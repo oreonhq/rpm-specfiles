@@ -1,0 +1,6 @@
+summary: Post-quantum cryptography support test
+author: Vitezslav Crhonek <vcrhonek@redhat.com>
+contact: Vitezslav Crhonek <vcrhonek@redhat.com>
+require: patch
+duration: 10m
+test: ./runtest.sh

@@ -1,0 +1,8 @@
+---
+badfuncs:
+  # Keama converts old ISC dhcpd configuration to a new Kea format.
+  # It is not multi-threaded so it is safe to use.
+  allowed:
+    /usr/bin/keama:
+      - gethostbyname
+

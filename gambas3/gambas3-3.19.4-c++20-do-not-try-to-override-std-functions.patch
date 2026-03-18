@@ -1,0 +1,33 @@
+diff -up gambas-3.19.4/main/share/gambas.h.c20 gambas-3.19.4/main/share/gambas.h
+--- gambas-3.19.4/main/share/gambas.h.c20	2024-08-21 13:18:14.599964020 -0400
++++ gambas-3.19.4/main/share/gambas.h	2024-08-21 13:19:23.949094449 -0400
+@@ -1305,12 +1305,6 @@ typedef
+ #include <string.h>
+ #include <ctype.h>
+ 
+-#ifdef tolower
+-#undef tolower
+-#endif
+-#ifdef toupper
+-#undef toupper
+-#endif
+ #ifdef strcasecmp
+ #undef strcasecmp
+ #endif
+@@ -1320,8 +1314,16 @@ typedef
+ 
+ #define strcasecmp GB.StrCaseCmp
+ #define strncasecmp GB.StrNCaseCmp
++#if __cplusplus < 202002L
++#ifdef tolower
++#undef tolower
++#endif
++#ifdef toupper
++#undef toupper
++#endif
+ #define toupper GB.ToUpper
+ #define tolower GB.ToLower
++#endif
+ 
+ #endif
+ 

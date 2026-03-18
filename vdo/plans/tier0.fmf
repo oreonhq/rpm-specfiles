@@ -1,0 +1,9 @@
+summary: CI plan to run all Tier0 tests
+
+discover:
+    how: fmf
+    filter: 'tier: 0'
+    url: https://github.com/dm-vdo/tmt-tests.git
+
+execute:
+    how: tmt

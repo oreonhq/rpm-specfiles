@@ -1,0 +1,2 @@
+# Compression terms
+addFilter("E: spelling-error \('(gzip|zlib)',")

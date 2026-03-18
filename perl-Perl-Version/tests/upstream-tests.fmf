@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Perl-Version
+require: perl-Perl-Version-tests
+test: /usr/libexec/perl-Perl-Version/test

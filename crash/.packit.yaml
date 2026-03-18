@@ -1,0 +1,37 @@
+# We want to use the following Packit functions in the crash package:
+# koji_build, bodhi_update, pull_from_upstream
+
+# See the documentation for more information:
+# https://packit.dev/docs/configuration/
+
+specfile_path: crash.spec
+
+upstream_project_url: https://github.com/crash-utility/crash
+# name in upstream package repository or registry (e.g. in PyPI)
+upstream_package_name: crash
+# downstream (Fedora) RPM package name
+downstream_package_name: crash
+
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - fedora-rawhide
+      - fedora-latest
+      - fedora-42
+
+  - job: koji_build
+    trigger: commit
+    allowed_pr_authors: ["lijiang", "ltao", "packit"]
+    allowed_committers: ["lijiang", "ltao", "packit"]
+    dist_git_branches:
+      - fedora-rawhide
+      - fedora-latest
+      - fedora-42
+
+  - job: bodhi_update
+    trigger: commit
+    dist_git_branches:
+      - fedora-rawhide
+      - fedora-latest
+      - fedora-42

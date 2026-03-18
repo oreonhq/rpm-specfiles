@@ -1,0 +1,3 @@
+from Config import *
+addFilter("spelling-error .* (lt|preprocess)");
+addFilter("-tests.noarch: W: no-documentation");

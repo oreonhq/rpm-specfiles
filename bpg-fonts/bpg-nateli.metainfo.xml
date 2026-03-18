@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>bpg-nateli</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>BPG Nateli</name>
+  <summary>Nateli family of BPG Georgian fonts</summary>
+  <description>
+    <p>
+      BPG Fonts are a set of GPL licensed Georgian Unicode fonts.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://groups.google.com/group/bpg-fonts</url>
+</component>
+

@@ -1,0 +1,16 @@
+summary: Fonts related tests
+discover:
+  how: fmf
+  url: https://src.fedoraproject.org/tests/fonts
+prepare:
+  name: tmt
+  how: install
+  package:
+    - bitmap-fixed-fonts
+execute:
+  how: tmt
+environment:
+  PACKAGE: bitmap-fixed-fonts
+  FONT_ALIAS: monospace
+  FONT_FAMILY: Fixed
+  FONT_LANG: en

@@ -1,0 +1,113 @@
+/biolatency:
+    summary: basic tracing
+    test: "bpf-biolatency 1 1"
+
+/biopattern:
+    summary: basic tracing
+    test: "bpf-biopattern 1 1"
+
+/biosnoop:
+    summary: basic tracing
+    test: "bpf-biosnoop 1"
+    enabled: false
+
+/biostacks:
+    summary: basic tracing
+    test: "bpf-biostacks 1"
+    enabled: false
+
+/bitesize:
+    summary: basic tracing
+    test: "bpf-bitesize 1 1"
+
+/cachestat:
+    summary: basic tracing
+    test: "bpf-cachestat 1 1"
+    enabled: false
+
+/cpudist:
+    summary: basic tracing
+    test: "bpf-cpudist 1 1"
+
+/cpufreq:
+    summary: basic tracing
+    test: "bpf-cpufreq -d 1"
+    enabled: false
+
+/drsnoop:
+    summary: basic tracing
+    test: "bpf-drsnoop -d 1"
+
+/filetop:
+    summary: basic tracing
+    test: "TERM=xterm bpf-filetop 1 1"
+
+/fsdist:
+    summary: basic tracing
+    test: "bpf-fsdist -t $(df -T $(pwd) | tail -1 | awk '{print $2}') 1 1"
+
+/fsslower:
+    summary: basic tracing
+    test: "bpf-fsslower -t $(df -T $(pwd) | tail -1 | awk '{print $2}') -d 1"
+
+/funclatency:
+    summary: basic tracing
+    test: "bpf-funclatency -i 1 -d 1 vfs_read"
+
+/hardirqs:
+    summary: basic tracing
+    test: "bpf-hardirqs 1 1"
+
+/klockstat:
+    summary: basic tracing
+    test: "bpf-klockstat -d 1"
+
+/llcstat:
+    summary: basic tracing
+    test: "bpf-llcstat 1"
+
+/offcputime:
+    summary: basic tracing
+    test: "bpf-offcputime 1"
+
+/opensnoop:
+    summary: basic tracing
+    test: "bpf-opensnoop -x -d 1"
+    enabled: false
+
+/readahead:
+    summary: basic tracing
+    test: "bpf-readahead -d 1"
+    enabled: false
+
+/runqlat:
+    summary: basic tracing
+    test: "bpf-runqlat 1 1"
+
+/runqlen:
+    summary: basic tracing
+    test: "bpf-runqlen 1 1"
+
+/slabratetop:
+    summary: basic tracing
+    test: "TERM=xterm bpf-slabratetop 1 1"
+
+/softirqs:
+    summary: basic tracing
+    test: "bpf-softirqs 1 1"
+
+/syscount:
+    summary: basic tracing
+    test: "bpf-syscount -d 1 -T 1"
+
+/tcprtt:
+    summary: basic tracing
+    test: "bpf-tcprtt -d 1 -i 1"
+
+/tcpsynbl:
+    summary: basic tracing
+    test: "bpf-tcpsynbl 1 1"
+
+/vfsstat:
+    summary: basic tracing
+    test: "bpf-vfsstat 1 1"

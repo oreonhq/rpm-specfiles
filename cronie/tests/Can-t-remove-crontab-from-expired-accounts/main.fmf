@@ -1,0 +1,13 @@
+summary: Test for Can't remove crontab from expired accounts
+description: ''
+contact: Karel Volny <kvolny@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 5m
+extra-summary: 
+    /CoreOS/cronie/Regression/Can-t-remove-crontab-from-expired-accounts
+extra-task: /CoreOS/cronie/Regression/Can-t-remove-crontab-from-expired-accounts

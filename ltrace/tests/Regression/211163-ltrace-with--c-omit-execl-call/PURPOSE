@@ -1,0 +1,1 @@
+ltrace with -c omit execl call

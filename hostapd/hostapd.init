@@ -1,0 +1,89 @@
+#!/bin/bash
+#
+# hostapd 
+#
+# chkconfig:   - 23 88
+# description: hostapd is a user space daemon for access point and
+#     authentication servers.  It implements IEEE 802.11 access point
+#     management, IEEE 802.1X/WPA/WPA2/EAP Authenticators and RADIUS
+#     authentication server.
+# processname: hostapd
+# config:      /etc/hostapd/hostapd.conf
+#
+### BEGIN INIT INFO
+# Provides: hostapd
+# Required-Start: $network
+# Required-Stop: $network
+# Default-Start:
+# Default-Stop: 0 1 6
+# Short-Description: start and stop hostapd
+# Description: IEEE 802.11 AP, IEEE 802.1X/WPA/WPA2/EAP/RADIUS Authenticator
+### END INIT INFO
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Source networking configuration.
+. /etc/sysconfig/network
+
+exec="/usr/sbin/hostapd"
+prog=hostapd
+conf="/etc/hostapd/hostapd.conf"
+lockfile=/var/lock/subsys/$prog
+
+[ -e /etc/sysconfig/$prog ] && . /etc/sysconfig/$prog
+
+start() {
+ 	echo -n $"Starting $prog: $conf"
+	daemon $prog -B $OTHER_ARGS $conf
+	retval=$?
+	echo
+	[ $retval -eq 0 ] && touch $lockfile
+	return $retval
+}
+
+stop() {
+	echo -n $"Stopping $prog: "
+	killproc $prog
+	retval=$?
+	echo
+	[ $retval -eq 0 ] && rm -f $lockfile
+	return $retval
+}
+
+restart() {
+	stop
+	start
+}
+
+reload() {
+	restart
+}
+
+force_reload() {
+	restart
+}
+
+fdr_status() {
+	status $prog
+}
+
+
+case "$1" in
+	start|stop|restart|reload)
+  		$1
+		;;
+	force-reload)
+		force_reload
+		;;
+	status)
+		fdr_status
+		;;
+	condrestart|try-restart)
+		[ -f $lockfile ] && restart
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|status|restart|try-restart|reload|force-reload}"
+		exit 1
+esac
+

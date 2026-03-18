@@ -1,0 +1,32 @@
+From e205c09f514aa3ce1ae2e118cf498b3fd031d055 Mon Sep 17 00:00:00 2001
+From: Chenghao Duan <duanchenghao@kylinos.cn>
+Date: Thu, 11 Dec 2025 09:41:18 +0800
+Subject: [PATCH 08/23] Loongarch: update the NR_CPUS to 2048
+
+Since the kernel commit 9559d5806319 ("LoongArch: Increase max
+supported CPUs up to 2048")the NR_CPUS on Linux kernel ranges
+from 2-2048. So let's match NR_CPUS with the max NR_CPUS count
+on the Linux kernel.
+
+Signed-off-by: Chenghao Duan <duanchenghao@kylinos.cn>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ defs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/defs.h b/defs.h
+index bea295165019..ceed3a9f2d68 100644
+--- a/defs.h
++++ b/defs.h
+@@ -169,7 +169,7 @@
+ #define NR_CPUS  (256)
+ #endif
+ #ifdef LOONGARCH64
+-#define NR_CPUS  (256)
++#define NR_CPUS  (2048)
+ #endif
+ 
+ #define NR_DEVICE_DUMPS (64)
+-- 
+2.51.1
+

@@ -1,0 +1,39 @@
+From 7a7e0802667a57a888407f2bab071c1e0009600b Mon Sep 17 00:00:00 2001
+From: Olivier Fourdan <ofourdan@redhat.com>
+Date: Tue, 17 Feb 2026 17:11:03 +0100
+Subject: [PATCH] systemd/sessions: Start accessibility settings
+
+This is required to launch the screen reader (orca) automatically when
+the screen reader is enabled in the settings.
+
+Part-of: <https://gitlab.gnome.org/GNOME/gnome-kiosk/-/merge_requests/130>
+---
+ kiosk-script/systemd/session.conf | 1 +
+ search-app/systemd/session.conf   | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/kiosk-script/systemd/session.conf b/kiosk-script/systemd/session.conf
+index 5652e83..7e1cf13 100644
+--- a/kiosk-script/systemd/session.conf
++++ b/kiosk-script/systemd/session.conf
+@@ -1,5 +1,6 @@
+ [Unit]
+ Requires=org.gnome.Kiosk.target
+ Requires=org.gnome.Kiosk.Script.service
++Wants=org.gnome.SettingsDaemon.A11ySettings.target
+ Wants=org.gnome.SettingsDaemon.Sharing.target
+ Wants=org.gnome.SettingsDaemon.MediaKeys.target
+diff --git a/search-app/systemd/session.conf b/search-app/systemd/session.conf
+index e37baf7..97d98c6 100644
+--- a/search-app/systemd/session.conf
++++ b/search-app/systemd/session.conf
+@@ -1,5 +1,6 @@
+ [Unit]
+ Requires=org.gnome.Kiosk.target
+ Requires=org.gnome.Kiosk.SearchApp.service
++Wants=org.gnome.SettingsDaemon.A11ySettings.target
+ Wants=org.gnome.SettingsDaemon.Sharing.target
+ Wants=org.gnome.SettingsDaemon.MediaKeys.target
+-- 
+2.53.0
+

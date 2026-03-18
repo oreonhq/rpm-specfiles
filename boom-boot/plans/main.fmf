@@ -1,0 +1,24 @@
+discover:
+    how: fmf
+    dist-git-source: true
+
+execute:
+    how: tmt
+
+prepare:
+  - name: Install packages
+    how: install
+    package:
+     - stratisd
+     - stratis-cli
+     - lvm2
+     - python3-pytest
+  - name: Enable Stratisd
+    how: shell
+    script: |
+        systemctl enable --now stratisd
+  - name: Enable CRB
+    how: shell
+    script: |
+        dnf install -y "dnf-command(config-manager)" ;
+        dnf config-manager --set-enabled crb || true

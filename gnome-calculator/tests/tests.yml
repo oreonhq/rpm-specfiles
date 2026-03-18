@@ -1,0 +1,23 @@
+# Basic tests for gnome-calculator
+- hosts: localhost
+  pre_tasks:
+  - name: Prepare the system
+    include: prepare.yml
+  roles:
+  - role: standard-test-basic
+    tags:
+    - classic
+    required_packages:
+    - gnome-calculator
+    - dogtail
+    - python-behave
+    - python-iniparse
+    repositories:
+    - repo: "https://pagure.io/desktop-qa/gnome-calculator.git"
+      dest: "gnome-calculator"
+    tests:
+    - sanity-tests:
+        dir: "gnome-calculator"
+        run: run/osci/runtest.sh fedora28
+
+

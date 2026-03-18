@@ -1,0 +1,36 @@
+From ef549c9a97838331877b139f407269db2a0fc691 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Tue, 29 May 2012 20:44:18 +0100
+Subject: [PATCH 2/3] configure: Allow user defined C compiler flags.
+
+---
+ configure.ac | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index fb60c7c14c..f6a493ccf5 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -997,6 +997,10 @@ AS_CASE([$ocaml_cc_vendor],
+     internal_cflags="$cc_warnings"],
+   [common_cflags="-O"])
+ 
++# Allow CFLAGS and LDFLAGS to be added.
++common_cflags="$common_cflags $CFLAGS"
++cclibs="$cclibs $LDFLAGS"
++
+ # Enable SSE2 on x86 mingw to avoid using 80-bit registers.
+ AS_CASE([$target],
+   [i686-w64-mingw32*],
+@@ -2904,7 +2908,7 @@ AC_CONFIG_COMMANDS_PRE([
+       [mkexedebugflag="${mkexe_ldflags_prefix}${mkexedebugflag}"])
+     mkdll_ldflags=""
+     AS_IF([test -n "${LDFLAGS}"],
+-      [for flag in ${LDFLAGS}; do
++      [for flag in "${LDFLAGS}"; do
+         mkdll_ldflags="${mkdll_ldflags} ${mkexe_ldflags_prefix}${flag}"
+       done
+       mkdll_ldflags_exp="$mkdll_ldflags"])
+-- 
+2.52.0
+

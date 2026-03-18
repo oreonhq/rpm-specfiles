@@ -1,0 +1,13 @@
+- hosts: localhost
+  roles:
+    - role: standard-test-beakerlib
+      tags:
+        - classic
+      tests:
+        - sanity-tests
+      required_packages:
+        - libconfig
+        - libconfig-devel
+        - libcmocka
+        - libcmocka-devel
+        - gcc

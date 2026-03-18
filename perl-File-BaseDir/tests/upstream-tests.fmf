@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-File-BaseDir
+require: perl-File-BaseDir-tests
+test: /usr/libexec/perl-File-BaseDir/test

@@ -1,0 +1,34 @@
+# Color terminals
+
+(note that COLORTERM is exported and so inherited by children)
+
+Terminal        TERM            COLORTERM
+--------        ----            ---------
+linux           linux
+xterm           xterm-256color
+lterm           xterm
+emacs           dumb
+screen          screen.xterm-256color
+tmux            tmux-256color
+
+cosmic-term     xterm-256color  truecolor
+gnome-console   xterm-256color  truecolor
+gnome-terminal  xterm-256color  truecolor
+guake           xterm-256color  truecolor
+konsole         xterm-256color  truecolor
+lxterm          xterm-256color  truecolor
+mate-terminal   xterm-256color  truecolor
+ptyxis          xterm-256color  truecolor
+qmlkonsole      xterm-256color  truecolor
+qterminal       xterm-256color  truecolor
+roxterm         xterm-256color  truecolor
+sakura          xterm-256color  truecolor
+tilda           xterm-256color  truecolor
+tilix           xterm-256color  truecolor
+yakuake         xterm-256color  truecolor
+
+cool-retro-term xterm           truecolor  (monochrome!)
+alacritty       alacritty       truecolor
+foot            foot            truecolor
+kitty           xterm-kitty     truecolor
+st              st-256color     truecolor

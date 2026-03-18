@@ -1,0 +1,260 @@
+From a4ae29afc6547e8231b933cfa1b95d7f7b37a25c Mon Sep 17 00:00:00 2001
+From: Lenka Doudova <lryznaro@redhat.com>
+Date: Tue, 10 Feb 2026 05:45:32 +0100
+Subject: [PATCH] Issue 6753 - Port ticket 49039 test
+
+Description:
+Port ticket 49039 test into
+dirsrvtests/tests/suites/password/pwp_test.py
+
+Relates: #6753
+Author: Lenka Doudova
+Assisted by: Cursor
+Reviewer: Barbora Simonova, Viktor Ashirov
+---
+ dirsrvtests/tests/suites/password/pwp_test.py |  83 +++++++++++-
+ dirsrvtests/tests/tickets/ticket49039_test.py | 127 ------------------
+ 2 files changed, 82 insertions(+), 128 deletions(-)
+ delete mode 100644 dirsrvtests/tests/tickets/ticket49039_test.py
+
+diff --git a/dirsrvtests/tests/suites/password/pwp_test.py b/dirsrvtests/tests/suites/password/pwp_test.py
+index 663d9bea9..6dae08cb2 100644
+--- a/dirsrvtests/tests/suites/password/pwp_test.py
++++ b/dirsrvtests/tests/suites/password/pwp_test.py
+@@ -9,11 +9,14 @@
+ """
+ 
+ import os
++import subprocess
+ import pytest
+ from lib389.topologies import topology_st as topo
+ from lib389.idm.user import UserAccounts, UserAccount
+-from lib389._constants import DEFAULT_SUFFIX
++from lib389.idm.directorymanager import DirectoryManager
++from lib389._constants import DEFAULT_SUFFIX, PASSWORD
+ from lib389.config import Config
++from lib389.pwpolicy import PwPolicyManager
+ from lib389.idm.group import Group
+ from lib389.utils import ds_is_older
+ import ldap
+@@ -512,6 +515,84 @@ def test_passwordlockout(topo, _fix_password):
+     _change_password_with_own(topo, user.dn, 'dby3rs2', 'secreter')
+ 
+ 
++def test_password_must_change_ignores_min_age(topo):
++    """Test that passwordMinAge does not block password update when the password was reset.
++
++    :id: a1b2c3d4-e5f6-4903-9abc-def012345678
++    :setup: Standalone instance
++    :steps:
++        1. Enable TLS (for ldappasswd StartTLS)
++        2. Set global policy via PwPolicyManager: passwordMustChange, passwordExp,
++           passwordMaxAge, passwordMinAge (high), passwordChange
++        3. Bind as Directory Manager
++        4. Create user
++        5. Reset user password as Directory Manager
++        6. User binds and changes own password (must succeed; min age must not block)
++        7. Rebind as Directory Manager, reset user password again
++        8. Run ldappasswd as user (StartTLS) to change password to password2
++        9. Bind as user with password2 to verify
++        10. Cleanup: delete user
++    :expectedresults:
++        1. TLS enabled
++        2. Policy set successfully
++        3. Bind succeeds
++        4. User created
++        5. Reset succeeds
++        6. User password change succeeds (min age does not block after reset)
++        7. Reset succeeds
++        8. ldappasswd succeeds
++        9. Bind succeeds
++        10. User deleted
++    """
++
++    topo.standalone.enable_tls()
++
++    policy = PwPolicyManager(topo.standalone)
++    policy.set_global_policy(properties={'nsslapd-pwpolicy-local': 'on',
++                                         'passwordMustChange': 'on',
++                                         'passwordExp': 'on',
++                                         'passwordMaxAge': '86400000',
++                                         'passwordMinAge': '8640000',
++                                         'passwordChange': 'on'})
++    dm = DirectoryManager(topo.standalone)
++    dm.bind()
++
++    user = _create_user(topo, 'user', 'Test User', '1002', PASSWORD)
++    try:
++        # Reset password as Directory Manager
++        user.replace('userpassword', PASSWORD)
++        time.sleep(1)
++
++        # Reset password as user (must succeed; min age must not block after reset)
++        user.rebind(PASSWORD)
++        user.replace('userpassword', PASSWORD)
++        time.sleep(1)
++
++        # Reset again as Directory Manager
++        dm.rebind(PASSWORD)
++        user.replace('userpassword', PASSWORD)
++        time.sleep(1)
++
++        # Change password through ldappasswd as user to ensure functionality
++        env = os.environ.copy()
++        env['LDAPTLS_CACERTDIR'] = topo.standalone.get_cert_dir()
++        cmd = [
++            'ldappasswd',
++            '-ZZ','-H', f"ldap://{topo.standalone.host}:{topo.standalone.port}",
++            '-D', user.dn, '-w', PASSWORD,
++            '-a', PASSWORD, '-s', 'password2',
++            user.dn,
++        ]
++        result = subprocess.run(cmd, env=env, capture_output=True, text=True)
++        assert result.returncode == 0, f'ldappasswd failed: {result.stderr}'
++
++        # Bind as user with new password
++        user.bind('password2')
++    finally:
++        dm.rebind(PASSWORD)
++        user.delete()
++
++
+ if __name__ == "__main__":
+     CURRENT_FILE = os.path.realpath(__file__)
+     pytest.main("-s -v %s" % CURRENT_FILE)
+diff --git a/dirsrvtests/tests/tickets/ticket49039_test.py b/dirsrvtests/tests/tickets/ticket49039_test.py
+deleted file mode 100644
+index 0313f69a3..000000000
+--- a/dirsrvtests/tests/tickets/ticket49039_test.py
++++ /dev/null
+@@ -1,127 +0,0 @@
+-# --- BEGIN COPYRIGHT BLOCK ---
+-# Copyright (C) 2022 Red Hat, Inc.
+-# All rights reserved.
+-#
+-# License: GPL (version 3 or any later version).
+-# See LICENSE for details.
+-# --- END COPYRIGHT BLOCK ---
+-#
+-import time
+-import ldap
+-import logging
+-import pytest
+-import os
+-from lib389 import Entry
+-from lib389._constants import *
+-from lib389.properties import *
+-from lib389.tasks import *
+-from lib389.utils import *
+-from lib389.topologies import topology_st as topo
+-from lib389.pwpolicy import PwPolicyManager
+-
+-
+-pytestmark = pytest.mark.tier2
+-
+-DEBUGGING = os.getenv("DEBUGGING", default=False)
+-if DEBUGGING:
+-    logging.getLogger(__name__).setLevel(logging.DEBUG)
+-else:
+-    logging.getLogger(__name__).setLevel(logging.INFO)
+-log = logging.getLogger(__name__)
+-
+-USER_DN = 'uid=user,dc=example,dc=com'
+-
+-
+-def test_ticket49039(topo):
+-    """Test "password must change" verses "password min age".  Min age should not
+-    block password update if the password was reset.
+-    """
+-
+-    # Setup SSL (for ldappasswd test)
+-    topo.standalone.enable_tls()
+-
+-    # Configure password policy
+-    try:
+-        policy = PwPolicyManager(topo.standalone)
+-        policy.set_global_policy(properties={'nsslapd-pwpolicy-local': 'on',
+-                                             'passwordMustChange': 'on',
+-                                             'passwordExp': 'on',
+-                                             'passwordMaxAge': '86400000',
+-                                             'passwordMinAge': '8640000',
+-                                             'passwordChange': 'on'})
+-    except ldap.LDAPError as e:
+-        log.fatal('Failed to set password policy: ' + str(e))
+-
+-    # Add user, bind, and set password
+-    try:
+-        topo.standalone.add_s(Entry((USER_DN, {
+-            'objectclass': 'top extensibleObject'.split(),
+-            'uid': 'user1',
+-            'userpassword': PASSWORD
+-        })))
+-    except ldap.LDAPError as e:
+-        log.fatal('Failed to add user: error ' + e.args[0]['desc'])
+-        assert False
+-
+-    # Reset password as RootDN
+-    try:
+-        topo.standalone.modify_s(USER_DN, [(ldap.MOD_REPLACE, 'userpassword', ensure_bytes(PASSWORD))])
+-    except ldap.LDAPError as e:
+-        log.fatal('Failed to bind: error ' + e.args[0]['desc'])
+-        assert False
+-
+-    time.sleep(1)
+-
+-    # Reset password as user
+-    try:
+-        topo.standalone.simple_bind_s(USER_DN, PASSWORD)
+-    except ldap.LDAPError as e:
+-        log.fatal('Failed to bind: error ' + e.args[0]['desc'])
+-        assert False
+-
+-    try:
+-        topo.standalone.modify_s(USER_DN, [(ldap.MOD_REPLACE, 'userpassword', ensure_bytes(PASSWORD))])
+-    except ldap.LDAPError as e:
+-        log.fatal('Failed to change password: error ' + e.args[0]['desc'])
+-        assert False
+-
+-    ###################################
+-    # Make sure ldappasswd also works
+-    ###################################
+-
+-    # Reset password as RootDN
+-    try:
+-        topo.standalone.simple_bind_s(DN_DM, PASSWORD)
+-    except ldap.LDAPError as e:
+-        log.fatal('Failed to bind as rootdn: error ' + e.args[0]['desc'])
+-        assert False
+-
+-    try:
+-        topo.standalone.modify_s(USER_DN, [(ldap.MOD_REPLACE, 'userpassword', ensure_bytes(PASSWORD))])
+-    except ldap.LDAPError as e:
+-        log.fatal('Failed to bind: error ' + e.args[0]['desc'])
+-        assert False
+-
+-    time.sleep(1)
+-
+-    # Run ldappasswd as the User.
+-    os.environ["LDAPTLS_CACERTDIR"] = topo.standalone.get_cert_dir()
+-    cmd = ('ldappasswd' + ' -h ' + topo.standalone.host + ' -Z -p 38901 -D ' + USER_DN +
+-           ' -w password -a password -s password2 ' + USER_DN)
+-    os.system(cmd)
+-    time.sleep(1)
+-
+-    try:
+-        topo.standalone.simple_bind_s(USER_DN, "password2")
+-    except ldap.LDAPError as e:
+-        log.fatal('Failed to bind: error ' + e.args[0]['desc'])
+-        assert False
+-
+-    log.info('Test Passed')
+-
+-
+-if __name__ == '__main__':
+-    # Run isolated
+-    # -s for DEBUG mode
+-    CURRENT_FILE = os.path.realpath(__file__)
+-    pytest.main("-s %s" % CURRENT_FILE)
+-- 
+2.53.0
+

@@ -1,0 +1,40 @@
+From c91e4c63c1eaf1e23806d9df10e3d5a9ae353c1d Mon Sep 17 00:00:00 2001
+From: Volker Hilsheimer <volker.hilsheimer@qt.io>
+Date: Fri, 18 Mar 2022 09:16:36 +0100
+Subject: [PATCH 2/2] Explicitly include QVarLengthArray header
+
+The template is instantiated, but only forward declared after recent
+cleanup of transitive includes.
+
+Pick-to: 6.3
+Change-Id: Id43dfe4dc8aa20815ff6b5f64ab307a269ce6c67
+Reviewed-by: Eirik Aavitsland <eirik.aavitsland@qt.io>
+Reviewed-by: Fabian Kosmale <fabian.kosmale@qt.io>
+(cherry picked from commit 1224337fdf898e502d3b04f9eb3975947de06fe8)
+---
+ src/plugins/imageformats/tiff/qtiffhandler.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/plugins/imageformats/tiff/qtiffhandler.cpp b/src/plugins/imageformats/tiff/qtiffhandler.cpp
+index f0dfe7f6..5cb0522e 100644
+--- a/src/plugins/imageformats/tiff/qtiffhandler.cpp
++++ b/src/plugins/imageformats/tiff/qtiffhandler.cpp
+@@ -38,13 +38,14 @@
+ ****************************************************************************/
+ 
+ #include "qtiffhandler_p.h"
+-#include <qvariant.h>
+ #include <qcolorspace.h>
+ #include <qdebug.h>
+ #include <qimage.h>
+ #include <qglobal.h>
+ #include <qbuffer.h>
+ #include <qfiledevice.h>
++#include <qvariant.h>
++#include <qvarlengtharray.h>
+ 
+ extern "C" {
+ #include "tiffio.h"
+-- 
+2.51.1
+

@@ -1,0 +1,14 @@
+*~
+
+# RPM target directories
+/x86_64
+
+# Version-dependent build artifacts
+/.build-*.log
+/virt-v2v-v*/
+/virt-v2v-*.src.rpm
+/results_virt-v2v/
+
+# Source
+/virt-v2v-*.tar.gz
+/virt-v2v-*.tar.gz.sig

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Net-SMTP-SSL
+require: perl-Net-SMTP-SSL-tests
+test: /usr/libexec/perl-Net-SMTP-SSL/test

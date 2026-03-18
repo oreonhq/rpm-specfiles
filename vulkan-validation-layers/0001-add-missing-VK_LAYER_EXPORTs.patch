@@ -1,0 +1,53 @@
+From f519c98e77ae1e48efeda49db144e786dd99339b Mon Sep 17 00:00:00 2001
+From: Dave Airlie <airlied@redhat.com>
+Date: Wed, 15 Feb 2023 17:37:08 +1000
+Subject: [PATCH] add missing VK_LAYER_EXPORTs
+
+---
+ layers/layer_options.h             | 2 +-
+ layers/stateless/stateless_validation.h      | 2 +-
+ scripts/generators/layer_chassis_generator.py | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/layers/layer_options.h b/layers/layer_options.h
+index 97909a5ed..d19e42c01 100644
+--- a/layers/layer_options.h
++++ b/layers/layer_options.h
+@@ -22,7 +22,7 @@
+ 
+ #define OBJECT_LAYER_NAME "VK_LAYER_KHRONOS_validation"
+ 
+-extern std::vector<std::pair<uint32_t, uint32_t>> custom_stype_info;
++VK_LAYER_EXPORT extern std::vector<std::pair<uint32_t, uint32_t>> custom_stype_info;
+ 
+ // Process validation features, flags and settings specified through extensions, a layer settings file, or environment variables
+ 
+diff --git a/layers/stateless/stateless_validation.h b/layers/stateless/stateless_validation.h
+index e0f21b7a6..2fb8c6142 100644
+--- a/layers/stateless/stateless_validation.h
++++ b/layers/stateless/stateless_validation.h
+@@ -31,7 +31,7 @@
+ [[maybe_unused]] static const char *kVUID_PVError_ExtensionNotEnabled = "UNASSIGNED-GeneralParameterError-ExtensionNotEnabled";
+ [[maybe_unused]] static const char *kVUID_PVError_ApiVersionViolation = "UNASSIGNED-API-Version-Violation";
+ 
+-extern std::vector<std::pair<uint32_t, uint32_t>> custom_stype_info;
++VK_LAYER_EXPORT extern std::vector<std::pair<uint32_t, uint32_t>> custom_stype_info;
+ 
+ // String returned by string_VkStructureType for an unrecognized type.
+ const std::string UnsupportedStructureTypeString = "Unhandled VkStructureType";
+diff --git a/scripts/generators/layer_chassis_generator.py b/scripts/generators/layer_chassis_generator.py
+index be76d4204..62b442e8b 100644
+--- a/scripts/generators/layer_chassis_generator.py
++++ b/scripts/generators/layer_chassis_generator.py
+@@ -845,7 +845,7 @@ class LayerChassisOutputGenerator(BaseGenerator):
+ 
+         out.append('''
+             // Global list of sType,size identifiers
+-            std::vector<std::pair<uint32_t, uint32_t>> custom_stype_info{};
++            VK_LAYER_EXPORT std::vector<std::pair<uint32_t, uint32_t>> custom_stype_info{};
+ 
+             template <typename ValidationObjectType>
+             ValidationObjectType* ValidationObject::GetValidationObject() const {
+-- 
+2.39.1
+

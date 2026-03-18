@@ -1,0 +1,61 @@
+From 32b250eab5e7847d3186ed1a61146dd01eb8f3c0 Mon Sep 17 00:00:00 2001
+From: kambe-mikb <77083885+kambe-mikb@users.noreply.github.com>
+Date: Tue, 28 Sep 2021 17:40:18 +1000
+Subject: [PATCH] Fix for Issue 31
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fix Issue 31 by removing reference to RSA_SSLV23_PADDING (removed from OpenSSL starting from v3.0.0)
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ RSA.pm | 3 ++-
+ RSA.xs | 4 ++++
+ 2 files changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/RSA.pm b/RSA.pm
+index 3e74925..afd27fd 100644
+--- a/RSA.pm
++++ b/RSA.pm
+@@ -37,7 +37,6 @@ Crypt::OpenSSL::RSA - RSA encoding and decoding, using the openSSL libraries
+   Crypt::OpenSSL::Random::random_seed($good_entropy);
+   Crypt::OpenSSL::RSA->import_random_seed();
+   $rsa_pub = Crypt::OpenSSL::RSA->new_public_key($key_string);
+-  $rsa_pub->use_sslv23_padding(); # use_pkcs1_oaep_padding is the default
+   $ciphertext = $rsa->encrypt($plaintext);
+ 
+   $rsa_priv = Crypt::OpenSSL::RSA->new_private_key($key_string);
+@@ -228,6 +227,8 @@ C<Crypt::OpenSSL::RSA>.
+ Use C<PKCS #1 v1.5> padding with an SSL-specific modification that
+ denotes that the server is SSL3 capable.
+ 
++Not available since OpenSSL 3.
++
+ =item use_md5_hash
+ 
+ Use the RFC 1321 MD5 hashing algorithm by Ron Rivest when signing and
+diff --git a/RSA.xs b/RSA.xs
+index 46cb199..4f65dfc 100644
+--- a/RSA.xs
++++ b/RSA.xs
+@@ -640,12 +640,16 @@ use_pkcs1_oaep_padding(p_rsa)
+   CODE:
+     p_rsa->padding = RSA_PKCS1_OAEP_PADDING;
+ 
++#if OPENSSL_VERSION_NUMBER < 0x30000000L
++
+ void
+ use_sslv23_padding(p_rsa)
+     rsaData* p_rsa;
+   CODE:
+     p_rsa->padding = RSA_SSLV23_PADDING;
+ 
++#endif
++
+ # Sign text. Returns the signature.
+ 
+ SV*
+-- 
+2.31.1
+

@@ -1,0 +1,28 @@
+execute:
+  how: tmt
+
+discover:
+  - name: rpms_pyproject-rpm-macros
+    how: shell
+    url: https://src.fedoraproject.org/rpms/pyproject-rpm-macros.git
+    tests:
+    - name: pyproject_pytest
+      path: /tests
+      test: ./mocktest.sh python-pytest
+    - name: pyproject_pluggy
+      path: /tests
+      test: ./mocktest.sh python-pluggy
+    - name: import_test
+      test: python3 -c "import setuptools_scm"
+
+prepare:
+  - name: Install dependencies
+    how: install
+    package:
+    - mock
+    - rpmdevtools
+    - rpm-build
+    - dnf
+  - name: Update packages
+    how: shell
+    script: dnf upgrade -y

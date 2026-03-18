@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Filter
+require: perl-Filter-tests
+test: /usr/libexec/perl-Filter/test

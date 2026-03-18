@@ -1,0 +1,2 @@
+# Reference to Perl hash
+addFilter("spelling-error \('hashrefs?',")

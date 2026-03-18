@@ -1,0 +1,113 @@
+From 12dff988989a0851b62a3b27b60632eec412b5ea Mon Sep 17 00:00:00 2001
+From: Reid Wahl <nrwahl@protonmail.com>
+Date: Sun, 30 Nov 2025 11:34:29 -0800
+Subject: [PATCH] Low: various: Use const for a few string pointer variables
+
+Pacemaker failed to compile on Fedora Rawhide because of this.
+
+Signed-off-by: Reid Wahl <nrwahl@protonmail.com>
+---
+ lib/common/agents.c        |  2 +-
+ lib/common/iso8601.c       |  2 +-
+ lib/common/xpath.c         |  6 +++---
+ lib/pacemaker/pcmk_fence.c | 18 ++++++++++++------
+ 4 files changed, 17 insertions(+), 11 deletions(-)
+
+diff --git a/lib/common/agents.c b/lib/common/agents.c
+index 2dda50e1c0..351fa3b334 100644
+--- a/lib/common/agents.c
++++ b/lib/common/agents.c
+@@ -119,7 +119,7 @@ int
+ crm_parse_agent_spec(const char *spec, char **standard, char **provider,
+                      char **type)
+ {
+-    char *colon;
++    const char *colon = NULL;
+ 
+     CRM_CHECK(spec && standard && provider && type, return -EINVAL);
+     *standard = NULL;
+diff --git a/lib/common/iso8601.c b/lib/common/iso8601.c
+index 48964e599d..d5130b14a2 100644
+--- a/lib/common/iso8601.c
++++ b/lib/common/iso8601.c
+@@ -834,7 +834,7 @@ static bool
+ crm_time_parse(const char *time_str, crm_time_t *a_time)
+ {
+     uint32_t h, m, s;
+-    char *offset_s = NULL;
++    const char *offset_s = NULL;
+ 
+     tzset();
+ 
+diff --git a/lib/common/xpath.c b/lib/common/xpath.c
+index 317114c1b1..6b7b809ed5 100644
+--- a/lib/common/xpath.c
++++ b/lib/common/xpath.c
+@@ -325,8 +325,8 @@ pcmk__xpath_node_id(const char *xpath, const char *node)
+ {
+     char *retval = NULL;
+     char *patt = NULL;
+-    char *start = NULL;
+-    char *end = NULL;
++    const char *start = NULL;
++    const char *end = NULL;
+ 
+     if (node == NULL || xpath == NULL) {
+         return retval;
+@@ -343,7 +343,7 @@ pcmk__xpath_node_id(const char *xpath, const char *node)
+     start += strlen(patt);
+     start++;
+ 
+-    end = strstr(start, "\'");
++    end = strchr(start, '\'');
+     pcmk__assert(end != NULL);
+     retval = strndup(start, end-start);
+ 
+diff --git a/lib/pacemaker/pcmk_fence.c b/lib/pacemaker/pcmk_fence.c
+index 703c414fb5..611d86d143 100644
+--- a/lib/pacemaker/pcmk_fence.c
++++ b/lib/pacemaker/pcmk_fence.c
+@@ -42,8 +42,10 @@ handle_level(stonith_t *st, const char *target, int fence_level, GList *devices,
+ {
+     const char *node = NULL;
+     const char *pattern = NULL;
+-    const char *name = NULL;
+-    char *value = NULL;
++
++    gchar **name_value = NULL;
++    const gchar *name = NULL;
++    const gchar *value = NULL;
+     int rc = pcmk_rc_ok;
+ 
+     if (target == NULL) {
+@@ -52,12 +54,15 @@ handle_level(stonith_t *st, const char *target, int fence_level, GList *devices,
+     }
+ 
+     /* Determine if targeting by attribute, node name pattern or node name */
+-    value = strchr(target, '=');
+-    if (value != NULL)  {
+-        name = target;
+-        *value++ = '\0';
++    name_value = g_strsplit(target, "=", 2);
++
++    if (g_strv_length(name_value) == 2) {
++        name = name_value[0];
++        value = name_value[1];
++
+     } else if (*target == '@') {
+         pattern = target + 1;
++
+     } else {
+         node = target;
+     }
+@@ -78,6 +83,7 @@ handle_level(stonith_t *st, const char *target, int fence_level, GList *devices,
+                                          name, value, fence_level);
+     }
+ 
++    g_strfreev(name_value);
+     return pcmk_legacy2rc(rc);
+ }
+ 
+-- 
+2.52.0
+

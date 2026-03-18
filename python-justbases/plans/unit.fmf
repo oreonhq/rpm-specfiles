@@ -1,0 +1,17 @@
+summary: deterministic (not Hypothesis-based) unit tests
+
+prepare:
+  - name: Install package
+    how: install
+    package: python-justbases
+
+discover:
+  how: shell
+  url: https://github.com/mulkieran/justbases
+  ref: v0.15.2
+  tests:
+    - name: unit
+      test: python3 -m unittest discover --verbose tests/test_deterministic
+
+execute:
+  how: tmt

@@ -1,0 +1,4 @@
+summary: Reverse dependency tests
+component: perl-Math-BigInt-GMP
+require: perl-Math-BigInt-GMP-tests
+test: /usr/libexec/perl-Math-BigInt-GMP/test

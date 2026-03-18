@@ -1,0 +1,27 @@
+summary: Compare udica output between podman and docker
+description: |+
+    Compare udica output between podman and docker
+
+contact: Jan Zarsky <jzarsky@redhat.com> 
+component:
+  - udica
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - container-selinux
+  - /usr/bin/docker
+  - podman
+  - policycoreutils
+  - udica
+duration: 20m
+enabled: true
+tag:
+  - NoRHEL4
+  - NoRHEL5
+  - NoRHEL6
+  - NoRHEL7
+  - targeted
+adjust:
+  - enabled: false
+    when: distro == rhel-4, rhel-5, rhel-6, rhel-7
+    because: the udica package is not available there

@@ -1,0 +1,8 @@
+/icu4j-*.tar.xz
+/icu4j-*
+/noarch
+/*.src.rpm
+/.project
+/.build-*.log
+/icu-*.tar.gz
+/release-*.tar.gz

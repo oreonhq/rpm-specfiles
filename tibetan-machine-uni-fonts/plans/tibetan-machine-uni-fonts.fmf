@@ -1,0 +1,19 @@
+summary: Fonts related tests
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/fonts
+    exclude:
+      - generic_alias
+prepare:
+    name: tmt
+    how: install
+    package: tibetan-machine-uni-fonts
+execute:
+    how: tmt
+environment:
+    PACKAGE: tibetan-machine-uni-fonts
+    FONT_ALIAS: sans-serif
+    FONT_FAMILY: Tibetan Machine Uni
+    FONT_LANG: bo,dz
+    DEFAULT_SANS: 2
+    DEFAULT_MONO: 2

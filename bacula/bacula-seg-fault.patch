@@ -1,0 +1,21 @@
+diff -Naur bacula-15.0.2.old/src/lib/message.c bacula-15.0.2/src/lib/message.c
+--- bacula-15.0.2.old/src/lib/message.c	2024-06-02 10:15:17.069968292 +0200
++++ bacula-15.0.2/src/lib/message.c	2024-06-02 10:15:17.267968420 +0200
+@@ -28,6 +28,7 @@
+  *
+  */
+ 
++#include <assert.h>
+ #include "bacula.h"
+ #include "jcr.h"
+ 
+@@ -1476,7 +1477,8 @@
+ 
+     if (type == M_ABORT) {
+        char *p = 0;
+-       p[0] = 0;                      /* generate segmentation violation */
++       // p[0] = 0;                      /* generate segmentation violation */
++       assert(p!=NULL);
+     }
+     if (type == M_ERROR_TERM) {
+        exit(1);

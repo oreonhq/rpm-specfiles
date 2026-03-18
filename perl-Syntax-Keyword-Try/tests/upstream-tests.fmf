@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Syntax-Keyword-Try
+require: perl-Syntax-Keyword-Try-tests
+test: /usr/libexec/perl-Syntax-Keyword-Try/test

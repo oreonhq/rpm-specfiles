@@ -1,0 +1,84 @@
+From: Markus Koschany <apo@debian.org>
+Date: Sat, 12 May 2018 22:12:44 +0200
+Subject: getContentDocument
+
+Fix FTBFS with Java10 due to missing method getContentDocument.
+
+Forwarded: no
+---
+ src/org/apache/html/dom/HTMLFrameElementImpl.java  | 7 +++++++
+ src/org/apache/html/dom/HTMLIFrameElementImpl.java | 5 +++++
+ src/org/apache/html/dom/HTMLObjectElementImpl.java | 5 +++++
+ 3 files changed, 17 insertions(+)
+
+diff --git a/src/org/apache/html/dom/HTMLFrameElementImpl.java b/src/org/apache/html/dom/HTMLFrameElementImpl.java
+index 18ab953..e90a592 100644
+--- a/src/org/apache/html/dom/HTMLFrameElementImpl.java
++++ b/src/org/apache/html/dom/HTMLFrameElementImpl.java
+@@ -17,6 +17,8 @@
+ package org.apache.html.dom;
+ 
+ import org.w3c.dom.html.HTMLFrameElement;
++import org.w3c.dom.Document;
++
+ 
+ /**
+  * @xerces.internal
+@@ -127,6 +129,11 @@ public class HTMLFrameElementImpl
+         setAttribute( "src", src );
+     }
+ 
++    public Document getContentDocument()
++    {
++        return null;
++    }
++
+     
+     /**
+      * Constructor requires owner document.
+diff --git a/src/org/apache/html/dom/HTMLIFrameElementImpl.java b/src/org/apache/html/dom/HTMLIFrameElementImpl.java
+index c326557..287ba9e 100644
+--- a/src/org/apache/html/dom/HTMLIFrameElementImpl.java
++++ b/src/org/apache/html/dom/HTMLIFrameElementImpl.java
+@@ -17,6 +17,7 @@
+ package org.apache.html.dom;
+ 
+ import org.w3c.dom.html.HTMLIFrameElement;
++import org.w3c.dom.Document;
+ 
+ /**
+  * @xerces.internal
+@@ -150,6 +151,10 @@ public class HTMLIFrameElementImpl
+         setAttribute( "width", width );
+     }
+ 
++    public Document getContentDocument()
++    {
++        return null;
++    }
+     
+     /**
+      * Constructor requires owner document.
+diff --git a/src/org/apache/html/dom/HTMLObjectElementImpl.java b/src/org/apache/html/dom/HTMLObjectElementImpl.java
+index b065e69..cd27fc8 100644
+--- a/src/org/apache/html/dom/HTMLObjectElementImpl.java
++++ b/src/org/apache/html/dom/HTMLObjectElementImpl.java
+@@ -17,6 +17,7 @@
+ package org.apache.html.dom;
+ 
+ import org.w3c.dom.html.HTMLObjectElement;
++import org.w3c.dom.Document;
+ 
+ /**
+  * @xerces.internal
+@@ -239,6 +240,10 @@ public class HTMLObjectElementImpl
+         setAttribute( "width", width );
+     }
+ 
++    public Document getContentDocument()
++    {
++        return null;
++    }
+     
+     
+     /**

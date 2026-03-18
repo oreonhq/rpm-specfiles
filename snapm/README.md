@@ -1,0 +1,3 @@
+# snapm
+
+The snapm package

@@ -1,0 +1,16 @@
+summary: Basic test plan
+prepare:
+    how: install
+    package:
+        - tmt
+        - xkeyboard-config
+        - perl
+        - console-setup
+        - patch
+        - file
+        - gzip
+        - diffutils
+discover:
+    how: fmf
+execute:
+    how: tmt

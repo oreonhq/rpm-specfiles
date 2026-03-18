@@ -1,0 +1,1 @@
+ltrace could possibly crash traced application on s390 and s390x.

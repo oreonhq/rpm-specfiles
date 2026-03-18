@@ -1,0 +1,14 @@
+diff --git a/libpurple/Makefile.am b/libpurple/Makefile.am
+index 2739cec..6f58739 100644
+--- a/libpurple/Makefile.am
++++ b/libpurple/Makefile.am
+@@ -282,8 +282,7 @@ libpurple_la_SOURCES = \
+ 
+ noinst_HEADERS= \
+ 	internal.h \
+-	media/backend-fs2.h \
+-	valgrind.h
++	media/backend-fs2.h
+ 
+ libpurpleincludedir=$(includedir)/libpurple
+ libpurpleinclude_HEADERS = \

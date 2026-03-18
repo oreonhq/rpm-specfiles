@@ -1,0 +1,5 @@
+.build*.log
+*.rpm
+x86_64
+i386
+virt-viewer-*.tar.xz

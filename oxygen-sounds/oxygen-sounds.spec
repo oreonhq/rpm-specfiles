@@ -1,0 +1,49 @@
+
+# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+ExcludeArch: %{ix86}
+
+Name:           oxygen-sounds
+Version:        6.6.2
+Release:        1%{?dist}
+Summary:        The Oxygen Sound Theme
+
+License:        LGPL-3.0-or-later AND CC0-1.0 AND CC-BY-3.0 AND BSD-2-Clause
+URL:            https://invent.kde.org/plasma/oxygen-sounds
+
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+
+Provides:       oxygen-sound-theme = %{version}-%{release}
+Obsoletes:      oxygen-sound-theme <= 5.24.50
+
+BuildRequires:  cmake
+BuildRequires:  extra-cmake-modules
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  qt6-qtbase-devel
+
+BuildArch:      noarch
+
+%description
+%{summary}.
+
+
+%prep
+%autosetup
+
+%build
+%{cmake_kf6} -DBUILD_WITH_QT6=ON
+%{cmake_build}
+
+%install
+%{cmake_install}
+
+
+%files
+%license LICENSES/*.txt
+%{_kf6_datadir}/sounds/Oxygen-*
+%{_kf6_datadir}/sounds/oxygen/
+
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
+- Prepare for Oreon 11 (RP1)

@@ -1,0 +1,3 @@
+PURPOSE of /tools/byacc/Regression/upstream-testsuite
+Description: Runs the upstream byacc testsuite.
+Author: Arjun Shankar <ashankar@redhat.com>

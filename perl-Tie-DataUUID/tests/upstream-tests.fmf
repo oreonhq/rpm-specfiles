@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Tie-DataUUID
+require: perl-Tie-DataUUID-tests
+test: /usr/libexec/perl-Tie-DataUUID/test

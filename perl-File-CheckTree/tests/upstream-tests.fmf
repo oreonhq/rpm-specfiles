@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-File-CheckTree
+require: perl-File-CheckTree-tests
+test: /usr/libexec/perl-File-CheckTree/test

@@ -1,0 +1,4 @@
+/virtualenv-*.tar.gz
+/virtualenv-*/
+/results_python-virtualenv/
+*.rpm

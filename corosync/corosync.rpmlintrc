@@ -1,0 +1,29 @@
+# Empty %postun
+addFilter(r'W: empty-%postun')
+
+# Spelling error init
+addFilter(r'W: spelling-error %description -l en_US init')
+
+# Spelling error corosync
+addFilter(r'W: spelling-error .* (C|c)orosync')
+
+# Spelling error votequorum and subprocesses
+addFilter(r'corosync-vqsim\.[^:]+: W: spelling-error .* votequorum')
+addFilter(r'corosync-vqsim\.[^:]+: W: spelling-error .* subprocesses')
+
+# Repeated Corosync
+addFilter(r'W: name-repeated-in-summary C Corosync')
+
+# Explicit lib dependency - knet nss has been requested by QA,
+# libxslt may be replaced with xsltproc binary
+addFilter(r'corosync\.[^:]+: (E|W): explicit-lib-dependency libknet1-crypto-nss-plugin')
+addFilter(r'corosync\.[^:]+: (E|W): explicit-lib-dependency libxslt')
+
+# Dbus is not config file
+addFilter(r'corosync\.[^:]+: (E|W): non-conffile-in-etc /etc/dbus-1/system\.d/corosync-signals\.conf')
+
+# Logrotate is not requirement
+addFilter(r'corosync\.[^:]+: (E|W): missing-dependency-to-logrotate')
+
+# libcorosync_common.so has no libc call
+addFilter(r'corosynclib\.[^:]+: (E|W): library-not-linked-against-libc /usr/lib(64)?/libcorosync_common\.so')

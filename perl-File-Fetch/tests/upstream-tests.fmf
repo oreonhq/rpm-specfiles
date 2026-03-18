@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-File-Fetch
+require: perl-File-Fetch-tests
+test: /usr/libexec/perl-File-Fetch/test

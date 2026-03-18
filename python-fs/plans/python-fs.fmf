@@ -1,0 +1,11 @@
+discover:
+  - name: smoke-tests
+    how: shell
+    tests:
+    - name: python-import-test
+      test: python3 -c 'import fs'
+      require:
+      - python3-fs
+      duration: 1m
+execute:
+  how: tmt

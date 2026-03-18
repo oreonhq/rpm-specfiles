@@ -1,0 +1,16 @@
+---
+# This first play always runs on the local staging system
+- hosts: localhost
+  roles:
+  - role: standard-test-basic
+    tags:
+    - classic
+    tests:
+    - upstream-testset
+    required_packages:
+    - dbus-glib
+    - rpm-build    
+    - gcc 
+    - gcc-c++
+    - wget
+    - make

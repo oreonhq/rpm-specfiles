@@ -1,0 +1,11 @@
+summary: Jurand smoke test
+description: |
+  Download Guava sources, run Jurand to remove annotations and then
+  compile Guava to verify that annotations were removed, producing
+  valid Java code that can be compiled.
+require:
+  - wget
+  - tar
+  - gzip
+  - findutils
+  - java-25-openjdk-devel

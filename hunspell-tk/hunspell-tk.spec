@@ -1,0 +1,42 @@
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%global dict_dirname hunspell
+%else
+%global dict_dirname myspell
+%endif
+
+Name: hunspell-tk
+Summary: Turkmen hunspell dictionaries
+Version: 0.02
+Epoch: 1
+Release: 31%{?dist}
+# Following link is dead now
+# Do not report bugs to fix it
+Source: http://releases.mozilla.org/pub/mozilla.org/addons/204314/turkmen_spell_checker-%{version}-tb+fx+sm.xpi
+URL: http://borel.slu.edu/crubadan/apps.html
+License: GPL-2.0-or-later
+BuildArch: noarch
+
+Requires: hunspell-filesystem
+Supplements: (hunspell and langpacks-tk)
+
+%description
+Turkmen hunspell dictionaries.
+
+%prep
+%autosetup -c -n hunspell-tk
+
+%build
+
+%install
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+cp -p dictionaries/tk-TM.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/tk.aff
+cp -p dictionaries/tk-TM.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/tk.dic
+
+
+%files
+%doc dictionaries/README_tk_TM.txt
+%{_datadir}/%{dict_dirname}/*
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.02-31
+- Prepare for Oreon 11 (RP1)

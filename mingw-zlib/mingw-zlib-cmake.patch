@@ -1,0 +1,23 @@
+diff -rupN --no-dereference zlib-1.3.2/CMakeLists.txt zlib-1.3.2-new/CMakeLists.txt
+--- zlib-1.3.2/CMakeLists.txt	2026-02-17 13:47:06.000000000 +0100
++++ zlib-1.3.2-new/CMakeLists.txt	2026-03-01 12:11:10.764932803 +0100
+@@ -149,7 +149,7 @@ set(ZLIB_SRCS
+     uncompr.c
+     zutil.c)
+ 
+-if(WIN32)
++if(WIN32 AND NOT MINGW)
+     set(zlib_static_suffix "s")
+     set(CMAKE_DEBUG_POSTFIX "d")
+ endif(WIN32)
+@@ -184,6 +184,10 @@ if(ZLIB_BUILD_SHARED)
+         PROPERTIES DEFINE_SYMBOL ZLIB_DLL
+                    EXPORT_NAME ZLIB
+                    OUTPUT_NAME z)
++   if(MINGW)
++     set_target_properties(zlib PROPERTIES PREFIX "")
++     set_target_properties(zlib PROPERTIES RUNTIME_OUTPUT_NAME "zlib1")
++   endif()
+     if(UNIX
+         AND NOT APPLE
+         AND NOT (CMAKE_SYSTEM_NAME STREQUAL AIX)

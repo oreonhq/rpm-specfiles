@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-XML-LibXML
+require: perl-XML-LibXML-tests
+test: /usr/libexec/perl-XML-LibXML/tests

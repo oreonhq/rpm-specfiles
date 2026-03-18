@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-XML-Simple
+require: perl-XML-Simple-tests
+test: /usr/libexec/perl-XML-Simple/test

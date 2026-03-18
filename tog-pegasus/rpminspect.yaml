@@ -1,0 +1,14 @@
+---
+badfuncs:
+    allowed:
+        /usr/lib*/libpegclient.so.*:
+            - inet_addr
+        /usr/lib*/libpegslp_client.so*:
+            - inet_addr
+debuginfo:
+    ignore:
+        - '/usr/lib*/Pegasus/providerManagers/*'
+        - '/usr/lib*/Pegasus/providers/*'
+        - '/usr/lib*/*'
+ownership:
+    bin_group: pegasus

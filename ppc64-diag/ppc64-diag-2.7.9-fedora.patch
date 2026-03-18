@@ -1,0 +1,378 @@
+From 9e2a0ee2356b2416479affe5e56903a265303cf4 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Thu, 7 Apr 2022 19:08:47 +0200
+Subject: [PATCH 1/4] fix message catalog location
+
+---
+ ela/Makefile.am          | 22 +++++++++++-----------
+ ela/catalogs.h           |  2 +-
+ ela/explain_syslog.cpp   |  2 +-
+ ela/syslog_to_svclog.cpp |  2 +-
+ 4 files changed, 14 insertions(+), 14 deletions(-)
+
+diff --git a/ela/Makefile.am b/ela/Makefile.am
+index 9dcb81c..a7d5a3f 100644
+--- a/ela/Makefile.am
++++ b/ela/Makefile.am
+@@ -62,22 +62,22 @@ clean-local-ela:
+ CLEAN_LOCALS += clean-local-ela
+ 
+ install-exec-hook-ela:
+-	install -d --mode=755 $(DESTDIR)/etc/ppc64-diag/message_catalog/with_regex/
+-	install -D --mode=644 $(CATALOG) $(DESTDIR)/etc/ppc64-diag/message_catalog/
++	install -d --mode=755 $(DESTDIR)/usr/share/ppc64-diag/message_catalog/with_regex/
++	install -D --mode=644 $(CATALOG) $(DESTDIR)/usr/share/ppc64-diag/message_catalog/
+ 	install -D --mode=644 $(CATALOG_REGEX) \
+-		$(DESTDIR)/etc/ppc64-diag/message_catalog/with_regex/
++		$(DESTDIR)/usr/share/ppc64-diag/message_catalog/with_regex/
+ 
+ INSTALL_EXEC_HOOKS += install-exec-hook-ela
+ 
+ uninstall-hook-ela:
+-	rm -f $(DESTDIR)/etc/ppc64-diag/message_catalog/cxgb3
+-	rm -f $(DESTDIR)/etc/ppc64-diag/message_catalog/e1000e
+-	rm -f $(DESTDIR)/etc/ppc64-diag/message_catalog/exceptions
+-	rm -f $(DESTDIR)/etc/ppc64-diag/message_catalog/reporters
+-	rm -f $(DESTDIR)/etc/ppc64-diag/message_catalog/gpfs
+-	rm -f $(DESTDIR)/etc/ppc64-diag/message_catalog/with_regex/cxgb3
+-	rm -f $(DESTDIR)/etc/ppc64-diag/message_catalog/with_regex/e1000e
+-	rm -f $(DESTDIR)/etc/ppc64-diag/message_catalog/with_regex/gpfs
++	rm -f $(DESTDIR)/usr/share/ppc64-diag/message_catalog/cxgb3
++	rm -f $(DESTDIR)/usr/share/ppc64-diag/message_catalog/e1000e
++	rm -f $(DESTDIR)/usr/share/ppc64-diag/message_catalog/exceptions
++	rm -f $(DESTDIR)/usr/share/ppc64-diag/message_catalog/reporters
++	rm -f $(DESTDIR)/usr/share/ppc64-diag/message_catalog/gpfs
++	rm -f $(DESTDIR)/usr/share/ppc64-diag/message_catalog/with_regex/cxgb3
++	rm -f $(DESTDIR)/usr/share/ppc64-diag/message_catalog/with_regex/e1000e
++	rm -f $(DESTDIR)/usr/share/ppc64-diag/message_catalog/with_regex/gpfs
+ 
+ UNINSTALL_HOOKS += uninstall-hook-ela
+ 
+diff --git a/ela/catalogs.h b/ela/catalogs.h
+index ce68a86..f77ee01 100644
+--- a/ela/catalogs.h
++++ b/ela/catalogs.h
+@@ -34,7 +34,7 @@ using namespace std;
+ #include <stdio.h>
+ #include <regex.h>
+ 
+-#define ELA_CATALOG_DIR "/etc/ppc64-diag/message_catalog"
++#define ELA_CATALOG_DIR "/usr/share/ppc64-diag/message_catalog"
+ 
+ class Parser {
+ protected:
+diff --git a/ela/explain_syslog.cpp b/ela/explain_syslog.cpp
+index f8a0dc7..4b26418 100644
+--- a/ela/explain_syslog.cpp
++++ b/ela/explain_syslog.cpp
+@@ -97,7 +97,7 @@ print_help(void)
+ 	printf(
+ "-b begin_time\tIgnore messages with timestamps prior to begin_time.\n"
+ "-C catalog_dir\tUse message catalog in catalog_dir.  Defaults to\n"
+-"\t\t\t/etc/ppc64-diag/message_catalog.\n"
++"\t\t\t/usr/share/ppc64-diag/message_catalog.\n"
+ "-d\t\tPrint debugging output on stderr.\n"
+ "-e end_time\tStop upon reading message with timestamp after end_time.\n"
+ "-h\t\tPrint this help text and exit.\n"
+diff --git a/ela/syslog_to_svclog.cpp b/ela/syslog_to_svclog.cpp
+index 35adca2..2b3d945 100644
+--- a/ela/syslog_to_svclog.cpp
++++ b/ela/syslog_to_svclog.cpp
+@@ -682,7 +682,7 @@ print_help(void)
+ 	printf(
+ "-b begin_time\tIgnore messages with timestamps prior to begin_time.\n"
+ "-C catalog_dir\tUse message catalog in catalog_dir.  Defaults to\n"
+-"\t\t\t/etc/ppc64-diag/message_catalog.\n"
++"\t\t\t/usr/share/ppc64-diag/message_catalog.\n"
+ "-d\t\tPrint debugging output on stderr.\n"
+ "-e end_time\tStop upon reading message with timestamp after end_time.\n"
+ "-F\t\tDon't stop at EOF; process newly logged messages as they occur.\n"
+-- 
+2.34.1
+
+
+From 1f962c902b170f073af51693182d2b4e3ec4f174 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Thu, 7 Apr 2022 19:09:21 +0200
+Subject: [PATCH 2/4] fix script location
+
+---
+ scripts/Makefile.am          | 15 ++++++++-------
+ scripts/ppc64_diag_migrate   |  2 +-
+ scripts/ppc64_diag_mkrsrc    |  4 ++--
+ scripts/ppc64_diag_notify    |  6 +++---
+ scripts/ppc64_diag_servagent |  4 ++--
+ scripts/ppc64_diag_setup     |  6 +++---
+ scripts/rtas_errd            |  2 +-
+ 7 files changed, 20 insertions(+), 19 deletions(-)
+
+--- a/scripts/ppc64_diag_migrate
++++ b/scripts/ppc64_diag_migrate
+@@ -1,4 +1,4 @@
+-#! /usr/bin/perl -I /etc/ppc64-diag
++#! /usr/bin/perl -I /usr/libexec/ppc64-diag
+ #
+ # This script is to be registered with servicelog as a notification tool.  It
+ # is responsible for performing whatever actions may be necessary following
+diff --git a/scripts/ppc64_diag_mkrsrc b/scripts/ppc64_diag_mkrsrc
+index 53e7a27..4df8b72 100755
+--- a/scripts/ppc64_diag_mkrsrc
++++ b/scripts/ppc64_diag_mkrsrc
+@@ -1,4 +1,4 @@
+-#! /usr/bin/perl -I /etc/ppc64-diag
++#! /usr/bin/perl -I /usr/libexec/ppc64-diag
+ #
+ # This script is to be registered with servicelog as a notification tool.  It
+ # is responsible for creating a new IBM.ServiceEvent RMC resource when a
+@@ -27,7 +27,7 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ 
+-require "/etc/ppc64-diag/servevent_parse.pl";
++require "/usr/libexec/ppc64-diag/servevent_parse.pl";
+ 
+ # Check to make sure that devices.chrp.base.ServiceRM is installed
+ $rc = system("which rpm >/dev/null 2>&1");
+diff --git a/scripts/ppc64_diag_notify b/scripts/ppc64_diag_notify
+index 9f198d9..607bb7f 100755
+--- a/scripts/ppc64_diag_notify
++++ b/scripts/ppc64_diag_notify
+@@ -1,4 +1,4 @@
+-#! /usr/bin/perl -I /etc/ppc64-diag
++#! /usr/bin/perl -I /usr/libexec/ppc64-diag
+ #
+ # This script is to be registered with servicelog as a notification tool.  It
+ # is responsible for sending out e-mail notifications of new ppc64 platform
+@@ -22,7 +22,7 @@
+  
+ use Getopt::Long;
+ 
+-require "/etc/ppc64-diag/servevent_parse.pl";
++require "/usr/libexec/ppc64-diag/servevent_parse.pl";
+ 
+ sub usage {
+ 	print "$0 [OPTIONS]\n";
+@@ -156,7 +156,7 @@ if ($flag_email) {
+ 	chomp $hostname;
+ 	$subject = "$hostname: serviceable platform event logged";
+ 
+-	if (open(MAILLIST, "< /etc/ppc64-diag/mail_list")) {
++	if (open(MAILLIST, "< /usr/libexec/ppc64-diag/mail_list")) {
+ 		while (<MAILLIST>) {
+ 			chomp;
+ 			$pos = index($_, "#");
+diff --git a/scripts/ppc64_diag_servagent b/scripts/ppc64_diag_servagent
+index 4f45983..9966302 100755
+--- a/scripts/ppc64_diag_servagent
++++ b/scripts/ppc64_diag_servagent
+@@ -1,4 +1,4 @@
+-#! /usr/bin/perl -I /etc/ppc64-diag
++#! /usr/bin/perl -I /usr/libexec/ppc64-diag
+ #
+ # This script is to be registered with servicelog as a notification tool.  It
+ # is responsible for invoking Electronic Service Agent in response to a
+@@ -25,7 +25,7 @@
+ # along with this program; if not, write to the Free Software
+ # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+  
+-require "/etc/ppc64-diag/servevent_parse.pl";
++require "/usr/libexec/ppc64-diag/servevent_parse.pl";
+ 
+ if (!-e "/usr/svcagent/bin/callsa2") {
+ 	# eSA is not installed; exit quietly
+diff --git a/scripts/ppc64_diag_setup b/scripts/ppc64_diag_setup
+index 283c357..2c80c5c 100755
+--- a/scripts/ppc64_diag_setup
++++ b/scripts/ppc64_diag_setup
+@@ -89,15 +89,15 @@ sub unregister {
+ 
+ @notification_tools = (
+ 
+-    ["/etc/ppc64-diag/ppc64_diag_notify -q -e root -l /var/log/platform",
++    ["/usr/libexec/ppc64-diag/ppc64_diag_notify -q -e root -l /var/log/platform",
+      "--match='serviceable=1' ".
+      "--type=EVENT --method=pairs_stdin"],
+ 
+-    ["/etc/ppc64-diag/ppc64_diag_mkrsrc",
++    ["/usr/libexec/ppc64-diag/ppc64_diag_mkrsrc",
+      "--match='serviceable=1' ".
+      "--type=EVENT --method=pairs_stdin"],
+ 
+-    ["/etc/ppc64-diag/ppc64_diag_migrate",
++    ["/usr/libexec/ppc64-diag/ppc64_diag_migrate",
+      "--match=\'refcode=\"#MIGRATE\" and serviceable=0\' ".
+      "--type=EVENT --method=pairs_stdin"],
+ );
+diff --git a/scripts/rtas_errd b/scripts/rtas_errd
+index d5d40fe..fd9d5d2 100755
+--- a/scripts/rtas_errd
++++ b/scripts/rtas_errd
+@@ -66,7 +66,7 @@ case "$1" in
+ 		echo "registering ppc64-diag with system"
+ 		rm -f /var/cache/ppc64-diag.registered
+ 		mkdir -v /var/cache/ppc64-diag.registered
+-		/etc/ppc64-diag/ppc64_diag_setup --register
++		/usr/libexec/ppc64-diag/ppc64_diag_setup --register
+ 	fi
+ 	echo -n "Starting rtas_errd (platform error handling) daemon: "
+ 	if [ $INSSERV -eq 1 ]; then
+-- 
+2.34.1
+
+
+From 6d56d9d7b96232d2e75800282a86760ba87b9204 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Thu, 7 Apr 2022 19:10:32 +0200
+Subject: [PATCH 3/4] fix lpd script location
+
+---
+ lpd/Makefile.am            | 8 ++++----
+ lpd/scripts/lp_diag_notify | 2 +-
+ lpd/scripts/lp_diag_setup  | 6 +++---
+ 3 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/lpd/Makefile.am b/lpd/Makefile.am
+index 4e0c03f..df362c0 100644
+--- a/lpd/Makefile.am
++++ b/lpd/Makefile.am
+@@ -46,16 +46,16 @@ all-local-lpd:
+ AM_LOCALS += all-local-lpd
+ 
+ install-exec-hook-lpd:
+-	install -d --mode=755 $(DESTDIR)/etc/ppc64-diag
+-	install -D --mode=744 $(LPD_SCRIPT) $(DESTDIR)/etc/ppc64-diag/
++	install -d --mode=755 $(DESTDIR)/usr/libexec/ppc64-diag
++	install -D --mode=744 $(LPD_SCRIPT) $(DESTDIR)/usr/libexec/ppc64-diag/
+ 	(cd $(DESTDIR)/$(sbindir) && $(LN_S) -f usysident usysattn)
+ 	(cd $(DESTDIR)/$(sbindir) && $(LN_S) -f usysident usysfault)
+ 
+ INSTALL_EXEC_HOOKS += install-exec-hook-lpd
+ 
+ uninstall-hook-lpd:
+-	rm -f $(DESTDIR)/etc/ppc64-diag/lp_diag_setup
+-	rm -f $(DESTDIR)/etc/ppc64-diag/lp_diag_notify
++	rm -f $(DESTDIR)/usr/libexec/ppc64-diag/lp_diag_setup
++	rm -f $(DESTDIR)/usr/libexec/ppc64-diag/lp_diag_notify
+ 	rm -f $(sbindir)/usysattn
+ 	rm -f $(sbindir)/usysfault
+ 
+diff --git a/lpd/scripts/lp_diag_notify b/lpd/scripts/lp_diag_notify
+index 52dc242..f500299 100755
+--- a/lpd/scripts/lp_diag_notify
++++ b/lpd/scripts/lp_diag_notify
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -I /etc/ppc64-diag
++#!/usr/bin/perl -I /usr/libexec/ppc64-diag
+ # @file		lp_diag_notify
+ #
+ # This script is to be registered with servicelog as a notification tool.
+diff --git a/lpd/scripts/lp_diag_setup b/lpd/scripts/lp_diag_setup
+index 8dabb75..4b4d0a2 100755
+--- a/lpd/scripts/lp_diag_setup
++++ b/lpd/scripts/lp_diag_setup
+@@ -1,4 +1,4 @@
+-#!/usr/bin/perl -I /etc/ppc64-diag
++#!/usr/bin/perl -I /usr/libexec/ppc64-diag
+ # @file		lp_diag_setup
+ # @brief	Register/unregister Light Path notification tools
+ #		with servicelog
+@@ -91,10 +91,10 @@ sub unregister {
+ }
+ 
+ @notification_tools = (
+-    ["/etc/ppc64-diag/lp_diag_notify -e",
++    ["/usr/libexec/ppc64-diag/lp_diag_notify -e",
+      "--match='disposition>=1 and severity>=4 and serviceable=1' ".
+      "--type=EVENT --method=num_arg"],
+-    ["/etc/ppc64-diag/lp_diag_notify -r",
++    ["/usr/libexec/ppc64-diag/lp_diag_notify -r",
+      "--type=REPAIR --method=num_arg"],
+ );
+ 
+-- 
+2.34.1
+
+
+From 156ec91278ba350a4cd7a722a2431e07e4f461bc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Thu, 7 Apr 2022 19:11:02 +0200
+Subject: [PATCH 4/4] fix permissions
+
+---
+ diags/Makefile.am     | 2 +-
+ lpd/Makefile.am       | 2 +-
+ rtas_errd/Makefile.am | 2 +-
+ scripts/Makefile.am   | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/diags/Makefile.am b/diags/Makefile.am
+index f513cec..268d5f4 100644
+--- a/diags/Makefile.am
++++ b/diags/Makefile.am
+@@ -43,7 +43,7 @@ DIAG_CRONTAB_SCRIPT = diags/run_diag_encl
+ install-exec-hook-diag:
+ 	install -d --mode=755 $(DESTDIR)/var/log/ppc64-diag/diag_disk
+ 	install -d --mode=755 $(DESTDIR)/etc/cron.daily/
+-	install -D --mode=744 $(DIAG_CRONTAB_SCRIPT) $(DESTDIR)/etc/cron.daily/
++	install -D --mode=644 $(DIAG_CRONTAB_SCRIPT) $(DESTDIR)/etc/cron.daily/
+ 
+ INSTALL_EXEC_HOOKS += install-exec-hook-diag
+ 
+diff --git a/lpd/Makefile.am b/lpd/Makefile.am
+index df362c0..c430b9a 100644
+--- a/lpd/Makefile.am
++++ b/lpd/Makefile.am
+@@ -47,7 +47,7 @@ AM_LOCALS += all-local-lpd
+ 
+ install-exec-hook-lpd:
+ 	install -d --mode=755 $(DESTDIR)/usr/libexec/ppc64-diag
+-	install -D --mode=744 $(LPD_SCRIPT) $(DESTDIR)/usr/libexec/ppc64-diag/
++	install -D --mode=755 $(LPD_SCRIPT) $(DESTDIR)/usr/libexec/ppc64-diag/
+ 	(cd $(DESTDIR)/$(sbindir) && $(LN_S) -f usysident usysattn)
+ 	(cd $(DESTDIR)/$(sbindir) && $(LN_S) -f usysident usysfault)
+ 
+diff --git a/rtas_errd/Makefile.am b/rtas_errd/Makefile.am
+index f475840..ed70978 100644
+--- a/rtas_errd/Makefile.am
++++ b/rtas_errd/Makefile.am
+@@ -47,7 +47,7 @@ dist_man_MANS += rtas_errd/man/rtas_errd.8
+ 
+ install-exec-hook-rtas-errd:
+ 	install -d --mode=755 $(DESTDIR)/etc/
+-	install -D --mode=744 $(rtas_scripts) $(DESTDIR)/etc/
++	install -D --mode=755 $(rtas_scripts) $(DESTDIR)/etc/
+ 
+ uninstall-hook-rtas-errd:
+ 	rm -f $(DESTDIR)/etc/rc.powerfail
+diff -up ppc64-diag-2.7.9/scripts/Makefile.am.me ppc64-diag-2.7.9/scripts/Makefile.am
+--- ppc64-diag-2.7.9/scripts/Makefile.am.me	2022-10-18 16:32:52.476721485 +0200
++++ ppc64-diag-2.7.9/scripts/Makefile.am	2022-10-18 16:36:34.798721016 +0200
+@@ -12,20 +12,21 @@ INIT_FILES = scripts/rtas_errd scripts/o
+ SERVICE_SCRIPT = scripts/rtas_errd.service scripts/opal_errd.service
+ 
+ install-exec-hook-scripts:
++	install -d --mode=755 $(DESTDIR)/usr/libexec/ppc64-diag/
+ 	install -d --mode=755 $(DESTDIR)/etc/ppc64-diag/
+-	install -D --mode=744 $(PPC64_DIAG_SCRIPT) $(DESTDIR)/etc/ppc64-diag/
+-	install -D --mode=644 $(CONFIG_FILE) $(DESTDIR)/etc/ppc64-diag
++	install -D --mode=755 $(PPC64_DIAG_SCRIPT) $(DESTDIR)/usr/libexec/ppc64-diag/
++	install -D --mode=644 $(CONFIG_FILE) $(DESTDIR)/etc/ppc64-diag/
+ 	install -d --mode=755 $(DESTDIR)/usr/libexec/ppc64-diag/
+ 	install -D --mode=755 $(INIT_FILES) $(DESTDIR)/usr/libexec/ppc64-diag/
+ 	install -d --mode=755 $(DESTDIR)/usr/lib/systemd/system/
+ 	install -D --mode=644 $(SERVICE_SCRIPT) $(DESTDIR)/usr/lib/systemd/system/
+ 
+ uninstall-hook-scripts:
+-	rm -f $(DESTDIR)/etc/ppc64-diag/ppc64_diag_setup
+-	rm -f $(DESTDIR)/etc/ppc64-diag/ppc64_diag_mkrsrc
+-	rm -f $(DESTDIR)/etc/ppc64-diag/ppc64_diag_notify
+-	rm -f $(DESTDIR)/etc/ppc64-diag/ppc64_diag_migrate
+-	rm -f $(DESTDIR)/etc/ppc64-diag/servevent_parse.pl
++	rm -f $(DESTDIR)/usr/libexec/ppc64-diag/ppc64_diag_setup
++	rm -f $(DESTDIR)/usr/libexec/ppc64-diag/ppc64_diag_mkrsrc
++	rm -f $(DESTDIR)/usr/libexec/ppc64-diag/ppc64_diag_notify
++	rm -f $(DESTDIR)/usr/libexec/ppc64-diag/ppc64_diag_migrate
++	rm -f $(DESTDIR)/usr/libexec/ppc64-diag/servevent_parse.pl
+ 	rm -f $(DESTDIR)/etc/ppc64-diag/ppc64-diag.config
+ 	rm -f $(DESTDIR)/etc/ppc64-diag/diag_nvme.config
+ 	rm -f $(DESTDIR)/usr/libexec/ppc64-diag/rtas_errd

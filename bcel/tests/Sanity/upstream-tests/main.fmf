@@ -1,0 +1,8 @@
+summary: BCEL upstream tests
+description: |
+  Run BCEL upstream tests that are packaged in the SRPM.
+require:
+  - bcel
+  - javapackages-tools
+  - maven
+  - cpio

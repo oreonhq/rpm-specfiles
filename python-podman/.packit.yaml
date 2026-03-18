@@ -1,0 +1,123 @@
+---
+# See the documentation for more information:
+# https://packit.dev/docs/configuration/
+
+upstream_tag_template: v{version}
+
+packages:
+  python-podman-fedora:
+    pkg_tool: fedpkg
+    downstream_package_name: python-podman
+    specfile_path: rpm/python-podman.spec
+  python-podman-centos:
+    pkg_tool: centpkg
+    downstream_package_name: python-podman
+    specfile_path: rpm/python-podman.spec
+  python-podman-rhel:
+    specfile_path: rpm/python-podman.spec
+
+actions:
+  prepare-files: >-
+    bash -c "sed -i 's/^\(\s*\)ref: .*/\1ref: \"${PACKIT_PROJECT_TAG}\"/' ${PACKIT_DOWNSTREAM_REPO}/plans/main.fmf"
+
+srpm_build_deps:
+  - make
+
+jobs:
+  # Copr builds for Fedora
+  - job: copr_build
+    trigger: pull_request
+    identifier: pr-fedora
+    packages: [python-podman-fedora]
+    targets:
+      - fedora-all
+
+  # Copr builds for CentOS Stream
+  - job: copr_build
+    trigger: pull_request
+    identifier: pr-centos
+    packages: [python-podman-centos]
+    targets:
+      - centos-stream-10
+      - centos-stream-9
+
+  # Copr builds for RHEL
+  - job: copr_build
+    trigger: pull_request
+    identifier: pr-rhel
+    packages: [python-podman-rhel]
+    targets:
+      - epel-9
+
+  # Run on commit to main branch
+  - job: copr_build
+    trigger: commit
+    identifier: commit-fedora
+    packages: [python-podman-fedora]
+    branch: main
+    owner: rhcontainerbot
+    project: podman-next
+
+  # Downstream sync for Fedora
+  - job: propose_downstream
+    trigger: release
+    packages: [python-podman-fedora]
+    dist_git_branches:
+      - fedora-all
+
+  # Downstream sync for CentOS Stream
+  # TODO: c9s enablement being tracked in https://issues.redhat.com/browse/RUN-2123
+  - job: propose_downstream
+    trigger: release
+    packages: [python-podman-centos]
+    dist_git_branches:
+      - c10s
+      - c9s
+
+  - job: koji_build
+    trigger: commit
+    packages: [python-podman-fedora]
+    dist_git_branches:
+      - fedora-all
+
+  - job: bodhi_update
+    trigger: commit
+    packages: [python-podman-fedora]
+    dist_git_branches:
+      - fedora-branched # rawhide updates are created automatically
+
+  # Test linting on the codebase
+  # This test might break based on the OS and lint used, so we follow fedora-latest as a reference
+  - job: tests
+    trigger: pull_request
+    identifier: upstream-sanity
+    tmt_plan: /upstream/sanity
+    packages: [python-podman-fedora]
+    targets:
+      - fedora-latest-stable
+    skip_build: true
+
+  - job: tests
+    trigger: pull_request
+    identifier: upstream-all-fedora
+    tmt_plan: /upstream/all
+    packages: [python-podman-fedora]
+    targets:
+      - fedora-all
+
+  - job: tests
+    trigger: pull_request
+    identifier: upstream-base-centos
+    tmt_plan: /upstream/base
+    packages: [python-podman-centos]
+    targets:
+      - centos-stream-9
+      - centos-stream-10
+
+  - job: tests
+    trigger: pull_request
+    identifier: upstream-base-rhel
+    tmt_plan: /upstream/base
+    packages: [python-podman-rhel]
+    targets:
+      - epel-9

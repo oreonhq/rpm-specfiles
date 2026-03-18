@@ -1,0 +1,56 @@
+From 58f5d129496cc8b4271daf5d0cd3ab31e8b926a8 Mon Sep 17 00:00:00 2001
+From: Akshay Adhikari <aadhikar@redhat.com>
+Date: Thu, 12 Feb 2026 12:47:23 +0530
+Subject: [PATCH] Issue 7233 - test_produce_division_by_zero fails with
+ IsADirectoryError in conftest.py (#7234)
+
+Description: glob('/*/*') matches directories causing open() to fail.
+
+Fixes: #7233
+
+Reviewed by: @droideck (Thanks!)
+---
+ dirsrvtests/conftest.py                                    | 2 ++
+ .../suites/disk_monitoring/disk_monitoring_divide_test.py  | 7 ++++---
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/dirsrvtests/conftest.py b/dirsrvtests/conftest.py
+index 0db6045f4..19b34c4a4 100644
+--- a/dirsrvtests/conftest.py
++++ b/dirsrvtests/conftest.py
+@@ -126,6 +126,8 @@ def pytest_runtest_makereport(item, call):
+                     text = asan_report.read()
+                     extra.append(pytest_html.extras.text(text, name=os.path.basename(f)))
+             for f in glob.glob(f'{p.log_dir.split("/slapd",1)[0]}/*/*'):
++                if not os.path.isfile(f):
++                    continue
+                 if f.endswith('gz'):
+                     with gzip.open(f, 'rb') as dirsrv_log:
+                         text = dirsrv_log.read()
+diff --git a/dirsrvtests/tests/suites/disk_monitoring/disk_monitoring_divide_test.py b/dirsrvtests/tests/suites/disk_monitoring/disk_monitoring_divide_test.py
+index 9d952f93a..3e52e7c6b 100644
+--- a/dirsrvtests/tests/suites/disk_monitoring/disk_monitoring_divide_test.py
++++ b/dirsrvtests/tests/suites/disk_monitoring/disk_monitoring_divide_test.py
+@@ -31,15 +31,16 @@ def create_dummy_mount(topology_st, request):
+     log.info('Create dummy mount')
+     for cmd in cmds:
+         log.info('Command used : %s' % cmd)
+-        subprocess.Popen(cmd, shell=True)
++        subprocess.run(cmd, shell=True)
+ 
+     def fin():
+         cmds = ['umount /var/log/dirsrv/slapd-{}/tmp'.format(topology_st.standalone.serverid),
++                'rmdir /var/log/dirsrv/slapd-{}/tmp'.format(topology_st.standalone.serverid),
+                 'setenforce 1']
+ 
+         for cmd in cmds:
+-            log.info('Command used : %s' % cmds)
+-            subprocess.Popen(cmd, shell=True)
++            log.info('Command used : %s' % cmd)
++            subprocess.run(cmd, shell=True)
+ 
+     request.addfinalizer(fin)
+ 
+-- 
+2.52.0
+

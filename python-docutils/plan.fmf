@@ -1,0 +1,9 @@
+discover:
+    how: shell
+    tests:
+    - name: import test
+      test: python3 -c 'import docutils'
+      require:
+      - python3-docutils
+execute:
+  how: tmt

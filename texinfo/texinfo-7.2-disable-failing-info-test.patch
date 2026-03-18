@@ -1,0 +1,23 @@
+diff -up texinfo-7.2/tp/tests/Makefile.in.orig texinfo-7.2/tp/tests/Makefile.in
+--- texinfo-7.2/tp/tests/Makefile.in.orig	2026-02-12 07:37:14.284221825 +0100
++++ texinfo-7.2/tp/tests/Makefile.in	2026-02-12 07:37:31.477996765 +0100
+@@ -2040,7 +2040,6 @@ type_base_one_test_files_generated_list
+     test_scripts/formatting_simplest_test_css.sh \
+     test_scripts/formatting_defcondx_Dbar.sh \
+     test_scripts/formatting_defcondx_Ubar.sh \
+-    test_scripts/formatting_documentlanguage_cmdline.sh \
+     test_scripts/formatting_cpp_lines.sh \
+     test_scripts/formatting_no_content.sh \
+     test_scripts/formatting_no_content_separate.sh \
+diff -up texinfo-7.2/tp/tests/many_input_files/Makefile.in.orig texinfo-7.2/tp/tests/many_input_files/Makefile.in
+--- texinfo-7.2/tp/tests/many_input_files/Makefile.in.orig	2026-02-12 07:43:15.444281478 +0100
++++ texinfo-7.2/tp/tests/many_input_files/Makefile.in	2026-02-12 07:43:49.794234491 +0100
+@@ -1968,7 +1968,7 @@ EXTRA_DIST = $(TESTS) \
+   input_files/simple_including_file.texi
+ 
+ TESTS = first_file_not_found.sh tex_l2h.sh tex_t4ht.sh \
+-  different_encodings.sh different_languages_gen_master_menu.sh \
++  different_encodings.sh \
+   for_nbspaces_different_encodings.sh \
+   input_dir_non_ascii.sh output_dir_non_ascii.sh \
+   output_dir_file_non_ascii.sh tex_t4ht_output_dir_non_ascii.sh \

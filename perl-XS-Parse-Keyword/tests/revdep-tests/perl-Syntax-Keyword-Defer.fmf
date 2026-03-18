@@ -1,0 +1,8 @@
+# Fedora CI does not support automatic testing of reverse dependencies. Hence
+# list the dependencies here explicitly.
+# We cannot link the tests via FMF plan uri because it would hard-code Fedora
+# dist-git domain name (ugly) and dist-git branch (does not survive branching).
+summary: Reverse dependency tests
+component: perl-Syntax-Keyword-Defer
+require: perl-Syntax-Keyword-Defer-tests
+test: /usr/libexec/perl-Syntax-Keyword-Defer/test

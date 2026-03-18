@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Text-VCardFast
+require: perl-Text-VCardFast-tests
+test: /usr/libexec/perl-Text-VCardFast/test

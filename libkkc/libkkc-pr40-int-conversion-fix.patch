@@ -1,0 +1,29 @@
+From b2dd5b2655d9fe7c3e8b423af7022dbe1c2e8bb1 Mon Sep 17 00:00:00 2001
+From: kinichiro <kinichiro.inoguchi@gmail.com>
+Date: Mon, 27 Sep 2021 12:39:23 +0000
+Subject: [PATCH] Return false rather than null in boolean function
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This suppress the warning below.
+warning: returning ‘void *’ from a function with return type ‘gboolean’ {aka ‘int’} makes integer from pointer without a cast [-Wint-conversion]
+
+Pointed out by @ricotz in #38
+---
+ libkkc/system-segment-dictionary.vala | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libkkc/system-segment-dictionary.vala b/libkkc/system-segment-dictionary.vala
+index 4195e50..b2eff9a 100644
+--- a/libkkc/system-segment-dictionary.vala
++++ b/libkkc/system-segment-dictionary.vala
+@@ -70,7 +70,7 @@ namespace Kkc {
+         // Skip until the first occurrence of line.  This moves offset
+         // at the beginning of the next line.
+         bool read_until (ref long offset, string line) {
+-            return_val_if_fail (offset < mmap.get_length (), null);
++            return_val_if_fail (offset < mmap.get_length (), false);
+             while (offset + line.length < mmap.get_length ()) {
+                 char *p = ((char *)mmap.get_contents () + offset);
+                 if (*p == '\n' &&

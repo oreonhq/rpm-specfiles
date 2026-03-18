@@ -1,0 +1,47 @@
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%global dict_dirname hunspell
+%else
+%global dict_dirname myspell
+%endif
+
+Name: hunspell-tn
+Summary: Tswana hunspell dictionaries
+%global upstreamid 20150904
+Version: 0.%{upstreamid}
+Release: 20%{?dist}
+Source: https://addons.mozilla.org/firefox/downloads/file/347396/tswana_spell_checker-%{upstreamid}-sm+tb+fx+an+fn.xpi
+URL: https://addons.mozilla.org/en-US/firefox/addon/tswana-spell-checker/
+License: GPL-3.0-or-later
+BuildArch: noarch
+
+Requires: hunspell-filesystem
+Supplements: (hunspell and langpacks-tn)
+
+%description
+Tswana hunspell dictionaries.
+
+%prep
+%autosetup -c -n hunspell-tn
+
+%build
+
+%install
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+cp -p dictionaries/tn-ZA.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/tn_ZA.aff
+cp -p dictionaries/tn-ZA.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/tn_ZA.dic
+pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
+tn_ZA_aliases="tn_BW"
+for lang in $tn_ZA_aliases; do
+        ln -s tn_ZA.aff $lang.aff
+        ln -s tn_ZA.dic $lang.dic
+done
+popd
+
+
+%files
+%doc dictionaries/README_tn_ZA.txt
+%{_datadir}/%{dict_dirname}/*
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-20
+- Prepare for Oreon 11 (RP1)

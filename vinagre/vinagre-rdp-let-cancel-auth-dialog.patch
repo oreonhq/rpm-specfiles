@@ -1,0 +1,13 @@
+diff --git a/plugins/rdp/vinagre-rdp-tab.c b/plugins/rdp/vinagre-rdp-tab.c
+index b731f9b..5b98c24 100644
+--- a/plugins/rdp/vinagre-rdp-tab.c
++++ b/plugins/rdp/vinagre-rdp-tab.c
+@@ -1218,7 +1218,7 @@ open_freerdp (VinagreRdpTab *rdp_tab)
+           init_freerdp (rdp_tab);
+         }
+     }
+-  while (!success && authentication_errors < 3);
++  while (!success && !cancelled && authentication_errors < 3);
+ 
+   if (!success)
+     {

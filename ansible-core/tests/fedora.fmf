@@ -1,0 +1,16 @@
+summary: A set of Fedora specific ansible integration tests
+discover:
+  - name: Generic ansible integration tests
+    how: shell
+    tests:
+      - name: Run tests/collections_path_warnings.sh
+        summary: Ensure GALAXY_COLLECTIONS_PATH_WARNINGS works properly
+        test: tests/collections_path_warnings.sh
+        require:
+          - ansible-core
+          - git-core
+          - python3-distlib
+          - /usr/bin/sponge
+          - /usr/bin/unbuffer
+execute:
+  how: tmt

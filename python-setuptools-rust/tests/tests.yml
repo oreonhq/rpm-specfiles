@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  roles:
+  - role: standard-test-basic
+    tags:
+    - classic
+    repositories:
+    - repo: "https://src.fedoraproject.org/rpms/pyproject-rpm-macros.git"
+      dest: "pyproject-rpm-macros"
+    tests:
+    - mockbuild_cryptography:
+        dir: pyproject-rpm-macros/tests
+        run: fedpkg clone -a python-cryptography && cd python-cryptography && (git switch f$(rpm -q --qf '%{VERSION}' fedora-release-common) || :) && fedpkg sources && ../mocktest.sh python-cryptography
+    required_packages:
+    - fedpkg
+    - mock

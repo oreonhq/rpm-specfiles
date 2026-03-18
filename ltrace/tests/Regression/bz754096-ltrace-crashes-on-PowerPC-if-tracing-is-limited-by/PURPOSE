@@ -1,0 +1,5 @@
+PURPOSE of /tools/ltrace/Regression/bz754096-ltrace-crashes-on-PowerPC-if-tracing-is-limited-by
+Description: Test for BZ#754096 (ltrace crashes on PowerPC if tracing is limited by)
+Author: Miroslav Franc <mfranc@redhat.com>
+Bug summary: ltrace crashes on PowerPC if tracing is limited by `-e' to event not present in trace
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=754096

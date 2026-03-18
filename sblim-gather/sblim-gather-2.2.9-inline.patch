@@ -1,0 +1,12 @@
+diff -up sblim-gather-2.2.9/repos.c.orig sblim-gather-2.2.9/repos.c
+--- sblim-gather-2.2.9/repos.c.orig	2014-10-09 23:29:11.000000000 +0200
++++ sblim-gather-2.2.9/repos.c	2019-11-05 15:01:49.529369051 +0100
+@@ -781,7 +781,7 @@ static RepositoryPlugin* pl_find(const c
+   }
+   return p?p->plugin:NULL;
+ }
+-inline int valueCompare(int type, ValueItem *v, ValueItem *w, int dir)
++static inline int valueCompare(int type, ValueItem *v, ValueItem *w, int dir)
+ {
+   long long          llv, llw;
+   unsigned long long ulv, ulw;

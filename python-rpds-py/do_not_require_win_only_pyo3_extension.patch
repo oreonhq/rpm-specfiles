@@ -1,0 +1,11 @@
+diff -U 3 -dHrN a/Cargo.toml b/Cargo.toml
+--- a/Cargo.toml	2006-07-24 03:21:28.000000000 +0200
++++ b/Cargo.toml	2026-02-08 10:59:46.269158012 +0100
+@@ -13,6 +13,4 @@
+ 
+ [dependencies.pyo3]
+ version = "0.27.2"
+-# To build extension for PyPy on Windows, "generate-import-lib" is needed:
+-# https://github.com/PyO3/maturin-action/issues/267#issuecomment-2106844429
+-features = ["extension-module", "generate-import-lib"]
++features = ["extension-module"]

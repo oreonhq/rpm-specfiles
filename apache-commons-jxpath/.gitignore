@@ -1,0 +1,5 @@
+/commons-jxpath-1.3-src.tar.gz
+/.build-*.log
+/noarch
+/*.src.rpm
+/commons-jxpath-1.4.0-src.tar.gz

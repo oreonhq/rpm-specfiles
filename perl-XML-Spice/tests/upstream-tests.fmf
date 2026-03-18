@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-XML-Spice
+require: perl-XML-Spice-tests
+test: /usr/libexec/perl-XML-Spice/test

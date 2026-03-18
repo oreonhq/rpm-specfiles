@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Sub-Info
+require: perl-Sub-Info-tests
+test: /usr/libexec/perl-Sub-Info/test

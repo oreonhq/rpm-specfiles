@@ -1,0 +1,11 @@
+diff -up skiboot-7.1/external/ffspart/Makefile.me skiboot-7.1/external/ffspart/Makefile
+diff -up skiboot-7.1/external/ffspart/rules.mk.me skiboot-7.1/external/ffspart/rules.mk
+--- skiboot-7.1/external/ffspart/rules.mk.me	2024-04-24 17:08:41.442757994 -0400
++++ skiboot-7.1/external/ffspart/rules.mk	2024-04-24 17:15:25.754621756 -0400
+@@ -33,5 +33,5 @@ $(LIBFLASH_OBJS): libflash-%.o : libflas
+ 	$(Q_CC)$(CC) $(CFLAGS) -c $< -o $@
+ 
+ $(EXE): $(OBJS)
+-	$(Q_CC)$(CC) $(CFLAGS) $^ -lrt -o $@
++	$(Q_CC)$(CC) $(LDFLAGS) $^ -lrt -o $@
+ 

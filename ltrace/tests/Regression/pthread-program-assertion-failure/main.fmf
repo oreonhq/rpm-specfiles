@@ -1,0 +1,16 @@
+summary: pthread-program-assertion-failure
+description: |+
+    Issue reproduced using an f20 arm (32 bit) fedora system with ltrace-0.7.91-13.fc22.armv7hl.
+
+contact: Martin Cermak <mcermak@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- gcc
+- glibc-devel
+duration: 10m
+extra-summary: /tools/ltrace/Regression/pthread-program-assertion-failure
+extra-task: /tools/ltrace/Regression/pthread-program-assertion-failure

@@ -1,0 +1,5 @@
+summary: Run tests from dist-git
+discover:
+  how: fmf
+execute:
+  how: tmt

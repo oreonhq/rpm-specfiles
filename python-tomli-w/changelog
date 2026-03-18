@@ -1,0 +1,51 @@
+* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-14
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Sat Jun 08 2024 Python Maint <python-maint@redhat.com> - 1.0.0-13
+- Rebuilt for Python 3.13
+
+* Fri Jun 07 2024 Python Maint <python-maint@redhat.com> - 1.0.0-12
+- Bootstrap for Python 3.13
+
+* Fri Jan 26 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-11
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Mon Jan 22 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Fri Jul 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Thu Jun 29 2023 Python Maint <python-maint@redhat.com> - 1.0.0-8
+- Rebuilt for Python 3.12
+
+* Tue Jun 13 2023 Python Maint <python-maint@redhat.com> - 1.0.0-7
+- Bootstrap for Python 3.12
+
+* Wed May 31 2023 Miro Hrončok <mhroncok@redhat.com> - 1.0.0-6
+- On Python 3.11+, do not BuildRequire python3-tomli for tests
+
+* Fri Jan 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Tue Jun 14 2022 Python Maint <python-maint@redhat.com> - 1.0.0-3
+- Rebuilt for Python 3.11
+
+* Mon Jun 13 2022 Python Maint <python-maint@redhat.com> - 1.0.0-2
+- Bootstrap for Python 3.11
+
+* Tue Feb 22 2022 Tomáš Hrnčiar <thrnciar@redhat.com> - 1.0.0-1
+- Update to 1.0
+- Fixes: rhbz#2053820
+
+* Fri Jan 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Thu Jan 20 2022 Michel Alexandre Salim <salimma@fedoraproject.org> - 0.4.0-2
+- Add boostrap and check toggles to ease bootstrapping new EPEL releases
+
+* Wed Oct 27 2021 Tomáš Hrnčiar <thrnciar@redhat.com> - 0.4.0-1
+- Initial package

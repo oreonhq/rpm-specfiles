@@ -1,0 +1,15 @@
+/results_*
+/*.src.rpm
+
+/apache-ivy-2.1.0-src.tar.gz
+/apache-ivy-2.2.0-src.tar.gz
+/apache-ivy-2.3.0-src.tar.gz
+/apache-ivy-2.4.0-src.tar.gz
+/apache-ivy-2.5.0-rc1-src.tar.gz
+/apache-ivy-2.5.0-src.tar.gz
+/apache-ivy-2.5.1-src.tar.gz
+/apache-ivy-2.5.1-src.tar.gz.asc
+/apache-ivy-2.5.2-src.tar.gz
+/apache-ivy-2.5.2-src.tar.gz.asc
+/apache-ivy-2.5.3-src.tar.gz
+/apache-ivy-2.5.3-src.tar.gz.asc

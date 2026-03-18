@@ -1,0 +1,10 @@
+# These are not real spelling errors...
+addFilter(r' spelling-error .* en_US (arpsnmp) ')
+# The sticky bit on this directory protects root-owned files from unlinking or
+# renaming by members of the arpwatch group.
+addFilter(r' non-standard-dir-perm /var/lib/arpwatch 1775')
+# Known zero-length files
+addFilter(r' zero-length /var/lib/arpwatch/arp.dat-?')
+# This is beyond what we want to rewrite downstream, and is not necessarily a
+# serious problem.
+addFilter(r' binary-or-shlib-calls-gethostbyname ')

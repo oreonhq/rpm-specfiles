@@ -1,0 +1,740 @@
+From 4db4f1e1b0425b06d5b0c3f285b43b1cb11c0353 Mon Sep 17 00:00:00 2001
+From: Dmitry Cherepanov <dcherepanov@azul.com>
+Date: Mon, 14 Feb 2022 13:48:51 +0300
+Subject: [PATCH 01/11] backport classloader patch from #783
+
+---
+ netx/net/sourceforge/jnlp/runtime/JNLPClassLoader.java | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/netx/net/sourceforge/jnlp/runtime/JNLPClassLoader.java b/netx/net/sourceforge/jnlp/runtime/JNLPClassLoader.java
+index 7ed0c4db6..da23fb5c4 100644
+--- a/netx/net/sourceforge/jnlp/runtime/JNLPClassLoader.java
++++ b/netx/net/sourceforge/jnlp/runtime/JNLPClassLoader.java
+@@ -1559,6 +1559,12 @@ protected Class<?> findLoadedClassAll(String name) {
+      */
+     @Override
+     public Class<?> loadClass(String name) throws ClassNotFoundException {
++        synchronized (getClassLoadingLock(name)) {
++            return loadClassImpl(name);
++        }
++    }
++
++    private Class<?> loadClassImpl(String name) throws ClassNotFoundException {
+         Class<?> result = findLoadedClassAll(name);
+ 
+         // try parent classloader
+
+From 3c25773f7d516f4babaf5e2ab302160914cbb58b Mon Sep 17 00:00:00 2001
+From: lherschi <lhersch@dssgmbh.de>
+Date: Tue, 8 Nov 2022 23:25:29 +0100
+Subject: [PATCH 02/11] fix "Unexpected End of ZLIB Input Stream" Task #826 -
+ IcedTeaWeb + Tomcat Cause "Unexpected End of ZLIB Input Stream" While Caching
+
+---
+ netx/net/sourceforge/jnlp/cache/ResourceDownloader.java | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/netx/net/sourceforge/jnlp/cache/ResourceDownloader.java b/netx/net/sourceforge/jnlp/cache/ResourceDownloader.java
+index e0a123bbd..50d4e12a1 100644
+--- a/netx/net/sourceforge/jnlp/cache/ResourceDownloader.java
++++ b/netx/net/sourceforge/jnlp/cache/ResourceDownloader.java
+@@ -396,6 +396,8 @@ private URLConnection getDownloadConnection(URL location) throws IOException {
+     }
+ 
+     private void downloadPackGzFile(URLConnection connection, URL downloadFrom, URL downloadTo) throws IOException {
++        if (downloadFrom.equals(downloadTo))
++            downloadFrom = new URL(downloadFrom + ".pack.gz");        
+         downloadFile(connection, downloadFrom);
+ 
+         uncompressPackGz(downloadFrom, downloadTo, resource.getDownloadVersion());
+@@ -405,6 +407,8 @@ private void downloadPackGzFile(URLConnection connection, URL downloadFrom, URL
+     }
+ 
+     private void downloadGZipFile(URLConnection connection, URL downloadFrom, URL downloadTo) throws IOException {
++        if (downloadFrom.equals(downloadTo))
++            downloadFrom = new URL(downloadFrom + ".gz");        
+         downloadFile(connection, downloadFrom);
+ 
+         uncompressGzip(downloadFrom, downloadTo, resource.getDownloadVersion());
+
+From 1f246bdcd3a7cf4db12b65a838cdcc228e8aec24 Mon Sep 17 00:00:00 2001
+From: lhersch <lhersch@dssgmbh.de>
+Date: Wed, 9 Nov 2022 13:38:11 +0100
+Subject: [PATCH 03/11] change to new rhino download url
+
+---
+ .github/workflows/build.yml | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index 4f016d3a4..4df43d068 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -49,7 +49,7 @@ jobs:
+           gmp-devel java-1.8.0-openjdk-devel libcurl-devel make mpfr-devel perl unzip which zip
+           curl -o tagsoup.jar "https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.jar"
+           sha256sum tagsoup.jar | awk '$1!="ac97f7b4b1d8e9337edfa0e34044f8d0efe7223f6ad8f3a85d54cc1018ea2e04"{exit 1}'
+-          curl -o rhino.zip "https://ftp.mozilla.org/pub/mozilla.org/js/rhino1_6R7.zip"
++          curl -o rhino.zip "https://mediacdn.prod.productdelivery.prod.webservices.mozgcp.net/pub/js/rhino1_6R7.zip"
+           sha256sum rhino.zip | awk '$1!="c94c6de3a29b3acbc4eee732e688f75a5d94bd02c9878be4ceb4d3cd220f3866"{exit 1}'
+           unzip -j rhino.zip "*/js.jar"
+ 
+@@ -161,7 +161,7 @@ jobs:
+           sha256sum tagsoup.jar | awk '$1!="ac97f7b4b1d8e9337edfa0e34044f8d0efe7223f6ad8f3a85d54cc1018ea2e04"{exit 1}'
+           curl -o mslinks.jar "https://repo1.maven.org/maven2/com/github/vatbub/mslinks/1.0.5/mslinks-1.0.5.jar"
+           sha256sum mslinks.jar | awk '$1!="e14d756f81b310b75baeb5baf219d25592b6a8635eb215c4059f17493b0cea5c"{exit 1}'
+-          curl -o rhino.zip "https://ftp.mozilla.org/pub/mozilla.org/js/rhino1_6R7.zip"
++          curl -o rhino.zip "https://mediacdn.prod.productdelivery.prod.webservices.mozgcp.net/pub/js/rhino1_6R7.zip"
+           sha256sum rhino.zip | awk '$1!="c94c6de3a29b3acbc4eee732e688f75a5d94bd02c9878be4ceb4d3cd220f3866"{exit 1}'
+           unzip -j rhino.zip "*/js.jar"
+ 
+
+From d3c6a540a1e2405d19d1c743ac853c3520655c4d Mon Sep 17 00:00:00 2001
+From: lhersch <lhersch@dssgmbh.de>
+Date: Wed, 9 Nov 2022 14:24:55 +0100
+Subject: [PATCH 04/11] change to new rhino download url
+
+---
+ .github/workflows/build.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index 4df43d068..00abe0f89 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -259,7 +259,7 @@ jobs:
+           brew install autoconf automake coreutils freetype gnu-sed rust
+           curl -o tagsoup.jar "https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.jar"
+           sha256sum tagsoup.jar | awk '$1!="ac97f7b4b1d8e9337edfa0e34044f8d0efe7223f6ad8f3a85d54cc1018ea2e04"{exit 1}'
+-          curl -o rhino.zip "https://ftp.mozilla.org/pub/mozilla.org/js/rhino1_6R7.zip"
++          curl -o rhino.zip "https://mediacdn.prod.productdelivery.prod.webservices.mozgcp.net/pub/js/rhino1_6R7.zip"
+           sha256sum rhino.zip | awk '$1!="c94c6de3a29b3acbc4eee732e688f75a5d94bd02c9878be4ceb4d3cd220f3866"{exit 1}'
+           unzip -j rhino.zip "*/js.jar"
+ 
+
+From 8970fed7c8b4ba25adec786104f4d348947c84fe Mon Sep 17 00:00:00 2001
+From: Lars Herschke <lhersch@dssgmbh.de>
+Date: Thu, 10 Nov 2022 10:37:45 +0100
+Subject: [PATCH 05/11] fix checkout when using Cygwin Git
+
+---
+ .github/workflows/build.yml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index 00abe0f89..8bfc780f5 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -359,9 +359,11 @@ jobs:
+ 
+       - name: Cygwin git configuration
+         shell: bash
+-        run: mkdir $HOME && git config --system core.autocrlf false
++        run: mkdir $HOME && git config --system core.autocrlf false && git config --system --add safe.directory '*'
+ 
+       - uses: actions/checkout@v2
++        with:
++          set-safe-directory: false
+ 
+       - name: Install Dependencies
+         run: |
+
+From be989488bb60c23b8ea2b5e95282d661d25a4077 Mon Sep 17 00:00:00 2001
+From: lherschi <lhersch@dssgmbh.de>
+Date: Sat, 26 Nov 2022 00:17:10 +0100
+Subject: [PATCH 06/11] backport of #868
+
+---
+ Makefile.am                                          | 10 +++++++---
+ configure.ac                                         |  9 ++++-----
+ .../jnlp/runtime/JNLPSecurityManager.java            | 12 ++++++++----
+ netx/net/sourceforge/jnlp/security/package-info.java |  2 +-
+ .../sourceforge/jnlp/tools/CodeSignerCreator.java    |  3 ++-
+ 5 files changed, 22 insertions(+), 14 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index e44070c17..d762c002b 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -195,6 +195,9 @@ else
+   NETX_EXCLUDE_SRCS=net.sourceforge.jnlp.MalformedXMLParser.java net.sourceforge.jnlp.util.WindowsDesktopEntry.java
+ endif
+ endif
++if !ENABLE_PLUGINJAR
++  NETX_EXCLUDE_SRCS+= net.sourceforge.jnlp.NetxPanel sun.applet.AppletViewerPanelAccess.java
++endif
+ 
+ # Flags
+ # macOS requires this flag, see https://youtrack.jetbrains.com/issue/IDEA-72010
+@@ -246,6 +249,7 @@ export ICEDTEAPLUGIN_TARGET = stamps/liveconnect-dist.stamp
+ export PLUGIN_DIR=$(TOP_BUILD_DIR)/plugin/icedteanp
+ export PLUGIN_SRCDIR=$(TOP_SRC_DIR)/plugin/icedteanp
+ export JSOBJECT_DIRS = netscape
++export SUN_DIR = sun
+ export SUN_APPLET_DIRS = sun/applet
+ export PLUGIN_PKGS = sun.applet netscape.security netscape.javascript
+ export LIVECONNECT_SRCS = $(PLUGIN_SRCDIR)/java
+@@ -283,7 +287,7 @@ if ENABLE_DOCS
+ JAVADOC_OPTS=-use -keywords -encoding UTF-8 -splitIndex \
+  -bottom '<font size="-1"> <a href="http://icedtea.classpath.org/bugzilla">Submit a bug or feature</a></font>'
+ if HAVE_JAVA9
+-JAVADOC_OPTS+=-source $(IT_LANGUAGE_SOURCE_VERSION)
++JAVADOC_OPTS+=-source $(IT_LANGUAGE_SOURCE_VERSION) --ignore-source-errors
+ endif
+ if JAVADOC_SUPPORTS_J_OPTIONS
+ JAVADOC_MEM_OPTS=-J-Xmx1024m -J-Xms128m
+@@ -956,11 +960,11 @@ stamps/netx-dist.stamp: stamps/netx.stamp $(TOP_BUILD_DIR)/netx.manifest stamps/
+ 	(cd $(NETX_DIR) ; \
+ 	 mkdir -p lib ; \
+ 	 $(SYSTEM_JDK_DIR)/bin/jar cfm lib/classes.jar \
+-	  $(TOP_BUILD_DIR)/netx.manifest javax/jnlp net sun; \
++	  $(TOP_BUILD_DIR)/netx.manifest javax/jnlp net $(SUN_DIR); \
+ 	 cp -pPR $(SRC_DIR_LINK) $(NETX_SRCDIR) src; \
+ 	 find src -type f -exec chmod 640 '{}' ';' -o -type d -exec chmod 750 '{}' ';'; \
+ 	 cd src ; \
+-	 $(ZIP) -qr $(NETX_DIR)/lib/src.zip javax net sun)
++	 $(ZIP) -qr $(NETX_DIR)/lib/src.zip javax net $(SUN_DIR))
+ 	mkdir -p stamps
+ 	touch $@
+ 
+diff --git a/configure.ac b/configure.ac
+index b6710ed93..3b5b95ade 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -143,7 +143,6 @@ dnl PR46074 (gcc) - Missing java.net cookie code required by IcedTea plugin
+ dnl IT563 - NetX uses sun.security code
+ dnl IT605 - NetX depends on sun.misc HexDumpEncoder or sun.security.util.HexDumpEncoder
+ dnl IT570 - NetX depends on sun.applet.AppletViewPanel
+-dnl IT571 - NetX depends on com.sun.net.ssl.internal.ssl.X509ExtendedTrustManager.java
+ dnl IT573 - Plugin depends on sun.awt,X11.XEmbeddedFrame.java
+ dnl IT575 - Plugin depends on com.sun/jndi.toolkit.url.UrlUtil
+ dnl IT576 - Plugin depends on sun.applet.AppletImageRef
+@@ -172,7 +171,6 @@ else
+   IT_CHECK_FOR_CLASS(SUN_MISC_LAUNCHER, [sun.misc.Launcher], [some.pkg], [$JAVA_BASE])
+ fi
+ IT_CHECK_FOR_CLASS(SUN_SECURITY_VALIDATOR_VALIDATOREXCEPTION, [sun.security.validator.ValidatorException], [some.pkg], [$JAVA_BASE])
+-IT_CHECK_FOR_CLASS(COM_SUN_NET_SSL_INTERNAL_SSL_X509EXTENDEDTRUSTMANAGER, [com.sun.net.ssl.internal.ssl.X509ExtendedTrustManager], [some.pkg], [$JAVA_BASE])
+ IT_CHECK_FOR_CLASS(SUN_NET_WWW_PROTOCOL_JAR_URLJARFILE, [sun.net.www.protocol.jar.URLJarFile], [some.pkg], [$JAVA_BASE])
+ IT_CHECK_FOR_CLASS(SUN_NET_WWW_PROTOCOL_JAR_URLJARFILECALLBACK, [sun.net.www.protocol.jar.URLJarFileCallBack], [some.pkg], [$JAVA_BASE])
+ if test "x$build_linux" = xyes ; then
+@@ -186,9 +184,10 @@ if test "x$build_windows" = xyes ; then
+ fi
+ IT_CHECK_FOR_CLASS(COM_SUN_JNDI_TOOLKIT_URL_URLUTIL, [com.sun.jndi.toolkit.url.UrlUtil], [some.pkg], [$JAVA_NAMING])
+ IT_CHECK_FOR_CLASS(SUN_NET_WWW_PROTOCOL_HTTP_HANDLER, [sun.net.www.protocol.http.Handler], [some.pkg], [$JAVA_BASE])
+-IT_CHECK_FOR_CLASS(SUN_APPLET_APPLETIMAGEREF, [sun.applet.AppletImageRef], [sun.applet], [$JAVA_DESKTOP])
+-
+-IT_CHECK_FOR_SUN_APPLET_ACCESSIBILITY
++if test "$enable_pluginjar" = yes ; then
++  IT_CHECK_FOR_CLASS(SUN_APPLET_APPLETIMAGEREF, [sun.applet.AppletImageRef], [sun.applet], [$JAVA_DESKTOP])
++  IT_CHECK_FOR_SUN_APPLET_ACCESSIBILITY
++fi
+ IT_CHECK_GLIB_VERSION
+ IT_CHECK_XULRUNNER_MIMEDESCRIPTION_CONSTCHAR
+ IT_CHECK_XULRUNNER_REQUIRES_C11
+diff --git a/netx/net/sourceforge/jnlp/runtime/JNLPSecurityManager.java b/netx/net/sourceforge/jnlp/runtime/JNLPSecurityManager.java
+index 6196a9ea7..fab17a80f 100644
+--- a/netx/net/sourceforge/jnlp/runtime/JNLPSecurityManager.java
++++ b/netx/net/sourceforge/jnlp/runtime/JNLPSecurityManager.java
+@@ -18,6 +18,7 @@
+ 
+ import static net.sourceforge.jnlp.runtime.Translator.R;
+ 
++import java.awt.AWTPermission;
+ import java.awt.Window;
+ import java.net.SocketPermission;
+ import java.security.AccessControlException;
+@@ -343,7 +344,6 @@ private void addPermission(Permission perm) {
+      * warning banner, and adds the window to the list of windows to
+      * be disposed when the calling application exits.
+      */
+-    @Override
+     public boolean checkTopLevelWindow(Object window) {
+         ApplicationInstance app = getApplication();
+ 
+@@ -362,7 +362,12 @@ public boolean checkTopLevelWindow(Object window) {
+         // todo: set awt.appletWarning to custom message
+         // todo: logo on with glass pane on JFrame/JWindow?
+ 
+-        return super.checkTopLevelWindow(window);
++        try {
++            checkPermission(new AWTPermission("showWindowWithoutWarningBanner"));
++            return true;
++        } catch (Exception se) {
++            return false;
++        }
+     }
+ 
+     /**
+@@ -432,7 +437,6 @@ protected void disableExit() {
+      * @exception  SecurityException  if the caller does not have
+      *             permission to accesss the AWT event queue.
+      */
+-    @Override
+     public void checkAwtEventQueueAccess() {
+         /*
+          * this is the templace of the code that should allow applets access to
+@@ -446,7 +450,7 @@ public void checkAwtEventQueueAccess() {
+         // If we're about to allow access to the main EventQueue,
+         // and anything untrusted is on the class context stack,
+         // disallow access.
+-        super.checkAwtEventQueueAccess();
++        checkPermission(new AWTPermission("accessEventQueue"));
+         // }
+     }
+ 
+diff --git a/netx/net/sourceforge/jnlp/security/package-info.java b/netx/net/sourceforge/jnlp/security/package-info.java
+index a894f15c8..bac704a49 100644
+--- a/netx/net/sourceforge/jnlp/security/package-info.java
++++ b/netx/net/sourceforge/jnlp/security/package-info.java
+@@ -32,7 +32,7 @@
+ statement from your version.*/
+ /**
+  *package generally about showing various security prompts
+- *<h3>Following diagram shows how dialog is handled when some application/appelt needs to show it</h3>
++ *<h2>Following diagram shows how dialog is handled when some application/appelt needs to show it</h2>
+  *
+  *<pre>
+ {@code
+diff --git a/tests/test-extensions/net/sourceforge/jnlp/tools/CodeSignerCreator.java b/tests/test-extensions/net/sourceforge/jnlp/tools/CodeSignerCreator.java
+index 8d372c022..0eceef613 100644
+--- a/tests/test-extensions/net/sourceforge/jnlp/tools/CodeSignerCreator.java
++++ b/tests/test-extensions/net/sourceforge/jnlp/tools/CodeSignerCreator.java
+@@ -204,7 +204,8 @@ private String getCertAndKeyGenClass() {
+             String className = null;
+             if (javaVersion.startsWith("1.7")) {
+                 className = "sun.security.x509.CertAndKeyGen";
+-            } else if (javaVersion.startsWith("1.8") || javaVersion.startsWith("1.9")) {
++            } else if (javaVersion.startsWith("1.8") ||
++                       javaVersion.matches("^(9|1[0-3])\\..*")) {
+                 className = "sun.security.tools.keytool.CertAndKeyGen";
+             } else {
+                 throw new AssertionError("Unrecognized Java Version");
+
+From 261ce91cfd6e09887c42ce0b4a4114fb7f511e3d Mon Sep 17 00:00:00 2001
+From: Frederic Thevenet <thevenet.fred@free.fr>
+Date: Tue, 28 Feb 2023 19:53:29 +0100
+Subject: [PATCH 07/11]  Fixed issue #691: properties from extension jnlp are
+ not set.
+
+---
+ .../jnlp/runtime/ApplicationInstance.java     | 35 ++++++++++++++++++-
+ 1 file changed, 34 insertions(+), 1 deletion(-)
+
+diff --git a/netx/net/sourceforge/jnlp/runtime/ApplicationInstance.java b/netx/net/sourceforge/jnlp/runtime/ApplicationInstance.java
+index 6acc5dd38..170e5032a 100644
+--- a/netx/net/sourceforge/jnlp/runtime/ApplicationInstance.java
++++ b/netx/net/sourceforge/jnlp/runtime/ApplicationInstance.java
+@@ -27,10 +27,15 @@
+ import java.security.CodeSource;
+ import java.security.PrivilegedAction;
+ import java.security.ProtectionDomain;
++import java.util.ArrayList;
++import java.util.Arrays;
++import java.util.List;
+ 
+ import javax.swing.event.EventListenerList;
+ 
+ import sun.awt.AppContext;
++import net.sourceforge.jnlp.ExtensionDesc;
++import net.sourceforge.jnlp.ParseException;
+ import net.sourceforge.jnlp.JNLPFile;
+ import net.sourceforge.jnlp.PropertyDesc;
+ import net.sourceforge.jnlp.SecurityDesc;
+@@ -314,7 +319,7 @@ public void finalize() {
+      * Install the environment variables.
+      */
+     void installEnvironment() {
+-        final PropertyDesc props[] = file.getResources().getProperties();
++        final List<PropertyDesc> props = collectPropertiesFromJnlpHierarchy(new ArrayList<>(), file);
+ 
+         CodeSource cs = new CodeSource((URL) null, (java.security.cert.Certificate[]) null);
+ 
+@@ -331,6 +336,8 @@ void installEnvironment() {
+             public Object run() {
+                 for (PropertyDesc propDesc : props) {
+                     System.setProperty(propDesc.getKey(), propDesc.getValue());
++                    OutputController.getLogger().log(OutputController.Level.MESSAGE_DEBUG,
++                            "Setting property: " + propDesc.getKey() + " = " + propDesc.getValue());
+                 }
+ 
+                 return null;
+@@ -339,6 +346,32 @@ public Object run() {
+         AccessController.doPrivileged(installProps, acc);
+     }
+ 
++    /**
++     * Collects properties from the full hierarchy of JNLP files
++     *
++     * @param props a list of all properties collected so far
++     * @param jnlpFile the current tip of the jnlp hierarchy
++     * @return a list of properties collected from the full hierarchy of JNLP files
++     */
++    private List<PropertyDesc> collectPropertiesFromJnlpHierarchy(List<PropertyDesc> props, JNLPFile jnlpFile) {
++        // Collect properties from the current jnlp file
++        props.addAll(Arrays.asList(jnlpFile.getResources().getProperties()));
++        for (ExtensionDesc ext : jnlpFile.getResources().getExtensions()) {
++            // Recursively look for extension jnlp files to collect their properties
++            try {
++                ext.resolve();
++                JNLPFile extFile = ext.getJNLPFile();
++                if (extFile != null) {
++                    collectPropertiesFromJnlpHierarchy(props, extFile);
++                }
++            } catch (ParseException | IOException e) {
++                OutputController.getLogger().log(OutputController.Level.WARNING_ALL,
++                        "Could not resolve JNLP file " + ext.getName() + " (declared properties won't be set): " + e.getMessage());
++            }
++        }
++        return props;
++    }
++
+     /**
+      * Returns the jnlpfile on which is this application based
+      * @return JNLP file for this task.
+
+From 6d938ae75310a3a76857ba6caae73efcd2af2821 Mon Sep 17 00:00:00 2001
+From: lherschi <lhersch@dssgmbh.de>
+Date: Fri, 11 Oct 2024 21:29:47 +0200
+Subject: [PATCH 08/11] fix github action build for all platforms
+
+---
+ .github/workflows/build.yml | 48 ++++++++++++++++++++++++-------------
+ Makefile.am                 |  6 ++---
+ rust-launcher/Cargo.toml    |  2 +-
+ 3 files changed, 36 insertions(+), 20 deletions(-)
+
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index 8bfc780f5..a5f5e1498 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -13,6 +13,10 @@ on:
+   pull_request:
+     branches:
+       - 1.8
++
++env:
++  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
++
+ jobs:
+   release:
+     if: github.event.inputs.release == 'True'
+@@ -39,17 +43,23 @@ jobs:
+     runs-on: ubuntu-latest
+     container: centos:7
+     steps:
+-      - uses: actions/checkout@v2
++      - uses: actions/checkout@v3
+         with:
+           path: icedtea-web
+ 
++      - name: Fix mirrors to use vault.centos.org
++        run: |
++          sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
++          sed -i s/^#.*baseurl=http/baseurl=https/g /etc/yum.repos.d/*.repo
++          sed -i s/^mirrorlist=http/#mirrorlist=https/g /etc/yum.repos.d/*.repo
++
+       - name: Install Dependencies
+         run: |
+           yum -y install autoconf bind-utils bzip2 cpio elfutils-libelf-devel gcc gcc-c++ glibc glibc-common glibc-devel \
+           gmp-devel java-1.8.0-openjdk-devel libcurl-devel make mpfr-devel perl unzip which zip
+           curl -o tagsoup.jar "https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.jar"
+           sha256sum tagsoup.jar | awk '$1!="ac97f7b4b1d8e9337edfa0e34044f8d0efe7223f6ad8f3a85d54cc1018ea2e04"{exit 1}'
+-          curl -o rhino.zip "https://mediacdn.prod.productdelivery.prod.webservices.mozgcp.net/pub/js/rhino1_6R7.zip"
++          curl -o rhino.zip "https://ftp.mozilla.org/pub/js/rhino1_6R7.zip"
+           sha256sum rhino.zip | awk '$1!="c94c6de3a29b3acbc4eee732e688f75a5d94bd02c9878be4ceb4d3cd220f3866"{exit 1}'
+           unzip -j rhino.zip "*/js.jar"
+ 
+@@ -114,7 +124,7 @@ jobs:
+             sha256sum "$zip" > "$zip.sha256.txt"
+           done
+ 
+-      - uses: actions/upload-artifact@v2
++      - uses: actions/upload-artifact@v3
+         with:
+           name: icedtea-web_build_x86-64_linux
+           path: |
+@@ -149,10 +159,16 @@ jobs:
+     runs-on: ubuntu-latest
+     container: centos:7
+     steps:
+-      - uses: actions/checkout@v2
++      - uses: actions/checkout@v3
+         with:
+           path: icedtea-web
+ 
++      - name: Fix mirrors to use vault.centos.org
++        run: |
++          sed -i s/mirror.centos.org/vault.centos.org/g /etc/yum.repos.d/*.repo
++          sed -i s/^#.*baseurl=http/baseurl=https/g /etc/yum.repos.d/*.repo
++          sed -i s/^mirrorlist=http/#mirrorlist=https/g /etc/yum.repos.d/*.repo
++
+       - name: Install Dependencies
+         run: |
+           yum -y install autoconf bind-utils bzip2 cpio elfutils-libelf-devel gcc gcc-c++ glibc glibc-common glibc-devel \
+@@ -161,7 +177,7 @@ jobs:
+           sha256sum tagsoup.jar | awk '$1!="ac97f7b4b1d8e9337edfa0e34044f8d0efe7223f6ad8f3a85d54cc1018ea2e04"{exit 1}'
+           curl -o mslinks.jar "https://repo1.maven.org/maven2/com/github/vatbub/mslinks/1.0.5/mslinks-1.0.5.jar"
+           sha256sum mslinks.jar | awk '$1!="e14d756f81b310b75baeb5baf219d25592b6a8635eb215c4059f17493b0cea5c"{exit 1}'
+-          curl -o rhino.zip "https://mediacdn.prod.productdelivery.prod.webservices.mozgcp.net/pub/js/rhino1_6R7.zip"
++          curl -o rhino.zip "https://ftp.mozilla.org/pub/js/rhino1_6R7.zip"
+           sha256sum rhino.zip | awk '$1!="c94c6de3a29b3acbc4eee732e688f75a5d94bd02c9878be4ceb4d3cd220f3866"{exit 1}'
+           unzip -j rhino.zip "*/js.jar"
+ 
+@@ -216,7 +232,7 @@ jobs:
+             sha256sum "$zip_rename" > "$zip_rename.sha256.txt"
+           done
+ 
+-      - uses: actions/upload-artifact@v2
++      - uses: actions/upload-artifact@v3
+         with:
+           name: icedtea-web_build_x86-64_portable
+           path: |
+@@ -250,7 +266,7 @@ jobs:
+     name: macOS
+     runs-on: macos-latest
+     steps:
+-      - uses: actions/checkout@v2
++      - uses: actions/checkout@v3
+         with:
+           path: icedtea-web
+ 
+@@ -259,7 +275,7 @@ jobs:
+           brew install autoconf automake coreutils freetype gnu-sed rust
+           curl -o tagsoup.jar "https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.jar"
+           sha256sum tagsoup.jar | awk '$1!="ac97f7b4b1d8e9337edfa0e34044f8d0efe7223f6ad8f3a85d54cc1018ea2e04"{exit 1}'
+-          curl -o rhino.zip "https://mediacdn.prod.productdelivery.prod.webservices.mozgcp.net/pub/js/rhino1_6R7.zip"
++          curl -o rhino.zip "https://ftp.mozilla.org/pub/js/rhino1_6R7.zip"
+           sha256sum rhino.zip | awk '$1!="c94c6de3a29b3acbc4eee732e688f75a5d94bd02c9878be4ceb4d3cd220f3866"{exit 1}'
+           unzip -j rhino.zip "*/js.jar"
+ 
+@@ -267,7 +283,7 @@ jobs:
+         run: |
+           export ICEDTEAWEB_INSTALL="/icedtea-web-image"
+           export PATH="/usr/local/opt/gnu-sed/libexec/gnubin/:/usr/local/opt/coreutils/bin/:$PATH"
+-          export JAVA_HOME=$(/usr/libexec/java_home -v 1.8)
++          export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+           export TAGSOUP="${PWD}/tagsoup.jar"
+           export RHINO="${PWD}/js.jar"
+           export ACLOCAL_PATH="/usr/local/share/aclocal"
+@@ -277,7 +293,7 @@ jobs:
+           echo "Invoking autogen.sh"
+           ./autogen.sh
+           echo "Incoking IcedTea-Web configure"
+-          ./configure --disable-native-plugin --prefix="${ICEDTEAWEB_INSTALL}" --with-itw-libs=BUNDLED --with-rhino="${RHINO}" --with-tagsoup="${TAGSOUP}" --with-jdk-home="${JAVA_HOME}" --with-jre-home="${JAVA_HOME}/jre"
++          ./configure --disable-native-plugin --disable-pluginjar --prefix="${ICEDTEAWEB_INSTALL}" --with-itw-libs=BUNDLED --with-rhino="${RHINO}" --with-tagsoup="${TAGSOUP}" --with-jdk-home="${JAVA_HOME}" --with-jre-home="${JAVA_HOME}"
+           echo "Build IcedTea-Web"
+           make DESTDIR="${WORKSPACE}"
+           
+@@ -292,7 +308,7 @@ jobs:
+             sha256sum "$zip" > "$zip.sha256.txt"
+           done
+ 
+-      - uses: actions/upload-artifact@v2
++      - uses: actions/upload-artifact@v3
+         with:
+           name: icedtea-web_build_x86-64_macos
+           path: |
+@@ -328,7 +344,7 @@ jobs:
+     steps:
+       - name: Restore cygwin packages from cache
+         id: cygwin
+-        uses: actions/cache@v2
++        uses: actions/cache@v3
+         with:
+           path: C:\cygwin_packages
+           key: cygwin-packages-${{ runner.os }}-v1
+@@ -361,7 +377,7 @@ jobs:
+         shell: bash
+         run: mkdir $HOME && git config --system core.autocrlf false && git config --system --add safe.directory '*'
+ 
+-      - uses: actions/checkout@v2
++      - uses: actions/checkout@v3
+         with:
+           set-safe-directory: false
+ 
+@@ -391,7 +407,7 @@ jobs:
+             exit 1
+           }
+           # Retrieve Rhino
+-          Invoke-WebRequest -UseBasicParsing 'https://ftp.mozilla.org/pub/mozilla.org/js/rhino1_6R7.zip' -OutFile 'rhino1_6R7.zip'
++          Invoke-WebRequest -UseBasicParsing 'https://ftp.mozilla.org/pub/js/rhino1_6R7.zip' -OutFile 'rhino1_6R7.zip'
+           $checksum = (Get-FileHash -Algorithm SHA256 'rhino1_6R7.zip' | Select-Object -ExpandProperty Hash) 
+           If ($checksum -ne "C94C6DE3A29B3ACBC4EEE732E688F75A5D94BD02C9878BE4CEB4D3CD220F3866") {
+             Write-Host "Checksums did not match!"
+@@ -413,14 +429,14 @@ jobs:
+         run: |
+           fsutil behavior set disable8dot3 0
+           cmd /c dir /x "C:\Program Files (x86)"
+-          fsutil file setshortname "C:\Program Files (x86)\WiX Toolset v3.11" "WIXTOO~1.14"
++          fsutil file setshortname "C:\Program Files (x86)\WiX Toolset v3.14" "WIXTOO~1.14"
+         shell: cmd
+ 
+       - name: Build
+         run: bash .github/workflows/windows_build.sh
+         shell: cmd
+ 
+-      - uses: actions/upload-artifact@v2
++      - uses: actions/upload-artifact@v3
+         with:
+           name: icedtea-web_build_x86-64_win
+           path: |
+diff --git a/Makefile.am b/Makefile.am
+index d762c002b..f1ca7b0a4 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -819,10 +819,10 @@ netx-source-files.txt:
+ 	find $(NETX_SRCDIR) -name '*.java' | sort > $@ ; \
+ 	for src in $(NETX_EXCLUDE_SRCS) ; \
+ 	do \
+-	  sed -i "/$${src}/ d" $@ ; \
++	  sed -i.bak "/$${src}/ d" $@ && rm $@.bak ; \
+ 	done
+ if !WITH_RHINO
+-	sed -i '/RhinoBasedPacEvaluator/ d' $@
++	sed -i.bak '/RhinoBasedPacEvaluator/ d' $@ && rm $@.bak
+ endif
+ 
+ # if 'sed' will be missing on machine, use old IFS hack as on other places
+@@ -905,7 +905,7 @@ stamps/generate-docs.stamp: stamps/netx.stamp
+ 	echo "<body><h3>$(PLUGIN_VERSION) docs:</h3>"  >> "$$HTML_DOCS_INDEX" ; \
+ 	for LANG_ID in en_US.UTF-8 cs_CZ.UTF-8 pl_PL.UTF-8 de_DE.UTF-8 ;  do \
+ 	  ID=`echo "$$LANG_ID" | head -c 2` ; \
+-	  ENCOD=`echo "$$LANG_ID" | tail -c 6 -` ; \
++	  ENCOD=`echo "$$LANG_ID" | tail -c 6` ; \
+ 	  export LANG=$$LANG_ID; \
+ 	  mkdir "$$HTML_DOCS_TARGET_DIR/$$ID" ; \
+ 	  echo "<li><a href='$$ID/icedtea-web.html'>$$LANG_ID</a></li>"  >> "$$HTML_DOCS_INDEX" ; \
+diff --git a/rust-launcher/Cargo.toml b/rust-launcher/Cargo.toml
+index 61ee3082b..2686df2a9 100644
+--- a/rust-launcher/Cargo.toml
++++ b/rust-launcher/Cargo.toml
+@@ -5,4 +5,4 @@ authors = ["https://icedtea.classpath.org/wiki/IcedTea-Web"]
+ 
+ [dependencies]
+ [target.'cfg(windows)'.dependencies]
+-dunce = "0.1.1"
++dunce = "1.0.0"
+
+From 2fe1b8e8178d25e3c28b86093609a98abc61a6b1 Mon Sep 17 00:00:00 2001
+From: lherschi <lhersch@dssgmbh.de>
+Date: Fri, 11 Oct 2024 21:37:34 +0200
+Subject: [PATCH 09/11] freetype is already installed on macOS
+
+---
+ .github/workflows/build.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/.github/workflows/build.yml b/.github/workflows/build.yml
+index a5f5e1498..9310f6d59 100644
+--- a/.github/workflows/build.yml
++++ b/.github/workflows/build.yml
+@@ -272,7 +272,7 @@ jobs:
+ 
+       - name: Install Dependencies
+         run: |
+-          brew install autoconf automake coreutils freetype gnu-sed rust
++          brew install autoconf automake coreutils gnu-sed rust
+           curl -o tagsoup.jar "https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.jar"
+           sha256sum tagsoup.jar | awk '$1!="ac97f7b4b1d8e9337edfa0e34044f8d0efe7223f6ad8f3a85d54cc1018ea2e04"{exit 1}'
+           curl -o rhino.zip "https://ftp.mozilla.org/pub/js/rhino1_6R7.zip"
+
+From 59f028ab35c9e26f0960026a4677cad932cecb2d Mon Sep 17 00:00:00 2001
+From: lherschi <lhersch@dssgmbh.de>
+Date: Sat, 12 Oct 2024 10:32:00 +0200
+Subject: [PATCH 10/11] make sed -i compatible with BSD and GNU sed
+
+---
+ html-gen.sh | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/html-gen.sh b/html-gen.sh
+index 4c448f155..ca320170e 100755
+--- a/html-gen.sh
++++ b/html-gen.sh
+@@ -88,15 +88,15 @@ print_debug "Starting sed substitutions"
+ for FILE in NEWS AUTHORS COPYING ChangeLog
+ do
+     print_debug "Processing $FILE..."
+-    sed -i -r 's/\t/    /g' "./$FILE" # Convert tabs into four spaces
+-    sed -i -r 's/\&/\&amp;/g' "./$FILE" # "&" -> "&amp;"
+-    sed -i -r 's/  /\&ensp;\&ensp;/g' "./$FILE" # Double-spaces into HTML whitespace for format preservation
+-    sed -i -r 's/</\&lt;/g' "./$FILE" # "<" -> "&lt;"
+-    sed -i -r 's/>/\&gt;/g' "./$FILE" # ">" -> "&gt;"
+-    sed -i -r 's_(\&lt;)?(https?://[^ ]*)(\&gt;| |$)_\1<a href="\2">\2</a>\3_i' "./$FILE" # Create hyperlinks from http(s) URLs
+-    sed -i -r 's/\&lt;(.*@.*)\&gt;/\&lt;<a href="mailto:\1\?subject=IcedTea-Web">\1<\/a>\&gt;/i' "./$FILE" # Create mailto links from email addresses formatted as <email@example.com>
+-    sed -i -r 's/$/<br>/' "./$FILE" # "\n" -> "<br>"
+-    sed -i '1i <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head>' "./$FILE"
++    sed -i.bak -r 's/\t/    /g' "./$FILE" && rm "./$FILE.bak" # Convert tabs into four spaces
++    sed -i.bak -r 's/\&/\&amp;/g' "./$FILE" && rm "./$FILE.bak" # "&" -> "&amp;"
++    sed -i.bak -r 's/  /\&ensp;\&ensp;/g' "./$FILE" && rm "./$FILE.bak" # Double-spaces into HTML whitespace for format preservation
++    sed -i.bak -r 's/</\&lt;/g' "./$FILE" && rm "./$FILE.bak" # "<" -> "&lt;"
++    sed -i.bak -r 's/>/\&gt;/g' "./$FILE" && rm "./$FILE.bak" # ">" -> "&gt;"
++    sed -i.bak -r 's_(\&lt;)?(https?://[^ ]*)(\&gt;| |$)_\1<a href="\2">\2</a>\3_i' "./$FILE" && rm "./$FILE.bak" # Create hyperlinks from http(s) URLs
++    sed -i.bak -r 's/\&lt;(.*@.*)\&gt;/\&lt;<a href="mailto:\1\?subject=IcedTea-Web">\1<\/a>\&gt;/i' "./$FILE" && rm "./$FILE.bak" # Create mailto links from email addresses formatted as <email@example.com>
++    sed -i.bak -r 's/$/<br>/' "./$FILE" && rm "./$FILE.bak" # "\n" -> "<br>"
++    sed -i.bak '1i <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head>' "./$FILE" && rm "./$FILE.bak"
+ 
+     mv "$FILE" "$FILE.html"
+     print_debug "$FILE.html finished."
+@@ -105,9 +105,9 @@ done
+ print_debug "Done sed subs. Starting in-place additions"
+ 
+ # Centre the column of author names in the Authors file
+-sed -i '5i <center>' AUTHORS.html
++sed -i.bak '5i <center>' AUTHORS.html && rm AUTHORS.html.bak
+ # Insert jamIcon above author names
+-sed -i '6i <br><img src="jamIcon.jpg" alt="Jam Icon" width="87" height="84"><br><br>' AUTHORS.html
++sed -i.bak '6i <br><img src="jamIcon.jpg" alt="Jam Icon" width="87" height="84"><br><br>' AUTHORS.html && rm AUTHORS.html.bak
+ echo "</center>" >> AUTHORS.html
+ 
+ if [ -n "${REPO_URL}" ]; then
+@@ -168,7 +168,7 @@ do
+     print_debug "$FILE finished"
+ done
+ 
+-sed -i -r 's|(\*\ .*):|<u>\1</u>:|' ChangeLog.html # Underline changed files in ChangeLog, eg "* Makefile.am:"
++sed -i.bak -r 's|(\*\ .*):|<u>\1</u>:|' ChangeLog.html && rm ChangeLog.html.bak # Underline changed files in ChangeLog, eg "* Makefile.am:"
+ 
+ end_time="$(date +%s.%N)"
+ 
+
+From 1e9e65b065c3f1cefe1a0d27666a969253431a63 Mon Sep 17 00:00:00 2001
+From: lherschi <lhersch@dssgmbh.de>
+Date: Sat, 12 Oct 2024 16:45:11 +0200
+Subject: [PATCH 11/11] a few more necessary adjustments for BSD sed
+
+---
+ html-gen.sh | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/html-gen.sh b/html-gen.sh
+index ca320170e..062dcbe68 100755
+--- a/html-gen.sh
++++ b/html-gen.sh
+@@ -93,10 +93,11 @@ do
+     sed -i.bak -r 's/  /\&ensp;\&ensp;/g' "./$FILE" && rm "./$FILE.bak" # Double-spaces into HTML whitespace for format preservation
+     sed -i.bak -r 's/</\&lt;/g' "./$FILE" && rm "./$FILE.bak" # "<" -> "&lt;"
+     sed -i.bak -r 's/>/\&gt;/g' "./$FILE" && rm "./$FILE.bak" # ">" -> "&gt;"
+-    sed -i.bak -r 's_(\&lt;)?(https?://[^ ]*)(\&gt;| |$)_\1<a href="\2">\2</a>\3_i' "./$FILE" && rm "./$FILE.bak" # Create hyperlinks from http(s) URLs
++    sed -i.bak -r -e 's_(\&lt;)?(https?://[^ ]*)(\&gt;| )_\1<a href="\2">\2</a>\3_i' \
++      -e '/<a href=/! s_(\&lt;)?(https?://[^ ]*)($)_\1<a href="\2">\2</a>\3_i' "./$FILE" && rm "./$FILE.bak" # Create hyperlinks from http(s) URLs
+     sed -i.bak -r 's/\&lt;(.*@.*)\&gt;/\&lt;<a href="mailto:\1\?subject=IcedTea-Web">\1<\/a>\&gt;/i' "./$FILE" && rm "./$FILE.bak" # Create mailto links from email addresses formatted as <email@example.com>
+     sed -i.bak -r 's/$/<br>/' "./$FILE" && rm "./$FILE.bak" # "\n" -> "<br>"
+-    sed -i.bak '1i <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head>' "./$FILE" && rm "./$FILE.bak"
++    sed -i.bak $'1i\\\n<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/></head>\n' "./$FILE" && rm "./$FILE.bak"
+ 
+     mv "$FILE" "$FILE.html"
+     print_debug "$FILE.html finished."
+@@ -105,9 +106,9 @@ done
+ print_debug "Done sed subs. Starting in-place additions"
+ 
+ # Centre the column of author names in the Authors file
+-sed -i.bak '5i <center>' AUTHORS.html && rm AUTHORS.html.bak
++sed -i.bak $'5i\\\n<center>\n' AUTHORS.html && rm AUTHORS.html.bak
+ # Insert jamIcon above author names
+-sed -i.bak '6i <br><img src="jamIcon.jpg" alt="Jam Icon" width="87" height="84"><br><br>' AUTHORS.html && rm AUTHORS.html.bak
++sed -i.bak $'6i\\\n<br><img src="jamIcon.jpg" alt="Jam Icon" width="87" height="84"><br><br>\n' AUTHORS.html && rm AUTHORS.html.bak
+ echo "</center>" >> AUTHORS.html
+ 
+ if [ -n "${REPO_URL}" ]; then

@@ -1,0 +1,16 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>test</groupId>
+  <artifactId>forktest</artifactId>
+  <version>1.0.0</version>
+  <build>
+    <plugins>
+      <plugin>
+	<artifactId>maven-surefire-plugin</artifactId>
+	<configuration>
+	  <forkCount>2</forkCount>
+	</configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

@@ -1,0 +1,8 @@
+summary: Tier 1 setroubleshoot test plan
+discover:
+    how: fmf
+    url: https://gitlab.com/setroubleshoot/tests.git
+    filter: "component:setroubleshoot & tier: 1"
+execute:
+    how: tmt
+

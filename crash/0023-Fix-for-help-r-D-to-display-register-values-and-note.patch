@@ -1,0 +1,91 @@
+From 95c1b0a1ddeeb23cfe4565ff917e3575e06fed91 Mon Sep 17 00:00:00 2001
+From: Lianbo Jiang <lijiang@redhat.com>
+Date: Fri, 13 Feb 2026 18:15:38 +0800
+Subject: [PATCH 23/23] Fix for "help -r/-D" to display register values and
+ notes[]
+
+Currently, when executing the "help -r" command on the aarch64
+architecture, only the register values of crashing cpu are displayed,
+but the register values of other cpus are not shown with the following
+messages:
+
+  crash> help -r
+  CPU 0:
+  help: registers not collected for cpu 0
+
+  CPU 1:
+      X0: 4000000000000000   X1: ffffc8c40d453d30   X2: ffff37436ecd0000
+      X3: ffffc8c40d475340   X4: 00000000000968a4   X5: 4000000000000000
+      X6: 4000000000000000   X7: 7fffffffffffffff   X8: 0000016f2a240000
+      X9: ffffc8c40b0c64fc  X10: 0000000000001000  X11: 00000000000000c0
+     X12: 0000000000000000  X13: 0000000000000072  X14: 0000000000000072
+     X15: 0000aaab0f98a320  X16: 0000000000000000  X17: 0000000000000000
+     X18: 0000000000000000  X19: 0000000000000000  X20: 0000000000000000
+     X21: ffffc8c40d475340  X22: ffffc8c40d460b80  X23: 00000000000000c0
+     X24: 00000007bf68b1b0  X25: 00000007b9284000  X26: 00000007bf68b1a8
+     X27: 00000007bbc95a40  X28: 00000007bbc6805a  X29: ffffc8c40d453d80
+      LR: ffffc8c40bebd5d8   SP: ffffc8c40d453d80   PC: ffffc8c40bebd5e8
+     PSTATE: 60400005   FPVALID: 00000000
+
+  CPU 2:
+  help: registers not collected for cpu 2
+
+  CPU 3:
+  help: registers not collected for cpu 3
+
+  crash> help -D
+  ...
+    num_prstatus_notes: 4
+            notes[0]: 0
+            notes[1]: dafa380 (NT_PRSTATUS)
+                      si.signo: 0  si.code: 0  si.errno: 0
+                      cursig: 0  sigpend: 0  sighold: 0
+                      pid: 0  ppid: 0  pgrp: 0  sid:0
+                      utime: 0.000000  stime: 0.000000
+                      cutime: 0.000000  cstime: 0.000000
+                       X0: 4000000000000000   X1: ffffc8c40d453d30   X2: ffff37436ecd0000
+                       X3: ffffc8c40d475340   X4: 00000000000968a4   X5: 4000000000000000
+                       X6: 4000000000000000   X7: 7fffffffffffffff   X8: 0000016f2a240000
+                       X9: ffffc8c40b0c64fc  X10: 0000000000001000  X11: 00000000000000c0
+                      X12: 0000000000000000  X13: 0000000000000072  X14: 0000000000000072
+                      X15: 0000aaab0f98a320  X16: 0000000000000000  X17: 0000000000000000
+                      X18: 0000000000000000  X19: 0000000000000000  X20: 0000000000000000
+                      X21: ffffc8c40d475340  X22: ffffc8c40d460b80  X23: 00000000000000c0
+                      X24: 00000007bf68b1b0  X25: 00000007b9284000  X26: 00000007bf68b1a8
+                      X27: 00000007bbc95a40  X28: 00000007bbc6805a  X29: ffffc8c40d453d80
+                       LR: ffffc8c40bebd5d8   SP: ffffc8c40d453d80   PC: ffffc8c40bebd5e8
+                      PSTATE: 60400005   FPVALID: 00000000
+            notes[2]: 0
+            notes[3]: 0
+  ...
+
+To fix the current issue, let's map to present cpus instead of online
+cpus.
+
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ diskdump.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/diskdump.c b/diskdump.c
+index fc2691536086..20f8b19f1514 100644
+--- a/diskdump.c
++++ b/diskdump.c
+@@ -181,12 +181,12 @@ map_cpus_to_prstatus_kdump_cmprs(void)
+ 	BZERO(dd->nt_prstatus_percpu, size);
+ 
+ 	/*
+-	 *  Re-populate the array with the notes mapping to online cpus
++	 *  Re-populate the array with the notes mapping to present cpus
+ 	 */
+ 	nrcpus = (kt->kernel_NR_CPUS ? kt->kernel_NR_CPUS : NR_CPUS);
+ 
+ 	for (i = 0, j = 0; i < nrcpus; i++) {
+-		if (in_cpu_map(ONLINE_MAP, i) && machdep->is_cpu_prstatus_valid(i)) {
++		if (in_cpu_map(PRESENT_MAP, i) && machdep->is_cpu_prstatus_valid(i)) {
+ 			dd->nt_prstatus_percpu[i] = nt_ptr[j++];
+ 			dd->num_prstatus_notes = 
+ 				MAX(dd->num_prstatus_notes, i+1);
+-- 
+2.51.1
+

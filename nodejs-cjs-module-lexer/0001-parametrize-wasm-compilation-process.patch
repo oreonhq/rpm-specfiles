@@ -1,0 +1,89 @@
+From 182e2768a4029365144d287257be0ca606c0ab40 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jan=20Stan=C4=9Bk?= <jstanek@redhat.com>
+Date: Mon, 26 Jun 2023 09:05:38 +0200
+Subject: [PATCH] Parametrize WASM compilation process (#87)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+* Makefile: extract compilation flags to variables
+
+Previously, the WASM compilation step was hard to adjust for different
+systems, as it required re-writing the actual rule.
+
+This change extracts all the flags into make variables,
+and separates them into system- and project-specific ones.
+
+The system-specific ones are expected to change from machine to machine,
+and now can be easily overridden:
+
+    $ make WASM_CC=clang WASM_CFLAGS=--target=wasm32-wasi …
+
+The project-specific flags are also extracted to variables,
+although at this point this is mainly for consistency sake.
+
+* Makefile: parametrize all binaries
+
+Similarly to previous change,
+this allows for all binary paths to be easily adjusted.
+
+* Makefile: polish
+
+Tiny leftover nitpicks:
+
+- Mark `optimize` and `clean` targets as phony
+- Use separate target for `lib/` directory creation
+- Use make's built-in `$(RM)` command
+---
+ Makefile | 39 ++++++++++++++++++++++++++++-----------
+ 1 file changed, 28 insertions(+), 11 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 3098484..961b336 100755
+--- a/Makefile
++++ b/Makefile
+@@ -1,16 +1,33 @@
+-lslib/lexer.wat: lib/lexer.wasm
+-	../wabt/bin/wasm2wat lib/lexer.wasm -o lib/lexer.wat
++# These flags depend on the system and may be overridden
++WASM_CC := ../wasi-sdk-12.0/bin/clang
++WASM_CFLAGS := --sysroot=../wasi-sdk-12.0/share/wasi-sysroot
++WASM_LDFLAGS := -nostartfiles
+ 
+-lib/lexer.wasm: include-wasm/cjs-module-lexer.h src/lexer.c
+-	@mkdir -p lib
+-	../wasi-sdk-12.0/bin/clang src/lexer.c -I include-wasm --sysroot=../wasi-sdk-12.0/share/wasi-sysroot -o lib/lexer.wasm -nostartfiles \
+-	-Wl,-z,stack-size=13312,--no-entry,--compress-relocations,--strip-all,--export=__heap_base,\
+-	--export=parseCJS,--export=sa,--export=e,--export=re,--export=es,--export=ee,--export=rre,--export=ree,--export=res,--export=ru,--export=us,--export=ue \
+-	-Wno-logical-op-parentheses -Wno-parentheses \
+-	-Oz
++WASM2WAT := ../wabt/bin/wasm2wat
++WASM_OPT := ../binaryen/bin/wasm-opt
++
++# These are project-specific and are expected to be kept intact
++WASM_EXTRA_CFLAGS := -I include-wasm/ -Wno-logical-op-parentheses -Wno-parentheses -Oz
++WASM_EXTRA_LDFLAGS := -Wl,-z,stack-size=13312,--no-entry,--compress-relocations,--strip-all
++WASM_EXTRA_LDFLAGS += -Wl,--export=__heap_base,--export=parseCJS,--export=sa
++WASM_EXTRA_LDFLAGS += -Wl,--export=e,--export=re,--export=es,--export=ee
++WASM_EXTRA_LDFLAGS += -Wl,--export=rre,--export=ree,--export=res,--export=ru,--export=us,--export=ue
++
++.PHONY: optimize clean
++
++lib/lexer.wat: lib/lexer.wasm
++	$(WASM2WAT) lib/lexer.wasm -o lib/lexer.wat
++
++lib/lexer.wasm: include-wasm/cjs-module-lexer.h src/lexer.c | lib/
++	$(WASM_CC) $(WASM_CFLAGS) $(WASM_EXTRA_CFLAGS) \
++		src/lexer.c -o lib/lexer.wasm \
++		$(WASM_LDFLAGS) $(WASM_EXTRA_LDFLAGS)
++
++lib/:
++	@mkdir -p $@
+ 
+ optimize: lib/lexer.wasm
+-	../binaryen/bin/wasm-opt -Oz lib/lexer.wasm -o lib/lexer.wasm
++	$(WASM_OPT) -Oz lib/lexer.wasm -o lib/lexer.wasm
+ 
+ clean:
+-	rm lib/*
++	$(RM) lib/*

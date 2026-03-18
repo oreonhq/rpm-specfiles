@@ -1,0 +1,5 @@
+xml:
+    # Regular expression (man 7 regex) matching directories to ignore
+    # during the xml inspection. Skip DTD files, which
+    # contain a mix of XML and code.
+    exclude_path: .*(\.dtd)$

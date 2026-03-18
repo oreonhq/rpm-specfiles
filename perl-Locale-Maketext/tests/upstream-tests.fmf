@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Locale-Maketext
+require: perl-Locale-Maketext-tests
+test: /usr/libexec/perl-Locale-Maketext/test

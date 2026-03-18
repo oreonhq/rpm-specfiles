@@ -1,0 +1,12 @@
+diff -up kde-workspace-4.11.22/CMakeLists.txt.strigi kde-workspace-4.11.22/CMakeLists.txt
+--- kde-workspace-4.11.22/CMakeLists.txt.strigi	2016-06-01 06:29:37.708438428 -0500
++++ kde-workspace-4.11.22/CMakeLists.txt	2016-06-01 06:30:34.238642795 -0500
+@@ -24,7 +24,7 @@ find_package(Strigi)
+ 
+ set_package_properties(Strigi PROPERTIES DESCRIPTION "Desktop indexing and search support"
+                        URL "http://strigi.sourceforge.net"
+-                       TYPE REQUIRED
++                       TYPE OPTIONAL
+                       )
+ 
+ find_package(ZLIB)

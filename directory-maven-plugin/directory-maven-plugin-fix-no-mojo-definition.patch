@@ -1,0 +1,33 @@
+From ce51a6ea81b583c7b7b75e859bb1a508eb713fbe Mon Sep 17 00:00:00 2001
+From: Andrew Bauer <abauer@debian-desktop.derbauer.local.lan>
+Date: Thu, 29 Feb 2024 15:02:29 -0600
+Subject: [PATCH] fix no mojo definition error
+
+---
+ pom.xml | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/pom.xml b/pom.xml
+index fa7b17d..d192c85 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -97,6 +97,19 @@
+         <plugin>
+           <artifactId>maven-plugin-plugin</artifactId>
+           <version>2.9</version>
++
++          <configuration>
++            <skipErrorNoDescriptorsFound>true</skipErrorNoDescriptorsFound>
++          </configuration>
++            <executions>
++            <execution>
++              <id>mojo-descriptor</id>
++              <goals>
++                <goal>descriptor</goal>
++              </goals>
++            </execution>
++          </executions> 
++
+         </plugin>
+         <plugin>
+           <groupId>org.apache.maven.plugins</groupId>

@@ -1,0 +1,20 @@
+---
+downstream_package_name: jackson-parent
+specfile_path: jackson-parent.spec
+upstream_package_name: jackson-parent
+upstream_project_url: https://github.com/FasterXML/jackson-parent
+upstream_tag_template: jackson-parent-{version}
+
+actions:
+  post-upstream-clone:
+    - "wget https://src.fedoraproject.org/rpms/jackson-parent/raw/main/f/jackson-parent.spec -O jackson-parent.spec"
+
+jobs:
+- job: pull_from_upstream
+  trigger: release
+  dist_git_branches:
+    - fedora-rawhide
+
+# We cannot do koji_build/bodhi_update jobs yet as we need to use
+# a side-tag and this is no supported yet. We can add them is this
+# issue gets resolved: https://github.com/packit/packit/issues/1870

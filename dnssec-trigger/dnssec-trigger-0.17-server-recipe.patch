@@ -1,0 +1,59 @@
+From f6b4cd17294d8faa8fd4d70110ac9da9916e7d61 Mon Sep 17 00:00:00 2001
+From: Petr Mensik <pemensik@redhat.com>
+Date: Wed, 20 Nov 2024 16:58:48 +0100
+Subject: [PATCH] Add recipe for adding own server
+
+Until someone adds nice support for using just CA bundle and server
+name, allow specification by fingerprint obtained manually. Do not rely
+only on server provided by upstream.
+---
+ dnssec.conf     | 4 ++--
+ example.conf.in | 6 +++++-
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/dnssec.conf b/dnssec.conf
+index bf896d3..4726ca1 100644
+--- a/dnssec.conf
++++ b/dnssec.conf
+@@ -38,7 +38,7 @@
+ #
+ #  - See also security notes on the `add_wifi_provided_zones` option.
+ #
+-# validate_connection_provided_zones=yes
++# validate_connection_provided_zones=no
+ #
+ #  - Connection provided zones will be configured in Unbound as secure forward
+ #    zones, validated using DNSSEC.
+@@ -63,7 +63,7 @@
+ #    Turning this option off has security implications, See the security
+ #    notice above.
+ #
+-validate_connection_provided_zones=yes
++validate_connection_provided_zones=no
+ 
+ # add_wifi_provided_zones:
+ # ------------------------
+diff --git a/example.conf.in b/example.conf.in
+index dafd35d..f7e8a54 100644
+--- a/example.conf.in
++++ b/example.conf.in
+@@ -79,6 +79,11 @@ tcp80: 2a04:b900::10:0:0:67
+ ssl443: 185.49.140.67 7E:CF:B4:BE:B9:9A:56:0D:F7:3B:40:51:A4:78:E6:A6:FD:66:0F:10:58:DC:A8:2E:C0:43:D4:77:5A:71:8A:CF
+ ssl443: 2a04:b900::10:0:0:67 7E:CF:B4:BE:B9:9A:56:0D:F7:3B:40:51:A4:78:E6:A6:FD:66:0F:10:58:DC:A8:2E:C0:43:D4:77:5A:71:8A:CF
+ 
++# How to add your own record:
++# openssl s_client -connect example.com:443 -showcerts </dev/null > /tmp/dns.crt
++# openssl x509 -noout -in /tmp/dns.crt -fingerprint -sha256
++# Append returned sha256 Fingerprint after ssl443: IP-address section.
++
+ # Use VPN servers for all traffic
+ # use-vpn-forwarders: no
+ 
+@@ -87,4 +92,3 @@ ssl443: 2a04:b900::10:0:0:67 7E:CF:B4:BE:B9:9A:56:0D:F7:3B:40:51:A4:78:E6:A6:FD:
+ 
+ # Add domains provided by VPN connections into Unbound forward zones
+ # add-wifi-provided-zones: no
+-
+-- 
+2.47.0
+

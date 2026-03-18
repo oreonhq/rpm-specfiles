@@ -1,0 +1,7 @@
+Man page of ltrace said,
+'Only ELF32 binaries are supported.'
+
+I seemed ltrace does not support ia64 architecture.
+
+That's not true.
+

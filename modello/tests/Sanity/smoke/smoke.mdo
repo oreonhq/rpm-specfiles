@@ -1,0 +1,26 @@
+<model>
+  <id>smoke</id>
+  <name>Smoke</name>
+  <description>Smoke test</description>
+  <defaults>
+    <default>
+      <key>package</key>
+      <value>smoke</value>
+    </default>
+  </defaults>
+  <classes>
+    <class java.clone="deep" xml.tagName="foo" rootElement="true">
+      <name>SomeBean</name>
+      <version>1.0.0+</version>
+      <description>Ordinary bean</description>
+      <fields>
+        <field>
+          <name>f</name>
+          <version>1.0.0+</version>
+          <description>A boolean field</description>
+          <type>Boolean</type>
+          </field>
+      </fields>
+    </class>
+  </classes>
+</model>

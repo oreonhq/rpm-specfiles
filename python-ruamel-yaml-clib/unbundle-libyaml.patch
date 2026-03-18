@@ -1,0 +1,35 @@
+diff -r e0ce8568e4d9 __init__.py
+--- a/__init__.py	Mon Sep 22 20:02:02 2025 +0200
++++ b/__init__.py	Tue Sep 23 14:11:52 2025 +0200
+@@ -23,20 +23,12 @@
+             name='_ruamel_yaml',
+             src=[
+                 '_ruamel_yaml.c',
+-                'api.c',
+-                'writer.c',
+-                'dumper.c',
+-                'loader.c',
+-                'reader.c',
+-                'scanner.c',
+-                'parser.c',
+-                'emitter.c',
+                 # '_ruamel_yaml.h',
+                 # 'config.h',
+                 # 'yaml_private.h',
+                 # 'yaml.h',
+             ],
+-            lib=[],
++            lib=['yaml'],
+             test="""
+             int main(int argc, char* argv[])
+             {
+diff -r e0ce8568e4d9 _ruamel_yaml.h
+--- a/_ruamel_yaml.h	Mon Sep 22 20:02:02 2025 +0200
++++ b/_ruamel_yaml.h	Tue Sep 23 14:11:52 2025 +0200
+@@ -1,5 +1,5 @@
+ 
+-#include "yaml.h"
++#include <yaml.h>
+ 
+ #if PY_MAJOR_VERSION < 3
+ 

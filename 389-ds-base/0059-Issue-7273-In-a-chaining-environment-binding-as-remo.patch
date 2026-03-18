@@ -1,0 +1,40 @@
+From ffe1909e69ab2aecef396f31cf95cdcecd992782 Mon Sep 17 00:00:00 2001
+From: Mark Reynolds <mreynolds@redhat.com>
+Date: Mon, 23 Feb 2026 12:10:32 -0500
+Subject: [PATCH] Issue 7273 - In a chaining environment binding as remote user
+ causes an invalid error in the logs
+
+Description:
+
+In a database link/chaining environment you can bind as a remote user, and
+this triggers an error when trying to "upgrade_on_bind" as the user does not
+locally have a userpassword since it's remote. There is no strong case to
+log an error in this situation.
+
+relates: http://github.com/389ds/389-ds-base/issues/7273
+
+Reviewed by: vashirov(Thanks!)
+---
+ ldap/servers/slapd/pw.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/ldap/servers/slapd/pw.c b/ldap/servers/slapd/pw.c
+index c53ecf23d..88e32537d 100644
+--- a/ldap/servers/slapd/pw.c
++++ b/ldap/servers/slapd/pw.c
+@@ -3564,10 +3564,8 @@ int32_t update_pw_encoding(Slapi_PBlock *orig_pb, Slapi_Entry *e, Slapi_DN *sdn,
+      * Does the entry have a pw?
+      */
+     if (e == NULL || slapi_entry_attr_find(e, SLAPI_USERPWD_ATTR, &pw) != 0 || pw == NULL) {
+-        slapi_log_err(SLAPI_LOG_WARNING,
+-                      "update_pw_encoding", "Could not read password attribute on '%s'\n",
+-                      dn);
+-        res = -1;
++        /* The entry does not have a userpassword attribute so there is nothing to do.
++         * This typically happens when chaining is involved. */
+         goto free_and_return;
+     }
+ 
+-- 
+2.53.0
+

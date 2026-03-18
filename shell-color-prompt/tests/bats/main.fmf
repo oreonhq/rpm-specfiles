@@ -1,0 +1,8 @@
+summary: test bash-color-prompt
+require:
+- bash
+- bash-color-prompt
+- bats
+- git-core
+test: bats test.bats
+framework: shell

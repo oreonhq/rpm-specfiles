@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2016 Luya Tshimbalanga <luya@fedoraproject.org> -->
+<component type="font">
+  <id>julietaula-montserrat-alternates</id>
+  <metadata_license> CC0-1.0</metadata_license>
+  <name>Montserrat Alternates</name>
+  <summary>An alternate sans-serif typeface loved by web and UI designers</summary>
+  <description>
+    <p>The old posters and signs in the traditional neighborhood of Buenos Aires called Montserrat inspired me to design a typeface that rescues the beauty of urban typography from the first half of the twentieth century. The goal is to rescue what is in Montserrat and set it free, under a free, libre and open source license, the SIL Open Font License.</p>
+<p>As urban development changes this place, it will never return to its original form and loses forever the designs that are so special and unique. Each selected example produces its own variants in length, width and height proportions, each adding to the Montserrat family. The old typographies and canopies are irretrievable when they are replaced.</p>
+<p>The letters that inspired this project have work, dedication, care, color, contrast, light and life, day and night! These are the types that make the city look so beautiful.</p>
+  </description>
+  <provides>
+	<font file="MontserratAlternates-Black.otf">Montserrat Alternates Black</font>
+	<font file="MontserratAlternates-Bold.otf">Montserrat Alternates Bold</font>
+	<font file="MontserratAlternates-ExtraBold.otf">Montserrat Alternates Extra Bold</font>
+	<font file="MontserratAlternates-Light.otf">Montserrat Alternates Light</font>
+	<font file="MontserratAlternates-Medium.otf">Montserrat Alternates Medium</font>
+	<font file="MontserratAlternates-Regular.otf">Montserrat Alternates Regular</font>
+	<font file="MontserratAlternates-SemiBold.otf">Montserrat Alternates Semi Bold</font>
+	<font file="MontserratAlternates-Thin.otf">Montserrat Alternates Thin</font>
+	<font file="MontserratAlternates-UltraLight.otf">Montserrat Alternates Ultra Light</font>
+  </provides>
+  <url type="homepage">https://github.com/JulietaUla/Montserrat/</url>
+  <updatecontact>luya@fedoraproject.org</updatecontact>
+</component>

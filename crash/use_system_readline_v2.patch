@@ -1,0 +1,32 @@
+--- crash-7.0.7/cmdline.c.orig
++++ crash-7.0.7/cmdline.c
+@@ -42,7 +42,8 @@ static int verify_args_input_file(char *
+ #define READLINE_LIBRARY
+ 
+ #include <readline.h>
+-#include <rldefs.h>
++#define vi_mode 0
++#define emacs_mode 1
+ #include <history.h>
+ 
+ static void readline_init(void);
+--- crash-7.0.7/Makefile.orig
++++ crash-7.0.7/Makefile
+@@ -200,7 +200,7 @@ TAR_FILES=${SOURCE_FILES} Makefile ${GPL
+ 	${EXTENSION_SOURCE_FILES} ${MEMORY_DRIVER_FILES}
+ CSCOPE_FILES=${SOURCE_FILES}
+ 
+-READLINE_DIRECTORY=./${GDB}/readline
++READLINE_DIRECTORY=/usr/include/readline
+ BFD_DIRECTORY=./${GDB}/bfd
+ GDB_INCLUDE_DIRECTORY=./${GDB}/include
+ 
+@@ -228,7 +228,7 @@ gdb_merge: force
+ 	@rm -f ${PROGRAM}
+ 	@if [ ! -f ${GDB}/config.status ]; then \
+ 	  (cd ${GDB}; ./configure ${GDB_CONF_FLAGS} --with-separate-debug-dir=/usr/lib/debug \
+-	    --with-bugurl="" --with-expat=no --with-python=no; \
++	    --with-bugurl="" --with-expat=no --with-python=no --with-system-readline; \
+ 	  make --no-print-directory CRASH_TARGET=${TARGET}; echo ${TARGET} > crash.target) \
+ 	else make --no-print-directory rebuild; fi
+ 	@if [ ! -f ${PROGRAM} ]; then \

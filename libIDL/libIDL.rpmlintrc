@@ -1,0 +1,5 @@
+# This software is unsupported upstream, so this cannot be fixed without
+# changing the license file downstream, which is discouraged.
+addFilter(r" incorrect-fsf-address ")
+# Intentional, with a justifying spec-file comment
+addFilter(r" no-%check-section")

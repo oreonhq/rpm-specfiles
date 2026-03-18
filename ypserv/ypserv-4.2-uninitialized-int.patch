@@ -1,0 +1,80 @@
+From 2bc35f9592c8abc850fc6d3343a29227b45eb054 Mon Sep 17 00:00:00 2001
+From: Ales Nezbeda <anezbeda@redhat.com>
+Date: Tue, 1 Oct 2024 14:40:26 +0200
+Subject: [PATCH] Fix use of uninitialized variable as an value for sock opt
+
+Since it is possible to listen to IPv4 via IPv6 socket by default, we
+have to disable this feature due to 'Disallow v4-in-v6 to allow
+host-based access checks'. This also allows us to use the same port for
+IPv4 and IPv6 socket.
+
+Disabling this feature is done via `setsockopt()` function where we pass
+flag that we want to set - `IPV6_V6ONLY` and value. For value, we should
+pass pointer to value and size of the value. We were passing pointer to
+uninitialized integer as a value. This resulted in undefined behavior.
+
+Most likely, this undefined behavior resulted in the flag being set to
+false. This also resulted in IPv4 and IPv6 not being able to share
+the same port. This caused use of two neighboring ports instead of one.
+When user then tried to set port in config file and then use port one
+above it was not possible as it was already used.
+---
+ rpc.yppasswdd/yppasswdd.c | 2 +-
+ rpc.ypxfrd/ypxfrd.c       | 2 +-
+ yppush/yppush.c           | 3 ++-
+ ypserv/ypserv.c           | 2 +-
+ 4 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/rpc.yppasswdd/yppasswdd.c b/rpc.yppasswdd/yppasswdd.c
+index f9609eb..d7f6050 100644
+--- a/rpc.yppasswdd/yppasswdd.c
++++ b/rpc.yppasswdd/yppasswdd.c
+@@ -476,7 +476,7 @@ main (int argc, char **argv)
+         {
+           /* Disallow v4-in-v6 to allow host-based access checks */
+ 
+-          int i;
++          int i = 1;
+ 
+           if (setsockopt (sock, IPPROTO_IPV6, IPV6_V6ONLY,
+                           &i, sizeof(i)) == -1)
+diff --git a/rpc.ypxfrd/ypxfrd.c b/rpc.ypxfrd/ypxfrd.c
+index f605c84..469e0e5 100644
+--- a/rpc.ypxfrd/ypxfrd.c
++++ b/rpc.ypxfrd/ypxfrd.c
+@@ -385,7 +385,7 @@ main (int argc, char **argv)
+         {
+           /* Disallow v4-in-v6 to allow host-based access checks */
+ 
+-          int i;
++          int i = 1;
+ 
+           if (setsockopt (sock, IPPROTO_IPV6, IPV6_V6ONLY,
+                           &i, sizeof(i)) == -1)
+diff --git a/yppush/yppush.c b/yppush/yppush.c
+index d937b84..a5916be 100644
+--- a/yppush/yppush.c
++++ b/yppush/yppush.c
+@@ -430,7 +430,8 @@ yppush_foreach (const char *host)
+   struct timeval tv = {10, 0};
+   u_int transid;
+   char server[YPMAXPEER + 2];
+-  int i, sock;
++  int i = 1;
++  int sock;
+   struct sigaction sig;
+   struct netconfig *nconf;
+   struct sockaddr *sa;
+diff --git a/ypserv/ypserv.c b/ypserv/ypserv.c
+index d8876e9..e27c2a4 100644
+--- a/ypserv/ypserv.c
++++ b/ypserv/ypserv.c
+@@ -497,7 +497,7 @@ main (int argc, char **argv)
+       if (family == AF_INET6)
+ 	{
+ 	  /* Disallow v4-in-v6 to allow host-based access checks */
+-	  int i;
++	  int i = 1;
+ 
+ 	  if (setsockopt (sock, IPPROTO_IPV6, IPV6_V6ONLY,
+ 			  &i, sizeof(i)) == -1)

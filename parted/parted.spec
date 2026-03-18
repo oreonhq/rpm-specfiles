@@ -1,0 +1,130 @@
+Summary: The GNU disk partition manipulation program
+Name:    parted
+Version: 3.6
+Release: 14%{?dist}
+License: GPL-3.0-or-later
+URL:     http://www.gnu.org/software/parted
+
+Source0: https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
+Source1: https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
+Source2: pubkey.phillip.susi
+Source3: pubkey.brian.lane
+
+Patch0001: 0001-parted-Print-the-Fixing.-message-to-stderr.patch
+Patch0002: 0002-doc-Document-IEC-unit-behavior-in-the-manpage.patch
+Patch0003: 0003-libparted-Fail-early-when-detecting-nilfs2.patch
+Patch0004: 0004-bug-74444-PATCH-parted-fix-do_version-declaration.patch
+Patch0005: 0005-libparted-Fix-sun-disklabel-unhandled-exception.patch
+Patch0006: 0006-tests-Add-test-for-SUN-disklabel-handling.patch
+Patch0007: 0007-libparted-Fix-dvh-disklabel-unhandled-exception.patch
+Patch0008: 0008-tests-Add-test-for-dvh-with-a-bad-checksum.patch
+Patch0009: 0009-tests-probing-ext4-without-journal-should-still-indi.patch
+Patch0010: 0010-libparted-Do-not-detect-ext4-without-journal-as-ext2.patch
+Patch0011: 0011-nilfs2-Fixed-possible-sigsegv-in-case-of-corrupted-s.patch
+Patch0012: 0012-doc-Fix-some-groff-mandoc-linting-complaints.patch
+
+BuildRequires: gcc
+BuildRequires: e2fsprogs-devel
+BuildRequires: readline-devel
+BuildRequires: ncurses-devel
+BuildRequires: gettext-devel
+BuildRequires: texinfo
+BuildRequires: device-mapper-devel
+BuildRequires: libuuid-devel
+BuildRequires: libblkid-devel >= 2.17
+BuildRequires: gnupg2
+BuildRequires: git
+BuildRequires: autoconf
+BuildRequires: automake
+BuildRequires: libtool
+BuildRequires: e2fsprogs
+BuildRequires: xfsprogs
+BuildRequires: dosfstools
+BuildRequires: perl-Digest-CRC
+BuildRequires: bc
+BuildRequires: python3
+BuildRequires: gperf
+BuildRequires: make
+BuildRequires: check-devel
+
+# bundled gnulib library exception, as per packaging guidelines
+# https://fedoraproject.org/wiki/Packaging:No_Bundled_Libraries
+Provides: bundled(gnulib)
+
+%description
+The GNU Parted program allows you to create, destroy, resize, move,
+and copy hard disk partitions. Parted can be used for creating space
+for new operating systems, reorganizing disk usage, and copying data
+to new hard disks.
+
+
+%package devel
+Summary:  Files for developing apps which will manipulate disk partitions
+Requires: %{name} = %{version}-%{release}
+Requires: pkgconfig
+
+%description devel
+The GNU Parted library is a set of routines for hard disk partition
+manipulation. If you want to develop programs that manipulate disk
+partitions and filesystems using the routines provided by the GNU
+Parted library, you need to install this package.
+
+
+%prep
+%{gpgverify} --keyring='%{SOURCE3}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%autosetup -S git_am
+iconv -f ISO-8859-1 -t UTF8 AUTHORS > tmp; touch -r AUTHORS tmp; mv tmp AUTHORS
+
+%build
+autoreconf -fiv
+CFLAGS="$RPM_OPT_FLAGS -Wno-unused-but-set-variable"; export CFLAGS
+%configure --disable-static --disable-gcc-warnings
+# Don't use rpath!
+%{__sed} -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
+%{__sed} -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
+%make_build
+
+
+%install
+%{__rm} -rf %{buildroot}
+%make_install
+
+# Remove components we do not ship
+%{__rm} -rf %{buildroot}%{_libdir}/*.la
+%{__rm} -rf %{buildroot}%{_infodir}/dir
+%{__rm} -rf %{buildroot}%{_bindir}/label
+%{__rm} -rf %{buildroot}%{_bindir}/disk
+
+%find_lang %{name}
+
+
+%check
+export LD_LIBRARY_PATH=$(pwd)/libparted/.libs:$(pwd)/libparted/fs/.libs
+make check
+
+%files -f %{name}.lang
+%doc AUTHORS NEWS README THANKS
+%{!?_licensedir:%global license %%doc}
+%license COPYING
+%{_sbindir}/parted
+%{_sbindir}/partprobe
+%{_mandir}/man8/parted.8*
+%{_mandir}/man8/partprobe.8*
+%{_libdir}/libparted.so.2
+%{_libdir}/libparted.so.2.0.5
+%{_libdir}/libparted-fs-resize.so.0
+%{_libdir}/libparted-fs-resize.so.0.0.5
+%{_infodir}/parted.info*
+
+%files devel
+%doc TODO doc/API doc/FAT
+%{_includedir}/parted
+%{_libdir}/libparted.so
+%{_libdir}/libparted-fs-resize.so
+%{_libdir}/pkgconfig/libparted.pc
+%{_libdir}/pkgconfig/libparted-fs-resize.pc
+
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6-14
+- Prepare for Oreon 11 (RP1)

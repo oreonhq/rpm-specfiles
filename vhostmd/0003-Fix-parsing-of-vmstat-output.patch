@@ -1,0 +1,31 @@
+commit 9d282891eaaeebf1b94c67314d97e55a0b58d9c2 (HEAD -> master, origin/master, origin/HEAD)
+Author: Jim Fehlig <jfehlig@suse.com>
+Date:   Fri Sep 27 13:25:58 2024 -0600
+
+    Fix parsing of vmstat output
+
+    The output of `vmstat -s`, which is used to calculate the Paged{In,Out}Memory
+    metrics, changed from "pages paged {in,out}" to "K paged {in,out}" in procps4.
+    Change the associated actions to match against the new output.
+
+    Signed-off-by: Jim Fehlig <jfehlig@suse.com>
+diff --git a/vhostmd.xml b/vhostmd.xml
+index 0dff85d..c957d1d 100644
+--- a/vhostmd.xml
++++ b/vhostmd.xml
+@@ -98,13 +98,13 @@ the logical && operator must be replaced with "&amp;&amp;".
+       <metric type="uint64" context="host">
+         <name>PagedInMemory</name>
+         <action>
+-          vmstat -s | awk '/pages paged in/ {printf "%d\n", $1 / 1024 * $(getconf PAGESIZE) / 1024;}'
++          vmstat -s | awk '/K paged in/ {printf "%d\n", $1;}'
+         </action>
+       </metric>
+       <metric type="uint64" context="host">
+         <name>PagedOutMemory</name>
+         <action>
+-          vmstat -s | awk '/pages paged out/ {printf "%d\n", $1 / 1024 * $(getconf PAGESIZE) / 1024;}'
++          vmstat -s | awk '/K paged out/ {printf "%d\n", $1;}'
+         </action>
+       </metric>
+       <metric type="group" context="host">

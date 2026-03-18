@@ -1,0 +1,15 @@
+summary: The test tries to ltrace an app which uses execl calls.
+description: ''
+contact: Michael Petlan <mpetlan@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- glibc-devel
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=797761
+extra-summary: /tools/ltrace/Regression/bz797761-ltrace-c-ommits-execl-call
+extra-task: /tools/ltrace/Regression/bz797761-ltrace-c-ommits-execl-call

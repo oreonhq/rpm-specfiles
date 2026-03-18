@@ -1,0 +1,3 @@
+from Config import *
+addFilter("spelling-error .* (ietf|ps)");
+addFilter("-tests.noarch: W: no-documentation");

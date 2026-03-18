@@ -1,0 +1,206 @@
+# For the generated library symbol suffix
+%if 0%{?__isa_bits} == 32
+%global libsymbolsuffix %{nil}
+%else
+%global libsymbolsuffix ()(%{__isa_bits}bit)
+%endif
+
+# For declaring rich dependency on libdecor
+%global libdecor_majver 0
+
+%if 0%{?rhel}
+# Disable static library on RHEL
+%bcond_with static
+# RHEL is Wayland-only, XWayland does not support XScrnSaver
+%bcond_with xscrnsaver
+%else
+%bcond_without static
+%bcond_without xscrnsaver
+%endif
+
+
+Name:           SDL3
+Version:        3.4.0
+Release:        3%{?dist}
+Summary:        Cross-platform multimedia library
+License:        Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 OR MIT)
+URL:            http://www.libsdl.org/
+Source0:        http://www.libsdl.org/release/%{name}-%{version}.tar.gz
+Source1:        SDL3_revision.h
+
+# Patches from upstream
+
+# Patches proposed upstream
+
+BuildRequires:  git-core
+BuildRequires:  cmake
+BuildRequires:  make
+BuildRequires:  gcc
+# Technically, there are a few C++ files in SDL3, but none are used for the Linux build
+# BuildRequires:  gcc-c++
+BuildRequires:  alsa-lib-devel
+BuildRequires:  fribidi-devel
+BuildRequires:  libthai-devel
+BuildRequires:  liburing-devel
+BuildRequires:  mesa-libGL-devel
+BuildRequires:  mesa-libGLU-devel
+BuildRequires:  mesa-libEGL-devel
+BuildRequires:  mesa-libGLES-devel
+BuildRequires:  libXext-devel
+BuildRequires:  libX11-devel
+BuildRequires:  libXi-devel
+BuildRequires:  libXrandr-devel
+BuildRequires:  libXrender-devel
+%if %{with xscrnsaver}
+BuildRequires:  libXScrnSaver-devel
+%endif
+BuildRequires:  libXinerama-devel
+BuildRequires:  libXcursor-devel
+BuildRequires:  libXfixes-devel
+BuildRequires:  systemd-devel
+# For building man pages
+BuildRequires:  perl-interpreter
+BuildRequires:  pkgconfig(libusb-1.0)
+# PulseAudio
+BuildRequires:  pkgconfig(libpulse-simple)
+# Jack
+BuildRequires:  pkgconfig(jack)
+# PipeWire
+BuildRequires:  pkgconfig(libpipewire-0.3)
+BuildRequires:  pipewire-jack-audio-connection-kit-devel
+# D-Bus
+BuildRequires:  pkgconfig(dbus-1)
+# IBus
+BuildRequires:  pkgconfig(ibus-1.0)
+# Wayland
+BuildRequires:  pkgconfig(libdecor-%{libdecor_majver})
+BuildRequires:  pkgconfig(wayland-client)
+BuildRequires:  pkgconfig(wayland-egl)
+BuildRequires:  pkgconfig(wayland-cursor)
+BuildRequires:  pkgconfig(wayland-protocols)
+BuildRequires:  pkgconfig(wayland-scanner)
+BuildRequires:  pkgconfig(xkbcommon)
+# Vulkan
+BuildRequires:  vulkan-devel
+# KMS
+BuildRequires:  mesa-libgbm-devel
+BuildRequires:  libdrm-devel
+BuildRequires:	libXtst-devel
+
+# Ensure libdecor is pulled in when libwayland-client is (rhbz#1992804)
+Requires:       (libdecor-%{libdecor_majver}.so.%{libdecor_majver}%{libsymbolsuffix} if libwayland-client)
+
+# Long ago forked hidraw customized for SDL
+Provides:       bundled(hidraw)
+
+%description
+Simple DirectMedia Layer (SDL) is a cross-platform multimedia library designed
+to provide fast access to the graphics frame buffer and audio device.
+
+%package devel
+Summary:        Files needed to develop Simple DirectMedia Layer applications
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+# Add deps required to compile SDL apps
+## For SDL_opengl.h
+Requires:       pkgconfig(gl)
+Requires:       pkgconfig(glu)
+## For SDL_syswm.h
+Requires:       pkgconfig(x11)
+Requires:       pkgconfig(xproto)
+%if ! %{with static}
+# Remove any leftover -static subpackages
+Obsoletes:      %{name}-static < %{version}-%{release}
+%endif
+
+%description devel
+Simple DirectMedia Layer (SDL) is a cross-platform multimedia library designed
+to provide fast access to the graphics frame buffer and audio device. This
+package provides the libraries, include files, and other resources needed for
+developing SDL applications.
+
+%if %{with static}
+%package static
+Summary:        Static libraries for SDL3
+# Needed to keep CMake happy
+Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
+
+%description static
+Static libraries for SDL3.
+%endif
+
+%package test
+Summary:        Testing libraries for SDL3
+# Needed to keep CMake happy
+Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
+
+%description test
+Testing libraries for SDL3.
+
+
+%prep
+%autosetup -S git_am
+sed -e 's/\r//g' -i README.md WhatsNew.txt BUGS.txt LICENSE.txt CREDITS.md
+
+
+%build
+# Deal with new CMake policy around whitespace in LDFLAGS...
+export LDFLAGS="%{shrink:%{build_ldflags}}"
+
+%cmake \
+    -DSDL_INSTALL_DOCS=ON \
+    -DSDL_DEPS_SHARED=ON \
+    -DSDL_SSE3=OFF \
+    -DSDL_RPATH=OFF \
+    -DSDL_VENDOR_INFO="%{?dist_vendor} %{version}-%{release}" \
+    %{?with_static:-DSDL_STATIC=ON} \
+    %{?with_static:-DCMAKE_POSITION_INDEPENDENT_CODE=ON} \
+    %{!?with_xscrnsaver:-DSDL_X11_XSCRNSAVER=OFF} \
+%ifarch ppc64le
+    -DSDL_ALTIVEC=OFF \
+%endif
+
+%cmake_build
+
+
+%install
+%cmake_install
+
+# Rename SDL_revision.h to SDL_revision-<arch>.h to avoid file conflicts on
+# multilib systems and install SDL_revision.h wrapper
+# TODO: Figure out how in the hell the SDL_REVISION changes between architectures on the same SRPM.
+mv %{buildroot}%{_includedir}/SDL3/SDL_revision.h %{buildroot}%{_includedir}/SDL3/SDL_revision-%{_arch}.h
+install -p -m 644 %{SOURCE1} %{buildroot}%{_includedir}/SDL3/SDL_revision.h
+
+
+%files
+%license LICENSE.txt
+%doc BUGS.txt CREDITS.md README.md
+%{_libdir}/libSDL3.so.0{,.*}
+
+%files devel
+%doc README.md WhatsNew.txt
+%{_libdir}/lib*.so
+%{_libdir}/pkgconfig/sdl3.pc
+%dir %{_libdir}/cmake/SDL3
+%{_libdir}/cmake/SDL3/SDL3Config*.cmake
+%{_libdir}/cmake/SDL3/SDL3headersTargets*.cmake
+%{_libdir}/cmake/SDL3/SDL3sharedTargets*.cmake
+%{_includedir}/SDL3
+%{_mandir}/man3/SDL*.3*
+
+%if %{with static}
+%files static
+%license LICENSE.txt
+%{_libdir}/libSDL3.a
+%{_libdir}/cmake/SDL3/SDL3staticTargets*.cmake
+%endif
+
+%files test
+%license LICENSE.txt
+%{_libdir}/libSDL3_test.a
+%{_libdir}/cmake/SDL3/SDL3testTargets*.cmake
+
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.0-3
+- Prepare for Oreon 11 (RP1)

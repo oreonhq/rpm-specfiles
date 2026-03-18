@@ -1,0 +1,7 @@
+/results_*
+/*.src.rpm
+
+/jaxb-istack-commons-3.0.11.tar.gz
+/jaxb-istack-commons-3.0.12.tar.gz
+/jaxb-istack-commons-4.1.1.tar.gz
+/jaxb-istack-commons-4.2.0.tar.gz

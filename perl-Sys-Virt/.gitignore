@@ -1,0 +1,4 @@
+Sys-Virt-*.tar.gz
+.build*.log
+x86_64
+*.src.rpm

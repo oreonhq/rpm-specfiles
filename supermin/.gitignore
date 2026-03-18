@@ -1,0 +1,8 @@
+*~
+*.rpm
+
+/.build-*.log
+/clog
+/supermin-*.tar.gz
+/supermin-*.tar.gz.sig
+/x86_64

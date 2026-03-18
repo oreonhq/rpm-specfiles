@@ -1,0 +1,268 @@
+From 918057c889d850940b0c8d6f2b14dc94d543bae4 Mon Sep 17 00:00:00 2001
+From: Nils Goroll <nils.goroll@uplex.de>
+Date: Wed, 25 Apr 2018 17:02:04 +0200
+Subject: [PATCH 1/4] update for master
+ a11939eb64427847ec11571d328696ba162f8c6a
+
+---
+ src/vmod_saintmode.c | 21 ++++++++++++++++-----
+ 1 file changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/src/vmod_saintmode.c b/src/vmod_saintmode.c
+index 26191cc..4b4b874 100644
+--- a/src/vmod_saintmode.c
++++ b/src/vmod_saintmode.c
+@@ -43,6 +43,11 @@
+ 
+ #include "vcc_saintmode_if.h"
+ 
++static unsigned
++healthy(const struct director *, const struct busyobj *, double *);
++static const struct director *
++resolve(const struct director *, struct worker *, struct busyobj *);
++
+ struct trouble {
+ 	unsigned		magic;
+ #define TROUBLE_MAGIC		0x4211ab21
+@@ -63,6 +68,14 @@ struct vmod_saintmode_saintmode {
+ 	VTAILQ_HEAD(, trouble)			troublelist;
+ };
+ 
++static const struct director_methods vmod_saintmode_methods[1] = {{
++	.magic =		DIRECTOR_METHODS_MAGIC,
++	.type =			"saintmode",
++	.healthy =		healthy,
++	.resolve =		resolve
++}};
++
++
+ struct saintmode_objs {
+ 	unsigned				magic;
+ #define SAINTMODE_OBJS_MAGIC			0x9aa7beec
+@@ -269,7 +282,7 @@ healthy(const struct director *dir, const struct busyobj *bo, double *changed)
+ 
+ 	/* Saintmode is disabled, or list is empty */
+ 	if (sm->threshold == 0 || sm->n_trouble == 0)
+-		return (sm->be->healthy(sm->be, bo, changed));
++		return (sm->be->methods->healthy(sm->be, bo, changed));
+ 
+ 	if (!bo) {
+ 		digest = NULL;
+@@ -282,7 +295,7 @@ healthy(const struct director *dir, const struct busyobj *bo, double *changed)
+ 	}
+ 
+ 	retval = is_digest_healthy(dir, digest, t_prev, vsl);
+-	return (retval ? sm->be->healthy(sm->be, bo, changed) : 0);
++	return (retval ? sm->be->methods->healthy(sm->be, bo, changed) : 0);
+ }
+ 
+ VCL_BOOL
+@@ -343,13 +356,11 @@ vmod_saintmode__init(VRT_CTX, struct vmod_saintmode_saintmode **smp,
+ 	VTAILQ_INIT(&sm->troublelist);
+ 
+ 	sm->sdir->magic = DIRECTOR_MAGIC;
+-	sm->sdir->resolve = resolve;
+-	sm->sdir->healthy = healthy;
++	sm->sdir->methods = vmod_saintmode_methods;
+ #ifdef HAVE_DIRECTOR_ADMIN_HEALTH
+ 	sm->sdir->admin_health = VDI_AH_HEALTHY;
+ #endif
+ 	REPLACE(sm->sdir->vcl_name, vcl_name);
+-	sm->sdir->name = "saintmode";
+ 	sm->sdir->priv = sm;
+ 
+ 	if (!priv->priv) {
+
+From 2141fd9d37f435b4875c07c8fcc3fb1ea5968d74 Mon Sep 17 00:00:00 2001
+From: Nils Goroll <nils.goroll@uplex.de>
+Date: Thu, 26 Apr 2018 14:50:30 +0200
+Subject: [PATCH 2/4] Output the health state as baseline information
+
+---
+ src/tests/saintmode/test02.vtc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/tests/saintmode/test02.vtc b/src/tests/saintmode/test02.vtc
+index aa97734..bd8b537 100644
+--- a/src/tests/saintmode/test02.vtc
++++ b/src/tests/saintmode/test02.vtc
+@@ -51,6 +51,8 @@ varnish v1 -vcl+backend {
+ 
+ } -start
+ 
++varnish v1 -cliok "backend.list"
++
+ client c1 {
+ 	txreq -url "/a"
+ 	rxresp
+
+From 1e704bfd7d8aa8b1e20d918788f0c7c65488713e Mon Sep 17 00:00:00 2001
+From: Nils Goroll <nils.goroll@uplex.de>
+Date: Thu, 26 Apr 2018 14:50:49 +0200
+Subject: [PATCH 3/4] changes required for latest varnish-cache
+
+The director API has changed and, in particular, the director healthy
+callback is now only queried for AH_PROBE.
+---
+ src/vmod_saintmode.c | 31 ++++++++++++++++---------------
+ 1 file changed, 16 insertions(+), 15 deletions(-)
+
+diff --git a/src/vmod_saintmode.c b/src/vmod_saintmode.c
+index 4b4b874..95de050 100644
+--- a/src/vmod_saintmode.c
++++ b/src/vmod_saintmode.c
+@@ -43,10 +43,10 @@
+ 
+ #include "vcc_saintmode_if.h"
+ 
+-static unsigned
+-healthy(const struct director *, const struct busyobj *, double *);
+-static const struct director *
+-resolve(const struct director *, struct worker *, struct busyobj *);
++static VCL_BOOL v_matchproto_(vdi_healthy_f)
++healthy(VRT_CTX, VCL_BACKEND, VCL_TIME *);
++static VCL_BACKEND v_matchproto_(vdi_resolve_f)
++resolve(VRT_CTX, VCL_BACKEND);
+ 
+ struct trouble {
+ 	unsigned		magic;
+@@ -266,23 +266,26 @@ is_digest_healthy(const struct director *dir,
+ }
+ 
+ /* All adapted from PHK's saintmode implementation in Varnish 3.0 */
+-static unsigned
+-healthy(const struct director *dir, const struct busyobj *bo, double *changed)
++static VCL_BOOL v_matchproto_(vdi_healthy_f)
++healthy(VRT_CTX, VCL_BACKEND dir, VCL_TIME *changed)
+ {
+ 	struct vmod_saintmode_saintmode *sm;
++	const struct busyobj *bo;
+ 	unsigned retval;
+ 	const uint8_t* digest;
+ 	double t_prev;
+ 	struct vsl_log* vsl;
+ 
++	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
+ 	CHECK_OBJ_NOTNULL(dir, DIRECTOR_MAGIC);
+ 	CAST_OBJ_NOTNULL(sm, dir->priv, VMOD_SAINTMODE_MAGIC);
+ 	CHECK_OBJ_NOTNULL(sm->be, DIRECTOR_MAGIC);
++	bo = ctx->bo;
+ 	CHECK_OBJ_ORNULL(bo, BUSYOBJ_MAGIC);
+ 
+ 	/* Saintmode is disabled, or list is empty */
+ 	if (sm->threshold == 0 || sm->n_trouble == 0)
+-		return (sm->be->methods->healthy(sm->be, bo, changed));
++		return (VRT_Healthy(ctx, sm->be, changed));
+ 
+ 	if (!bo) {
+ 		digest = NULL;
+@@ -295,7 +298,7 @@ healthy(const struct director *dir, const struct busyobj *bo, double *changed)
+ 	}
+ 
+ 	retval = is_digest_healthy(dir, digest, t_prev, vsl);
+-	return (retval ? sm->be->methods->healthy(sm->be, bo, changed) : 0);
++	return (retval ? VRT_Healthy(ctx, sm->be, changed) : 0);
+ }
+ 
+ VCL_BOOL
+@@ -316,19 +319,17 @@ vmod_saintmode_is_healthy(VRT_CTX, struct vmod_saintmode_saintmode *sm)
+ 		return  is_digest_healthy(sm->sdir, digest,
+ 					  ctx->req->t_prev, ctx->req->vsl);
+ 	} else
+-		return healthy(sm->sdir, ctx->bo, NULL);
++		return healthy(ctx, sm->sdir, NULL);
+ }
+ 
+-static const struct director *
+-resolve(const struct director *dir, struct worker *wrk, struct busyobj *bo) {
++static VCL_BACKEND v_matchproto_(vdi_resolve_f)
++resolve(VRT_CTX, VCL_BACKEND dir) {
+ 	struct vmod_saintmode_saintmode *sm;
+-	double changed = 0.0;
+ 
+ 	CHECK_OBJ_NOTNULL(dir, DIRECTOR_MAGIC);
+ 	CAST_OBJ_NOTNULL(sm, dir->priv, VMOD_SAINTMODE_MAGIC);
+-	(void)wrk;
+ 
+-	if (!healthy(dir, bo, &changed))
++	if (!healthy(ctx, dir, NULL))
+ 		return (NULL);
+ 
+ 	return (sm->be);
+@@ -358,7 +359,7 @@ vmod_saintmode__init(VRT_CTX, struct vmod_saintmode_saintmode **smp,
+ 	sm->sdir->magic = DIRECTOR_MAGIC;
+ 	sm->sdir->methods = vmod_saintmode_methods;
+ #ifdef HAVE_DIRECTOR_ADMIN_HEALTH
+-	sm->sdir->admin_health = VDI_AH_HEALTHY;
++	sm->sdir->admin_health = VDI_AH_PROBE;
+ #endif
+ 	REPLACE(sm->sdir->vcl_name, vcl_name);
+ 	sm->sdir->priv = sm;
+
+From c1c9b6ff4652c34aeff68f209d983be684caeb32 Mon Sep 17 00:00:00 2001
+From: Nils Goroll <nils.goroll@uplex.de>
+Date: Tue, 1 May 2018 18:48:59 +0200
+Subject: [PATCH 4/4] reflect latest changes to the director API
+
+---
+ src/vmod_saintmode.c | 19 +++++--------------
+ 1 file changed, 5 insertions(+), 14 deletions(-)
+
+diff --git a/src/vmod_saintmode.c b/src/vmod_saintmode.c
+index 95de050..b0e4ac6 100644
+--- a/src/vmod_saintmode.c
++++ b/src/vmod_saintmode.c
+@@ -35,9 +35,6 @@
+ 
+ #include "vmod_config.h"
+ 
+-#include "cache/cache_director.h"
+-#include "cache/cache_backend.h"
+-
+ #include "vsb.h"
+ #include "vtim.h"
+ 
+@@ -59,7 +56,7 @@ struct trouble {
+ struct vmod_saintmode_saintmode {
+ 	unsigned				magic;
+ #define VMOD_SAINTMODE_MAGIC			0xa03756e4
+-	struct director				sdir[1];
++	const struct director			*sdir;
+ 	const struct director			*be;
+ 	pthread_mutex_t				mtx;
+ 	unsigned				threshold;
+@@ -68,8 +65,8 @@ struct vmod_saintmode_saintmode {
+ 	VTAILQ_HEAD(, trouble)			troublelist;
+ };
+ 
+-static const struct director_methods vmod_saintmode_methods[1] = {{
+-	.magic =		DIRECTOR_METHODS_MAGIC,
++static const struct vdi_methods vmod_saintmode_methods[1] = {{
++	.magic =		VDI_METHODS_MAGIC,
+ 	.type =			"saintmode",
+ 	.healthy =		healthy,
+ 	.resolve =		resolve
+@@ -356,13 +353,7 @@ vmod_saintmode__init(VRT_CTX, struct vmod_saintmode_saintmode **smp,
+ 	sm->be = be;
+ 	VTAILQ_INIT(&sm->troublelist);
+ 
+-	sm->sdir->magic = DIRECTOR_MAGIC;
+-	sm->sdir->methods = vmod_saintmode_methods;
+-#ifdef HAVE_DIRECTOR_ADMIN_HEALTH
+-	sm->sdir->admin_health = VDI_AH_PROBE;
+-#endif
+-	REPLACE(sm->sdir->vcl_name, vcl_name);
+-	sm->sdir->priv = sm;
++	sm->sdir = VRT_AddDirector(ctx, vmod_saintmode_methods, sm, "%s", vcl_name);
+ 
+ 	if (!priv->priv) {
+ 		ALLOC_OBJ(sm_objs, SAINTMODE_OBJS_MAGIC);
+@@ -392,7 +383,7 @@ vmod_saintmode__fini(struct vmod_saintmode_saintmode **smp) {
+ 		FREE_OBJ(tr);
+ 	}
+ 
+-	free(sm->sdir->vcl_name);
++	VRT_DelDirector(&sm->sdir);
+ 	AZ(pthread_mutex_destroy(&sm->mtx));
+ 
+ 	/* We can no longer refer to the sm_objs after this

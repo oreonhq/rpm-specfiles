@@ -1,0 +1,2 @@
+# Module name (not from this package)
+addFilter("spelling-error \('MockObject',")

@@ -1,0 +1,5 @@
+/results_*
+/*.src.rpm
+/maven-doxia-sitetools-*.tar.gz
+/doxia-sitetools-*-source-release.zip
+/doxia-sitetools-*-source-release.zip.asc

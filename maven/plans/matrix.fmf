@@ -1,0 +1,53 @@
+discover:
+  how: fmf
+  url: https://gitlab.com/redhat/centos-stream/tests/maven.git
+
+execute:
+  how: tmt
+
+environment:
+  # branch maven-3.9.x
+  MAVEN_IT_GIT_REF: e3f9b7c9671cdd67bffe5c2d2663b2d92f05441c
+
+/jdk25:
+  environment+:
+    OPENJDK_VERSION: 25
+  prepare:
+    - how: install
+      exclude:
+        - maven-unbound
+
+  /full:
+    summary: Maven matrix tests - OpenJDK 25 full
+    discover+:
+      filter: tag:jdk25 & tier:0,1
+
+  /headless:
+    summary: Maven matrix tests - OpenJDK 25 headless
+    discover+:
+      filter: tag:jre25 & tier:0,1
+    environment+:
+      OPENJDK_HEADLESS: "true"
+    prepare+:
+      - how: shell
+        script: |
+          dnf -y remove java-*-openjdk
+
+/unbound:
+  prepare:
+    - how: install
+      exclude:
+        - maven-openjdk25
+
+  /jlink:
+    summary: Maven matrix tests - unbound jlink-based Java
+    discover+:
+      filter: tag:unbound & tier:0,1
+    prepare+:
+      - how: shell
+        script: |
+          test -d /opt/java && test -x /usr/local/bin/java && exit 0
+          dnf -y install java-25-openjdk-jmods
+          jlink --add-modules java.base,java.logging,java.xml,java.naming --output /opt/java
+          ln -s /opt/java/bin/java /usr/local/bin/java
+          dnf -y remove java-25-openjdk-jmods

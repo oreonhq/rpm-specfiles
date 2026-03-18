@@ -1,0 +1,8 @@
+test: ./runtests.sh
+duration: 10m
+framework: beakerlib
+require:
+  - convmv
+  - perl
+  - make
+  - rpm-build

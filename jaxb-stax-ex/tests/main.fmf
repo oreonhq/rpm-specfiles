@@ -1,0 +1,5 @@
+contact: Marian Koncek <mkoncek@redhat.com>
+framework: beakerlib
+test: ./runtest.sh
+tier: 0
+component: jaxb-stax-ex

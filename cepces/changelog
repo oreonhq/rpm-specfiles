@@ -1,0 +1,87 @@
+* Fri Jun 07 2024 Python Maint <python-maint@redhat.com> - 0.3.9-2
+- Rebuilt for Python 3.13
+
+* Tue Mar 19 2024 Andreas Schneider <asn@redhat.com> - 0.3.9-1
+- Update to version 0.3.9
+  * https://github.com/openSUSE/cepces/releases/tag/v0.3.9
+
+* Fri Feb 09 2024 Andreas Schneider <asn@redhat.com> - 0.3.8-3
+- Fix installing cepces-selinux
+
+* Mon Feb 05 2024 Andreas Schneider <asn@redhat.com> - 0.3.8-2
+- Require selinux package if selinux is enabled
+
+* Tue Jan 23 2024 Andreas Schneider <asn@redhat.com> - 0.3.8-1
+- Update to version 0.3.8
+  * https://github.com/openSUSE/cepces/releases/tag/v0.3.8
+
+* Tue Jan 23 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.3.7-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Fri Jan 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.3.7-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Wed Jul 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0.3.7-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Wed Jun 28 2023 Python Maint <python-maint@redhat.com> - 0.3.7-2
+- Rebuilt for Python 3.12
+
+* Wed Jun 28 2023 Andreas Schneider <asn@redhat.com> - 0.3.7-1
+- Update to version 0.3.7
+  * https://github.com/openSUSE/cepces/releases/tag/v0.3.7
+
+* Wed Jun 14 2023 Python Maint <python-maint@redhat.com> - 0.3.5-8
+- Rebuilt for Python 3.12
+
+* Wed Jan 18 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0.3.5-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Sun Jul 24 2022 Ding-Yi Chen <dchen@redhat.com> - 0.3.5-6
+- Review comment #16 addressed
+- It make more sense that -selinux and -certmonger depends on main package,
+  Not the other round
+- Recommends: logrotate
+- Supplements: -selinux, -certmonger
+
+* Wed Jul 20 2022 Ding-Yi Chen <dchen@redhat.com> - 0.3.5-5
+- Add Pull request #19
+- Remove Pull request #17 as it is not accepted
+- Review comment #13, #14 addressed
+
+* Mon Jun 27 2022 Ding-Yi Chen <dchen@redhat.com> - 0.3.5-4
+- Add Pull request #18
+- Replaces kerberos with gssapi
+- Replaces requests_kerberos with requests_gssapi
+
+* Fri Jun 24 2022 Ding-Yi Chen <dchen@redhat.com> - 0.3.5-3
+- Review comment #4, #7 addressed
+
+* Wed Jun 22 2022 Ding-Yi Chen <dchen@redhat.com> - 0.3.5-2
+- Review comment #1 addressed
+
+* Thu Jun 16 2022 Ding-Yi Chen <dchen@redhat.com> - 0.3.5-1
+- Initial import to Fedora
+- Add logrotate
+- Applied patch for https://github.com/openSUSE/cepces/issues/15
+
+* Fri Oct 01 2021 Daniel Uvehag <daniel.uvehag@gmail.com> - 0.3.4-1
+- Fix collections deprecation
+
+* Fri Oct 01 2021 Daniel Uvehag <daniel.uvehag@gmail.com> - 0.3.4-1
+- Fix collections deprecation
+
+* Mon Jul 29 2019 Daniel Uvehag <daniel.uvehag@gmail.com> - 0.3.3-2
+- Add missing log directory
+
+* Mon Jul 29 2019 Daniel Uvehag <daniel.uvehag@gmail.com> - 0.3.3-1
+- Update to version 0.3.3-1
+
+* Mon Feb 05 2018 Daniel Uvehag <daniel.uvehag@gmail.com> - 0.3.0-1
+- Update to version 0.3.0-1
+
+* Thu Feb 01 2018 Daniel Uvehag <daniel.uvehag@gmail.com> - 0.2.1-1
+- Update to version 0.2.1-1
+
+* Mon Jun 27 2016 Daniel Uvehag <daniel.uvehag@gmail.com> - 0.1.0-1
+- Initial package.

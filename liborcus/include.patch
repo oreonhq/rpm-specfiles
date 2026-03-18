@@ -1,0 +1,11 @@
+--- include/orcus/sax_parser.hpp~	2023-02-07 18:49:51.000000000 -0600
++++ include/orcus/sax_parser.hpp	2025-01-29 09:05:32.960176390 -0600
+@@ -5,6 +5,8 @@
+  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  */
+ 
++#include <cstdint>
++
+ #ifndef INCLUDED_ORCUS_SAX_PARSER_HPP
+ #define INCLUDED_ORCUS_SAX_PARSER_HPP
+ 

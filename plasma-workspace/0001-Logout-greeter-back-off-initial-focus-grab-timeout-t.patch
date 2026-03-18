@@ -1,0 +1,48 @@
+From c63d436dd7c2274234bd426daef7c191f266a3d8 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Fri, 13 Mar 2026 11:10:32 -0700
+Subject: [PATCH] Logout greeter: back off initial focus grab timeout to 3
+ seconds
+
+1 second seems pretty aggressive, and appears to be causing
+regular failures in openQA testing in Fedora:
+
+https://bugzilla.redhat.com/show_bug.cgi?id=2442475
+
+Testing indicates that 3 seconds is significantly better than 2
+when the test system is under load (14/19 passes with 2 seconds,
+17/19 with 3 seconds). I think beyond 3 seconds we hit diminishing
+returns, though, and it starts to risk the effectiveness of the
+fix (people who alt-tab'ed at the wrong time will get impatient
+after a few seconds). If this isn't enough, the whole approach
+might need re-thinking.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ logout-greeter/greeter.cpp | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/logout-greeter/greeter.cpp b/logout-greeter/greeter.cpp
+index 6f883f3ecd..6fc3ea724a 100644
+--- a/logout-greeter/greeter.cpp
++++ b/logout-greeter/greeter.cpp
+@@ -59,13 +59,13 @@ void Greeter::init()
+     setupWaylandIntegration();
+ 
+     if (!m_windowed) {
+-        // Quit if we lost focus or failed to gain it after 1 second
++        // Quit if we lost focus or failed to gain it after 3 seconds
+         auto *quitTimer = new QTimer(this);
+         QObject::connect(quitTimer, &QTimer::timeout, this, [this] {
+-            qCWarning(LOGOUT_GREETER) << "Failed to get focus after 1 second, quitting";
++            qCWarning(LOGOUT_GREETER) << "Failed to get focus after 3 seconds, quitting";
+             quit();
+         });
+-        quitTimer->setInterval(1s);
++        quitTimer->setInterval(3s);
+         quitTimer->setSingleShot(true);
+         quitTimer->start();
+         QObject::connect(qApp, &QGuiApplication::applicationStateChanged, this, [this, quitTimer = QPointer(quitTimer)](Qt::ApplicationState state) {
+-- 
+2.53.0
+

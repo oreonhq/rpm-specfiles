@@ -1,0 +1,5 @@
+---
+debuginfo:
+  ignore:
+    - /usr/share/ignition/ignition-validate-*-unknown-linux-gnu-static
+

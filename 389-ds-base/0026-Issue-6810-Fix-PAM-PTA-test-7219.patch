@@ -1,0 +1,30 @@
+From ff44acffcc67c985148c4df280685a674fec010a Mon Sep 17 00:00:00 2001
+From: Akshay Adhikari <aadhikar@redhat.com>
+Date: Thu, 5 Feb 2026 15:19:58 +0530
+Subject: [PATCH] Issue 6810 - Fix PAM PTA test (#7219)
+
+Description: Fix the PAM PTA test by add missing yield in fixture.
+
+Relates: #6810
+
+Reviewed by: @jchapma
+---
+ dirsrvtests/tests/suites/plugins/pam_pta_test.py | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/dirsrvtests/tests/suites/plugins/pam_pta_test.py b/dirsrvtests/tests/suites/plugins/pam_pta_test.py
+index 484c1bc80..e55a7f7ee 100644
+--- a/dirsrvtests/tests/suites/plugins/pam_pta_test.py
++++ b/dirsrvtests/tests/suites/plugins/pam_pta_test.py
+@@ -104,6 +104,8 @@ def pam_service_ldapserver(migrated_child_config):
+                 f.write(line + "\n")
+         os.chmod(pam_file, 0o644)
+ 
++        yield
++
+     except Exception as e:
+         if os.path.exists(backup_file):
+             # Restore backup on error
+-- 
+2.52.0
+

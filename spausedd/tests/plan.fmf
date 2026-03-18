@@ -1,0 +1,9 @@
+summary: Run all smoke tests
+discover:
+    how: fmf
+execute:
+    how: tmt
+prepare:
+    how: install
+    package:
+        - spausedd

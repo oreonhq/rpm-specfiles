@@ -1,0 +1,14 @@
+summary: When crond is running in multiple instance, then cron jobs are executed
+    multiple times. Is neccesary to prevent multiple instances of crond running 
+    in time.
+description: ''
+contact: Jakub Prokes <jprokes@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 5m
+extra-summary: /CoreOS/cronie/Regression/only-one-running-instance-in-time
+extra-task: /CoreOS/cronie/Regression/only-one-running-instance-in-time

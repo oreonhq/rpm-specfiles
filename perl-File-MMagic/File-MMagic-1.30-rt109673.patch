@@ -1,0 +1,20 @@
+--- MMagic.pm
++++ MMagic.pm
+@@ -929,7 +929,7 @@ sub magicMatch {
+ 	}
+ 	else {
+ #	    $$p_desc .= ' ' . sprintf($message,$data) if $message;
+-	    $$p_desc .= sprintf($message,$data) if $message;
++	    $$p_desc .= index($message, '%') >= 0 ? sprintf($message, $data) : $message if $message;
+ 	}
+ 
+ 	my $subtest;
+@@ -1094,7 +1094,7 @@ sub magicMatchStr {
+ 	}
+ 	else {
+ #	    $$p_desc .= ' ' . sprintf($message,$data) if $message;
+-	    $$p_desc .= sprintf($message,$data) if $message;
++	    $$p_desc .= index($message, '%') >= 0 ? sprintf($message, $data) : $message if $message;
+ 	}
+ 
+ 	my $subtest;

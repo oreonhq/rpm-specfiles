@@ -1,0 +1,7 @@
+summary: jaxb-stax-ex smoke test
+description: |
+  Test basic functionality of jaxb-stax-ex.
+require:
+  - jaxb-stax-ex
+  - java-21-openjdk-devel
+  - xmvn-tools

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-YAML-LibYAML
+require: perl-YAML-LibYAML-tests
+test: /usr/libexec/perl-YAML-LibYAML/test

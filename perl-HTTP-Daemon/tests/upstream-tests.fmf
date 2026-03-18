@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-HTTP-Daemon
+require: perl-HTTP-Daemon-tests
+test: /usr/libexec/perl-HTTP-Daemon/test

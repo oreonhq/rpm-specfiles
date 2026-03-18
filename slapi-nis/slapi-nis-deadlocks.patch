@@ -1,0 +1,102 @@
+From ee94788e63d9f35daca7c0d1e80a488f738a9c52 Mon Sep 17 00:00:00 2001
+From: Thierry Bordaz <tbordaz@redhat.com>
+Date: Fri, 1 Sep 2023 11:02:08 +0200
+Subject: [PATCH 1/2] BZ 2124214 - schema compat plugin deadlock on delete post
+ op
+
+Bug description:
+	backends locks (SC map and retroCL) are acquired in
+	the opposite order
+	(https://bugzilla.redhat.com/show_bug.cgi?id=2124214#c17)
+
+Fix description:
+	Credits of the fix are to Pierre Rogier who found
+	a reproducible testcase, did the fix and verified it.
+
+	In specific condition of retroCL trimming the DEL
+	callback of the SC should check if the backend should
+	be ignored
+
+relates: 2124214
+---
+ src/back-shr.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/src/back-shr.c b/src/back-shr.c
+index ce2b1f3..1792bef 100644
+--- a/src/back-shr.c
++++ b/src/back-shr.c
+@@ -2811,6 +2811,18 @@ backend_shr_delete_cb(Slapi_PBlock *pb)
+ 	if (wrap_get_call_level() > 0) {
+ 		return 0;
+ 	}
++        /* especially important to test if we want to prevent frequent
++         * deadlocks when backends are accesses in opposite order.
++         * i.e. "regular" update on domain map+retroCL and retroCL trimming
++         * retroCL+domain map
++         */
++        if (backend_shr_write_ignore(pb)) {
++#if DEBUG_MAP_LOCK
++        slapi_log_error(SLAPI_LOG_FATAL, "schema-compat",
++                "backend_shr_delete_cb: (%p) operation is not impacting schema compat\n", PR_MyThreadId(), 1);
++#endif
++		return 0;
++	}
+ 
+ 	/* Read parameters from the pblock. */
+ 	slapi_pblock_get(pb, SLAPI_PLUGIN_PRIVATE, &cbdata.state);
+-- 
+2.41.0
+
+
+From 61fcf534c3da767788e27641f3ebfe4d6a6c0b25 Mon Sep 17 00:00:00 2001
+From: Alexander Bokovoy <abokovoy@redhat.com>
+Date: Mon, 9 Oct 2023 13:53:28 +0300
+Subject: [PATCH 2/2] Add more ignores to modrdn and modify cases
+
+BZ 2124214 - schema compat plugin deadlock on delete post op
+
+Signed-off-by: Alexander Bokovoy <abokovoy@redhat.com>
+---
+ src/back-shr.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
+
+diff --git a/src/back-shr.c b/src/back-shr.c
+index 1792bef..4cbc39b 100644
+--- a/src/back-shr.c
++++ b/src/back-shr.c
+@@ -2463,6 +2463,15 @@ backend_shr_modify_cb(Slapi_PBlock *pb)
+ 		/* No data yet, ignore */
+ 		return 0;
+ 	}
++
++	if (backend_shr_write_ignore(pb)) {
++#if DEBUG_MAP_LOCK
++        slapi_log_error(SLAPI_LOG_FATAL, "schema-compat",
++                "backend_shr_modify_cb: (%p) operation is not impacting schema compat\n", PR_MyThreadId(), 1);
++#endif
++		return 0;
++	}
++
+ 	slapi_pblock_get(pb, SLAPI_MODIFY_TARGET, &dn);
+ 	slapi_pblock_get(pb, SLAPI_MODIFY_MODS, &cbdata.mods);
+ 	slapi_pblock_get(pb, SLAPI_ENTRY_PRE_OP, &cbdata.e_pre);
+@@ -2669,6 +2678,15 @@ backend_shr_modrdn_cb(Slapi_PBlock *pb)
+ 		/* No data yet, ignore */
+ 		return 0;
+ 	}
++
++	if (backend_shr_write_ignore(pb)) {
++#if DEBUG_MAP_LOCK
++        slapi_log_error(SLAPI_LOG_FATAL, "schema-compat",
++                "backend_shr_modrdn_cb: (%p) operation is not impacting schema compat\n", PR_MyThreadId(), 1);
++#endif
++		return 0;
++	}
++
+ 	slapi_pblock_get(pb, SLAPI_ENTRY_PRE_OP, &cbdata.e_pre);
+ 	slapi_pblock_get(pb, SLAPI_ENTRY_POST_OP, &cbdata.e_post);
+ 
+-- 
+2.41.0
+

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Devel-CheckLib
+require: perl-Devel-CheckLib-tests
+test: /usr/libexec/perl-Devel-CheckLib/test

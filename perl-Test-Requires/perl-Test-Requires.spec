@@ -1,0 +1,53 @@
+Name:		perl-Test-Requires
+Summary:	Checks to see if a given module can be loaded
+Version:	0.11
+Release:	18%{?dist}
+License:	GPL-1.0-or-later OR Artistic-1.0-Perl
+URL:		https://metacpan.org/release/Test-Requires
+Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-Requires-%{version}.tar.gz
+BuildArch:	noarch
+# Module Build
+BuildRequires:	coreutils
+BuildRequires:	make
+BuildRequires:	perl-generators
+BuildRequires:	perl-interpreter
+BuildRequires:	perl(ExtUtils::MakeMaker) >= 6.76
+# Module
+BuildRequires:	perl(base)
+BuildRequires:	perl(strict)
+BuildRequires:	perl(Test::Builder::Module)
+BuildRequires:	perl(warnings)
+# Test Suite
+BuildRequires:	perl(Data::Dumper)
+BuildRequires:	perl(Test::More) >= 0.47
+# Runtime
+
+%description
+Test::Requires checks to see if the module can be loaded.
+
+If this fails, rather than failing tests this skips all tests.
+
+%prep
+%setup -q -n Test-Requires-%{version}
+
+%build
+perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
+%{make_build}
+
+%install
+%{make_install}
+%{_fixperms} -c %{buildroot}
+
+%check
+# note the "skipped" warnings indicate success :)
+make test
+
+%files
+%license LICENSE
+%doc Changes README.md t/ xt/
+%{perl_vendorlib}/Test/
+%{_mandir}/man3/Test::Requires.3*
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11-18
+- Prepare for Oreon 11 (RP1)

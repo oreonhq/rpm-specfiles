@@ -1,0 +1,17 @@
+summary: Fonts related tests
+discover:
+  how: fmf
+  url: https://src.fedoraproject.org/tests/fonts
+  exclude:
+    - generic_alias
+prepare:
+  name: tmt
+  how: install
+  package:
+    - wqy-unibit-fonts
+execute:
+  how: tmt
+environment:
+  PACKAGE: wqy-unibit-fonts
+  FONT_FAMILY: Unibit
+  FONT_LANG: zh-cn, zh-tw

@@ -1,0 +1,26 @@
+From 6fbb6553a283c0d118138d681d63069142919ff1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Sviatoslav=20Sydorenko=20=28=D0=A1=D0=B2=D1=8F=D1=82=D0=BE?=
+ =?UTF-8?q?=D1=81=D0=BB=D0=B0=D0=B2=20=D0=A1=D0=B8=D0=B4=D0=BE=D1=80=D0=B5?=
+ =?UTF-8?q?=D0=BD=D0=BA=D0=BE=29?= <webknjaz@redhat.com>
+Date: Tue, 5 Nov 2024 17:25:55 +0100
+Subject: [PATCH] Drop `wheel` from direct build dependencies
+
+It was never necessary. In the past, `setuptools` would pull it in through the PEP 517 hook, only when building the wheels. During PyCon 2024, though, `wheel` moved into the `setuptools`' codebase and so it's always bundled now, in the modern versions.
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 2423a38..392d3b8 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ['setuptools>=36.2.2', 'wheel>=0.28.0']
++requires = ['setuptools>=36.2.2']
+ 
+ [tool.black]
+ line-length = 79
+-- 
+2.53.0
+

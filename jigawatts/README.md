@@ -1,0 +1,3 @@
+# jigawatts
+
+The jigawatts package

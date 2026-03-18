@@ -1,0 +1,37 @@
+From 83e27fc67d81b76daea4ab0741cf5799456d867f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Thu, 23 Jan 2020 10:16:38 +0000
+Subject: [PATCH] make install-unpacked flattens the python hierarchy so result
+ doesn't work
+
+the original oxt has the correct hierarchy but 'install' flattened it
+
+Resolves:
+https://github.com/voikko/libreoffice-voikko/issues/11
+https://bugzilla.redhat.com/show_bug.cgi?id=1676830
+https://bugs.documentfoundation.org/show_bug.cgi?id=122984
+---
+ Makefile | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 18eaff6..da085f3 100644
+--- a/Makefile
++++ b/Makefile
+@@ -98,10 +98,9 @@ all: oxt
+ 
+ install-unpacked: extension-files
+ 	install -m 755 -d "$(DESTDIR)" "$(DESTDIR)/META-INF"
+-	install -m 644 build/oxt/META-INF/manifest.xml "$(DESTDIR)/META-INF"
+-	install -m 644 build/oxt/description.xml \
+-	               $(patsubst %,build/oxt/%,$(STANDALONE_EXTENSION_FILES)) \
+-	               $(patsubst %,build/oxt/%,$(COPY_TEMPLATES)) $(DESTDIR)
++	install -m 644 build/oxt/description.xml $(DESTDIR)
++	install -m 755 -d "$(DESTDIR)" "$(DESTDIR)/pythonpath"
++	cd oxt && find . -type f ! -name description.xml.template -exec install -D {} $(DESTDIR)/{} \;
+ 
+ # Sed scripts for modifying templates
+ DESCRIPTION_SEDSCRIPT:=s/VOIKKO_VERSION/$(VOIKKO_VERSION)/g
+-- 
+2.24.1
+

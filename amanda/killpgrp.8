@@ -1,0 +1,36 @@
+.\" This file is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
+.\" the GNU General Public License for more details.
+.\"
+.\" You should have received a copy of the GNU General Public License
+.\" along with this file; if not, write to the Free Software
+.\" Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+.\" MA 02111-1307 USA
+.\"
+.\" HISTORY:
+.\" 2006-05-16, created by Rodrigo Rubira Branco <rrbranco@br.ibm.com>
+.TH killpgrp 8 "May 16, 2006" "User Manuals" "User Manuals"
+.SH NAME
+killpgrp \- kill all processes in the same process group
+.SH SYNOPSIS
+.nf
+.fam C
+\fBkillpgrp\fP
+.fam T
+.fi
+.SH DESCRIPTION
+Kills all processes in its process group when a process group leader is killed.
+.PP
+This program needs to be called by the client uid defined in amanda, and is used to kill VDUMP, VXDUMP, and XFSDUMP in a safe manner. It is called by sendsize, the amanda client software.
+.PP
+killpgrp send a SIGTERM to all processes in its process group. If a process in the group does not exit after three seconds
+and does not answer, killpgp will send a SIGKILL.
+.SH OPTIONS
+\fBkillpgrp\fP takes no arguments.
+.SH SECURITY
+\fBkillpgrp\fP needs to be setuid root unless amanda is compiled with DONT_SUID_ROOT.
+.SH SEE ALSO
+\fBamanda\fP(8)
+.SH AUTHOR
+Manpage written by Rodrigo Rubira Branco <rrbranco@br.ibm.com>

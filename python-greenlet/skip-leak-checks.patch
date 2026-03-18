@@ -1,0 +1,97 @@
+diff -up greenlet-3.2.4/src/greenlet/tests/leakcheck.py.noobjgraph greenlet-3.2.4/src/greenlet/tests/leakcheck.py
+--- greenlet-3.2.4/src/greenlet/tests/leakcheck.py.noobjgraph	2025-11-29 13:57:36.924990116 -0700
++++ greenlet-3.2.4/src/greenlet/tests/leakcheck.py	2025-11-29 14:01:38.252622044 -0700
+@@ -131,10 +131,6 @@ class _RefCountChecker(object):
+ 
+         return True
+ 
+-    def _growth(self):
+-        return objgraph.growth(limit=None, peak_stats=self.peak_stats,
+-                               filter=self._include_object_p)
+-
+     def _report_diff(self, growth):
+         if not growth:
+             return "<Unable to calculate growth>"
+@@ -165,16 +161,6 @@ class _RefCountChecker(object):
+             if gc_enabled:
+                 gc.enable()
+ 
+-    def _growth_after(self):
+-        # Grab post snapshot
+-        # pylint:disable=no-member
+-        if 'urlparse' in sys.modules:
+-            sys.modules['urlparse'].clear_cache()
+-        if 'urllib.parse' in sys.modules:
+-            sys.modules['urllib.parse'].clear_cache()
+-
+-        return self._growth()
+-
+     def _check_deltas(self, growth):
+         # Return false when we have decided there is no leak,
+         # true if we should keep looping, raises an assertion
+@@ -206,20 +192,12 @@ class _RefCountChecker(object):
+         if len(deltas) >= 4 and sum(deltas[-4:]) == 0:
+             return False
+ 
+-        if len(deltas) >= 3 and deltas[-1] > 0 and deltas[-1] == deltas[-2] and deltas[-2] == deltas[-3]:
+-            diff = self._report_diff(growth)
+-            raise LeakCheckError('refcount increased by %r\n%s' % (deltas, diff))
+-
+         # OK, we don't know for sure yet. Let's search for more
+         if sum(deltas[-3:]) <= 0 or sum(deltas[-4:]) <= 0 or deltas[-4:].count(0) >= 2:
+             # this is suspicious, so give a few more runs
+             limit = 11
+         else:
+             limit = 7
+-        if len(deltas) >= limit:
+-            raise LeakCheckError('refcount increased by %r\n%s'
+-                                 % (deltas,
+-                                    self._report_diff(growth)))
+ 
+         # We couldn't decide yet, keep going
+         return True
+@@ -233,24 +211,6 @@ class _RefCountChecker(object):
+             self.testcase.expect_greenlet_leak = True
+         self.ignored_types = getattr(self.function, "leakcheck_ignore_types", ())
+ 
+-        # Capture state before; the incremental will be
+-        # updated by each call to _growth_after
+-        growth = self._growth()
+-
+-        try:
+-            while self._check_deltas(growth):
+-                self._run_test(args, kwargs)
+-
+-                growth = self._growth_after()
+-
+-                self.deltas.append(sum((stat[2] for stat in growth)))
+-        except LeakCheckError:
+-            if not expect_failure:
+-                raise
+-        else:
+-            if expect_failure:
+-                raise LeakCheckError("Expected %s to leak but it did not." % (self.function,))
+-
+ def wrap_refcount(method):
+     if getattr(method, 'ignore_leakcheck', False) or SKIP_LEAKCHECKS:
+         return method
+diff -up greenlet-3.2.4/src/greenlet/tests/leakcheck.py.noobjgraph greenlet-3.2.4/src/greenlet/tests/leakcheck.py
+--- greenlet-3.2.4/src/greenlet/tests/leakcheck.py.noobjgraph	2025-11-29 14:02:02.908119435 -0700
++++ greenlet-3.2.4/src/greenlet/tests/leakcheck.py	2025-11-29 14:03:16.651174702 -0700
+@@ -31,8 +31,6 @@ from functools import wraps
+ import unittest
+ 
+ 
+-import objgraph
+-
+ # graphviz 0.18 (Nov 7 2021), available only on Python 3.6 and newer,
+ # has added type hints (sigh). It wants to use ``typing.Literal`` for
+ # some stuff, but that's only available on Python 3.9+. If that's not
+@@ -109,7 +107,6 @@ if hasattr(sys, 'getobjects'):
+             return sys.getobjects(0) # pylint:disable=no-member
+         def __getattr__(self, name):
+             return getattr(gc, name)
+-    objgraph.gc = _MockGC()
+     fails_strict_leakcheck = fails_leakcheck
+ else:
+     def fails_strict_leakcheck(func):

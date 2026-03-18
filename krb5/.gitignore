@@ -1,0 +1,5 @@
+/krb5-*-build
+/results_krb5
+/*.tar.bz2
+/*.tar.gz
+/*.tar.gz.asc

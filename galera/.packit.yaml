@@ -1,0 +1,28 @@
+# We want to use the following Packit functions in the galera package:
+# koji_build, bodhi_update and pull_from_upstream
+
+# See the documentation for more information:
+# https://packit.dev/docs/configuration/
+
+specfile_path: galera.spec
+
+# name in upstream package repository or registry (e.g. in PyPI)
+upstream_package_name: galera
+
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - fedora-rawhide
+
+  - job: koji_build
+    trigger: commit
+    allowed_pr_authors: ["packit", "@db-sig"]
+    allowed_committers: ["packit", "@db-sig"]
+    dist_git_branches:
+      - fedora-all
+
+  - job: bodhi_update
+    trigger: commit
+    dist_git_branches:
+      - fedora-all

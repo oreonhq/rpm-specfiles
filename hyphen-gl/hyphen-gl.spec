@@ -1,0 +1,32 @@
+Name: hyphen-gl
+Summary: Galician hyphenation rules
+Version: 0.99
+Release: 34%{?dist}
+Source: https://forxa.mancomun.org/frs/download.php/534/hyph_gl.oxt
+URL: https://forxa.mancomun.org/projects/hyphenation-gl
+License: GPL-3.0-only
+BuildArch: noarch
+Requires: hyphen
+Supplements: (hyphen and langpacks-gl)
+
+%description
+Galician hyphenation rules.
+
+%prep
+%autosetup -c -n hyphen-gl
+
+%build
+chmod -x *.dic *.txt
+
+%install
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/hyphen
+cp -p hyph_gl_ANY.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen/hyph_gl_ES.dic
+
+
+%files
+%doc LEME-gl_ANY.txt LICENCES-gl.txt LICENSES-en.txt  
+%{_datadir}/hyphen/*
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.99-34
+- Prepare for Oreon 11 (RP1)

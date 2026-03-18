@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Digest-HMAC
+require: perl-Digest-HMAC-tests
+test: /usr/libexec/perl-Digest-HMAC/test

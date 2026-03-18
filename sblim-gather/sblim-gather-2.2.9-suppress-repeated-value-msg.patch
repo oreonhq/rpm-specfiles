@@ -1,0 +1,21 @@
+diff -up sblim-gather-2.2.9/repos.c.orig sblim-gather-2.2.9/repos.c
+--- sblim-gather-2.2.9/repos.c.orig	2025-02-04 13:44:57.724728899 +0100
++++ sblim-gather-2.2.9/repos.c	2025-02-04 13:47:20.553381198 +0100
+@@ -388,14 +388,14 @@ int reposvalue_get(ValueRequest *vs, COM
+ 	    memcpy(vs->vsValues[actnum].viResource, mv[j][numv[j]-1].mvResource,reslen);
+ 	    /* Workround for [bugs:#2739]: check for duplicate timestamp, don't crash */
+ 	    if (mv[j][0].mvTimeStamp == mv[j][1].mvTimeStamp) {
+-	      m_log(M_ERROR, M_SHOW,
++	      m_log(M_DEBUG, M_QUIET,
+ 	         "Hit repeated value on calculation of %s (mid=%d)\n",
+ 	          mc->mcName, mv[j][0].mvId);
+-	      m_log(M_ERROR, M_SHOW, "0: sys=%s res=%s value=%lu at %lu\n",
++	      m_log(M_DEBUG, M_QUIET, "0: sys=%s res=%s value=%lu at %lu\n",
+ 	          mv[j][0].mvSystemId, mv[j][0].mvResource,
+ 	          ntohll(*(unsigned long long*) mv[j][0].mvData),
+ 	          mv[j][0].mvTimeStamp);
+-	      m_log(M_ERROR, M_SHOW, "1: sys=%s res=%s value=%lu at %lu\n",
++	      m_log(M_DEBUG, M_QUIET, "1: sys=%s res=%s value=%lu at %lu\n",
+ 	          mv[j][1].mvSystemId, mv[j][1].mvResource,
+ 	          ntohll(*(unsigned long long*) mv[j][1].mvData),
+ 	          mv[j][1].mvTimeStamp);

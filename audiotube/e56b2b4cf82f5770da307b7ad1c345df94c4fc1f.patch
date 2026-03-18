@@ -1,0 +1,38 @@
+From e56b2b4cf82f5770da307b7ad1c345df94c4fc1f Mon Sep 17 00:00:00 2001
+From: Steve Cossette <farchord@gmail.com>
+Date: Wed, 14 May 2025 08:32:55 -0400
+Subject: [PATCH] Possible fix for build failures on F41
+
+---
+ src/asyncytmusic.cpp | 1 -
+ src/asyncytmusic.h   | 2 +-
+ 2 files changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/asyncytmusic.cpp b/src/asyncytmusic.cpp
+index 49aebc37..7a93fa4d 100644
+--- a/src/asyncytmusic.cpp
++++ b/src/asyncytmusic.cpp
+@@ -5,7 +5,6 @@
+ #include "asyncytmusic.h"
+ 
+ #include <QThread>
+-#include <QDebug>
+ #include <QJsonObject>
+ #include <QJsonArray>
+ #include <QFutureInterface>
+diff --git a/src/asyncytmusic.h b/src/asyncytmusic.h
+index fab2ba73..1d32358f 100644
+--- a/src/asyncytmusic.h
++++ b/src/asyncytmusic.h
+@@ -8,7 +8,7 @@
+ #include <QThread>
+ #include <QFuture>
+ #include <QFutureWatcher>
+-
++#include <QDebug>
+ #include <QCoroTask>
+ #include <QCoroFuture>
+ 
+-- 
+GitLab
+

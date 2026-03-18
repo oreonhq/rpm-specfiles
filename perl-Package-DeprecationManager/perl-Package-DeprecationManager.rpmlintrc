@@ -1,0 +1,2 @@
+# Plural of deprecation
+addFilter("spelling-error \('deprecations', ")

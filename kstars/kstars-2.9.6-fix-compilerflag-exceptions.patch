@@ -1,0 +1,13 @@
+diff -Naur kstars-2.9.6/CMakeLists.txt kstars-2.9.6.fix/CMakeLists.txt
+--- kstars-2.9.6/CMakeLists.txt	2018-05-26 08:33:31.000000000 +0200
++++ kstars-2.9.6.fix/CMakeLists.txt	2018-07-19 09:07:06.206283586 +0200
+@@ -357,6 +357,9 @@
+     SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fsanitize=address,undefined -fno-omit-frame-pointer")
+ ENDIF ()
+ 
++SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fexceptions -fPIC")
++SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -fPIC")
++
+ # Unity build support
+ SET(UNITY_BUILD OFF CACHE BOOL "Enable Unity Build")
+ INCLUDE(UnityBuild)

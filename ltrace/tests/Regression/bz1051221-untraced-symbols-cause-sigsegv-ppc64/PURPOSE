@@ -1,0 +1,3 @@
+PURPOSE of /tools/ltrace/Regression/bz1051221-untraced-symbols-cause-sigsegv-ppc64
+Description: The test tries to workaround of a bz1051221 a little.
+Author: Michael Petlan <mpetlan@redhat.com>

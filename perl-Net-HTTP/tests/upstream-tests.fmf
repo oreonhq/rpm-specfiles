@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Net-HTTP
+require: perl-Net-HTTP-tests
+test: /usr/libexec/perl-Net-HTTP/test

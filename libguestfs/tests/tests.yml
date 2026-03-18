@@ -1,0 +1,14 @@
+# https://fedoraproject.org/wiki/CI/Tests
+# https://fedoraproject.org/wiki/CI/Standard_Test_Roles
+- hosts: localhost
+  roles:
+  - role: standard-test-basic
+    tags:
+    - classic
+    required_packages:
+    - libguestfs
+    - libvirt-daemon-kvm
+    tests:
+    - libguestfs-test-tool:
+        dir: .
+        run: ./run-libguestfs-test-tool.sh

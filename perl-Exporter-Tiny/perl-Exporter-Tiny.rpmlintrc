@@ -1,0 +1,6 @@
+# rpmlint can't tell if a macro is expanded or not; this one is correct
+addFilter("unexpanded-macro %description -l C %EXPORT_TAGS")
+
+# perl-ism
+addFilter("spelling-error \('coderefs',")
+

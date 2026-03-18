@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Text-Balanced
+require: perl-Text-Balanced-tests
+test: /usr/libexec/perl-Text-Balanced/test

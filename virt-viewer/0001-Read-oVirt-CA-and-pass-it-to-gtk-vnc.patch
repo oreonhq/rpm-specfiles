@@ -1,0 +1,89 @@
+From de864c14146c120b46d435949b1d8d0b11e57b85 Mon Sep 17 00:00:00 2001
+From: Jean-Louis Dupond <jean-louis@dupond.be>
+Date: Thu, 25 May 2023 16:22:14 +0200
+Subject: [PATCH] Read oVirt CA and pass it to gtk-vnc
+
+The connection file created by oVirt contains the trusted CA.
+When https://gitlab.gnome.org/GNOME/gtk-vnc/-/merge_requests/24 is
+merged, we can pass this CA certificate to gtk-vnc to have it trusted.
+This can replace manually putting the cacert.pem into ~/.pki/CA/
+
+Signed-off-by: Jean-Louis Dupond <jean-louis@dupond.be>
+---
+ src/virt-viewer-session-vnc.c | 25 +++++++++++++++++++++++--
+ 1 file changed, 23 insertions(+), 2 deletions(-)
+
+diff --git a/src/virt-viewer-session-vnc.c b/src/virt-viewer-session-vnc.c
+index 6281bd0..1635c1b 100644
+--- a/src/virt-viewer-session-vnc.c
++++ b/src/virt-viewer-session-vnc.c
+@@ -42,6 +42,9 @@
+ #if VNC_CHECK_VERSION(1, 2, 0)
+ # define HAVE_VNC_POWER_CONTROL
+ #endif
++#if VNC_CHECK_VERSION(1, 3, 2)
++# define HAVE_VNC_DISPLAY_CREDENTIAL_CA_CERT_DATA
++#endif
+ 
+ struct _VirtViewerSessionVnc {
+     VirtViewerSession parent;
+@@ -343,8 +346,8 @@ virt_viewer_session_vnc_auth_credential(GtkWidget *src G_GNUC_UNUSED,
+                                         VirtViewerSession *session)
+ {
+     VirtViewerSessionVnc *self = VIRT_VIEWER_SESSION_VNC(session);
+-    char *username = NULL, *password = NULL;
+-    gboolean wantPassword = FALSE, wantUsername = FALSE;
++    char *username = NULL, *password = NULL, *ca = NULL;
++    gboolean wantPassword = FALSE, wantUsername = FALSE, wantCA = FALSE;
+     VirtViewerFile *file = NULL;
+     int i;
+ 
+@@ -360,6 +363,9 @@ virt_viewer_session_vnc_auth_credential(GtkWidget *src G_GNUC_UNUSED,
+             wantPassword = TRUE;
+             break;
+         case VNC_DISPLAY_CREDENTIAL_CLIENTNAME:
++#ifdef HAVE_VNC_DISPLAY_CREDENTIAL_CA_CERT_DATA
++        case VNC_DISPLAY_CREDENTIAL_CA_CERT_DATA:
++#endif
+             break;
+         default:
+             g_debug("Unsupported credential type %d", g_value_get_enum(cred));
+@@ -382,6 +388,10 @@ virt_viewer_session_vnc_auth_credential(GtkWidget *src G_GNUC_UNUSED,
+             password = virt_viewer_file_get_password(file);
+             wantPassword = FALSE;
+         }
++        ca = virt_viewer_file_get_ovirt_ca(file);
++        if (wantCA && ca) {
++            wantCA = FALSE;
++        }
+     }
+ 
+     if (wantUsername || wantPassword) {
+@@ -427,6 +437,16 @@ virt_viewer_session_vnc_auth_credential(GtkWidget *src G_GNUC_UNUSED,
+                 vnc_display_close(self->vnc);
+             }
+             break;
++#ifdef HAVE_VNC_DISPLAY_CREDENTIAL_CA_CERT_DATA
++        case VNC_DISPLAY_CREDENTIAL_CA_CERT_DATA:
++            if (vnc_display_set_credential(self->vnc,
++                                           g_value_get_enum(cred),
++                                           ca)) {
++                g_debug("Failed to set credential type %d", g_value_get_enum(cred));
++                vnc_display_close(self->vnc);
++            }
++            break;
++#endif
+         default:
+             g_debug("Unsupported credential type %d", g_value_get_enum(cred));
+             vnc_display_close(self->vnc);
+@@ -436,6 +456,7 @@ virt_viewer_session_vnc_auth_credential(GtkWidget *src G_GNUC_UNUSED,
+  cleanup:
+     g_free(username);
+     g_free(password);
++    g_free(ca);
+ }
+ 
+ 
+-- 
+2.47.1
+

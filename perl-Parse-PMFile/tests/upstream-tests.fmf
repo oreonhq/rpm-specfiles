@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Parse-PMFile
+require: perl-Parse-PMFile-tests
+test: /usr/libexec/perl-Parse-PMFile/test

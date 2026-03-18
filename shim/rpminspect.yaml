@@ -1,0 +1,104 @@
+# rpminspect configuration
+
+---
+common:
+    workdir: /var/tmp/rpminspect
+commands:
+    msgunfmt: msgunfmt
+    desktop-file-validate: desktop-file-validate
+    abidiff: abidiff
+    kmidiff: kmidiff
+    annocheck: annocheck
+    udevadm: udevadm
+vendor:
+    vendor_data_dir: /usr/share/rpminspect
+    favor_release: newest
+inspections:
+    abidiff: on
+    addedfiles: off
+    annocheck: off
+    arch: on
+    badfuncs: on
+    capabilities: on
+    changedfiles: off
+    changelog: on
+    config: on
+    debuginfo: on
+    desktop: on
+    disttag: off
+    doc: on
+    dsodeps: on
+    elf: off
+    emptyrpm: on
+    files: on
+    filesize: off
+    javabytecode: off
+    kmidiff: on
+    kmod: on
+    license: on
+    lostpayload: on
+    lto: on
+    manpage: on
+    metadata: on
+    modularity: on
+    movedfiles: on
+    ownership: on
+    patches: off
+    pathmigration: on
+    permissions: off
+    politics: on
+    removedfiles: on
+    rpmdeps: on
+    runpath: on
+    shellsyntax: on
+    specname: on
+    subpackages: on
+    symlinks: on
+    types: on
+    udevrules: on
+    unicode: on
+    upstream: off
+    virus: on
+    xml: on
+desktop:
+    desktop_entry_files_dir: /usr/share/applications
+ownership:
+    bin_paths:
+        - /bin
+        - /sbin
+        - /usr/bin
+        - /usr/sbin
+    bin_owner: root
+    bin_group: root
+shellsyntax:
+    shells:
+        - sh
+        - ksh
+        - zsh
+        - csh
+        - tcsh
+        - rc
+        - bash
+filesize:
+    size_threshold: info
+specname:
+    match: full
+    primary: name
+abidiff:
+    suppression_file: .abignore
+    debuginfo_path: /usr/lib/debug/
+    security_level_threshold: 2
+kmidiff:
+    suppression_file: .abignore
+    debuginfo_path: /usr/lib/debug/
+    kernel_filenames:
+        - vmlinux
+        - vmlinuz
+debuginfo:
+    debuginfo_sections: .symtab .debug_info
+udevrules:
+    udev_rules_dirs:
+        - /etc/udev/rules.d/
+        - /usr/lib/udev/rules.d/
+
+

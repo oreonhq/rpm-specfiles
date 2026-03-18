@@ -1,0 +1,6 @@
+from Config import *
+addFilter("spelling-error Summary\(en_US\) hostname -> ");
+addFilter("spelling-error %description -l en_US hostname -> ");
+addFilter("spelling-error %description -l en_US cron -> ");
+addFilter("only-non-binary-in-usr-lib");
+addFilter("no-documentation");

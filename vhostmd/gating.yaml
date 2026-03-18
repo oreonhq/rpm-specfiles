@@ -1,0 +1,7 @@
+--- !Policy
+product_versions:
+  - rhel-*
+decision_context: osci_compose_gate
+rules:
+  - !PassingTestCaseRule {test_case_name: osci.brew-build.tier0.functional}
+  - !PassingTestCaseRule {test_case_name: manual.sst_virtualization.vhostmd.manual-test}

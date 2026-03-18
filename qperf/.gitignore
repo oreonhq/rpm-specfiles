@@ -1,0 +1,16 @@
+i386/
+i686/
+x86_64/
+ppc/
+ppc64/
+ia64/
+mips/
+arm*/
+noarch/
+.project
+*.src.rpm
+.build*.log
+/qperf-0.4.6/
+/qperf-0.4.6-0.1.gb81434e.tar.gz
+/qperf-0.4.9.tar.gz
+/qperf-0.4.9/

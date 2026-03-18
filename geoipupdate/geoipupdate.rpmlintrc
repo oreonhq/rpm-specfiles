@@ -1,0 +1,16 @@
+# Documentation for cron packages is the package %description
+addFilter("no-documentation")
+
+# Cron scripts can be edited by end users
+addFilter("executable-marked-as-config-file /etc/cron.weekly/geoipupdate")
+
+# geoipupdate-cron6 is obsolete (upstream stopped providing free IPv6 databases) and not replaced
+addFilter("obsolete-not-provided geoipupdate-cron6")
+
+# Consequence of vendoring dependencies
+addFilter("invalid-url Source1: geoipupdate-.*-vendor.tar.bz2")
+
+# Nobody will ever have separate filesystems for subdirectories here
+addFilter("cross-directory-hard-link /usr/share/licenses/geoipupdate/vendor/.*/LICENSE /usr/share/licenses/geoipupdate/vendor/.*/LICENSE")
+addFilter("cross-directory-hard-link /usr/share/licenses/geoipupdate/vendor/.*/PATENTS /usr/share/licenses/geoipupdate/vendor/.*/PATENTS")
+

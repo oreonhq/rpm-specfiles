@@ -1,0 +1,13 @@
+/mockito-*.tar.xz
+/.build-*.log
+/noarch/
+/*.src.rpm
+/mockito-3.5.13.tar.gz
+/mockito-3.7.13.tar.gz
+/mockito-3.12.4.tar.gz
+/mockito-5.5.0.tar.gz
+/mockito-core-5.5.0.pom
+/mockito-junit-jupiter-5.5.0.pom
+/mockito-5.8.0.tar.gz
+/mockito-core-5.8.0.pom
+/mockito-junit-jupiter-5.8.0.pom

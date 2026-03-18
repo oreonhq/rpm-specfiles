@@ -1,0 +1,13 @@
+# packit config for vulkan-volk
+# Build Stage 3 - depends on vulkan-loader
+
+jobs:
+  - job: koji_build
+    trigger: commit | koji_build
+    dist_git_branches:
+      - fedora-all
+    sidetag_group: vulkan-sdk-releases
+    dependencies:
+      - vulkan-loader
+    dependents:
+      - vulkan-tools

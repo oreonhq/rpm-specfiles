@@ -1,0 +1,7 @@
+annocheck:
+  extra_opts:
+    # libflexiblas_netlib.so:
+    # - fortify: isamax_, sasum_
+    # libflexiblas_fallback_lapack.so:
+    # - fortify: sgbbrd_, sgbcon_, sgbequ_, sladiv2_, slamch_
+    hardened: --skip-glibcxx-assertions --skip-fortify

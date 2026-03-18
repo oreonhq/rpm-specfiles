@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Net-CalDAVTalk
+require: perl-Net-CalDAVTalk-tests
+test: /usr/libexec/perl-Net-CalDAVTalk/test

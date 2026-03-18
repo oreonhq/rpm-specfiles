@@ -1,0 +1,13 @@
+- hosts: localhost
+  roles:
+  - role: standard-test-basic
+    tags:
+    - classic
+    required_packages:
+    - virt-v2v
+    - guestfs-tools
+    - libvirt-daemon-kvm
+    tests:
+    - simple:
+        dir: .
+        run: ./basic-test.sh

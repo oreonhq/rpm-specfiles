@@ -1,0 +1,161 @@
+From d34554f3437b424028c5aa06ece5006e91718fb9 Mon Sep 17 00:00:00 2001
+From: Shivang Upadhyay <shivangu@linux.ibm.com>
+Date: Tue, 24 Feb 2026 13:55:06 +0530
+Subject: [PATCH 22/23] Reapply "vmcoreinfo: read vmcoreinfo using
+ 'vmcoreinfo_data' when unavailable in elf note"
+
+Commit 7636c13 ("vmcoreinfo: read vmcoreinfo using 'vmcoreinfo_data'
+when unavailable in elf note") moved the vmcoreinfo reading to always
+read from memory instead of relying on diskdump/netdump's local
+handlers. This was later reverted to fix regression in X86_64 kslar
+images.
+
+Reintroduce the `vmcoreinfo_read_from_memory` as fallback to
+diskdump/netdump vmcores.
+
+Sometimes, vmcoreinfo_data is found within the primary format handler,
+but the symbol is not availbale. Pairing this case with vmcoreinfo missing
+from memory we can hit the following warning.
+
+$ ~/crash-dev/crash.aft vmcore vmlinux.gz
+...
+GNU gdb (GDB) 16.2
+Copyright (C) 2024 Free Software Foundation, Inc.
+...
+Type "apropos word" to search for commands related to "word"...
+
+crash.aft: cannot read vmcoreinfo_data <<--------------
+      KERNEL: vmlinux.gz
+    DUMPFILE: vmcore  [PARTIAL DUMP]
+...
+crash.aft>
+
+To fix this, We will only fallback to `vmcoreinfo_read_from_memory`,
+when the vmcoreinfo_data is not found within the format handler.
+
+This reverts commit 72e2776caf1ca41dffcc8aba11c55c636565725b.
+
+Cc: Aditya Gupta <adityag@linux.ibm.com>
+Cc: Tao Liu <ltao@redhat.com>
+Cc: Misbah Anjum N <misanjum@linux.ibm.com>
+Signed-off-by: Shivang Upadhyay <shivangu@linux.ibm.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ defs.h     |  1 +
+ diskdump.c |  5 +++++
+ kernel.c   | 17 ++++++++++++-----
+ netdump.c  |  5 +++--
+ 4 files changed, 21 insertions(+), 7 deletions(-)
+
+diff --git a/defs.h b/defs.h
+index cfdfa08983bf..a6f43725b6b8 100644
+--- a/defs.h
++++ b/defs.h
+@@ -6236,6 +6236,7 @@ void dump_kernel_table(int);
+ void dump_bt_info(struct bt_info *, char *where);
+ void dump_log(int);
+ void parse_kernel_version(char *);
++char *vmcoreinfo_read_from_memory(const char *);
+ 
+ #define LOG_LEVEL(v) ((v) & 0x07)
+ #define SHOW_LOG_LEVEL    (0x1)
+diff --git a/diskdump.c b/diskdump.c
+index 0ff87822732a..fc2691536086 100644
+--- a/diskdump.c
++++ b/diskdump.c
+@@ -2389,6 +2389,7 @@ vmcoreinfo_read_string(const char *key)
+ 	off_t offset;
+ 	char keybuf[BUFSIZE];
+ 	const off_t failed = (off_t)-1;
++	bool info_found = false;
+ 
+ 	if (dd->header->header_version < 3)
+ 		return NULL;
+@@ -2421,6 +2422,7 @@ vmcoreinfo_read_string(const char *key)
+ 	}
+ 
+ 	buf[size_vmcoreinfo] = '\n';
++	info_found = true;
+ 
+ 	if ((p1 = strstr(buf, keybuf))) {
+ 		p2 = p1 + strlen(keybuf);
+@@ -2434,6 +2436,9 @@ err:
+ 	if (buf)
+ 		free(buf);
+ 
++	if (!info_found && value_string == NULL)
++		return vmcoreinfo_read_from_memory(key);
++
+ 	return value_string;
+ }
+ 
+diff --git a/kernel.c b/kernel.c
+index ccc4b3d55b01..8781d6a22414 100644
+--- a/kernel.c
++++ b/kernel.c
+@@ -100,7 +100,6 @@ static ulong dump_audit_skb_queue(ulong);
+ static ulong __dump_audit(char *);
+ static void dump_audit(void);
+ static void dump_printk_safe_seq_buf(int);
+-static char *vmcoreinfo_read_string(const char *);
+ static void check_vmcoreinfo(void);
+ static int is_pvops_xen(void);
+ static int get_linux_banner_from_vmlinux(char *, size_t);
+@@ -12031,8 +12030,8 @@ dump_printk_safe_seq_buf(int msg_flags)
+  * Returns a string (that has to be freed by the caller) that contains the
+  * value for key or NULL if the key has not been found.
+  */
+-static char *
+-vmcoreinfo_read_string(const char *key)
++char *
++vmcoreinfo_read_from_memory(const char *key)
+ {
+ 	char *buf, *value_string, *p1, *p2;
+ 	size_t value_length;
+@@ -12042,6 +12041,14 @@ vmcoreinfo_read_string(const char *key)
+ 
+ 	buf = value_string = NULL;
+ 
++	if (!(pc->flags & GDB_INIT)) {
++		/*
++		 * GDB interface hasn't been initialised yet, so can't
++		 * access vmcoreinfo_data
++		 */
++		return NULL;
++	}
++
+ 	switch (get_symbol_type("vmcoreinfo_data", NULL, NULL))
+ 	{
+ 	case TYPE_CODE_PTR:
+@@ -12097,10 +12104,10 @@ check_vmcoreinfo(void)
+ 		switch (get_symbol_type("vmcoreinfo_data", NULL, NULL))
+ 		{
+ 		case TYPE_CODE_PTR:
+-			pc->read_vmcoreinfo = vmcoreinfo_read_string;
++			pc->read_vmcoreinfo = vmcoreinfo_read_from_memory;
+ 			break;
+ 		case TYPE_CODE_ARRAY:
+-			pc->read_vmcoreinfo = vmcoreinfo_read_string;
++			pc->read_vmcoreinfo = vmcoreinfo_read_from_memory;
+ 			break;
+ 		}
+ 	}
+diff --git a/netdump.c b/netdump.c
+index ba1c6c408878..452ef72224db 100644
+--- a/netdump.c
++++ b/netdump.c
+@@ -1977,8 +1977,9 @@ vmcoreinfo_read_string(const char *key)
+ 		size_vmcoreinfo = 0;
+ 	}
+ 
+-	if (!vmcoreinfo)
+-		return NULL;
++	if (!vmcoreinfo) {
++		return vmcoreinfo_read_from_memory(key);
++	}
+ 
+ 	/* the '+ 1' is the equal sign */
+ 	for (i = 0; i < (int)(size_vmcoreinfo - key_length + 1); i++) {
+-- 
+2.51.1
+

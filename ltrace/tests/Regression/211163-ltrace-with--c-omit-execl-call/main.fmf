@@ -1,0 +1,17 @@
+summary: ltrace with -c omit execl call
+description: |
+    ltrace with -c omit execl call
+contact: Michal Nowak <mnowak@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- gcc
+- glibc-devel
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=211163
+extra-summary: /tools/ltrace/Regression/211163-ltrace-with--c-omit-execl-call
+extra-task: /tools/ltrace/Regression/211163-ltrace-with--c-omit-execl-call

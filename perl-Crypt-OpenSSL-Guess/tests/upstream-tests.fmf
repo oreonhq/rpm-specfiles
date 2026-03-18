@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Crypt-OpenSSL-Guess
+require: perl-Crypt-OpenSSL-Guess-tests
+test: /usr/libexec/perl-Crypt-OpenSSL-Guess/test

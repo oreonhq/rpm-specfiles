@@ -1,0 +1,96 @@
+From 6e13ba9b4367fb7867f8a61930bd80b34970aa34 Mon Sep 17 00:00:00 2001
+From: Lubomir Rintel <lkundrak@v3.sk>
+Date: Thu, 22 Aug 2019 16:28:51 +0200
+Subject: [PATCH] Move the NetworkManager dispatcher script out of /etc
+
+It's not user configuration and shouldn't ever have been there. Except for that
+it used to be the only location NetworkManager looked into. With NetworkManager
+1.20 that is no longer the case and the dispatcher scripts can be moved to
+/usr/lib.
+
+Users of older NetworkManager versions can still override this on the
+./configure command line.
+---
+ README       |  2 +-
+ configure    | 10 +++++-----
+ configure.ac |  8 ++++----
+ 3 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/README b/README
+index 1ddc3f4..7093268 100644
+--- a/README
++++ b/README
+@@ -74,7 +74,7 @@ the secure version, but this was fixed in 0.6.
+ 
+ * unix - NetworkManager
+ 
+-In /etc/NetworkManager/dispatcher.d a script sends DHCP changes to
++In /usr/lib/NetworkManager/dispatcher.d a script sends DHCP changes to
+ the daemon.  The script is a networkmanager dhcp hook script and uses
+ dnssec-trigger-control to talk to the daemon.  The script uses nmcli
+ to find the DNS info.
+diff --git a/configure b/configure
+index 16d86fc..1efddd3 100755
+--- a/configure
++++ b/configure
+@@ -1364,8 +1364,8 @@ Optional Packages:
+                           'windows' or 'none'
+   --with-networkmanager-dispatch
+                           Set the networkmanager dhcp dispatcher dir, default
+-                          tests prefix/etc/NetworkManager/dispatcher.d and
+-                          /etc/NetworkManager/dispatcher.d
++                          tests prefix/lib/NetworkManager/dispatcher.d and
++                          /lib/NetworkManager/dispatcher.d
+   --with-netconfig-dispatch
+                           Set the netconfig dhcp dispatcher dir, default tests
+                           prefix/etc/netconfig.d and /etc/netconfig.d
+@@ -6879,7 +6879,7 @@ if test -n "$withval"; then
+ fi
+ 
+ # hook settings
+-networkmanager_dispatcher_dir="$sysconfdir/NetworkManager/dispatcher.d"
++networkmanager_dispatcher_dir="$prefix/lib/NetworkManager/dispatcher.d"
+ 
+ # Check whether --with-networkmanager-dispatch was given.
+ if test "${with_networkmanager_dispatch+set}" = set; then :
+@@ -6938,8 +6938,8 @@ $as_echo_n "checking for NetworkManager dispatch... " >&6; }
+ 	else
+ 		if test -d "$networkmanager_dispatcher_dir" ; then
+ 			:
+-		else if test -d /etc/NetworkManager/dispatcher.d; then
+-			networkmanager_dispatcher_dir="/etc/NetworkManager/dispatcher.d"
++		else if test -d /lib/NetworkManager/dispatcher.d; then
++			networkmanager_dispatcher_dir="/lib/NetworkManager/dispatcher.d"
+ 			fi
+ 		fi
+ 	fi
+diff --git a/configure.ac b/configure.ac
+index f06412f..d1b8556 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -244,9 +244,9 @@ if test -n "$withval"; then
+ fi
+ 
+ # hook settings
+-networkmanager_dispatcher_dir="$sysconfdir/NetworkManager/dispatcher.d"
++networkmanager_dispatcher_dir="$prefix/lib/NetworkManager/dispatcher.d"
+ AC_ARG_WITH([networkmanager-dispatch], AC_HELP_STRING([--with-networkmanager-dispatch],
+-	[Set the networkmanager dhcp dispatcher dir, default tests prefix/etc/NetworkManager/dispatcher.d and /etc/NetworkManager/dispatcher.d]),
++	[Set the networkmanager dhcp dispatcher dir, default tests prefix/lib/NetworkManager/dispatcher.d and /lib/NetworkManager/dispatcher.d]),
+ 	, withval="")
+ with_nm_dispatch="$withval"
+ AC_SUBST(networkmanager_dispatcher_dir)
+@@ -290,8 +290,8 @@ if test "$hooks" = "networkmanager"; then
+ 	else
+ 		if test -d "$networkmanager_dispatcher_dir" ; then
+ 			:
+-		else if test -d /etc/NetworkManager/dispatcher.d; then
+-			networkmanager_dispatcher_dir="/etc/NetworkManager/dispatcher.d"
++		else if test -d /lib/NetworkManager/dispatcher.d; then
++			networkmanager_dispatcher_dir="/lib/NetworkManager/dispatcher.d"
+ 			fi
+ 		fi
+ 	fi
+-- 
+2.23.0
+

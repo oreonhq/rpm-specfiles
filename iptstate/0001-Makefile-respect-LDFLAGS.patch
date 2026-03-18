@@ -1,0 +1,27 @@
+From d3d373600e32ab1ec79211c7e592e628072951bf Mon Sep 17 00:00:00 2001
+From: Sam James <sam@gentoo.org>
+Date: Fri, 10 Dec 2021 03:10:49 +0000
+Subject: [PATCH] Makefile: respect LDFLAGS
+
+Signed-off-by: Sam James <sam@gentoo.org>
+(cherry picked from commit 1ac59c1b12b2b53c8620a8195bbb3cd7c07ec9a9)
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 6e85b6c795fdc..f7eb4faa2772d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -49,7 +49,7 @@ iptstate: iptstate.cc Makefile
+ 	echo "+------------------------------------------------------------+" ;\
+ 	echo "";
+ 
+-	$(CXX) $(CXXFLAGS) $(CXXFILES) -o iptstate $(LIBS) $(CPPFLAGS)
++	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(LDFLAGS) $(CXXFILES) -o iptstate $(LIBS)
+ 	@touch iptstate
+ 
+ 	@\
+-- 
+2.34.1
+

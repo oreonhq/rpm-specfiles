@@ -1,0 +1,18 @@
+summary: Fonts related tests
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/fonts
+prepare:
+    name: tmt
+    how: install
+    package: khmer-os-fasthand-fonts
+execute:
+    how: tmt
+environment:
+    PACKAGE: khmer-os-fasthand-fonts
+    FONT_ALIAS: fantasy
+    FONT_FAMILY: Khmer OS Fasthand
+    FONT_LANG: km
+    DEFAULT_SANS: 2
+    DEFAULT_SERIF: 2
+    DEFAULT_MONO: 2

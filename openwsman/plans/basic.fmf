@@ -1,0 +1,9 @@
+summary: Basic test plan
+prepare:
+    how: install
+    package:
+        - openwsman-server
+discover:
+    how: fmf
+execute:
+    how: tmt

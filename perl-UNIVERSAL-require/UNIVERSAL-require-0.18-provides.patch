@@ -1,0 +1,12 @@
+--- lib/UNIVERSAL/require.pm
++++ lib/UNIVERSAL/require.pm
+@@ -6,7 +6,8 @@ $UNIVERSAL::require::VERSION = '0.18';
+ # So we load it up beforehand to avoid that.
+ BEGIN { require UNIVERSAL }
+ 
+-package UNIVERSAL;
++package # Hide from rpm
++    UNIVERSAL;
+ 
+ use 5.006;
+ use strict;

@@ -1,0 +1,17 @@
+Notes for Spamassassin for RHEL or Fedora
+=========================================
+Upstream spamassassin is no longer distributed with rules.  Our package 
+contains rules in order to be less of a surprise to system administrators.
+However just as you wouldn't rely on antivirus software without signature
+updates, spamassassin cannot be relied upon without regular rule updates.
+
+A systemd timer unit/service is provided to do this daily.
+
+Note that the update script runs sa-update only if a known spam 
+daemon is running: spamd, amavisd, or mimedefang.  If you do not run any
+of these spam daemons but wish to have nightly sa-update, you may 
+override the daemon check in /etc/sysconfig/sa-update
+
+/etc/mail/spamassassin/channel.d
+All sa-update channels are defined in files contained in this directory.
+See the existing config files as examples for writing your own config file.

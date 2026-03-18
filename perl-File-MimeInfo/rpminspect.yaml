@@ -1,0 +1,3 @@
+---
+annocheck:
+  - rhel-policy: --skip-pie --ignore-unknown --verbose

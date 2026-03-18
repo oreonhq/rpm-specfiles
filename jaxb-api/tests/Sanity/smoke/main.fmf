@@ -1,0 +1,7 @@
+summary: jaxb-api smoke test
+description: |
+  Test basic functionality of jaxb-api.
+require:
+  - jaxb-api
+  - java-25-openjdk-devel
+  - xmvn-tools

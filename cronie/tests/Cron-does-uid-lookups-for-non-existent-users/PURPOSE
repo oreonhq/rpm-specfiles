@@ -1,0 +1,4 @@
+PURPOSE of /CoreOS/cronie/Regression/Cron-does-uid-lookups-for-non-existent-users
+Description: Test for Cron does uid lookups for non-existent users
+Author: Vaclav Danek <vdanek@redhat.com>
+Bug summary: Cron does uid lookups for non-existent users

@@ -1,0 +1,7 @@
+description: |
+    Runs very simple babel example which should always work
+test: python3 smoke.py
+framework: shell
+require:
+- python3
+- python3-babel

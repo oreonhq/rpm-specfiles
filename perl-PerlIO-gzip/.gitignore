@@ -1,0 +1,7 @@
+PerlIO-gzip-0.18.tar.gz
+clog
+*.gz
+*.tar
+.build*
+i386
+x86_64

@@ -1,0 +1,5 @@
+summary: Upstream tests
+contact: Jitka Plesnikova <jplesnik@redhat.com>
+component: perl-libxml-perl
+require: perl-libxml-perl-tests
+test: /usr/libexec/perl-libxml-perl/test

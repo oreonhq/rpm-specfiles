@@ -1,0 +1,12 @@
+summary: Init script should meet LSB specifications
+description: ''
+contact: Petr Sklenar <psklenar@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: shell
+recommend:
+  - cronie
+duration: 5m
+extra-summary: /CoreOS/cronie/Sanity/init-script-LSB
+extra-task: /CoreOS/cronie/Sanity/init-script-LSB

@@ -1,0 +1,8 @@
+# The size of a Judy array is not pre-allocated
+addFilter("spelling-error \('pre',")
+
+# Won't get fixed as upstream is no longer active
+addFilter("incorrect-fsf-address")
+
+# Code variants with identical files (historical structure)
+addFilter("Judy-debugsource.*: .* files-duplicated-waste")

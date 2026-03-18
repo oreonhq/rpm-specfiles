@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-HTTP-Negotiate
+require: perl-HTTP-Negotiate-tests
+test: /usr/libexec/perl-HTTP-Negotiate/test

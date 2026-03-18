@@ -1,0 +1,5 @@
+# Compression tool
+addFilter("E: spelling-error \('gzip',")
+
+# Tests are their own documentation
+addFilter("perl-IO-Zlib-tests.noarch: W: no-documentation")

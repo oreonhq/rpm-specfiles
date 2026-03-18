@@ -1,0 +1,3 @@
+PURPOSE of /tools/ltrace/Regression/bz797761-ltrace-c-ommits-execl-call
+Description: The test tries to ltrace an app which uses execl calls.
+Author: Michael Petlan <mpetlan@redhat.com>

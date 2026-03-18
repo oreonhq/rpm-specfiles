@@ -1,0 +1,25 @@
+specfile_path: micropipenv.spec
+upstream_package_name: micropipenv
+upstream_project_url: https://github.com/thoth-station/micropipenv/
+upstream_tag_template: v{version}
+downstream_package_name: micropipenv
+
+jobs:
+- job: pull_from_upstream
+  trigger: release
+  dist_git_branches:
+   - fedora-all
+  actions:
+    changelog-entry:
+    - bash -c '[ -n "$PACKIT_RESOLVED_BUGS" ] && echo "Update to ${PACKIT_PROJECT_VERSION} (${PACKIT_RESOLVED_BUGS})" || echo "Update to ${PACKIT_PROJECT_VERSION}"'
+    commit-message:
+    - bash -c '[ -n "$PACKIT_RESOLVED_BUGS" ] && echo "Update to ${PACKIT_PROJECT_VERSION} (${PACKIT_RESOLVED_BUGS})" || echo "Update to ${PACKIT_PROJECT_VERSION}"'
+- job: koji_build
+  trigger: commit
+  allowed_committers: ["lbalhar", "packit"]
+  dist_git_branches:
+    - fedora-all
+- job: bodhi_update
+  trigger: commit
+  dist_git_branches:
+    - fedora-branched

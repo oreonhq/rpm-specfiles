@@ -1,0 +1,13 @@
+summary: Run all tests
+discover:
+  how: fmf
+prepare:
+  - name: Disable installing everything from srpm
+    how: install
+    exclude: ".*"
+  - name: Install the main test package
+    how: install
+    package:
+      - booth-test
+execute:
+  how: tmt

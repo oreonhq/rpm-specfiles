@@ -1,0 +1,5 @@
+summary: Upstream tests
+contact: Jitka Plesnikova <jplesnik@redhat.com>
+component: perl-XML-Twig
+require: perl-XML-Twig-tests
+test: /usr/libexec/perl-XML-Twig/test

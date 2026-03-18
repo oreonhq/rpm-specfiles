@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Bit-Vector
+require: perl-Bit-Vector-tests
+test: /usr/libexec/perl-Bit-Vector/test

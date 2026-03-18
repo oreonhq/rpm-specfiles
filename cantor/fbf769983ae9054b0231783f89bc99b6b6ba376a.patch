@@ -1,0 +1,49 @@
+From fbf769983ae9054b0231783f89bc99b6b6ba376a Mon Sep 17 00:00:00 2001
+From: Nanhao Lv <nanhaolv@gmail.com>
+Date: Wed, 29 Oct 2025 21:33:49 +0800
+Subject: [PATCH] Fix(julia): Adapt to removed Julia C-API functions
+
+Julia >= 1.12 removed `jl_binding_resolved_p` and
+`jl_get_binding_or_error` from the C-API, causing
+build failures.
+
+This commit replaces them with `jl_boundp` and `jl_get_global`
+respectively, guarded by a version check to maintain
+compatibility.
+---
+ src/backends/julia/juliaserver/juliaserver.cpp | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/src/backends/julia/juliaserver/juliaserver.cpp b/src/backends/julia/juliaserver/juliaserver.cpp
+index ee4f5a8f9..03ad86a40 100644
+--- a/src/backends/julia/juliaserver/juliaserver.cpp
++++ b/src/backends/julia/juliaserver/juliaserver.cpp
+@@ -175,12 +175,23 @@ void JuliaServer::parseJlModule(jl_module_t* module, bool parseValue)
+ #endif
+     for (size_t i = 0; i < jl_array_len(names); i++)
+     {
+-        bool isBindingResolved = (bool)jl_binding_resolved_p(module, (jl_sym_t*)(data[i]));
++        bool isBindingResolved;
++#if QT_VERSION_CHECK(JULIA_VERSION_MAJOR, JULIA_VERSION_MINOR, 0) >= QT_VERSION_CHECK(1, 12, 0)
++        isBindingResolved = (bool)jl_boundp(module, (jl_sym_t*)(data[i]), 0);
++#else
++        isBindingResolved = (bool)jl_binding_resolved_p(module, (jl_sym_t*)(data[i]));
++#endif
+         if (isBindingResolved)
+         {
+ 
+             const auto& name = fromJuliaString(jl_call1(jl_string_function, data[i]));
+-            jl_value_t* value = jl_get_binding_or_error(module, (jl_sym_t*)(data[i]))->value;
++            jl_value_t* value;
++#if QT_VERSION_CHECK(JULIA_VERSION_MAJOR, JULIA_VERSION_MINOR, 0) >= QT_VERSION_CHECK(1, 12, 0)
++            value = jl_get_global(module, (jl_sym_t*)(data[i]));
++#else
++            value = jl_get_binding_or_error(module, (jl_sym_t*)(data[i]))->value;
++#endif
++
+             jl_datatype_t* datetype = (jl_datatype_t*)jl_typeof(value);
+             const auto& type = QString::fromUtf8(jl_typeof_str(value));
+ 
+-- 
+GitLab
+

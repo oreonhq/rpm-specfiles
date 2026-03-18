@@ -1,0 +1,504 @@
+From 6ce33b1bedd2cd13d7e6544692354715f6e613b8 Mon Sep 17 00:00:00 2001
+From: progier389 <progier@redhat.com>
+Date: Tue, 20 Jan 2026 19:41:05 +0100
+Subject: [PATCH] Issue 7170 - Support of PQC keys (#7188)
+
+Support of Post Quantum Cryptography Keys in certificates:
+Added support of a new key type: ML_DSA
+Enable the following policies (that are not enabled by defaut): ML-DSA-44, ML-DSA-65- ML-DSA-87
+Replaced deprecated function SSL_ConfigSecureServer by SSL_ConfigServerCert
+Added test case for ML-DSA certificate. That test case rely of openssl command because python cryptography module does not yet support ML-DSA keys
+
+Issue: #7170
+
+Reviewed by: @tbordaz, @droideck and @vashirov (Thanks!)
+---
+ dirsrvtests/tests/suites/tls/mldsa_test.py | 322 +++++++++++++++++++++
+ ldap/servers/slapd/ssl.c                   |  95 +++++-
+ 2 files changed, 407 insertions(+), 10 deletions(-)
+ create mode 100644 dirsrvtests/tests/suites/tls/mldsa_test.py
+
+diff --git a/dirsrvtests/tests/suites/tls/mldsa_test.py b/dirsrvtests/tests/suites/tls/mldsa_test.py
+new file mode 100644
+index 000000000..2c815088b
+--- /dev/null
++++ b/dirsrvtests/tests/suites/tls/mldsa_test.py
+@@ -0,0 +1,322 @@
++# --- BEGIN COPYRIGHT BLOCK ---
++# Copyright (C) 2026 Red Hat, Inc.
++# All rights reserved.
++#
++# License: GPL (version 3 or any later version).
++# See LICENSE for details.
++# --- END COPYRIGHT BLOCK ---
++#
++import logging
++import pytest
++import os
++import sys
++import itertools
++import rpm
++import socket
++import subprocess
++from lib389.utils import ds_is_older
++from lib389._constants import DN_DM, PW_DM, DEFAULT_SUFFIX
++from lib389.config import Encryption, CertmapLegacy
++from lib389.idm.user import UserAccount
++from lib389.topologies import topology_st as topo
++from tempfile import TemporaryDirectory
++
++pytestmark = pytest.mark.tier1
++
++DEBUGGING = os.getenv("DEBUGGING", default=False)
++if DEBUGGING:
++    logging.getLogger(__name__).setLevel(logging.DEBUG)
++else:
++    logging.getLogger(__name__).setLevel(logging.INFO)
++log = logging.getLogger(__name__)
++
++
++def rpm_is_older(pkg, version):
++    ts = rpm.TransactionSet()
++    mi = ts.dbMatch('name', pkg)
++    for h in mi:
++        print(f"{pkg} {h['version']} {version}")
++        for n1,n2 in itertools.zip_longest(h['version'].split('.'), version.split('.'), fillvalue=""):
++            try:
++                if int(n1) < int(n2):
++                    return True
++            except ValueError:
++                if n1 < n2:
++                    return True
++    return False
++
++
++script_content="""
++#!/bin/bash
++set -e  # Exit if a command fails
++set -x  # Log the commands
++
++cd {dir}
++inst={instname}
++url={url}
++rootdn="{rootdn}"
++rootpw="{rootpw}"
++
++################################
++###### GENERATE CA CERT ########
++################################
++
++echo "
++[ req ]
++distinguished_name = req_distinguished_name
++policy             = policy_match
++x509_extensions     = v3_ca
++
++# For the CA policy
++[ policy_match ]
++countryName             = optional
++stateOrProvinceName     = optional
++organizationName        = optional
++organizationalUnitName  = optional
++commonName              = supplied
++emailAddress            = optional
++
++[ req_distinguished_name ]
++countryName			= Country Name (2 letter code)
++countryName_default		= FR
++countryName_min			= 2
++countryName_max			= 2
++
++stateOrProvinceName		= State or Province Name (full name)
++stateOrProvinceName_default	= test
++
++localityName			= Locality Name (eg, city)
++
++0.organizationName		= Organization Name (eg, company)
++0.organizationName_default	= test-ML-DSA-CA
++
++organizationalUnitName		= Organizational Unit Name (eg, section)
++#organizationalUnitName_default	=
++
++commonName			= Common Name (e.g. server FQDN or YOUR name)
++commonName_max			= 64
++
++
++[ v3_ca ]
++subjectKeyIdentifier = hash
++authorityKeyIdentifier = keyid:always,issuer
++basicConstraints = critical,CA:true
++#nsComment = "OpenSSL Generated Certificate"
++keyUsage=critical, keyCertSign
++" >ca.conf
++
++
++openssl genpkey -algorithm ML-DSA-87 -out ca.key
++openssl req -x509 -new -sha256 -key ca.key -nodes -days 3650 -config ca.conf -subj "/CN=`hostname`/O=test-ML-DSA-CA/C=FR"  -out ca.pem -keyout ca.key
++openssl x509 -outform der -in ca.pem -out ca.crt
++
++openssl x509 -text -in ca.pem
++
++####################################
++###### GENERATE SERVER CERT ########
++####################################
++
++echo "
++[ req ]
++distinguished_name = req_distinguished_name
++policy             = policy_match
++x509_extensions     = v3_cert
++
++# For the cert policy
++[ policy_match ]
++countryName             = optional
++stateOrProvinceName     = optional
++organizationName        = optional
++organizationalUnitName  = optional
++commonName              = supplied
++emailAddress            = optional
++
++[ req_distinguished_name ]
++countryName			= Country Name (2 letter code)
++countryName_default		= FR
++countryName_min			= 2
++countryName_max			= 2
++
++stateOrProvinceName		= State or Province Name (full name)
++
++localityName			= Locality Name (eg, city)
++
++0.organizationName		= Organization Name (eg, company)
++0.organizationName_default	= test-ML-DSA
++
++organizationalUnitName		= Organizational Unit Name (eg, section)
++#organizationalUnitName_default	=
++
++commonName			= Common Name (e.g. server FQDN or YOUR name)
++commonName_max			= 64
++
++
++[ v3_cert ]
++basicConstraints = critical,CA:false
++subjectAltName=DNS:`hostname`
++keyUsage=digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
++#nsComment = "OpenSSL Generated Certificate"
++extendedKeyUsage=clientAuth, serverAuth
++nsCertType=client, server
++" >cert.conf
++
++openssl genpkey -algorithm ML-DSA-65 -out cert.key
++openssl req -new -sha256 -key cert.key -nodes  -config cert.conf -subj "/CN=`hostname`/O=test-ML-DSA/C=FR" -out cert.csr
++openssl x509 -req -sha256 -days 3650 -extensions v3_cert -extfile cert.conf -in cert.csr -CA ca.pem -CAkey ca.key -CAcreateserial -out cert.pem
++openssl pkcs12 -export -inkey cert.key -in cert.pem -name mldsacert -out cert.p12 -passout pass:secret12
++
++openssl x509 -text -in cert.pem
++
++
++
++####################################
++###### GENERATE CLIENT CERT ########
++####################################
++
++echo "
++[ req ]
++distinguished_name = req_distinguished_name
++policy             = policy_match
++x509_extensions     = v3_cert
++
++# For the cert policy
++[ policy_match ]
++countryName             = optional
++stateOrProvinceName     = optional
++organizationName        = optional
++organizationalUnitName  = optional
++commonName              = supplied
++emailAddress            = optional
++
++[ req_distinguished_name ]
++countryName			= Country Name (2 letter code)
++countryName_default		= FR
++countryName_min			= 2
++countryName_max			= 2
++
++stateOrProvinceName		= State or Province Name (full name)
++
++localityName			= Locality Name (eg, city)
++
++0.organizationName		= Organization Name (eg, company)
++0.organizationName_default	= test-ML-DSA
++
++organizationalUnitName		= Organizational Unit Name (eg, section)
++#organizationalUnitName_default	=
++
++commonName			= Common Name (e.g. server FQDN or YOUR name)
++commonName_max			= 64
++
++
++[ v3_cert ]
++basicConstraints = critical,CA:false
++subjectAltName=DNS:`hostname`
++keyUsage=digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
++#nsComment = "OpenSSL Generated Certificate"
++extendedKeyUsage=clientAuth
++nsCertType=client, server
++" >client.conf
++
++openssl genpkey -algorithm ML-DSA-65 -out client.key
++openssl req -new -sha256 -key client.key -nodes  -config client.conf -subj "/CN=`hostname`/O=client-test-ML-DSA/C=FR" -out client.csr
++openssl x509 -req -sha256 -days 3650 -extensions v3_cert -extfile client.conf -in client.csr -CA ca.pem -CAkey ca.key -CAcreateserial -out client.pem
++openssl pkcs12 -export -inkey client.key -in client.pem -name mldsacert2 -out client.p12 -passout pass:secret12
++
++openssl x509 -text -in client.pem
++
++
++#############################
++###### INSTALL CERTS ########
++#############################
++
++certdbdir=$PREFIX/etc/dirsrv/slapd-$inst
++rm -f $certdbdir/cert9.db $certdbdir/key4.db
++certutil -N -d $certdbdir -f $certdbdir/pwdfile.txt
++
++certutil -A -n Self-Signed-CA -t CT,, -f $certdbdir/pwdfile.txt -d $certdbdir -a -i ca.pem
++certutil -A -n Client-Cert -t u,, -f $certdbdir/pwdfile.txt -d $certdbdir -a -i client.pem
++
++dsctl $inst tls import-server-key-cert cert.pem cert.key
++
++dsctl $inst restart
++
++
++#########################
++###### TEST CERT ########
++#########################
++export LDAPTLS_CACERT=$PWD/ca.pem
++export LDAPTLS_CERT=$PWD/client.pem
++export LDAPTLS_KEY=$PWD/client.key
++
++ldapsearch -x -H $url -D "$rootdn" -w "$rootpw" -b "" -s base
++ldapsearch -Y external -H $url -b "" -s base
++"""
++
++@pytest.mark.skipif(rpm_is_older("openssl", "3.5"), reason="OpenSSL too old to support PQC")
++@pytest.mark.skipif(rpm_is_older("nss", "3.119.1"), reason="NSS too old to support PQC")
++def test_mldsa(topo):
++    """Test using ML-DSA Certificate - (PQC)
++
++    :id: 87fb19ef-672d-4fa7-934d-dfb4397f2312
++    :setup: Standalone Instance
++    :steps:
++        1. Configure the certmap
++        2. Create user mapped with theclient certificate
++        3. Generate the test script
++        4. Run the test script
++        5. Check that ldapsearch returned the namingcontext
++    :expectedresults:
++        1. No error
++        2. No error
++        3. No error
++        4. No error and exit code should be 0
++        5. namingcontext should be in the script output
++    """
++
++    inst = topo.standalone
++    inst.enable_tls()
++
++    cm = CertmapLegacy(inst)
++    certmaps = cm.list()
++    certmaps['default'].update({'DNComps': None, 'CmapLdapAttr': 'description'})
++    cm.set(certmaps)
++
++    cert_dn = f'C=FR,O=client-test-ML-DSA,CN={socket.gethostname()}'
++    dn = f'uid=test_user,ou=people,{DEFAULT_SUFFIX}'
++    UserAccount(inst, dn=dn).create( properties= {
++            'uid': 'test_user',
++            'cn': 'Test user',
++            'sn': 'Test user',
++            'uidNumber': '99998',
++            'gidNumber': '99998',
++            'homeDirectory': '/var/empty',
++            'loginShell': '/bin/false',
++            'description': cert_dn })
++
++    tmpdir_kwargs = {}
++    if sys.version_info >= (3, 12):
++        tmpdir_kwargs['delete'] = not DEBUGGING
++    with TemporaryDirectory(**tmpdir_kwargs) as dir:
++        scriptname = f"{dir}/doit"
++        d = {
++            'dir': dir,
++            'instname': inst.serverid,
++            'url': f"ldaps://localhost:{inst.sslport}",
++            'rootdn': DN_DM,
++            'rootpw': PW_DM,
++        }
++        with open(scriptname, 'w') as f:
++            f.write(script_content.format(**d))
++        res = subprocess.run(('/bin/bash', scriptname), stdout=subprocess.PIPE, stderr=subprocess.STDOUT, encoding='utf-8')
++        assert res
++        log.info(res.stdout)
++        res.check_returncode()
++        # If ldapsearch is successful then defaultnamingcontext should be in res.stdout
++        assert "defaultnamingcontext" in res.stdout
++
++
++if __name__ == '__main__':
++    # Run isolated
++    # -s for DEBUG mode
++    CURRENT_FILE = os.path.realpath(__file__)
++    pytest.main(["-s", CURRENT_FILE])
+diff --git a/ldap/servers/slapd/ssl.c b/ldap/servers/slapd/ssl.c
+index a9c17ef42..053db5424 100644
+--- a/ldap/servers/slapd/ssl.c
++++ b/ldap/servers/slapd/ssl.c
+@@ -169,6 +169,20 @@ PRBool enableTLS1 = PR_TRUE;
+ /* CA cert pem file */
+ static char *CACertPemFile = NULL;
+ 
++static const struct {
++    KeyType kt;
++    const char *shortname;
++    const char *fullname;
++} supported_key_types[] = {
++    { rsaKey, "RSA", "Rivest–Shamir–Adleman" },
++    { ecKey, "EC", "Elliptic Curve" },
++#ifdef MAX_ML_DSA_PRIVATE_KEY_LEN
++    { mldsaKey, "ML-DSA", "Module-Lattice-Based Digital Signature Algorithm (post-quantum)" },
++#endif
++    { 0 }
++};
++
++
+ /* helper functions for openldap update. */
+ static int slapd_extract_cert(Slapi_Entry *entry, int isCA);
+ static int slapd_extract_key(Slapi_Entry *entry, char *token, PK11SlotInfo *slot);
+@@ -718,9 +732,31 @@ SSLPLCY_Install(void)
+ {
+ 
+     SECStatus s = 0;
++#ifdef MAX_ML_DSA_PRIVATE_KEY_LEN
++    int flags = NSS_USE_ALG_IN_SIGNATURE | NSS_USE_ALG_IN_SSL;
++    static const SECOidTag oids[] = {
++        SEC_OID_ML_DSA_44,
++        SEC_OID_ML_DSA_65,
++        SEC_OID_ML_DSA_87,
++    };
++#endif
+ 
+     s = NSS_SetDomesticPolicy();
+ 
++#ifdef MAX_ML_DSA_PRIVATE_KEY_LEN
++    /* Should rely on the crypto module policy in FIPS mode */
++    if (!slapd_pk11_isFIPS()) {
++        /* Set explicitly PQC algorithm policy if it is not set by default */
++        for (size_t i=0; s == SECSuccess && i < PR_ARRAY_SIZE(oids); i++) {
++            int oflags = 0;
++            (void) NSS_GetAlgorithmPolicy(oids[i], &oflags);
++            if ((oflags & flags) != flags) {
++                s = NSS_SetAlgorithmPolicy(oids[i], flags, 0);
++            }
++        }
++    }
++#endif
++
+     return s ? PR_FAILURE : PR_SUCCESS;
+ }
+ 
+@@ -1640,7 +1676,7 @@ slapd_ssl_init2(PRFileDesc **fd, int startTLS)
+     /*
+      * Now, get the complete list of cipher families. Each family
+      * has a token name and personality name which we'll use to find
+-     * appropriate keys and certs, and call SSL_ConfigSecureServer
++     * appropriate keys and certs, and call SSL_ConfigServerCert
+      * with.
+      */
+ 
+@@ -1759,8 +1795,6 @@ slapd_ssl_init2(PRFileDesc **fd, int startTLS)
+                 }
+ 
+                 if (SECSuccess == rv) {
+-                    SSLKEAType certKEA;
+-
+                     /* If we want weak dh params, flag it on the socket now! */
+                     rv = SSL_OptionSet(*fd, SSL_ENABLE_SERVER_DHE, PR_TRUE);
+                     if (rv != SECSuccess) {
+@@ -1774,11 +1808,10 @@ slapd_ssl_init2(PRFileDesc **fd, int startTLS)
+                         }
+                     }
+ 
+-                    certKEA = NSS_FindCertKEAType(cert);
+-                    rv = SSL_ConfigSecureServer(*fd, cert, key, certKEA);
++                    rv = SSL_ConfigServerCert(*fd, cert, key, NULL, 0);
+                     if (SECSuccess != rv) {
+                         errorCode = PR_GetError();
+-                        slapd_SSL_warn("ConfigSecureServer: "
++                        slapd_SSL_warn("SSL_ConfigServerCert: "
+                                        "Server key/certificate is "
+                                        "bad for cert %s of family %s (" SLAPI_COMPONENT_NAME_NSPR " error %d - %s)",
+                                        cert_name, *family, errorCode,
+@@ -2663,6 +2696,38 @@ bail:
+     return rv;
+ }
+ 
++/* Helper for get_supported_key_type */
++static char *
++buf_add_str(char *buf, char *bufend, const char *str)
++{
++    /* bufend is sizeof(buf)-4 (to avoid overflow with ...) */
++    char *ret = buf+strlen(str);
++    if (ret > bufend) {
++        ret = bufend;
++        strcpy(buf, "...");
++    } else {
++        strcpy(buf, str);
++    }
++    return ret;
++}
++
++static void
++get_supported_key_type_names(char *buf, size_t bufsize)
++{
++    char *bufend = buf + bufsize - 4;
++    for (size_t i=0; supported_key_types[i].kt; i++) {
++        if (i>0) {
++            if (supported_key_types[i+1].kt == 0) {
++                /* Last supported key type */
++                buf = buf_add_str(buf, bufend, " or ");
++            } else {
++                buf = buf_add_str(buf, bufend, ", ");
++            }
++        }
++        buf = buf_add_str(buf, bufend, supported_key_types[i].shortname);
++    }
++}
++
+ /*
+  * Borrowed from keyutil.c (crypto-util)
+  *
+@@ -2723,10 +2788,20 @@ extractKeysAndSubject(
+     }
+ 
+     keytype = (*privkey)->keyType;
+-    if  (keytype != rsaKey && keytype != ecKey) {
+-        slapi_log_err(SLAPI_LOG_ERR, "extractKeysAndSubject",
+-                      "Unexpected key algorythm in certificate: %s. Only rsa and ec keys are supported.\n", nickname);
+-        goto bail;
++    for (size_t i=0; ;i++) {
++        KeyType kt = supported_key_types[i].kt;
++        if (kt == keytype && keytype != 0) {
++            /* Stop looping if the key type is supported */
++            break;
++        }
++        if (kt == 0) {
++            /* No supported key type have been found. */
++            char sktnames[100] = "";
++            get_supported_key_type_names(sktnames, sizeof sktnames);
++            slapi_log_err(SLAPI_LOG_ERR, "extractKeysAndSubject",
++                          "Unexpected key algorithm in certificate: %s. Only %s are supported.\n", nickname, sktnames);
++            goto bail;
++        }
+     }
+ 
+     *subject = CERT_AsciiToName(cert->subjectName);
+-- 
+2.52.0
+

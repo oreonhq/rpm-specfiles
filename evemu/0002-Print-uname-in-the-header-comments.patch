@@ -1,0 +1,56 @@
+From b9052900ba09005754114684789497f04040811b Mon Sep 17 00:00:00 2001
+From: Peter Hutterer <peter.hutterer@who-t.net>
+Date: Thu, 11 Jun 2015 11:14:17 +1000
+Subject: [PATCH evemu 2/2] Print uname in the header comments
+
+Knowing what approximate kernel version this was recorded against help
+identify a few bugs before we spend too much time trying to reproduce it on
+other kernels.
+
+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@gmail.com>
+---
+ src/evemu.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/src/evemu.c b/src/evemu.c
+index b98d340..b800998 100644
+--- a/src/evemu.c
++++ b/src/evemu.c
+@@ -52,6 +52,7 @@
+ #include <poll.h>
+ #include <ctype.h>
+ #include <unistd.h>
++#include <sys/utsname.h>
+ 
+ #include "version.h"
+ 
+@@ -343,11 +344,24 @@ static void write_desc(const struct evemu_device *dev, FILE *fp)
+ #endif
+ }
+ 
++static void
++write_header(FILE *fp)
++{
++	struct utsname u;
++
++	fprintf(fp, "# EVEMU %d.%d\n", EVEMU_FILE_MAJOR, EVEMU_FILE_MINOR);
++
++	if (uname(&u) == -1)
++		return;
++
++	fprintf(fp, "# Kernel: %s\n", u.release);
++}
++
+ int evemu_write(const struct evemu_device *dev, FILE *fp)
+ {
+ 	int i;
+ 
+-	fprintf(fp, "# EVEMU %d.%d\n", EVEMU_FILE_MAJOR, EVEMU_FILE_MINOR);
++	write_header(fp);
+ 
+ 	write_desc(dev, fp);
+ 
+-- 
+2.4.2
+

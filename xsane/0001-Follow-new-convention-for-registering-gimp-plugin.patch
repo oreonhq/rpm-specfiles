@@ -1,0 +1,72 @@
+diff -up xsane-0.999/src/xsane-save.c.use-register xsane-0.999/src/xsane-save.c
+--- xsane-0.999/src/xsane-save.c.use-register	2024-08-27 17:26:05.375925695 +0200
++++ xsane-0.999/src/xsane-save.c	2024-08-27 17:26:05.383925749 +0200
+@@ -6641,10 +6641,14 @@ static void xsane_gimp_query(void)
+ 
+   snprintf(name, sizeof(name), "%s", xsane.prog_name);
+ #ifdef GIMP_CHECK_VERSION
+-# if GIMP_CHECK_VERSION(1,1,9)
++# if GIMP_CHECK_VERSION(2,10,30)
++  snprintf(mpath, sizeof(mpath), "%s", XSANE_GIMP_MENU_DIALOG_NEW);
++#else
++#  if GIMP_CHECK_VERSION(1,1,9)
+   snprintf(mpath, sizeof(mpath), "%s", XSANE_GIMP_MENU_DIALOG);
+-# else
++#  else
+   snprintf(mpath, sizeof(mpath), "%s", XSANE_GIMP_MENU_DIALOG_OLD);
++#  endif
+ # endif
+ #else
+   snprintf(mpath, sizeof(mpath), "%s", XSANE_GIMP_MENU_DIALOG_OLD);
+@@ -6660,6 +6664,11 @@ static void xsane_gimp_query(void)
+ 			 GIMP_EXTENSION,
+ 			 nargs, nreturn_vals,
+ 			 args, return_vals);
++#ifdef GIMP_CHECK_VERSION
++# if GIMP_CHECK_VERSION(2,10,30)
++  gimp_plugin_menu_register(name, XSANE_GIMP_MENU);
++# endif
++#endif
+ 
+   sane_init(&xsane.sane_backend_versioncode, (void *) xsane_authorization_callback);
+   if (SANE_VERSION_MAJOR(xsane.sane_backend_versioncode) != SANE_V_MAJOR)
+@@ -6689,10 +6698,14 @@ static void xsane_gimp_query(void)
+     }
+ 
+ #ifdef GIMP_CHECK_VERSION
+-# if GIMP_CHECK_VERSION(1,1,9)
+-    snprintf(mpath, sizeof(mpath), "%s", XSANE_GIMP_MENU);
++# if GIMP_CHECK_VERSION(2,10,30)
++    mpath[0] = 0;
+ # else
++#  if GIMP_CHECK_VERSION(1,1,9)
++    snprintf(mpath, sizeof(mpath), "%s", XSANE_GIMP_MENU);
++#  else
+     snprintf(mpath, sizeof(mpath), "%s", XSANE_GIMP_MENU_OLD);
++#  endif
+ # endif
+ #else
+     snprintf(mpath, sizeof(mpath), "%s", XSANE_GIMP_MENU_OLD);
+@@ -6722,6 +6735,11 @@ static void xsane_gimp_query(void)
+                            GIMP_EXTENSION,
+                            nargs, nreturn_vals,
+                            args, return_vals);
++#ifdef GIMP_CHECK_VERSION
++# if GIMP_CHECK_VERSION(2,10,30)
++  gimp_plugin_menu_register(name, XSANE_GIMP_MENU);
++# endif
++#endif
+   }
+ 
+   sane_exit();
+diff -up xsane-0.999/src/xsane-text.h.use-register xsane-0.999/src/xsane-text.h
+--- xsane-0.999/src/xsane-text.h.use-register	2024-08-27 17:26:05.383925749 +0200
++++ xsane-0.999/src/xsane-text.h	2024-08-27 17:28:08.811758730 +0200
+@@ -873,6 +873,7 @@ The format of [DEVICE] is backendname:de
+ #define XSANE_GIMP_INSTALL_HELP		_("This function provides access to scanners and other image acquisition devices through the SANE (Scanner Access Now Easy) interface.")
+ 
+ /* Menu path must not be translated, this is done by the gimp. Only translate the text behind the last "/" */
++#define XSANE_GIMP_MENU_DIALOG_NEW	_("Device dialog...")
+ #define XSANE_GIMP_MENU_DIALOG		_("<Toolbox>/File/Acquire/XSane: Device dialog...")
+ #define XSANE_GIMP_MENU			_("<Toolbox>/File/Acquire/XSane: ")
+ #define XSANE_GIMP_MENU_DIALOG_OLD	_("<Toolbox>/Xtns/XSane/Device dialog...")

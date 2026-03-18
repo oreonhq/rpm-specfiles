@@ -1,0 +1,9 @@
+* Thu Jun 02 2022 Hedayat Vatankhah <hedayat.fwd+rpmchlog@gmail.com> - 32.101-3
+- Enhance package descriptions
+
+* Fri May 20 2022 Hedayat Vatankhah <hedayat.fwd+rpmchlog@gmail.com> - 32.101-2
+- Create separate package for VF fonts & cleanup most template comments
+
+* Sat Apr 23 2022 Hedayat Vatankhah <hedayat.fwd+rpmchlog@gmail.com> - 32.101-1
+- Initial version
+

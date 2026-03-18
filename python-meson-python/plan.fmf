@@ -1,0 +1,26 @@
+# based on https://gitlab.com/redhat/centos-stream/rpms/python-meson-python/-/blob/c10s/ci.fmf
+
+execute:
+  how: tmt
+
+discover:
+  - how: shell
+    tests:
+    - name: smoke
+      test: |
+        set -eux
+        TMP_DIR="$(mktemp -d)"
+        pushd "$TMP_DIR"
+        meson init --name foo
+        cat >pyproject.toml <<EOF
+        [build-system]
+        build-backend = 'mesonpy'
+        requires = ['meson-python']
+        EOF
+        python3 -c 'import mesonpy; x = mesonpy.Project(source_dir=".", build_dir="./build"); x.build()'
+        build/foo
+        popd
+        rm -rf "$TMP_DIR"
+      require:
+      - gcc
+      - python3-meson-python

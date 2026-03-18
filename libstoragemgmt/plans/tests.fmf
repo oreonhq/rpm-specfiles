@@ -1,0 +1,45 @@
+summary: libstoragemgmt gating tests
+
+provision:
+    how: container
+    image: fedora:latest
+
+prepare:
+    how: install
+    package:
+      - libstoragemgmt
+      - libstoragemgmt-arcconf-plugin
+      - libstoragemgmt-hpsa-plugin
+      - libstoragemgmt-local-plugin
+      - libstoragemgmt-megaraid-plugin
+      - libstoragemgmt-nfs-plugin
+      - libstoragemgmt-targetd-plugin
+      - libstoragemgmt-udev
+
+discover:
+    how: shell
+    dist-git-source: true
+    dist-git-install-builddeps: true
+    tests:
+      - name: upstream test suite
+        test: |
+          set -x
+          if [ -z "$PKG_VER" ]; then
+              PKG_VER=`rpmspec -q --srpm --qf "%{version}" libstoragemgmt.spec`
+          fi
+          if [ -z "$PKG_VER" ]; then
+              echo "Error: Unable to extract package version"
+              exit 1
+          fi
+
+          pushd $TMT_SOURCE_DIR/libstoragemgmt-${PKG_VER}/test
+          echo "we are at $PWD"
+          ls -lh
+          echo "**** integration.sh contents"
+          cat integration.sh
+          echo "***************************"
+          ./integration.sh
+
+execute:
+  - how: tmt
+

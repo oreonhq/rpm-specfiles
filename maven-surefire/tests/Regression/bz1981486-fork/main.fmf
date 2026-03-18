@@ -1,0 +1,9 @@
+summary: rhbz#1981486 regression test for maven-surefire
+description: |
+  Regression test for https://bugzilla.redhat.com/show_bug.cgi?id=1981486.
+  Ensure that maven-surefire can execute forked JVM.
+require:
+  - maven-surefire-plugin
+  - maven-surefire-provider-junit
+  - maven-compiler-plugin
+  - xmvn-minimal

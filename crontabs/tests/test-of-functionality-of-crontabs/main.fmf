@@ -1,0 +1,12 @@
+summary: test of functionality of crontabs
+description: ''
+contact: Petr Sklenar <psklenar@redhat.com>
+component:
+  - crontabs
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - crontabs
+duration: 30m
+extra-summary: /CoreOS/crontabs/Sanity/test-of-functionality-of-crontabs
+extra-task: /CoreOS/crontabs/Sanity/test-of-functionality-of-crontabs

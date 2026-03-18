@@ -1,0 +1,215 @@
+/bindsnoop:
+    summary: get version
+    test: "bpf-bindsnoop -V"
+
+/biolatency:
+    summary: get version
+    test: "bpf-biolatency -V"
+
+/biopattern:
+    summary: get version
+    test: "bpf-biopattern -V"
+
+/biosnoop:
+    summary: get version
+    test: "bpf-biosnoop -V"
+
+/biostacks:
+    summary: get version
+    test: "bpf-biostacks -V"
+
+/bitesize:
+    summary: get version
+    test: "bpf-bitesize -V"
+
+/btrfsdist:
+    summary: get version
+    test: "bpf-btrfsdist -V"
+
+/btrfsslower:
+    summary: get version
+    test: "bpf-btrfsslower -V"
+
+/cachestat:
+    summary: get version
+    test: "bpf-cachestat -V"
+
+/cpudist:
+    summary: get version
+    test: "bpf-cpudist -V"
+
+/cpufreq:
+    summary: get version
+    test: "bpf-cpufreq -V"
+
+/drsnoop:
+    summary: get version
+    test: "bpf-drsnoop -V"
+
+/execsnoop:
+    summary: get version
+    test: "bpf-execsnoop -V"
+
+/exitsnoop:
+    summary: get version
+    test: "bpf-exitsnoop -V"
+
+/ext4dist:
+    summary: get version
+    test: "bpf-ext4dist -V"
+
+/ext4slower:
+    summary: get version
+    test: "bpf-ext4slower -V"
+
+/filelife:
+    summary: get version
+    test: "bpf-filelife -V"
+
+/filetop:
+    summary: get version
+    test: "bpf-filetop -V"
+
+/fsdist:
+    summary: get version
+    test: "bpf-fsdist -V"
+
+/fsslower:
+    summary: get version
+    test: "bpf-fsslower -V"
+
+/funclatency:
+    summary: get version
+    test: "bpf-funclatency -V"
+
+/gethostlatency:
+    summary: get version
+    test: "bpf-gethostlatency -V"
+
+/hardirqs:
+    summary: get version
+    test: "bpf-hardirqs -V"
+
+/killsnoop:
+    summary: get version
+    test: "bpf-killsnoop -V"
+
+/klockstat:
+    summary: get version
+    test: "bpf-klockstat -V"
+
+/ksnoop:
+    summary: get version
+    test: "bpf-ksnoop -V"
+
+/llcstat:
+    summary: get version
+    test: "bpf-llcstat -V"
+
+/mdflush:
+    summary: get version
+    test: "bpf-mdflush -V"
+
+/mountsnoop:
+    summary: get version
+    test: "bpf-mountsnoop -V"
+
+/nfsdist:
+    summary: get version
+    test: "bpf-nfsdist -V"
+
+/nfsslower:
+    summary: get version
+    test: "bpf-nfsslower -V"
+
+/numamove:
+    summary: get version
+    test: "bpf-numamove -V"
+
+/offcputime:
+    summary: get version
+    test: "bpf-offcputime -V"
+
+/oomkill:
+    summary: get version
+    test: "bpf-oomkill -V"
+
+/opensnoop:
+    summary: get version
+    test: "bpf-opensnoop -V"
+
+/readahead:
+    summary: get version
+    test: "bpf-readahead -V"
+
+/runqlat:
+    summary: get version
+    test: "bpf-runqlat -V"
+
+/runqlen:
+    summary: get version
+    test: "bpf-runqlen -V"
+
+/runqslower:
+    summary: get version
+    test: "bpf-runqslower -V"
+
+/sigsnoop:
+    summary: get version
+    test: "bpf-sigsnoop -V"
+
+/slabratetop:
+    summary: get version
+    test: "bpf-slabratetop -V"
+
+/softirqs:
+    summary: get version
+    test: "bpf-softirqs -V"
+
+/solisten:
+    summary: get version
+    test: "bpf-solisten -V"
+
+/statsnoop:
+    summary: get version
+    test: "bpf-statsnoop -V"
+
+/syscount:
+    summary: get version
+    test: "bpf-syscount -V"
+
+/tcpconnect:
+    summary: get version
+    test: "bpf-tcpconnect -V"
+
+/tcpconnlat:
+    summary: get version
+    test: "bpf-tcpconnlat -V"
+
+/tcplife:
+    summary: get version
+    test: "bpf-tcplife -V"
+
+/tcprtt:
+    summary: get version
+    test: "bpf-tcprtt -V"
+
+/tcpsynbl:
+    summary: get version
+    test: "bpf-tcpsynbl -V"
+
+/tcptracer:
+    summary: get version
+    test: "bpf-tcptracer -V"
+
+/vfsstat:
+    summary: get version
+    test: "bpf-vfsstat -V"
+
+/xfsdist:
+    summary: get version
+    test: "bpf-xfsdist -V"
+
+/xfsslower:
+    summary: get version
+    test: "bpf-xfsslower -V"

@@ -1,0 +1,13 @@
+---
+# Test to run in classic context
+- hosts: localhost
+  roles:
+  - role: standard-test-beakerlib
+    tags:
+    - classic
+    repositories:
+    - repo: "https://github.com/RedHat-SP-Security/tests"
+      dest: "tests"
+      fmf_filter: "component: usbguard"
+    required_packages:
+    - beakerlib-libraries

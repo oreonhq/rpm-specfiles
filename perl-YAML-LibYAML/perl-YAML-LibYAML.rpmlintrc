@@ -1,0 +1,10 @@
+# A person's name
+addFilter("E: spelling-error \('Kirill',")
+
+# Intentionally empty
+addFilter("E: zero-length /usr/libexec/perl-YAML-LibYAML/t/empty.yaml")
+
+# Test package only includes tests
+addFilter("perl-YAML-LibYAML-tests.*: W: no-documentation")
+addFilter("perl-YAML-LibYAML-tests.*: E: no-binary")
+

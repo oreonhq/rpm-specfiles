@@ -1,0 +1,5 @@
+/d3-flame-graph-*.tar.gz
+/js-d3-flame-graph-vendor-*.tar.xz
+/js-d3-flame-graph-vendor-*.tar.xz.manifest
+/d3-flame-graph*/
+*.rpm

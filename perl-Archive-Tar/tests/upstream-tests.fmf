@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Archive-Tar
+require: perl-Archive-Tar-tests
+test: /usr/libexec/perl-Archive-Tar/test

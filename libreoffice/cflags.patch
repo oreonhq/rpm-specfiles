@@ -1,0 +1,10 @@
+--- a/configure~	2024-08-22 09:49:41.957960557 -0500
++++ b/configure	2024-08-23 10:31:14.357014789 -0500
+@@ -7399,7 +7399,6 @@
+     # AC_PROG_CC sets CFLAGS to -g -O2 if not set, avoid that (and avoid -O2 during AC_PROG_CC,
+     # Clang 12.0.1 occasionally SEGVs on some of the test invocations during AC_PROG_CC with -O2):
+     save_CFLAGS=$CFLAGS
+-    CFLAGS=-g
+ 
+ 
+ 

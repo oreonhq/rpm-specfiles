@@ -1,0 +1,3 @@
+from Config import *
+addFilter("spelling-error .* dir");
+addFilter("-tests.noarch: W: no-documentation");

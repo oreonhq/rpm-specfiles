@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-XML-XPath
+require: perl-XML-XPath-tests
+test: /usr/libexec/perl-XML-XPath/test

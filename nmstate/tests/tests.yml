@@ -1,0 +1,12 @@
+- hosts: localhost
+  roles:
+  - role: standard-test-basic
+    tags:
+    - classic
+    remote_user: root
+    tests:
+    - cli_query_reapply:
+        dir: .
+        run: ./cli_query_reapply.sh
+    required_packages:
+    - nmstate

@@ -1,0 +1,16 @@
+diff -up ypserv-2.32.1/configure.ac.systemdso ypserv-2.32.1/configure.ac
+--- ypserv-2.32.1/configure.ac.systemdso	2014-08-12 15:44:02.069991624 +0200
++++ ypserv-2.32.1/configure.ac	2014-08-12 15:46:20.086669886 +0200
+@@ -272,10 +272,10 @@ fi
+ 
+ USE_SD_NOTIFY=0
+ AC_SUBST(USE_SD_NOTIFY)
+-AC_CHECK_LIB(systemd-daemon,sd_notify,LIBSYSTEMD_DAEMON="-lsystemd-daemon",
++AC_CHECK_LIB(systemd,sd_notify,LIBSYSTEMD_DAEMON="-lsystemd",
+ 	LIBSYSTEMD_DAEMON="")
+ if test -z "$LIBSYSTEMD_DAEMON" ; then
+-	AC_CHECK_LIB(systemd,sd_notify,LIBSYSTEMD_DAEMON="-lsystemd",
++	AC_CHECK_LIB(systemd-daemon,sd_notify,LIBSYSTEMD_DAEMON="-lsystemd-daemon",
+ 	LIBSYSTEMD_DAEMON="")
+ fi
+ if test -n "$LIBSYSTEMD_DAEMON" ; then

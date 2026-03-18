@@ -1,0 +1,8 @@
+summary: basic setroubleshoot-plugins test plan
+discover:
+    how: fmf
+    url: https://gitlab.com/setroubleshoot/tests.git
+    filter: "component:setroubleshoot-plugins & tier: 1"
+execute:
+    how: tmt
+

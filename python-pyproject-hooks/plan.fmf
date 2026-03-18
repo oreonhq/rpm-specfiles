@@ -1,0 +1,9 @@
+discover:
+    how: shell
+    tests:
+    - name: import test
+      test: python3 -c 'import pyproject_hooks'
+      require:
+      - python3-pyproject-hooks
+execute:
+  how: tmt

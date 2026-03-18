@@ -1,0 +1,54 @@
+diff --git a/kdecore/localization/klocale_kde.cpp b/kdecore/localization/klocale_kde.cpp
+index 41c3915..216dd25 100644
+--- a/kdecore/localization/klocale_kde.cpp
++++ b/kdecore/localization/klocale_kde.cpp
+@@ -2438,8 +2438,8 @@ QString KLocalePrivate::formatLocaleTime(const QTime &time, KLocale::TimeFormatO
+ 
+ bool KLocalePrivate::use12Clock() const
+ {
+-    if ((timeFormat().contains(QString::fromLatin1("%I")) > 0) ||
+-        (timeFormat().contains(QString::fromLatin1("%l")) > 0)) {
++    if ((timeFormat().contains(QString::fromLatin1("%I")) != 0) ||
++        (timeFormat().contains(QString::fromLatin1("%l")) != 0)) {
+         return true;
+     } else {
+         return false;
+diff --git a/kimgio/jp2.cpp b/kimgio/jp2.cpp
+index 11e8a51..3b35221 100644
+--- a/kimgio/jp2.cpp
++++ b/kimgio/jp2.cpp
+@@ -109,7 +109,7 @@ static int qiodevice_read(jas_stream_obj_t *obj, char *buf, unsigned int cnt)
+         return io->read(buf, cnt);
+ }
+ 
+-static int qiodevice_write(jas_stream_obj_t *obj, char *buf, unsigned int cnt)
++static int qiodevice_write(jas_stream_obj_t *obj, const char *buf, unsigned int cnt)
+ {
+         QIODevice *io = (QIODevice*) obj;
+         return io->write(buf, cnt);
+diff --git a/kio/kfile/kopenwithdialog.cpp b/kio/kfile/kopenwithdialog.cpp
+index 9c1ace8..1daf4b2 100644
+--- a/kio/kfile/kopenwithdialog.cpp
++++ b/kio/kfile/kopenwithdialog.cpp
+@@ -713,7 +713,7 @@ void KOpenWithDialog::slotHighlighted(const QString& entryPath, const QString&)
+         // ### indicate that default value was restored
+         d->terminal->setChecked(d->curService->terminal());
+         QString terminalOptions = d->curService->terminalOptions();
+-        d->nocloseonexit->setChecked((terminalOptions.contains(QLatin1String("--noclose")) > 0));
++        d->nocloseonexit->setChecked((terminalOptions.contains(QLatin1String("--noclose")) != 0));
+         d->m_terminaldirty = false; // slotTerminalToggled changed it
+     }
+ }
+diff --git a/kio/kfile/kpropertiesdialog.cpp b/kio/kfile/kpropertiesdialog.cpp
+index 6611ee7..067525c 100644
+--- a/kio/kfile/kpropertiesdialog.cpp
++++ b/kio/kfile/kpropertiesdialog.cpp
+@@ -3306,7 +3306,7 @@ void KDesktopPropsPlugin::slotAdvanced()
+ 
+     if (preferredTerminal == "konsole")
+     {
+-        terminalCloseBool = (d->m_terminalOptionStr.contains( "--noclose" ) > 0);
++        terminalCloseBool = (d->m_terminalOptionStr.contains( "--noclose" ) != 0);
+         w.terminalCloseCheck->setChecked(terminalCloseBool);
+         d->m_terminalOptionStr.remove( "--noclose");
+     }

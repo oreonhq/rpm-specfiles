@@ -1,0 +1,8 @@
+summary: Sanity tests
+discover:
+    how: fmf
+    repository: https://src.fedoraproject.org/tests/mariadb.git
+    ref: master
+    filter: tier:1
+execute:
+    how: tmt

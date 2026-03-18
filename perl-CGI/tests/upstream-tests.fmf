@@ -1,0 +1,12 @@
+summary: Upstream tests
+component: perl-CGI
+require: perl-CGI-tests
+test: /usr/libexec/perl-CGI/test
+enabled: true
+tag:
+  - rhel-buildroot
+tier: '1'
+adjust:
+  - enabled: false
+    when: distro < rhel-10 or distro < centos-stream-10
+    continue: false

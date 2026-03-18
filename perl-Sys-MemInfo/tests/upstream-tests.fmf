@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Sys-MemInfo
+require: perl-Sys-MemInfo-tests
+test: /usr/libexec/perl-Sys-MemInfo/test

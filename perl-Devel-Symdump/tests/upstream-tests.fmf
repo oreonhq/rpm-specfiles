@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Devel-Symdump
+require: perl-Devel-Symdump-tests
+test: /usr/libexec/perl-Devel-Symdump/test

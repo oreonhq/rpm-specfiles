@@ -1,0 +1,12 @@
+--- xmlgraphics-commons-2.11/src/main/java/org/apache/xmlgraphics/image/loader/impl/ImageLoaderRawJPEG.java
++++ xmlgraphics-commons-2.11/src/main/java/org/apache/xmlgraphics/image/loader/impl/ImageLoaderRawJPEG.java
+@@ -228,7 +228,7 @@
+             if (padding != 0) {
+                 try {
+                     iccStream.write(new byte[padding]);
+-                } catch (IOException ioe) {
++                } catch (Exception ioe) {
+                     throw new IOException("Error while aligning ICC stream: " + ioe.getMessage());
+                 }
+             }
+

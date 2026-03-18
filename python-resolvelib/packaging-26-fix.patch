@@ -1,0 +1,55 @@
+From 2031e79f7ff1375c22a63566d69f5ec0847ded25 Mon Sep 17 00:00:00 2001
+From: Damian Shaw <damian.peter.shaw@gmail.com>
+Date: Wed, 11 Feb 2026 23:26:14 -0500
+Subject: [PATCH] Correct `PythonInputProvider._iter_matches` to fix tests with
+ packaging 26.0
+
+---
+ .../python/test_resolvers_python.py           | 24 ++++++++++++++-----
+ 1 file changed, 18 insertions(+), 6 deletions(-)
+
+diff --git a/tests/functional/python/test_resolvers_python.py b/tests/functional/python/test_resolvers_python.py
+index 2b6de36..30de7b4 100644
+--- a/tests/functional/python/test_resolvers_python.py
++++ b/tests/functional/python/test_resolvers_python.py
+@@ -4,6 +4,7 @@ import collections
+ import json
+ import operator
+ import os
++from functools import reduce
+ 
+ import packaging.markers
+ import packaging.requirements
+@@ -86,12 +87,23 @@ class PythonInputProvider(AbstractProvider):
+         name, _, _ = identifier.partition("[")
+         bad_versions = {c.version for c in incompatibilities[identifier]}
+         extras = {e for r in requirements[identifier] for e in r.extras}
+-        for key in self.index[name]:
+-            v = packaging.version.parse(key)
+-            if any(v not in r.specifier for r in requirements[identifier]):
+-                continue
+-            if v in bad_versions:
+-                continue
++
++        # Get all versions from the index, excluding bad versions
++        available_versions = (
++            v
++            for key in self.index[name]
++            if (v := packaging.version.parse(key)) not in bad_versions
++        )
++
++        # Combine all requirement specifiers using & operator
++        combined_specifier = reduce(
++            operator.and_,
++            map(operator.attrgetter("specifier"), requirements[identifier]),
++            packaging.specifiers.SpecifierSet(),
++        )
++
++        # Filter versions using the combined specifier
++        for v in combined_specifier.filter(available_versions):
+             yield Candidate(name=name, version=v, extras=extras)
+ 
+     def find_matches(self, identifier, requirements, incompatibilities):
+-- 
+2.53.0
+

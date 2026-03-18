@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>Bacula Director</short>
+  <description>Bacula Director, the central brain of Bacula. You need the bacula-director package installed for this option to be useful.</description>
+  <port protocol="tcp" port="9101"/>
+</service>

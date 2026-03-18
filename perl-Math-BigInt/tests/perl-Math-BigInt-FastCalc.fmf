@@ -1,0 +1,4 @@
+summary: Reverse dependency tests
+component: perl-Math-BigInt-FastCalc
+require: perl-Math-BigInt-FastCalc-tests
+test: /usr/libexec/perl-Math-BigInt-FastCalc/test

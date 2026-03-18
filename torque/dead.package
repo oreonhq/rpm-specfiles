@@ -1,0 +1,1 @@
+torque no longer works with 6.12 kernels due to lack of cpuset v1, it is deeply unmaintained upstream, time for this old package to rest

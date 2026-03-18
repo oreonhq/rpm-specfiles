@@ -1,0 +1,17 @@
+/plan:
+    summary: Basic test suite
+    discover:
+        how: fmf
+    execute:
+        how: tmt
+    prepare:
+      - name: install required packages
+        how: install
+        package: [389-ds-base, git, pytest]
+      - name: clone repo
+        how: shell
+        script: git clone https://github.com/389ds/389-ds-base /root/ds
+/test:
+    /upstream_basic:
+        test: pytest -v /root/ds/dirsrvtests/tests/suites/basic/basic_test.py
+        duration: 30m

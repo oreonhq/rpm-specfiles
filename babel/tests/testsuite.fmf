@@ -1,0 +1,16 @@
+summary: upstream testsuite
+require:
+  - babel
+  - python3-babel
+  - python3-pip
+  - python3-pytest
+  - python3-setuptools # for test_setuptools_frontend
+  - python3-dateutil   # required by freezegun
+  - python3-six        # required by freezegun
+  # pytz and freezegun installed from PyPI, not available in RHEL
+environment:
+    TZ: UTC
+test: |
+  pip install pytz==2024.1 freezegun==1.5.1 &&
+  cd $(dirname $TMT_SOURCE_DIR/babel-*/tests) &&
+  pytest -v

@@ -1,0 +1,14 @@
+--- ghc-9.10.3/libraries/Cabal/Cabal/src/Distribution/Simple/Install.hs~	2025-09-11 00:05:57.000000000 +0800
++++ ghc-9.10.3/libraries/Cabal/Cabal/src/Distribution/Simple/Install.hs	2026-01-08 01:36:47.674638923 +0800
+@@ -263,9 +263,9 @@
+   when (not inPath) $
+     warn
+       verbosity
+-      ( "The directory "
++      -- fedora patched:
++      ( "Executable installed in "
+           ++ binPref
+-          ++ " is not in the system search path."
+       )
+   case compilerFlavor (compiler lbi) of
+     GHC -> GHC.installExe verbosity lbi binPref buildPref progFix pkg_descr exe

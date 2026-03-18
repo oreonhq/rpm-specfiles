@@ -1,0 +1,12 @@
+--- cmake-4.0.0-rc4/Modules/FindRuby.cmake	2025-03-11 18:12:16.000000000 +0100
++++ cmake-4.0.0-rc4/Modules/FindRuby.cmake	2025-03-23 19:44:54.419957176 +0100
+@@ -289,6 +289,9 @@
+   execute_process(COMMAND ${Ruby_EXECUTABLE} -r vendor-specific -e "print 'true'"
+                   OUTPUT_VARIABLE Ruby_HAS_VENDOR_RUBY ERROR_QUIET)
+ 
++  # Overwrite by Fedora
++  set(Ruby_HAS_VENDOR_RUBY ON)
++
+   if (Ruby_HAS_VENDOR_RUBY)
+     _RUBY_CONFIG_VAR("vendorlibdir" Ruby_VENDORLIB_DIR)
+     _RUBY_CONFIG_VAR("vendorarchdir" Ruby_VENDORARCH_DIR)

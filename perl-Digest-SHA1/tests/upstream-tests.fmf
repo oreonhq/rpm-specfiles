@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Digest-SHA1
+require: perl-Digest-SHA1-tests
+test: /usr/libexec/perl-Digest-SHA1/test

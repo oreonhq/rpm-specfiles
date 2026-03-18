@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Config-Perl-V
+require: perl-Config-Perl-V-tests
+test: /usr/libexec/perl-Config-Perl-V/test

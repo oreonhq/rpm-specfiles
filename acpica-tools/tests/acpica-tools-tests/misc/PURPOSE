@@ -1,0 +1,4 @@
+A set of sanity tests for iasl(1) to confirm it fails gracefully when given bad AML code to compile. 
+ Included with the source distribution of acpica-tools
+
+

@@ -1,0 +1,9 @@
+discover:
+    how: shell
+    tests:
+    - name: import test
+      test: python3 -c 'import trove_classifiers'
+      require:
+      - python3-trove-classifiers
+execute:
+  how: tmt

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-HTML-Parser
+require: perl-HTML-Parser-tests
+test: /usr/libexec/perl-HTML-Parser/test

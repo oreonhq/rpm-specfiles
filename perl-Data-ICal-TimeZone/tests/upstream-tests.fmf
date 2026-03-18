@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Data-ICal-TimeZone
+require: perl-Data-ICal-TimeZone-tests
+test: /usr/libexec/perl-Data-ICal-TimeZone/test

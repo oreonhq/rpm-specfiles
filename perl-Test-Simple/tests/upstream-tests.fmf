@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Test-Simple
+require: perl-Test-Simple-tests
+test: /usr/libexec/perl-Test-Simple/test

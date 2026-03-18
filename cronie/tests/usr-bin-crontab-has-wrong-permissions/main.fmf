@@ -1,0 +1,12 @@
+summary: Test for /usr/bin/crontab has wrong permissions
+description: "Bug summary: /usr/bin/crontab has wrong permissions\n\n"
+contact: Martin Cermak <mcermak@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 15m
+extra-summary: /CoreOS/cronie/Regression/usr-bin-crontab-has-wrong-permissions
+extra-task: /CoreOS/cronie/Regression/usr-bin-crontab-has-wrong-permissions

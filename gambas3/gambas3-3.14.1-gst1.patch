@@ -1,0 +1,12 @@
+diff -up gambas-3.14.1/TEMPLATE/conf/gb.media.conf.gst1 gambas-3.14.1/TEMPLATE/conf/gb.media.conf
+--- gambas-3.14.1/TEMPLATE/conf/gb.media.conf.gst1	2019-11-14 08:33:16.210251507 -0500
++++ gambas-3.14.1/TEMPLATE/conf/gb.media.conf	2019-11-14 08:33:27.316055554 -0500
+@@ -24,7 +24,7 @@
+ #if __USE_PKGCONFIG
+ 
+ /* Name of the package for pkg-config */
+-#define __PKGCONFIG_NAME gstreamer-0.10
++#define __PKGCONFIG_NAME gstreamer-1.0
+ 
+ /* Minimum version needed */
+ //#define __PKGCONFIG_VERSION 2.14.3

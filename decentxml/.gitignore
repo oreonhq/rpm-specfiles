@@ -1,0 +1,5 @@
+/decentxml-*.tar.xz
+/*.zip
+/digulla-decentxml-*/
+/results_*/
+*.rpm

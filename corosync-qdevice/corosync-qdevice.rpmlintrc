@@ -1,0 +1,20 @@
+# qdevice coroqnetd group directories
+addFilter(r'corosync-qdevice\.[^:]+: (E|W): non-standard-dir-perm /etc/corosync/qdevice/net 770')
+addFilter(r'corosync-qdevice\.[^:]+: (E|W): dir-or-file-in-var-run /var/run/corosync-qdevice')
+addFilter(r'corosync-qdevice\.[^:]+: (E|W): non-standard-dir-perm /var/run/corosync-qdevice 770')
+
+# qnetd coroqnetd group directories
+addFilter(r'corosync-qnetd\.[^:]+: (E|W): non-standard-(u|g)id /etc/corosync/qnetd coroqnetd')
+addFilter(r'corosync-qnetd\.[^:]+: (E|W): non-standard-(u|g)id /var/run/corosync-qnetd coroqnetd')
+addFilter(r'corosync-qnetd\.[^:]+: (E|W): non-standard-dir-perm /etc/corosync/qnetd 770')
+addFilter(r'corosync-qnetd\.[^:]+: (E|W): dir-or-file-in-var-run /var/run/corosync-qnetd')
+addFilter(r'corosync-qnetd\.[^:]+: (E|W): non-standard-dir-perm /var/run/corosync-qnetd 770')
+
+# Empty %postun
+addFilter(r'W: empty-%postun')
+
+# Spelling error init
+addFilter(r'W: spelling-error %description -l en_US init')
+
+# No docs for qdevice devel sub-package
+addFilter(r'corosync-qdevice-devel\.[^:]+: W: no-documentation')

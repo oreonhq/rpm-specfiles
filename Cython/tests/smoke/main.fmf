@@ -1,0 +1,9 @@
+summary: smoke test
+test: ./runtest.sh
+framework: beakerlib
+require:
+  - gcc
+  - python3-devel
+  - python3-cython
+  - python3-setuptools
+duration: 10m

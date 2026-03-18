@@ -1,0 +1,23 @@
+summary: upstream tests for ltrace
+description: ''
+contact: Martin Cermak <mcermak@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- gcc
+- gcc-c++
+- libstdc++
+- libstdc++-devel
+- rpm-build
+- yum-utils
+- elfutils-devel
+- dejagnu
+- libselinux-devel
+- libtool
+- koji
+duration: 5h
+extra-summary: /tools/ltrace/Sanity/testsuite
+extra-task: /tools/ltrace/Sanity/testsuite

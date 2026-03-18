@@ -1,0 +1,338 @@
+From 6693c724382bababf9664609f0a44f74bd3c4dc3 Mon Sep 17 00:00:00 2001
+From: Munehisa Kamata <kamatam@amazon.com>
+Date: Mon, 8 Dec 2025 10:16:17 -0800
+Subject: [PATCH 07/23] Add a command line option to retrieve build-id
+
+Resending because my previous post is held for presumably being sent
+without a list subscription.
+
+Since Linux kernel commit 0935288c6e00 ("kdump: append kernel build-id
+string to VMCOREINFO") merged in v5.9, VMCOREINFO data contains a kernel
+build-id. Add a simple --build-id command line option that retrieves the
+build-id from a kernel dump file, which works just like the existing
+--osrelease option (and the implementation mimics it).
+
+ Example:
+ # crash --build-id /var/crash/127.0.0.1-2025-11-28-00\:33\:07/vmcore
+ 03cc3b4eb67df4e66a6a794a39521bafabef0886
+
+While we may also want to implement the strict build-id based
+verification between namelist and dump file, this would be still handy
+for some scripting or automation tasks without namelist.
+
+Signed-off-by: Munehisa Kamata <kamatam@amazon.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ crash.8        |  7 +++++++
+ defs.h         |  1 +
+ diskdump.c     | 17 +++++++++++++++++
+ help.c         |  6 ++++++
+ main.c         | 30 ++++++++++++++++++++++++++++++
+ makedumpfile.c | 40 ++++++++++++++++++++++++++++++++++------
+ netdump.c      | 17 +++++++++++++++++
+ 7 files changed, 112 insertions(+), 6 deletions(-)
+
+diff --git a/crash.8 b/crash.8
+index 511c09283233..f1a3d8f04154 100644
+--- a/crash.8
++++ b/crash.8
+@@ -398,6 +398,13 @@ Display the OSRELEASE vmcoreinfo string from a kdump
+ .I dumpfile 
+ header.
+ .TP
++.BI --build-id \ dumpfile
++Display the BUILD-ID vmcoreinfo string from a kdump
++.I dumpfile
++header.
++Note: this option only works for kernel (>=v5.9); otherwise it
++prints "unknown" and exits with non-zero status.
++.TP
+ .BI --hyper
+ Force the session to be that of a Xen hypervisor.
+ .TP
+diff --git a/defs.h b/defs.h
+index 0d39cf2faa88..bea295165019 100644
+--- a/defs.h
++++ b/defs.h
+@@ -577,6 +577,7 @@ struct program_context {
+ #define MEMSRC_LOCAL         (0x80000ULL)
+ #define REDZONE             (0x100000ULL)
+ #define VMWARE_VMSS_GUESTDUMP (0x200000ULL)
++#define GET_BUILD_ID (0x400000ULL)
+ 	char *cleanup;
+ 	char *namelist_orig;
+ 	char *namelist_debug_orig;
+diff --git a/diskdump.c b/diskdump.c
+index b1ca0a73be23..0ff87822732a 100644
+--- a/diskdump.c
++++ b/diskdump.c
+@@ -91,6 +91,7 @@ static void dump_vmcoreinfo(FILE *);
+ static void dump_note_offsets(FILE *);
+ static char *vmcoreinfo_read_string(const char *);
+ static void diskdump_get_osrelease(void);
++static void diskdump_get_build_id(void);
+ static int valid_note_address(unsigned char *);
+ 
+ /* For split dumpfile */
+@@ -1074,6 +1075,9 @@ is_diskdump(char *file)
+ 	if (pc->flags2 & GET_OSRELEASE) 
+ 		diskdump_get_osrelease();
+ 
++	if (pc->flags2 & GET_BUILD_ID)
++		diskdump_get_build_id();
++
+ #ifdef LZO
+ 	if (lzo_init() == LZO_E_OK)
+ 		dd->flags |= LZO_SUPPORTED;
+@@ -2446,6 +2450,19 @@ diskdump_get_osrelease(void)
+ 		pc->flags2 &= ~GET_OSRELEASE;
+ }
+ 
++static void
++diskdump_get_build_id(void)
++{
++	char *string;
++
++	if ((string = vmcoreinfo_read_string("BUILD-ID"))) {
++		fprintf(fp, "%s\n", string);
++		free(string);
++	}
++	else
++		pc->flags2 &= ~GET_BUILD_ID;
++}
++
+ static int
+ valid_note_address(unsigned char *offset)
+ {
+diff --git a/help.c b/help.c
+index 3faea6079d7b..91d155098993 100644
+--- a/help.c
++++ b/help.c
+@@ -266,6 +266,12 @@ char *program_usage_info[] = {
+     "    Display the OSRELEASE vmcoreinfo string from a kdump dumpfile",
+     "    header.",
+     "",
++    "  --build-id dumpfile",
++    "    Display the BUILD-ID vmcoreinfo string from a kdump dumpfile",
++    "    header.",
++    "    Note: this option only works for kernel(>=v5.9); otherwise it",
++    "    prints \"unknown\" and exits with non-zero status",
++    "",
+     "  --hyper",
+     "    Force the session to be that of a Xen hypervisor.",
+     "",
+diff --git a/main.c b/main.c
+index 247779cc82db..536f862b0716 100644
+--- a/main.c
++++ b/main.c
+@@ -29,6 +29,7 @@ static void check_xen_hyper(void);
+ static void show_untrusted_files(void);
+ static void get_osrelease(char *);
+ static void get_log(char *);
++static void get_build_id(char *);
+ 
+ static struct option long_options[] = {
+         {"memory_module", required_argument, 0, 0},
+@@ -67,6 +68,7 @@ static struct option long_options[] = {
+ 	{"no_elf_notes", 0, 0, 0},
+ 	{"osrelease", required_argument, 0, 0},
+ 	{"log", required_argument, 0, 0},
++	{"build-id", required_argument, 0, 0},
+ 	{"hex", 0, 0, 0},
+ 	{"dec", 0, 0, 0},
+ 	{"no_strip", 0, 0, 0},
+@@ -280,6 +282,11 @@ main(int argc, char **argv)
+ 				get_log(optarg);
+ 			}
+ 
++		        else if (STREQ(long_options[option_index].name, "build-id")) {
++				pc->flags2 |= GET_BUILD_ID;
++				get_build_id(optarg);
++			}
++
+ 			else if (STREQ(long_options[option_index].name, "hex")) {
+ 				pc->flags2 |= RADIX_OVERRIDE;
+ 				pc->output_radix = 16;
+@@ -1506,6 +1513,8 @@ dump_program_context(void)
+ 		fprintf(fp, "%sREDZONE", others++ ? "|" : "");
+ 	if (pc->flags2 & VMWARE_VMSS_GUESTDUMP)
+ 		fprintf(fp, "%sVMWARE_VMSS_GUESTDUMP", others++ ? "|" : "");
++	if (pc->flags2 & GET_BUILD_ID)
++		fprintf(fp, "%sGET_BUILD_ID", others++ ? "|" : "");
+ 	fprintf(fp, ")\n");
+ 
+ 	fprintf(fp, "         namelist: %s\n", pc->namelist);
+@@ -1976,6 +1985,27 @@ get_log(char *dumpfile)
+ 	clean_exit(retval);
+ }
+ 
++static void
++get_build_id(char *dumpfile)
++{
++	int retval = 1;
++
++	if (is_flattened_format(dumpfile)) {
++		if (pc->flags2 & GET_BUILD_ID)
++			retval = 0;
++	} else if (is_diskdump(dumpfile)) {
++		if (pc->flags2 & GET_BUILD_ID)
++			retval = 0;
++	} else if (is_kdump(dumpfile, KDUMP_LOCAL)) {
++		if (pc->flags2 & GET_BUILD_ID)
++			retval = 0;
++	}
++
++	if (retval)
++		fprintf(fp, "unknown\n");
++
++	clean_exit(retval);
++}
+ 
+ char *
+ no_vmcoreinfo(const char *unused)
+diff --git a/makedumpfile.c b/makedumpfile.c
+index 26d12b638ecd..ee0319949a97 100644
+--- a/makedumpfile.c
++++ b/makedumpfile.c
+@@ -24,6 +24,7 @@
+ #include <byteswap.h>
+ 
+ static void flattened_format_get_osrelease(char *);
++static void flattened_format_get_build_id(char *);
+ 
+ int flattened_format = 0;
+ 
+@@ -196,7 +197,7 @@ read_all_makedumpfile_data_header(char *file)
+ void
+ check_flattened_format(char *file)
+ {
+-	int fd, get_osrelease;
++	int fd, get_osrelease, get_build_id;
+ 	struct stat stat;
+ 	struct makedumpfile_header fh;
+ 
+@@ -206,6 +207,12 @@ check_flattened_format(char *file)
+ 	} else
+ 		get_osrelease = FALSE;
+ 
++	if (pc->flags2 & GET_BUILD_ID) {
++		get_build_id = TRUE;
++		pc->flags2 &= ~GET_BUILD_ID;
++	} else
++		get_build_id = FALSE;
++
+ 	if (flattened_format)
+ 		goto out;
+ 
+@@ -237,6 +244,11 @@ check_flattened_format(char *file)
+ 		return;
+ 	}
+ 
++	if (get_build_id) {
++		flattened_format_get_build_id(file);
++		return;
++	}
++
+ 	if (!read_all_makedumpfile_data_header(file))
+ 		return;
+ 
+@@ -251,6 +263,9 @@ check_flattened_format(char *file)
+ out:
+ 	if (get_osrelease)
+ 		pc->flags2 |= GET_OSRELEASE;
++
++	if (get_build_id)
++		pc->flags2 |= GET_BUILD_ID;
+ }
+ 
+ static int
+@@ -368,26 +383,39 @@ dump_flat_header(FILE *ofp)
+ }
+ 
+ static void 
+-flattened_format_get_osrelease(char *file)
++flattened_format_get_common(char *file, char *key, ulonglong flag)
+ {
+ 	int c;
+ 	FILE *pipe;
+-	char buf[BUFSIZE], *p1, *p2;
++	char keybuf[BUFSIZE], buf[BUFSIZE], *p1, *p2;
+ 
+-	c = strlen("OSRELEASE=");
++	sprintf(keybuf, "%s=", key);
++	c = strlen(keybuf);
+ 	sprintf(buf, "/usr/bin/strings -n %d %s", c, file);
+ 			
+ 	if ((pipe = popen(buf, "r")) == NULL)
+ 		return;
+ 
+         for (c = 0; (c < 100) && fgets(buf, BUFSIZE-1, pipe); c++) {
+-		if ((p1 = strstr(buf, "OSRELEASE="))) {
++		if ((p1 = strstr(buf, keybuf))) {
+ 			p2 = strstr(p1, "=");
+ 			fprintf(fp, "%s", p2+1);
+ 			flattened_format = TRUE;
+-			pc->flags2 |= GET_OSRELEASE;
++			pc->flags2 |= flag;
+ 		}
+ 	}
+ 
+ 	pclose(pipe);
+ }
++
++static void
++flattened_format_get_osrelease(char *file)
++{
++	flattened_format_get_common(file, "OSRELEASE", GET_OSRELEASE);
++}
++
++static void
++flattened_format_get_build_id(char *file)
++{
++	flattened_format_get_common(file, "BUILD-ID", GET_BUILD_ID);
++}
+diff --git a/netdump.c b/netdump.c
+index c7ff009e7f90..ba1c6c408878 100644
+--- a/netdump.c
++++ b/netdump.c
+@@ -50,6 +50,7 @@ static int proc_kcore_init_64(FILE *, int);
+ static char *get_regs_from_note(char *, ulong *, ulong *);
+ static void kdump_get_osrelease(void);
+ static char *vmcoreinfo_read_string(const char *);
++static void kdump_get_build_id(void);
+ 
+ 
+ #define ELFSTORE 1
+@@ -477,6 +478,10 @@ is_netdump(char *file, ulong source_query)
+ 		get_log_from_vmcoreinfo(file);
+ 	}
+ 
++	if ((source_query == KDUMP_LOCAL) &&
++	    (pc->flags2 & GET_BUILD_ID))
++		kdump_get_build_id();
++
+ 	return nd->header_size;
+ 
+ bailout:
+@@ -4996,6 +5001,18 @@ kdump_get_osrelease(void)
+ 		pc->flags2 &= ~GET_OSRELEASE;
+ }
+ 
++static void
++kdump_get_build_id(void)
++{
++	char *string;
++
++	if ((string = vmcoreinfo_read_string("BUILD-ID"))) {
++		fprintf(fp, "%s\n", string);
++		free(string);
++	} else
++		pc->flags2 &= ~GET_BUILD_ID;
++}
++
+ void
+ dump_registers_for_qemu_mem_dump(void)
+ {
+-- 
+2.51.1
+

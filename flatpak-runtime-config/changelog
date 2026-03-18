@@ -1,0 +1,128 @@
+* Sun Feb 09 2025 Yaakov Selkowitz <yselkowi@redhat.com> - 42-1
+- Bump version
+
+* Tue Dec 10 2024 Yaakov Selkowitz <yselkowi@redhat.com> - 41-2
+- Enable dynamic ld.so.cache generation
+
+* Thu Aug 15 2024 Yaakov Selkowitz <yselkowi@redhat.com> - 41-1
+- Bump version
+
+* Wed Apr 03 2024 Yaakov Selkowitz <yselkowi@redhat.com> - 40-1
+- Bump version
+
+* Fri Mar 01 2024 Yaakov Selkowitz <yselkowi@redhat.com> - 39-6
+- Add Java symlink trigger
+- Add /app-built X11 font directories to fontconfig path
+- Add alternatives symlink trigger
+
+* Fri Dec 15 2023 Yaakov Selkowitz <yselkowi@redhat.com> - 39-5
+- Add graphviz install trigger
+
+* Thu Oct 05 2023 Kalev Lember <klember@redhat.com> - 39-4
+- appdata: Add F39 versions
+
+* Mon Sep 04 2023 Yaakov Selkowitz <yselkowi@redhat.com> - 39-3
+- Provide sitecustomize instead of usercustomize
+
+* Tue Aug 22 2023 Owen Taylor <otaylor@redhat.com> - 39-2
+- Bump for rebuild
+
+* Mon Aug 7 2023 Owen Taylor <otaylor@redhat.com> - 39-1
+- Bump version
+
+* Sat Mar 18 2023 Kalev Lember <klember@redhat.com> - 38-1
+- appdata: Add F38 versions
+- Revert "Provide systemd packages"
+
+* Tue Feb 21 2023 Yaakov Selkowitz <yselkowi@redhat.com> - 37-4
+- Add metainfo for KDE runtimes
+
+* Tue Feb 21 2023 Yaakov Selkowitz <yselkowi@redhat.com> - 37-3
+- Remove package notes from flatpak-builder compile flags
+
+* Tue Sep 06 2022 Kalev Lember <klember@redhat.com> - 37-2
+- Correctly substitute /app/lib in flatpak-builder defaults.json ldflags
+- Revert "Fix search paths for /app-installed python modules" (#2026979)
+
+* Wed Aug 17 2022 Kalev Lember <klember@redhat.com> - 37-1
+- appdata: Add F37 versions
+
+* Thu Aug 04 2022 Kalev Lember <klember@redhat.com> - 36-2
+- Fix search paths for /app-installed python modules (#2112499)
+
+* Mon May 02 2022 Tomas Popela <tpopela@redhat.com> - 36-1
+- appdata: Add F36 versions
+
+* Thu Sep 30 2021 Kalev Lember <klember@redhat.com> - 35-1
+- appdata: Add F35 versions
+
+* Tue Feb 02 2021 Kalev Lember <klember@redhat.com> - 34-1
+- Install flatpak-builder defaults.json config file
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 33-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Wed Jul 29 2020 Kalev Lember <klember@redhat.com> - 33-1
+- Install appdata for both the Platform and the Sdk
+
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 32-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Fri Mar 06 2020 Kalev Lember <klember@redhat.com> - 32-1
+- Remove Python 2 support (#1801932)
+
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 30-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
+* Thu Aug  8 2019 fedora-toolbox <otaylor@redhat.com> - 30-2
+- Fix comment location in fontconfig config file
+
+* Fri Jul 26 2019 Mark Otaris <mark@net-c.com> - 30-1
+- Update font config to match freedesktop-sdk, allowing user-installed fonts to work
+
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 29-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 29-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Fri Sep 28 2018 Owen Taylor <otaylor@redhat.com> - 29-4
+- Add a usercustomize.py to set up Python paths
+
+* Sat Sep  8 2018 Owen Taylor <otaylor@redhat.com> - 29-3
+- Fix path to gsettings schemas in trigger
+
+* Sat Sep  8 2018 Owen Taylor <otaylor@redhat.com> - 29-2
+- Avoid comments leaking into scriplets
+
+* Sat Sep  8 2018 Owen Taylor <otaylor@redhat.com> - 29-1
+- Add file triggers from glibc, glib2, and fontconfig
+
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 27-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
+
+* Wed Aug 02 2017 Fedora Release Engineering <releng@fedoraproject.org> - 27-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Binutils_Mass_Rebuild
+
+* Wed Jul 26 2017 Fedora Release Engineering <releng@fedoraproject.org> - 27-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
+
+* Thu Jun 29 2017 Owen Taylor <otaylor@redhat.com> - 27-3
+- Make not noarch - the contents of /etc/ld.so.conf.d/app.conf
+  depend on 64-bit vs. 32-bit
+- Rename fontconfig conf file from 'xdg-app' to 'flatpak'
+
+* Tue Jun 13 2017 Owen Taylor <otaylor@redhat.com> - 27-2
+See https://bugzilla.redhat.com/show_bug.cgi?id=1460081
+- Switch license to MIT
+- Preserve timestamps on file installation
+- Own /usr/cache since it's not a standard directory
+- Require fontpackages-filesystem for /etc/fonts/conf.d
+
+* Wed Jun  7 2017 Owen Taylor <otaylor@redhat.com> - 27-1
+- Strip down to just config files
+
+* Wed Jun  3 2015 Alexander Larsson <alexl@redhat.com>
+- Initial version

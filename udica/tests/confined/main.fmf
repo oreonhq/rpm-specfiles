@@ -1,0 +1,34 @@
+summary: Concise summary describing what the test does
+description: |+
+    Test basic functionality of sepolicy_confine tool
+
+contact: Vit Mojzis <vmojzis@redhat.com> 
+component:
+  - policycoreutils
+  - udica
+test: ./test.sh
+framework: beakerlib
+recommend:
+  - policycoreutils
+  - /usr/sbin/semanage
+  - expect
+  - net-tools
+  - traceroute
+  - tcpdump
+  - setools-console
+  - policycoreutils-devel
+  - bind-utils
+  - grep
+  - telnet
+  - telnet-server
+  - udica
+duration: 60m
+enabled: true
+tag:
+  - NoRHEL4
+  - NoRHEL5
+  - targeted
+adjust:
+  - enabled: false
+    when: distro == rhel-4, rhel-5, rhel-6, rhel-7
+    continue: false

@@ -1,0 +1,17 @@
+summary: The test tries to workaround of a bz1051221 a little.
+description: ''
+contact: Michael Petlan <mpetlan@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- prelink
+- binutils
+- gcc
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=1051221
+extra-summary: /tools/ltrace/Regression/bz1051221-untraced-symbols-cause-sigsegv-ppc64
+extra-task: /tools/ltrace/Regression/bz1051221-untraced-symbols-cause-sigsegv-ppc64

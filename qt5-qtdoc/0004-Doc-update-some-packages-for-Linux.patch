@@ -1,0 +1,113 @@
+From 3dcb1318ef26276adb71144eee1b6d31301ee59b Mon Sep 17 00:00:00 2001
+From: Liang Qi <liang.qi@qt.io>
+Date: Mon, 16 Nov 2020 14:56:50 +0100
+Subject: [PATCH 4/5] Doc: update some packages for Linux
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Fixes: QTBUG-88409
+Change-Id: Ifce6dcd3a3ef7263f06309586ce688921a9ff7d7
+Reviewed-by: Tor Arne Vestbø <tor.arne.vestbo@qt.io>
+(cherry picked from commit 05bd1e8a443e9e6608a42be62b9d5b4b502a930b)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+---
+ doc/src/platforms/linux.qdoc | 30 ++++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
+
+diff --git a/doc/src/platforms/linux.qdoc b/doc/src/platforms/linux.qdoc
+index e3a0299f3..89e3863c1 100644
+--- a/doc/src/platforms/linux.qdoc
++++ b/doc/src/platforms/linux.qdoc
+@@ -149,43 +149,49 @@
+     \li libxcb-render
+     \li X C Bindings for Render extension
+     \li auto-detected
+-    \li 1.9
++    \li 1.11
+     \row {id="OptionalColor"}
+     \li xcb-render-util
+     \li libxcb-render-util
+     \li Utility library for XCB for Render extension
+     \li auto-detected
+-    \li 0.3.8
++    \li 0.3.9
+     \row {id="OptionalColor"}
+     \li xcb-shape
+     \li libxcb-shape
+     \li X C Bindings for Shape extension
+     \li auto-detected
+-    \li 1.9
++    \li 1.11
+     \row {id="DefaultColor"}
+     \li xcb-randr
+     \li libxcb-randr
+     \li X C Bindings for Resize and Rotate Extension
+     \li auto-detected
+-    \li 1.9
++    \li 1.11
+     \row {id="DefaultColor"}
+     \li xcb-xfixes
+     \li libxcb-xfixes
+     \li X C Bindings for Fixes Extension
+     \li auto-detected
+-    \li 1.9
++    \li 1.11
++    \row {id="DefaultColor"}
++    \li xcb-xkb
++    \li libxcb-xkb
++    \li X C Bindings for XKeyboard Extension
++    \li auto-detected
++    \li 1.11
+     \row {id="DefaultColor"}
+     \li xcb-sync
+     \li libxcb-sync
+     \li X C Bindings for Sync Extension
+     \li auto-detected
+-    \li 1.9
++    \li 1.11
+     \row {id="DefaultColor"}
+     \li xcb-shm
+     \li libxcb-shm
+     \li X C Bindings for Shared Memory Extension
+     \li auto-detected
+-    \li 1.9
++    \li 1.11
+     \row {id="DefaultColor"}
+     \li xcb-icccm
+     \li libxcb-icccm
+@@ -204,6 +210,12 @@
+     \li Utility library for XCB for XImage and XShmImage, used for QBackingStore and cursor support
+     \li auto-detected
+     \li 0.3.9
++    \row {id="DefaultColor"}
++    \li xcb-util
++    \li libxcb-util
++    \li Utility library for XCB for atom, aux and event
++    \li auto-detected
++    \li 0.3.9
+ 
+     \row {id="OptionalColor"}
+     \li xkbcommon
+@@ -247,7 +259,7 @@
+     \li libxcb
+     \li X C Binding library
+     \li
+-    \li 1.9
++    \li 1.11
+     \row {id="DefaultColor"}
+     \li X11-xcb
+     \li libX11-xcb
+@@ -307,7 +319,9 @@
+     \li libxcb-shape0-dev
+     \li libxcb-randr0-dev
+     \li libxcb-render-util0-dev
++    \li libxcb-util-dev
+     \li libxcb-xinerama-dev
++    \li libxcd-xkb-dev
+     \li libxkbcommon-dev
+     \li libxkbcommon-x11-dev
+     \endlist
+-- 
+2.51.1
+

@@ -1,0 +1,96 @@
+Based on fix for upstream bug #2668, see
+https://github.com/varnishcache/varnish-cache/commit/9bdc5f75d661a1659c4df60799612a7524a6caa7
+
+
+diff -Naur ../varnish-6.0.1.orig/bin/varnishtest/gensequences ./bin/varnishtest/gensequences
+--- ../varnish-6.0.1.orig/bin/varnishtest/gensequences	2018-08-29 11:48:32.000000000 +0200
++++ ./bin/varnishtest/gensequences	2018-09-27 12:18:20.946853383 +0200
+@@ -149,6 +149,7 @@
+ 
+ 	if (l_prefix_name[p] != "teken_state_init") {
+ 		print "";
++		print "\tt->t_last = 0;";
+ 		print "\tteken_state_switch(t, teken_state_init);";
+ 	}
+ 	print "}";
+diff -Naur ../varnish-6.0.1.orig/bin/varnishtest/sequences ./bin/varnishtest/sequences
+--- ../varnish-6.0.1.orig/bin/varnishtest/sequences	2018-08-29 11:48:32.000000000 +0200
++++ ./bin/varnishtest/sequences	2018-09-27 12:18:50.193581932 +0200
+@@ -113,3 +113,6 @@
+ 
+ # VT52 compatibility
+ #DECID	VT52 DECID				^[ Z
++
++# ECMA-48
++REP	Repeat last graphic char		^[ [ b		n
+diff -Naur ../varnish-6.0.1.orig/bin/varnishtest/teken.h ./bin/varnishtest/teken.h
+--- ../varnish-6.0.1.orig/bin/varnishtest/teken.h	2018-08-29 11:48:32.000000000 +0200
++++ ./bin/varnishtest/teken.h	2018-09-27 12:18:20.947853442 +0200
+@@ -153,6 +153,7 @@
+ 
+ 	unsigned int	 t_utf8_left;
+ 	teken_char_t	 t_utf8_partial;
++	teken_char_t	 t_last;
+ 
+ 	unsigned int	 t_curscs;
+ 	teken_scs_t	*t_saved_curscs;
+diff -Naur ../varnish-6.0.1.orig/bin/varnishtest/teken_subr.h ./bin/varnishtest/teken_subr.h
+--- ../varnish-6.0.1.orig/bin/varnishtest/teken_subr.h	2018-08-29 11:48:32.000000000 +0200
++++ ./bin/varnishtest/teken_subr.h	2018-09-27 12:18:20.947853442 +0200
+@@ -777,10 +777,11 @@
+ }
+ 
+ static void
+-teken_subr_do_putchar(const teken_t *t, const teken_pos_t *tp, teken_char_t c,
++teken_subr_do_putchar(teken_t *t, const teken_pos_t *tp, teken_char_t c,
+     int width)
+ {
+ 
++	t->t_last = c;
+ 	if (t->t_stateflags & TS_INSERT &&
+ 	    tp->tp_col < t->t_winsize.tp_col - width) {
+ 		teken_rect_t ctr;
+@@ -1313,3 +1314,12 @@
+ 	t->t_stateflags &= ~TS_WRAPPED;
+ 	teken_funcs_cursor(t);
+ }
++
++static void
++teken_subr_repeat_last_graphic_char(teken_t *t, unsigned int rpts)
++{
++
++	for (; t->t_last != 0 && rpts > 0; rpts--)
++		teken_subr_regular_character(t, t->t_last);
++}
++
+diff -Naur ../varnish-6.0.1.orig/bin/varnishtest/tests/a00001.vtc ./bin/varnishtest/tests/a00001.vtc
+--- ../varnish-6.0.1.orig/bin/varnishtest/tests/a00001.vtc	2018-08-29 11:48:32.000000000 +0200
++++ ./bin/varnishtest/tests/a00001.vtc	2018-09-27 12:18:20.948853501 +0200
+@@ -204,6 +204,27 @@
+ process p4 -expect-text 21 11 "Enter choice number (0 - 12):"
+ process p4 -screen_dump
+ 
++# 11. Test non-VT100 (e.g., VT220, XTERM) terminals
++process p4 -writehex "31 31 0d"
++process p4 -expect-text 0 0 "Menu 11: Non-VT100 Tests"
++
++process p4 -writehex "37 0d"
++process p4 -expect-text 0 0 "Menu 11.7: Miscellaneous ISO-6429 (ECMA-48) Tests"
++
++process p4 -writehex "32 0d"
++process p4 -expect-text 0 0 "Push <RETURN>"
++process p4 -screen_dump
++process p4 -expect-text 20 1 "Test Repeat (REP)"
++process p4 -expect-text 1 1 " ++ "
++process p4 -expect-text 2 2 " ++ "
++process p4 -expect-text 17 17 " ++ "
++process p4 -expect-text 18 18 "*++*"
++process p4 -writehex "0d"
++process p4 -expect-text 0 0 "Menu 11.7: Miscellaneous ISO-6429 (ECMA-48) Tests"
++process p4 -writehex "30 0d"
++process p4 -expect-text 0 0 "Menu 11: Non-VT100 Tests"
++process p4 -writehex "30 0d"
++
+ # 0. Exit
+ process p4 -writehex "30 0d"
+ process p4 -expect-text 12 30 "That's all, folks!"

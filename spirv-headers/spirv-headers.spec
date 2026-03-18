@@ -1,0 +1,65 @@
+%global commit 04f10f650d514df88b76d25e83db360142c7b174
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+
+
+Name:           spirv-headers
+Version:        1.5.5
+Release:        %autorelease
+Summary:        Header files from the SPIR-V registry
+
+License:        MIT
+URL:            https://github.com/KhronosGroup/SPIRV-Headers/
+Source0:        %{url}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+
+BuildArch:      noarch
+
+BuildRequires:  cmake
+BuildRequires:  ninja-build
+BuildRequires:  gcc
+BuildRequires:  gcc-c++
+
+%description
+%{summary}
+
+This includes:
+
+* Header files for various languages.
+* JSON files describing the grammar for the SPIR-V core instruction
+  set, and for the GLSL.std.450 extended instruction set.
+* The XML registry file
+
+%package        devel
+Summary:        Development files for %{name}
+
+%description    devel
+%{summary}
+
+This includes:
+
+* Header files for various languages.
+* JSON files describing the grammar for the SPIR-V core instruction
+  set, and for the GLSL.std.450 extended instruction set.
+* The XML registry fil
+
+%prep
+%autosetup -n SPIRV-Headers-%{commit} -p1
+chmod a-x include/spirv/1.2/spirv.py
+
+
+%build
+%cmake -DCMAKE_INSTALL_LIBDIR=%{_lib} -GNinja
+%cmake_build
+
+%install
+%cmake_install
+
+%files devel
+%license LICENSE
+%doc README.md
+%{_includedir}/spirv/
+%{_datadir}/cmake/SPIRV-Headers/*.cmake
+%{_datadir}/pkgconfig/SPIRV-Headers.pc
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.5-1
+- Prepare for Oreon 11 (RP1)

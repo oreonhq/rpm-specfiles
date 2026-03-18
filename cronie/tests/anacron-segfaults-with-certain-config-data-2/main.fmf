@@ -1,0 +1,14 @@
+summary: try some invalid configs for anacron to check config parser
+description: ''
+contact: Jakub Prokes <jprokes@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 5m
+extra-summary: 
+    /CoreOS/cronie/Regression/anacron-segfaults-with-certain-config-data-2
+extra-task: 
+    /CoreOS/cronie/Regression/anacron-segfaults-with-certain-config-data-2

@@ -1,0 +1,16 @@
+summary: Test for BZ#1449588 (Can ltrace be built with backtrace support?)
+description: |
+    Bug summary: Can ltrace be built with backtrace support?
+    Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1449588
+contact: Edjunior Machado <emachado@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=1449588
+extra-summary: /tools/ltrace/Sanity/bz1449588-Can-ltrace-be-built-with-backtrace-support
+extra-task: /tools/ltrace/Sanity/bz1449588-Can-ltrace-be-built-with-backtrace-support

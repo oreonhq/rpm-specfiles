@@ -1,0 +1,45 @@
+From c2ee5cead03b74abf570e46d238d46fa6300dc87 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Wed, 4 Feb 2026 10:07:32 -0800
+Subject: [PATCH] Workaround GCC 16 miscompilation issue (#785) (RHBZ #2435534)
+
+This is a workaround recommended by Jakub Jelinek for GCC 16
+mis-compiling these functions, see:
+
+https://github.com/DanBloomberg/leptonica/issues/785
+https://bugzilla.redhat.com/show_bug.cgi?id=2435534
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=123978
+
+Not submitted upstream as upstream may want to take a different
+approach or leave it as-is and  wait for the gcc bug to be fixed.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ src/pix2.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/pix2.c b/src/pix2.c
+index 487cebf7..d50a86cc 100644
+--- a/src/pix2.c
++++ b/src/pix2.c
+@@ -775,7 +775,7 @@ pixClearAll(PIX  *pix)
+     if (!pix)
+         return ERROR_INT("pix not defined", __func__, 1);
+ 
+-    memset(pix->data, 0, 4LL * pix->wpl * pix->h);
++    memset(pix->data, 0, 4ULL * pix->wpl * pix->h);
+     return 0;
+ }
+ 
+@@ -809,7 +809,7 @@ PIXCMAP  *cmap;
+             return ERROR_INT("cmap entry does not exist", __func__, 1);
+     }
+ 
+-    memset(pix->data, 0xff, 4LL * pix->wpl * pix->h);
++    memset(pix->data, 0xff, 4ULL * pix->wpl * pix->h);
+     return 0;
+ }
+ 
+-- 
+2.52.0
+

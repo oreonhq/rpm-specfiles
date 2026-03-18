@@ -1,0 +1,51 @@
+--- a/include/orcus/sax_parser.hpp~	2023-02-07 18:49:51.000000000 -0600
++++ b/include/orcus/sax_parser.hpp	2025-02-10 14:40:47.725536085 -0600
+@@ -8,6 +8,8 @@
+ #ifndef INCLUDED_ORCUS_SAX_PARSER_HPP
+ #define INCLUDED_ORCUS_SAX_PARSER_HPP
+ 
++#include <cstdint>
++
+ #include "sax_parser_base.hpp"
+ 
+ #include <string_view>
+--- a/include/orcus/zip_archive.hpp~	2023-02-08 21:08:15.000000000 -0600
++++ b/include/orcus/zip_archive.hpp	2025-02-10 14:44:57.187544661 -0600
+@@ -15,6 +15,7 @@
+ #include <vector>
+ #include <memory>
+ #include <ostream>
++#include <cstdint>
+ 
+ namespace orcus {
+ 
+--- liborcus-0.19.2/include/orcus/json_document_tree.hpp~	2022-12-17 09:37:19.000000000 -0600
++++ liborcus-0.19.2/include/orcus/json_document_tree.hpp	2025-02-10 14:52:59.965585200 -0600
+@@ -14,6 +14,7 @@
+ #include <string>
+ #include <memory>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace orcus {
+ 
+--- liborcus-0.19.2/src/liborcus/yaml_document_tree.cpp~	2023-08-25 18:45:07.000000000 -0500
++++ liborcus-0.19.2/src/liborcus/yaml_document_tree.cpp	2025-02-10 14:58:19.820276675 -0600
+@@ -15,6 +15,7 @@
+ #include <unordered_map>
+ #include <algorithm>
+ #include <iostream>
++#include <cstdint>
+ 
+ #include <boost/current_function.hpp>
+ 
+--- liborcus-0.19.2/include/orcus/yaml_document_tree.hpp~	2022-12-17 09:37:19.000000000 -0600
++++ liborcus-0.19.2/include/orcus/yaml_document_tree.hpp	2025-02-10 15:04:18.521807590 -0600
+@@ -14,6 +14,7 @@
+ #include <string>
+ #include <memory>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace orcus {
+ 

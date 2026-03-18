@@ -1,0 +1,77 @@
+diff -up sblim-gather-2.2.9/plugin/channelclt.c.orig sblim-gather-2.2.9/plugin/channelclt.c
+--- sblim-gather-2.2.9/plugin/channelclt.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/plugin/channelclt.c	2025-01-22 08:57:50.762584067 +0100
+@@ -24,7 +24,7 @@
+ #include <unistd.h>
+ #include <string.h>
+ 
+-const int true = (1==1);
++const int t = (1==1);
+ 
+ void showDevice(sysfsw_Device* device, size_t pos) {
+ 	
+@@ -95,7 +95,7 @@ void showDevice(sysfsw_Device* device, s
+ }
+ 
+ int filterDevice(sysfsw_Device* device) {
+-	return true;
++	return t;
+ }
+ 
+ int main(int argc, char** argv)  {
+diff -up sblim-gather-2.2.9/plugin/metriczCH.c.orig sblim-gather-2.2.9/plugin/metriczCH.c
+--- sblim-gather-2.2.9/plugin/metriczCH.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metriczCH.c	2025-01-22 08:58:13.510325125 +0100
+@@ -48,8 +48,8 @@ inline int min(int x, int y) {
+ 	return (x>y) ? x : y;
+ }
+ 
+-const int true = (1==1);
+-const int false = (1==0);
++const int t = (1==1);
++const int f = (1==0);
+ 
+ /* ---------------------------------------------------------------------------*/
+ 
+@@ -171,7 +171,7 @@ void updateDeviceList(sysfsw_Device* dev
+ 
+ int filterDevices(sysfsw_Device* device) {
+ 	sysfsw_Attribute* cmgAttr = sysfsw_openAttribute(device, "cmg");
+-	if (cmgAttr==NULL) return false;
++	if (cmgAttr==NULL) return f;
+ 	
+ 	char* cmgVal = sysfsw_getAttributeValue(cmgAttr);
+ 	int cmg = atoi(cmgVal);
+@@ -187,9 +187,9 @@ int refreshDeviceList() {
+ 			deviceCount = min(count, MAX_CHPID_COUNT);
+ 		}
+ 		pthread_mutex_unlock(&mutex);
+-		return true;
++		return t;
+ 	}
+-	return false;
++	return f;
+ }
+ 
+ int metricRetrCUE( int mid, 
+diff -up sblim-gather-2.2.9/reposd.c.orig sblim-gather-2.2.9/reposd.c
+--- sblim-gather-2.2.9/reposd.c.orig	2025-01-21 14:57:54.661148175 +0100
++++ sblim-gather-2.2.9/reposd.c	2025-01-22 08:55:10.707047724 +0100
+@@ -54,7 +54,7 @@ static pthread_cond_t  connect_cond  = P
+ static size_t globalNum = 0;
+ static int    globalAsc = 0;
+ 
+-static void * repos_remote();
++static void * repos_remote(void *);
+ static void * rrepos_getrequest(void * hdl);
+ 
+ #define RINITCHECK() \
+@@ -710,7 +710,7 @@ int main(int argc, char * argv[])
+   return 0;
+ }
+ 
+-static void * repos_remote()
++static void * repos_remote(void *)
+ {
+   pthread_t thread;
+   int       hdl = -1;

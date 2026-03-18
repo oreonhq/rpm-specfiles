@@ -1,0 +1,45 @@
+--- ./kdm/backend/auth.c	2015-02-06 17:59:27.473734701 -0600
++++ ./kdm/backend/auth.c.orig	2015-02-06 18:46:13.072441136 -0600
+@@ -44,6 +44,10 @@ 
+ 
+ #include <sys/ioctl.h>
+ 
++#ifdef XDMCP
++# include <string.h>
++#endif
++
+ #include "dm_socket.h"
+ #ifdef DNETCONN
+ # include <netdnet/dnetdb.h>
+@@ -1075,10 +1079,28 @@ 
+ static int
+ convertAuthAddr(char *saddr, int *len, CARD8 **addr)
+ {
++    static const unsigned char ipv6_lo[] = {
++        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01
++    };
++
++    static const unsigned char ipv4_lo[] = {
++        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
++        0x00, 0x00, 0xff, 0xff, 0x7f, 0x00, 0x00, 0x01
++    };
++
+     int ret = convertAddr(saddr, len, addr);
+-    if (ret == FamilyInternet &&
+-            ((struct in_addr *)*addr)->s_addr == htonl(0x7F000001L))
+-        ret = FamilyLocal;
++
++    if (ret == FamilyInternet) {
++        if (((struct in_addr *)*addr)->s_addr == htonl(0x7F000001L))
++            ret = FamilyLocal;
++    } else if (ret == FamilyInternet6) {
++	if (memcmp(*addr, ipv6_lo, sizeof ipv6_lo) == 0)
++            ret = FamilyLocal;
++        else if (memcmp(*addr, ipv4_lo, sizeof ipv4_lo) == 0)
++            ret = FamilyLocal;
++    }
++
+     return ret;
+ }
+ 

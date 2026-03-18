@@ -1,0 +1,12 @@
+diff -ru fonts-tweak-tool-0.4.5-org/fontstweak/Makefile.am fonts-tweak-tool-0.4.5/fontstweak/Makefile.am
+--- fonts-tweak-tool-0.4.5-org/fontstweak/Makefile.am	2018-01-17 05:15:39.000000000 -0800
++++ fonts-tweak-tool-0.4.5/fontstweak/Makefile.am	2022-03-08 23:51:44.091601893 -0800
+@@ -46,7 +46,7 @@
+ libfontstweak_resources_la_CFLAGS =	\
+ 	$(GIO_CFLAGS)			\
+ 	$(NULL)
+-libfontstweak_resources_la_LIBS =	\
++libfontstweak_resources_la_LIBADD =	\
+ 	$(GIO_LIBS)			\
+ 	$(NULL)
+ 

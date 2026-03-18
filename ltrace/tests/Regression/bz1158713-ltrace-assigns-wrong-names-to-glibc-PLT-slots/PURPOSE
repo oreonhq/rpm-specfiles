@@ -1,0 +1,5 @@
+PURPOSE of /tools/ltrace/Regression/bz1158713-ltrace-assigns-wrong-names-to-glibc-PLT-slots
+Description: bz1158713-ltrace-assigns-wrong-names-to-glibc-PLT-slots
+Author: Martin Cermak <mcermak@redhat.com>
+Bug summary: ltrace assigns wrong names to glibc PLT slots
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1158713

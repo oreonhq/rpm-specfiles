@@ -1,0 +1,84 @@
+* Fri Jan 17 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.103-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Mon Aug  5 2024 Daniel P. Berrangé <berrange@redhat.com> - 0.103-4
+- Updates for changes mingw content
+
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.103-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.103-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Tue Sep 19 2023 Marc-André Lureau <marcandre.lureau@redhat.com> - 0.103-1
+- new version v0.103
+- Rename libmsi.so -> libmsi-1.0.so
+
+* Thu Sep 14 2023 Jerry James <loganjerry@gmail.com> - 0.102-3
+- Fix build on s390x
+- More SPDX migration
+
+* Thu Jul 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0.102-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Tue Jun 20 2023 Marc-André Lureau <marcandre.lureau@redhat.com> - 0.102-1
+- New release v0.102
+
+* Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0.101.32-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 0.101.32-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Mon May 09 2022 Richard Hughes <rhughes@redhat.com> - 0.101.32-5
+- Fix tests with latest adwaita-icon-theme.
+
+* Fri May 06 2022 Richard Hughes <rhughes@redhat.com> - 0.101.32-4
+- Backport a patch so wixl-heat can work with glib as-shiped in F36.
+
+* Sat Jan 29 2022 Marc-André Lureau <marcandre.lureau@redhat.com> - 0.101.32-3
+- Fix FTBFS. rhbz#2046759
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 0.101.32-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Sun Aug 01 2021 Marc-André Lureau <marcandre.lureau@redhat.com> - 0.101.32-1
+- Fix FTBFS. rhbz#1987721
+
+* Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 0.101.27-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Mon Jun 28 2021 Marc-André Lureau <marcandre.lureau@redhat.com> - 0.101.27-1
+- Fix FTBFS. rhbz#1943037
+
+* Wed Feb  3 2021 Daniel P. Berrangé <berrange@redhat.com> - 0.101-2
+- Fix enablement of wxi tests
+- Use perl-base and gettext for more minimal dep chain
+
+* Tue Feb 02 2021 Marc-André Lureau <marcandre.lureau@redhat.com> - 0.101-1
+- new version v0.101
+- Fix FTBFS. rhbz#1923683
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 0.100-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Sun Oct 04 2020 Marc-André Lureau <marcandre.lureau@redhat.com> - 0.100-7
+- Fix FTBFS. rhbz#1864178
+- Drop mingw-gstreamer* checks, it's outdated.
+
+* Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.100-6
+- Second attempt - Rebuilt for
+  https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.100-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Thu May 14 2020 Daniel P. Berrangé <berrange@redhat.com> - 0.100-4
+- Switch spice back to dsound instead of wasapi
+
+* Thu Apr 23 2020 Daniel P. Berrangé <berrange@redhat.com> - 0.100-3
+- Re-enable wix validation
+- Fix bugs in multiple wxi manifests
+
+* Wed Jan 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.100-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild

@@ -1,0 +1,35 @@
+From 90300748effc1cf0fe56e35d3d1cc2ddfedab246 Mon Sep 17 00:00:00 2001
+From: Adrian Reber <areber@redhat.com>
+Date: Wed, 26 Nov 2025 13:21:07 +0000
+Subject: [PATCH] tty: fix compiler error
+
+At least on tests running on Fedora rawhide following error could be
+seen:
+
+```
+  criu/tty.c: In function 'pts_fd_get_index':
+  criu/tty.c:262:21: error: initialization discards 'const' qualifier from pointer target type [-Werror=discarded-qualifiers]
+    262 |         char *pos = strrchr(link->name, '/');
+        |
+```
+
+This fixes it.
+
+Signed-off-by: Adrian Reber <areber@redhat.com>
+---
+ criu/tty.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/criu/tty.c b/criu/tty.c
+index ae23094b7b..9a4520d535 100644
+--- a/criu/tty.c
++++ b/criu/tty.c
+@@ -259,7 +259,7 @@ static int pts_fd_get_index(int fd, const struct fd_parms *p)
+ {
+ 	int index;
+ 	const struct fd_link *link = p->link;
+-	char *pos = strrchr(link->name, '/');
++	const char *pos = strrchr(link->name, '/');
+ 
+ 	if (!pos || pos == (link->name + link->len - 1)) {
+ 		pr_err("Unexpected format on path %s\n", link->name + 1);

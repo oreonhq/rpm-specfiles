@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Net-Server
+require: perl-Net-Server-tests
+test: /usr/libexec/perl-Net-Server/test

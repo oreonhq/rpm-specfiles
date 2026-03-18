@@ -1,0 +1,66 @@
+upstream_project_url: https://github.com/osbuild/image-builder-frontend
+specfile_path: cockpit/cockpit-image-builder.spec
+upstream_package_name: cockpit-image-builder
+downstream_package_name: cockpit-image-builder
+# use the nicely formatted release description from our upstream release, instead of git shortlog
+copy_upstream_release_description: true
+upstream_tag_template: v{version}
+
+actions:
+  create-archive:
+    - npm ci
+    - make dist
+
+srpm_build_deps:
+  - make
+  - npm
+
+jobs:
+  - job: tests
+    identifier: self
+    trigger: pull_request
+    tmt_plan: /plans/all/main
+    targets:
+      - centos-stream-10
+      - fedora-42
+      - fedora-43
+
+  - job: copr_build
+    trigger: pull_request
+    targets: &build_targets
+      - centos-stream-9
+      - centos-stream-9-aarch64
+      - centos-stream-10
+      - centos-stream-10-aarch64
+      - fedora-all
+      - rhel-10
+      - rhel-10-aarch64
+
+  - job: copr_build
+    trigger: commit
+    branch: "^main$"
+    owner: "@osbuild"
+    project: "cockpit-image-builder-main"
+    preserve_project: True
+    targets: *build_targets
+
+  - job: copr_build
+    trigger: release
+    owner: "@osbuild"
+    project: "cockpit-image-builder"
+    preserve_project: True
+    targets: *build_targets
+    actions:
+      create-archive:
+        - npm ci
+        - make dist
+
+  - job: propose_downstream
+    trigger: release
+    dist_git_branches:
+      - fedora-all
+
+  - job: koji_build
+    trigger: commit
+    dist_git_branches:
+      - fedora-all

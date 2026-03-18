@@ -1,0 +1,41 @@
+[package]
+cargo-toml-patch-comments = [
+    "switch crypto backend from Nettle to OpenSSL",
+    "exclude files that are only useful for upstream development",
+    "drop automated generation of upstream integration tests",
+    "drop features for unsupported crypto backends",
+    "allow indicatif 0.18: https://gitlab.com/sequoia-pgp/sequoia-sq/-/merge_requests/582",
+    "allow dirs 6: https://gitlab.com/sequoia-pgp/sequoia-sq/-/merge_requests/598",
+]
+extra-files = [
+    "%{_mandir}/man1/sq*",
+    "%{bash_completions_dir}/sq.bash",
+    "%{fish_completions_dir}/sq.fish",
+    "%{zsh_completions_dir}/_sq",
+]
+doc-files.exclude = [
+    "sq-subplot.md",
+]
+
+[scripts]
+prep.post = [
+    "# drop broken integration tests",
+    "rm -vr subplot/",
+    "rm -v tests/sq-subplot.rs",
+]
+build.pre = [
+    "export ASSET_OUT_DIR=target/assets",
+]
+install.post = [
+    "# install manual pages",
+    "mkdir -p %{buildroot}/%{_mandir}/man1",
+    "cp -pav target/assets/man-pages/sq*.1 %{buildroot}/%{_mandir}/man1/",
+    "# install shell completions",
+    "install -Dpm 0644 target/assets/shell-completions/sq.bash \\",
+    "    %{buildroot}/%{bash_completions_dir}/sq.bash",
+    "install -Dpm 0644 target/assets/shell-completions/sq.fish \\",
+    "    %{buildroot}/%{fish_completions_dir}/sq.fish",
+    "install -Dpm 0644 target/assets/shell-completions/_sq \\",
+    "    %{buildroot}/%{zsh_completions_dir}/_sq",
+]
+

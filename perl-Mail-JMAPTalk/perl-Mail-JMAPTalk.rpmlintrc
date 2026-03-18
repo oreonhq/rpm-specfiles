@@ -1,0 +1,3 @@
+from Config import *
+addFilter("spelling-error .* (http|io|jmap)");
+addFilter("-tests.noarch: W: no-documentation");

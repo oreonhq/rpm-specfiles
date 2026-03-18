@@ -1,0 +1,6 @@
+summary: basic udica test plan
+discover:
+    how: fmf
+execute:
+    how: tmt
+

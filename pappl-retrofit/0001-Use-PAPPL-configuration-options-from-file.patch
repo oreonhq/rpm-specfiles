@@ -1,0 +1,98 @@
+From f1cfd4bdd916568712347c42ca8e7268e4e76171 Mon Sep 17 00:00:00 2001
+From: Zdenek Dohnal <zdohnal@redhat.com>
+Date: Mon, 29 Jul 2024 16:14:48 +0200
+Subject: [PATCH] Use PAPPL configuration options from file
+
+My previous commit added possibility to configure legacy-printer-app to
+be run with different options when the service is started. However PAPPL
+supports reading configuration files, which can happen either in default
+system callback defined in PAPPL, or by specific system callback defined
+by the application.
+
+The change updates `_prSystemCB()` to accept different server options,
+the same way as lprint or default PAPPL system callback does. This way
+the retrofitting printer application and lprint can use the same way of
+configuration.
+---
+ configure.ac                         | 75 ----------------------------
+ legacy/legacy-printer-app.service    | 10 ++++
+ legacy/legacy-printer-app.service.in | 10 ----
+ pappl-retrofit/pappl-retrofit.c      | 44 +++++++++++++++-
+ 4 files changed, 52 insertions(+), 87 deletions(-)
+ create mode 100644 legacy/legacy-printer-app.service
+ delete mode 100644 legacy/legacy-printer-app.service.in
+
+diff --git a/pappl-retrofit/pappl-retrofit.c b/pappl-retrofit/pappl-retrofit.c
+index dfbf570..7627164 100644
+--- a/pappl-retrofit/pappl-retrofit.c
++++ b/pappl-retrofit/pappl-retrofit.c
+@@ -4553,6 +4553,7 @@ _prSystemCB(int            num_options,	// I - Number of options
+   pappl_system_t	*system;	// System object
+   const char		*val,		// Current option value
+ 			*hostname,	// Hostname, if any
++			*listenhost,	// Listen hostname, if any
+ 			*logfile,	// Log file, if any
+ 			*system_name;	// System name, if any
+   pappl_loglevel_t	loglevel;	// Log level
+@@ -4599,8 +4600,43 @@ _prSystemCB(int            num_options,	// I - Number of options
+   else
+     loglevel = PAPPL_LOGLEVEL_UNSPEC;
+ 
+-  logfile     = cupsGetOption("log-file", num_options, options);
++  if ((val = cupsGetOption("server-options", num_options, options)) != NULL)
++  {
++    const char	*valptr;		// Pointer into value
++
++    for (valptr = val; valptr && *valptr;)
++    {
++      if (!strcmp(valptr, "none") || !strncmp(valptr, "none,", 5))
++        soptions = PAPPL_SOPTIONS_NONE;
++      else if (!strcmp(valptr, "dnssd-host") || !strncmp(valptr, "dnssd-host,", 11))
++        soptions |= PAPPL_SOPTIONS_DNSSD_HOST;
++      else if (!strcmp(valptr, "no-multi-queue") || !strncmp(valptr, "no-multi-queue,", 15))
++        soptions &= (pappl_soptions_t)~PAPPL_SOPTIONS_MULTI_QUEUE;
++      else if (!strcmp(valptr, "raw-socket") || !strncmp(valptr, "raw-socket,", 11))
++        soptions |= PAPPL_SOPTIONS_RAW_SOCKET;
++      else if (!strcmp(valptr, "usb-printer") || !strncmp(valptr, "usb-printer,", 12))
++        soptions |= PAPPL_SOPTIONS_USB_PRINTER;
++      else if (!strcmp(valptr, "no-web-interface") || !strncmp(valptr, "no-web-interface,", 17))
++        soptions &= (pappl_soptions_t)~PAPPL_SOPTIONS_WEB_INTERFACE;
++      else if (!strcmp(valptr, "web-log") || !strncmp(valptr, "web-log,", 8))
++        soptions |= PAPPL_SOPTIONS_WEB_LOG;
++      else if (!strcmp(valptr, "web-network") || !strncmp(valptr, "web-network,", 12))
++        soptions |= PAPPL_SOPTIONS_WEB_NETWORK;
++      else if (!strcmp(valptr, "web-remote") || !strncmp(valptr, "web-remote,", 11))
++        soptions |= PAPPL_SOPTIONS_WEB_REMOTE;
++      else if (!strcmp(valptr, "web-security") || !strncmp(valptr, "web-security,", 13))
++        soptions |= PAPPL_SOPTIONS_WEB_SECURITY;
++      else if (!strcmp(valptr, "no-tls") || !strncmp(valptr, "no-tls,", 7))
++        soptions |= PAPPL_SOPTIONS_NO_TLS;
++
++      if ((valptr = strchr(valptr, ',')) != NULL)
++        valptr ++;
++    }
++  }
++
++  listenhost  = cupsGetOption("listen-hostname", num_options, options);
+   hostname    = cupsGetOption("server-hostname", num_options, options);
++  logfile     = cupsGetOption("log-file", num_options, options);
+   system_name = cupsGetOption("system-name", num_options, options);
+ 
+   if ((val = cupsGetOption("server-port", num_options, options)) != NULL)
+@@ -4744,8 +4780,12 @@ _prSystemCB(int            num_options,	// I - Number of options
+ 
+   global_data->system = system;
+   
+-  papplSystemAddListeners(system, NULL);
++  papplSystemAddListeners(system, listenhost);
+   papplSystemSetHostName(system, hostname);
++
++  if ((val = cupsGetOption("admin-group", num_options, options)) != NULL)
++    papplSystemSetAdminGroup(system, val);
++
+   _prSetup(global_data);
+ 
+   // Extra setup steps for the system (like adding buttos/pages)
+-- 
+2.45.2
+

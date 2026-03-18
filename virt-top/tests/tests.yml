@@ -1,0 +1,13 @@
+- hosts: localhost
+  roles:
+  - role: standard-test-basic
+    tags:
+    - classic
+    required_packages:
+    - libvirt-daemon
+    - libvirt-daemon-kvm
+    - virt-top
+    tests:
+    - simple:
+        dir: .
+        run: ./basic-test.sh

@@ -1,0 +1,11 @@
+--- ghc-9.10.3/libraries/Cabal/Cabal/src/Distribution/Simple/GHC.hs~	2025-09-11 00:05:57.000000000 +0800
++++ ghc-9.10.3/libraries/Cabal/Cabal/src/Distribution/Simple/GHC.hs	2026-02-24 21:58:43.210748596 +0800
+@@ -164,7 +164,7 @@
+   -- Cabal currently supports ghc >= 7.0.1 && < 9.12
+   -- ... and the following odd development version
+   unless (ghcVersion < mkVersion [9, 12]) $
+-    warn verbosity $
++    info verbosity $
+       "Unknown/unsupported 'ghc' version detected "
+         ++ "(Cabal "
+         ++ prettyShow cabalVersion

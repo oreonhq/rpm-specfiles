@@ -1,0 +1,14 @@
+--- ceph-20.2.0/src/rgw/rgw_lua_utils.cc.orig	2026-02-17 11:46:05.677894827 -0500
++++ ceph-20.2.0/src/rgw/rgw_lua_utils.cc	2026-02-17 11:50:06.106569226 -0500
+@@ -115,7 +115,11 @@
+ 
+ // create new lua state together with reference to the guard
+ lua_State* newstate(lua_state_guard* guard) {
++#if (LUA_VERSION_NUM < 505)
+   lua_State* L = lua_newstate(allocator, guard);
++#else
++  lua_State* L = lua_newstate(allocator, guard, 314159);
++#endif
+   if (L) {
+     lua_atpanic(L, [](lua_State* L) -> int {
+       const char* msg = lua_tostring(L, -1);

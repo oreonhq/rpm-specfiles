@@ -1,0 +1,4 @@
+# This Source cannot be a URL because we must filter out certain files.
+addFilter(r" invalid-url Source[0-9]+: chardet-.*-filtered\.tar\.zst")
+# Bogus; it is a perfectly fine zstandard file.
+addFilter(r" inconsistent-file-extension chardet-.*-filtered\.tar\.zst$")

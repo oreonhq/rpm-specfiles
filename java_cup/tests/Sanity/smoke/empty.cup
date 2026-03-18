@@ -1,0 +1,2 @@
+non terminal bar;
+bar::=;

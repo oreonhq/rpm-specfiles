@@ -1,0 +1,148 @@
+From 5d8a3a804befd179a28c5e4c7845e982b8d1922e Mon Sep 17 00:00:00 2001
+From: Weslley S Pereira <weslley.spereira@gmail.com>
+Date: Tue, 22 Nov 2022 18:19:33 -0700
+Subject: [PATCH] Check for NaNs in xGECON
+
+---
+ SRC/cgecon.f | 7 ++++---
+ SRC/dgecon.f | 7 ++++---
+ SRC/sgecon.f | 7 ++++---
+ SRC/zgecon.f | 7 ++++---
+ 4 files changed, 16 insertions(+), 12 deletions(-)
+
+diff --git a/SRC/cgecon.f b/SRC/cgecon.f
+index 48f409b68..6f426c2ab 100644
+--- a/SRC/cgecon.f
++++ b/SRC/cgecon.f
+@@ -106,6 +106,7 @@
+ *>          INFO is INTEGER
+ *>          = 0:  successful exit
+ *>          < 0:  if INFO = -i, the i-th argument had an illegal value
++*>          =-5:  if ANORM is NAN or negative.
+ *> \endverbatim
+ *
+ *  Authors:
+@@ -153,10 +154,10 @@ SUBROUTINE CGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, RWORK,
+       INTEGER            ISAVE( 3 )
+ *     ..
+ *     .. External Functions ..
+-      LOGICAL            LSAME
++      LOGICAL            LSAME, SISNAN
+       INTEGER            ICAMAX
+       REAL               SLAMCH
+-      EXTERNAL           LSAME, ICAMAX, SLAMCH
++      EXTERNAL           LSAME, ICAMAX, SLAMCH, SISNAN
+ *     ..
+ *     .. External Subroutines ..
+       EXTERNAL           CLACN2, CLATRS, CSRSCL, XERBLA
+@@ -182,7 +183,7 @@ SUBROUTINE CGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, RWORK,
+          INFO = -2
+       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
+          INFO = -4
+-      ELSE IF( ANORM.LT.ZERO ) THEN
++      ELSE IF( ANORM.LT.ZERO .OR. SISNAN( ANORM ) ) THEN
+          INFO = -5
+       END IF
+       IF( INFO.NE.0 ) THEN
+diff --git a/SRC/dgecon.f b/SRC/dgecon.f
+index aa10dee9a..1ad302ae3 100644
+--- a/SRC/dgecon.f
++++ b/SRC/dgecon.f
+@@ -106,6 +106,7 @@
+ *>          INFO is INTEGER
+ *>          = 0:  successful exit
+ *>          < 0:  if INFO = -i, the i-th argument had an illegal value
++*>          =-5:  if ANORM is NAN or negative.
+ *> \endverbatim
+ *
+ *  Authors:
+@@ -152,10 +153,10 @@ SUBROUTINE DGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
+       INTEGER            ISAVE( 3 )
+ *     ..
+ *     .. External Functions ..
+-      LOGICAL            LSAME
++      LOGICAL            LSAME, DISNAN
+       INTEGER            IDAMAX
+       DOUBLE PRECISION   DLAMCH
+-      EXTERNAL           LSAME, IDAMAX, DLAMCH
++      EXTERNAL           LSAME, IDAMAX, DLAMCH, DISNAN
+ *     ..
+ *     .. External Subroutines ..
+       EXTERNAL           DLACN2, DLATRS, DRSCL, XERBLA
+@@ -175,7 +176,7 @@ SUBROUTINE DGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
+          INFO = -2
+       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
+          INFO = -4
+-      ELSE IF( ANORM.LT.ZERO ) THEN
++      ELSE IF( ANORM.LT.ZERO .OR. DISNAN( ANORM ) ) THEN
+          INFO = -5
+       END IF
+       IF( INFO.NE.0 ) THEN
+diff --git a/SRC/sgecon.f b/SRC/sgecon.f
+index a284b094b..86aeea73b 100644
+--- a/SRC/sgecon.f
++++ b/SRC/sgecon.f
+@@ -106,6 +106,7 @@
+ *>          INFO is INTEGER
+ *>          = 0:  successful exit
+ *>          < 0:  if INFO = -i, the i-th argument had an illegal value
++*>          =-5:  if ANORM is NAN or negative.
+ *> \endverbatim
+ *
+ *  Authors:
+@@ -152,10 +153,10 @@ SUBROUTINE SGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
+       INTEGER            ISAVE( 3 )
+ *     ..
+ *     .. External Functions ..
+-      LOGICAL            LSAME
++      LOGICAL            LSAME, SISNAN
+       INTEGER            ISAMAX
+       REAL               SLAMCH
+-      EXTERNAL           LSAME, ISAMAX, SLAMCH
++      EXTERNAL           LSAME, ISAMAX, SLAMCH, SISNAN
+ *     ..
+ *     .. External Subroutines ..
+       EXTERNAL           SLACN2, SLATRS, SRSCL, XERBLA
+@@ -175,7 +176,7 @@ SUBROUTINE SGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, IWORK,
+          INFO = -2
+       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
+          INFO = -4
+-      ELSE IF( ANORM.LT.ZERO ) THEN
++      ELSE IF( ANORM.LT.ZERO .OR. SISNAN( ANORM ) ) THEN
+          INFO = -5
+       END IF
+       IF( INFO.NE.0 ) THEN
+diff --git a/SRC/zgecon.f b/SRC/zgecon.f
+index 3d3127f9d..9cbfe35bc 100644
+--- a/SRC/zgecon.f
++++ b/SRC/zgecon.f
+@@ -106,6 +106,7 @@
+ *>          INFO is INTEGER
+ *>          = 0:  successful exit
+ *>          < 0:  if INFO = -i, the i-th argument had an illegal value
++*>          =-5:  if ANORM is NAN or negative.
+ *> \endverbatim
+ *
+ *  Authors:
+@@ -153,10 +154,10 @@ SUBROUTINE ZGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, RWORK,
+       INTEGER            ISAVE( 3 )
+ *     ..
+ *     .. External Functions ..
+-      LOGICAL            LSAME
++      LOGICAL            LSAME, DISNAN
+       INTEGER            IZAMAX
+       DOUBLE PRECISION   DLAMCH
+-      EXTERNAL           LSAME, IZAMAX, DLAMCH
++      EXTERNAL           LSAME, IZAMAX, DLAMCH, DISNAN
+ *     ..
+ *     .. External Subroutines ..
+       EXTERNAL           XERBLA, ZDRSCL, ZLACN2, ZLATRS
+@@ -182,7 +183,7 @@ SUBROUTINE ZGECON( NORM, N, A, LDA, ANORM, RCOND, WORK, RWORK,
+          INFO = -2
+       ELSE IF( LDA.LT.MAX( 1, N ) ) THEN
+          INFO = -4
+-      ELSE IF( ANORM.LT.ZERO ) THEN
++      ELSE IF( ANORM.LT.ZERO .OR. DISNAN( ANORM ) ) THEN
+          INFO = -5
+       END IF
+       IF( INFO.NE.0 ) THEN

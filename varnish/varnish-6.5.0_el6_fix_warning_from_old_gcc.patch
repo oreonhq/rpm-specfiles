@@ -1,0 +1,78 @@
+diff -Naur ../varnish-6.5.0.orig/bin/varnishd/http1/cache_http1_deliver.c ./bin/varnishd/http1/cache_http1_deliver.c
+--- ../varnish-6.5.0.orig/bin/varnishd/http1/cache_http1_deliver.c	2020-09-15 17:06:03.000000000 +0200
++++ ./bin/varnishd/http1/cache_http1_deliver.c	2020-09-16 11:45:28.663086943 +0200
+@@ -76,7 +76,7 @@
+ 	VSLb(req->vsl, SLT_RespReason, "Internal Server Error");
+ 
+ 	req->wrk->stats->client_resp_500++;
+-	(void)write(req->sp->fd, r_500, sizeof r_500 - 1);
++	if (write(req->sp->fd, r_500, sizeof r_500 - 1)) 0;
+ 	req->doclose = SC_TX_EOF;
+ }
+ 
+diff -Naur ../varnish-6.5.0.orig/bin/varnishd/mgt/mgt_main.c ./bin/varnishd/mgt/mgt_main.c
+--- ../varnish-6.5.0.orig/bin/varnishd/mgt/mgt_main.c	2020-09-15 17:06:03.000000000 +0200
++++ ./bin/varnishd/mgt/mgt_main.c	2020-09-16 11:46:21.323667133 +0200
+@@ -252,7 +252,7 @@
+ 		return;
+ 	VJ_rmdir("vmod_cache");
+ 	VJ_unlink("_.pid");
+-	(void)chdir("/");
++	if (chdir("/")) 0;
+ 	VJ_rmdir(workdir);
+ }
+ 
+diff -Naur ../varnish-6.5.0.orig/bin/varnishd/mgt/mgt_param.c ./bin/varnishd/mgt/mgt_param.c
+--- ../varnish-6.5.0.orig/bin/varnishd/mgt/mgt_param.c	2020-09-15 17:06:03.000000000 +0200
++++ ./bin/varnishd/mgt/mgt_param.c	2020-09-16 11:45:28.771086082 +0200
+@@ -829,11 +829,11 @@
+ 				t2 = strchr(t1 + 1, '\t');
+ 				AN(t2);
+ 				printf("\n\t*");
+-				(void)fwrite(t1 + 1, (t2 - 1) - t1, 1, stdout);
++				if (fwrite(t1 + 1, (t2 - 1) - t1, 1, stdout)) 1;
+ 				printf("*\n\t\t");
+ 				p = t2 + 1;
+ 			}
+-			(void)fwrite(p, q - p, 1, stdout);
++			if(fwrite(p, q - p, 1, stdout)) 1;
+ 			p = q;
+ 			if (*p == '\n') {
+ 				printf("\n");
+diff -Naur ../varnish-6.5.0.orig/bin/varnishtest/vtc_main.c ./bin/varnishtest/vtc_main.c
+--- ../varnish-6.5.0.orig/bin/varnishtest/vtc_main.c	2020-09-15 17:06:03.000000000 +0200
++++ ./bin/varnishtest/vtc_main.c	2020-09-16 11:45:28.771086082 +0200
+@@ -233,7 +233,7 @@
+ 	assert(cleaner_pid >= 0);
+ 	if (cleaner_pid == 0) {
+ 		closefd(&p[1]);
+-		(void)nice(1);		/* Not important */
++		if (nice(1)) 1;
+ 		setbuf(stdin, NULL);
+ 		AZ(dup2(p[0], STDIN_FILENO));
+ 		while (fgets(buf, sizeof buf, stdin)) {
+diff -Naur ../varnish-6.5.0.orig/lib/libvarnishapi/vsm.c ./lib/libvarnishapi/vsm.c
+--- ../varnish-6.5.0.orig/lib/libvarnishapi/vsm.c	2020-09-15 17:06:03.000000000 +0200
++++ ./lib/libvarnishapi/vsm.c	2020-09-16 11:45:28.772086074 +0200
+@@ -764,18 +764,18 @@
+ 		VSM_ResetError(vd);
+ 		if (u & VSM_MGT_RUNNING) {
+ 			if (progress >= 0 && n > 4)
+-				(void)write(progress, "\n", 1);
++			  if (!write(progress, "\n", 1)) return (vsm_diag(vd, "Unable to write progress"));
+ 			vd->attached = 1;
+ 			return (0);
+ 		}
+ 		if (t0 < VTIM_mono()) {
+ 			if (progress >= 0 && n > 4)
+-				(void)write(progress, "\n", 1);
++				if (!write(progress, "\n", 1)) return (vsm_diag(vd, "Unable to write progress"));
+ 			return (vsm_diag(vd,
+ 			    "Could not get hold of varnishd, is it running?"));
+ 		}
+ 		if (progress >= 0 && !(++n % 4))
+-			(void)write(progress, ".", 1);
++			if (!write(progress, ".", 1)) return (vsm_diag(vd, "Unable to write progress"));
+ 		VTIM_sleep(.25);
+ 	}
+ 	return (vsm_diag(vd, "Attach interrupted"));

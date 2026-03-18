@@ -1,0 +1,38 @@
+From f4aec4d37447cc274b90c129ea15a008473ed02d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20Men=C5=A1=C3=ADk?= <pemensik@redhat.com>
+Date: Thu, 21 Jan 2021 17:30:54 +0100
+Subject: [PATCH] Yet another change to support BIND 9.16.11 API change
+
+Another change with another release, new parameter is added again.
+Add another ifdef to keep compatibility with both versions.
+---
+ src/zone.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/zone.c b/src/zone.c
+index d0b71b194..7ce1769b3 100644
+--- a/src/zone.c
++++ b/src/zone.c
+@@ -17,6 +17,7 @@
+ #include <dns/zone.h>
+ 
+ #include "util.h"
++#include "config.h"
+ 
+ /**
+  * Write given diff to zone journal. Journal will be created
+@@ -61,7 +62,11 @@ zone_soaserial_updatetuple(dns_updatemethod_t method, dns_difftuple_t *soa_tuple
+ 	REQUIRE(soa_tuple->rdata.type == dns_rdatatype_soa);
+ 
+ 	serial = dns_soa_getserial(&soa_tuple->rdata);
++#if LIBDNS_VERSION_MAJOR >= 1611
++	serial = dns_update_soaserial(serial, method, NULL);
++#else
+ 	serial = dns_update_soaserial(serial, method);
++#endif
+ 	dns_soa_setserial(serial, &soa_tuple->rdata);
+ 	if (new_serial != NULL)
+ 		*new_serial = serial;
+-- 
+2.26.2
+

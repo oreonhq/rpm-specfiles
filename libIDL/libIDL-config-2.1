@@ -1,0 +1,38 @@
+.TH LIBIDL\-CONFIG\-2 "1" "February 2021" "" "User Commands"
+.SH NAME
+libIDL\-config\-2 \- prints information about a libIDL installation
+.SH SYNOPSIS
+.B libIDL\-config\-2
+.RB [ OPTIONS \ ...]
+.SH DESCRIPTION
+This program is mostly for use in build scripts.
+Please consider using
+.BR pkg\-config (1)
+or
+.BR pkgconf (1)
+instead.
+.SH OPTIONS
+.TP
+.BR \-\-prefix [=\fIDIR\fR]
+Print the prefix for host-independent files for libIDL, e.g. \fB/usr\fR.
+.TP
+.BR \-\-exec\-prefix [=\fIDIR\fR]
+Print the prefix for host-dependent files for libIDL, e.g. \fB/usr\fR.
+.TP
+.B \-\-version
+Display the version of libIDL and exit.
+.TP
+.B \-\-libs
+Display all linker flags:
+.BR \-L ,
+.BR \-l ,
+and otherwise.
+.TP
+.B \-\-cflags
+Display all
+.BR CFLAGS :
+.BR \-I ,
+and otherwise.
+.SH "SEE\ ALSO"
+.BR pkgconf (1),
+.BR pkg\-config (1)

@@ -1,0 +1,15 @@
+/results_*
+/*.src.rpm
+
+/jansi-1.6.tar.xz
+/jansi-1.9.tar.xz
+/jansi-1.11.tar.xz
+/jansi-project-1.16.tar.gz
+/jansi-project-1.17.tar.gz
+/jansi-project-1.17.1.tar.gz
+/jansi-project-1.18.tar.gz
+/jansi-2.1.1.tar.gz
+/jansi-2.3.3.tar.gz
+/jansi-2.4.0.tar.gz
+/jansi-2.4.1.tar.gz
+/jansi-2.4.2.tar.gz

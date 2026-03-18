@@ -1,0 +1,11 @@
+test: ./runtests.sh
+duration: 10m
+framework: beakerlib
+require:
+  - hspell
+  - hunspell-he
+  - make
+  - gcc
+  - gzip
+  - zlib-devel 
+  - rpm-build

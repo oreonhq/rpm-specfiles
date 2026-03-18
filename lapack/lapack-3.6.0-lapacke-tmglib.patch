@@ -1,0 +1,36 @@
+diff -up lapack-3.6.0/LAPACKE/Makefile.tmglib lapack-3.6.0/LAPACKE/Makefile
+--- lapack-3.6.0/LAPACKE/Makefile.tmglib	2015-12-02 10:01:15.639679177 -0500
++++ lapack-3.6.0/LAPACKE/Makefile	2015-12-02 10:01:15.660679035 -0500
+@@ -50,7 +50,7 @@ lapacke:
+ 	cd utils && $(MAKE)
+ 
+ shlib: lapacke
+-	$(CC) $(CFLAGS) -shared -Wl,-soname,$(SHLIB_LAPACKE).@SHORTVER@ -o $(SHLIB_LAPACKE).@LONGVER@ src/*.o utils/*.o $(LIBS) -lgfortran -lc
++	$(CC) $(CFLAGS) -shared -Wl,-soname,$(SHLIB_LAPACKE).@SHORTVER@ -o $(SHLIB_LAPACKE).@LONGVER@ src/*.o utils/*.o $(LIBS) -lgfortran -lc ../TESTING/MATGEN/*.o
+ 
+ lapacke_example:
+ 	cd example && $(MAKE)
+diff -up lapack-3.6.0/LAPACKE/src/Makefile.tmglib lapack-3.6.0/LAPACKE/src/Makefile
+--- lapack-3.6.0/LAPACKE/src/Makefile.tmglib	2015-12-03 12:18:04.216900463 -0500
++++ lapack-3.6.0/LAPACKE/src/Makefile	2015-12-03 12:18:15.638838677 -0500
+@@ -2204,7 +2204,7 @@ OBJ_FILES := $(C_FILES:.o=.o)
+ all: ../../$(LAPACKELIB)
+ 
+ ../../$(LAPACKELIB): $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
+-	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED)
++	$(ARCH) $(ARCHFLAGS) ../../$(LAPACKELIB) $(ALLOBJ) $(ALLXOBJ) $(DEPRECATED) ../../TESTING/MATGEN/*.o
+ 	$(RANLIB) ../../$(LAPACKELIB)
+ 
+ .c.o:
+diff -up lapack-3.6.0/Makefile.tmglib lapack-3.6.0/Makefile
+--- lapack-3.6.0/Makefile.tmglib	2015-11-01 11:21:47.000000000 -0500
++++ lapack-3.6.0/Makefile	2015-12-02 10:01:15.647679123 -0500
+@@ -26,7 +26,7 @@ cblaslib:
+ lapacklib:	lapack_install
+ 	( cd SRC; $(MAKE) )
+ 
+-lapackelib: lapacklib
++lapackelib: tmglib lapacklib
+ 	( cd LAPACKE; $(MAKE) )
+ 
+ cblas_example: cblaslib blaslib

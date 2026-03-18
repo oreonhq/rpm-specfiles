@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Module-Load
+require: perl-Module-Load-tests
+test: /usr/libexec/perl-Module-Load/test

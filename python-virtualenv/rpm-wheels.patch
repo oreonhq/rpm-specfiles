@@ -1,0 +1,173 @@
+From 615e6ac75dd98f6164db92b9734550602251b301 Mon Sep 17 00:00:00 2001
+From: Lumir Balhar <lbalhar@redhat.com>
+Date: Thu, 9 Feb 2023 15:13:36 +0100
+Subject: [PATCH] RPM wheels
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Co-Authored-By: Miro Hrončok <miro@hroncok.cz>
+---
+ src/virtualenv/run/__init__.py                |  5 +++--
+ src/virtualenv/seed/embed/base_embed.py       | 16 +++++++++++++-
+ src/virtualenv/seed/embed/pip_invoke.py       |  1 +
+ .../seed/embed/via_app_data/via_app_data.py   |  1 +
+ src/virtualenv/seed/wheels/acquire.py         |  3 ++-
+ src/virtualenv/seed/wheels/embed/__init__.py  |  4 ++++
+ src/virtualenv/util/path/_system_wheels.py    | 22 +++++++++++++++++++
+ 7 files changed, 48 insertions(+), 4 deletions(-)
+ create mode 100644 src/virtualenv/util/path/_system_wheels.py
+
+diff --git a/src/virtualenv/run/__init__.py b/src/virtualenv/run/__init__.py
+index 8c91f21..48edcb2 100644
+--- a/src/virtualenv/run/__init__.py
++++ b/src/virtualenv/run/__init__.py
+@@ -125,8 +125,9 @@ def build_parser_only(args: list[str] | None = None) -> VirtualEnvConfigParser:
+ 
+ def handle_extra_commands(options: VirtualEnvOptions) -> None:
+     if options.upgrade_embed_wheels:
+-        result = manual_upgrade(options.app_data, options.env)
+-        raise SystemExit(result)
++        # result = manual_upgrade(options.app_data, options.env)
++        logging.warning("virtualenv installed from the RPM package uses wheels from RPM packages as well. Updating them via virtualenv is not possible. The RPM packaged wheels are updated together with other RPM packages of the system.")
++        raise SystemExit(1)
+ 
+ 
+ def load_app_data(
+diff --git a/src/virtualenv/seed/embed/base_embed.py b/src/virtualenv/seed/embed/base_embed.py
+index 9980dab..9588f8a 100644
+--- a/src/virtualenv/seed/embed/base_embed.py
++++ b/src/virtualenv/seed/embed/base_embed.py
+@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING
+ 
+ from virtualenv.seed.seeder import Seeder
+ from virtualenv.seed.wheels import Version
++from virtualenv.util.path._system_wheels import get_system_wheels_paths
+ 
+ if TYPE_CHECKING:
+     from argparse import ArgumentParser
+@@ -18,7 +19,7 @@ if TYPE_CHECKING:
+     from virtualenv.config.cli.parser import VirtualEnvOptions
+ 
+ LOGGER = logging.getLogger(__name__)
+-PERIODIC_UPDATE_ON_BY_DEFAULT = True
++PERIODIC_UPDATE_ON_BY_DEFAULT = False
+ 
+ 
+ class BaseEmbed(Seeder, ABC):
+@@ -53,6 +54,15 @@ class BaseEmbed(Seeder, ABC):
+ 
+         if not self.distribution_to_versions():
+             self.enabled = False
++ 
++        if "embed" in (self.pip_version, self.setuptools_version, getattr(self, "wheel_version", None)):
++            raise RuntimeError(
++                "Embedded wheels are not available if virtualenv "
++                "is installed from the RPM package.\nEither install "
++                "virtualenv from PyPI (via pip) or use 'bundle' "
++                "version which uses the system-wide pip, setuptools "
++                "and wheel wheels provided also by RPM packages."
++            )
+ 
+     @classmethod
+     def distributions(cls) -> dict[str, str]:
+@@ -144,6 +154,10 @@ class BaseEmbed(Seeder, ABC):
+             result += f" {distribution}{ver},"
+         return result[:-1] + ")"
+ 
++    def insert_system_wheels_paths(self, creator):
++        system_wheels_paths = get_system_wheels_paths(creator.interpreter)
++        self.extra_search_dir = list(system_wheels_paths) + self.extra_search_dir
++
+ 
+ __all__ = [
+     "BaseEmbed",
+diff --git a/src/virtualenv/seed/embed/pip_invoke.py b/src/virtualenv/seed/embed/pip_invoke.py
+index fb44229..d516697 100644
+--- a/src/virtualenv/seed/embed/pip_invoke.py
++++ b/src/virtualenv/seed/embed/pip_invoke.py
+@@ -26,6 +26,7 @@ class PipInvoke(BaseEmbed):
+     def run(self, creator: Creator) -> None:
+         if not self.enabled:
+             return
++        self.insert_system_wheels_paths(creator)
+         for_py_version = creator.interpreter.version_release_str
+         with self.get_pip_install_cmd(creator.exe, for_py_version) as cmd:
+             env = pip_wheel_env_run(self.extra_search_dir, self.app_data, self.env)
+diff --git a/src/virtualenv/seed/embed/via_app_data/via_app_data.py b/src/virtualenv/seed/embed/via_app_data/via_app_data.py
+index 092ef74..12fec7b 100644
+--- a/src/virtualenv/seed/embed/via_app_data/via_app_data.py
++++ b/src/virtualenv/seed/embed/via_app_data/via_app_data.py
+@@ -55,6 +55,7 @@ class FromAppData(BaseEmbed):
+     def run(self, creator: Creator) -> None:
+         if not self.enabled:
+             return
++        self.insert_system_wheels_paths(creator)
+         with self._get_seed_wheels(creator) as name_to_whl:
+             pip_version = name_to_whl["pip"].version_tuple if "pip" in name_to_whl else None
+             installer_class = self.installer_class(pip_version)
+diff --git a/src/virtualenv/seed/wheels/acquire.py b/src/virtualenv/seed/wheels/acquire.py
+index b6a6533..ae1229e 100644
+--- a/src/virtualenv/seed/wheels/acquire.py
++++ b/src/virtualenv/seed/wheels/acquire.py
+@@ -39,11 +39,12 @@ def get_wheel(  # noqa: PLR0913
+ 
+     if download and wheel is None and version != Version.embed:
+         # 2. download from the internet
++        from virtualenv.util.path._system_wheels import get_system_wheels_paths
+         wheel = download_wheel(
+             distribution=distribution,
+             version_spec=Version.as_version_spec(version),
+             for_py_version=for_py_version,
+-            search_dirs=search_dirs,
++            search_dirs=get_system_wheels_paths(sys),
+             app_data=app_data,
+             to_folder=app_data.house,
+             env=env,
+diff --git a/src/virtualenv/seed/wheels/embed/__init__.py b/src/virtualenv/seed/wheels/embed/__init__.py
+index f9947a1..ddb6d61 100644
+--- a/src/virtualenv/seed/wheels/embed/__init__.py
++++ b/src/virtualenv/seed/wheels/embed/__init__.py
+@@ -43,7 +43,11 @@ BUNDLE_SUPPORT = {
+ MAX = "3.8"
+ 
+ 
++# Redefined here because bundled wheels are removed in RPM build
++BUNDLE_SUPPORT = None
++
+ def get_embed_wheel(distribution: str, for_py_version: str) -> Wheel | None:
++    return None  # BUNDLE_SUPPORT == None anyway
+     mapping = BUNDLE_SUPPORT.get(for_py_version, {}) or BUNDLE_SUPPORT[MAX]
+     wheel_file = mapping.get(distribution)
+     if wheel_file is None:
+diff --git a/src/virtualenv/util/path/_system_wheels.py b/src/virtualenv/util/path/_system_wheels.py
+new file mode 100644
+index 0000000..f3fd9b1
+--- /dev/null
++++ b/src/virtualenv/util/path/_system_wheels.py
+@@ -0,0 +1,22 @@
++from pathlib import Path
++from subprocess import check_output, CalledProcessError
++
++
++def get_system_wheels_paths(interpreter):
++    # ensurepip wheels
++    # We need subprocess here to check ensurepip with the Python we are creating
++    # a new virtual environment for
++    executable = interpreter.executable
++    try:
++        ensurepip_path = check_output((executable, "-u", "-c", 'import ensurepip; print(ensurepip.__path__[0])'), universal_newlines=True)
++        ensurepip_path = Path(ensurepip_path.strip()) / "_bundled"
++    except CalledProcessError:
++        pass
++    else:
++        if ensurepip_path.is_dir():
++            yield ensurepip_path
++
++    # Standard wheels path
++    wheels_dir = Path("/usr/share/python-wheels")
++    if wheels_dir.exists():
++        yield wheels_dir
+-- 
+2.53.0
+

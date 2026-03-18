@@ -1,0 +1,32 @@
+summary: PCS gating test plan
+description: Runs upstream tier0, tier1 and smoke tests
+
+discover:
+    dist-git-source: true
+    dist-git-install-builddeps: true
+    how: shell
+    tests:
+        - name: tier0
+          test: |
+              ./prepare-tests.sh
+              $TMT_SOURCE_DIR/pcs-*/pcs_test/suite --tier0 -v --vanilla --installed
+          duration: 10m
+          tier: 0
+          tag: fast
+        - name: tier1
+          test: |
+              ./prepare-tests.sh
+              $TMT_SOURCE_DIR/pcs-*/pcs_test/suite --tier1 -v --vanilla --installed
+          duration: 2h
+          tier: 1
+        - name: smoke
+          test: |
+              systemctl start pcsd
+              ./prepare-tests.sh
+              $TMT_SOURCE_DIR/pcs-*/pcs_test/smoke.sh
+          duration: 10m
+          tier: smoke
+          tag: fast
+
+execute:
+    how: tmt

@@ -1,0 +1,24 @@
+From dc6770ba4b79db91543d27bd20fc3f00de1101c8 Mon Sep 17 00:00:00 2001
+From: Akira TAGOH <akira@tagoh.org>
+Date: Thu, 19 Jul 2018 09:12:53 +0000
+Subject: [PATCH] clean up
+
+---
+ fontstweak/ui/fonts-tweak-config.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/fontstweak/ui/fonts-tweak-config.py b/fontstweak/ui/fonts-tweak-config.py
+index 4888c7f..473b74d 100644
+--- a/fontstweak/ui/fonts-tweak-config.py
++++ b/fontstweak/ui/fonts-tweak-config.py
+@@ -26,7 +26,6 @@ from distutils.version import LooseVersion
+ from gi.repository import Gtk
+ from gi.repository import Pango
+ from gi.repository import Easyfc
+-from xdg import BaseDirectory
+ try:
+     from tweaks import FontsTweak
+ except ImportError:
+-- 
+2.18.0.rc2
+

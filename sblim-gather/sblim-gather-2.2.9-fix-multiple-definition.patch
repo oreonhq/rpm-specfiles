@@ -1,0 +1,38 @@
+diff -up sblim-gather-2.2.9/plugin/metricVirt.c.orig sblim-gather-2.2.9/plugin/metricVirt.c
+--- sblim-gather-2.2.9/plugin/metricVirt.c.orig	2024-08-06 09:18:19.947955210 +0200
++++ sblim-gather-2.2.9/plugin/metricVirt.c	2024-08-06 09:17:47.268904950 +0200
+@@ -47,6 +47,9 @@ static int err_fn_set = 0;
+ 
+ static time_t last_time_sampled;
+ 
++struct node_statistics_type node_statistics;
++struct domain_statistics_type domain_statistics;
++
+ static void logHypervisorErrors(void *userData, virErrorPtr err)
+ {
+     m_log(M_INFO, M_SHOW, "libvirt error: %s\n", err->message);
+diff -up sblim-gather-2.2.9/plugin/metricVirt.h.orig sblim-gather-2.2.9/plugin/metricVirt.h
+--- sblim-gather-2.2.9/plugin/metricVirt.h.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metricVirt.h	2024-08-06 09:15:39.207706860 +0200
+@@ -48,7 +48,9 @@ struct node_statistics_type {
+ 	size_t total_domains;
+ 	unsigned long long total_memory;
+ 	unsigned long long free_memory;
+-} node_statistics;
++};
++
++extern struct node_statistics_type node_statistics;
+ 
+ struct domain_statistics_type {
+ 	unsigned int domain_id[MAX_DOMAINS];
+@@ -61,7 +63,9 @@ struct domain_statistics_type {
+ 	unsigned long long cpu_used[MAX_DOMAINS];
+ 	unsigned long long cpu_ready[MAX_DOMAINS];
+ 	struct vdisk_type * blkio[MAX_DOMAINS];
+-} domain_statistics;
++};
++
++extern struct domain_statistics_type domain_statistics;
+ 
+ int testHypervisor(int type);
+ 

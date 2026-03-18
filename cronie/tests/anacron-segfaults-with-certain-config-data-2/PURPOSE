@@ -1,0 +1,3 @@
+PURPOSE of /CoreOS/cronie/Regression/anacron-segfaults-with-certain-config-data-2
+Description: try some invalid configs for anacron to check config parser
+Author: Jakub Prokes <jprokes@redhat.com>

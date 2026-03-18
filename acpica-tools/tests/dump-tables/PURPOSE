@@ -1,0 +1,13 @@
+Uses the utilities in acpica-tools to dump the ACPI tables on a system and upload to Beaker. 
+ The task will do the following:
+   - Capture the acpi tables currently in use by the running kernel in binary format (acpidump-acpica -b)
+   - Capture namespace information from the DSDT (acpinames dsdt.dat)
+   - Capture the acpi tables currently in use by the running kernel hexidecmal encoded (acpidump-acpica -o somefile.hex)
+   - Decompile the table files from the binary tables and store the resulting source code (iasl -d on each .dat file)
+   - Archive all of the above and send to Beaker. 
+    
+Paramaters:
+ACPIDUMP_BIN - Set to path/to/alternate-acpidump-binary to use a different acpidump tool from what acpica-tools provides,
+ set to "_sys_firmware" to bypass use of acpidump completely and dump from /sys/firmware/acpi/tables/ instead
+
+note: using the acpidump binary is not supported on all platforms 

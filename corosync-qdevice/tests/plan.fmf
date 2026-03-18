@@ -1,0 +1,11 @@
+summary: Run all smoke tests
+discover:
+    how: fmf
+execute:
+    how: tmt
+prepare:
+    how: install
+    package:
+        - iproute
+        - corosync-qdevice
+        - corosync-qnetd

@@ -1,0 +1,16 @@
+diff --git a/src/tls/tls_misc.c b/src/tls/tls_misc.c
+index d4cbe2b..8245a5e 100644
+--- a/src/tls/tls_misc.c
++++ b/src/tls/tls_misc.c
+@@ -1493,11 +1493,6 @@ void    tls_check_version(void)
+ 	    || lib_info.minor != hdr_info.minor
+ 	    || lib_info.micro != hdr_info.micro;
+     }
+-    if (warn_compat)
+-	msg_warn("run-time library vs. compile-time header version mismatch: "
+-	     "OpenSSL %d.%d.%d may not be compatible with OpenSSL %d.%d.%d",
+-		 lib_info.major, lib_info.minor, lib_info.micro,
+-		 hdr_info.major, hdr_info.minor, hdr_info.micro);
+ }
+ 
+ /* tls_compile_version - compile-time OpenSSL version */

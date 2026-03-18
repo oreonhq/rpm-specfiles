@@ -1,0 +1,17 @@
+diff --git a/defaults.h b/defaults.h
+index 4385cc6..c3f28a7 100644
+--- a/defaults.h
++++ b/defaults.h
+@@ -24,10 +24,10 @@
+ 
+ typedef enum
+ {
+-    NOPRINTER = 0xff,
+     HP7X0 = 0,
+     HP820,
+-    HP1000
++    HP1000,
++    NOPRINTER
+ }
+ printerModel_t;
+ 

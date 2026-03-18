@@ -1,0 +1,23 @@
+diff --git a/doc/Makefile b/doc/Makefile
+index 135bfb4..efe5f22 100644
+--- a/doc/Makefile
++++ b/doc/Makefile
+@@ -3,7 +3,7 @@
+ 
+ # You can set these variables from the command line.
+ SPHINXOPTS    =
+-SPHINXBUILD   = sphinx-build
++SPHINXBUILD   = sphinx-build-3
+ PAPER         = a4
+ BUILDDIR      = _build
+ 
+diff --git a/doc/generate_usage_includes.py b/doc/generate_usage_includes.py
+index 257ba51..0182116 100755
+--- a/doc/generate_usage_includes.py
++++ b/doc/generate_usage_includes.py
+@@ -1,4 +1,4 @@
+-#!/usr/bin/env python
++#!/usr/bin/env python3
+ 
+ import re
+ import sys, os

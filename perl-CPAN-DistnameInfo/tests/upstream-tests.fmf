@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-CPAN-DistnameInfo
+require: perl-CPAN-DistnameInfo-tests
+test: /usr/libexec/perl-CPAN-DistnameInfo/test

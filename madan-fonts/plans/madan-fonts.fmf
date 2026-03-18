@@ -1,0 +1,15 @@
+summary: Fonts related tests
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/fonts
+prepare:
+    name: tmt
+    how: install
+    package: madan-fonts
+execute:
+    how: tmt
+environment:
+    PACKAGE: madan-fonts
+    FONT_ALIAS: Madan2
+    FONT_FAMILY: Madan
+    FONT_LANG: ne

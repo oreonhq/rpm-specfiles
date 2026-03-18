@@ -1,0 +1,15 @@
+diff -up yasm-9defefae9fbcb6958cddbfa778c1ea8605da8b8b/libyasm/bitvect.h.gcc15 yasm-9defefae9fbcb6958cddbfa778c1ea8605da8b8b/libyasm/bitvect.h
+--- yasm-9defefae9fbcb6958cddbfa778c1ea8605da8b8b/libyasm/bitvect.h.gcc15	2023-09-22 07:21:20.000000000 +0200
++++ yasm-9defefae9fbcb6958cddbfa778c1ea8605da8b8b/libyasm/bitvect.h	2025-02-15 22:14:50.029332956 +0100
+@@ -83,7 +83,11 @@ typedef  Z_longword         *Z_longwordp
+     #ifdef MACOS_TRADITIONAL
+         #define boolean Boolean
+     #else
++        #if __STDC_VERSION__ < 202311L
+         typedef enum boolean { false = FALSE, true = TRUE } boolean;
++        #else
++             typedef bool boolean;
++        #endif
+     #endif
+ #endif
+ 

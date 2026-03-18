@@ -1,0 +1,9 @@
+/test:
+ summary:
+  Basic set of quick tests for pyodbc.
+ discover:
+  how: fmf
+  filter: "tier: 1"
+  repository: "https://github.com/devexp-db/pyodbc-tests.git"
+ execute:
+  how: tmt

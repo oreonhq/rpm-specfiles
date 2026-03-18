@@ -1,0 +1,25 @@
+From 3333e26db4405a4606e2223f74c5b23d9b473c1a Mon Sep 17 00:00:00 2001
+From: Mikolaj Izdebski <mizdebsk@redhat.com>
+Date: Mon, 30 Jun 2025 07:46:58 +0200
+Subject: [PATCH 1/2] Disable verbose debug output by default
+
+Resolves: rhbz#2375157
+---
+ src/main/rpm/macros.xmvngen | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main/rpm/macros.xmvngen b/src/main/rpm/macros.xmvngen
+index 5623fb2..b29156e 100644
+--- a/src/main/rpm/macros.xmvngen
++++ b/src/main/rpm/macros.xmvngen
+@@ -1,6 +1,6 @@
+ # Debug enable flag.
+ # Setting this to non-empty value enables debugging output.
+-%__xmvngen_debug 1
++%__xmvngen_debug %nil
+ 
+ # Path to JVM library (libjvm.so).  Java 21 or newer is required.
+ %__xmvngen_libjvm %{_jvmdir}/jre-21-openjdk/lib/server/libjvm.so
+-- 
+2.49.0
+

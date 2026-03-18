@@ -1,0 +1,87 @@
+From 105c0f43399d75645be59b3c6be68b57a711d84a Mon Sep 17 00:00:00 2001
+From: Michal Schmidt <mschmidt@redhat.com>
+Date: Mon, 20 Feb 2017 12:00:39 +0100
+Subject: [PATCH] Allocate OpenSSL cipher contexts for seal/unseal
+
+Cipher contexts need to be allocated before using EVP_EncryptInit or
+EVP_DecryptInit. Using a NULL context is invalid.
+
+Fixes: f50ab0949438 ("Support OpenSSL 1.1.0")
+---
+ lib/tpm_unseal.c        | 11 ++++++++++-
+ src/cmds/tpm_sealdata.c | 10 +++++++++-
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/lib/tpm_unseal.c b/lib/tpm_unseal.c
+index 4aadf21ec1bb..88f21cf40b72 100644
+--- a/lib/tpm_unseal.c
++++ b/lib/tpm_unseal.c
+@@ -87,6 +87,7 @@ int tpmUnsealFile( char* fname, unsigned char** tss_data, int* tss_size,
+ 	unsigned char* res_data = NULL;
+ 	int res_size = 0;
+ 
++	EVP_CIPHER_CTX *ctx = NULL;
+ 	BIO *bdata = NULL, *b64 = NULL, *bmem = NULL;
+ 	int bioRc;
+ 
+@@ -408,7 +409,12 @@ int tpmUnsealFile( char* fname, unsigned char** tss_data, int* tss_size,
+ 	}
+ 
+ 	/* Decode and decrypt the encrypted data */
+-	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
++	ctx = EVP_CIPHER_CTX_new();
++	if ( ctx == NULL ) {
++		rc = TPMSEAL_STD_ERROR;
++		tpm_errno = ENOMEM;
++		goto tss_out;
++	}
+ 	EVP_DecryptInit(ctx, EVP_aes_256_cbc(), symKey, (unsigned char *)TPMSEAL_IV);
+ 
+ 	/* Create a base64 BIO to decode the encrypted data */
+@@ -459,6 +465,9 @@ out:
+ 	} else
+ 		free(res_data);
+ 
++	if (ctx)
++		EVP_CIPHER_CTX_free(ctx);
++
+ 	return rc;
+ }
+ 
+diff --git a/src/cmds/tpm_sealdata.c b/src/cmds/tpm_sealdata.c
+index 88f63ca0ef89..cd5c49a37f64 100644
+--- a/src/cmds/tpm_sealdata.c
++++ b/src/cmds/tpm_sealdata.c
+@@ -119,6 +119,7 @@ int main(int argc, char **argv)
+ 	int pswd_len;
+ 	BYTE wellKnown[TCPA_SHA1_160_HASH_LEN] = TSS_WELL_KNOWN_SECRET;
+ 
++	EVP_CIPHER_CTX *ctx = NULL;
+ 	BIO *bin = NULL, *bdata=NULL, *b64=NULL;
+ 
+ 	initIntlSys();
+@@ -343,7 +344,11 @@ int main(int argc, char **argv)
+ 	BIO_puts(bdata, TPMSEAL_ENC_STRING); 
+ 	bdata = BIO_push(b64, bdata);
+ 
+-	EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
++	ctx = EVP_CIPHER_CTX_new();
++	if (ctx == NULL) {
++		logError(_("Unable to allocate cipher context\n"));
++		goto out_close;
++	}
+ 	EVP_EncryptInit(ctx, EVP_aes_256_cbc(), randKey, (unsigned char *)TPMSEAL_IV);
+ 
+ 	while ((lineLen = BIO_read(bin, line, sizeof(line))) > 0) {
+@@ -375,5 +380,8 @@ out:
+ 		BIO_free(bdata);
+ 	if (b64)
+ 		BIO_free(b64);
++	if (ctx)
++		EVP_CIPHER_CTX_free(ctx);
++
+ 	return iRc;
+ }
+-- 
+2.27.0
+

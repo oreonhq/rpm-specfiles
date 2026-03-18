@@ -1,0 +1,22 @@
+summary: stratisd unit tests
+
+prepare:
+  - name: Install packages
+    how: install
+    package:
+     - stratisd
+     - stratisd-tools
+     - util-linux
+     - python3-psutil
+     - python3-dbus
+
+discover:
+  how: shell
+  url: https://github.com/stratis-storage/testing.git
+  ref: v3.8.1
+  tests:
+    - name: unit
+      test: python3 stratisd_cert.py -v
+
+execute:
+  how: tmt

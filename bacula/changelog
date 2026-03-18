@@ -1,0 +1,138 @@
+* Wed Jun 25 2025 Simone Caronni <negativo17@gmail.com> - 15.0.2-6
+- Bacula is no longer in EL and no longer has an ELN branch, re-enable QT
+  support unconditionally.
+
+* Tue Feb 11 2025 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 15.0.2-5
+- Add sysusers.d config file to allow rpm to create users/groups automatically
+
+* Sat Feb 01 2025 Björn Esser <besser82@fedoraproject.org> - 15.0.2-4
+- Add explicit BR: libxcrypt-devel
+
+* Thu Jan 16 2025 Fedora Release Engineering <releng@fedoraproject.org> - 15.0.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Wed Jul 17 2024 Fedora Release Engineering <releng@fedoraproject.org> - 15.0.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Sun Jun 02 2024 Simone Caronni <negativo17@gmail.com> - 15.0.2-1
+- Update to 15.0.2.
+- Drop EL7 support.
+- Enable antivirus plugin for File Daemon.
+- Enable AWS and aligned driver for Storage Daemon
+- Enable TOTP support for Director.
+- Add ZSTD support.
+
+* Thu Feb 15 2024 Simone Caronni <negativo17@gmail.com> - 13.0.4-4
+- Adjust QT conditional.
+
+* Wed Feb 14 2024 Simone Caronni <negativo17@gmail.com> - 13.0.4-3
+- Adjust build requirements and conditions to build on all supported EL/Fedora
+  releases.
+
+* Wed Feb 14 2024 Simone Caronni <negativo17@gmail.com> - 13.0.4-2
+- Enable S3 support.
+
+* Wed Feb 14 2024 Simone Caronni <negativo17@gmail.com> - 13.0.4-1
+- Update to 13.0.4.
+
+* Tue Jan 23 2024 Fedora Release Engineering <releng@fedoraproject.org> - 13.0.3-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Fri Jan 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 13.0.3-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Wed Aug 16 2023 Yaakov Selkowitz <yselkowi@redhat.com> - 13.0.3-3
+- Disable Qt components in RHEL builds
+
+* Wed Jul 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 13.0.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Thu May 04 2023 Simone Caronni <negativo17@gmail.com> - 13.0.3-1
+- Update to 13.0.3.
+- Trim changelog.
+
+* Wed Mar 29 2023 Simone Caronni <negativo17@gmail.com> - 13.0.2-1
+- Update to 13.0.2.
+
+* Wed Jan 18 2023 Fedora Release Engineering <releng@fedoraproject.org> - 13.0.1-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Mon Dec 19 2022 Florian Weimer <fweimer@redhat.com> - 13.0.1-5
+- Port configure script to C99
+
+* Tue Nov 29 2022 Simone Caronni <negativo17@gmail.com> - 13.0.1-4
+- Fix isworm script.
+
+* Tue Nov 29 2022 Simone Caronni <negativo17@gmail.com> - 13.0.1-3
+- Require sdparm in storage subpackage. It's required for WORM tapes.
+
+* Mon Nov 21 2022 Simone Caronni <negativo17@gmail.com> - 13.0.1-2
+- Add separate firewall rules for storage/director only.
+
+* Fri Aug 19 2022 Simone Caronni <negativo17@gmail.com> - 13.0.1-1
+- Update to 13.0.1.
+
+* Wed Jul 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 13.0.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Fri Jul 08 2022 Simone Caronni <negativo17@gmail.com> - 13.0.0-1
+- Update to version 13.0.0.
+- Enable LDAP integration.
+
+* Sat Mar 26 2022 Simone Caronni <negativo17@gmail.com> - 11.0.6-2
+- Update/reorganize patches.
+
+* Fri Mar 25 2022 Simone Caronni <negativo17@gmail.com> - 11.0.6-1
+- Update to 11.0.6.
+
+* Wed Jan 19 2022 Fedora Release Engineering <releng@fedoraproject.org> - 11.0.5-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 11.0.5-3
+- Rebuilt with OpenSSL 3.0.0
+
+* Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 11.0.5-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Thu Jun 03 2021 Simone Caronni <negativo17@gmail.com> - 11.0.5-1
+- Update to 11.0.5.
+
+* Mon May 31 2021 Simone Caronni <negativo17@gmail.com> - 11.0.3-1
+- Update to 11.0.3.
+
+* Fri Apr 16 2021 Simone Caronni <negativo17@gmail.com> - 11.0.2-3
+- All scripts require sh, so use that also for the backup report.
+
+* Fri Apr 16 2021 Simone Caronni <negativo17@gmail.com> - 11.0.2-2
+- Remove dash build requirement.
+
+* Fri Apr 16 2021 Simone Caronni <negativo17@gmail.com> - 11.0.2-1
+- Update to 11.0.2.
+
+* Tue Mar 02 2021 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 11.0.1-2
+- Rebuilt for updated systemd-rpm-macros
+  See https://pagure.io/fesco/issue/2583.
+
+* Thu Feb 11 2021 Simone Caronni <negativo17@gmail.com> - 11.0.1-1
+- Update to 11.0.1.
+
+* Mon Feb 08 2021 Pavel Raiskup <praiskup@redhat.com> - 11.0.0-5
+- rebuild for libpq ABI fix rhbz#1908268
+
+* Thu Jan 28 2021 Simone Caronni <negativo17@gmail.com> - 11.0.0-4
+- Remove leftover ImageMagick build requirement.
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 11.0.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Fri Jan 15 2021 Simone Caronni <negativo17@gmail.com> - 11.0.0-2
+- Build CDP plugin components.
+
+* Tue Jan 12 2021 Simone Caronni <negativo17@gmail.com> - 11.0.0-1
+- Update to 11.0.0.
+- Enable Docker plugin.
+
+* Tue Jan 12 2021 Simone Caronni <negativo17@gmail.com> - 9.6.7-1
+- Update to 9.6.7.
+- Drop support for building on CentOS/RHEL 6 and upgrades from version 2.4.
+- Trim changelog.

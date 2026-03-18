@@ -1,0 +1,41 @@
+From d006495e2f95969522e60c6ea83ff226f098d413 Mon Sep 17 00:00:00 2001
+From: "Richard W.M. Jones" <rjones@redhat.com>
+Date: Sat, 24 Mar 2018 08:50:07 +0000
+Subject: [PATCH] New location of major() and minor() macros for glibc 2.27.
+
+glibc 2.27 moves the major() and minor() macros to the
+<sys/sysmacros.h> header file.
+
+Signed-off-by: Richard W.M. Jones <rjones@redhat.com>
+---
+ dlm_controld/dlm_daemon.h | 1 +
+ libdlm/libdlm.c           | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/dlm_controld/dlm_daemon.h b/dlm_controld/dlm_daemon.h
+index 6cb0f11c..731818c5 100644
+--- a/dlm_controld/dlm_daemon.h
++++ b/dlm_controld/dlm_daemon.h
+@@ -40,6 +40,7 @@
+ #include <sched.h>
+ #include <signal.h>
+ #include <dirent.h>
++#include <sys/sysmacros.h>
+ 
+ #include <corosync/cpg.h>
+ 
+diff --git a/libdlm/libdlm.c b/libdlm/libdlm.c
+index a9e61955..ebfba457 100644
+--- a/libdlm/libdlm.c
++++ b/libdlm/libdlm.c
+@@ -24,6 +24,7 @@
+ #include <stdio.h>
+ #include <dirent.h>
+ #include <linux/major.h>
++#include <sys/sysmacros.h>
+ #ifdef HAVE_SELINUX
+ #include <selinux/selinux.h>
+ #endif
+-- 
+2.15.1
+

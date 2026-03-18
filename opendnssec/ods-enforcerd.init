@@ -1,0 +1,106 @@
+#!/bin/bash
+#
+# ods-enforcerd:         Starts the OpenDNSSEC Enforcer Daemon
+#
+# chkconfig: - 13 87
+# description:  ods-enforcerd is the OpenDNSSEC DNSSEC policy enforcer daemon
+# processname: /usr/sbin/ods-enforcerd
+# config: /etc/opendnssec/conf.xml
+#
+### BEGIN INIT INFO
+# Provides: ods-enforcerd
+# Required-Start: $local_fs $network $syslog
+# Required-Stop: $local_fs $network $syslog
+# Default-Stop: 0 11 89
+# Short-Description: start|stop|status|restart|try-restart| OpenDNSSEC Enforcer Daemon
+# Description: control OpenDNSSEC enforcer daemon
+### END INIT INFO
+
+# Init script default settings
+ODS_ENFORCERD_CONF="/etc/opendnssec/conf.xml"
+ODS_ENFORCERD_OPT=""
+ODS_ENFORCERD_PROG="/usr/sbin/ods-enforcerd"
+ODS_ENFORCERD_PIDFILE="/var/run/opendnssec/enforcerd.pid"
+PIDDIR="/var/run/opendnssec"
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+[ -r /etc/sysconfig/ods ] && . /etc/sysconfig/ods
+
+# Check that networking is configured.
+[ "${NETWORKING}" = "no" ] && exit 0
+
+start() {
+  # Source networking configuration.
+  [ -r /etc/sysconfig/network ] && . /etc/sysconfig/network
+
+  # Check that networking is up
+  [ "${NETWORKING}" = "no" ] && exit 1
+
+  # Sanity checks.
+  [ -f $ODS_ENFORCERD_CONF ] || exit 5
+  [ -x $ODS_ENFORCERD_PROG ] || exit 5
+  # /var/run could (and should) be tmpfs
+  [ -d $PIDDIR ] || mkdir -p $PIDDIR
+
+  echo -n $"Starting ods-enforcerd:"
+  $ODS_ENFORCERD_PROG -c $ODS_ENFORCERD_CONF $ODS_ENFORCERD_OPT
+  RETVAL=$?
+        if [ $RETVAL -eq 0 ]; then
+           touch /var/lock/subsys/ods-enforcerd;
+           success
+           echo
+        else
+           failure
+           echo
+           exit 7;
+        fi
+  return 0;
+}
+
+stop() {
+  echo -n $"Stopping ods-enforcerd: "
+    killproc -p $ODS_ENFORCERD_PIDFILE $ODS_ENFORCERD_PROG
+    retval=$?
+    if [ $retval -eq 0 ] ; then
+       rm -f $ODS_ENFORCERD_PIDFILE
+       rm -f /var/lock/subsys/ods-enforcerd
+       success
+    else
+       failure
+    fi
+    echo
+    return $retval
+}
+
+restart() {
+	stop
+	start
+}
+
+RETVAL=0
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart)
+	restart
+	;;
+  condrestart)
+        [ -f /var/lock/subsys/ods-enforcerd ] && restart || :
+	;;
+  status)
+	status -p $ODS_ENFORCERD_PIDFILE $ODS_ENFORCERD_PROG
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|status|restart|condrestart}"
+	exit 1
+esac
+
+exit $?

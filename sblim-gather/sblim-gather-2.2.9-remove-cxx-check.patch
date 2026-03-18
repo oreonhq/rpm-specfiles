@@ -1,0 +1,9 @@
+diff -up sblim-gather-2.2.9/missing-providers/CMakeLists.txt.orig sblim-gather-2.2.9/missing-providers/CMakeLists.txt
+--- sblim-gather-2.2.9/missing-providers/CMakeLists.txt.orig	2013-02-27 12:38:07.000000000 +0100
++++ sblim-gather-2.2.9/missing-providers/CMakeLists.txt	2018-02-26 10:47:07.892292626 +0100
+@@ -1,3 +1,5 @@
++PROJECT(PROVIDERS C)
++
+ cmake_minimum_required(VERSION 2.6)
+ 
+ # Set flags and definitions

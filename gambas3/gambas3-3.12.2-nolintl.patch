@@ -1,0 +1,14 @@
+diff -up gambas-3.12.2/main/configure.ac.nolintl gambas-3.12.2/main/configure.ac
+--- gambas-3.12.2/main/configure.ac.nolintl	2019-04-10 15:30:40.539833126 -0400
++++ gambas-3.12.2/main/configure.ac	2019-04-10 16:30:10.754877419 -0400
+@@ -19,8 +19,8 @@ dnl ---- Check for internationalization
+ GB_COMPONENT(
+   intl, INTL, libintl, [],
+   [GB_FIND(libintl.h, /opt/local /usr/local /usr, include)],
+-  [GB_FIND(libintl.$SHLIBEXT, /opt/local /usr/local /usr /, lib)],
+-  [-lintl],
++  [],
++  [],
+   [],
+   [Cannot find 'libintl' library. It may be located inside the system C library, so you can ignore that warning...])
+ 

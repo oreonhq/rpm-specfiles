@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-File-ReadBackwards
+require: perl-File-ReadBackwards-tests
+test: /usr/libexec/perl-File-ReadBackwards/test

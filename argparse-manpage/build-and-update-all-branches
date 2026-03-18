@@ -1,0 +1,31 @@
+#! /bin/sh
+
+# Prepare master branch, review the list of branches below and then execute this
+# script.
+
+main=main
+branches="$main epel8 epel9 epel10 epel10.0 f41 f42 f43"
+
+exit_handler ()
+{
+    git checkout "$main"
+}
+
+trap exit_handler EXIT
+
+set -e
+set -x
+
+koji hello
+
+tasks=
+for branch in $branches; do
+    if test $branch != "$main"; then
+        git checkout "$branch"
+        git merge "$main"
+    fi
+    git push
+    tasks="${tasks}`fedpkg build --nowait | grep 'Created task' | cut -d: -f2`"
+done
+
+koji watch-task $tasks

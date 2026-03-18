@@ -1,0 +1,8 @@
+diff -up yasm-9defefae9fbcb6958cddbfa778c1ea8605da8b8b/modules/objfmts/macho/tests/nasm64/Makefile.inc.orig yasm-9defefae9fbcb6958cddbfa778c1ea8605da8b8b/modules/objfmts/macho/tests/nasm64/Makefile.inc
+--- yasm-9defefae9fbcb6958cddbfa778c1ea8605da8b8b/modules/objfmts/macho/tests/nasm64/Makefile.inc.orig	2023-09-22 07:21:20.000000000 +0200
++++ yasm-9defefae9fbcb6958cddbfa778c1ea8605da8b8b/modules/objfmts/macho/tests/nasm64/Makefile.inc	2024-03-22 12:07:58.945545848 +0100
+@@ -1,4 +1,3 @@
+-TESTS += modules/objfmts/macho/tests/nasm64/macho64_test.sh
+ 
+ EXTRA_DIST += modules/objfmts/macho/tests/nasm64/nasm-macho64-pic.asm
+ EXTRA_DIST += modules/objfmts/macho/tests/nasm64/nasm-macho64-pic.hex

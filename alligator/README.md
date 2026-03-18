@@ -1,0 +1,3 @@
+# alligator
+
+The alligator package

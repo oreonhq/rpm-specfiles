@@ -1,0 +1,41 @@
+#!/bin/sh
+set -o errexit
+set -o nounset
+
+URL='https://standards-oui.ieee.org/oui/oui.csv'
+DATA='oui.csv'
+SPEC='arpwatch.spec'
+
+cd "$(dirname "$0")"
+
+echo "==> Fetching ${URL}..." 1>&2
+newfile="$(mktemp out.csv.XXXXXXXXXX)"
+# shellcheck disable=SC2064
+trap "rm -f '${newfile}'" INT TERM EXIT
+chmod 0644 "${newfile}"
+curl --output "${newfile}" "${URL}"
+
+echo '==> Comparing data...' 1>&2
+newhash="$(sha256sum < "${newfile}")"
+oldhash="$(sha256sum < "${DATA}")"
+if [ "${newhash}" = "${oldhash}" ]
+then
+  echo '==> Local file is up to date' 1>&2
+  exit 0
+fi
+
+env TZ=UTC stat --format='Old file %s bytes, modified %y' "${DATA}"
+env TZ=UTC stat --format='New file %s bytes, modified %y' "${newfile}"
+mv "${newfile}" "${DATA}"
+
+ISOMTIME="$(
+  env TZ=UTC date --iso-8601=seconds --date="$(stat --format='@%Y' "${DATA}")"
+)"
+sed -r -i 's/(oui\.csv last fetched )[^[:blank:]]+\./\1'"${ISOMTIME}./" "${SPEC}"
+
+echo "==> Updated ${DATA}" 1>&2
+
+git add "${DATA}"
+fedpkg commit -m 'Generate ethercodes.dat from latest oui.csv'
+
+# vim: set tw=78 ts=2 sw=2 sts=2 et ai cin nojs :

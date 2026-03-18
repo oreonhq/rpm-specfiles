@@ -1,0 +1,7 @@
+summary: jakarta-activation smoke test
+description: |
+  Test basic functionality of jakarta-activation.
+require:
+  - jakarta-activation
+  - java-21-openjdk-devel
+  - xmvn-tools

@@ -1,0 +1,62 @@
+# Perform optional tests
+%bcond_without perl_Term_Size_Any_enabels_optional_test
+
+Name:           perl-Term-Size-Any
+Version:        0.002
+Release:        46%{?dist}
+Summary:        Retrieve terminal size
+License:        GPL-1.0-or-later OR Artistic-1.0-Perl
+URL:            https://metacpan.org/release/Term-Size-Any
+Source0:        https://cpan.metacpan.org/authors/id/F/FE/FERREIRA/Term-Size-Any-%{version}.tar.gz
+BuildArch:      noarch
+BuildRequires:  make
+BuildRequires:  perl-generators
+BuildRequires:  perl-interpreter
+BuildRequires:  perl(:VERSION) >= 5.6
+BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
+BuildRequires:  perl(strict)
+BuildRequires:  perl(warnings)
+# Run-time:
+BuildRequires:  perl(Term::Size::Perl)
+# Term::Size::Win32 not used on Linux
+BuildRequires:  perl(vars)
+# Tests:
+BuildRequires:  perl(Module::Load::Conditional)
+BuildRequires:  perl(Test::More)
+%if %{with perl_Term_Size_Any_enabels_optional_test}
+# Optional tests:
+BuildRequires:  perl(Test::Pod) >= 1.18
+BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
+%endif
+Requires:       perl(Term::Size::Perl)
+
+%{?perl_default_filter}
+
+%description
+This is a unified interface to retrieve terminal size. It loads one module
+of a list of known alternatives, each implementing some way to get the
+desired terminal information. This loaded module will actually do the job
+on behalf of Term::Size::Any.
+
+%prep
+%setup -q -n Term-Size-Any-%{version}
+
+%build
+perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
+%{make_build}
+
+%install
+%{make_install}
+%{_fixperms} $RPM_BUILD_ROOT/*
+
+%check
+make test
+
+%files
+%doc Changes README
+%{perl_vendorlib}/*
+%{_mandir}/man3/*
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.002-46
+- Prepare for Oreon 11 (RP1)

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Module-Pluggable
+require: perl-Module-Pluggable-tests
+test: /usr/libexec/perl-Module-Pluggable/test

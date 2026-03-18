@@ -1,0 +1,19 @@
+summary: Basic smoke test
+discover:
+  how: fmf
+  url: https://gitlab.com/redhat/centos-stream/tests/mariadb-java-client.git
+
+execute:
+  how: tmt
+
+/mariadb-10.11:
+  prepare:
+    how: install
+    package:
+      - mariadb10.11-server
+
+/mariadb-11.8:
+  prepare:
+    how: install
+    package:
+      - mariadb11.8-server

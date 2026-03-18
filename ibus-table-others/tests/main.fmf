@@ -1,0 +1,14 @@
+test: ./runtest.sh
+framework: beakerlib
+duration: 10m
+require:
+  - ibus
+  - ibus-table
+  - ibus-table-others
+  - ibus-table-code
+  - ibus-table-cyrillic
+  - ibus-table-latin
+  - ibus-table-translit
+  - ibus-table-tv
+  - ibus-table-mathwriter
+  - ibus-table-mongol

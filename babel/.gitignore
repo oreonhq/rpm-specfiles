@@ -1,0 +1,10 @@
+/Babel-0.9.*.tar.gz
+/Babel-1.*.tar.gz
+/Babel-2.*.tar.gz
+/Babel-*/
+/results_babel
+/babel-upstream.git
+/babel-2.15.0.tar.gz
+/babel-2.16.0.tar.gz
+/babel-2.17.0.tar.gz
+/babel-2.18.0.tar.gz

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-generators
+require: perl-generators-tests
+test: /usr/libexec/perl-generators/test

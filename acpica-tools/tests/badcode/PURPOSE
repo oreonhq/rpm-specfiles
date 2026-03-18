@@ -1,0 +1,3 @@
+PURPOSE of tests/badcode
+Description: sanity check that iasl is handling bad ASL properly
+Author: Al Stone <ahs3@redhat.com>

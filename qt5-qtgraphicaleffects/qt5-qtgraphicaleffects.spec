@@ -1,0 +1,55 @@
+%global qt_module qtgraphicaleffects
+
+Summary: Qt5 - QtGraphicalEffects component
+Name:    qt5-%{qt_module}
+Version: 5.15.18
+Release: 2%{?dist}
+
+# See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively from qt5-qtbase for details
+License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
+Url:     http://www.qt.io
+%global majmin %(echo %{version} | cut -d. -f1-2)
+Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
+
+# filter qml provides
+%global __provides_exclude_from ^%{_qt5_archdatadir}/qml/.*\\.so$
+
+BuildRequires: make
+BuildRequires: qt5-qtbase-devel >= %{version}
+BuildRequires: qt5-qtbase-private-devel
+#libQt5Quick.so.5(Qt_5_PRIVATE_API)(64bit)
+%{?_qt5:Requires: %{_qt5}%{?_isa} = %{_qt5_version}}
+BuildRequires: qt5-qtdeclarative-devel
+
+BuildRequires: libmng-devel
+BuildRequires: libtiff-devel
+
+%description
+The Qt Graphical Effects module provides a set of QML types for adding
+visually impressive and configurable effects to user interfaces. Effects
+are visual items that can be added to Qt Quick user interface as UI
+components.
+
+
+%prep
+%setup -q -n %{qt_module}-everywhere-src-%{version}
+
+
+%build
+%{qmake_qt5}
+
+%make_build
+
+
+%install
+make install INSTALL_ROOT=%{buildroot}
+
+
+%files
+%license LICENSE.*
+%{_qt5_qmldir}/QtGraphicalEffects/
+
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
+- Prepare for Oreon 11 (RP1)

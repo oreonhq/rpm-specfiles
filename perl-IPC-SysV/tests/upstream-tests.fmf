@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-IPC-SysV
+require: perl-IPC-SysV-tests
+test: /usr/libexec/perl-IPC-SysV/test

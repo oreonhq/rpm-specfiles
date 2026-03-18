@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Math-Int64
+require: perl-Math-Int64-tests
+test: /usr/libexec/perl-Math-Int64/test

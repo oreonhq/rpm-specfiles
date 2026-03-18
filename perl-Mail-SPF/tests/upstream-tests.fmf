@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Mail-SPF
+require: perl-Mail-SPF-tests
+test: /usr/libexec/perl-Mail-SPF/test

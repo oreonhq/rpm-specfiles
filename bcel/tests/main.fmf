@@ -1,0 +1,5 @@
+contact: Mikolaj Izdebski <mizdebsk@redhat.com>
+framework: beakerlib
+test: ./runtest.sh
+tier: 0
+component: bcel

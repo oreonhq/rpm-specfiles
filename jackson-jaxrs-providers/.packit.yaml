@@ -1,0 +1,20 @@
+---
+downstream_package_name: jackson-jaxrs-providers
+specfile_path: jackson-jaxrs-providers.spec
+upstream_package_name: jackson-jaxrs-providers
+upstream_project_url: https://github.com/FasterXML/jackson-jaxrs-providers
+upstream_tag_template: jackson-jaxrs-providers-{version}
+
+actions:
+  post-upstream-clone:
+    - "wget https://src.fedoraproject.org/rpms/jackson-jaxrs-providers/raw/main/f/jackson-jaxrs-providers.spec -O jackson-jaxrs-providers.spec"
+
+jobs:
+- job: pull_from_upstream
+  trigger: release
+  dist_git_branches:
+    - fedora-rawhide
+
+# We cannot do koji_build/bodhi_update jobs yet as we need to use
+# a side-tag and this is no supported yet. We can add them is this
+# issue gets resolved: https://github.com/packit/packit/issues/1870

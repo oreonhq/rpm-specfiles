@@ -1,0 +1,5 @@
+# %clean section is not superfluous, it's needed to clean up $GNUPGHOME
+addFilter("superfluous-%clean-section")
+
+# For small perl modules, this is not particularly unusual
+addFilter("package-with-huge-docs")

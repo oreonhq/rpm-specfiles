@@ -1,0 +1,63 @@
+From 9dd5e992b71b6a855fc419114344d4bd181bc08f Mon Sep 17 00:00:00 2001
+From: Maik Qualmann <metzpinguin@gmail.com>
+Date: Sun, 15 Mar 2026 20:23:21 +0100
+Subject: [PATCH] use the QImage Loader if JPEG2000 is available. Since
+ jas_init_library() and jas_cleanup_library() can only be called once in the
+ main thread, it is almost impossible to handle them if another Jasper Loader
+ is present in a library. BUGS: 517588 FIXED-IN: 9.1.0
+
+---
+ NEWS                                              |  2 +-
+ .../dplugins/dimg/jpeg2000/dimgjpeg2000plugin.cpp | 15 +++++++++++++--
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/core/dplugins/dimg/jpeg2000/dimgjpeg2000plugin.cpp b/core/dplugins/dimg/jpeg2000/dimgjpeg2000plugin.cpp
+index e1d56e9151..09616f1e2b 100644
+--- a/core/dplugins/dimg/jpeg2000/dimgjpeg2000plugin.cpp
++++ b/core/dplugins/dimg/jpeg2000/dimgjpeg2000plugin.cpp
+@@ -17,6 +17,7 @@
+ // Qt includes
+ 
+ #include <QFile>
++#include <QImageReader>
+ 
+ // KDE includes
+ 
+@@ -36,6 +37,13 @@ DImgJPEG2000Plugin::DImgJPEG2000Plugin(QObject* const parent)
+ 
+ #if defined JAS_VERSION_MAJOR && JAS_VERSION_MAJOR >= 3
+ 
++    const auto frms = QImageReader::supportedImageFormats();
++
++    if (frms.contains(QByteArray("jp2")))
++    {
++        return;
++    }
++
+     size_t max_mem = jas_get_total_mem_size();
+ 
+     if (max_mem)
+@@ -70,7 +78,10 @@ DImgJPEG2000Plugin::~DImgJPEG2000Plugin()
+ 
+ #if defined JAS_VERSION_MAJOR && JAS_VERSION_MAJOR >= 3
+ 
+-    jas_cleanup_library();
++    if (m_initJasper)
++    {
++        jas_cleanup_library();
++    }
+ 
+ #endif
+ 
+@@ -244,7 +255,7 @@ DImgLoader* DImgJPEG2000Plugin::loader(DImg* const image, const DRawDecoding&) c
+ 
+ DImgLoaderSettings* DImgJPEG2000Plugin::exportWidget(const QString& format) const
+ {
+-    if (canWrite(format))
++    if (canWrite(format) || !m_initJasper)
+     {
+         return (new DImgJPEG2000ExportSettings());
+     }
+-- 
+GitLab
+

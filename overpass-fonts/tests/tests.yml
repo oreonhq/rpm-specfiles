@@ -1,0 +1,21 @@
+- hosts: localhost
+  tags:
+  - classic
+  roles:
+  - role: custom-test-fonts
+    required_packages:
+    - overpass-fonts
+    - overpass-mono-fonts
+    path_prefix: /usr/share/fonts/overpass
+    coverage:
+     - en
+    families:
+    - lang: en
+      alias: sans-serif
+      family: Overpass
+      package: overpass-fonts
+    - lang: en
+      alias: monospace
+      family: Overpass Mono
+      package: overpass-mono-fonts
+

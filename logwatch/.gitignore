@@ -1,0 +1,10 @@
+/logwatch-*.tar.gz
+/logwatch-*.tar.xz
+/0README.txt
+/doprep.sh
+/dotest.sh
+/doall.sh
+/logwatch-*/
+*.rpm
+/.build-*.log
+/results_logwatch/

@@ -1,0 +1,24 @@
+---
+specfile_path: python-urwid.spec
+downstream_package_name: python-urwid
+upstream_project_url: https://github.com/urwid/urwid
+
+upstream_tag_exclude: '.+-docs'
+
+actions:
+  create-archive:
+  - "python3 setup.py sdist --dist-dir ."
+  - "ls -1 ./*.tar.gz"
+  get-current-version: "python3 setup.py --version"
+  changelog-entry: bash -c "echo '- New upstream release' ${PACKIT_PROJECT_VERSION}"
+
+jobs:
+- job: pull_from_upstream
+  trigger: release
+  dist_git_branches:
+  - fedora-rawhide
+- job: koji_build
+  trigger: commit
+  dist_git_branches:
+  - fedora-rawhide
+  allowed_committers: [packit, ttomecek]

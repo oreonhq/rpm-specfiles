@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="font">
+  <id>lklug</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Lklug</name>
+  <summary>Font for Sinhala language</summary>
+  <description>
+    <p>
+      This package provides the Lklug font for Sinhala made by the
+      by Yannis Haralambous and are in GPL. OTF tables are added by 
+      Anuradha Ratnaweera and Harshani Devadithya.
+    </p>
+  </description>
+  <updatecontact>psatpute_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://sinhala.sourceforge.net/</url>
+</component>

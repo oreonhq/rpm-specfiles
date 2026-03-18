@@ -1,0 +1,159 @@
+--- crash-5.1.7/gdb-7.0.patch.orig
++++ crash-5.1.7/gdb-7.0.patch
+@@ -1685,3 +1685,156 @@
+  	      add_symbol_to_list (sym, &global_symbols);
+  	    }
+  	  child_die = sibling_die (child_die);
++--- gdb-7.0/bfd/elf64-ppc.c.orig
+++++ gdb-7.0/bfd/elf64-ppc.c
++@@ -4764,7 +4764,7 @@ ppc64_elf_check_relocs (bfd *abfd, struc
++ {
++   struct ppc_link_hash_table *htab;
++   Elf_Internal_Shdr *symtab_hdr;
++-  struct elf_link_hash_entry **sym_hashes, **sym_hashes_end;
+++  struct elf_link_hash_entry **sym_hashes;
++   const Elf_Internal_Rela *rel;
++   const Elf_Internal_Rela *rel_end;
++   asection *sreloc;
++@@ -4793,10 +4793,6 @@ ppc64_elf_check_relocs (bfd *abfd, struc
++   symtab_hdr = &elf_symtab_hdr (abfd);
++ 
++   sym_hashes = elf_sym_hashes (abfd);
++-  sym_hashes_end = (sym_hashes
++-		    + symtab_hdr->sh_size / sizeof (Elf64_External_Sym)
++-		    - symtab_hdr->sh_info);
++-
++   sreloc = NULL;
++   opd_sym_map = NULL;
++   if (strcmp (bfd_get_section_name (abfd, sec), ".opd") == 0)
++@@ -5672,6 +5668,9 @@ ppc64_elf_gc_sweep_hook (bfd *abfd, stru
++   elf_section_data (sec)->local_dynrel = NULL;
++ 
++   htab = ppc_hash_table (info);
+++  if (htab == NULL)
+++    return FALSE;
+++
++   symtab_hdr = &elf_symtab_hdr (abfd);
++   sym_hashes = elf_sym_hashes (abfd);
++   local_got_ents = elf_local_got_ents (abfd);
++@@ -6790,7 +6789,6 @@ ppc64_elf_edit_opd (bfd *obfd, struct bf
++       Elf_Internal_Rela *relstart, *rel, *relend;
++       Elf_Internal_Shdr *symtab_hdr;
++       Elf_Internal_Sym *local_syms;
++-      struct elf_link_hash_entry **sym_hashes;
++       bfd_vma offset;
++       struct _opd_sec_data *opd;
++       bfd_boolean need_edit, add_aux_fields;
++@@ -6812,7 +6810,6 @@ ppc64_elf_edit_opd (bfd *obfd, struct bf
++ 
++       local_syms = NULL;
++       symtab_hdr = &elf_symtab_hdr (ibfd);
++-      sym_hashes = elf_sym_hashes (ibfd);
++ 
++       /* Read the relocations.  */
++       relstart = _bfd_elf_link_read_relocs (ibfd, sec, NULL, NULL,
++@@ -7664,7 +7661,6 @@ ppc64_elf_edit_toc (bfd *obfd ATTRIBUTE_
++       asection *toc, *sec;
++       Elf_Internal_Shdr *symtab_hdr;
++       Elf_Internal_Sym *local_syms;
++-      struct elf_link_hash_entry **sym_hashes;
++       Elf_Internal_Rela *relstart, *rel;
++       unsigned long *skip, *drop;
++       unsigned char *used;
++@@ -7679,7 +7675,6 @@ ppc64_elf_edit_toc (bfd *obfd ATTRIBUTE_
++ 
++       local_syms = NULL;
++       symtab_hdr = &elf_symtab_hdr (ibfd);
++-      sym_hashes = elf_sym_hashes (ibfd);
++ 
++       /* Look at sections dropped from the final link.  */
++       skip = NULL;
++--- gdb-7.0/bfd/elf32-ppc.c.orig
+++++ gdb-7.0/bfd/elf32-ppc.c
++@@ -4735,7 +4735,6 @@ ppc_elf_tls_optimize (bfd *obfd ATTRIBUT
++ 		    }
++ 		  else
++ 		    {
++-		      Elf_Internal_Sym *sym;
++ 		      bfd_signed_vma *lgot_refs;
++ 		      struct plt_entry **local_plt;
++ 		      char *lgot_masks;
++@@ -4754,7 +4753,6 @@ ppc_elf_tls_optimize (bfd *obfd ATTRIBUT
++ 			      return FALSE;
++ 			    }
++ 			}
++-		      sym = locsyms + r_symndx;
++ 		      lgot_refs = elf_local_got_refcounts (ibfd);
++ 		      if (lgot_refs == NULL)
++ 			abort ();
++@@ -5941,7 +5939,7 @@ ppc_elf_relax_section (bfd *abfd,
++   for (irel = internal_relocs; irel < irelend; irel++)
++     {
++       unsigned long r_type = ELF32_R_TYPE (irel->r_info);
++-      bfd_vma reladdr, toff, roff;
+++      bfd_vma toff, roff;
++       asection *tsec;
++       struct one_fixup *f;
++       size_t insn_offset = 0;
++@@ -6125,7 +6123,6 @@ ppc_elf_relax_section (bfd *abfd,
++ 	continue;
++ 
++       roff = irel->r_offset;
++-      reladdr = isec->output_section->vma + isec->output_offset + roff;
++ 
++       /* If the branch is in range, no need to do anything.  */
++       if (tsec != bfd_und_section_ptr
++--- gdb-7.0/bfd/coffcode.h.orig
+++++ gdb-7.0/bfd/coffcode.h
++@@ -3527,7 +3527,9 @@ coff_write_object_contents (bfd * abfd)
++   asection *current;
++   bfd_boolean hasrelocs = FALSE;
++   bfd_boolean haslinno = FALSE;
+++#ifdef COFF_IMAGE_WITH_PE
++   bfd_boolean hasdebug = FALSE;
+++#endif
++   file_ptr scn_base;
++   file_ptr reloc_base;
++   file_ptr lineno_base;
++@@ -3630,9 +3632,9 @@ coff_write_object_contents (bfd * abfd)
++        current = current->next)
++     {
++       struct internal_scnhdr section;
+++#ifdef COFF_IMAGE_WITH_PE
++       bfd_boolean is_reloc_section = FALSE;
++ 
++-#ifdef COFF_IMAGE_WITH_PE
++       if (strcmp (current->name, DOT_RELOC) == 0)
++ 	{
++ 	  is_reloc_section = TRUE;
++@@ -3731,9 +3733,11 @@ coff_write_object_contents (bfd * abfd)
++ #endif
++       if (current->lineno_count != 0)
++ 	haslinno = TRUE;
+++#ifdef COFF_IMAGE_WITH_PE
++       if ((current->flags & SEC_DEBUGGING) != 0
++ 	  && ! is_reloc_section)
++ 	hasdebug = TRUE;
+++#endif
++ 
++ #ifdef RS6000COFF_C
++ #ifndef XCOFF64
++--- gdb-7.0/bfd/coff-rs6000.c.orig
+++++ gdb-7.0/bfd/coff-rs6000.c
++@@ -3068,7 +3068,7 @@ xcoff_complain_overflow_bitfield_func (i
++      bfd_vma relocation;
++      struct reloc_howto_struct *howto;
++ {
++-  bfd_vma addrmask, fieldmask, signmask, ss;
+++  bfd_vma fieldmask, signmask, ss;
++   bfd_vma a, b, sum;
++ 
++   /* Get the values to be added together.  For signed and unsigned
++@@ -3076,7 +3076,6 @@ xcoff_complain_overflow_bitfield_func (i
++      the size of an address.  For bitfields, all the bits matter.
++      See also bfd_check_overflow.  */
++   fieldmask = N_ONES (howto->bitsize);
++-  addrmask = N_ONES (bfd_arch_bits_per_address (input_bfd)) | fieldmask;
++   a = relocation;
++   b = val & howto->src_mask;
++ 

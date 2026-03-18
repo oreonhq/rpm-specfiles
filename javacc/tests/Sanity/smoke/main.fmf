@@ -1,0 +1,6 @@
+summary: javacc smoke test
+description: |
+  Test basic functionality of javacc.
+require:
+  - javacc
+  - java-devel

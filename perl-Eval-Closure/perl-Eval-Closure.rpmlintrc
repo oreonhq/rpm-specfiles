@@ -1,0 +1,2 @@
+# Computer Science
+addFilter("spelling-error \('(accessors|eval(ed|s)|inlined)',")

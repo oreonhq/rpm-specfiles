@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Unicode-Collate
+require: perl-Unicode-Collate-tests
+test: /usr/libexec/perl-Unicode-Collate/test

@@ -1,0 +1,6 @@
+summary: Service works with 'sscg' generated SSL certificates
+author: Vitezslav Crhonek <vcrhonek@redhat.com>
+contact: Vitezslav Crhonek <vcrhonek@redhat.com>
+require: sscg
+duration: 10m
+test: ./runtest.sh

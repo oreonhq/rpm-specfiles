@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Module-Build
+require: perl-Module-Build-tests
+test: /usr/libexec/perl-Module-Build/test

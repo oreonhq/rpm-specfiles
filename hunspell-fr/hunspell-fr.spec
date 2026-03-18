@@ -1,0 +1,47 @@
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9
+%global dict_dirname hunspell
+%else
+%global dict_dirname myspell
+%endif
+
+Name: hunspell-fr
+Summary: French hunspell dictionaries
+Version: 7.0
+Release: 2%{?dist}
+Source: https://grammalecte.net/dic/hunspell-french-dictionaries-v%{version}.zip
+URL: https://grammalecte.net/
+License: MPL-2.0
+BuildArch: noarch
+
+Requires: hunspell-filesystem
+Supplements: (hunspell and langpacks-fr)
+
+%description
+French (France, Belgium, etc.) hunspell dictionaries.
+
+%prep
+%setup -q -c -n hunspell-fr
+
+%build
+
+%install
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
+cp -p fr-toutesvariantes.dic $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/fr_FR.dic
+cp -p fr-toutesvariantes.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/fr_FR.aff
+
+pushd $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
+fr_FR_aliases="fr_BE fr_CA fr_CH fr_LU fr_MC"
+for lang in $fr_FR_aliases; do
+	ln -s fr_FR.aff $lang.aff
+	ln -s fr_FR.dic $lang.dic
+done
+popd
+
+
+%files
+%doc README_dict_fr.txt
+%{_datadir}/%{dict_dirname}/*
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0-2
+- Prepare for Oreon 11 (RP1)

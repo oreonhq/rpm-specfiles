@@ -1,0 +1,17 @@
+specfile_path: python-websockets.spec
+
+upstream_package_name: websockets
+upstream_project_url: https://github.com/python-websockets/websockets/
+downstream_package_name: python-websockets
+
+jobs:
+
+- job: pull_from_upstream
+  trigger: release
+  dist_git_branches:
+   - fedora-rawhide
+
+- job: koji_build
+  trigger: commit
+  dist_git_branches:
+    - fedora-rawhide

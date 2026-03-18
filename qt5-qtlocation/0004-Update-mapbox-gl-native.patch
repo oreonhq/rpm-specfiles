@@ -1,0 +1,19 @@
+From 04575f8fb687ccf2347035322a0cf5f6c5b88634 Mon Sep 17 00:00:00 2001
+From: Albert Astals Cid <aacid@kde.org>
+Date: Mon, 25 Sep 2023 21:56:54 +0200
+Subject: [PATCH 4/7] Update mapbox-gl-native
+
+---
+ src/3rdparty/mapbox-gl-native | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/3rdparty/mapbox-gl-native b/src/3rdparty/mapbox-gl-native
+index 5a07e1967..4c88f2c0e 160000
+--- a/src/3rdparty/mapbox-gl-native
++++ b/src/3rdparty/mapbox-gl-native
+@@ -1 +1 @@
+-Subproject commit 5a07e1967dcc925d9def47accadae991436b9686
++Subproject commit 4c88f2c0e61daa89f584a8a9a3eba210221c6920
+-- 
+2.51.1
+

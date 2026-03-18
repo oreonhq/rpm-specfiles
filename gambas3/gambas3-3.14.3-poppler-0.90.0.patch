@@ -1,0 +1,168 @@
+diff -up gambas-3.14.3/gb.pdf/configure.ac.poppler090 gambas-3.14.3/gb.pdf/configure.ac
+--- gambas-3.14.3/gb.pdf/configure.ac.poppler090	2020-01-17 18:33:39.000000000 -0500
++++ gambas-3.14.3/gb.pdf/configure.ac	2020-07-14 11:17:19.271386755 -0400
+@@ -29,6 +29,8 @@ if test "$have_poppler" = "yes"; then
+   AC_DEFINE_UNQUOTED(POPPLER_VERSION_0_76, $((1-$?)), Poppler version >= 0.76)
+   pkg-config --atleast-version=0.83.0 poppler
+   AC_DEFINE_UNQUOTED(POPPLER_VERSION_0_83, $((1-$?)), Poppler version >= 0.83)
++  pkg-config --atleast-version=0.90.0 poppler
++  AC_DEFINE_UNQUOTED(POPPLER_VERSION_0_90, $((1-$?)), Poppler version >= 0.90)
+ fi
+ 
+ AC_OUTPUT( \
+diff -up gambas-3.14.3/gb.pdf/src/CPdfDocument.cpp.poppler090 gambas-3.14.3/gb.pdf/src/CPdfDocument.cpp
+--- gambas-3.14.3/gb.pdf/src/CPdfDocument.cpp.poppler090	2020-07-14 11:17:19.263386882 -0400
++++ gambas-3.14.3/gb.pdf/src/CPdfDocument.cpp	2020-07-14 12:16:19.518914007 -0400
+@@ -104,7 +104,11 @@ END_PROPERTY
+ 
+ static void return_unicode_string(const Unicode *unicode, int len)
+ {
++#if POPPLER_VERSION_0_90
++	const UnicodeMap *uMap = NULL;
++#else
+ 	static UnicodeMap *uMap = NULL;
++#endif
+ 	
+ 	GooString gstr;
+ 	char buf[8]; /* 8 is enough for mapping an unicode char to a string */
+@@ -112,10 +116,14 @@ static void return_unicode_string(const
+ 
+ 	if (uMap == NULL) 
+ 	{
++#if POPPLER_VERSION_0_90
++		uMap = globalParams->getUnicodeMap("UTF-8");
++#else
+ 		GooString *enc = new GooString("UTF-8");
+ 		uMap = globalParams->getUnicodeMap(enc);
+ 		uMap->incRefCnt();
+ 		delete enc;
++#endif
+ 	}
+ 		
+ 	for (i = 0; i < len; ++i) {
+@@ -224,15 +232,24 @@ static void aux_return_date_info(void *_
+ 	#endif
+ }
+ 
+-static const_LinkDest *get_dest(const_LinkAction *act)
++#if POPPLER_VERSION_0_90
++static std::unique_ptr<LinkDest> get_dest(const_LinkAction *act)
++#else
++static LinkDest *get_dest(const_LinkAction *act)
++#endif
+ {
+ 	if (!act)
+ 		return 0;
+ 	
+ 	switch (act->getKind())
+ 	{
++#if POPPLER_VERSION_0_90
++		case actionGoTo: return std::unique_ptr<LinkDest>(((LinkGoTo*)act)->getDest()->copy());
++		case actionGoToR: return std::unique_ptr<LinkDest>(((LinkGoToR*)act)->getDest()->copy());
++#else
+ 		case actionGoTo: return ((LinkGoTo*)act)->getDest();
+ 		case actionGoToR: return ((LinkGoToR*)act)->getDest();
++#endif
+ 		default: return 0;
+ 	}
+ }
+@@ -240,7 +257,11 @@ static const_LinkDest *get_dest(const_Li
+ static uint32_t aux_get_page_from_action(void *_object, const_LinkAction *act)
+ {
+ 	Ref pref;       
++#if POPPLER_VERSION_0_90
++	static std::unique_ptr<LinkDest> dest = get_dest(act);
++#else
+ 	const_LinkDest *dest = get_dest(act);
++#endif
+ 	const_GooString *name;
+ 
+ 	if (!dest)
+@@ -280,7 +301,11 @@ static uint32_t aux_get_page_from_action
+ 
+ static void aux_get_dimensions_from_action(const_LinkAction *act, CPDFRECT *rect)
+ {
++#if POPPLER_VERSION_0_90
++	std::unique_ptr<LinkDest> dest = get_dest(act);
++#else
+ 	const_LinkDest *dest = get_dest(act);
++#endif
+ 	if (!dest)
+ 		return;
+ 	
+@@ -292,7 +317,11 @@ static void aux_get_dimensions_from_acti
+ 
+ static double aux_get_zoom_from_action(const_LinkAction *act)
+ {
++#if POPPLER_VERSION_0_90
++	std::unique_ptr<LinkDest> dest = get_dest(act);
++#else
+ 	const_LinkDest *dest = get_dest(act);
++#endif
+ 	if (dest)
+ 		return dest->getZoom();
+ 	else
+@@ -303,18 +332,27 @@ static char* aux_get_target_from_action(
+ {
+ 	char *vl=NULL;
+ 	char *uni=NULL;	
++#if POPPLER_VERSION_0_90
++	std::string tmp;
++#else
+ 	const_GooString *tmp=NULL;
++#endif
++	const_GooString *tmpfn=NULL;
+ 
+ 	switch (act->getKind())
+ 	{
+ 		case actionGoToR:
+-			tmp=((LinkGoToR*)act)->getFileName(); break;
++			tmpfn=((LinkGoToR*)act)->getFileName(); break;
+ 
+ 		case actionLaunch:
+-			tmp=((LinkLaunch*)act)->getFileName(); break;
++			tmpfn=((LinkLaunch*)act)->getFileName(); break;
+ 
+ 		case actionURI:
++#if POPPLER_VERSION_0_90
++			tmp=((LinkURI*)act)->getURI().c_str(); break;
++#else
+ 			tmp=((LinkURI*)act)->getURI(); break;
++#endif
+ 			
+ 		case actionNamed:
+ 			tmp=((LinkNamed*)act)->getName(); break;
+@@ -326,17 +364,24 @@ static char* aux_get_target_from_action(
+ 			break;
+ 	}
+ 
+-	if (!tmp) return NULL;
++	if (tmp.empty() && !tmpfn) return NULL;
+ 
+-	if (tmp->hasUnicodeMarker())
++	if (tmpfn)
+ 	{
+-			GB.ConvString (&uni,tmp->c_str()+2,tmp->getLength()-2,"UTF-16BE","UTF-8");
+-			vl = GB.AddString(vl, uni, 0);	
+-	}	
++		if (tmpfn->hasUnicodeMarker())
++		{
++				GB.ConvString (&uni,tmpfn->c_str()+2,tmpfn->getLength()-2,"UTF-16BE","UTF-8");
++				vl = GB.AddString(vl, uni, 0);	
++		}	
++		else
++				vl = GB.AddString(vl,tmpfn->c_str(),tmpfn->getLength());
++	}
+ 	else
+-			vl = GB.AddString(vl,tmp->c_str(),tmp->getLength());
+-	
+-
++#if POPPLER_VERSION_0_90
++		vl = GB.AddString(vl,tmp.c_str(),tmp.size());
++#else
++		vl = GB.AddString(vl,tmp->c_str(),tmp->getLength());
++#endif
+ 	return vl;
+ 
+ }
+diff -up gambas-3.14.3/gb.pdf/src/CPdfDocument.h.poppler090 gambas-3.14.3/gb.pdf/src/CPdfDocument.h

@@ -1,0 +1,57 @@
+From 16d7afb935e5e27eadc324856c3b0319eda38242 Mon Sep 17 00:00:00 2001
+From: neilfsun <loyou85@gmail.com>
+Date: Thu, 4 Dec 2025 14:34:37 +0800
+Subject: [PATCH 17/23] Fix prompt output interfering with piped commands in
+ input files
+
+When executing piped commands from input files, the prompt text was
+incorrectly written to the pipe instead of stdout.
+This caused commands read the prompt as their first line,
+consuming it instead of the actual command output.
+
+  crash> p cpu_info:0 | head -1
+  per_cpu(cpu_info, 0) = $29 = {
+  crash> p cpu_info:0 | head -2
+  per_cpu(cpu_info, 0) = $4 = {
+    x86 = 0x6,
+  crash> cat crashrc1
+  p cpu_info:0 | head -1
+  crash> < crashrc1
+  crash> p cpu_info:0 | head -1
+
+  crash> cat crashrc2
+  p cpu_info:0 | head -2
+  crash> < crashrc2
+  crash> p cpu_info:0 | head -2
+  per_cpu(cpu_info, 0) = $30 = {
+  crash>
+
+Fix: Output prompt to incoming_fp (stdout) instead of fp (which may be the pipe
+after setup_redirect()), ensuring prompts display on terminal while command output
+goes to the pipe as intended.
+
+Signed-off-by: neilfsun <neilfsun@tencent.com>
+Signed-off-by: Feng Sun <loyou85@gmail.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ cmdline.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cmdline.c b/cmdline.c
+index 4add548e4932..030ae5600cea 100644
+--- a/cmdline.c
++++ b/cmdline.c
+@@ -1488,8 +1488,8 @@ exec_input_file(void)
+ 			continue;
+ 
+                 if (!(pc->flags & SILENT)) {
+-                        fprintf(fp, "%s%s", pc->prompt, buf);
+-                        fflush(fp);
++                        fprintf(incoming_fp, "%s%s", pc->prompt, buf);
++                        fflush(incoming_fp);
+                 }
+ 
+                 exec_command();
+-- 
+2.51.1
+

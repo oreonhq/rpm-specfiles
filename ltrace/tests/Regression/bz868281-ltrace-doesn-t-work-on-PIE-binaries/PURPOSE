@@ -1,0 +1,5 @@
+PURPOSE of /tools/ltrace/Regression/bz868281-ltrace-doesn-t-work-on-PIE-binaries
+Description: Test for BZ#868281 (ltrace doesn't work on PIE binaries)
+Author: Miroslav Franc <mfranc@redhat.com>
+Bug summary: ltrace doesn't work on PIE binaries
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=868281

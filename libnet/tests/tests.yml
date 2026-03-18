@@ -1,0 +1,17 @@
+- hosts: localhost
+  roles:
+    - role: standard-test-beakerlib
+      tags:
+        - classic
+      tests:
+        - sanity-tests
+      required_packages:
+        - libnet
+        - libnet-devel
+        - libpcap
+        - libpcap-devel
+        - systemd
+        - wireshark-cli
+        - libcmocka
+        - libcmocka-devel
+        - gcc

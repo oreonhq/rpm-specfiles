@@ -1,0 +1,808 @@
+diff --git a/Makefile b/Makefile
+index 5302e11..a460e78 100644
+--- a/Makefile
++++ b/Makefile
+@@ -60,7 +60,8 @@ clean:	# if configure hasn't run, nothing to clean
+ endif
+ 
+ $(CONFIGURE): aclocal.m4
+-	autoconf
++	autoupdate --force
++	autoreconf --install
+ 	./configure \
+ 		--prefix=/ \
+ 		--exec-prefix=/ \
+@@ -95,4 +96,6 @@ install-lib: default
+ 
+ realclean distclean: clean
+ 	rm -f $(LDIRT) $(CONFIGURE)
+-	rm -rf autom4te.cache Logs
++	rm -rf autom4te.cache Logs configure.ac~
++	rm -rf config.guess config.sub configure~
++
+diff --git a/configure.ac b/configure.ac
+index c624295..3337575 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,5 +1,5 @@
+-AC_INIT([nfs4-acl-tools], [0.3.3])
+-AC_CONFIG_HEADER(include/config.h)
++AC_INIT([nfs4-acl-tools],[0.3.3])
++AC_CONFIG_HEADERS(include/config.h)
+ AC_PREFIX_DEFAULT(/usr/local)
+ 
+ AC_CONFIG_MACRO_DIRS([m4])
+@@ -12,7 +12,6 @@ AC_SUBST(enable_shared)
+ AC_PROG_INSTALL
+ AC_PROG_CC
+ 
+-AC_HEADER_STDC
+ AC_CHECK_HEADERS([netinet/in.h stdlib.h string.h unistd.h])
+ AC_CHECK_HEADERS([attr/xattr.h sys/xattr.h])
+ 
+@@ -33,4 +32,5 @@ AC_PACKAGE_UTILITIES([nfs4acl])
+ AC_PACKAGE_NEED_GETXATTR_LIBATTR
+ AC_MANUAL_FORMAT
+ 
+-AC_OUTPUT(include/builddefs)
++AC_CONFIG_FILES([include/builddefs])
++AC_OUTPUT
+diff --git a/include/builddefs.in b/include/builddefs.in
+index fe49b08..3dab1de 100644
+--- a/include/builddefs.in
++++ b/include/builddefs.in
+@@ -43,6 +43,7 @@ LIBNFS4ACL = $(TOPDIR)/libnfs4acl/libnfs4acl.la
+ LIBATTR = @libattr@
+ 
+ prefix = @prefix@
++datarootdir = @datarootdir@
+ exec_prefix = @exec_prefix@
+ 
+ DESTDIR =
+diff --git a/include/libacl_nfs4.h b/include/libacl_nfs4.h
+index d3786c3..a486390 100644
+--- a/include/libacl_nfs4.h
++++ b/include/libacl_nfs4.h
+@@ -54,6 +54,7 @@
+ #define FLAG_SUCCESSFUL_ACCESS		'S'
+ #define FLAG_FAILED_ACCESS		'F'
+ #define FLAG_GROUP			'g'
++#define FLAG_INHERITED			'I'
+ 
+ #define PERM_READ_DATA			'r'
+ #define PERM_WRITE_DATA			'w'
+@@ -123,6 +124,8 @@
+ 
+ /* NFS4 acl xattr name */
+ #define ACL_NFS4_XATTR "system.nfs4_acl"
++#define DACL_NFS4_XATTR "system.nfs4_dacl"
++#define SACL_NFS4_XATTR "system.nfs4_sacl"
+ 
+ /* Macro for finding empty tailqs */
+ #define TAILQ_IS_EMPTY(head) (head.tqh_first == NULL)
+@@ -139,6 +142,12 @@
+ 
+ typedef u_int32_t u32;
+ 
++enum acl_type {
++	ACL_TYPE_ACL,
++	ACL_TYPE_DACL,
++	ACL_TYPE_SACL
++};
++
+ enum {	ACL_NFS4_NOT_USED = 0,
+ 		ACL_NFS4_USED
+ };
+@@ -152,11 +161,20 @@ TAILQ_HEAD(ace_container_list_head, ace_container);
+ 
+ /**** Public functions ****/
+ 
++extern struct nfs4_acl *	nfs4_getacl(const char *path);
++extern struct nfs4_acl *	nfs4_getdacl(const char *path);
++extern struct nfs4_acl *	nfs4_getsacl(const char *path);
++extern int			nfs4_setacl(const char *path, struct nfs4_acl *acl);
++extern int			nfs4_setdacl(const char *path, struct nfs4_acl *acl);
++extern int			nfs4_setsacl(const char *path, struct nfs4_acl *acl);
++
+ /** Manipulation functions **/
+ extern int			acl_nfs4_set_who(struct nfs4_ace*, int, char*);
+ extern struct nfs4_acl *	acl_nfs4_copy_acl(struct nfs4_acl *);
+ extern struct nfs4_acl *	acl_nfs4_xattr_load(char *, int, u32);
++extern struct nfs4_acl *	acl_nfs41_xattr_load(char *, int, u32, enum acl_type);
+ extern int			acl_nfs4_xattr_pack(struct nfs4_acl *, char**);
++extern int			acl_nfs41_xattr_pack(struct nfs4_acl *, char**, enum acl_type);
+ extern int			acl_nfs4_xattr_size(struct nfs4_acl *);
+ 
+ extern void			nfs4_free_acl(struct nfs4_acl *);
+diff --git a/include/nfs4.h b/include/nfs4.h
+index da6eefb..d15482e 100644
+--- a/include/nfs4.h
++++ b/include/nfs4.h
+@@ -55,6 +55,10 @@
+ #define ACL4_SUPPORT_AUDIT_ACL 0x04
+ #define ACL4_SUPPORT_ALARM_ACL 0x08
+ 
++#define NFS4_ACL_AUTO_INHERIT	0x00000001
++#define NFS4_ACL_PROTECTED	0x00000002
++#define NFS4_ACL_DEFAULTED	0x00000004
++
+ #define NFS4_ACE_FILE_INHERIT_ACE             0x00000001
+ #define NFS4_ACE_DIRECTORY_INHERIT_ACE        0x00000002
+ #define NFS4_ACE_NO_PROPAGATE_INHERIT_ACE     0x00000004
+@@ -62,6 +66,7 @@
+ #define NFS4_ACE_SUCCESSFUL_ACCESS_ACE_FLAG   0x00000010
+ #define NFS4_ACE_FAILED_ACCESS_ACE_FLAG       0x00000020
+ #define NFS4_ACE_IDENTIFIER_GROUP             0x00000040
++#define NFS4_ACE_INHERITED_ACE                0x00000080
+ 
+ #define NFS4_ACE_READ_DATA                    0x00000001
+ #define NFS4_ACE_LIST_DIRECTORY               0x00000001
+@@ -125,6 +130,7 @@ struct nfs4_acl {
+ 	u_int32_t		naces;
+ 	u_int32_t		is_directory;
+ 	struct ace_list_head	ace_head;
++	u_int32_t		aclflag;
+ };
+ 
+ typedef struct { char data[NFS4_VERIFIER_SIZE]; } nfs4_verifier;
+diff --git a/libnfs4acl/Makefile b/libnfs4acl/Makefile
+index a598d4e..556b595 100644
+--- a/libnfs4acl/Makefile
++++ b/libnfs4acl/Makefile
+@@ -92,6 +92,8 @@ LIBACL_NFS4_CFILES = \
+ 	nfs4_get_ace_access.c \
+ 	nfs4_get_ace_flags.c \
+ 	nfs4_get_ace_type.c \
++	nfs4_getacl.c \
++	nfs4_setacl.c \
+ 	nfs4_insert_file_aces.c \
+ 	nfs4_insert_string_aces.c \
+ 	nfs4_free_acl.c \
+diff --git a/libnfs4acl/acl_nfs4_copy_acl.c b/libnfs4acl/acl_nfs4_copy_acl.c
+index cf09173..7a6d83b 100644
+--- a/libnfs4acl/acl_nfs4_copy_acl.c
++++ b/libnfs4acl/acl_nfs4_copy_acl.c
+@@ -54,6 +54,8 @@ struct nfs4_acl * acl_nfs4_copy_acl(struct nfs4_acl * acl)
+ 	if (new_acl == NULL)
+ 		goto failed;
+ 
++	new_acl->aclflag = acl->aclflag;
++
+ 	ace = nfs4_get_first_ace(acl);
+ 	nace = 1;
+ 
+diff --git a/libnfs4acl/acl_nfs4_get_who.c b/libnfs4acl/acl_nfs4_get_who.c
+index 695db2e..3e2fd7c 100644
+--- a/libnfs4acl/acl_nfs4_get_who.c
++++ b/libnfs4acl/acl_nfs4_get_who.c
+@@ -49,7 +49,7 @@ int acl_nfs4_get_who(struct nfs4_ace* ace, int* type, char** who)
+ 	char* iwho = NULL;
+ 	int wholen;
+ 
+-	if (ace == NULL || ace->who == NULL)
++	if (ace == NULL)
+ 		goto inval_failed;
+ 
+ 	itype = acl_nfs4_get_whotype(ace->who);
+diff --git a/libnfs4acl/acl_nfs4_xattr_load.c b/libnfs4acl/acl_nfs4_xattr_load.c
+index 089a139..c747e8d 100644
+--- a/libnfs4acl/acl_nfs4_xattr_load.c
++++ b/libnfs4acl/acl_nfs4_xattr_load.c
+@@ -38,7 +38,8 @@
+ #include "libacl_nfs4.h"
+ 
+ 
+-struct nfs4_acl * acl_nfs4_xattr_load(char *xattr_v, int xattr_size, u32 is_dir)
++struct nfs4_acl *acl_nfs41_xattr_load(char *xattr_v, int xattr_size, u32 is_dir,
++				      enum acl_type acl_type)
+ {
+ 	struct nfs4_acl *acl;
+ 	struct nfs4_ace *ace;
+@@ -61,6 +62,12 @@ struct nfs4_acl * acl_nfs4_xattr_load(char *xattr_v, int xattr_size, u32 is_dir)
+ 		return NULL;
+ 	}
+ 
++	if (acl_type == ACL_TYPE_DACL || acl_type == ACL_TYPE_SACL) {
++		acl->aclflag = (u32)ntohl(*((u32*)(bufp)));
++		bufp += sizeof(u32);
++		bufs -= sizeof(u32);
++	}
++
+ 	/* Grab the number of aces in the acl */
+ 	num_aces = (u32)ntohl(*((u32*)(bufp)));
+ 
+@@ -180,3 +187,8 @@ err1:
+ 	nfs4_free_acl(acl);
+ 	return NULL;
+ }
++
++struct nfs4_acl *acl_nfs4_xattr_load(char *xattr_v, int xattr_size, u32 is_dir)
++{
++	return acl_nfs41_xattr_load(xattr_v, xattr_size, is_dir, ACL_TYPE_ACL);
++}
+diff --git a/libnfs4acl/acl_nfs4_xattr_pack.c b/libnfs4acl/acl_nfs4_xattr_pack.c
+index 7c281fe..2bd3b1b 100644
+--- a/libnfs4acl/acl_nfs4_xattr_pack.c
++++ b/libnfs4acl/acl_nfs4_xattr_pack.c
+@@ -37,11 +37,12 @@
+ #include "libacl_nfs4.h"
+ #include <stdio.h>
+ 
+-int acl_nfs4_xattr_pack(struct nfs4_acl * acl, char** bufp)
++int acl_nfs41_xattr_pack(struct nfs4_acl * acl, char** bufp,
++			 enum acl_type acl_type)
+ {
+ 	struct nfs4_ace * ace;
+ 	int buflen;
+-	int rbuflen;
++	int rbuflen = 0;
+ 	int num_aces;
+ 	int ace_num;
+ 	int wholen;
+@@ -58,6 +59,9 @@ int acl_nfs4_xattr_pack(struct nfs4_acl * acl, char** bufp)
+ 	if (buflen < 0)
+ 		goto failed;
+ 
++	if (acl_type == ACL_TYPE_DACL || acl_type == ACL_TYPE_SACL)
++		buflen += sizeof(u32);
++
+ 	*bufp = (char*) malloc(buflen);
+ 	if (*bufp == NULL) {
+ 		errno = ENOMEM;
+@@ -67,11 +71,17 @@ int acl_nfs4_xattr_pack(struct nfs4_acl * acl, char** bufp)
+ 
+ 	p = *bufp;
+ 
++	if (acl_type == ACL_TYPE_DACL || acl_type == ACL_TYPE_SACL) {
++		*((u32*)p) = htonl(acl->aclflag);
++		rbuflen += sizeof(u32);
++		p += sizeof(u32);
++	}
++
+ 	num_aces = acl->naces;
+ 
+ 	*((u32*)p) = htonl(num_aces);
+ 
+-	rbuflen = sizeof(u32);
++	rbuflen += sizeof(u32);
+ 	p += sizeof(u32);
+ 
+ 	ace = nfs4_get_first_ace(acl);
+@@ -140,5 +150,7 @@ failed:
+ 	return -1;
+ }
+ 
+-
+-
++int acl_nfs4_xattr_pack(struct nfs4_acl * acl, char** bufp)
++{
++	return acl_nfs41_xattr_pack(acl, bufp, ACL_TYPE_ACL);
++}
+diff --git a/libnfs4acl/nfs4_ace_from_string.c b/libnfs4acl/nfs4_ace_from_string.c
+index ab8401a..7f13154 100644
+--- a/libnfs4acl/nfs4_ace_from_string.c
++++ b/libnfs4acl/nfs4_ace_from_string.c
+@@ -209,6 +209,9 @@ struct nfs4_ace * nfs4_ace_from_string(char *ace_buf, int is_dir)
+ 			case FLAG_GROUP:
+ 				flags |= NFS4_ACE_IDENTIFIER_GROUP;
+ 				break;
++			case FLAG_INHERITED:
++				flags |= NFS4_ACE_INHERITED_ACE;
++				break;
+ 			default:
+ 				fprintf(stderr,"Bad Ace Flag:%c\n", *field);
+ 				goto out_free;
+diff --git a/libnfs4acl/nfs4_get_ace_flags.c b/libnfs4acl/nfs4_get_ace_flags.c
+index 1d28ed4..1f27d17 100644
+--- a/libnfs4acl/nfs4_get_ace_flags.c
++++ b/libnfs4acl/nfs4_get_ace_flags.c
+@@ -53,6 +53,8 @@ char* nfs4_get_ace_flags(struct nfs4_ace *ace, char *buf)
+ 		*buf++ = FLAG_FAILED_ACCESS;;
+ 	if (flags & NFS4_ACE_IDENTIFIER_GROUP)
+ 		*buf++ = FLAG_GROUP;
++	if (flags & NFS4_ACE_INHERITED_ACE)
++		*buf++ = FLAG_INHERITED;
+ 	*buf = '\0';
+ 
+ 	return bp;
+diff --git a/libnfs4acl/nfs4_getacl.c b/libnfs4acl/nfs4_getacl.c
+new file mode 100644
+index 0000000..7821da3
+--- /dev/null
++++ b/libnfs4acl/nfs4_getacl.c
+@@ -0,0 +1,84 @@
++/*
++ * Copyright (c) 2022, Trond Myklebust <trond.myklebust@hammerspace.com>
++ *
++ * This code is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
++ * version 2.1 as published by the Free Software Foundation.
++ *
++ * This code is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU LESSER GENERAL PUBLIC LICENSE for more details.
++ */
++
++#include <sys/types.h>
++#include <config.h>
++#ifdef HAVE_ATTR_XATTR_H
++# include <attr/xattr.h>
++#else
++# ifdef HAVE_SYS_XATTR_H
++#  include <sys/xattr.h>
++# endif
++#endif
++#include <sys/stat.h>
++#include "libacl_nfs4.h"
++
++/* returns a newly-allocated struct nfs4_acl or NULL on error. */
++static struct nfs4_acl *nfs4_getacl_byname(const char *path,
++					   const char *xattr_name,
++					   enum acl_type type)
++{
++	struct nfs4_acl *acl;
++	struct stat st;
++	void *buf;
++	ssize_t ret;
++	u32 iflags = NFS4_ACL_ISFILE;
++
++	if (path == NULL || *path == 0) {
++		errno = EFAULT;
++		return NULL;
++	}
++
++	/* find necessary buffer size */
++	ret = getxattr(path, xattr_name, NULL, 0);
++	if (ret == -1)
++		goto err;
++
++	buf = malloc(ret);
++	if (!buf)
++		goto err;
++
++	/* reconstruct the ACL */
++	ret = getxattr(path, xattr_name, buf, ret);
++	if (ret == -1)
++		goto err_free;
++
++	ret = stat(path, &st);
++	if (ret == -1)
++		goto err_free;
++
++	if (S_ISDIR(st.st_mode))
++		iflags = NFS4_ACL_ISDIR;
++
++	acl = acl_nfs41_xattr_load(buf, ret, iflags, type);
++
++	free(buf);
++	return acl;
++err_free:
++	free(buf);
++err:
++	return NULL;
++}
++
++struct nfs4_acl *nfs4_getacl(const char *path)
++{
++	return nfs4_getacl_byname(path, ACL_NFS4_XATTR, ACL_TYPE_ACL);
++}
++struct nfs4_acl *nfs4_getdacl(const char *path)
++{
++	return nfs4_getacl_byname(path, DACL_NFS4_XATTR, ACL_TYPE_DACL);
++}
++struct nfs4_acl *nfs4_getsacl(const char *path)
++{
++	return nfs4_getacl_byname(path, SACL_NFS4_XATTR, ACL_TYPE_SACL);
++}
+diff --git a/libnfs4acl/nfs4_new_acl.c b/libnfs4acl/nfs4_new_acl.c
+index 78d4c28..0a5583a 100644
+--- a/libnfs4acl/nfs4_new_acl.c
++++ b/libnfs4acl/nfs4_new_acl.c
+@@ -50,6 +50,7 @@ nfs4_new_acl(u32 is_dir)
+ 
+ 	acl->naces = 0;
+ 	acl->is_directory = is_dir;
++	acl->aclflag = 0;
+ 
+ 	TAILQ_INIT(&acl->ace_head);
+ 
+diff --git a/libnfs4acl/nfs4_print_ace_verbose.c b/libnfs4acl/nfs4_print_ace_verbose.c
+index 96a6573..ef87e89 100644
+--- a/libnfs4acl/nfs4_print_ace_verbose.c
++++ b/libnfs4acl/nfs4_print_ace_verbose.c
+@@ -64,7 +64,7 @@ int nfs4_print_ace_verbose(struct nfs4_ace * ace, u32 is_dir)
+ 	char * whotype_s;
+ 	char * type_s;
+ 	u32 flag;
+-	u32 whotype;
++	int whotype;
+ 	u32 mask;
+ 
+ 
+diff --git a/libnfs4acl/nfs4_setacl.c b/libnfs4acl/nfs4_setacl.c
+new file mode 100644
+index 0000000..d684502
+--- /dev/null
++++ b/libnfs4acl/nfs4_setacl.c
+@@ -0,0 +1,49 @@
++/*
++ * Copyright (c) 2022, Trond Myklebust <trond.myklebust@hammerspace.com>
++ *
++ * This code is free software; you can redistribute it and/or modify
++ * it under the terms of the GNU LESSER GENERAL PUBLIC LICENSE
++ * version 2.1 as published by the Free Software Foundation.
++ *
++ * This code is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++ * GNU LESSER GENERAL PUBLIC LICENSE for more details.
++ */
++
++#include <sys/types.h>
++#include <config.h>
++#ifdef HAVE_ATTR_XATTR_H
++# include <attr/xattr.h>
++#else
++# ifdef HAVE_SYS_XATTR_H
++#  include <sys/xattr.h>
++# endif
++#endif
++#include "libacl_nfs4.h"
++
++static int nfs4_setacl_byname(const char *path, const char *xattr_name,
++			      struct nfs4_acl *acl, enum acl_type type)
++{
++	char *xdrbuf = NULL;
++	int ret;
++
++	ret = acl_nfs41_xattr_pack(acl, &xdrbuf, type);
++	if (ret != -1)
++		ret = setxattr(path, xattr_name, xdrbuf, ret, XATTR_REPLACE);
++	free(xdrbuf);
++	return ret;
++}
++
++int nfs4_setacl(const char *path, struct nfs4_acl *acl)
++{
++	return nfs4_setacl_byname(path, ACL_NFS4_XATTR, acl, ACL_TYPE_ACL);
++}
++int nfs4_setdacl(const char *path, struct nfs4_acl *acl)
++{
++	return nfs4_setacl_byname(path, DACL_NFS4_XATTR, acl, ACL_TYPE_DACL);
++}
++int nfs4_setsacl(const char *path, struct nfs4_acl *acl)
++{
++	return nfs4_setacl_byname(path, SACL_NFS4_XATTR, acl, ACL_TYPE_SACL);
++}
+diff --git a/man/man1/nfs4_getfacl.1 b/man/man1/nfs4_getfacl.1
+index 7cf7cbf..2a618fc 100644
+--- a/man/man1/nfs4_getfacl.1
++++ b/man/man1/nfs4_getfacl.1
+@@ -34,6 +34,20 @@ flag is specified,
+ .B nfs4_getfacl
+ will not display the comment header (Do not print filename).
+ 
++If the
++.BR --dacl
++flag is specified,
++.B nfs4_getfacl
++will retrieve the dacl. This functionality is only available if
++the server supports NFSv4 minor version 1 or newer.
++
++If the
++.BR --sacl
++flag is specified,
++.B nfs4_getfacl
++will retrieve the sacl. This functionality is only available if
++the server supports NFSv4 minor version 1 or newer.
++
+ The output format for an NFSv4 file ACL, e.g., is:
+ .RS
+ .nf
+diff --git a/man/man1/nfs4_setfacl.1 b/man/man1/nfs4_setfacl.1
+index 7144f04..47ab517 100644
+--- a/man/man1/nfs4_setfacl.1
++++ b/man/man1/nfs4_setfacl.1
+@@ -101,6 +101,14 @@ in conjunction with
+ in conjunction with
+ .BR -R / --recursive ", a physical walk skips all symbolic links."
+ .TP
++.BR "--dacl"	
++acts on the dacl only. This functionality is only available if
++the server supports NFSv4 minor version 1 or newer.
++.TP
++.BR "--sacl"	
++acts on the sacl only. This functionality is only available if
++the server supports NFSv4 minor version 1 or newer.
++.TP
+ .BR --test	 
+ display results of 
+ .BR COMMAND ,
+diff --git a/man/man5/nfs4_acl.5 b/man/man5/nfs4_acl.5
+index e0b2a0a..7036ab7 100644
+--- a/man/man5/nfs4_acl.5
++++ b/man/man5/nfs4_acl.5
+@@ -125,6 +125,16 @@ group - indicates that
+ .I principal
+ represents a group instead of a user.
+ .TP
++.BR "INHERITED FLAG" " - can be used in any ACE"
++.TP
++.B I
++inherited - indicates that the ACE was inherited from the parent directory.
++This flag can only be used with the NFSv4.1 protocol or newer when using the
++.BR --dacl
++or
++.BR --sacl
++options.
++.TP
+ .BR "INHERITANCE FLAGS" " - can be used in any directory ACE"
+ .TP
+ .B d
+diff --git a/nfs4_getfacl/nfs4_getfacl.c b/nfs4_getfacl/nfs4_getfacl.c
+index e068095..954cf7e 100644
+--- a/nfs4_getfacl/nfs4_getfacl.c
++++ b/nfs4_getfacl/nfs4_getfacl.c
+@@ -42,15 +42,30 @@
+ #include <ftw.h>
+ #include <getopt.h>
+ 
++#define OPT_DACL	0x98
++#define OPT_SACL	0x99
++
+ static void usage(int);
+ static void more_help();
+ static char *execname;
+-static void print_acl_from_path();
++static void print_acl_from_path(const char *, enum acl_type);
+ static int ignore_comment = 0;
+ 
+-static int recursive(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
++static int print_acl(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
++{
++	print_acl_from_path(fpath, ACL_TYPE_ACL);
++	return 0;
++}
++
++static int print_dacl(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
+ {
+-	print_acl_from_path(fpath);
++	print_acl_from_path(fpath, ACL_TYPE_DACL);
++	return 0;
++}
++
++static int print_sacl(const char *fpath, const struct stat *sb, int tflag, struct FTW *ftwbuf)
++{
++	print_acl_from_path(fpath, ACL_TYPE_SACL);
+ 	return 0;
+ }
+ 
+@@ -59,6 +74,8 @@ static struct option long_options[] = {
+         {"help",         0, 0, 'h' },
+         {"recursive",     0, 0, 'R' },
+         {"omit-header",  0, 0, 'c'},
++        {"dacl",         0, 0, OPT_DACL},
++        {"sacl",         0, 0, OPT_SACL},
+         { NULL,          0, 0, 0,  },
+ };
+ 
+@@ -66,6 +83,9 @@ int main(int argc, char **argv)
+ {
+ 	int opt, res = 1;
+         int do_recursive = 0;
++	int (*recursive)(const char *fpath, const struct stat *sb,
++			 int tflag, struct FTW *ftwbuf) = print_acl;
++	enum acl_type type = ACL_TYPE_ACL;
+ 	
+ 	execname = basename(argv[0]);
+ 
+@@ -88,6 +108,14 @@ int main(int argc, char **argv)
+ 			case 'c':
+ 				ignore_comment = 1;
+ 				break;
++			case OPT_DACL:
++				type = ACL_TYPE_DACL;
++				recursive = print_dacl;
++				break;
++			case OPT_SACL:
++				type = ACL_TYPE_SACL;
++				recursive = print_sacl;
++				break;
+ 			case 'h':
+ 				usage(1);
+ 				res = 0;
+@@ -111,23 +139,51 @@ int main(int argc, char **argv)
+ 				printf("Invalid filename: %s\n", argv[optind]);
+ 		}
+ 		else
+-			print_acl_from_path(argv[optind]);
++			print_acl_from_path(argv[optind], type);
+ 		res = 0;
+ 	}
+ out:
+ 	return res;
+ }
+ 
+-static void print_acl_from_path(const char *fpath)
++static void print_acl_from_path(const char *fpath, enum acl_type type)
+ {
+ 	struct nfs4_acl *acl;
+-	acl = nfs4_acl_for_path(fpath);
++
++	switch (type) {
++	case ACL_TYPE_ACL:
++		acl = nfs4_getacl(fpath);
++		break;
++	case ACL_TYPE_DACL:
++		acl = nfs4_getdacl(fpath);
++		break;
++	case ACL_TYPE_SACL:
++		acl = nfs4_getsacl(fpath);
++		break;
++	}
++
+ 	if (acl != NULL) {
+ 		if (ignore_comment == 0)
+ 			printf("# file: %s\n", fpath);
+ 		nfs4_print_acl(stdout, acl);
+ 		printf("\n");
+ 		nfs4_free_acl(acl);
++	} else {
++		switch (errno) {
++		case ENODATA:
++			fprintf(stderr,"Attribute not found on file: %s\n",
++				fpath);
++			break;
++		case EREMOTEIO:
++			fprintf(stderr,"An NFS server error occurred.\n");
++			break;
++		case EOPNOTSUPP:
++                        fprintf(stderr,"Operation to request attribute not "
++				       "supported: %s\n", fpath);
++			break;
++		default:
++			perror("Failed operation");
++		}
+ 	}
+ }
+ 
+@@ -142,7 +198,9 @@ static void usage(int label)
+ 	"   -H, --more-help	 display ACL format information\n"
+ 	"   -h, --help		 display this help text\n"
+ 	"   -R, --recursive	 recurse into subdirectories\n"
+-	"   -c, --omit-header	 Do not display the comment header (Do not print filename)\n";
++	"   -c, --omit-header	 Do not display the comment header (Do not print filename)\n"
++	"       --dacl           display the NFSv4.1 dacl\n"
++	"       --sacl           display the NFSv4.1 sacl\n";
+ 
+ 	fprintf(stderr, gfusage, execname);
+ }
+@@ -170,6 +228,7 @@ static void more_help()
+ 	"        'S'  successful-access\n"
+ 	"        'F'  failed-access\n"
+ 	"        'g'  group (denotes that <principal> is a group)\n"
++	"        'I'  inherited\n"
+ 	"\n"
+ 	"    * <principal> - named user or group, or one of: \"OWNER@\", \"GROUP@\", \"EVERYONE@\"\n"
+ 	"\n"
+diff --git a/nfs4_setfacl/nfs4_setfacl.c b/nfs4_setfacl/nfs4_setfacl.c
+index d0485ad..e581608 100644
+--- a/nfs4_setfacl/nfs4_setfacl.c
++++ b/nfs4_setfacl/nfs4_setfacl.c
+@@ -79,6 +79,9 @@
+ #define EDITOR  		"vi"  /* <- evangelism! */
+ #define u32 u_int32_t
+ 
++#define OPT_DACL	0x98
++#define OPT_SACL	0x99
++
+ static int apply_action(const char *, const struct stat *, int, struct FTW *);
+ static int do_apply_action(const char *, const struct stat *);
+ static int open_editor(const char *);
+@@ -110,6 +113,8 @@ static struct option long_options[] = {
+ 	{ "recursive",		0, 0, 'R' },
+ 	{ "physical",		0, 0, 'P' },
+ 	{ "logical",		0, 0, 'L' },
++	{ "dacl",		0, 0, OPT_DACL },
++	{ "sacl",		0, 0, OPT_SACL },
+ 	{ NULL,			0, 0, 0,  },
+ };
+ 
+@@ -124,6 +129,8 @@ static char *mod_string;
+ static char *from_ace;
+ static char *to_ace;
+ 
++static enum acl_type acl_type = ACL_TYPE_ACL;
++
+ /* XXX: things we need to handle:
+  *
+  *  - we need some sort of 'purge' operation that completely clears an ACL.
+@@ -272,6 +279,13 @@ int main(int argc, char **argv)
+ 				paths[numpaths++] = optarg;
+ 				break;
+ 
++			case OPT_DACL:
++				acl_type = ACL_TYPE_DACL;
++				break;
++			case OPT_SACL:
++				acl_type = ACL_TYPE_SACL;
++				break;
++
+ 			case 'h':
+ 			case '?':
+ 			default:
+@@ -334,6 +348,50 @@ out:
+ 	return err;
+ }
+ 
++static void nfs4_print_acl_error(const char *path)
++{
++	switch (errno) {
++	case ENODATA:
++		fprintf(stderr,"Attribute not found on file: %s\n", path);
++		break;
++	case EREMOTEIO:
++		fprintf(stderr,"An NFS server error occurred.\n");
++		break;
++	case EOPNOTSUPP:
++		fprintf(stderr,"Operation to request attribute not supported: "
++			       "%s\n", path);
++		break;
++	default:
++		perror("Failed operation");
++	}
++}
++
++static struct nfs4_acl *nfs4_retrieve_acl(const char *path,
++					  enum acl_type type)
++{
++	switch (type) {
++	case ACL_TYPE_DACL:
++		return nfs4_getdacl(path);
++	case ACL_TYPE_SACL:
++		return nfs4_getsacl(path);
++	default:
++		return nfs4_getacl(path);
++	}
++}
++
++static int nfs4_apply_acl(const char *path, struct nfs4_acl *acl,
++			  enum acl_type type)
++{
++	switch (type) {
++	case ACL_TYPE_DACL:
++		return nfs4_setdacl(path, acl);
++	case ACL_TYPE_SACL:
++		return nfs4_setsacl(path, acl);
++	default:
++		return nfs4_setacl(path, acl);
++	}
++}
++
+ /* returns 0 on success, nonzero on failure */
+ static int apply_action(const char *_path, const struct stat *stat, int flag, struct FTW *ftw)
+ {
+@@ -378,7 +436,7 @@ static int do_apply_action(const char *path, const struct stat *_st)
+ 	if (action == SUBSTITUTE_ACTION)
+ 		acl = nfs4_new_acl(S_ISDIR(st->st_mode));
+ 	else
+-		acl = nfs4_acl_for_path(path);
++		acl = nfs4_retrieve_acl(path, acl_type);
+ 
+ 	if (acl == NULL) {
+ 		fprintf(stderr, "Failed to instantiate ACL.\n");
+@@ -438,8 +496,11 @@ static int do_apply_action(const char *path, const struct stat *_st)
+ 	if (is_test) {
+ 		fprintf(stderr, "## Test mode only - the resulting ACL for \"%s\": \n", path);
+ 		nfs4_print_acl(stdout, acl);
+-	} else
+-		err = nfs4_set_acl(acl, path);
++	} else {
++		err = nfs4_apply_acl(path, acl, acl_type);
++		if (err == -1)
++			nfs4_print_acl_error(path);
++	}
+ 
+ out:
+ 	nfs4_free_acl(acl);

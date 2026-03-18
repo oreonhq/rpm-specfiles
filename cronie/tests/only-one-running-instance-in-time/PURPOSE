@@ -1,0 +1,3 @@
+PURPOSE of /CoreOS/cronie/Regression/only-one-running-instance-in-time
+Description: When crond is running in multiple instance, then cron jobs are executed multiple times. Is neccesary to prevent multiple instances of crond running in time.
+Author: Jakub Prokes <jprokes@redhat.com>

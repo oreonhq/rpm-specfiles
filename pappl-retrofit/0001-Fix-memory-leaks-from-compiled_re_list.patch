@@ -1,0 +1,15 @@
+diff --git a/pappl-retrofit/pappl-retrofit.c b/pappl-retrofit/pappl-retrofit.c
+index 8e272d3..386fede 100644
+--- a/pappl-retrofit/pappl-retrofit.c
++++ b/pappl-retrofit/pappl-retrofit.c
+@@ -253,7 +253,10 @@ prBestMatchingPPD(const char *device_id,	// I - IEEE-1284 device ID
+     {
+       for (re = (regex_t *)cupsArrayFirst(compiled_re_list);
+ 	   re; re = (regex_t *)cupsArrayNext(compiled_re_list))
++      {
+ 	regfree(re);
++	free(re);
++      }
+       cupsArrayDelete(compiled_re_list);
+     }
+   }

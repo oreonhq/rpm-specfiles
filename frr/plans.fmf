@@ -1,0 +1,35 @@
+/tier1-internal:
+  plan:
+    import:
+      url: https://gitlab.com/redhat/centos-stream/tests/frr.git
+      name: /plans/frr/tier1/internal
+ 
+/tier1-public:
+  plan:
+    import:
+      url: https://gitlab.com/redhat/centos-stream/tests/frr.git
+      name: /plans/frr/tier1/public
+ 
+/tier2-tier3-internal:
+  plan:
+    import:
+      url: https://gitlab.com/redhat/centos-stream/tests/frr.git
+      name: /plans/frr/tier2-tier3/internal
+ 
+/tier2-tier3-public:
+  plan:
+    import:
+      url: https://gitlab.com/redhat/centos-stream/tests/frr.git
+      name: /plans/frr/tier2-tier3/public
+ 
+/others-internal:
+  plan:
+    import:
+      url: https://gitlab.com/redhat/centos-stream/tests/frr.git
+      name: /plans/frr/others/internal
+ 
+/others-public:
+  plan:
+    import:
+      url: https://gitlab.com/redhat/centos-stream/tests/frr.git
+      name: /plans/frr/others/public

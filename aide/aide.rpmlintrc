@@ -1,0 +1,15 @@
+# RPMlint configuration for aide package
+# These warnings are expected and intentional for security reasons
+
+# AIDE log directory has restricted permissions (700) for security
+# Log files may contain sensitive security information
+addFilter("aide.* non-standard-dir-perm /var/log/aide 700")
+
+# AIDE configuration file has restricted permissions (600) for security  
+# Configuration reveals what files/directories are monitored
+addFilter("aide.* non-readable /etc/aide.conf 600")
+
+# FSF address in COPYING file is outdated - this is an upstream issue
+# The license text contains the old FSF address format
+addFilter("aide.* incorrect-fsf-address /usr/share/licenses/aide/COPYING")
+

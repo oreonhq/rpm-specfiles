@@ -1,0 +1,216 @@
+diff --git a/src/scanadf.c b/src/scanadf.c
+index d4ff566..6874711 100644
+--- a/src/scanadf.c
++++ b/src/scanadf.c
+@@ -124,6 +124,8 @@ static int resolution_opt = -1, x_resolution_opt = -1, y_resolution_opt = -1;
+ static SANE_Word window_val[2];
+ static int window_val_user[2];	/* is width/height user-specified? */
+ 
++static void scanadf_exit (int);
++
+ static const char usage[] = "Usage: %s [OPTION]...\n\
+ \n\
+ Start image acquisition on a scanner device and write image data to\n\
+@@ -379,7 +381,7 @@ parse_scalar (const SANE_Option_Descriptor * opt, const char * str,
+       fprintf (stderr,
+ 	       "%s: option --%s: bad option value (rest of option: %s)\n",
+ 	       prog_name, opt->name, str);
+-      exit (1);
++      scanadf_exit (1);
+     }
+   str = end;
+ 
+@@ -480,7 +482,7 @@ parse_vector (const SANE_Option_Descriptor * opt, const char * str,
+ 	  {
+ 	    fprintf (stderr, "%s: option --%s: closing bracket missing "
+ 		     "(rest of option: %s)\n", prog_name, opt->name, str);
+-	    exit (1);
++	    scanadf_exit (1);
+ 	  }
+ 	str = end + 1;
+       }
+@@ -491,20 +493,20 @@ parse_vector (const SANE_Option_Descriptor * opt, const char * str,
+       {
+ 	fprintf (stderr, "%s: option --%s: index %d out of range [0..%ld]\n",
+ 		 prog_name, opt->name, index, (long) vector_length - 1);
+-	exit (1);
++	scanadf_exit (1);
+       }
+ 
+     /* read value */
+     str = parse_scalar (opt, str, &value);
+     if (!str)
+-      exit (1);
++      scanadf_exit (1);
+ 
+     if (*str && *str != '-' && *str != ',')
+       {
+ 	fprintf (stderr,
+ 		 "%s: option --%s: illegal separator (rest of option: %s)\n",
+ 		 prog_name, opt->name, str);
+-	exit (1);
++	scanadf_exit (1);
+       }
+ 
+     /* store value: */
+@@ -652,6 +654,28 @@ fetch_options (SANE_Device * device)
+     }
+ }
+ 
++static void
++scanadf_exit (int status)
++{
++  if (device)
++    {
++      if (verbose > 1)
++	fprintf (stderr, "Closing device\n");
++      sane_close (device);
++    }
++  if (verbose > 1)
++    fprintf (stderr, "Calling sane_exit\n");
++  sane_exit ();
++
++  if (all_options)
++    free (all_options);
++  if (option_number)
++    free (option_number);
++  if (verbose > 1)
++    fprintf (stderr, "scanimage: finished\n");
++  exit (status);
++}
++
+ static void
+ set_option (SANE_Handle device, int optnum, void * valuep)
+ {
+@@ -671,7 +695,7 @@ set_option (SANE_Handle device, int optnum, void * valuep)
+     {
+       fprintf (stderr, "%s: setting of option --%s failed (%s)\n",
+ 	       prog_name, opt->name, sane_strstatus (status));
+-      exit (1);
++      scanadf_exit (1);
+     }
+ 
+   if ((info & SANE_INFO_INEXACT) && opt->size == sizeof (SANE_Word))
+@@ -706,7 +730,7 @@ process_backend_option (SANE_Handle device, int optnum, const char * optarg)
+     {
+       fprintf (stderr, "%s: attempted to set inactive option %s\n",
+ 	       prog_name, opt->name);
+-      exit (1);
++      scanadf_exit (1);
+     }
+ 
+   if ((opt->cap & SANE_CAP_AUTOMATIC) && strncasecmp (optarg, "auto", 4) == 0)
+@@ -717,7 +741,7 @@ process_backend_option (SANE_Handle device, int optnum, const char * optarg)
+ 	{
+ 	  fprintf (stderr, "%s: failed to set option --%s to automatic (%s)\n",
+ 		   prog_name, opt->name, sane_strstatus (status));
+-	  exit (1);
++	  scanadf_exit (1);
+ 	}
+       return;
+     }
+@@ -737,7 +761,7 @@ process_backend_option (SANE_Handle device, int optnum, const char * optarg)
+ 	    {
+ 	      fprintf (stderr, "%s: option --%s: bad option value `%s'\n",
+ 		       prog_name, opt->name, optarg);
+-	      exit (1);
++	      scanadf_exit (1);
+ 	    }
+ 	}
+       break;
+@@ -753,7 +777,7 @@ process_backend_option (SANE_Handle device, int optnum, const char * optarg)
+ 	  if (!vector)
+ 	    {
+ 	      fprintf (stderr, "%s: out of memory\n", prog_name);
+-	      exit (1);
++	      scanadf_exit (1);
+ 	    }
+ 	}
+       parse_vector (opt, optarg, vector, vector_length);
+@@ -1325,7 +1349,7 @@ main (int argc, char **argv)
+ 	      {
+ 		fprintf (stderr, "%s: sane_get_devices() failed: %s\n",
+ 			 prog_name, sane_strstatus (status));
+-		exit (1);
++		scanadf_exit (1);
+ 	      }
+ 
+ 	    for (i = 0; device_list[i]; ++i)
+@@ -1334,7 +1358,7 @@ main (int argc, char **argv)
+ 			 device_list[i]->name, device_list[i]->vendor,
+ 			 device_list[i]->model, device_list[i]->type);
+ 	      }
+-	    exit (0);
++	    scanadf_exit (0);
+ 	  }
+ 
+ 	case 'o': outputFile = optarg; break;
+@@ -1369,12 +1393,12 @@ main (int argc, char **argv)
+ 	{
+ 	  fprintf (stderr, "%s: sane_get_devices() failed: %s\n",
+ 		   prog_name, sane_strstatus (status));
+-	  exit (1);
++	  scanadf_exit (1);
+ 	}
+       if (!device_list[0])
+ 	{
+ 	  fprintf (stderr, "%s: no SANE devices found\n", prog_name);
+-	  exit (1);
++	  scanadf_exit (1);
+ 	}
+       devname = device_list[0]->name;
+     }
+@@ -1387,7 +1411,7 @@ main (int argc, char **argv)
+       if (help)
+ 	device = 0;
+       else
+-	exit (1);
++	scanadf_exit (1);
+     }
+ 
+   if (device)
+@@ -1399,7 +1423,7 @@ main (int argc, char **argv)
+ 	{
+ 	  fprintf (stderr, "%s: unable to determine option count\n",
+ 		   prog_name);
+-	  exit (1);
++	  scanadf_exit (1);
+ 	}
+ 
+       all_options_len = num_dev_options + NELEMS(basic_options) + 1;
+@@ -1410,7 +1434,7 @@ main (int argc, char **argv)
+ 	{
+ 	  fprintf (stderr, "%s: out of memory in fetch_options()\n",
+ 		   prog_name);
+-	  exit (1);
++	  scanadf_exit (1);
+ 	}
+ 
+       fetch_options (device);
+@@ -1440,7 +1464,7 @@ main (int argc, char **argv)
+ 	if (!full_optstring)
+ 	  {
+ 	    fprintf (stderr, "%s: out of memory\n", prog_name);
+-	    exit (1);
++	    scanadf_exit (1);
+ 	  }
+ 
+ 	strcpy (full_optstring, BASE_OPTSTRING);
+@@ -1460,7 +1484,7 @@ main (int argc, char **argv)
+ 	    {
+ 	    case ':':
+ 	    case '?':
+-	      exit (1);	/* error message is printed by getopt_long() */
++	      scanadf_exit (1);	/* error message is printed by getopt_long() */
+ 
+ 	    case 'd': case 'h': case 'v': case 'V': case 'T':
+ 	    case 'o': case 'S': case 's': case 'e': case 'r':
+@@ -1569,7 +1593,7 @@ List of available devices:", prog_name);
+ 	    }
+ 	}
+       fputc ('\n', stdout);
+-      exit (0);
++      scanadf_exit (0);
+     }
+ 
+   signal (SIGHUP,  sighandler);

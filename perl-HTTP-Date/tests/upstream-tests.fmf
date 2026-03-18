@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-HTTP-Date
+require: perl-HTTP-Date-tests
+test: /usr/libexec/perl-HTTP-Date/test

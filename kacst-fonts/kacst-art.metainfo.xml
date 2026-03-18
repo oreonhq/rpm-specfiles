@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="font">
+  <id>kacst-art</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <name>Kacst</name>
+  <summary>Fonts for arabic from arabeyes project</summary>
+  <description>
+    <p>
+	This package contains fonts for the display of Arabic
+	from the King Abdulaziz City for Science and Technology(kacst).
+    </p>
+  </description>
+  <updatecontact>psatpute_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://old.arabeyes.org/resources.php</url>
+</component>

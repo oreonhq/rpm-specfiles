@@ -1,0 +1,11 @@
+summary: run the basic documentation build
+test: |
+    sphinx-build -M html source/ build/ &&
+    grep '<script src="_static/jquery.js' build/html/index.html &&
+    grep '<script src="_static/_sphinx_javascript_frameworks_compat.js' build/html/index.html &&
+    test -f build/html/_static/jquery.js &&
+    test -f build/html/_static/_sphinx_javascript_frameworks_compat.js &&
+    rm -rf build/
+require:
+  - python3-sphinx
+  - python3-sphinxcontrib-jquery

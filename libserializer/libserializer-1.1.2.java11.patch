@@ -1,0 +1,22 @@
+--- libserializer-1.1.2/common_build.xml	2020-05-05 19:40:10.080026171 +0100
++++ libserializer-1.1.2/common_build.xml	2020-05-05 19:40:46.433336643 +0100
+@@ -136,8 +136,8 @@
+   <property name="javac.deprecation"
+             value="true"
+             description="Indicates whether source should be compiled with deprecation information" />
+-  <property name="javac.source" value="1.5" description="Provide source compatibility with specified release" />
+-  <property name="javac.target" value="1.5" description="Generate class files for specific VM version" />
++  <property name="javac.source" value="1.8" description="Provide source compatibility with specified release" />
++  <property name="javac.target" value="1.8" description="Generate class files for specific VM version" />
+ 
+   <!-- Build Cache properties -->
+   <property name="build.cache.dir"
+@@ -1340,7 +1340,7 @@
+           depends="javadoc.init, compile">
+     <javadoc destdir="${javadoc.dir}/docs/api"
+              access="public"
+-             source="1.5"
++             source="1.8"
+              use="true"
+              notree="false"
+              nonavbar="false"

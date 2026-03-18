@@ -1,0 +1,1 @@
+fontpackages is now deprecated, retired and unmaintained. New fonts packaging guidelines in Fedora use fonts-rpm-macros (effectively, fontpackages 2). To ease the transition, some fontpackages compatibility code has been added to fonts-rpm-macros. This compatibility code will be removed in Fedora 34.

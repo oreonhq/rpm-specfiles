@@ -1,0 +1,37 @@
+diff --git a/awscli/botocore/awsrequest.py b/awscli/botocore/awsrequest.py
+index f7a18a3..bf1ca13 100644
+--- a/awscli/botocore/awsrequest.py
++++ b/awscli/botocore/awsrequest.py
+@@ -14,6 +14,7 @@
+ import functools
+ import io
+ import logging
++from collections.abc import Mapping
+ import socket
+ import sys
+ 
+@@ -24,6 +25,7 @@ from botocore.compat import (
+     HTTPResponse,
+     MutableMapping,
+     urlencode,
++    urlparse,
+     urlsplit,
+     urlunsplit,
+ )
+@@ -375,8 +377,14 @@ class AWSRequestPreparer:
+     def _prepare_url(self, original):
+         url = original.url
+         if original.params:
+-            params = urlencode(list(original.params.items()), doseq=True)
+-            url = f'{url}?{params}'
++            url_parts = urlparse(url)
++            delim = '&' if url_parts.query else '?'
++            if isinstance(original.params, Mapping):
++                params_to_encode = list(original.params.items())
++            else:
++                params_to_encode = original.params
++            params = urlencode(params_to_encode, doseq=True)
++            url = delim.join((url, params))
+         return url
+ 
+     def _prepare_headers(self, original, prepared_body=None):

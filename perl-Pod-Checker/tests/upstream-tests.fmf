@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Pod-Checker
+require: perl-Pod-Checker-tests
+test: /usr/libexec/perl-Pod-Checker/test

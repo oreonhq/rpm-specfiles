@@ -1,0 +1,36 @@
+from tests/aslts/README:
+
+   ACPICA ASL grammar validation Test Suite (ASLTS)
+
+
+   ASLTS verifies, in "hardware-independent" mode, conformity of ACPICA
+ASL compiler and interpreter to the ACPI ASL grammar specification. The
+more common task of ASLTS is to check, in "hardware-independent" mode also,
+all the functionality of ACPICA which can be initiated and then verified
+from inside the test modules coded in ASL. The first local task is performed
+by the test collection named 'functional', to achieve the second one the tests
+of other collections are intended: complex, exceptions, etc. The conditional
+difference between the tests of 'functional' and 'complex' collections is that
+the tests of 'functional' collection checks specific functionality of the
+particular ASL operator while the tests of 'complex' collection verify the
+more common functionality.
+
+   The testing is performed in "hardware-independent" mode without any
+access to ACPI subsystem hardware. In this purpose the AcpiExec utility
+is used which includes the entire ACPICA subsystem and allows to execute
+the AML code and thus verify functionality of ACPICA subsystem.
+
+   The ASL source code is compiled to AML code and then passed to
+AcpiExec utility. In this relation one more type tests are provided,
+so called ASL-compilation control test collection, which check ability
+of ASL compiler to reveal and report incorrect ASL code.
+
+   The tests of the exceptional conditions test collection
+initiate and verify exceptional conditions, check that the
+exceptions occur (or not occur) in the expected specified way.
+
+   The testing is provided in both 32-bit and 64-bit modes
+(option -r of ASL compiler) as well both normal and slack
+modes (option -s of AcpiExec).
+
+

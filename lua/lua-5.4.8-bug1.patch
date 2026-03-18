@@ -1,0 +1,18 @@
+diff -up lua-5.4.8/src/lgc.c.54bug1 lua-5.4.8/src/lgc.c
+--- lua-5.4.8/src/lgc.c.54bug1	2026-01-14 16:36:43.207903781 -0500
++++ lua-5.4.8/src/lgc.c	2026-01-14 16:36:48.354344444 -0500
+@@ -553,8 +553,12 @@ static lu_mem traversetable (global_Stat
+       traverseweakvalue(g, h);
+     else if (!weakvalue)  /* strong values? */
+       traverseephemeron(g, h, 0);
+-    else  /* all weak */
+-      linkgclist(h, g->allweak);  /* nothing to traverse now */
++    else {  /* all weak */
++      if (g->gcstate == GCSpropagate)
++        linkgclist(h, g->grayagain);  /* must visit again its metatable */
++      else
++        linkgclist(h, g->allweak);  /* must clear collected entries */
++    }
+   }
+   else  /* not weak */
+     traversestrongtable(g, h);

@@ -1,0 +1,288 @@
+diff -rup kde-workspace-4.11.22.orig/doc/kcontrol/mouse/index.docbook kde-workspace-4.11.22/doc/kcontrol/mouse/index.docbook
+--- kde-workspace-4.11.22.orig/doc/kcontrol/mouse/index.docbook	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/doc/kcontrol/mouse/index.docbook	2021-12-18 22:05:31.732599066 +0000
+@@ -389,9 +389,9 @@ then
+ # New code, using lock files instead of copying /dev/console permissions
+ # This also works with non-kdm logins (e.g. on a virtual terminal)
+ # Idea and code from Nalin Dahyabhai <nalin@redhat.com>
+-    if [ -f /var/run/console.lock ]
++    if [ -f /run/console.lock ]
+     then
+-        CONSOLEOWNER=`cat /var/run/console.lock`
++        CONSOLEOWNER=`cat /run/console.lock`
+     elif [ -f /var/lock/console.lock ]
+     then
+         CONSOLEOWNER=`cat /var/lock/console.lock`
+diff -rup kde-workspace-4.11.22.orig/doc/kdm/kdmrc-ref.docbook kde-workspace-4.11.22/doc/kdm/kdmrc-ref.docbook
+--- kde-workspace-4.11.22.orig/doc/kdm/kdmrc-ref.docbook	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/doc/kdm/kdmrc-ref.docbook	2021-12-18 22:05:31.729599077 +0000
+@@ -241,7 +241,7 @@ this directory from stale files on reboo
+ The authorization file to be used for a particular display can be
+ specified with the <option>AuthFile</option> option in [X-*-Core].
+ </para>
+-<para>The default is <quote>/var/run/xauth</quote>.</para>
++<para>The default is <quote>/run/xauth</quote>.</para>
+ </listitem>
+ </varlistentry>
+ 
+@@ -330,7 +330,7 @@ function instead.
+ The directory in which the command sockets should
+ be created; make it empty to disable them.
+ </para>
+-<para>The default is <quote>/var/run/xdmctl</quote>.</para>
++<para>The default is <quote>/run/xdmctl</quote>.</para>
+ </listitem>
+ </varlistentry>
+ 
+diff -rup kde-workspace-4.11.22.orig/kcheckpass/kcheckpass.c kde-workspace-4.11.22/kcheckpass/kcheckpass.c
+--- kde-workspace-4.11.22.orig/kcheckpass/kcheckpass.c	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kcheckpass/kcheckpass.c	2021-12-18 22:05:31.727599085 +0000
+@@ -397,7 +397,7 @@ main(int argc, char **argv)
+    * it's not expected to have a noticeable adverse effect.
+    */
+   if ( uid != geteuid() ) {
+-    sprintf(fname, "/var/run/kcheckpass.%d", uid);
++    sprintf(fname, "/run/kcheckpass.%d", uid);
+     if ((lfd = open(fname, O_RDWR | O_CREAT | O_NOFOLLOW, 0600)) < 0) {
+       message("Cannot open lockfile\n");
+       return AuthError;
+diff -rup kde-workspace-4.11.22.orig/kcontrol/input/consoleUserPerms kde-workspace-4.11.22/kcontrol/input/consoleUserPerms
+--- kde-workspace-4.11.22.orig/kcontrol/input/consoleUserPerms	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kcontrol/input/consoleUserPerms	2021-12-18 22:05:31.735599055 +0000
+@@ -24,9 +24,9 @@ then
+     # New code, using lock files instead of copying /dev/console permissions
+     # This also works with non-kdm logins (e.g. on a virtual terminal)
+     # Idea and code from Nalin Dahyabhai <nalin@redhat.com>
+-    if [ -f /var/run/console.lock ]
++    if [ -f /run/console.lock ]
+     then
+-        CONSOLEOWNER=`cat /var/run/console.lock`
++        CONSOLEOWNER=`cat /run/console.lock`
+     elif [ -f /var/lock/console.lock ]
+     then
+         CONSOLEOWNER=`cat /var/lock/console.lock`
+diff -rup kde-workspace-4.11.22.orig/kdm/backend/auth.c kde-workspace-4.11.22/kdm/backend/auth.c
+--- kde-workspace-4.11.22.orig/kdm/backend/auth.c	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kdm/backend/auth.c	2021-12-18 22:05:31.712599141 +0000
+@@ -346,7 +346,7 @@ makeServerAuthFile(struct display *d, ch
+     /*
+      * Some paranoid, but still not sufficient (DoS was still possible)
+      * checks used to be here. I removed all this stuff because
+-     * a) authDir is supposed to be /var/run/xauth (=safe) or similar and
++     * a) authDir is supposed to be /run/xauth (=safe) or similar and
+      * b) even if it's not (say, /tmp), we create files safely (hopefully).
+      */
+     if (mkdir(authDir, 0755) < 0  &&  errno != EEXIST)
+diff -rup kde-workspace-4.11.22.orig/kdm/backend/dm.c kde-workspace-4.11.22/kdm/backend/dm.c
+--- kde-workspace-4.11.22.orig/kdm/backend/dm.c	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kdm/backend/dm.c	2021-12-18 22:05:31.715599130 +0000
+@@ -285,7 +285,7 @@ main(int argc, char **argv)
+ 
+     /*
+      * We used to clean up old authorization files here. As authDir is
+-     * supposed to be /var/run/xauth or /tmp, we needn't to care for it.
++     * supposed to be /run/xauth or /tmp, we needn't to care for it.
+      */
+ 
+ #ifdef XDMCP
+diff -rup kde-workspace-4.11.22.orig/kdm/ChangeLog kde-workspace-4.11.22/kdm/ChangeLog
+--- kde-workspace-4.11.22.orig/kdm/ChangeLog	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kdm/ChangeLog	2021-12-18 22:05:31.717599122 +0000
+@@ -323,7 +323,7 @@ if they affect the configuration.
+ 2001-10-04  Oswald Buddenhagen <ossi@kde.org>
+ 
+ 	* Xauth files are now created in AuthDir, not AuthDir/authdir.
+-	  Changed AuthDir default to /var/run/xauth.
++	  Changed AuthDir default to /run/xauth.
+ 
+ 2001-07-12  Oswald Buddenhagen <ossi@kde.org>
+ 
+@@ -558,7 +558,7 @@ if they affect the configuration.
+ 
+ 	* Change defaults:
+ 	  - Setup: "" -> XDMDIR/Xsetup
+-	  - PidFile: "" -> FreeBSD: /var/run/kdm.pid, others: XDMDIR/kdm-pid
++	  - PidFile: "" -> FreeBSD: /run/kdm.pid, others: XDMDIR/kdm-pid
+ 	  - Session: "XBINDIR/xterm -ls" -> XDMDIR/Xsession
+ 	  - UserPath & SystemPath: no /usr/ucb for Linux & FreeBSD
+ 
+diff -rup kde-workspace-4.11.22.orig/kdm/config.def kde-workspace-4.11.22/kdm/config.def
+--- kde-workspace-4.11.22.orig/kdm/config.def	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kdm/config.def	2021-12-18 22:05:31.720599111 +0000
+@@ -878,7 +878,7 @@ Key: PidFile
+ Type: string
+ Default: ""
+ User: core
+-Instance: "/var/run/kdm.pid"
++Instance: "/run/kdm.pid"
+ Merge: xdm
+ Comment:
+  Where &kdm; should store its PID (do not store if empty).
+@@ -903,7 +903,7 @@ Description:
+ Key: AuthDir
+ Type: path
+ # differs from XDM
+-Default: "/var/run/xauth"
++Default: "/run/xauth"
+ User: core
+ Instance: #"/tmp"
+ Merge: xdm(P_authDir)
+@@ -1010,7 +1010,7 @@ Description:
+ 
+ Key: FifoDir
+ Type: path
+-Default: *"/var/run/xdmctl"
++Default: *"/run/xdmctl"
+ User: core
+ Instance: #"/tmp"
+ Update: upd_fifodir
+diff -rup kde-workspace-4.11.22.orig/kdm/kfrontend/genkdmconf.c kde-workspace-4.11.22/kdm/kfrontend/genkdmconf.c
+--- kde-workspace-4.11.22.orig/kdm/kfrontend/genkdmconf.c	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kdm/kfrontend/genkdmconf.c	2021-12-18 22:05:31.724599096 +0000
+@@ -51,7 +51,7 @@ Foundation, Inc., 51 Franklin Street, Fi
+ # endif
+ # ifndef _PATH_UTMP
+ #  if defined(__FreeBSD_version) && __FreeBSD_version >= 900007
+-#   define _PATH_UTMP "/var/run/utmp"
++#   define _PATH_UTMP "/run/utmp"
+ #  else
+ #   error "_PATH_UTMP must be defined"
+ #  endif
+@@ -1792,7 +1792,7 @@ edit_setup(File *file)
+     int chg =
+         delstr(file, "\n"
+                "(\n"
+-               "  PIDFILE=/var/run/kdmdesktop-$DISPLAY.pid\n"
++               "  PIDFILE=/run/kdmdesktop-$DISPLAY.pid\n"
+                "  */kdmdesktop\t&\n"
+                "  echo $! >$PIDFILE\n"
+                "  wait $!\n"
+@@ -1837,12 +1837,12 @@ edit_startup(File *file)
+ 
+     if (mod_usebg &&
+         (delstr(file, "\n"
+-                "PIDFILE=/var/run/kdmdesktop-$DISPLAY.pid\n"
++                "PIDFILE=/run/kdmdesktop-$DISPLAY.pid\n"
+                 "if [[] -f $PIDFILE ] ; then\n"
+                 "	   kill `cat $PIDFILE`\n"
+                 "fi\n") ||
+          delstr(file, "\n"
+-                "PIDFILE=/var/run/kdmdesktop-$DISPLAY.pid\n"
++                "PIDFILE=/run/kdmdesktop-$DISPLAY.pid\n"
+                 "test -f $PIDFILE && kill `cat $PIDFILE`\n")))
+         chg1 = True;
+     if (oldver < 0x0203) {
+@@ -1885,7 +1885,7 @@ edit_startup(File *file)
+ #endif
+ " $USER\n") |
+             delstr(file, "\n"
+-"exec sessreg -a -l $DISPLAY -u /var/run/utmp -x */Xservers $USER\n");
++"exec sessreg -a -l $DISPLAY -u /run/utmp -x */Xservers $USER\n");
+         putVal("UseSessReg", chg2 ? "true" : "false");
+     }
+     return chg1 | chg2;
+@@ -1934,7 +1934,7 @@ edit_reset(File *file)
+ # endif
+ " $USER\n") |
+         delstr(file, "\n"
+-"exec sessreg -d -l $DISPLAY -u /var/run/utmp -x */Xservers $USER\n");
++"exec sessreg -d -l $DISPLAY -u /run/utmp -x */Xservers $USER\n");
+ }
+ 
+ static void
+diff -rup kde-workspace-4.11.22.orig/kdm/kfrontend/kdmctl.c kde-workspace-4.11.22/kdm/kfrontend/kdmctl.c
+--- kde-workspace-4.11.22.orig/kdm/kfrontend/kdmctl.c	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kdm/kfrontend/kdmctl.c	2021-12-18 22:05:31.722599103 +0000
+@@ -63,7 +63,7 @@ readConfig(const char *cfg)
+                 cfg);
+         return 0;
+     }
+-    ctl = "/var/run/xdmctl";
++    ctl = "/run/xdmctl";
+     while (fgets(buf, sizeof(buf), fp))
+         if (!strncmp(buf, "FifoDir", 7)) {
+             ptr = buf + 7;
+@@ -175,7 +175,7 @@ main(int argc, char **argv)
+ "- the -s option is examined\n"
+ "- the $DM_CONTROL variable is examined\n"
+ "- the kdm config file is searched for the FifoDir key\n"
+-"- /var/run/xdmctl and /var/run are tried\n"
++"- /run/xdmctl and /run are tried\n"
+ "\n"
+ "If $DISPLAY is set (or -d was specified) and -g was not specified, the\n"
+ "display-specific control socket will be used, otherwise the global one.\n"
+@@ -222,8 +222,8 @@ main(int argc, char **argv)
+         if (!openCtl(fd, 1, ctl, dpy))
+             return 1;
+     } else {
+-        if (!openCtl(fd, 0, "/var/run/xdmctl", dpy) &&
+-            !openCtl(fd, 0, "/var/run", dpy))
++        if (!openCtl(fd, 0, "/run/xdmctl", dpy) &&
++            !openCtl(fd, 0, "/run", dpy))
+         {
+             fprintf(stderr, "No command socket found.\n");
+             return 1;
+diff -rup kde-workspace-4.11.22.orig/kdm/README kde-workspace-4.11.22/kdm/README
+--- kde-workspace-4.11.22.orig/kdm/README	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kdm/README	2021-12-18 22:05:31.710599148 +0000
+@@ -53,9 +53,9 @@ ${kde_datadir}/kdm/pics/users/
+ ${kde_datadir}/kdm/pics/
+ ${kde_datadir}/kdm/faces/*.face{,.icon}
+   /usr/share/faces/
+-/var/run/xauth/A*
+-/var/run/xdmctl/xdmctl*
+-/var/run/kdm.pid
++/run/xauth/A*
++/run/xdmctl/xdmctl*
++/run/kdm.pid
+ /var/lib/kdm/kdmsts
+ <site-specific>/*.dmrc
+ $HOME/.face{,.icon}
+diff -rup kde-workspace-4.11.22.orig/kinfocenter/Modules/base/info_netbsd.cpp kde-workspace-4.11.22/kinfocenter/Modules/base/info_netbsd.cpp
+--- kde-workspace-4.11.22.orig/kinfocenter/Modules/base/info_netbsd.cpp	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kinfocenter/Modules/base/info_netbsd.cpp	2021-12-18 22:05:31.704599170 +0000
+@@ -43,7 +43,7 @@ typedef struct {
+ // this is used to find out which devices are currently
+ // on system
+ static bool GetDmesgInfo(QTreeWidget* tree, const char *filter, void func(QTreeWidget* tree, QString s)) {
+-	QFile *dmesg = new QFile("/var/run/dmesg.boot");
++	QFile *dmesg = new QFile("/run/dmesg.boot");
+ 	bool usepipe = false;
+ 	FILE *pipe= NULL;
+ 	QTextStream *t;
+diff -rup kde-workspace-4.11.22.orig/kinfocenter/Modules/base/info_openbsd.cpp kde-workspace-4.11.22/kinfocenter/Modules/base/info_openbsd.cpp
+--- kde-workspace-4.11.22.orig/kinfocenter/Modules/base/info_openbsd.cpp	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/kinfocenter/Modules/base/info_openbsd.cpp	2021-12-18 22:05:31.695599204 +0000
+@@ -39,7 +39,7 @@ typedef struct {
+ // this is used to find out which devices are currently
+ // on system
+ static bool GetDmesgInfo(QTreeWidget* tree, const char *filter, void func(QTreeWidget *, QString s, void **, bool)) {
+-	QFile *dmesg = new QFile("/var/run/dmesg.boot");
++	QFile *dmesg = new QFile("/run/dmesg.boot");
+ 	bool usepipe=false;
+ 	FILE *pipe=NULL;
+ 	QTextStream *t;
+diff -rup kde-workspace-4.11.22.orig/ksysguard/ksysguardd/ksysguardd.c kde-workspace-4.11.22/ksysguard/ksysguardd/ksysguardd.c
+--- kde-workspace-4.11.22.orig/ksysguard/ksysguardd/ksysguardd.c	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/ksysguard/ksysguardd/ksysguardd.c	2021-12-18 22:05:31.739599040 +0000
+@@ -62,7 +62,7 @@ static ClientInfo ClientList[ MAX_CLIENT
+ static int SocketPort = -1;
+ static unsigned char BindToAllInterfaces = 0;
+ static int CurrentSocket;
+-static const char LockFile[] = "/var/run/ksysguardd.pid";
++static const char LockFile[] = "/run/ksysguardd.pid";
+ static const char *ConfigFile = KSYSGUARDDRCFILE;
+ 
+ void signalHandler( int sig );
+diff -rup kde-workspace-4.11.22.orig/libs/kworkspace/kdisplaymanager.cpp kde-workspace-4.11.22/libs/kworkspace/kdisplaymanager.cpp
+--- kde-workspace-4.11.22.orig/libs/kworkspace/kdisplaymanager.cpp	2015-08-12 08:03:15.000000000 +0100
++++ kde-workspace-4.11.22/libs/kworkspace/kdisplaymanager.cpp	2021-12-18 22:05:31.707599159 +0000
+@@ -319,7 +319,7 @@ KDisplayManager::KDisplayManager() : d(n
+             return;
+         sa.sun_family = AF_UNIX;
+         if (DMType == OldGDM) {
+-            strcpy(sa.sun_path, "/var/run/gdm_socket");
++            strcpy(sa.sun_path, "/run/gdm_socket");
+             if (::connect(d->fd, (struct sockaddr *)&sa, sizeof(sa))) {
+                 strcpy(sa.sun_path, "/tmp/.gdm_socket");
+                 if (::connect(d->fd, (struct sockaddr *)&sa, sizeof(sa))) {

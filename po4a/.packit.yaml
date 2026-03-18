@@ -1,0 +1,33 @@
+specfile_path: po4a.spec
+
+# name in upstream package repository or registry (e.g. in PyPI)
+upstream_package_name: po4a
+upstream_project_url: https://github.com/mquinson/po4a
+upstream_tag_template: v{version}
+# downstream (Fedora) RPM package name
+downstream_package_name: po4a
+issue_repository: https://src.fedoraproject.org/rpms/po4a
+
+upload_sources: true
+
+actions:
+  changelog-entry:
+  - bash -c 'echo "- New release ${PACKIT_PROJECT_VERSION}"'
+
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - fedora-rawhide
+
+  - job: koji_build
+    trigger: commit
+    allowed_pr_authors: ["packit", "sergiomb"]
+    allowed_committers: ["packit", "sergiomb"]
+    dist_git_branches:
+      - fedora-all
+
+  - job: bodhi_update
+    trigger: commit
+    dist_git_branches:
+      - fedora-all # rawhide updates are created automatically

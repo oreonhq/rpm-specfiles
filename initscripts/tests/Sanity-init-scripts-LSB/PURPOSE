@@ -1,0 +1,3 @@
+PURPOSE of /CoreOS/initscripts/Sanity/init-scripts-LSB
+Description: Init scripts should meet LSB specifications
+Author: Yulia Kopkova <ykopkova@redhat.com>

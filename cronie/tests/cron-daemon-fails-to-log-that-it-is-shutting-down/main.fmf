@@ -1,0 +1,14 @@
+summary: Test for cron daemon fails to log that it is shutting down.
+description: "Bug summary: cron daemon fails to log that it is shutting down.\n"
+contact: Robin Hack <rhack@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 20m
+extra-summary: 
+    /CoreOS/cronie/Regression/cron-daemon-fails-to-log-that-it-is-shutting-down
+extra-task: 
+    /CoreOS/cronie/Regression/cron-daemon-fails-to-log-that-it-is-shutting-down

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Date-Manip
+require: perl-Date-Manip-tests
+test: /usr/libexec/perl-Date-Manip/test

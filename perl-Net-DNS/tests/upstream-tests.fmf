@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Net-DNS
+require: perl-Net-DNS-tests
+test: /usr/libexec/perl-Net-DNS/test

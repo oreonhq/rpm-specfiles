@@ -1,0 +1,10 @@
+summary: jaxb smoke test
+description: |
+  Test basic functionality of jaxb.
+require:
+  - jaxb-runtime
+  - java-25-openjdk-devel
+  - xmvn-tools
+  - mvn(jakarta.activation:jakarta.activation-api)
+  - mvn(jakarta.xml.bind:jakarta.xml.bind-api)
+  - mvn(com.sun.istack:istack-commons-runtime)

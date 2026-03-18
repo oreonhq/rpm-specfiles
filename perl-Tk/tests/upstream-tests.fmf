@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Tk
+require: perl-Tk-tests
+test: /usr/libexec/perl-Tk/test

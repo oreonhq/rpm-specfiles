@@ -1,0 +1,7 @@
+summary: Basic test
+require:
+    - liblangtag-gobject
+    - python3
+    - python3-gobject
+test: ./runtest.sh
+framework: beakerlib

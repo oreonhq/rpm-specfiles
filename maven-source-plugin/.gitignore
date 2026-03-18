@@ -1,0 +1,14 @@
+/results_*
+/*.src.rpm
+
+/maven-source-plugin-2.1.2.tar.xz
+/maven-source-plugin-2.1.2-source-release.zip
+/maven-source-plugin-2.2.1-source-release.zip
+/maven-source-plugin-2.3-source-release.zip
+/maven-source-plugin-2.4-source-release.zip
+/maven-source-plugin-3.0.0-source-release.zip
+/maven-source-plugin-3.0.1-source-release.zip
+/maven-source-plugin-3.1.0-source-release.zip
+/maven-source-plugin-3.2.0-source-release.zip
+/maven-source-plugin-3.2.1-source-release.zip
+/maven-source-plugin-3.3.0-source-release.zip

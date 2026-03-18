@@ -1,0 +1,5 @@
+summary: Upstream tests
+component: perl-Archive-Zip
+require: perl-Archive-Zip-tests
+test: /usr/libexec/perl-Archive-Zip/test
+

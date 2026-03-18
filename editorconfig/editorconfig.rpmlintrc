@@ -1,0 +1,4 @@
+# don't care about these warnings
+addFilter(r" name-repeated-in-summary EditorConfig")
+addFilter(r" no-manual-page-for-binary editorconfig-")
+addFilter(r"^editorconfig-devel\..+: no-documentation$")

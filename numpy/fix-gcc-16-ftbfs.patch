@@ -1,0 +1,37 @@
+From cb42dd6742f60104eb4f8e8c83d5f8fc038d908c Mon Sep 17 00:00:00 2001
+From: Charalampos Stratakis <cstratak@redhat.com>
+Date: Thu, 22 Jan 2026 03:31:26 +0100
+Subject: [PATCH] Fix GCC 16 LTO build failure with multi-target dispatch
+
+Remove always_inline from STDSortComparator. This function is passed
+to std::sort, and GCC 16 rejects forced inlining when the caller and
+callee have mismatched target attributes during LTO.
+
+This occurs when the library is used via the header-only static include
+with multiple dispatch targets (e.g. AVX-512 and baseline) linked
+together, as NumPy does.
+
+Standalone builds are unaffected since they use -march=skylake-avx512
+for the entire translation unit.
+---
+ numpy/_core/src/npysort/x86-simd-sort/src/xss-common-comparators.hpp | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/numpy/_core/src/npysort/x86-simd-sort/src/xss-common-comparators.hpp b/numpy/_core/src/npysort/x86-simd-sort/src/xss-common-comparators.hpp
+index bd742cd..e786c91 100644
+--- a/numpy/_core/src/npysort/x86-simd-sort/src/xss-common-comparators.hpp
++++ b/numpy/_core/src/npysort/x86-simd-sort/src/xss-common-comparators.hpp
+@@ -40,8 +40,8 @@ struct Comparator {
+     using opmask_t = typename vtype::opmask_t;
+     using type_t = typename vtype::type_t;
+ 
+-    X86_SIMD_SORT_FINLINE bool STDSortComparator(const type_t &a,
+-                                                 const type_t &b)
++    X86_SIMD_SORT_INLINE bool STDSortComparator(const type_t &a,
++                                                const type_t &b)
+     {
+         if constexpr (descend) { return comparison_func<vtype>(b, a); }
+         else {
+-- 
+2.52.0
+

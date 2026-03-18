@@ -1,0 +1,5 @@
+addFilter('web-assets-filesystem\.noarch: W: no-documentation')
+# The target is provided by fonts-filesystem.
+addFilter('web-assets-filesystem\.noarch: W: dangling-relative-symlink /usr/share/web-assets/fonts \.\./fonts')
+# RPM macros live in /usr/lib.
+addFilter('web-assets-devel\.noarch: W: only-non-binary-in-usr-lib')

@@ -1,0 +1,144 @@
+diff -Naur malaga-7.12.orig/allomorphs.c malaga-7.12/allomorphs.c
+--- malaga-7.12.orig/allomorphs.c	2006-05-27 16:58:16.000000000 +0300
++++ malaga-7.12/allomorphs.c	2025-08-16 21:49:38.878169729 +0300
+@@ -140,7 +140,7 @@
+ 
+ static GtkItemFactoryEntry in_line_items[] = 
+ {
+-  { "/Style/Inline", NULL, set_in_line, 0, "<ToggleItem>" }
++  { "/Style/Inline", NULL, (GtkItemFactoryCallback)set_in_line, 0, "<ToggleItem>" }
+ };
+ 
+ /*---------------------------------------------------------------------------*/
+diff -Naur malaga-7.12.orig/canvas.c malaga-7.12/canvas.c
+--- malaga-7.12.orig/canvas.c	2008-03-07 09:03:23.000000000 +0200
++++ malaga-7.12/canvas.c	2025-08-16 21:57:44.635717499 +0300
+@@ -2065,21 +2065,21 @@
+ static GtkItemFactoryEntry canvas_items[] = 
+ {
+   { "/Window", NULL, NULL, 0, "<Branch>" },
+-  { "/Window/Export Postscript...", NULL, export_postscript, 0, NULL },
+-  { "/Window/Close", "<Control>C", hide_canvas, 0, NULL },
++  { "/Window/Export Postscript...", NULL, (GtkItemFactoryCallback)export_postscript, 0, NULL },
++  { "/Window/Close", "<Control>C", (GtkItemFactoryCallback)hide_canvas, 0, NULL },
+   { "/Style", NULL, NULL, 0, "<Branch>" },
+-  { "/Style/Font Size 8", NULL, set_font_size, 8, "<RadioItem>" },
+-  { "/Style/Font Size 10", NULL, set_font_size, 10, "/Style/Font Size 8" },
+-  { "/Style/Font Size 12", NULL, set_font_size, 12, "/Style/Font Size 8" },
+-  { "/Style/Font Size 14", NULL, set_font_size, 14, "/Style/Font Size 8" },
+-  { "/Style/Font Size 18", NULL, set_font_size, 18, "/Style/Font Size 8" },
+-  { "/Style/Font Size 24", NULL, set_font_size, 24, "/Style/Font Size 8" }
++  { "/Style/Font Size 8", NULL, (GtkItemFactoryCallback)set_font_size, 8, "<RadioItem>" },
++  { "/Style/Font Size 10", NULL, (GtkItemFactoryCallback)set_font_size, 10, "/Style/Font Size 8" },
++  { "/Style/Font Size 12", NULL, (GtkItemFactoryCallback)set_font_size, 12, "/Style/Font Size 8" },
++  { "/Style/Font Size 14", NULL, (GtkItemFactoryCallback)set_font_size, 14, "/Style/Font Size 8" },
++  { "/Style/Font Size 18", NULL, (GtkItemFactoryCallback)set_font_size, 18, "/Style/Font Size 8" },
++  { "/Style/Font Size 24", NULL, (GtkItemFactoryCallback)set_font_size, 24, "/Style/Font Size 8" }
+ };
+ 
+ static GtkItemFactoryEntry hanging_style_items[] =
+ {
+   { "/Style/sep1", NULL, NULL, 0, "<Separator>" },
+-  { "/Style/Hanging", NULL, set_hanging_style, 0, "<ToggleItem>" }
++  { "/Style/Hanging", NULL, (GtkItemFactoryCallback)set_hanging_style, 0, "<ToggleItem>" }
+ };
+ 
+ /*---------------------------------------------------------------------------*/
+diff -Naur malaga-7.12.orig/expressions.c malaga-7.12/expressions.c
+--- malaga-7.12.orig/expressions.c	2005-05-06 11:25:07.000000000 +0300
++++ malaga-7.12/expressions.c	2025-08-16 21:54:58.023594259 +0300
+@@ -179,9 +179,9 @@
+ static GtkItemFactoryEntry menu_items[] = 
+ {
+   { "/Expressions", NULL, NULL, 0, "<Branch>" },
+-  { "/Expressions/Clear All", NULL, clear_expressions, NULL, NULL },
+-  { "/Expressions/Show All", NULL, show_all_expressions, TRUE, NULL },
+-  { "/Expressions/Hide All", NULL, show_all_expressions, FALSE, NULL },
++  { "/Expressions/Clear All", NULL, (GtkItemFactoryCallback)clear_expressions, NULL, NULL },
++  { "/Expressions/Show All", NULL, (GtkItemFactoryCallback)show_all_expressions, TRUE, NULL },
++  { "/Expressions/Hide All", NULL, (GtkItemFactoryCallback)show_all_expressions, FALSE, NULL },
+ };
+ 
+ /*---------------------------------------------------------------------------*/
+diff -Naur malaga-7.12.orig/tree.c malaga-7.12/tree.c
+--- malaga-7.12.orig/tree.c	2007-08-05 09:05:39.000000000 +0300
++++ malaga-7.12/tree.c	2025-08-16 22:03:44.664584153 +0300
+@@ -402,17 +402,17 @@
+ 
+ static GtkItemFactoryEntry path_items[] = 
+ {
+-  { "/Style/Inline", NULL, set_inline_path, 0, "<ToggleItem>" },
++  { "/Style/Inline", NULL, (GtkItemFactoryCallback)set_inline_path, 0, "<ToggleItem>" },
+   { "/Path", NULL, NULL, 0, "<Branch>" },
+-  { "/Path/Show State Indexes", NULL, path_index_option, 0, "<ToggleItem>" },
++  { "/Path/Show State Indexes", NULL, (GtkItemFactoryCallback)path_index_option, 0, "<ToggleItem>" },
+   { "/End States", NULL, NULL, 0, "<Branch>" },
+-  { "/End States/Show First End State", "<Control>F", goto_state, FIRST_STATE, 
++  { "/End States/Show First End State", "<Control>F", (GtkItemFactoryCallback)goto_state, FIRST_STATE, 
+     NULL },
+-  { "/End States/Show Previous End State", "<Control>P", goto_state, PREV_STATE,
++  { "/End States/Show Previous End State", "<Control>P", (GtkItemFactoryCallback)goto_state, PREV_STATE,
+     NULL },
+-  { "/End States/Show Next End State", "<Control>N", goto_state, NEXT_STATE, 
++  { "/End States/Show Next End State", "<Control>N", (GtkItemFactoryCallback)goto_state, NEXT_STATE, 
+     NULL },
+-  { "/End States/Show Last End State", "<Control>L", goto_state, LAST_STATE, 
++  { "/End States/Show Last End State", "<Control>L", (GtkItemFactoryCallback)goto_state, LAST_STATE, 
+     NULL }
+ };
+ 
+@@ -905,19 +905,19 @@
+ static GtkItemFactoryEntry tree_items[] = 
+ {
+   { "/Tree", NULL, NULL, 0, "<Branch>" },
+-  { "/Tree/Full Tree", NULL, set_tree, FULL_TREE, "<RadioItem>" },
+-  { "/Tree/No Dead Ends", NULL, set_tree, NO_DEAD_ENDS, "/Tree/Full Tree" },
+-  { "/Tree/Complete Paths", NULL, set_tree, RESULT_PATHS, "/Tree/Full Tree" },
++  { "/Tree/Full Tree", NULL, (GtkItemFactoryCallback)set_tree, FULL_TREE, "<RadioItem>" },
++  { "/Tree/No Dead Ends", NULL, (GtkItemFactoryCallback)set_tree, NO_DEAD_ENDS, "/Tree/Full Tree" },
++  { "/Tree/Complete Paths", NULL, (GtkItemFactoryCallback)set_tree, RESULT_PATHS, "/Tree/Full Tree" },
+   { "/Tree/sep1", NULL, NULL, 0, "<Separator>" },
+-  { "/Tree/Show State Indexes", NULL, tree_index_option, 0, "<ToggleItem>" },
++  { "/Tree/Show State Indexes", NULL, (GtkItemFactoryCallback)tree_index_option, 0, "<ToggleItem>" },
+   { "/End States", NULL, NULL, 0, "<Branch>" },
+-  { "/End States/Show First End State", "<Control>F", goto_state, FIRST_STATE, 
++  { "/End States/Show First End State", "<Control>F", (GtkItemFactoryCallback)goto_state, FIRST_STATE, 
+     NULL },
+-  { "/End States/Show Previous End State", "<Control>P", goto_state, PREV_STATE,
++  { "/End States/Show Previous End State", "<Control>P", (GtkItemFactoryCallback)goto_state, PREV_STATE,
+     NULL },
+-  { "/End States/Show Next End State", "<Control>N", goto_state, NEXT_STATE, 
++  { "/End States/Show Next End State", "<Control>N", (GtkItemFactoryCallback)goto_state, NEXT_STATE, 
+     NULL },
+-  { "/End States/Show Last End State", "<Control>L", goto_state, LAST_STATE, 
++  { "/End States/Show Last End State", "<Control>L", (GtkItemFactoryCallback)goto_state, LAST_STATE, 
+     NULL }
+ };
+ 
+@@ -925,9 +925,9 @@
+ 
+ static GtkItemFactoryEntry popup_items[] = 
+ {
+-  { "/Set Path Begin", NULL, display_node, PATH_BEGIN, "<Item>" },
+-  { "/Set Path End", NULL, display_node, PATH_END, "<Item>" },
+-  { "/Show Path From Root", NULL, display_node, FROM_ROOT, "<Item>" }
++  { "/Set Path Begin", NULL, (GtkItemFactoryCallback)display_node, PATH_BEGIN, "<Item>" },
++  { "/Set Path End", NULL, (GtkItemFactoryCallback)display_node, PATH_END, "<Item>" },
++  { "/Show Path From Root", NULL, (GtkItemFactoryCallback)display_node, FROM_ROOT, "<Item>" }
+ };
+ 
+ /*---------------------------------------------------------------------------*/
+diff -Naur malaga-7.12.orig/variables.c malaga-7.12/variables.c
+--- malaga-7.12.orig/variables.c	2005-05-06 11:17:26.000000000 +0300
++++ malaga-7.12/variables.c	2025-08-16 22:06:03.437396520 +0300
+@@ -196,8 +196,8 @@
+ static GtkItemFactoryEntry menu_items[] = 
+ {
+   { "/Variables", NULL, NULL, 0, "<Branch>" },
+-  { "/Variables/Show All", NULL, show_all_variables, TRUE, NULL },
+-  { "/Variables/Hide All", NULL, show_all_variables, FALSE, NULL },
++  { "/Variables/Show All", NULL, (GtkItemFactoryCallback)show_all_variables, TRUE, NULL },
++  { "/Variables/Hide All", NULL, (GtkItemFactoryCallback)show_all_variables, FALSE, NULL },
+ };
+ 
+ /*---------------------------------------------------------------------------*/

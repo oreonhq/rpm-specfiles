@@ -1,0 +1,16 @@
+summary: Fonts related tests
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/fonts
+prepare:
+    name: tmt
+    how: install
+    package: vazirmatn-fonts
+execute:
+    how: tmt
+environment:
+    PACKAGE: vazirmatn-fonts
+    FONT_ALIAS: sans-serif
+    FONT_FAMILY: Vazirmatn
+    FONT_LANG: ar,pa-pk,ur
+    DEFAULT_MONO: 1

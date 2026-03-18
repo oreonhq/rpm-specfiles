@@ -1,0 +1,7 @@
+summary: jaxb-dtd-parser smoke test
+description: |
+  Test basic functionality of jaxb-dtd-parser.
+require:
+  - jaxb-dtd-parser
+  - java-21-openjdk-devel
+  - xmvn-tools

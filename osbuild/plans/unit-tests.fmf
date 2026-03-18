@@ -1,0 +1,13 @@
+summary: Run osbuild unit tests from dist-git sources
+prepare:
+    how: install
+    package:
+        - git
+        - make
+        - osbuild
+discover:
+    how: fmf
+    dist-git-source: true
+    filter: tag:unit-test
+execute:
+    how: tmt

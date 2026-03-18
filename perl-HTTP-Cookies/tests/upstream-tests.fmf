@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-HTTP-Cookies
+require: perl-HTTP-Cookies-tests
+test: /usr/libexec/perl-HTTP-Cookies/test

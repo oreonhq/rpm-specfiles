@@ -1,0 +1,7 @@
+---
+runpath:
+    allowed_paths:
+        - /usr/lib64/frr
+        - /usr/lib/frr
+inspections:
+    badfuncs: off

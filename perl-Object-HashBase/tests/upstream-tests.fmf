@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Object-HashBase
+require: perl-Object-HashBase-tests
+test: /usr/libexec/perl-Object-HashBase/test

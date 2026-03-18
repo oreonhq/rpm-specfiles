@@ -1,0 +1,28 @@
+--- kdelibs-4.14.38/kimgio/jp2.cpp.jasper3	2022-02-15 01:42:27.494190845 +0900
++++ kdelibs-4.14.38/kimgio/jp2.cpp	2022-02-15 01:52:22.103749995 +0900
+@@ -103,13 +103,13 @@ static void jas_stream_initbuf(jas_strea
+         stream->bufmode_ |= bufmode & JAS_STREAM_BUFMODEMASK;
+ }
+ 
+-static int qiodevice_read(jas_stream_obj_t *obj, char *buf, unsigned int cnt)
++static ssize_t qiodevice_read(jas_stream_obj_t *obj, char *buf, size_t cnt)
+ {
+         QIODevice *io = (QIODevice*) obj;
+         return io->read(buf, cnt);
+ }
+ 
+-static int qiodevice_write(jas_stream_obj_t *obj, const char *buf, unsigned int cnt)
++static ssize_t qiodevice_write(jas_stream_obj_t *obj, const char *buf, size_t cnt)
+ {
+         QIODevice *io = (QIODevice*) obj;
+         return io->write(buf, cnt);
+@@ -385,7 +385,8 @@ write_image( const QImage &image, QIODev
+         // use sprintf for locale-aware string
+         char rateBuffer[16];
+         sprintf(rateBuffer, "rate=%.2g\n", (quality < 0) ? DEFAULT_RATE : quality / 100.0);
+-        int i = jp2_encode( ji, stream, rateBuffer);
++        int fmt = jas_image_strtofmt("jp2");
++        int i = jas_image_encode( ji, stream, fmt, rateBuffer);
+ 
+         jas_image_destroy( ji );
+         jas_stream_close( stream );

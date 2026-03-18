@@ -1,0 +1,12 @@
+# packit config for vulkan-tools
+# Build Stage 4 - depends on glslang, vulkan-volk
+
+jobs:
+  - job: koji_build
+    trigger: commit | koji_build
+    dist_git_branches:
+      - fedora-all
+    sidetag_group: vulkan-sdk-releases
+    dependencies:
+      - glslang
+      - vulkan-volk

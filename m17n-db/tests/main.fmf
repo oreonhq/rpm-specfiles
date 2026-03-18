@@ -1,0 +1,13 @@
+test: ./runtest.sh
+duration: 10m
+framework: beakerlib
+require:
+  - m17n-db
+  - m17n-db-devel
+  - glibc-locale-source
+  - rpm-build
+  - autoconf
+  - automake
+  - make
+  - gettext-devel
+  - gcc

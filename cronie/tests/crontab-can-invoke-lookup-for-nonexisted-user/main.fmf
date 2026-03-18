@@ -1,0 +1,14 @@
+summary: Test for Cron does uid lookups for non-existent users
+description: "Bug summary: Cron does uid lookups for non-existent users\n"
+contact: Jakub Prokes <jprokes@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 10m
+extra-summary: 
+    /CoreOS/cronie/Regression/crontab-can-invoke-lookup-for-nonexisted-user
+extra-task: 
+    /CoreOS/cronie/Regression/crontab-can-invoke-lookup-for-nonexisted-user

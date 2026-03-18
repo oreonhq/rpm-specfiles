@@ -1,0 +1,30 @@
+From e72c454ae7cd2be16974b54884a568031e00df5f Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Fri, 30 Jun 2017 15:10:22 +0200
+Subject: [PATCH] Do not override OPTIMIZE by default
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+CPAN RT#118714
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ Makefile.PL | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index b1153e7..94fae7b 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -23,7 +23,6 @@ WriteMakefile(
+ 	DEFINE            => '',
+ 	INC               => '-I.',
+ 	CCFLAGS           => $CCFLAGS,
+-	OPTIMIZE          => ($AUTHOR ? '-g ' : '').'-O2',
+ 	OBJECT            => 'Fast.o xmlfast.o', # link all the C files too
+ 	META_ADD          => { license => 'perl' },
+ );
+-- 
+2.9.4
+

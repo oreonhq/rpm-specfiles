@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-DB_File
+require: perl-DB_File-tests
+test: /usr/libexec/perl-DB_File/test

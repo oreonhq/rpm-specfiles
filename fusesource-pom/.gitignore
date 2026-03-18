@@ -1,0 +1,9 @@
+/results_*
+/*.src.rpm
+
+/fusesource-pom-1.5.tar.bz2
+/fusesource-pom-1.9.pom
+/fusesource-pom-1.11.pom
+/fusesource-pom-1.12.pom
+/mvnplugins-1.12.tar.gz
+/fusesource-pom-1.12.tar.gz

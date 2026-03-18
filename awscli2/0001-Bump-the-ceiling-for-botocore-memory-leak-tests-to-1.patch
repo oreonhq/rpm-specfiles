@@ -1,0 +1,38 @@
+From 4b5762bb17f172d9f9e058df8908651856ff4a69 Mon Sep 17 00:00:00 2001
+From: Adam Williamson <awilliam@redhat.com>
+Date: Thu, 13 Jun 2024 10:33:42 -0700
+Subject: [PATCH] Bump the ceiling for botocore memory leak tests to 15 MiB
+
+See https://github.com/boto/botocore/issues/3205 for the
+background on this. In rebuilding awscli2 for Python 3.13 in
+Fedora Rawhide, we found that two of these tests fail because
+they now top out around 11MiB of memory usage, rather than
+around 1.6MiB. We don't understand why this is yet, but it's not
+a memory *leak*, so bumping the ceiling seems appropriate. I'm
+sending this upstream so I have a reference for the downstream
+package and to raise awareness of the issue, but the correct fix
+may be something else.
+
+Signed-off-by: Adam Williamson <awilliam@redhat.com>
+---
+ tests/functional/botocore/leak/test_resource_leaks.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/functional/botocore/leak/test_resource_leaks.py b/tests/functional/botocore/leak/test_resource_leaks.py
+index df1c4fe7f..73027725f 100644
+--- a/tests/functional/botocore/leak/test_resource_leaks.py
++++ b/tests/functional/botocore/leak/test_resource_leaks.py
+@@ -22,8 +22,8 @@ class TestDoesNotLeakMemory(BaseClientDriverTest):
+     # a substantial amount of time to the total test run time.
+     INJECT_DUMMY_CREDS = True
+     # We're making up numbers here, but let's say arbitrarily
+-    # that the memory can't increase by more than 10MB.
+-    MAX_GROWTH_BYTES = 10 * 1024 * 1024
++    # that the memory can't increase by more than 15MB.
++    MAX_GROWTH_BYTES = 15 * 1024 * 1024
+ 
+     def test_create_single_client_memory_constant(self):
+         self.cmd('create_client', 's3')
+-- 
+2.45.2
+

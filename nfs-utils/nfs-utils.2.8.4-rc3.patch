@@ -1,0 +1,742 @@
+diff --git a/.gitignore b/.gitignore
+index 08ce7cdf..622134bb 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -80,6 +80,7 @@ tests/nsm_client/nlm_sm_inter_svc.c
+ tests/nsm_client/nlm_sm_inter_xdr.c
+ utils/nfsidmap/nfsidmap
+ utils/nfsref/nfsref
++systemd/nfsroot-generator
+ systemd/nfs-server-generator
+ systemd/rpc-pipefs-generator
+ systemd/nfs-config.service
+diff --git a/configure.ac b/configure.ac
+index d8205e80..e402c22d 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -578,7 +578,7 @@ AC_FUNC_ERROR_AT_LINE
+ AC_FUNC_FORK
+ AC_FUNC_GETGROUPS
+ AC_FUNC_GETMNTENT
+-AC_PROG_GCC_TRADITIONAL
++AC_PROG_CC
+ AC_FUNC_LSTAT
+ AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
+ AC_HEADER_MAJOR
+diff --git a/systemd/Makefile.am b/systemd/Makefile.am
+index b4483222..5e481421 100644
+--- a/systemd/Makefile.am
++++ b/systemd/Makefile.am
+@@ -59,15 +59,19 @@ EXTRA_DIST = $(unit_files) $(udev_files) $(man5_MANS) $(man7_MANS)
+ 
+ generator_dir = $(unitdir)/../system-generators
+ 
+-EXTRA_PROGRAMS	= nfs-server-generator rpc-pipefs-generator
++EXTRA_PROGRAMS	= nfsroot-generator nfs-server-generator rpc-pipefs-generator
+ genexecdir = $(generator_dir)
+ 
+ COMMON_SRCS = systemd.c systemd.h
+ 
++nfsroot_generator_SOURCES = $(COMMON_SRCS) nfsroot-generator.c
++
+ nfs_server_generator_SOURCES = $(COMMON_SRCS) nfs-server-generator.c
+ 
+ rpc_pipefs_generator_SOURCES = $(COMMON_SRCS) rpc-pipefs-generator.c
+ 
++nfsroot_generator_LDADD = ../support/nfs/libnfs.la
++
+ nfs_server_generator_LDADD = ../support/export/libexport.a \
+ 			     ../support/nfs/libnfs.la \
+ 			     ../support/misc/libmisc.a \
+@@ -78,7 +82,7 @@ nfs_server_generator_LDADD = ../support/export/libexport.a \
+ rpc_pipefs_generator_LDADD = ../support/nfs/libnfs.la
+ 
+ if INSTALL_SYSTEMD
+-genexec_PROGRAMS = nfs-server-generator rpc-pipefs-generator
++genexec_PROGRAMS = nfsroot-generator nfs-server-generator rpc-pipefs-generator
+ install-data-hook: $(unit_files) $(udev_files)
+ 	mkdir -p $(DESTDIR)/$(unitdir)
+ 	cp $(unit_files) $(DESTDIR)/$(unitdir)
+diff --git a/systemd/nfs-idmapd.service b/systemd/nfs-idmapd.service
+index d820f10c..3afdcea0 100644
+--- a/systemd/nfs-idmapd.service
++++ b/systemd/nfs-idmapd.service
+@@ -6,7 +6,7 @@ Requires=rpc_pipefs.target
+ After=rpc_pipefs.target local-fs.target network-online.target
+ Wants=network-online.target
+ 
+-BindsTo=nfs-server.service
++PartOf=nfs-server.service
+ 
+ [Service]
+ Type=forking
+diff --git a/systemd/nfs.systemd.man b/systemd/nfs.systemd.man
+index f49e7776..a8476038 100644
+--- a/systemd/nfs.systemd.man
++++ b/systemd/nfs.systemd.man
+@@ -14,13 +14,13 @@ The
+ .I nfs-utils
+ package provides a suite of
+ .I systemd
+-unit files which allow the various services to be started and
+-managed.  These unit files ensure that the services are started in the
+-correct order, and the prerequisites are active before dependant
+-services start.  As there are quite  few unit files, it is not
+-immediately obvious how best to achieve certain results.  The
+-following subsections attempt to cover the issues that are most likely
+-to come up.
++unit files and generators which allow the various services to be
++started and managed.  These unit files and generators ensure that the
++services are started in the correct order, and the prerequisites are
++active before dependant services start.  As there are quite a few unit
++files and generators, it is not immediately obvious how best to achieve
++certain results.  The following subsections attempt to cover the issues
++that are most likely to come up.
+ .SS Configuration
+ The standard systemd unit files do not provide any easy way to pass
+ any command line arguments to daemons so as to configure their
+@@ -166,6 +166,52 @@ file is present.  If a site needs this file present but does not want
+ running, it can be masked with
+ .RS
+ .B systemctl mask rpc-gssd
++.SS Generators
++systemd unit generators are small executables placed in
++.I /usr/lib/systemd/system-generators/
++to dynamically extend the unit file hierarchy.  The
++.I nfs-utils
++package provides three:
++.TP
++.B nfsroot-generator
++It creates the
++.B sysroot.mount
++unit to mount /sysroot via NFSv4 in the initrd, if it detects one the
++following options in the kernel command line:
++.PP
++.RS
++.B root=/dev/nfs nfsroot=[<server>:]<path>[,<options>]
++.PP
++.RS
++Defined in
++.I <kernel_source>/Documentation/admin-guide/nfs/nfsroot.rst
++.RE
++.RE
++.PP
++.RS
++.B root=nfs[4]:[<server>:]<path>[:<options>]
++.PP
++.RS
++Defined in
++.BR dracut.cmdline (7).
++.PP
++.B NOTE:
++Although "nfs" can be used as type indicator for the mountpoint, the
++mount unit will use always "nfs4".
++.RE
++.RE
++.TP
++.B nfs-server-generator
++It creates ordering dependencies between
++.I nfs-server.service
++and various filesystem mounts: it should start before any "nfs"
++mountpoints are mounted, in case they are loop-back mounts, and after
++all exported filesystems are mounted, so there is no risk of exporting
++the underlying directory.
++.TP
++.B rpc-pipefs-generator
++It creates ordering dependencies between NFS services and the
++rpc_pipefs mountpoint.
+ .RE
+ .SH FILES
+ /etc/nfs.conf
+@@ -180,6 +226,8 @@ and in related
+ .I conf.d
+ drop-in directories.
+ .SH SEE ALSO
++.BR bootup (7),
++.BR systemd.generator (7),
+ .BR systemd.unit (5),
+ .BR nfs.conf (5),
+ .BR nfsmount.conf (5).
+diff --git a/systemd/nfsroot-generator.c b/systemd/nfsroot-generator.c
+new file mode 100644
+index 00000000..f3cb60c3
+--- /dev/null
++++ b/systemd/nfsroot-generator.c
+@@ -0,0 +1,243 @@
++/*
++ * nfsroot-generator:
++ *   systemd generator to mount /sysroot via NFSv4 in the initrd
++ */
++
++#include <sys/stat.h>
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++
++#include "nfslib.h"
++#include "systemd.h"
++
++struct nfsroot_info {
++	char	*server;
++	char	*path;
++	char	*options;
++};
++
++/* Valid kernel command line options:
++ *
++ * - root=/dev/nfs nfsroot=[<server>:]<path>[,<options>]
++ *
++ *   Defined in <kernel_source>/Documentation/admin-guide/nfs/nfsroot.rst
++ *
++ * - root=nfs[4]:[<server>:]<path>[:<options>]
++ *
++ *   Defined in dracut.cmdline(7).
++ *
++ * Allow to use both "nfs" or "nfs4" as type indicator,
++ * although the mount unit will use always "nfs4".
++ *
++ * If <server> is not set, it is determined by the 2nd
++ * token of the ip parameter:
++ *
++ *     ip=<client-ip>:<server-ip>:...
++ *
++ * <options> can be appended with the prefix ":" or ","
++ * and are separated by ",".
++ */
++static int get_nfsroot_info_from_cmdline(struct nfsroot_info *info)
++{
++	FILE	*f;
++	char	buf[4096], *p;
++	char	*root = NULL, *nfsroot = NULL, *ip = NULL;
++	char	*colon, *slash, *comma;
++	size_t	size;
++
++	f = fopen("/proc/cmdline", "r");
++	if (!f)
++		return errno;
++
++	if (fgets(buf, sizeof(buf), f) == NULL)
++		return EIO;
++
++	fclose(f);
++
++	size = strlen(buf);
++	if (buf[size - 1] == '\n')
++		buf[size - 1] = '\0';
++	for (p = strtok(buf, " "); p; p = strtok(NULL, " ")) {
++		if (!strncmp(p, "root=", strlen("root=")))
++			root = p + strlen("root=");
++		else if (!strncmp(p, "nfsroot=", strlen("nfsroot=")))
++			nfsroot = p + strlen("nfsroot=");
++		else if (!strncmp(p, "ip=", strlen("ip=")))
++			ip = p + strlen("ip=");
++	}
++
++	if (!strcmp(root, "/dev/nfs")) {
++		/* Require the nfsroot parameter with the pseudo-NFS-device */
++		if (!nfsroot)
++			return EINVAL;
++
++	} else if (root) {
++		/* Mount type: "nfs" or "nfs4" */
++		colon = strchr(root, ':');
++		if (colon == NULL)
++			return 0;
++		if (strncmp(root, "nfs:", strlen("nfs:")) &&
++			strncmp(root, "nfs4:", strlen("nfs4:")))
++			return 0;
++
++		nfsroot = colon + 1;
++	}
++
++	slash = strchr(nfsroot, '/');
++	if (slash == NULL)
++		return EINVAL;
++
++	if (slash - nfsroot > 0) {
++		if ((slash - 1)[0] != ':')
++			return EINVAL;
++
++		info->server = strndup(nfsroot, slash - nfsroot - 1);
++		nfsroot = slash;
++	} else {
++		/* Require the ip parameter if <server> is unset */
++		if (!ip)
++			return EINVAL;
++
++		colon = strchr(ip, ':');
++		if (colon == NULL)
++			return EINVAL;
++		ip = colon + 1;
++		colon = strchr(ip, ':');
++		if (colon == NULL)
++			return EINVAL;
++		info->server = strndup(ip, colon - ip);
++	}
++	if (!info->server)
++		return ENOMEM;
++
++	colon = strchr(nfsroot, ':');
++	if (colon != NULL) {
++		info->path = strndup(nfsroot, colon - nfsroot);
++		nfsroot = colon + 1;
++	} else {
++		comma = strchr(nfsroot, ',');
++		if (comma == NULL) {
++			info->path = strdup(nfsroot);
++		} else {
++			info->path = strndup(nfsroot, comma - nfsroot);
++			nfsroot = comma + 1;
++		}
++	}
++	if (!info->path)
++		return ENOMEM;
++
++	if ((colon || comma) && strlen(nfsroot) > 0) {
++		/* Skip checking <options> format */
++		info->options = strdup(nfsroot);
++		if (!info->options)
++			return ENOMEM;
++	}
++
++	return 0;
++}
++
++static int generate_sysroot_mount_unit(const struct nfsroot_info *info,
++			       const char *dirname)
++{
++	int 	ret = 0;
++	char	*path, *rpath;
++	char	dirbase[] = "/initrd-root-fs.target.requires";
++	char	filebase[] = "/sysroot.mount";
++	FILE	*f;
++
++	path = malloc(strlen(dirname) + 1 + sizeof(filebase));
++	if (!path)
++		return ENOMEM;
++	sprintf(path, "%s", dirname);
++	mkdir(path, 0755);
++	strcat(path, filebase);
++	f = fopen(path, "w");
++	if (!f) {
++		ret = errno;
++		goto cleanup;
++	}
++
++	fprintf(f, "# Automatically generated by nfsroot-generator\n\n[Unit]\n");
++	fprintf(f, "Description=NFSv4 Root File System\n");
++	fprintf(f, "SourcePath=/proc/cmdline\n");
++	fprintf(f, "Requires=modprobe@sunrpc.service rpc_pipefs.target\n");
++	fprintf(f, "Wants=nfs-idmapd.service network-online.target remote-fs-pre.target\n");
++	fprintf(f, "After=modprobe@sunrpc.service nfs-idmapd.service network-online.target remote-fs-pre.target rpc_pipefs.target\n");
++	fprintf(f, "Before=initrd-root-fs.target remote-fs.target\n");
++	fprintf(f, "\n[Mount]\n");
++	fprintf(f, "What=%s:%s\n", info->server, info->path);
++	fprintf(f, "Where=/sysroot\n");
++	fprintf(f, "Type=nfs4\n");
++	if (info->options)
++		fprintf(f, "Options=%s\n", info->options);
++
++	fclose(f);
++
++	rpath = malloc(strlen(dirname) + 1 + sizeof(dirbase) + sizeof(filebase));
++	if (!rpath) {
++		ret = ENOMEM;
++		goto cleanup;
++	}
++	sprintf(rpath, "%s%s", dirname, dirbase);
++	mkdir(rpath, 0755);
++	strcat(rpath, filebase);
++
++	if (symlink(path, rpath) < 0 && errno != EEXIST)
++		ret = errno;
++
++	free(rpath);
++cleanup:
++	free(path);
++
++	return ret;
++}
++
++int main(int argc, char *argv[])
++{
++	int 	ret;
++	struct nfsroot_info	info = {
++		.server = NULL,
++		.path = NULL,
++		.options = NULL,
++	};
++
++	/* Avoid using any external services */
++	xlog_syslog(0);
++
++	if (argc != 4 || argv[1][0] != '/') {
++		fprintf(stderr, "nfsroot-generator: mount /sysroot via NFSv4 in the initrd\n");
++		fprintf(stderr, "Usage: normal-dir early-dir late-dir\n");
++		exit(1);
++	}
++
++	if (!systemd_in_initrd())
++		exit(0);
++
++	ret = get_nfsroot_info_from_cmdline(&info);
++	if (ret) {
++		fprintf(stderr, "nfsroot-generator: failed to get nfsroot from kernel command line: %s\n",
++			strerror(ret));
++		goto cleanup;
++	}
++
++	if (info.server && info.path) {
++		ret = generate_sysroot_mount_unit(&info, argv[1]);
++		if (ret) {
++			fprintf(stderr, "nfsroot-generator: failed to generate sysroot.mount unit: %s\n",
++				strerror(ret));
++		}
++	}
++
++cleanup:
++	if (info.server)
++		free(info.server);
++	if (info.path)
++		free(info.path);
++	if (info.options)
++		free(info.options);
++
++	exit(ret);
++}
+diff --git a/systemd/systemd.c b/systemd/systemd.c
+index c7bdb4d2..fe749a99 100644
+--- a/systemd/systemd.c
++++ b/systemd/systemd.c
+@@ -1,13 +1,12 @@
+ /*
+  * Helper functions for systemd generators in nfs-utils.
+- *
+- * Currently just systemd_escape().
+  */
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <ctype.h>
+ #include <string.h>
++#include <unistd.h>
+ #include "systemd.h"
+ 
+ static const char hex[16] =
+@@ -132,3 +131,16 @@ out:
+ 	sprintf(p, "%s", suffix);
+ 	return result;
+ }
++
++/*
++ * check if the system is running in the initrd, following the same logic as
++ * systemd, described in os-release(5):
++ *
++ *     In the initrd[2] and exitrd, /etc/initrd-release plays the same role as
++ *     os-release in the main system. Additionally, the presence of that file
++ *     means that the system is in the initrd/exitrd phase.
++ */
++int systemd_in_initrd(void)
++{
++	return (access("/etc/initrd-release", F_OK) >= 0);
++}
+diff --git a/systemd/systemd.h b/systemd/systemd.h
+index 25235ec8..72a04c86 100644
+--- a/systemd/systemd.h
++++ b/systemd/systemd.h
+@@ -2,5 +2,6 @@
+ #define SYSTEMD_H
+ 
+ char *systemd_escape(char *path, char *suffix);
++int systemd_in_initrd(void);
+ 
+ #endif /* SYSTEMD_H */
+diff --git a/tools/rpcctl/rpcctl.man b/tools/rpcctl/rpcctl.man
+index b87ba0df..2ee168c8 100644
+--- a/tools/rpcctl/rpcctl.man
++++ b/tools/rpcctl/rpcctl.man
+@@ -12,6 +12,7 @@ rpcctl \- Displays SunRPC connection information
+ .BR "rpcctl client show " "\fR[ \fB\-h \f| \fB\-\-help \fR] [ \fIXPRT \fR]"
+ .P
+ .BR "rpcctl switch" " \fR[ \fB\-h \fR| \fB\-\-help \fR] { \fBset \fR| \fBshow \fR}"
++.BR "rpcctl switch add-xprt" " \fR[ \fB\-h \fR| \fB\-\-help \fR] [ \fISWITCH \fR]"
+ .BR "rpcctl switch set" " \fR[ \fB\-h \fR| \fB\-\-help \fR] \fISWITCH \fBdstaddr \fINEWADDR"
+ .BR "rpcctl switch show" " \fR[ \fB\-h \fR| \fB\-\-help \fR] [ \fISWITCH \fR]"
+ .P
+@@ -29,6 +30,9 @@ Show detailed information about the RPC clients on this system.
+ If \fICLIENT \fRwas provided, then only show information about a single RPC client.
+ .P
+ .SS rpcctl switch \fR- \fBCommands operating on groups of transports
++.IP "\fBadd-xprt \fISWITCH"
++Add an aditional transport to the \fISWITCH\fR.
++Note that the new transport will take its values from the "main" transport.
+ .IP "\fBset \fISWITCH \fBdstaddr \fINEWADDR"
+ Change the destination address of all transports in the \fISWITCH \fRto \fINEWADDR\fR.
+ \fINEWADDR \fRcan be an IP address, DNS name, or anything else resolvable by \fBgethostbyname\fR(3).
+diff --git a/tools/rpcctl/rpcctl.py b/tools/rpcctl/rpcctl.py
+index 0221fbb6..29ae7d26 100755
+--- a/tools/rpcctl/rpcctl.py
++++ b/tools/rpcctl/rpcctl.py
+@@ -20,20 +20,20 @@ if not sunrpc.is_dir():
+     sys.exit(1)
+ 
+ 
+-def read_addr_file(path):
+-    """Read an xprt address file."""
++def read_sysfs_file(path, *, missing="enoent"):
++    """Read a sysfs file."""
+     try:
+         with open(path, 'r') as f:
+             return f.readline().strip()
+     except FileNotFoundError:
+-        return "(enoent)"
++        return f"({missing})"
+ 
+ 
+-def write_addr_file(path, newaddr):
+-    """Write a new address to an xprt address file."""
++def write_sysfs_file(path, input):
++    """Write 'input' to a sysfs file."""
+     with open(path, 'w') as f:
+-        f.write(newaddr)
+-    return read_addr_file(path)
++        f.write(input)
++    return read_sysfs_file(path)
+ 
+ 
+ def read_info_file(path):
+@@ -56,8 +56,9 @@ class Xprt:
+         self.name = path.stem.rsplit("-", 1)[0]
+         self.type = path.stem.split("-")[2]
+         self.info = read_info_file(path / "xprt_info")
+-        self.dstaddr = read_addr_file(path / "dstaddr")
+-        self.srcaddr = read_addr_file(path / "srcaddr")
++        self.dstaddr = read_sysfs_file(path / "dstaddr")
++        self.srcaddr = read_sysfs_file(path / "srcaddr")
++        self.xprtsec = read_sysfs_file(path / "xprtsec", missing="unknown")
+         self.read_state()
+ 
+     def __lt__(self, rhs):
+@@ -67,7 +68,8 @@ class Xprt:
+     def _xprt(self):
+         main = ", main" if self.info.get("main_xprt") else ""
+         return f"{self.name}: {self.type}, {self.dstaddr}, " \
+-               f"port {self.info['dst_port']}, state <{self.state}>{main}"
++               f"port {self.info['dst_port']}, sec {self.xprtsec}, " \
++               f"state <{self.state}>{main}"
+ 
+     def _src_reqs(self):
+         return f"	Source: {self.srcaddr}, port {self.info['src_port']}, " \
+@@ -106,7 +108,7 @@ class Xprt:
+ 
+     def set_dstaddr(self, newaddr):
+         """Change the dstaddr of an xprt."""
+-        self.dstaddr = write_addr_file(self.path / "dstaddr", newaddr)
++        self.dstaddr = write_sysfs_file(self.path / "dstaddr", newaddr)
+ 
+     def set_state(self, state):
+         """Change the state of an xprt."""
+@@ -183,14 +185,13 @@ class Xprt:
+ class XprtSwitch:
+     """Represents a group of xprt connections."""
+ 
+-    def __init__(self, path, sep=":"):
++    def __init__(self, path):
+         """Read in xprt switch information from sysfs."""
+         self.path = path
+         self.name = path.stem
+         self.info = read_info_file(path / "xprt_switch_info")
+         self.xprts = sorted([Xprt(p) for p in self.path.iterdir()
+                              if p.is_dir()])
+-        self.sep = sep
+ 
+     def __lt__(self, rhs):
+         """Compare the name of two xprt switch instances."""
+@@ -198,7 +199,7 @@ class XprtSwitch:
+ 
+     def __str__(self):
+         """Return a string representation of an xprt switch."""
+-        switch = f"{self.name}{self.sep} " \
++        switch = f"{self.name}: " \
+                  f"xprts {self.info['num_xprts']}, " \
+                  f"active {self.info['num_active']}, " \
+                  f"queue {self.info['queue_len']}"
+@@ -212,6 +213,12 @@ class XprtSwitch:
+         parser.set_defaults(func=XprtSwitch.show, switch=None)
+         subparser = parser.add_subparsers()
+ 
++        add = subparser.add_parser("add-xprt",
++                                   help="Add an xprt to the switch")
++        add.add_argument("switch", metavar="SWITCH", nargs=1,
++                         help="Name of a specific xprt switch to modify")
++        add.set_defaults(func=XprtSwitch.add_xprt)
++
+         show = subparser.add_parser("show", help="Show xprt switches")
+         show.add_argument("switch", metavar="SWITCH", nargs='?',
+                           help="Name of a specific switch to show")
+@@ -235,6 +242,11 @@ class XprtSwitch:
+             return [XprtSwitch(xprt_switches / name)]
+         return [XprtSwitch(f) for f in sorted(xprt_switches.iterdir())]
+ 
++    def add_xprt(args):
++        """Handle the `rpcctl switch add-xprt` command."""
++        for switch in XprtSwitch.get_by_name(args.switch[0]):
++            write_sysfs_file(switch.path / "add_xprt", "1")
++
+     def show(args):
+         """Handle the `rpcctl switch show` command."""
+         for switch in XprtSwitch.get_by_name(args.switch):
+@@ -256,7 +268,11 @@ class RpcClient:
+         """Read in rpc client information from sysfs."""
+         self.path = path
+         self.name = path.stem
+-        self.switch = XprtSwitch(path / (path / "switch").readlink(), sep=",")
++        self.switch = XprtSwitch(path / (path / "switch").readlink())
++        self.program = read_sysfs_file(path / "program", missing="unknown")
++        self.version = read_sysfs_file(path / "rpc_version", missing="unknown")
++        self.max_connect = read_sysfs_file(path / "max_connect",
++                                           missing="unknown")
+ 
+     def __lt__(self, rhs):
+         """Compare the name of two rpc client instances."""
+@@ -264,7 +280,9 @@ class RpcClient:
+ 
+     def __str__(self):
+         """Return a string representation of an rpc client."""
+-        return f"{self.name}: {self.switch}"
++        return f"{self.name}: {self.program}, rpc version {self.version}, " \
++               f"max_connect {self.max_connect}" \
++               f"\n  {' ' * len(self.name)}{self.switch}"
+ 
+     def add_command(subparser):
+         """Add parser options for the `rpcctl client` command."""
+diff --git a/utils/exportfs/exportfs.c b/utils/exportfs/exportfs.c
+index b03a047b..748c38e3 100644
+--- a/utils/exportfs/exportfs.c
++++ b/utils/exportfs/exportfs.c
+@@ -74,13 +74,19 @@ grab_lockfile(void)
+ {
+ 	_lockfd = open(lockfile, O_CREAT|O_RDWR, 0666);
+ 	if (_lockfd != -1)
+-		lockf(_lockfd, F_LOCK, 0);
++		if (lockf(_lockfd, F_LOCK, 0) != 0) {
++			xlog_warn("%s: lockf() failed: errno %d (%s)",
++			__func__, errno, strerror(errno));
++		}
+ }
+ static void
+ release_lockfile(void)
+ {
+ 	if (_lockfd != -1) {
+-		lockf(_lockfd, F_ULOCK, 0);
++		if (lockf(_lockfd, F_ULOCK, 0) != 0) {
++			xlog_warn("%s: lockf() failed: errno %d (%s)",
++			__func__, errno, strerror(errno));
++		}
+ 		close(_lockfd);
+ 		_lockfd = -1;
+ 	}
+diff --git a/utils/gssd/krb5_util.c b/utils/gssd/krb5_util.c
+index 560e8be1..09625fb9 100644
+--- a/utils/gssd/krb5_util.c
++++ b/utils/gssd/krb5_util.c
+@@ -619,6 +619,7 @@ get_full_hostname(const char *inhost, char *outhost, int outhostlen)
+ 		goto out;
+ 	}
+ 	strncpy(outhost, addrs->ai_canonname, outhostlen);
++	outhost[outhostlen - 1] = '\0';
+ 	nfs_freeaddrinfo(addrs);
+ 	for (c = outhost; *c != '\0'; c++)
+ 	    *c = tolower(*c);
+diff --git a/utils/nfsdcld/nfsdcld.c b/utils/nfsdcld/nfsdcld.c
+index f7737d92..8551dc97 100644
+--- a/utils/nfsdcld/nfsdcld.c
++++ b/utils/nfsdcld/nfsdcld.c
+@@ -822,6 +822,7 @@ main(int argc, char **argv)
+ 	evbase = event_base_new();
+ 	if (evbase == NULL) {
+ 		fprintf(stderr, "%s: unable to allocate event base.\n", argv[0]);
++		free(progname);
+ 		return 1;
+ 	}
+ 	xlog_syslog(0);
+diff --git a/utils/nfsdctl/nfsdctl.c b/utils/nfsdctl/nfsdctl.c
+index 733756a9..e7a0e124 100644
+--- a/utils/nfsdctl/nfsdctl.c
++++ b/utils/nfsdctl/nfsdctl.c
+@@ -436,7 +436,7 @@ static struct nl_msg *netlink_msg_alloc(struct nl_sock *sock, const char *family
+ 
+ 	id = genl_ctrl_resolve(sock, family);
+ 	if (id < 0) {
+-		xlog(L_ERROR, "%s not found", NFSD_FAMILY_NAME);
++		xlog(L_ERROR, "failed to resolve %s generic netlink family", family);
+ 		return NULL;
+ 	}
+ 
+@@ -447,7 +447,7 @@ static struct nl_msg *netlink_msg_alloc(struct nl_sock *sock, const char *family
+ 	}
+ 
+ 	if (!genlmsg_put(msg, 0, 0, id, 0, 0, 0, 0)) {
+-		xlog(L_ERROR, "failed to allocate netlink message");
++		xlog(L_ERROR, "failed to add generic netlink headers to netlink message");
+ 		nlmsg_free(msg);
+ 		return NULL;
+ 	}
+@@ -1417,7 +1417,6 @@ static int lockd_configure(struct nl_sock *sock, int grace)
+ {
+ 	char *tcp_svc, *udp_svc;
+ 	int tcpport = 0, udpport = 0;
+-	int ret;
+ 
+ 	tcp_svc = conf_get_str("lockd", "port");
+ 	if (tcp_svc) {
+@@ -1432,6 +1431,8 @@ static int lockd_configure(struct nl_sock *sock, int grace)
+ 		if (udpport < 0)
+ 			return 1;
+ 	}
++
++	return lockd_config_doit(sock, LOCKD_CMD_SERVER_SET, grace, tcpport, udpport);
+ }
+ 
+ static int
+@@ -1520,7 +1521,7 @@ static int configure_versions(void)
+ 
+ static int configure_listeners(void)
+ {
+-	char *port, *rdma_port;
++	char *port, *rdma_port = NULL;
+ 	bool rdma, udp, tcp;
+ 	struct conf_list *hosts;
+ 	int ret = 0;
+@@ -1592,8 +1593,6 @@ static int autostart_func(struct nl_sock *sock, int argc, char ** argv)
+ 		}
+ 	}
+ 
+-	read_nfsd_conf();
+-
+ 	grace = conf_get_num("nfsd", "grace-time", 0);
+ 	ret = lockd_configure(sock, grace);
+ 	if (ret) {
+@@ -1676,10 +1675,7 @@ static void nlm_usage(void)
+ 
+ static int nlm_func(struct nl_sock *sock, int argc, char ** argv)
+ {
+-	int *threads, grace, lease, idx, ret, opt, pools;
+-	struct conf_list *thread_str;
+-	struct conf_list_node *n;
+-	char *scope, *pool_mode;
++	int opt;
+ 
+ 	optind = 1;
+ 	while ((opt = getopt_long(argc, argv, "h", help_only_options, NULL)) != -1) {
+@@ -1824,6 +1820,8 @@ int main(int argc, char **argv)
+ 	xlog_syslog(0);
+ 	xlog_stderr(1);
+ 
++	read_nfsd_conf();
++
+ 	/* Parse the preliminary options */
+ 	while ((opt = getopt_long(argc, argv, "+hdsV", pre_options, NULL)) != -1) {
+ 		switch (opt) {

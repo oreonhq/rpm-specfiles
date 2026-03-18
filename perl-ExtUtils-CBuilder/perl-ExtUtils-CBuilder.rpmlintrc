@@ -1,0 +1,4 @@
+from Config import *
+addFilter("spelling-error .* linkers");
+# ExtUtils::CBuilder->link() method links libperl.so to executables
+addFilter("E: devel-dependency perl-devel");

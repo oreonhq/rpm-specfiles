@@ -1,0 +1,94 @@
+%global libreportver 2.0.18-1
+
+Summary:  A python library for handling exceptions
+Name: python-meh
+Url: https://github.com/rhinstaller/python-meh
+Version: 0.52
+Release: 9%{?dist}
+# This is a Red Hat maintained package which is specific to
+# our distribution.  Thus the source is only available from
+# within this srpm.
+# This tarball was created from upstream git:
+#   git clone https://github.com/rhinstaller/python-meh
+#   cd python-meh && make archive
+Source0: https://github.com/rhinstaller/python-meh/archive/%{name}-%{version}.tar.gz
+
+License: GPL-2.0-or-later
+BuildArch: noarch
+BuildRequires: make
+BuildRequires: gettext
+BuildRequires: intltool
+%if 0%{?rhel} < 10 || 0%{?fedora}
+BuildRequires: libreport-gtk >= %{libreportver}
+BuildRequires: libreport-cli >= %{libreportver}
+BuildRequires: python3-libreport >= %{libreportver}
+%endif
+BuildRequires: python3-devel
+BuildRequires: python3-setuptools
+BuildRequires: python3-dbus
+
+%global _description\
+The python-meh package is a python library for handling, saving, and reporting \
+exceptions.
+
+%description %_description
+
+%package -n python3-meh
+Summary:  A python 3 library for handling exceptions
+%{?python_provide:%python_provide python3-meh}
+Obsoletes: python-meh < 0.46-1
+Obsoletes: python2-meh < 0.46-1
+Requires: python3
+Requires: python3-dbus
+Requires: python3-rpm
+%if 0%{?rhel} < 10 || 0%{?fedora}
+Requires: libreport-cli >= %{libreportver}
+Requires: python3-libreport >= %{libreportver}
+%endif
+
+%description -n python3-meh
+The python3-meh package is a python 3 library for handling, saving, and reporting
+exceptions.
+
+%package -n python3-meh-gui
+Summary: Graphical user interface for the python3-meh library
+%{?python_provide:%python_provide python3-meh-gui}
+Obsoletes: python-meh-gui < 0.46-1
+Obsoletes: python2-meh-gui < 0.46-1
+Requires: python3-meh = %{version}-%{release}
+Requires: python3-gobject, gtk3
+%if 0%{?rhel} < 10 || 0%{?fedora}
+Requires: libreport-gtk >= %{libreportver}
+%endif
+
+%description -n python3-meh-gui
+The python3-meh-gui package provides a GUI for the python3-meh library.
+
+%prep
+%setup -q
+
+%build
+make
+
+%check
+make test
+
+%install
+make DESTDIR=%{buildroot} install
+
+%find_lang %{name}
+
+%files -n python3-meh -f %{name}.lang
+%doc ChangeLog COPYING
+%{python3_sitelib}/*
+%exclude %{python3_sitelib}/meh/ui/gui.py*
+%exclude %{python3_sitelib}/meh/ui/__pycache__/gui.*
+
+%files -n python3-meh-gui
+%{python3_sitelib}/meh/ui/gui.py*
+%{python3_sitelib}/meh/ui/__pycache__/gui.*
+%{_datadir}/python-meh
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.52-9
+- Prepare for Oreon 11 (RP1)

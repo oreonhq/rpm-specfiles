@@ -1,0 +1,13 @@
+summary: Test for anacron segfaults with certain config data
+description: ''
+contact: Robin Hack <rhack@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 20m
+extra-summary: 
+    /CoreOS/cronie/Regression/anacron-segfaults-with-certain-config-data
+extra-task: /CoreOS/cronie/Regression/anacron-segfaults-with-certain-config-data

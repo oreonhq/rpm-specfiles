@@ -1,0 +1,5 @@
+# Loadable module, perl interpreter has the linkage itself
+addFilter("shared-library-without-dependency-information /usr/lib.*/perl5/vendor_perl/auto/Devel/CallChecker/CallChecker.so")
+
+# Tests are self-documenting
+addFilter("-tests.noarch: W: no-documentation")

@@ -1,0 +1,59 @@
+From 4d0c9d55e1c53274527c2f449b83a858ae9bcddd Mon Sep 17 00:00:00 2001
+From: "Bryn M. Reeves" <bmr@redhat.com>
+Date: Tue, 18 Nov 2025 23:49:31 +0000
+Subject: [PATCH 1/2] schedule: fix TIMELINE policy retention indexing when
+ keep_x > len(x)
+
+Resolves: #606
+
+Signed-off-by: Bryn M. Reeves <bmr@redhat.com>
+---
+ snapm/manager/_schedule.py | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/snapm/manager/_schedule.py b/snapm/manager/_schedule.py
+index 2a65811..fd382a5 100644
+--- a/snapm/manager/_schedule.py
++++ b/snapm/manager/_schedule.py
+@@ -431,24 +431,32 @@ class GcPolicyParamsTimeline(GcPolicyParams):
+         # Build a set of snapshots that should be KEPT by each category
+         kept_by_category = {
+             "yearly": set(
+-                yearly[len(yearly) - self.keep_yearly :] if self.keep_yearly else []
++                yearly[max(len(yearly) - self.keep_yearly, 0) :]
++                if self.keep_yearly
++                else []
+             ),
+             "quarterly": set(
+-                quarterly[len(quarterly) - self.keep_quarterly :]
++                quarterly[max(len(quarterly) - self.keep_quarterly, 0) :]
+                 if self.keep_quarterly
+                 else []
+             ),
+             "monthly": set(
+-                monthly[len(monthly) - self.keep_monthly :] if self.keep_monthly else []
++                monthly[max(len(monthly) - self.keep_monthly, 0) :]
++                if self.keep_monthly
++                else []
+             ),
+             "weekly": set(
+-                weekly[len(weekly) - self.keep_weekly :] if self.keep_weekly else []
++                weekly[max(len(weekly) - self.keep_weekly, 0) :]
++                if self.keep_weekly
++                else []
+             ),
+             "daily": set(
+-                daily[len(daily) - self.keep_daily :] if self.keep_daily else []
++                daily[max(len(daily) - self.keep_daily, 0) :] if self.keep_daily else []
+             ),
+             "hourly": set(
+-                hourly[len(hourly) - self.keep_hourly :] if self.keep_hourly else []
++                hourly[max(len(hourly) - self.keep_hourly, 0) :]
++                if self.keep_hourly
++                else []
+             ),
+         }
+ 
+-- 
+2.51.0
+

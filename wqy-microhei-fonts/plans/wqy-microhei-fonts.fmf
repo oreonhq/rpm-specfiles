@@ -1,0 +1,18 @@
+summary: Fonts related tests
+discover:
+  how: fmf
+  url: https://src.fedoraproject.org/tests/fonts
+  exclude:
+    - validate_family
+prepare:
+  name: tmt
+  how: install
+  package:
+    - wqy-microhei-fonts
+execute:
+  how: tmt
+environment:
+  PACKAGE: wqy-microhei-fonts
+  FONT_ALIAS: sans-serif, serif
+  FONT_FAMILY: WenQuanYi Micro Hei
+  FONT_LANG: zh-cn, zh-tw

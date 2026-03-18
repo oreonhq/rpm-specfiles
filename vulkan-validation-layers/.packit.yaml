@@ -1,0 +1,28 @@
+# packit config for vulkan-validation-layers
+# Build Stage 4 - depends on glslang, vulkan-utility-libraries
+
+jobs:
+  - job: koji_build
+    trigger: commit | koji_build
+    dist_git_branches:
+      - fedora-all
+    sidetag_group: vulkan-sdk-releases
+    dependencies:
+      - glslang
+      - vulkan-utility-libraries
+
+  - job: bodhi_update
+    trigger: commit
+    dist_git_branches:
+      - fedora-branched
+    sidetag_group: vulkan-sdk-releases
+    dependencies:
+      - spirv-headers
+      - vulkan-headers
+      - spirv-tools
+      - vulkan-loader
+      - glslang
+      - vulkan-utility-libraries
+      - vulkan-volk
+      - vulkan-tools
+      - shaderc

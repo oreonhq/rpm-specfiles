@@ -1,0 +1,27 @@
+diff -up gambas-3.21.2/gb.pdf/configure.ac.poppler26 gambas-3.21.2/gb.pdf/configure.ac
+--- gambas-3.21.2/gb.pdf/configure.ac.poppler26	2026-01-22 09:04:10.721277464 -0500
++++ gambas-3.21.2/gb.pdf/configure.ac	2026-01-22 09:05:11.948237582 -0500
+@@ -46,6 +46,8 @@ if test "$have_poppler" = "yes"; then
+   AC_DEFINE_UNQUOTED(POPPLER_VERSION_25_01_0, $((1-$?)), Poppler version >= 25.01.0)
+   $PKG_CONFIG --atleast-version=25.12.0 poppler
+   AC_DEFINE_UNQUOTED(POPPLER_VERSION_25_12_0, $((1-$?)), Poppler version >= 25.12.0)
++  $PKG_CONFIG --atleast-version=26.01.0 poppler
++  AC_DEFINE_UNQUOTED(POPPLER_VERSION_26_01_0, $((1-$?)), Poppler version >= 26.01.0)
+ fi
+ 
+ AC_CONFIG_FILES([\
+diff -up gambas-3.21.2/gb.pdf/src/CPdfDocument.cpp.poppler26 gambas-3.21.2/gb.pdf/src/CPdfDocument.cpp
+--- gambas-3.21.2/gb.pdf/src/CPdfDocument.cpp.poppler26	2026-01-07 16:23:45.000000000 -0500
++++ gambas-3.21.2/gb.pdf/src/CPdfDocument.cpp	2026-01-22 08:53:11.856581742 -0500
+@@ -1061,7 +1061,11 @@ BEGIN_METHOD(PDFPAGE_select, GB_INTEGER
+ 	THIS->page->display(gfx);
+ 	dev->endPage();
+ 
++#if POPPLER_VERSION_26_01_0
++	str=dev->getText(PDFRectangle { (double)x, (double)y, (double)(w+x), (double)(h+y) });
++#else
+ 	str=dev->getText((double)x,(double)y,(double)(w+x),(double)(h+y));
++#endif
+ 
+ #if !(POPPLER_VERSION_24_12_0)
+ 	delete gfx;

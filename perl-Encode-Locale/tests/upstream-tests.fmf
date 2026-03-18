@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Mozilla-CA
+require: perl-Mozilla-CA-tests
+test: /usr/libexec/perl-Mozilla-CA/test

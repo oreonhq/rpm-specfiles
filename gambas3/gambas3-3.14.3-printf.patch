@@ -1,0 +1,46 @@
+diff -up gambas-3.14.3/gb.db.postgresql/src/main.c.orig gambas-3.14.3/gb.db.postgresql/src/main.c
+--- gambas-3.14.3/gb.db.postgresql/src/main.c.orig	2020-06-22 21:31:16.035953348 +0200
++++ gambas-3.14.3/gb.db.postgresql/src/main.c	2020-06-22 21:33:38.812290889 +0200
+@@ -33,6 +33,42 @@
+ #include <postgres.h>
+ #include <pg_type.h>
+ 
++// Starting v12, PostgreSQL (libpq) redefins printf symbol but the
++// implementation is not exported.
++// This should work-around the issue before a more robust solution is found.
++// PostgreSQL commit that caused this:
++// https://github.com/postgres/postgres/commit/96bf88d5271
++#ifdef vsnprintf
++#undef vsnprintf
++#endif
++#ifdef snprintf
++#undef snprintf
++#endif
++#ifdef vsprintf
++#undef vsprintf
++#endif
++#ifdef sprintf
++#undef sprintf
++#endif
++#ifdef vfprintf
++#undef vfprintf
++#endif
++#ifdef fprintf
++#undef fprintf
++#endif
++#ifdef vprintf
++#undef vprintf
++#endif
++#ifdef printf
++#undef printf
++#endif
++#ifdef strerror
++#undef strerror
++#endif
++#ifdef strerror_r
++#undef strerror_r
++#endif
++
+ #ifdef PACKAGE_NAME
+ 	#undef PACKAGE_NAME
+ 	#undef PACKAGE_BUGREPORT

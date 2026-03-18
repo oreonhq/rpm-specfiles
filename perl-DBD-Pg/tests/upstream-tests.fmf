@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-DBD-Pg
+require: perl-DBD-Pg-tests
+test: /usr/libexec/perl-DBD-Pg/test

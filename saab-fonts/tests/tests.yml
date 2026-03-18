@@ -1,0 +1,15 @@
+- hosts: localhost
+  tags:
+  - classic
+  roles:
+  - role: custom-test-fonts
+    required_packages:
+    - saab-fonts
+    path_prefix: /usr/share/fonts/saab-fonts
+    package: saab-fonts
+    coverage:
+     - pa
+    families:
+    - lang: pa
+      alias: serif
+      family: Saab

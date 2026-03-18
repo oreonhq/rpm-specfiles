@@ -1,0 +1,2 @@
+# proleptic: retroactively calculated, anticipatory or foreshadowing
+addFilter("spelling-error \('proleptic',")

@@ -1,0 +1,56 @@
+From 323118dcf8c7872d607a77ce6f3f6f05af7fde7b Mon Sep 17 00:00:00 2001
+From: Sam James <sam@gentoo.org>
+Date: Fri, 10 Dec 2021 03:10:42 +0000
+Subject: [PATCH] Makefile: Use pkg-config
+
+Depending on platform, linking against ncurses may require -ltinfo as well,
+and linking against netfilter_conntrack may require -lnetfilter too.
+
+Signed-off-by: Sam James <sam@gentoo.org>
+(cherry picked from commit 3bac50422fcd8fae153e6787e767a3f7a1953a25)
+---
+ Makefile  | 3 ++-
+ README.md | 6 +++---
+ 2 files changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index f7eb4faa2772d..ddf0ca552aefe 100644
+--- a/Makefile
++++ b/Makefile
+@@ -13,6 +13,7 @@ SBIN?=$(PREFIX)/sbin
+ INSTALL?=/usr/bin/install
+ STRIP?=/usr/bin/strip
+ MAN?=$(PREFIX)/share/man
++PKG_CONFIG?=pkg-config
+ 
+ ### ADVANCED USERS AND PACKAGERS MIGHT WANT TO CHANGE THIS
+ 
+@@ -25,7 +26,7 @@ CXXFLAGS?= -g -Wall -O2 -Werror=format-security -Wformat-truncation=0
+ CXXFILES?= iptstate.cc
+ 
+ # THIS IS FOR NORMAL COMPILATION
+-LIBS?= -lncurses -lnetfilter_conntrack
++LIBS?= $(shell $(PKG_CONFIG) --libs ncurses libnetfilter_conntrack)
+ CPPFLAGS=
+ 
+ ### YOU SHOULDN'T NEED TO CHANGE ANYTHING BELOW THIS
+diff --git a/README.md b/README.md
+index de1645169fdb5..3647d6dc6df5e 100644
+--- a/README.md
++++ b/README.md
+@@ -28,9 +28,9 @@ Make sure you have some version of curses installed (for most users this is
+ probably ncurses). Note that if you are using vendor packages you will most
+ likely need the packaged with '-dev' on the end of of it (i.e. ncurses-dev).
+ 
+-Starting with version 2.2.0 you also need libnetfilter_conntrack version 0.0.50
+-or later. These libraries also require nf_conntrack_netlink and nfnetlink
+-support in your kernel.
++Starting with version 2.2.0, you also need libnetfilter_conntrack version 0.0.50
++or later. These libraries also require nf_conntrack_netlink and nfnetlink support
++in your kernel. You will also need pkg-config at build-time.
+ 
+ ## INSTALLATION
+ 
+-- 
+2.34.1
+

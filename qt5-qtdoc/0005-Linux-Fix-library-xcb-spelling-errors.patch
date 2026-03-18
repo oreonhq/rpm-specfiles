@@ -1,0 +1,34 @@
+From ddb2afda6f713259fc8d95fb22a1c96bb448c36a Mon Sep 17 00:00:00 2001
+From: Andre Hartmann <aha_1980@gmx.de>
+Date: Sat, 5 Dec 2020 22:55:40 +0100
+Subject: [PATCH 5/5] Linux: Fix library xcb spelling errors
+
+The basename is "xcb", not "xcd".
+Also, xinerama has a "0" appended.
+
+Change-Id: I7874295445b96b55b0e995d67e8cbe591c309907
+Reviewed-by: Paul Wicking <paul.wicking@qt.io>
+(cherry picked from commit 128e08d1e9c1e8627e113d0f9a6c2c71f28cc862)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+---
+ doc/src/platforms/linux.qdoc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/doc/src/platforms/linux.qdoc b/doc/src/platforms/linux.qdoc
+index 89e3863c1..c1a675da7 100644
+--- a/doc/src/platforms/linux.qdoc
++++ b/doc/src/platforms/linux.qdoc
+@@ -320,8 +320,8 @@
+     \li libxcb-randr0-dev
+     \li libxcb-render-util0-dev
+     \li libxcb-util-dev
+-    \li libxcb-xinerama-dev
+-    \li libxcd-xkb-dev
++    \li libxcb-xinerama0-dev
++    \li libxcb-xkb-dev
+     \li libxkbcommon-dev
+     \li libxkbcommon-x11-dev
+     \endlist
+-- 
+2.51.1
+

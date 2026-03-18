@@ -1,0 +1,61 @@
+%global srcname bottle
+
+Name:           python-%{srcname}
+Version:        0.13.4
+Release:        5%{?dist}
+Summary:        Fast and simple WSGI-framework for small web-applications
+
+License:        MIT
+URL:            http://bottlepy.org
+Source0:        https://github.com/bottlepy/%{srcname}/archive/%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
+
+BuildArch:      noarch
+
+BuildRequires:  python%{python3_pkgversion}-devel
+BuildRequires:  python3dist(pytest)
+
+%description
+Bottle is a fast and simple micro-framework for small web-applications.
+It offers request dispatching (Routes) with URL parameter support, Templates,
+a built-in HTTP Server and adapters for many third party WSGI/HTTP-server and
+template engines. All in a single file and with no dependencies other than the
+Python Standard Library.
+
+%package -n python%{python3_pkgversion}-%{srcname}
+Summary:        Fast and simple WSGI-framework for small web-applications
+%{?python_provide:%python_provide python%{python3_pkgversion}-%{srcname}}
+
+%description -n python%{python3_pkgversion}-%{srcname}
+Bottle is a fast and simple micro-framework for small web-applications.
+It offers request dispatching (Routes) with URL parameter support, Templates,
+a built-in HTTP Server and adapters for many third party WSGI/HTTP-server and
+template engines. All in a single file and with no dependencies other than the
+Python Standard Library.
+
+%prep
+%autosetup -p1 -n %{srcname}-%{version}
+sed -i '/^#!/d' bottle.py
+
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+rm %{buildroot}%{_bindir}/bottle %{buildroot}%{_bindir}/bottle.py
+
+%check
+%{pytest} test
+
+%files -n python%{python3_pkgversion}-%{srcname}
+%license LICENSE
+%doc AUTHORS README.rst docs/*
+%{python3_sitelib}/__pycache__/*
+%{python3_sitelib}/*.dist-info
+%{python3_sitelib}/*.py
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.13.4-5
+- Prepare for Oreon 11 (RP1)

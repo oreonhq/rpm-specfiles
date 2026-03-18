@@ -1,0 +1,19 @@
+commit b0af060fb688b8fc2ff3817ea99430432668b291
+Author: Ingvar Hagelund <ingvar@redpill-linpro.com>
+Date:   Tue Feb 11 12:56:54 2020 +0100
+
+    simple fix for fedora/gcc-10.0.1: -Werror=format-overflow, by some reason hit on s390x
+
+diff --git a/bin/varnishtest/vtc_varnish.c b/bin/varnishtest/vtc_varnish.c
+index 1ec748cb6..09e49d258 100644
+--- a/bin/varnishtest/vtc_varnish.c
++++ b/bin/varnishtest/vtc_varnish.c
+@@ -121,7 +121,7 @@ varnish_ask_cli(const struct varnish *v, const char *cmd, char **repl)
+ 	i = VCLI_ReadResult(v->cli_fd, &retval, &r, vtc_maxdur);
+ 	if (i != 0 && !vtc_stop)
+ 		vtc_fatal(v->vl, "CLI failed (%s) = %d %u %s",
+-		    cmd, i, retval, r);
++		    cmd != NULL ? cmd : "NULL", i, retval, r);
+ 	vtc_log(v->vl, 3, "CLI RX  %u", retval);
+ 	vtc_dump(v->vl, 4, "CLI RX", r, -1);
+ 	if (repl != NULL)

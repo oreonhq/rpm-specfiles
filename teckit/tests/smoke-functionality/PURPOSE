@@ -1,0 +1,8 @@
+PURPOSE of /CoreOS/teckit/smoke-functionality
+Description: tests basic functionality
+Author: Than Ngo <than@redhat.com>
+
+tests following scenarios:
+ * test teckit_compile, compiling Greek mapping
+ * test txtconv, converting plain-text file to unicode and converting back to legacy encoding
+ * test sfconv, converting standard format file to unicode and converting back to legacy encodings

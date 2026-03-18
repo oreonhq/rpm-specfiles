@@ -1,0 +1,6 @@
+summary: Run snapm upstream test suite
+test: ./prepare-host-environment.sh; ./run-unit-tests.sh
+require:
+- python3-pytest
+- python3-devel
+duration: 90m

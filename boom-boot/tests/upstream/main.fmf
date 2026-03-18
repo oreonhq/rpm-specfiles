@@ -1,0 +1,9 @@
+summary: Run boom upstream test suite
+test: |
+    cd $TMT_SOURCE_DIR/boom-boot-*[0-9]/
+    pytest -v --log-level=debug
+require:
+- boom-boot
+- python3-pytest
+- python3-devel
+duration: 5m

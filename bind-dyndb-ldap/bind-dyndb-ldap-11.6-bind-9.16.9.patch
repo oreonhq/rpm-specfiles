@@ -1,0 +1,30 @@
+From 2a732bb03812878a9cc00d27d6c80f3993520626 Mon Sep 17 00:00:00 2001
+From: Petr Mensik <pemensik@redhat.com>
+Date: Thu, 26 Nov 2020 17:31:21 +0100
+Subject: [PATCH] Support BIND 9.16.9
+
+Two new functions were added to database interface. They are more
+related to caching server and not authoritative. Add just null pointers,
+returning not supporter error if used.
+---
+ src/ldap_driver.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/ldap_driver.c b/src/ldap_driver.c
+index 2f6574ea5..c524b7cc5 100644
+--- a/src/ldap_driver.c
++++ b/src/ldap_driver.c
+@@ -959,6 +959,10 @@ static dns_dbmethods_t ldapdb_methods = {
+ 	setservestalettl,
+ 	getservestalettl,
+ #endif
++#if LIBDNS_VERSION_MAJOR >= 1609
++	NULL, /* setservestalerefresh */
++	NULL, /* getservestalerefresh */
++#endif
+ #if LIBDNS_VERSION_MAJOR >= 1600
+ 	NULL, /* setgluecachestats */
+ #endif
+-- 
+2.26.2
+

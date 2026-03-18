@@ -1,0 +1,8 @@
+xml:
+    # exclude ruby templates from checks
+    exclude_path: .*\.erb$
+
+shellsyntax:
+    # exclude ruby templates from checks
+    ignore:
+        - /usr/lib*/pcsd/vendor/bundle/gems/thin*/lib/thin/controllers/*.erb

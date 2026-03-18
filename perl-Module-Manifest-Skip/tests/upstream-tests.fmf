@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Module-Manifest-Skip
+require: perl-Module-Manifest-Skip-tests
+test: /usr/libexec/perl-Module-Manifest-Skip/test

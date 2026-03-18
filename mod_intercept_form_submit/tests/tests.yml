@@ -1,0 +1,15 @@
+- hosts: localhost
+  roles:
+  - role: standard-test-source # Fetch source tarball and unpack it into the test environment, under directory "source/"
+    tags:
+    - always
+  - role: standard-test-basic
+    tags:
+    - classic
+    tests:
+    - simple:
+        dir: source
+        run: tests/config.sh && setsebool allow_httpd_mod_auth_pam 1 && systemctl start httpd && tail -f /var/log/httpd/*_log & tests/run.sh
+    required_packages:
+    - httpd
+    - mod_intercept_form_submit

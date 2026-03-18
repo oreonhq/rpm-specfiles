@@ -1,0 +1,11 @@
+- hosts: localhost
+  roles:
+  - role: standard-test-basic
+    tags:
+    - classic
+    required_packages:
+    - ocaml
+    tests:
+    - simple:
+        dir: .
+        run: ./basic-test.sh

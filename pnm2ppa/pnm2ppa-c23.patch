@@ -1,0 +1,18 @@
+diff --git a/global.h b/global.h
+index fc941b0..10a024a 100644
+--- a/global.h
++++ b/global.h
+@@ -26,9 +26,13 @@
+  * Global types
+  */
+ 
++#if !defined(__STDC_VERSION__) || __STDC_VERSION__ < 202311L
+ typedef enum
+ { false = 0, true = 1 }
+ BOOLEAN;
++#else
++typedef bool BOOLEAN;
++#endif // GCC < 15
+ 
+ /* Paper sizes in 600ths of an inch. */
+ 

@@ -1,0 +1,11 @@
+---
+/:
+    inherit: false
+
+summary: Plan for running all tests
+
+discover:
+  how: fmf
+execute:
+  how: tmt
+

@@ -1,0 +1,13 @@
+summary: Test for cronie has a bug when run with syslog flag
+description: "Bug summary: cronie has a bug when run with syslog flag\n"
+contact: Jakub Prokes <jprokes@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+  - rsyslog
+duration: 10m
+extra-summary: /CoreOS/cronie/Regression/run-with-syslog-flag
+extra-task: /CoreOS/cronie/Regression/run-with-syslog-flag

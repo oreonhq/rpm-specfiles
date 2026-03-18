@@ -1,0 +1,10 @@
+summary: Run javapackages-specific tests
+discover:
+  how: fmf
+  url: https://src.fedoraproject.org/tests/javapackages
+  ref: main
+execute:
+  how: tmt
+environment:
+  JP_VALIDATOR_SOURCE_PATH: ''
+  JP_VALIDATOR_ARGS: org.fedoraproject.javapackages.validator.validators.DefaultValidatorFactory

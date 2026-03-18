@@ -1,0 +1,2 @@
+# Compression
+addFilter("spelling-error \('(gunzip|Zlib)',")

@@ -1,0 +1,47 @@
+%global debug_package %{nil}
+
+Name:		libkkc-data
+Version:	0.2.7
+Release:	31%{?dist}
+Epoch:		1
+Summary:	Language model data for libkkc
+
+# Automatically converted from old format: GPLv3+ - review is highly recommended.
+License:	GPL-3.0-or-later
+URL:		https://github.com/ueno/libkkc/
+Source0:	https://github.com/ueno/libkkc/releases/download/v0.3.5/%{name}-%{version}.tar.xz
+Patch0:		https://github.com/ueno/libkkc/commit/ba1c1bd3eb86d887fc3689c3142732658071b5f7.patch
+
+BuildRequires:	gcc
+BuildRequires:	python3-devel
+BuildRequires:	python3-marisa
+BuildRequires: make
+
+%description
+The %{name} package contains the language model data that libkkc uses
+at run time.
+
+
+%prep
+%setup -q
+%patch -P0 -p4 -b .orig
+
+
+%build
+export PYTHON=%{__python3}
+%configure --disable-static
+%make_build
+
+
+%install
+%make_install
+
+
+%files
+%doc COPYING
+%{_libdir}/libkkc
+
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.7-31
+- Prepare for Oreon 11 (RP1)

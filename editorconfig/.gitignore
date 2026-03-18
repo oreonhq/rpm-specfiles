@@ -1,0 +1,12 @@
+/results_*
+/*.src.rpm
+
+/editorconfig-0.12.2.tar.gz
+/editorconfig-0.12.3.tar.gz
+/editorconfig-core-c-0.12.4.tar.gz
+/editorconfig-core-c-0.12.5.tar.gz
+/editorconfig-core-c-0.12.6.tar.gz
+/editorconfig-core-c-0.12.7.tar.gz
+/editorconfig-core-c-0.12.8.tar.gz
+/editorconfig-core-c-0.12.9.tar.gz
+/editorconfig-core-c-0.12.10.tar.gz

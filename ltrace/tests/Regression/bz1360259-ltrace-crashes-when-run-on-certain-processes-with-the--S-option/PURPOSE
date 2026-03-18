@@ -1,0 +1,5 @@
+PURPOSE of /tools/ltrace/Regression/bz1360259-ltrace-crashes-when-run-on-certain-processes-with-the--S-option
+Description: Test for BZ#1360259 (ltrace crashes when run on certain processes with the -S option)
+Author: Edjunior Machado <emachado@redhat.com>
+Bug summary: ltrace crashes when run on certain processes with the -S option
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1360259

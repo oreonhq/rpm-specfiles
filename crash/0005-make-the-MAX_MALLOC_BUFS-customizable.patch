@@ -1,0 +1,108 @@
+From f459c359a63dc36cf1005a96a3bc2ac81b96d312 Mon Sep 17 00:00:00 2001
+From: Shivang Upadhyay <shivangu@linux.ibm.com>
+Date: Mon, 8 Dec 2025 14:01:16 +0530
+Subject: [PATCH 05/23] make the MAX_MALLOC_BUFS customizable
+
+the default (and minimum) value of MAX_MALLOC_BUFS is 3072, but can be
+changed with command line with flag `--max-malloc-bufs`.
+
+Signed-off-by: Shivang Upadhyay <shivangu@linux.ibm.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ defs.h  | 8 ++++++++
+ main.c  | 4 ++++
+ tools.c | 9 ++++++---
+ 3 files changed, 18 insertions(+), 3 deletions(-)
+
+diff --git a/defs.h b/defs.h
+index 24dad932c1f7..0d39cf2faa88 100644
+--- a/defs.h
++++ b/defs.h
+@@ -188,6 +188,13 @@
+ #define HIST_BLKSIZE  (4096)
+ 
+ static inline int string_exists(char *s) { return (s ? TRUE : FALSE); }
++
++static inline int max(int a, int b) {
++	if (a > b)
++		return a;
++	return b;
++}
++
+ #define STREQ(A, B)      (string_exists((char *)A) && string_exists((char *)B) && \
+ 	(strcmp((char *)(A), (char *)(B)) == 0))
+ #define STRNEQ(A, B)     (string_exists((char *)A) && string_exists((char *)B) && \
+@@ -5609,6 +5616,7 @@ void exec_args_input_file(struct command_table_entry *, struct args_input_file *
+ /*
+  *  tools.c
+  */
++extern int MAX_MALLOC_BUFS;
+ FILE *set_error(char *);
+ int __error(int, char *, ...);
+ #define error __error               /* avoid conflict with gdb error() */
+diff --git a/main.c b/main.c
+index 71bcc1558192..247779cc82db 100644
+--- a/main.c
++++ b/main.c
+@@ -46,6 +46,7 @@ static struct option long_options[] = {
+ 	{"version", 0, 0, 0},
+ 	{"buildinfo", 0, 0, 0},
+         {"cpus", required_argument, 0, 0},
++        {"max-malloc-bufs", required_argument, 0, 0},
+         {"no_ikconfig", 0, 0, 0},
+         {"hyper", 0, 0, 0},
+ 	{"p2m_mfn", required_argument, 0, 0},
+@@ -163,6 +164,9 @@ main(int argc, char **argv)
+ 		        else if (STREQ(long_options[option_index].name, "cpus")) 
+ 				kt->cpus_override = optarg;
+ 
++		        else if (STREQ(long_options[option_index].name, "max-malloc-bufs"))
++				MAX_MALLOC_BUFS = max(MAX_MALLOC_BUFS, atoi(optarg));
++
+ 			else if (STREQ(long_options[option_index].name, "hyper"))
+ 				pc->flags |= XEN_HYPER;
+ 
+diff --git a/tools.c b/tools.c
+index a9ad18d520d9..69250c48fa91 100644
+--- a/tools.c
++++ b/tools.c
+@@ -5698,7 +5698,7 @@ ll_power(long long base, long long exp)
+ #define B32K (4)
+ 
+ #define SHARED_BUF_SIZES  (B32K+1)
+-#define MAX_MALLOC_BUFS   (2000)
++int MAX_MALLOC_BUFS  = 3072; /* can be changed from command line args */
+ #define MAX_CACHE_SIZE    (KILOBYTES(32))
+ 
+ struct shared_bufs {
+@@ -5723,7 +5723,7 @@ struct shared_bufs {
+         long buf_8K_ovf;
+         long buf_32K_ovf;
+ 	int buf_inuse[SHARED_BUF_SIZES];
+-	char *malloc_bp[MAX_MALLOC_BUFS];
++	char **malloc_bp;
+ 	long smallest;
+ 	long largest;
+ 	long embedded;
+@@ -5744,6 +5744,7 @@ buf_init(void)
+ 
+ 	bp->smallest = 0x7fffffff; 
+ 	bp->total = 0.0;
++	bp->malloc_bp = (char**) calloc(MAX_MALLOC_BUFS * sizeof(char*), 1);
+ 
+ #ifdef VALGRIND
+ 	VALGRIND_MAKE_MEM_NOACCESS(&bp->buf_1K, sizeof(bp->buf_1K));
+@@ -6130,7 +6131,9 @@ getbuf(long reqsize)
+ 	dump_shared_bufs();
+ 	
+ 	return ((char *)(long)
+-		error(FATAL, "cannot allocate any more memory!\n"));
++		error(FATAL, "cannot allocate any more memory!\n"
++				"try increasing --max-malloc-bufs (current  value : %d)\n",
++				MAX_MALLOC_BUFS));
+ }
+ 
+ /*
+-- 
+2.51.1
+

@@ -1,0 +1,92 @@
+From e91e1417c213f45d57600f67801f521055712a6e Mon Sep 17 00:00:00 2001
+From: Austin Kim <austindh.kim@gmail.com>
+Date: Tue, 13 Jan 2026 10:54:01 +0900
+Subject: [PATCH 11/23] RISCV64: fix wrong information of PUD, PMD and PTE -
+ SA48(4K page)
+
+As for SA48(4K page) in RISC-V based vmcore, 'vtop address' command
+produces the misleading information, including PUD, PMD, PTE.
+
+This commit is based on the following previous commit:
+
+commit 536a0d78f1fa ("RISCV64: fix wrong information of PMD and PTE - SA39(4K page)")
+
+Signed-off-by: Austin Kim <austindh.kim@gmail.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ riscv64.c | 37 ++++++++++++++++++-------------------
+ 1 file changed, 18 insertions(+), 19 deletions(-)
+
+diff --git a/riscv64.c b/riscv64.c
+index 6b89f0b414f1..4400d5cb815f 100644
+--- a/riscv64.c
++++ b/riscv64.c
+@@ -1210,10 +1210,9 @@ static int
+ riscv64_vtop_4level_4k(ulong *pgd, ulong vaddr, physaddr_t *paddr, int verbose)
+ {
+ 	ulong *pgd_ptr, pgd_val;
+-	ulong pud_val;
+-	ulong pmd_val;
+-	ulong pte_val, pte_pfn;
+-	ulong pt_phys;
++	ulong pud_base, pud_addr, pud_val;
++	ulong pmd_base, pmd_addr, pmd_val;
++	ulong pte_base, pte_addr, pte_val, pte_pfn;
+ 
+ 	if (verbose)
+ 		fprintf(fp, "PAGE DIRECTORY: %lx\n", (ulong)pgd);
+@@ -1227,36 +1226,36 @@ riscv64_vtop_4level_4k(ulong *pgd, ulong vaddr, physaddr_t *paddr, int verbose)
+ 	if (!pgd_val)
+ 		goto no_page;
+ 	pgd_val &= PTE_PFN_PROT_MASK;
+-	pt_phys = (pgd_val >> _PAGE_PFN_SHIFT) << PAGESHIFT();
++	pud_base = (pgd_val >> _PAGE_PFN_SHIFT) << PAGESHIFT();
+ 
+ 	/* PUD */
+-	FILL_PUD(PAGEBASE(pt_phys), PHYSADDR, PAGESIZE());
+-	pud_val = ULONG(machdep->pud + PAGEOFFSET(sizeof(pud_t) *
+-			pud_index_l4_4k(vaddr)));
++	FILL_PUD(PAGEBASE(pud_base), PHYSADDR, PAGESIZE());
++	pud_addr = pud_base + sizeof(pud_t) * pud_index_l4_4k(vaddr);
++	pud_val = ULONG(machdep->pud + PAGEOFFSET(pud_addr));
+ 	if (verbose)
+-		fprintf(fp, "  PUD: %016lx => %016lx\n", pt_phys, pud_val);
++		fprintf(fp, "  PUD: %016lx => %016lx\n", pud_addr, pud_val);
+ 	if (!pud_val)
+ 		goto no_page;
+ 	pud_val &= PTE_PFN_PROT_MASK;
+-	pt_phys = (pud_val >> _PAGE_PFN_SHIFT) << PAGESHIFT();
++	pmd_base = (pud_val >> _PAGE_PFN_SHIFT) << PAGESHIFT();
+ 
+ 	/* PMD */
+-	FILL_PMD(PAGEBASE(pt_phys), PHYSADDR, PAGESIZE());
+-	pmd_val = ULONG(machdep->pmd + PAGEOFFSET(sizeof(pmd_t) *
+-			pmd_index_l4_4k(vaddr)));
++	FILL_PMD(PAGEBASE(pmd_base), PHYSADDR, PAGESIZE());
++	pmd_addr = pmd_base + sizeof(pmd_t) + pmd_index_l4_4k(vaddr);
++	pmd_val = ULONG(machdep->pmd + PAGEOFFSET(pmd_addr));
+ 	if (verbose)
+-		fprintf(fp, "  PMD: %016lx => %016lx\n", pt_phys, pmd_val);
++		fprintf(fp, "  PMD: %016lx => %016lx\n", pmd_addr, pmd_val);
+ 	if (!pmd_val)
+ 		goto no_page;
+ 	pmd_val &= PTE_PFN_PROT_MASK;
+-	pt_phys = (pmd_val >> _PAGE_PFN_SHIFT) << PAGESHIFT();
++	pte_base = (pmd_val >> _PAGE_PFN_SHIFT) << PAGESHIFT();
+ 
+ 	/* PTE */
+-	FILL_PTBL(PAGEBASE(pt_phys), PHYSADDR, PAGESIZE());
+-	pte_val = ULONG(machdep->ptbl + PAGEOFFSET(sizeof(pte_t) *
+-			pte_index_l4_4k(vaddr)));
++	FILL_PTBL(PAGEBASE(pte_base), PHYSADDR, PAGESIZE());
++	pte_addr = pte_base + sizeof(pte_t) * pte_index_l4_4k(vaddr);
++	pte_val = ULONG(machdep->ptbl + PAGEOFFSET(pte_addr));
+ 	if (verbose)
+-		fprintf(fp, "  PTE: %lx => %lx\n", pt_phys, pte_val);
++		fprintf(fp, "  PTE: %lx => %lx\n", pte_addr, pte_val);
+ 	if (!pte_val)
+ 		goto no_page;
+ 	pte_val &= PTE_PFN_PROT_MASK;
+-- 
+2.51.1
+

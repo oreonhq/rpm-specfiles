@@ -1,0 +1,34 @@
+From 0ad3618f226deee531bcced057afa1b52d5b41f5 Mon Sep 17 00:00:00 2001
+From: Sergei Golubchik <vuvova@gmail.com>
+Date: Wed, 14 Aug 2019 12:09:30 +0400
+Subject: [PATCH] Fix recursion stack estimator
+
+Due to inlining match() by recent GCC, the stack estimator reported 4-bytes
+stack consumption.
+
+Author: Sergei Golubchik <vuvova@gmail.com>
+<https://bugs.exim.org/show_bug.cgi?id=2173>
+---
+ pcre_exec.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/pcre_exec.c b/pcre_exec.c
+index 3fd58cb..2b4d704 100644
+--- a/pcre_exec.c
++++ b/pcre_exec.c
+@@ -509,6 +509,12 @@ Returns:       MATCH_MATCH if matched            )  these values are >= 0
+                  (e.g. stopped by repeated call or recursion limit)
+ */
+ 
++#ifdef __GNUC__
++static int
++match(REGISTER PCRE_PUCHAR eptr, REGISTER const pcre_uchar *ecode,
++  PCRE_PUCHAR mstart, int offset_top, match_data *md, eptrblock *eptrb,
++  unsigned int rdepth) __attribute__((noinline,noclone));
++#endif
+ static int
+ match(REGISTER PCRE_PUCHAR eptr, REGISTER const pcre_uchar *ecode,
+   PCRE_PUCHAR mstart, int offset_top, match_data *md, eptrblock *eptrb,
+-- 
+2.23.0.rc1
+

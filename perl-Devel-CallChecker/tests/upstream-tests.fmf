@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Devel-CallChecker
+require: perl-Devel-CallChecker-tests
+test: /usr/libexec/perl-Devel-CallChecker/test

@@ -1,0 +1,34 @@
+From d4b08251d816038950b522fc1b003c8d4f1bcc6d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20Men=C5=A1=C3=ADk?= <pemensik@redhat.com>
+Date: Tue, 25 Jul 2023 15:42:50 +0200
+Subject: [PATCH] Customize workstation only
+
+---
+ dnssec-trigger-workstation.conf | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/dnssec-trigger-workstation.conf b/dnssec-trigger-workstation.conf
+index 6251c98..bb2b5db 100644
+--- a/dnssec-trigger-workstation.conf
++++ b/dnssec-trigger-workstation.conf
+@@ -32,6 +32,7 @@
+ # the command to run to open login pages on hot spots, a web browser.
+ # empty string runs no command.
+ # login-command: "/usr/bin/xdg-open"
++login-command: ""
+ 
+ # the url to open to get hot spot login, it gets overridden by the hotspot.
+ # login-location: "http://hotspot-nocache.fedoraproject.org/"
+@@ -62,7 +63,8 @@
+ # url: "http://ster.nlnetlabs.nl/hotspot.txt OK"
+ 
+ # provided by FedoraProject
+-url: "http://fedoraproject.org/static/hotspot.txt OK"
++# on Workstation, the detection is turned off
++# url: "http://fedoraproject.org/static/hotspot.txt OK"
+ 
+ # fallback open DNSSEC resolvers that run on TCP port 80 and TCP port 443.
+ # These relay incoming DNS traffic on the other port numbers to the usual DNS
+-- 
+2.41.0
+

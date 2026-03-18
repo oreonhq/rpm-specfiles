@@ -1,0 +1,3 @@
+from Config import *
+addFilter("spelling-error .* (accessor|getters|inlined)");
+addFilter("-tests\.noarch: W: no-documentation");

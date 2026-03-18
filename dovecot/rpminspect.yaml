@@ -1,0 +1,7 @@
+---
+runpath:
+  allowed_paths:
+    # dovecot only plugins
+    - /usr/lib/dovecot/old-stats
+    - /usr/lib64/dovecot/old-stats
+

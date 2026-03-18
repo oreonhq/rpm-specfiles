@@ -1,0 +1,16 @@
+diff -Naur libIDL-0.8.14-original/parser.y libIDL-0.8.14/parser.y
+--- libIDL-0.8.14-original/parser.y	2009-04-18 08:20:37.000000000 -0400
++++ libIDL-0.8.14/parser.y	2021-02-03 12:44:47.638466666 -0500
+@@ -898,11 +898,9 @@
+ 	;
+ 
+ primary_expr:		scoped_name			{
+-	IDL_tree p, literal;
++	IDL_tree literal;
+ 	
+ 	assert (IDL_NODE_TYPE ($1) == IDLN_IDENT);
+-
+-	p = IDL_NODE_UP ($1);
+ 	
+ 	if ((literal = IDL_resolve_const_exp ($1, IDLN_ANY))) {
+ 		++IDL_NODE_REFS (literal);

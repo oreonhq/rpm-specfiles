@@ -1,0 +1,41 @@
+diff --git a/setup.py b/setup.py
+index 59f7601..023d84b 100644
+--- a/setup.py
++++ b/setup.py
+@@ -341,17 +341,9 @@ class test_command(Command):
+ 
+     def run(self):
+         import pytest
+-        from coverage import Coverage
+-
+-        cov = Coverage()
+-        cov.erase()
+-        cov.start()
+ 
+         result = pytest.main()
+ 
+-        cov.stop()
+-        cov.save()
+-        cov.html_report(directory="covhtml")
+         sys.exit(int(bool(len(result.failures) > 0 or len(result.errors) > 0)))
+ 
+ 
+@@ -479,7 +471,6 @@ if __name__ == "__main__":
+         },
+         license="GPLv2+",
+         setup_requires=[
+-            "coverage",
+             "distro",
+             "setuptools",
+             "sphinx",
+@@ -501,10 +492,7 @@ if __name__ == "__main__":
+             "lint": ["pyflakes", "pycodestyle", "pylint", "black", "mypy"],
+             "test": [
+                 "pytest>6",
+-                "pytest-cov",
+-                "codecov",
+                 "pytest-mock",
+-                "pytest-benchmark",
+             ],
+             "docs": ["sphinx", "sphinx-rtd-theme", "sphinxcontrib-apidoc"],
+             # We require the current version to properly detect duplicate issues

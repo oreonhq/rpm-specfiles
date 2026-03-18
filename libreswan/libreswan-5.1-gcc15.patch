@@ -1,0 +1,46 @@
+From 943ae66144f292ab915918ccb94257af850abadf Mon Sep 17 00:00:00 2001
+From: Daiki Ueno <dueno@redhat.com>
+Date: Thu, 30 Jan 2025 17:00:10 +0900
+Subject: [PATCH] testing: make jambufcheck compile with GCC 15
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Previously, when compiled with GCC 15, it fails with:
+
+  libreswan-5.1/testing/programs/jambufcheck/jambufcheck.c:36:34: error: initializer-string for array of ‘char’ is too long [-Werror=unterminated-string-initialization]
+     36 |                 char array[12] = "abcdefghijkl";
+        |                                  ^~~~~~~~~~~~~~
+  cc1: all warnings being treated as errors
+
+The relevant code really needs to initialize `array` with 12 elements (10
+characters + NUL + SENTINEL), but with a "..." initializer it
+a NUL character is automatically appended at the end. This patch
+switches to using a {...} to initialize the array.
+
+Signed-off-by: Daiki Ueno <dueno@redhat.com>
+Signed-off-by: Andrew Cagney <cagney@gnu.org>
+Merge ueno:wip/c23
+---
+ testing/programs/jambufcheck/jambufcheck.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/testing/programs/jambufcheck/jambufcheck.c b/testing/programs/jambufcheck/jambufcheck.c
+index 1e9018997f..b87501c7db 100644
+--- a/testing/programs/jambufcheck/jambufcheck.c
++++ b/testing/programs/jambufcheck/jambufcheck.c
+@@ -33,7 +33,10 @@ static void check_jambuf(bool ok, const char *expect, ...)
+ 		const char *op = ops[i];
+ 		printf("%s: %s '%s' %s\n", __func__, op, expect, oks);
+ 		/* 10 characters + NUL + SENTINEL */
+-		char array[12] = "abcdefghijkl";
++		char array[12] = {
++			'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j',
++			'k', 'l'
++		};
+ 		struct jambuf buf = ARRAY_AS_JAMBUF(array);
+ #define FAIL(FMT, ...)							\
+ 		{							\
+-- 
+2.48.1
+

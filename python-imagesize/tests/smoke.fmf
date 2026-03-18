@@ -1,0 +1,5 @@
+test: python3 -c 'import imagesize'
+framework: shell
+require:
+- python3-imagesize
+

@@ -1,0 +1,28 @@
+upstream_project_url: https://github.com/candlepin/subscription-manager
+srpm_build_deps:
+  - python3
+  - tito
+actions:
+  pre-sync:
+    - tito build -o . --tgz
+specfile_path: subscription-manager.spec
+files_to_sync:
+  - src:
+    - subscription-manager.spec
+    - "subscription-manager-*.tar.gz"
+    dest: .
+upstream_tag_template: "subscription-manager-{version}-1"
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - fedora-all
+  - job: koji_build
+    trigger: commit
+    dist_git_branches:
+      - fedora-all
+  - job: bodhi_update
+    trigger: commit
+    dist_git_branches:
+      - fedora-branched
+      - fedora-stable

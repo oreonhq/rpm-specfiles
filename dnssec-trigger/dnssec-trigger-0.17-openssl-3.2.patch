@@ -1,0 +1,34 @@
+From 7c3ff5b59952bc6bf11f988c9dbd961ae3c626ea Mon Sep 17 00:00:00 2001
+From: Petr Mensik <pemensik@redhat.com>
+Date: Tue, 10 Sep 2024 16:22:07 +0200
+Subject: [PATCH] Mark explicitly server cert with CA flag
+
+Since OpenSSL 3.2 it did not connect from control to server cert. Create
+server with indication is it CA.
+
+Also use clientAuth trust for CA cert. That allows control cert to be
+used for client authentication.
+---
+ dnssec-trigger-control-setup.sh.in | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/dnssec-trigger-control-setup.sh.in b/dnssec-trigger-control-setup.sh.in
+index 7cc305a..eede665 100644
+--- a/dnssec-trigger-control-setup.sh.in
++++ b/dnssec-trigger-control-setup.sh.in
+@@ -200,9 +200,9 @@ EOF
+ test -f request.cfg || error "could not create request.cfg"
+ 
+ echo "create $SVR_BASE.pem (self signed certificate)"
+-openssl req -key $SVR_BASE.key -config request.cfg  -new -x509 -days $DAYS -out $SVR_BASE.pem || error "could not create $SVR_BASE.pem"
+-# create trusted usage pem
+-openssl x509 -in $SVR_BASE.pem -addtrust serverAuth -out $SVR_BASE"_trust.pem"
++openssl req -key $SVR_BASE.key -config request.cfg  -new -x509 -days $DAYS -addext "basicConstraints=critical,CA:TRUE,pathlen:0" -out $SVR_BASE.pem || error "could not create $SVR_BASE.pem"
++# create trusted usage pem for CA, what are signed certs allowed to do?
++openssl x509 -in "$SVR_BASE.pem" -addtrust clientAuth -out "${SVR_BASE}_trust.pem"
+ 
+ # create client request and sign it, piped
+ cat >request.cfg <<EOF
+-- 
+2.46.0
+

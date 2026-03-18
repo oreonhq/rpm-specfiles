@@ -1,0 +1,4 @@
+# It is normal for the -devel package to lack documentation of its own.
+# Furthermore, all interesting documentation has been packaged in the -doc
+# subpackage.
+addFilter(r"^cairomm(-devel)?\..*: no-documentation")

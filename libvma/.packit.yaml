@@ -1,0 +1,21 @@
+# See the documentation for more information:
+# https://packit.dev/docs/configuration/
+
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      fedora-rawhide:
+        fast_forward_merge_into:
+          - fedora-development
+
+  - job: koji_build
+    trigger: commit
+    dist_git_branches:
+      - fedora-rawhide
+      - fedora-branched
+
+  - job: bodhi_update
+    trigger: commit
+    dist_git_branches:
+      - fedora-branched  # rawhide updates are created automatically

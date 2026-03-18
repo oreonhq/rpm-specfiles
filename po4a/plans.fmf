@@ -1,0 +1,11 @@
+summary: Run all smoke tests
+discover:
+  how: fmf
+prepare:
+    how: install
+    package:
+      - bash
+      - coreutils
+      - grep
+execute:
+  how: tmt

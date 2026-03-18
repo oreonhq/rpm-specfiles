@@ -1,0 +1,15 @@
+---
+summary: Package test suite
+discover:
+  how: fmf
+  url: https://gitlab.com/redhat/centos-stream/tests/nodejs
+  filter: 'component: nodejs-cjs-module-lexer'
+prepare:
+  - name: install nodejs and cjs-module-lexer
+    how: install
+    package:
+      - nodejs
+      - nodejs-cjs-module-lexer
+execute:
+  how: tmt
+...

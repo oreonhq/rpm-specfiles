@@ -1,0 +1,14 @@
+summary: Runs random app which caused strace problems in the past
+description: ''
+contact: Michal Nowak <mnowak@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- gcc
+- glibc-devel
+duration: 1h
+extra-summary: /tools/ltrace/Sanity/random-apps
+extra-task: /tools/ltrace/Sanity/random-apps

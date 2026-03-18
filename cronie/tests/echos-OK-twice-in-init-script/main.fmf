@@ -1,0 +1,12 @@
+summary: Test for echos "OK" twice in init script
+description: ''
+contact: Martin Cermak <mcermak@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 15m
+extra-summary: /CoreOS/cronie/Regression/echos-OK-twice-in-init-script
+extra-task: /CoreOS/cronie/Regression/echos-OK-twice-in-init-script

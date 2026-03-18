@@ -1,0 +1,107 @@
+From 1477124fd2b94229fb3580dd74abaecf72095a5c Mon Sep 17 00:00:00 2001
+From: Zdenek Dohnal <zdohnal@redhat.com>
+Date: Tue, 28 Jan 2025 16:41:28 +0100
+Subject: [PATCH] Fix potential memory leaks
+
+---
+ pappl-retrofit/pappl-retrofit.c | 10 +++++++---
+ pappl-retrofit/print-job.c      |  4 ++++
+ pappl-retrofit/web-interface.c  |  3 +++
+ 3 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/pappl-retrofit/pappl-retrofit.c b/pappl-retrofit/pappl-retrofit.c
+index b187bde..98b8b56 100644
+--- a/pappl-retrofit/pappl-retrofit.c
++++ b/pappl-retrofit/pappl-retrofit.c
+@@ -157,7 +157,7 @@ prBestMatchingPPD(const char *device_id,	// I - IEEE-1284 device ID
+         {
+ 	  if (regcomp(re, regex, REG_ICASE | REG_EXTENDED | REG_NOSUB))
+ 	  {
+-	    regfree(re);
++	    free(re);
+ 	    papplLog(global_data->system, PAPPL_LOGLEVEL_ERROR,
+ 		     "Invalid regular expression: %s", regex);
+ 	    continue;
+@@ -334,7 +334,7 @@ prRegExMatchDevIDField(const char *device_id,     // I - Device ID to search in
+     // Compile the regular expression
+     if (regcomp(re, value_regex, REG_ICASE | REG_EXTENDED | REG_NOSUB))
+     {
+-      regfree(re);
++      free(re);
+       ret = -3;
+       goto out;
+     }
+@@ -365,6 +365,7 @@ prRegExMatchDevIDField(const char *device_id,     // I - Device ID to search in
+     }
+ 
+     regfree(re);
++    free(re);
+   }
+   else
+     ret = -5;
+@@ -3930,7 +3931,7 @@ _prSetupDriverList(pr_printer_app_global_data_t *global_data)
+ 	if (regcomp(driver_re, global_data->config->driver_display_regex,
+ 		    REG_ICASE | REG_EXTENDED))
+ 	{
+-	  regfree(driver_re);
++	  free(driver_re);
+ 	  driver_re = NULL;
+ 	  papplLog(system, PAPPL_LOGLEVEL_ERROR,
+ 		   "Invalid regular expression: %s",
+@@ -4230,7 +4231,10 @@ _prSetupDriverList(pr_printer_app_global_data_t *global_data)
+ 
+     // Free the compiled regular expression
+     if (driver_re)
++    {
+       regfree(driver_re);
++      free(driver_re);
++    }
+ 
+     cupsArrayDelete(ppds);
+ 
+diff --git a/pappl-retrofit/print-job.c b/pappl-retrofit/print-job.c
+index 1fbd16f..3138590 100644
+--- a/pappl-retrofit/print-job.c
++++ b/pappl-retrofit/print-job.c
+@@ -996,6 +996,7 @@ _prFilter(
+   {
+     papplLogJob(job, PAPPL_LOGLEVEL_ERROR, "Unable to open input file '%s' for printing: %s",
+ 		filename, strerror(errno));
++    _prFreeJobData(job_data);
+     return (false);
+   }
+ 
+@@ -1033,6 +1034,8 @@ _prFilter(
+     papplLogJob(job, PAPPL_LOGLEVEL_ERROR,
+ 		"No pre-filter found for input format %s",
+ 		informat);
++    _prFreeJobData(job_data);
++    close(fd);
+     return (false);
+   }
+ 
+@@ -1655,6 +1658,7 @@ _prRasterPrepareJob(
+ 		"Unable to create pipe for filtering and sending off the job");
+     if (strlen(job_data->stream_filter) > 1)
+       free(ppd_filter_params);
++    _prFreeJobData(job_data);
+     return (NULL);
+   }
+ 
+diff --git a/pappl-retrofit/web-interface.c b/pappl-retrofit/web-interface.c
+index 6935aa0..5afc99c 100644
+--- a/pappl-retrofit/web-interface.c
++++ b/pappl-retrofit/web-interface.c
+@@ -1294,6 +1294,9 @@ _prSystemWebAddPPD(
+       // Flush remaining data...
+       if (httpGetState(http) == initial_state)
+ 	httpFlush(http);
++
++      if (fp)
++	fclose(fp);
+     }
+ 
+     strbuf[0] = '\0';
+-- 
+2.48.1
+

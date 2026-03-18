@@ -1,0 +1,3143 @@
+diff --git a/README.rst b/README.rst
+index 7b757ed..709d82f 100644
+--- a/README.rst
++++ b/README.rst
+@@ -1,3 +1,10 @@
++Status of this repository
++=========================
++
++This repository is based upon
++https://github.com/varnish/varnish-modules with necessary adjustments
++for varnish-cache master. It is being maintained by https://uplex.de/
++
+ Varnish module collection by Varnish Software
+ =============================================
+ 
+@@ -49,14 +56,13 @@ If you are using the distro provided packages::
+ 
+ Then proceed to the configure and build::
+ 
+-    ./bootstrap   # If running from git.
+     ./configure
+     make
+     make check   # optional
+     sudo make install
+ 
+ 
+-The resulting loadable modules (``libvmod_foo*.so`` files) will be installed to
++The resulting loadable modules (``libvmod_*.so`` files) will be installed to
+ the Varnish module directory. (default `/usr/lib/varnish/vmods/`)
+ 
+ 
+@@ -86,6 +92,18 @@ The source git tree lives on Github: https://github.com/varnish/varnish-modules
+ All source code is placed in the master git branch. Pull requests and issue
+ reporting are appreciated.
+ 
++Unlike building from releases, you need to first bootstrap the build system
++when you work from git::
++
++    ./bootstrap
++    ./configure
++    make
++    make check # recommended
++
++If the ``configure`` step succeeds but the ``make`` step fails, check for
++warnings in the ``./configure`` output or the ``config.log`` file. You may be
++missing bootstrap dependencies not required by release archives.
++
+ Porting
+ -------
+ 
+diff --git a/configure.ac b/configure.ac
+index 294ece3..df55b41 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -7,7 +7,7 @@ AC_CONFIG_AUX_DIR([build-aux])
+ AC_CONFIG_SRCDIR(src/vmod_cookie.vcc)
+ AC_CONFIG_HEADERS(config.h)
+ 
+-AM_INIT_AUTOMAKE([1.11 foreign])
++AM_INIT_AUTOMAKE([1.12.2 foreign])
+ AM_SILENT_RULES([yes])
+ AM_EXTRA_RECURSIVE_TARGETS([rst-docs])
+ 
+diff --git a/docs/vmod_cookie.rst b/docs/vmod_cookie.rst
+index d7a3666..892fe40 100644
+--- a/docs/vmod_cookie.rst
++++ b/docs/vmod_cookie.rst
+@@ -4,25 +4,42 @@
+ .. Edit vmod.vcc and run make instead
+ ..
+ 
+-.. role:: ref(emphasis)
+ 
+-.. _vmod_cookie(3):
+-
+-===========
+-vmod_cookie
+-===========
++:tocdepth: 1
+ 
+----------------------
+-Varnish Cookie Module
+----------------------
++.. _vmod_cookie(3):
+ 
+-:Manual section: 3
++===================================
++VMOD cookie - Varnish Cookie Module
++===================================
+ 
+ SYNOPSIS
+ ========
+ 
+-import cookie [from "path"] ;
+-
++.. parsed-literal::
++
++  import cookie [from "path"]
++  
++  :ref:`vmod_cookie.clean`
++   
++  :ref:`vmod_cookie.delete`
++   
++  :ref:`vmod_cookie.filter`
++   
++  :ref:`vmod_cookie.filter_except`
++   
++  :ref:`vmod_cookie.format_rfc1123`
++   
++  :ref:`vmod_cookie.get`
++   
++  :ref:`vmod_cookie.get_string`
++   
++  :ref:`vmod_cookie.isset`
++   
++  :ref:`vmod_cookie.parse`
++   
++  :ref:`vmod_cookie.set`
++   
+ DESCRIPTION
+ ===========
+ 
+@@ -34,8 +51,8 @@ but a set comma-separated list of cookies. A filter() method removes a comma-
+ separated list of cookies.
+ 
+ A convenience function for formatting the Set-Cookie Expires date field
+-is also included. To actually manipulate the Set-Cookie response headers,
+-vmod-header should be used instead though.
++is also included. If there are multiple Set-Cookie headers vmod-header
++should be used.
+ 
+ The state loaded with cookie.parse() has a lifetime of the current request
+ or backend request context. To pass variables to the backend request, store
+@@ -71,28 +88,11 @@ Filtering example::
+ 
+ .. vcl-end
+ 
+-CONTENTS
+-========
+-
+-* :ref:`func_clean`
+-* :ref:`func_delete`
+-* :ref:`func_filter`
+-* :ref:`func_filter_except`
+-* :ref:`func_format_rfc1123`
+-* :ref:`func_get`
+-* :ref:`func_get_string`
+-* :ref:`func_isset`
+-* :ref:`func_parse`
+-* :ref:`func_set`
+ 
+-.. _func_clean:
++.. _vmod_cookie.clean:
+ 
+-clean
+------
+-
+-::
+-
+-	VOID clean(PRIV_TASK)
++VOID clean()
++------------
+ 
+ Description
+         Clean up previously parsed cookies. It is not necessary to run clean()
+@@ -104,14 +104,10 @@ Example
+                         cookie.clean();
+                 }
+ 
+-.. _func_delete:
+-
+-delete
+-------
+-
+-::
++.. _vmod_cookie.delete:
+ 
+-	VOID delete(PRIV_TASK, STRING cookiename)
++VOID delete(STRING cookiename)
++------------------------------
+ 
+ Description
+         Delete `cookiename` from internal vmod storage if it exists.
+@@ -125,14 +121,10 @@ Example
+ 		    // get_string() will now yield "cookie1: value1";
+ 		}
+ 
+-.. _func_filter:
++.. _vmod_cookie.filter:
+ 
+-filter
+-------
+-
+-::
+-
+-	VOID filter(PRIV_TASK, STRING filterstring)
++VOID filter(STRING filterstring)
++--------------------------------
+ 
+ Description
+         Delete all cookies from internal vmod storage that are in the
+@@ -148,14 +140,10 @@ Example
+                         // "cookie3: value3";
+                 }
+ 
+-.. _func_filter_except:
+-
+-filter_except
+--------------
+-
+-::
++.. _vmod_cookie.filter_except:
+ 
+-	VOID filter_except(PRIV_TASK, STRING filterstring)
++VOID filter_except(STRING filterstring)
++---------------------------------------
+ 
+ Description
+         Delete all cookies from internal vmod storage that is not in the
+@@ -170,14 +158,10 @@ Example
+                         // "cookie1: value1; cookie2: value2;";
+                 }
+ 
+-.. _func_format_rfc1123:
++.. _vmod_cookie.format_rfc1123:
+ 
+-format_rfc1123
+---------------
+-
+-::
+-
+-	STRING format_rfc1123(TIME now, DURATION timedelta)
++STRING format_rfc1123(TIME now, DURATION timedelta)
++---------------------------------------------------
+ 
+ Description
+         Get a RFC1123 formatted date string suitable for inclusion in a
+@@ -193,14 +177,10 @@ Example
+                         set resp.http.Set-Cookie = "userid=" + req.http.userid + "; Expires=" + cookie.format_rfc1123(now, 5m) + "; httpOnly";
+                 }
+ 
+-.. _func_get:
+-
+-get
+----
+-
+-::
++.. _vmod_cookie.get:
+ 
+-	STRING get(PRIV_TASK, STRING cookiename)
++STRING get(STRING cookiename)
++-----------------------------
+ 
+ Description
+         Get the value of `cookiename`, as stored in internal vmod storage. If `cookiename` does not exist an empty string is returned.
+@@ -213,14 +193,10 @@ Example
+                         std.log("cookie1 value is: " + cookie.get("cookie1"));
+                 }
+ 
+-.. _func_get_string:
++.. _vmod_cookie.get_string:
+ 
+-get_string
+-----------
+-
+-::
+-
+-	STRING get_string(PRIV_TASK)
++STRING get_string()
++-------------------
+ 
+ Description
+         Get a Cookie string value with all cookies in internal vmod storage. Does
+@@ -234,14 +210,10 @@ Example
+                         set req.http.cookie = cookie.get_string();
+                 }
+ 
+-.. _func_isset:
+-
+-isset
+------
+-
+-::
++.. _vmod_cookie.isset:
+ 
+-	BOOL isset(PRIV_TASK, STRING cookiename)
++BOOL isset(STRING cookiename)
++-----------------------------
+ 
+ Description
+         Check if `cookiename` is set in the internal vmod storage.
+@@ -257,14 +229,10 @@ Example
+                         }
+                 }
+ 
+-.. _func_parse:
++.. _vmod_cookie.parse:
+ 
+-parse
+------
+-
+-::
+-
+-	VOID parse(PRIV_TASK, STRING cookieheader)
++VOID parse(STRING cookieheader)
++-------------------------------
+ 
+ Description
+         Parse the cookie string in `cookieheader`. If state already exists, clean() will be run first.
+@@ -275,16 +243,10 @@ Example
+                         cookie.parse(req.http.Cookie);
+                 }
+ 
++.. _vmod_cookie.set:
+ 
+-
+-.. _func_set:
+-
+-set
+----
+-
+-::
+-
+-	VOID set(PRIV_TASK, STRING cookiename, STRING value)
++VOID set(STRING cookiename, STRING value)
++-----------------------------------------
+ 
+ Description
+         Set the internal vmod storage for `cookiename` to `value`.
+@@ -296,5 +258,3 @@ Example
+                         cookie.set("cookie1", "value1");
+                         std.log("cookie1 value is: " + cookie.get("cookie1"));
+                 }
+-
+-
+diff --git a/docs/vmod_header.rst b/docs/vmod_header.rst
+index 50f64db..1789727 100644
+--- a/docs/vmod_header.rst
++++ b/docs/vmod_header.rst
+@@ -4,25 +4,30 @@
+ .. Edit vmod.vcc and run make instead
+ ..
+ 
+-.. role:: ref(emphasis)
+ 
+-.. _vmod_header(3):
++:tocdepth: 1
+ 
+-===========
+-vmod_header
+-===========
+-
+------------------------
+-Header VMOD for Varnish
+------------------------
++.. _vmod_header(3):
+ 
+-:Manual section: 3
++=====================================
++VMOD header - Header VMOD for Varnish
++=====================================
+ 
+ SYNOPSIS
+ ========
+ 
+-import header [from "path"] ;
+-
++.. parsed-literal::
++
++  import header [from "path"]
++  
++  :ref:`vmod_header.append`
++   
++  :ref:`vmod_header.copy`
++   
++  :ref:`vmod_header.get`
++   
++  :ref:`vmod_header.remove`
++   
+ DESCRIPTION
+ ===========
+ 
+@@ -51,22 +56,10 @@ Example::
+ .. vcl-end
+ 
+ 
+-CONTENTS
+-========
+-
+-* :ref:`func_append`
+-* :ref:`func_copy`
+-* :ref:`func_get`
+-* :ref:`func_remove`
+-
+-.. _func_append:
++.. _vmod_header.append:
+ 
+-append
+-------
+-
+-::
+-
+-	VOID append(HEADER, STRING)
++VOID append(HEADER, STRING)
++---------------------------
+ 
+ Description
+         Append an extra occurrence to an existing header.
+@@ -74,14 +67,10 @@ Example
+     ::
+     header.append(beresp.http.Set-Cookie, "foo=bar")
+ 
+-.. _func_copy:
+-
+-copy
+-----
++.. _vmod_header.copy:
+ 
+-::
+-
+-	VOID copy(HEADER, HEADER)
++VOID copy(HEADER, HEADER)
++-------------------------
+ 
+ Description
+         Copy all source headers to a new header.
+@@ -89,14 +78,10 @@ Example
+     ::
+     header.copy(beresp.http.set-cookie, beresp.http.x-old-cookie);
+ 
+-.. _func_get:
+-
+-get
+----
++.. _vmod_header.get:
+ 
+-::
+-
+-	STRING get(PRIV_CALL, HEADER header, STRING regex)
++STRING get(HEADER header, STRING regex)
++---------------------------------------
+ 
+ Description
+         Fetches the value of the first `header` that matches the given
+@@ -105,17 +90,13 @@ Example
+     ::
+     set beresp.http.xusr = header.get(beresp.http.set-cookie,"user=");
+ 
+-.. _func_remove:
+-
+-remove
+-------
++.. _vmod_header.remove:
+ 
+-::
+-
+-	VOID remove(PRIV_CALL, HEADER header, STRING regex)
++VOID remove(HEADER header, STRING regex)
++----------------------------------------
+ 
+ Description
+-        Remove all occurences of `header` that matches `regex`.
++        Remove all occurrences of `header` that matches `regex`.
+ Example
+     ::
+     header.remove(beresp.http.set-cookie,"^(?!(funcookie=))");
+@@ -135,4 +116,3 @@ BUGS
+ 
+ You can't use dynamic regular expressions, which also holds true for normal
+ regular expressions in regsub().
+-
+diff --git a/docs/vmod_saintmode.rst b/docs/vmod_saintmode.rst
+index ceaaf44..801cc92 100644
+--- a/docs/vmod_saintmode.rst
++++ b/docs/vmod_saintmode.rst
+@@ -4,26 +4,34 @@
+ .. Edit vmod.vcc and run make instead
+ ..
+ 
+-.. role:: ref(emphasis)
+ 
+-.. _vmod_saintmode(3):
+-
+-==============
+-vmod_saintmode
+-==============
++:tocdepth: 1
+ 
+----------------------------
+-Saint mode backend director
+----------------------------
++.. _vmod_saintmode(3):
+ 
+-:Manual section: 3
++============================================
++VMOD saintmode - Saint mode backend director
++============================================
+ 
+ SYNOPSIS
+ ========
+ 
+-import saintmode [from "path"] ;
+-
+-
++.. parsed-literal::
++
++  import saintmode [from "path"]
++  
++  :ref:`vmod_saintmode.blacklist`
++   
++  :ref:`vmod_saintmode.status`
++   
++  :ref:`vmod_saintmode.saintmode`
++  
++      :ref:`vmod_saintmode.saintmode.backend`
++  
++      :ref:`vmod_saintmode.saintmode.blacklist_count`
++  
++      :ref:`vmod_saintmode.saintmode.is_healthy`
++  
+ DESCRIPTION
+ ===========
+ 
+@@ -95,23 +103,10 @@ Example::
+ .. vcl-end
+ 
+ 
+-CONTENTS
+-========
+-
+-* :ref:`func_blacklist`
+-* :ref:`obj_saintmode`
+-* :ref:`func_saintmode.backend`
+-* :ref:`func_saintmode.blacklist_count`
+-* :ref:`func_status`
+-
+-.. _func_blacklist:
+-
+-blacklist
+----------
+-
+-::
++.. _vmod_saintmode.blacklist:
+ 
+-	VOID blacklist(PRIV_VCL, DURATION expires)
++VOID blacklist(DURATION expires)
++--------------------------------
+ 
+ Marks the backend as sick for a specific object. Used in vcl_backend_response.
+ Corresponds to the use of ``beresp.saintmode`` in Varnish 3.0. Only available
+@@ -126,15 +121,10 @@ Example::
+         }
+     }
+ 
++.. _vmod_saintmode.status:
+ 
+-.. _func_status:
+-
+-status
+-------
+-
+-::
+-
+-	STRING status(PRIV_VCL)
++STRING status()
++---------------
+ 
+ Returns a JSON formatted status string suitable for use in vcl_synth.
+ 
+@@ -164,38 +154,33 @@ Example JSON output:
+ 	]
+       }
+ 
++.. _vmod_saintmode.saintmode:
+ 
+-.. _obj_saintmode:
+-
+-saintmode
+----------
++new xsaintmode = saintmode.saintmode(BACKEND backend, INT threshold)
++--------------------------------------------------------------------
+ 
+ ::
+ 
+-	new OBJ = saintmode(PRIV_VCL, BACKEND backend, INT threshold)
++   new xsaintmode = saintmode.saintmode(
++      BACKEND backend,
++      INT threshold
++   )
+ 
+ Constructs a saintmode director object. The ``threshold`` argument sets
+ the saintmode threshold, which is the maximum number of items that can be
+ blacklisted before the whole backend is regarded as sick. Corresponds with the
+ ``saintmode_threshold`` parameter of Varnish 3.0.
+ 
+-Setting threshold to 0 disables saintmode, not the threshold.
+-
+ Example::
+ 
+     sub vcl_init {
+         new sm = saintmode.saintmode(b, 10);
+     }
+ 
++.. _vmod_saintmode.saintmode.backend:
+ 
+-.. _func_saintmode.backend:
+-
+-saintmode.backend
+------------------
+-
+-::
+-
+-	BACKEND saintmode.backend()
++BACKEND xsaintmode.backend()
++----------------------------
+ 
+ Used for assigning the backend from the saintmode object.
+ 
+@@ -205,15 +190,10 @@ Example::
+         set bereq.backend = sm.backend();
+     }
+ 
++.. _vmod_saintmode.saintmode.blacklist_count:
+ 
+-.. _func_saintmode.blacklist_count:
+-
+-saintmode.blacklist_count
+--------------------------
+-
+-::
+-
+-	INT saintmode.blacklist_count()
++INT xsaintmode.blacklist_count()
++--------------------------------
+ 
+ Returns the number of objects currently blacklisted for a saintmode
+ director object.
+@@ -226,3 +206,11 @@ Example:
+        set resp.http.troublecount = sm.blacklist_count();
+    }
+ 
++.. _vmod_saintmode.saintmode.is_healthy:
++
++BOOL xsaintmode.is_healthy()
++----------------------------
++
++Checks if the object is currently blacklisted for a saintmode director object.
++If there are no valid objects available (called from vcl_hit or vcl_recv),
++the function will fall back to the backend's health function.
+diff --git a/docs/vmod_tcp.rst b/docs/vmod_tcp.rst
+index b37c863..5015443 100644
+--- a/docs/vmod_tcp.rst
++++ b/docs/vmod_tcp.rst
+@@ -4,25 +4,30 @@
+ .. Edit vmod.vcc and run make instead
+ ..
+ 
+-.. role:: ref(emphasis)
+ 
+-.. _vmod_tcp(3):
+-
+-========
+-vmod_tcp
+-========
++:tocdepth: 1
+ 
+---------
+-TCP vmod
+---------
++.. _vmod_tcp(3):
+ 
+-:Manual section: 3
++===================
++VMOD tcp - TCP vmod
++===================
+ 
+ SYNOPSIS
+ ========
+ 
+-import tcp [from "path"] ;
+-
++.. parsed-literal::
++
++  import tcp [from "path"]
++  
++  :ref:`vmod_tcp.congestion_algorithm`
++   
++  :ref:`vmod_tcp.dump_info`
++   
++  :ref:`vmod_tcp.get_estimated_rtt`
++   
++  :ref:`vmod_tcp.set_socket_pace`
++   
+ DESCRIPTION
+ ===========
+ 
+@@ -59,22 +64,10 @@ Example::
+ .. vcl-end
+ 
+ 
+-CONTENTS
+-========
+-
+-* :ref:`func_congestion_algorithm`
+-* :ref:`func_dump_info`
+-* :ref:`func_get_estimated_rtt`
+-* :ref:`func_set_socket_pace`
+-
+-.. _func_congestion_algorithm:
++.. _vmod_tcp.congestion_algorithm:
+ 
+-congestion_algorithm
+---------------------
+-
+-::
+-
+-	INT congestion_algorithm(STRING algorithm)
++INT congestion_algorithm(STRING algorithm)
++------------------------------------------
+ 
+ Set the client socket congestion control algorithm to S. Returns 0 on success, and -1 on error.
+ 
+@@ -84,15 +77,10 @@ Example::
+         set req.http.x-tcp = tcp.congestion_algorithm("cubic");
+     }
+ 
++.. _vmod_tcp.dump_info:
+ 
+-.. _func_dump_info:
+-
+-dump_info
+----------
+-
+-::
+-
+-	VOID dump_info()
++VOID dump_info()
++----------------
+ 
+ Write the contents of the TCP_INFO data structure into varnishlog.
+ 
+@@ -107,17 +95,10 @@ Example varnishlog output::
+         -   VCL_Log        tcpi2: pmtu=1500 rtt=152000 rttvar=76000 snd_cwnd=10 advmss=1448 reordering=3
+         -   VCL_Log        getsockopt() returned: cubic
+ 
++.. _vmod_tcp.get_estimated_rtt:
+ 
+-
+-
+-.. _func_get_estimated_rtt:
+-
+-get_estimated_rtt
+------------------
+-
+-::
+-
+-	REAL get_estimated_rtt()
++REAL get_estimated_rtt()
++------------------------
+ 
+ Get the estimated round-trip-time for the client socket. Unit: milliseconds.
+ 
+@@ -127,15 +108,10 @@ Example::
+         std.log("client is far away.");
+     }
+ 
++.. _vmod_tcp.set_socket_pace:
+ 
+-.. _func_set_socket_pace:
+-
+-set_socket_pace
+----------------
+-
+-::
+-
+-	VOID set_socket_pace(INT)
++VOID set_socket_pace(INT)
++-------------------------
+ 
+ Set socket pacing on client-side TCP connection to PACE KB/s. Network interface
+ used must be using a supported scheduler. (fq)
+@@ -143,5 +119,3 @@ used must be using a supported scheduler. (fq)
+ Example::
+ 
+     tcp.set_socket_pace(1000);
+-
+-
+diff --git a/docs/vmod_var.rst b/docs/vmod_var.rst
+index d5f7a2d..fe7dcce 100644
+--- a/docs/vmod_var.rst
++++ b/docs/vmod_var.rst
+@@ -4,26 +4,56 @@
+ .. Edit vmod.vcc and run make instead
+ ..
+ 
+-.. role:: ref(emphasis)
+ 
+-.. _vmod_var(3):
++:tocdepth: 1
+ 
+-========
+-vmod_var
+-========
+-
+---------------------------------
+-Variable support for Varnish VCL
+---------------------------------
++.. _vmod_var(3):
+ 
+-:Manual section: 3
++===========================================
++VMOD var - Variable support for Varnish VCL
++===========================================
+ 
+ SYNOPSIS
+ ========
+ 
+-import var [from "path"] ;
+-
+-
++.. parsed-literal::
++
++  import var [from "path"]
++  
++  :ref:`vmod_var.set`
++   
++  :ref:`vmod_var.get`
++   
++  :ref:`vmod_var.global_set`
++   
++  :ref:`vmod_var.global_get`
++   
++  :ref:`vmod_var.set_int`
++   
++  :ref:`vmod_var.get_int`
++   
++  :ref:`vmod_var.set_string`
++   
++  :ref:`vmod_var.get_string`
++   
++  :ref:`vmod_var.set_real`
++   
++  :ref:`vmod_var.get_real`
++   
++  :ref:`vmod_var.set_duration`
++   
++  :ref:`vmod_var.get_duration`
++   
++  :ref:`vmod_var.set_ip`
++   
++  :ref:`vmod_var.get_ip`
++   
++  :ref:`vmod_var.set_backend`
++   
++  :ref:`vmod_var.get_backend`
++   
++  :ref:`vmod_var.clear`
++   
+ This VMOD implements basic variable support in VCL.
+ 
+ It supports strings, integers and real numbers. There are methods to get and
+@@ -82,183 +112,122 @@ Example::
+ .. vcl-end
+ 
+ 
+-CONTENTS
+-========
+-
+-* :ref:`func_clear`
+-* :ref:`func_get`
+-* :ref:`func_get_duration`
+-* :ref:`func_get_int`
+-* :ref:`func_get_ip`
+-* :ref:`func_get_real`
+-* :ref:`func_get_string`
+-* :ref:`func_global_get`
+-* :ref:`func_global_set`
+-* :ref:`func_set`
+-* :ref:`func_set_duration`
+-* :ref:`func_set_int`
+-* :ref:`func_set_ip`
+-* :ref:`func_set_real`
+-* :ref:`func_set_string`
+-
+-.. _func_set:
++.. _vmod_var.set:
+ 
+-set
+----
+-
+-::
+-
+-	VOID set(PRIV_TASK, STRING key, STRING value)
++VOID set(STRING key, STRING value)
++----------------------------------
+ 
+ Set `key` to `value`.
+ 
+-.. _func_get:
+-
+-get
+----
++.. _vmod_var.get:
+ 
+-::
+-
+-	STRING get(PRIV_TASK, STRING)
++STRING get(STRING)
++------------------
+ 
+ Get `key` with data type STRING. If stored `key` is not a STRING an empty string is returned.
+ 
+-.. _func_global_set:
+-
+-global_set
+-----------
++.. _vmod_var.global_set:
+ 
+-::
++VOID global_set(STRING, STRING)
++-------------------------------
+ 
+-	VOID global_set(STRING, STRING)
+ 
+-.. _func_global_get:
+ 
+-global_get
+-----------
++.. _vmod_var.global_get:
+ 
+-::
++STRING global_get(STRING)
++-------------------------
+ 
+-	STRING global_get(STRING)
+ 
+-.. _func_set_int:
+ 
+-set_int
+--------
++.. _vmod_var.set_int:
+ 
+-::
+-
+-	VOID set_int(PRIV_TASK, STRING key, INT value)
++VOID set_int(STRING key, INT value)
++-----------------------------------
+ 
+ Set `key` to `value`.
+ 
+-.. _func_get_int:
+-
+-get_int
+--------
+-
+-::
++.. _vmod_var.get_int:
+ 
+-	INT get_int(PRIV_TASK, STRING key)
++INT get_int(STRING key)
++-----------------------
+ 
+ Get `key` with data type INT. If stored `key` is not an INT zero will be returned.
+ 
+-.. _func_set_string:
+-
+-set_string
+-----------
+-
+-::
++.. _vmod_var.set_string:
+ 
+-	VOID set_string(PRIV_TASK, STRING key, STRING value)
++VOID set_string(STRING key, STRING value)
++-----------------------------------------
+ 
+ Identical to set().
+ 
+-.. _func_get_string:
++.. _vmod_var.get_string:
+ 
+-get_string
+-----------
+-
+-::
+-
+-	STRING get_string(PRIV_TASK, STRING key)
++STRING get_string(STRING key)
++-----------------------------
+ 
+ Identical to get().
+ 
+-.. _func_set_real:
+-
+-set_real
+---------
++.. _vmod_var.set_real:
+ 
+-::
+-
+-	VOID set_real(PRIV_TASK, STRING key, REAL value)
++VOID set_real(STRING key, REAL value)
++-------------------------------------
+ 
+ Set `key` to `value`.
+ 
+-.. _func_get_real:
+-
+-get_real
+---------
++.. _vmod_var.get_real:
+ 
+-::
+-
+-	REAL get_real(PRIV_TASK, STRING key)
++REAL get_real(STRING key)
++-------------------------
+ 
+ Get `key` with data type REAL. If stored `key` is not a REAL zero will be returned.
+ 
+-.. _func_set_duration:
+-
+-set_duration
+-------------
++.. _vmod_var.set_duration:
+ 
+-::
+-
+-	VOID set_duration(PRIV_TASK, STRING key, DURATION value)
++VOID set_duration(STRING key, DURATION value)
++---------------------------------------------
+ 
+ Set `key` to `value`.
+ 
+-.. _func_get_duration:
++.. _vmod_var.get_duration:
+ 
+-get_duration
+-------------
+-
+-::
+-
+-	DURATION get_duration(PRIV_TASK, STRING key)
++DURATION get_duration(STRING key)
++---------------------------------
+ 
+ Get `key` with data type DURATION. If stored `key` is not a DURATION zero will be returned.
+ 
+-.. _func_set_ip:
++.. _vmod_var.set_ip:
+ 
+-set_ip
+-------
++VOID set_ip(STRING key, IP value)
++---------------------------------
+ 
+-::
++Set `key` to `value`.
+ 
+-	VOID set_ip(PRIV_TASK, STRING key, IP value)
++.. _vmod_var.get_ip:
+ 
+-Set `key` to `value`.
++IP get_ip(STRING key)
++---------------------
+ 
+-.. _func_get_ip:
++Get `key` with data type IP. If stored `key` is not an IP null will be returned.
+ 
+-get_ip
+-------
++.. _vmod_var.set_backend:
+ 
+-::
++VOID set_backend(STRING key, BACKEND value)
++-------------------------------------------
+ 
+-	IP get_ip(PRIV_TASK, STRING key)
++Set `key` to `value`.
+ 
+-Get `key` with data type IP. If stored `key` is not an IP null will be returned.
++.. _vmod_var.get_backend:
+ 
+-.. _func_clear:
++BACKEND get_backend(STRING key)
++-------------------------------
+ 
+-clear
+------
++Get `key` with data type BACKEND. If stored `key` is not a BACKEND,
++null will be returned.
+ 
+-::
++.. _vmod_var.clear:
+ 
+-	VOID clear(PRIV_TASK)
++VOID clear()
++------------
+ 
+ Clear all non-global variables.
+-
+diff --git a/docs/vmod_vsthrottle.rst b/docs/vmod_vsthrottle.rst
+index 2593224..403aa7f 100644
+--- a/docs/vmod_vsthrottle.rst
++++ b/docs/vmod_vsthrottle.rst
+@@ -4,25 +4,30 @@
+ .. Edit vmod.vcc and run make instead
+ ..
+ 
+-.. role:: ref(emphasis)
+ 
+-.. _vmod_vsthrottle(3):
+-
+-===============
+-vmod_vsthrottle
+-===============
++:tocdepth: 1
+ 
+----------------
+-Throttling VMOD
+----------------
++.. _vmod_vsthrottle(3):
+ 
+-:Manual section: 3
++=================================
++VMOD vsthrottle - Throttling VMOD
++=================================
+ 
+ SYNOPSIS
+ ========
+ 
+-import vsthrottle [from "path"] ;
+-
++.. parsed-literal::
++
++  import vsthrottle [from "path"]
++  
++  :ref:`vmod_vsthrottle.is_denied`
++   
++  :ref:`vmod_vsthrottle.return_token`
++   
++  :ref:`vmod_vsthrottle.remaining`
++   
++  :ref:`vmod_vsthrottle.blocked`
++   
+ DESCRIPTION
+ ===========
+ 
+@@ -37,6 +42,12 @@ The request rate is specified as the number of requests permitted over
+ a period. To keep things simple, this is passed as two separate
+ parameters, 'limit' and 'period'.
+ 
++If an optional duration 'block' is specified, then access is denied
++altogether for that period of time after the rate limit is
++reached. This is a way to entirely turn away a particularly
++troublesome source of traffic for a while, rather than let them back
++in as soon as the rate slips back under the threshold.
++
+ This VMOD implements a `token bucket algorithm`_. State associated
+ with the token bucket for each key is stored in-memory using BSD's
+ red-black tree implementation.
+@@ -58,8 +69,9 @@ Example::
+     sub vcl_recv {
+         # Varnish will set client.identity for you based on client IP.
+ 
+-        if (vsthrottle.is_denied(client.identity, 15, 10s)) {
+-            # Client has exceeded 15 reqs per 10s
++        if (vsthrottle.is_denied(client.identity, 15, 10s, 30s)) {
++            # Client has exceeded 15 reqs per 10s.
++            # When this happens, block altogether for the next 30s.
+             return (synth(429, "Too Many Requests"));
+         }
+ 
+@@ -78,33 +90,37 @@ Example::
+ 
+ .. vcl-end
+ 
+-CONTENTS
+-========
+-
+-* :ref:`func_is_denied`
+-* :ref:`func_remaining`
+ 
+-.. _func_is_denied:
++.. _vmod_vsthrottle.is_denied:
+ 
+-is_denied
+----------
++BOOL is_denied(STRING key, INT limit, DURATION period, DURATION block)
++----------------------------------------------------------------------
+ 
+ ::
+ 
+-	BOOL is_denied(STRING key, INT limit, DURATION period)
++   BOOL is_denied(
++      STRING key,
++      INT limit,
++      DURATION period,
++      DURATION block=0
++   )
+ 
+ Arguments:
+ 
+   - key: A unique identifier to define what is being throttled - more examples below
+   - limit: How many requests in the specified period
+   - period: The time period
++  - block: a period to deny all access after hitting the threshold. Default is 0s
+ 
+ Description
+   Can be used to rate limit the traffic for a specific key to a
+-  maximum of 'limit' requests per 'period' time. A token bucket
+-  is uniquely identified by the triplet of its key, limit and
+-  period, so using the same key multiple places with different
+-  rules will create multiple token buckets.
++  maximum of 'limit' requests per 'period' time. If 'block' is > 0s,
++  (0s by default), then always deny for 'key' for that length of time
++  after hitting the threshold.
++
++  Note: A token bucket is uniquely identified by the 4-tuple of its
++  key, limit, period and block, so using the same key multiple places
++  with different rules will create multiple token buckets.
+ 
+ Example
+         ::
+@@ -118,20 +134,69 @@ Example
+ 			# ...
+ 		}
+ 
++.. _vmod_vsthrottle.return_token:
++
++VOID return_token(STRING key, INT limit, DURATION period, DURATION block)
++-------------------------------------------------------------------------
++
++::
++
++   VOID return_token(
++      STRING key,
++      INT limit,
++      DURATION period,
++      DURATION block=0
++   )
+ 
+-.. _func_remaining:
++Arguments:
++  - Same arguments as is_denied()
++
++Description
++  Increment (by one) the number of tokens in the specified bucket. is_denied()
++  decrements the bucket by one token and return_token() adds it back.
++  Using these two, you can effectively make a token bucket act like a limit on
++  concurrent requests instead of requests / time.
++
++  Note: This function doesn't enforce anything, it merely credits a token to
++  appropriate bucket.
++
++  Warning: If streaming is enabled (beresp.do_stream = true) as it is by
++  default now, vcl_deliver() is called *before* the response is sent
++  to the client (who may download it slowly). Thus you may credit the token
++  back too early if you use return_token() in vcl_backend_response().
++
++Example
++        ::
+ 
+-remaining
+----------
++		sub vcl_recv {
++			if (vsthrottle.is_denied(client.identity, 20, 20s)) {
++				# Client has more than 20 concurrent requests
++				return (synth(429, "Too Many Requests In Flight"));
++			}
++
++			# ...
++		}
++
++		sub vcl_deliver {
++			vsthrottle.return_token(client.identity, 10, 10s);
++		}
++
++.. _vmod_vsthrottle.remaining:
++
++INT remaining(STRING key, INT limit, DURATION period, DURATION block)
++---------------------------------------------------------------------
+ 
+ ::
+ 
+-	INT remaining(STRING key, INT limit, DURATION period)
++   INT remaining(
++      STRING key,
++      INT limit,
++      DURATION period,
++      DURATION block=0
++   )
+ 
+ Arguments:
+-  - key: A unique identifier to define what is being throttled
+-  - limit: How many requests in the specified period
+-  - period: The time period
++  - Same arguments as is_denied()
+ 
+ Description
+ 
+@@ -147,3 +212,36 @@ Example
+ 	set resp.http.X-RateLimit-Remaining = vsthrottle.remaining(client.identity, 15, 10s);
+      }
+ 
++.. _vmod_vsthrottle.blocked:
++
++DURATION blocked(STRING key, INT limit, DURATION period, DURATION block)
++------------------------------------------------------------------------
++
++::
++
++   DURATION blocked(
++      STRING key,
++      INT limit,
++      DURATION period,
++      DURATION block
++   )
++
++Arguments:
++  - Same arguments as is_denied()
++
++Description
++
++  If the token bucket identified by the four parameters has been
++  blocked by use of the 'block' parameter in 'is_denied()', then
++  return the time remaining in the block. If it is not blocked,
++  return 0s. This can be used to inform clients how long they
++  will be locked out.
++
++
++Example
++  ::
++
++     sub vcl_deliver {
++	set resp.http.Retry-After
++		= vsthrottle.blocked(client.identity, 15, 10s, 30s);
++     }
+diff --git a/docs/vmod_xkey.rst b/docs/vmod_xkey.rst
+index 40c22c2..86da183 100644
+--- a/docs/vmod_xkey.rst
++++ b/docs/vmod_xkey.rst
+@@ -4,25 +4,26 @@
+ .. Edit vmod.vcc and run make instead
+ ..
+ 
+-.. role:: ref(emphasis)
+ 
+-.. _vmod_xkey(3):
+-
+-=========
+-vmod_xkey
+-=========
++:tocdepth: 1
+ 
+-----------------------------------------
+-Surrogate keys support for Varnish Cache
+-----------------------------------------
++.. _vmod_xkey(3):
+ 
+-:Manual section: 3
++====================================================
++VMOD xkey - Surrogate keys support for Varnish Cache
++====================================================
+ 
+ SYNOPSIS
+ ========
+ 
+-import xkey [from "path"] ;
++.. parsed-literal::
+ 
++  import xkey [from "path"]
++  
++  :ref:`vmod_xkey.purge`
++   
++  :ref:`vmod_xkey.softpurge`
++   
+ DESCRIPTION
+ ===========
+ 
+@@ -39,13 +40,13 @@ Similarly with an e-commerce site, where various SKUs are often
+ referenced on a page.
+ 
+ Hash keys are specified in the ``xkey`` response header. Multiple keys
+-can be specified per header line with a space
+-separator. Alternatively, they can be specified in multiple ``xkey``
++can be specified per header line with spaces and/or commas as
++separators. Alternatively, they can be specified in multiple ``xkey``
+ response headers.
+ 
+ Preferably the secondary hash keys are set from the backend
+-application, but can also be set from VCL in ``vcl_backend_response``
+-as in the above example.
++application, but the header can also be set from VCL in
++``vcl_backend_response``.
+ 
+ .. vcl-start
+ 
+@@ -65,10 +66,14 @@ VCL example::
+             if (client.ip !~ purgers) {
+                 return (synth(403, "Forbidden"));
+             }
+-            set req.http.n-gone = xkey.purge(req.http.xkey-purge);
+-            # or: set req.http.n-gone = xkey.softpurge(req.http.xkey-purge)
+-
+-            return (synth(200, "Invalidated "+req.http.n-gone+" objects"));
++	    if (req.http.xkey) {
++		set req.http.n-gone = xkey.purge(req.http.xkey);
++		# or: set req.http.n-gone = xkey.softpurge(req.http.xkey)
++
++		return (synth(200, "Invalidated "+req.http.n-gone+" objects"));
++	    } else {
++		return (purge);
++	    }
+         }
+     }
+ 
+@@ -88,9 +93,6 @@ header for a certain page might look like this::
+     xkey: 166412
+     xkey: 234323
+ 
+-Alternatively you may instead use a single header with space separated
+-values like ``xkey: 8155054 166412 234323``.
+-
+ This requires a bit of VCL to be in place. The VCL can be found above.
+ 
+ Then, in order to keep the web in sync with the database, a trigger is
+@@ -98,17 +100,10 @@ set up in the database. When an SKU is updated this will trigger an
+ HTTP request towards the Varnish server, clearing out every object
+ with the matching xkey header::
+ 
+-    PURGE / HTTP/1.1
++    GET / HTTP/1.1
+     Host: www.example.com
+     xkey-purge: 166412
+ 
+-Several ``xkey-purge`` headers are also supported like in the response
+-example above, and you may also here use a single header with space
+-seperated values like ``xkey-purge: 166412 234323``.
+-
+-Unlike `xkey` header for responses, purge header is fully configurable
+-by means of adjusting the name of the header in the VCL example above. 
+-
+ Note the xkey-purge header. It is probably a good idea to protect
+ this with an ACL so random people from the Internet cannot purge your
+ cache.
+@@ -122,20 +117,11 @@ Varnish will find the objects and clear them out, responding with::
+ 
+ The objects are now cleared.
+ 
+-CONTENTS
+-========
+-
+-* :ref:`func_purge`
+-* :ref:`func_softpurge`
+-
+-.. _func_purge:
+ 
+-purge
+------
++.. _vmod_xkey.purge:
+ 
+-::
+-
+-	INT purge(STRING keys)
++INT purge(STRING keys)
++----------------------
+ 
+ Description
+         Purges all objects hashed on any key found in the ``keys`` argument.
+@@ -143,15 +129,10 @@ Description
+ 
+         The ``keys`` may contain a list of space-separated ids.
+ 
++.. _vmod_xkey.softpurge:
+ 
+-.. _func_softpurge:
+-
+-softpurge
+----------
+-
+-::
+-
+-	INT softpurge(STRING keys)
++INT softpurge(STRING keys)
++--------------------------
+ 
+ Description
+         Performs a "soft purge" for all objects hashed on any key found in the
+@@ -160,5 +141,3 @@ Description
+         A softpurge differs from a regular purge in that it resets an
+         object's TTL but keeps it available for grace mode and conditional
+         requests for the remainder of its configured grace and keep time.
+-
+-
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 36ca267..6a4b48a 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -143,6 +143,7 @@ VMOD_TESTS = \
+ 	tests/vsthrottle/test01.vtc \
+ 	tests/vsthrottle/test02.vtc \
+ 	tests/vsthrottle/test03.vtc \
++	tests/vsthrottle/test04.vtc \
+ 	tests/xkey/test01.vtc \
+ 	tests/xkey/test02.vtc \
+ 	tests/xkey/test03.vtc \
+@@ -150,7 +151,8 @@ VMOD_TESTS = \
+ 	tests/xkey/test05.vtc \
+ 	tests/xkey/test06.vtc \
+ 	tests/xkey/test07.vtc \
+-	tests/xkey/test08.vtc
++	tests/xkey/test08.vtc \
++	tests/xkey/test09.vtc
+ 
+ SOFTPURGE_TESTS = \
+ 	tests/softpurge/01-load.vtc \
+diff --git a/src/tests/saintmode/test02.vtc b/src/tests/saintmode/test02.vtc
+index aa97734..bd8b537 100644
+--- a/src/tests/saintmode/test02.vtc
++++ b/src/tests/saintmode/test02.vtc
+@@ -51,6 +51,8 @@ varnish v1 -vcl+backend {
+ 
+ } -start
+ 
++varnish v1 -cliok "backend.list"
++
+ client c1 {
+ 	txreq -url "/a"
+ 	rxresp
+diff --git a/src/tests/tcp/02-congestion.vtc b/src/tests/tcp/02-congestion.vtc
+index 2972f6d..e0c09a6 100644
+--- a/src/tests/tcp/02-congestion.vtc
++++ b/src/tests/tcp/02-congestion.vtc
+@@ -20,9 +20,12 @@ varnish v1 -vcl+backend {
+ client c1 {
+ 	txreq -url "/"
+ 	rxresp
+-	expect resp.http.a == "0"
+-	expect resp.http.b == "-1"
+-	expect resp.http.c == "0"
++	# XXX: it would be better to skip the test altogether when we
++	#      don't have struct tcp_info available on the system.
++	#      See https://github.com/varnish/varnish-modules/issues/115
++	expect resp.http.a <= 0
++	expect resp.http.b == -1
++	expect resp.http.c <= 0
+ }
+ 
+ client c1 -run
+diff --git a/src/tests/vsthrottle/test04.vtc b/src/tests/vsthrottle/test04.vtc
+new file mode 100644
+index 0000000..bef9ecf
+--- /dev/null
++++ b/src/tests/vsthrottle/test04.vtc
+@@ -0,0 +1,40 @@
++varnishtest "Test vsthrottle return_token()"
++
++server s1 {
++       rxreq
++       txresp
++} -start
++
++varnish v1 -vcl+backend {
++	import vsthrottle from "${vmod_builddir}/.libs/libvmod_vsthrottle.so";
++
++	sub vcl_deliver {
++		set resp.http.foo-count0 = vsthrottle.remaining("foo", 1, 1s);
++		if (!vsthrottle.is_denied("foo", 1, 1s)) {
++			set resp.http.f1 = "OK";
++		}
++		set resp.http.foo-count1 = vsthrottle.remaining("foo", 1, 1s);
++
++		if (!vsthrottle.is_denied("foo", 1, 1s)) {
++			set resp.http.f2 = "OK";
++		}
++		set resp.http.foo-count2 = vsthrottle.remaining("foo", 1, 1s);
++
++		vsthrottle.return_token("foo", 1, 1s);
++
++		set resp.http.foo-count3 = vsthrottle.remaining("foo", 1, 1s);
++	}
++} -start
++
++client c1 {
++	txreq -url "/"
++	rxresp
++	expect resp.http.foo-count0 == "1"
++	expect resp.http.f1 == "OK"
++	expect resp.http.foo-count1 == "0"
++	expect resp.http.f2 == <undef>
++	expect resp.http.foo-count2 == "0"
++	expect resp.http.foo-count3 == "1"
++}
++
++client c1 -run
+diff --git a/src/tests/xkey/test09.vtc b/src/tests/xkey/test09.vtc
+new file mode 100644
+index 0000000..c010c37
+--- /dev/null
++++ b/src/tests/xkey/test09.vtc
+@@ -0,0 +1,66 @@
++varnishtest "Test xkey vmod multiple keys, comma separated"
++# https://github.com/varnish/varnish-modules/issues/102
++
++server s1 {
++	rxreq
++	txresp -hdr "xkey: asdf, fdsa"
++
++	rxreq
++	txresp -hdr "xkey: qwer, rewq"
++} -start
++
++varnish v1 -vcl+backend {
++	import xkey from "${vmod_builddir}/.libs/libvmod_xkey.so";
++
++	sub vcl_recv {
++		if (req.http.xkey-purge) {
++			if (xkey.purge(req.http.xkey-purge) != 0) {
++				return (synth(200, "Purged"));
++			} else {
++				return (synth(404, "No key"));
++			}
++		}
++	}
++
++	sub vcl_backend_response {
++		set beresp.ttl = 60s;
++		set beresp.grace = 0s;
++		set beresp.keep = 0s;
++	}
++
++	sub vcl_synth {
++		set resp.http.reason = resp.reason;
++	}
++} -start
++
++client c1 {
++	txreq
++	rxresp
++	txreq -url /2
++	rxresp
++} -run
++
++varnish v1 -expect n_object == 2
++
++client c1 {
++	# Test the purge using the asdf key, so we check that we didn't include the comma
++	txreq -hdr "xkey-purge: asdf"
++	rxresp
++	expect resp.status == 200
++	expect resp.http.reason == "Purged"
++} -run
++
++delay 1
++
++varnish v1 -expect n_object == 1
++
++client c1 {
++	txreq -hdr "xkey-purge: rewq"
++	rxresp
++	expect resp.status == 200
++	expect resp.http.reason == "Purged"
++} -run
++
++delay 1
++
++varnish v1 -expect n_object == 0
+diff --git a/src/vmod_bodyaccess.c b/src/vmod_bodyaccess.c
+index d1f324f..a8a8951 100644
+--- a/src/vmod_bodyaccess.c
++++ b/src/vmod_bodyaccess.c
+@@ -114,6 +114,26 @@ bodyaccess_log_cb(struct req *req, void *priv, void *ptr, size_t len)
+ 
+ 	return (bodyaccess_log(priv, ptr, len));
+ }
++#elif defined(HAVE_OBJITERATE_F) && defined(OBJ_ITER_FLUSH)
++static int
++bodyaccess_bcat_cb(void *priv, unsigned flush, const void *ptr, ssize_t len)
++{
++
++	AN(priv);
++
++	(void)flush;
++	return (VSB_bcat(priv, ptr, len));
++}
++
++static int
++bodyaccess_log_cb(void *priv, unsigned flush, const void *ptr, ssize_t len)
++{
++
++	AN(priv);
++
++	(void)flush;
++	return (bodyaccess_log(priv, ptr, len));
++}
+ #elif defined(HAVE_OBJITERATE_F)
+ static int
+ bodyaccess_bcat_cb(void *priv, int flush, const void *ptr, ssize_t len)
+@@ -187,6 +207,8 @@ vmod_hash_req_body(VRT_CTX)
+ VCL_INT
+ vmod_len_req_body(VRT_CTX)
+ {
++	uint64_t u;
++
+ 	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
+ 	CHECK_OBJ_NOTNULL(ctx->req, REQ_MAGIC);
+ 
+@@ -202,7 +224,10 @@ vmod_len_req_body(VRT_CTX)
+ 		return (-1);
+ 	}
+ 
+-	return (ctx->req->req_bodybytes);
++	AZ(ObjGetU64(ctx->req->wrk, ctx->req->body_oc, OA_LEN, &u));
++	AZ(u > INT64_MAX);
++
++	return ((VCL_INT)u);
+ }
+ 
+ VCL_INT
+diff --git a/src/vmod_bodyaccess.vcc b/src/vmod_bodyaccess.vcc
+index d5cdf61..55666fc 100644
+--- a/src/vmod_bodyaccess.vcc
++++ b/src/vmod_bodyaccess.vcc
+@@ -1,4 +1,4 @@
+-$Module bodyaccess 3 Varnish Module for request body access
++$Module bodyaccess 3 "Varnish Module for request body access"
+ 
+ DESCRIPTION
+ ===========
+diff --git a/src/vmod_cookie.vcc b/src/vmod_cookie.vcc
+index edd383a..0f49bad 100644
+--- a/src/vmod_cookie.vcc
++++ b/src/vmod_cookie.vcc
+@@ -1,4 +1,4 @@
+-$Module cookie 3 Varnish Cookie Module
++$Module cookie 3 "Varnish Cookie Module"
+ DESCRIPTION
+ ===========
+ 
+diff --git a/src/vmod_header.c b/src/vmod_header.c
+index 798afdb..ea6b5d5 100644
+--- a/src/vmod_header.c
++++ b/src/vmod_header.c
+@@ -193,7 +193,7 @@ header_http_cphdr(VRT_CTX, const struct http *hp, const char *hdr,
+  * vmod entrypoint. Sets up the header mutex.
+  */
+ int
+-event_function(VRT_CTX, struct vmod_priv *priv, enum vcl_event_e e)
++vmod_event_function(VRT_CTX, struct vmod_priv *priv, enum vcl_event_e e)
+ {
+ 	(void)ctx;
+ 	(void)priv;
+diff --git a/src/vmod_header.vcc b/src/vmod_header.vcc
+index 5df8dc6..4a5b27c 100644
+--- a/src/vmod_header.vcc
++++ b/src/vmod_header.vcc
+@@ -1,4 +1,4 @@
+-$Module header 3 Header VMOD for Varnish
++$Module header 3 "Header VMOD for Varnish"
+ DESCRIPTION
+ ===========
+ 
+@@ -57,7 +57,7 @@ Example
+ $Function VOID remove(PRIV_CALL, HEADER header, STRING regex)
+ 
+ Description
+-        Remove all occurences of `header` that matches `regex`.
++        Remove all occurrences of `header` that matches `regex`.
+ Example
+     ::
+     header.remove(beresp.http.set-cookie,"^(?!(funcookie=))");
+diff --git a/src/vmod_saintmode.c b/src/vmod_saintmode.c
+index 26191cc..b0e4ac6 100644
+--- a/src/vmod_saintmode.c
++++ b/src/vmod_saintmode.c
+@@ -35,14 +35,16 @@
+ 
+ #include "vmod_config.h"
+ 
+-#include "cache/cache_director.h"
+-#include "cache/cache_backend.h"
+-
+ #include "vsb.h"
+ #include "vtim.h"
+ 
+ #include "vcc_saintmode_if.h"
+ 
++static VCL_BOOL v_matchproto_(vdi_healthy_f)
++healthy(VRT_CTX, VCL_BACKEND, VCL_TIME *);
++static VCL_BACKEND v_matchproto_(vdi_resolve_f)
++resolve(VRT_CTX, VCL_BACKEND);
++
+ struct trouble {
+ 	unsigned		magic;
+ #define TROUBLE_MAGIC		0x4211ab21
+@@ -54,7 +56,7 @@ struct trouble {
+ struct vmod_saintmode_saintmode {
+ 	unsigned				magic;
+ #define VMOD_SAINTMODE_MAGIC			0xa03756e4
+-	struct director				sdir[1];
++	const struct director			*sdir;
+ 	const struct director			*be;
+ 	pthread_mutex_t				mtx;
+ 	unsigned				threshold;
+@@ -63,6 +65,14 @@ struct vmod_saintmode_saintmode {
+ 	VTAILQ_HEAD(, trouble)			troublelist;
+ };
+ 
++static const struct vdi_methods vmod_saintmode_methods[1] = {{
++	.magic =		VDI_METHODS_MAGIC,
++	.type =			"saintmode",
++	.healthy =		healthy,
++	.resolve =		resolve
++}};
++
++
+ struct saintmode_objs {
+ 	unsigned				magic;
+ #define SAINTMODE_OBJS_MAGIC			0x9aa7beec
+@@ -253,23 +263,26 @@ is_digest_healthy(const struct director *dir,
+ }
+ 
+ /* All adapted from PHK's saintmode implementation in Varnish 3.0 */
+-static unsigned
+-healthy(const struct director *dir, const struct busyobj *bo, double *changed)
++static VCL_BOOL v_matchproto_(vdi_healthy_f)
++healthy(VRT_CTX, VCL_BACKEND dir, VCL_TIME *changed)
+ {
+ 	struct vmod_saintmode_saintmode *sm;
++	const struct busyobj *bo;
+ 	unsigned retval;
+ 	const uint8_t* digest;
+ 	double t_prev;
+ 	struct vsl_log* vsl;
+ 
++	CHECK_OBJ_NOTNULL(ctx, VRT_CTX_MAGIC);
+ 	CHECK_OBJ_NOTNULL(dir, DIRECTOR_MAGIC);
+ 	CAST_OBJ_NOTNULL(sm, dir->priv, VMOD_SAINTMODE_MAGIC);
+ 	CHECK_OBJ_NOTNULL(sm->be, DIRECTOR_MAGIC);
++	bo = ctx->bo;
+ 	CHECK_OBJ_ORNULL(bo, BUSYOBJ_MAGIC);
+ 
+ 	/* Saintmode is disabled, or list is empty */
+ 	if (sm->threshold == 0 || sm->n_trouble == 0)
+-		return (sm->be->healthy(sm->be, bo, changed));
++		return (VRT_Healthy(ctx, sm->be, changed));
+ 
+ 	if (!bo) {
+ 		digest = NULL;
+@@ -282,7 +295,7 @@ healthy(const struct director *dir, const struct busyobj *bo, double *changed)
+ 	}
+ 
+ 	retval = is_digest_healthy(dir, digest, t_prev, vsl);
+-	return (retval ? sm->be->healthy(sm->be, bo, changed) : 0);
++	return (retval ? VRT_Healthy(ctx, sm->be, changed) : 0);
+ }
+ 
+ VCL_BOOL
+@@ -303,19 +316,17 @@ vmod_saintmode_is_healthy(VRT_CTX, struct vmod_saintmode_saintmode *sm)
+ 		return  is_digest_healthy(sm->sdir, digest,
+ 					  ctx->req->t_prev, ctx->req->vsl);
+ 	} else
+-		return healthy(sm->sdir, ctx->bo, NULL);
++		return healthy(ctx, sm->sdir, NULL);
+ }
+ 
+-static const struct director *
+-resolve(const struct director *dir, struct worker *wrk, struct busyobj *bo) {
++static VCL_BACKEND v_matchproto_(vdi_resolve_f)
++resolve(VRT_CTX, VCL_BACKEND dir) {
+ 	struct vmod_saintmode_saintmode *sm;
+-	double changed = 0.0;
+ 
+ 	CHECK_OBJ_NOTNULL(dir, DIRECTOR_MAGIC);
+ 	CAST_OBJ_NOTNULL(sm, dir->priv, VMOD_SAINTMODE_MAGIC);
+-	(void)wrk;
+ 
+-	if (!healthy(dir, bo, &changed))
++	if (!healthy(ctx, dir, NULL))
+ 		return (NULL);
+ 
+ 	return (sm->be);
+@@ -342,15 +353,7 @@ vmod_saintmode__init(VRT_CTX, struct vmod_saintmode_saintmode **smp,
+ 	sm->be = be;
+ 	VTAILQ_INIT(&sm->troublelist);
+ 
+-	sm->sdir->magic = DIRECTOR_MAGIC;
+-	sm->sdir->resolve = resolve;
+-	sm->sdir->healthy = healthy;
+-#ifdef HAVE_DIRECTOR_ADMIN_HEALTH
+-	sm->sdir->admin_health = VDI_AH_HEALTHY;
+-#endif
+-	REPLACE(sm->sdir->vcl_name, vcl_name);
+-	sm->sdir->name = "saintmode";
+-	sm->sdir->priv = sm;
++	sm->sdir = VRT_AddDirector(ctx, vmod_saintmode_methods, sm, "%s", vcl_name);
+ 
+ 	if (!priv->priv) {
+ 		ALLOC_OBJ(sm_objs, SAINTMODE_OBJS_MAGIC);
+@@ -380,7 +383,7 @@ vmod_saintmode__fini(struct vmod_saintmode_saintmode **smp) {
+ 		FREE_OBJ(tr);
+ 	}
+ 
+-	free(sm->sdir->vcl_name);
++	VRT_DelDirector(&sm->sdir);
+ 	AZ(pthread_mutex_destroy(&sm->mtx));
+ 
+ 	/* We can no longer refer to the sm_objs after this
+diff --git a/src/vmod_saintmode.vcc b/src/vmod_saintmode.vcc
+index 4315e43..27f8ba0 100644
+--- a/src/vmod_saintmode.vcc
++++ b/src/vmod_saintmode.vcc
+@@ -1,4 +1,4 @@
+-$Module saintmode 3 Saint mode backend director
++$Module saintmode 3 "Saint mode backend director"
+ 
+ DESCRIPTION
+ ===========
+diff --git a/src/vmod_softpurge.c b/src/vmod_softpurge.c
+index 9273de5..0e46c25 100644
+--- a/src/vmod_softpurge.c
++++ b/src/vmod_softpurge.c
+@@ -52,8 +52,12 @@ vmod_softpurge(VRT_CTX)
+ 	CHECK_OBJ_NOTNULL(ctx->req->wrk, WORKER_MAGIC);
+ 	oh = ctx->req->objcore->objhead;
+ 	CHECK_OBJ_NOTNULL(oh, OBJHEAD_MAGIC);
+-	spc = WS_Reserve(ctx->ws, 0);
+-	assert(spc >= sizeof *ocp);
++	spc = WS_ReserveAll(ctx->ws);
++	if (spc < sizeof *ocp) {
++		WS_Release(ctx->ws, 0);
++		VRT_fail(ctx, "insufficient workspace");
++		return;
++	}
+ 
+ 	nobj = 0;
+ 	ocp = (void*)ctx->ws->f;
+diff --git a/src/vmod_softpurge.vcc b/src/vmod_softpurge.vcc
+index 20252dd..aaf9a1c 100644
+--- a/src/vmod_softpurge.vcc
++++ b/src/vmod_softpurge.vcc
+@@ -1,4 +1,4 @@
+-$Module softpurge Soft purge vmod
++$Module softpurge 3 "Soft purge vmod"
+ DESCRIPTION
+ ===========
+ 
+diff --git a/src/vmod_tcp.c b/src/vmod_tcp.c
+index fee4bd3..570be45 100644
+--- a/src/vmod_tcp.c
++++ b/src/vmod_tcp.c
+@@ -174,7 +174,7 @@ vmod_set_socket_pace(VRT_CTX, VCL_INT rate)
+             sizeof(pacerate)) != 0)
+                 VSLb(ctx->vsl, SLT_VCL_Error, "set_socket_pace(): Error setting pace rate.");
+ 	else
+-                VSLb(ctx->vsl, SLT_VCL_Log, "vmod-tcp: Socket paced to %lu KB/s.", rate);
++                VSLb(ctx->vsl, SLT_VCL_Log, "vmod-tcp: Socket paced to %jd KB/s.", (intmax_t)rate);
+ 
+ #  ifndef NDEBUG
+         int retval;
+diff --git a/src/vmod_tcp.vcc b/src/vmod_tcp.vcc
+index 8659770..fddf7c6 100644
+--- a/src/vmod_tcp.vcc
++++ b/src/vmod_tcp.vcc
+@@ -1,4 +1,4 @@
+-$Module tcp 3 TCP vmod
++$Module tcp 3 "TCP vmod"
+ DESCRIPTION
+ ===========
+ 
+diff --git a/src/vmod_var.vcc b/src/vmod_var.vcc
+index 719b182..7af5cf1 100644
+--- a/src/vmod_var.vcc
++++ b/src/vmod_var.vcc
+@@ -1,4 +1,4 @@
+-$Module var 3 Variable support for Varnish VCL
++$Module var 3 "Variable support for Varnish VCL"
+ 
+ This VMOD implements basic variable support in VCL.
+ 
+diff --git a/src/vmod_vsthrottle.c b/src/vmod_vsthrottle.c
+index ff1719c..e088860 100644
+--- a/src/vmod_vsthrottle.c
++++ b/src/vmod_vsthrottle.c
+@@ -58,7 +58,7 @@ struct tbucket {
+ 	double			block;
+ 	long			tokens;
+ 	long			capacity;
+-	VRB_ENTRY(tbucket)	tree;
++	VRBT_ENTRY(tbucket)	tree;
+ };
+ 
+ static int
+@@ -67,9 +67,9 @@ keycmp(const struct tbucket *b1, const struct tbucket *b2)
+ 	return (memcmp(b1->digest, b2->digest, sizeof b1->digest));
+ }
+ 
+-VRB_HEAD(tbtree, tbucket);
+-VRB_PROTOTYPE_STATIC(tbtree, tbucket, tree, keycmp);
+-VRB_GENERATE_STATIC(tbtree, tbucket, tree, keycmp);
++VRBT_HEAD(tbtree, tbucket);
++VRBT_PROTOTYPE_STATIC(tbtree, tbucket, tree, keycmp);
++VRBT_GENERATE_STATIC(tbtree, tbucket, tree, keycmp);
+ 
+ /* To lessen potential mutex contention, we partition the buckets into
+    N_PART partitions.  */
+@@ -119,12 +119,12 @@ get_bucket(const unsigned char *digest, long limit, double period, double now)
+ 
+ 	INIT_OBJ(&k, TBUCKET_MAGIC);
+ 	memcpy(&k.digest, digest, sizeof k.digest);
+-	b = VRB_FIND(tbtree, &v->buckets, &k);
++	b = VRBT_FIND(tbtree, &v->buckets, &k);
+ 	if (b) {
+ 		CHECK_OBJ_NOTNULL(b, TBUCKET_MAGIC);
+ 	} else {
+ 		b = tb_alloc(digest, limit, period, now);
+-		AZ(VRB_INSERT(tbtree, &v->buckets, b));
++		AZ(VRBT_INSERT(tbtree, &v->buckets, b));
+ 	}
+ 	return (b);
+ }
+@@ -205,6 +205,32 @@ vmod_is_denied(VRT_CTX, VCL_STRING key, VCL_INT limit, VCL_DURATION period,
+ 	return (ret);
+ }
+ 
++VCL_VOID
++vmod_return_token(VRT_CTX, VCL_STRING key, VCL_INT limit, VCL_DURATION period,
++               VCL_DURATION block)
++{
++	struct tbucket *b;
++	double now;
++
++	struct vsthrottle *v;
++	unsigned char digest[SHA256_LEN];
++	unsigned part;
++
++	(void)ctx;
++
++	if (!key)
++		return;
++	do_digest(digest, key, limit, period, block);
++
++	part = digest[0] & N_PART_MASK;
++	v = &vsthrottle[part];
++	AZ(pthread_mutex_lock(&v->mtx));
++	now = VTIM_mono();
++	b = get_bucket(digest, limit, period, now);
++	b->tokens++;
++	AZ(pthread_mutex_unlock(&v->mtx));
++}
++
+ /* Clean up expired entries. */
+ static void
+ run_gc(double now, unsigned part)
+@@ -213,11 +239,11 @@ run_gc(double now, unsigned part)
+ 	struct tbtree *buckets = &vsthrottle[part].buckets;
+ 
+ 	/* XXX: Assert mtx is held ... */
+-	VRB_FOREACH_SAFE(x, tbtree, buckets, y) {
++	VRBT_FOREACH_SAFE(x, tbtree, buckets, y) {
+ 		CHECK_OBJ_NOTNULL(x, TBUCKET_MAGIC);
+ 		if (now - x->last_used > x->period) {
+-			VRB_REMOVE(tbtree, buckets, x);
+-			free(x);
++			VRBT_REMOVE(tbtree, buckets, x);
++			FREE_OBJ(x);
+ 		}
+ 	}
+ }
+@@ -291,9 +317,9 @@ fini(void *priv)
+ 
+ 		for (p = 0; p < N_PART; ++p ) {
+ 			struct vsthrottle *v = &vsthrottle[p];
+-			VRB_FOREACH_SAFE(x, tbtree, &v->buckets, y) {
++			VRBT_FOREACH_SAFE(x, tbtree, &v->buckets, y) {
+ 				CHECK_OBJ_NOTNULL(x, TBUCKET_MAGIC);
+-				VRB_REMOVE(tbtree, &v->buckets, x);
++				VRBT_REMOVE(tbtree, &v->buckets, x);
+ 				free(x);
+ 			}
+ 		}
+@@ -302,7 +328,7 @@ fini(void *priv)
+ }
+ 
+ int
+-event_function(VRT_CTX, struct vmod_priv *priv, enum vcl_event_e e)
++vmod_event_function(VRT_CTX, struct vmod_priv *priv, enum vcl_event_e e)
+ {
+ 	if (e != VCL_EVENT_LOAD)
+ 		return (0);
+@@ -318,7 +344,7 @@ event_function(VRT_CTX, struct vmod_priv *priv, enum vcl_event_e e)
+ 			struct vsthrottle *v = &vsthrottle[p];
+ 			v->magic = VSTHROTTLE_MAGIC;
+ 			AZ(pthread_mutex_init(&v->mtx, NULL));
+-			VRB_INIT(&v->buckets);
++			VRBT_INIT(&v->buckets);
+ 		}
+ 	}
+ 	n_init++;
+diff --git a/src/vmod_vsthrottle.vcc b/src/vmod_vsthrottle.vcc
+index 1f10080..72a8839 100644
+--- a/src/vmod_vsthrottle.vcc
++++ b/src/vmod_vsthrottle.vcc
+@@ -1,4 +1,4 @@
+-$Module vsthrottle 3 Throttling VMOD
++$Module vsthrottle 3 "Throttling VMOD"
+ DESCRIPTION
+ ===========
+ 
+@@ -71,16 +71,17 @@ Arguments:
+   - key: A unique identifier to define what is being throttled - more examples below
+   - limit: How many requests in the specified period
+   - period: The time period
+-  - block: a period to deny all access after meeting the threshold
++  - block: a period to deny all access after hitting the threshold. Default is 0s
+ 
+ Description
+   Can be used to rate limit the traffic for a specific key to a
+   maximum of 'limit' requests per 'period' time. If 'block' is > 0s,
+   (0s by default), then always deny for 'key' for that length of time
+-  after hitting the threshold. A token bucket is uniquely identified
+-  by the 4-tuple of its key, limit, period and block, so using the
+-  same key multiple places with different rules will create multiple
+-  token buckets.
++  after hitting the threshold.
++
++  Note: A token bucket is uniquely identified by the 4-tuple of its
++  key, limit, period and block, so using the same key multiple places
++  with different rules will create multiple token buckets.
+ 
+ Example
+         ::
+@@ -95,14 +96,48 @@ Example
+ 		}
+ 
+ 
++$Function VOID return_token(STRING key, INT limit, DURATION period,
++                         DURATION block=0)
++
++Arguments:
++  - Same arguments as is_denied()
++
++Description
++  Increment (by one) the number of tokens in the specified bucket. is_denied()
++  decrements the bucket by one token and return_token() adds it back.
++  Using these two, you can effectively make a token bucket act like a limit on
++  concurrent requests instead of requests / time.
++
++  Note: This function doesn't enforce anything, it merely credits a token to
++  appropriate bucket.
++
++  Warning: If streaming is enabled (beresp.do_stream = true) as it is by
++  default now, vcl_deliver() is called *before* the response is sent
++  to the client (who may download it slowly). Thus you may credit the token
++  back too early if you use return_token() in vcl_backend_response().
++
++Example
++        ::
++
++		sub vcl_recv {
++			if (vsthrottle.is_denied(client.identity, 20, 20s)) {
++				# Client has more than 20 concurrent requests
++				return (synth(429, "Too Many Requests In Flight"));
++			}
++
++			# ...
++		}
++
++		sub vcl_deliver {
++			vsthrottle.return_token(client.identity, 10, 10s);
++		}
++
++
+ $Function INT remaining(STRING key, INT limit, DURATION period,
+                         DURATION block=0)
+ 
+ Arguments:
+-  - key: A unique identifier to define what is being throttled
+-  - limit: How many requests in the specified period
+-  - period: The time period
+-  - block: duration to block, defaults to 0s
++  - Same arguments as is_denied()
+ 
+ Description
+ 
+@@ -122,10 +157,7 @@ $Function DURATION blocked(STRING key, INT limit, DURATION period,
+                            DURATION block)
+ 
+ Arguments:
+-  - key: A unique identifier to define what is being throttled
+-  - limit: How many requests in the specified period
+-  - period: The time period
+-  - block: duration to block
++  - Same arguments as is_denied()
+ 
+ Description
+ 
+diff --git a/src/vmod_xkey.c b/src/vmod_xkey.c
+index 3cf8069..ff825fd 100644
+--- a/src/vmod_xkey.c
++++ b/src/vmod_xkey.c
+@@ -51,23 +51,23 @@ uintptr_t xkey_cb_handle;
+ 
+ struct xkey_hashkey {
+ 	char				digest[DIGEST_LEN];
+-	VRB_ENTRY(xkey_hashkey)		entry;
++	VRBT_ENTRY(xkey_hashkey)		entry;
+ };
+ static int xkey_hashcmp(const struct xkey_hashkey *k1,
+     const struct xkey_hashkey *k2);
+-VRB_HEAD(xkey_hashtree, xkey_hashkey);
+-static struct xkey_hashtree xkey_hashtree = VRB_INITIALIZER(&xkey_hashtree);
+-VRB_PROTOTYPE(xkey_hashtree, xkey_hashkey, entry, xkey_hashcmp);
++VRBT_HEAD(xkey_hashtree, xkey_hashkey);
++static struct xkey_hashtree xkey_hashtree = VRBT_INITIALIZER(&xkey_hashtree);
++VRBT_PROTOTYPE(xkey_hashtree, xkey_hashkey, entry, xkey_hashcmp);
+ 
+ struct xkey_ptrkey {
+ 	uintptr_t			ptr;
+-	VRB_ENTRY(xkey_ptrkey)		entry;
++	VRBT_ENTRY(xkey_ptrkey)		entry;
+ };
+ static int xkey_ptrcmp(const struct xkey_ptrkey *k1,
+     const struct xkey_ptrkey *k2);
+-VRB_HEAD(xkey_octree, xkey_ptrkey);
+-static struct xkey_octree xkey_octree = VRB_INITIALIZER(&xkey_octree);
+-VRB_PROTOTYPE(xkey_octree, xkey_ptrkey, entry, xkey_ptrcmp)
++VRBT_HEAD(xkey_octree, xkey_ptrkey);
++static struct xkey_octree xkey_octree = VRBT_INITIALIZER(&xkey_octree);
++VRBT_PROTOTYPE(xkey_octree, xkey_ptrkey, entry, xkey_ptrcmp)
+ 
+ struct xkey_hashhead;
+ struct xkey_ochead;
+@@ -114,8 +114,8 @@ static struct {
+ 
+ /*******************/
+ 
+-VRB_GENERATE(xkey_hashtree, xkey_hashkey, entry, xkey_hashcmp);
+-VRB_GENERATE(xkey_octree, xkey_ptrkey, entry, xkey_ptrcmp);
++VRBT_GENERATE(xkey_hashtree, xkey_hashkey, entry, xkey_hashcmp);
++VRBT_GENERATE(xkey_octree, xkey_ptrkey, entry, xkey_ptrcmp);
+ 
+ static int
+ xkey_hashcmp(const struct xkey_hashkey *k1, const struct xkey_hashkey *k2)
+@@ -246,7 +246,7 @@ xkey_hashtree_lookup(const unsigned char *digest, unsigned len)
+ 	AN(digest);
+ 	assert(len == sizeof(key.digest));
+ 	memcpy(&key.digest, digest, len);
+-	pkey = VRB_FIND(xkey_hashtree, &xkey_hashtree, &key);
++	pkey = VRBT_FIND(xkey_hashtree, &xkey_hashtree, &key);
+ 	if (pkey != NULL)
+ 		CAST_OBJ_NOTNULL(head, (void *)pkey, XKEY_HASHHEAD_MAGIC);
+ 	return (head);
+@@ -262,7 +262,7 @@ xkey_hashtree_insert(const unsigned char *digest, unsigned len)
+ 	head = xkey_hashhead_new();
+ 	assert(len == sizeof(head->key.digest));
+ 	memcpy(&head->key.digest, digest, len);
+-	key = VRB_INSERT(xkey_hashtree, &xkey_hashtree, &head->key);
++	key = VRBT_INSERT(xkey_hashtree, &xkey_hashtree, &head->key);
+ 	if (key != NULL) {
+ 		xkey_hashhead_delete(&head);
+ 		CAST_OBJ_NOTNULL(head, (void *)key, XKEY_HASHHEAD_MAGIC);
+@@ -278,7 +278,7 @@ xkey_octree_lookup(uintptr_t ptr)
+ 
+ 	AN(ptr);
+ 	key.ptr = ptr;
+-	pkey = VRB_FIND(xkey_octree, &xkey_octree, &key);
++	pkey = VRBT_FIND(xkey_octree, &xkey_octree, &key);
+ 	if (pkey)
+ 		CAST_OBJ_NOTNULL(head, (void *)pkey, XKEY_OCHEAD_MAGIC);
+ 	return (head);
+@@ -293,7 +293,7 @@ xkey_octree_insert(uintptr_t ptr)
+ 	AN(ptr);
+ 	head = xkey_ochead_new();
+ 	head->key.ptr = ptr;
+-	key = VRB_INSERT(xkey_octree, &xkey_octree, &head->key);
++	key = VRBT_INSERT(xkey_octree, &xkey_octree, &head->key);
+ 	if (key != NULL) {
+ 		xkey_ochead_delete(&head);
+ 		CAST_OBJ_NOTNULL(head, (void *)key, XKEY_OCHEAD_MAGIC);
+@@ -342,7 +342,7 @@ xkey_remove(struct xkey_ochead **pochead)
+ 		oc->hashhead = NULL;
+ 		VTAILQ_REMOVE(&hashhead->ocs, oc, list_hashhead);
+ 		if (VTAILQ_EMPTY(&hashhead->ocs)) {
+-			VRB_REMOVE(xkey_hashtree, &xkey_hashtree,
++			VRBT_REMOVE(xkey_hashtree, &xkey_hashtree,
+ 			    &hashhead->key);
+ 			xkey_hashhead_delete(&hashhead);
+ 		}
+@@ -351,7 +351,7 @@ xkey_remove(struct xkey_ochead **pochead)
+ 		xkey_oc_delete(&oc);
+ 	}
+ 	AN(VTAILQ_EMPTY(&ochead->ocs));
+-	VRB_REMOVE(xkey_octree, &xkey_octree, &ochead->key);
++	VRBT_REMOVE(xkey_octree, &xkey_octree, &ochead->key);
+ 	xkey_ochead_delete(&ochead);
+ }
+ 
+@@ -364,19 +364,19 @@ xkey_cleanup(void)
+ 	struct xkey_ochead *ochead;
+ 	struct xkey_oc *oc;
+ 
+-	VRB_FOREACH(hashkey, xkey_hashtree, &xkey_hashtree) {
++	VRBT_FOREACH(hashkey, xkey_hashtree, &xkey_hashtree) {
+ 		CAST_OBJ_NOTNULL(hashhead, (void *)hashkey,
+ 		    XKEY_HASHHEAD_MAGIC);
+ 		VTAILQ_CONCAT(&xkey_pool.ocs, &hashhead->ocs, list_ochead);
+ 		VTAILQ_INSERT_HEAD(&xkey_pool.hashheads, hashhead, list);
+ 	}
+-	VRB_INIT(&xkey_hashtree);
++	VRBT_INIT(&xkey_hashtree);
+ 
+-	VRB_FOREACH(ockey, xkey_octree, &xkey_octree) {
++	VRBT_FOREACH(ockey, xkey_octree, &xkey_octree) {
+ 		CAST_OBJ_NOTNULL(ochead, (void *)ockey, XKEY_OCHEAD_MAGIC);
+ 		VTAILQ_INSERT_HEAD(&xkey_pool.ocheads, ochead, list);
+ 	}
+-	VRB_INIT(&xkey_octree);
++	VRBT_INIT(&xkey_octree);
+ 
+ 	while (!VTAILQ_EMPTY(&xkey_pool.hashheads)) {
+ 		hashhead = VTAILQ_FIRST(&xkey_pool.hashheads);
+@@ -410,11 +410,11 @@ xkey_tok(const char **b, const char **e)
+ 	t = *b;
+ 	AN(t);
+ 
+-	while (isblank(*t))
++	while (*t == ',' || isblank(*t))
+ 		t++;
+ 	*b = t;
+ 
+-	while (*t != '\0' && !isblank(*t))
++	while (*t != '\0' && *t != ',' && !isblank(*t))
+ 		t++;
+ 	*e = t;
+ 	return (*b < *e);
+diff --git a/src/vmod_xkey.vcc b/src/vmod_xkey.vcc
+index 637d4e8..3e6553c 100644
+--- a/src/vmod_xkey.vcc
++++ b/src/vmod_xkey.vcc
+@@ -1,4 +1,4 @@
+-$Module xkey 3 Surrogate keys support for Varnish Cache
++$Module xkey 3 "Surrogate keys support for Varnish Cache"
+ DESCRIPTION
+ ===========
+ 
+@@ -15,8 +15,8 @@ Similarly with an e-commerce site, where various SKUs are often
+ referenced on a page.
+ 
+ Hash keys are specified in the ``xkey`` response header. Multiple keys
+-can be specified per header line with a space
+-separator. Alternatively, they can be specified in multiple ``xkey``
++can be specified per header line with spaces and/or commas as
++separators. Alternatively, they can be specified in multiple ``xkey``
+ response headers.
+ 
+ Preferably the secondary hash keys are set from the backend
+@@ -93,7 +93,7 @@ Varnish will find the objects and clear them out, responding with::
+ The objects are now cleared.
+ 
+ $ABI strict
+-$Event vmod_event
++$Event event
+ $Function INT purge(STRING keys)
+ 
+ Description
+diff --git a/src/vtree.h b/src/vtree.h
+deleted file mode 100644
+index b88d9d2..0000000
+--- a/src/vtree.h
++++ /dev/null
+@@ -1,770 +0,0 @@
+-/*	$NetBSD: tree.h,v 1.8 2004/03/28 19:38:30 provos Exp $	*/
+-/*	$OpenBSD: tree.h,v 1.7 2002/10/17 21:51:54 art Exp $	*/
+-/* $FreeBSD: release/9.0.0/sys/sys/tree.h 189204 2009-03-01 04:57:23Z bms $ */
+-
+-/*-
+- * Copyright 2002 Niels Provos <provos@citi.umich.edu>
+- * All rights reserved.
+- *
+- * Redistribution and use in source and binary forms, with or without
+- * modification, are permitted provided that the following conditions
+- * are met:
+- * 1. Redistributions of source code must retain the above copyright
+- *    notice, this list of conditions and the following disclaimer.
+- * 2. Redistributions in binary form must reproduce the above copyright
+- *    notice, this list of conditions and the following disclaimer in the
+- *    documentation and/or other materials provided with the distribution.
+- *
+- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+- */
+-
+-#ifndef	_VTREE_H_
+-#define	_VTREE_H_
+-
+-#ifndef __unused
+-#define __unused __attribute__((__unused__))
+-#endif
+-
+-/*
+- * This file defines data structures for different types of trees:
+- * splay trees and red-black trees.
+- *
+- * A splay tree is a self-organizing data structure.  Every operation
+- * on the tree causes a splay to happen.  The splay moves the requested
+- * node to the root of the tree and partly rebalances it.
+- *
+- * This has the benefit that request locality causes faster lookups as
+- * the requested nodes move to the top of the tree.  On the other hand,
+- * every lookup causes memory writes.
+- *
+- * The Balance Theorem bounds the total access time for m operations
+- * and n inserts on an initially empty tree as O((m + n)lg n).  The
+- * amortized cost for a sequence of m accesses to a splay tree is O(lg n);
+- *
+- * A red-black tree is a binary search tree with the node color as an
+- * extra attribute.  It fulfills a set of conditions:
+- *	- every search path from the root to a leaf consists of the
+- *	  same number of black nodes,
+- *	- each red node (except for the root) has a black parent,
+- *	- each leaf node is black.
+- *
+- * Every operation on a red-black tree is bounded as O(lg n).
+- * The maximum height of a red-black tree is 2lg (n+1).
+- */
+-
+-#define VSPLAY_HEAD(name, type)						\
+-struct name {								\
+-	struct type *sph_root; /* root of the tree */			\
+-}
+-
+-#define VSPLAY_INITIALIZER(root)					\
+-	{ NULL }
+-
+-#define VSPLAY_INIT(root) do {						\
+-	(root)->sph_root = NULL;					\
+-} while (/*CONSTCOND*/ 0)
+-
+-#define VSPLAY_ENTRY(type)						\
+-struct {								\
+-	struct type *spe_left; /* left element */			\
+-	struct type *spe_right; /* right element */			\
+-}
+-
+-#define VSPLAY_LEFT(elm, field)		(elm)->field.spe_left
+-#define VSPLAY_RIGHT(elm, field)		(elm)->field.spe_right
+-#define VSPLAY_ROOT(head)		(head)->sph_root
+-#define VSPLAY_EMPTY(head)		(VSPLAY_ROOT(head) == NULL)
+-
+-/* VSPLAY_ROTATE_{LEFT,RIGHT} expect that tmp hold VSPLAY_{RIGHT,LEFT} */
+-#define VSPLAY_ROTATE_RIGHT(head, tmp, field) do {			\
+-	VSPLAY_LEFT((head)->sph_root, field) = VSPLAY_RIGHT(tmp, field);\
+-	VSPLAY_RIGHT(tmp, field) = (head)->sph_root;			\
+-	(head)->sph_root = tmp;						\
+-} while (/*CONSTCOND*/ 0)
+-
+-#define VSPLAY_ROTATE_LEFT(head, tmp, field) do {			\
+-	VSPLAY_RIGHT((head)->sph_root, field) = VSPLAY_LEFT(tmp, field);\
+-	VSPLAY_LEFT(tmp, field) = (head)->sph_root;			\
+-	(head)->sph_root = tmp;						\
+-} while (/*CONSTCOND*/ 0)
+-
+-#define VSPLAY_LINKLEFT(head, tmp, field) do {				\
+-	VSPLAY_LEFT(tmp, field) = (head)->sph_root;			\
+-	tmp = (head)->sph_root;						\
+-	(head)->sph_root = VSPLAY_LEFT((head)->sph_root, field);	\
+-} while (/*CONSTCOND*/ 0)
+-
+-#define VSPLAY_LINKRIGHT(head, tmp, field) do {				\
+-	VSPLAY_RIGHT(tmp, field) = (head)->sph_root;			\
+-	tmp = (head)->sph_root;						\
+-	(head)->sph_root = VSPLAY_RIGHT((head)->sph_root, field);	\
+-} while (/*CONSTCOND*/ 0)
+-
+-#define VSPLAY_ASSEMBLE(head, node, left, right, field) do {		\
+-	VSPLAY_RIGHT(left, field) = VSPLAY_LEFT((head)->sph_root, field);\
+-	VSPLAY_LEFT(right, field) = VSPLAY_RIGHT((head)->sph_root, field);\
+-	VSPLAY_LEFT((head)->sph_root, field) = VSPLAY_RIGHT(node, field);\
+-	VSPLAY_RIGHT((head)->sph_root, field) = VSPLAY_LEFT(node, field);\
+-} while (/*CONSTCOND*/ 0)
+-
+-/* Generates prototypes and inline functions */
+-
+-#define VSPLAY_PROTOTYPE(name, type, field, cmp)			\
+-void name##_VSPLAY(struct name *, struct type *);			\
+-void name##_VSPLAY_MINMAX(struct name *, int);				\
+-struct type *name##_VSPLAY_INSERT(struct name *, struct type *);	\
+-struct type *name##_VSPLAY_REMOVE(struct name *, struct type *);	\
+-									\
+-/* Finds the node with the same key as elm */				\
+-static __inline struct type *						\
+-name##_VSPLAY_FIND(struct name *head, struct type *elm)			\
+-{									\
+-	if (VSPLAY_EMPTY(head))						\
+-		return(NULL);						\
+-	name##_VSPLAY(head, elm);					\
+-	if ((cmp)(elm, (head)->sph_root) == 0)				\
+-		return (head->sph_root);				\
+-	return (NULL);							\
+-}									\
+-									\
+-static __inline struct type *						\
+-name##_VSPLAY_NEXT(struct name *head, struct type *elm)			\
+-{									\
+-	name##_VSPLAY(head, elm);					\
+-	if (VSPLAY_RIGHT(elm, field) != NULL) {				\
+-		elm = VSPLAY_RIGHT(elm, field);				\
+-		while (VSPLAY_LEFT(elm, field) != NULL) {		\
+-			elm = VSPLAY_LEFT(elm, field);			\
+-		}							\
+-	} else								\
+-		elm = NULL;						\
+-	return (elm);							\
+-}									\
+-									\
+-static __inline struct type *						\
+-name##_VSPLAY_MIN_MAX(struct name *head, int val)			\
+-{									\
+-	name##_VSPLAY_MINMAX(head, val);				\
+-	return (VSPLAY_ROOT(head));					\
+-}
+-
+-/* Main splay operation.
+- * Moves node close to the key of elm to top
+- */
+-#define VSPLAY_GENERATE(name, type, field, cmp)				\
+-struct type *								\
+-name##_VSPLAY_INSERT(struct name *head, struct type *elm)		\
+-{									\
+-    if (VSPLAY_EMPTY(head)) {						\
+-	    VSPLAY_LEFT(elm, field) = VSPLAY_RIGHT(elm, field) = NULL;	\
+-    } else {								\
+-	    int __comp;							\
+-	    name##_VSPLAY(head, elm);					\
+-	    __comp = (cmp)(elm, (head)->sph_root);			\
+-	    if(__comp < 0) {						\
+-		    VSPLAY_LEFT(elm, field) = VSPLAY_LEFT((head)->sph_root, field);\
+-		    VSPLAY_RIGHT(elm, field) = (head)->sph_root;	\
+-		    VSPLAY_LEFT((head)->sph_root, field) = NULL;	\
+-	    } else if (__comp > 0) {					\
+-		    VSPLAY_RIGHT(elm, field) = VSPLAY_RIGHT((head)->sph_root, field);\
+-		    VSPLAY_LEFT(elm, field) = (head)->sph_root;		\
+-		    VSPLAY_RIGHT((head)->sph_root, field) = NULL;	\
+-	    } else							\
+-		    return ((head)->sph_root);				\
+-    }									\
+-    (head)->sph_root = (elm);						\
+-    return (NULL);							\
+-}									\
+-									\
+-struct type *								\
+-name##_VSPLAY_REMOVE(struct name *head, struct type *elm)		\
+-{									\
+-	struct type *__tmp;						\
+-	if (VSPLAY_EMPTY(head))						\
+-		return (NULL);						\
+-	name##_VSPLAY(head, elm);					\
+-	if ((cmp)(elm, (head)->sph_root) == 0) {			\
+-		if (VSPLAY_LEFT((head)->sph_root, field) == NULL) {	\
+-			(head)->sph_root = VSPLAY_RIGHT((head)->sph_root, field);\
+-		} else {						\
+-			__tmp = VSPLAY_RIGHT((head)->sph_root, field);	\
+-			(head)->sph_root = VSPLAY_LEFT((head)->sph_root, field);\
+-			name##_VSPLAY(head, elm);			\
+-			VSPLAY_RIGHT((head)->sph_root, field) = __tmp;	\
+-		}							\
+-		return (elm);						\
+-	}								\
+-	return (NULL);							\
+-}									\
+-									\
+-void									\
+-name##_VSPLAY(struct name *head, struct type *elm)			\
+-{									\
+-	struct type __node, *__left, *__right, *__tmp;			\
+-	int __comp;							\
+-\
+-	VSPLAY_LEFT(&__node, field) = VSPLAY_RIGHT(&__node, field) = NULL;\
+-	__left = __right = &__node;					\
+-\
+-	while ((__comp = (cmp)(elm, (head)->sph_root)) != 0) {		\
+-		if (__comp < 0) {					\
+-			__tmp = VSPLAY_LEFT((head)->sph_root, field);	\
+-			if (__tmp == NULL)				\
+-				break;					\
+-			if ((cmp)(elm, __tmp) < 0){			\
+-				VSPLAY_ROTATE_RIGHT(head, __tmp, field);\
+-				if (VSPLAY_LEFT((head)->sph_root, field) == NULL)\
+-					break;				\
+-			}						\
+-			VSPLAY_LINKLEFT(head, __right, field);		\
+-		} else if (__comp > 0) {				\
+-			__tmp = VSPLAY_RIGHT((head)->sph_root, field);	\
+-			if (__tmp == NULL)				\
+-				break;					\
+-			if ((cmp)(elm, __tmp) > 0){			\
+-				VSPLAY_ROTATE_LEFT(head, __tmp, field);	\
+-				if (VSPLAY_RIGHT((head)->sph_root, field) == NULL)\
+-					break;				\
+-			}						\
+-			VSPLAY_LINKRIGHT(head, __left, field);		\
+-		}							\
+-	}								\
+-	VSPLAY_ASSEMBLE(head, &__node, __left, __right, field);		\
+-}									\
+-									\
+-/* Splay with either the minimum or the maximum element			\
+- * Used to find minimum or maximum element in tree.			\
+- */									\
+-void name##_VSPLAY_MINMAX(struct name *head, int __comp) \
+-{									\
+-	struct type __node, *__left, *__right, *__tmp;			\
+-\
+-	VSPLAY_LEFT(&__node, field) = VSPLAY_RIGHT(&__node, field) = NULL;\
+-	__left = __right = &__node;					\
+-\
+-	while (1) {							\
+-		if (__comp < 0) {					\
+-			__tmp = VSPLAY_LEFT((head)->sph_root, field);	\
+-			if (__tmp == NULL)				\
+-				break;					\
+-			if (__comp < 0){				\
+-				VSPLAY_ROTATE_RIGHT(head, __tmp, field);\
+-				if (VSPLAY_LEFT((head)->sph_root, field) == NULL)\
+-					break;				\
+-			}						\
+-			VSPLAY_LINKLEFT(head, __right, field);		\
+-		} else if (__comp > 0) {				\
+-			__tmp = VSPLAY_RIGHT((head)->sph_root, field);	\
+-			if (__tmp == NULL)				\
+-				break;					\
+-			if (__comp > 0) {				\
+-				VSPLAY_ROTATE_LEFT(head, __tmp, field);	\
+-				if (VSPLAY_RIGHT((head)->sph_root, field) == NULL)\
+-					break;				\
+-			}						\
+-			VSPLAY_LINKRIGHT(head, __left, field);		\
+-		}							\
+-	}								\
+-	VSPLAY_ASSEMBLE(head, &__node, __left, __right, field);		\
+-}
+-
+-#define VSPLAY_NEGINF	-1
+-#define VSPLAY_INF	1
+-
+-#define VSPLAY_INSERT(name, x, y)	name##_VSPLAY_INSERT(x, y)
+-#define VSPLAY_REMOVE(name, x, y)	name##_VSPLAY_REMOVE(x, y)
+-#define VSPLAY_FIND(name, x, y)		name##_VSPLAY_FIND(x, y)
+-#define VSPLAY_NEXT(name, x, y)		name##_VSPLAY_NEXT(x, y)
+-#define VSPLAY_MIN(name, x)		(VSPLAY_EMPTY(x) ? NULL	\
+-					: name##_VSPLAY_MIN_MAX(x, VSPLAY_NEGINF))
+-#define VSPLAY_MAX(name, x)		(VSPLAY_EMPTY(x) ? NULL	\
+-					: name##_VSPLAY_MIN_MAX(x, VSPLAY_INF))
+-
+-#define VSPLAY_FOREACH(x, name, head)					\
+-	for ((x) = VSPLAY_MIN(name, head);				\
+-	     (x) != NULL;						\
+-	     (x) = VSPLAY_NEXT(name, head, x))
+-
+-/* Macros that define a red-black tree */
+-#define VRB_HEAD(name, type)						\
+-struct name {								\
+-	struct type *rbh_root; /* root of the tree */			\
+-}
+-
+-#define VRB_INITIALIZER(root)						\
+-	{ NULL }
+-
+-#define VRB_INIT(root) do {						\
+-	(root)->rbh_root = NULL;					\
+-} while (/*CONSTCOND*/ 0)
+-
+-#define VRB_BLACK	0
+-#define VRB_RED		1
+-#define VRB_ENTRY(type)							\
+-struct {								\
+-	struct type *rbe_left;		/* left element */		\
+-	struct type *rbe_right;		/* right element */		\
+-	struct type *rbe_parent;	/* parent element */		\
+-	int rbe_color;			/* node color */		\
+-}
+-
+-#define VRB_LEFT(elm, field)		(elm)->field.rbe_left
+-#define VRB_RIGHT(elm, field)		(elm)->field.rbe_right
+-#define VRB_PARENT(elm, field)		(elm)->field.rbe_parent
+-#define VRB_COLOR(elm, field)		(elm)->field.rbe_color
+-#define VRB_ROOT(head)			(head)->rbh_root
+-#define VRB_EMPTY(head)			(VRB_ROOT(head) == NULL)
+-
+-#define VRB_SET(elm, parent, field) do {				\
+-	VRB_PARENT(elm, field) = parent;				\
+-	VRB_LEFT(elm, field) = VRB_RIGHT(elm, field) = NULL;		\
+-	VRB_COLOR(elm, field) = VRB_RED;				\
+-} while (/*CONSTCOND*/ 0)
+-
+-#define VRB_SET_BLACKRED(black, red, field) do {			\
+-	VRB_COLOR(black, field) = VRB_BLACK;				\
+-	VRB_COLOR(red, field) = VRB_RED;				\
+-} while (/*CONSTCOND*/ 0)
+-
+-#ifndef VRB_AUGMENT
+-#define VRB_AUGMENT(x)	do {} while (0)
+-#endif
+-
+-#define VRB_ROTATE_LEFT(head, elm, tmp, field) do {			\
+-	(tmp) = VRB_RIGHT(elm, field);					\
+-	if ((VRB_RIGHT(elm, field) = VRB_LEFT(tmp, field)) != NULL) {	\
+-		VRB_PARENT(VRB_LEFT(tmp, field), field) = (elm);	\
+-	}								\
+-	VRB_AUGMENT(elm);						\
+-	if ((VRB_PARENT(tmp, field) = VRB_PARENT(elm, field)) != NULL) {\
+-		if ((elm) == VRB_LEFT(VRB_PARENT(elm, field), field))	\
+-			VRB_LEFT(VRB_PARENT(elm, field), field) = (tmp);\
+-		else							\
+-			VRB_RIGHT(VRB_PARENT(elm, field), field) = (tmp);\
+-	} else								\
+-		(head)->rbh_root = (tmp);				\
+-	VRB_LEFT(tmp, field) = (elm);					\
+-	VRB_PARENT(elm, field) = (tmp);					\
+-	VRB_AUGMENT(tmp);						\
+-	if ((VRB_PARENT(tmp, field)))					\
+-		VRB_AUGMENT(VRB_PARENT(tmp, field));			\
+-} while (/*CONSTCOND*/ 0)
+-
+-#define VRB_ROTATE_RIGHT(head, elm, tmp, field) do {			\
+-	(tmp) = VRB_LEFT(elm, field);					\
+-	if ((VRB_LEFT(elm, field) = VRB_RIGHT(tmp, field)) != NULL) {	\
+-		VRB_PARENT(VRB_RIGHT(tmp, field), field) = (elm);	\
+-	}								\
+-	VRB_AUGMENT(elm);						\
+-	if ((VRB_PARENT(tmp, field) = VRB_PARENT(elm, field)) != NULL) {\
+-		if ((elm) == VRB_LEFT(VRB_PARENT(elm, field), field))	\
+-			VRB_LEFT(VRB_PARENT(elm, field), field) = (tmp);\
+-		else							\
+-			VRB_RIGHT(VRB_PARENT(elm, field), field) = (tmp);\
+-	} else								\
+-		(head)->rbh_root = (tmp);				\
+-	VRB_RIGHT(tmp, field) = (elm);					\
+-	VRB_PARENT(elm, field) = (tmp);					\
+-	VRB_AUGMENT(tmp);						\
+-	if ((VRB_PARENT(tmp, field)))					\
+-		VRB_AUGMENT(VRB_PARENT(tmp, field));			\
+-} while (/*CONSTCOND*/ 0)
+-
+-/* Generates prototypes and inline functions */
+-#define	VRB_PROTOTYPE(name, type, field, cmp)				\
+-	VRB_PROTOTYPE_INTERNAL(name, type, field, cmp,)
+-#define	VRB_PROTOTYPE_STATIC(name, type, field, cmp)			\
+-	VRB_PROTOTYPE_INTERNAL(name, type, field, cmp, __unused static)
+-#define VRB_PROTOTYPE_INTERNAL(name, type, field, cmp, attr)		\
+-/*lint -esym(528, name##_VRB_*) */					\
+-attr void name##_VRB_INSERT_COLOR(struct name *, struct type *);	\
+-attr void name##_VRB_REMOVE_COLOR(struct name *, struct type *, struct type *);\
+-attr struct type *name##_VRB_REMOVE(struct name *, struct type *);	\
+-attr struct type *name##_VRB_INSERT(struct name *, struct type *);	\
+-attr struct type *name##_VRB_FIND(const struct name *, const struct type *);	\
+-attr struct type *name##_VRB_NFIND(const struct name *, const struct type *);	\
+-attr struct type *name##_VRB_NEXT(struct type *);			\
+-attr struct type *name##_VRB_PREV(struct type *);			\
+-attr struct type *name##_VRB_MINMAX(const struct name *, int);		\
+-									\
+-
+-/* Main rb operation.
+- * Moves node close to the key of elm to top
+- */
+-#define	VRB_GENERATE(name, type, field, cmp)				\
+-	VRB_GENERATE_INTERNAL(name, type, field, cmp,)
+-#define	VRB_GENERATE_STATIC(name, type, field, cmp)			\
+-	VRB_GENERATE_INTERNAL(name, type, field, cmp, __unused static)
+-#define VRB_GENERATE_INTERNAL(name, type, field, cmp, attr)		\
+-attr void								\
+-name##_VRB_INSERT_COLOR(struct name *head, struct type *elm)		\
+-{									\
+-	struct type *parent, *gparent, *tmp;				\
+-	while ((parent = VRB_PARENT(elm, field)) != NULL &&		\
+-	    VRB_COLOR(parent, field) == VRB_RED) {			\
+-		gparent = VRB_PARENT(parent, field);			\
+-		if (parent == VRB_LEFT(gparent, field)) {		\
+-			tmp = VRB_RIGHT(gparent, field);		\
+-			if (tmp && VRB_COLOR(tmp, field) == VRB_RED) {	\
+-				VRB_COLOR(tmp, field) = VRB_BLACK;	\
+-				VRB_SET_BLACKRED(parent, gparent, field);\
+-				elm = gparent;				\
+-				continue;				\
+-			}						\
+-			if (VRB_RIGHT(parent, field) == elm) {		\
+-				VRB_ROTATE_LEFT(head, parent, tmp, field);\
+-				tmp = parent;				\
+-				parent = elm;				\
+-				elm = tmp;				\
+-			}						\
+-			VRB_SET_BLACKRED(parent, gparent, field);	\
+-			VRB_ROTATE_RIGHT(head, gparent, tmp, field);	\
+-		} else {						\
+-			tmp = VRB_LEFT(gparent, field);			\
+-			if (tmp && VRB_COLOR(tmp, field) == VRB_RED) {	\
+-				VRB_COLOR(tmp, field) = VRB_BLACK;	\
+-				VRB_SET_BLACKRED(parent, gparent, field);\
+-				elm = gparent;				\
+-				continue;				\
+-			}						\
+-			if (VRB_LEFT(parent, field) == elm) {		\
+-				VRB_ROTATE_RIGHT(head, parent, tmp, field);\
+-				tmp = parent;				\
+-				parent = elm;				\
+-				elm = tmp;				\
+-			}						\
+-			VRB_SET_BLACKRED(parent, gparent, field);	\
+-			VRB_ROTATE_LEFT(head, gparent, tmp, field);	\
+-		}							\
+-	}								\
+-	VRB_COLOR(head->rbh_root, field) = VRB_BLACK;			\
+-}									\
+-									\
+-attr void								\
+-name##_VRB_REMOVE_COLOR(struct name *head, struct type *parent, struct type *elm) \
+-{									\
+-	struct type *tmp;						\
+-	while ((elm == NULL || VRB_COLOR(elm, field) == VRB_BLACK) &&	\
+-	    elm != VRB_ROOT(head)) {					\
+-		AN(parent);						\
+-		if (VRB_LEFT(parent, field) == elm) {			\
+-			tmp = VRB_RIGHT(parent, field);			\
+-			if (VRB_COLOR(tmp, field) == VRB_RED) {		\
+-				VRB_SET_BLACKRED(tmp, parent, field);	\
+-				VRB_ROTATE_LEFT(head, parent, tmp, field);\
+-				tmp = VRB_RIGHT(parent, field);		\
+-			}						\
+-			if ((VRB_LEFT(tmp, field) == NULL ||		\
+-			    VRB_COLOR(VRB_LEFT(tmp, field), field) == VRB_BLACK) &&\
+-			    (VRB_RIGHT(tmp, field) == NULL ||		\
+-			    VRB_COLOR(VRB_RIGHT(tmp, field), field) == VRB_BLACK)) {\
+-				VRB_COLOR(tmp, field) = VRB_RED;	\
+-				elm = parent;				\
+-				parent = VRB_PARENT(elm, field);	\
+-			} else {					\
+-				if (VRB_RIGHT(tmp, field) == NULL ||	\
+-				    VRB_COLOR(VRB_RIGHT(tmp, field), field) == VRB_BLACK) {\
+-					struct type *oleft;		\
+-					if ((oleft = VRB_LEFT(tmp, field)) \
+-					    != NULL)			\
+-						VRB_COLOR(oleft, field) = VRB_BLACK;\
+-					VRB_COLOR(tmp, field) = VRB_RED;\
+-					VRB_ROTATE_RIGHT(head, tmp, oleft, field);\
+-					tmp = VRB_RIGHT(parent, field);	\
+-				}					\
+-				VRB_COLOR(tmp, field) = VRB_COLOR(parent, field);\
+-				VRB_COLOR(parent, field) = VRB_BLACK;	\
+-				if (VRB_RIGHT(tmp, field))		\
+-					VRB_COLOR(VRB_RIGHT(tmp, field), field) = VRB_BLACK;\
+-				VRB_ROTATE_LEFT(head, parent, tmp, field);\
+-				elm = VRB_ROOT(head);			\
+-				break;					\
+-			}						\
+-		} else {						\
+-			tmp = VRB_LEFT(parent, field);			\
+-			if (VRB_COLOR(tmp, field) == VRB_RED) {		\
+-				VRB_SET_BLACKRED(tmp, parent, field);	\
+-				VRB_ROTATE_RIGHT(head, parent, tmp, field);\
+-				tmp = VRB_LEFT(parent, field);		\
+-			}						\
+-			if ((VRB_LEFT(tmp, field) == NULL ||		\
+-			    VRB_COLOR(VRB_LEFT(tmp, field), field) == VRB_BLACK) &&\
+-			    (VRB_RIGHT(tmp, field) == NULL ||		\
+-			    VRB_COLOR(VRB_RIGHT(tmp, field), field) == VRB_BLACK)) {\
+-				VRB_COLOR(tmp, field) = VRB_RED;	\
+-				elm = parent;				\
+-				parent = VRB_PARENT(elm, field);	\
+-			} else {					\
+-				if (VRB_LEFT(tmp, field) == NULL ||	\
+-				    VRB_COLOR(VRB_LEFT(tmp, field), field) == VRB_BLACK) {\
+-					struct type *oright;		\
+-					if ((oright = VRB_RIGHT(tmp, field)) \
+-					    != NULL)			\
+-						VRB_COLOR(oright, field) = VRB_BLACK;\
+-					VRB_COLOR(tmp, field) = VRB_RED;\
+-					VRB_ROTATE_LEFT(head, tmp, oright, field);\
+-					tmp = VRB_LEFT(parent, field);	\
+-				}					\
+-				VRB_COLOR(tmp, field) = VRB_COLOR(parent, field);\
+-				VRB_COLOR(parent, field) = VRB_BLACK;	\
+-				if (VRB_LEFT(tmp, field))		\
+-					VRB_COLOR(VRB_LEFT(tmp, field), field) = VRB_BLACK;\
+-				VRB_ROTATE_RIGHT(head, parent, tmp, field);\
+-				elm = VRB_ROOT(head);			\
+-				break;					\
+-			}						\
+-		}							\
+-	}								\
+-	if (elm)							\
+-		VRB_COLOR(elm, field) = VRB_BLACK;			\
+-}									\
+-									\
+-attr struct type *							\
+-name##_VRB_REMOVE(struct name *head, struct type *elm)			\
+-{									\
+-	struct type *child, *parent, *old = elm;			\
+-	int color;							\
+-	if (VRB_LEFT(elm, field) == NULL)				\
+-		child = VRB_RIGHT(elm, field);				\
+-	else if (VRB_RIGHT(elm, field) == NULL)				\
+-		child = VRB_LEFT(elm, field);				\
+-	else {								\
+-		struct type *left;					\
+-		elm = VRB_RIGHT(elm, field);				\
+-		while ((left = VRB_LEFT(elm, field)) != NULL)		\
+-			elm = left;					\
+-		child = VRB_RIGHT(elm, field);				\
+-		parent = VRB_PARENT(elm, field);			\
+-		color = VRB_COLOR(elm, field);				\
+-		if (child)						\
+-			VRB_PARENT(child, field) = parent;		\
+-		if (parent) {						\
+-			if (VRB_LEFT(parent, field) == elm)		\
+-				VRB_LEFT(parent, field) = child;	\
+-			else						\
+-				VRB_RIGHT(parent, field) = child;	\
+-			VRB_AUGMENT(parent);				\
+-		} else							\
+-			VRB_ROOT(head) = child;				\
+-		if (VRB_PARENT(elm, field) == old)			\
+-			parent = elm;					\
+-		(elm)->field = (old)->field;				\
+-		if (VRB_PARENT(old, field)) {				\
+-			if (VRB_LEFT(VRB_PARENT(old, field), field) == old)\
+-				VRB_LEFT(VRB_PARENT(old, field), field) = elm;\
+-			else						\
+-				VRB_RIGHT(VRB_PARENT(old, field), field) = elm;\
+-			VRB_AUGMENT(VRB_PARENT(old, field));		\
+-		} else							\
+-			VRB_ROOT(head) = elm;				\
+-		VRB_PARENT(VRB_LEFT(old, field), field) = elm;		\
+-		if (VRB_RIGHT(old, field))				\
+-			VRB_PARENT(VRB_RIGHT(old, field), field) = elm;	\
+-		if (parent) {						\
+-			left = parent;					\
+-			do {						\
+-				VRB_AUGMENT(left);			\
+-			} while ((left = VRB_PARENT(left, field)) != NULL); \
+-		}							\
+-		goto color;						\
+-	}								\
+-	parent = VRB_PARENT(elm, field);				\
+-	color = VRB_COLOR(elm, field);					\
+-	if (child)							\
+-		VRB_PARENT(child, field) = parent;			\
+-	if (parent) {							\
+-		if (VRB_LEFT(parent, field) == elm)			\
+-			VRB_LEFT(parent, field) = child;		\
+-		else							\
+-			VRB_RIGHT(parent, field) = child;		\
+-		VRB_AUGMENT(parent);					\
+-	} else								\
+-		VRB_ROOT(head) = child;					\
+-color:									\
+-	if (color == VRB_BLACK) {					\
+-		name##_VRB_REMOVE_COLOR(head, parent, child);		\
+-	}								\
+-	return (old);							\
+-}									\
+-									\
+-/* Inserts a node into the RB tree */					\
+-attr struct type *							\
+-name##_VRB_INSERT(struct name *head, struct type *elm)			\
+-{									\
+-	struct type *tmp;						\
+-	struct type *parent = NULL;					\
+-	int comp = 0;							\
+-	tmp = VRB_ROOT(head);						\
+-	while (tmp) {							\
+-		parent = tmp;						\
+-		comp = (cmp)(elm, parent);				\
+-		if (comp < 0)						\
+-			tmp = VRB_LEFT(tmp, field);			\
+-		else if (comp > 0)					\
+-			tmp = VRB_RIGHT(tmp, field);			\
+-		else							\
+-			return (tmp);					\
+-	}								\
+-	VRB_SET(elm, parent, field);					\
+-	if (parent != NULL) {						\
+-		if (comp < 0)						\
+-			VRB_LEFT(parent, field) = elm;			\
+-		else							\
+-			VRB_RIGHT(parent, field) = elm;			\
+-		VRB_AUGMENT(parent);					\
+-	} else								\
+-		VRB_ROOT(head) = elm;					\
+-	name##_VRB_INSERT_COLOR(head, elm);				\
+-	return (NULL);							\
+-}									\
+-									\
+-/* Finds the node with the same key as elm */				\
+-attr struct type *							\
+-name##_VRB_FIND(const struct name *head, const struct type *elm)	\
+-{									\
+-	struct type *tmp = VRB_ROOT(head);				\
+-	int comp;							\
+-	while (tmp) {							\
+-		comp = cmp(elm, tmp);					\
+-		if (comp < 0)						\
+-			tmp = VRB_LEFT(tmp, field);			\
+-		else if (comp > 0)					\
+-			tmp = VRB_RIGHT(tmp, field);			\
+-		else							\
+-			return (tmp);					\
+-	}								\
+-	return (NULL);							\
+-}									\
+-									\
+-/* Finds the first node greater than or equal to the search key */	\
+-attr struct type *							\
+-name##_VRB_NFIND(const struct name *head, const struct type *elm)	\
+-{									\
+-	struct type *tmp = VRB_ROOT(head);				\
+-	struct type *res = NULL;					\
+-	int comp;							\
+-	while (tmp) {							\
+-		comp = cmp(elm, tmp);					\
+-		if (comp < 0) {						\
+-			res = tmp;					\
+-			tmp = VRB_LEFT(tmp, field);			\
+-		}							\
+-		else if (comp > 0)					\
+-			tmp = VRB_RIGHT(tmp, field);			\
+-		else							\
+-			return (tmp);					\
+-	}								\
+-	return (res);							\
+-}									\
+-									\
+-/* ARGSUSED */								\
+-attr struct type *							\
+-name##_VRB_NEXT(struct type *elm)					\
+-{									\
+-	if (VRB_RIGHT(elm, field)) {					\
+-		elm = VRB_RIGHT(elm, field);				\
+-		while (VRB_LEFT(elm, field))				\
+-			elm = VRB_LEFT(elm, field);			\
+-	} else {							\
+-		if (VRB_PARENT(elm, field) &&				\
+-		    (elm == VRB_LEFT(VRB_PARENT(elm, field), field)))	\
+-			elm = VRB_PARENT(elm, field);			\
+-		else {							\
+-			while (VRB_PARENT(elm, field) &&		\
+-			    (elm == VRB_RIGHT(VRB_PARENT(elm, field), field)))\
+-				elm = VRB_PARENT(elm, field);		\
+-			elm = VRB_PARENT(elm, field);			\
+-		}							\
+-	}								\
+-	return (elm);							\
+-}									\
+-									\
+-/* ARGSUSED */								\
+-attr struct type *							\
+-name##_VRB_PREV(struct type *elm)					\
+-{									\
+-	if (VRB_LEFT(elm, field)) {					\
+-		elm = VRB_LEFT(elm, field);				\
+-		while (VRB_RIGHT(elm, field))				\
+-			elm = VRB_RIGHT(elm, field);			\
+-	} else {							\
+-		if (VRB_PARENT(elm, field) &&				\
+-		    (elm == VRB_RIGHT(VRB_PARENT(elm, field), field)))	\
+-			elm = VRB_PARENT(elm, field);			\
+-		else {							\
+-			while (VRB_PARENT(elm, field) &&		\
+-			    (elm == VRB_LEFT(VRB_PARENT(elm, field), field)))\
+-				elm = VRB_PARENT(elm, field);		\
+-			elm = VRB_PARENT(elm, field);			\
+-		}							\
+-	}								\
+-	return (elm);							\
+-}									\
+-									\
+-attr struct type *							\
+-name##_VRB_MINMAX(const struct name *head, int val)			\
+-{									\
+-	struct type *tmp = VRB_ROOT(head);				\
+-	struct type *parent = NULL;					\
+-	while (tmp) {							\
+-		parent = tmp;						\
+-		if (val < 0)						\
+-			tmp = VRB_LEFT(tmp, field);			\
+-		else							\
+-			tmp = VRB_RIGHT(tmp, field);			\
+-	}								\
+-	return (parent);						\
+-}
+-
+-#define VRB_NEGINF	-1
+-#define VRB_INF	1
+-
+-#define VRB_INSERT(name, x, y)	name##_VRB_INSERT(x, y)
+-#define VRB_REMOVE(name, x, y)	name##_VRB_REMOVE(x, y)
+-#define VRB_FIND(name, x, y)	name##_VRB_FIND(x, y)
+-#define VRB_NFIND(name, x, y)	name##_VRB_NFIND(x, y)
+-#define VRB_NEXT(name, x, y)	name##_VRB_NEXT(y)
+-#define VRB_PREV(name, x, y)	name##_VRB_PREV(y)
+-#define VRB_MIN(name, x)		name##_VRB_MINMAX(x, VRB_NEGINF)
+-#define VRB_MAX(name, x)		name##_VRB_MINMAX(x, VRB_INF)
+-
+-#define VRB_FOREACH(x, name, head)					\
+-	for ((x) = VRB_MIN(name, head);					\
+-	     (x) != NULL;						\
+-	     (x) = name##_VRB_NEXT(x))
+-
+-#define VRB_FOREACH_FROM(x, name, y)					\
+-	for ((x) = (y);							\
+-	    ((x) != NULL) && ((y) = name##_VRB_NEXT(x), (x) != NULL);	\
+-	     (x) = (y))
+-
+-#define VRB_FOREACH_SAFE(x, name, head, y)				\
+-	for ((x) = VRB_MIN(name, head);					\
+-	    ((x) != NULL) && ((y) = name##_VRB_NEXT(x), (x) != NULL);	\
+-	     (x) = (y))
+-
+-#define VRB_FOREACH_REVERSE(x, name, head)				\
+-	for ((x) = VRB_MAX(name, head);					\
+-	     (x) != NULL;						\
+-	     (x) = name##_VRB_PREV(x))
+-
+-#define VRB_FOREACH_REVERSE_FROM(x, name, y)				\
+-	for ((x) = (y);							\
+-	    ((x) != NULL) && ((y) = name##_VRB_PREV(x), (x) != NULL);	\
+-	     (x) = (y))
+-
+-#define VRB_FOREACH_REVERSE_SAFE(x, name, head, y)			\
+-	for ((x) = VRB_MAX(name, head);					\
+-	    ((x) != NULL) && ((y) = name##_VRB_PREV(x), (x) != NULL);	\
+-	     (x) = (y))
+-
+-#endif	/* _VTREE_H_ */

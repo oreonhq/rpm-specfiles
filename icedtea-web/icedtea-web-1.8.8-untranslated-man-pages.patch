@@ -1,0 +1,22 @@
+From 14cbac3727802f4bce136e65dd899abf36afed3b Mon Sep 17 00:00:00 2001
+From: Robert Scheck <robert@fedoraproject.org>
+Date: Fri, 2 May 2025 23:12:03 +0200
+Subject: [PATCH] Disable man pages for languages without any translation
+
+---
+ Makefile.am | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index f1ca7b0a4..5d16d3c64 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -903,7 +903,7 @@ stamps/generate-docs.stamp: stamps/netx.stamp
+ 	LANG_BACKUP=$$LANG ; \
+ 	echo "<html><head><title>$(PLUGIN_VERSION)</title></head>" > "$$HTML_DOCS_INDEX" ; \
+ 	echo "<body><h3>$(PLUGIN_VERSION) docs:</h3>"  >> "$$HTML_DOCS_INDEX" ; \
+-	for LANG_ID in en_US.UTF-8 cs_CZ.UTF-8 pl_PL.UTF-8 de_DE.UTF-8 ;  do \
++	for LANG_ID in en_US.UTF-8 ;  do \
+ 	  ID=`echo "$$LANG_ID" | head -c 2` ; \
+ 	  ENCOD=`echo "$$LANG_ID" | tail -c 6` ; \
+ 	  export LANG=$$LANG_ID; \

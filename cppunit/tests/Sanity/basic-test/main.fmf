@@ -1,0 +1,15 @@
+summary: cppunit basic test
+description: ''
+contact: Edjunior Machado <emachado@redhat.com>
+component:
+  - cppunit
+test: ./runtest.sh
+framework: beakerlib
+require:
+  - bash
+  - coreutils
+  - gcc-c++
+  - cppunit-devel
+duration: 1h
+extra-summary: /tools/cppunit/Sanity/basic-test
+extra-task: /tools/cppunit/Sanity/basic-test

@@ -1,0 +1,31 @@
+From 4fa58ef6628dcf2c4dcbf3625a235ae44ba5e95c Mon Sep 17 00:00:00 2001
+From: Zdenek Dohnal <zdohnal@redhat.com>
+Date: Wed, 26 Jul 2023 10:22:31 +0200
+Subject: [PATCH] src/scanadf.c: Fix segfault when `scanadf -h -d <device>`
+
+scanadf segfaults when printing help for a specific device, because
+device handle is closed before `scanadf_exit()`, but not set to NULL.
+
+Fixes Fedora bugzilla 2225209
+---
+ src/scanadf.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/scanadf.c b/src/scanadf.c
+index 0dab19b..b1fe2be 100644
+--- a/src/scanadf.c
++++ b/src/scanadf.c
+@@ -1672,7 +1672,10 @@ Type ``%s --help -d DEVICE'' to get list of all options for DEVICE.\n\
+ \n\
+ List of available devices:", prog_name);
+       if (device)
++	{
+ 	  sane_close(device);
++	  device = NULL;
++	}
+ 
+       status = sane_get_devices (&device_list, SANE_FALSE);
+       if (status == SANE_STATUS_GOOD)
+-- 
+2.41.0
+

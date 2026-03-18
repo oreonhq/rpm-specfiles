@@ -1,0 +1,12 @@
+diff -up suite3270-4.5/Common/mkversion.py.orig suite3270-4.5/Common/mkversion.py
+--- suite3270-4.5/Common/mkversion.py.orig	2026-02-23 17:23:54.155112220 +0100
++++ suite3270-4.5/Common/mkversion.py	2026-02-23 17:24:19.943983520 +0100
+@@ -111,7 +111,7 @@ def mkversion(outfile_name: str, program
+ 
+     # Get the date.
+     if 'SOURCE_DATE_EPOCH' in os.environ:
+-        now = datetime.fromtimestamp(int(os.environ['SOURCE_DATE_EPOCH'])).replace(tzinfo=timezone.utc)
++        now = datetime.utcfromtimestamp(int(os.environ['SOURCE_DATE_EPOCH']))
+     else:
+         now = datetime.now(timezone.utc)
+     builddate = datetime.strftime(now, '%a %b %d %H:%M:%S %Z %Y')

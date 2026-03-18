@@ -1,0 +1,36 @@
+From 610cf4ce34ad850eda67d9fba1f98f8ab6001e6e Mon Sep 17 00:00:00 2001
+From: Alexander Bokovoy <abokovoy@redhat.com>
+Date: Tue, 1 Feb 2022 08:28:18 +0200
+Subject: [PATCH] Update OpenLDAP detection code to deal with libldap_r removal
+ in 2.6
+
+Resolves: rhbz#2032691
+
+Signed-off-by: Alexander Bokovoy <abokovoy@redhat.com>
+---
+ configure.ac | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 7cd7d76..24fbe20 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -71,8 +71,13 @@ dirsrv)
+ 		;;
+ 	openldap)
+ 		runtime_modules="nss nspr"
+-		LDAP_CFLAGS=
+-		LDAP_LIBS="-lldap_r -llber"
++		SAVE_LIBS="$LIBS"
++		LIBS=
++		AC_SEARCH_LIBS([ldap_search], [ldap_r ldap], [], [AC_MSG_ERROR([libldap or libldap_r not found])])
++		AC_SEARCH_LIBS([ber_peek_tag], [lber], [], [AC_MSG_ERROR([liblber not found])])
++		LDAP_LIBS="$LIBS"
++		LDAP_CFLAGS=""
++		LIBS="$SAVE_LIBS"
+ 		;;
+ 	*)
+ 		runtime_modules="nss nspr"
+-- 
+2.34.1
+

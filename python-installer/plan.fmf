@@ -1,0 +1,9 @@
+discover:
+    how: shell
+    tests:
+    - name: import test
+      test: python3 -c 'import installer'
+      require:
+      - python3-installer
+execute:
+  how: tmt

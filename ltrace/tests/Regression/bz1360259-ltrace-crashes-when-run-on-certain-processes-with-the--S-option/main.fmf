@@ -1,0 +1,18 @@
+summary: Test for BZ#1360259 (ltrace crashes when run on certain processes with the
+    -S option)
+description: |
+    Bug summary: ltrace crashes when run on certain processes with the -S option
+    Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1360259
+contact: Edjunior Machado <emachado@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- dbus
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=1360259
+extra-summary: /tools/ltrace/Regression/bz1360259-ltrace-crashes-when-run-on-certain-processes-with-the--S-option
+extra-task: /tools/ltrace/Regression/bz1360259-ltrace-crashes-when-run-on-certain-processes-with-the--S-option

@@ -1,0 +1,12 @@
+# Ignition sources have duplicate files because of how spec versioning is
+# implemented
+addFilter("ignition-debugsource.x86_64: E: files-duplicated-waste")
+
+# -validate-redistributable is supposed to have binaries in it, and
+# doesn't really need docs since it isn't user-facing
+addFilter("ignition-validate-redistributable.noarch: E: arch-independent-package-contains-binary-or-object")
+addFilter("ignition-validate-redistributable.noarch: W: no-documentation")
+
+# This is documented as optional
+# https://fedoraproject.org/wiki/Upgrade_paths_%E2%80%94_renaming_or_splitting_packages#Do_I_need_to_Provide_my_old_package_names.3F
+addFilter("ignition-validate-redistributable.noarch: W: obsolete-not-provided ignition-validate-nonlinux")

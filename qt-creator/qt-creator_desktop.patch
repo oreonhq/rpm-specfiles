@@ -1,0 +1,10 @@
+diff -rupN --no-dereference qt-creator-opensource-src-19.0.0-beta1/share/applications/org.qt-project.qtcreator.desktop qt-creator-opensource-src-19.0.0-beta1-new/share/applications/org.qt-project.qtcreator.desktop
+--- qt-creator-opensource-src-19.0.0-beta1/share/applications/org.qt-project.qtcreator.desktop	2026-01-27 03:56:20.000000000 +0100
++++ qt-creator-opensource-src-19.0.0-beta1-new/share/applications/org.qt-project.qtcreator.desktop	2026-01-31 10:21:53.772860378 +0100
+@@ -8,5 +8,5 @@ Icon=QtProject-qtcreator
+ StartupWMClass=qtcreator
+ Terminal=false
+ Categories=Development;IDE;Qt;
+-MimeType= text/x-c++src;text/x-c++hdr;text/x-xsrc;application/x-designer;application/vnd.qt.qmakeprofile;application/vnd.qt.xml.resource;
++MimeType=text/x-c++src;text/x-c++hdr;text/x-xsrc;application/x-designer;application/vnd.qt.qmakeprofile;application/vnd.qt.xml.resource;
+ 

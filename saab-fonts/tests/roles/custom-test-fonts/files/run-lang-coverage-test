@@ -1,0 +1,197 @@
+#! /bin/bash -efu
+
+debug() {
+	if [ -n "$DEBUG" ]; then
+		echo "$*" >&2
+	fi
+}
+
+msg_usage() {
+	cat <<_EOF_
+Run language coverage test.
+
+Usage:
+$PROG <options>
+
+Options:
+-h, --help		Display this help and exit
+-v, --verbose		Turn on debug
+-l, --lang=LANG		Test LANG language coverage (default: en)
+-p, --path=PATH		Test fonts on PATH
+-n, --name=NAME		Set NAME to store a log file.
+-a, --artifactsdir=DIR	test environment dir to store artifacts
+-e, --exclude=FILE	Exclude FILE to check.
+-i, --include=FILE	Include File to check.
+_EOF_
+}
+
+PROG="${PROG:-${0##*/}}"
+DEBUG="${DEBUG:-}"
+OPT_LANG="${OPT_LANG:-en}"
+OPT_PATH="${OPT_PATH:-}"
+OPT_ARTIFACTS_DIR="${OPT_ARTIFACTS_DIR:-}"
+OPT_EXCLUDE=()
+OPT_INCLUDE=()
+OPT_NAME="${OPT_NAME:-}"
+
+opt=$(getopt -n "$0" --options "hvl:p:n:a:e:i:" --longoptions "help,verbose,lang:,path:,name:,artifactsdir:,exclude:,include:" -- "$@")
+eval set -- "$opt"
+while [[ $# -gt 0 ]]; do
+	case "$1" in
+	-n|--name)
+		OPT_NAME="$2"
+		shift 2
+		;;
+	-i|--include)
+		OPT_INCLUDE+=("$2")
+		shift 2
+		;;
+	-e|--exclude)
+		OPT_EXCLUDE+=("$2")
+		shift 2
+		;;
+	-a|--artifactsdir)
+		OPT_ARTIFACTS_DIR="$2"
+		shift 2
+		;;
+	-p|--path)
+		OPT_PATH="$2"
+		shift 2
+		;;
+	-l|--lang)
+		OPT_LANG="$2"
+		shift 2
+		;;
+	-v|--verbose)
+		DEBUG="-v"
+		shift
+		;;
+	-h|--help)
+		msg_usage
+		exit 0
+		;;
+	--)
+		shift
+		;;
+	*)
+		msg_usage
+		exit 1
+	esac
+done
+
+if [ -z "$OPT_ARTIFACTS_DIR" ] || [ -z "$OPT_LANG" ] || [ -z "$OPT_PATH" ]; then
+	echo "Use: $PROG -h for help."
+	exit 0
+fi
+
+expand_regex() {
+	local e ret=()
+	local path="$1"
+	shift
+	(cd $path;
+	for e; do
+		debug "$e"
+		set +f
+		local x=$(find -regextype posix-egrep -regex "./$e" -print|sed -e 's,^\./,,g')
+		ret+=($x)
+		set -f
+		echo ${ret[@]}
+	done)
+	echo ${ret[@]}
+}
+
+OPT_INCLUDE=($(expand_regex $OPT_PATH ${OPT_INCLUDE[@]}))
+OPT_EXCLUDE=($(expand_regex $OPT_PATH ${OPT_EXCLUDE[@]}))
+
+debug "Path: $OPT_PATH"
+debug "Lang: $OPT_LANG"
+debug "Artifacts dir: $OPT_ARTIFACTS_DIR"
+debug "Exclude: ${OPT_EXCLUDE[@]}"
+debug "Include: ${OPT_INCLUDE[@]}"
+STR_TEST_DASHED=$(echo "${OPT_NAME:-${OPT_LANG}_${OPT_PATH}}" | sed -e 's/\//-/g')
+
+clean_exit() {
+	rc=$?;
+	trap - SIGINT SIGTERM SIGABRT EXIT
+	echo "Run test $OPT_PATH: done."
+	for pid in $(ps -o pid --no-headers --ppid $$); do
+		if [ -n "$(ps -p $pid -o pid=)" ]; then
+			kill -s HUP $pid
+		fi
+	done
+	local log_file_name="$STR_TEST_DASHED.log"
+	local log_file_path="$OPT_ARTIFACTS_DIR/$log_file_name"
+	local status
+	if [[ $rc -eq 127 ]]; then
+		status="ERROR"
+	elif grep -q "RESULT: WARN" "$log_file_path"; then
+		status="ERROR"
+	elif grep -q "RESULT: FAIL" "$log_file_path"; then
+		status="FAIL"
+	elif grep -q "RESULT: PASS" "$log_file_path"; then
+		status="PASS"
+	elif grep -q "FAIL" "$log_file_path"; then
+		status="FAIL"
+	elif grep -q "PASS" "$log_file_path"; then
+		status="PASS"
+	else
+		status="ERROR"
+	fi
+	echo "$status $OPT_PATH" >> "$OPT_ARTIFACTS_DIR/test.log"
+	mv "$log_file_path" "$OPT_ARTIFACTS_DIR/${status}_${log_file_name}"
+	local results="$OPT_ARTIFACTS_DIR/results.yml"
+	local result=$(echo $status | tr '[:upper:]' '[:lower:]')
+	test -f "$results" || echo 'results:' > "$results"
+	echo "- {result: $result, test: $OPT_PATH}" >> "$results"
+	exit 0
+}
+trap clean_exit SIGINT SIGTERM SIGABRT EXIT
+
+mkdir -p "$OPT_ARTIFACTS_DIR"
+export OUTPUTFILE="$(realpath "$OPT_ARTIFACTS_DIR")/$STR_TEST_DASHED-out.log"
+logfile_stdout="$OPT_ARTIFACTS_DIR/$STR_TEST_DASHED.log"
+logfile_stderr="$OPT_ARTIFACTS_DIR/$STR_TEST_DASHED-err.log"
+exec 3>&1 4>&2 1> >(tee -a "$logfile_stdout" >&3) 2> >(tee -a "$logfile_stderr" >&4)
+
+contains() {
+	local e match="$1"
+	shift
+	for e; do [[ "$e" == "$match" ]] && return 1; done
+	return 0
+}
+
+debug "Check language coverage"
+set +f
+for i in `find $OPT_PATH -regex '.*/*\.\(t1\)?\(ttf\)?\(otf\)?\(ttc\)?\(pcf.*\)?\(pfa\)?'`; do
+set -f
+	debug "$i"
+	if test -f $i; then
+		n=`basename $i`
+		set +e
+		contains "$n" "${OPT_EXCLUDE[@]}"
+		ret=$?
+		set -e
+		if [ $ret -eq 1 ]; then
+			debug "ignoring $i"
+			continue
+		fi
+		if [ ${#OPT_INCLUDE[@]} -ne 0 ]; then
+			set +e
+			contains "$n" "${OPT_INCLUDE[@]}"
+			ret=$?
+			set -e
+			if [ $ret -eq 0 ]; then
+				debug "$i isn't targeted file"
+				continue
+			fi
+		fi
+		debug "  $i"
+		res=`fc-validate -l $OPT_LANG $i`
+		if echo $res | grep -q Missing; then
+			echo "RESULT: FAIL: $i doesn't satisfy $OPT_LANG language coverage."
+		else
+			echo "RESULT: PASS: $i satisfy $OPT_LANG language coverage."
+		fi
+	fi
+done
+

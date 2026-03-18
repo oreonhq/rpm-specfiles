@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Pod-Plainer
+require: perl-Pod-Plainer-tests
+test: /usr/libexec/perl-Pod-Plainer/test

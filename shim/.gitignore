@@ -1,0 +1,6 @@
+shim*.efi
+*.rpm
+*/
+.build*.log
+*~
+.*.sw?

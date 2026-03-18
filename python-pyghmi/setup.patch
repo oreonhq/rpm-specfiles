@@ -1,0 +1,22 @@
+diff -up pyghmi-1.5.14/.orig.orig pyghmi-1.5.14/.orig
+diff -up pyghmi-1.5.14/setup.py.tmpl.orig pyghmi-1.5.14/setup.py.tmpl
+--- pyghmi-1.5.14/setup.py.tmpl.orig	2021-08-06 11:44:02.618240604 +0200
++++ pyghmi-1.5.14/setup.py.tmpl	2021-08-06 11:44:35.586675599 +0200
+@@ -26,6 +26,16 @@ setuptools.setup(
+     packages=['pyghmi', 'pyghmi.util', 'pyghmi.ipmi', 'pyghmi.cmd',
+               'pyghmi.redfish', 'pyghmi.ipmi.private', 'pyghmi.ipmi.oem',
+               'pyghmi.ipmi.oem.lenovo', 'pyghmi.redfish.oem',
+-              'pyghmi.redfish.oem.dell', 'pyghmi.redfish.oem.lenovo'],
++              'pyghmi.redfish.oem.dell', 'pyghmi.redfish.oem.lenovo',
++              'pyghmi.tests'],
++    entry_points={
++        'console_scripts': [
++            'pyghmicons=pyghmi.cmd.pyghmicons:main',
++            'pyghmiutil=pyghmi.cmd.pyghmiutil:main',
++            'virshbmc=pyghmi.cmd.virshbmc:main',
++            'fakebmc=pyghmi.cmd.fakebmc:main',
++        ],
++    },
++
+     license='Apache License, Version 2.0')
+ 

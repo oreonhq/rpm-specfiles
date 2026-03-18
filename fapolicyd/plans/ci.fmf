@@ -1,0 +1,12 @@
+summary: FedoraCI test set
+discover:
+    how: fmf
+    url: https://github.com/linux-application-whitelisting/fapolicyd-tests.git
+    ref: main
+    filter: 'component:fapolicyd & tag:CI-Tier-1'
+execute:
+    how: tmt
+environment:
+    trigger: FedoraCI
+tag:
+  - FedoraCI

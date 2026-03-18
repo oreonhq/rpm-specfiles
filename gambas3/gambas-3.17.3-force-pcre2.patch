@@ -1,0 +1,60 @@
+diff -up gambas-3.17.3/gb.pcre/configure.ac.just-pcre2 gambas-3.17.3/gb.pcre/configure.ac
+--- gambas-3.17.3/gb.pcre/configure.ac.just-pcre2	2022-09-20 14:20:07.418837160 -0400
++++ gambas-3.17.3/gb.pcre/configure.ac	2022-09-20 14:21:12.326309588 -0400
+@@ -11,22 +11,6 @@ GB_COMPONENT_PKG_CONFIG(
+   pcre, PCRE, gb.pcre, [src],
+   libpcre2-8)
+ 
+-if test "$have_pcre" != "yes"; then
+-
+-  GB_COMPONENT_PKG_CONFIG_AGAIN(
+-    pcre, PCRE, gb.pcre, [src],
+-    libpcre, [trying with pcre])
+-  gb_use_pcre2=0
+-
+-else
+-
+-  AC_DEFINE_UNQUOTED(PCRE2, 1, libpcre2 is used)
+-  gb_use_pcre2=1
+-
+-fi
+-
+-AM_CONDITIONAL(USE_PCRE2, test "$gb_use_pcre2" = 1)
+-
+ AC_OUTPUT( \
+ Makefile \
+ src/Makefile \
+diff -up gambas-3.17.3/gb.pcre/src/main.c.just-pcre2 gambas-3.17.3/gb.pcre/src/main.c
+--- gambas-3.17.3/gb.pcre/src/main.c.just-pcre2	2022-09-20 14:23:27.914296475 -0400
++++ gambas-3.17.3/gb.pcre/src/main.c	2022-09-20 14:23:37.395365484 -0400
+@@ -29,7 +29,7 @@
+ #include <stdarg.h>
+ #include <string.h>
+ 
+-#include "regexp.h"
++#include "regexp2.h"
+ 
+ #include "main.h"
+ 
+diff -up gambas-3.17.3/gb.pcre/src/Makefile.am.just-pcre2 gambas-3.17.3/gb.pcre/src/Makefile.am
+--- gambas-3.17.3/gb.pcre/src/Makefile.am.just-pcre2	2022-09-20 14:21:58.953648970 -0400
++++ gambas-3.17.3/gb.pcre/src/Makefile.am	2022-09-20 14:22:10.542733323 -0400
+@@ -9,16 +9,6 @@ gb_pcre_la_CPPFLAGS = @PCRE_INC@
+ 
+ gb_pcre_la_SOURCES = \
+  main.h main.c \
+- gb.pcre.h
+- 
+-if USE_PCRE2
+-
+-gb_pcre_la_SOURCES += regexp2.h regexp2.c
+-
+-else
+-
+-gb_pcre_la_SOURCES += regexp.h regexp.c
+- 
+-endif
+-
++ gb.pcre.h \
++ regexp2.h regexp2.c
+ 

@@ -1,0 +1,12 @@
+--- ypserv-5bfba760283060087aefeb417342bcc66d349b2e/lib/access.c.oldaddr	2017-04-07 13:23:34.403404792 +0200
++++ ypserv-5bfba760283060087aefeb417342bcc66d349b2e/lib/access.c	2017-04-07 13:32:07.315466530 +0200
+@@ -151,6 +151,9 @@ copy_netbuf (struct netbuf *src)
+ static int
+ cmp_netbuf (struct netbuf *nbuf1, struct netbuf *nbuf2)
+ {
++  if (nbuf1 == NULL || nbuf2 == NULL)
++    return 1;
++
+   if (nbuf1->len != nbuf2->len)
+     return 1;
+ 

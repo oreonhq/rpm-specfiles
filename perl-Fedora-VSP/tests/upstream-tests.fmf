@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Fedora-VSP
+require: perl-Fedora-VSP-tests
+test: /usr/libexec/perl-Fedora-VSP/test

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Sys-Syslog
+require: perl-Sys-Syslog-tests
+test: /usr/libexec/perl-Sys-Syslog/test

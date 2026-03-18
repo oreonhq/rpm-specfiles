@@ -1,0 +1,52 @@
+From a565553a94750da31986769d3407be9ce16507ff Mon Sep 17 00:00:00 2001
+From: Stefan Becker <chemobejk@gmail.com>
+Date: Tue, 15 Oct 2019 09:27:33 +0300
+Subject: [PATCH 2/3] Fix #359: Incorrect build due to false negative configure
+ checks
+
+We must not include QUALITY_CFLAGS, which can include -Werror, in CFLAGS
+during configure run, because it can cause false negative configure
+checks. QUALITY_CFLAGS should only affect compiling SIPE code itself.
+---
+ ChangeLog    | 3 +++
+ configure.ac | 6 ++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/ChangeLog b/ChangeLog
+index 17649f54..b9179736 100644
+--- a/ChangeLog
++++ b/ChangeLog
+@@ -1,3 +1,6 @@
++version 1.25.1 "???" (????-??-??)
++	- Fixed #359: Incorrect build due to false negative configure checks (Stefan Becker)
++
+ version 1.25.0 "Buddy Idle Time, RTF" (2019-10-12)
+ 	- Feature #107: Provide idle start time for a buddy (Stefan Becker)
+ 	- Feature #77: RTF support (incoming) (Stefan Becker)
+diff --git a/configure.ac b/configure.ac
+index 0df85b04..01b44803 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -336,7 +336,8 @@ PKG_CHECK_MODULES(LIBXML2, [libxml-2.0])
+ dnl assumption check: sizof(uuid_t) must be 16 (see uuid.c)
+ AC_MSG_CHECKING([that sizeof(uuid_t) is 16])
+ ac_save_CFLAGS="$CFLAGS"
+-CFLAGS="$CFLAGS $GLIB_CFLAGS $QUALITY_CFLAGS"
++dnl NOTE: including $QUALITY_CFLAGS can lead to false negative configure checks!
++CFLAGS="$CFLAGS $GLIB_CFLAGS"
+ dnl note the [[[ quoting: our code contains []!
+ AC_RUN_IFELSE(
+ 	[AC_LANG_PROGRAM(
+@@ -415,7 +416,8 @@ AS_IF([test "x$enable_purple" != xno],
+ 
+ 		 ac_save_CFLAGS="$CFLAGS"
+ 		 ac_save_LIBS="$LIBS"
+-		 CFLAGS="$CFLAGS $PURPLE_CFLAGS $QUALITY_CFLAGS"
++		 dnl NOTE: including $QUALITY_CFLAGS can lead to false negative configure checks!
++		 CFLAGS="$CFLAGS $PURPLE_CFLAGS"
+ 		 LIBS="$LIBS $PURPLE_LIBS"
+ 
+ 		 dnl check whether enable voice and video support
+-- 
+2.23.0
+

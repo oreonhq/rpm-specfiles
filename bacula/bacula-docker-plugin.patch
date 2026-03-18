@@ -1,0 +1,27 @@
+diff -Naur bacula-15.0.2.old/autoconf/configure.in bacula-15.0.2/autoconf/configure.in
+--- bacula-15.0.2.old/autoconf/configure.in	2024-06-02 10:15:17.471968553 +0200
++++ bacula-15.0.2/autoconf/configure.in	2024-06-02 10:15:17.572968619 +0200
+@@ -3623,20 +3623,9 @@
+    ]
+ )
+ if test x$support_docker = xyes -o x$support_docker = xauto; then
+-   AC_CHECK_PROG(docker_bin, docker, yes, no, "/usr/bin/")
+-   if test x$docker_bin = xyes; then
+-      support_docker=yes
+-      FD_PLUGIN_DIR="${FD_PLUGIN_DIR} src/plugins/fd/docker"
+-      FD_PLUGIN_INSTALL="${FD_PLUGIN_INSTALL} install-docker"
+-   else
+-      if test x$support_docker = xyes; then
+-         echo " "
+-         echo "You enabled a Docker Plugin build but 'docker' command not found."
+-         echo " "
+-         exit 1
+-      fi
+-      support_docker=no
+-   fi
++   support_docker=yes
++   FD_PLUGIN_DIR="${FD_PLUGIN_DIR} src/plugins/fd/docker"
++   FD_PLUGIN_INSTALL="${FD_PLUGIN_INSTALL} install-docker"
+ fi
+ 
+ dnl kubernetes Plugin

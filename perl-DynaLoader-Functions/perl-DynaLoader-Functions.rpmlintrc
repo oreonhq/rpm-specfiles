@@ -1,0 +1,5 @@
+# Tests are self-documenting
+addFilter("-tests.noarch: W: no-documentation");
+
+# This file gets compiled during the running of the test suite
+addFilter("-tests.noarch: W: devel-file-in-non-devel-package /usr/libexec/perl-DynaLoader-Functions/t/dyna_low.c")

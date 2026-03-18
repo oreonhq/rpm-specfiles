@@ -1,0 +1,6 @@
+# Per se
+addFilter("spelling-error \('se',")
+
+# OO terminology
+addFilter("spelling-error \('subclassing',")
+

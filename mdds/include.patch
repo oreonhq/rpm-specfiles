@@ -1,0 +1,10 @@
+--- include/mdds/trie_map.hpp~	2025-01-21 20:24:59.000000000 -0600
++++ include/mdds/trie_map.hpp	2025-01-28 11:39:55.117522466 -0600
+@@ -37,6 +37,7 @@
+ #include <map>
+ #include <memory>
+ #include <limits>
++#include <cstdint>
+ 
+ namespace mdds {
+ 

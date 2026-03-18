@@ -1,0 +1,2 @@
+# Empty %postun
+addFilter(r'W: empty-%postun')

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Compress-Raw-Bzip2
+require: perl-Compress-Raw-Bzip2-tests
+test: /usr/libexec/perl-Compress-Raw-Bzip2/test

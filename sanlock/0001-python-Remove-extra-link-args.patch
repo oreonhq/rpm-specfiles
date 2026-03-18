@@ -1,0 +1,108 @@
+From 5044719a27cb41889ec08177cba977596b783e83 Mon Sep 17 00:00:00 2001
+From: Nir Soffer <nsoffer@redhat.com>
+Date: Sun, 2 Aug 2020 02:01:06 +0300
+Subject: [PATCH] python: Remove extra link args
+
+Fedora 33 builds fails now with:
+
+/usr/bin/ld: /tmp/sanlock.cpython-39-x86_64-linux-gnu.so.mpvMfj.ltrans0.ltrans.o:
+relocation R_X86_64_PC32 against undefined symbol `PyExc_ValueError' can
+not be used when making a shared object; recompile with -fPIC
+
+We use these extra link args:
+
+    extra_link_args=['-fPIE', '-Wl,-z,relro,-z,now'],
+
+Looking the generated compiler command[1]:
+
+gcc -pthread \
+    -shared \
+    -Wl,-z,relro \
+    -Wl,--as-needed \
+    -Wl,-z,now \
+    -g \
+    -Wl,-z,relro \
+    -Wl,--as-needed \
+    -Wl,-z,now \
+    -g \
+    -Wl,-z,relro \
+    -Wl,--as-needed \
+    -Wl,-z,now \
+    -specs=/usr/lib/rpm/redhat/redhat-hardened-ld \
+    -O2 \
+    -fexceptions \
+    -g \
+    -grecord-gcc-switches \
+    -pipe \
+    -Wall \
+    -Werror=format-security \
+    -Wp,-D_FORTIFY_SOURCE=2 \
+    -Wp,-D_GLIBCXX_ASSERTIONS \
+    -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 \
+    -fstack-protector-strong \
+    -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 \
+    -m64 \
+    -mtune=generic \
+    -fasynchronous-unwind-tables \
+    -fstack-clash-protection \
+    -fcf-protection build/temp.linux-x86_64-3.9/sanlock.o \
+    -L../src \
+    -L/usr/lib64 \
+    -lsanlock \
+    -o build/lib.linux-x86_64-3.9/sanlock.cpython-39-x86_64-linux-gnu.so \
+    -fPIE \
+    -Wl,-z,relro,-z,now
+
+This looks like a complete mess. These arguments are repeated 3 times:
+
+    -Wl,-z,relro \
+    -Wl,--as-needed \
+    -Wl,-z,now \
+
+And our extra compiler flags adds the forth copy.
+
+gcc says this about -fPIE:
+
+    These options are similar to -fpic and -fPIC, but the generated
+    position-independent code can be only linked into executables
+
+But our python extension is a shared object, so I don't think -fPIE
+makes sense.
+
+The extra arguments were added in:
+
+commit a1929080a6ce51879139eb8d05a425ccd3d37082
+Author: David Teigland <teigland@redhat.com>
+Date:   Wed Oct 14 13:21:04 2015 -0500
+
+    python: add compile flags
+
+Without any justification. I assume the intent was good, but it looks
+like this change was not needed, and somehow it worked until now.
+
+If some hardening is needed, it should be done by python build
+infrastructure, not in sanlock. And it seems that python do use some
+hardening specs (e.g. -specs=/usr/lib/rpm/redhat/redhat-hardened-ld).
+
+[1] https://kojipkgs.fedoraproject.org//work/tasks/8900/48358900/build.log
+
+Signed-off-by: Nir Soffer <nsoffer@redhat.com>
+---
+ python/setup.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/python/setup.py b/python/setup.py
+index 0f3d683..b3bfaf1 100644
+--- a/python/setup.py
++++ b/python/setup.py
+@@ -12,7 +12,6 @@ sanlock = Extension(name='sanlock',
+                     include_dirs=['../src'],
+                     library_dirs=['../src'],
+                     extra_compile_args=["-std=c99"],
+-                    extra_link_args=['-fPIE', '-Wl,-z,relro,-z,now'],
+                     libraries=sanlocklib)
+ 
+ version = None
+-- 
+2.25.4
+

@@ -1,0 +1,2 @@
+test: bash ./smoke.sh
+framework: shell

@@ -1,0 +1,53 @@
+From 1c84271eee9328a60304518d85d7d7e93993f099 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Poho=C5=99elsk=C3=BD?= <opohorel@redhat.com>
+Date: Mon, 26 Jan 2026 15:22:46 +0100
+Subject: [PATCH] Fix invalid Maven attribute values in compilerArgs
+
+---
+ guava-testlib/pom.xml | 2 +-
+ guava/pom.xml         | 2 +-
+ pom.xml               | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/guava-testlib/pom.xml b/guava-testlib/pom.xml
+index f104a585dc..3664f59fb7 100644
+--- a/guava-testlib/pom.xml
++++ b/guava-testlib/pom.xml
+@@ -75,7 +75,7 @@
+           <execution>
+             <id>default-compile</id>
+             <configuration>
+-              <compilerArgs combine.children="append" combine.self="append">
++              <compilerArgs combine.children="append" combine.self="merge">
+                 <arg>-XDignore.symbol.file</arg>
+               </compilerArgs>
+             </configuration>
+diff --git a/guava/pom.xml b/guava/pom.xml
+index a7c256a3e2..37cb69fa6d 100644
+--- a/guava/pom.xml
++++ b/guava/pom.xml
+@@ -103,7 +103,7 @@
+           <execution>
+             <id>default-compile</id>
+             <configuration>
+-              <compilerArgs combine.children="append" combine.self="append">
++              <compilerArgs combine.children="append" combine.self="merge">
+                 <arg>-XDignore.symbol.file</arg>
+               </compilerArgs>
+             </configuration>
+diff --git a/pom.xml b/pom.xml
+index 7e372f5230..5b1efbaa8a 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -169,7 +169,7 @@
+             <target>1.8</target>
+             <encoding>UTF-8</encoding>
+             <parameters>true</parameters>
+-            <compilerArgs combine.children="override">
++            <compilerArgs combine.children="merge">
+               <!-- https://errorprone.info/docs/installation#maven -->
+               <arg>-XDcompilePolicy=simple</arg>
+               <arg>--should-stop=ifError=FLOW</arg>
+-- 
+2.52.0
+

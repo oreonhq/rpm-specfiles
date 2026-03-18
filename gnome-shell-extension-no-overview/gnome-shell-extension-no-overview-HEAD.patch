@@ -1,0 +1,30 @@
+From b0d987702a63f27a062fd2e2da5d99cc0799972e Mon Sep 17 00:00:00 2001
+From: Takao Fujiwara <tfujiwar@redhat.com>
+Date: Sun, 1 Mar 2026 10:05:47 +0900
+Subject: [PATCH] Add gnome-shell-50
+
+---
+ metadata.json | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/metadata.json b/metadata.json
+index 695d317..57cfc5d 100644
+--- a/metadata.json
++++ b/metadata.json
+@@ -5,10 +5,10 @@
+     "fthx"
+   ],
+   "shell-version": [
+-    "48",
+-    "49"
++    "49",
++    "50"
+   ],
+   "url": "https://github.com/fthx/no-overview",
+   "uuid": "no-overview@fthx",
+   "version": 999
+ }
+\ No newline at end of file
+-- 
+2.45.2
+

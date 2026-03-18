@@ -1,0 +1,103 @@
+%{!?postgresql_default:%global postgresql_default 0}
+
+%global majorname pg_repack
+%global pgversion 16
+Name:           postgresql%{pgversion}-%{majorname}
+Version:        1.5.2
+Release:        3%{?dist}
+Summary:        Reorganize tables in PostgreSQL databases without any locks
+
+License:        BSD-3-Clause
+URL:            http://reorg.github.io/%{majorname}/
+Source0:        https://github.com/reorg/%{majorname}/archive/ver_%{version}.tar.gz
+
+%if %?postgresql_default
+%global pkgname %{majorname}
+%package -n %{pkgname}
+Summary: Reorganize tables in PostgreSQL databases without any locks
+%else
+%global pkgname %name
+%endif
+
+BuildRequires: make
+BuildRequires:  gcc, openssl-devel, lz4-devel, libzstd-devel
+BuildRequires:  postgresql16-server-devel
+BuildRequires:  postgresql16-server
+BuildRequires:  postgresql16-static
+BuildRequires:  readline-devel, zlib-devel
+BuildRequires:  python3-docutils
+Requires(pre):  postgresql16-server
+
+%global precise_version %{?epoch:%epoch:}%version-%release
+Provides: %{pkgname} = %precise_version
+%if %?postgresql_default
+Provides: postgresql-%{majorname} = %precise_version
+Provides: %name = %precise_version
+%endif
+Provides: %{pkgname}%{?_isa} = %precise_version
+Provides: %{majorname}-any
+Conflicts: %{majorname}-any
+
+%description
+pg_repack is a PostgreSQL extension which lets you remove
+bloat from tables and indexes, and optionally
+restore the physical order of clustered indexes.
+Unlike CLUSTER and VACUUM FULL it works online,
+without holding an exclusive lock on the processed tables during processing.
+pg_repack is efficient to boot,
+with performance comparable to using CLUSTER directly.
+
+Please check the documentation (in the doc directory or online)
+for installation and usage instructions.
+
+%description -n %{pkgname}
+pg_repack is a PostgreSQL extension which lets you remove
+bloat from tables and indexes, and optionally
+restore the physical order of clustered indexes.
+Unlike CLUSTER and VACUUM FULL it works online,
+without holding an exclusive lock on the processed tables during processing.
+pg_repack is efficient to boot,
+with performance comparable to using CLUSTER directly.
+
+Please check the documentation (in the doc directory or online)
+for installation and usage instructions.
+
+%prep
+%setup -n %{majorname}-ver_%{version} -q
+
+
+%build
+
+make %{?_smp_mflags}
+cd doc
+make
+
+
+%install
+%make_install
+
+%files -n %{pkgname}
+%{_bindir}/%{majorname}
+%{_libdir}/pgsql/%{majorname}.so
+%if 0%{?postgresql_server_llvmjit}
+%{_libdir}/pgsql/bitcode/%{majorname}.index.bc
+%{_libdir}/pgsql/bitcode/%{majorname}/pgut/pgut-spi.bc
+%{_libdir}/pgsql/bitcode/%{majorname}/repack.bc
+%endif
+%{_datadir}/pgsql/extension/%{majorname}.control
+%{_datadir}/pgsql/extension/%{majorname}--%{version}.sql
+
+%license COPYRIGHT
+
+%doc README.rst
+%doc doc/%{majorname}.html
+%doc doc/%{majorname}.rst
+%doc doc/%{majorname}_jp.html
+%doc doc/%{majorname}_jp.rst
+%doc doc/release.html
+%doc doc/release.rst
+
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.2-3
+- Prepare for Oreon 11 (RP1)

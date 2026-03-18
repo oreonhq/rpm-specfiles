@@ -1,0 +1,4 @@
+---
+badfuncs:
+    ignore:
+        - /usr/lib64/libnss_wrapper.so.*

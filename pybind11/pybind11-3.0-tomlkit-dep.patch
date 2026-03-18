@@ -1,0 +1,30 @@
+From 7752c67790fa2722ea4564114ed5586693cd1095 Mon Sep 17 00:00:00 2001
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+Date: Fri, 20 Feb 2026 09:06:18 -0500
+Subject: [PATCH] Move tomlkit dependency to dev group
+
+tomlkit is used only in the packaging tests which are not ordinarily run as
+part of the normal workflow of a user or downstream packager.
+
+Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+---
+ pyproject.toml | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 7a12eed1ac..6a300985ad 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -57,9 +57,11 @@ pybind11 = "pybind11.share.pkgconfig"
+ test = [
+   "pytest",
+   "build",
++]
++dev = [
+   "tomlkit",
++  { include-group = "test" }
+ ]
+-dev = [{ include-group = "test" }]
+ 
+ 
+ [tool.scikit-build]

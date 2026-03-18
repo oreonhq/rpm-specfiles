@@ -1,0 +1,11 @@
+test: ./runtests.sh
+duration: 10m
+framework: beakerlib
+require:
+  - libspiro
+  - libtool
+  - gcc
+  - m4
+  - sed
+  - make
+  - rpm-build

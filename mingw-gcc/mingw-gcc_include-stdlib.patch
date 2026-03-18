@@ -1,0 +1,11 @@
+diff -rupN --no-dereference gcc-16.0.1-20260305/libgcc/config/i386/enable-execute-stack-mingw32.c gcc-16.0.1-20260305-new/libgcc/config/i386/enable-execute-stack-mingw32.c
+--- gcc-16.0.1-20260305/libgcc/config/i386/enable-execute-stack-mingw32.c	2026-03-05 13:13:29.000000000 +0100
++++ gcc-16.0.1-20260305-new/libgcc/config/i386/enable-execute-stack-mingw32.c	2026-03-07 22:54:57.989839664 +0100
+@@ -25,6 +25,7 @@
+ #define WIN32_LEAN_AND_MEAN
+ #include <stdlib.h>
+ #include <windows.h>
++#include <stdlib.h>
+ 
+ extern void __enable_execute_stack (void *);
+ 

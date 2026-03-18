@@ -1,0 +1,32 @@
+From 9bd93dc618c261d52222e713c56500abbce4113e Mon Sep 17 00:00:00 2001
+From: progier389 <progier@redhat.com>
+Date: Mon, 19 Jan 2026 17:24:40 +0100
+Subject: [PATCH] Issue 7196 - DynamicCertificates returns empty DER (#7197)
+
+Fixing a mistake done while fixing memory leaks.
+Value was freed before being added in the entry rather than after ...
+
+Issue: #7196
+
+Reviewed by: @jchapma (thanks!)
+---
+ ldap/servers/slapd/dyncerts.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ldap/servers/slapd/dyncerts.c b/ldap/servers/slapd/dyncerts.c
+index 50b92aa5f..efeaa6eb6 100644
+--- a/ldap/servers/slapd/dyncerts.c
++++ b/ldap/servers/slapd/dyncerts.c
+@@ -786,8 +786,8 @@ dyncerts_cert2entry(CERTCertificate *cert)
+     COND_STR(e, DYCATTR_TYPE, "OBJECT SIGNING CA", cert->nsCertType & NS_CERT_TYPE_OBJECT_SIGNING_CA);
+     slapi_entry_add_string(e, DYCATTR_TOKEN, PK11_GetTokenName(cert->slot));
+     secitemv(&cert->derCert, &tmpv);
+-    value_done(&tmpv);
+     slapi_entry_add_value(e, DYCATTR_CERTDER, &tmpv);
++    value_done(&tmpv);
+     tmpstr = secitem2hex(&cert->serialNumber);
+     slapi_entry_add_string(e, DYCATTR_SN, tmpstr);
+     slapi_ch_free_string(&tmpstr);
+-- 
+2.52.0
+

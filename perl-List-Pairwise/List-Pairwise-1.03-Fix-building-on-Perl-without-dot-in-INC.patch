@@ -1,0 +1,9 @@
+diff -up List-Pairwise-1.03/Makefile.PL.orig List-Pairwise-1.03/Makefile.PL
+--- List-Pairwise-1.03/Makefile.PL.orig	2017-05-17 13:08:57.451809670 +0200
++++ List-Pairwise-1.03/Makefile.PL	2017-05-17 13:09:08.730761932 +0200
+@@ -1,3 +1,5 @@
++BEGIN { push @INC, '.'; }
++
+ use inc::Module::Install;
+ 
+ name		'List-Pairwise';

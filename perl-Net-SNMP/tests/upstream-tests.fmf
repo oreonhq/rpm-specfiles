@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Net-SNMP
+require: perl-Net-SNMP-tests
+test: /usr/libexec/perl-Net-SNMP/test

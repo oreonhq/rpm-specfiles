@@ -1,0 +1,3 @@
+# udica
+
+The udica package

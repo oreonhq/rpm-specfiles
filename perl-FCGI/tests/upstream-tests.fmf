@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-FCGI
+require: perl-FCGI-tests
+test: /usr/libexec/perl-FCGI/test

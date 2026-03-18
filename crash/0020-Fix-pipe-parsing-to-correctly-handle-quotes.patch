@@ -1,0 +1,86 @@
+From 1ae0ca8dcaf651cb0f12e19852c92a91f43f8db8 Mon Sep 17 00:00:00 2001
+From: neilfsun <loyou85@gmail.com>
+Date: Wed, 11 Feb 2026 09:51:27 +0800
+Subject: [PATCH 20/23] Fix pipe parsing to correctly handle quotes
+
+When parsing command lines with pipes, the previous logic incorrectly
+handled nested quote types. The string detection used a simple
+boolean toggle that would flip state for ANY quote character (single or
+double), causing pipes inside quoted strings to be incorrectly recognized
+as command separators. Without the fix, the following commands will stuck:
+
+  crash> help -t | awk '/panic_processor/{print "p cpu_info:"$2" | grep phys_proc_id"}'
+
+Signed-off-by: neilfsun <neilfsun@tencent.com>
+Signed-off-by: Feng Sun <loyou85@gmail.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ cmdline.c | 26 +++++++++++++++-----------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
+
+diff --git a/cmdline.c b/cmdline.c
+index 030ae5600cea..7e7b81d73828 100644
+--- a/cmdline.c
++++ b/cmdline.c
+@@ -486,7 +486,7 @@ setup_redirect(int origin)
+ 	char *p, which;
+ 	int append;
+ 	int expression;
+-	int string;
++	char string;
+ 	int ret ATTRIBUTE_UNUSED;
+ 	FILE *pipe;
+ 	FILE *ofile;
+@@ -506,7 +506,7 @@ setup_redirect(int origin)
+ 		pc->redirect |= REDIRECT_SHELL_COMMAND;
+ 
+ 	expression = 0;
+-	string = FALSE;
++	string = 0;
+ 
+ 	while (*p) {
+ 		if (*p == '(')
+@@ -514,10 +514,12 @@ setup_redirect(int origin)
+ 		if (*p == ')')
+ 			expression--;
+ 
+-		if ((*p == '"') || (*p == '\''))
+-			string = !string;
++		if (*p == '\'' && string != '"')
++			string = (string == '\'') ? 0 : '\'';
++		else if (*p == '"' && string != '\'')
++			string = (string == '"') ? 0 : '"';
+ 
+-		if (!(expression || string) && 
++		if (!(expression || string) &&
+ 		    ((*p == '|') || (*p == '!'))) {
+ 			which = *p;
+ 			*p = NULLCHAR;
+@@ -674,16 +676,18 @@ int
+ multiple_pipes(char **input)
+ {
+ 	char *p, *found;
+-	int quote;
++	char quote;
+ 
+ 	found = NULL;
+-	quote = FALSE;
++	quote = 0;
+ 
+ 	for (p = *input; *p; p++) {
+-		if ((*p == '\'') || (*p == '"')) {
+-			quote = !quote;
+-			continue;
+-		} else if (quote)
++		if (*p == '\'' && quote != '"')
++			quote = (quote == '\'') ? 0 : '\'';
++		else if (*p == '"' && quote != '\'')
++			quote = (quote == '"') ? 0 : '"';
++
++		if (quote)
+ 			continue;
+ 
+ 		if (*p == '|') {
+-- 
+2.51.1
+

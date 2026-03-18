@@ -1,0 +1,3 @@
+shellsyntax:
+  ignore:
+    - /usr/bin/wnb

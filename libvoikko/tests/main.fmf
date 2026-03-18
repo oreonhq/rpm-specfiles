@@ -1,0 +1,6 @@
+require:
+- libvoikko
+- voikko-tools
+- python3-libvoikko
+test: python3 test_libvoikko.py -v
+framework: shell

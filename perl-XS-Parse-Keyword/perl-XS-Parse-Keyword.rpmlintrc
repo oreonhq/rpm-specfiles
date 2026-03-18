@@ -1,0 +1,3 @@
+addFilter('-tests\.\S*: W: no-documentation')
+# It is a devel package.
+addFilter('perl-XS-Parse-Keyword-Builder\.\S*: W: devel-file-in-non-devel-package')

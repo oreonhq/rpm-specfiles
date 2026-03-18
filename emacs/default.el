@@ -1,0 +1,13 @@
+;;; default.el --- loaded after ".emacs" on startup -*- lexical-binding: t -*-
+
+;;; Commentary:
+;;
+;; Setting `inhibit-default-init' non-nil in "~/.emacs"
+;; prevents loading of this file.  Also the "-q" option to "emacs"
+;; prevents both "~/.emacs" and this file from being loaded at startup.
+
+;;; Code:
+
+(setq-default smime-CA-directory "/etc/ssl/certs")
+
+;;; default.el ends here

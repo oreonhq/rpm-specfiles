@@ -1,0 +1,10 @@
+summary: Run osbuild integration tests
+prepare:
+    how: install
+    package:
+    - osbuild
+discover:
+    how: fmf
+    filter: tag:integration-test
+execute:
+    how: tmt

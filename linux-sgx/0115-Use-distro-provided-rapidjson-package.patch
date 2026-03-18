@@ -1,0 +1,174 @@
+From 1d4b1aba6634f4015fb84d94ea5593a776f1d30a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Daniel=20P=2E=20Berrang=C3=A9?= <berrange@redhat.com>
+Date: Mon, 26 Feb 2024 12:19:51 +0000
+Subject: [PATCH 115/131] Use distro provided rapidjson package
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Daniel P. Berrangé <berrange@redhat.com>
+---
+ QuoteGeneration/qcnl/certification_provider.cpp             | 2 +-
+ QuoteGeneration/qcnl/inc/pccs_response_object.h             | 4 ++--
+ QuoteGeneration/qcnl/inc/qcnl_config.h                      | 2 +-
+ QuoteGeneration/qcnl/linux/Makefile                         | 2 +-
+ QuoteGeneration/qcnl/linux/qcnl_config_impl.cpp             | 2 +-
+ QuoteGeneration/qcnl/qcnl_config.cpp                        | 6 +++---
+ QuoteVerification/buildenv.mk                               | 4 ++--
+ tools/PCKCertSelection/PCKCertSelectionLib/Makefile         | 4 ++--
+ .../PCKCertSelectionLib/Makefile.static_lib                 | 4 ++--
+ 9 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/QuoteGeneration/qcnl/certification_provider.cpp b/QuoteGeneration/qcnl/certification_provider.cpp
+index a08ea7e7..41e5b9d0 100644
+--- a/QuoteGeneration/qcnl/certification_provider.cpp
++++ b/QuoteGeneration/qcnl/certification_provider.cpp
+@@ -36,7 +36,7 @@
+  */
+ #include "certification_provider.h"
+ #include "certification_service.h"
+-#include "document.h"
++#include <rapidjson/document.h>
+ #include "local_cache.h"
+ #include "pck_cert_selection.h"
+ #include "qcnl_util.h"
+diff --git a/QuoteGeneration/qcnl/inc/pccs_response_object.h b/QuoteGeneration/qcnl/inc/pccs_response_object.h
+index f1f545f0..2153b6fa 100644
+--- a/QuoteGeneration/qcnl/inc/pccs_response_object.h
++++ b/QuoteGeneration/qcnl/inc/pccs_response_object.h
+@@ -37,7 +37,7 @@
+ #define PCCSRESPONSEOBJECT_H_
+ #pragma once
+ 
+-#include "document.h"
++#include <rapidjson/document.h>
+ #include "qcnl_def.h"
+ #include <sstream>
+ #include <string>
+@@ -148,4 +148,4 @@ public:
+     }
+ };
+ 
+-#endif
+\ No newline at end of file
++#endif
+diff --git a/QuoteGeneration/qcnl/inc/qcnl_config.h b/QuoteGeneration/qcnl/inc/qcnl_config.h
+index ff3c744d..71b9a996 100644
+--- a/QuoteGeneration/qcnl/inc/qcnl_config.h
++++ b/QuoteGeneration/qcnl/inc/qcnl_config.h
+@@ -38,7 +38,7 @@
+ #pragma once
+ 
+ #include "sgx_default_qcnl_wrapper.h"
+-#include "document.h"
++#include <rapidjson/document.h>
+ #include <memory>
+ #include <string>
+ 
+diff --git a/QuoteGeneration/qcnl/linux/Makefile b/QuoteGeneration/qcnl/linux/Makefile
+index f0f800ea..84636460 100644
+--- a/QuoteGeneration/qcnl/linux/Makefile
++++ b/QuoteGeneration/qcnl/linux/Makefile
+@@ -43,7 +43,7 @@ CNL_Lib_Include_Paths := -I../../quote_wrapper/common/inc       \
+                          -I../inc -I$(SGX_SDK)/include          \
+                          -I../../common/inc/internal            \
+                          -I../../pce_wrapper/inc                \
+-                         -I../../../QuoteVerification/QVL/Src/ThirdParty/rapidjson/include/rapidjson	\
++                         $(pkg-config --cflags RapidJSON) \
+                          -I../../../tools/PCKCertSelection/include
+ 
+ CNL_Lib_Common_Flags := $(COMMON_FLAGS) -g -fPIC -Wno-attributes $(CNL_Lib_Include_Paths) $(shell pkg-config --cflags libcrypto)
+diff --git a/QuoteGeneration/qcnl/linux/qcnl_config_impl.cpp b/QuoteGeneration/qcnl/linux/qcnl_config_impl.cpp
+index 7b74eae0..5f20a1e3 100644
+--- a/QuoteGeneration/qcnl/linux/qcnl_config_impl.cpp
++++ b/QuoteGeneration/qcnl/linux/qcnl_config_impl.cpp
+@@ -35,7 +35,7 @@
+  *
+  */
+ 
+-#include "istreamwrapper.h"
++#include <rapidjson/istreamwrapper.h>
+ #include "qcnl_config.h"
+ #include <algorithm>
+ #include <curl/curl.h>
+diff --git a/QuoteGeneration/qcnl/qcnl_config.cpp b/QuoteGeneration/qcnl/qcnl_config.cpp
+index 42388a08..9be8feec 100644
+--- a/QuoteGeneration/qcnl/qcnl_config.cpp
++++ b/QuoteGeneration/qcnl/qcnl_config.cpp
+@@ -36,10 +36,10 @@
+  */
+ 
+ #include "qcnl_config.h"
+-#include "error/en.h"
+-#include "error/error.h"
++#include <rapidjson/error/en.h>
++#include <rapidjson/error/error.h>
+ #include <fstream>
+-#include <istreamwrapper.h>
++#include <rapidjson/istreamwrapper.h>
+ #include <mutex>
+ #include <algorithm>
+ 
+diff --git a/QuoteVerification/buildenv.mk b/QuoteVerification/buildenv.mk
+index 8ffd99cb..0b412d13 100644
+--- a/QuoteVerification/buildenv.mk
++++ b/QuoteVerification/buildenv.mk
+@@ -47,9 +47,9 @@ else
+ COMMON_INCLUDE := -I$(SGX_SDK)/include -I$(SGX_SDK)/include/tlibc -I$(SGX_SDK)/include/libcxx -isystem$(SGXSSL_PACKAGE_PATH)/include
+ endif
+ 
+-QVL_LIB_INC := -I$(QVL_COMMON_PATH)/include -I$(QVL_COMMON_PATH)/include/Utils -I$(QVL_LIB_PATH)/include -I$(QVL_LIB_PATH)/src -I$(QVL_PARSER_PATH)/include -I$(QVL_SRC_PATH)/ThirdParty/rapidjson/include  -isystem$(DCAP_EXTERNAL_DIR)/jwt-cpp/include
++QVL_LIB_INC := -I$(QVL_COMMON_PATH)/include -I$(QVL_COMMON_PATH)/include/Utils -I$(QVL_LIB_PATH)/include -I$(QVL_LIB_PATH)/src -I$(QVL_PARSER_PATH)/include $(pkg-config --cflags RapidJSON)  -isystem$(DCAP_EXTERNAL_DIR)/jwt-cpp/include
+ 
+-QVL_PARSER_INC := -I$(QVL_COMMON_PATH)/include -I$(QVL_COMMON_PATH)/include/Utils -I$(QVL_SRC_PATH) -I$(QVL_PARSER_PATH)/include -I$(QVL_PARSER_PATH)/src -I$(QVL_LIB_PATH)/include -isystem$(QVL_SRC_PATH)/ThirdParty/rapidjson/include
++QVL_PARSER_INC := -I$(QVL_COMMON_PATH)/include -I$(QVL_COMMON_PATH)/include/Utils -I$(QVL_SRC_PATH) -I$(QVL_PARSER_PATH)/include -I$(QVL_PARSER_PATH)/src -I$(QVL_LIB_PATH)/include $(pkg-config --cflags RapidJSON)
+ 
+ QVL_LIB_FILES := $(sort $(wildcard $(QVL_LIB_PATH)/src/*.cpp) $(wildcard $(QVL_LIB_PATH)/src/*/*.cpp) $(wildcard $(QVL_LIB_PATH)/src/*/*/*.cpp) $(wildcard $(QVL_COMMON_PATH)/src/Utils/*.cpp))
+ QVL_PARSER_FILES := $(sort $(wildcard $(QVL_PARSER_PATH)/src/*.cpp) $(wildcard $(QVL_PARSER_PATH)/src/*/*.cpp))
+diff --git a/tools/PCKCertSelection/PCKCertSelectionLib/Makefile b/tools/PCKCertSelection/PCKCertSelectionLib/Makefile
+index 4b8ff9dc..eac25551 100644
+--- a/tools/PCKCertSelection/PCKCertSelectionLib/Makefile
++++ b/tools/PCKCertSelection/PCKCertSelectionLib/Makefile
+@@ -66,7 +66,7 @@ endif
+ OPENSSL_INC 		:= $(shell pkg-config --cflags libcrypto)
+ 
+ # JSON parser include dir
+-JSON_INC		:= $(QVL_DIR)/ThirdParty/rapidjson/include
++JSON_INC		:= $(pkg-config --cflags RapidJSON)
+ 
+ # QVL Attestation Parsers include directory
+ PARSERS_INC 		:= $(QVL_DIR)/AttestationParsers/include
+@@ -113,7 +113,7 @@ LIB_CPP_OBJECTS 	:= \
+ 	$(UTILS_CPP_FILES:.cpp=.o)
+ 
+ # include paths, local, parser and openssl
+-LIB_INCLUDE_PATHS	:= -I. -I$(PROJ_ROOT_DIR)/include $(OPENSSL_INC) -I$(JSON_INC) -I$(PARSERS_INC) -I$(PARSERS_COMM_INC) -I$(PARSERS_DIR) -I$(VER_DIR) -I$(PARSERS_UTIL_INC)
++LIB_INCLUDE_PATHS	:= -I. -I$(PROJ_ROOT_DIR)/include $(OPENSSL_INC) $(JSON_INC) -I$(PARSERS_INC) -I$(PARSERS_COMM_INC) -I$(PARSERS_DIR) -I$(VER_DIR) -I$(PARSERS_UTIL_INC)
+ 
+ # the library shared object name
+ LIB_NAME		:= libPCKCertSelection.so
+diff --git a/tools/PCKCertSelection/PCKCertSelectionLib/Makefile.static_lib b/tools/PCKCertSelection/PCKCertSelectionLib/Makefile.static_lib
+index 499ee94f..434fa6b9 100644
+--- a/tools/PCKCertSelection/PCKCertSelectionLib/Makefile.static_lib
++++ b/tools/PCKCertSelection/PCKCertSelectionLib/Makefile.static_lib
+@@ -69,7 +69,7 @@ OPENSSL_INC 		:= $(PROJ_ROOT_DIR)/../../prebuilt/openssl/inc
+ OPENSSL_LIB 		:= $(PROJ_ROOT_DIR)/../../prebuilt/openssl/lib/linux64
+ 
+ # JSON parser include dir
+-JSON_INC		:= $(QVL_DIR)/ThirdParty/rapidjson/include
++JSON_INC		:= $(pkg-config --cflags RapidJSON)
+ 
+ # QVL Attestation Parsers include directory
+ PARSERS_INC 		:= $(QVL_DIR)/AttestationParsers/include
+@@ -118,7 +118,7 @@ LIB_CPP_OBJECTS 	:= \
+ LIB_CPP_OBJECTS := $(addprefix $(BIN_DIR)/, $(LIB_CPP_OBJECTS))
+ 
+ # include paths, local, parser and openssl
+-LIB_INCLUDE_PATHS	:= -I. -I$(PROJ_ROOT_DIR)/include $(shell pkg-config --cflags libcrypto) -I$(JSON_INC) -I$(PARSERS_INC) -I$(PARSERS_COMM_INC) -I$(PARSERS_DIR) -I$(VER_DIR) -I$(PARSERS_UTIL_INC)
++LIB_INCLUDE_PATHS	:= -I. -I$(PROJ_ROOT_DIR)/include $(shell pkg-config --cflags libcrypto) $(JSON_INC) -I$(PARSERS_INC) -I$(PARSERS_COMM_INC) -I$(PARSERS_DIR) -I$(VER_DIR) -I$(PARSERS_UTIL_INC)
+ 
+ # the library shared object name
+ LIB_NAME		:= libPCKCertSelection.a
+-- 
+2.53.0
+

@@ -1,0 +1,3 @@
+# ksc
+
+The ksc package

@@ -1,0 +1,9 @@
+[Unit]
+Description=Amanda Backup System
+After=local-fs.target
+
+[Service]
+User=root
+Group=disk
+ExecStart=/usr/sbin/amandad -auth=krb5 amdump amindexd amidxtaped
+StandardInput=socket

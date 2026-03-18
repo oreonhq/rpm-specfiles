@@ -1,0 +1,17 @@
+.build*.log
+*.rpm
+x86_64/
+/pam_wrapper-1.0.1.tar.gz
+/pam_wrapper-1.0.2.tar.gz
+/pam_wrapper-1.0.3.tar.gz
+/pam_wrapper-1.0.7.tar.gz
+/pam_wrapper-1.1.2.tar.gz
+/pam_wrapper-1.1.2.tar.gz.asc
+/pam_wrapper-1.1.3.tar.gz
+/pam_wrapper-1.1.3.tar.gz.asc
+/pam_wrapper-1.1.4.tar.gz
+/pam_wrapper-1.1.4.tar.gz.asc
+/pam_wrapper-1.1.7.tar.gz
+/pam_wrapper-1.1.7.tar.gz.asc
+/pam_wrapper-1.1.8.tar.gz
+/pam_wrapper-1.1.8.tar.gz.asc

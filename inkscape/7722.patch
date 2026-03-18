@@ -1,0 +1,44 @@
+From 1a3b83d57e12d55ee7880a4ad4a7ff35722475f3 Mon Sep 17 00:00:00 2001
+From: Alfred Wingate <parona@protonmail.com>
+Date: Sun, 4 Jan 2026 03:09:27 +0200
+Subject: [PATCH] Include implicit headers for gcc-16
+
+New GCC release in the horizon, more implicit includes removed.
+
+This reverts some include removals in
+7c7241441d0c96b4d69e84c38c745612db8b22b7
+234ad1bf8aee61d5c5e0d8de9d057b8b41bd01c7
+
+Bug: https://bugs.gentoo.org/960304
+Signed-off-by: Alfred Wingate <parona@protonmail.com>
+---
+ src/display/control/ctrl-handle-rendering.h | 1 +
+ src/util/pool.cpp                           | 1 +
+
+diff --git a/src/display/control/ctrl-handle-rendering.h b/src/display/control/ctrl-handle-rendering.h
+index 4dbd3af82e..5c74ec691a 100644
+--- a/src/display/control/ctrl-handle-rendering.h
++++ b/src/display/control/ctrl-handle-rendering.h
+@@ -13,6 +13,7 @@
+  * Released under GNU GPL v2+, read the file 'COPYING' for more information.
+  */
+ 
++#include <cstdint>
+ #include <memory>
+ #include <compare>
+ 
+diff --git a/src/util/pool.cpp b/src/util/pool.cpp
+index 3f343c1e3e..9fcbe1c9fa 100644
+--- a/src/util/pool.cpp
++++ b/src/util/pool.cpp
+@@ -3,6 +3,7 @@
+ #include "pool.h"
+ 
+ #include <cassert>
++#include <cstdint>
+ #include <utility>
+ 
+ namespace Inkscape::Util {
+-- 
+GitLab
+

@@ -1,0 +1,8 @@
+/.build*.log
+/clog
+/ocaml-*.tar.bz2
+/ocaml-*.tar.gz
+/ocaml-*.tar.xz
+/ocaml-*-refman.pdf
+/4.11.0.tar.gz
+/4.13.1.tar.gz

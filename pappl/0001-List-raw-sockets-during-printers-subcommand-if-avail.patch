@@ -1,0 +1,102 @@
+From 539d471a9a484fa8f6bc894064704adae7829d34 Mon Sep 17 00:00:00 2001
+From: Zdenek Dohnal <zdohnal@redhat.com>
+Date: Tue, 13 Feb 2024 17:52:27 +0100
+Subject: [PATCH] List raw sockets during `printers` subcommand if available
+
+Provide a way how to show path to raw socket via CLI without 3rd part
+tools.
+---
+ pappl/mainloop-subcommands.c | 47 ++++++++++++++++++++++++++++++++++--
+ pappl/printer-ipp.c          | 11 +++++++++
+ 2 files changed, 56 insertions(+), 2 deletions(-)
+
+diff --git a/pappl/mainloop-subcommands.c b/pappl/mainloop-subcommands.c
+index 9df19b8..ee581b7 100644
+--- a/pappl/mainloop-subcommands.c
++++ b/pappl/mainloop-subcommands.c
+@@ -1198,6 +1198,11 @@ _papplMainloopShowPrinters(
+   ipp_t		*request,		// IPP request
+ 		*response;		// IPP response
+   ipp_attribute_t *attr;		// Current attribute
++  ipp_tag_t	value_tag;		// Value tag of IPP attribute
++  const char	*printer_name,		// Printer name
++		*printer_uri,		// Printer URI
++		*attr_name,		// Attribute name
++		*socket_uri;		// Socket URI
+ 
+ 
+   (void)num_options;
+@@ -1213,8 +1218,46 @@ _papplMainloopShowPrinters(
+ 
+   response = cupsDoRequest(http, request, "/ipp/system");
+ 
+-  for (attr = ippFindAttribute(response, "printer-name", IPP_TAG_NAME); attr; attr = ippFindNextAttribute(response, "printer-name", IPP_TAG_NAME))
+-    puts(ippGetString(attr, 0, NULL));
++  for (attr = ippFirstAttribute(response); attr; attr = ippNextAttribute(response))
++  {
++    while (attr != NULL && ippGetGroupTag(attr) != IPP_TAG_PRINTER)
++      attr = ippNextAttribute(response);
++
++    if (attr == NULL)
++      break;
++
++    value_tag = IPP_TAG_CUPS_INVALID;
++    printer_name = NULL;
++    printer_uri = NULL;
++    attr_name = NULL;
++    socket_uri = NULL;
++
++    for (; attr && ippGetGroupTag(attr) == IPP_TAG_PRINTER; attr = ippNextAttribute(response))
++    {
++      value_tag = ippGetValueTag(attr);
++
++      if (value_tag != IPP_TAG_NAME &&
++	  value_tag != IPP_TAG_URI)
++	continue;
++
++      attr_name = ippGetName(attr);
++
++      if (value_tag == IPP_TAG_NAME && !strcmp(attr_name, "printer-name"))
++	printer_name = ippGetString(attr, 0, NULL);
++
++      if (value_tag == IPP_TAG_URI && !strcmp(attr_name, "smi55357-printer-socket-uri-supported"))
++	socket_uri = ippGetString(attr, 0, NULL);
++
++      if (value_tag == IPP_TAG_URI && !strcmp(attr_name, "printer-uri-supported"))
++	printer_uri = ippGetString(attr, 0, NULL);
++    }
++
++    if (printer_name && printer_uri)
++      printf("%s - printer - %s\n", printer_name, printer_uri);
++
++    if (printer_name && socket_uri)
++      printf("%s - raw socket - %s\n", printer_name, socket_uri);
++  }
+ 
+   ippDelete(response);
+   httpClose(http);
+diff --git a/pappl/printer-ipp.c b/pappl/printer-ipp.c
+index 551eddc..0d473aa 100644
+--- a/pappl/printer-ipp.c
++++ b/pappl/printer-ipp.c
+@@ -626,6 +626,17 @@ _papplPrinterCopyAttributesNoLock(
+       ippAddStrings(client->response, IPP_TAG_PRINTER, IPP_CONST_TAG(IPP_TAG_KEYWORD), "uri-authentication-supported", 2, NULL, uri_authentication_none);
+     }
+   }
++
++  if (printer->raw_active)
++  {
++    if (!ra || cupsArrayFind(ra, "smi55357-printer-socket-uri-supported"))
++    {
++      char socket_uri[1024];            // Buffer for socket URI
++
++      httpAssembleURI(HTTP_URI_CODING_ALL, socket_uri, sizeof(socket_uri), "socket", NULL, client->host_field, 9099 + printer->printer_id, NULL);
++      ippAddString(client->response, IPP_TAG_PRINTER, IPP_TAG_URI, "smi55357-printer-socket-uri-supported", NULL, socket_uri);
++    }
++  }
+ }
+ 
+ 
+-- 
+2.43.0
+

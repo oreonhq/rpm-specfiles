@@ -1,0 +1,12 @@
+[Unit]
+Description=Wait for dhcpcd to get online
+Requisite=dhcpcd.service
+After=dhcpcd.service
+Before=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=dhcpcd-online
+
+[Install]
+WantedBy=network-online.target

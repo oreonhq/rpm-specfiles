@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-bignum
+require: perl-bignum-tests
+test: /usr/libexec/perl-bignum/test

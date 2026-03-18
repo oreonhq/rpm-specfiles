@@ -1,0 +1,744 @@
+diff -up sblim-gather-2.2.9/comms/mcclt_unix.c.orig sblim-gather-2.2.9/comms/mcclt_unix.c
+--- sblim-gather-2.2.9/comms/mcclt_unix.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/comms/mcclt_unix.c	2021-09-15 10:46:48.289977660 +0200
+@@ -22,6 +22,7 @@
+ 
+ #include <sys/socket.h>
+ #include <sys/un.h>
++#include <sys/uio.h>
+ #include <mtrace.h>
+ #include <merrno.h>
+ #include <stdio.h>
+@@ -73,7 +74,7 @@ int mcc_init(const char *commid)
+ 	m_setstrerror("mcc_init could not complete socket name %s",commid);
+ 	M_TRACE(MTRACE_ERROR,MTRACE_COMM,
+ 		("mcc_init could not complete socket name %s"));
+-        /* TODO do we need a mutex unlock here? */
++	pthread_mutex_unlock(&sockname_mutex);
+ 	return -1;
+       }
+       if (!_sigpipe_h_installed) {
+@@ -149,7 +150,8 @@ static int _mcc_connect(int commhandle)
+       return -1;
+     }
+     sa.sun_family = AF_UNIX;
+-    strcpy(sa.sun_path,sockname[commhandle].sn_name);
++    strncpy(sa.sun_path,sockname[commhandle].sn_name,sizeof(sa.sun_path)-1);
++    sa.sun_path[sizeof(sa.sun_path)-1] = '\0';
+     sockname[commhandle].sn_connects ++;
+     connhandle=connect(sockname[commhandle].sn_handle,
+ 		       (struct sockaddr*)&sa,
+diff -up sblim-gather-2.2.9/comms/mcserv_unix.c.orig sblim-gather-2.2.9/comms/mcserv_unix.c
+--- sblim-gather-2.2.9/comms/mcserv_unix.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/comms/mcserv_unix.c	2021-09-15 10:46:48.289977660 +0200
+@@ -25,6 +25,7 @@
+ #include <sys/un.h>
+ #include <sys/file.h>
+ #include <sys/poll.h>
++#include <sys/uio.h>
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <unistd.h>
+@@ -63,7 +64,7 @@ int mcs_init(const char *commid)
+       if (snprintf(lockname,PATH_MAX+2,MC_LOCKFILE,commid) > 
+ 	  PATH_MAX) {
+ 	m_log(M_ERROR,M_QUIET,
+-	      "mcs_init: could not complete lockfile name %s\n"
++	      "mcs_init: could not complete lockfile name %s\n",
+ 	      MC_LOCKFILE);
+ 	return -1;
+       }
+@@ -86,13 +87,14 @@ int mcs_init(const char *commid)
+     if (snprintf(sockname,PATH_MAX+2,MC_SOCKET,commid) > 
+ 	PATH_MAX) {
+ 	m_log(M_ERROR,M_QUIET,
+-	      "mcs_init: could not complete socket name %s\n"
++	      "mcs_init: could not complete socket name %s\n",
+ 	      MC_SOCKET);
+ 	return -1;
+     }
+     unlink(sockname);
+     sa.sun_family=AF_UNIX;
+-    strcpy(sa.sun_path,sockname);
++    strncpy(sa.sun_path,sockname,sizeof(sa.sun_path)-1);
++    sa.sun_path[sizeof(sa.sun_path)-1] = '\0';
+     if (bind(commhandle,(struct sockaddr*)&sa,sizeof(sa))) {
+       m_log(M_ERROR,M_QUIET,
+ 	    "mcs_init: could not bind socket %s, error string %s\n",
+@@ -140,7 +142,6 @@ int mcs_accept(MC_REQHDR *hdr)
+     if (hdr->mc_handle == -1) {
+       m_log(M_ERROR,M_QUIET,
+ 	    "mcs_accept: failed to accept server socket, error string %s\n",
+-	    sockname,
+ 	    strerror(errno));
+       return -1;
+     } 
+@@ -177,7 +178,6 @@ int mcs_getrequest(MC_REQHDR *hdr, void
+ 	  if (readlen <= 0) {
+ 	    m_log(M_ERROR,M_QUIET,
+ 		  "mcs_getrequest: failed to read header, error string %s\n",
+-		  sockname,
+ 		  strerror(errno));
+ 	    break;
+ 	  }
+diff -up sblim-gather-2.2.9/comms/rcctest.c.orig sblim-gather-2.2.9/comms/rcctest.c
+--- sblim-gather-2.2.9/comms/rcctest.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/comms/rcctest.c	2021-09-15 10:46:48.290977675 +0200
+@@ -32,7 +32,6 @@ int main(int argc, char *argv[])
+ {
+   char   hostname[256];
+   char   buf[500];
+-  size_t buflen;
+   time_t start, end;
+   int    port = 6363;
+   int    i    = 0;
+@@ -58,7 +57,6 @@ int main(int argc, char *argv[])
+       rcc_request("",0);
+       break;
+     } else {
+-      buflen=sizeof(buf);
+       if (rcc_request(buf,strlen(buf)+1)==0) {
+ 	fprintf(stderr,"send : %s\n",buf);
+       }
+diff -up sblim-gather-2.2.9/comms/rcstest.c.orig sblim-gather-2.2.9/comms/rcstest.c
+--- sblim-gather-2.2.9/comms/rcstest.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/comms/rcstest.c	2021-09-15 10:46:48.290977675 +0200
+@@ -51,6 +51,7 @@ static void * _get_request(void *hdl)
+       fprintf(stderr,"--- time out on socket %i\n",(int)rhdl);
+       break;
+     }
++    buf[buflen-1] = '\0';
+     fprintf(stderr,"---- received on socket %i: %s\n",(int)rhdl,buf);
+   }
+ 
+@@ -88,9 +89,12 @@ int main()
+   while (1) {
+     pthread_mutex_lock(&connect_mutex);
+     if (hdl == -1) {
+-      if (rcs_accept(&hdl) == -1) { return -1;}
++      if (rcs_accept(&hdl) == -1) {
++         pthread_mutex_unlock(&connect_mutex);
++         return -1;
++      }
+     }
+-    for(i=0;i<MAXCONN;i++) { 
++    for(i=0;i<(MAXCONN-1);i++) { 
+       if (clthdl[i] <= 0) {
+ 	clthdl[i] = hdl;
+ 	break;
+@@ -99,6 +103,7 @@ int main()
+     thdl = hdl;
+     if (pthread_create(&thread_id[i],NULL,_get_request,(void *)thdl) != 0) {
+       perror("create thread");
++      pthread_mutex_unlock(&connect_mutex);
+       return -1;
+     }
+     hdl = -1;
+diff -up sblim-gather-2.2.9/gather.c.orig sblim-gather-2.2.9/gather.c
+--- sblim-gather-2.2.9/gather.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/gather.c	2021-09-15 10:46:48.290977675 +0200
+@@ -194,6 +194,8 @@ int metricplugin_add(const char *pluginn
+   int status = -1;
+   if (metriclist && pluginname && pl_find(pluginname)==NULL) {
+     mp = malloc(sizeof(MetricPlugin));
++    if (mp == NULL)
++      return -1;
+     /* load plugin */
+     mp->mpName = strdup(pluginname);
+     mp->mpRegister=MPR_IdForString;
+@@ -340,7 +342,9 @@ static void pl_unlink(MetricPlugin *mp)
+ {
+   PluginList *p, *q;
+   p = pluginhead;
+-  if (p && p->plugin==mp) {
++  if (p == NULL)
++    return;
++  if (p->plugin==mp) {
+     pluginhead=p->next;
+     free(p);
+     pluginnum-=1;
+diff -up sblim-gather-2.2.9/missing-providers/file_handler.c.orig sblim-gather-2.2.9/missing-providers/file_handler.c
+--- sblim-gather-2.2.9/missing-providers/file_handler.c.orig	2013-02-27 12:38:07.000000000 +0100
++++ sblim-gather-2.2.9/missing-providers/file_handler.c	2021-09-15 10:46:48.290977675 +0200
+@@ -270,8 +270,8 @@ int clear_rp(linked_list* ll)
+     free(rl);
+     rl = rn;
+   }
+-  return 0;
+   free(ll);
++  return 0;
+ }
+ 
+ int clear_mvd(linked_list* ll)
+diff -up sblim-gather-2.2.9/mlist.c.orig sblim-gather-2.2.9/mlist.c
+--- sblim-gather-2.2.9/mlist.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/mlist.c	2021-09-15 10:46:48.291977690 +0200
+@@ -182,6 +182,7 @@ int ML_Relocate(ML_Head mlhead, MetricBl
+ 	  mcursor=mcursor->nextMetric;
+ 	}
+ 	if (!mcursor) {
++ 	  pthread_mutex_unlock(&(mh->mutex));
+ 	  return -1; /* error - could not locate metric block in list */
+ 	} else {
+ 	  mpredecessor = mcursor;
+diff -up sblim-gather-2.2.9/mreg.c.orig sblim-gather-2.2.9/mreg.c
+--- sblim-gather-2.2.9/mreg.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/mreg.c	2021-09-15 10:46:48.291977690 +0200
+@@ -160,7 +160,7 @@ static void Grow()
+   if (MR_MaxEntries == MR_NumEntries) {
+     MR_MaxEntries += INCREASE_BY;
+     MR_Entries = realloc(MR_Entries,MR_MaxEntries*sizeof(MetricEntry));
+-    memset(MR_Entries+MR_MaxEntries-INCREASE_BY,0,INCREASE_BY);
++    memset(MR_Entries+MR_MaxEntries-INCREASE_BY,0,INCREASE_BY*sizeof(MetricEntry));
+   }
+ }
+ 
+diff -up sblim-gather-2.2.9/plugin/cimplugKvm.c.orig sblim-gather-2.2.9/plugin/cimplugKvm.c
+--- sblim-gather-2.2.9/plugin/cimplugKvm.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/plugin/cimplugKvm.c	2021-09-15 10:46:48.291977690 +0200
+@@ -46,20 +46,6 @@ CMPIObjectPath *COP4VALID(CMPIBroker * b
+ int VALID4COP(CMPIObjectPath * cop, char *id, size_t idlen,
+ 	      char *systemid, size_t systemidlen)
+ {
+-    CMPIData data;
+-    char *str;
+-
+-    return -1;
+-    if (cop && id && systemid) {
+-	data = CMGetKey(cop, "Name", NULL);
+-	if (data.type == CMPI_string && data.value.string) {
+-	    str = CMGetCharPtr(data.value.string);
+-	    if (strlen(id) < idlen) {
+-		strcpy(id, str);
+-		return 0;
+-	    }
+-	}
+-    }
+     // systemid is not a key property of KVM_ComputerSystem
+     return -1;
+ }
+diff -up sblim-gather-2.2.9/plugin/cimplugLocalFileSystem.c.orig sblim-gather-2.2.9/plugin/cimplugLocalFileSystem.c
+--- sblim-gather-2.2.9/plugin/cimplugLocalFileSystem.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/plugin/cimplugLocalFileSystem.c	2021-09-15 10:46:48.291977690 +0200
+@@ -28,14 +28,15 @@ CMPIObjectPath* COP4VALID (CMPIBroker *b
+ {
+   CMPIObjectPath *cop; 
+   char *fsclass;
+-  char  fsname[300];
++  char  fsname[301];
+   char *fstype, *idx2;
+   
+   if (id==NULL || systemid==NULL) {
+     return NULL;
+   }
+ 
+-  strncpy(fsname,id,sizeof(fsname));
++  strncpy(fsname,id,sizeof(fsname)-1);
++  fsname[sizeof(fsname)-1] = '\0';
+   fstype = strchr(fsname,'(');
+   idx2 = strchr(fsname,')');
+   if (fstype && idx2 && fstype < idx2) {
+diff -up sblim-gather-2.2.9/plugin/cimplugXen.c.orig sblim-gather-2.2.9/plugin/cimplugXen.c
+--- sblim-gather-2.2.9/plugin/cimplugXen.c.orig	2014-10-09 23:29:09.000000000 +0200
++++ sblim-gather-2.2.9/plugin/cimplugXen.c	2021-09-15 10:46:48.291977690 +0200
+@@ -45,20 +45,6 @@ CMPIObjectPath *COP4VALID(CMPIBroker * b
+ int VALID4COP(CMPIObjectPath * cop, char *id, size_t idlen,
+ 	      char *systemid, size_t systemidlen)
+ {
+-    CMPIData data;
+-    char *str;
+-
+-    return -1;
+-    if (cop && id && systemid) {
+-	data = CMGetKey(cop, "Name", NULL);
+-	if (data.type == CMPI_string && data.value.string) {
+-	    str = CMGetCharPtr(data.value.string);
+-	    if (strlen(id) < idlen) {
+-		strcpy(id, str);
+-		return 0;
+-	    }
+-	}
+-    }
+     // systemid is not a key property of Xen_ComputerSystem
+     return -1;
+ }
+diff -up sblim-gather-2.2.9/plugin/metricIPProtocolEndpoint.c.orig sblim-gather-2.2.9/plugin/metricIPProtocolEndpoint.c
+--- sblim-gather-2.2.9/plugin/metricIPProtocolEndpoint.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metricIPProtocolEndpoint.c	2021-09-15 10:46:48.291977690 +0200
+@@ -172,7 +172,10 @@ int metricRetrBytesSubmitted( int mid,
+ 	}
+        	fclose(fhd);
+       }
+-      else { return -1; }
++      else {
++        fclose(fhd);
++        return -1;
++      }
+     }
+     return i;
+   }
+diff -up sblim-gather-2.2.9/plugin/metricLocalFileSystem.c.orig sblim-gather-2.2.9/plugin/metricLocalFileSystem.c
+--- sblim-gather-2.2.9/plugin/metricLocalFileSystem.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metricLocalFileSystem.c	2021-09-15 10:46:48.291977690 +0200
+@@ -172,6 +172,8 @@ int metricRetrAvSpace( int mid,
+       ptr_dir = _enum_fsdir + (i*LFSPATHMAX);
+       
+       fs = (struct statfs *) malloc (sizeof (struct statfs));
++      if (fs == NULL)
++        return -1;
+       memset(fs, 0, sizeof (struct statfs) );
+       if (statfs(ptr_dir, fs) == 0) {
+ 	size = ((unsigned long long)fs->f_bavail) *
+@@ -240,6 +242,8 @@ int metricRetrAvSpacePerc( int mid,
+       ptr_dir = _enum_fsdir + (i*LFSPATHMAX);
+       size = 0;
+       fs = (struct statfs *) malloc (sizeof (struct statfs));
++      if (fs == NULL)
++        return -1;
+       memset(fs, 0, sizeof (struct statfs) );
+       if (statfs(ptr_dir, fs) == 0) {
+ 	if( fs->f_blocks != 0 ) {
+@@ -292,7 +296,10 @@ int enum_all_fs() {
+     
+     if( (fhd = setmntent( ETC_MTAB ,"r")) == NULL ) {
+       fhd = setmntent( PROC_MOUNTS ,"r");
+-      if ( fhd == NULL ) { return -2; }
++      if ( fhd == NULL ) {
++        pthread_mutex_unlock(&mutex);
++        return -2;
++      }
+     }
+ 
+     _enum_fssize = 1;
+diff -up sblim-gather-2.2.9/plugin/metricNetworkPort.c.orig sblim-gather-2.2.9/plugin/metricNetworkPort.c
+--- sblim-gather-2.2.9/plugin/metricNetworkPort.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metricNetworkPort.c	2021-09-15 10:46:48.292977705 +0200
+@@ -169,7 +169,10 @@ int metricRetrBytesSubmitted( int mid,
+ 	}
+        	fclose(fhd);
+       }
+-      else { return -1; }
++      else {
++        fclose(fhd);
++        return -1;
++      }
+     }
+     return i;
+   }
+diff -up sblim-gather-2.2.9/plugin/metricOperatingSystem.c.orig sblim-gather-2.2.9/plugin/metricOperatingSystem.c
+--- sblim-gather-2.2.9/plugin/metricOperatingSystem.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metricOperatingSystem.c	2021-09-15 10:46:48.292977705 +0200
+@@ -231,9 +231,14 @@ int metricRetrNumOfUser( int mid,
+       memset(str,0,sizeof(str));
+ 
+       fd_stdout = dup( fileno(stdout) );
++      if (fd_stdout == -1) { return -1; }
+       dup2( fd_out[1], fileno(stdout) );
+ 
+       fd_stderr = dup( fileno(stderr) );
++      if (fd_stderr == -1) {
++        close(fd_stdout);
++        return -1;
++      }
+       dup2( fd_err[1], fileno(stderr) );
+ 
+       rc = system("who -u | wc -l");
+@@ -304,9 +309,14 @@ int metricRetrNumOfProc( int mid,
+ 		memset(str, 0, sizeof(str));
+ 
+         fd_stdout = dup( fileno(stdout) );
++        if (fd_stdout == -1) { return -1; }
+         dup2( fd_out[1], fileno(stdout) );
+ 
+         fd_stderr = dup( fileno(stderr) );
++        if (fd_stderr == -1) {
++          close(fd_stdout);
++          return -1;
++        }
+         dup2( fd_err[1], fileno(stderr) );
+ 
+         rc = system("ps -ef | wc -l");
+@@ -471,6 +481,8 @@ int metricRetrMemorySize( int mid,
+     else { return -1; }
+ 
+     str = calloc(1, ((4*ULL_CHAR_MAX)+4) );
++    if (str == NULL)
++      return -1;
+     sprintf( str,"%lld:%lld:%lld:%lld",
+ 	     totalPhysMem,freePhysMem,totalSwapMem,freeSwapMem);
+     
+diff -up sblim-gather-2.2.9/plugin/metricProcessor.c.orig sblim-gather-2.2.9/plugin/metricProcessor.c
+--- sblim-gather-2.2.9/plugin/metricProcessor.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metricProcessor.c	2021-09-15 10:46:48.292977705 +0200
+@@ -204,9 +204,14 @@ int enum_all_proc() {
+   if( pipe(fd_out)==0 && pipe(fd_err)==0 ) {
+ 
+     fd_stdout = dup( fileno(stdout) );
++    if (fd_stdout == -1) { return -1; }
+     dup2( fd_out[1], fileno(stdout) );
+ 
+     fd_stderr = dup( fileno(stderr) );
++    if (fd_stderr == -1) {
++      close(fd_stdout);
++      return -1;
++    }
+     dup2( fd_err[1], fileno(stderr) );
+ 
+     cmd = calloc(1,(strlen(CPUINFO)+46));
+diff -up sblim-gather-2.2.9/plugin/metricStorage.c.orig sblim-gather-2.2.9/plugin/metricStorage.c
+--- sblim-gather-2.2.9/plugin/metricStorage.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metricStorage.c	2021-09-15 10:46:48.292977705 +0200
+@@ -141,8 +141,8 @@ int metricRetrBlockStorage( int mid, Met
+ 	  fd = open(dev, O_RDONLY | O_NONBLOCK);
+           if (fd > -1) {
+ 	  	ioctl(fd, BLKGETSIZE64, &capacity);
++	  	close(fd);
+ 	  }
+-	  close(fd);
+ 	  
+ 	  read = read / 2;   /* convert form sectors to kb */
+ 	  write = write / 2; /* 512 bytes/sector, 1kb/1024 bytes = 1kb/2 sectors */
+@@ -170,7 +170,10 @@ int metricRetrBlockStorage( int mid, Met
+ 	}
+        	fclose(fhd);
+       }
+-      else { return -1; }
++      else {
++        fclose(fhd);
++        return -1;
++      }
+     }
+     return i;
+   }
+diff -up sblim-gather-2.2.9/plugin/metricUnixProcess.c.orig sblim-gather-2.2.9/plugin/metricUnixProcess.c
+--- sblim-gather-2.2.9/plugin/metricUnixProcess.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metricUnixProcess.c	2021-09-15 10:46:48.293977720 +0200
+@@ -313,6 +313,7 @@ int metricRetrResSetSize( int mid,
+       if(_enum_pid) free(_enum_pid);
+       return _enum_size;
+     }
++    if(_enum_pid) free(_enum_pid);
+   }
+   return -1;
+ }
+@@ -378,6 +379,7 @@ int metricRetrPageInCounter( int mid,
+       if(_enum_pid) free(_enum_pid);
+       return _enum_size;
+     }
++    if(_enum_pid) free(_enum_pid);
+   }
+   return -1;
+ }
+@@ -445,6 +447,7 @@ int metricRetrPageOutCounter( int mid,
+       if(_enum_pid) free(_enum_pid);
+       return _enum_size;
+     }
++    if(_enum_pid) free(_enum_pid);
+   }
+   return -1;
+ }
+@@ -509,6 +512,7 @@ int metricRetrVirtualSize( int mid,
+       if(_enum_pid) free(_enum_pid);
+       return _enum_size;
+     }
++    if(_enum_pid) free(_enum_pid);
+   }
+   return -1;
+ }
+@@ -574,6 +578,7 @@ int metricRetrSharedSize( int mid,
+       if(_enum_pid) free(_enum_pid);
+       return _enum_size;
+     }
++    if(_enum_pid) free(_enum_pid);
+   }
+   return -1;
+ }
+diff -up sblim-gather-2.2.9/plugin/metricVirt.c.orig sblim-gather-2.2.9/plugin/metricVirt.c
+--- sblim-gather-2.2.9/plugin/metricVirt.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metricVirt.c	2021-09-15 10:46:48.293977720 +0200
+@@ -1098,6 +1098,8 @@ int virtMetricRetrVirtualBlockIOStats(in
+                     strcpy(mv->mvResource, resource);
+                     mret(mv);
+                 }
++
++                free(resource);
+                 
+                 disk = disk->next;
+             }
+diff -up sblim-gather-2.2.9/plugin/repositoryUnixProcess.c.orig sblim-gather-2.2.9/plugin/repositoryUnixProcess.c
+--- sblim-gather-2.2.9/plugin/repositoryUnixProcess.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/repositoryUnixProcess.c	2021-09-15 10:46:48.293977720 +0200
+@@ -1289,7 +1289,8 @@ unsigned long long os_getCPUIdleTime( ch
+   if( (hlp = strrchr(data, ':')) != NULL ) {
+     hlp++;
+     memset(time,0,sizeof(time));
+-    strcpy(time, hlp);
++    strncpy(time, hlp, sizeof(time)-1);
++    time[sizeof(time)-1] = '\0';
+     val = strtoll(time,(char**)NULL,10)*10;
+   }
+ 
+diff -up sblim-gather-2.2.9/provider/OSBase_MetricIndicationProvider.c.orig sblim-gather-2.2.9/provider/OSBase_MetricIndicationProvider.c
+--- sblim-gather-2.2.9/provider/OSBase_MetricIndicationProvider.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/provider/OSBase_MetricIndicationProvider.c	2021-09-15 10:46:48.293977720 +0200
+@@ -182,8 +182,11 @@ CMPIStatus OSBase_MetricIndicationProvid
+     } else {
+       /* was not freed in addListenFilter */
+       free(sr);
++      sr = NULL;
+     }
+   }
++  if (sr)
++    free(sr);
+   if( _debug )
+     fprintf(stderr,"*** could not activate filter for %s\n", _ClassName);
+   CMReturn(CMPI_RC_ERR_FAILED);
+@@ -364,10 +367,13 @@ static int removeListenFilter(const CMPI
+ 	free (lf->lf_namespace);
+       }
+       free(lf);
++      lf = NULL;
+       state=0;
+     }
+-    prev = lf;
+-    lf = lf->lf_next;
++    if (lf) {
++      prev = lf;
++      lf = lf->lf_next;
++    }
+   }
+   pthread_mutex_unlock(&listenMutex);
+   return state;
+diff -up sblim-gather-2.2.9/provider/OSBase_MetricLifeCycleProvider.c.orig sblim-gather-2.2.9/provider/OSBase_MetricLifeCycleProvider.c
+--- sblim-gather-2.2.9/provider/OSBase_MetricLifeCycleProvider.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/provider/OSBase_MetricLifeCycleProvider.c	2021-09-15 10:46:48.294977735 +0200
+@@ -183,8 +183,11 @@ CMPIStatus OSBase_MetricLifeCycleProvide
+     } else {
+       /* was not freed in addListenFilter */
+       free(sr);
++      sr = NULL;
+     }
+   }
++  if (sr)
++    free(sr);
+   if( _debug )
+     fprintf(stderr,"*** could not activate filter for %s\n", _ClassName);
+   CMReturn(CMPI_RC_ERR_FAILED);
+@@ -384,10 +387,13 @@ static int removeListenFilter(const CMPI
+ 	free (lf->lf_namespace);
+       }
+       free(lf);
++      lf = NULL;
+       state=0;
+     }
+-    prev = lf;
+-    lf = lf->lf_next;
++    if (lf) {
++      prev = lf;
++      lf = lf->lf_next;
++    }
+   }
+   pthread_mutex_unlock(&listenMutex);
+   return state;
+diff -up sblim-gather-2.2.9/provider/OSBase_MetricUtil.c.orig sblim-gather-2.2.9/provider/OSBase_MetricUtil.c
+--- sblim-gather-2.2.9/provider/OSBase_MetricUtil.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/provider/OSBase_MetricUtil.c	2021-09-15 10:46:48.294977735 +0200
+@@ -133,6 +133,7 @@ static int refreshMetricValueList(const
+   /* assume lock is already done */
+   _OSBASE_TRACE(4,("refreshMetricValueList() - namespace %s\n",namesp));
+   removeValueList();
++  memset(&valdata, 0, sizeof(CMPIData));
+   while (en && CMHasNext(en,NULL)) {
+     data = CMGetNext(en,NULL);
+     if (data.value.inst) {
+@@ -343,7 +344,8 @@ char * makeMetricDefIdFromCache(const CM
+   MReadLock(&MdefLock);
+   while(metricDefinitionList && metricDefinitionList[i].mdef_metricname) {
+     if (metricDefinitionList[i].mdef_metricid==id) {
+-      strcpy(name,metricDefinitionList[i].mdef_metricname);
++      strncpy(name,metricDefinitionList[i].mdef_metricname,sizeof(name)-1);
++      name[sizeof(name)-1] = '\0';
+       MReadUnlock(&MdefLock);
+       return makeMetricDefId(defid,name,id);
+     }
+@@ -365,7 +367,8 @@ char * makeMetricValueIdFromCache(const
+   MReadLock(&MdefLock);
+   while(metricDefinitionList && metricDefinitionList[i].mdef_metricname) {
+     if (metricDefinitionList[i].mdef_metricid==id) {
+-      strcpy(name,metricDefinitionList[i].mdef_metricname);
++      strncpy(name,metricDefinitionList[i].mdef_metricname,sizeof(name)-1);
++      name[sizeof(name)-1] = '\0';
+       MReadUnlock(&MdefLock);
+       return makeMetricValueId(valid,name,id,resource,systemid,timestamp);
+     }
+@@ -605,7 +608,8 @@ int getPluginNamesForValueClass(const CM
+       while(metricDefinitionList && metricDefinitionList[j].mdef_metricname) {
+ 	if (strcasecmp(metricValueList[i].mdef_classname,
+ 		   metricDefinitionList[j].mdef_classname)==0) {
+-	  strcpy(pluginname, metricDefinitionList[j].mdef_pluginname);
++	  strncpy(pluginname, metricDefinitionList[j].mdef_pluginname, sizeof(pluginname)-1);
++	  pluginname[sizeof(pluginname)-1] = '\0';
+ 	  break;
+ 	}
+ 	j++;
+@@ -630,7 +634,8 @@ int getPluginNamesForValueClass(const CM
+     while(metricDefinitionList && metricDefinitionList[i].mdef_metricname) {
+       if (strcmp(pluginname,metricDefinitionList[i].mdef_pluginname)) {
+ 	/* a new plugin name found -- add to list */
+-	strcpy(pluginname,metricDefinitionList[i].mdef_pluginname);
++	strncpy(pluginname,metricDefinitionList[i].mdef_pluginname,sizeof(pluginname)-1);
++	pluginname[sizeof(pluginname)-1] = '\0';
+ 	*pluginnames=realloc(*pluginnames, sizeof(char*)*(totalnum+2));
+ 	(*pluginnames)[totalnum]=strdup(pluginname);
+ 	(*pluginnames)[totalnum+1]=NULL;
+@@ -839,7 +844,8 @@ CMPIString * val2string(const CMPIBroker
+     sprintf(valbuf,"%f",*(double*)val->viValue);
+     break;
+   case MD_STRING:
+-    strcpy(valbuf,val->viValue);
++    strncpy(valbuf,val->viValue,sizeof(valbuf)-1);
++    valbuf[sizeof(valbuf)-1] = '\0';
+     break;
+   default:
+     sprintf(valbuf,"datatype %0x not supported",datatype);
+diff -up sblim-gather-2.2.9/repos.c.orig sblim-gather-2.2.9/repos.c
+--- sblim-gather-2.2.9/repos.c.orig	2021-09-15 10:46:48.284977584 +0200
++++ sblim-gather-2.2.9/repos.c	2021-09-15 10:46:48.294977735 +0200
+@@ -126,7 +126,7 @@ int repos_sessiontoken(RepositoryToken *
+   if (rt) {
+     rt->rt_size=htonl(sizeof(RepositoryToken));
+     rt->rt1 = 1234567;
+-    rt->rt1 = 7654321;
++    rt->rt2 = 7654321;
+     return 0;
+   }
+   return -1;
+@@ -170,6 +170,8 @@ int reposplugin_add(const char *pluginna
+         return 0;
+     }
+     rp = malloc(sizeof(RepositoryPlugin));
++    if (rp == NULL)
++      return -1;
+     /* load plugin */
+     rp->rpName = strdup(pluginname);
+     rp->rpRegister=RPR_IdForString;
+@@ -754,7 +756,9 @@ static void pl_unlink(RepositoryPlugin *
+ {
+   PluginList *p, *q;
+   p = pluginhead;
+-  if (p && p->plugin==rp) {
++  if (p == NULL)
++    return;
++  if (p->plugin==rp) {
+     pluginhead=p->next;
+     free(p);
+     pluginnum-=1;
+diff -up sblim-gather-2.2.9/reposd.c.orig sblim-gather-2.2.9/reposd.c
+--- sblim-gather-2.2.9/reposd.c.orig	2014-10-09 23:29:11.000000000 +0200
++++ sblim-gather-2.2.9/reposd.c	2021-09-15 10:46:48.295977750 +0200
+@@ -796,8 +796,8 @@ static void * rrepos_getrequest(void * h
+     /* perform sanity check */
+     if (bufferlen != sizeof(GATHERCOMM) + comm->gc_datalen) {
+       m_log(M_ERROR,M_SHOW,
+-	    "Remote reposd invalid length received on socket %i: expected %d got %d.\n",
+-	    hdl,sizeof(GATHERCOMM)+comm->gc_datalen,bufferlen);
++	    "Remote reposd invalid length received on socket %ld: expected %d got %d.\n",
++	    (long)hdl,sizeof(GATHERCOMM)+comm->gc_datalen,bufferlen);
+       continue;
+     }
+     /* the transmitted parameters are
+@@ -822,8 +822,8 @@ static void * rrepos_getrequest(void * h
+       if (bufferlen + sizeof(MetricValue) - sizeof(MetricValue32) > GATHERVALBUFLEN) {
+ 	/* not enough room to expand ! */
+ 	m_log(M_ERROR,M_SHOW,
+-	      "Remote reposd short buffer on socket %i during 32-to-64-bit expansion.\n",
+-	      hdl);
++	      "Remote reposd short buffer on socket %ld during 32-to-64-bit expansion.\n",
++	      (long)hdl);
+ 	continue;    	
+       }
+       mvTemp.mvId         = mv32->mv32Id;
+@@ -877,8 +877,8 @@ static void * rrepos_getrequest(void * h
+ 	    ("Retrieved data on socket %i: %s %s %s",(long)hdl,
+ 	     mv->mvSystemId,pluginname,metricname));
+     if ((comm->gc_result=reposvalue_put(pluginname,metricname,mv)) != 0) {
+-      m_log(M_ERROR,M_SHOW,"Remote reposd on socket %i: write %s to repository failed.\n",
+-	    hdl,metricname);
++      m_log(M_ERROR,M_SHOW,"Remote reposd on socket %ld: write %s to repository failed.\n",
++	    (long)hdl,metricname);
+     }
+   }
+   M_TRACE(MTRACE_FLOW,MTRACE_REPOS,("Ending thread on socket %i",(long)hdl));
+diff -up sblim-gather-2.2.9/rreg.c.orig sblim-gather-2.2.9/rreg.c
+--- sblim-gather-2.2.9/rreg.c.orig	2014-10-09 23:29:11.000000000 +0200
++++ sblim-gather-2.2.9/rreg.c	2021-09-15 10:46:48.295977750 +0200
+@@ -164,7 +164,7 @@ static void Grow()
+   if (PR_MaxEntries == PR_NumEntries) {
+     PR_MaxEntries += INCREASE_BY;
+     PR_Entries = realloc(PR_Entries,PR_MaxEntries*sizeof(MetricCalcEntry));
+-    memset(PR_Entries+PR_MaxEntries-INCREASE_BY,0,INCREASE_BY);
++    memset(PR_Entries+PR_MaxEntries-INCREASE_BY,0,INCREASE_BY*sizeof(MetricCalcEntry));
+   }
+ }
+ 
+diff -up sblim-gather-2.2.9/rrepos.c.orig sblim-gather-2.2.9/rrepos.c
+--- sblim-gather-2.2.9/rrepos.c.orig	2014-10-09 23:29:11.000000000 +0200
++++ sblim-gather-2.2.9/rrepos.c	2021-09-15 10:46:48.295977750 +0200
+@@ -412,8 +412,8 @@ int rrepos_terminate()
+   if (mcc_request(rreposhandle,&hdr,comm,sizeof(GATHERCOMM))==0 &&
+       mcc_response(&hdr,comm,&commlen)==0 &&
+       mcc_term(rreposhandle)==0) {
+-    pthread_mutex_unlock(&rrepos_mutex);
+     rreposhandle=-1;
++    pthread_mutex_unlock(&rrepos_mutex);
+     return comm->gc_result;
+   } else {
+     pthread_mutex_unlock(&rrepos_mutex);
+@@ -705,7 +705,7 @@ int rreposresource_list(const char * met
+       pthread_mutex_unlock(&rrepos_mutex);
+       return comm->gc_result;
+     }
+-    pthread_mutex_lock(&rrepos_mutex);	
++    pthread_mutex_unlock(&rrepos_mutex);
+   }        
+   return -1;
+ }
+diff -up sblim-gather-2.2.9/sforward.c.orig sblim-gather-2.2.9/sforward.c
+--- sblim-gather-2.2.9/sforward.c.orig	2014-10-09 23:29:11.000000000 +0200
++++ sblim-gather-2.2.9/sforward.c	2021-09-15 10:46:48.295977750 +0200
+@@ -66,7 +66,8 @@ int subs_enable_forwarding(SubscriptionR
+     fwl->fw_corrid = fwCorrelatorId ++;
+     fwl->fw_origcorrid = sr->srCorrelatorId;
+     fwl->fw_listener.sun_family = AF_UNIX;
+-    strcpy(fwl->fw_listener.sun_path,listenerid);
++    strncpy(fwl->fw_listener.sun_path, listenerid, sizeof(fwl->fw_listener.sun_path)-1);
++    fwl->fw_listener.sun_path[sizeof(fwl->fw_listener.sun_path)-1] = '\0';
+     if (fwHead == NULL) {
+       fwHead = fwl;
+     } else {
+diff -up sblim-gather-2.2.9/util/mcfg.c.orig sblim-gather-2.2.9/util/mcfg.c
+--- sblim-gather-2.2.9/util/mcfg.c.orig	2014-10-09 23:29:11.000000000 +0200
++++ sblim-gather-2.2.9/util/mcfg.c	2021-09-15 10:46:48.296977765 +0200
+@@ -60,6 +60,7 @@ int set_configfile(const char * filename
+ 	m_log(M_ERROR,M_QUIET,
+ 	      "set_configfile: maximum number (%d) of config files exceeded",
+ 	      CFG_MAXHANDLE);
++	fclose(cfgf); 
+ 	return -1;
+       }
+       while (!feof(cfgf)) {
+diff -up sblim-gather-2.2.9/util/mtrace.c.orig sblim-gather-2.2.9/util/mtrace.c
+--- sblim-gather-2.2.9/util/mtrace.c.orig	2014-10-09 23:29:11.000000000 +0200
++++ sblim-gather-2.2.9/util/mtrace.c	2021-09-15 10:46:48.296977765 +0200
+@@ -93,9 +93,10 @@ static int _f_trace(char * buf, size_t l
+   char             tm[20];
+   static pid_t     pid=0;
+   
++  memset(tm, 0, sizeof(tm));
++
+   if( gettimeofday( &tv, &tz) == 0 ) {
+     sec = tv.tv_sec + (tz.tz_minuteswest*-1*60);
+-    memset(tm, 0, sizeof(tm));
+     if( gmtime_r( &sec , &cttm) != NULL ) {
+       strftime(tm,20,"%m/%d/%Y %H:%M:%S UTC",&cttm);
+     }

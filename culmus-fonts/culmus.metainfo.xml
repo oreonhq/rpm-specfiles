@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Parag Nemade <pnemade AT redhat DOT com> -->
+<component type="font">
+  <id>culmus</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Culmus</name>
+  <summary>Fonts for Hebrew from Culmus project</summary>
+  <description>
+    <p>
+      The culmus-fonts package contains fonts for the display of
+      Hebrew from the Culmus project.
+    </p>
+  </description>
+  <updatecontact>pnemade_at_redhat_dot_com</updatecontact>
+  <url type="homepage">http://culmus.sourceforge.net/</url>
+</component>
+

@@ -1,0 +1,13 @@
+--- libbase-1.1.3/common_build.xml	2020-05-05 19:34:48.033291800 +0100
++++ libbase-1.1.3/common_build.xml	2020-05-05 19:34:57.346369361 +0100
+@@ -136,8 +136,8 @@
+   <property name="javac.deprecation"
+             value="true"
+             description="Indicates whether source should be compiled with deprecation information" />
+-  <property name="javac.source" value="1.5" description="Provide source compatibility with specified release" />
+-  <property name="javac.target" value="1.5" description="Generate class files for specific VM version" />
++  <property name="javac.source" value="1.8" description="Provide source compatibility with specified release" />
++  <property name="javac.target" value="1.8" description="Generate class files for specific VM version" />
+ 
+   <!-- Build Cache properties -->
+   <property name="build.cache.dir"

@@ -1,0 +1,7 @@
+# OO terms
+addFilter("spelling-error \('(accessor|mutators|overridable)',")
+
+# Upstream tarball contains non-free documentation
+# so the one we use has that removed
+addFilter("invalid-url Source0: Class-Data-Inheritable-[0-9.]*-clean.tar.gz")
+

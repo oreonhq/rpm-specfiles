@@ -1,0 +1,53 @@
+diff -up pnm2ppa-1.13/calibrate_ppa.c.coverity-return-local pnm2ppa-1.13/calibrate_ppa.c
+--- pnm2ppa-1.13/calibrate_ppa.c.coverity-return-local	2009-12-12 20:14:55.000000000 +0100
++++ pnm2ppa-1.13/calibrate_ppa.c	2023-10-20 13:34:21.570205199 +0200
+@@ -80,7 +80,7 @@ main (int argc, char *argv[])
+   BOOLEAN gamma = false ;
+   FILE *outFile = NULL ;
+   int testPattern = 0;
+-  char *out_filepath = NULL;
++  char out_filepath[MAXPATHLEN];
+   char c;
+   static struct option long_opts[] = {
+     {"gamma",0,0,'g'},
+@@ -162,9 +162,7 @@ main (int argc, char *argv[])
+ 	    {
+ 	      if ( strlen(optarg) < MAXPATHLEN )
+ 		{
+-                  char filepath[MAXPATHLEN];
+-		  strncpy(filepath, optarg, MAXPATHLEN);
+-		  out_filepath = filepath ;
++		  strncpy(out_filepath, optarg, MAXPATHLEN);
+ 		  use_stdout = false ;
+ 		}
+ 	    }
+diff -up pnm2ppa-1.13/pnm2ppa.c.coverity-return-local pnm2ppa-1.13/pnm2ppa.c
+--- pnm2ppa-1.13/pnm2ppa.c.coverity-return-local	2023-10-20 13:34:21.570205199 +0200
++++ pnm2ppa-1.13/pnm2ppa.c	2023-10-20 13:38:05.524230753 +0200
+@@ -148,21 +148,15 @@ print_pnm (FILE * fptr)
+ char *
+ readPath(char *input )
+ { 	 
+-  char File_path[MAXPATHLEN];
+   char *path = NULL;
+   /* security audit ajv 20001007;  be very careful with input strings!*/
+   if (strlen(input) < MAXPATHLEN )
+     {
+-      if ( strncpy (File_path, input, MAXPATHLEN ))
+-	{
+-	  /*
+-	    a user-specifed file *File_path may later be opened;
+-	    should any extra validation of this be performed now ?
+-	  */
+-	  /* remember to free(path) after use! */
+-	  path = strdup(File_path);
+-	  return path;
+-	}
++      path = strdup(input);
++      /*
++        a user-specifed file *path may later be opened;
++        should any extra validation of this be performed now ?
++       */
+     }
+   else
+     {

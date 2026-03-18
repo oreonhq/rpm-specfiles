@@ -1,0 +1,19 @@
+summary: Runs the upstream byacc testsuite.
+description: ''
+contact: Arjun Shankar <ashankar@redhat.com>
+component:
+- byacc
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- byacc
+- gcc
+- glibc-devel
+- glibc-headers
+- make
+- sed
+- rpm-build
+- yum-utils
+duration: 30m
+extra-summary: /tools/byacc/Regression/upstream-testsuite
+extra-task: /tools/byacc/Regression/upstream-testsuite

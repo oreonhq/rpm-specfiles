@@ -1,0 +1,15 @@
+diff -rupN --no-dereference qt-creator-opensource-src-19.0.0-beta1/src/libs/utils/buildablehelperlibrary.cpp qt-creator-opensource-src-19.0.0-beta1-new/src/libs/utils/buildablehelperlibrary.cpp
+--- qt-creator-opensource-src-19.0.0-beta1/src/libs/utils/buildablehelperlibrary.cpp	2026-01-27 03:56:15.000000000 +0100
++++ qt-creator-opensource-src-19.0.0-beta1-new/src/libs/utils/buildablehelperlibrary.cpp	2026-01-31 10:21:54.968864177 +0100
+@@ -179,7 +179,10 @@ QStringList BuildableHelperLibrary::poss
+     // Qt 6 CMake built targets, such as Android, are dependent on the host installation
+     // and use a script wrapper around the host qmake executable
+     // Remote build configurations (e.g. Windows host + Linux target) must be taken into account too
+-    return {"qmake*", "qtpaths*"};
++    return {
++        "qmake-qt6", "qmake-qt5", "qmake-qt4", "qmake-qt3", "qmake",
++        "qtpaths-qt6", "qtpaths-qt5", "qtpaths-qt4", "qtpaths-qt3", "qtpaths"
++    };
+ }
+ 
+ } // namespace Utils

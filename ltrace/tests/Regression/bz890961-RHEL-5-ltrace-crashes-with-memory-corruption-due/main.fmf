@@ -1,0 +1,18 @@
+summary: Test for BZ#890961 ([RHEL 5] ltrace crashes with memory corruption due)
+description: |
+    Bug summary: [RHEL 5] ltrace crashes with memory corruption due to double free()
+    Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=890961
+contact: Miroslav Franc <mfranc@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- ksh
+- ltrace-debuginfo
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=890961
+extra-summary: /tools/ltrace/Regression/bz890961-RHEL-5-ltrace-crashes-with-memory-corruption-due
+extra-task: /tools/ltrace/Regression/bz890961-RHEL-5-ltrace-crashes-with-memory-corruption-due

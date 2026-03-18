@@ -1,0 +1,18 @@
+discover:
+  - how: shell
+    dist-git-source: true
+    tests:
+    - name: /smoke
+      test: cd $TMT_SOURCE_DIR/udica-*[0-9]/ && python3 -m unittest -v tests/test_unit.py
+    - name: /smoke2
+      test: cd $TMT_SOURCE_DIR/udica-*[0-9]/ && python3 tests/test_integration.py
+prepare:
+  - name: install packages
+    how: install
+    package:
+    - udica
+    - python3
+    - container-selinux
+    - git-core
+execute:
+  how: tmt

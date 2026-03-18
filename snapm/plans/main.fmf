@@ -1,0 +1,27 @@
+summary: Run snapm unit tests from dist-git sources
+discover:
+    how: fmf
+    dist-git-source: true
+
+execute:
+    how: tmt
+
+prepare:
+  - name: Install packages
+    how: install
+    package:
+     - stratisd
+     - stratis-cli
+     - lvm2
+     - python3-boom
+     - python3-pytest
+     - boom-boot
+     - rpmdevtools
+  - name: Enable Stratisd
+    how: shell
+    script: |
+        systemctl enable --now stratisd
+  - name: Create boom OsProfile
+    how: shell
+    script: |
+        boom profile create --from-host

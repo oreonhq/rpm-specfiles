@@ -1,0 +1,9 @@
+discover:
+    how: shell
+    tests:
+    - name: import test
+      test: python3 -c 'import pytest_timeout'
+      require:
+      - python3-pytest-timeout
+execute:
+  how: tmt

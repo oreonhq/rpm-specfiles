@@ -1,0 +1,122 @@
+--- gambas-3.11.4/gb.pdf/src/CPdfDocument.cpp
++++ gambas-3.11.4/gb.pdf/src/CPdfDocument.cpp
+@@ -120,7 +120,7 @@ static void return_unicode_string(const
+ 		gstr.append(buf, n);
+ 	}
+ 
+-	GB.ReturnNewZeroString(gstr.getCString());
++	GB.ReturnNewZeroString(gstr.c_str());
+ }
+ 
+ 
+@@ -151,11 +151,11 @@ static void aux_return_string_info(void
+ 
+ 		if (goo_value->hasUnicodeMarker())
+ 		{
+-			GB.ConvString (&tmpstr,goo_value->getCString()+2,goo_value->getLength()-2,"UTF-16BE","UTF-8");
++			GB.ConvString (&tmpstr,goo_value->c_str()+2,goo_value->getLength()-2,"UTF-16BE","UTF-8");
+ 			GB.ReturnNewZeroString(tmpstr);		
+ 		}		
+ 		else
+-			GB.ReturnNewString(goo_value->getCString(),goo_value->getLength());		
++			GB.ReturnNewString(goo_value->c_str(),goo_value->getLength());		
+ 	}
+ 	#if ! POPPLER_VERSION_0_58
+ 	dst.free();
+@@ -194,10 +194,10 @@ static void aux_return_date_info(void *_
+ 	{
+ 		goo = dst.getString();
+ 		if (goo->hasUnicodeMarker())
+-			GB.ConvString (&datestr,goo->getCString()+2,goo->getLength()-2,"UTF-16BE","UTF-8");
++			GB.ConvString (&datestr,goo->c_str()+2,goo->getLength()-2,"UTF-16BE","UTF-8");
+ 		else
+ 		{
+-			datestr = GB.NewString(goo->getCString(),goo->getLength());
++			datestr = GB.NewString(goo->c_str(),goo->getLength());
+ 			tofree=datestr;		
+ 		}
+ 
+@@ -333,11 +333,11 @@ static char* aux_get_target_from_action(
+ 
+ 	if (tmp->hasUnicodeMarker())
+ 	{
+-			GB.ConvString (&uni,tmp->getCString()+2,tmp->getLength()-2,"UTF-16BE","UTF-8");
++			GB.ConvString (&uni,tmp->c_str()+2,tmp->getLength()-2,"UTF-16BE","UTF-8");
+ 			vl = GB.AddString(vl, uni, 0);	
+ 	}	
+ 	else
+-			vl = GB.AddString(vl,tmp->getCString(),tmp->getLength());
++			vl = GB.AddString(vl,tmp->c_str(),tmp->getLength());
+ 	
+ 
+ 	return vl;
+@@ -454,7 +454,7 @@ int32_t open_document (void *_object, ch
+ 	if ( GB.LoadFile(sfile,lfile,&buf,&len) ) return -1;
+ 
+ 	#if POPPLER_VERSION_0_58
+-	stream=new MemStream(buf,0,(Guint)len,std::move(obj));
++	stream=new MemStream(buf,0,(unsigned int)len,std::move(obj));
+ 	#else
+ 	obj.initNull();
+ 	stream=new MemStream(buf,0,(Guint)len,&obj);
+@@ -478,7 +478,7 @@ int32_t open_document (void *_object, ch
+ 	THIS->len=len;
+ 
+ 	white[0] = 0xFF; white[1] = 0xFF; white[2] = 0xFF;
+-	THIS->dev=new SplashOutputDev(splashModeRGB8, 3, gFalse, white);
++	THIS->dev=new SplashOutputDev(splashModeRGB8, 3, false, white);
+ 
+ 	#if POPPLER_VERSION_0_20
+ 	THIS->dev->startDoc(THIS->doc);
+@@ -922,10 +922,10 @@ static uint32_t *get_page_data(CPDFDOCUM
+ 	#if POPPLER_VERSION_0_20
+ 	THIS->page->displaySlice(THIS->dev,72.0*scale,72.0*scale,
+ 			   rotation,
+-			   gFalse,
+-			   gTrue,
++			   false,
++			   true,
+ 			   x,y,w,h,
+-			   gFalse);
++			   false);
+ 	#else
+ 	THIS->page->displaySlice(THIS->dev,72.0*scale,72.0*scale,
+ 			   rotation,
+@@ -994,8 +994,8 @@ BEGIN_METHOD(PDFPAGE_select, GB_INTEGER
+ 	h = VARGOPT(H, (int32_t)THIS->page->getMediaHeight());
+ 
+ 	#if POPPLER_VERSION_0_20
+-	dev = new TextOutputDev (NULL, gTrue, 0, gFalse, gFalse);
+-	gfx = THIS->page->createGfx(dev,72.0,72.0,0,gFalse,gTrue,-1, -1, -1, -1, gFalse, NULL, NULL);
++	dev = new TextOutputDev (NULL, true, 0, false, false);
++	gfx = THIS->page->createGfx(dev,72.0,72.0,0,false,true,-1, -1, -1, -1, false, NULL, NULL);
+ 	#else
+ 	dev = new TextOutputDev (NULL, gTrue, gFalse, gFalse);
+ 	gfx = THIS->page->createGfx(dev,72.0,72.0,0,gFalse,gTrue,-1, -1, -1, -1, gFalse,THIS->doc->getCatalog (),NULL, NULL, NULL, NULL);
+@@ -1015,7 +1015,7 @@ BEGIN_METHOD(PDFPAGE_select, GB_INTEGER
+ 		return;
+ 	}
+ 	
+-	GB.ReturnNewString(str->getCString(),str->getLength());	
++	GB.ReturnNewString(str->c_str(),str->getLength());	
+ 	delete str;
+ 
+ END_METHOD
+@@ -1081,7 +1081,7 @@ BEGIN_PROPERTY (PDFPAGELINKDATA_paramete
+ 		return;	
+ 	}
+ 
+-	GB.ReturnNewZeroString(((LinkLaunch*)THIS->action)->getParams()->getCString());
++	GB.ReturnNewZeroString(((LinkLaunch*)THIS->action)->getParams()->c_str());
+ 
+ END_PROPERTY
+ 
+@@ -1226,7 +1226,7 @@ BEGIN_METHOD (PDFPAGE_find,GB_STRING Tex
+ 
+ 	count = 0;
+ 	#if POPPLER_VERSION_0_20
+-	while (textdev->findText (block,nlen,gFalse,gTrue,gTrue,gFalse,sensitive,gFalse,gFalse,&x0,&y0,&x1,&y1))
++	while (textdev->findText (block,nlen,false,true,true,false,sensitive,false,false,&x0,&y0,&x1,&y1))
+ 	#else
+ 	while (textdev->findText (block,nlen,gFalse,gTrue,gTrue,gFalse,sensitive,gFalse,&x0,&y0,&x1,&y1))
+ 	#endif

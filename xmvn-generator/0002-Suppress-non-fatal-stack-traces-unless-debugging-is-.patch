@@ -1,0 +1,111 @@
+From 35624a1e5972e4ddb8fefbcaa82ee6921ddd89b3 Mon Sep 17 00:00:00 2001
+From: Mikolaj Izdebski <mizdebsk@redhat.com>
+Date: Mon, 30 Jun 2025 08:13:20 +0200
+Subject: [PATCH 2/2] Suppress non-fatal stack traces unless debugging is
+ enabled
+
+Resolves: rhbz#2375157
+---
+ .../fedoraproject/xmvn/generator/jpms/JPMSGenerator.java    | 4 +++-
+ .../xmvn/generator/jpscript/JPackageScriptGenerator.java    | 3 ++-
+ .../org/fedoraproject/xmvn/generator/logging/Logger.java    | 6 ++++++
+ .../fedoraproject/xmvn/generator/maven/MavenGenerator.java  | 2 +-
+ .../xmvn/generator/transformer/TransformerHook.java         | 6 ++++--
+ 5 files changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/src/main/java/org/fedoraproject/xmvn/generator/jpms/JPMSGenerator.java b/src/main/java/org/fedoraproject/xmvn/generator/jpms/JPMSGenerator.java
+index 6e5ec53..5808273 100644
+--- a/src/main/java/org/fedoraproject/xmvn/generator/jpms/JPMSGenerator.java
++++ b/src/main/java/org/fedoraproject/xmvn/generator/jpms/JPMSGenerator.java
+@@ -29,6 +29,7 @@ import java.util.stream.Stream;
+ import org.fedoraproject.xmvn.generator.BuildContext;
+ import org.fedoraproject.xmvn.generator.Collector;
+ import org.fedoraproject.xmvn.generator.Generator;
++import org.fedoraproject.xmvn.generator.logging.Logger;
+ 
+ class JPMSGenerator implements Generator {
+     private final BuildContext context;
+@@ -75,7 +76,8 @@ class JPMSGenerator implements Generator {
+                                 }
+                             }
+                         } catch (IOException e) {
+-                            e.printStackTrace();
++                            // Continue despite exception
++                            Logger.debug(e);
+                         }
+                     }
+                 } catch (IOException e) {
+diff --git a/src/main/java/org/fedoraproject/xmvn/generator/jpscript/JPackageScriptGenerator.java b/src/main/java/org/fedoraproject/xmvn/generator/jpscript/JPackageScriptGenerator.java
+index dbcb537..cf81e43 100644
+--- a/src/main/java/org/fedoraproject/xmvn/generator/jpscript/JPackageScriptGenerator.java
++++ b/src/main/java/org/fedoraproject/xmvn/generator/jpscript/JPackageScriptGenerator.java
+@@ -24,6 +24,7 @@ import java.util.stream.Stream;
+ import org.fedoraproject.xmvn.generator.BuildContext;
+ import org.fedoraproject.xmvn.generator.Collector;
+ import org.fedoraproject.xmvn.generator.Generator;
++import org.fedoraproject.xmvn.generator.logging.Logger;
+ 
+ class JPackageScriptGenerator implements Generator {
+     private final BuildContext context;
+@@ -51,7 +52,7 @@ class JPackageScriptGenerator implements Generator {
+                 }
+             } catch (MalformedInputException e) {
+                 // Continue despite exception
+-                e.printStackTrace();
++                Logger.debug(e);
+             } catch (IOException e) {
+                 throw new UncheckedIOException(e);
+             }
+diff --git a/src/main/java/org/fedoraproject/xmvn/generator/logging/Logger.java b/src/main/java/org/fedoraproject/xmvn/generator/logging/Logger.java
+index 3aee1aa..55d189c 100644
+--- a/src/main/java/org/fedoraproject/xmvn/generator/logging/Logger.java
++++ b/src/main/java/org/fedoraproject/xmvn/generator/logging/Logger.java
+@@ -71,4 +71,10 @@ public class Logger {
+                 BOX_BOTTOM_LEFT + repeat(BOX_BORDER_HORIZONTAL, BOX_WIDTH - 2) + BOX_BOTTOM_RIGHT);
+         flush();
+     }
++
++    public static void debug(Throwable t) {
++        if (debugEnabled) {
++            t.printStackTrace();
++        }
++    }
+ }
+diff --git a/src/main/java/org/fedoraproject/xmvn/generator/maven/MavenGenerator.java b/src/main/java/org/fedoraproject/xmvn/generator/maven/MavenGenerator.java
+index 69c5a46..ae63d1b 100644
+--- a/src/main/java/org/fedoraproject/xmvn/generator/maven/MavenGenerator.java
++++ b/src/main/java/org/fedoraproject/xmvn/generator/maven/MavenGenerator.java
+@@ -295,8 +295,8 @@ class MavenGenerator implements Generator {
+                     try (StringWriter sw = new StringWriter();
+                             PrintWriter pw = new PrintWriter(sw)) {
+                         sw.append("Unable to generate POM dependencies: ");
+-                        e.printStackTrace(pw);
+                         Logger.debug(sw.toString());
++                        Logger.debug(e);
+                     } catch (IOException e1) {
+                         throw new UncheckedIOException(e1);
+                     }
+diff --git a/src/main/java/org/fedoraproject/xmvn/generator/transformer/TransformerHook.java b/src/main/java/org/fedoraproject/xmvn/generator/transformer/TransformerHook.java
+index 5914be4..436c59c 100644
+--- a/src/main/java/org/fedoraproject/xmvn/generator/transformer/TransformerHook.java
++++ b/src/main/java/org/fedoraproject/xmvn/generator/transformer/TransformerHook.java
+@@ -64,12 +64,14 @@ class TransformerHook implements Hook {
+                     try {
+                         jarTransformer.transformJar(filePath);
+                     } catch (IOException e) {
+-                        e.printStackTrace();
++                        // Continue despite exception
++                        Logger.debug(e);
+                     }
+                 }
+             }
+         } catch (IOException e) {
+-            e.printStackTrace();
++            // Continue despite exception
++            Logger.debug(e);
+         }
+     }
+ 
+-- 
+2.49.0
+

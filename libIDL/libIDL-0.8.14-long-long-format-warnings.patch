@@ -1,0 +1,31 @@
+On platforms (such as 64-bit Linux), where long long int and long int are both
+64-bit, we can have IDL_LL defined to ll (format with %%lld) while
+IDL_longlong_t, which is just gint64, may be ultimately defined to long int.
+This results in compiler warnings about the mismatch between the long long
+format and long parameter, even though the types are compatible. We can fix
+this with a cast to long long before formatting.
+
+diff -Naur libIDL-0.8.14-original/parser.y libIDL-0.8.14/parser.y
+--- libIDL-0.8.14-original/parser.y	2009-04-18 08:20:37.000000000 -0400
++++ libIDL-0.8.14/parser.y	2021-02-03 12:37:11.067509562 -0500
+@@ -1354,7 +1354,7 @@
+ 	} else if (value < 0) {
+ 		yywarningv (IDL_WARNING1, "Cannot use negative value %"
+ 			    IDL_LL "d, using %" IDL_LL "d",
+-			   value, -value);
++			   (long long) value, (long long) -value);
+ 		if (ident)
+ 			IDL_tree_warning (ident,
+ 					  IDL_WARNING1, "From constant declared here");
+diff -Naur libIDL-0.8.14-original/util.c libIDL-0.8.14/util.c
+--- libIDL-0.8.14-original/util.c	2009-04-18 08:20:37.000000000 -0400
++++ libIDL-0.8.14/util.c	2021-02-03 12:42:13.641470825 -0500
+@@ -2818,7 +2818,7 @@
+ 
+ 	case IDLN_INTEGER:
+ 		/* FIXME: sign */
+-		dataf (data, "%" IDL_LL "d", IDL_INTEGER (p).value);
++		dataf (data, "%" IDL_LL "d", (long long) IDL_INTEGER (p).value);
+ 		break;
+ 
+ 	case IDLN_FIXED:

@@ -1,0 +1,6 @@
+/results_*
+/*.src.rpm
+
+/commons-collections4-4.0-src.tar.gz
+/commons-collections4-4.1-src.tar.gz
+/commons-collections4-4.4-src.tar.gz

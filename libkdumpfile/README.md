@@ -1,0 +1,3 @@
+# libkdumpfile
+
+The libkdumpfile package

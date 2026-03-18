@@ -1,0 +1,13 @@
+diff -Naur opendnssec-1.4.5-orig/signer/src/adapter/addns.c opendnssec-1.4.5/signer/src/adapter/addns.c
+--- opendnssec-1.4.5-orig/signer/src/adapter/addns.c	2014-03-25 06:45:44.000000000 +0000
++++ opendnssec-1.4.5/signer/src/adapter/addns.c	2014-04-18 16:26:39.079974120 +0000
+@@ -243,7 +243,8 @@
+             tmp_serial =
+                 ldns_rdf2native_int32(ldns_rr_rdf(rr, SE_SOA_RDATA_SERIAL));
+             old_serial = adapi_get_serial(zone);
+-            if (!util_serial_gt(tmp_serial, old_serial)) {
++            if (!util_serial_gt(tmp_serial, old_serial)
++		&& zone->db->is_initialized) {
+                 ods_log_info("[%s] zone %s is already up to date, have "
+                     "serial %u, got serial %u", adapter_str, zone->name,
+                     old_serial, tmp_serial);

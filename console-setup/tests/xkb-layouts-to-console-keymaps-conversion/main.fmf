@@ -1,0 +1,5 @@
+summary: X keyboard layouts to console keymaps conversion
+author: Vitezslav Crhonek <vcrhonek@redhat.com>
+contact: Vitezslav Crhonek <vcrhonek@redhat.com>
+duration: 10m
+test: ./runtest.sh

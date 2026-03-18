@@ -1,0 +1,23 @@
+diff -up pnm2ppa-1.13/Makefile.am.rh pnm2ppa-1.13/Makefile.am
+--- pnm2ppa-1.13/Makefile.am.rh	2023-10-20 13:22:50.893888824 +0200
++++ pnm2ppa-1.13/Makefile.am	2023-10-20 13:30:33.506822860 +0200
+@@ -123,7 +123,7 @@ CLEANFILES = hash_ink.c make_hash_ink
+ # run on the build host in case of cross compiling)
+ #
+ CC_FOR_BUILD = @CC_FOR_BUILD@
+-CFLAGS_FOR_BUILD = -O2
++CFLAGS_FOR_BUILD = $(RPM_OPT_FLAGS) -O2
+ CPPFLAGS_FOR_BUILD = -I$(top_srcdir)
+ LDFLAGS_FOR_BUILD =
+ LDLIBS_FOR_BUILD =
+diff -up pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile.rh pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile
+--- pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile.rh	2023-10-20 13:18:54.058176682 +0200
++++ pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile	2023-10-20 13:18:54.061176659 +0200
+@@ -1,5 +1,5 @@
+ CC=gcc
+-CFLAGS=-Wall -O2 
++CFLAGS=$(RPM_OPT_FLAGS)
+ LDFLAGS=
+ PRINTER=HP720
+ 
+diff -up pnm2ppa-1.13/pnm2ppa.conf.rh pnm2ppa-1.13/pnm2ppa.conf

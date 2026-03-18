@@ -1,0 +1,41 @@
+From 63b2c618cf770de3338fe94fd910656cc3c6ec38 Mon Sep 17 00:00:00 2001
+From: Zdenek Dohnal <zdohnal@redhat.com>
+Date: Mon, 27 Jan 2025 15:46:19 +0100
+Subject: [PATCH] Protect `_prASCII()` from negative lengths
+
+---
+ pappl-retrofit/cups-backends.c | 2 +-
+ pappl-retrofit/print-job.c     | 4 ++++
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/pappl-retrofit/cups-backends.c b/pappl-retrofit/cups-backends.c
+index 5cfd78c..4639449 100644
+--- a/pappl-retrofit/cups-backends.c
++++ b/pappl-retrofit/cups-backends.c
+@@ -470,7 +470,7 @@ _prCUPSDevList(pappl_device_cb_t cb,
+ 	      //
+ 
+ 	      backends[i].bytes += bytes;
+-              backends[i].buf[4095] = '\0';
++	      backends[i].buf[4095] = '\0';
+ 	      while ((newline = strchr(backends[i].buf, '\n')) != NULL)
+ 	      {
+ 		// We have read at least one line
+diff --git a/pappl-retrofit/print-job.c b/pappl-retrofit/print-job.c
+index 115dd4b..1fbd16f 100644
+--- a/pappl-retrofit/print-job.c
++++ b/pappl-retrofit/print-job.c
+@@ -55,6 +55,10 @@ _prASCII85(FILE                *outputfp,
+   static unsigned int   num_remaining = 0;
+ 
+ 
++  // Prevent possible negative lengths...
++  if (length < 0)
++    return;
++
+   while (num_remaining + length > 0)
+   {
+     if (num_remaining > 0 || length < 4)
+-- 
+2.48.1
+

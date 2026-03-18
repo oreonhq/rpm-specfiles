@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Tie-RefHash
+require: perl-Tie-RefHash-tests
+test: /usr/libexec/perl-Tie-RefHash/test

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Crypt-OpenSSL-Bignum
+require: perl-Crypt-OpenSSL-Bignum-tests
+test: /usr/libexec/perl-Crypt-OpenSSL-Bignum/test

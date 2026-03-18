@@ -1,0 +1,3 @@
+summary: Run Lorax tests (build an iso, run mkksiso on it)
+execute:
+    script: ./tests/scripts/run_tests.sh

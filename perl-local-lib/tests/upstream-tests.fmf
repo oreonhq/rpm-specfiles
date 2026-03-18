@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-local-lib
+require: perl-local-lib-tests
+test: /usr/libexec/perl-local-lib/test

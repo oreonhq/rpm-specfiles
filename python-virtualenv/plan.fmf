@@ -1,0 +1,97 @@
+execute:
+  how: tmt
+
+discover:
+  - name: same_repo
+    how: shell
+    tests:
+      - name: smoke_poetry
+        test: poetry new smoke && cd smoke && poetry config --local virtualenvs.options.no-pip true && poetry add pello && poetry run pello_greeting
+  - name: tests_python
+    how: shell
+    url: https://src.fedoraproject.org/tests/python.git
+    tests:
+    - name: smoke36
+      path: /smoke
+      test: VERSION=3.6 METHOD=virtualenv ./venv.sh
+    - name: smoke36d
+      path: /smoke
+      test: VERSION=3.6 METHOD=virtualenv-download TOX=false ./venv.sh
+    - name: smoke36nd
+      path: /smoke
+      test: VERSION=3.6 METHOD=virtualenv-no-download ./venv.sh
+    - name: smoke36sp
+      path: /smoke
+      test: VERSION=3.6 METHOD=virtualenv-seeder-pip ./venv.sh
+    - name: smoke39
+      path: /smoke
+      test: VERSION=3.9 METHOD=virtualenv ./venv.sh
+    - name: smoke39d
+      path: /smoke
+      test: VERSION=3.9 METHOD=virtualenv-download TOX=false ./venv.sh
+    - name: smoke39nd
+      path: /smoke
+      test: VERSION=3.9 METHOD=virtualenv-no-download ./venv.sh
+    - name: smoke39sp
+      path: /smoke
+      test: VERSION=3.9 METHOD=virtualenv-seeder-pip ./venv.sh
+    - name: smoke310
+      path: /smoke
+      test: VERSION=3.10 METHOD=virtualenv ./venv.sh
+    - name: smoke310d
+      path: /smoke
+      test: VERSION=3.10 METHOD=virtualenv-download TOX=false ./venv.sh
+    - name: smoke311
+      path: /smoke
+      test: VERSION=3.11 METHOD=virtualenv ./venv.sh
+    - name: smoke311d
+      path: /smoke
+      test: VERSION=3.11 METHOD=virtualenv-download TOX=false ./venv.sh
+    - name: smoke312
+      path: /smoke
+      test: VERSION=3.12 METHOD=virtualenv ./venv.sh
+    - name: smoke312d
+      path: /smoke
+      test: VERSION=3.12 METHOD=virtualenv-download TOX=false ./venv.sh
+    - name: smoke313
+      path: /smoke
+      test: VERSION=3.13 METHOD=virtualenv ./venv.sh
+    - name: smoke313d
+      path: /smoke
+      test: VERSION=3.13 METHOD=virtualenv-download TOX=false ./venv.sh
+    - name: smoke314
+      path: /smoke
+      test: VERSION=3.14 METHOD=virtualenv ./venv.sh
+    - name: smoke314d
+      path: /smoke
+      test: VERSION=3.14 METHOD=virtualenv-download TOX=false ./venv.sh
+    - name: smoke315
+      path: /smoke
+      test: VERSION=3.15 METHOD=virtualenv ./venv.sh
+    - name: smoke315d
+      path: /smoke
+      test: VERSION=3.15 METHOD=virtualenv-download TOX=false ./venv.sh
+prepare:
+  - name: Install dependencies
+    how: install
+    package:
+    - gcc
+    - virtualenv
+    - poetry
+    - python3.6-devel
+    - python3.9-devel
+    - python3.10-devel
+    - python3.11-devel
+    - python3.12-devel
+    - python3.13-devel
+    - python3.14-devel
+    - python3.15-devel
+    - tox
+    - rpm
+    - dnf
+  - name: Update packages
+    how: shell
+    script: dnf upgrade -y
+  - name: List installed packages
+    how: shell
+    script: rpm -qa | sort | tee $TMT_PLAN_DATA/rpmqa.txt

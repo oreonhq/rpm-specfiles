@@ -1,0 +1,3 @@
+PURPOSE of tests/acpixtract
+Description: sanity check that ACPI tables created by acpidump can be read
+Author: Al Stone <ahs3@redhat.com>

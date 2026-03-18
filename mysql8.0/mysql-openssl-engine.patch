@@ -1,0 +1,14 @@
+--- mysql-8.0.42/plugin/group_replication/libmysqlgcs/src/bindings/xcom/xcom/network/xcom_network_provider_ssl_native_lib.cc	2025-03-31 10:19:27.000000000 +0200
++++ mysql-8.0.42-patched/plugin/group_replication/libmysqlgcs/src/bindings/xcom/xcom/network/xcom_network_provider_ssl_native_lib.cc	2025-04-24 15:27:29.155287397 +0200
+@@ -50,9 +50,9 @@
+ #include "my_compiler.h"
+ #endif
+ 
+-#if OPENSSL_VERSION_NUMBER < 0x10100000L
++#if !defined(OPENSSL_NO_ENGINE)
+ #include <openssl/engine.h>
+-#endif /* OPENSSL_VERSION_NUMBER < 0x10100000L */
++#endif
+ 
+ #include "xcom/retry.h"
+ #include "xcom/task_debug.h"

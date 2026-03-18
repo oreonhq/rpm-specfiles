@@ -1,0 +1,4 @@
+PURPOSE of /CoreOS/cronie/Regression/crontab-can-invoke-lookup-for-nonexisted-user
+Description: Test for Cron does uid lookups for non-existent users
+Author: Jakub Prokes <jprokes@redhat.com>
+Bug summary: Cron does uid lookups for non-existent users

@@ -1,0 +1,48 @@
+From a82ab0801d9dc4bc8e5dbefb92fe2cba1021fedf Mon Sep 17 00:00:00 2001
+From: Radek Vykydal <rvykydal@redhat.com>
+Date: Fri, 24 Oct 2025 14:04:36 +0200
+Subject: [PATCH 1/2] Fix luks save_passphrase for missing format context
+
+---
+ blivet/static_data/luks_data.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/blivet/static_data/luks_data.py b/blivet/static_data/luks_data.py
+index 3e4cc2a0e..6bb9d1399 100644
+--- a/blivet/static_data/luks_data.py
++++ b/blivet/static_data/luks_data.py
+@@ -86,7 +86,7 @@ def add_passphrases(self, passphrases):
+     def save_passphrase(self, device):
+         """ Save a device's LUKS passphrase in case of reset. """
+         pctx = device.format.contexts.get_context("passphrase")
+-        passphrase = pctx._passphrase
++        passphrase = pctx and pctx._passphrase
+         if passphrase:
+             luks_data.luks_devs[device.format.uuid] = passphrase
+             self.add_passphrase(passphrase)
+
+From d5dbcabbbc7fa353433e50e3e6dfe4a9dc7af6aa Mon Sep 17 00:00:00 2001
+From: Vojtech Trefny <vtrefny@redhat.com>
+Date: Wed, 29 Oct 2025 10:20:32 +0100
+Subject: [PATCH 2/2] tests: Add check for saving passphrase with context not
+ set
+
+---
+ tests/storage_tests/formats_test/luks_test.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/tests/storage_tests/formats_test/luks_test.py b/tests/storage_tests/formats_test/luks_test.py
+index b42cacddd..3eb62ba66 100644
+--- a/tests/storage_tests/formats_test/luks_test.py
++++ b/tests/storage_tests/formats_test/luks_test.py
+@@ -304,6 +304,10 @@ def test_luks_save_passphrase(self):
+         self.assertIsNotNone(disk)
+         self.assertTrue(disk.format.has_key)
+ 
++        # remove passphrase and try to save it (should not fail)
++        disk.format.passphrase = None
++        blivet.static_data.luks_data.save_passphrase(disk)
++
+     def test_label_subsystem(self):
+         disk = self.storage.devicetree.get_device_by_path(self.vdevs[0])
+         self.assertIsNotNone(disk)

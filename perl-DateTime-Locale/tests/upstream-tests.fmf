@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-DateTime-Locale
+require: perl-DateTime-Locale-tests
+test: /usr/libexec/perl-DateTime-Locale/test

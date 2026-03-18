@@ -1,0 +1,6 @@
+test: ./run_tests.sh
+duration: 10m
+framework: beakerlib
+require:
+  - python3-enchant
+  - hunspell-mr

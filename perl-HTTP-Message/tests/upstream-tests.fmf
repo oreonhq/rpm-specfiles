@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-HTTP-Message
+require: perl-HTTP-Message-tests
+test: /usr/libexec/perl-HTTP-Message/test

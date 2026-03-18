@@ -1,0 +1,149 @@
+From e2a1c2bc7aa7018ed14dd8b5859bf3a16704825c Mon Sep 17 00:00:00 2001
+From: Olivier Fourdan <ofourdan@redhat.com>
+Date: Thu, 5 Feb 2026 13:44:29 +0100
+Subject: [PATCH] compositor: Neuter native keybindings by default
+
+By default, mutter enables the native keybindings which allow for
+VT switching on Linux.
+
+That could be used as an escape path for a user in a kiosk session.
+
+To avoid that issue, also neuter the native keybindings, unless the
+command line option "--enable-vt-switch" is specified.
+
+Part-of: <https://gitlab.gnome.org/GNOME/gnome-kiosk/-/merge_requests/124>
+---
+ compositor/kiosk-compositor.c | 30 ++++++++++++++++++++++++++++++
+ compositor/main.c             | 14 ++++++++++++++
+ compositor/main.h             |  9 +++++++++
+ meson.build                   |  3 ++-
+ 4 files changed, 55 insertions(+), 1 deletion(-)
+ create mode 100644 compositor/main.h
+
+diff --git a/compositor/kiosk-compositor.c b/compositor/kiosk-compositor.c
+index e43e658..8553735 100644
+--- a/compositor/kiosk-compositor.c
++++ b/compositor/kiosk-compositor.c
+@@ -32,6 +32,7 @@
+ #include "kiosk-shell-screenshot-service.h"
+ #include "kiosk-window-config.h"
+ #include "kiosk-magnifier.h"
++#include "main.h"
+ 
+ #include "org.gnome.DisplayManager.Manager.h"
+ 
+@@ -231,6 +232,21 @@ neuter_builtin_keybindings (KioskCompositor *self)
+                 "move-to-workspace-down",
+                 NULL
+         };
++        const char *native_keybindings[] = {
++                "switch-to-session-1",
++                "switch-to-session-2",
++                "switch-to-session-3",
++                "switch-to-session-4",
++                "switch-to-session-5",
++                "switch-to-session-6",
++                "switch-to-session-7",
++                "switch-to-session-8",
++                "switch-to-session-9",
++                "switch-to-session-10",
++                "switch-to-session-11",
++                "switch-to-session-12",
++                NULL
++        };
+         size_t i;
+ 
+         g_debug ("KioskCompositor: Neutering builtin keybindings");
+@@ -242,6 +258,20 @@ neuter_builtin_keybindings (KioskCompositor *self)
+                                                      self,
+                                                      NULL);
+         }
++
++        if (is_vt_switch_enabled ()) {
++                g_debug ("KioskCompositor: Keeping VT keybindings enabled");
++                return;
++        }
++
++        g_debug ("KioskCompositor: Neutering VT switching keybindings");
++        for (i = 0; native_keybindings[i] != NULL; i++) {
++                meta_keybindings_set_custom_handler (native_keybindings[i],
++                                                     (MetaKeyHandlerFunc)
++                                                     on_builtin_keybinding_triggered,
++                                                     self,
++                                                     NULL);
++        }
+ }
+ 
+ static void
+diff --git a/compositor/main.c b/compositor/main.c
+index adc748d..dc946ab 100644
+--- a/compositor/main.c
++++ b/compositor/main.c
+@@ -11,8 +11,10 @@
+ #include <meta/prefs.h>
+ 
+ #include "kiosk-compositor.h"
++#include "main.h"
+ 
+ static char **argv_ignored = NULL;
++static gboolean enable_vt_switch = FALSE;
+ 
+ static void
+ command_exited_cb (GPid      command_pid,
+@@ -77,6 +79,12 @@ static GOptionEntry
+                 N_ ("Print version"),
+                 NULL
+         },
++        {
++                "enable-vt-switch", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE,
++                &enable_vt_switch,
++                N_ ("Enable VT switching keybindings"),
++                NULL
++        },
+         {
+                 G_OPTION_REMAINING,
+                 .arg = G_OPTION_ARG_STRING_ARRAY,
+@@ -86,6 +94,12 @@ static GOptionEntry
+         { NULL }
+ };
+ 
++gboolean
++is_vt_switch_enabled (void)
++{
++        return enable_vt_switch;
++}
++
+ static void
+ set_working_directory (void)
+ {
+diff --git a/meson.build b/meson.build
+index e34cde7..0c280de 100644
+--- a/meson.build
++++ b/meson.build
+@@ -202,6 +202,7 @@ compositor_headers = []
+ compositor_headers += 'compositor/kiosk-app.h'
+ compositor_headers += 'compositor/kiosk-app-system.h'
+ compositor_headers += 'compositor/kiosk-window-tracker.h'
++compositor_headers += 'compositor/main.h'
+ kiosk_enums = gnome.mkenums_simple('kiosk-enum-types',
+   sources: compositor_headers
+ )
+
+diff --git a/compositor/main.h b/compositor/main.h
+new file mode 100644
+index 0000000..bb2949f
+--- /dev/null
++++ b/compositor/main.h
+@@ -0,0 +1,9 @@
++#pragma once
++
++#include <glib.h>
++
++G_BEGIN_DECLS
++
++gboolean is_vt_switch_enabled (void);
++
++G_END_DECLS
+-- 
+2.53.0
+

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Parse-Yapp
+require: perl-Parse-Yapp-tests
+test: /usr/libexec/perl-Parse-Yapp/test

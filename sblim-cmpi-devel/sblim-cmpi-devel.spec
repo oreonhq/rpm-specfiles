@@ -1,0 +1,62 @@
+
+Name:           sblim-cmpi-devel
+Version:        2.0.3
+Release:        34%{?dist}
+Summary:        SBLIM CMPI Provider Development Support
+
+License:        EPL-1.0
+URL:            http://sblim.wiki.sourceforge.net/
+Source0:        http://downloads.sourceforge.net/sblim/%{name}-%{version}.tar.bz2
+# Source1: macro definitions
+Source1: macros.sblim-cmpi-devel
+
+# Patch0:       remove version from docdir
+Patch0:         sblim-cmpi-devel-2.0.3-docdir.patch
+BuildRequires: make
+BuildRequires:  gcc
+
+
+%description
+This packages provides the C and C++ CMPI header files needed by
+provider developers and can be used standalone. If used for
+C++ provider development it is also necessary to have
+tog-pegasus-devel installed.
+
+%package -n libcmpiCppImpl0
+License:        EPL-1.0
+Summary:        CMPI C++ wrapper library
+Conflicts:      tog-pegasus-libs
+BuildRequires:  gcc-c++
+
+%description -n libcmpiCppImpl0
+This packages provides the C++ wrapper library for CMPI development
+
+%prep
+%setup -q
+%patch -P0 -p1 -b .docdir
+
+%build
+%configure
+%make_build
+
+%install
+%make_install
+# remove unused libtool files
+rm -f $RPM_BUILD_ROOT/%{_libdir}/*a
+# install macro definitions
+mkdir -p $RPM_BUILD_ROOT%{_rpmconfigdir}/macros.d
+cp %{SOURCE1} $RPM_BUILD_ROOT%{_rpmconfigdir}/macros.d
+
+%ldconfig_scriptlets -n libcmpiCppImpl0
+
+%files
+%doc AUTHORS COPYING README
+%{_includedir}/cmpi
+%{_rpmconfigdir}/macros.d/macros.sblim-cmpi-devel
+
+%files -n libcmpiCppImpl0
+%{_libdir}/libcmpiCppImpl.so*
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.3-34
+- Prepare for Oreon 11 (RP1)

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: psutils
+require: psutils-tests
+test: /usr/libexec/psutils/test

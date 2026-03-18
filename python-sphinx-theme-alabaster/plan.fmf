@@ -1,0 +1,9 @@
+summary: Basic smoke test
+
+discover:
+  - name: Run smoke-alabaster test
+    how: fmf
+    url: https://src.fedoraproject.org/rpms/python-sphinx/
+    test: "/tests/smoke-alabaster"
+execute:
+  how: tmt

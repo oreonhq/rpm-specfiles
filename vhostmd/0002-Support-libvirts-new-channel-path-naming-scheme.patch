@@ -1,0 +1,77 @@
+commit 176fcda44caca807b4bec9fd613991afd9d5a70b
+Author: Jim Fehlig <jfehlig@suse.com>
+Date:   Fri Sep 27 10:48:41 2024 -0600
+
+    Support libvirt's new channel path naming scheme
+
+    libvirt commit 8abc979bb0 changed the channel path naming scheme from
+    domain-<id>-<name> to <id>-<name>. Change the logic searching for channels
+    to work with either scheme.
+
+    Signed-off-by: Jim Fehlig <jfehlig@suse.com>
+diff --git a/vhostmd/virtio.c b/vhostmd/virtio.c
+index d2d07bf..4516b1f 100644
+--- a/vhostmd/virtio.c
++++ b/vhostmd/virtio.c
+@@ -277,34 +277,37 @@ static int vio_readdir(const char * path)
+     }
+ 
+     while ((ent = readdir(dir)) != NULL) {
+-        int rc, id;
+-
+-        if (sscanf(ent->d_name, "domain-%d-", &id) == 1) {
+-
+-            char tmp[SUN_PATH_LEN + 8];
+-            struct stat st;
+-
+-            rc = snprintf(tmp, sizeof(tmp), "%s/%s/%s", path, ent->d_name, channel_name);
++        char tmp[SUN_PATH_LEN + 8];
++        struct stat st;
++        char *name = NULL;
++        int id = -1;
++        int rc;
++        channel_t *c = NULL;
++
++        if (sscanf(ent->d_name, "domain-%d-", &id) == 1)
++            name = strchr(&(ent->d_name[strlen("domain-")]), '-');
++        else if (sscanf(ent->d_name, "%d-", &id) == 1)
++            name = strchr(ent->d_name, '-');
++        else
++            continue;
+ 
+-            if (rc > 0 && rc < (int) sizeof(tmp) &&
+-                strlen(tmp) < SUN_PATH_LEN &&
+-                stat(tmp, &st) == 0 &&
+-                S_ISSOCK(st.st_mode)) {
++        rc = snprintf(tmp, sizeof(tmp), "%s/%s/%s", path, ent->d_name, channel_name);
+ 
+-                channel_t *c = NULL;
+-                const char *name = strchr(&(ent->d_name[strlen("domain-")]), '-');
++        if (rc > 0 && rc < (int) sizeof(tmp) &&
++            strlen(tmp) < SUN_PATH_LEN &&
++            stat(tmp, &st) == 0 &&
++            S_ISSOCK(st.st_mode)) {
+ 
+-                pthread_mutex_lock(&channel_mtx);
+-                c = vio_channel_find(id, name, 0);
+-                pthread_mutex_unlock(&channel_mtx);
++            pthread_mutex_lock(&channel_mtx);
++            c = vio_channel_find(id, name, 0);
++            pthread_mutex_unlock(&channel_mtx);
+ 
+-                if (c && c->fd == FREE) {
+-                    c->uds_name = strdup(tmp);
+-                    if (c->uds_name == NULL)
+-                        goto error;
+-                    if (vio_channel_open(c))
+-                        goto error;
+-                }
++            if (c && c->fd == FREE) {
++                c->uds_name = strdup(tmp);
++                if (c->uds_name == NULL)
++                    goto error;
++                if (vio_channel_open(c))
++                    goto error;
+             }
+         }
+     }

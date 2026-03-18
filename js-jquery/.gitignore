@@ -1,0 +1,17 @@
+*.swp
+jquery-*/*
+/js-jquery-4dec426aa2a6cbabb1b064319ba7c272d594a688.tar.gz
+/js-jquery-8f2a9d9272d6ed7f32d3a484740ab342c02541e0.tar.gz
+/jquery-2.2.4.tar.gz
+/jquery-3.2.1.tar.gz
+/jquery-3.3.1.tar.gz
+/jquery-3.5.0.tar.gz
+/jquery_3.5.0_node_modules.tar.gz
+/jquery-3.6.0.tar.gz
+/jquery_3.6.0_node_modules.tar.gz
+/jquery-3.6.3.tar.gz
+/jquery_3.6.3_node_modules.tar.gz
+/jquery-3.6.4.tar.gz
+/jquery_3.6.4_node_modules.tar.gz
+/jquery-3.7.1.tar.gz
+/jquery_3.7.1_node_modules.tar.gz

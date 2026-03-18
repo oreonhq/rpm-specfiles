@@ -1,0 +1,882 @@
+diff --git a/awscli/botocore/auth.py b/awscli/botocore/auth.py
+index 8ceb4ff..d7570b4 100644
+--- a/awscli/botocore/auth.py
++++ b/awscli/botocore/auth.py
+@@ -419,7 +419,7 @@ class SigV4Auth(BaseSigner):
+     def add_auth(self, request):
+         if self.credentials is None:
+             raise NoCredentialsError()
+-        datetime_now = datetime.datetime.utcnow()
++        datetime_now = datetime.datetime.now(datetime.timezone.utc)
+         request.context['timestamp'] = datetime_now.strftime(SIGV4_TIMESTAMP)
+         # This could be a retry.  Make sure the previous
+         # authorization header is removed first.
+@@ -465,7 +465,7 @@ class SigV4Auth(BaseSigner):
+         if 'Date' in request.headers:
+             del request.headers['Date']
+             datetime_timestamp = datetime.datetime.strptime(
+-                request.context['timestamp'], SIGV4_TIMESTAMP
++                request.context['timestamp'], SIGV4_TIMESTAMP[:-1] + '%z'
+             )
+             request.headers['Date'] = formatdate(
+                 int(calendar.timegm(datetime_timestamp.timetuple()))
+@@ -557,7 +557,7 @@ class S3ExpressPostAuth(S3ExpressAuth):
+     REQUIRES_IDENTITY_CACHE = True
+ 
+     def add_auth(self, request):
+-        datetime_now = datetime.datetime.utcnow()
++        datetime_now = datetime.datetime.now(datetime.timezone.utc)
+         request.context['timestamp'] = datetime_now.strftime(SIGV4_TIMESTAMP)
+ 
+         fields = {}
+@@ -818,7 +818,7 @@ class S3SigV4PostAuth(SigV4Auth):
+     """
+ 
+     def add_auth(self, request):
+-        datetime_now = datetime.datetime.utcnow()
++        datetime_now = datetime.datetime.now(datetime.timezone.utc)
+         request.context['timestamp'] = datetime_now.strftime(SIGV4_TIMESTAMP)
+ 
+         fields = {}
+diff --git a/awscli/botocore/crt/auth.py b/awscli/botocore/crt/auth.py
+index 2b96c7e..86104f3 100644
+--- a/awscli/botocore/crt/auth.py
++++ b/awscli/botocore/crt/auth.py
+@@ -56,11 +56,7 @@ class CrtSigV4Auth(BaseSigner):
+         if self.credentials is None:
+             raise NoCredentialsError()
+ 
+-        # Use utcnow() because that's what gets mocked by tests, but set
+-        # timezone because CRT assumes naive datetime is local time.
+-        datetime_now = datetime.datetime.utcnow().replace(
+-            tzinfo=datetime.timezone.utc
+-        )
++        datetime_now = datetime.datetime.now(datetime.timezone.utc)
+ 
+         # Use existing 'X-Amz-Content-SHA256' header if able
+         existing_sha256 = self._get_existing_sha256(request)
+@@ -254,11 +250,7 @@ class CrtSigV4AsymAuth(BaseSigner):
+         if self.credentials is None:
+             raise NoCredentialsError()
+ 
+-        # Use utcnow() because that's what gets mocked by tests, but set
+-        # timezone because CRT assumes naive datetime is local time.
+-        datetime_now = datetime.datetime.utcnow().replace(
+-            tzinfo=datetime.timezone.utc
+-        )
++        datetime_now = datetime.datetime.now(datetime.timezone.utc)
+ 
+         # Use existing 'X-Amz-Content-SHA256' header if able
+         existing_sha256 = self._get_existing_sha256(request)
+diff --git a/awscli/botocore/signers.py b/awscli/botocore/signers.py
+index 8cd7b37..3a1e3a3 100644
+--- a/awscli/botocore/signers.py
++++ b/awscli/botocore/signers.py
+@@ -717,7 +717,7 @@ class S3PostPresigner:
+         policy = {}
+ 
+         # Create an expiration date for the policy
+-        datetime_now = datetime.datetime.utcnow()
++        datetime_now = datetime.datetime.now(datetime.timezone.utc)
+         expire_date = datetime_now + datetime.timedelta(seconds=expires_in)
+         policy['expiration'] = expire_date.strftime(botocore.auth.ISO8601)
+ 
+diff --git a/awscli/botocore/utils.py b/awscli/botocore/utils.py
+index 04d516c..4a82618 100644
+--- a/awscli/botocore/utils.py
++++ b/awscli/botocore/utils.py
+@@ -625,7 +625,7 @@ class InstanceMetadataFetcher(IMDSFetcher):
+             return
+         try:
+             expiration = datetime.datetime.strptime(
+-                expiration, "%Y-%m-%dT%H:%M:%SZ"
++                expiration, "%Y-%m-%dT%H:%M:%S%z"
+             )
+             refresh_interval = self._config.get(
+                 "ec2_credential_refresh_window", 60 * 10
+@@ -633,7 +633,7 @@ class InstanceMetadataFetcher(IMDSFetcher):
+             refresh_interval_with_jitter = refresh_interval + random.randint(
+                 120, 600
+             )
+-            current_time = datetime.datetime.utcnow()
++            current_time = datetime.datetime.now(datetime.timezone.utc)
+             refresh_offset = datetime.timedelta(
+                 seconds=refresh_interval_with_jitter
+             )
+diff --git a/awscli/compat.py b/awscli/compat.py
+index fd5fa19..3dce1f5 100644
+--- a/awscli/compat.py
++++ b/awscli/compat.py
+@@ -24,6 +24,7 @@ import shlex
+ import signal
+ import sys
+ import urllib.parse as urlparse
++import urllib.request
+ import zipfile
+ from configparser import RawConfigParser
+ from functools import partial
+diff --git a/awscli/customizations/cloudformation/deployer.py b/awscli/customizations/cloudformation/deployer.py
+index a5c512f..8783ebb 100644
+--- a/awscli/customizations/cloudformation/deployer.py
++++ b/awscli/customizations/cloudformation/deployer.py
+@@ -15,7 +15,7 @@ import collections
+ import logging
+ import sys
+ import time
+-from datetime import datetime
++from datetime import datetime, timezone
+ 
+ import botocore
+ 
+@@ -98,7 +98,7 @@ class Deployer:
+         :return:
+         """
+ 
+-        now = datetime.utcnow().isoformat()
++        now = datetime.now(timezone.utc).isoformat()
+         description = f"Created by AWS CLI at {now} UTC"
+ 
+         # Each changeset will get a unique name based on time
+diff --git a/awscli/customizations/cloudtrail/validation.py b/awscli/customizations/cloudtrail/validation.py
+index d5255f4..aca31f4 100644
+--- a/awscli/customizations/cloudtrail/validation.py
++++ b/awscli/customizations/cloudtrail/validation.py
+@@ -18,7 +18,7 @@ import logging
+ import re
+ import sys
+ import zlib
+-from datetime import datetime, timedelta
++from datetime import datetime, timedelta, timezone
+ from zlib import error as ZLibError
+ 
+ from awscrt.crypto import RSA, RSASignatureAlgorithm
+@@ -464,7 +464,7 @@ class DigestTraverser:
+         :param end_date: Date to stop validating at (inclusive).
+         """
+         if end_date is None:
+-            end_date = datetime.utcnow()
++            end_date = datetime.now(timezone.utc)
+         end_date = normalize_date(end_date)
+         start_date = normalize_date(start_date)
+         bucket = self.starting_bucket
+@@ -850,7 +850,7 @@ class CloudTrailValidateLogs(BasicCommand):
+         if args.end_time:
+             self.end_time = normalize_date(parse_date(args.end_time))
+         else:
+-            self.end_time = normalize_date(datetime.utcnow())
++            self.end_time = normalize_date(datetime.now(timezone.utc))
+         if self.start_time > self.end_time:
+             raise ParamValidationError(
+                 'Invalid time range specified: start-time must '
+diff --git a/awscli/customizations/codecommit.py b/awscli/customizations/codecommit.py
+index b001562..cb9e757 100644
+--- a/awscli/customizations/codecommit.py
++++ b/awscli/customizations/codecommit.py
+@@ -159,7 +159,7 @@ class CodeCommitGetCommand(BasicCommand):
+         request = AWSRequest()
+         request.url = url_to_sign
+         request.method = 'GIT'
+-        now = datetime.datetime.utcnow()
++        now = datetime.datetime.now(datetime.timezone.utc)
+         request.context['timestamp'] = now.strftime('%Y%m%dT%H%M%S')
+         split = urlsplit(request.url)
+         # we don't want to include the port number in the signature
+diff --git a/awscli/customizations/codedeploy/push.py b/awscli/customizations/codedeploy/push.py
+index bdde82e..3281ce4 100644
+--- a/awscli/customizations/codedeploy/push.py
++++ b/awscli/customizations/codedeploy/push.py
+@@ -16,7 +16,7 @@ import os
+ import sys
+ import tempfile
+ import zipfile
+-from datetime import datetime
++from datetime import datetime, timezone
+ 
+ from botocore.exceptions import ClientError
+ 
+@@ -131,7 +131,7 @@ class Push(BasicCommand):
+             )
+         if not parsed_args.description:
+             parsed_args.description = (
+-                f'Uploaded by AWS CLI {datetime.utcnow().isoformat()} UTC'
++                f'Uploaded by AWS CLI {datetime.now(timezone.utc).isoformat()} UTC'
+             )
+ 
+     def _push(self, params):
+diff --git a/awscli/customizations/datapipeline/__init__.py b/awscli/customizations/datapipeline/__init__.py
+index 5665769..d197339 100644
+--- a/awscli/customizations/datapipeline/__init__.py
++++ b/awscli/customizations/datapipeline/__init__.py
+@@ -12,7 +12,7 @@
+ # language governing permissions and limitations under the License.
+ 
+ import json
+-from datetime import datetime, timedelta
++from datetime import datetime, timedelta, timezone
+ 
+ from awscli.arguments import CustomArgument
+ from awscli.customizations.commands import BasicCommand
+@@ -197,7 +197,7 @@ class QueryArgBuilder:
+ 
+     def __init__(self, current_time=None):
+         if current_time is None:
+-            current_time = datetime.utcnow()
++            current_time = datetime.now(timezone.utc)
+         self.current_time = current_time
+ 
+     def build_query(self, parsed_args):
+diff --git a/awscli/customizations/ec2/bundleinstance.py b/awscli/customizations/ec2/bundleinstance.py
+index 240540f..8dc2e22 100644
+--- a/awscli/customizations/ec2/bundleinstance.py
++++ b/awscli/customizations/ec2/bundleinstance.py
+@@ -129,7 +129,7 @@ def _generate_policy(params):
+     # Called if there is no policy supplied by the user.
+     # Creates a policy that provides access for 24 hours.
+     delta = datetime.timedelta(hours=24)
+-    expires = datetime.datetime.utcnow() + delta
++    expires = datetime.datetime.now(datetime.timezone.utc) + delta
+     expires_iso = expires.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+     policy = POLICY.format(
+         expires=expires_iso, bucket=params['Bucket'], prefix=params['Prefix']
+diff --git a/awscli/customizations/eks/get_token.py b/awscli/customizations/eks/get_token.py
+index 00fc4d3..ee8c74c 100644
+--- a/awscli/customizations/eks/get_token.py
++++ b/awscli/customizations/eks/get_token.py
+@@ -14,7 +14,7 @@ import base64
+ import json
+ import os
+ import sys
+-from datetime import datetime, timedelta
++from datetime import datetime, timedelta, timezone
+ 
+ import botocore
+ from botocore.model import ServiceId
+@@ -105,7 +105,7 @@ class GetTokenCommand(BasicCommand):
+     ]
+ 
+     def get_expiration_time(self):
+-        token_expiration = datetime.utcnow() + timedelta(
++        token_expiration = datetime.now(timezone.utc) + timedelta(
+             minutes=TOKEN_EXPIRATION_MINS
+         )
+         return token_expiration.strftime('%Y-%m-%dT%H:%M:%SZ')
+diff --git a/awscli/customizations/logs/tail.py b/awscli/customizations/logs/tail.py
+index e22facd..9b464b4 100644
+--- a/awscli/customizations/logs/tail.py
++++ b/awscli/customizations/logs/tail.py
+@@ -10,11 +10,12 @@
+ # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ # ANY KIND, either express or implied. See the License for the specific
+ # language governing permissions and limitations under the License.
++import functools
+ import json
+ import re
+ import time
+ from collections import defaultdict
+-from datetime import datetime, timedelta
++from datetime import datetime, timedelta, timezone
+ 
+ import colorama
+ from botocore.utils import datetime2timestamp, parse_timestamp
+@@ -266,7 +267,7 @@ class TimestampUtils:
+     def __init__(self, now=None):
+         self._now = now
+         if now is None:
+-            self._now = datetime.utcnow
++            self._now = functools.partial(datetime.now, timezone.utc)
+ 
+     def to_epoch_millis(self, timestamp):
+         re_match = self._RELATIVE_TIMESTAMP_REGEX.match(timestamp)
+diff --git a/tests/functional/botocore/test_ec2.py b/tests/functional/botocore/test_ec2.py
+index 81f4b76..39423aa 100644
+--- a/tests/functional/botocore/test_ec2.py
++++ b/tests/functional/botocore/test_ec2.py
+@@ -92,14 +92,14 @@ class TestCopySnapshotCustomization(BaseSessionTest):
+             '<snapshotId>%s</snapshotId>\n'
+             '</CopySnapshotResponse>\n'
+         )
+-        self.now = datetime.datetime(2011, 9, 9, 23, 36)
++        self.now = datetime.datetime(2011, 9, 9, 23, 36, tzinfo=datetime.timezone.utc)
+         self.datetime_patch = mock.patch.object(
+             botocore.auth.datetime,
+             'datetime',
+             mock.Mock(wraps=datetime.datetime),
+         )
+         self.mocked_datetime = self.datetime_patch.start()
+-        self.mocked_datetime.utcnow.return_value = self.now
++        self.mocked_datetime.now.return_value = self.now
+ 
+     def tearDown(self):
+         super().tearDown()
+diff --git a/tests/functional/botocore/test_lex.py b/tests/functional/botocore/test_lex.py
+index cded9c0..000f50d 100644
+--- a/tests/functional/botocore/test_lex.py
++++ b/tests/functional/botocore/test_lex.py
+@@ -10,7 +10,7 @@
+ # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ # ANY KIND, either express or implied. See the License for the specific
+ # language governing permissions and limitations under the License.
+-from datetime import datetime
++from datetime import datetime, timezone
+ 
+ from tests import BaseSessionTest, ClientHTTPStubber, mock
+ 
+@@ -31,10 +31,10 @@ class TestLex(BaseSessionTest):
+             'inputStream': b'',
+         }
+ 
+-        timestamp = datetime(2017, 3, 22, 0, 0)
++        timestamp = datetime(2017, 3, 22, 0, 0, tzinfo=timezone.utc)
+ 
+         with mock.patch('botocore.auth.datetime') as _datetime:
+-            _datetime.datetime.utcnow.return_value = timestamp
++            _datetime.datetime.now.return_value = timestamp
+             self.http_stubber.add_response(body=b'{}')
+             with self.http_stubber:
+                 self.client.post_content(**params)
+diff --git a/tests/functional/botocore/test_s3express.py b/tests/functional/botocore/test_s3express.py
+index 91ec532..1a516d2 100644
+--- a/tests/functional/botocore/test_s3express.py
++++ b/tests/functional/botocore/test_s3express.py
+@@ -108,7 +108,6 @@ class TestS3ExpressAuth:
+ class TestS3ExpressIdentityCache:
+     def test_default_s3_express_cache(self, default_s3_client, mock_datetime):
+         mock_datetime.now.return_value = DATE
+-        mock_datetime.utcnow.return_value = DATE
+ 
+         identity_cache = S3ExpressIdentityCache(
+             default_s3_client,
+@@ -126,7 +125,6 @@ class TestS3ExpressIdentityCache:
+         self, default_s3_client, mock_datetime
+     ):
+         mock_datetime.now.return_value = DATE
+-        mock_datetime.utcnow.return_value = DATE
+         bucket = 'my_bucket'
+ 
+         identity_cache = S3ExpressIdentityCache(
+@@ -151,7 +149,6 @@ class TestS3ExpressIdentityCache:
+         self, default_s3_client, mock_datetime
+     ):
+         mock_datetime.now.return_value = DATE
+-        mock_datetime.utcnow.return_value = DATE
+         bucket = 'my_bucket'
+         other_bucket = 'other_bucket'
+ 
+@@ -204,7 +201,7 @@ class TestS3ExpressRequests:
+         )
+ 
+     def test_create_bucket(self, default_s3_client, mock_datetime):
+-        mock_datetime.utcnow.return_value = DATE
++        mock_datetime.now.return_value = DATE
+ 
+         with ClientHTTPStubber(default_s3_client) as stubber:
+             stubber.add_response()
+@@ -228,7 +225,6 @@ class TestS3ExpressRequests:
+         self._assert_standard_sigv4_signature(stubber.requests[0].headers)
+ 
+     def test_get_object(self, default_s3_client, mock_datetime):
+-        mock_datetime.utcnow.return_value = DATE
+         mock_datetime.now.return_value = DATE
+ 
+         with ClientHTTPStubber(default_s3_client) as stubber:
+@@ -250,7 +246,6 @@ class TestS3ExpressRequests:
+     def test_cache_with_multiple_requests(
+         self, default_s3_client, mock_datetime
+     ):
+-        mock_datetime.utcnow.return_value = DATE
+         mock_datetime.now.return_value = DATE
+ 
+         with ClientHTTPStubber(default_s3_client) as stubber:
+@@ -275,7 +270,6 @@ class TestS3ExpressRequests:
+     def test_delete_objects_injects_correct_checksum(
+         self, default_s3_client, mock_datetime
+     ):
+-        mock_datetime.utcnow.return_value = DATE
+         mock_datetime.now.return_value = DATE
+ 
+         with ClientHTTPStubber(default_s3_client) as stubber:
+diff --git a/tests/functional/botocore/test_sts.py b/tests/functional/botocore/test_sts.py
+index 6bf343e..407ebab 100644
+--- a/tests/functional/botocore/test_sts.py
++++ b/tests/functional/botocore/test_sts.py
+@@ -11,7 +11,7 @@
+ # ANY KIND, either express or implied. See the License for the specific
+ # language governing permissions and limitations under the License.
+ import re
+-from datetime import datetime
++from datetime import datetime, timezone
+ 
+ from botocore.config import Config
+ from botocore.stub import Stubber
+@@ -32,9 +32,9 @@ class TestSTSPresignedUrl(BaseSessionTest):
+         self.stubber.activate()
+ 
+     def test_presigned_url_contains_no_content_type(self):
+-        timestamp = datetime(2017, 3, 22, 0, 0)
++        timestamp = datetime(2017, 3, 22, 0, 0, tzinfo=timezone.utc)
+         with mock.patch('botocore.auth.datetime') as _datetime:
+-            _datetime.datetime.utcnow.return_value = timestamp
++            _datetime.datetime.now.return_value = timestamp
+             url = self.client.generate_presigned_url('get_caller_identity', {})
+ 
+         # There should be no 'content-type' in x-amz-signedheaders
+diff --git a/tests/functional/dsql/test_generate_db_auth_token.py b/tests/functional/dsql/test_generate_db_auth_token.py
+index 2b48453..39871ab 100644
+--- a/tests/functional/dsql/test_generate_db_auth_token.py
++++ b/tests/functional/dsql/test_generate_db_auth_token.py
+@@ -50,7 +50,7 @@ class TestGenerateDBConnectAuthToken(BaseTestGenerateDBConnectAuthToken):
+         clock = datetime.datetime(2024, 11, 7, 17, 39, 33, tzinfo=tzutc())
+ 
+         with mock.patch('datetime.datetime') as dt:
+-            dt.utcnow.return_value = clock
++            dt.now.return_value = clock
+             stdout, _, _ = self.run_cmd(command, expected_rc=0)
+ 
+         # Expected hashes are always the same as session variables come from the BaseAwsCommandParamsTest class
+@@ -79,7 +79,7 @@ class TestGenerateDBConnectAuthToken(BaseTestGenerateDBConnectAuthToken):
+         clock = datetime.datetime(2024, 11, 7, 17, 39, 33, tzinfo=tzutc())
+ 
+         with mock.patch('datetime.datetime') as dt:
+-            dt.utcnow.return_value = clock
++            dt.now.return_value = clock
+             stdout, _, _ = self.run_cmd(command, expected_rc=252)
+ 
+ 
+@@ -92,7 +92,7 @@ class TestGenerateDBConnectAdminAuthToken(BaseTestGenerateDBConnectAuthToken):
+         clock = datetime.datetime(2024, 11, 7, 17, 39, 33, tzinfo=tzutc())
+ 
+         with mock.patch('datetime.datetime') as dt:
+-            dt.utcnow.return_value = clock
++            dt.now.return_value = clock
+             stdout, _, _ = self.run_cmd(command, expected_rc=0)
+ 
+         # Expected hashes are always the same as session variables come from the BaseAwsCommandParamsTest class
+diff --git a/tests/functional/ec2/test_bundle_instance.py b/tests/functional/ec2/test_bundle_instance.py
+index 5442929..06747f9 100644
+--- a/tests/functional/ec2/test_bundle_instance.py
++++ b/tests/functional/ec2/test_bundle_instance.py
+@@ -31,7 +31,7 @@ class TestBundleInstance(BaseAWSCommandParamsTest):
+ 
+     def setUp(self):
+         super(TestBundleInstance, self).setUp()
+-        # This mocks out datetime.datetime.utcnow() so that it always
++        # This mocks out datetime.datetime.now() so that it always
+         # returns the same datetime object.  This is because this value
+         # is embedded into the policy file that is generated and we
+         # don't what the policy or its signature to change each time
+@@ -42,7 +42,7 @@ class TestBundleInstance(BaseAWSCommandParamsTest):
+             mock.Mock(wraps=datetime.datetime),
+         )
+         mocked_datetime = self.datetime_patcher.start()
+-        mocked_datetime.utcnow.return_value = datetime.datetime(2013, 8, 9)
++        mocked_datetime.now.return_value = datetime.datetime(2013, 8, 9, tzinfo=datetime.timezone.utc)
+ 
+     def tearDown(self):
+         super(TestBundleInstance, self).tearDown()
+diff --git a/tests/functional/ec2instanceconnect/test_opentunnel.py b/tests/functional/ec2instanceconnect/test_opentunnel.py
+index 744aea6..ee8c47f 100644
+--- a/tests/functional/ec2instanceconnect/test_opentunnel.py
++++ b/tests/functional/ec2instanceconnect/test_opentunnel.py
+@@ -367,10 +367,10 @@ def request_params_for_describe_eice():
+ 
+ 
+ @pytest.fixture
+-def datetime_utcnow_patch():
++def datetime_now_patch():
+     clock = datetime.datetime(2020, 1, 1, 1, 1, 1, tzinfo=tzutc())
+     with mock.patch('datetime.datetime') as dt:
+-        dt.utcnow.return_value = clock
++        dt.now.return_value = clock
+         yield dt
+ 
+ 
+@@ -462,7 +462,7 @@ class TestOpenTunnel:
+         fips_dns_name,
+         request_params_for_describe_instance,
+         request_params_for_describe_eice,
+-        datetime_utcnow_patch,
++        datetime_now_patch,
+         endpoint_state,
+     ):
+         cli_runner.env["AWS_USE_FIPS_ENDPOINT"] = "false"
+diff --git a/tests/functional/eks/test_get_token.py b/tests/functional/eks/test_get_token.py
+index 0e78f9a..5600bdf 100644
+--- a/tests/functional/eks/test_get_token.py
++++ b/tests/functional/eks/test_get_token.py
+@@ -13,7 +13,7 @@
+ import base64
+ import json
+ import os
+-from datetime import datetime
++from datetime import datetime, timezone
+ 
+ from awscli.compat import urlparse
+ from awscli.testutils import BaseAWSCommandParamsTest, mock
+@@ -78,7 +78,7 @@ class TestGetTokenCommand(BaseAWSCommandParamsTest):
+ 
+     @mock.patch('awscli.customizations.eks.get_token.datetime')
+     def test_get_token(self, mock_datetime):
+-        mock_datetime.utcnow.return_value = datetime(2019, 10, 23, 23, 0, 0, 0)
++        mock_datetime.now.return_value = datetime(2019, 10, 23, 23, 0, 0, 0, tzinfo=timezone.utc)
+         cmd = 'eks get-token --cluster-name %s' % self.cluster_name
+         response = self.run_get_token(cmd)
+         self.assertEqual(
+@@ -96,7 +96,7 @@ class TestGetTokenCommand(BaseAWSCommandParamsTest):
+ 
+     @mock.patch('awscli.customizations.eks.get_token.datetime')
+     def test_query_nested_object(self, mock_datetime):
+-        mock_datetime.utcnow.return_value = datetime(2019, 10, 23, 23, 0, 0, 0)
++        mock_datetime.now.return_value = datetime(2019, 10, 23, 23, 0, 0, 0, tzinfo=timezone.utc)
+         cmd = 'eks get-token --cluster-name %s' % self.cluster_name
+         cmd += ' --query status'
+         response = self.run_get_token(cmd)
+@@ -119,7 +119,7 @@ class TestGetTokenCommand(BaseAWSCommandParamsTest):
+ 
+     @mock.patch('awscli.customizations.eks.get_token.datetime')
+     def test_output_text(self, mock_datetime):
+-        mock_datetime.utcnow.return_value = datetime(2019, 10, 23, 23, 0, 0, 0)
++        mock_datetime.now.return_value = datetime(2019, 10, 23, 23, 0, 0, 0, tzinfo=timezone.utc)
+         cmd = 'eks get-token --cluster-name %s' % self.cluster_name
+         cmd += ' --output text'
+         stdout, _, _ = self.run_cmd(cmd)
+@@ -129,7 +129,7 @@ class TestGetTokenCommand(BaseAWSCommandParamsTest):
+ 
+     @mock.patch('awscli.customizations.eks.get_token.datetime')
+     def test_output_table(self, mock_datetime):
+-        mock_datetime.utcnow.return_value = datetime(2019, 10, 23, 23, 0, 0, 0)
++        mock_datetime.now.return_value = datetime(2019, 10, 23, 23, 0, 0, 0, tzinfo=timezone.utc)
+         cmd = 'eks get-token --cluster-name %s' % self.cluster_name
+         cmd += ' --output table'
+         stdout, _, _ = self.run_cmd(cmd)
+diff --git a/tests/functional/logs/test_tail.py b/tests/functional/logs/test_tail.py
+index 0024bd4..8eaf61c 100644
+--- a/tests/functional/logs/test_tail.py
++++ b/tests/functional/logs/test_tail.py
+@@ -155,7 +155,7 @@ class TestTailCommand(BaseAWSCommandParamsTest):
+ 
+     def test_tail_defaults_to_10m(self):
+         datetime_mock = mock.Mock(wraps=datetime)
+-        datetime_mock.utcnow = mock.Mock(
++        datetime_mock.now = mock.Mock(
+             return_value=datetime(1970, 1, 1, 0, 10, 1, tzinfo=tz.tzutc())
+         )
+         with mock.patch(
+@@ -182,7 +182,7 @@ class TestTailCommand(BaseAWSCommandParamsTest):
+ 
+     def test_tail_with_relative_since(self):
+         datetime_mock = mock.Mock(wraps=datetime)
+-        datetime_mock.utcnow = mock.Mock(
++        datetime_mock.now = mock.Mock(
+             return_value=datetime(1970, 1, 1, 0, 0, 2, tzinfo=tz.tzutc())
+         )
+         with mock.patch(
+diff --git a/tests/functional/rds/test_generate_db_auth_token.py b/tests/functional/rds/test_generate_db_auth_token.py
+index 4cc562a..4ff83e1 100644
+--- a/tests/functional/rds/test_generate_db_auth_token.py
++++ b/tests/functional/rds/test_generate_db_auth_token.py
+@@ -50,7 +50,7 @@ class TestGenerateDBAuthToken(BaseAWSCommandParamsTest):
+         clock = datetime.datetime(2016, 11, 7, 17, 39, 33, tzinfo=tzutc())
+ 
+         with mock.patch('datetime.datetime') as dt:
+-            dt.utcnow.return_value = clock
++            dt.now.return_value = clock
+             stdout, _, _ = self.run_cmd(command, expected_rc=0)
+ 
+         expected = (
+diff --git a/tests/functional/s3/test_presign_command.py b/tests/functional/s3/test_presign_command.py
+index 43ede9a..d315dd3 100644
+--- a/tests/functional/s3/test_presign_command.py
++++ b/tests/functional/s3/test_presign_command.py
+@@ -22,13 +22,13 @@ from awscli.testutils import (
+     temporary_file,
+ )
+ 
+-# Values used to fix time.time() and datetime.datetime.utcnow()
++# Values used to fix time.time() and datetime.datetime.now()
+ # so we know the exact values of the signatures generated.
+ FROZEN_TIMESTAMP = 1471305652
+ DEFAULT_EXPIRES = 3600
+ FROZEN_TIME = mock.Mock(return_value=FROZEN_TIMESTAMP)
+ FROZEN_DATETIME = mock.Mock(
+-    return_value=datetime.datetime(2016, 8, 18, 14, 33, 3, 0)
++    return_value=datetime.datetime(2016, 8, 18, 14, 33, 3, 0, tzinfo=datetime.timezone.utc)
+ )
+ 
+ 
+@@ -76,7 +76,7 @@ class TestPresignCommand(BaseAWSCommandParamsTest):
+     def get_presigned_url_for_cmd(self, cmdline):
+         with mock.patch('time.time', FROZEN_TIME):
+             with mock.patch('datetime.datetime') as d:
+-                d.utcnow = FROZEN_DATETIME
++                d.now = FROZEN_DATETIME
+                 stdout = self.assert_params_for_cmd(cmdline, None)[0].strip()
+                 return stdout
+ 
+diff --git a/tests/integration/customizations/test_codecommit.py b/tests/integration/customizations/test_codecommit.py
+index 7077c08..d904290 100644
+--- a/tests/integration/customizations/test_codecommit.py
++++ b/tests/integration/customizations/test_codecommit.py
+@@ -12,7 +12,7 @@
+ # language governing permissions and limitations under the License.
+ 
+ import os
+-from datetime import datetime
++from datetime import datetime, timezone
+ 
+ from botocore.awsrequest import AWSRequest
+ from botocore.credentials import Credentials
+@@ -64,7 +64,7 @@ class TestCodeCommitCredentialHelper(unittest.TestCase):
+     @mock.patch('sys.stdout', new_callable=StringIOWithFileNo)
+     @mock.patch.object(awscli.customizations.codecommit.datetime, 'datetime')
+     def test_integration_using_cli_driver(self, dt_mock, stdout_mock):
+-        dt_mock.utcnow.return_value = datetime(2010, 10, 8)
++        dt_mock.now.return_value = datetime(2010, 10, 8, tzinfo=timezone.utc)
+         driver = create_clidriver()
+         entry_point = AWSCLIEntryPoint(driver)
+         rc = entry_point.main('codecommit credential-helper get'.split())
+@@ -83,7 +83,7 @@ class TestCodeCommitCredentialHelper(unittest.TestCase):
+     @mock.patch('sys.stdout', new_callable=StringIOWithFileNo)
+     @mock.patch.object(awscli.customizations.codecommit.datetime, 'datetime')
+     def test_integration_fips_using_cli_driver(self, dt_mock, stdout_mock):
+-        dt_mock.utcnow.return_value = datetime(2010, 10, 8)
++        dt_mock.now.return_value = datetime(2010, 10, 8, tzinfo=timezone.utc)
+         driver = create_clidriver()
+         entry_point = AWSCLIEntryPoint(driver)
+         rc = entry_point.main('codecommit credential-helper get'.split())
+@@ -102,7 +102,7 @@ class TestCodeCommitCredentialHelper(unittest.TestCase):
+     @mock.patch('sys.stdout', new_callable=StringIOWithFileNo)
+     @mock.patch.object(awscli.customizations.codecommit.datetime, 'datetime')
+     def test_integration_vpc_using_cli_driver(self, dt_mock, stdout_mock):
+-        dt_mock.utcnow.return_value = datetime(2010, 10, 8)
++        dt_mock.now.return_value = datetime(2010, 10, 8, tzinfo=timezone.utc)
+         driver = create_clidriver()
+         entry_point = AWSCLIEntryPoint(driver)
+         rc = entry_point.main('codecommit credential-helper get'.split())
+diff --git a/tests/unit/botocore/auth/test_signers.py b/tests/unit/botocore/auth/test_signers.py
+index 7effaf3..ff62c77 100644
+--- a/tests/unit/botocore/auth/test_signers.py
++++ b/tests/unit/botocore/auth/test_signers.py
+@@ -28,10 +28,10 @@ from tests import mock, unittest
+ 
+ class BaseTestWithFixedDate(unittest.TestCase):
+     def setUp(self):
+-        self.fixed_date = datetime.datetime(2014, 3, 10, 17, 2, 55, 0)
++        self.fixed_date = datetime.datetime(2014, 3, 10, 17, 2, 55, 0, tzinfo=datetime.timezone.utc)
+         self.datetime_patch = mock.patch('botocore.auth.datetime.datetime')
+         self.datetime_mock = self.datetime_patch.start()
+-        self.datetime_mock.utcnow.return_value = self.fixed_date
++        self.datetime_mock.now.return_value = self.fixed_date
+         self.datetime_mock.strptime.return_value = self.fixed_date
+ 
+     def tearDown(self):
+@@ -379,9 +379,9 @@ class TestSigV4(unittest.TestCase):
+             'datetime',
+             mock.Mock(wraps=datetime.datetime),
+         ) as mock_datetime:
+-            original_utcnow = datetime.datetime(2014, 1, 1, 0, 0)
++            original_now = datetime.datetime(2014, 1, 1, 0, 0, tzinfo=datetime.timezone.utc)
+ 
+-            mock_datetime.utcnow.return_value = original_utcnow
++            mock_datetime.now.return_value = original_now
+             # Go through the add_auth process once. This will attach
+             # a timestamp to the request at the beginning of auth.
+             auth.add_auth(request)
+@@ -389,9 +389,8 @@ class TestSigV4(unittest.TestCase):
+             # Ensure the date is in the Authorization header
+             self.assertIn('20140101', request.headers['Authorization'])
+             # Now suppose the utc time becomes the next day all of a sudden
+-            mock_datetime.utcnow.return_value = datetime.datetime(
+-                2014, 1, 2, 0, 0
+-            )
++            mock_datetime.now.return_value = datetime.datetime(
++                2014, 1, 2, 0, 0, tzinfo=datetime.timezone.utc)
+             # Smaller methods like the canonical request and string_to_sign
+             # should  have the timestamp attached to the request in their
+             # body and not what the time is now mocked as. This is to ensure
+@@ -563,8 +562,8 @@ class TestSigV4Presign(BasePresignTest):
+             mock.Mock(wraps=datetime.datetime),
+         )
+         mocked_datetime = self.datetime_patcher.start()
+-        mocked_datetime.utcnow.return_value = datetime.datetime(
+-            2014, 1, 1, 0, 0
++        mocked_datetime.now.return_value = datetime.datetime(
++            2014, 1, 1, 0, 0, tzinfo=datetime.timezone.utc
+         )
+ 
+     def tearDown(self):
+@@ -780,8 +779,8 @@ class TestS3SigV4Post(BaseS3PresignPostTest):
+             mock.Mock(wraps=datetime.datetime),
+         )
+         mocked_datetime = self.datetime_patcher.start()
+-        mocked_datetime.utcnow.return_value = datetime.datetime(
+-            2014, 1, 1, 0, 0
++        mocked_datetime.now.return_value = datetime.datetime(
++            2014, 1, 1, 0, 0, tzinfo=datetime.timezone.utc
+         )
+ 
+     def tearDown(self):
+diff --git a/tests/unit/botocore/test_credentials.py b/tests/unit/botocore/test_credentials.py
+index 29d36ac..96c18c3 100644
+--- a/tests/unit/botocore/test_credentials.py
++++ b/tests/unit/botocore/test_credentials.py
+@@ -16,7 +16,7 @@ import os
+ import shutil
+ import subprocess
+ import tempfile
+-from datetime import datetime, timedelta
++from datetime import datetime, timedelta, timezone
+ 
+ import botocore.exceptions
+ import botocore.session
+@@ -138,7 +138,7 @@ class TestRefreshableCredentials(TestCredentials):
+ 
+     def test_refresh_needed(self):
+         # The expiry time was set for 30 minutes ago, so if we
+-        # say the current time is utcnow(), then we should need
++        # say the current time is now(), then we should need
+         # a refresh.
+         self.mock_time.return_value = datetime.now(tzlocal())
+         self.assertTrue(self.creds.refresh_needed())
+@@ -326,8 +326,8 @@ class TestAssumeRoleCredentialFetcher(BaseEnvVar):
+         self.assertEqual(response, expected_response)
+ 
+     def test_retrieves_from_cache(self):
+-        date_in_future = datetime.utcnow() + timedelta(seconds=1000)
+-        utc_timestamp = date_in_future.isoformat() + 'Z'
++        date_in_future = datetime.now(timezone.utc) + timedelta(seconds=1000)
++        utc_timestamp = date_in_future.isoformat()
+         cache_key = '793d6e2f27667ab2da104824407e486bfec24a47'
+         cache = {
+             cache_key: {
+@@ -830,8 +830,8 @@ class TestAssumeRoleWithWebIdentityCredentialFetcher(BaseEnvVar):
+         self.assertEqual(response, expected_response)
+ 
+     def test_retrieves_from_cache(self):
+-        date_in_future = datetime.utcnow() + timedelta(seconds=1000)
+-        utc_timestamp = date_in_future.isoformat() + 'Z'
++        date_in_future = datetime.now(timezone.utc) + timedelta(seconds=1000)
++        utc_timestamp = date_in_future.isoformat()
+         cache_key = '793d6e2f27667ab2da104824407e486bfec24a47'
+         cache = {
+             cache_key: {
+@@ -1019,8 +1019,8 @@ class TestAssumeRoleWithWebIdentityCredentialProvider(unittest.TestCase):
+         mock_loader_cls.assert_called_with('/some/path/token.jwt')
+ 
+     def test_assume_role_retrieves_from_cache(self):
+-        date_in_future = datetime.utcnow() + timedelta(seconds=1000)
+-        utc_timestamp = date_in_future.isoformat() + 'Z'
++        date_in_future = datetime.now(timezone.utc) + timedelta(seconds=1000)
++        utc_timestamp = date_in_future.isoformat()
+ 
+         cache_key = 'c29461feeacfbed43017d20612606ff76abc073d'
+         cache = {
+@@ -2260,8 +2260,8 @@ class TestAssumeRoleCredentialProvider(unittest.TestCase):
+         self.assertEqual(expiry_time, '2016-11-06T01:30:00UTC')
+ 
+     def test_assume_role_retrieves_from_cache(self):
+-        date_in_future = datetime.utcnow() + timedelta(seconds=1000)
+-        utc_timestamp = date_in_future.isoformat() + 'Z'
++        date_in_future = datetime.now(timezone.utc) + timedelta(seconds=1000)
++        utc_timestamp = date_in_future.isoformat()
+         self.fake_config['profiles']['development']['role_arn'] = 'myrole'
+ 
+         cache_key = '793d6e2f27667ab2da104824407e486bfec24a47'
+@@ -2289,8 +2289,8 @@ class TestAssumeRoleCredentialProvider(unittest.TestCase):
+         self.assertEqual(creds.token, 'baz-cached')
+ 
+     def test_chain_prefers_cache(self):
+-        date_in_future = datetime.utcnow() + timedelta(seconds=1000)
+-        utc_timestamp = date_in_future.isoformat() + 'Z'
++        date_in_future = datetime.now(timezone.utc) + timedelta(seconds=1000)
++        utc_timestamp = date_in_future.isoformat()
+ 
+         # The profile we will be using has a cache entry, but the profile it
+         # is sourcing from does not. This should result in the cached
+diff --git a/tests/unit/botocore/test_signers.py b/tests/unit/botocore/test_signers.py
+index b97bf58..ed54e9a 100644
+--- a/tests/unit/botocore/test_signers.py
++++ b/tests/unit/botocore/test_signers.py
+@@ -686,9 +686,9 @@ class TestS3PostPresigner(BaseSignerTest):
+ 
+         self.datetime_patch = mock.patch('botocore.signers.datetime')
+         self.datetime_mock = self.datetime_patch.start()
+-        self.fixed_date = datetime.datetime(2014, 3, 10, 17, 2, 55, 0)
++        self.fixed_date = datetime.datetime(2014, 3, 10, 17, 2, 55, 0, tzinfo=datetime.timezone.utc)
+         self.fixed_delta = datetime.timedelta(seconds=3600)
+-        self.datetime_mock.datetime.utcnow.return_value = self.fixed_date
++        self.datetime_mock.datetime.now.return_value = self.fixed_date
+         self.datetime_mock.timedelta.return_value = self.fixed_delta
+ 
+     def tearDown(self):
+@@ -1141,7 +1141,7 @@ class TestGenerateDBAuthToken(BaseSignerTest):
+         clock = datetime.datetime(2016, 11, 7, 17, 39, 33, tzinfo=tzutc())
+ 
+         with mock.patch('datetime.datetime') as dt:
+-            dt.utcnow.return_value = clock
++            dt.now.return_value = clock
+             result = generate_db_auth_token(
+                 self.client, hostname, port, username
+             )
+diff --git a/tests/unit/botocore/test_utils.py b/tests/unit/botocore/test_utils.py
+index 0d02ade..90b73f0 100644
+--- a/tests/unit/botocore/test_utils.py
++++ b/tests/unit/botocore/test_utils.py
+@@ -109,7 +109,7 @@ from dateutil.tz import tzoffset, tzutc
+ 
+ from tests import FreezeTime, RawResponse, create_session, mock, unittest
+ 
+-DATE = datetime.datetime(2021, 12, 10, 00, 00, 00)
++DATE = datetime.datetime(2021, 12, 10, 00, 00, 00, tzinfo=datetime.timezone.utc)
+ DT_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
+ 
+ 
+@@ -3155,7 +3155,7 @@ class TestInstanceMetadataFetcher(unittest.TestCase):
+ 
+     def _get_datetime(self, dt=None, offset=None, offset_func=operator.add):
+         if dt is None:
+-            dt = datetime.datetime.utcnow()
++            dt = datetime.datetime.now(datetime.timezone.utc)
+         if offset is not None:
+             dt = offset_func(dt, offset)
+ 
+diff --git a/tests/unit/customizations/eks/test_get_token.py b/tests/unit/customizations/eks/test_get_token.py
+index 7f830b3..0f019c3 100644
+--- a/tests/unit/customizations/eks/test_get_token.py
++++ b/tests/unit/customizations/eks/test_get_token.py
+@@ -48,7 +48,7 @@ class TestGetTokenCommand(BaseTokenTest):
+         cmd = GetTokenCommand(self._session)
+         timestamp = cmd.get_expiration_time()
+         try:
+-            datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%SZ')
++            datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S%z')
+         except ValueError:
+             raise ValueError(
+                 "Incorrect data format, should be %Y-%m-%dT%H:%M:%SZ"
+diff --git a/tests/utils/botocore/__init__.py b/tests/utils/botocore/__init__.py
+index bbe6a59..dddaf26 100644
+--- a/tests/utils/botocore/__init__.py
++++ b/tests/utils/botocore/__init__.py
+@@ -579,12 +579,12 @@ class FreezeTime(contextlib.ContextDecorator):
+     :param module: reference to imported module to patch (e.g. botocore.auth.datetime)
+ 
+     :type date: datetime.datetime
+-    :param date: datetime object specifying the output for utcnow()
++    :param date: datetime object specifying the output for now()
+     """
+ 
+     def __init__(self, module, date=None):
+         if date is None:
+-            date = datetime.datetime.utcnow()
++            date = datetime.datetime.now(datetime.timezone.utc)
+         self.date = date
+         self.datetime_patcher = mock.patch.object(
+             module, 'datetime', mock.Mock(wraps=datetime.datetime)
+@@ -592,7 +592,7 @@ class FreezeTime(contextlib.ContextDecorator):
+ 
+     def __enter__(self, *args, **kwargs):
+         mock = self.datetime_patcher.start()
+-        mock.utcnow.return_value = self.date
++        mock.now.return_value = self.date
+ 
+     def __exit__(self, *args, **kwargs):
+         self.datetime_patcher.stop()

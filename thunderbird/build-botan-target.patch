@@ -1,0 +1,12 @@
+diff -up thunderbird-147.0/comm/third_party/openpgp.configure.build-botan thunderbird-147.0/comm/third_party/openpgp.configure
+--- thunderbird-147.0/comm/third_party/openpgp.configure.build-botan	2026-01-08 22:45:29.000000000 +0100
++++ thunderbird-147.0/comm/third_party/openpgp.configure	2026-01-14 15:43:34.946025500 +0100
+@@ -348,7 +348,7 @@ with only_when(in_tree_librnp):
+ 
+             botan_flags = [
+                 "--cc-bin={}".format(cxx_compiler.compiler),
+-                "--cc-abi-flags={}".format(" ".join(abi_flags)),
++                #"--cc-abi-flags={}".format(" ".join(abi_flags)),
+                 "--cpu={}".format(target.cpu),
+                 "--os={}".format(botan_os),
+                 "--with-build-dir={}".format(botan_objdir),

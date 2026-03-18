@@ -1,0 +1,74 @@
+From ebccb911c4a1aef7af6d72335531003fb6c9fb6d Mon Sep 17 00:00:00 2001
+From: "Guanyou.Chen" <chenguanyou@xiaomi.com>
+Date: Fri, 5 Dec 2025 13:56:38 +0800
+Subject: [PATCH 04/23] arm64: Fix "vtop" command to display swap information
+ on Linux 6.10 and later
+
+Kernel commit 798cb7f9aec3 ("swapon(2)/swapoff(2): don't bother with
+block size") removed swap_info_struct.old_block_size member at Linux
+6.10-rc1.  The crash-utility has used this to determine whether a swap
+is a partition or file and to determine the way to get the swap path.
+
+before:
+    crash> vtop 2000000
+    VIRTUAL     PHYSICAL
+    2000000     (not mapped)
+
+    PAGE DIRECTORY: ffffff8106356000
+       PGD: ffffff8106356000 => 800000186355003
+       PMD: ffffff8106355080 => 8000001476f5003
+       PTE: ffffff80c76f5000 => 101a62004
+
+       PTE       OFFSET: 1055330
+    vtop: cannot determine swap location
+
+after:
+    crash> vtop 2000000
+    VIRTUAL     PHYSICAL
+    2000000     (not mapped)
+
+    PAGE DIRECTORY: ffffff8106356000
+       PGD: ffffff8106356000 => 800000186355003
+       PMD: ffffff8106355080 => 8000001476f5003
+       PTE: ffffff80c76f5000 => 101a62004
+
+       PTE                     SWAP                  OFFSET
+    101a62004  /first_stage_ramdisk/dev/block/zram0  1055330
+
+          VMA           START       END     FLAGS FILE
+    ffffff81a06e8b00    2000000   22000000 100073
+
+    SWAP: /first_stage_ramdisk/dev/block/zram0  OFFSET: 1055330
+
+Signed-off-by: Guanyou.Chen <chenguanyou@xiaomi.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ memory.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/memory.c b/memory.c
+index 400d31a04cd4..cbc8d2fe2727 100644
+--- a/memory.c
++++ b/memory.c
+@@ -16415,6 +16415,8 @@ get_swapdev(ulong type, char *buf)
+ 	ulong vfsmnt;
+ 	char *devname;
+ 	char buf1[BUFSIZE];
++	int swap_file_is_file =
++		STREQ(MEMBER_TYPE_NAME("swap_info_struct", "swap_file"), "file");
+ 
+ 	swap_info_init();
+ 
+@@ -16474,7 +16476,8 @@ get_swapdev(ulong type, char *buf)
+ 			vfsmnt = ULONG(vt->swap_info_struct + 
+ 				OFFSET(swap_info_struct_swap_vfsmnt));
+         		get_pathname(swap_file, buf, BUFSIZE, 1, vfsmnt);
+-                } else if (VALID_MEMBER (swap_info_struct_old_block_size)) {
++                } else if (VALID_MEMBER (swap_info_struct_old_block_size)
++					|| swap_file_is_file) {
+ 			devname = vfsmount_devname(file_to_vfsmnt(swap_file),
+ 				buf1, BUFSIZE);
+ 			get_pathname(file_to_dentry(swap_file),
+-- 
+2.51.1
+

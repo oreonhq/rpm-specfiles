@@ -1,0 +1,16 @@
+summary: Fonts related tests
+discover:
+  how: fmf
+  url: https://src.fedoraproject.org/tests/fonts
+prepare:
+  name: tmt
+  how: install
+  package:
+    - bitmap-lucida-typewriter-fonts
+execute:
+  how: tmt
+environment:
+  PACKAGE: bitmap-lucida-typewriter-fonts
+  FONT_ALIAS: monospace
+  FONT_FAMILY: LucidaTypewriter
+  FONT_LANG: en

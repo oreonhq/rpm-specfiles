@@ -1,0 +1,4 @@
+PURPOSE of /CoreOS/cronie/Regression/crond-subtask-abnormal-termination-removes-pid-file-in-error
+Description: Test for crond subtask abnormal termination removes pid
+Author: Robin Hack <rhack@redhat.com>
+Bug summary: crond subtask abnormal termination removes pid file in error

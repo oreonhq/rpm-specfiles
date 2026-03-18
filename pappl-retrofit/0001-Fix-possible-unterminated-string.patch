@@ -1,0 +1,30 @@
+From a06689c14dbff46107aa9b1933ed3d9268cfc9c9 Mon Sep 17 00:00:00 2001
+From: Zdenek Dohnal <zdohnal@redhat.com>
+Date: Mon, 16 Dec 2024 14:38:08 +0100
+Subject: [PATCH] Fix possible unterminated string
+
+Although we terminate buf2 in libcupsfilters and make_model can't be
+1024 bytes long, using snprintf() fixes the coverity report and makes
+sure the buffer is terminated.
+---
+ pappl-retrofit/pappl-retrofit.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/pappl-retrofit/pappl-retrofit.c b/pappl-retrofit/pappl-retrofit.c
+index 7627164..b187bde 100644
+--- a/pappl-retrofit/pappl-retrofit.c
++++ b/pappl-retrofit/pappl-retrofit.c
+@@ -4054,9 +4054,7 @@ _prSetupDriverList(pr_printer_app_global_data_t *global_data)
+ 	      // word (cleaned manufacturer name or part of it) is the
+ 	      // same, we accept the data of the device ID as display
+ 	      // string.
+-	      strncpy(buf1,
+-		      (buf2[0] ? buf2 : ppd->record.make_and_model),
+-		      sizeof(buf1));
++	      snprintf(buf1, sizeof(buf1), "%s", buf2[0] ? buf2 : ppd->record.make_and_model);
+ 	      if ((ptr = strchr(buf1, ' ')) != NULL)
+ 		*ptr = '\0';
+ 	      // Convert device ID to make/model string, so that we can add
+-- 
+2.48.1
+

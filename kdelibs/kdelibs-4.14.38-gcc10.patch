@@ -1,0 +1,12 @@
+diff -up kdelibs-4.14.38/dnssd/servicemodel.cpp.me kdelibs-4.14.38/dnssd/servicemodel.cpp
+--- kdelibs-4.14.38/dnssd/servicemodel.cpp.me	2019-09-25 10:46:44.673557894 +0200
++++ kdelibs-4.14.38/dnssd/servicemodel.cpp	2019-09-25 10:56:35.515894652 +0200
+@@ -87,7 +87,7 @@ QVariant ServiceModel::data(const QModel
+ 		case Host: return srv[index.row()]->hostName();
+ 		case Port: return srv[index.row()]->port();
+ 	    }
+-	case ServicePtrRole: QVariant ret;
++	case int(ServicePtrRole): QVariant ret;
+ 			     ret.setValue(srv[index.row()]);
+ 			    return ret;
+     }

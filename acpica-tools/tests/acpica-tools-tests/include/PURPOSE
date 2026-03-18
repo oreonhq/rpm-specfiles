@@ -1,0 +1,8 @@
+Common library functions for acpica-tools-tests.
+
+This task includes library functions for other acpica-tools-tests tasks, do not schedule this task directly. 
+
+includes:
+ - Download/install of binary acpica-tools package
+ - Download/install and build prep of acpica-tools .src.rpm
+ - 

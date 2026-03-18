@@ -1,0 +1,24 @@
+#!/usr/bin/expect -f
+# Expect script for telnet logging as $username to $hostname using $password and executing $command.
+# Usage:
+#   ./telnet.exp username password hostname command
+set username [lrange $argv 0 0]
+set password [lrange $argv 1 1]
+set hostname [lrange $argv 2 2]
+set command  [lrange $argv 3 10]
+#set timeout 300
+# connect to remote host and execute given command
+log_user 1
+spawn telnet $hostname 23
+
+expect {
+  -nocase "yes/no" { send -- "yes\r" ; exp_continue }
+  -nocase "password" { send -- "$password\r" ; exp_continue }
+  -nocase "kernel" { send -- "$username\r" ; exp_continue }
+  -nocase "last login" { send -- "$command\r" }
+}
+
+log_user 1
+send -- "\r"
+sleep 1
+expect eof

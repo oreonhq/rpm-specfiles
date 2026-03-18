@@ -1,0 +1,29 @@
+---
+inspections:
+  # none of our compiled code has an ABI
+  abidiff: off
+  # the project does not use .desktop files
+  desktop: off
+  # the project uses no Java
+  javabytecode: off
+
+rpmdeps:
+  # ignore auto dependencies like: (crate(bindgen/default) >= 0.59.0 with crate(bindgen/default) < 0.60.0~)'
+  ignore:
+    requires: ^\(crate\(.*\)$
+
+debuginfo:
+  # rpminspect error: "Contains .symtab"
+  # ignoring because this appears to be a bug in rpmbuild or further down the toolchain
+  # https://bugzilla.redhat.com/show_bug.cgi?id=2166149
+  ignore:
+    - /usr/lib/udev/stratis*
+
+annocheck:
+  # annocheck error:
+  # Hardened: <path>: FAIL: stack-prot test because stack protection
+  # deliberately disabled (function: call_fini)
+  # Seems to be a consequence of including glibc-static when fully static
+  # compilation occurs.
+  ignore:
+    - /usr/lib/udev/stratis*

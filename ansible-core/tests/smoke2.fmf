@@ -1,0 +1,15 @@
+summary: Run smoke tests with the standalone ansible-collection-community-general installed
+discover:
+  - name: Smoke tests with community.general
+    how: shell
+    tests:
+      - name: Run tests/smoke.sh
+        test: tests/smoke.sh
+        require:
+          - python3
+          - python3-dnf
+          - dnf-plugins-core
+          - ansible-core
+          - ansible-collection-community-general
+execute:
+  how: tmt

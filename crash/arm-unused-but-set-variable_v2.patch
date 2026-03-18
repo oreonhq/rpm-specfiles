@@ -1,0 +1,35 @@
+--- crash-5.1.8/gdb-7.0.patch.orig
++++ crash-5.1.8/gdb-7.0.patch
+@@ -1986,3 +1986,32 @@
+    stub_sec = stub_entry->stub_sec;
+  
+    /* Ensure this stub is attached to the current section being
++--- gdb-7.0/bfd/elf32-arm.c.orig
+++++ gdb-7.0/bfd/elf32-arm.c
++@@ -12962,7 +12962,6 @@ arm_map_one_stub (struct bfd_hash_entry 
++ 		  void * in_arg)
++ {
++   struct elf32_arm_stub_hash_entry *stub_entry;
++-  struct bfd_link_info *info;
++   asection *stub_sec;
++   bfd_vma addr;
++   char *stub_name;
++@@ -12977,8 +12976,6 @@ arm_map_one_stub (struct bfd_hash_entry 
++   stub_entry = (struct elf32_arm_stub_hash_entry *) gen_entry;
++   osi = (output_arch_syminfo *) in_arg;
++ 
++-  info = osi->info;
++-
++   stub_sec = stub_entry->stub_sec;
++ 
++   /* Ensure this stub is attached to the current section being
++--- gdb-7.0/bfd/cpu-arm.c.orig
+++++ gdb-7.0/bfd/cpu-arm.c
++@@ -262,6 +262,7 @@ arm_check_note (bfd *abfd,
++     }
++ 
++   /* FIXME: We should probably check the type as well.  */
+++  (void) type;
++ 
++   if (description_return != NULL)
++     * description_return = descr;

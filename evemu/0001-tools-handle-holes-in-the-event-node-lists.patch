@@ -1,0 +1,54 @@
+From 095fc44e699b79ce28d30151e3768b933cf8e461 Mon Sep 17 00:00:00 2001
+From: Peter Hutterer <peter.hutterer@who-t.net>
+Date: Wed, 28 Jan 2015 10:02:17 +1000
+Subject: [PATCH evemu 1/2] tools: handle holes in the event node lists
+
+The current code simply counts the number of directory entries and takes that
+as the maximum event node given. That isn't true if we have a hole in the
+event range after removing a device, making the last device in the list
+unaccessible.
+
+Fix this by actually looking at the event node numbers.
+
+Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
+Signed-off-by: Benjamin Tissoires <benjamin.tissoires@gmail.com>
+---
+ tools/find_event_devices.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/tools/find_event_devices.c b/tools/find_event_devices.c
+index fd975aa..1f7539a 100644
+--- a/tools/find_event_devices.c
++++ b/tools/find_event_devices.c
+@@ -46,6 +46,7 @@ char* find_event_devices(void)
+ 	struct dirent **namelist;
+ 	int i, ndev, devnum;
+ 	char *filename;
++	int max_device = 0;
+ 
+ 	ndev = scandir(DEV_INPUT_EVENT, &namelist, is_event_device, versionsort);
+ 	if (ndev <= 0)
+@@ -68,13 +69,18 @@ char* find_event_devices(void)
+ 
+ 		fprintf(stderr, "%s:	%s\n", fname, name);
+ 		close(fd);
++
++		sscanf(namelist[i]->d_name, "event%d", &devnum);
++		if (devnum > max_device)
++			max_device = devnum;
++
+ 		free(namelist[i]);
+ 	}
+ 
+-	fprintf(stderr, "Select the device event number [0-%d]: ", ndev - 1);
++	fprintf(stderr, "Select the device event number [0-%d]: ", max_device);
+ 	scanf("%d", &devnum);
+ 
+-	if (devnum >= ndev || devnum < 0)
++	if (devnum > max_device || devnum < 0)
+ 		return NULL;
+ 
+ 	asprintf(&filename, "%s/%s%d",
+-- 
+2.4.2
+

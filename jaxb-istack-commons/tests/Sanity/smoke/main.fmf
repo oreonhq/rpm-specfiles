@@ -1,0 +1,9 @@
+summary: jaxb-istack-commons smoke test
+description: |
+  Test basic functionality of jaxb-istack-commons.
+require:
+  - jaxb-istack-commons-tools
+  - java-21-openjdk-devel
+  - xmvn-tools
+  - mvn(org.apache.ant:ant)
+  - mvn(jakarta.activation:jakarta.activation-api)

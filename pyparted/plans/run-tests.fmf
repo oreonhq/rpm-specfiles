@@ -1,0 +1,9 @@
+summary: Run pyparted tests
+prepare:
+    how: install
+    package:
+    - python3-pyparted
+execute:
+    script: |
+        fallocate -l 1G $PWD/disk.img
+        ./tests/scripts/pyparted-tests $PWD/disk.img

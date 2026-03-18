@@ -1,0 +1,32 @@
+From 1d83bd29c253ba898ac35683258fec285d5a6529 Mon Sep 17 00:00:00 2001
+From: Orion Poplawski <orion@nwra.com>
+Date: Sat, 4 Oct 2025 19:49:26 -0600
+Subject: [PATCH] Use systemctl is-active --quiet to check status of services
+ (fixes #3942)
+
+---
+ changelog.d/3942.fixed   | 1 +
+ cobbler/actions/check.py | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+ create mode 100644 changelog.d/3942.fixed
+
+diff --git a/changelog.d/3942.fixed b/changelog.d/3942.fixed
+new file mode 100644
+index 0000000000..444bdb800a
+--- /dev/null
++++ b/changelog.d/3942.fixed
+@@ -0,0 +1 @@
++check: Use systemctl is-active --quiet to check the status of services
+diff --git a/cobbler/actions/check.py b/cobbler/actions/check.py
+index b79706aff1..5f6a3fa3bc 100644
+--- a/cobbler/actions/check.py
++++ b/cobbler/actions/check.py
+@@ -142,7 +142,7 @@ def check_service(self, status, which, notes=""):
+                     status.append("service %s is not running%s" % (which, notes))
+                     return
+         elif utils.is_systemd():
+-            return_code = utils.subprocess_call("systemctl status %s > /dev/null 2>/dev/null" % which,
++            return_code = utils.subprocess_call("systemctl is-active --quiet %s > /dev/null 2>/dev/null" % which,
+                                                 shell=True)
+             if return_code != 0:
+                 status.append("service %s is not running%s" % (which, notes))

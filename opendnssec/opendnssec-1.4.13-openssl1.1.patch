@@ -1,0 +1,95 @@
+From e2bbb899195ea98b6b5f6c972ab764a53b387789 Mon Sep 17 00:00:00 2001
+From: Yuri Schaeffer <yuri@nlnetlabs.nl>
+Date: Fri, 4 Nov 2016 15:35:06 +0100
+Subject: [PATCH] HMAC_CTX_init deprecated in openssl-1.1.0
+
+---
+ m4/acx_ssl.m4                  | 12 +++++++++---
+ signer/src/Makefile.am         |  4 ++--
+ signer/src/wire/tsig-openssl.c | 15 ++++++++++++---
+ 3 files changed, 23 insertions(+), 8 deletions(-)
+
+diff --git a/m4/acx_ssl.m4 b/m4/acx_ssl.m4
+index 1dc6e40..3d64626 100644
+--- a/m4/acx_ssl.m4
++++ b/m4/acx_ssl.m4
+@@ -35,12 +35,18 @@ AC_DEFUN([ACX_SSL], [
+             if test x_$ssldir = x_/usr/sfw; then
+                 SSL_LIBS="$SSL_LIBS -R$ssldir/lib";
+             fi
+-            AC_CHECK_LIB(crypto, HMAC_CTX_init,, [
+-                    AC_MSG_ERROR([OpenSSL found in $ssldir, but version 0.9.7 or higher is required])
+-            ])
++            AC_CHECK_LIB(crypto, HMAC_CTX_reset, [
++                    AC_DEFINE_UNQUOTED([HAVE_SSL_NEW_HMAC], [], [Define if you have the SSL libraries with new HMAC related functions.])
++                    SSL_LIBS="$SSL_LIBS -lcrypto";
++            ], [
++                    AC_CHECK_LIB(crypto, HMAC_CTX_init,, [
++                            AC_MSG_ERROR([OpenSSL found in $ssldir, but version 0.9.7 or higher is required])
++                    ])
++            ] )
+             AC_CHECK_FUNCS([EVP_sha1 EVP_sha256])
+         fi
+         AC_SUBST(HAVE_SSL)
++        AC_SUBST(HAVE_SSL_NEW_HMAC)
+         AC_SUBST(SSL_INCLUDES)
+         AC_SUBST(SSL_LIBS)
+     fi
+diff --git a/signer/src/Makefile.am b/signer/src/Makefile.am
+index 60e8877..b39eac8 100644
+--- a/signer/src/Makefile.am
++++ b/signer/src/Makefile.am
+@@ -133,7 +133,7 @@ ods_signer_SOURCES=		ods-signer.c \
+ 				wire/xfrd.c wire/xfrd.h
+ 
+ ods_signer_LDADD=		$(LIBHSM)
+-ods_signer_LDADD+=		@LDNS_LIBS@ @XML2_LIBS@ @RT_LIBS@
++ods_signer_LDADD+=		@LDNS_LIBS@ @XML2_LIBS@ @RT_LIBS@ @SSL_LIBS@ 
+ ods_signer_LDADD+=		$(LIBCOMPAT)
+ 
+ ods_getconf_SOURCES=		ods-getconf.c \
+@@ -193,5 +193,5 @@ ods_getconf_SOURCES=		ods-getconf.c \
+ 				wire/xfrd.c wire/xfrd.h
+ 
+ ods_getconf_LDADD=		$(LIBHSM)
+-ods_getconf_LDADD+=		@LDNS_LIBS@ @XML2_LIBS@ @RT_LIBS@
++ods_getconf_LDADD+=		@SSL_LIBS@ @LDNS_LIBS@ @XML2_LIBS@ @RT_LIBS@
+ ods_getconf_LDADD+=		$(LIBCOMPAT)
+diff --git a/signer/src/wire/tsig-openssl.c b/signer/src/wire/tsig-openssl.c
+index c26b1e7..24fd342 100644
+--- a/signer/src/wire/tsig-openssl.c
++++ b/signer/src/wire/tsig-openssl.c
+@@ -131,8 +131,11 @@ static void
+ cleanup_context(void *data)
+ {
+     HMAC_CTX* context = (HMAC_CTX*) data;
++#ifdef HAVE_SSL_NEW_HMAC
++    HMAC_CTX_free(context);
++#else
+     HMAC_CTX_cleanup(context);
+-    return;
++#endif
+ }
+ 
+ static void
+@@ -155,9 +158,15 @@ context_add_cleanup(void* context)
+ static void*
+ create_context(allocator_type* allocator)
+ {
+-    HMAC_CTX* context = (HMAC_CTX*) allocator_alloc(allocator,
+-        sizeof(HMAC_CTX));
++    HMAC_CTX* context;
++#ifdef HAVE_SSL_NEW_HMAC
++    context = HMAC_CTX_new();
++    if (!context) return NULL;
++    HMAC_CTX_reset(context);
++#else
++    context = (HMAC_CTX*) allocator_alloc(allocator, sizeof(HMAC_CTX));
+     HMAC_CTX_init(context);
++#endif
+     context_add_cleanup(context);
+     return context;
+ }
+-- 
+2.9.3
+

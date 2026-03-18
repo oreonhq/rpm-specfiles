@@ -1,0 +1,27 @@
+- hosts: localhost
+  vars:
+  - artifacts: "{{ lookup('env', 'TEST_ARTIFACTS')|default('./artifacts', true) }}"
+  tags:
+  - classic
+  roles:
+  - role: standard-test-basic
+    tests:
+    - acpidump
+    required_packages:
+    - acpica-tools
+  remote_user: root
+  tasks:
+  - name: acpidump
+    block:
+      - name: run acpidump
+        shell: exec > /tmp/acpidump.test.log 2>&1 && ./acpidump/runtest.sh
+
+    always:
+      - name: pull out results
+        fetch:
+          dest: "{{ artifacts }}/"
+          src:  "{{ item }}"
+          flat: yes
+        with_items:
+        - /tmp/acpidump.test.log
+        - /tmp/acpi.tables

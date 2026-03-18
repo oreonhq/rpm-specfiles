@@ -1,0 +1,9 @@
+[Unit]
+Description=Amanda Kerberos Activation Socket
+
+[Socket]
+ListenStream=10082
+Accept=true
+
+[Install]
+WantedBy=sockets.target

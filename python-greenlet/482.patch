@@ -1,0 +1,46 @@
+From 18ec3ac07564bde2c0978f654d21e22980077f9d Mon Sep 17 00:00:00 2001
+From: Thomas A Caswell <tcaswell@gmail.com>
+Date: Mon, 8 Dec 2025 21:39:56 -0500
+Subject: [PATCH] FIX: add macros to guard against removed enum
+
+close #481
+---
+ src/greenlet/TGreenlet.cpp               | 6 ++++++
+ src/greenlet/greenlet_cpython_compat.hpp | 6 ++++++
+ 2 files changed, 12 insertions(+)
+
+diff --git a/src/greenlet/TGreenlet.cpp b/src/greenlet/TGreenlet.cpp
+index d12722ba..1fb056e8 100644
+--- a/src/greenlet/TGreenlet.cpp
++++ b/src/greenlet/TGreenlet.cpp
+@@ -633,7 +633,13 @@ void GREENLET_NOINLINE(Greenlet::expose_frames)()
+             // directly.  This is important since GetFrameObject might
+             // lazily _create_ the frame object and we don't want the
+             // interpreter to lose track of it.
++            //
++            #if !GREENLET_PY315
++            // This enum value was removed in
++            //    https://github.com/python/cpython/pull/141108
++
+             assert(iframe_copy.owner != FRAME_OWNED_BY_CSTACK);
++            #endif
+ 
+             // We really want to just write:
+             //     PyFrameObject* frame = _PyFrame_GetFrameObject(iframe);
+diff --git a/src/greenlet/greenlet_cpython_compat.hpp b/src/greenlet/greenlet_cpython_compat.hpp
+index a3b3850e..f46d9777 100644
+--- a/src/greenlet/greenlet_cpython_compat.hpp
++++ b/src/greenlet/greenlet_cpython_compat.hpp
+@@ -67,6 +67,12 @@ Greenlet won't compile on anything older than Python 3.11 alpha 4 (see
+ #    define GREENLET_PY314 0
+ #endif
+ 
++#if PY_VERSION_HEX >= 0x30F0000
++#    define GREENLET_PY315 1
++#else
++#    define GREENLET_PY315 0
++#endif
++
+ #ifndef Py_SET_REFCNT
+ /* Py_REFCNT and Py_SIZE macros are converted to functions
+ https://bugs.python.org/issue39573 */

@@ -1,0 +1,9 @@
+diff -up Class-Inner-0.1/t/basic.t.BAD Class-Inner-0.1/t/basic.t
+--- Class-Inner-0.1/t/basic.t.BAD	2008-03-06 14:09:44.000000000 -0500
++++ Class-Inner-0.1/t/basic.t	2008-03-06 14:10:13.000000000 -0500
+@@ -45,4 +45,4 @@ is($ic->poly(), 'b',      '$ic->poly is 
+ 
+ $ic = undef;
+ 
+-ok(!$ic_class->isa('Parent'), 'Class dismissed');
++ok(!(ref $ic_class && $ic_class->isa('Parent')), 'Class dismissed');

@@ -1,0 +1,29 @@
+From c601b311dd09dfbdca13dc2f06e9ff440fe92718 Mon Sep 17 00:00:00 2001
+From: Luis Galdos <luis.galdos@suse.com>
+Date: Wed, 17 Dec 2025 08:13:50 +0000
+Subject: [PATCH 10/23] bpf: improve for-loop when searching for used_maps
+
+As the list bpf->maplist contains unique pointers, break when a
+map is found.
+
+Signed-off-by: Luis Galdos <luis.galdos@suse.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ bpf.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/bpf.c b/bpf.c
+index 9b99e2332e6c..2840c7daad45 100644
+--- a/bpf.c
++++ b/bpf.c
+@@ -880,6 +880,7 @@ bpf_prog_used_maps(int idx, char *retbuf)
+ 				sprintf(&retbuf[strlen(retbuf)], "%s%ld", 
+ 					strlen(retbuf) ? "," : "",
+ 					bpf->maplist[m].index);
++				break;
+ 			}
+ 		}
+ 	}
+-- 
+2.51.1
+

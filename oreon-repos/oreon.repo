@@ -1,0 +1,12 @@
+[oreon]
+name=Oreon 11 - $basearch
+mirrorlist=https://mirrors.oreonhq.com/oreon-11
+enabled=1
+countme=0
+metadata_expire=6h
+repo_gpgcheck=0
+type=rpm
+gpgcheck=1
+gpgkey=https://mirrors.oreonhq.com/RPM-GPG-KEY-oreon-11-primary
+skip_if_unavailable=False
+fastestmirror=1

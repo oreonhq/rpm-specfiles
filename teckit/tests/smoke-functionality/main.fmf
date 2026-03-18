@@ -1,0 +1,14 @@
+summary: tests basic functionality
+contact: Than Ngo <than@redhat.com>
+component:
+  - teckit
+test: ./runtest.sh
+framework: beakerlib
+require:
+  - bash
+  - coreutils
+  - man-db
+  - teckit
+duration: 5m
+extra-summary: /CoreOS/teckit/smoke-functionality
+extra-task: /CoreOS/teckit/smoke-functionality

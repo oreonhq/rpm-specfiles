@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<!-- SPDX-License-Identifier: MIT -->
+<fontconfig>
+  <group>
+    <target>PT Sans</target>
+    <axis>
+      <name>optical size</name>
+      <step>
+        <name>Regular</name>
+        <match>
+          <family>PT Sans Narrow</family>
+          <prepend-keyword>Condensed</prepend-keyword>
+        </match>
+      </step>
+      <step>
+        <name>Caption</name>
+        <value>8</value>
+      </step>
+    </axis>
+    <like>
+      <family>Myriad Pro</family>
+      <family>sans-serif</family>
+    </like>
+  </group>
+</fontconfig>
+

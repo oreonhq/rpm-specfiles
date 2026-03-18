@@ -1,0 +1,6 @@
+summary: log4j smoke test
+description: |
+  Test basic functionality of log4j.
+require:
+  - log4j
+  - java-21-openjdk-devel

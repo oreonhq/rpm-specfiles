@@ -1,0 +1,6 @@
+/*.rpm
+/.build*.log
+/clog
+/csv-*.tar.gz
+/x86_64
+/ocaml-csv-2.4.tar.gz

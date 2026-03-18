@@ -1,0 +1,4 @@
+summary: Smoke test
+execute:
+    how: tmt
+    script: dpdk-testpmd --help

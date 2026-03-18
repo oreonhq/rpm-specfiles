@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Module-Load-Conditional
+require: perl-Module-Load-Conditional-tests
+test: /usr/libexec/perl-Module-Load-Conditional/test

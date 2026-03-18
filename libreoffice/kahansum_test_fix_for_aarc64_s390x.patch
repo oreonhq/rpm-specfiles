@@ -1,0 +1,16 @@
+diff -U 3 -dHrN a/sc/inc/arraysumfunctor.hxx b/sc/inc/arraysumfunctor.hxx
+--- a/sc/inc/arraysumfunctor.hxx	2023-09-22 21:07:01.000000000 +0200
++++ b/sc/inc/arraysumfunctor.hxx	2023-10-01 09:13:03.523493665 +0200
+@@ -85,8 +85,12 @@
+ inline KahanSum sumArray(const double* pArray, size_t nSize)
+ {
+     size_t i = 0;
++#if 0
+     const double* pCurrent = pArray;
+     KahanSum fSum = executeFast(i, nSize, pCurrent);
++#else
++    KahanSum fSum = 0.0;
++#endif
+ 
+     // sum rest of the array
+     for (; i < nSize; ++i)

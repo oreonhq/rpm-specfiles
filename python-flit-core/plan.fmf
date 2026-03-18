@@ -1,0 +1,23 @@
+execute:
+  how: tmt
+
+discover:
+  - name: rpms_pyproject-rpm-macros
+    how: shell
+    url: https://src.fedoraproject.org/rpms/pyproject-rpm-macros.git
+    tests:   
+    - name: pyproject_entrypoints
+      path: /tests
+      test: ./mocktest.sh python-entrypoints
+    - name: import_test
+      test: python3 -c "import flit_core"
+
+prepare:
+  - name: Install dependencies
+    how: install
+    package:
+    - mock
+    - python3
+    - python3-flit-core
+    - rpmdevtools
+    - rpm-build

@@ -1,0 +1,22 @@
+From 70069cd50eb07e8a40ac9b0efbb83fcb91a78b99 Mon Sep 17 00:00:00 2001
+From: Patrick <tingping@tingping.se>
+Date: Fri, 9 Feb 2024 14:20:48 -0600
+Subject: [PATCH] appdata: Fix release date
+
+---
+ data/misc/io.github.Hexchat.appdata.xml.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/misc/io.github.Hexchat.appdata.xml.in b/data/misc/io.github.Hexchat.appdata.xml.in
+index 6e3cf2e67..0d67a0b6e 100644
+--- a/data/misc/io.github.Hexchat.appdata.xml.in
++++ b/data/misc/io.github.Hexchat.appdata.xml.in
+@@ -27,7 +27,7 @@
+     <id>hexchat.desktop</id>
+   </provides>
+   <releases>
+-    <release date="2023-02-07" version="2.16.2">
++    <release date="2024-02-07" version="2.16.2">
+       <description>
+         <p>This is a minor release with small improvements and fixes:</p>
+         <ul>

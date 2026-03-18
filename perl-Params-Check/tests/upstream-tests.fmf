@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Params-Check
+require: perl-Params-Check-tests
+test: /usr/libexec/perl-Params-Check/test

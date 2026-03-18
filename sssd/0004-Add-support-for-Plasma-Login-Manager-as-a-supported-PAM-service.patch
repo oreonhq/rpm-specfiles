@@ -1,0 +1,94 @@
+From 3cb77746db8d04156763d95e4777e5982abb78ce Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa@velocitylimitless.com>
+Date: Mon, 9 Mar 2026 09:35:59 -0400
+Subject: [PATCH] Add support for Plasma Login Manager as a supported PAM
+ service
+
+Plasma Login Manager is the new recommended login manager for KDE Plasma,
+and is used as the login manager for Fedora Linux 44 and higher for KDE
+Plasma.
+
+Reference: https://fedoraproject.org/wiki/Changes/PlasmaLoginManager
+
+Resolves: https://github.com/SSSD/sssd/issues/8490
+
+Signed-off-by: Neal Gompa <ngompa@velocitylimitless.com>
+Reviewed-by: Alexey Tikhonov <atikhono@redhat.com>
+Reviewed-by: Sumit Bose <sbose@redhat.com>
+(cherry picked from commit 5df3bfff92ffe57e3d856e246ca8ffec5250b6fc)
+---
+ src/man/sssd-ad.5.xml          | 5 +++++
+ src/man/sssd.conf.5.xml        | 5 +++++
+ src/providers/ad/ad_gpo.c      | 3 ++-
+ src/responder/pam/pamsrv_p11.c | 2 +-
+ 4 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/src/man/sssd-ad.5.xml b/src/man/sssd-ad.5.xml
+index 0e6da86c400c18464968ebd3ee3706c03c8d8fe9..24ac43973b6ccb0a5931a65ffe91181da410f9ff 100644
+--- a/src/man/sssd-ad.5.xml
++++ b/src/man/sssd-ad.5.xml
+@@ -689,6 +689,11 @@ ad_gpo_map_interactive = +my_pam_service, -login
+                                         lxdm
+                                     </para>
+                                 </listitem>
++                                <listitem>
++                                    <para>
++                                        plasmalogin
++                                    </para>
++                                </listitem>
+                                 <listitem>
+                                     <para>
+                                         sddm
+diff --git a/src/man/sssd.conf.5.xml b/src/man/sssd.conf.5.xml
+index 450d8ffb149a0bf06bda1c793775d564ffc6e261..ba0b5bd1efdc49ebc53d6345cedbbfa913eef665 100644
+--- a/src/man/sssd.conf.5.xml
++++ b/src/man/sssd.conf.5.xml
+@@ -1757,6 +1757,11 @@ pam_p11_allowed_services = +my_pam_service, -login
+                                         kdm
+                                     </para>
+                                 </listitem>
++                                <listitem>
++                                    <para>
++                                        plasmalogin
++                                    </para>
++                                </listitem>
+                                 <listitem>
+                                     <para>
+                                         sudo
+diff --git a/src/providers/ad/ad_gpo.c b/src/providers/ad/ad_gpo.c
+index 46aa3d73224e6bbca32f5f24d7361a849fac8e22..952fa49a0e539d6bedf1a60cfd7784f52875107e 100644
+--- a/src/providers/ad/ad_gpo.c
++++ b/src/providers/ad/ad_gpo.c
+@@ -202,6 +202,7 @@ int ad_gpo_process_cse_recv(struct tevent_req *req);
+ #define GPO_KDM "kdm"
+ #define GPO_LIGHTDM "lightdm"
+ #define GPO_LXDM "lxdm"
++#define GPO_PLASMALOGIN "plasmalogin"
+ #define GPO_SDDM "sddm"
+ #define GPO_UNITY "unity"
+ #define GPO_XDM "xdm"
+@@ -230,7 +231,7 @@ struct gpo_map_option_entry {
+ const char *gpo_map_interactive_defaults[] =
+     {GPO_LOGIN, GPO_SU, GPO_SU_L,
+      GPO_GDM_FINGERPRINT, GPO_GDM_PASSWORD, GPO_GDM_SMARTCARD, GPO_KDM,
+-     GPO_LIGHTDM, GPO_LXDM, GPO_SDDM, GPO_UNITY, GPO_XDM, NULL};
++     GPO_LIGHTDM, GPO_LXDM, GPO_PLASMALOGIN, GPO_SDDM, GPO_UNITY, GPO_XDM, NULL};
+ const char *gpo_map_remote_interactive_defaults[] = {GPO_SSHD, GPO_COCKPIT,
+                                                      NULL};
+ const char *gpo_map_network_defaults[] = {GPO_FTP, GPO_SAMBA, NULL};
+diff --git a/src/responder/pam/pamsrv_p11.c b/src/responder/pam/pamsrv_p11.c
+index 83925b86a87ab4ed7becc81d4cb9c52d06063415..4f1e8d084815acc220aa4bf9f8e6d9a19b51026a 100644
+--- a/src/responder/pam/pamsrv_p11.c
++++ b/src/responder/pam/pamsrv_p11.c
+@@ -275,7 +275,7 @@ static errno_t get_sc_services(TALLOC_CTX *mem_ctx, struct pam_ctx *pctx,
+     int expected_sc_list_size;
+ 
+     const char *default_sc_services[] = {
+-        "login", "su", "su-l", "gdm-smartcard", "gdm-password", "kdm", "sudo",
++        "login", "su", "su-l", "gdm-smartcard", "gdm-password", "kdm", "plasmalogin", "sudo",
+         "sudo-i", "gnome-screensaver", "gdm-switchable-auth", "polkit-1", "vlock", NULL,
+     };
+     const int default_sc_services_size =
+-- 
+2.52.0
+

@@ -1,0 +1,86 @@
+From 8b4dbf35ace326e5b836982d428e7029313a2247 Mon Sep 17 00:00:00 2001
+From: Mark Reynolds <mreynolds@redhat.com>
+Date: Mon, 23 Feb 2026 12:37:26 -0500
+Subject: [PATCH] Issue 7271 - plugins that create threads need to update 
+ active thread count
+
+Description:
+
+Plugins that create threads need to up to the global active thread count.
+Otherwise when the server is being stopped the plugin's close function gets
+called while these threads are still running and still using the plugin
+configuration. This can lead to crashes.
+
+relates: https://github.com/389ds/389-ds-base/issues/7271
+
+Reviewed by: progier & tbordaz (Thanks!!)
+---
+ ldap/servers/plugins/replication/repl5_protocol.c | 5 +++++
+ ldap/servers/plugins/retrocl/retrocl_trim.c       | 7 ++++++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/ldap/servers/plugins/replication/repl5_protocol.c b/ldap/servers/plugins/replication/repl5_protocol.c
+index 5d4a0e455..bc9580319 100644
+--- a/ldap/servers/plugins/replication/repl5_protocol.c
++++ b/ldap/servers/plugins/replication/repl5_protocol.c
+@@ -23,6 +23,7 @@
+ 
+ #include "repl5.h"
+ #include "repl5_prot_private.h"
++#include "slap.h"
+ 
+ #define PROTOCOL_5_INCREMENTAL 1
+ #define PROTOCOL_5_TOTAL 2
+@@ -237,6 +238,8 @@ prot_thread_main(void *arg)
+         return;
+     }
+ 
++    g_incr_active_threadcnt();
++
+     set_thread_private_agmtname(agmt_get_long_name(agmt));
+ 
+     done = 0;
+@@ -301,6 +304,8 @@ prot_thread_main(void *arg)
+             done = 1;
+         }
+     }
++
++    g_decr_active_threadcnt();
+ }
+ 
+ /*
+diff --git a/ldap/servers/plugins/retrocl/retrocl_trim.c b/ldap/servers/plugins/retrocl/retrocl_trim.c
+index 8fcd3d32b..8fdc75c62 100644
+--- a/ldap/servers/plugins/retrocl/retrocl_trim.c
++++ b/ldap/servers/plugins/retrocl/retrocl_trim.c
+@@ -243,6 +243,8 @@ trim_changelog(void)
+ 
+     now_interval = slapi_current_rel_time_t(); /* monotonic time for interval */
+ 
++    g_incr_active_threadcnt();
++
+     PR_Lock(ts.ts_s_trim_mutex);
+     max_age = ts.ts_c_max_age;
+     trim_interval = ts.ts_c_trim_interval;
+@@ -257,7 +259,7 @@ trim_changelog(void)
+          */
+         done = 0;
+         now_maxage = slapi_current_utc_time(); /* real time for trim candidates */
+-        while (!done && retrocl_trimming == 1) {
++        while (!done && retrocl_trimming == 1 && !slapi_is_shutting_down()) {
+             int did_delete;
+ 
+             did_delete = 0;
+@@ -309,6 +311,9 @@ trim_changelog(void)
+                       "trim_changelog: removed %d change records\n",
+                       num_deleted);
+     }
++
++    g_decr_active_threadcnt();
++
+     return rc;
+ }
+ 
+-- 
+2.53.0
+

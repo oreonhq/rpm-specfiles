@@ -1,0 +1,2 @@
+# This is a loadable module; the main calling process is linked against libc itself
+addFilter("library-not-linked-against-libc /.*/auto/Taint/Runtime/Runtime\.so")

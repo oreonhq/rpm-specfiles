@@ -1,0 +1,52 @@
+From caccc723f79495b473733d937d174251defc4658 Mon Sep 17 00:00:00 2001
+From: Assam Boudjelthia <assam.boudjelthia@qt.io>
+Date: Wed, 2 Dec 2020 23:05:40 +0200
+Subject: [PATCH 2/5] Android: update linux package dependencies
+
+The 32bit packages are not needed by the current SDK tools, and
+libncurses is required for gdb to work properly.
+
+Task-number: QTCREATORBUG-24995
+Change-Id: I5f1faa3114d5e73cf569a141a61adc048f913b03
+Reviewed-by: Andy Shaw <andy.shaw@qt.io>
+Reviewed-by: Paul Wicking <paul.wicking@qt.io>
+(cherry picked from commit 0a7e3dee8654bab22139c0bbe5b9a65571e30379)
+Reviewed-by: Qt Cherry-pick Bot <cherrypick_bot@qt-project.org>
+---
+ doc/src/platforms/android/android.qdoc | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/doc/src/platforms/android/android.qdoc b/doc/src/platforms/android/android.qdoc
+index 34f46f435..b4abea8b0 100644
+--- a/doc/src/platforms/android/android.qdoc
++++ b/doc/src/platforms/android/android.qdoc
+@@ -253,21 +253,20 @@ After the package installation is complete, install the driver from
+ \l{Android: adb}{adb} commands now and check whether your Android device
+ responds to them.
+ 
+-\section2 Linux 64-bit
++\section2 Linux
+ 
+-If you're developing on a 64-bit Linux machine, you must install the
+-following dependencies in order to run 32-bit executables like \c adb, which
+-allows Qt Creator to find devices to deploy to:
++The following dependencies are needed for using tools such as \c adb or \c gdb which
++can be used by Qt Creator:
+ 
+ \badcode
+-sudo apt-get install libstdc++6:i386 libgcc1:i386 zlib1g:i386 libncurses5:i386
++sudo apt-get install libstdc++6 libncurses5
+ \endcode
+ 
+ \target emulator dependencies
+ To run the Android emulator, the following dependencies are also necessary:
+ 
+ \badcode
+-sudo apt-get install libsdl1.2debian:i386
++sudo apt-get install libsdl1.2debian
+ \endcode
+ 
+ \section2 Qt Creator IDE
+-- 
+2.51.1
+

@@ -1,0 +1,35 @@
+Name: hyphen-mi
+Summary: Maori hyphenation rules
+%global upstreamid 20080630
+Version: 0.%{upstreamid}
+Release: 34%{?dist}
+# Source is dead now
+# Source: http://packages.papakupu.maori.nz/hunspell-hyphen/hunspell-hyphen-mi-0.1.%%{upstreamid}-beta.tar.gz
+Source: hunspell-hyphen-mi-0.1.%{upstreamid}-beta.tar.gz
+URL: http://papakupu.maori.nz/
+License: GPL-3.0-or-later
+BuildArch: noarch
+
+Requires: hyphen
+Supplements: (hyphen and langpacks-mi)
+
+%description
+Maori hyphenation rules.
+
+%prep
+%autosetup -c
+
+%build
+
+%install
+mkdir -p $RPM_BUILD_ROOT/%{_datadir}/hyphen
+cp -p mi.dic $RPM_BUILD_ROOT/%{_datadir}/hyphen/hyph_mi_NZ.dic
+
+
+%files
+%doc mi.LICENSE mi.README
+%{_datadir}/hyphen/*
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-34
+- Prepare for Oreon 11 (RP1)

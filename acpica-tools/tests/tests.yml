@@ -1,0 +1,9 @@
+- import_playbook: test_acpidump.yml
+- import_playbook: test_acpixtract.yml
+- import_playbook: test_badcode.yml
+- import_playbook: test_grammar.yml
+- import_playbook: test_grammar2.yml
+- import_playbook: test_converterSample.yml
+- import_playbook: test_dump-tables.yml
+- import_playbook: test_acpica-tools-tests.yml
+

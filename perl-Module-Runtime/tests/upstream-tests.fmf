@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Module-Runtime
+require: perl-Module-Runtime-tests
+test: /usr/libexec/perl-Module-Runtime/test

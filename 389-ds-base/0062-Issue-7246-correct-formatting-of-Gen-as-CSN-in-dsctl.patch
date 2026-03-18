@@ -1,0 +1,34 @@
+From f4d8df66187c0d1db6c9f5c9aa55946a8564de4b Mon Sep 17 00:00:00 2001
+From: Sam Morris <sam@robots.org.uk>
+Date: Wed, 25 Feb 2026 12:30:01 +0000
+Subject: [PATCH] Issue 7246 - correct formatting of 'Gen as CSN' in dsctl
+ get-nsstate output (#7247)
+
+Description: CSNs are formatted as hexadecimal, but the replica id and
+sequence number are displayed in decomal.
+
+Fix: use correct format specifiers for hexadecimal output.
+
+Fixes: https://github.com/389ds/389-ds-base/issues/7246
+
+Signed-off-by: Sam Morris <sam@robots.org.uk>
+---
+ src/lib389/lib389/dseldif.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/lib389/lib389/dseldif.py b/src/lib389/lib389/dseldif.py
+index 7834d9468..eac17aa4c 100644
+--- a/src/lib389/lib389/dseldif.py
++++ b/src/lib389/lib389/dseldif.py
+@@ -407,7 +407,7 @@ class DSEldif(DSLint):
+             'endian': endian,
+             'rid': str(rid),
+             'gen_time': str(sampled_time),
+-            'gencsn': "%08x%04d%04d0000" % (sampled_time, seq_num, rid),
++            'gencsn': "%08x%04x%04x0000" % (sampled_time, seq_num, rid),
+             'gen_time_str': time.ctime(sampled_time),
+             'local_offset': str(local_offset),
+             'local_offset_str': print_nice_time(local_offset),
+-- 
+2.53.0
+

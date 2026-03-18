@@ -1,0 +1,6 @@
+/*.tar.gz
+/jzlib-1*/
+/.project
+/noarch
+/*.src.rpm
+/.build-*.log

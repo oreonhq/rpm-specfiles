@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Convert-ASN1
+require: perl-Convert-ASN1-tests
+test: /usr/libexec/perl-Convert-ASN1/test

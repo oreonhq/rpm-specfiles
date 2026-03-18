@@ -1,0 +1,43 @@
+From aedad47f6408e03b8ed6008e2df7adcaa1dda9c1 Mon Sep 17 00:00:00 2001
+From: neilfsun <loyou85@gmail.com>
+Date: Wed, 3 Dec 2025 10:35:57 +0800
+Subject: [PATCH 16/23] Ensure all child processes are properly cleaned up in
+ restore_ifile_sanity
+
+Run input file with pipe cmdlines will get nothing output.
+
+    crash> p cpu_info:0 | grep 'x86 ='
+      x86 = 0x19,
+    crash> cat crashrc
+    p cpu_info:0 | grep 'x86 ='
+    p cpu_info:0 | grep 'x86 ='
+    crash> < crashrc
+    crash> p cpu_info:0 | grep 'x86 ='
+      x86 = 0x19,
+    crash> p cpu_info:0 | grep 'x86 ='
+
+    crash>
+
+Signed-off-by: neilfsun <neilfsun@tencent.com>
+Signed-off-by: Feng Sun <loyou85@gmail.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ cmdline.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/cmdline.c b/cmdline.c
+index 65da04cbf9a5..4add548e4932 100644
+--- a/cmdline.c
++++ b/cmdline.c
+@@ -1285,6 +1285,8 @@ restore_ifile_sanity(void)
+ 		close_tmpfile2();
+ 	}
+ 
++	wait_for_children(ALL_CHILDREN);
++
+ 	restore_gdb_sanity();
+ 
+ 	free_all_bufs();
+-- 
+2.51.1
+

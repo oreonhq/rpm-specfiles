@@ -1,0 +1,51 @@
+diff -up dovecot-2.4.1-build/dovecot-2.4.1-4/dovecot-init.service.initbysystemd dovecot-2.4.1-build/dovecot-2.4.1-4/dovecot-init.service
+--- dovecot-2.4.1-build/dovecot-2.4.1-4/dovecot-init.service.initbysystemd	2025-06-02 23:32:10.685053915 +0200
++++ dovecot-2.4.1-build/dovecot-2.4.1-4/dovecot-init.service	2025-06-02 23:32:10.685053915 +0200
+@@ -0,0 +1,13 @@
++[Unit]
++Description=One-time Dovecot init service
++ConditionPathExists=|!/etc/pki/dovecot/certs/dovecot.pem
++
++[Service]
++Type=oneshot
++RemainAfterExit=no
++ExecStart=/bin/sh -c '\
++if [ ! -f /etc/pki/dovecot/certs/dovecot.pem ]; \
++then\
++  SSLDIR=/etc/pki/dovecot/ OPENSSLCONFIG=/etc/pki/dovecot/dovecot-openssl.cnf /usr/libexec/dovecot/mkcert.sh /dev/null 2>&1;\
++fi'
++
+diff -up dovecot-2.4.1-build/dovecot-2.4.1-4/dovecot.service.in.initbysystemd dovecot-2.4.1-build/dovecot-2.4.1-4/dovecot.service.in
+--- dovecot-2.4.1-build/dovecot-2.4.1-4/dovecot.service.in.initbysystemd	2025-06-02 23:32:10.685195261 +0200
++++ dovecot-2.4.1-build/dovecot-2.4.1-4/dovecot.service.in	2025-06-02 23:34:03.123174934 +0200
+@@ -11,7 +11,8 @@
+ Description=Dovecot IMAP/POP3 email server
+ Documentation=man:dovecot(1)
+ Documentation=https://doc.dovecot.org/
+-After=local-fs.target network-online.target remote-fs.target time-sync.target
++After=local-fs.target network-online.target remote-fs.target time-sync.target dovecot-init.service
++Requires=dovecot-init.service
+ Wants=network-online.target
+ 
+ [Service]
+diff -up dovecot-2.4.1-build/dovecot-2.4.1-4/Makefile.am.initbysystemd dovecot-2.4.1-build/dovecot-2.4.1-4/Makefile.am
+--- dovecot-2.4.1-build/dovecot-2.4.1-4/Makefile.am.initbysystemd	2025-03-28 12:32:27.000000000 +0100
++++ dovecot-2.4.1-build/dovecot-2.4.1-4/Makefile.am	2025-06-02 23:33:22.221675050 +0200
+@@ -19,6 +19,7 @@ EXTRA_DIST = \
+ 	update-version.sh \
+ 	run-test-valgrind.supp \
+ 	dovecot.service.in \
++	dovecot-init.service \
+ 	dovecot.socket \
+ 	version \
+ 	build-aux/git-abi-version-gen \
+@@ -67,7 +68,8 @@ dovecot-config: dovecot-config.in Makefi
+ if WANT_SYSTEMD
+ systemdsystemunit_DATA = \
+         dovecot.socket \
+-        dovecot.service
++        dovecot.service \
++        dovecot-init.service
+ endif
+ 
+ install-exec-hook:

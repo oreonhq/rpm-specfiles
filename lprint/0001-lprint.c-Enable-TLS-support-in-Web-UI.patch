@@ -1,0 +1,43 @@
+From 641efd2de2c57d06389b869943aaf7517d52645c Mon Sep 17 00:00:00 2001
+From: Zdenek Dohnal <zdohnal@redhat.com>
+Date: Tue, 6 Aug 2024 15:16:27 +0200
+Subject: [PATCH] lprint.c: Enable TLS support in Web UI
+
+Currently (1.3.1) there is no way how to turn TLS web UI pages, because
+system callback does not set WEB_TLS option by default, and checks only
+for `no-tls` when processing server options.
+
+This can be fixed by two way, depending on which default settings we
+prefer. The PR enables TLS pages by default, leaving to user whether he
+wants them to be disabled.
+
+Do let me know if you would prefer the other way around.
+---
+ lprint.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lprint.c b/lprint.c
+index 435e9aa..8990379 100644
+--- a/lprint.c
++++ b/lprint.c
+@@ -468,7 +468,7 @@ system_cb(
+   char			oldfile[1024];	// Old configuration filename
+   pappl_loglevel_t	loglevel;	// Log level
+   int			port = 0;	// Port number, if any
+-  pappl_soptions_t	soptions = PAPPL_SOPTIONS_MULTI_QUEUE | PAPPL_SOPTIONS_WEB_INTERFACE | PAPPL_SOPTIONS_WEB_LOG | PAPPL_SOPTIONS_WEB_SECURITY;
++  pappl_soptions_t	soptions = PAPPL_SOPTIONS_MULTI_QUEUE | PAPPL_SOPTIONS_WEB_INTERFACE | PAPPL_SOPTIONS_WEB_LOG | PAPPL_SOPTIONS_WEB_SECURITY | PAPPL_SOPTIONS_WEB_TLS;
+ 					// System options
+   static pappl_version_t versions[1] =	// Software versions
+   {
+@@ -527,7 +527,7 @@ system_cb(
+       else if (!strcmp(valptr, "web-security") || !strncmp(valptr, "web-security,", 13))
+         soptions |= PAPPL_SOPTIONS_WEB_SECURITY;
+       else if (!strcmp(valptr, "no-tls") || !strncmp(valptr, "no-tls,", 7))
+-        soptions |= PAPPL_SOPTIONS_NO_TLS;
++        soptions &= (pappl_soptions_t)~PAPPL_SOPTIONS_WEB_TLS;
+ 
+       if ((valptr = strchr(valptr, ',')) != NULL)
+         valptr ++;
+-- 
+2.45.2
+

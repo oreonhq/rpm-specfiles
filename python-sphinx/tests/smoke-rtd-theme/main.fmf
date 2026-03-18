@@ -1,0 +1,11 @@
+summary: run the basic documentation build with sphinx-rtd-theme
+test: |
+    sphinx-build -M html source/ build/ &&
+    grep '<section id="test-docfile">' build/html/index.html &&
+    grep '<h1>Test docfile' build/html/index.html &&
+    grep 'SphinxRtdTheme' build/html/_static/js/theme.js &&
+    grep '<script src="_static/js/theme.js' build/html/index.html &&
+    rm -rf build/
+require:
+  - python3-sphinx
+  - python3-sphinx_rtd_theme

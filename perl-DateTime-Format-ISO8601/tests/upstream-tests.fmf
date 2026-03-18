@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-DateTime-Format-ISO8601
+require: perl-DateTime-Format-ISO8601-tests
+test: /usr/libexec/perl-DateTime-Format-ISO8601/test

@@ -1,0 +1,46 @@
+From b922ecd4777d80524e91644c98c46f6ed3577f1f Mon Sep 17 00:00:00 2001
+From: Matthias Clasen <mclasen@redhat.com>
+Date: Tue, 5 Apr 2011 11:06:13 -0400
+Subject: [PATCH] Status icon: fix size problems
+
+There are bugs in both the notification area and in GtkStatusIcon
+when it comes to size allocation. This patch tries to work around
+them in a way that makes the keyboard indicator come up with a
+reasonable size initially, and not resize when clicked.
+https://bugzilla.gnome.org/show_bug.cgi?id=642703
+---
+ libgnomekbd/gkbd-status.c |   11 +++++++++++
+ 1 files changed, 11 insertions(+), 0 deletions(-)
+
+diff --git a/libgnomekbd/gkbd-status.c b/libgnomekbd/gkbd-status.c
+index 276fe54..2f5b41f 100644
+--- a/libgnomekbd/gkbd-status.c
++++ b/libgnomekbd/gkbd-status.c
+@@ -393,6 +393,12 @@ void
+ gkbd_status_reinit_ui (GkbdStatus * gki)
+ {
+ 	gkbd_status_set_current_page (gki);
++        /* To work around combined bugs in notification-area
++         * and GtkStatusIcon, reshow the icon here, to ensure
++         * size changes are picked up.
++         */
++        gtk_status_icon_set_visible (GTK_STATUS_ICON (gki), FALSE);
++        gtk_status_icon_set_visible (GTK_STATUS_ICON (gki), TRUE);
+ }
+ 
+ /* Should be called once for all widgets */
+@@ -509,6 +515,11 @@ static void
+ gkbd_status_size_changed (GkbdStatus * gki, gint size)
+ {
+ 	xkl_debug (150, "Size changed to %d\n", size);
++        /* Ignore the initial size 200 that we get before
++         * we are embedded
++         */
++        if (!gtk_status_icon_is_embedded (GTK_STATUS_ICON (gki)))
++                return;
+ 	if (globals.current_height != size) {
+ 		globals.current_height = size;
+ 		globals.current_width = size * 3 / 2;
+-- 
+1.7.4.2
+

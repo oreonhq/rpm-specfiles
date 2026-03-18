@@ -1,0 +1,2 @@
+summary: bats tests
+test: ./test_osbh.sh

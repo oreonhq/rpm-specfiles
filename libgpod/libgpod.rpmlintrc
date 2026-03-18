@@ -1,0 +1,16 @@
+from Config import addFilter
+
+# libgpod is unlikely to be updated to fix the license file
+addFilter("incorrect-fsf-address .*/COPYING")
+
+# the README.SysInfo file documents the usage of this command
+addFilter("libgpod.*: W: no-manual-page-for-binary ipod-read-sysinfo-extended")
+
+# documention is in libgpod-doc
+addFilter("libgpod-(devel|sharp).*: W: no-documentation")
+
+# only-non-binary-in-usr-lib is expected for mono packages
+addFilter("libgpod-sharp.*: W: only-non-binary-in-usr-lib")
+
+# ignore spelling errors
+addFilter("libgpod.*: W: spelling-error %description .* (playlists|playcounts|podcasts)")

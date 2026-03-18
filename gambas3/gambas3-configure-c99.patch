@@ -1,0 +1,39 @@
+Define _GNU_SOURCE in the math tests so that exp10 can be found.
+Include <stdio.h> for the puts function in the __progname check.
+
+Submitted upstream: <https://gitlab.com/gambas/gambas/-/merge_requests/286>
+
+diff --git a/acinclude.m4 b/acinclude.m4
+index 055cfd86b1102815..fe4f24b9f49cd1d7 100644
+--- a/acinclude.m4
++++ b/acinclude.m4
+@@ -558,6 +558,7 @@ AC_DEFUN([GB_CHECK_MATH_FUNC],
+     [
+       #define _ISOC9X_SOURCE	1
+       #define _ISOC99_SOURCE	1
++      #define _GNU_SOURCE	1
+       #define __USE_ISOC99	1
+       #define __USE_ISOC9X	1
+       #include <math.h>
+diff --git a/gb.httpd/configure.ac b/gb.httpd/configure.ac
+index 5fb0fa507ff89993..e8a3a9e3a4dfe8fb 100644
+--- a/gb.httpd/configure.ac
++++ b/gb.httpd/configure.ac
+@@ -28,7 +28,7 @@ dnl
+ AC_MSG_CHECKING(how to link static binaries)
+ AC_CACHE_VAL(ac_cv_lbl_static_flag,
+     ac_cv_lbl_static_flag=unknown
+-    echo 'main() {}' > conftest.c
++    echo 'int main() {}' > conftest.c
+     if test "$GCC" != yes ; then
+ 	    trial_flag="-Bstatic"
+ 	    test=`$CC $trial_flag -o conftest conftest.c 2>&1`
+@@ -53,7 +53,7 @@ fi
+ 
+ AC_MSG_CHECKING(for __progname)
+ AC_CACHE_VAL(ac_cv_extern__progname,
+-    AC_TRY_LINK([],
++    AC_TRY_LINK([#include <stdio.h>],
+ 	[extern char *__progname; 
+ 	puts(__progname)],
+ 	ac_cv_extern__progname=yes,

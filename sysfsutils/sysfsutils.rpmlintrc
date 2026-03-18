@@ -1,0 +1,4 @@
+# missing documentation from subpackages
+addFilter(r'^(libsysfs.*|sysfsutils)\.[^:]+: (E|W): no-documentation')
+# spurious spelling error
+addFilter(r'^(libsysfs.*|sysfsutils)\.[^:]+: (E|W): spelling-error.*sysfs ->')

@@ -1,0 +1,12 @@
+---
+abidiff:
+    ignore:
+        - /usr/lib64/dirsrv/plugins/*.so
+        - /usr/lib64/dirsrv/libsds.so*
+        - /usr/lib64/dirsrv/libslapd.so*
+specname:
+    match: suffix
+runpath:
+    allowed_paths:
+        - /usr/lib64/dirsrv
+        - /usr/lib64/dirsrv/plugins

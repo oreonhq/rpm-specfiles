@@ -1,0 +1,117 @@
+--- pegasus/src/Pegasus/ProviderManager2/CMPI/CMPIProviderManager.cpp.warnings	2006-02-28 14:53:30.000000000 -0500
++++ pegasus/src/Pegasus/ProviderManager2/CMPI/CMPIProviderManager.cpp	2006-04-05 19:27:27.000000000 -0400
+@@ -88,7 +88,7 @@
+    char **props;
+    int pCount;
+   public:
+-   CMPIPropertyList(CIMPropertyList &propertyList) {
++    CMPIPropertyList(CIMPropertyList &propertyList) : props(0L), pCount(0) {
+       if (!propertyList.isNull()) {
+         Array<CIMName> p=propertyList.getPropertyNameArray();
+         pCount=p.size();
+@@ -2497,7 +2497,7 @@
+ 
+     try
+     {
+-        indProvRecord *provRec;
++        indProvRecord *provRec = 0L;
+         if (provTab.lookup (ph.GetProvider ().getName (), provRec))
+         {
+             provRec->enabled = true;
+@@ -2587,7 +2587,7 @@
+     PEG_METHOD_ENTER (TRC_PROVIDERMANAGER,
+         "CMPIProviderManager::_callDisableIndications");
+ 
+-    indProvRecord * provRec;
++    indProvRecord * provRec = 0L;
+     if (provTab.lookup (ph.GetProvider ().getName (), provRec))
+     {
+         provRec->enabled = false;
+--- pegasus/src/Pegasus/Config/ConfigManager.cpp.warnings	2006-03-14 16:06:37.000000000 -0500
++++ pegasus/src/Pegasus/Config/ConfigManager.cpp	2006-04-05 19:27:27.000000000 -0400
+@@ -758,7 +758,7 @@
+     //
+     for (Uint32 i = 0; i < NUM_PROPERTIES; i++)
+     {
+-        const char* fixedValue;
++        const char* fixedValue = 0L;
+ 
+         _properties[i].propertyOwner->initialize();
+ 
+--- pegasus/src/Pegasus/Common/Packer.h.warnings	2006-01-30 11:17:07.000000000 -0500
++++ pegasus/src/Pegasus/Common/Packer.h	2006-04-05 19:27:27.000000000 -0400
+@@ -173,12 +173,12 @@
+ 
+ inline void Packer::packReal32(Buffer& out, Real32 x)
+ {
+-    packUint32(out, *((Uint32*)&x));
++    packUint32(out, *(reinterpret_cast<Uint32*>(&x)));
+ }
+ 
+ inline void Packer::packReal64(Buffer& out, Real64 x)
+ {
+-    packUint64(out, *((Uint64*)&x));
++    packUint64(out, *(reinterpret_cast<Uint64*>(&x)));
+ }
+ 
+ inline void Packer::packChar16(Buffer& out, Char16 x)
+--- pegasus/src/Pegasus/Common/StringInline.h.warnings	2006-01-30 11:17:08.000000000 -0500
++++ pegasus/src/Pegasus/Common/StringInline.h	2006-04-05 19:30:43.000000000 -0400
+@@ -102,7 +102,7 @@
+ 
+ PEGASUS_STRING_INLINE const Char16* String::getChar16Data() const 
+ { 
+-    return (Char16*)_rep->data; 
++    return (Char16*)&(_rep->data[0]); 
+ }
+ 
+ PEGASUS_STRING_INLINE Char16& String::operator[](Uint32 i) 
+@@ -145,7 +145,7 @@
+ 
+ PEGASUS_STRING_INLINE Uint32 String::find(const String& s) const
+ {
+-    return StringFindAux(_rep, (Char16*)s._rep->data, s._rep->size);
++    return StringFindAux(_rep, (Char16*)&(s._rep->data[0]), s._rep->size);
+ }
+ 
+ PEGASUS_STRING_INLINE String& String::append(const Char16& c)
+--- pegasus/src/Pegasus/Common/ResponseHandler.cpp.warnings	2006-01-30 11:17:07.000000000 -0500
++++ pegasus/src/Pegasus/Common/ResponseHandler.cpp	2006-04-05 19:27:27.000000000 -0400
+@@ -79,7 +79,7 @@
+ ResponseHandlerRep* _getRep(
+     const ResponseHandler* object)
+ {
+-    ResponseHandlerRep* rep;
++    ResponseHandlerRep* rep = 0L;
+     Boolean found;
+ 
+     AutoMutex lock(repTableMutex);
+@@ -91,7 +91,7 @@
+ void _deleteRep(
+     ResponseHandler* object)
+ {
+-    ResponseHandlerRep* rep;
++    ResponseHandlerRep* rep = 0L;
+     Boolean found;
+ 
+     AutoMutex lock(repTableMutex);
+--- pegasus/src/Pegasus/Common/String.cpp.warnings	2006-01-30 11:17:08.000000000 -0500
++++ pegasus/src/Pegasus/Common/String.cpp	2006-04-05 19:27:27.000000000 -0400
+@@ -843,7 +843,7 @@
+ 
+ String& String::append(const String& str)
+ {
+-    return append((Char16*)str._rep->data, str._rep->size);
++    return append((Char16*)(&(str._rep->data[0])), str._rep->size);
+ }
+ 
+ String& String::append(const char* str, Uint32 size)
+@@ -905,7 +905,7 @@
+         if (n == PEG_NOT_FOUND || n > _rep->size - index)
+             n = _rep->size - index;
+ 
+-        return String((Char16*)_rep->data + index, n);
++        return String((Char16*)(_rep->data + index), n);
+     }
+ 
+     return String();

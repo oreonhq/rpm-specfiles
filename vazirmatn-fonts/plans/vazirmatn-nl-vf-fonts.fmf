@@ -1,0 +1,15 @@
+summary: Fonts related tests
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/fonts
+prepare:
+    name: tmt
+    how: install
+    package: vazirmatn-nl-vf-fonts
+execute:
+    how: tmt
+environment:
+    PACKAGE: vazirmatn-nl-vf-fonts
+    FONT_ALIAS: sans-serif
+    FONT_FAMILY: Vazirmatn NL
+    FONT_LANG: fa

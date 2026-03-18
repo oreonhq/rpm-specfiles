@@ -1,0 +1,47 @@
+From c20e1e53c4bc174f63533b5d572dec86657cd5a0 Mon Sep 17 00:00:00 2001
+From: Achilleas Koutsou <achilleas@koutsou.net>
+Date: Mon, 25 Jul 2022 11:26:16 +0200
+Subject: [PATCH 1/7] osbuild: use path as secondary sort key for fstab
+
+Most filesystems entries in fstab don't have a PassNo, which makes the
+order of those entries dependent on the sorting algorithm.  Changes in
+the algorithm can introduce changes in the sort order, which we don't
+like.
+
+Add a secondary sorting key, the Path, which is guaranteed unique, to
+guarantee stable ordering.
+---
+ internal/osbuild/fstab_stage.go | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/internal/osbuild/fstab_stage.go b/internal/osbuild/fstab_stage.go
+index 72ecb59bb..d0cc66a22 100644
+--- a/internal/osbuild/fstab_stage.go
++++ b/internal/osbuild/fstab_stage.go
+@@ -1,6 +1,7 @@
+ package osbuild
+ 
+ import (
++	"fmt"
+ 	"sort"
+ 
+ 	"github.com/osbuild/osbuild-composer/internal/disk"
+@@ -64,10 +65,14 @@ func NewFSTabStageOptions(pt *disk.PartitionTable) *FSTabStageOptions {
+ 		return nil
+ 	}
+ 
++	key := func(fs *FSTabEntry) string {
++		return fmt.Sprintf("%d%s", fs.PassNo, fs.Path)
++	}
++
+ 	_ = pt.ForEachMountable(genOption) // genOption always returns nil
+ 	// sort the entries by PassNo to maintain backward compatibility
+ 	sort.Slice(options.FileSystems, func(i, j int) bool {
+-		return options.FileSystems[i].PassNo < options.FileSystems[j].PassNo
++		return key(options.FileSystems[i]) < key(options.FileSystems[j])
+ 	})
+ 	return &options
+ }
+-- 
+2.35.3
+

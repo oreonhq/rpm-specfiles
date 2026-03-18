@@ -1,0 +1,20 @@
+summary: upstream testsuite
+require:
+  - gcc
+  - gcc-c++
+  - gdb
+  - python3-devel
+  - python3-test
+  - python3-cython
+  - python3-setuptools
+  - python3-pip
+  - python3-numpy
+  - python3-pytest
+  - blas-devel  # for pythran
+  # ipython and pythran installed from PyPI, not available in RHEL
+  # Add ipython again when upstream resolves https://github.com/cython/cython/issues/7075
+test: |
+  pip install pythran==0.18.0 &&
+  cd $(dirname $TMT_SOURCE_DIR/cython-*/tests) &&
+  python3 runtests.py -vv --no-pyregr --exclude 'run.pstats_profile_test*'
+duration: 240m

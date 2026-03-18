@@ -1,0 +1,4 @@
+PURPOSE of /CoreOS/cronie/Regression/echos-OK-twice-in-init-script
+Description: Test for echos "OK" twice in init script
+Author: Martin Cermak <mcermak@redhat.com>
+

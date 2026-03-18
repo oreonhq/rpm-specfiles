@@ -1,0 +1,40 @@
+From 53d1abd0e15939307325c317daca5cebcf9be668 Mon Sep 17 00:00:00 2001
+From: Assam Boudjelthia <assam.boudjelthia@qt.io>
+Date: Thu, 12 Nov 2020 13:28:25 +0200
+Subject: [PATCH 1/5] Android: keep only mandatory arguments for configure when
+ building
+
+Remove optional arguments when building from source, since there is a
+link for additional arguments in the page.
+
+Change-Id: I418182776e59f3d4fc8422977c2138afe93c6922
+Reviewed-by: Alexandru Croitor <alexandru.croitor@qt.io>
+---
+ doc/src/platforms/android/android-building.qdoc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/doc/src/platforms/android/android-building.qdoc b/doc/src/platforms/android/android-building.qdoc
+index 942753cc9..36bdf6379 100644
+--- a/doc/src/platforms/android/android-building.qdoc
++++ b/doc/src/platforms/android/android-building.qdoc
+@@ -120,7 +120,7 @@
+     mkdir <path_to_build_dir>/build-qt
+     cd <path_to_build_dir>/build-qt
+ 
+-    <path_to_qt_source>/configure -xplatform android-clang -prefix </path/to/install> -disable-rpath -nomake tests -nomake examples -android-ndk <path/to/sdk>/ndk/<ndk_version> -android-sdk <path/to/sdk> -no-warnings-are-errors
++    <path_to_qt_source>/configure -xplatform android-clang -prefix </path/to/install> -android-ndk <path/to/sdk>/ndk/<ndk_version> -android-sdk <path/to/sdk>
+     \endcode
+ 
+     \l{Qt Configure Options} contains more information about the configure options.
+@@ -217,7 +217,7 @@
+     mkdir C:\Qt\Build\build-qt
+     cd C:\Qt\Build\build-qt
+ 
+-    ..\Src_%VERSION%\configure.bat -platform win32-g++ -xplatform android-clang -prefix <\path\to\install> -nomake tests -nomake examples -android-sdk <ANDROID_SDK_PATH> -android-ndk <ANDROID_SDK_PATH>\ndk\<ndk_version> -android-ndk-host windows-x86_64 -no-warnings-are-errors
++    ..\Src_%VERSION%\configure.bat -platform win32-g++ -xplatform android-clang -prefix <\path\to\install> -android-sdk <ANDROID_SDK_PATH> -android-ndk <ANDROID_SDK_PATH>\ndk\<ndk_version> -android-ndk-host windows-x86_64
+     \endcode
+ 
+     \l{Qt Configure Options} contains more information about the configure options.
+-- 
+2.51.1
+

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-WWW-RobotRules
+require: perl-WWW-RobotRules-tests
+test: /usr/libexec/perl-WWW-RobotRules/test

@@ -1,0 +1,4 @@
+require:
+- rpm-build
+- rpmdevtools
+- mock

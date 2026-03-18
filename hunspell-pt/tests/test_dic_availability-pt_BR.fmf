@@ -1,0 +1,6 @@
+require:
+- python3-enchant
+- hunspell-pt-BR
+test: python3 test_dic_availability-pt_BR.py
+framework: shell
+

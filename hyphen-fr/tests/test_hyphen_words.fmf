@@ -1,0 +1,7 @@
+require:
+- hyphen-devel
+- hyphen-fr
+- gcc
+test: bash ./test-hyphen.sh
+framework: shell
+

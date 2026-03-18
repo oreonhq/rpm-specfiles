@@ -1,0 +1,11 @@
+*.swp
+/rteval-3.1.tar.xz
+/rteval-3.2.tar.xz
+/rteval-3.5.tar.xz
+/rteval-3.6.tar.xz
+/rteval-3.7.tar.xz
+/0001-rteval-Change-the-default-kernel-for-kcompile-to-lin.patch
+/0002-rteval-Remove-upstream-spec-file.patch
+/rteval-3.8.tar.xz
+/rteval-3.9.tar.xz
+/rteval-3.10.tar.xz

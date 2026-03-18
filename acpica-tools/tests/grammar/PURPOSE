@@ -1,0 +1,3 @@
+PURPOSE of tests/grammar
+Description: sanity check that iasl is handling ASL grammar properly
+Author: Al Stone <ahs3@redhat.com>

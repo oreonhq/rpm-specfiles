@@ -1,0 +1,22 @@
+Hi there! If you're trying to fix something here, do the following:
+
+1. Make whatever edits you need to in 80-rhel/
+2. `git commit` the changes with the relevant 'Resolves/Related' bug reference
+3. `make release`
+   This will bump the release, update the spec with changes in this branch,
+   create a new tarball, upload it, and commit the changes.
+   NOTE: If there are commits on c10s since the last build you need to set PREV=<HASH>
+   so that the changelog will be correct. eg. PREV=ACTUALHASH make release
+4. Examine the changes with 'git show' and make sure they look ok.
+5. Push the changes to your fork of the project with:
+   'git push REMOTE BRANCHNAME' and follow the instructions to
+   create a merge request in gitlab.
+
+# To rebase from RHEL:
+1. Add "cs" remote: `git remote add cs https://gitlab.com/redhat/centos-stream/rpms/lorax-templates-rhel.git`
+2. `git merge [-X ours] cs/c10s`
+3. `make release-merge`
+4. Edit the %changelog section of lorax-templates-rhel.spec appropriately
+5. `git add lorax-templates-rhel.spec`
+6. `git commit --amend`
+

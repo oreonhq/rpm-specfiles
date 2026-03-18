@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-File-Listing
+require: perl-File-Listing-tests
+test: /usr/libexec/perl-File-Listing/test

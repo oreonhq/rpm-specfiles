@@ -1,0 +1,9 @@
+---
+badfuncs:
+    allowed:
+        /usr/lib64/sfcb/libsfcHttpAdapter.so.*:
+            - inet_aton
+
+runpath:
+    allowed_paths:
+        - /usr/lib64/sfcb

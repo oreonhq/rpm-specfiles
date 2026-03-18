@@ -1,0 +1,3 @@
+# dnsconfd
+
+The dnsconfd package

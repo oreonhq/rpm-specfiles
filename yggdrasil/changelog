@@ -1,0 +1,16 @@
+* Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0.2.98^1.ffb580f-0.5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Sat Jul 23 2022 Fedora Release Engineering <releng@fedoraproject.org> - 0.2.98^1.ffb580f-0.4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Tue Jul 19 2022 Maxwell G <gotmax@e.email> - 0.2.98^1.ffb580f-0.3
+- Rebuild for CVE-2022-{1705,32148,30631,30633,28131,30635,30632,30630,1962} in
+  golang
+
+* Sat Jun 18 2022 Robert-André Mauchin <zebob.m@gmail.com> - 0.2.98^1.ffb580f-0.2
+- Rebuilt for CVE-2022-1996, CVE-2022-24675, CVE-2022-28327, CVE-2022-27191,
+  CVE-2022-29526, CVE-2022-30629
+
+* Tue Aug 10 2021 Link Dupont <linkdupont@fedoraproject.org> - 0.2.98^1.ffb580f-0.1.20210728gitffb580f
+- Initial package

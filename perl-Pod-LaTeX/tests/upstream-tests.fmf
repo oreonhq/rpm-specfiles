@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Pod-LaTeX
+require: perl-Pod-LaTeX-tests
+test: /usr/libexec/perl-Pod-LaTeX/test

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<configuration xmlns="http://fedorahosted.org/xmvn/CONFIG/2.0.0">
+  <repositories>
+    <!-- Repositories flatpak-jar and flatpak-jni are copies of base-jar and
+         base-jni from /usr/share/xmvn/configuration.xml (javapackages-tools),
+         with "usr" replaced by "app":  -->
+    <repository>
+      <id>flatpak-jar</id>
+      <type>jpp</type>
+      <properties>
+        <root>app/share/java</root>
+      </properties>
+      <filter>
+        <or>
+          <and>
+            <equals>
+              <extension/>
+              <string>jar</string>
+            </equals>
+            <not>
+              <equals>
+                <property>native</property>
+                <string>true</string>
+              </equals>
+            </not>
+          </and>
+          <!-- Maybe /app/share/java is not the best place to store
+               ZIP files, but packages are doing so anyways and
+               allowing ZIPs here simplifies packaging.  TODO: find a
+               better location for ZIP files.  -->
+          <equals>
+            <extension/>
+            <string>zip</string>
+          </equals>
+        </or>
+      </filter>
+    </repository>
+    <repository>
+      <id>flatpak-jni</id>
+      <type>jpp</type>
+      <properties>
+        <root>app/lib/java</root>
+      </properties>
+      <filter>
+        <and>
+          <equals>
+            <extension/>
+            <string>jar</string>
+          </equals>
+          <equals>
+            <property>native</property>
+            <string>true</string>
+          </equals>
+        </and>
+      </filter>
+    </repository>
+    <!-- Repository install overrides the repository of the same name from
+         /usr/share/xmvn/configuration.xml (javapackages-tools), prepending the
+         above flatpak-jar and flatpak-jni:  -->
+    <repository>
+      <id>install</id>
+      <type>compound</type>
+      <configuration>
+        <repositories>
+          <repository>flatpak-jar</repository>
+          <repository>flatpak-jni</repository>
+          <repository>base-install</repository>
+        </repositories>
+      </configuration>
+    </repository>
+  </repositories>
+</configuration>

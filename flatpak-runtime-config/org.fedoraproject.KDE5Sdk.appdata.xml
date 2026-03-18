@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="runtime">
+  <id>org.fedoraproject.KDE5Sdk</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <!-- FIXME -->
+  <project_license>GPL-2.0-or-later</project_license>
+  <name>Fedora KDE 5 SDK</name>
+  <summary>Tools and headers for developing KDE 5 applications</summary>
+  <releases>
+    <release version="42" date="2025-04-15"/>
+    <release version="41" date="2024-10-22"/>
+    <release version="40" date="2024-04-03"/>
+    <release version="39" date="2023-10-06"/>
+    <release version="38" date="2023-03-18"/>
+    <release version="37" date="2023-02-07"/>
+  </releases>
+  <description>
+    <p>
+      The Fedora KDE 5 Sdk is the development runtime that you can use to produce applications using
+      the Fedora KDE 5 Platform runtime. It contains everything that is in the platform, as well
+      as build and debugging tools and headers for the libraries.
+    </p>
+  </description>
+  <url type="homepage">https://fedoraproject.org/</url>
+</component>

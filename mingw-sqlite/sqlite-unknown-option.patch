@@ -1,0 +1,12 @@
+diff -rupN --no-dereference sqlite-src-3510200/autosetup/autosetup sqlite-src-3510200-new/autosetup/autosetup
+--- sqlite-src-3510200/autosetup/autosetup	2026-01-09 19:30:09.000000000 +0100
++++ sqlite-src-3510200-new/autosetup/autosetup	2026-01-21 23:36:08.873073598 +0100
+@@ -648,7 +648,7 @@ proc options {optlist} {
+ 		if {[opt-bool option-checking]} {
+ 			foreach o [dict keys $::autosetup(getopt)] {
+ 				if {$o ni $::autosetup(options)} {
+-					user-error "Unknown option --$o"
++					puts "Warning: Unknown option --$o"
+ 				}
+ 			}
+ 		}

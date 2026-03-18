@@ -1,0 +1,41 @@
+* Tue Aug 20 2024 Marian Koncek <mkoncek@redhat.com> - 1.3.3-1
+- Update to upstream version 1.3.3
+
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Wed Jan 24 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sat Jan 20 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Tue Nov 21 2023 Marian Koncek <mkoncek@redhat.com> - 1.3.2-1
+- Update to upstream version 1.3.2
+
+* Wed Aug 30 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.3.1-3
+- Obsolete javapackages-extra
+
+* Thu Jul 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Thu Mar 23 2023 Marian Koncek <mkoncek@redhat.com> - 1.3.1-1
+- Update to upstream version 1.3.1
+
+* Wed Mar 15 2023 Marian Koncek <mkoncek@redhat.com> - 1.3.0-1
+- Update to upstream version 1.3.0
+
+* Wed Mar 08 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.2.0-2
+- Skip interface keyword as annotation in name matching only
+
+* Wed Mar 08 2023 Marian Koncek <mkoncek@redhat.com> - 1.2.0-1
+- Update to upstream version 1.2.0
+
+* Tue Mar 07 2023 Marian Koncek <mkoncek@redhat.com> - 1.1.0-1
+- Update to upstream version 1.1.0
+
+* Fri Mar 03 2023 Marian Koncek <mkoncek@redhat.com> - 1.0.2-1
+- Update to upstream version 1.0.2
+
+* Wed Mar 01 2023 Marian Koncek <mkoncek@redhat.com> - 1.0.0-1
+- Initial build

@@ -1,0 +1,201 @@
+commit 6723b340cdaee9b285bd6dd1a9b0e3711449c718
+Author: Daiki Ueno <ueno@gnu.org>
+Date:   Wed Dec 20 07:18:34 2017 +0100
+
+    build: Migrate from intltool to gettext
+
+Index: libkkc-0.3.5/Makefile.am
+===================================================================
+--- libkkc-0.3.5.orig/Makefile.am
++++ libkkc-0.3.5/Makefile.am
+@@ -23,6 +23,8 @@ SUBDIRS += docs
+ endif
+ 
+ GITIGNOREFILES =							\
++	ABOUT-NLS							\
++	config.rpath							\
+ 	INSTALL								\
+ 	aclocal.m4							\
+ 	compile								\
+@@ -37,6 +39,16 @@ GITIGNOREFILES =							\
+ 	`find "m4" -type f -name "*.m4" ! -name "vala.m4" -print`	\
+ 	$(top_builddir)/lcov.html/*					\
+ 	data/rules/*/*.pot						\
++	po/Makevars.template						\
++	po/Rules-quot							\
++	po/boldquot.sed							\
++	po/en@boldquot.header						\
++	po/en@quot.header						\
++	po/insert-header.sin						\
++	po/quot.sed							\
++	po/remove-potcdate.sed						\
++	po/remove-potcdate.sin						\
++	po/stamp-po							\
+ 	test-driver							\
+ 	$(NULL)
+ 
+Index: libkkc-0.3.5/autogen.sh
+===================================================================
+--- libkkc-0.3.5.orig/autogen.sh
++++ libkkc-0.3.5/autogen.sh
+@@ -1,25 +1,38 @@
+ #!/bin/sh
+ # Run this to generate all the initial makefiles, etc.
++test -n "$srcdir" || srcdir=$(dirname "$0")
++test -n "$srcdir" || srcdir=.
+ 
+-srcdir=`dirname $0`
+-test -z "$srcdir" && srcdir=.
++olddir=$(pwd)
+ 
+-PKG_NAME="libkkc"
++cd $srcdir
+ 
+-(test -f $srcdir/configure.ac \
+-  && test -f $srcdir/README ) || {
+-    echo -n "**Error**: Directory "\`$srcdir\'" does not look like the"
+-    echo " top-level $PKG_NAME directory"
+-    exit 1
++(test -f configure.ac) || {
++        echo "*** ERROR: Directory '$srcdir' does not look like the top-level project directory ***"
++        exit 1
+ }
+ 
+-which gnome-autogen.sh || {
+-    echo "You need to install gnome-common from the GNOME CVS"
+-    exit 1
+-}
+-
+-ACLOCAL_FLAGS="$ACLOCAL_FLAGS -I m4"
+-REQUIRED_AUTOMAKE_VERSION=1.11
+-REQUIRED_AUTOCONF_VERSION=2.63
++# shellcheck disable=SC2016
++PKG_NAME=libkkc
+ 
+-. gnome-autogen.sh
++if [ "$#" = 0 -a "x$NOCONFIGURE" = "x" ]; then
++        echo "*** WARNING: I am going to run 'configure' with no arguments." >&2
++        echo "*** If you wish to pass any to it, please specify them on the" >&2
++        echo "*** '$0' command line." >&2
++        echo "" >&2
++fi
++
++autoreconf --verbose --force --install || exit 1
++
++cd "$olddir"
++if [ "$NOCONFIGURE" = "" ]; then
++        $srcdir/configure "$@" || exit 1
++
++        if [ "$1" = "--help" ]; then
++                exit 0
++        else
++                echo "Now type 'make' to compile $PKG_NAME" || exit 1
++        fi
++else
++        echo "Skipping configure process."
++fi
+Index: libkkc-0.3.5/configure.ac
+===================================================================
+--- libkkc-0.3.5.orig/configure.ac
++++ libkkc-0.3.5/configure.ac
+@@ -44,7 +44,8 @@ AM_PROG_CC_C_O
+ AC_PROG_CC_STDC
+ AC_PROG_CXX
+ AC_PROG_INSTALL
+-IT_PROG_INTLTOOL
++AM_GNU_GETTEXT([external])
++AM_GNU_GETTEXT_VERSION([0.19.8])
+ 
+ dnl Check python for tests
+ AM_PATH_PYTHON
+Index: libkkc-0.3.5/po/Makevars
+===================================================================
+--- /dev/null
++++ libkkc-0.3.5/po/Makevars
+@@ -0,0 +1,78 @@
++# Makefile variables for PO directory in any package using GNU gettext.
++
++# Usually the message domain is the same as the package name.
++DOMAIN = $(PACKAGE)
++
++# These two variables depend on the location of this directory.
++subdir = po
++top_builddir = ..
++
++# These options get passed to xgettext.
++XGETTEXT_OPTIONS = --keyword=_ --keyword=N_
++
++# This is the copyright holder that gets inserted into the header of the
++# $(DOMAIN).pot file.  Set this to the copyright holder of the surrounding
++# package.  (Note that the msgstr strings, extracted from the package's
++# sources, belong to the copyright holder of the package.)  Translators are
++# expected to transfer the copyright for their translations to this person
++# or entity, or to disclaim their copyright.  The empty string stands for
++# the public domain; in this case the translators are expected to disclaim
++# their copyright.
++COPYRIGHT_HOLDER = Daiki Ueno
++
++# This tells whether or not to prepend "GNU " prefix to the package
++# name that gets inserted into the header of the $(DOMAIN).pot file.
++# Possible values are "yes", "no", or empty.  If it is empty, try to
++# detect it automatically by scanning the files in $(top_srcdir) for
++# "GNU packagename" string.
++PACKAGE_GNU = no
++
++# This is the email address or URL to which the translators shall report
++# bugs in the untranslated strings:
++# - Strings which are not entire sentences, see the maintainer guidelines
++#   in the GNU gettext documentation, section 'Preparing Strings'.
++# - Strings which use unclear terms or require additional context to be
++#   understood.
++# - Strings which make invalid assumptions about notation of date, time or
++#   money.
++# - Pluralisation problems.
++# - Incorrect English spelling.
++# - Incorrect formatting.
++# It can be your email address, or a mailing list address where translators
++# can write to without being subscribed, or the URL of a web page through
++# which the translators can contact you.
++MSGID_BUGS_ADDRESS =
++
++# This is the list of locale categories, beyond LC_MESSAGES, for which the
++# message catalogs shall be used.  It is usually empty.
++EXTRA_LOCALE_CATEGORIES =
++
++# This tells whether the $(DOMAIN).pot file contains messages with an 'msgctxt'
++# context.  Possible values are "yes" and "no".  Set this to yes if the
++# package uses functions taking also a message context, like pgettext(), or
++# if in $(XGETTEXT_OPTIONS) you define keywords with a context argument.
++USE_MSGCTXT = no
++
++# These options get passed to msgmerge.
++# Useful options are in particular:
++#   --previous            to keep previous msgids of translated messages,
++#   --quiet               to reduce the verbosity.
++MSGMERGE_OPTIONS =
++
++# These options get passed to msginit.
++# If you want to disable line wrapping when writing PO files, add
++# --no-wrap to MSGMERGE_OPTIONS, XGETTEXT_OPTIONS, and
++# MSGINIT_OPTIONS.
++MSGINIT_OPTIONS =
++
++# This tells whether or not to regenerate a PO file when $(DOMAIN).pot
++# has changed.  Possible values are "yes" and "no".  Set this to no if
++# the POT file is checked in the repository and the version control
++# program ignores timestamps.
++PO_DEPENDS_ON_POT = no
++
++# This tells whether or not to forcibly update $(DOMAIN).pot and
++# regenerate PO files on "make dist".  Possible values are "yes" and
++# "no".  Set this to no if the POT file and PO files are maintained
++# externally.
++DIST_DEPENDS_ON_UPDATE_PO = no
+Index: libkkc-0.3.5/po/POTFILES.skip
+===================================================================
+--- libkkc-0.3.5.orig/po/POTFILES.skip
++++ libkkc-0.3.5/po/POTFILES.skip
+@@ -1,3 +1 @@
+ libkkc/keymap.c
+-tools/kkc.c
+-tools/server.c

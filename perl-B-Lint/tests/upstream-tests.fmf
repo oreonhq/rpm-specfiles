@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-B-Lint
+require: perl-B-Lint-tests
+test: /usr/libexec/perl-B-Lint/test

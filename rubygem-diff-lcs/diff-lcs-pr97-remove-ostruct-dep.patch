@@ -1,0 +1,33 @@
+From 1871db87d5adb600172574b2ce532f1836501593 Mon Sep 17 00:00:00 2001
+From: Yuji Yaginuma <yuuji.yaginuma@gmail.com>
+Date: Wed, 11 Sep 2024 09:21:42 +0900
+Subject: [PATCH] Remove unused `ostruct`
+
+Since Ruby 3.3.5, Bundler shows the following warning when using
+`ostruct`.
+
+```
+ostruct was loaded from the standard library, but will no longer be part of the default gems starting from Ruby 3.5.0.
+You can add ostruct to your Gemfile or gemspec to silence this warning.
+```
+Ref: https://bugs.ruby-lang.org/issues/20309
+
+As the message described, we need to add `ostruct` to the gemspec
+to keep using it. But, it seems that `diff-lcs` doesn't use it.
+So I just remove `require of it.
+---
+ lib/diff/lcs/ldiff.rb | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/lib/diff/lcs/ldiff.rb b/lib/diff/lcs/ldiff.rb
+index 9c620f02..abe6bb02 100644
+--- a/lib/diff/lcs/ldiff.rb
++++ b/lib/diff/lcs/ldiff.rb
+@@ -1,7 +1,6 @@
+ # frozen_string_literal: true
+ 
+ require 'optparse'
+-require 'ostruct'
+ require 'diff/lcs/hunk'
+ 
+ module Diff::LCS::Ldiff #:nodoc:

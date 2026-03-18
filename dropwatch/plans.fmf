@@ -1,0 +1,9 @@
+summary: Run dropwatch selftest
+discover:
+  how: fmf
+prepare:
+  how: install
+  # install psmisc for killall
+  package: [dropwatch, psmisc]
+execute:
+  how: tmt

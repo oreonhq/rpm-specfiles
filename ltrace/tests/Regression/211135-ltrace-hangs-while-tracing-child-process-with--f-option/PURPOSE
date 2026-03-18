@@ -1,0 +1,2 @@
+ltrace could possibly crash/hang when tracing fork() on ppc/ppc64
+in ltrace with option "-f".

@@ -1,0 +1,34 @@
+From 31c922e6eea3047b784a1f95132d044f3dab58c9 Mon Sep 17 00:00:00 2001
+From: Bastien Nocera <hadess@hadess.net>
+Date: Thu, 3 Feb 2011 14:54:07 +0000
+Subject: [PATCH] Don't use different layouts per window
+
+Using different layouts per-window is confusing for new users. Both
+Windows and MacOS X default to using the same layout globally, and
+just like them, we offer a graphical way to change the layout (through
+a system icon).
+
+Once the user gains profiency in switching layouts, we can offer them
+a more complicated way, using separate layouts for each window.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=641351
+---
+ ...org.gnome.libgnomekbd.desktop.gschema.xml.in.in |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/libgnomekbd/org.gnome.libgnomekbd.desktop.gschema.xml.in.in b/libgnomekbd/org.gnome.libgnomekbd.desktop.gschema.xml.in.in
+index 7be778d..6f42fd7 100644
+--- a/libgnomekbd/org.gnome.libgnomekbd.desktop.gschema.xml.in.in
++++ b/libgnomekbd/org.gnome.libgnomekbd.desktop.gschema.xml.in.in
+@@ -7,7 +7,7 @@
+       <_description>Default group, assigned on window creation</_description>
+     </key>
+     <key name="group-per-window" type="b">
+-      <default>true</default>
++      <default>false</default>
+       <_summary>Keep and manage separate group per window</_summary>
+       <_description>Keep and manage separate group per window</_description>
+     </key>
+-- 
+1.7.4
+

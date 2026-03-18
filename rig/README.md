@@ -1,0 +1,3 @@
+# rig
+
+The rig package

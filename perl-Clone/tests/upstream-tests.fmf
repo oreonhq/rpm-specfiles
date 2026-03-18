@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Clone
+require: perl-Clone-tests
+test: /usr/libexec/perl-Clone/test

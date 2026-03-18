@@ -1,0 +1,28 @@
+From 0cc72f0d807a71e0fdc67d04e0b86b98282db644 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Dan=20Hor=C3=A1k?= <dan@danny.cz>
+Date: Wed, 29 Jan 2014 14:27:27 +0100
+Subject: [PATCH] build the library as a module
+
+---
+ Makefile.am | 4 ++++
+ Makefile.in | 2 ++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/Makefile.am b/Makefile.am
+index a9a040d..bddc86f 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -69,6 +69,10 @@ libzfcphbaapi_la_LDFLAGS = \
+ 	-Wl,-init,_initvlib,-fini,_finivlib \
+ 	-export-symbols $(SYMFILE)
+ 
++if VENDORLIB
++libzfcphbaapi_la_LDFLAGS += -module -avoid-version -release $(VERSION)
++endif
++
+ bin_PROGRAMS = zfcp_ping zfcp_show
+ 
+ zfcp_ping_SOURCES = fc_tools/zfcp_ping.c
+-- 
+1.8.5.3
+

@@ -1,0 +1,5 @@
+PURPOSE of /CoreOS/cronie/Regression/crond-is-missing-RELRO-flags
+Description: Test for crond is missing RELRO flags
+Author: Martin Cermak <mcermak@redhat.com>
+Bug summary: crond is missing RELRO flags
+

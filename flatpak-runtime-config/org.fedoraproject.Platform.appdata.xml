@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="runtime">
+  <id>org.fedoraproject.Platform</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <!-- FIXME -->
+  <project_license>GPL-2.0-or-later</project_license>
+  <name>Fedora Platform</name>
+  <summary>Shared libraries</summary>
+  <releases>
+    <release version="42" date="2025-04-15"/>
+    <release version="41" date="2024-10-22"/>
+    <release version="40" date="2024-04-03"/>
+    <release version="39" date="2023-10-06"/>
+    <release version="38" date="2023-03-18"/>
+    <release version="37" date="2022-08-17"/>
+    <release version="36" date="2022-05-03"/>
+    <release version="35" date="2021-10-01"/>
+    <release version="34" date="2021-03-27"/>
+    <release version="33" date="2020-10-27"/>
+  </releases>
+  <description>
+    <p>
+      The Fedora Platform is a runtime for Flatpak applications. It contains
+      common libraries that are shared between desktop applications, including
+      GTK 3, GStreamer, Qt 5, Mesa, SDL2, and many others.
+    </p>
+  </description>
+  <url type="homepage">https://fedoraproject.org/</url>
+</component>

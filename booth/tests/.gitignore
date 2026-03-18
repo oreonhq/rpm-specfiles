@@ -1,0 +1,3 @@
+# Ignore tests runs/artefacts.
+artifacts/**
+**/*.retry

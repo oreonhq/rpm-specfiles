@@ -1,0 +1,18 @@
+summary: When executing ltrace command with both -o and -c option, the result of ltrace
+    command is not output into file
+description: "When executing ltrace command with both -o and -c option, \nthe result\
+    \ of ltrace command is not output into the file \nwhich is specified by -o option.\n\
+    \n"
+contact: Michal Nowak <mnowak@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- gcc
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=447404
+extra-summary: /tools/ltrace/Regression/447404-ltrace-with-both--o-and--c-options-does-not-produce-output-to-file
+extra-task: /tools/ltrace/Regression/447404-ltrace-with-both--o-and--c-options-does-not-produce-output-to-file

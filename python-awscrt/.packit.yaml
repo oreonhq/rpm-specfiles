@@ -1,0 +1,29 @@
+upstream_package_name: awscrt
+downstream_package_name: python-awscrt
+
+upstream_project_url: https://github.com/awslabs/aws-crt-python
+
+upstream_tag_template: v{version}
+
+specfile_path: python-awscrt.spec
+
+copy_upstream_release_description: true
+
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - fedora-all
+      - epel9
+
+  - job: koji_build
+    trigger: commit
+    dist_git_branches:
+      - fedora-all
+      - epel9
+
+  - job: bodhi_update
+    trigger: commit
+    dist_git_branches:
+      - fedora-branched # rawhide updates are created automatically
+      - epel9

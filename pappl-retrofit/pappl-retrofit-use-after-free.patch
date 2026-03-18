@@ -1,0 +1,17 @@
+diff --git a/pappl-retrofit/cups-backends.c b/pappl-retrofit/cups-backends.c
+index b5d1643..bbb80f4 100644
+--- a/pappl-retrofit/cups-backends.c
++++ b/pappl-retrofit/cups-backends.c
+@@ -586,11 +586,11 @@ _prCUPSDevList(pappl_device_cb_t cb,
+ 		// Check whether we have a duplicate and if so, skip it
+ 		if (cupsArrayFind(devices, device))
+ 		{
+-		  free(device);
+ 		  _prCUPSDevLog(&devlog_data, PAPPL_LOGLEVEL_DEBUG,
+ 				"Duplicate device from backend '%s' skipped: %s (URI: %s Device ID: %s)",
+ 				backends[i].name, info, device->device_uri,
+ 				device_id);
++		  free(device);
+ 		}
+ 		else
+ 		{

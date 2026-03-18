@@ -1,0 +1,70 @@
+From 2aeef316a25ee9934387a834cdb2df1cfa8435a6 Mon Sep 17 00:00:00 2001
+From: Fabio Valentini <decathorpe@gmail.com>
+Date: Thu, 12 Mar 2026 01:07:29 +0100
+Subject: [PATCH] Remove clippy tests (linters should not be run downstream)
+
+---
+ meson.build | 26 --------------------------
+ 1 file changed, 26 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index f4cf80e..3fcd51d 100644
+--- a/meson.build
++++ b/meson.build
+@@ -61,11 +61,6 @@ if is_devel
+ 
+   rust_target = 'debug'
+   cargo_release_options = []
+-  clippy_deny_warnings = [
+-    '--',
+-    '--deny',
+-    'warnings',
+-  ]
+ else
+   message('Building in release mode')
+ 
+@@ -75,7 +70,6 @@ else
+ 
+   rust_target = 'release'
+   cargo_release_options = [ '--release' ]
+-  clippy_deny_warnings = []
+ endif
+ 
+ cargo_home = meson.project_build_root() / 'cargo-home'
+@@ -98,15 +92,6 @@ if is_devel
+   run_command('cp', '-f', 'hooks/pre-commit.hook', '.git/hooks/pre-commit', check: false)
+ endif
+ 
+-clippy_options = []
+-clippy_options += cargo_release_options
+-clippy_options += [
+-  '--all-targets',
+-  '--all-features',
+-  '--workspace',
+-]
+-clippy_options += clippy_deny_warnings
+-
+ subdir('data')
+ subdir('po')
+ subdir('src')
+@@ -126,17 +111,6 @@ test (
+   timeout: 400,
+ )
+ 
+-test (
+-  'cargo-clippy',
+-  cargo,
+-  args: [
+-    'clippy',
+-    clippy_options,
+-  ],
+-  env: cargo_env,
+-  timeout: 400, # cargo might take a bit of time sometimes
+-)
+-
+ gnome.post_install(
+   gtk_update_icon_cache: true,
+   glib_compile_schemas: true,
+-- 
+2.53.0
+

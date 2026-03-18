@@ -1,0 +1,55 @@
+commit 6bfa2ec7a7f424b018fd2e21a70e9d2f04041832
+Author: Barnali Guha Thakurata <barnali@linux.ibm.com>
+Date:   Tue Oct 22 12:05:39 2024 +0530
+
+    Added Power11 support for diag_nvme
+    
+    Without Patch:
+    # diag_nvme nvme0
+    diag_nvme is only supported in PowerVM LPARs and at least Power10 processors
+    
+    With Patch:
+    # diag_nvme nvme0
+    Running diagnostics for nvme0
+    
+    NVMe diag command completed successfully
+    
+    Signed-off-by: Barnali Guha Thakurata <barnali@linux.ibm.com>
+    Signed-off-by: Nilay Shroff <nilay@linux.ibm.com>
+    Reviewed-by: Sathvika Vasireddy <sv@linux.ibm.com>
+    Tested-by: Sathvika Vasireddy <sv@linux.ibm.com>
+
+diff --git a/common/platform.c b/common/platform.c
+index 1359adb..801b924 100644
+--- a/common/platform.c
++++ b/common/platform.c
+@@ -96,6 +96,9 @@ get_processor(void)
+ 	case PVR_POWER10:
+ 		rc = POWER10;
+ 		break;
++	case PVR_POWER11:
++		rc = POWER11;
++		break;
+ 	default:
+ 		rc = PROCESSOR_UNKNOWN;
+ 		break;
+diff --git a/common/platform.h b/common/platform.h
+index b265d1e..ae3ea21 100644
+--- a/common/platform.h
++++ b/common/platform.h
+@@ -36,6 +36,7 @@
+ #define PVR_POWER8	0x004D
+ #define PVR_POWER9	0x004E
+ #define PVR_POWER10	0x0080
++#define PVR_POWER11	0x0082
+ 
+ enum {
+ 	PLATFORM_UNKNOWN = 0,
+@@ -56,6 +57,7 @@ enum {
+ 	POWER8,
+ 	POWER9,
+ 	POWER10,
++	POWER11,
+ };
+ 
+ extern const char *__platform_name[];

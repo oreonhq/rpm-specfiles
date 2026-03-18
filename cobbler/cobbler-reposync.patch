@@ -1,0 +1,18 @@
+diff -up cobbler-3.3.7/cobbler/cli.py.reposync cobbler-3.3.7/cobbler/cli.py
+--- cobbler-3.3.7/cobbler/cli.py.reposync	2024-11-17 14:02:02.000000000 -0700
++++ cobbler-3.3.7/cobbler/cli.py	2025-10-04 19:21:03.379260526 -0600
+@@ -1184,7 +1184,13 @@ class CobblerCLI:
+             task_id = self.start_task("import", options)
+         elif action_name == "reposync":
+             self.parser.add_option("--only", dest="only", help="update only this repository name")
+-            self.parser.add_option("--tries", dest="tries", help="try each repo this many times", default=1)
++            self.parser.add_option(
++                "--tries",
++                dest="tries",
++                help="try each repo this many times",
++                default=1,
++                type="int",
++            )
+             self.parser.add_option("--no-fail", dest="nofail", help="don't stop reposyncing if a failure occurs",
+                                    action="store_true")
+             (options, args) = self.parser.parse_args(self.args)

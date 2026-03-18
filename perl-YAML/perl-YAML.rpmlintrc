@@ -1,0 +1,2 @@
+# Tarball modified to remove non-free content
+addFilter("invalid-url Source0: YAML-free-[0-9.]*\.tar\.gz")

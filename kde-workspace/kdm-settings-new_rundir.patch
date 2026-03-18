@@ -1,0 +1,40 @@
+diff -rup kdm-settings.orig/etc/kde/kdm/kdmrc kdm-settings/etc/kde/kdm/kdmrc
+--- kdm-settings.orig/etc/kde/kdm/kdmrc	2016-06-12 16:54:54.000000000 +0100
++++ kdm-settings/etc/kde/kdm/kdmrc	2021-12-18 22:08:46.938871915 +0000
+@@ -68,14 +68,14 @@ ServerVTs=-1
+ ConsoleTTYs=tty1,tty2,tty3,tty4,tty5,tty6
+ # Where KDM should store its PID (do not store if empty).
+ # Default is ""
+-PidFile=/var/run/kdm/kdm.pid
++PidFile=/run/kdm/kdm.pid
+ # Whether KDM should lock the PID file to prevent having multiple KDM
+ # instances running at once. Do not change unless you are brave.
+ # Default is true
+ #LockPidFile=false
+ # Where to store authorization files.
+-# Default is "/var/run/xauth"
+-AuthDir=/var/run/kdm
++# Default is "/run/xauth"
++AuthDir=/run/kdm
+ # Whether KDM should automatically re-read configuration files, if it
+ # finds them having changed.
+ # Default is true
+@@ -91,8 +91,8 @@ AuthDir=/var/run/kdm
+ #RandomDevice=/dev/altrandom
+ # Where the command sockets should be created; make it empty to disable
+ # them.
+-# Default is "/var/run/xdmctl"
+-#FifoDir=/var/run/kdm
++# Default is "/run/xdmctl"
++#FifoDir=/run/kdm
+ # The group to which the global command socket should belong;
+ # can be either a name or a numerical ID.
+ # Default is 0
+diff -rup kdm-settings.orig/usr/lib/tmpfiles.d/kdm.conf kdm-settings/usr/lib/tmpfiles.d/kdm.conf
+--- kdm-settings.orig/usr/lib/tmpfiles.d/kdm.conf	2012-11-08 18:41:27.000000000 +0000
++++ kdm-settings/usr/lib/tmpfiles.d/kdm.conf	2021-12-18 22:08:46.935871927 +0000
+@@ -1,2 +1,2 @@
+-d /var/run/kdm/ 0711 root root -
+-d /var/run/xdmctl 0711 root root -
++d /run/kdm/ 0711 root root -
++d /run/xdmctl 0711 root root -

@@ -1,0 +1,12 @@
+#e2e test plan
+/e2e:
+  plan:
+    import:
+      url: https://github.com/RedHat-SP-Security/aide-plans.git
+      name: /generic/e2e_ci
+ 
+/rpmverify:
+  plan:
+    import:
+      url: https://github.com/RedHat-SP-Security/aide-plans.git
+      name: /generic/rpmverify

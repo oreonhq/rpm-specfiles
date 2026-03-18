@@ -1,0 +1,19 @@
+- hosts: localhost
+  roles:
+  - role: standard-test-basic
+    tags:
+    - classic
+    required_packages:
+    - coreutils
+    - virt-p2v
+    # https://github.com/libguestfs/virt-p2v/blob/master/dependencies.m4
+    # Only need the virt-p2v program dependencies.
+    # There's no way that I'm aware of to build this list automatically.
+    - dbus-libs
+    - gtk3
+    - libxml2
+    - pcre2
+    tests:
+    - simple:
+        dir: .
+        run: ./basic-test.sh

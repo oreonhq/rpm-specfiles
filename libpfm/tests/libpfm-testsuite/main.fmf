@@ -1,0 +1,16 @@
+summary: libpfm-testsuite testing by upstream testsuite
+description: ''
+contact: Michal Kolar <mkolar@redhat.com>
+component:
+- libpfm
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- libpfm
+- rpm-build
+- yum-utils
+- make
+- gcc
+duration: 1h
+extra-summary: /tools/libpfm/Sanity/libpfm-testsuite
+extra-task: /tools/libpfm/Sanity/libpfm-testsuite

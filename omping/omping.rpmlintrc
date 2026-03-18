@@ -1,0 +1,2 @@
+# Spelling error multicast
+addFilter(r'W: spelling-error .* multicast')

@@ -1,0 +1,3 @@
+PURPOSE of /CoreOS/cronie/Sanity/init-script-LSB
+Description: Init script should meet LSB specifications
+Author: Yulia Kopkova <ykopkova@redhat.com>

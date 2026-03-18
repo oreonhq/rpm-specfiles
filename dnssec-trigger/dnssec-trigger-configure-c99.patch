@@ -1,0 +1,30 @@
+Do not rely on an implicit function declaration for detecting
+the daemon function.  Future compilers may not accept such
+declarations by default, causing the detection result to change.
+
+Submitted upstream: <https://github.com/NLnetLabs/dnssec-trigger/pull/11>
+
+diff --git a/configure b/configure
+index 079ea641e2940515..22c9487fb0d311f8 100755
+--- a/configure
++++ b/configure
+@@ -6757,6 +6757,7 @@ else
+ 
+ echo '
+ #include <stdlib.h>
++#include <unistd.h>
+ ' >conftest.c
+ echo 'void f(){ (void)daemon(0, 0); }' >>conftest.c
+ if test -z "`$CC -c conftest.c 2>&1 | grep deprecated`"; then
+diff --git a/configure.ac b/configure.ac
+index c809367d307f108e..e8095fe7288ba68a 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -225,6 +225,7 @@ AC_CHECK_FUNCS([daemon])
+ if test $ac_cv_func_daemon = yes; then
+         ACX_FUNC_DEPRECATED([daemon], [(void)daemon(0, 0);], [
+ #include <stdlib.h>
++#include <unistd.h>
+ ])
+ fi
+ 

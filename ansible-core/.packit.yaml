@@ -1,0 +1,30 @@
+# See the documentation for more information:
+# https://packit.dev/docs/configuration/
+
+upstream_project_url: https://github.com/ansible/ansible
+upstream_tag_template: v{version}
+issue_repository: https://pagure.io/ansible-packit-issues
+create_sync_note: false
+# TODO: Remove pending https://fedoraproject.org/wiki/Changes/Ansible13
+upstream_tag_include: "v2.18"
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      # Fast forward merge rawhide while it is held at v2.18.
+      rawhide:
+        fast_forward_merge_into:
+          - fedora-43
+          - fedora-42
+  - job: koji_build
+    trigger: commit
+    dist_git_branches:
+      - fedora-all
+    sidetag_group: "ansible"
+    dependents:
+      - ansible
+  # The update for the sidetag group is created in the ansible package.
+  # - job: bodhi_update
+  #   trigger: commit
+  #   dist_git_branches:
+  #     - rawhide

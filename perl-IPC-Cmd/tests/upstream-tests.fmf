@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-IPC-Cmd
+require: perl-IPC-Cmd-tests
+test: /usr/libexec/perl-IPC-Cmd/test

@@ -1,0 +1,10 @@
+* Mon Jun 21 2021 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.1.8-1
+- Update to latest version
+
+* Wed May 12 2021 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.1.7-1
+- Resolve comments from initial review
+- Start the service and timer in %%posttrans
+- Conflict with mlocate and provide /bin/locate alias
+
+* Fri Feb 19 2021 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 1.1.4-1
+- First version

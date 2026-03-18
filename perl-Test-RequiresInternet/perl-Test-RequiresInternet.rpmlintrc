@@ -1,0 +1,2 @@
+# Names
+addFilter("spelling-error \('(getservbyname|ldap|www)',")

@@ -1,0 +1,30 @@
+--- include/mdds/trie_map_def.inl~	2023-04-20 21:32:52.000000000 -0500
++++ include/mdds/trie_map_def.inl	2025-02-10 14:09:25.567409260 -0600
+@@ -34,6 +34,7 @@
+ #include <sstream>
+ #include <type_traits>
+ #include <cstring>
++#include <cstdint>
+ 
+ #ifdef MDDS_TRIE_MAP_DEBUG
+ #include <iostream>
+--- include/mdds/trie_map.hpp~	2023-04-20 21:32:52.000000000 -0500
++++ include/mdds/trie_map.hpp	2025-02-10 14:15:26.859613664 -0600
+@@ -36,6 +36,7 @@
+ #include <deque>
+ #include <map>
+ #include <memory>
++#include <cstdint>
+ 
+ namespace mdds {
+ 
+--- include/mdds/trie_map_itr.hpp~	2023-04-20 21:32:52.000000000 -0500
++++ include/mdds/trie_map_itr.hpp	2025-02-10 14:15:56.136496184 -0600
+@@ -34,6 +34,7 @@
+ #ifdef MDDS_TRIE_MAP_DEBUG
+ #include <sstream>
+ #endif
++#include <cstdint>
+ 
+ #include "mdds/global.hpp"
+ #include "mdds/ref_pair.hpp"

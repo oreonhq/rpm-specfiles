@@ -1,0 +1,22 @@
+---
+# Tests that run in classic, container and atomic context
+- hosts: localhost
+  roles:
+  - role: standard-test-beakerlib
+    tags:
+    - classic
+    - container
+    - atomic
+    tests:
+    - acpica-tools-tests/aslts
+    - acpica-tools-tests/misc
+    - acpica-tools-tests/templates
+    required_packages:
+    - acpica-tools
+    - rpm-build
+    - gcc
+    - wget
+    - bison
+    - flex
+    - patchutils
+

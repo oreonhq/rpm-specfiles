@@ -1,0 +1,11 @@
+---
+
+# qemu options: https://qemu.weilnetz.de/doc/qemu-doc.html
+
+standard-inventory-qcow2:
+  qemu:
+    # RAM size in megabytes. Optionally, a suffix of “M” or “G”.
+    m: 3G
+
+# vim:ft=yaml: ts=2 sts=2 sw=2 expandtab
+

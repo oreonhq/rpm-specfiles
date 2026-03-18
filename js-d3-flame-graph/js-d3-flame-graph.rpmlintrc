@@ -1,0 +1,2 @@
+addFilter("W: strange-permission list_bundled_nodejs_packages.py 755")
+addFilter("W: patch-not-applied .+.vendor.patch")

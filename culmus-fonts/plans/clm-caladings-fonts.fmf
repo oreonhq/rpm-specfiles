@@ -1,0 +1,21 @@
+summary: Fonts related tests
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/fonts
+    exclude:
+      - lang_coverage
+      - generic_alias
+prepare:
+    name: tmt
+    how: install
+    package: clm-caladings-fonts
+execute:
+    how: tmt
+environment:
+    PACKAGE: clm-caladings-fonts
+    FONT_ALIAS: fantasy
+    FONT_FAMILY: CaladingsCLM
+    FONT_LANG: he
+    DEFAULT_SANS: 2
+    DEFAULT_SERIF: 2
+    DEFAULT_MONO: 2

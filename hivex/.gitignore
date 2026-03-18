@@ -1,0 +1,4 @@
+/.build-*
+/clog
+/hivex-*.tar.gz
+/hivex-*.tar.gz.sig

@@ -1,0 +1,46 @@
+From 91a961600bd8f8fb56e098b0557ae3c95ebe834a Mon Sep 17 00:00:00 2001
+From: neilfsun <loyou85@gmail.com>
+Date: Wed, 11 Feb 2026 09:50:04 +0800
+Subject: [PATCH 21/23] Fix file redirection not working for external commands
+ in input files
+
+When executing external commands (echo, cat, etc.) from input files
+with file redirection (>), the output was not properly redirected to
+the file but instead printed to stdout.
+
+  crash> cat crashrc
+  echo hi > 1
+  cat 1
+  crash> <crashrc
+  crash> echo hi > 1
+  hi
+  crash> cat 1
+  crash>
+
+When file redirection was used, the code fell through to system() which
+outputs to stdout instead of using the global fp that was correctly set
+by setup_redirect().
+
+Signed-off-by: neilfsun <neilfsun@tencent.com>
+Signed-off-by: Feng Sun <loyou85@gmail.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/main.c b/main.c
+index 2e6e633f7d10..d5f8486bb217 100644
+--- a/main.c
++++ b/main.c
+@@ -1071,7 +1071,7 @@ is_external_command(void)
+                         	strcat(command, args[i]);
+                 }
+ 
+-		if (pc->redirect & REDIRECT_TO_PIPE) {
++		if (pc->redirect & (REDIRECT_TO_PIPE|REDIRECT_TO_FILE)) {
+ 			if ((pipe = popen(command, "r")) == NULL) {
+ 				error(INFO, "cannot execute: %s\n", command);
+ 				return TRUE;
+-- 
+2.51.1
+

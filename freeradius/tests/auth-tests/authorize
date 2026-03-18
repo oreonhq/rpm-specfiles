@@ -1,0 +1,2 @@
+fedora-ci Cleartext-Password := "password"
+       Reply-Message = "Hello, %{User-Name}"

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-LWP-MediaTypes
+require: perl-LWP-MediaTypes-tests
+test: /usr/libexec/perl-LWP-MediaTypes/test

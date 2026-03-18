@@ -1,0 +1,25 @@
+From 1c20fa80772ca7a1ed0512056ce7cd6a94f8e68d Mon Sep 17 00:00:00 2001
+From: Jon Rowe <hello@jonrowe.co.uk>
+Date: Fri, 28 Nov 2025 10:59:10 +0000
+Subject: [PATCH] Cope with the changes to block source_location in Ruby 4
+
+---
+ rspec-core/lib/rspec/core/hooks.rb                              | 2 +-
+ rspec-core/lib/rspec/core/metadata.rb                           | 2 +-
+ rspec-core/lib/rspec/core/shared_example_group.rb               | 2 +-
+ .../lib/rspec/expectations/block_snippet_extractor.rb           | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/rspec-expectations/lib/rspec/expectations/block_snippet_extractor.rb b/rspec-expectations/lib/rspec/expectations/block_snippet_extractor.rb
+index 5c66ac639..24dbaf88e 100644
+--- a/rspec-expectations/lib/rspec/expectations/block_snippet_extractor.rb
++++ b/rspec-expectations/lib/rspec/expectations/block_snippet_extractor.rb
+@@ -62,7 +62,7 @@ def file_path
+       end
+ 
+       def beginning_line_number
+-        source_location.last
++        source_location[1]
+       end
+ 
+       def source_location

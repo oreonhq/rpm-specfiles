@@ -1,0 +1,345 @@
+From 3397e1e4fe0a9964e1837c2934b81835093494b8 Mon Sep 17 00:00:00 2001
+From: Dmitry Sidorov <dmitry.sidorov@intel.com>
+Date: Wed, 27 Aug 2025 11:28:53 +0200
+Subject: [PATCH] Update SPV_INTEL_variable_length_array to rev 3 (#542)
+
+* Update SPV_INTEL_variable_length_array to rev 3
+
+Spec: https://github.com/KhronosGroup/SPIRV-Registry/pull/352
+
+Signed-off-by: Sidorov, Dmitry <dmitry.sidorov@intel.com>
+---
+ include/spirv/unified1/spirv.bf               |  2 ++
+ .../spirv/unified1/spirv.core.grammar.json    | 28 ++++++++++++++++---
+ include/spirv/unified1/spirv.cs               |  2 ++
+ include/spirv/unified1/spirv.h                |  5 ++++
+ include/spirv/unified1/spirv.hpp              |  5 ++++
+ include/spirv/unified1/spirv.hpp11            |  5 ++++
+ include/spirv/unified1/spirv.json             |  2 ++
+ include/spirv/unified1/spirv.lua              |  2 ++
+ include/spirv/unified1/spirv.py               |  2 ++
+ include/spirv/unified1/spv.d                  |  2 ++
+ 10 files changed, 51 insertions(+), 4 deletions(-)
+
+diff --git a/include/spirv/unified1/spirv.bf b/include/spirv/unified1/spirv.bf
+index 0b153d4bf..99ba58041 100644
+--- a/include/spirv/unified1/spirv.bf
++++ b/include/spirv/unified1/spirv.bf
+@@ -1314,6 +1314,7 @@ namespace Spv
+             Subgroup2DBlockTransposeINTEL = 6230,
+             SubgroupMatrixMultiplyAccumulateINTEL = 6236,
+             TernaryBitwiseFunctionINTEL = 6241,
++            UntypedVariableLengthArrayINTEL = 6243,
+             SpecConditionalINTEL = 6245,
+             FunctionVariantsINTEL = 6246,
+             GroupUniformArithmeticKHR = 6400,
+@@ -2481,6 +2482,7 @@ namespace Spv
+             OpSubgroup2DBlockStoreINTEL = 6235,
+             OpSubgroupMatrixMultiplyAccumulateINTEL = 6237,
+             OpBitwiseFunctionINTEL = 6242,
++            OpUntypedVariableLengthArrayINTEL = 6244,
+             OpConditionalExtensionINTEL = 6248,
+             OpConditionalEntryPointINTEL = 6249,
+             OpConditionalCapabilityINTEL = 6250,
+diff --git a/include/spirv/unified1/spirv.core.grammar.json b/include/spirv/unified1/spirv.core.grammar.json
+index 60523206c..b33dca154 100644
+--- a/include/spirv/unified1/spirv.core.grammar.json
++++ b/include/spirv/unified1/spirv.core.grammar.json
+@@ -9154,19 +9154,19 @@
+     },
+     {
+       "opname" : "OpVariableLengthArrayINTEL",
+-      "class"  : "@exclude",
++      "class"  : "Memory",
+       "opcode" : 5818,
+       "operands" : [
+         { "kind" : "IdResultType" },
+         { "kind" : "IdResult" },
+-        { "kind" : "IdRef", "name" : "Lenght" }
++        { "kind" : "IdRef", "name" : "Length" }
+       ],
+       "capabilities" : [ "VariableLengthArrayINTEL" ],
+       "version" : "None"
+     },
+     {
+       "opname" : "OpSaveMemoryINTEL",
+-      "class"  : "@exclude",
++      "class"  : "Memory",
+       "opcode" : 5819,
+       "operands" : [
+         { "kind" : "IdResultType" },
+@@ -9177,7 +9177,7 @@
+     },
+     {
+       "opname" : "OpRestoreMemoryINTEL",
+-      "class"  : "@exclude",
++      "class"  : "Memory",
+       "opcode" : 5820,
+       "operands" : [
+         { "kind" : "IdRef", "name" : "Ptr" }
+@@ -10838,6 +10838,19 @@
+       "capabilities" : [ "TernaryBitwiseFunctionINTEL" ],
+       "version" : "None"
+     },
++    {
++      "opname" : "OpUntypedVariableLengthArrayINTEL",
++      "class"  : "Memory",
++      "opcode" : 6244,
++      "operands" : [
++        { "kind" : "IdResultType" },
++        { "kind" : "IdResult" },
++        { "kind" : "IdRef", "name" : "Element Type" },
++        { "kind" : "IdRef", "name" : "Length" }
++      ],
++      "capabilities" : [ "UntypedVariableLengthArrayINTEL" ],
++      "version" : "None"
++    },
+     {
+       "opname" : "OpConditionalExtensionINTEL",
+       "class"  : "Extension",
+@@ -17735,6 +17748,13 @@
+           "extensions" : [ "SPV_INTEL_ternary_bitwise_function"],
+           "version" : "None"
+         },
++        {
++          "enumerant" : "UntypedVariableLengthArrayINTEL",
++          "value" : 6243,
++          "capabilities" : [ "VariableLengthArrayINTEL", "UntypedPointersKHR" ],
++          "extensions" : [ "SPV_INTEL_variable_length_array" ],
++          "version" : "None"
++        },
+         {
+           "enumerant" : "SpecConditionalINTEL",
+           "value" : 6245,
+diff --git a/include/spirv/unified1/spirv.cs b/include/spirv/unified1/spirv.cs
+index 4e611612d..0c2b4505a 100644
+--- a/include/spirv/unified1/spirv.cs
++++ b/include/spirv/unified1/spirv.cs
+@@ -1313,6 +1313,7 @@ public enum Capability
+             Subgroup2DBlockTransposeINTEL = 6230,
+             SubgroupMatrixMultiplyAccumulateINTEL = 6236,
+             TernaryBitwiseFunctionINTEL = 6241,
++            UntypedVariableLengthArrayINTEL = 6243,
+             SpecConditionalINTEL = 6245,
+             FunctionVariantsINTEL = 6246,
+             GroupUniformArithmeticKHR = 6400,
+@@ -2480,6 +2481,7 @@ public enum Op
+             OpSubgroup2DBlockStoreINTEL = 6235,
+             OpSubgroupMatrixMultiplyAccumulateINTEL = 6237,
+             OpBitwiseFunctionINTEL = 6242,
++            OpUntypedVariableLengthArrayINTEL = 6244,
+             OpConditionalExtensionINTEL = 6248,
+             OpConditionalEntryPointINTEL = 6249,
+             OpConditionalCapabilityINTEL = 6250,
+diff --git a/include/spirv/unified1/spirv.h b/include/spirv/unified1/spirv.h
+index cf23bade2..5d07719a4 100644
+--- a/include/spirv/unified1/spirv.h
++++ b/include/spirv/unified1/spirv.h
+@@ -1284,6 +1284,7 @@ typedef enum SpvCapability_ {
+     SpvCapabilitySubgroup2DBlockTransposeINTEL = 6230,
+     SpvCapabilitySubgroupMatrixMultiplyAccumulateINTEL = 6236,
+     SpvCapabilityTernaryBitwiseFunctionINTEL = 6241,
++    SpvCapabilityUntypedVariableLengthArrayINTEL = 6243,
+     SpvCapabilitySpecConditionalINTEL = 6245,
+     SpvCapabilityFunctionVariantsINTEL = 6246,
+     SpvCapabilityGroupUniformArithmeticKHR = 6400,
+@@ -2415,6 +2416,7 @@ typedef enum SpvOp_ {
+     SpvOpSubgroup2DBlockStoreINTEL = 6235,
+     SpvOpSubgroupMatrixMultiplyAccumulateINTEL = 6237,
+     SpvOpBitwiseFunctionINTEL = 6242,
++    SpvOpUntypedVariableLengthArrayINTEL = 6244,
+     SpvOpConditionalExtensionINTEL = 6248,
+     SpvOpConditionalEntryPointINTEL = 6249,
+     SpvOpConditionalCapabilityINTEL = 6250,
+@@ -3246,6 +3248,7 @@ inline void SpvHasResultAndType(SpvOp opcode, bool *hasResult, bool *hasResultTy
+     case SpvOpSubgroup2DBlockStoreINTEL: *hasResult = false; *hasResultType = false; break;
+     case SpvOpSubgroupMatrixMultiplyAccumulateINTEL: *hasResult = true; *hasResultType = true; break;
+     case SpvOpBitwiseFunctionINTEL: *hasResult = true; *hasResultType = true; break;
++    case SpvOpUntypedVariableLengthArrayINTEL: *hasResult = true; *hasResultType = true; break;
+     case SpvOpConditionalExtensionINTEL: *hasResult = false; *hasResultType = false; break;
+     case SpvOpConditionalEntryPointINTEL: *hasResult = false; *hasResultType = false; break;
+     case SpvOpConditionalCapabilityINTEL: *hasResult = false; *hasResultType = false; break;
+@@ -4234,6 +4237,7 @@ inline const char* SpvCapabilityToString(SpvCapability value) {
+     case SpvCapabilitySubgroup2DBlockTransposeINTEL: return "Subgroup2DBlockTransposeINTEL";
+     case SpvCapabilitySubgroupMatrixMultiplyAccumulateINTEL: return "SubgroupMatrixMultiplyAccumulateINTEL";
+     case SpvCapabilityTernaryBitwiseFunctionINTEL: return "TernaryBitwiseFunctionINTEL";
++    case SpvCapabilityUntypedVariableLengthArrayINTEL: return "UntypedVariableLengthArrayINTEL";
+     case SpvCapabilitySpecConditionalINTEL: return "SpecConditionalINTEL";
+     case SpvCapabilityFunctionVariantsINTEL: return "FunctionVariantsINTEL";
+     case SpvCapabilityGroupUniformArithmeticKHR: return "GroupUniformArithmeticKHR";
+@@ -5235,6 +5239,7 @@ inline const char* SpvOpToString(SpvOp value) {
+     case SpvOpSubgroup2DBlockStoreINTEL: return "OpSubgroup2DBlockStoreINTEL";
+     case SpvOpSubgroupMatrixMultiplyAccumulateINTEL: return "OpSubgroupMatrixMultiplyAccumulateINTEL";
+     case SpvOpBitwiseFunctionINTEL: return "OpBitwiseFunctionINTEL";
++    case SpvOpUntypedVariableLengthArrayINTEL: return "OpUntypedVariableLengthArrayINTEL";
+     case SpvOpConditionalExtensionINTEL: return "OpConditionalExtensionINTEL";
+     case SpvOpConditionalEntryPointINTEL: return "OpConditionalEntryPointINTEL";
+     case SpvOpConditionalCapabilityINTEL: return "OpConditionalCapabilityINTEL";
+diff --git a/include/spirv/unified1/spirv.hpp b/include/spirv/unified1/spirv.hpp
+index 2e1f2173c..490299e4a 100644
+--- a/include/spirv/unified1/spirv.hpp
++++ b/include/spirv/unified1/spirv.hpp
+@@ -1280,6 +1280,7 @@ enum Capability {
+     CapabilitySubgroup2DBlockTransposeINTEL = 6230,
+     CapabilitySubgroupMatrixMultiplyAccumulateINTEL = 6236,
+     CapabilityTernaryBitwiseFunctionINTEL = 6241,
++    CapabilityUntypedVariableLengthArrayINTEL = 6243,
+     CapabilitySpecConditionalINTEL = 6245,
+     CapabilityFunctionVariantsINTEL = 6246,
+     CapabilityGroupUniformArithmeticKHR = 6400,
+@@ -2411,6 +2412,7 @@ enum Op {
+     OpSubgroup2DBlockStoreINTEL = 6235,
+     OpSubgroupMatrixMultiplyAccumulateINTEL = 6237,
+     OpBitwiseFunctionINTEL = 6242,
++    OpUntypedVariableLengthArrayINTEL = 6244,
+     OpConditionalExtensionINTEL = 6248,
+     OpConditionalEntryPointINTEL = 6249,
+     OpConditionalCapabilityINTEL = 6250,
+@@ -3242,6 +3244,7 @@ inline void HasResultAndType(Op opcode, bool *hasResult, bool *hasResultType) {
+     case OpSubgroup2DBlockStoreINTEL: *hasResult = false; *hasResultType = false; break;
+     case OpSubgroupMatrixMultiplyAccumulateINTEL: *hasResult = true; *hasResultType = true; break;
+     case OpBitwiseFunctionINTEL: *hasResult = true; *hasResultType = true; break;
++    case OpUntypedVariableLengthArrayINTEL: *hasResult = true; *hasResultType = true; break;
+     case OpConditionalExtensionINTEL: *hasResult = false; *hasResultType = false; break;
+     case OpConditionalEntryPointINTEL: *hasResult = false; *hasResultType = false; break;
+     case OpConditionalCapabilityINTEL: *hasResult = false; *hasResultType = false; break;
+@@ -4230,6 +4233,7 @@ inline const char* CapabilityToString(Capability value) {
+     case CapabilitySubgroup2DBlockTransposeINTEL: return "Subgroup2DBlockTransposeINTEL";
+     case CapabilitySubgroupMatrixMultiplyAccumulateINTEL: return "SubgroupMatrixMultiplyAccumulateINTEL";
+     case CapabilityTernaryBitwiseFunctionINTEL: return "TernaryBitwiseFunctionINTEL";
++    case CapabilityUntypedVariableLengthArrayINTEL: return "UntypedVariableLengthArrayINTEL";
+     case CapabilitySpecConditionalINTEL: return "SpecConditionalINTEL";
+     case CapabilityFunctionVariantsINTEL: return "FunctionVariantsINTEL";
+     case CapabilityGroupUniformArithmeticKHR: return "GroupUniformArithmeticKHR";
+@@ -5231,6 +5235,7 @@ inline const char* OpToString(Op value) {
+     case OpSubgroup2DBlockStoreINTEL: return "OpSubgroup2DBlockStoreINTEL";
+     case OpSubgroupMatrixMultiplyAccumulateINTEL: return "OpSubgroupMatrixMultiplyAccumulateINTEL";
+     case OpBitwiseFunctionINTEL: return "OpBitwiseFunctionINTEL";
++    case OpUntypedVariableLengthArrayINTEL: return "OpUntypedVariableLengthArrayINTEL";
+     case OpConditionalExtensionINTEL: return "OpConditionalExtensionINTEL";
+     case OpConditionalEntryPointINTEL: return "OpConditionalEntryPointINTEL";
+     case OpConditionalCapabilityINTEL: return "OpConditionalCapabilityINTEL";
+diff --git a/include/spirv/unified1/spirv.hpp11 b/include/spirv/unified1/spirv.hpp11
+index c9201846d..2d190121b 100644
+--- a/include/spirv/unified1/spirv.hpp11
++++ b/include/spirv/unified1/spirv.hpp11
+@@ -1280,6 +1280,7 @@ enum class Capability : unsigned {
+     Subgroup2DBlockTransposeINTEL = 6230,
+     SubgroupMatrixMultiplyAccumulateINTEL = 6236,
+     TernaryBitwiseFunctionINTEL = 6241,
++    UntypedVariableLengthArrayINTEL = 6243,
+     SpecConditionalINTEL = 6245,
+     FunctionVariantsINTEL = 6246,
+     GroupUniformArithmeticKHR = 6400,
+@@ -2411,6 +2412,7 @@ enum class Op : unsigned {
+     OpSubgroup2DBlockStoreINTEL = 6235,
+     OpSubgroupMatrixMultiplyAccumulateINTEL = 6237,
+     OpBitwiseFunctionINTEL = 6242,
++    OpUntypedVariableLengthArrayINTEL = 6244,
+     OpConditionalExtensionINTEL = 6248,
+     OpConditionalEntryPointINTEL = 6249,
+     OpConditionalCapabilityINTEL = 6250,
+@@ -3242,6 +3244,7 @@ inline void HasResultAndType(Op opcode, bool *hasResult, bool *hasResultType) {
+     case Op::OpSubgroup2DBlockStoreINTEL: *hasResult = false; *hasResultType = false; break;
+     case Op::OpSubgroupMatrixMultiplyAccumulateINTEL: *hasResult = true; *hasResultType = true; break;
+     case Op::OpBitwiseFunctionINTEL: *hasResult = true; *hasResultType = true; break;
++    case Op::OpUntypedVariableLengthArrayINTEL: *hasResult = true; *hasResultType = true; break;
+     case Op::OpConditionalExtensionINTEL: *hasResult = false; *hasResultType = false; break;
+     case Op::OpConditionalEntryPointINTEL: *hasResult = false; *hasResultType = false; break;
+     case Op::OpConditionalCapabilityINTEL: *hasResult = false; *hasResultType = false; break;
+@@ -4230,6 +4233,7 @@ inline const char* CapabilityToString(Capability value) {
+     case Capability::Subgroup2DBlockTransposeINTEL: return "Subgroup2DBlockTransposeINTEL";
+     case Capability::SubgroupMatrixMultiplyAccumulateINTEL: return "SubgroupMatrixMultiplyAccumulateINTEL";
+     case Capability::TernaryBitwiseFunctionINTEL: return "TernaryBitwiseFunctionINTEL";
++    case Capability::UntypedVariableLengthArrayINTEL: return "UntypedVariableLengthArrayINTEL";
+     case Capability::SpecConditionalINTEL: return "SpecConditionalINTEL";
+     case Capability::FunctionVariantsINTEL: return "FunctionVariantsINTEL";
+     case Capability::GroupUniformArithmeticKHR: return "GroupUniformArithmeticKHR";
+@@ -5231,6 +5235,7 @@ inline const char* OpToString(Op value) {
+     case Op::OpSubgroup2DBlockStoreINTEL: return "OpSubgroup2DBlockStoreINTEL";
+     case Op::OpSubgroupMatrixMultiplyAccumulateINTEL: return "OpSubgroupMatrixMultiplyAccumulateINTEL";
+     case Op::OpBitwiseFunctionINTEL: return "OpBitwiseFunctionINTEL";
++    case Op::OpUntypedVariableLengthArrayINTEL: return "OpUntypedVariableLengthArrayINTEL";
+     case Op::OpConditionalExtensionINTEL: return "OpConditionalExtensionINTEL";
+     case Op::OpConditionalEntryPointINTEL: return "OpConditionalEntryPointINTEL";
+     case Op::OpConditionalCapabilityINTEL: return "OpConditionalCapabilityINTEL";
+diff --git a/include/spirv/unified1/spirv.json b/include/spirv/unified1/spirv.json
+index 539c1c2ba..83495d418 100644
+--- a/include/spirv/unified1/spirv.json
++++ b/include/spirv/unified1/spirv.json
+@@ -1256,6 +1256,7 @@
+                     "Subgroup2DBlockTransposeINTEL": 6230,
+                     "SubgroupMatrixMultiplyAccumulateINTEL": 6236,
+                     "TernaryBitwiseFunctionINTEL": 6241,
++                    "UntypedVariableLengthArrayINTEL": 6243,
+                     "SpecConditionalINTEL": 6245,
+                     "FunctionVariantsINTEL": 6246,
+                     "GroupUniformArithmeticKHR": 6400,
+@@ -2392,6 +2393,7 @@
+                     "OpSubgroup2DBlockStoreINTEL": 6235,
+                     "OpSubgroupMatrixMultiplyAccumulateINTEL": 6237,
+                     "OpBitwiseFunctionINTEL": 6242,
++                    "OpUntypedVariableLengthArrayINTEL": 6244,
+                     "OpConditionalExtensionINTEL": 6248,
+                     "OpConditionalEntryPointINTEL": 6249,
+                     "OpConditionalCapabilityINTEL": 6250,
+diff --git a/include/spirv/unified1/spirv.lua b/include/spirv/unified1/spirv.lua
+index dec7f65ce..50bca1917 100644
+--- a/include/spirv/unified1/spirv.lua
++++ b/include/spirv/unified1/spirv.lua
+@@ -1271,6 +1271,7 @@ spv = {
+         Subgroup2DBlockTransposeINTEL = 6230,
+         SubgroupMatrixMultiplyAccumulateINTEL = 6236,
+         TernaryBitwiseFunctionINTEL = 6241,
++        UntypedVariableLengthArrayINTEL = 6243,
+         SpecConditionalINTEL = 6245,
+         FunctionVariantsINTEL = 6246,
+         GroupUniformArithmeticKHR = 6400,
+@@ -2402,6 +2403,7 @@ spv = {
+         OpSubgroup2DBlockStoreINTEL = 6235,
+         OpSubgroupMatrixMultiplyAccumulateINTEL = 6237,
+         OpBitwiseFunctionINTEL = 6242,
++        OpUntypedVariableLengthArrayINTEL = 6244,
+         OpConditionalExtensionINTEL = 6248,
+         OpConditionalEntryPointINTEL = 6249,
+         OpConditionalCapabilityINTEL = 6250,
+diff --git a/include/spirv/unified1/spirv.py b/include/spirv/unified1/spirv.py
+index fc1aa981a..13ef69c53 100644
+--- a/include/spirv/unified1/spirv.py
++++ b/include/spirv/unified1/spirv.py
+@@ -1242,6 +1242,7 @@
+         'Subgroup2DBlockTransposeINTEL' : 6230,
+         'SubgroupMatrixMultiplyAccumulateINTEL' : 6236,
+         'TernaryBitwiseFunctionINTEL' : 6241,
++        'UntypedVariableLengthArrayINTEL' : 6243,
+         'SpecConditionalINTEL' : 6245,
+         'FunctionVariantsINTEL' : 6246,
+         'GroupUniformArithmeticKHR' : 6400,
+@@ -2345,6 +2346,7 @@
+         'OpSubgroup2DBlockStoreINTEL' : 6235,
+         'OpSubgroupMatrixMultiplyAccumulateINTEL' : 6237,
+         'OpBitwiseFunctionINTEL' : 6242,
++        'OpUntypedVariableLengthArrayINTEL' : 6244,
+         'OpConditionalExtensionINTEL' : 6248,
+         'OpConditionalEntryPointINTEL' : 6249,
+         'OpConditionalCapabilityINTEL' : 6250,
+diff --git a/include/spirv/unified1/spv.d b/include/spirv/unified1/spv.d
+index 1feb5e0a6..fb9588dba 100644
+--- a/include/spirv/unified1/spv.d
++++ b/include/spirv/unified1/spv.d
+@@ -1316,6 +1316,7 @@ enum Capability : uint
+     Subgroup2DBlockTransposeINTEL = 6230,
+     SubgroupMatrixMultiplyAccumulateINTEL = 6236,
+     TernaryBitwiseFunctionINTEL = 6241,
++    UntypedVariableLengthArrayINTEL = 6243,
+     SpecConditionalINTEL = 6245,
+     FunctionVariantsINTEL = 6246,
+     GroupUniformArithmeticKHR = 6400,
+@@ -2483,6 +2484,7 @@ enum Op : uint
+     OpSubgroup2DBlockStoreINTEL = 6235,
+     OpSubgroupMatrixMultiplyAccumulateINTEL = 6237,
+     OpBitwiseFunctionINTEL = 6242,
++    OpUntypedVariableLengthArrayINTEL = 6244,
+     OpConditionalExtensionINTEL = 6248,
+     OpConditionalEntryPointINTEL = 6249,
+     OpConditionalCapabilityINTEL = 6250,

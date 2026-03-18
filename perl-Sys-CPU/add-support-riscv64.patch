@@ -1,0 +1,29 @@
+diff --git a/CPU.xs b/CPU.xs
+index 067c9cb..53e806b 100644
+--- a/CPU.xs
++++ b/CPU.xs
+@@ -400,6 +400,9 @@ CODE:
+ #endif
+ #if defined __s390__ || defined __s390x__
+     value = processor_machine_field (proc_cpuinfo_field ("processor") );
++#endif
++#if defined __riscv
++    value = proc_cpuinfo_field ("processor");
+ #endif
+     if (!value) value = proc_cpuinfo_field ("model name");
+     if (!value) value = proc_cpuinfo_field ("machine");
+diff --git a/t/Sys-CPU.t b/t/Sys-CPU.t
+index 4246b22..e813514 100755
+--- a/t/Sys-CPU.t
++++ b/t/Sys-CPU.t
+@@ -25,8 +25,8 @@ if (defined($speed)) {
+     print "ok 3 (CPU Speed : $speed)\n";
+ } elsif ( $^O eq 'MSWin32'){
+     print "ok 3 (CPU Speed: test skipped on MSWin32)\n";
+-} elsif ($Config{archname} =~ /^(arm|aarch64)/ ) {
+-    print "ok 3 (CPU Speed: test skipped on ARM and AArch64)\n";
++} elsif ($Config{archname} =~ /^(arm|aarch64|riscv64)/ ) {
++    print "ok 3 (CPU Speed: test skipped on ARM, AArch64 and RISC-V RV64GC)\n";
+ } else  {
+     print "not ok 3 (cpu_clock undefined (ok if Win9x))\n";
+ }

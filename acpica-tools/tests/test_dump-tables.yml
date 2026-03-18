@@ -1,0 +1,12 @@
+# Tests that run in classic and atomic
+- hosts: localhost
+  roles:
+  - role: standard-test-beakerlib
+    tags:
+    - classic
+    - atomic
+    tests:
+    - dump-tables
+    required_packages:
+    - acpica-tools
+

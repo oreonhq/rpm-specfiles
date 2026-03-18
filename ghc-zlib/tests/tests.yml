@@ -1,0 +1,40 @@
+---
+- hosts: localhost
+  tags:
+  - classic
+  vars:
+    # standard-test-basic directory for tests are relative to {{ tenv_workdir }}
+    tenv_workdir: /var/test
+  pre_tasks:
+  - import_role:
+      name: standard-test-source
+    vars:
+      fetch_only: True
+
+  - name: Copy files including source to test environment
+    synchronize:
+      src: "{{ playbook_dir }}/.."
+      dest: "{{ tenv_workdir }}"
+      mode: push
+      ssh_args: "-o UserKnownHostsFile=/dev/null"
+
+  roles:
+  - role: standard-test-basic
+    required_packages:
+    - cabal-install
+    - ghc-tasty-hunit-devel
+    - ghc-tasty-quickcheck-devel
+    - ghc-zlib-devel
+    - ghc-rpm-macros
+    - rpm-build
+    tests:
+    - prepare-source:
+        dir: ./
+        run: rpmbuild -bp {{ tenv_workdir }}/*.spec --nodeps --define "_sourcedir {{ tenv_workdir }}" --define "_builddir {{ tenv_workdir }}/source"
+    - flatten-source:
+        dir: ./
+        run: shopt -s dotglob; mv {{ tenv_workdir }}/source/*/* {{ tenv_workdir }}/source
+    - smoke:
+        dir: simple
+        run: ./runtest.sh {{ tenv_workdir }}/source/
+...

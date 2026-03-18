@@ -1,0 +1,9 @@
+/results_*
+/*.src.rpm
+
+/plexus-containers-1.6.tar.gz
+/plexus-containers-1.7.1.tar.gz
+/plexus-containers-2.0.0.tar.gz
+/plexus-containers-2.1.0.tar.gz
+/plexus-containers-2.1.1.tar.gz
+/plexus-containers-2.2.0.tar.gz

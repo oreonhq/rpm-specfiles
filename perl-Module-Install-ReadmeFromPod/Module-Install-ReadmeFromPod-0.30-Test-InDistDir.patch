@@ -1,0 +1,36 @@
+Test::InDistDir is only useful for running tests directly in an unpacked
+source directory, e.g. with an IDE.  It is a no-op when building a package.
+
+diff --git a/META.yml b/META.yml
+index d2559af..b5a9b80 100644
+--- a/META.yml
++++ b/META.yml
+@@ -6,7 +6,6 @@ build_requires:
+   Capture::Tiny: 0.05
+   ExtUtils::MakeMaker: 6.59
+   File::Temp: 0
+-  Test::InDistDir: 0
+   Test::More: 0.47
+ configure_requires:
+   ExtUtils::MakeMaker: 6.59
+diff --git a/Makefile.PL b/Makefile.PL
+index f7b4aa3..fdddc40 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -14,7 +14,6 @@ auto_license holder => 'Chris Williams';
+ build_requires 'Test::More' => 0.47;
+ build_requires 'File::Temp' => 0;
+ build_requires 'Capture::Tiny' => 0.05;
+-build_requires 'Test::InDistDir' => 0;
+ requires 'Module::Install' => 1.00;
+ requires 'IO::All' => 0;
+ requires 'Pod::Text' => 3.13;
+diff --git a/t/01_dist.t b/t/01_dist.t
+index a3af08c..70cdcc9 100644
+--- a/t/01_dist.t
++++ b/t/01_dist.t
+@@ -1,4 +1,3 @@
+-use Test::InDistDir;
+ use strict;
+ use warnings;
+ use Test::More; #tests => 1;

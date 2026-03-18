@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-XML-SAX-Base
+require: perl-XML-SAX-Base-tests
+test: /usr/libexec/perl-XML-SAX-Base/test

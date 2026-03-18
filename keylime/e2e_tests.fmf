@@ -1,0 +1,21 @@
+context:
+  initiator: fedora-ci
+  component: keylime
+
+/e2e:
+  plan:
+    import:
+      url: https://github.com/RedHat-SP-Security/keylime-plans.git
+      name: /generic/e2e
+
+/package-update:
+  plan:
+    import:
+      url: https://github.com/RedHat-SP-Security/keylime-plans.git
+      name: /generic/package-update
+
+/rpmverify:
+  plan:
+    import:
+      url: https://github.com/RedHat-SP-Security/keylime-plans.git
+      name: /generic/rpmverify

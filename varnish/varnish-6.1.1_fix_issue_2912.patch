@@ -1,0 +1,115 @@
+This patch is a fix for memory issues with
+pcre-jit, see upstream bug report at
+https://github.com/varnishcache/varnish-cache/issues/2817
+
+The patch is based on upstream commits
+a3129a5340566d17192de8058a9c1dbb051a7039
+683b7cbe8cde1dde8f9e516a354b82430f1d318e
+1226e77f9501c56976635c714c99d84f417aa5d2
+
+
+diff -Naur a/bin/varnishd/cache/cache_panic.c b/bin/varnishd/cache/cache_panic.c
+--- a/bin/varnishd/cache/cache_panic.c	2018-10-24 11:29:10.000000000 +0200
++++ b/bin/varnishd/cache/cache_panic.c	2019-03-07 16:27:16.592441674 +0100
+@@ -601,6 +601,33 @@
+ 	VSB_indent(vsb, -2);
+ }
+ 
++#ifdef HAVE_PTHREAD_GETATTR_NP
++static void
++pan_threadattr(struct vsb *vsb)
++{
++	pthread_attr_t attr[1];
++	size_t sz;
++	void *addr;
++
++	if (pthread_getattr_np(pthread_self(), attr) != 0)
++		return;
++
++	VSB_cat(vsb, "pthread.attr = {\n");
++	VSB_indent(vsb, 2);
++
++	if (pthread_attr_getguardsize(attr, &sz) == 0)
++		VSB_printf(vsb, "guard = %zu,\n", sz);
++	if (pthread_attr_getstack(attr, &addr, &sz) == 0) {
++		VSB_printf(vsb, "stack_bottom = %p,\n", addr);
++		VSB_printf(vsb, "stack_top = %p,\n", (char *)addr + sz);
++		VSB_printf(vsb, "stack_size = %zu,\n", sz);
++	}
++	VSB_indent(vsb, -2);
++	VSB_cat(vsb, "}\n");
++	(void) pthread_attr_destroy(attr);
++}
++#endif
++
+ /*--------------------------------------------------------------------*/
+ 
+ static void __attribute__((__noreturn__))
+@@ -673,6 +700,10 @@
+ 	if (q != NULL)
+ 		VSB_printf(pan_vsb, "thread = (%s)\n", q);
+ 
++#ifdef HAVE_PTHREAD_GETATTR_NP
++	pan_threadattr(pan_vsb);
++#endif
++
+ 	if (!FEATURE(FEATURE_SHORT_PANIC)) {
+ 		req = THR_GetRequest();
+ 		VSB_cat(pan_vsb, "thr.");
+diff -Naur a/bin/varnishd/mgt/mgt_param.c b/bin/varnishd/mgt/mgt_param.c
+--- a/bin/varnishd/mgt/mgt_param.c	2018-10-24 11:29:10.000000000 +0200
++++ b/bin/varnishd/mgt/mgt_param.c	2019-03-07 16:27:16.594441699 +0100
+@@ -494,6 +494,8 @@
+ 
+ 	MCF_TcpParams();
+ 
++	def = 56 * 1024;
++
+ 	if (sizeof(void *) < 8) {		/*lint !e506 !e774  */
+ 		/*
+ 		 * Adjust default parameters for 32 bit systems to conserve
+@@ -505,20 +507,16 @@
+ 		MCF_ParamConf(MCF_DEFAULT, "http_req_size", "12k");
+ 		MCF_ParamConf(MCF_DEFAULT, "gzip_buffer", "4k");
+ 		MCF_ParamConf(MCF_MAXIMUM, "vsl_space", "1G");
++		def = 48 * 1024;
+ 	}
+ 
+-#if !defined(HAVE_ACCEPT_FILTERS) || defined(__linux)
+-	MCF_ParamConf(MCF_DEFAULT, "accept_filter", "off");
+-#endif
+-
+ 	low = sysconf(_SC_THREAD_STACK_MIN);
+ 	MCF_ParamConf(MCF_MINIMUM, "thread_pool_stack", "%jdb", (intmax_t)low);
+ 
+ #if defined(__SANITIZER) || __has_feature(address_sanitizer)
+ 	def = 92 * 1024;
+-#else
+-	def = 48 * 1024;
+ #endif
++
+ 	if (def < low)
+ 		def = low;
+ 	MCF_ParamConf(MCF_DEFAULT, "thread_pool_stack", "%jdb", (intmax_t)def);
+@@ -529,6 +527,10 @@
+ 
+ 	MCF_ParamConf(MCF_MAXIMUM, "thread_pools", "%d", MAX_THREAD_POOLS);
+ 
++#if !defined(HAVE_ACCEPT_FILTERS) || defined(__linux)
++	MCF_ParamConf(MCF_DEFAULT, "accept_filter", "off");
++#endif
++
+ 	VCLS_AddFunc(mgt_cls, MCF_AUTH, cli_params);
+ 
+ 	vsb = VSB_new_auto();
+diff -Naur a/configure.ac b/configure.ac
+--- a/configure.ac	2018-10-26 13:22:45.000000000 +0200
++++ b/configure.ac	2019-03-07 16:27:16.592441674 +0100
+@@ -239,6 +239,7 @@
+ AC_CHECK_FUNCS([pthread_set_name_np])
+ AC_CHECK_FUNCS([pthread_setname_np])
+ AC_CHECK_FUNCS([pthread_mutex_isowned_np])
++AC_CHECK_FUNCS([pthread_getattr_np])
+ LIBS="${save_LIBS}"
+ 
+ # Support for visibility attribute

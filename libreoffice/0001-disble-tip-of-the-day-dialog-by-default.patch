@@ -1,0 +1,26 @@
+From d6e2cdb0023e422546e3ece5bf9915f7c490ced8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Caol=C3=A1n=20McNamara?= <caolanm@redhat.com>
+Date: Fri, 20 Mar 2020 14:24:05 +0000
+Subject: [PATCH] disble tip-of-the-day dialog by default
+
+Change-Id: Ie7f0e3fe3dda12c2ec88c376d2b57419253ae5cf
+---
+ officecfg/registry/schema/org/openoffice/Office/Common.xcs | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/officecfg/registry/schema/org/openoffice/Office/Common.xcs b/officecfg/registry/schema/org/openoffice/Office/Common.xcs
+index e7c339e2e22e..9aa88ef1aa02 100644
+--- a/officecfg/registry/schema/org/openoffice/Office/Common.xcs
++++ b/officecfg/registry/schema/org/openoffice/Office/Common.xcs
+@@ -5570,7 +5570,7 @@
+         <info>
+           <desc>Determines whether the Tip-of-the-Day dialog is shown on startup.</desc>
+         </info>
+-        <value>true</value>
++        <value>false</value>
+       </prop>
+       <prop oor:name="LastTipOfTheDayShown" oor:type="xs:int" oor:nillable="false">
+           <info>
+-- 
+2.24.1
+

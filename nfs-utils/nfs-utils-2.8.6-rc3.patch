@@ -1,0 +1,1140 @@
+diff --git a/configure.ac b/configure.ac
+index 97ae6356..ceae6b24 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -262,12 +262,10 @@ AC_ARG_ENABLE(nfsdctl,
+ 		PKG_CHECK_MODULES(LIBNLGENL3, libnl-genl-3.0 >= 3.1)
+ 		PKG_CHECK_MODULES(LIBREADLINE, readline)
+ 		AC_CHECK_HEADERS(linux/nfsd_netlink.h)
+-		AC_CHECK_DECLS([NFSD_A_SERVER_MIN_THREADS], , ,
+-			       [#include <linux/nfsd_netlink.h>])
+ 
+-		# ensure we have the pool-mode commands
++		# ensure we have the MIN_THREADS attribute
+ 		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <linux/nfsd_netlink.h>]],
+-				                   [[int foo = NFSD_CMD_POOL_MODE_GET;]])],
++				                   [[int foo = NFSD_A_SERVER_MIN_THREADS;]])],
+ 				   [AC_DEFINE([USE_SYSTEM_NFSD_NETLINK_H], 1,
+ 					      ["Use system's linux/nfsd_netlink.h"])])
+ 		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <linux/lockd_netlink.h>]],
+diff --git a/nfs.conf b/nfs.conf
+index 3cca68c3..222447dd 100644
+--- a/nfs.conf
++++ b/nfs.conf
+@@ -22,7 +22,6 @@
+ # use-machine-creds=1
+ # use-gss-proxy=0
+ # avoid-dns=1
+-# limit-to-legacy-enctypes=0
+ # allowed-enctypes=aes256-cts-hmac-sha384-192,aes128-cts-hmac-sha256-128,camellia256-cts-cmac,camellia128-cts-cmac,aes256-cts-hmac-sha1-96,aes128-cts-hmac-sha1-96
+ # context-timeout=0
+ # rpc-timeout=5
+diff --git a/support/nfs/conffile.c b/support/nfs/conffile.c
+index 137fac8d..8d242c2f 100644
+--- a/support/nfs/conffile.c
++++ b/support/nfs/conffile.c
+@@ -1704,12 +1704,13 @@ static bool
+ is_tag(const char *line, const char *tagname)
+ {
+ 	char *end;
++	const char *equal;
+ 	char *name;
+ 	bool found = false;
+ 
+ 	/* quick check, is this even an assignment line */
+-	end = strchr(line, '=');
+-	if (end == NULL)
++	equal = strchr(line, '=');
++	if (equal == NULL)
+ 		return false;
+ 
+ 	/* skip leading white space before tag name */
+@@ -1807,6 +1808,7 @@ static bool
+ is_taggedcomment(const char *line, const char *field)
+ {
+ 	char *end;
++	const char *equal;
+ 	char *name;
+ 	bool found = false;
+ 
+@@ -1822,8 +1824,8 @@ is_taggedcomment(const char *line, const char *field)
+ 	line++;
+ 
+ 	/* quick check, is this even a likely formatted line */
+-	end = strchr(line, ':');
+-	if (end == NULL)
++	equal = strchr(line, ':');
++	if (equal == NULL)
+ 		return false;
+ 
+ 	/* skip leading white space before field name */
+diff --git a/systemd/nfs.conf.man b/systemd/nfs.conf.man
+index ecdc4fc9..80c4f34e 100644
+--- a/systemd/nfs.conf.man
++++ b/systemd/nfs.conf.man
+@@ -266,7 +266,7 @@ Recognized values:
+ .BR use-machine-creds ,
+ .BR use-gss-proxy ,
+ .BR avoid-dns ,
+-.BR limit-to-legacy-enctypes ,
++.BR allowed-enctypes ,
+ .BR context-timeout ,
+ .BR rpc-timeout ,
+ .BR keytab-file ,
+diff --git a/tools/nfsrahead/main.c b/tools/nfsrahead/main.c
+index b7b889ff..64953346 100644
+--- a/tools/nfsrahead/main.c
++++ b/tools/nfsrahead/main.c
+@@ -16,6 +16,7 @@
+ 
+ #define CONF_NAME "nfsrahead"
+ #define NFS_DEFAULT_READAHEAD 128
++#define MNT_NM_TIMEOUT 10000
+ 
+ /* Device information from the system */
+ struct device_info {
+@@ -117,7 +118,39 @@ out_free_device_info:
+ 
+ static int get_device_info(const char *device_number, struct device_info *device_info)
+ {
+-	int ret = get_mountinfo(device_number, device_info, MOUNTINFO_PATH);
++	int ret;
++	struct libmnt_monitor *mn = NULL;
++	int timeout_ms = MNT_NM_TIMEOUT;
++
++	ret = get_mountinfo(device_number, device_info, MOUNTINFO_PATH);
++	if (ret == 0)
++		return 0;
++
++	mn = mnt_new_monitor();
++	if (!mn)
++		goto fallback;
++
++	if (mnt_monitor_enable_kernel(mn, 1) < 0) {
++		mnt_unref_monitor(mn);
++		goto fallback;
++	}
++
++	while (timeout_ms > 0) {
++		int rc = mnt_monitor_wait(mn, timeout_ms);
++		if (rc > 0) {
++			ret = get_mountinfo(device_number, device_info, MOUNTINFO_PATH);
++			if (ret == 0) {
++				mnt_unref_monitor(mn);
++				return 0;
++			}
++		} else {
++			break;
++		}
++	}
++	mnt_unref_monitor(mn);
++	return ret;
++
++fallback:
+ 	for (int retry_count = 0; retry_count < 5 && ret != 0; retry_count++) {
+ 		usleep(50000);
+ 		ret = get_mountinfo(device_number, device_info, MOUNTINFO_PATH);
+diff --git a/utils/gssd/gssd.c b/utils/gssd/gssd.c
+index 01ce7d18..1c901991 100644
+--- a/utils/gssd/gssd.c
++++ b/utils/gssd/gssd.c
+@@ -1034,10 +1034,6 @@ read_gss_conf(void)
+ 	root_uses_machine_creds = conf_get_bool("gssd", "use-machine-creds",
+ 						root_uses_machine_creds);
+ 	avoid_dns = conf_get_bool("gssd", "avoid-dns", avoid_dns);
+-#ifdef HAVE_SET_ALLOWABLE_ENCTYPES
+-	limit_to_legacy_enctypes = conf_get_bool("gssd", "limit-to-legacy-enctypes",
+-						 limit_to_legacy_enctypes);
+-#endif
+ 	context_timeout = conf_get_num("gssd", "context-timeout", context_timeout);
+ 	rpc_timeout = conf_get_num("gssd", "rpc-timeout", rpc_timeout);
+ 	upcall_timeout = conf_get_num("gssd", "upcall-timeout", upcall_timeout);
+@@ -1084,7 +1080,7 @@ main(int argc, char *argv[])
+ 	verbosity = conf_get_num("gssd", "verbosity", verbosity);
+ 	rpc_verbosity = conf_get_num("gssd", "rpc-verbosity", rpc_verbosity);
+ 
+-	while ((opt = getopt(argc, argv, "HDfvrlmnMp:k:d:t:T:R:U:C")) != -1) {
++	while ((opt = getopt(argc, argv, "HDfvrmnMp:k:d:t:T:R:U:C")) != -1) {
+ 		switch (opt) {
+ 			case 'f':
+ 				fg = 1;
+@@ -1123,13 +1119,6 @@ main(int argc, char *argv[])
+ 			case 'R':
+ 				preferred_realm = strdup(optarg);
+ 				break;
+-			case 'l':
+-#ifdef HAVE_SET_ALLOWABLE_ENCTYPES
+-				limit_to_legacy_enctypes = 1;
+-#else 
+-				errx(1, "Encryption type limits not supported by Kerberos libraries.");
+-#endif
+-				break;
+ 			case 'D':
+ 				avoid_dns = false;
+ 				break;
+@@ -1233,6 +1222,9 @@ main(int argc, char *argv[])
+ 	daemon_init(fg);
+ 
+ #ifdef HAVE_SET_ALLOWABLE_ENCTYPES
++	rc = get_krb5_library_permitted_enctypes();
++	if (rc)
++		exit(EXIT_FAILURE);
+ 	rc = get_allowed_enctypes();
+ 	if (rc)
+ 		exit(EXIT_FAILURE);
+diff --git a/utils/gssd/gssd.man b/utils/gssd/gssd.man
+index f81b24cd..57ad30cf 100644
+--- a/utils/gssd/gssd.man
++++ b/utils/gssd/gssd.man
+@@ -165,23 +165,15 @@ no keytab), NFSv4 operations that require machine credentials will fail.
+ A realm administrator can choose to add keys encoded in a number of different
+ encryption types to the local system's keytab.
+ For instance, a host/ principal might have keys for the
+-.BR aes256-cts-hmac-sha1-96 ,
+-.BR aes128-cts-hmac-sha1-96 ,
+-.BR des3-cbc-sha1 ", and"
+-.BR arcfour-hmac " encryption types."
++.BR aes256-cts-hmac-sha384-192 ,
++.BR aes128-cts-hmac-sha256-128 ,
++.BR aes256-cts-hmac-sha1-96 ", and"
++.BR aes128-cts-hmac-sha1-96 " encryption types."
+ This permits
+ .B rpc.gssd
+ to choose an appropriate encryption type that the target NFS server
+ supports.
+-.P
+-These encryption types are stronger than legacy single-DES encryption types.
+-To interoperate in environments where servers support
+-only weak encryption types,
+-you can restrict your client to use only single-DES encryption types
+-by specifying the
+-.B -l
+-option when starting
+-.BR rpc.gssd .
++
+ .SH OPTIONS
+ .TP
+ .B \-D
+@@ -225,14 +217,6 @@ to obtain machine credentials.
+ The default value is
+ .IR /etc/krb5.keytab .
+ .TP
+-.B -l
+-When specified, restricts
+-.B rpc.gssd
+-to sessions to weak encryption types such as
+-.BR des-cbc-crc .
+-This option is available only when the local system's Kerberos library
+-supports settable encryption types.
+-.TP
+ .BI "-p " path
+ Tells
+ .B rpc.gssd
+@@ -342,10 +326,6 @@ is equivalent to providing the
+ .B -D
+ flag.
+ .TP
+-.B limit-to-legacy-enctypes
+-Equivalent to
+-.BR -l .
+-.TP
+ .B allowed-enctypes
+ Allows you to restrict
+ .B rpc.gssd
+diff --git a/utils/gssd/gssd_proc.c b/utils/gssd/gssd_proc.c
+index 01331485..e060bee3 100644
+--- a/utils/gssd/gssd_proc.c
++++ b/utils/gssd/gssd_proc.c
+@@ -91,6 +91,7 @@ extern TAILQ_HEAD(active_thread_list_head, upcall_thread_info) active_thread_lis
+ /* Encryption types supported by the kernel rpcsec_gss code */
+ int num_krb5_enctypes = 0;
+ krb5_enctype *krb5_enctypes = NULL;
++char *krb5_enctypes_string = NULL;
+ 
+ /* Args for the cleanup_handler() */
+ struct cleanup_args  {
+@@ -121,6 +122,8 @@ parse_enctypes(char *enctypes)
+ 		free(krb5_enctypes);
+ 		krb5_enctypes = NULL;
+ 		num_krb5_enctypes = 0;
++		free(krb5_enctypes_string);
++		krb5_enctypes_string = NULL;
+ 	}
+ 
+ 	/* count the number of commas */
+@@ -156,6 +159,18 @@ parse_enctypes(char *enctypes)
+ 	if ((cached_types = malloc(strlen(enctypes)+1)))
+ 		strcpy(cached_types, enctypes);
+ 
++	if (num_krb5_enctypes > 0) {
++		if (enctypes_list_to_string(krb5_enctypes, num_krb5_enctypes,
++					    &krb5_enctypes_string) != 0) {
++			printerr(2, "%s: warning: enctypes_list_to_string() failed\n",
++				 __func__);
++			goto out;
++		}
++		printerr(2, "kernel supported enctypes: %s\n",
++			 krb5_enctypes_string);
++	}
++
++out:
+ 	return 0;
+ }
+ 
+diff --git a/utils/gssd/krb5_util.c b/utils/gssd/krb5_util.c
+index 137cffda..bc063a8b 100644
+--- a/utils/gssd/krb5_util.c
++++ b/utils/gssd/krb5_util.c
+@@ -155,9 +155,23 @@ static struct gssd_k5_kt_princ *gssd_k5_kt_princ_list = NULL;
+ static pthread_mutex_t ple_lock = PTHREAD_MUTEX_INITIALIZER;
+ 
+ #ifdef HAVE_SET_ALLOWABLE_ENCTYPES
+-int limit_to_legacy_enctypes = 0;
++/* Encryption types specified in nfs.conf */
+ krb5_enctype *allowed_enctypes = NULL;
+ int num_allowed_enctypes = 0;
++char *allowed_enctypes_string = NULL;
++
++/* Encryption types permitted by the krb5 library */
++int num_lib_enctypes = 0;
++krb5_enctype *lib_enctypes = NULL;
++char *lib_enctypes_string = NULL;
++
++/*
++ * The final set of encryption types that will be used in
++ * limit_krb5_enctypes().  See determine_enctypes() below.
++ */
++int num_set_enctypes = 0;
++krb5_enctype *set_enctypes = NULL;
++char *set_enctypes_string = NULL;
+ #endif
+ 
+ /*==========================*/
+@@ -1581,14 +1595,60 @@ out_cred:
+         return ret;
+ }
+ 
++int
++enctypes_list_to_string(krb5_enctype *enctypes, int num_enctypes,
++		        char **enctype_string)
++{
++	char tmp[100], *buf = NULL, *old = NULL;
++	int i, len, ret;
++
++	for (i = 0; i < num_enctypes; i++) {
++		ret = krb5_enctype_to_name(enctypes[i], true, tmp, sizeof(tmp));
++		if (ret == 0) {
++			if (buf == NULL) {
++				len = asprintf(&buf, "%s (%d)", tmp,
++					       enctypes[i]);
++				if (len < 0) {
++					ret = ENOMEM;
++					goto out_err;
++				}
++			} else {
++				old = buf;
++				len = asprintf(&buf, "%s, %s (%d)", old, tmp,
++					       enctypes[i]);
++				if (len < 0) {
++					ret = ENOMEM;
++					goto out_err;
++				}
++				free(old);
++				old = NULL;
++			}
++		} else {
++			printerr(0, "%s: invalid enctype %d",
++				 __func__, enctypes[i]);
++			goto out_err;
++		}
++	}
++	goto out;
++
++out_err:
++	free(buf);
++
++out:
++	if (old != buf)
++		free(old);
++	if (ret == 0)
++		*enctype_string = buf;
++	return ret;
++}
++
+ #ifdef HAVE_SET_ALLOWABLE_ENCTYPES
+ int
+ get_allowed_enctypes(void)
+ {
+ 	struct conf_list *allowed_etypes = NULL;
+ 	struct conf_list_node *node;
+-	char *buf = NULL, *old = NULL;
+-	int len, ret = 0;
++	int ret = 0;
+ 
+ 	allowed_etypes = conf_get_list("gssd", "allowed-enctypes");
+ 	if (allowed_etypes) {
+@@ -1607,43 +1667,200 @@ get_allowed_enctypes(void)
+ 					 __func__, node->field);
+ 				goto out_err;
+ 			}
+-			if (get_verbosity() > 1) {
+-				if (buf == NULL) {
+-					len = asprintf(&buf, "%s(%d)", node->field,
+-						       allowed_enctypes[num_allowed_enctypes]);
+-					if (len < 0) {
+-						ret = ENOMEM;
+-						goto out_err;
+-					}
+-				} else {
+-					old = buf;
+-					len = asprintf(&buf, "%s,%s(%d)", old, node->field,
+-						       allowed_enctypes[num_allowed_enctypes]);
+-					if (len < 0) {
+-						ret = ENOMEM;
+-						goto out_err;
+-					}
+-					free(old);
+-					old = NULL;
+-				}
+-			}
+ 			num_allowed_enctypes++;
+ 		}
+-		printerr(2, "%s: allowed_enctypes = %s", __func__, buf);
++	}
++	if (num_allowed_enctypes > 0) {
++		if (enctypes_list_to_string(allowed_enctypes, num_allowed_enctypes,
++					    &allowed_enctypes_string) != 0) {
++			printerr(2, "%s: warning: enctypes_list_to_string() failed\n",
++				 __func__);
++			goto out;
++		}
++		printerr(2, "%s: config allowed enctypes: %s\n", __func__,
++			 allowed_enctypes_string);
+ 	}
+ 	goto out;
+ out_err:
+ 	num_allowed_enctypes = 0;
+ 	free(allowed_enctypes);
+ out:
+-	free(buf);
+-	if (old != buf)
+-		free(old);
+ 	if (allowed_etypes)
+ 		conf_free_list(allowed_etypes);
+ 	return ret;
+ }
+ 
++int
++get_krb5_library_permitted_enctypes(void)
++{
++	krb5_error_code code = 0;
++	krb5_context context;
++	char *k5err = NULL;
++	int ret = 0;
++
++	code = krb5_init_context(&context);
++	if (code) {
++		k5err = gssd_k5_err_msg(NULL, code);
++		printerr(2, "ERROR: %s: %s while initializing krb5 context\n",
++			 __func__, k5err);
++		ret = code;
++		goto out;
++	}
++
++	code = krb5_get_permitted_enctypes(context, &lib_enctypes);
++	if (code) {
++		k5err = gssd_k5_err_msg(context, code);
++		printerr(2, "ERROR: %s: %s while getting permitted enctypes\n",
++			 __func__, k5err);
++		ret = code;
++		goto out_free_context;
++	}
++
++	if (lib_enctypes != NULL)
++		while (lib_enctypes[num_lib_enctypes] != 0)
++			num_lib_enctypes++;
++
++	if (num_lib_enctypes > 0) {
++		if (enctypes_list_to_string(lib_enctypes, num_lib_enctypes,
++					    &lib_enctypes_string) != 0) {
++			printerr(2, "%s: warning: enctypes_list_to_string() failed\n",
++				 __func__);
++			goto out_free_context;
++		}
++		printerr(2, "krb5 library permitted enctypes: %s\n",
++			 lib_enctypes_string);
++	}
++
++out_free_context:
++	krb5_free_context(context);
++
++out:
++	free(k5err);
++	return ret;
++}
++
++/*
++ * Helper to determine the final set of enctypes that will be passed to
++ * gss_set_allowable_enctypes() in limit_krb5_enctypes().
++ *
++ * It will be the intersection of:
++ *
++ * 1. allowed_enctypes - If allowed-enctypes is defined in nfs.conf, this is
++ *    processed via get_allowed_enctypes() during gssd startup.
++ * 2. krb5_enctypes - This is the list of enctypes passed in the upcall from
++ *    the kernel, and is processed via handle_gssd_upcall() -> parse_enctypes().
++ * 3. lib_enctypes - Processed via get_krb5_library_permitted_enctypes() during
++ *    gssd startup.
++ *
++ * It will be ordered according to lib_enctypes.  This is necessary because when
++ * the MIT kerberos library does a TGS request it initially does so with
++ * referrals enabled, using its default enctype list instead of the application-
++ * provided one.  It still ensures that the resulting ticket is using an enctype
++ * from the application-provided list, it just might not be the highest priority
++ * enctype from the application-provided list.
++ *
++ * That can result in the machine cred's service ticket using a different
++ * enctype than a user cred's service ticket (particularly in the case of
++ * contrained delegation with gssproxy), which will lead to XDR decoding
++ * failures in the kernel.
++ *
++ * The best way to combat this to configure the krb5 library's
++ * permitted_enctypes list to have the same order as the kernel's
++ * gss_krb5_prepare_enctype_priority_list (which is set at build time), but not
++ * all distros do that.  The second best way is to make sure our list is ordered
++ * according to the krb5 library's list, hence this helper function.
++ */
++static int
++determine_enctypes(krb5_enctype **set_enctypes, int *num_set_enctypes,
++		   char **set_enctypes_string)
++{
++	extern int num_allowed_enctypes, num_krb5_enctypes, num_lib_enctypes;
++	extern krb5_enctype *allowed_enctypes, *krb5_enctypes, *lib_enctypes;
++	extern char *allowed_enctypes_string, *krb5_enctypes_string,
++	       *lib_enctypes_string;
++	krb5_enctype *enctypes;
++	int num_enctypes = 0;
++	char *enctypes_string;
++	int i, j, k;
++
++	if (krb5_enctypes) {
++		printerr(2, "%s: kernel enctypes: %s\n",
++			 __func__, krb5_enctypes_string);
++	} else {
++		printerr(2, "%s: kernel enctype list is empty\n",
++			 __func__);
++		return -1;
++	}
++
++	if (lib_enctypes) {
++		printerr(2, "%s: krb5 library enctypes: %s\n",
++			 __func__, lib_enctypes_string);
++	} else {
++		printerr(2, "%s: krb5 library enctype list is empty\n",
++			 __func__);
++		return -1;
++	}
++
++	if (allowed_enctypes) {
++		printerr(2, "%s: config allowed enctypes: %s\n",
++			 __func__, allowed_enctypes_string);
++	}
++
++	if (allowed_enctypes) {
++		enctypes = (krb5_enctype *) calloc(num_allowed_enctypes,
++						   sizeof(krb5_enctype));
++		if (enctypes == NULL)
++			return ENOMEM;
++		for (i = 0; i < num_lib_enctypes; i++) {
++			for (j = 0; j < num_krb5_enctypes; j++) {
++				if (lib_enctypes[i] == krb5_enctypes[j]) {
++					for (k = 0; k < num_allowed_enctypes; k++) {
++						if (lib_enctypes[i] == allowed_enctypes[k]) {
++							enctypes[num_enctypes++] = lib_enctypes[i];
++							break;
++						}
++					}
++					break;
++				}
++			}
++		}
++	} else {
++		enctypes = (krb5_enctype *) calloc(num_krb5_enctypes,
++						   sizeof(krb5_enctype));
++		if (enctypes == NULL)
++			return ENOMEM;
++		for (i = 0; i < num_lib_enctypes; i++) {
++			for (j = 0; j < num_krb5_enctypes; j++) {
++				if (lib_enctypes[i] == krb5_enctypes[j]) {
++					enctypes[num_enctypes++] = lib_enctypes[i];
++					break;
++				}
++			}
++		}
++	}
++
++	if (num_enctypes > 0) {
++		if (enctypes_list_to_string(enctypes, num_enctypes,
++					    &enctypes_string) != 0) {
++			printerr(2, "%s: warning: enctypes_list_to_string() failed\n",
++				 __func__);
++			return -1;
++		}
++		printerr(2, "%s: result enctypes: %s\n",
++			 __func__, enctypes_string);
++	} else {
++		printerr(2, "%s: no result enctypes\n",
++			 __func__);
++		free(enctypes);
++		return -1;
++	}
++
++	*set_enctypes = enctypes;
++	*num_set_enctypes = num_enctypes;
++	*set_enctypes_string = enctypes_string;
++	return 0;
++}
++
+ /*
+  * this routine obtains a credentials handle via gss_acquire_cred()
+  * then calls gss_krb5_set_allowable_enctypes() to limit the encryption
+@@ -1656,21 +1873,13 @@ out:
+  *	0 => all went well
+  *     -1 => there was an error
+  */
+-
+ int
+ limit_krb5_enctypes(struct rpc_gss_sec *sec)
+ {
+ 	u_int maj_stat, min_stat;
+-	krb5_enctype enctypes[] = { ENCTYPE_DES_CBC_CRC,
+-				    ENCTYPE_DES_CBC_MD5,
+-				    ENCTYPE_DES_CBC_MD4 };
+-	int num_enctypes = sizeof(enctypes) / sizeof(enctypes[0]);
+-	extern int num_krb5_enctypes;
+-	extern krb5_enctype *krb5_enctypes;
+-	extern int num_allowed_enctypes;
+-	extern krb5_enctype *allowed_enctypes;
+-	int num_set_enctypes;
+-	krb5_enctype *set_enctypes;
++	extern int num_set_enctypes;
++	extern krb5_enctype *set_enctypes;
++	extern char *set_enctypes_string;
+ 	int err = -1;
+ 
+ 	if (sec->cred == GSS_C_NO_CREDENTIAL) {
+@@ -1679,28 +1888,18 @@ limit_krb5_enctypes(struct rpc_gss_sec *sec)
+ 			return -1;
+ 	}
+ 
+-	/*
+-	 * If we failed for any reason to produce global
+-	 * list of supported enctypes, use local default here.
+-	 */
+-	if (krb5_enctypes == NULL || limit_to_legacy_enctypes ||
+-			allowed_enctypes) {
+-		if (allowed_enctypes) {
+-			printerr(2, "%s: using allowed enctypes from config\n",
++	if (set_enctypes == NULL) {
++		err = determine_enctypes(&set_enctypes, &num_set_enctypes,
++					 &set_enctypes_string);
++		if (err) {
++			printerr(2, "%s: failed to determine set_enctypes\n",
+ 				 __func__);
+-			num_set_enctypes = num_allowed_enctypes;
+-			set_enctypes = allowed_enctypes;
+-		} else {
+-			printerr(2, "%s: using legacy enctypes\n", __func__);
+-			num_set_enctypes = num_enctypes;
+-			set_enctypes = enctypes;
++			return -1;
+ 		}
+-	} else {
+-		printerr(2, "%s: using enctypes from the kernel\n", __func__);
+-		num_set_enctypes = num_krb5_enctypes;
+-		set_enctypes = krb5_enctypes;
+ 	}
+ 
++	printerr(2, "%s: %s\n", __func__, set_enctypes_string);
++
+ 	maj_stat = gss_set_allowable_enctypes(&min_stat, sec->cred,
+ 				&krb5oid, num_set_enctypes, set_enctypes);
+ 
+diff --git a/utils/gssd/krb5_util.h b/utils/gssd/krb5_util.h
+index 40ad3233..e9d08567 100644
+--- a/utils/gssd/krb5_util.h
++++ b/utils/gssd/krb5_util.h
+@@ -24,10 +24,13 @@ void gssd_k5_get_default_realm(char **def_realm);
+ int gssd_acquire_user_cred(gss_cred_id_t *gss_cred);
+ int gssd_k5_remove_bad_service_cred(char *srvname);
+ 
++int enctypes_list_to_string(krb5_enctype *enctypes, int num_enctypes,
++			    char **enctype_string);
++
+ #ifdef HAVE_SET_ALLOWABLE_ENCTYPES
+-extern int limit_to_legacy_enctypes;
+ int limit_krb5_enctypes(struct rpc_gss_sec *sec);
+ int get_allowed_enctypes(void);
++int get_krb5_library_permitted_enctypes(void);
+ #endif
+ 
+ /*
+diff --git a/utils/mount/parse_dev.c b/utils/mount/parse_dev.c
+index 2ade5d5d..a6354bba 100644
+--- a/utils/mount/parse_dev.c
++++ b/utils/mount/parse_dev.c
+@@ -79,7 +79,7 @@ static int nfs_pdn_missing_brace_err(void)
+ /*
+  * Standard hostname:path format
+  */
+-static int nfs_parse_simple_hostname(const char *dev,
++static int nfs_parse_simple_hostname(char *dev,
+ 				     char **hostname, char **pathname)
+ {
+ 	size_t host_len, path_len;
+@@ -134,7 +134,7 @@ static int nfs_parse_simple_hostname(const char *dev,
+  * There could be anything in between the brackets, but we'll
+  * let DNS resolution sort it out later.
+  */
+-static int nfs_parse_square_bracket(const char *dev,
++static int nfs_parse_square_bracket(char *dev,
+ 				    char **hostname, char **pathname)
+ {
+ 	size_t host_len, path_len;
+@@ -185,7 +185,7 @@ static int nfs_parse_square_bracket(const char *dev,
+  * with the mount request and failing with a cryptic error message
+  * later.
+  */
+-static int nfs_parse_nfs_url(__attribute__((unused)) const char *dev,
++static int nfs_parse_nfs_url(__attribute__((unused)) char *dev,
+ 			     __attribute__((unused)) char **hostname,
+ 			     __attribute__((unused)) char **pathname)
+ {
+diff --git a/utils/nfsdctl/nfsd_netlink.h b/utils/nfsdctl/nfsd_netlink.h
+index 887cbd12..e9efbc9e 100644
+--- a/utils/nfsdctl/nfsd_netlink.h
++++ b/utils/nfsdctl/nfsd_netlink.h
+@@ -2,6 +2,7 @@
+ /* Do not edit directly, auto-generated from: */
+ /*	Documentation/netlink/specs/nfsd.yaml */
+ /* YNL-GEN uapi header */
++/* To regenerate run: tools/net/ynl/ynl-regen.sh */
+ 
+ #ifndef _UAPI_LINUX_NFSD_NETLINK_H
+ #define _UAPI_LINUX_NFSD_NETLINK_H
+@@ -34,6 +35,7 @@ enum {
+ 	NFSD_A_SERVER_GRACETIME,
+ 	NFSD_A_SERVER_LEASETIME,
+ 	NFSD_A_SERVER_SCOPE,
++	NFSD_A_SERVER_MIN_THREADS,
+ 
+ 	__NFSD_A_SERVER_MAX,
+ 	NFSD_A_SERVER_MAX = (__NFSD_A_SERVER_MAX - 1)
+diff --git a/utils/nfsdctl/nfsdctl.c b/utils/nfsdctl/nfsdctl.c
+index c906a2c8..6a20d180 100644
+--- a/utils/nfsdctl/nfsdctl.c
++++ b/utils/nfsdctl/nfsdctl.c
+@@ -46,9 +46,14 @@
+ #include "conffile.h"
+ #include "xlog.h"
+ 
+-/* compile note:
+- * gcc -I/usr/include/libnl3/ -o <prog-name> <prog-name>.c -lnl-3 -lnl-genl-3
+- */
++/* The index of the "lockd" netlink family */
++static int lockd_nl_family;
++
++/* The index of the "nfsd" netlink family */
++static int nfsd_nl_family;
++
++/* The highest attribute index supported by NFSD_CMD_THREADS_SET on this kernel */
++int nfsd_threads_max_nlattr;
+ 
+ struct nfs_version {
+ 	uint8_t	major;
+@@ -324,11 +329,9 @@ static void parse_threads_get(struct genlmsghdr *gnlh)
+ 		case NFSD_A_SERVER_THREADS:
+ 			pool_threads[i++] = nla_get_u32(attr);
+ 			break;
+-#if HAVE_DECL_NFSD_A_SERVER_MIN_THREADS
+ 		case NFSD_A_SERVER_MIN_THREADS:
+ 			printf("min-threads: %u\n", nla_get_u32(attr));
+ 			break;
+-#endif
+ 		default:
+ 			break;
+ 		}
+@@ -435,24 +438,18 @@ static struct nl_sock *netlink_sock_alloc(void)
+ 	return sock;
+ }
+ 
+-static struct nl_msg *netlink_msg_alloc(struct nl_sock *sock, const char *family)
++static struct nl_msg *netlink_msg_alloc(struct nl_sock *sock, int family)
+ {
+ 	struct nl_msg *msg;
+ 	int id;
+ 
+-	id = genl_ctrl_resolve(sock, family);
+-	if (id < 0) {
+-		xlog(L_ERROR, "failed to resolve %s generic netlink family", family);
+-		return NULL;
+-	}
+-
+ 	msg = nlmsg_alloc();
+ 	if (!msg) {
+ 		xlog(L_ERROR, "failed to allocate netlink message");
+ 		return NULL;
+ 	}
+ 
+-	if (!genlmsg_put(msg, 0, 0, id, 0, 0, 0, 0)) {
++	if (!genlmsg_put(msg, 0, 0, family, 0, 0, 0, 0)) {
+ 		xlog(L_ERROR, "failed to add generic netlink headers to netlink message");
+ 		nlmsg_free(msg);
+ 		return NULL;
+@@ -461,6 +458,118 @@ static struct nl_msg *netlink_msg_alloc(struct nl_sock *sock, const char *family
+ 	return msg;
+ }
+ 
++static int resolve_family(struct nl_sock *sock, const char *name, int loglevel)
++{
++	int family = genl_ctrl_resolve(sock, name);
++
++	if (family < 0) {
++		xlog(loglevel, "failed to resolve %s generic netlink family: %d", name, family);
++		family = 0;
++	}
++	return family;
++}
++
++static int lockd_nl_family_setup(struct nl_sock *sock)
++{
++	if (!lockd_nl_family) {
++		lockd_nl_family = resolve_family(sock, LOCKD_FAMILY_NAME, L_WARNING);
++		if (lockd_nl_family) {
++			system("modprobe lockd");
++			lockd_nl_family = resolve_family(sock, LOCKD_FAMILY_NAME, L_ERROR);
++		}
++	}
++	return lockd_nl_family;
++}
++
++static int nfsd_nl_family_setup(struct nl_sock *sock)
++{
++	if (!nfsd_nl_family) {
++		nfsd_nl_family = resolve_family(sock, NFSD_FAMILY_NAME, L_WARNING);
++		if (!nfsd_nl_family) {
++			system("modprobe nfsd");
++			nfsd_nl_family = resolve_family(sock, NFSD_FAMILY_NAME, L_ERROR);
++		}
++	}
++	return nfsd_nl_family;
++}
++
++static int getpolicy_handler(struct nl_msg *msg, void *arg)
++{
++	struct genlmsghdr *gnlh = nlmsg_data(nlmsg_hdr(msg));
++	struct nlattr *attr;
++	int rem;
++
++	nla_for_each_attr(attr, genlmsg_attrdata(gnlh, 0), genlmsg_attrlen(gnlh, 0), rem) {
++		struct nlattr *a, *b;
++		int i, j, index;
++
++		if (nla_type(attr) == CTRL_ATTR_POLICY) {
++			nla_for_each_nested(a, attr, i) {
++				nla_for_each_nested(b, a, j) {
++					int idx = nla_type(b);
++
++					if (nfsd_threads_max_nlattr < idx)
++						nfsd_threads_max_nlattr = idx;
++				}
++			}
++		}
++	}
++	return NL_SKIP;
++}
++
++static int query_nfsd_nl_policy(struct nl_sock *sock)
++{
++	struct genlmsghdr *ghdr;
++	struct nlmsghdr *nlh;
++	struct nl_msg *msg;
++	struct nl_cb *cb;
++	int opt, ret, id;
++
++	if (!nfsd_nl_family_setup(sock))
++		return 1;
++
++	msg = netlink_msg_alloc(sock, GENL_ID_CTRL);
++	if (!msg)
++		return 1;
++
++	nlh = nlmsg_hdr(msg);
++	nlh->nlmsg_flags |= NLM_F_DUMP;
++	ghdr = nlmsg_data(nlh);
++	ghdr->cmd = CTRL_CMD_GETPOLICY;
++
++	cb = nl_cb_alloc(NL_CB_CUSTOM);
++	if (!cb) {
++		xlog(L_ERROR, "failed to allocate netlink callbacks");
++		ret = 1;
++		goto out;
++	}
++
++	nla_put_u16(msg, CTRL_ATTR_FAMILY_ID, nfsd_nl_family);
++	nla_put_u32(msg, CTRL_ATTR_OP, NFSD_CMD_THREADS_SET);
++
++	ret = nl_send_auto(sock, msg);
++	if (ret < 0)
++		goto out_cb;
++
++	ret = 1;
++	nl_cb_err(cb, NL_CB_CUSTOM, error_handler, &ret);
++	nl_cb_set(cb, NL_CB_FINISH, NL_CB_CUSTOM, finish_handler, &ret);
++	nl_cb_set(cb, NL_CB_ACK, NL_CB_CUSTOM, ack_handler, &ret);
++	nl_cb_set(cb, NL_CB_VALID, NL_CB_CUSTOM, getpolicy_handler, NULL);
++
++	while (ret > 0)
++		nl_recvmsgs(sock, cb);
++	if (ret < 0) {
++		xlog(L_ERROR, "Error: %s", strerror(-ret));
++		ret = 1;
++	}
++out_cb:
++	nl_cb_put(cb);
++out:
++	nlmsg_free(msg);
++	return ret;
++}
++
+ static void status_usage(void)
+ {
+ 	printf("Usage: %s status\n", taskname);
+@@ -484,7 +593,10 @@ static int status_func(struct nl_sock *sock, int argc, char ** argv)
+ 		}
+ 	}
+ 
+-	msg = netlink_msg_alloc(sock, NFSD_FAMILY_NAME);
++	if (!nfsd_nl_family_setup(sock))
++		return 1;
++
++	msg = netlink_msg_alloc(sock, nfsd_nl_family);
+ 	if (!msg)
+ 		return 1;
+ 
+@@ -532,7 +644,10 @@ static int threads_doit(struct nl_sock *sock, int cmd, int grace, int lease,
+ 	struct nl_cb *cb;
+ 	int ret;
+ 
+-	msg = netlink_msg_alloc(sock, NFSD_FAMILY_NAME);
++	if (!nfsd_nl_family_setup(sock))
++		return 1;
++
++	msg = netlink_msg_alloc(sock, nfsd_nl_family);
+ 	if (!msg)
+ 		return 1;
+ 
+@@ -546,10 +661,8 @@ static int threads_doit(struct nl_sock *sock, int cmd, int grace, int lease,
+ 			nla_put_u32(msg, NFSD_A_SERVER_LEASETIME, lease);
+ 		if (scope)
+ 			nla_put_string(msg, NFSD_A_SERVER_SCOPE, scope);
+-#if HAVE_DECL_NFSD_A_SERVER_MIN_THREADS
+ 		if (minthreads >= 0)
+ 			nla_put_u32(msg, NFSD_A_SERVER_MIN_THREADS, minthreads);
+-#endif
+ 		for (i = 0; i < pool_count; ++i)
+ 			nla_put_u32(msg, NFSD_A_SERVER_THREADS, pool_threads[i]);
+ 	}
+@@ -591,24 +704,16 @@ out:
+ static void threads_usage(void)
+ {
+ 	printf("Usage: %s threads { --min-threads=X } [ pool0_count ] [ pool1_count ] ...\n", taskname);
+-#if HAVE_DECL_NFSD_A_SERVER_MIN_THREADS
+ 	printf("    --min-threads= set the minimum thread count per pool to value\n");
+-#endif
+ 	printf("    pool0_count: thread count for pool0, etc...\n");
+ 	printf("Omit any arguments to show current thread counts.\n");
+ }
+ 
+-#if HAVE_DECL_NFSD_A_SERVER_MIN_THREADS
+ static const struct option threads_options[] = {
+ 	{ "help", no_argument, NULL, 'h' },
+ 	{ "min-threads", required_argument, NULL, 'm' },
+ 	{ },
+ };
+-#define THREADS_OPTSTRING "hm:"
+-#else
+-#define threads_options help_only_options
+-#define THREADS_OPTSTRING "h"
+-#endif
+ 
+ static int threads_func(struct nl_sock *sock, int argc, char **argv)
+ {
+@@ -618,13 +723,17 @@ static int threads_func(struct nl_sock *sock, int argc, char **argv)
+ 	int opt, pools = 0;
+ 
+ 	optind = 1;
+-	while ((opt = getopt_long(argc, argv, THREADS_OPTSTRING, threads_options, NULL)) != -1) {
++	while ((opt = getopt_long(argc, argv, "hm:", threads_options, NULL)) != -1) {
+ 		switch (opt) {
+ 		case 'h':
+ 			threads_usage();
+ 			return 0;
+-#if HAVE_DECL_NFSD_A_SERVER_MIN_THREADS
+ 		case 'm':
++			if (nfsd_threads_max_nlattr < NFSD_A_SERVER_MIN_THREADS) {
++				xlog(L_ERROR, "This kernel does not support dynamic threading.");
++				return 1;
++			}
++
+ 			errno = 0;
+ 			minthreads = strtoul(optarg, NULL, 0);
+ 			if (minthreads == ULONG_MAX && errno != 0) {
+@@ -632,7 +741,6 @@ static int threads_func(struct nl_sock *sock, int argc, char **argv)
+ 				return 1;
+ 			}
+ 			break;
+-#endif
+ 		}
+ 	}
+ 
+@@ -674,7 +782,10 @@ static int fetch_nfsd_versions(struct nl_sock *sock)
+ 	struct nl_cb *cb;
+ 	int ret;
+ 
+-	msg = netlink_msg_alloc(sock, NFSD_FAMILY_NAME);
++	if (!nfsd_nl_family_setup(sock))
++		return 1;
++
++	msg = netlink_msg_alloc(sock, nfsd_nl_family);
+ 	if (!msg)
+ 		return 1;
+ 
+@@ -739,7 +850,10 @@ static int set_nfsd_versions(struct nl_sock *sock)
+ 	struct nl_cb *cb;
+ 	int i, ret;
+ 
+-	msg = netlink_msg_alloc(sock, NFSD_FAMILY_NAME);
++	if (!nfsd_nl_family_setup(sock))
++		return 1;
++
++	msg = netlink_msg_alloc(sock, nfsd_nl_family);
+ 	if (!msg)
+ 		return 1;
+ 
+@@ -920,7 +1034,10 @@ static int fetch_current_listeners(struct nl_sock *sock)
+ 	struct nl_cb *cb;
+ 	int ret;
+ 
+-	msg = netlink_msg_alloc(sock, NFSD_FAMILY_NAME);
++	if (!nfsd_nl_family_setup(sock))
++		return 1;
++
++	msg = netlink_msg_alloc(sock, nfsd_nl_family);
+ 	if (!msg)
+ 		return 1;
+ 
+@@ -1165,7 +1282,10 @@ static int set_listeners(struct nl_sock *sock)
+ 	struct nl_cb *cb;
+ 	int i, ret;
+ 
+-	msg = netlink_msg_alloc(sock, NFSD_FAMILY_NAME);
++	if (!nfsd_nl_family_setup(sock))
++		return 1;
++
++	msg = netlink_msg_alloc(sock, nfsd_nl_family);
+ 	if (!msg)
+ 		return 1;
+ 
+@@ -1286,7 +1406,10 @@ static int pool_mode_doit(struct nl_sock *sock, int cmd, const char *pool_mode)
+ 	struct nl_cb *cb;
+ 	int ret;
+ 
+-	msg = netlink_msg_alloc(sock, NFSD_FAMILY_NAME);
++	if (!nfsd_nl_family_setup(sock))
++		return 1;
++
++	msg = netlink_msg_alloc(sock, nfsd_nl_family);
+ 	if (!msg)
+ 		return 1;
+ 
+@@ -1379,7 +1502,10 @@ static int lockd_config_doit(struct nl_sock *sock, int cmd, int grace, int tcppo
+ 			return 0;
+ 	}
+ 
+-	msg = netlink_msg_alloc(sock, LOCKD_FAMILY_NAME);
++	if (!lockd_nl_family_setup(sock))
++		return 1;
++
++	msg = netlink_msg_alloc(sock, lockd_nl_family);
+ 	if (!msg)
+ 		return 1;
+ 
+@@ -1398,14 +1524,14 @@ static int lockd_config_doit(struct nl_sock *sock, int cmd, int grace, int tcppo
+ 
+ 	cb = nl_cb_alloc(NL_CB_CUSTOM);
+ 	if (!cb) {
+-		xlog(L_ERROR, "failed to allocate netlink callbacks\n");
++		xlog(L_ERROR, "failed to allocate netlink callbacks");
+ 		ret = 1;
+ 		goto out;
+ 	}
+ 
+ 	ret = nl_send_auto(sock, msg);
+ 	if (ret < 0) {
+-		xlog(L_ERROR, "send failed (%d)!\n", ret);
++		xlog(L_ERROR, "send failed (%d)!", ret);
+ 		goto out_cb;
+ 	}
+ 
+@@ -1418,7 +1544,7 @@ static int lockd_config_doit(struct nl_sock *sock, int cmd, int grace, int tcppo
+ 	while (ret > 0)
+ 		nl_recvmsgs(sock, cb);
+ 	if (ret < 0) {
+-		xlog(L_ERROR, "Error: %s\n", strerror(-ret));
++		xlog(L_ERROR, "Error: %s", strerror(-ret));
+ 		ret = 1;
+ 	}
+ out_cb:
+@@ -1438,7 +1564,7 @@ static int get_service(const char *svc)
+ 
+ 	ret = getaddrinfo(NULL, svc, &hints, &res);
+ 	if (ret) {
+-		xlog(L_ERROR, "getaddrinfo of \"%s\" failed: %s\n",
++		xlog(L_ERROR, "getaddrinfo of \"%s\" failed: %s",
+ 			svc, gai_strerror(ret));
+ 		return -1;
+ 	}
+@@ -1459,7 +1585,7 @@ static int get_service(const char *svc)
+ 		}
+ 		break;
+ 	default:
+-		xlog(L_ERROR, "Bad address family: %d\n", res->ai_family);
++		xlog(L_ERROR, "Bad address family: %d", res->ai_family);
+ 		port = -1;
+ 	}
+ 	freeaddrinfo(res);
+@@ -1712,7 +1838,12 @@ static int autostart_func(struct nl_sock *sock, int argc, char ** argv)
+ 
+ 	lease = conf_get_num("nfsd", "lease-time", 0);
+ 	scope = conf_get_str("nfsd", "scope");
+-	minthreads = conf_get_num("nfsd", "min-threads", 0);
++	minthreads = conf_get_num("nfsd", "min-threads", -1);
++
++	if (minthreads >= 0 && nfsd_threads_max_nlattr < NFSD_A_SERVER_MIN_THREADS) {
++		xlog(L_WARNING, "This kernel does not support dynamic threading. min-threads setting ignored.");
++		minthreads = -1;
++	}
+ 
+ 	ret = threads_doit(sock, NFSD_CMD_THREADS_SET, grace, lease, pools,
+ 			   threads, scope, minthreads);
+@@ -1905,6 +2036,9 @@ int main(int argc, char **argv)
+ 		return 1;
+ 	}
+ 
++	if (query_nfsd_nl_policy(sock))
++		return 1;
++
+ 	if (optind > argc) {
+ 		usage();
+ 		return 1;

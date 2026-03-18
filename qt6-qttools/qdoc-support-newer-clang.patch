@@ -1,0 +1,43 @@
+diff --git a/src/qdoc/cmake/QDocConfiguration.cmake b/src/qdoc/cmake/QDocConfiguration.cmake
+index aceeb92..c786cb7 100644
+--- a/src/qdoc/cmake/QDocConfiguration.cmake
++++ b/src/qdoc/cmake/QDocConfiguration.cmake
+@@ -8,6 +8,6 @@ set(QDOC_MINIMUM_CLANG_VERSION "17")
+ 
+ # List of explicitly supported Clang versions for QDoc
+ set(QDOC_SUPPORTED_CLANG_VERSIONS
+-    "21.1" "20.1" "19.1" "18.1" "17.0.6"
++    "22.1" "22.0" "21.1" "20.1" "19.1" "18.1" "17.0.6"
+ )
+ 
+diff --git a/src/qdoc/qdoc/src/qdoc/clangcodeparser.cpp b/src/qdoc/qdoc/src/qdoc/clangcodeparser.cpp
+index bd9a5fe..fb8beae 100644
+--- a/src/qdoc/qdoc/src/qdoc/clangcodeparser.cpp
++++ b/src/qdoc/qdoc/src/qdoc/clangcodeparser.cpp
+@@ -35,11 +35,25 @@
+ #include <clang/AST/Type.h>
+ #include <clang/AST/TypeLoc.h>
+ #include <clang/Basic/SourceLocation.h>
++QT_WARNING_PUSH
++#if LIBCLANG_VERSION_MAJOR >= 22
++// GCC 15 false positive: misparses a member template inside a class template
++// in LLVM 22's Sema.h, emitting spurious -Wtemplate-body errors.
++QT_WARNING_DISABLE_GCC("-Wtemplate-body")
++#endif
+ #include <clang/Frontend/ASTUnit.h>
++QT_WARNING_POP
+ #include <clang/Lex/Lexer.h>
+ #include <llvm/Support/Casting.h>
+ 
+-#include "clang/AST/QualTypeNames.h"
++#if LIBCLANG_VERSION_MAJOR >= 22
++// LLVM 22 refactored NestedNameSpecifier to a value type and removed
++// ElaboratedType, making the bundled QualTypeNames.h incompatible.
++// Use the official system header; the implementation is in clang-cpp.
++#  include <clang/AST/QualTypeNames.h>
++#else
++#  include "clang/AST/QualTypeNames.h"
++#endif
+ #include "template_declaration.h"
+ 
+ #include <cstdio>

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-String-ShellQuote
+require: perl-String-ShellQuote-tests
+test: /usr/libexec/perl-String-ShellQuote/test

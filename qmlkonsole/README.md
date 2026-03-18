@@ -1,0 +1,3 @@
+# qmlkonsole
+
+The qmlkonsole package

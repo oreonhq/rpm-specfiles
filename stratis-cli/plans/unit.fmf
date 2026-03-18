@@ -1,0 +1,17 @@
+summary: stratis-cli unit tests
+
+prepare:
+  - name: Install package
+    how: install
+    package: [stratis-cli, util-linux, python3-psutil]
+
+discover:
+  how: shell
+  url: https://github.com/stratis-storage/testing.git
+  ref: v3.8.1
+  tests:
+    - name: unit
+      test: python3 stratis_cli_cert.py -v
+
+execute:
+  how: tmt

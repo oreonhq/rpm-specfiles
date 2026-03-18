@@ -1,0 +1,21 @@
+summary: Test for BZ#868281 (ltrace doesn't work on PIE binaries)
+description: |
+    Bug summary: ltrace doesn't work on PIE binaries
+    Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=868281
+contact: Miroslav Franc <mfranc@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- gcc
+- libgcc
+- glibc-devel
+- libgcc.i686
+- glibc-devel.i686
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=868281
+extra-summary: /tools/ltrace/Regression/bz868281-ltrace-doesn-t-work-on-PIE-binaries
+extra-task: /tools/ltrace/Regression/bz868281-ltrace-doesn-t-work-on-PIE-binaries

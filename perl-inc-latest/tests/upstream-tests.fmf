@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-inc-latest
+require: perl-inc-latest-tests
+test: /usr/libexec/perl-inc-latest/test

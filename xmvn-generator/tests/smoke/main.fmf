@@ -1,0 +1,7 @@
+summary: XMvn Generator smoke test
+description: |
+  Test basic functionality of XMvn Generator.
+require:
+  - rpm-build
+  - javapackages-local
+  - java-21-openjdk-devel

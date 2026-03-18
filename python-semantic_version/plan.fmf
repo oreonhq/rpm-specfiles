@@ -1,0 +1,14 @@
+execute:
+  how: tmt
+discover:
+  how: shell
+  dist-git-source: true
+  tests:
+  - name: bundled tests
+    require:
+    - python3-semantic_version
+    - python3-pytest
+    test: |
+      cd $(dirname $TMT_SOURCE_DIR/python-semanticversion-*/tests) &&
+      rm -rf semantic_version* &&
+      pytest

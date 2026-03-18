@@ -1,0 +1,9 @@
+*~
+.build*.log
+*.rpm
+clog
+/x86_64/
+/i386/
+/noarch/
+/libguestfs-*.tar.gz
+/libguestfs-*.tar.gz.sig

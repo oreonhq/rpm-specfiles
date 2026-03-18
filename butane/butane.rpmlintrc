@@ -1,0 +1,11 @@
+# Butane sources (including vendored sources) have duplicate files because
+# of how spec versioning is implemented
+addFilter("butane-debugsource.x86_64: W: files-duplicate")
+addFilter("butane-debugsource.x86_64: E: files-duplicated-waste")
+
+# -redistributable is supposed to have binaries in it
+addFilter("butane-redistributable.noarch: E: arch-independent-package-contains-binary-or-object")
+
+# This is documented as optional
+# https://fedoraproject.org/wiki/Upgrade_paths_%E2%80%94_renaming_or_splitting_packages#Do_I_need_to_Provide_my_old_package_names.3F
+addFilter("butane-redistributable.noarch: W: obsolete-not-provided butane-nonlinux")

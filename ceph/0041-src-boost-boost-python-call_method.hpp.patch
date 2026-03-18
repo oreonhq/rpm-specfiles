@@ -1,0 +1,11 @@
+--- ceph-18.2.3/src/boost/boost/python/call_method.hpp.orig	2024-06-07 11:14:58.579734749 -0400
++++ ceph-18.2.3/src/boost/boost/python/call_method.hpp	2024-06-07 11:19:06.754520504 -0400
+@@ -59,7 +59,7 @@
+     )
+ {
+     PyObject* const result = 
+-        PyEval_CallMethod(
++        PyObject_CallMethod(
+             self
+             , const_cast<char*>(name)
+             , const_cast<char*>("(" BOOST_PP_REPEAT_1ST(N, BOOST_PYTHON_FIXED, "O") ")")

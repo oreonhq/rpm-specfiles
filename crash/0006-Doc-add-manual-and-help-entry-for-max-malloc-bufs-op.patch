@@ -1,0 +1,46 @@
+From 848d86efe3bd6a56a693b9111f53e17a9496b238 Mon Sep 17 00:00:00 2001
+From: Shivang Upadhyay <shivangu@linux.ibm.com>
+Date: Sat, 13 Dec 2025 18:10:44 +0530
+Subject: [PATCH 06/23] Doc: add manual and help entry for --max-malloc-bufs
+ option
+
+Signed-off-by: Shivang Upadhyay <shivangu@linux.ibm.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ crash.8 | 4 ++++
+ help.c  | 4 ++++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/crash.8 b/crash.8
+index c7dc27df67d7..511c09283233 100644
+--- a/crash.8
++++ b/crash.8
+@@ -511,6 +511,10 @@ a relocation size equal to the difference between the two values.
+ Set the number of internal hash queue heads used for list gathering
+ and verification.  The default count is 32768.
+ .TP
++.BI --max-malloc-bufs \ size
++Set the value of \fBMAX_MALLOC_BUFS\fP to \fIsize\fP.
++The minimum allowed value is 3072.
++.TP
+ .B --minimal
+ Bring up a session that is restricted to the 
+ .I log, dis, rd, sym, eval, set
+diff --git a/help.c b/help.c
+index 78d7a5c70e30..3faea6079d7b 100644
+--- a/help.c
++++ b/help.c
+@@ -344,6 +344,10 @@ char *program_usage_info[] = {
+     "    relocated KASLR value.  If set to auto, the KASLR offset value will",
+     "    be automatically calculated.",
+     "",
++    "  --max-malloc-bufs <size>",
++    "    Set the value of MAX_MALLOC_BUFS to size.",
++    "    The minimum allowed value is 3072.",
++    "",
+     "  --minimal",
+     "    Bring up a session that is restricted to the log, dis, rd, sym,",
+     "    eval, set and exit commands.  This option may provide a way to",
+-- 
+2.51.1
+

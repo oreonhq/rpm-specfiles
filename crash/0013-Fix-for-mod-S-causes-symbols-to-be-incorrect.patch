@@ -1,0 +1,73 @@
+From 36bffee60ba697371600cf9c33b7767ac6c0ee88 Mon Sep 17 00:00:00 2001
+From: Lianbo Jiang <lijiang@redhat.com>
+Date: Thu, 15 Jan 2026 16:27:04 +0800
+Subject: [PATCH 13/23] Fix for "mod -S" causes symbols to be incorrect
+
+Currently, the "mod -S" command may cause that the "bt/sym" commands
+incorrectly translate the kernel module virtual address to symbol names,
+if a kernel module contains a per-cpu section, this was reported on
+PPC64 kernel.
+
+Without the patch:
+  crash> mod -S ../usr/lib/debug/lib/modules/5.14.0-xxx.ppc64le
+  ...
+  crash> bt
+  PID: 35705    TASK: c0000000b0365680  CPU: 16   COMMAND: "lsof"
+  ...
+   [NIP  : __key.7+32443920]
+   [LR   : __key.7+32446288]
+   #4 [c0000000394df9c0] __key.7 at c00800001ce82040 [overlay]  (unreliable)
+   #5 [c0000000394dfa00] walk_component at c0000000005c914c
+  ...
+  crash> sym c00800001ce82040
+  c00800001ce82040 (b) __key.7+32443920 [bnx2i] /usr/src/debug/kernel-5.14.0-xxx/linux-5.14.0-xxx.ppc64le/fs/overlayfs/super.c: 122
+
+With the patch:
+  crash> mod -S ../usr/lib/debug/lib/modules/5.14.0-xxx.ppc64le
+  ...
+  crash> bt
+  PID: 35705    TASK: c0000000b0365680  CPU: 16   COMMAND: "lsof"
+  ...
+   [NIP  : ovl_revalidate_real+40]
+   [LR   : ovl_dentry_revalidate_common+136]
+   #4 [c0000000394df9c0] ovl_revalidate_real at c00800001ce82040 [overlay]
+   #5 [c0000000394dfa00] walk_component at c0000000005c914c
+  ...
+  crash> sym c00800001ce82040
+  c00800001ce82040 (t) ovl_revalidate_real+40 [overlay] /usr/src/debug/kernel-5.14.0-xxx/linux-5.14.0-xxx.ppc64le/fs/overlayfs/super.c: 122
+
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ symbols.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/symbols.c b/symbols.c
+index c446beb43a76..e6865cabef74 100644
+--- a/symbols.c
++++ b/symbols.c
+@@ -5679,7 +5679,7 @@ value_search_module_6_4(ulong value, ulong *offset)
+ 
+ 			splast = NULL;
+ 			for ( ; sp <= sp_end; sp++) {
+-				if (machine_type("ARM64") &&
++				if ((machine_type("ARM64") || machine_type("PPC64")) &&
+ 				    IN_MODULE_PERCPU(sp->value, lm) &&
+ 				    !IN_MODULE_PERCPU(value, lm))
+ 					continue;
+@@ -5769,10 +5769,10 @@ retry:
+ 		*/
+ 		splast = NULL;
+                 for ( ; sp <= sp_end; sp++) {
+-			if (machine_type("ARM64") &&
++			if ((machine_type("ARM64") || machine_type("PPC64")) &&
+ 			    IN_MODULE_PERCPU(sp->value, lm) &&
+-			    !IN_MODULE_PERCPU(value, lm)) 
+-				continue;       
++			    !IN_MODULE_PERCPU(value, lm))
++				continue;
+ 
+ 			if (value == sp->value) {
+ 				if (MODULE_END(sp) || MODULE_INIT_END(sp))
+-- 
+2.51.1
+

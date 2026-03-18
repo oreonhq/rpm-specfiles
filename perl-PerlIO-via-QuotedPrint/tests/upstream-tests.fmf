@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-PerlIO-via-QuotedPrint
+require: perl-PerlIO-via-QuotedPrint-tests
+test: /usr/libexec/perl-PerlIO-via-QuotedPrint/test

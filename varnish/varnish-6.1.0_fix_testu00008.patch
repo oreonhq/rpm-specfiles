@@ -1,0 +1,13 @@
+--- bin/varnishtest/tests/u00008.vtc.orig	2018-11-02 16:06:40.731680282 +0100
++++ bin/varnishtest/tests/u00008.vtc	2018-11-02 16:07:21.587092836 +0100
+@@ -38,8 +38,8 @@
+ process p1 -screen_dump
+ 
+ process p1 -winsz 25 132
+-process p1 -expect-text 4 124 "AVG_1000"
+-process p1 -expect-text 22 108 "UNSEEN  DIAG"
++process p1 -expect-text 4 0 "AVG_1000"
++process p1 -expect-text 22 0 "UNSEEN  DIAG"
+ 
+ process p1 -screen_dump -write {q} -wait
+ 

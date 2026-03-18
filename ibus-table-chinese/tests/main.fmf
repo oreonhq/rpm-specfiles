@@ -1,0 +1,20 @@
+test: ./runtest.sh
+framework: beakerlib
+duration: 10m
+require:
+  - ibus
+  - ibus-table
+  - ibus-table-chinese
+  - ibus-table-chinese-array
+  - ibus-table-chinese-cangjie
+  - ibus-table-chinese-cantonese
+  - ibus-table-chinese-cantonyale
+  - ibus-table-chinese-easy
+  - ibus-table-chinese-erbi
+  - ibus-table-chinese-quick
+  - ibus-table-chinese-scj
+  - ibus-table-chinese-stroke5
+  - ibus-table-chinese-wu
+  - ibus-table-chinese-wubi-haifeng
+  - ibus-table-chinese-wubi-jidian
+  - ibus-table-chinese-yong

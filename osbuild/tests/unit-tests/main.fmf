@@ -1,0 +1,4 @@
+summary: Run osbuild unit tests from dist-git sources
+tag: unit-test
+duration: 4h
+test: ./prep-host-environment.sh; sudo chcon $(matchpathcon -n /usr/bin/osbuild) ./run-unit-tests.sh; ./run-unit-tests.sh

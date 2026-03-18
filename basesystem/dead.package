@@ -1,0 +1,14 @@
+Obsoleted by filesystem 3.18-38.fc43
+
+See https://src.fedoraproject.org/rpms/filesystem/pull-request/20
+and https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/message/M6AUGRUKVWAQTDSIEOHKYZTLDA4QRMMS.
+
+This is the second attempt. The first retirement was done too
+hastily.
+
+Some follow-up work:
+https://pagure.io/fedora-iot/ostree/pull-request/72
+https://src.fedoraproject.org/rpms/glibc/c/fe113cd0451d2e36edad5f5cf0f2b7759769c233
+https://src.fedoraproject.org/rpms/glibc/c/0b1ea0894105a34f2377470d9c2d280a00e9c5bf
+https://pagure.io/fedora-iot/fedora-iot-bootc/pull-request/1
+https://github.com/fedora-iot/fedora-iot-bootc/pull/6

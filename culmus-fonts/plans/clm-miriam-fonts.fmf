@@ -1,0 +1,18 @@
+summary: Fonts related tests
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/fonts
+prepare:
+    name: tmt
+    how: install
+    package: clm-miriam-fonts
+execute:
+    how: tmt
+environment:
+    PACKAGE: clm-miriam-fonts
+    FONT_ALIAS: sans-serif
+    FONT_FAMILY: Miriam CLM
+    FONT_LANG: he
+    DEFAULT_SANS: 2
+    DEFAULT_SERIF: 2
+    DEFAULT_MONO: 2

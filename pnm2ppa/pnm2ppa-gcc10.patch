@@ -1,0 +1,24 @@
+diff -up pnm2ppa-1.13/ppa_syslog.h.gcc10 pnm2ppa-1.13/ppa_syslog.h
+--- pnm2ppa-1.13/ppa_syslog.h.gcc10	2023-10-20 14:27:00.381590872 +0200
++++ pnm2ppa-1.13/ppa_syslog.h	2023-10-20 14:27:10.052671328 +0200
+@@ -39,7 +39,7 @@
+ #include <syslog.h>
+ #endif
+ 
+-char syslog_message[128];
++extern char syslog_message[128];
+ extern size_t message_size ;
+ 
+ void wrap_syslog( int, char *, char *);
+diff -up pnm2ppa-1.13/syslog.c.gcc10 pnm2ppa-1.13/syslog.c
+--- pnm2ppa-1.13/syslog.c.gcc10	2023-10-20 14:23:10.093285301 +0200
++++ pnm2ppa-1.13/syslog.c	2023-10-20 14:26:04.925129503 +0200
+@@ -33,6 +33,8 @@
+ 
+ BOOLEAN verbose = false ;
+ 
++char syslog_message[128];
++
+ /*
+   For some reason, BeOS doesn't seem to implement syslog(), even though it is
+   included with the system.  Wierd.  This wraps the syslog functions used

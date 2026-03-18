@@ -1,0 +1,11 @@
+diff -up texinfo-7.2.90/info/makedoc.c.orig texinfo-7.2.90/info/makedoc.c
+--- texinfo-7.2.90/info/makedoc.c.orig	2026-01-13 09:20:49.084748300 +0100
++++ texinfo-7.2.90/info/makedoc.c	2026-01-13 09:21:12.918658065 +0100
+@@ -27,6 +27,7 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <string.h>
++#include <limits.h>
+ 
+ /* From gnulib */
+ #include "xalloc.h"

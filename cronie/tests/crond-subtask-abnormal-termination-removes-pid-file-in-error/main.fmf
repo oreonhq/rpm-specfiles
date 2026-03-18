@@ -1,0 +1,15 @@
+summary: Test for crond subtask abnormal termination removes pid
+description: "Bug summary: crond subtask abnormal termination removes pid file in
+    error\n"
+contact: Robin Hack <rhack@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 20m
+extra-summary: 
+    /CoreOS/cronie/Regression/crond-subtask-abnormal-termination-removes-pid-file-in-error
+extra-task: 
+    /CoreOS/cronie/Regression/crond-subtask-abnormal-termination-removes-pid-file-in-error

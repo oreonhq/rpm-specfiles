@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-B-Debug
+require: perl-B-Debug-tests
+test: /usr/libexec/perl-B-Debug/test

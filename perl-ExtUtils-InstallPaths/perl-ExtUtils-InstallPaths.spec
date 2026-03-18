@@ -1,0 +1,63 @@
+Name:		perl-ExtUtils-InstallPaths
+Version:	0.015
+Release:	2%{?dist}
+Summary:	Build.PL install path logic made easy
+License:	GPL-1.0-or-later OR Artistic-1.0-Perl
+URL:		https://metacpan.org/release/ExtUtils-InstallPaths
+Source0:	https://cpan.metacpan.org/modules/by-module/ExtUtils/ExtUtils-InstallPaths-%{version}.tar.gz
+BuildArch:	noarch
+# Build
+BuildRequires:	coreutils
+BuildRequires:	make
+BuildRequires:	perl-generators
+BuildRequires:	perl-interpreter
+BuildRequires:	perl(ExtUtils::MakeMaker) >= 6.76
+# Module
+BuildRequires:	perl(Carp)
+BuildRequires:	perl(ExtUtils::Config) >= 0.009
+BuildRequires:	perl(File::Spec)
+BuildRequires:	perl(strict)
+BuildRequires:	perl(warnings)
+# Test Suite
+BuildRequires:	perl(Config)
+BuildRequires:	perl(File::Spec::Functions) >= 0.83
+BuildRequires:	perl(File::Temp)
+BuildRequires:	perl(Test::More)
+# Dependencies
+# (none)
+
+%description
+This module tries to make install path resolution as easy as possible.
+
+When you want to install a module, it needs to figure out where to install
+things. The nutshell version of how this works is that default installation
+locations are determined from ExtUtils::Config, and they may be individually
+overridden by using the install_path attribute. An install_base attribute lets
+you specify an alternative installation root like /home/foo and prefix does
+something similar in a rather different (and more complicated) way. destdir
+lets you specify a temporary installation directory like /tmp/install in case
+you want to create bundled-up installable packages.
+
+%prep
+%setup -q -n ExtUtils-InstallPaths-%{version}
+
+%build
+perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1
+%{make_build}
+
+%install
+%{make_install}
+%{_fixperms} -c %{buildroot}
+
+%check
+make test
+
+%files
+%license LICENSE
+%doc Changes README
+%{perl_vendorlib}/ExtUtils/
+%{_mandir}/man3/ExtUtils::InstallPaths.3*
+
+%changelog
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.015-2
+- Prepare for Oreon 11 (RP1)

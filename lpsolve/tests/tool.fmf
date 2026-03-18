@@ -1,0 +1,9 @@
+summary: lp_solve tool
+description:
+    Check that lp_solve tool can be executed and solve a simple problem.
+component: lpsolve
+require:
+    - grep
+    - lpsolve
+test: |
+    echo 'max: x; x < 42;' | lp_solve -S1 | grep -e ': 42\.0*$'

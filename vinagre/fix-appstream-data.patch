@@ -1,0 +1,29 @@
+From ff84871ad2f8e276aaf805d596d8af832be74fde Mon Sep 17 00:00:00 2001
+From: Felipe Borges <felipeborges@gnome.org>
+Date: Wed, 13 Nov 2019 11:28:10 +0100
+Subject: [PATCH] appdata: Add <release> and <content_rating> tags
+
+To pass appstream-util validate-strict.
+---
+ data/vinagre.appdata.xml.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/data/vinagre.appdata.xml.in b/data/vinagre.appdata.xml.in
+index ec28520..1516a83 100644
+--- a/data/vinagre.appdata.xml.in
++++ b/data/vinagre.appdata.xml.in
+@@ -23,7 +23,11 @@
+       <_caption><!-- Describe this screenshot in less than ~10 words --></_caption>
+     </screenshot>
+   </screenshots>
++  <releases>
++    <release version="3.32.0" date="2016-09-20"/>
++  </releases>
+   <update_contact>amigadave@amigadave.com</update_contact>
+   <project_group>GNOME</project_group>
+   <translation type="gettext">vinagre</translation>
++  <content_rating type="oars-1.1" />
+ </component>
+-- 
+2.23.0
+

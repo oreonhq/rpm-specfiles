@@ -1,0 +1,12 @@
+diff -Naur bacula-15.0.2.old/scripts/isworm bacula-15.0.2/scripts/isworm
+--- bacula-15.0.2.old/scripts/isworm	2024-06-02 10:15:16.943968210 +0200
++++ bacula-15.0.2/scripts/isworm	2024-06-02 10:15:17.672968683 +0200
+@@ -46,7 +46,7 @@
+ #   but it does not work for mhvtl.  Comment out the next 5 lines
+ #   and the code that follows will detect correctly on mhtvl.
+ #
+-worm=`$sdparm --page=0x1D -f $1 |grep " *WORMM"|cut -b12-16|sed "s:^ *::"`
++worm=`$sdparm --page=0x1D -f $1 |grep "WORMM"|cut -b12-16|sed "s:^ *::"`
+ if [ $? = 0 ] ; then
+    echo $worm
+    exit 0

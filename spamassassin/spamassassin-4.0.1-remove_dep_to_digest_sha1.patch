@@ -1,0 +1,44 @@
+diff -u -r Mail-SpamAssassin-4.0.1.orig/INSTALL Mail-SpamAssassin-4.0.1/INSTALL
+--- Mail-SpamAssassin-4.0.1.orig/INSTALL	2024-11-28 15:46:04.746114884 +0100
++++ Mail-SpamAssassin-4.0.1/INSTALL	2024-11-28 15:46:41.689348148 +0100
+@@ -410,13 +410,6 @@
+     If you do not plan to use this plugin, be sure to comment out its
+     loadplugin line in "/etc/mail/spamassassin/v310.pre".
+ 
+-  - Digest::SHA1 (from CPAN)
+-
+-    An external perl module razor-agents-2.84 as used by a Razor2 plugin
+-    seems to be the only remaining component depending on Digest::SHA1 (note
+-    that a packager may ship a patched version of razor-agents which can use
+-    Digest::SHA instead)
+-
+   - LWP::UserAgent (aka libwww-perl) (from CPAN)
+ 
+     Can be used by sa-update to retrieve update archives, as alternative to
+diff -u -r Mail-SpamAssassin-4.0.1.orig/lib/Mail/SpamAssassin/Util/DependencyInfo.pm Mail-SpamAssassin-4.0.1/lib/Mail/SpamAssassin/Util/DependencyInfo.pm
+--- Mail-SpamAssassin-4.0.1.orig/lib/Mail/SpamAssassin/Util/DependencyInfo.pm	2024-11-28 15:46:04.773115054 +0100
++++ Mail-SpamAssassin-4.0.1/lib/Mail/SpamAssassin/Util/DependencyInfo.pm	2024-11-29 09:39:44.359950894 +0100
+@@ -91,12 +91,6 @@
+ 
+ our @OPTIONAL_MODULES = (
+ {
+-  'module' => 'Digest::SHA1',
+-  'version' => 0,
+-  'desc' => 'The Digest::SHA1 module is still required by the Razor2 plugin.
+-  Other modules prefer Digest::SHA, which is a Perl base module.',
+-},
+-{
+   module => 'MIME::Base64',
+   version => 0,
+   desc => 'This module is highly recommended to increase the speed with which
+diff -u -r Mail-SpamAssassin-4.0.1.orig/t/rule_names.t Mail-SpamAssassin-4.0.1/t/rule_names.t
+--- Mail-SpamAssassin-4.0.1.orig/t/rule_names.t	2024-11-28 15:46:04.750114909 +0100
++++ Mail-SpamAssassin-4.0.1/t/rule_names.t	2024-11-28 15:47:21.093596927 +0100
+@@ -8,7 +8,6 @@
+ 
+ BEGIN {
+   eval { require Digest::SHA; Digest::SHA->import(qw(sha1)); 1 }
+-  or do { require Digest::SHA1; Digest::SHA1->import(qw(sha1)) }
+ }
+ 
+ our $RUN_THIS_TEST;

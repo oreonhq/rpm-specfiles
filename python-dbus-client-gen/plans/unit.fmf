@@ -1,0 +1,17 @@
+summary: deterministic (not Hypothesis-based) unit tests
+
+prepare:
+  - name: Install package
+    how: install
+    package: python-dbus-client-gen
+
+discover:
+  how: shell
+  url: https://github.com/stratis-storage/dbus-client-gen
+  ref: v0.5.1
+  tests:
+    - name: unit
+      test: python -m unittest -v tests/test_deterministic.py
+
+execute:
+  how: tmt

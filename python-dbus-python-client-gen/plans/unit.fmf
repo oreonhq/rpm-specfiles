@@ -1,0 +1,20 @@
+summary: unit tests
+
+prepare:
+  - name: Install make
+    how: install
+    package: make
+  - name: Install package
+    how: install
+    package: python-dbus-python-client-gen
+
+discover:
+  how: shell
+  url: https://github.com/stratis-storage/dbus-python-client-gen
+  ref: v0.8.3
+  tests:
+    - name: unit
+      test: make test
+
+execute:
+  how: tmt

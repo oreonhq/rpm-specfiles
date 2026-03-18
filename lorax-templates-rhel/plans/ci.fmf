@@ -1,0 +1,9 @@
+summary: Run tests
+discover:
+  how: fmf
+execute:
+  how: tmt
+provision:
+  how: virtual
+  hardware:
+    memory: ">= 4 GiB"

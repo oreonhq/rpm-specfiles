@@ -1,0 +1,3 @@
+from Config import *
+addFilter("spelling-error .* (gethostbyaddr|gethostbyname)");
+addFilter("-tests\.noarch: W: no-documentation");

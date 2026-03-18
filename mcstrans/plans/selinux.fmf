@@ -1,0 +1,8 @@
+summary: selinux tests - Tier 1 | mcstrans
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/selinux
+    filter: "component:mcstrans"
+execute:
+    how: tmt
+

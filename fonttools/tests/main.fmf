@@ -1,0 +1,22 @@
+test: ./runtests.sh
+duration: 10m
+framework: beakerlib
+require:
+  - fonttools
+  - python3-fonttools
+  - rpm-build
+  - python3-pytest
+  - python3-brotli
+  - python3-scipy
+  - python3-pluggy
+  - python3-packaging
+  - python3-attrs
+  - python3-pyparsing
+  - python3-gobject
+  - python3-fs
+  - python3-lxml
+  - python3-ufoLib2
+  - python3-zopfli
+  - atk-devel
+  - pango-devel
+  - gtk3-devel

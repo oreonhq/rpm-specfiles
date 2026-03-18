@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Mail-JMAPTalk
+require: perl-Mail-JMAPTalk-tests
+test: /usr/libexec/perl-Mail-JMAPTalk/test

@@ -1,0 +1,3 @@
+# libecpg
+
+The libecpg package

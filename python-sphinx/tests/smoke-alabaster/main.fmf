@@ -1,0 +1,10 @@
+summary: run the basic documentation build
+test: |
+    sphinx-build -M html source/ build/ &&
+    grep '<section id="test-docfile">' build/html/index.html &&
+    grep '<h1>Test docfile' build/html/index.html &&
+    grep '_static/alabaster.css' build/html/index.html &&
+    rm -rf build/
+require:
+  - python3-sphinx
+  - python3-sphinx-theme-alabaster

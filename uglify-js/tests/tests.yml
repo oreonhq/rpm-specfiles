@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  roles:
+    - role: standard-test-basic
+      tags:
+        - classic
+      required_packages:
+        - uglify-js
+      tests:
+        # Check that the main binary can be run at all
+        - usable:
+            run: uglifyjs --version
+        # Check that a basic expression is correctly minified
+        - expression:
+            run: test "$(echo '1 + 1'|uglifyjs)" = '1+1;'
+...

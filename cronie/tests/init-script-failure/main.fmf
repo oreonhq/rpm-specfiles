@@ -1,0 +1,12 @@
+summary: Testing some init script failures
+description: ''
+contact: Jakub Prokes <jprokes@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 5m
+extra-summary: /CoreOS/cronie/Regression/init-script-failure
+extra-task: /CoreOS/cronie/Regression/init-script-failure

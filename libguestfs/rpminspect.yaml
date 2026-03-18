@@ -1,0 +1,5 @@
+# Ignore copy-patches.sh.  It is an internal script we use to
+# manage the patches.
+upstream:
+  ignore:
+  - copy-patches.sh

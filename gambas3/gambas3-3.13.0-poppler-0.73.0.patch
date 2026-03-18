@@ -1,0 +1,71 @@
+diff -up gambas-3.13.0/gb.pdf/src/CPdfDocument.cpp.poppler_0.73.0 gambas-3.13.0/gb.pdf/src/CPdfDocument.cpp
+--- gambas-3.13.0/gb.pdf/src/CPdfDocument.cpp.poppler_0.73.0	2019-04-10 18:58:05.000000000 -0400
++++ gambas-3.13.0/gb.pdf/src/CPdfDocument.cpp	2019-09-12 11:54:41.577828642 -0400
+@@ -123,7 +123,7 @@ static void return_unicode_string(const
+ 		gstr.append(buf, n);
+ 	}
+ 
+-	GB.ReturnNewZeroString(gstr.getCString());
++	GB.ReturnNewZeroString(gstr.c_str());
+ }
+ 
+ 
+@@ -154,11 +154,11 @@ static void aux_return_string_info(void
+ 
+ 		if (goo_value->hasUnicodeMarker())
+ 		{
+-			GB.ConvString (&tmpstr,goo_value->getCString()+2,goo_value->getLength()-2,"UTF-16BE","UTF-8");
++			GB.ConvString (&tmpstr,goo_value->c_str()+2,goo_value->getLength()-2,"UTF-16BE","UTF-8");
+ 			GB.ReturnNewZeroString(tmpstr);		
+ 		}		
+ 		else
+-			GB.ReturnNewString(goo_value->getCString(),goo_value->getLength());		
++			GB.ReturnNewString(goo_value->c_str(),goo_value->getLength());		
+ 	}
+ 	#if ! POPPLER_VERSION_0_58
+ 	dst.free();
+@@ -197,10 +197,10 @@ static void aux_return_date_info(void *_
+ 	{
+ 		goo = dst.getString();
+ 		if (goo->hasUnicodeMarker())
+-			GB.ConvString (&datestr,goo->getCString()+2,goo->getLength()-2,"UTF-16BE","UTF-8");
++			GB.ConvString (&datestr,goo->c_str()+2,goo->getLength()-2,"UTF-16BE","UTF-8");
+ 		else
+ 		{
+-			datestr = GB.NewString(goo->getCString(),goo->getLength());
++			datestr = GB.NewString(goo->c_str(),goo->getLength());
+ 			tofree=datestr;		
+ 		}
+ 
+@@ -336,11 +336,11 @@ static char* aux_get_target_from_action(
+ 
+ 	if (tmp->hasUnicodeMarker())
+ 	{
+-			GB.ConvString (&uni,tmp->getCString()+2,tmp->getLength()-2,"UTF-16BE","UTF-8");
++			GB.ConvString (&uni,tmp->c_str()+2,tmp->getLength()-2,"UTF-16BE","UTF-8");
+ 			vl = GB.AddString(vl, uni, 0);	
+ 	}	
+ 	else
+-			vl = GB.AddString(vl,tmp->getCString(),tmp->getLength());
++			vl = GB.AddString(vl,tmp->c_str(),tmp->getLength());
+ 	
+ 
+ 	return vl;
+@@ -1018,7 +1018,7 @@ BEGIN_METHOD(PDFPAGE_select, GB_INTEGER
+ 		return;
+ 	}
+ 	
+-	GB.ReturnNewString(str->getCString(),str->getLength());	
++	GB.ReturnNewString(str->c_str(),str->getLength());	
+ 	delete str;
+ 
+ END_METHOD
+@@ -1084,7 +1084,7 @@ BEGIN_PROPERTY (PDFPAGELINKDATA_paramete
+ 		return;	
+ 	}
+ 
+-	GB.ReturnNewZeroString(((LinkLaunch*)THIS->action)->getParams()->getCString());
++	GB.ReturnNewZeroString(((LinkLaunch*)THIS->action)->getParams()->c_str());
+ 
+ END_PROPERTY
+ 

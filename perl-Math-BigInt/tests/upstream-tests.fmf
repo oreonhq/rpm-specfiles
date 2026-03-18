@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Math-BigInt
+require: perl-Math-BigInt-tests
+test: /usr/libexec/perl-Math-BigInt/test

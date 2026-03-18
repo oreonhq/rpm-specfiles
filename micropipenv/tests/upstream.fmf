@@ -1,0 +1,13 @@
+summary: upstream testsuite
+require:
+  - python3-devel
+  - python3-test
+  - python3-pip
+  - python3-pytest
+  - python3-pytest-venv
+  # flexmock installed from PyPI, not available in RHEL
+test: |
+  pip install flexmock==0.12.1 &&
+  cd $(dirname $TMT_SOURCE_DIR/micropipenv-*/tests) &&
+  pytest -v
+duration: 5m

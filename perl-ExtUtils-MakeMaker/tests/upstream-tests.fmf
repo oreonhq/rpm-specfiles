@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-ExtUtils-MakeMaker
+require: perl-ExtUtils-MakeMaker-tests
+test: /usr/libexec/perl-ExtUtils-MakeMaker/test

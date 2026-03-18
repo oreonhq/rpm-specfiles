@@ -1,0 +1,23 @@
+diff -Naur bacula-15.0.2.old/scripts/bacula-tray-monitor.desktop.in bacula-15.0.2/scripts/bacula-tray-monitor.desktop.in
+--- bacula-15.0.2.old/scripts/bacula-tray-monitor.desktop.in	2024-06-02 10:15:16.941968209 +0200
++++ bacula-15.0.2/scripts/bacula-tray-monitor.desktop.in	2024-06-02 10:15:17.524968587 +0200
+@@ -5,6 +5,5 @@
+ Exec=@sbindir@/bacula-tray-monitor -c @sysconfdir@/bacula-tray-monitor.conf
+ Terminal=false
+ Type=Application
+-Encoding=UTF-8
+ X-Desktop-File-Install-Version=0.3
+-Categories=System;Application;Utility;X-Red-Hat-Base;
++Categories=System;Utility;
+diff -Naur bacula-15.0.2.old/scripts/bat.desktop.in bacula-15.0.2/scripts/bat.desktop.in
+--- bacula-15.0.2.old/scripts/bat.desktop.in	2024-06-02 10:15:16.944968211 +0200
++++ bacula-15.0.2/scripts/bat.desktop.in	2024-06-02 10:15:17.524968587 +0200
+@@ -5,7 +5,6 @@
+ Exec=@sbindir@/bat -c @sysconfdir@/bat.conf
+ Terminal=false
+ Type=Application
+-Encoding=UTF-8
+ StartupNotify=true
+ X-Desktop-File-Install-Version=0.3
+-Categories=System;Application;Utility;X-Red-Hat-Base;
++Categories=System;Utility;

@@ -1,0 +1,51 @@
+Fix a configure check that happens to trigger and implicit function
+declaration error.
+
+Fixed slightly differently in upstream via:
+
+commit 516032ec39169d05c613de0e8ee10845658748ff
+Author: Quentin Armitage <quentin@armitage.org.uk>
+Date:   Sun Apr 17 18:02:18 2022 +0100
+
+    config parser: Fix segfault caused by extra '}' and other parser fixes
+    
+    If there was a configuration error in a block, e.g. a vrrp_instance,
+    keepalived would apply the configuration in the rest of the block to
+    the previous object of that type, e.g. the previous vrrp instance. If
+    there had been no previous instance, keepalived would probably segfault.
+    
+    This commit changes the way the parser works. A new instance of an
+    object, e.g. a VRRP instance or a virtual server, is only added to the
+    list of those objects once the configuration of that object is complete.
+    In particular it no longer applies the configuration to the last entry
+    on the list of the relevant object type, but keeps a point to the
+    object currently being configured.
+    
+    Signed-off-by: Quentin Armitage <quentin@armitage.org.uk>
+
+diff --git a/configure b/configure
+index 7cd6c4f614930391..b099b8f42aca1cba 100755
+--- a/configure
++++ b/configure
+@@ -6382,7 +6382,7 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ 
+         #include <stdio.h>
+ 
+-        static int func(int i) __attribute__((error("deliberate error")))
++        static int __attribute__((error("deliberate error"))) func(int i)
+ 	{
+ 	  return i * 2;
+ 	}
+diff --git a/configure.ac b/configure.ac
+index 350a9f4e9567518c..5546143b4630aff6 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -792,7 +792,7 @@ AC_COMPILE_IFELSE(
+       [[
+         #include <stdio.h>
+ 
+-        static int func(int i) __attribute__((error("deliberate error")))
++        static int __attribute__((error("deliberate error"))) func(int i)
+ 	{
+ 	  return i * 2;
+ 	}

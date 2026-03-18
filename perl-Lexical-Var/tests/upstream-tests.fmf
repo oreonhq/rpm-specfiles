@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Lexical-Var
+require: perl-Lexical-Var-tests
+test: /usr/libexec/perl-Lexical-Var/test

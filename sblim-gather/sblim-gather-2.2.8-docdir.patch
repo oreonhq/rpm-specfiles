@@ -1,0 +1,12 @@
+diff -up sblim-gather-2.2.8/Makefile.in.orig sblim-gather-2.2.8/Makefile.in
+--- sblim-gather-2.2.8/Makefile.in.orig	2013-08-28 12:53:38.468175893 +0200
++++ sblim-gather-2.2.8/Makefile.in	2013-08-28 12:53:48.018209290 +0200
+@@ -685,7 +685,7 @@ datadir = @datadir@
+ datarootdir = @datarootdir@
+ 
+ # docdir defines where the documentation goes
+-docdir = $(datadir)/doc/$(PACKAGE)-$(VERSION)
++docdir = $(datadir)/doc/$(PACKAGE)
+ dvidir = @dvidir@
+ enable_man = @enable_man@
+ exec_prefix = @exec_prefix@

@@ -1,0 +1,12 @@
+- hosts: localhost
+  roles:
+    - role: standard-test-beakerlib
+      tags:
+      - classic
+      tests:
+      - auth-tests
+      required_packages:
+      - python3
+      - systemd
+      - freeradius
+      - freeradius-utils

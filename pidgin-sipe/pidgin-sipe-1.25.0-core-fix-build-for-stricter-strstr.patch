@@ -1,0 +1,91 @@
+From 5c8a776dabe52387ed9e0ebf2778a47eb45bb44b Mon Sep 17 00:00:00 2001
+From: Stefan Becker <chemobejk@gmail.com>
+Date: Tue, 20 Jan 2026 18:40:05 +0200
+Subject: [PATCH] core: fix build for stricter strstr()
+
+The build with GCC fails on Fedora 44, because when the pointer to the
+haystack is const, then the return result must also be assigned to a
+const char pointer.
+---
+ src/core/sipe-ocs2007.c |  4 ++--
+ src/core/sipmsg.c       | 17 +++++++++--------
+ 2 files changed, 11 insertions(+), 10 deletions(-)
+
+diff --git a/src/core/sipe-ocs2007.c b/src/core/sipe-ocs2007.c
+index c8f831a2..278e5fb8 100644
+--- a/src/core/sipe-ocs2007.c
++++ b/src/core/sipe-ocs2007.c
+@@ -3,7 +3,7 @@
+  *
+  * pidgin-sipe
+  *
+- * Copyright (C) 2011-2019 SIPE Project <http://sipe.sourceforge.net/>
++ * Copyright (C) 2011-2026 SIPE Project <http://sipe.sourceforge.net/>
+  *
+  *
+  * This program is free software; you can redistribute it and/or modify
+@@ -404,7 +404,7 @@ static int sipe_find_member_access_level(struct sipe_core_private *sipe_private,
+  */
+ static const gchar *sipe_get_domain(const gchar *email)
+ {
+-	gchar *tmp;
++	const gchar *tmp;
+ 
+ 	if (!email) return NULL;
+ 
+diff --git a/src/core/sipmsg.c b/src/core/sipmsg.c
+index 269a75bb..19a27fa7 100644
+--- a/src/core/sipmsg.c
++++ b/src/core/sipmsg.c
+@@ -3,7 +3,7 @@
+  *
+  * pidgin-sipe
+  *
+- * Copyright (C) 2010-2019 SIPE Project <http://sipe.sourceforge.net/>
++ * Copyright (C) 2010-2026 SIPE Project <http://sipe.sourceforge.net/>
+  * Copyright (C) 2008 Novell, Inc.
+  * Copyright (C) 2005 Thomas Butter <butter@uni-mannheim.de>
+  *
+@@ -788,9 +788,10 @@ void sipmsg_update_to_header_tag(struct sipmsg *msg) {
+ void
+ msn_parse_format(const char *mime, char **pre_ret, char **post_ret)
+ {
+-	char *cur;
++	const char *cur;
+ 	GString *pre  = g_string_new(NULL);
+ 	GString *post = g_string_new(NULL);
++	char *unescaped;
+ 	unsigned int colors[3];
+ 
+ 	if (pre_ret  != NULL) *pre_ret  = NULL;
+@@ -886,21 +887,21 @@ msn_parse_format(const char *mime, char **pre_ret, char **post_ret)
+ 		}
+ 	}
+ 
+-	cur = sipe_utils_uri_unescape(pre->str);
++	unescaped = sipe_utils_uri_unescape(pre->str);
+ 	g_string_free(pre, TRUE);
+ 
+ 	if (pre_ret != NULL)
+-		*pre_ret = cur;
++		*pre_ret = unescaped;
+ 	else
+-		g_free(cur);
++		g_free(unescaped);
+ 
+-	cur = sipe_utils_uri_unescape(post->str);
++	unescaped = sipe_utils_uri_unescape(post->str);
+ 	g_string_free(post, TRUE);
+ 
+ 	if (post_ret != NULL)
+-		*post_ret = cur;
++		*post_ret = unescaped;
+ 	else
+-		g_free(cur);
++		g_free(unescaped);
+ }
+ 
+ static const char *
+-- 
+2.52.0
+

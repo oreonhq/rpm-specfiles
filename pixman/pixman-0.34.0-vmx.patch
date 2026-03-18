@@ -1,0 +1,12 @@
+diff -up pixman-0.34.0/pixman/pixman-vmx.c.orig pixman-0.34.0/pixman/pixman-vmx.c
+--- pixman-0.34.0/pixman/pixman-vmx.c.orig	2018-04-27 12:10:14.411696502 +0200
++++ pixman-0.34.0/pixman/pixman-vmx.c	2018-04-27 12:27:41.174290224 +0200
+@@ -227,7 +227,7 @@ do							  \
+ #define COMPUTE_SHIFT_MASKC(dest, source, mask)
+ 
+ # define LOAD_VECTOR(source)				\
+-    v ## source = *((typeof(v ## source)*)source);
++    v ## source = (typeof(v ## source))vec_xl(0, source);
+ 
+ # define LOAD_VECTORS(dest, source)			\
+     LOAD_VECTOR(source);				\

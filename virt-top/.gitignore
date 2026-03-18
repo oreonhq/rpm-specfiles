@@ -1,0 +1,6 @@
+*~
+
+/.build*.log
+/clog
+/virt-top-*.tar.gz
+/virt-top-*.tar.gz.sig

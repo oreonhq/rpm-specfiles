@@ -1,0 +1,22 @@
+# See the documentation for more information:
+# https://packit.dev/docs/configuration/
+
+upstream_project_url: https://github.com/googleapis/google-api-python-client
+upstream_tag_template: v{version}
+
+jobs:
+- job: pull_from_upstream
+  trigger: release
+  dist_git_branches:
+    - fedora-rawhide
+
+- job: koji_build
+  trigger: commit
+  #allowed_committers: [all_admins]
+  dist_git_branches:
+    - fedora-rawhide
+
+- job: bodhi_update
+  trigger: commit
+  dist_git_branches:
+    - fedora-branched

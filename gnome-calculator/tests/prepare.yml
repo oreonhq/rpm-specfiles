@@ -1,0 +1,30 @@
+- name: Install Workstation packages
+  dnf:
+    name: '@Fedora Workstation'
+    state: present
+- name: Install libselinux-python
+  dnf:
+    name: libselinux-python
+    state: present
+- name: Set up user test
+  user:
+    name: test
+    groups:
+      - wheel
+      - adm
+    password: $6$lJYbJXPZrkeslR0K$H46Th6V.IdaHEPWt7YUSIwz9r16LWWDFSrIvbmUOyZaGMWfXzS1wb5iWPuMmX9VeSz/wiKj5003sl6gDQ/cUD.
+- name: Set passwordless sudo
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: '^%wheel\s'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+- name: Set gdm to use xorg session
+  ini_file:
+    path: /etc/gdm/custom.conf
+    section: daemon
+    option: WaylandEnable
+    value: false
+  when: wayland is undefined
+- name: Turn off lock screen when we are idle
+  command: gsettings set org.gnome.desktop.session idle-delay 0

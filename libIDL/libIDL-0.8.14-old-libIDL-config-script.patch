@@ -1,0 +1,116 @@
+diff -Naur libIDL-0.8.14-original/libIDL-config-2.in libIDL-0.8.14/libIDL-config-2.in
+--- libIDL-0.8.14-original/libIDL-config-2.in	2009-04-18 08:20:37.000000000 -0400
++++ libIDL-0.8.14/libIDL-config-2.in	2021-02-04 08:30:19.646031279 -0500
+@@ -7,7 +7,7 @@
+ usage()
+ {
+ 	cat <<EOF
+-Usage: libIDL-config [OPTIONS]
++Usage: libIDL-config-2 [OPTIONS]
+ Options:
+ 	[--prefix[=DIR]]
+ 	[--exec-prefix[=DIR]]
+diff -Naur libIDL-0.8.14-original/libIDL.m4.in libIDL-0.8.14/libIDL.m4.in
+--- libIDL-0.8.14-original/libIDL.m4.in	2009-04-18 08:20:37.000000000 -0400
++++ libIDL-0.8.14/libIDL.m4.in	2021-02-04 08:33:46.123369131 -0500
+@@ -5,7 +5,7 @@
+ dnl
+ AC_DEFUN([AM_PATH_LIBIDL],
+ [dnl 
+-dnl Get the cflags and libraries from the libIDL-config script
++dnl Get the cflags and libraries from the libIDL-config-2 script
+ dnl
+ AC_ARG_WITH(libIDL-prefix,[  --with-libIDL-prefix=PFX   Prefix where libIDL is installed (optional)],
+             libIDL_config_prefix="$withval", libIDL_config_prefix="")
+@@ -17,20 +17,20 @@
+   if test x$libIDL_config_exec_prefix != x ; then
+      libIDL_config_args="$libIDL_config_args --exec-prefix=$libIDL_config_exec_prefix"
+      if test x${LIBIDL_CONFIG+set} != xset ; then
+-        LIBIDL_CONFIG=$libIDL_config_exec_prefix/bin/libIDL-config
++        LIBIDL_CONFIG=$libIDL_config_exec_prefix/bin/libIDL-config-2
+      fi
+   fi
+   if test x$libIDL_config_prefix != x ; then
+      libIDL_config_args="$libIDL_config_args --prefix=$libIDL_config_prefix"
+      if test x${LIBIDL_CONFIG+set} != xset ; then
+-        LIBIDL_CONFIG=$libIDL_config_prefix/bin/libIDL-config
++        LIBIDL_CONFIG=$libIDL_config_prefix/bin/libIDL-config-2
+      fi
+   fi
+ 
+ dnl AM_PATH_GLIB(@GLIB_VERSION_REQUIRED@)
+   AM_PATH_GLIB_2_0(@GLIB_VERSION_REQUIRED@)
+ 
+-  AC_PATH_PROG(LIBIDL_CONFIG, libIDL-config, no)
++  AC_PATH_PROG(LIBIDL_CONFIG, libIDL-config-2, no)
+   min_libIDL_version=ifelse([$1], ,0.6.0,$1)
+   AC_MSG_CHECKING(for libIDL - version >= $min_libIDL_version)
+   no_libIDL=""
+@@ -89,16 +89,16 @@
+       (libIDL_minor_version != $libIDL_config_minor_version) ||
+       (libIDL_micro_version != $libIDL_config_micro_version))
+     {
+-      printf("\n*** 'libIDL-config --version' returned %d.%d.%d, but libIDL (%d.%d.%d)\n", 
++      printf("\n*** 'libIDL-config-2 --version' returned %d.%d.%d, but libIDL (%d.%d.%d)\n", 
+              $libIDL_config_major_version, $libIDL_config_minor_version, $libIDL_config_micro_version,
+              libIDL_major_version, libIDL_minor_version, libIDL_micro_version);
+-      printf ("*** was found! If libIDL-config was correct, then it is best\n");
++      printf ("*** was found! If libIDL-config-2 was correct, then it is best\n");
+       printf ("*** to remove the old version of LIBIDL. You may also be able to fix the error\n");
+       printf("*** by modifying your LD_LIBRARY_PATH enviroment variable, or by editing\n");
+       printf("*** /etc/ld.so.conf. Make sure you have run ldconfig if that is\n");
+       printf("*** required on your system.\n");
+-      printf("*** If libIDL-config was wrong, set the environment variable LIBIDL_CONFIG\n");
+-      printf("*** to point to the correct copy of libIDL-config, and remove the file config.cache\n");
++      printf("*** If libIDL-config-2 was wrong, set the environment variable LIBIDL_CONFIG\n");
++      printf("*** to point to the correct copy of libIDL-config-2, and remove the file config.cache\n");
+       printf("*** before re-running configure\n");
+     } 
+   else if ((libIDL_major_version != LIBIDL_MAJOR_VERSION) ||
+@@ -126,10 +126,10 @@
+                major, minor, micro);
+         printf("***\n");
+         printf("*** If you have already installed a sufficiently new version, this error\n");
+-        printf("*** probably means that the wrong copy of the libIDL-config shell script is\n");
++        printf("*** probably means that the wrong copy of the libIDL-config-2 shell script is\n");
+         printf("*** being found. The easiest way to fix this is to remove the old version\n");
+         printf("*** of libIDL, but you can also set the LIBIDL_CONFIG environment to point to the\n");
+-        printf("*** correct copy of libIDL-config. (In this case, you will have to\n");
++        printf("*** correct copy of libIDL-config-2. (In this case, you will have to\n");
+         printf("*** modify your LD_LIBRARY_PATH enviroment variable, or edit /etc/ld.so.conf\n");
+         printf("*** so that the correct libraries are found at run-time))\n");
+       }
+@@ -147,10 +147,10 @@
+   else
+      AC_MSG_RESULT(no)
+      if test "$LIBIDL_CONFIG" = "no" ; then
+-       echo "*** The libIDL-config script installed by libIDL could not be found"
++       echo "*** The libIDL-config-2 script installed by libIDL could not be found"
+        echo "*** If libIDL was installed in PREFIX, make sure PREFIX/bin is in"
+        echo "*** your path, or set the LIBIDL_CONFIG environment variable to the"
+-       echo "*** full path to libIDL-config."
++       echo "*** full path to libIDL-config-2."
+      else
+        if test -f conf.libIDLtest ; then
+         :
+@@ -175,7 +175,7 @@
+         [ echo "*** The test program failed to compile or link. See the file config.log for the"
+           echo "*** exact error that occured. This usually means libIDL was incorrectly installed"
+           echo "*** or that you have moved libIDL since it was installed. In the latter case, you"
+-          echo "*** may want to edit the libIDL-config script: $LIBIDL_CONFIG" ])
++          echo "*** may want to edit the libIDL-config-2 script: $LIBIDL_CONFIG" ])
+           CFLAGS="$ac_save_CFLAGS"
+           LIBS="$ac_save_LIBS"
+        fi
+diff -Naur libIDL-0.8.14-original/tstidl.c libIDL-0.8.14/tstidl.c
+--- libIDL-0.8.14-original/tstidl.c	2021-02-04 08:31:53.168637254 -0500
++++ libIDL-0.8.14/tstidl.c	2021-02-04 08:32:10.342748532 -0500
+@@ -6,7 +6,7 @@
+  *
+  * if given, flags is read as (output_flags << 24) | parse_flags
+  *
+- * gcc `libIDL-config --cflags --libs` tstidl.c -o tstidl
++ * gcc `libIDL-config-2 --cflags --libs` tstidl.c -o tstidl
+  *
+  */
+ #ifdef G_LOG_DOMAIN

@@ -1,0 +1,1 @@
+no support for PHP 8, use php-pecl-xdebug3 instead

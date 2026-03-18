@@ -1,0 +1,40 @@
+From 8412e17712015d8d293ead358ed93663fd2ec4f8 Mon Sep 17 00:00:00 2001
+From: Aditi Mishra <aditi@linux.ibm.com>
+Date: Wed, 19 Feb 2025 12:40:49 -0500
+Subject: [PATCH] Replace custom boolean type with <stdbool.h> for C23
+ compatibility
+
+The custom boolean type definition (typedef enum { false, true } bool;) is incompatible with the C23 standard, as the identifiers bool, true, and false are now reserved keywords. This results in compilation errors such as:
+
+  CC       ela/date.o
+ela/date.c:7:16: error: cannot use keyword 'false' as enumeration constant
+    7 | typedef enum { false, true } bool;
+      |                ^~~~~
+ela/date.c:7:16: note: 'false' is a keyword with '-std=c23' onwards
+ela/date.c:7:30: error: expected ';', identifier or '(' before 'bool'
+    7 | typedef enum { false, true } bool;
+      |                              ^~~~
+ela/date.c:7:30: warning: useless type name in empty declaration
+make: *** [Makefile:2168: ela/date.o] Error 1
+
+To ensure compatibility with C23 and avoid such issues, replace the custom definition with the standard <stdbool.h> header, which provides the bool type and associated constants (true and false).
+
+Signed-off-by: Aditi Mishra <aditi@linux.ibm.com>
+---
+ ela/date.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/ela/date.c b/ela/date.c
+index 0a8cfb9..f6dc84d 100644
+--- a/ela/date.c
++++ b/ela/date.c
+@@ -3,8 +3,8 @@
+ #include <stdio.h>
+ #include <time.h>
+ #include <string.h>
++#include <stdbool.h>
+ 
+-typedef enum { false, true } bool;
+ static int cur_year = 0;	// year - 1900
+ static time_t end_of_cur_year;	// January 1 00:00:00 of next year
+ 

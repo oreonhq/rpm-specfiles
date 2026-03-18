@@ -1,0 +1,43 @@
+From d118315931634f32cd6ffb50e27e75b7a8ea489e Mon Sep 17 00:00:00 2001
+From: "Guanyou.Chen" <chenguanyou@xiaomi.com>
+Date: Fri, 5 Dec 2025 13:55:30 +0800
+Subject: [PATCH 03/23] arm64: Fix "vtop" command to display swap information
+ on Linux 6.10 and later
+
+Kernel commit 55564814a838 ("arm64/mm: Move PTE_PRESENT_INVALID
+to overlay PTE_NG"), which is contained in Linux 6.10 and
+later kernels, changed the format of swap entries on arm64.
+Without the patch, the "vtop" command cannot display swap information
+
+Link: https://lore.kernel.org/r/20240503144604.151095-4-ryan.roberts@arm.com
+Signed-off-by: Guanyou.Chen <chenguanyou@xiaomi.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ arm64.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/arm64.c b/arm64.c
+index 17235950bb60..c125655d6807 100644
+--- a/arm64.c
++++ b/arm64.c
+@@ -712,7 +712,16 @@ arm64_init(int when)
+ 			}
+ 		}
+ 
+-		if (THIS_KERNEL_VERSION >= LINUX(5,19,0)) {
++		if (THIS_KERNEL_VERSION >= LINUX(6,10,0)) {
++			ms->__SWP_TYPE_BITS = 5;
++			ms->__SWP_TYPE_SHIFT = 6;
++			ms->__SWP_TYPE_MASK = ((1UL << ms->__SWP_TYPE_BITS) - 1);
++			ms->__SWP_OFFSET_SHIFT = 12;
++			ms->__SWP_OFFSET_BITS = 50;
++			ms->__SWP_OFFSET_MASK = ((1UL << ms->__SWP_OFFSET_BITS) - 1);
++			ms->PTE_PROT_NONE = 0; /* unused */
++			ms->PTE_FILE = 0;  /* unused */
++		} else if (THIS_KERNEL_VERSION >= LINUX(5,19,0)) {
+ 			ms->__SWP_TYPE_BITS = 5;
+ 			ms->__SWP_TYPE_SHIFT = 3;
+ 			ms->__SWP_TYPE_MASK = ((1UL << ms->__SWP_TYPE_BITS) - 1);
+-- 
+2.51.1
+

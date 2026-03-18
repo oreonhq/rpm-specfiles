@@ -1,0 +1,21 @@
+diff -up suite3270-4.5/x3270/CmeP.h.c23 suite3270-4.5/x3270/CmeP.h
+--- suite3270-4.5/x3270/CmeP.h.c23	2026-02-23 17:11:47.532461550 +0100
++++ suite3270-4.5/x3270/CmeP.h	2026-02-23 17:12:44.818297155 +0100
+@@ -120,16 +120,7 @@ typedef struct _CmeRec {
+  *
+  ************************************************************/
+ 
+-#if defined(__clang__) /*[*/
+-# pragma clang diagnostic push
+-# pragma clang diagnostic ignored "-Wstrict-prototypes"
+-#endif /*]*/
+-typedef void (*_XawEntryVoidFunc)();
+-#if defined(__clang__) /*[*/
+-# pragma clang diagnostic pop
+-#endif /*]*/
+-
+-#define XtInheritHighlight   ((_XawEntryVoidFunc) _XtInherit)
++#define XtInheritHighlight   (void (*)(struct _WidgetRec *)) _XtInherit
+ #define XtInheritUnhighlight XtInheritHighlight
+ #define XtInheritNotify      XtInheritHighlight
+ 

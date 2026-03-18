@@ -1,0 +1,11 @@
+--- bin/varnishtest/tests/r02429.vtc.orig	2017-11-16 11:08:04.718822949 +0100
++++ bin/varnishtest/tests/r02429.vtc	2017-11-16 11:08:12.411275341 +0100
+@@ -4,7 +4,7 @@
+ 	accept
+ } -start
+ 
+-varnish v1 -arg "-s Transient=file,${tmpdir}/_.file,1m" -vcl+backend {
++varnish v1 -arg "-s Transient=file,${tmpdir}/_.file,10m" -vcl+backend {
+ 	sub vcl_backend_error {
+ 		synthetic("foo");
+ 		return (deliver);

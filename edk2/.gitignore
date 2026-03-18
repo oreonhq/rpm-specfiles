@@ -1,0 +1,11 @@
+/openssl-*-hobbled.tar.xz
+/edk2-*.tar.xz
+/qemu-ovmf-secureboot-*.tar.gz
+/edk2-*.tar.gz
+/softfloat-20180726-gitb64af41.tar.xz
+/qemu-ovmf-secureboot-20190521-gitf158f12.tar.xz
+/qemu-ovmf-secureboot-20200228-gitc3e16b3.tar.xz
+/openssl-rhel-*.tar.xz
+/openssl-*.tar.gz
+/jansson-2.13.1.tar.bz2
+/dtc-1.7.0.tar.xz

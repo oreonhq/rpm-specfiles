@@ -1,0 +1,68 @@
+diff -rupN qt-creator-opensource-src-19.0.0-beta1/src/libs/utils/hostosinfo.cpp qt-creator-opensource-src-19.0.0-beta1-new/src/libs/utils/hostosinfo.cpp
+--- qt-creator-opensource-src-19.0.0-beta1/src/libs/utils/hostosinfo.cpp	2026-01-27 03:56:15.000000000 +0100
++++ qt-creator-opensource-src-19.0.0-beta1-new/src/libs/utils/hostosinfo.cpp	2026-01-31 10:25:36.099606157 +0100
+@@ -125,6 +125,10 @@ OsArch binaryArchitecture()
+     return OsArchArm;
+ #elif defined(__ia64__) || defined(__itanium__)
+     return OsArchItanium;
++#elif defined(__powerpc64__) and defined(__LITTLE_ENDIAN__)
++    return OsArchPPC64LE;
++#elif defined(__s390x__)
++    return OsArchS390X;
+ #else
+     static_assert(false, "Unknown architecture, please add detection.");
+     return OsArchUnknown;
+diff -rupN qt-creator-opensource-src-19.0.0-beta1/src/libs/utils/osspecificaspects.cpp qt-creator-opensource-src-19.0.0-beta1-new/src/libs/utils/osspecificaspects.cpp
+--- qt-creator-opensource-src-19.0.0-beta1/src/libs/utils/osspecificaspects.cpp	2026-01-27 03:56:15.000000000 +0100
++++ qt-creator-opensource-src-19.0.0-beta1-new/src/libs/utils/osspecificaspects.cpp	2026-01-31 10:26:35.955918874 +0100
+@@ -56,6 +56,10 @@ Result<OsArch> osArchFromString(const QS
+         return OsArchArm;
+     if (architecture == QLatin1String("arm64") || architecture == QLatin1String("aarch64"))
+         return OsArchArm64;
++    if (architecture == QLatin1String("ppc64le"))
++        return OsArchPPC64LE;
++    if (architecture == QLatin1String("s390x"))
++        return OsArchS390X;
+ 
+     return Utils::ResultError(QString::fromLatin1("Unknown architecture: %1").arg(architecture));
+ }
+diff -rupN qt-creator-opensource-src-19.0.0-beta1/src/libs/utils/osspecificaspects.h qt-creator-opensource-src-19.0.0-beta1-new/src/libs/utils/osspecificaspects.h
+--- qt-creator-opensource-src-19.0.0-beta1/src/libs/utils/osspecificaspects.h	2026-01-27 03:56:15.000000000 +0100
++++ qt-creator-opensource-src-19.0.0-beta1-new/src/libs/utils/osspecificaspects.h	2026-01-31 10:26:54.434565426 +0100
+@@ -15,7 +15,7 @@ namespace Utils {
+ // Add more as needed.
+ enum OsType { OsTypeWindows, OsTypeLinux, OsTypeMac, OsTypeOtherUnix, OsTypeOther };
+ 
+-enum OsArch { OsArchUnknown, OsArchX86, OsArchAMD64, OsArchItanium, OsArchArm, OsArchArm64 };
++enum OsArch { OsArchUnknown, OsArchX86, OsArchAMD64, OsArchItanium, OsArchArm, OsArchArm64, OsArchPPC64LE, OsArchS390X };
+ 
+ QTCREATOR_UTILS_EXPORT QString osTypeToString(OsType osType);
+ QTCREATOR_UTILS_EXPORT Utils::Result<OsType> osTypeFromString(const QString &string);
+diff -rupN qt-creator-opensource-src-19.0.0-beta1/src/plugins/extensionmanager/extensionsmodel.cpp qt-creator-opensource-src-19.0.0-beta1-new/src/plugins/extensionmanager/extensionsmodel.cpp
+--- qt-creator-opensource-src-19.0.0-beta1/src/plugins/extensionmanager/extensionsmodel.cpp	2026-01-27 03:56:18.000000000 +0100
++++ qt-creator-opensource-src-19.0.0-beta1-new/src/plugins/extensionmanager/extensionsmodel.cpp	2026-01-31 10:27:18.388865959 +0100
+@@ -391,6 +391,10 @@ QString customOsArchToString(OsArch osAr
+         return "arm";
+     case OsArchArm64:
+         return "arm64";
++    case OsArchPPC64LE:
++        return "ppc64le";
++    case OsArchS390X:
++        return "s390x";
+     case OsArchUnknown:
+         break;
+     }
+diff -rupN qt-creator-opensource-src-19.0.0-beta1/src/plugins/lua/bindings/utils.cpp qt-creator-opensource-src-19.0.0-beta1-new/src/plugins/lua/bindings/utils.cpp
+--- qt-creator-opensource-src-19.0.0-beta1/src/plugins/lua/bindings/utils.cpp	2026-01-27 03:56:18.000000000 +0100
++++ qt-creator-opensource-src-19.0.0-beta1-new/src/plugins/lua/bindings/utils.cpp	2026-01-31 10:27:34.852965572 +0100
+@@ -144,6 +144,10 @@ void setupUtilsModule()
+                     return "arm";
+                 case OsArchArm64:
+                     return "arm64";
++                case OsArchPPC64LE:
++                    return "ppc64le";
++                case OsArchS390X:
++                    return "s390x";
+                 default:
+                     return "unknown";
+                 }

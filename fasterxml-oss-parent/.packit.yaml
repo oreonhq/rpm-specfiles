@@ -1,0 +1,21 @@
+---
+downstream_package_name: fasterxml-oss-parent
+specfile_path: fasterxml-oss-parent.spec
+upstream_package_name: oss-parent
+upstream_project_url: https://github.com/FasterXML/oss-parent
+upstream_tag_template: oss-parent-{version}
+
+actions:
+  post-upstream-clone:
+    - "wget https://src.fedoraproject.org/rpms/fasterxml-oss-parent/raw/main/f/fasterxml-oss-parent.spec -O fasterxml-oss-parent.spec"
+ 
+jobs:
+- job: pull_from_upstream
+  trigger: release
+  dist_git_branches:
+    - fedora-rawhide
+
+- job: koji_build
+  trigger: commit
+  dist_git_branches:
+    - fedora-rawhide

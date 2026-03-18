@@ -1,0 +1,4 @@
+# This is normal for loadable modules where the loading executable
+# (i.e. perl in this case) is linked against libc itself
+addFilter("library-not-linked-against-libc /usr/lib.*/Devel/Caller/Caller\.so")
+

@@ -1,0 +1,4 @@
+/*.rpm
+/results_rpmlint/
+/rpmlint-*/
+/rpmlint-*.tar.gz

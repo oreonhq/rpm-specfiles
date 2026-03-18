@@ -1,0 +1,25 @@
+From a0a11a9250d8072f0d7dd083dad90cdd8a459020 Mon Sep 17 00:00:00 2001
+From: Steve Cossette <farchord@gmail.com>
+Date: Thu, 4 Dec 2025 01:55:21 +0000
+Subject: [PATCH] Edit gaussian_process.cpp
+
+---
+ .../MPI_IS_gaussian_process/src/gaussian_process.cpp            | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kstars/ekos/guide/internalguide/MPI_IS_gaussian_process/src/gaussian_process.cpp b/kstars/ekos/guide/internalguide/MPI_IS_gaussian_process/src/gaussian_process.cpp
+index 27e6f6177f..d96528b0f3 100644
+--- a/kstars/ekos/guide/internalguide/MPI_IS_gaussian_process/src/gaussian_process.cpp
++++ b/kstars/ekos/guide/internalguide/MPI_IS_gaussian_process/src/gaussian_process.cpp
+@@ -18,7 +18,7 @@
+  */
+ 
+ #include <cstdint>
+-
++#include <cassert>
+ #include "gaussian_process.h"
+ #include "math_tools.h"
+ #include "covariance_functions.h"
+-- 
+GitLab
+

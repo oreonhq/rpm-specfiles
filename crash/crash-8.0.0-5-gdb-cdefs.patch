@@ -1,0 +1,17 @@
+--- a/gdb-10.2.patch
++++ b/gdb-10.2.patch
+@@ -2078,3 +2078,14 @@ exit 0
+  
+    return new_type;
+  }
++--- gdb-10.2/gnulib/import/libc-config.h.orig
+++++ gdb-10.2/gnulib/import/libc-config.h
++@@ -156,7 +156,7 @@
++ #undef __warndecl
++ 
++ /* Include our copy of glibc <sys/cdefs.h>.  */
++-#include <cdefs.h>
+++#include <sys/cdefs.h>
++ 
++ /* <cdefs.h> __inline is too pessimistic for non-GCC.  */
++ #undef __inline

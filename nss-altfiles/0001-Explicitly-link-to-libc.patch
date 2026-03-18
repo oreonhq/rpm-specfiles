@@ -1,0 +1,31 @@
+From d8b586ca4108a50c9badce61c8e820779c58e764 Mon Sep 17 00:00:00 2001
+From: Michael Marineau <mike@marineau.org>
+Date: Tue, 17 Dec 2013 22:51:27 -0800
+Subject: [PATCH] Explicitly link to libc.
+
+Previously the library was linked using the -nostdlib flag which made
+ldd --verbose look suspicious but everything still worked by virtue of
+libpthread dynamically linking to libc. I don't know of any particular
+reason for using -nostdlib and the documentation doesn't list it.
+
+http://www.gnu.org/software/libc/manual/html_node/Adding-another-Service-to-NSS.html
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 8d9b7d2..6b56baf 100644
+--- a/Makefile
++++ b/Makefile
+@@ -10,7 +10,7 @@ O := files-pwd.o \
+      files-have_o_cloexec.o
+ 
+ CFLAGS   += $(EXTRA_CFLAGS) -pthread -fpic
+-LDFLAGS  += $(CFLAGS) -Wl,-soname,$T -Wl,-as-needed -nostdlib -lpthread
++LDFLAGS  += $(CFLAGS) -Wl,-soname,$T -Wl,-as-needed -lpthread
+ CPPFLAGS += -D_GNU_SOURCE
+ 
+ ifneq ($(strip $(DATADIR)),)
+-- 
+1.8.3.1
+

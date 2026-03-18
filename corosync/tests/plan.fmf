@@ -1,0 +1,12 @@
+summary: Run all smoke tests
+discover:
+    how: fmf
+execute:
+    how: tmt
+prepare:
+    how: install
+    package:
+        - gcc
+        - iproute
+        - corosync
+        - corosync-devel

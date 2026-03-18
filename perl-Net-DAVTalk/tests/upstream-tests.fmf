@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Net-DAVTalk
+require: perl-Net-DAVTalk-tests
+test: /usr/libexec/perl-Net-DAVTalk/test

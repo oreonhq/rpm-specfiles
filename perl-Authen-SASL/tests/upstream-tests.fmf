@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Authen-SASL
+require: perl-Authen-SASL-tests
+test: /usr/libexec/perl-Authen-SASL/test

@@ -1,0 +1,9 @@
+Description: Smoke test for sg3_dd utility
+
+This test should work on all computers with at least 1 non-removable device
+which has a SCSI layer above. It's not necessary to have a SCSI disk, some ATA
+disks behave in some cases like SCSI disks. Its aim is to test some basic
+functionality provided by sg_dd, sgm_dd, sgp_dd utilities. This test is
+non-destructive, but requires about 512MB free space in /tmp.
+
+There are no related bugzillas.

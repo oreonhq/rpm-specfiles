@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-JSON
+require: perl-JSON-tests
+test: /usr/libexec/perl-JSON/test

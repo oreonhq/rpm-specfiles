@@ -1,0 +1,14 @@
+discover:
+    how: fmf
+    dist-git-source: true
+execute:
+    how: tmt
+prepare:
+  - name: install git-core
+    how: install
+    package:
+     - git-core
+     - micropipenv
+  - name: clone upstream test data
+    how: shell
+    script: git clone https://github.com/thoth-station/micropipenv.git /tmp/micropipenv

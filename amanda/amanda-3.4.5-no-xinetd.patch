@@ -1,0 +1,12 @@
+diff --git a/server-src/amserverconfig.pl b/server-src/amserverconfig.pl
+index 5748dfc..18f59f0 100755
+--- a/server-src/amserverconfig.pl
++++ b/server-src/amserverconfig.pl
+@@ -656,7 +656,6 @@ if ( defined $template ) {
+ &create_customconf;
+ }
+ 
+-&check_xinetd;
+ &build_amanda_ssh_key;
+ 
+ if ( $vtape_err ) {

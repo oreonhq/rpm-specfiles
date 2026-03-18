@@ -1,0 +1,88 @@
+#!/usr/bin/python3
+
+import parted
+import sys
+
+
+def init_disk(disk_img):
+    # Make a disklabel (failures here will raise an error)
+    dev = parted.getDevice(disk_img)
+    disk = parted.freshDisk(dev, "gpt")
+
+    # Make a partition
+    geom = parted.Geometry(device=dev,
+                           start=2048,
+                           end=50*2048)
+    fs = parted.FileSystem(type="ext4", geometry=geom)
+    part = parted.Partition(disk=disk,
+                            type=parted.PARTITION_NORMAL,
+                            fs=fs,
+                            geometry=geom)
+    disk.addPartition(partition=part,
+                      constraint=dev.optimalAlignedConstraint)
+    part.setFlag(parted.PARTITION_BOOT)
+    disk.commit()
+
+def read_disk(disk_img):
+    # Read the disk and check the partitions
+    dev = parted.getDevice(disk_img)
+    disk = parted.newDisk(dev)
+
+    if dev.length == 0:
+        print("ERROR: Disk has no length", file=sys.stderr)
+        sys.exit(1)
+
+    if len(disk.partitions) != 1:
+        print("ERROR: Wrong number of partitions", file=sys.stderr)
+        sys.exit(1)
+
+    part = disk.partitions[0]
+    if part.geometry.end != 50*2048:
+        print("ERROR: Partition is wrong length", file=sys.stderr)
+        sys.exit(1)
+
+    if part.geometry.start != 2048:
+        print("ERROR: Parition doesn't start at sector 2048", file=sys.stderr)
+        sys.exit(1)
+
+
+def remove_partition(disk_img):
+    # Remove partition and check disk
+    dev = parted.getDevice(disk_img)
+    disk = parted.newDisk(dev)
+
+    if len(disk.partitions) != 1:
+        print("ERROR: Wrong number of partitions", file=sys.stderr)
+        sys.exit(1)
+
+    disk.removePartition(partition=disk.partitions[0])
+    disk.commit()
+
+    dev = parted.getDevice(disk_img)
+    disk = parted.newDisk(dev)
+
+    if len(disk.partitions) != 0:
+        print("ERROR: Failed to delete partition", file=sys.stderr)
+        sys.exit(1)
+
+
+def main(disk_img):
+    print(f"Running tests on {disk_img}")
+
+    try:
+        init_disk(disk_img)
+        read_disk(disk_img)
+        remove_partition(disk_img)
+    except Exception as e:
+        print(f"ERROR: {str(e)}", file=sys.stderr)
+        sys.exit(1)
+
+    print("PASS", file=sys.stderr)
+    sys.exit(0)
+
+if __name__ == '__main__':
+    if len(sys.argv) < 2:
+        print("Usage: %s <disk.img>" % sys.argv[0], file=sys.stderr)
+        sys.exit(1)
+
+    main(sys.argv[1])

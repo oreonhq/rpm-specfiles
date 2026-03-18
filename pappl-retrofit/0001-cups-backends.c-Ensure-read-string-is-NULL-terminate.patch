@@ -1,0 +1,25 @@
+From 1780a78ed0b40b7eef769346958b1148fa598be0 Mon Sep 17 00:00:00 2001
+From: Zdenek Dohnal <zdohnal@redhat.com>
+Date: Mon, 16 Dec 2024 14:48:15 +0100
+Subject: [PATCH] cups-backends.c: Ensure read string is NULL-terminated
+
+We read from external program output, make sure we use NULL terminator.
+---
+ pappl-retrofit/cups-backends.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pappl-retrofit/cups-backends.c b/pappl-retrofit/cups-backends.c
+index 9ef3f4d..5cfd78c 100644
+--- a/pappl-retrofit/cups-backends.c
++++ b/pappl-retrofit/cups-backends.c
+@@ -470,6 +470,7 @@ _prCUPSDevList(pappl_device_cb_t cb,
+ 	      //
+ 
+ 	      backends[i].bytes += bytes;
++              backends[i].buf[4095] = '\0';
+ 	      while ((newline = strchr(backends[i].buf, '\n')) != NULL)
+ 	      {
+ 		// We have read at least one line
+-- 
+2.48.1
+

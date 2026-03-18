@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-XS-Parse-Keyword
+require: perl-XS-Parse-Keyword-tests
+test: /usr/libexec/perl-XS-Parse-Keyword/test

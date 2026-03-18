@@ -1,0 +1,23 @@
+From 0e2ad235cbeac76bc139c24d7231b7c70d5c49c4 Mon Sep 17 00:00:00 2001
+From: Mamoru TASAKA <mtasaka@fedoraproject.org>
+Date: Fri, 8 Nov 2024 11:18:56 +0900
+Subject: [PATCH] TEST: explicitly require stringio
+
+Since spec/spec_helper.rb uses StringIO class,
+make this file explicitly require stringio.
+---
+ spec/spec_helper.rb | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/spec/spec_helper.rb b/spec/spec_helper.rb
+index 7689e7bee..205d7ea96 100644
+--- a/spec/spec_helper.rb
++++ b/spec/spec_helper.rb
+@@ -23,6 +23,7 @@
+ $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), "..", "lib"))
+ 
+ require "ostruct"
++require "stringio"
+ require "bson"
+ require "json"
+ require "rspec"

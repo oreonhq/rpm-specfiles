@@ -1,0 +1,436 @@
+From 068bc038d347497891faed2b18a25e0122a6f1dd Mon Sep 17 00:00:00 2001
+From: Reid Wahl <nrwahl@protonmail.com>
+Date: Mon, 29 Dec 2025 00:47:11 -0800
+Subject: [PATCH] Fix: build: Handle CMocka deprecations
+
+This caused CI failures in newer builders.
+
+The check_expected_*() definitions could go in mock.c instead of
+unittest_internal.h. It's unlikely that they'll ever be used in any
+other .c file. However, it seems reasonable to collect everything in one
+place.
+
+Amusingly, CMocka provides macros to check the current CMocka version,
+but they're not available until CMocka 2.0.0.
+
+Signed-off-by: Reid Wahl <nrwahl@protonmail.com>
+---
+ include/crm/common/unittest_internal.h        | 25 +++++++++++++++++++
+ lib/common/mock.c                             | 12 ++++-----
+ .../cmdline/pcmk__new_common_args_test.c      |  6 ++---
+ .../tests/options/pcmk__set_env_option_test.c | 14 +++++------
+ .../tests/output/pcmk__output_new_test.c      |  6 ++---
+ .../procfs/pcmk__procfs_has_pids_false_test.c |  2 +-
+ .../procfs/pcmk__procfs_has_pids_true_test.c  |  2 +-
+ .../tests/procfs/pcmk__procfs_pid2path_test.c |  6 ++---
+ .../tests/scheduler/pcmk_new_scheduler_test.c |  6 ++---
+ .../tests/strings/pcmk__compress_test.c       |  7 +++---
+ lib/common/tests/utils/crm_user_lookup_test.c | 14 +++++------
+ lib/common/tests/utils/pcmk__realloc_test.c   |  4 +--
+ .../tests/utils/pcmk_daemon_user_test.c       |  6 ++---
+ 13 files changed, 68 insertions(+), 42 deletions(-)
+
+diff --git a/include/crm/common/unittest_internal.h b/include/crm/common/unittest_internal.h
+index a877a94f13..d60ba5a3d6 100644
+--- a/include/crm/common/unittest_internal.h
++++ b/include/crm/common/unittest_internal.h
+@@ -38,5 +38,30 @@ extern "C" {
+ 
+ /* internal unit testing related utilities */
+ 
++/* @COMPAT CMocka 2.0.0:
++ * - Deprecated check_expected() in favor of the new check_expected_int() and
++ *   check_expected_uint() (commit ba5b1970).
++ * - Deprecated expect_value() (commit cac1c1d2) in favor of the new
++ *   expect_int_value() and expect_uint_value() (commit bd47d6dd).
++ */
++
++#ifndef check_expected_int
++#define check_expected_int(parameter) check_expected(parameter)
++#endif  // ifndef check_expected_int
++
++#ifndef check_expected_uint
++#define check_expected_uint(parameter) check_expected(parameter)
++#endif  // ifndef check_expected_uint
++
++#ifndef expect_int_value
++#define expect_int_value(function, parameter, value)    \
++    expect_value(function, parameter, value)
++#endif  // ifndef expect_int_value
++
++#ifndef expect_uint_value
++#define expect_uint_value(function, parameter, value)   \
++    expect_value(function, parameter, value)
++#endif  // ifndef expect_uint_value
++
+ #if (PCMK__WITH_COVERAGE == 1)
+ /* This function isn't exposed anywhere.  The following prototype was taken from
+diff --git a/lib/common/mock.c b/lib/common/mock.c
+index c51c350657..88773d7387 100644
+--- a/lib/common/mock.c
++++ b/lib/common/mock.c
+@@ -95,8 +95,8 @@ __wrap_calloc(size_t nmemb, size_t size)
+     if (!pcmk__mock_calloc) {
+         return __real_calloc(nmemb, size);
+     }
+-    check_expected(nmemb);
+-    check_expected(size);
++    check_expected_uint(nmemb);
++    check_expected_uint(size);
+     return NULL;
+ }
+ 
+@@ -145,7 +145,7 @@ __wrap_realloc(void *ptr, size_t size)
+         return __real_realloc(ptr, size);
+     }
+     check_expected_ptr(ptr);
+-    check_expected(size);
++    check_expected_uint(size);
+     return NULL;
+ }
+ 
+@@ -174,7 +174,7 @@ __wrap_setenv(const char *name, const char *value, int overwrite)
+     }
+     check_expected_ptr(name);
+     check_expected_ptr(value);
+-    check_expected(overwrite);
++    check_expected_int(overwrite);
+     errno = mock_type(int);
+     return (errno == 0)? 0 : -1;
+ }
+@@ -385,7 +385,7 @@ __wrap_getpwnam_r(const char *name, struct passwd *pwd, char *buf,
+         check_expected_ptr(name);
+         check_expected_ptr(pwd);
+         check_expected_ptr(buf);
+-        check_expected(buflen);
++        check_expected_uint(buflen);
+         check_expected_ptr(result);
+         *result = mock_ptr_type(struct passwd *);
+         return retval;
+@@ -419,8 +419,7 @@ __wrap_readlink(const char *restrict path, char *restrict buf,
+         const char *contents = NULL;
+ 
+         check_expected_ptr(path);
+-        check_expected(buf);
+-        check_expected(bufsize);
++        check_expected_uint(bufsize);
+         errno = mock_type(int);
+         contents = mock_ptr_type(const char *);
+ 
+diff --git a/lib/common/tests/cmdline/pcmk__new_common_args_test.c b/lib/common/tests/cmdline/pcmk__new_common_args_test.c
+index 6b70465629..11d3d8a315 100644
+--- a/lib/common/tests/cmdline/pcmk__new_common_args_test.c
++++ b/lib/common/tests/cmdline/pcmk__new_common_args_test.c
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2023 the Pacemaker project contributors
++ * Copyright 2023-2026 the Pacemaker project contributors
+  *
+  * The version control history for this file may have further details.
+  *
+@@ -22,8 +22,8 @@ calloc_fails(void **state)
+     pcmk__assert_exits(CRM_EX_OSERR,
+         {
+             pcmk__mock_calloc = true;   // calloc() will return NULL
+-            expect_value(__wrap_calloc, nmemb, 1);
+-            expect_value(__wrap_calloc, size, sizeof(pcmk__common_args_t));
++            expect_uint_value(__wrap_calloc, nmemb, 1);
++            expect_uint_value(__wrap_calloc, size, sizeof(pcmk__common_args_t));
+             pcmk__new_common_args("boring summary");
+             pcmk__mock_calloc = false;  // Use real calloc()
+         }
+diff --git a/lib/common/tests/options/pcmk__set_env_option_test.c b/lib/common/tests/options/pcmk__set_env_option_test.c
+index 22fd795052..dc345c26ec 100644
+--- a/lib/common/tests/options/pcmk__set_env_option_test.c
++++ b/lib/common/tests/options/pcmk__set_env_option_test.c
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2022-2023 the Pacemaker project contributors
++ * Copyright 2022-2026 the Pacemaker project contributors
+  *
+  * The version control history for this file may have further details.
+  *
+@@ -85,7 +85,7 @@ input_too_long_for_pcmk(void **state)
+ 
+     expect_string(__wrap_setenv, name, buf);
+     expect_string(__wrap_setenv, value, "new_value");
+-    expect_value(__wrap_setenv, overwrite, 1);
++    expect_int_value(__wrap_setenv, overwrite, 1);
+     will_return(__wrap_setenv, 0);
+     pcmk__set_env_option(long_opt, "new_value", true);
+ 
+@@ -109,22 +109,22 @@ valid_inputs_set(void **state)
+ 
+     expect_string(__wrap_setenv, name, "PCMK_env_var");
+     expect_string(__wrap_setenv, value, "new_value");
+-    expect_value(__wrap_setenv, overwrite, 1);
++    expect_int_value(__wrap_setenv, overwrite, 1);
+     will_return(__wrap_setenv, 0);
+     expect_string(__wrap_setenv, name, "HA_env_var");
+     expect_string(__wrap_setenv, value, "new_value");
+-    expect_value(__wrap_setenv, overwrite, 1);
++    expect_int_value(__wrap_setenv, overwrite, 1);
+     will_return(__wrap_setenv, 0);
+     pcmk__set_env_option("env_var", "new_value", true);
+ 
+     // Empty string is also a valid value
+     expect_string(__wrap_setenv, name, "PCMK_env_var");
+     expect_string(__wrap_setenv, value, "");
+-    expect_value(__wrap_setenv, overwrite, 1);
++    expect_int_value(__wrap_setenv, overwrite, 1);
+     will_return(__wrap_setenv, 0);
+     expect_string(__wrap_setenv, name, "HA_env_var");
+     expect_string(__wrap_setenv, value, "");
+-    expect_value(__wrap_setenv, overwrite, 1);
++    expect_int_value(__wrap_setenv, overwrite, 1);
+     will_return(__wrap_setenv, 0);
+     pcmk__set_env_option("env_var", "", true);
+ 
+@@ -154,7 +154,7 @@ disable_compat(void **state)
+ 
+     expect_string(__wrap_setenv, name, "PCMK_env_var");
+     expect_string(__wrap_setenv, value, "new_value");
+-    expect_value(__wrap_setenv, overwrite, 1);
++    expect_int_value(__wrap_setenv, overwrite, 1);
+     will_return(__wrap_setenv, 0);
+     pcmk__set_env_option("env_var", "new_value", false);
+ 
+diff --git a/lib/common/tests/output/pcmk__output_new_test.c b/lib/common/tests/output/pcmk__output_new_test.c
+index a05d9a715f..3f8bf7f996 100644
+--- a/lib/common/tests/output/pcmk__output_new_test.c
++++ b/lib/common/tests/output/pcmk__output_new_test.c
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2022-2023 the Pacemaker project contributors
++ * Copyright 2022-2026 the Pacemaker project contributors
+  *
+  * The version control history for this file may have further details.
+  *
+@@ -83,8 +83,8 @@ create_fails(void **state) {
+ 
+     pcmk__mock_calloc = true;   // calloc() will return NULL
+ 
+-    expect_value(__wrap_calloc, nmemb, 1);
+-    expect_value(__wrap_calloc, size, sizeof(pcmk__output_t));
++    expect_uint_value(__wrap_calloc, nmemb, 1);
++    expect_uint_value(__wrap_calloc, size, sizeof(pcmk__output_t));
+     assert_int_equal(pcmk__output_new(&out, "text", NULL, NULL), ENOMEM);
+ 
+     pcmk__mock_calloc = false;  // Use real calloc()
+diff --git a/lib/common/tests/procfs/pcmk__procfs_has_pids_false_test.c b/lib/common/tests/procfs/pcmk__procfs_has_pids_false_test.c
+index f6cdee3348..f69a427f00 100644
+--- a/lib/common/tests/procfs/pcmk__procfs_has_pids_false_test.c
++++ b/lib/common/tests/procfs/pcmk__procfs_has_pids_false_test.c
+@@ -29,8 +29,7 @@ no_pids(void **state)
+     pcmk__mock_readlink = true;
+ 
+     expect_string(__wrap_readlink, path, path);
+-    expect_any(__wrap_readlink, buf);
+-    expect_value(__wrap_readlink, bufsize, PATH_MAX - 1);
++    expect_uint_value(__wrap_readlink, bufsize, PATH_MAX - 1);
+     will_return(__wrap_readlink, ENOENT);
+     will_return(__wrap_readlink, NULL);
+ 
+diff --git a/lib/common/tests/procfs/pcmk__procfs_has_pids_true_test.c b/lib/common/tests/procfs/pcmk__procfs_has_pids_true_test.c
+index 4d907da4ec..7888436666 100644
+--- a/lib/common/tests/procfs/pcmk__procfs_has_pids_true_test.c
++++ b/lib/common/tests/procfs/pcmk__procfs_has_pids_true_test.c
+@@ -28,8 +28,7 @@ has_pids(void **state)
+     pcmk__mock_readlink = true;
+ 
+     expect_string(__wrap_readlink, path, path);
+-    expect_any(__wrap_readlink, buf);
+-    expect_value(__wrap_readlink, bufsize, PATH_MAX - 1);
++    expect_uint_value(__wrap_readlink, bufsize, PATH_MAX - 1);
+     will_return(__wrap_readlink, 0);
+     will_return(__wrap_readlink, "/ok");
+ 
+diff --git a/lib/common/tests/procfs/pcmk__procfs_pid2path_test.c b/lib/common/tests/procfs/pcmk__procfs_pid2path_test.c
+index 1cea2a353d..d3b3f8acb2 100644
+--- a/lib/common/tests/procfs/pcmk__procfs_pid2path_test.c
++++ b/lib/common/tests/procfs/pcmk__procfs_pid2path_test.c
+@@ -27,8 +27,7 @@ no_exe_file(void **state)
+     pcmk__mock_readlink = true;
+ 
+     expect_string(__wrap_readlink, path, "/proc/1000/exe");
+-    expect_value(__wrap_readlink, buf, path);
+-    expect_value(__wrap_readlink, bufsize, len - 1);
++    expect_uint_value(__wrap_readlink, bufsize, len - 1);
+     will_return(__wrap_readlink, ENOENT);
+     will_return(__wrap_readlink, NULL);
+ 
+@@ -48,8 +48,7 @@ contents_too_long(void **state)
+     pcmk__mock_readlink = true;
+ 
+     expect_string(__wrap_readlink, path, "/proc/1000/exe");
+-    expect_value(__wrap_readlink, buf, path);
+-    expect_value(__wrap_readlink, bufsize, len - 1);
++    expect_uint_value(__wrap_readlink, bufsize, len - 1);
+     will_return(__wrap_readlink, 0);
+     will_return(__wrap_readlink, "/more/than/10/characters");
+ 
+@@ -70,8 +70,7 @@ contents_ok(void **state)
+     pcmk__mock_readlink = true;
+ 
+     expect_string(__wrap_readlink, path, "/proc/1000/exe");
+-    expect_value(__wrap_readlink, buf, path);
+-    expect_value(__wrap_readlink, bufsize, len - 1);
++    expect_uint_value(__wrap_readlink, bufsize, len - 1);
+     will_return(__wrap_readlink, 0);
+     will_return(__wrap_readlink, "/ok");
+ 
+diff --git a/lib/common/tests/scheduler/pcmk_new_scheduler_test.c b/lib/common/tests/scheduler/pcmk_new_scheduler_test.c
+index e7545df762..51218bcfef 100644
+--- a/lib/common/tests/scheduler/pcmk_new_scheduler_test.c
++++ b/lib/common/tests/scheduler/pcmk_new_scheduler_test.c
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2022-2024 the Pacemaker project contributors
++ * Copyright 2022-2026 the Pacemaker project contributors
+  *
+  * The version control history for this file may have further details.
+  *
+@@ -19,8 +19,8 @@ calloc_fails(void **state)
+ {
+     pcmk__mock_calloc = true;   // calloc() will return NULL
+ 
+-    expect_value(__wrap_calloc, nmemb, 1);
+-    expect_value(__wrap_calloc, size, sizeof(pcmk_scheduler_t));
++    expect_uint_value(__wrap_calloc, nmemb, 1);
++    expect_uint_value(__wrap_calloc, size, sizeof(pcmk_scheduler_t));
+     assert_null(pcmk_new_scheduler());
+ 
+     pcmk__mock_calloc = false;  // Use real calloc()
+diff --git a/lib/common/tests/strings/pcmk__compress_test.c b/lib/common/tests/strings/pcmk__compress_test.c
+index 813bcdbeb1..0dd2fcdc79 100644
+--- a/lib/common/tests/strings/pcmk__compress_test.c
++++ b/lib/common/tests/strings/pcmk__compress_test.c
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2022-2024 the Pacemaker project contributors
++ * Copyright 2022-2026 the Pacemaker project contributors
+  *
+  * The version control history for this file may have further details.
+  *
+@@ -45,8 +45,9 @@ calloc_fails(void **state) {
+         CRM_EX_OSERR,
+         {
+             pcmk__mock_calloc = true;   // calloc() will return NULL
+-            expect_value(__wrap_calloc, nmemb, (size_t) ((40 * 1.01) + 601));
+-            expect_value(__wrap_calloc, size, sizeof(char));
++            expect_uint_value(__wrap_calloc, nmemb,
++                              (size_t) ((40 * 1.01) + 601));
++            expect_uint_value(__wrap_calloc, size, sizeof(char));
+             pcmk__compress(SIMPLE_DATA, 40, 0, &result, &len);
+             pcmk__mock_calloc = false;  // Use the real calloc()
+         }
+diff --git a/lib/common/tests/utils/crm_user_lookup_test.c b/lib/common/tests/utils/crm_user_lookup_test.c
+index 5842ec5027..e9df74f6e2 100644
+--- a/lib/common/tests/utils/crm_user_lookup_test.c
++++ b/lib/common/tests/utils/crm_user_lookup_test.c
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2022 the Pacemaker project contributors
++ * Copyright 2022-2026 the Pacemaker project contributors
+  *
+  * The version control history for this file may have further details.
+  *
+@@ -25,8 +25,8 @@ calloc_fails(void **state)
+ 
+     pcmk__mock_calloc = true;   // calloc() will return NULL
+ 
+-    expect_value(__wrap_calloc, nmemb, 1);
+-    expect_value(__wrap_calloc, size, PCMK__PW_BUFFER_LEN);
++    expect_uint_value(__wrap_calloc, nmemb, 1);
++    expect_uint_value(__wrap_calloc, size, PCMK__PW_BUFFER_LEN);
+     assert_int_equal(crm_user_lookup("hauser", &uid, &gid), -ENOMEM);
+ 
+     pcmk__mock_calloc = false;  // Use real calloc()
+@@ -44,7 +44,7 @@ getpwnam_r_fails(void **state)
+     expect_string(__wrap_getpwnam_r, name, "hauser");
+     expect_any(__wrap_getpwnam_r, pwd);
+     expect_any(__wrap_getpwnam_r, buf);
+-    expect_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
++    expect_uint_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
+     expect_any(__wrap_getpwnam_r, result);
+     will_return(__wrap_getpwnam_r, EIO);
+     will_return(__wrap_getpwnam_r, NULL);
+@@ -66,7 +66,7 @@ no_matching_pwent(void **state)
+     expect_string(__wrap_getpwnam_r, name, "hauser");
+     expect_any(__wrap_getpwnam_r, pwd);
+     expect_any(__wrap_getpwnam_r, buf);
+-    expect_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
++    expect_uint_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
+     expect_any(__wrap_getpwnam_r, result);
+     will_return(__wrap_getpwnam_r, 0);
+     will_return(__wrap_getpwnam_r, NULL);
+@@ -95,7 +95,7 @@ entry_found(void **state)
+     expect_string(__wrap_getpwnam_r, name, "hauser");
+     expect_any(__wrap_getpwnam_r, pwd);
+     expect_any(__wrap_getpwnam_r, buf);
+-    expect_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
++    expect_uint_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
+     expect_any(__wrap_getpwnam_r, result);
+     will_return(__wrap_getpwnam_r, 0);
+     will_return(__wrap_getpwnam_r, &returned_ent);
+@@ -108,7 +108,7 @@ entry_found(void **state)
+     expect_string(__wrap_getpwnam_r, name, "hauser");
+     expect_any(__wrap_getpwnam_r, pwd);
+     expect_any(__wrap_getpwnam_r, buf);
+-    expect_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
++    expect_uint_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
+     expect_any(__wrap_getpwnam_r, result);
+     will_return(__wrap_getpwnam_r, 0);
+     will_return(__wrap_getpwnam_r, &returned_ent);
+diff --git a/lib/common/tests/utils/pcmk__realloc_test.c b/lib/common/tests/utils/pcmk__realloc_test.c
+index 62d51df1f6..7efd884fdc 100644
+--- a/lib/common/tests/utils/pcmk__realloc_test.c
++++ b/lib/common/tests/utils/pcmk__realloc_test.c
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2024 the Pacemaker project contributors
++ * Copyright 2024-2026 the Pacemaker project contributors
+  *
+  * The version control history for this file may have further details.
+  *
+@@ -30,7 +30,7 @@ realloc_fails(void **state)
+         {
+             pcmk__mock_realloc = true;   // realloc() will return NULL
+             expect_any(__wrap_realloc, ptr);
+-            expect_value(__wrap_realloc, size, 1000);
++            expect_uint_value(__wrap_realloc, size, 1000);
+             pcmk__realloc(ptr, 1000);
+             pcmk__mock_realloc = false;  // Use real realloc()
+         }
+diff --git a/lib/common/tests/utils/pcmk_daemon_user_test.c b/lib/common/tests/utils/pcmk_daemon_user_test.c
+index a63ca73735..3c54c2d430 100644
+--- a/lib/common/tests/utils/pcmk_daemon_user_test.c
++++ b/lib/common/tests/utils/pcmk_daemon_user_test.c
+@@ -1,5 +1,5 @@
+ /*
+- * Copyright 2022 the Pacemaker project contributors
++ * Copyright 2022-2026 the Pacemaker project contributors
+  *
+  * The version control history for this file may have further details.
+  *
+@@ -29,7 +29,7 @@ no_matching_pwent(void **state)
+     expect_string(__wrap_getpwnam_r, name, "hacluster");
+     expect_any(__wrap_getpwnam_r, pwd);
+     expect_any(__wrap_getpwnam_r, buf);
+-    expect_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
++    expect_uint_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
+     expect_any(__wrap_getpwnam_r, result);
+     will_return(__wrap_getpwnam_r, ENOENT);
+     will_return(__wrap_getpwnam_r, NULL);
+@@ -58,7 +58,7 @@ entry_found(void **state)
+     expect_string(__wrap_getpwnam_r, name, "hacluster");
+     expect_any(__wrap_getpwnam_r, pwd);
+     expect_any(__wrap_getpwnam_r, buf);
+-    expect_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
++    expect_uint_value(__wrap_getpwnam_r, buflen, PCMK__PW_BUFFER_LEN);
+     expect_any(__wrap_getpwnam_r, result);
+     will_return(__wrap_getpwnam_r, 0);
+     will_return(__wrap_getpwnam_r, &returned_ent);
+-- 
+2.52.0
+

@@ -1,0 +1,3 @@
+/upstream:
+  summary: Run upstream tests
+  test: ./upstream/runtest.sh

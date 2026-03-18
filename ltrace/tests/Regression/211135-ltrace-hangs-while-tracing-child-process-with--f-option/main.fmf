@@ -1,0 +1,17 @@
+summary: ltrace hangs while tracing child process with -f option
+description: |
+    ltrace could possibly crash/hang when tracing fork() on ppc/ppc64
+    in ltrace with option "-f".
+contact: Michal Nowak <mnowak@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- glibc-devel
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=211135
+extra-summary: /tools/ltrace/Regression/211135-ltrace-hangs-while-tracing-child-process-with--f-option
+extra-task: /tools/ltrace/Regression/211135-ltrace-hangs-while-tracing-child-process-with--f-option

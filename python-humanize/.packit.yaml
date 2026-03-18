@@ -1,0 +1,26 @@
+---
+# See the documentation for more information:
+# https://packit.dev/docs/configuration/
+
+upstream_project_url: https://github.com/python-humanize/humanize
+copy_upstream_release_description: false
+upstream_tag_include: '^\d+\.\d+\.\d+$'
+
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - fedora-rawhide
+      - epel10
+  - job: koji_build
+    trigger: commit
+    allowed_committers: ['packit','all_admins']
+    dist_git_branches:
+      - fedora-rawhide
+      - epel10
+  - job: bodhi_update
+    trigger: commit
+    allowed_builders: ['packit','all_users']
+    dist_git_branches:
+      - fedora-rawhide
+      - epel10

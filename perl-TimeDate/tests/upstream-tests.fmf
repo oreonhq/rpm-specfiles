@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-TimeDate
+require: perl-TimeDate-tests
+test: /usr/libexec/perl-TimeDate/test

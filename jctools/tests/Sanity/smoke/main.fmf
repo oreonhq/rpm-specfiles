@@ -1,0 +1,6 @@
+summary: jctools smoke test
+description: |
+  Test basic functionality of jctools.
+require:
+  - jctools
+  - java-21-openjdk-devel

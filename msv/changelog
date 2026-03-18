@@ -1,0 +1,12 @@
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 2022.7-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 2022.7-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 2022.7-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Mon Aug 07 2023 Marian Koncek <mkoncek@redhat.com> - 2022.7-1
+- Package unretired
+- Update to upstream version 2022.7

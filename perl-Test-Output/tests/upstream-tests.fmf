@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Test-Output
+require: perl-Test-Output-tests
+test: /usr/libexec/perl-Test-Output/test

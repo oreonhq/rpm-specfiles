@@ -1,0 +1,17 @@
+summary: Fonts related tests
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/fonts
+prepare:
+    name: tmt
+    how: install
+    package: rit-meera-new-fonts
+execute:
+    how: tmt
+environment:
+    PACKAGE: rit-meera-new-fonts
+    FONT_ALIAS: sans-serif
+    FONT_FAMILY: RIT Meera New
+    FONT_LANG: ml
+    DEFAULT_SANS: 1
+    DEFAULT_MONO: 1

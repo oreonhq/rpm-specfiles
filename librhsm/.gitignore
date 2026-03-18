@@ -1,0 +1,5 @@
+*~
+*.swp
+/*.tar.gz
+/librhsm-*/
+/librhsm-0.0.4.tar.gz.asc

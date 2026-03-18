@@ -1,0 +1,20 @@
+* Tue Jul 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 0.0.13-3
+- Second attempt - Rebuilt for
+  https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Tue Jun  8 2021 Davide Cavalca <dcavalca@fedoraproject.org> - 0.0.13-2
+- Backport fix for s390x and drop the ExcludeArch
+
+* Tue Jun  8 2021 Davide Cavalca <dcavalca@fedoraproject.org> - 0.0.13-1
+- Update to 0.0.13
+- Drop no longer needed ExcludeArch for armv7hl and i686
+
+* Fri Jun 04 2021 Python Maint <python-maint@redhat.com> - 0.0.11-3
+- Rebuilt for Python 3.10
+
+* Tue Apr  6 2021 Davide Cavalca <dcavalca@fedoraproject.org> - 0.0.11-2
+- Make doc subpackage noarch
+- Add license file
+
+* Tue Apr  6 2021 Davide Cavalca <dcavalca@fedoraproject.org> - 0.0.11-1
+- Initial package.

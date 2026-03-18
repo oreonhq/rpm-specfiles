@@ -1,0 +1,40 @@
+From 54c0a2cce45ad385d793d494e62222cd254a866a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Tom=C3=A1=C5=A1=20Hozza?= <thozza@redhat.com>
+Date: Wed, 31 Jul 2024 18:12:24 +0200
+Subject: [PATCH] Test/dnf4.mark: adjust the test for markings used by DNF5
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+When I rolled back from using 'dnf4', to check package markings, to
+using 'dnf', I didn't verify the test case on Fedora Rawhide with DNF5.
+It turns out that the strings reported by DNF5 differ and make the test
+case fail. This time I tested the change on Fedora Rawhide with DNF5 and
+it works.
+
+Signed-off-by: Tomáš Hozza <thozza@redhat.com>
+---
+ test/run/test_stages.py | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/test/run/test_stages.py b/test/run/test_stages.py
+index dc91bf8f..7fec10c8 100644
+--- a/test/run/test_stages.py
++++ b/test/run/test_stages.py
+@@ -565,9 +565,11 @@ class TestStages(test.TestBase):
+                     raise
+ 
+                 if package == "dnf":
+-                    assert mark == "user"
++                    # dnf4 marks packages as 'user', while dnf5 marks them as 'User'
++                    assert mark in ("user", "User")
+                 else:
+-                    assert mark == "unknown"
++                    # dnf4 marks packages as 'unknown', while dnf5 marks them as 'External User'
++                    assert mark in ("unknown", "External User")
+ 
+     @unittest.skipUnless(test.TestBase.has_filesystem_support("btrfs"), "btrfs needed")
+     def test_btrfs(self):
+-- 
+2.45.2
+

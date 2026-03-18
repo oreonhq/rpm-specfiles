@@ -1,0 +1,21 @@
+summary: Fonts related tests
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/fonts
+    exclude:
+      - generic_alias
+      - lang_coverage
+prepare:
+    name: tmt
+    how: install
+    package: kurdit-unikurd-web-fonts
+execute:
+    how: tmt
+environment:
+    PACKAGE: kurdit-unikurd-web-fonts
+    FONT_ALIAS: sans-serif
+    FONT_FAMILY: Unikurd Web
+    FONT_LANG: ku
+    DEFAULT_SANS: 2
+    DEFAULT_SERIF: 2
+    DEFAULT_MONO: 2

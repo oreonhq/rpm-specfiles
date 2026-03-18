@@ -1,0 +1,2 @@
+addFilter('spelling-error \(\'Nestable\'')
+addFilter('-tests\.noarch: W: no-documentation')

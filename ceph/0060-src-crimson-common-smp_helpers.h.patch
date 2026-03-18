@@ -1,0 +1,10 @@
+--- ceph-20.2.0/src/crimson/common/smp_helpers.h.orig	2025-12-04 10:38:34.906915674 -0500
++++ ceph-20.2.0/src/crimson/common/smp_helpers.h	2025-12-04 10:38:45.200845804 -0500
+@@ -8,6 +8,7 @@
+ #include <optional>
+ #include <type_traits>
+ #include <vector>
++#include <coroutine>
+ 
+ #include <seastar/core/shared_future.hh>
+ #include <seastar/core/smp.hh>

@@ -1,0 +1,63 @@
+From daad20dd1224fd273428b292a3e86aa30754b61e Mon Sep 17 00:00:00 2001
+From: neilfsun <loyou85@gmail.com>
+Date: Thu, 4 Dec 2025 22:27:47 +0800
+Subject: [PATCH 18/23] Fix external command output not redirected to pipe
+
+When executing external commands (cat, etc.) with pipes,
+the command output was not properly redirected to the pipe.
+
+  crash> cat /tmp/testfile
+  line1
+  line2
+  line3
+  crash> cat /tmp/testfile | head -1
+  line1
+  line2
+  line3
+  crash>
+
+Signed-off-by: neilfsun <neilfsun@tencent.com>
+Signed-off-by: Feng Sun <loyou85@gmail.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ main.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/main.c b/main.c
+index 536f862b0716..2e6e633f7d10 100644
+--- a/main.c
++++ b/main.c
+@@ -1045,6 +1045,8 @@ is_external_command(void)
+ 	int i;
+ 	char *cmd;
+ 	char command[BUFSIZE];
++	FILE *pipe;
++	char buf[BUFSIZE];
+ 
+ 	cmd = args[0];
+ 
+@@ -1068,8 +1070,19 @@ is_external_command(void)
+ 			else
+                         	strcat(command, args[i]);
+                 }
+-                if (system(command) == -1)
+-			perror(command);
++
++		if (pc->redirect & REDIRECT_TO_PIPE) {
++			if ((pipe = popen(command, "r")) == NULL) {
++				error(INFO, "cannot execute: %s\n", command);
++				return TRUE;
++			}
++			while (fgets(buf, BUFSIZE, pipe))
++				fputs(buf, fp);
++			pclose(pipe);
++		} else {
++			if (system(command) == -1)
++				perror(command);
++		}
+                 return TRUE;
+         }
+ 
+-- 
+2.51.1
+

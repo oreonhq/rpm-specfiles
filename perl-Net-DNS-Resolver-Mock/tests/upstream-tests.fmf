@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Net-DNS-Resolver-Mock
+require: perl-Net-DNS-Resolver-Mock-tests
+test: /usr/libexec/perl-Net-DNS-Resolver-Mock/test

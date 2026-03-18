@@ -1,0 +1,4 @@
+PURPOSE of /CoreOS/cronie/Regression/run-with-syslog-flag
+Description: Test for cronie has a bug when run with syslog flag
+Author: Jakub Prokes <jprokes@redhat.com>
+Bug summary: cronie has a bug when run with syslog flag

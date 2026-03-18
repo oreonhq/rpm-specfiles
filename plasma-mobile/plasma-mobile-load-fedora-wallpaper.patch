@@ -1,0 +1,19 @@
+diff --git a/initialstart/qml/LandingComponent.qml b/initialstart/qml/LandingComponent.qml
+index a908c3930..c6cc63ef2 100644
+--- a/initialstart/qml/LandingComponent.qml
++++ b/initialstart/qml/LandingComponent.qml
+@@ -45,10 +45,10 @@ Item {
+ 
+         source: {
+             // Default wallpaper background
+-            // Needs to be in-sync with breeze/wallpapers/Next/contents/images
+-            const imgFile = isLandscape ? '5120x2880.png' : '1440x2960.png';
+-            const lightWallpaperFolder = 'wallpapers/Next/contents/images/';
+-            const darkWallpaperFolder = 'wallpapers/Next/contents/images_dark/';
++            // Needs to be in-sync with breeze/wallpapers/Default/contents/images
++            const imgFile = '3840x2160.jxl';
++            const lightWallpaperFolder = 'wallpapers/Default/contents/images/';
++            const darkWallpaperFolder = 'wallpapers/Default/contents/images_dark/';
+ 
+             const wallpaperUrl = StandardPaths.locate(
+                 StandardPaths.GenericDataLocation,

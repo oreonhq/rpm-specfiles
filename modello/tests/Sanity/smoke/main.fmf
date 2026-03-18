@@ -1,0 +1,6 @@
+summary: modello smoke test
+description: |
+  Test basic functionality of modello.
+require:
+  - modello
+  - java-21-openjdk-devel

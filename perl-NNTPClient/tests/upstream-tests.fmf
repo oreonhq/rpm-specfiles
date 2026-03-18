@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-NNTPClient
+require: perl-NNTPClient-tests
+test: /usr/libexec/perl-NNTPClient/test

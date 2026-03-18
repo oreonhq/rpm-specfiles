@@ -1,0 +1,3137 @@
+From 93592dabc1355490c16d1b80a8a39d059a7429e9 Mon Sep 17 00:00:00 2001
+From: Achilleas Koutsou <achilleas@koutsou.net>
+Date: Mon, 25 Jul 2022 22:07:13 +0200
+Subject: [PATCH 2/7] test: regenerate manifests
+
+---
+ .../manifests/centos_8-aarch64-ami-boot.json     |  8 ++++----
+ .../centos_8-aarch64-qcow2_customize-boot.json   |  8 ++++----
+ .../centos_8-ppc64le-qcow2_customize-boot.json   |  8 ++++----
+ .../centos_8-x86_64-qcow2_customize-boot.json    |  8 ++++----
+ .../manifests/centos_9-aarch64-ami-boot.json     |  8 ++++----
+ .../centos_9-aarch64-openstack-boot.json         |  8 ++++----
+ .../manifests/centos_9-aarch64-qcow2-boot.json   |  8 ++++----
+ .../centos_9-aarch64-qcow2_customize-boot.json   |  8 ++++----
+ .../manifests/centos_9-ppc64le-qcow2-boot.json   |  8 ++++----
+ .../centos_9-ppc64le-qcow2_customize-boot.json   |  8 ++++----
+ .../manifests/centos_9-s390x-qcow2-boot.json     |  8 ++++----
+ .../centos_9-s390x-qcow2_customize-boot.json     |  8 ++++----
+ .../data/manifests/centos_9-x86_64-ami-boot.json |  8 ++++----
+ .../data/manifests/centos_9-x86_64-gce-boot.json |  8 ++++----
+ .../data/manifests/centos_9-x86_64-oci-boot.json |  8 ++++----
+ .../centos_9-x86_64-openstack-boot.json          |  8 ++++----
+ .../manifests/centos_9-x86_64-qcow2-boot.json    |  8 ++++----
+ .../centos_9-x86_64-qcow2_customize-boot.json    |  8 ++++----
+ .../data/manifests/centos_9-x86_64-vhd-boot.json |  8 ++++----
+ .../manifests/centos_9-x86_64-vmdk-boot.json     |  8 ++++----
+ .../manifests/fedora_35-aarch64-ami-boot.json    |  8 ++++----
+ .../manifests/fedora_35-aarch64-oci-boot.json    |  8 ++++----
+ .../fedora_35-aarch64-openstack-boot.json        |  8 ++++----
+ .../manifests/fedora_35-aarch64-qcow2-boot.json  |  8 ++++----
+ .../fedora_35-aarch64-qcow2_customize-boot.json  |  8 ++++----
+ .../manifests/fedora_35-x86_64-ami-boot.json     |  8 ++++----
+ .../manifests/fedora_35-x86_64-oci-boot.json     |  8 ++++----
+ .../fedora_35-x86_64-openstack-boot.json         |  8 ++++----
+ .../manifests/fedora_35-x86_64-qcow2-boot.json   |  8 ++++----
+ .../fedora_35-x86_64-qcow2_customize-boot.json   |  8 ++++----
+ .../manifests/fedora_35-x86_64-vhd-boot.json     |  8 ++++----
+ .../manifests/fedora_35-x86_64-vmdk-boot.json    |  8 ++++----
+ .../manifests/fedora_36-aarch64-ami-boot.json    |  8 ++++----
+ .../manifests/fedora_36-aarch64-oci-boot.json    |  8 ++++----
+ .../fedora_36-aarch64-openstack-boot.json        |  8 ++++----
+ .../manifests/fedora_36-aarch64-qcow2-boot.json  |  8 ++++----
+ .../fedora_36-aarch64-qcow2_customize-boot.json  |  8 ++++----
+ .../manifests/fedora_36-x86_64-ami-boot.json     |  8 ++++----
+ .../manifests/fedora_36-x86_64-oci-boot.json     |  8 ++++----
+ .../fedora_36-x86_64-openstack-boot.json         |  8 ++++----
+ .../manifests/fedora_36-x86_64-qcow2-boot.json   |  8 ++++----
+ .../fedora_36-x86_64-qcow2_customize-boot.json   |  8 ++++----
+ .../manifests/fedora_36-x86_64-vhd-boot.json     |  8 ++++----
+ .../manifests/fedora_36-x86_64-vmdk-boot.json    |  8 ++++----
+ .../manifests/rhel_7-x86_64-azure_rhui-boot.json | 16 ++++++++--------
+ .../data/manifests/rhel_7-x86_64-qcow2-boot.json |  8 ++++----
+ .../rhel_7-x86_64-qcow2_customize-boot.json      |  8 ++++----
+ test/data/manifests/rhel_8-aarch64-ami-boot.json |  8 ++++----
+ test/data/manifests/rhel_8-aarch64-ec2-boot.json |  8 ++++----
+ .../manifests/rhel_8-x86_64-azure_rhui-boot.json | 16 ++++++++--------
+ .../data/manifests/rhel_84-aarch64-ami-boot.json |  8 ++++----
+ .../data/manifests/rhel_84-aarch64-ec2-boot.json |  8 ++++----
+ .../rhel_84-x86_64-azure_rhui-boot.json          | 16 ++++++++--------
+ .../data/manifests/rhel_85-aarch64-ami-boot.json |  8 ++++----
+ .../data/manifests/rhel_85-aarch64-ec2-boot.json |  8 ++++----
+ .../rhel_85-aarch64-qcow2_customize-boot.json    | 12 ++++++------
+ .../rhel_85-ppc64le-qcow2_customize-boot.json    | 12 ++++++------
+ .../rhel_85-s390x-qcow2_customize-boot.json      | 12 ++++++------
+ .../rhel_85-x86_64-azure_rhui-boot.json          | 16 ++++++++--------
+ .../rhel_85-x86_64-qcow2_customize-boot.json     | 12 ++++++------
+ .../data/manifests/rhel_86-aarch64-ami-boot.json |  8 ++++----
+ .../data/manifests/rhel_86-aarch64-ec2-boot.json |  8 ++++----
+ .../rhel_86-aarch64-qcow2_customize-boot.json    |  8 ++++----
+ .../rhel_86-ppc64le-qcow2_customize-boot.json    |  8 ++++----
+ .../rhel_86-s390x-qcow2_customize-boot.json      |  8 ++++----
+ .../rhel_86-x86_64-azure_rhui-boot.json          | 16 ++++++++--------
+ .../rhel_86-x86_64-qcow2_customize-boot.json     |  8 ++++----
+ .../data/manifests/rhel_87-aarch64-ami-boot.json |  8 ++++----
+ .../data/manifests/rhel_87-aarch64-ec2-boot.json |  8 ++++----
+ .../rhel_87-aarch64-qcow2_customize-boot.json    |  8 ++++----
+ .../rhel_87-ppc64le-qcow2_customize-boot.json    |  8 ++++----
+ .../rhel_87-s390x-qcow2_customize-boot.json      |  8 ++++----
+ .../rhel_87-x86_64-azure_rhui-boot.json          | 16 ++++++++--------
+ .../rhel_87-x86_64-qcow2_customize-boot.json     |  8 ++++----
+ .../data/manifests/rhel_90-aarch64-ami-boot.json |  8 ++++----
+ .../data/manifests/rhel_90-aarch64-ec2-boot.json |  8 ++++----
+ .../rhel_90-aarch64-openstack-boot.json          |  8 ++++----
+ .../manifests/rhel_90-aarch64-qcow2-boot.json    |  8 ++++----
+ .../rhel_90-aarch64-qcow2_customize-boot.json    |  8 ++++----
+ .../manifests/rhel_90-ppc64le-qcow2-boot.json    |  8 ++++----
+ .../rhel_90-ppc64le-qcow2_customize-boot.json    |  8 ++++----
+ .../data/manifests/rhel_90-s390x-qcow2-boot.json |  8 ++++----
+ .../rhel_90-s390x-qcow2_customize-boot.json      |  8 ++++----
+ test/data/manifests/rhel_90-x86_64-ami-boot.json |  8 ++++----
+ .../rhel_90-x86_64-azure_rhui-boot.json          | 16 ++++++++--------
+ test/data/manifests/rhel_90-x86_64-ec2-boot.json |  8 ++++----
+ .../manifests/rhel_90-x86_64-ec2_ha-boot.json    |  8 ++++----
+ .../manifests/rhel_90-x86_64-ec2_sap-boot.json   |  8 ++++----
+ test/data/manifests/rhel_90-x86_64-gce-boot.json |  8 ++++----
+ .../manifests/rhel_90-x86_64-gce_rhui-boot.json  |  8 ++++----
+ test/data/manifests/rhel_90-x86_64-oci-boot.json |  8 ++++----
+ .../manifests/rhel_90-x86_64-openstack-boot.json |  8 ++++----
+ .../manifests/rhel_90-x86_64-qcow2-boot.json     |  8 ++++----
+ .../rhel_90-x86_64-qcow2_customize-boot.json     |  8 ++++----
+ test/data/manifests/rhel_90-x86_64-vhd-boot.json |  8 ++++----
+ .../data/manifests/rhel_90-x86_64-vmdk-boot.json |  8 ++++----
+ .../data/manifests/rhel_91-aarch64-ami-boot.json |  8 ++++----
+ .../data/manifests/rhel_91-aarch64-ec2-boot.json |  8 ++++----
+ .../rhel_91-aarch64-openstack-boot.json          |  8 ++++----
+ .../manifests/rhel_91-aarch64-qcow2-boot.json    |  8 ++++----
+ .../rhel_91-aarch64-qcow2_customize-boot.json    |  8 ++++----
+ .../manifests/rhel_91-ppc64le-qcow2-boot.json    |  8 ++++----
+ .../rhel_91-ppc64le-qcow2_customize-boot.json    |  8 ++++----
+ .../data/manifests/rhel_91-s390x-qcow2-boot.json |  8 ++++----
+ .../rhel_91-s390x-qcow2_customize-boot.json      |  8 ++++----
+ test/data/manifests/rhel_91-x86_64-ami-boot.json |  8 ++++----
+ .../rhel_91-x86_64-azure_rhui-boot.json          | 16 ++++++++--------
+ test/data/manifests/rhel_91-x86_64-ec2-boot.json |  8 ++++----
+ .../manifests/rhel_91-x86_64-ec2_ha-boot.json    |  8 ++++----
+ .../manifests/rhel_91-x86_64-ec2_sap-boot.json   |  8 ++++----
+ test/data/manifests/rhel_91-x86_64-gce-boot.json |  8 ++++----
+ .../manifests/rhel_91-x86_64-gce_rhui-boot.json  |  8 ++++----
+ test/data/manifests/rhel_91-x86_64-oci-boot.json |  8 ++++----
+ .../manifests/rhel_91-x86_64-openstack-boot.json |  8 ++++----
+ .../manifests/rhel_91-x86_64-qcow2-boot.json     |  8 ++++----
+ .../rhel_91-x86_64-qcow2_customize-boot.json     |  8 ++++----
+ test/data/manifests/rhel_91-x86_64-vhd-boot.json |  8 ++++----
+ .../data/manifests/rhel_91-x86_64-vmdk-boot.json |  8 ++++----
+ 118 files changed, 512 insertions(+), 512 deletions(-)
+
+diff --git a/test/data/manifests/centos_8-aarch64-ami-boot.json b/test/data/manifests/centos_8-aarch64-ami-boot.json
+index 794b45fd9..3f50f6d0b 100644
+--- a/test/data/manifests/centos_8-aarch64-ami-boot.json
++++ b/test/data/manifests/centos_8-aarch64-ami-boot.json
+@@ -5394,15 +5394,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_8-aarch64-qcow2_customize-boot.json b/test/data/manifests/centos_8-aarch64-qcow2_customize-boot.json
+index ed7d0d6a4..989785166 100644
+--- a/test/data/manifests/centos_8-aarch64-qcow2_customize-boot.json
++++ b/test/data/manifests/centos_8-aarch64-qcow2_customize-boot.json
+@@ -5919,15 +5919,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_8-ppc64le-qcow2_customize-boot.json b/test/data/manifests/centos_8-ppc64le-qcow2_customize-boot.json
+index c1e539395..8d79188fe 100644
+--- a/test/data/manifests/centos_8-ppc64le-qcow2_customize-boot.json
++++ b/test/data/manifests/centos_8-ppc64le-qcow2_customize-boot.json
+@@ -6327,15 +6327,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/centos_8-x86_64-qcow2_customize-boot.json b/test/data/manifests/centos_8-x86_64-qcow2_customize-boot.json
+index a86133aea..ededf68ae 100644
+--- a/test/data/manifests/centos_8-x86_64-qcow2_customize-boot.json
++++ b/test/data/manifests/centos_8-x86_64-qcow2_customize-boot.json
+@@ -6015,15 +6015,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-aarch64-ami-boot.json b/test/data/manifests/centos_9-aarch64-ami-boot.json
+index 6ef5b47c6..fdf7a0f12 100644
+--- a/test/data/manifests/centos_9-aarch64-ami-boot.json
++++ b/test/data/manifests/centos_9-aarch64-ami-boot.json
+@@ -5106,15 +5106,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-aarch64-openstack-boot.json b/test/data/manifests/centos_9-aarch64-openstack-boot.json
+index 8198a1d72..c5524d6e4 100644
+--- a/test/data/manifests/centos_9-aarch64-openstack-boot.json
++++ b/test/data/manifests/centos_9-aarch64-openstack-boot.json
+@@ -5077,15 +5077,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-aarch64-qcow2-boot.json b/test/data/manifests/centos_9-aarch64-qcow2-boot.json
+index b8844174c..deab2b3bb 100644
+--- a/test/data/manifests/centos_9-aarch64-qcow2-boot.json
++++ b/test/data/manifests/centos_9-aarch64-qcow2-boot.json
+@@ -5123,15 +5123,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-aarch64-qcow2_customize-boot.json b/test/data/manifests/centos_9-aarch64-qcow2_customize-boot.json
+index 09129cebc..41aab3a09 100644
+--- a/test/data/manifests/centos_9-aarch64-qcow2_customize-boot.json
++++ b/test/data/manifests/centos_9-aarch64-qcow2_customize-boot.json
+@@ -5368,15 +5368,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-ppc64le-qcow2-boot.json b/test/data/manifests/centos_9-ppc64le-qcow2-boot.json
+index ba43a8a85..9841ebd04 100644
+--- a/test/data/manifests/centos_9-ppc64le-qcow2-boot.json
++++ b/test/data/manifests/centos_9-ppc64le-qcow2-boot.json
+@@ -5611,15 +5611,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/centos_9-ppc64le-qcow2_customize-boot.json b/test/data/manifests/centos_9-ppc64le-qcow2_customize-boot.json
+index 0e3f77a56..075778eae 100644
+--- a/test/data/manifests/centos_9-ppc64le-qcow2_customize-boot.json
++++ b/test/data/manifests/centos_9-ppc64le-qcow2_customize-boot.json
+@@ -5856,15 +5856,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-s390x-qcow2-boot.json b/test/data/manifests/centos_9-s390x-qcow2-boot.json
+index fc7ff00ec..42b6d1b53 100644
+--- a/test/data/manifests/centos_9-s390x-qcow2-boot.json
++++ b/test/data/manifests/centos_9-s390x-qcow2-boot.json
+@@ -6307,15 +6307,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/centos_9-s390x-qcow2_customize-boot.json b/test/data/manifests/centos_9-s390x-qcow2_customize-boot.json
+index bda4a3c53..12acf2102 100644
+--- a/test/data/manifests/centos_9-s390x-qcow2_customize-boot.json
++++ b/test/data/manifests/centos_9-s390x-qcow2_customize-boot.json
+@@ -6552,15 +6552,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-x86_64-ami-boot.json b/test/data/manifests/centos_9-x86_64-ami-boot.json
+index cb4c58e48..3a28c32b7 100644
+--- a/test/data/manifests/centos_9-x86_64-ami-boot.json
++++ b/test/data/manifests/centos_9-x86_64-ami-boot.json
+@@ -4958,15 +4958,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-x86_64-gce-boot.json b/test/data/manifests/centos_9-x86_64-gce-boot.json
+index 69ffa9bcd..26e5bc025 100644
+--- a/test/data/manifests/centos_9-x86_64-gce-boot.json
++++ b/test/data/manifests/centos_9-x86_64-gce-boot.json
+@@ -5150,15 +5150,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-x86_64-oci-boot.json b/test/data/manifests/centos_9-x86_64-oci-boot.json
+index 5276ba905..0e10ee831 100644
+--- a/test/data/manifests/centos_9-x86_64-oci-boot.json
++++ b/test/data/manifests/centos_9-x86_64-oci-boot.json
+@@ -5262,15 +5262,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-x86_64-openstack-boot.json b/test/data/manifests/centos_9-x86_64-openstack-boot.json
+index 66fef9366..d0be2ab65 100644
+--- a/test/data/manifests/centos_9-x86_64-openstack-boot.json
++++ b/test/data/manifests/centos_9-x86_64-openstack-boot.json
+@@ -5341,15 +5341,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-x86_64-qcow2-boot.json b/test/data/manifests/centos_9-x86_64-qcow2-boot.json
+index bf1e91698..69b2b0858 100644
+--- a/test/data/manifests/centos_9-x86_64-qcow2-boot.json
++++ b/test/data/manifests/centos_9-x86_64-qcow2-boot.json
+@@ -5283,15 +5283,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-x86_64-qcow2_customize-boot.json b/test/data/manifests/centos_9-x86_64-qcow2_customize-boot.json
+index d878b2c6c..6bc13d306 100644
+--- a/test/data/manifests/centos_9-x86_64-qcow2_customize-boot.json
++++ b/test/data/manifests/centos_9-x86_64-qcow2_customize-boot.json
+@@ -5624,15 +5624,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-x86_64-vhd-boot.json b/test/data/manifests/centos_9-x86_64-vhd-boot.json
+index 3460bf9d0..85eeea69f 100644
+--- a/test/data/manifests/centos_9-x86_64-vhd-boot.json
++++ b/test/data/manifests/centos_9-x86_64-vhd-boot.json
+@@ -5287,15 +5287,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/centos_9-x86_64-vmdk-boot.json b/test/data/manifests/centos_9-x86_64-vmdk-boot.json
+index 6d82a4eaf..112ad3c66 100644
+--- a/test/data/manifests/centos_9-x86_64-vmdk-boot.json
++++ b/test/data/manifests/centos_9-x86_64-vmdk-boot.json
+@@ -5341,15 +5341,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-aarch64-ami-boot.json b/test/data/manifests/fedora_35-aarch64-ami-boot.json
+index 080c28936..5f38d751b 100644
+--- a/test/data/manifests/fedora_35-aarch64-ami-boot.json
++++ b/test/data/manifests/fedora_35-aarch64-ami-boot.json
+@@ -4475,15 +4475,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-aarch64-oci-boot.json b/test/data/manifests/fedora_35-aarch64-oci-boot.json
+index 31c0d9b0f..8392d0ac4 100644
+--- a/test/data/manifests/fedora_35-aarch64-oci-boot.json
++++ b/test/data/manifests/fedora_35-aarch64-oci-boot.json
+@@ -4478,15 +4478,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-aarch64-openstack-boot.json b/test/data/manifests/fedora_35-aarch64-openstack-boot.json
+index e5f9ffb79..e56d64af1 100644
+--- a/test/data/manifests/fedora_35-aarch64-openstack-boot.json
++++ b/test/data/manifests/fedora_35-aarch64-openstack-boot.json
+@@ -4690,15 +4690,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-aarch64-qcow2-boot.json b/test/data/manifests/fedora_35-aarch64-qcow2-boot.json
+index 6de4f4e51..2f4d6aa69 100644
+--- a/test/data/manifests/fedora_35-aarch64-qcow2-boot.json
++++ b/test/data/manifests/fedora_35-aarch64-qcow2-boot.json
+@@ -4499,15 +4499,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-aarch64-qcow2_customize-boot.json b/test/data/manifests/fedora_35-aarch64-qcow2_customize-boot.json
+index 992d9898c..bb97b0b22 100644
+--- a/test/data/manifests/fedora_35-aarch64-qcow2_customize-boot.json
++++ b/test/data/manifests/fedora_35-aarch64-qcow2_customize-boot.json
+@@ -4746,15 +4746,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-x86_64-ami-boot.json b/test/data/manifests/fedora_35-x86_64-ami-boot.json
+index f62e9efea..55069473c 100644
+--- a/test/data/manifests/fedora_35-x86_64-ami-boot.json
++++ b/test/data/manifests/fedora_35-x86_64-ami-boot.json
+@@ -4467,15 +4467,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-x86_64-oci-boot.json b/test/data/manifests/fedora_35-x86_64-oci-boot.json
+index e711f8a87..be5322155 100644
+--- a/test/data/manifests/fedora_35-x86_64-oci-boot.json
++++ b/test/data/manifests/fedora_35-x86_64-oci-boot.json
+@@ -4590,15 +4590,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-x86_64-openstack-boot.json b/test/data/manifests/fedora_35-x86_64-openstack-boot.json
+index 920890fe4..1e433be13 100644
+--- a/test/data/manifests/fedora_35-x86_64-openstack-boot.json
++++ b/test/data/manifests/fedora_35-x86_64-openstack-boot.json
+@@ -4730,15 +4730,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-x86_64-qcow2-boot.json b/test/data/manifests/fedora_35-x86_64-qcow2-boot.json
+index 145639f60..7afa91c26 100644
+--- a/test/data/manifests/fedora_35-x86_64-qcow2-boot.json
++++ b/test/data/manifests/fedora_35-x86_64-qcow2-boot.json
+@@ -4611,15 +4611,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-x86_64-qcow2_customize-boot.json b/test/data/manifests/fedora_35-x86_64-qcow2_customize-boot.json
+index 0e0725dd8..405e21747 100644
+--- a/test/data/manifests/fedora_35-x86_64-qcow2_customize-boot.json
++++ b/test/data/manifests/fedora_35-x86_64-qcow2_customize-boot.json
+@@ -4858,15 +4858,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-x86_64-vhd-boot.json b/test/data/manifests/fedora_35-x86_64-vhd-boot.json
+index c21037594..82de48e04 100644
+--- a/test/data/manifests/fedora_35-x86_64-vhd-boot.json
++++ b/test/data/manifests/fedora_35-x86_64-vhd-boot.json
+@@ -4349,15 +4349,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_35-x86_64-vmdk-boot.json b/test/data/manifests/fedora_35-x86_64-vmdk-boot.json
+index 2f43cb8fa..44b3a0924 100644
+--- a/test/data/manifests/fedora_35-x86_64-vmdk-boot.json
++++ b/test/data/manifests/fedora_35-x86_64-vmdk-boot.json
+@@ -4610,15 +4610,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-aarch64-ami-boot.json b/test/data/manifests/fedora_36-aarch64-ami-boot.json
+index 69f940c31..2bbcc0592 100644
+--- a/test/data/manifests/fedora_36-aarch64-ami-boot.json
++++ b/test/data/manifests/fedora_36-aarch64-ami-boot.json
+@@ -4843,15 +4843,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-aarch64-oci-boot.json b/test/data/manifests/fedora_36-aarch64-oci-boot.json
+index dc446f507..8938266ad 100644
+--- a/test/data/manifests/fedora_36-aarch64-oci-boot.json
++++ b/test/data/manifests/fedora_36-aarch64-oci-boot.json
+@@ -4830,15 +4830,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-aarch64-openstack-boot.json b/test/data/manifests/fedora_36-aarch64-openstack-boot.json
+index 76522173c..c4d682e0b 100644
+--- a/test/data/manifests/fedora_36-aarch64-openstack-boot.json
++++ b/test/data/manifests/fedora_36-aarch64-openstack-boot.json
+@@ -5074,15 +5074,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-aarch64-qcow2-boot.json b/test/data/manifests/fedora_36-aarch64-qcow2-boot.json
+index 71933ad89..1cff618ea 100644
+--- a/test/data/manifests/fedora_36-aarch64-qcow2-boot.json
++++ b/test/data/manifests/fedora_36-aarch64-qcow2-boot.json
+@@ -4851,15 +4851,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-aarch64-qcow2_customize-boot.json b/test/data/manifests/fedora_36-aarch64-qcow2_customize-boot.json
+index 25b8c3045..5baf99da2 100644
+--- a/test/data/manifests/fedora_36-aarch64-qcow2_customize-boot.json
++++ b/test/data/manifests/fedora_36-aarch64-qcow2_customize-boot.json
+@@ -5272,15 +5272,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-x86_64-ami-boot.json b/test/data/manifests/fedora_36-x86_64-ami-boot.json
+index 3eaaf39db..b65b00853 100644
+--- a/test/data/manifests/fedora_36-x86_64-ami-boot.json
++++ b/test/data/manifests/fedora_36-x86_64-ami-boot.json
+@@ -4883,15 +4883,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-x86_64-oci-boot.json b/test/data/manifests/fedora_36-x86_64-oci-boot.json
+index 11989cc48..b553f026a 100644
+--- a/test/data/manifests/fedora_36-x86_64-oci-boot.json
++++ b/test/data/manifests/fedora_36-x86_64-oci-boot.json
+@@ -4974,15 +4974,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-x86_64-openstack-boot.json b/test/data/manifests/fedora_36-x86_64-openstack-boot.json
+index 1084e6529..aeebca1e9 100644
+--- a/test/data/manifests/fedora_36-x86_64-openstack-boot.json
++++ b/test/data/manifests/fedora_36-x86_64-openstack-boot.json
+@@ -5154,15 +5154,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-x86_64-qcow2-boot.json b/test/data/manifests/fedora_36-x86_64-qcow2-boot.json
+index 4a52decbf..50d3a68da 100644
+--- a/test/data/manifests/fedora_36-x86_64-qcow2-boot.json
++++ b/test/data/manifests/fedora_36-x86_64-qcow2-boot.json
+@@ -4995,15 +4995,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-x86_64-qcow2_customize-boot.json b/test/data/manifests/fedora_36-x86_64-qcow2_customize-boot.json
+index f9dfcb237..e22bab7a0 100644
+--- a/test/data/manifests/fedora_36-x86_64-qcow2_customize-boot.json
++++ b/test/data/manifests/fedora_36-x86_64-qcow2_customize-boot.json
+@@ -5416,15 +5416,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-x86_64-vhd-boot.json b/test/data/manifests/fedora_36-x86_64-vhd-boot.json
+index ef89f8d77..c69fc86a5 100644
+--- a/test/data/manifests/fedora_36-x86_64-vhd-boot.json
++++ b/test/data/manifests/fedora_36-x86_64-vhd-boot.json
+@@ -4797,15 +4797,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/fedora_36-x86_64-vmdk-boot.json b/test/data/manifests/fedora_36-x86_64-vmdk-boot.json
+index 35f37f26d..42e17839d 100644
+--- a/test/data/manifests/fedora_36-x86_64-vmdk-boot.json
++++ b/test/data/manifests/fedora_36-x86_64-vmdk-boot.json
+@@ -4994,15 +4994,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "ext4",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "ext4",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_7-x86_64-azure_rhui-boot.json b/test/data/manifests/rhel_7-x86_64-azure_rhui-boot.json
+index 056fb5a72..28ac15b54 100644
+--- a/test/data/manifests/rhel_7-x86_64-azure_rhui-boot.json
++++ b/test/data/manifests/rhel_7-x86_64-azure_rhui-boot.json
+@@ -2501,9 +2501,9 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+@@ -2518,12 +2518,6 @@
+                   "path": "/home",
+                   "options": "defaults"
+                 },
+-                {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+-                  "vfs_type": "xfs",
+-                  "path": "/",
+-                  "options": "defaults"
+-                },
+                 {
+                   "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+@@ -2536,6 +2530,12 @@
+                   "path": "/usr",
+                   "options": "defaults"
+                 },
++                {
++                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "vfs_type": "xfs",
++                  "path": "/var",
++                  "options": "defaults"
++                },
+                 {
+                   "uuid": "7B77-95E7",
+                   "vfs_type": "vfat",
+diff --git a/test/data/manifests/rhel_7-x86_64-qcow2-boot.json b/test/data/manifests/rhel_7-x86_64-qcow2-boot.json
+index 89c820e40..b98e16d7c 100644
+--- a/test/data/manifests/rhel_7-x86_64-qcow2-boot.json
++++ b/test/data/manifests/rhel_7-x86_64-qcow2-boot.json
+@@ -1693,15 +1693,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_7-x86_64-qcow2_customize-boot.json b/test/data/manifests/rhel_7-x86_64-qcow2_customize-boot.json
+index f25fcc26f..db8681ec4 100644
+--- a/test/data/manifests/rhel_7-x86_64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_7-x86_64-qcow2_customize-boot.json
+@@ -1810,15 +1810,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_8-aarch64-ami-boot.json b/test/data/manifests/rhel_8-aarch64-ami-boot.json
+index 5e3764c76..385b7c67f 100644
+--- a/test/data/manifests/rhel_8-aarch64-ami-boot.json
++++ b/test/data/manifests/rhel_8-aarch64-ami-boot.json
+@@ -2242,15 +2242,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_8-aarch64-ec2-boot.json b/test/data/manifests/rhel_8-aarch64-ec2-boot.json
+index d99e766f2..be81fd0a4 100644
+--- a/test/data/manifests/rhel_8-aarch64-ec2-boot.json
++++ b/test/data/manifests/rhel_8-aarch64-ec2-boot.json
+@@ -2258,15 +2258,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_8-x86_64-azure_rhui-boot.json b/test/data/manifests/rhel_8-x86_64-azure_rhui-boot.json
+index 37769e43e..e6fd0d254 100644
+--- a/test/data/manifests/rhel_8-x86_64-azure_rhui-boot.json
++++ b/test/data/manifests/rhel_8-x86_64-azure_rhui-boot.json
+@@ -2974,9 +2974,9 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+@@ -2991,12 +2991,6 @@
+                   "path": "/home",
+                   "options": "defaults"
+                 },
+-                {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+-                  "vfs_type": "xfs",
+-                  "path": "/",
+-                  "options": "defaults"
+-                },
+                 {
+                   "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+@@ -3009,6 +3003,12 @@
+                   "path": "/usr",
+                   "options": "defaults"
+                 },
++                {
++                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "vfs_type": "xfs",
++                  "path": "/var",
++                  "options": "defaults"
++                },
+                 {
+                   "uuid": "7B77-95E7",
+                   "vfs_type": "vfat",
+diff --git a/test/data/manifests/rhel_84-aarch64-ami-boot.json b/test/data/manifests/rhel_84-aarch64-ami-boot.json
+index e46182437..3de4303f7 100644
+--- a/test/data/manifests/rhel_84-aarch64-ami-boot.json
++++ b/test/data/manifests/rhel_84-aarch64-ami-boot.json
+@@ -2275,15 +2275,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_84-aarch64-ec2-boot.json b/test/data/manifests/rhel_84-aarch64-ec2-boot.json
+index efcaabc48..0760bb0b5 100644
+--- a/test/data/manifests/rhel_84-aarch64-ec2-boot.json
++++ b/test/data/manifests/rhel_84-aarch64-ec2-boot.json
+@@ -2291,15 +2291,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_84-x86_64-azure_rhui-boot.json b/test/data/manifests/rhel_84-x86_64-azure_rhui-boot.json
+index df23e2c6d..d31052e39 100644
+--- a/test/data/manifests/rhel_84-x86_64-azure_rhui-boot.json
++++ b/test/data/manifests/rhel_84-x86_64-azure_rhui-boot.json
+@@ -3004,9 +3004,9 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+@@ -3021,12 +3021,6 @@
+                   "path": "/home",
+                   "options": "defaults"
+                 },
+-                {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+-                  "vfs_type": "xfs",
+-                  "path": "/",
+-                  "options": "defaults"
+-                },
+                 {
+                   "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+@@ -3039,6 +3033,12 @@
+                   "path": "/usr",
+                   "options": "defaults"
+                 },
++                {
++                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "vfs_type": "xfs",
++                  "path": "/var",
++                  "options": "defaults"
++                },
+                 {
+                   "uuid": "7B77-95E7",
+                   "vfs_type": "vfat",
+diff --git a/test/data/manifests/rhel_85-aarch64-ami-boot.json b/test/data/manifests/rhel_85-aarch64-ami-boot.json
+index 7e2554607..bd1087d1a 100644
+--- a/test/data/manifests/rhel_85-aarch64-ami-boot.json
++++ b/test/data/manifests/rhel_85-aarch64-ami-boot.json
+@@ -2239,15 +2239,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_85-aarch64-ec2-boot.json b/test/data/manifests/rhel_85-aarch64-ec2-boot.json
+index 9c6502025..ec6468445 100644
+--- a/test/data/manifests/rhel_85-aarch64-ec2-boot.json
++++ b/test/data/manifests/rhel_85-aarch64-ec2-boot.json
+@@ -2255,15 +2255,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_85-aarch64-qcow2_customize-boot.json b/test/data/manifests/rhel_85-aarch64-qcow2_customize-boot.json
+index 164827c93..d25e7e6ef 100644
+--- a/test/data/manifests/rhel_85-aarch64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_85-aarch64-qcow2_customize-boot.json
+@@ -2457,21 +2457,21 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+-                  "path": "/usr",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/usr",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/var",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_85-ppc64le-qcow2_customize-boot.json b/test/data/manifests/rhel_85-ppc64le-qcow2_customize-boot.json
+index 587d8bedf..2d7827c1f 100644
+--- a/test/data/manifests/rhel_85-ppc64le-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_85-ppc64le-qcow2_customize-boot.json
+@@ -2619,21 +2619,21 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+-                  "path": "/usr",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/usr",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/var",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/rhel_85-s390x-qcow2_customize-boot.json b/test/data/manifests/rhel_85-s390x-qcow2_customize-boot.json
+index 4839005e3..860fc0bbc 100644
+--- a/test/data/manifests/rhel_85-s390x-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_85-s390x-qcow2_customize-boot.json
+@@ -2725,21 +2725,21 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+-                  "path": "/usr",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/usr",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/var",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/rhel_85-x86_64-azure_rhui-boot.json b/test/data/manifests/rhel_85-x86_64-azure_rhui-boot.json
+index cd88a9e4e..af79bcb3f 100644
+--- a/test/data/manifests/rhel_85-x86_64-azure_rhui-boot.json
++++ b/test/data/manifests/rhel_85-x86_64-azure_rhui-boot.json
+@@ -2977,9 +2977,9 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+@@ -2994,12 +2994,6 @@
+                   "path": "/home",
+                   "options": "defaults"
+                 },
+-                {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+-                  "vfs_type": "xfs",
+-                  "path": "/",
+-                  "options": "defaults"
+-                },
+                 {
+                   "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+@@ -3012,6 +3006,12 @@
+                   "path": "/usr",
+                   "options": "defaults"
+                 },
++                {
++                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "vfs_type": "xfs",
++                  "path": "/var",
++                  "options": "defaults"
++                },
+                 {
+                   "uuid": "7B77-95E7",
+                   "vfs_type": "vfat",
+diff --git a/test/data/manifests/rhel_85-x86_64-qcow2_customize-boot.json b/test/data/manifests/rhel_85-x86_64-qcow2_customize-boot.json
+index 775bc8fa8..20d01c464 100644
+--- a/test/data/manifests/rhel_85-x86_64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_85-x86_64-qcow2_customize-boot.json
+@@ -2496,21 +2496,21 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+-                  "path": "/usr",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/usr",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/var",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_86-aarch64-ami-boot.json b/test/data/manifests/rhel_86-aarch64-ami-boot.json
+index f4b8b5287..03f5b4561 100644
+--- a/test/data/manifests/rhel_86-aarch64-ami-boot.json
++++ b/test/data/manifests/rhel_86-aarch64-ami-boot.json
+@@ -2242,15 +2242,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_86-aarch64-ec2-boot.json b/test/data/manifests/rhel_86-aarch64-ec2-boot.json
+index 886ec3b7e..b2580e1e2 100644
+--- a/test/data/manifests/rhel_86-aarch64-ec2-boot.json
++++ b/test/data/manifests/rhel_86-aarch64-ec2-boot.json
+@@ -2258,15 +2258,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_86-aarch64-qcow2_customize-boot.json b/test/data/manifests/rhel_86-aarch64-qcow2_customize-boot.json
+index 6ff790c9a..09cd6d41c 100644
+--- a/test/data/manifests/rhel_86-aarch64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_86-aarch64-qcow2_customize-boot.json
+@@ -2458,15 +2458,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_86-ppc64le-qcow2_customize-boot.json b/test/data/manifests/rhel_86-ppc64le-qcow2_customize-boot.json
+index 43e468bba..df0b7d87b 100644
+--- a/test/data/manifests/rhel_86-ppc64le-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_86-ppc64le-qcow2_customize-boot.json
+@@ -2611,15 +2611,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/rhel_86-s390x-qcow2_customize-boot.json b/test/data/manifests/rhel_86-s390x-qcow2_customize-boot.json
+index 1607b6b6a..13f5c7a67 100644
+--- a/test/data/manifests/rhel_86-s390x-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_86-s390x-qcow2_customize-boot.json
+@@ -2708,15 +2708,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/rhel_86-x86_64-azure_rhui-boot.json b/test/data/manifests/rhel_86-x86_64-azure_rhui-boot.json
+index 4e19073e4..694c3f305 100644
+--- a/test/data/manifests/rhel_86-x86_64-azure_rhui-boot.json
++++ b/test/data/manifests/rhel_86-x86_64-azure_rhui-boot.json
+@@ -2974,9 +2974,9 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+@@ -2991,12 +2991,6 @@
+                   "path": "/home",
+                   "options": "defaults"
+                 },
+-                {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+-                  "vfs_type": "xfs",
+-                  "path": "/",
+-                  "options": "defaults"
+-                },
+                 {
+                   "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+@@ -3009,6 +3003,12 @@
+                   "path": "/usr",
+                   "options": "defaults"
+                 },
++                {
++                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "vfs_type": "xfs",
++                  "path": "/var",
++                  "options": "defaults"
++                },
+                 {
+                   "uuid": "7B77-95E7",
+                   "vfs_type": "vfat",
+diff --git a/test/data/manifests/rhel_86-x86_64-qcow2_customize-boot.json b/test/data/manifests/rhel_86-x86_64-qcow2_customize-boot.json
+index af2a3457c..762209754 100644
+--- a/test/data/manifests/rhel_86-x86_64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_86-x86_64-qcow2_customize-boot.json
+@@ -2497,15 +2497,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_87-aarch64-ami-boot.json b/test/data/manifests/rhel_87-aarch64-ami-boot.json
+index a35807b30..aae84ddb4 100644
+--- a/test/data/manifests/rhel_87-aarch64-ami-boot.json
++++ b/test/data/manifests/rhel_87-aarch64-ami-boot.json
+@@ -2239,15 +2239,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_87-aarch64-ec2-boot.json b/test/data/manifests/rhel_87-aarch64-ec2-boot.json
+index 66debbde6..37ce166ff 100644
+--- a/test/data/manifests/rhel_87-aarch64-ec2-boot.json
++++ b/test/data/manifests/rhel_87-aarch64-ec2-boot.json
+@@ -2255,15 +2255,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_87-aarch64-qcow2_customize-boot.json b/test/data/manifests/rhel_87-aarch64-qcow2_customize-boot.json
+index 459bd7472..aef32364f 100644
+--- a/test/data/manifests/rhel_87-aarch64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_87-aarch64-qcow2_customize-boot.json
+@@ -2458,15 +2458,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_87-ppc64le-qcow2_customize-boot.json b/test/data/manifests/rhel_87-ppc64le-qcow2_customize-boot.json
+index cc63c4335..772f9b489 100644
+--- a/test/data/manifests/rhel_87-ppc64le-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_87-ppc64le-qcow2_customize-boot.json
+@@ -2611,15 +2611,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/rhel_87-s390x-qcow2_customize-boot.json b/test/data/manifests/rhel_87-s390x-qcow2_customize-boot.json
+index 8dbdcc94b..97fb5a1eb 100644
+--- a/test/data/manifests/rhel_87-s390x-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_87-s390x-qcow2_customize-boot.json
+@@ -2708,15 +2708,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/rhel_87-x86_64-azure_rhui-boot.json b/test/data/manifests/rhel_87-x86_64-azure_rhui-boot.json
+index ed1ab4479..30502377f 100644
+--- a/test/data/manifests/rhel_87-x86_64-azure_rhui-boot.json
++++ b/test/data/manifests/rhel_87-x86_64-azure_rhui-boot.json
+@@ -2974,9 +2974,9 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+@@ -2991,12 +2991,6 @@
+                   "path": "/home",
+                   "options": "defaults"
+                 },
+-                {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+-                  "vfs_type": "xfs",
+-                  "path": "/",
+-                  "options": "defaults"
+-                },
+                 {
+                   "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+@@ -3009,6 +3003,12 @@
+                   "path": "/usr",
+                   "options": "defaults"
+                 },
++                {
++                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "vfs_type": "xfs",
++                  "path": "/var",
++                  "options": "defaults"
++                },
+                 {
+                   "uuid": "7B77-95E7",
+                   "vfs_type": "vfat",
+diff --git a/test/data/manifests/rhel_87-x86_64-qcow2_customize-boot.json b/test/data/manifests/rhel_87-x86_64-qcow2_customize-boot.json
+index b06069625..bea677832 100644
+--- a/test/data/manifests/rhel_87-x86_64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_87-x86_64-qcow2_customize-boot.json
+@@ -2497,15 +2497,15 @@
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/opt",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/opt",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-aarch64-ami-boot.json b/test/data/manifests/rhel_90-aarch64-ami-boot.json
+index c9938f785..97ca58cca 100644
+--- a/test/data/manifests/rhel_90-aarch64-ami-boot.json
++++ b/test/data/manifests/rhel_90-aarch64-ami-boot.json
+@@ -2127,15 +2127,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-aarch64-ec2-boot.json b/test/data/manifests/rhel_90-aarch64-ec2-boot.json
+index 9d03c0200..5f599126c 100644
+--- a/test/data/manifests/rhel_90-aarch64-ec2-boot.json
++++ b/test/data/manifests/rhel_90-aarch64-ec2-boot.json
+@@ -2146,15 +2146,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-aarch64-openstack-boot.json b/test/data/manifests/rhel_90-aarch64-openstack-boot.json
+index d82ad98a2..7e5c39d8a 100644
+--- a/test/data/manifests/rhel_90-aarch64-openstack-boot.json
++++ b/test/data/manifests/rhel_90-aarch64-openstack-boot.json
+@@ -2029,15 +2029,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-aarch64-qcow2-boot.json b/test/data/manifests/rhel_90-aarch64-qcow2-boot.json
+index e6bdf52db..55d3842ac 100644
+--- a/test/data/manifests/rhel_90-aarch64-qcow2-boot.json
++++ b/test/data/manifests/rhel_90-aarch64-qcow2-boot.json
+@@ -2078,15 +2078,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-aarch64-qcow2_customize-boot.json b/test/data/manifests/rhel_90-aarch64-qcow2_customize-boot.json
+index ac82ac613..7a59c46f0 100644
+--- a/test/data/manifests/rhel_90-aarch64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_90-aarch64-qcow2_customize-boot.json
+@@ -2243,15 +2243,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-ppc64le-qcow2-boot.json b/test/data/manifests/rhel_90-ppc64le-qcow2-boot.json
+index 57108772b..a3669fcc5 100644
+--- a/test/data/manifests/rhel_90-ppc64le-qcow2-boot.json
++++ b/test/data/manifests/rhel_90-ppc64le-qcow2-boot.json
+@@ -2267,15 +2267,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/rhel_90-ppc64le-qcow2_customize-boot.json b/test/data/manifests/rhel_90-ppc64le-qcow2_customize-boot.json
+index e0e2e0217..cc63042ee 100644
+--- a/test/data/manifests/rhel_90-ppc64le-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_90-ppc64le-qcow2_customize-boot.json
+@@ -2432,15 +2432,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-s390x-qcow2-boot.json b/test/data/manifests/rhel_90-s390x-qcow2-boot.json
+index 46e90ffbf..e6aea9d19 100644
+--- a/test/data/manifests/rhel_90-s390x-qcow2-boot.json
++++ b/test/data/manifests/rhel_90-s390x-qcow2-boot.json
+@@ -2525,15 +2525,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/rhel_90-s390x-qcow2_customize-boot.json b/test/data/manifests/rhel_90-s390x-qcow2_customize-boot.json
+index 81237a27f..338a3c9aa 100644
+--- a/test/data/manifests/rhel_90-s390x-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_90-s390x-qcow2_customize-boot.json
+@@ -2690,15 +2690,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-ami-boot.json b/test/data/manifests/rhel_90-x86_64-ami-boot.json
+index 5169a2d1c..5e6843ad6 100644
+--- a/test/data/manifests/rhel_90-x86_64-ami-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-ami-boot.json
+@@ -2085,15 +2085,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-azure_rhui-boot.json b/test/data/manifests/rhel_90-x86_64-azure_rhui-boot.json
+index 4887364bf..a6e611861 100644
+--- a/test/data/manifests/rhel_90-x86_64-azure_rhui-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-azure_rhui-boot.json
+@@ -2827,9 +2827,9 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+@@ -2844,12 +2844,6 @@
+                   "path": "/home",
+                   "options": "defaults"
+                 },
+-                {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+-                  "vfs_type": "xfs",
+-                  "path": "/",
+-                  "options": "defaults"
+-                },
+                 {
+                   "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+@@ -2862,6 +2856,12 @@
+                   "path": "/usr",
+                   "options": "defaults"
+                 },
++                {
++                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "vfs_type": "xfs",
++                  "path": "/var",
++                  "options": "defaults"
++                },
+                 {
+                   "uuid": "7B77-95E7",
+                   "vfs_type": "vfat",
+diff --git a/test/data/manifests/rhel_90-x86_64-ec2-boot.json b/test/data/manifests/rhel_90-x86_64-ec2-boot.json
+index e94e820e6..1304d42b1 100644
+--- a/test/data/manifests/rhel_90-x86_64-ec2-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-ec2-boot.json
+@@ -2106,15 +2106,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-ec2_ha-boot.json b/test/data/manifests/rhel_90-x86_64-ec2_ha-boot.json
+index ca7890825..0aa4b2658 100644
+--- a/test/data/manifests/rhel_90-x86_64-ec2_ha-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-ec2_ha-boot.json
+@@ -2678,15 +2678,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-ec2_sap-boot.json b/test/data/manifests/rhel_90-x86_64-ec2_sap-boot.json
+index 73ed7859b..a6702dce3 100644
+--- a/test/data/manifests/rhel_90-x86_64-ec2_sap-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-ec2_sap-boot.json
+@@ -3661,15 +3661,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-gce-boot.json b/test/data/manifests/rhel_90-x86_64-gce-boot.json
+index 1119d6c0a..26530bb18 100644
+--- a/test/data/manifests/rhel_90-x86_64-gce-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-gce-boot.json
+@@ -2177,15 +2177,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-gce_rhui-boot.json b/test/data/manifests/rhel_90-x86_64-gce_rhui-boot.json
+index c60c2ba91..abb35615d 100644
+--- a/test/data/manifests/rhel_90-x86_64-gce_rhui-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-gce_rhui-boot.json
+@@ -2183,15 +2183,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-oci-boot.json b/test/data/manifests/rhel_90-x86_64-oci-boot.json
+index 63d58a0af..5cd8fd4f8 100644
+--- a/test/data/manifests/rhel_90-x86_64-oci-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-oci-boot.json
+@@ -2117,15 +2117,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-openstack-boot.json b/test/data/manifests/rhel_90-x86_64-openstack-boot.json
+index 02a9566b3..530e84fd1 100644
+--- a/test/data/manifests/rhel_90-x86_64-openstack-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-openstack-boot.json
+@@ -2131,15 +2131,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-qcow2-boot.json b/test/data/manifests/rhel_90-x86_64-qcow2-boot.json
+index 4451f1b38..1dd250098 100644
+--- a/test/data/manifests/rhel_90-x86_64-qcow2-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-qcow2-boot.json
+@@ -2138,15 +2138,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-qcow2_customize-boot.json b/test/data/manifests/rhel_90-x86_64-qcow2_customize-boot.json
+index d8456a485..eaec1aedd 100644
+--- a/test/data/manifests/rhel_90-x86_64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-qcow2_customize-boot.json
+@@ -2339,15 +2339,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-vhd-boot.json b/test/data/manifests/rhel_90-x86_64-vhd-boot.json
+index 49177d3fd..4910da83e 100644
+--- a/test/data/manifests/rhel_90-x86_64-vhd-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-vhd-boot.json
+@@ -2117,15 +2117,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_90-x86_64-vmdk-boot.json b/test/data/manifests/rhel_90-x86_64-vmdk-boot.json
+index 41fc68dd0..1e05d195c 100644
+--- a/test/data/manifests/rhel_90-x86_64-vmdk-boot.json
++++ b/test/data/manifests/rhel_90-x86_64-vmdk-boot.json
+@@ -2131,15 +2131,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-aarch64-ami-boot.json b/test/data/manifests/rhel_91-aarch64-ami-boot.json
+index afcbb094d..03e4d7089 100644
+--- a/test/data/manifests/rhel_91-aarch64-ami-boot.json
++++ b/test/data/manifests/rhel_91-aarch64-ami-boot.json
+@@ -5228,15 +5228,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-aarch64-ec2-boot.json b/test/data/manifests/rhel_91-aarch64-ec2-boot.json
+index 1075fda5f..a7118289e 100644
+--- a/test/data/manifests/rhel_91-aarch64-ec2-boot.json
++++ b/test/data/manifests/rhel_91-aarch64-ec2-boot.json
+@@ -5258,15 +5258,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-aarch64-openstack-boot.json b/test/data/manifests/rhel_91-aarch64-openstack-boot.json
+index 8ef4aab45..f1b1213b4 100644
+--- a/test/data/manifests/rhel_91-aarch64-openstack-boot.json
++++ b/test/data/manifests/rhel_91-aarch64-openstack-boot.json
+@@ -5165,15 +5165,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-aarch64-qcow2-boot.json b/test/data/manifests/rhel_91-aarch64-qcow2-boot.json
+index 094765f2a..05e9d44a0 100644
+--- a/test/data/manifests/rhel_91-aarch64-qcow2-boot.json
++++ b/test/data/manifests/rhel_91-aarch64-qcow2-boot.json
+@@ -5296,15 +5296,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-aarch64-qcow2_customize-boot.json b/test/data/manifests/rhel_91-aarch64-qcow2_customize-boot.json
+index 6f2b6cd43..713534831 100644
+--- a/test/data/manifests/rhel_91-aarch64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_91-aarch64-qcow2_customize-boot.json
+@@ -5549,15 +5549,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-ppc64le-qcow2-boot.json b/test/data/manifests/rhel_91-ppc64le-qcow2-boot.json
+index 8edeb3ec7..57736311e 100644
+--- a/test/data/manifests/rhel_91-ppc64le-qcow2-boot.json
++++ b/test/data/manifests/rhel_91-ppc64le-qcow2-boot.json
+@@ -5800,15 +5800,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/rhel_91-ppc64le-qcow2_customize-boot.json b/test/data/manifests/rhel_91-ppc64le-qcow2_customize-boot.json
+index 623db8433..30f6be9d9 100644
+--- a/test/data/manifests/rhel_91-ppc64le-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_91-ppc64le-qcow2_customize-boot.json
+@@ -6053,15 +6053,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-s390x-qcow2-boot.json b/test/data/manifests/rhel_91-s390x-qcow2-boot.json
+index e09b42751..b77433993 100644
+--- a/test/data/manifests/rhel_91-s390x-qcow2-boot.json
++++ b/test/data/manifests/rhel_91-s390x-qcow2-boot.json
+@@ -6488,15 +6488,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 }
+               ]
+diff --git a/test/data/manifests/rhel_91-s390x-qcow2_customize-boot.json b/test/data/manifests/rhel_91-s390x-qcow2_customize-boot.json
+index 0367fc572..68fe6c299 100644
+--- a/test/data/manifests/rhel_91-s390x-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_91-s390x-qcow2_customize-boot.json
+@@ -6741,15 +6741,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-ami-boot.json b/test/data/manifests/rhel_91-x86_64-ami-boot.json
+index 6cc89bd5b..e16e8cecc 100644
+--- a/test/data/manifests/rhel_91-x86_64-ami-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-ami-boot.json
+@@ -5096,15 +5096,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-azure_rhui-boot.json b/test/data/manifests/rhel_91-x86_64-azure_rhui-boot.json
+index 475a87c69..79f1e053d 100644
+--- a/test/data/manifests/rhel_91-x86_64-azure_rhui-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-azure_rhui-boot.json
+@@ -7013,9 +7013,9 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+                   "vfs_type": "xfs",
+-                  "path": "/var",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+@@ -7030,12 +7030,6 @@
+                   "path": "/home",
+                   "options": "defaults"
+                 },
+-                {
+-                  "uuid": "fb180daf-48a7-4ee0-b10d-394651850fd4",
+-                  "vfs_type": "xfs",
+-                  "path": "/",
+-                  "options": "defaults"
+-                },
+                 {
+                   "uuid": "a178892e-e285-4ce1-9114-55780875d64e",
+                   "vfs_type": "xfs",
+@@ -7048,6 +7042,12 @@
+                   "path": "/usr",
+                   "options": "defaults"
+                 },
++                {
++                  "uuid": "f83b8e88-3bbf-457a-ab99-c5b252c7429c",
++                  "vfs_type": "xfs",
++                  "path": "/var",
++                  "options": "defaults"
++                },
+                 {
+                   "uuid": "7B77-95E7",
+                   "vfs_type": "vfat",
+diff --git a/test/data/manifests/rhel_91-x86_64-ec2-boot.json b/test/data/manifests/rhel_91-x86_64-ec2-boot.json
+index 50ca74834..02df69343 100644
+--- a/test/data/manifests/rhel_91-x86_64-ec2-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-ec2-boot.json
+@@ -5128,15 +5128,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-ec2_ha-boot.json b/test/data/manifests/rhel_91-x86_64-ec2_ha-boot.json
+index 7cc538b5a..5f459547f 100644
+--- a/test/data/manifests/rhel_91-x86_64-ec2_ha-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-ec2_ha-boot.json
+@@ -6636,15 +6636,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-ec2_sap-boot.json b/test/data/manifests/rhel_91-x86_64-ec2_sap-boot.json
+index 42b3e1a0c..7ea4bfc11 100644
+--- a/test/data/manifests/rhel_91-x86_64-ec2_sap-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-ec2_sap-boot.json
+@@ -9071,15 +9071,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-gce-boot.json b/test/data/manifests/rhel_91-x86_64-gce-boot.json
+index 1def09536..2f39df2c1 100644
+--- a/test/data/manifests/rhel_91-x86_64-gce-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-gce-boot.json
+@@ -5344,15 +5344,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-gce_rhui-boot.json b/test/data/manifests/rhel_91-x86_64-gce_rhui-boot.json
+index 4033198b1..27c561a53 100644
+--- a/test/data/manifests/rhel_91-x86_64-gce_rhui-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-gce_rhui-boot.json
+@@ -5350,15 +5350,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-oci-boot.json b/test/data/manifests/rhel_91-x86_64-oci-boot.json
+index 73cbbeee2..3834e148b 100644
+--- a/test/data/manifests/rhel_91-x86_64-oci-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-oci-boot.json
+@@ -5435,15 +5435,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-openstack-boot.json b/test/data/manifests/rhel_91-x86_64-openstack-boot.json
+index b81d2b812..d2632e2f0 100644
+--- a/test/data/manifests/rhel_91-x86_64-openstack-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-openstack-boot.json
+@@ -5437,15 +5437,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-qcow2-boot.json b/test/data/manifests/rhel_91-x86_64-qcow2-boot.json
+index 2486cd97e..f25594cb8 100644
+--- a/test/data/manifests/rhel_91-x86_64-qcow2-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-qcow2-boot.json
+@@ -5456,15 +5456,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-qcow2_customize-boot.json b/test/data/manifests/rhel_91-x86_64-qcow2_customize-boot.json
+index 908d9f3df..52a3bd60d 100644
+--- a/test/data/manifests/rhel_91-x86_64-qcow2_customize-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-qcow2_customize-boot.json
+@@ -5805,15 +5805,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-vhd-boot.json b/test/data/manifests/rhel_91-x86_64-vhd-boot.json
+index 59b177614..89897f1fc 100644
+--- a/test/data/manifests/rhel_91-x86_64-vhd-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-vhd-boot.json
+@@ -5383,15 +5383,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+diff --git a/test/data/manifests/rhel_91-x86_64-vmdk-boot.json b/test/data/manifests/rhel_91-x86_64-vmdk-boot.json
+index 9402b535a..1fa27f84d 100644
+--- a/test/data/manifests/rhel_91-x86_64-vmdk-boot.json
++++ b/test/data/manifests/rhel_91-x86_64-vmdk-boot.json
+@@ -5437,15 +5437,15 @@
+             "options": {
+               "filesystems": [
+                 {
+-                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
++                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
+                   "vfs_type": "xfs",
+-                  "path": "/boot",
++                  "path": "/",
+                   "options": "defaults"
+                 },
+                 {
+-                  "uuid": "6e4ff95f-f662-45ee-a82a-bdf44a2d0b75",
++                  "uuid": "0194fdc2-fa2f-4cc0-81d3-ff12045b73c8",
+                   "vfs_type": "xfs",
+-                  "path": "/",
++                  "path": "/boot",
+                   "options": "defaults"
+                 },
+                 {
+-- 
+2.35.3
+

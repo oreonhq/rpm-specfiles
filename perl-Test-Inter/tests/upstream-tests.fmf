@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Test-Inter
+require: perl-Test-Inter-tests
+test: /usr/libexec/perl-Test-Inter/test

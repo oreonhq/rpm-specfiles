@@ -1,0 +1,11 @@
+diff -urp '--exclude=*~' nokogiri-1.18.10.orig/test/helper.rb nokogiri-1.18.10/test/helper.rb
+--- nokogiri-1.18.10.orig/test/helper.rb	2025-12-24 12:29:06.569389292 +0900
++++ nokogiri-1.18.10/test/helper.rb	2025-12-24 12:39:48.443826371 +0900
+@@ -41,6 +41,7 @@ warn
+ 
+ require "minitest/autorun"
+ require "minitest/benchmark"
++require "minitest/mock"
+ 
+ if !Nokogiri.jruby? && ENV["NCPU"].to_i > 1
+   require "minitest/parallel_fork"

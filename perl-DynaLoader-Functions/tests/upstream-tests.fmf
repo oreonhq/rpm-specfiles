@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-DynaLoader-Functions
+require: perl-DynaLoader-Functions-tests
+test: /usr/libexec/perl-DynaLoader-Functions/test

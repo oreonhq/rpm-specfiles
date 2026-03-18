@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-autodie
+require: perl-autodie-tests
+test: /usr/libexec/perl-autodie/test

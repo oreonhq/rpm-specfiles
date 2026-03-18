@@ -1,0 +1,9 @@
+*~
+*.rpm
+*.tar.gz
+/.build*.log
+/libgpod-*/
+/libgpod-0.7.95.tar.gz
+/libgpod-0.8.0.tar.gz
+/libgpod-0.8.2.tar.bz2
+/libgpod-0.8.3.tar.bz2

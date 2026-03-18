@@ -1,0 +1,27 @@
+# no-documentation is fine for booth-arbitrator and booth (virtual package) and debug packages
+addFilter(r'booth-arbitrator\.[^:]+: W: no-documentation')
+addFilter(r'booth\.[^:]+: W: no-documentation')
+addFilter(r'booth-debugsource\.[^:]+: W: no-documentation')
+
+# permissions for chroot
+addFilter(r'booth-core\.[^:]+: (E|W): non-standard-dir-perm /var/lib/booth 750')
+addFilter(r'booth-core\.[^:]+: (E|W): non-standard-dir-perm /var/lib/booth/cores 750')
+
+# booth is just metapackage
+addFilter(r'booth\.[^:]+: (W|E): no-binary')
+
+# pc should be in devel but it is not really devel file
+addFilter(r'booth\.[^:]+: W: devel-file-in-non-devel-package /usr/share/pkgconfig/booth.pc')
+
+# booth-(site|test) installs just scripts in /usr/lib
+addFilter(r'booth-(site|test)\.[^:]+: (W|E): only-non-binary-in-usr-lib')
+
+# dangling symlink is ok for geostore and boothd (they actually points to booth binary)
+addFilter(r'booth-site\.[^:]+: (W|E): dangling-symlink /usr/sbin/geostore /usr/sbin/boothd')
+addFilter(r'booth-test\.[^:]+: (W|E): dangling-symlink /usr/share/booth/tests/src/boothd /usr/sbin/boothd')
+
+# Ignore all errors in debuginfo packages
+addFilter(r'booth-core-debuginfo\.[^:]+: (W|E):')
+
+# booth-arbitrator contains just unit files
+addFilter(r'booth-arbitrator\.[^:]+: (W|E): only-non-binary-in-usr-lib')

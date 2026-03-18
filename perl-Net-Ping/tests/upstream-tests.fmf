@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Net-Ping
+require: perl-Net-Ping-tests
+test: /usr/libexec/perl-Net-Ping/test

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-HTML-Tagset
+require: perl-HTML-Tagset-tests
+test: /usr/libexec/perl-HTML-Tagset/test

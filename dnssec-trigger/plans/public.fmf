@@ -1,0 +1,6 @@
+summary: Run all beakerlib tests for dnssec-trigger
+discover:
+  - name: fedora_tests_dnssec-trigger
+    how: fmf
+execute:
+    how: tmt

@@ -1,0 +1,10 @@
+summary: Run integration tests
+prepare:
+    how: install
+    package:
+    - osbuild-composer
+    - weldr-client
+    - weldr-client-tests
+    - createrepo_c
+execute:
+    script: ./tests/scripts/run_tests.sh ./tests/

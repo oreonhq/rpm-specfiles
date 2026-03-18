@@ -1,0 +1,8 @@
+# Perl-isms
+addFilter("E: spelling-error \('(lifed|perldoc)',")
+
+# Intended to be run using "do"
+addFilter("non-executable-script /usr/libexec/perl-Test-Simple/t/Legacy/Tester/tbt_09do_script.pl 644 /usr/bin/perl")
+
+# Tests are their own documentation
+addFilter("perl-Test-Simple-tests.noarch: W: no-documentation")

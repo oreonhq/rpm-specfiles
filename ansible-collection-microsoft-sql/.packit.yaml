@@ -1,0 +1,16 @@
+downstream_package_name: ansible-collection-microsoft-sql
+
+specfile_path: ansible-collection-microsoft-sql.spec
+
+upstream_project_url: https://github.com/linux-system-roles/auto-maintenance
+
+jobs:
+  - job: koji_build
+    trigger: commit
+    dist_git_branches:
+      - fedora-all
+  - job: bodhi_update
+    trigger: commit
+    dist_git_branches:
+      - fedora-branched # rawhide updates are created automatically
+

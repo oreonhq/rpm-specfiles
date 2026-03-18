@@ -1,0 +1,13 @@
+diff --git a/pom.xml b/pom.xml
+index f19102b..63895e8 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -124,7 +124,7 @@
+                                 <argument>-I/usr/include/criu</argument>
+                                 <argument>-I${project.build.directory}/native/javah</argument>
+                                 <argument>-lcriu</argument>
+-                                <argument>-o${project.build.outputDirectory}/libJigawatts.so</argument>
++                                <argument>-o${project.build.directory}/libJigawatts.so</argument>
+                                 <argument>${project.basedir}/src/main/cpp/com_redhat_jigawatts_Jigawatts.cpp</argument>
+                             </arguments>
+                         </configuration>

@@ -1,0 +1,23 @@
+--- conf/catalina.policy.orig	2025-03-04 21:02:32.000000000 +0200
++++ conf/catalina.policy	2025-03-07 14:23:42.341169484 +0200
+@@ -55,6 +55,20 @@ grant codeBase "jrt:/jdk.compiler" {
+         permission java.security.AllPermission;
+ };
+ 
++// ========== FEDORA SPECIFIC CODE PERMISSIONS =======================================
++
++grant codeBase "file:/usr/share/java/ecj/ecj.jar" {
++	permission java.security.AllPermission;
++};
++
++grant codeBase "file:/usr/share/tomcat-jakartaee-migration/jakartaee-migration.jar" {
++	permission java.security.AllPermission;
++};
++
++grant codeBase "file:/usr/lib/java/tomcat/tomcat-jni.jar" {
++	permission java.security.AllPermission;
++};
++
+ 
+ // ========== CATALINA CODE PERMISSIONS =======================================
+ 

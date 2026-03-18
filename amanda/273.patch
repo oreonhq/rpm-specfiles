@@ -1,0 +1,36 @@
+From 403656a684d8c934866721ca0e1674997deb4eeb Mon Sep 17 00:00:00 2001
+From: Orion Poplawski <orion@nwra.com>
+Date: Mon, 11 Nov 2024 21:19:54 -0700
+Subject: [PATCH] Drop non-existant -s option from amflush man page
+
+---
+ man/xml-source/amflush.8.xml | 9 ---------
+ 1 file changed, 9 deletions(-)
+
+diff --git a/man/xml-source/amflush.8.xml b/man/xml-source/amflush.8.xml
+index e3b1360afd..f09f4a46b6 100644
+--- a/man/xml-source/amflush.8.xml
++++ b/man/xml-source/amflush.8.xml
+@@ -32,7 +32,6 @@
+     <arg choice='opt'>-b</arg>
+     <arg choice='opt'>-f</arg>
+     <arg choice='opt'>--exact-match</arg>
+-    <arg choice='opt'>-s</arg>
+     <arg choice='opt'>-D <replaceable>datestamp</replaceable></arg>
+     &configoverride.synopsis;
+     <arg choice='plain'><replaceable>config</replaceable></arg>
+@@ -90,14 +89,6 @@ This is useful if
+ <command>amflush</command>
+ is run as part of another script that, for example, advances the tape
+ after the flush is completed.</para>
+-  </listitem>
+-  </varlistentry>
+-  <varlistentry>
+-  <term><option>-s</option></term>
+-  <listitem>
+-<para>Write log to stdout/stderr instead of the amflush log file. Requires the
+-<option>-f</option>
+-option.</para>
+   </listitem>
+   </varlistentry>
+   <varlistentry>

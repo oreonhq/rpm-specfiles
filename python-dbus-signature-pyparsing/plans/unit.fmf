@@ -1,0 +1,17 @@
+summary: deterministic (not Hypothesis-based) unit tests
+
+prepare:
+  - name: Install package
+    how: install
+    package: python-dbus-signature-pyparsing
+
+discover:
+  how: shell
+  url: https://github.com/stratis-storage/dbus-signature-pyparsing
+  ref: v0.4.1
+  tests:
+    - name: unit
+      test: python3 -m unittest -v tests/test_deterministic.py
+
+execute:
+  how: tmt

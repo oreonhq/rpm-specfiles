@@ -1,0 +1,16 @@
+---
+badfuncs:
+  allowed:
+    # mupdate uses gethostbyname (safely) to check if the IP address
+    # of the given hostname is local.
+    /usr/libexec/cyrus-imapd/mupdate:
+      - gethostbyname
+    # smmapd uses gethostbyname (safely) to verify user's host.
+    /usr/libexec/cyrus-imapd/smmapd:
+      - gethostbyname
+
+files:
+  ignore:
+    # Old cyrus packages used to keep the deliver executable in
+    # /usr/lib/cyrus-imapd, and MTA configurations might rely on this.
+    - /usr/lib/cyrus-imapd/

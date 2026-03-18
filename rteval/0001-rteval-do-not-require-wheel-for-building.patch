@@ -1,0 +1,29 @@
+From 6bcbc23f9d6ce753f360c16863f441aa793a9217 Mon Sep 17 00:00:00 2001
+From: Yaakov Selkowitz <yselkowi@redhat.com>
+Date: Wed, 26 Nov 2025 17:18:49 -0500
+Subject: [PATCH] rteval: do not require wheel for building
+
+Setuptools 70.1+ does not need wheel at all; older versions would fetch
+wheel when building wheels (but not sdists).
+
+Signed-off-by: Yaakov Selkowitz <yselkowi@redhat.com>
+---
+See also: https://github.com/fedora-eln/eln/issues/284
+
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 9fc681f..4ea8a78 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,5 +1,5 @@
+ [build-system]
+-requires = ["setuptools>=61.0", "wheel"]
++requires = ["setuptools>=61.0"]
+ build-backend = "setuptools.build_meta"
+ 
+ [project]
+-- 
+2.51.1
+

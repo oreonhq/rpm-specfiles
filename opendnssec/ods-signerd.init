@@ -1,0 +1,112 @@
+#!/bin/bash
+#
+# ods-signerd:         Starts the OpenDNSSEC Signer Daemon
+#
+# chkconfig: - 13 87
+# description:  ods-signerd is the OpenDNSSEC DNSSEC zone signer daemon
+# processname: /usr/sbin/ods-signerd
+# config: /etc/opendnssec/conf.xml
+#
+### BEGIN INIT INFO
+# Provides: ods-signerd
+# Required-Start: $local_fs $network $syslog
+# Required-Stop: $local_fs $network $syslog
+# Default-Stop: 0 11 89
+# Short-Description: start|stop|status|restart|try-restart|reload|force-reload OpenDNSSEC Signer Daemon
+# Description: control OpenDNSSEC signer daemon
+### END INIT INFO
+
+# Init script default settings
+ODS_SIGNERD_CONF="/etc/opendnssec/conf.xml"
+ODS_SIGNERD_OPT=""
+ODS_SIGNERD_PROG="/usr/sbin/ods-signerd"
+ODS_SIGNER_PROG="/usr/sbin/ods-signer"
+ODS_SIGNERD_PIDFILE="/var/run/opendnssec/signerd.pid"
+PIDDIR="/var/run/opendnssec"
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+[ -r /etc/sysconfig/ods ] && . /etc/sysconfig/ods
+
+# Check that networking is configured.
+[ "${NETWORKING}" = "no" ] && exit 0
+
+start() {
+  # Source networking configuration.
+  [ -r /etc/sysconfig/network ] && . /etc/sysconfig/network
+
+  # Check that networking is up
+  [ "${NETWORKING}" = "no" ] && exit 1
+
+  # Sanity checks.
+  [ -f $ODS_SIGNERD_CONF ] || exit 5
+  [ -x $ODS_SIGNERD_PROG ] || exit 5
+  # /var/run could (and should) be tmpfs
+  [ -d $PIDDIR ] || mkdir -p $PIDDIR
+
+  echo -n $"Starting ods-signerd:"
+# ods-signerd is lying about supporting -c conf.file option :(
+#  $ODS_SIGNERD_PROG -c $ODS_SIGNERD_CONF $ODS_SIGNERD_OPT
+  $ODS_SIGNERD_PROG $ODS_SIGNERD_OPT
+  RETVAL=$?
+        if [ $RETVAL -eq 0 ]; then
+           touch /var/lock/subsys/ods-signerd;
+           success
+           echo
+        else
+           failure
+           echo
+           exit 7;
+        fi
+  return 0;
+}
+
+stop() {
+  echo -n $"Stopping ods-signerd: "
+  #$ODS_SIGNER_PROG -c $ODS_SIGNERD_CONF stop
+  # seems that this loses our settings :(
+  /usr/sbin/ods-signer stop
+  RETVAL=$?
+  [ "$RETVAL" -eq 0 ] || killproc $ODS_SIGNERD_PROG -TERM >/dev/null 2>&1
+  if [ $RETVAL -eq 0 ] ; then
+     rm -f $ODS_SIGNERD_PIDFILE
+     rm -f /var/lock/subsys/ods-signerd
+     success
+  else
+     failure
+  fi
+  echo
+  return $RETVAL
+}
+
+restart() {
+	stop
+	start
+}
+
+RETVAL=0
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  restart)
+	restart
+	;;
+  condrestart)
+        [ -f /var/lock/subsys/ods-signerd ] && restart || :
+	;;
+  status)
+	status -p $ODS_SIGNERD_PIDFILE $ODS_SIGNERD_PROG
+	;;
+  *)
+	echo $"Usage: $0 {start|stop|status|restart|condrestart}"
+	exit 1
+esac
+
+exit $?

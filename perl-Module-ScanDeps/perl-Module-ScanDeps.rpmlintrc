@@ -1,0 +1,2 @@
+from Config import *
+addFilter("unexpanded-macro %description -l C %INC");

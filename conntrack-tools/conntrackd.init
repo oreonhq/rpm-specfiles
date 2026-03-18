@@ -1,0 +1,114 @@
+#!/bin/sh
+#
+# /etc/init.d/conntrackd
+#
+# Created for RHEL/Centos by: James Shubin <purpleidea@gmail.com>
+#
+### BEGIN INIT INFO
+# Provides: conntrackd
+# Required-Start: $network $syslog
+# Required-Stop: $network $syslog
+# Should-Start: $named
+# Should-Stop: $named
+# Default-Start: 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: daemon for netfilter connection tracking
+# Description: This is a daemon for replicating connection state across two
+#              machines. See http://conntrack-tools.netfilter.org/
+### END INIT INFO
+
+# the following is the chkconfig init header
+#
+# conntrackd: daemon for netfilter connection tracking
+#
+# chkconfig: 345 97 03
+# description: This is a daemon for replicating connection state across two
+#              machines. See http://conntrack-tools.netfilter.org/
+#
+# processname: conntrackd
+# pidfile: /var/run/conntrackd.pid
+#
+
+# Sanity checks
+[ -x /usr/sbin/conntrackd ] || exit 0
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+SERVICE=conntrackd
+PROCESS=conntrackd
+CONNTRACKD_CONFIG=
+CONNTRACKD_ARGS=
+
+test -f /etc/sysconfig/conntrackd && . /etc/sysconfig/conntrackd
+
+CONNTRACKD_CONFIG_ARGS=
+if [ -n "$CONNTRACKD_CONFIG" ]
+then
+	CONNTRACKD_CONFIG_ARGS="-C $CONNTRACKD_CONFIG"
+fi
+
+RETVAL=0
+
+start() {
+	echo -n $"Starting $SERVICE: "
+	# If Linux kernel is < 2.6.22, disable TCP window tracking
+	if uname -r | {
+		# version cmp courtesy of geirha in #bash
+		IFS=.- read -r a b c _; [ "$((a*10000+b*100+c))" -lt 20622 ];
+	}; then
+		echo 1 > /proc/sys/net/ipv4/netfilter/ip_conntrack_tcp_be_liberal
+	fi
+	daemon --check $SERVICE $PROCESS -d $CONNTRACKD_CONFIG_ARGS $CONNTRACKD_ARGS
+	RETVAL=$?
+	echo
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/$SERVICE
+}
+
+stop() {
+	echo -n $"Stopping $SERVICE: "
+	killproc $PROCESS
+	RETVAL=$?
+	echo
+	if [ $RETVAL -eq 0 ]; then
+		rm -f /var/lock/subsys/$SERVICE
+		rm -f /var/run/$SERVICE.pid
+	fi
+}
+
+restart() {
+	stop
+	start
+}
+
+# XXX: can conntrackd reload?
+reload() {
+	echo -n $"Reloading $SERVICE configuration: "
+	killproc $PROCESS -HUP
+	RETVAL=$?
+	echo
+	return $RETVAL
+}
+
+# See how we were called.
+case "$1" in
+	start|stop|restart|reload)
+		$1
+		;;
+	status)
+		status $PROCESS
+		RETVAL=$?
+		;;
+	force-reload)
+		reload
+		;;
+	condrestart|try-restart)
+		[ -f /var/lock/subsys/$SERVICE ] && restart || :
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|status|restart|condrestart|reload}"
+		exit 2
+		;;
+esac
+exit $RETVAL
+

@@ -1,0 +1,8 @@
+summary: Lint check for GNOME-Shell extension files
+test: ./test.sh
+framework: beakerlib
+require:
+    - gjs
+    - glib2
+    - gnome-shell-extension-no-overview
+    - json-glib-devel

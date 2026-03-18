@@ -1,0 +1,12 @@
+diff -up kdelibs-4.14.14/kded/vfolder_menu.cpp.vfolder_spam kdelibs-4.14.14/kded/vfolder_menu.cpp
+--- kdelibs-4.14.14/kded/vfolder_menu.cpp.vfolder_spam	2015-11-04 16:29:10.000000000 -0600
++++ kdelibs-4.14.14/kded/vfolder_menu.cpp	2015-12-09 08:45:49.861988284 -0600
+@@ -487,7 +487,7 @@ VFolderMenu::loadDoc()
+    int errorRow;
+    int errorCol;
+    if ( !doc.setContent( &file, &errorMsg, &errorRow, &errorCol ) ) {
+-      kWarning(7021) << "Parse error in " << m_docInfo.path << ", line " << errorRow << ", col " << errorCol << ": " << errorMsg;
++      kDebug(7021) << "Parse error in " << m_docInfo.path << ", line " << errorRow << ", col " << errorCol << ": " << errorMsg;
+       file.close();
+       return doc;
+    }

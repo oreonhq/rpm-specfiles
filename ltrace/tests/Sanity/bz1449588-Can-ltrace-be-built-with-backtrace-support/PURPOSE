@@ -1,0 +1,5 @@
+PURPOSE of /tools/ltrace/Sanity/bz1449588-Can-ltrace-be-built-with-backtrace-support
+Description: Test for BZ#1449588 (Can ltrace be built with backtrace support?)
+Author: Edjunior Machado <emachado@redhat.com>
+Bug summary: Can ltrace be built with backtrace support?
+Bugzilla link: https://bugzilla.redhat.com/show_bug.cgi?id=1449588

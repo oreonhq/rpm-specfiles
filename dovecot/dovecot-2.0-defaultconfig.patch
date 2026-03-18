@@ -1,0 +1,97 @@
+diff -up dovecot-2.4.2-build/dovecot-2.4.2/doc/dovecot.conf.in.default-settings dovecot-2.4.2-build/dovecot-2.4.2/doc/dovecot.conf.in
+--- dovecot-2.4.2-build/dovecot-2.4.2/doc/dovecot.conf.in.default-settings	2025-10-29 07:58:41.000000000 +0100
++++ dovecot-2.4.2-build/dovecot-2.4.2/doc/dovecot.conf.in	2025-11-30 09:24:17.130246956 +0100
+@@ -16,24 +16,19 @@ dovecot_storage_version = @DOVECOT_CONFI
+ # The configuration below is a minimal configuration file using system user authentication.
+ # See https://@DOVECOT_ASSET_URL@/latest/core/config/quick.html
+ 
+-!include_try conf.d/*.conf
+-
+ # Enable wanted protocols:
+ protocols {
+   imap = yes
+   lmtp = yes
+ }
+ 
+-mail_home = /srv/mail/%{user}
+-mail_driver = sdbox
++mail_home = /home/%{user}
++mail_driver = maildir
+ mail_path = ~/mail
+ 
+-mail_uid = vmail
+-mail_gid = vmail
+-
+-# By default first_valid_uid is 500. If your vmail user's UID is smaller,
++# By default first_valid_uid is 1000. If your vmail user's UID is smaller,
+ # you need to modify this:
+-#first_valid_uid = uid-number-of-vmail-user
++first_valid_uid = 1000
+ 
+ namespace inbox {
+   inbox = yes
+@@ -44,7 +39,15 @@ namespace inbox {
+ passdb pam {
+ }
+ 
++userdb passwd {
++}
++
++ssl = required
++ssl_cipher_list = PROFILE=SYSTEM
++
+ ssl_server {
+-  cert_file = /etc/dovecot/ssl-cert.pem
+-  key_file = /etc/dovecot/ssl-key.pem
++  cert_file = /etc/pki/dovecot/certs/dovecot.pem
++  key_file = /etc/pki/dovecot/private/dovecot.pem
+ }
++
++!include_try conf.d/*.conf
+diff -up dovecot-2.4.2-build/dovecot-2.4.2/dovecot-pigeonhole/doc/example-config/conf.d/90-sieve.conf.default-settings dovecot-2.4.2-build/dovecot-2.4.2/dovecot-pigeonhole/doc/example-config/conf.d/90-sieve.conf
+--- dovecot-2.4.2-build/dovecot-2.4.2/dovecot-pigeonhole/doc/example-config/conf.d/90-sieve.conf.default-settings	2025-10-29 08:00:30.000000000 +0100
++++ dovecot-2.4.2-build/dovecot-2.4.2/dovecot-pigeonhole/doc/example-config/conf.d/90-sieve.conf	2025-11-30 09:18:17.667869864 +0100
+@@ -21,7 +21,6 @@
+ # file or directory. Refer to Pigeonhole wiki or INSTALL file for more
+ # information.
+ 
+-plugin {
+   # The location of the user's main Sieve script or script storage. The LDA
+   # Sieve plugin uses this to find the active script for Sieve filtering at
+   # delivery. The "include" extension uses this location for retrieving
+@@ -36,7 +35,10 @@ plugin {
+   # active script symlink is located.
+   # For other types: use the ';name=' parameter to specify the name of the
+   # default/active script.
+-  sieve = file:~/sieve;active=~/.dovecot.sieve
++sieve_script personal {
++  path = ~/sieve
++  active_path = ~/.dovecot.sieve
++}
+ 
+   # The default Sieve script when the user has none. This is the location of a
+   # global sieve script file, which gets executed ONLY if user's personal Sieve
+@@ -202,4 +204,3 @@ plugin {
+   # Enables showing byte code addresses in the trace output, rather than only
+   # the source line numbers.
+   #sieve_trace_addresses = no 
+-}
+diff -up dovecot-2.4.2-build/dovecot-2.4.2/dovecot-pigeonhole/doc/example-config/conf.d/90-sieve-extprograms.conf.default-settings dovecot-2.4.2-build/dovecot-2.4.2/dovecot-pigeonhole/doc/example-config/conf.d/90-sieve-extprograms.conf
+--- dovecot-2.4.2-build/dovecot-2.4.2/dovecot-pigeonhole/doc/example-config/conf.d/90-sieve-extprograms.conf.default-settings	2025-10-29 08:00:30.000000000 +0100
++++ dovecot-2.4.2-build/dovecot-2.4.2/dovecot-pigeonhole/doc/example-config/conf.d/90-sieve-extprograms.conf	2025-11-30 09:18:17.668131795 +0100
+@@ -6,7 +6,6 @@
+ # sieve_extensions or sieve_global_extensions settings. Restricting these
+ # extensions to a global context using sieve_global_extensions is recommended.
+ 
+-plugin {
+ 
+   # The directory where the program sockets are located for the
+   # vnd.dovecot.pipe, vnd.dovecot.filter and vnd.dovecot.execute extension
+@@ -23,7 +22,6 @@ plugin {
+   #sieve_pipe_bin_dir = /usr/lib/dovecot/sieve-pipe
+   #sieve_filter_bin_dir = /usr/lib/dovecot/sieve-filter
+   #sieve_execute_bin_dir = /usr/lib/dovecot/sieve-execute
+-}
+ 
+ # An example program service called 'do-something' to pipe messages to
+ #service do-something {

@@ -1,0 +1,75 @@
+From fe017d7cb95ac4703ce59e4c72fd73a5fad3bcea Mon Sep 17 00:00:00 2001
+From: Mikhail Zaslonko <zaslonko@linux.ibm.com>
+Date: Mon, 16 Feb 2026 20:39:15 +0100
+Subject: [PATCH 19/23] memory: Handle crash failure in linux-next caused by
+ struct kmem_cache changes
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Since kernel commit cf338283652f ("slab: remove struct kmem_cache_cpu")
+in linux-next there is no more 'cpu_slab' member in struct kmem_cache.
+Pick 'cpu_sheaves' as an alternative kmem_cache member for kernel-next to
+identify the SLUB case.
+
+Without the patch, crash fails to start on kernel-next with the error
+message:
+
+  crash: invalid structure member offset: kmem_cache_s_num
+            FILE: memory.c  LINE: 9988  FUNCTION: kmem_cache_init()
+
+This fix:
+- allows the crash to start with no errors for kernel-next.
+- make the 'kmap -s' command working again for kernel-next.
+- throws an error message on 'kmem -S' command if no 'cpu_slab' member
+  presents in struct kmem_cache:
+	kmem: -S not supported for this kernel
+
+Signed-off-by: Mikhail Zaslonko <zaslonko@linux.ibm.com>
+Signed-off-by: Lianbo Jiang <lijiang@redhat.com>
+---
+ memory.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/memory.c b/memory.c
+index cbc8d2fe2727..17423a588464 100644
+--- a/memory.c
++++ b/memory.c
+@@ -672,6 +672,7 @@ vm_init(void)
+         } else if (!VALID_STRUCT(kmem_slab_s) && 
+ 		   !VALID_STRUCT(slab_s) &&
+ 		   !MEMBER_EXISTS("kmem_cache", "cpu_slab") &&
++		   !MEMBER_EXISTS("kmem_cache", "cpu_sheaves") &&
+ 		   (VALID_STRUCT(slab) || (vt->flags & SLAB_OVERLOAD_PAGE))) {
+                 vt->flags |= PERCPU_KMALLOC_V2;
+ 
+@@ -816,7 +817,7 @@ vm_init(void)
+ 		if (INVALID_MEMBER(page_first_page))
+ 			ANON_MEMBER_OFFSET_INIT(page_first_page, "page", "first_page");
+ 
+-	} else if (MEMBER_EXISTS("kmem_cache", "cpu_slab") &&
++	} else if ((MEMBER_EXISTS("kmem_cache", "cpu_slab") || MEMBER_EXISTS("kmem_cache", "cpu_sheaves")) &&
+ 		STRUCT_EXISTS("kmem_cache_node")) {
+ 		vt->flags |= KMALLOC_SLUB;
+ 
+@@ -5270,6 +5271,9 @@ cmd_kmem(void)
+ 	if (sflag || Sflag || rflag || !(vt->flags & KMEM_CACHE_INIT))
+ 		kmem_cache_init();
+ 
++	if (Sflag && !MEMBER_EXISTS("kmem_cache", "cpu_slab"))
++		error(FATAL, "-S not supported for this kernel\n");
++
+ 	while (args[optind]) {
+                 if (hexadecimal(args[optind], 0)) {
+                         value[spec_addr++] = 
+@@ -20401,7 +20405,6 @@ get_cpu_slab_ptr(struct meminfo *si, int cpu, ulong *cpu_freelist)
+ 
+ 	default:
+ 		cpu_slab_ptr = 0;
+-		error(FATAL, "cannot determine location of kmem_cache.cpu_slab page\n");
+ 	}
+ 
+ 	return cpu_slab_ptr;
+-- 
+2.51.1
+

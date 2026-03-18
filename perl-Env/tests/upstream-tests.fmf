@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Env
+require: perl-Env-tests
+test: /usr/libexec/perl-Env/test

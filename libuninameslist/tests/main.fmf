@@ -1,0 +1,13 @@
+test: ./runtests.sh
+duration: 10m
+framework: beakerlib
+require:
+  - libuninameslist
+  - autoconf
+  - automake
+  - libtool
+  - gcc
+  - m4
+  - sed
+  - make
+  - rpm-build

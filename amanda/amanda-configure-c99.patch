@@ -1,0 +1,19 @@
+Avoid an implicit int.  Otherwise, the test fails unconditionally with
+compilers that do not support implicit ints (a language feature that
+was removed with the C99 language revision).
+
+Submitted upstream: <https://github.com/zmanda/amanda/pull/220>
+
+diff --git a/config/amanda/ipv6.m4 b/config/amanda/ipv6.m4
+index 9d76979339fee75a..d91ab95ab97e4ec1 100644
+--- a/config/amanda/ipv6.m4
++++ b/config/amanda/ipv6.m4
+@@ -85,7 +85,7 @@ AC_DEFUN([AMANDA_CHECK_IPV6],
+ #include <sys/socket.h>
+ #include <errno.h>
+ 
+-main()
++int main(void)
+ {
+    int aa;
+    aa = socket(AF_INET6, SOCK_STREAM, 0);

@@ -1,0 +1,11 @@
+/.build-*-*.fc*.log
+/python-systemd-*-*.fc*.src.rpm
+/results_python-systemd/
+/x86_64/
+/i686/
+/python-systemd-*/
+/python-systemd-230.tar.gz
+/python-systemd-231.tar.gz
+/python-systemd-232.tar.gz
+/python-systemd-234.tar.gz
+/python-systemd-235.tar.gz

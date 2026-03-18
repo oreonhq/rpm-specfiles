@@ -1,0 +1,8 @@
+* Wed Apr 26 2023 Nikola Forró <nforro@redhat.com> - 0.16.16-1
+- New upstream release 0.16.16
+
+* Wed Mar 22 2023 Nikola Forró <nforro@redhat.com> - 0.16.13-2
+- Workaround a crash on %%ix86
+
+* Thu Mar 16 2023 Nikola Forró <nforro@redhat.com> - 0.16.13-1
+- Initial package

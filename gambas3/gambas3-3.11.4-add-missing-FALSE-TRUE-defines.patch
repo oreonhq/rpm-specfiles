@@ -1,0 +1,26 @@
+From 75c0cafe4d18782083adba30981894ae2e4c9368 Mon Sep 17 00:00:00 2001
+From: bgermann <bgermann@users.noreply.github.com>
+Date: Sun, 14 Oct 2018 16:31:24 +0200
+Subject: [PATCH] [GB.DB.POSTGRESQL] Fix undefined TRUE/FALSE
+
+[GB.DB.POSTGRESQL]
+* BUG: Fix undefined TRUE/FALSE
+---
+ gb.db.postgresql/src/main.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/gb.db.postgresql/src/main.h b/gb.db.postgresql/src/main.h
+index b45b607f6..a952b9564 100644
+--- a/gb.db.postgresql/src/main.h
++++ b/gb.db.postgresql/src/main.h
+@@ -25,6 +25,7 @@
+ #define __MAIN_H
+ 
+ #include "gambas.h"
++#include "gb_common.h"
+ #include "gb.db.h"
+ 
+ #ifndef __MAIN_C
+-- 
+2.18.1
+

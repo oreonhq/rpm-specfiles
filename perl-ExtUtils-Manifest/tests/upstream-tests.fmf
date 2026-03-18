@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-ExtUtils-Manifest
+require: perl-ExtUtils-Manifest-tests
+test: /usr/libexec/perl-ExtUtils-Manifest/test

@@ -1,0 +1,5 @@
+summary: Simple test of python-pycotap
+test: ./test.sh
+framework: beakerlib
+require:
+    - python3-pycotap

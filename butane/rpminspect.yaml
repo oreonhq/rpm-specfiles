@@ -1,0 +1,4 @@
+---
+debuginfo:
+  ignore:
+    - /usr/share/butane/butane-*-unknown-linux-gnu-static

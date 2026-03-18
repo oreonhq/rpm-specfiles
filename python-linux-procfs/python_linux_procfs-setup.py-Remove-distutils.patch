@@ -1,0 +1,57 @@
+From 6862fbced61b192980b804927f98a8dc568630a5 Mon Sep 17 00:00:00 2001
+From: John Kacur <jkacur@redhat.com>
+Date: Thu, 16 Feb 2023 11:03:59 -0500
+Subject: [PATCH] python_linux_procfs: setup.py: Remove distutils
+
+distutils is deprecated, so use sysconfig instead
+
+different versions of python produce different results, which is why
+we test which SCHEME is available before calculating our answer.
+
+TODO: test whether we need to calculate PYTHONLIB at all. Is it being
+used during the setup? We don't appear to be using a --prefix from our
+specfiles. This patch ensures that if it is used, we are getting a
+correct PYTHONLIB without using distutils, but perhaps we can just drop
+this section.
+
+We need to bump the version number as well here, it looks like it was
+missed the last time.
+
+Signed-off-by: John Kacur <jkacur@redhat.com>
+---
+ setup.py | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/setup.py b/setup.py
+index 0ee543487c31..92e6363abb4b 100755
+--- a/setup.py
++++ b/setup.py
+@@ -1,17 +1,21 @@
+ #!/usr/bin/python3
+ import os
+-from os.path import isfile, join
+-from distutils.sysconfig import get_python_lib
++from os.path import isfile, relpath
++import sysconfig
+ from setuptools import setup
+ 
+ if isfile("MANIFEST"):
+     os.unlink("MANIFEST")
+ 
++SCHEME = 'rpm_prefix'
++if not SCHEME in sysconfig.get_scheme_names():
++    SCHEME = 'posix_prefix'
++
+ # Get PYTHONLIB with no prefix so --prefix installs work.
+-PYTHONLIB = join(get_python_lib(standard_lib=1, prefix=''), 'site-packages')
++PYTHONLIB = relpath(sysconfig.get_path('platlib', SCHEME), '/usr')
+ 
+ setup(name="python-linux-procfs",
+-    version = "0.7.0",
++    version = "0.7.1",
+     description = "Linux /proc abstraction classes",
+     author = "Arnaldo Carvalho de Melo",
+     author_email = "acme@redhat.com",
+-- 
+2.39.1
+

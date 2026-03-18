@@ -1,0 +1,156 @@
+diff -Naur opendnssec-1.4.7-orig/conf/conf.rnc opendnssec-1.4.7/conf/conf.rnc
+--- opendnssec-1.4.7-orig/conf/conf.rnc	2014-12-04 10:17:40.000000000 -0500
++++ opendnssec-1.4.7/conf/conf.rnc	2014-12-08 22:49:16.100212010 -0500
+@@ -50,7 +50,10 @@
+ 			element RequireBackup { empty }?,
+ 
+ 			# Do not maintain public keys in the repository (optional)
+-			element SkipPublicKey { empty }?
++			element SkipPublicKey { empty }?,
++
++			# Generate extractable keys (CKA_EXTRACTABLE = TRUE) (optional)
++			element AllowExtraction { empty }?
+ 		}*
+ 	},
+ 
+diff -Naur opendnssec-1.4.7-orig/conf/conf.rng opendnssec-1.4.7/conf/conf.rng
+--- opendnssec-1.4.7-orig/conf/conf.rng	2014-12-04 10:18:39.000000000 -0500
++++ opendnssec-1.4.7/conf/conf.rng	2014-12-08 22:49:16.105212137 -0500
+@@ -71,6 +71,12 @@
+                 <empty/>
+               </element>
+             </optional>
++            <optional>
++              <!-- Generate extractable keys (CKA_EXTRACTABLE = TRUE) (optional) -->
++              <element name="AllowExtraction">
++                <empty/>
++              </element>
++            </optional>
+           </element>
+         </zeroOrMore>
+       </element>
+diff -Naur opendnssec-1.4.7-orig/conf/conf.xml.in opendnssec-1.4.7/conf/conf.xml.in
+--- opendnssec-1.4.7-orig/conf/conf.xml.in	2014-12-04 10:17:40.000000000 -0500
++++ opendnssec-1.4.7/conf/conf.xml.in	2014-12-08 22:49:16.101212036 -0500
+@@ -9,6 +9,9 @@
+ 			<TokenLabel>OpenDNSSEC</TokenLabel>
+ 			<PIN>1234</PIN>
+ 			<SkipPublicKey/>
++			<!--
++			<AllowExtraction/>
++			-->
+ 		</Repository>
+ 
+ <!--
+diff -Naur opendnssec-1.4.7-orig/libhsm/src/lib/libhsm.c opendnssec-1.4.7/libhsm/src/lib/libhsm.c
+--- opendnssec-1.4.7-orig/libhsm/src/lib/libhsm.c	2014-12-04 10:17:40.000000000 -0500
++++ opendnssec-1.4.7/libhsm/src/lib/libhsm.c	2014-12-08 22:49:16.102212061 -0500
+@@ -504,6 +504,7 @@
+ hsm_config_default(hsm_config_t *config)
+ {
+     config->use_pubkey = 1;
++    config->allow_extract = 0;
+ }
+ 
+ /* creates a session_t structure, and automatically adds and initializes
+@@ -2054,6 +2055,8 @@
+                     module_pin = (char *) xmlNodeGetContent(curNode);
+                 if (xmlStrEqual(curNode->name, (const xmlChar *)"SkipPublicKey"))
+                     module_config.use_pubkey = 0;
++                if (xmlStrEqual(curNode->name, (const xmlChar *)"AllowExtraction"))
++                    module_config.allow_extract = 1;
+                 curNode = curNode->next;
+             }
+ 
+@@ -2341,10 +2344,12 @@
+     CK_BBOOL ctrue = CK_TRUE;
+     CK_BBOOL cfalse = CK_FALSE;
+     CK_BBOOL ctoken = CK_TRUE;
++    CK_BBOOL cextractable = CK_FALSE;
+ 
+     if (!ctx) ctx = _hsm_ctx;
+     session = hsm_find_repository_session(ctx, repository);
+     if (!session) return NULL;
++    cextractable = session->module->config->allow_extract ? CK_TRUE : CK_FALSE;
+ 
+     /* check whether this key doesn't happen to exist already */
+     do {
+@@ -2380,7 +2385,7 @@
+         { CKA_SENSITIVE,   &ctrue,   sizeof (ctrue) },
+         { CKA_TOKEN,       &ctrue,   sizeof (ctrue)  },
+         { CKA_PRIVATE,     &ctrue,   sizeof (ctrue)  },
+-        { CKA_EXTRACTABLE, &cfalse,  sizeof (cfalse) }
++        { CKA_EXTRACTABLE, &cextractable,  sizeof (cextractable) }
+     };
+ 
+     rv = ((CK_FUNCTION_LIST_PTR)session->module->sym)->C_GenerateKeyPair(session->session,
+@@ -2420,6 +2425,7 @@
+     CK_OBJECT_HANDLE domainPar, publicKey, privateKey;
+     CK_BBOOL ctrue = CK_TRUE;
+     CK_BBOOL cfalse = CK_FALSE;
++    CK_BBOOL cextractable = CK_FALSE;
+ 
+     /* ids we create are 16 bytes of data */
+     unsigned char id[16];
+@@ -2466,12 +2472,13 @@
+         { CKA_SENSITIVE,           &ctrue,   sizeof(ctrue)   },
+         { CKA_TOKEN,               &ctrue,   sizeof(ctrue)   },
+         { CKA_PRIVATE,             &ctrue,   sizeof(ctrue)   },
+-        { CKA_EXTRACTABLE,         &cfalse,  sizeof(cfalse)  }
++        { CKA_EXTRACTABLE, &cextractable,  sizeof (cextractable) }
+     };
+ 
+     if (!ctx) ctx = _hsm_ctx;
+     session = hsm_find_repository_session(ctx, repository);
+     if (!session) return NULL;
++    cextractable = session->module->config->allow_extract ? CK_TRUE : CK_FALSE;
+ 
+     /* check whether this key doesn't happen to exist already */
+ 
+@@ -2533,6 +2540,7 @@
+     CK_OBJECT_HANDLE publicKey, privateKey;
+     CK_BBOOL ctrue = CK_TRUE;
+     CK_BBOOL cfalse = CK_FALSE;
++    CK_BBOOL cextractable = CK_FALSE;
+ 
+     /* ids we create are 16 bytes of data */
+     unsigned char id[16];
+@@ -2569,12 +2577,13 @@
+         { CKA_SENSITIVE,           &ctrue,   sizeof(ctrue)   },
+         { CKA_TOKEN,               &ctrue,   sizeof(ctrue)   },
+         { CKA_PRIVATE,             &ctrue,   sizeof(ctrue)   },
+-        { CKA_EXTRACTABLE,         &cfalse,  sizeof(cfalse)  }
++        { CKA_EXTRACTABLE,         &cextractable,  sizeof (cextractable) }
+     };
+ 
+     if (!ctx) ctx = _hsm_ctx;
+     session = hsm_find_repository_session(ctx, repository);
+     if (!session) return NULL;
++    cextractable = session->module->config->allow_extract ? CK_TRUE : CK_FALSE;
+ 
+     /* check whether this key doesn't happen to exist already */
+ 
+diff -Naur opendnssec-1.4.7-orig/libhsm/src/lib/libhsm.h opendnssec-1.4.7/libhsm/src/lib/libhsm.h
+--- opendnssec-1.4.7-orig/libhsm/src/lib/libhsm.h	2014-12-04 10:17:40.000000000 -0500
++++ opendnssec-1.4.7/libhsm/src/lib/libhsm.h	2014-12-08 22:49:16.102212061 -0500
+@@ -75,6 +75,7 @@
+ /*! HSM configuration */
+ typedef struct {
+     unsigned int use_pubkey;     /*!< Maintain public keys in HSM */
++    unsigned int allow_extract;  /*!< Generate CKA_EXTRACTABLE private keys */
+ } hsm_config_t;
+ 
+ /*! Data type to describe an HSM */
+diff -Naur opendnssec-1.4.7-orig/NEWS opendnssec-1.4.7/NEWS
+--- opendnssec-1.4.7-orig/NEWS	2014-12-04 10:17:40.000000000 -0500
++++ opendnssec-1.4.7/NEWS	2014-12-08 22:50:00.560342544 -0500
+@@ -1,3 +1,9 @@
++
++Fedora patch:
++* Enforcer: New repository option <AllowExtraction/> allows to generate keys
++  with CKA_EXTRACTABLE attribute set to TRUE so keys can be wrapped
++  and extracted from HSM.
++
+ OpenDNSSEC 1.4.7 - 2014-12-04
+ 
+ Bugfixes:

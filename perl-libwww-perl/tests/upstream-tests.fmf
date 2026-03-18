@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-libwww-perl
+require: perl-libwww-perl-tests
+test: /usr/libexec/perl-libwww-perl/test

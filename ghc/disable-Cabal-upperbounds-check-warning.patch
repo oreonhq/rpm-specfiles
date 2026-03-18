@@ -1,0 +1,19 @@
+--- ghc-9.10.3/libraries/Cabal/Cabal/src/Distribution/PackageDescription/Check.hs~	2025-09-11 00:05:57.000000000 +0800
++++ ghc-9.10.3/libraries/Cabal/Cabal/src/Distribution/PackageDescription/Check.hs	2026-01-08 01:44:46.160533191 +0800
+@@ -560,13 +560,13 @@
+ checkSetupBuildInfo Nothing = return ()
+ checkSetupBuildInfo (Just (SetupBuildInfo ds _)) = do
+   let uqs = map mkUnqualComponentName ["base", "Cabal"]
+-  (is, rs) <- partitionDeps [] uqs ds
++  (is, _rs) <- partitionDeps [] uqs ds
+   let ick = PackageDistInexcusable . UpperBoundSetup
+-      rck =
++      _rck =
+         PackageDistSuspiciousWarn
+           . MissingUpperBounds CETSetup
+   checkPVP ick is
+-  checkPVPs rck rs
++  -- checkPVPs rck rs
+ 
+ checkPackageId :: Monad m => PackageIdentifier -> CheckM m ()
+ checkPackageId (PackageIdentifier pkgName_ _pkgVersion_) = do

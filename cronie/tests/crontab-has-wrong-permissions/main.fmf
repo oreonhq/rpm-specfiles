@@ -1,0 +1,12 @@
+summary: What the test does
+description: ''
+contact: Jakub Prokes <jprokes@redhat.com>
+component:
+  - cronie
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - cronie
+duration: 5m
+extra-summary: /CoreOS/cronie/Regression/crontab-has-wrong-permissions
+extra-task: /CoreOS/cronie/Regression/crontab-has-wrong-permissions

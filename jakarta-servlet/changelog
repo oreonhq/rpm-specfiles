@@ -1,0 +1,60 @@
+* Wed Aug 21 2024 Mikolaj Izdebski <mizdebsk@redhat.com> - 5.0.0-20
+- Switch to new GitHub repository
+
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-19
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Tue Feb 27 2024 Jiri Vanek <jvanek@redhat.com> - 5.0.0-18
+- Rebuilt for java-21-openjdk as system jdk
+
+* Fri Feb 23 2024 Jiri Vanek <jvanek@redhat.com> - 5.0.0-17
+- bump of release for for java-21-openjdk as system jdk
+
+* Wed Jan 24 2024 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-16
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sat Jan 20 2024 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-15
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Fri Sep 01 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 5.0.0-14
+- Convert License tag to SPDX format
+
+* Thu Jul 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-13
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-12
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-11
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Sat Feb 05 2022 Jiri Vanek <jvanek@redhat.com> - 5.0.0-10
+- Rebuilt for java-17-openjdk as system jdk
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Wed May 26 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 5.0.0-7
+- Re-add provides on glassfish-servlet-api
+
+* Mon May 17 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 5.0.0-6
+- Bootstrap build
+- Non-bootstrap build
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Thu Aug 20 2020 Mat Booth <mat.booth@redhat.com> - 5.0.0-4
+- Correct mvn_file macro invokation
+
+* Wed Aug 19 2020 Fabio Valentini <decathorpe@gmail.com> - 5.0.0-3
+- Add compat symlink for packages constructing the classpath manually.
+
+* Wed Aug 19 2020 Mat Booth <mat.booth@redhat.com> - 5.0.0-2
+- Also ship the API in the old javax namespace to aid transition
+
+* Thu Aug 13 2020 Fabio Valentini <decathorpe@gmail.com> - 5.0.0-1
+- Initial package renamed from glassfish-servlet-api.

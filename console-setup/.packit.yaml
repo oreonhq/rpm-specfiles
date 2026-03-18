@@ -1,0 +1,22 @@
+
+specfile_path: console-setup.spec
+
+upstream_package_name: console-setup
+upstream_project_url: https://salsa.debian.org/installer-team/console-setup
+downstream_package_name: console-setup
+
+actions:
+  changelog-entry:
+  - echo "- Update to latest upstream version"
+
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - fedora-rawhide
+
+  - job: koji_build
+    trigger: commit
+    allowed_pr_authors: ["packit", "vcrhonek"]
+    dist_git_branches:
+      - fedora-rawhide

@@ -1,0 +1,11 @@
+
+upstream_project_url: https://github.com/SBECK-github/Date-Manip
+upstream_tag_template: v{version}
+copy_upstream_release_description: false
+
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - fedora-development
+

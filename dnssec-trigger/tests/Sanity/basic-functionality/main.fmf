@@ -1,0 +1,9 @@
+summary: Try starting dnssec-triggerd and use fallbacks
+description: |
+  Use configured fallbacks manually by test_tcp and test_http commands.
+  Also check resolutions is actually working.
+test: ./test.sh
+framework: beakerlib
+require:
+  - dnssec-trigger
+  - unbound

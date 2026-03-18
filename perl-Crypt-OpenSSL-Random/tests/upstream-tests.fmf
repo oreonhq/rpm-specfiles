@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Crypt-OpenSSL-Random
+require: perl-Crypt-OpenSSL-Random-tests
+test: /usr/libexec/perl-Crypt-OpenSSL-Random/test

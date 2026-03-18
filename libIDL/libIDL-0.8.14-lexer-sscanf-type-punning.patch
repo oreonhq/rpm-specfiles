@@ -1,0 +1,36 @@
+diff -Naur libIDL-0.8.14-original/lexer.l libIDL-0.8.14/lexer.l
+--- libIDL-0.8.14-original/lexer.l	2009-04-18 08:20:37.000000000 -0400
++++ libIDL-0.8.14/lexer.l	2021-02-03 12:56:01.237822569 -0500
+@@ -269,17 +269,29 @@
+ <*>{whitespace}						;
+ {b8_int}						{
+ 	yylval.integer = 0;
+-	sscanf (yytext, "%" IDL_LL "o", &yylval.integer);
++        {
++        	long long unsigned yyltmp = 0;
++		sscanf (yytext, "%" IDL_LL "o", &yyltmp);
++		memmove (&yylval.integer, &yyltmp, sizeof (yylval.integer));
++	}
+ 	tokreturn (TOK_INTEGER);
+ }
+ {b10_uint}						{
+ 	yylval.integer = 0;
+-	sscanf (yytext, "%" IDL_LL "u", &yylval.integer);
++        {
++        	long long unsigned yyltmp = 0;
++		sscanf (yytext, "%" IDL_LL "u", &yyltmp);
++		memmove (&yylval.integer, &yyltmp, sizeof (yylval.integer));
++	}
+ 	tokreturn (TOK_INTEGER);
+ }
+ {b16_int}						{
+ 	yylval.integer = 0;
+-	sscanf (yytext + 2, "%" IDL_LL "x", &yylval.integer);
++        {
++        	long long unsigned yyltmp = 0;
++		sscanf (yytext + 2, "%" IDL_LL "x", &yyltmp);
++		memmove (&yylval.integer, &yyltmp, sizeof (yylval.integer));
++	}
+ 	tokreturn (TOK_INTEGER);
+ }
+ {fixed_lit}						{

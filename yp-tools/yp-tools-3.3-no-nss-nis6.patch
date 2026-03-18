@@ -1,0 +1,24 @@
+diff -ru yp-tools-3.3-orig/Makefile.am yp-tools-3.3/Makefile.am
+--- yp-tools-3.3-orig/Makefile.am	2014-10-29 15:28:02.000000000 +0100
++++ yp-tools-3.3/Makefile.am	2014-12-10 18:47:11.864137423 +0100
+@@ -5,7 +5,7 @@
+ #
+ AUTOMAKE_OPTIONS = 1.5 gnits dist-bzip2
+ #
+-SUBDIRS = lib src nss_nis6 po man etc
++SUBDIRS = lib src po man etc
+ 
+ CLEANFILES = *~
+ 
+diff -ru yp-tools-3.3-orig/Makefile.in yp-tools-3.3/Makefile.in
+--- yp-tools-3.3-orig/Makefile.in	2014-12-05 12:44:37.000000000 +0100
++++ yp-tools-3.3/Makefile.in	2014-12-10 18:16:20.996550012 +0100
+@@ -382,7 +382,7 @@
+ #
+ AUTOMAKE_OPTIONS = 1.5 gnits dist-bzip2
+ #
+-SUBDIRS = lib src nss_nis6 po man etc
++SUBDIRS = lib src po man etc
+ CLEANFILES = *~
+ ACLOCAL_AMFLAGS = -I m4
+ M4_FILES = m4/getline.m4

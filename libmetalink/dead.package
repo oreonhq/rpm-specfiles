@@ -1,0 +1,1 @@
+Obsolete and unsupported upstream for over ten years; was required by wget, but that was retired in favor of wget2 as part of https://fedoraproject.org/wiki/Changes/Wget2asWget, so there is absolutely no further reason to keep this package around.

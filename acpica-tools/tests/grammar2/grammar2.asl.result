@@ -1,0 +1,375 @@
+ACPI Warning: NsLookup: Type mismatch on GIDX (RegionField), searching for (Region) (20190509/nsaccess-728)
+ACPI Warning: NsLookup: Type mismatch on IDX2 (RegionField), searching for (Region) (20190509/nsaccess-728)
+ACPI Warning: NsLookup: Type mismatch on INDX (RegionField), searching for (Region) (20190509/nsaccess-728)
+ACPI Warning: NsLookup: Type mismatch on AIDX (RegionField), searching for (Region) (20190509/nsaccess-728)
+ACPI Warning: NsLookup: Type mismatch on C05D (RegionField), searching for (Region) (20190509/nsaccess-728)
+ACPI Warning: NsLookup: Type mismatch on INDX (RegionField), searching for (Region) (20190509/nsaccess-728)
+ACPI Warning: NsLookup: Type mismatch on IND2 (RegionField), searching for (Region) (20190509/nsaccess-728)
+grammar2.asl    106:     Device (A1)
+Warning  3141 -                  ^ Missing dependency (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl    121:     Device (A2)
+Warning  3141 -                  ^ Missing dependency (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl    131:     Device (A3)
+Warning  3141 -                  ^ Missing dependency (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl    141:     Device (A4)
+Warning  3141 -                  ^ Missing dependency (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl    156:     Device (IRES)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl    184:     Name (_NPK, Package (0x04)
+Warning  3133 -                  ^ Unknown reserved name (_NPK)
+
+grammar2.asl    191:     Device (RES)
+Warning  3141 -                   ^ Missing dependency (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl    437:             CreateByteField (PRT0, \RES._CRS._Y01._ASZ, RSIZ)  // _ASZ: Access Size
+Remark   2089 -                                       Object is not referenced ^  (Name [RSIZ] is within a method [_CRS])
+
+grammar2.asl    579:         Name (_STR, Unicode ("test"))  // _STR: Description String
+Remark   2089 -                      ^ Object is not referenced (Name [_STR] is within a method [TCOP])
+
+grammar2.asl    581:         Local0 = MFLD /* \MFLD */
+Warning  3144 -                  ^ Method Local is set but never used (Local0)
+
+grammar2.asl    706:     Method (RCIV, 1, NotSerialized)
+Warning  3115 -                    ^ Not all control paths return a value (RCIV)
+
+grammar2.asl    714:         RCIV ((Arg0 - 0x01))
+Remark   2098 -                ^ Recursive method call (RCIV)
+
+grammar2.asl    758:     Method (SMWE, 4, NotSerialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg0)
+
+grammar2.asl    758:     Method (SMWE, 4, NotSerialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg1)
+
+grammar2.asl    758:     Method (SMWE, 4, NotSerialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg2)
+
+grammar2.asl    758:     Method (SMWE, 4, NotSerialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg3)
+
+grammar2.asl    763:     Method (SMRE, 4, NotSerialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg0)
+
+grammar2.asl    763:     Method (SMRE, 4, NotSerialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg1)
+
+grammar2.asl    763:     Method (SMRE, 4, NotSerialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg2)
+
+grammar2.asl    763:     Method (SMRE, 4, NotSerialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg3)
+
+grammar2.asl    788:             CreateField (\_SB.SBUF, 0x94, 0x60, FLDV)
+Remark   2089 -                               Object is not referenced ^  (Name [FLDV] is within a method [_INI])
+
+grammar2.asl    812:             Method (_SRS, 0, NotSerialized)  // _SRS: Set Resource Settings
+Warning  3102 -                            ^ Reserved method has too few arguments (_SRS requires 1)
+
+grammar2.asl    817:             Device (EIO)
+Warning  3141 -        Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl    885:                 If (!SMRE (0x09, 0x17, Local2, RefOf (Local3)))
+Warning  3144 -                             Method Local is set but never used ^  (Local3)
+
+grammar2.asl    981:     Device (DEV1)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   1029:         Divide (Local0, Local1, Local3)
+Warning  3144 -       Method Local is set but never used ^  (Local3)
+
+grammar2.asl   1055:     Method (R226, 2, NotSerialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg0)
+
+grammar2.asl   1055:     Method (R226, 2, NotSerialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg1)
+
+grammar2.asl   1083:         Local1 = Local0
+Warning  3144 -                  ^ Method Local is set but never used (Local1)
+
+grammar2.asl   1364:     Method (OBJ1, 1, Serialized)
+Remark   2146 -                    ^ Method Argument is never used (Arg0)
+
+grammar2.asl   1367:         Name (BUFR, Buffer (Local0){})
+Remark   2089 -                      ^ Object is not referenced (Name [BUFR] is within a method [OBJ1])
+
+grammar2.asl   1375:         Alias (MTX1, MTX2)
+Remark   2089 -    Object is not referenced ^  (Name [MTX2] is within a method [OBJ1])
+
+grammar2.asl   1393:         CreateField (BUF2, 0x94, 0x60, FLD3)
+Remark   2089 -                      Object is not referenced ^  (Name [FLD3] is within a method [FLDS])
+
+grammar2.asl   1457:         QWD2 = 0x1234567887654321
+Warning  3038 -                                     ^ Truncating 64-bit constant found in 32-bit table
+
+grammar2.asl   1459:         If ((Local0 != 0x1234567887654321))
+Warning  3038 -                                             ^ Truncating 64-bit constant found in 32-bit table
+
+grammar2.asl   1536:         SizeOf (BUFO)
+Error    6114 -                        ^ Result is not used, operator has no effect
+
+grammar2.asl   1550:         Alias (MTX2, MTXA)
+Remark   2089 -    Object is not referenced ^  (Name [MTXA] is within a method [OBJ2])
+
+grammar2.asl   1554:         Acquire (MTX2, 0x0001)
+Warning  3130 -                                 ^ Result is not used, possible operator timeout will be missed
+
+grammar2.asl   1669:         (Local0 + Local1)
+Error    6114 -                     ^ Result is not used, operator has no effect
+
+grammar2.asl   1680:         Local2 = (Local0 + Local1)
+Warning  3144 -                  ^ Method Local is set but never used (Local2)
+
+grammar2.asl   1792:         Local0 = (0xFFFFFFFF && 0x11111111)
+Warning  3144 -                  ^ Method Local is set but never used (Local0)
+
+grammar2.asl   1794:         Local1 = (0xFFFFFFFF == 0x11111111)
+Warning  3144 -                  ^ Method Local is set but never used (Local1)
+
+grammar2.asl   1796:         Local2 = (0xFFFFFFFF > 0x11111111)
+Warning  3144 -                  ^ Method Local is set but never used (Local2)
+
+grammar2.asl   1798:         Local3 = (0xFFFFFFFF >= 0x11111111)
+Warning  3144 -                  ^ Method Local is set but never used (Local3)
+
+grammar2.asl   1800:         Local4 = (0xFFFFFFFF < 0x11111111)
+Warning  3144 -                  ^ Method Local is set but never used (Local4)
+
+grammar2.asl   1802:         Local5 = (0xFFFFFFFF <= 0x11111111)
+Warning  3144 -                  ^ Method Local is set but never used (Local5)
+
+grammar2.asl   1827:     Method (COND, 0, NotSerialized)
+Warning  3115 -                    ^ Not all control paths return a value (COND)
+
+grammar2.asl   1937:         Local5 = RefOf (MAIN)
+Warning  3144 -                  ^ Method Local is set but never used (Local5)
+
+grammar2.asl   1999:     Device (IFEL)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   2165:     Device (NOSV)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   2604:     Device (IDXF)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   2633:             Local0 = IFE0 /* \IDXF.IFE0 */
+Warning  3144 -                      ^ Method Local is set but never used (Local0)
+
+grammar2.asl   2634:             Local1 = IFE1 /* \IDXF.IFE1 */
+Warning  3144 -                      ^ Method Local is set but never used (Local1)
+
+grammar2.asl   2635:             Local2 = IFE2 /* \IDXF.IFE2 */
+Warning  3144 -                      ^ Method Local is set but never used (Local2)
+
+grammar2.asl   2651:         Device (NSTL)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   2681:     Device (RTBF)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   2786:     Device (GPE2)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   2801:     Device (PRW2)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   2855:     Device (PRW1)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   2936:             Local0 = Arg0
+Warning  3144 -                      ^ Method Local is set but never used (Local0)
+
+grammar2.asl   2939:         Device (RTLV)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   3052:             Name (_CRS, 0x00)  // _CRS: Current Resource Settings
+Error    6105 -                                ^ Invalid object type for reserved name (_CRS: found Integer, Buffer required)
+
+grammar2.asl   3159:         Device (RETP)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   3199:     Device (WHLR)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   3255:     Device (ANDO)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   3543:     Device (BRKP)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   3581:     Device (ADSU)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   3706:     Device (INDC)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   3835:     Device (LOPS)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   4269:     Device (FDSO)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   4484:     Device (MLDV)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   4664:     Device (NBIT)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   4955:     Device (SHFT)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   5194:     Device (XORD)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   5571:     Device (CRBF)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   5674:     Device (IDX4)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   6604:     Device (EVNT)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   6867:     Device (SZLV)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   6952:         Device (BYTF)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   6963:         Device (C005)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   6967:             Device (C013)
+Warning  3141 -         Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   7039:             Name (_HID, "*PNP0A06")  // _HID: Hardware ID
+Error    6061 -             Invalid leading asterisk ^  (*PNP0A06)
+
+grammar2.asl   7231:         Name (C18C, Package (0x02)
+Remark   2063 -                                     ^ Initializer list shorter than declared package length
+
+grammar2.asl   7264:         Device (C19B)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   7276:                 Divide (Local1, 0x0A, Local0, Local2) /*  Local0 = Local1 / 10 */
+Warning  3144 -             Method Local is set but never used ^  (Local0)
+
+grammar2.asl   7321:     Device (DWDF)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   7345:     Method (MKW, 2, NotSerialized)
+Remark   2146 -                   ^ Method Argument is never used (Arg0)
+
+grammar2.asl   7345:     Method (MKW, 2, NotSerialized)
+Remark   2146 -                   ^ Method Argument is never used (Arg1)
+
+grammar2.asl   7354:     Device (DVAX)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   7394:     Device (IDX6)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   7420:         Device (TST)
+Warning  3141 -    Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   7441:             Local0 = IFE0 /* \IDX6.IFE0 */
+Warning  3144 -                      ^ Method Local is set but never used (Local0)
+
+grammar2.asl   7442:             Local1 = IFE1 /* \IDX6.IFE1 */
+Warning  3144 -                      ^ Method Local is set but never used (Local1)
+
+grammar2.asl   7443:             Local2 = IFE2 /* \IDX6.IFE2 */
+Warning  3144 -                      ^ Method Local is set but never used (Local2)
+
+grammar2.asl   7446:             Local3 = \IDX6.IFE0
+Warning  3144 -                      ^ Method Local is set but never used (Local3)
+
+grammar2.asl   7447:             Local4 = \IDX6.IFE1
+Warning  3144 -                      ^ Method Local is set but never used (Local4)
+
+grammar2.asl   7450:             Local5 = \IDX6.TST.IFE0
+Warning  3144 -                      ^ Method Local is set but never used (Local5)
+
+grammar2.asl   7451:             Local6 = \IDX6.TST.IFE1
+Warning  3144 -                      ^ Method Local is set but never used (Local6)
+
+grammar2.asl   7463:     Device (IDX5)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   7852:         Device (BITI)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   7960:                 Local0 &= 0x01 /*  Local0 &= 1 */
+Error    6066 -                          ^ Method local variable is not initialized (Local0)
+
+grammar2.asl   8123:             Name (_HID, "*PNP0C0A")     /*  Control Method Battey ID */  // _HID: Hardware ID
+Error    6061 -             Invalid leading asterisk ^  (*PNP0C0A)
+
+grammar2.asl   8133:         Device (IDX3)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   8314:     Device (IDX7)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   9020:     Device (MTCH)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   9099:             CreateDWordField (TMD0, 0x04, DMA0)
+Remark   2089 -                         Object is not referenced ^  (Name [DMA0] is within a method [TEST])
+
+grammar2.asl   9100:             CreateDWordField (TMD0, 0x08, PIO1)
+Remark   2089 -                         Object is not referenced ^  (Name [PIO1] is within a method [TEST])
+
+grammar2.asl   9101:             CreateDWordField (TMD0, 0x0C, DMA1)
+Remark   2089 -                         Object is not referenced ^  (Name [DMA1] is within a method [TEST])
+
+grammar2.asl   9102:             CreateDWordField (TMD0, 0x10, CHNF)
+Remark   2089 -                         Object is not referenced ^  (Name [CHNF] is within a method [TEST])
+
+grammar2.asl   9295:     Device (WHLB)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl   9673:         Device (IDX2)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl  10054:     Device (SIZO)
+Warning  3141 - Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl  10103:             Name (PKG2, Package (0x04)
+Remark   2063 -                                         ^ Initializer list shorter than declared package length
+
+grammar2.asl  10489:             Local0 = _OS /* \_OS_ */
+Warning  3144 -                      ^ Method Local is set but never used (Local0)
+
+grammar2.asl  10621:         Device (MBIT)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl  10632:         Device (MWRD)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl  10640:         Device (MBYT)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl  10714:         Device (SMIS)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+grammar2.asl  10780:         Device (CNDT)
+Warning  3141 -     Missing dependency ^  (Device object requires a _HID or _ADR in same scope)
+
+
+Intel ACPI Component Architecture
+ASL+ Optimizing Compiler/Disassembler version VVVVVVVV
+Copyright (c) 2000 - 2019 Intel Corporation
+
+Ignoring all errors, forcing AML file generation
+
+ASL Input:     grammar2.asl -  378020 bytes   4899 keywords  11654 source lines
+AML Output:    grammar2.aml -   43758 bytes   4229 opcodes     670 named objects
+
+Compilation successful. 6 Errors, 86 Warnings, 27 Remarks, 1109 Optimizations

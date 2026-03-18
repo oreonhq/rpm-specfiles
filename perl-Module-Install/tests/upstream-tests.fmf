@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Module-Install
+require: perl-Module-Install-tests
+test: /usr/libexec/perl-Module-Install/test

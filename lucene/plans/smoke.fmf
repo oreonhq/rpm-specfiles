@@ -1,0 +1,13 @@
+summary: Basic smoke test
+prepare:
+  how: install
+  package: java-devel
+discover:
+  how: shell
+  tests:
+    - name: /smoke/print-codecs
+      test: |
+        javac --class-path $(echo /usr/share/java/lucene/*.jar | tr ' ' ':') plans/Smoke.java -d plans
+        java --class-path $(echo /usr/share/java/lucene/*.jar | tr ' ' ':'):plans Smoke
+execute:
+  how: tmt

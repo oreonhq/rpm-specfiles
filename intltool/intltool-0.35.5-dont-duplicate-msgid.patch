@@ -1,0 +1,20 @@
+--- intltool-0.35.5/intltool-merge.in.in.dont-duplicate-msgid	2007-03-21 13:10:28.000000000 -0400
++++ intltool-0.35.5/intltool-merge.in.in	2007-03-21 13:13:43.000000000 -0400
+@@ -428,7 +428,7 @@
+        
+ 	    if (/^msgid "((\\.|[^\\]+)*)"/ ) 
+             {
+-		$translations{$lang, $msgid} = $msgstr if $inmsgstr && $msgid && $msgstr;
++		$translations{$lang, $msgid} = $msgstr if $inmsgstr && $msgid && $msgstr && $msgid ne $msgstr;
+ 		$msgid = "";
+ 		$msgstr = "";
+ 
+@@ -455,7 +455,7 @@
+ 	        $msgstr .= unescape_po_string($1) if $inmsgstr;
+ 	    }
+ 	}
+-	$translations{$lang, $msgid} = $msgstr if $inmsgstr && $msgid && $msgstr;
++	$translations{$lang, $msgid} = $msgstr if $inmsgstr && $msgid && $msgstr && $msgstr ne $msgid;
+     }
+ }
+ 

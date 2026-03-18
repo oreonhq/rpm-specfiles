@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Test-NoWarnings
+require: perl-Test-NoWarnings-tests
+test: /usr/libexec/perl-Test-NoWarnings/test

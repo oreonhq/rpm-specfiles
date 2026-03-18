@@ -1,0 +1,8 @@
+summary: Building a lp_solve application
+description:
+    Check that a lp_solve application can be compiled, linked and executed.
+component: lpsolve
+require:
+    - gcc
+    - lpsolve-devel
+test: gcc -I/usr/include/lpsolve /usr/share/doc/lpsolve-devel/demo.c -llpsolve55 && ./a.out </dev/null

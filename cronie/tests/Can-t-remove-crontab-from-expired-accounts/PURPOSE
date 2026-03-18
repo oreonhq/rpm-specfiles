@@ -1,0 +1,3 @@
+PURPOSE of /CoreOS/cronie/Regression/Can-t-remove-crontab-from-expired-accounts
+Description: Test for Can't remove crontab from expired accounts
+Author: Karel Volny <kvolny@redhat.com>

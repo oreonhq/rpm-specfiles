@@ -1,0 +1,10 @@
+summary: Run all tests
+discover:
+  how: fmf
+execute:
+  how: tmt
+prepare:
+  how: install
+  package:
+    - ocaml
+    - ocaml-dune

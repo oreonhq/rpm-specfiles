@@ -1,0 +1,135 @@
+* Wed Jul 31 2024 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.17.0-1
+- Update to upstream version 1.17.0
+
+* Wed Jul 24 2024 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.16.0-4
+- Put private JAR files outsides of javadir/jnidir
+
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.16.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Tue Feb 27 2024 Jiri Vanek <jvanek@redhat.com> - 1.16.0-2
+- Rebuilt for java-21-openjdk as system jdk
+
+* Mon Feb 19 2024 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.16.0-1
+- Update to upstream version 1.16.0
+- Switch from Java 17 to Java 21
+
+* Wed Feb 07 2024 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.15.0-1
+- Update to upstream version 1.15.0
+
+* Wed Jan 24 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.14.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sat Jan 20 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.14.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Mon Dec 11 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.14.0-1
+- Update to upstream version 1.14.0
+
+* Wed Oct 25 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.13.0-3
+- Dynamically generate bundled Provides
+
+* Fri Sep 01 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.13.0-2
+- Convert License tag to SPDX format
+
+* Fri Aug 25 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.13.0-1
+- Update to upstream version 1.13.0
+
+* Mon Aug 21 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.12.0-1
+- Update to upstream version 1.12.0
+
+* Thu Aug 17 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.11.0-2
+- Update to upstream version 1.11.0
+
+* Thu Aug 10 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.10.0-1
+- Update to upstream version 1.10.0
+
+* Thu Jul 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1.9.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Fri Mar 31 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.9.0-2
+- Rebuild with no changes
+
+* Mon Mar 27 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.9.0-1
+- Update to upstream version 1.9.0
+
+* Mon Mar 20 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.8.1-1
+- Update to upstream version 1.8.1
+
+* Fri Mar 17 2023 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.8.0-1
+- Update to upstream version 1.8.0
+
+* Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Wed Oct 19 2022 Marian Koncek <mkoncek@redhat.com> - 1.7.2-1
+- Update to upstream version 1.7.2
+
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.7.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Wed Jun 22 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.7.1-1
+- Update to upstream version 1.7.1
+
+* Tue Jun 14 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.7.0-3
+- Add openjdk8 toolchain subpackage
+
+* Mon Jun 06 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.7.0-2
+- Drop build-requires on javapackages-generators
+
+* Fri May 13 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.7.0-1
+- Update to upstream version 1.7.0
+
+* Thu May 05 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.5.0^20220505.git4f9a68a-2
+- Fix dangling toolchains.xml symlink
+
+* Thu May 05 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.5.0^20220505.git4f9a68a-1
+- Update to latest upstream snapshot
+
+* Fri Apr 29 2022 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.5.0^20220429.git1cfada9-1
+- Update to latest upstream snapshot
+
+* Sat Feb 05 2022 Jiri Vanek <jvanek@redhat.com> - 1.5.0^20220105.git9f283b7-3
+- Rebuilt for java-17-openjdk as system jdk
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.5.0^20220105.git9f283b7-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Wed Jan 05 2022 Marian Koncek <mkoncek@redhat.com> - 1.5.0^20220105.git9f283b7-1
+- Update to latest upstream snapshot
+
+* Wed Nov 03 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.5.0^20211102.gitd76c032-2
+- Build with OpenJDK 17
+
+* Tue Nov 02 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.5.0^20211102.gitd76c032-1
+- Update to latest upstream snapshot
+
+* Thu Oct 28 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.5.0^20211028.git2daa95f-1
+- Update to latest upstream snapshot
+
+* Fri Oct 15 2021 Marian Koncek <mkoncek@redhat.com> - 1.5.0~20211015.1e296d5-1
+- Update to upstream snapshot 1e296d550d91f89f383e42ceeb0856b97214b51a
+
+* Mon Jul 26 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.5.0-1
+- Update to upstream version 1.5.0
+
+* Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.4.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Thu Mar 18 2021 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.4.0-1
+- Update to upstream version 1.4.0
+
+* Mon Feb 08 2021 Marian Koncek <mkoncek@redhat.com> - 1.3.0-1
+- Update to upstream version 1.3.0
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Wed Dec 16 2020 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.2.0-1
+- Update to upstream version 1.2.0
+
+* Thu Dec  3 2020 Mikolaj Izdebski <mizdebsk@redhat.com> - 1.1.0-1
+- Update to upstream version 1.1.0
+
+* Wed Nov 25 2020 Marian Koncek <mkoncek@redhat.com> - 1.0.0-1
+- Initial commit

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-perlfaq
+require: perl-perlfaq-tests
+test: /usr/libexec/perl-perlfaq/test

@@ -1,0 +1,17 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "kde@lists.fedoraproject.org",
+                "Name": "Fedora KDE SIG"
+            }
+        ],
+        "Category": "",
+        "Description": "Fedora mobile theme by Fedora KDE SIG",
+        "Id": "org.fedoraproject.fedora.mobile",
+        "License": "GPLv2+",
+        "Name": "Fedora Mobile",
+        "Website": "https://fedoraproject.org/"
+    }
+}

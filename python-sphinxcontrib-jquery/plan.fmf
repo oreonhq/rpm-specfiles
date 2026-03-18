@@ -1,0 +1,9 @@
+summary: Basic smoke test
+
+discover:
+  - name: Run include-sphinxcontrib-jquery test
+    how: fmf
+    url: https://src.fedoraproject.org/rpms/python-sphinx/
+    test: "/tests/include-sphinxcontrib-jquery"
+execute:
+  how: tmt

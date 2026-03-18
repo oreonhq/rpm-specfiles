@@ -1,0 +1,17 @@
+summary: ltrace crashes process to be analysed
+description: |
+    ltrace could possibly crash traced application on s390 and s390x.
+contact: Michal Nowak <mnowak@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- gcc
+- glibc-devel
+duration: 5m
+link:
+-   relates: https://bugzilla.redhat.com/show_bug.cgi?id=427444
+extra-summary: /tools/ltrace/Regression/427444-ltrace-crashes-process-to-be-analysed
+extra-task: /tools/ltrace/Regression/427444-ltrace-crashes-process-to-be-analysed

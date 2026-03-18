@@ -1,0 +1,12 @@
+summary: Basic smoke test
+discover:
+  how: shell
+  tests:
+    - name: /smoke/import-python-module
+      test: |
+        python3 -c 'import importlib as il; print(il.import_module("lxml"))'
+    - name: /smoke/etree-fromstring
+      test: |
+        python3 plans/etree-fromstring.py
+execute:
+  how: tmt

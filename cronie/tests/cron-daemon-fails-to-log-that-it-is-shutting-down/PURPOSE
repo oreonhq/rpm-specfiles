@@ -1,0 +1,4 @@
+PURPOSE of /CoreOS/cronie/Regression/cron-daemon-fails-to-log-that-it-is-shutting-down
+Description: Test for cron daemon fails to log that it is shutting down.
+Author: Robin Hack <rhack@redhat.com>
+Bug summary: cron daemon fails to log that it is shutting down.

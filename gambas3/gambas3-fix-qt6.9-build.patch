@@ -1,0 +1,39 @@
+diff --git a/gb.qt6/src/main.cpp b/gb.qt6/src/main.cpp
+index f3461b2..1ac617a 100644
+--- a/gb.qt6/src/main.cpp
++++ b/gb.qt6/src/main.cpp
+@@ -51,6 +51,7 @@
+ #include <QPaintDevice>
+ #include <QLibraryInfo>
+ #include <QThreadPool>
++#include <QGuiApplication>
+ 
+ #include "gb.image.h"
+ #include "gb.form.font.h"
+@@ -1264,8 +1265,13 @@ int EXPORT GB_INFO(const char *key, void **value)
+ }
+ #endif
+ 
+-
+-#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
++class QGuiApplicationPrivate
++{
++public:
++    static QThreadPool *qtGuiThreadPool();
++};
++#elif QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+ 	
+ // Qt6 adds a new internal private Thread pool. Hack it so that it can be reset when forking.
+ class QThreadPoolPrivate
+@@ -1279,7 +1285,9 @@ public:
+ void EXPORT GB_FORK(void)
+ {
+ 	delete QThreadPool::globalInstance();
+-#if QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
++#if QT_VERSION >= QT_VERSION_CHECK(6, 9, 0)
++	delete QGuiApplicationPrivate::qtGuiThreadPool();
++#elif QT_VERSION >= QT_VERSION_CHECK(6, 5, 0)
+ 	delete QThreadPoolPrivate::qtGuiInstance();
+ #endif
+ }

@@ -1,0 +1,94 @@
+%flatpak	1
+%distcore       .fc%{fedora}app
+# This definition of dist in terms of distcore is standard in fedora-release from F40 on, but duplicated here for F39
+%dist           %{!?distprefix0:%{?distprefix}}%{expand:%{lua:for i=0,9999 do print("%{?distprefix" .. i .."}") end}}%{distcore}%{?with_bootstrap:%{__bootstrap}}
+%_prefix	/app
+%_sysconfdir	%{_prefix}/etc
+%_localstatedir %{_prefix}/var
+%build_fflags %{__build_flags_common} -I%{_fmoddir} -I/usr/__LIB__/gfortran/modules %{?_distro_extra_fflags}
+%build_ldflags -Wl,-z,relro %{_ld_as_needed_flags} %{_ld_symbols_flags} %{_hardened_ldflags} %{_annotation_ldflags} %[ "%{toolchain}" == "clang" ? "%{?_clang_extra_ldflags}" : "" ] %{_build_id_flags} %{?_package_note_flags} -L%{_prefix}/__LIB__
+%__brp_compress		%{_usr}/lib/rpm/brp-compress /app
+%__git			%{_bindir}/git
+%__perl			%{_usr}/bin/perl
+%_fontbasedir		%{_datadir}/fonts
+%java_home		%{_prefix}/lib/jvm/jre-openjdk
+%__dola_classpath       %(build-classpath dola/dola-bsx.jar plexus-classworlds.jar)
+%__dola_classworlds     /etc/java/dola/classworlds
+%__xmvngen_classpath    %(build-classpath xmvn-generator.jar objectweb-asm/asm.jar commons-compress.jar commons-io.jar commons-lang3.jar xmvn/xmvn-api.jar xmvn/xmvn-core.jar maven/maven-model.jar plexus/utils.jar)
+# macros.emacs
+%_emacs_sitelispdir     %{_datadir}/emacs/site-lisp
+%_emacs_sitestartdir    %{_datadir}/emacs/site-lisp/site-start.d
+%_emacs_bytecompile(W)  %{_bindir}/emacs -batch --no-init-file --no-site-file --eval '(push nil load-path)' %{-W:--eval '(setq byte-compile-error-on-warn t)' }-f batch-byte-compile %*
+
+%___build_pre_env	\
+  RPM_SOURCE_DIR=\"%{u2p:%{_sourcedir}}\"\
+  RPM_BUILD_DIR=\"%{u2p:%{_builddir}}\"\
+  RPM_OPT_FLAGS=\"%{optflags}\"\
+  RPM_LD_FLAGS=\"%{?build_ldflags}\"\
+  RPM_ARCH=\"%{_arch}\"\
+  RPM_OS=\"%{_os}\"\
+  RPM_BUILD_NCPUS=\"%{_smp_build_ncpus}\"\
+  RPM_SPECPARTS_DIR=\"%{specpartsdir}\"\
+  export RPM_SOURCE_DIR RPM_BUILD_DIR RPM_OPT_FLAGS RPM_LD_FLAGS RPM_ARCH RPM_OS RPM_BUILD_NCPUS RPM_SPECPARTS_DIR RPM_LD_FLAGS\
+  RPM_DOC_DIR=\"%{_docdir}\"\
+  export RPM_DOC_DIR\
+  RPM_PACKAGE_NAME=\"%{NAME}\"\
+  RPM_PACKAGE_VERSION=\"%{VERSION}\"\
+  RPM_PACKAGE_RELEASE=\"%{RELEASE}\"\
+  export RPM_PACKAGE_NAME RPM_PACKAGE_VERSION RPM_PACKAGE_RELEASE\
+  LANG=C.UTF-8\
+  export LANG\
+  unset CDPATH DISPLAY ||:\
+  unset DEBUGINFOD_URLS ||:\
+  unset RPM_CONFIG_DIR ||:\
+  %{?buildroot:RPM_BUILD_ROOT=\"%{u2p:%{buildroot}}\"\
+  export RPM_BUILD_ROOT}\
+  %{?_javaclasspath:CLASSPATH=\"%{_javaclasspath}\"\
+  export CLASSPATH}\
+  CONFIG_SITE=${CONFIG_SITE:-NONE}\
+  export CONFIG_SITE\
+  ACLOCAL_PATH="%{_datadir}/aclocal:%{_usr}/share/aclocal"\
+  export ACLOCAL_PATH\
+  CPATH="%{_prefix}/include"\
+  export CPATH\
+  CPLUS_INCLUDE_PATH="%{_prefix}/include"\
+  export CPLUS_INCLUDE_PATH\
+  C_INCLUDE_PATH="%{_prefix}/include"\
+  export C_INCLUDE_PATH\
+  GI_TYPELIB_PATH="%{_prefix}/__LIB__/girepository-1.0:%{_usr}/__LIB__/girepository-1.0"\
+  export GI_TYPELIB_PATH\
+  INFOPATH="%{_datadir}/info"\
+  export INFOPATH\
+  MANPATH="%{_datadir}/man:"\
+  export MANPATH\
+  OBJC_INCLUDE_PATH="%{_prefix}/include"\
+  export OBJC_INCLUDE_PATH\
+  PATH="%{_bindir}:%{_usr}/bin:/bin"\
+  PKG_CONFIG_GLADEUI_2_0_CATALOGDIR="%{_datadir}/glade/catalogs"\
+  export PKG_CONFIG_GLADEUI_2_0_CATALOGDIR\
+  PKG_CONFIG_PATH="%{_prefix}/__LIB__/pkgconfig:%{_datadir}/pkgconfig:%{_usr}/__LIB__/pkgconfig:%{_usr}/share/pkgconfig"\
+  export PKG_CONFIG_PATH\
+  XDG_CONFIG_DIRS="%{_sysconfdir}/xdg:/etc/xdg"\
+  export XDG_CONFIG_DIRS\
+  XDG_DATA_DIRS="%{_datadir}:%{_usr}/local/share:%{_usr}/share"\
+  export XDG_DATA_DIRS\
+  GVFS_REMOTE_VOLUME_MONITOR_IGNORE="1"\
+  export GVFS_REMOTE_VOLUME_MONITOR_IGNORE\
+  JAVA_HOME="%{_prefix}/lib/jvm/jre-openjdk"\
+  export JAVA_HOME\
+  BOOST_ROOT=%{_prefix}\
+  export BOOST_ROOT
+
+
+# Override /usr/lib/rpm/fontconfig.prov with a version that also handles fonts
+# in /app/share/fonts
+%__font_provides	%{_rpmconfigdir}/fontconfig-flatpak.prov
+# Fix /usr/lib/rpm/fileattrs/maven.attr search path
+%__maven_path           ^/usr/share/maven-metadata/.*
+# Search /app/etc/java for java.conf and javapackages-config.json
+%jpb_env                JAVACONFDIRS=%{_sysconfdir}/java
+# rpm-build's rpath script hardcodes /usr and doesn't work right for /app prefix
+%__brp_check_rpaths	%{nil}
+# Override buildroot jurand macros which mistakenly use %%_bindir
+%java_remove_imports /usr/bin/jurand -i
+%java_remove_annotations /usr/bin/jurand -i -a

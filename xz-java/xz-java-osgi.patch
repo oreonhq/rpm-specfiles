@@ -1,0 +1,12 @@
+--- build.xml.bak	2012-07-05 08:21:30.000000000 +0200
++++ build.xml	2013-01-03 14:23:51.411506995 +0100
+@@ -64,6 +64,9 @@
+                 <attribute name="Implementation-Version" value="${version}"/>
+                 <attribute name="Implementation-URL" value="${homepage}"/>
+                 <attribute name="Sealed" value="true"/>
++                <attribute name="Bundle-SymbolicName" value="org.tukaani.xz"/>
++                <attribute name="Bundle-Version" value="1.1"/>
++                <attribute name="Export-Package" value="org.tukaani.xz"/>
+             </manifest>
+         </jar>
+ 

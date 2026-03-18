@@ -1,0 +1,7 @@
+summary: jaxb-fi smoke test
+description: |
+  Test basic functionality of jaxb-fi.
+require:
+  - jaxb-fi
+  - java-21-openjdk-devel
+  - xmvn-tools

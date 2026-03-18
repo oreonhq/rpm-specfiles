@@ -1,0 +1,27 @@
+From a2c5f97692f5a5b1fb269a2507f76b1ce0481c1a Mon Sep 17 00:00:00 2001
+From: Neal Gompa <ngompa@fedoraproject.org>
+Date: Wed, 18 Feb 2026 17:08:52 -0500
+Subject: [PATCH] TesseractRuntimeLoader: Adapt for library names used in
+ Fedora and CentOS
+
+This allows the runtime loader to correctly detect the library with
+the names offered by the Fedora and CentOS Stream 10 packages.
+---
+ src/TesseractRuntimeLoader.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/src/TesseractRuntimeLoader.cpp b/src/TesseractRuntimeLoader.cpp
+index 528d220a..fa5bdd99 100644
+--- a/src/TesseractRuntimeLoader.cpp
++++ b/src/TesseractRuntimeLoader.cpp
+@@ -181,5 +181,6 @@ bool TesseractRuntimeLoader::validateLoadedVersion()
+ 
+ QStringList TesseractRuntimeLoader::candidateLibraryNames() const
+ {
+-    return {QStringLiteral("libtesseract.so.5"), QStringLiteral("libtesseract.so.4"), QStringLiteral("libtesseract.so")};
++    return {QStringLiteral("libtesseract.so.5.5"), QStringLiteral("libtesseract.so.5.3.4"), QStringLiteral("libtesseract.so.5"),
++            QStringLiteral("libtesseract.so.4"), QStringLiteral("libtesseract.so")};
+ }
+-- 
+2.53.0
+

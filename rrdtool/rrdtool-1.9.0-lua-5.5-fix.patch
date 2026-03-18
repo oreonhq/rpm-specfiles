@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index be8b4d6..b2c5648 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -877,7 +877,7 @@ LUA_EOF
+       lua_havelib=no
+       LUA_HAVE_COMPAT51=DONT_HAVE_COMPAT51
+       RRD_SEARCH_LIBS(lua_call, [#include <${lua_headerdir:+$lua_headerdir/}lua.h>], [0, 0, 0], lua$lua_vdot lua$lua_vndot lua,
+-        [AC_SEARCH_LIBS(luaL_openlibs, lua$lua_vdot lua$lua_vndot lua,
++        [AC_SEARCH_LIBS(luaL_openselectedlibs, lua$lua_vdot lua$lua_vndot lua,
+           [lua_havelib=LUA$lua_vndot],
+           [AC_SEARCH_LIBS(luaL_module, lualib$lua_vndot lualib$lua_vdot lualib,
+             [lua_havelib=$lua_vndot; $LUA -l compat-5.1 2>/dev/null;

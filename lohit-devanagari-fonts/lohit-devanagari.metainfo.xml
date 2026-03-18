@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="font">
+  <id>lohit-devanagari</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Lohit</name>
+  <summary>A set of Indian language fonts</summary>
+  <description>
+    <p>
+      This package provides a free Devanagari script truetype/opentype font.
+      Support Marathi, Hindi, Konkani, Maithili, Sindhi, Kashmiri, Nepali,
+      Dogri and Santali languages.
+    </p>
+  </description>
+  <updatecontact>psatpute_at_redhat_dot_com</updatecontact>
+  <url type="homepage">https://fedorahosted.org/lohit/</url>
+</component>

@@ -1,0 +1,14 @@
+summary: tests basic functionality
+description: ''
+contact: Than Ngo <than@redhat.com>
+component:
+  - opal-prd
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+  - findutils
+  - opal-prd 
+  - opal-utils
+duration: 5m
+extra-summary: /CoreOS/opal-prd/smoke-functionality
+extra-task: /CoreOS/opal-prd/smoke-functionality

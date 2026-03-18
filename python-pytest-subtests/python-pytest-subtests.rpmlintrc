@@ -1,0 +1,2 @@
+# Not a real spelling error:
+addFilter(r" spelling-error \('unittests?',")

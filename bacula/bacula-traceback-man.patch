@@ -1,0 +1,20 @@
+diff -Naur bacula-15.0.2.old/manpages/btraceback.8 bacula-15.0.2/manpages/btraceback.8
+--- bacula-15.0.2.old/manpages/btraceback.8	2024-06-02 10:15:16.947968212 +0200
++++ bacula-15.0.2/manpages/btraceback.8	2024-06-02 10:15:17.368968486 +0200
+@@ -45,14 +45,14 @@
+ 
+ .SH FILES
+ .TP
+-.I /usr/lib/bacula/btraceback
++.I /usr/libexec/bacula/btraceback
+ .RS
+ The script itself.
+ .RE
+ .TP
+ .I /usr/sbin/btraceback
+ .RS
+-symbolic link to \fI/usr/lib/bacula/btraceback\fR
++symbolic link to \fI/usr/libexec/bacula/btraceback\fR
+ .RE
+ .TP
+ .I /etc/bacula/scripts/btraceback.gdb

@@ -1,0 +1,18 @@
+summary: Fonts related tests
+discover:
+    how: fmf
+    url: https://src.fedoraproject.org/tests/fonts
+prepare:
+    name: tmt
+    how: install
+    package: lohit-kannada-fonts
+execute:
+    how: tmt
+environment:
+    PACKAGE: lohit-kannada-fonts
+    FONT_ALIAS: sans-serif
+    FONT_FAMILY: Lohit Kannada
+    FONT_LANG: kn
+    DEFAULT_SANS: 2
+    DEFAULT_SERIF: 2
+    DEFAULT_MONO: 2

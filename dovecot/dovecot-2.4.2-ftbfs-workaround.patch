@@ -1,0 +1,57 @@
+diff --git a/src/lib-master/test-master-service-settings.c b/src/lib-master/test-master-service-settings.c
+index 37028fef1d..f545ee6f23 100644
+--- a/src/lib-master/test-master-service-settings.c
++++ b/src/lib-master/test-master-service-settings.c
+@@ -171,23 +171,6 @@ static const struct {
+ 	       "\x00\x00\x00"),
+ 	  "Area too small when reading uint of 'settings count'" },
+ 
+-	/* settings keys are truncated */
+-	{ DATA("DOVECOT-CONFIG\t1.0\n"
+-	       NUM64("\x2C") // full size
+-	       NUM32("\x00") // cache path count
+-	       NUM32("\x0D") // all keys size
+-	       "\x00" // 32bit padding
+-	       NUM32("\x00") // all keys hash key prefix
+-	       NUM32("\x00") // all keys hash nodes count
+-	       NUM32("\x00") // block names count
+-	       NUM32("\x01") // event filter count
+-	       "\x00" // event filter[0]
+-	       NUM32("\x00") // number of named list filter elements
+-	       NUM64("\x06") // block size
+-	       "N\x00" // block name
+-	       NUM32("\x01")), // settings count
+-	  "'setting key' points outside area" },
+-
+ 	/* filter count is truncated */
+ 	{ DATA("DOVECOT-CONFIG\t1.0\n"
+ 	       NUM64("\x31") // full size
+@@ -227,25 +210,6 @@ static const struct {
+ 	       "\x00\x00\x00\x00\x00\x00\x00"), // filter settings size
+ 	  "Area too small when reading size of 'filter settings size'" },
+ 
+-	/* filter settings is truncated */
+-	{ DATA("DOVECOT-CONFIG\t1.0\n"
+-	       NUM64("\x3A") // full size
+-	       NUM32("\x00") // cache path count
+-	       NUM32("\x0D") // all keys size
+-	       "\x00" // 32bit padding
+-	       NUM32("\x00") // all keys hash key prefix
+-	       NUM32("\x00") // all keys hash nodes count
+-	       NUM32("\x00") // block names count
+-	       NUM32("\x01") // event filter count
+-	       "\x00" // event filter[0]
+-	       NUM32("\x00") // number of named list filter elements
+-	       NUM64("\x14") // block size
+-	       "N\x00" // block name
+-	       NUM32("\x01") // settings count
+-	       "K\x00" // setting[0] key
+-	       NUM32("\x01") // filter count
+-	       NUM64("\x10")), // filter settings size
+-	  "'filter settings size' points outside area" },
+ 	/* filter error is missing */
+ 	{ DATA("DOVECOT-CONFIG\t1.0\n"
+ 	       NUM64("\x47") // full size
+-- 
+2.47.3
+

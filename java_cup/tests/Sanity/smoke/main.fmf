@@ -1,0 +1,6 @@
+summary: java_cup smoke test
+description: |
+  Test basic functionality of java_cup.
+require:
+  - java_cup
+  - java-21-openjdk-devel

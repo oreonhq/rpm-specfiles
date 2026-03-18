@@ -1,0 +1,35 @@
+upstream_project_url: https://github.com/pypa/trove-classifiers
+copy_upstream_release_description: false
+create_sync_note: false
+jobs:
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - fedora-rawhide
+    actions:
+      commit-message:
+      - bash -c 'echo "Update to ${PACKIT_PROJECT_VERSION}"'
+      - bash -c '[ -z "$PACKIT_RESOLVED_BUGS" ] || echo ${PACKIT_RESOLVED_BUGS} | tr " " "\n" | sed "s/^/- Resolves /"'
+      changelog-entry:
+      - bash -c 'echo "- Update to ${PACKIT_PROJECT_VERSION}"'
+      - bash -c '[ -z "$PACKIT_RESOLVED_BUGS" ] || echo ${PACKIT_RESOLVED_BUGS} | tr " " "\n" | sed "s/^/- Resolves /"'
+
+  - job: pull_from_upstream
+    trigger: release
+    dist_git_branches:
+      - epel-9
+    actions:
+      commit-message:
+      - bash -c 'echo "Update to ${PACKIT_PROJECT_VERSION}"'
+      - bash -c '[ -z "$PACKIT_RESOLVED_BUGS" ] || echo ${PACKIT_RESOLVED_BUGS} | tr " " "\n" | sed "s/^/- Resolves /"'
+      changelog-entry:
+      - bash -c 'echo "- Update to ${PACKIT_PROJECT_VERSION}"'
+      - bash -c '[ -z "$PACKIT_RESOLVED_BUGS" ] || echo ${PACKIT_RESOLVED_BUGS} | tr " " "\n" | sed "s/^/- Resolves /"'
+
+  - job: koji_build
+    trigger: commit
+    allowed_committers:
+      - packit
+    dist_git_branches:
+      - fedora-all
+      - epel-9

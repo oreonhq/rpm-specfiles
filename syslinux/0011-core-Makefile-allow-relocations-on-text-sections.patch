@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Leo Sandoval <lsandova@redhat.com>
+Date: Wed, 28 Jan 2026 10:21:36 -0600
+Subject: [PATCH] core/Makefile: allow relocations on text sections
+
+Relocations on text sections are expected thus allow them, otherwise
+observed the following the latest binutils
+
+    ld -m elf_i386  -z muldefs -pie -Bsymbolic \
+    	-T /builddir/build/BUILD/syslinux-6.04-build/syslinux-6.04-pre1/core/i386/syslinux.ld \
+    	--unresolved-symbols=report-all \
+    	-E --hash-style=gnu -M -o ldlinux.elf ldlinux.o \
+    	--start-group libcom32.a --whole-archive /builddir/build/BUILD/syslinux-6.04-build/syslinux-6.04-pre1/bios/com32/lib/libcom32core.a libldlinux.a --end-group \
+    	> ldlinux.map
+    /usr/bin/ld.bfd: ldlinux.o: warning: relocation in read-only section `.text'
+    /usr/bin/ld.bfd: warning: ldlinux.elf has a LOAD segment with RWX permissions
+    /usr/bin/ld.bfd: error: read-only segment has dynamic relocations
+
+Signed-off-by: Leo Sandoval <lsandova@redhat.com>
+---
+ core/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index f0cfcbe9..8ce7bfb1 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -156,7 +156,7 @@ LDSCRIPT = $(SRC)/$(ARCH)/syslinux.ld
+ NASM_ELF = elf
+ 
+ %.elf: %.o $(LIBDEP) $(LDSCRIPT) $(AUXLIBS)
+-	$(LD) $(LDFLAGS) -z muldefs -pie -Bsymbolic \
++	$(LD) $(LDFLAGS) -z muldefs -z notext -pie -Bsymbolic \
+ 		-T $(LDSCRIPT) \
+ 		--unresolved-symbols=report-all \
+ 		-E --hash-style=gnu -M -o $@ $< \

@@ -1,0 +1,8 @@
+summary: Run pykickstart tests
+prepare:
+    how: install
+    package:
+    - python3-kickstart
+    - pykickstart
+execute:
+    script: ./tests/scripts/run_tests.sh

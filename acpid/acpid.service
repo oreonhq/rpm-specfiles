@@ -1,0 +1,14 @@
+[Unit]
+Description=ACPI Event Daemon
+Documentation=man:acpid(8)
+Requires=acpid.socket
+
+[Service]
+StandardInput=socket
+StandardOutput=journal
+EnvironmentFile=/etc/sysconfig/acpid
+ExecStart=/usr/sbin/acpid -f $OPTIONS
+
+[Install]
+Also=acpid.socket
+WantedBy=multi-user.target

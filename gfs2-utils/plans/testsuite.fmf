@@ -1,0 +1,5 @@
+summary: Run testsuite
+discover:
+  how: fmf
+execute:
+  how: tmt

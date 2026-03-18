@@ -1,0 +1,6 @@
+/booth-*.tar.gz
+/booth-*.rpm
+/booth-*/
+
+*~
+*.sw?

@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-LDAP
+require: perl-LDAP-tests
+test: /usr/libexec/perl-LDAP/test

@@ -1,0 +1,28 @@
+From 062c157013c5af8714d9015582de898b42d1a981 Mon Sep 17 00:00:00 2001
+From: Alexander Bokovoy <abokovoy@redhat.com>
+Date: Wed, 2 May 2018 08:56:15 +0300
+Subject: [PATCH] support transition from libtirpc to libnsl in Fedora 28
+
+libnsl2-devel in Fedora 28 depends on libtirpc-devel internally
+so we can also reduce the dependency in spec
+
+diff --git a/configure.ac b/configure.ac
+index 184a9af..80f2ca2 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -273,6 +273,12 @@ AC_ARG_WITH(tirpc,
+ 	    ])
+ if test $use_tirpc = yes ; then
+ 	PKG_CHECK_MODULES(TIRPC,libtirpc)
++fi
++
++PKG_CHECK_MODULES(NSL,libnsl,[use_libnsl=yes],[use_libnsl=no])
++if test "$use_libnsl" = yes ; then
++	RPC_CFLAGS="$NSL_CFLAGS"
++	RPC_LIBS="$NSL_LIBS"
+ else
+ 	RPC_CFLAGS=
+ 	RPC_LIBS=-lnsl
+-- 
+2.14.3
+

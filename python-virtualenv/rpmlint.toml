@@ -1,0 +1,6 @@
+Filters = [
+    'spelling-error .* en_US venv ',
+    'python-leftover-require python-\S+-wheel$',
+    'obsolete-not-provided python-wheel\S+-wheel$',
+    'no-manual-page-for-binary virtualenv$',
+]

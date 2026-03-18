@@ -1,0 +1,5 @@
+/.project
+/*.src.rpm
+/noarch
+/.build-*.log
+/commons-codec-*-src.tar.gz

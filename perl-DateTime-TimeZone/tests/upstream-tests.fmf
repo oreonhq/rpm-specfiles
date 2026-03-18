@@ -1,0 +1,11 @@
+summary: Upstream tests
+component: perl-DateTime-TimeZone
+require: perl-DateTime-TimeZone-tests
+test: /usr/libexec/perl-DateTime-TimeZone/test
+enabled: true
+tag:
+  - rhel-buildroot
+adjust:
+  - enabled: false
+    when: distro < rhel-9 or distro < centos-stream-9
+    continue: false

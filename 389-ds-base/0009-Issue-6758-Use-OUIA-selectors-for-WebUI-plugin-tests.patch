@@ -1,0 +1,115 @@
+From 5b32479abcd68f8b37d2fb207c502113a5b4b16c Mon Sep 17 00:00:00 2001
+From: Akshay Adhikari <aadhikar@redhat.com>
+Date: Mon, 19 Jan 2026 19:45:29 +0530
+Subject: [PATCH] Issue 6758 - Use OUIA selectors for WebUI plugin tests
+ (#7182)
+
+Description:
+Add ouiaId to plugin NavItems and update tests to use OUIA selectors
+instead of text matching.
+
+Relates: #6758
+
+Reviewed by: @droideck
+---
+ .../suites/webui/plugins/plugins_test.py      | 28 +++++++++----------
+ src/cockpit/389-console/src/plugins.jsx       |  2 +-
+ 2 files changed, 15 insertions(+), 15 deletions(-)
+
+diff --git a/dirsrvtests/tests/suites/webui/plugins/plugins_test.py b/dirsrvtests/tests/suites/webui/plugins/plugins_test.py
+index e4bd7f039..a849bfb91 100644
+--- a/dirsrvtests/tests/suites/webui/plugins/plugins_test.py
++++ b/dirsrvtests/tests/suites/webui/plugins/plugins_test.py
+@@ -168,8 +168,8 @@ def test_linked_attributes_plugin_visibility(topology_st, page, browser_name):
+ 
+     log.info('Click on Plugins tab, click on Linked Attributes plugin and check if element is loaded.')
+     frame.get_by_role('tab', name='Plugins', exact=True).click()
+-    frame.get_by_text('Linked Attributes').wait_for()
+-    frame.get_by_text('Linked Attributes').click()
++    frame.locator('[data-ouia-component-id="linkedAttributes"]').wait_for()
++    frame.locator('[data-ouia-component-id="linkedAttributes"]').click()
+     frame.get_by_role('button', name='Add Config').wait_for()
+     assert frame.get_by_role('button', name='Add Config').is_visible()
+ 
+@@ -254,8 +254,8 @@ def test_ldap_pass_through_auth_plugin_visibility(topology_st, page, browser_nam
+ 
+     log.info('Click on Plugins tab, click on LDAP Pass Through Auth plugin and check if element is loaded.')
+     frame.get_by_role('tab', name='Plugins', exact=True).click()
+-    frame.get_by_text('LDAP Pass Through Auth').wait_for()
+-    frame.get_by_text('LDAP Pass Through Auth').click()
++    frame.locator('[data-ouia-component-id="passthroughAuthentication"]').wait_for()
++    frame.locator('[data-ouia-component-id="passthroughAuthentication"]').click()
+     frame.get_by_role('button', name='Add URL').wait_for()
+     assert frame.get_by_role('button', name='Add URL').is_visible()
+ 
+@@ -280,8 +280,8 @@ def test_pam_pass_through_auth_plugin_visibility(topology_st, page, browser_name
+ 
+     log.info('Click on Plugins tab, click on PAM Pass Through Auth plugin and check if element is loaded.')
+     frame.get_by_role('tab', name='Plugins', exact=True).click()
+-    frame.get_by_text('PAM Pass Through Auth').wait_for()
+-    frame.get_by_text('PAM Pass Through Auth').click()
++    frame.locator('[data-ouia-component-id="pamPassthroughAuthentication"]').wait_for()
++    frame.locator('[data-ouia-component-id="pamPassthroughAuthentication"]').click()
+     frame.get_by_role('button', name='Add Config').wait_for()
+     assert frame.get_by_role('button', name='Add Config').is_visible()
+ 
+@@ -306,8 +306,8 @@ def test_posix_winsync_plugin_visibility(topology_st, page, browser_name):
+ 
+     log.info('Click on Plugins tab, click on Posix Winsync plugin and check if element is loaded.')
+     frame.get_by_role('tab', name='Plugins', exact=True).click()
+-    frame.get_by_text('Posix Winsync').wait_for()
+-    frame.get_by_text('Posix Winsync').click()
++    frame.locator('[data-ouia-component-id="winsync"]').wait_for()
++    frame.locator('[data-ouia-component-id="winsync"]').click()
+     frame.locator('#posixWinsyncCreateMemberOfTask').wait_for()
+     assert frame.locator('#posixWinsyncCreateMemberOfTask').is_visible()
+ 
+@@ -332,8 +332,8 @@ def test_referential_integrity_plugin_visibility(topology_st, page, browser_name
+ 
+     log.info('Click on Plugins tab, click on Referential Integrity plugin and check if element is loaded.')
+     frame.get_by_role('tab', name='Plugins', exact=True).click()
+-    frame.get_by_text('Referential Integrity').wait_for()
+-    frame.get_by_text('Referential Integrity').click()
++    frame.locator('[data-ouia-component-id="referentialIntegrity"]').wait_for()
++    frame.locator('[data-ouia-component-id="referentialIntegrity"]').click()
+     frame.locator('#entryScope').wait_for()
+     assert frame.locator('#entryScope').is_visible()
+ 
+@@ -358,8 +358,8 @@ def test_retro_changelog_plugin_visibility(topology_st, page, browser_name):
+ 
+     log.info('Click on Plugins tab, click on Retro Changelog plugin and check if element is loaded.')
+     frame.get_by_role('tab', name='Plugins', exact=True).click()
+-    frame.get_by_text('Retro Changelog').wait_for()
+-    frame.get_by_text('Retro Changelog').click()
++    frame.locator('[data-ouia-component-id="retroChangelog"]').wait_for()
++    frame.locator('[data-ouia-component-id="retroChangelog"]').click()
+     frame.locator('#isReplicated').wait_for()
+     assert frame.locator('#isReplicated').is_visible()
+ 
+@@ -384,8 +384,8 @@ def test_rootdn_access_control_plugin_visibility(topology_st, page, browser_name
+ 
+     log.info('Click on Plugins tab, click on RootDN Access Control plugin and check if element is loaded.')
+     frame.get_by_role('tab', name='Plugins', exact=True).click()
+-    frame.get_by_text('RootDN Access Control').wait_for()
+-    frame.get_by_text('RootDN Access Control').click()
++    frame.locator('[data-ouia-component-id="rootDnaAccessControl"]').wait_for()
++    frame.locator('[data-ouia-component-id="rootDnaAccessControl"]').click()
+     frame.locator('#allowMon').wait_for()
+     assert frame.locator('#allowMon').is_visible()
+ 
+diff --git a/src/cockpit/389-console/src/plugins.jsx b/src/cockpit/389-console/src/plugins.jsx
+index 4124a77ef..e24255c76 100644
+--- a/src/cockpit/389-console/src/plugins.jsx
++++ b/src/cockpit/389-console/src/plugins.jsx
+@@ -680,7 +680,7 @@ export class Plugins extends React.Component {
+                             <Nav key={this.state.pluginTableKey} theme="light" onSelect={(event, item) => this.handleSelect(event, item)}>
+                                 <NavList>
+                                     {Object.entries(selectPlugins).map(([id, item]) => (
+-                                        <NavItem key={item.name} itemId={item.name} isActive={this.state.activePlugin === item.name}>
++                                        <NavItem key={item.name} itemId={item.name} ouiaId={id} isActive={this.state.activePlugin === item.name}>
+                                             {item.icon}
+                                         </NavItem>
+                                     ))}
+-- 
+2.52.0
+

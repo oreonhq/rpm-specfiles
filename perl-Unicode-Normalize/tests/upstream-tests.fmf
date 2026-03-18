@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Unicode-Normalize
+require: perl-Unicode-Normalize-tests
+test: /usr/libexec/perl-Unicode-Normalize/test

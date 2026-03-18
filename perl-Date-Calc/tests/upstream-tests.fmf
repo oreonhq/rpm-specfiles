@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Date-Calc
+require: perl-Date-Calc-tests
+test: /usr/libexec/perl-Date-Calc/test

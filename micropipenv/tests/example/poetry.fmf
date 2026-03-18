@@ -1,0 +1,2 @@
+summary: Install from poetry
+test: ./test_install.sh poetry

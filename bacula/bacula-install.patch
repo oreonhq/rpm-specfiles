@@ -1,0 +1,149 @@
+diff -Naur bacula-15.0.2.old/autoconf/config.rpath bacula-15.0.2/autoconf/config.rpath
+--- bacula-15.0.2.old/autoconf/config.rpath	2024-06-02 10:15:17.084968302 +0200
++++ bacula-15.0.2/autoconf/config.rpath	2024-06-02 10:15:17.472968553 +0200
+@@ -555,7 +555,7 @@
+ 
+ # Flag to hardcode \$libdir into a binary during linking.
+ # This must work even if \$libdir does not exist.
+-hardcode_libdir_flag_spec="$escaped_hardcode_libdir_flag_spec"
++hardcode_libdir_flag_spec=""
+ 
+ # Whether we need a single -rpath flag with a separated argument.
+ hardcode_libdir_separator="$hardcode_libdir_separator"
+diff -Naur bacula-15.0.2.old/examples/nagios/check_bacula/Makefile.in bacula-15.0.2/examples/nagios/check_bacula/Makefile.in
+--- bacula-15.0.2.old/examples/nagios/check_bacula/Makefile.in	2024-06-02 10:15:17.112968320 +0200
++++ bacula-15.0.2/examples/nagios/check_bacula/Makefile.in	2024-06-02 10:15:17.473968554 +0200
+@@ -72,7 +72,8 @@
+ 	(cd $(srcdir); $(RMF) Makefile)
+ 
+ install: all
+-	$(LIBTOOL_INSTALL) $(INSTALL_PROGRAM) check_bacula $(DESTDIR)$(sbindir)/check_bacula
++	$(MKDIR) $(DESTDIR)$(libdir)/nagios/plugins
++	$(LIBTOOL_INSTALL) $(INSTALL_PROGRAM) .libs/check_bacula $(DESTDIR)$(libdir)/nagios/plugins/check_bacula
+ 
+ uninstall:
+ 	(cd $(DESTDIR)$(sbindir); $(RMF) check_bacula)
+diff -Naur bacula-15.0.2.old/scripts/logwatch/logfile.bacula.conf.in bacula-15.0.2/scripts/logwatch/logfile.bacula.conf.in
+--- bacula-15.0.2.old/scripts/logwatch/logfile.bacula.conf.in	2024-06-02 10:15:16.943968210 +0200
++++ bacula-15.0.2/scripts/logwatch/logfile.bacula.conf.in	2024-06-02 10:15:17.473968554 +0200
+@@ -1,3 +1,3 @@
+ # What actual file?  Defaults to LogPath if not absolute path....
+-LogFile = @logdir@/bacula.log
++LogFile = @logdir@/*.log
+ 
+diff -Naur bacula-15.0.2.old/scripts/Makefile.in bacula-15.0.2/scripts/Makefile.in
+--- bacula-15.0.2.old/scripts/Makefile.in	2024-06-02 10:15:16.944968211 +0200
++++ bacula-15.0.2/scripts/Makefile.in	2024-06-02 10:15:17.473968554 +0200
+@@ -74,7 +74,6 @@
+ 	   $(MV) -f ${DESTDIR}${scriptdir}/baculabackupreport ${DESTDIR}${scriptdir}/baculabackupreport.old; \
+ 	fi
+ 	$(INSTALL_SCRIPT) baculabackupreport $(DESTDIR)$(scriptdir)/baculabackupreport
+-	$(INSTALL_SCRIPT) bacula-tray-monitor.desktop $(DESTDIR)$(scriptdir)/bacula-tray-monitor.desktop
+ 	chmod 0644 $(DESTDIR)$(scriptdir)/btraceback.gdb \
+ 		   $(DESTDIR)$(scriptdir)/btraceback.dbx \
+ 		   $(DESTDIR)$(scriptdir)/btraceback.mdb
+diff -Naur bacula-15.0.2.old/src/cats/make_sqlite3_tables.in bacula-15.0.2/src/cats/make_sqlite3_tables.in
+--- bacula-15.0.2.old/src/cats/make_sqlite3_tables.in	2024-06-02 10:15:16.949968214 +0200
++++ bacula-15.0.2/src/cats/make_sqlite3_tables.in	2024-06-02 10:15:17.473968554 +0200
+@@ -684,4 +684,5 @@
+ echo ""
+ 
+ chmod 640 ${db_name}.db
++chown bacula:bacula ${db_name}.db
+ exit 0
+diff -Naur bacula-15.0.2.old/src/dird/bacula-dir.conf.in bacula-15.0.2/src/dird/bacula-dir.conf.in
+--- bacula-15.0.2.old/src/dird/bacula-dir.conf.in	2024-06-02 10:15:17.034968269 +0200
++++ bacula-15.0.2/src/dird/bacula-dir.conf.in	2024-06-02 10:15:17.473968554 +0200
+@@ -18,7 +18,7 @@
+ Director {                            # define myself
+   Name = @basename@-dir
+   DIRport = @dir_port@                # where we listen for UA connections
+-  QueryFile = "@scriptdir@/query.sql"
++  QueryFile = "@sysconfdir@/query.sql"
+   WorkingDirectory = "@working_dir@"
+   PidDirectory = "@piddir@"
+   Maximum Concurrent Jobs = 20
+diff -Naur bacula-15.0.2.old/src/dird/Makefile.in bacula-15.0.2/src/dird/Makefile.in
+--- bacula-15.0.2.old/src/dird/Makefile.in	2024-06-02 10:15:17.033968268 +0200
++++ bacula-15.0.2/src/dird/Makefile.in	2024-06-02 10:15:17.473968554 +0200
+@@ -134,11 +134,11 @@
+ 	   @if test "x${dir_group}" != "x"; then \
+ 	      chgrp -f ${dir_group} ${DESTDIR}${sysconfdir}/$$destconf ; \
+ 	   fi
+-	@if  test -f ${DESTDIR}${scriptdir}/query.sql; then \
++	@if  test -f ${DESTDIR}${sysconfdir}/query.sql; then \
+ 	   echo "  ==> Saving existing query.sql to query.sql.old"; \
+-	   $(MV) -f ${DESTDIR}${scriptdir}/query.sql ${DESTDIR}${scriptdir}/query.sql.old; \
++	   $(MV) -f ${DESTDIR}${sysconfdir}/query.sql ${DESTDIR}${sysconfdir}/query.sql.old; \
+ 	fi
+-	${INSTALL_DATA} query.sql ${DESTDIR}${scriptdir}/query.sql
++	${INSTALL_DATA} query.sql ${DESTDIR}${sysconfdir}/query.sql
+ 	@if test -f static-bacula-dir; then \
+ 	   $(LIBTOOL_INSTALL) $(INSTALL_PROGRAM) static-bacula-dir $(DESTDIR)$(sbindir)/static-bacula-dir; \
+ 	fi
+@@ -147,7 +147,7 @@
+ uninstall:
+ 	(cd $(DESTDIR)$(sbindir); $(RMF) bacula-dir bdirjson)
+ 	(cd $(DESTDIR)$(sysconfdir); $(RMF) bacula-dir.conf bacula-dir.conf.new)
+-	(cd $(DESTDIR)$(scriptdir); $(RMF) query.sql)
++	(cd $(DESTDIR)$(sysconfdir); $(RMF) query.sql)
+ 
+ 
+ 
+diff -Naur bacula-15.0.2.old/src/plugins/fd/docker/Makefile bacula-15.0.2/src/plugins/fd/docker/Makefile
+--- bacula-15.0.2.old/src/plugins/fd/docker/Makefile	2024-06-02 10:15:17.022968261 +0200
++++ bacula-15.0.2/src/plugins/fd/docker/Makefile	2024-06-02 10:15:17.474968555 +0200
+@@ -25,11 +25,11 @@
+ 
+ .c.lo:
+ 	@echo "Compiling $< ..."
+-	$(NO_ECHO)$(LIBTOOL_COMPILE) $(CXX) $(DEFS) $(DEBUG) $(CPPFLAGS) $(CFLAGS) -I${SRCDIR} -I${FDDIR} -I${FDPLUGDIR} -I${LIBDIR} -DWORKDIR=\"$(DESTDIR)$(working_dir)\" -c $<
++	$(NO_ECHO)$(LIBTOOL_COMPILE) $(CXX) $(DEFS) $(DEBUG) $(CPPFLAGS) $(CFLAGS) -I${SRCDIR} -I${FDDIR} -I${FDPLUGDIR} -I${LIBDIR} -DWORKDIR=\"$(working_dir)\" -c $<
+ 
+ %.lo: %.c %.h
+ 	@echo "Pattern compiling $< ..."
+-	$(NO_ECHO)$(LIBTOOL_COMPILE) $(CXX) $(DEFS) $(DEBUG) $(CPPFLAGS) $(CFLAGS) -I${SRCDIR} -I${FDDIR} -I${FDPLUGDIR} -I${LIBDIR} -DWORKDIR=\"$(DESTDIR)$(working_dir)\" -c $(@:.lo=.c)
++	$(NO_ECHO)$(LIBTOOL_COMPILE) $(CXX) $(DEFS) $(DEBUG) $(CPPFLAGS) $(CFLAGS) -I${SRCDIR} -I${FDDIR} -I${FDPLUGDIR} -I${LIBDIR} -DWORKDIR=\"$(working_dir)\" -c $(@:.lo=.c)
+ 
+ docker-fd.la: Makefile $(DOCKEROBJ) $(PLUGINLIBDIR)/pluginlib.lo $(DOCKERSRCH)
+ 	@echo "Linking $(@:.la=.so) ..."
+diff -Naur bacula-15.0.2.old/src/qt-console/bat.pro.in bacula-15.0.2/src/qt-console/bat.pro.in
+--- bacula-15.0.2.old/src/qt-console/bat.pro.in	2024-06-02 10:15:17.471968553 +0200
++++ bacula-15.0.2/src/qt-console/bat.pro.in	2024-06-02 10:15:17.474968555 +0200
+@@ -12,10 +12,10 @@
+ 
+ datarootdir = @datarootdir@
+ bins.path = /$(DESTDIR)@sbindir@
+-bins.files = bat
++bins.files = .libs/bat
+ confs.path = /$(DESTDIR)@sysconfdir@
+ confs.commands = ./install_conf_file
+-help.path = /$(DESTDIR)@docdir@
++help.path = /$(DESTDIR)@htmldir@
+ help.files = help/*.html images/status.png images/mail-message-new.png
+ 
+ TEMPLATE     = app
+diff -Naur bacula-15.0.2.old/src/qt-console/tray-monitor/tray-monitor.pro.in bacula-15.0.2/src/qt-console/tray-monitor/tray-monitor.pro.in
+--- bacula-15.0.2.old/src/qt-console/tray-monitor/tray-monitor.pro.in	2024-06-02 10:15:17.471968553 +0200
++++ bacula-15.0.2/src/qt-console/tray-monitor/tray-monitor.pro.in	2024-06-02 10:15:17.474968555 +0200
+@@ -26,7 +26,7 @@
+ 
+ 
+ bins.path = /$(DESTDIR)@sbindir@
+-bins.files = bacula-tray-monitor
++bins.files = .libs/bacula-tray-monitor
+ confs.path = /$(DESTDIR)@sysconfdir@
+ confs.commands = ./install_conf_file
+ 
+diff -Naur bacula-15.0.2.old/src/stored/Makefile.in bacula-15.0.2/src/stored/Makefile.in
+--- bacula-15.0.2.old/src/stored/Makefile.in	2024-06-02 12:42:09.932685743 +0200
++++ bacula-15.0.2/src/stored/Makefile.in	2024-06-02 15:15:18.389591566 +0200
+@@ -380,7 +380,7 @@
+ install-tune-dde: tune-dde
+ 	$(LIBTOOL_INSTALL) $(INSTALL_PROGRAM) tune-dde $(DESTDIR)$(sbindir)/tune-dde
+ 
+-install: all @LIBTOOL_INSTALL_TARGET@ $(CLOUD_INSTALL_TARGETS)
++install: all @LIBTOOL_INSTALL_TARGET@ $(CLOUD_INSTALL_TARGETS) install-aligned
+ 	$(LIBTOOL_INSTALL) $(INSTALL_PROGRAM) bacula-sd $(DESTDIR)$(sbindir)/bacula-sd
+ 	$(LIBTOOL_INSTALL) $(INSTALL_PROGRAM) bsdjson $(DESTDIR)$(sbindir)/bsdjson
+ 	$(LIBTOOL_INSTALL) $(INSTALL_PROGRAM) bls $(DESTDIR)$(sbindir)/bls

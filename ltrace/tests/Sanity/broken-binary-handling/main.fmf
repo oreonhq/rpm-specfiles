@@ -1,0 +1,14 @@
+summary: Try to trace broken binary by ltrace
+description: ''
+contact:
+- Vaclav Kadlcik <vkadlcik@redhat.com>
+component:
+- ltrace
+test: ./runtest.sh
+framework: beakerlib
+recommend:
+- ltrace
+- gzip
+duration: 5m
+extra-summary: /tools/ltrace/Sanity/broken-binary-handling
+extra-task: /tools/ltrace/Sanity/broken-binary-handling

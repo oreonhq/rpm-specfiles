@@ -1,0 +1,9 @@
+summary: XMvn smoke test
+description: |
+  Test basic functionality of XMvn.
+require:
+  - xmvn
+  - xmvn-minimal
+  - xmvn-tools
+  - maven-dependency-plugin
+  - junit

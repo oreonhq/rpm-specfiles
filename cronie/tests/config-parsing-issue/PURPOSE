@@ -1,0 +1,4 @@
+PURPOSE of /CoreOS/cronie/Regression/config-parsing-issue
+Description: Test for cronie-anacron-1.4.4-14.el6.x86_64 doesn't like
+Author: Jakub Prokes <jprokes@redhat.com>
+Bug summary: cronie-anacron-1.4.4-14.el6.x86_64 doesn't like its own /etc/anacrontab syntax

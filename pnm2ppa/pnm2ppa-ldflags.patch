@@ -1,0 +1,31 @@
+diff -up pnm2ppa-1.13/Makefile.am.ldflags pnm2ppa-1.13/Makefile.am
+--- pnm2ppa-1.13/Makefile.am.ldflags	2023-10-20 13:52:38.470722125 +0200
++++ pnm2ppa-1.13/Makefile.am	2023-10-20 13:53:24.625056218 +0200
+@@ -125,7 +125,7 @@ CLEANFILES = hash_ink.c make_hash_ink
+ CC_FOR_BUILD = @CC_FOR_BUILD@
+ CFLAGS_FOR_BUILD = $(RPM_OPT_FLAGS) -O2
+ CPPFLAGS_FOR_BUILD = -I$(top_srcdir)
+-LDFLAGS_FOR_BUILD =
++LDFLAGS_FOR_BUILD = $(LDFLAGS)
+ LDLIBS_FOR_BUILD =
+ 
+ make_hash_ink: make_hash_ink.c
+diff -up pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile.ldflags pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile
+--- pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile.ldflags	2023-10-20 13:39:19.049686539 +0200
++++ pnm2ppa-1.13/pbm2ppa-0.8.6/Makefile	2023-10-20 13:39:19.053686629 +0200
+@@ -1,6 +1,5 @@
+ CC=gcc
+ CFLAGS=$(RPM_OPT_FLAGS)
+-LDFLAGS=
+ PRINTER=HP720
+ 
+ default: all
+@@ -23,7 +22,7 @@ pbm2ppa: pbm2ppa.o ppa.o pbm.o cutswath.
+ 	$(CC) $(LDFLAGS) -o pbm2ppa pbm2ppa.o ppa.o pbm.o cutswath.o
+ 
+ pbmtpg: pbmtpg.o
+-	$(CC) $(CFLAGS) -o pbmtpg pbmtpg.o -lm
++	$(CC) $(CFLAGS) $(LDFLAGS) -o pbmtpg pbmtpg.o -lm
+ 
+ .c.o: $*.c ppa.h pbm.h
+ 	$(CC) $(CFLAGS) -DDEFAULT_PRINTER=$(PRINTER)  -c $*.c

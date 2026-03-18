@@ -1,0 +1,21 @@
+summary: DSP test suite
+discover:
+  - name: DSP_test
+    how: fmf
+    url: https://pagure.io/DSP_test.git
+    ref: master
+
+execute:
+    how: tmt
+
+environment:
+    trigger: FedoraCI
+    # DSP_test specific variables:
+    TEST_RPM: "fapolicyd-selinux"
+    TEST_POLICY: "fapolicyd"
+    IGNORE_RULES: "fapolicyd_t:boot_t:dir"
+
+prepare:
+  - name: packages
+    how: install
+    package: fapolicyd-selinux

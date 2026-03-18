@@ -1,0 +1,9 @@
+summary:
+    Run distribution upstream tests
+discover:
+    how: fmf
+    url: https://github.com/InfrastructureServices/dnsconfd.git
+    filter: tag:distribution
+    ref: 1.7.5
+execute:
+    how: tmt

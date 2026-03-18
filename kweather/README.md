@@ -1,0 +1,3 @@
+# kweather
+
+The kweather package

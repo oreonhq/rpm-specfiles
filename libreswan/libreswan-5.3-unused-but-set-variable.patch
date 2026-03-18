@@ -1,0 +1,52 @@
+From 75c3bb1663b13fce6cd20d0a160518156de6985a Mon Sep 17 00:00:00 2001
+From: Daiki Ueno <dueno@redhat.com>
+Date: Thu, 29 Jan 2026 11:34:17 +0900
+Subject: [PATCH] Fix compilation error on Fedora 44
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+On Fedora 44, where -Wunused-but-set-variable is enabled with GCC 16,
+the build fails with:
+
+  ikev2_proposals.c: In function ‘process_transforms’:
+  ikev2_proposals.c:453:46: error: variable ‘local_proposal’ set but not used [-Werror=unused-but-set-variable=]
+    453 |                 const struct ikev2_proposal *local_proposal;
+        |                                              ^~~~~~~~~~~~~~
+  ikev2_proposals.c:773:32: error: variable ‘local_proposal’ set but not used [-Werror=unused-but-set-variable=]
+    773 |         struct ikev2_proposal *local_proposal;
+        |                                ^~~~~~~~~~~~~~
+  cc1: all warnings being treated as errors
+
+This fixes it by adding the UNUSED attribute to the local variable.
+
+Signed-off-by: Daiki Ueno <dueno@redhat.com>
+---
+ programs/pluto/ikev2_proposals.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/programs/pluto/ikev2_proposals.c b/programs/pluto/ikev2_proposals.c
+index 6395fa58e2..a10fc37a10 100644
+--- a/programs/pluto/ikev2_proposals.c
++++ b/programs/pluto/ikev2_proposals.c
+@@ -440,7 +440,7 @@ static int process_transforms(struct pbs_in *prop_pbs, struct jambuf *remote_jam
+ 	 */
+ 	{
+ 		int local_propnum;
+-		const struct ikev2_proposal *local_proposal;
++		const struct ikev2_proposal *local_proposal UNUSED;
+ 		FOR_EACH_V2_PROPOSAL_IN_RANGE(local_propnum, local_proposal, local_proposals,
+ 					      local_propnum_base, local_propnum_bound) {
+ 			struct ikev2_proposal_match *matching_local_proposal = &matching_local_proposals[local_propnum];
+@@ -689,7 +689,7 @@ static int process_transforms(struct pbs_in *prop_pbs, struct jambuf *remote_jam
+ 	}
+ 
+ 	int local_propnum;
+-	struct ikev2_proposal *local_proposal;
++	struct ikev2_proposal *local_proposal UNUSED;
+ 	FOR_EACH_V2_PROPOSAL_IN_RANGE(local_propnum, local_proposal, local_proposals,
+ 				      local_propnum_base, local_propnum_bound) {
+ 		struct ikev2_proposal_match *matching_local_proposal = &matching_local_proposals[local_propnum];
+-- 
+2.52.0
+

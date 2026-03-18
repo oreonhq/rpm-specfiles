@@ -1,0 +1,4 @@
+summary: Upstream tests
+component: perl-Test-Harness
+require: perl-Test-Harness-tests
+test: /usr/libexec/perl-Test-Harness/test

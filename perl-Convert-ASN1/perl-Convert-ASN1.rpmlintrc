@@ -1,0 +1,2 @@
+from Config import *
+addFilter("perl-Convert-ASN1-tests.noarch: W: no-documentation");

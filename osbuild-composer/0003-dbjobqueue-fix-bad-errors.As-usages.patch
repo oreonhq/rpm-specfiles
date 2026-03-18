@@ -1,0 +1,81 @@
+From 9def5455708f7e247fe4103d47e00a7beb52169b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Budai?= <ondrej@budai.cz>
+Date: Wed, 27 Jul 2022 13:35:08 +0200
+Subject: [PATCH 3/7] dbjobqueue: fix bad errors.As usages
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+errors.As is meant to check whether err (or other error in its chain) can
+be assigned to the value that target is pointing at.
+
+Let's consider this example:
+
+errors.As(err, &pgx.ErrNoRows)
+
+pgx.ErrNoRows (and pgx.ErrTxClosed) is typed as error, thus in all
+errors.As calls, the target is typed as *error. Err is always an error.
+So this call is basically asking whether error can be assigned to error.
+If err != nil, this is always true, thus this check doesn't make any sense
+over a plain err != nil.
+
+Go 1.19 now checks this issue and if it's found, it refuses to compile the
+code, see:
+
+https://go-review.googlesource.com/c/tools/+/339889
+
+This commit changes usages of errors.As() to errors.Is(). The Is() method
+doesn't check assignability but equality (the only different between Is()
+and a plain old == operator is that Is() also inspects the whole error chain).
+
+This fixes the check because now, we are basically checking if err (or
+any other error in its chain) == pgx.ErrTxClosed which is exactly what we
+want.
+
+Signed-off-by: Ondřej Budai <ondrej@budai.cz>
+---
+ pkg/jobqueue/dbjobqueue/dbjobqueue.go | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/pkg/jobqueue/dbjobqueue/dbjobqueue.go b/pkg/jobqueue/dbjobqueue/dbjobqueue.go
+index 4c1e60105..25231224f 100644
+--- a/pkg/jobqueue/dbjobqueue/dbjobqueue.go
++++ b/pkg/jobqueue/dbjobqueue/dbjobqueue.go
+@@ -18,6 +18,7 @@ import (
+ 	"github.com/jackc/pgtype"
+ 	"github.com/jackc/pgx/v4"
+ 	"github.com/jackc/pgx/v4/pgxpool"
++
+ 	"github.com/osbuild/osbuild-composer/pkg/jobqueue"
+ 
+ 	logrus "github.com/sirupsen/logrus"
+@@ -229,7 +230,7 @@ func (q *DBJobQueue) Enqueue(jobType string, args interface{}, dependencies []uu
+ 	}
+ 	defer func() {
+ 		err := tx.Rollback(context.Background())
+-		if err != nil && !errors.As(err, &pgx.ErrTxClosed) {
++		if err != nil && !errors.Is(err, pgx.ErrTxClosed) {
+ 			logrus.Error("error rolling back enqueue transaction: ", err)
+ 		}
+ 	}()
+@@ -283,7 +284,7 @@ func (q *DBJobQueue) Dequeue(ctx context.Context, jobTypes []string, channels []
+ 		if err == nil {
+ 			break
+ 		}
+-		if err != nil && !errors.As(err, &pgx.ErrNoRows) {
++		if err != nil && !errors.Is(err, pgx.ErrNoRows) {
+ 			return uuid.Nil, uuid.Nil, nil, "", nil, fmt.Errorf("error dequeuing job: %v", err)
+ 		}
+ 
+@@ -384,7 +385,7 @@ func (q *DBJobQueue) FinishJob(id uuid.UUID, result interface{}) error {
+ 	}
+ 	defer func() {
+ 		err = tx.Rollback(context.Background())
+-		if err != nil && !errors.As(err, &pgx.ErrTxClosed) {
++		if err != nil && !errors.Is(err, pgx.ErrTxClosed) {
+ 			logrus.Errorf("error rolling back finish job transaction for job %s: %v", id, err)
+ 		}
+ 
+-- 
+2.35.3
+

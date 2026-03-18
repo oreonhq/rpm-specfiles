@@ -1,0 +1,134 @@
+diff -up sblim-gather-2.2.9/plugin/metricVirt.c.orig sblim-gather-2.2.9/plugin/metricVirt.c
+--- sblim-gather-2.2.9/plugin/metricVirt.c.orig	2014-10-09 23:29:10.000000000 +0200
++++ sblim-gather-2.2.9/plugin/metricVirt.c	2021-08-19 14:29:14.500341897 +0200
+@@ -31,6 +31,7 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
++#include <unistd.h>
+ 
+ #define PIDDIR "/var/run/libvirt/qemu/"
+ #define L_piddir 22
+@@ -239,7 +240,8 @@ static void collectDomainSchedStats(int
+     FILE * fd = NULL;
+     char * pidfile = NULL;
+     char * tidfile = NULL;
+-    char tmpfile[L_tmpnam];
++    char pidtmpfile[] = "/tmp/pidtmp-XXXXXX";
++    int tfd = -1;
+     char cmdbuf[128];
+     char buf[bufsize];
+     int * tids = NULL;
+@@ -266,10 +268,12 @@ static void collectDomainSchedStats(int
+     
+     /* determine thread ids for each vcpu via ps */
+     if (pid) {
+-        if (tmpnam(tmpfile)) {
+-            sprintf(cmdbuf, "ps --no-headers -p %d -Lo lwp > %s", pid, tmpfile);
++        tfd = mkstemp(pidtmpfile);
++        if (tfd != -1) {
++            unlink(pidtmpfile);
++            sprintf(cmdbuf, "ps --no-headers -p %d -Lo lwp > %s", pid, pidtmpfile);
+             if (system(cmdbuf) == 0) {
+-                if ((fd = fopen(tmpfile, "r")) != NULL) {
++                if ((fd = fdopen(tfd, "r")) != NULL) {
+                     /* ignore master thread (vm pid) */
+                     fgets(buf, bufsize, fd);
+                     
+@@ -282,7 +286,6 @@ static void collectDomainSchedStats(int
+                     fclose(fd);
+                 }
+             }
+-            remove(tmpfile);
+         }
+     }
+     
+@@ -293,17 +296,20 @@ static void collectDomainSchedStats(int
+         /* for each vcpu/tid grab stats from /proc/$pid/task/$tid/sched */
+         for (i = 0; i < domain_statistics.vcpus[cnt]; i++) {
+             float used, ready;
++            char tidtmpfile[] = "/tmp/tidtmp-XXXXXX";
+             
+-            if (tmpnam(tmpfile)) {
++            tfd = mkstemp(tidtmpfile);
++            if (tfd != -1) {
++                unlink(tidtmpfile);
+                 sprintf(tidfile, "%s%d%s%d%s", PROC, pid, TASK, tids[i], SCHED);
+                 
+                 /* interested in se.sum_exec_runtime and se.wait_sum */           
+                 sprintf(cmdbuf, "cat %s | awk '/exec_runtime/ || /wait_sum/ {print $3}' > %s",
+-                    tidfile, tmpfile);
++                    tidfile, tidtmpfile);
+                 
+                 /* stats are in floating point ms, convert to microseconds */
+                 if (system(cmdbuf) == 0) {
+-                    if ((fd = fopen(tmpfile, "r")) != NULL) {
++                    if ((fd = fdopen(tfd, "r")) != NULL) {
+                         fgets(buf, bufsize, fd);
+                         sscanf(buf, "%f", &used);
+                         used = used * 1000;
+@@ -317,7 +323,6 @@ static void collectDomainSchedStats(int
+                         fclose(fd);
+                     }
+                 }
+-                remove(tmpfile);
+             }
+             
+         }
+diff -up sblim-gather-2.2.9/reposdump.c.orig sblim-gather-2.2.9/reposdump.c
+--- sblim-gather-2.2.9/reposdump.c.orig	2014-10-09 23:29:11.000000000 +0200
++++ sblim-gather-2.2.9/reposdump.c	2021-08-19 14:33:27.612564618 +0200
+@@ -55,6 +55,7 @@ int main(int argc, char * argv[])
+   /* output file handling */
+   char fname[400];
+   char *dumpdir;
++  int tfd;
+   FILE * fhdl;
+   /* rrepos API related */
+   char **plugins;
+@@ -119,7 +120,8 @@ int main(int argc, char * argv[])
+ 
+   /* we will need the current time later on */
+   now = time(NULL);
+-  strcpy(timestr,time_chars_unsafe(now));
++  strncpy(timestr, time_chars_unsafe(now), sizeof(timestr)-1);
++  timestr[sizeof(timestr)-1] = '\0';
+ 
+   /* construct output filename and open for writing */
+   if (argc > 3) {
+@@ -127,8 +129,14 @@ int main(int argc, char * argv[])
+   } else {
+     dumpdir = "/tmp";
+   }
+-  sprintf(fname,"%s/reposd-dump-%s.out",dumpdir,timestr);
+-  fhdl = fopen(fname,"w");
++  snprintf(fname, sizeof(fname)-1, "%s/reposd-dump-%s-XXXXXX.out", dumpdir, timestr);
++  fname[sizeof(fname)-1] = '\0';
++  tfd = mkstemps(fname, 4);
++  if (tfd == -1) {
++    fprintf(stderr, "Could not create %s\n", fname);
++    return REPOSDUMP_FILEWRITE;
++  }
++  fhdl = fdopen(tfd,"w");
+   if (fhdl == NULL) {
+     fprintf(stderr, "Could not open %s for writing\n", fname);
+     return REPOSDUMP_FILEWRITE;
+diff -up sblim-gather-2.2.9/slisten.c.orig sblim-gather-2.2.9/slisten.c
+--- sblim-gather-2.2.9/slisten.c.orig	2014-10-09 23:29:11.000000000 +0200
++++ sblim-gather-2.2.9/slisten.c	2021-08-19 14:29:14.501341906 +0200
+@@ -64,6 +64,7 @@ static void subs_listener_cleanup(void *
+   /* reset to initial state */
+   long fds = (long)fdsocket;
+   close(fds);
++  close(fdsockfile);
+   unlink(listener);
+   strcpy(listener,SOCKFILE_TEMPLATE);
+   fdsockfile=-1;
+@@ -139,7 +140,6 @@ int add_subscription_listener(char *list
+     M_TRACE(MTRACE_DETAILED,MTRACE_RREPOS,
+ 	    ("listener socket name = %s",listener));
+     if (fdsockfile != -1) {
+-      close(fdsockfile);
+       unlink(listener);
+       pthread_create(&pt_listener,NULL,subs_listener,NULL);
+       pthread_detach(pt_listener);

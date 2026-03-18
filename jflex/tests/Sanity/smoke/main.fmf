@@ -1,0 +1,6 @@
+summary: jflex smoke test
+description: |
+  Test basic functionality of jflex.
+require:
+  - jflex
+  - java-21-openjdk-devel

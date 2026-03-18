@@ -1,0 +1,21 @@
+diff -rupN --no-dereference qt-creator-opensource-src-19.0.0-beta1/cmake/Findelfutils.cmake qt-creator-opensource-src-19.0.0-beta1-new/cmake/Findelfutils.cmake
+--- qt-creator-opensource-src-19.0.0-beta1/cmake/Findelfutils.cmake	2026-01-27 03:56:14.000000000 +0100
++++ qt-creator-opensource-src-19.0.0-beta1-new/cmake/Findelfutils.cmake	2026-01-31 10:21:56.055680245 +0100
+@@ -32,7 +32,7 @@ find_path(ELFUTILS_INCLUDE_DIR
+     "${ELFUTILS_INSTALL_DIR}" ENV ELFUTILS_INSTALL_DIR "${CMAKE_PREFIX_PATH}"
+ )
+ 
+-foreach(lib dw elf eu_compat)
++foreach(lib dw elf eu_compat debuginfod)
+   find_library(ELFUTILS_LIB_${lib}
+     NAMES ${lib}
+     PATH_SUFFIXES lib
+@@ -48,7 +48,7 @@ find_package_handle_standard_args(elfuti
+ )
+ 
+ if(elfutils_FOUND)
+-  foreach(lib dw elf)
++  foreach(lib dw elf debuginfod)
+     if (NOT TARGET elfutils::${lib})
+       add_library(elfutils::${lib} UNKNOWN IMPORTED)
+       set_target_properties(elfutils::${lib}

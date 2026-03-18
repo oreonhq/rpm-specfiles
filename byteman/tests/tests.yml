@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  roles:
+    - role: standard-test-beakerlib
+      tags:
+        - classic
+      required_packages:
+        - byteman
+        - java-11-openjdk-devel
+
+      tests:
+        - smoke/test-smoke.sh

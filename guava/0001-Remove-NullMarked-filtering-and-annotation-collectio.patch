@@ -1,0 +1,33 @@
+From 150e9c607cce068fd68c9420f252891faab7d3c1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Poho=C5=99elsk=C3=BD?= <opohorel@redhat.com>
+Date: Mon, 26 Jan 2026 12:49:36 +0100
+Subject: [PATCH] Remove NullMarked filtering and annotation collection
+
+---
+ .../common/collect/testing/features/FeatureUtil.java   | 10 ----------
+ 1 file changed, 10 deletions(-)
+
+diff --git a/guava-testlib/src/com/google/common/collect/testing/features/FeatureUtil.java b/guava-testlib/src/com/google/common/collect/testing/features/FeatureUtil.java
+index 6c1fb64515..02ab8012fe 100644
+--- a/guava-testlib/src/com/google/common/collect/testing/features/FeatureUtil.java
++++ b/guava-testlib/src/com/google/common/collect/testing/features/FeatureUtil.java
+@@ -235,16 +235,6 @@ public final class FeatureUtil {
+       List<Annotation> annotations = annotationCache.get(classOrMethod);
+       if (annotations == null) {
+         annotations = new ArrayList<>();
+-        for (Annotation a : classOrMethod.getDeclaredAnnotations()) {
+-          /*
+-           * We avoid reflecting on NullMarked because its @Target(..., MODULE) causes problems
+-           * under JDK 8.
+-           */
+-          if (!(a instanceof NullMarked)
+-              && a.annotationType().isAnnotationPresent(TesterAnnotation.class)) {
+-            annotations.add(a);
+-          }
+-        }
+         annotations = unmodifiableList(annotations);
+         annotationCache.put(classOrMethod, annotations);
+       }
+-- 
+2.52.0
+
