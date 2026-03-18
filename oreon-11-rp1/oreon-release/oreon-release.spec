@@ -3,7 +3,7 @@
 
 Summary:        Oreon release files
 Name:           oreon-release
-Version:        11-RP1
+Version:        11
 Release:        1%{?dist}
 License:        MIT
 URL:            https://oreonhq.com/oreon
