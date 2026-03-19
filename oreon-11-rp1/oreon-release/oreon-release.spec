@@ -90,5 +90,5 @@ install -m 644 %{SOURCE12} %{buildroot}%{_prefix}/lib/systemd/system-preset/
 %{_prefix}/lib/systemd/system-preset/*
 
 %changelog
-* Mon Jan 06 2026 Oreon HQ Packaging Team <packaging@oreonhq.com> - 11-1
+* Tue Jan 06 2026 Oreon HQ Packaging Team <packaging@oreonhq.com> - 11-1
 - Prepare for Oreon 11
