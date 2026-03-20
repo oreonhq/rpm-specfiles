@@ -59,6 +59,11 @@ ExcludeArch: i686
 # Build cockpit plugin
 %bcond cockpit 1
 
+# Fedora dist-git lookaside URLs (plain names are not in git; spectool/fetch will download)
+%global fedora_lookaside https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base
+# Must match the bundled rust/cockpit snapshot tied to this Fedora release bump
+%global fedora_vendor_rel 14
+
 # fedora 15 and later uses tmpfiles.d
 # otherwise, comment this out
 %{!?with_tmpfiles_d: %global with_tmpfiles_d %{_sysconfdir}/tmpfiles.d}
@@ -499,9 +504,9 @@ Source4:          389-ds-base.sysusers
 Source5:          https://fedorapeople.org/groups/389ds/libdb-5.3.28-59.tar.bz2
 %endif
 
-Source6:          vendor-%{version}-14.tar.gz
-Source7:          Cargo-%{version}-14.lock
-Source8:          cockpit_dist-%{version}-14.tar.bz2
+Source6:          %{fedora_lookaside}/vendor-%{version}-%{fedora_vendor_rel}.tar.gz/sha512/27cc2630fea6b73fa4c5370b5b33ec5a2ea8cdaef72604cc5f48f6c72473c944e67f11c10fd6e7820419bcb1988bc3ee904cda9b11d414a0aa6940968f67d383/vendor-%{version}-%{fedora_vendor_rel}.tar.gz
+Source7:          %{fedora_lookaside}/Cargo-%{version}-%{fedora_vendor_rel}.lock/sha512/bdd7228ebcc4d312d414f642cf59ac9f6c043b98482ea6dec780a3830d248429262c76993eec7b52939e9a750713cecb618cbff6b94ff7e3e76f6f240c76d322/Cargo-%{version}-%{fedora_vendor_rel}.lock
+Source8:          %{fedora_lookaside}/cockpit_dist-%{version}-%{fedora_vendor_rel}.tar.bz2/sha512/70c7dc376676821b05fca257bc01f80202f7cee97221f52ad7ead237a547ee950edf2efb8c501d466d88b3dcaf1677c6c3a96ec20729a6896efdcdad9a96aed0/cockpit_dist-%{version}-%{fedora_vendor_rel}.tar.bz2
 
 Patch:            0001-Issue-7096-During-replication-online-total-init-the-.patch
 Patch:            0002-Issue-Revise-paged-result-search-locking.patch
