@@ -8,6 +8,7 @@ Summary:        The Microsoft Azure Linux Agent
 License:        Apache-2.0
 URL:            https://github.com/Azure/%{name}
 Source0:        https://github.com/Azure/%{name}/archive/v%{version}.tar.gz
+# Dracut module glue (not in the Azure upstream repo; track module-setup.sh in dist-git / this tree)
 Source1:        module-setup.sh
 
 Patch1:         0001-waagent.service-set-ConditionVirtualization-microsof.patch

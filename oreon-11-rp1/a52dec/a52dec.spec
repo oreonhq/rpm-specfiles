@@ -4,7 +4,8 @@ Version:    0.7.4
 Release:    53%{?dist}
 License:    GPL-2.0-only
 URL:        http://liba52.sourceforge.net
-Source0:    %{url}/files/%{name}-%{version}.tar.gz
+# Debian upstream orig tarball (same a52dec-0.7.4 tree as upstream releases)
+Source0:    https://deb.debian.org/debian/pool/main/a/a52dec/a52dec_%{version}.orig.tar.gz
 Patch0:     a52dec-configure-optflags.patch
 Patch2:     liba52-silence.patch
 

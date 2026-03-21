@@ -193,6 +193,8 @@ Summary: The Linux kernel
 %define pkgrelease 0.rc4.260317g2d1373e4246d.37
 %define kversion 7
 %define tarfile_release 7.0-rc4-5-g2d1373e4246d
+# Short git commit in Linus's tree matching this snapshot (see Source0)
+%global upstream_snapshot_commit 2d1373e4246d
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
@@ -999,7 +1001,8 @@ BuildRequires: redhat-sb-certs >= 9.4-0.1
 # exact git commit you can run
 #
 # xzcat -qq ${TARBALL} | git get-tar-commit-id
-Source0: linux-%{tarfile_release}.tar.xz
+# Upstream Linus tree snapshot (kernel.org git). %%prep renames linux-%%{upstream_snapshot_commit} -> linux-%%{KVERREL}.
+Source0: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/snapshot/linux-%{upstream_snapshot_commit}.tar.gz
 
 Source1: Makefile.rhelver
 Source2: %{name}.changelog
@@ -1166,6 +1169,7 @@ Source212: Module.kabi_dup_s390x
 Source213: Module.kabi_dup_x86_64
 Source214: Module.kabi_dup_riscv64
 
+# kABI helper tarballs: no kernel.org equivalent; small vendored sources next to this spec (kernel-abi-*.tar.xz)
 Source300: kernel-abi-stablelists-%{kabiversion}.tar.xz
 Source301: kernel-kabi-dw-%{kabiversion}.tar.xz
 
@@ -2165,8 +2169,9 @@ ApplyOptionalPatch()
 }
 
 %{log_msg "Untar kernel tarball"}
-%setup -q -n kernel-%{tarfile_release} -c
-mv linux-%{tarfile_release} linux-%{KVERREL}
+%setup -q -n linux-%{upstream_snapshot_commit}
+cd ..
+mv linux-%{upstream_snapshot_commit} linux-%{KVERREL}
 
 cd linux-%{KVERREL}
 cp -a %{SOURCE1} .
