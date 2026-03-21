@@ -1169,9 +1169,9 @@ Source212: Module.kabi_dup_s390x
 Source213: Module.kabi_dup_x86_64
 Source214: Module.kabi_dup_riscv64
 
-# kABI helper tarballs: no kernel.org equivalent; small vendored sources next to this spec (kernel-abi-*.tar.xz)
-Source300: kernel-abi-stablelists-%{kabiversion}.tar.xz
-Source301: kernel-kabi-dw-%{kabiversion}.tar.xz
+# kABI helper tarballs: distribution-only metadata (no kernel.org release). Fetchable URLs so mock/spectool do not need git-committed binaries.
+Source300: https://src.fedoraproject.org/repo/pkgs/rpms/kernel/kernel-abi-stablelists-%{kabiversion}.tar.xz/sha512/02cc3ae85f53eb46df297208fa9eaaefe640b1cf6f601fd1e9f175a1764e6a8de91ccb9cb85c2cfc6bdf9f4685e9a18110162e3a8b965cdcea64c8b6fdfc12a5/kernel-abi-stablelists-%{kabiversion}.tar.xz
+Source301: https://src.fedoraproject.org/repo/pkgs/rpms/kernel/kernel-kabi-dw-%{kabiversion}.tar.xz/sha512/03ee7d4ebc47f5bdc9d6c72924c496c932ea755d39c57e7bf17ea9c24e839da5863886a7f390cf7367e8b2cd3263fe36e469fba07ab654da913870356a0d29ae/kernel-kabi-dw-%{kabiversion}.tar.xz
 
 %if 0%{include_rt}
 %if 0%{include_rhel}
