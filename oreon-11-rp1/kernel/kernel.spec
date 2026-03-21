@@ -2172,6 +2172,10 @@ ApplyOptionalPatch()
 %setup -q -n linux-%{upstream_snapshot_commit}
 cd ..
 mv linux-%{upstream_snapshot_commit} linux-%{KVERREL}
+# %%setup records %%buildsubdir as linux-%%{upstream_snapshot_commit}; redhat-rpm-config's
+# %%___build_pre still does "cd" there before %%build. Recreate that name as a symlink to
+# linux-%%{KVERREL} so %%build starts in the renamed tree.
+ln -sfn linux-%{KVERREL} linux-%{upstream_snapshot_commit}
 
 cd linux-%{KVERREL}
 cp -a %{SOURCE1} .
