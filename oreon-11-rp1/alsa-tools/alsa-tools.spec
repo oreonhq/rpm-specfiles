@@ -30,8 +30,9 @@ Release:        4%{?dist}
 # Checked at least one source file from all the sub-projects contained in
 # the source tarball and they are consistent GPLv2+ - TJ 2007-11-15
 License:        GPL-2.0-or-later
-URL:            http://www.alsa-project.org/
-Source:         ftp://ftp.alsa-project.org/pub/tools/%{name}-%{version}.tar.bz2
+URL:            https://www.alsa-project.org/
+# HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
+Source:         https://www.alsa-project.org/files/pub/tools/%{name}-%{version}.tar.bz2
 
 Source1:        90-alsa-tools-firmware.rules
 

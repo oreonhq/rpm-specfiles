@@ -9,8 +9,9 @@ Name:    alsa-utils
 Version: %{baseversion}%{?fixversion}
 Release: 3%{?dist}
 License: GPL-2.0-or-later
-URL:     http://www.alsa-project.org/
-Source:  ftp://ftp.alsa-project.org/pub/utils/alsa-utils-%{version}.tar.bz2
+URL:     https://www.alsa-project.org/
+# HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
+Source:  https://www.alsa-project.org/files/pub/utils/alsa-utils-%{version}.tar.bz2
 Source4: alsaunmute
 Source5: alsaunmute.1
 Source11: alsactl.conf

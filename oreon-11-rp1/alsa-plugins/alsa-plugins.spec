@@ -15,8 +15,9 @@ Summary:        The Advanced Linux Sound Architecture (ALSA) Plugins
 # All packages are LGPL-2.1-or-later with the exception of samplerate
 # which is GPL-2.0-or-later, pph plugin is BSD-3-Clause licensed
 License:        GPL-2.0-or-later and LGPL-2.1-or-later and BSD-3-Clause
-URL:            http://www.alsa-project.org/
-Source0:        ftp://ftp.alsa-project.org/pub/plugins/%{name}-%{version}.tar.bz2
+URL:            https://www.alsa-project.org/
+# HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
+Source0:        https://www.alsa-project.org/files/pub/plugins/%{name}-%{version}.tar.bz2
 Patch0:         alsa-git.patch
 
 BuildRequires:  autoconf automake libtool
