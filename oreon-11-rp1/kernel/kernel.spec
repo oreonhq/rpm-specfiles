@@ -3287,7 +3287,9 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/boot
 mkdir -p $RPM_BUILD_ROOT%{_libexecdir}
 
-cd linux-%{KVERREL}
+# %%___build_pre cds into %%buildsubdir (linux-%%{upstream_snapshot_commit} symlink); cwd is *inside*
+# the tree, so a relative "cd linux-%%{KVERREL}" would wrongly look for a subdir of the source.
+cd %{_builddir}/linux-%{KVERREL}
 
 %if %{with_debug}
 %if %{with_realtime}
@@ -3659,7 +3661,7 @@ find Documentation -type d | xargs chmod u+w
 
 %install
 
-cd linux-%{KVERREL}
+cd %{_builddir}/linux-%{KVERREL}
 
 # re-define RPM_VMLINUX_H, because it doesn't carry over from %build
 RPM_VMLINUX_H="$(cat ../vmlinux_h_path)"
