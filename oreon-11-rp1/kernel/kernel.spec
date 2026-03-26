@@ -4488,7 +4488,7 @@ fi\
 %{_libexecdir}/perf-core/*
 %{_mandir}/man[1-8]/perf*
 %{_sysconfdir}/bash_completion.d/perf
-%doc linux-%{KVERREL}/tools/perf/Documentation/examples.txt
+# tools/perf/Documentation/examples.txt removed upstream (perf 7.x); do not %doc it
 %{_docdir}/perf-tip/tips.txt
 %{_includedir}/perf/perf_dlfilter.h
 
