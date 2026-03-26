@@ -28,7 +28,7 @@
 
 Name:		shim-unsigned-%{efiarch}
 Version:	15.8
-Release:	3
+Release:	4
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	x86_64
 License:	BSD-2-Clause AND OpenSSL
@@ -40,11 +40,8 @@ Source1:	oreon-shim-vendor-ca.cer
 Source2:	%{dbxfile}
 %endif
 Source3:	sbat.oreon.csv
-Source4:	shim.patches
 
 Source100:	shim-find-debuginfo.sh
-
-%include %{SOURCE4}
 
 BuildRequires:	gcc make
 BuildRequires:	elfutils-libelf-devel
@@ -193,6 +190,9 @@ cd ..
 %files debugsource -f build-%{efiarch}/debugsource.list
 
 %changelog
+* Wed Mar 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-4
+- Drop empty shim.patches %%include so source prep does not need shim.patches in SOURCES
+
 * Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-3
 - oreon-shim-vendor-ca sbat.oreon.csv as data sbat.redhat.csv
 
