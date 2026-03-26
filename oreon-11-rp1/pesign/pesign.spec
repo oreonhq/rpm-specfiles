@@ -6,7 +6,7 @@
 Name:    pesign
 Summary: Signing utility for UEFI binaries
 Version: 116
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: GPL-2.0-only
 URL:     https://github.com/rhboot/pesign
 
@@ -58,8 +58,8 @@ well as other associated tools.
 %setup -q -T -b 0
 %setup -q -T -D -c -n pesign-%{version}/ -a 1
 git init
-git config user.email "pesign-owner@fedoraproject.org"
-git config user.name "Fedora Ninjas"
+git config user.email "packaging@oreonhq.com"
+git config user.name "Oreon Packaging"
 git add .
 git commit -a -q -m "%{version} baseline."
 git am %{patches} </dev/null
@@ -163,5 +163,8 @@ certutil -d %{_sysconfdir}/pki/pesign/ -X -L > /dev/null
 %{_sysusersdir}/pesign.conf
 
 %changelog
+* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 116-9
+- Oreon git identity on baseline commit
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 116-8
 - Prepare for Oreon 11 (RP1)

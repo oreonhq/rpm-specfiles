@@ -5,7 +5,7 @@
 
 Name:		shim
 Version:	16.1
-Release:	6%{?dist}
+Release:	7%{?dist}
 Summary:	First-stage UEFI bootloader
 License:	BSD-3-Clause
 URL:		https://github.com/rhboot/shim/
@@ -34,7 +34,7 @@ Source22:	shimx64.efi
 
 %include %{SOURCE0}
 
-BuildRequires:	pesign >= 0.112-20.fc27
+BuildRequires:	pesign >= 0.112-20
 # We need this because %%{efi} won't expand before choosing where to make
 # the src.rpm in koji, and we could be on a non-efi architecture, in which
 # case we won't have a valid expansion here...  To be solved in the future
@@ -51,8 +51,8 @@ BuildRequires: %{unsignedaa64} = %{shimveraa64}
 
 %description
 Initial UEFI bootloader that handles chaining to a trusted full bootloader
-under secure boot environments. This package contains the version signed by
-the UEFI signing service.
+under Secure Boot. This package contains shim built for Oreon Linux and
+signed with the distro signing service (pesign).
 
 %define_pkg -a %{efi_arch} -p 1
 %if %{efi_has_alt_arch}
@@ -115,5 +115,8 @@ if [[ ! -e "/run/ostree-booted" ]]; then
 fi
 
 %changelog
+* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-7
+- pesign oreon-grub2-signer Oreon description text
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-6
 - Prepare for Oreon 11 (RP1)

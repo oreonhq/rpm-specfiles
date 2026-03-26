@@ -9,12 +9,12 @@
 %global debug_package %{nil}
 %global __brp_mangle_shebangs_exclude_from_file %{expand:%{_builddir}/shim-%{efi_arch}-%{version}-%{release}.%{_target_cpu}-shebangs.txt}
 %global vendor_token_str %{expand:%%{nil}%%{?vendor_token_name:-t "%{vendor_token_name}"}}
-%global vendor_cert_str %{expand:%%{!?vendor_cert_nickname:-c "Red Hat Test Certificate"}%%{?vendor_cert_nickname:-c "%%{vendor_cert_nickname}"}}
+%global vendor_cert_str %{expand:%%{!?vendor_cert_nickname:-c "Oreon Secure Boot Test Certificate"}%%{?vendor_cert_nickname:-c "%%{vendor_cert_nickname}"}}
 
 %global grub_version 2.06-63
 %global fwupd_version 1.5.8
 
-%define __pesign_client_cert grub2-signer
+%define __pesign_client_cert oreon-grub2-signer
 
 %global bootcsvaa64 %{expand:%{SOURCE10}}
 %global bootcsvarm %{expand:%{SOURCE13}}
@@ -77,8 +77,8 @@ Provides: bundled(openssl) = 1.0.2j					\
 									\
 %{expand:%%description -n shim-%{-a*}}					\
 Initial UEFI bootloader that handles chaining to a trusted full		\
-bootloader under secure boot environments. This package contains the	\
-version signed by the UEFI signing service.				\
+bootloader under Secure Boot. This build is signed for Oreon Linux	\
+(Oreon signing / pesign).						\
 %{nil}
 
 # -a <efiarch>

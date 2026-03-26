@@ -52,4 +52,4 @@ install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/etc/yum.repos.d/oreon.repo
 
 %changelog
 * Mon Jan 06 2026 Oreon HQ Packaging Team <packaging@oreonhq.com> - 11-1
-- Prepare for Oreon 11
+- Oreon 11

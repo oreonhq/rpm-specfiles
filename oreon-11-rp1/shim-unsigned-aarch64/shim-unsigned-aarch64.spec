@@ -27,17 +27,18 @@
 
 Name:		shim-unsigned-aarch64
 Version:	16.1
-Release:	1
+Release:	2
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	aarch64
 License:	BSD-2-Clause AND OpenSSL
 URL:		https://github.com/rhboot/shim
 Source0:	https://github.com/rhboot/shim/releases/download/%{version}%{?dashpre}/shim-%{version}%{?dotpre}.tar.bz2
-Source1:	fedora-ca-20200709.cer
+# Vendor cert embedded in shim
+Source1:	oreon-shim-vendor-ca.cer
 %if 0%{?dbxfile}
 Source2:	%{dbxfile}
 %endif
-Source3:	sbat.redhat.csv.in
+Source3:	sbat.oreon.csv.in
 Source4:	shim.patches
 
 Source100:	shim-find-debuginfo.sh
@@ -150,5 +151,8 @@ cd ..
 %files debugsource -f build-%{efiarch}/debugsource.list
 
 %changelog
+* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-2
+- oreon-shim-vendor-ca sbat.oreon.csv.in
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-1
 - Prepare for Oreon 11 (RP1)

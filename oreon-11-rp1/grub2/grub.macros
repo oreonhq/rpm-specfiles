@@ -414,8 +414,8 @@ git init							\
 echo '![[:digit:]][[:digit:]]_*.in' > util/grub.d/.gitignore	\
 echo '!*.[[:digit:]]' > util/.gitignore				\
 echo '!config.h' > include/grub/emu/.gitignore			\
-git config user.email "grub2-owner@fedoraproject.org"		\
-git config user.name "Fedora Ninjas"				\
+git config user.email "packaging@oreonhq.com"			\
+git config user.name "Oreon Packaging"				\
 git config gc.auto 0						\
 rm -f configure							\
 git add .							\
@@ -558,15 +558,15 @@ mksquashfs memdisk memdisk.squashfs -comp lzo			\
 %{?__pesign_client_cert:%{expand:%%define __pesign_client_cert %{___pesign_client_cert}}} \
 %{expand:%%{pesign -s -i %%{2}.orig -o %%{2}.onesig -a %%{5} -c %%{6} -n %%{7}}}	\
 %{expand:%%{pesign -s -i %%{3}.orig -o %%{3}.onesig -a %%{5} -c %%{6} -n %%{7}}}	\
-%{expand:%%define __pesign_client_cert grub2-signer} \
+%{expand:%%define __pesign_client_cert oreon-grub2-signer} \
 %{expand:%%{pesign -s -i %%{2}.onesig -o %%{2} -a %%{5} -c %%{6} -n %%{7}}}	\
 %{expand:%%{pesign -s -i %%{3}.onesig -o %%{3} -a %%{5} -c %%{6} -n %%{7}}}	\
 %{nil}
 %endif
 
 %ifarch ppc64le
-# RHEL signs, Fedora + ELN don't (but ELN defines rhel)
-%if 0%{?fedora} || 0%{?eln}
+# RHEL signs, Fedora + ELN + Oreon don't (ELN defines rhel)
+%if 0%{?fedora} || 0%{?eln} || 0%{?oreon}
 %define ieee1275_mkimage()					\
 mkdir -p memdisk/fonts						\
 cp %{5}/unicode.pf2 memdisk/fonts				\

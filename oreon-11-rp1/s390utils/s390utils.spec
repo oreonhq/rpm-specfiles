@@ -17,7 +17,7 @@
 Name:           s390utils
 Summary:        Utilities and daemons for IBM z Systems
 Version:        2.41.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          2
 # MIT covers nearly all the files, except init files (LGPL-2.1-or-later)
 #
@@ -66,7 +66,11 @@ Source24:       52-zipl-rescue.install
 Source25:       91-zipl.install
 
 %if %{with signzipl}
+%if 0%{?oreon}
+%define pesign_name oreonsecureboot302
+%else
 %define pesign_name redhatsecureboot302
+%endif
 %endif
 
 # change the defaults to match Fedora environment
@@ -1135,5 +1139,8 @@ User-space development files for the s390/s390x architecture.
 
 
 %changelog
+* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.0-2
+- pesign oreonsecureboot302 if %%{?oreon}
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.0-1
 - Prepare for Oreon 11 (RP1)

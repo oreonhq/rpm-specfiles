@@ -109,7 +109,7 @@
 %endif
 
 Summary: The Linux kernel
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %define secure_boot_arch x86_64
 %else
 %define secure_boot_arch x86_64 aarch64 s390x ppc64le
@@ -122,7 +122,12 @@ Summary: The Linux kernel
 %global signkernel 0
 %endif
 
-# RHEL/CentOS specific .SBAT entries
+# SBAT entries (kernel.* component lines in *.sbat.template)
+%if 0%{?oreon}
+%global sbat_suffix oreon
+%global sbat_vendor Oreon HQ
+%global sbat_contact mailto:security@oreonhq.com
+%else
 %if 0%{?centos}
 %global sbat_suffix centos
 %else
@@ -131,6 +136,9 @@ Summary: The Linux kernel
 %else
 %global sbat_suffix rhel
 %endif
+%endif
+%global sbat_vendor Red Hat
+%global sbat_contact mailto:secalert@redhat.com
 %endif
 
 # Sign modules on all arches
@@ -908,9 +916,12 @@ BuildRequires: kabi-dw
 %if %{signkernel}%{signmodules}
 BuildRequires: openssl
 %if %{signkernel}
-# ELN uses Fedora signing process, so exclude
-%if 0%{?rhel}%{?centos} && !0%{?eln}
+# ELN uses Fedora signing process, so exclude. Oreon uses embedded certs like Fedora.
+%if 0%{?rhel}%{?centos} && !0%{?eln} && !0%{?oreon}
 BuildRequires: system-sb-certs
+%endif
+%if 0%{?oreon}
+BuildRequires: oreon-release
 %endif
 %ifarch x86_64 aarch64 riscv64
 BuildRequires: nss-tools
@@ -986,7 +997,7 @@ BuildRequires: systemd-boot-unsigned
 # For UKI kernel cmdline addons
 BuildRequires: systemd-ukify
 # For UKI sb cert
-%if 0%{?rhel}%{?centos} && !0%{?eln}
+%if 0%{?rhel}%{?centos} && !0%{?eln} && !0%{?oreon}
 %if 0%{?centos}
 BuildRequires: centos-sb-certs >= 9.0-23
 %else
@@ -1007,8 +1018,9 @@ Source0: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/snap
 Source1: Makefile.rhelver
 Source2: %{name}.changelog
 
-Source10: redhatsecurebootca5.cer
-Source13: redhatsecureboot501.cer
+# Oreon UEFI Secure Boot
+Source10: oreonsecureboot-ca.cer
+Source13: oreonsecureboot-kernel.cer
 
 %if %{signkernel}
 # Name of the packaged file containing signing key
@@ -1019,9 +1031,18 @@ Source13: redhatsecureboot501.cer
 %define signing_key_filename kernel-signing-s390.cer
 %endif
 
+# Oreon: same layout as Fedora (embedded certs in SRPM); NSS DB must contain oreonsecureboot501 (and UKI if split).
+%if 0%{?oreon}
+%define pesign_name_0 oreonsecureboot501
+%define secureboot_ca_0 %{SOURCE10}
+%define secureboot_key_0 %{SOURCE13}
+%define pesign_name_uki_0 %{pesign_name_0}
+%define secureboot_key_uki_0 %{secureboot_key_0}
+%endif
+
 # Fedora/ELN pesign macro expects to see these cert file names, see:
 # https://github.com/rhboot/pesign/blob/main/src/pesign-rpmbuild-helper.in#L216
-%if 0%{?fedora}%{?eln}
+%if 0%{?fedora}%{?eln} && !0%{?oreon}
 %define pesign_name_0 redhatsecureboot501
 %define secureboot_ca_0 %{SOURCE10}
 %define secureboot_key_0 %{SOURCE13}
@@ -1030,7 +1051,7 @@ Source13: redhatsecureboot501.cer
 %endif
 
 # RHEL/centos certs come from system-sb-certs
-%if 0%{?rhel} && !0%{?eln}
+%if 0%{?rhel} && !0%{?eln} && !0%{?oreon}
 %define secureboot_ca_0 %{_datadir}/pki/sb-certs/secureboot-ca-%{_arch}.cer
 %define secureboot_key_0 %{_datadir}/pki/sb-certs/secureboot-kernel-%{_arch}.cer
 %define secureboot_key_uki_0 %{_datadir}/pki/sb-certs/secureboot-uki-virt-%{_arch}.cer
@@ -2219,10 +2240,10 @@ rm -f localversion-next localversion-rt
 	scripts/clang-tools 2> /dev/null
 
 # SBAT data
-sed -e s,@KVER,%{KVERREL}, -e s,@SBAT_SUFFIX,%{sbat_suffix}, %{SOURCE82} > dtbloader.sbat
-sed -e s,@KVER,%{KVERREL}, -e s,@SBAT_SUFFIX,%{sbat_suffix}, %{SOURCE83} > uki.sbat
-sed -e s,@KVER,%{KVERREL}, -e s,@SBAT_SUFFIX,%{sbat_suffix}, %{SOURCE84} > uki-addons.sbat
-sed -e s,@KVER,%{KVERREL}, -e s,@SBAT_SUFFIX,%{sbat_suffix}, %{SOURCE85} > kernel.sbat
+sed -e 's|@KVER@|%{KVERREL}|g' -e 's|@SBAT_SUFFIX@|%{sbat_suffix}|g' -e 's|@SBAT_VENDOR@|%{sbat_vendor}|g' -e 's|@SBAT_CONTACT@|%{sbat_contact}|g' %{SOURCE82} > dtbloader.sbat
+sed -e 's|@KVER@|%{KVERREL}|g' -e 's|@SBAT_SUFFIX@|%{sbat_suffix}|g' -e 's|@SBAT_VENDOR@|%{sbat_vendor}|g' -e 's|@SBAT_CONTACT@|%{sbat_contact}|g' %{SOURCE83} > uki.sbat
+sed -e 's|@KVER@|%{KVERREL}|g' -e 's|@SBAT_SUFFIX@|%{sbat_suffix}|g' -e 's|@SBAT_VENDOR@|%{sbat_vendor}|g' -e 's|@SBAT_CONTACT@|%{sbat_contact}|g' %{SOURCE84} > uki-addons.sbat
+sed -e 's|@KVER@|%{KVERREL}|g' -e 's|@SBAT_SUFFIX@|%{sbat_suffix}|g' -e 's|@SBAT_VENDOR@|%{sbat_vendor}|g' -e 's|@SBAT_CONTACT@|%{sbat_contact}|g' %{SOURCE85} > kernel.sbat
 
 # only deal with configs if we are going to build for the arch
 %ifnarch %nobuildarches
@@ -3241,7 +3262,7 @@ BuildKernel() {
     # prune junk from kernel-debuginfo
     find $RPM_BUILD_ROOT/usr/src/kernels -name "*.mod.c" -delete
 
-    # Red Hat UEFI Secure Boot CA cert, which can be used to authenticate the kernel
+    # UEFI Secure Boot CA cert shipped with the kernel for verification (vendor: %{sbat_vendor})
     %{log_msg "Install certs"}
     mkdir -p $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer
 %if %{signkernel}
@@ -4843,5 +4864,6 @@ fi\
 #
 #
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{specrpmversion}-1
+* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{specrpmversion}-1
 - Prepare for Oreon 11 (RP1)
+- %%oreon SBAT oreonsecureboot pesign oreon-release sources skip RHEL sb-certs

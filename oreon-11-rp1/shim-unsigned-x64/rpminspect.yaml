@@ -1,4 +1,5 @@
-# rpminspect configuration
+# rpminspect configuration (Oreon). Point profiledir/vendor_data_dir at your
+# local rpminspect install if not using Fedora’s paths.
 
 ---
 common:
@@ -26,16 +27,8 @@ inspections:
     manpage: off
     javabytecode: off
 metadata:
-    # Required Vendor string.  This is part of the RPM header and is
-    # the value expected in packages checked by rpminspect.
-    vendor: Fedora Project
-
-    # Allowed build host subdomain.  The RPM header contains information about
-    # where the package was built.  rpminspect verifies the hostnames are in
-    # the expected subdomain listed below.
-    #
-    # This is an array of allowed subdomains.
+    vendor: Oreon HQ
     buildhost_subdomain:
+        - .oreonhq.com
         - .fedoraproject.org
         - .bos.redhat.com
-

@@ -17,7 +17,7 @@
 Name:		grub2
 Epoch:		1
 Version:	2.12
-Release:	55%{?dist}
+Release:	56%{?dist}
 Summary:	Bootloader with support for Linux, Multiboot and more
 License:	GPL-3.0-or-later
 URL:		http://www.gnu.org/software/grub/
@@ -608,5 +608,8 @@ fi
 %endif
 
 %changelog
+* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12-56
+- SBAT grub.oreon macros oreon-grub2-signer git ids ppc64le %%{?oreon}
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12-55
 - Prepare for Oreon 11 (RP1)

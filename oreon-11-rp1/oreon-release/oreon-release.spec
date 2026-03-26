@@ -4,7 +4,7 @@
 Summary:        Oreon release files
 Name:           oreon-release
 Version:        11
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        MIT
 URL:            https://oreonhq.com/oreon
 
@@ -59,6 +59,13 @@ EOF
 %install
 install -d -m 755 %{buildroot}/etc
 install -d -m 755 %{buildroot}%{_prefix}/lib
+install -d -m 755 %{buildroot}%{_rpmmacrodir}
+
+# Defines %%oreon for specs (kernel/shim/grub2 secure boot branding). Builders
+# should have oreon-release installed so mock/koji expands %%{?oreon}.
+cat > %{buildroot}%{_rpmmacrodir}/macros.oreon-release << 'EOF'
+%%oreon 1
+EOF
 
 # Install os-release
 install -m 644 os-release %{buildroot}%{_prefix}/lib/os-release
@@ -88,7 +95,11 @@ install -m 644 %{SOURCE12} %{buildroot}%{_prefix}/lib/systemd/system-preset/
 %config(noreplace) /etc/issue
 %config(noreplace) /etc/issue.net
 %{_prefix}/lib/systemd/system-preset/*
+%{_rpmmacrodir}/macros.oreon-release
 
 %changelog
+* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 11-2
+- Add %%oreon via macros.oreon-release
+
 * Tue Jan 06 2026 Oreon HQ Packaging Team <packaging@oreonhq.com> - 11-1
-- Prepare for Oreon 11
+- Oreon 11

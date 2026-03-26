@@ -28,17 +28,18 @@
 
 Name:		shim-unsigned-%{efiarch}
 Version:	15.8
-Release:	2
+Release:	3
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	x86_64
 License:	BSD-2-Clause AND OpenSSL
 URL:		https://github.com/rhboot/shim
 Source0:	https://github.com/rhboot/shim/releases/download/%{version}%{?dashpre}/shim-%{version}%{?dotpre}.tar.bz2
-Source1:	fedora-ca-20200709.cer
+# Vendor cert embedded in shim
+Source1:	oreon-shim-vendor-ca.cer
 %if 0%{?dbxfile}
 Source2:	%{dbxfile}
 %endif
-Source3:	sbat.redhat.csv
+Source3:	sbat.oreon.csv
 Source4:	shim.patches
 
 Source100:	shim-find-debuginfo.sh
@@ -105,7 +106,8 @@ git config --unset user.email
 git config --unset user.name
 mkdir build-%{efiarch}
 mkdir build-%{efialtarch}
-cp %{SOURCE3} data/
+install -d data
+cp -f %{SOURCE3} data/sbat.redhat.csv
 
 %build
 COMMIT_ID=5914984a1ffeab841f482c791426d7ca9935a5e6
@@ -191,5 +193,8 @@ cd ..
 %files debugsource -f build-%{efiarch}/debugsource.list
 
 %changelog
+* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-3
+- oreon-shim-vendor-ca sbat.oreon.csv as data sbat.redhat.csv
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-2
 - Prepare for Oreon 11 (RP1)
