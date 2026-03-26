@@ -27,7 +27,7 @@
 
 Name:		shim-unsigned-aarch64
 Version:	16.1
-Release:	5
+Release:	6
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	aarch64
 License:	BSD-2-Clause AND OpenSSL
@@ -84,6 +84,8 @@ BuildArch:	noarch
 %autosetup -S git_am -n shim-%{version}
 git config --unset user.email
 git config --unset user.name
+# binutils 2.46+ applies %%--target to input+output and breaks efi-app conversion LP 2139340 shim still uses %%--target in Make.defaults.
+sed -i 's/FORMAT ?= --target efi-app-/FORMAT ?= --output-target efi-app-/' Make.defaults
 mkdir build-%{efiarch}
 sed -e 's/@@VERSION@@/%{version}/g' \
     -e 's/@@RELEASE@@/%{release}/g' \
@@ -244,6 +246,9 @@ cd ..
 %files debugsource -f build-%{efiarch}/debugsource.list
 
 %changelog
+* Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-6
+- Sed Make.defaults FORMAT to %%--output-target efi-app for binutils 2.46+ LP 2139340
+
 * Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-5
 - Build shim with make -j1 to avoid parallel objcopy on shared %%.so vs binutils
 
