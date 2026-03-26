@@ -28,7 +28,7 @@
 
 Name:		shim-unsigned-%{efiarch}
 Version:	15.8
-Release:	5
+Release:	6
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	x86_64
 License:	BSD-2-Clause AND OpenSSL
@@ -206,7 +206,8 @@ COMMIT_ID=5914984a1ffeab841f482c791426d7ca9935a5e6
 MAKEFLAGS="TOPDIR=.. -f ../Makefile COMMIT_ID=${COMMIT_ID} "
 MAKEFLAGS+="EFIDIR=%{efidir} PKGNAME=shim RELEASE=%{release} "
 MAKEFLAGS+="ENABLE_SHIM_HASH=true "
-MAKEFLAGS+=" %{_smp_mflags} "
+# -j1 avoid parallel %.efi and %.efi.debug (both objcopy the same %.so) which can break on binutils (shimx64.so file format not recognized).
+MAKEFLAGS+=" -j1 "
 if [ -f "%{SOURCE1}" ]; then
 	MAKEFLAGS="$MAKEFLAGS VENDOR_CERT_FILE=%{SOURCE1} "
 fi
@@ -285,6 +286,9 @@ cd ..
 %files debugsource -f build-%{efiarch}/debugsource.list
 
 %changelog
+* Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-6
+- Build shim with make -j1 to avoid parallel objcopy on shared %%.so vs binutils
+
 * Wed Mar 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-5
 - Generate shim-find-debuginfo.sh in %%prep so SOURCES does not need that file
 
