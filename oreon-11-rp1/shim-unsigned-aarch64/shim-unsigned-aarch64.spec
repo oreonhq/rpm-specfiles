@@ -84,8 +84,8 @@ BuildArch:	noarch
 %autosetup -S git_am -n shim-%{version}
 git config --unset user.email
 git config --unset user.name
-# binutils 2.46+ applies %%--target to input+output and breaks efi-app conversion LP 2139340 shim still uses %%--target in Make.defaults.
-sed -i 's/FORMAT ?= --target efi-app-/FORMAT ?= --output-target efi-app-/' Make.defaults
+# binutils 2.46+ treats %%--target as input bfd too and objcopy then rejects the %%%.so LP 2139340. Shim upstream still uses %%--target in Make.defaults.
+sed -i 's/--target efi-app-/--output-target efi-app-/g' Make.defaults
 mkdir build-%{efiarch}
 sed -e 's/@@VERSION@@/%{version}/g' \
     -e 's/@@RELEASE@@/%{release}/g' \
@@ -206,6 +206,7 @@ fi
 
 cd build-%{efiarch}
 make ${MAKEFLAGS} \
+	FORMAT='--output-target efi-app-aarch64' \
 	DEFAULT_LOADER='\\\\grub%{efiarch}.efi' \
 	all
 cd ..
@@ -226,6 +227,7 @@ fi
 
 cd build-%{efiarch}
 make ${MAKEFLAGS} \
+	FORMAT='--output-target efi-app-aarch64' \
 	DEFAULT_LOADER='\\\\grub%{efiarch}.efi' \
 	DESTDIR=${RPM_BUILD_ROOT} \
 	install-as-data install-debuginfo install-debugsource

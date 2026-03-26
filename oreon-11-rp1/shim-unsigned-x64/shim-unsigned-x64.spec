@@ -99,8 +99,8 @@ BuildArch:	noarch
 %autosetup -S git_am -n shim-%{version}
 git config --unset user.email
 git config --unset user.name
-# binutils 2.46+ applies %%--target to input+output and breaks efi-app conversion LP 2139340 shim still uses %%--target in Make.defaults.
-sed -i 's/FORMAT ?= --target efi-app-/FORMAT ?= --output-target efi-app-/' Make.defaults
+# binutils 2.46+ treats %%--target as input bfd too and objcopy then rejects the %%%.so LP 2139340. Shim upstream still uses %%--target in Make.defaults.
+sed -i 's/--target efi-app-/--output-target efi-app-/g' Make.defaults
 mkdir build-%{efiarch}
 mkdir build-%{efialtarch}
 install -d data
@@ -221,6 +221,7 @@ fi
 
 cd build-%{efiarch}
 make ${MAKEFLAGS} \
+	FORMAT='--output-target efi-app-x86_64' \
 	DEFAULT_LOADER='\\\\grub%{efiarch}.efi' \
 	all
 cd ..
@@ -228,6 +229,7 @@ cd ..
 cd build-%{efialtarch}
 setarch linux32 -B make ${MAKEFLAGS} \
 	ARCH=%{efialtarch} \
+	FORMAT='--output-target efi-app-ia32' \
 	DEFAULT_LOADER='\\\\grub%{efialtarch}.efi' \
 	all
 cd ..
@@ -248,6 +250,7 @@ fi
 
 cd build-%{efiarch}
 make ${MAKEFLAGS} \
+	FORMAT='--output-target efi-app-x86_64' \
 	DEFAULT_LOADER='\\\\grub%{efiarch}.efi' \
 	DESTDIR=${RPM_BUILD_ROOT} \
 	install-as-data install-debuginfo install-debugsource
@@ -255,8 +258,9 @@ install -m 0644 BOOT*.CSV "${RPM_BUILD_ROOT}/%{shimdir}/"
 cd ..
 
 cd build-%{efialtarch}
-setarch linux32 make ${MAKEFLAGS} \
+setarch linux32 -B make ${MAKEFLAGS} \
 	ARCH=%{efialtarch} \
+	FORMAT='--output-target efi-app-ia32' \
 	DEFAULT_LOADER='\\\\grub%{efialtarch}.efi' \
 	DESTDIR=${RPM_BUILD_ROOT} \
 	install-as-data install-debuginfo install-debugsource
