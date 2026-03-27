@@ -28,7 +28,7 @@
 %global dbxfile %{nil}
 
 Name:		shim-unsigned-%{efiarch}
-Version:	15.8
+Version:	16.1
 Release:	14
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	x86_64
@@ -219,7 +219,7 @@ SHIMFINDDEBUGINFO_EOF
 chmod 755 shim-find-debuginfo.sh
 
 %build
-COMMIT_ID=5914984a1ffeab841f482c791426d7ca9935a5e6
+COMMIT_ID=afc49558b34548644c1cd0ad1b6526a9470182ed
 MAKEFLAGS="TOPDIR=.. -f ../Makefile COMMIT_ID=${COMMIT_ID} "
 MAKEFLAGS+="EFIDIR=%{efidir} PKGNAME=shim RELEASE=%{release} "
 MAKEFLAGS+="ENABLE_SHIM_HASH=true "
@@ -250,7 +250,7 @@ setarch linux32 -B make ${MAKEFLAGS} \
 cd ..
 
 %install
-COMMIT_ID=5914984a1ffeab841f482c791426d7ca9935a5e6
+COMMIT_ID=afc49558b34548644c1cd0ad1b6526a9470182ed
 MAKEFLAGS="TOPDIR=.. -f ../Makefile COMMIT_ID=${COMMIT_ID} "
 MAKEFLAGS+="EFIDIR=%{efidir} PKGNAME=shim RELEASE=%{release} "
 MAKEFLAGS+="ENABLE_SHIM_HASH=true "
@@ -307,6 +307,9 @@ cd ..
 %files debugsource -f build-%{efiarch}/debugsource.list
 
 %changelog
+* Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-14
+- Bump x64 and ia32 unsigned shim build to 16.1 with matching commit id and SBAT rows
+
 * Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-8
 - Set %%efidir to oreon so ESP path is EFI/oreon not mock chroot ID (fedora)
 
