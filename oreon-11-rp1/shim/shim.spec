@@ -59,10 +59,10 @@ Source12:	BOOTX64.CSV
 %global shimefix64 %{shimdirx64}/shimx64.efi
 
 # Must match installed shim-unsigned-* NVR (same path as DATATARGETDIR in those specs).
-%global shimveraa64 16.1-12
+%global shimveraa64 16.1-13
 %global shimverarm 15.4-1.fc34
-%global shimveria32 15.8-13
-%global shimverx64 15.8-13
+%global shimveria32 15.8-14
+%global shimverx64 15.8-14
 
 %global shimdiraa64 %{_datadir}/shim/%{shimveraa64}/aa64
 %global shimdirarm %{_datadir}/shim/%{shimverarm}/arm
