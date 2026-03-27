@@ -28,7 +28,7 @@
 
 Name:		shim-unsigned-aarch64
 Version:	16.1
-Release:	8
+Release:	9
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	aarch64
 License:	BSD-2-Clause AND OpenSSL
