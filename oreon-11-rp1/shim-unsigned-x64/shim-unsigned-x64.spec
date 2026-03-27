@@ -9,7 +9,8 @@
 %global zdpd 0%{dotpre}.
 %endif
 
-%global efidir %(eval echo $(grep ^ID= /etc/os-release | sed -e 's/^ID=//' -e 's/rhel/redhat/'))
+# Shim bake-in and repo layout use EFI/<efidir>/ (must match signed shim %%os_id). Build host ID would wrongly yield fedora in mock.
+%global efidir oreon
 %global shimrootdir %{_datadir}/shim/
 %global shimversiondir %{shimrootdir}/%{version}-%{release}
 %global efiarch x64
@@ -28,7 +29,7 @@
 
 Name:		shim-unsigned-%{efiarch}
 Version:	15.8
-Release:	7
+Release:	8
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	x86_64
 License:	BSD-2-Clause AND OpenSSL
@@ -292,6 +293,9 @@ cd ..
 %files debugsource -f build-%{efiarch}/debugsource.list
 
 %changelog
+* Wed Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-8
+- Set %%efidir to oreon so ESP path is EFI/oreon not mock chroot ID (fedora)
+
 * Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-7
 - Sed Make.defaults FORMAT to %%--output-target efi-app for binutils 2.46+ LP 2139340
 

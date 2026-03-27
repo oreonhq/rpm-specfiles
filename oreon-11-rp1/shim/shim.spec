@@ -5,7 +5,7 @@
 
 Name:		shim
 Version:	16.1
-Release:	8%{?dist}
+Release:	9%{?dist}
 Summary:	First-stage UEFI bootloader
 License:	BSD-3-Clause
 URL:		https://github.com/rhboot/shim/
@@ -32,7 +32,8 @@ Source12:	BOOTX64.CSV
 %global _libdir %{_exec_prefix}/lib
 
 %global vr %{version}-%{release}
-%global os_id %(eval echo $(grep ^ID= /etc/os-release | sed -e 's/^ID=//' -e 's/rhel/redhat/'))
+# ESP vendor directory under EFI/ (must match shim-unsigned EFIDIR). Do not use build host ID; mock chroot os-release is often fedora.
+%global os_id oreon
 %global shim_vr_dir  %{_libdir}/efi/shim/%{vr}
 %global shim_efi_dir  %{shim_vr_dir}/EFI/%{os_id}
 %global shim_boot_dir %{shim_vr_dir}/EFI/BOOT
@@ -58,10 +59,10 @@ Source12:	BOOTX64.CSV
 %global shimefix64 %{shimdirx64}/shimx64.efi
 
 # Must match installed shim-unsigned-* NVR (same path as DATATARGETDIR in those specs).
-%global shimveraa64 16.1-6
+%global shimveraa64 16.1-7
 %global shimverarm 15.4-1.fc34
-%global shimveria32 15.8-7
-%global shimverx64 15.8-7
+%global shimveria32 15.8-8
+%global shimverx64 15.8-8
 
 %global shimdiraa64 %{_datadir}/shim/%{shimveraa64}/aa64
 %global shimdirarm %{_datadir}/shim/%{shimverarm}/arm
@@ -300,6 +301,9 @@ if [[ ! -e "/run/ostree-booted" ]]; then
 fi
 
 %changelog
+* Wed Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-9
+- Use EFI/oreon (%%os_id) not build-host ID, unsigned inputs from %%{_datadir}/shim per %%shimver*, sync %%shimver to new unsigned NVR
+
 * Wed Mar 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-8
 - Inline former shim.rpmmacros into spec so parse does not require shim.rpmmacros in SOURCES
 
