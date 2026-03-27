@@ -5,7 +5,7 @@
 
 Name:		shim
 Version:	16.1
-Release:	9%{?dist}
+Release:	10%{?dist}
 Summary:	First-stage UEFI bootloader
 License:	BSD-3-Clause
 URL:		https://github.com/rhboot/shim/
@@ -59,10 +59,10 @@ Source12:	BOOTX64.CSV
 %global shimefix64 %{shimdirx64}/shimx64.efi
 
 # Must match installed shim-unsigned-* NVR (same path as DATATARGETDIR in those specs).
-%global shimveraa64 16.1-7
+%global shimveraa64 16.1-8
 %global shimverarm 15.4-1.fc34
-%global shimveria32 15.8-8
-%global shimverx64 15.8-8
+%global shimveria32 15.8-9
+%global shimverx64 15.8-9
 
 %global shimdiraa64 %{_datadir}/shim/%{shimveraa64}/aa64
 %global shimdirarm %{_datadir}/shim/%{shimverarm}/arm
