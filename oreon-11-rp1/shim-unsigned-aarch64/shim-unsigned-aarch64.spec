@@ -28,7 +28,7 @@
 
 Name:		shim-unsigned-aarch64
 Version:	16.1
-Release:	11
+Release:	12
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	aarch64
 License:	BSD-2-Clause AND OpenSSL
@@ -249,7 +249,7 @@ cd ..
 %files debugsource -f build-%{efiarch}/debugsource.list
 
 %changelog
-* Wed Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-7
+* Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-7
 - Set %%efidir to oreon so ESP path is EFI/oreon not mock chroot ID (fedora)
 
 * Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-6

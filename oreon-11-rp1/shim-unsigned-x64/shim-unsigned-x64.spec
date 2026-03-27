@@ -29,7 +29,7 @@
 
 Name:		shim-unsigned-%{efiarch}
 Version:	15.8
-Release:	12
+Release:	13
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	x86_64
 License:	BSD-2-Clause AND OpenSSL
@@ -293,7 +293,7 @@ cd ..
 %files debugsource -f build-%{efiarch}/debugsource.list
 
 %changelog
-* Wed Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-8
+* Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-8
 - Set %%efidir to oreon so ESP path is EFI/oreon not mock chroot ID (fedora)
 
 * Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-7

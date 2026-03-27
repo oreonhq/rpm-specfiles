@@ -5,7 +5,7 @@
 
 Name:		shim
 Version:	16.1
-Release:	13%{?dist}
+Release:	14%{?dist}
 Summary:	First-stage UEFI bootloader
 License:	BSD-3-Clause
 URL:		https://github.com/rhboot/shim/
@@ -59,10 +59,10 @@ Source12:	BOOTX64.CSV
 %global shimefix64 %{shimdirx64}/shimx64.efi
 
 # Must match installed shim-unsigned-* NVR (same path as DATATARGETDIR in those specs).
-%global shimveraa64 16.1-11
+%global shimveraa64 16.1-12
 %global shimverarm 15.4-1.fc34
-%global shimveria32 15.8-12
-%global shimverx64 15.8-12
+%global shimveria32 15.8-13
+%global shimverx64 15.8-13
 
 %global shimdiraa64 %{_datadir}/shim/%{shimveraa64}/aa64
 %global shimdirarm %{_datadir}/shim/%{shimverarm}/arm
@@ -301,7 +301,7 @@ if [[ ! -e "/run/ostree-booted" ]]; then
 fi
 
 %changelog
-* Wed Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-9
+* Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-9
 - Use EFI/oreon (%%os_id) not build-host ID, unsigned inputs from %%{_datadir}/shim per %%shimver*, sync %%shimver to new unsigned NVR
 
 * Wed Mar 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-8
