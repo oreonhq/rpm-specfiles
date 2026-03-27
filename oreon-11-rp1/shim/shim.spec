@@ -23,13 +23,10 @@ Source0:	shim.conf
 # keep these two lists of sources synched up arch-wise.  That is 0 and 10
 # match, 1 and 11 match, ...
 Source10:	BOOTAA64.CSV
-Source20:	shimaa64.efi
 Source11:	BOOTIA32.CSV
-Source21:	shimia32.efi
 Source12:	BOOTX64.CSV
-Source22:	shimx64.efi
+# Unsigned shim binaries come from BuildRequires shim-unsigned-* under %%{_datadir}/shim/<ver-rel>/<arch>/ (not SOURCES).
 #Source13:	BOOTARM.CSV
-#Source23:	shimarm.efi
 
 # Macros below were shim.rpmmacros (inlined so %%include does not need a SOURCES file).
 %global _libdir %{_exec_prefix}/lib
@@ -55,15 +52,16 @@ Source22:	shimx64.efi
 %global bootcsvia32 %{expand:%{SOURCE11}}
 %global bootcsvx64 %{expand:%{SOURCE12}}
 
-%global shimefiaa64 %{expand:%{SOURCE20}}
-%global shimefiarm %{expand:%{SOURCE23}}
-%global shimefiia32 %{expand:%{SOURCE21}}
-%global shimefix64 %{expand:%{SOURCE22}}
+%global shimefiaa64 %{shimdiraa64}/shimaa64.efi
+%global shimefiarm %{shimdirarm}/shimarm.efi
+%global shimefiia32 %{shimdiria32}/shimia32.efi
+%global shimefix64 %{shimdirx64}/shimx64.efi
 
-%global shimveraa64 16.1-1
+# Must match installed shim-unsigned-* NVR (same path as DATATARGETDIR in those specs).
+%global shimveraa64 16.1-6
 %global shimverarm 15.4-1.fc34
-%global shimveria32 16.1-1
-%global shimverx64 16.1-1
+%global shimveria32 15.8-7
+%global shimverx64 15.8-7
 
 %global shimdiraa64 %{_datadir}/shim/%{shimveraa64}/aa64
 %global shimdirarm %{_datadir}/shim/%{shimverarm}/arm
