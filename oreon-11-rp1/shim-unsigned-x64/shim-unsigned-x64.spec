@@ -29,7 +29,7 @@
 
 Name:		shim-unsigned-%{efiarch}
 Version:	15.8
-Release:	11
+Release:	12
 Summary:	First-stage UEFI bootloader
 ExclusiveArch:	x86_64
 License:	BSD-2-Clause AND OpenSSL
