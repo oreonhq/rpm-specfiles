@@ -105,13 +105,27 @@ sed -i 's/--target efi-app-/--output-target efi-app-/g' Make.defaults
 mkdir build-%{efiarch}
 mkdir build-%{efialtarch}
 install -d data
-cp -f %{SOURCE3} data/sbat.redhat.csv
+cp -f %{SOURCE3} data/sbat.oreon.csv
 
-# Generated in %%prep so source prep does not need shim-find-debuginfo.sh in SOURCES (Fedora shim-find-debuginfo.sh logic).
+# Generated in %%prep so source prep does not need shim-find-debuginfo.sh in SOURCES (upstream-style helper, Oreon packaging).
 cat > shim-find-debuginfo.sh << 'SHIMFINDDEBUGINFO_EOF'
 #!/bin/bash
-# Copyright (C) 2017 Peter Jones
+# Oreon Build shim-find-debuginfo helper
 # Copyright (C) 2026 Oreon HQ
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
+#
 # SPDX-License-Identifier: GPL-3.0-or-later
 set -e
 set -u
@@ -309,7 +323,7 @@ cd ..
 - Drop empty shim.patches %%include so source prep does not need shim.patches in SOURCES
 
 * Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-3
-- oreon-shim-vendor-ca sbat.oreon.csv as data sbat.redhat.csv
+- oreon-shim-vendor-ca sbat.oreon.csv as data/sbat.oreon.csv
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 15.8-2
 - Prepare for Oreon 11 (RP1)

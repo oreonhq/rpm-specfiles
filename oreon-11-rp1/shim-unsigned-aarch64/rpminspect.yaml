@@ -1,14 +1,9 @@
-# rpminspect configuration (Oreon). Point profiledir/vendor_data_dir at your
-# local rpminspect install if not using Fedora’s paths.
+# rpminspect configuration (Oreon HQ). Point profiledir/vendor_data_dir at your install.
 
 ---
 common:
     workdir: /var/tmp/rpminspect
-    profiledir: /usr/share/rpminspect/profiles/fedora
-koji:
-    hub: https://koji.fedoraproject.org/kojihub
-    download_ursine: https://kojipkgs.fedoraproject.org
-    download_mbs: https://kojipkgs.fedoraproject.org
+    profiledir: /usr/share/rpminspect/profiles/generic
 commands:
     msgunfmt: msgunfmt
     desktop-file-validate: desktop-file-validate
@@ -18,8 +13,6 @@ commands:
     udevadm: udevadm
 vendor:
     vendor_data_dir: /usr/share/rpminspect
-    licensedb:
-        - /usr/share/fedora-license-data/licenses/fedora-licenses.json
     favor_release: newest
 inspections:
     abidiff: off
@@ -30,5 +23,3 @@ metadata:
     vendor: Oreon HQ
     buildhost_subdomain:
         - .oreonhq.com
-        - .fedoraproject.org
-        - .bos.redhat.com
