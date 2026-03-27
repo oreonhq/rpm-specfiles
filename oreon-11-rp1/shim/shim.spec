@@ -61,8 +61,8 @@ Source12:	BOOTX64.CSV
 # Must match installed shim-unsigned-* NVR (same path as DATATARGETDIR in those specs).
 %global shimveraa64 16.1-13
 %global shimverarm 15.4-1.fc34
-%global shimveria32 15.8-14
-%global shimverx64 15.8-14
+%global shimveria32 16.1-14
+%global shimverx64 16.1-14
 
 %global shimdiraa64 %{_datadir}/shim/%{shimveraa64}/aa64
 %global shimdirarm %{_datadir}/shim/%{shimverarm}/arm
@@ -301,6 +301,9 @@ if [[ ! -e "/run/ostree-booted" ]]; then
 fi
 
 %changelog
+* Fri Mar 27 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-10
+- Sync shim BuildRequires for x64 and ia32 unsigned packages to 16.1-14
+
 * Thu Mar 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1-9
 - Use EFI/oreon (%%os_id) not build-host ID, unsigned inputs from %%{_datadir}/shim per %%shimver*, sync %%shimver to new unsigned NVR
 
