@@ -3783,7 +3783,7 @@ rm -rf %{buildroot}%{_libdir}/libperf.a
 %ifarch %{cpupowerarchs}
 %{make} -C tools/power/cpupower DESTDIR=$RPM_BUILD_ROOT libdir=%{_libdir} libexecdir=%{_libexecdir} mandir=%{_mandir} unitdir=%{_unitdir} CPUFREQ_BENCH=false install
 %find_lang cpupower
-mv cpupower.lang ../
+# Leave cpupower.lang in the source tree so %%files -f finds it under %%buildsubdir.
 %ifarch x86_64
     pushd tools/power/cpupower/debug/x86_64
     install -m755 centrino-decode %{buildroot}%{_bindir}/centrino-decode
