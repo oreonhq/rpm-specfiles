@@ -2533,7 +2533,8 @@ BuildKernel() {
     fi
     %{log_msg "GCOV - continuing build in: $(pwd)"}
     pushd ../linux-%{KVERREL}${Variant:+-${Variant}}
-    pwd > ../kernel${Variant:+-${Variant}}-gcov.list
+    # Keep gcov list under %%buildsubdir (main tree), not the parent of it.
+    pwd > "$OLDPWD/kernel${Variant:+-${Variant}}-gcov.list"
 %endif
 
     %{log_msg "Calling InitBuildVars for $Variant"}
@@ -2673,13 +2674,14 @@ BuildKernel() {
 
     %{log_msg "Add VDSO files"}
     # add an a noop %%defattr statement 'cause rpm doesn't like empty file list files
-    echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-ldsoconf.list
+    # Keep this list in the tree (not ..) so %%files -f finds it under %%buildsubdir.
+    echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-ldsoconf.list
     if [ $DoVDSO -ne 0 ]; then
         %{make} ARCH=$Arch INSTALL_MOD_PATH=$RPM_BUILD_ROOT vdso_install KERNELRELEASE=$KernelVer
         if [ -s ldconfig-kernel.conf ]; then
              install -D -m 444 ldconfig-kernel.conf \
                 $RPM_BUILD_ROOT/etc/ld.so.conf.d/kernel-$KernelVer.conf
-	     echo /etc/ld.so.conf.d/kernel-$KernelVer.conf >> ../kernel${Variant:+-${Variant}}-ldsoconf.list
+	     echo /etc/ld.so.conf.d/kernel-$KernelVer.conf >> kernel${Variant:+-${Variant}}-ldsoconf.list
         fi
 
         rm -rf $RPM_BUILD_ROOT/lib/modules/$KernelVer/vdso/.build-id
@@ -2992,11 +2994,12 @@ BuildKernel() {
     if [ $DoModules -eq 0 ]; then
         %{log_msg "Create empty files for RPM packaging"}
         # Ensure important files/directories exist to let the packaging succeed
-        echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-modules-core.list
-        echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-modules.list
-        echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-modules-extra.list
-        echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-modules-internal.list
-        echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-modules-partner.list
+        # Keep lists in the tree so %%files -f finds them under %%buildsubdir.
+        echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-modules-core.list
+        echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-modules.list
+        echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-modules-extra.list
+        echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-modules-internal.list
+        echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-modules-partner.list
         mkdir -p $RPM_BUILD_ROOT/lib/modules/$KernelVer/kernel
         # Add files usually created by make modules, needed to prevent errors
         # thrown by depmod during package installation
@@ -3167,14 +3170,14 @@ BuildKernel() {
         fi
 
         if [ "$add_all_dirs" -eq 1 ]; then
-            (cd $RPM_BUILD_ROOT; find lib/modules/$KernelVer/kernel -mindepth 1 -type d | sort -n) > ../module-dirs.list
-            sed -e 's|^lib|%dir /lib|' ../module-dirs.list >> $absolute_file_list
+            (cd $RPM_BUILD_ROOT; find lib/modules/$KernelVer/kernel -mindepth 1 -type d | sort -n) > module-dirs.list
+            sed -e 's|^lib|%dir /lib|' module-dirs.list >> $absolute_file_list
         fi
     }
 
     if [ $DoModules -eq 1 ]; then
         # save modules.dep for debugging
-        cp $RPM_BUILD_ROOT/lib/modules/$KernelVer/modules.dep ../
+        cp $RPM_BUILD_ROOT/lib/modules/$KernelVer/modules.dep .
 
         %{log_msg "Create module list files for all kernel variants"}
         variants_param=""
@@ -3187,13 +3190,13 @@ BuildKernel() {
         if [[ "$Variant" == "automotive" || "$Variant" == "automotive-debug" ]]; then
             variants_param="-r automotive"
         fi
-        # this creates ../modules-*.list output, where each kmod path is as it
+        # this creates modules-*.list in cwd, where each kmod path is as it
         # appears in modules.dep (relative to lib/modules/$KernelVer)
         ret=0
-        %{SOURCE22} -l "../filtermods-$KernelVer.log" sort -d $RPM_BUILD_ROOT/lib/modules/$KernelVer/modules.dep -c configs/def_variants.yaml $variants_param -o .. || ret=$?
+        %{SOURCE22} -l "filtermods-$KernelVer.log" sort -d $RPM_BUILD_ROOT/lib/modules/$KernelVer/modules.dep -c configs/def_variants.yaml $variants_param -o . || ret=$?
         if [ $ret -ne 0 ]; then
             echo "8< --- filtermods-$KernelVer.log ---"
-            cat "../filtermods-$KernelVer.log"
+            cat "filtermods-$KernelVer.log"
             echo "--- filtermods-$KernelVer.log --- >8"
 
             echo "8< --- modules.dep ---"
@@ -3202,12 +3205,12 @@ BuildKernel() {
             exit 1
         fi
 
-        create_module_file_list "kernel" ../modules-core.list ../kernel${Variant:+-${Variant}}-modules-core.list 1 0
-        create_module_file_list "kernel" ../modules.list ../kernel${Variant:+-${Variant}}-modules.list 0 0
-        create_module_file_list "internal" ../modules-internal.list ../kernel${Variant:+-${Variant}}-modules-internal.list 0 1
-        create_module_file_list "kernel" ../modules-extra.list ../kernel${Variant:+-${Variant}}-modules-extra.list 0 1
+        create_module_file_list "kernel" modules-core.list kernel${Variant:+-${Variant}}-modules-core.list 1 0
+        create_module_file_list "kernel" modules.list kernel${Variant:+-${Variant}}-modules.list 0 0
+        create_module_file_list "internal" modules-internal.list kernel${Variant:+-${Variant}}-modules-internal.list 0 1
+        create_module_file_list "kernel" modules-extra.list kernel${Variant:+-${Variant}}-modules-extra.list 0 1
 %if 0%{!?fedora:1}
-        create_module_file_list "partner" ../modules-partner.list ../kernel${Variant:+-${Variant}}-modules-partner.list 1 1
+        create_module_file_list "partner" modules-partner.list kernel${Variant:+-${Variant}}-modules-partner.list 1 1
 %endif
     fi # $DoModules -eq 1
 
