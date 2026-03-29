@@ -4695,7 +4695,7 @@ fi\
 %if %{2}\
 %{expand:%%files %{?1:-f kernel-%{?3:%{3}-}ldsoconf.list} %{?3:%{3}-}core}\
 %{!?_licensedir:%global license %%doc}\
-%%license linux-%{KVERREL}/COPYING-%{version}-%{release}\
+%%license COPYING-%{version}-%{release}\
 /lib/modules/%{KVERREL}%{?3:+%{3}}/%{?-k:%{-k*}}%{!?-k:vmlinuz}\
 %ghost /%{image_install_path}/%{?-k:%{-k*}}%{!?-k:vmlinuz}-%{KVERREL}%{?3:+%{3}}\
 /lib/modules/%{KVERREL}%{?3:+%{3}}/.vmlinuz.hmac \
@@ -4775,7 +4775,7 @@ fi\
 %endif\
 %if %{with_dtbloader} && ("%{?3}" == "" || "%{3}" == "debug")\
 %{expand:%%files %{?3:%{3}-}uki-dtbloader}\
-%%license linux-%{KVERREL}/COPYING-%{version}-%{release}\
+%%license COPYING-%{version}-%{release}\
 %dir /lib/modules\
 %dir /lib/modules/%{KVERREL}%{?3:+%{3}}\
 /lib/modules/%{KVERREL}%{?3:+%{3}}/System.map\
