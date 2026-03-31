@@ -4,7 +4,7 @@ Release:	25%{?dist}
 Summary:	File System in Userspace (FUSE) v2 utilities
 License:	GPL-1.0-or-later
 URL:		https://github.com/libfuse/libfuse/
-Source0:	https://github.com/libfuse/libfuse/releases/download/%{name}-%{version}.tar.gz
+Source0:	https://github.com/libfuse/libfuse/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
 
 Patch1: fuse2-0001-More-parentheses.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=970768
