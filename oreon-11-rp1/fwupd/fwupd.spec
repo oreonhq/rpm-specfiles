@@ -45,7 +45,7 @@ Version:   2.1.1
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/fwupd/fwupd
-Source0:   http://people.freedesktop.org/~hughsient/releases/%{name}-%{version}.tar.xz
+Source0:   %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires: gettext
 BuildRequires: hwdata
