@@ -25,10 +25,11 @@ Source3: libdb-5.3.28-manpages.tar.gz
 Source4: https://github.com/fila43/db_converter/archive/refs/tags/v%{_converter_version}.tar.gz
 Patch0: libdb-multiarch.patch
 # db-1.85 upstream patches
-Patch10: http://www.oracle.com/technology/products/berkeley-db/db/update/1.85/patch.1.1
-Patch11: http://www.oracle.com/technology/products/berkeley-db/db/update/1.85/patch.1.2
-Patch12: http://www.oracle.com/technology/products/berkeley-db/db/update/1.85/patch.1.3
-Patch13: http://www.oracle.com/technology/products/berkeley-db/db/update/1.85/patch.1.4
+# Former Oracle URLs are dead; files vendored next to spec (same as Fedora libdb lookaside)
+Patch10: patch.1.1
+Patch11: patch.1.2
+Patch12: patch.1.3
+Patch13: patch.1.4
 # other patches
 Patch20: db-1.85-errno.patch
 Patch22: db-4.6.21-1.85-compat.patch
