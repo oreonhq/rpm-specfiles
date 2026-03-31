@@ -368,7 +368,8 @@ you probably want to install edk2-tools only.
 %prep
 # We needs some special git config options that %%autosetup won't give us.
 # We init the git dir ourselves, then tell %%autosetup not to blow it away.
-%setup -q -n edk2-%{GITCOMMIT}
+%setup -q -T -D -c -n edk2-%{GITCOMMIT}
+tar -xf %{SOURCE0} --strip-components=1
 tar -xf %{SOURCE4} --strip-components=1 "*/Drivers" "*/Features" "*/Platform" "*/Silicon"
 git init -q
 git config core.whitespace cr-at-eol
