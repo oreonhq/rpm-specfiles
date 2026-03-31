@@ -19,7 +19,8 @@ Source0: http://download.oracle.com/berkeley-db/db-%{version}.tar.gz
 Source1: http://download.oracle.com/berkeley-db/db.1.85.tar.gz
 # For mt19937db.c
 Source2: http://www.gnu.org/licenses/lgpl-2.1.txt
-# libdb man pages generated from the 5.3.28 documentation
+# Man pages from Fedora libdb SRPM (not in Oracle db tarball); kept next to spec for CI
+# e.g. libdb-5.3.28-67.fc44.src.rpm on dl.fedoraproject.org
 Source3: libdb-5.3.28-manpages.tar.gz
 Source4: https://github.com/fila43/db_converter/archive/refs/tags/v%{_converter_version}.tar.gz
 Patch0: libdb-multiarch.patch
