@@ -5,7 +5,7 @@ Version: 0.9.1
 Release: 1%{?dist}
 License: LGPL-2.0-or-later
 URL: https://github.com/stevegrubb/libcap-ng
-Source0: %{name}-%{version}.tar.gz
+Source0: %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildRequires: gcc make
 BuildRequires: autoconf automake libtool
 BuildRequires: kernel-headers >= 2.6.11 
