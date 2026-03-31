@@ -191,7 +191,8 @@ Source3:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz.s
 # Patch 0000 - 2999: Backported patches from upstream.
 Patch0000:      %{url}/commit/174c24d6e87a.patch#/%{name}-%{version}-Werror_discarded-qualifiers.patch
 # Patch 3000 - 5999: Backported patches from pull requests.
-Patch3000:      %{url}/commit/ba67911314f5.patch#/%{name}-%{version}-Make-crypt-and-crypt_gensalt-use-thread-local-output.patch
+# Do not use github .../commit/ba67911314f5.patch here: that diff does not apply to the v4.5.2 release tarball (Makefile.am, doc/crypt_gensalt.3).
+Patch3000:      %{name}-%{version}-Make-crypt-and-crypt_gensalt-use-thread-local-output.patch
 # Patch 6000 - 9999: Downstream patches.
 
 BuildRequires:  autoconf
