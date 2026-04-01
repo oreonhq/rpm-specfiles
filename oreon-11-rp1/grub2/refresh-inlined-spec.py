@@ -33,8 +33,8 @@ def main() -> None:
         head = "".join(lines[:head_end])
         new_sources = (
             "Source0:\thttps://ftp.gnu.org/gnu/grub/grub-%{tarversion}.tar.xz\n"
-            "Source1:\thttps://git.savannah.gnu.org/cgit/gnulib.git/snapshot/"
-            "gnulib-%{gnulibversion}.tar.gz\n"
+            "Source1:\thttps://github.com/coreutils/gnulib/archive/"
+            "%{gnulibversion}.tar.gz#/gnulib-%{gnulibversion}.tar.gz\n"
             "Source2:\t99-grub-mkconfig.install\n"
             "Source3:\thttp://unifoundry.com/pub/unifont/"
             "unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz\n"

@@ -23,7 +23,8 @@ License:	GPL-3.0-or-later
 URL:		http://www.gnu.org/software/grub/
 Obsoletes:	grub < 1:0.98
 Source0:	https://ftp.gnu.org/gnu/grub/grub-%{tarversion}.tar.xz
-Source1:	https://git.savannah.gnu.org/cgit/gnulib.git/snapshot/gnulib-%{gnulibversion}.tar.gz
+# Savannah cgit snapshots are flaky for spectool or mock, use GitHub mirror + fixed name
+Source1:	https://github.com/coreutils/gnulib/archive/%{gnulibversion}.tar.gz#/gnulib-%{gnulibversion}.tar.gz
 Source2:	99-grub-mkconfig.install
 Source3:	http://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
 Source4:	gitignore
@@ -1966,7 +1967,7 @@ fi
 
 %changelog
 * Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12-56
-- Gnulib fetch URL (savannah snapshot), drop unused theme.tar.bz2 source, renumber SourceN
+- Gnulib Source1 GitHub mirror with #/ rename, drop theme.tar.bz2, renumber SourceN
 - Inline grub.macros and grub.patches for spectool parse without extra SOURCES
 
 * Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12-56
