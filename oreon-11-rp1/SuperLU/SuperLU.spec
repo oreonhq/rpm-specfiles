@@ -16,9 +16,6 @@ Patch0:	 %{genname}-removemc64.patch
 # Fix ldflags of example files
 Patch1:      %{name}-fix_example_builds.patch
 
-# Fix 'VERSION_BugFix' number
-Patch2:      %{name}-%{version}-fix_version.patch
-
 BuildRequires: pkgconfig(flexiblas)
 %if 0%{?epel}
 BuildRequires:	epel-rpm-macros
@@ -55,7 +52,6 @@ The %{name}-doc package contains all the help HTML documentation.
 
 %patch -P 0 -p1 -b .backup
 %patch -P 1 -p1 -b .backup
-%patch -P 2 -p1 -b .backup
 
 rm -f make.inc
 cp -pf %{SOURCE1} make.inc.in
@@ -113,5 +109,8 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir}:MATGEN
 %doc DOC
 
 %changelog
+* Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.1-1
+- Drop fix_version patch, upstream v7.0.1 tarball already sets VERSION_BugFix to 1
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.1-1
 - Prepare for Oreon 11 (RP1)
