@@ -8,8 +8,6 @@ Summary:        The Microsoft Azure Linux Agent
 License:        Apache-2.0
 URL:            https://github.com/Azure/%{name}
 Source0:        https://github.com/Azure/%{name}/archive/v%{version}.tar.gz
-# Dracut module glue (not in the Azure upstream repo; track module-setup.sh in dist-git / this tree)
-Source1:        module-setup.sh
 
 Patch1:         0001-waagent.service-set-ConditionVirtualization-microsof.patch
 
@@ -90,7 +88,27 @@ install -m0644 -D config/waagent.logrotate %{buildroot}%{_sysconfdir}/logrotate.
 
 # Install -udev related files
 install -m0644 -D --target-directory=%{buildroot}%{_udevrulesdir}/ config/*.rules
-install -m0755 -D --target-directory=%{buildroot}%{_prefix}/lib/dracut/modules.d/%{dracut_modname}/ %{SOURCE1}
+mkdir -p %{buildroot}%{_prefix}/lib/dracut/modules.d/%{dracut_modname}
+cat > %{buildroot}%{_prefix}/lib/dracut/modules.d/%{dracut_modname}/module-setup.sh <<'EOF'
+#!/usr/bin/bash
+
+# called by dracut
+check() {
+    return 0
+}
+
+# called by dracut
+depends() {
+    return 0
+}
+
+# called by dracut
+install() {
+    inst_multiple chmod cut readlink
+    inst_rules 66-azure-storage.rules 99-azure-product-uuid.rules
+}
+EOF
+chmod 0755 %{buildroot}%{_prefix}/lib/dracut/modules.d/%{dracut_modname}/module-setup.sh
 
 sed -i 's,#!/usr/bin/env python,#!/usr/bin/python3,' %{buildroot}%{_sbindir}/waagent
 sed -i 's,/usr/bin/python ,/usr/bin/python3 ,' %{buildroot}%{_unitdir}/waagent.service
