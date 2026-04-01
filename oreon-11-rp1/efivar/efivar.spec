@@ -15,10 +15,12 @@ BuildRequires:  git
 # please don't fix this to reflect github's incomprehensible url that goes
 # to a different tarball.
 Source0:        https://github.com/rhboot/efivar/releases/download/%{version}/efivar-%{version}.tar.bz2
-Source1:        efivar.patches
 
-# include patches
-%include %{SOURCE1}
+# Was efivar.patches (%%include needs SOURCES at parse time for spectool)
+Patch0001: 0001-ABI-update-for-newer-libabigail.patch
+Patch0002: 0002-ABI-update-after-glibc-changes.patch
+Patch0003: 0003-ABI-update-after-glibc-changes.patch
+Patch0004: 0004-efivarfs-Update-a-file-variable-store-On-SetVariable.patch
 
 %description
 efivar provides a simple command line interface to the UEFI variable facility.
@@ -84,5 +86,8 @@ make abicheck CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="$RPM_LD_FLAGS"
 %{_libdir}/*.so.*
 
 %changelog
+* Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 39-12
+- Inline patch list, drop %%include efivar.patches for spectool
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 39-12
 - Prepare for Oreon 11 (RP1)

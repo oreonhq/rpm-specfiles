@@ -18,9 +18,9 @@ Requires: efi-filesystem
 ExclusiveArch: %{efi}
 
 Source0: https://github.com/rhboot/%{name}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.bz2
-Source1: efibootmgr.patches
 
-%include %{SOURCE1}
+# Was efibootmgr.patches (%%include needs SOURCES at parse time for spectool)
+Patch0001: 0001-Update-efibootmgr.c.patch
 
 %description
 %{name} displays and allows the user to edit the Intel Extensible
@@ -51,5 +51,8 @@ git config --local --add efibootmgr.efidir %{efi_vendor}
 %doc README
 
 %changelog
+* Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 18-12
+- Inline patch list, drop %%include efibootmgr.patches for spectool
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 18-12
 - Prepare for Oreon 11 (RP1)
