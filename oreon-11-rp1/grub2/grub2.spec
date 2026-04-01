@@ -23,18 +23,17 @@ License:	GPL-3.0-or-later
 URL:		http://www.gnu.org/software/grub/
 Obsoletes:	grub < 1:0.98
 Source0:	https://ftp.gnu.org/gnu/grub/grub-%{tarversion}.tar.xz
-Source1:	gnulib-%{gnulibversion}.tar.gz
+Source1:	https://git.savannah.gnu.org/cgit/gnulib.git/snapshot/gnulib-%{gnulibversion}.tar.gz
 Source2:	99-grub-mkconfig.install
 Source3:	http://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
-Source4:	theme.tar.bz2
-Source5:	gitignore
-Source6:	bootstrap
-Source7:	bootstrap.conf
-Source8:	strtoull_test.c
-Source9:	20-grub.install
-Source10:	sbat.csv.in
-Source11:	gen_grub_cfgstub
-Source12:	95-set-boot-entry.install
+Source4:	gitignore
+Source5:	bootstrap
+Source6:	bootstrap.conf
+Source7:	strtoull_test.c
+Source8:	20-grub.install
+Source9:	sbat.csv.in
+Source10:	gen_grub_cfgstub
+Source11:	95-set-boot-entry.install
 
 
 # Inlined from grub.macros (parse-time %%include removed for spectool)
@@ -443,10 +442,10 @@ This subpackage provides support for rebuilding your own grub-%{xen_pvh_grub_tar
 %global do_common_setup()					\
 %setup -q -n grub-%{tarversion}					\
 rm -fv docs/*.info						\
-cp %{SOURCE5} .gitignore					\
-cp %{SOURCE6} bootstrap						\
-cp %{SOURCE7} bootstrap.conf					\
-cp %{SOURCE8} ./grub-core/tests/strtoull_test.c			\
+cp %{SOURCE4} .gitignore					\
+cp %{SOURCE5} bootstrap						\
+cp %{SOURCE6} bootstrap.conf					\
+cp %{SOURCE7} ./grub-core/tests/strtoull_test.c			\
 cp %{SOURCE1} gnulib-%{gnulibversion}.tar.gz			\
 tar -zxf gnulib-%{gnulibversion}.tar.gz				\
 mv gnulib-%{gnulibversion} gnulib				\
@@ -773,7 +772,7 @@ install -m 700 %{3} $RPM_BUILD_ROOT%{grub_efi_dir}/%{3}	\
 %ifarch %{arm}							\
 install -D -m 700 %{2} $RPM_BUILD_ROOT%{efi_esp_boot}/BOOTARM.EFI \
 %endif								\
-install -D -m 700 %{SOURCE11}					\\\
+install -D -m 700 %{SOURCE10}					\\\
     ${RPM_BUILD_ROOT}/usr/bin/gen_grub_cfgstub		\
 install -D -m 700 unicode.pf2					\\\
 	${RPM_BUILD_ROOT}/boot/grub2/fonts/unicode.pf2		\
@@ -1552,7 +1551,7 @@ mkdir grub-%{grubefiarch}-%{tarversion}
 grep -A100000 '# stuff "make" creates' .gitignore > grub-%{grubefiarch}-%{tarversion}/.gitignore
 cp %{SOURCE3} grub-%{grubefiarch}-%{tarversion}/unifont.pcf.gz
 sed -e "s,@@VERSION@@,%{version},g" -e "s,@@VERSION_RELEASE@@,%{version}-%{release},g" \
-    %{SOURCE10} > grub-%{grubefiarch}-%{tarversion}/sbat.csv
+    %{SOURCE9} > grub-%{grubefiarch}-%{tarversion}/sbat.csv
 git add grub-%{grubefiarch}-%{tarversion}
 %endif
 %if 0%{with_alt_efi_arch}
@@ -1578,7 +1577,7 @@ mkdir grub-%{grubxenarch}-%{tarversion}
 grep -A100000 '# stuff "make" creates' .gitignore > grub-%{grubxenarch}-%{tarversion}/.gitignore
 cp %{SOURCE3} grub-%{grubxenarch}-%{tarversion}/unifont.pcf.gz
 sed -e "s,@@VERSION@@,%{version},g" -e "s,@@VERSION_RELEASE@@,%{version}-%{release},g" \
-    %{SOURCE10} > grub-%{grubxenarch}-%{tarversion}/sbat.csv
+    %{SOURCE9} > grub-%{grubxenarch}-%{tarversion}/sbat.csv
 git add grub-%{grubxenarch}-%{tarversion}
 %endif
 %if 0%{with_xen_pvh_arch}
@@ -1586,7 +1585,7 @@ mkdir grub-%{grubxenpvharch}-%{tarversion}
 grep -A100000 '# stuff "make" creates' .gitignore > grub-%{grubxenpvharch}-%{tarversion}/.gitignore
 cp %{SOURCE3} grub-%{grubxenpvharch}-%{tarversion}/unifont.pcf.gz
 sed -e "s,@@VERSION@@,%{version},g" -e "s,@@VERSION_RELEASE@@,%{version}-%{release},g" \
-    %{SOURCE10} > grub-%{grubxenpvharch}-%{tarversion}/sbat.csv
+    %{SOURCE9} > grub-%{grubxenpvharch}-%{tarversion}/sbat.csv
 git add grub-%{grubxenpvharch}-%{tarversion}
 %endif
 git commit -m "After making subdirs"
@@ -1659,8 +1658,8 @@ rm -vf ${RPM_BUILD_ROOT}/%{_sbindir}/grub2-macbless
 
 # Install kernel-install scripts
 install -d -m 0755 %{buildroot}%{_prefix}/lib/kernel/install.d/
-install -D -m 0755 -t %{buildroot}%{_prefix}/lib/kernel/install.d/ %{SOURCE9}
-install -D -m 0755 -t %{buildroot}%{_prefix}/lib/kernel/install.d/ %{SOURCE12}
+install -D -m 0755 -t %{buildroot}%{_prefix}/lib/kernel/install.d/ %{SOURCE8}
+install -D -m 0755 -t %{buildroot}%{_prefix}/lib/kernel/install.d/ %{SOURCE11}
 install -D -m 0755 -t %{buildroot}%{_prefix}/lib/kernel/install.d/ %{SOURCE2}
 install -d -m 0755 %{buildroot}%{_sysconfdir}/kernel/install.d/
 # Install systemd user service to set the boot_success flag
@@ -1967,7 +1966,8 @@ fi
 
 %changelog
 * Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12-56
-- Inline grub.macros and grub.patches, renumber sources (spectool without SOURCES prep)
+- Gnulib fetch URL (savannah snapshot), drop unused theme.tar.bz2 source, renumber SourceN
+- Inline grub.macros and grub.patches for spectool parse without extra SOURCES
 
 * Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12-56
 - SBAT grub.oreon macros oreon-grub2-signer git ids ppc64le %%{?oreon}

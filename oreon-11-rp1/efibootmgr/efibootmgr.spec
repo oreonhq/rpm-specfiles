@@ -17,7 +17,8 @@ BuildRequires: make
 Requires: efi-filesystem
 ExclusiveArch: %{efi}
 
-Source0: https://github.com/rhboot/%{name}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.bz2
+# Tag is 18, not efibootmgr-18 (asset at .../download/18/...)
+Source0: https://github.com/rhboot/%{name}/releases/download/%{version}/%{name}-%{version}.tar.bz2
 
 # Was efibootmgr.patches (%%include needs SOURCES at parse time for spectool)
 Patch0001: 0001-Update-efibootmgr.c.patch
@@ -52,6 +53,7 @@ git config --local --add efibootmgr.efidir %{efi_vendor}
 
 %changelog
 * Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 18-12
+- Fix Source0 GitHub release path (tag is 18, not efibootmgr-18)
 - Inline patch list, drop %%include efibootmgr.patches for spectool
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 18-12

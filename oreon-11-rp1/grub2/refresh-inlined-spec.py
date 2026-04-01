@@ -33,45 +33,23 @@ def main() -> None:
         head = "".join(lines[:head_end])
         new_sources = (
             "Source0:\thttps://ftp.gnu.org/gnu/grub/grub-%{tarversion}.tar.xz\n"
-            "Source1:\tgnulib-%{gnulibversion}.tar.gz\n"
+            "Source1:\thttps://git.savannah.gnu.org/cgit/gnulib.git/snapshot/"
+            "gnulib-%{gnulibversion}.tar.gz\n"
             "Source2:\t99-grub-mkconfig.install\n"
             "Source3:\thttp://unifoundry.com/pub/unifont/"
             "unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz\n"
-            "Source4:\ttheme.tar.bz2\n"
-            "Source5:\tgitignore\n"
-            "Source6:\tbootstrap\n"
-            "Source7:\tbootstrap.conf\n"
-            "Source8:\tstrtoull_test.c\n"
-            "Source9:\t20-grub.install\n"
-            "Source10:\tsbat.csv.in\n"
-            "Source11:\tgen_grub_cfgstub\n"
-            "Source12:\t95-set-boot-entry.install\n\n"
+            "Source4:\tgitignore\n"
+            "Source5:\tbootstrap\n"
+            "Source6:\tbootstrap.conf\n"
+            "Source7:\tstrtoull_test.c\n"
+            "Source8:\t20-grub.install\n"
+            "Source9:\tsbat.csv.in\n"
+            "Source10:\tgen_grub_cfgstub\n"
+            "Source11:\t95-set-boot-entry.install\n\n"
         )
         repl_macros = macros
-        repl_macros = repl_macros.replace("%{SOURCE13}", "__SRC11__")
-        repl_macros = repl_macros.replace("%{SOURCE9}", "__SRC8__")
-        repl_macros = repl_macros.replace("%{SOURCE8}", "__SRC7__")
-        repl_macros = repl_macros.replace("%{SOURCE7}", "__SRC6__")
-        repl_macros = repl_macros.replace("%{SOURCE6}", "__SRC5__")
-        repl_macros = repl_macros.replace("%{SOURCE2}", "__SRC1__")
-        repl_macros = repl_macros.replace("__SRC11__", "%{SOURCE11}")
-        repl_macros = repl_macros.replace("__SRC8__", "%{SOURCE8}")
-        repl_macros = repl_macros.replace("__SRC7__", "%{SOURCE7}")
-        repl_macros = repl_macros.replace("__SRC6__", "%{SOURCE6}")
-        repl_macros = repl_macros.replace("__SRC5__", "%{SOURCE5}")
-        repl_macros = repl_macros.replace("__SRC1__", "%{SOURCE1}")
         middle = "".join(lines[idx_inc1 + 1 : idx_inc11])
         tail = "".join(lines[idx_inc11 + 1 :])
-        tail = tail.replace("%{SOURCE14}", "__T12__")
-        tail = tail.replace("%{SOURCE12}", "__T10__")
-        tail = tail.replace("%{SOURCE10}", "__T9__")
-        tail = tail.replace("%{SOURCE4}", "__T3__")
-        tail = tail.replace("%{SOURCE3}", "__T2__")
-        tail = tail.replace("__T12__", "%{SOURCE12}")
-        tail = tail.replace("__T10__", "%{SOURCE10}")
-        tail = tail.replace("__T9__", "%{SOURCE9}")
-        tail = tail.replace("__T3__", "%{SOURCE3}")
-        tail = tail.replace("__T2__", "%{SOURCE2}")
         banner_m = (
             "# Inlined from grub.macros "
             "(parse-time %%include removed for spectool)\n"
@@ -126,18 +104,6 @@ def main() -> None:
         tail_start += 1
 
     repl_macros = macros
-    repl_macros = repl_macros.replace("%{SOURCE13}", "__SRC11__")
-    repl_macros = repl_macros.replace("%{SOURCE9}", "__SRC8__")
-    repl_macros = repl_macros.replace("%{SOURCE8}", "__SRC7__")
-    repl_macros = repl_macros.replace("%{SOURCE7}", "__SRC6__")
-    repl_macros = repl_macros.replace("%{SOURCE6}", "__SRC5__")
-    repl_macros = repl_macros.replace("%{SOURCE2}", "__SRC1__")
-    repl_macros = repl_macros.replace("__SRC11__", "%{SOURCE11}")
-    repl_macros = repl_macros.replace("__SRC8__", "%{SOURCE8}")
-    repl_macros = repl_macros.replace("__SRC7__", "%{SOURCE7}")
-    repl_macros = repl_macros.replace("__SRC6__", "%{SOURCE6}")
-    repl_macros = repl_macros.replace("__SRC5__", "%{SOURCE5}")
-    repl_macros = repl_macros.replace("__SRC1__", "%{SOURCE1}")
 
     if not patches.endswith("\n"):
         patches = patches + "\n"

@@ -403,11 +403,11 @@ This subpackage provides support for rebuilding your own grub-%{xen_pvh_grub_tar
 %global do_common_setup()					\
 %setup -q -n grub-%{tarversion}					\
 rm -fv docs/*.info						\
-cp %{SOURCE6} .gitignore					\
-cp %{SOURCE7} bootstrap						\
-cp %{SOURCE8} bootstrap.conf					\
-cp %{SOURCE9} ./grub-core/tests/strtoull_test.c			\
-cp %{SOURCE2} gnulib-%{gnulibversion}.tar.gz			\
+cp %{SOURCE4} .gitignore					\
+cp %{SOURCE5} bootstrap						\
+cp %{SOURCE6} bootstrap.conf					\
+cp %{SOURCE7} ./grub-core/tests/strtoull_test.c			\
+cp %{SOURCE1} gnulib-%{gnulibversion}.tar.gz			\
 tar -zxf gnulib-%{gnulibversion}.tar.gz				\
 mv gnulib-%{gnulibversion} gnulib				\
 git init							\
@@ -733,7 +733,7 @@ install -m 700 %{3} $RPM_BUILD_ROOT%{grub_efi_dir}/%{3}	\
 %ifarch %{arm}							\
 install -D -m 700 %{2} $RPM_BUILD_ROOT%{efi_esp_boot}/BOOTARM.EFI \
 %endif								\
-install -D -m 700 %{SOURCE13}					\\\
+install -D -m 700 %{SOURCE10}					\\\
     ${RPM_BUILD_ROOT}/usr/bin/gen_grub_cfgstub		\
 install -D -m 700 unicode.pf2					\\\
 	${RPM_BUILD_ROOT}/boot/grub2/fonts/unicode.pf2		\

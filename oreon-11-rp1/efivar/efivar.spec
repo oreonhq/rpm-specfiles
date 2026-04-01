@@ -12,9 +12,8 @@ BuildRequires:  efi-srpm-macros git glibc-static libabigail
 BuildRequires:  make
 BuildRequires:  mandoc
 BuildRequires:  git
-# please don't fix this to reflect github's incomprehensible url that goes
-# to a different tarball.
-Source0:        https://github.com/rhboot/efivar/releases/download/%{version}/efivar-%{version}.tar.bz2
+# Upstream release 39+ ships no release artifact, only the tag archive.
+Source0:        https://github.com/rhboot/efivar/archive/refs/tags/%{version}.tar.gz#/efivar-%{version}.tar.gz
 
 # Was efivar.patches (%%include needs SOURCES at parse time for spectool)
 Patch0001: 0001-ABI-update-for-newer-libabigail.patch
@@ -87,6 +86,7 @@ make abicheck CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="$RPM_LD_FLAGS"
 
 %changelog
 * Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 39-12
+- Source0 from GitHub tag archive (release has no uploaded tarball)
 - Inline patch list, drop %%include efivar.patches for spectool
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 39-12

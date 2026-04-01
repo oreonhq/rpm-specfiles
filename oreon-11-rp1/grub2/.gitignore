@@ -2,7 +2,6 @@ grub-*.tar.?z
 *.rpm
 clog
 /unifont-*.pcf.?z
-/theme.tar.bz2
 kojilogs
 /grub-*/
 .build*.log
