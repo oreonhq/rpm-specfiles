@@ -1,3 +1,5 @@
+# KDE Gear tarball path (was missing, broke Source URL and spectool)
+%global stable_kf6 stable
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
@@ -9,7 +11,7 @@ Release:        1%{?dist}
 License:        GPL-2.0-only OR GPL-3.0-only
 Summary:        Kirigami-based RSS reader
 Url:            https://invent.kde.org/network/alligator
-Source:         https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -69,5 +71,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.%{name}.deskt
 %{_kf6_datadir}/qlogging-categories6/alligator.categories
 
 %changelog
+* Wed Apr 1 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
+- Define stable_kf6 for Source0 (fix empty path segment), use Source0 label
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)
