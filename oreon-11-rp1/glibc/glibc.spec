@@ -1,6 +1,5 @@
-# Top-level dir inside the snapshot tarball (git describe tarball name differs from gitweb snapshot)
-%global glibc_git_ref f6143a7848
-%global glibcsrcdir glibc-%{glibc_git_ref}
+%global glibc_git_full f6143a7848098a1d4fe4340dd6f375cf0cb9d2db
+%global glibcsrcdir glibc-%{glibc_git_full}
 %global glibcversion 2.43.9000
 # Pre-release tarballs are pulled in from git using a command that is
 # effectively:
@@ -218,7 +217,7 @@ Release: %{baserelease}%{?dist}
 License: LGPL-2.1-or-later AND SunPro AND LGPL-2.1-or-later WITH GCC-exception-2.0 AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later WITH GNU-compiler-exception AND GPL-2.0-only AND ISC AND LicenseRef-Fedora-Public-Domain AND HPND AND CMU-Mach AND LGPL-2.0-or-later AND Unicode-3.0 AND GFDL-1.1-or-later AND GPL-1.0-or-later AND FSFUL AND MIT AND Inner-Net-2.0 AND X11 AND GPL-2.0-or-later WITH GCC-exception-2.0 AND GFDL-1.3-only AND GFDL-1.1-only AND GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Texinfo-exception
 
 URL: http://www.gnu.org/software/glibc/
-Source0: %{?glibc_release_url:%{glibc_release_url}%{glibcsrcdir}.tar.xz}%{!?glibc_release_url:https://sourceware.org/git/?p=glibc.git;a=snapshot;h=%{glibc_git_ref};sf=tgz#/glibc-%{glibc_git_ref}.tar.gz}
+Source0: %{?glibc_release_url:%{glibc_release_url}%{glibcsrcdir}.tar.xz}%{!?glibc_release_url:https://github.com/bminor/glibc/archive/%{glibc_git_full}.tar.gz#/glibc-%{glibc_git_full}.tar.gz}
 Source1: bench.mk
 Source2: glibc-bench-compare
 Source3: glibc.req.in
@@ -2403,7 +2402,7 @@ update_gconv_modules_cache ()
 
 %changelog
 * Wed Apr 1 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{glibcversion}-1
-- Source0 sourceware.org git snapshot when not a GNU release tarball, glibcsrcdir matches archive prefix
+- Snapshot Source0 GitHub archive URL (spectool-friendly), glibcsrcdir = glibc-%%{glibc_git_full} to match archive prefix
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{glibcversion}-1
 - Prepare for Oreon 11 (RP1)
