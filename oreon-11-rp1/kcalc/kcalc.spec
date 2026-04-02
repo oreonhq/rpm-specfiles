@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
