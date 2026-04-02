@@ -28,7 +28,8 @@ BuildRequires:  cmake(KF6KCMUtils)
 
 BuildRequires:  cmake(KDevPlatform) >= 6.0
 BuildRequires:  cmake(KDevelop-PG-Qt) >= 2.3.0
-BuildRequires:  kdevelop-devel = 9:%{version}
+# Exact 9:%%{version} breaks dnf builddep when kdevelop-devel has another epoch/NVR in the repo
+BuildRequires:  kdevelop-devel >= %{version}
 
 %{?kdevelop_requires}
 
@@ -66,5 +67,8 @@ BuildRequires:  kdevelop-devel = 9:%{version}
 
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
+- Relax kdevelop-devel BuildRequires to >= %%{version} for dnf builddep
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)
