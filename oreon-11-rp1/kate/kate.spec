@@ -4,6 +4,7 @@
 ## tests busted due to %%{_target_platform} not being used as default anymore -- rex
 #global tests 1
 
+%global stable_kf6 stable
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}

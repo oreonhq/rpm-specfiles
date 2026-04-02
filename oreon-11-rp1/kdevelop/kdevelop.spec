@@ -1,5 +1,7 @@
 %bcond svn %{undefined flatpak}
 
+%global stable_kf6 stable
+
 Name:           kdevelop
 Summary:        Integrated Development Environment for C++/C
 Epoch:          9

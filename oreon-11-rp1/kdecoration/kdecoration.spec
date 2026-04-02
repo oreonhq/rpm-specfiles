@@ -1,3 +1,5 @@
+%global stable_kf6 stable
+
 Name:    kdecoration
 Summary: A plugin-based library to create window decorations
 Version: 6.6.2

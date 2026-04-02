@@ -1,3 +1,4 @@
+%global stable_kf6 stable
 
 Name:    kalgebra
 Summary: 2D and 3D Graph Calculator

@@ -1,5 +1,8 @@
 %define framework prison
 
+%global stable_kf6 stable
+%global majmin_ver_kf6 6.24
+
 Name:		kf6-%{framework}
 Summary:	KDE Frameworks 6 Tier 1 barcode library
 Version:	6.24.0

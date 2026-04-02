@@ -1,5 +1,7 @@
 %global framework kdeclarative
 
+%global stable_kf6 stable
+
 Name:    kf6-%{framework}
 Version: 6.24.0
 Release: 1%{?dist}

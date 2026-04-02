@@ -1,5 +1,8 @@
 %global framework qqc2-desktop-style
 
+%global stable_kf6 stable
+%global majmin_ver_kf6 6.24
+
 Name:    kf6-%{framework}
 Version: 6.24.0
 Release: 1%{?dist}

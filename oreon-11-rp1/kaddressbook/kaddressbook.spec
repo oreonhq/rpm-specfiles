@@ -1,3 +1,5 @@
+%global stable_kf6 stable
+
 Name:    kaddressbook
 Summary: Contact Manager
 Version: 25.12.3

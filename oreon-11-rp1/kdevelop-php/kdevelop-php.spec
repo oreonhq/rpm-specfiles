@@ -1,3 +1,5 @@
+%global stable_kf6 stable
+
 Name:           kdevelop-php
 Summary:        Php language and documentation plugins for KDevelop
 Version:        25.12.3

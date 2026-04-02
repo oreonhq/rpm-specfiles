@@ -1,4 +1,7 @@
 %global framework bluez-qt
+
+%global stable_kf6 stable
+%global majmin_ver_kf6 6.24
  
 Name:           kf6-%{framework}
 Summary:        A Qt wrapper for Bluez

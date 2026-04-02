@@ -1,3 +1,5 @@
+%global stable_kf6 stable
+
 Name:    kdialog
 Summary: Nice dialog boxes from shell scripts
 Version: 25.12.3

@@ -1,5 +1,8 @@
 %global framework kuserfeedback
 
+%global stable_kf6 stable
+%global majmin_ver_kf6 6.24
+
 Name:    kf6-%{framework}
 Summary: Framework for collecting user feedback for apps via telemetry and surveys
 Version: 6.24.0

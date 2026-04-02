@@ -1,5 +1,7 @@
 %global framework purpose
 
+%global stable_kf6 stable
+
 Name:    kf6-purpose
 Summary: Framework for providing abstractions to get the developer's purposes fulfilled
 Version: 6.24.0
