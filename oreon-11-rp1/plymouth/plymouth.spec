@@ -6,8 +6,8 @@ License: GPL-2.0-or-later
 URL: http://www.freedesktop.org/wiki/Software/Plymouth
 
 Source0: https://gitlab.freedesktop.org/plymouth/plymouth/-/archive/%{version}/%{name}-%{version}.tar.bz2
-# Spinner update from: https://gitlab.freedesktop.org/plymouth/plymouth/-/commit/1a01883fa2659bfb5e7417e1d5bd8d287a2cac36
-# Drop this on next rebase to latest upstream
+# Spinner theme refresh from commit 1a01883 (git archive themes/spinner at that commit).
+# Drop on rebase if upstream release already includes it.
 Source1: spinner-update.tar.gz
 Source2: charge.plymouth
 
@@ -520,5 +520,8 @@ fi
 %files system-theme
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - 24.004.60-1
+- Track spinner-update.tar.gz in git
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 24.004.60-1
 - Prepare for Oreon 11 (RP1)
