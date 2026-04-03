@@ -6,7 +6,7 @@ Version: 1.0.8
 Release: 23%{?dist}
 License: BSD-4-Clause
 URL: https://sourceware.org/bzip2
-#Source0: http://www.bzip.org/%{version}/%{name}-%{version}.tar.gz
+#Source0: http://www.bzip.org/%%{version}/%%{name}-%%{version}.tar.gz
 Source0: https://sourceware.org/pub/bzip2/%{name}-%{version}.tar.gz
 Source1: bzip2.pc
 Source2: https://sourceware.org/pub/bzip2/%{name}-%{version}.tar.gz.sig
@@ -128,5 +128,8 @@ ln -s bzgrep.1 $RPM_BUILD_ROOT%{_mandir}/man1/bzfgrep.1
 %{_libdir}/pkgconfig/bzip2.pc
 
 %changelog
+* Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.8-23
+- Escape macros in commented legacy Source0 line (rpmlint)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.8-23
 - Prepare for Oreon 11 (RP1)
