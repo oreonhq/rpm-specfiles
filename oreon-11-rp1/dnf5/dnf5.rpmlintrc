@@ -1,0 +1,2 @@
+addFilter('non-conffile-in-etc /etc/dnf/dnf5-aliases.d/README')
+addFilter('spelling-error \(\'builddep|changelog|copr|cron|modulemd|repomanage|repoclosure|reposync\'')

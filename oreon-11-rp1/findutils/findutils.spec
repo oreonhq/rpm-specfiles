@@ -118,5 +118,8 @@ rm -f %{buildroot}%{_infodir}/dir
 %{_infodir}/find-maint.info.*
 
 %changelog
+* Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.10.0-7
+- Fix .gitignore so Fedora patches are not excluded from the tree
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.10.0-7
 - Prepare for Oreon 11 (RP1)

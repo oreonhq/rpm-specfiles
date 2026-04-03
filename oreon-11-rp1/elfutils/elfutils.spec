@@ -7,7 +7,7 @@ Version: 0.194
 %global baserelease 5
 Release: %{baserelease}%{?dist}
 URL: http://elfutils.org/
-%global source_url ftp://sourceware.org/pub/elfutils/%{version}/
+%global source_url https://sourceware.org/pub/elfutils/%{version}/
 License: GPL-3.0-or-later AND (GPL-2.0-or-later OR LGPL-3.0-or-later) AND GFDL-1.3-no-invariants-or-later
 Source: %{?source_url}%{name}-%{version}.tar.bz2
 Source1: elfutils-debuginfod.sysusers
@@ -532,5 +532,8 @@ exit 0
 %systemd_postun_with_restart debuginfod.service
 
 %changelog
+* Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.194-5
+- Use HTTPS for sourceware tarball instead
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.194-1
 - Prepare for Oreon 11 (RP1)
