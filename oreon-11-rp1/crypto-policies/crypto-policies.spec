@@ -61,7 +61,6 @@ defined in simple policy definition files.
 
 %prep
 %setup -q -n fedora-crypto-policies-%{git_commit_hash}-%{git_commit}
-%autopatch -p1
 
 %build
 %make_build \
@@ -289,5 +288,8 @@ exit 0
 %{_datarootdir}/crypto-policies/python
 
 %changelog
+* Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{git_date}-3.git
+- Remove autopatch with no Patch entries (prep failed in mock)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{git_date}-3.git
 - Prepare for Oreon 11 (RP1)

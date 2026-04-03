@@ -13,7 +13,7 @@ Source0: https://github.com/cracklib/cracklib/releases/download/v%{version}/crac
 Source1: https://github.com/cracklib/cracklib/releases/download/v%{version}/cracklib-words-%{version}.gz
 # From attachment to https://bugzilla.redhat.com/show_bug.cgi?id=627449
 Source2: cracklib.default.zh_CN.po
-# No upstream source for this, just words missing from the current cracklib-words
+# No upstream source; supplement for words missing from cracklib-words (from EL9 SRPM lineage)
 Source3: missing-words.gz
 
 Patch: cracklib-2.9.11-packlib-reentrant.patch
@@ -154,5 +154,8 @@ make test DESTDIR=%{buildroot}
 %{_sbindir}/mkdict
 
 %changelog
+* Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.11-10
+- Add missing-words.gz for dict build, track in git
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.11-10
 - Prepare for Oreon 11 (RP1)
