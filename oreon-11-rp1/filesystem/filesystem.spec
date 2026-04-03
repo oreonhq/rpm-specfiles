@@ -209,11 +209,28 @@ posix.mkdir("/usr/lib/debug/usr/sbin")
 
 %if %{with merged_sbin}
 %global sbin_filenames %{lua:
-print('{\\n')
-io.input(sources[4])
-for v in io.lines() do
-  print('  ["'..v..'"] = true,\\n')
+local candidates = {}
+local function add(p)
+  if p and p ~= "" then table.insert(candidates, p) end
 end
+add(rpm.expand("%{SOURCE4}"))
+add(rpm.expand("%{_sourcedir}/sbin-filenames"))
+local pwd = posix.getenv("PWD")
+if pwd then add(pwd .. "/sbin-filenames") end
+add("sbin-filenames")
+local f
+for _, p in ipairs(candidates) do
+  f = io.open(p, "r")
+  if f then break end
+end
+if not f then
+  error("cannot open Source4 sbin-filenames (copy into SOURCES or run from package dir)")
+end
+print('{\\n')
+for line in f:lines() do
+  print('  ["'..line..'"] = true,\\n')
+end
+f:close()
 print('}')
 }
 
@@ -552,5 +569,8 @@ end
 /var/yp
 
 %changelog
+* Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.18-1
+- Open sbin-filenames via SOURCE4, PWD, or cwd, no stray # inside %%pretrans lua
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.18-1
 - Prepare for Oreon 11 (RP1)
