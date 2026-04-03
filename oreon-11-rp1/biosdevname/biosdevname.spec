@@ -7,12 +7,13 @@ Summary:	Udev helper for naming devices per BIOS names
 # * bundled dmidecode is GPL-2.0-or-later
 License:	GPL-2.0-only AND GPL-2.0-or-later
 
-URL:		http://linux.dell.com/files/%{name}
+URL:		https://github.com/dell/%{name}
 # SMBIOS only exists on these arches.  It's also likely that other
 # arches don't expect the PCI bus to be sorted breadth-first, or of
 # so, there haven't been any comments about that on LKML.
 ExclusiveArch:	%{ix86} x86_64
-Source0:	http://linux.dell.com/files/%{name}/%{name}-%{version}/%{name}-%{version}.tar.gz
+# linux.dell.com tarball URL returns 404.
+Source0:	https://github.com/dell/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -50,5 +51,8 @@ make install install-data DESTDIR=%{buildroot}
 %{_mandir}/man1/%{name}.1*
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.3-21
+- Source0 from GitHub tag archive (Dell file mirror 404)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.3-21
 - Prepare for Oreon 11 (RP1)
