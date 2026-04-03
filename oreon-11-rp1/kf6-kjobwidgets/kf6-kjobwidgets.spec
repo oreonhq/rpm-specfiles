@@ -1,4 +1,6 @@
 %global framework kjobwidgets
+%global stable_kf6 stable
+%global majmin_ver_kf6 6.24
 
 Name:           kf6-%{framework}
 Version:        6.24.0
@@ -50,18 +52,6 @@ Requires:       cmake(KF6CoreAddons)
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package        doc
-Summary:        Developer Documentation files for %{name}
-BuildArch:      noarch
-%description    doc
-Developer Documentation files for %{name} for use with KDevelop or QtCreator.
-
-%package        html
-Summary:        Developer Documentation files for %{name}
-BuildArch:      noarch
-%description    html
-Developer Documentation files for %{name} in HTML format
-
 %prep
 %autosetup -n %{framework}-%{version} -p1
 
@@ -89,16 +79,6 @@ Developer Documentation files for %{name} in HTML format
 %{_kf6_libdir}/libKF6JobWidgets.so
 %{_kf6_libdir}/cmake/KF6JobWidgets/
 %{_kf6_datadir}/dbus-1/interfaces/*.xml
-%{_qt6_docdir}/*/*.tags
-%{_qt6_docdir}/*/*.index
-
-%files doc
-%{_qt6_docdir}/*.qch
-
-%files html
-%{_qt6_docdir}/*/*
-%exclude %{_qt6_docdir}/*/*.tags
-%exclude %{_qt6_docdir}/*/*.index
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1

@@ -114,7 +114,7 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.%{name}.deskt
 %{_qt6_plugindir}/plasma/applets/org.kde.plasma.%{name}_1x2.so
 
 %changelog
-* Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Define stable_kf6 so Source0 KDE Gear URL resolves
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1

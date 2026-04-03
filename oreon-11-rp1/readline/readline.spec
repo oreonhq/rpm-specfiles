@@ -9,7 +9,7 @@ Release: 4%{?dist}
 License: GPL-3.0-or-later AND GPL-2.0-or-later AND GFDL-1.3-no-invariants-or-later
 
 URL: https://tiswww.case.edu/php/chet/readline/rltop.html
-Source: ftp://ftp.gnu.org/gnu/readline/readline-%{version}.tar.gz
+Source: https://ftp.gnu.org/gnu/readline/readline-%{version}.tar.gz
 
 # Official upstream patches
 # Patches are converted to apply with '-p1'

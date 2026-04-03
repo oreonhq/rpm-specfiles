@@ -1,4 +1,6 @@
 %global framework extra-cmake-modules
+%global stable_kf6 stable
+%global majmin_ver_kf6 6.24
 
 # uncomment to enable bootstrap mode
 #global bootstrap 1

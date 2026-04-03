@@ -6,8 +6,8 @@ Version: 7.3
 Release: 1%{?dist}
 License: GPL-3.0-or-later
 Url: http://www.gnu.org/software/texinfo/
-Source0: ftp://ftp.gnu.org/gnu/texinfo/texinfo-%{version}.tar.xz
-Source1: ftp://ftp.gnu.org/gnu/texinfo/texinfo-%{version}.tar.xz.sig
+Source0: https://ftp.gnu.org/gnu/texinfo/texinfo-%{version}.tar.xz
+Source1: https://ftp.gnu.org/gnu/texinfo/texinfo-%{version}.tar.xz.sig
 Source2: fix-info-dir
 # Patch0: we need to fix template fix-info-dir generates
 Patch0: info-6.5-sync-fix-info-dir.patch

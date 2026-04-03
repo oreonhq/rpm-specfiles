@@ -52,7 +52,7 @@ git config --local --add efibootmgr.efidir %{efi_vendor}
 %doc README
 
 %changelog
-* Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 18-12
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 18-12
 - Fix Source0 GitHub release path (tag is 18, not efibootmgr-18)
 - Inline patch list, drop %%include efibootmgr.patches for spectool
 

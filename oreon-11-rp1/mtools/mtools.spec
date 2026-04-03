@@ -3,7 +3,7 @@ Name: mtools
 Version: 4.0.49
 Release: %autorelease
 License: GPL-3.0-or-later
-Source0: ftp://ftp.gnu.org/gnu/mtools/mtools-%{version}.tar.gz
+Source0: https://ftp.gnu.org/gnu/mtools/mtools-%{version}.tar.gz
 Url: https://www.gnu.org/software/mtools/
 Patch0: mtools-3.9.6-config.patch
 
@@ -62,5 +62,8 @@ ln -s mtools.5.gz %{buildroot}%{_mandir}/man5/mtools.conf.5.gz
 %{_infodir}/mtools.info*
 
 %changelog
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.49-1
+- Use HTTPS for GNU mtools tarball (spectool and firewalls often block FTP)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.49-1
 - Prepare for Oreon 11 (RP1)

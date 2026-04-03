@@ -32,7 +32,7 @@
     -DCMAKE_Fortran_FLAGS_RELEASE:STRING="-DNDEBUG" \\\
     -DBUILD_SHARED_LIBS:BOOL=ON \\\
     -DBUILD_TESTING:BOOL=FALSE \\\
-    -DBUILD_QCH:BOOL=ON \\\
+    -DBUILD_QCH:BOOL=OFF \\\
     -DCMAKE_BUILD_TYPE=%{_kf6_buildtype} \\\
     -DCMAKE_INSTALL_INCLUDEDIR_kf6:PATH=%{_kf6_includedir} \\\
     -DCMAKE_INSTALL_LIBEXECDIR_kf6:PATH=%{_kf6_libexecdir} \\\
@@ -55,16 +55,11 @@
     -DKDE_INSTALL_USE_QT_SYS_PATHS:BOOL=ON
 
 %cmake_build_kf6 \\\
-	%cmake_build \
-	%cmake_build -t prepare_docs \
-	%cmake_build -t generate_docs \
-	%cmake_build -t generate_qch
+	%cmake_build
 
 %cmake_install_kf6 \\\
 	%cmake_install \
-	DESTDIR=%{buildroot} ; export DESTDIR ; \
-	%cmake_build -t install_html_docs \
-	%cmake_build -t install_qch_docs 
+	DESTDIR=%{buildroot} ; export DESTDIR
 
 # %%find_lang_kf6
 #

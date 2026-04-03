@@ -85,7 +85,7 @@ make abicheck CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="$RPM_LD_FLAGS"
 %{_libdir}/*.so.*
 
 %changelog
-* Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 39-12
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 39-12
 - Source0 from GitHub tag archive (release has no uploaded tarball)
 - Inline patch list, drop %%include efivar.patches for spectool
 

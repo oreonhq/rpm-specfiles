@@ -100,8 +100,8 @@ Source0:        https://github.com/systemd/systemd/archive/%{commit}/%{name}-%{c
 %elif %{with obs}
 Source0:        https://github.com/systemd/systemd/archive/v%{version_no_tilde}/%{name}-%{version}.tar.xz
 %endif
-# This file must be available before %%prep.
-# It is generated during systemd build and can be found at build/src/rpm/triggers.systemd.sh.
+# Vendored snapshot (refresh from build/src/rpm/triggers.systemd.sh or a Fedora SRPM when updating).
+# %%include reads this at spec parse time, so it must live in SOURCES with the spec.
 Source1:        triggers.systemd
 Source2:        split-files.py
 Source4:        test_sysusers_defined.py
@@ -1580,5 +1580,8 @@ rm -rf \
     elfbins.list
 
 %changelog
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{?version_override}%{!?version_override:260}-2
+- Add triggers.systemd next to spec so %%include and spectoolless SRPM prep work
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{?version_override}%{!?version_override:260}-1
 - Prepare for Oreon 11 (RP1)

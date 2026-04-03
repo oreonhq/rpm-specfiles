@@ -109,7 +109,7 @@ export LD_LIBRARY_PATH=%{buildroot}%{_libdir}:MATGEN
 %doc DOC
 
 %changelog
-* Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.1-1
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.1-1
 - Drop fix_version patch, upstream v7.0.1 tarball already sets VERSION_BugFix to 1
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.1-1

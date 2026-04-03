@@ -1966,7 +1966,7 @@ fi
 %endif
 
 %changelog
-* Tue Mar 31 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12-56
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12-56
 - Gnulib Source1 GitHub mirror with #/ rename, drop theme.tar.bz2, renumber SourceN
 - Inline grub.macros and grub.patches for spectool parse without extra SOURCES
 

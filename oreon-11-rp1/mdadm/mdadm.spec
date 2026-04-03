@@ -64,7 +64,7 @@ file can be used to help with some common tasks.
 
 %build
 # CXFLAGS is NOT a typo, it's baked into the makefile, not to be confused with CXXFLAGS
-%make_build CXFLAGS="%{optflags} -std=gnu17 -Wno-error=unterminated-string-initialization" LDFLAGS="$RPM_LD_FLAGS" SYSCONFDIR="%{_sysconfdir}" mdadm mdmon raid6check raid6check.man
+%make_build CXFLAGS="%{optflags} -std=gnu17 -Wno-error=unterminated-string-initialization -Wno-error=unused-but-set-variable" LDFLAGS="$RPM_LD_FLAGS" SYSCONFDIR="%{_sysconfdir}" mdadm mdmon raid6check raid6check.man
 
 
 %install

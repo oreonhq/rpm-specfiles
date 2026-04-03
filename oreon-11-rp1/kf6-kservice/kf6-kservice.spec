@@ -1,4 +1,6 @@
 %global framework kservice
+%global stable_kf6 stable
+%global majmin_ver_kf6 6.24
 
 Name:    kf6-%{framework}
 Summary: KDE Frameworks 6 Tier 3 solution for advanced plugin and service introspection
@@ -42,18 +44,6 @@ Requires:       cmake(KF6CoreAddons)
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-%package        doc
-Summary:        Developer Documentation files for %{name}
-BuildArch:      noarch
-%description    doc
-Developer Documentation files for %{name} for use with KDevelop or QtCreator.
-
-%package        html
-Summary:        Developer Documentation files for %{name}
-BuildArch:      noarch
-%description    html
-Developer Documentation files for %{name} in HTML format
-
 %prep
 %autosetup -n %{framework}-%{version} -p1
 
@@ -83,16 +73,6 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kservicetypes6
 %{_kf6_includedir}/KService/
 %{_kf6_libdir}/libKF6Service.so
 %{_kf6_libdir}/cmake/KF6Service/
-%{_qt6_docdir}/*/*.tags
-%{_qt6_docdir}/*/*.index
-
-%files doc
-%{_qt6_docdir}/*.qch
-
-%files html
-%{_qt6_docdir}/*/*
-%exclude %{_qt6_docdir}/*/*.tags
-%exclude %{_qt6_docdir}/*/*.index
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1

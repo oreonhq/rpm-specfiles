@@ -36,7 +36,7 @@
 %global gawk_api_major %%(x=`tar -xf %{SOURCE0} gawk-%{version}/gawkapi.h --to-stdout 2>/dev/null | \
                           grep -i -e "gawk_api_major.*[[:digit:]]" | \
                           grep -o -e "[[:digit:]]"`; \
-			  [ "$x" -lt 3 ] && x=3; echo $x)
+			  x=${x:-0}; case "$x" in ''|*[!0-9]*) x=3;; *) [ "$x" -lt 3 ] && x=3;; esac; echo $x)
 
 %global gawk_api_minor %%(tar -xf %{SOURCE0} gawk-%{version}/gawkapi.h --to-stdout 2>/dev/null | \
                           grep -i -e "gawk_api_minor.*[[:digit:]]" | \

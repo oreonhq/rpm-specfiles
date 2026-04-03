@@ -3,11 +3,11 @@ Name: tzdata
 Version: 2025c
 %define tzdata_version 2025c
 %define tzcode_version 2025c
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: LicenseRef-Fedora-Public-Domain AND (GPL-2.0-only WITH ClassPath-exception-2.0)
 URL: https://www.iana.org/time-zones
-Source0: ftp://ftp.iana.org/tz/releases/tzdata%{tzdata_version}.tar.gz
-Source1: ftp://ftp.iana.org/tz/releases/tzcode%{tzcode_version}.tar.gz
+Source0: https://www.iana.org/time-zones/repository/releases/tzdata%{tzdata_version}.tar.gz
+Source1: https://www.iana.org/time-zones/repository/releases/tzcode%{tzcode_version}.tar.gz
 
 Patch002: 0002-Fix-have-snprintf-error.patch
 Patch003: 0003-continue-to-ship-posixrules.patch
@@ -30,7 +30,7 @@ the world.
 
 %package java
 Summary: Timezone data for Java
-Source3: javazic-1.8-37392f2f5d59.tar.xz
+Source3: https://pkgs.fedoraproject.org/repo/pkgs/rpms/tzdata/javazic-1.8-37392f2f5d59.tar.xz/sha512/2ba718dfeed53a3bd6b44e3dfe96338a609e482e4e6d942e2a7e622fc6c52606cb323ac3a59739c463e34f70fff217c0a61f5b3d3c4958eff2801b1504ee4204/javazic-1.8-37392f2f5d59.tar.xz
 Source4: ZoneTest.java
 Patch100: 8051641.patch
 Patch101: javazic-harden-links.patch
@@ -146,5 +146,9 @@ echo ============END TESTING===========
 %{_datadir}/javazi-1.8
 
 %changelog
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2025c-3
+- Use HTTPS for IANA tzdata and tzcode tarballs (spectool has no FTP)
+- Fetch javazic tarball from Fedora lookaside so spectool and CI can download it
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2025c-2
 - Prepare for Oreon 11 (RP1)

@@ -28,9 +28,9 @@ Summary:    Perl-compatible regular expression library
 # other files:              BSD
 License:    BSD-3-Clause
 URL:        https://www.pcre.org/
-Source0:    https://ftp.pcre.org/pub/%{name}/%{?rcversion:Testing/}%{name}-%{myversion}.tar.bz2
-Source1:    https://ftp.pcre.org/pub/%{name}/%{?rcversion:Testing/}%{name}-%{myversion}.tar.bz2.sig
-Source2:    https://ftp.pcre.org/pub/pcre/Public-Key
+Source0:    https://ftp.exim.org/pub/pcre/%{?rcversion:Testing/}%{name}-%{myversion}.tar.bz2
+Source1:    https://ftp.exim.org/pub/pcre/%{?rcversion:Testing/}%{name}-%{myversion}.tar.bz2.sig
+Source2:    https://ftp.exim.org/pub/pcre/Public-Key
 # Do no set RPATH if libdir is not /usr/lib
 Patch0:     pcre-8.21-multilib.patch
 # Refused by upstream, bug #675477

@@ -1,11 +1,11 @@
 Summary: GNU data compression program
 Name: gzip
 Version: 1.14
-Release: 2%{?dist}
+Release: 3%{?dist}
 # info pages are under GFDL license
 License: GPL-3.0-or-later AND GFDL-1.3-only
 Source0: https://ftp.gnu.org/gnu/gzip/gzip-%{version}.tar.xz
-Source1: https://www.gnu.org/licenses/fdl-1.3.txt
+Source1: fdl-1.3.txt
 
 # downstream solution for coloured z*grep (#1034839)
 Source100: colorzgrep.csh
@@ -91,5 +91,8 @@ install -p -m 644 %{SOURCE101} %{buildroot}%{profiledir}
 %{profiledir}/*
 
 %changelog
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.14-3
+- Ship GNU FDL 1.3 text in-tree for %%prep (avoids spectool or network for Source1)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.14-2
 - Prepare for Oreon 11 (RP1)
