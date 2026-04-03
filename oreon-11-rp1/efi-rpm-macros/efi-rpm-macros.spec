@@ -8,7 +8,8 @@ BuildRequires: git sed
 BuildRequires: make
 BuildArch: noarch
 
-Source0: https://github.com/rhboot/%{name}/releases/download/%{version}/%{name}-6.tar.bz2
+# Tag 6 has no GitHub release asset (releases/download/...tar.bz2 404). Use tag archive.
+Source0: https://github.com/rhboot/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # Not upstream, but trivial and posted upstream as a PR:
 # https://github.com/rhboot/efi-rpm-macros/pull/3
 Patch0001: 0001-add-riscv64-support.patch
@@ -70,5 +71,8 @@ git config --local --add efi.arches "x86_64 aarch64 %{arm} %{ix86} riscv64"
 %dir /boot/efi/EFI/%{_efi_vendor_}
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6-6
+- Source0: use GitHub tag archive (no uploaded release tarball for v6)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6-6
 - Prepare for Oreon 11 (RP1)
