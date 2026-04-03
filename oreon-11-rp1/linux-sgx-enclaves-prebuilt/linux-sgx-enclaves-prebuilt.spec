@@ -148,7 +148,8 @@ prebuilt by Intel. \
 %do_package qve %{with_enclave_qve} %{dcap_version}
 
 %prep
-%autosetup -n linux-sgx-sgx_%{linux_sgx_version}_reproducible
+# Upstream repo renamed to confidential-computing.sgx (GitHub archive top dir matches)
+%autosetup -n confidential-computing.sgx-sgx_%{linux_sgx_version}_reproducible
 
 # dcap
 (
@@ -250,6 +251,9 @@ version_file=external/dcap_source/QuoteGeneration/common/inc/internal/se_version
 
 
 %changelog
+* Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{linux_sgx_version}-1
+- Autosetup -n for GitHub archive after intel/linux-sgx repo rename
+
 * Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{linux_sgx_version}-1
 - Add prebuilt_dcap repacked tarball, escape macros in URL comment
 
