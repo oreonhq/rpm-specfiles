@@ -10,7 +10,8 @@ Summary:        Open-source legacy BIOS implementation
 License:        LGPL-3.0-only
 URL:            http://www.coreboot.org/SeaBIOS
 
-Source0:        http://code.coreboot.org/p/seabios/downloads/get/%{name}-%{version}.tar.gz
+# code.coreboot.org HTTPS often fails TLS handshakes. GitHub tag matches release.
+Source0:        https://github.com/coreboot/seabios/archive/refs/tags/rel-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 Patch0001:      0001-Workaround-for-a-win8.1-32-S4-resume-bug.patch
 Patch0003:      0003-vgabios-Reorder-video-modes-to-work-around-a-Windows.patch
@@ -87,7 +88,7 @@ SeaVGABIOS is an open-source VGABIOS implementation.
 
 
 %prep
-%setup -q
+%setup -q -n seabios-rel-%{version}
 %autopatch -p1
 
 %build
@@ -164,5 +165,8 @@ install -m 0644 binaries/vgabios*.bin $RPM_BUILD_ROOT%{_datadir}/seavgabios
 
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.17.0-1
+- Source0 from GitHub tag rel-1.17.0 (coreboot.org TLS issues)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.17.0-1
 - Prepare for Oreon 11 (RP1)

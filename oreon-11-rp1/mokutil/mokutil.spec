@@ -6,7 +6,6 @@ Summary:        Tool to manage UEFI Secure Boot MoK Keys
 License:        GPL-3.0-or-later
 URL:            https://github.com/lcp/mokutil
 Source0:        https://github.com/lcp/mokutil/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Source1:        mokutil.patches
 ExclusiveArch:  %{ix86} x86_64 aarch64 %{arm} riscv64
 
 BuildRequires:  autoconf
@@ -23,7 +22,8 @@ BuildRequires:  libxcrypt-devel
 Conflicts:      shim < 0.8-1%{?dist}
 Obsoletes:      mokutil < 0.2.0
 
-%include %{SOURCE1}
+Patch0001: 0001-mokutil-remove-unused-int_to_b64.patch
+Patch0002: 0002-mokutil.c-show-help-if-no-args-or-help-even-on-unsup.patch
 
 %description
 mokutil provides a tool to manage keys for Secure Boot through the MoK
@@ -48,5 +48,8 @@ mokutil provides a tool to manage keys for Secure Boot through the MoK
 %{_datadir}/bash-completion/completions/mokutil
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.2-4
+- Inline Patch lines (drop %%include mokutil.patches for spectool)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.2-4
 - Prepare for Oreon 11 (RP1)

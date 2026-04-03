@@ -248,8 +248,8 @@ Ignition on IoT/Edge systems.
 Summary:  Enablement glue for bootupd's grub2 config
 License:  Apache-2.0
 
-# `ignition-grub` is a rename `ignition-ignition-grub` so let's obsolete `ignition-ignition-grub`
-Obsoletes: ignition-ignition-grub
+# ignition-grub replaced the misnamed ignition-ignition-grub subpackage
+Obsoletes:     ignition-ignition-grub < %{version}-%{release}
 
 %description grub
 This package contains the grub2 config which is compatable with bootupd.
@@ -387,5 +387,8 @@ install -p -m 0755 ./ignition %{buildroot}/%{dracutlibdir}/modules.d/30ignition
 %{_prefix}/lib/bootupd/grub2-static/configs.d/05_ignition.cfg
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.26.0-2
+- Version Obsoletes for ignition-ignition-grub (rpmlint unversioned-obsoletes)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.26.0-2
 - Prepare for Oreon 11 (RP1)

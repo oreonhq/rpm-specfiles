@@ -14,6 +14,8 @@ Summary:	Generic Health Check Framework for systemd
 License:	BSD-3-Clause AND ISC AND MIT AND Unicode-DFS-2016 AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
 URL:		https://github.com/fedora-iot/greenboot-rs
 Source0:	%{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# Bundled crates for RHEL-style builds (no crates.io in mock). Regenerate from the release tag with
+# cargo vendor, .cargo/config.toml pointing crates-io at vendor/, then tar.xz vendor and .cargo.
 Source1:	%{name}-%{version}-vendor-patched.tar.xz
 
 ExcludeArch:	%{ix86}
@@ -146,5 +148,8 @@ install -DpZm 0644 usr/lib/systemd/system/greenboot-healthcheck.service.d/10-net
 %{_unitdir}/greenboot-healthcheck.service.d/10-network-online.conf
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.16.2-0
+- Add vendor tarball for Source1 (RHEL bundled_rust_deps path)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.16.2-0
 - Prepare for Oreon 11 (RP1)

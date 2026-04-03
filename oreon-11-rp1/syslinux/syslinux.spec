@@ -13,7 +13,8 @@ Version: 6.04
 Release: 0.35%{?dist}
 License: GPL-2.0-or-later
 URL: http://syslinux.zytor.com/wiki/index.php/The_Syslinux_Project
-Source0: http://www.kernel.org/pub/linux/utils/boot/syslinux/%{name}-%{tarball_version}.tar.xz
+# Pre-releases live under Testing/6.04/ on kernel.org (top-level path 404)
+Source0: https://cdn.kernel.org/pub/linux/utils/boot/syslinux/Testing/6.04/%{name}-%{tarball_version}.tar.xz
 Patch0001: 0001-Add-install-all-target-to-top-side-of-HAVE_FIRMWARE.patch
 Patch0002: 0002-ext4-64bit-feature.patch
 Patch0003: 0003-include-sysmacros-h.patch
@@ -260,5 +261,8 @@ fi
 %endif
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.04-0.35
+- Source0 path Testing/6.04 on cdn.kernel.org (6.04-pre1 moved)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.04-0.35
 - Prepare for Oreon 11 (RP1)
