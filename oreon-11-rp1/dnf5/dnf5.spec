@@ -948,9 +948,9 @@ DNF5 plugin for working with RPM package manifest files.
 %if %{with man}
 %{_mandir}/man8/dnf*-manifest.8.*
 %endif
-%endif  # %{with plugin_manifest}
+%endif
 
-%endif  # %{with dnf5_plugins}
+%endif
 
 
 # ========== unpack, build, check & install ==========
@@ -1099,3 +1099,4 @@ mkdir -p %{buildroot}%{_libdir}/libdnf5/plugins
 %changelog
 * Fri Apr 3 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.4.0.0-3
 - Prepare for Oreon 11 (RP1)
+- fix parsing issue
