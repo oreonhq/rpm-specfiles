@@ -107,7 +107,7 @@ Source2: repack.sh
 
 # Upload tarball is:
 #
-#   https://download.01.org/intel-sgx/sgx-dcap/%{dcap_version}/linux/prebuilt_dcap_%{dcap_version}.tar.gz
+#   https://download.01.org/intel-sgx/sgx-dcap/%%{dcap_version}/linux/prebuilt_dcap_%%{dcap_version}.tar.gz
 #
 # but is then post-processed using repack.sh to create this
 Source3: prebuilt_dcap_%{dcap_version}-repacked.tar.gz
@@ -250,5 +250,8 @@ version_file=external/dcap_source/QuoteGeneration/common/inc/internal/se_version
 
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{linux_sgx_version}-1
+- Add prebuilt_dcap repacked tarball, escape macros in URL comment
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{linux_sgx_version}-1
 - Prepare for Oreon 11 (RP1)

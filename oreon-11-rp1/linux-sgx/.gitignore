@@ -6,13 +6,14 @@
 /libcbor-*.tar.gz
 /linux-sgx-*.tar.gz
 /openssl-*.tar.gz
+# Raw Intel prebuilt upload is local-only; repacked source for the SRPM is tracked.
 /prebuilt_dcap_*.tar.gz
+!/prebuilt_dcap_*-repacked.tar.gz
 /sgx-emm-*.tar.gz
 /tinyxml2-*.tar.gz
 /wasm-micro-runtime-*.tar.gz
 /DCAP_*.tar.gz
 *~
-/pccs-*-node-modules.tar.xz
 /node-ffi-rs-*-vendor.tar.gz
 /node-ffi-rs-*.tar.gz
 /pccs-*.tar.gz

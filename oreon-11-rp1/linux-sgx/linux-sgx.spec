@@ -57,8 +57,8 @@
 %global with_sysusers_scripts 1
 %endif
 
-# Change after running pccs-nodejs-bundler
-%define node_modules_date 20260204
+# Change after running pccs-nodejs-bundler (must match bundled archive basename)
+%define node_modules_date 20260402
 
 ############################################################
 #
@@ -239,7 +239,7 @@ Provides: bundled(dcap) = %{dcap_version}
 
 # Upload tarball is:
 #
-#   https://download.01.org/intel-sgx/sgx-dcap/%{dcap_version}/linux/prebuilt_dcap_%{dcap_version}.tar.gz
+#   https://download.01.org/intel-sgx/sgx-dcap/%%{dcap_version}/linux/prebuilt_dcap_%%{dcap_version}.tar.gz
 #
 # but is then post-processed using repack.sh to create this
 Source3: prebuilt_dcap_%{dcap_version}-repacked.tar.gz
@@ -320,7 +320,7 @@ Provides: bundled(vtune) = 2018
 
 # 0000-0099 -> against confidential-computing.sgx-sgx.git
 #
-# Maintained in: https://github.com/berrange/linux-sgx/tree/dist-git-%{linux_sgx_version}-hostsw
+# Maintained in: https://github.com/berrange/linux-sgx/tree/dist-git-%%{linux_sgx_version}-hostsw
 #
 Patch0000: 0000-Add-support-for-building-against-host-openssl-crypto.patch
 Patch0001: 0001-Add-support-for-building-against-host-tinyxml2-lib.patch
@@ -349,7 +349,7 @@ Patch0050: 0050-Disable-inclusion-of-AESM-in-installer.patch
 
 # 0100-0199 -> against confidential-computing.tee.dcap.git
 #
-# Maintained in https://github.com/berrange/SGXDataCenterAttestationPrimitives/tree/dist-git-%{dcap_version}-hostsw
+# Maintained in https://github.com/berrange/SGXDataCenterAttestationPrimitives/tree/dist-git-%%{dcap_version}-hostsw
 #
 Patch0100: 0100-Drop-use-of-bundled-pre-built-openssl.patch
 Patch0101: 0101-Improve-debuggability-of-build-system.patch
@@ -393,7 +393,7 @@ Patch0131: 0131-pcsclient-fix-name-of-input-file-in-cache-command-he.patch
 
 # 0200-0299 -> against intel-sgx-ssl.git
 #
-# Maintained in https://github.com/berrange/intel-sgx-ssl/tree/dist-git-%{sgx_ssl_version}
+# Maintained in https://github.com/berrange/intel-sgx-ssl/tree/dist-git-%%{sgx_ssl_version}
 #
 Patch0200: 0200-Enable-pointing-sgxssl-build-to-alternative-glibc-he.patch
 Patch0201: 0201-Workaround-missing-output-directory.patch
@@ -403,7 +403,7 @@ Patch0203: 0203-Disable-sm2-and-sm4-crypto-algorithms.patch
 
 # 0300-0399 -> against ipp-crypto.git
 #
-# Maintained in https://github.com/berrange/ipp-crypto/tree/dist-git-%{ipp_crypto_version}
+# Maintained in https://github.com/berrange/ipp-crypto/tree/dist-git-%%{ipp_crypto_version}
 #
 Patch0300: 0300-Drop-min-openssl-from-3.0.8-to-3.0.7.patch
 Patch0301: 0301-Drop-Werror-from-build-flags.patch
@@ -411,7 +411,7 @@ Patch0301: 0301-Drop-Werror-from-build-flags.patch
 
 # 0400-0499 -> against confidential-computing.tee.dcap.pccs.git
 #
-# Maintained in https://github.com/berrange/confidential-computing.tee.dcap.pccs/tree/dist-git-%{pccs_version}
+# Maintained in https://github.com/berrange/confidential-computing.tee.dcap.pccs/tree/dist-git-%%{pccs_version}
 #
 Patch0400: 0400-service-sanitize-paths-to-all-resources.patch
 Patch0401: 0401-pccsadmin-remove-leftover-debugging-print-args-state.patch
@@ -1345,9 +1345,9 @@ rm -f %{buildroot}/root/usr/lib64/lib*signed.so*
 # Normal host libraries
 mv %{buildroot}/root/usr/lib64/lib* %{buildroot}/%{_libdir}/
 
-# Some overlap with what's in %{sgx_includedir}, but that dir is
+# Some overlap with what's in %%{sgx_includedir}, but that dir is
 # intended exclusively for building enclave code, while
-# %{_includedir} is for stuff that's exclusively host code
+# %%{_includedir} is for stuff that's exclusively host code
 mv %{buildroot}/root/usr/include/*.h %{buildroot}/%{_includedir}/
 # Wierdly missing, but required by other headers that are present
 for i in 3 4 5
@@ -1795,5 +1795,8 @@ fi
 
 
 %changelog
+* Thu Apr 2 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{linux_sgx_version}-1
+- Add prebuilt_dcap repack and pccs node-modules tarballs, fix comment macros
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{linux_sgx_version}-1
 - Prepare for Oreon 11 (RP1)

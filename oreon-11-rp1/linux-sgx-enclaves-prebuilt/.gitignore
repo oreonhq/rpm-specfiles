@@ -1,2 +1,3 @@
 *.tar.gz
+!*-repacked.tar.gz
 .build.*.log
