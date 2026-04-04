@@ -5,7 +5,7 @@
 Name:    kf6-%{framework}
 Summary: KDE Frameworks 6 Tier 3 solution for advanced plugin and service introspection
 Version: 6.24.0
-Release:	4%{?dist}
+Release:	5%{?dist}
 
 # The following licenses are in the LICENSES folder but go unused: GPL-2.0-only, GPL-2.0-or-later, GPL-3.0-only, LicenseRef-KDE-Accepted-GPL
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -45,12 +45,6 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 
-%package	html
-Summary:	Developer Documentation files for %{name} in HTML format
-BuildArch:	noarch
-%description	html
-Developer Documentation files for %{name} in HTML format
-
 %prep
 %autosetup -n %{framework}-%{version} -p1
 
@@ -60,15 +54,6 @@ Developer Documentation files for %{name} in HTML format
 
 %install
 %cmake_install_kf6
-
-# Qt6 qdoc: list all files under %{_qt6_docdir} except tags/index (-devel owns those).
-: > %{_builddir}/%{framework}-qt6doc.files
-if [ -d "%{buildroot}%{_qt6_docdir}" ]; then
-  find "%{buildroot}%{_qt6_docdir}" -type f \
-    ! -name '*.tags' ! -name '*.index' \
-    | sed "s#^%{buildroot}##" >> %{_builddir}/%{framework}-qt6doc.files
-fi
-LC_ALL=C sort -u -o %{_builddir}/%{framework}-qt6doc.files %{_builddir}/%{framework}-qt6doc.files
 
 %find_lang %{name} --all-name --with-man
 mkdir -p %{buildroot}%{_kf6_datadir}/kservices6
@@ -90,12 +75,11 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kservicetypes6
 %{_kf6_libdir}/libKF6Service.so
 %{_kf6_libdir}/cmake/KF6Service/
 
-%{_qt6_docdir}/*/*.tags
-%{_qt6_docdir}/*/*.index
-
-%files html -f %{_builddir}/%{framework}-qt6doc.files
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Qt6 qdoc: -html file list via find, tags/index in -devel
 

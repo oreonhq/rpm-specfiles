@@ -3,7 +3,7 @@
 Name:    kf6
 # This version MUST remain in sync with KF6 versions!
 Version: 6.24.0
-Release: 9%{?dist}
+Release: 10%{?dist}
 Summary: Filesystem and RPM macros for KDE Frameworks 6
 License: BSD-3-Clause
 URL:     http://www.kde.org
@@ -37,8 +37,10 @@ Recommends: clang-devel
 BuildArch: noarch
 %description rpm-macros
 RPM macros for building KDE Frameworks 6 packages.
-%%cmake_kf6 no longer forces QDOC_BIN=/bin/true (Oreon qt6-qttools carries QTBUG-142742).
-Framework doc targets still need the optional BuildRequires above when you want qdoc output.
+%%cmake_build_kf6 runs only the default cmake build. It does not use %%cmake_build from
+qt6-rpm-macros, which adds a second pass ``-t prepare_docs`` and runs qdoc (often unstable).
+%%cmake_kf6 still sets KDE_INSTALL paths. Optional doc BuildRequires apply if you add a
+custom qdoc step to a spec.
 
 %install
 # See macros.kf6 where the directories are specified
@@ -98,6 +100,9 @@ sed -i \
 %{_rpmconfigdir}/macros.d/macros.kf6
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-10
+- macros: %%cmake_build_kf6 avoids qt6 %%cmake_build extra prepare_docs pass (qdoc SIGSEGV)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-9
 - macros: drop -DQDOC_BIN=/bin/true so real qdoc runs with patched qt6-qttools (QTBUG-142742)
 

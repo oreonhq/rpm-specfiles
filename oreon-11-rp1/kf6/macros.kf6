@@ -54,8 +54,11 @@
     -DKDE_INSTALL_SYSCONFDIR:PATH=%{_kf6_sysconfdir} \\\
     -DKDE_INSTALL_USE_QT_SYS_PATHS:BOOL=ON
 
+# Do not use %%cmake_build here. qt6-rpm-macros appends a second
+# ``cmake --build ... -t prepare_docs`` pass, which runs qdoc and often
+# SIGSEGVs in Koji. Default ``all`` is enough for libraries and install.
 %cmake_build_kf6 \\\
-	%cmake_build
+	%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 
 %cmake_install_kf6 \\\
 	%cmake_install \

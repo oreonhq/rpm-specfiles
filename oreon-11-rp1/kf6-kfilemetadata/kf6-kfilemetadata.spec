@@ -5,7 +5,7 @@
 Name:           kf6-%{framework}
 Summary:        A Tier 2 KDE Framework for extracting file metadata
 Version:        6.24.0
-Release:	4%{?dist}
+Release:	5%{?dist}
 
 License:        BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:            https://invent.kde.org/frameworks/%{framework}
@@ -49,12 +49,6 @@ Requires:       qt6-qtbase-devel
 %{summary}.
 
 
-%package	html
-Summary:	Developer Documentation files for %{name} in HTML format
-BuildArch:	noarch
-%description	html
-Developer Documentation files for %{name} in HTML format
-
 %prep
 %autosetup -n %{framework}-%{version} -p1
 
@@ -64,15 +58,6 @@ Developer Documentation files for %{name} in HTML format
 
 %install
 %cmake_install_kf6
-
-# Qt6 qdoc: list all files under %{_qt6_docdir} except tags/index (-devel owns those).
-: > %{_builddir}/%{framework}-qt6doc.files
-if [ -d "%{buildroot}%{_qt6_docdir}" ]; then
-  find "%{buildroot}%{_qt6_docdir}" -type f \
-    ! -name '*.tags' ! -name '*.index' \
-    | sed "s#^%{buildroot}##" >> %{_builddir}/%{framework}-qt6doc.files
-fi
-LC_ALL=C sort -u -o %{_builddir}/%{framework}-qt6doc.files %{_builddir}/%{framework}-qt6doc.files
 
 %find_lang %{name} --all-name
 mkdir -p %{buildroot}%{_kf6_plugindir}/kfilemetadata/writers/
@@ -92,12 +77,11 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/kfilemetadata/writers/
 %{_kf6_libdir}/cmake/KF6FileMetaData
 %{_kf6_includedir}/KFileMetaData/
 
-%{_qt6_docdir}/*/*.tags
-%{_qt6_docdir}/*/*.index
-
-%files html -f %{_builddir}/%{framework}-qt6doc.files
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Qt6 qdoc: -html file list via find, tags/index in -devel
 

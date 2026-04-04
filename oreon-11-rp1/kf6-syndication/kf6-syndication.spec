@@ -4,7 +4,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.24.0
-Release:	4%{?dist}
+Release:	5%{?dist}
 Summary: The Syndication Library
 
 # Qt-Commercial-exception-1.0 is also found in the LICENSES folder, but is unused except for tests which we don't use anyway
@@ -35,12 +35,6 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 
-%package	html
-Summary:	Developer Documentation files for %{name} in HTML format
-BuildArch:	noarch
-%description	html
-Developer Documentation files for %{name} in HTML format
-
 %prep
 %autosetup -n %{framework}-%{version} -p1
 
@@ -50,15 +44,6 @@ Developer Documentation files for %{name} in HTML format
 
 %install
 %cmake_install_kf6
-
-# Qt6 qdoc: list all files under %{_qt6_docdir} except tags/index (-devel owns those).
-: > %{_builddir}/%{framework}-qt6doc.files
-if [ -d "%{buildroot}%{_qt6_docdir}" ]; then
-  find "%{buildroot}%{_qt6_docdir}" -type f \
-    ! -name '*.tags' ! -name '*.index' \
-    | sed "s#^%{buildroot}##" >> %{_builddir}/%{framework}-qt6doc.files
-fi
-LC_ALL=C sort -u -o %{_builddir}/%{framework}-qt6doc.files %{_builddir}/%{framework}-qt6doc.files
 
 %files
 %license LICENSES/*.txt
@@ -70,12 +55,11 @@ LC_ALL=C sort -u -o %{_builddir}/%{framework}-qt6doc.files %{_builddir}/%{framew
 %{_kf6_libdir}/cmake/KF6Syndication/
 %{_kf6_libdir}/libKF6Syndication.so
 
-%{_qt6_docdir}/*/*.tags
-%{_qt6_docdir}/*/*.index
-
-%files html -f %{_builddir}/%{framework}-qt6doc.files
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Qt6 qdoc: -html file list via find, tags/index in -devel
 

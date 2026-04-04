@@ -6,7 +6,7 @@
 Name:           kf6-%{framework}
 Summary:        A Qt wrapper for Bluez
 Version:        6.24.0
-Release:	3%{?dist}
+Release:	4%{?dist}
  
 License:        CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only
 URL:            https://invent.kde.org/frameworks/%{framework}
@@ -40,12 +40,6 @@ Requires:       qt6-qtbase-devel
 Development files for %{name}.
  
 
-%package	html
-Summary:	Developer Documentation files for %{name} in HTML format
-BuildArch:	noarch
-%description	html
-Developer Documentation files for %{name} in HTML format
-
 %prep
 %autosetup -n %{framework}-%{version} -p1
  
@@ -56,15 +50,6 @@ Developer Documentation files for %{name} in HTML format
  
 %install
 %cmake_install_kf6
-
-# Qt6 qdoc: list all files under %{_qt6_docdir} except tags/index (-devel owns those).
-: > %{_builddir}/%{framework}-qt6doc.files
-if [ -d "%{buildroot}%{_qt6_docdir}" ]; then
-  find "%{buildroot}%{_qt6_docdir}" -type f \
-    ! -name '*.tags' ! -name '*.index' \
-    | sed "s#^%{buildroot}##" >> %{_builddir}/%{framework}-qt6doc.files
-fi
-LC_ALL=C sort -u -o %{_builddir}/%{framework}-qt6doc.files %{_builddir}/%{framework}-qt6doc.files
 
 %files
 %doc README.md
@@ -79,12 +64,11 @@ LC_ALL=C sort -u -o %{_builddir}/%{framework}-qt6doc.files %{_builddir}/%{framew
 %{_kf6_libdir}/cmake/KF6BluezQt/
 %{_kf6_libdir}/pkgconfig/KF6BluezQt.pc
 
-%{_qt6_docdir}/*/*.tags
-%{_qt6_docdir}/*/*.index
-
-%files html -f %{_builddir}/%{framework}-qt6doc.files
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Qt6 qdoc: -html file list via find, tags/index in -devel
 
