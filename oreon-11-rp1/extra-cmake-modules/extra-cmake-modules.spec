@@ -12,7 +12,7 @@
 Name:    extra-cmake-modules
 Summary: Additional modules for CMake build system
 Version: 6.24.0
-Release: 200%{?dist}
+Release: 201%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL:     https://api.kde.org/ecm/
@@ -88,7 +88,7 @@ make test ARGS="--output-on-failure --timeout 300" -C %{_vpath_builddir} ||:
 
 
 %changelog
-* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-200
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-201
 - ECMGenerateQDoc: add ECM_ENABLE_QDOC_TARGETS (Oreon disables via %%cmake_kf6 to avoid qdoc segfaults)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
