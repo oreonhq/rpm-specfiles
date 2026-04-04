@@ -5,7 +5,7 @@
 Name:		kf6-%{framework}
 Summary:	A QtQuick module providing high-performance charts
 Version:	6.24.0
-Release:	3%{?dist}
+Release:	4%{?dist}
 
 License:	BSD-2-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-3.0-only AND MIT
 URL:		https://invent.kde.org/frameworks/%{framework}
@@ -38,6 +38,13 @@ Requires:	%{name} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+
+%package	html
+Summary:	Developer Documentation files for %{name} in HTML format
+BuildArch:	noarch
+%description	html
+Developer Documentation files for %{name} in HTML format
+
 %prep
 %autosetup -n %{framework}-%{version} -p1
 
@@ -48,6 +55,15 @@ developing applications that use %{name}.
 
 %install
 %cmake_install_kf6
+
+# Qt6 qdoc: list all files under %{_qt6_docdir} except tags/index (-devel owns those).
+: > %{_builddir}/%{framework}-qt6doc.files
+if [ -d "%{buildroot}%{_qt6_docdir}" ]; then
+  find "%{buildroot}%{_qt6_docdir}" -type f \
+    ! -name '*.tags' ! -name '*.index' \
+    | sed "s#^%{buildroot}##" >> %{_builddir}/%{framework}-qt6doc.files
+fi
+LC_ALL=C sort -u -o %{_builddir}/%{framework}-qt6doc.files %{_builddir}/%{framework}-qt6doc.files
 
 %files
 %doc README.md
@@ -62,9 +78,18 @@ developing applications that use %{name}.
 %{_libdir}/libQuickCharts.so
 %{_libdir}/libQuickChartsControls.so
 
+%{_qt6_docdir}/*/*.tags
+%{_qt6_docdir}/*/*.index
+
+%files html -f %{_builddir}/%{framework}-qt6doc.files
+
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Qt6 qdoc: -html file list via find, tags/index in -devel
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
+

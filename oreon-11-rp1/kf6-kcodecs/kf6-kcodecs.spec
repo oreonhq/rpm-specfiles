@@ -5,7 +5,7 @@
 
 Name:		kf6-%{framework}
 Version:	6.24.0
-Release:	8%{?dist}
+Release:	9%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon with string manipulation methods
 License:	BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT AND MPL-1.1
 URL:		https://invent.kde.org/frameworks/%{framework}
@@ -49,24 +49,14 @@ Developer Documentation files for %{name} in HTML format
 
 %install
 %cmake_install_kf6
-# Fedora rawhide spec uses %%{_qt6_docdir}/*/* here, which only matches two path
-# segments under docdir (e.g. kcodecs/page.html). Current qdoc also drops CSS under
-# kcodecs/style/, which is three segments, so a plain paste leaves those unpackaged.
-# This find is the only intentional delta from Fedora's %%files html.
-# Fedora also has a -doc package for %%{_qt6_docdir}/*.qch. %%cmake_kf6 sets
-# BUILD_QCH OFF and QCH targets are EXCLUDE_FROM_ALL, so that glob often matches
-# nothing and breaks the build. Ship QCH paths here when they exist.
-: > %{_builddir}/kcodecs-html.files
-if [ -d "%{buildroot}%{_qt6_docdir}/%{framework}" ]; then
-  find "%{buildroot}%{_qt6_docdir}/%{framework}" -type f \
+# Qt6 qdoc: list all files under %{_qt6_docdir} except tags/index (-devel owns those).
+: > %{_builddir}/%{framework}-qt6doc.files
+if [ -d "%{buildroot}%{_qt6_docdir}" ]; then
+  find "%{buildroot}%{_qt6_docdir}" -type f \
     ! -name '*.tags' ! -name '*.index' \
-    | sed "s#^%{buildroot}##" >> %{_builddir}/kcodecs-html.files
+    | sed "s#^%{buildroot}##" >> %{_builddir}/%{framework}-qt6doc.files
 fi
-for f in "%{buildroot}%{_qt6_docdir}"/*.qch; do
-  [ -f "$f" ] || continue
-  printf '%s\n' "${f#%{buildroot}}" >> %{_builddir}/kcodecs-html.files
-done
-LC_ALL=C sort -u -o %{_builddir}/kcodecs-html.files %{_builddir}/kcodecs-html.files
+LC_ALL=C sort -u -o %{_builddir}/%{framework}-qt6doc.files %{_builddir}/%{framework}-qt6doc.files
 
 %find_lang_kf6 kcodecs6_qt
 %fdupes LICENSES
@@ -84,9 +74,12 @@ LC_ALL=C sort -u -o %{_builddir}/kcodecs-html.files %{_builddir}/kcodecs-html.fi
 %{_qt6_docdir}/*/*.tags
 %{_qt6_docdir}/*/*.index
 
-%files html -f %{_builddir}/kcodecs-html.files
+%files html -f %{_builddir}/%{framework}-qt6doc.files
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-9
+- Align qdoc install snippet with other kf6 specs (full %%{_qt6_docdir} find, %%{framework}-qt6doc.files)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-8
 - Drop separate -doc (*.qch) subpackage, merge optional QCH paths into -html list
 
