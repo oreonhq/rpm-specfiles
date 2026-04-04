@@ -56,7 +56,7 @@ Requires:	qt6-qtbase-devel
 %{_kf6_libdir}/pkgconfig/KF6Attica.pc
 
 %changelog
-* Fri Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1

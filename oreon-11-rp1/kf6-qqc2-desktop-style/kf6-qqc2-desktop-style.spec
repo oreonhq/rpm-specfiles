@@ -59,7 +59,7 @@ between QWidget-based and QML-based apps.
 %{_kf6_plugindir}/kirigami/platform/org.kde.desktop.so
 
 %changelog
-* Fri Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
