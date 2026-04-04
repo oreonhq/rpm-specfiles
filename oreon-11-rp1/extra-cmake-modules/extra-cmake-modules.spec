@@ -12,7 +12,7 @@
 Name:    extra-cmake-modules
 Summary: Additional modules for CMake build system
 Version: 6.24.0
-Release: 5%{?dist}
+Release: 6%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL:     https://api.kde.org/ecm/
@@ -25,6 +25,8 @@ BuildArch:      noarch
 Patch2: extra-cmake-modules-5.39.0-poppler_overlinking.patch
 
 ## downstream patches
+# qdoc targets must not run on default "all" (cmake --build); matches ECM docs and avoids qdoc crashes
+Patch3: extra-cmake-modules-ECMGenerateQDoc-exclude-from-all.patch
 
 BuildRequires: kf6-rpm-macros
 BuildRequires: make
@@ -87,6 +89,9 @@ make test ARGS="--output-on-failure --timeout 300" -C %{_vpath_builddir} ||:
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-6
+- Patch ECMGenerateQDoc: EXCLUDE_FROM_ALL on prepare_docs and related targets (default build skips qdoc)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-5
 - Note: kf6-rpm-macros no longer stubs QDOC_BIN, rely on patched qt6-qttools qdoc
 

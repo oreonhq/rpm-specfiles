@@ -1,0 +1,59 @@
+--- a/modules/ECMGenerateQDoc.cmake
++++ b/modules/ECMGenerateQDoc.cmake
+@@ -50,11 +50,11 @@
+ 
+ cmake_policy(VERSION 3.16)
+ 
+-add_custom_target(prepare_docs)
+-add_custom_target(generate_docs)
+-add_custom_target(install_html_docs)
+-add_custom_target(generate_qch)
+-add_custom_target(install_qch_docs)
++add_custom_target(prepare_docs EXCLUDE_FROM_ALL)
++add_custom_target(generate_docs EXCLUDE_FROM_ALL)
++add_custom_target(install_html_docs EXCLUDE_FROM_ALL)
++add_custom_target(generate_qch EXCLUDE_FROM_ALL)
++add_custom_target(install_qch_docs EXCLUDE_FROM_ALL)
+ 
+ function(ecm_generate_qdoc target qdocconf_file)
+     find_package(Qt6Tools CONFIG QUIET)
+@@ -146,6 +146,7 @@
+     )
+ 
+     add_custom_target(prepare_docs_${target}
++        EXCLUDE_FROM_ALL
+         COMMAND ${CMAKE_COMMAND} -E env ${qdoc_env_args}
+         ${QDOC_BIN}
+         ${prepare_qdoc_args}
+@@ -162,6 +163,7 @@
+     )
+ 
+     add_custom_target(generate_docs_${target}
++        EXCLUDE_FROM_ALL
+         COMMAND ${CMAKE_COMMAND} -E env ${qdoc_env_args}
+         ${QDOC_BIN}
+         ${generate_qdoc_args}
+@@ -177,6 +179,7 @@
+         get_target_property(QHelpGenerator_EXECUTABLE Qt6::qhelpgenerator LOCATION)
+ 
+         add_custom_target(generate_qch_${target}
++            EXCLUDE_FROM_ALL
+             COMMAND ${QHelpGenerator_EXECUTABLE}
+             "${dest_dir}/${doc_target}/${doc_target}.qhp"
+             -o "${qch_file_path}"
+@@ -193,6 +196,7 @@
+         )
+ 
+         add_custom_target(install_html_docs_${target}
++            EXCLUDE_FROM_ALL
+             COMMAND ${CMAKE_COMMAND}
+             --install "${CMAKE_BINARY_DIR}"
+             --component _install_html_docs_${target}
+@@ -206,6 +210,7 @@
+         )
+ 
+         add_custom_target(install_qch_docs_${target}
++            EXCLUDE_FROM_ALL
+             COMMAND ${CMAKE_COMMAND}
+             --install "${CMAKE_BINARY_DIR}"
+             --component _install_qch_docs_${target}
