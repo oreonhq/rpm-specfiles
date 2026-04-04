@@ -1,3 +1,4 @@
+# Shipped as macros.zz-kf6 under macros.d so this file loads after qt6-rpm-macros (see kf6.spec).
 %_kf6_prefix %_prefix
 %_kf6_archdatadir %_qt6_archdatadir
 %_kf6_bindir %_kf6_prefix/bin

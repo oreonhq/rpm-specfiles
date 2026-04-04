@@ -3,7 +3,7 @@
 Name:    kf6
 # This version MUST remain in sync with KF6 versions!
 Version: 6.24.0
-Release: 10%{?dist}
+Release: 11%{?dist}
 Summary: Filesystem and RPM macros for KDE Frameworks 6
 License: BSD-3-Clause
 URL:     http://www.kde.org
@@ -39,8 +39,8 @@ BuildArch: noarch
 RPM macros for building KDE Frameworks 6 packages.
 %%cmake_build_kf6 runs only the default cmake build. It does not use %%cmake_build from
 qt6-rpm-macros, which adds a second pass ``-t prepare_docs`` and runs qdoc (often unstable).
-%%cmake_kf6 still sets KDE_INSTALL paths. Optional doc BuildRequires apply if you add a
-custom qdoc step to a spec.
+These macros install as macros.zz-kf6 so they load after macros.qt6 and win over qt6's
+%%cmake_build_kf6 redefinition. %%cmake_kf6 still sets KDE_INSTALL paths.
 
 %install
 # See macros.kf6 where the directories are specified
@@ -64,11 +64,12 @@ mkdir -p %{buildroot}%{_datadir}/solid/{actions,devices}
 mkdir -p %{buildroot}%{_sysconfdir}/xdg/plasma-workspace/{env,shutdown}
 %endif
 
-install -Dpm644 %{_sourcedir}/macros.kf6 %{buildroot}%{_rpmconfigdir}/macros.d/macros.kf6
+# macros.zz-kf6 sorts after macros.qt6 so %%cmake_build_kf6 is not overwritten by qt6-rpm-macros.
+install -Dpm644 %{_sourcedir}/macros.kf6 %{buildroot}%{_rpmconfigdir}/macros.d/macros.zz-kf6
 install -Dpm644 %{_sourcedir}/LICENSE %{buildroot}%{_datadir}/kf6/LICENSE
 sed -i \
   -e "s|@@kf6_VERSION@@|%{version}|g" \
-  %{buildroot}%{_rpmconfigdir}/macros.d/macros.kf6
+  %{buildroot}%{_rpmconfigdir}/macros.d/macros.zz-kf6
 
 %files filesystem
 %{_datadir}/kf6/
@@ -97,9 +98,12 @@ sed -i \
 %endif
 
 %files rpm-macros
-%{_rpmconfigdir}/macros.d/macros.kf6
+%{_rpmconfigdir}/macros.d/macros.zz-kf6
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-11
+- rpm-macros: install as macros.zz-kf6 so definitions load after qt6 (fix prepare_docs override)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-10
 - macros: %%cmake_build_kf6 avoids qt6 %%cmake_build extra prepare_docs pass (qdoc SIGSEGV)
 
