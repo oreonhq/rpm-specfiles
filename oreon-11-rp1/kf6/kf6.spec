@@ -3,7 +3,7 @@
 Name:    kf6
 # This version MUST remain in sync with KF6 versions!
 Version: 6.24.0
-Release: 4%{?dist}
+Release: 6%{?dist}
 Summary: Filesystem and RPM macros for KDE Frameworks 6
 License: BSD-3-Clause
 URL:     http://www.kde.org
@@ -28,11 +28,12 @@ Requires: cmake >= 3
 Requires: qt6-rpm-macros >= 6
 # misc build environment dependencies
 Requires: gcc-c++
-# for docs generation
+# qdoc (KF6 API docs / ecm_generate_qdoc) needs Qt doc tools plus Clang libs per Qt docs
 Requires: doxygen
 Requires: qt6-doc-devel
 Requires: kde-qdoc-common
 Requires: cmake(Qt6ToolsTools)
+Requires: clang-devel
 BuildArch: noarch
 %description rpm-macros
 RPM macros for building KDE Frameworks 6 packages.
@@ -95,11 +96,11 @@ sed -i \
 %{_rpmconfigdir}/macros.d/macros.kf6
 
 %changelog
-* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-3
-- Pass -DECM_ENABLE_QDOC_TARGETS=OFF (needs extra-cmake-modules with ECMGenerateQDoc patch)
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-6
+- rpm-macros: restore qdoc deps, require clang-devel, set LLVM_INSTALL_DIR and QT_QPA_PLATFORM for mock
 
-* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-2
-- Skip qdoc QCH prepare and install steps in KF6 macros (rawhide qdoc can segfault)
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-5
+- rpm-macros: stop requiring qt6-doc-devel and qdoc stack (ECM skips qdoc targets without it)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
