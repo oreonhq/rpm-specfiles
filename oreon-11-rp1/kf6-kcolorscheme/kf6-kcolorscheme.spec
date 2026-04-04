@@ -5,7 +5,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.24.0
-Release: 1%{?dist}
+Release:	2%{?dist}
 Summary: Classes to read and interact with KColorScheme
 License: BSD-2-Clause and CC0-1.0 and LGPL-2.0-or-later and LGPL-2.1-only and LGPL-3.0-only and (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -38,7 +38,8 @@ developing applications that use %{name}.
 %autosetup -n %{framework}-%{version} -p1
 
 %build
-%cmake_kf6
+%cmake_kf6 \
+    -DQDOC_BIN=/bin/true
 %cmake_build_kf6
 
 %install
@@ -59,5 +60,8 @@ developing applications that use %{name}.
 %{_kf6_libdir}/libKF6ColorScheme.so
 
 %changelog
+* Fri Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)

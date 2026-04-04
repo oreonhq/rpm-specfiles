@@ -6,7 +6,7 @@
 Name:    kf6-%{framework}
 Summary: Framework for collecting user feedback for apps via telemetry and surveys
 Version: 6.24.0
-Release: 1%{?dist}
+Release:	2%{?dist}
 
 License: MIT AND CC0-1.0 AND BSD-3-Clause
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -68,6 +68,7 @@ developing applications that use %{name}.
 
 %build
 %cmake_kf6 \
+    -DQDOC_BIN=/bin/true \
    -DENABLE_DOCS:BOOL=OFF \
    -DENABLE_CONSOLE=ON
 
@@ -109,5 +110,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kuserfeedback
 %{_kf6_archdatadir}/mkspecs/modules/qt_KF6UserFeedback*.pri
 
 %changelog
+* Fri Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)

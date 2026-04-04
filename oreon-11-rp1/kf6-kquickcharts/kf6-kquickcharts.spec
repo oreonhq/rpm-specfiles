@@ -5,7 +5,7 @@
 Name:		kf6-%{framework}
 Summary:	A QtQuick module providing high-performance charts
 Version:	6.24.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 
 License:	BSD-2-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-3.0-only AND MIT
 URL:		https://invent.kde.org/frameworks/%{framework}
@@ -43,7 +43,8 @@ developing applications that use %{name}.
 
 
 %build
-%cmake_kf6
+%cmake_kf6 \
+    -DQDOC_BIN=/bin/true
 %cmake_build_kf6
 
 %install
@@ -63,5 +64,8 @@ developing applications that use %{name}.
 %{_libdir}/libQuickChartsControls.so
 
 %changelog
+* Fri Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)

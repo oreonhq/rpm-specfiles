@@ -4,7 +4,7 @@
 
 Name:		kf6-%{framework}
 Version:	6.24.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 addon for localization
 License:	BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND ODbl-1.0
 URL:		https://invent.kde.org/frameworks/%{framework}
@@ -43,7 +43,8 @@ developing applications that use %{name}.
 
 
 %build
-%cmake_kf6
+%cmake_kf6 \
+    -DQDOC_BIN=/bin/true
 %cmake_build_kf6
 
 %install
@@ -88,5 +89,8 @@ developing applications that use %{name}.
 %{_kf6_libdir}/cmake/KF6I18n/
 
 %changelog
+* Fri Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)
