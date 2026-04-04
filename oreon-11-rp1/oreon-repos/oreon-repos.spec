@@ -51,5 +51,5 @@ install -m 644 %{SOURCE1} $RPM_BUILD_ROOT/etc/yum.repos.d/oreon.repo
 /etc/pki/rpm-gpg/RPM-GPG-KEY-oreon-*
 
 %changelog
-* Mon Jan 06 2026 Oreon HQ Packaging Team <packaging@oreonhq.com> - 11-1
+* Tue Jan 06 2026 Oreon HQ Packaging Team <packaging@oreonhq.com> - 11-1
 - Oreon 11
