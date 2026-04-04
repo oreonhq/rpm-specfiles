@@ -2,7 +2,7 @@
 
 Name:               greenboot
 Version:            0.15.8
-Release:            3%{?dist}
+Release:            4%{?dist}
 Summary:            Generic Health Check Framework for systemd
 License:            LGPL-2.1-or-later
 
