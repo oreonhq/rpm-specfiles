@@ -5,7 +5,7 @@
 
 Name:           kf6-%{framework}
 Version:        6.24.0
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 addon with additional image plugins for QtGui
 
 License:        LGPLv2+
@@ -60,7 +60,6 @@ developing applications that use %{name}.
 
 %build
 %cmake_kf6 \
-    -DQDOC_BIN=/bin/true \
   -DKIMAGEFORMATS_HEIF:BOOL=ON \
   -DKIMAGEFORMATS_JXR:BOOL=ON
 %cmake_build
@@ -78,7 +77,7 @@ developing applications that use %{name}.
 
 %changelog
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-2
 - Prepare for Oreon 11 (RP1)

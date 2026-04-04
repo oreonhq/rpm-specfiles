@@ -12,7 +12,7 @@
 Name:    kf6-%{framework}
 Summary: Breeze icon theme library
 Version: 6.24.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 
 # skladnik.svg is CC-BY-SA-4.0
 # folder-edit-sign-encrypt.svg is LGPL-2.1-or-later
@@ -116,7 +116,6 @@ mv icons/apps/48/org.fedoraproject.AnacondaInstaller.svg icons-fedora/apps/48
 
 %build
 %cmake_kf6 \
-    -DQDOC_BIN=/bin/true \
   -DBINARY_ICONS_RESOURCE:BOOL=%{?with_install_rcc:ON}%{!?with_install_rcc:OFF} \
   -DSKIP_INSTALL_ICONS:BOOL=%{?with_install_icons:OFF}%{!?with_install_icons:ON} \
   %{nil}
@@ -197,7 +196,7 @@ gtk-update-icon-cache --force %{_datadir}/icons/breeze-dark &>/dev/null || :
 
 %changelog
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)

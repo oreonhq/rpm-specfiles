@@ -6,7 +6,7 @@
 Name:    kf6-%{framework}
 Summary: A Tier 3 KDE Frameworks 6 module that provides indexing and search functionality
 Version: 6.24.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND bzip2-1.0.6
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -72,7 +72,6 @@ Summary:        Runtime libraries for %{name}
 
 %build
 %cmake_kf6 \
-    -DQDOC_BIN=/bin/true \
     -DKDE_INSTALL_SYSTEMDUSERUNITDIR=%{_userunitdir}
 %cmake_build_kf6
 
@@ -134,7 +133,7 @@ cat baloo_file6.lang baloo_file_extractor6.lang \
 
 %changelog
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)

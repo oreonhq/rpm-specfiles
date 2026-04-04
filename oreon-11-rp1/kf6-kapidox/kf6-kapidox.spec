@@ -5,7 +5,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.24.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: KDE Frameworks 6 Tier 4 scripts and data for building API documentation
 
 License: BSD
@@ -70,5 +70,8 @@ style.
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)

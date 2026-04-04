@@ -5,7 +5,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.24.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary: KDE Frameworks 6 Tier 3 module for KNotify configuration
 
 License: CC0-1.0 AND LGPL-2.0-only
@@ -46,8 +46,7 @@ developing applications that use %{name}.
 %autosetup -n %{framework}-%{version} -p1
 
 %build
-%cmake_kf6 \
-    -DQDOC_BIN=/bin/true
+%cmake_kf6
 %cmake_build_kf6
 
 %install
@@ -68,7 +67,7 @@ developing applications that use %{name}.
 
 %changelog
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)

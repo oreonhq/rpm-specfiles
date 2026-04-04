@@ -2,7 +2,7 @@
 
 Name:           kf6-%{framework}
 Version:        1.12.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 License:        BSD-2-Clause AND CC-BY-SA-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND LicenseRef-KFQF-Accepted-GPL
 Summary:        Convergent visual components ("widgets") for Kirigami-based applications
 Url:            https://invent.kde.org/libraries/%{framework}
@@ -77,7 +77,6 @@ and header files for developing applications that use %{name}.
 
 %build
 %cmake_kf6 \
-    -DQDOC_BIN=/bin/true \
     -DBUILD_WITH_QT6=ON
 %cmake_build
 
@@ -108,7 +107,7 @@ and header files for developing applications that use %{name}.
 
 %changelog
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12.0-1
 - Prepare for Oreon 11 (RP1)

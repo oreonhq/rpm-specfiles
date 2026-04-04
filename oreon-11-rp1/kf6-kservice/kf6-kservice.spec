@@ -5,7 +5,7 @@
 Name:    kf6-%{framework}
 Summary: KDE Frameworks 6 Tier 3 solution for advanced plugin and service introspection
 Version: 6.24.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 
 # The following licenses are in the LICENSES folder but go unused: GPL-2.0-only, GPL-2.0-or-later, GPL-3.0-only, LicenseRef-KDE-Accepted-GPL
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -48,8 +48,7 @@ developing applications that use %{name}.
 %autosetup -n %{framework}-%{version} -p1
 
 %build
-%cmake_kf6 \
-    -DQDOC_BIN=/bin/true
+%cmake_kf6
 %cmake_build_kf6
 
 %install
@@ -77,7 +76,7 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kservicetypes6
 
 %changelog
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)

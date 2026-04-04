@@ -3,7 +3,7 @@
 Name:    kf6
 # This version MUST remain in sync with KF6 versions!
 Version: 6.24.0
-Release: 8%{?dist}
+Release: 9%{?dist}
 Summary: Filesystem and RPM macros for KDE Frameworks 6
 License: BSD-3-Clause
 URL:     http://www.kde.org
@@ -28,7 +28,7 @@ Requires: cmake >= 3
 Requires: qt6-rpm-macros >= 6
 # misc build environment dependencies
 Requires: gcc-c++
-# Optional qdoc stack (%%cmake_kf6 defaults ECM_ENABLE_QDOC_TARGETS OFF until Qt qdoc is stable on aarch64)
+# Optional qdoc stack (qt6-doc-devel, kde-qdoc-common, clang-devel, cmake(Qt6ToolsTools))
 Recommends: doxygen
 Recommends: qt6-doc-devel
 Recommends: kde-qdoc-common
@@ -37,9 +37,8 @@ Recommends: clang-devel
 BuildArch: noarch
 %description rpm-macros
 RPM macros for building KDE Frameworks 6 packages.
-%%cmake_kf6 passes -DECM_ENABLE_QDOC_TARGETS=OFF by default (qdoc can segfault on aarch64 rawhide).
-To try API docs again after a Qt fix, use %%global _kf6_enable_ecm_qdoc 1 before %%build and ensure
-BuildRequires pull in qt6-doc-devel and clang-devel.
+%%cmake_kf6 no longer forces QDOC_BIN=/bin/true (Oreon qt6-qttools carries QTBUG-142742).
+Framework doc targets still need the optional BuildRequires above when you want qdoc output.
 
 %install
 # See macros.kf6 where the directories are specified
@@ -99,6 +98,9 @@ sed -i \
 %{_rpmconfigdir}/macros.d/macros.kf6
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-9
+- macros: drop -DQDOC_BIN=/bin/true so real qdoc runs with patched qt6-qttools (QTBUG-142742)
+
 * Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-8
 - macros: use -DQDOC_BIN=/bin/true instead of ECM patch (works with any unpatched ECM)
 

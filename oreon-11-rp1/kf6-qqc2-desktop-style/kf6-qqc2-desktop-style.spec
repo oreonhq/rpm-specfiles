@@ -5,7 +5,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.24.0
-Release:	2%{?dist}
+Release:	3%{?dist}
 Summary: QtQuickControls2 style for consistency between QWidget and QML apps
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LicenseRef-KFQF-Accepted-GPL
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -42,8 +42,7 @@ between QWidget-based and QML-based apps.
 %autosetup -n %{framework}-%{version} -p1
 
 %build
-%cmake_kf6 \
-    -DQDOC_BIN=/bin/true
+%cmake_kf6
 %cmake_build
 
 %install
@@ -60,7 +59,7 @@ between QWidget-based and QML-based apps.
 
 %changelog
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Pass -DQDOC_BIN=/bin/true to work around qdoc segfault until kf6-rpm-macros is deployed
+- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
 - Prepare for Oreon 11 (RP1)

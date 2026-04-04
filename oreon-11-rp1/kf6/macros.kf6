@@ -33,7 +33,6 @@
     -DBUILD_SHARED_LIBS:BOOL=ON \\\
     -DBUILD_TESTING:BOOL=FALSE \\\
     -DBUILD_QCH:BOOL=OFF \\\
-    -DQDOC_BIN=/bin/true \\\
     -DCMAKE_BUILD_TYPE=%{_kf6_buildtype} \\\
     -DCMAKE_INSTALL_INCLUDEDIR_kf6:PATH=%{_kf6_includedir} \\\
     -DCMAKE_INSTALL_LIBEXECDIR_kf6:PATH=%{_kf6_libexecdir} \\\
