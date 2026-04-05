@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:           calindori
 Version:        25.12.3
-Release:        1%{?dist}
+Release:	2%{?dist}
 Summary:        Calendar application for Plasma Mobile
 License:        BSD-2-Clause AND CC-BY-4.0 AND CC-BY-SA-4.0 AND CC0-1.0 AND GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://apps.kde.org/%{name}/
@@ -48,10 +48,9 @@ Requires:      qt6-qtwayland
 
 %build
 %cmake_kf6 -DBUILD_WITH_QT6=ON
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang %{name}
 %find_lang calindac
 cat %{name}.lang calindac.lang > %{name}-full.lang
@@ -74,5 +73,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{
 %license LICENSES/*
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

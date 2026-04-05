@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name: neochat
 Version: 25.12.3
-Release: 1%{?dist}
+Release:	2%{?dist}
 
 License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND BSD-3-Clause
 URL: https://invent.kde.org/network/%{name}
@@ -102,10 +102,9 @@ notably Kirigami, KConfig and KI18n.
 %build
 %cmake_kf6 -G Ninja \
     -DCMAKE_BUILD_TYPE=Release
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang %{name} --with-qt --with-man
 
 %check
@@ -127,5 +126,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %{_kf6_datadir}/dbus-1/services/org.kde.neochat.service
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

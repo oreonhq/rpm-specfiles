@@ -1,7 +1,7 @@
 Name: kdbg
 Summary: A GUI for gdb, the GNU debugger, and KDE
 Version: 3.2.0
-Release: 3%{?dist}
+Release:	4%{?dist}
 Epoch: 1
 Source: http://download.sourceforge.net/kdbg/%{name}-%{version}.tar.gz
 # No version specified.
@@ -36,11 +36,9 @@ requires X and KDE to be installed in order to run.
 %build
 %cmake_kf6 -DBUILD_FOR_KDE_VERSION=6
 
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 %find_lang %{name} --with-html
 
 %files -f %{name}.lang
@@ -53,5 +51,8 @@ requires X and KDE to be installed in order to run.
 %{_datadir}/icons/*/*/*/*
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.0-3
 - Prepare for Oreon 11 (RP1)

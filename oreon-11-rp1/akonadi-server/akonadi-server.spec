@@ -5,7 +5,7 @@
 Name:    akonadi-server
 Summary: PIM Storage Service
 Version: 25.12.3
-Release: 1%{?dist}
+Release:	2%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:     https://invent.kde.org/pim/akonadi
@@ -133,11 +133,9 @@ find ./po -type f -name libakonadi5.po -execdir mv {} libakonadi6.po \;
   -DMYSQLD_EXECUTABLE:FILEPATH=%{_libexecdir}/mysqld \
   -DMYSQLD_SCRIPTS_PATH:FILEPATH=%{_bindir}/mysql_install_db \
   -DPOSTGRES_PATH:FILEPATH=%{_bindir}/pg_ctl
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.akonadi.configdialog.desktop
 %find_lang libakonadi6 --all-name --with-html --with-qt
 
@@ -251,5 +249,8 @@ fi
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

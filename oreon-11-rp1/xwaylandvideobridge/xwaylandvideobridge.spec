@@ -1,6 +1,6 @@
 Name:           xwaylandvideobridge
 Version:        0.4.0
-Release:        12%{?dist}
+Release:	13%{?dist}
 Summary:        Utility to allow streaming Wayland windows to X applications
 
 License:        (GPL-2.0-only or GPL-3.0-only) and LGPL-2.0-or-later and BSD-3-Clause
@@ -48,12 +48,9 @@ but within the control of the user at all times.
 %build
 %cmake_kf6 \
     -DQT_MAJOR_VERSION=6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 %find_lang %{name} --all-name
 
 
@@ -74,5 +71,8 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.d
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4.0-12
 - Prepare for Oreon 11 (RP1)

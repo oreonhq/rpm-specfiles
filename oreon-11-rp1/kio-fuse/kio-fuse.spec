@@ -10,7 +10,7 @@
 
 Name:           kio-fuse
 Version:        5.1.1
-Release:        3%{?dist}
+Release:	4%{?dist}
 Summary:        KIO FUSE
 
 License:        GPL-3.0-or-later
@@ -59,13 +59,9 @@ FUSE.
 %cmake_kf6 -DBUILD_TESTING:BOOL=%{?tests:ON}%{!?tests:OFF} \
 	-DQT_MAJOR_VERSION=6
 
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
-
+%cmake_install_kf6
 %check
 %if 0%{?tests}
 export CTEST_OUTPUT_ON_FAILURE=1
@@ -84,5 +80,8 @@ dbus-launch --exit-with-session \
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.1-3
 - Prepare for Oreon 11 (RP1)

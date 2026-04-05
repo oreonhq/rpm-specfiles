@@ -1,6 +1,6 @@
 Name:           plasma-pass
 Version:        1.3.0
-Release:        2%{?dist}
+Release:	3%{?dist}
 Summary:        Plasma applet to access passwords from the Pass password manager
 License:        CC0-1.0 AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/%{name}.git
@@ -52,10 +52,9 @@ password manager.
 
 %build
 %cmake_kf6 -DBUILD_WITH_QT6=ON
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang plasma_applet_org.kde.plasma.pass
 
 %files -f plasma_applet_org.kde.plasma.pass.lang
@@ -67,5 +66,8 @@ password manager.
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-2
 - Prepare for Oreon 11 (RP1)

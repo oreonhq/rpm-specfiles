@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:          flatpak-kcm
 Version:       6.6.2
-Release:       1%{?dist}
+Release:	2%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later
 Summary:       Flatpak Permissions Management KCM
 Url:           https://invent.kde.org/plasma/flatpak-kcm
@@ -35,10 +35,9 @@ BuildRequires: pkgconfig(flatpak)
 
 %build
 %cmake_kf6
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 desktop-file-validate %{buildroot}%{_datadir}/applications/kcm_app-permissions.desktop
 %find_lang kcm_app-permissions
 
@@ -48,5 +47,8 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/kcm_app-permissions.d
 %{_kf6_datadir}/applications/kcm_app-permissions.desktop
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
 - Prepare for Oreon 11 (RP1)

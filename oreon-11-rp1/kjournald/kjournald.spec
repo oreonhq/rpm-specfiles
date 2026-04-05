@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:          kjournald
 Version:       25.12.3
-Release:       1%{?dist}
+Release:	2%{?dist}
 Summary:       Framework for interacting with systemd-journald
 
 License:       BSD-3-Clause and CC0-1.0 and MIT and LGPL-2.1-or-later and MIT
@@ -49,10 +49,9 @@ Summary:       Library files for kjournald
 %build
 # Building on Qt 6.9.1 crashed the qml compiler. This is a (...temporary?) workaround.
 %cmake_kf6 -DQT_QML_NO_CACHEGEN=ON
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang %{name} --with-kde --with-man --all-name
 # unpackaged (headers not installed, no stable API)
 rm -f %{buildroot}%{_kf6_libdir}/libkjournald.so
@@ -75,5 +74,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.kj
 %{_kf6_libdir}/libkjournald.so.%{version}
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

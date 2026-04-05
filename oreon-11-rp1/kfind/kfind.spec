@@ -1,7 +1,7 @@
 Name:    kfind
 Summary: KDE Find File Utility
 Version: 25.12.3
-Release: 1%{?dist}
+Release:	2%{?dist}
 
 # Documentation is GFDL, rest GPLv2+
 # Automatically converted from old format: GPLv2+ and GFDL - review is highly recommended.
@@ -39,12 +39,9 @@ KFind allows you to search for directories and files.
 
 %build
 %cmake_kf6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 %find_lang %{name} --with-html --with-man
 
 
@@ -64,5 +61,8 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.d
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

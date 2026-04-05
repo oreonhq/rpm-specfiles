@@ -7,7 +7,7 @@
 
 Name:    kaccounts-integration
 Version: 25.12.3
-Release: 1%{?dist}
+Release:	2%{?dist}
 Summary: Small system to administer web accounts across the KDE desktop
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/network/%{name}
@@ -128,26 +128,26 @@ Headers, development libraries and documentation for %{name}.
 mkdir %{name}_qt6
 pushd %{name}_qt6
 %cmake_kf6 -S ..
-%cmake_build
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 popd
 
 %if %{with kf5}
 mkdir %{name}_qt5
 pushd %{name}_qt5
 %cmake_kf5 -DKF6_COMPAT_BUILD=ON -S ..
-%cmake_build
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 popd
 %endif
 
 %install
 pushd %{name}_qt6
-%cmake_install
+%cmake_install_kf6
 popd
 %find_lang %{name} --all-name --with-html
 
 %if %{with kf5}
 pushd %{name}_qt5
-%cmake_install
+%cmake_install_kf6
 popd
 %endif
 
@@ -184,5 +184,8 @@ popd
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

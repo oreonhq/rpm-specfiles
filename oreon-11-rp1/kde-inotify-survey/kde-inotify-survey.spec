@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:          kde-inotify-survey
 Version:       25.12.3
-Release:       1%{?dist}
+Release:	2%{?dist}
 Summary:       Monitors inotify limits and lets the user know when exceeded
 
 # Complete license breakdown can be found in the "LICENSE-BREAKDOWN" file
@@ -41,11 +41,9 @@ BuildRequires: cmake(KF6Auth)
 
 %build
 %cmake_kf6 -DQT_MAJOR_VERSION=6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang %{name} --with-kde --with-man --all-name
 rm %{buildroot}%{_datadir}/dbus-1/system.d/org.kde.kded.inotify.conf
 install -m644 -p -D %{SOURCE1} %{buildroot}%{_datadir}/dbus-1/system.d/org.kde.kded.inotify.conf
@@ -63,5 +61,8 @@ install -m644 -p -D %{SOURCE1} %{buildroot}%{_datadir}/dbus-1/system.d/org.kde.k
 %{_datadir}/polkit-1/actions/org.kde.kded.inotify.policy
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

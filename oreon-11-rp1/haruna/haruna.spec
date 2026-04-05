@@ -81,11 +81,9 @@ Features:
 
 %build
 %cmake_kf6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 # Cleaning icons with non-standard resolution
 for i in 44 150 310; do
   rm -rf %{buildroot}%{_kf6_datadir}/icons/hicolor/"${i}x${i}"
@@ -108,5 +106,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.1-1
 - Prepare for Oreon 11 (RP1)

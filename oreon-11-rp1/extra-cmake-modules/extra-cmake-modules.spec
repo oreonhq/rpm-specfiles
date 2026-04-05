@@ -12,7 +12,7 @@
 Name:    extra-cmake-modules
 Summary: Additional modules for CMake build system
 Version: 6.24.0
-Release: 6%{?dist}
+Release:	7%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL:     https://api.kde.org/ecm/
@@ -64,11 +64,9 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
   -DBUILD_QTHELP_DOCS:BOOL=ON \
   -DBUILD_TESTING:BOOL=%{?tests:ON}%{!?tests:OFF} \
   %{?sphinx_build}
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 # move to qt6 docdir so it shows up in Qt Creator by default
 mkdir %{buildroot}%{_qt6_docdir}
 mv %{buildroot}%{_kf6_docdir}/ECM/*.qch %{buildroot}%{_qt6_docdir}/
@@ -89,6 +87,9 @@ make test ARGS="--output-on-failure --timeout 300" -C %{_vpath_builddir} ||:
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-6
 - Patch ECMGenerateQDoc: EXCLUDE_FROM_ALL on prepare_docs and related targets (default build skips qdoc)
 

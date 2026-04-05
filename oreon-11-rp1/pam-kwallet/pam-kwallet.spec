@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 Name:    pam-kwallet
 Summary: PAM module for KWallet
 Version: 6.6.2
-Release: 1%{?dist}
+Release:	2%{?dist}
 License: LGPL-2.0-or-later
 URL:     https://invent.kde.org/plasma/%{base_name}.git
 
@@ -44,13 +44,9 @@ Requires: kf6-kwallet
 
 %build
 %cmake_kf6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
-
+%cmake_install_kf6
 %files
 %{_sysconfdir}/xdg/autostart/pam_kwallet_init.desktop
 %{_userunitdir}/plasma-kwallet-pam.service
@@ -59,5 +55,8 @@ Requires: kf6-kwallet
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
 - Prepare for Oreon 11 (RP1)

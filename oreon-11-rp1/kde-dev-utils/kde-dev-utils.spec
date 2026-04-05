@@ -5,7 +5,7 @@ ExcludeArch: %{ix86}
 Name:    kde-dev-utils
 Summary: Utilities for developers using KDE
 Version: 25.12.3
-Release: 1%{?dist}
+Release:	2%{?dist}
 
 License: LGPL-2.0-only AND LGPL-3.0-only
 URL:     https://invent.kde.org/sdk/%{name}.git
@@ -81,12 +81,9 @@ Requires:  %{name}-common = %{version}-%{release}
 
 %build
 %cmake_kf6 -DQT_MAJOR_VERSION=6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 %find_lang kpartloader --with-html
 %find_lang kuiviewer --with-html
 
@@ -115,5 +112,8 @@ desktop-file-validate %{buildroot}/%{_kf6_datadir}/applications/org.kde.kuiviewe
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

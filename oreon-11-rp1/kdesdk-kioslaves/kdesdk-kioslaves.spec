@@ -7,7 +7,7 @@ ExcludeArch: %{ix86}
 Name:    kdesdk-kioslaves
 Summary: KDESDK KIOslaves
 Version: 25.12.3
-Release: 1%{?dist}
+Release:	2%{?dist}
 
 # Automatically converted from old format: GPLv2 and GPLv2+ - review is highly recommended.
 License: GPL-2.0-only AND GPL-2.0-or-later
@@ -50,11 +50,9 @@ KDE SDK kioslaves:
 %cmake_kf6 \
 	-DQT_MAJOR_VERSION=6
 
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 %find_lang %{base_name} --all-name
 
 

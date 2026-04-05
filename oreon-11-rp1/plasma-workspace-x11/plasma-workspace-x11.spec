@@ -5,7 +5,7 @@ ExcludeArch: %{ix86}
 Name:    plasma-workspace-x11
 Summary: Xorg support for Plasma
 Version: 6.6.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
 URL:     https://invent.kde.org/plasma/plasma-workspace
@@ -211,10 +211,10 @@ sed -i \
   -DPLASMA_X11_DEFAULT_SESSION:BOOL=OFF \
   -DGLIBC_LOCALE_GEN:BOOL=OFF \
   -DGLIBC_LOCALE_PREGENERATED:BOOL=ON
-%cmake_build --target startplasma-x11
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose --target startplasma-x11
 
 %install
-%cmake_install --component X11
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose --component X11
 
 
 %files
@@ -223,5 +223,8 @@ sed -i \
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: inline cmake build/install with --component (no qt6 install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
 - Prepare for Oreon 11 (RP1)

@@ -1,7 +1,7 @@
 Summary: Multimedia framework api
 Name:    phonon
 Version: 4.12.0
-Release: 11%{?dist}
+Release:	12%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://community.kde.org/Phonon
@@ -82,7 +82,7 @@ pushd phononqt6
   -DCMAKE_BUILD_TYPE:STRING="Release" \
   -DPHONON_BUILD_QT5:BOOL=OFF \
   -DPHONON_BUILD_QT6:BOOL=ON
-%cmake_build
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 popd
 
 mkdir -p phononqt5
@@ -92,17 +92,17 @@ pushd phononqt5
   -DPHONON_BUILD_QT5:BOOL=ON \
   -DPHONON_BUILD_QT6:BOOL=OFF \
   -DPHONON_BUILD_SETTINGS=OFF
-%cmake_build
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 popd
 
 
 %install
 pushd phononqt6
-%cmake_install
+%cmake_install_kf6
 popd
 
 pushd phononqt5
-%cmake_install
+%cmake_install_kf6
 popd
 
 %find_lang %{name} --with-qt --all-name
@@ -150,5 +150,8 @@ test "$(pkg-config --modversion phonon4qt6)" = "%{version}"
 %files common -f %{name}.lang
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.12.0-11
 - Prepare for Oreon 11 (RP1)

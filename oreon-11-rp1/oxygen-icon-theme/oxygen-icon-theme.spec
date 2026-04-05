@@ -7,7 +7,7 @@ Name:    oxygen-icon-theme
 Summary: Oxygen icon theme
 Epoch:   1
 Version: 6.1.0
-Release: 4%{?dist}
+Release:	5%{?dist}
 
 # http://techbase.kde.org/Policies/Licensing_Policy
 License: LGPL-3.0-or-later
@@ -51,12 +51,9 @@ Conflicts: kmail < 15.12.2
 %build
 %cmake_kf6
 
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 # optimize
 pushd %{buildroot}%{_kf6_datadir}/icons/oxygen
 
@@ -101,5 +98,8 @@ gtk-update-icon-cache --force %{_datadir}/icons/oxygen &>/dev/null || :
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.1.0-4
 - Prepare for Oreon 11 (RP1)

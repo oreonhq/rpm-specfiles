@@ -3,7 +3,7 @@
 Name:           dolphin
 Summary:        KDE File Manager
 Version:        25.12.3
-Release:        1%{?dist}
+Release:	2%{?dist}
 
 License:        BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:            https://invent.kde.org/system/dolphin
@@ -99,12 +99,9 @@ Requires:       kf6-kio-devel%{?_isa}
   -DKDE_INSTALL_SYSTEMDUSERUNITDIR=%{_userunitdir} \
   -DBUILD_TESTING:BOOL=%{?tests:ON}%{!?tests:OFF}
 
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 %find_lang dolphin --all-name --with-html
 
 
@@ -162,5 +159,8 @@ xvfb-run -a bash -c "%ctest" || :
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

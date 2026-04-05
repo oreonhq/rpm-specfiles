@@ -9,7 +9,7 @@
 Name:    konsole
 Summary: KDE Terminal emulator
 Version: 25.12.3
-Release: 1%{?dist}
+Release:	2%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://www.kde.org/applications/system/konsole/
@@ -95,12 +95,9 @@ Summary: Konsole kpart plugin
   %{?flatpak:-DINSTALL_ICONS:BOOL=ON} \
   %{?tests:-DBUILD_TESTING:BOOL=ON}
 
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 install -m644 -p -D %{SOURCE10} %{buildroot}%{_kf6_sysconfdir}/xdg/konsolerc
 
 %find_lang konsole --with-html
@@ -138,5 +135,8 @@ xvfb-run -a bash -c "%ctest" || :
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

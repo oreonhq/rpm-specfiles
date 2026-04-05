@@ -3,7 +3,7 @@
 
 Name:    plasma-wayland-protocols
 Version: 1.20.0
-Release: 2%{?dist}
+Release:	3%{?dist}
 Summary: Plasma Specific Protocols for Wayland
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-or-later AND MIT-CMU
@@ -34,13 +34,9 @@ developing applications that use %{name}.
 
 %build
 %cmake_kf6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
-
+%cmake_install_kf6
 %files
 %license LICENSES/* COPYING.LIB
 %{_kf6_datadir}/plasma-wayland-protocols/
@@ -50,5 +46,8 @@ developing applications that use %{name}.
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.20.0-2
 - Prepare for Oreon 11 (RP1)

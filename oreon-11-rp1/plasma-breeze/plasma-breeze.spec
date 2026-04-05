@@ -8,7 +8,7 @@
 
 Name:    plasma-breeze
 Version: 6.6.2
-Release: 1%{?dist}
+Release:	2%{?dist}
 Summary: Artwork, styles and assets for the Breeze visual style for the Plasma Desktop
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND MIT
@@ -103,14 +103,14 @@ Provides:       breeze-cursor-themes = %{version}-%{release}
 mkdir -p qt6build
 pushd qt6build
 %cmake_kf6 -S .. -DBUILD_QT6=ON -DBUILD_QT5=OFF
-%cmake_build
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 popd
 
 %if %{with kf5}
 mkdir -p qt5build
 pushd qt5build
 %cmake_kf5 -S .. -DBUILD_QT6=OFF -DBUILD_QT5=ON
-%cmake_build
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 popd
 %endif
 
@@ -118,12 +118,12 @@ popd
 %install
 %if %{with kf5}
 pushd qt5build
-%cmake_install
+%cmake_install_kf6
 popd
 %endif
 
 pushd qt6build
-%cmake_install
+%cmake_install_kf6
 popd
 
 %find_lang breeze --all-name
@@ -168,5 +168,8 @@ popd
 %{_kf6_datadir}/icons/breeze_cursors/index.theme
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
 - Prepare for Oreon 11 (RP1)

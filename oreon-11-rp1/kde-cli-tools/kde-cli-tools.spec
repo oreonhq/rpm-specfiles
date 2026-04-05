@@ -1,6 +1,6 @@
 Name:    kde-cli-tools
 Version: 6.6.2
-Release: 1%{?dist}
+Release:	2%{?dist}
 
 Summary: Tools based on KDE Frameworks 5 to better interact with the system
 
@@ -61,11 +61,9 @@ Conflicts: kde-runtime-docs < 14.12.3-2
 
 %build
 %cmake_kf6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang kdeclitools_qt --with-qt --with-kde --all-name
 
 ln -s %{_kf6_libexecdir}/kdesu %{buildroot}%{_bindir}/kdesu
@@ -110,5 +108,8 @@ ln -s %{_kf6_libexecdir}/kdesu %{buildroot}%{_bindir}/kdesu
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
 - Prepare for Oreon 11 (RP1)

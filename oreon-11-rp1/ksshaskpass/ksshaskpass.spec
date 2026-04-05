@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:    ksshaskpass
 Version: 6.6.2
-Release: 1%{?dist}
+Release:	2%{?dist}
 Summary: A ssh-add helper that uses kwallet and kpassworddialog
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.
@@ -35,12 +35,9 @@ BuildRequires:  cmake(Qt6Keychain)
 
 %build
 %cmake_kf6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 %find_lang ksshaskpass
 
 # Setup environment variables
@@ -61,5 +58,8 @@ EOF
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
 - Prepare for Oreon 11 (RP1)

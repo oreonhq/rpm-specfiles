@@ -1,7 +1,7 @@
 Name:           kdevelop-pg-qt
 Summary:        A parser generator
 Version:        2.4.0
-Release:        3%{?dist}
+Release:	4%{?dist}
 License:        LGPL-2.0-only AND GPL-3.0-or-later AND CC0-1.0 AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH Bison-exception-2.2) AND BSD-3-Clause
 URL:            http://techbase.kde.org/Development/KDevelop-PG-Qt_Introduction
 Source0:        https://download.kde.org/stable/kdevelop-pg-qt/%{version}/src/%{name}-%{version}.tar.xz
@@ -36,13 +36,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %build
 %cmake_kf6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
-
+%cmake_install_kf6
 %files 
 %doc AUTHORS README
 %license LICENSES/*
@@ -54,5 +50,8 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %{_libdir}/cmake/KDevelopPGQt/
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.0-3
 - Prepare for Oreon 11 (RP1)

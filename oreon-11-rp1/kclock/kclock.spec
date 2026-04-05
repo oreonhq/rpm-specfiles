@@ -8,7 +8,7 @@ ExcludeArch: %{ix86}
 
 Name:           kclock
 Version:        25.12.3
-Release:        1%{?dist}
+Release:	2%{?dist}
 License:        LGPL-2.1-or-later AND LGPL-2.0-or-later AND GPL-3.0-or-later AND CC-BY-4.0 AND GPL-2.0-or-later
 Summary:        Clock app for Plasma Mobile
 Url:            https://apps.kde.org/kclock/
@@ -83,10 +83,9 @@ Requires:       libplasma%{?_isa}
 
 %build
 %cmake_kf6
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang %{name} --all-name
 
 
@@ -114,6 +113,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.%{name}.deskt
 %{_qt6_plugindir}/plasma/applets/org.kde.plasma.%{name}_1x2.so
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Define stable_kf6 so Source0 KDE Gear URL resolves
 

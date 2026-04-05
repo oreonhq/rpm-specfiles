@@ -5,7 +5,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.24.0
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary: QtQuickControls2 style for consistency between QWidget and QML apps
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LicenseRef-KFQF-Accepted-GPL
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -43,10 +43,10 @@ between QWidget-based and QML-based apps.
 
 %build
 %cmake_kf6
-%cmake_build
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang %{name} --all-name --with-man --with-qt
 
 %files -f %{name}.lang
@@ -58,6 +58,9 @@ between QWidget-based and QML-based apps.
 %{_kf6_plugindir}/kirigami/platform/org.kde.desktop.so
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 

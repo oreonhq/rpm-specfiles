@@ -1,6 +1,6 @@
 Name:           gcompris-qt
 Version:        26.1
-Release:        1%{?dist}
+Release:	2%{?dist}
 Summary:        Educational software suite for children aged 2 to 10
 
 License:        AGPL-3.0-only
@@ -84,12 +84,9 @@ More than 100 activities are available.
 %cmake_kf6 \
   -DQML_BOX2D_MODULE=disabled \
   -DBUILD_SERVER=OFF
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 # Validate desktop file
 desktop-file-validate \
    %{buildroot}%{_datadir}/applications/org.kde.gcompris.desktop
@@ -115,5 +112,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.gc
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.1-1
 - Prepare for Oreon 11 (RP1)

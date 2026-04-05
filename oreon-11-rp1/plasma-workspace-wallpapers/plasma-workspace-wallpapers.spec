@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-workspace-wallpapers
 Version: 6.6.2
-Release: 1%{?dist}
+Release:	2%{?dist}
 Summary: Additional wallpapers for Plasma workspace
 # Automatically converted from old format: LGPLv3 - review is highly recommended.
 License: LGPL-3.0-only
@@ -37,13 +37,9 @@ Obsoletes:      plasma-workspace-wallpapers < 5.2.0-2
 
 %build
 %cmake_kf6 -DBUILD_WITH_QT6=ON
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
-
+%cmake_install_kf6
 %files
 %license COPYING.LGPL3
 %{_datadir}/wallpapers/Altai/
@@ -84,5 +80,8 @@ Obsoletes:      plasma-workspace-wallpapers < 5.2.0-2
 %{_datadir}/wallpapers/Orionids/
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
 - Prepare for Oreon 11 (RP1)

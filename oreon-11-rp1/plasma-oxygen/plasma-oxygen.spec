@@ -9,7 +9,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-%{base_name}
 Version: 6.6.2
-Release: 1%{?dist}
+Release:	2%{?dist}
 Summary: Plasma and Qt widget style and window decorations for Plasma
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
@@ -112,25 +112,25 @@ Obsoletes:      plasma-oxygen-common < 5.1.1-2
 mkdir -p qt6build
 pushd qt6build
 %cmake_kf6 -S .. -DBUILD_QT6=ON -DBUILD_QT5=OFF
-%cmake_build
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 popd
 
 %if %{with kf5}
 mkdir -p qt5build
 pushd qt5build
 %cmake_kf5 -S .. -DBUILD_QT6=OFF -DBUILD_QT5=ON
-%cmake_build
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 popd
 %endif
 
 %install
 pushd qt6build
-%cmake_install
+%cmake_install_kf6
 popd
 
 %if %{with kf5}
 pushd qt5build
-%cmake_install
+%cmake_install_kf6
 popd
 %endif
 
@@ -175,5 +175,8 @@ popd
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
 - Prepare for Oreon 11 (RP1)

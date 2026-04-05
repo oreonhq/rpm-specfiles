@@ -1,6 +1,6 @@
 Name:          arianna
 Version:       25.12.3
-Release:       1%{?dist}
+Release:	2%{?dist}
 Summary:       EPub Reader for mobile devices
 # Complete license breakdown can be found in the "LICENSE-BREAKDOWN" file.
 # Automatically converted from old format: GPLv3 - review is highly recommended.
@@ -68,11 +68,11 @@ An ebook reader and library management app
 
 %build
 %cmake_kf6 %{?flatpak:-DQT_BUILD_CMAKE_PREFIX_PATH=%{_libdir}/cmake}
-%cmake_build
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %fdupes
 
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang %{name} --with-kde --with-man --all-name
 
 %check
@@ -89,5 +89,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.ar
 %{_kf6_metainfodir}/org.kde.arianna.appdata.xml
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

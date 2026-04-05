@@ -2,7 +2,7 @@
 
 Name:           kf6-%{framework}
 Version:        1.12.0
-Release:	3%{?dist}
+Release:	4%{?dist}
 License:        BSD-2-Clause AND CC-BY-SA-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND LicenseRef-KFQF-Accepted-GPL
 Summary:        Convergent visual components ("widgets") for Kirigami-based applications
 Url:            https://invent.kde.org/libraries/%{framework}
@@ -78,10 +78,10 @@ and header files for developing applications that use %{name}.
 %build
 %cmake_kf6 \
     -DBUILD_WITH_QT6=ON
-%cmake_build
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang %{orig_name}6 --all-name
 
 %files -f %{orig_name}6.lang
@@ -106,6 +106,9 @@ and header files for developing applications that use %{name}.
 %{_kf6_datadir}/kdevappwizard/templates/librarymanager6.tar.bz2
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 

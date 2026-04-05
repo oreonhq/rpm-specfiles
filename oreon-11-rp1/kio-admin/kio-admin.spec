@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:           kio-admin
 Version:        25.12.3
-Release:        1%{?dist}
+Release:	2%{?dist}
 Summary:        Manage files as administrator using the admin:// KIO protocol
 License:        (GPL-2.0-only or GPL-3.0-only) and BSD-3-Clause and CC0-1.0 and FSFAP
 URL:            https://invent.kde.org/system/kio-admin
@@ -40,10 +40,9 @@ operations in root-scope.
 %cmake_kf6 \
 	-DQT_MAJOR_VERSION=6
 
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang kio5_admin %{name}.lang
 
 %files -f %{name}.lang
@@ -60,5 +59,8 @@ operations in root-scope.
 %{_kf6_datadir}/polkit-1/actions/org.kde.kio.admin.policy
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

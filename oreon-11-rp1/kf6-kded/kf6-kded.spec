@@ -4,7 +4,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.24.0
-Release:	3%{?dist}
+Release:	4%{?dist}
 Summary: KDE Frameworks 6 Tier 3 addon with extensible daemon for system-level services
 
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later
@@ -49,10 +49,10 @@ developing applications that use %{name}.
 
 %build
 %cmake_kf6
-%cmake_build
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 
 %install
-%cmake_install
+%cmake_install_kf6
 
 %find_lang kded6 --with-man
 # create/own this
@@ -80,6 +80,9 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/kded
 %{_kf6_datadir}/dbus-1/interfaces/*.xml
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 

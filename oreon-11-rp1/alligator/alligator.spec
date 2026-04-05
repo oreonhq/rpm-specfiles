@@ -6,7 +6,7 @@ ExcludeArch: %{ix86}
 
 Name:           alligator
 Version:        25.12.3
-Release:        1%{?dist}
+Release:	2%{?dist}
 # Automatically converted from old format: GPLv2 or GPLv3 - review is highly recommended.
 License:        GPL-2.0-only OR GPL-3.0-only
 Summary:        Kirigami-based RSS reader
@@ -49,10 +49,9 @@ Alligator is a convergent RSS/Atom feed reader.
 
 %build
 %cmake_kf6
-%cmake_build
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang %{name}
 chmod -x %{buildroot}%{_datadir}/applications/org.kde.%{name}.desktop
 
@@ -71,6 +70,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.%{name}.deskt
 %{_kf6_datadir}/qlogging-categories6/alligator.categories
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Wed Apr 1 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Define stable_kf6 for Source0 (fix empty path segment), use Source0 label
 

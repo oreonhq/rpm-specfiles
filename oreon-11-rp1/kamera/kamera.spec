@@ -5,7 +5,7 @@ ExcludeArch: %{ix86}
 Name:    kamera
 Summary: Digital camera support for KDE 
 Version: 25.12.3
-Release: 1%{?dist}
+Release:	2%{?dist}
 
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
@@ -43,12 +43,9 @@ Requires: kde-cli-tools
 %build
 %cmake_kf6
 
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 %find_lang %{name} --all-name --with-html
 
 
@@ -69,5 +66,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

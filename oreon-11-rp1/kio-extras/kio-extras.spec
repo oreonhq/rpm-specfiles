@@ -1,6 +1,6 @@
 Name:    kio-extras
 Version: 25.12.3
-Release: 1%{?dist}
+Release:	2%{?dist}
 Summary: Additional components to increase the functionality of KIO Framework
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -86,11 +86,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %build
 %cmake_kf6 -DLIBSSH_LIBRARIES="$(pkg-config --libs libssh)"
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang %{name} --all-name --with-html
 
 
@@ -132,5 +130,8 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)

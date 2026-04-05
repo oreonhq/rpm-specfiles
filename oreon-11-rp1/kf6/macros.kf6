@@ -16,6 +16,12 @@
 %_kf6_qmldir %_kf6_archdatadir/qml
 %_kf6_version @@kf6_VERSION@@
 
+# ECM/qdoc HTML under %%{__cmake_builddir}/.doc. Default off so libs ship without HTML docs.
+# Opt in per spec: %%global _kf6_html_docs 1 , run %%kf6_cmake_prepare_docs after the main
+# %%cmake --build in %%build , then %%cmake_install_kf6 installs them only if .doc is non-empty.
+# Or use %%bcond_with kf6_html_docs and %%global _kf6_html_docs %%{?with_kf6_html_docs:1}%%{!?with_kf6_html_docs:0}
+%_kf6_html_docs 0
+
 %cmake_kf6 \\\
   %undefine __cmake_in_source_build \
   QTDIR="%{_qt6_prefix}" ; export QTDIR ; \
@@ -61,11 +67,19 @@
 %cmake_build_kf6 \\\
 	%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 
-# Do not use %%cmake_install here. qt6-rpm-macros can redefine it to run
-# ``cmake --build ... -t install_html_docs`` before ``cmake --install``, which
-# fails when %%cmake_build_kf6 (or an inlined build) skipped prepare_docs.
+# After main library build, only when %%_kf6_html_docs is 1 (opt-in specs).
+%kf6_cmake_prepare_docs \\\
+	if [ "%{_kf6_html_docs}" = "1" ]; then \\
+	  %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose -t prepare_docs ; \\
+	fi
+
+# Plain ``cmake --install`` (never use qt6 %%cmake_install; it may force install_html_docs).
+# HTML install runs only if %%_kf6_html_docs is 1 and upstream actually wrote %%{__cmake_builddir}/.doc .
 %cmake_install_kf6 \\\
-	DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
+	DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose ; \\
+	if [ "%{_kf6_html_docs}" = "1" ] && [ -d "%{__cmake_builddir}/.doc" ] && find "%{__cmake_builddir}/.doc" -mindepth 1 -maxdepth 1 2>/dev/null | grep -q . ; then \\
+	  DESTDIR="%{buildroot}" %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose -t install_html_docs ; \\
+	fi
 
 # %%find_lang_kf6
 #

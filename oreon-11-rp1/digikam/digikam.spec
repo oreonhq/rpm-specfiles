@@ -220,12 +220,9 @@ needed to develop applications using %{name}.
   -DENABLE_MYSQLSUPPORT:BOOL=ON \
   -DENABLE_INTERNALMYSQL:BOOL=ON
 
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 desktop-file-install --vendor="" \
   --dir=%{buildroot}%{_datadir}/applications/ \
   %{SOURCE10}
@@ -335,5 +332,8 @@ update-desktop-database -q &> /dev/null
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.0.0-3
 - Prepare for Oreon 11 (RP1)

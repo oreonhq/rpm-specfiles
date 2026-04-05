@@ -5,7 +5,7 @@
 
 Name:           kf6-%{framework}
 Version:        6.24.0
-Release:	4%{?dist}
+Release:	5%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 addon with additional image plugins for QtGui
 
 License:        LGPLv2+
@@ -62,10 +62,10 @@ developing applications that use %{name}.
 %cmake_kf6 \
   -DKIMAGEFORMATS_HEIF:BOOL=ON \
   -DKIMAGEFORMATS_JXR:BOOL=ON
-%cmake_build
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 
 %install
-%cmake_install
+%cmake_install_kf6
 
 %files
 %doc README.md
@@ -76,6 +76,9 @@ developing applications that use %{name}.
 %{_kf6_libdir}/cmake/KF6ImageFormats/
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
 

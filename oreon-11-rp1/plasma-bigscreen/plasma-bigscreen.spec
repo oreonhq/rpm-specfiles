@@ -4,7 +4,7 @@
 
 Name:          plasma-bigscreen
 Version:       6.5.80^%{gitdate}.%{shortcommit}
-Release:       2%{?dist}
+Release:	3%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later and CC-BY-SA-4.0
 Summary:       A big launcher giving you access to any installed apps and skills
 Url:           https://invent.kde.org/plasma/plasma-bigscreen
@@ -85,11 +85,9 @@ Conflicts: %{name}-x11 < %{version}-%{release}
 
 %build
 %cmake_kf6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang plasma-bigscreen --with-man --with-qt --all-name
 
 %check
@@ -122,5 +120,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.5.80^%{gitdate}.%{shortcommit}-2
 - Prepare for Oreon 11 (RP1)

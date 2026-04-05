@@ -1,6 +1,6 @@
 Name:    libkcompactdisc 
 Version: 25.12.2
-Release: 1%{?dist}
+Release:	2%{?dist}
 Summary: A KDE compact disc library
 
 # License for this library is very nebulous.
@@ -52,12 +52,9 @@ Obsoletes: kf5-libkcompactdisc-devel < 24.01.85
 %cmake_kf6 \
 	-DQT_MAJOR_VERSION=6
 
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
-
+%cmake_install_kf6
 %find_lang %{name} --all-name --with-html --with-man
 
 %files -f %{name}.lang
@@ -72,5 +69,8 @@ Obsoletes: kf5-libkcompactdisc-devel < 24.01.85
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.2-1
 - Prepare for Oreon 11 (RP1)

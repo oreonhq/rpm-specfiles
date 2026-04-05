@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:           colord-kde
 Version:        25.12.3
-Release:        1%{?dist}
+Release:	2%{?dist}
 Summary:        Colord support for KDE
 
 License:        CC0-1.0 AND LGPL-3.0-or-later
@@ -47,11 +47,9 @@ KDE support for colord including KDE Daemon module and System Settings module.
 
 %build
 %cmake_kf6
-%cmake_build
-
-
+%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
 %install
-%cmake_install
+%cmake_install_kf6
 %find_lang colord-kde
 
 %check
@@ -68,5 +66,8 @@ desktop-file-validate %{buildroot}/%{_kf6_datadir}/applications/{colordkdeiccimp
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
 - Prepare for Oreon 11 (RP1)
