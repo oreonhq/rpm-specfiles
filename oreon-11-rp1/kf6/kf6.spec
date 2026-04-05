@@ -104,7 +104,7 @@ sed -i \
 %{_rpmconfigdir}/macros.d/macros.zz-kf6
 
 %changelog
-* Sat Apr 05 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-16
+* Sun Apr 05 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-16
 - %%cmake_install_kf6: require files under .doc before install_html_docs (avoid empty-dir false positive)
 
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-15
