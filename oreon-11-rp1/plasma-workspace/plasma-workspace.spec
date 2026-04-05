@@ -427,7 +427,7 @@ EOL
   -DWITH_X11_SESSION:BOOL=OFF \
   -DGLIBC_LOCALE_GEN:BOOL=OFF \
   -DGLIBC_LOCALE_PREGENERATED:BOOL=ON
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 #chrpath --delete %{buildroot}%{_kf6_qtplugindir}/phonon_platform/kde.so

@@ -67,7 +67,7 @@ KDE Wallet Manager is a tool to manage the passwords on your KDE system.
 %build
 %cmake_kf6 %{?flatpak:-DENABLE_KAUTH=OFF}
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang %{name} --all-name --with-html

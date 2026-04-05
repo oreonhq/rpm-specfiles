@@ -80,7 +80,7 @@ BuildArch:      noarch
 mkdir -p phononqt5
 pushd phononqt5
 %cmake_kf5 -S .. -DPHONON_BUILD_QT5:BOOL=ON -DPHONON_BUILD_QT6:BOOL=OFF
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 popd
 %endif
 
@@ -88,7 +88,7 @@ popd
 mkdir -p phononqt6
 pushd phononqt6
 %cmake_kf6 -S .. -DPHONON_BUILD_QT5:BOOL=OFF -DPHONON_BUILD_QT6:BOOL=ON
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 popd
 %endif
 

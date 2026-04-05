@@ -57,7 +57,7 @@ https://community.kde.org/Plasma/Browser_Integration
   -DMOZILLA_DIR:PATH=%{_libdir}/mozilla \
   -DLIBREWOLF_DIR:PATH=%{_libdir}/librewolf \
   -DWATERFOX_DIR:PATH=%{_libdir}/waterfox
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang %{name} --all-name

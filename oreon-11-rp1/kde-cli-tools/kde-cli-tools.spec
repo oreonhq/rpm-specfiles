@@ -61,7 +61,7 @@ Conflicts: kde-runtime-docs < 14.12.3-2
 
 %build
 %cmake_kf6
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang kdeclitools_qt --with-qt --with-kde --all-name

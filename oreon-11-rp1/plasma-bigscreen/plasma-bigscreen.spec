@@ -85,7 +85,7 @@ Conflicts: %{name}-x11 < %{version}-%{release}
 
 %build
 %cmake_kf6
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang plasma-bigscreen --with-man --with-qt --all-name

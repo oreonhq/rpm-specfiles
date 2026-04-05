@@ -48,7 +48,7 @@ each tile's matching pair.
 %build
 %cmake_kf6
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang %{name} --all-name --with-html

@@ -35,7 +35,7 @@ Provides: kffmpegthumbnailer = %{version}-%{release}
 
 %build
 %cmake_kf6 -DQT_MAJOR_VERSION=6
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %check

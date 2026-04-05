@@ -101,7 +101,7 @@ Requires: %{name}-libs = %{version}-%{release}
   -Wno-dev \
   -DBUILD_TESTING:BOOL=%{?tests:ON}%{!?tests:OFF}
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang all --all-name --with-html --with-man

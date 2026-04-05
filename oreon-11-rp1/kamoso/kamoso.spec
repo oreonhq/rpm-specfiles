@@ -74,7 +74,7 @@ Kamoso is an application to take pictures and videos out of your webcam.
 %cmake_kf6 \
   -DBUILD_TESTING:BOOL=%{?tests:ON}%{!?tests:OFF} -Wno-dev
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang kamoso --with-html

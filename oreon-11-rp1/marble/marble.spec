@@ -170,7 +170,7 @@ mv src/3rdparty/zlib src/3rdparty/zlib.UNUSED ||:
   -DWITH_DESIGNER_PLUGIN:BOOL=OFF \
   -DBUILD_MARBLE_TOOLS=ON
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang %{name} --all-name --with-html

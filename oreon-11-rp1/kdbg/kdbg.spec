@@ -36,7 +36,7 @@ requires X and KDE to be installed in order to run.
 %build
 %cmake_kf6 -DBUILD_FOR_KDE_VERSION=6
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang %{name} --with-html

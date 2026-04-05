@@ -133,7 +133,7 @@ find ./po -type f -name libakonadi5.po -execdir mv {} libakonadi6.po \;
   -DMYSQLD_EXECUTABLE:FILEPATH=%{_libexecdir}/mysqld \
   -DMYSQLD_SCRIPTS_PATH:FILEPATH=%{_bindir}/mysql_install_db \
   -DPOSTGRES_PATH:FILEPATH=%{_bindir}/pg_ctl
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.akonadi.configdialog.desktop

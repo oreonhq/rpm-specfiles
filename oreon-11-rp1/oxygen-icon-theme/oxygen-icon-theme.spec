@@ -51,7 +51,7 @@ Conflicts: kmail < 15.12.2
 %build
 %cmake_kf6
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 # optimize

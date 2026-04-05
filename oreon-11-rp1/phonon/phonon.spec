@@ -82,7 +82,7 @@ pushd phononqt6
   -DCMAKE_BUILD_TYPE:STRING="Release" \
   -DPHONON_BUILD_QT5:BOOL=OFF \
   -DPHONON_BUILD_QT6:BOOL=ON
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 popd
 
 mkdir -p phononqt5
@@ -92,7 +92,7 @@ pushd phononqt5
   -DPHONON_BUILD_QT5:BOOL=ON \
   -DPHONON_BUILD_QT6:BOOL=OFF \
   -DPHONON_BUILD_SETTINGS=OFF
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 popd
 
 

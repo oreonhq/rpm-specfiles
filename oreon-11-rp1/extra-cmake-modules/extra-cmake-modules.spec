@@ -64,7 +64,7 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
   -DBUILD_QTHELP_DOCS:BOOL=ON \
   -DBUILD_TESTING:BOOL=%{?tests:ON}%{!?tests:OFF} \
   %{?sphinx_build}
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 # move to qt6 docdir so it shows up in Qt Creator by default

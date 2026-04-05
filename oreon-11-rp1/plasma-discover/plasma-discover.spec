@@ -208,7 +208,7 @@ Supplements: (%{name} and plasma-workspace%{?_isa})
   -DBUILD_RpmOstreeBackend:BOOL=ON
 %endif
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 install -m644 -p -D %{SOURCE10} %{buildroot}%{_kf6_sysconfdir}/xdg/discoverrc

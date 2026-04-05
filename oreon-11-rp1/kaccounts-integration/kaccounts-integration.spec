@@ -128,14 +128,14 @@ Headers, development libraries and documentation for %{name}.
 mkdir %{name}_qt6
 pushd %{name}_qt6
 %cmake_kf6 -S ..
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 popd
 
 %if %{with kf5}
 mkdir %{name}_qt5
 pushd %{name}_qt5
 %cmake_kf5 -DKF6_COMPAT_BUILD=ON -S ..
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 popd
 %endif
 

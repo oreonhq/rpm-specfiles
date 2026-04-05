@@ -86,7 +86,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %build
 %cmake_kf6 -DLIBSSH_LIBRARIES="$(pkg-config --libs libssh)"
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang %{name} --all-name --with-html

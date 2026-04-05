@@ -95,7 +95,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %cmake_kf6 \
   -DBUILD_WITH_GEOIP:BOOL=ON
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 # ensure this exists (sometimes not, e.g. when qtwebengine support isn't available)

@@ -70,7 +70,7 @@ Requires: polkit
 
 %build
 %cmake_kf6 -DWITH_PYTHON_VENDORING=OFF -DWITH_GDB12=ON
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 # installdbgsymbols script

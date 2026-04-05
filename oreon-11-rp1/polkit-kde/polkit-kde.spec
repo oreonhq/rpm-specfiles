@@ -54,7 +54,7 @@ Provides Policy Kit Authentication Agent that nicely fits to KDE.
 %cmake_kf6 \
   -DKDE_INSTALL_LIBEXECDIR:PATH=%{_kf6_libexecdir}
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang polkit-kde-authentication-agent-1

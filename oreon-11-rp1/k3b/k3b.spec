@@ -120,7 +120,7 @@ Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
   -DK3B_BUILD_LAME_ENCODER_PLUGIN:BOOL=ON \
   -DK3B_BUILD_MAD_DECODER_PLUGIN:BOOL=ON
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang %{name} --all-name --with-html

@@ -90,7 +90,7 @@ Web browser for mobile devices with Plasma integration
 
 %build
 %cmake_kf6
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %if %{with adblock}
 # Rust dependency handling
 %cargo_license_summary

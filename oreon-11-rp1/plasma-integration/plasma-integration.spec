@@ -93,11 +93,11 @@ Requires:       qqc2-desktop-style%{?_isa}
 %build
 %global _vpath_builddir %{_target_platform}-qt6
 %cmake_kf6 -DBUILD_QT5=OFF -DBUILD_QT6=ON
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %if %{with kf5}
 %global _vpath_builddir %{_target_platform}-qt5
 %cmake_kf5 -DBUILD_QT5=ON  -DBUILD_QT6=OFF
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %endif
 
 

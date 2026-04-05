@@ -49,7 +49,7 @@ Summary:       Library files for kjournald
 %build
 # Building on Qt 6.9.1 crashed the qml compiler. This is a (...temporary?) workaround.
 %cmake_kf6 -DQT_QML_NO_CACHEGEN=ON
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang %{name} --with-kde --with-man --all-name

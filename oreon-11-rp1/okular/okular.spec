@@ -156,7 +156,7 @@ sed -i -e 's|^add_subdirectory( mobile )|#add_subdirectory( mobile )|' CMakeList
 %cmake_kf6 -DOKULAR_UI=both \
 	-DFORCE_NOT_REQUIRED_DEPENDENCIES="CHM;LibZip;DjVuLibre;EPub;"
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang all --all-name --with-html --with-man

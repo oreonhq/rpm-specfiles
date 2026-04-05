@@ -189,7 +189,7 @@ Requires:       NetworkManager-iodine
   %{!?with_openconnect:-DBUILD_OPENCONNECT=OFF} \
   %{nil}
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %if ! 0%{?fedora}

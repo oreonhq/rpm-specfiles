@@ -95,7 +95,7 @@ Summary: Konsole kpart plugin
   %{?flatpak:-DINSTALL_ICONS:BOOL=ON} \
   %{?tests:-DBUILD_TESTING:BOOL=ON}
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 install -m644 -p -D %{SOURCE10} %{buildroot}%{_kf6_sysconfdir}/xdg/konsolerc

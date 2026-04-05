@@ -63,7 +63,7 @@ Obsoletes: plasma-systemsettings-devel < 5.20.90
 
 %build
 %cmake_kf6
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang systemsettings6 --with-qt --with-html --all-name

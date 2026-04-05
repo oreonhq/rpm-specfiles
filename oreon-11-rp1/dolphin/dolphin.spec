@@ -99,7 +99,7 @@ Requires:       kf6-kio-devel%{?_isa}
   -DKDE_INSTALL_SYSTEMDUSERUNITDIR=%{_userunitdir} \
   -DBUILD_TESTING:BOOL=%{?tests:ON}%{!?tests:OFF}
 
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang dolphin --all-name --with-html

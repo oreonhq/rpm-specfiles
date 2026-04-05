@@ -84,7 +84,7 @@ More than 100 activities are available.
 %cmake_kf6 \
   -DQML_BOX2D_MODULE=disabled \
   -DBUILD_SERVER=OFF
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 # Validate desktop file

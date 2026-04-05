@@ -69,7 +69,7 @@ Requires:       libplasma%{?_isa}
 
 %build
 %cmake_kf6
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 chmod -x %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.desktop

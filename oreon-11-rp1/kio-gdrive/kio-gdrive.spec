@@ -40,7 +40,7 @@ Provides KIO Access to Google Drive using the gdrive:/// protocol.
 
 %build
 %cmake_kf6
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 %find_lang kio6_gdrive --all-name --with-html

@@ -103,14 +103,14 @@ Provides:       breeze-cursor-themes = %{version}-%{release}
 mkdir -p qt6build
 pushd qt6build
 %cmake_kf6 -S .. -DBUILD_QT6=ON -DBUILD_QT5=OFF
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 popd
 
 %if %{with kf5}
 mkdir -p qt5build
 pushd qt5build
 %cmake_kf5 -S .. -DBUILD_QT6=OFF -DBUILD_QT5=ON
-%{__cmake} --build \"%{__cmake_builddir}\" %{?_smp_mflags} --verbose
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 popd
 %endif
 
