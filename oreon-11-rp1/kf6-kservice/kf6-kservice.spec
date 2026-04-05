@@ -53,8 +53,7 @@ developing applications that use %{name}.
 %cmake_kf6
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
-%cmake_install_kf6
-
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %find_lang %{name} --all-name --with-man
 mkdir -p %{buildroot}%{_kf6_datadir}/kservices6
 mkdir -p %{buildroot}%{_kf6_datadir}/kservicetypes6

@@ -125,8 +125,7 @@ mv icons/apps/48/org.fedoraproject.AnacondaInstaller.svg icons-fedora/apps/48
 
 
 %install
-%cmake_install_kf6
-
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %if %{with install_icons}
 
 ## icon optimizations

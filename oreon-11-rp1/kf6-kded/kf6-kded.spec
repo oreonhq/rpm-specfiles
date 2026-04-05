@@ -53,8 +53,7 @@ developing applications that use %{name}.
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 
 %install
-%cmake_install_kf6
-
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %find_lang kded6 --with-man
 # create/own this
 mkdir -p %{buildroot}%{_kf6_plugindir}/kded

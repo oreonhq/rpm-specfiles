@@ -40,8 +40,7 @@ that use ModemManager.
 %cmake_kf6
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
-%cmake_install_kf6
-
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %files
 %doc README README.md
 %license LICENSES/*

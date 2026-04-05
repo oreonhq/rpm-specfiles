@@ -42,8 +42,7 @@ developing applications that use %{name}.
 %cmake_kf6
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
-%cmake_install_kf6
-%find_lang_kf6 kcodecs6_qt
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose%find_lang_kf6 kcodecs6_qt
 %fdupes LICENSES
 
 %files -f kcodecs6_qt.lang

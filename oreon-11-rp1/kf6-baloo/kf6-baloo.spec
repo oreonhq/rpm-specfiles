@@ -77,8 +77,7 @@ Summary:        Runtime libraries for %{name}
     -DKDE_INSTALL_SYSTEMDUSERUNITDIR=%{_userunitdir}
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
-%cmake_install_kf6
-
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 # baloodb not installed unless BUILD_EXPERIMENTAL is enabled, so omit translations
 #rm -fv %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/baloodb5.*
 

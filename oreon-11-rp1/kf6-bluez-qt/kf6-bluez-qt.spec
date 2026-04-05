@@ -49,8 +49,7 @@ Development files for %{name}.
   -DUDEV_RULES_INSTALL_DIR:PATH="%{_udevrulesdir}"
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
-%cmake_install_kf6
-
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %files
 %doc README.md
 %license LICENSES/*.txt

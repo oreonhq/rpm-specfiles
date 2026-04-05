@@ -48,8 +48,7 @@ developing applications that use %{name}.
     -DUTEMPTER_EXECUTABLE:PATH=/usr/libexec/utempter/utempter
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
-%cmake_install_kf6
-
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %find_lang %{name} --all-name --with-man
 
 %files -f %{name}.lang

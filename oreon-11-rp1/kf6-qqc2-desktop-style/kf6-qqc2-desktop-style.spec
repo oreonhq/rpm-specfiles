@@ -47,8 +47,7 @@ between QWidget-based and QML-based apps.
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 
 %install
-%cmake_install_kf6
-%find_lang %{name} --all-name --with-man --with-qt
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose%find_lang %{name} --all-name --with-man --with-qt
 
 %files -f %{name}.lang
 %doc README.md
