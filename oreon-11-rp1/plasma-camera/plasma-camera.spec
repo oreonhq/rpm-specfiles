@@ -1,11 +1,11 @@
 Name:          plasma-camera
-Version:       2.1.1
-Release:	5%{?dist}
+Version:       26.03.80
+Release:       1%{?dist}
 License:       BSD-3-Clause AND GPL-2.0-or-later AND CC0-1.0 AND GPL-3.0-or-later
 Summary:       Camera application for Plasma Mobile
 URL:           https://apps.kde.org/plasma.camera/
 
-Source0:       https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+Source0:       https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 # libcamera does not currently build on these architectures
 ExcludeArch: s390x ppc64le
@@ -46,9 +46,11 @@ switching between different camera devices.
 
 %build
 %cmake_kf6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
+
 %install
-%cmake_install_kf6
+%cmake_install
 %find_lang %{name} --with-man --with-qt --all-name
 
 %check
@@ -62,8 +64,35 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
 %{_metainfodir}/org.kde.plasma.camera.appdata.xml
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
+- 26.03.80
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.1-4
-- Prepare for Oreon 11 (RP1)
+* Mon Feb 02 2026 Steve Cossette <farchord@gmail.com> - 2.1.1-4
+- Rebuild for new libcamera
+
+* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 2.1.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Mon Dec 15 2025 Adam Williamson <awilliam@redhat.com> - 2.1.1-2
+- Rebuild for new libcamera soname
+
+* Mon Dec 08 2025 Steve Cossette <farchord@gmail.com> - 2.1.1-1
+- 2.1.1
+
+* Fri Nov 07 2025 Steve Cossette <farchord@gmail.com> - 2.1.0-1
+- 2.1.0
+
+* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 2.0.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Tue Jul 08 2025 Steve Cossette <farchord@gmail.com> - 2.0.0-2
+- Added excludearch, libcamera doesn't build on ppc and s390x
+
+* Tue Jul 08 2025 Steve Cossette <farchord@gmail.com> - 2.0.0-1
+- 2.0.0
+
+* Mon Jan 20 2025 Fedora Release Engineering <releng@fedoraproject.org> - 1.0^20240615.212920.2b92073-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Mon Jun 17 2024 Steve Cossette <farchord@gmail.com> - 1.0^2b92073.20240615.212920
+- Initial Release

@@ -1,10 +1,10 @@
 Name:           plasma-phonebook
-Version:        24.02.0
-Release:	7%{?dist}
+Version:        26.03.80
+Release:        1%{?dist}
 License:        CC0 and GPLv2 and GPLv3 and GPLv3+ and LGPLv2+
 Summary:        Convergent Plasma Mobile phonebook application
 Url:            https://invent.kde.org/plasma-mobile/%{name}
-Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 
 BuildRequires:  gcc-c++
@@ -46,9 +46,10 @@ Contacts application which allows adding, modifying and removing contacts.
 
 %build
 %cmake_kf6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
 %install
-%cmake_install_kf6
+%cmake_install
 %find_lang %{name}
 
 %files -f %{name}.lang
@@ -61,8 +62,47 @@ Contacts application which allows adding, modifying and removing contacts.
 %{_qt6_plugindir}/kpeople/actions/phonebook_kpeople_plugin.so
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
+- 26.03.80
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 24.02.0-6
-- Prepare for Oreon 11 (RP1)
+* Sun Jan 18 2026 Yaakov Selkowitz <yselkowi@redhat.com> - 24.02.0-6
+- Update QML module dependencies
+
+* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 24.02.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 24.02.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Sat Jan 18 2025 Fedora Release Engineering <releng@fedoraproject.org> - 24.02.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 24.02.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Sat Mar 02 2024 Steve Cossette <farchord@gmail.com> - 24.02.0-1
+- 24.02.0
+
+* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Fri Jul 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Mon Jan 30 2023 Justin Zobel <justin@1707.io> - 23.01.0-1
+- Update to 23.01.0
+
+* Fri Jan 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 22.11-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Thu Dec 01 2022 Justin Zobel <justin@1707.io> - 22.11-1
+- Update to 22.11
+
+* Wed Sep 28 2022 Justin Zobel <justin@1707.io> - 22.09-1
+- Update to 22.09
+
+* Wed Aug 31 2022 Onuralp SEZER <thunderbirdtr@fedoraproject.org> - 22.06-1
+- Initial package

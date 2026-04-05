@@ -1,6 +1,6 @@
 Name:           plasma-pass
 Version:        1.3.0
-Release:	3%{?dist}
+Release:        2%{?dist}
 Summary:        Plasma applet to access passwords from the Pass password manager
 License:        CC0-1.0 AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/%{name}.git
@@ -52,9 +52,10 @@ password manager.
 
 %build
 %cmake_kf6 -DBUILD_WITH_QT6=ON
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
 %install
-%cmake_install_kf6
+%cmake_install
 %find_lang plasma_applet_org.kde.plasma.pass
 
 %files -f plasma_applet_org.kde.plasma.pass.lang
@@ -66,8 +67,69 @@ password manager.
 
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-2
-- Prepare for Oreon 11 (RP1)
+* Sat Aug 02 2025 Steve Cossette <farchord@gmail.com> - 1.3.0-1
+- 1.3.0
+
+* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.2-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Sat Jan 18 2025 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Sun Feb 25 2024 Alessandro Astone <ales.astone@gmail.com> - 1.2.2-1
+- 1.2.2 (Qt6, not functional yet)
+
+* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Fri Jul 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Fri Jan 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Fri Jan 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Fri Jul 23 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Mon Jun 07 2021 Onuralp SEZER <thunderbirdtr@fedoraproject.org> - 1.2.0-2
+- check section added.
+- min kf5 ver changed to 5.82
+- cpp BRs added.
+- missing qt and kf5 BRs added.
+
+
+* Mon Feb 15 2021 Daniel Vrátil <dvratil@fedoraproject.org> - 1.2.0-1
+- Plasma Pass 1.2.0
+
+* Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
+* Mon Jan 13 2020 Daniel Vrátil <dvratil@fedoraproject.org> - 1.1.0-1
+- Plasma Pass 1.1.0
+
+* Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Tue Feb 26 2019 Daniel Vrátil <dvratil@fedoraproject.org> - 1.0.0-1
+- Initial version

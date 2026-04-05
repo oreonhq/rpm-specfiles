@@ -1,6 +1,6 @@
 Name:           xwaylandvideobridge
 Version:        0.4.0
-Release:	13%{?dist}
+Release:        12%{?dist}
 Summary:        Utility to allow streaming Wayland windows to X applications
 
 License:        (GPL-2.0-only or GPL-3.0-only) and LGPL-2.0-or-later and BSD-3-Clause
@@ -48,9 +48,12 @@ but within the control of the user at all times.
 %build
 %cmake_kf6 \
     -DQT_MAJOR_VERSION=6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
+
 %install
-%cmake_install_kf6
+%cmake_install
+
 %find_lang %{name} --all-name
 
 
@@ -71,8 +74,69 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.d
 
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-12
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4.0-12
-- Prepare for Oreon 11 (RP1)
+* Tue Sep 30 2025 Jan Grulich <jgrulich@redhat.com> - 0.4.0-11
+- Rebuild (qt6)
+
+* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Tue Mar 25 2025 Jan Grulich <jgrulich@redhat.com> - 0.4.0-9
+- Rebuild (qt6)
+
+* Sun Jan 19 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Mon Oct 14 2024 Jan Grulich <jgrulich@redhat.com> - 0.4.0-7
+- Rebuild (qt6)
+
+* Sat Jul 20 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Thu Apr 04 2024 Jan Grulich <jgrulich@redhat.com> - 0.4.0-5
+- Rebuild (qt6)
+
+* Wed Mar 13 2024 Marie Loise Nolden <loise@kde.org> - 0.4.0-4
+- build with QT_MAJOR_VERSION=6
+- precisely require kpipewire >= 6.0.0
+
+* Fri Feb 16 2024 Jan Grulich <jgrulich@redhat.com> - 0.4.0-3
+- Rebuild (qt6)
+
+* Sat Jan 27 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Mon Dec 18 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 0.4.0-1
+- 0.4.0
+
+* Mon Dec 04 2023 Alessandro Astone <ales.astone@gmail.com> - 0.3.0-4
+- Do not start in an X11 session
+- Opt out of session managment
+- Skip the task switcher
+
+* Wed Nov 29 2023 Jan Grulich <jgrulich@redhat.com> - 0.3.0-3
+- Rebuild (qt6)
+
+* Sat Nov 18 2023 Alessandro Astone <ales.astone@gmail.com> - 0.3.0-2
+- Build against Qt6/KF6
+
+* Thu Nov 09 2023 Alessandro Astone <ales.astone@gmail.com> - 0.3.0-1
+- Update to 0.3
+- Autostart on login
+
+* Fri Oct 27 2023 Alessandro Astone <ales.astone@gmail.com> - 0.2-1
+- Update to tagged release 0.2
+
+* Mon Sep 18 2023 Neal Gompa <ngompa@fedoraproject.org> - 0~git20230917.9b27c3f-1
+- Bump to new git snapshot
+
+* Sat Jul 22 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0~git20230504.3445aff-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Mon May 15 2023 Neal Gompa <ngompa@fedoraproject.org> - 0~git20230504.3445aff-2
+- Add dependency on hicolor-icon-theme
+
+* Wed May 10 2023 Neal Gompa <ngompa@fedoraproject.org> - 0~git20230504.3445aff-1
+- Initial package

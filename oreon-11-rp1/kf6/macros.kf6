@@ -74,11 +74,15 @@
 	fi
 
 # Plain ``cmake --install`` (never use qt6 %%cmake_install; it may force install_html_docs).
-# HTML install runs only if %%_kf6_html_docs is 1 and upstream actually wrote %%{__cmake_builddir}/.doc .
+# HTML install runs only if %%_kf6_html_docs is 1, %%{__cmake_builddir}/.doc is populated,
+# and the build graph defines ``install_html_docs`` (KDocTools handbooks can fill .doc without that target).
 %cmake_install_kf6 \\\
 	DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose ; \\
 	if [ "%{_kf6_html_docs}" = "1" ] && [ -d "%{__cmake_builddir}/.doc" ] && find "%{__cmake_builddir}/.doc" -mindepth 1 -maxdepth 1 2>/dev/null | grep -q . ; then \\
-	  DESTDIR="%{buildroot}" %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose -t install_html_docs ; \\
+	  if ( [ -f "%{__cmake_builddir}/Makefile" ] && grep -qE '^install_html_docs:' "%{__cmake_builddir}/Makefile" ) || \\
+	     ( [ -f "%{__cmake_builddir}/build.ninja" ] && grep -qE '^build install_html_docs([ :]|$)' "%{__cmake_builddir}/build.ninja" ) ; then \\
+	    DESTDIR="%{buildroot}" %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose -t install_html_docs ; \\
+	  fi ; \\
 	fi
 
 # %%find_lang_kf6

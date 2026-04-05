@@ -3,6 +3,7 @@
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.24
 
+
 Name:    kf6-purpose
 Summary: Framework for providing abstractions to get the developer's purposes fulfilled
 Version: 6.24.0

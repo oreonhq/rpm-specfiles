@@ -4,7 +4,7 @@
 
 Name:          fielding
 Version:       0.1~%{gitdate}.%{shortcommit}
-Release:	10%{?dist}
+Release:       9%{?dist}
 Summary:       A simple REST API testing tool
 
 # The following files contribute to the licenses of the binary RPMs:
@@ -88,9 +88,10 @@ Requires: hicolor-icon-theme
 
 %build
 %cmake_kf6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
 %install
-%cmake_install_kf6
+%cmake_install
 # No translations for this package yet.
 
 %check
@@ -106,8 +107,29 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.fi
 %{_datadir}/icons/hicolor/scalable/apps/org.kde.fielding.svg
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 0.1~20231028.022709.1912c80-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1~%{gitdate}.%{shortcommit}-9
-- Prepare for Oreon 11 (RP1)
+* Wed Jul 23 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.1~20231028.022709.1912c80-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Tue Mar 25 2025 Jan Grulich <jgrulich@redhat.com> - 0.1~20231028.022709.1912c80-7
+- Rebuild (qt6)
+
+* Thu Jan 16 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.1~20231028.022709.1912c80-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Mon Oct 14 2024 Jan Grulich <jgrulich@redhat.com> - 0.1~20231028.022709.1912c80-5
+- Rebuild (qt6)
+
+* Wed Jul 17 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.1~20231028.022709.1912c80-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Thu Apr 04 2024 Jan Grulich <jgrulich@redhat.com> - 0.1~20231028.022709.1912c80-3
+- Rebuild (qt6)
+
+* Thu Apr 04 2024 Jan Grulich <jgrulich@redhat.com> - 0.1~20231028.022709.1912c80-2
+- Rebuild (qt6)
+
+* Thu Oct 12 2023 Steve Cossette <farchord@gmail.com> - 0.1~20231028.022709.1912c80-1
+- v0.1

@@ -1,6 +1,7 @@
 %undefine __cmake_in_source_build
 
 %global framework networkmanager-qt
+
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.24
 

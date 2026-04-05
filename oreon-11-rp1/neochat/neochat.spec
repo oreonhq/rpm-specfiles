@@ -3,8 +3,8 @@
 ExcludeArch: %{ix86}
 
 Name: neochat
-Version: 25.12.3
-Release:	2%{?dist}
+Version: 26.03.80
+Release: 1%{?dist}
 
 License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND BSD-3-Clause
 URL: https://invent.kde.org/network/%{name}
@@ -102,9 +102,10 @@ notably Kirigami, KConfig and KI18n.
 %build
 %cmake_kf6 -G Ninja \
     -DCMAKE_BUILD_TYPE=Release
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
 %install
-%cmake_install_kf6
+%cmake_install
 %find_lang %{name} --with-qt --with-man
 
 %check
@@ -126,8 +127,286 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %{_kf6_datadir}/dbus-1/services/org.kde.neochat.service
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
+- 26.03.80
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
-- Prepare for Oreon 11 (RP1)
+* Sun Mar 08 2026 Steve Cossette <farchord@gmail.com> - 25.12.3-1
+- 25.12.3
+
+* Thu Feb 12 2026 Steve Cossette <farchord@gmail.com> - 25.12.2-2
+- Full Stack Rebuild (kio abi break)
+
+* Wed Feb 04 2026 Steve Cossette <farchord@gmail.com> - 25.12.2-1
+- 25.12.2
+
+* Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 25.12.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Wed Jan 07 2026 farchord@gmail.com - 25.12.1-1
+- 25.12.1
+
+* Mon Jan 05 2026 Jens Petersen <petersen@redhat.com> - 25.12.0-2
+- rebuild for F44 https://fedoraproject.org/wiki/Changes/cmark-0.31
+
+* Sat Dec 06 2025 Steve Cossette <farchord@gmail.com> - 25.12.0-1
+- 25.12.0
+
+* Fri Nov 28 2025 Steve Cossette <farchord@gmail.com> - 25.11.90-1
+- 25.11.90
+
+* Sat Nov 15 2025 Steve Cossette <farchord@gmail.com> - 25.11.80-1
+- 25.11.80
+
+* Tue Nov 04 2025 Steve Cossette <farchord@gmail.com> - 25.08.3-1
+- 25.08.3
+
+* Tue Nov 04 2025 Steve Cossette <farchord@gmail.com> - 25.08.2-2
+- Rebuild for libquotient
+
+* Wed Oct 08 2025 Steve Cossette <farchord@gmail.com> - 25.08.2-1
+- 25.08.2
+
+* Sun Sep 21 2025 Steve Cossette <farchord@gmail.com> - 25.08.1-1
+- 25.08.1
+
+* Sat Aug 16 2025 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 25.08.0-2
+- Drop i686 support (leaf package)
+
+* Fri Aug 08 2025 Steve Cossette <farchord@gmail.com> - 25.08.0-1
+- 25.08.0
+
+* Wed Aug 06 2025 František Zatloukal <fzatlouk@redhat.com> - 25.07.90-2
+- Rebuilt for icu 77.1
+
+* Fri Jul 25 2025 Steve Cossette <farchord@gmail.com> - 25.07.90-1
+- 25.07.90
+
+* Thu Jul 24 2025 Fedora Release Engineering <releng@fedoraproject.org> - 25.07.80-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Fri Jul 11 2025 Steve Cossette <farchord@gmail.com> - 25.07.80-1
+- 25.07.80
+
+* Thu Jul 03 2025 Steve Cossette <farchord@gmail.com> - 25.04.3-1
+- 25.04.3
+
+* Wed Jun 04 2025 Steve Cossette <farchord@gmail.com> - 25.04.2-1
+- 25.04.2
+
+* Wed May 14 2025 Steve Cossette <farchord@gmail.com> - 25.04.1-1
+- 25.04.1
+
+* Sat Apr 12 2025 Steve Cossette <farchord@gmail.com> - 25.04.0-1
+- 25.04.0
+
+* Thu Mar 20 2025 Steve Cossette <farchord@gmail.com> - 25.03.80-1
+- 25.03.80 (Beta)
+
+* Tue Mar 04 2025 Steve Cossette <farchord@gmail.com> - 24.12.3-1
+- 24.12.3
+
+* Fri Feb 21 2025 Steve Cossette <farchord@gmail.com> - 24.12.2-2
+- Rebuild for ppc64le enablement
+
+* Wed Feb 05 2025 Steve Cossette <farchord@gmail.com> - 24.12.2-1
+- 24.12.2
+
+* Fri Jan 17 2025 Fedora Release Engineering <releng@fedoraproject.org> - 24.12.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Tue Jan 07 2025 Steve Cossette <farchord@gmail.com> - 24.12.1-1
+- 24.12.1
+
+* Mon Dec 16 2024 Alessandro Astone <ales.astone@gmail.com> - 24.12.0-2
+- Backport patch to fix crash when sending messages
+
+* Sat Dec 07 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.12.0-1
+- 24.12.0
+
+* Fri Nov 29 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.11.90-1
+- 24.11.90
+
+* Mon Nov 18 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.11.80-1
+- 24.11.80
+
+* Mon Nov 18 2024 Steve Cossette <farchord@gmail.com> - 24.08.3-3
+- Version bump for Libquotient update
+
+* Tue Nov 05 2024 Steve Cossette <farchord@gmail.com> - 24.08.3-1
+- 24.08.3
+
+* Tue Oct 08 2024 Steve Cossette <farchord@gmail.com> - 24.08.2-1
+- 24.08.2
+
+* Wed Sep 25 2024 Alessandro Astone <ales.astone@gmail.com> - 24.08.1-1
+- 24.08.1
+
+* Thu Aug 22 2024 Steve Cossette <farchord@gmail.com> - 24.08.0-1
+- 24.08.0
+
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 24.05.2-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Sun Jul 07 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.05.2-1
+- 24.05.2
+
+* Fri Jun 14 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.05.1-1
+- 24.05.1
+
+* Tue May 21 2024 Jan Grulich <jgrulich@redhat.com> - 24.05.0-2
+- Rebuild (qt6)
+
+* Fri May 17 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.05.0-1
+- 24.05.0
+
+* Fri May 03 2024 Gwyn Ciesla <gwync@protonmail.com> - 24.04.80-1
+- 24.04.80
+
+* Fri Apr 12 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.02.2-1
+- 24.02.2
+
+* Thu Apr 04 2024 Jan Grulich <jgrulich@redhat.com> - 24.02.1-2
+- Rebuild (qt6)
+
+* Fri Mar 29 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.02.1-1
+- 24.02.1
+
+* Wed Feb 21 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.02.0-1
+- 24.02.0
+
+* Wed Jan 31 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.01.95-1
+- 24.01.95
+
+* Wed Jan 31 2024 Pete Walter <pwalter@fedoraproject.org> - 24.01.90-4
+- Rebuild for ICU 74
+
+* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 24.01.90-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 24.01.90-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Thu Jan 11 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.01.90-1
+- 24.01.90
+
+* Sat Dec 23 2023 ales.astone@gmail.com - 24.01.85-1
+- 24.01.85
+
+* Thu Dec 07 2023 Yaakov Selkowitz <yselkowi@redhat.com> - 24.01.80-2
+- Fix QML module dependencies
+- Build without webview on unsupported arches
+
+* Sun Dec 03 2023 Yaakov Selkowitz <yselkowitz@fedoraproject.org> - 24.01.80-1
+- 24.01.80
+
+* Thu Oct 12 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 23.08.2-1
+- 23.08.2
+
+* Thu Oct 05 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 23.08.1-2
+- Add missing Requires BZ#2242379
+
+* Sat Sep 16 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 23.08.1-1
+- 23.08.1
+
+* Thu Sep 07 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 23.08.0-1
+- 23.08.0
+
+* Mon Sep 04 2023 Neal Gompa <ngompa@fedoraproject.org> - 23.04.3-5
+- Add patch to enforce E2EE enabled in libQuotient 0.8.x
+
+* Sun Sep 03 2023 Neal Gompa <ngompa@fedoraproject.org> - 23.04.3-4
+- Add runtime dependency on kf5-kitemmodels (#2216142)
+
+* Sat Sep 02 2023 Neal Gompa <ngompa@fedoraproject.org> - 23.04.3-3
+- Rebuild for libquotient 0.8.1.1
+
+* Thu Jul 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 23.04.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Sat Jul 08 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 23.04.3-1
+- 23.04.3
+
+* Tue Jun 06 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 23.04.2-1
+- 23.04.2
+
+* Sat May 13 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 23.04.1-1
+- 23.04.1
+
+* Thu Apr 20 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 23.04.0-1
+- 23.04.0
+
+* Fri Mar 31 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 23.03.90-1
+- 23.03.90
+
+* Mon Mar 20 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 23.03.80-1
+- 23.03.80
+
+* Tue Feb 07 2023 Marc Deop <marcdeop@fedoraproject.org> - 23.01.0-2
+- Require kf5-kirigami2-addons
+
+* Mon Jan 30 2023 Justin Zobel <justin@1707.io> - 23.01.0-1
+- Update to 23.01.0
+
+* Fri Jan 27 2023 Jens Petersen <petersen@redhat.com> - 22.11-4
+- rebuild f38 against newer cmark
+
+* Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 22.11-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Wed Dec 21 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 22.11-2
+- Rebuilt against libquotient 0.7.0 with E2EE enabled.
+- Switched to SPDX license tag.
+
+* Thu Dec 01 2022 Justin Zobel <justin@1707.io> - 22.11-1
+- Update to 22.11
+
+* Wed Sep 28 2022 Justin Zobel <justin@1707.io> - 22.09-1
+- Update to 22.09
+
+* Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 22.06-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Fri Jun 24 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 22.06-1
+- Updated to version 22.06.
+
+* Sun Apr 24 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 22.04-1
+- Updated to version 22.04.
+
+* Wed Feb 09 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 22.02-1
+- Updated to version 22.02.
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 21.12-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Sun Jan 09 2022 Vitaly Zaitsev <vitaly@easycoding.org> - 21.12-2
+- Backported upstream patch with qcoro 0.4.0 build fixes.
+
+* Tue Dec 07 2021 Vitaly Zaitsev <vitaly@easycoding.org> - 21.12-1
+- Updated to version 21.12.
+
+* Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Tue Jun 01 2021 Vitaly Zaitsev <vitaly@easycoding.org> - 1.2.0-1
+- Updated to version 1.2.0.
+
+* Tue Feb 23 2021 Vitaly Zaitsev <vitaly@easycoding.org> - 1.1.1-1
+- Updated to version 1.1.1.
+
+* Tue Feb 23 2021 Vitaly Zaitsev <vitaly@easycoding.org> - 1.1.0-1
+- Updated to version 1.1.0.
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.0.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Wed Jan 13 2021 Vitaly Zaitsev <vitaly@easycoding.org> - 1.0.1-1
+- Updated to version 1.0.1.
+
+* Wed Dec 23 2020 Vitaly Zaitsev <vitaly@easycoding.org> - 1.0-1
+- Updated to version 1.0.
+
+* Tue Dec 15 2020 Vitaly Zaitsev <vitaly@easycoding.org> - 0.1.0-0.2.20201214git54b0773
+- Updated to the latest Git snapshot.
+
+* Mon Nov 23 2020 Vitaly Zaitsev <vitaly@easycoding.org> - 0.1.0-0.1.20201123git5d4e787
+- Initial SPEC release.

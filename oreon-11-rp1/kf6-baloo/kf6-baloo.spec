@@ -3,6 +3,7 @@
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.24
 
+
 Name:    kf6-%{framework}
 Summary: A Tier 3 KDE Frameworks 6 module that provides indexing and search functionality
 Version: 6.24.0

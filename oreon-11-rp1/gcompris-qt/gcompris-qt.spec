@@ -1,6 +1,6 @@
 Name:           gcompris-qt
 Version:        26.1
-Release:	2%{?dist}
+Release:        1%{?dist}
 Summary:        Educational software suite for children aged 2 to 10
 
 License:        AGPL-3.0-only
@@ -84,9 +84,12 @@ More than 100 activities are available.
 %cmake_kf6 \
   -DQML_BOX2D_MODULE=disabled \
   -DBUILD_SERVER=OFF
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
+
 %install
-%cmake_install_kf6
+%cmake_install
+
 # Validate desktop file
 desktop-file-validate \
    %{buildroot}%{_datadir}/applications/org.kde.gcompris.desktop
@@ -112,8 +115,158 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.gc
 
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Fri Mar 13 2026 Andrea Musuruane <musuruan@gmail.com> - 26.1-1
+- Updated to new upstream release
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.1-1
-- Prepare for Oreon 11 (RP1)
+* Sun Feb 15 2026 Andrea Musuruane <musuruan@gmail.com> - 26.0-1
+- Updated to new upstream release
+- Check signature
+
+* Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 25.1.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Wed Jul 23 2025 Fedora Release Engineering <releng@fedoraproject.org> - 25.1.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Sat Jun 28 2025 Andrea Musuruane <musuruan@gmail.com> - 25.1.1-1
+- Updated to new upstream release
+
+* Thu May 22 2025 Andrea Musuruane <musuruan@gmail.com> - 25.1-1
+- Updated to new upstream release
+
+* Sun Mar 09 2025 Andrea Musuruane <musuruan@gmail.com> - 25.0.12-1
+- Updated to new upstream release
+
+* Sat Feb 01 2025 Andrea Musuruane <musuruan@gmail.com> - 25.0-1
+- Updated to new upstream release
+
+* Thu Jan 16 2025 Fedora Release Engineering <releng@fedoraproject.org> - 4.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Wed Nov 27 2024 Andrea Musuruane <musuruan@gmail.com> - 4.3-1
+- Updated to new upstream release
+
+* Sat Sep 21 2024 Andrea Musuruane <musuruan@gmail.com> - 4.2-1
+- Updated to new upstream release
+
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 4.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Wed Jul 17 2024 Miroslav Suchý <msuchy@redhat.com> - 4.1-2
+- convert license to SPDX
+
+* Mon May 27 2024 Andrea Musuruane <musuruan@gmail.com> - 4.1-1
+- Updated to new upstream release
+
+* Sat Feb 24 2024 Andrea Musuruane <musuruan@gmail.com> - 4.0-1
+- Updated to new upstream release
+
+* Wed Jan 24 2024 Fedora Release Engineering <releng@fedoraproject.org> - 3.3-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Fri Jan 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 3.3-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Wed Jul 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 3.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Sat Jun 10 2023 Andrea Musuruane <musuruan@gmail.com> - 3.3-1
+- Updated to new upstream release
+
+* Tue May 23 2023 Andrea Musuruane <musuruan@gmail.com> - 3.2-2
+- Added missing qt5-qtimageformats dependency (BZ# 2209119)
+
+* Sat Apr 01 2023 Andrea Musuruane <musuruan@gmail.com> - 3.2-1
+- Updated to new upstream release
+
+* Sun Jan 22 2023 Andrea Musuruane <musuruan@gmail.com> - 3.1-1
+- Updated to new upstream release
+
+* Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 2.4-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.4-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Tue Apr 19 2022 Andrea Musuruane <musuruan@gmail.com> - 2.4-1
+- Updated to new upstream release
+
+* Sun Feb 27 2022 Andrea Musuruane <musuruan@gmail.com> - 2.3-1
+- Updated to new upstream release
+
+* Fri Feb 25 2022 Andrea Musuruane <musuruan@gmail.com> - 2.2-1
+- Updated to new upstream release
+
+* Fri Jan 21 2022 Andrea Musuruane <musuruan@gmail.com> - 2.1-1
+- Updated to new upstream release
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 2.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Sun Dec 19 2021 Andrea Musuruane <musuruan@gmail.com> - 2.0-1
+- Updated to new upstream release
+
+* Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Sat Mar 20 2021 Andrea Musuruane <musuruan@gmail.com> - 1.1-1
+- Updated to new upstream release
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Sat Nov 21 19:10:16 CET 2020 Andrea Musuruane <musuruan@gmail.com> - 1.0-1
+- Updated to new upstream release
+
+* Thu Aug 06 2020 Andrea Musuruane <musuruan@gmail.com> - 0.97-6
+- Fixed FTBFS for F33 (BZ #1863600)
+
+* Sat Aug 01 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.97-5
+- Second attempt - Rebuilt for
+  https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Mon Jul 27 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.97-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Sat May 09 2020 Andrea Musuruane <musuruan@gmail.com> - 0.97-3
+- Added missing qt5-qtsvg dependency
+
+* Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 0.97-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
+
+* Fri Dec 13 2019 Andrea Musuruane <musuruan@gmail.com> - 0.97-1
+- Updated to new upstream release
+
+* Sat Aug 17 2019 Andrea Musuruane <musuruan@gmail.com> - 0.96-3
+- Obsoletes gcompris package (BZ #1740801)
+
+* Thu Jul 25 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.96-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
+* Thu Mar 14 2019 Andrea Musuruane <musuruan@gmail.com> - 0.96-1
+- Updated to new upstream release
+
+* Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 0.95-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
+* Sat Dec 22 2018 Andrea Musuruane <musuruan@gmail.com> - 0.95-1
+- Updated to new upstream release
+
+* Fri Jul 13 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.91-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
+
+* Fri May 18 2018 Andrea Musuruane <musuruan@gmail.com> - 0.91-1
+- Updated to new upstream release
+
+* Sun Mar 18 2018 Andrea Musuruane <musuruan@gmail.com> - 0.90-1
+- Updated to new upstream release
+- Made a separate package for activities
+- Added gcc-c++ dependency
+- Added kf5-kdoctools-devel to BR to enable the documentation
+
+* Sun Feb 04 2018 Andrea Musuruane <musuruan@gmail.com> - 0.81-2
+- Removed obsolete scriptlets
+
+* Sun Dec 17 2017 Andrea Musuruane <musuruan@gmail.com> - 0.81-1
+- First release
+

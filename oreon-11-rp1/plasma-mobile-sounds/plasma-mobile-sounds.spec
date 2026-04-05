@@ -2,7 +2,7 @@
 
 Name:           plasma-mobile-sounds
 Version:        0.1
-Release:	13%{?dist}
+Release:        12%{?dist}
 # Automatically converted from old format: CC-BY-SA and CC0 and CC-BY - review is highly recommended.
 License:        LicenseRef-Callaway-CC-BY-SA AND CC0-1.0 AND LicenseRef-Callaway-CC-BY
 Summary:        Plasma Mobile Sound Theme
@@ -26,15 +26,47 @@ BuildRequires: kf6-rpm-macros
 
 %build
 %cmake_kf6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
 %install
-%cmake_install_kf6
+%cmake_install
+
 %files
 %{_datadir}/sounds/plasma-mobile
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-12
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1-12
-- Prepare for Oreon 11 (RP1)
+* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-11
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Sat Jan 18 2025 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Wed Dec 11 2024 Troy Dawson <tdawson@redhat.com> - 0.1-9
+- Use cmake datadir
+
+* Wed Sep 4 2024 Miroslav Suchý <msuchy@redhat.com> - 0.1-8
+- convert license to SPDX
+
+* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Fri Jul 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Fri Jan 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Fri Jul 22 2022 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Fri Mar 11 2022 Justin Zobel <justin@1707.io> - 0.1-1
+- Initial version of package

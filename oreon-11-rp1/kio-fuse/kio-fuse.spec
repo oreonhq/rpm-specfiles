@@ -10,7 +10,7 @@
 
 Name:           kio-fuse
 Version:        5.1.1
-Release:	4%{?dist}
+Release:        3%{?dist}
 Summary:        KIO FUSE
 
 License:        GPL-3.0-or-later
@@ -59,9 +59,13 @@ FUSE.
 %cmake_kf6 -DBUILD_TESTING:BOOL=%{?tests:ON}%{!?tests:OFF} \
 	-DQT_MAJOR_VERSION=6
 
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
+
 %install
-%cmake_install_kf6
+%cmake_install
+
+
 %check
 %if 0%{?tests}
 export CTEST_OUTPUT_ON_FAILURE=1
@@ -80,8 +84,79 @@ dbus-launch --exit-with-session \
 
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 5.1.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.1-3
-- Prepare for Oreon 11 (RP1)
+* Tue Nov  4 2025 Tom Callaway <spot@fedoraproject.org> - 5.1.1-2
+- rebuild for new fuse3
+
+* Mon Oct 13 2025 Steve Cossette <farchord@gmail.com> - 5.1.1-1
+- 5.1.1
+
+* Thu Jul 24 2025 Fedora Release Engineering <releng@fedoraproject.org> - 5.1.0-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Fri Jan 17 2025 Fedora Release Engineering <releng@fedoraproject.org> - 5.1.0-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Thu Jul 25 2024 Miroslav Suchý <msuchy@redhat.com> - 5.1.0-7
+- convert license to SPDX
+
+* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 5.1.0-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Fri Apr 12 2024 Yaroslav Sidlovsky <zawertun@gmail.com> - 5.1.0-5
+- added patch to fix #2274653
+
+* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 5.1.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 5.1.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sun Dec 31 2023 Marie Loise Nolden <loise@kde.org> - 5.1.0-2
+- use Qt6/KF6
+
+* Tue Dec 12 2023 Yaroslav Sidlovsky <zawertun@gmail.com> - 5.1.0-1
+- version 5.1.0
+
+* Thu Jul 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.1-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Thu Jan 19 2023 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.1-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Thu Jul 21 2022 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.1-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.1-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Thu Jun 03 2021 Yaroslav Sidlovsky <zawertun@gmail.com> - 5.0.1-1
+- version 5.0.1
+
+* Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
+
+* Fri Jan 22 2021 Rex Dieter <rdieter@fedoraproject.org> - 5.0.0-4
+- pull in upstream crash fix
+- move BR: make inside '%%if %%{tests}' (only explicitly used there)
+
+* Sat Jan  9 16:34:01 MSK 2021 Yaroslav Sidlovsky <zawertun@gmail.com> - 5.0.0-3
+- ignore exit status of `make test`
+
+* Sat Jan  9 16:15:31 MSK 2021 Yaroslav Sidlovsky <zawertun@gmail.com> - 5.0.0-2
+- cleaned up build dependicies & tests enabled
+
+* Fri Jan  1 15:55:51 MSK 2021 Yaroslav Sidlovsky <zawertun@gmail.com> - 5.0.0-1
+- version 5.0.0
+
+* Tue Jul 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 4.95.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
+
+* Tue May 26 2020 Yaroslav Sidlovsky <zawertun@gmail.com> - 4.95.0-1
+- first spec for version 4.95.0
+

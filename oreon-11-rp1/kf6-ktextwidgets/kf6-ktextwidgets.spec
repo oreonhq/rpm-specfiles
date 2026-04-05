@@ -1,4 +1,5 @@
 %global framework ktextwidgets
+
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.24
 

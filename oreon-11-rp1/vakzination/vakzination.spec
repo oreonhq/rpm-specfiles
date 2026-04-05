@@ -4,7 +4,7 @@
 
 Name:           vakzination
 Version:        23.01.0^git%{date}.%{shortcommit0}
-Release:	5%{?dist}
+Release:        4%{?dist}
 
 License:        CC-PDDC AND Apache-2.0 AND LGPL-2.0-or-later AND CC0-1.0 AND BSD-3-Clause AND GPL-2.0-or-later AND FSFAP
 Summary:        Vakzination manages your health certificates like vaccination, test, and recovery certificates.
@@ -40,9 +40,10 @@ BuildRequires: cmake(Qt6Svg)
 
 %build
 %cmake_kf6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
 %install
-%cmake_install_kf6
+%cmake_install
 %find_lang %{name}
 desktop-file-install --dir=%{buildroot}%{_kf6_datadir}/applications/ %{buildroot}/%{_kf6_datadir}/applications/org.kde.%{name}.desktop
 
@@ -57,8 +58,59 @@ desktop-file-install --dir=%{buildroot}%{_kf6_datadir}/applications/ %{buildroot
 %{_kf6_metainfodir}/org.kde.%{name}.metainfo.xml
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0^git20241228.851a9fb-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 23.01.0^git%{date}.%{shortcommit0}-4
-- Prepare for Oreon 11 (RP1)
+* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0^git20241228.851a9fb-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Sun Jan 19 2025 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0^git20241228.851a9fb-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Sat Jan 11 2025 Alessandro Astone <ales.astone@gmail.com> - 23.01.0^git20241228.851a9fb-1
+- Use git snapshot for porting to Qt6
+
+* Sat Jul 20 2024 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-8
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Sat Jan 27 2024 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Mon Aug 14 2023 Justin Zobel <justin.zobel@gmail.com> - 23.01.0-6
+- Rebuild
+
+* Sat Jul 22 2023 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Thu Jun 08 2023 Justin Zobel <justin.zobel@gmail.com> - 23.01.0-3
+- rebuilt
+
+* Thu May 04 2023 Justin Zobel <justin@1707.io> - 23.01.0-2
+- Rebuild
+
+* Mon Jan 30 2023 Justin Zobel <justin@1707.io> - 23.01.0-1
+- Update to 23.01.0
+
+* Sat Jan 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 22.11-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Thu Dec 01 2022 Justin Zobel <justin@1707.io> - 22.11-1
+- Update to 22.11
+
+* Wed Sep 28 2022 Justin Zobel <justin@1707.io> - 22.09-1
+- Update to 22.09
+
+* Fri Aug 26 2022 Justin Zobel <justin@1707.io> - 22.06-1
+- Update to 22.06
+
+* Sat Jul 23 2022 Fedora Release Engineering <releng@fedoraproject.org> - 22.04-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Wed May 04 2022 Justin Zobel <justin@1707.io> - 22.04-1
+- Update to 22.04
+
+* Mon Feb 21 2022 Justin Zobel <justin@1707.io> - 22.02
+- Verison bump to 22.02
+
+* Wed Dec 22 2021 Justin Zobel <justin@1707.io> - 21.12-1
+- Initial version of package

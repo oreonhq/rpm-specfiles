@@ -2,8 +2,8 @@
 
 Name:           plasma-dialer
 Epoch:          1
-Version:        6.6.2
-Release:	2%{?dist}
+Version:        6.6.3
+Release:        1%{?dist}
 License:        BSD and CC0 and GPLv2 and GPLv2+ and GPLv3 and GPLv3+ and LGPLv2+ and LGPLv2.1 and LGPLv2.1+ and LGPLv3 and LGPLv3
 Summary:        Convergent Plasma Mobile dialer application
 Url:            https://invent.kde.org/plasma-mobile/plasma-dialer
@@ -74,9 +74,10 @@ developing applications that use %{name}.
 
 %build
 %cmake_kf6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
+
 %install
-%cmake_install_kf6
+%cmake_install
 %find_lang %{name} --all-name
 
 %check
@@ -105,8 +106,198 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/%{kde_name}.deskt
 %{_kf6_libdir}/libktelephonymetatypes.a
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
+* Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 1:6.6.3-1
+- 6.6.3
 
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
-- Prepare for Oreon 11 (RP1)
+* Tue Mar 03 2026 Steve Cossette <farchord@gmail.com> - 1:6.6.2-1
+- 6.6.2
+
+* Tue Feb 24 2026 Steve Cossette <farchord@gmail.com> - 1:6.6.1-1
+- 6.6.1
+
+* Thu Feb 12 2026 Steve Cossette <farchord@gmail.com> - 1:6.6.0-1
+- 6.6.0
+
+* Tue Jan 27 2026 Steve Cossette <farchord@gmail.com> - 1:6.5.91-1
+- 6.5.91
+
+* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1:6.5.90-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Tue Jan 13 2026 farchord@gmail.com - 1:6.5.90-1
+- 6.5.90
+
+* Tue Jan 13 2026 farchord@gmail.com - 1:6.5.5-1
+- 6.5.5
+
+* Tue Dec 09 2025 Steve Cossette <farchord@gmail.com> - 1:6.5.4-1
+- 6.5.4
+
+* Tue Nov 18 2025 Steve Cossette <farchord@gmail.com> - 1:6.5.3-1
+- 6.5.3
+
+* Tue Nov 04 2025 Steve Cossette <farchord@gmail.com> - 1:6.5.2-1
+- 6.5.2
+
+* Tue Oct 28 2025 Steve Cossette <farchord@gmail.com> - 1:6.5.1-1
+- 6.5.1
+
+* Fri Oct 17 2025 Steve Cossette <farchord@gmail.com> - 1:6.5.0-1
+- 6.5.0
+
+* Thu Oct 02 2025 Steve Cossette <farchord@gmail.com> - 1:6.4.91-1
+- 6.4.91
+
+* Tue Sep 30 2025 Jan Grulich <jgrulich@redhat.com> - 1:6.4.5-2
+- Rebuild (qt6)
+
+* Thu Sep 25 2025 Steve Cossette <farchord@gmail.com> - 1:6.4.90-1
+- 6.4.90
+
+* Tue Sep 16 2025 farchord@gmail.com - 1:6.4.5-1
+- 6.4.5
+
+* Wed Aug 06 2025 Steve Cossette <farchord@gmail.com> - 1:6.4.4-1
+- 6.4.4
+
+* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 1:6.4.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Tue Jul 15 2025 Steve Cossette <farchord@gmail.com> - 1:6.4.3-1
+- 6.4.3
+
+* Thu Jul 10 2025 Benjamin A. Beasley <code@musicinmybrain.net> - 1:6.4.2-2
+- Drop unnecessary build dependency on reuse
+
+* Thu Jul 03 2025 Steve Cossette <farchord@gmail.com> - 1:6.4.2-1
+- 6.4.2
+
+* Tue Jun 24 2025 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 1:6.4.1-1
+- 6.4.1
+
+* Mon Jun 16 2025 Steve Cossette <farchord@gmail.com> - 1:6.4.0-1
+- 6.4.0
+
+* Sat May 31 2025 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 1:6.3.91-2
+- Add signature file
+
+* Fri May 30 2025 Steve Cossette <farchord@gmail.com> - 1:6.3.91-1
+- 6.3.91
+
+* Thu May 15 2025 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 1:6.3.90-1
+- 6.3.90
+
+* Tue May 06 2025 Steve Cossette <farchord@gmail.com> - 1:6.3.5-1
+- 6.3.5
+
+* Mon Apr 14 2025 Jan Grulich <jgrulich@redhat.com> - 1:6.3.4-2
+- Rebuild (qt6)
+
+* Wed Apr 02 2025 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 1:6.3.4-1
+- 6.3.4
+
+* Tue Mar 25 2025 Jan Grulich <jgrulich@redhat.com> - 1:6.3.3-2
+- Rebuild (qt6)
+
+* Tue Mar 11 2025 Steve Cossette <farchord@gmail.com> - 1:6.3.3-1
+- 6.3.3
+
+* Wed Feb 26 2025 Benjamin A. Beasley <code@musicinmybrain.net> - 1:6.3.2-2
+- Rebuilt for abseil-cpp-20250127.0
+
+* Tue Feb 25 2025 Steve Cossette <farchord@gmail.com> - 1:6.3.2-1
+- 6.3.2
+
+* Tue Feb 25 2025 Benjamin A. Beasley <code@musicinmybrain.net> - 1:6.3.1-2
+- Rebuilt for abseil-cpp-20250127.0
+
+* Tue Feb 18 2025 Steve Cossette <farchord@gmail.com> - 1:6.3.1-1
+- 6.3.1
+
+* Thu Feb 06 2025 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 1:6.3.0-1
+- 6.3.0
+
+* Thu Jan 23 2025 Steve Cossette <farchord@gmail.com> - 1:6.2.91-1
+- 6.2.91
+
+* Mon Jan 20 2025 Fedora Release Engineering <releng@fedoraproject.org> - 1:6.2.90-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Thu Jan 09 2025 Steve Cossette <farchord@gmail.com> - 1:6.2.90-1
+- Beta 6.2.90
+
+* Tue Dec 31 2024 Steve Cossette <farchord@gmail.com> - 1:6.2.5-1
+- 6.2.5
+
+* Sat Dec 14 2024 Adam Williamson <awilliam@redhat.com> - 1:6.2.4-2
+- Rebuild for new libphonenumber
+
+* Tue Nov 26 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 1:6.2.4-1
+- 6.2.4
+
+* Tue Nov 05 2024 Steve Cossette <farchord@gmail.com> - 1:6.2.3-1
+- 6.2.3
+
+* Tue Oct 22 2024 Steve Cossette <farchord@gmail.com> - 1:6.2.2-1
+- 6.2.2
+
+* Tue Oct 15 2024 Steve Cossette <farchord@gmail.com> - 1:6.2.1-1
+- 6.2.1
+
+* Mon Oct 14 2024 Jan Grulich <jgrulich@redhat.com> - 1:6.2.0-2
+- Rebuild (qt6)
+
+* Thu Oct 03 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 1:6.2.0-1
+- 6.2.0
+
+* Mon Sep 23 2024 Alessandro Astone <ales.astone@gmail.com> - 6.1.90-1
+- 6.1.90
+- Bump epoch
+
+* Sun Aug 25 2024 Benjamin A. Beasley <code@musicinmybrain.net> - 24.08.0-2
+- Rebuilt for abseil-cpp-20240722.0
+
+* Thu Aug 15 2024 Steve Cossette <farchord@gmail.com> - 24.08.0-1
+- 24.08.0 (+ Conversion to Qt6)
+
+* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-10
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Sun Feb 04 2024 Benjamin A. Beasley <code@musicinmybrain.net> - 23.01.0-9
+- Rebuilt for abseil-cpp-20240116.0
+
+* Sun Jan 28 2024 Alessandro Astone <ales.astone@gmail.com> - 23.01.0-8
+- Remove phony and nonexistent cmake(KWinEffects) build requires
+
+* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Wed Aug 30 2023 Benjamin A. Beasley <code@musicinmybrain.net> - 23.01.0-5
+- Rebuilt for abseil-cpp 20230802.0
+
+* Fri Jul 21 2023 Fedora Release Engineering <releng@fedoraproject.org> - 23.01.0-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Wed May 17 2023 Sérgio Basto <sergio@serjux.com> - 23.01.0-3
+- Rebuild for libphonenumber-8.13.x
+
+* Mon Mar 27 2023 Rich Mattes <richmattes@gmail.com> - 23.01.0-2
+- Rebuild for abseil-cpp-20230125.1
+
+* Mon Jan 30 2023 Justin Zobel <justin@1707.io> - 23.01.0-1
+- Update to 23.01.0
+
+* Fri Jan 20 2023 Fedora Release Engineering <releng@fedoraproject.org> - 22.11-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Thu Dec 01 2022 Justin Zobel <justin@1707.io> - 22.11-1
+- Update to 22.11
+
+* Wed Sep 28 2022 Justin Zobel <justin@1707.io> - 22.09-1
+- Update to 22.09
+
+* Mon Sep 26 2022 Onuralp SEZER <thunderbirdtr@fedoraproject.org> - 22.06-1
+- initial version plasma-dialer

@@ -80,7 +80,7 @@ BuildArch:      noarch
 mkdir -p phononqt5
 pushd phononqt5
 %cmake_kf5 -S .. -DPHONON_BUILD_QT5:BOOL=ON -DPHONON_BUILD_QT6:BOOL=OFF
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
 popd
 %endif
 
@@ -88,7 +88,7 @@ popd
 mkdir -p phononqt6
 pushd phononqt6
 %cmake_kf6 -S .. -DPHONON_BUILD_QT5:BOOL=OFF -DPHONON_BUILD_QT6:BOOL=ON
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build
 popd
 %endif
 
@@ -96,13 +96,13 @@ popd
 %install
 %if %{with qt5}
 pushd phononqt5
-%cmake_install_kf6
+%cmake_install
 popd
 %endif
 
 %if %{with qt6}
 pushd phononqt6
-%cmake_install_kf6
+%cmake_install
 popd
 %endif
 
@@ -127,8 +127,4 @@ popd
 
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- KF6 packaging: use kf6 cmake build/install macros (no qt6 prepare_docs / forced install_html_docs)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.12.0-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog

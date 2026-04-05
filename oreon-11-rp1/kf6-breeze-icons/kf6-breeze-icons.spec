@@ -9,6 +9,7 @@
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.24
 
+
 Name:    kf6-%{framework}
 Summary: Breeze icon theme library
 Version: 6.24.0
