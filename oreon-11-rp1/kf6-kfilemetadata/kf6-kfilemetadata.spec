@@ -5,7 +5,7 @@
 Name:           kf6-%{framework}
 Summary:        A Tier 2 KDE Framework for extracting file metadata
 Version:        6.24.0
-Release:	5%{?dist}
+Release:	6%{?dist}
 
 License:        BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:            https://invent.kde.org/frameworks/%{framework}
@@ -54,8 +54,7 @@ Requires:       qt6-qtbase-devel
 
 %build
 %cmake_kf6
-%cmake_build_kf6
-
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 
@@ -79,6 +78,9 @@ mkdir -p %{buildroot}%{_kf6_plugindir}/kfilemetadata/writers/
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- inline cmake --build (no qt6 prepare_docs pass)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
 

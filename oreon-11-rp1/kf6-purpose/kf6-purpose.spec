@@ -6,7 +6,7 @@
 Name:    kf6-purpose
 Summary: Framework for providing abstractions to get the developer's purposes fulfilled
 Version: 6.24.0
-Release:	5%{?dist}
+Release:	6%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -66,8 +66,7 @@ Requires: cmake(KF6CoreAddons)
 
 %build
 %cmake_kf6
-%cmake_build_kf6
-
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 
@@ -99,6 +98,9 @@ Requires: cmake(KF6CoreAddons)
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- inline cmake --build (no qt6 prepare_docs pass)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
 

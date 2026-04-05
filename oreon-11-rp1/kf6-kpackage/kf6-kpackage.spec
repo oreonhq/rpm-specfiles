@@ -5,7 +5,7 @@
 
 Name:           kf6-%{framework}
 Version:        6.24.0
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:        KDE Frameworks 6 Tier 2 library to load and install packages as plugins
 
 License:        CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
@@ -42,8 +42,7 @@ developing applications that use %{name}.
 
 %build
 %cmake_kf6
-%cmake_build_kf6
-
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 
@@ -70,6 +69,9 @@ mkdir -p %{buildroot}%{_kf6_datadir}/kpackage/
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- inline cmake --build (no qt6 prepare_docs pass)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
 

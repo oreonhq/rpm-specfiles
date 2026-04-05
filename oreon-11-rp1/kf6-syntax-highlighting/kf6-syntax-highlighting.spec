@@ -4,7 +4,7 @@
 
 Name:           kf6-%{framework}
 Version:        6.24.0
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:        KDE Frameworks 6 Syntax highlighting engine for Kate syntax definitions
 License:        MIT AND BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND LGPL-2.0-or-later
 URL:            https://invent.kde.org/frameworks/%{framework}
@@ -47,8 +47,7 @@ developing applications that use %{name}.
 %build
 %cmake_kf6 \
     -DBUILD_TESTING:BOOL=ON
-%cmake_build_kf6
-
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 
@@ -74,6 +73,9 @@ make test ARGS="--output-on-failure --timeout 300" -C %{_target_platform} ||:
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- inline cmake --build (no qt6 prepare_docs pass)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
 

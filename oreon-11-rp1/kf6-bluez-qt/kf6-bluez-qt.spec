@@ -6,7 +6,7 @@
 Name:           kf6-%{framework}
 Summary:        A Qt wrapper for Bluez
 Version:        6.24.0
-Release:	4%{?dist}
+Release:	5%{?dist}
  
 License:        CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only
 URL:            https://invent.kde.org/frameworks/%{framework}
@@ -46,8 +46,7 @@ Development files for %{name}.
 %build
  %{cmake_kf6} \
   -DUDEV_RULES_INSTALL_DIR:PATH="%{_udevrulesdir}"
-%cmake_build_kf6
- 
+%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 %install
 %cmake_install_kf6
 
@@ -66,6 +65,9 @@ Development files for %{name}.
 
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- inline cmake --build (no qt6 prepare_docs pass)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
 

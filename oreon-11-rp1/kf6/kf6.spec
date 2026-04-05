@@ -3,7 +3,7 @@
 Name:    kf6
 # This version MUST remain in sync with KF6 versions!
 Version: 6.24.0
-Release: 11%{?dist}
+Release: 12%{?dist}
 Summary: Filesystem and RPM macros for KDE Frameworks 6
 License: BSD-3-Clause
 URL:     http://www.kde.org
@@ -37,10 +37,10 @@ Recommends: clang-devel
 BuildArch: noarch
 %description rpm-macros
 RPM macros for building KDE Frameworks 6 packages.
-%%cmake_build_kf6 runs only the default cmake build. It does not use %%cmake_build from
-qt6-rpm-macros, which adds a second pass ``-t prepare_docs`` and runs qdoc (often unstable).
-These macros install as macros.zz-kf6 so they load after macros.qt6 and win over qt6's
-%%cmake_build_kf6 redefinition. %%cmake_kf6 still sets KDE_INSTALL paths.
+%%cmake_kf6 sets KDE install paths. %%cmake_build_kf6 in macros.zz-kf6 is a single cmake
+``--build`` pass (not %%cmake_build from qt6-rpm-macros, which adds ``-t prepare_docs`` and
+runs qdoc). Oreon kf6-* framework specs also expand that one-liner directly in %%build so
+macro load order in mock cannot bring back the second pass.
 
 %install
 # See macros.kf6 where the directories are specified
@@ -101,6 +101,9 @@ sed -i \
 %{_rpmconfigdir}/macros.d/macros.zz-kf6
 
 %changelog
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-12
+- docs: note framework specs inline cmake --build alongside macros.zz-kf6
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-11
 - rpm-macros: install as macros.zz-kf6 so definitions load after qt6 (fix prepare_docs override)
 
