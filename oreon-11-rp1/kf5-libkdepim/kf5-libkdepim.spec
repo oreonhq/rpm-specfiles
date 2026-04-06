@@ -37,9 +37,6 @@ BuildRequires:  cmake(Qt5Designer)
 BuildRequires:  cmake(Qt5UiTools)
 BuildRequires:  cmake(Qt5Widgets)
 
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
-#global majmin_ver %{version}
-
 Obsoletes:      kdepim-libs < 7:16.04.0
 Conflicts:      kdepim-libs < 7:16.04.0
 # kdepimwidgets designer plugin moved here

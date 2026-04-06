@@ -53,7 +53,6 @@ BuildRequires:  cmake(KF5NewStuff)
 BuildRequires:  cmake(KF5SyntaxHighlighting)
 BuildRequires:  cmake(KF5TextAutoCorrectionWidgets)
 
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-akonadi-mime-devel >= %{majmin_ver}
 BuildRequires:  kf5-akonadi-notes-devel >= %{majmin_ver}

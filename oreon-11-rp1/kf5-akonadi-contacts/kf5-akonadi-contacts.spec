@@ -34,7 +34,6 @@ BuildRequires:  kf5-prison-devel >= %{kf5_ver}
 BuildRequires:  cmake(Grantlee5) >= 5.1
 BuildRequires:  cmake(Qt5Widgets) >= 5.8
 
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-akonadi-mime-devel >= %{majmin_ver}
 BuildRequires:  kf5-akonadi-server-devel >= %{majmin_ver}

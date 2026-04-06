@@ -42,7 +42,6 @@ BuildRequires:  cmake(KPim5Mime)
 BuildRequires:  cmake(KPim5CalendarUtils)
 BuildRequires:  cmake(KF5TextEditTextToSpeech)
 
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-akonadi-calendar-devel >= %{majmin_ver}
 BuildRequires:  kf5-akonadi-server-devel >= %{majmin_ver}

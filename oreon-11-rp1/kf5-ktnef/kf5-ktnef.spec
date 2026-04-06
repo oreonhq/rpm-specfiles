@@ -37,7 +37,6 @@ BuildRequires: make
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf5-rpm-macros
 BuildRequires:  kf5-kdelibs4support-devel >= 5.15
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-kcalendarcore-devel >= %{majmin_ver}
 BuildRequires:  kf5-kcalendarutils-devel >= %{majmin_ver}

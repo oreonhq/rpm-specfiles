@@ -37,7 +37,6 @@ BuildRequires:  kf5-kcoreaddons-devel >= 5.15
 BuildRequires:  kf5-kdelibs4support-devel >= 5.15
 BuildRequires:  kf5-kio-devel >= 5.15
 BuildRequires:  kf5-kxmlrpcclient-devel >= 5.15
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-kcalendarcore-devel >= %{majmin_ver}
 # in kf5 since 5.50.0

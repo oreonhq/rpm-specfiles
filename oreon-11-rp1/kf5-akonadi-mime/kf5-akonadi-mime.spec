@@ -38,7 +38,6 @@ BuildRequires:  cmake(Qt5Gui)
 BuildRequires:  pkgconfig(libxslt)
 BuildRequires:  pkgconfig(shared-mime-info)
 
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-akonadi-server-devel >= %{majmin_ver}
 BuildRequires:  kf5-akonadi-server-devel >= %{majmin_ver}

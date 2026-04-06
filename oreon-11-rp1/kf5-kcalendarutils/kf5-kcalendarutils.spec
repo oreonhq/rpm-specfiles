@@ -41,7 +41,6 @@ BuildRequires:  kf5-kconfig-devel >= 5.15
 BuildRequires:  kf5-ki18n-devel >= 5.15
 BuildRequires:  kf5-kdelibs4support-devel >= 5.15
 BuildRequires:  kf5-kcodecs-devel >= 5.15
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-kcalendarcore-devel >= %{majmin_ver}
 BuildRequires:  kf5-kidentitymanagement-devel >= %{majmin_ver}

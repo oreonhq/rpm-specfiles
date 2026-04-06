@@ -40,7 +40,6 @@ BuildRequires:  kf5-kdelibs4support-devel >= %{kf5_ver}
 BuildRequires:  kf5-kio-devel >= %{kf5_ver}
 BuildRequires:  kf5-kwallet-devel >= %{kf5_ver}
 BuildRequires:  kf5-kcodecs-devel >= %{kf5_ver}
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-grantleetheme-devel >= %{majmin_ver}
 BuildRequires:  kf5-kcontacts-devel >= %{majmin_ver}

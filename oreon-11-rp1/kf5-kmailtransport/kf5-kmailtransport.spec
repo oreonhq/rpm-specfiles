@@ -43,7 +43,6 @@ BuildRequires:  cmake(KF5KCMUtils)
 BuildRequires:  cmake(KF5KIO)
 BuildRequires:  cmake(KF5Wallet)
 
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-kmime-devel >= %{majmin_ver}
 BuildRequires:  kf5-akonadi-mime-devel >= %{majmin_ver}

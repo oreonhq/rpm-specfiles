@@ -45,7 +45,6 @@ BuildRequires:  cmake(KPim5Ldap)
 BuildRequires:  cmake(KPim5Libkdepim)
 BuildRequires:  cmake(KPim5MailTransport)
 
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-akonadi-mime-devel >= %{majmin_ver}
 BuildRequires:  kf5-akonadi-server-devel >= %{majmin_ver}

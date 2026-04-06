@@ -35,7 +35,6 @@ BuildRequires:  kf5-kconfig-devel >= %{kf5_ver}
 BuildRequires:  kf5-kwidgetsaddons-devel >= %{kf5_ver}
 BuildRequires:  kf5-ktextwidgets-devel >= %{kf5_ver}
 
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-akonadi-contacts-devel >= %{majmin_ver}
 BuildRequires:  kf5-akonadi-mime-devel >= %{majmin_ver}

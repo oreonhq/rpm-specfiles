@@ -34,7 +34,6 @@ BuildRequires:  kf5-kio-devel >= %{kf5_ver}
 BuildRequires:  kf5-kwidgetsaddons-devel >= %{kf5_ver}
 BuildRequires:  kf5-ki18n-devel >= %{kf5_ver}
 BuildRequires:  cmake(KF5Wallet) >= %{kf5_ver}
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-kmbox-devel >= %{majmin_ver}
 BuildRequires:  kf5-kmime-devel >= %{majmin_ver}

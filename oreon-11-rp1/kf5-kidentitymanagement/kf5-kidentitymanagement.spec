@@ -36,7 +36,6 @@ BuildRequires:  kf5-kio-devel >= 5.15
 BuildRequires:  kf5-kconfig-devel >= 5.15
 BuildRequires:  kf5-kemoticons-devel >= 5.15
 BuildRequires:  kf5-kcodecs-devel >= 5.15
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  qt5-qtbase-devel
 %if 0%{?tests}

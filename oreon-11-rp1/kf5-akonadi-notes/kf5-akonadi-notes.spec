@@ -33,7 +33,6 @@ BuildRequires:  kf5-ki18n-devel >= %{kf5_ver}
 
 BuildRequires:  cmake(Qt5Xml)
 
-#global majmin_ver %(echo %{version} | cut -d. -f1,2)
 %global majmin_ver %{version}
 BuildRequires:  kf5-akonadi-server-devel >= %{majmin_ver}
 BuildRequires:  kf5-kmime-devel >= %{majmin_ver}
