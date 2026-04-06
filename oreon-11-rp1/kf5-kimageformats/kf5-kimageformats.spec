@@ -9,17 +9,23 @@ Summary:        KDE Frameworks 5 Tier 1 addon with additional image plugins for 
 License:        BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:            https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0:        http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0:        http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 %global __provides_exclude_from ^(%{_kf5_plugindir}/.*\\.so)$
 
 # Upastream patches
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
 BuildRequires:  jasper-devel
-BuildRequires:  kf5-rpm-macros >= %{majmin}
+BuildRequires:  kf5-rpm-macros >= %{kf5_dl_majmin}
 BuildRequires:  LibRaw-devel
 
 %if 0%{?fedora} || 0%{?rhel} >= 9
@@ -41,7 +47,7 @@ BuildRequires:  cmake(libheif)
 BuildRequires:  pkgconfig(zlib)
 BuildRequires:  qt5-qtbase-devel
 
-Requires:       kf5-filesystem >= %{majmin}
+Requires:       kf5-filesystem >= %{kf5_dl_majmin}
 
 %description
 This framework provides additional image format plugins for QtGui.  As

@@ -8,20 +8,26 @@ Summary: KDE Frameworks 5 Tier 3 addon for creating configuration dialogs
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0: http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-kauth-devel >= %{majmin}
-BuildRequires:  kf5-kcodecs-devel >= %{majmin}
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kcoreaddons-devel >= %{majmin}
-BuildRequires:  kf5-kdoctools-devel >= %{majmin}
-BuildRequires:  kf5-kguiaddons-devel >= %{majmin}
-BuildRequires:  kf5-ki18n-devel >= %{majmin}
-BuildRequires:  kf5-kwidgetsaddons-devel >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kauth-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcodecs-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfig-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcoreaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdoctools-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kguiaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-ki18n-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwidgetsaddons-devel >= %{kf5_dl_majmin}
 BuildRequires:  kf5-rpm-macros
 
 # KColorScheme requires color schemes to be installed
@@ -38,10 +44,10 @@ well as a set of widgets which uses KConfig to store their settings.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       kf5-kauth-devel >= %{majmin}
-Requires:       kf5-kcodecs-devel >= %{majmin}
-Requires:       kf5-kconfig-devel >= %{majmin}
-Requires:       kf5-kwidgetsaddons-devel >= %{majmin}
+Requires:       kf5-kauth-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kcodecs-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kconfig-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kwidgetsaddons-devel >= %{kf5_dl_majmin}
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.

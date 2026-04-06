@@ -6,11 +6,19 @@ Release: 5%{?dist}
 Summary: QtQuickControls2 style for consistency between QWidget and QML apps
 License: LGPL-2.0-or-later AND (LGPL-3.0-only OR GPL-2.0-or-later) AND (LGPL-3.0-only OR GPL-2.0-only OR GPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}
-Source:  https://download.kde.org/%{stable_kf5}/frameworks/%{majmin_ver_kf5}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source:  https://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 ## upstream patches
 
-BuildRequires: extra-cmake-modules >= %{majmin_ver_kf5}
+BuildRequires: extra-cmake-modules >= %{kf5_dl_majmin}
 BuildRequires: gcc-c++
 BuildRequires: kf5-rpm-macros
 
@@ -23,13 +31,13 @@ BuildRequires: cmake(Qt5Widgets)
 BuildRequires: cmake(Qt5X11Extras)
 BuildRequires: cmake(Qt5LinguistTools)
 
-BuildRequires: cmake(KF5Config) >= %{majmin_ver_kf5}
-BuildRequires: cmake(KF5ConfigWidgets) >= %{majmin_ver_kf5}
-BuildRequires: cmake(KF5Kirigami2) >= %{majmin_ver_kf5}
-BuildRequires: cmake(KF5IconThemes) >= %{majmin_ver_kf5}
+BuildRequires: cmake(KF5Config) >= %{kf5_dl_majmin}
+BuildRequires: cmake(KF5ConfigWidgets) >= %{kf5_dl_majmin}
+BuildRequires: cmake(KF5Kirigami2) >= %{kf5_dl_majmin}
+BuildRequires: cmake(KF5IconThemes) >= %{kf5_dl_majmin}
 
-Requires: kf5-kirigami2%{?_isa} >= %{majmin_ver_kf5}
-Requires: kf5-sonnet%{?_isa} >= %{majmin_ver_kf5}
+Requires: kf5-kirigami2%{?_isa} >= %{kf5_dl_majmin}
+Requires: kf5-sonnet%{?_isa} >= %{kf5_dl_majmin}
 Requires: qt5-qtquickcontrols2%{?_isa}
 
 # renamed

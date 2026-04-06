@@ -20,19 +20,25 @@ Summary: A DAV protocol implementation with KJobs
 License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0: http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-rpm-macros >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
+BuildRequires:  kf5-rpm-macros >= %{kf5_dl_majmin}
 
 BuildRequires:  cmake(Qt5Gui)
 BuildRequires:  cmake(Qt5XmlPatterns)
 
-BuildRequires:  kf5-ki18n-devel >= %{majmin}
-BuildRequires:  kf5-kcoreaddons-devel >= %{majmin}
-BuildRequires:  kf5-kio-devel  >= %{majmin}
+BuildRequires:  kf5-ki18n-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcoreaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kio-devel  >= %{kf5_dl_majmin}
 
 BuildRequires:  cmake(KF5CoreAddons)
 BuildRequires:  cmake(KF5I18n)

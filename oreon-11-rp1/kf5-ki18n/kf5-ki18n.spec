@@ -8,18 +8,24 @@ Summary: KDE Frameworks 5 Tier 1 addon for localization
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND ODbL-1.0
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0: http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 ## upstream patches
 
 # filter plugin provides
 %global __provides_exclude_from ^(%{_kf5_plugindir}/.*\\.so)$
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
 BuildRequires:  gettext
-BuildRequires:  kf5-rpm-macros >= %{majmin}
+BuildRequires:  kf5-rpm-macros >= %{kf5_dl_majmin}
 BuildRequires:  perl-interpreter
 BuildRequires:  python3
 BuildRequires:  qt5-qtbase-devel
@@ -27,7 +33,7 @@ BuildRequires:  qt5-qtbase-private-devel
 BuildRequires:  qt5-qtdeclarative-devel
 BuildRequires:  qt5-qtscript-devel
 
-Requires:       kf5-filesystem >= %{majmin}
+Requires:       kf5-filesystem >= %{kf5_dl_majmin}
 
 %description
 KDE Frameworks 5 Tier 1 addon for localization.

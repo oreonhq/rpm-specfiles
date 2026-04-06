@@ -17,9 +17,15 @@ Summary: KDE Frameworks 5 Tier 3 with advanced embeddable text editor
 License: BSD-2-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND MIT
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0: http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 ## upstream patches (lookaside cache)
 
@@ -28,17 +34,17 @@ Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{v
 # filter plugin provides
 %global __provides_exclude_from ^(%{_kf5_qtplugindir}/.*\\.so)$
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-karchive-devel >= %{majmin}
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kguiaddons-devel >= %{majmin}
-BuildRequires:  kf5-ki18n-devel >= %{majmin}
-BuildRequires:  kf5-kiconthemes-devel >= %{majmin}
-BuildRequires:  kf5-kio-devel >= %{majmin}
-BuildRequires:  kf5-kparts-devel >= %{majmin}
-BuildRequires:  kf5-rpm-macros >= %{majmin}
-BuildRequires:  kf5-sonnet-devel >= %{majmin}
-BuildRequires:  kf5-syntax-highlighting-devel >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
+BuildRequires:  kf5-karchive-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfig-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kguiaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-ki18n-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kiconthemes-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kio-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kparts-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-rpm-macros >= %{kf5_dl_majmin}
+BuildRequires:  kf5-sonnet-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-syntax-highlighting-devel >= %{kf5_dl_majmin}
 
 BuildRequires:  pkgconfig(Qt5Widgets)
 BuildRequires:  pkgconfig(Qt5PrintSupport)
@@ -72,8 +78,8 @@ IDE.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       kf5-kparts-devel >= %{majmin}
-Requires:       kf5-syntax-highlighting-devel >= %{majmin}
+Requires:       kf5-kparts-devel >= %{kf5_dl_majmin}
+Requires:       kf5-syntax-highlighting-devel >= %{kf5_dl_majmin}
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.

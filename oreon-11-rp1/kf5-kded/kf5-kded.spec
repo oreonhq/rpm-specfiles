@@ -9,17 +9,23 @@ Summary: KDE Frameworks 5 Tier 3 addon with extensible daemon for system-level s
 License: CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0: http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kcoreaddons-devel >= %{majmin}
-BuildRequires:  kf5-kcrash-devel >= %{majmin}
-BuildRequires:  kf5-kdbusaddons-devel >= %{majmin}
-BuildRequires:  kf5-kdoctools-devel >= %{majmin}
-BuildRequires:  kf5-kservice-devel >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfig-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcoreaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcrash-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdbusaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdoctools-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kservice-devel >= %{kf5_dl_majmin}
 BuildRequires:  kf5-rpm-macros
 
 BuildRequires:  qt5-qtbase-devel

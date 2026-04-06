@@ -19,9 +19,15 @@ Summary: KDE Frameworks 5 Tier 1 addon with advanced configuration system
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: https://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0: https://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 ## upstream patches
 
@@ -31,8 +37,8 @@ Source0: https://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{
 BuildRequires:  ninja-build
 %endif
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-rpm-macros >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
+BuildRequires:  kf5-rpm-macros >= %{kf5_dl_majmin}
 
 BuildRequires:  cmake(Qt5DBus)
 BuildRequires:  cmake(Qt5Gui)
@@ -57,7 +63,7 @@ BuildRequires: time
 BuildRequires: xorg-x11-server-Xvfb
 %endif
 
-Requires:       kf5-filesystem >= %{majmin}
+Requires:       kf5-filesystem >= %{kf5_dl_majmin}
 Requires:       %{name}-core%{?_isa} = %{version}-%{release}
 Requires:       %{name}-gui%{?_isa} = %{version}-%{release}
 

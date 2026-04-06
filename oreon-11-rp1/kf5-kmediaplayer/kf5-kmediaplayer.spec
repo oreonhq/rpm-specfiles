@@ -10,13 +10,19 @@ Summary: KDE Frameworks 5 Tier 3 module with interface for media player features
 License: X11
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/portingAids/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0: http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/portingAids/%{framework}-%{version}.tar.xz
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-kparts-devel >= %{majmin}
-BuildRequires:  kf5-kxmlgui-devel >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kparts-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kxmlgui-devel >= %{kf5_dl_majmin}
 BuildRequires:  kf5-rpm-macros
 
 BuildRequires:  qt5-qtbase-devel
@@ -27,7 +33,7 @@ KDE Frameworks 5 Tier 3 module with plugin interfaces for media player features.
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       kf5-kparts-devel >= %{majmin}
+Requires:       kf5-kparts-devel >= %{kf5_dl_majmin}
 %description    devel
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.

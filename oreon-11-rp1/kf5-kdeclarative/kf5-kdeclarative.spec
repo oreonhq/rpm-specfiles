@@ -15,9 +15,15 @@ Summary: KDE Frameworks 5 Tier 3 addon for Qt declarative
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND LGPL-2.1-only OR LGPL-3.0-only AND MIT
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0:        http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0:        http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 # filter qml provides
 %global __provides_exclude_from ^%{_kf5_qmldir}/.*\\.so$
@@ -25,17 +31,17 @@ Source0:        http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framewo
 ## upstream patches
 
 BuildRequires: make
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kglobalaccel-devel >= %{majmin}
-BuildRequires:  kf5-kguiaddons-devel >= %{majmin}
-BuildRequires:  kf5-ki18n-devel >= %{majmin}
-BuildRequires:  kf5-kiconthemes-devel >= %{majmin}
-BuildRequires:  kf5-kio-devel >= %{majmin}
-BuildRequires:  kf5-knotifications-devel >= %{majmin}
-BuildRequires:  kf5-kpackage-devel >= %{majmin}
-BuildRequires:  kf5-kwidgetsaddons-devel >= %{majmin}
-BuildRequires:  kf5-kwindowsystem-devel >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfig-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kglobalaccel-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kguiaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-ki18n-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kiconthemes-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kio-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-knotifications-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kpackage-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwidgetsaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwindowsystem-devel >= %{kf5_dl_majmin}
 BuildRequires:  kf5-rpm-macros
 
 BuildRequires:  libepoxy-devel
@@ -61,8 +67,8 @@ KDE Frameworks 5 Tier 3 addon for Qt declarative
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       kf5-kconfig-devel >= %{majmin}
-Requires:       kf5-kpackage-devel >= %{majmin}
+Requires:       kf5-kconfig-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kpackage-devel >= %{kf5_dl_majmin}
 Requires:       qt5-qtdeclarative-devel
 %description    devel
 The %{name}-devel package contains libraries and header files for

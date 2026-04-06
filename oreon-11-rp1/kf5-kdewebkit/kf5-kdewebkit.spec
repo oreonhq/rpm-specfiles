@@ -9,24 +9,30 @@ Summary: KDE Frameworks 5 Tier 3 integration module for QtWebKit
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/portingAids/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0: http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/portingAids/%{framework}-%{version}.tar.xz
 
 
 # Temporary revert commit that introduces a dependency on kf6 extra-cmake-modules
 Patch0: revert_feature_summary_ecm.patch
 
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kcoreaddons-devel >= %{majmin}
-BuildRequires:  kf5-kio-devel >= %{majmin}
-BuildRequires:  kf5-kjobwidgets-devel >= %{majmin}
-BuildRequires:  kf5-kparts-devel >= %{majmin}
-BuildRequires:  kf5-kservice-devel >= %{majmin}
-BuildRequires:  kf5-kwallet-devel >= %{majmin}
-BuildRequires:  kf5-rpm-macros >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfig-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcoreaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kio-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kjobwidgets-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kparts-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kservice-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwallet-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-rpm-macros >= %{kf5_dl_majmin}
 
 BuildRequires:  qt5-qtbase-devel
 BuildRequires:  qt5-qtwebkit-devel

@@ -18,9 +18,15 @@ Summary: KDE Frameworks 5 Tier 3 solution for password management
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0: http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 ## upstream patches
 
@@ -28,22 +34,22 @@ Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{v
 
 BuildRequires:  cmake(Qca-qt5)
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
 BuildRequires:  libgcrypt-devel
 BuildRequires:  make
 BuildRequires:  qt5-qtbase-devel
 
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kconfigwidgets-devel >= %{majmin}
-BuildRequires:  kf5-kcoreaddons-devel >= %{majmin}
-BuildRequires:  kf5-kdbusaddons-devel >= %{majmin}
-BuildRequires:  kf5-kdoctools-devel >= %{majmin}
-BuildRequires:  kf5-ki18n-devel >= %{majmin}
-BuildRequires:  kf5-kiconthemes-devel >= %{majmin}
-BuildRequires:  kf5-knotifications-devel >= %{majmin}
-BuildRequires:  kf5-kservice-devel >= %{majmin}
-BuildRequires:  kf5-kwidgetsaddons-devel >= %{majmin}
-BuildRequires:  kf5-kwindowsystem-devel >= %{majmin}
+BuildRequires:  kf5-kconfig-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfigwidgets-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcoreaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdbusaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdoctools-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-ki18n-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kiconthemes-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-knotifications-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kservice-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwidgetsaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwindowsystem-devel >= %{kf5_dl_majmin}
 BuildRequires:  kf5-rpm-macros
 
 %if ! 0%{?bootstrap} && 0%{?fedora}

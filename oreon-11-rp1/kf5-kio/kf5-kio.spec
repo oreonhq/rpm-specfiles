@@ -11,9 +11,15 @@ Summary: KDE Frameworks 5 Tier 3 solution for filesystem abstraction
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0: http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0: http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 ## upstream patches (lookaside)
 
@@ -28,36 +34,36 @@ Patch101: kio-no-help-protocol.patch
 # filter plugin provides
 %global __provides_exclude_from ^(%{_kf5_qtplugindir}/.*\\.so)$
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
 BuildRequires:  kf5-rpm-macros
 %if 0%{?rhel} && 0%{?rhel} < 9
 BuildRequires: gcc-toolset-12
 %endif
 # core
-BuildRequires:  kf5-karchive-devel >= %{majmin}
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kcoreaddons-devel >= %{majmin}
-BuildRequires:  kf5-kcrash-devel >= %{majmin}
-BuildRequires:  kf5-kdoctools-devel >= %{majmin}
-BuildRequires:  kf5-kdbusaddons-devel >= %{majmin}
-BuildRequires:  kf5-kguiaddons-devel >= %{majmin}
-BuildRequires:  kf5-ki18n-devel >= %{majmin}
-BuildRequires:  kf5-kservice-devel >= %{majmin}
-BuildRequires:  kf5-solid-devel >= %{majmin}
+BuildRequires:  kf5-karchive-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfig-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcoreaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcrash-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdoctools-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdbusaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kguiaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-ki18n-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kservice-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-solid-devel >= %{kf5_dl_majmin}
 # extras
-BuildRequires:  kf5-kbookmarks-devel >= %{majmin}
-BuildRequires:  kf5-kcompletion-devel >= %{majmin}
-BuildRequires:  kf5-kconfigwidgets-devel >= %{majmin}
-BuildRequires:  kf5-kiconthemes-devel >= %{majmin}
-BuildRequires:  kf5-kitemviews-devel >= %{majmin}
-BuildRequires:  kf5-kjobwidgets-devel >= %{majmin}
-BuildRequires:  kf5-kwindowsystem-devel >= %{majmin}
+BuildRequires:  kf5-kbookmarks-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcompletion-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfigwidgets-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kiconthemes-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kitemviews-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kjobwidgets-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwindowsystem-devel >= %{kf5_dl_majmin}
 # others
-BuildRequires:  kf5-knotifications-devel >= %{majmin}
-BuildRequires:  kf5-ktextwidgets-devel >= %{majmin}
-BuildRequires:  kf5-kwallet-devel >= %{majmin}
-BuildRequires:  kf5-kwidgetsaddons-devel >= %{majmin}
-BuildRequires:  kf5-kxmlgui-devel >= %{majmin}
+BuildRequires:  kf5-knotifications-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-ktextwidgets-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwallet-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwidgetsaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kxmlgui-devel >= %{kf5_dl_majmin}
 
 BuildRequires:  krb5-devel
 BuildRequires:  libacl-devel
@@ -100,16 +106,16 @@ KDE Frameworks 5 Tier 3 solution for filesystem abstraction
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       kf5-kbookmarks-devel >= %{majmin}
-Requires:       kf5-kcompletion-devel >= %{majmin}
-Requires:       kf5-kconfig-devel >= %{majmin}
-Requires:       kf5-kcoreaddons-devel >= %{majmin}
-Requires:       kf5-kitemviews-devel >= %{majmin}
-Requires:       kf5-kjobwidgets-devel >= %{majmin}
-Requires:       kf5-kservice-devel >= %{majmin}
-Requires:       kf5-solid-devel >= %{majmin}
-Requires:       kf5-kxmlgui-devel >= %{majmin}
-Requires:       kf5-kwindowsystem-devel >= %{majmin}
+Requires:       kf5-kbookmarks-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kcompletion-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kconfig-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kcoreaddons-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kitemviews-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kjobwidgets-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kservice-devel >= %{kf5_dl_majmin}
+Requires:       kf5-solid-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kxmlgui-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kwindowsystem-devel >= %{kf5_dl_majmin}
 Requires:       qt5-qtbase-devel
 %description    devel
 The %{name}-devel package contains libraries and header files for

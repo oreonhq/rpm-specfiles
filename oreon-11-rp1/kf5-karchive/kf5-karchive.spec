@@ -9,9 +9,15 @@ Summary:        KDE Frameworks 5 Tier 1 addon with archive functions
 License:        BSD-2-Clause AND CC0-1.0 AND LGPL-2.0-or-later
 URL:            https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0:        http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0:        http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 BuildRequires:  bzip2-devel
 BuildRequires:  extra-cmake-modules >= %{version}
@@ -22,7 +28,7 @@ BuildRequires:  zlib-devel
 BuildRequires:  cmake(Qt5LinguistTools)
 BuildRequires:  pkgconfig(libzstd)
 
-Requires:       kf5-filesystem >= %{majmin}
+Requires:       kf5-filesystem >= %{kf5_dl_majmin}
 
 %description
 KDE Frameworks 5 Tier 1 addon with archive functions.

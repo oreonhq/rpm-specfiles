@@ -8,36 +8,42 @@ Summary: KDE Frameworks 5 Tier 4 module with porting aid from KDELibs 4
 License: GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-BSD
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0:        http://download.kde.org/%{stable}/frameworks/%{majmin}/portingAids/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0:        http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/portingAids/%{framework}-%{version}.tar.xz
 
 BuildRequires:  ca-certificates
 BuildRequires:  gettext-devel
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-kcompletion-devel >= %{majmin}
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kconfigwidgets-devel >= %{majmin}
-BuildRequires:  kf5-kcrash-devel >= %{majmin}
-BuildRequires:  kf5-kdbusaddons-devel >= %{majmin}
-BuildRequires:  kf5-kded-devel >= %{majmin}
-BuildRequires:  kf5-kdesignerplugin-devel >= %{majmin}
-BuildRequires:  kf5-kdoctools-devel >= %{majmin}
-BuildRequires:  kf5-kemoticons-devel >= %{majmin}
-BuildRequires:  kf5-kglobalaccel-devel >= %{majmin}
-BuildRequires:  kf5-kguiaddons-devel >= %{majmin}
-BuildRequires:  kf5-ki18n-devel >= %{majmin}
-BuildRequires:  kf5-kiconthemes-devel >= %{majmin}
-BuildRequires:  kf5-kio-devel >= %{majmin}
-BuildRequires:  kf5-knotifications-devel >= %{majmin}
-BuildRequires:  kf5-kparts-devel >= %{majmin}
-BuildRequires:  kf5-kservice-devel >= %{majmin}
-BuildRequires:  kf5-ktextwidgets-devel >= %{majmin}
-BuildRequires:  kf5-kunitconversion-devel >= %{majmin}
-BuildRequires:  kf5-kwidgetsaddons-devel >= %{majmin}
-BuildRequires:  kf5-kwindowsystem-devel >= %{majmin}
-BuildRequires:  kf5-kxmlgui-devel >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcompletion-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfig-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfigwidgets-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcrash-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdbusaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kded-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdesignerplugin-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdoctools-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kemoticons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kglobalaccel-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kguiaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-ki18n-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kiconthemes-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kio-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-knotifications-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kparts-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kservice-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-ktextwidgets-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kunitconversion-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwidgetsaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kwindowsystem-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kxmlgui-devel >= %{kf5_dl_majmin}
 BuildRequires:  kf5-rpm-macros
 
 BuildRequires:  libSM-devel
@@ -57,7 +63,7 @@ BuildRequires:  qt5-qtx11extras-devel
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Requires:       ca-certificates
 Requires:       kde-settings
-Requires:       kf5-kded >= %{majmin}
+Requires:       kf5-kded >= %{kf5_dl_majmin}
 
 %description
 This framework provides code and utilities to ease the transition from kdelibs 4
@@ -80,24 +86,24 @@ BuildArch:      noarch
 %package        devel
 Summary:        Development files for %{name}
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-Requires:       kf5-kauth-devel >= %{majmin}
-Requires:       kf5-kconfigwidgets-devel >= %{majmin}
-Requires:       kf5-kcoreaddons-devel >= %{majmin}
-Requires:       kf5-kcrash-devel >= %{majmin}
-Requires:       kf5-kdesignerplugin-devel >= %{majmin}
-Requires:       kf5-kdoctools-devel >= %{majmin}
-Requires:       kf5-kemoticons-devel >= %{majmin}
-Requires:       kf5-kguiaddons-devel >= %{majmin}
-Requires:       kf5-kiconthemes-devel >= %{majmin}
-Requires:       kf5-kinit-devel >= %{majmin}
-Requires:       kf5-kitemmodels-devel >= %{majmin}
-Requires:       kf5-knotifications-devel >= %{majmin}
-Requires:       kf5-kparts-devel >= %{majmin}
-Requires:       kf5-ktextwidgets-devel >= %{majmin}
-Requires:       kf5-kunitconversion-devel >= %{majmin}
-Requires:       kf5-kwindowsystem-devel >= %{majmin}
-Requires:       kf5-kdbusaddons-devel >= %{majmin}
-Requires:       kf5-karchive-devel >= %{majmin}
+Requires:       kf5-kauth-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kconfigwidgets-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kcoreaddons-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kcrash-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kdesignerplugin-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kdoctools-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kemoticons-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kguiaddons-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kiconthemes-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kinit-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kitemmodels-devel >= %{kf5_dl_majmin}
+Requires:       kf5-knotifications-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kparts-devel >= %{kf5_dl_majmin}
+Requires:       kf5-ktextwidgets-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kunitconversion-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kwindowsystem-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kdbusaddons-devel >= %{kf5_dl_majmin}
+Requires:       kf5-karchive-devel >= %{kf5_dl_majmin}
 Requires:       qt5-qtbase-devel
 
 %if 0%{?fedora} || 0%{?rhel} > 7

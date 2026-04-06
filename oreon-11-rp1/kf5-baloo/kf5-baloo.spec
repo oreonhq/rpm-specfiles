@@ -18,9 +18,15 @@ License: BSD-3-Clause AND CC0-1.0 AND LGPL-3.0-or-later
 URL:     https://community.kde.org/Baloo
 #URL:     https://invent.kde.org/frameworks/%%{framework}
 
-%global majmin %majmin_ver_kf5
-%global stable %stable_kf5
-Source0:        http://download.kde.org/%{stable}/frameworks/%{majmin}/%{framework}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2).50
+%else
+%global kf5_dl_stable stable
+%global kf5_dl_majmin %(echo %{version} | cut -d. -f1,2)
+%endif
+Source0:        http://download.kde.org/%{kf5_dl_stable}/frameworks/%{kf5_dl_majmin}/%{framework}-%{version}.tar.xz
 
 Source1:        97-kde-baloo-filewatch-inotify.conf
 # shutdown script to explictly stop baloo_file on logout
@@ -33,17 +39,17 @@ Patch100: baloo-5.67.0-baloofile_config.patch
 
 ## upstream patches
 
-BuildRequires:  extra-cmake-modules >= %{majmin}
-BuildRequires:  kf5-kconfig-devel >= %{majmin}
-BuildRequires:  kf5-kcoreaddons-devel >= %{majmin}
-BuildRequires:  kf5-kcrash-devel >= %{majmin}
-BuildRequires:  kf5-kdbusaddons-devel >= %{majmin}
-BuildRequires:  kf5-kfilemetadata-devel >= %{majmin}
-BuildRequires:  kf5-ki18n-devel >= %{majmin}
-BuildRequires:  kf5-kidletime-devel >= %{majmin}
-BuildRequires:  kf5-kio-devel >= %{majmin}
-BuildRequires:  kf5-rpm-macros >= %{majmin}
-BuildRequires:  kf5-solid-devel >= %{majmin}
+BuildRequires:  extra-cmake-modules >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kconfig-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcoreaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kcrash-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kdbusaddons-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kfilemetadata-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-ki18n-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kidletime-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-kio-devel >= %{kf5_dl_majmin}
+BuildRequires:  kf5-rpm-macros >= %{kf5_dl_majmin}
+BuildRequires:  kf5-solid-devel >= %{kf5_dl_majmin}
 
 BuildRequires:  lmdb-devel
 BuildRequires:  qt5-qtbase-devel
@@ -79,8 +85,8 @@ Summary:        Development files for %{name}
 # KDE e.V. may determine that future LGPL versions are accepted
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND (LGPL-2.1-only OR LGPL-3.0-only)
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
-Requires:       kf5-kcoreaddons-devel >= %{majmin}
-Requires:       kf5-kfilemetadata-devel >= %{majmin}
+Requires:       kf5-kcoreaddons-devel >= %{kf5_dl_majmin}
+Requires:       kf5-kfilemetadata-devel >= %{kf5_dl_majmin}
 Requires:       qt5-qtbase-devel
 
 %description    devel
