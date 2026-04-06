@@ -6,7 +6,7 @@
 
 Name:           kf6-%{framework}
 Version:        6.24.0
-Release:	6%{?dist}
+Release:	7%{?dist}
 Summary:        QtQuick plugins to build user interfaces based on the KDE UX guidelines
 License:        BSD-3-Clause AND CC0-1.0 AND FSFAP AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
 URL:            https://invent.kde.org/frameworks/%{framework}
@@ -20,7 +20,7 @@ BuildRequires:  gcc-c++
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  make
-BuildRequires:  qt6-linguist
+BuildRequires:  cmake(Qt6LinguistTools)
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtdeclarative-devel
 BuildRequires:  qt6-qtsvg-devel
@@ -108,6 +108,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
+- BR cmake(Qt6LinguistTools) for ecm_install_po_files_as_qm (fixes x86_64 configure)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

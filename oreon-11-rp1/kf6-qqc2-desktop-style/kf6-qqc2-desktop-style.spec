@@ -6,16 +6,17 @@
 
 Name:    kf6-%{framework}
 Version: 6.24.0
-Release:	4%{?dist}
+Release:	5%{?dist}
 Summary: QtQuickControls2 style for consistency between QWidget and QML apps
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LicenseRef-KFQF-Accepted-GPL
 URL:     https://invent.kde.org/frameworks/%{framework}
-Source0: http://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
-Source1: http://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+Source0: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+Source1: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
 
 BuildRequires: extra-cmake-modules >= %{version}
 BuildRequires: gcc-c++
 BuildRequires: cmake
+BuildRequires: cmake(Qt6LinguistTools)
 BuildRequires: kf6-rpm-macros
 BuildRequires: cmake(KF6ConfigWidgets)
 BuildRequires: cmake(KF6Kirigami2)
@@ -59,6 +60,10 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_plugindir}/kirigami/platform/org.kde.desktop.so
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-5
+- BR cmake(Qt6LinguistTools) for ecm_install_po_files_as_qm
+- Source URLs https
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
 
