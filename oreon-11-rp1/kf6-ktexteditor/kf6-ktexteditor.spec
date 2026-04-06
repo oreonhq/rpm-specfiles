@@ -3,9 +3,14 @@
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.24
 
+%ifarch aarch64
+%global _lto_cflags %{nil}
+%global _smp_mflags -j2
+%endif
+
 Name:    kf6-%{framework}
 Version: 6.24.0
-Release:	6%{?dist}
+Release:	7%{?dist}
 Summary: KDE Frameworks 6 Tier 3 with advanced embeddable text editor
 
 License: BSD-2-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND MIT
@@ -94,6 +99,9 @@ rm -f %{buildroot}%{_kf6_datadir}/katepart5/script/README.md
 
 
 %changelog
+* Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
+- aarch64: no LTO, -j2 to avoid OOM (cc1plus Killed)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

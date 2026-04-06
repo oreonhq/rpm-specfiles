@@ -1,8 +1,14 @@
 %global framework kirigami-addons
+%global orig_name kirigami-addons
+
+%ifarch aarch64
+%global _lto_cflags %{nil}
+%global _smp_mflags -j2
+%endif
 
 Name:           kf6-%{framework}
 Version:        1.12.0
-Release:	4%{?dist}
+Release:	5%{?dist}
 License:        BSD-2-Clause AND CC-BY-SA-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND LicenseRef-KFQF-Accepted-GPL
 Summary:        Convergent visual components ("widgets") for Kirigami-based applications
 Url:            https://invent.kde.org/libraries/%{framework}
@@ -81,7 +87,8 @@ and header files for developing applications that use %{name}.
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 
 %install
-DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose%find_lang %{orig_name}6 --all-name
+DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
+%find_lang %{orig_name}6 --all-name
 
 %files -f %{orig_name}6.lang
 %doc README.md
@@ -105,6 +112,10 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose%find
 %{_kf6_datadir}/kdevappwizard/templates/librarymanager6.tar.bz2
 
 %changelog
+* Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12.0-5
+- define %%orig_name for %%find_lang (broken %%install when empty)
+- aarch64: no LTO, -j2 to reduce OOM risk
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - Use kf6 cmake build/install macros (avoid qt6 prepare_docs / install_html_docs)
 

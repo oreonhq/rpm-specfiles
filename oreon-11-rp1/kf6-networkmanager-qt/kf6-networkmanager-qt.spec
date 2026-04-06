@@ -5,9 +5,14 @@
 %global stable_kf6 stable
 %global majmin_ver_kf6 6.24
 
+%ifarch aarch64
+%global _lto_cflags %{nil}
+%global _smp_mflags -j2
+%endif
+
 Name:           kf6-%{framework}
 Version:        6.24.0
-Release:	6%{?dist}
+Release:	7%{?dist}
 Summary:        A Tier 1 KDE Frameworks 6 module that wraps NetworkManager DBus API
 License:        LGPL-2.0-or-later AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND CC0-1.0
 URL:            https://invent.kde.org/frameworks/%{framework}
@@ -72,6 +77,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
+- aarch64: no LTO, -j2 to avoid OOM (cc1plus Killed)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 
