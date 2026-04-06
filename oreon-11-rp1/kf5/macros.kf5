@@ -49,6 +49,7 @@
     -DKDE_INSTALL_QTPLUGINDIR:PATH=%{_qt5_plugindir} \\\
     -DKDE_INSTALL_QTQUICKIMPORTSDIR:PATH=%{_qt5_importdir} \\\
     -DKDE_INSTALL_SYSCONFDIR:PATH=%{_kf5_sysconfdir} \\\
+    -DCMAKE_POLICY_VERSION_MINIMUM:STRING=3.5 \\\
     -DKDE_INSTALL_USE_QT_SYS_PATHS:BOOL=ON
 
 # %%find_lang_kf5

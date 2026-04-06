@@ -11,7 +11,14 @@ Summary:       Monitors inotify limits and lets the user know when exceeded
 License:       BSD-3-Clause and CC0-1.0 and FSFAP and GPL-2.0-only and GPL-3.0-only
 URL:           https://invent.kde.org/system/%{name}
 
-Source:        https://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%else
+%global kf5_dl_stable stable
+%endif
+
+Source:        https://download.kde.org/%{kf5_dl_stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 # Updates the dbus service config to use the right policies to satisfy a rpmlint error
 # Merge Request: https://invent.kde.org/frameworks/kauth/-/merge_requests/44

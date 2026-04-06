@@ -13,7 +13,14 @@ Release: 1%{?dist}
 License: BSD-3-Clause AND GFDL-1.2-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-or-later
 URL:     https://invent.kde.org/education/%{name}
 
-Source0: http://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%else
+%global kf5_dl_stable stable
+%endif
+
+Source0: http://download.kde.org/%{kf5_dl_stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstreamable patches
 

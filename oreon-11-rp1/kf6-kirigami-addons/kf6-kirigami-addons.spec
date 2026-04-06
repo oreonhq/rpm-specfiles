@@ -112,7 +112,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/kdevappwizard/templates/librarymanager6.tar.bz2
 
 %changelog
-* Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12.0-5
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12.0-5
 - define %%orig_name for %%find_lang (broken %%install when empty)
 - aarch64: no LTO, -j2 to reduce OOM risk
 

@@ -71,7 +71,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
-* Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
+* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
 - aarch64: no LTO, -j2 to avoid OOM (cc1plus Killed)
 
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>

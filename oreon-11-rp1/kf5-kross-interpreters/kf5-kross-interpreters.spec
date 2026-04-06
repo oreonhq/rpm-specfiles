@@ -12,7 +12,7 @@ ExcludeArch: %{ix86}
 Name:    kf5-kross-interpreters
 Summary: Kross interpreters for KDE Frameworks 5
 Version: 22.04.3
-Release: 15%{?dist}
+Release: 16%{?dist}
 
 License: LGPL-2.1-or-later AND CC0-1.0
 URL:     https://invent.kde.org/frameworks/%{framework}
@@ -79,7 +79,8 @@ Ruby plugin for the Kross archtecture in KDE Frameworks 5.
 
 
 %build
-%{cmake_kf5}
+%{cmake_kf5} \
+  -DCMAKE_POLICY_VERSION_MINIMUM:STRING=3.5
 %cmake_build
 
 
@@ -107,5 +108,8 @@ Ruby plugin for the Kross archtecture in KDE Frameworks 5.
 %endif
 
 %changelog
+* Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 22.04.3-16
+- CMAKE_POLICY_VERSION_MINIMUM for CMake 4
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 22.04.3-15
 - Prepare for Oreon 11 (RP1)

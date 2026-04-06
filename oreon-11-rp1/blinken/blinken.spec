@@ -9,7 +9,14 @@ Release: 1%{?dist}
 
 License: GPL-2.0-or-later
 URL:     https://apps.kde.org/blinken/
-Source:  https://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%else
+%global kf5_dl_stable stable
+%endif
+
+Source:  https://download.kde.org/%{kf5_dl_stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules

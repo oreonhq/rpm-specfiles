@@ -15,7 +15,14 @@ Epoch:   1
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL:     http://edu.kde.org/kstars
-Source0: https://download.kde.org/%{stable_kf5}/%{name}/%{version}/%{name}-%{version}.tar.xz
+%global kf5_dl_bug %(echo %{version} | cut -d. -f3)
+%if 0%{?kf5_dl_bug} >= 50
+%global kf5_dl_stable unstable
+%else
+%global kf5_dl_stable stable
+%endif
+
+Source0: https://download.kde.org/%{kf5_dl_stable}/%{name}/%{version}/%{name}-%{version}.tar.xz
 
 ## upstream patches
 

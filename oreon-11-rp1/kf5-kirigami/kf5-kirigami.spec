@@ -14,7 +14,7 @@ ExcludeArch: %{ix86}
 
 Name:    kf5-%{framework}
 Version: 1.1.0
-Release: 28%{?dist}
+Release: 29%{?dist}
 Summary: QtQuick plugins to build user interfaces based on the KDE UX guidelines
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
@@ -68,6 +68,7 @@ developing applications that use %{name}.
 
 %build
 %{cmake_kf5} \
+  -DCMAKE_POLICY_VERSION_MINIMUM:STRING=3.5 \
   -DBUILD_TESTING:BOOL=%{?tests:ON}%{!?tests:OFF}
 %cmake_build
 
@@ -101,5 +102,8 @@ make test ARGS="--output-on-failure --timeout 30" -C %{_target_platform} ||:
 
 
 %changelog
+* Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0-29
+- Pass CMAKE_POLICY_VERSION_MINIMUM for CMake 4 (old upstream cmake_minimum_required)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0-28
 - Prepare for Oreon 11 (RP1)
