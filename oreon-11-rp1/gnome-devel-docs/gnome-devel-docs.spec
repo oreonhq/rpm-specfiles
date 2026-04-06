@@ -44,4 +44,5 @@ make %{?_smp_mflags}
 %doc README AUTHORS NEWS
 %license COPYING COPYING.GFDL
 
+%changelog
 %autochangelog
