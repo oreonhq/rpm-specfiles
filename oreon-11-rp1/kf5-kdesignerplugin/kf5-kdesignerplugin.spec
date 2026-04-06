@@ -76,7 +76,7 @@ cat kdesignerplugin5_qt.lang %{name}-man.lang > %{name}.lang
 %license COPYING.LIB
 %{_kf5_bindir}/kgendesignerplugin
 #{_kf5_qtplugindir}/designer/kf5widgets.so
-#dir %{_kf5_datadir}/kf5/widgets/
+#dir %%{_kf5_datadir}/kf5/widgets/
 #{_kf5_datadir}/kf5/widgets/*
 %{_kf5_mandir}/man1/kgendesignerplugin.1*
 # runtime config, no need for -devel pkg

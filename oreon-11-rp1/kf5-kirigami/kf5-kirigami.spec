@@ -19,7 +19,7 @@ Summary: QtQuick plugins to build user interfaces based on the KDE UX guidelines
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
-#URL:    https://quickgit.kde.org/?p=%{framework}.git
+#URL:    https://quickgit.kde.org/?p=%%{framework}.git
 URL:     https://techbase.kde.org/Kirigami
 Source0: http://download.kde.org/stable/kirigami/%{framework}-%{version}.tar.xz
 

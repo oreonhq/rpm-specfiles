@@ -16,7 +16,7 @@ Release: 5%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-3.0-or-later
 URL:     https://community.kde.org/Baloo
-#URL:     https://invent.kde.org/frameworks/%{framework}
+#URL:     https://invent.kde.org/frameworks/%%{framework}
 
 %global majmin %majmin_ver_kf5
 %global stable %stable_kf5

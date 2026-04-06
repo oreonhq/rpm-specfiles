@@ -5,7 +5,7 @@
 #global bootstrap 1
 
 ## currently includes no tests
-#if !0%{?bootstrap}
+#if !0%%{?bootstrap}
 #global tests 1
 #endif
 

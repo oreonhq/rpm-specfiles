@@ -71,7 +71,7 @@ developing applications that use %{name}.
 %install
 %cmake_install
 
-#find_lang %{name} --all-name
+#find_lang %%{name} --all-name
 
 
 %check

@@ -43,7 +43,7 @@ BuildRequires:  kf5-kcalendarcore-devel >= %{majmin_ver}
 %endif
 BuildRequires:  kf5-kcontacts-devel >= %{majmin_ver}
 BuildRequires:  kf5-kmime-devel >= %{majmin_ver}
-#BuildRequires:  kf5-libkleo-devel >= %{majmin_ver}
+#BuildRequires:  kf5-libkleo-devel >= %%{majmin_ver}
 
 %if 0%{?tests}
 BuildRequires: kf5-akonadi-server >= %{majmin_ver}
