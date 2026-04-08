@@ -97,14 +97,14 @@ License: (LGPLv2 with exceptions or GPLv3 with exceptions) and BSD and LGPLv2+ a
 URL:     http://www.qt.io
 %global  majmin %(echo %{version} | cut -d. -f1-2)
 %global  qt_version %(echo %{version} | cut -d~ -f1)
+%global  qtweb_unpacked %{qt_module}-everywhere-src-%{qt_version}%{?prerelease:-%{prerelease}}
 
-# cleaned tarball with patent-encumbered codecs removed from the bundled FFmpeg
-# ./qtwebengine-release.sh
-# ./clean_qtwebengine.sh 6.9.0
+# Official Qt tarball. Patent-encumbered bits are stripped from bundled FFmpeg in %%prep
+# (same effect as the old maintainer-built *-clean.tar.xz plus ./clean_qtwebengine.sh).
 %if 0%{?unstable}
-Source0: %{qt_module}-everywhere-src-%{qt_version}-%{prerelease}-clean.tar.xz
+Source0: https://download.qt.io/development_releases/qt/%{majmin}/%{qt_version}/submodules/%{qt_module}-everywhere-src-%{qt_version}-%{prerelease}.tar.xz
 %else
-Source0: %{qt_module}-everywhere-src-%{version}-clean.tar.xz
+Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
 # cleanup scripts used above
@@ -114,8 +114,8 @@ Source4: get_free_ffmpeg_source_files.py
 # macros
 Source10: macros.qt6-qtwebengine
 
-# pulseaudio headers
-Source20: pulseaudio-12.2-headers.tar.gz
+# PulseAudio 12.2 client headers for bundled Chromium (subset of upstream source tree)
+Source20: https://www.freedesktop.org/software/pulseaudio/releases/pulseaudio-12.2.tar.xz
 
 # workaround FTBFS against kernel-headers-5.2.0+
 Patch1:   qtwebengine-SIOCGSTAMP.patch
@@ -471,8 +471,19 @@ Requires: qt6-qtsvg%{?_isa}
 %{summary}.
 
 %prep
-%setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?prerelease:-%{prerelease}} -a20
+%setup -q -n %{qtweb_unpacked}
 
+pushd %{_sourcedir}
+bash %{SOURCE3} %{_builddir}/%{qtweb_unpacked}/src/3rdparty/chromium
+popd
+find %{_builddir}/%{qtweb_unpacked}/src/3rdparty/chromium/third_party/openh264/src -type f ! -name '*.h' -delete 2>/dev/null || :
+
+cd %{_builddir}
+tar xf %{SOURCE20}
+pa_root=$(echo pulseaudio-*)
+mv "$pa_root"/src/pulse %{_builddir}/%{qtweb_unpacked}/pulse
+rm -rf "$pa_root"
+cd %{_builddir}/%{qtweb_unpacked}
 mv pulse src/3rdparty/chromium/
 
 pushd src/3rdparty/chromium

@@ -56,7 +56,7 @@ Requires: qt6-qtbase-devel%{?_isa}
 %package examples
 Summary: Programming examples for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-# BuildRequires: qt6-qtwebchannel-devel >= %{version}
+# BuildRequires: qt6-qtwebchannel-devel >= %%{version}
 %description examples
 %{summary}.
 %endif

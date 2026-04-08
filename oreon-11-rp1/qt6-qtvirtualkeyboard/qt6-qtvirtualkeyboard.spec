@@ -8,6 +8,12 @@
 
 %global examples 1
 
+# Many C++ PCH jobs plus LTO can OOM smaller mock workers (aarch64, s390x)
+%ifarch aarch64 s390x
+%global _smp_mflags -j1
+%define _lto_cflags %{nil}
+%endif
+
 Summary: Qt6 - VirtualKeyboard component
 Name:    qt6-%{qt_module}
 Version: 6.10.2

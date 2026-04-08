@@ -92,7 +92,7 @@ Summary: Programming examples for %{name}
 Requires:  %{name}%{?_isa} = %{version}-%{release}
 Obsoletes: qt6-qtquickcontrols2-examples < 6.2.0~beta3-1
 Provides:  qt6-qtquickcontrols2-examples = %{version}-%{release}
-# BuildRequires: qt6-qtdeclarative-devel >= %{version}
+# BuildRequires: qt6-qtdeclarative-devel >= %%{version}
 %description examples
 %{summary}.
 %endif
