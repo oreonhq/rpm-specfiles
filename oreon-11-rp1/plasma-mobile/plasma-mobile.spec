@@ -1,9 +1,15 @@
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
+# Parallel C++/LTO link jobs can OOM aarch64 mock workers
+%ifarch aarch64 s390x
+%global _smp_mflags -j1
+%define _lto_cflags %{nil}
+%endif
+
 Name:           plasma-mobile
 Version:        6.6.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 License:        CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-only AND MIT
 Summary:        General UI components for Plasma Phone including shell, containment and applets
 Url:            https://invent.kde.org/plasma/plasma-mobile
@@ -185,6 +191,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_{mobile_info,mob
 %{_kf6_datadir}/plasma/look-and-feel/org.fedoraproject.fedora.mobile
 
 %changelog
+* Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
+- Limit parallel jobs and LTO on aarch64 and s390x to avoid OOM during build
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

@@ -2,10 +2,16 @@
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
+# Parallel C++/LTO jobs can OOM smaller aarch64 builders
+%ifarch aarch64 s390x
+%global _smp_mflags -j1
+%define _lto_cflags %{nil}
+%endif
+
 Name:    plasma-vault
 Summary: Plasma Vault offers strong encryption features in a user-friendly way
 Version: 6.6.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
@@ -67,6 +73,9 @@ prying eyes even when the user is logged in.
 %{_kf6_datadir}/plasma/plasmoids/org.kde.plasma.vault/
 
 %changelog
+* Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
+- Limit parallel jobs and LTO on aarch64 and s390x to avoid OOM during build
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 
