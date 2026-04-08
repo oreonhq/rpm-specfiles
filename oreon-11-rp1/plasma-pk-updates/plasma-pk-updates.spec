@@ -57,7 +57,7 @@ Requires:       kf5-solid%{?_isa} >= 5.75.0-2
 
 
 %build
-%cmake_kf5
+%cmake_kf5 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
 %cmake_build
 
