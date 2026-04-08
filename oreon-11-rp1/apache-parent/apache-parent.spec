@@ -27,7 +27,7 @@ Requires:       mvn(org.apache.apache.resources:apache-jar-resource-bundle)
 This package contains the parent pom file for apache projects.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n apache-%{version}
 
 %pom_remove_plugin :maven-enforcer-plugin
 %pom_remove_plugin :maven-site-plugin
@@ -44,5 +44,8 @@ This package contains the parent pom file for apache projects.
 %license LICENSE NOTICE
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 35-2
+- %%autosetup -n apache-%%{version} for Maven apache-VERSION-source-release.zip layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 35-1
 - Prepare for Oreon 11 (RP1)

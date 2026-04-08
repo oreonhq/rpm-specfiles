@@ -12,11 +12,15 @@
 %global system_assimp 1
 %global system_openxr 1
 %endif
+%if 0%{?oreon}
+%global system_assimp 1
+%global system_openxr 1
+%endif
 
 Summary: Qt6 - Quick3D Libraries and utilities
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 1%{?dist}
+Release: 3%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -29,10 +33,10 @@ Source0: https://download.qt.io/development_releases/qt/%{majmin}/%{qt_version}/
 Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 Patch0:  qtquick3d-fix-build-with-gcc11.patch
-%if 0%{?fedora} >= 43
+# Shipped in every SRPM so %%{?fedora} >= 43 and Oreon builds always have the file
+# Applied in %%prep only when using system assimp (Fedora 43+ or %%{?oreon})
 # From https://gitlab.archlinux.org/archlinux/packaging/packages/qt6-quick3d
 Patch1:  qtquick3d-fix-build-with-assimp6.patch
-%endif
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
@@ -83,7 +87,11 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %endif
 
 %prep
-%autosetup -n %{qt_module}-everywhere-src-%{qt_version}%{?unstable:-%{prerelease}} -p1
+%setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?unstable:-%{prerelease}}
+%patch -P 0 -p1
+%if 0%{?fedora} >= 43 || 0%{?oreon}
+%patch -P 1 -p1
+%endif
 
 
 %build
@@ -299,5 +307,11 @@ popd
 %endif
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
+- Always list assimp6 patch in SRPM apply only for Fedora 43+ or %%{?oreon}
+
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
+- Oreon uses system assimp like Fedora, apply assimp6 wrap patch when %%{?oreon} is set
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
 - Prepare for Oreon 11 (RP1)

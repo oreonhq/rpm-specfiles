@@ -47,7 +47,7 @@ the new version, while apache-commons-lang is the compatibility
 package.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n commons-lang3-%{version}-src
 
 %pom_remove_plugin :maven-javadoc-plugin
 %pom_remove_dep org.openjdk.jmh:jmh-core
@@ -81,5 +81,8 @@ sed -i '/<argLine>/d' pom.xml
 %doc RELEASE-NOTES.txt
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.19.0-2
+- %%autosetup -n commons-lang3-%%{version}-src for upstream source tarball layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.19.0-1
 - Prepare for Oreon 11 (RP1)

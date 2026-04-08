@@ -29,7 +29,7 @@ JXPath applies XPath expressions to graphs of objects of all kinds:
 JavaBeans, Maps, Servlet contexts, DOM etc, including mixtures thereof.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n commons-jxpath-%{version}-src
 
 %pom_remove_dep com.mockrunner:
 
@@ -57,5 +57,8 @@ rm src/test/java/org/apache/commons/jxpath/servlet/JXPathServletContextTest.java
 %license LICENSE.txt NOTICE.txt
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.0-2
+- %%autosetup -n commons-jxpath-%%{version}-src for upstream source tarball layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.0-1
 - Prepare for Oreon 11 (RP1)

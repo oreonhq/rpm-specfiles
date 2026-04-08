@@ -33,7 +33,7 @@ The CLI library provides a simple and easy to use API for working with the
 command line arguments and options.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n commons-cli-%{version}-src
 
 # Compatibility links
 %mvn_alias : org.apache.commons:commons-cli
@@ -50,5 +50,8 @@ command line arguments and options.
 %doc README.md RELEASE-NOTES.txt
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.0-2
+- %%autosetup -n commons-cli-%%{version}-src for upstream source tarball layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.0-1
 - Prepare for Oreon 11 (RP1)

@@ -33,7 +33,7 @@ commonly used encoders and decoders. Examples include Base64, Hex,
 Phonetic and URLs.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n commons-codec-%{version}-src
 cp %{SOURCE1} aspell-mail.txt
 sed -i 's/\r//' RELEASE-NOTES*.txt LICENSE.txt NOTICE.txt
 
@@ -51,5 +51,8 @@ sed -i 's/\r//' RELEASE-NOTES*.txt LICENSE.txt NOTICE.txt
 %doc RELEASE-NOTES*
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.19.0-2
+- %%autosetup -n commons-codec-%%{version}-src for upstream source tarball layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.19.0-1
 - Prepare for Oreon 11 (RP1)

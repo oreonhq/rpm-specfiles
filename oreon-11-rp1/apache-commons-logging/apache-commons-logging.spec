@@ -40,7 +40,7 @@ the two, and to allow a developer to not tie himself to a particular
 logging implementation.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n commons-logging-%{version}-src
 
 %pom_remove_dep :avalon-framework
 %pom_remove_dep :logkit
@@ -78,5 +78,8 @@ rm -rf src/test/java/org/apache/commons/logging/log4j/log4j12
 %doc PROPOSAL.html RELEASE-NOTES.txt
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-2
+- %%autosetup -n commons-logging-%%{version}-src for upstream source tarball layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-1
 - Prepare for Oreon 11 (RP1)

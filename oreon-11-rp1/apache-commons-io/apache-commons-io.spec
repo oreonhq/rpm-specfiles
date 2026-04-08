@@ -32,7 +32,7 @@ file filters, and endian classes. It is a library of utilities
 to assist with developing IO functionality.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n commons-io-%{version}-src
 
 sed -i 's/\r//' *.txt
 
@@ -71,5 +71,8 @@ rm src/test/java/org/apache/commons/io/file/PathUtilsContentEqualsTest.java
 %doc RELEASE-NOTES.txt
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20.0-2
+- %%autosetup -n commons-io-%%{version}-src for upstream source tarball layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20.0-1
 - Prepare for Oreon 11 (RP1)

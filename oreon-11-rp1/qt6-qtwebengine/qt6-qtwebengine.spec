@@ -88,7 +88,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -564,14 +564,22 @@ src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-librarie
 . /opt/rh/gcc-toolset-13/enable
 %endif
 export STRIP=strip
+%ifarch aarch64
+export NINJAFLAGS="-j1 -v"
+%else
 export NINJAFLAGS="%{__ninja_common_opts}"
+%endif
 export NINJA_PATH=%{__ninja}
 
 # this follows the logic of the Configure summary to turn on and off
 %cmake_qt6 \
   -DCMAKE_TOOLCHAIN_FILE:STRING="%{_libdir}/cmake/Qt6/qt.toolchain.cmake" \
   -DFEATURE_webengine_build_gn:BOOL=ON \
+%ifarch aarch64
+  -DFEATURE_webengine_jumbo_build:BOOL=OFF \
+%else
   -DFEATURE_webengine_jumbo_build:BOOL=ON \
+%endif
   -DFEATURE_webengine_developer_build:BOOL=OFF \
   -DFEATURE_qtwebengine_build:BOOL=ON \
   -DFEATURE_qtwebengine_core_build:BOOL=ON \
@@ -860,6 +868,9 @@ done
 %endif
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
+- aarch64 ease OOM during gn gen (disable jumbo build, NINJAFLAGS -j1)
+
 * Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
 - Add sources checksum list for bundled scripts, drop stale headers tarball name
 

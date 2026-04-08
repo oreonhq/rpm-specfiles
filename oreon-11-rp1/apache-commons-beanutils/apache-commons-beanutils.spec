@@ -29,7 +29,7 @@ dependencies outside of the JDK are required, so the use of this package
 is very lightweight.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n commons-beanutils-%{version}-src
 sed -i 's/\r//' *.txt
 
 %pom_remove_plugin :maven-assembly-plugin
@@ -51,5 +51,8 @@ sed -i 's/\r//' *.txt
 %license LICENSE.txt NOTICE.txt
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.11.0-2
+- %%autosetup -n commons-beanutils-%%{version}-src for upstream source tarball layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.11.0-1
 - Prepare for Oreon 11 (RP1)

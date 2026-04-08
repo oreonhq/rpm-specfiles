@@ -49,7 +49,7 @@ Requires:       %{name} = %{version}-%{release}
 %{summary}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n commons-collections-%{version}-src
 
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;
@@ -79,5 +79,8 @@ sed -i 's/\r//' LICENSE.txt PROPOSAL.html README.txt NOTICE.txt
 %files testframework -f .mfiles-testframework
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.2-2
+- %%autosetup -n commons-collections-%%{version}-src for upstream source tarball layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.2-1
 - Prepare for Oreon 11 (RP1)

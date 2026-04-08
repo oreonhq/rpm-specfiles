@@ -7,7 +7,7 @@
 
 Name:           apache-%{jarname}
 Version:        2.5.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Java-based dependency manager
 License:        Apache-2.0
 URL:            https://ant.apache.org/ivy
@@ -22,6 +22,8 @@ Source2:        https://archive.apache.org/dist/ant/KEYS
 # settings files Ivy tries to load.  This file will be used only as
 # last resort, when no other setting files exist.
 Source3:         00-global-settings.patch
+# java.util.jar.Pack200 was removed in modern JDKs, do not compile against it
+Patch0:          ivy-FileUtil-Pack200-reflection.patch
 
 BuildRequires:  gnupg2
 BuildRequires:  ant
@@ -155,5 +157,8 @@ echo "apache-ivy/ivy" > %{buildroot}%{_sysconfdir}/ant.d/%{name}
 %{_sysconfdir}/ant.d/%{name}
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.3-4
+- call Pack200 via reflection so the tree compiles on JDK without java.util.jar.Pack200
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.3-3
 - Prepare for Oreon 11 (RP1)

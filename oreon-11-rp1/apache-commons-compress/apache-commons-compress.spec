@@ -39,7 +39,7 @@ In version 1.14 read-only support for Brotli decompression has been added,
 but it has been removed form this package.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n commons-compress-%{version}-src
 
 # Unavailable Google Brotli library (org.brotli.dec)
 %pom_remove_dep org.brotli:dec
@@ -78,5 +78,8 @@ rm src/test/java/org/apache/commons/compress/archivers/tar/TarMemoryFileSystemTe
 %license LICENSE.txt NOTICE.txt
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.0-2
+- %%autosetup -n commons-compress-%%{version}-src for upstream source tarball layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.0-1
 - Prepare for Oreon 11 (RP1)

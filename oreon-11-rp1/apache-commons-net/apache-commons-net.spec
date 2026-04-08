@@ -34,7 +34,7 @@ as BSD R command support. The purpose of the library is to provide
 fundamental protocol access, not higher-level abstractions.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n commons-net-%{version}-src
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %pom_remove_plugin :exec-maven-plugin
@@ -87,5 +87,8 @@ src/test/java/org/apache/commons/net/time/TimeUDPClientTest.java \
 %license LICENSE.txt NOTICE.txt
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.12.0-2
+- %%autosetup -n commons-net-%%{version}-src for upstream source tarball layout
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.12.0-1
 - Prepare for Oreon 11 (RP1)

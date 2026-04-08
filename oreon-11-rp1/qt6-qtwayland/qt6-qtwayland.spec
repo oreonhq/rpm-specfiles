@@ -11,7 +11,7 @@
 Summary: Qt6 - Wayland platform support and QtCompositor module
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -122,7 +122,6 @@ popd
 %license LICENSES/*
 %{_qt6_archdatadir}/sbom/%{qt_module}-%{qt_version}.spdx
 %{_qt6_libdir}/libQt6WaylandCompositor.so.6*
-%{_qt6_libdir}/libQt6WaylandCompositor.so.6*
 %{_qt6_libdir}/libQt6WaylandCompositorIviapplication.so.6*
 %{_qt6_libdir}/libQt6WaylandCompositorPresentationTime.so.6*
 %{_qt6_libdir}/libQt6WaylandCompositorWLShell.so.6*
@@ -168,7 +167,6 @@ popd
 %{_qt6_libdir}/cmake/Qt6/*.cmake
 %{_qt6_libdir}/cmake/Qt6BuildInternals/StandaloneTests/QtWaylandTestsConfig.cmake
 %{_qt6_libdir}/cmake/Qt6Qml/QmlPlugins/*.cmake
-%{_qt6_libdir}/cmake/Qt6WaylandClient/*.cmake
 %{_qt6_libdir}/cmake/Qt6WaylandClientFeaturesPrivate/*.cmake
 %{_qt6_libdir}/cmake/Qt6WaylandCompositor/
 %{_qt6_libdir}/cmake/Qt6WaylandCompositorIviapplication/
@@ -184,7 +182,6 @@ popd
 %{_qt6_libdir}/qt6/metatypes/qt6*_metatypes.json
 %{_qt6_libdir}/qt6/modules/*.json
 %{_qt6_libdir}/pkgconfig/*.pc
-%exclude %{_qt6_libdir}/cmake/Qt6WaylandClient/Qt6QWaylandAdwaitaDecoration*.cmake
 
 %files adwaita-decoration
 %{_qt6_plugindir}/wayland-decoration-client/libadwaita.so
@@ -196,5 +193,9 @@ popd
 %endif
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
+- devel no longer lists cmake/Qt6WaylandClient (owned by qt6-qtbase-devel since Qt 6.10)
+- drop duplicate compositor soname glob in main package
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
 - Prepare for Oreon 11 (RP1)
