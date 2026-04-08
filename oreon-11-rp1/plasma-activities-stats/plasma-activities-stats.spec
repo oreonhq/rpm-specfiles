@@ -71,7 +71,6 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 %{_kf6_libdir}/cmake/PlasmaActivitiesStats/
 %{_kf6_libdir}/libPlasmaActivitiesStats.so
 %{_kf6_libdir}/pkgconfig/PlasmaActivitiesStats.pc
-%{_qt6_docdir}/*.tags
 
 %files doc
 %{_qt6_docdir}/*.qch
