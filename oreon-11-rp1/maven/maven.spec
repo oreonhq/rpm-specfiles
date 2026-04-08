@@ -115,7 +115,7 @@ Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 Core part of Apache Maven that can be used as a library.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 find -name '*.java' -exec sed -i 's/\r//' {} +
 find -name 'pom.xml' -exec sed -i 's/\r//' {} +

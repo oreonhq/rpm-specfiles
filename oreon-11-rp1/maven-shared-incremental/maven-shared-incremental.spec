@@ -33,7 +33,7 @@ Various utility classes and plexus components for supporting
 incremental build functionality in maven plugins.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %pom_remove_dep :plexus-component-api
 
 %build

@@ -76,7 +76,7 @@ when this is useful:
   non-standard ways.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_dep :junit-bom
 

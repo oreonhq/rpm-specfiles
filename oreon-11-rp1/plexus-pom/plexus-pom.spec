@@ -24,7 +24,7 @@ executing software projects. This package provides parent POM for
 Plexus packages.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp -p %{SOURCE1} LICENSE
 
 %pom_remove_dep org.junit:junit-bom

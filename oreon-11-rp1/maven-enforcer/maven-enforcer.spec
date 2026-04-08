@@ -75,7 +75,7 @@ making use of pom inheritence. This way you don't have to adjust the
 pom.xml, but you can enforce a set of rules.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 find -name '*.java' -exec sed -i 's/\r//' {} +
 
 find -name EvaluateBeanshell.java -delete

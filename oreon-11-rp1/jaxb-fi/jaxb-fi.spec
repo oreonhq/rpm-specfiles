@@ -36,7 +36,7 @@ License:        Apache-2.0 AND BSD-3-Clause
 %{summary}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_parent
 

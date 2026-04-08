@@ -29,7 +29,7 @@ Obsoletes:      %{name}-javadoc < 2.0-33
 Plexus Security Dispatcher Component
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 cp %{SOURCE1} .
 

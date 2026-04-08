@@ -51,7 +51,7 @@ licensing requirements at Apache where each project much include
 license and notice files for each release.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %mvn_build -j

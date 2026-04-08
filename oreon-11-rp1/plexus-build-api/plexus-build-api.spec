@@ -31,7 +31,7 @@ Obsoletes:      %{name}-javadoc < 1.2.0-17
 Plexus Build API
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp -p %{SOURCE1} .
 
 %mvn_file : plexus/%{name}

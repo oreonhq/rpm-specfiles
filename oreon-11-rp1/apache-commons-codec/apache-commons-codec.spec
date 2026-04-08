@@ -33,7 +33,7 @@ commonly used encoders and decoders. Examples include Base64, Hex,
 Phonetic and URLs.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp %{SOURCE1} aspell-mail.txt
 sed -i 's/\r//' RELEASE-NOTES*.txt LICENSE.txt NOTICE.txt
 

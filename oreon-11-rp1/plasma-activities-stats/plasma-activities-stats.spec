@@ -1,7 +1,7 @@
 Name:    plasma-activities-stats
 Summary: Library to access the usage statistics data collected by the KDE activity manager
 Version: 6.6.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: CC0-1.0, GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
@@ -47,7 +47,8 @@ Provides:       kf6-kactivities-stats-devel = 1:%{version}-%{release}
 
 
 %build
-%cmake_kf6
+# Avoid QCH/tags under %%{_docdir}/qt6 when distro macros turn BUILD_QCH on
+%cmake_kf6 -DBUILD_QCH=OFF
 %cmake_build
 
 
@@ -68,6 +69,9 @@ Provides:       kf6-kactivities-stats-devel = 1:%{version}-%{release}
 %{_kf6_libdir}/pkgconfig/PlasmaActivitiesStats.pc
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
+- Force BUILD_QCH off so -devel does not expect missing qt doc tags
+
 * Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Remove -doc subpackage (no *.qch installed by current build)
 

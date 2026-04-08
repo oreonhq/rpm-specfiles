@@ -74,7 +74,7 @@ Summary:        Placeholders for %{name}
 This package provides %{summary}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 
 rm -r xmlunit-core/src/main/java/org/xmlunit/builder/javax_jaxb\

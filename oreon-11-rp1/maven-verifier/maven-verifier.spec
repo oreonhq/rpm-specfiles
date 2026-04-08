@@ -33,7 +33,7 @@ Obsoletes:      %{name}-javadoc < 2.0.0~M1-18
 Provides a test harness for Maven integration tests.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # This test attempts to write outside the build directory
 rm src/test/java/org/apache/maven/shared/verifier/ForkedLauncherTest.java

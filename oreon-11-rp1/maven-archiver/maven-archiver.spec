@@ -33,7 +33,7 @@ The Maven Archiver is used by other Maven plugins
 to handle packaging
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %pom_remove_dep :junit-bom
 
 %build

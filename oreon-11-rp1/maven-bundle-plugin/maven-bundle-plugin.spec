@@ -41,7 +41,7 @@ from the contents of the compilation classpath along with its
 resources and dependencies. Plus a zillion other features.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 find -name '*.jar' -delete
 

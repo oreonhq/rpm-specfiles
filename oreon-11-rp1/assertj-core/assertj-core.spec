@@ -29,7 +29,7 @@ A rich and intuitive set of strongly-typed assertions to use for unit testing
 (either with JUnit or TestNG).
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin -r :maven-javadoc-plugin
 %pom_remove_plugin -r :maven-enforcer-plugin

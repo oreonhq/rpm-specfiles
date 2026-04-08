@@ -26,7 +26,7 @@ Obsoletes:      %{name}-javadoc < 1.2-53
 Resolver subproject of xml-commons.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove all binary libs and prebuilt javadocs
 find . -name "*.jar" -exec rm -f {} \;

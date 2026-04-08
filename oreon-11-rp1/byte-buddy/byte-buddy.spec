@@ -64,7 +64,7 @@ Summary:        Byte Buddy Maven plugin
 A plugin for post-processing class files via Byte Buddy in a Maven build.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 
 find -name '*.class' -delete

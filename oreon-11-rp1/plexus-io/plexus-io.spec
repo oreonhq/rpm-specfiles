@@ -37,7 +37,7 @@ Plexus IO is a set of plexus components, which are designed for use
 in I/O operations.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp %{SOURCE1} .
 
 # Test fails in mock

@@ -34,7 +34,7 @@ as BSD R command support. The purpose of the library is to provide
 fundamental protocol access, not higher-level abstractions.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %pom_remove_plugin :exec-maven-plugin

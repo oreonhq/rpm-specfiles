@@ -92,7 +92,7 @@ Provides:       maven-shared-plugin-tools-java = 0:%{version}-%{release}
 Descriptor extractor for plugins written in Java.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 find -name '*.java' -exec sed -i 's/\r//' {} +
 
 rm -r maven-plugin-tools-api/src/test/resources/javadoc

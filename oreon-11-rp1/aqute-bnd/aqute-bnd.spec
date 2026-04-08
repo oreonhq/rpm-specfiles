@@ -93,7 +93,7 @@ Summary:        BND Maven plugin
 %endif
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # the commands pull in more dependencies than we want (felix-resolver, jetty)
 rm biz.aQute.bnd/src/aQute/bnd/main/{ExportReportCommand,MbrCommand,RemoteCommand,ReporterLogger,ResolveCommand,Shell}.java

@@ -41,7 +41,7 @@ The Resources Plugin handles the copying of project resources
 to the output directory.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %mvn_build -j

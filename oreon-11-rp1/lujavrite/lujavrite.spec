@@ -21,7 +21,7 @@ from Lua code.  It does so by launching embedded Java Virtual Machine
 and using JNI interface to invoke Java methods.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %conf
 %cmake

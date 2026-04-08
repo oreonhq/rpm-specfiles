@@ -50,7 +50,7 @@ of recording expectations, most refactorings will not affect the Mock Objects.
 So EasyMock is a perfect fit for Test-Driven Development.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 
 %pom_remove_plugin -r :maven-javadoc-plugin

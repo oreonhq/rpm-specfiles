@@ -37,7 +37,7 @@ velocity, etc. Plexus also includes an application server which
 is like a J2EE application server, without all the baggage.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %mvn_file : plexus/utils
 %mvn_alias : plexus:plexus-utils

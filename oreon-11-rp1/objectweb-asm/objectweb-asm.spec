@@ -40,7 +40,7 @@ transformations and analysis algorithms allow to easily assemble
 custom complex transformations and code analysis tools.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # A custom pom to aggregate the build
 cp -p %{SOURCE1} pom.xml

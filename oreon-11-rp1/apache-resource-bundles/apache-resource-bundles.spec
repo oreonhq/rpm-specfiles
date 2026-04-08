@@ -33,7 +33,7 @@ An archive which contains templates for generating the necessary license files
 and notices for all Apache releases.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %pom_disable_module resources-bundles-sample
 %mvn_alias :apache-jar-resource-bundle org.apache:
 

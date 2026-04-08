@@ -29,7 +29,7 @@ frameworks. Typical scenarios include testing frameworks, mocking libraries and
 UI validation rules.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 pushd hamcrest
 cp -p %{SOURCE1} pom.xml

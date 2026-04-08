@@ -29,7 +29,7 @@ JXPath applies XPath expressions to graphs of objects of all kinds:
 JavaBeans, Maps, Servlet contexts, DOM etc, including mixtures thereof.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_dep com.mockrunner:
 

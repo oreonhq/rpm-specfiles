@@ -26,7 +26,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 Apache Maven parent POM file used by other Maven projects.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin :maven-checkstyle-plugin
 %pom_remove_plugin :apache-rat-plugin

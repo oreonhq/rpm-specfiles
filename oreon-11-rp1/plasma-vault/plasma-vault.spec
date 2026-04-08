@@ -5,13 +5,13 @@ ExcludeArch: %{ix86}
 # Parallel C++/LTO jobs can OOM smaller aarch64 builders
 %ifarch aarch64 s390x
 %global _smp_mflags -j1
-%define _lto_cflags %{nil}
+%global _lto_cflags %{nil}
 %endif
 
 Name:    plasma-vault
 Summary: Plasma Vault offers strong encryption features in a user-friendly way
 Version: 6.6.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
@@ -56,7 +56,11 @@ prying eyes even when the user is logged in.
 %autosetup -n %{name}-%{version} -p1
 
 %build
+%ifarch aarch64 s390x
+%cmake_kf6 -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF
+%else
 %cmake_kf6
+%endif
 %cmake_build
 
 
@@ -73,6 +77,9 @@ prying eyes even when the user is logged in.
 %{_kf6_datadir}/plasma/plasmoids/org.kde.plasma.vault/
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
+- Disable IPO in cmake on aarch64 and s390x so LTO does not blow RAM
+
 * Mon Apr 06 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Limit parallel jobs and LTO on aarch64 and s390x to avoid OOM during build
 

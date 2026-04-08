@@ -37,7 +37,7 @@ improvements: lots of methods got cleaned up, generics got added and we dropped
 a lot of unused code.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 find -name '*.java' -exec sed -i 's/\r//' {} +
 

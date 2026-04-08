@@ -23,7 +23,7 @@ BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 Codehaus MOJO parent project pom file
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 # Not needed in Fedora.
 %pom_remove_plugin :maven-enforcer-plugin
 %pom_remove_plugin :maven-site-plugin

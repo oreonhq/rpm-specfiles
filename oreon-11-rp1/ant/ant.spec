@@ -328,7 +328,7 @@ Documentation pour %{name}.
 # -----------------------------------------------------------------------------
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # clean jar files
 find . -name "*.jar" | xargs -t rm

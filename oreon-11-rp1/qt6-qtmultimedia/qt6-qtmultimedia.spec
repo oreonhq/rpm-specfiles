@@ -18,10 +18,16 @@
 
 %global examples 1
 
+# PCH, qsb, and LTO together can OOM smaller aarch64 or s390x builders
+%ifarch aarch64 s390x
+%global _smp_mflags -j1
+%global _lto_cflags %{nil}
+%endif
+
 Summary: Qt6 - Multimedia support
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -103,7 +109,7 @@ Requires: pkgconfig(libpulse-mainloop-glib)
 %package examples
 Summary: Programming examples for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-# BuildRequires: qt6-qtmultimedia-devel >= %%{version}
+# BuildRequires: qt6-qtmultimedia-devel (same version as this package)
 %description examples
 %{summary}.
 %endif
@@ -116,9 +122,16 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %if 0%{?rhel} && 0%{?rhel} < 10
 . /opt/rh/gcc-toolset-13/enable
 %endif
+%ifarch aarch64 s390x
+%cmake_qt6 \
+  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
+  -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
+  -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
+%else
 %cmake_qt6 \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
+%endif
 
 %cmake_build
 
@@ -234,5 +247,8 @@ rm -r %{buildroot}%{_qt6_archdatadir}/mkspecs/features/ios/add_ios_ffmpeg_librar
 
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
+- Ease aarch64 and s390x OOM, disable IPO there, fix comment macro warning
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
 - Prepare for Oreon 11 (RP1)

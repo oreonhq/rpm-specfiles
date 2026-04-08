@@ -50,7 +50,7 @@ Obsoletes:      %{name}-javadoc < 3.1.1-4
 Maven Plugin for processing JavaCC grammar files.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %conf
 cp -p %{SOURCE1} .

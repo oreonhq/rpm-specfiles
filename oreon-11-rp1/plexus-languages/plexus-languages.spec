@@ -34,7 +34,7 @@ Plexus Languages is a set of Plexus components that maintain shared
 language features.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 cp %{SOURCE1} .
 

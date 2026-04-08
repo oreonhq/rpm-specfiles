@@ -38,7 +38,7 @@ Obsoletes:      %{name}-javadoc < 1:3.0.0-47
 API for I/O support like logging, download or file scanning.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %mvn_build -j -- -Dmaven.compiler.target=8

@@ -18,7 +18,7 @@ insufficient due to Java language syntax. The tool follows Java language rules
 rather than applying simple regular expressions on the source code.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %{make_build} test-compile manpages

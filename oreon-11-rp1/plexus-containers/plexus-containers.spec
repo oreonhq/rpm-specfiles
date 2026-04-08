@@ -59,7 +59,7 @@ Summary:        Component API from %{name}
 %{summary}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp %{SOURCE1} .
 cp %{SOURCE2} .
 

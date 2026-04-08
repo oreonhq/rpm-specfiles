@@ -23,7 +23,7 @@ Parent pom for Apache Logging Services projects.
 
 
 %prep
-%setup -q -n logging-parent-logging-parent-%{version}
+%setup -q -n logging-parent-%{version}
 cp -p %SOURCE1 LICENSE
 
 %pom_remove_plugin com.diffplug.spotless:spotless-maven-plugin

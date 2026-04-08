@@ -31,7 +31,7 @@ represent a 'container' can benefit from the classloading control provided by
 classworlds.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %mvn_file : %{name} plexus/classworlds
 %mvn_alias : classworlds:classworlds
 

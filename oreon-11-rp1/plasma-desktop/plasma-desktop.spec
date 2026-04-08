@@ -6,17 +6,13 @@
 Name:    plasma-desktop
 Summary: Plasma Desktop shell
 Version: 6.6.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
 
 Source0: https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
 Source1: https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
-
-# breeze fedora sddm theme components
-# includes f40-based preview (better than breeze or nothing at least)
-Source20:       breeze-fedora-0.3.tar.gz
 
 ## upstream patches
 
@@ -226,7 +222,7 @@ BuildArch: noarch
 
 %package -n sddm-breeze
 Summary:        SDDM breeze theme
-Requires:       kde-settings-sddm
+Requires:       sddm
 # upgrade path, when sddm-breeze was split out
 Obsoletes: plasma-workspace < 5.3.2-8
 # theme files from breeze plasma
@@ -250,7 +246,7 @@ BuildArch: noarch
 
 
 %prep
-%autosetup -a 20 -p1
+%autosetup -p1
 
 
 %build
@@ -269,22 +265,6 @@ BuildArch: noarch
 
 grep "%{_kf6_docdir}" %{name}.lang > %{name}-doc.lang
 cat  %{name}.lang %{name}-doc.lang | sort | uniq -u > plasmadesktop6.lang
-
-# make fedora-breeze sddm theme variant.
-cp -alf %{buildroot}%{_datadir}/sddm/themes/breeze/ \
-        %{buildroot}%{_datadir}/sddm/themes/01-breeze-fedora
-# replace items
-install -m644 -p breeze-fedora/* \
-        %{buildroot}%{_datadir}/sddm/themes/01-breeze-fedora/
-# Set Fedora background
-bg_file_ext="jxl"
-if [ -f "/usr/share/backgrounds/default.png" ]; then
-bg_file_ext="png"
-fi
-sed -i -e "s|^background=.*$|background=/usr/share/backgrounds/default.${bg_file_ext}|g" %{buildroot}%{_datadir}/sddm/themes/01-breeze-fedora/theme.conf
-# Set Fedora distro vendor logo
-sed -i -e 's|^showlogo=.*$|showlogo=shown|g' %{buildroot}%{_datadir}/sddm/themes/01-breeze-fedora/theme.conf
-sed -i -e 's|^logo=.*$|logo=%{_datadir}/pixmaps/fedora_whitelogo.svg|g' %{buildroot}%{_datadir}/sddm/themes/01-breeze-fedora/theme.conf
 
 
 %check
@@ -358,7 +338,6 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kaccess.desktop
 
 %files -n sddm-breeze
 %{_datadir}/sddm/themes/breeze/
-%{_datadir}/sddm/themes/01-breeze-fedora/
 
 
 %if 0%{?scim}
@@ -370,6 +349,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kaccess.desktop
 
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
+- Drop Fedora SDDM theme overlay and breeze-fedora source, require sddm only
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

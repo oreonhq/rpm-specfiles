@@ -32,7 +32,7 @@ file filters, and endian classes. It is a library of utilities
 to assist with developing IO functionality.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 sed -i 's/\r//' *.txt
 

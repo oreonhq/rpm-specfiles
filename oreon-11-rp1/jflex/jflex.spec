@@ -40,7 +40,7 @@ used together with other parser generators like ANTLR or as a
 standalone tool.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %mvn_file : %{name}
 %pom_add_dep java_cup:java_cup
 

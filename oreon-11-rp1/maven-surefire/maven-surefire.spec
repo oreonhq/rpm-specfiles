@@ -101,7 +101,7 @@ integration-test phase thus enabling the post-integration-test phase
 to execute.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp -p %{SOURCE2} .
 
 

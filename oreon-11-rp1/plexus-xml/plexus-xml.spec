@@ -34,7 +34,7 @@ Obsoletes:      %{name}-javadoc < 4.0.4-5
 A collection of various utility classes to ease working with XML.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 # Test dependencies are not packaged

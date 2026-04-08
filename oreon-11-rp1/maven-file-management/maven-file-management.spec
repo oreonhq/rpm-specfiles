@@ -31,7 +31,7 @@ Obsoletes:      %{name}-javadoc < 1:3.1.0-19
 Provides a component for plugins to easily resolve project dependencies.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %mvn_build -j

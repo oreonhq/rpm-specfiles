@@ -29,7 +29,7 @@ equivalent Java object. Gson can work with arbitrary Java objects including
 pre-existing objects that you do not have source-code of.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin -r :spotless-maven-plugin

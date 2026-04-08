@@ -27,7 +27,7 @@ Requires:       mvn(org.apache.apache.resources:apache-jar-resource-bundle)
 This package contains the parent pom file for apache projects.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin :maven-enforcer-plugin
 %pom_remove_plugin :maven-site-plugin

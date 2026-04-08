@@ -22,7 +22,7 @@ extensibility, reusability, and maintainability to effectively manage
 and control package dependencies.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 # remove all binary libs
 find . -name "*.jar" -delete
 # fix strange permissions

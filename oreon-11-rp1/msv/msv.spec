@@ -48,7 +48,7 @@ MSV XML Datatypes Library, Java implementation of W3C’s XML Schema Part 2, is
 intended for use with applications that incorporate XML Schema Part 2.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Disable runtime dependency on Apache Xerces
 rm xsdlib/src/main/java/com/sun/msv/datatype/xsd/regex/XercesImpl.java

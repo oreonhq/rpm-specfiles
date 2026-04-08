@@ -63,7 +63,7 @@ specification of local repository, remote repository, developer workspaces,
 artifact transports and artifact resolution.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Skip tests that equire internet connection
 rm maven-resolver-supplier/src/test/java/org/eclipse/aether/supplier/RepositorySystemSupplierTest.java

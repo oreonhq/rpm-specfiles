@@ -22,7 +22,7 @@ BuildRequires:  mvn(org.apache:apache:pom:)
 Parent POM file for Apache Felix Specs.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %mvn_alias : :felix
 %pom_remove_plugin :maven-enforcer-plugin
 %pom_remove_plugin :maven-javadoc-plugin

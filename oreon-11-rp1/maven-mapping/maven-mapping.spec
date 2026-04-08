@@ -29,7 +29,7 @@ Obsoletes:      %{name}-javadoc < 3.0.0-46
 Maven shared component that implements file name mapping.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %pom_xpath_set "pom:project/pom:properties/pom:maven.compiler.target" "8" pom.xml
 %pom_xpath_set "pom:project/pom:properties/pom:maven.compiler.source" "8" pom.xml
 

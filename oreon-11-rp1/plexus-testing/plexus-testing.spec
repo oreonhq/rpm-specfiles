@@ -31,7 +31,7 @@ The Plexus Testing contains the necessary classes to be able to test
 Plexus components.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %pom_add_dep org.codehaus.plexus:plexus-utils
 %pom_add_dep org.codehaus.plexus:plexus-xml
 

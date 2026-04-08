@@ -35,7 +35,7 @@ interoperability between Java/J2EE AOP implementations to build a
 larger AOP community.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 export CLASSPATH=

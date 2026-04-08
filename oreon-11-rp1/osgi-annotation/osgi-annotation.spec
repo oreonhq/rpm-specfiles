@@ -28,7 +28,7 @@ Annotations for use in compiling OSGi bundles. This package is not normally
 needed at run-time.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 mkdir -p src/main/java && mv OSGI-OPT/src/org src/main/java
 

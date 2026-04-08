@@ -40,7 +40,7 @@ and comments. It is also possible to change the AST nodes or create new
 ones to modify the source code.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 sed -i 's/\r//' readme.md
 

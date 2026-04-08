@@ -25,7 +25,7 @@ This package provides Plexus Components parent POM used by different
 Plexus packages.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp -p %{SOURCE1} LICENSE
 
 %build

@@ -37,7 +37,7 @@ currently missing from the JDK:
 ° Executor
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # drop some failure-prone tests (race conditions?)
 rm jctools-core/src/test/java/org/jctools/queues/MpqSanityTestMpscCompound.java

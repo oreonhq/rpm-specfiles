@@ -44,7 +44,7 @@ Obsoletes:      %{name}-javadoc < 1:0.13.1-34
 An API to either install or deploy artifacts with Maven 3.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 find -name '*.java' -exec sed -i 's/\r//' {} +
 
 %pom_remove_plugin :apache-rat-plugin

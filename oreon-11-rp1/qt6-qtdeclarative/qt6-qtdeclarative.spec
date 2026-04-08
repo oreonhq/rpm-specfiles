@@ -1,7 +1,12 @@
 
 %global qt_module qtdeclarative
 
-%define _lto_cflags %{nil}
+%global _lto_cflags %{nil}
+
+# Ninja default job count plus huge TU can OOM aarch64 or s390x mock
+%ifarch aarch64 s390x
+%global _smp_mflags -j1
+%endif
 
 # definition borrowed from qtbase
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9
@@ -16,7 +21,7 @@
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -92,7 +97,7 @@ Summary: Programming examples for %{name}
 Requires:  %{name}%{?_isa} = %{version}-%{release}
 Obsoletes: qt6-qtquickcontrols2-examples < 6.2.0~beta3-1
 Provides:  qt6-qtquickcontrols2-examples = %{version}-%{release}
-# BuildRequires: qt6-qtdeclarative-devel >= %%{version}
+# BuildRequires: qt6-qtdeclarative-devel (same version as this package)
 %description examples
 %{summary}.
 %endif
@@ -107,9 +112,16 @@ Provides:  qt6-qtquickcontrols2-examples = %{version}-%{release}
 ln -s %{__python3} python
 export PATH=`pwd`:$PATH
 
+%ifarch aarch64 s390x
+%cmake_qt6 \
+  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
+  -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
+  -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
+%else
 %cmake_qt6 \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
+%endif
 
 %cmake_build
 
@@ -557,7 +569,7 @@ make check -k -C tests ||:
 # This (split to -private-devel) didn't work out because of rhbz#2330219
 # Might be something to consider in the future.
 # Private stuff
-# {_qt6_headerdir}/*/{qt_version}
+# private headers live in versioned subdirs under the qt6 header prefix
 %dir %{_qt6_libdir}/cmake/Qt6LabsAnimationPrivate
 %dir %{_qt6_libdir}/cmake/Qt6LabsFolderListModelPrivate
 %dir %{_qt6_libdir}/cmake/Qt6LabsPlatformPrivate
@@ -737,5 +749,8 @@ make check -k -C tests ||:
 %endif
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
+- Ease aarch64 and s390x OOM, disable IPO there, fix comment macro warning
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
 - Prepare for Oreon 11 (RP1)

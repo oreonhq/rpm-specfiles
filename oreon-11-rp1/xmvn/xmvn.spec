@@ -120,7 +120,7 @@ This package provides various XMvn tools:
   with symbolic links to corresponding files in artifact repository.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %mvn_package ::tar.gz: __noinstall
 %mvn_package ":{xmvn,xmvn-connector}" xmvn

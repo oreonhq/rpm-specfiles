@@ -37,7 +37,7 @@ Builds a Java Archive (JAR) file from the compiled
 project classes and resources.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 # System version of maven-jar-plugin should be used, not reactor version
 %pom_xpath_inject pom:pluginManagement/pom:plugins "<plugin><artifactId>maven-jar-plugin</artifactId><version>SYSTEM</version></plugin>"
 

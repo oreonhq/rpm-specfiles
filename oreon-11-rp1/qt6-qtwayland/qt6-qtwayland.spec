@@ -82,7 +82,7 @@ Supplements: (qt6-qtbase and gnome-shell)
 %package examples
 Summary: Programming examples for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-# BuildRequires: qt6-qtwayland-devel >= %%{version}
+# BuildRequires: qt6-qtwayland-devel (same version as this package)
 %description examples
 %{summary}.
 %endif

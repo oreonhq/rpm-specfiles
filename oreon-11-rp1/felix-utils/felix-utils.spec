@@ -32,7 +32,7 @@ Obsoletes:      %{name}-javadoc < 1.11.8-24
 Utility classes for OSGi
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_parent
 %pom_xpath_inject pom:project "<groupId>org.apache.felix</groupId>"

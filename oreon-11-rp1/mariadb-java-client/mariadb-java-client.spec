@@ -37,7 +37,7 @@ Summary: Tests for %{name}
 This package contains tests for %{name}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_dep ch.qos.logback:logback-classic
 grep -l -r '^import ch\.qos\.logback\.classic' src/test | xargs rm -v

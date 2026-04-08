@@ -3,8 +3,9 @@
 %global gitdate 20260218.085444
 
 Name:          plasma-bigscreen
-Version:       6.5.80-%{gitdate}.%{shortcommit}
-Release:       2%{?dist}
+# Plain semver in Version, git snapshot in Release (avoids illegal '-' and '^' macro glitches)
+Version:       6.5.80
+Release:       0.%{gitdate}.%{shortcommit}%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later and CC-BY-SA-4.0
 Summary:       A big launcher giving you access to any installed apps and skills
 Url:           https://invent.kde.org/plasma/plasma-bigscreen
@@ -122,6 +123,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.5.80-0.20260218.085444.a1b44a8
+- Move git snapshot from Version into Release for rpmspec and macros
+
 * Thu Feb 26 2026 Yaakov Selkowitz <yselkowi@redhat.com> - 6.5.80^20260218.085444.a1b44a8-2
 - Rebuild (libplasma)
 

@@ -21,7 +21,7 @@ BuildRequires:  maven-local-openjdk25
 This is a shared POM parent for FuseSource Maven projects.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 mv fusesource-pom/pom.xml .
 
 %pom_remove_plugin :maven-scm-plugin

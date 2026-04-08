@@ -30,7 +30,7 @@ Obsoletes:      %{name}-javadoc < 3.2.1-20
 Apache Maven dependency tree artifact. Originally part of maven-shared.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin :apache-rat-plugin
 %pom_remove_plugin :maven-invoker-plugin

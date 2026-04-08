@@ -92,7 +92,7 @@ Requires:       %{name} = %{version}-%{release}
 Examples for %{name}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Remove binary information in the source tar
 find . -name "*.jar" -delete

@@ -44,7 +44,7 @@ Install transfig if you need a utility for translating FIG or PIC figures into
 certain graphics languages.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 autoreconf -i
 
 # Fix the manpage not being in UTF-8

@@ -118,7 +118,7 @@ Guice is a lightweight dependency injection framework for Java 5
 and above. This package provides Bill of Materials module for Guice.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 jurand -i -s -a core/src/ \
   -p com[.]google[.]common[.]annotations[.] \

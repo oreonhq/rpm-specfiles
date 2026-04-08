@@ -42,7 +42,7 @@ Summary:       Javadoc for %{name}
 This package contains javadoc for %{name}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent

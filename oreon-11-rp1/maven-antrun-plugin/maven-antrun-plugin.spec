@@ -36,7 +36,7 @@ This plugin provides the ability to run Ant tasks from within Maven.
 It is even possible to embed Ant scripts in the POM.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %mvn_build -j

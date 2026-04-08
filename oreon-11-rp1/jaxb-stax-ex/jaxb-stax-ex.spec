@@ -30,7 +30,7 @@ the following areas:
 - Improve the namespace support.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_parent
 

@@ -110,7 +110,7 @@ Summary:        SLF4J Source JARs
 SLF4J Source JARs.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 find -name '*.jar' -delete
 install -p -m 0644 %{SOURCE1} LICENSE-2.0.txt
 

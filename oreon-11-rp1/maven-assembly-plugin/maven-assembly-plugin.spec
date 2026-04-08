@@ -48,7 +48,7 @@ A Maven plugin to create archives of your project's sources, classes,
 dependencies etc. from flexible assembly descriptors.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_dep jaxen:jaxen
 

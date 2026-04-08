@@ -194,7 +194,7 @@ example, JPB contains embedded version of XMvn, removing dependency of JPT on
 XMvn, allowing JPT to be used before one builds XMvn package.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 mkdir archive/
 cp %{sources} archive/
 ./downstream.sh prep-from-archive

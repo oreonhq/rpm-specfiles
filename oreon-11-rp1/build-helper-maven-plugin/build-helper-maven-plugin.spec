@@ -35,7 +35,7 @@ This plugin contains various small independent goals to assist with
 Maven build lifecycle.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_add_dep junit:junit::test
 

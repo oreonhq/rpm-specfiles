@@ -46,7 +46,7 @@ Summary:        Maven Plugin Testing Mechanism
 The Maven Plugin Testing Harness provides mechanisms to manage tests on Mojo.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 
 %pom_remove_plugin :maven-enforcer-plugin

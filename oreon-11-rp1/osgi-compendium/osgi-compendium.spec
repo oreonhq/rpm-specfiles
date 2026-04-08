@@ -26,7 +26,7 @@ Obsoletes:      %{name}-javadoc < 7.0.0-38
 OSGi Compendium, Interfaces and Classes for use in compiling bundles.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Delete pre-built binaries
 rm -r org

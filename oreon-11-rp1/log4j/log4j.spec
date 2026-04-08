@@ -131,7 +131,7 @@ Use NoSQL databases such as MongoDB and CouchDB to append log messages.
 %endif
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin -r :apache-rat-plugin
 %pom_remove_plugin -r :maven-site-plugin

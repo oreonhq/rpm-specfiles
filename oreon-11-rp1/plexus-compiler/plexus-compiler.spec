@@ -51,7 +51,7 @@ Summary:        Maven POM files for %{name}
 This package provides %{summary}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 find -name '.class' -delete
 

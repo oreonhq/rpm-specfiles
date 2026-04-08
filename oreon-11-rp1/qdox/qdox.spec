@@ -38,7 +38,7 @@ It is designed to be used by active code
 generators or documentation tools.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent

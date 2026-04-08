@@ -32,7 +32,7 @@ This plugin allows the creation of a module-info.class for projects on Java 6
 to Java 8 where a module-info.java file cannot be compiled.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 cp -p %{SOURCE1} .
 

@@ -41,7 +41,7 @@ Summary:        Documentation for java_cup
 Documentation for java_cup.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove all binary files
 find -name "*.class" -delete

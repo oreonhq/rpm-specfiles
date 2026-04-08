@@ -43,7 +43,7 @@ complex and memory-consumptive options that current API
 offerings provide.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 
 sed -i 's/\r//' LICENSE.txt

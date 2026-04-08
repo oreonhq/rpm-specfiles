@@ -57,7 +57,7 @@ License:        Apache-2.0
 Documentation for %{name}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 sed -i '/<bootclasspath/d' build.xml
 

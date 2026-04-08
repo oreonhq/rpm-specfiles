@@ -47,7 +47,7 @@ Maven Resources Plugin. The goal is to provide a shared component for all
 plugins that needs to filter resources.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %mvn_build -j

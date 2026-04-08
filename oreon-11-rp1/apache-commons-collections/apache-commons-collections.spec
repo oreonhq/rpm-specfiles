@@ -49,7 +49,7 @@ Requires:       %{name} = %{version}-%{release}
 %{summary}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;

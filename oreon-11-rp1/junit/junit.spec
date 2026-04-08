@@ -45,7 +45,7 @@ Summary:        Manual for %{name}
 Documentation for %{name}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 
 # InaccessibleBaseClassTest fails with Java 8

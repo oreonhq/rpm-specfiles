@@ -40,7 +40,7 @@ distributed test running.  It is designed to cover unit tests as well as
 functional, end-to-end, integration, etc.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 cp %{SOURCE1} pom.xml
 

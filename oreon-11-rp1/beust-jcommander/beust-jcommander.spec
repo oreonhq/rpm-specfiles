@@ -32,7 +32,7 @@ JCommander is a very small Java framework that makes it trivial to
 parse command line parameters (with annotations).
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 chmod -x license.txt
 
 cp -p %SOURCE1 pom.xml

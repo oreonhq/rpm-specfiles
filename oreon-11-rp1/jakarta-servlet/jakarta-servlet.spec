@@ -30,7 +30,7 @@ Jakarta Servlet defines a server-side API for handling HTTP requests
 and responses.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent . api

@@ -21,7 +21,7 @@ Obsoletes:      %{name}-javadoc < 2011.1-14
 Interface between RELAX NG validators and datatype libraries.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp %{SOURCE1} .
 
 %pom_remove_parent

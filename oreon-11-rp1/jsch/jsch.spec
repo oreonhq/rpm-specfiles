@@ -27,7 +27,7 @@ X11 forwarding, file transfer, etc., and you can integrate its
 functionality into your own Java programs.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %mvn_file : jsch
 
 %pom_remove_parent

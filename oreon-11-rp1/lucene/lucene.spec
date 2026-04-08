@@ -222,7 +222,7 @@ Summary:        Lucene module: suggest
 %{summary}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 find -mindepth 1 -maxdepth 1 ! -name lucene ! -name LICENSE.txt ! -name NOTICE.txt ! -name README.md -exec rm -rf {} +
 mv -t . lucene/*

@@ -31,7 +31,7 @@ Requires:       mvn(org.moditect:moditect-maven-plugin)
 The Project Object Model files for the apache-commons packages.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Plugin is not in fedora
 %pom_remove_plugin org.apache.commons:commons-build-plugin

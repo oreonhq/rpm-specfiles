@@ -35,7 +35,7 @@ A collection of ready-made filters to control inclusion/exclusion of artifacts
 during dependency resolution.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Test depends on jmh performance benchmarking library
 %pom_remove_dep org.openjdk.jmh:jmh-core

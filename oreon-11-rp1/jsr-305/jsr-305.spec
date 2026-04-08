@@ -30,7 +30,7 @@ documents for Java Specification Request 305: Annotations for Software Defect
 Detection.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Replace javax.annotation.concurrent annotations (that are based on
 # code from https://jcip.net/ and are licensed under CC-BY-2.5, which

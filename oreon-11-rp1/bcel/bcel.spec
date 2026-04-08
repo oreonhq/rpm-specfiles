@@ -33,7 +33,7 @@ optimizers, obsfuscators and analysis tools, the most popular probably
 being the Xalan XSLT processor at Apache.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin :maven-source-plugin
 %pom_remove_plugin :spotbugs-maven-plugin

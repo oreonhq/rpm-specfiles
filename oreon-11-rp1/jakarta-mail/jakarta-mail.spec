@@ -28,7 +28,7 @@ Jakarta Mail defines a platform-independent and protocol-independent
 framework to build mail and messaging applications.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 pushd api
 # Remove unnecessary dependency on parent POM

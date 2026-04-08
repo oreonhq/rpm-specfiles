@@ -20,7 +20,7 @@ Obsoletes:      %{name}-javadoc < 1.5.1-14
 SAX-like API for parsing XML DTDs.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 pushd dtd-parser
 

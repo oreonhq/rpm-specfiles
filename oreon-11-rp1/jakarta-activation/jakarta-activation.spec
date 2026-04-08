@@ -31,7 +31,7 @@ discover the operations available on it; and instantiate the
 appropriate bean to perform the operation(s).
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 pushd api
 %pom_remove_parent

@@ -29,7 +29,7 @@ the various externally-defined standard interfaces for XML. This
 includes the DOM, SAX, and JAXP.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 # Make sure upstream hasn't sneaked in any jars we don't know about
 find -name '*.class' -exec rm -f '{}' \;
 find -name '*.jar' -exec rm -f '{}' \;

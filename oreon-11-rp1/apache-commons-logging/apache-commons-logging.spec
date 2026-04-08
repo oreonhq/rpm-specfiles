@@ -40,7 +40,7 @@ the two, and to allow a developer to not tie himself to a particular
 logging implementation.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_dep :avalon-framework
 %pom_remove_dep :logkit

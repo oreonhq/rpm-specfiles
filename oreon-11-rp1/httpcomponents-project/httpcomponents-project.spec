@@ -25,7 +25,7 @@ required only for building dependant packages with Maven. Please don't
 use it as runtime requirement.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin :maven-site-plugin
 %pom_remove_plugin :animal-sniffer-maven-plugin

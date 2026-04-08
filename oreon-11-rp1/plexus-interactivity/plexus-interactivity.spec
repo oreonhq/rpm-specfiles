@@ -32,7 +32,7 @@ Plexus component that handles interactive user input from different
 sources.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp %{SOURCE1} .
 
 %build

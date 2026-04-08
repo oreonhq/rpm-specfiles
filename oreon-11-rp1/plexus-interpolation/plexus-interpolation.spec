@@ -33,7 +33,7 @@ the expression language style commonly seen in Maven, Plexus, and other
 related projects.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %pom_add_dep junit:junit:4.13.1:test
 %pom_remove_plugin :maven-release-plugin
 %pom_remove_plugin :maven-scm-publish-plugin

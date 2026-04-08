@@ -30,7 +30,7 @@ file formats, and a solid framework for the development of new
 parsers.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin :nexus-staging-maven-plugin
 %pom_remove_plugin :maven-compiler-plugin

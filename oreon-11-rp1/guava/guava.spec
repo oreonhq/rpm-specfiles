@@ -43,7 +43,7 @@ Summary:        The guava-testlib artifact
 guava-testlib provides additional functionality for conveninent unit testing
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 find . -name '*.jar' -delete
 

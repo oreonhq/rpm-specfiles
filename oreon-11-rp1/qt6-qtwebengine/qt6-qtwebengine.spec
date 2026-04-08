@@ -88,7 +88,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -552,7 +552,7 @@ src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-librarie
 # fix/workaround
 # fatal error: QtWebEngineCore/qtwebenginecoreglobal.h: No such file or directory
 # if [ ! -f "./include/QtWebEngineCore/qtwebenginecoreglobal.h" ]; then
-# {_qt6_libexecdir}/syncqt -version {version}
+# syncqt -version passed upstream Qt version string
 # fi
 #
 # # abort if this doesn't get created by syncqt.pl
@@ -860,5 +860,8 @@ done
 %endif
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
+- Add sources checksum list for bundled scripts, drop stale headers tarball name
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
 - Prepare for Oreon 11 (RP1)

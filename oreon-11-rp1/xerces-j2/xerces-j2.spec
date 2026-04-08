@@ -73,7 +73,7 @@ Requires:       %{name} = %{version}-%{release}
 %{summary}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Copy the custom ant task into place
 mkdir -p tools/org/apache/xerces/util

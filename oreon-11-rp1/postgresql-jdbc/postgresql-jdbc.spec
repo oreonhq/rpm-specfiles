@@ -95,7 +95,7 @@ Summary:        Tests for %{name}
 This package contains tests for %{name}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove any binary libs
 find -type f \( -name "*.jar" -or -name "*.class" \) -delete

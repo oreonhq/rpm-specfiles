@@ -108,7 +108,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
-* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
+* Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-7
 - BR cmake(Qt6LinguistTools) for ecm_install_po_files_as_qm (fixes x86_64 configure)
 
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>

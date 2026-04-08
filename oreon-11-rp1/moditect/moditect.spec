@@ -46,7 +46,7 @@ to add a module descriptor to your project JAR while staying on Java 8 with your
 own build.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_parent parent
 %pom_xpath_inject 'pom:project' '<groupId>org.moditect</groupId>' parent

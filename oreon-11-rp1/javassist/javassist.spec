@@ -35,7 +35,7 @@ bytecode-level API allows the users to directly edit a class file as
 other editors.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove unnecessary maven plugins
 %pom_remove_plugin :maven-source-plugin

@@ -71,7 +71,7 @@ Suggests:       %{name}-platform-console-openjdk25 = %{version}-%{release}
 %{summary}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 find -name '*.jar' -delete
 
 cp -p %{SOURCE100} pom.xml

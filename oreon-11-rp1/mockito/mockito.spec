@@ -52,7 +52,7 @@ Requires:       %{name} = %{version}-%{release}
 Mockito JUnit 5 support.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 cp %{SOURCE2} aggregator.pom
 cp %{SOURCE3} pom.xml

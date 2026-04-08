@@ -3,7 +3,7 @@
 Name:           plasma-pk-updates
 Epoch:          1
 Version:        0.3.2
-Release:        22%{?dist}
+Release:        23%{?dist}
 Summary:        Plasma applet for system updates using PackageKit
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -57,6 +57,8 @@ Requires:       kf5-solid%{?_isa} >= 5.75.0-2
 
 
 %build
+# CMake 4 rejects cmake_minimum_required older than 3.5 unless policy is set for the whole run
+export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake_kf5 -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
 %cmake_build
@@ -81,5 +83,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf5_metainfodir}/org.kde.pl
 
 
 %changelog
+* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.2-23
+- Export CMAKE_POLICY_VERSION_MINIMUM for CMake 4 configure
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.2-22
 - Prepare for Oreon 11 (RP1)

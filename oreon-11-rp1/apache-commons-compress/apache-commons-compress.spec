@@ -39,7 +39,7 @@ In version 1.14 read-only support for Brotli decompression has been added,
 but it has been removed form this package.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Unavailable Google Brotli library (org.brotli.dec)
 %pom_remove_dep org.brotli:dec

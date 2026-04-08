@@ -26,7 +26,7 @@ Obsoletes:      %{name}-javadoc < 3.4.4-29
 A High Performance Inter-Thread Messaging Library.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 # Cleanup
 find . -name "*.class" -print -delete
 find . -name "*.jar" -type f -print -delete

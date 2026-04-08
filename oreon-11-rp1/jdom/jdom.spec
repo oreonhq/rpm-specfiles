@@ -71,7 +71,7 @@ Requires:       %{name} = %{version}-%{release}
 Demonstrations and samples for %{name}.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;
 find . -name "*.class" -exec rm -f {} \;

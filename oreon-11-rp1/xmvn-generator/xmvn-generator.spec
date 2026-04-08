@@ -33,7 +33,7 @@ XMvn Generator is a dependency generator for RPM Package Manager
 written in Java and Lua.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 %mvn_file : %{name}
 
 %build

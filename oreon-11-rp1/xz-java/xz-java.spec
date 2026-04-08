@@ -29,7 +29,7 @@ decompression with limited random access support, raw streams (no .xz headers)
 for advanced users, including LZMA2 with preset dictionary.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %mvn_file : %{name} xz
 

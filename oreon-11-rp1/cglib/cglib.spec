@@ -33,7 +33,7 @@ for Java. It is used to extend Java classes and implements interfaces
 at run-time.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent

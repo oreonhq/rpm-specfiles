@@ -47,7 +47,7 @@ the new version, while apache-commons-lang is the compatibility
 package.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin :maven-javadoc-plugin
 %pom_remove_dep org.openjdk.jmh:jmh-core

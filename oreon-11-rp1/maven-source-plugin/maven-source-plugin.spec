@@ -37,7 +37,7 @@ The Maven Source Plugin creates a JAR archive of the
 source files of the current project.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %mvn_file : %{name}

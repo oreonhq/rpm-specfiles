@@ -9,7 +9,7 @@ URL:            https://commons.apache.org/proper/commons-cli/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://www.apache.org/dist/commons/cli/source/commons-cli-%{version}-src.tar.gz
+Source0:        https://archive.apache.org/dist/commons/cli/source/commons-cli-%{version}-src.tar.gz
 
 Patch:          0001-Port-tests-to-commons-lang3.patch
 
@@ -33,7 +33,7 @@ The CLI library provides a simple and easy to use API for working with the
 command line arguments and options.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Compatibility links
 %mvn_alias : org.apache.commons:commons-cli

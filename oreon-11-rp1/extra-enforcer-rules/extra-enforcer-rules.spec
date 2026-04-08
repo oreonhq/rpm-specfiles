@@ -34,7 +34,7 @@ projects. The Enforcer plugin ships with a set of standard rules. This project
 provides extra rules which are not part of the standard rule set.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Integration tests fetch upstream poms
 %pom_remove_plugin :maven-invoker-plugin

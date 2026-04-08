@@ -48,7 +48,7 @@ Summary:        istack-commons tools
 This package contains istack-commons tools.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 pushd istack-commons
 

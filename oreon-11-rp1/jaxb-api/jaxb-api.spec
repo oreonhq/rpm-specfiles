@@ -22,7 +22,7 @@ The Jakarta XML Binding provides an API and tools that automate the mapping
 between XML documents and Java objects.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Remove unnecessary dependency on parent POM
 %pom_remove_parent

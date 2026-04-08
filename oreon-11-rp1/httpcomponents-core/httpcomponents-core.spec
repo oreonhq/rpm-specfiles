@@ -42,7 +42,7 @@ less important than the ability to handle thousands of simultaneous
 HTTP connections in a resource efficient manner.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Tests failing without networking
 sed -i '/testHttpsCreateConnection/i@org.junit.Ignore' httpcore/src/test/java/org/apache/http/impl/pool/TestBasicConnPool.java

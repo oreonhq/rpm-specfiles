@@ -24,7 +24,7 @@ Source2:        https://archive.apache.org/dist/ant/KEYS
 Source3:         00-global-settings.patch
 
 BuildRequires:  gnupg2
-BuildRequires:  ant-openjdk21
+BuildRequires:  ant
 BuildRequires:  ivy-local
 BuildRequires:  dos2unix
 BuildRequires:  mvn(org.apache.ant:ant)

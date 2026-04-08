@@ -28,7 +28,7 @@ common semantic concepts that enable a declarative style of
 programming that applies across a variety of Java technologies.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove unnecessary dependency on parent POM
 # org.eclipse.ee4j:project is not packaged and isn't needed

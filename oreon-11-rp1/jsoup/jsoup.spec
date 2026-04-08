@@ -45,7 +45,7 @@ pristine and validating, to invalid tag-soup; jsoup will create a sensible parse
 tree.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin :animal-sniffer-maven-plugin
 %pom_remove_plugin :build-helper-maven-plugin

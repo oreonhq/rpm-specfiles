@@ -48,7 +48,7 @@ engines:
 * JudoScript
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 find -name \*.jar -delete
 
 %mvn_file : %{name}

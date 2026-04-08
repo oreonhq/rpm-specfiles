@@ -50,7 +50,7 @@ and tcsh) will find most of the command editing features of JLine to be
 familiar.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp -p console-ui/LICENSE.txt LICENSE-APACHE.txt
 
 # Remove local Maven extensions not needed for RPM build

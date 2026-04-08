@@ -28,7 +28,7 @@ It includes complete Javadoc documentation as well as a simple Applet
 for visual debugging and testing suite for compatibility.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 cp -p %{SOURCE2} MANIFEST.MF
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;

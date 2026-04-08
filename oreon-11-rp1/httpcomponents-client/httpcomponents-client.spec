@@ -44,7 +44,7 @@ for Commons HttpClient 3.x. Users of Commons HttpClient are strongly
 encouraged to upgrade.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %mvn_package :::tests: __noinstall
 

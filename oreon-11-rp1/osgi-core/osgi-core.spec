@@ -25,7 +25,7 @@ Obsoletes:      %{name}-javadoc < 8.0.0-34
 OSGi Core, Interfaces and Classes for use in compiling bundles.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # Delete pre-built binaries
 rm -r org

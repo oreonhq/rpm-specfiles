@@ -38,7 +38,7 @@ which don't support it like Windows and provides graceful degradation for
 when output is being sent to output devices which cannot support ANSI sequences.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 # We don't need the Fuse JXR skin
 %pom_xpath_remove "pom:build/pom:extensions"

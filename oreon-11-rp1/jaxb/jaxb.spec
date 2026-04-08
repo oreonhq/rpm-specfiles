@@ -109,7 +109,7 @@ Summary:        TXW2 Compiler
 JAXB schema generator. The tool to generate XML schema based on java classes.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 pushd jaxb-ri
 

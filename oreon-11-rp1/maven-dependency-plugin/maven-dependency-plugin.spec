@@ -51,7 +51,7 @@ artifacts. It can copy and/or unpack artifacts from local or remote
 repositories to a specified location.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 find src -name '*.java' -exec sed -i 's/\r//' {} +
 
 %pom_remove_dep :maven-reporting-impl

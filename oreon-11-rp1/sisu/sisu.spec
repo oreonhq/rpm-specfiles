@@ -61,7 +61,7 @@ The Sisu Plugin for Maven provides mojos to generate
 META-INF/sisu/javax.inject.Named index files for the Sisu container.
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_disable_module org.eclipse.sisu.inject.extender
 %pom_disable_module org.eclipse.sisu.plexus.extender

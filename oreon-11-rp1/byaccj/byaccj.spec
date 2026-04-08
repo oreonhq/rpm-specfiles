@@ -25,7 +25,7 @@ generate Java source code, instead. So there finally is a YACC for
 Java now! 
 
 %prep
-%autosetup -p1 -C
+%autosetup -p1
 chmod -c -x src/* docs/*
 sed -i -e 's|-arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4|$(LDFLAGS)|g' src/Makefile
 
