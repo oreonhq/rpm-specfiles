@@ -2,12 +2,14 @@
 
 %ifarch aarch64
 %global _smp_mflags -j1
+# LTO plus PCH can blow up link or .d writes on small mock workers (same class as plasma-desktop)
+%global _lto_cflags %{nil}
 %endif
 
 Name:    plasma-workspace
 Summary: Plasma workspace, applications and applets
 Version: 6.6.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 # Automatically converted from old format: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT - review is highly recommended.
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
@@ -422,7 +424,11 @@ EOL
   -DINSTALL_SDDM_WAYLAND_SESSION:BOOL=ON \
   -DWITH_X11_SESSION:BOOL=OFF \
   -DGLIBC_LOCALE_GEN:BOOL=OFF \
-  -DGLIBC_LOCALE_PREGENERATED:BOOL=ON
+  -DGLIBC_LOCALE_PREGENERATED:BOOL=ON \
+%ifarch aarch64
+  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
+  -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
+%endif
 %cmake_build
 
 
@@ -665,6 +671,9 @@ fi
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
+- aarch64 disable LTO and precompiled headers to avoid missing .d and link failures in mock
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - aarch64 single-job %%cmake_build for tight mock disk
 
