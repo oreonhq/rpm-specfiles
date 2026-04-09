@@ -11,7 +11,8 @@
 %global use_system_libwebp 1
 %global use_system_opus 1
 %global use_system_ffmpeg 1
-# libvpx is exclusive with VA-API support (libva) which is enabled by default
+# Chromium can keep bundled libvpx (needed for VA-API) while system FFmpeg still
+# runs configure checks that need pkgconfig(vpx) when use_system_libvpx is 0.
 %global use_system_libvpx 0
 %global use_system_snappy 1
 %global use_system_glib 1
@@ -88,7 +89,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 7%{?dist}
+Release: 8%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -211,6 +212,8 @@ BuildRequires: pkgconfig(libavutil) >= 58.29.100
 BuildRequires: pkgconfig(libavcodec) >= 60.31.102
 BuildRequires: pkgconfig(libavformat) >= 60.16.100
 BuildRequires: pkgconfig(openh264)
+# VP9 paths in system FFmpeg integration, without enabling bundled replacement via %%{use_system_libvpx}
+BuildRequires: pkgconfig(vpx) >= 1.10.0
 %endif
 %if %{?use_system_libvpx}
 BuildRequires: pkgconfig(vpx) >= 1.10.0
@@ -578,6 +581,12 @@ export MALLOC_ARENA_MAX=2
 export QTWEBENGINE_GN_THREADS=1
 export NINJA_PATH=%{__ninja}
 
+%ifarch aarch64
+# Qt configure.cmake udot probe needs dotprod in the default ISA (see webengine-arm64-udot-support)
+export CFLAGS="${CFLAGS} -march=armv8.2-a+dotprod"
+export CXXFLAGS="${CXXFLAGS} -march=armv8.2-a+dotprod"
+%endif
+
 # this follows the logic of the Configure summary to turn on and off
 %cmake_qt6 \
   -DCMAKE_TOOLCHAIN_FILE:STRING="%{_libdir}/cmake/Qt6/qt.toolchain.cmake" \
@@ -880,6 +889,10 @@ done
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-8
+- With system FFmpeg add pkgconfig(vpx) so VPX configure probe passes while bundled Chromium libvpx stays on for VA-API
+- aarch64 append -march=armv8.2-a+dotprod so Qt udot compile test enables webengine-arm64-udot-support
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-7
 - %%prep set TAR_OPTIONS --delay-directory-restore for Khronos OpenGL-Registry katex font extract ENOENT
 
