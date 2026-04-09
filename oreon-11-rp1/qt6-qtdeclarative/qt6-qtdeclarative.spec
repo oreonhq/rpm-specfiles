@@ -6,6 +6,8 @@
 # Ninja default job count plus huge TU can OOM aarch64 or s390x mock
 %ifarch aarch64 s390x
 %global _smp_mflags -j1
+# Ninja has seen spurious Automoc depfile races on aarch64 (!.o.d no such file). Use Make generator.
+%global _qt6_build_tool make
 %endif
 
 # definition borrowed from qtbase
@@ -21,7 +23,7 @@
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 5%{?dist}
+Release: 6%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -751,6 +753,9 @@ make check -k -C tests ||:
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-6
+- aarch64 and s390x use %%_qt6_build_tool make avoid Ninja Automoc .d file flakes
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
 - aarch64 and s390x set NINJAFLAGS -j1 so ninja does not OOM mock
 
