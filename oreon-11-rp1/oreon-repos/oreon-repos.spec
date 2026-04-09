@@ -6,7 +6,7 @@ License:        MIT
 URL:            https://oreonhq.com/
 
 Provides:       oreon-repos(%{version}) = %{release}
-Requires:       system-release(43)
+Requires:       system-release(11)
 Requires:       oreon-gpg-keys >= %{version}-%{release}
 BuildArch:      noarch
 
