@@ -88,7 +88,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 5%{?dist}
+Release: 6%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -564,15 +564,15 @@ src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-librarie
 . /opt/rh/gcc-toolset-13/enable
 %endif
 export STRIP=strip
-%ifarch aarch64
+# Parallel ninja in Chromium hits intermittent "opening dependency file *.o.d" in mock (all arches).
 export NINJAFLAGS="-j1 -v"
+# Inner QtWebEngineCore ninja often still used -jN from build parallel level without this.
+export NINJAJOBS=-j1
+export CMAKE_BUILD_PARALLEL_LEVEL=1
 export GOMAXPROCS=1
 export MALLOC_ARENA_MAX=2
 # Qt passes this into cmake -P QtGnGen.cmake as -DGN_THREADS=... (not a CMake cache var)
 export QTWEBENGINE_GN_THREADS=1
-%else
-export NINJAFLAGS="%{__ninja_common_opts}"
-%endif
 export NINJA_PATH=%{__ninja}
 
 # this follows the logic of the Configure summary to turn on and off
@@ -877,6 +877,9 @@ done
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-6
+- All arches serial Chromium ninja NINJAFLAGS NINJAJOBS CMAKE_BUILD_PARALLEL_LEVEL gn threads 1 fix .o.d flakes on x86_64
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
 - aarch64 set QTWEBENGINE_GN_THREADS=1 so gn gen actually gets --threads=1
 
