@@ -1,6 +1,6 @@
 Name:           wayland-utils
 Version:        1.3.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Wayland utilities
 
 License:        MIT
@@ -39,5 +39,8 @@ XDG output protocols.
 %{_mandir}/man1/wayland-info.1*
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-4
+- bump release (retry failed build)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-3
 - Prepare for Oreon 11 (RP1)

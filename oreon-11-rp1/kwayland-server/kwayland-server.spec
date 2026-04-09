@@ -2,7 +2,7 @@
 
 Name:    kwayland-server
 Version: 5.24.5
-Release: 11%{?dist}
+Release: 12%{?dist}
 Summary: Wayland server components built on KDE Frameworks
 
 # Automatically converted from old format: LGPLv2+ and MIT and BSD - review is highly recommended.
@@ -68,5 +68,8 @@ developing applications that use %{name}.
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.24.5-12
+- bump release (retry failed build)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.24.5-11
 - Prepare for Oreon 11 (RP1)

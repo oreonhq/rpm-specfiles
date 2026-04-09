@@ -67,6 +67,9 @@ done
 %license LICENSE.txt NOTICE.txt
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 89-3
+- bump release (retry failed build)
+
 * Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 89-2
 - Fix %%prep directory for GitHub commons-parent tarball layout
 

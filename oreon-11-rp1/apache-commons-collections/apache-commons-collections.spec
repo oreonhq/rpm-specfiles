@@ -79,6 +79,9 @@ sed -i 's/\r//' LICENSE.txt PROPOSAL.html README.txt NOTICE.txt
 %files testframework -f .mfiles-testframework
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.2-3
+- bump release (retry failed build)
+
 * Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.2-2
 - %%autosetup -n commons-collections-%%{version}-src for upstream source tarball layout
 

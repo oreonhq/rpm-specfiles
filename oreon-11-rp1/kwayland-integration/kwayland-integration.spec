@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:    kwayland-integration
 Version: 6.6.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Provides integration plugins for various KDE Frameworks for Wayland
 
 License: CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only AND LGPL-3.0-only)
@@ -57,5 +57,8 @@ Requires:       kf5-filesystem
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-2
+- bump release (retry failed build)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
 - Prepare for Oreon 11 (RP1)

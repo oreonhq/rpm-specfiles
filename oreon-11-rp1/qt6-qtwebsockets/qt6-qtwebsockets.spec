@@ -16,7 +16,7 @@
 Summary: Qt6 - WebSockets component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 2%{?dist}
+Release: 4%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
@@ -71,14 +71,23 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %build
 %cmake_qt6 \
-  -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
-  -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
+%if 0%{?examples}
+  -DQT_BUILD_EXAMPLES:BOOL=ON \
+  -DQT_INSTALL_EXAMPLES_SOURCES=ON \
+%else
+  -DQT_BUILD_EXAMPLES:BOOL=OFF \
+  -DQT_INSTALL_EXAMPLES_SOURCES=OFF \
+%endif
 
 %cmake_build
 
 
 %install
 %cmake_install
+%if ! 0%{?examples}
+# Belt and suspenders if anything still lands under examples
+rm -rf %{buildroot}%{_qt6_examplesdir}/websockets
+%endif
 
 ## .prl/.la file love
 # nuke .prl reference(s) to %%buildroot, excessive (.la-like) libs
@@ -123,6 +132,13 @@ popd
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
+- bump release (retry failed build)
+
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
+- fix %%{?examples ON} so value 0 does not still enable QT_BUILD_EXAMPLES
+- rm examples tree from buildroot when examples subpackage is off
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
 - aarch64 skip examples and single-job build to avoid ENOSPC in mock
 

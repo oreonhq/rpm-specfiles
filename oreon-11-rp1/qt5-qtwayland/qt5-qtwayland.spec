@@ -3,7 +3,7 @@
 Summary: Qt5 - Wayland platform support and QtCompositor module
 Name:    qt5-%{qt_module}
 Version: 5.15.18
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -184,5 +184,8 @@ popd
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-3
+- bump release (retry failed build)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
 - Prepare for Oreon 11 (RP1)

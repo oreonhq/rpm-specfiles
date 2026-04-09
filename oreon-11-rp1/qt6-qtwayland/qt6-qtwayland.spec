@@ -11,7 +11,7 @@
 Summary: Qt6 - Wayland platform support and QtCompositor module
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 3%{?dist}
+Release: 5%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -150,13 +150,16 @@ popd
 %{_qt6_libdir}/libQt6WaylandEglCompositorHwIntegration.so
 %{_qt6_libdir}/libQt6WaylandCompositor.prl
 %{_qt6_libdir}/libQt6WaylandEglCompositorHwIntegration.prl
-%{_qt6_libdir}/cmake/Qt6WaylandCompositor/Qt6WaylandCompositorConfig*.cmake
 %{_qt6_archdatadir}/mkspecs/modules/*.pri
 %dir %{_qt6_libdir}/cmake/Qt6WaylandClientFeaturesPrivate/
 %{_qt6_libdir}/cmake/Qt6/*.cmake
 %{_qt6_libdir}/cmake/Qt6BuildInternals/StandaloneTests/QtWaylandTestsConfig.cmake
 %{_qt6_libdir}/cmake/Qt6Qml/QmlPlugins/*.cmake
 %{_qt6_libdir}/cmake/Qt6WaylandClientFeaturesPrivate/*.cmake
+# Plugin CMake is installed next to Qt6Gui (Qt 6.10), not under WaylandClient
+%{_qt6_libdir}/cmake/Qt6Gui/Qt6QWaylandAdwaitaDecorationPlugin*.cmake
+%{_qt6_libdir}/cmake/Qt6Gui/Qt6QWaylandIviShellIntegrationPlugin*.cmake
+%{_qt6_libdir}/cmake/Qt6Gui/Qt6QWaylandQtShellIntegrationPlugin*.cmake
 %{_qt6_libdir}/cmake/Qt6WaylandCompositor/
 %{_qt6_libdir}/cmake/Qt6WaylandCompositorIviapplication/
 %{_qt6_libdir}/cmake/Qt6WaylandCompositorIviapplicationPrivate/*.cmake
@@ -181,6 +184,13 @@ popd
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
+- bump release (retry failed build)
+
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
+- devel owns Qt6Gui QWayland decoration and shell integration plugin CMake
+- remove duplicate Qt6WaylandCompositorConfig lines (tree %%{_qt6_libdir}/cmake/Qt6WaylandCompositor/ already)
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
 - adwaita subpackage ships only the plugin (Qt 6.10 does not install Adwaita cmake there)
 - drop duplicate compositor cmake directory globs in devel

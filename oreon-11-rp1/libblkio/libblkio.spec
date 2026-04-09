@@ -9,7 +9,7 @@ Version:       1.5.0
 
 Summary:       Block device I/O library
 Name:          libblkio
-Release:       5%{?dist}
+Release:       6%{?dist}
 URL:           %{forgeurl}
 Source0:       %{forgesource}
 # To create the vendor tarball:
@@ -128,5 +128,8 @@ export RUSTFLAGS="%build_rustflags"
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-6
+- bump release (retry failed build)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-5
 - Prepare for Oreon 11 (RP1)

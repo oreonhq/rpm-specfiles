@@ -17,7 +17,7 @@
 Summary: Qt6 - VirtualKeyboard component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt.io
@@ -156,6 +156,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
+- bump release (retry failed build)
+
 * Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
 - CMAKE_DISABLE_PRECOMPILE_HEADERS on aarch64 and s390x to avoid cc1plus OOM
 

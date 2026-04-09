@@ -78,6 +78,9 @@ rm src/test/java/org/apache/commons/compress/archivers/tar/TarMemoryFileSystemTe
 %license LICENSE.txt NOTICE.txt
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.0-3
+- bump release (retry failed build)
+
 * Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.0-2
 - %%autosetup -n commons-compress-%%{version}-src for upstream source tarball layout
 

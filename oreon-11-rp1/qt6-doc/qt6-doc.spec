@@ -1,7 +1,7 @@
 Name:    qt6-doc
 Summary: Qt6 - Complete documentation
 Version: 6.9.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 BuildArch: noarch
 
 License: GFDL
@@ -61,5 +61,8 @@ tar xf %{SOURCE0} -C %{buildroot}
 %{_qt6_docdir}/*/*.index
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.9.1-5
+- bump release (retry failed build)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.9.1-4
 - Prepare for Oreon 11 (RP1)

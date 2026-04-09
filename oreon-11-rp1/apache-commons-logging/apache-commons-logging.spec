@@ -78,6 +78,9 @@ rm -rf src/test/java/org/apache/commons/logging/log4j/log4j12
 %doc PROPOSAL.html RELEASE-NOTES.txt
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-3
+- bump release (retry failed build)
+
 * Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-2
 - %%autosetup -n commons-logging-%%{version}-src for upstream source tarball layout
 

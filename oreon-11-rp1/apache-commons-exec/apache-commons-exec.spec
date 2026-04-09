@@ -3,7 +3,7 @@
 
 Name:           apache-commons-exec
 Version:        1.6.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Java library to reliably execute external processes from within the JVM
 License:        Apache-2.0
 URL:            https://commons.apache.org/proper/%{short_name}
@@ -63,5 +63,8 @@ find src/test/java/ -name "*.java" -exec sed  -i '/SetSystemProperty/d' {} \;
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.0-4
+- bump release (retry failed build)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.0-3
 - Prepare for Oreon 11 (RP1)

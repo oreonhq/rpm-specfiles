@@ -5,13 +5,13 @@
 Name:          plasma-bigscreen
 # Plain semver in Version, git snapshot in Release (avoids illegal '-' and '^' macro glitches)
 Version:       6.5.80
-Release:       0.%{gitdate}.%{shortcommit}%{?dist}
+Release:       0.%{gitdate}.%{shortcommit}.1%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later and CC-BY-SA-4.0
 Summary:       A big launcher giving you access to any installed apps and skills
 Url:           https://invent.kde.org/plasma/plasma-bigscreen
 
 # Not currently in the plasma releases. Getting from gitlab tags.
-# Source0:       http://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+# Source0:       http://download.kde.org/%%{stable_kf6}/plasma/%%{version}/%%{name}-%%{version}.tar.xz
 Source0:       https://invent.kde.org/plasma/%{name}/-/archive/%{commit}/%{name}-%{commit}.tar.gz
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
@@ -123,6 +123,12 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.5.80-0.20260218.085444.a1b44a8.1
+- bump release (retry failed build)
+
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.5.80-0.20260218.085444.a1b44a8
+- escape percent in commented kde.org Source template line for rpmbuild
+
 * Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.5.80-0.20260218.085444.a1b44a8
 - Move git snapshot from Version into Release for rpmspec and macros
 

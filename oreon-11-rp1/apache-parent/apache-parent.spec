@@ -44,6 +44,9 @@ This package contains the parent pom file for apache projects.
 %license LICENSE NOTICE
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 35-3
+- bump release (retry failed build)
+
 * Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 35-2
 - %%autosetup -n apache-%%{version} for Maven apache-VERSION-source-release.zip layout
 

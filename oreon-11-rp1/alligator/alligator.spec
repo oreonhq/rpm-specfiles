@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:           alligator
 Version:        26.03.80
-Release:        1%{?dist}
+Release:        2%{?dist}
 # Automatically converted from old format: GPLv2 or GPLv3 - review is highly recommended.
 License:        GPL-2.0-only OR GPL-3.0-only
 Summary:        Kirigami-based RSS reader
@@ -70,6 +70,9 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.%{name}.deskt
 %{_kf6_datadir}/qlogging-categories6/alligator.categories
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.03.80-2
+- bump release (retry failed build)
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 
