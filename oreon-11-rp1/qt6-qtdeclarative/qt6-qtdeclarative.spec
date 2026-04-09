@@ -23,7 +23,7 @@
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 6%{?dist}
+Release: 7%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -114,8 +114,12 @@ Provides:  qt6-qtquickcontrols2-examples = %{version}-%{release}
 ln -s %{__python3} python
 export PATH=`pwd`:$PATH
 
-%ifarch aarch64 s390x
+# Parallel Qt and LTO on modest RAM builders can OOM cc1plus (seen on x86_64 too)
+export RPM_BUILD_NCPUS=1
+export CMAKE_BUILD_PARALLEL_LEVEL=1
 export NINJAFLAGS="-j1"
+
+%ifarch aarch64 s390x
 %cmake_qt6 \
   -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
   -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
@@ -753,6 +757,9 @@ make check -k -C tests ||:
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-7
+- All arches use single compile job to avoid LTO cc1plus OOM on constrained builders
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-6
 - aarch64 and s390x use %%_qt6_build_tool make avoid Ninja Automoc .d file flakes
 

@@ -19,7 +19,7 @@
 
 Name:           bcc
 Version:        0.35.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        BPF Compiler Collection (BCC)
 License:        Apache-2.0
 URL:            https://github.com/iovisor/bcc
@@ -128,6 +128,10 @@ Command line libbpf tools for BPF Compiler Collection (BCC)
 
 
 %build
+# clang_frontend pulls huge AST TUs, parallel ninja + low RAM mock builders get OOM killed (cc1plus Killed,
+# bogus asm CFI errors from truncated compiler output). Force one compile job for the main build.
+export RPM_BUILD_NCPUS=1
+export CMAKE_BUILD_PARALLEL_LEVEL=1
 %cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
        -DREVISION_LAST=%{version} -DREVISION=%{version} -DPYTHON_CMD=python3 \
        -DCMAKE_USE_LIBBPF_PACKAGE:BOOL=TRUE -DENABLE_NO_PIE=OFF \
@@ -228,6 +232,9 @@ cp -a libbpf-tools/tmp-install/bin/* %{buildroot}/%{_sbindir}/
 %{_sbindir}/bpf-*
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-7
+- Build with RPM_BUILD_NCPUS=1 so clang heavy objects do not OOM small builders
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-6
 - Add upstream patch for llvm-22 createDiagnostics API changes
 

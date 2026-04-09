@@ -1,11 +1,13 @@
 Name:    qt6-doc
 Summary: Qt6 - Complete documentation
 Version: 6.9.1
-Release: 5%{?dist}
+Release: 6%{?dist}
 BuildArch: noarch
 
 License: GFDL
-# The tarball for this docs are self generated through provided script on SOURCES generate-qt-doc.sh
+# The tarball is a pre-assembled install tree of Qt docs (qch, html, tags). Qt does not publish this
+# file name on download.qt.io. Generate with Source1 or copy Source0 out of a Fedora qt6-doc SRPM
+# (rpm2cpio *.src.rpm | cpio -idmv). Host it on your lookaside if spectool must fetch by URL.
 Url:     http://qt-project.org/
 Source0: qt-doc-opensource-src-%{version}.tar.xz
 Source1: generate-qt6-doc.sh
@@ -61,6 +63,9 @@ tar xf %{SOURCE0} -C %{buildroot}
 %{_qt6_docdir}/*/*.index
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.9.1-6
+- Document how to obtain Source0 prebuilt doc tarball when no public URL exists
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.9.1-5
 - bump release (retry failed build)
 

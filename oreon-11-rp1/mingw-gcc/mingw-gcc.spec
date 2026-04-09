@@ -14,14 +14,14 @@
 # Run the testsuite
 %global enable_tests 0
 
-%global DATE 20260305
+%global DATE 20260308
 %global gitrev da9795f681c5add73add41595bb6713b45c77d4e
 %global gcc_version 16.0.1
 %global gcc_major 16
 
 Name:           mingw-gcc
 Version:        %{gcc_version}
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        MinGW Windows cross-compiler (GCC) for C
 
 # Sync with native 'gcc' package
@@ -34,8 +34,8 @@ URL:            http://gcc.gnu.org
 # git --git-dir=gcc-dir.tmp/.git fetch --depth 1 origin %%{gitrev}
 # git --git-dir=gcc-dir.tmp/.git archive --prefix=%%{name}-%%{version}-%%{DATE}/ %%{gitrev} | xz -9e > %%{name}-%%{version}-%%{DATE}.tar.xz
 # rm -rf gcc-dir.tmp
-%global srcdir gcc-%{version}-%{DATE}
-Source0:        %{srcdir}.tar.xz
+%global srcdir gcc-%{gcc_major}-%{DATE}
+Source0:        https://gcc.gnu.org/pub/gcc/snapshots/%{gcc_major}-%{DATE}/gcc-%{gcc_major}-%{DATE}.tar.xz
 
 # See https://sourceforge.net/p/mingw-w64/mailman/mingw-w64-public/thread/8fd2fb03-9b8a-07e1-e162-0bb48bcc3984%40gmail.com/#msg37200751
 Patch0:         0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
@@ -993,5 +993,8 @@ ln -sf %{ucrt64_bindir}/libssp-0.dll %{buildroot}%{ucrt64_libdir}/libssp.dll.a
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-6
+- Source0 from published gcc 16 weekly snapshot tarball (16-20260308)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-5
 - Prepare for Oreon 11 (RP1)

@@ -8,7 +8,7 @@
 
 Name:           gnome-tour
 Version:        48.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        GNOME Tour and Greeter
 
 # * gnome-tour source code is GPL-3.0-or-later
@@ -106,6 +106,9 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/org.gnome.Tour.des
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 48.1-6
+- Ship Source1 welcome-fedora.svg in tree for Fedora branding prep step
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 48.1-5
 - bump release (retry failed build)
 

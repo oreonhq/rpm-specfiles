@@ -9,7 +9,7 @@ URL:            https://commons.apache.org/proper/commons-collections/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://www.apache.org/dist/commons/collections/source/commons-collections-%{version}-src.tar.gz
+Source0:        https://archive.apache.org/dist/commons/collections/source/commons-collections-%{version}-src.tar.gz
 
 Patch:          0001-Port-to-Java-8.patch
 Patch:          0002-Port-to-OpenJDK-11.patch
