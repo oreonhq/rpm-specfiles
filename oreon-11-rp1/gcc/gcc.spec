@@ -176,20 +176,20 @@ License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-e
 # to speed up the clone operations.  Note, %%{gitrev} macro in
 # gcc.spec shouldn't be updated before running the script, the script
 # will update it, fill in some %%changelog details etc.
-Source0: gcc-%{version}-%{DATE}.tar.xz
+Source0: https://gcc.gnu.org/pub/gcc/snapshots/%{DATE}/gcc-%{version}-%{DATE}.tar.xz
 # The source for nvptx-tools package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 # git clone --depth 1 https://github.com/MentorEmbedded/nvptx-tools.git nvptx-tools-dir.tmp
 # git --git-dir=nvptx-tools-dir.tmp/.git fetch --depth 1 origin %%{nvptx_tools_gitrev}
 # git --git-dir=nvptx-tools-dir.tmp/.git archive --prefix=nvptx-tools-%%{nvptx_tools_gitrev}/ %%{nvptx_tools_gitrev} | xz -9e > nvptx-tools-%%{nvptx_tools_gitrev}.tar.xz
 # rm -rf nvptx-tools-dir.tmp
-Source1: nvptx-tools-%{nvptx_tools_gitrev}.tar.xz
+Source1: https://github.com/MentorEmbedded/nvptx-tools/archive/%{nvptx_tools_gitrev}/nvptx-tools-%{nvptx_tools_gitrev}.tar.gz
 # The source for nvptx-newlib package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 # git clone https://sourceware.org/git/newlib-cygwin.git newlib-cygwin-dir.tmp
 # git --git-dir=newlib-cygwin-dir.tmp/.git archive --prefix=newlib-cygwin-%%{newlib_cygwin_gitrev}/ %%{newlib_cygwin_gitrev} ":(exclude)newlib/libc/sys/linux/include/rpc/*.[hx]" | xz -9e > newlib-cygwin-%%{newlib_cygwin_gitrev}.tar.xz
 # rm -rf newlib-cygwin-dir.tmp
-Source2: newlib-cygwin-%{newlib_cygwin_gitrev}.tar.xz
+Source2: https://sourceware.org/git/?p=newlib-cygwin.git;a=snapshot;h=%{newlib_cygwin_gitrev};sf=tgz#/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz
 %global isl_version 0.24
 Source3: https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
 URL: http://gcc.gnu.org

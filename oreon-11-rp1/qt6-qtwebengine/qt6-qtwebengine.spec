@@ -880,7 +880,7 @@ done
 %endif
 
 %changelog
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-7
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-7
 - %%prep set TAR_OPTIONS --delay-directory-restore for Khronos OpenGL-Registry katex font extract ENOENT
 
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-6

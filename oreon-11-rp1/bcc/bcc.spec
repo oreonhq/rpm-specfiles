@@ -19,13 +19,15 @@
 
 Name:           bcc
 Version:        0.35.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        BPF Compiler Collection (BCC)
 License:        Apache-2.0
 URL:            https://github.com/iovisor/bcc
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 # Fix build with clang 21
 Patch0:         %{url}/pull/5369.patch
+# Fix build with llvm 22
+Patch1:         https://github.com/iovisor/bcc/commit/4c7be1ec6ab74e973f8d18a9011fa349c3d9dd58.patch
 
 # Arches will be included as upstream support is added and dependencies are
 # satisfied in the respective arches
@@ -226,5 +228,8 @@ cp -a libbpf-tools/tmp-install/bin/* %{buildroot}/%{_sbindir}/
 %{_sbindir}/bpf-*
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-6
+- Add upstream patch for llvm-22 createDiagnostics API changes
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-5
 - Prepare for Oreon 11 (RP1)
