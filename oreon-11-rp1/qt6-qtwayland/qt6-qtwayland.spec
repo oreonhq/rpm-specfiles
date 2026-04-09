@@ -11,7 +11,7 @@
 Summary: Qt6 - Wayland platform support and QtCompositor module
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -153,17 +153,6 @@ popd
 %{_qt6_libdir}/cmake/Qt6WaylandCompositor/Qt6WaylandCompositorConfig*.cmake
 %{_qt6_archdatadir}/mkspecs/modules/*.pri
 %dir %{_qt6_libdir}/cmake/Qt6WaylandClientFeaturesPrivate/
-%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositor/
-%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorIviapplication/
-%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorIviapplicationPrivate
-%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorPresentationTime/
-%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorPresentationTimePrivate
-%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorPrivate
-%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorWLShell/
-%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorWLShellPrivate
-%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorXdgShell/
-%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorXdgShellPrivate
-%dir %{_qt6_libdir}/cmake/Qt6WaylandEglCompositorHwIntegrationPrivate/
 %{_qt6_libdir}/cmake/Qt6/*.cmake
 %{_qt6_libdir}/cmake/Qt6BuildInternals/StandaloneTests/QtWaylandTestsConfig.cmake
 %{_qt6_libdir}/cmake/Qt6Qml/QmlPlugins/*.cmake
@@ -185,7 +174,6 @@ popd
 
 %files adwaita-decoration
 %{_qt6_plugindir}/wayland-decoration-client/libadwaita.so
-%{_qt6_libdir}/cmake/Qt6WaylandClient/Qt6QWaylandAdwaitaDecoration*.cmake
 
 %if 0%{?examples}
 %files examples
@@ -193,6 +181,10 @@ popd
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
+- adwaita subpackage ships only the plugin (Qt 6.10 does not install Adwaita cmake there)
+- drop duplicate compositor cmake directory globs in devel
+
 * Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
 - devel no longer lists cmake/Qt6WaylandClient (owned by qt6-qtbase-devel since Qt 6.10)
 - drop duplicate compositor soname glob in main package

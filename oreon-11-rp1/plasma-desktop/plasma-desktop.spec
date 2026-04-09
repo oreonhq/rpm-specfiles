@@ -3,10 +3,14 @@
 %undefine scim
 %endif
 
+%ifarch aarch64
+%global _smp_mflags -j1
+%endif
+
 Name:    plasma-desktop
 Summary: Plasma Desktop shell
 Version: 6.6.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
@@ -349,6 +353,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kaccess.desktop
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
+- aarch64 single-job %%cmake_build to reduce mock disk and path churn
+
 * Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Drop Fedora SDDM theme overlay and breeze-fedora source, require sddm only
 

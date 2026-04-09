@@ -88,7 +88,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 3%{?dist}
+Release: 5%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -566,6 +566,10 @@ src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-librarie
 export STRIP=strip
 %ifarch aarch64
 export NINJAFLAGS="-j1 -v"
+export GOMAXPROCS=1
+export MALLOC_ARENA_MAX=2
+# Qt passes this into cmake -P QtGnGen.cmake as -DGN_THREADS=... (not a CMake cache var)
+export QTWEBENGINE_GN_THREADS=1
 %else
 export NINJAFLAGS="%{__ninja_common_opts}"
 %endif
@@ -630,8 +634,13 @@ export NINJA_PATH=%{__ninja}
   -DFEATURE_webengine_v8_context_snapshot:BOOL=ON \
   -DFEATURE_webenginedriver:BOOL=ON \
   -DFEATURE_pdf_v8:BOOL=%{?enable_pdf_v8} \
+%ifarch aarch64
+  -DQT_BUILD_EXAMPLES:BOOL=OFF \
+  -DQT_INSTALL_EXAMPLES_SOURCES=OFF \
+%else
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
+%endif
 
 %cmake_build
 
@@ -868,6 +877,12 @@ done
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
+- aarch64 set QTWEBENGINE_GN_THREADS=1 so gn gen actually gets --threads=1
+
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
+- aarch64 GN_THREADS=1 GOMAXPROCS examples off and malloc arenas to trim gn OOM
+
 * Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
 - aarch64 ease OOM during gn gen (disable jumbo build, NINJAFLAGS -j1)
 

@@ -21,7 +21,7 @@
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -115,6 +115,7 @@ export PATH=`pwd`:$PATH
 %ifarch aarch64 s390x
 %cmake_qt6 \
   -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
+  -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
 %else
@@ -749,6 +750,9 @@ make check -k -C tests ||:
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
+- aarch64 and s390x disable precompiled headers to cut cc1plus OOM on Qml
+
 * Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
 - Ease aarch64 and s390x OOM, disable IPO there, fix comment macro warning
 

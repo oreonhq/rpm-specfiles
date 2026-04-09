@@ -7,7 +7,7 @@
 
 Name:           apache-%{jarname}
 Version:        2.5.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Java-based dependency manager
 License:        Apache-2.0
 URL:            https://ant.apache.org/ivy
@@ -65,7 +65,10 @@ reporting and publication.
 
 %prep
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%autosetup
+%setup -q
+# Upstream tarball uses CRLF so %%autosetup patch step cannot match hunks
+dos2unix src/java/org/apache/ivy/util/FileUtil.java
+%patch -P0 -p1
 dos2unix src/java/org/apache/ivy/ant/IvyAntSettings.java
 patch -p1 -l < %{SOURCE3}
 # Don't hardcode sysconfdir path
@@ -157,6 +160,9 @@ echo "apache-ivy/ivy" > %{buildroot}%{_sysconfdir}/ant.d/%{name}
 %{_sysconfdir}/ant.d/%{name}
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.3-5
+- dos2unix FileUtil.java before Pack200 patch (CRLF breaks %%autosetup patch)
+
 * Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.3-4
 - call Pack200 via reflection so the tree compiles on JDK without java.util.jar.Pack200
 

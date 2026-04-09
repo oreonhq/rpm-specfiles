@@ -77,12 +77,18 @@ sed -i 's|errors.test||' autoopts/test/Makefile.in
 %build
 # Static libraries are needed to run test-suite.
 export CFLAGS="$RPM_OPT_FLAGS -Wno-implicit-fallthrough -Wno-format-overflow \
-		-Wno-format-truncation"
+		-Wno-format-truncation -Wno-error=discarded-qualifiers \
+		-Wno-error=unused-but-set-variable"
 autoreconf -fiv
 %configure
 
 # Omit unused direct shared library dependencies.
 sed --in-place --expression 's! -shared ! -Wl,--as-needed\0!g' ./libtool
+
+# libopts Makefiles add -Werror=* which ignores top-level CFLAGS relaxations
+for m in autoopts/Makefile autoopts/test/Makefile; do
+  test -f "$m" && sed -i 's/-Werror[^[:space:]]*//g' "$m"
+done
 
 make %{?_smp_mflags}
 
@@ -147,5 +153,11 @@ rm -f $RPM_BUILD_ROOT%{_infodir}/dir
 %{_includedir}/autoopts/usage-txt.h
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.18.16-3
+- strip -Werror* from autoopts Makefiles after configure (libopts ignores top-level CFLAGS)
+
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.18.16-2
+- relax -Werror in bundled libopts for GCC const and unused-but-set diagnostics
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.18.16-1
 - Prepare for Oreon 11 (RP1)
