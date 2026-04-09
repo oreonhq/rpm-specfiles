@@ -1,4 +1,8 @@
 Version:       1.5.0
+# Default no vendored crates (crate BRs, no Source1). Oreon sets %%{?rhel} but does not ship vendor.tar.xz.
+# Offline RHEL-style: add vendor tarball to SOURCES and build with --with libblkio_vendor
+%bcond_with libblkio_vendor
+
 %global forgeurl https://gitlab.com/libblkio/libblkio
 %global tag    v%{version}
 %forgemeta
@@ -9,10 +13,10 @@ Version:       1.5.0
 
 Summary:       Block device I/O library
 Name:          libblkio
-Release:       7%{?dist}
+Release:       8%{?dist}
 URL:           %{forgeurl}
 Source0:       %{forgesource}
-%if 0%{?rhel}
+%if %{with libblkio_vendor}
 # To create the vendor tarball:
 #   tar xf %%{name}-v%%{version}.tar.bz2 ; pushd %%{name}-v%%{version} ; \
 #   cargo vendor && tar Jcvf ../%%{name}-v%%{version}-vendor.tar.xz vendor/ ; popd
@@ -24,7 +28,7 @@ License:       (Apache-2.0 OR MIT) AND (Apache-2.0 OR BSD-3-Clause) AND (Apache-
 BuildRequires: gcc, gcc-c++
 BuildRequires: make
 BuildRequires: meson
-%if 0%{?rhel}
+%if %{with libblkio_vendor}
 BuildRequires: rust-toolset
 %else
 BuildRequires: rust-packaging >= 21
@@ -46,7 +50,7 @@ BuildRequires: git
 #
 # For major version >= 0, we are requiring that the minor version does
 # not change.
-%if ! 0%{?rhel}
+%if %{without libblkio_vendor}
 BuildRequires: (crate(autocfg/default) >= 1.0.0 with crate(autocfg/default) < 2.0.0~)
 BuildRequires: (crate(bitflags/default) >= 2.5.0 with crate(bitflags/default) < 3.0.0~)
 BuildRequires: (crate(bitflags/default) >= 1.2.0 with crate(bitflags/default) < 2.0.0~)
@@ -84,7 +88,7 @@ This package contains development tools for %{name}.
 %else
 %forgeautosetup -p1
 
-%if 0%{?rhel}
+%if %{with libblkio_vendor}
 tar xf %{SOURCE1}
 %cargo_prep -v vendor
 %else
@@ -101,7 +105,7 @@ export RUSTFLAGS="%build_rustflags"
 %{meson_build}
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
-%if 0%{?rhel}
+%if %{with libblkio_vendor}
 %cargo_vendor_manifest
 %endif
 
@@ -113,7 +117,7 @@ export RUSTFLAGS="%build_rustflags"
 %files
 %license LICENSE-APACHE LICENSE-MIT LICENSE.crosvm
 %license LICENSE.dependencies
-%if 0%{?rhel}
+%if %{with libblkio_vendor}
 %license cargo-vendor.txt
 %endif
 %doc README.rst
@@ -130,6 +134,9 @@ export RUSTFLAGS="%build_rustflags"
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-8
+- %%bcond_with libblkio_vendor default off so no Source1 vendor.xz use rpmbuild --with libblkio_vendor when needed
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-7
 - Source1 vendor tarball only for rhel Fedora uses crates BR
 
