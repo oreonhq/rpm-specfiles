@@ -1,4 +1,4 @@
-%global DATE 20260305
+%global DATE 20260308
 %global gitrev da9795f681c5add73add41595bb6713b45c77d4e
 %global gcc_version 16.0.1
 %global gcc_major 16
@@ -176,7 +176,7 @@ License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-e
 # to speed up the clone operations.  Note, %%{gitrev} macro in
 # gcc.spec shouldn't be updated before running the script, the script
 # will update it, fill in some %%changelog details etc.
-Source0: https://gcc.gnu.org/pub/gcc/snapshots/%{DATE}/gcc-%{version}-%{DATE}.tar.xz
+Source0: https://gcc.gnu.org/pub/gcc/snapshots/%{gcc_major}-%{DATE}/gcc-%{gcc_major}-%{DATE}.tar.xz
 # The source for nvptx-tools package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 # git clone --depth 1 https://github.com/MentorEmbedded/nvptx-tools.git nvptx-tools-dir.tmp
@@ -189,7 +189,7 @@ Source1: https://github.com/MentorEmbedded/nvptx-tools/archive/%{nvptx_tools_git
 # git clone https://sourceware.org/git/newlib-cygwin.git newlib-cygwin-dir.tmp
 # git --git-dir=newlib-cygwin-dir.tmp/.git archive --prefix=newlib-cygwin-%%{newlib_cygwin_gitrev}/ %%{newlib_cygwin_gitrev} ":(exclude)newlib/libc/sys/linux/include/rpc/*.[hx]" | xz -9e > newlib-cygwin-%%{newlib_cygwin_gitrev}.tar.xz
 # rm -rf newlib-cygwin-dir.tmp
-Source2: https://sourceware.org/git/?p=newlib-cygwin.git;a=snapshot;h=%{newlib_cygwin_gitrev};sf=tgz#/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz
+Source2: https://github.com/mirror/newlib-cygwin/archive/%{newlib_cygwin_gitrev}/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz
 %global isl_version 0.24
 Source3: https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
 URL: http://gcc.gnu.org
@@ -965,7 +965,7 @@ of the plugin is explicitly built by the same version of gcc that is installed
 so that there cannot be any synchronization problems.
 
 %prep
-%setup -q -n gcc-%{version}-%{DATE} -a 1 -a 2 -a 3
+%setup -q -n gcc-%{gcc_major}-%{DATE} -a 1 -a 2 -a 3
 %autopatch -p0 -m 0 -M 4
 %if %{build_isl}
 %autopatch -p0 -m 5 -M 6
@@ -1514,10 +1514,10 @@ tar xf %{_usrsrc}/annobin/latest-annobin.tar.xz
 cd annobin*
 touch aclocal.m4 configure Makefile.in */configure */config.h.in */Makefile.in
 ANNOBIN_FLAGS=../../obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags
-ANNOBIN_CFLAGS1="%build_cflags -I %{_builddir}/gcc-%{version}-%{DATE}/gcc"
-ANNOBIN_CFLAGS1="$ANNOBIN_CFLAGS1 -I %{_builddir}/gcc-%{version}-%{DATE}/obj-%{gcc_target_platform}/gcc"
-ANNOBIN_CFLAGS2="-I %{_builddir}/gcc-%{version}-%{DATE}/include -I %{_builddir}/gcc-%{version}-%{DATE}/libcpp/include"
-ANNOBIN_LDFLAGS="%build_ldflags -L%{_builddir}/gcc-%{version}-%{DATE}/obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/src/.libs"
+ANNOBIN_CFLAGS1="%build_cflags -I %{_builddir}/gcc-%{gcc_major}-%{DATE}/gcc"
+ANNOBIN_CFLAGS1="$ANNOBIN_CFLAGS1 -I %{_builddir}/gcc-%{gcc_major}-%{DATE}/obj-%{gcc_target_platform}/gcc"
+ANNOBIN_CFLAGS2="-I %{_builddir}/gcc-%{gcc_major}-%{DATE}/include -I %{_builddir}/gcc-%{gcc_major}-%{DATE}/libcpp/include"
+ANNOBIN_LDFLAGS="%build_ldflags -L%{_builddir}/gcc-%{gcc_major}-%{DATE}/obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/src/.libs"
 CC="`$ANNOBIN_FLAGS --build-cc`" CXX="`$ANNOBIN_FLAGS --build-cxx`" \
   CFLAGS="$ANNOBIN_CFLAGS1 $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
   CXXFLAGS="$ANNOBIN_CFLAGS1 `$ANNOBIN_FLAGS --build-includes` $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
@@ -2582,7 +2582,7 @@ ln -s ../../libexec/gcc/%{gcc_target_platform}/%{gcc_major}/liblto_plugin.so \
 %if %{build_annobin_plugin}
 mkdir -p $FULLPATH/plugin
 rm -f $FULLPATH/plugin/gcc-annobin*
-cp -a %{_builddir}/gcc-%{version}-%{DATE}/annobin-plugin/annobin*/gcc-plugin/.libs/annobin.so.0.0.0 \
+cp -a %{_builddir}/gcc-%{gcc_major}-%{DATE}/annobin-plugin/annobin*/gcc-plugin/.libs/annobin.so.0.0.0 \
   $FULLPATH/plugin/gcc-annobin.so.0.0.0
 ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so.0
 ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so
