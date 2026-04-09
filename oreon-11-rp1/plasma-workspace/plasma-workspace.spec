@@ -676,7 +676,7 @@ fi
 
 
 %changelog
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-4
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-4
 - aarch64 and s390x export NINJAFLAGS -j1 and CMAKE_BUILD_PARALLEL_LEVEL 1 extend IPO PCH off to s390x
 
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
