@@ -9,13 +9,15 @@ Version:       1.5.0
 
 Summary:       Block device I/O library
 Name:          libblkio
-Release:       6%{?dist}
+Release:       7%{?dist}
 URL:           %{forgeurl}
 Source0:       %{forgesource}
+%if 0%{?rhel}
 # To create the vendor tarball:
 #   tar xf %%{name}-v%%{version}.tar.bz2 ; pushd %%{name}-v%%{version} ; \
 #   cargo vendor && tar Jcvf ../%%{name}-v%%{version}-vendor.tar.xz vendor/ ; popd
 Source1:       %{name}-v%{version}-vendor.tar.xz
+%endif
 License:       (Apache-2.0 OR MIT) AND (Apache-2.0 OR BSD-3-Clause) AND (Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT) AND BSD-3-Clause
 
 # Basic build requirements.
@@ -128,6 +130,9 @@ export RUSTFLAGS="%build_rustflags"
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-7
+- Source1 vendor tarball only for rhel Fedora uses crates BR
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-6
 - bump release (retry failed build)
 

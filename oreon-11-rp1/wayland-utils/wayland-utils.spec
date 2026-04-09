@@ -1,11 +1,12 @@
 Name:           wayland-utils
 Version:        1.3.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Wayland utilities
 
 License:        MIT
 URL:            https://wayland.freedesktop.org/
-Source0:        https://wayland.freedesktop.org/releases/%{name}-%{version}.tar.xz
+# freedesktop.org/releases .tar.xz for this version returns 404 use git tag archive
+Source0:        https://gitlab.freedesktop.org/wayland/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -39,6 +40,9 @@ XDG output protocols.
 %{_mandir}/man1/wayland-info.1*
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-5
+- Source0 GitLab archive freedesktop releases URL 404 for 1.3.0
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-4
 - bump release (retry failed build)
 

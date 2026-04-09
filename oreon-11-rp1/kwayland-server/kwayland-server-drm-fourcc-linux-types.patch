@@ -1,0 +1,20 @@
+--- a/src/server/drm_fourcc.h
++++ b/src/server/drm_fourcc.h
+@@ -9,9 +9,16 @@
+ 
+ //#include "drm.h"
+ 
+-// These typedefs are copied from drm.h
+-typedef uint32_t __u32;
+-typedef uint64_t __u64;
++#if defined(__linux__)
++/* Use kernel uapi types. Local typedef uint64_t __u64 clashes with linux/types.h on aarch64. */
++#include <linux/types.h>
++#else
++#include <stdint.h>
++typedef uint32_t __u32;
++typedef uint64_t __u64;
++#endif
+ 
+ #if defined(__cplusplus)
+ extern "C" {

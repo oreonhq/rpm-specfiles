@@ -8,10 +8,16 @@
 
 %global examples 1
 
+# PCH plus default Ninja parallelism can OOM aarch64 or s390x mock
+%ifarch aarch64 s390x
+%global _smp_mflags -j1
+%global _lto_cflags %{nil}
+%endif
+
 Summary: Qt6 - ScXml component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -62,9 +68,30 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 
 %build
+%ifarch aarch64 s390x
+export NINJAFLAGS="-j1"
+%endif
+%ifarch aarch64 s390x
 %cmake_qt6 \
-  -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
-  -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
+  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
+  -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
+%if 0%{?examples}
+  -DQT_BUILD_EXAMPLES:BOOL=ON \
+  -DQT_INSTALL_EXAMPLES_SOURCES=ON \
+%else
+  -DQT_BUILD_EXAMPLES:BOOL=OFF \
+  -DQT_INSTALL_EXAMPLES_SOURCES=OFF \
+%endif
+%else
+%cmake_qt6 \
+%if 0%{?examples}
+  -DQT_BUILD_EXAMPLES:BOOL=ON \
+  -DQT_INSTALL_EXAMPLES_SOURCES=ON \
+%else
+  -DQT_BUILD_EXAMPLES:BOOL=OFF \
+  -DQT_INSTALL_EXAMPLES_SOURCES=OFF \
+%endif
+%endif
 
 %cmake_build
 
@@ -134,6 +161,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
+- aarch64 and s390x NINJAFLAGS -j1 disable PCH and IPO fix cc1plus killed on StateMachine_pch
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
 - bump release (retry failed build)
 

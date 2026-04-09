@@ -21,7 +21,7 @@
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -113,6 +113,7 @@ ln -s %{__python3} python
 export PATH=`pwd`:$PATH
 
 %ifarch aarch64 s390x
+export NINJAFLAGS="-j1"
 %cmake_qt6 \
   -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
   -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
@@ -750,6 +751,9 @@ make check -k -C tests ||:
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
+- aarch64 and s390x set NINJAFLAGS -j1 so ninja does not OOM mock
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
 - aarch64 and s390x disable precompiled headers to cut cc1plus OOM on Qml
 
