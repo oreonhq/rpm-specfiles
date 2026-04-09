@@ -88,7 +88,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 6%{?dist}
+Release: 7%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -471,7 +471,10 @@ Requires: qt6-qtsvg%{?_isa}
 %{summary}.
 
 %prep
+# GNU tar can fail on Chromium Dawn Khronos paths (specs/katex/fonts/KaTeX_*.woff) with ENOENT if directory metadata is applied before all members under that directory are extracted (seen on EL10 xfs mock).
+export TAR_OPTIONS="--delay-directory-restore"
 %setup -q -n %{qtweb_unpacked}
+unset TAR_OPTIONS
 
 pushd %{_sourcedir}
 bash %{SOURCE3} %{_builddir}/%{qtweb_unpacked}/src/3rdparty/chromium
@@ -877,6 +880,9 @@ done
 %endif
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-7
+- %%prep set TAR_OPTIONS --delay-directory-restore for Khronos OpenGL-Registry katex font extract ENOENT
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-6
 - All arches serial Chromium ninja NINJAFLAGS NINJAJOBS CMAKE_BUILD_PARALLEL_LEVEL gn threads 1 fix .o.d flakes on x86_64
 

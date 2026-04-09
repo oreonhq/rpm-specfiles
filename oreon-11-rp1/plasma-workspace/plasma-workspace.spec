@@ -1,6 +1,6 @@
 %bcond kf6_pim 1
 
-%ifarch aarch64
+%ifarch aarch64 s390x
 %global _smp_mflags -j1
 # LTO plus PCH can blow up link or .d writes on small mock workers (same class as plasma-desktop)
 %global _lto_cflags %{nil}
@@ -9,7 +9,7 @@
 Name:    plasma-workspace
 Summary: Plasma workspace, applications and applets
 Version: 6.6.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 # Automatically converted from old format: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT - review is highly recommended.
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
@@ -420,12 +420,17 @@ EOL
 
 
 %build
+%ifarch aarch64 s390x
+# Ninja can still parallelize nested work unless these are set (cf qt6-qtdeclarative Automoc .d races).
+export NINJAFLAGS="-j1"
+export CMAKE_BUILD_PARALLEL_LEVEL=1
+%endif
 %cmake_kf6 \
   -DINSTALL_SDDM_WAYLAND_SESSION:BOOL=ON \
   -DWITH_X11_SESSION:BOOL=OFF \
   -DGLIBC_LOCALE_GEN:BOOL=OFF \
   -DGLIBC_LOCALE_PREGENERATED:BOOL=ON \
-%ifarch aarch64
+%ifarch aarch64 s390x
   -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
   -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
 %endif
@@ -671,6 +676,9 @@ fi
 
 
 %changelog
+* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-4
+- aarch64 and s390x export NINJAFLAGS -j1 and CMAKE_BUILD_PARALLEL_LEVEL 1 extend IPO PCH off to s390x
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
 - aarch64 disable LTO and precompiled headers to avoid missing .d and link failures in mock
 
