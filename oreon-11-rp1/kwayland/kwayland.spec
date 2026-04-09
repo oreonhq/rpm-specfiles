@@ -1,6 +1,6 @@
 Name:       kwayland
 Version:    6.6.3
-Release:    2%{?dist}
+Release:    3%{?dist}
 Summary:    Qt-style API to interact with the wayland-client API
 
 License:    BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND MIT-CMU AND MIT
@@ -77,12 +77,14 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 %{_libdir}/cmake/KWayland/
 %{_libdir}/libKWaylandClient.so
 %{_libdir}/pkgconfig/KWaylandClient.pc
-%{_qt6_docdir}/*.tags
 
 %files doc
 %{_qt6_docdir}/*.qch
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
+- Drop %%files devel qdoc .tags glob upstream no longer installs it
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - bump release (retry failed build)
 
