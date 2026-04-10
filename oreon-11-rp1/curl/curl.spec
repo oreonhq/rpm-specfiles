@@ -13,7 +13,7 @@ Summary: A utility for getting files from remote servers (FTP, HTTP, and others)
 Name: curl
 Version: 8.19.0
 %global version_no_tilde %(echo %{version} | sed 's/~/-/g')
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: curl
 Source0: https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz
 Source1: https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz.asc
@@ -356,9 +356,6 @@ sed -e 's/^runpath_var=.*/runpath_var=/' \
 export OPENSSL_SYSTEM_CIPHERS_OVERRIDE=XXX
 export OPENSSL_CONF=
 
-# make runtests.pl work for out-of-tree builds
-export srcdir=../../tests
-
 # prevent valgrind from being extremely slow (#1662656)
 # https://fedoraproject.org/wiki/Changes/DebuginfodByDefault
 unset DEBUGINFOD_URLS
@@ -371,7 +368,11 @@ for size in minimal full; do (
     export LD_LIBRARY_PATH="${PWD}/lib/.libs"
 
     cd tests
-    perl -I../../tests ../../tests/runtests.pl -a -p -v '!flaky'
+    # Absolute srcdir so server subprocesses always find tests/data (e.g. test 199) if cwd shifts.
+    export srcdir="$(cd ../.. && pwd)/tests"
+    mkdir -p log/lock log/server
+    # -n skips valgrind here libtool+valgrind in %%check often breaks relative log/ paths for sws.
+    perl -I../../tests ../../tests/runtests.pl -a -p -n -v '!flaky'
 )
 done
 
@@ -443,6 +444,9 @@ rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/wcurl.1*
 %{_libdir}/libcurl.so.4.[0-9].[0-9].minimal
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.19.0-3
+- %%check use absolute srcdir mkdir log subdirs runtests -n so sws and data files resolve under rpmbuild
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.19.0-2
 - 8.19.0 stable tarballs on curl.se (RC snapshots 404 there)
 
