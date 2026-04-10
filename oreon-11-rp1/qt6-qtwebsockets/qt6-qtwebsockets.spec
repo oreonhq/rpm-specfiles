@@ -10,13 +10,12 @@
 # Examples plus QML import blow mock disk on some aarch64 workers
 %ifarch aarch64
 %global examples 0
-%global _smp_mflags -j1
 %endif
 
 Summary: Qt6 - WebSockets component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
@@ -132,8 +131,8 @@ popd
 
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
-- bump release (retry failed build)
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
+- Drop aarch64 %%_smp_mflags -j1 (still skip examples on aarch64 for mock disk)
 
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
 - fix %%{?examples ON} so value 0 does not still enable QT_BUILD_EXAMPLES

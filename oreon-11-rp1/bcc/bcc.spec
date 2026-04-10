@@ -19,7 +19,7 @@
 
 Name:           bcc
 Version:        0.35.0
-Release:        9%{?dist}
+Release:        11%{?dist}
 Summary:        BPF Compiler Collection (BCC)
 License:        Apache-2.0
 URL:            https://github.com/iovisor/bcc
@@ -32,15 +32,6 @@ Patch1:         https://github.com/iovisor/bcc/commit/4c7be1ec6ab74e973f8d18a901
 # Arches will be included as upstream support is added and dependencies are
 # satisfied in the respective arches
 ExclusiveArch:  x86_64 %{power64} aarch64 s390x armv7hl riscv64
-
-# %%cmake --build honors %%_smp_mflags. Parallel ninja + loader.cc sized TUs OOM cc1plus on aarch64 mock.
-%global _smp_mflags -j1
-
-%ifarch aarch64
-# clang_frontend/loader.cc is one giant TU. Default %%optflags LTO can make a single cc1plus exceed
-# modest aarch64 mock RAM even with RPM_BUILD_NCPUS=1 (OOM Killed, not a code error).
-%global _lto_cflags %{nil}
-%endif
 
 BuildRequires:  bison
 BuildRequires:  cmake >= 2.8.7
@@ -137,11 +128,6 @@ Command line libbpf tools for BPF Compiler Collection (BCC)
 
 
 %build
-# clang_frontend pulls huge AST TUs, parallel ninja + low RAM mock builders get OOM killed (cc1plus Killed,
-# bogus asm CFI errors from truncated compiler output). Force one compile job for the main build.
-export RPM_BUILD_NCPUS=1
-export CMAKE_BUILD_PARALLEL_LEVEL=1
-export NINJAFLAGS="-j1"
 %cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
        -DREVISION_LAST=%{version} -DREVISION=%{version} -DPYTHON_CMD=python3 \
        -DCMAKE_USE_LIBBPF_PACKAGE:BOOL=TRUE -DENABLE_NO_PIE=OFF \
@@ -242,14 +228,8 @@ cp -a libbpf-tools/tmp-install/bin/* %{buildroot}/%{_sbindir}/
 %{_sbindir}/bpf-*
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-9
-- %%_smp_mflags -j1 and NINJAFLAGS so %%cmake_build does not spawn many ninja jobs and OOM loader.cc
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-8
-- aarch64 clear %%_lto_cflags so loader.cc sized translation units do not OOM one cc1plus in mock
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-7
-- Build with RPM_BUILD_NCPUS=1 so clang heavy objects do not OOM small builders
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-11
+- Remove spec OOM mitigations (%%_smp_mflags, LTO strip, ninja env, var-tracking flags)
 
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-6
 - Add upstream patch for llvm-22 createDiagnostics API changes

@@ -18,16 +18,10 @@
 
 %global examples 1
 
-# PCH, qsb, and LTO together can OOM smaller aarch64 or s390x builders
-%ifarch aarch64 s390x
-%global _smp_mflags -j1
-%global _lto_cflags %{nil}
-%endif
-
 Summary: Qt6 - Multimedia support
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -247,8 +241,8 @@ rm -r %{buildroot}%{_qt6_archdatadir}/mkspecs/features/ios/add_ios_ffmpeg_librar
 
 
 %changelog
-* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- Ease aarch64 and s390x OOM, disable IPO there, fix comment macro warning
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
+- Drop aarch64 and s390x %%_smp_mflags and %%_lto_cflags OOM workarounds
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
 - Prepare for Oreon 11 (RP1)

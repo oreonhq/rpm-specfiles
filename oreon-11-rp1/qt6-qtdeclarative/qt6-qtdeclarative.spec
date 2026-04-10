@@ -1,16 +1,6 @@
 
 %global qt_module qtdeclarative
 
-%global _lto_cflags %{nil}
-
-# %%cmake_build uses %%_smp_mflags for --parallel. Without -j1 everywhere, Ninja/CMake can ignore
-# NINJAFLAGS alone and still compile QuickTemplates2 before cmake_pch.hxx exists.
-%global _smp_mflags -j1
-%ifarch aarch64 s390x
-# Ninja has seen spurious Automoc depfile races on aarch64 (!.o.d no such file). Use Make generator.
-%global _qt6_build_tool make
-%endif
-
 # definition borrowed from qtbase
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9
 
@@ -24,7 +14,7 @@
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 9%{?dist}
+Release: 10%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -115,23 +105,10 @@ Provides:  qt6-qtquickcontrols2-examples = %{version}-%{release}
 ln -s %{__python3} python
 export PATH=`pwd`:$PATH
 
-# Parallel Qt and LTO on modest RAM builders can OOM cc1plus (seen on x86_64 too)
-export RPM_BUILD_NCPUS=1
-export CMAKE_BUILD_PARALLEL_LEVEL=1
-export NINJAFLAGS="-j1"
-
-%ifarch aarch64 s390x
-%cmake_qt6 \
-  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
-  -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
-  -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
-  -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-%else
 %cmake_qt6 \
   -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-%endif
 
 %cmake_build
 
@@ -759,26 +736,8 @@ make check -k -C tests ||:
 %endif
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-9
-- Set %%_smp_mflags -j1 on all arches so %%cmake_build cannot over-parallelize Ninja past PCH generation
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-8
-- Disable CMake precompiled headers on x86_64 too so QuickTemplates2 cmake_pch.hxx is not missing mid-build
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-7
-- All arches use single compile job to avoid LTO cc1plus OOM on constrained builders
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-6
-- aarch64 and s390x use %%_qt6_build_tool make avoid Ninja Automoc .d file flakes
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
-- aarch64 and s390x set NINJAFLAGS -j1 so ninja does not OOM mock
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
-- aarch64 and s390x disable precompiled headers to cut cc1plus OOM on Qml
-
-* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
-- Ease aarch64 and s390x OOM, disable IPO there, fix comment macro warning
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-10
+- Drop %%_lto_cflags, %%_smp_mflags -j1, ninja env, aarch64 Make generator, aarch64 IPO (keep CMAKE_DISABLE_PRECOMPILE_HEADERS)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
 - Prepare for Oreon 11 (RP1)

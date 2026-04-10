@@ -8,16 +8,10 @@
 
 %global examples 1
 
-# Many C++ PCH jobs plus LTO can OOM smaller mock workers (aarch64, s390x)
-%ifarch aarch64 s390x
-%global _smp_mflags -j1
-%global _lto_cflags %{nil}
-%endif
-
 Summary: Qt6 - VirtualKeyboard component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt.io
@@ -83,17 +77,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 
 %build
-%ifarch aarch64 s390x
-%cmake_qt6 \
-  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
-  -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
-  -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
-  -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-%else
 %cmake_qt6 \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-%endif
 
 %cmake_build
 
@@ -156,15 +142,8 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %endif
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
-- bump release (retry failed build)
-
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
-- CMAKE_DISABLE_PRECOMPILE_HEADERS on aarch64 and s390x to avoid cc1plus OOM
-
-* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- Disable IPO on aarch64 and s390x with PCH to reduce OOM
-- BuildRequire qt6-qtmultimedia-devel so optional Multimedia is found
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
+- Drop aarch64 and s390x IPO PCH and %%_smp_mflags %%_lto_cflags OOM workarounds
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
 - Prepare for Oreon 11 (RP1)
