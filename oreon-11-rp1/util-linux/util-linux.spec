@@ -9,7 +9,8 @@ URL: https://en.wikipedia.org/wiki/Util-linux
 
 ### Macros
 %global upstream_version %{version}
-%global upstream_major %(eval echo %{version} | sed -e 's/\([[:digit:]]*\)\.\([[:digit:]]*\)\.[[:digit:]]*$/\1.\2/')
+# First two numeric components (e.g. 2.41.3 -> 2.41). sed %%global was expanding wrong for spectool; kernel.org uses v2.41/ not v2.41.3/
+%global upstream_major %(echo %{version} | cut -d. -f1-2)
 
 %global compldir %{_datadir}/bash-completion/completions/
 
@@ -1048,6 +1049,9 @@ fi
 %{compldir}/scriptreplay
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.3-3
+- Fix upstream_major for spectool (cut -f1-2 so URL uses v2.41 not v2.41.3)
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.3-2
 - Source0 from kernel.org mirror (mirrors.edge.kernel.org 404 for this point release)
 

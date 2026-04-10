@@ -1,10 +1,10 @@
-%global DATE 20260308
-%global gitrev da9795f681c5add73add41595bb6713b45c77d4e
+%global DATE 20260321
+%global gitrev da66e2fe4839df86a5fcfd7440bc80d55745534b
 %global gcc_version 16.0.1
 %global gcc_major 16
 # Note, gcc_release must be integer, if you want to add suffixes to
 # %%{release}, append them after %%{gcc_release} on Release: line.
-%global gcc_release 0
+%global gcc_release 3
 %global nvptx_tools_gitrev a0c1fff6534a4df9fb17937c3c4a4b1071212029
 %global newlib_cygwin_gitrev d35cc82b5ec15bb8a5fe0fe11e183d1887992e99
 %global _unpackaged_files_terminate_build 0
@@ -176,7 +176,9 @@ License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-e
 # to speed up the clone operations.  Note, %%{gitrev} macro in
 # gcc.spec shouldn't be updated before running the script, the script
 # will update it, fill in some %%changelog details etc.
-Source0: https://gcc.gnu.org/pub/gcc/snapshots/%{gcc_major}-%{DATE}/gcc-%{gcc_major}-%{DATE}.tar.xz
+# Same tarball as Fedora rawhide gcc (spectool friendly). Keeps %%prep in sync with their patch queue (PR124547 etc.).
+%global gcc_source_sha512 7e246963cfcf278a9b7f775094e5ffa60b011ae32084b8923a0bddea3d695518a10b01ddbc1f7d071a72c767fb5d2c4a66acd5f4772c234445aa02afe36c8711
+Source0: https://src.fedoraproject.org/repo/pkgs/rpms/gcc/gcc-%{version}-%{DATE}.tar.xz/sha512/%{gcc_source_sha512}/gcc-%{version}-%{DATE}.tar.xz
 # The source for nvptx-tools package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 # git clone --depth 1 https://github.com/MentorEmbedded/nvptx-tools.git nvptx-tools-dir.tmp
@@ -323,6 +325,10 @@ Patch10: gcc16-rh1574936.patch
 Patch11: gcc16-d-shared-libphobos.patch
 Patch12: gcc16-pr119006.patch
 Patch13: gcc16-tcl9.patch
+Patch14: gcc16-pr124531.patch
+Patch15: gcc16-pr124547.patch
+Patch16: gcc16-uglification.patch
+Patch17: gcc16-module-exports.patch
 
 Patch50: isl-rh2155127.patch
 
@@ -965,7 +971,7 @@ of the plugin is explicitly built by the same version of gcc that is installed
 so that there cannot be any synchronization problems.
 
 %prep
-%setup -q -n gcc-%{gcc_major}-%{DATE} -a 1 -a 2 -a 3
+%setup -q -n gcc-%{version}-%{DATE} -a 1 -a 2 -a 3
 %autopatch -p0 -m 0 -M 4
 %if %{build_isl}
 %autopatch -p0 -m 5 -M 6
@@ -1514,10 +1520,10 @@ tar xf %{_usrsrc}/annobin/latest-annobin.tar.xz
 cd annobin*
 touch aclocal.m4 configure Makefile.in */configure */config.h.in */Makefile.in
 ANNOBIN_FLAGS=../../obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags
-ANNOBIN_CFLAGS1="%build_cflags -I %{_builddir}/gcc-%{gcc_major}-%{DATE}/gcc"
-ANNOBIN_CFLAGS1="$ANNOBIN_CFLAGS1 -I %{_builddir}/gcc-%{gcc_major}-%{DATE}/obj-%{gcc_target_platform}/gcc"
-ANNOBIN_CFLAGS2="-I %{_builddir}/gcc-%{gcc_major}-%{DATE}/include -I %{_builddir}/gcc-%{gcc_major}-%{DATE}/libcpp/include"
-ANNOBIN_LDFLAGS="%build_ldflags -L%{_builddir}/gcc-%{gcc_major}-%{DATE}/obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/src/.libs"
+ANNOBIN_CFLAGS1="%build_cflags -I %{_builddir}/gcc-%{version}-%{DATE}/gcc"
+ANNOBIN_CFLAGS1="$ANNOBIN_CFLAGS1 -I %{_builddir}/gcc-%{version}-%{DATE}/obj-%{gcc_target_platform}/gcc"
+ANNOBIN_CFLAGS2="-I %{_builddir}/gcc-%{version}-%{DATE}/include -I %{_builddir}/gcc-%{version}-%{DATE}/libcpp/include"
+ANNOBIN_LDFLAGS="%build_ldflags -L%{_builddir}/gcc-%{version}-%{DATE}/obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/src/.libs"
 CC="`$ANNOBIN_FLAGS --build-cc`" CXX="`$ANNOBIN_FLAGS --build-cxx`" \
   CFLAGS="$ANNOBIN_CFLAGS1 $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
   CXXFLAGS="$ANNOBIN_CFLAGS1 `$ANNOBIN_FLAGS --build-includes` $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
@@ -2582,7 +2588,7 @@ ln -s ../../libexec/gcc/%{gcc_target_platform}/%{gcc_major}/liblto_plugin.so \
 %if %{build_annobin_plugin}
 mkdir -p $FULLPATH/plugin
 rm -f $FULLPATH/plugin/gcc-annobin*
-cp -a %{_builddir}/gcc-%{gcc_major}-%{DATE}/annobin-plugin/annobin*/gcc-plugin/.libs/annobin.so.0.0.0 \
+cp -a %{_builddir}/gcc-%{version}-%{DATE}/annobin-plugin/annobin*/gcc-plugin/.libs/annobin.so.0.0.0 \
   $FULLPATH/plugin/gcc-annobin.so.0.0.0
 ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so.0
 ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so
@@ -3973,5 +3979,15 @@ end
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-4
+- Fedora lookaside Source0 16.0.1-20260321 tarball, DATE and gitrev aligned with rawhide so Patch14-17 apply (PR124547 fixes bootstrap gas vs gas_flag). Restore builddir naming gcc-version-DATE. Offload toolchains stay on.
+
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-3
+- Sync Fedora rawhide gcc patches pr124531 pr124547 uglification module-exports (PR124547 fixes bootstrap configure gas_flag vs libcody bogus subdir list)
+- Re-enable NVPTX and AMDGCN offload
+
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-2
+- Disable NVPTX and AMDGCN OpenMP offload subbuilds (gcc-16 snapshot breaks in obj-offload-nvptx-none)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-1
 - Prepare for Oreon 11 (RP1)
