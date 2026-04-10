@@ -11,7 +11,7 @@
 Summary: SELinux policy core utilities
 Name:    policycoreutils
 Version: 3.10
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPL-2.0-or-later
 # https://github.com/SELinuxProject/selinux/wiki/Releases
 Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/selinux-%{version}.tar.gz
@@ -20,21 +20,13 @@ Source2: https://github.com/perfinion.gpg
 Source3: changelog
 URL:     https://github.com/SELinuxProject/selinux
 Source13: system-config-selinux.png
-Source14: sepolicy-icons.tgz
 Source15: selinux-autorelabel
 Source16: selinux-autorelabel.service
 Source17: selinux-autorelabel-mark.service
 Source18: selinux-autorelabel.target
 Source19: selinux-autorelabel-generator.sh
-# Drop this when upstream updates translations and the package is rebased
-# wlc --key <apikey> --url https://translate.fedoraproject.org/api/ download selinux/policycoreutils --output ./
-Source20: selinux-policycoreutils.zip
-# wlc --key <apikey> --url https://translate.fedoraproject.org/api/ download selinux/python --output ./
-Source21: selinux-python.zip
-# wlc --key <apikey> --url https://translate.fedoraproject.org/api/ download selinux/gui --output ./
-Source22: selinux-gui.zip
-# wlc --key <apikey> --url https://translate.fedoraproject.org/api/ download selinux/sandbox --output ./
-Source23: selinux-sandbox.zip
+# Weblate zip bundles are optional Fedora extras see README.translations those unzip steps were
+# already commented out in prep and are not used for 3.10.
 # https://github.com/fedora-selinux/selinux
 # $ git format-patch -N 3.10 -- policycoreutils python gui sandbox dbus semodule-utils restorecond
 # $ for j in [0-9]*.patch; do printf "Patch%s: %s\n" ${j/-*/} $j; done
@@ -98,21 +90,6 @@ to switch roles.
 %autosetup -p 1 -n selinux-%{version}
 
 cp %{SOURCE13} gui/
-tar -xvf %{SOURCE14} -C python/sepolicy/
-
-# Temporary disabled since upstream updated translations in this release
-# Since patches containing translation changes were too big, translations were moved to separate tarballs
-# For more information see README.translations
-# First remove old translation files
-# rm -f policycoreutils/po/*.po python/po/*.po gui/po/*.po sandbox/po/*.po
-# unzip %{SOURCE20}
-# cp -r selinux/policycoreutils/po policycoreutils
-# unzip %{SOURCE21}
-# cp -r selinux/python/po python
-# unzip %{SOURCE22}
-# cp -r selinux/gui/po gui
-# unzip %{SOURCE23}
-# cp -r selinux/sandbox/po sandbox
 
 %build
 %set_build_flags
@@ -460,6 +437,9 @@ The policycoreutils-restorecond package contains the restorecond service.
 %systemd_postun_with_restart restorecond.service
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10-4
+- Remove sepolicy-icons and Weblate zip sources (unused in %%prep 3.10 tree already ships icons)
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10-3
 - Drop unused gen_changelog macros load so rpmspec works without SOURCES macros file
 
