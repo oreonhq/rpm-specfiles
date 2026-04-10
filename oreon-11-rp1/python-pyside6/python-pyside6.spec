@@ -15,7 +15,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.10.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -37,6 +37,7 @@ Patch3:         https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/
 BuildRequires:  cmake
 BuildRequires:  ninja-build
 BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  git
 BuildRequires:  clang-devel
 BuildRequires:  clang-tools-extra
@@ -241,7 +242,10 @@ tar xf %{SOURCE1}
 %build
 # Compile generated C++ with GCC. The %%toolchain macro is not always wired into
 # upstream CMake, so set CC/CXX explicitly (clang was producing -Wcast-function-type noise).
-export CC=gcc CXX=g++
+export CC=%{_bindir}/gcc
+export CXX=%{_bindir}/g++
+export CFLAGS="%{build_cflags}"
+export CXXFLAGS="%{build_cxxflags}"
 export CMAKE_BUILD_PARALLEL_LEVEL=1
 export NINJAFLAGS="-j1"
 mkdir -p "$(pwd)/tmp-pyside6-build"
@@ -251,6 +255,8 @@ export TMPDIR="$(pwd)/tmp-pyside6-build"
 # Prior to Fedora 43, %%cmake set the nonstandard -DLIB_SUFFIX=... variable.
 # cmake %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""]
 %cmake_qt6 %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""] \
+    -DCMAKE_C_COMPILER:FILEPATH=%{_bindir}/gcc \
+    -DCMAKE_CXX_COMPILER:FILEPATH=%{_bindir}/g++ \
     -DCMAKE_BUILD_TYPE=None \
     -DSHIBOKEN_PYTHON_LIBRARIES=`pkgconf python3-embed --libs` \
     -DBUILD_TESTS=OFF \
@@ -387,6 +393,9 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %endif
 
 %changelog
+* Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
+- BuildRequires gcc-c++, export %%{build_cflags}/%%{build_cxxflags}, force CMAKE_C_CXX_COMPILER paths so cstddef finds gcc stddef.h in mock
+
 * Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
 - %%_lto_cflags nil, %%_smp_mflags -j1, NINJAFLAGS and CMAKE_BUILD_PARALLEL_LEVEL, TMPDIR under build for mock ninja reliability
 
