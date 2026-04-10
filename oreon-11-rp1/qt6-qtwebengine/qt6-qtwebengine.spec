@@ -89,7 +89,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 8%{?dist}
+Release: 9%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -571,6 +571,7 @@ src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-librarie
 %endif
 export STRIP=strip
 # Parallel ninja in Chromium hits intermittent "opening dependency file *.o.d" in mock (all arches).
+# Jumbo unity builds also trigger bad Perfetto depfile paths (common/common/*.o.d) even at -j1.
 export NINJAFLAGS="-j1 -v"
 # Inner QtWebEngineCore ninja often still used -jN from build parallel level without this.
 export NINJAJOBS=-j1
@@ -591,11 +592,7 @@ export CXXFLAGS="${CXXFLAGS} -march=armv8.2-a+dotprod"
 %cmake_qt6 \
   -DCMAKE_TOOLCHAIN_FILE:STRING="%{_libdir}/cmake/Qt6/qt.toolchain.cmake" \
   -DFEATURE_webengine_build_gn:BOOL=ON \
-%ifarch aarch64
   -DFEATURE_webengine_jumbo_build:BOOL=OFF \
-%else
-  -DFEATURE_webengine_jumbo_build:BOOL=ON \
-%endif
   -DFEATURE_webengine_developer_build:BOOL=OFF \
   -DFEATURE_qtwebengine_build:BOOL=ON \
   -DFEATURE_qtwebengine_core_build:BOOL=ON \
@@ -889,6 +886,9 @@ done
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-9
+- Disable webengine jumbo on all arches (fixes Perfetto process_tracker.o.d missing depfile with serial ninja)
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-8
 - With system FFmpeg add pkgconfig(vpx) so VPX configure probe passes while bundled Chromium libvpx stays on for VA-API
 - aarch64 append -march=armv8.2-a+dotprod so Qt udot compile test enables webengine-arm64-udot-support
