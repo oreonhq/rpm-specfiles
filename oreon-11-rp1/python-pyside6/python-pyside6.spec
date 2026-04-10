@@ -10,7 +10,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.10.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -21,7 +21,7 @@ Source0:        https://download.qt.io/official_releases/QtForPython/%{pypi_name
 %global docs 0
 %global qt_module qtbase
 %global  majmin %(echo %{version} | cut -d. -f1-2)
-#Source1:	https://download.qt.io/official_releases/qt/%{majmin}/%{qt6ver}/submodules/%{qt_module}-everywhere-src-%{qt6ver}.tar.xz
+# Optional doc-only qtbase submodule tarball when %%docs is enabled (see Fedora python-pyside6).
 
 # OpenSuse patches (from Fedora rawhide)
 Patch0:         https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-Revert-Modify-headers-installation-for-CMake-builds.patch
@@ -374,5 +374,8 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
+- Reword commented Source1 note so rpmspec does not expand macros inside a comment
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
 - Import Fedora rawhide python-pyside6 6.10.3-1, HTTPS Source0, Fedora patch URLs

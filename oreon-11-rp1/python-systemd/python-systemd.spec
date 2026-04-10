@@ -7,7 +7,7 @@ License:        LGPL-2.1-or-later
 URL:            https://github.com/systemd/python-systemd
 Source0:        https://github.com/systemd/python-systemd/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
-Patch:          https://github.com/systemd/python-systemd/pull/140.patch
+Patch0:         https://github.com/systemd/python-systemd/commit/903142423452c4dd18110b7f8a953dabb2031e49.patch
 
 BuildRequires:  make
 BuildRequires:  gcc
@@ -76,5 +76,8 @@ make PYTHON=%{__python3} check
 %doc %{_pkgdocdir}/html
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 235-2
+- Patch0 from merged PR 140 commit (github pull patch URL flakes with 503)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 235-1
 - Prepare for Oreon 11 (RP1)

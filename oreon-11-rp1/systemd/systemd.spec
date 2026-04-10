@@ -1171,7 +1171,52 @@ meson test -C %{_vpath_builddir} -t 6 --print-errorlogs
 #############################################################################################
 
 %if %{without upstream} || (0%{?fedora} < 41 && 0%{?rhel} < 11)
-%include %{SOURCE1}
+%transfiletriggerin -P 900900 -- /usr/lib/systemd/system /etc/systemd/system
+/usr/lib/systemd/systemd-update-helper system-reload-restart || :
+
+%transfiletriggerin -P 900899 -- /usr/lib/systemd/user /etc/systemd/user
+/usr/lib/systemd/systemd-update-helper user-reload-restart || :
+
+%transfiletriggerpostun -P 1000100 -- /usr/lib/systemd/system /etc/systemd/system
+/usr/lib/systemd/systemd-update-helper system-reload || :
+
+%transfiletriggerpostun -P 1000099 -- /usr/lib/systemd/user /etc/systemd/user
+/usr/lib/systemd/systemd-update-helper user-reload || :
+
+%transfiletriggerpostun -P 10000 -- /usr/lib/systemd/system /etc/systemd/system
+/usr/lib/systemd/systemd-update-helper system-restart || :
+
+%transfiletriggerpostun -P  9999 -- /usr/lib/systemd/user /etc/systemd/user
+/usr/lib/systemd/systemd-update-helper user-restart || :
+
+%transfiletriggerin -P 1000700 -- /usr/lib/sysusers.d
+systemd-sysusers || :
+
+%transfiletriggerin -P 1000700 udev -- /usr/lib/udev/hwdb.d
+systemd-hwdb update || :
+
+%transfiletriggerin -P 1000700 -- /usr/lib/systemd/catalog
+journalctl --update-catalog || :
+
+%transfiletriggerin -P 1000700 -- /usr/lib/binfmt.d
+if test -d "/run/systemd/system"; then
+  /usr/lib/systemd/systemd-binfmt || :
+fi
+
+%transfiletriggerin -P 1000600 -- /usr/lib/tmpfiles.d
+if test -d "/run/systemd/system"; then
+  systemd-tmpfiles --create || :
+fi
+
+%transfiletriggerin -P 1000600 udev -- /usr/lib/udev/rules.d
+if test -e /run/udev/control; then
+  udevadm control --reload || :
+fi
+
+%transfiletriggerin -P 1000500 -- /usr/lib/sysctl.d
+if test -d "/run/systemd/system"; then
+  /usr/lib/systemd/systemd-sysctl || :
+fi
 %endif
 
 # This macro is newly added upstream so we can't rely on it being always being available
@@ -1580,6 +1625,9 @@ rm -rf \
     elfbins.list
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{?version_override}%{!?version_override:260}-3
+- Inline transfiletrigger block instead of %%include %%SOURCE1 so rpmspec works without SOURCES at parse time
+
 * Fri Apr 03 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{?version_override}%{!?version_override:260}-2
 - Add triggers.systemd next to spec so %%include and spectoolless SRPM prep work
 

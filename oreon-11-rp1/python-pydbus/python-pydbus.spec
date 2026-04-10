@@ -2,7 +2,7 @@
 
 Name:           python-%{srcname}
 Version:        0.6.0
-Release:        34%{?dist}
+Release:        35%{?dist}
 Summary:        Pythonic DBus library
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
@@ -13,14 +13,6 @@ Source0:        https://files.pythonhosted.org/packages/source/%(n=%{srcname}; e
 # upstream fix, not yet in release
 # https://github.com/LEW21/pydbus/commit/ff792feb45bbdc0dd6a9ff7453825e34b6554865
 Patch1: 0001-make-direction-attribute-conforming-to-introspect.dt.patch
-
-# patch submitted for upstream inclusion, not yet merged
-# https://github.com/LEW21/pydbus/pull/63
-Patch2: 0002-Support-asynchronous-calls-58.patch
-
-# patch submitted for upstream inclusion, not yet merged
-# https://github.com/LEW21/pydbus/pull/64
-Patch3: 0003-Support-transformation-between-D-Bus-errors-and-exce.patch
 
 BuildArch:      noarch
 
@@ -58,5 +50,8 @@ Python 3 version.
 %{python3_sitelib}/%{srcname}/
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.0-35
+- Drop stale Patch2 Patch3 (do not apply to 0.6.0)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.0-34
 - Prepare for Oreon 11 (RP1)

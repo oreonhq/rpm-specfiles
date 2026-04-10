@@ -11,8 +11,9 @@
 
 Summary: A utility for getting files from remote servers (FTP, HTTP, and others)
 Name: curl
-Version: 8.19.0~rc3
-Release: 1%{?dist}
+Version: 8.19.0
+%global version_no_tilde %(echo %{version} | sed 's/~/-/g')
+Release: 2%{?dist}
 License: curl
 Source0: https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz
 Source1: https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz.asc
@@ -442,5 +443,8 @@ rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/wcurl.1*
 %{_libdir}/libcurl.so.4.[0-9].[0-9].minimal
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.19.0-2
+- 8.19.0 stable tarballs on curl.se (RC snapshots 404 there)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.19.0~rc3-1
 - Prepare for Oreon 11 (RP1)

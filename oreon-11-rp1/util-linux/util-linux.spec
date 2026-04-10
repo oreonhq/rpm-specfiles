@@ -48,7 +48,7 @@ BuildRequires: bison
 BuildRequires: flex
 
 ### Sources
-Source0: https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v%{upstream_major}/util-linux-%{upstream_version}.tar.xz
+Source0: https://www.kernel.org/pub/linux/utils/util-linux/v%{upstream_major}/util-linux-%{upstream_version}.tar.xz
 Source1: util-linux-login.pamd
 Source2: util-linux-remote.pamd
 Source3: util-linux-chsh-chfn.pamd
@@ -1048,5 +1048,8 @@ fi
 %{compldir}/scriptreplay
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.3-2
+- Source0 from kernel.org mirror (mirrors.edge.kernel.org 404 for this point release)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.3-1
 - Prepare for Oreon 11 (RP1)

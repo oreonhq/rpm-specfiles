@@ -1,10 +1,10 @@
 Summary: User space tools for kernel auditing
 Name: audit
 Version: 4.1.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 URL: https://github.com/linux-audit/audit-userspace/
-Source0: audit-userspace-%{version}.tar.gz
+Source0: https://github.com/linux-audit/audit-userspace/archive/refs/tags/v%{version}.tar.gz#/audit-userspace-%{version}.tar.gz
 Source1: https://www.gnu.org/licenses/lgpl-2.1.txt
 BuildRequires: make gcc
 BuildRequires: autoconf automake libtool
@@ -301,5 +301,8 @@ fi
 %attr(750,root,root) %{_sbindir}/audispd-zos-remote
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.1.3-2
+- HTTPS Source0 on GitHub for spectool
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.1.3-1
 - Prepare for Oreon 11 (RP1)

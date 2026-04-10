@@ -5,12 +5,12 @@
 
 Name:           libeconf
 Version:        0.7.9
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Enhanced config file parser library
 
 License:        MIT
 URL:            https://github.com/openSUSE/libeconf
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/openSUSE/libeconf/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 ### Patches ###
 # This should be a temporary workaround. I don't have enough time to check what's happening, but since we aren't shipping the html documentation it's fine to stop installing it
@@ -82,5 +82,8 @@ configuration files from applications that use %{name}.
 %{_mandir}/man8/econftool.8*
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.9-4
+- Fix Source0 GitHub archive URL for spectool
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.9-3
 - Prepare for Oreon 11 (RP1)

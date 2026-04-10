@@ -14,7 +14,7 @@
 Summary: An extensible library which provides authentication for applications
 Name: pam
 Version: 1.7.2
-Release: 1%{?dist}
+Release: 2%{?dist}
 # The library is BSD licensed with option to relicense as GPLv2+
 # - this option is redundant as the BSD license allows that anyway.
 # pam_timestamp and pam_loginuid modules are GPLv2+.
@@ -35,7 +35,11 @@ Source18: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 Patch1:  pam-1.7.0-redhat-modules.patch
 Patch2:  pam-1.5.3-unix-nomsg.patch
 
-%{load:%{SOURCE3}}
+%global _pam_libdir %{_libdir}
+%global _pam_moduledir %{_libdir}/security
+%global _pam_secconfdir %{_sysconfdir}/security
+%global _pam_confdir %{_sysconfdir}/pam.d
+%global _pam_vendordir %{_datadir}/pam.d
 
 ### Dependencies ###
 Requires(meta): authselect >= 1.3
@@ -363,5 +367,8 @@ done
 %{_pam_libdir}/libpam_misc.so.%{so_ver}*
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.2-2
+- Replace %%load macros.pam with %%global _pam_* so rpmspec works without SOURCES at parse time
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.2-1
 - Prepare for Oreon 11 (RP1)
