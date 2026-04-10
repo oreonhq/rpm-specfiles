@@ -15,7 +15,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.10.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -246,6 +246,11 @@ export CC=%{_bindir}/gcc
 export CXX=%{_bindir}/g++
 export CFLAGS="%{build_cflags}"
 export CXXFLAGS="%{build_cxxflags}"
+# Qt6 CMake puts many paths in -isystem order, which breaks #include_next from
+# libstdc++ cstddef to GCC stddef.h unless the compiler include dir is searched.
+_gcc_incdir="$(%{_bindir}/gcc -print-file-name=include)"
+export CFLAGS="${CFLAGS} -idirafter ${_gcc_incdir}"
+export CXXFLAGS="${CXXFLAGS} -idirafter ${_gcc_incdir}"
 export CMAKE_BUILD_PARALLEL_LEVEL=1
 export NINJAFLAGS="-j1"
 mkdir -p "$(pwd)/tmp-pyside6-build"
@@ -393,6 +398,9 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %endif
 
 %changelog
+* Thu Apr 16 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-6
+- Append -idirafter GCC internal include so cstddef include_next finds stddef.h with Qt -isystem-heavy compile lines
+
 * Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
 - BuildRequires gcc-c++, export %%{build_cflags}/%%{build_cxxflags}, force CMAKE_C_CXX_COMPILER paths so cstddef finds gcc stddef.h in mock
 
