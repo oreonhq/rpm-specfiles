@@ -18,10 +18,13 @@
 
 %global examples 1
 
+# PCH plus distro LTO optflags runs one giant cc1plus per target. That OOMs low-RAM builders (x86_64 mock too).
+%global _lto_cflags %{nil}
+
 Summary: Qt6 - Multimedia support
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -116,16 +119,10 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %if 0%{?rhel} && 0%{?rhel} < 10
 . /opt/rh/gcc-toolset-13/enable
 %endif
-%ifarch aarch64 s390x
 %cmake_qt6 \
-  -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=OFF \
+  -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-%else
-%cmake_qt6 \
-  -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
-  -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-%endif
 
 %cmake_build
 
@@ -241,6 +238,9 @@ rm -r %{buildroot}%{_qt6_archdatadir}/mkspecs/features/ios/add_ios_ffmpeg_librar
 
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
+- Clear %%_lto_cflags and disable CMake PCH so MultimediaQuick cmake_pch.hxx gch does not OOM cc1plus
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
 - Drop aarch64 and s390x %%_smp_mflags and %%_lto_cflags OOM workarounds
 
