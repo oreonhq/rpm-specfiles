@@ -15,7 +15,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.10.3
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -244,13 +244,23 @@ tar xf %{SOURCE1}
 # upstream CMake, so set CC/CXX explicitly (clang was producing -Wcast-function-type noise).
 export CC=%{_bindir}/gcc
 export CXX=%{_bindir}/g++
+# %%_lto_cflags is only part of the picture. Default %%{build_*flags} still carry
+# -flto=auto, and LTO plus Qt CMake -isystem wiring breaks #include_next from
+# libstdc++ cstddef to the compiler stddef.h. Strip LTO and force the gcc fixed-
+# header dir into both the environment and the CMake cache (Ninja ignores fresh
+# CXXFLAGS after configure unless the cache carries them).
+_gcc_incdir="$(%{_bindir}/gcc -print-file-name=include)"
 export CFLAGS="%{build_cflags}"
 export CXXFLAGS="%{build_cxxflags}"
-# Qt6 CMake puts many paths in -isystem order, which breaks #include_next from
-# libstdc++ cstddef to GCC stddef.h unless the compiler include dir is searched.
-_gcc_incdir="$(%{_bindir}/gcc -print-file-name=include)"
-export CFLAGS="${CFLAGS} -idirafter ${_gcc_incdir}"
-export CXXFLAGS="${CXXFLAGS} -idirafter ${_gcc_incdir}"
+export LDFLAGS="%{build_ldflags}"
+CFLAGS="${CFLAGS//-flto=auto/}"; CFLAGS="${CFLAGS//-ffat-lto-objects/}"
+CXXFLAGS="${CXXFLAGS//-flto=auto/}"; CXXFLAGS="${CXXFLAGS//-ffat-lto-objects/}"
+LDFLAGS="${LDFLAGS//-flto=auto/}"; LDFLAGS="${LDFLAGS//-ffat-lto-objects/}"
+_incfix="-I${_gcc_incdir} -idirafter ${_gcc_incdir}"
+export CFLAGS="${_incfix} ${CFLAGS}"
+export CXXFLAGS="${_incfix} ${CXXFLAGS}"
+export C_INCLUDE_PATH="${_gcc_incdir}${C_INCLUDE_PATH:+:${C_INCLUDE_PATH}}"
+export CPLUS_INCLUDE_PATH="${_gcc_incdir}${CPLUS_INCLUDE_PATH:+:${CPLUS_INCLUDE_PATH}}"
 export CMAKE_BUILD_PARALLEL_LEVEL=1
 export NINJAFLAGS="-j1"
 mkdir -p "$(pwd)/tmp-pyside6-build"
@@ -274,7 +284,12 @@ export TMPDIR="$(pwd)/tmp-pyside6-build"
     -DFULLDOCSBUILD:BOOL=ON \
     -DDOC_OUTPUT_FORMAT=qthelp \
 %endif
-    -DNO_QT_TOOLS=yes
+    -DNO_QT_TOOLS=yes \
+    -DCMAKE_C_FLAGS:STRING="${CFLAGS}" \
+    -DCMAKE_CXX_FLAGS:STRING="${CXXFLAGS}" \
+    -DCMAKE_EXE_LINKER_FLAGS:STRING="${LDFLAGS}" \
+    -DCMAKE_MODULE_LINKER_FLAGS:STRING="${LDFLAGS}" \
+    -DCMAKE_SHARED_LINKER_FLAGS:STRING="${LDFLAGS}"
 
 # Generate a build_history entry (for tests) manually, since we're performing
 # a cmake build.
@@ -398,6 +413,9 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %endif
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-7
+- Strip -flto from compile and link flags, pin GCC include dir on flags and CPLUS_INCLUDE_PATH, pass CMAKE_LANG_FLAGS and linker flags so Ninja gets cstddef working past Qt -isystem
+
 * Thu Apr 16 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-6
 - Append -idirafter GCC internal include so cstddef include_next finds stddef.h with Qt -isystem-heavy compile lines
 
