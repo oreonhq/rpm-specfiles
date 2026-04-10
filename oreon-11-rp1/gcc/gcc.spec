@@ -158,7 +158,7 @@
 Summary: Various compilers (C, C++, Objective-C, ...)
 Name: gcc
 Version: %{gcc_version}
-Release: %{gcc_release}.9%{?dist}
+Release: %{gcc_release}.10%{?dist}
 # License notes for some of the less obvious ones:
 #   gcc/doc/cppinternals.texi: Linux-man-pages-copyleft-2-para
 #   isl: MIT, BSD-2-Clause
@@ -1086,7 +1086,8 @@ CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
 	--with-bugurl=%dist_bug_report_url \
 	--enable-checking=release --with-system-zlib \
 	--with-gcc-major-version-only --without-isl
-make %{?_smp_mflags}
+# Full GCC plus libgfortran or libstdc++ in this tree with %%{_smp_mflags} peaks RAM hard on mock workers (SIGKILL cc1plus).
+make -j1
 cd ..
 rm -f newlib
 %endif
@@ -1122,7 +1123,7 @@ CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
 	--with-bugurl=%dist_bug_report_url \
 	--enable-checking=release --with-system-zlib \
 	--with-gcc-major-version-only --without-isl --disable-libquadmath
-make %{?_smp_mflags}
+make -j1
 cd ..
 rm -f newlib
 %endif
@@ -3979,6 +3980,9 @@ end
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-%{gcc_release}.10
+- Serial make -j1 for obj-offload-nvptx-none and obj-offload-amdgcn-amdhsa only nested accelerator build OOM in mock
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-4
 - Fedora lookaside Source0 16.0.1-20260321 tarball, DATE and gitrev aligned with rawhide so Patch14-17 apply (PR124547 fixes bootstrap gas vs gas_flag). Restore builddir naming gcc-version-DATE. Offload toolchains stay on.
 
