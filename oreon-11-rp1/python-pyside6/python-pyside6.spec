@@ -1,5 +1,7 @@
-# explicitely set clang as toolchain to avoid gcc usage
-%global toolchain clang
+# Do not force clang as the C++ compiler for generated wrappers. Clang 16+ hits
+# -Wcast-function-type-mismatch on thousands of shiboken-generated PyMethodDef lines.
+# Libclang is still used for API parsing (LLVM_INSTALL_DIR / CMAKE_PREFIX_PATH).
+%global toolchain gcc
 
 # needed to ship deploy_lib template files
 %global _python_bytecompile_errors_terminate_build 0
@@ -10,7 +12,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.10.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -234,6 +236,10 @@ tar xf %{SOURCE1}
 %endif
 
 %build
+# Compile generated C++ with GCC. The %%toolchain macro is not always wired into
+# upstream CMake, so set CC/CXX explicitly (clang was producing -Wcast-function-type noise).
+export CC=gcc CXX=g++
+
 # https://src.fedoraproject.org/rpms/polyclipping/c/02c70e17ef9e9fcdfbc65021418a3e332e465b20?branch=rawhide
 # Prior to Fedora 43, %%cmake set the nonstandard -DLIB_SUFFIX=... variable.
 # cmake %["%{?_lib}" == "lib64" ? "-DLIB_SUFFIX=64" : ""]
@@ -374,6 +380,9 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %endif
 
 %changelog
+* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
+- Build generated bindings with GCC (export CC/CXX) to avoid clang cast-function-type spam
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
 - Reword commented Source1 note so rpmspec does not expand macros inside a comment
 
