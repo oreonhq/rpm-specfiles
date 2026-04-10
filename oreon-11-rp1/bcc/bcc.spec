@@ -19,7 +19,7 @@
 
 Name:           bcc
 Version:        0.35.0
-Release:        11%{?dist}
+Release:        12%{?dist}
 Summary:        BPF Compiler Collection (BCC)
 License:        Apache-2.0
 URL:            https://github.com/iovisor/bcc
@@ -32,6 +32,9 @@ Patch1:         https://github.com/iovisor/bcc/commit/4c7be1ec6ab74e973f8d18a901
 # Arches will be included as upstream support is added and dependencies are
 # satisfied in the respective arches
 ExclusiveArch:  x86_64 %{power64} aarch64 s390x armv7hl riscv64
+
+%global _smp_mflags -j1
+%global _lto_cflags %{nil}
 
 BuildRequires:  bison
 BuildRequires:  cmake >= 2.8.7
@@ -128,6 +131,11 @@ Command line libbpf tools for BPF Compiler Collection (BCC)
 
 
 %build
+export RPM_BUILD_NCPUS=1
+export CMAKE_BUILD_PARALLEL_LEVEL=1
+export NINJAFLAGS="-j1"
+export CFLAGS="%{optflags} -fno-var-tracking-assignments -g1"
+export CXXFLAGS="%{optflags} -fno-var-tracking-assignments -g1"
 %cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
        -DREVISION_LAST=%{version} -DREVISION=%{version} -DPYTHON_CMD=python3 \
        -DCMAKE_USE_LIBBPF_PACKAGE:BOOL=TRUE -DENABLE_NO_PIE=OFF \
@@ -228,8 +236,8 @@ cp -a libbpf-tools/tmp-install/bin/* %{buildroot}/%{_sbindir}/
 %{_sbindir}/bpf-*
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-11
-- Remove spec OOM mitigations (%%_smp_mflags, LTO strip, ninja env, var-tracking flags)
+* Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-12
+- Restore %%_smp_mflags -j1, %%_lto_cflags nil, ninja env, -g1 and -fno-var-tracking-assignments for clang_frontend OOM and bogus assembler after SIGKILL
 
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.35.0-6
 - Add upstream patch for llvm-22 createDiagnostics API changes

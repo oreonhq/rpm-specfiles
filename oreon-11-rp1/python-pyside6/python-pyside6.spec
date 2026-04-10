@@ -3,6 +3,9 @@
 # Libclang is still used for API parsing (LLVM_INSTALL_DIR / CMAKE_PREFIX_PATH).
 %global toolchain gcc
 
+%global _lto_cflags %{nil}
+%global _smp_mflags -j1
+
 # needed to ship deploy_lib template files
 %global _python_bytecompile_errors_terminate_build 0
 
@@ -12,7 +15,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.10.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -239,6 +242,10 @@ tar xf %{SOURCE1}
 # Compile generated C++ with GCC. The %%toolchain macro is not always wired into
 # upstream CMake, so set CC/CXX explicitly (clang was producing -Wcast-function-type noise).
 export CC=gcc CXX=g++
+export CMAKE_BUILD_PARALLEL_LEVEL=1
+export NINJAFLAGS="-j1"
+mkdir -p "$(pwd)/tmp-pyside6-build"
+export TMPDIR="$(pwd)/tmp-pyside6-build"
 
 # https://src.fedoraproject.org/rpms/polyclipping/c/02c70e17ef9e9fcdfbc65021418a3e332e465b20?branch=rawhide
 # Prior to Fedora 43, %%cmake set the nonstandard -DLIB_SUFFIX=... variable.
@@ -380,6 +387,9 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %endif
 
 %changelog
+* Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
+- %%_lto_cflags nil, %%_smp_mflags -j1, NINJAFLAGS and CMAKE_BUILD_PARALLEL_LEVEL, TMPDIR under build for mock ninja reliability
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
 - Build generated bindings with GCC (export CC/CXX) to avoid clang cast-function-type spam
 

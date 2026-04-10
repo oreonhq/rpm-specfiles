@@ -1,5 +1,7 @@
 %global qt_module qtwebengine
 
+%global _lto_cflags %{nil}
+
 %global _hardened_build 1
 
 # package-notes causes FTBFS (#2043178)
@@ -89,7 +91,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 9%{?dist}
+Release: 10%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -569,6 +571,8 @@ src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-librarie
 %if 0%{?rhel} && 0%{?rhel} < 10
 . /opt/rh/gcc-toolset-13/enable
 %endif
+mkdir -p "$(pwd)/tmp-qtwebengine-build"
+export TMPDIR="$(pwd)/tmp-qtwebengine-build"
 export STRIP=strip
 # Parallel ninja in Chromium hits intermittent "opening dependency file *.o.d" in mock (all arches).
 # Jumbo unity builds also trigger bad Perfetto depfile paths (common/common/*.o.d) even at -j1.
@@ -886,6 +890,9 @@ done
 %endif
 
 %changelog
+* Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-10
+- Clear %%_lto_cflags and set TMPDIR under build dir to dodge Chromium *.o.d depfile and tmp races in mock
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-9
 - Disable webengine jumbo on all arches (fixes Perfetto process_tracker.o.d missing depfile with serial ninja)
 

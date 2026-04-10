@@ -158,7 +158,7 @@
 Summary: Various compilers (C, C++, Objective-C, ...)
 Name: gcc
 Version: %{gcc_version}
-Release: %{gcc_release}.10%{?dist}
+Release: %{gcc_release}.11%{?dist}
 # License notes for some of the less obvious ones:
 #   gcc/doc/cppinternals.texi: Linux-man-pages-copyleft-2-para
 #   isl: MIT, BSD-2-Clause
@@ -1074,6 +1074,8 @@ rm -rf obj-offload-nvptx-none
 mkdir obj-offload-nvptx-none
 
 cd obj-offload-nvptx-none
+mkdir -p tmp
+export TMPDIR="$(pwd)/tmp"
 CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
 	CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
 		  | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
@@ -1086,10 +1088,10 @@ CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
 	--with-bugurl=%dist_bug_report_url \
 	--enable-checking=release --with-system-zlib \
 	--with-gcc-major-version-only --without-isl
-# Full GCC plus libgfortran or libstdc++ in this tree with %%{_smp_mflags} peaks RAM hard on mock workers (SIGKILL cc1plus).
-make -j1
+make %{?_smp_mflags}
 cd ..
 rm -f newlib
+unset TMPDIR
 %endif
 
 %if %{build_offload_amdgcn}
@@ -1111,6 +1113,8 @@ rm -rf obj-offload-amdgcn-amdhsa
 mkdir obj-offload-amdgcn-amdhsa
 
 cd obj-offload-amdgcn-amdhsa
+mkdir -p tmp
+export TMPDIR="$(pwd)/tmp"
 CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
 	CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
 		  | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
@@ -1123,9 +1127,10 @@ CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
 	--with-bugurl=%dist_bug_report_url \
 	--enable-checking=release --with-system-zlib \
 	--with-gcc-major-version-only --without-isl --disable-libquadmath
-make -j1
+make %{?_smp_mflags}
 cd ..
 rm -f newlib
+unset TMPDIR
 %endif
 
 rm -rf obj-%{gcc_target_platform}
@@ -3980,8 +3985,9 @@ end
 %endif
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-%{gcc_release}.10
-- Serial make -j1 for obj-offload-nvptx-none and obj-offload-amdgcn-amdhsa only nested accelerator build OOM in mock
+* Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-%{gcc_release}.11
+- Offload trees use dedicated TMPDIR under each obj-offload dir libgomp configure conftest races default /tmp in mock
+- Restore make %%{_smp_mflags} for nvptx and amdgcn nested builds -j1 broke target libgomp configure
 
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-4
 - Fedora lookaside Source0 16.0.1-20260321 tarball, DATE and gitrev aligned with rawhide so Patch14-17 apply (PR124547 fixes bootstrap gas vs gas_flag). Restore builddir naming gcc-version-DATE. Offload toolchains stay on.
