@@ -91,7 +91,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 12%{?dist}
+Release: 13%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -894,13 +894,16 @@ done
 %endif
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-12
+* Sat Apr 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-13
+- Patch102 also rewrite importers/proto/winscope (and all nested importers/**/BUILD.gn) so GN no longer resolves :common after tp_importer_common rename
+
+* Sat Apr 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-12
 - Regenerate Patch102 against Qt 6.10.2 Perfetto (not upstream main) and strip stray diff headers so %%patch applies
 
-* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-11
+* Sat Apr 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-11
 - Patch bundled Perfetto GN to rename importers/common source_set away from target name common (fixes slice_tracker.o.d missing under common/common with gcc -MD)
 
-* Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-10
+* Sat Apr 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-10
 - Clear %%_lto_cflags and set TMPDIR under build dir to dodge Chromium *.o.d depfile and tmp races in mock
 
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-9
