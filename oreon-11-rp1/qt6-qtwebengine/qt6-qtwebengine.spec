@@ -91,7 +91,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 11%{?dist}
+Release: 12%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -894,6 +894,9 @@ done
 %endif
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-12
+- Regenerate Patch102 against Qt 6.10.2 Perfetto (not upstream main) and strip stray diff headers so %%patch applies
+
 * Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-11
 - Patch bundled Perfetto GN to rename importers/common source_set away from target name common (fixes slice_tracker.o.d missing under common/common with gcc -MD)
 
