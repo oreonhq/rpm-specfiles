@@ -1,0 +1,549 @@
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/BUILD.gn
+index ae78563f..387125c9 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/BUILD.gn
+@@ -65,7 +65,7 @@ source_set("export_json") {
+     "../../include/perfetto/ext/trace_processor:export_json",
+     "../base",
+     "containers",
+-    "importers/common",
++    "importers/common:tp_importer_common",
+     "storage",
+     "tables",
+     "types",
+@@ -130,7 +130,7 @@ source_set("storage_minimal") {
+     "../base",
+     "../protozero",
+     "containers",
+-    "importers/common",
++    "importers/common:tp_importer_common",
+     "importers/common:parser_types",
+     "importers/etw:minimal",
+     "importers/ftrace:minimal",
+@@ -183,7 +183,7 @@ if (enable_perfetto_trace_processor_sqlite) {
+       "importers/art_hprof",
+       "importers/art_method",
+       "importers/collapsed_stack",
+-      "importers/common",
++      "importers/common:tp_importer_common",
+       "importers/etw:full",
+       "importers/ftrace:full",
+       "importers/fuchsia:full",
+@@ -333,7 +333,7 @@ perfetto_unittest_source_set("top_level_unittests") {
+       ":export_json",
+       "../../include/perfetto/ext/trace_processor:export_json",
+       "containers",
+-      "importers/common",
++      "importers/common:tp_importer_common",
+       "importers/proto:minimal",
+       "storage",
+       "tables",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/android_bugreport/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/android_bugreport/BUILD.gn
+index a43fb21f..4d12a4f8 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/android_bugreport/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/android_bugreport/BUILD.gn
+@@ -70,7 +70,7 @@ source_set("android_bugreport") {
+     "../../types",
+     "../../util:trace_type",
+     "../../util:zip_reader",
+-    "../common",
++    "../common:tp_importer_common",
+   ]
+ }
+ 
+@@ -90,6 +90,6 @@ perfetto_unittest_source_set("unittests") {
+     "../../sorter",
+     "../../storage",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+   ]
+ }
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/archive/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/archive/BUILD.gn
+index 67a84b50..8ca4fe0c 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/archive/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/archive/BUILD.gn
+@@ -38,7 +38,7 @@ source_set("archive") {
+     "../../util:trace_type",
+     "../../util:zip_reader",
+     "../android_bugreport",
+-    "../common",
++    "../common:tp_importer_common",
+     "../proto:minimal",
+   ]
+ }
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/art_hprof/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/art_hprof/BUILD.gn
+index d5d0df57..7752b715 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/art_hprof/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/art_hprof/BUILD.gn
+@@ -26,13 +26,13 @@ source_set("art_hprof") {
+   deps = [
+     "../../../../gn:default_deps",
+     "../../../../include/perfetto/ext/base:base",
+-    "../../../../src/trace_processor/importers/common:common",
++    "../../../../src/trace_processor/importers/common:tp_importer_common",
+     "../../../../src/trace_processor/storage:storage",
+     "../../../../src/trace_processor/types:types",
+     "../../../../src/trace_processor/util:trace_blob_view_reader",
+     "../../../base",
+     "../../containers",
+-    "../../importers/common",
++    "../../importers/common:tp_importer_common",
+     "../../tables",
+   ]
+ }
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/art_method/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/art_method/BUILD.gn
+index c9856771..7f38165b 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/art_method/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/art_method/BUILD.gn
+@@ -37,7 +37,7 @@ source_set("art_method") {
+     "../../../../protos/perfetto/common:zero",
+     "../../../base",
+     "../../containers",
+-    "../../importers/common",
++    "../../importers/common:tp_importer_common",
+     "../../sorter",
+     "../../storage",
+     "../../types",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/collapsed_stack/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/collapsed_stack/BUILD.gn
+index c1c86ab2..491d6ef6 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/collapsed_stack/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/collapsed_stack/BUILD.gn
+@@ -19,7 +19,7 @@ source_set("collapsed_stack") {
+   ]
+   deps = [
+     "../../../../gn:default_deps",
+-    "../../importers/common",
++    "../../importers/common:tp_importer_common",
+     "../../storage",
+     "../../tables:tables_python",
+     "../../types:types",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/common/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/common/BUILD.gn
+index d2f10c45..17fda66c 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/common/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/common/BUILD.gn
+@@ -14,7 +14,7 @@
+ 
+ import("../../../../gn/perfetto.gni")
+ 
+-source_set("common") {
++source_set("tp_importer_common") {
+   sources = [
+     "address_range.h",
+     "args_tracker.cc",
+@@ -164,7 +164,7 @@ source_set("unittests") {
+   ]
+   testonly = true
+   deps = [
+-    ":common",
++    ":tp_importer_common",
+     "../../../../gn:default_deps",
+     "../../../../gn:gtest_and_gmock",
+     "../../../../protos/perfetto/common:zero",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/etm/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/etm/BUILD.gn
+index 17c535dd..d1ab2396 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/etm/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/etm/BUILD.gn
+@@ -77,7 +77,7 @@ source_set("etm") {
+     "../../tables:tables_python",
+     "../../types",
+     "../../util:build_id",
+-    "../common",
++    "../common:tp_importer_common",
+     "../perf",
+     "../perf:record",
+   ]
+@@ -94,6 +94,6 @@ perfetto_unittest_source_set("unittests") {
+     "../../storage",
+     "../../tables:tables_python",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+   ]
+ }
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/etw/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/etw/BUILD.gn
+index 7457d31f..3ceb14d8 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/etw/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/etw/BUILD.gn
+@@ -27,7 +27,7 @@ source_set("minimal") {
+     "../../../protozero",
+     "../../storage",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+     "../common:parser_types",
+     "../proto:proto_importer_module",
+   ]
+@@ -53,7 +53,7 @@ source_set("full") {
+     "../../sorter",
+     "../../storage",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+     "../common:parser_types",
+     "../i2c:full",
+     "../proto:minimal",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/ftrace/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/ftrace/BUILD.gn
+index 7be89bd9..446e5921 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/ftrace/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/ftrace/BUILD.gn
+@@ -79,7 +79,7 @@ source_set("full") {
+     "../../storage",
+     "../../tables",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+     "../common:parser_types",
+     "../i2c:full",
+     "../proto:minimal",
+@@ -112,7 +112,7 @@ perfetto_unittest_source_set("unittests") {
+     "../../../../gn:gtest_and_gmock",
+     "../../storage",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+     "../ftrace:full",
+   ]
+ }
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/fuchsia/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/fuchsia/BUILD.gn
+index b73212c6..e509ec4f 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/fuchsia/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/fuchsia/BUILD.gn
+@@ -44,7 +44,7 @@ source_set("full") {
+     "../../tables",
+     "../../types",
+     "../../util:trace_type",
+-    "../common",
++    "../common:tp_importer_common",
+     "../proto:minimal",
+   ]
+ }
+@@ -89,7 +89,7 @@ perfetto_unittest_source_set("unittests") {
+     "../../tables",
+     "../../types",
+     "../../util:descriptors",
+-    "../common",
++    "../common:tp_importer_common",
+     "../ftrace:full",
+     "../proto:full",
+     "../proto:minimal",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/gecko/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/gecko/BUILD.gn
+index ac4f732b..cee05e17 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/gecko/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/gecko/BUILD.gn
+@@ -36,7 +36,7 @@ source_set("gecko") {
+     "../../../../include/perfetto/trace_processor:storage",
+     "../../../../protos/perfetto/trace:zero",
+     "../../../base",
+-    "../../importers/common",
++    "../../importers/common:tp_importer_common",
+     "../../sorter",
+     "../../storage",
+     "../../tables",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/generic_kernel/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/generic_kernel/BUILD.gn
+index 40a14034..5fb1eed2 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/generic_kernel/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/generic_kernel/BUILD.gn
+@@ -29,7 +29,7 @@ source_set("full") {
+     "../../../protozero",
+     "../../storage",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+     "../common:parser_types",
+     "../proto:proto_importer_module",
+   ]
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/i2c/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/i2c/BUILD.gn
+index 6b47a4b8..34ef576a 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/i2c/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/i2c/BUILD.gn
+@@ -22,6 +22,6 @@ source_set("full") {
+     "../../sorter",
+     "../../storage",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+   ]
+ }
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/instruments/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/instruments/BUILD.gn
+index 0d67655e..e2b6c021 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/instruments/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/instruments/BUILD.gn
+@@ -45,7 +45,7 @@ if (enable_perfetto_trace_processor_mac_instruments) {
+       "../../storage",
+       "../../types",
+       "../../util:build_id",
+-      "../common",
++      "../common:tp_importer_common",
+     ]
+   }
+ }
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/json/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/json/BUILD.gn
+index a4244da8..7b3727de 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/json/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/json/BUILD.gn
+@@ -31,7 +31,7 @@ source_set("json") {
+     "../../util:json_args",
+     "../../util:json_parser",
+     "../../util:simple_json_parser",
+-    "../common",
++    "../common:tp_importer_common",
+     "../common:parser_types",
+     "../common:v8_profile_parser",
+     "../systrace:full",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/ninja/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/ninja/BUILD.gn
+index f64cf412..d79c7fd9 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/ninja/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/ninja/BUILD.gn
+@@ -19,7 +19,7 @@ source_set("ninja") {
+   ]
+   deps = [
+     "../../../../gn:default_deps",
+-    "../../importers/common",
++    "../../importers/common:tp_importer_common",
+     "../../sorter",
+     "../../storage",
+   ]
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/perf/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/perf/BUILD.gn
+index d1369752..8544fc0c 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/perf/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/perf/BUILD.gn
+@@ -36,7 +36,7 @@ source_set("record") {
+     "../../tables:tables_python",
+     "../../types",
+     "../../util:build_id",
+-    "../common:common",
++    "../common:tp_importer_common",
+     "../common:parser_types",
+   ]
+ }
+@@ -93,7 +93,7 @@ source_set("perf") {
+     "../../types",
+     "../../util:build_id",
+     "../../util:trace_blob_view_reader",
+-    "../common:common",
++    "../common:tp_importer_common",
+     "../proto:minimal",
+   ]
+ }
+@@ -113,6 +113,6 @@ perfetto_unittest_source_set("unittests") {
+     "../../../base",
+     "../../storage",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+   ]
+ }
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/perf_text/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/perf_text/BUILD.gn
+index 0707688d..af850668 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/perf_text/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/perf_text/BUILD.gn
+@@ -31,7 +31,7 @@ source_set("perf_text") {
+     "../../tables",
+     "../../types",
+     "../../util:trace_blob_view_reader",
+-    "../common",
++    "../common:tp_importer_common",
+   ]
+ }
+ 
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/pprof/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/pprof/BUILD.gn
+index e3a31e26..37726a07 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/pprof/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/pprof/BUILD.gn
+@@ -21,7 +21,7 @@ source_set("pprof") {
+     "../../../../gn:default_deps",
+     "../../../../protos/third_party/pprof:zero",
+     "../../../../src/protozero",
+-    "../../importers/common",
++    "../../importers/common:tp_importer_common",
+     "../../sorter",
+     "../../storage",
+     "../../tables:tables_python",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/primes/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/primes/BUILD.gn
+index 56cb7fb2..a49f0e29 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/primes/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/primes/BUILD.gn
+@@ -30,7 +30,7 @@ source_set("primes") {
+     "../../../../protos/third_party/primes:zero",
+     "../../../base",
+     "../../containers",
+-    "../../importers/common",
++    "../../importers/common:tp_importer_common",
+     "../../sorter",
+     "../../storage",
+     "../../types",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/proto/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/proto/BUILD.gn
+index 0a2117e3..39b3f6a6 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/proto/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/proto/BUILD.gn
+@@ -112,7 +112,7 @@ source_set("minimal") {
+     "../../util:profiler_util",
+     "../../util:simple_json_parser",
+     "../../util:trace_blob_view_reader",
+-    "../common",
++    "../common:tp_importer_common",
+     "../common:parser_types",
+     "../common:v8_profile_parser",
+     "../etw:minimal",
+@@ -226,7 +226,7 @@ source_set("full") {
+     "../../util:profiler_util",
+     "../../util:proto_profiler",
+     "../../util:proto_to_args_parser",
+-    "../common",
++    "../common:tp_importer_common",
+     "../common:parser_types",
+     "../etw:full",
+     "../etw:minimal",
+@@ -351,7 +351,7 @@ source_set("unittests") {
+     "../../util:build_id",
+     "../../util:descriptors",
+     "../../util:profiler_util",
+-    "../common",
++    "../common:tp_importer_common",
+     "../ftrace:full",
+   ]
+   if (enable_perfetto_winscope) {
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/proto/winscope/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/proto/winscope/BUILD.gn
+index 29fe69fa..5ffa6ec4 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/proto/winscope/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/proto/winscope/BUILD.gn
+@@ -85,7 +85,7 @@ source_set("full") {
+     "../../../tables",
+     "../../../types",
+     "../../../util:winscope_proto_mapping",
+-    "../../common",
++    "../../common:tp_importer_common",
+     "../../common:parser_types",
+     "../../proto:minimal",
+     "../../proto:packet_sequence_state_generation_hdr",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/simpleperf_proto/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/simpleperf_proto/BUILD.gn
+index b4e768d5..79385c1d 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/simpleperf_proto/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/simpleperf_proto/BUILD.gn
+@@ -26,7 +26,7 @@ source_set("simpleperf_proto") {
+     "../../../../include/perfetto/protozero:protozero",
+     "../../../../protos/perfetto/common:zero",
+     "../../../../protos/third_party/simpleperf:zero",
+-    "../../importers/common:common",
++    "../../importers/common:tp_importer_common",
+     "../../sorter",
+     "../../storage",
+     "../../tables:tables_python",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/syscalls/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/syscalls/BUILD.gn
+index 2576f8e0..8184fca0 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/syscalls/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/syscalls/BUILD.gn
+@@ -25,7 +25,7 @@ source_set("full") {
+     "../../containers",
+     "../../storage",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+   ]
+ }
+ 
+@@ -36,6 +36,6 @@ perfetto_unittest_source_set("unittests") {
+     ":full",
+     "../../../../gn:default_deps",
+     "../../../../gn:gtest_and_gmock",
+-    "../common",
++    "../common:tp_importer_common",
+   ]
+ }
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/systrace/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/systrace/BUILD.gn
+index 7dfc455e..4ecb4fb9 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/systrace/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/systrace/BUILD.gn
+@@ -33,7 +33,7 @@ source_set("systrace_parser") {
+     "../../storage",
+     "../../tables",
+     "../../types",
+-    "../common",
++    "../common:tp_importer_common",
+   ]
+ }
+ 
+@@ -58,7 +58,7 @@ source_set("full") {
+     "../../types",
+     "../../util:regex",
+     "../../util:trace_type",
+-    "../common",
++    "../common:tp_importer_common",
+     "../ftrace:full",
+   ]
+ }
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/perfetto_sql/intrinsics/functions/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/perfetto_sql/intrinsics/functions/BUILD.gn
+index 44cbbc29..abac6d7f 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/perfetto_sql/intrinsics/functions/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/perfetto_sql/intrinsics/functions/BUILD.gn
+@@ -86,7 +86,7 @@ source_set("functions") {
+     "../../../../base",
+     "../../../containers",
+     "../../../core/dataframe",
+-    "../../../importers/common",
++    "../../../importers/common:tp_importer_common",
+     "../../../importers/ftrace:ftrace_descriptors",
+     "../../../perfetto_sql/intrinsics/table_functions",
+     "../../../sqlite",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/perfetto_sql/intrinsics/table_functions/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/perfetto_sql/intrinsics/table_functions/BUILD.gn
+index 27fdfa76..69f767fe 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/perfetto_sql/intrinsics/table_functions/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/perfetto_sql/intrinsics/table_functions/BUILD.gn
+@@ -117,7 +117,7 @@ source_set("unittests") {
+     "../../../../base:test_support",
+     "../../../containers",
+     "../../../core/dataframe",
+-    "../../../importers/common",
++    "../../../importers/common:tp_importer_common",
+     "../../../perfetto_sql/engine",
+     "../../../sqlite",
+     "../../../storage",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/sorter/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/sorter/BUILD.gn
+index c27af020..6a74302d 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/sorter/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/sorter/BUILD.gn
+@@ -52,7 +52,7 @@ perfetto_unittest_source_set("unittests") {
+     "../../../include/perfetto/trace_processor:storage",
+     "../../../include/perfetto/trace_processor:trace_processor",
+     "../../base",
+-    "../importers/common",
++    "../importers/common:tp_importer_common",
+     "../importers/common:parser_types",
+     "../importers/proto:minimal",
+     "../importers/proto:packet_sequence_state_generation_hdr",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/sqlite/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/sqlite/BUILD.gn
+index 72e9ab8e..1cc8aea4 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/sqlite/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/sqlite/BUILD.gn
+@@ -42,7 +42,7 @@ source_set("sqlite") {
+     "../../../protos/perfetto/trace_processor:zero",
+     "../../base",
+     "../containers",
+-    "../importers/common",
++    "../importers/common:tp_importer_common",
+     "../importers/ftrace:ftrace_descriptors",
+     "../perfetto_sql/intrinsics/table_functions:interface",
+     "../storage",
+diff --git a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/util/BUILD.gn b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/util/BUILD.gn
+index c04ed405..36d55d3d 100644
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/util/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/util/BUILD.gn
+@@ -293,7 +293,7 @@ source_set("json_args") {
+     "../../../include/perfetto/base",
+     "../../../include/perfetto/ext/base",
+     "../containers",
+-    "../importers/common",
++    "../importers/common:tp_importer_common",
+     "../storage",
+     "../types",
+   ]
+@@ -481,7 +481,7 @@ source_set("unittests") {
+     "../../base:test_support",
+     "../../protozero",
+     "../../protozero:testing_messages_zero",
+-    "../importers/common",
++    "../importers/common:tp_importer_common",
+     "../importers/proto:gen_cc_track_event_descriptor",
+     "../importers/proto:minimal",
+     "../importers/proto:packet_sequence_state_generation_hdr",

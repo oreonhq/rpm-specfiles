@@ -91,7 +91,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 10%{?dist}
+Release: 11%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -140,6 +140,9 @@ Patch80:  qtwebengine-fix-arm-build.patch
 ## Upstreamable patches:
 Patch100: qtwebengine-add-missing-pipewire-headers.patch
 Patch101: qtwebengine-fix-build-against-gcc16.patch
+# GN source_set("common") under importers/common/ emits obj/.../common/common/*.o.d; gcc
+# then fails opening the depfile when the nested dir is missing. Rename the target.
+Patch102: qtwebengine-perfetto-gn-avoid-common-common-objdir.patch
 
 ## ppc64le port
 Patch200: qtwebengine-6.9-ppc64.patch
@@ -511,6 +514,7 @@ popd
 ## upstreamable patches
 %patch -P100 -p1 -b .add-missing-pipewire-headers
 %patch -P101 -p1 -b .fix-build-against-gcc16
+%patch -P102 -p1 -b .perfetto-common-objdir
 
 # ppc64le support
 %patch -P200 -p1
@@ -890,6 +894,9 @@ done
 %endif
 
 %changelog
+* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-11
+- Patch bundled Perfetto GN to rename importers/common source_set away from target name common (fixes slice_tracker.o.d missing under common/common with gcc -MD)
+
 * Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-10
 - Clear %%_lto_cflags and set TMPDIR under build dir to dodge Chromium *.o.d depfile and tmp races in mock
 
