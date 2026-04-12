@@ -18,7 +18,7 @@ Oreon package repository configuration and GPG keys.
 
 %package -n oreon-gpg-keys
 Summary:        Oreon RPM GPG keys
-Requires:       filesystem >= 3.18-6
+Requires:       filesystem
 
 %description -n oreon-gpg-keys
 GPG keys for Oreon 11 package verification.
