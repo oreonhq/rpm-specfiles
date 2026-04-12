@@ -3,16 +3,17 @@
 Summary: Network monitoring tools including ping
 Name: iputils
 Version: 20250605
-Release: 4%{?dist}
+Release: 5%{?dist}
 # some parts are under the original BSD (ping.c)
 # some are under GPLv2+ (tracepath.c)
 License: BSD-4-Clause-UC AND GPL-2.0-or-later
 URL: https://github.com/iputils/iputils
 
 Source0: https://github.com/iputils/iputils/archive/%{version}/%{name}-%{version}.tar.gz
-# Upstream ifenslave (flat layout was former Fedora lookaside tarball). Debian .orig matches patches.
-# Current Debian pool no longer carries this orig tarball, use the archive snapshot
-Source1: http://archive.debian.org/debian/pool/main/i/ifenslave/ifenslave_1.1.0.orig.tar.gz
+# Debian source is ifenslave-2.6 (not ifenslave); NixOS and old pool used:
+#   pool/main/i/ifenslave-2.6/ifenslave-2.6_1.1.0.orig.tar.gz
+# Immutable snapshot (same file as historic deb.debian.org).
+Source1: https://snapshot.debian.org/archive/debian/20070312T000000Z/pool/main/i/ifenslave-2.6/ifenslave-2.6_1.1.0.orig.tar.gz
 # Taken from ping.c on 2014-07-12
 Source4: bsd.txt
 Source5: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
@@ -43,9 +44,22 @@ the target machine is alive and receiving network traffic.
 %prep
 %setup -q -n %{name}-%{version}
 tar -xf %{SOURCE1}
-cp -p ifenslave-1.1.0/ifenslave.c ifenslave-1.1.0/ifenslave.8 .
-if [ -f ifenslave-1.1.0/README.bonding ]; then
-  cp -p ifenslave-1.1.0/README.bonding .
+# .orig unpacks to ifenslave-1.1.0 or ifenslave-2.6-1.1.0 depending on tarball name
+if [ -d ifenslave-1.1.0 ]; then
+  _ifd=ifenslave-1.1.0
+elif [ -d ifenslave-2.6-1.1.0 ]; then
+  _ifd=ifenslave-2.6-1.1.0
+else
+  _ifd=$(find . -maxdepth 1 -mindepth 1 -type d -name 'ifenslave*' | head -1)
+  _ifd=${_ifd#./}
+fi
+if [ -z "${_ifd}" ] || [ ! -f "${_ifd}/ifenslave.c" ]; then
+  echo 'iputils: could not unpack ifenslave sources from Source1' >&2
+  exit 1
+fi
+cp -p "${_ifd}/ifenslave.c" "${_ifd}/ifenslave.8" .
+if [ -f "${_ifd}/README.bonding" ]; then
+  cp -p "${_ifd}/README.bonding" .
 else
   echo 'Bundled ifenslave from Debian upstream tarball; see kernel Documentation.' > README.bonding
 fi
@@ -100,6 +114,9 @@ install -cp ifenslave.8 ${RPM_BUILD_ROOT}%{_mandir}/man8/
 %attr(644,root,root) %{_mandir}/man8/ifenslave.8*
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-5
+- Source1 correct Debian name ifenslave-2.6_1.1.0.orig.tar.gz from snapshot.debian.org, prep finds either top dir
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-4
 - Source1 ifenslave from archive.debian.org (deb.debian.org pool dropped 1.1.0 orig)
 
