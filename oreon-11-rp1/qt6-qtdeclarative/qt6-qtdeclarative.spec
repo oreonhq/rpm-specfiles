@@ -1,6 +1,12 @@
 
 %global qt_module qtdeclarative
 
+# Mock parallel Ninja can hit "opening dependency file *.o.d: No such file or directory" on QuickTemplates2
+# and similar targets. Match qt6-qtwebengine mitigations (serial ninja, local TMPDIR, no RPM LTO glue).
+%global _lto_cflags %{nil}
+# %%cmake_build passes %%{_smp_mflags} to cmake --build, which must be -j1 here or parallel wins over NINJAFLAGS.
+%global _smp_mflags -j1
+
 # definition borrowed from qtbase
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9
 
@@ -14,7 +20,7 @@
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
 Version: 6.10.2
-Release: 10%{?dist}
+Release: 11%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -100,6 +106,12 @@ Provides:  qt6-qtquickcontrols2-examples = %{version}-%{release}
 
 
 %build
+
+mkdir -p "$(pwd)/tmp-qtdeclarative-build"
+export TMPDIR="$(pwd)/tmp-qtdeclarative-build"
+export NINJAFLAGS="-j1 -v"
+export CMAKE_BUILD_PARALLEL_LEVEL=1
+export MALLOC_ARENA_MAX=1
 
 # HACK so calls to "python" get what we want
 ln -s %{__python3} python
@@ -736,6 +748,9 @@ make check -k -C tests ||:
 %endif
 
 %changelog
+* Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-11
+- Restore %%_lto_cflags clear, %%_smp_mflags -j1 (cmake --build), TMPDIR under build dir, NINJAFLAGS -j1, CMAKE_BUILD_PARALLEL_LEVEL 1, MALLOC_ARENA_MAX 1 to fix QuickTemplates2 *.o.d races in mock
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-10
 - Drop %%_lto_cflags, %%_smp_mflags -j1, ninja env, aarch64 Make generator, aarch64 IPO (keep CMAKE_DISABLE_PRECOMPILE_HEADERS)
 
