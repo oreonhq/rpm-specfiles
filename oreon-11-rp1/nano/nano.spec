@@ -8,12 +8,12 @@
 Summary:         A small text editor
 Name:            nano
 Version:         8.7.1
-Release:         1%{?dist}
+Release:         2%{?dist}
 License:         GPL-3.0-or-later
 URL:             https://www.nano-editor.org
 
-Source0:         https://www.nano-editor.org/dist/latest/%{name}-%{version}.tar.xz
-Source1:         https://www.nano-editor.org/dist/latest/%{name}-%{version}.tar.xz.asc
+Source0:         https://www.nano-editor.org/dist/v8/%{name}-%{version}.tar.xz
+Source1:         https://www.nano-editor.org/dist/v8/%{name}-%{version}.tar.xz.asc
 # gpg --keyserver keyserver.ubuntu.com --recv-key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
 # gpg --output bensberg.pgp --armor --export bensberg@telfort.nl
 Source2:         bensberg.pgp
@@ -133,5 +133,8 @@ install -Dpm 0644 %{SOURCE13} %{buildroot}%{_datadir}/fish/vendor_conf.d/%{basen
 
 
 %changelog
+* Sat Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.7.1-2
+- Point Source0 or Source1 at dist/v8 (latest/ is not a stable path and 404s)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.7.1-1
 - Prepare for Oreon 11 (RP1)

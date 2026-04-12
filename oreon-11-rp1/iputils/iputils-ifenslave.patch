@@ -1,5 +1,5 @@
---- iputils/ifenslave.c.addr	2006-03-29 15:00:24.000000000 +0200
-+++ iputils/ifenslave.c	2006-03-29 15:02:01.000000000 +0200
+--- a/ifenslave.c.addr
++++ b/ifenslave.c
 @@ -524,8 +524,8 @@
  	if (ioctl(skfd, SIOCGIFADDR, &ifr) < 0)
  		return -1;

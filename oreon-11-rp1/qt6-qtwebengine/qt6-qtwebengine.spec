@@ -83,7 +83,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 14%{?dist}
+Release: 15%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -137,6 +137,8 @@ Patch101: qtwebengine-fix-build-against-gcc16.patch
 Patch102: qtwebengine-perfetto-gn-avoid-common-common-objdir.patch
 # RelWithDebInfo sets GN symbol_level=1 on Linux which balloons RAM for Chromium
 Patch103: qtwebengine-relwdebinfo-gn-symbol-level-0-linux.patch
+# Ensure gen_buildflags runs before proto importers minimal compile (perfetto_build_flags.h)
+Patch104: qtwebengine-perfetto-proto-minimal-gen-buildflags-dep.patch
 
 ## ppc64le port
 Patch200: qtwebengine-6.9-ppc64.patch
@@ -510,6 +512,7 @@ popd
 %patch -P101 -p1 -b .fix-build-against-gcc16
 %patch -P102 -p1 -b .perfetto-common-objdir
 %patch -P103 -p1 -b .gn-symbol-level-linux
+%patch -P104 -p1 -b .perfetto-gen-buildflags
 
 # ppc64le support
 %patch -P200 -p1
@@ -889,6 +892,9 @@ done
 %endif
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-15
+- Patch104 add explicit Perfetto gn gen_buildflags dep on trace_processor importers proto minimal so perfetto_build_flags.h is generated before compile
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-14
 - Patch103 set GN symbol_level=0 on Linux for RelWithDebInfo to cut Chromium compile and link RAM (mock OOM)
 - Tighten MALLOC_ARENA_MAX to 1 for glibc arena overhead

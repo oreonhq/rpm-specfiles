@@ -43,10 +43,10 @@
 Summary: An open source implementation of SSH protocol version 2
 Name: openssh
 Version: %{openssh_ver}
-Release: 5%{?dist}
+Release: 6%{?dist}
 URL: http://www.openssh.com/portable.html
-Source0: ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
-Source1: ftp://ftp.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz.asc
+Source0: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
+Source1: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz.asc
 Source2: sshd.pam
 Source3: gpgkey-736060BA.gpg
 Source6: ssh-keycat.pam
@@ -577,5 +577,8 @@ test -f %{sysconfig_anaconda} && \
 %attr(0755,root,root) %{_libdir}/sshtest/sk-dummy.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{openssh_ver}-5
+* Sat Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-6
+- Use HTTPS OpenBSD CDN for Source0 or Source1 (spectool has no ftp)
+
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-5
 - Prepare for Oreon 11 (RP1)

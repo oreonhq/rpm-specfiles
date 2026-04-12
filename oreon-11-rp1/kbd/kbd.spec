@@ -5,12 +5,12 @@
 
 Name:           kbd
 Version:        2.9.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tools for configuring the console (keyboard, virtual terminals, etc.)
 License:        GPL-2.0-or-later
 URL:            http://www.kbd-project.org/
 
-Source0:        ftp://ftp.altlinux.org/pub/people/legion/kbd/kbd-%{version}.tar.xz
+Source0:        https://www.kernel.org/pub/linux/utils/kbd/kbd-%{version}.tar.xz
 Source1:        kbd-latsun-fonts.tar.bz2
 Source2:        kbd-latarcyrheb-32.tar.bz2
 Source3:        xml2lst.pl
@@ -184,5 +184,8 @@ fi
 %{kbd_datadir}/keymaps/legacy
 
 %changelog
+* Sat Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-3
+- Source0 from kernel.org over HTTPS (spectool has no ftp)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-2
 - Prepare for Oreon 11 (RP1)

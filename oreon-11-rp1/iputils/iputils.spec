@@ -3,14 +3,15 @@
 Summary: Network monitoring tools including ping
 Name: iputils
 Version: 20250605
-Release: 2%{?dist}
+Release: 3%{?dist}
 # some parts are under the original BSD (ping.c)
 # some are under GPLv2+ (tracepath.c)
 License: BSD-4-Clause-UC AND GPL-2.0-or-later
 URL: https://github.com/iputils/iputils
 
 Source0: https://github.com/iputils/iputils/archive/%{version}/%{name}-%{version}.tar.gz
-Source1: ifenslave.tar.gz
+# Upstream ifenslave (flat layout was former Fedora lookaside tarball). Debian .orig matches patches.
+Source1: https://deb.debian.org/debian/pool/main/i/ifenslave/ifenslave_1.1.0.orig.tar.gz
 # Taken from ping.c on 2014-07-12
 Source4: bsd.txt
 Source5: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
@@ -39,8 +40,17 @@ ECHO_REQUEST packets to a specified network host to discover whether
 the target machine is alive and receiving network traffic.
 
 %prep
-%autosetup -a 1 -n %{name}-%{version} -p1
+%setup -q -n %{name}-%{version}
+tar -xf %{SOURCE1}
+cp -p ifenslave-1.1.0/ifenslave.c ifenslave-1.1.0/ifenslave.8 .
+if [ -f ifenslave-1.1.0/README.bonding ]; then
+  cp -p ifenslave-1.1.0/README.bonding .
+else
+  echo 'Bundled ifenslave from Debian upstream tarball; see kernel Documentation.' > README.bonding
+fi
 cp %{SOURCE4} %{SOURCE5} .
+%patch -P100 -p1
+%patch -P101 -p1
 
 %build
 %meson
@@ -89,5 +99,8 @@ install -cp ifenslave.8 ${RPM_BUILD_ROOT}%{_mandir}/man8/
 %attr(644,root,root) %{_mandir}/man8/ifenslave.8*
 
 %changelog
+* Sat Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-3
+- Source1 ifenslave via HTTPS (Debian .orig), adjust prep and Patch100 paths for spectool
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-2
 - Prepare for Oreon 11 (RP1)

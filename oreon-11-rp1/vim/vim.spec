@@ -51,7 +51,7 @@ Summary: The VIM editor
 URL:     https://www.vim.org/
 Name: vim
 Version: %{baseversion}.%{patchlevel}
-Release: 1%{?dist}
+Release: 2%{?dist}
 Epoch: 2
 # swift.vim contains Apache 2.0 with runtime library exception:
 # which is taken as Apache-2.0 WITH Swift-exception - reported to legal as https://gitlab.com/fedora/legal/fedora-license-data/-/issues/188
@@ -62,7 +62,7 @@ Epoch: 2
 # resolution: take it as OPUBL-1.0, the license won't be added to allowed license list, but if a project uses it for documentation
 # and don't use license options mentioned in the OPUBL 1.0 license text (which both are the case for Vim), the license is allowed
 License: Vim AND LGPL-2.1-or-later AND MIT AND GPL-1.0-only AND (GPL-2.0-only OR Vim) AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-or-later AND GPL-3.0-or-later AND OPUBL-1.0 AND Apache-2.0 WITH Swift-exception
-Source0: ftp://ftp.vim.org/pub/vim/unix/vim-%{baseversion}-%{patchlevel}.tar.bz2
+Source0: https://ftp.nluug.nl/pub/vim/unix/vim-%{baseversion}-%{patchlevel}.tar.bz2
 Source1: virc
 Source2: vimrc
 Source3: gvim16.png
@@ -1052,5 +1052,8 @@ install -p -m644 %{SOURCE11} %{buildroot}/%{_datadir}/fish/vendor_conf.d/vim-def
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{baseversion}.%{patchlevel}-1
+* Sat Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.2.148-2
+- Source0 from NLUUG HTTPS mirror (spectool has no ftp)
+
+* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.2.148-1
 - Prepare for Oreon 11 (RP1)

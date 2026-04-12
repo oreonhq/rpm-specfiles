@@ -1,0 +1,10 @@
+--- a/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/proto/BUILD.gn
++++ b/src/3rdparty/chromium/third_party/perfetto/src/trace_processor/importers/proto/BUILD.gn
+@@ -72,6 +72,7 @@
+     ":gen_cc_chrome_track_event_descriptor",
+     ":gen_cc_track_event_descriptor",
+     "../../../../gn:default_deps",
++    "../../../../gn:gen_buildflags",
+     "../../../../include/perfetto/trace_processor:trace_processor",
+     "../../../../protos/perfetto/common:zero",
+     "../../../../protos/perfetto/config:zero",
