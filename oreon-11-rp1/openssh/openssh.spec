@@ -43,12 +43,13 @@
 Summary: An open source implementation of SSH protocol version 2
 Name: openssh
 Version: %{openssh_ver}
-Release: 6%{?dist}
+Release: 7%{?dist}
 URL: http://www.openssh.com/portable.html
 Source0: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
 Source1: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz.asc
 Source2: sshd.pam
-Source3: gpgkey-736060BA.gpg
+# Portable release signing keys (armored). %%prep runs gpg --dearmor for gpgv2.
+Source3: https://ftp.openbsd.org/pub/OpenBSD/OpenSSH/RELEASE_KEY.asc
 Source6: ssh-keycat.pam
 Source7: sshd.sysconfig
 Source9: sshd@.service
@@ -298,7 +299,8 @@ an X11 passphrase dialog for OpenSSH.
 This package contains a test SK driver used for OpenSSH test purposes
 
 %prep
-gpgv2 --quiet --keyring %{SOURCE3} %{SOURCE1} %{SOURCE0}
+gpg --batch --dearmor --output %{_builddir}/openssh-release-keyring.gpg %{SOURCE3}
+gpgv2 --quiet --keyring %{_builddir}/openssh-release-keyring.gpg %{SOURCE1} %{SOURCE0}
 %autosetup -T -b 0 -p1
 
 autoreconf
@@ -577,7 +579,10 @@ test -f %{sysconfig_anaconda} && \
 %attr(0755,root,root) %{_libdir}/sshtest/sk-dummy.so
 
 %changelog
-* Sat Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-6
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-7
+- Source3 OpenSSH RELEASE_KEY.asc over HTTPS plus gpg --dearmor for gpgv2 (no local gpgkey file)
+
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-6
 - Use HTTPS OpenBSD CDN for Source0 or Source1 (spectool has no ftp)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-5

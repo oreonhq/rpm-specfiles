@@ -85,6 +85,9 @@ Release:        %autorelease
 License:        MIT AND BSD-3-Clause AND SGI-B-2.0
 URL:            https://mesa3d.org
 
+# Mock note: if Oreon gcc 16.x and Fedora rawhide gcc are both enabled, dnf can fail on
+# libstdc++-devel = exact NVR (see mesa builddep errors). Use one toolchain repo in the chroot or --no-best.
+
 # The "Version" field for release candidates has the format: A.B.C~rcX
 # However, the tarball has the format: A.B.C-rcX.
 # The "ver" variable contains the version in the second format.

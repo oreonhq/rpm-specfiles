@@ -3,7 +3,7 @@
 Summary: Network monitoring tools including ping
 Name: iputils
 Version: 20250605
-Release: 3%{?dist}
+Release: 4%{?dist}
 # some parts are under the original BSD (ping.c)
 # some are under GPLv2+ (tracepath.c)
 License: BSD-4-Clause-UC AND GPL-2.0-or-later
@@ -11,7 +11,8 @@ URL: https://github.com/iputils/iputils
 
 Source0: https://github.com/iputils/iputils/archive/%{version}/%{name}-%{version}.tar.gz
 # Upstream ifenslave (flat layout was former Fedora lookaside tarball). Debian .orig matches patches.
-Source1: https://deb.debian.org/debian/pool/main/i/ifenslave/ifenslave_1.1.0.orig.tar.gz
+# Current Debian pool no longer carries this orig tarball, use the archive snapshot
+Source1: http://archive.debian.org/debian/pool/main/i/ifenslave/ifenslave_1.1.0.orig.tar.gz
 # Taken from ping.c on 2014-07-12
 Source4: bsd.txt
 Source5: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
@@ -99,7 +100,10 @@ install -cp ifenslave.8 ${RPM_BUILD_ROOT}%{_mandir}/man8/
 %attr(644,root,root) %{_mandir}/man8/ifenslave.8*
 
 %changelog
-* Sat Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-3
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-4
+- Source1 ifenslave from archive.debian.org (deb.debian.org pool dropped 1.1.0 orig)
+
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-3
 - Source1 ifenslave via HTTPS (Debian .orig), adjust prep and Patch100 paths for spectool
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-2

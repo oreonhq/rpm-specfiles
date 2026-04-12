@@ -5,14 +5,14 @@
 Summary:	Font configuration and customization library
 Name:		fontconfig
 Version:	2.17.0
-Release:	4%{?dist}
+Release:	5%{?dist}
 # src/ftglue.[ch] is in Public Domain
 # src/fccache.c contains Public Domain code
 ## https://gitlab.com/fedora/legal/fedora-license-data/-/issues/177
 # fc-case/CaseFolding.txt is in the UCD
 # otherwise MIT
 License:	HPND AND LicenseRef-Fedora-Public-Domain AND Unicode-DFS-2016
-Source:		http://fontconfig.org/release/%{name}-%{version}.tar.xz
+Source:		https://www.freedesktop.org/software/fontconfig/release/%{name}-%{version}.tar.xz
 URL:		http://fontconfig.org
 Source1:	25-no-bitmap-fedora.conf
 Source2:	fc-cache
@@ -204,5 +204,8 @@ fi
 %doc fontconfig-devel.txt fontconfig-devel.html
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17.0-5
+- Source from www.freedesktop.org/software/fontconfig/release (fontconfig.org path 404)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17.0-4
 - Prepare for Oreon 11 (RP1)

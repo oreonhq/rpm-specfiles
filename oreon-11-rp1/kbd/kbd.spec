@@ -5,14 +5,16 @@
 
 Name:           kbd
 Version:        2.9.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Tools for configuring the console (keyboard, virtual terminals, etc.)
 License:        GPL-2.0-or-later
 URL:            http://www.kbd-project.org/
 
 Source0:        https://www.kernel.org/pub/linux/utils/kbd/kbd-%{version}.tar.xz
-Source1:        kbd-latsun-fonts.tar.bz2
-Source2:        kbd-latarcyrheb-32.tar.bz2
+# Same tarballs as Fedora kbd lookaside (public mirrors)
+Source1:        https://www.linuxfromscratch.org/~ken/console-fonts/other/kbd-latsun-fonts.tar.bz2
+# Fedora Koji stores lookaside uploads under kojifiles (same content as Fedora src.rpm)
+Source2:        https://kojipkgs.fedoraproject.org/kojifiles/packages/kbd/2.7.1/3.fc42/src/kbd/kbd-latarcyrheb-32.tar.bz2
 Source3:        xml2lst.pl
 Source4:        vlock.pamd
 Source5:        kbdinfo.1
@@ -184,7 +186,10 @@ fi
 %{kbd_datadir}/keymaps/legacy
 
 %changelog
-* Sat Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-3
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-4
+- Source1 kbd-latsun-fonts from LFS mirror, Source2 latarcyrheb from Fedora Koji, ship kbdinfo.1 in git
+
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-3
 - Source0 from kernel.org over HTTPS (spectool has no ftp)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-2

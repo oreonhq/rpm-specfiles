@@ -8,7 +8,7 @@
 Summary:         A small text editor
 Name:            nano
 Version:         8.7.1
-Release:         2%{?dist}
+Release:         3%{?dist}
 License:         GPL-3.0-or-later
 URL:             https://www.nano-editor.org
 
@@ -133,7 +133,10 @@ install -Dpm 0644 %{SOURCE13} %{buildroot}%{_datadir}/fish/vendor_conf.d/%{basen
 
 
 %changelog
-* Sat Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.7.1-2
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.7.1-3
+- Fix %%changelog weekday on prior entry
+
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.7.1-2
 - Point Source0 or Source1 at dist/v8 (latest/ is not a stable path and 404s)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.7.1-1

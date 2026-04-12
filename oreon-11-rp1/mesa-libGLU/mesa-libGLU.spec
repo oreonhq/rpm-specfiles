@@ -5,7 +5,8 @@ Summary:        Mesa libGLU library
 
 License:        X11
 URL:            http://mesa3d.org/
-Source0:        https://ftp.freedesktop.org/pub/mesa/glu/glu-%{version}.tar.xz
+# ftp.freedesktop.org TLS hostname does not match on some workers, use Mesa archive
+Source0:        https://mesa.freedesktop.org/archive/glu/glu-%{version}.tar.xz
 Source2:        make-git-snapshot.sh
 
 BuildRequires:  gcc-c++
@@ -49,5 +50,8 @@ find $RPM_BUILD_ROOT -name '*.a' -delete
 %{_libdir}/pkgconfig/glu.pc
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.0.3-9
+- Source0 from mesa.freedesktop.org archive (ftp.freedesktop.org TLS mismatch)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.0.3-8
 - Prepare for Oreon 11 (RP1)
