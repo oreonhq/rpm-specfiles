@@ -59,17 +59,9 @@
 # FTBFS due to e.g. GCC bug https://bugzilla.redhat.com/show_bug.cgi?id=1282495
 #global arm_neon 1
 
-# the QMake CONFIG flags to force debugging information to be produced in
-# release builds, and for all parts of the code
-%ifarch %{arm} aarch64
-# the ARM builder runs out of memory during linking with the full setting below,
-# so omit debugging information for the parts upstream deems it dispensable for
-# (webcore, v8base)
+# Legacy qmake-era knob (unused with Qt 6 CMake plus GN). Kept empty so nothing
+# accidentally wires it back in during merges.
 %global debug_config %{nil}
-%else
-%global debug_config force_debug_info
-# webcore_debug v8base_debug
-%endif
 
 # spellchecking dictionary directory
 %global _qtwebengine_dictionaries_dir %{_qt6_datadir}/qtwebengine_dictionaries
@@ -91,7 +83,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 13%{?dist}
+Release: 14%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -143,6 +135,8 @@ Patch101: qtwebengine-fix-build-against-gcc16.patch
 # GN source_set("common") under importers/common/ emits obj/.../common/common/*.o.d; gcc
 # then fails opening the depfile when the nested dir is missing. Rename the target.
 Patch102: qtwebengine-perfetto-gn-avoid-common-common-objdir.patch
+# RelWithDebInfo sets GN symbol_level=1 on Linux which balloons RAM for Chromium
+Patch103: qtwebengine-relwdebinfo-gn-symbol-level-0-linux.patch
 
 ## ppc64le port
 Patch200: qtwebengine-6.9-ppc64.patch
@@ -515,6 +509,7 @@ popd
 %patch -P100 -p1 -b .add-missing-pipewire-headers
 %patch -P101 -p1 -b .fix-build-against-gcc16
 %patch -P102 -p1 -b .perfetto-common-objdir
+%patch -P103 -p1 -b .gn-symbol-level-linux
 
 # ppc64le support
 %patch -P200 -p1
@@ -585,7 +580,7 @@ export NINJAFLAGS="-j1 -v"
 export NINJAJOBS=-j1
 export CMAKE_BUILD_PARALLEL_LEVEL=1
 export GOMAXPROCS=1
-export MALLOC_ARENA_MAX=2
+export MALLOC_ARENA_MAX=1
 # Qt passes this into cmake -P QtGnGen.cmake as -DGN_THREADS=... (not a CMake cache var)
 export QTWEBENGINE_GN_THREADS=1
 export NINJA_PATH=%{__ninja}
@@ -894,6 +889,10 @@ done
 %endif
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-14
+- Patch103 set GN symbol_level=0 on Linux for RelWithDebInfo to cut Chromium compile and link RAM (mock OOM)
+- Tighten MALLOC_ARENA_MAX to 1 for glibc arena overhead
+
 * Sat Apr 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-13
 - Patch102 also rewrite importers/proto/winscope (and all nested importers/**/BUILD.gn) so GN no longer resolves :common after tp_importer_common rename
 
