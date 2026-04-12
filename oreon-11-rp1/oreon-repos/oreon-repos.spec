@@ -1,7 +1,7 @@
 Summary:        Oreon package repositories
 Name:           oreon-repos
 Version:        11
-Release:        3%{?dist}
+Release:        4%{?dist}
 License:        MIT
 URL:            https://oreonhq.com/
 
