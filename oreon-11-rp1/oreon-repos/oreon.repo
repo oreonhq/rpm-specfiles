@@ -1,6 +1,6 @@
 [oreon]
 name=Oreon 11 - $basearch
-mirrorlist=https://mirrors.oreonhq.com/oreon-11
+mirrorlist=https://mirrors.oreonhq.com/oreon-11-rp1
 enabled=1
 countme=0
 metadata_expire=6h
