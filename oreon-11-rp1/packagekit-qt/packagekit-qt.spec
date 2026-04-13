@@ -2,7 +2,7 @@
 
 Name:           packagekit-qt
 Version:        1.1.4
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Qt 6 bindings for PackageKit
 License:        LGPL-2.1-or-later
 URL:            https://github.com/PackageKit/PackageKit-Qt
@@ -47,7 +47,8 @@ Headers, pkg-config, and CMake files for building against packagekit-qt6.
 %files -n packagekit-qt6
 %license COPYING
 %doc AUTHORS NEWS README.md
-%{_libdir}/libpackagekitqt6.so.2*
+# Real soname from CMake is libpackagekitqt6.so.1.1.4 (plus symlinks), not only .so.2*
+%{_libdir}/libpackagekitqt6.so.*
 
 %files -n packagekit-qt6-devel
 %{_libdir}/libpackagekitqt6.so
