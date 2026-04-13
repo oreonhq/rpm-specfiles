@@ -3,7 +3,7 @@
 Summary: Network monitoring tools including ping
 Name: iputils
 Version: 20250605
-Release: 6%{?dist}
+Release: 7%{?dist}
 # some parts are under the original BSD (ping.c)
 # some are under GPLv2+ (tracepath.c)
 License: BSD-4-Clause-UC AND GPL-2.0-or-later
@@ -80,8 +80,9 @@ else
   echo 'Bundled ifenslave from Debian upstream tarball; see kernel Documentation.' > README.bonding
 fi
 cp %{SOURCE4} %{SOURCE5} .
-%patch -P100 -p1
+# P101 (CWE strncpy) matches pristine ifenslave.c, P100 (SIOCGIFADDR bytes) changes the same function first if mis-ordered
 %patch -P101 -p1
+%patch -P100 -p1
 
 %build
 %meson
@@ -130,6 +131,9 @@ install -cp ifenslave.8 ${RPM_BUILD_ROOT}%{_mandir}/man8/
 %attr(644,root,root) %{_mandir}/man8/ifenslave.8*
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-7
+- Apply ifenslave P101 before P100 so CWE patch context matches (P100 edits SIOCGIFADDR printf)
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-6
 - Prep finds ifenslave.c by path, ifenslave.8 via find or minimal stub (.orig often has no man page)
 

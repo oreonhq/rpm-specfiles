@@ -213,8 +213,6 @@ fi
 %changelog
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17.0-7
 - %%install use nullglob for doc man globs when meson -Ddoc=disabled leaves no doc/*.1
-
-* Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17.0-6
 - Source0 from GitLab tag archive (freedesktop release/fontconfig-2.17.0.tar.xz 404)
 - Replace deprecated PreReq with Requires(pre) for freetype
 

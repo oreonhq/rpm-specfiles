@@ -83,6 +83,7 @@ done
 for PART in $PARTS; do
     mkdir .t/${PART}
     cp -ra * .t/${PART}/
+    rm -f .t/"${PART}"/regress/misc/sk-dummy/sk-dummy.so
     sed -i "s|abs_top_srcdir=.*|abs_top_srcdir=$(pwd)/.t/${PART}|" \
         .t/${PART}/Makefile
     sed -i "s|abs_top_builddir=.*|abs_top_builddir=$(pwd)/.t/${PART}|" \
