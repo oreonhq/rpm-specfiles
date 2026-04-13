@@ -51,6 +51,8 @@ sed -i 's|^RFWD_PORT=.*|RFWD_PORT=$(expr $TEST_SSH_PORT + 2)|' \
 
 # patch testsuite: speed up
 sed -i 's|sleep 1$|sleep .25|' regress/forward-control.sh
+# Force-disable SK key types in regress setup. sk-dummy.so may be rebuilt in subtrees.
+sed -i 's/sk-ssh-ed25519@openssh.com//g; s/sk-ecdsa-sha2-nistp256@openssh.com//g' regress/test-exec.sh*
 
 # extract LTESTS list to .tests/ltests/all:
 grep -Ex 'tests:[[:space:]]*file-tests t-exec interop-tests extra-tests unit' Makefile

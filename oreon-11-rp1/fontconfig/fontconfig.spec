@@ -98,16 +98,12 @@ rm $RPM_BUILD_ROOT%{_sysconfdir}/fonts/conf.d/70-*bitmaps*.conf
 # Install extra docs when present (-Ddoc=disabled means no prebuilt doc/*.[135] in tree)
 install -d $RPM_BUILD_ROOT%{_mandir}/man1
 install -d $RPM_BUILD_ROOT%{_mandir}/man3
-install -d $RPM_BUILD_ROOT%{_mandir}/man5
 shopt -s nullglob
 for f in doc/*.1; do
   install -p -m 0644 "$f" $RPM_BUILD_ROOT%{_mandir}/man1
 done
 for f in doc/*.3; do
   install -p -m 0644 "$f" $RPM_BUILD_ROOT%{_mandir}/man3
-done
-for f in doc/*.5; do
-  install -p -m 0644 "$f" $RPM_BUILD_ROOT%{_mandir}/man5
 done
 for f in doc/*.txt doc/*.pdf doc/*.html; do
   install -p -m 0644 "$f" .
@@ -197,7 +193,6 @@ fi
 %dir /usr/lib/fontconfig
 %dir /usr/lib/fontconfig/cache
 %{_mandir}/man1/*
-%{_mandir}/man5/*
 
 %files devel
 %{_libdir}/libfontconfig.so

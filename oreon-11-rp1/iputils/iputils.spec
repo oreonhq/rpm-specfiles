@@ -82,6 +82,8 @@ cp %{SOURCE4} %{SOURCE5} .
 %patch -P100 -p1
 # CWE-170 strncpy (was unified Patch101): unified diff breaks on tab vs space; rewrite lines in place
 perl -i -pe 's/^(\s*)strcpy\s*\(\s*ifr\.ifr_name\s*,\s*ifname\s*\)\s*;\s*$/$1memset(\&ifr, 0, sizeof(ifr));\n$1strncpy(ifr.ifr_name, ifname, IFNAMSIZ - 1);/m' ifenslave.c
+# GCC format-security on raw usage_msg/version pointers from legacy ifenslave
+perl -i -pe 's/fprintf\(\s*stderr\s*,\s*usage_msg\s*\);/fprintf(stderr, "%s", usage_msg);/g; s/printf\(\s*usage_msg\s*\);/printf("%s", usage_msg);/g; s/printf\(\s*help_msg\s*\);/printf("%s", help_msg);/g; s/printf\(\s*version\s*\);/printf("%s", version);/g' ifenslave.c
 
 %build
 %meson
