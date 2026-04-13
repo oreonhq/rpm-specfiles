@@ -79,8 +79,9 @@ License: Python-2.0.1
 # PEP 744: JIT Compilation
 # Whether to build with the experimental JIT compiler
 # Only possible on certain architectures: https://peps.python.org/pep-0744/#support
-# The freethreading build (when enabled) does not support JIT yet
-%bcond jit %["%{_arch}" == "x86_64" || "%{_arch}" == "aarch64"]
+# The freethreading build (when enabled) does not support JIT yet.
+# Disable by default in Oreon to avoid missing pre-generated jit_stencils sources.
+%bcond jit 0
 # Whether to build the JIT stencils (or else use the prebuilt ones)
 # We can only do this on Fedora 41+, where clang 19 is available
 # We don't do it in RHEL, see https://github.com/fedora-eln/eln/issues/207

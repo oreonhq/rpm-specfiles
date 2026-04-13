@@ -10,7 +10,7 @@ Obsoletes: libpng-compat <= 2:1.5.10
 
 # Note: non-current tarballs get moved to the history/ subdirectory,
 # so look there if you fail to retrieve the version you want
-Source0: https://ftp-osl.osuosl.org/pub/libpng/src/libpng12/libpng-%{version}.tar.xz
+Source0: https://downloads.sourceforge.net/project/libpng/libpng12/%{version}/libpng-%{version}.tar.xz
 
 Patch0: libpng12-multilib.patch
 Patch1: libpng12-pngconf.patch

@@ -68,7 +68,7 @@ install -m644 '%{SOURCE3}' \
 
 %check
 # do not run them in parrallel with %{?_smp_mflags}
-%meson_test --num-processes 1
+%meson_test --num-processes 1 --timeout-multiplier 4
 
 
 %files

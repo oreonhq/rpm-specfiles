@@ -57,7 +57,7 @@ rm %{buildroot}%{_libdir}/*.la
 %license COPYING
 %else
 %doc COPYING
-%endif # licensedir
+%endif
 %{_libdir}/libxcb-util.so.1*
 
 
