@@ -30,17 +30,10 @@
 # For more info: https://fedoraproject.org/wiki/Packaging:Guidelines#PIE
 %global _hardened_build 1
 
-# Extract the API major & minor versions, so we can export them below.
-# Ensure that the major version is >= 3, since that patch is not yet
-# in the tarball.
-%global gawk_api_major %%(x=`tar -xf %{SOURCE0} gawk-%{version}/gawkapi.h --to-stdout 2>/dev/null | \
-                          grep -i -e "gawk_api_major.*[[:digit:]]" | \
-                          grep -o -e "[[:digit:]]"`; \
-			  x=${x:-0}; case "$x" in ''|*[!0-9]*) x=3;; *) [ "$x" -lt 3 ] && x=3;; esac; echo $x)
-
-%global gawk_api_minor %%(tar -xf %{SOURCE0} gawk-%{version}/gawkapi.h --to-stdout 2>/dev/null | \
-                          grep -i -e "gawk_api_minor.*[[:digit:]]" | \
-                          grep -o -e "[[:digit:]]" || :)
+# Keep ABI values static for source-prep parsing reliability.
+# Dynamic shell extraction here breaks spectool/rpm parser on some setups.
+%global gawk_api_major 3
+%global gawk_api_minor 2
 
 # =============================================================================
 

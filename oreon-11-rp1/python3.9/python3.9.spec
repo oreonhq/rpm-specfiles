@@ -290,7 +290,7 @@ BuildRequires: python3-rpm-generators
 
 Source0: %{url}ftp/python/%{general_version}/Python-%{upstream_version}.tar.xz
 Source1: %{url}ftp/python/%{general_version}/Python-%{upstream_version}.tar.xz.asc
-Source2: %{url}static/files/pubkeys.txt
+Source2: https://legacy.python.org/files/pubkeys.txt
 
 # A simple script to check timestamps of bytecode files
 # Run in check section with Python that is currently being built
@@ -584,7 +584,7 @@ Provides: python-is-python3 = %{version}-%{release}
 %description -n python-unversioned-command
 This package contains /usr/bin/python - the "python" command that runs Python 3.
 
-%endif # with main_python
+%endif
 
 
 %package -n %{pkgname}-libs
@@ -798,9 +798,9 @@ of Python.
 
 The debug runtime additionally supports debug builds of C-API extensions
 (with the "d" ABI flag) for debugging issues in those extensions.
-%endif # with debug_build
+%endif
 
-%else  # with flatpackage
+%else
 
 # Python interpreter packages used to be named (or provide) name pythonXY (e.g.
 # python39). However, to align it with the executable names and to prepare for
@@ -853,7 +853,7 @@ version of Python. This is not a full Python stack and if you wish to run
 your applications with Python %{pybasever}, see other distributions
 that support it, such as CentOS or RHEL or older Fedora releases.
 
-%endif # with flatpackage
+%endif
 
 # ======================================================
 # The prep phase of the build:
@@ -1007,7 +1007,7 @@ BuildPython() {
 BuildPython debug \
   "--without-ensurepip --with-pydebug" \
   "-O0 -Wno-cpp"
-%endif # with debug_build
+%endif
 
 BuildPython optimized \
   "--without-ensurepip %{optimizations_flag}" \
@@ -1044,7 +1044,7 @@ topdir=$(pwd)
 %if %{with gdb_hooks}
 DirHoldingGdbPy=%{_usr}/lib/debug/%{_libdir}
 mkdir -p %{buildroot}$DirHoldingGdbPy
-%endif # with gdb_hooks
+%endif
 
 # Multilib support for pyconfig.h
 # 32- and 64-bit versions of pyconfig.h are different. For multilib support
@@ -1079,7 +1079,7 @@ InstallPython() {
   # See comment on $DirHoldingGdbPy above
   PathOfGdbPy=$DirHoldingGdbPy/$PyInstSoName-%{version}-%{release}.%{_arch}.debug-gdb.py
   cp Tools/gdb/libpython.py %{buildroot}$PathOfGdbPy
-%endif # with gdb_hooks
+%endif
 
   # Rename the -devel script that differs on different arches to arch specific name
   mv %{buildroot}%{_bindir}/python${LDVersion}-{,`uname -m`-}config
@@ -1112,7 +1112,7 @@ InstallPython debug \
   %{py_INSTSONAME_debug} \
   -O0 \
   %{LDVERSION_debug}
-%endif # with debug_build
+%endif
 
 # Now the optimized build:
 InstallPython optimized \
@@ -1403,10 +1403,10 @@ CheckPython() {
 # Check each of the configurations:
 %if %{with debug_build}
 CheckPython debug
-%endif # with debug_build
+%endif
 CheckPython optimized
 
-%endif # with tests
+%endif
 
 
 %files -n %{pkgname}
@@ -1907,7 +1907,7 @@ CheckPython optimized
 %{pylibdir}/_sysconfigdata_d_linux_%{platform_triplet}.py
 %{pylibdir}/__pycache__/_sysconfigdata_d_linux_%{platform_triplet}%{bytecode_suffixes}
 
-%endif # with debug_build
+%endif
 
 # We put the debug-gdb.py file inside /usr/lib/debug to avoid noise from ldconfig
 # See https://bugzilla.redhat.com/show_bug.cgi?id=562980
