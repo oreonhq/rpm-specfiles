@@ -1,0 +1,5 @@
+This package is intentionally lightweight.
+
+It exists so p7zip-plugins is available in Oreon repositories
+for dependency compatibility with software that still references
+this historical package name.
