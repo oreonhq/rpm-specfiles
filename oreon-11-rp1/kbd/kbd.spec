@@ -5,7 +5,7 @@
 
 Name:           kbd
 Version:        2.9.0
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Tools for configuring the console (keyboard, virtual terminals, etc.)
 License:        GPL-2.0-or-later
 URL:            http://www.kbd-project.org/
@@ -13,8 +13,7 @@ URL:            http://www.kbd-project.org/
 Source0:        https://www.kernel.org/pub/linux/utils/kbd/kbd-%{version}.tar.xz
 # Same tarballs as Fedora kbd lookaside (public mirrors)
 Source1:        https://www.linuxfromscratch.org/~ken/console-fonts/other/kbd-latsun-fonts.tar.bz2
-# Fedora Koji stores lookaside uploads under kojifiles (same content as Fedora src.rpm)
-Source2:        https://kojipkgs.fedoraproject.org/kojifiles/packages/kbd/2.7.1/3.fc42/src/kbd/kbd-latarcyrheb-32.tar.bz2
+# latarcyrheb-sun16/sun32.psfu are in upstream kbd 2.9.0 (no separate Source2, Koji copy 404s)
 Source3:        xml2lst.pl
 Source4:        vlock.pamd
 Source5:        kbdinfo.1
@@ -70,7 +69,7 @@ The %{name}-legacy package contains original keymaps for kbd package.
 Please note that %{name}-legacy is not helpful without kbd.
 
 %prep
-%setup -q -a 1 -a 2
+%setup -q -a 1
 cp -fp %{SOURCE3} .
 cp -fp %{SOURCE6} .
 %autopatch -p1
@@ -186,6 +185,9 @@ fi
 %{kbd_datadir}/keymaps/legacy
 
 %changelog
+* Sun Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-5
+- Drop Source2 kbd-latarcyrheb-32 (included in upstream 2.9.0, kojipkgs URL 404)
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-4
 - Source1 kbd-latsun-fonts from LFS mirror, Source2 latarcyrheb from Fedora Koji, ship kbdinfo.1 in git
 

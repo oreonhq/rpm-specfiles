@@ -43,7 +43,7 @@
 Summary: An open source implementation of SSH protocol version 2
 Name: openssh
 Version: %{openssh_ver}
-Release: 7%{?dist}
+Release: 8%{?dist}
 URL: http://www.openssh.com/portable.html
 Source0: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
 Source1: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz.asc
@@ -579,6 +579,9 @@ test -f %{sysconfig_anaconda} && \
 %attr(0755,root,root) %{_libdir}/sshtest/sk-dummy.so
 
 %changelog
+* Thu Apr  9 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-8
+- parallel_test.sh: drop sk-dummy.so before %check so regress skips SK key types when dummy enrollment fails in mock
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-7
 - Source3 OpenSSH RELEASE_KEY.asc over HTTPS plus gpg --dearmor for gpgv2 (no local gpgkey file)
 

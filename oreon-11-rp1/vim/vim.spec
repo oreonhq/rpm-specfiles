@@ -41,6 +41,9 @@
 %define bugurl %(source /etc/os-release; echo ${BUG_REPORT_URL})
 %define patchlevel 148
 %define vimdir vim92
+# Git tags use zero-padded patch (v9.2.0148), archive dir vim-9.2.0148 (same tree as vim.org unix tarball)
+%define vim_github_tag v%{baseversion}.%(LANG=C printf '%%04d' %{patchlevel})
+%define vim_srcdirname vim-%{baseversion}.%(LANG=C printf '%%04d' %{patchlevel})
 
 %if %{with desktop_file}
 %define desktop_file_utils_version 0.2.93
@@ -51,7 +54,7 @@ Summary: The VIM editor
 URL:     https://www.vim.org/
 Name: vim
 Version: %{baseversion}.%{patchlevel}
-Release: 3%{?dist}
+Release: 4%{?dist}
 Epoch: 2
 # swift.vim contains Apache 2.0 with runtime library exception:
 # which is taken as Apache-2.0 WITH Swift-exception - reported to legal as https://gitlab.com/fedora/legal/fedora-license-data/-/issues/188
@@ -62,8 +65,8 @@ Epoch: 2
 # resolution: take it as OPUBL-1.0, the license won't be added to allowed license list, but if a project uses it for documentation
 # and don't use license options mentioned in the OPUBL 1.0 license text (which both are the case for Vim), the license is allowed
 License: Vim AND LGPL-2.1-or-later AND MIT AND GPL-1.0-only AND (GPL-2.0-only OR Vim) AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-or-later AND GPL-3.0-or-later AND OPUBL-1.0 AND Apache-2.0 WITH Swift-exception
-# Primary upstream (NLUUG mirror often lags or drops patch tarballs)
-Source0: https://ftp.vim.org/pub/vim/unix/vim-%{baseversion}-%{patchlevel}.tar.bz2
+# GitHub tag matches vim.org releases (workers that cannot resolve ftp.vim.org still reach github.com)
+Source0: https://github.com/vim/vim/archive/refs/tags/%{vim_github_tag}.tar.gz
 Source1: virc
 Source2: vimrc
 Source3: gvim16.png
@@ -393,7 +396,11 @@ vim-common package.
 
 
 %prep
-%setup -q -b 0 -n %{vimdir}
+%setup -q -b 0 -n %{vim_srcdirname}
+# Patches use vim92/ paths like the vim.org unix bundle, not vim-9.2.0148/
+cd ..
+mv %{vim_srcdirname} %{vimdir}
+cd %{vimdir}
 
 # use %%{__python3} macro for defining shebangs in python3 tests
 sed -i -e 's,/usr/bin/python3,%{__python3},' %{PATCH6}
@@ -1053,6 +1060,9 @@ install -p -m644 %{SOURCE11} %{buildroot}/%{_datadir}/fish/vendor_conf.d/vim-def
 
 
 %changelog
+* Sun Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.2.148-4
+- Source0 from GitHub tag v9.2.0148 (ftp.vim.org DNS failed on worker), prep unpacks vim-9.2.0148 like unix tarball
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.2.148-3
 - Source0 from ftp.vim.org (NLUUG 404 on vim-9.2-148)
 

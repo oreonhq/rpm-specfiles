@@ -28,6 +28,10 @@ chcon -t unconfined_exec_t ssh-sk-helper || :
 # work around something else that only crops up in brew
 export TEST_SSH_UNSAFE_PERMISSIONS=1
 
+# Koji/mock often hits OpenSSL or provider quirks so sk-dummy enrollment fails and t-exec dies on sk-* keygen.
+# Without regress/misc/sk-dummy/sk-dummy.so, test-exec leaves SSH_SK_PROVIDER unset and filters sk-* from ssh -Q.
+rm -f regress/misc/sk-dummy/sk-dummy.so
+
 # create a .test directory to store all our files in:
 mkdir -p .t .ltests/{in,not-in}
 

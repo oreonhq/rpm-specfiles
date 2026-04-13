@@ -5,14 +5,15 @@
 Summary:	Font configuration and customization library
 Name:		fontconfig
 Version:	2.17.0
-Release:	5%{?dist}
+Release:	6%{?dist}
 # src/ftglue.[ch] is in Public Domain
 # src/fccache.c contains Public Domain code
 ## https://gitlab.com/fedora/legal/fedora-license-data/-/issues/177
 # fc-case/CaseFolding.txt is in the UCD
 # otherwise MIT
 License:	HPND AND LicenseRef-Fedora-Public-Domain AND Unicode-DFS-2016
-Source:		https://www.freedesktop.org/software/fontconfig/release/%{name}-%{version}.tar.xz
+# Official release tarball on freedesktop.org is missing for some tags; GitLab tag archive matches upstream.
+Source:		https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/%{version}/fontconfig-%{version}.tar.bz2
 URL:		http://fontconfig.org
 Source1:	25-no-bitmap-fedora.conf
 Source2:	fc-cache
@@ -37,7 +38,7 @@ Requires:	fonts-filesystem freetype
 # (used by fonts-rpm-macros)
 Requires(pre):    xml-common
 Requires(postun): xml-common
-PreReq:		freetype >= 2.9.1-6
+Requires(pre):	freetype >= 2.9.1-6
 Requires(post):	grep coreutils
 Requires:	font(:lang=en)
 Suggests:	font(notosans)
@@ -204,6 +205,10 @@ fi
 %doc fontconfig-devel.txt fontconfig-devel.html
 
 %changelog
+* Thu Apr  9 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17.0-6
+- Source0 from GitLab tag archive (freedesktop release/fontconfig-2.17.0.tar.xz 404)
+- Replace deprecated PreReq with Requires(pre) for freetype
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17.0-5
 - Source from www.freedesktop.org/software/fontconfig/release (fontconfig.org path 404)
 
