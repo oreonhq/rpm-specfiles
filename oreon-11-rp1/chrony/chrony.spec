@@ -9,7 +9,7 @@
 
 Name:           chrony
 Version:        4.8
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        An NTP client/server
 
 License:        GPL-2.0-only
@@ -19,8 +19,8 @@ Source1:        https://chrony-project.org/releases/chrony-%{version}%{?prerelea
 Source2:        https://chrony-project.org/gpgkey-8F375C7E8D0EE125A3D3BD51537E2B76F7680DAC.asc
 Source3:        chrony.dhclient
 Source4:        chrony.sysusers
-# simulator for test suite
-Source10:       https://gitlab.com/chrony/clknetsim/-/archive/master/clknetsim-%{clknetsim_ver}.tar.gz
+# simulator for test suite (pinned commit, reproducible tree name)
+Source10:       https://gitlab.com/chrony/clknetsim/-/archive/%{clknetsim_ver}/clknetsim-%{clknetsim_ver}.tar.gz
 %{?gitpatch:Patch0: chrony-%{version}%{?prerelease}-%{gitpatch}.patch.gz}
 
 # add distribution-specific bits to DHCP dispatcher
@@ -97,7 +97,10 @@ sed -i '/^ExecStart/a SELinuxContext=system_u:system_r:chronyd_restricted_t:s0' 
 # regenerate the file from getdate.y
 rm -f getdate.c
 
-mv clknetsim-*-%{clknetsim_ver}* test/simulation/clknetsim
+# GitLab top dir is clknetsim-<ref> or clknetsim-<sha>, not always *-<sha> after another segment.
+clknetsim_src=$(find . -maxdepth 1 -mindepth 1 -type d -name 'clknetsim-*' -print -quit)
+test -n "$clknetsim_src" || { echo 'clknetsim: no directory after %%setup -a 10'; ls -la; exit 1; }
+mv "$clknetsim_src" test/simulation/clknetsim
 
 %build
 %configure \
@@ -209,5 +212,8 @@ fi
 %ghost %dir %attr(750,chrony,chrony) %{_localstatedir}/log/chrony
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.8-6
+- clknetsim: robust unpack path, pin GitLab archive to %%{clknetsim_ver} (fix %%prep mv on aarch64)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.8-5
 - Prepare for Oreon 11 (RP1)
