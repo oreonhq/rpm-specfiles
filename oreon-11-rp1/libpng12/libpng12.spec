@@ -1,16 +1,15 @@
 Summary: Old version of libpng, needed to run old binaries
 Name: libpng12
 Version: 1.2.57
-Release: 24%{?dist}
+Release: 25%{?dist}
 License: zlib
 URL: http://www.libpng.org/pub/png/
 
 # Obsolete old temporary packaging of libpng 1.2
 Obsoletes: libpng-compat <= 2:1.5.10
 
-# Note: non-current tarballs get moved to the history/ subdirectory,
-# so look there if you fail to retrieve the version you want
-Source0: https://downloads.sourceforge.net/project/libpng/libpng12/%{version}/libpng-%{version}.tar.xz
+# SourceForge libpng12 paths often 404 after releases move. Tag archive is stable.
+Source0: https://github.com/pnggroup/libpng/archive/refs/tags/v%{version}.tar.gz#/libpng-%{version}.tar.gz
 
 Patch0: libpng12-multilib.patch
 Patch1: libpng12-pngconf.patch
@@ -81,5 +80,8 @@ make check
 %{_libdir}/pkgconfig/libpng12.pc
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.57-25
+- Source0: use pnggroup/libpng GitHub tag archive (SourceForge 404 for 1.2.57)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.57-24
 - Prepare for Oreon 11 (RP1)
