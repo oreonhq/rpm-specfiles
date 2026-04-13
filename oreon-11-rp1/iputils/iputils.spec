@@ -3,7 +3,7 @@
 Summary: Network monitoring tools including ping
 Name: iputils
 Version: 20250605
-Release: 5%{?dist}
+Release: 6%{?dist}
 # some parts are under the original BSD (ping.c)
 # some are under GPLv2+ (tracepath.c)
 License: BSD-4-Clause-UC AND GPL-2.0-or-later
@@ -44,20 +44,36 @@ the target machine is alive and receiving network traffic.
 %prep
 %setup -q -n %{name}-%{version}
 tar -xf %{SOURCE1}
-# .orig unpacks to ifenslave-1.1.0 or ifenslave-2.6-1.1.0 depending on tarball name
-if [ -d ifenslave-1.1.0 ]; then
-  _ifd=ifenslave-1.1.0
-elif [ -d ifenslave-2.6-1.1.0 ]; then
-  _ifd=ifenslave-2.6-1.1.0
-else
-  _ifd=$(find . -maxdepth 1 -mindepth 1 -type d -name 'ifenslave*' | head -1)
-  _ifd=${_ifd#./}
-fi
-if [ -z "${_ifd}" ] || [ ! -f "${_ifd}/ifenslave.c" ]; then
-  echo 'iputils: could not unpack ifenslave sources from Source1' >&2
+# .orig layout varies; ifenslave.8 is often only in Debian's debian/ tarball, not in .orig
+_ifc=$(find . -name ifenslave.c -print -quit)
+if [ -z "${_ifc}" ] || [ ! -f "${_ifc}" ]; then
+  echo 'iputils: no ifenslave.c in Source1' >&2
   exit 1
 fi
-cp -p "${_ifd}/ifenslave.c" "${_ifd}/ifenslave.8" .
+cp -p "${_ifc}" .
+_ifd=$(dirname "${_ifc}")
+_if8=$(find . -name ifenslave.8 -print -quit)
+if [ -n "${_if8}" ] && [ -f "${_if8}" ]; then
+  cp -p "${_if8}" .
+else
+  echo 'iputils: no ifenslave.8 in .orig, installing minimal stub man page' >&2
+  cat > ifenslave.8 << 'ROFF'
+.TH IFENSLAVE 8 "iputils" "Linux" "System Administration"
+.SH NAME
+ifenslave \- attach a network interface to an Ethernet bond (legacy)
+.SH SYNOPSIS
+.B ifenslave
+.RI [ options ]
+.I bond\-device slave\-interface
+.SH DESCRIPTION
+Legacy helper for Linux Ethernet bonding. Prefer
+.BR ip (8)
+link set with bonding driver in modern setups.
+.SH SEE ALSO
+.BR ip (8),
+.BR systemd.network (5)
+ROFF
+fi
 if [ -f "${_ifd}/README.bonding" ]; then
   cp -p "${_ifd}/README.bonding" .
 else
@@ -114,6 +130,9 @@ install -cp ifenslave.8 ${RPM_BUILD_ROOT}%{_mandir}/man8/
 %attr(644,root,root) %{_mandir}/man8/ifenslave.8*
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-6
+- Prep finds ifenslave.c by path, ifenslave.8 via find or minimal stub (.orig often has no man page)
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-5
 - Source1 correct Debian name ifenslave-2.6_1.1.0.orig.tar.gz from snapshot.debian.org, prep finds either top dir
 
