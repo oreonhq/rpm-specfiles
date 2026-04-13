@@ -400,8 +400,10 @@ vim-common package.
 %prep
 %setup -q -b 0 -n %{vim_srcdirname}
 # Patches use vim92/ paths like the vim.org unix bundle, not vim-9.2.0148/
+# %%setup -n %%{vim_srcdirname} makes %%build auto-cd into that name, so keep a symlink after rename
 cd ..
 mv %{vim_srcdirname} %{vimdir}
+ln -sfn %{vimdir} %{vim_srcdirname}
 cd %{vimdir}
 
 # use %%{__python3} macro for defining shebangs in python3 tests
