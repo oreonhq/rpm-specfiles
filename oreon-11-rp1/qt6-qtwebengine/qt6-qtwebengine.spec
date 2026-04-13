@@ -83,7 +83,7 @@
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.2
-Release: 16%{?dist}
+Release: 17%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -139,9 +139,6 @@ Patch102: qtwebengine-perfetto-gn-avoid-common-common-objdir.patch
 Patch103: qtwebengine-relwdebinfo-gn-symbol-level-0-linux.patch
 # Ensure gen_buildflags runs before proto importers minimal compile (perfetto_build_flags.h)
 Patch104: qtwebengine-perfetto-proto-minimal-gen-buildflags-dep.patch
-# Pin //base:debugging_buildflags in component("base") deps so stack_copier.cc sees the header
-Patch105: qtwebengine-chromium-base-implicit-deps-debugging-buildflags.patch
-
 ## ppc64le port
 Patch200: qtwebengine-6.9-ppc64.patch
 Patch201: qtwebengine-chromium-ppc64.patch
@@ -515,7 +512,9 @@ popd
 %patch -P102 -p1 -b .perfetto-common-objdir
 %patch -P103 -p1 -b .gn-symbol-level-linux
 %patch -P104 -p1 -b .perfetto-gen-buildflags
-%patch -P105 -p1 -b .base-debugging-buildflags
+# base/BUILD.gn line numbers drift across Qt drops, so patch105 is too fragile with --fuzz=0.
+# Add the dependency directly in %prep in a stable way.
+perl -0777 -i -pe 's@(component\("base"\)\s*\{.*?\n\s*deps\s*=\s*\[\n)(\s*":check_version_internal",)@$1  ":debugging_buildflags",\n$2@s' src/3rdparty/chromium/base/BUILD.gn
 
 # ppc64le support
 %patch -P200 -p1
@@ -895,6 +894,9 @@ done
 %endif
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-17
+- Drop fragile Patch105 apply and inject :debugging_buildflags into Chromium base deps via %prep perl for stable line drift handling
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-16
 - Patch105 add :debugging_buildflags to Chromium base component deps first so debug/debugging_buildflags.h exists before stack_copier.cc
 
