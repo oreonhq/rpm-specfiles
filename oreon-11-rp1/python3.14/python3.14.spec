@@ -20,10 +20,11 @@
 # Uses upstream bundled prebuilt wheels otherwise
 %bcond rpmwheels %{without bootstrap}
 
-# Expensive optimizations (mainly, profile-guided optimizations)
-# We don't have to switch it off for bootstrap, but it speeds up the first build,
-# so we opt to only run them during the "full" build
-%bcond optimizations %{without bootstrap}
+# Expensive optimizations (mainly, profile-guided optimizations / PGO).
+# Oreon: always off. Up to four configurations (optimized, debug, freethreading x2)
+# with LTO makes PGO link steps a frequent mock OOM or killed-after-hours build.
+# Use rpmbuild --with optimizations if you really want PGO locally.
+%bcond optimizations 0
 
 # Run the test suite in %%check
 # Technically, we can run the tests even during the bootstrap build, but since
@@ -49,7 +50,7 @@ URL: https://www.python.org/
 #global prerel ...
 %global upstream_version %{general_version}%{?prerel}
 Version: %{general_version}%{?prerel:~%{prerel}}
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: Python-2.0.1
 
 
@@ -93,6 +94,13 @@ License: Python-2.0.1
 
 # Main interpreter loop optimization
 %bcond computed_gotos 1
+
+# Limit parallel compile/link (LTO) jobs so mock does not OOM on hosts that advertise many CPUs.
+%ifarch aarch64
+%global _smp_mflags -j2
+%else
+%global _smp_mflags -j4
+%endif
 
 # =====================
 # General global macros
@@ -1998,5 +2006,8 @@ CheckPython freethreading
 # ======================================================
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-2
+- Default off PGO (%%bcond optimizations 0), cap %%{_smp_mflags} (mock OOM / killed builds)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-1
 - Prepare for Oreon 11 (RP1)
