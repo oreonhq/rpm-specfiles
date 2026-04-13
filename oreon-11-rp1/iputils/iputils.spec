@@ -3,7 +3,7 @@
 Summary: Network monitoring tools including ping
 Name: iputils
 Version: 20250605
-Release: 7%{?dist}
+Release: 8%{?dist}
 # some parts are under the original BSD (ping.c)
 # some are under GPLv2+ (tracepath.c)
 License: BSD-4-Clause-UC AND GPL-2.0-or-later
@@ -19,7 +19,6 @@ Source4: bsd.txt
 Source5: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
 Patch100: iputils-ifenslave.patch
-Patch101: iputils-ifenslave-CWE-170.patch
 
 BuildRequires: gcc
 BuildRequires: meson
@@ -80,9 +79,9 @@ else
   echo 'Bundled ifenslave from Debian upstream tarball; see kernel Documentation.' > README.bonding
 fi
 cp %{SOURCE4} %{SOURCE5} .
-# P101 (CWE strncpy) matches pristine ifenslave.c, P100 (SIOCGIFADDR bytes) changes the same function first if mis-ordered
-%patch -P101 -p1
 %patch -P100 -p1
+# CWE-170 strncpy (was unified Patch101): unified diff breaks on tab vs space; rewrite lines in place
+perl -i -pe 's/^(\s*)strcpy\s*\(\s*ifr\.ifr_name\s*,\s*ifname\s*\)\s*;\s*$/$1memset(\&ifr, 0, sizeof(ifr));\n$1strncpy(ifr.ifr_name, ifname, IFNAMSIZ - 1);/m' ifenslave.c
 
 %build
 %meson
@@ -131,6 +130,9 @@ install -cp ifenslave.8 ${RPM_BUILD_ROOT}%{_mandir}/man8/
 %attr(644,root,root) %{_mandir}/man8/ifenslave.8*
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-8
+- Drop Patch101, apply CWE-170 strncpy fix with perl (unified patch kept failing on whitespace)
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20250605-7
 - Apply ifenslave P101 before P100 so CWE patch context matches (P100 edits SIOCGIFADDR printf)
 
