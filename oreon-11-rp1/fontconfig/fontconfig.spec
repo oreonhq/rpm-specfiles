@@ -205,7 +205,7 @@ fi
 %doc fontconfig-devel.txt fontconfig-devel.html
 
 %changelog
-* Thu Apr  9 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17.0-6
+* Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17.0-6
 - Source0 from GitLab tag archive (freedesktop release/fontconfig-2.17.0.tar.xz 404)
 - Replace deprecated PreReq with Requires(pre) for freetype
 

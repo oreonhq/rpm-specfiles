@@ -185,7 +185,7 @@ fi
 %{kbd_datadir}/keymaps/legacy
 
 %changelog
-* Sun Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-5
+* Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-5
 - Drop Source2 kbd-latarcyrheb-32 (included in upstream 2.9.0, kojipkgs URL 404)
 
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.0-4

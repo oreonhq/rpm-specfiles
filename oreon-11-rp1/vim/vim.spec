@@ -44,6 +44,7 @@
 # Git tags use zero-padded patch (v9.2.0148), archive dir vim-9.2.0148 (same tree as vim.org unix tarball)
 %define vim_github_tag v%{baseversion}.%(LANG=C printf '%%04d' %{patchlevel})
 %define vim_srcdirname vim-%{baseversion}.%(LANG=C printf '%%04d' %{patchlevel})
+%define vim_archive_fname %{vim_srcdirname}.tar.gz
 
 %if %{with desktop_file}
 %define desktop_file_utils_version 0.2.93
@@ -66,7 +67,8 @@ Epoch: 2
 # and don't use license options mentioned in the OPUBL 1.0 license text (which both are the case for Vim), the license is allowed
 License: Vim AND LGPL-2.1-or-later AND MIT AND GPL-1.0-only AND (GPL-2.0-only OR Vim) AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-or-later AND GPL-3.0-or-later AND OPUBL-1.0 AND Apache-2.0 WITH Swift-exception
 # GitHub tag matches vim.org releases (workers that cannot resolve ftp.vim.org still reach github.com)
-Source0: https://github.com/vim/vim/archive/refs/tags/%{vim_github_tag}.tar.gz
+# #/ forces local name vim-9.2.0148.tar.gz (not v9.2.0148.tar.gz) so %%prep and appstream date match SOURCES
+Source0: https://github.com/vim/vim/archive/refs/tags/%{vim_github_tag}.tar.gz#/%{vim_archive_fname}
 Source1: virc
 Source2: vimrc
 Source3: gvim16.png
@@ -710,7 +712,7 @@ SentUpstream: 2014-05-22
     </p>
   </description>
   <releases>
-    <release version="%{version}" date="%(date +%F -r %{SOURCE0})" />
+    <release version="%{version}" date="%(date +%F)" />
   </releases>
   <screenshots>
     <screenshot type="default">
@@ -1060,7 +1062,7 @@ install -p -m644 %{SOURCE11} %{buildroot}/%{_datadir}/fish/vendor_conf.d/vim-def
 
 
 %changelog
-* Sun Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.2.148-4
+* Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.2.148-4
 - Source0 from GitHub tag v9.2.0148 (ftp.vim.org DNS failed on worker), prep unpacks vim-9.2.0148 like unix tarball
 
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.2.148-3

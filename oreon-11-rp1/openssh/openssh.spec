@@ -579,7 +579,7 @@ test -f %{sysconfig_anaconda} && \
 %attr(0755,root,root) %{_libdir}/sshtest/sk-dummy.so
 
 %changelog
-* Thu Apr  9 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-8
+* Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-8
 - parallel_test.sh: drop sk-dummy.so before %check so regress skips SK key types when dummy enrollment fails in mock
 
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2p1-7
