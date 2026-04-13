@@ -5,7 +5,7 @@
 Summary:	Font configuration and customization library
 Name:		fontconfig
 Version:	2.17.0
-Release:	6%{?dist}
+Release:	7%{?dist}
 # src/ftglue.[ch] is in Public Domain
 # src/fccache.c contains Public Domain code
 ## https://gitlab.com/fedora/legal/fedora-license-data/-/issues/177
@@ -95,28 +95,34 @@ rm $RPM_BUILD_ROOT%{_sysconfdir}/fonts/conf.d/10-sub-pixel-*.conf
 # Do not enable bitmap-related conf
 rm $RPM_BUILD_ROOT%{_sysconfdir}/fonts/conf.d/70-*bitmaps*.conf
 
-# Install docs manually
+# Install extra docs when present (-Ddoc=disabled means no prebuilt doc/*.[135] in tree)
 install -d $RPM_BUILD_ROOT%{_mandir}/man1
 install -d $RPM_BUILD_ROOT%{_mandir}/man3
 install -d $RPM_BUILD_ROOT%{_mandir}/man5
+shopt -s nullglob
 for f in doc/*.1; do
-  install -p -m 0644 $f $RPM_BUILD_ROOT%{_mandir}/man1
+  install -p -m 0644 "$f" $RPM_BUILD_ROOT%{_mandir}/man1
 done
 for f in doc/*.3; do
-  install -p -m 0644 $f $RPM_BUILD_ROOT%{_mandir}/man3
+  install -p -m 0644 "$f" $RPM_BUILD_ROOT%{_mandir}/man3
 done
 for f in doc/*.5; do
-  install -p -m 0644 $f $RPM_BUILD_ROOT%{_mandir}/man5
+  install -p -m 0644 "$f" $RPM_BUILD_ROOT%{_mandir}/man5
 done
 for f in doc/*.txt doc/*.pdf doc/*.html; do
-  install -p -m 0644 $f .
+  install -p -m 0644 "$f" .
 done
+shopt -u nullglob
 
 # adjust the timestamp to avoid conflicts for multilib
-touch -r doc/fontconfig-user.sgml fontconfig-user.txt
-touch -r doc/fontconfig-user.sgml fontconfig-user.html
-touch -r doc/fontconfig-devel.sgml fontconfig-devel.txt
-touch -r doc/fontconfig-devel.sgml fontconfig-devel.html
+if [ -f doc/fontconfig-user.sgml ]; then
+  touch -r doc/fontconfig-user.sgml fontconfig-user.txt
+  touch -r doc/fontconfig-user.sgml fontconfig-user.html
+fi
+if [ -f doc/fontconfig-devel.sgml ]; then
+  touch -r doc/fontconfig-devel.sgml fontconfig-devel.txt
+  touch -r doc/fontconfig-devel.sgml fontconfig-devel.html
+fi
 
 # rename fc-cache binary
 mv $RPM_BUILD_ROOT%{_bindir}/fc-cache $RPM_BUILD_ROOT%{_bindir}/fc-cache-%{__isa_bits}
@@ -205,6 +211,9 @@ fi
 %doc fontconfig-devel.txt fontconfig-devel.html
 
 %changelog
+* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17.0-7
+- %%install use nullglob for doc man globs when meson -Ddoc=disabled leaves no doc/*.1
+
 * Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.17.0-6
 - Source0 from GitLab tag archive (freedesktop release/fontconfig-2.17.0.tar.xz 404)
 - Replace deprecated PreReq with Requires(pre) for freetype
