@@ -290,7 +290,7 @@ BuildRequires: python3-rpm-generators
 
 Source0: %{url}ftp/python/%{general_version}/Python-%{upstream_version}.tar.xz
 Source1: %{url}ftp/python/%{general_version}/Python-%{upstream_version}.tar.xz.asc
-Source2: https://keybase.io/ambv/pgp_keys.asc?fingerprint=e3ff2839c048b25c084debe9b26995e310250568
+Source2: https://keybase.io/ambv/pgp_keys.asc
 
 # A simple script to check timestamps of bytecode files
 # Run in check section with Python that is currently being built

@@ -248,7 +248,7 @@ Provides: bundled(python3dist(zipp)) = 3.19.2
 # preferable to an "extra" interpreter. For example, python3-3.6.1 will
 # replace python3.6-3.6.2.
 %define unversioned_obsoletes_of_python3_X_if_main() %{expand:\
-Obsoletes: python%{pybasever}%{?1:-%{1}}\
+Obsoletes: python%{pybasever}%{?1:-%{1}} < %{version}-%{release}\
 }
 %else
 %define unversioned_obsoletes_of_python3_X_if_main() %{nil}

@@ -30,8 +30,8 @@ BuildRequires: xorg-x11-server-devel >= 1.14.0
 BuildRequires: libudev-devel libevdev-devel libinput-devel >= 0.6.0-3
 BuildRequires: xorg-x11-util-macros
 
-Requires: Xorg %(xserver-sdk-abi-requires ansic)
-Requires: Xorg %(xserver-sdk-abi-requires xinput)
+Requires: Xorg %(if command -v xserver-sdk-abi-requires >/dev/null 2>&1; then xserver-sdk-abi-requires ansic; else echo 'xorg-x11-server(X-ABI-ANSIC)'; fi)
+Requires: Xorg %(if command -v xserver-sdk-abi-requires >/dev/null 2>&1; then xserver-sdk-abi-requires xinput; else echo 'xorg-x11-server(X-ABI-XINPUT)'; fi)
 Requires: xkeyboard-config
 Requires: libinput >= 0.21.0
 
