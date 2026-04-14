@@ -20,7 +20,7 @@
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
 Version: 6.10.3
-Release: 11%{?dist}
+Release: 12%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -40,7 +40,6 @@ Source5: qv4global_p-multilib.h
 ## upstream patches
 # https://codereview.qt-project.org/c/qt/qtdeclarative/+/678924
 Patch0:  qtdeclarative-quickshapes-make-module-public.patch
-Patch1:  qtdeclarative-qtqml-do-not-clear-objects-propertycaches-on-last-gc-run.patch
 
 ## upstreamable patches
 
@@ -748,6 +747,9 @@ make check -k -C tests ||:
 %endif
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-12
+- Drop Patch1 (QTBUG-142514) already in upstream 6.10.3, redundant %%prep patch
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-11
 - Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
 
