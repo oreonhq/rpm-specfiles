@@ -1,11 +1,14 @@
 Name:           libgexiv2
 Version:        0.16.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Gexiv2 is a GObject-based wrapper around the Exiv2 library
+
+# GNOME mirror path is sources/gexiv2/MAJOR.MINOR/ not full %%{version}
+%global gexiv2_series %(echo %{version} | cut -d. -f1-2)
 
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Projects/gexiv2
-Source0:        https://download.gnome.org/sources/gexiv2/%{version}/gexiv2-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/gexiv2/%{gexiv2_series}/gexiv2-%{version}.tar.xz
 Patch: 0001-gexiv2-fix-package-name-in-gir-file-to-have-0.16-suf.patch
 
 BuildRequires:  pkgconfig(exiv2)
@@ -81,5 +84,8 @@ This package contains the python3 bindings for %{name}
 %pycached %{python3_sitelib}/gi/overrides/GExiv2.py
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.16.0-3
+- Fix Source0 path use GNOME series dir %%{gexiv2_series} (0.16) not %%{version} (0.16.0)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.16.0-2
 - Prepare for Oreon 11 (RP1)
