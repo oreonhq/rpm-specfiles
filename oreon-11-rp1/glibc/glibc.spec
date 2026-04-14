@@ -153,7 +153,7 @@ Version: %{glibcversion}
 # - It allows using the Release number without the %%dist tag in the dependency
 #   generator to make the generated requires interchangeable between Rawhide
 #   and ELN (.elnYY < .fcXX).
-%global baserelease 5
+%global baserelease 8
 Release: %{baserelease}%{?dist}
 
 # Licenses:
@@ -2401,6 +2401,9 @@ update_gconv_modules_cache ()
 %endif
 
 %changelog
+* Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.43.9000-8
+- Bump baserelease to 8 so published glibc satisfies automatic Requires from builds done with 2.43.9000-8+ (e.g. qt6-qtdeclarative)
+
 * Wed Apr 1 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{glibcversion}-1
 - Snapshot Source0 GitHub archive URL (spectool-friendly), glibcsrcdir = glibc-%%{glibc_git_full} to match archive prefix
 

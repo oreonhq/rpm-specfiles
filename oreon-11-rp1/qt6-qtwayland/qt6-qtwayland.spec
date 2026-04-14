@@ -10,7 +10,7 @@
 
 Summary: Qt6 - Wayland platform support and QtCompositor module
 Name:    qt6-%{qt_module}
-Version: 6.10.2
+Version: 6.10.3
 Release: 5%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -184,6 +184,9 @@ popd
 %endif
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
 - bump release (retry failed build)
 

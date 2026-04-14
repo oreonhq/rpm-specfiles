@@ -14,7 +14,7 @@
 
 Summary: Qt6 - WebSockets component
 Name:    qt6-%{qt_module}
-Version: 6.10.2
+Version: 6.10.3
 Release: 5%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -131,6 +131,9 @@ popd
 
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
 - Drop aarch64 %%_smp_mflags -j1 (still skip examples on aarch64 for mock disk)
 

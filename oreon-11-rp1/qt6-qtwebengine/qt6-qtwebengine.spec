@@ -82,7 +82,7 @@
 
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
-Version: 6.10.2
+Version: 6.10.3
 Release: 17%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
@@ -894,6 +894,9 @@ done
 %endif
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-17
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-17
 - Drop fragile Patch105 apply and inject :debugging_buildflags into Chromium base deps via %prep perl for stable line drift handling
 

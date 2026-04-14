@@ -19,7 +19,7 @@
 
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
-Version: 6.10.2
+Version: 6.10.3
 Release: 11%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -748,6 +748,9 @@ make check -k -C tests ||:
 %endif
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-11
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-11
 - Restore %%_lto_cflags clear, %%_smp_mflags -j1 (cmake --build), TMPDIR under build dir, NINJAFLAGS -j1, CMAKE_BUILD_PARALLEL_LEVEL 1, MALLOC_ARENA_MAX 1 to fix QuickTemplates2 *.o.d races in mock
 

@@ -1,33 +1,65 @@
-Summary:        Compatibility package for pkcs11-helper
 Name:           pkcs11-helper
-Version:        1.30.0
+Version:        1.31.0
 Release:        1%{?dist}
-License:        BSD-3-Clause
+Summary:        Library that simplifies PKCS#11 use for applications
+
+License:        GPL-2.0-only OR BSD-3-Clause
 URL:            https://github.com/OpenSC/pkcs11-helper
-BuildArch:      noarch
 
-Source0:        LICENSE
-Source1:        README.oreon
+# Tag is pkcs11-helper-VERSION; GitHub unpack dir is pkcs11-helper-pkcs11-helper-VERSION
+Source0:        https://github.com/OpenSC/pkcs11-helper/archive/refs/tags/pkcs11-helper-%{version}.tar.gz#/pkcs11-helper-%{version}.tar.gz
 
-Provides:       pkcs11-helper = %{version}-%{release}
+BuildRequires:  autoconf
+BuildRequires:  automake
+BuildRequires:  gcc
+BuildRequires:  libtool
+BuildRequires:  make
+BuildRequires:  openssl-devel
+BuildRequires:  pkgconfig
 
 %description
-Compatibility package to provide pkcs11-helper in Oreon repositories.
-This package intentionally ships metadata and documentation only.
+pkcs11-helper is a library that simplifies using PKCS#11 tokens from
+end-user applications (session handling, enumeration, events, OpenSSL
+engine integration).
+
+
+%package devel
+Summary:        Development files for %{name}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description    devel
+Headers and pkg-config files for building against libpkcs11-helper.
+
 
 %prep
+%autosetup -p1 -n pkcs11-helper-pkcs11-helper-%{version}
+
 
 %build
+autoreconf -fiv
+%configure --disable-static --disable-silent-rules
+%make_build
+
 
 %install
-install -d -m 0755 %{buildroot}%{_docdir}/%{name}
-install -m 0644 %{SOURCE0} %{buildroot}%{_docdir}/%{name}/
-install -m 0644 %{SOURCE1} %{buildroot}%{_docdir}/%{name}/
+%make_install
+find %{buildroot} -name '*.la' -delete
+
 
 %files
-%license %{_docdir}/%{name}/LICENSE
-%doc %{_docdir}/%{name}/README.oreon
+%license COPYING COPYING.BSD COPYING.GPL
+%doc AUTHORS README ChangeLog THANKS
+%{_libdir}/libpkcs11-helper.so.1*
+
+%files devel
+%{_includedir}/pkcs11-helper-1.0/
+%{_libdir}/libpkcs11-helper.so
+%{_libdir}/pkgconfig/libpkcs11-helper-1.pc
+
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.31.0-1
+- Real library build from upstream (replace noarch placeholder), OpenSC 1.31.0
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.30.0-1
-- Add pkcs11-helper compatibility package to Oreon repo
+- Placeholder compatibility package (superseded)

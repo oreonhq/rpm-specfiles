@@ -10,7 +10,7 @@
 
 Summary: Qt6 - VirtualKeyboard component
 Name:    qt6-%{qt_module}
-Version: 6.10.2
+Version: 6.10.3
 Release: 5%{?dist}
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -142,6 +142,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %endif
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
 - Drop aarch64 and s390x IPO PCH and %%_smp_mflags %%_lto_cflags OOM workarounds
 

@@ -19,7 +19,7 @@
 
 Summary: Qt6 - Quick3D Libraries and utilities
 Name:    qt6-%{qt_module}
-Version: 6.10.2
+Version: 6.10.3
 Release: 3%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -307,6 +307,9 @@ popd
 %endif
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
 - Always list assimp6 patch in SRPM apply only for Fedora 43+ or %%{?oreon}
 

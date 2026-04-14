@@ -11,7 +11,7 @@
 
 Summary: Qt6 - QtTool components
 Name:    qt6-qttools
-Version: 6.10.2
+Version: 6.10.3
 Release: 3%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -399,6 +399,9 @@ popd
 
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
 - Backport upstream qdoc fix for invalid @-file handling to avoid core dump
 

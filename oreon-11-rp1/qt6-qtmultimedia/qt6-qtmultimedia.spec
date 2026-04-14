@@ -23,7 +23,7 @@
 
 Summary: Qt6 - Multimedia support
 Name:    qt6-%{qt_module}
-Version: 6.10.2
+Version: 6.10.3
 Release: 4%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -238,6 +238,9 @@ rm -r %{buildroot}%{_qt6_archdatadir}/mkspecs/features/ios/add_ios_ffmpeg_librar
 
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
 - Clear %%_lto_cflags and disable CMake PCH so MultimediaQuick cmake_pch.hxx gch does not OOM cc1plus
 

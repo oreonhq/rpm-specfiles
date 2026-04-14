@@ -10,7 +10,7 @@
 
 Summary: Qt6 - Location Libraries
 Name:    qt6-%{qt_module}
-Version: 6.10.2
+Version: 6.10.3
 Release: 2%{?dist}
 
 # Rest of the licenses are for Qt code in src/location and src/plugins
@@ -129,6 +129,9 @@ popd
 %endif
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
 - bump release (retry failed build)
 

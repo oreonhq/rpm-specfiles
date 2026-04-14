@@ -6,8 +6,8 @@
 
 Summary: PyQt6 is Python bindings for Qt6
 Name:    python-pyqt6
-Version: 6.10.2
-Release: 3%{?dist}
+Version: 6.10.3
+Release: 1%{?dist}
 License: gpl-3.0-only
 Url:     http://www.riverbankcomputing.com/software/pyqt/
 Source0: https://pypi.python.org/packages/source/P/PyQt6/pyqt6-%{version}%{?snap:.%{snap}}.tar.gz
@@ -238,5 +238,8 @@ sed -i \
 
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
+- Bump to 6.10.3 with Qt 6.10.3 stack
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
 - Prepare for Oreon 11 (RP1)

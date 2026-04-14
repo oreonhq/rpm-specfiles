@@ -8,7 +8,7 @@
 
 Summary: Qt6 - QtImageFormats component
 Name:    qt6-%{qt_module}
-Version: 6.10.2
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -83,5 +83,8 @@ rm -rv src/3rdparty
 %{_qt6_libdir}/cmake/Qt6Gui/*.cmake
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
 - Prepare for Oreon 11 (RP1)

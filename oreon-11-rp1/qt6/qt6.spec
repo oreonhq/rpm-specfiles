@@ -1,7 +1,7 @@
 
 Name: qt6
 # This version MUST remain in sync with Qt6 versions!
-Version: 6.10.2
+Version: 6.10.3
 Release: 1%{?dist}
 Summary: Qt6 meta package
 License: GPL-3.0-only
@@ -212,5 +212,8 @@ echo "- Qt6 devel meta package" > %{buildroot}%{_docdir}/qt6-devel/README
 
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
+- Sync meta package version with qt6-qtbase 6.10.3
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
 - Prepare for Oreon 11 (RP1)

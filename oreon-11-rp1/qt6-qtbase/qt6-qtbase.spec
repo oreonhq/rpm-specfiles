@@ -47,8 +47,8 @@ BuildRequires: pkgconfig(libsystemd)
 
 Name:    qt6-qtbase
 Summary: Qt6 - QtBase components
-Version: 6.10.2
-Release: 2%{?dist}
+Version: 6.10.3
+Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
@@ -445,7 +445,7 @@ translationdir=%{_qt6_translationdir}
 
 Name: Qt6
 Description: Qt6 Configuration
-Version: 6.10.2
+Version: %{version}
 EOF
 
 # rpm macros
@@ -973,5 +973,9 @@ make check -k ||:
 %{_qt6_datadir}/wayland/protocols/
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
+- Bump to 6.10.3 so %%{_qt6_version} matches published qt6-qtbase (installer dep closure)
+- Qt6.pc Version follows %%{version}
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
 - Prepare for Oreon 11 (RP1)

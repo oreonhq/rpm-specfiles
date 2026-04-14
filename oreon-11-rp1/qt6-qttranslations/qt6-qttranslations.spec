@@ -7,7 +7,7 @@
 
 Summary: Qt6 - QtTranslations module
 Name:    qt6-%{qt_module}
-Version: 6.10.2
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -131,5 +131,8 @@ Provides: %{_qt6}-zh_TW = %{version}-%{release}
 
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
+- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
 - Prepare for Oreon 11 (RP1)
