@@ -1,11 +1,12 @@
 
 %global qt_module qtdeclarative
 
-# Mock parallel Ninja can hit "opening dependency file *.o.d: No such file or directory" on QuickTemplates2
-# and similar targets. Match qt6-qtwebengine mitigations (serial ninja, local TMPDIR, no RPM LTO glue).
+# Mock Ninja can hit "opening dependency file *.o.d: No such file or directory" on Quick / moc autogen
+# (GCC -MD with Ninja). Use Unix Makefiles plus serial %%cmake_build instead of serial Ninja.
 %global _lto_cflags %{nil}
-# %%cmake_build passes %%{_smp_mflags} to cmake --build, which must be -j1 here or parallel wins over NINJAFLAGS.
+# %%cmake_build passes %%{_smp_mflags} to cmake --build, which must be -j1 here.
 %global _smp_mflags -j1
+%global _qt6_build_tool make
 
 # definition borrowed from qtbase
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9
@@ -20,7 +21,7 @@
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
 Version: 6.10.3
-Release: 13%{?dist}
+Release: 14%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -48,7 +49,7 @@ Patch0:  qtdeclarative-quickshapes-make-module-public.patch
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
-BuildRequires: ninja-build
+BuildRequires: make
 BuildRequires: qt6-rpm-macros
 BuildRequires: qt6-qtbase-devel >= %{version}
 BuildRequires: qt6-qtbase-private-devel
@@ -748,6 +749,9 @@ make check -k -C tests ||:
 %endif
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-14
+- Force %%_qt6_build_tool make (Unix Makefiles) to avoid Ninja moc *.o.d races, BuildRequires make
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-13
 - Set CMAKE_AUTOGEN_PARALLEL=1 (with NINJAFLAGS -j1) to avoid moc *.o.d races in mock
 

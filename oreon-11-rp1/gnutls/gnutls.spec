@@ -1,19 +1,10 @@
-%define srpmhash() %{lua:
-local files = rpm.expand("%_specdir/gnutls.spec")
-for i, p in ipairs(patches) do
-   files = files.." "..p
-end
-for i, p in ipairs(sources) do
-   files = files.." "..p
-end
-local sha256sum = assert(io.popen("cat "..files.."| sha256sum"))
-local hash = sha256sum:read("*a")
-sha256sum:close()
-print(string.sub(hash, 0, 16))
-}
-
 Version: 3.8.12
 Release: %{?autorelease}%{!?autorelease:1%{?dist}}
+
+# FIPS --with-fips140-module-version uses this. The old Lua macro ran cat on every
+# Source/Patch under %%_specdir at parse time, which breaks rpmspec and any prep
+# before SOURCES exist. Use a short hash of version-release instead.
+%global srpmhash %(echo %{version}-%{release} | sha256sum | awk '{print substr($1,1,16)}')
 Patch: gnutls-3.2.7-rpath.patch
 
 # follow https://gitlab.com/gnutls/gnutls/-/issues/1443
@@ -134,7 +125,7 @@ Source2: https://gnutls.org/gnutls-release-keyring.gpg
 
 %if %{with bundled_gmp}
 Provides:	bundled(gmp) = 6.2.1
-Source100:	gmp-6.2.1.tar.xz
+Source100:	https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz
 # Taken from the main gmp package
 Source101:	gmp-6.2.1-intel-cet.patch
 Source102:	gmp-6.2.1-c23.patch
@@ -142,7 +133,8 @@ Source102:	gmp-6.2.1-c23.patch
 
 %if %{with leancrypto}
 Provides:	bundled(leancrypto) = 1.6.0
-Source300:	leancrypto-1.6.0.tar.gz
+# GitHub release has no upload asset, use archive URL that Content-Disposition names leancrypto-1.6.0.tar.gz
+Source300:	https://github.com/smuellerDD/leancrypto/archive/v1.6.0/leancrypto-1.6.0.tar.gz
 %endif
 
 # Wildcard bundling exception https://fedorahosted.org/fpc/ticket/174
@@ -600,5 +592,9 @@ popd
 %endif
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.8.12-2
+- Replace parse-time srpmhash Lua (cat on SOURCES) with version-release sha256 prefix
+- Use HTTPS for bundled gmp and leancrypto tarballs so spectool can fetch them
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.8.12-1
 - Prepare for Oreon 11 (RP1)

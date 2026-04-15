@@ -268,5 +268,8 @@ fi
 
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.26.2-2
+- Stop .gitignore from excluding Source3 trust-extract-compat and Source4 p11-kit-client.service
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.26.2-1
 - Prepare for Oreon 11 (RP1)
