@@ -13,7 +13,7 @@
 
 Name:            ffmpeg
 Version:         8.1
-Release:         2%{?dist}
+Release:         3%{?dist}
 Summary:         Digital VCR and streaming server
 License:         GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 URL:             https://ffmpeg.org/
@@ -60,6 +60,15 @@ Requires:        %{name}-libs%{?_isa} = %{version}-%{release}
 %description devel
 Headers, pkg-config files, and unversioned shared library symlinks for
 developing against FFmpeg.
+
+%package doc
+Summary:         FFmpeg presets, ffprobe schema, and upstream C examples
+BuildArch:       noarch
+Requires:        %{name} = %{version}-%{release}
+
+%description doc
+libvpx .ffpreset files, ffprobe.xsd, and the upstream C example tree under
+%{_datadir}/ffmpeg/examples.
 
 %prep
 %autosetup -p1 -n ffmpeg-%{version}
@@ -123,8 +132,8 @@ install -pm644 COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1 COPYING.LGPLv3 LICEN
 %doc %{_docdir}/%{name}/README.md
 %{_bindir}/ffmpeg
 %{_bindir}/ffprobe
-%{_mandir}/man1/ffmpeg.1*
-%{_mandir}/man1/ffprobe.1*
+%{_mandir}/man1/ffmpeg*.1*
+%{_mandir}/man1/ffprobe*.1*
 
 %files libs
 %{_libdir}/libavutil.so.%{lavu_major}*
@@ -157,8 +166,16 @@ install -pm644 COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1 COPYING.LGPLv3 LICEN
 %{_libdir}/pkgconfig/libavutil.pc
 %{_libdir}/pkgconfig/libswresample.pc
 %{_libdir}/pkgconfig/libswscale.pc
+%{_mandir}/man3/libav*.3.gz
+%{_mandir}/man3/libsw*.3.gz
+
+%files doc
+%{_datadir}/ffmpeg/
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-3
+- Package extra man1 pages, man3 API pages in devel, ffmpeg-doc for data dir and examples
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-2
 - Disable RPM LTO (%%global _lto_cflags %%{nil}) fix shared lib link libavcodec/libswscale
 

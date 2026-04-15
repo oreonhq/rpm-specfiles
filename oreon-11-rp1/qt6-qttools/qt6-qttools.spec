@@ -159,7 +159,6 @@ Requires: %{name}-common = %{version}-%{release}
 %patch -P2 -p1 -b .libatomic
 %endif
 %patch -P3 -p1 -b .llvm22
-%patch -P4 -p1 -b .qdoc-at-file
 
 %build
 %cmake_qt6 \
