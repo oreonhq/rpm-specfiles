@@ -1,3 +1,7 @@
+# Red Hat %%optflags default -flto breaks final link of libavcodec/libswscale .so
+# (R_X86_64_PC32 against undefined symbol e.g. pd_1 in .ltrans object).
+%global _lto_cflags %{nil}
+
 # SONAME majors for FFmpeg %{version} (update on rebase if configure fails on %%files)
 %global lavu_major   60
 %global lavc_major   62
@@ -9,7 +13,7 @@
 
 Name:            ffmpeg
 Version:         8.1
-Release:         1%{?dist}
+Release:         2%{?dist}
 Summary:         Digital VCR and streaming server
 License:         GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 URL:             https://ffmpeg.org/
@@ -155,5 +159,8 @@ install -pm644 COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1 COPYING.LGPLv3 LICEN
 %{_libdir}/pkgconfig/libswscale.pc
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-2
+- Disable RPM LTO (%%global _lto_cflags %%{nil}) fix shared lib link libavcodec/libswscale
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-1
 - Add FFmpeg 8.1 (GPLv3+, libs, devel, common free codecs, GnuTLS)
