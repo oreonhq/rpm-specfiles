@@ -12,7 +12,7 @@
 Summary: Qt6 - QtTool components
 Name:    qt6-qttools
 Version: 6.10.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -34,9 +34,6 @@ Patch2: qttools-add-libatomic.patch
 
 # Support LLVM/Clang 22
 Patch3: qdoc-support-newer-clang.patch
-
-# QDoc can crash hard on invalid @-files, upstream fixed to warn and continue
-Patch4: qdoc-invalid-at-file-no-core.patch
 
 ## upstream patches
 
@@ -399,6 +396,9 @@ popd
 
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
+- Drop Patch4 qdoc @-file warning fix (already in upstream 6.10.3 qdoccommandlineparser.cpp)
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
 - Refresh qdoc-support-newer-clang.patch for 6.10.3 (QDocConfiguration.cmake header layout)
 

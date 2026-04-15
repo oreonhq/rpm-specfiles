@@ -20,7 +20,7 @@
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
 Version: 6.10.3
-Release: 12%{?dist}
+Release: 13%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -118,6 +118,7 @@ export PATH=`pwd`:$PATH
 
 %cmake_qt6 \
   -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
+  -DCMAKE_AUTOGEN_PARALLEL=1 \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
 
@@ -747,6 +748,9 @@ make check -k -C tests ||:
 %endif
 
 %changelog
+* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-13
+- Set CMAKE_AUTOGEN_PARALLEL=1 (with NINJAFLAGS -j1) to avoid moc *.o.d races in mock
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-12
 - Drop Patch1 (QTBUG-142514) already in upstream 6.10.3, redundant %%prep patch
 
