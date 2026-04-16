@@ -659,6 +659,9 @@ export CXXFLAGS="${CXXFLAGS} -march=armv8.2-a+dotprod"
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
 %endif
 
+# Work around intermittent missing depfile directories in Chromium/Perfetto ninja phase.
+mkdir -p redhat-linux-build/src/core/RelWithDebInfo/%{_arch}/obj/third_party/perfetto/src/trace_processor/importers/proto/minimal
+mkdir -p redhat-linux-build/src/core/RelWithDebInfo/%{_arch}/obj/third_party/perfetto/src/trace_processor/importers/proto/common
 %cmake_build
 
 

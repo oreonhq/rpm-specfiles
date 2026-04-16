@@ -41,6 +41,7 @@ BuildRequires: cmake(KPim6AkonadiSearch)
 BuildRequires: cmake(KPim6AkonadiContactWidgets)
 BuildRequires: cmake(KPim6GrantleeTheme)
 BuildRequires: cmake(KPim6LdapCore)
+BuildRequires: cmake(KPim6LdapWidgets)
 
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
@@ -67,6 +68,7 @@ developing applications that use %{name}.
 %autosetup -n %{name}-%{version} -p1
 # Oreon pim stack is 6.6.3, upstream release-service pins 6.6.80 for unreleased libs
 sed -i 's/"6.6.80"/"6.6.3"/g' CMakeLists.txt
+sed -i 's/"2.0.0"/"1.8.0"/g' CMakeLists.txt
 
 
 %build

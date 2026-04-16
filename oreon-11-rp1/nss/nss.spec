@@ -280,7 +280,7 @@ License:        MPL-2.0
 URL:            http://www.mozilla.org/projects/nspr/
 Conflicts:      filesystem < 3
 BuildRequires:  gcc
-BuildRequires:  binutils >= 2.45.50-9
+BuildRequires:  binutils
 
 %description -n nspr
 NSPR provides platform independence for non-GUI operating system
