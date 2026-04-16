@@ -1,0 +1,3 @@
+# ktextaddons
+
+The ktextaddons package

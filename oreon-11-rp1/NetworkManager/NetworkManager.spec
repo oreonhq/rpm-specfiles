@@ -6,7 +6,7 @@ Group:   System Environment/Base
 
 Epoch:   1
 Version: 1.56.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 ###############################################################################
 

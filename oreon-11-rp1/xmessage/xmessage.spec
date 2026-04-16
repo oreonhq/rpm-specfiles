@@ -31,7 +31,7 @@ label of the selected button.
 
 %files
 %license COPYING
-%doc README.md
+%doc README
 %{_bindir}/xmessage
 %{_mandir}/man1/xmessage.1*
 

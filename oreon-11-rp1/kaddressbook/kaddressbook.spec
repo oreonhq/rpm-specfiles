@@ -30,6 +30,7 @@ BuildRequires: cmake(KF6DocTools)
 BuildRequires: cmake(KF6UserFeedback)
 BuildRequires: cmake(KF6TextTemplate)
 BuildRequires: cmake(KF6IconThemes)
+BuildRequires: cmake(KF6TextAddonsWidgets)
 
 Obsoletes: kdepim-apps-libs < 20.11.90
 

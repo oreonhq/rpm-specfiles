@@ -101,6 +101,8 @@ mkdir -p %{buildroot}%{_kf6_qmldir}/org/kde/private
 %{_kf6_plugindir}/packagestructure
 %{_kf6_qmldir}/org/kde/plasma/
 %{_kf6_qmldir}/org/kde/kirigami/styles/Plasma/AbstractApplicationHeader.qml
+%{_datadir}/doc/qt6/Plasma.qch
+%{_datadir}/doc/qt6/Plasma.tags
 
 %files devel
 %dir %{_kf6_datadir}/kdevappwizard/

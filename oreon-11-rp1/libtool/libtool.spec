@@ -1,7 +1,7 @@
 # See the bug #429880
 %global gcc_major  %(gcc -dumpversion || echo "666")
-# See rhbz#1193591
-%global automake_version %(set -- `automake --version | head -n 1` ; echo ${4-unknown})
+# See rhbz#1193591 (do not shell out to automake at spec parse time; breaks SRPM workers without automake)
+%global automake_version unknown
 
 %bcond_without check
 
@@ -131,7 +131,7 @@ the rest of the GNU Autotools (including GNU Autoconf and GNU Automake).
 
 %package ltdl-devel
 Summary: Tools needed for development using the GNU Libtool Dynamic Module Loader
-Requires: automake = %automake_version
+Requires: automake
 Requires: %{name}-ltdl = %{version}-%{release}
 License:  LGPL-2.0-or-later WITH Libtool-exception
 

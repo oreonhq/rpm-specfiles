@@ -12,10 +12,8 @@ Release: %autorelease
 License: BSD-Attribution-HPND-disclaimer
 URL: https://www.cyrusimap.org/sasl/
 
-# Source0 originally comes from https://www.cyrusimap.org/releases/;
-# make-no-dlcompatorsrp-tarball.sh removes the "dlcompat" subdirectory and builds a
-# new tarball.
-Source0: cyrus-sasl-%{version}-nodlcompatorsrp.tar.gz
+# Upstream release tarball (dlcompat/srp stripped in %%prep like Fedora script)
+Source0: https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-%{version}/cyrus-sasl-%{version}.tar.gz
 Source3: saslauth.sysusers
 Source5: saslauthd.service
 Source7: sasl-mechlist.c
@@ -164,6 +162,8 @@ the GS2 authentication scheme.
 
 %prep
 %setup -q -n cyrus-sasl-%{version}
+rm -rf dlcompat* 2>/dev/null || :
+rm -rf plugins/srp* 2>/dev/null || :
 %patch -P11 -p1 -b .no_rpath
 %patch -P15 -p1 -b .path
 %patch -P23 -p1 -b .man

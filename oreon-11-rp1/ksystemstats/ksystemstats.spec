@@ -26,6 +26,7 @@ BuildRequires:  cmake(KF6Crash)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KIO)
 BuildRequires:  cmake(KF6Solid)
+BuildRequires:  libdrm-devel
 
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6DBus)

@@ -15,7 +15,6 @@ BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  ninja-build
-BuildRequires:  plasma-rpm-macros
 BuildRequires:  qcoro-qt6-devel
 BuildRequires:  wayland-devel
 BuildRequires:  wayland-protocols-devel

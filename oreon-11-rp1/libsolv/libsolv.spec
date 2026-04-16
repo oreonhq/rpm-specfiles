@@ -90,6 +90,11 @@ library is based on two major, but independent, blocks:
 - Using satisfiability, a well known and researched topic, for
   resolving package dependencies.
 
+%if %{with zchunk}
+# liblibsolv.so links libzck; without this, dnf/libdnf5 installs fail until zchunk-libs is pulled in some other way
+Requires:       zchunk-libs%{?_isa}
+%endif
+
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}

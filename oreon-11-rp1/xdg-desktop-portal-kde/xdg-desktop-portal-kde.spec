@@ -49,7 +49,7 @@ BuildRequires:  cmake(Qt6QuickWidgets)
 BuildRequires:  cmake(Qt6Test)
 BuildRequires:  cmake(Qt6WaylandClient)
 BuildRequires:  cmake(Qt6Widgets)
-BuildRequires:  cmake(WaylandProtocols)
+BuildRequires:  wayland-protocols-devel
 
 Requires:       kf6-filesystem
 Requires:       xdg-desktop-portal%{?_isa}

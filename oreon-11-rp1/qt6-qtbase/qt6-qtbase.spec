@@ -139,9 +139,6 @@ BuildRequires: libmng-devel
 BuildRequires: libtiff-devel
 BuildRequires: libzstd-devel
 BuildRequires: mtdev-devel
-%if 0%{?fedora} || 0%{?epel}
-BuildRequires: tslib-devel
-%endif
 BuildRequires: pkgconfig(alsa)
 # required for -accessibility
 BuildRequires: pkgconfig(atspi-2)
@@ -203,11 +200,6 @@ BuildRequires: (wlheadless-run and %{wlheadless_compositor})
 %endif
 
 Requires:      qt6-filesystem
-# QtCore links these; explicit Requires helps anaconda on minimal repos
-Requires:      libicu%{?_isa}
-Requires:      libb2%{?_isa}
-Requires:      double-conversion%{?_isa}
-Requires:      libproxy%{?_isa}
 
 Requires: %{name}-common = %{version}-%{release}
 
@@ -328,8 +320,6 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %package gui
 Summary: Qt6 GUI-related libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires:      mtdev%{?_isa}
-Requires:      tslib%{?_isa}
 Recommends: mesa-dri-drivers%{?_isa}
 # Required for some locales: https://pagure.io/fedora-kde/SIG/issue/311
 Recommends: qt6-qttranslations
@@ -389,6 +379,7 @@ export MAKEFLAGS="%{?_smp_mflags}"
  -DFEATURE_accessibility=ON \
  -DFEATURE_fontconfig=ON \
  -DFEATURE_glib=ON \
+ -DFEATURE_tslib=OFF \
  -DFEATURE_sse2=%{?no_sse2:OFF}%{!?no_sse2:ON} \
  -DFEATURE_icu=ON \
  -DFEATURE_enable_new_dtags=ON \
@@ -426,6 +417,9 @@ export MAKEFLAGS="%{?_smp_mflags}"
 
 %install
 %cmake_install
+
+# tslib input is disabled in cmake but the generic plugin can still appear in some trees; never ship it so gui does not require tslib
+rm -f %{buildroot}%{_qt6_plugindir}/generic/libqtslibplugin.so
 
 install -m644 -p -D %{SOURCE1} %{buildroot}%{_qt6_datadir}/qtlogging.ini
 
@@ -933,9 +927,6 @@ make check -k ||:
 %{_qt6_plugindir}/generic/libqevdevtabletplugin.so
 %{_qt6_plugindir}/generic/libqevdevtouchplugin.so
 %{_qt6_plugindir}/generic/libqlibinputplugin.so
-%if 0%{?fedora} || 0%{?epel}
-%{_qt6_plugindir}/generic/libqtslibplugin.so
-%endif
 %{_qt6_plugindir}/generic/libqtuiotouchplugin.so
 # Imageformats
 %{_qt6_plugindir}/imageformats/libqico.so

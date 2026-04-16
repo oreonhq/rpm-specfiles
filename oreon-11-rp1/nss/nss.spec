@@ -17,7 +17,8 @@
 %global dracut_modules_dir %{dracutlibdir}/modules.d/05nss-softokn/
 %global dracut_conf_dir %{dracutlibdir}/dracut.conf.d
 
-%bcond_without tests
+# Default off on Oreon builders (SSL selftests need a full NSS trust setup)
+%bcond_with tests
 %bcond_with dbm
 
 # Produce .chk files for the final stripped binaries
