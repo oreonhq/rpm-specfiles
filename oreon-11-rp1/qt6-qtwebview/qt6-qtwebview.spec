@@ -34,6 +34,8 @@ BuildRequires: qt6-qtbase-private-devel
 BuildRequires: qt6-qtdeclarative-devel >= %{version}
 BuildRequires: qt6-qtwebengine-devel
 BuildRequires: pkgconfig(xkbcommon) >= 0.4.1
+# WebEngine backend plugin needs full qt6-qtwebengine stack at runtime
+Requires:      qt6-qtwebengine%{?_isa} >= %{majmin}
 
 %description
 Qt WebView provides a way to display web content in a QML application

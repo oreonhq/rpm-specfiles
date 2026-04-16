@@ -12,7 +12,8 @@
     %bcond_with rhsm
 %endif
 
-%global rust_minor %(rustc --version | cut -f2 -d" " | cut -f2 -d".")
+# Avoid %%(rustc...) at spec-parse time. Workers often parse the spec before Rust exists in PATH.
+%global rust_minor 89
 
 # https://github.com/bootc-dev/bootc/issues/1640
 %if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?rust_minor} >= 89

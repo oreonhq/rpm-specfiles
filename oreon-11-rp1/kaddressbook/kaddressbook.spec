@@ -15,6 +15,7 @@ BuildRequires: libappstream-glib
 BuildRequires: perl-generators
 
 BuildRequires: cmake(Qt6DBus)
+BuildRequires: cups-devel
 BuildRequires: cmake(Qt6PrintSupport)
 BuildRequires: cmake(Qt6Test)
 BuildRequires: cmake(Qt6Widgets)
@@ -64,6 +65,8 @@ developing applications that use %{name}.
 
 %prep
 %autosetup -n %{name}-%{version} -p1
+# Oreon pim stack is 6.6.3, upstream release-service pins 6.6.80 for unreleased libs
+sed -i 's/"6.6.80"/"6.6.3"/g' CMakeLists.txt
 
 
 %build

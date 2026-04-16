@@ -203,6 +203,11 @@ BuildRequires: (wlheadless-run and %{wlheadless_compositor})
 %endif
 
 Requires:      qt6-filesystem
+# QtCore links these; explicit Requires helps anaconda on minimal repos
+Requires:      libicu%{?_isa}
+Requires:      libb2%{?_isa}
+Requires:      double-conversion%{?_isa}
+Requires:      libproxy%{?_isa}
 
 Requires: %{name}-common = %{version}-%{release}
 
@@ -323,6 +328,8 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %package gui
 Summary: Qt6 GUI-related libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires:      mtdev%{?_isa}
+Requires:      tslib%{?_isa}
 Recommends: mesa-dri-drivers%{?_isa}
 # Required for some locales: https://pagure.io/fedora-kde/SIG/issue/311
 Recommends: qt6-qttranslations

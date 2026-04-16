@@ -91,6 +91,13 @@ easily take advantage of a platforms multimedia capabilites and hardware.
 This ranges from the playback and recording of audio and video content to
 the use of available devices like cameras and radios.
 
+# libgstreamermediaplugin.so links GStreamer and Pulse; explicit for minimal ISO trees
+Requires:      gstreamer1%{?_isa}
+Requires:      gstreamer1-plugins-base%{?_isa}
+Requires:      pulseaudio-libs%{?_isa}
+Requires:      libXrandr%{?_isa}
+Requires:      libXext%{?_isa}
+
 %package devel
 Summary: Development files for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
