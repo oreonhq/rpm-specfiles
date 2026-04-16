@@ -46,9 +46,18 @@ This build enables common free codecs (VPx, Opus, Vorbis, MP3 via LAME)
 and HTTPS via GnuTLS. ffplay is disabled to avoid a SDL2 dependency.
 
 Requires:        %{name}-libs%{?_isa} = %{version}-%{release}
+Provides:        ffmpeg-free = %{version}-%{release}
 
 %package libs
 Summary:         Libraries for FFmpeg apps
+Provides:        ffmpeg-free-libs = %{version}-%{release}
+Provides:        libavutil-free = %{version}-%{release}
+Provides:        libavcodec-free = %{version}-%{release}
+Provides:        libavformat-free = %{version}-%{release}
+Provides:        libavfilter-free = %{version}-%{release}
+Provides:        libavdevice-free = %{version}-%{release}
+Provides:        libswscale-free = %{version}-%{release}
+Provides:        libswresample-free = %{version}-%{release}
 
 %description libs
 libavcodec, libavformat, libavutil, and related shared libraries.
@@ -56,6 +65,14 @@ libavcodec, libavformat, libavutil, and related shared libraries.
 %package devel
 Summary:         Development headers and libraries for FFmpeg
 Requires:        %{name}-libs%{?_isa} = %{version}-%{release}
+Provides:        ffmpeg-free-devel = %{version}-%{release}
+Provides:        libavutil-free-devel = %{version}-%{release}
+Provides:        libavcodec-free-devel = %{version}-%{release}
+Provides:        libavformat-free-devel = %{version}-%{release}
+Provides:        libavfilter-free-devel = %{version}-%{release}
+Provides:        libavdevice-free-devel = %{version}-%{release}
+Provides:        libswscale-free-devel = %{version}-%{release}
+Provides:        libswresample-free-devel = %{version}-%{release}
 
 %description devel
 Headers, pkg-config files, and unversioned shared library symlinks for
