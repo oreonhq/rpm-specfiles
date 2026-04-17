@@ -51,7 +51,7 @@ URL: https://www.python.org/
 #global prerel ...
 %global upstream_version %{general_version}%{?prerel}
 Version: %{general_version}%{?prerel:~%{prerel}}
-Release: 5%{?dist}
+Release: 6%{?dist}
 License: Python-2.0.1
 
 # ==================================
@@ -331,7 +331,7 @@ BuildRequires: libappstream-glib
 %if %{with rpmwheels}
 # Python 3.12 removed the deprecated imp module,
 # the first compatible version of pip is 23.1.2.
-BuildRequires: %{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2
+BuildRequires: (%{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2 or python-pip-wheel >= 23.1.2)
 %if %{with tests}
 BuildRequires: %{python_wheel_pkg_prefix}-setuptools-wheel
 BuildRequires: (%{python_wheel_pkg_prefix}-wheel-wheel if %{python_wheel_pkg_prefix}-setuptools-wheel < 71)
@@ -612,7 +612,7 @@ Summary:        Python runtime libraries
 # Zstandard bindings in Modules/_zstd and Lib/compression/zstd are BSD-3-Clause
 %global libs_license Python-2.0.1 AND MIT AND BSD-3-Clause AND MIT-CMU AND HPND-SMC AND BSD-2-Clause AND dtoa
 %if %{with rpmwheels}
-Requires: %{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2
+Requires: (%{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2 or python-pip-wheel >= 23.1.2)
 License: %{libs_license}
 %else
 Provides: bundled(python3dist(pip)) = %{pip_version}
@@ -842,7 +842,7 @@ which may need to be installed separately.
 %package -n python%{pybasever}-freethreading-libs
 Summary: Free Threading Python runtime libraries
 %if %{with rpmwheels}
-Requires: %{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2
+Requires: (%{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2 or python-pip-wheel >= 23.1.2)
 License: %{libs_license}
 %else
 Provides: bundled(python3dist(pip)) = %{pip_version}
@@ -2015,6 +2015,9 @@ CheckPython freethreading
 # ======================================================
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.3-6
+- rpmwheels: accept python3-pip-wheel or legacy python-pip-wheel Provides
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-2
 - Default off PGO (%%bcond optimizations 0), cap %%{_smp_mflags} (mock OOM / killed builds)
 

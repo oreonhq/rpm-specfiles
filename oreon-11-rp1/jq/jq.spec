@@ -50,7 +50,10 @@ Development files for %{name}
 
 %build
 # Avoid GLIBC_2.44 libm IFUNC symbols when the compose root ships an older glibc than the build host.
-export CFLAGS="%{optflags} -fno-builtin-exp -fno-builtin-log -fno-builtin-pow -fno-builtin-log2 -fno-builtin-exp2"
+export CFLAGS="%{optflags} -ffp-contract=off \
+-fno-builtin-exp -fno-builtin-log -fno-builtin-pow -fno-builtin-log2 -fno-builtin-exp2 \
+-fno-builtin-sin -fno-builtin-cos -fno-builtin-sqrt -fno-builtin-ceil -fno-builtin-floor \
+-fno-builtin-fmin -fno-builtin-fmax -fno-builtin-round -fno-builtin-trunc"
 %configure --disable-static
 %make_build
 # Docs already shipped in jq's tarball.
@@ -92,5 +95,8 @@ make check
 %{_libdir}/pkgconfig/libjq.pc
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com>
+- Broaden -fno-builtin / -ffp-contract=off to avoid GLIBC_2.44 libm deps on older compose glibc
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-1
 - Prepare for Oreon 11 (RP1)

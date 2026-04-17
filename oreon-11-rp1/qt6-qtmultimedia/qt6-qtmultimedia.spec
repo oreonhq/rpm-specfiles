@@ -21,7 +21,7 @@
 Summary: Qt6 - Multimedia support
 Name:    qt6-%{qt_module}
 Version: 6.10.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -93,6 +93,8 @@ Requires:      gstreamer1%{?_isa}
 Requires:      gstreamer1-plugins-base%{?_isa}
 Requires:      gstreamer1-plugins-good%{?_isa}
 Requires:      gstreamer1-plugins-bad-free%{?_isa}
+# libgstphotography etc. live in the -libs split; explicit for ISO / minimal roots
+Requires:      gstreamer1-plugins-bad-free-libs%{?_isa}
 Requires:      pulseaudio-libs%{?_isa}
 Requires:      libXrandr%{?_isa}
 Requires:      libXext%{?_isa}
@@ -247,6 +249,9 @@ rm -r %{buildroot}%{_qt6_archdatadir}/mkspecs/features/ios/add_ios_ffmpeg_librar
 
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
+- Require gstreamer1-plugins-bad-free-libs (libgstphotography etc.) for minimal ISO trees
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
 - Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
 
