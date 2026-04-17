@@ -22,7 +22,6 @@ Source3:   https://raw.githubusercontent.com/unicode-org/icu-data/main/tzdata/ic
 Source4:   https://raw.githubusercontent.com/unicode-org/icu-data/main/tzdata/icunew/2022b/44/windowsZones.txt
 Source5:   https://raw.githubusercontent.com/unicode-org/icu-data/main/tzdata/icunew/2022b/44/zoneinfo64.txt
 %endif
-Source10:   icu-config.sh
 
 BuildRequires: gcc
 BuildRequires: gcc-c++
@@ -125,7 +124,12 @@ chmod +x $RPM_BUILD_ROOT%{_libdir}/*.so.*
  cd $RPM_BUILD_ROOT%{_bindir}
  mv icu-config icu-config-%{__isa_bits}
 )
-install -p -m755 -D %{SOURCE10} $RPM_BUILD_ROOT%{_bindir}/icu-config
+cat > $RPM_BUILD_ROOT%{_bindir}/icu-config <<'EOF'
+#!/bin/sh
+bits=$(getconf LONG_BIT 2>/dev/null || echo 64)
+exec "/usr/bin/icu-config-${bits}" "$@"
+EOF
+chmod 755 $RPM_BUILD_ROOT%{_bindir}/icu-config
 
 
 %check

@@ -9,7 +9,8 @@ Summary: Virtual keyboard for Plasma based on Qt Virtual Keyboard
 License: BSD-2-Clause
 URL:     https://invent.kde.org/plasma/%{name}
 
-Source0: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+# download.kde.org can redirect to mirrors that fail on Plasma tarballs
+Source0: https://invent.kde.org/plasma/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
@@ -21,17 +22,23 @@ BuildRequires:  qt6-qtwayland-devel
 BuildRequires:  qt6-qtvirtualkeyboard-devel
 BuildRequires:  qt6-qttools-devel
 BuildRequires:  qt6-qtbase-private-devel
+BuildRequires:  qt6-qtdeclarative-devel
 
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6Crash)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KCMUtils)
+BuildRequires:  cmake(KF6KCMUtilsQuick)
 
 BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6Quick)
 BuildRequires:  cmake(Qt6VirtualKeyboard)
 BuildRequires:  cmake(Qt6WaylandClient)
+BuildRequires:  cmake(Qt6WaylandClientPrivate)
 
 Requires:       kf6-filesystem
 Requires:       qt6-qtvirtualkeyboard%{?_isa}
@@ -42,7 +49,7 @@ keyboard layouts, styles and KCM configuration integration.
 
 
 %prep
-%autosetup -n %{name}-%{version} -p1
+%autosetup -n %{name}-v%{version} -p1
 
 
 %build

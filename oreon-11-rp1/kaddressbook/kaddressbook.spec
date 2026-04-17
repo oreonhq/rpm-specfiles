@@ -6,7 +6,8 @@ Release: 1%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://www.kde.org/applications/office/kaddressbook
 
-Source0: http://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+# download.kde.org often redirects to third-party mirrors (e.g. fcix) that 500 on unstable tarballs
+Source0: https://invent.kde.org/pim/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 
 
 BuildRequires: desktop-file-utils
@@ -67,7 +68,7 @@ developing applications that use %{name}.
 
 
 %prep
-%autosetup -n %{name}-%{version} -p1
+%autosetup -n %{name}-v%{version} -p1
 # Oreon pim stack is 6.6.3, upstream release-service pins 6.6.80 for unreleased libs
 sed -i 's/"6.6.80"/"6.6.3"/g' CMakeLists.txt
 sed -i 's/"2.0.0"/"1.8.0"/g' CMakeLists.txt

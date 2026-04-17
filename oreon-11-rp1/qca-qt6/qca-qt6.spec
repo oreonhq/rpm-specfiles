@@ -17,7 +17,8 @@ Release: 4%{?dist}
 
 License: LGPL-2.1-only
 URL:     https://userbase.kde.org/QCA
-Source0: http://download.kde.org/stable/qca/%{version}/qca-%{version}.tar.xz
+# Stable mirror redirects can 500, use Invent archive (same tag as release tarball)
+Source0: https://invent.kde.org/libraries/qca/-/archive/v%{version}/qca-v%{version}.tar.gz
 # Also generate pkgconfig file for qt6
 Patch0:  qca-qt6-pkgconfig.patch
 ## upstream patches
@@ -222,7 +223,7 @@ Requires: %{name}-qt6%{?_isa} = %{version}-%{release}
 
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n qca-v%{version}
 
 
 %build
@@ -268,8 +269,10 @@ cmake_opts="-Wno-dev \
 
 
 %install
+%if %{with qt5}
 %define _vpath_builddir %{_target_platform}-qt5
 %cmake_install
+%endif
 
 %if %{with qt6}
 %define _vpath_builddir %{_target_platform}-qt6
