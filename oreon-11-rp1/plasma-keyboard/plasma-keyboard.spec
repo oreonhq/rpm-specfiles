@@ -3,7 +3,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-keyboard
 Version: 6.6.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Virtual keyboard for Plasma based on Qt Virtual Keyboard
 
 License: BSD-2-Clause
@@ -62,6 +62,8 @@ sed -i 's/set(KF6_MIN_VERSION "6.22.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeList
 
 %install
 %cmake_install
+# .desktop is not a script; brp removes +x and warns if left executable
+chmod a-x %{buildroot}%{_kf6_datadir}/applications/org.kde.plasma.keyboard.desktop 2>/dev/null || :
 %find_lang %{name} --with-qt --all-name
 
 
@@ -75,7 +77,6 @@ sed -i 's/set(KF6_MIN_VERSION "6.22.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeList
 %{_kf6_qmldir}/org/kde/plasma/keyboard/lib/
 %{_kf6_qmldir}/QtQuick/VirtualKeyboard/Styles/Breeze/
 %{_kf6_qtplugindir}/plasma/kcms/systemsettings/kcm_plasmakeyboard.so
-%{_kf6_datadir}/kpackage/kcms/kcm_plasmakeyboard/
 
 
 %changelog

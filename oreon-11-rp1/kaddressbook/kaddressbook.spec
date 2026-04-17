@@ -1,7 +1,7 @@
 Name:    kaddressbook
 Summary: Contact Manager
 Version: 26.03.80
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://www.kde.org/applications/office/kaddressbook
@@ -104,6 +104,16 @@ sed -i 's/TextAddonsWidgets::NeedUpdateVersionUtils/PimCommon::NeedUpdateVersion
 sed -i 's/TextAddonsWidgets::NeedUpdateVersionWidget/PimCommon::NeedUpdateVersionWidget/g' src/mainwindow.cpp
 sed -i 's/TextAddonsWidgets::WhatsNewInfo/PimCommon::WhatsNewInfo/g' \
     src/whatsnew/whatsnewtranslations.h src/whatsnew/whatsnewtranslations.cpp
+# ConfigurePluginsWidget moved to PimCommon with ktextaddons 1.8 (plugins KCM must match plugins.cpp)
+sed -i 's#TextAddonsWidgets/ConfigurePluginsWidget#PimCommon/ConfigurePluginsWidget#g' \
+    src/configuration/kaddressbookconfigpluginlistwidget.h \
+    src/configuration/kaddressbookconfigpluginlistwidget.cpp
+sed -i 's/TextAddonsWidgets::ConfigurePluginsWidget/PimCommon::ConfigurePluginsWidget/g' \
+    src/configuration/kaddressbookconfigpluginlistwidget.h \
+    src/configuration/kaddressbookconfigpluginlistwidget.cpp
+# kaddressbook_config_plugins uses PimCommon::ConfigurePluginsWidget; link KPim6::PimCommon explicitly
+sed -i '/^add_library(kaddressbook_config_plugins MODULE)/,/^install(TARGETS kaddressbook_config_plugins /s/^\([[:space:]]*\)KPim6AddressbookImportExport$/\1KPim6AddressbookImportExport\n\1KPim6::PimCommon/' \
+    src/configuration/CMakeLists.txt
 
 
 %build
@@ -146,9 +156,6 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{
 
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.03.80-2
-- Run ktextaddons PimCommon seds from definite source root after %%autosetup
-
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 
