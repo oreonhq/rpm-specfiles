@@ -71,7 +71,7 @@ Frameworks. It provides desktop portal interfaces for Plasma sessions.
 
 %files -f %{name}.lang
 %license LICENSES/*
-%{_kf6_libexecdir}/xdg-desktop-portal-kde
+%{_libexecdir}/xdg-desktop-portal-kde
 %{_datadir}/xdg-desktop-portal/portals/kde.portal
 %{_datadir}/dbus-1/services/org.freedesktop.impl.portal.desktop.kde.service
 %{_datadir}/applications/org.freedesktop.impl.portal.desktop.kde.desktop

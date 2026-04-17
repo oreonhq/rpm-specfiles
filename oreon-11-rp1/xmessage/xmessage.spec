@@ -34,6 +34,8 @@ label of the selected button.
 %doc README
 %{_bindir}/xmessage
 %{_mandir}/man1/xmessage.1*
+%{_datadir}/X11/app-defaults/Xmessage
+%{_datadir}/X11/app-defaults/Xmessage-color
 
 %changelog
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.7-1

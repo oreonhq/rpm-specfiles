@@ -1,2 +1,2 @@
-# OBS package name is qca-qt6; Fedora spec is still named qca.spec
+# OBS package id qca-qt6; keep qca-qt6-pkgconfig.patch in this directory for SRPM gather
 %include ../qca/qca.spec

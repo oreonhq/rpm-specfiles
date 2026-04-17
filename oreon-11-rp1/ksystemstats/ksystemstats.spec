@@ -55,12 +55,12 @@ CPU, memory, network, disk, power and GPU statistics.
 
 %files -f %{name}.lang
 %license LICENSES/*
-%{_bindir}/ksystemstats
-%{_bindir}/kstatsviewer
+%{_kf6_bindir}/ksystemstats
+%{_kf6_bindir}/kstatsviewer
 %{_datadir}/dbus-1/services/org.kde.ksystemstats1.service
 %{_userunitdir}/plasma-ksystemstats.service
-%{_kf6_plugindir}/ksystemstats/
-%{_kf6_libexecdir}/ksystemstats_intel_helper
+%{_qt6_plugindir}/ksystemstats/
+%caps(cap_perfmon=ep) %{_libexecdir}/ksystemstats_intel_helper
 %{_kf6_datadir}/qlogging-categories6/ksystemstats.categories
 
 
