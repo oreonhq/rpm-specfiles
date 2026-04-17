@@ -71,6 +71,11 @@ developing applications that use %{name}.
 # Oreon pim stack is 6.6.3, upstream release-service pins 6.6.80 for unreleased libs
 sed -i 's/"6.6.80"/"6.6.3"/g' CMakeLists.txt
 sed -i 's/"2.0.0"/"1.8.0"/g' CMakeLists.txt
+# ktextaddons 1.8 exposes PluginUtil under PimCommon, not TextAddonsWidgets
+sed -i 's#<TextAddonsWidgets/PluginUtil>#<PimCommon/PluginUtil>#' src/importexport/pluginmanager.h
+sed -i 's/TextAddonsWidgets::PluginUtilData/PimCommon::PluginUtilData/g' \
+    src/importexport/pluginmanager.h src/importexport/pluginmanager.cpp
+sed -i 's/TextAddonsWidgets::PluginUtil::/PimCommon::PluginUtil::/g' src/importexport/pluginmanager.cpp
 
 
 %build

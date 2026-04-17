@@ -91,6 +91,7 @@ AC events, display and keyboard brightness, suspend behavior, and power profiles
 %{_sysconfdir}/xdg/autostart/powerdevil.desktop
 %{_userunitdir}/plasma-powerdevil.service
 %{_datadir}/dbus-1/system-services/org.kde.powerdevil.*.service
+%{_datadir}/dbus-1/system.d/org.kde.powerdevil.*.conf
 %{_datadir}/polkit-1/actions/org.kde.powerdevil.*.policy
 %{_kf6_datadir}/knotifications6/powerdevil.notifyrc
 %{_kf6_datadir}/qlogging-categories6/powerdevil*.categories
@@ -100,7 +101,11 @@ AC events, display and keyboard brightness, suspend behavior, and power profiles
 %{_qt6_plugindir}/powerdevil/
 %{_libdir}/qt6/qml/org/kde/plasma/private/batterymonitor/
 %{_libdir}/qt6/qml/org/kde/plasma/private/brightnesscontrolplugin/
+%{_datadir}/applications/kcm_mobile_power.desktop
+%{_datadir}/applications/kcm_powerdevilprofilesconfig.desktop
+%{_datadir}/doc/HTML/*/kcontrol/powerdevil/
 %{_libdir}/libpowerdevilcore.so.*
+%{_libdir}/libpowerdevilcore.so
 
 
 %changelog
