@@ -114,6 +114,7 @@ export LDFLAGS="%{shrink:%{build_ldflags}}"
     -DSDL_NAS=OFF \
     -DSDL_PULSEAUDIO_SHARED=ON \
     -DSDL_JACK_SHARED=ON \
+    -DSDL_PIPEWIRE=OFF \
     -DSDL_PIPEWIRE_SHARED=OFF \
     -DSDL_ALSA=ON \
     -DSDL_VIDEO_WAYLAND=ON \

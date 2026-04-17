@@ -83,27 +83,23 @@ AC events, display and keyboard brightness, suspend behavior, and power profiles
 
 %files -f %{name}.lang
 %license LICENSES/*
-%{_kf6_libexecdir}/org_kde_powerdevil
+%{_libexecdir}/org_kde_powerdevil
 %{_kf6_libexecdir}/kauth/chargethresholdhelper
 %{_kf6_libexecdir}/kauth/discretegpuhelper
 %{_kf6_libexecdir}/kauth/backlighthelper
 %{_kf6_libexecdir}/kauth/wakeupsourcehelper
-%{_datadir}/dbus-1/services/org.kde.Solid.PowerManagement.service
-%{_datadir}/autostart/powerdevil.desktop
+%{_sysconfdir}/xdg/autostart/powerdevil.desktop
 %{_userunitdir}/plasma-powerdevil.service
 %{_datadir}/dbus-1/system-services/org.kde.powerdevil.*.service
 %{_datadir}/polkit-1/actions/org.kde.powerdevil.*.policy
 %{_kf6_datadir}/knotifications6/powerdevil.notifyrc
 %{_kf6_datadir}/qlogging-categories6/powerdevil*.categories
-%{_kf6_qtplugindir}/plasma/applets/*.so
-%{_kf6_qtplugindir}/plasma/kcms/systemsettings/*.so
-%{_kf6_plugindir}/krunner/krunner_powerdevil.so
-%{_kf6_plugindir}/powerdevil/
-%{_kf6_plugindir}/kded/
-%{_kf6_datadir}/plasma/plasmoids/org.kde.plasma.battery/
-%{_kf6_datadir}/plasma/plasmoids/org.kde.plasma.brightness/
-%{_kf6_datadir}/kpackage/kcms/kcm_powerdevilprofilesconfig/
-%{_kf6_datadir}/kpackage/kcms/kcm_mobile_power/
+%{_qt6_plugindir}/plasma/applets/*.so
+%{_qt6_plugindir}/plasma/kcms/systemsettings/*.so
+%{_qt6_plugindir}/kf6/krunner/krunner_powerdevil.so
+%{_qt6_plugindir}/powerdevil/
+%{_libdir}/qt6/qml/org/kde/plasma/private/batterymonitor/
+%{_libdir}/qt6/qml/org/kde/plasma/private/brightnesscontrolplugin/
 %{_libdir}/libpowerdevilcore.so.*
 
 

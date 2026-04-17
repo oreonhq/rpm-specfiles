@@ -16,6 +16,7 @@ BuildRequires:  libtool
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  gettext-devel
+BuildRequires:  gtk-doc
 BuildRequires:  systemd-rpm-macros
 
 Requires:       gtk3%{?_isa}
@@ -31,8 +32,9 @@ tar -xzf %{SOURCE0} -C %{name}-%{version}
 
 %build
 cd %{name}-%{version}
-# Ubuntu orig tarball ships configure.ac only (no gtk-doc in minimal mock roots)
+# Ubuntu orig tarball ships configure.ac only
 if test ! -x ./configure; then
+  gtkdocize --copy --docdir docs || :
   autoreconf -fiv
 fi
 %configure --with-gtk=3 --with-gtk-module-dir=%{_libdir}/gtk-3.0/modules
