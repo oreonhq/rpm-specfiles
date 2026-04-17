@@ -1,7 +1,7 @@
 Name:    kaddressbook
 Summary: Contact Manager
 Version: 26.03.80
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://www.kde.org/applications/office/kaddressbook
@@ -70,6 +70,14 @@ developing applications that use %{name}.
 
 %prep
 %autosetup -n %{name}-v%{version} -p1
+# %%autosetup does not always leave cwd in the unpacked tree; seds must run there
+top='%{name}-v%{version}'
+if test -d "$top"; then
+  cd "$top"
+elif ! test -f CMakeLists.txt; then
+  echo "kaddressbook: cannot find source root (expected $top or .)" >&2
+  exit 1
+fi
 # Oreon pim stack is 6.6.3, upstream release-service pins 6.6.80 for unreleased libs
 sed -i 's/"6.6.80"/"6.6.3"/g' CMakeLists.txt
 sed -i 's/"2.0.0"/"1.8.0"/g' CMakeLists.txt
@@ -138,6 +146,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.%{
 
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.03.80-2
+- Run ktextaddons PimCommon seds from definite source root after %%autosetup
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

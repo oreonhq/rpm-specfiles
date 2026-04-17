@@ -2014,7 +2014,7 @@ CheckPython freethreading
 # ======================================================
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-3
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-3
 - Set python_wheel_pkg_prefix to python3 for main interpreter so -libs pulls python3-pip-wheel
 
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-2

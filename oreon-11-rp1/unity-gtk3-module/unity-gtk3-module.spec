@@ -72,7 +72,7 @@ find '%{buildroot}' -type f -name '*.py' -delete 2>/dev/null || :
 %{_userunitdir}/unity-gtk-module.service
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.0+18.04.20171202-2
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.0+18.04.20171202-2
 - Patch main.c via find so GCC 15 GMenuModel cast always applies
 
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.0+18.04.20171202-1
