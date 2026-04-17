@@ -1,0 +1,68 @@
+%undefine __cmake_in_source_build
+
+Name:           ebook-tools
+Version:        0.2.2
+Release:        1%{?dist}
+Summary:        Tools and library for EPUB and LIT ebooks
+License:        MIT
+URL:            https://sourceforge.net/projects/ebook-tools/
+Source0:        https://downloads.sourceforge.net/ebook-tools/%{name}-%{version}.tar.gz
+
+BuildRequires:  cmake
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  libxml2-devel
+BuildRequires:  libzip-devel
+BuildRequires:  ninja-build
+BuildRequires:  pkgconfig(libzip)
+BuildRequires:  pkgconfig(libxml-2.0)
+BuildRequires:  pkgconfig(zlib)
+
+%description
+Utilities for working with common ebook formats plus the libepub shared
+library.
+
+
+%package -n ebook-tools-libs
+Summary:        EPUB manipulation library
+
+%description -n ebook-tools-libs
+Shared library for ebook-tools.
+
+%package -n ebook-tools-devel
+Summary:        Development files for ebook-tools
+Requires:       ebook-tools-libs%{?_isa} = %{version}-%{release}
+
+%description -n ebook-tools-devel
+Headers and libraries for libepub.
+
+
+%prep
+%autosetup -p1
+
+
+%build
+%cmake \
+  -DCMAKE_BUILD_TYPE=Release
+%cmake_build
+
+
+%install
+%cmake_install
+
+
+%files
+%{_bindir}/einfo
+%{_bindir}/lit2epub
+
+%files -n ebook-tools-libs
+%{_libdir}/libepub.so.0*
+
+%files -n ebook-tools-devel
+%{_includedir}/*.h
+%{_libdir}/libepub.so
+
+
+%changelog
+* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.2-1
+- Add ebook-tools for Okular and converters

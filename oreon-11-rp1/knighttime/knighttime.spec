@@ -1,0 +1,59 @@
+Name:           knighttime
+Version:        6.6.3
+Release:        1%{?dist}
+Summary:        Plasma day and night cycle scheduling daemon
+License:        GPL-2.0-or-later
+URL:            https://invent.kde.org/plasma/knighttime
+Source0:        https://download.kde.org/stable/plasma/%{version}/knighttime-%{version}.tar.xz
+
+BuildRequires:  cmake
+BuildRequires:  extra-cmake-modules
+BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  ninja-build
+BuildRequires:  cmake(KF6Config)
+BuildRequires:  cmake(KF6CoreAddons)
+BuildRequires:  cmake(KF6DBusAddons)
+BuildRequires:  cmake(KF6Holidays)
+BuildRequires:  cmake(KF6I18n)
+BuildRequires:  cmake(Qt6Core)
+BuildRequires:  cmake(Qt6DBus)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Positioning)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  cmake(Qt6Test)
+BuildRequires:  systemd-rpm-macros
+
+Requires:       kf6-filesystem
+
+%description
+%{summary}.
+
+
+%prep
+%autosetup -n knighttime-%{version} -p1
+
+
+%build
+%cmake_kf6
+%cmake_build
+
+
+%install
+%cmake_install
+
+
+%files
+%license LICENSES/*
+%{_libexecdir}/knighttimed
+%{_kf6_datadir}/applications/org.kde.knighttimed.desktop
+%{_datadir}/dbus-1/interfaces/org.kde.NightTime.xml
+%{_datadir}/dbus-1/services/org.kde.NightTime.service
+%{_kf6_datadir}/qlogging-categories6/knighttime.categories
+%{_userunitdir}/plasma-knighttimed.service
+
+
+%changelog
+* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-1
+- Add knighttime for Plasma
