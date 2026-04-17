@@ -13,6 +13,7 @@ Source0: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{vers
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
+BuildRequires:  kf6-kdoctools-devel
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  ninja-build
 BuildRequires:  qt6-qtbase-private-devel
