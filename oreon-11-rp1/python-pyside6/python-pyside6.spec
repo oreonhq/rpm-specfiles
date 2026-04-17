@@ -15,7 +15,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.10.3
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -28,11 +28,11 @@ Source0:        https://download.qt.io/official_releases/QtForPython/%{pypi_name
 %global  majmin %(echo %{version} | cut -d. -f1-2)
 # Optional doc-only qtbase submodule tarball when %%docs is enabled (see Fedora python-pyside6).
 
-# OpenSuse patches (from Fedora rawhide)
-Patch0:         https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-Revert-Modify-headers-installation-for-CMake-builds.patch
-Patch1:         https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-Always-link-to-python-libraries.patch
-Patch2:         https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-Fix-installation.patch
-Patch3:         https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-shiboken6-Fix-build-with-clang-22.patch
+# Shipped in SRPM (avoid src.fedoraproject.org fetch flakiness in mock)
+Patch0:         0001-Revert-Modify-headers-installation-for-CMake-builds.patch
+Patch1:         0001-Always-link-to-python-libraries.patch
+Patch2:         0001-Fix-installation.patch
+Patch3:         0001-shiboken6-Fix-build-with-clang-22.patch
 
 BuildRequires:  cmake
 BuildRequires:  ninja-build
@@ -119,6 +119,7 @@ BuildRequires:  cmake(Qt6Charts) >= %{qt6ver}
 BuildRequires:  cmake(Qt6SpatialAudio) >= %{qt6ver}
 BuildRequires:  cmake(Qt6DataVisualization) >= %{qt6ver}
 BuildRequires:  cmake(Qt6Graphs) >= %{qt6ver}
+BuildRequires:  qt6-qtgraphs-devel >= %{qt6ver}
 BuildRequires:  cmake(Qt6Bluetooth) >= %{qt6ver}
 BuildRequires:  cmake(Qt6WebChannel) >= %{qt6ver}
 %ifarch %{qt6_qtwebengine_arches}
@@ -131,6 +132,7 @@ BuildRequires:  cmake(Qt6WebView) >= %{qt6ver}
 %endif
 BuildRequires:  cmake(Qt6WebSockets) >= %{qt6ver}
 BuildRequires:  cmake(Qt6HttpServer) >= %{qt6ver}
+BuildRequires:  qt6-qthttpserver-devel >= %{qt6ver}
 BuildRequires:  cmake(Qt63DCore) >= %{qt6ver}
 BuildRequires:  cmake(Qt63DRender) >= %{qt6ver}
 BuildRequires:  cmake(Qt63DInput) >= %{qt6ver}
@@ -146,7 +148,8 @@ BuildRequires:  qt6-assistant >= %{qt6ver}
 BuildRequires:  qt6-designer >= %{qt6ver}
 BuildRequires:  qt6-doctools >= %{qt6ver}
 
-# Tests use a fake graphical environment
+# Tests / configure use a headless Wayland compositor (xwayland-run provides wlheadless-run)
+BuildRequires:  xwayland-run
 BuildRequires:  /usr/bin/wlheadless-run
 BuildRequires:  mesa-dri-drivers
 
@@ -415,6 +418,9 @@ export LD_LIBRARY_PATH="%{buildroot}%{_libdir}"
 %endif
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-9
+- Vendor Rawhide patches in SRPM, BR qt6-qtgraphs-devel + qt6-qthttpserver-devel + xwayland-run
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-7
 - Strip -flto from compile and link flags, pin GCC include dir on flags and CPLUS_INCLUDE_PATH, pass CMAKE_LANG_FLAGS and linker flags so Ninja gets cstddef working past Qt -isystem
 
