@@ -36,7 +36,8 @@ find %{name}-%{version} -type f -name '*.py' -delete 2>/dev/null || :
 # GCC 15 is stricter about pointer types here
 sed -i 's/icon = g_object_ref (pixbuf);/icon = G_ICON (g_object_ref (pixbuf));/g' \
   %{name}-%{version}/lib/unity-gtk-menu-item.c
-sed -i 's/window_data->old_model = g_object_ref (old_menu_model);/window_data->old_model = G_MENU_MODEL (g_object_ref (old_menu_model));/g' \
+# glib ref keeps GDBusMenuModel*; need GObject + G_MENU_MODEL for -Wincompatible-pointer-types (GCC 15)
+sed -i 's/window_data->old_model = g_object_ref (old_menu_model);/window_data->old_model = G_MENU_MODEL (g_object_ref (G_OBJECT (old_menu_model)));/g' \
   %{name}-%{version}/src/main.c
 
 %build

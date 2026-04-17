@@ -21,6 +21,7 @@ BuildRequires:  ninja-build
 BuildRequires:  cmake(KDecoration3)
 BuildRequires:  cmake(KF6ColorScheme)
 BuildRequires:  cmake(KF6Config)
+BuildRequires:  kf6-kconfig-devel
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KCMUtils)
@@ -32,6 +33,7 @@ BuildRequires:  cmake(KF6WindowSystem)
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Quick)
+BuildRequires:  qt6-qtdeclarative-devel
 BuildRequires:  cmake(Qt6UiTools)
 BuildRequires:  cmake(Qt6Widgets)
 
