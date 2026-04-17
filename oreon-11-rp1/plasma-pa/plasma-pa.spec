@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-pa
 Version: 6.6.3
-Release: 1%{?dist}
+Release: 3%{?dist}
 Summary: Plasma applet for audio volume management using PulseAudio
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -45,6 +45,7 @@ BuildRequires: cmake(KF6ItemModels)
 Requires: kf6-kirigami
 Requires: kf6-kirigami-addons
 Requires: kf6-kitemmodels
+Requires: kf6-pulseaudio-qt%{?_isa}
 
 Requires: pulseaudio-daemon
 

@@ -6,7 +6,7 @@
 Name:    plasma-desktop
 Summary: Plasma Desktop shell
 Version: 6.6.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
@@ -169,9 +169,12 @@ Requires:       signon-plugin-oauth2%{?_isa}
 
 # applets/kickoff/KickoffSingleton.qml unconditionally imports org.kde.plasma.plasma5support
 Requires:       qt6qml(org.kde.plasma.plasma5support)
+Requires:       plasma5support%{?_isa}
 
 # for kimpanel-ibus-panel and kimpanel-ibus-panel-launcher
-Recommends: ibus
+Requires:       ibus%{?_isa}
+Requires:       libXcursor%{?_isa}
+Requires:       libksysguard%{?_isa}
 
 # for drawing tablet support
 Recommends: udev-hid-bpf-stable

@@ -6,7 +6,7 @@
 
 Name:		kf6-%{framework}
 Version:	6.24.0
-Release:	6%{?dist}
+Release:	7%{?dist}
 Summary:	KDE Frameworks 6 Tier 1 integration module with classes for windows management
 License:	CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND MIT
 URL:		https://invent.kde.org/frameworks/%{framework}
@@ -40,6 +40,7 @@ BuildRequires:  pkgconfig(Qt6Core)
 BuildRequires:  pkgconfig(Qt6Gui)
 BuildRequires:  qt6-qtbase-private-devel
 Requires:	kf6-filesystem
+Requires:	libXfixes%{?_isa}
 
 %description
 KDE Frameworks Tier 1 integration module that provides classes for managing and

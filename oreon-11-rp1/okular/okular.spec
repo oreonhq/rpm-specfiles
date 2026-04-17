@@ -15,7 +15,7 @@
 Name:    okular
 Summary: A document viewer
 Version: 26.03.80
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 License: GPL-2.0-only
 URL:     https://www.kde.org/applications/graphics/okular/
@@ -137,6 +137,14 @@ Recommends: ghostscript-core
 %package part
 Summary: Okular kpart plugin
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
+Requires: kdegraphics-mobipocket%{?_isa}
+Requires: ebook-tools-libs%{?_isa}
+Requires: poppler-qt6%{?_isa}
+Requires: libkexiv2-qt6%{?_isa}
+Requires: phonon-qt6%{?_isa}
+Requires: djvulibre-libs%{?_isa}
+Requires: libmarkdown%{?_isa}
+Requires: libspectre%{?_isa}
 # translations moved here
 Conflicts: kde-l10n < 17.03
 %description part

@@ -6,7 +6,7 @@ Name:    gwenview
 Summary: An image viewer
 Epoch:   1
 Version: 26.03.80
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 # app + lib: GPL-2.0-or-later
 # lib/jlibjpeg: IJG
@@ -88,6 +88,7 @@ Summary:  Runtime files for %{name}
 # lib/flowlayout.cpp: GPL-2.0-only OR GPL-3.0-only (see https://gitlab.com/fedora/legal/fedora-license-data/-/issues/718 )
 License:  IJG AND MIT AND LGPL-2.1-or-later AND (GPL-2.0-only OR GPL-3.0-only)
 Requires: %{name} = %{epoch}:%{version}-%{release}
+Requires: kimageannotator-libs%{?_isa}
 %description libs
 %{summary}.
 

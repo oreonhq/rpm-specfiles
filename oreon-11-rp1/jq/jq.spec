@@ -49,6 +49,8 @@ Development files for %{name}
 %autosetup -p1
 
 %build
+# Avoid GLIBC_2.44 libm IFUNC symbols when the compose root ships an older glibc than the build host.
+export CFLAGS="%{optflags} -fno-builtin-exp -fno-builtin-log -fno-builtin-pow -fno-builtin-log2 -fno-builtin-exp2"
 %configure --disable-static
 %make_build
 # Docs already shipped in jq's tarball.

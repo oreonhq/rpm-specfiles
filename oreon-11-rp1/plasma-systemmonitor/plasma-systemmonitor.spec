@@ -4,7 +4,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-systemmonitor
 Version: 6.6.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: An application for monitoring system resources
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND LGPL-3.0-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
@@ -43,6 +43,7 @@ Requires: kf6-kirigami%{?_isa}
 Requires: kf6-kirigami-addons%{?_isa}
 Requires: kf6-kiconthemes%{?_isa}
 Requires: ksystemstats%{?_isa}
+Requires: libksysguard%{?_isa}
 
 Obsoletes: ksysguard < 5.23
 

@@ -15,7 +15,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.10.3
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -158,6 +158,8 @@ provides access to the complete Qt 6+ framework.
 %package -n     python%{python3_pkgversion}-%{pypi_name}
 Provides:       python%{python3_pkgversion}-%{camel_name} = %{version}-%{release}
 Summary:        %{summary}
+Requires:       qt6-qtgraphs%{?_isa} >= %{qt6ver}
+Requires:       qt6-qthttpserver%{?_isa} >= %{qt6ver}
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{pypi_name}}
 %{?python_provide:%python_provide python%{python3_pkgversion}-%{camel_name}}
 

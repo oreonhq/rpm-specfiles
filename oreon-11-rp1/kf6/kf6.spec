@@ -3,7 +3,7 @@
 Name:    kf6
 # This version MUST remain in sync with KF6 versions!
 Version: 6.24.0
-Release: 16%{?dist}
+Release: 17%{?dist}
 Summary: Filesystem and RPM macros for KDE Frameworks 6
 License: BSD-3-Clause
 URL:     http://www.kde.org
@@ -15,7 +15,7 @@ Filesystem and RPM macros for KDE Frameworks 6
 
 %package filesystem
 Summary: Filesystem for KDE Frameworks 6
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon}
 Requires: kde-filesystem >= 5
 %endif
 %{?_qt6_version:Requires: qt6-qtbase >= %{_qt6_version}}
@@ -58,7 +58,7 @@ mkdir -p %{buildroot}%{_docdir}/qt6
 mkdir -p %{buildroot}%{_libexecdir}/kf6
 mkdir -p %{buildroot}%{_datadir}/kf6/
 mkdir -p %{buildroot}%{_datadir}/locale/tok
-%if ! (0%{?fedora} >= 40 || 0%{?rhel} >= 10)
+%if ! (0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon})
 mkdir -p %{buildroot}%{_prefix}/{lib,%{_lib}}/kconf_update_bin
 mkdir -p %{buildroot}%{_datadir}/{config.kcfg,kconf_update}
 mkdir -p %{buildroot}%{_datadir}/kpackage/{genericqml,kcms}

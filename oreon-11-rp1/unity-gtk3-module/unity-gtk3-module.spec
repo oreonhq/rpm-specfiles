@@ -1,6 +1,6 @@
 Name:           unity-gtk3-module
 Version:        0.0.0+18.04.20171202
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        GTK3 module for exporting old-style menus as GMenuModels
 
 License:        LGPL-3.0-or-later
@@ -25,6 +25,17 @@ Requires:       glib2%{?_isa}
 %description
 Unity GTK3 module exports GTK menu shells over DBus. It provides appmenu
 integration used by desktop components such as Plasma workspace integrations.
+
+%package        devel
+Summary:        Development files for libunity-gtk3-parser
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       gtk3-devel
+Requires:       glib2-devel
+Requires:       pkgconfig
+
+%description    devel
+Headers and pkg-config metadata for the Unity GTK3 menu parser library
+(libunity-gtk3-parser).
 
 %prep
 mkdir -p %{name}-%{version}
@@ -112,6 +123,11 @@ fi
 %{_datadir}/glib-2.0/schemas/com.canonical.unity-gtk-module.gschema.xml
 %{_datadir}/upstart/sessions/unity-gtk-module.conf
 %{_userunitdir}/unity-gtk-module.service
+
+%files devel
+%{_includedir}/unity-gtk-parser/
+%{_libdir}/libunity-gtk3-parser.so
+%{_libdir}/pkgconfig/unity-gtk3-parser.pc
 
 %changelog
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.0+18.04.20171202-2

@@ -1,6 +1,6 @@
 Name:    kwin
 Version: 6.6.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: KDE Window manager
 
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND MIT
@@ -180,6 +180,8 @@ Conflicts:      kde-workspace-libs%{?_isa} < 4.11.14-2
 # kwin uses wl_display_set_default_max_buffer_size from wayland 1.23.0
 # https://bugzilla.redhat.com/show_bug.cgi?id=2312499
 Requires:       libwayland-server%{?_isa} >= 1.23.0
+Requires:       kf6-kglobalacceld%{?_isa}
+Requires:       libqaccessibilityclient-qt6%{?_isa}
 %description    libs
 %{summary}.
 
