@@ -3,7 +3,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-keyboard
 Version: 6.6.3
-Release: 4%{?dist}
+Release: 5%{?dist}
 Summary: Virtual keyboard for Plasma based on Qt Virtual Keyboard
 
 License: BSD-2-Clause
@@ -40,6 +40,7 @@ BuildRequires:  cmake(Qt6Quick)
 BuildRequires:  cmake(Qt6VirtualKeyboard)
 BuildRequires:  cmake(Qt6WaylandClient)
 BuildRequires:  cmake(Qt6WaylandClientPrivate)
+BuildRequires:  desktop-file-utils
 
 Requires:       kf6-filesystem
 Requires:       qt6-qtvirtualkeyboard%{?_isa}
@@ -64,13 +65,18 @@ sed -i 's/set(KF6_MIN_VERSION "6.22.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeList
 %cmake_install
 # .desktop is not a script; brp removes +x and warns if left executable
 chmod a-x %{buildroot}%{_kf6_datadir}/applications/org.kde.plasma.keyboard.desktop 2>/dev/null || :
+chmod a-x %{buildroot}%{_kf6_datadir}/applications/kcm_plasmakeyboard.desktop 2>/dev/null || :
 %find_lang %{name} --with-qt --all-name
 
+%check
+desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.plasma.keyboard.desktop
+desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/kcm_plasmakeyboard.desktop
 
 %files -f %{name}.lang
 %license LICENSES/*
 %{_kf6_bindir}/plasma-keyboard
 %{_kf6_datadir}/applications/org.kde.plasma.keyboard.desktop
+%{_kf6_datadir}/applications/kcm_plasmakeyboard.desktop
 %{_kf6_metainfodir}/org.kde.plasma.keyboard.metainfo.xml
 %{_kf6_datadir}/plasma/keyboard/
 %{_kf6_qmldir}/org/kde/plasma/keyboard/
