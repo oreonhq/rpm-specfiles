@@ -39,6 +39,7 @@ Obsoletes: kdepim-apps-libs < 20.11.90
 BuildRequires: cmake(KPim6Akonadi)
 BuildRequires: cmake(KPim6KontactInterface)
 BuildRequires: cmake(KPim6Libkdepim)
+BuildRequires: cmake(KPim6PimCommon)
 BuildRequires: cmake(KPim6PimCommonAkonadi)
 BuildRequires: cmake(KPim6AkonadiSearch)
 BuildRequires: cmake(KPim6AkonadiContactWidgets)
@@ -83,6 +84,18 @@ sed -i 's#<TextAddonsWidgets/WhatsNewTranslationsBase>#<PimCommon/WhatsNewTransl
 sed -i 's/TextAddonsWidgets::WhatsNewTranslationsBase/PimCommon::WhatsNewTranslationsBase/g' \
     src/whatsnew/whatsnewtranslations.h src/whatsnew/whatsnewtranslations.cpp
 sed -i 's#<TextAddonsWidgets/WhatsNewDialog>#<PimCommon/WhatsNewDialog>#' src/mainwidget.cpp
+sed -i 's/TextAddonsWidgets::WhatsNewDialog/PimCommon::WhatsNewDialog/g' src/mainwidget.cpp
+# Remaining WhatsNew / version-nag widgets live under PimCommon with ktextaddons >= 1.8
+sed -i 's#<TextAddonsWidgets/WhatsNewMessageWidget>#<PimCommon/WhatsNewMessageWidget>#' \
+    src/kaddressbookpart.cpp src/mainwindow.cpp
+sed -i 's/TextAddonsWidgets::WhatsNewMessageWidget/PimCommon::WhatsNewMessageWidget/g' \
+    src/kaddressbookpart.cpp src/mainwindow.cpp
+sed -i 's#<TextAddonsWidgets/NeedUpdateVersionUtils>#<PimCommon/NeedUpdateVersionUtils>#' src/mainwindow.cpp
+sed -i 's#<TextAddonsWidgets/NeedUpdateVersionWidget>#<PimCommon/NeedUpdateVersionWidget>#' src/mainwindow.cpp
+sed -i 's/TextAddonsWidgets::NeedUpdateVersionUtils/PimCommon::NeedUpdateVersionUtils/g' src/mainwindow.cpp
+sed -i 's/TextAddonsWidgets::NeedUpdateVersionWidget/PimCommon::NeedUpdateVersionWidget/g' src/mainwindow.cpp
+sed -i 's/TextAddonsWidgets::WhatsNewInfo/PimCommon::WhatsNewInfo/g' \
+    src/whatsnew/whatsnewtranslations.h src/whatsnew/whatsnewtranslations.cpp
 
 
 %build

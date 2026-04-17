@@ -3,7 +3,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-keyboard
 Version: 6.6.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Virtual keyboard for Plasma based on Qt Virtual Keyboard
 
 License: BSD-2-Clause
@@ -25,6 +25,7 @@ BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  qt6-qtdeclarative-devel
 
 BuildRequires:  cmake(KF6Config)
+BuildRequires:  kf6-kconfig-devel
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6Crash)
 BuildRequires:  cmake(KF6I18n)
@@ -50,6 +51,8 @@ keyboard layouts, styles and KCM configuration integration.
 
 %prep
 %autosetup -n %{name}-v%{version} -p1
+# Tag still asks for ECM/KF6 6.22 while this branch is Plasma 6.6.x on distro KF 6.6
+sed -i 's/set(KF6_MIN_VERSION "6.22.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeLists.txt
 
 
 %build
@@ -76,5 +79,8 @@ keyboard layouts, styles and KCM configuration integration.
 
 
 %changelog
+* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
+- Relax KF6 min in CMakeLists for KF 6.6 stack, pull in kf6-kconfig-devel for KCM ConfigGui
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-1
 - Add plasma-keyboard package for virtual keyboard support in Plasma

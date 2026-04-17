@@ -50,10 +50,8 @@ URL: https://www.python.org/
 #global prerel ...
 %global upstream_version %{general_version}%{?prerel}
 Version: %{general_version}%{?prerel:~%{prerel}}
-Release: 2%{?dist}
+Release: 3%{?dist}
 License: Python-2.0.1
-
-%{?oreon:%global python_wheel_pkg_prefix python3}
 
 # ==================================
 # Conditionals controlling the build
@@ -115,6 +113,15 @@ License: Python-2.0.1
 %global pkgname python%{pybasever}
 %global exename python%{pybasever}
 %global python3_pkgversion %{pybasever}
+%endif
+
+# With rpmwheels, -libs BR/Requires %%{python_wheel_pkg_prefix}-*-wheel. Fedora
+# defaults to python-*-wheel; Oreon ships python3-*-wheel (macros.oreon-release).
+# Do not rely on %%{?oreon} here (often undefined in early mock parse).
+%if %{with main_python}
+%global python_wheel_pkg_prefix python3
+%else
+%{?oreon:%global python_wheel_pkg_prefix python%{python3_pkgversion}}
 %endif
 
 # If the rpmwheels condition is disabled, we use the bundled wheel packages
@@ -2007,6 +2014,9 @@ CheckPython freethreading
 # ======================================================
 
 %changelog
+* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-3
+- Set python_wheel_pkg_prefix to python3 for main interpreter so -libs pulls python3-pip-wheel
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-2
 - Default off PGO (%%bcond optimizations 0), cap %%{_smp_mflags} (mock OOM / killed builds)
 

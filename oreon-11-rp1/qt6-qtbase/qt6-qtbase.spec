@@ -49,6 +49,8 @@ Name:    qt6-qtbase
 Summary: Qt6 - QtBase components
 Version: 6.10.3
 Release: 1%{?dist}
+# Minimum libicu for DT_NEEDED sonames bundled in libQt6Core (bump when icu rebases)
+%global oreon_icu_min 77.1
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
@@ -200,8 +202,8 @@ BuildRequires: (wlheadless-run and %{wlheadless_compositor})
 %endif
 
 Requires:      qt6-filesystem
-# ISO minimal trees can miss libicu unless pulled explicitly (libQt6Core links ICU)
-Requires:      libicu%{?_isa}
+# libQt6Core links ICU, explicit so anaconda/minimal composes pull libicu
+Requires:      libicu%{?_isa} >= %{oreon_icu_min}
 
 Requires: %{name}-common = %{version}-%{release}
 

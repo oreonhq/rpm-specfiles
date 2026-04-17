@@ -1,6 +1,6 @@
 Name:           unity-gtk3-module
 Version:        0.0.0+18.04.20171202
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GTK3 module for exporting old-style menus as GMenuModels
 
 License:        LGPL-3.0-or-later
@@ -37,8 +37,9 @@ find %{name}-%{version} -type f -name '*.py' -delete 2>/dev/null || :
 sed -i 's/icon = g_object_ref (pixbuf);/icon = G_ICON (g_object_ref (pixbuf));/g' \
   %{name}-%{version}/lib/unity-gtk-menu-item.c
 # glib ref keeps GDBusMenuModel*; need GObject + G_MENU_MODEL for -Wincompatible-pointer-types (GCC 15)
-sed -i 's/window_data->old_model = g_object_ref (old_menu_model);/window_data->old_model = G_MENU_MODEL (g_object_ref (G_OBJECT (old_menu_model)));/g' \
-  %{name}-%{version}/src/main.c
+# Match any unpack layout (orig tarball may nest one directory under %%{name}-%%{version})
+find '%{name}-%{version}' -type f -path '*/src/main.c' -exec sed -i \
+  's/window_data->old_model = g_object_ref (old_menu_model);/window_data->old_model = G_MENU_MODEL (g_object_ref (G_OBJECT (old_menu_model)));/g' {} +
 
 %build
 cd %{name}-%{version}
@@ -71,5 +72,8 @@ find '%{buildroot}' -type f -name '*.py' -delete 2>/dev/null || :
 %{_userunitdir}/unity-gtk-module.service
 
 %changelog
+* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.0+18.04.20171202-2
+- Patch main.c via find so GCC 15 GMenuModel cast always applies
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.0+18.04.20171202-1
 - Add unity-gtk3-module package for GTK3 appmenu module support
