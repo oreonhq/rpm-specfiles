@@ -1,6 +1,6 @@
 Name:           unity-gtk3-module
 Version:        0.0.0+18.04.20171202
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GTK3 module for exporting old-style menus as GMenuModels
 
 License:        LGPL-3.0-or-later
@@ -29,9 +29,16 @@ integration used by desktop components such as Plasma workspace integrations.
 %prep
 mkdir -p %{name}-%{version}
 tar -xzf %{SOURCE0} -C %{name}-%{version}
-# Drop Python2-era tests and any stray .py (%%install byte-compile trips on Python 3.14).
-find %{name}-%{version} \( -type d -path '*/tests' -o -type d -path '*/unity_gtk_module/tests' \) \
-  -prune -exec rm -rf {} + 2>/dev/null || :
+# tests/ is wired in configure.ac + Makefile.am; deleting it without editing breaks automake.
+# Drop tests from the autotools graph, then remove the tree and any remaining .py for %%install.
+for top in %{name}-%{version} %{name}-%{version}/unity-gtk-module %{name}-%{version}/unity-gtk-module-*; do
+  test -f "$top/configure.ac" || continue
+  sed -i '/^[[:space:]]*tests\/Makefile$/d' "$top/configure.ac"
+  sed -i '/^[[:space:]]*tests\/autopilot\/Makefile$/d' "$top/configure.ac"
+  sed -i 's/^SUBDIRS = lib src data docs tests$/SUBDIRS = lib src data docs/' "$top/Makefile.am"
+  rm -rf "$top/tests"
+  break
+done
 find %{name}-%{version} -type f -name '*.py' -delete 2>/dev/null || :
 # GCC 15 is stricter about pointer types here
 sed -i 's/icon = g_object_ref (pixbuf);/icon = G_ICON (g_object_ref (pixbuf));/g' \

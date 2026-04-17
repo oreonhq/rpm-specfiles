@@ -48,7 +48,7 @@ BuildRequires: pkgconfig(libsystemd)
 Name:    qt6-qtbase
 Summary: Qt6 - QtBase components
 Version: 6.10.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 # Minimum libicu for DT_NEEDED sonames bundled in libQt6Core (bump when icu rebases)
 %global oreon_icu_min 77.1
 
@@ -168,6 +168,10 @@ BuildRequires: pkgconfig(xkbcommon-x11) >= 0.4.1
 BuildRequires: pkgconfig(xkeyboard-config)
 %global vulkan 1
 BuildRequires: pkgconfig(vulkan)
+# QtGui configure.cmake compile test links RenderDoc::RenderDoc (header-only target from FindRenderDoc.cmake)
+%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
+BuildRequires: renderdoc-devel
+%endif
 %global egl 1
 BuildRequires: pkgconfig(egl)
 BuildRequires: pkgconfig(gbm)
@@ -975,6 +979,9 @@ make check -k ||:
 %{_qt6_datadir}/wayland/protocols/
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
+- BuildRequires renderdoc-devel for Qt 6.10 RenderDoc header configure test
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
 - Bump to 6.10.3 so %%{_qt6_version} matches published qt6-qtbase (installer dep closure)
 - Qt6.pc Version follows %%{version}

@@ -3,7 +3,7 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-keyboard
 Version: 6.6.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: Virtual keyboard for Plasma based on Qt Virtual Keyboard
 
 License: BSD-2-Clause
@@ -30,7 +30,7 @@ BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6Crash)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KCMUtils)
-BuildRequires:  cmake(KF6KCMUtilsQuick)
+BuildRequires:  kf6-kcmutils-devel
 
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6DBus)
@@ -79,6 +79,9 @@ sed -i 's/set(KF6_MIN_VERSION "6.22.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeList
 
 
 %changelog
+* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
+- Use kf6-kcmutils-devel instead of bogus cmake(KF6KCMUtilsQuick) for KCM QML deps
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Relax KF6 min in CMakeLists for KF 6.6 stack, pull in kf6-kconfig-devel for KCM ConfigGui
 

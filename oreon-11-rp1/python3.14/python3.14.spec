@@ -18,7 +18,8 @@
 
 # Whether to use RPM build wheels from the python-{pip,setuptools,wheel}-wheel packages
 # Uses upstream bundled prebuilt wheels otherwise
-%bcond rpmwheels %{without bootstrap}
+# Oreon: off (python3-pip-wheel / python3-setuptools-wheel not in compose yet; avoid builddep failure)
+%bcond rpmwheels 0
 
 # Expensive optimizations (mainly, profile-guided optimizations / PGO).
 # Oreon: always off. Up to four configurations (optimized, debug, freethreading x2)
@@ -50,7 +51,7 @@ URL: https://www.python.org/
 #global prerel ...
 %global upstream_version %{general_version}%{?prerel}
 Version: %{general_version}%{?prerel:~%{prerel}}
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: Python-2.0.1
 
 # ==================================
@@ -2014,9 +2015,6 @@ CheckPython freethreading
 # ======================================================
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-3
-- Set python_wheel_pkg_prefix to python3 for main interpreter so -libs pulls python3-pip-wheel
-
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-2
 - Default off PGO (%%bcond optimizations 0), cap %%{_smp_mflags} (mock OOM / killed builds)
 
