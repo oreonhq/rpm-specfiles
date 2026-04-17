@@ -48,7 +48,7 @@ BuildRequires: pkgconfig(libsystemd)
 Name:    qt6-qtbase
 Summary: Qt6 - QtBase components
 Version: 6.10.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 # Minimum libicu for DT_NEEDED sonames bundled in libQt6Core (bump when icu rebases)
 %global oreon_icu_min 77.1
 
@@ -384,6 +384,7 @@ export LDFLAGS="$LDFLAGS $RPM_LD_FLAGS"
 export MAKEFLAGS="%{?_smp_mflags}"
 
 %cmake_qt6 \
+ -DFEATURE_glibc_fortify_source=OFF \
  -DFEATURE_accessibility=ON \
  -DFEATURE_fontconfig=ON \
  -DFEATURE_glib=ON \
@@ -979,6 +980,9 @@ make check -k ||:
 %{_qt6_datadir}/wayland/protocols/
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
+- Turn off Qt glibc_fortify_source (redhat-hardened-cc1 already sets _FORTIFY_SOURCE=3)
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
 - BuildRequires renderdoc-devel for Qt 6.10 RenderDoc header configure test
 
