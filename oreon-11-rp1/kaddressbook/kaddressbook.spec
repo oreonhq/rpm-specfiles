@@ -81,6 +81,7 @@ sed -i 's#<TextAddonsWidgets/WhatsNewTranslationsBase>#<PimCommon/WhatsNewTransl
     src/whatsnew/whatsnewtranslations.h
 sed -i 's/TextAddonsWidgets::WhatsNewTranslationsBase/PimCommon::WhatsNewTranslationsBase/g' \
     src/whatsnew/whatsnewtranslations.h src/whatsnew/whatsnewtranslations.cpp
+sed -i 's#<TextAddonsWidgets/WhatsNewDialog>#<PimCommon/WhatsNewDialog>#' src/mainwidget.cpp
 
 
 %build

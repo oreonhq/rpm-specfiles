@@ -29,6 +29,8 @@ integration used by desktop components such as Plasma workspace integrations.
 %prep
 mkdir -p %{name}-%{version}
 tar -xzf %{SOURCE0} -C %{name}-%{version}
+# Drop Python2-era tests shipped in-tree. %%install byte-compilation fails on Python 3.14.
+find %{name}-%{version} -type d -path '*/unity_gtk_module/tests' -prune -exec rm -rf {} + 2>/dev/null || :
 # GCC 15 is stricter about pointer types here
 sed -i 's/icon = g_object_ref (pixbuf);/icon = G_ICON (g_object_ref (pixbuf));/g' \
   %{name}-%{version}/lib/unity-gtk-menu-item.c

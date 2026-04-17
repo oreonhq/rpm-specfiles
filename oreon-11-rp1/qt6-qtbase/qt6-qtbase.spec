@@ -200,6 +200,8 @@ BuildRequires: (wlheadless-run and %{wlheadless_compositor})
 %endif
 
 Requires:      qt6-filesystem
+# ISO minimal trees can miss libicu unless pulled explicitly (libQt6Core links ICU)
+Requires:      libicu%{?_isa}
 
 Requires: %{name}-common = %{version}-%{release}
 

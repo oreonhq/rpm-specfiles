@@ -6,6 +6,8 @@ Version:        21.1.0
 Release:        %autorelease
 Summary:        Tool to create isolated Python environments
 
+%{?oreon:%global python_wheel_pkg_prefix python3}
+
 License:        MIT
 URL:            http://pypi.python.org/pypi/virtualenv
 Source:         %{pypi_source virtualenv}

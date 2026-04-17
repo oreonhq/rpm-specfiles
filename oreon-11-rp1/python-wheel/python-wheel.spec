@@ -13,6 +13,8 @@ Release:        %autorelease
 Epoch:          1
 Summary:        Built-package format for Python
 
+%{?oreon:%global python_wheel_pkg_prefix python3}
+
 # packaging is Apache-2.0 OR BSD-2-Clause
 License:        MIT AND (Apache-2.0 OR BSD-2-Clause)
 URL:            https://github.com/pypa/wheel

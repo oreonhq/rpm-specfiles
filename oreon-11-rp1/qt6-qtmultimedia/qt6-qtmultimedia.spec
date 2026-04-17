@@ -5,11 +5,8 @@
 %global gst 1.0
 %endif
 
-%if 0%{?rhel} && ! 0%{?epel}
-%bcond_with ffmpeg
-%else
+# Oreon 11 composes expect the FFmpeg backend. %%{rhel} gating would otherwise default it off.
 %bcond_without ffmpeg
-%endif
 
 #global unstable 0
 %if 0%{?unstable}
@@ -94,9 +91,14 @@ the use of available devices like cameras and radios.
 # libgstreamermediaplugin.so links GStreamer and Pulse; explicit for minimal ISO trees
 Requires:      gstreamer1%{?_isa}
 Requires:      gstreamer1-plugins-base%{?_isa}
+Requires:      gstreamer1-plugins-good%{?_isa}
+Requires:      gstreamer1-plugins-bad-free%{?_isa}
 Requires:      pulseaudio-libs%{?_isa}
 Requires:      libXrandr%{?_isa}
 Requires:      libXext%{?_isa}
+%if %{with ffmpeg}
+Requires:      ffmpeg-libs%{?_isa}
+%endif
 
 %package devel
 Summary: Development files for %{name}

@@ -69,6 +69,7 @@ BuildRequires:  python%{python3_pkgversion}-gobject-base
 # glib2 version with g_once_init_enter_pointer symbol, bug #2265336
 Requires:       glib2 >= 2.79.0-2
 %endif
+Requires:       libyaml%{?_isa}
 
 
 %description

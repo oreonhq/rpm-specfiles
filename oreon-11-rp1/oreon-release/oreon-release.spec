@@ -65,6 +65,7 @@ install -d -m 755 %{buildroot}%{_rpmmacrodir}
 # should have oreon-release installed so mock/koji expands %%{?oreon}.
 cat > %{buildroot}%{_rpmmacrodir}/macros.oreon-release << 'EOF'
 %%oreon 1
+%%python_wheel_pkg_prefix python3
 EOF
 
 # Install os-release

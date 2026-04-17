@@ -27,6 +27,7 @@ BuildRequires:  cmake(KF6KCMUtils)
 BuildRequires:  cmake(KF6NewStuff)
 BuildRequires:  cmake(KF6Package)
 BuildRequires:  cmake(KF6Svg)
+BuildRequires:  cmake(KF6WindowSystem)
 
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6DBus)
@@ -38,6 +39,7 @@ Requires:       kf6-filesystem
 Requires:       kwin%{?_isa}
 # kwin Requires: aurorae%%{?_isa}; this subpackage name is plasma-aurorae upstream
 Provides:       aurorae = %{version}-%{release}
+Provides:       aurorae%{?_isa} = %{version}-%{release}
 
 %description
 Aurorae is a window decoration engine for KWin. It supports QML-based
@@ -67,14 +69,15 @@ Development files (CMake package config) for Aurorae.
 
 %files -f %{base_name}.lang
 %license LICENSES/*
-%{_kf6_libexecdir}/plasma-apply-aurorae
+%{_kf6_qtplugindir}/org.kde.kdecoration3.kcm/kcm_auroraedecoration.so
+%{_kf6_qtplugindir}/org.kde.kdecoration3/org.kde.kwin.aurorae.so
+%{_kf6_qtplugindir}/org.kde.kdecoration3/org.kde.kwin.aurorae.v2.so
+%{_kf6_qmldir}/org/kde/kwin/decoration/
+%{_kf6_qmldir}/org/kde/kwin/decorations/plastik/
+%{_libexecdir}/plasma-apply-aurorae
 %{_kf6_datadir}/knsrcfiles/aurorae.knsrc
 %{_kf6_datadir}/kwin/aurorae/
 %{_kf6_datadir}/kwin/decorations/kwin4_decoration_qml_plastik/
-%{_kf6_qmldir}/org/kde/kwin/decoration/
-%{_kf6_qmldir}/org/kde/kwin/decorations/
-%{_kf6_plugindir}/org.kde.kdecoration3/
-%{_kf6_plugindir}/kwin/
 
 %files devel
 %{_kf6_libdir}/cmake/Aurorae/

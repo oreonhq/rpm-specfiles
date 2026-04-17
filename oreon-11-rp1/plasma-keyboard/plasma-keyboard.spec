@@ -20,6 +20,7 @@ BuildRequires:  wayland-protocols-devel
 BuildRequires:  qt6-qtwayland-devel
 BuildRequires:  qt6-qtvirtualkeyboard-devel
 BuildRequires:  qt6-qttools-devel
+BuildRequires:  qt6-qtbase-private-devel
 
 BuildRequires:  cmake(KF6Config)
 BuildRequires:  cmake(KF6CoreAddons)

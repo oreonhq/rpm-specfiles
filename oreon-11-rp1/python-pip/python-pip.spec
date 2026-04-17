@@ -15,6 +15,8 @@ Version:        %{base_version}%{?prerel:~%{prerel}}
 Release:        %autorelease
 Summary:        A tool for installing and managing Python packages
 
+%{?oreon:%global python_wheel_pkg_prefix python3}
+
 # We bundle a lot of libraries with pip, which itself is under MIT license.
 # Here is the list of the libraries with corresponding licenses:
 

@@ -15,6 +15,9 @@ Name:           python-setuptools
 Version:        80.10.2
 Release:        %autorelease
 Summary:        Easily build and distribute Python packages
+
+%{?oreon:%global python_wheel_pkg_prefix python3}
+
 # setuptools is MIT
 # autocommand is LGPL-3.0-only
 # backports-tarfile is MIT

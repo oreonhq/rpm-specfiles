@@ -53,6 +53,7 @@ Version: %{general_version}%{?prerel:~%{prerel}}
 Release: 2%{?dist}
 License: Python-2.0.1
 
+%{?oreon:%global python_wheel_pkg_prefix python3}
 
 # ==================================
 # Conditionals controlling the build

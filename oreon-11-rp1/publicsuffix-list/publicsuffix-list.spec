@@ -10,12 +10,12 @@ URL:            https://publicsuffix.org/
 Source0:        https://publicsuffix.org/list/public_suffix_list.dat
 Source1:        https://www.mozilla.org/media/MPL/2.0/index.txt
 Source2:        https://github.com/publicsuffix/list/raw/main/tests/test_psl.txt
+# Bootstrap: DAFSA generator (same script as libpsl's psl-make-dafsa subpackage) so we
+# do not need that RPM installed before publicsuffix-list-dafsa exists.
+%global libpsl_tools_ver 0.21.5
+Source3:        https://github.com/rockdaboot/libpsl/releases/download/%{libpsl_tools_ver}/libpsl-%{libpsl_tools_ver}.tar.gz
 
 BuildArch:      noarch
-
-%if %{with dafsa}
-BuildRequires:  psl-make-dafsa
-%endif
 
 
 %description
@@ -47,12 +47,17 @@ for runtime loading.
 %setup -c -T
 cp -av %{SOURCE0} .
 install -m 644 -p -v %{SOURCE1} COPYING
+%if %{with dafsa}
+tar xf %{SOURCE3} libpsl-%{libpsl_tools_ver}/src/psl-make-dafsa
+install -m755 libpsl-%{libpsl_tools_ver}/src/psl-make-dafsa ./psl-make-dafsa-bootstrap
+sed -i '1s|.*|#!/usr/bin/python3|' ./psl-make-dafsa-bootstrap
+%endif
 
 
 %build
 %if %{with dafsa}
 LC_CTYPE=C.UTF-8 \
-psl-make-dafsa --output-format=binary \
+./psl-make-dafsa-bootstrap --output-format=binary \
   public_suffix_list.dat public_suffix_list.dafsa
 %endif
 
