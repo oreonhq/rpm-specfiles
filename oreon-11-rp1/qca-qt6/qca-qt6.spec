@@ -1,3 +1,3 @@
-# OBS distgit checks out only this directory. Include a copy of the full qca spec
-# shipped as qca-bundled.spec (sync from ../qca/qca.spec when bumping QCA).
-%include qca-bundled.spec
+# OBS runs rpmbuild from SPECS, so include the bundled spec via SOURCES path.
+# Keep qca-bundled.spec in this package directory and sync from ../qca/qca.spec.
+%include %{_sourcedir}/qca-bundled.spec

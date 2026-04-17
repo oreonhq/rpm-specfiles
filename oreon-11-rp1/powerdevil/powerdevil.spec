@@ -95,6 +95,8 @@ AC events, display and keyboard brightness, suspend behavior, and power profiles
 %{_datadir}/polkit-1/actions/org.kde.powerdevil.*.policy
 %{_kf6_datadir}/knotifications6/powerdevil.notifyrc
 %{_kf6_datadir}/qlogging-categories6/powerdevil*.categories
+%{_kf6_datadir}/qlogging-categories6/batterymonitor.categories
+%{_kf6_datadir}/qlogging-categories6/brightness.categories
 %{_qt6_plugindir}/plasma/applets/*.so
 %{_qt6_plugindir}/plasma/kcms/systemsettings/*.so
 %{_qt6_plugindir}/kf6/krunner/krunner_powerdevil.so

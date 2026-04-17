@@ -21,7 +21,6 @@ BuildRequires:  ninja-build
 BuildRequires:  cmake(KDecoration3)
 BuildRequires:  cmake(KF6ColorScheme)
 BuildRequires:  cmake(KF6Config)
-BuildRequires:  cmake(KF6ConfigGui)
 BuildRequires:  cmake(KF6CoreAddons)
 BuildRequires:  cmake(KF6I18n)
 BuildRequires:  cmake(KF6KCMUtils)

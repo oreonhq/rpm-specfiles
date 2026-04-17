@@ -76,6 +76,11 @@ sed -i 's#<TextAddonsWidgets/PluginUtil>#<PimCommon/PluginUtil>#' src/importexpo
 sed -i 's/TextAddonsWidgets::PluginUtilData/PimCommon::PluginUtilData/g' \
     src/importexport/pluginmanager.h src/importexport/pluginmanager.cpp
 sed -i 's/TextAddonsWidgets::PluginUtil::/PimCommon::PluginUtil::/g' src/importexport/pluginmanager.cpp
+# Same API move for What\'s New translation helper in ktextaddons 1.8
+sed -i 's#<TextAddonsWidgets/WhatsNewTranslationsBase>#<PimCommon/WhatsNewTranslationsBase>#' \
+    src/whatsnew/whatsnewtranslations.h
+sed -i 's/TextAddonsWidgets::WhatsNewTranslationsBase/PimCommon::WhatsNewTranslationsBase/g' \
+    src/whatsnew/whatsnewtranslations.h src/whatsnew/whatsnewtranslations.cpp
 
 
 %build
