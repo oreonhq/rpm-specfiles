@@ -2,7 +2,7 @@
 Name: qt6
 # This version MUST remain in sync with Qt6 versions!
 Version: 6.10.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Qt6 meta package
 License: GPL-3.0-only
 URL:     https://getfedora.org/
@@ -22,6 +22,8 @@ Requires: qt6-qtcharts
 Requires: qt6-qtconnectivity
 Requires: qt6-qtdatavis3d
 Requires: qt6-qtdeclarative
+Requires: qt6-qtgraphs
+Requires: qt6-qthttpserver
 Requires: qt6-qtimageformats
 Requires: qt6-qtlocation
 Requires: qt6-qtmultimedia
@@ -59,6 +61,8 @@ Requires: qt6-qtconnectivity-devel
 Requires: qt6-qtdatavis3d-devel
 Requires: qt6-qtdeclarative-devel
 Requires: qt6-qtdeclarative-static
+Requires: qt6-qtgraphs-devel
+Requires: qt6-qthttpserver-devel
 Requires: qt6-qtlocation-devel
 Requires: qt6-qtmultimedia-devel
 Requires: qt6-qtnetworkauth-devel
@@ -212,6 +216,9 @@ echo "- Qt6 devel meta package" > %{buildroot}%{_docdir}/qt6-devel/README
 
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
+- Require qt6-qtgraphs and qt6-qthttpserver in meta package
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
 - Sync meta package version with qt6-qtbase 6.10.3
 

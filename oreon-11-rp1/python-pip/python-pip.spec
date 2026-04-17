@@ -191,6 +191,8 @@ Packages" or "Pip Installs Python".
 %package -n     %{python_wheel_pkg_prefix}-%{srcname}-wheel
 Summary:        The pip wheel
 Requires:       ca-certificates
+# ISO/compose pieces still require the Fedora main-Python wheel name
+%{?oreon:Provides: python-pip-wheel = %{version}-%{release}}
 
 # Virtual provides for the packages bundled by pip:
 %{bundled %{python3_pkgversion}}
