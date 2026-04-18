@@ -26,7 +26,7 @@
 
 Name:           gstreamer1-plugins-bad-free
 Version:        1.26.7
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -634,7 +634,6 @@ EOF
 %if %{with extras}
 %{_libdir}/gstreamer-%{majorminor}/libgstfbdevsink.so
 %endif
-%{_libdir}/gstreamer-%{majorminor}/libgsthip.so
 %if %{with vpl}
 %{_libdir}/gstreamer-%{majorminor}/libgstmsdk.so
 %{_libdir}/gstreamer-%{majorminor}/libgstqsv.so
@@ -777,7 +776,6 @@ EOF
 %{_libdir}/libgstcodecs-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstcuda-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstdxva-%{majorminor}.so.0{,.*}
-%{_libdir}/libgsthip.so.0{,.*}
 %{_libdir}/libgstinsertbin-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstisoff-%{majorminor}.so.0{,.*}
 %{_libdir}/libgstmpegts-%{majorminor}.so.0{,.*}
@@ -803,8 +801,6 @@ EOF
 %{_libdir}/girepository-1.0/GstCodecs-1.0.typelib
 %{_libdir}/girepository-1.0/GstCuda-1.0.typelib
 %{_libdir}/girepository-1.0/GstDxva-1.0.typelib
-%{_libdir}/girepository-1.0/GstHip-1.0.typelib
-%{_libdir}/girepository-1.0/GstHipGL-1.0.typelib
 %{_libdir}/girepository-1.0/GstInsertBin-1.0.typelib
 %{_libdir}/girepository-1.0/GstMpegts-1.0.typelib
 %{_libdir}/girepository-1.0/GstMse-1.0.typelib
@@ -829,8 +825,6 @@ EOF
 %{_datadir}/gir-1.0/GstCodecs-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstCuda-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstDxva-%{majorminor}.gir
-%{_datadir}/gir-1.0/GstHip-1.0.gir
-%{_datadir}/gir-1.0/GstHipGL-1.0.gir
 %{_datadir}/gir-1.0/GstInsertBin-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstMpegts-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstMse-%{majorminor}.gir
@@ -850,7 +844,6 @@ EOF
 %{_libdir}/libgstcodecparsers-%{majorminor}.so
 %{_libdir}/libgstcodecs-%{majorminor}.so
 %{_libdir}/libgstdxva-%{majorminor}.so
-%{_libdir}/libgsthip.so
 %{_libdir}/libgstinsertbin-%{majorminor}.so
 %{_libdir}/libgstisoff-%{majorminor}.so
 %{_libdir}/libgstmpegts-%{majorminor}.so
@@ -874,7 +867,6 @@ EOF
 %{_includedir}/gstreamer-%{majorminor}/gst/basecamerabinsrc
 %{_includedir}/gstreamer-%{majorminor}/gst/codecparsers
 %{_includedir}/gstreamer-%{majorminor}/gst/cuda/
-%{_includedir}/gstreamer-%{majorminor}/gst/hip
 %{_includedir}/gstreamer-%{majorminor}/gst/insertbin
 %{_includedir}/gstreamer-%{majorminor}/gst/interfaces/photography*
 %{_includedir}/gstreamer-%{majorminor}/gst/isoff/
@@ -895,8 +887,6 @@ EOF
 %{_libdir}/pkgconfig/gstreamer-bad-audio-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-cuda-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-codecparsers-%{majorminor}.pc
-%{_libdir}/pkgconfig/gstreamer-hip-%{majorminor}.pc
-%{_libdir}/pkgconfig/gstreamer-hip-gl-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-insertbin-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-mpegts-%{majorminor}.pc
 %{_libdir}/pkgconfig/gstreamer-mse-%{majorminor}.pc
