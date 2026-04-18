@@ -26,7 +26,7 @@
 
 Name:           gstreamer1-plugins-bad-free
 Version:        1.26.7
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -411,7 +411,6 @@ aren't tested well enough, or the code is not of good enough quality.
     -D lcevcencoder=disabled \
     -D libde265=disabled \
     -D magicleap=disabled \
-    -D mpeghdec=disabled \
     -D neon=disabled \
     -D nvcomp=disabled \
     -D nvdswrapper=disabled \
