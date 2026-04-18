@@ -1,6 +1,6 @@
 Name:           jpegxl
 Version:        0.11.1
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        JPEG XL reference encoder and decoder (libjxl)
 License:        BSD-3-Clause
 URL:            https://github.com/libjxl/libjxl
@@ -32,6 +32,14 @@ Requires:       libjxl%{?_isa} = %{version}-%{release}
 
 %description -n libjxl-devel
 Headers and pkg-config files for libjxl (this release does not ship CMake package config).
+
+
+%package -n libjxl-static
+Summary:        Static libraries for libjxl
+Requires:       libjxl-devel%{?_isa} = %{version}-%{release}
+
+%description -n libjxl-static
+Static libjxl_extras_codec archive for builds that link the codec helpers without shared libjxl extras.
 
 
 %package -n libjxl-tools
@@ -74,6 +82,10 @@ cjxl, djxl, jxlinfo, and benchmark_xl from libjxl.
 %{_libdir}/libjxl_cms.so
 %{_libdir}/pkgconfig/libjxl.pc
 %{_libdir}/pkgconfig/libjxl_cms.pc
+%{_libdir}/pkgconfig/libjxl_threads.pc
+
+%files -n libjxl-static
+%{_libdir}/libjxl_extras_codec.a
 
 %files -n libjxl-tools
 %{_bindir}/cjxl
