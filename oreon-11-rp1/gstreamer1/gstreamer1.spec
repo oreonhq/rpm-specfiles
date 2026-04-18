@@ -16,8 +16,8 @@
 %endif
 
 Name:           gstreamer1
-Version:        1.28.1
-Release:        1%{?dist}
+Version:        1.26.7
+Release:        2%{?dist}
 Summary:        GStreamer streaming media framework runtime
 
 License:        LGPL-2.1-or-later

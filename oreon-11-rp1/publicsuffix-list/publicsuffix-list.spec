@@ -17,6 +17,10 @@ Source3:        https://github.com/rockdaboot/libpsl/releases/download/%{libpsl_
 
 BuildArch:      noarch
 
+%if %{with dafsa}
+BuildRequires:  python3
+%endif
+
 
 %description
 The Public Suffix List is a cross-vendor initiative to provide

@@ -1,11 +1,11 @@
 Name:           jxrlib
 Version:        1.2
-Release:        0.2.git20170615%{?dist}
+Release:        0.3.git20170615%{?dist}
 Summary:        JPEG XR reference library
 License:        BSD-2-Clause
 URL:            https://git.debian.org/git/phototools/jxrlib.git
 # Reproducible upstream snapshot used by Debian
-Source0:        https://snapshot.debian.org/archive/debian-archive/20221221T204908Z/debian/pool/main/j/jxrlib/jxrlib_1.2~git20170615.f752187.orig.tar.xz
+Source0:        https://deb.debian.org/debian/pool/main/j/jxrlib/jxrlib_1.2~git20170615.f752187.orig.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  gcc

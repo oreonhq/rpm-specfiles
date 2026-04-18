@@ -25,8 +25,8 @@
 %endif
 
 Name:           gstreamer1-plugins-bad-free
-Version:        1.28.1
-Release:        2%{?dist}
+Version:        1.26.7
+Release:        3%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later

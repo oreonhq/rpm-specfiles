@@ -1,6 +1,6 @@
 Name:           openjpeg2
 Version:        2.5.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        JPEG 2000 codec library
 License:        BSD-2-Clause
 URL:            https://www.openjpeg.org/
@@ -54,9 +54,9 @@ Headers and CMake files for OpenJPEG 2.x.
 %{_libdir}/libopenjp2.so.2*
 
 %files devel
-%{_includedir}/openjpeg-2.5
+%{_includedir}/openjpeg-2.5/
 %{_libdir}/libopenjp2.so
-%{_libdir}/openjpeg-2.5
+%{_libdir}/cmake/openjpeg-2.5/
 %{_libdir}/pkgconfig/libopenjp2.pc
 
 

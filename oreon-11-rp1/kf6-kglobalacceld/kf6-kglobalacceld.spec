@@ -2,7 +2,7 @@
 
 Name:           kf6-kglobalacceld
 Version:        6.6.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Plasma daemon for global keyboard shortcuts
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 URL:            https://invent.kde.org/plasma/kglobalacceld
@@ -23,6 +23,7 @@ BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Gui)
 BuildRequires:  cmake(Qt6Quick)
 BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  pkgconfig(x11-xcb)
 BuildRequires:  pkgconfig(xcb)
 BuildRequires:  pkgconfig(xcb-keysyms)

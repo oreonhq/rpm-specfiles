@@ -2,7 +2,7 @@
 
 Name:           discount
 Version:        2.2.7
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        C implementation of Markdown
 License:        BSD-3-Clause
 URL:            https://github.com/Orc/discount
@@ -35,6 +35,7 @@ Headers and pkg-config file for libmarkdown.
 
 
 %build
+export CFLAGS="%{optflags} -Wno-incompatible-pointer-types"
 ./configure.sh \
   --prefix=%{_prefix} \
   --libdir=%{_libdir} \

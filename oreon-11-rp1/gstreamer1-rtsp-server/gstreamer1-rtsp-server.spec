@@ -1,8 +1,8 @@
 %global         majorminor      1.0
 
 Name:           gstreamer1-rtsp-server
-Version:        1.28.1
-Release:        1%{?dist}
+Version:        1.26.7
+Release:        2%{?dist}
 Summary:        GStreamer RTSP server library
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-only

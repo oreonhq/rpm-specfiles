@@ -1,6 +1,6 @@
 Name:           knighttime
 Version:        6.6.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Plasma day and night cycle scheduling daemon
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/plasma/knighttime
@@ -46,6 +46,10 @@ Requires:       kf6-filesystem
 
 %files
 %license LICENSES/*
+%{_libdir}/libKNightTime.so.0*
+%{_libdir}/libKNightTime.so
+%{_includedir}/KNightTime/
+%{_libdir}/cmake/KNightTime/
 %{_libexecdir}/knighttimed
 %{_kf6_datadir}/applications/org.kde.knighttimed.desktop
 %{_datadir}/dbus-1/interfaces/org.kde.NightTime.xml

@@ -1,6 +1,6 @@
 Name:           accounts-qml-module
 Version:        0.7
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        QML bindings for online accounts (Qt 6)
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.com/accounts-sso/accounts-qml-module
@@ -17,7 +17,7 @@ BuildRequires:  pkgconfig(Qt6Qml)
 BuildRequires:  pkgconfig(Qt6Quick)
 BuildRequires:  pkgconfig(Qt6Test)
 BuildRequires:  pkgconfig(Qt6Xml)
-BuildRequires:  pkgconfig(libaccounts-qt6)
+BuildRequires:  pkgconfig(accounts-qt6)
 BuildRequires:  pkgconfig(libsignon-qt6)
 BuildRequires:  qt6-qtbase-devel
 BuildRequires:  qt6-qtdeclarative-devel

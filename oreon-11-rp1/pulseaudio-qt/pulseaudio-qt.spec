@@ -2,11 +2,11 @@
 
 Name:           pulseaudio-qt
 Version:        1.8.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Qt bindings to PulseAudio (Qt 6)
 License:        LGPL-2.1-only
 URL:            https://invent.kde.org/libraries/pulseaudio-qt
-Source0:        https://download.kde.org/stable/pulseaudio-qt/%{version}/pulseaudio-qt-%{version}.tar.xz
+Source0:        https://invent.kde.org/libraries/pulseaudio-qt/-/archive/v%{version}/pulseaudio-qt-v%{version}.tar.bz2
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -38,7 +38,7 @@ Headers, pkg-config, and CMake files for kf6-pulseaudio-qt.
 
 
 %prep
-%autosetup -n pulseaudio-qt-%{version} -p1
+%autosetup -n pulseaudio-qt-v%{version} -p1
 
 
 %build

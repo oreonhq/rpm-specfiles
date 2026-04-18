@@ -1,6 +1,6 @@
 Name:           kwrited
 Version:        6.6.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        KDE daemon for wall and write messages
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/plasma/kwrited
@@ -41,8 +41,7 @@ Requires:       kf6-filesystem
 
 %files
 %license LICENSES/*
-%{_kf6_bindir}/kwrited
-%{_sysconfdir}/xdg/autostart/kwrited-autostart.desktop
+%{_kf6_plugindir}/kded/kwrited.so
 %{_kf6_datadir}/knotifications6/kwrited.notifyrc
 
 

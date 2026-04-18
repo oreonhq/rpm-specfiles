@@ -1,6 +1,6 @@
 Name:           weston
 Version:        13.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Reference Wayland compositor
 License:        MIT
 URL:            https://gitlab.freedesktop.org/wayland/weston
@@ -47,8 +47,7 @@ backends plus demo clients.
 %meson \
   -Dbackend-vnc=false \
   -Dbackend-rdp=false \
-  -Dpipewire=false \
-  -Dtests=false
+  -Dpipewire=false
 %meson_build
 
 

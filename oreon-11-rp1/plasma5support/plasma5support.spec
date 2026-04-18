@@ -1,6 +1,6 @@
 Name:           plasma5support
 Version:        6.6.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Compatibility and migration support between KDE Frameworks 5 and 6
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/plasma5support
@@ -31,6 +31,7 @@ BuildRequires:  cmake(PlasmaActivities)
 BuildRequires:  cmake(Qt6Core)
 BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  qt6-qtbase-private-devel
 BuildRequires:  cmake(Qt6Network)
 BuildRequires:  cmake(Qt6Qml)
 BuildRequires:  cmake(Qt6Quick)

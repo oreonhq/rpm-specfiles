@@ -1,7 +1,7 @@
 Name:    kaddressbook
 Summary: Contact Manager
 Version: 26.03.80
-Release: 6%{?dist}
+Release: 7%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://www.kde.org/applications/office/kaddressbook
@@ -104,11 +104,6 @@ sed -i 's/TextAddonsWidgets::NeedUpdateVersionUtils/PimCommon::NeedUpdateVersion
 sed -i 's/TextAddonsWidgets::NeedUpdateVersionWidget/PimCommon::NeedUpdateVersionWidget/g' src/mainwindow.cpp
 sed -i 's/TextAddonsWidgets::WhatsNewInfo/PimCommon::WhatsNewInfo/g' \
     src/whatsnew/whatsnewtranslations.h src/whatsnew/whatsnewtranslations.cpp
-# KCModule still wraps PimCommon::ConfigurePluginsWidget(inner, parent) but the inner list must
-# subclass TextAddonsWidgets::ConfigurePluginsWidget (PluginItem, overrides). Upstream sometimes
-# includes PimCommon/ConfigurePluginsWidget in the inner header which does not declare that base.
-sed -i 's#<PimCommon/ConfigurePluginsWidget>#<TextAddonsWidgets/ConfigurePluginsWidget>#' \
-    src/configuration/kaddressbookconfigpluginlistwidget.h
 
 %build
 %cmake_kf6

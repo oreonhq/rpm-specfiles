@@ -1,6 +1,6 @@
 Name:           openexr
 Version:        3.3.3
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Tools and libraries for ILM's OpenEXR high dynamic-range image format
 License:        BSD-3-Clause
 URL:            https://www.openexr.com/
@@ -8,6 +8,7 @@ Source0:        https://github.com/AcademySoftwareFoundation/openexr/archive/v%{
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
+BuildRequires:  git
 BuildRequires:  imath-devel
 BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(zlib)
