@@ -45,6 +45,7 @@ Summary:        Accounts framework Qt6 bindings
 BuildRequires:  pkgconfig(Qt6Gui)
 BuildRequires:  make
 BuildRequires:  cmake(Qt6Test)
+Requires:        libaccounts-glib%{?_isa}
 %description    -n libaccounts-qt6
 %{summary}.
 

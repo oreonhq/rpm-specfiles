@@ -13,11 +13,6 @@ BuildRequires: flex
 BuildRequires: gcc
 BuildRequires: git
 BuildRequires: glibc-kernheaders >= 2.2.0
-#rdma-core-devel not available on arm
-%ifnarch %{arm}
-BuildRequires: rdma-core-devel
-%endif
-
 Source0:  https://www.tcpdump.org/release/%{name}-%{version}.tar.xz
 Source1:  https://www.tcpdump.org/release/%{name}-%{version}.tar.xz.sig
 
@@ -63,11 +58,7 @@ sed -i -e 's|-fpic|-fPIC|g' configure
 
 %build
 export CFLAGS="$RPM_OPT_FLAGS -fno-strict-aliasing"
-%ifarch %{arm}
-%configure
-%else
-%configure --enable-rdma
-%endif
+%configure --disable-rdma
 %make_build
 
 %install

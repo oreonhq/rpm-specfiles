@@ -26,6 +26,7 @@ BuildRequires:  gtk-doc
 BuildRequires:  graphviz
 BuildRequires:  meson
 
+Requires:       gupnp-igd%{?_isa}
 
 %description
 %{name} is an implementation of the IETF draft Interactive Connectivity

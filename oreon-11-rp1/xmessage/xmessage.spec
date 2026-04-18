@@ -12,6 +12,8 @@ BuildRequires:  make
 BuildRequires:  pkgconfig(xaw7)
 BuildRequires:  pkgconfig(xt)
 
+Requires:       libXaw%{?_isa}
+
 Obsoletes:      xorg-x11-utils < 7.5-39
 
 %description

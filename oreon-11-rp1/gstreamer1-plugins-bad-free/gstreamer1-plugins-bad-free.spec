@@ -298,6 +298,14 @@ This package contains the OpenH264 plugin.
 
 %package libs
 Summary:        Runtime libraries for the GStreamer media framework "bad" plug-ins
+Requires:       openal-soft%{?_isa}
+Requires:       librsvg2%{?_isa}
+Requires:       libaom%{?_isa}
+Requires:       faad2%{?_isa}
+Requires:       liblc3%{?_isa}
+Requires:       libvpl%{?_isa}
+Requires:       webrtc-audio-processing%{?_isa}
+Requires:       libnice%{?_isa}
 
 %description libs
 GStreamer is a streaming media framework, based on graphs of elements which

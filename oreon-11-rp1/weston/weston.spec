@@ -38,6 +38,8 @@ BuildRequires:  wayland-devel
 BuildRequires:  wayland-protocols-devel
 
 Requires:       xkeyboard-config
+Requires:       libdisplay-info%{?_isa}
+Requires:       libseat%{?_isa}
 
 %description
 Weston is the reference Wayland compositor with DRM, Wayland, and X11

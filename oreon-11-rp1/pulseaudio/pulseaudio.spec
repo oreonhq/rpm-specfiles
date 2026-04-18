@@ -136,6 +136,15 @@ BuildRequires:  pkgconfig(gstreamer-rtp-1.0) >= 1.16.0
 Obsoletes:      padevchooser < 1.0
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Requires:       rtkit
+Requires:       speexdsp%{?_isa}
+Requires:       fftw-libs%{?_isa}
+Requires:       libtdb%{?_isa}
+%if 0%{?with_webrtc}
+Requires:       webrtc-audio-processing%{?_isa}
+%endif
+%if 0%{?fedora}
+Requires:       soxr%{?_isa}
+%endif
 
 # Virtual Provides to support swapping between PipeWire-PA and PA
 Provides:       pulseaudio-daemon

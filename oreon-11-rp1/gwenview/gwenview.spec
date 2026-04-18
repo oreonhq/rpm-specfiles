@@ -64,6 +64,7 @@ BuildRequires: pkgconfig(wayland-client)
 BuildRequires: pkgconfig(wayland-protocols)
 
 Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
+Requires: kimageannotator-libs%{?_isa}
 
 # support for more formats, e.g. jp2, tiff, webp
 Recommends: qt6-qtimageformats%{?_isa}

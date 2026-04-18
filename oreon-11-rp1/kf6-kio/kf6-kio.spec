@@ -116,6 +116,7 @@ Summary:        Core components of the KIO Framework
 Requires:       %{name}-core-libs%{?_isa} = %{version}-%{release}
 Requires:       %{name}-doc = %{version}-%{release}
 Requires:       kf6-filesystem
+Requires:       libxslt%{?_isa}
 Recommends:     switcheroo-control
 %description    core
 KIOCore library provides core non-GUI components for working with KIO.

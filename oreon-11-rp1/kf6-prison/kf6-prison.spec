@@ -24,6 +24,8 @@ BuildRequires:	pkgconfig(libdmtx)
 BuildRequires:	pkgconfig(libqrencode)
 
 Requires:	kf6-filesystem
+Requires:	qrencode-libs%{?_isa}
+Requires:	libdmtx%{?_isa}
 
 %description
 Prison is a Qt-based barcode abstraction layer/library that provides

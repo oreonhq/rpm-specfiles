@@ -110,6 +110,11 @@ Recommends:     libsoup3%{?_isa}
 # Obsoletes/Provides moved from plugins-bad-free
 Obsoletes:      gstreamer1-plugin-mpg123 < 1.13.1
 Provides:       gstreamer1-plugin-mpg123 = %{version}-%{release}
+Requires:       libvpx%{?_isa}
+Requires:       libshout%{?_isa}
+Requires:       taglib%{?_isa}
+Requires:       libv4l%{?_isa}
+Requires:       opencore-amr%{?_isa}
 
 %description
 GStreamer is a streaming media framework, based on graphs of filters which

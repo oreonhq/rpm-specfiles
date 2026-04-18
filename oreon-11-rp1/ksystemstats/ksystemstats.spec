@@ -33,6 +33,7 @@ BuildRequires:  cmake(Qt6DBus)
 BuildRequires:  cmake(Qt6Test)
 
 Requires:       kf6-filesystem
+Requires:       lm_sensors-libs%{?_isa}
 
 %description
 KSystemStats is a plugin based system monitoring daemon used by Plasma for

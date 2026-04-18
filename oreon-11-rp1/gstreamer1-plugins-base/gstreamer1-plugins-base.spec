@@ -62,6 +62,8 @@ BuildRequires: pkgconfig(wayland-egl) >= 9.0
 BuildRequires: pkgconfig(wayland-protocols) >= 1.15
 
 Requires:       iso-codes
+Requires:       graphene%{?_isa}
+Requires:       libcdio-paranoia%{?_isa}
 
 #  libgstgl moved here
 Conflicts: gstreamer1-plugins-bad-free < 1.13

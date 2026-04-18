@@ -39,6 +39,7 @@ BuildRequires:  pkgconfig(libraw_r) >= 0.20.2
 BuildRequires:  jxrlib-devel
 
 Requires:       kf6-filesystem
+Requires:       openexr-libs%{?_isa}
 # for eps plugin read/write support
 Recommends:     poppler-utils
 Recommends:     ghostscript

@@ -155,6 +155,9 @@ Requires:         adobe-mappings-cmap-deprecated
 Requires:         adobe-mappings-pdf
 Requires:         google-droid-sans-fonts
 Requires:         urw-base35-fonts
+Requires:         libijs%{?_isa}
+Requires:         jbig2dec-libs%{?_isa}
+Requires:         libpaper%{?_isa}
 
 %description -n libgs
 This library provides Ghostscript's core functionality, based on Ghostscript's

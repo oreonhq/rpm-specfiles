@@ -18,6 +18,10 @@ BuildRequires:  gcc-c++
 BuildRequires:  make
 BuildRequires:  meson
 
+# Graphite shaping links libgraphite2; explicit Requires for minimal ISO roots
+# where auto-deps are not always pulled into the transaction.
+Requires:       graphite2%{?_isa}
+
 # https://github.com/harfbuzz/harfbuzz/issues/3163
 %global _distro_extra_cflags -fno-exceptions
 %global _distro_extra_cxxflags -fno-exceptions -fno-rtti

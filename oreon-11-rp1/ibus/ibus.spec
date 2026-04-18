@@ -117,9 +117,9 @@ Requires:       iso-codes
 # rpmlint asks to delete librsvg2
 #Requires:       librsvg2
 
-Requires:               dconf
-Requires(postun):       dconf
-Requires(posttrans):    dconf
+Requires:               dconf%{?_isa}
+Requires(postun):       dconf%{?_isa}
+Requires(posttrans):    dconf%{?_isa}
 
 Requires:               %{_sbindir}/alternatives
 Requires(post):         %{_sbindir}/alternatives

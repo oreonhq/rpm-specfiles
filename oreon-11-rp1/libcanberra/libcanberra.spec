@@ -30,6 +30,7 @@ BuildRequires: systemd-devel
 BuildRequires: make
 Requires: sound-theme-freedesktop
 Requires: pulseaudio-libs >= 0.9.15
+Requires: libtdb%{?_isa}
 
 %description
 A small and lightweight implementation of the XDG Sound Theme Specification

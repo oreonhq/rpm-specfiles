@@ -8,16 +8,12 @@
 
 %global examples 1
 
-%if 0%{?fedora}
-%global system_assimp 1
-%global system_openxr 1
-%endif
-%if 0%{?oreon}
-# Oreon ships only the oreon mirror. Bundling matches Fedora-off behavior without
-# pulling assimp and openxr into the minimal ISO dependency graph.
+# Always bundle assimp and OpenXR. Oreon mock often defines %%{?fedora} without
+# %%{?oreon}, which flipped these back to system libs and made qt6-qtquick3d
+# require libassimp.so / libopenxr_loader.so even though we never want that
+# closure on the ISO (see anaconda-dnf-problems.log).
 %global system_assimp 0
 %global system_openxr 0
-%endif
 
 Summary: Qt6 - Quick3D Libraries and utilities
 Name:    qt6-%{qt_module}
@@ -91,7 +87,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %prep
 %setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?unstable:-%{prerelease}}
 %patch -P 0 -p1
-%if (0%{?fedora} >= 43 || 0%{?oreon}) && 0%{?system_assimp}
+%if 0%{?system_assimp}
 %patch -P 1 -p1
 %endif
 

@@ -21,6 +21,7 @@ BuildRequires:  systemd-rpm-macros
 
 Requires:       gtk3%{?_isa}
 Requires:       glib2%{?_isa}
+Requires:       atk%{?_isa}
 
 %description
 Unity GTK3 module exports GTK menu shells over DBus. It provides appmenu

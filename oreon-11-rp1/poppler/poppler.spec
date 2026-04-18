@@ -73,6 +73,7 @@ BuildRequires: boost-devel
 BuildRequires: gnupg2
 
 Requires: poppler-data
+Requires: gpgmepp%{?_isa}
 
 Obsoletes: poppler-glib-demos < 0.60.1-1
 

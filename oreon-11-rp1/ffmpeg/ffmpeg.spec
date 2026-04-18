@@ -58,6 +58,7 @@ Provides:        libavfilter-free = %{version}-%{release}
 Provides:        libavdevice-free = %{version}-%{release}
 Provides:        libswscale-free = %{version}-%{release}
 Provides:        libswresample-free = %{version}-%{release}
+Requires:        libvpx%{?_isa}
 
 %description libs
 libavcodec, libavformat, libavutil, and related shared libraries.

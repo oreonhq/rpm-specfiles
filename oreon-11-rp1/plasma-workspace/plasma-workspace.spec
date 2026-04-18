@@ -335,6 +335,8 @@ Requires:  libXcursor%{?_isa}
 Requires:  libkexiv2-qt6%{?_isa}
 Requires:  knighttime%{?_isa}
 Requires:  plasma-keyboard%{?_isa}
+Requires:  libXft%{?_isa}
+Requires:  libqalculate%{?_isa}
 # consider splitting out plasma_packagestructure content later
 Provides: plasma-packagestructure = %{version}-%{release}
 %description libs
