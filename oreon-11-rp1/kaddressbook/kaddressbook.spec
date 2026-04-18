@@ -1,14 +1,14 @@
 Name:    kaddressbook
 Summary: Contact Manager
 Version: 26.03.80
-Release: 16%{?dist}
+Release: 17%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://www.kde.org/applications/office/kaddressbook
 
 # download.kde.org often redirects to third-party mirrors (e.g. fcix) that 500 on unstable tarballs
 Source0: https://invent.kde.org/pim/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
-# ktextaddons 1.8 on Oreon ships no TextAddonsWidgets/ConfigurePluginsWidget (kaddressbook needs the base class)
+# ktextaddons 1.8 on Oreon has no TextAddonsWidgets::ConfigurePluginsWidget yet so reroute the kcm to PimCommon::ConfigurePluginsListWidget
 Patch0: kaddressbook-oreon-ConfigurePluginsWidget-compat.patch
 
 
@@ -106,16 +106,6 @@ sed -i 's/TextAddonsWidgets::NeedUpdateVersionUtils/PimCommon::NeedUpdateVersion
 sed -i 's/TextAddonsWidgets::NeedUpdateVersionWidget/PimCommon::NeedUpdateVersionWidget/g' src/mainwindow.cpp
 sed -i 's/TextAddonsWidgets::WhatsNewInfo/PimCommon::WhatsNewInfo/g' \
     src/whatsnew/whatsnewtranslations.h src/whatsnew/whatsnewtranslations.cpp
-# Patch0 embeds TextAddonsWidgets::ConfigurePluginsWidget (missing from ktextaddons 1.8 devel). PimCommon and kaddressbook
-# must both include <TextAddonsWidgets/ConfigurePluginsWidget> (no .h) or the list widget base type differs from PimCommon
-# ctor TextAddonsWidgets::ConfigurePluginsWidget* and overload resolution fails.
-install -d src/configuration/textaddons_compat_configureplugins/TextAddonsWidgets
-printf '%s\n' '#pragma once' '#include "../configurepluginswidget.h"' \
-  > src/configuration/textaddons_compat_configureplugins/TextAddonsWidgets/ConfigurePluginsWidget
-# Oreon pimcommon may not ship PimCommon::PluginUtil::pluginConfigFile (upstream returns pimpluginsrc KConfig name)
-sed -i 's/PimCommon::PluginUtil::pluginConfigFile()/QStringLiteral("pimpluginsrc")/g' \
-    src/configuration/kaddressbookconfigpluginlistwidget.cpp
-
 %build
 %cmake_kf6
 %cmake_build
