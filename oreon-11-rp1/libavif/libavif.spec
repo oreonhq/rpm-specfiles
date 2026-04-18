@@ -1,12 +1,16 @@
 %global sover 16
+# Same commit as cmake/Modules/LocalLibargparse.cmake in this libavif release
+%global libargparse_commit ee74d1b53bd680748af14e737378de57e2a0a954
 
 Name:           libavif
 Version:        1.3.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Library for encoding and decoding AVIF images
 License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif
 Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+# Vendored libargparse tarball so we never use FetchContent/git in mock (see ext/libargparse.patch)
+Source1:        https://github.com/kmurray/libargparse/archive/%{libargparse_commit}/libargparse-%{libargparse_commit}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -45,9 +49,19 @@ Summary:        AVIF encoder and decoder command line tools
 
 %prep
 %autosetup -p1
+mkdir -p ext
+tar -xzf %{SOURCE1} -C ext
+mv "ext/libargparse-%{libargparse_commit}" ext/libargparse
+patch -p1 --fuzz=0 -d ext/libargparse < ext/libargparse.patch
 
 
 %build
+# Produce ext/libargparse/build/libargparse.a so LocalLibargparse.cmake skips FetchContent (no git, no network)
+%{__cmake} -GNinja -S ext/libargparse -B ext/libargparse/build \
+  -DBUILD_SHARED_LIBS=OFF \
+  -DCMAKE_BUILD_TYPE=Release
+%{__cmake} --build ext/libargparse/build %{?_smp_build_ncpus:--parallel %{_smp_build_ncpus}} --target libargparse
+
 %cmake \
   -GNinja \
   -DAVIF_CODEC_AOM=SYSTEM \

@@ -1,7 +1,7 @@
 Name:    kaddressbook
 Summary: Contact Manager
 Version: 26.03.80
-Release: 8%{?dist}
+Release: 9%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://www.kde.org/applications/office/kaddressbook
@@ -104,10 +104,9 @@ sed -i 's/TextAddonsWidgets::NeedUpdateVersionUtils/PimCommon::NeedUpdateVersion
 sed -i 's/TextAddonsWidgets::NeedUpdateVersionWidget/PimCommon::NeedUpdateVersionWidget/g' src/mainwindow.cpp
 sed -i 's/TextAddonsWidgets::WhatsNewInfo/PimCommon::WhatsNewInfo/g' \
     src/whatsnew/whatsnewtranslations.h src/whatsnew/whatsnewtranslations.cpp
-# ConfigurePluginsWidget moved to PimCommon with ktextaddons >= 1.8 (header already includes PimCommon)
-sed -i 's/TextAddonsWidgets::ConfigurePluginsWidget/PimCommon::ConfigurePluginsWidget/g' \
-    src/configuration/kaddressbookconfigpluginlistwidget.h \
-    src/configuration/kaddressbookconfigpluginlistwidget.cpp
+# Do not replace TextAddonsWidgets::ConfigurePluginsWidget on the list widget. PimCommon::ConfigurePluginsWidget
+# is a wrapper QWidget whose ctor takes TextAddonsWidgets::ConfigurePluginsWidget* (see pimcommon configurepluginswidget.h).
+# Subclassing PimCommon::ConfigurePluginsWidget breaks PluginItem, overrides, and the KCM ctor.
 
 %build
 %cmake_kf6

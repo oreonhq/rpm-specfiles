@@ -1,6 +1,6 @@
 Name:           libksysguard
 Version:        6.6.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        KDE system monitoring libraries and plugin runtime for Plasma
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/libksysguard
@@ -160,12 +160,8 @@ Headers and CMake files for libksysguard.
 %{_libdir}/libKSysGuardSensors.so.6*
 
 %files devel
+# 6.6.x installs formatter/sensors/etc. under include/ksysguard/ (not top-level KSysGuard*)
 %{_includedir}/ksysguard
-%{_includedir}/KSysGuardFormatter
-%{_includedir}/KSysGuardSensorFaces
-%{_includedir}/KSysGuardSensors
-%{_includedir}/KSysGuardSystemStats
-%{_includedir}/processcore
 %{_libdir}/libKSysGuardSystemStats.so
 %{_libdir}/libprocesscore.so
 %{_libdir}/libKSysGuardFormatter.so
