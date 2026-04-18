@@ -1,84 +1,13 @@
-From ec73d5f871a41eaffc5b5330f30969297ad67d2f Mon Sep 17 00:00:00 2001
-From: Jan Grulich <jgrulich@redhat.com>
-Date: Wed, 15 Apr 2026 15:56:53 +0200
-Subject: [PATCH] shiboken6: Fix build with clang 22
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Date: Thu, 17 Apr 2026 00:00:00 +0000
+Subject: [PATCH] shiboken6: Fix build with clang 22 (refreshed for fuzz=0)
 
-Squashed backport of the following upstream commits from the dev branch,
-adapted to Qt for Python 6.10.3 sources/shiboken6/ (upstream merged shiboken6_generator):
-
-2f25d2a3d: Add a define for the LLVM major version
-4522cb44b: Small preparatory refactorings/fixes
-47b52076d: Fix type names
-565f8ead9: Prepare for introducing error handling to type parsing
-d785072bc: Add infrastructure for error handling to the type parsing
-40965ebb2: Refactor function proto type handling
-d12cf3be3: Add some type checks
-f4d0e173e: Add clang type struct
-27cb9caa4: Fix retrieving fully qualified type names with clang 22
-
-Task-number: PYSIDE-3286
+Regenerated against pyside-setup 6.10.3 after Patch0-2 so rpmbuild %%autosetup (fuzz 0) applies cleanly.
 ---
- sources/shiboken6/cmake/ShibokenSetup.cmake   |   5 +-
- .../ApiExtractor/CMakeLists.txt               |   3 +-
- .../ApiExtractor/abstractmetabuilder.cpp      |   6 +-
- .../ApiExtractor/clangparser/clang_typedefs.h |  19 ++
- .../ApiExtractor/clangparser/clangbuilder.cpp | 306 ++++++++++++------
- .../ApiExtractor/clangparser/clangbuilder.h   |   2 +
- .../ApiExtractor/clangparser/clangparser.cpp  |  26 +-
- .../ApiExtractor/clangparser/clangparser.h    |   6 +-
- .../ApiExtractor/clangparser/clangtype.cpp    |  83 +++++
- .../ApiExtractor/clangparser/clangtype.h      |  28 ++
- .../ApiExtractor/clangparser/clangutils.cpp   |  23 +-
- .../ApiExtractor/clangparser/clangutils.h     |  11 +-
- .../ApiExtractor/messages.cpp                 |  11 +
- .../ApiExtractor/messages.h                   |   2 +
- .../ApiExtractor/parser/codemodel.cpp         |   9 +-
- .../ApiExtractor/parser/codemodel.h           |   4 +-
- .../ApiExtractor/parser/codemodel_enums.h     |   3 +-
- .../ApiExtractor/parser/typeinfo.cpp          |  36 ++-
- .../ApiExtractor/parser/typeinfo.h            |   1 -
- 19 files changed, 448 insertions(+), 138 deletions(-)
- create mode 100644 sources/shiboken6/ApiExtractor/clangparser/clang_typedefs.h
- create mode 100644 sources/shiboken6/ApiExtractor/clangparser/clangtype.cpp
- create mode 100644 sources/shiboken6/ApiExtractor/clangparser/clangtype.h
 
-
-diff --git a/sources/shiboken6/cmake/ShibokenSetup.cmake b/sources/shiboken6/cmake/ShibokenSetup.cmake
-index 73030bc..70f0ae2 100644
---- a/sources/shiboken6/cmake/ShibokenSetup.cmake
-+++ b/sources/shiboken6/cmake/ShibokenSetup.cmake
-@@ -79,8 +79,11 @@ if(NOT PYTHON_SITE_PACKAGES)
-     shiboken_internal_set_python_site_packages()
- endif()
- 
-+string(REGEX REPLACE "\\.[0-9]+\\.[0-9]+$" "" LLVM_VERSION "${LLVM_PACKAGE_VERSION}")
-+
- set_cmake_cxx_flags()
--set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D QT_NO_CAST_FROM_ASCII -D QT_NO_CAST_TO_ASCII")
-+set(CMAKE_CXX_FLAGS
-+    "${CMAKE_CXX_FLAGS} -D QT_NO_CAST_FROM_ASCII -D QT_NO_CAST_TO_ASCII -D LLVM_VERSION=${LLVM_VERSION}")
- 
- # Force usage of the C++17 standard
- set(CMAKE_CXX_STANDARD 17)
-diff --git a/sources/shiboken6/ApiExtractor/CMakeLists.txt b/sources/shiboken6/ApiExtractor/CMakeLists.txt
-index 6adc3e1..b340a0d 100644
---- a/sources/shiboken6/ApiExtractor/CMakeLists.txt
-+++ b/sources/shiboken6/ApiExtractor/CMakeLists.txt
-@@ -77,7 +77,8 @@ xmlutils.cpp xmlutils.h xmlutils_libxslt.h xmlutils_qt.h
- clangparser/clangbuilder.cpp clangparser/clangbuilder.h
- clangparser/clangdebugutils.cpp clangparser/clangdebugutils.h
- clangparser/clangparser.cpp clangparser/clangparser.h
--clangparser/clangutils.cpp clangparser/clangutils.h
-+clangparser/clangtype.cpp clangparser/clangtype.h
-+clangparser/clangutils.cpp clangparser/clangutils.h clangparser/clang_typedefs.h
- clangparser/compilersupport.cpp clangparser/compilersupport.h
- clangparser/triplet.cpp clangparser/triplet.h
- # Old parser
-diff --git a/sources/shiboken6/ApiExtractor/abstractmetabuilder.cpp b/sources/shiboken6/ApiExtractor/abstractmetabuilder.cpp
-index 107d6c8..036081b 100644
---- a/sources/shiboken6/ApiExtractor/abstractmetabuilder.cpp
-+++ b/sources/shiboken6/ApiExtractor/abstractmetabuilder.cpp
-@@ -535,6 +535,10 @@ FileModelItem AbstractMetaBuilderPrivate::buildDom(QByteArrayList arguments,
+--- a/sources/shiboken6/ApiExtractor/abstractmetabuilder.cpp	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/abstractmetabuilder.cpp	2026-04-17 20:15:11.841468201 -0700
+@@ -489,6 +489,10 @@
          for (qsizetype i = 0; i < diagnosticsCount; ++i)
              d << "  " << diagnostics.at(i) << '\n';
      }
@@ -89,7 +18,7 @@ index 107d6c8..036081b 100644
      return result;
  }
  
-@@ -2874,7 +2878,7 @@ std::optional<AbstractMetaType>
+@@ -2795,7 +2799,7 @@
          newInfo.setIndirectionsV(typeInfo.indirectionsV());
          newInfo.setConstant(typeInfo.isConstant());
          newInfo.setVolatile(typeInfo.isVolatile());
@@ -98,35 +27,8 @@ index 107d6c8..036081b 100644
          newInfo.setQualifiedName(typeInfo.qualifiedName());
          newInfo.setReferenceType(typeInfo.referenceType());
          newInfo.setVolatile(typeInfo.isVolatile());
-diff --git a/sources/shiboken6/ApiExtractor/clangparser/clang_typedefs.h b/sources/shiboken6/ApiExtractor/clangparser/clang_typedefs.h
-new file mode 100644
-index 0000000..49efc25
---- /dev/null
-+++ b/sources/shiboken6/ApiExtractor/clangparser/clang_typedefs.h
-@@ -0,0 +1,19 @@
-+// Copyright (C) 2026 The Qt Company Ltd.
-+// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
-+
-+#ifndef CLANG_TYPEDEFS_H
-+#define CLANG_TYPEDEFS_H
-+
-+#include <clang-c/Index.h>
-+
-+namespace clang {
-+
-+#if LLVM_VERSION >= 22
-+using PrintingPolicy = CXPrintingPolicy;
-+#else
-+using PrintingPolicy = void *;
-+#endif
-+
-+} // namespace clang
-+
-+#endif // CLANG_TYPEDEFS_H
-diff --git a/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.cpp b/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.cpp
-index 8e262d6..15e10e3 100644
---- a/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.cpp
-+++ b/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.cpp
+--- a/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.cpp	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.cpp	2026-04-17 20:15:11.841951599 -0700
 @@ -4,6 +4,7 @@
  #include "clangbuilder.h"
  #include "compilersupport.h"
@@ -146,7 +48,7 @@ index 8e262d6..15e10e3 100644
  using namespace Qt::StringLiterals;
  
  namespace clang {
-@@ -40,7 +45,7 @@ static inline bool withinClassDeclaration(const CXCursor &cursor)
+@@ -40,7 +45,7 @@
      return isClassCursor(clang_getCursorLexicalParent(cursor));
  }
  
@@ -155,7 +57,7 @@ index 8e262d6..15e10e3 100644
  {
      // Fix "Foo &" -> "Foo&", similarly "Bar **" -> "Bar**"
      auto pos = t.size() - 1;
-@@ -163,13 +168,15 @@ public:
+@@ -163,13 +168,15 @@
      FunctionModelItem createMemberFunction(const CXCursor &cursor,
                                             bool isTemplateCode = false);
      void qualifyConstructor(const CXCursor &cursor);
@@ -176,7 +78,7 @@ index 8e262d6..15e10e3 100644
                                     TypeInfo *t) const;
      bool addTemplateInstantiationsRecursion(const CXType &type, TypeInfo *t) const;
  
-@@ -180,7 +187,7 @@ public:
+@@ -180,7 +187,7 @@
  
      TemplateParameterModelItem createTemplateParameter(const CXCursor &cursor) const;
      TemplateParameterModelItem createNonTypeTemplateParameter(const CXCursor &cursor) const;
@@ -185,7 +87,7 @@ index 8e262d6..15e10e3 100644
  
      static QString cursorValueExpression(BaseVisitor *bv, const CXCursor &cursor);
      std::pair<QString, ClassModelItem> getBaseClass(CXType type) const;
-@@ -220,6 +227,7 @@ public:
+@@ -220,6 +227,7 @@
      CodeModel::FunctionType m_currentFunctionType = CodeModel::Normal;
      bool m_withinFriendDecl = false;
      mutable QHash<QString, SpecialSystemHeader> m_systemHeaders;
@@ -193,7 +95,7 @@ index 8e262d6..15e10e3 100644
  };
  
  bool BuilderPrivate::addClass(const CXCursor &cursor, CodeModel::ClassType t)
-@@ -329,11 +337,14 @@ FunctionModelItem BuilderPrivate::createFunction(const CXCursor &cursor,
+@@ -329,11 +337,14 @@
      QString name = getCursorSpelling(cursor);
      // Apply type fixes to "operator X &" -> "operator X&"
      if (name.startsWith(u"operator "))
@@ -210,7 +112,7 @@ index 8e262d6..15e10e3 100644
      result->setScopeResolution(hasScopeResolution(type));
      result->setFunctionType(t);
      result->setScope(m_scope);
-@@ -392,6 +403,8 @@ FunctionModelItem BuilderPrivate::createMemberFunction(const CXCursor &cursor,
+@@ -392,6 +403,8 @@
          : functionTypeFromCursor(cursor);
      isTemplateCode |= m_currentClass->name().endsWith(u'>');
      auto result = createFunction(cursor, functionType, isTemplateCode);
@@ -219,7 +121,7 @@ index 8e262d6..15e10e3 100644
      result->setAccessPolicy(accessPolicy(clang_getCXXAccessSpecifier(cursor)));
      result->setConstant(clang_CXXMethod_isConst(cursor) != 0);
      result->setAttribute(FunctionAttribute::Static, clang_CXXMethod_isStatic(cursor) != 0);
-@@ -425,45 +438,31 @@ TemplateParameterModelItem BuilderPrivate::createTemplateParameter(const CXCurso
+@@ -424,45 +437,31 @@
  
  TemplateParameterModelItem BuilderPrivate::createNonTypeTemplateParameter(const CXCursor &cursor) const
  {
@@ -275,7 +177,7 @@ index 8e262d6..15e10e3 100644
  static bool isArrayType(CXTypeKind k)
  {
      return k == CXType_ConstantArray || k == CXType_IncompleteArray
-@@ -489,7 +488,10 @@ bool BuilderPrivate::addTemplateInstantiationsRecursion(const CXType &type, Type
+@@ -488,7 +487,10 @@
                  // of a non-type template (template <int v>).
                  if (argType.kind == CXType_Invalid)
                      return false;
@@ -287,7 +189,7 @@ index 8e262d6..15e10e3 100644
              }
          }
          break;
-@@ -499,10 +501,8 @@ bool BuilderPrivate::addTemplateInstantiationsRecursion(const CXType &type, Type
+@@ -498,10 +500,8 @@
      return true;
  }
  
@@ -299,7 +201,7 @@ index 8e262d6..15e10e3 100644
                                                 TypeInfo *t) const
  {
      // In most cases, for templates like "Vector<A>", Clang will give us the
-@@ -513,16 +513,12 @@ void BuilderPrivate::addTemplateInstantiations(const CXType &type,
+@@ -512,16 +512,12 @@
      //    Vector(const Vector&);
      // };
      // In that case, have TypeInfo parse the list from the spelling.
@@ -319,7 +221,7 @@ index 8e262d6..15e10e3 100644
  }
  
  static TypeCategory typeCategoryFromClang(CXTypeKind k)
-@@ -546,22 +542,59 @@ static TypeCategory typeCategoryFromClang(CXTypeKind k)
+@@ -545,22 +541,59 @@
      return TypeCategory::Other;
  }
  
@@ -392,7 +294,7 @@ index 8e262d6..15e10e3 100644
      }
  
      TypeInfo typeInfo;
-@@ -595,9 +628,12 @@ TypeInfo BuilderPrivate::createTypeInfoUncached(const CXType &type,
+@@ -594,9 +627,12 @@
      typeInfo.setConstant(clang_isConstQualifiedType(nestedType) != 0);
      typeInfo.setVolatile(clang_isVolatileQualifiedType(nestedType) != 0);
  
@@ -408,7 +310,7 @@ index 8e262d6..15e10e3 100644
      }
  
      // For typedefs within templates or nested classes within templates (iterators):
-@@ -619,33 +655,44 @@ TypeInfo BuilderPrivate::createTypeInfoUncached(const CXType &type,
+@@ -618,33 +654,44 @@
  
      // Obtain template instantiations if the name has '<' (thus excluding
      // typedefs like "std::string".
@@ -462,7 +364,7 @@ index 8e262d6..15e10e3 100644
      item->setScope(m_scope);
      item->setAccessPolicy(accessPolicy(clang_getCXXAccessSpecifier(cursor)));
      m_scopeStack.back()->addTypeDef(item);
-@@ -675,8 +722,10 @@ void BuilderPrivate::endTemplateTypeAlias(const CXCursor &typeAliasCursor)
+@@ -674,8 +721,10 @@
      // Usually "<elaborated>std::list<T>" or "<unexposed>Container1<T>",
      // as obtained with parser of PYSIDE-323
      if (type.kind == CXType_Unexposed || type.kind == CXType_Elaborated) {
@@ -475,7 +377,7 @@ index 8e262d6..15e10e3 100644
      }
      m_currentTemplateTypeAlias.reset();
  }
-@@ -733,9 +782,11 @@ std::pair<QString, ClassModelItem> BuilderPrivate::getBaseClass(CXType type) con
+@@ -732,9 +781,11 @@
  {
      const auto decl = resolveBaseClassType(type);
      // Note: spelling has "struct baseClass", use type
@@ -490,7 +392,7 @@ index 8e262d6..15e10e3 100644
  
      auto it = m_cursorClassHash.constFind(decl.declaration);
      // Not found: Set unqualified name. This happens in cases like
-@@ -917,6 +968,11 @@ FileModelItem Builder::dom() const
+@@ -916,6 +967,11 @@
      return std::dynamic_pointer_cast<_FileModelItem>(rootScope);
  }
  
@@ -502,7 +404,7 @@ index 8e262d6..15e10e3 100644
  static QString msgOutOfOrder(const CXCursor &cursor, const char *expectedScope)
  {
      return getCursorKindName(cursor.kind) + u' '
-@@ -945,7 +1001,7 @@ static NamespaceType namespaceType(const CXCursor &cursor)
+@@ -944,7 +1000,7 @@
      return NamespaceType::Default;
  }
  
@@ -511,7 +413,7 @@ index 8e262d6..15e10e3 100644
  {
      QString name = getCursorSpelling(cursor); // "enum Foo { v1, v2 };"
      if (name.contains(u"unnamed enum")) // Clang 16.0
-@@ -953,7 +1009,7 @@ static QString enumType(const CXCursor &cursor)
+@@ -952,7 +1008,7 @@
      if (name.isEmpty()) {
          // PYSIDE-1228: For "typedef enum { v1, v2 } Foo;", type will return
          // "Foo" as expected. Care must be taken to exclude real anonymous enums.
@@ -520,7 +422,7 @@ index 8e262d6..15e10e3 100644
          if (name.contains(u"(unnamed") // Clang 12.0.1
              || name.contains(u"(anonymous")) { // earlier
              name.clear();
-@@ -1011,7 +1067,7 @@ BaseVisitor::StartTokenResult Builder::startToken(const CXCursor &cursor)
+@@ -1010,7 +1066,7 @@
          d->m_scope.back() += "<>"_L1;
          break;
      case CXCursor_EnumDecl: {
@@ -529,7 +431,7 @@ index 8e262d6..15e10e3 100644
          EnumKind kind = CEnum;
          if (name.isEmpty()) {
              kind = AnonymousEnum;
-@@ -1031,7 +1087,7 @@ BaseVisitor::StartTokenResult Builder::startToken(const CXCursor &cursor)
+@@ -1030,7 +1086,7 @@
              d->m_currentEnum->setDeprecated(true);
          const auto enumType = fullyResolveType(clang_getEnumDeclIntegerType(cursor));
          d->m_currentEnum->setSigned(isSigned(enumType.kind));
@@ -538,7 +440,7 @@ index 8e262d6..15e10e3 100644
          if (std::dynamic_pointer_cast<_ClassModelItem>(d->m_scopeStack.back()))
              d->m_currentEnum->setAccessPolicy(accessPolicy(clang_getCXXAccessSpecifier(cursor)));
      }
-@@ -1059,10 +1115,8 @@ BaseVisitor::StartTokenResult Builder::startToken(const CXCursor &cursor)
+@@ -1058,10 +1114,8 @@
          break;
      case CXCursor_VarDecl:
          // static class members are seen as CXCursor_VarDecl
@@ -551,7 +453,7 @@ index 8e262d6..15e10e3 100644
          break;
      case CXCursor_FieldDecl:
          d->addField(cursor);
-@@ -1073,13 +1127,16 @@ BaseVisitor::StartTokenResult Builder::startToken(const CXCursor &cursor)
+@@ -1072,13 +1126,16 @@
      case CXCursor_Constructor:
      case CXCursor_Destructor: // Note: Also use clang_CXXConstructor_is..Constructor?
      case CXCursor_CXXMethod:
@@ -571,7 +473,7 @@ index 8e262d6..15e10e3 100644
          break;
      // Not fully supported, currently, seen as normal function
      // Note: May appear inside class (member template) or outside (free template).
-@@ -1087,31 +1144,30 @@ BaseVisitor::StartTokenResult Builder::startToken(const CXCursor &cursor)
+@@ -1086,31 +1143,30 @@
          const CXCursor semParent = clang_getCursorSemanticParent(cursor);
          if (isClassCursor(semParent)) {
              if (semParent == clang_getCursorLexicalParent(cursor)) {
@@ -616,7 +518,7 @@ index 8e262d6..15e10e3 100644
          }
          break;
      case CXCursor_Namespace: {
-@@ -1144,10 +1200,15 @@ BaseVisitor::StartTokenResult Builder::startToken(const CXCursor &cursor)
+@@ -1143,10 +1199,15 @@
          // and function pointer typedefs.
          if (!d->m_currentArgument && d->m_currentFunction) {
              const QString name = getCursorSpelling(cursor);
@@ -634,7 +536,7 @@ index 8e262d6..15e10e3 100644
              d->m_currentFunction->addArgument(d->m_currentArgument);
              QString defaultValueExpression = BuilderPrivate::cursorValueExpression(this, cursor);
              if (!defaultValueExpression.isEmpty()) {
-@@ -1164,10 +1225,30 @@ BaseVisitor::StartTokenResult Builder::startToken(const CXCursor &cursor)
+@@ -1163,10 +1224,30 @@
              ? d->createTemplateParameter(cursor) : d->createNonTypeTemplateParameter(cursor);
          // Apply to function/member template?
          if (d->m_currentFunction) {
@@ -666,7 +568,7 @@ index 8e262d6..15e10e3 100644
              const QString &tplParmName = tItem->name();
              if (Q_UNLIKELY(!insertTemplateParameterIntoClassName(tplParmName, d->m_currentClass)
                             || !insertTemplateParameterIntoClassName(tplParmName, &d->m_scope.back()))) {
-@@ -1178,7 +1259,7 @@ BaseVisitor::StartTokenResult Builder::startToken(const CXCursor &cursor)
+@@ -1177,7 +1258,7 @@
                  appendDiagnostic(d);
                  return Error;
              }
@@ -675,7 +577,7 @@ index 8e262d6..15e10e3 100644
          }
      }
          break;
-@@ -1289,9 +1370,10 @@ bool Builder::endToken(const CXCursor &cursor)
+@@ -1288,9 +1369,10 @@
          d->m_currentField.reset();
          break;
      case CXCursor_Constructor:
@@ -687,7 +589,7 @@ index 8e262d6..15e10e3 100644
              d->m_currentFunction.reset();
          }
          break;
-@@ -1301,12 +1383,28 @@ bool Builder::endToken(const CXCursor &cursor)
+@@ -1300,12 +1382,28 @@
      case CXCursor_FunctionTemplate:
          if (d->m_currentFunction) {
              d->m_currentFunction->_determineType();
@@ -716,11 +618,9 @@ index 8e262d6..15e10e3 100644
              d->m_currentFunction.reset();
          }
          break;
-diff --git a/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.h b/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.h
-index f60bbe1..4cc58d0 100644
---- a/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.h
-+++ b/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.h
-@@ -33,6 +33,8 @@ public:
+--- a/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.h	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/clangparser/clangbuilder.h	2026-04-17 20:15:11.842213702 -0700
+@@ -33,6 +33,8 @@
  
      FileModelItem dom() const;
  
@@ -729,10 +629,9 @@ index f60bbe1..4cc58d0 100644
  private:
      BuilderPrivate *d;
  };
-diff --git a/sources/shiboken6/ApiExtractor/clangparser/clangparser.cpp b/sources/shiboken6/ApiExtractor/clangparser/clangparser.cpp
---- a/sources/shiboken6/ApiExtractor/clangparser/clangparser.cpp
-+++ b/sources/shiboken6/ApiExtractor/clangparser/clangparser.cpp
-@@ -286,7 +286,8 @@ static void setupTarget(CXTranslationUnit translationUnit)
+--- a/sources/shiboken6/ApiExtractor/clangparser/clangparser.cpp	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/clangparser/clangparser.cpp	2026-04-17 20:15:11.842264211 -0700
+@@ -286,7 +286,8 @@
      QString message;
      {
          QTextStream str(&message);
@@ -742,7 +641,7 @@ diff --git a/sources/shiboken6/ApiExtractor/clangparser/clangparser.cpp b/source
              << " targeting \"" << targetTriple() << "\"/"
              << clang::compilerTripletValue(clang::compiler())
              << ", " << pointerSize() << "bit";
-@@ -322,8 +323,19 @@ bool parse(const QByteArrayList  &clangArgs, bool addCompilerSupportArguments,
+@@ -322,8 +323,19 @@
  
      CXCursor rootCursor = clang_getTranslationUnitCursor(translationUnit);
  
@@ -762,10 +661,8 @@ diff --git a/sources/shiboken6/ApiExtractor/clangparser/clangparser.cpp b/source
      QList<Diagnostic> diagnostics = getDiagnostics(translationUnit);
      diagnostics.append(bv.diagnostics());
      bv.setDiagnostics(diagnostics);
-diff --git a/sources/shiboken6/ApiExtractor/clangparser/clangparser.h b/sources/shiboken6/ApiExtractor/clangparser/clangparser.h
-index 79dc855..7cc47e8 100644
---- a/sources/shiboken6/ApiExtractor/clangparser/clangparser.h
-+++ b/sources/shiboken6/ApiExtractor/clangparser/clangparser.h
+--- a/sources/shiboken6/ApiExtractor/clangparser/clangparser.h	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/clangparser/clangparser.h	2026-04-17 20:15:11.842321803 -0700
 @@ -4,7 +4,7 @@
  #ifndef CLANGPARSER_H
  #define CLANGPARSER_H
@@ -775,7 +672,7 @@ index 79dc855..7cc47e8 100644
  
  #include <QtCore/qbytearraylist.h>
  #include <QtCore/qhash.h>
-@@ -72,10 +72,14 @@ public:
+@@ -72,10 +72,14 @@
      // For usage by the parser
      bool _handleVisitLocation( const CXSourceLocation &location);
  
@@ -790,11 +687,8 @@ index 79dc855..7cc47e8 100644
      bool m_visitCurrent = true;
  };
  
-diff --git a/sources/shiboken6/ApiExtractor/clangparser/clangtype.cpp b/sources/shiboken6/ApiExtractor/clangparser/clangtype.cpp
-new file mode 100644
-index 0000000..bd455bd
---- /dev/null
-+++ b/sources/shiboken6/ApiExtractor/clangparser/clangtype.cpp
+--- a/sources/shiboken6/ApiExtractor/clangparser/clangtype.cpp	1969-12-31 16:00:00.000000000 -0800
++++ b/sources/shiboken6/ApiExtractor/clangparser/clangtype.cpp	2026-04-17 20:15:11.842372160 -0700
 @@ -0,0 +1,83 @@
 +// Copyright (C) 2026 The Qt Company Ltd.
 +// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -879,11 +773,30 @@ index 0000000..bd455bd
 +}
 +
 +} // namespace clang
-diff --git a/sources/shiboken6/ApiExtractor/clangparser/clangtype.h b/sources/shiboken6/ApiExtractor/clangparser/clangtype.h
-new file mode 100644
-index 0000000..0ae9706
---- /dev/null
-+++ b/sources/shiboken6/ApiExtractor/clangparser/clangtype.h
+--- a/sources/shiboken6/ApiExtractor/clangparser/clang_typedefs.h	1969-12-31 16:00:00.000000000 -0800
++++ b/sources/shiboken6/ApiExtractor/clangparser/clang_typedefs.h	2026-04-17 20:15:11.841833144 -0700
+@@ -0,0 +1,19 @@
++// Copyright (C) 2026 The Qt Company Ltd.
++// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
++
++#ifndef CLANG_TYPEDEFS_H
++#define CLANG_TYPEDEFS_H
++
++#include <clang-c/Index.h>
++
++namespace clang {
++
++#if LLVM_VERSION >= 22
++using PrintingPolicy = CXPrintingPolicy;
++#else
++using PrintingPolicy = void *;
++#endif
++
++} // namespace clang
++
++#endif // CLANG_TYPEDEFS_H
+--- a/sources/shiboken6/ApiExtractor/clangparser/clangtype.h	1969-12-31 16:00:00.000000000 -0800
++++ b/sources/shiboken6/ApiExtractor/clangparser/clangtype.h	2026-04-17 20:15:11.842398294 -0700
 @@ -0,0 +1,28 @@
 +// Copyright (C) 2026 The Qt Company Ltd.
 +// SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -913,10 +826,8 @@ index 0000000..0ae9706
 +} // namespace clang
 +
 +#endif // CLANGTYPE_H
-diff --git a/sources/shiboken6/ApiExtractor/clangparser/clangutils.cpp b/sources/shiboken6/ApiExtractor/clangparser/clangutils.cpp
-index 384fd68..44878dc 100644
---- a/sources/shiboken6/ApiExtractor/clangparser/clangutils.cpp
-+++ b/sources/shiboken6/ApiExtractor/clangparser/clangutils.cpp
+--- a/sources/shiboken6/ApiExtractor/clangparser/clangutils.cpp	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/clangparser/clangutils.cpp	2026-04-17 20:15:11.842463105 -0700
 @@ -10,6 +10,8 @@
  
  #include <string_view>
@@ -926,7 +837,7 @@ index 384fd68..44878dc 100644
  bool operator==(const CXCursor &c1, const CXCursor &c2) noexcept
  {
      return c1.kind == c2.kind
-@@ -137,8 +139,23 @@ CXType fullyResolveType(const CXType &type)
+@@ -137,8 +139,23 @@
      return resolveTypedef(resolveElaboratedType(type));
  }
  
@@ -951,7 +862,7 @@ index 384fd68..44878dc 100644
      CXString typeSpelling = clang_getTypeSpelling(type);
      const QString result = QString::fromUtf8(clang_getCString(typeSpelling));
      clang_disposeString(typeSpelling);
-@@ -157,9 +174,9 @@ bool hasScopeResolution(const CXType &type)
+@@ -157,9 +174,9 @@
  }
  
  // Resolve elaborated types occurring with clang 16
@@ -963,10 +874,8 @@ index 384fd68..44878dc 100644
  }
  
  Diagnostic::Diagnostic(const QString &m, const CXCursor &c, CXDiagnosticSeverity s)
-diff --git a/sources/shiboken6/ApiExtractor/clangparser/clangutils.h b/sources/shiboken6/ApiExtractor/clangparser/clangutils.h
-index bb819e6..866be92 100644
---- a/sources/shiboken6/ApiExtractor/clangparser/clangutils.h
-+++ b/sources/shiboken6/ApiExtractor/clangparser/clangutils.h
+--- a/sources/shiboken6/ApiExtractor/clangparser/clangutils.h	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/clangparser/clangutils.h	2026-04-17 20:15:11.842519109 -0700
 @@ -4,7 +4,8 @@
  #ifndef CLANGUTILS_H
  #define CLANGUTILS_H
@@ -977,7 +886,7 @@ index bb819e6..866be92 100644
  #include <QtCore/qstring.h>
  #include <QtCore/qstringlist.h>
  #include <QtCore/qcompare.h>
-@@ -26,14 +27,10 @@ namespace clang {
+@@ -26,14 +27,10 @@
  QString getCursorKindName(CXCursorKind cursorKind);
  QString getCursorSpelling(const CXCursor &cursor);
  QString getCursorDisplayName(const CXCursor &cursor);
@@ -994,13 +903,23 @@ index bb819e6..866be92 100644
  
  inline bool isCursorValid(const CXCursor &c)
  {
-diff --git a/sources/shiboken6/ApiExtractor/messages.cpp b/sources/shiboken6/ApiExtractor/messages.cpp
-index e619f1e..be11bf9 100644
---- a/sources/shiboken6/ApiExtractor/messages.cpp
-+++ b/sources/shiboken6/ApiExtractor/messages.cpp
-@@ -1168,3 +1168,14 @@ QString msgSynthesizedFunction(const AbstractMetaFunctionCPtr &newFunction,
-     const QString why = "from: \""_L1 + oldFunction->classQualifiedSignature() + u'"';
-     return msgSynthesizedFunction(newFunction, why);
+--- a/sources/shiboken6/ApiExtractor/CMakeLists.txt	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/CMakeLists.txt	2026-04-17 20:15:11.841277091 -0700
+@@ -77,7 +77,8 @@
+ clangparser/clangbuilder.cpp clangparser/clangbuilder.h
+ clangparser/clangdebugutils.cpp clangparser/clangdebugutils.h
+ clangparser/clangparser.cpp clangparser/clangparser.h
+-clangparser/clangutils.cpp clangparser/clangutils.h
++clangparser/clangtype.cpp clangparser/clangtype.h
++clangparser/clangutils.cpp clangparser/clangutils.h clangparser/clang_typedefs.h
+ clangparser/compilersupport.cpp clangparser/compilersupport.h
+ # Old parser
+ parser/codemodel.cpp parser/codemodel.h parser/codemodel_fwd.h parser/codemodel_enums.h
+--- a/sources/shiboken6/ApiExtractor/messages.cpp	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/messages.cpp	2026-04-17 20:15:11.842587438 -0700
+@@ -1116,3 +1116,14 @@
+     result.append(u'\n');
+     return result;
  }
 +
 +QString msgRejectedTypes(const QStringList &rejectedTypes)
@@ -1013,22 +932,18 @@ index e619f1e..be11bf9 100644
 +    str << '\n';
 +    return result;
 +}
-diff --git a/sources/shiboken6/ApiExtractor/messages.h b/sources/shiboken6/ApiExtractor/messages.h
-index db32f38..5a81485 100644
---- a/sources/shiboken6/ApiExtractor/messages.h
-+++ b/sources/shiboken6/ApiExtractor/messages.h
-@@ -297,4 +297,6 @@ QString msgSynthesizedFunction(const AbstractMetaFunctionCPtr &newFunction,
- QString msgSynthesizedFunction(const AbstractMetaFunctionCPtr &newFunction,
-                                const FunctionModelItem &oldFunction);
+--- a/sources/shiboken6/ApiExtractor/messages.h	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/messages.h	2026-04-17 20:15:11.842664543 -0700
+@@ -288,4 +288,6 @@
+ 
+ QString msgCommandLineArguments(const QStringList &argv);
  
 +QString msgRejectedTypes(const QStringList &rejectedTypes);
 +
  #endif // MESSAGES_H
-diff --git a/sources/shiboken6/ApiExtractor/parser/codemodel.cpp b/sources/shiboken6/ApiExtractor/parser/codemodel.cpp
-index bfccacb..e261635 100644
---- a/sources/shiboken6/ApiExtractor/parser/codemodel.cpp
-+++ b/sources/shiboken6/ApiExtractor/parser/codemodel.cpp
-@@ -345,9 +345,9 @@ TemplateParameterList _ClassModelItem::templateParameters() const
+--- a/sources/shiboken6/ApiExtractor/parser/codemodel.cpp	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/parser/codemodel.cpp	2026-04-17 20:15:11.842753164 -0700
+@@ -345,9 +345,9 @@
      return m_templateParameters;
  }
  
@@ -1040,7 +955,7 @@ index bfccacb..e261635 100644
  }
  
  bool _ClassModelItem::extendsClass(const QString &name) const
-@@ -1547,6 +1547,11 @@ void _MemberModelItem::setAccessPolicy(Access accessPolicy)
+@@ -1475,6 +1475,11 @@
      m_accessPolicy = accessPolicy;
  }
  
@@ -1052,33 +967,9 @@ index bfccacb..e261635 100644
  bool _MemberModelItem::isStatic() const
  {
      return m_isStatic;
-diff --git a/sources/shiboken6/ApiExtractor/parser/codemodel.h b/sources/shiboken6/ApiExtractor/parser/codemodel.h
-index 7ff0a88..c867f80 100644
---- a/sources/shiboken6/ApiExtractor/parser/codemodel.h
-+++ b/sources/shiboken6/ApiExtractor/parser/codemodel.h
-@@ -284,7 +284,7 @@ public:
-     void addBaseClass(const BaseClass &b) { m_baseClasses.append(b); }
- 
-     TemplateParameterList templateParameters() const;
--    void setTemplateParameters(const TemplateParameterList &templateParameters);
-+    void addTemplateParameter(const TemplateParameterModelItem &templateParameter);
- 
-     bool extendsClass(const QString &name) const;
- 
-@@ -432,7 +432,7 @@ public:
-     void setAccessPolicy(Access accessPolicy);
- 
-     TemplateParameterList templateParameters() const { return m_templateParameters; }
--    void setTemplateParameters(const TemplateParameterList &templateParameters) { m_templateParameters = templateParameters; }
-+    void addTemplateParameter(const TemplateParameterModelItem &templateParameter);
- 
-     TypeInfo type() const;
-     void setType(const TypeInfo &type);
-diff --git a/sources/shiboken6/ApiExtractor/parser/codemodel_enums.h b/sources/shiboken6/ApiExtractor/parser/codemodel_enums.h
-index 272140a..ae49b0e 100644
---- a/sources/shiboken6/ApiExtractor/parser/codemodel_enums.h
-+++ b/sources/shiboken6/ApiExtractor/parser/codemodel_enums.h
-@@ -59,13 +59,14 @@ enum class FunctionAttribute : std::uint8_t {
+--- a/sources/shiboken6/ApiExtractor/parser/codemodel_enums.h	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/parser/codemodel_enums.h	2026-04-17 20:15:11.842916242 -0700
+@@ -58,13 +58,14 @@
  Q_DECLARE_FLAGS(FunctionAttributes, FunctionAttribute)
  Q_DECLARE_OPERATORS_FOR_FLAGS(FunctionAttributes)
  
@@ -1094,11 +985,29 @@ index 272140a..ae49b0e 100644
      Void
  };
  
-diff --git a/sources/shiboken6/ApiExtractor/parser/typeinfo.cpp b/sources/shiboken6/ApiExtractor/parser/typeinfo.cpp
-index c530caf..7bd0223 100644
---- a/sources/shiboken6/ApiExtractor/parser/typeinfo.cpp
-+++ b/sources/shiboken6/ApiExtractor/parser/typeinfo.cpp
-@@ -41,8 +41,7 @@ public:
+--- a/sources/shiboken6/ApiExtractor/parser/codemodel.h	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/parser/codemodel.h	2026-04-17 20:15:11.842852452 -0700
+@@ -284,7 +284,7 @@
+     void addBaseClass(const BaseClass &b) { m_baseClasses.append(b); }
+ 
+     TemplateParameterList templateParameters() const;
+-    void setTemplateParameters(const TemplateParameterList &templateParameters);
++    void addTemplateParameter(const TemplateParameterModelItem &templateParameter);
+ 
+     bool extendsClass(const QString &name) const;
+ 
+@@ -430,7 +430,7 @@
+     void setAccessPolicy(Access accessPolicy);
+ 
+     TemplateParameterList templateParameters() const { return m_templateParameters; }
+-    void setTemplateParameters(const TemplateParameterList &templateParameters) { m_templateParameters = templateParameters; }
++    void addTemplateParameter(const TemplateParameterModelItem &templateParameter);
+ 
+     TypeInfo type() const;
+     void setType(const TypeInfo &type);
+--- a/sources/shiboken6/ApiExtractor/parser/typeinfo.cpp	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/parser/typeinfo.cpp	2026-04-17 20:15:11.842976630 -0700
+@@ -41,8 +41,7 @@
          struct {
              uint m_constant: 1;
              uint m_volatile: 1;
@@ -1108,7 +1017,7 @@ index c530caf..7bd0223 100644
          };
      };
  
-@@ -223,13 +222,7 @@ void TypeInfo::addIndirection(Indirection i)
+@@ -223,13 +222,7 @@
  
  bool TypeInfo::isFunctionPointer() const
  {
@@ -1123,7 +1032,7 @@ index c530caf..7bd0223 100644
  }
  
  const QStringList &TypeInfo::arrayElements() const
-@@ -426,8 +419,11 @@ QString TypeInfo::toString() const
+@@ -426,8 +419,11 @@
          break;
      }
  
@@ -1137,7 +1046,7 @@ index c530caf..7bd0223 100644
          for (qsizetype i = 0; i < d->m_arguments.size(); ++i) {
              if (i != 0)
                  tmp += u", "_s;
-@@ -461,7 +457,7 @@ bool TypeInfoData::equals(const TypeInfoData &other) const
+@@ -461,7 +457,7 @@
      return flags == other.flags
             && m_qualifiedName == other.m_qualifiedName
             && m_category == other.m_category
@@ -1146,7 +1055,7 @@ index c530caf..7bd0223 100644
             && m_instantiations == other.m_instantiations;
  }
  
-@@ -602,8 +598,14 @@ void TypeInfo::formatDebug(QDebug &debug) const
+@@ -602,8 +598,14 @@
          debug << ", [pointer]";
          break;
      case TypeCategory::Function:
@@ -1162,7 +1071,7 @@ index c530caf..7bd0223 100644
      }
      if (!d->m_indirections.isEmpty()) {
          debug << ", indirections=";
-@@ -625,8 +627,12 @@ void TypeInfo::formatDebug(QDebug &debug) const
+@@ -625,8 +627,12 @@
          formatSequence(debug, d->m_instantiations.begin(), d->m_instantiations.end());
          debug << '>';
      }
@@ -1177,11 +1086,9 @@ index c530caf..7bd0223 100644
          formatSequence(debug, d->m_arguments.begin(), d->m_arguments.end());
          debug << ')';
      }
-diff --git a/sources/shiboken6/ApiExtractor/parser/typeinfo.h b/sources/shiboken6/ApiExtractor/parser/typeinfo.h
-index 092fbb7..43c9947 100644
---- a/sources/shiboken6/ApiExtractor/parser/typeinfo.h
-+++ b/sources/shiboken6/ApiExtractor/parser/typeinfo.h
-@@ -71,7 +71,6 @@ public:
+--- a/sources/shiboken6/ApiExtractor/parser/typeinfo.h	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/ApiExtractor/parser/typeinfo.h	2026-04-17 20:15:11.843042085 -0700
+@@ -71,7 +71,6 @@
      void setIndirections(int indirections);
  
      bool isFunctionPointer() const;
@@ -1189,7 +1096,1152 @@ index 092fbb7..43c9947 100644
  
      const QStringList &arrayElements() const;
      void setArrayElements(const QStringList &arrayElements);
-
--- 
-2.53.0
-
+--- a/sources/shiboken6/cmake/ShibokenHelpers.cmake.orig	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/cmake/ShibokenHelpers.cmake.orig	1969-12-31 16:00:00.000000000 -0800
+@@ -1,905 +0,0 @@
+-# Copyright (C) 2023 The Qt Company Ltd.
+-# SPDX-License-Identifier: BSD-3-Clause
+-
+-include(CMakeParseArguments)
+-
+-macro(set_limited_api)
+-    if (WIN32 AND NOT EXISTS "${PYTHON_LIMITED_LIBRARIES}")
+-        message(FATAL_ERROR "The Limited API was enabled, but ${PYTHON_LIMITED_LIBRARIES} was not found!")
+-    endif()
+-    message(STATUS "******************************************************")
+-    message(STATUS "** Limited API enabled ${PYTHON_LIMITED_LIBRARIES}")
+-    message(STATUS "******************************************************")
+-endmacro()
+-
+-macro(set_debug_build)
+-    set(SHIBOKEN_BUILD_TYPE "Debug")
+-
+-    if(NOT Python_LIBRARIES)
+-        message(WARNING "Python debug shared library not found; \
+-            assuming python was built with shared library support disabled.")
+-    endif()
+-
+-    if(NOT PYTHON_WITH_DEBUG)
+-        message(WARNING "Compiling shiboken6 with debug enabled, \
+-            but the python executable was not compiled with debug support.")
+-    else()
+-        set(SBK_PKG_CONFIG_PY_DEBUG_DEFINITION " -DPy_DEBUG")
+-    endif()
+-
+-    if (PYTHON_WITH_COUNT_ALLOCS)
+-        set(SBK_PKG_CONFIG_PY_DEBUG_DEFINITION "${SBK_PKG_CONFIG_PY_DEBUG_DEFINITION} -DCOUNT_ALLOCS")
+-    endif()
+-endmacro()
+-
+-macro(setup_sanitize_address)
+-    # Currently this does not check that the clang / gcc / MSVC version used supports Address
+-    # sanitizer, so once again, use at your own risk.
+-    if(MSVC)
+-        add_compile_options("/fsanitize=address")
+-    else()
+-        add_compile_options("-fsanitize=address" "-g" "-fno-omit-frame-pointer")
+-    endif()
+-    # We need to add the sanitize address option to all linked executables / shared libraries
+-    # so that proper sanitizer symbols are linked in.
+-    #
+-    # Note that when running tests, you may need to set an additional environment variable
+-    # in set_tests_properties for shiboken6 / pyside tests, or exported in your shell. Address
+-    # sanitizer will tell you what environment variable needs to be exported. For example:
+-    # export DYLD_INSERT_LIBRARIES=/Applications/Xcode.app/Contents/Developer/Toolchains/
+-    #   ./XcodeDefault.xctoolchain/usr/lib/clang/8.1.0/lib/darwin/libclang_rt.asan_osx_dynamic.dylib
+-    if(MSVC)
+-        set(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_STANDARD_LIBRARIES} /fsanitize=address")
+-    else()
+-        set(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_STANDARD_LIBRARIES} -fsanitize=address")
+-    endif()
+-endmacro()
+-
+-macro(setup_sanitize_thread)
+-    if(MSVC)
+-        set(sanitize_thread_option "/fsanitize=thread")
+-    else()
+-        set(sanitize_thread_option "-fsanitize=thread")
+-    endif()
+-    add_compile_options("${sanitize_thread_option}")
+-    set(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_STANDARD_LIBRARIES} ${sanitize_thread_option}")
+-endmacro()
+-
+-macro(set_cmake_cxx_flags)
+-if(MSVC)
+-    # Qt5: this flag has changed from /Zc:wchar_t- in Qt4.X
+-    set(CMAKE_CXX_FLAGS "/Zc:wchar_t /GR /EHsc /DWIN32 /D_WINDOWS /D_SCL_SECURE_NO_WARNINGS")
+-    #set(CMAKE_CXX_FLAGS "/Zc:wchar_t /GR /EHsc /DNOCOLOR /DWIN32 /D_WINDOWS /D_SCL_SECURE_NO_WARNINGS") # XXX
+-else()
+-    set (gcc_warnings_options "-Wall -Wextra -Wno-strict-aliasing")
+-    # Clang has -Wno-bad-function-cast, but does not need it.
+-    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL  "GNU")
+-        set (gcc_warnings_options "${gcc_warnings_options} -Wno-cast-function-type")
+-    endif()
+-    if(CMAKE_HOST_UNIX AND NOT CYGWIN)
+-        add_definitions(-fPIC)
+-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${gcc_warnings_options} -fvisibility=hidden")
+-    endif()
+-    set(CMAKE_CXX_FLAGS_DEBUG "-g")
+-    option(ENABLE_GCC_OPTIMIZATION "Enable specific GCC flags to optimization library \
+-        size and performance. Only available on Release Mode" 0)
+-    if(ENABLE_GCC_OPTIMIZATION)
+-        set(CMAKE_CXX_FLAGS_RELEASE "-DNDEBUG -Os -Wl,-O1")
+-        if(NOT CMAKE_HOST_APPLE)
+-            set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wl,--hash-style=gnu")
+-        endif()
+-    endif()
+-    if(CMAKE_HOST_APPLE)
+-        # ALTERNATIVE_QT_INCLUDE_DIR is deprecated, because CMake takes care of finding the proper
+-        # include folders using the qmake found in the environment. Only use it for now in case
+-        # something goes wrong with the cmake process.
+-        if(ALTERNATIVE_QT_INCLUDE_DIR AND NOT QT_INCLUDE_DIR)
+-            set(QT_INCLUDE_DIR ${ALTERNATIVE_QT_INCLUDE_DIR})
+-        endif()
+-    endif()
+-endif()
+-
+-endmacro()
+-
+-function(qfp_strip_library target)
+-    # Strip unless macOS (/strip: error: symbols referenced by indirect symbol
+-    # table entries that can't be stripped).
+-    if (CMAKE_STRIP AND UNIX AND NOT APPLE AND NOT QFP_NO_STRIP
+-        AND NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
+-        set(post_command COMMAND ${CMAKE_STRIP} $<TARGET_FILE:${target}>)
+-        add_custom_command(TARGET ${target} POST_BUILD ${post_command})
+-    endif()
+-
+-endfunction()
+-
+-macro(shiboken_internal_set_python_site_packages)
+-    # When cross-building, we can't run the target python executable to find out the information,
+-    # so we allow an explicit variable assignment or use a default / sensible value.
+-    if(SHIBOKEN_IS_CROSS_BUILD OR PYSIDE_IS_CROSS_BUILD OR QFP_FIND_NEW_PYTHON_PACKAGE)
+-        # Allow manual assignment.
+-        if(QFP_PYTHON_SITE_PACKAGES)
+-            set(PYTHON_SITE_PACKAGES "${QFP_PYTHON_SITE_PACKAGES}")
+-        else()
+-            # Assumes POSIX.
+-            # Convention can be checked in cpython's source code in
+-            # Lib/sysconfig.py's _INSTALL_SCHEMES
+-            set(__version_major_minor
+-                "${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}")
+-
+-            set(PYTHON_SITE_PACKAGES_WITHOUT_PREFIX
+-                "lib/python${__version_major_minor}/site-packages")
+-            set(PYTHON_SITE_PACKAGES
+-                "${CMAKE_INSTALL_PREFIX}/${PYTHON_SITE_PACKAGES_WITHOUT_PREFIX}")
+-            unset(__version_major_minor)
+-        endif()
+-    else()
+-        execute_process(
+-            COMMAND ${Python_EXECUTABLE} -c "if True:
+-                import sys
+-                import sysconfig
+-                from os.path import sep
+-
+-                # /home/qt/dev/env/lib/python3.9/site-packages
+-                if sys.platform == 'win32':
+-                    lib_path = sysconfig.get_path('purelib')
+-                else:
+-                    lib_path = sysconfig.get_path('purelib', scheme='posix_prefix')
+-
+-                # /home/qt/dev/env
+-                if sys.platform == 'win32':
+-                    data_path = sysconfig.get_path('data')
+-                else:
+-                    data_path = sysconfig.get_path('data', scheme='posix_prefix')
+-
+-                # /lib/python3.9/site-packages
+-                rel_path = lib_path.replace(data_path, '')
+-
+-                print(f'${CMAKE_INSTALL_PREFIX}{rel_path}'.replace(sep, '/'))
+-                "
+-            OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
+-            OUTPUT_STRIP_TRAILING_WHITESPACE)
+-    endif()
+-    if (NOT PYTHON_SITE_PACKAGES)
+-        message(FATAL_ERROR "Could not detect Python module installation directory.")
+-    elseif (APPLE)
+-        message(STATUS "!!! The generated bindings will be installed on ${PYTHON_SITE_PACKAGES}, \
+-            is it right!?")
+-    endif()
+-endmacro()
+-
+-macro(set_python_config_suffix)
+-    if (PYTHON_LIMITED_API)
+-        if(WIN32)
+-            set(PYTHON_EXTENSION_SUFFIX "")
+-        else()
+-            set(PYTHON_EXTENSION_SUFFIX ".abi3")
+-        endif()
+-        set(PYTHON_CONFIG_SUFFIX ".abi3")
+-    else()
+-        set(PYTHON_CONFIG_SUFFIX "${PYTHON_EXTENSION_SUFFIX}")
+-    endif()
+-endmacro()
+-
+-macro(setup_clang)
+-    # Find libclang using the environment variables LLVM_INSTALL_DIR,
+-    # CLANG_INSTALL_DIR using standard cmake.
+-    # Use CLANG_INCLUDE_DIRS and link to libclang.
+-    if(DEFINED ENV{LLVM_INSTALL_DIR})
+-        list(PREPEND CMAKE_PREFIX_PATH "$ENV{LLVM_INSTALL_DIR}")
+-        list(PREPEND CMAKE_FIND_ROOT_PATH "$ENV{LLVM_INSTALL_DIR}")
+-    elseif(DEFINED ENV{CLANG_INSTALL_DIR})
+-        list(PREPEND CMAKE_PREFIX_PATH "$ENV{CLANG_INSTALL_DIR}")
+-        list(PREPEND CMAKE_FIND_ROOT_PATH "$ENV{CLANG_INSTALL_DIR}")
+-    endif()
+-
+-    find_package(Clang CONFIG REQUIRED)
+-    # Need to explicitly handle the version check, because the Clang package doesn't.
+-    set(REQUIRED_LLVM "18.0")
+-
+-    if (LLVM_PACKAGE_VERSION AND LLVM_PACKAGE_VERSION VERSION_LESS "${REQUIRED_LLVM}")
+-        message(WARNING "You need LLVM version ${REQUIRED_LLVM} or greater to build PySide "
+-            "without issues, and ${LLVM_PACKAGE_VERSION} was found. "
+-            "A lower version might case problems, specially on Windows.")
+-        # Exception to enable Yocto builds (Kirkstone) - 6.8.x
+-        set(REQUIRED_LLVM "14.0")
+-        if (LLVM_PACKAGE_VERSION AND LLVM_PACKAGE_VERSION VERSION_LESS "${REQUIRED_LLVM}")
+-            message(FATAL_ERROR "Using a LLVM version ${REQUIRED_LLVM} is the minimum allowed "
+-                "to work pyside in some systems, however ${LLVM_PACKAGE_VERSION} was found.")
+-        endif()
+-    endif()
+-
+-    # CLANG_LIBRARY is read out from the cmake cache to deploy libclang
+-    get_target_property(CLANG_BUILD_TYPE libclang IMPORTED_CONFIGURATIONS)
+-    get_target_property(CLANG_LIBRARY_NAME libclang IMPORTED_LOCATION_${CLANG_BUILD_TYPE})
+-    set(CLANG_LIBRARY "${CLANG_LIBRARY_NAME}" CACHE FILEPATH "libclang")
+-    message(STATUS "CLANG: ${Clang_DIR}, ${CLANG_LIBRARY} detected")
+-endmacro()
+-
+-macro(set_quiet_build)
+-    # Don't display "up-to-date / install" messages when installing, to reduce visual clutter.
+-    set(CMAKE_INSTALL_MESSAGE NEVER)
+-    # Override message not to display info messages when doing a quiet build.
+-    function(message)
+-        list(GET ARGV 0 MessageType)
+-        if (MessageType STREQUAL FATAL_ERROR OR
+-            MessageType STREQUAL SEND_ERROR OR
+-            MessageType STREQUAL WARNING OR
+-            MessageType STREQUAL AUTHOR_WARNING)
+-                list(REMOVE_AT ARGV 0)
+-                _message(${MessageType} "${ARGV}")
+-        endif()
+-    endfunction()
+-endmacro()
+-
+-macro(get_python_extension_suffix)
+-    # When cross-building, we can't run the target python executable to find out the information,
+-    # so we rely on Python_SOABI being set by find_package(Python).
+-    # Python_SOABI is only set by CMake 3.17+
+-    # TODO: Lower this to CMake 3.16 if possible.
+-    if(SHIBOKEN_IS_CROSS_BUILD)
+-        if(NOT Python_SOABI)
+-            message(FATAL_ERROR "Python_SOABI variable is empty.")
+-        endif()
+-        set(PYTHON_EXTENSION_SUFFIX ".${Python_SOABI}")
+-    else()
+-        # See PYSIDE-1841 / https://bugs.python.org/issue39825 for distutils vs sysconfig
+-        execute_process(
+-          COMMAND ${Python_EXECUTABLE} -c "if True:
+-             import sys
+-             if sys.version_info >= (3, 8, 2):
+-                 import sysconfig
+-                 suffix = sysconfig.get_config_var('EXT_SUFFIX')
+-             else:
+-                 from distutils import sysconfig
+-                 suffix = sysconfig.get_config_var('EXT_SUFFIX')
+-             pos = suffix.rfind('.')
+-             if pos > 0:
+-                 print(suffix[:pos])
+-             else:
+-                 print(f'Unable to determine PYTHON_EXTENSION_SUFFIX from EXT_SUFFIX: \"{suffix}\"',
+-                     file=sys.stderr)
+-             "
+-          OUTPUT_VARIABLE PYTHON_EXTENSION_SUFFIX
+-          OUTPUT_STRIP_TRAILING_WHITESPACE)
+-    endif()
+-    message(STATUS "PYTHON_EXTENSION_SUFFIX: " ${PYTHON_EXTENSION_SUFFIX})
+-endmacro()
+-
+-macro(shiboken_parse_all_arguments prefix type flags options multiopts)
+-    cmake_parse_arguments(${prefix} "${flags}" "${options}" "${multiopts}" ${ARGN})
+-    if(DEFINED ${prefix}_UNPARSED_ARGUMENTS)
+-        message(FATAL_ERROR "Unknown arguments were passed to ${type} (${${prefix}_UNPARSED_ARGUMENTS}).")
+-    endif()
+-endmacro()
+-
+-macro(shiboken_check_if_limited_api)
+-    # TODO: Figure out how to use limited API libs when cross-building to Windows, if that's ever
+-    # needed. Perhaps use host python to walk the libs of the target python installation.
+-
+-    if(NOT SHIBOKEN_IS_CROSS_BUILD AND WIN32)
+-        # On Windows, PYTHON_LIBRARIES can be a list. Example:
+-        #    optimized;C:/Python36/libs/python36.lib;debug;C:/Python36/libs/python36_d.lib
+-        # On other platforms, this result is not used at all.
+-        execute_process(
+-            COMMAND ${Python_EXECUTABLE} -c "if True:
+-                from pathlib import Path
+-                libs = r'${Python_LIBRARIES}'
+-                libs = libs.split(';')
+-                for lib in libs:
+-                    if ('\\\\' in lib or '/' in lib) and Path(lib).is_file():
+-                        lib = Path(lib)
+-                        prefix = lib.parent
+-                        py = lib.name
+-                        if py.startswith('python3'):
+-                            print(prefix / 'python3.lib')
+-                            break
+-                "
+-            OUTPUT_VARIABLE PYTHON_LIMITED_LIBRARIES
+-            OUTPUT_STRIP_TRAILING_WHITESPACE)
+-    endif()
+-
+-    message(STATUS "PYTHON_LIMITED_LIBRARIES: " ${PYTHON_LIMITED_LIBRARIES})
+-
+-    if(FORCE_LIMITED_API OR SHIBOKEN_PYTHON_LIMITED_API)
+-        set(PYTHON_LIMITED_API 1)
+-        if(WIN32)
+-            set(SHIBOKEN_PYTHON_LIBRARIES ${PYTHON_LIMITED_LIBRARIES})
+-        endif()
+-    endif()
+-endmacro()
+-
+-
+-macro(shiboken_find_required_python)
+-    set(_shiboken_find_python_version_args "")
+-    if(${ARGC} GREATER 0)
+-        list(APPEND _shiboken_find_python_version_args "${ARGV0}")
+-    endif()
+-    # This function can also be called by consumers of ShibokenConfig.cmake package like pyside,
+-    # that's why we also check for PYSIDE_IS_CROSS_BUILD (which is set by pyside project)
+-    # and QFP_FIND_NEW_PYTHON_PACKAGE for an explicit opt in.
+-    #
+-    # We have to use FindPython package instead of FindPythonInterp to get required target Python
+-    # information.
+-    if(SHIBOKEN_IS_CROSS_BUILD OR PYSIDE_IS_CROSS_BUILD OR QFP_FIND_NEW_PYTHON_PACKAGE)
+-        # We want FindPython to look in the sysroot for the python-config executable,
+-        # but toolchain files might set CMAKE_FIND_ROOT_PATH_MODE_PROGRAM to NEVER because
+-        # programs are mostly found for running and you usually can't run a target executable on
+-        # a host platform. python-config can likely be ran though, because it's a shell script
+-        # to be run on a host Linux.
+-        set(_shiboken_backup_CMAKE_FIND_ROOT_PATH_MODE_PROGRAM
+-            "${CMAKE_FIND_ROOT_PATH_MODE_PROGRAM}")
+-        set(_shiboken_backup_CMAKE_FIND_ROOT_PATH
+-            "${CMAKE_FIND_ROOT_PATH}")
+-        set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM ONLY)
+-        if(Python_ROOT_DIR)
+-            list(PREPEND CMAKE_FIND_ROOT_PATH "${Python_ROOT_DIR}")
+-        endif()
+-
+-        # We can't look for the Python interpreter because FindPython tries to execute it, which
+-        # usually won't work on a host platform due to different architectures / platforms.
+-        # Thus we only look for the Python include and lib directories which are part of the
+-        # Development component.
+-        find_package(
+-            Python
+-            ${_shiboken_find_python_version_args}
+-            REQUIRED
+-            COMPONENTS Development
+-        )
+-        set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM
+-            "${_shiboken_backup_CMAKE_FIND_ROOT_PATH_MODE_PROGRAM}")
+-        set(CMAKE_FIND_ROOT_PATH
+-            "${_shiboken_backup_CMAKE_FIND_ROOT_PATH}")
+-
+-        # For Android platform sometimes the FindPython module returns Python_SOABI as empty in
+-        # certain scenarios eg: armv7a target, macOS host etc. This is because
+-        # it is unable to set Python_CONFIG i.e. `python3-config` script
+-        # This workaround sets the Python_SOABI manually for this Android platform.
+-        # This needs to be updated manually if the Python version for Android cross compilation
+-        # changes.
+-        # TODO: Find a better way to set Python_SOABI for Android platform
+-        if(CMAKE_SYSTEM_NAME STREQUAL "Android" AND NOT Python_SOABI)
+-            set(Python_SOABI "cpython-311")
+-        endif()
+-    else()
+-        find_package(
+-            Python
+-            ${_shiboken_find_python_version_args}
+-            REQUIRED
+-            COMPONENTS Interpreter Development.Module
+-        )
+-    endif()
+-
+-    shiboken_validate_python_version()
+-
+-    set(SHIBOKEN_PYTHON_INTERPRETER "${Python_EXECUTABLE}")
+-    set_property(GLOBAL PROPERTY SHIBOKEN_PYTHON_INTERPRETER "${Python_EXECUTABLE}")
+-endmacro()
+-
+-macro(shiboken_validate_python_version)
+-    if(Python_VERSION_MAJOR EQUAL "3" AND Python_VERSION_MINOR LESS "9")
+-            message(FATAL_ERROR
+-                   "Shiboken requires Python 3.9+.")
+-    endif()
+-endmacro()
+-
+-macro(shiboken_compute_python_includes)
+-    shiboken_parse_all_arguments(
+-        "SHIBOKEN_COMPUTE_INCLUDES" "shiboken_compute_python_includes"
+-        "IS_CALLED_FROM_EXPORT" "" "" ${ARGN})
+-
+-
+-    # If the installed shiboken config file is used,
+-    # append the found Python include dirs as an interface property on the libshiboken target.
+-    # This needs to be dynamic because the user of the library might have python installed
+-    # in a different path than when shiboken was originally built.
+-    # Otherwise if shiboken is currently being built itself (either as standalone, or super project
+-    # build) append the include dirs as PUBLIC.
+-    if (SHIBOKEN_COMPUTE_INCLUDES_IS_CALLED_FROM_EXPORT)
+-        #TODO target_include_directories works on imported targets only starting with v3.11.0.
+-        set_property(TARGET Shiboken6::libshiboken
+-                     APPEND PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${Python_INCLUDE_DIRS})
+-    else()
+-        target_include_directories(libshiboken
+-                                   PUBLIC $<BUILD_INTERFACE:${Python_INCLUDE_DIRS}>)
+-    endif()
+-
+-
+-    set(SHIBOKEN_PYTHON_INCLUDE_DIRS "${Python_INCLUDE_DIRS}")
+-
+-    set_property(GLOBAL PROPERTY shiboken_python_include_dirs "${SHIBOKEN_PYTHON_INCLUDE_DIRS}")
+-
+-    message(STATUS
+-            "SHIBOKEN_PYTHON_INCLUDE_DIRS computed to value: '${SHIBOKEN_PYTHON_INCLUDE_DIRS}'")
+-endmacro()
+-
+-# Given a list of the following form:
+-#     optimized;C:/Python36/libs/python36.lib;debug;C:/Python36/libs/python36_d.lib
+-# choose the corresponding library to use, based on the current configuration type.
+-function(shiboken_get_library_for_current_config library_list current_config out_var)
+-    list(FIND library_list "optimized" optimized_found)
+-    list(FIND library_list "general" general_found)
+-    list(FIND library_list "debug" debug_found)
+-
+-    if (optimized_found OR general_found OR debug_found)
+-        # Iterate over library list to find the most appropriate library.
+-        foreach(token ${library_list})
+-            if(token STREQUAL "optimized" OR token STREQUAL "general")
+-                set(is_debug 0)
+-                set(token1 1)
+-                set(lib "")
+-            elseif(token STREQUAL "debug")
+-                set(is_debug 1)
+-                set(token1 1)
+-                set(lib "")
+-            elseif(EXISTS ${token})
+-                set(lib ${token})
+-                set(token2 1)
+-            else()
+-                set(token1 0)
+-                set(token2 0)
+-                set(lib "")
+-            endif()
+-
+-            if(token1 AND token2)
+-                if((is_debug AND lib AND current_config STREQUAL "Debug")
+-                   OR (NOT is_debug AND lib AND (NOT current_config STREQUAL "Debug")))
+-                    set(${out_var} ${lib} PARENT_SCOPE)
+-                    return()
+-                endif()
+-            endif()
+-        endforeach()
+-    else()
+-        # No configuration specific libraries found, just set the original value.
+-        set(${out_var} "${library_list}" PARENT_SCOPE)
+-    endif()
+-
+-endfunction()
+-
+-macro(shiboken_compute_python_libraries)
+-    shiboken_parse_all_arguments(
+-        "SHIBOKEN_COMPUTE_LIBS" "shiboken_compute_python_libraries"
+-        "IS_CALLED_FROM_EXPORT" "" "" ${ARGN})
+-
+-    if (NOT SHIBOKEN_PYTHON_LIBRARIES)
+-        set(SHIBOKEN_PYTHON_LIBRARIES "")
+-    endif()
+-
+-    if(WIN32 AND NOT SHIBOKEN_PYTHON_LIBRARIES)
+-        set(SHIBOKEN_PYTHON_LIBRARIES ${Python_LIBRARIES})
+-    endif()
+-
+-    # If the resulting variable
+-    # contains a "debug;X;optimized;Y" list like described in shiboken_check_if_limited_api,
+-    # make sure to pick just one, so that the final generator expressions are valid.
+-    shiboken_get_library_for_current_config("${SHIBOKEN_PYTHON_LIBRARIES}" "${CMAKE_BUILD_TYPE}" "SHIBOKEN_PYTHON_LIBRARIES")
+-
+-    if(APPLE)
+-        set(SHIBOKEN_PYTHON_LIBRARIES "-undefined dynamic_lookup")
+-    endif()
+-
+-    # If the installed shiboken config file is used,
+-    # append the computed Python libraries as an interface property on the libshiboken target.
+-    # This needs to be dynamic because the user of the library might have python installed
+-    # in a different path than when shiboken was originally built.
+-    # Otherwise if shiboken is currently being built itself (either as standalone, or super project
+-    # build) append the libraries as PUBLIC.
+-    if (SHIBOKEN_COMPUTE_LIBS_IS_CALLED_FROM_EXPORT)
+-        #TODO target_link_libraries works on imported targets only starting with v3.11.0.
+-        set_property(TARGET Shiboken6::libshiboken
+-                     APPEND PROPERTY INTERFACE_LINK_LIBRARIES ${SHIBOKEN_PYTHON_LIBRARIES})
+-    else()
+-        target_link_libraries(libshiboken
+-                              PUBLIC $<BUILD_INTERFACE:${SHIBOKEN_PYTHON_LIBRARIES}>)
+-    endif()
+-
+-    set_property(GLOBAL PROPERTY shiboken_python_libraries "${SHIBOKEN_PYTHON_LIBRARIES}")
+-
+-    message(STATUS "SHIBOKEN_PYTHON_LIBRARIES computed to value: '${SHIBOKEN_PYTHON_LIBRARIES}'")
+-endmacro()
+-
+-function(shiboken_check_if_built_and_target_python_are_compatible)
+-    if(NOT SHIBOKEN_PYTHON_VERSION_MAJOR STREQUAL Python_VERSION_MAJOR)
+-        message(FATAL_ERROR "The detected Python major version is not \
+-compatible with the Python major version which was used when Shiboken was built.
+-Built with: '${SHIBOKEN_PYTHON_VERSION_MAJOR}.${SHIBOKEN_PYTHON_VERSION_MINOR}' \
+-Detected: '${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}'")
+-    else()
+-        if(NOT SHIBOKEN_PYTHON_LIMITED_API
+-           AND NOT SHIBOKEN_PYTHON_VERSION_MINOR STREQUAL Python_VERSION_MINOR)
+-            message(FATAL_ERROR
+-                    "The detected Python minor version is not compatible with the Python minor \
+-version which was used when Shiboken was built. Consider building shiboken with \
+-FORCE_LIMITED_API set to '1', so that only the Python major version matters.
+-Built with: '${SHIBOKEN_PYTHON_VERSION_MAJOR}.${SHIBOKEN_PYTHON_VERSION_MINOR}' \
+-Detected: '${Python_VERSION_MAJOR}.${Python_VERSION_MINOR}'")
+-        endif()
+-    endif()
+-endfunction()
+-
+-function(shiboken_internal_disable_pkg_config)
+-    # Disable pkg-config by setting an empty executable path. There's no documented way to
+-    # mark the package as not found, but we can force all pkg_check_modules calls to do nothing
+-    # by setting the variable to an empty value.
+-    set(PKG_CONFIG_EXECUTABLE "" CACHE STRING "Disabled pkg-config usage." FORCE)
+-endfunction()
+-
+-function(shiboken_internal_disable_pkg_config_if_needed)
+-    if(SHIBOKEN_SKIP_PKG_CONFIG_ADJUSTMENT)
+-        return()
+-    endif()
+-
+-    # pkg-config should not be used by default on Darwin platforms.
+-    if(APPLE)
+-        set(pkg_config_enabled OFF)
+-    else()
+-        set(pkg_config_enabled ON)
+-    endif()
+-
+-    if(NOT pkg_config_enabled)
+-        shiboken_internal_disable_pkg_config()
+-    endif()
+-endfunction()
+-
+-function(shiboken_internal_detect_if_cross_building)
+-    if(CMAKE_CROSSCOMPILING OR QFP_SHIBOKEN_HOST_PATH)
+-        set(is_cross_build TRUE)
+-    else()
+-        set(is_cross_build FALSE)
+-    endif()
+-    set(SHIBOKEN_IS_CROSS_BUILD "${is_cross_build}" PARENT_SCOPE)
+-    message(STATUS "SHIBOKEN_IS_CROSS_BUILD: ${is_cross_build}")
+-endfunction()
+-
+-function(shiboken_internal_decide_parts_to_build)
+-    set(build_libs_default ON)
+-    option(SHIBOKEN_BUILD_LIBS "Build shiboken libraries" ${build_libs_default})
+-    message(STATUS "SHIBOKEN_BUILD_LIBS: ${SHIBOKEN_BUILD_LIBS}")
+-
+-    if(SHIBOKEN_IS_CROSS_BUILD)
+-        set(build_tools_default OFF)
+-    else()
+-        set(build_tools_default ON)
+-    endif()
+-    option(SHIBOKEN_BUILD_TOOLS "Build shiboken tools" ${build_tools_default})
+-    message(STATUS "SHIBOKEN_BUILD_TOOLS: ${SHIBOKEN_BUILD_TOOLS}")
+-
+-    if(SHIBOKEN_IS_CROSS_BUILD)
+-        set(_shiboken_build_tests_default OFF)
+-    elseif(SHIBOKEN_BUILD_LIBS)
+-        set(_shiboken_build_tests_default ON)
+-    endif()
+-    option(BUILD_TESTS "Build tests." ${_shiboken_build_tests_default})
+-    message(STATUS "BUILD_TESTS: ${BUILD_TESTS}")
+-endfunction()
+-
+-function(shiboken_internal_find_host_shiboken_tools)
+-    if(SHIBOKEN_IS_CROSS_BUILD)
+-        set(find_package_extra_args)
+-        if(QFP_SHIBOKEN_HOST_PATH)
+-            list(APPEND find_package_extra_args PATHS "${QFP_SHIBOKEN_HOST_PATH}/lib/cmake")
+-            list(PREPEND CMAKE_FIND_ROOT_PATH "${QFP_SHIBOKEN_HOST_PATH}")
+-        endif()
+-        find_package(
+-            Shiboken6Tools 6 CONFIG
+-            ${find_package_extra_args}
+-        )
+-
+-        if(NOT Shiboken6Tools_DIR)
+-            message(FATAL_ERROR
+-                "Shiboken6Tools package was not found. "
+-                "Please set QFP_SHIBOKEN_HOST_PATH to the location where the Shiboken6Tools CMake "
+-                "package is installed.")
+-        endif()
+-    endif()
+-endfunction()
+-
+-function(shiboken_internal_set_up_extra_dependency_paths)
+-    set(extra_root_path_vars
+-        QFP_QT_TARGET_PATH
+-        QFP_PYTHON_TARGET_PATH
+-    )
+-    foreach(root_path IN LISTS extra_root_path_vars)
+-        set(new_root_path_value "${${root_path}}")
+-        if(new_root_path_value)
+-            set(new_prefix_path "${CMAKE_PREFIX_PATH}")
+-            list(PREPEND new_prefix_path "${new_root_path_value}/lib/cmake")
+-            set(CMAKE_PREFIX_PATH "${new_prefix_path}")
+-            set(CMAKE_PREFIX_PATH "${new_prefix_path}" PARENT_SCOPE)
+-
+-            # Need to adjust the prefix and root paths so that find_package(Qt) and other 3rd
+-            # party packages are found successfully when they are located outside of the
+-            # default sysroot (whatever that maybe for the target platform).
+-            if(SHIBOKEN_IS_CROSS_BUILD)
+-                set(new_root_path "${CMAKE_FIND_ROOT_PATH}")
+-                list(PREPEND new_root_path "${new_root_path_value}")
+-                set(CMAKE_FIND_ROOT_PATH "${new_root_path}")
+-                set(CMAKE_FIND_ROOT_PATH "${new_root_path}" PARENT_SCOPE)
+-            endif()
+-        endif()
+-    endforeach()
+-endfunction()
+-
+-macro(compute_config_py_values
+-      full_version_var_name
+-        )
+-    set(QT_MACOS_DEPLOYMENT_TARGET "")
+-    if (Qt${QT_MAJOR_VERSION}Core_FOUND)
+-        get_target_property(darwin_target Qt6::Core QT_DARWIN_MIN_DEPLOYMENT_TARGET)
+-        if(darwin_target)
+-            set(QT_MACOS_DEPLOYMENT_TARGET
+-                "__qt_macos_min_deployment_target__ = '${darwin_target}'")
+-        endif()
+-    elseif(APPLE)
+-        message(FATAL_ERROR "Qt6::Core should be found before calling this macro")
+-    endif()
+-
+-    string(TIMESTAMP PACKAGE_BUILD_DATE "%Y-%m-%dT%H:%M:%S+00:00" UTC)
+-    if (PACKAGE_BUILD_DATE)
+-        set(PACKAGE_BUILD_DATE "__build_date__ = '${PACKAGE_BUILD_DATE}'")
+-    endif()
+-
+-    if (PACKAGE_SETUP_PY_PACKAGE_VERSION)
+-        set(PACKAGE_SETUP_PY_PACKAGE_VERSION_ASSIGNMENT "__setup_py_package_version__ = '${PACKAGE_SETUP_PY_PACKAGE_VERSION}'")
+-        set(FINAL_PACKAGE_VERSION ${PACKAGE_SETUP_PY_PACKAGE_VERSION})
+-    else()
+-        set(FINAL_PACKAGE_VERSION ${${full_version_var_name}})
+-    endif()
+-
+-    if (PACKAGE_SETUP_PY_PACKAGE_TIMESTAMP)
+-        set(PACKAGE_SETUP_PY_PACKAGE_TIMESTAMP_ASSIGNMENT "__setup_py_package_timestamp__ = '${PACKAGE_SETUP_PY_PACKAGE_TIMESTAMP}'")
+-    else()
+-        set(PACKAGE_SETUP_PY_PACKAGE_TIMESTAMP_ASSIGNMENT "")
+-    endif()
+-
+-    find_package(Git)
+-    if(GIT_FOUND)
+-        # Check if current source folder is inside a git repo, so that commit information can be
+-        # queried.
+-        execute_process(
+-          COMMAND ${GIT_EXECUTABLE} rev-parse --git-dir
+-          OUTPUT_VARIABLE PACKAGE_SOURCE_IS_INSIDE_REPO
+-          ERROR_QUIET
+-          OUTPUT_STRIP_TRAILING_WHITESPACE)
+-
+-        if(PACKAGE_SOURCE_IS_INSIDE_REPO)
+-            # Force git dates to be UTC-based.
+-            set(ENV{TZ} UTC)
+-            execute_process(
+-              COMMAND ${GIT_EXECUTABLE} --no-pager show --date=format-local:%Y-%m-%dT%H:%M:%S+00:00 -s --format=%cd HEAD
+-              OUTPUT_VARIABLE PACKAGE_BUILD_COMMIT_DATE
+-              OUTPUT_STRIP_TRAILING_WHITESPACE)
+-            if(PACKAGE_BUILD_COMMIT_DATE)
+-                set(PACKAGE_BUILD_COMMIT_DATE "__build_commit_date__ = '${PACKAGE_BUILD_COMMIT_DATE}'")
+-            endif()
+-            unset(ENV{TZ})
+-
+-            execute_process(
+-              COMMAND ${GIT_EXECUTABLE} rev-parse HEAD
+-              OUTPUT_VARIABLE PACKAGE_BUILD_COMMIT_HASH
+-              OUTPUT_STRIP_TRAILING_WHITESPACE)
+-            if(PACKAGE_BUILD_COMMIT_HASH)
+-                set(PACKAGE_BUILD_COMMIT_HASH "__build_commit_hash__ = '${PACKAGE_BUILD_COMMIT_HASH}'")
+-            endif()
+-
+-            execute_process(
+-              COMMAND ${GIT_EXECUTABLE} describe HEAD
+-              OUTPUT_VARIABLE PACKAGE_BUILD_COMMIT_HASH_DESCRIBED
+-              OUTPUT_STRIP_TRAILING_WHITESPACE)
+-            if(PACKAGE_BUILD_COMMIT_HASH_DESCRIBED)
+-                set(PACKAGE_BUILD_COMMIT_HASH_DESCRIBED "__build_commit_hash_described__ = '${PACKAGE_BUILD_COMMIT_HASH_DESCRIBED}'")
+-            endif()
+-
+-        endif()
+-    endif()
+-
+-endmacro()
+-
+-# Creates a new target called "${library_name}_generator" which
+-# depends on the mjb_rejected_classes.log file generated by shiboken.
+-# This target is added as a dependency to ${library_name} target.
+-# This file's timestamp informs cmake when the last generation was
+-# done, without force-updating the timestamps of the generated class
+-# cpp files.
+-# In practical terms this means that changing some injection code in
+-# an xml file that modifies only one specific class cpp file, will
+-# not force rebuilding all the cpp files, and thus allow for better
+-# incremental builds.
+-macro(create_generator_target library_name)
+-    add_custom_target(${library_name}_generator DEPENDS "${CMAKE_CURRENT_BINARY_DIR}/mjb_rejected_classes.log")
+-    add_dependencies(${library_name} ${library_name}_generator)
+-endmacro()
+-
+-# Generate a shell script wrapper that sets environment variables for executing a specific tool.
+-#
+-# tool_name should be a unique tool name, preferably without spaces.
+-# Returns the wrapper path in path_out_var.
+-#
+-# Currently adds the Qt lib dir and libclang to PATH / LD_LIBRARY_PATH / DYLD_LIBRARY_PATH.
+-# Meant to be used as the first argument to add_custom_command's COMMAND option.
+-# TODO: Remove tool_name as the tool_name for this function is always shiboken.
+-function(shiboken_get_tool_shell_wrapper tool_name path_out_var)
+-    # Generate the wrapper only once during the execution of CMake.
+-    get_property(is_called GLOBAL PROPERTY "_shiboken_tool_wrapper_${tool_name}_created")
+-
+-    if(is_called)
+-        get_property(wrapper_path GLOBAL PROPERTY "_shiboken_tool_wrapper_${tool_name}_path")
+-        set(${path_out_var} "${wrapper_path}" PARENT_SCOPE)
+-        return()
+-    endif()
+-
+-    set(path_dirs "")
+-    set(path_dirs_native "")
+-
+-    if(CMAKE_HOST_WIN32)
+-        set(wrapper_script_extension ".bat")
+-    else()
+-        set(wrapper_script_extension ".sh")
+-    endif()
+-
+-    # Try to get original host shiboken paths from exported target properties.
+-    shiboken_get_host_tool_wrapper_properties(orig_qt_library_dir_absolute orig_libclang_lib_dir)
+-
+-    # Get path to the Qt bin/lib dir depending on the platform and developer input.
+-    # Prefer values given on the command line, then the original host path if it exists, otherwise
+-    # try to use the Qt install prefix and libclang env vars.
+-    #
+-    # Note that in a cross-compiling case, using the Qt install prefix is very likely
+-    # wrong, because you want to use the location of the host Qt, not the target Qt. Same for
+-    # libclang. Unfortunately we currently don't provide a host Qt and host libclang option via
+-    # setup.py, so the manual cmake vars will have to suffice.
+-    if(SHIBOKEN_WRAPPER_HOST_QT_LIB_PATH AND EXISTS "${SHIBOKEN_WRAPPER_HOST_QT_LIB_PATH}")
+-        set(qt_library_dir_absolute "${SHIBOKEN_WRAPPER_HOST_QT_LIB_PATH}")
+-    elseif(orig_qt_library_dir_absolute AND EXISTS "${orig_qt_library_dir_absolute}")
+-        set(qt_library_dir_absolute "${orig_qt_library_dir_absolute}")
+-    elseif(CMAKE_HOST_WIN32)
+-        # in Windows the Qt dll are store `bin` in directory
+-        set(qt_library_dir ${QT6_INSTALL_BINS})
+-    else()
+-        # in Unix the .so are stored in `lib` directory
+-        set(qt_library_dir ${QT6_INSTALL_LIBS})
+-    endif()
+-
+-    # Assert that Qt is already found.
+-    if((QT6_INSTALL_PREFIX AND qt_library_dir) OR orig_qt_library_dir_absolute)
+-    else()
+-        message(FATAL_ERROR "Qt should have been found already by now.")
+-    endif()
+-
+-    if(NOT qt_library_dir_absolute)
+-        set(qt_library_dir_absolute "${QT6_INSTALL_PREFIX}/${qt_library_dir}")
+-    endif()
+-    list(APPEND path_dirs "${qt_library_dir_absolute}")
+-
+-    # Get libclang lib dir path.
+-    # Prefer values given on the command line, then the original host path if it exists.
+-    if(SHIBOKEN_WRAPPER_HOST_CLANG_LIB_PATH AND EXISTS "${SHIBOKEN_WRAPPER_HOST_CLANG_LIB_PATH}")
+-        set(libclang_lib_dir "${SHIBOKEN_WRAPPER_HOST_CLANG_LIB_PATH}")
+-    elseif(orig_libclang_lib_dir AND EXISTS "${orig_libclang_lib_dir}")
+-        set(libclang_lib_dir "${orig_libclang_lib_dir}")
+-    else()
+-        # find libclang
+-        find_libclang()
+-    endif()
+-
+-    if(libclang_lib_dir)
+-        list(APPEND path_dirs "${libclang_lib_dir}")
+-    endif()
+-
+-    # Convert the paths from unix-style to native Windows style.
+-    foreach(path_dir IN LISTS path_dirs)
+-        if(EXISTS "${path_dir}")
+-            file(TO_NATIVE_PATH "${path_dir}" path_dir_native)
+-            list(APPEND path_dirs_native "${path_dir_native}")
+-        endif()
+-    endforeach()
+-
+-    set(wrapper_dir "${CMAKE_BINARY_DIR}/.qfp/bin")
+-    file(MAKE_DIRECTORY "${wrapper_dir}")
+-    set(wrapper_path "${wrapper_dir}/${tool_name}_wrapper${wrapper_script_extension}")
+-
+-    if(CMAKE_HOST_WIN32)
+-        file(WRITE "${wrapper_path}" "@echo off
+-set PATH=${path_dirs_native};%PATH%
+-%*")
+-    elseif(CMAKE_HOST_APPLE)
+-        string(REPLACE ";" ":" path_dirs_native "${path_dirs_native}")
+-        file(WRITE "${wrapper_path}" "#!/bin/bash
+-export DYLD_LIBRARY_PATH=${path_dirs_native}:$DYLD_LIBRARY_PATH
+-export DYLD_FRAMEWORK_PATH=${path_dirs_native}:$DYLD_FRAMEWORK_PATH
+-$@")
+-    else()
+-        string(REPLACE ";" ":" path_dirs_native "${path_dirs_native}")
+-        file(WRITE "${wrapper_path}" "#!/bin/bash
+-export LD_LIBRARY_PATH=${path_dirs_native}:$LD_LIBRARY_PATH
+-$@")
+-    endif()
+-
+-    # Remember the creation of the file for a specific tool.
+-    set_property(GLOBAL PROPERTY "_shiboken_tool_wrapper_${tool_name}_path" "${wrapper_path}")
+-    set_property(GLOBAL PROPERTY "_shiboken_tool_wrapper_${tool_name}_created" TRUE)
+-
+-    # Save original host paths for future cross-builds.
+-    shiboken_save_host_tool_wrapper_properties("${qt_library_dir_absolute}" "${libclang_lib_dir}")
+-
+-    # give execute permission to run the file
+-    if(CMAKE_HOST_UNIX)
+-        execute_process(COMMAND chmod +x ${wrapper_path})
+-    endif()
+-
+-    set(${path_out_var} "${wrapper_path}" PARENT_SCOPE)
+-endfunction()
+-
+-# Retrieve the original host shiboken runtime dependency paths from the installed (namespaced)
+-# shiboken generator target.
+-function(shiboken_get_host_tool_wrapper_properties out_qt_library_dir out_libclang_lib_dir)
+-    if(TARGET Shiboken6::shiboken6)
+-        get_target_property(qt_library_dir Shiboken6::shiboken6 _shiboken_original_qt_lib_dir)
+-        if(NOT qt_library_dir)
+-            set(qt_library_dir "")
+-        endif()
+-        get_target_property(libclang_lib_dir Shiboken6::shiboken6
+-            _shiboken_original_libclang_lib_dir)
+-        if(NOT libclang_lib_dir)
+-            set(libclang_lib_dir "")
+-        endif()
+-    endif()
+-
+-    set(${out_qt_library_dir} "${qt_library_dir}" PARENT_SCOPE)
+-    set(${out_libclang_lib_dir} "${libclang_lib_dir}" PARENT_SCOPE)
+-endfunction()
+-
+-# Save original host shiboken runtime dependency paths as target properties, so they can be used
+-# when generating the wrapper file for cross-builds.
+-# Should only be done when shiboken is being built (aka it's a non-imported target).
+-function(shiboken_save_host_tool_wrapper_properties qt_library_dir libclang_lib_dir)
+-    if(TARGET shiboken6)
+-        get_target_property(is_imported shiboken6 IMPORTED)
+-        if(is_imported)
+-            return()
+-        endif()
+-
+-        set_target_properties(shiboken6 PROPERTIES
+-            _shiboken_original_qt_lib_dir "${qt_library_dir}")
+-        set_property(TARGET shiboken6 APPEND PROPERTY
+-            EXPORT_PROPERTIES _shiboken_original_qt_lib_dir)
+-        if(libclang_lib_dir)
+-            set_target_properties(shiboken6 PROPERTIES
+-                _shiboken_original_libclang_lib_dir "${libclang_lib_dir}")
+-            set_property(TARGET shiboken6 APPEND PROPERTY
+-                EXPORT_PROPERTIES _shiboken_original_libclang_lib_dir)
+-        endif()
+-    endif()
+-endfunction()
+-
+-# Returns the platform-specific relative rpath base token, if it's supported.
+-# If it's not supported, returns the string NO_KNOWN_RPATH_REL_BASE.
+-function(get_rpath_base_token out_var)
+-    if(APPLE)
+-        set(rpath_rel_base "@loader_path")
+-    elseif(UNIX)
+-        set(rpath_rel_base "$ORIGIN")
+-    else()
+-        #has no effect on Windows
+-        set(rpath_rel_base "NO_KNOWN_RPATH_REL_BASE")
+-    endif()
+-    set(${out_var} "${rpath_rel_base}" PARENT_SCOPE)
+-endfunction()
+-
+-# Get path to libclang.dll/libclang.so depending on the platform
+-macro(find_libclang)
+-    find_package(Clang CONFIG REQUIRED)
+-    get_target_property(libclang_location libclang LOCATION)
+-    get_filename_component(libclang_lib_dir "${libclang_location}" DIRECTORY)
+-endmacro()
+-
+-# Allow setting a shiboken debug level from the the build system or from the environment
+-# to all shiboken invocations.
+-function(shiboken_get_debug_level out_var)
+-    set(debug_level "")
+-    if(SHIBOKEN_DEBUG_LEVEL)
+-        set(debug_level "--debug-level=${SHIBOKEN_DEBUG_LEVEL}")
+-    elseif(DEFINED ENV{SHIBOKEN_DEBUG_LEVEL})
+-        set(debug_level "--debug-level=$ENV{SHIBOKEN_DEBUG_LEVEL}")
+-    endif()
+-    set(${out_var} "${debug_level}" PARENT_SCOPE)
+-endfunction()
+--- a/sources/shiboken6/cmake/ShibokenSetup.cmake	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/cmake/ShibokenSetup.cmake	2026-04-17 20:15:11.841197956 -0700
+@@ -83,8 +83,11 @@
+     shiboken_internal_set_python_site_packages()
+ endif()
+ 
++string(REGEX REPLACE "\\.[0-9]+\\.[0-9]+$" "" LLVM_VERSION "${LLVM_PACKAGE_VERSION}")
++
+ set_cmake_cxx_flags()
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D QT_NO_CAST_FROM_ASCII -D QT_NO_CAST_TO_ASCII")
++set(CMAKE_CXX_FLAGS
++    "${CMAKE_CXX_FLAGS} -D QT_NO_CAST_FROM_ASCII -D QT_NO_CAST_TO_ASCII -D LLVM_VERSION=${LLVM_VERSION}")
+ 
+ # Force usage of the C++17 standard
+ set(CMAKE_CXX_STANDARD 17)
+--- a/sources/shiboken6/libshiboken/CMakeLists.txt.orig	2026-03-30 21:38:37.000000000 -0700
++++ b/sources/shiboken6/libshiboken/CMakeLists.txt.orig	1969-12-31 16:00:00.000000000 -0800
+@@ -1,223 +0,0 @@
+-# Copyright (C) 2023 The Qt Company Ltd.
+-# SPDX-License-Identifier: BSD-3-Clause
+-
+-project(libshiboken)
+-
+-option(ENABLE_VERSION_SUFFIX "Used to use current version in suffix to generated files. This is used to allow multiples versions installed simultaneous." FALSE)
+-if(ENABLE_VERSION_SUFFIX)
+-    set(shiboken6_SUFFIX "-${shiboken_MAJOR_VERSION}.${shiboken_MINOR_VERSION}")
+-else()
+-    set(shiboken6_SUFFIX "")
+-endif()
+-
+-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/sbkversion.h.in"
+-               "${CMAKE_CURRENT_BINARY_DIR}/sbkversion.h" @ONLY)
+-configure_file("${CMAKE_CURRENT_SOURCE_DIR}/embed/signature_bootstrap.py"
+-               "${CMAKE_CURRENT_BINARY_DIR}/embed/signature_bootstrap.py" @ONLY)
+-
+-# Variable from enclosing scope.
+-list(TRANSFORM shiboken_python_files
+-     PREPEND "${CMAKE_CURRENT_SOURCE_DIR}/../shibokenmodule/files.dir/shibokensupport/"
+-     OUTPUT_VARIABLE embedded_shiboken_files)
+-
+-if (QUIET_BUILD)
+-    set(embedding_option "--quiet")
+-else()
+-    set(embedding_option "")
+-endif()
+-
+-if(SHIBOKEN_IS_CROSS_BUILD)
+-    set(host_python_path "${QFP_PYTHON_HOST_PATH}")
+-    set(use_pyc_in_embedding FALSE)
+-else()
+-    set(host_python_path "${Python_EXECUTABLE}")
+-    if(PYTHON_LIMITED_API)
+-        set(use_pyc_in_embedding FALSE)
+-    else()
+-        set(use_pyc_in_embedding TRUE)
+-    endif()
+-endif()
+-
+-add_custom_command(
+-    OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/embed/signature_bootstrap_inc.h"
+-    OUTPUT  "${CMAKE_CURRENT_BINARY_DIR}/embed/signature_inc.h"
+-    COMMAND ${host_python_path} -E
+-            "${CMAKE_CURRENT_SOURCE_DIR}/embed/embedding_generator.py"
+-            --cmake-dir "${CMAKE_CURRENT_BINARY_DIR}/embed"
+-            --use-pyc ${use_pyc_in_embedding}
+-            ${embedding_option}
+-    DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/embed/embedding_generator.py"
+-            "${CMAKE_CURRENT_SOURCE_DIR}/embed/signature_bootstrap.py"
+-            ${embedded_shiboken_files}
+-    )
+-
+-set(libshiboken_MAJOR_VERSION ${shiboken_MAJOR_VERSION})
+-set(libshiboken_MINOR_VERSION ${shiboken_MINOR_VERSION})
+-set(libshiboken_MICRO_VERSION ${shiboken_MICRO_VERSION})
+-set(libshiboken_VERSION "${libshiboken_MAJOR_VERSION}.${libshiboken_MINOR_VERSION}.${libshiboken_MICRO_VERSION}")
+-set(libshiboken_SOVERSION "${shiboken6_library_so_version}")
+-
+-set(libshiboken_SRC
+-autodecref.h
+-basewrapper.cpp basewrapper.h basewrapper_p.h
+-bindingmanager.cpp bindingmanager.h
+-bufferprocs_py37.cpp bufferprocs_py37.h
+-debugfreehook.cpp debugfreehook.h
+-gilstate.cpp gilstate.h
+-helper.cpp helper.h
+-pep384impl.cpp pep384impl.h
+-pyobjectholder.h
+-sbkarrayconverter.cpp sbkarrayconverter.h sbkarrayconverter_p.h
+-sbkbindingutils.cpp sbkbindingutils.h
+-sbkcontainer.cpp sbkcontainer.h
+-sbkconverter.cpp sbkconverter.h sbkconverter_p.h
+-sbkcppstring.cpp sbkcppstring.h sbkcpptonumpy.h
+-sbkenum.cpp sbkenum.h
+-sbkerrors.cpp sbkerrors.h
+-sbkfeature_base.cpp sbkfeature_base.h
+-sbkmodule.cpp sbkmodule.h sbkmodule_p.h
+-sbknumpy.cpp sbknumpycheck.h
+-sbknumpyview.h
+-sbkpep.h
+-sbkpepbuffer.h
+-sbkpython.h
+-sbksmartpointer.cpp sbksmartpointer.h
+-sbkstaticstrings.cpp sbkstaticstrings.h sbkstaticstrings_p.h
+-sbkstring.cpp sbkstring.h
+-sbktypefactory.cpp sbktypefactory.h
+-sbkwindows.h
+-shiboken.h
+-shibokenbuffer.cpp shibokenbuffer.h
+-shibokenmacros.h
+-threadstatesaver.cpp threadstatesaver.h
+-voidptr.cpp voidptr.h
+-
+-embed/signature_bootstrap_inc.h
+-embed/signature_inc.h
+-
+-signature/signature.cpp signature.h signature_p.h
+-signature/signature_globals.cpp
+-signature/signature_extend.cpp
+-signature/signature_helper.cpp
+-)
+-
+-# This is needed to let the header obey a variable in "pep384impl.h".
+-# Note: This must be set on the cpp file!
+-set_property(SOURCE "pep384impl.cpp" PROPERTY SKIP_UNITY_BUILD_INCLUSION ON)
+-
+-add_library(libshiboken SHARED ${libshiboken_SRC})
+-add_library(Shiboken6::libshiboken ALIAS libshiboken)
+-
+-target_include_directories(libshiboken PUBLIC
+-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+-  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+-  $<INSTALL_INTERFACE:shiboken6/include>
+-)
+-
+-if (NOT "${NUMPY_INCLUDE_DIR}" STREQUAL "")
+-    message(STATUS "NUMPY_INCLUDE_DIR: " ${NUMPY_INCLUDE_DIR})
+-    target_include_directories(libshiboken PRIVATE ${NUMPY_INCLUDE_DIR})
+-    target_compile_definitions(libshiboken PRIVATE -DHAVE_NUMPY
+-                                           PRIVATE -DNPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION)
+-else()
+-    message(STATUS "NUMPY not found")
+-endif()
+-
+-if(SHIBOKEN_IS_CROSS_BUILD)
+-    target_compile_definitions(libshiboken PRIVATE -DSHIBOKEN_NO_EMBEDDING_PYC=1)
+-endif()
+-
+-shiboken_compute_python_includes()
+-# On Windows we need to link against the python.lib import library.
+-# On macOS and Linux we don't link against the python shared / static library,
+-# the dynamic linker will pick up the python symbols at runtime automatically.
+-shiboken_compute_python_libraries()
+-
+-if(PYTHON_LIMITED_API)
+-    target_compile_definitions(libshiboken PUBLIC "-DPy_LIMITED_API=0x03090000")
+-endif()
+-
+-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+-    if(PYTHON_WITH_DEBUG)
+-        target_compile_definitions(libshiboken PUBLIC "-DPy_DEBUG")
+-    endif()
+-    if (PYTHON_WITH_COUNT_ALLOCS)
+-        target_compile_definitions(libshiboken PUBLIC "-DCOUNT_ALLOCS")
+-    endif()
+-elseif(CMAKE_BUILD_TYPE STREQUAL "Release")
+-    target_compile_definitions(libshiboken PUBLIC "-DNDEBUG")
+-endif()
+-
+-set_target_properties(libshiboken PROPERTIES OUTPUT_NAME "shiboken6${shiboken6_SUFFIX}${PYTHON_SHARED_LIBRARY_SUFFIX}"
+-                                             VERSION ${libshiboken_VERSION}
+-                                             SOVERSION ${libshiboken_SOVERSION}
+-                                             DEFINE_SYMBOL BUILD_LIBSHIBOKEN)
+-
+-qfp_strip_library("libshiboken")
+-
+-install(FILES
+-        autodecref.h
+-        basewrapper.h
+-        basewrapper_p.h
+-        bindingmanager.h
+-        gilstate.h
+-        helper.h
+-        pyobjectholder.h
+-        sbkarrayconverter.h
+-        sbkbindingutils.h
+-        sbkcontainer.h
+-        sbkconverter.h
+-        sbkcpptonumpy.h
+-        sbkenum.h
+-        sbkerrors.h
+-        sbkfeature_base.h
+-        sbkmodule.h
+-        sbkmodule_p.h
+-        sbknumpycheck.h
+-        sbknumpyview.h
+-        sbkstring.h
+-        sbkcppstring.h
+-        sbksmartpointer.h
+-        sbkstaticstrings.h
+-        sbktypefactory.h
+-        shiboken.h
+-        shibokenmacros.h
+-        threadstatesaver.h
+-        shibokenbuffer.h
+-        sbkpep.h
+-        sbkpepbuffer.h
+-        sbkpython.h
+-        sbkwindows.h
+-        pep384impl.h
+-        pep384ext.h
+-        voidptr.h
+-        bufferprocs_py37.h
+-        "${CMAKE_CURRENT_BINARY_DIR}/sbkversion.h"
+-
+-        signature.h
+-        signature_p.h
+-
+-        DESTINATION shiboken6${shiboken6_SUFFIX}/include)
+-install(TARGETS libshiboken EXPORT Shiboken6Targets
+-                            LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
+-                            ARCHIVE DESTINATION "${LIB_INSTALL_DIR}"
+-                            RUNTIME DESTINATION bin)
+-install(EXPORT Shiboken6Targets NAMESPACE Shiboken6::
+-        DESTINATION ${LIB_INSTALL_DIR}/cmake/Shiboken6)
+-
+-# wheel specific installation
+-if(NOT is_pyside6_superproject_build)
+-
+-    set_target_properties(libshiboken PROPERTIES
+-        VERSION ${libshiboken_SOVERSION})
+-
+-    install(TARGETS libshiboken EXPORT Shiboken6WheelTargets
+-            LIBRARY DESTINATION "shiboken6"
+-            ARCHIVE DESTINATION "shiboken6"
+-            RUNTIME DESTINATION "shiboken6")
+-
+-    install(EXPORT Shiboken6WheelTargets
+-            NAMESPACE Shiboken6::
+-            DESTINATION "${LIB_INSTALL_DIR}/wheels/cmake/Shiboken6"
+-            FILE Shiboken6Targets.cmake)
+-endif()

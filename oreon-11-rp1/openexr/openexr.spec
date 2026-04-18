@@ -1,6 +1,6 @@
 Name:           openexr
 Version:        3.3.3
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Tools and libraries for ILM's OpenEXR high dynamic-range image format
 License:        BSD-3-Clause
 URL:            https://www.openexr.com/
@@ -53,20 +53,23 @@ Development files for OpenEXR 3.x.
 %{_bindir}/*
 
 %files libs
-%{_libdir}/libIex*.so.*
-%{_libdir}/libIlmThread*.so.*
-%{_libdir}/libOpenEXR*.so.*
-%{_libdir}/libOpenEXRCore*.so.*
+# libOpenEXR* would also match libOpenEXRCore / libOpenEXRUtil and double-list files
+%{_libdir}/libIex-3_3.so.*
+%{_libdir}/libIlmThread-3_3.so.*
+%{_libdir}/libOpenEXR-3_3.so.*
+%{_libdir}/libOpenEXRCore-3_3.so.*
+%{_libdir}/libOpenEXRUtil-3_3.so.*
 
 %files devel
 %{_includedir}/OpenEXR
-%{_libdir}/libIex.so
-%{_libdir}/libIlmThread.so
-%{_libdir}/libOpenEXR.so
-%{_libdir}/libOpenEXRCore.so
-%{_libdir}/libOpenEXRUtil.so
+%{_libdir}/libIex-3_3.so
+%{_libdir}/libIlmThread-3_3.so
+%{_libdir}/libOpenEXR-3_3.so
+%{_libdir}/libOpenEXRCore-3_3.so
+%{_libdir}/libOpenEXRUtil-3_3.so
 %{_libdir}/cmake/OpenEXR
 %{_libdir}/pkgconfig/OpenEXR.pc
+%{_docdir}/OpenEXR/examples
 
 
 %changelog
