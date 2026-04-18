@@ -1,7 +1,7 @@
 Name:    kaddressbook
 Summary: Contact Manager
 Version: 26.03.80
-Release: 14%{?dist}
+Release: 15%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://www.kde.org/applications/office/kaddressbook
@@ -116,10 +116,8 @@ printf '%s\n' '#pragma once' '#include "../configurepluginswidget.h"' \
 # Oreon pimcommon may not ship PimCommon::PluginUtil::pluginConfigFile (upstream returns pimpluginsrc KConfig name)
 sed -i 's/PimCommon::PluginUtil::pluginConfigFile()/QStringLiteral("pimpluginsrc")/g' \
     src/configuration/kaddressbookconfigpluginlistwidget.cpp
-# PimCommon ctor takes TextAddonsWidgets::ConfigurePluginsWidget*; force compat headers (CMake BEFORE) plus cast so the
-# inner widget pointer matches the type kpimcommon was built against when system -I order would win.
-sed -i 's/new PimCommon::ConfigurePluginsWidget(new KAddressBookConfigPluginListWidget(widget()), widget())/new PimCommon::ConfigurePluginsWidget(static_cast<TextAddonsWidgets::ConfigurePluginsWidget *>(new KAddressBookConfigPluginListWidget(widget())), widget())/' \
-    src/configuration/kaddressbook_config_plugins.cpp
+# PimCommon::ConfigurePluginsWidget(QWidget *pluginList, QWidget *parent) takes QWidget*; do not cast to
+# TextAddonsWidgets::ConfigurePluginsWidget* (older kpimcommon overloads are gone).
 
 %build
 %cmake_kf6

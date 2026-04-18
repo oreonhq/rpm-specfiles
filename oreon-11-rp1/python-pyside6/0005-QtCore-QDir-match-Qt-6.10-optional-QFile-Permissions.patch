@@ -7,7 +7,7 @@ std::optional, and generated sources broke (including spurious .d path errors).
 ---
 --- a/sources/pyside6/PySide6/QtCore/typesystem_core_common.xml
 +++ b/sources/pyside6/PySide6/QtCore/typesystem_core_common.xml
-@@ -975,10 +975,10 @@
+@@ -975,11 +975,11 @@
  
      <declare-function signature="mkdir(QString)const" return-type="bool"/>
      <declare-function signature="mkdir(QString,QFileDevice::Permissions)const" return-type="bool"/>

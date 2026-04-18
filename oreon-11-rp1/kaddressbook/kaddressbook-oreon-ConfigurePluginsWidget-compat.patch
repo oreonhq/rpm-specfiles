@@ -185,7 +185,7 @@ diff -Nru kb/kaddressbook-v26.03.80/src/configuration/textaddons_compat_configur
 diff -Nru kb/kaddressbook-v26.03.80/src/configuration/textaddons_compat_configureplugins/configurepluginswidget.cpp kb-patched/kaddressbook-v26.03.80/src/configuration/textaddons_compat_configureplugins/configurepluginswidget.cpp
 --- a/src/configuration/textaddons_compat_configureplugins/configurepluginswidget.cpp	1969-12-31 16:00:00.000000000 -0800
 +++ b/src/configuration/textaddons_compat_configureplugins/configurepluginswidget.cpp	2026-04-17 21:49:08.011930477 -0700
-@@ -0,0 +1,193 @@
+@@ -0,0 +1,195 @@
 +/*
 +  SPDX-FileCopyrightText: 2025-2026 Laurent Montel <montel@kde.org>
 +
@@ -292,6 +292,7 @@ diff -Nru kb/kaddressbook-v26.03.80/src/configuration/textaddons_compat_configur
 +                                         const QList<PluginItem *> &listItems,
 +                                         const QString &configName)
 +{
++    Q_UNUSED(configName)
 +    if (listItems.isEmpty()) {
 +        return;
 +    }
@@ -305,7 +306,7 @@ diff -Nru kb/kaddressbook-v26.03.80/src/configuration/textaddons_compat_configur
 +        }
 +    }
 +
-+    PimCommon::PluginUtil::savePluginSettings(groupName, prefixSettingKey, enabledPlugins, disabledPlugins, configName);
++    PimCommon::PluginUtil::savePluginSettings(groupName, prefixSettingKey, enabledPlugins, disabledPlugins);
 +}
 +
 +void ConfigurePluginsWidget::fillTopItems(const QList<PimCommon::PluginUtilData> &lst,
@@ -317,11 +318,12 @@ diff -Nru kb/kaddressbook-v26.03.80/src/configuration/textaddons_compat_configur
 +                                          bool checkable,
 +                                          const QString &fileName)
 +{
++    Q_UNUSED(fileName)
 +    itemsList.clear();
 +    if (!lst.isEmpty()) {
 +        auto topLevel = new QTreeWidgetItem(mTreePluginWidget, {topLevelItemName});
 +        topLevel->setFlags(topLevel->flags() & ~Qt::ItemIsSelectable);
-+        const PimCommon::PluginUtil::PluginsStateList pair = PimCommon::PluginUtil::loadPluginSetting(fileName, groupName, prefixKey);
++        const PimCommon::PluginUtil::PluginsStateList pair = PimCommon::PluginUtil::loadPluginSetting(groupName, prefixKey);
 +        for (const PimCommon::PluginUtilData &data : lst) {
 +            auto subItem = new PluginItem(topLevel);
 +            subItem->setData(0, ConfigurePluginsWidget::PluginItemData::Description, data.mDescription);
