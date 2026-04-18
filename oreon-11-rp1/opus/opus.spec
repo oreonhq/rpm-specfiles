@@ -17,9 +17,9 @@ License:  BSD-3-Clause AND BSD-2-Clause
 URL:      https://www.opus-codec.org/
 
 Source0:  https://ftp.osuosl.org/pub/xiph/releases/%{name}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.gz
-# This is the final IETF Working Group RFC
-Source1:  https://tools.ietf.org/rfc/rfc6716.txt
-Source2:  https://tools.ietf.org/rfc/rfc8251.txt
+# Final IETF WG RFCs (tools.ietf.org returns 403 to many clients; rfc-editor is canonical)
+Source1:  https://www.rfc-editor.org/rfc/rfc6716.txt
+Source2:  https://www.rfc-editor.org/rfc/rfc8251.txt
 
 BuildRequires: make
 BuildRequires: gcc

@@ -29,9 +29,10 @@ Summary:        A low-level cryptographic library
 
 License:        LGPL-3.0-or-later OR GPL-2.0-or-later
 URL:            http://www.lysator.liu.se/~nisse/nettle/
-Source0:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
-Source1:	http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz.sig
-Source2:	nettle-release-keyring.gpg
+Source0:	https://ftp.gnu.org/gnu/nettle/%{name}-%{version}.tar.gz
+Source1:	https://ftp.gnu.org/gnu/nettle/%{name}-%{version}.tar.gz.sig
+# Same keyring blob and SHA512 as Fedora nettle sources (not shipped on ftp.gnu.org).
+Source2:	https://src.fedoraproject.org/repo/pkgs/rpms/nettle/nettle-release-keyring.gpg/sha512/0e59447eb74017439c8b5b5b05173c0ffd710705d2a9c1f74833b7034fad1608fa1bdd2c308e6c42214553cd648606b6a07044ea39677b1b3452cb4d07bf889b/nettle-release-keyring.gpg
 %if 0%{?bootstrap}
 Source100:	%{name}-%{version_old}-hobbled.tar.xz
 Source101:	nettle-3.5-remove-ecc-testsuite.patch
@@ -40,7 +41,7 @@ Patch:		nettle-3.8-zeroize-stack.patch
 Patch:		nettle-3.10-hobble-to-configure.patch
 
 %if %{with bundle_gmp}
-Source200:	gmp-6.2.1.tar.xz
+Source200:	https://gmplib.org/download/gmp/gmp-6.2.1.tar.xz
 # Taken from the main gmp package
 Source201:	gmp-6.2.1-intel-cet.patch
 Source202:	gmp-6.2.1-zeroize-allocator.patch
