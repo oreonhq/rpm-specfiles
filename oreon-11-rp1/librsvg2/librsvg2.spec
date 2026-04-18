@@ -1,12 +1,6 @@
 %bcond check 1
 
-# Use bundled deps as we don't ship the exact right versions for all the
-# required rust libraries
-%if 0%{?rhel}
-%global bundled_rust_deps 1
-%else
-%global bundled_rust_deps 0
-%endif
+# Oreon uses packaged Rust crates (cargo-rpm-macros), not a vendored vendor/ tree.
 
 %global cairo_version 1.18.0
 
@@ -49,10 +43,6 @@ License:        %{shrink:
     }
 URL:            https://wiki.gnome.org/Projects/LibRsvg
 Source0:        https://download.gnome.org/sources/librsvg/2.62/librsvg-%{version}.tar.xz
-# upstream dropped vendoring since 2.55.0 (GNOME/librsvg#718), to create:
-#   tar xf librsvg-%%{version}.tar.xz ; pushd librsvg-%%{version} ; \
-#   cargo vendor --versioned-dirs && tar Jcvf ../librsvg-%%{version}-vendor.tar.xz vendor/ ; popd
-Source1:        librsvg-%{version}-vendor.tar.xz
 
 # Patches to build with Fedora-packaged rust crates
 Patch:          0001-Fedora-Drop-dependencies-required-for-benchmarking.patch
@@ -77,11 +67,7 @@ BuildRequires:  pkgconfig(pangocairo)
 BuildRequires:  pkgconfig(pangoft2)
 BuildRequires:  vala
 BuildRequires:  /usr/bin/rst2man
-%if 0%{?bundled_rust_deps}
-BuildRequires:  rust-toolset
-%else
 BuildRequires:  cargo-rpm-macros
-%endif
 
 Requires:       cairo%{?_isa} >= %{cairo_version}
 Requires:       cairo-gobject%{?_isa} >= %{cairo_version}
@@ -111,26 +97,17 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 This package provides extra utilities based on the librsvg library.
 
 %prep
-%if ! 0%{?bundled_rust_deps}
-# use packaged Rust dependencies
 %autosetup -p1 -n librsvg-%{version}
 %cargo_prep
-%else
-# use vendored Rust dependencies
-%autosetup -N -n librsvg-%{version} -a1
-%cargo_prep -v vendor
-%endif
 
 # Ensure we build without --locked, as %%cargo_prep removes
 # the lock file (Cargo.lock), allowing more wiggle room when
 # providing Rust dependencies.
 sed -i 's/, "--locked"//g' meson/cargo_wrapper.py
 
-%if ! 0%{?bundled_rust_deps}
 %generate_buildrequires
 # cargo-c requires all optional dependencies to be available
 %cargo_generate_buildrequires -a
-%endif
 
 %build
 %meson %{?rhel:-Davif=disabled}
@@ -138,9 +115,6 @@ sed -i 's/, "--locked"//g' meson/cargo_wrapper.py
 
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
-%if 0%{?bundled_rust_deps}
-%cargo_vendor_manifest
-%endif
 
 %install
 %meson_install
@@ -154,9 +128,6 @@ sed -i 's/, "--locked"//g' meson/cargo_wrapper.py
 %doc code-of-conduct.md NEWS README.md
 %license COPYING.LIB
 %license LICENSE.dependencies
-%if 0%{?bundled_rust_deps}
-%license cargo-vendor.txt
-%endif
 %{_libdir}/librsvg-2.so.*
 %dir %{_libdir}/girepository-1.0
 %{_libdir}/girepository-1.0/Rsvg-2.0.typelib
