@@ -61,6 +61,8 @@ BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  pkgconfig(cairo) >= %{cairo_version}
 BuildRequires:  pkgconfig(cairo-gobject) >= %{cairo_version}
 BuildRequires:  pkgconfig(cairo-png) >= %{cairo_version}
+# AVIF decoding (default on non-RHEL); meson requires dav1d when Avif is enabled.
+BuildRequires:  pkgconfig(dav1d)
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
 BuildRequires:  pkgconfig(gio-2.0)
