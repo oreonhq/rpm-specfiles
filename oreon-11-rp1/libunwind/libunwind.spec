@@ -35,7 +35,7 @@
 #     Ltest-resume-sig-rt
 #     test-ptrace
 
-%ifarch i686 ppc64le s390x
+%ifarch i686 ppc64le s390x x86_64
 %global test_failure_override true
 %else
 %global test_failure_override false

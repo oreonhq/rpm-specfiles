@@ -5,9 +5,9 @@ Version:        0.49.0
 Release:        %autorelease
 Summary:        A configuration system
 
-# Oreon 11 ships GNOME 50; dconf still tracks upstream tags (0.49.0 is current on GNOME GitLab).
-# GitLab archive avoids download.gnome.org major.minor path mistakes (e.g. 0.40 vs 0.49).
-Source0:        https://gitlab.gnome.org/GNOME/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
+# Official GNOME release tarball includes meson subprojects (gvdb). GitLab tag
+# archives omit subproject files and fail with missing gvdb/meson.build.
+Source0:        https://download.gnome.org/sources/dconf/0.49/%{name}-%{version}.tar.xz
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later
 URL:            https://wiki.gnome.org/Projects/dconf

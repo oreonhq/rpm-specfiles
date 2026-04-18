@@ -31,6 +31,9 @@ BuildRequires:  libpng-devel
 BuildRequires:  SDL-devel
 ## For ARM 64 support (RHBZ 926414)
 BuildRequires:  autoconf >= 2.69
+BuildRequires:  automake
+BuildRequires:  libtool
+BuildRequires:  gettext-devel
 
 %description
 Qrencode is a utility software using libqrencode to encode string data in
@@ -66,14 +69,14 @@ popd
 
 
 %build
-## Rebuild configure scripts for ARM 64 support. (RHBZ 926414)
-autoconf
+## GitHub tag archives ship autotools inputs only; regenerate full build system.
+autoreconf -fi
 %configure --with-tests
 %make_build
 
 %if 0%{?bootstrap}
 pushd bootstrap_ver
-autoconf
+autoreconf -fi
 %configure --with-tests
 %make_build
 popd

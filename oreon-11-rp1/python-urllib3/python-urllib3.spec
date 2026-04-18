@@ -12,7 +12,7 @@ Summary:        HTTP library with thread-safe connection pooling, file post, and
 # SPDX
 License:        MIT
 URL:            https://github.com/urllib3/urllib3
-Source0:        %{url}/archive/%{version}/urllib3-%{version}.tar.gz
+Source0:        https://codeload.github.com/urllib3/urllib3/tar.gz/%{version}#/urllib3-%{version}.tar.gz
 # A special forked copy of Hypercorn is required for testing. We asked about
 # the possiblility of using a released version in the future in:
 #   Path toward testing with a released version of hypercorn?
@@ -29,7 +29,7 @@ Source0:        %{url}/archive/%{version}/urllib3-%{version}.tar.gz
 # installed in the buildroot or otherwise included in any of the binary RPMs.
 %global hypercorn_url https://github.com/urllib3/hypercorn
 %global hypercorn_commit d1719f8c1570cbd8e6a3719ffdb14a4d72880abb
-Source1:        %{hypercorn_url}/archive/%{hypercorn_commit}/hypercorn-%{hypercorn_commit}.tar.gz
+Source1:        https://codeload.github.com/urllib3/hypercorn/tar.gz/%{hypercorn_commit}#/hypercorn-%{hypercorn_commit}.tar.gz
 
 BuildArch:      noarch
 
