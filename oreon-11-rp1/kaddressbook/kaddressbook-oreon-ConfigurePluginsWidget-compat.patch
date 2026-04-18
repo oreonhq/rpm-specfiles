@@ -14,6 +14,7 @@ diff -Nru kb/kaddressbook-v26.03.80/src/configuration/CMakeLists.txt kb-patched/
 +
 +target_include_directories(
 +    kaddressbook_config_plugins
++    BEFORE
 +    PRIVATE
 +        "${CMAKE_CURRENT_SOURCE_DIR}/textaddons_compat_configureplugins"
 +)
