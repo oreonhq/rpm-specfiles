@@ -1,13 +1,15 @@
 Name:    kaddressbook
 Summary: Contact Manager
 Version: 26.03.80
-Release: 10%{?dist}
+Release: 11%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://www.kde.org/applications/office/kaddressbook
 
 # download.kde.org often redirects to third-party mirrors (e.g. fcix) that 500 on unstable tarballs
 Source0: https://invent.kde.org/pim/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+# ktextaddons 1.8 on Oreon ships no TextAddonsWidgets/ConfigurePluginsWidget (kaddressbook needs the base class)
+Patch0: kaddressbook-oreon-ConfigurePluginsWidget-compat.patch
 
 
 BuildRequires: desktop-file-utils
@@ -104,13 +106,8 @@ sed -i 's/TextAddonsWidgets::NeedUpdateVersionUtils/PimCommon::NeedUpdateVersion
 sed -i 's/TextAddonsWidgets::NeedUpdateVersionWidget/PimCommon::NeedUpdateVersionWidget/g' src/mainwindow.cpp
 sed -i 's/TextAddonsWidgets::WhatsNewInfo/PimCommon::WhatsNewInfo/g' \
     src/whatsnew/whatsnewtranslations.h src/whatsnew/whatsnewtranslations.cpp
-# List widget subclasses TextAddonsWidgets::ConfigurePluginsWidget but upstream only includes PimCommon's wrapper
-# header, which does not declare the real base class (breaks moc and compilation).
-sed -i 's|^#include <PimCommon/ConfigurePluginsWidget>|#include <TextAddonsWidgets/ConfigurePluginsWidget>|' \
-    src/configuration/kaddressbookconfigpluginlistwidget.h
-# Do not replace TextAddonsWidgets::ConfigurePluginsWidget on the list widget. PimCommon::ConfigurePluginsWidget
-# is a wrapper QWidget whose ctor takes TextAddonsWidgets::ConfigurePluginsWidget* (see pimcommon configurepluginswidget.h).
-# Subclassing PimCommon::ConfigurePluginsWidget breaks PluginItem, overrides, and the KCM ctor.
+# Patch0 embeds TextAddonsWidgets::ConfigurePluginsWidget (missing from ktextaddons 1.8 devel) and switches the list
+# widget include to TextAddonsWidgets/ConfigurePluginsWidget.h
 
 %build
 %cmake_kf6

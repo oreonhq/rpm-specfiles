@@ -1,6 +1,6 @@
 Name:           plasma5support
 Version:        6.6.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Compatibility and migration support between KDE Frameworks 5 and 6
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/plasma5support
@@ -99,6 +99,8 @@ Headers and CMake files for libplasma5support.
 %{_libdir}/libPlasma5Support.so
 %{_libdir}/libplasma-geolocation-interface.so
 %{_libdir}/libweather_ion.so
+%{_datadir}/doc/qt6/Plasma5Support.qch
+%{_datadir}/doc/qt6/Plasma5Support.tags
 
 
 %changelog

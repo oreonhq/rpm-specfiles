@@ -1,6 +1,6 @@
 Name:           weston
 Version:        13.0.1
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Reference Wayland compositor
 License:        MIT
 URL:            https://gitlab.freedesktop.org/wayland/weston
@@ -65,6 +65,10 @@ backends plus demo clients.
 %files
 %license COPYING
 %{_bindir}/*
+%{_libexecdir}/weston-desktop-shell
+%{_libexecdir}/weston-ivi-shell-user-interface
+%{_libexecdir}/weston-keyboard
+%{_libexecdir}/weston-simple-im
 %{_libdir}/weston
 %{_libdir}/libweston-*/*
 %{_libdir}/libweston*.so*
@@ -72,8 +76,11 @@ backends plus demo clients.
 %{_includedir}/libweston-*
 %{_datadir}/wayland-sessions/*
 %{_datadir}/weston
+%{_datadir}/libweston-*/protocols/*
+%{_datadir}/pkgconfig/libweston-*-protocols.pc
 %{_mandir}/man*/*
 %{_libdir}/pkgconfig/libweston-*.pc
+%{_libdir}/pkgconfig/weston.pc
 
 
 %changelog
