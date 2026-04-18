@@ -1,12 +1,12 @@
-%global somajor 12
+%global somajor 9
 %global sominor 0
 %global sotiny  0
 %global soversion %{somajor}.%{sominor}.%{sotiny}
 
 Name:			libvpx
 Summary:		VP8/VP9 Video Codec SDK
-Version:		1.16.0
-Release:		2%{?dist}
+Version:		1.15.0
+Release:		4%{?dist}
 License:		BSD-3-Clause
 URL:			http://www.webmproject.org/code/
 Source0:		https://github.com/webmproject/libvpx/archive/v%{version}.tar.gz
@@ -22,6 +22,8 @@ BuildRequires:		make
 BuildRequires:		nasm
 %endif
 BuildRequires:		doxygen, perl(Getopt::Long)
+
+Patch1:                 0001-vpx_codec_enc_init_multi-fix-double-free-on-init-fai.patch
 
 %description
 libvpx provides the VP8/VP9 SDK, which allows you to integrate your applications
@@ -47,6 +49,7 @@ and decoder.
 %prep
 %setup -q -n libvpx-%{version}
 %patch -P0 -p1 -b .fortify-source-on
+%patch -P1 -p1 -b .0001
 
 %build
 
@@ -202,5 +205,5 @@ rm -rf %{buildroot}%{_prefix}/src
 %{_bindir}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.16.0-2
-- Prepare for Oreon 11 (RP1)
+* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.15.0-4
+- Import from Fedora dist-git f43 for Oreon 11
