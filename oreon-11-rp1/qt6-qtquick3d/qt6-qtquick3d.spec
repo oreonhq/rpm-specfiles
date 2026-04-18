@@ -13,14 +13,16 @@
 %global system_openxr 1
 %endif
 %if 0%{?oreon}
-%global system_assimp 1
-%global system_openxr 1
+# Oreon ships only the oreon mirror. Bundling matches Fedora-off behavior without
+# pulling assimp and openxr into the minimal ISO dependency graph.
+%global system_assimp 0
+%global system_openxr 0
 %endif
 
 Summary: Qt6 - Quick3D Libraries and utilities
 Name:    qt6-%{qt_module}
 Version: 6.10.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -89,7 +91,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 %prep
 %setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?unstable:-%{prerelease}}
 %patch -P 0 -p1
-%if 0%{?fedora} >= 43 || 0%{?oreon}
+%if (0%{?fedora} >= 43 || 0%{?oreon}) && 0%{?system_assimp}
 %patch -P 1 -p1
 %endif
 

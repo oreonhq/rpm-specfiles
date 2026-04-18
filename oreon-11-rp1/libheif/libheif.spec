@@ -25,7 +25,9 @@ Patch0:         libheif-no-hevc-tests.patch
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
+%if !0%{?oreon}
 BuildRequires:  pkgconfig(aom)
+%endif
 BuildRequires:  pkgconfig(dav1d)
 BuildRequires:  pkgconfig(libbrotlidec)
 BuildRequires:  pkgconfig(libjpeg)
@@ -37,6 +39,7 @@ BuildRequires:  pkgconfig(openjph) >= 0.18.0
 BuildRequires:  pkgconfig(sdl2)
 %endif
 BuildRequires:  pkgconfig(zlib)
+%if !0%{?oreon}
 %ifnarch %{ix86}
 # openh264 is not available for i686, see:
 # https://bugzilla.redhat.com/show_bug.cgi?id=2393742
@@ -46,6 +49,7 @@ BuildRequires:  pkgconfig(openh264)
 BuildRequires:  pkgconfig(libsharpyuv)
 BuildRequires:  pkgconfig(rav1e)
 BuildRequires:  pkgconfig(SvtAv1Enc)
+%endif
 %endif
 
 Obsoletes:      heif-pixbuf-loader < %{version}-%{release}
@@ -107,8 +111,13 @@ rm -rf third-party/
  -DBUILD_TESTING=ON \
  -DCMAKE_COMPILE_WARNING_AS_ERROR=OFF \
  -DPLUGIN_DIRECTORY=%{_libdir}/%{name} \
+%if 0%{?oreon}
+ -DWITH_AOM=OFF \
+ -DWITH_AOM_PLUGIN=OFF \
+%else
  -DWITH_AOM=ON \
  -DWITH_AOM_PLUGIN=OFF \
+%endif
  -DWITH_DAV1D=ON \
  -DWITH_DAV1D_PLUGIN=OFF \
  -DWITH_JPEG_DECODER=ON \
@@ -120,6 +129,14 @@ rm -rf third-party/
  -DWITH_OPENJPH_DECODER=ON \
  -DWITH_OPENJPH_ENCODER=ON \
  -DWITH_OPENJPH_ENCODER_PLUGIN=OFF \
+%if 0%{?oreon}
+ -DWITH_OpenH264_DECODER=OFF \
+ -DWITH_OpenH264_ENCODER=OFF \
+ -DWITH_RAV1E=OFF \
+ -DWITH_RAV1E_PLUGIN=OFF \
+ -DWITH_SvtEnc=OFF \
+ -DWITH_SvtEnc_PLUGIN=OFF \
+%else
 %ifnarch %{ix86}
  -DWITH_OpenH264_DECODER=ON \
  -DWITH_OpenH264_ENCODER=ON \
@@ -129,6 +146,7 @@ rm -rf third-party/
  -DWITH_RAV1E_PLUGIN=OFF \
  -DWITH_SvtEnc=ON \
  -DWITH_SvtEnc_PLUGIN=OFF \
+%endif
 %endif
 %if %{with bootstrap}
  -DWITH_EXAMPLE_HEIF_VIEW=OFF \

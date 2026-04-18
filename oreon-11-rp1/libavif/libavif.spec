@@ -4,7 +4,7 @@
 
 Name:           libavif
 Version:        1.3.0
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        Library for encoding and decoding AVIF images
 License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif
@@ -16,16 +16,11 @@ BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  ninja-build
-BuildRequires:  nasm
-BuildRequires:  pkgconfig(aom)
 BuildRequires:  pkgconfig(dav1d)
 BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(libpng)
 BuildRequires:  pkgconfig(libsharpyuv)
 BuildRequires:  pkgconfig(libxml-2.0)
-BuildRequires:  pkgconfig(libyuv)
-BuildRequires:  pkgconfig(rav1e)
-BuildRequires:  pkgconfig(SvtAv1Enc)
 BuildRequires:  pkgconfig(zlib)
 
 %description
@@ -64,10 +59,11 @@ patch -p1 --fuzz=0 -d ext/libargparse < ext/libargparse.patch
 
 %cmake \
   -GNinja \
-  -DAVIF_CODEC_AOM=SYSTEM \
+  -DAVIF_CODEC_AOM=OFF \
+  -DAVIF_CODEC_RAV1E=OFF \
+  -DAVIF_CODEC_SVT=OFF \
   -DAVIF_CODEC_DAV1D=SYSTEM \
-  -DAVIF_CODEC_RAV1E=SYSTEM \
-  -DAVIF_CODEC_SVT=SYSTEM \
+  -DAVIF_ENABLE_LIBYUV=OFF \
   -DAVIF_BUILD_APPS=ON \
   -DAVIF_BUILD_GDK_PIXBUF=OFF \
   -DCMAKE_BUILD_TYPE=Release

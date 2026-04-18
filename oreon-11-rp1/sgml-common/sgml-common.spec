@@ -2,7 +2,7 @@
 
 Name: sgml-common
 Version: 0.6.3
-Release: 68%{?dist}
+Release: 67%{?dist}
 
 Summary: Common SGML catalog and DTD files
 
@@ -195,5 +195,5 @@ fi
 %{_datadir}/xml/datatypes.dtd
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.3-68
+* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.3-67
 - Prepare for Oreon 11 (RP1)
