@@ -1,6 +1,6 @@
 Name:           accounts-qml-module
 Version:        0.7
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        QML bindings for online accounts (Qt 6)
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.com/accounts-sso/accounts-qml-module
@@ -41,7 +41,8 @@ Qt 6 QML plugin installed under qml/SSO.
 
 
 %prep
-%autosetup -n accounts-qml-module-VERSION_%{version} -p1
+# GitLab commit archive unpacks as accounts-qml-module-<full-hash>, not VERSION_ tag path
+%autosetup -n accounts-qml-module-%{gitrev} -p1
 
 
 %build
