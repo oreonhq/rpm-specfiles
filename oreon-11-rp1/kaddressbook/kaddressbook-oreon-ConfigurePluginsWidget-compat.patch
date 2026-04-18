@@ -42,7 +42,7 @@ diff -Nru kb/kaddressbook-v26.03.80/src/configuration/kaddressbookconfigpluginli
  
  #pragma once
 -#include <PimCommon/ConfigurePluginsWidget>
-+#include <TextAddonsWidgets/ConfigurePluginsWidget.h>
++#include <TextAddonsWidgets/ConfigurePluginsWidget>
  
  class KAddressBookConfigPluginListWidget : public TextAddonsWidgets::ConfigurePluginsWidget
  {

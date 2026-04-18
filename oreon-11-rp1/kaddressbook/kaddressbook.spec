@@ -1,7 +1,7 @@
 Name:    kaddressbook
 Summary: Contact Manager
 Version: 26.03.80
-Release: 15%{?dist}
+Release: 16%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://www.kde.org/applications/office/kaddressbook
@@ -106,18 +106,15 @@ sed -i 's/TextAddonsWidgets::NeedUpdateVersionUtils/PimCommon::NeedUpdateVersion
 sed -i 's/TextAddonsWidgets::NeedUpdateVersionWidget/PimCommon::NeedUpdateVersionWidget/g' src/mainwindow.cpp
 sed -i 's/TextAddonsWidgets::WhatsNewInfo/PimCommon::WhatsNewInfo/g' \
     src/whatsnew/whatsnewtranslations.h src/whatsnew/whatsnewtranslations.cpp
-# Patch0 embeds TextAddonsWidgets::ConfigurePluginsWidget (missing from ktextaddons 1.8 devel) and switches the list
-# widget include to TextAddonsWidgets/ConfigurePluginsWidget.h
-# PimCommon/ConfigurePluginsWidget includes <TextAddonsWidgets/ConfigurePluginsWidget> (no extension). Add a wrapper so
-# that include resolves to the same vendored class as ConfigurePluginsWidget.h (fixes ctor overload resolution).
+# Patch0 embeds TextAddonsWidgets::ConfigurePluginsWidget (missing from ktextaddons 1.8 devel). PimCommon and kaddressbook
+# must both include <TextAddonsWidgets/ConfigurePluginsWidget> (no .h) or the list widget base type differs from PimCommon
+# ctor TextAddonsWidgets::ConfigurePluginsWidget* and overload resolution fails.
 install -d src/configuration/textaddons_compat_configureplugins/TextAddonsWidgets
 printf '%s\n' '#pragma once' '#include "../configurepluginswidget.h"' \
   > src/configuration/textaddons_compat_configureplugins/TextAddonsWidgets/ConfigurePluginsWidget
 # Oreon pimcommon may not ship PimCommon::PluginUtil::pluginConfigFile (upstream returns pimpluginsrc KConfig name)
 sed -i 's/PimCommon::PluginUtil::pluginConfigFile()/QStringLiteral("pimpluginsrc")/g' \
     src/configuration/kaddressbookconfigpluginlistwidget.cpp
-# PimCommon::ConfigurePluginsWidget(QWidget *pluginList, QWidget *parent) takes QWidget*; do not cast to
-# TextAddonsWidgets::ConfigurePluginsWidget* (older kpimcommon overloads are gone).
 
 %build
 %cmake_kf6
