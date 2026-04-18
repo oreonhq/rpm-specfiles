@@ -4,7 +4,7 @@
 
 Name:           discount
 Version:        2.2.7
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        C implementation of Markdown
 License:        BSD-3-Clause
 URL:            https://github.com/Orc/discount
@@ -58,7 +58,7 @@ chmod 0755 %{buildroot}%{_libdir}/libmarkdown.so.*
 
 %files
 %doc README*
-%license COPYING
+%license COPYRIGHT
 %{_bindir}/markdown
 %{_bindir}/makepage
 %{_bindir}/mkd2html

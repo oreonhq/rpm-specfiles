@@ -1,6 +1,6 @@
 Name:           jpegxl
 Version:        0.11.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        JPEG XL reference encoder and decoder (libjxl)
 License:        BSD-3-Clause
 URL:            https://github.com/libjxl/libjxl
@@ -45,7 +45,8 @@ Headers and CMake files for libjxl.
   -DBUILD_TESTING=OFF \
   -DJPEGXL_ENABLE_SKCMS=OFF \
   -DJPEGXL_ENABLE_PLUGINS=OFF \
-  -DJPEGXL_ENABLE_DEVTOOLS=OFF
+  -DJPEGXL_ENABLE_DEVTOOLS=OFF \
+  -DJPEGXL_ENABLE_SJPEG=OFF
 %cmake_build
 
 
