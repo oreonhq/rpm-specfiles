@@ -3,20 +3,15 @@
 
 %global         majorminor      1.0
 
-#global gitrel     140
-#global gitcommit  c52adc8fcccf691754ab762e667fffb5465c3354
-#global shortcommit %(c=%{gitcommit}; echo ${c:0:5})
-
 Name:           gstreamer1-plugins-base
 Version:        1.28.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GStreamer streaming media framework base plugins
 
 License:        LGPL-2.1-or-later
 URL:            http://gstreamer.freedesktop.org/
 %if 0%{?gitrel}
-# git clone git://anongit.freedesktop.org/gstreamer/gst-plugins-base
-# cd gst-plugins-base; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
+# Git snapshot workflow disabled (use release tarball).
 Source0:        gst-plugins-base-%{version}.tar.xz
 %else
 Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-%{version}.tar.xz
@@ -507,5 +502,8 @@ chrpath --delete $RPM_BUILD_ROOT%{_bindir}/gst-play-1.0
 %endif
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-2
+- Remove commented git snapshot lines that expanded macros in comments
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-1
 - Prepare for Oreon 11 (RP1)

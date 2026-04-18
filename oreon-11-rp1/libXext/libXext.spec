@@ -5,7 +5,7 @@
 Summary: X.Org X11 libXext runtime library
 Name: libXext
 Version: 1.3.6
-Release: 5%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Release: 6%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT-open-group AND X11 AND HPND AND HPND-sell-variant AND SMLNJ AND MIT AND ISC AND HPND-doc AND HPND-doc-sell
 URL: http://www.x.org
 
@@ -84,9 +84,11 @@ rm -rf $RPM_BUILD_ROOT%{_docdir}
 %{_includedir}/X11/extensions/xtestext1.h
 %{_libdir}/libXext.so
 %{_libdir}/pkgconfig/xext.pc
-#%dir %{_mandir}/man3x
 %{_mandir}/man3/*.3*
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.6-6
+- Drop commented man3x line (rpmbuild expands macros in comments)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.6-5
 - Prepare for Oreon 11 (RP1)

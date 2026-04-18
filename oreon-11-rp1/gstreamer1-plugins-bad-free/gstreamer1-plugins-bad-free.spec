@@ -24,13 +24,9 @@
 %bcond vpl %{defined fedora}
 %endif
 
-#global gitrel     140
-#global gitcommit  4ca3a22b6b33ad8be4383063e76f79c4d346535d
-#global shortcommit %(c=%{gitcommit}; echo ${c:0:5})
-
 Name:           gstreamer1-plugins-bad-free
 Version:        1.28.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -48,8 +44,7 @@ Summary:        GStreamer streaming media framework "bad" plugins
 License:        LGPL-2.1-or-later AND LGPL-2.0-or-later AND (MIT OR LGPL-2.1-or-later) AND MPL-1.1 AND BSD-2-Clause AND BSD-3-Clause AND BSD-2-Clause-Views AND (BSD-2-Clause AND DOC) AND MIT-Festival AND (LGPL-2.0-or-later AND LicenseRef-Fedora-Public-Domain) AND (MPL-1.1 OR LGPL-2.0-or-later OR MIT) AND BSD-3-Clause WITH AdditionRef-Dart AND MIT AND GPL-2.0-only WITH Linux-syscall-note
 URL:            http://gstreamer.freedesktop.org/
 %if 0%{?gitrel}
-# git clone git://anongit.freedesktop.org/gstreamer/gst-plugins-bad
-# cd gst-plugins-bad; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
+# Git snapshot workflow disabled (use release tarball).
 Source0:        gst-plugins-bad-%{version}.tar.xz
 %else
 Source:         https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.xz
@@ -928,5 +923,8 @@ EOF
 
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-2
+- Remove commented git snapshot lines that expanded macros in comments
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-1
 - Prepare for Oreon 11 (RP1)

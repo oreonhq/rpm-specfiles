@@ -5,7 +5,7 @@
 Summary: X.Org X11 libXrandr runtime library
 Name: libXrandr
 Version: 1.5.4
-Release: 7%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Release: 8%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: HPND-sell-variant
 URL: http://www.x.org
 
@@ -65,9 +65,11 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_includedir}/X11/extensions/Xrandr.h
 %{_libdir}/libXrandr.so
 %{_libdir}/pkgconfig/xrandr.pc
-#%dir %{_mandir}/man3x
 %{_mandir}/man3/*.3*
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.4-8
+- Drop commented man3x line (rpmbuild expands macros in comments)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.4-7
 - Prepare for Oreon 11 (RP1)

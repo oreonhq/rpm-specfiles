@@ -1,7 +1,11 @@
 # The original RHEL N+1 content set is defined by (build)dependencies
 # of the packages in Fedora ELN. Hence we disable tests here
 # to prevent pulling many unwanted packages in.
+%if 0%{?oreon}
+%bcond_with tests
+%else
 %bcond tests %{defined fedora}
+%endif
 # Whether to build the manual pages (useful for bootstrapping Sphinx)
 %bcond man 1
 
@@ -12,7 +16,7 @@
 
 Name:           python-%{srcname}
 Version:        %{base_version}%{?prerel:~%{prerel}}
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        A tool for installing and managing Python packages
 
 %{?oreon:%global python_wheel_pkg_prefix python3}
@@ -48,6 +52,7 @@ Source0:        https://github.com/pypa/pip/archive/%{upstream_version}/%{srcnam
 # They are not bundled in the built package and do not contribute to the overall license.
 # They are pre-built but only contain text files, rebuilding them in %%build has very little benefit.
 
+%if %{with tests}
 # setuptools.whl
 # We cannot use RPM-packaged python-setuptools-wheel because upstream pins to <80.
 # See https://github.com/pypa/pip/pull/13357 for rationale.
@@ -63,6 +68,7 @@ Source3:        https://files.pythonhosted.org/packages/f2/65/b6ba90634c984a4fcc
 # This is a dummy placeholder package that only contains empty coverage.process_startup().
 # That way, we don't need to patch the usage out of conftest.py.
 Source4:        coverage-0-py3-none-any.whl
+%endif
 
 BuildArch:      noarch
 
@@ -361,5 +367,8 @@ pytest_k="$pytest_k and not test_check_unsupported"
 %{python_wheel_dir}/%{python_wheel_name}
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{base_version}%{?prerel:~%{prerel}}-2
+- On oreon default off full pip pytest wheel downloads
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{base_version}%{?prerel:~%{prerel}}-1
 - Prepare for Oreon 11 (RP1)

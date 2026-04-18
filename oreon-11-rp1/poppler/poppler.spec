@@ -1,6 +1,3 @@
-%global test_sha 03a4b9eb854a06a83c465e82de601796c458bbe9
-%global test_date 2021-01-11
-
 %bcond qt 1
 
 %if %{with qt}
@@ -17,15 +14,13 @@
 Summary: PDF rendering library
 Name:    poppler
 Version: 26.01.0
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: (GPL-2.0-only OR GPL-3.0-only) AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:     https://poppler.freedesktop.org/
 Source0: https://poppler.freedesktop.org/poppler-%{version}.tar.xz
 Source1: https://poppler.freedesktop.org/poppler-%{version}.tar.xz.sig
 # https://pgp.surfnet.nl/pks/lookup?op=get&search=0xCA262C6C83DE4D2FB28A332A3A6A4DB839EAA6D7
 Source2: armored-keys.asc
-# git archive --prefix test/
-Source3: %{name}-test-%{test_date}-%{test_sha}.tar.xz
 
 Patch1:  poppler-0.90.0-position-independent-code.patch
 
@@ -174,7 +169,7 @@ other formats.
 
 %prep
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%autosetup -p1 -b 3
+%autosetup -p1
 
 chmod -x poppler/CairoFontEngine.cc
 
@@ -200,7 +195,7 @@ chmod -x poppler/CairoFontEngine.cc
 %find_lang pdfsig
 
 %check
-%make_build test
+# Upstream ctest bundle not shipped in Oreon dist-git (Source test tarball dropped)
 
 # verify pkg-config sanity/version
 export PKG_CONFIG_PATH=%{buildroot}%{_datadir}/pkgconfig:%{buildroot}%{_libdir}/pkgconfig
@@ -290,5 +285,8 @@ test "$(pkg-config --modversion poppler-qt6)" = "%{version}"
 %{_mandir}/man1/*
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-4
+- Drop unpackaged git test tarball, skip ctest in check
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-3
 - Prepare for Oreon 11 (RP1)

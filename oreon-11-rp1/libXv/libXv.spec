@@ -5,7 +5,7 @@
 Summary: X.Org X11 libXv runtime library
 Name:    libXv
 Version: 1.0.13
-Release: 4%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Release: 5%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: SMLNJ AND HPND-sell-variant
 URL: http://www.x.org
 
@@ -64,9 +64,11 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_includedir}/X11/extensions/Xvlib.h
 %{_libdir}/libXv.so
 %{_libdir}/pkgconfig/xv.pc
-#%dir %{_mandir}/man3x
 %{_mandir}/man3/*.3*
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.13-5
+- Drop commented man3x line (rpmbuild expands macros in comments)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.13-4
 - Prepare for Oreon 11 (RP1)

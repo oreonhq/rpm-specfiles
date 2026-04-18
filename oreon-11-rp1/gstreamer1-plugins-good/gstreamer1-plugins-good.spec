@@ -29,21 +29,16 @@
 %bcond_without qt6
 %endif
 
-#global gitrel     140
-#global gitcommit  9865730cfa5b3a8b2560d082e7e56b350042d3d2
-#global shortcommit %(c=%{gitcommit}; echo ${c:0:5})
-
 Name:           gstreamer1-plugins-good
 Version:        1.28.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        GStreamer plugins with good code and licensing
 
 License:        CC0-1.0 AND GPL-2.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND xlock AND MIT AND BSD-3-Clause AND CC-BY-3.0 
 URL:            http://gstreamer.freedesktop.org/
 
 %if 0%{?gitrel}
-# git clone git://anogit.freedesktop.org/gstreamer/gst-plugins-good
-# cd gst-plugins-good; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
+# Git snapshot workflow disabled (use release tarball).
 Source0:        gst-plugins-good-%{version}.tar.xz
 %else
 Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-%{version}.tar.xz
@@ -373,5 +368,8 @@ find $RPM_BUILD_ROOT -name '*.la' -exec rm -fv {} ';'
 
 
 %changelog
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-3
+- Remove commented git snapshot lines that expanded macros in comments
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-2
 - Prepare for Oreon 11 (RP1)
