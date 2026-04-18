@@ -26,7 +26,7 @@
 
 Name:           gstreamer1-plugins-bad-free
 Version:        1.26.7
-Release:        7%{?dist}
+Release:        8%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -627,6 +627,7 @@ EOF
 %{_libdir}/gstreamer-%{majorminor}/libgstinsertbin.so
 %{_libdir}/gstreamer-%{majorminor}/libgstmse.so
 %{_libdir}/gstreamer-%{majorminor}/libgstunixfd.so
+%{_libdir}/gstreamer-%{majorminor}/libgsty4mdec.so
 
 # System (Linux) specific plugins
 %{_libdir}/gstreamer-%{majorminor}/libgstbluez.so
