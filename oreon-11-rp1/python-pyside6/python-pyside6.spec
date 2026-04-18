@@ -15,7 +15,7 @@
 
 Name:           python-%{pypi_name}
 Version:        6.10.3
-Release:        14%{?dist}
+Release:        15%{?dist}
 Summary:        Python bindings for the Qt 6 cross-platform application and UI framework
 
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -34,6 +34,7 @@ Patch1:         0001-Always-link-to-python-libraries.patch
 Patch2:         0001-Fix-installation.patch
 Patch3:         0001-shiboken6-Fix-build-with-clang-22.patch
 Patch4:         0004-shiboken6-define-LLVM_VERSION-for-apiextractor.patch
+Patch5:         0005-QtCore-QDir-match-Qt-6.10-optional-QFile-Permissions.patch
 
 BuildRequires:  cmake
 BuildRequires:  ninja-build
