@@ -133,7 +133,7 @@ IBus means Intelligent Input Bus. It is an input framework for Linux OS.
 %package -n python3-ibus
 Summary:        Python 3 GObject Introspection overrides for IBus
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       %{py3_dist pygobject}
+Requires:       python3-gobject%{?_isa}
 
 %description -n python3-ibus
 The python3-ibus package provides GObject Introspection overrides

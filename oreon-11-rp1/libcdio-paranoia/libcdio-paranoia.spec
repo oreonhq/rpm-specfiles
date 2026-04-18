@@ -16,6 +16,8 @@ BuildRequires: chrpath
 BuildRequires: libcdio-devel
 BuildRequires: make
 
+Requires:       libcdio%{?_isa}
+
 %description
 This CDDA reader distribution ('libcdio-cdparanoia') reads audio from the
 CDROM directly as data, with no analog step between, and writes the

@@ -55,6 +55,7 @@ KWallet is a secure and unified container for user passwords.
 %package        libs
 Summary:        KWallet framework libraries
 Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       gpgmepp%{?_isa}
 %description    libs
 Provides API to access KWallet data from applications.
 
