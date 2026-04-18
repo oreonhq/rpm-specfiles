@@ -4,7 +4,7 @@
 
 Name:           discount
 Version:        2.2.7
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        C implementation of Markdown
 License:        BSD-3-Clause
 URL:            https://github.com/Orc/discount
@@ -50,6 +50,8 @@ export CFLAGS="%{optflags} -Wno-incompatible-pointer-types -Wno-int-conversion -
 
 
 %install
+# configure bakes /sbin/ldconfig into librarian.sh; %%install runs in %%buildroot only
+sed -i '/ldconfig/d' librarian.sh
 %make_install install.everything DESTDIR=%{buildroot}
 chmod 0755 %{buildroot}%{_libdir}/libmarkdown.so.*
 

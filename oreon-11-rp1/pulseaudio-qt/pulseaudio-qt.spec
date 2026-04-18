@@ -2,7 +2,7 @@
 
 Name:           pulseaudio-qt
 Version:        1.8.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Qt bindings to PulseAudio (Qt 6)
 License:        LGPL-2.1-only
 URL:            https://invent.kde.org/libraries/pulseaudio-qt
@@ -55,7 +55,8 @@ Headers, pkg-config, and CMake files for kf6-pulseaudio-qt.
 
 %files -n kf6-pulseaudio-qt
 %license LICENSES/*
-%{_libdir}/libKF6PulseAudioQt.so.5*
+# Real name is .so.<upstream-version> (e.g. 1.8.1); SONAME is still .so.5
+%{_libdir}/libKF6PulseAudioQt.so.*
 
 %files -n kf6-pulseaudio-qt-devel
 %{_includedir}/KF6/*
