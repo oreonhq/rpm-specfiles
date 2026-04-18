@@ -1,0 +1,24 @@
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Subject: drm: allow libdisplay-info 0.2.x
+
+Weston 14 widens the pkg-config range to < 0.3.0. libdisplay-info 0.2.0
+satisfies >= 0.1.1 but failed the old < 0.2.0 cap, so HAVE_LIBDISPLAY_INFO
+was unset even when the library was installed.
+
+---
+ libweston/backend-drm/meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libweston/backend-drm/meson.build b/libweston/backend-drm/meson.build
+index 1111111..2222222 100644
+--- a/libweston/backend-drm/meson.build
++++ b/libweston/backend-drm/meson.build
+@@ -4,7 +4,7 @@ endif
+ 
+ dep_libdisplay_info = dependency(
+ 	'libdisplay-info',
+-	version: ['>= 0.1.1', '< 0.2.0'],
++	version: ['>= 0.1.1', '< 0.3.0'],
+ 	fallback: ['display-info', 'di_dep'],
+ 	default_options: [
+ 		'werror=false',

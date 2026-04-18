@@ -1,10 +1,12 @@
 Name:           weston
 Version:        13.0.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Reference Wayland compositor
 License:        MIT
 URL:            https://gitlab.freedesktop.org/wayland/weston
 Source0:        https://gitlab.freedesktop.org/wayland/weston/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz
+# libdisplay-info 0.2.x (matches Weston 14 upper bound)
+Patch0:         weston-libdisplay-info-0.2.patch
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -21,6 +23,7 @@ BuildRequires:  libpng-devel
 BuildRequires:  libseat-devel
 BuildRequires:  libva-devel
 BuildRequires:  libwebp-devel
+BuildRequires:  libXcursor-devel
 BuildRequires:  libxkbcommon-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  mesa-libEGL-devel
