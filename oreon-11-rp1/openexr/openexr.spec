@@ -1,6 +1,6 @@
 Name:           openexr
 Version:        3.3.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Tools and libraries for ILM's OpenEXR high dynamic-range image format
 License:        BSD-3-Clause
 URL:            https://www.openexr.com/
@@ -68,5 +68,5 @@ Development files for OpenEXR 3.x.
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.3-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.3-2
 - Add OpenEXR 3 for HDR imaging

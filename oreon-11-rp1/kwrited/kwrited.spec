@@ -1,6 +1,6 @@
 Name:           kwrited
 Version:        6.6.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        KDE daemon for wall and write messages
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/plasma/kwrited
@@ -47,5 +47,5 @@ Requires:       kf6-filesystem
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Add kwrited for Plasma workspace

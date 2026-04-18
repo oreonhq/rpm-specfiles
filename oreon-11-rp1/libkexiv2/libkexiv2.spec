@@ -2,7 +2,7 @@
 
 Name:           libkexiv2
 Version:        25.12.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        KDE wrapper around Exiv2 (Qt 6)
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/graphics/libkexiv2
@@ -67,5 +67,5 @@ Headers and CMake files for libkexiv2.
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-2
 - Add libkexiv2 Qt 6 from KDE release service

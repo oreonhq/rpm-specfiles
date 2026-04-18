@@ -2,7 +2,7 @@
 
 Name:           libavif
 Version:        1.3.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Library for encoding and decoding AVIF images
 License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif
@@ -78,5 +78,5 @@ Summary:        AVIF encoder and decoder command line tools
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.0-2
 - Add libavif for AVIF codecs in Qt and browsers

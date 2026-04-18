@@ -1,6 +1,6 @@
 Name:           jxrlib
 Version:        1.2
-Release:        0.1.git20170615%{?dist}
+Release:        0.2.git20170615%{?dist}
 Summary:        JPEG XR reference library
 License:        BSD-2-Clause
 URL:            https://git.debian.org/git/phototools/jxrlib.git
@@ -60,5 +60,5 @@ Headers for building against jxrlib.
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2-0.1.git20170615
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2-0.2.git20170615
 - Add jxrlib snapshot for legacy JPEG XR media

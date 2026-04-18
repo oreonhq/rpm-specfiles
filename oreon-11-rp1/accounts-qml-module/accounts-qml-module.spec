@@ -1,10 +1,11 @@
 Name:           accounts-qml-module
-Version:        0.7.0
-Release:        1%{?dist}
+Version:        0.7
+Release:        3%{?dist}
 Summary:        QML bindings for online accounts (Qt 6)
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.com/accounts-sso/accounts-qml-module
-Source0:        https://gitlab.com/accounts-sso/accounts-qml-module/-/archive/%{version}/accounts-qml-module-%{version}.tar.bz2
+# Upstream tag is VERSION_0.7 (not 0.7.0)
+Source0:        https://gitlab.com/accounts-sso/accounts-qml-module/-/archive/VERSION_%{version}/accounts-qml-module-VERSION_%{version}.tar.bz2
 
 BuildRequires:  gcc-c++
 BuildRequires:  libaccounts-qt6-devel
@@ -38,7 +39,7 @@ Qt 6 QML plugin installed under qml/SSO.
 
 
 %prep
-%autosetup -n accounts-qml-module-%{version} -p1
+%autosetup -n accounts-qml-module-VERSION_%{version} -p1
 
 
 %build
@@ -63,5 +64,6 @@ rm -rf %{buildroot}%{_datadir}/accounts-qml-module/doc
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.0-1
-- Add accounts QML (Qt 6) for online accounts UI
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7-3
+- Fix GitLab archive URL for VERSION_0.7 tag
+- Fix changelog weekday for rpmlint

@@ -2,7 +2,7 @@
 
 Name:           libqaccessibilityclient
 Version:        0.6.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Accessibility client library for Qt
 License:        LGPL-2.0-or-later
 URL:            https://invent.kde.org/library/libqaccessibilityclient
@@ -66,5 +66,5 @@ Headers and CMake files for the Qt 6 build.
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.0-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.0-2
 - Add libqaccessibilityclient Qt 6 stack

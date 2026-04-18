@@ -1,6 +1,6 @@
 Name:           plasma5support
 Version:        6.6.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Compatibility and migration support between KDE Frameworks 5 and 6
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/plasma5support
@@ -100,5 +100,5 @@ Headers and CMake files for libplasma5support.
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Add plasma5support for legacy Plasma QML

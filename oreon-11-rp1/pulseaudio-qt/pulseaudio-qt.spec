@@ -2,7 +2,7 @@
 
 Name:           pulseaudio-qt
 Version:        1.8.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Qt bindings to PulseAudio (Qt 6)
 License:        LGPL-2.1-only
 URL:            https://invent.kde.org/libraries/pulseaudio-qt
@@ -65,5 +65,5 @@ Headers, pkg-config, and CMake files for kf6-pulseaudio-qt.
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-2
 - Add pulseaudio-qt for Plasma audio applets

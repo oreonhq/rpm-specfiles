@@ -1,6 +1,6 @@
 Name:           jpegxl
 Version:        0.11.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        JPEG XL reference encoder and decoder (libjxl)
 License:        BSD-3-Clause
 URL:            https://github.com/libjxl/libjxl
@@ -63,5 +63,5 @@ Headers and CMake files for libjxl.
 %{_libdir}/pkgconfig/libjxl.pc
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.1-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.1-2
 - Add JPEG XL (libjxl) stack

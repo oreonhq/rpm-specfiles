@@ -1,6 +1,6 @@
 Name:           openjpeg2
 Version:        2.5.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        JPEG 2000 codec library
 License:        BSD-2-Clause
 URL:            https://www.openjpeg.org/
@@ -61,5 +61,5 @@ Headers and CMake files for OpenJPEG 2.x.
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.3-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.3-2
 - Add OpenJPEG2 for PDF and imaging stacks

@@ -2,7 +2,7 @@
 
 Name:           ebook-tools
 Version:        0.2.2
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Tools and library for EPUB and LIT ebooks
 License:        MIT
 URL:            https://sourceforge.net/projects/ebook-tools/
@@ -64,5 +64,5 @@ Headers and libraries for libepub.
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.2-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.2-2
 - Add ebook-tools for Okular and converters

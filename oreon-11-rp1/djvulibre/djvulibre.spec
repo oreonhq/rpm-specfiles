@@ -1,6 +1,6 @@
 Name:           djvulibre
 Version:        3.5.28
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        DjVu viewers, encoders, and libraries
 License:        GPL-2.0-or-later
 URL:            https://djvu.sourceforge.net/
@@ -70,5 +70,5 @@ find %{buildroot} -name '*.la' -delete
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.28-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.28-2
 - Add DjVu stack for document viewers

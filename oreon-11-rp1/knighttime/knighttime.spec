@@ -1,6 +1,6 @@
 Name:           knighttime
 Version:        6.6.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Plasma day and night cycle scheduling daemon
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/plasma/knighttime
@@ -55,5 +55,5 @@ Requires:       kf6-filesystem
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Add knighttime for Plasma

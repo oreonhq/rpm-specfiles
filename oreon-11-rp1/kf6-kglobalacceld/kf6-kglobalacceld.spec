@@ -2,7 +2,7 @@
 
 Name:           kf6-kglobalacceld
 Version:        6.6.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Plasma daemon for global keyboard shortcuts
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 URL:            https://invent.kde.org/plasma/kglobalacceld
@@ -60,5 +60,5 @@ Daemon and platform plugin for KGlobalAccel on Plasma 6.
 
 
 %changelog
-* Thu Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-1
+* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Add Plasma kglobalacceld for kwin and session
