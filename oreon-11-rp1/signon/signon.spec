@@ -1,7 +1,6 @@
 %global gitdate 20240205
 %global commit0 c8ad98249af541514ff7a81634d3295e712f1a39
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
-%global tag0 VERSION_%{version}
 
 Name:           signon
 Version:        8.60^%{gitdate}.%{shortcommit0}
@@ -11,15 +10,8 @@ Summary:        Accounts framework for Linux and POSIX based platforms
 License:        LGPL-2.1-only
 URL:            https://gitlab.com/accounts-sso/signond
 
-# Temporary source, for plasma6 compatibility
+# Temporary source, for plasma6 compatibility (fork archive; upstream is accounts-sso/signond).
 Source0:        https://gitlab.com/nicolasfella/signond/-/archive/%{commit0}/signond-%{commit0}.tar.gz
-
-# Original Sources
-#%%if 0%{?tag0:1}
-#Source0:        https://gitlab.com/accounts-sso/signond/repository/archive.tar.gz?ref=%%{tag0}#/%%{name}-%{version}.tar.gz
-#%%else
-#Source0:        https://gitlab.com/accounts-sso/signond/repository/archive.tar.gz?ref=%%{commit0}#/%%{name}-%%{shortcommit0}.tar.gz
-#%%endif
 
 BuildRequires: make
 BuildRequires:  dbus-x11
