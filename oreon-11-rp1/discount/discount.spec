@@ -1,8 +1,10 @@
 %global somajor 2
+# Old-style C + hand-written Makefile: LTO can fail linking; GCC 15 is stricter on conversions.
+%global _lto_cflags %{nil}
 
 Name:           discount
 Version:        2.2.7
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        C implementation of Markdown
 License:        BSD-3-Clause
 URL:            https://github.com/Orc/discount
@@ -35,7 +37,7 @@ Headers and pkg-config file for libmarkdown.
 
 
 %build
-export CFLAGS="%{optflags} -Wno-incompatible-pointer-types"
+export CFLAGS="%{optflags} -Wno-incompatible-pointer-types -Wno-int-conversion -Wno-discarded-qualifiers"
 ./configure.sh \
   --prefix=%{_prefix} \
   --libdir=%{_libdir} \

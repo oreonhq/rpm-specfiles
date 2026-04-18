@@ -2,7 +2,7 @@
 
 Name:           libavif
 Version:        1.3.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Library for encoding and decoding AVIF images
 License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif
@@ -20,8 +20,6 @@ BuildRequires:  pkgconfig(libpng)
 BuildRequires:  pkgconfig(libsharpyuv)
 BuildRequires:  pkgconfig(libxml-2.0)
 BuildRequires:  pkgconfig(libyuv)
-BuildRequires:  pkgconfig(rav1e)
-BuildRequires:  pkgconfig(SvtAv1Enc)
 BuildRequires:  pkgconfig(zlib)
 
 %description

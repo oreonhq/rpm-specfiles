@@ -1,11 +1,13 @@
 Name:           accounts-qml-module
 Version:        0.7
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        QML bindings for online accounts (Qt 6)
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.com/accounts-sso/accounts-qml-module
-# Upstream tag is VERSION_0.7 (not 0.7.0)
-Source0:        https://gitlab.com/accounts-sso/accounts-qml-module/-/archive/VERSION_%{version}/accounts-qml-module-VERSION_%{version}.tar.bz2
+# VERSION_0.7 tarball is Qt5-only (hardcoded accounts-qt5). Qt6 needs master after
+# https://gitlab.com/accounts-sso/accounts-qml-module/-/commit/05e79ebbbf3784a87f72b7be571070125c10dfe3
+%global gitrev 05e79ebbbf3784a87f72b7be571070125c10dfe3
+Source0:        https://gitlab.com/accounts-sso/accounts-qml-module/-/archive/%{gitrev}/accounts-qml-module-%{gitrev}.tar.bz2
 
 BuildRequires:  gcc-c++
 BuildRequires:  libaccounts-qt6-devel

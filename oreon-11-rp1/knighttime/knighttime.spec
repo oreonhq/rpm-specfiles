@@ -1,6 +1,6 @@
 Name:           knighttime
 Version:        6.6.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Plasma day and night cycle scheduling daemon
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/plasma/knighttime
@@ -36,7 +36,8 @@ Requires:       kf6-filesystem
 
 
 %build
-%cmake_kf6
+# Autotests pull extra runtime; ORBS/mock often lacks D-Bus/X11 for them
+%cmake_kf6 -DBUILD_TESTING=OFF
 %cmake_build
 
 

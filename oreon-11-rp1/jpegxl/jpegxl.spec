@@ -1,6 +1,6 @@
 Name:           jpegxl
 Version:        0.11.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        JPEG XL reference encoder and decoder (libjxl)
 License:        BSD-3-Clause
 URL:            https://github.com/libjxl/libjxl
@@ -13,6 +13,7 @@ BuildRequires:  brotli-devel
 BuildRequires:  pkgconfig(libjpeg)
 BuildRequires:  pkgconfig(libpng)
 BuildRequires:  pkgconfig(zlib)
+BuildRequires:  highway-devel
 
 %description
 JPEG XL shared libraries (binary packages include libjxl).

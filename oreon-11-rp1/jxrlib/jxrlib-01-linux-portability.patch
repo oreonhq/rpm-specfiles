@@ -1,0 +1,177 @@
+--- a/image/sys/strcodec.h	2026-04-17 19:57:51.161570687 -0700
++++ b/image/sys/strcodec.h	2026-04-17 19:57:51.161631201 -0700
+@@ -38,6 +38,13 @@
+ #define _BIG__ENDIAN_
+ #endif
+ 
++/* Declared in strcodec.c for non-Windows little-endian (see Memory access functions). */
++#if !(defined(WIN32) && !defined(UNDER_CE)) && !(defined(UNDER_CE) && defined(_ARM_))
++#ifndef _BIG__ENDIAN_
++U32 _byteswap_ulong(U32 bits);
++#endif
++#endif
++
+ //================================================================
+ #ifdef ENABLE_OPTIMIZATIONS
+ #if defined(WIN32) && !defined(_WIN64)
+--- a/image/decode/segdec.c	2026-04-17 19:57:51.161744708 -0700
++++ b/image/decode/segdec.c	2026-04-17 19:57:51.161794758 -0700
+@@ -63,7 +63,9 @@
+     v |= ((U32)((U16 *) pv)[1]) << 16;
+     return _byteswap_ulong(v);
+ #else // _M_IA64
+-    return _byteswap_ulong(*(U32*)pv);
++    U32 v;
++    memcpy(&v, pv, sizeof(U32));
++    return _byteswap_ulong(v);
+ #endif // _M_IA64
+ #endif // _BIG__ENDIAN_
+ }
+--- a/image/sys/strcodec.c	2026-04-17 19:57:51.161891555 -0700
++++ b/image/sys/strcodec.c	2026-04-17 19:57:51.161951698 -0700
+@@ -694,7 +694,9 @@
+     v |= ((U32)((U16 *) pv)[1]) << 16;
+     return _byteswap_ulong(v);
+ #else // _M_IA64
+-    return _byteswap_ulong(*(U32*)pv);
++    U32 v;
++    memcpy(&v, pv, sizeof(U32));
++    return _byteswap_ulong(v);
+ #endif // _M_IA64
+ #endif // _BIG__ENDIAN_
+ }
+--- a/jxrtestlib/JXRTest.c	2026-04-17 19:57:51.162025199 -0700
++++ b/jxrtestlib/JXRTest.c	2026-04-17 19:57:51.162076442 -0700
+@@ -208,13 +208,13 @@
+     FailIf(NULL == pExt, WMP_errUnsupportedFormat);
+ 
+     // get decode PKIID
+-    Call(GetTestDecodeIID(pExt, &pIID));
++    Call(GetTestDecodeIID(pExt, (const PKIID**)&pIID));
+ 
+     // create stream
+     Call(CreateWS_File(&pStream, szFilename, "rb"));
+ 
+     // Create decoder
+-    Call(PKTestFactory_CreateCodec(pIID, ppDecoder));
++    Call(PKTestFactory_CreateCodec(pIID, (void**)ppDecoder));
+     pDecoder = *ppDecoder;
+ 
+     // attach stream to decoder
+@@ -232,7 +232,7 @@
+ 
+     UNREFERENCED_PARAMETER( uVersion );
+ 
+-    Call(PKAlloc(ppCFactory, sizeof(**ppCFactory)));
++    Call(PKAlloc((void**)ppCFactory, sizeof(**ppCFactory)));
+     pCFactory = *ppCFactory;
+ 
+     pCFactory->CreateCodec = PKTestFactory_CreateCodec;
+@@ -287,7 +287,7 @@
+ 
+     pID->fStreamOwner && pID->pStream->Close(&pID->pStream);
+ 
+-    return PKFree(ppID);
++    return PKFree((void**)ppID);
+ }
+ 
+ ERR PKTestDecode_Create(
+@@ -296,7 +296,7 @@
+     ERR err = WMP_errSuccess;
+     PKTestDecode* pID = NULL;
+ 
+-    Call(PKAlloc(ppID, sizeof(**ppID)));
++    Call(PKAlloc((void**)ppID, sizeof(**ppID)));
+ 
+     pID = *ppID;
+     pID->Initialize = PKTestDecode_Initialize;
+--- a/jxrtestlib/JXRTestTif.c	2026-04-17 19:57:51.162151336 -0700
++++ b/jxrtestlib/JXRTestTif.c	2026-04-17 19:57:51.162207414 -0700
+@@ -909,8 +909,8 @@
+ 
+     PKTestDecode *pID = *ppID;
+ 
+-    Call(WMPFree(&pID->EXT.TIF.uStripOffsets));
+-    Call(WMPFree(&pID->EXT.TIF.uStripByteCounts));
++    Call(WMPFree((void**)&pID->EXT.TIF.uStripOffsets));
++    Call(WMPFree((void**)&pID->EXT.TIF.uStripByteCounts));
+ 
+     Call(PKTestDecode_Release(ppID));
+ 
+--- a/jxrencoderdecoder/JxrEncApp.c	2026-04-17 19:57:51.162303733 -0700
++++ b/jxrencoderdecoder/JxrEncApp.c	2026-04-17 19:57:51.162346138 -0700
+@@ -615,7 +615,7 @@
+ 
+     //================================
+     Call(PKCreateCodecFactory(&pCodecFactory, WMP_SDK_VERSION));
+-    Call(pCodecFactory->CreateCodec(&IID_PKImageWmpEncode, &pEncoder));
++    Call(pCodecFactory->CreateCodec(&IID_PKImageWmpEncode, (void**)&pEncoder));
+ 
+     //----------------------------------------------------------------
+     Call(PKCreateTestFactory(&pTestFactory, WMP_SDK_VERSION));
+--- a/jxrencoderdecoder/JxrDecApp.c	2026-04-17 19:57:51.162447523 -0700
++++ b/jxrencoderdecoder/JxrDecApp.c	2026-04-17 19:57:51.162494015 -0700
+@@ -427,7 +427,7 @@
+     Call(GetTestEncodeIID(szExt, &pIID));
+ 
+     // Create encoder
+-    Call(PKTestFactory_CreateCodec(pIID, ppIE));
++    Call(PKTestFactory_CreateCodec(pIID, (void**)ppIE));
+ 
+ Cleanup:
+     return err;
+--- a/jxrgluelib/JXRGlueJxr.c	2026-04-17 19:57:51.162697830 -0700
++++ b/jxrgluelib/JXRGlueJxr.c	2026-04-17 19:57:51.162757574 -0700
+@@ -27,6 +27,7 @@
+ //
+ //*@@@---@@@@******************************************************************
+ #include <limits.h>
++#include <wchar.h>
+ #include <JXRGlue.h>
+ 
+ 
+--- a/image/sys/adapthuff.c	2026-04-17 19:57:51.162848559 -0700
++++ b/image/sys/adapthuff.c	2026-04-17 19:57:51.162889177 -0700
+@@ -28,6 +28,8 @@
+ 
+ #include "strcodec.h"
+ 
++#include <limits.h>
++
+ #ifdef MEM_TRACE
+ #define TRACE_MALLOC    1
+ #define TRACE_NEW       0
+@@ -459,7 +461,7 @@
+     assert (t < gMaxTables[iSym]);
+ 
+     //pAdHuff->m_iDiscriminant >>= 1;
+-    pAdHuff->m_iLowerBound = (t == 0) ? (-1 << 31) : -THRESHOLD;
++    pAdHuff->m_iLowerBound = (t == 0) ? INT_MIN : -THRESHOLD;
+     pAdHuff->m_iUpperBound = (t == gMaxTables[iSym] - 1) ? (1 << 30) : THRESHOLD;
+ 
+     switch (iSym) {
+--- a/image/encode/strenc.c	2026-04-17 19:57:51.163036431 -0700
++++ b/image/encode/strenc.c	2026-04-17 19:57:51.163159301 -0700
+@@ -29,6 +29,7 @@
+ #include "encode.h"
+ #include "strTransform.h"
+ #include <math.h>
++#include <unistd.h>
+ #include "perfTimer.h"
+ 
+ #ifdef MEM_TRACE
+@@ -482,8 +483,12 @@
+                 pSC->ppTempFile[i] = (char *)malloc(FILENAME_MAX * sizeof(char));
+                 if(pSC->ppTempFile[i] == NULL) return ICERR_ERROR;
+ 
+-                if ((pFilename = tmpnam(NULL)) == NULL)
+-                    return ICERR_ERROR;                
++                char tmpnambuf[] = "/tmp/jxrXXXXXX";
++                int tmpfd = mkstemp(tmpnambuf);
++                if (tmpfd == -1)
++                    return ICERR_ERROR;
++                close(tmpfd);
++                pFilename = tmpnambuf;
+                 strcpy(pSC->ppTempFile[i], pFilename);
+ #endif
+                 if(CreateWS_File(pSC->ppWStream + i, pFilename, "w+b") != ICERR_OK) return ICERR_ERROR;                

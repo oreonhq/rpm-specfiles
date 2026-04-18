@@ -1,11 +1,7 @@
-# The original RHEL N+1 content set is defined by (build)dependencies
-# of the packages in Fedora ELN. Hence we disable tests here
-# to prevent pulling many unwanted packages in.
-%if 0%{?oreon}
+# Full pytest needs setuptools/flit_core/coverage wheels in SOURCES plus VCS BRs.
+# Default off so rpmbuild -bs inside mock (Fedora defines %%fedora) does not
+# require those sources. Build with: rpmbuild --with tests after spectool -g.
 %bcond_with tests
-%else
-%bcond tests %{defined fedora}
-%endif
 # Whether to build the manual pages (useful for bootstrapping Sphinx)
 %bcond man 1
 
@@ -16,7 +12,7 @@
 
 Name:           python-%{srcname}
 Version:        %{base_version}%{?prerel:~%{prerel}}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A tool for installing and managing Python packages
 
 %{?oreon:%global python_wheel_pkg_prefix python3}

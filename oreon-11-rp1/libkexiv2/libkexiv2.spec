@@ -11,6 +11,7 @@ Source0:        https://download.kde.org/stable/release-service/%{version}/src/l
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
+BuildRequires:  kf6-rpm-macros
 BuildRequires:  ninja-build
 BuildRequires:  pkgconfig(exiv2)
 BuildRequires:  qt6-qtbase-devel
@@ -42,9 +43,9 @@ Headers and CMake files for libkexiv2.
 
 
 %build
-%cmake \
-  -DQT_MAJOR_VERSION=6 \
+%cmake_kf6 \
   -DCMAKE_BUILD_TYPE=Release \
+  -DBUILD_TESTING=OFF \
   -DKDE_INSTALL_USE_QT_SYS_PATHS:BOOL=ON
 %cmake_build
 
