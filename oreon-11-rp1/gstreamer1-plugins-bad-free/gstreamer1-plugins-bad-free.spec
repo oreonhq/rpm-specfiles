@@ -26,7 +26,7 @@
 
 Name:           gstreamer1-plugins-bad-free
 Version:        1.26.7
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -794,10 +794,10 @@ EOF
 %endif
 %{_libdir}/libgstwayland-%{majorminor}.so.0{,.*}
 
+# libgstcodecparsers remains; GstCodecParsers-*.typelib/.gir not built since upstream dropped GI there (1.26+)
 %{_libdir}/girepository-1.0/CudaGst-1.0.typelib
 %{_libdir}/girepository-1.0/GstAnalytics-1.0.typelib
 %{_libdir}/girepository-1.0/GstBadAudio-1.0.typelib
-%{_libdir}/girepository-1.0/GstCodecParsers-1.0.typelib
 %{_libdir}/girepository-1.0/GstCodecs-1.0.typelib
 %{_libdir}/girepository-1.0/GstCuda-1.0.typelib
 %{_libdir}/girepository-1.0/GstDxva-1.0.typelib
@@ -821,7 +821,6 @@ EOF
 %{_datadir}/gir-1.0/CudaGst-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstAnalytics-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstBadAudio-%{majorminor}.gir
-%{_datadir}/gir-1.0/GstCodecParsers-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstCodecs-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstCuda-%{majorminor}.gir
 %{_datadir}/gir-1.0/GstDxva-%{majorminor}.gir
