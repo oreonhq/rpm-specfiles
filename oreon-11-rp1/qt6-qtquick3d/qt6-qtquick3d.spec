@@ -14,6 +14,16 @@
 # closure on the ISO (see anaconda-dnf-problems.log).
 %global system_assimp 0
 %global system_openxr 0
+%if %{system_assimp}
+%global _qt_feat_system_assimp ON
+%else
+%global _qt_feat_system_assimp OFF
+%endif
+%if %{system_openxr}
+%global _qt_feat_system_openxr ON
+%else
+%global _qt_feat_system_openxr OFF
+%endif
 
 Summary: Qt6 - Quick3D Libraries and utilities
 Name:    qt6-%{qt_module}
@@ -111,8 +121,8 @@ CXXFLAGS="$CXXFLAGS -mno-avx"
 %cmake_qt6 \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF} \
-  -DFEATURE_system_assimp=%{?system_assimp:ON}%{!?system_assimp:OFF} \
-  -DFEATURE_system_openxr=%{?system_openxr:ON}%{!?system_openxr:OFF}
+  -DFEATURE_system_assimp=%{_qt_feat_system_assimp} \
+  -DFEATURE_system_openxr=%{_qt_feat_system_openxr}
 
 %cmake_build
 

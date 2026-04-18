@@ -33,7 +33,8 @@ mechanism to allow real-time scheduling to be used by normal user
 processes.
 
 %prep
-%autosetup -p1
+# GitLab archive unpacks to rtkit-v%{version}, not rtkit-%{version}
+%autosetup -p1 -n rtkit-v%{version}
 
 %build
 %meson \

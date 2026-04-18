@@ -55,11 +55,8 @@ Summary:        Software implementation of the OpenAL 3D audio API
 License:        LGPL-2.0-or-later AND BSD-3-Clause AND GPL-2.0-or-later AND Apache-2.0 AND (LGPL-2.0-or-later AND BSD-3-Clause) AND (MIT WITH fmt-exception) AND NCL AND MIT AND LicenseRef-Fedora-Public-Domain
 URL:            https://openal-soft.org/
 VCS:            https://github.com/kcat/openal-soft
-# Source without non free datasets
-# Run ./make_tarball.sh
-# Then don't forget to upload it with:
-# fedpkg new-sources *.tar.xz
-Source:         openal-soft-1.24.2-clean.tar.xz
+# Source without non free datasets (Fedora f43 lookaside; same as SRPM)
+Source:         https://src.fedoraproject.org/lookaside/pkgs/rpms/openal-soft/openal-soft-1.24.2-clean.tar.xz/sha512/06780ad417af01263ce4eaa03f950708d2f3296c20d5c6deb882bce3e3c13684dee379fa55d08107579ee219db2574265981b1d3db3a2e03dc258d8ef29a16a8/openal-soft-1.24.2-clean.tar.xz
 Source:         make_tarball.sh
 # Patch to unbundle fmt
 Patch:          0001-Unbundle-fmt.diff

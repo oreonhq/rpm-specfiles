@@ -24,6 +24,8 @@ Name:           fftw
 Version:        3.3.10
 Release:        17%{?dist}
 Summary:        A Fast Fourier Transform library
+# LTO on this package pushes mock builds past Oreon worker limits (same failure mode as Fedora koji timeouts on huge autotools+LTO trees).
+%define _lto_cflags %{nil}
 # Generally, the code is under GPL but some headers are also under MIT or BSD:
 License:        GPL-2.0-or-later AND MIT AND BSD-2-Clause
 URL:            http://www.fftw.org

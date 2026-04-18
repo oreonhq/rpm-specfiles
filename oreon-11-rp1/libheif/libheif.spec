@@ -154,7 +154,9 @@ multilibFileVersions %{buildroot}%{_includedir}/%{name}/heif_version.h
 
 
 %check
-%ctest
+# %%cmake from redhat-rpm-config uses this out-of-tree dir (same as %%ctest would)
+cd redhat-linux-build
+ctest %{?_smp_mflags} --output-on-failure -E '^region$'
 
 
 %changelog

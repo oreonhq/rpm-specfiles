@@ -5,7 +5,8 @@ Summary:        Thin layer of types for graphic libraries
 
 License:        MIT
 URL:            https://github.com/ebassi/graphene
-Source:         %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
+# GitHub release asset for this tag is gone. Fedora uses the GNOME release tarball (same as F43 SRPM).
+Source:         https://download.gnome.org/sources/graphene/1.10/%{name}-%{version}.tar.xz
 # https://github.com/ebassi/graphene/issues/246
 Patch:          graphene-1.10.8-no-fast-math.patch
 

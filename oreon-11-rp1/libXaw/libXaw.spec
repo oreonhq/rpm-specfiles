@@ -69,8 +69,6 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/xaw7.pc
 %{_mandir}/man3/*.3*
 %{_pkgdocdir}/*.xml
-#{_pkgdocdir}/%{name}.html
-#{_pkgdocdir}/%{name}.txt
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.16-5
