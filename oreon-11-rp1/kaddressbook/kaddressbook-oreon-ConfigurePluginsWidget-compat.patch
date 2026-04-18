@@ -1,7 +1,7 @@
 diff -Nru kb/kaddressbook-v26.03.80/src/configuration/CMakeLists.txt kb-patched/kaddressbook-v26.03.80/src/configuration/CMakeLists.txt
 --- a/src/configuration/CMakeLists.txt	2026-03-10 20:38:21.000000000 -0700
 +++ b/src/configuration/CMakeLists.txt	2026-04-17 21:49:08.131518209 -0700
-@@ -9,6 +9,19 @@
+@@ -9,6 +9,21 @@
          kaddressbookconfigpluginlistwidget.h
  )
  
@@ -19,10 +19,11 @@ diff -Nru kb/kaddressbook-v26.03.80/src/configuration/CMakeLists.txt kb-patched/
 +        "${CMAKE_CURRENT_SOURCE_DIR}/textaddons_compat_configureplugins"
 +)
 +
++
  ecm_qt_declare_logging_category(kaddressbook_config_plugins HEADER kaddressbook_configure_debug.h IDENTIFIER KADDRESSBOOK_CONFIGURE_LOG CATEGORY_NAME org.kde.pim.kaddressbook_configure
          DESCRIPTION "kaddressbook (configure)"
          EXPORT KADDRESSBOOK
-@@ -26,6 +39,10 @@
+@@ -26,6 +41,10 @@
      kaddressbook_config_plugins
      KF6::KCMUtils
      KF6::I18n
