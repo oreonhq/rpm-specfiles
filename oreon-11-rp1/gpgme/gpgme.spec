@@ -13,7 +13,7 @@ Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        2.0.1
 %global spversion 2.0.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 
 # MIT: src/cJSON.{c,h} (used by gpgme-json)
 License:        LGPL-2.1-or-later AND MIT
@@ -60,6 +60,9 @@ BuildRequires:  chrpath
 
 # For AutoReq cmake-filesystem
 BuildRequires:  cmake
+
+# gpgmepy uses SWIG. %%pyproject_buildrequires emits python3dist(swig) which nothing in Fedora provides (SWIG is the swig RPM, not a PyPI dep).
+BuildRequires:  swig
 
 Requires:       gnupg2 >= %{gnupg2_min_ver}
 
@@ -196,7 +199,7 @@ sed -i 's/3.13/%{python3_version}/g' configure
 
 %generate_buildrequires
 cd gpgmepy
-%pyproject_buildrequires
+%pyproject_buildrequires | grep -v 'python3dist(swig)' || :
 
 %build
 # People neeed to learn that you can't run autogen.sh anymore
