@@ -1,6 +1,6 @@
 Name:           libksysguard
 Version:        6.6.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        KDE system monitoring libraries and plugin runtime for Plasma
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/libksysguard
@@ -123,9 +123,9 @@ Headers and CMake files for libksysguard.
 %license LICENSES/*
 %{_kf6_datadir}/qlogging-categories6/libksysguard.categories
 %{_datadir}/dbus-1/interfaces/org.kde.ksystemstats1.xml
-%{_libdir}/libexec/kf6/kauth/ksysguardprocesslist_helper
-%dir %{_libdir}/libexec/ksysguard
-%{_libdir}/libexec/ksysguard/ksgrd_network_helper
+%{_libexecdir}/kf6/kauth/ksysguardprocesslist_helper
+%dir %{_libexecdir}/ksysguard
+%{_libexecdir}/ksysguard/ksgrd_network_helper
 %{_kf6_datadir}/dbus-1/system.d/org.kde.ksysguard.processlisthelper.conf
 %{_kf6_datadir}/dbus-1/system-services/org.kde.ksysguard.processlisthelper.service
 %{_kf6_qmldir}/org/kde/ksysguard

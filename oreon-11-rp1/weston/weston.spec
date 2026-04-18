@@ -1,6 +1,6 @@
 Name:           weston
 Version:        13.0.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Reference Wayland compositor
 License:        MIT
 URL:            https://gitlab.freedesktop.org/wayland/weston
@@ -12,6 +12,7 @@ BuildRequires:  cairo-devel
 BuildRequires:  glib2-devel
 BuildRequires:  lcms2-devel
 BuildRequires:  libdisplay-info-devel
+BuildRequires:  pkgconfig(libdisplay-info)
 BuildRequires:  libdrm-devel
 BuildRequires:  libevdev-devel
 BuildRequires:  libinput-devel
@@ -47,6 +48,7 @@ backends plus demo clients.
 %meson \
   -Dbackend-vnc=false \
   -Dbackend-rdp=false \
+  -Dbackend-pipewire=false \
   -Dpipewire=false
 %meson_build
 

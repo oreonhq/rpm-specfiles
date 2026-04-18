@@ -5,7 +5,7 @@
 
 Name:           gstreamer1-plugins-base
 Version:        1.26.7
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GStreamer streaming media framework base plugins
 
 License:        LGPL-2.1-or-later
@@ -52,6 +52,7 @@ BuildRequires:  mesa-libGLU-devel
 BuildRequires:  mesa-libEGL-devel
 BuildRequires:  mesa-libgbm-devel
 BuildRequires:  libgudev-devel
+BuildRequires:  libdrm-devel
 BuildRequires:  wayland-devel
 BuildRequires:  graphene-devel
 # pkgconfig-style deps specifically searched-for by autotools/configure
@@ -125,6 +126,8 @@ for the GStreamer Base Plugins library.
   -D package-name='Fedora GStreamer-plugins-base package' \
   -D package-origin='http://download.fedoraproject.org' \
   -D gl_winsys=wayland,x11,gbm \
+  -D gl=enabled \
+  -D drm=enabled \
   %{!?with_cdparanoia:-D cdparanoia=disabled} \
   %{!?with_libvisual:-D libvisual=disabled} \
   -D doc=disabled \

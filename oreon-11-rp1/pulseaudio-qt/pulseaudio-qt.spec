@@ -2,7 +2,7 @@
 
 Name:           pulseaudio-qt
 Version:        1.8.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Qt bindings to PulseAudio (Qt 6)
 License:        LGPL-2.1-only
 URL:            https://invent.kde.org/libraries/pulseaudio-qt

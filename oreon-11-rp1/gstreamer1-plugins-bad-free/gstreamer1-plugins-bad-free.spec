@@ -26,7 +26,7 @@
 
 Name:           gstreamer1-plugins-bad-free
 Version:        1.26.7
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -422,15 +422,10 @@ aren't tested well enough, or the code is not of good enough quality.
     -D rtmp=disabled \
     -D svthevcenc=disabled \
     -D svtjpegxs=disabled \
-    -D tflite=disabled \
-    -D tflite-edgetpu=disabled \
-    -D tflite-vsi=disabled \
     -D tinyalsa=disabled \
     -D voaacenc=disabled \
-    -D vmaf=disabled \
     -D wasapi=disabled -D wasapi2=disabled \
     -D wpe=disabled \
-    -D wpe2=disabled \
     -D x11=disabled \
     -D x265=disabled \
     %{nil}

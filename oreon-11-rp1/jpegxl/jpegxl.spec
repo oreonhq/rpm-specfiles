@@ -1,6 +1,6 @@
 Name:           jpegxl
 Version:        0.11.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        JPEG XL reference encoder and decoder (libjxl)
 License:        BSD-3-Clause
 URL:            https://github.com/libjxl/libjxl

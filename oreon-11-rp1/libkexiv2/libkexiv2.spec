@@ -2,7 +2,7 @@
 
 Name:           libkexiv2
 Version:        25.12.3
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        KDE wrapper around Exiv2 (Qt 6)
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/graphics/libkexiv2
@@ -59,7 +59,7 @@ Headers and CMake files for libkexiv2.
 %{_datadir}/qlogging-categories6/libkexiv2.categories
 
 %files -n libkexiv2-qt6
-%{_libdir}/libKExiv2Qt6.so.6*
+%{_libdir}/libKExiv2Qt6.so.0*
 
 %files -n libkexiv2-qt6-devel
 %{_includedir}/KExiv2Qt6

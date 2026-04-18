@@ -4,7 +4,7 @@
 
 Name:           discount
 Version:        2.2.7
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        C implementation of Markdown
 License:        BSD-3-Clause
 URL:            https://github.com/Orc/discount
@@ -44,7 +44,9 @@ export CFLAGS="%{optflags} -Wno-incompatible-pointer-types -Wno-int-conversion -
   --mandir=%{_mandir} \
   --shared \
   --pkg-config
-%make_build
+# pandoc_headers links -lmarkdown; build libmarkdown first so parallel make does not race
+%{__make} %{?_smp_mflags} libmarkdown
+%{__make} %{?_smp_mflags}
 
 
 %install
