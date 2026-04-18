@@ -1,22 +1,21 @@
 From: Oreon Packaging Team <packaging@oreonhq.com>
-Subject: QtCore: match QDir mkdir/mkpath optional remove rules to Qt 6.10 headers
+Subject: QtCore: drop QDir mkdir/mkpath optional overload for QFile and QFileDevice
 
-Qt 6.10 uses std::optional<QFile::Permissions> in qdir.h. The typesystem removed
-QFileDevice::Permissions, so remove="all" did not match, shiboken failed on
-std::optional, and generated sources broke (including spurious .d path errors).
+Some Qt builds use std::optional<QFileDevice::Permissions>, others use
+std::optional<QFile::Permissions>. Add a second remove= rule so shiboken
+always strips the optional overload and does not fail on std::optional.
 ---
 --- a/sources/pyside6/PySide6/QtCore/typesystem_core_common.xml
 +++ b/sources/pyside6/PySide6/QtCore/typesystem_core_common.xml
-@@ -975,11 +975,11 @@
- 
+@@ -976,10 +976,12 @@
      <declare-function signature="mkdir(QString)const" return-type="bool"/>
      <declare-function signature="mkdir(QString,QFileDevice::Permissions)const" return-type="bool"/>
--    <modify-function signature="mkdir(QString,std::optional&lt;QFileDevice::Permissions&gt;)const" remove="all"/>
+     <modify-function signature="mkdir(QString,std::optional&lt;QFileDevice::Permissions&gt;)const" remove="all"/>
 +    <modify-function signature="mkdir(QString,std::optional&lt;QFile::Permissions&gt;)const" remove="all"/>
  
      <declare-function signature="mkpath(QString)const" return-type="bool"/>
      <declare-function signature="mkpath(QString,QFileDevice::Permissions)const" return-type="bool"/>
--    <modify-function signature="mkpath(QString,std::optional&lt;QFileDevice::Permissions&gt;)const" remove="all"/>
+     <modify-function signature="mkpath(QString,std::optional&lt;QFileDevice::Permissions&gt;)const" remove="all"/>
 +    <modify-function signature="mkpath(QString,std::optional&lt;QFile::Permissions&gt;)const" remove="all"/>
  
      <!-- PYSIDE-1499: Replace QString by pathlib.Path (qdir.h) -->
