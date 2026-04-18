@@ -1,0 +1,26 @@
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Subject: shiboken6: define LLVM_VERSION for ApiExtractor (clang-22 patch follow-up)
+
+Patch3 uses LLVM_VERSION in C++ but the ShibokenSetup.cmake hunk was dropped with the bad
+.git-generated hunks. Define the major version for the preprocessor from LLVM_PACKAGE_VERSION
+after setup_clang() has run.
+---
+--- a/sources/shiboken6/cmake/ShibokenSetup.cmake
++++ b/sources/shiboken6/cmake/ShibokenSetup.cmake
+@@ -82,8 +82,15 @@ if(NOT PYTHON_SITE_PACKAGES)
+     shiboken_internal_set_python_site_packages()
+ endif()
+ 
++if(DEFINED LLVM_PACKAGE_VERSION AND NOT "${LLVM_PACKAGE_VERSION}" STREQUAL "")
++    string(REGEX REPLACE "\\.[0-9]+\\.[0-9]+$" "" LLVM_VERSION "${LLVM_PACKAGE_VERSION}")
++else()
++    set(LLVM_VERSION 0)
++endif()
++
+ set_cmake_cxx_flags()
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D QT_NO_CAST_FROM_ASCII -D QT_NO_CAST_TO_ASCII")
++set(CMAKE_CXX_FLAGS
++    "${CMAKE_CXX_FLAGS} -D QT_NO_CAST_FROM_ASCII -D QT_NO_CAST_TO_ASCII -DLLVM_VERSION=${LLVM_VERSION}")
+ 
+ # Force usage of the C++17 standard
+ set(CMAKE_CXX_STANDARD 17)

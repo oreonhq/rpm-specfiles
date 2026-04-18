@@ -1,6 +1,6 @@
 Name:           weston
 Version:        13.0.1
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Reference Wayland compositor
 License:        MIT
 URL:            https://gitlab.freedesktop.org/wayland/weston
@@ -24,6 +24,7 @@ BuildRequires:  libseat-devel
 BuildRequires:  libva-devel
 BuildRequires:  libwebp-devel
 BuildRequires:  libXcursor-devel
+BuildRequires:  pkgconfig(xcb-cursor)
 BuildRequires:  libxkbcommon-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  mesa-libEGL-devel

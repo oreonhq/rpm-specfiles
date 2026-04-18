@@ -2,7 +2,7 @@
 
 Name:           kf6-kglobalacceld
 Version:        6.6.3
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Plasma daemon for global keyboard shortcuts
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 URL:            https://invent.kde.org/plasma/kglobalacceld
@@ -34,10 +34,26 @@ BuildRequires:  pkgconfig(xkbcommon)
 BuildRequires:  systemd-rpm-macros
 
 Requires:       kf6-filesystem
+Requires:       kf6-kglobalacceld-libs%{?_isa} = %{version}-%{release}
 Provides:       kglobalacceld = %{version}-%{release}
 
 %description
 Daemon and platform plugin for KGlobalAccel on Plasma 6.
+
+
+%package        libs
+Summary:        Shared library for KGlobalAccelD
+
+%description    libs
+Runtime library for the KGlobalAccelD D-Bus service and platform plugins.
+
+
+%package        devel
+Summary:        Development files for KGlobalAccelD
+Requires:       kf6-kglobalacceld-libs%{?_isa} = %{version}-%{release}
+
+%description    devel
+Headers and CMake config for libKGlobalAccelD.
 
 
 %prep
@@ -60,6 +76,13 @@ Daemon and platform plugin for KGlobalAccel on Plasma 6.
 %{_userunitdir}/plasma-kglobalaccel.service
 %{_kf6_qtplugindir}/org.kde.kglobalacceld.platforms/
 %{_libexecdir}/kglobalacceld
+
+%files libs
+%{_libdir}/libKGlobalAccelD.so.*
+
+%files devel
+%{_includedir}/KGlobalAccelD/
+%{_libdir}/cmake/KGlobalAccelD/
 
 
 %changelog

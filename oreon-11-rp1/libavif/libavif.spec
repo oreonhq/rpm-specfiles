@@ -4,7 +4,7 @@
 
 Name:           libavif
 Version:        1.3.0
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Library for encoding and decoding AVIF images
 License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif
@@ -90,6 +90,7 @@ patch -p1 --fuzz=0 -d ext/libargparse < ext/libargparse.patch
 %files tools
 %{_bindir}/avifdec
 %{_bindir}/avifenc
+%{_bindir}/avifgainmaputil
 
 
 %changelog
