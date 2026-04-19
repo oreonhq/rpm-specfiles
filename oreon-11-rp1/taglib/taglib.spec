@@ -1,7 +1,14 @@
-%bcond mingw %{undefined rhel}
-%bcond tests 1
-%bcond doc 0
+%if 0%{?fedora}
+%bcond_without mingw
+%else
+%bcond_with mingw
+%endif
 
+%undefine __cmake_in_source_build
+
+## 1.11 currently disables tests with BUILD_SHARED_LIBS=ON
+#bcond_without tests
+#bcond_without doc
 %global apidocdir __api-doc_fedora
 
 %global common_description %{expand:
@@ -12,7 +19,7 @@ Speex, WavPack, TrueAudio files, as well as APE Tags.}
 
 Name:       taglib
 Summary:    Audio Meta-Data Library
-Version:    2.1.1
+Version:    1.13.1
 Release:    %autorelease
 
 License:    (LGPL-2.1-only OR MPL-1.1) AND BSD-2-Clause AND LGPL-2.1-only
@@ -21,17 +28,12 @@ Source0:    https://taglib.github.io/releases/taglib-%{version}%{?beta}.tar.gz
 
 # http://bugzilla.redhat.com/343241
 # fix multilib, and drop -lz flag to consumers (probably only needed for static linking)
-Patch0:     taglib-2.1.1-multilib.patch
+Patch0:     taglib-1.13.1-multilib.patch
 
 BuildRequires: gcc
 BuildRequires: gcc-c++
 BuildRequires: cmake
 BuildRequires: pkgconfig
-%if %{defined fedora}
-BuildRequires: utf8cpp-static
-%else
-Provides:      bundled(utf8cpp)
-%endif
 BuildRequires: zlib-devel
 %if %{with tests}
 BuildRequires: cppunit-devel
@@ -143,20 +145,20 @@ test "$(pkg-config --modversion taglib)" = "%{version}"
 test "$(pkg-config --modversion taglib_c)" = "%{version}"
 %if %{with tests}
 #ln -s ../../tests/data %{_target_platform}/tests/
+#LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH \
 %ctest
 %endif
 
 %files
-%doc AUTHORS CHANGELOG.md
+%doc AUTHORS NEWS
 %license COPYING.LGPL COPYING.MPL
-%{_libdir}/libtag.so.2*
-%{_libdir}/libtag_c.so.2*
+%{_libdir}/libtag.so.1*
+%{_libdir}/libtag_c.so.0*
 
 %files devel
 %doc examples
 %{_bindir}/taglib-config
 %{_includedir}/taglib/
-%{_libdir}/cmake/taglib/
 %{_libdir}/libtag.so
 %{_libdir}/libtag_c.so
 %{_libdir}/pkgconfig/taglib.pc
@@ -169,26 +171,24 @@ test "$(pkg-config --modversion taglib_c)" = "%{version}"
 
 %if %{with mingw}
 %files -n mingw32-%{name}
-%doc AUTHORS CHANGELOG.md
+%doc AUTHORS NEWS
 %license COPYING.LGPL COPYING.MPL
 %{mingw32_bindir}/libtag.dll
 %{mingw32_bindir}/libtag_c.dll
 %{mingw32_bindir}/taglib-config.cmd
 %{mingw32_includedir}/taglib/
-%{mingw32_libdir}/cmake/taglib/
 %{mingw32_libdir}/libtag.dll.a
 %{mingw32_libdir}/libtag_c.dll.a
 %{mingw32_libdir}/pkgconfig/taglib.pc
 %{mingw32_libdir}/pkgconfig/taglib_c.pc
 
 %files -n mingw64-%{name}
-%doc AUTHORS CHANGELOG.md
+%doc AUTHORS NEWS
 %license COPYING.LGPL COPYING.MPL
 %{mingw64_bindir}/libtag.dll
 %{mingw64_bindir}/libtag_c.dll
 %{mingw64_bindir}/taglib-config.cmd
 %{mingw64_includedir}/taglib/
-%{mingw64_libdir}/cmake/taglib/
 %{mingw64_libdir}/libtag.dll.a
 %{mingw64_libdir}/libtag_c.dll.a
 %{mingw64_libdir}/pkgconfig/taglib.pc
@@ -196,5 +196,5 @@ test "$(pkg-config --modversion taglib_c)" = "%{version}"
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.1-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog
+
