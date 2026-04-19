@@ -4,7 +4,7 @@ Summary:  A python library for handling exceptions
 Name: python-meh
 Url: https://github.com/rhinstaller/python-meh
 Version: 0.52
-Release: 9%{?dist}
+Release: 10%{?dist}
 # This is a Red Hat maintained package which is specific to
 # our distribution.  Thus the source is only available from
 # within this srpm.
@@ -65,7 +65,7 @@ Requires: libreport-gtk >= %{libreportver}
 The python3-meh-gui package provides a GUI for the python3-meh library.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{name}-%{version}
 
 %build
 make
@@ -90,5 +90,8 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/python-meh
 
 %changelog
+* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.52-10
+- Fix prep section directory name for GitHub archive
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.52-9
 - Prepare for Oreon 11 (RP1)

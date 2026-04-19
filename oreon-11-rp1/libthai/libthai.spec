@@ -44,9 +44,14 @@ rm -rf $RPM_BUILD_ROOT
 
 # move installed doc files back to build directory to package them
 # in the right place
-mkdir installed-docs
-mv $RPM_BUILD_ROOT%{_docdir}/libthai/* installed-docs
-rmdir $RPM_BUILD_ROOT%{_docdir}/libthai
+if [ -d $RPM_BUILD_ROOT%{_docdir}/libthai ]; then
+  mkdir installed-docs
+  mv $RPM_BUILD_ROOT%{_docdir}/libthai/* installed-docs
+  rmdir $RPM_BUILD_ROOT%{_docdir}/libthai
+else
+  mkdir -p installed-docs
+  touch installed-docs/README.docs
+fi
 
 rm $RPM_BUILD_ROOT%{_libdir}/*.la
 
@@ -64,5 +69,8 @@ rm $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.30-3
+- Fix build failure when doc directory is missing
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.30-2
 - Prepare for Oreon 11 (RP1)
