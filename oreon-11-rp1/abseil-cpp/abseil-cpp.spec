@@ -3,7 +3,7 @@
 
 Name:           abseil-cpp
 Version:        20260107.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        C++ Common Libraries
 
 # The entire source is Apache-2.0, except:
@@ -35,9 +35,6 @@ BuildRequires:  cmake
 BuildRequires:  ninja-build
 BuildRequires:  gcc-c++
 
-BuildRequires:  gmock-devel
-BuildRequires:  gtest-devel
-
 # The contents of absl/time/internal/cctz are derived from
 # https://github.com/google/cctz (https://src.fedoraproject.org/rpms/cctz), but
 # have been forked with Abseil-specific changes. It is not obvious from which
@@ -49,6 +46,7 @@ BuildRequires:  gtest-devel
 #   “[…] we have no plans to change this decision, but we reserve the right to
 #   change our minds.”
 Provides:       bundled(cctz)
+Obsoletes:      %{name}-testing < %{version}-%{release}
 
 # LTO plus hundreds of compiled unit tests routinely exhaust mock tmpfs.
 %global _lto_cflags %{nil}
@@ -69,19 +67,9 @@ Abseil is not meant to be a competitor to the standard library; we've just
 found that many of these utilities serve a purpose within our code base,
 and we now want to provide those resources to the C++ community as a whole.
 
-%package testing
-Summary:        Libraries needed for running tests on the installed %{name}
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-
-Provides:       bundled(cctz)
-
-%description testing
-%{summary}.
-
 %package devel
 Summary:        Development files for %{name}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       %{name}-testing%{?_isa} = %{version}-%{release}
 
 # Some of the headers from CCTZ are part of the -devel subpackage. See the
 # corresponding virtual Provides in the base package for full details.
@@ -94,16 +82,13 @@ Development headers for %{name}
 %autosetup -p1 -S gendiff
 
 %build
-# ABSL_BUILD_TEST_HELPERS is needed to build libraries for the -testing
-# subpackage when tests are not enabled. It is therefore redundant here, but we
-# still supply it to be more explicit.
+# Tests and test-helper shared libs stay off so mock tmpfs is not filled by
+# hundreds of gtest targets (see prior abseil-cpp-testing %%files failures).
 %cmake \
   -GNinja \
-  -DABSL_USE_EXTERNAL_GOOGLETEST:BOOL=ON \
-  -DABSL_FIND_GOOGLETEST:BOOL=ON \
   -DABSL_ENABLE_INSTALL:BOOL=ON \
   -DABSL_BUILD_TESTING:BOOL=OFF \
-  -DABSL_BUILD_TEST_HELPERS:BOOL=ON \
+  -DABSL_BUILD_TEST_HELPERS:BOOL=OFF \
   -DCMAKE_BUILD_TYPE:STRING=None \
   -DCMAKE_CXX_STANDARD:STRING=17
 %cmake_build
@@ -113,14 +98,11 @@ Development headers for %{name}
 %cmake_install
 
 %check
-# ABSL_BUILD_TESTING is disabled in %%build so ctest has no in-tree targets.
 :
 
 %files
 %license LICENSE
 %doc FAQ.md README.md UPGRADES.md
-# All shared libraries except installed TESTONLY libraries; see the %%files
-# list for the -testing subpackage for those.
 %{_libdir}/libabsl_base.so.%{lib_version}
 %{_libdir}/libabsl_borrowed_fixup_buffer.so.%{lib_version}
 %{_libdir}/libabsl_city.so.%{lib_version}
@@ -213,31 +195,6 @@ Development headers for %{name}
 %{_libdir}/libabsl_utf8_for_code_point.so.%{lib_version}
 %{_libdir}/libabsl_vlog_config_internal.so.%{lib_version}
 
-%files testing
-# TESTONLY libraries (that are actually installed):
-# absl/base/CMakeLists.txt
-%{_libdir}/libabsl_exception_safety_testing.so.%{lib_version}
-%{_libdir}/libabsl_atomic_hook_test_helper.so.%{lib_version}
-%{_libdir}/libabsl_spinlock_test_common.so.%{lib_version}
-# absl/container/CMakeLists.txt
-%{_libdir}/libabsl_test_instance_tracker.so.%{lib_version}
-%{_libdir}/libabsl_hash_generator_testing.so.%{lib_version}
-# absl/debugging/CMakeLists.txt
-%{_libdir}/libabsl_stack_consumption.so.%{lib_version}
-# absl/log/CMakeLists.txt
-%{_libdir}/libabsl_log_internal_test_actions.so.%{lib_version}
-%{_libdir}/libabsl_log_internal_test_helpers.so.%{lib_version}
-%{_libdir}/libabsl_log_internal_test_matchers.so.%{lib_version}
-%{_libdir}/libabsl_scoped_mock_log.so.%{lib_version}
-# absl/status/CMakeLists.txt
-%{_libdir}/libabsl_status_matchers.so.%{lib_version}
-# absl/strings/CMakeLists.txt
-%{_libdir}/libabsl_pow10_helper.so.%{lib_version}
-# absl/synchronization/CMakeLists.txt
-%{_libdir}/libabsl_per_thread_sem_test_common.so.%{lib_version}
-# absl/time/CMakeLists.txt
-%{_libdir}/libabsl_time_internal_test_util.so.%{lib_version}
-
 %files devel
 %{_includedir}/absl
 %{_libdir}/libabsl_*.so
@@ -245,8 +202,5 @@ Development headers for %{name}
 %{_libdir}/pkgconfig/absl_*.pc
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260107.1-2
-- Disable Abseil unit test build and %%check ctest (mock tmpfs), drop LTO, cap -j2
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260107.1-1
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260107.1-3
 - Import for oreon-11-rp1

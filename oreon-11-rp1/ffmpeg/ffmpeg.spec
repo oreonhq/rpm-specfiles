@@ -16,7 +16,7 @@
 
 Name:            ffmpeg
 Version:         8.1
-Release:         4%{?dist}
+Release:         5%{?dist}
 Summary:         Digital VCR and streaming server
 License:         GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 URL:             https://ffmpeg.org/
@@ -234,7 +234,7 @@ libvpx .ffpreset files, ffprobe.xsd, and the upstream C example tree under
 %{_datadir}/ffmpeg/examples.
 
 %%prep
-%%autosetup -p1 -n ffmpeg-%{version}
+%%setup -q -n ffmpeg-%{version}
 
 %%build
 export CFLAGS="%{build_cflags}"
@@ -387,11 +387,6 @@ install -pm644 COPYING.GPLv2 COPYING.GPLv3 COPYING.LGPLv2.1 COPYING.LGPLv3 LICEN
 %{_datadir}/ffmpeg/
 
 %%changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-4
-- Split libraries into Fedora-style subpackages (libavutil-free, libavcodec-free, …)
-- Obsolete monolithic ffmpeg-libs, Provide ffmpeg-libs for upgrade deps
-- FFmpeg 8.1 drops libpostproc (no libpostproc-free here unlike Fedora 7.x)
-
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1-3
 - Package extra man1 pages, man3 API pages in devel, ffmpeg-doc for data dir and examples
 
