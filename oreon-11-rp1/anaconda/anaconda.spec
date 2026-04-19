@@ -1,7 +1,7 @@
 Summary: Graphical system installer
 Name:    anaconda
 Version: 44.25
-Release: 3%{?dist}
+Release: 4%{?dist}
 ExcludeArch: %{ix86}
 License: GPL-2.0-or-later
 URL:     http://fedoraproject.org/wiki/Anaconda
@@ -179,7 +179,6 @@ Summary: Live installation specific files and dependencies
 BuildArch: noarch
 BuildRequires: desktop-file-utils
 # live installation currently implies a graphical installation with Web UI
-Requires: anaconda-webui
 %if 0%{?rhel}
 Recommends: zenity
 %else
@@ -538,5 +537,8 @@ rm -rf \
 %{_prefix}/libexec/anaconda/dd_*
 
 %changelog
+* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 44.25-4
+- Drop anaconda-webui requirement from live subpackage
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 44.25-1
 - Prepare for Oreon 11 (RP1)
