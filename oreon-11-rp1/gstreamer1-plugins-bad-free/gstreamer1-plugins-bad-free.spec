@@ -26,7 +26,7 @@
 
 Name:           gstreamer1-plugins-bad-free
 Version:        1.26.7
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later
@@ -300,12 +300,24 @@ This package contains the OpenH264 plugin.
 Summary:        Runtime libraries for the GStreamer media framework "bad" plug-ins
 Requires:       openal-soft%{?_isa}
 Requires:       librsvg2%{?_isa}
-Requires:       libaom%{?_isa}
-Requires:       faad2%{?_isa}
 Requires:       liblc3%{?_isa}
-Requires:       libvpl%{?_isa}
-Requires:       webrtc-audio-processing%{?_isa}
 Requires:       libnice%{?_isa}
+%if %{with aom}
+Requires:       libaom%{?_isa}
+%endif
+%if %{with extras}
+Requires:       faad2%{?_isa}
+%endif
+%if %{with vpl}
+Requires:       libvpl%{?_isa}
+%endif
+%if %{with webrtc}
+%if %{with webrtc1}
+Requires:       webrtc-audio-processing1%{?_isa}
+%else
+Requires:       webrtc-audio-processing%{?_isa}
+%endif
+%endif
 
 %description libs
 GStreamer is a streaming media framework, based on graphs of elements which

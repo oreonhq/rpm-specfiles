@@ -5,7 +5,7 @@
 
 Name:           gstreamer1-plugins-base
 Version:        1.26.7
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        GStreamer streaming media framework base plugins
 
 License:        LGPL-2.1-or-later
@@ -63,7 +63,11 @@ BuildRequires: pkgconfig(wayland-protocols) >= 1.15
 
 Requires:       iso-codes
 Requires:       graphene%{?_isa}
+%if %{with cdparanoia}
+Requires:       cdparanoia-libs%{?_isa}
+%else
 Requires:       libcdio-paranoia%{?_isa}
+%endif
 
 #  libgstgl moved here
 Conflicts: gstreamer1-plugins-bad-free < 1.13

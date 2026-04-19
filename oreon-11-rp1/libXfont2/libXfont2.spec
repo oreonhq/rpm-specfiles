@@ -1,7 +1,7 @@
 Summary: X.Org X11 libXfont2 runtime library
 Name: libXfont2
 Version: 2.0.7
-Release: 4%{?dist}
+Release: 5%{?dist}
 License: BSD-2-Clause AND BSD-4-Clause-UC AND HPND-sell-variant AND MIT-open-group AND SMLNJ AND X11
 URL: http://www.x.org
 
@@ -14,6 +14,8 @@ BuildRequires: xorg-x11-util-macros
 BuildRequires: xorg-x11-xtrans-devel >= 1.0.3-3
 BuildRequires: libfontenc-devel
 BuildRequires: freetype-devel
+
+Requires:       libfontenc%{?_isa}
 
 %description
 X.Org X11 libXfont2 runtime library

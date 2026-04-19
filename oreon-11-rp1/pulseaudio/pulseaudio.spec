@@ -34,7 +34,7 @@
 Name:           pulseaudio
 Summary:        Improved Linux Sound Server
 Version:        %{pa_major}%{?pa_minor:.%{pa_minor}}
-Release:        9%{?snap:.%{snap}git%{shortcommit}}%{?dist}
+Release:        10%{?snap:.%{snap}git%{shortcommit}}%{?dist}
 License:        LGPL-2.1-or-later
 URL:            http://www.freedesktop.org/wiki/Software/PulseAudio
 %if 0%{?gitrel}
@@ -137,14 +137,12 @@ Obsoletes:      padevchooser < 1.0
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Requires:       rtkit
 Requires:       speexdsp%{?_isa}
-Requires:       fftw-libs%{?_isa}
+Requires:       fftw-libs-single%{?_isa}
 Requires:       libtdb%{?_isa}
 %if 0%{?with_webrtc}
-Requires:       webrtc-audio-processing%{?_isa}
+Requires:       webrtc-audio-processing1%{?_isa}
 %endif
-%if 0%{?fedora}
 Requires:       soxr%{?_isa}
-%endif
 
 # Virtual Provides to support swapping between PipeWire-PA and PA
 Provides:       pulseaudio-daemon

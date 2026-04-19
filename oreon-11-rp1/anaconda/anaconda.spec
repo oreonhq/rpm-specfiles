@@ -1,7 +1,7 @@
 Summary: Graphical system installer
 Name:    anaconda
 Version: 44.25
-Release: 1%{?dist}
+Release: 2%{?dist}
 ExcludeArch: %{ix86}
 License: GPL-2.0-or-later
 URL:     http://fedoraproject.org/wiki/Anaconda
@@ -296,6 +296,9 @@ Requires: selinux-policy
 Requires: libselinux-utils
 Requires: selinux-policy-targeted
 Requires: policycoreutils-python-utils
+# fontconfig pulls fonts-filesystem and a default Latin font for Qt or GTK on the image
+Requires: fonts-filesystem
+Requires: liberation-fonts
 
 %description install-img-deps
 The anaconda-install-img-deps metapackage lists all boot.iso installation

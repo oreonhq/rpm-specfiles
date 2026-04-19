@@ -6,7 +6,7 @@
 
 Name:           kf6-%{framework}
 Version:        6.24.0
-Release:	5%{?dist}
+Release:	6%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 addon with additional image plugins for QtGui
 
 License:        LGPLv2+
@@ -40,6 +40,7 @@ BuildRequires:  jxrlib-devel
 
 Requires:       kf6-filesystem
 Requires:       openexr-libs%{?_isa}
+Requires:       LibRaw%{?_isa}
 # for eps plugin read/write support
 Recommends:     poppler-utils
 Recommends:     ghostscript
