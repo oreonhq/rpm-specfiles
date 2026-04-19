@@ -81,7 +81,7 @@
 Name:           mesa
 Summary:        Mesa graphics libraries
 Version:        26.0.2
-Release:        %autorelease
+Release:        3%{?dist}
 License:        MIT AND BSD-3-Clause AND SGI-B-2.0
 URL:            https://mesa3d.org
 
@@ -269,6 +269,8 @@ Provides:       libEGL-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 %package dri-drivers
 Summary:        Mesa-based DRI drivers
 Requires:       %{name}-filesystem%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
+Requires:       (llvm-libs%{?_isa} or llvm22-libs%{?_isa})
+Requires:       spirv-tools-libs%{?_isa}
 Obsoletes:      %{name}-libglapi < 25.0.0~rc2-1
 Provides:       %{name}-libglapi >= 25.0.0~rc2-1
 Obsoletes:      %{name}-va-drivers < 26.0.0-5
@@ -720,5 +722,11 @@ ln -s %{_libdir}/libGLX_mesa.so.0 %{buildroot}%{_libdir}/libGLX_system.so.0
 %endif
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.0.2-3
+- dri-drivers Require llvm-libs or llvm22-libs plus spirv-tools-libs
+
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.0.2-2
+- dri-drivers Require llvm-libs and spirv-tools-libs
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.0.2-1
 - Prepare for Oreon 11 (RP1)

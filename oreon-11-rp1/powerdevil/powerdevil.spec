@@ -3,7 +3,7 @@ ExcludeArch: %{ix86}
 
 Name:    powerdevil
 Version: 6.6.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: Power management service for Plasma
 
 License: BSD-2-Clause
@@ -61,6 +61,7 @@ BuildRequires:  cmake(Qt6WaylandClient)
 BuildRequires:  cmake(Qt6Widgets)
 
 Requires:       kf6-filesystem
+Requires:       libkscreen%{?_isa} >= 6.6.3
 
 %description
 PowerDevil is the power management service for Plasma. It handles battery and
@@ -111,5 +112,8 @@ AC events, display and keyboard brightness, suspend behavior, and power profiles
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
+- Require libkscreen at runtime
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-1
 - Add powerdevil package for Plasma power management

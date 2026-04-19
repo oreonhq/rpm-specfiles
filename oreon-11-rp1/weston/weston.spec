@@ -1,6 +1,6 @@
 Name:           weston
 Version:        13.0.1
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        Reference Wayland compositor
 License:        MIT
 URL:            https://gitlab.freedesktop.org/wayland/weston
@@ -86,5 +86,8 @@ backends plus demo clients.
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 13.0.1-10
+- Rebuild for libdisplay-info 0.3 SONAME
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 13.0.1-2
 - Add Weston compositor reference implementation

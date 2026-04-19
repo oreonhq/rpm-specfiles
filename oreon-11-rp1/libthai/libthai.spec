@@ -1,11 +1,13 @@
 Summary:  Thai language support routines
 Name: libthai
 Version: 0.1.30
-Release: 2%{?dist}
+Release: 4%{?dist}
 License: LGPL-2.1-or-later
 Source: http://linux.thai.net/pub/thailinux/software/libthai/libthai-%{version}.tar.xz
 Patch0: libthai-0.1.9-multilib.patch
 URL: http://linux.thai.net
+
+Requires: libdatrie%{?_isa}
 
 BuildRequires: gcc
 BuildRequires: pkgconfig(datrie-0.2)
@@ -69,6 +71,9 @@ rm $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_libdir}/pkgconfig/*
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.30-4
+- Require libdatrie at runtime
+
 * Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.30-3
 - Fix build failure when doc directory is missing
 

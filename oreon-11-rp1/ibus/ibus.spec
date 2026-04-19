@@ -58,7 +58,7 @@
 Name:           ibus
 Version:        1.5.34~rc1
 # https://github.com/fedora-infra/rpmautospec/issues/101
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Intelligent Input Bus for Linux OS
 License:        LGPL-2.1-or-later
 URL:            https://github.com/ibus/%name/wiki
@@ -145,8 +145,8 @@ Summary:        IBus libraries
 
 Requires:       dbus >= 1.2.4
 Requires:       glib2 >= %{glib_ver}
-# Owner of %%{_libdir}/girepository-1.0
-Requires:       gobject-introspection
+# GObject introspection runtime ships in glib2 (libgirepository) on this distro
+Requires:       glib2%{?_isa}
 %if (0%{?fedora} > 28 || 0%{?rhel} > 7)
 %else
 Conflicts:      %{name}%{?_isa} < %{version}
@@ -583,5 +583,8 @@ dconf update || :
 %{_datadir}/installed-tests/ibus
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.34~rc1-3
+- ibus-libs depend on glib2 instead of missing gobject-introspection RPM
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.34~rc1-2
 - Prepare for Oreon 11 (RP1)

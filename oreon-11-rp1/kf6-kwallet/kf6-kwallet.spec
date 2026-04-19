@@ -5,7 +5,7 @@
 
 Name:    kf6-%{framework}
 Version: 6.24.0
-Release:	7%{?dist}
+Release:	8%{?dist}
 Summary: KDE Frameworks 6 Tier 3 solution for password management
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
@@ -107,6 +107,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-8
+- Rebuild for gpgmepp SONAME
+
 * Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
 - inline cmake --build (no qt6 prepare_docs pass)
 

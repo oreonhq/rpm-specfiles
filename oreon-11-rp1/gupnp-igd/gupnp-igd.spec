@@ -1,6 +1,6 @@
 Name:           gupnp-igd
 Version:        1.6.0
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Library to handle UPnP IGD port mapping
 
 License:        LGPL-2.1-or-later
@@ -13,9 +13,11 @@ BuildRequires:  gobject-introspection-devel
 BuildRequires:  gtk-doc
 BuildRequires:  meson
 
+Requires:       gssdp%{?_isa}
+Requires:       gupnp%{?_isa}
+
 %description
 %{name} is a library to handle UPnP IGD port mapping.
-
 
 %package        devel
 Summary:        Development files for %{name}
@@ -59,5 +61,8 @@ developing applications that use %{name}.
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.0-9
+- Require gssdp and gupnp for libnice chain
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.0-8
 - Prepare for Oreon 11 (RP1)

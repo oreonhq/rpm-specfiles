@@ -1,9 +1,11 @@
-%bcond bundled_absl %{defined rhel}
+# Always prefer bundled Abseil so the shared library does not pick up distro
+# libabsl SONAME drift (pulseaudio links against the bundled copy).
+%bcond_without bundled_absl
 %global absl_ver 20250814.1
 
 Name:           webrtc-audio-processing
 Version:        2.1
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Library for echo cancellation
 
 License:        BSD-3-Clause
@@ -79,5 +81,8 @@ mv %{buildroot}%{_includedir}/absl %{buildroot}%{_includedir}/webrtc-audio-proce
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1-6
+- Default %%{with bundled_absl} on (no external libabsl_strings)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1-5
 - Prepare for Oreon 11 (RP1)

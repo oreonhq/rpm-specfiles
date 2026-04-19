@@ -6,13 +6,14 @@
 
 Name:           kimageannotator
 Version:        0.7.2
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Image annotation widget library for Qt (ksnip)
 License:        LGPL-3.0-or-later
 URL:            https://github.com/ksnip/kImageAnnotator
 
 Source0:        https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v%{version}.tar.gz#/kImageAnnotator-%{version}.tar.gz
 Source1:        https://github.com/ksnip/kColorPicker/archive/refs/tags/v%{kcp_version}.tar.gz#/kColorPicker-%{kcp_version}.tar.gz
+Patch1:         kimageannotator-qt6-output-name.patch
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -86,15 +87,18 @@ popd
 %doc README.md CHANGELOG.md
 
 %files libs
-%{_libdir}/libkImageAnnotator.so.0*
+%{_libdir}/libkImageAnnotator-Qt6.so.0*
 %{_datadir}/kImageAnnotator/translations/*.qm
 
 %files devel
 %{_includedir}/kImageAnnotator-Qt6/
-%{_libdir}/libkImageAnnotator.so
+%{_libdir}/libkImageAnnotator-Qt6.so
 %{_libdir}/cmake/kImageAnnotator-Qt6/
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.2-3
+- Qt6 build installs libkImageAnnotator-Qt6.so (Gwenview DT_NEEDED)
+
 * Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.7.2-2
 - Bundle kColorPicker %%build-only staging (find_package without kcolorpicker-devel in mock)
 - kimageannotator-libs Requires kcolorpicker-libs

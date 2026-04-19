@@ -1,0 +1,13 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -98,6 +98,10 @@ set_target_properties(kImageAnnotator
+ 					  SOVERSION 0
+ 					  )
+ 
++if(BUILD_WITH_QT6)
++	set_property(TARGET kImageAnnotator APPEND PROPERTY OUTPUT_NAME kImageAnnotator-Qt6)
++endif()
++
+ install(TARGETS kImageAnnotator
+ 		EXPORT kImageAnnotator-targets
+ 		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

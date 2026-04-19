@@ -15,7 +15,7 @@ Summary: CUPS printing system
 Name: cups
 Epoch: 1
 Version: 2.4.16
-Release: 7%{?dist}
+Release: 8%{?dist}
 # backend/failover.c - BSD-3-Clause
 # cups/md5* - Zlib
 # scheduler/colorman.c - Apache-2.0 WITH LLVM-exception AND BSD-2-Clause
@@ -182,6 +182,7 @@ Requires: zlib-devel
 %package libs
 Summary: CUPS printing system - libraries
 Requires: %{name}-filesystem = %{epoch}:%{version}-%{release}
+Requires: avahi-libs%{?_isa}
 
 %package filesystem
 Summary: CUPS printing system - directory layout
@@ -791,5 +792,8 @@ rm -f %{cups_serverbin}/backend/smb
 %{_mandir}/man7/ippeveps.7.gz
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.16-8
+- cups-libs Require avahi-libs (libcups pulls libavahi)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.16-7
 - Prepare for Oreon 11 (RP1)

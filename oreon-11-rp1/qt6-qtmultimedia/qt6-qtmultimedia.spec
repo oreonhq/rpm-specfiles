@@ -21,7 +21,7 @@
 Summary: Qt6 - Multimedia support
 Name:    qt6-%{qt_module}
 Version: 6.10.3
-Release: 9%{?dist}
+Release: 10%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -104,6 +104,12 @@ Requires:      pulseaudio-libs%{?_isa}
 Requires:      libXrandr%{?_isa}
 Requires:      libXext%{?_isa}
 %if %{with ffmpeg}
+Requires:      libavcodec-free%{?_isa}
+Requires:      libavformat-free%{?_isa}
+Requires:      libavutil-free%{?_isa}
+Requires:      libswresample-free%{?_isa}
+Requires:      libswscale-free%{?_isa}
+Requires:      libavfilter-free%{?_isa}
 Requires:      ffmpeg-libs%{?_isa}
 %endif
 
@@ -254,6 +260,9 @@ rm -r %{buildroot}%{_qt6_archdatadir}/mkspecs/features/ios/add_ios_ffmpeg_librar
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-10
+- Require libav*free stack explicitly for ISO dependency closure
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
 - Require gstreamer1-plugins-bad-free-libs (libgstphotography etc.) for minimal ISO trees
 

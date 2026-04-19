@@ -1,6 +1,9 @@
 %if 0%{?fedora}
 %global with_broadway 1
 %global with_cloudproviders 1
+%global with_tracker3 1
+%else
+%global with_tracker3 0
 %endif
 
 %global glib2_version 2.57.2
@@ -20,7 +23,7 @@
 
 Name:    gtk3
 Version: 3.24.51
-Release: %autorelease
+Release: 2%{?dist}
 Summary: GTK+ graphical user interface library
 
 License: LGPL-2.0-or-later
@@ -45,7 +48,9 @@ BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}
 BuildRequires: pkgconfig(gobject-introspection-1.0)
 BuildRequires: pkgconfig(pango) >= %{pango_version}
 BuildRequires: pkgconfig(sysprof-capture-4)
+%if %{with_tracker3}
 BuildRequires: pkgconfig(tracker-sparql-3.0)
+%endif
 BuildRequires: pkgconfig(wayland-client) >= %{wayland_version}
 BuildRequires: pkgconfig(wayland-cursor) >= %{wayland_version}
 BuildRequires: pkgconfig(wayland-egl) >= %{wayland_version}
@@ -81,6 +86,11 @@ Requires: libwayland-client%{?_isa} >= %{wayland_version}
 Requires: libwayland-cursor%{?_isa} >= %{wayland_version}
 Requires: libXrandr%{?_isa} >= %{xrandr_version}
 Requires: pango%{?_isa} >= %{pango_version}
+Requires: colord-libs%{?_isa}
+Requires: at-spi2-atk%{?_isa}
+%if %{with_cloudproviders}
+Requires: libcloudproviders%{?_isa}
+%endif
 
 # make sure we have a reasonable gsettings backend
 Recommends: dconf%{?_isa}
@@ -172,12 +182,18 @@ export CFLAGS='-fno-strict-aliasing %optflags'
         -Dcolord=yes \
 %if 0%{?with_cloudproviders}
         -Dcloudproviders=true \
+%else
+        -Dcloudproviders=false \
 %endif
         -Dgtk_doc=true \
         -Dinstalled_tests=true \
         -Dman=true \
         -Dprofiler=true \
+%if %{with_tracker3}
         -Dtracker3=true \
+%else
+        -Dtracker3=false \
+%endif
         -Dxinerama=yes \
 %meson_build
 
@@ -307,5 +323,9 @@ gtk-query-immodules-3.0-%{__isa_bits} --update-cache &>/dev/null || :
 %{_datadir}/installed-tests/
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.24.51-2
+- Non-Fedora disable tracker3 (no tinysparql in tree)
+- Require colord-libs and at-spi2-atk, cloudproviders when enabled
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.24.51-1
 - Prepare for Oreon 11 (RP1)
