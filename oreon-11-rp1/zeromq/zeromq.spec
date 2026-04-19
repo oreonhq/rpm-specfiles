@@ -51,7 +51,7 @@ developing applications that use %{name}.
 
 
 %prep
-%autosetup -p1
+%autosetup -n libzmq-%{version} -p1
 
 # Remove bundled code.
 rm -rf external/wepoll
