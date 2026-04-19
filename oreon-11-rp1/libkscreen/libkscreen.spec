@@ -5,7 +5,7 @@
 
 Name:           libkscreen
 Version:        %{plasma_ver}
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        KDE screen management library
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND CC0-1.0
@@ -50,7 +50,7 @@ Headers and CMake package KF6Screen for software that links libkscreen.
 %autosetup -n libkscreen-%{version} -p1
 
 %build
-%cmake_kf6
+%cmake_kf6 -DBUILD_QCH:BOOL=OFF
 %{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
 
 %install
@@ -65,12 +65,15 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %doc README.md
 %{_kf6_datadir}/qlogging-categories6/libkscreen.categories
 %{_kf6_libdir}/libKF6Screen.so.8*
+%{_kf6_libdir}/libKF6Screen.so.%{version}
 %{_kf6_libdir}/libKF6ScreenDpms.so.8*
+%{_kf6_libdir}/libKF6ScreenDpms.so.%{version}
 %{_kf6_plugindir}/kscreen/*.so
 %{_kf6_libexecdir}/kscreen_backend_launcher
 %{_datadir}/dbus-1/services/org.kde.kscreen.service
 %{_userunitdir}/plasma-kscreen.service
 %{_bindir}/kscreen-doctor
+%{_datadir}/zsh/site-functions/_kscreen-doctor
 
 %files devel
 %{_kf6_includedir}/KScreen/
@@ -82,6 +85,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-4
+- Package versioned .so, zsh completion; turn off QCH (no qt6 help install)
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
 - Fix kscreen backend glob (no double kf6 under %%{_kf6_plugindir})
 
