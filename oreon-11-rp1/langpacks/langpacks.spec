@@ -6,7 +6,6 @@ Summary:   Langpacks meta-package
 License:   GPL-2.0-or-later
 BuildArch: noarch
 BuildRequires: python3 fontconfig
-Source4:   normlang.py
 
 # to split up the AppStream file
 BuildRequires: libappstream-glib >= 0.5.10
@@ -1553,7 +1552,7 @@ for i = 1, #langpacks_package_list do
   local extra_deps = {}
   local lang = langpacks_package_list[i]["lang"]
   rpm.define("langcode " .. lang .. "\n")
-  local orth = rpm.expand("%(python3 %{SOURCE4} %{langcode})")
+  local orth = rpm.expand("%(python3 -c \"import ctypes,sys; fc=ctypes.CDLL('libfontconfig.so.1'); fc.FcLangNormalize.argtypes=[ctypes.c_char_p]; fc.FcLangNormalize.restype=ctypes.c_char_p; print(fc.FcLangNormalize(sys.argv[1].encode('utf-8')).decode())\" %{langcode})")
   rpm.undefine("langcode")
   local lowerorth = string.lower(orth)
   local normlang = string.gsub(string.lower(lang), "_", "-")
