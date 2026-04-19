@@ -4,11 +4,12 @@
 Name:           libvpl
 Epoch:          1
 Version:        2.16.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Intel Video Processing Library
 License:        MIT
 URL:            https://intel.github.io/libvpl/latest/index.html
-ExclusiveArch:  x86_64
+# Dispatcher and samples build on aarch64 too (no ExclusiveArch). Workers that
+# only care about x86_64 can still skip via repo compose.
 
 Source0:        https://github.com/intel/libvpl/archive/v%{version}/%{name}-%{version}.tar.gz
 

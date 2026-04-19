@@ -1,18 +1,19 @@
 Name:           hfsplus-tools
 Version:        540.1.linux3
-Release:        36%{?dist}
+Release:        37%{?dist}
 Summary:        Tools to create/check Apple HFS+ filesystems
 
 # Automatically converted from old format: APSL 2.0 - review is highly recommended.
 License:        APSL-2.0
 URL:            http://gentoo-wiki.com/HOWTO_hfsplus
 
-Source0: http://cavan.codon.org.uk/~mjg59/diskdev_cmds/diskdev_cmds-%{version}.tar.gz
+# Upstream mirror is dead; Debian's orig tarball is the same diskdev_cmds tree.
+Source0: http://deb.debian.org/debian/pool/non-free/h/hfsprogs/hfsprogs_%{version}.orig.tar.gz
 Patch0: hfsplus-tools-no-blocks.patch
 Patch1: hfsplus-tools-learn-to-stdarg.patch
 Patch2: hfsplus-tools-sysctl.patch
 
-Source100:      http://www.opensource.org/licenses/apsl-2.0.txt
+Source100:      apsl-2.0.txt
 
 BuildRequires:  gcc
 BuildRequires: openssl-devel 
@@ -46,7 +47,7 @@ commit.
 
 
 %prep
-%setup -q -n hfsplus-mkfs-%{version} -n diskdev_cmds-%{version}
+%setup -q -n diskdev_cmds-%{version}
 %patch -P0 -p1
 %patch -P1 -p1
 %patch -P2 -p1

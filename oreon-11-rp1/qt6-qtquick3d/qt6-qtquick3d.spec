@@ -28,7 +28,7 @@
 Summary: Qt6 - Quick3D Libraries and utilities
 Name:    qt6-%{qt_module}
 Version: 6.10.3
-Release: 5%{?dist}
+Release: 6%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -55,6 +55,7 @@ BuildRequires: qt6-qtbase-private-devel
 %{?_qt6:Requires: %{_qt6}%{?_isa} = %{_qt6_version}}
 BuildRequires: qt6-qtdeclarative-devel
 BuildRequires: qt6-qtdeclarative-static
+BuildRequires: pkgconfig(Qt6QuickLayouts)
 BuildRequires: qt6-qtquicktimeline-devel
 BuildRequires: qt6-qtshadertools-devel
 %if 0%{?system_assimp}

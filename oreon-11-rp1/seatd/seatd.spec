@@ -5,7 +5,7 @@
 
 Name:           seatd
 Version:        0.9.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Minimal seat management daemon
 
 License:        MIT
