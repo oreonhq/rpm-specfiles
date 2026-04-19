@@ -4,7 +4,7 @@ Summary:  A python library for handling exceptions
 Name: python-meh
 Url: https://github.com/rhinstaller/python-meh
 Version: 0.52
-Release: 10%{?dist}
+Release: 11%{?dist}
 # This is a Red Hat maintained package which is specific to
 # our distribution.  Thus the source is only available from
 # within this srpm.
@@ -76,9 +76,10 @@ make test
 %install
 make DESTDIR=%{buildroot} install
 
-%find_lang %{name}
+# Upstream ships no installed gettext catalogs in the release tarball (empty po
+# tree in practice), so %%find_lang would always fail with "No translations found".
 
-%files -n python3-meh -f %{name}.lang
+%files -n python3-meh
 %doc ChangeLog COPYING
 %{python3_sitelib}/*
 %exclude %{python3_sitelib}/meh/ui/gui.py*
@@ -90,6 +91,9 @@ make DESTDIR=%{buildroot} install
 %{_datadir}/python-meh
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.52-11
+- Drop %%find_lang when no catalogs are installed (find-lang.sh exits 1)
+
 * Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.52-10
 - Fix prep section directory name for GitHub archive
 
