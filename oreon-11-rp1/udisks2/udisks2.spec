@@ -12,6 +12,10 @@
 %endif
 
 %define is_fedora                       0%{?rhel} == 0
+%if 0%{?oreon}
+# Lower peak disk use during big libtool static archives (mock sometimes fills tmpfs)
+%global _smp_mflags -j2
+%endif
 %define is_git                          %(git show > /dev/null 2>&1 && echo 1 || echo 0)
 %define git_hash                        %(git log -1 --pretty=format:"%h" || true)
 %define build_date                      %(date '+%Y%m%d')
@@ -25,7 +29,7 @@
 Name:    udisks2
 Summary: Disk Manager
 Version: 2.11.1
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPL-2.0-or-later
 URL:     https://github.com/storaged-project/udisks
 Source0: https://github.com/storaged-project/udisks/releases/download/udisks-%{version}/udisks-%{version}.tar.bz2
@@ -340,5 +344,8 @@ fi
 %endif
 
 %changelog
+* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11.1-2
+- When %%{?oreon}, cap %%{_smp_mflags} to reduce tmpfs pressure in mock
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11.1-1
 - Prepare for Oreon 11 (RP1)

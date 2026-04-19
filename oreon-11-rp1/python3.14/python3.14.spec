@@ -51,7 +51,7 @@ URL: https://www.python.org/
 #global prerel ...
 %global upstream_version %{general_version}%{?prerel}
 Version: %{general_version}%{?prerel:~%{prerel}}
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: Python-2.0.1
 
 # ==================================
@@ -71,11 +71,20 @@ License: Python-2.0.1
 
 # Extra build for debugging the interpreter or C-API extensions
 # (the -debug subpackages)
+%if 0%{?oreon}
+# Oreon mock jobs often hit time and disk limits when building every ABI at once
+%bcond debug_build 0
+%else
 %bcond debug_build 1
+%endif
 
 # Extra build without GIL, the freethreading PEP 703 way
 # (the -freethreading subpackage)
+%if 0%{?oreon}
+%bcond freethreading_build 0
+%else
 %bcond freethreading_build 1
+%endif
 
 # PEP 744: JIT Compilation
 # Whether to build with the experimental JIT compiler
@@ -2015,6 +2024,9 @@ CheckPython freethreading
 # ======================================================
 
 %changelog
+* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.3-7
+- When %%{?oreon}, skip debug and freethreading ABIs (mock time and disk)
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.3-6
 - rpmwheels: accept python3-pip-wheel or legacy python-pip-wheel Provides
 

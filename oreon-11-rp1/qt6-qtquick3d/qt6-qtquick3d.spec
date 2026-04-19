@@ -28,7 +28,7 @@
 Summary: Qt6 - Quick3D Libraries and utilities
 Name:    qt6-%{qt_module}
 Version: 6.10.3
-Release: 6%{?dist}
+Release: 7%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -55,6 +55,7 @@ BuildRequires: qt6-qtbase-private-devel
 %{?_qt6:Requires: %{_qt6}%{?_isa} = %{_qt6_version}}
 BuildRequires: qt6-qtdeclarative-devel
 BuildRequires: qt6-qtdeclarative-static
+BuildRequires: qt6-qtquicklayouts-devel
 BuildRequires: pkgconfig(Qt6QuickLayouts)
 BuildRequires: qt6-qtquicktimeline-devel
 BuildRequires: qt6-qtshadertools-devel
@@ -120,6 +121,7 @@ CXXFLAGS="$CXXFLAGS -mno-avx"
 %define _lto_cflags %{nil}
 
 %cmake_qt6 \
+  -DCMAKE_SKIP_PRECOMPILE_HEADERS=ON \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF} \
   -DFEATURE_system_assimp=%{_qt_feat_system_assimp} \
@@ -316,6 +318,9 @@ popd
 %endif
 
 %changelog
+* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-7
+- BR qt6-qtquicklayouts-devel, skip CMake PCH (aarch64 / disk)
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
 - Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
 

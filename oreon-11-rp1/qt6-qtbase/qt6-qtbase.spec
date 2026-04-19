@@ -48,7 +48,7 @@ BuildRequires: pkgconfig(libsystemd)
 Name:    qt6-qtbase
 Summary: Qt6 - QtBase components
 Version: 6.10.3
-Release: 3%{?dist}
+Release: 4%{?dist}
 # Minimum libicu for DT_NEEDED sonames bundled in libQt6Core (bump when icu rebases)
 %global oreon_icu_min 77.1
 
@@ -384,6 +384,7 @@ export LDFLAGS="$LDFLAGS $RPM_LD_FLAGS"
 export MAKEFLAGS="%{?_smp_mflags}"
 
 %cmake_qt6 \
+ -DCMAKE_SKIP_PRECOMPILE_HEADERS=ON \
  -DFEATURE_glibc_fortify_source=OFF \
  -DFEATURE_accessibility=ON \
  -DFEATURE_fontconfig=ON \
@@ -980,6 +981,9 @@ make check -k ||:
 %{_qt6_datadir}/wayland/protocols/
 
 %changelog
+* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
+- Skip CMake precompiled headers (mock disk)
+
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
 - Turn off Qt glibc_fortify_source (redhat-hardened-cc1 already sets _FORTIFY_SOURCE=3)
 
