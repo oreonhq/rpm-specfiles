@@ -981,7 +981,7 @@ make check -k ||:
 %{_qt6_datadir}/wayland/protocols/
 
 %changelog
-* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
 - Skip CMake precompiled headers (mock disk)
 
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3

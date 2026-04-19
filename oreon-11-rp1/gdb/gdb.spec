@@ -997,7 +997,7 @@ fi
 # endif scl
 
 %changelog
-* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.1-6
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.1-6
 - Use HTTPS for upstream tarball (spectool has no FTP)
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.1-5

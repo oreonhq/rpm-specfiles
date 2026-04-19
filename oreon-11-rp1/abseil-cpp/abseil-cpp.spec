@@ -260,5 +260,5 @@ skips="${skips})$"
 %{_libdir}/pkgconfig/absl_*.pc
 
 %changelog
-* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260107.1-1
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20260107.1-1
 - Import for oreon-11-rp1

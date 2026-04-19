@@ -318,7 +318,7 @@ popd
 %endif
 
 %changelog
-* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-7
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-7
 - BR qt6-qtquicklayouts-devel, skip CMake PCH (aarch64 / disk)
 
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3

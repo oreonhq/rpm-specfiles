@@ -344,7 +344,7 @@ fi
 %endif
 
 %changelog
-* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11.1-2
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11.1-2
 - When %%{?oreon}, cap %%{_smp_mflags} to reduce tmpfs pressure in mock
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11.1-1

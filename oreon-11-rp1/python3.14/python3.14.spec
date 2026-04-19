@@ -2024,7 +2024,7 @@ CheckPython freethreading
 # ======================================================
 
 %changelog
-* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.3-7
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.3-7
 - When %%{?oreon}, skip debug and freethreading ABIs (mock time and disk)
 
 * Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.3-6

@@ -665,7 +665,7 @@ via PackageKit.
 
 # The changelog is automatically generated and merged
 %changelog
-* Sat Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 357-2
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 357-2
 - Reword comment so source prep does not treat centos macro text as a missing source
 
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 357-1
