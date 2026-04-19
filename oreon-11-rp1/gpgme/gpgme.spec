@@ -13,7 +13,7 @@ Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        2.0.1
 %global spversion 2.0.0
-Release:        5%{?dist}
+Release:        6%{?dist}
 
 # MIT: src/cJSON.{c,h} (used by gpgme-json)
 License:        LGPL-2.1-or-later AND MIT
@@ -66,6 +66,7 @@ BuildRequires:  cmake
 BuildRequires:  swig
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-packaging
+BuildRequires:  python3-pip
 BuildRequires:  pyproject-rpm-macros
 
 Requires:       gnupg2 >= %{gnupg2_min_ver}
