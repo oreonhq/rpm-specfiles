@@ -1,7 +1,7 @@
 Summary: Graphical system installer
 Name:    anaconda
 Version: 44.25
-Release: 2%{?dist}
+Release: 3%{?dist}
 ExcludeArch: %{ix86}
 License: GPL-2.0-or-later
 URL:     http://fedoraproject.org/wiki/Anaconda
@@ -180,7 +180,11 @@ BuildArch: noarch
 BuildRequires: desktop-file-utils
 # live installation currently implies a graphical installation with Web UI
 Requires: anaconda-webui
+%if 0%{?rhel}
+Recommends: zenity
+%else
 Requires: zenity
+%endif
 Recommends: xhost
 # FIXME: This is currently needed by the locale1-x11-sync script.
 # It makes little sense for Anaconda to pull in two Python DBus libraries,
@@ -196,15 +200,21 @@ for live installations.
 
 %package install-env-deps
 Summary: Installation environment specific dependencies
+%if 0%{?rhel}
+# Slim Oreon installer repos often omit these; keep hard deps on Fedora only.
+Recommends: udisks2-iscsi
+Recommends: libblockdev-plugins-all >= %{libblockdevver}
+Recommends: libblockdev-tools
+Recommends: realmd
+Recommends: isomd5sum >= %{isomd5sumver}
+%else
 Requires: udisks2-iscsi
 Requires: libblockdev-plugins-all >= %{libblockdevver}
 Requires: libblockdev-tools
-%if ! 0%{?rhel}
 Requires: libblockdev-lvm-dbus
-%endif
-# active directory/freeipa join support
 Requires: realmd
 Requires: isomd5sum >= %{isomd5sumver}
+%endif
 %ifarch x86_64
 Recommends: fcoe-utils >= %{fcoeutilsver}
 %endif
@@ -215,15 +225,21 @@ Requires: hfsplus-tools
 %endif
 %endif
 # kexec support except riscv64
+%if 0%{?rhel}
+%ifnarch riscv64
+Recommends: kexec-tools
+%endif
+Recommends: tmux
+Recommends: gdb
+Recommends: rsync
+%else
 %ifnarch riscv64
 Requires: kexec-tools
 %endif
-# run's on TTY1 in install env
 Requires: tmux
-# install time crash handling
 Requires: gdb
-# support for installation from image and live & live image installations
 Requires: rsync
+%endif
 # An addon that allows enabling kdump at install time
 Recommends: kdump-anaconda-addon
 # basic filesystem tools

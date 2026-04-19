@@ -1,8 +1,13 @@
 %global         majorminor 1.0
 %global         _gobject_introspection  1.31.1
 
-# Only have extras package on fedora
-%bcond aom %{defined fedora}
+# AOM plugin needs libaom in the compose. Fedora carries it; on RHEL default
+# off so slim installer trees do not hard-require libaom for libgstaom.so.
+%if 0%{?rhel}
+%bcond_with aom
+%else
+%bcond_without aom
+%endif
 %bcond extras %{defined fedora}
 %bcond opencv %{defined fedora}
 %bcond openh264 %{defined fedora}
@@ -26,7 +31,7 @@
 
 Name:           gstreamer1-plugins-bad-free
 Version:        1.26.7
-Release:        9%{?dist}
+Release:        10%{?dist}
 Summary:        GStreamer streaming media framework "bad" plugins
 
 # main code is LGPL-2.1-or-later AND LGPL-2.0-or-later

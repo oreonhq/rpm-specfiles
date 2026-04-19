@@ -5,7 +5,7 @@
 
 Name:           gstreamer1-plugins-base
 Version:        1.26.7
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        GStreamer streaming media framework base plugins
 
 License:        LGPL-2.1-or-later
@@ -65,8 +65,6 @@ Requires:       iso-codes
 Requires:       graphene%{?_isa}
 %if %{with cdparanoia}
 Requires:       cdparanoia-libs%{?_isa}
-%else
-Requires:       libcdio-paranoia%{?_isa}
 %endif
 
 #  libgstgl moved here

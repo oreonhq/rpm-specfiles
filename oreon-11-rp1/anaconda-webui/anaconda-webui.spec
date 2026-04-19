@@ -1,6 +1,6 @@
 Name:           anaconda-webui
 Version:        68
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Anaconda installer Web interface
 License:        LGPL-2.1-or-later AND MIT
 URL:            https://github.com/rhinstaller/%{name}
@@ -23,12 +23,20 @@ BuildRequires: systemd-rpm-macros
 
 %define _unitdir /usr/lib/systemd/system
 
+%if 0%{?rhel}
+Recommends: cockpit-storaged
+Recommends: cockpit-networkmanager
+Recommends: cockpit-bridge >= %{cockpitver}
+Recommends: cockpit-ws >= %{cockpitver}
+Recommends: python3-bugzilla
+%else
 Requires: cockpit-storaged
 Requires: cockpit-networkmanager
 Requires: cockpit-bridge >= %{cockpitver}
 Requires: cockpit-ws >= %{cockpitver}
-Requires: anaconda-core  >= %{anacondacorever}
 Requires: python3-bugzilla
+%endif
+Requires: anaconda-core  >= %{anacondacorever}
 # Firefox dependency needs to be specified there as cockpit web-view does not have a hard dependency on Firefox as
 # it can often fall back to a diferent browser. This does not work in the limited installer
 # environment, so we need to make sure Firefox is available. Exclude on RHEL, only Flatpak version will be there.

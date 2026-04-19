@@ -21,7 +21,7 @@
 Summary: Qt6 - Multimedia support
 Name:    qt6-%{qt_module}
 Version: 6.10.3
-Release: 7%{?dist}
+Release: 8%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -65,12 +65,8 @@ BuildRequires: pkgconfig(gstreamer-plugins-bad-%{gst})
 BuildRequires: pkgconfig(gstreamer-video-%{gst})
 BuildRequires: pkgconfig(libpulse) pkgconfig(libpulse-mainloop-glib)
 %if %{with ffmpeg}
-BuildRequires: ffmpeg-free-devel
-BuildRequires: libavcodec-free-devel
-BuildRequires: libavutil-free-devel
-BuildRequires: libavformat-free-devel
-BuildRequires: libswscale-free-devel
-BuildRequires: libswresample-free-devel
+# Single ffmpeg-devel stack on Oreon (also Provides *-free-devel names)
+BuildRequires: ffmpeg-devel
 BuildRequires: pkgconfig(libva) pkgconfig(libva-drm)
 BuildRequires: pkgconfig(libpipewire-0.3)
 %endif
