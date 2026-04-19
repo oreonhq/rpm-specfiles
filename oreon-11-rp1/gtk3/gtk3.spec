@@ -3,6 +3,8 @@
 %global with_cloudproviders 1
 %global with_tracker3 1
 %else
+%global with_broadway 0
+%global with_cloudproviders 0
 %global with_tracker3 0
 %endif
 
@@ -23,7 +25,7 @@
 
 Name:    gtk3
 Version: 3.24.51
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: GTK+ graphical user interface library
 
 License: LGPL-2.0-or-later
@@ -323,6 +325,9 @@ gtk-query-immodules-3.0-%{__isa_bits} --update-cache &>/dev/null || :
 %{_datadir}/installed-tests/
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.24.51-3
+- Define with_broadway and with_cloudproviders on non-Fedora (fix %%if parse)
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.24.51-2
 - Non-Fedora disable tracker3 (no tinysparql in tree)
 - Require colord-libs and at-spi2-atk, cloudproviders when enabled

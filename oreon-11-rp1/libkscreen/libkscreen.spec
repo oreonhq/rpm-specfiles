@@ -5,7 +5,7 @@
 
 Name:           libkscreen
 Version:        %{plasma_ver}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        KDE screen management library
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND CC0-1.0
@@ -66,7 +66,7 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_datadir}/qlogging-categories6/libkscreen.categories
 %{_kf6_libdir}/libKF6Screen.so.8*
 %{_kf6_libdir}/libKF6ScreenDpms.so.8*
-%{_kf6_plugindir}/kf6/kscreen/*.so
+%{_kf6_plugindir}/kscreen/*.so
 %{_kf6_libexecdir}/kscreen_backend_launcher
 %{_datadir}/dbus-1/services/org.kde.kscreen.service
 %{_userunitdir}/plasma-kscreen.service
@@ -82,5 +82,8 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
+- Fix kscreen backend glob (no double kf6 under %%{_kf6_plugindir})
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-2
 - Plasma 6.6.3 source, backends, launcher, translations (KF6Screen)
