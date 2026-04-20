@@ -4,7 +4,7 @@
 
 Name:          gupnp
 Version:       1.6.9
-Release:       3%{?dist}
+Release:       4%{?dist}
 Summary:       A framework for creating UPnP devices & control points
 
 License:       LGPL-2.1-or-later
@@ -24,6 +24,7 @@ BuildRequires: pkgconfig(uuid)
 
 Requires: dbus
 Requires: gssdp%{?_isa} >= %{gssdp_version}
+Requires: libsoup3%{?_isa}
 
 %description
 GUPnP is an object-oriented open source framework for creating UPnP 
@@ -85,5 +86,8 @@ This package contains developer documentation for %{name}.
 %{_docdir}/gupnp-%{apiver}/
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.9-4
+- Require libsoup3 at runtime
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.9-3
 - Prepare for Oreon 11 (RP1)

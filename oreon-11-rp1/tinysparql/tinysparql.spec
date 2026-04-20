@@ -4,7 +4,7 @@
 
 %global tracker_obsoletes_version 3.8
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %bcond libstemmer 0
 %else
 %bcond libstemmer 1
@@ -12,7 +12,7 @@
 
 Name:           tinysparql
 Version:        3.10.1
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        Desktop-neutral metadata database and search tool
 
 License:        GPL-2.0-or-later
@@ -68,6 +68,7 @@ Metadata indexers are provided by the localsearch package.
 %package -n     libtinysparql
 Summary:        Libtinysparql library
 License:        LGPL-2.1-or-later
+Requires:       libsoup3%{?_isa}
 Recommends:     %{name}%{?_isa} = %{version}-%{release}
 
 # renamed in F42
@@ -172,5 +173,8 @@ This package contains the documentation for %{name}.
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10.1-2
+- Disable libstemmer on %%{?oreon} (no stemmer package in tree yet)
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10.1-1
 - Prep for or11

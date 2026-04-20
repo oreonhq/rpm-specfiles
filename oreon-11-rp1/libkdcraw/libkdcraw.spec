@@ -3,7 +3,7 @@
 Name:    libkdcraw
 Summary: A C++ interface around LibRaw library
 Version: 25.12.3
-Release: 2%{?dist}
+Release: 3%{?dist}
 
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later
 URL:     https://invent.kde.org/graphics/%{name}
@@ -63,5 +63,8 @@ Requires: cmake(Qt6Gui)
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-3
+- Rebuild for LibRaw SONAME
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 25.12.3-2
 - Import from Fedora 43 SRPM libkdcraw-25.12.3-1.fc43

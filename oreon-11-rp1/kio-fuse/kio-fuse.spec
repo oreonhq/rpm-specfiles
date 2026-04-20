@@ -10,7 +10,7 @@
 
 Name:           kio-fuse
 Version:        5.1.1
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        KIO FUSE
 
 License:        GPL-3.0-or-later
@@ -44,6 +44,7 @@ BuildRequires:  fuse3
 
 Requires:       systemd
 Requires:       dbus-common
+Requires:       fuse3-libs%{?_isa}
 
 %description
 KioFuse works by acting as a bridge between KDE's KIO filesystem design and
@@ -84,6 +85,9 @@ dbus-launch --exit-with-session \
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.1-4
+- Require fuse3-libs for libfuse3 at runtime
+
 * Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 5.1.1-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

@@ -66,6 +66,13 @@
 # For using an alternative build of EVC codecs
 %bcond evc_main 0
 
+# Oreon ISO side-repos may omit optional demuxer RPMs (samba, bluray, etc.).
+%if 0%{?oreon}
+%global with_ffmpeg_iso_extras 0
+%else
+%global with_ffmpeg_iso_extras 1
+%endif
+
 %if %{with all_codecs}
 %bcond rtmp 1
 %bcond vvc 1
@@ -98,7 +105,7 @@ Name:           ffmpeg
 %global pkg_name %{name}%{?pkg_suffix}
 
 Version:        7.1.2
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        A complete solution to record, convert and stream audio and video
 License:        GPL-3.0-or-later
 URL:            https://ffmpeg.org/
@@ -141,7 +148,9 @@ BuildRequires:  fdk-aac-free-devel
 %if %{with flite}
 BuildRequires:  flite-devel >= 2.2
 %endif
+%if 0%{?with_ffmpeg_iso_extras}
 BuildRequires:  game-music-emu-devel
+%endif
 BuildRequires:  gcc
 BuildRequires:  git-core
 BuildRequires:  gnupg2
@@ -183,16 +192,22 @@ BuildRequires:  pkgconfig(lcms2) >= 2.13
 %endif
 BuildRequires:  pkgconfig(libaribcaption) >= 1.1.1
 BuildRequires:  pkgconfig(libass)
+%if 0%{?with_ffmpeg_iso_extras}
 BuildRequires:  pkgconfig(libbluray)
+%endif
 BuildRequires:  pkgconfig(libbs2b)
 BuildRequires:  pkgconfig(libcdio)
 BuildRequires:  pkgconfig(libcdio_paranoia)
+%if 0%{?with_ffmpeg_iso_extras}
 %if %{with chromaprint}
 BuildRequires:  pkgconfig(libchromaprint)
 %endif
+%endif
 BuildRequires:  pkgconfig(libdrm)
 BuildRequires:  pkgconfig(libjxl) >= 0.7.0
+%if 0%{?with_ffmpeg_iso_extras}
 BuildRequires:  pkgconfig(libmodplug)
+%endif
 BuildRequires:  pkgconfig(libopenjp2)
 BuildRequires:  pkgconfig(libopenmpt)
 %if %{with placebo}
@@ -200,8 +215,10 @@ BuildRequires:  pkgconfig(libplacebo) >= 4.192.0
 %endif
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(libqrencode)
+%if 0%{?with_ffmpeg_iso_extras}
 BuildRequires:  pkgconfig(librabbitmq)
 BuildRequires:  pkgconfig(librist)
+%endif
 BuildRequires:  pkgconfig(librsvg-2.0)
 BuildRequires:  pkgconfig(libssh)
 BuildRequires:  pkgconfig(libv4l2)
@@ -223,7 +240,9 @@ BuildRequires:  pkgconfig(rav1e)
 BuildRequires:  pkgconfig(rubberband)
 BuildRequires:  pkgconfig(sdl2)
 BuildRequires:  pkgconfig(shaderc) >= 2019.1
+%if 0%{?with_ffmpeg_iso_extras}
 BuildRequires:  pkgconfig(smbclient)
+%endif
 BuildRequires:  pkgconfig(snappy)
 BuildRequires:  pkgconfig(soxr)
 BuildRequires:  pkgconfig(speex)
@@ -753,8 +772,12 @@ cp -a doc/examples/{*.c,Makefile,README} _doc/examples/
     --enable-avformat \
     --enable-alsa \
     --enable-bzlib \
+%if 0%{?with_ffmpeg_iso_extras}
 %if %{with chromaprint}
     --enable-chromaprint \
+%else
+    --disable-chromaprint \
+%endif
 %else
     --disable-chromaprint \
 %endif
@@ -777,7 +800,11 @@ cp -a doc/examples/{*.c,Makefile,README} _doc/examples/
     --enable-libaribb24 \
     --enable-libaribcaption \
     --enable-libass \
+%if 0%{?with_ffmpeg_iso_extras}
     --enable-libbluray \
+%else
+    --disable-libbluray \
+%endif
     --enable-libbs2b \
     --enable-libcaca \
     --enable-libcdio \
@@ -796,7 +823,11 @@ cp -a doc/examples/{*.c,Makefile,README} _doc/examples/
     --enable-libfontconfig \
     --enable-libfreetype \
     --enable-libfribidi \
+%if 0%{?with_ffmpeg_iso_extras}
     --enable-libgme \
+%else
+    --disable-libgme \
+%endif
     --enable-libharfbuzz \
     --enable-libgsm \
 %if %{with dc1394}
@@ -809,7 +840,11 @@ cp -a doc/examples/{*.c,Makefile,README} _doc/examples/
     --disable-liblensfun \
     --disable-liblcevc-dec \
     --enable-liblc3 \
+%if 0%{?with_ffmpeg_iso_extras}
     --enable-libmodplug \
+%else
+    --disable-libmodplug \
+%endif
     --enable-libmp3lame \
     --enable-libmysofa \
     --disable-libnpp \
@@ -826,9 +861,17 @@ cp -a doc/examples/{*.c,Makefile,README} _doc/examples/
     --enable-libpulse \
     --enable-libqrencode \
     --disable-libquirc \
+%if 0%{?with_ffmpeg_iso_extras}
     --enable-librabbitmq \
+%else
+    --disable-librabbitmq \
+%endif
     --enable-librav1e \
+%if 0%{?with_ffmpeg_iso_extras}
     --enable-librist \
+%else
+    --disable-librist \
+%endif
     --enable-librsvg \
 %if %{with librtmp}
     --enable-librtmp \
@@ -836,7 +879,11 @@ cp -a doc/examples/{*.c,Makefile,README} _doc/examples/
     --enable-librubberband \
     --enable-libshaderc \
     --disable-libshine \
+%if 0%{?with_ffmpeg_iso_extras}
     --enable-libsmbclient \
+%else
+    --disable-libsmbclient \
+%endif
     --enable-libsnappy \
     --enable-libsvtav1 \
     --enable-libsoxr \
@@ -995,6 +1042,9 @@ rm -rf %{buildroot}%{_bindir}
 rm -rf %{buildroot}%{_datadir}
 %endif
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.2-4
+- On %%{?oreon}, disable optional libavformat demuxers missing from ISO repos
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.2-3
 - Replace local spec with Fedora 43 ffmpeg 7.1.2-2 SRPM layout
 
