@@ -118,5 +118,5 @@ mv %{buildroot}%{_docdir}/%{name}/html .
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.0-3
-- Prepare for Oreon 11 (RP1)
+* Sun Apr 19 2026 Brandon Lester <blester@oreonhq.com> - 1.4.0-3
+- import
