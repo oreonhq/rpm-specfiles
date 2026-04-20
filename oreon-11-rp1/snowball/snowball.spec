@@ -7,12 +7,12 @@
 # - Rust
 
 %global giturl  https://github.com/snowballstem/snowball
-# Pinned: floating master.zip drifts from snowball %%{version} and breaks %%check.
-%global snowball_data_git 1c73c56bb30003fe621a614f4a2718607e3e8144
+# Pinned: must match corpus for this snowball release (v3.0.1 tag = 2025-05-09).
+%global snowball_data_git 381b447563f9bef87b218ebbedde3159afdc3032
 
 Name:           snowball
 Version:        3.0.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Snowball compiler and stemming algorithms
 
 License:        BSD-3-Clause
@@ -261,6 +261,9 @@ make check_python
 %doc python/README.html
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.1-3
+- Pin snowball-data to pre-release snapshot (matches v3.0.1 stemmer)
+
 * Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.1-2
 - Pin snowball-data git rev for %%check (master moved)
 
