@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -78,10 +78,10 @@ group["monospace"] = "Noto Sans Mono"
 --fallback: array: alias name for fallback. similarly work for 'alias' but no rules for family->alias
 --
 local subpackages = {
-    { alias="cursive",    family="Nastaliq Urdu", lang={ "ur" } },
-    { alias="cursive",    family="Rashi Hebrew", lang={ "he" },
-      default=true
-    },
+    -- Nastaliq Urdu and Rashi Hebrew: upstream noto-monthly-release ships these
+    -- only as slim-variable-ttf (installed under google-noto-vf). Static ttf/
+    -- trees no longer contain files, so static subpackages break %%install
+    -- (metainfo: No family names provided).
 
     { alias="fangsong",   family="Fangsong KSS Rotated" },
     { alias="fangsong",   family="Fangsong KSS Vertical" },
@@ -537,9 +537,12 @@ local subpackages = {
       fcconffile=string.match(rpm.expand('%{SOURCE4}'), "([^/]*)$"),
     },
 
-    { alias="cursive",    variable=true, family="Nastaliq Urdu", lang={ "ur" } },
+    { alias="cursive",    variable=true, family="Nastaliq Urdu", lang={ "ur" },
+      obsoletes={ "nastaliq-urdu" },
+    },
     { alias="cursive",    variable=true, family="Rashi Hebrew", lang={ "he" },
-      default=true
+      default=true,
+      obsoletes={ "rashi-hebrew" },
     },
 
     { alias="fantasy",    variable=true, family="Sans Symbols" },

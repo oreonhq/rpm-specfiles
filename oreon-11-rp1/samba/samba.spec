@@ -18,13 +18,13 @@
 %global debug_package %{nil}
 %endif
 
-# Build with internal talloc, tevent, tdb (default on for Oreon 11 RP1 so mock
-# builddep does not need libtalloc-devel, libtevent-devel, libtdb-devel, or the
-# matching python3-* packages when those are not yet in the build root).
+# Build with internal talloc, tevent, tdb
 #
-# To use system libs instead: rpmbuild --rebuild --without=includelibs …
+# fedpkg mockbuild --with=testsuite --with=includelibs
+# or
+# rpmbuild --rebuild --with=testsuite --with=includelibs samba.src.rpm
 #
-%bcond includelibs 1
+%bcond includelibs 0
 
 # fedpkg mockbuild --with=ccache
 %bcond ccache 0
@@ -152,6 +152,12 @@
 #                    default is 1).
 %global samba_release %autorelease
 
+%global pre_release %nil
+%if "x%{?pre_release}" != "x"
+%global samba_release %autorelease -p -e %pre_release
+%endif
+
+
 # If one of those versions change, we need to make sure we rebuilt or adapt
 # projects comsuming those. This is e.g. sssd, openchange, evolution-mapi, ...
 %global libdcerpc_binding_so_version 0
@@ -214,10 +220,9 @@ Summary:        Server and Client software to interoperate with Windows machines
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://www.samba.org
 
-# Upstream publishes gzip tarballs. The detached .tar.asc signs the *uncompressed*
-# tar stream (same as Fedora libcap style: gzip -cd ... | gpgverify --data=-).
-Source0:        https://ftp.samba.org/pub/samba/samba-%{version}.tar.gz
-Source1:        https://ftp.samba.org/pub/samba/samba-%{version}.tar.asc
+# This is a xz recompressed file of https://ftp.samba.org/pub/samba/samba-%%{version}%%{pre_release}.tar.gz
+Source0:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.gz#/samba-%{version}%{pre_release}.tar.xz
+Source1:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.asc
 Source2:        samba-pubkey_AA99442FB680B620.gpg
 
 # Red Hat specific replacement-files
@@ -233,6 +238,8 @@ Source18:       samba-winbind-systemd-sysusers.conf
 
 Source201:      README.downgrade
 Source202:      samba.abignore
+
+Patch:          0001-printing-Set-default-value-in-case-of-non-exisiting-.patch
 
 Requires(pre): %{name}-common = %{samba_depver}
 Requires: %{name}-common = %{samba_depver}
@@ -1337,26 +1344,11 @@ Python bindings for the LDB library
 
 %prep
 %if 0%{?fedora} || 0%{?rhel} >= 9
-gzip -dc '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
+xzcat %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %else
-gzip -dc '%{SOURCE0}' | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
+xzcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
 %endif
-cd "%{_builddir}"
-rm -rf "samba-%{version}"
-# Unpack by payload not by filename. Stale SRPM or lookaside can still ship a
-# .tar.xz basename with gzip bytes (or the old URL fragment rename), and %%autosetup
-# would pick xzcat from the suffix and blow up again.
-if gzip -t '%{SOURCE0}' 2>/dev/null; then
-  gzip -dc '%{SOURCE0}' | tar -xf -
-elif xz -t '%{SOURCE0}' 2>/dev/null; then
-  xzcat '%{SOURCE0}' | tar -xf -
-else
-  echo "Cannot unpack %{SOURCE0} (not gzip or xz)." >&2
-  file '%{SOURCE0}' >&2 || true
-  exit 1
-fi
-cd "samba-%{version}"
-# No Patch: entries in this package, so do not call %%autopatch (fails on some rpm: no matching patches in range)
+%autosetup -n samba-%{version}%{pre_release} -p1
 
 # Make sure we do not build with heimdal code
 rm -rfv third_party/heimdal
@@ -1369,8 +1361,6 @@ sed -i 's/#define WINBINDD_PRIV_SOCKET_SUBDIR.*/#define WINBINDD_PRIV_SOCKET_SUB
 %endif
 
 %build
-# %%autosetup used to set buildsubdir; manual unpack in %%prep leaves cwd at top of %%{_builddir}
-cd "samba-%{version}"
 %if %{with includelibs}
 %global _talloc_lib ,talloc,pytalloc,pytalloc-util
 %global _tevent_lib ,tevent,pytevent
@@ -1511,7 +1501,6 @@ popd
 
 %install
 %if !%{with testsuite}
-cd "samba-%{version}"
 # Do not use %%make_install, make is just a wrapper around waf in Samba!
 %{__make} %{?_smp_mflags} %{_make_verbose} install DESTDIR=%{buildroot}
 
@@ -1655,7 +1644,6 @@ touch %{buildroot}%{_libexecdir}/ctdb/statd_callout
 
 %check
 %if %{with testsuite}
-cd "samba-%{version}"
 #
 # samba3.smb2.timestamps.*:
 #
@@ -4211,26 +4199,4 @@ fi
 %endif
 
 %changelog
-* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-7
-- %%build, %%install, and %%check run in samba-%%{version} after manual unpack (restore %%autosetup cwd behavior)
-
-* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-6
-- Verify gpg signature on decompressed tar (Samba .asc is not for the .gz file bytes)
-
-* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-5
-- Drop %%autopatch in %%prep when there are no patches (rpm errors with no matching patches in range)
-
-* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-4
-- Unpack Source0 with gzip or xz based on magic so a misnamed cached tarball cannot break %%prep again
-
-* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-3
-- Use upstream %%tar.gz as Source0 and verify gpg against that file (drop xzcat and bogus .tar.xz rename)
-
-* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-2
-- Default %%with includelibs so builddeps do not require talloc, tevent, or tdb devel packages missing from Oreon mock
-
-* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-1
-- Bump to 4.24.1 stable upstream tarball (rc3 gone from mirror)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{samba_version}-1
-- Prepare for Oreon 11 (RP1)
+%autochangelog
