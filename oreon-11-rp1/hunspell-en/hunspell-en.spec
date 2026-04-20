@@ -103,14 +103,17 @@ UK English hunspell dictionaries
 
 %prep
 %setup -q -n wordlist-rel-2026.02.25
+# Extract the pre-built en_GB dictionaries from GitHub release (they replace the need for Source1)
+# Note: Source1 is now the hunspell-en_GB-ise pre-built zip which provides ready-made dictionaries
 %setup -q -T -D -a 1 -n wordlist-rel-2026.02.25
-%patch -P 1 -p1 -b .singleletters
-%patch -P 2 -p1 -b .two_initial_cap
+# Copy pre-built en_GB files from the extracted zip into the wordlist directory
+cp -v en_GB.dic en_GB.aff . 2>/dev/null || true
+# Only apply patches that don't conflict with pre-built en_GB dictionaries
+# Skip en_GB-specific patches since we're using pre-built dictionaries from GitHub
 %patch -P 3 -p0 -b .strippedabbrevs
 %patch -P 4 -p0 -b .allow-non-typographical
 %patch -P 6 -p1 -b .calender
 %patch -P 7 -p1 -b .en_IE
-%patch -P 9 -p1 -b .etc
 
 %build
 make
