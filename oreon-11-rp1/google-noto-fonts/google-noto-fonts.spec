@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -1014,8 +1014,10 @@ end
 local function genmetainfo(table)
 -- fc-scan format prints XML lines directly. Avoid nested echo|sh scripts that
 -- expand to one huge line per font (rpm logs every command, upload proxies choke).
-local xmlfontname = '$(names=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "    <font>%{fullname[0]}</font>\\n"; done | sort -u | grep -v "font></font"); if test -n "$names"; then printf "  <provides>\\n%s\\n  </provides>\\n" "$names"; fi)'
-local xmlfontlang = '$(langs=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "%{[]lang{    <lang>%{lang}</lang>\\n}}"; done | sort -u); if test -n "$langs"; then printf "  <languages>\\n%s\\n  </languages>\\n" "$langs"; fi)'
+-- Fontconfig treats \\n in -f as the letter n here, so use a real newline in the format.
+local nl = "\n"
+local xmlfontname = '$(names=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "    <font>%{fullname[0]}</font>' .. nl .. '"; done | sort -u | grep -v "font></font"); if test -n "$names"; then printf '\''%s\n'\'' '\''  <provides>'\'' "$names" '\''  </provides>'\''; fi)'
+local xmlfontlang = '$(langs=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "%{[]lang{    <lang>%{lang}</lang>' .. nl .. '}}"; done | sort -u); if test -n "$langs"; then printf '\''%s\n'\'' '\''  <languages>'\'' "$langs" '\''  </languages>'\''; fi)'
 local xml = [[
 <?xml version=\"1.0\" encoding=\"UTF-8\"?>\
 <!-- $PDX-License-Identifier: MIT -->\
@@ -1205,16 +1207,15 @@ install -m 0755 -d %{buildroot}%{_fontbasedir}/google-noto-vf
 install -m 0644 -p */fonts/*/unhinted/slim-variable-ttf/Noto*.ttf %{buildroot}%{_fontbasedir}/google-noto-vf/
 
 # remove display fonts. this isn't shipped in upstream anymore.
-rm %{buildroot}%{_fontbasedir}/google-noto/NotoSansDisplay*.ttf \
-   %{buildroot}%{_fontbasedir}/google-noto/NotoSans-Display*.ttf \
-   %{buildroot}%{_fontbasedir}/google-noto/NotoSerifDisplay*.ttf \
-   %{buildroot}%{_fontbasedir}/google-noto-vf/NotoSansDisplay*.ttf \
-   %{buildroot}%{_fontbasedir}/google-noto-vf/NotoSerifDisplay*.ttf || :
-rm %{buildroot}%{_fontbasedir}/google-noto/Noto*Test-*.ttf \
-   %{buildroot}%{_fontbasedir}/google-noto-vf/Noto*Test*.ttf || :
+# use find not bare globs so missing names do not make rm complain
+find %{buildroot}%{_fontbasedir}/google-noto %{buildroot}%{_fontbasedir}/google-noto-vf -maxdepth 1 \( \
+  -name 'NotoSansDisplay*.ttf' -o -name 'NotoSans-Display*.ttf' -o -name 'NotoSerifDisplay*.ttf' \) \
+  -exec rm -f {} + 2>/dev/null || :
+find %{buildroot}%{_fontbasedir}/google-noto %{buildroot}%{_fontbasedir}/google-noto-vf -maxdepth 1 \
+  \( -name 'Noto*Test-*.ttf' -o -name 'Noto*Test*.ttf' \) -exec rm -f {} + 2>/dev/null || :
 # Noto Sans Phags Pa has been renamed to Noto Sans PhagsPa but shipped in the archive somehow
 #   https://github.com/notofonts/phags-pa/commit/b85e2b0a38ad21d0196104e791e0b15bafedaf66
-rm %{buildroot}%{_fontbasedir}/google-noto/NotoSansPhags-Pa*.ttf || :
+find %{buildroot}%{_fontbasedir}/google-noto -maxdepth 1 -name 'NotoSansPhags-Pa*.ttf' -exec rm -f {} + 2>/dev/null || :
 
 # fc-scan in script expects fonts are already installed
 %{notobuild_metainfo}
@@ -1250,6 +1251,10 @@ done
 
 
 %changelog
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-3
+- AppStream lang lines: real newline in fc-scan -f (\\n became stray n after </lang>), wrap with printf %%s per line
+- Remove optional fonts with find -exec so empty globs do not rm error
+
 * Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-2
 - Generate AppStream provides and languages from fc-scan without nested echo sh (stops multi-megabyte install script lines and huge build logs)
 
