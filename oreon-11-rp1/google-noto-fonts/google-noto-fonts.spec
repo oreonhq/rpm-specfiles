@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -1024,25 +1024,36 @@ local rel_date = os.date("!%Y-%m-%d", epoch)
 local Q = string.char(39)
 local xmlfontname = '$(names=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "    <font>%{fullname[0]}</font>' .. nl .. '"; done | sort -u | grep -v ' .. Q .. 'font></font' .. Q .. '); if test -n "$names"; then echo ' .. Q .. '  <provides>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$names"; echo ' .. Q .. '  </provides>' .. Q .. '; fi)'
 local xmlfontlang = '$(langs=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "%{[]lang{    <lang>%{lang}</lang>' .. nl .. '}}"; done | sort -u); if test -n "$langs"; then echo ' .. Q .. '  <languages>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$langs"; echo ' .. Q .. '  </languages>' .. Q .. '; fi)'
-local xml = [[
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
-<!-- $PDX-License-Identifier: MIT -->\
-<component type=\"font\">\
-  <id>]] .. rpm.expand("%{fontorg}.") .. table.pkgname .. [[</id>\
-  <metadata_license>MIT</metadata_license>\
-  <project_license>]] .. rpm.expand("%{license}") .. [[</project_license>\
-  <name>Noto ]] .. table.family .. [[</name>\
-  <summary><![CDATA[Noto ]] .. table.summary .. [[\]\]></summary>\
-  <description>\
-]] .. txt2xml(table.description) .. "\\\n" .. [[
-  </description>\
-  <updatecontact>]] .. rpm.expand("%{fontcontact}") .. [[</updatecontact>\
-  <url type=\"homepage\">]] .. rpm.expand("%{url}") .. [[</url>\
-  <releases>\
-    <release version=\"]] .. rpm.expand("%{version}") .. [[\" date=\"]] .. rel_date .. [[\"/>\
-  </releases>]] .. "\\\n" .. xmlfontname .. "\\\n" .. xmlfontlang .. "\\\n" .. [[
-</component>\]]
-    _metainfobuild = (_metainfobuild ~= '' and _metainfobuild .. "\n" or '') .. "cat<<_EOL_>" .. table.metainfo .. "\\\n" .. xml .. "\n_EOL_\\\nif ! grep provides " .. table.metainfo .. " > /dev/null 2>&1; then echo \"" .. table.pkgname .. ": No family names provided\"; exit 1; fi\\"
+-- Write static XML in a quoted heredoc so bash never parses fc-scan -f "..." inside
+-- the same document as unquoted $(…) (fixes: unexpected EOF while looking for matching '"').
+local xml_prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+  .. "<!-- $PDX-License-Identifier: MIT -->\n"
+  .. "<component type=\"font\">\n"
+  .. "  <id>" .. rpm.expand("%{fontorg}.") .. table.pkgname .. "</id>\n"
+  .. "  <metadata_license>MIT</metadata_license>\n"
+  .. "  <project_license>" .. rpm.expand("%{license}") .. "</project_license>\n"
+  .. "  <name>Noto " .. table.family .. "</name>\n"
+  .. "  <summary><![CDATA[Noto " .. table.summary .. "]]></summary>\n"
+  .. "  <description>\n"
+  .. txt2xml(table.description)
+  .. "\n  </description>\n"
+  .. "  <updatecontact>" .. rpm.expand("%{fontcontact}") .. "</updatecontact>\n"
+  .. "  <url type=\"homepage\">" .. rpm.expand("%{url}") .. "</url>\n"
+  .. "  <releases>\n"
+  .. "    <release version=\"" .. rpm.expand("%{version}") .. "\" date=\"" .. rel_date .. "\"/>\n"
+  .. "  </releases>\n"
+    _metainfobuild = (_metainfobuild ~= '' and _metainfobuild .. "\n" or '')
+      .. "{\n"
+      .. "  cat <<'NOTO_METAINFO_H_9f3c2b1a'\n"
+      .. xml_prefix
+      .. "NOTO_METAINFO_H_9f3c2b1a\n"
+      .. "  " .. xmlfontname .. "\n"
+      .. "  " .. xmlfontlang .. "\n"
+      .. "  cat <<'NOTO_METAINFO_T_9f3c2b1a'\n"
+      .. "</component>\n"
+      .. "NOTO_METAINFO_T_9f3c2b1a\n"
+      .. "} > " .. table.metainfo .. "\n"
+      .. "if ! grep provides " .. table.metainfo .. " > /dev/null 2>&1; then echo \"" .. table.pkgname .. ": No family names provided\"; exit 1; fi\n"
 end
 
 local function has_value(table, value)
@@ -1257,6 +1268,9 @@ done
 
 
 %changelog
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-6
+- Metainfo: quoted heredoc for static XML then run fc-scan $(…) outside it (bash no longer sees nested quotes in one cat)
+
 * Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-5
 - Metainfo: embed release date from Lua not $(date …) in heredoc, use string.char(39) for shell quotes (fixes bash EOF in matching quote)
 - AppStream fc-scan wrappers stay single-quoted via Q concat
