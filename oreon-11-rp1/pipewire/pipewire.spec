@@ -13,7 +13,7 @@
 
 #global snapdate   20210107
 #global gitcommit  b17db2cebc1a5ab2c01851d29c05f79cd2f262bb
-#global shortcommit %(c=%{gitcommit}; echo ${c:0:7})
+#global shortcommit %%(c=%%{gitcommit}; echo ${c:0:7})
 
 # https://bugzilla.redhat.com/983606
 %global _hardened_build 1
