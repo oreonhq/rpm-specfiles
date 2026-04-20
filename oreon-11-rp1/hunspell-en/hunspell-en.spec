@@ -5,7 +5,7 @@ Summary: English hunspell dictionaries
 Version: 0.%{upstreamid}
 Release: 2%{?dist}
 Source0: https://github.com/en-wl/wordlist/archive/rel-2026.02.25.tar.gz
-Source1: http://download.services.openoffice.org/contrib/dictionaries/en_GB.zip
+Source1: https://github.com/en-wl/wordlist/releases/download/rel-2026.02.25/hunspell-en_GB-ise-2026.02.25.zip
 Patch1: en_GB-singleletters.patch
 Patch2: en_GB.two_initial_caps.patch
 #See https://github.com/en-wl/wordlist/issues/15
