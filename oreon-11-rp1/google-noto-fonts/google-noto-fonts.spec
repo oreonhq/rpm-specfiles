@@ -1,6 +1,4 @@
 %global cionly 0
-# Set _sourcedir to the spec file directory for local source file access
-%global _sourcedir %{_specdir}
 
 %global _fontname google-noto
 %global fontname %{_fontname}
