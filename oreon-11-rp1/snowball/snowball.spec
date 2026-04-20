@@ -7,18 +7,20 @@
 # - Rust
 
 %global giturl  https://github.com/snowballstem/snowball
+# Pinned: floating master.zip drifts from snowball %%{version} and breaks %%check.
+%global snowball_data_git 1c73c56bb30003fe621a614f4a2718607e3e8144
 
 Name:           snowball
 Version:        3.0.1
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Snowball compiler and stemming algorithms
 
 License:        BSD-3-Clause
 URL:            https://snowballstem.org/
 VCS:            git:%{giturl}.git
 Source0:        %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
-# Test data for the compiler
-Source1:        https://github.com/snowballstem/snowball-data/archive/refs/heads/master.zip
+# Test data for the compiler (must match algorithms shipped in this snowball release)
+Source1:        https://github.com/snowballstem/snowball-data/archive/%{snowball_data_git}/%{snowball_data_git}.tar.gz
 # Build a shared library instead of a static library
 Patch:          %{name}-sharedlib.patch
 
@@ -224,7 +226,7 @@ cd -
 %check
 # Check the compiler
 export LD_LIBRARY_PATH=%{buildroot}%{_libdir}
-mv ../snowball-data-master ../snowball-data
+mv ../snowball-data-%{snowball_data_git} ../snowball-data
 make check
 %ifarch %{java_arches}
 make check_java
@@ -259,5 +261,8 @@ make check_python
 %doc python/README.html
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.1-2
+- Pin snowball-data git rev for %%check (master moved)
+
 * Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.1-1
 - Import from Fedora 43 dist-git for Oreon 11 RP1 (libstemmer)
