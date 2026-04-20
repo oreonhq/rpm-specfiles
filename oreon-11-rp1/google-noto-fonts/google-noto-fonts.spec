@@ -1,5 +1,5 @@
 %global cionly 0
-%global _specdir %{getenv:PWD}
+# Set _sourcedir to the spec file directory for local source file access
 %global _sourcedir %{_specdir}
 
 %global _fontname google-noto
@@ -354,7 +354,7 @@ local subpackages = {
     { alias="sans-serif", family="Sans SignWriting" },
     { alias="sans-serif", family="Sans Sinhala", lang={ "si" },
       default=true, fallback={ "monospace" },
-      fcconfexfile=rpm.expand('%{SOURCE8}')
+      fcconfexfile=string.match(rpm.expand('%{SOURCE8}'), "([^/]*)$")
     },
     { alias="system-ui",  family="Sans Sinhala UI", lang={ "si" },
       priority=rpm.expand('%{lprio}'), nogroup=1,
@@ -445,7 +445,7 @@ local subpackages = {
     },
 
     { alias="serif",      family="Naskh Arabic",
-      fcconfexfile=rpm.expand('%{SOURCE3}'),
+      fcconfexfile=string.match(rpm.expand('%{SOURCE3}'), "([^/]*)$"),
       default=true
     },
     { alias="system-ui",  family="Naskh Arabic UI",
@@ -536,7 +536,7 @@ local subpackages = {
     -- It may be symbol but is a part of. no alias is intentional.
     { alias="",           family="Znamenny Musical Notation",
       priority=rpm.expand('%{lprio}'), nogroup=1,
-      fcconffile=rpm.expand('%{SOURCE4}'),
+      fcconffile=string.match(rpm.expand('%{SOURCE4}'), "([^/]*)$"),
     },
 
     { alias="cursive",    variable=true, family="Nastaliq Urdu", lang={ "ur" } },
@@ -647,7 +647,7 @@ local subpackages = {
     },
     { alias="sans-serif", variable=true, family="Sans Sinhala", lang={ "si" },
       default=true, fallback={ "monospace" },
-      fcconfexfile=rpm.expand('%{SOURCE8}')
+      fcconfexfile=string.match(rpm.expand('%{SOURCE8}'), "([^/]*)$")
     },
     { alias="sans-serif", variable=true, family="Sans Sora Sompeng" },
     { alias="sans-serif", variable=true, family="Sans Sundanese" },
@@ -683,7 +683,7 @@ local subpackages = {
     },
     { alias="sans-serif", variable=true, family="Sans Vithkuqi" },
     { alias="serif",      variable=true, family="Naskh Arabic",
-      fcconfexfile=rpm.expand('%{SOURCE3}'),
+      fcconfexfile=string.match(rpm.expand('%{SOURCE3}'), "([^/]*)$"),
       default=true
     },
     { alias="system-ui",  variable=true, family="Naskh Arabic UI",
@@ -817,15 +817,27 @@ end
 local function genfcconf(table)
     local extra = "\\\n"
     if table.fcconfexfile then
-        local f = io.open(table.fcconfexfile, "r")
+        -- Try to find the file in multiple locations
+        local sourcedir = rpm.expand('%{_sourcedir}')
+        if sourcedir:sub(-1) ~= "/" then sourcedir = sourcedir .. "/" end
+        local filepath = sourcedir .. table.fcconfexfile
+        local f = io.open(filepath, "r")
+        
+        -- If not found in _sourcedir, try the spec directory
+        if not f then
+            local specdir = rpm.expand('%{_specdir}')
+            if specdir:sub(-1) ~= "/" then specdir = specdir .. "/" end
+            filepath = specdir .. table.fcconfexfile
+            f = io.open(filepath, "r")
+        end
+        
+        -- If found, read the extra config; if not, just use default
         if f then
             for line in f:lines() do
                 extra = extra .. line:gsub("\n$", ""):gsub("$", "\\\n")
             end
             extra = extra:gsub("\n\n$", "\n")
             f:close()
-        else
-            error("Unable to open " .. table.fcconfexfile)
         end
     end
     local xml = [[
@@ -843,7 +855,21 @@ local function genfcconf(table)
 </fontconfig>\
 ]]
     if table.fcconffile then
-        local f = io.open(table.fcconffile, "r")
+        -- Try to find the file in multiple locations
+        local sourcedir = rpm.expand('%{_sourcedir}')
+        if sourcedir:sub(-1) ~= "/" then sourcedir = sourcedir .. "/" end
+        local filepath = sourcedir .. table.fcconffile
+        local f = io.open(filepath, "r")
+        
+        -- If not found in _sourcedir, try the spec directory
+        if not f then
+            local specdir = rpm.expand('%{_specdir}')
+            if specdir:sub(-1) ~= "/" then specdir = specdir .. "/" end
+            filepath = specdir .. table.fcconffile
+            f = io.open(filepath, "r")
+        end
+        
+        -- If found, read config; if not, generate default
         if f then
             xml = ""
             for line in f:lines() do
@@ -851,8 +877,6 @@ local function genfcconf(table)
             end
             xml = xml:gsub("\n\n$", "\n")
             f:close()
-        else
-            error("Unable to open " .. table.fcconffile)
         end
     end
     _fcconfbuild = _fcconfbuild .. "cat<<_EOL_>" .. table.fcconf .. "\\\n" .. xml .. "_EOL_\\\n"
