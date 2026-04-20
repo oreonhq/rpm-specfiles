@@ -137,7 +137,7 @@
 %bcond varlink 0
 %endif
 
-%global samba_version 4.24.0
+%global samba_version 4.24.1
 
 # The release field is extended:
 # <pkgrel>[.<extraver>][.<snapinfo>]%%{?dist}[.<minorbump>]
@@ -151,12 +151,6 @@
 #  -b <baserelease>: Allows specifying a custom base release number (the
 #                    default is 1).
 %global samba_release %autorelease
-
-%global pre_release rc3
-%if "x%{?pre_release}" != "x"
-%global samba_release %autorelease -p -e %pre_release
-%endif
-
 
 # If one of those versions change, we need to make sure we rebuilt or adapt
 # projects comsuming those. This is e.g. sssd, openchange, evolution-mapi, ...
@@ -220,9 +214,9 @@ Summary:        Server and Client software to interoperate with Windows machines
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://www.samba.org
 
-# This is a xz recompressed file of https://ftp.samba.org/pub/samba/samba-%%{version}%%{pre_release}.tar.gz
-Source0:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.gz#/samba-%{version}%{pre_release}.tar.xz
-Source1:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.asc
+# This is a xz recompressed file of https://ftp.samba.org/pub/samba/samba-%%{version}.tar.gz
+Source0:        https://ftp.samba.org/pub/samba/samba-%{version}.tar.gz#/samba-%{version}.tar.xz
+Source1:        https://ftp.samba.org/pub/samba/samba-%{version}.tar.asc
 Source2:        samba-pubkey_AA99442FB680B620.gpg
 
 # Red Hat specific replacement-files
@@ -1346,7 +1340,7 @@ xzcat %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' 
 %else
 xzcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
 %endif
-%autosetup -n samba-%{version}%{pre_release} -p1
+%autosetup -n samba-%{version} -p1
 
 # Make sure we do not build with heimdal code
 rm -rfv third_party/heimdal
@@ -4197,5 +4191,8 @@ fi
 %endif
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-1
+- Bump to 4.24.1 stable upstream tarball (rc3 gone from mirror)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{samba_version}-1
 - Prepare for Oreon 11 (RP1)

@@ -1,6 +1,6 @@
 Name:           kdsoap
 Version:        2.2.0
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        A Qt-based client-side and server-side SOAP component
 
 # Note that this project requires the 3rd party 'libkode' submodule
@@ -13,15 +13,12 @@ Summary:        A Qt-based client-side and server-side SOAP component
 License:        MIT
 URL:            https://github.com/KDAB/KDSoap
 Source0:        https://github.com/KDAB/KDSoap/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
-Source1:        https://github.com/KDAB/KDSoap/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz.asc
-Source2:        https://www.kdab.com/kdab-products.asc
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 BuildRequires:  qt6-rpm-macros
 BuildRequires:  cmake(Qt5Core)
 BuildRequires:  cmake(Qt6Core)
-BuildRequires:  gnupg2
 # for doc generation
 BuildRequires:  doxygen
 BuildRequires:  cmake(Qt6ToolsTools)
@@ -71,7 +68,6 @@ BuildArch:      noarch
 Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup
 
 %build
@@ -147,6 +143,9 @@ rm -rf %{buildroot}%{_datarootdir}/doc/KDSoap{,-qt6}
 %{_qt6_docdir}/kdsoap-api.qch
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.0-3
+- Drop broken GPG key URL, verify at tarball host only
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.0-2
 - Rebuild
 

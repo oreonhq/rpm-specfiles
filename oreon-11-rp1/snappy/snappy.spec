@@ -4,12 +4,12 @@
 
 Name:           snappy
 Version:        1.2.2
-Release:        5%{?dist}
+Release:        6%{?dist}
 Summary:        Fast compression and decompression library
 
 License:        BSD-3-Clause
 URL:            https://github.com/google/snappy
-Source0:        https://github.com/google/snappy/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/google/snappy/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
 
 # Remove dependency on bundled gtest and google-benchmark.
 Patch0:         %{name}-thirdparty.patch
@@ -93,5 +93,8 @@ rm -rf %{buildroot}%{_datadir}/doc/snappy-devel/
 
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.2-6
+- Fix Source0 URL (GitHub tag archive)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.2-5
 - Prepare for Oreon 11 (RP1)
