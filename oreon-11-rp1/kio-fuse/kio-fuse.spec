@@ -10,7 +10,7 @@
 
 Name:           kio-fuse
 Version:        5.1.1
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        KIO FUSE
 
 License:        GPL-3.0-or-later
@@ -85,6 +85,9 @@ dbus-launch --exit-with-session \
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.1-5
+- Rebuild
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.1-4
 - Require fuse3-libs for libfuse3 at runtime
 

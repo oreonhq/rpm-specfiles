@@ -4,7 +4,7 @@
 
 Name:          gupnp
 Version:       1.6.9
-Release:       4%{?dist}
+Release:       5%{?dist}
 Summary:       A framework for creating UPnP devices & control points
 
 License:       LGPL-2.1-or-later
@@ -86,6 +86,9 @@ This package contains developer documentation for %{name}.
 %{_docdir}/gupnp-%{apiver}/
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.9-5
+- Rebuild
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.9-4
 - Require libsoup3 at runtime
 

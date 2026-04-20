@@ -6,7 +6,7 @@
 
 Name:           kf6-%{framework}
 Version:        6.24.0
-Release:	9%{?dist}
+Release:	10%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 addon with additional image plugins for QtGui
 
 License:        LGPLv2+
@@ -78,6 +78,9 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/cmake/KF6ImageFormats/
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-10
+- Rebuild
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-9
 - Rebuild for OpenEXR 3.3 / LibRaw SONAMEs (ISO dep fix)
 

@@ -12,7 +12,7 @@
 
 Name:           tinysparql
 Version:        3.10.1
-Release:        2%{?dist}
+Release:        3%{?dist}
 Summary:        Desktop-neutral metadata database and search tool
 
 License:        GPL-2.0-or-later
@@ -173,6 +173,9 @@ This package contains the documentation for %{name}.
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10.1-3
+- Rebuild
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.10.1-2
 - Disable libstemmer on %%{?oreon} (no stemmer package in tree yet)
 

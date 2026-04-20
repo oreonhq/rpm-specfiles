@@ -105,7 +105,7 @@ Name:           ffmpeg
 %global pkg_name %{name}%{?pkg_suffix}
 
 Version:        7.1.2
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        A complete solution to record, convert and stream audio and video
 License:        GPL-3.0-or-later
 URL:            https://ffmpeg.org/
@@ -1042,6 +1042,9 @@ rm -rf %{buildroot}%{_bindir}
 rm -rf %{buildroot}%{_datadir}
 %endif
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.2-5
+- Rebuild
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1.2-4
 - On %%{?oreon}, disable optional libavformat demuxers missing from ISO repos
 

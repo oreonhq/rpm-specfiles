@@ -3,7 +3,7 @@
 
 Name:           libmtp
 Version:        1.1.22
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Software library for MTP media players
 URL:            http://libmtp.sourceforge.net/
 
@@ -125,6 +125,9 @@ chrpath --delete $RPM_BUILD_ROOT{%{_bindir},/usr/lib/udev}/mtp*
 %{_libdir}/pkgconfig/libmtp.pc
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.22-5
+- Rebuild
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.22-4
 - Rebuild for ISO kio-extras dep
 

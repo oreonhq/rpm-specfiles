@@ -1,6 +1,6 @@
 Name:    kio-extras
 Version: 26.03.80
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: Additional components to increase the functionality of KIO Framework
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -132,6 +132,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.03.80-4
+- Rebuild
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.03.80-3
 - Rebuild after kdsoap stack is in the build root
 

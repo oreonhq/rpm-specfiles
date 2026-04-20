@@ -1,6 +1,6 @@
 Name:           kdsoap
 Version:        2.2.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A Qt-based client-side and server-side SOAP component
 
 # Note that this project requires the 3rd party 'libkode' submodule
@@ -147,6 +147,9 @@ rm -rf %{buildroot}%{_datarootdir}/doc/KDSoap{,-qt6}
 %{_qt6_docdir}/kdsoap-api.qch
 
 %changelog
+* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.0-2
+- Rebuild
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.0-1
 - Import EL10 kdsoap 2.2.0 for kio-extras (Qt6 SOAP stack)
 
