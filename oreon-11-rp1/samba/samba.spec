@@ -220,8 +220,9 @@ Summary:        Server and Client software to interoperate with Windows machines
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://www.samba.org
 
-# This is a xz recompressed file of https://ftp.samba.org/pub/samba/samba-%%{version}%%{pre_release}.tar.gz
-Source0:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.gz#/samba-%{version}%{pre_release}.tar.xz
+# Upstream ships .tar.gz. Do not rename to .tar.xz in the URL fragment (spectool
+# and mock keep gzip bytes then xzcat and gpgverify in %%prep both break).
+Source0:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.gz
 Source1:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.asc
 Source2:        samba-pubkey_AA99442FB680B620.gpg
 
@@ -1343,12 +1344,24 @@ Provides: python3-ldb-devel = %{samba_depver}
 Python bindings for the LDB library
 
 %prep
+# Detached .asc signs the tarball file bytes (the .tar.gz), not the uncompressed tar.
 %if 0%{?fedora} || 0%{?rhel} >= 9
-xzcat %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %else
-xzcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
+gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %endif
-%autosetup -n samba-%{version}%{pre_release} -p1
+cd "%{_builddir}"
+rm -rf "samba-%{version}%{pre_release}"
+if gzip -t '%{SOURCE0}' 2>/dev/null; then
+  tar -xzf '%{SOURCE0}'
+elif xz -t '%{SOURCE0}' 2>/dev/null; then
+  xzcat '%{SOURCE0}' | tar -xf -
+else
+  echo "Cannot unpack %{SOURCE0} (not gzip or xz)." >&2
+  exit 1
+fi
+cd "samba-%{version}%{pre_release}"
+%patch -P0 -p1
 
 # Make sure we do not build with heimdal code
 rm -rfv third_party/heimdal
@@ -1361,6 +1374,7 @@ sed -i 's/#define WINBINDD_PRIV_SOCKET_SUBDIR.*/#define WINBINDD_PRIV_SOCKET_SUB
 %endif
 
 %build
+cd "samba-%{version}%{pre_release}"
 %if %{with includelibs}
 %global _talloc_lib ,talloc,pytalloc,pytalloc-util
 %global _tevent_lib ,tevent,pytevent
@@ -1500,6 +1514,7 @@ doxygen Doxyfile
 popd
 
 %install
+cd "samba-%{version}%{pre_release}"
 %if !%{with testsuite}
 # Do not use %%make_install, make is just a wrapper around waf in Samba!
 %{__make} %{?_smp_mflags} %{_make_verbose} install DESTDIR=%{buildroot}
@@ -1643,6 +1658,7 @@ touch %{buildroot}%{_libexecdir}/ctdb/statd_callout
 %endif
 
 %check
+cd "samba-%{version}%{pre_release}"
 %if %{with testsuite}
 #
 # samba3.smb2.timestamps.*:

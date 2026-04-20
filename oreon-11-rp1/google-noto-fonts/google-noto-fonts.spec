@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -81,7 +81,6 @@ local subpackages = {
     -- Some families ship only slim-variable-ttf (under google-noto-vf). Keeping a
     -- static subpackage when ttf/ is empty breaks %%install (metainfo: No family names).
 
-    { alias="fantasy",    family="Music" },
     { alias="fantasy",    family="Sans Symbols" },
     { alias="fantasy",    family="Sans Symbols 2",
       obsoletes={ "sans-symbols2" },
@@ -548,6 +547,10 @@ local subpackages = {
     },
 
     { alias="fantasy",    variable=true, family="Sans Symbols" },
+
+    { alias="fantasy",    variable=true, family="Music",
+      obsoletes={ "music" },
+    },
 
     { alias="sans-serif", variable=true, family="Kufi Arabic" },
 
