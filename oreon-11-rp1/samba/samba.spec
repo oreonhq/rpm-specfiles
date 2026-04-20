@@ -18,13 +18,13 @@
 %global debug_package %{nil}
 %endif
 
-# Build with internal talloc, tevent, tdb
+# Build with internal talloc, tevent, tdb (default on for Oreon mock so
+# builddep does not need libtalloc-devel, libtdb-devel, python3-talloc-devel,
+# python3-tdb when those are not in the build root yet).
 #
-# fedpkg mockbuild --with=testsuite --with=includelibs
-# or
-# rpmbuild --rebuild --with=testsuite --with=includelibs samba.src.rpm
+# System libs: rpmbuild --rebuild --without=includelibs …
 #
-%bcond includelibs 0
+%bcond includelibs 1
 
 # fedpkg mockbuild --with=ccache
 %bcond ccache 0
