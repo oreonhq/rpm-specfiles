@@ -214,7 +214,8 @@ Summary:        Server and Client software to interoperate with Windows machines
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://www.samba.org
 
-# Upstream publishes gzip tarballs and detached signatures for those bytes (not xz).
+# Upstream publishes gzip tarballs. The detached .tar.asc signs the *uncompressed*
+# tar stream (same as Fedora libcap style: gzip -cd ... | gpgverify --data=-).
 Source0:        https://ftp.samba.org/pub/samba/samba-%{version}.tar.gz
 Source1:        https://ftp.samba.org/pub/samba/samba-%{version}.tar.asc
 Source2:        samba-pubkey_AA99442FB680B620.gpg
@@ -1336,9 +1337,9 @@ Python bindings for the LDB library
 
 %prep
 %if 0%{?fedora} || 0%{?rhel} >= 9
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+gzip -dc '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %else
-gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
+gzip -dc '%{SOURCE0}' | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
 %endif
 cd "%{_builddir}"
 rm -rf "samba-%{version}"
@@ -4206,6 +4207,9 @@ fi
 %endif
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-6
+- Verify gpg signature on decompressed tar (Samba .asc is not for the .gz file bytes)
+
 * Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-5
 - Drop %%autopatch in %%prep when there are no patches (rpm errors with no matching patches in range)
 

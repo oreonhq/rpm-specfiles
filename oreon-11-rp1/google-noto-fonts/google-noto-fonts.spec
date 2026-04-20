@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        3%{?dist}
+Release:        4%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -1016,8 +1016,8 @@ local function genmetainfo(table)
 -- expand to one huge line per font (rpm logs every command, upload proxies choke).
 -- Fontconfig treats \\n in -f as the letter n here, so use a real newline in the format.
 local nl = "\n"
-local xmlfontname = '$(names=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "    <font>%{fullname[0]}</font>' .. nl .. '"; done | sort -u | grep -v "font></font"); if test -n "$names"; then printf '\''%s\n'\'' '\''  <provides>'\'' "$names" '\''  </provides>'\''; fi)'
-local xmlfontlang = '$(langs=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "%{[]lang{    <lang>%{lang}</lang>' .. nl .. '}}"; done | sort -u); if test -n "$langs"; then printf '\''%s\n'\'' '\''  <languages>'\'' "$langs" '\''  </languages>'\''; fi)'
+local xmlfontname = '$(names=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "    <font>%{fullname[0]}</font>' .. nl .. '"; done | sort -u | grep -v "font></font"); if test -n "$names"; then echo "  <provides>"; printf "%s\n" "$names"; echo "  </provides>"; fi)'
+local xmlfontlang = '$(langs=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "%{[]lang{    <lang>%{lang}</lang>' .. nl .. '}}"; done | sort -u); if test -n "$langs"; then echo "  <languages>"; printf "%s\n" "$langs"; echo "  </languages>"; fi)'
 local xml = [[
 <?xml version=\"1.0\" encoding=\"UTF-8\"?>\
 <!-- $PDX-License-Identifier: MIT -->\
@@ -1251,6 +1251,9 @@ done
 
 
 %changelog
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-4
+- Fix rpmspec Lua parse error from printf single-quote escaping, use echo plus printf %%s for AppStream blocks
+
 * Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-3
 - AppStream lang lines: real newline in fc-scan -f (\\n became stray n after </lang>), wrap with printf %%s per line
 - Remove optional fonts with find -exec so empty globs do not rm error
