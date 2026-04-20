@@ -214,8 +214,8 @@ Summary:        Server and Client software to interoperate with Windows machines
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://www.samba.org
 
-# This is a xz recompressed file of https://ftp.samba.org/pub/samba/samba-%%{version}.tar.gz
-Source0:        https://ftp.samba.org/pub/samba/samba-%{version}.tar.gz#/samba-%{version}.tar.xz
+# Upstream publishes gzip tarballs and detached signatures for those bytes (not xz).
+Source0:        https://ftp.samba.org/pub/samba/samba-%{version}.tar.gz
 Source1:        https://ftp.samba.org/pub/samba/samba-%{version}.tar.asc
 Source2:        samba-pubkey_AA99442FB680B620.gpg
 
@@ -1336,9 +1336,9 @@ Python bindings for the LDB library
 
 %prep
 %if 0%{?fedora} || 0%{?rhel} >= 9
-xzcat %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %else
-xzcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
+gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %endif
 %autosetup -n samba-%{version} -p1
 
@@ -4191,6 +4191,9 @@ fi
 %endif
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-3
+- Use upstream %%tar.gz as Source0 and verify gpg against that file (drop xzcat and bogus .tar.xz rename)
+
 * Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-2
 - Default %%with includelibs so builddeps do not require talloc, tevent, or tdb devel packages missing from Oreon mock
 
