@@ -14,8 +14,6 @@ Patch3: en_US-strippedabbrevs.patch
 #See https://sourceforge.net/p/hunspell/patches/35
 #to allow "didn't" instead of suggesting change to typographical apostrophe
 Patch4: hunspell-en-allow-non-typographical.marks.patch
-#See https://github.com/en-wl/wordlist/issues/46 obscure Calender hides misspelling of Calendar
-Patch6: hunspell-en-calender.patch
 #valid English words that are archaic or rare in en-GB but not in en-IE
 Patch7: en_IE.supplemental.patch
 #rhbz#1492306 for better or worse treat etc the same in US and GB
@@ -106,14 +104,15 @@ UK English hunspell dictionaries
 # Extract the pre-built en_GB dictionaries from GitHub release (they replace the need for Source1)
 # Note: Source1 is now the hunspell-en_GB-ise pre-built zip which provides ready-made dictionaries
 %setup -q -T -D -a 1 -n wordlist-rel-2026.02.25
-# Copy pre-built en_GB files from the extracted zip into the wordlist directory
-cp -v en_GB.dic en_GB.aff . 2>/dev/null || true
+# Copy pre-built en_GB (ISE) files from the release zip to the names this package installs
+cp -v en_GB-ise.dic en_GB.dic
+cp -v en_GB-ise.aff en_GB.aff
+cp -v README_en_GB-ise.txt README_en_GB.txt
 # Only apply patches that don't conflict with pre-built en_GB dictionaries
 # Skip en_GB-specific patches since we're using pre-built dictionaries from GitHub
 %patch -P 3 -p0 -b .strippedabbrevs
 %patch -P 4 -p0 -b .allow-non-typographical
-%patch -P 6 -p1 -b .calender
-%patch -P 7 -p1 -b .en_IE
+%patch -P 7 -p0 -b .en_IE
 
 %build
 make

@@ -1,16 +1,16 @@
---- wordlist/en_GB.dic.orig	2012-04-10 22:51:16.471732570 +0100
-+++ wordlist/en_GB.dic	2012-04-10 22:55:00.018995514 +0100
+--- en_GB.dic
++++ en_GB.dic
 @@ -1,4 +1,4 @@
--46285
-+46286
- abaft
- abbreviation/M
- abdicate/DNGSn
-@@ -22588,6 +22588,7 @@
- halter/d
- halyard/MS
- Hamal/M
+-47563
++47564
+ 0/nm
+ 0th/pt
+ 1/n1
+@@ -25206,6 +25206,7 @@
+ halyard/S
+ ham/SM
+ hamburg/SZR
 +hames
- Hamlin/M
- hamper/dS
- handbag/SMDG
+ hamlet/MS
+ hammed
+ hammer/MDRSJZG
