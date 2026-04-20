@@ -1,4 +1,6 @@
 %global cionly 0
+%global _specdir %{getenv:PWD}
+%global _sourcedir %{_specdir}
 
 %global _fontname google-noto
 %global fontname %{_fontname}
