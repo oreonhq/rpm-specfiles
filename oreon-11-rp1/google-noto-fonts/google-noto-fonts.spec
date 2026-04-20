@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -1012,8 +1012,10 @@ local function txt2xml(text)
 end
 
 local function genmetainfo(table)
-local xmlfontname = '$(cmd=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "echo \\\\\"    <font>%{fullname[0]}</font>\\\\\";"; sync; done); if test x"$cmd" != x; then echo "echo \\\\\"  <provides>\\\\\"; $cmd echo \\\\\"  </provides>\\\\\""|sh; fi|grep -v "font></font")'
-local xmlfontlang = '$(cmd=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "%{[]lang{echo \\\\\"    <lang>%{lang}</lang>\\\\\";}}"; sync; done); if test x"$cmd" != x; then echo "echo \\\\\"  <languages>\\\\\"; ($cmd)|sort -u; echo \\\\\"  </languages>\\\\\""|sh; fi)'
+-- fc-scan format prints XML lines directly. Avoid nested echo|sh scripts that
+-- expand to one huge line per font (rpm logs every command, upload proxies choke).
+local xmlfontname = '$(names=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "    <font>%{fullname[0]}</font>\\n"; done | sort -u | grep -v "font></font"); if test -n "$names"; then printf "  <provides>\\n%s\\n  </provides>\\n" "$names"; fi)'
+local xmlfontlang = '$(langs=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "%{[]lang{    <lang>%{lang}</lang>\\n}}"; done | sort -u); if test -n "$langs"; then printf "  <languages>\\n%s\\n  </languages>\\n" "$langs"; fi)'
 local xml = [[
 <?xml version=\"1.0\" encoding=\"UTF-8\"?>\
 <!-- $PDX-License-Identifier: MIT -->\
@@ -1248,5 +1250,8 @@ done
 
 
 %changelog
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-2
+- Generate AppStream provides and languages from fc-scan without nested echo sh (stops multi-megabyte install script lines and huge build logs)
+
 * Sun Apr 19 2026 Brandon Lester <blester@oreonhq.com> - 20260401-1
 - import

@@ -1340,7 +1340,22 @@ Python bindings for the LDB library
 %else
 gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %endif
-%autosetup -n samba-%{version} -p1
+cd "%{_builddir}"
+rm -rf "samba-%{version}"
+# Unpack by payload not by filename. Stale SRPM or lookaside can still ship a
+# .tar.xz basename with gzip bytes (or the old URL fragment rename), and %%autosetup
+# would pick xzcat from the suffix and blow up again.
+if gzip -t '%{SOURCE0}' 2>/dev/null; then
+  gzip -dc '%{SOURCE0}' | tar -xf -
+elif xz -t '%{SOURCE0}' 2>/dev/null; then
+  xzcat '%{SOURCE0}' | tar -xf -
+else
+  echo "Cannot unpack %{SOURCE0} (not gzip or xz)." >&2
+  file '%{SOURCE0}' >&2 || true
+  exit 1
+fi
+cd "samba-%{version}"
+%autopatch -p1
 
 # Make sure we do not build with heimdal code
 rm -rfv third_party/heimdal
@@ -4191,6 +4206,9 @@ fi
 %endif
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-4
+- Unpack Source0 with gzip or xz based on magic so a misnamed cached tarball cannot break %%prep again
+
 * Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-3
 - Use upstream %%tar.gz as Source0 and verify gpg against that file (drop xzcat and bogus .tar.xz rename)
 
