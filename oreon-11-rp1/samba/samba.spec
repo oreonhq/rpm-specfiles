@@ -18,13 +18,13 @@
 %global debug_package %{nil}
 %endif
 
-# Build with internal talloc, tevent, tdb
+# Build with internal talloc, tevent, tdb (default on for Oreon 11 RP1 so mock
+# builddep does not need libtalloc-devel, libtevent-devel, libtdb-devel, or the
+# matching python3-* packages when those are not yet in the build root).
 #
-# fedpkg mockbuild --with=testsuite --with=includelibs
-# or
-# rpmbuild --rebuild --with=testsuite --with=includelibs samba.src.rpm
+# To use system libs instead: rpmbuild --rebuild --without=includelibs …
 #
-%bcond includelibs 0
+%bcond includelibs 1
 
 # fedpkg mockbuild --with=ccache
 %bcond ccache 0
@@ -4191,6 +4191,9 @@ fi
 %endif
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-2
+- Default %%with includelibs so builddeps do not require talloc, tevent, or tdb devel packages missing from Oreon mock
+
 * Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-1
 - Bump to 4.24.1 stable upstream tarball (rc3 gone from mirror)
 
