@@ -1355,7 +1355,7 @@ else
   exit 1
 fi
 cd "samba-%{version}"
-%autopatch -p1
+# No Patch: entries in this package, so do not call %%autopatch (fails on some rpm: no matching patches in range)
 
 # Make sure we do not build with heimdal code
 rm -rfv third_party/heimdal
@@ -4206,6 +4206,9 @@ fi
 %endif
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-5
+- Drop %%autopatch in %%prep when there are no patches (rpm errors with no matching patches in range)
+
 * Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-4
 - Unpack Source0 with gzip or xz based on magic so a misnamed cached tarball cannot break %%prep again
 
