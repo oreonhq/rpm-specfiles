@@ -1369,6 +1369,8 @@ sed -i 's/#define WINBINDD_PRIV_SOCKET_SUBDIR.*/#define WINBINDD_PRIV_SOCKET_SUB
 %endif
 
 %build
+# %%autosetup used to set buildsubdir; manual unpack in %%prep leaves cwd at top of %%{_builddir}
+cd "samba-%{version}"
 %if %{with includelibs}
 %global _talloc_lib ,talloc,pytalloc,pytalloc-util
 %global _tevent_lib ,tevent,pytevent
@@ -1509,6 +1511,7 @@ popd
 
 %install
 %if !%{with testsuite}
+cd "samba-%{version}"
 # Do not use %%make_install, make is just a wrapper around waf in Samba!
 %{__make} %{?_smp_mflags} %{_make_verbose} install DESTDIR=%{buildroot}
 
@@ -1652,6 +1655,7 @@ touch %{buildroot}%{_libexecdir}/ctdb/statd_callout
 
 %check
 %if %{with testsuite}
+cd "samba-%{version}"
 #
 # samba3.smb2.timestamps.*:
 #
@@ -4207,6 +4211,9 @@ fi
 %endif
 
 %changelog
+* Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-7
+- %%build, %%install, and %%check run in samba-%%{version} after manual unpack (restore %%autosetup cwd behavior)
+
 * Mon Apr 20 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.24.1-6
 - Verify gpg signature on decompressed tar (Samba .asc is not for the .gz file bytes)
 

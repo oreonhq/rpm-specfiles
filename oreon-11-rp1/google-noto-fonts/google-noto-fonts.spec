@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        4%{?dist}
+Release:        5%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -1015,9 +1015,15 @@ local function genmetainfo(table)
 -- fc-scan format prints XML lines directly. Avoid nested echo|sh scripts that
 -- expand to one huge line per font (rpm logs every command, upload proxies choke).
 -- Fontconfig treats \\n in -f as the letter n here, so use a real newline in the format.
+-- Release date is fixed at spec-parse time so the metainfo heredoc does not embed $(date …)
+-- (that plus inner double quotes broke bash: unexpected EOF while looking for matching '"').
 local nl = "\n"
-local xmlfontname = '$(names=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "    <font>%{fullname[0]}</font>' .. nl .. '"; done | sort -u | grep -v "font></font"); if test -n "$names"; then echo "  <provides>"; printf "%s\n" "$names"; echo "  </provides>"; fi)'
-local xmlfontlang = '$(langs=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "%{[]lang{    <lang>%{lang}</lang>' .. nl .. '}}"; done | sort -u); if test -n "$langs"; then echo "  <languages>"; printf "%s\n" "$langs"; echo "  </languages>"; fi)'
+local epoch = tonumber(rpm.expand("0%{?SOURCE_DATE_EPOCH}"))
+if epoch == 0 then epoch = os.time() end
+local rel_date = os.date("!%Y-%m-%d", epoch)
+local Q = string.char(39)
+local xmlfontname = '$(names=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "    <font>%{fullname[0]}</font>' .. nl .. '"; done | sort -u | grep -v ' .. Q .. 'font></font' .. Q .. '); if test -n "$names"; then echo ' .. Q .. '  <provides>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$names"; echo ' .. Q .. '  </provides>' .. Q .. '; fi)'
+local xmlfontlang = '$(langs=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "%{[]lang{    <lang>%{lang}</lang>' .. nl .. '}}"; done | sort -u); if test -n "$langs"; then echo ' .. Q .. '  <languages>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$langs"; echo ' .. Q .. '  </languages>' .. Q .. '; fi)'
 local xml = [[
 <?xml version=\"1.0\" encoding=\"UTF-8\"?>\
 <!-- $PDX-License-Identifier: MIT -->\
@@ -1033,7 +1039,7 @@ local xml = [[
   <updatecontact>]] .. rpm.expand("%{fontcontact}") .. [[</updatecontact>\
   <url type=\"homepage\">]] .. rpm.expand("%{url}") .. [[</url>\
   <releases>\
-    <release version=\"]] .. rpm.expand("%{version}") .. [[\" date=\"$(date -d @$SOURCE_DATE_EPOCH -u --rfc-3339=d)\"/>\
+    <release version=\"]] .. rpm.expand("%{version}") .. [[\" date=\"]] .. rel_date .. [[\"/>\
   </releases>]] .. "\\\n" .. xmlfontname .. "\\\n" .. xmlfontlang .. "\\\n" .. [[
 </component>\]]
     _metainfobuild = (_metainfobuild ~= '' and _metainfobuild .. "\n" or '') .. "cat<<_EOL_>" .. table.metainfo .. "\\\n" .. xml .. "\n_EOL_\\\nif ! grep provides " .. table.metainfo .. " > /dev/null 2>&1; then echo \"" .. table.pkgname .. ": No family names provided\"; exit 1; fi\\"
@@ -1251,6 +1257,10 @@ done
 
 
 %changelog
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-5
+- Metainfo: embed release date from Lua not $(date …) in heredoc, use string.char(39) for shell quotes (fixes bash EOF in matching quote)
+- AppStream fc-scan wrappers stay single-quoted via Q concat
+
 * Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-4
 - Fix rpmspec Lua parse error from printf single-quote escaping, use echo plus printf %%s for AppStream blocks
 
