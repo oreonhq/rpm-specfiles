@@ -22,7 +22,7 @@ BuildRequires:  freetype-devel
 BuildRequires:  gcc
 BuildRequires:  graphviz
 BuildRequires:  libtool
-BuildRequires:  libudfread-devel >= 1.2.0
+BuildRequires:  libudfread-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  meson
 BuildRequires:  texlive-latex
