@@ -1344,11 +1344,13 @@ Provides: python3-ldb-devel = %{samba_depver}
 Python bindings for the LDB library
 
 %prep
-# Detached .asc signs the tarball file bytes (the .tar.gz), not the uncompressed tar.
+# Samba's detached .tar.asc signs the uncompressed tar stream (same bytes as
+# ``gzip -dc`` of the .tar.gz), not the gzip file. Verifying --data='%%{SOURCE0}'
+# always yields BAD signature.
 %if 0%{?fedora} || 0%{?rhel} >= 9
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+gzip -dc '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %else
-gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
+gzip -dc '%{SOURCE0}' | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
 %endif
 cd "%{_builddir}"
 rm -rf "samba-%{version}%{pre_release}"
