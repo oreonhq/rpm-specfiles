@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        14%{?dist}
+Release:        15%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -1255,28 +1255,26 @@ install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
 # bash -x prints the whole "for f in …" line every iteration when the list is huge (multi‑MB
 # logs, truncated lines, brittle CI). Use set +x and set -- with IFS=: instead of $(echo …).
 set +x
-IFS=:
-set -- %{noto_fcconflist}
-for f do
+IFS=: read -r -a noto_fcconf_items <<< "%{noto_fcconflist}"
+for f in "${noto_fcconf_items[@]}"; do
     install -m 0644 -p "$f" "%{buildroot}%{_fontconfig_templatedir}/$f"
     ln -s "$(realpath --relative-to="%{buildroot}%{_fontconfig_confdir}" "%{buildroot}%{_fontconfig_templatedir}/$f")" \
 	  "%{buildroot}%{_fontconfig_confdir}/$f"
 done
-set -- %{noto_metafilelist}
-for f do
+IFS=: read -r -a noto_metainfo_items <<< "%{noto_metafilelist}"
+for f in "${noto_metainfo_items[@]}"; do
     install -m 0644 -p "$f" "%{buildroot}%{_metainfodir}/$f"
 done
 set -x
 
 %check
 set +x
-IFS=:
-set -- %{noto_fcconflist}
-for f do
+IFS=: read -r -a noto_fcconf_items <<< "%{noto_fcconflist}"
+for f in "${noto_fcconf_items[@]}"; do
     xmllint --loaddtd --valid --nonet "%{buildroot}%{_fontconfig_templatedir}/$f"
 done
-set -- %{noto_metafilelist}
-for f do
+IFS=: read -r -a noto_metainfo_items <<< "%{noto_metafilelist}"
+for f in "${noto_metainfo_items[@]}"; do
     appstream-util validate-relax --nonet "%{buildroot}%{_metainfodir}/$f" || (cat "%{buildroot}%{_metainfodir}/$f"; exit 1)
 done
 set -x
@@ -1287,6 +1285,10 @@ set -x
 
 
 %changelog
+* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-8
+- Fix fcconf and metainfo loops to actually split colon lists in bash (%%install and %%check use read -a)
+- Avoid install "File name too long" from treating the whole %{noto_fcconflist} macro as one filename
+
 * Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-7
 - %%install/%%check: stop bash -x from reprinting the entire fcconf list every loop (set +x, set -- + IFS=:)
 - fontconfig symlinks: realpath relative to dirs under %%{buildroot}, not host /etc and /usr
