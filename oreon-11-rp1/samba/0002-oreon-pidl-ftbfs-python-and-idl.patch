@@ -3,14 +3,17 @@ From: Oreon <oreon@local>
 Date: Mon, 20 Apr 2026 18:31:30 -0700
 Subject: [PATCH] Oreon: pidl Python ignore/skip, relax NDR client errors, split source3 IDL python
 
-Fix pidl FTBFS on newer Perl (struct timeval, smbXsrv [ignore], winbind client stubs).
-Keep irpc.idl --python so py_irpc.c is generated for source4 Python bindings.
+Fix pidl FTBFS on newer Perl (smbXsrv [ignore], winbind client stubs).
+Run open_files.idl without --python so pidl does not emit Python glue for
+struct timeval and struct timespec (Python.pm cannot map those types).
+Keep smbXsrv.idl and the remaining source3 IDL lists on --python for
+py_smbXsrv.c and friends. Keep irpc.idl --python in source4 as before.
 
 ---
  pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm | 2 +-
  pidl/lib/Parse/Pidl/Samba4/Python.pm     | 6 ++++++
- source3/librpc/idl/wscript_build         | 7 ++++++-
- 3 files changed, 13 insertions(+), 2 deletions(-)
+ source3/librpc/idl/wscript_build         | 10 ++++++++++
+ 3 files changed, 18 insertions(+), 3 deletions(-)
 
 diff --git a/pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm b/pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm
 index 84e2beb..4418137 100644
@@ -60,12 +63,18 @@ diff --git a/source3/librpc/idl/wscript_build b/source3/librpc/idl/wscript_build
 index 3602ba9..d0e5e96 100644
 --- a/source3/librpc/idl/wscript_build
 +++ b/source3/librpc/idl/wscript_build
-@@ -6,8 +6,13 @@ topinclude=os.path.join(bld.srcnode.abspath(), 'librpc/idl')
+@@ -6,8 +6,18 @@
  
  bld.SAMBA_PIDL_LIST('PIDL',
                      '''open_files.idl
 -                       perfcount.idl secrets.idl
-                        smbXsrv.idl
+-                       smbXsrv.idl
++                    ''',
++                    options='--includedir=%s --header --ndr-parser --client' % topinclude,
++                    output_dir='../gen_ndr')
++
++bld.SAMBA_PIDL_LIST('PIDL',
++                    '''smbXsrv.idl
 +                    ''',
 +                    options='--includedir=%s --header --ndr-parser --client --python' % topinclude,
 +                    output_dir='../gen_ndr')
@@ -75,4 +84,5 @@ index 3602ba9..d0e5e96 100644
                         leases_db.idl
                         rpcd_witness.idl
                      ''',
-
+                     options='--includedir=%s --header --ndr-parser --client --python' % topinclude,
+                     output_dir='../gen_ndr')

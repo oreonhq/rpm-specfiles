@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        23%{?dist}
+Release:        24%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -158,6 +158,9 @@ set -x
 
 
 %changelog
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-17
+- gen.lua metainfo: use fc-scan format \\n instead of a real newline inside -f so Fedora 43 mock emits <provides> (fixes ORBS %%install "No family names provided")
+
 * Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-16
 - Load gen.lua from cwd, %%{_sourcedir}, or %%{_specdir} (rpmbuild %%{_specdir} is SPECS not the git tree, so spectool from the package dir must find Source9 by basename)
 

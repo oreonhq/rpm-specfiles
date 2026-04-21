@@ -965,7 +965,8 @@ local function genmetainfo(table)
 -- Fontconfig treats \\n in -f as the letter n here, so use a real newline in the format.
 -- Release date is fixed at spec-parse time so the metainfo heredoc does not embed date-in-subshell
 -- (that plus inner double quotes broke bash: unexpected EOF while looking for matching '"').
-local nl = "\n"
+-- Use literal \\n inside fc-scan -f (not a real newline). A real newline inside the -f
+-- argument breaks fc-scan on Fedora 43 mock, so <provides> is empty and %%install aborts.
 local epoch = tonumber(rpm.expand("0%{?SOURCE_DATE_EPOCH}"))
 if epoch == 0 then epoch = os.time() end
 local rel_date = os.date("!%Y-%m-%d", epoch)
@@ -980,8 +981,8 @@ local rootp = (bro ~= "" and not string.match(bro, "^%%{")) and bro or (string.c
 -- aborts install before <provides> is written. "|| :" keeps the pipeline success.
 -- Build fc-scan -f strings without literal "%{…}" in this spec: rpm's lexer parses inside %{lua:…}.
 local pct = string.char(37)
-local xmlfontname = '$(names=$(for f in $(cd "' .. rootp .. table.fontdir .. '" && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "' .. rootp .. table.fontdir .. '$f" -f "    <font>' .. pct .. '{fullname[0]}</font>' .. nl .. '"; done | sort -u | grep -v ' .. Q .. 'font></font' .. Q .. ' || :); if test -n "$names"; then echo ' .. Q .. '  <provides>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$names"; echo ' .. Q .. '  </provides>' .. Q .. '; fi)'
-local xmlfontlang = '$(langs=$(for f in $(cd "' .. rootp .. table.fontdir .. '" && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "' .. rootp .. table.fontdir .. '$f" -f "' .. pct .. '{[]lang{    <lang>' .. pct .. '{lang}</lang>' .. nl .. string.char(125) .. string.char(125) .. '"; done | sort -u); if test -n "$langs"; then echo ' .. Q .. '  <languages>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$langs"; echo ' .. Q .. '  </languages>' .. Q .. '; fi)'
+local xmlfontname = '$(names=$(for f in $(cd "' .. rootp .. table.fontdir .. '" && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "' .. rootp .. table.fontdir .. '$f" -f "    <font>' .. pct .. '{fullname[0]}</font>\\n"; done | sort -u | grep -v ' .. Q .. 'font></font' .. Q .. ' || :); if test -n "$names"; then echo ' .. Q .. '  <provides>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$names"; echo ' .. Q .. '  </provides>' .. Q .. '; fi)'
+local xmlfontlang = '$(langs=$(for f in $(cd "' .. rootp .. table.fontdir .. '" && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "' .. rootp .. table.fontdir .. '$f" -f "' .. pct .. '{[]lang{    <lang>' .. pct .. '{lang}</lang>\\n' .. string.char(125) .. string.char(125) .. '"; done | sort -u); if test -n "$langs"; then echo ' .. Q .. '  <languages>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$langs"; echo ' .. Q .. '  </languages>' .. Q .. '; fi)'
 -- Write static XML in a quoted heredoc so bash never parses fc-scan -f "..." inside
 -- the same document as unquoted command substitutions (fixes: unexpected EOF while looking for matching '"').
 local xml_prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
