@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        18%{?dist}
+Release:        19%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -1198,12 +1198,14 @@ A meta package for all Noto static font families
 
 rpm.define("noto_fcconflist " .. _fcconflist)
 rpm.define("noto_metafilelist " .. _metafilelist)
-local f = io.open("debug-noto-fcconf-build.sh", "w")
+-- Write next to the spec so %%{_specdir}/… matches at %%install time (cwd during parse is not SPECS).
+local _noto_debug_dir = rpm.expand("%{_specdir}")
+local f = io.open(_noto_debug_dir .. "/debug-noto-fcconf-build.sh", "w")
 if f then
     f:write(_fcconfbuild)
     f:close()
 end
-local f = io.open("debug-noto-metainfo-build.sh", "w")
+f = io.open(_noto_debug_dir .. "/debug-noto-metainfo-build.sh", "w")
 if f then
     f:write(_metainfobuild)
     f:close()
@@ -1285,6 +1287,9 @@ set -x
 
 
 %changelog
+* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-12
+- Lua: write debug-noto-*-build.sh under %%{_specdir}, not cwd (fixes mock %%install "No such file" for metainfo script)
+
 * Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-11
 - Fix %%install path to generated metainfo script by invoking it from %%{_specdir}
 - Resolve "bash: ./debug-noto-metainfo-build.sh: No such file or directory" on ORBS
