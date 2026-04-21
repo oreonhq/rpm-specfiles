@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        13%{?dist}
+Release:        14%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -1252,25 +1252,34 @@ install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
                    %{buildroot}%{_fontconfig_confdir} \
                    %{buildroot}%{_metainfodir}
 
-IFS=":"
-for f in $(echo %{noto_fcconflist}); do
-    install -m 0644 -p $f %{buildroot}%{_fontconfig_templatedir}/$f
-    ln -s $(realpath --relative-to=%{_fontconfig_confdir}/ %{_fontconfig_templatedir}/$f) \
-	  %{buildroot}%{_fontconfig_confdir}/$f
+# bash -x prints the whole "for f in …" line every iteration when the list is huge (multi‑MB
+# logs, truncated lines, brittle CI). Use set +x and set -- with IFS=: instead of $(echo …).
+set +x
+IFS=:
+set -- %{noto_fcconflist}
+for f do
+    install -m 0644 -p "$f" "%{buildroot}%{_fontconfig_templatedir}/$f"
+    ln -s "$(realpath --relative-to="%{buildroot}%{_fontconfig_confdir}" "%{buildroot}%{_fontconfig_templatedir}/$f")" \
+	  "%{buildroot}%{_fontconfig_confdir}/$f"
 done
-for f in $(echo %{noto_metafilelist}); do
-    install -m 0644 -p $f %{buildroot}%{_metainfodir}/$f
+set -- %{noto_metafilelist}
+for f do
+    install -m 0644 -p "$f" "%{buildroot}%{_metainfodir}/$f"
 done
-
+set -x
 
 %check
-IFS=":"
-for f in $(echo %{noto_fcconflist}); do
-    xmllint --loaddtd --valid --nonet %{buildroot}%{_fontconfig_templatedir}/$f
+set +x
+IFS=:
+set -- %{noto_fcconflist}
+for f do
+    xmllint --loaddtd --valid --nonet "%{buildroot}%{_fontconfig_templatedir}/$f"
 done
-for f in $(echo %{noto_metafilelist}); do
-    appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/$f || (cat $f; exit 1)
+set -- %{noto_metafilelist}
+for f do
+    appstream-util validate-relax --nonet "%{buildroot}%{_metainfodir}/$f" || (cat "%{buildroot}%{_metainfodir}/$f"; exit 1)
 done
+set -x
 
 %files common
 %license */LICENSE
@@ -1278,6 +1287,10 @@ done
 
 
 %changelog
+* Mon Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-7
+- %%install/%%check: stop bash -x from reprinting the entire fcconf list every loop (set +x, set -- + IFS=:)
+- fontconfig symlinks: realpath relative to dirs under %%{buildroot}, not host /etc and /usr
+
 * Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-6
 - Metainfo: quoted heredoc for static XML then run fc-scan $(…) outside it (bash no longer sees nested quotes in one cat)
 

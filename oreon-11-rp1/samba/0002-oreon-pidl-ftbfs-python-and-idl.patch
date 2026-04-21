@@ -67,7 +67,7 @@ index 3602ba9..d0e5e96 100644
 -                       perfcount.idl secrets.idl
                         smbXsrv.idl
 +                    ''',
-+                    options='--includedir=%s --header --ndr-parser --client' % topinclude,
++                    options='--includedir=%s --header --ndr-parser --client --python' % topinclude,
 +                    output_dir='../gen_ndr')
 +
 +bld.SAMBA_PIDL_LIST('PIDL',
