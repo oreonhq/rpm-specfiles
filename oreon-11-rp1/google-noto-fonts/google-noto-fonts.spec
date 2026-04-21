@@ -161,35 +161,35 @@ set -x
 * Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-17
 - gen.lua metainfo: use fc-scan format \\n instead of a real newline inside -f so Fedora 43 mock emits <provides> (fixes ORBS %%install "No family names provided")
 
-* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-16
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-16
 - Load gen.lua from cwd, %%{_sourcedir}, or %%{_specdir} (rpmbuild %%{_specdir} is SPECS not the git tree, so spectool from the package dir must find Source9 by basename)
 
-* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-15
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-15
 - Move large embedded %%{lua:…} body to Source9 google-noto-fonts.gen.lua and load with dofile (rpmspec fails on megabyte inline lua with "unclosed macro or bad line continuation")
 - Metainfo debug script: expanded buildroot path and fc-scan %% escapes kept in gen.lua
 
-* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-14
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-14
 - Lua metainfo root path: build %%{RPM_BUILD_ROOT} fallback with string.char(36) so rpmspec does not treat $ as macro syntax (fixes "unclosed macro" parse error)
 
-* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-13
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-13
 - Metainfo shell in debug script: bake expanded %%{buildroot} via Lua or RPM_BUILD_ROOT fallback (literal %%{buildroot} in that file is never expanded by bash)
 
-* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-12
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-12
 - Lua: write debug-noto-*-build.sh under %%{_specdir}, not cwd (fixes mock %%install "No such file" for metainfo script)
 
-* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-11
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-11
 - Fix %%install path to generated metainfo script by invoking it from %%{_specdir}
 - Resolve "bash: ./debug-noto-metainfo-build.sh: No such file or directory" on ORBS
 
-* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-10
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-10
 - Run generated metainfo script file directly in %%install so XML files are created exactly as emitted by Lua
 - Avoid macro re-expansion mangling of the multiline metainfo command block
 
-* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-9
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-9
 - Fix metainfo generation redirection so org.fedoraproject.*.metainfo.xml files are actually created before install
 - Keep command substitutions inside a single heredoc write path and escape $PDX literal in XML header
 
-* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-8
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-8
 - Fix fcconf and metainfo loops to actually split colon lists in bash (%%install and %%check use read -a)
 - Avoid install "File name too long" from treating the whole %{noto_fcconflist} macro as one filename
 
