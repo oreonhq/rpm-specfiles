@@ -32,8 +32,12 @@
 # ctdb is enabled by default, you can disable it with: --without clustering
 %bcond clustering 1
 
-# Define _make_verbose if it doesn't exist (RHEL8)
-%{!?_make_verbose:%define _make_verbose V=1 VERBOSE=1}
+# Keep make output non-verbose by default.
+# ORBS log collection can truncate/crash when waf dumps very long full gcc argv
+# lines for every object, which hides the real failure reason.
+# Allow overriding from command line if needed:
+#   rpmbuild ... --define '_make_verbose V=1 VERBOSE=1'
+%{!?_make_verbose:%global _make_verbose %{nil}}
 
 # Samba waf plus distro LTO and unbounded -j on ORBS mock workers often OOMs mid-build.
 # Logs then look like rpmbuild "just died" with no clear gcc error line.

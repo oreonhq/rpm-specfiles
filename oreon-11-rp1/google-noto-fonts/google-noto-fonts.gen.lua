@@ -4,6 +4,11 @@ group["sans-serif"] = "Noto Sans"
 group["serif"] = "Noto Serif"
 group["monospace"] = "Noto Sans Mono"
 
+-- Wrap for a single-quoted bash argument (family names in metainfo echoes).
+local function bash_single_quote(s)
+  return "'" .. string.gsub(s, "'", "'\\''") .. "'"
+end
+
 --
 --alias: string: generic alias name
 --family: string: font family name
@@ -962,11 +967,10 @@ end
 local function genmetainfo(table)
 -- fc-scan format prints XML lines directly. Avoid nested echo|sh scripts that
 -- expand to one huge line per font (rpm logs every command, upload proxies choke).
--- Fontconfig treats \\n in -f as the letter n here, so use a real newline in the format.
 -- Release date is fixed at spec-parse time so the metainfo heredoc does not embed date-in-subshell
 -- (that plus inner double quotes broke bash: unexpected EOF while looking for matching '"').
--- Use literal \\n inside fc-scan -f (not a real newline). A real newline inside the -f
--- argument breaks fc-scan on Fedora 43 mock, so <provides> is empty and %%install aborts.
+-- Do not put a raw newline inside fc-scan -f (breaks mock). Append newline with printf after each scan.
+-- Always echo one <font> from the family name so grep provides never fails if find or fc-scan is empty.
 local epoch = tonumber(rpm.expand("0%{?SOURCE_DATE_EPOCH}"))
 if epoch == 0 then epoch = os.time() end
 local rel_date = os.date("!%Y-%m-%d", epoch)
@@ -981,8 +985,13 @@ local rootp = (bro ~= "" and not string.match(bro, "^%%{")) and bro or (string.c
 -- aborts install before <provides> is written. "|| :" keeps the pipeline success.
 -- Build fc-scan -f strings without literal "%{…}" in this spec: rpm's lexer parses inside %{lua:…}.
 local pct = string.char(37)
-local xmlfontname = '$(names=$(for f in $(cd "' .. rootp .. table.fontdir .. '" && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "' .. rootp .. table.fontdir .. '$f" -f "    <font>' .. pct .. '{fullname[0]}</font>\\n"; done | sort -u | grep -v ' .. Q .. 'font></font' .. Q .. ' || :); if test -n "$names"; then echo ' .. Q .. '  <provides>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$names"; echo ' .. Q .. '  </provides>' .. Q .. '; fi)'
-local xmlfontlang = '$(langs=$(for f in $(cd "' .. rootp .. table.fontdir .. '" && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "' .. rootp .. table.fontdir .. '$f" -f "' .. pct .. '{[]lang{    <lang>' .. pct .. '{lang}</lang>\\n' .. string.char(125) .. string.char(125) .. '"; done | sort -u); if test -n "$langs"; then echo ' .. Q .. '  <languages>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$langs"; echo ' .. Q .. '  </languages>' .. Q .. '; fi)'
+local find_inner = table.find_inner or ("find -regex './" .. table.filename .. "' -print")
+local xmlfontname_more = '$(names=$(for f in $(cd "' .. rootp .. table.fontdir .. '" && ' .. find_inner .. '); do fc-scan "' .. rootp .. table.fontdir .. '$f" -f "    <font>' .. pct .. '{fullname[0]}</font>"; printf ' .. Q .. '\\n' .. Q .. '; done | sort -u | grep -v ' .. Q .. 'font></font' .. Q .. ' || :); test -n "$names" && printf ' .. Q .. '%s\\n' .. Q .. ' "$names" || true)'
+local xmlfontprovides = "  echo " .. bash_single_quote("  <provides>") .. "\n"
+  .. "  echo " .. bash_single_quote("    <font>Noto " .. table.family .. "</font>") .. "\n"
+  .. "  " .. xmlfontname_more .. "\n"
+  .. "  echo " .. bash_single_quote("  </provides>") .. "\n"
+local xmlfontlang = '$(langs=$(for f in $(cd "' .. rootp .. table.fontdir .. '" && ' .. find_inner .. '); do fc-scan "' .. rootp .. table.fontdir .. '$f" -f "' .. pct .. '{[]lang{    <lang>' .. pct .. '{lang}</lang>' .. string.char(125) .. string.char(125) .. '"; printf ' .. Q .. '\\n' .. Q .. '; done | sort -u); if test -n "$langs"; then echo ' .. Q .. '  <languages>' .. Q .. '; printf ' .. Q .. '%s\\n' .. Q .. ' "$langs"; echo ' .. Q .. '  </languages>' .. Q .. '; fi)'
 -- Write static XML in a quoted heredoc so bash never parses fc-scan -f "..." inside
 -- the same document as unquoted command substitutions (fixes: unexpected EOF while looking for matching '"').
 local xml_prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
@@ -1006,7 +1015,7 @@ local xml_prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       .. "  cat <<'NOTO_METAINFO_H_9f3c2b1a'\n"
       .. xml_prefix
       .. "NOTO_METAINFO_H_9f3c2b1a\n"
-      .. "  " .. xmlfontname .. "\n"
+      .. xmlfontprovides
       .. "  " .. xmlfontlang .. "\n"
       .. "  cat <<'NOTO_METAINFO_T_9f3c2b1a'\n"
       .. "</component>\n"
@@ -1026,7 +1035,8 @@ end
 
 local function genfilelist(table)
     local pct = string.char(37)
-    local flist = '$(for f in $(cd ' .. pct .. '{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do echo "' .. table.fontdir .. '$f"; done)' .. '\\\n'
+    local find_inner = table.find_inner or ("find -regex './" .. table.filename .. "' -print")
+    local flist = '$(for f in $(cd ' .. pct .. '{buildroot}/' .. table.fontdir .. ' && ' .. find_inner .. '); do echo "' .. table.fontdir .. '$f"; done)' .. '\\\n'
     _filelistbuild = _filelistbuild .. "cat<<_EOL_>" .. table.pkgname .. ".list\\\n" .. flist .. "_EOL_\\\n"
 end
 
@@ -1055,8 +1065,17 @@ local function notopkg(table)
     prio = tostring(prio)
     local fcconf = prio .. '-' .. rpm.expand('%{fontconf}') .. '-' .. pname .. '.conf'
     local fontdir = rpm.expand('%{_fontbasedir}') .. '/google-noto' .. (table.variable and '-vf/' or '/')
-    local fontname = 'Noto' .. (table.fontname and table.fontname or string.gsub(table.family, ' ', '')) .. (table.variable and '\\\\(\\\\(-[A-Za-z]*\\\\)?\\\\[.*\\\\]\\\\|-VF\\\\).*tf' or '-\\\\([^\\\\[\\\\]]\\\\|[^-VF]\\\\)*.*tf')
+    local basename = 'Noto' .. (table.fontname and table.fontname or string.gsub(table.family, ' ', ''))
+    local fontname = basename .. (table.variable and '\\\\(\\\\(-[A-Za-z]*\\\\)?\\\\[.*\\\\]\\\\|-VF\\\\).*tf' or '-\\\\([^\\\\[\\\\]]\\\\|[^-VF]\\\\)*.*tf')
     local metaname = rpm.expand('%{fontorg}.') .. pkgname .. '.metainfo.xml'
+    if table.variable then
+      table.find_inner = "find -regex './" .. fontname .. "' -print"
+    else
+      table.find_inner = "find -maxdepth 1 \\( -name " .. bash_single_quote(basename .. "*.ttf")
+        .. " ! -name " .. bash_single_quote("*[*]*")
+        .. " ! -name " .. bash_single_quote("*-VF.ttf")
+        .. " \\) -print"
+    end
 
     table.fcconf = fcconf
     table.pkgname = pkgname

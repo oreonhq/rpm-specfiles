@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        24%{?dist}
+Release:        25%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -158,6 +158,9 @@ set -x
 
 
 %changelog
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-18
+- gen.lua metainfo: static packages use find -name PREFIX*.ttf (not only hyphenated -regex) so NotoSans.ttf matches, always echo a fallback <font>Noto FAMILY</font>, printf newline after fc-scan (fixes ORBS google-noto-sans-fonts "No family names provided")
+
 * Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-17
 - gen.lua metainfo: use fc-scan format \\n instead of a real newline inside -f so Fedora 43 mock emits <provides> (fixes ORBS %%install "No family names provided")
 
