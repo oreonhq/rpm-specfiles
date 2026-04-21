@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        15%{?dist}
+Release:        17%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -1245,7 +1245,7 @@ find %{buildroot}%{_fontbasedir}/google-noto %{buildroot}%{_fontbasedir}/google-
 find %{buildroot}%{_fontbasedir}/google-noto -maxdepth 1 -name 'NotoSansPhags-Pa*.ttf' -exec rm -f {} + 2>/dev/null || :
 
 # fc-scan in script expects fonts are already installed
-%{notobuild_metainfo}
+bash ./debug-noto-metainfo-build.sh
 %{notobuild_filelist}
 
 install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
@@ -1285,6 +1285,14 @@ set -x
 
 
 %changelog
+* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-10
+- Run generated metainfo script file directly in %%install so XML files are created exactly as emitted by Lua
+- Avoid macro re-expansion mangling of the multiline metainfo command block
+
+* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-9
+- Fix metainfo generation redirection so org.fedoraproject.*.metainfo.xml files are actually created before install
+- Keep command substitutions inside a single heredoc write path and escape $PDX literal in XML header
+
 * Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-8
 - Fix fcconf and metainfo loops to actually split colon lists in bash (%%install and %%check use read -a)
 - Avoid install "File name too long" from treating the whole %{noto_fcconflist} macro as one filename
