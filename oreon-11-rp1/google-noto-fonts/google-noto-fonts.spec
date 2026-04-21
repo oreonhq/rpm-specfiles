@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        22%{?dist}
+Release:        23%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -59,7 +59,33 @@ Summary:        Common files for Noto fonts
 %description common
 Common files for Google Noto fonts.
 
-%{lua:dofile(rpm.expand('%{_sourcedir}/google-noto-fonts.gen.lua'))}
+%{lua:
+local function slurp(p)
+  local f = io.open(p, "r")
+  if not f then return nil end
+  local s = f:read("*a")
+  f:close()
+  return s
+end
+local base = "google-noto-fonts.gen.lua"
+local sd = string.gsub(rpm.expand("%{_sourcedir}"), "/+$", "")
+local sp = string.gsub(rpm.expand("%{_specdir}"), "/+$", "")
+local paths = {
+  base,
+  "./" .. base,
+  sd .. "/" .. base,
+  sp .. "/" .. base,
+}
+local body = nil
+for i = 1, #paths do
+  body = slurp(paths[i])
+  if body then break end
+end
+if not body then
+  error("google-noto-fonts.gen.lua: run spectool from the dir that contains it, or install it under SOURCES or SPECS (Source9)")
+end
+assert(load(body))()
+}
 
 %prep
 %setup -q -c -n noto-fonts-%{srcver}
@@ -132,6 +158,9 @@ set -x
 
 
 %changelog
+* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-16
+- Load gen.lua from cwd, %%{_sourcedir}, or %%{_specdir} (rpmbuild %%{_specdir} is SPECS not the git tree, so spectool from the package dir must find Source9 by basename)
+
 * Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-15
 - Move large embedded %%{lua:…} body to Source9 google-noto-fonts.gen.lua and load with dofile (rpmspec fails on megabyte inline lua with "unclosed macro or bad line continuation")
 - Metainfo debug script: expanded buildroot path and fc-scan %% escapes kept in gen.lua
