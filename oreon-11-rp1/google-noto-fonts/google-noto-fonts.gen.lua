@@ -989,7 +989,8 @@ local find_inner = table.find_inner or ("find -regex './" .. table.filename .. "
 local xmlfontname_more = '$(names=$(for f in $(cd "' .. rootp .. table.fontdir .. '" && ' .. find_inner .. '); do fc-scan "' .. rootp .. table.fontdir .. '$f" -f "    <font>' .. pct .. '{fullname[0]}</font>"; printf ' .. Q .. '\\n' .. Q .. '; done | sort -u | grep -v ' .. Q .. 'font></font' .. Q .. ' || :); test -n "$names" && printf ' .. Q .. '%s\\n' .. Q .. ' "$names" || true)'
 local xmlfontprovides = "  echo " .. bash_single_quote("  <provides>") .. "\n"
   .. "  echo " .. bash_single_quote("    <font>Noto " .. table.family .. "</font>") .. "\n"
-  .. "  " .. xmlfontname_more .. "\n"
+  .. "  names_more=" .. xmlfontname_more .. "\n"
+  .. "  test -n \"$names_more\" && printf '%s\\n' \"$names_more\" || true\n"
   .. "  echo " .. bash_single_quote("  </provides>") .. "\n"
 local xmlfontlang = '$(langs=$(for f in $(cd "' .. rootp .. table.fontdir .. '" && ' .. find_inner .. '); do fc-scan "' .. rootp .. table.fontdir .. '$f" -f "' .. pct .. '{[]lang{    <lang>' .. pct .. '{lang}</lang>' .. string.char(125) .. string.char(125) .. '"; printf ' .. Q .. '\\n' .. Q .. '; done | sort -u); if test -n "$langs"; then echo ' .. Q .. '  <languages>' .. Q .. '; printf ' .. Q .. '%s\\n' .. Q .. ' "$langs"; echo ' .. Q .. '  </languages>' .. Q .. '; fi)'
 -- Write static XML in a quoted heredoc so bash never parses fc-scan -f "..." inside
@@ -1016,7 +1017,8 @@ local xml_prefix = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
       .. xml_prefix
       .. "NOTO_METAINFO_H_9f3c2b1a\n"
       .. xmlfontprovides
-      .. "  " .. xmlfontlang .. "\n"
+      .. "  langs_block=" .. xmlfontlang .. "\n"
+      .. "  test -n \"$langs_block\" && printf '%s\\n' \"$langs_block\" || true\n"
       .. "  cat <<'NOTO_METAINFO_T_9f3c2b1a'\n"
       .. "</component>\n"
       .. "NOTO_METAINFO_T_9f3c2b1a\n"

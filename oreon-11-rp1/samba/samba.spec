@@ -35,9 +35,7 @@
 # Keep make output non-verbose by default.
 # ORBS log collection can truncate/crash when waf dumps very long full gcc argv
 # lines for every object, which hides the real failure reason.
-# Allow overriding from command line if needed:
-#   rpmbuild ... --define '_make_verbose V=1 VERBOSE=1'
-%{!?_make_verbose:%global _make_verbose %{nil}}
+%global _make_verbose %{nil}
 
 # Samba waf plus distro LTO and unbounded -j on ORBS mock workers often OOMs mid-build.
 # Logs then look like rpmbuild "just died" with no clear gcc error line.
@@ -1511,7 +1509,7 @@ export PYTHONARCHDIR=%{python3_sitearch}
         --systemd-samba-extra=%{_systemd_extra}
 
 # Do not use %%make_build, make is just a wrapper around waf in Samba!
-%{__make} %{?_smp_mflags} %{_make_verbose}
+%{__make} %{?_smp_mflags}
 
 pushd pidl
 %__perl Makefile.PL PREFIX=%{_prefix}
@@ -1527,7 +1525,7 @@ popd
 cd "samba-%{version}%{pre_release}"
 %if !%{with testsuite}
 # Do not use %%make_install, make is just a wrapper around waf in Samba!
-%{__make} %{?_smp_mflags} %{_make_verbose} install DESTDIR=%{buildroot}
+%{__make} %{?_smp_mflags} install DESTDIR=%{buildroot}
 
 install -d -m 0755 %{buildroot}/usr/{sbin,bin}
 install -d -m 0755 %{buildroot}%{_libdir}/security
