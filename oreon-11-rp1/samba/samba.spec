@@ -241,6 +241,7 @@ Source201:      README.downgrade
 Source202:      samba.abignore
 
 Patch:          0001-printing-Set-default-value-in-case-of-non-exisiting-.patch
+Patch1:         0002-oreon-pidl-ftbfs-python-and-idl.patch
 
 Requires(pre): %{name}-common = %{samba_depver}
 Requires: %{name}-common = %{samba_depver}
@@ -1364,6 +1365,7 @@ else
 fi
 cd "samba-%{version}%{pre_release}"
 %patch -P0 -p1
+%patch -P1 -p1
 
 # Make sure we do not build with heimdal code
 rm -rfv third_party/heimdal

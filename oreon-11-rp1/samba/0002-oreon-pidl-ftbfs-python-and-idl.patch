@@ -1,0 +1,73 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Oreon <oreon@local>
+Date: Mon, 20 Apr 2026 17:05:24 -0700
+Subject: [PATCH] Oreon: pidl Python ignore/skip, relax NDR client errors, split IDL python
+
+Fix pidl FTBFS on newer Perl (struct timeval, smbXsrv [ignore], irpc/winbind client stubs).
+---
+--- a/pidl/lib/Parse/Pidl/Samba4/Python.pm
++++ b/pidl/lib/Parse/Pidl/Samba4/Python.pm
+@@ -165,6 +165,10 @@
+ sub PythonElementGetSet($$$$$$) {
+ 	my ($self, $name, $cname, $ename, $e, $env) = @_;
+ 
++	if (has_property($e, "ignore") or has_property($e, "skip")) {
++		return;
++	}
++
+ 	my $varname = "object->$ename";
+ 	$self->pidl("static PyObject *py_$name\_get_$e->{NAME}(PyObject *obj, void *closure)");
+ 	$self->pidl("{");
+@@ -215,6 +219,7 @@
+ 
+ 	if ($#{$d->{ELEMENTS}} > -1) {
+ 		foreach my $e (@{$d->{ELEMENTS}}) {
++			next if (has_property($e, "ignore") or has_property($e, "skip"));
+ 			$self->PythonElementGetSet($name, $cname, $e->{NAME}, $e, $env);
+ 		}
+ 
+@@ -222,6 +227,7 @@
+ 		$self->pidl("static PyGetSetDef ".$getsetters."[] = {");
+ 		$self->indent;
+ 		foreach my $e (@{$d->{ELEMENTS}}) {
++			next if (has_property($e, "ignore") or has_property($e, "skip"));
+ 			my $etype = "";
+ 			if (ref($e->{TYPE}) eq "HASH") {
+ 				$etype = $e->{TYPE}->{NAME};
+--- a/pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm
++++ b/pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm
+@@ -793,7 +793,7 @@
+ 		$self->pidl_both(" */");
+ 		$self->pidl_both("");
+ 
+-		error($e->{ORIGINAL}, "$fn->{NAME}: [out] argument '$e->{NAME}' $reason, skip client functions");
++		warning($e->{ORIGINAL}, "$fn->{NAME}: [out] argument '$e->{NAME}' $reason, skip client functions");
+ 		return;
+ 	}
+ 
+--- a/source3/librpc/idl/wscript_build
++++ b/source3/librpc/idl/wscript_build
+@@ -6,8 +6,13 @@
+ 
+ bld.SAMBA_PIDL_LIST('PIDL',
+                     '''open_files.idl
+-                       perfcount.idl secrets.idl
+                        smbXsrv.idl
++                    ''',
++                    options='--includedir=%s --header --ndr-parser --client' % topinclude,
++                    output_dir='../gen_ndr')
++
++bld.SAMBA_PIDL_LIST('PIDL',
++                    '''perfcount.idl secrets.idl
+                        leases_db.idl
+                        rpcd_witness.idl
+                     ''',
+--- a/source4/librpc/idl/wscript_build
++++ b/source4/librpc/idl/wscript_build
+@@ -13,5 +13,5 @@
+ 
+ bld.SAMBA_PIDL_LIST('PIDL',
+ 		    source='''irpc.idl''',
+-                    options="--includedir=%s --header --ndr-parser --client --python" % topinclude,
++                    options="--includedir=%s --header --ndr-parser --client" % topinclude,
+                     output_dir='../gen_ndr')
