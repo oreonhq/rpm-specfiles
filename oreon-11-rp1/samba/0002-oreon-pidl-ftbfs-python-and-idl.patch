@@ -1,13 +1,35 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Oreon <oreon@local>
-Date: Mon, 20 Apr 2026 17:05:24 -0700
-Subject: [PATCH] Oreon: pidl Python ignore/skip, relax NDR client errors, split IDL python
+Date: Mon, 20 Apr 2026 18:31:30 -0700
+Subject: [PATCH] Oreon: pidl Python ignore/skip, relax NDR client errors, split source3 IDL python
 
-Fix pidl FTBFS on newer Perl (struct timeval, smbXsrv [ignore], irpc/winbind client stubs).
+Fix pidl FTBFS on newer Perl (struct timeval, smbXsrv [ignore], winbind client stubs).
+Keep irpc.idl --python so py_irpc.c is generated for source4 Python bindings.
+
 ---
+ pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm | 2 +-
+ pidl/lib/Parse/Pidl/Samba4/Python.pm     | 6 ++++++
+ source3/librpc/idl/wscript_build         | 7 ++++++-
+ 3 files changed, 13 insertions(+), 2 deletions(-)
+
+diff --git a/pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm b/pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm
+index 84e2beb..4418137 100644
+--- a/pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm
++++ b/pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm
+@@ -793,7 +793,7 @@ sub ParseFunction($$$)
+ 		$self->pidl_both(" */");
+ 		$self->pidl_both("");
+ 
+-		error($e->{ORIGINAL}, "$fn->{NAME}: [out] argument '$e->{NAME}' $reason, skip client functions");
++		warning($e->{ORIGINAL}, "$fn->{NAME}: [out] argument '$e->{NAME}' $reason, skip client functions");
+ 		return;
+ 	}
+ 
+diff --git a/pidl/lib/Parse/Pidl/Samba4/Python.pm b/pidl/lib/Parse/Pidl/Samba4/Python.pm
+index b342704..3b3898e 100644
 --- a/pidl/lib/Parse/Pidl/Samba4/Python.pm
 +++ b/pidl/lib/Parse/Pidl/Samba4/Python.pm
-@@ -165,6 +165,10 @@
+@@ -165,6 +165,10 @@ sub FromPythonToUnionFunction($$$$$)
  sub PythonElementGetSet($$$$$$) {
  	my ($self, $name, $cname, $ename, $e, $env) = @_;
  
@@ -18,7 +40,7 @@ Fix pidl FTBFS on newer Perl (struct timeval, smbXsrv [ignore], irpc/winbind cli
  	my $varname = "object->$ename";
  	$self->pidl("static PyObject *py_$name\_get_$e->{NAME}(PyObject *obj, void *closure)");
  	$self->pidl("{");
-@@ -215,6 +219,7 @@
+@@ -215,6 +219,7 @@ sub PythonStruct($$$$$$)
  
  	if ($#{$d->{ELEMENTS}} > -1) {
  		foreach my $e (@{$d->{ELEMENTS}}) {
@@ -26,7 +48,7 @@ Fix pidl FTBFS on newer Perl (struct timeval, smbXsrv [ignore], irpc/winbind cli
  			$self->PythonElementGetSet($name, $cname, $e->{NAME}, $e, $env);
  		}
  
-@@ -222,6 +227,7 @@
+@@ -222,6 +227,7 @@ sub PythonStruct($$$$$$)
  		$self->pidl("static PyGetSetDef ".$getsetters."[] = {");
  		$self->indent;
  		foreach my $e (@{$d->{ELEMENTS}}) {
@@ -34,20 +56,11 @@ Fix pidl FTBFS on newer Perl (struct timeval, smbXsrv [ignore], irpc/winbind cli
  			my $etype = "";
  			if (ref($e->{TYPE}) eq "HASH") {
  				$etype = $e->{TYPE}->{NAME};
---- a/pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm
-+++ b/pidl/lib/Parse/Pidl/Samba4/NDR/Client.pm
-@@ -793,7 +793,7 @@
- 		$self->pidl_both(" */");
- 		$self->pidl_both("");
- 
--		error($e->{ORIGINAL}, "$fn->{NAME}: [out] argument '$e->{NAME}' $reason, skip client functions");
-+		warning($e->{ORIGINAL}, "$fn->{NAME}: [out] argument '$e->{NAME}' $reason, skip client functions");
- 		return;
- 	}
- 
+diff --git a/source3/librpc/idl/wscript_build b/source3/librpc/idl/wscript_build
+index 3602ba9..d0e5e96 100644
 --- a/source3/librpc/idl/wscript_build
 +++ b/source3/librpc/idl/wscript_build
-@@ -6,8 +6,13 @@
+@@ -6,8 +6,13 @@ topinclude=os.path.join(bld.srcnode.abspath(), 'librpc/idl')
  
  bld.SAMBA_PIDL_LIST('PIDL',
                      '''open_files.idl
@@ -62,12 +75,4 @@ Fix pidl FTBFS on newer Perl (struct timeval, smbXsrv [ignore], irpc/winbind cli
                         leases_db.idl
                         rpcd_witness.idl
                      ''',
---- a/source4/librpc/idl/wscript_build
-+++ b/source4/librpc/idl/wscript_build
-@@ -13,5 +13,5 @@
- 
- bld.SAMBA_PIDL_LIST('PIDL',
- 		    source='''irpc.idl''',
--                    options="--includedir=%s --header --ndr-parser --client --python" % topinclude,
-+                    options="--includedir=%s --header --ndr-parser --client" % topinclude,
-                     output_dir='../gen_ndr')
+

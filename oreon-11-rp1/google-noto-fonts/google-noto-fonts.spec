@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        12%{?dist}
+Release:        13%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -1030,7 +1030,9 @@ local epoch = tonumber(rpm.expand("0%{?SOURCE_DATE_EPOCH}"))
 if epoch == 0 then epoch = os.time() end
 local rel_date = os.date("!%Y-%m-%d", epoch)
 local Q = string.char(39)
-local xmlfontname = '$(names=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "    <font>%{fullname[0]}</font>' .. nl .. '"; done | sort -u | grep -v ' .. Q .. 'font></font' .. Q .. '); if test -n "$names"; then echo ' .. Q .. '  <provides>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$names"; echo ' .. Q .. '  </provides>' .. Q .. '; fi)'
+-- grep -v exits 1 when it drops every line (or stdin empty); with bash -e that
+-- aborts %%install before <provides> is written. "|| :" keeps the pipeline success.
+local xmlfontname = '$(names=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "    <font>%{fullname[0]}</font>' .. nl .. '"; done | sort -u | grep -v ' .. Q .. 'font></font' .. Q .. ' || :); if test -n "$names"; then echo ' .. Q .. '  <provides>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$names"; echo ' .. Q .. '  </provides>' .. Q .. '; fi)'
 local xmlfontlang = '$(langs=$(for f in $(cd %{buildroot}/' .. table.fontdir .. ' && find -regex \'./' .. table.filename .. '\' -print); do fc-scan "%{buildroot}' .. table.fontdir .. '$f" -f "%{[]lang{    <lang>%{lang}</lang>' .. nl .. '}}"; done | sort -u); if test -n "$langs"; then echo ' .. Q .. '  <languages>' .. Q .. '; printf ' .. Q .. '%s\n' .. Q .. ' "$langs"; echo ' .. Q .. '  </languages>' .. Q .. '; fi)'
 -- Write static XML in a quoted heredoc so bash never parses fc-scan -f "..." inside
 -- the same document as unquoted $(…) (fixes: unexpected EOF while looking for matching '"').
