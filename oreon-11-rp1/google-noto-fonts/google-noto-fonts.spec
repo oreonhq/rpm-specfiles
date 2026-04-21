@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        26%{?dist}
+Release:        27%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -158,6 +158,9 @@ set -x
 
 
 %changelog
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-20
+- gen.lua: define notobuild_filelist macro (%%install used it but it was never defined, leaving literal %{notobuild_filelist} in shell and causing "fg: no job control")
+
 * Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-19
 - gen.lua metainfo: print command-substitution output with printf (do not execute XML lines as shell commands), fixes debug-noto-metainfo-build.sh "<font>Noto: command not found" and "<languages>: command not found"
 

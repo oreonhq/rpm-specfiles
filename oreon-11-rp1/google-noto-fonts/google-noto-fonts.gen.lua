@@ -1172,3 +1172,4 @@ end
 
 rpm.define("notobuild_fcconf " .. _fcconfbuild .. "\n")
 rpm.define("notobuild_metainfo " .. _metainfobuild .. "\n")
+rpm.define("notobuild_filelist " .. _filelistbuild .. "\n")

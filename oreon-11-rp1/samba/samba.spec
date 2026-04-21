@@ -1508,8 +1508,9 @@ export PYTHONARCHDIR=%{python3_sitearch}
 %endif
         --systemd-samba-extra=%{_systemd_extra}
 
-# Do not use %%make_build, make is just a wrapper around waf in Samba!
-%{__make} %{?_smp_mflags}
+# Do not use %%make_build, make is just a wrapper around waf in Samba.
+# Call waf directly to avoid verbose "runner ['gcc', ...]" argv dumps in ORBS logs.
+./buildtools/bin/waf build --jobs=%{_smp_build_ncpus}
 
 pushd pidl
 %__perl Makefile.PL PREFIX=%{_prefix}
@@ -1524,8 +1525,8 @@ popd
 %install
 cd "samba-%{version}%{pre_release}"
 %if !%{with testsuite}
-# Do not use %%make_install, make is just a wrapper around waf in Samba!
-%{__make} %{?_smp_mflags} install DESTDIR=%{buildroot}
+# Do not use %%make_install, make is just a wrapper around waf in Samba.
+./buildtools/bin/waf install --destdir=%{buildroot}
 
 install -d -m 0755 %{buildroot}/usr/{sbin,bin}
 install -d -m 0755 %{buildroot}%{_libdir}/security
