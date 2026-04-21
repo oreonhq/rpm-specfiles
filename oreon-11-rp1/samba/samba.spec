@@ -35,6 +35,11 @@
 # Define _make_verbose if it doesn't exist (RHEL8)
 %{!?_make_verbose:%define _make_verbose V=1 VERBOSE=1}
 
+# Samba waf plus distro LTO and unbounded -j on ORBS mock workers often OOMs mid-build.
+# Logs then look like rpmbuild "just died" with no clear gcc error line.
+%global _lto_cflags %{nil}
+%global _smp_mflags -j4
+
 # Build with Active Directory Domain Controller support by default on Fedora
 %if 0%{?fedora}
 %bcond dc 1
@@ -352,12 +357,6 @@ Provides:      bundled(ngtcp2)
 
 %if %{with varlink}
 BuildRequires: pkgconfig(libvarlink) >= 24
-%endif
-
-%ifnarch i686
-%if 0%{?fedora} >= 37
-BuildRequires: mold
-%endif
 %endif
 
 %if %{with vfs_glusterfs}
@@ -1425,8 +1424,7 @@ cd "samba-%{version}%{pre_release}"
 # TODO: resolve underlinked python modules
 export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 
-# Force bfd linker for Samba on ORBS.
-# mold emits version-script warnings that become fatal with distro ld error flags.
+# Force bfd linker for Samba on ORBS (mold plus version scripts tripped hardened ld).
 export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 
 %ifnarch i686 riscv64
