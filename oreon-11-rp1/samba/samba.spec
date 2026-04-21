@@ -1425,12 +1425,13 @@ cd "samba-%{version}%{pre_release}"
 # TODO: resolve underlinked python modules
 export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 
-# Use the mold linker if possible
+# Force bfd linker for Samba on ORBS.
+# mold emits version-script warnings that become fatal with distro ld error flags.
 export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 
 %ifnarch i686 riscv64
 %if 0%{?fedora} >= 37
-export LDFLAGS="%{__global_ldflags} -fuse-ld=mold"
+export LDFLAGS="%{__global_ldflags} -fuse-ld=bfd"
 export python_LDFLAGS="$(echo ${LDFLAGS} | sed -e 's/-Wl,-z,defs//g')"
 #endif fedora >= 37
 %endif
