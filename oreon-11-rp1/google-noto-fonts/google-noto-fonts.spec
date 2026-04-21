@@ -1287,7 +1287,7 @@ set -x
 
 
 %changelog
-* Mon Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-7
+* Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-7
 - %%install/%%check: stop bash -x from reprinting the entire fcconf list every loop (set +x, set -- + IFS=:)
 - fontconfig symlinks: realpath relative to dirs under %%{buildroot}, not host /etc and /usr
 
