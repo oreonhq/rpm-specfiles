@@ -1073,10 +1073,10 @@ local function notopkg(table)
     if table.variable then
       table.find_inner = "find -regex './" .. fontname .. "' -print"
     else
-      table.find_inner = "find -maxdepth 1 \\( -name " .. bash_single_quote(basename .. "*.ttf")
+      table.find_inner = "find -maxdepth 1 \\\\( -name " .. bash_single_quote(basename .. "*.ttf")
         .. " ! -name " .. bash_single_quote("*[*]*")
         .. " ! -name " .. bash_single_quote("*-VF.ttf")
-        .. " \\) -print"
+        .. " \\\\) -print"
     end
 
     table.fcconf = fcconf

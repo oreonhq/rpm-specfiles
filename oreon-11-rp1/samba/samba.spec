@@ -1371,9 +1371,31 @@ cd "samba-%{version}%{pre_release}"
 # pidl with --python and the build dies on missing gen_ndr/py_irpc.c. The old perl fix never matched
 # because the real option string includes --header before --ndr-parser --client.
 sed -i 's/--header --ndr-parser --client" %% topinclude/--header --ndr-parser --client --python" %% topinclude/' source4/librpc/idl/wscript_build
-# smbXsrv.idl must run pidl with --python (missing gen_ndr/py_smbXsrv.c otherwise). Do not touch
-# open_files.idl in the same file, which must stay without --python (Python timeval/timespec FTBFS).
-sed -i '/smbXsrv\.idl/,+2{/options=/s/--ndr-parser --client'"'"' %/--ndr-parser --client --python'"'"' %/}' source3/librpc/idl/wscript_build
+# smbXsrv.idl must run pidl with --python (missing gen_ndr/py_smbXsrv.c otherwise), but
+# open_files.idl must stay without --python (Python timeval/timespec FTBFS). Keep this scoped.
+python3 - <<'PY'
+from pathlib import Path
+
+path = Path("source3/librpc/idl/wscript_build")
+lines = path.read_text(encoding="utf-8").splitlines(True)
+
+current = None
+for i, line in enumerate(lines):
+    if "'''open_files.idl" in line:
+        current = "open_files"
+    elif "'''smbXsrv.idl" in line:
+        current = "smbXsrv"
+    elif line.lstrip().startswith("bld.SAMBA_PIDL_LIST("):
+        current = None
+
+    if "options='--includedir=%s --header --ndr-parser --client" in line:
+        if current == "open_files":
+            lines[i] = line.replace(" --python", "")
+        elif current == "smbXsrv" and "--python" not in line:
+            lines[i] = line.replace("--client", "--client --python", 1)
+
+path.write_text("".join(lines), encoding="utf-8")
+PY
 
 # Make sure we do not build with heimdal code
 rm -rfv third_party/heimdal
