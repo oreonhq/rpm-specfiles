@@ -1357,14 +1357,13 @@ gzip -dc '%{SOURCE0}' | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
 cd "%{_builddir}"
 rm -rf "samba-%{version}%{pre_release}"
 if gzip -t '%{SOURCE0}' 2>/dev/null; then
-  tar -xzf '%{SOURCE0}'
+  tar -xzf '%{SOURCE0}' --strip-components=1
 elif xz -t '%{SOURCE0}' 2>/dev/null; then
-  xzcat '%{SOURCE0}' | tar -xf -
+  xzcat '%{SOURCE0}' | tar -xf - --strip-components=1
 else
   echo "Cannot unpack %{SOURCE0} (not gzip or xz)." >&2
   exit 1
 fi
-cd "samba-%{version}%{pre_release}"
 %patch -P0 -p1
 %patch -P1 -p1
 # Some 0002 revisions mis-merged and dropped --python from the irpc.idl pidl stanza, so waf never runs
@@ -1408,7 +1407,6 @@ sed -i 's/#define WINBINDD_PRIV_SOCKET_SUBDIR.*/#define WINBINDD_PRIV_SOCKET_SUB
 %endif
 
 %build
-cd "samba-%{version}%{pre_release}"
 export PYTHONHASHSEED=1
 %if %{with includelibs}
 %global _talloc_lib ,talloc,pytalloc,pytalloc-util
@@ -1550,7 +1548,6 @@ doxygen Doxyfile
 popd
 
 %install
-cd "samba-%{version}%{pre_release}"
 export PYTHONHASHSEED=1
 %if !%{with testsuite}
 # Do not use %%make_install, make is just a wrapper around waf in Samba.
@@ -1695,7 +1692,6 @@ touch %{buildroot}%{_libexecdir}/ctdb/statd_callout
 %endif
 
 %check
-cd "samba-%{version}%{pre_release}"
 export PYTHONHASHSEED=1
 %if %{with testsuite}
 #

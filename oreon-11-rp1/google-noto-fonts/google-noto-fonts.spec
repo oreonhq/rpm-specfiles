@@ -99,7 +99,7 @@ printf '%s' '%{noto_metafilelist}' | tr ':' '\n' > "%{_builddir}/noto-metainfo-i
 %if %{cionly}
 exit 1
 %endif
-%{notobuild_fcconf}
+bash "%{_specdir}/debug-noto-fcconf-build.sh"
 
 
 %install
@@ -123,7 +123,7 @@ find %{buildroot}%{_fontbasedir}/google-noto -maxdepth 1 -name 'NotoSansPhags-Pa
 
 # fc-scan in script expects fonts are already installed
 bash "%{_specdir}/debug-noto-metainfo-build.sh"
-%{notobuild_filelist}
+bash "%{_specdir}/debug-noto-filelist-build.sh"
 
 install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
                    %{buildroot}%{_fontconfig_confdir} \

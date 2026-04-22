@@ -1170,6 +1170,11 @@ if f then
     f:write(_metainfobuild)
     f:close()
 end
+f = io.open(_noto_debug_dir .. "/debug-noto-filelist-build.sh", "w")
+if f then
+    f:write(_filelistbuild)
+    f:close()
+end
 
 rpm.define("notobuild_fcconf " .. _fcconfbuild .. "\n")
 rpm.define("notobuild_metainfo " .. _metainfobuild .. "\n")
