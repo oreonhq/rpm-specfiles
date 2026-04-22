@@ -1685,6 +1685,8 @@ rm -f %{buildroot}%{_mandir}/man3/PyLdb*
 # CTDB
 %if %{with clustering}
 touch %{buildroot}%{_libexecdir}/ctdb/statd_callout
+# Remove duplicate event scripts in /etc that are already in /usr/share
+rm -rf %{buildroot}%{_sysconfdir}/ctdb/events/legacy
 #endif with clustering
 %endif
 
@@ -4051,7 +4053,7 @@ fi
 
 %{_sysconfdir}/ctdb/functions
 %{_sysconfdir}/ctdb/nfs-linux-kernel-callout
-%ghost %{_sysconfdir}/ctdb/statd-callout
+%{_sysconfdir}/ctdb/statd-callout
 
 # CTDB scripts, no config files
 # script with executable bit means activated

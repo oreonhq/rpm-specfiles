@@ -792,8 +792,8 @@ local function genfcconf(table)
         end
     end
     local xml = [[
-<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE fontconfig SYSTEM \"urn:fontconfig:fonts.dtd\">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE fontconfig SYSTEM "urn:fontconfig:fonts.dtd">
 <fontconfig>
 ]]
     xml = xml .. _genfcconf(table.alias, table.family, table.lang, true)
@@ -824,13 +824,13 @@ local function genfcconf(table)
         if f then
             xml = ""
             for line in f:lines() do
-                xml = xml .. line:gsub("\n" .. '$', ""):gsub('%$', "\\\n")
+                xml = xml .. line:gsub("\n" .. '$', ""):gsub('%%', "%%%%")
             end
             xml = xml:gsub("\n\n" .. '$', "\n")
             f:close()
         end
     end
-    _fcconfbuild = _fcconfbuild .. "cat<<_EOL_>" .. table.fcconf .. "\\\n" .. xml .. "_EOL_\\\n"
+    _fcconfbuild = _fcconfbuild .. "cat <<'NOTO_FCCONF_9f3c2b1a' > " .. table.fcconf .. "\n" .. xml .. "\nNOTO_FCCONF_9f3c2b1a\n"
 end
 
 -- Borrowed from fonts-rpm-macros
@@ -1038,8 +1038,8 @@ end
 local function genfilelist(table)
     local pct = string.char(37)
     local find_inner = table.find_inner or ("find -regex './" .. table.filename .. "' -print")
-    local flist = '$(for f in $(cd ' .. pct .. '{buildroot}/' .. table.fontdir .. ' && ' .. find_inner .. '); do echo "' .. table.fontdir .. '$f"; done)' .. '\\\n'
-    _filelistbuild = _filelistbuild .. "cat<<_EOL_>" .. table.pkgname .. ".list\\\n" .. flist .. "_EOL_\\\n"
+    local flist = '$(for f in $(cd ' .. pct .. '{buildroot}/' .. table.fontdir .. ' && ' .. find_inner .. '); do echo "' .. table.fontdir .. '$f"; done)'
+    _filelistbuild = _filelistbuild .. "cat <<NOTO_FILELIST_9f3c2b1a > " .. table.pkgname .. ".list\n" .. flist .. "\nNOTO_FILELIST_9f3c2b1a\n"
 end
 
 local function notopkg(table)
