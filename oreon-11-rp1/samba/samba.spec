@@ -1367,9 +1367,10 @@ fi
 cd "samba-%{version}%{pre_release}"
 %patch -P0 -p1
 %patch -P1 -p1
-# Some 0002 revisions mis-merged the source3 PIDL hunk and also touched source4/librpc/idl/wscript_build,
-# dropping --python from irpc.idl so gen_ndr/py_irpc.c is never emitted. Restore only that exact line.
-perl -pi -e 's/--ndr-parser --client" %% topinclude/--ndr-parser --client --python" %% topinclude/' source4/librpc/idl/wscript_build
+# Some 0002 revisions mis-merged and dropped --python from the irpc.idl pidl stanza, so waf never runs
+# pidl with --python and the build dies on missing gen_ndr/py_irpc.c. The old perl fix never matched
+# because the real option string includes --header before --ndr-parser --client.
+sed -i 's/--header --ndr-parser --client" %% topinclude/--header --ndr-parser --client --python" %% topinclude/' source4/librpc/idl/wscript_build
 
 # Make sure we do not build with heimdal code
 rm -rfv third_party/heimdal

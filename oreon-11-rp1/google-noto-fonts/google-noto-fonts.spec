@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        27%{?dist}
+Release:        28%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -125,31 +125,31 @@ install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
                    %{buildroot}%{_fontconfig_confdir} \
                    %{buildroot}%{_metainfodir}
 
-# bash -x prints the whole "for f in …" line every iteration when the list is huge (multi‑MB
-# logs, truncated lines, brittle CI). Use set +x and set -- with IFS=: instead of $(echo …).
+# bash -x plus megabyte-long colon lists blow log parsers and can hit argv limits. gen.lua writes
+# one name per line next to the spec (same as debug scripts). Iterate with while read.
 set +x
-IFS=: read -r -a noto_fcconf_items <<< "%{noto_fcconflist}"
-for f in "${noto_fcconf_items[@]}"; do
-    install -m 0644 -p "$f" "%{buildroot}%{_fontconfig_templatedir}/$f"
-    ln -s "$(realpath --relative-to="%{buildroot}%{_fontconfig_confdir}" "%{buildroot}%{_fontconfig_templatedir}/$f")" \
-	  "%{buildroot}%{_fontconfig_confdir}/$f"
-done
-IFS=: read -r -a noto_metainfo_items <<< "%{noto_metafilelist}"
-for f in "${noto_metainfo_items[@]}"; do
-    install -m 0644 -p "$f" "%{buildroot}%{_metainfodir}/$f"
-done
+while IFS= read -r f || [[ -n "${f}" ]]; do
+    [[ -z "${f}" ]] && continue
+    install -m 0644 -p "${f}" "%{buildroot}%{_fontconfig_templatedir}/${f}"
+    ln -s "$(realpath --relative-to="%{buildroot}%{_fontconfig_confdir}" "%{buildroot}%{_fontconfig_templatedir}/${f}")" \
+	  "%{buildroot}%{_fontconfig_confdir}/${f}"
+done < "%{_specdir}/noto-fcconf-install.list"
+while IFS= read -r f || [[ -n "${f}" ]]; do
+    [[ -z "${f}" ]] && continue
+    install -m 0644 -p "${f}" "%{buildroot}%{_metainfodir}/${f}"
+done < "%{_specdir}/noto-metainfo-install.list"
 set -x
 
 %check
 set +x
-IFS=: read -r -a noto_fcconf_items <<< "%{noto_fcconflist}"
-for f in "${noto_fcconf_items[@]}"; do
-    xmllint --loaddtd --valid --nonet "%{buildroot}%{_fontconfig_templatedir}/$f"
-done
-IFS=: read -r -a noto_metainfo_items <<< "%{noto_metafilelist}"
-for f in "${noto_metainfo_items[@]}"; do
-    appstream-util validate-relax --nonet "%{buildroot}%{_metainfodir}/$f" || (cat "%{buildroot}%{_metainfodir}/$f"; exit 1)
-done
+while IFS= read -r f || [[ -n "${f}" ]]; do
+    [[ -z "${f}" ]] && continue
+    xmllint --loaddtd --valid --nonet "%{buildroot}%{_fontconfig_templatedir}/${f}"
+done < "%{_specdir}/noto-fcconf-install.list"
+while IFS= read -r f || [[ -n "${f}" ]]; do
+    [[ -z "${f}" ]] && continue
+    appstream-util validate-relax --nonet "%{buildroot}%{_metainfodir}/${f}" || (cat "%{buildroot}%{_metainfodir}/${f}"; exit 1)
+done < "%{_specdir}/noto-metainfo-install.list"
 set -x
 
 %files common
@@ -158,6 +158,9 @@ set -x
 
 
 %changelog
+* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-28
+- gen.lua: write noto-fcconf-install.list and noto-metainfo-install.list (one name per line) for %%install/%%check so huge colon lists never hit bash argv limits or bash -x log truncation
+
 * Mon Apr 20 2026 Brandon Lester <blester@oreonhq.com> - 20260401-20
 - gen.lua: define notobuild_filelist macro (%%install used it but it was never defined, leaving literal %{notobuild_filelist} in shell and causing "fg: no job control")
 
