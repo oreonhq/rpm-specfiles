@@ -18,13 +18,13 @@
 %global debug_package %{nil}
 %endif
 
-# Build with internal talloc, tevent, tdb (default on for Oreon mock so
-# builddep does not need libtalloc-devel, libtdb-devel, python3-talloc-devel,
-# python3-tdb when those are not in the build root yet).
+# Build with internal talloc, tevent, tdb
 #
-# System libs: rpmbuild --rebuild --without=includelibs …
+# fedpkg mockbuild --with=testsuite --with=includelibs
+# or
+# rpmbuild --rebuild --with=testsuite --with=includelibs samba.src.rpm
 #
-%bcond includelibs 1
+%bcond includelibs 0
 
 # fedpkg mockbuild --with=ccache
 %bcond ccache 0
@@ -32,15 +32,8 @@
 # ctdb is enabled by default, you can disable it with: --without clustering
 %bcond clustering 1
 
-# Keep make output non-verbose by default.
-# ORBS log collection can truncate/crash when waf dumps very long full gcc argv
-# lines for every object, which hides the real failure reason.
-%global _make_verbose %{nil}
-
-# Samba waf plus distro LTO and unbounded -j on ORBS mock workers often OOMs mid-build.
-# Logs then look like rpmbuild "just died" with no clear gcc error line.
-%global _lto_cflags %{nil}
-%global _smp_mflags -j4
+# Define _make_verbose if it doesn't exist (RHEL8)
+%{!?_make_verbose:%define _make_verbose V=1 VERBOSE=1}
 
 # Build with Active Directory Domain Controller support by default on Fedora
 %if 0%{?fedora}
@@ -227,9 +220,8 @@ Summary:        Server and Client software to interoperate with Windows machines
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://www.samba.org
 
-# Upstream ships .tar.gz. Do not rename to .tar.xz in the URL fragment (spectool
-# and mock keep gzip bytes then xzcat and gpgverify in %%prep both break).
-Source0:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.gz
+# This is a xz recompressed file of https://ftp.samba.org/pub/samba/samba-%%{version}%%{pre_release}.tar.gz
+Source0:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.gz#/samba-%{version}%{pre_release}.tar.xz
 Source1:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.asc
 Source2:        samba-pubkey_AA99442FB680B620.gpg
 
@@ -248,7 +240,6 @@ Source201:      README.downgrade
 Source202:      samba.abignore
 
 Patch:          0001-printing-Set-default-value-in-case-of-non-exisiting-.patch
-Patch1:         0002-oreon-pidl-ftbfs-python-and-idl.patch
 
 Requires(pre): %{name}-common = %{samba_depver}
 Requires: %{name}-common = %{samba_depver}
@@ -359,6 +350,12 @@ Provides:      bundled(ngtcp2)
 
 %if %{with varlink}
 BuildRequires: pkgconfig(libvarlink) >= 24
+%endif
+
+%ifnarch i686
+%if 0%{?fedora} >= 37
+BuildRequires: mold
+%endif
 %endif
 
 %if %{with vfs_glusterfs}
@@ -1346,55 +1343,12 @@ Provides: python3-ldb-devel = %{samba_depver}
 Python bindings for the LDB library
 
 %prep
-# Samba's detached .tar.asc signs the uncompressed tar stream (same bytes as
-# ``gzip -dc`` of the .tar.gz), not the gzip file. Verifying --data='%%{SOURCE0}'
-# always yields BAD signature.
 %if 0%{?fedora} || 0%{?rhel} >= 9
-gzip -dc '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
+xzcat %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %else
-gzip -dc '%{SOURCE0}' | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
+xzcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
 %endif
-cd "%{_builddir}"
-rm -rf "samba-%{version}%{pre_release}"
-if gzip -t '%{SOURCE0}' 2>/dev/null; then
-  tar -xzf '%{SOURCE0}' --strip-components=1
-elif xz -t '%{SOURCE0}' 2>/dev/null; then
-  xzcat '%{SOURCE0}' | tar -xf - --strip-components=1
-else
-  echo "Cannot unpack %{SOURCE0} (not gzip or xz)." >&2
-  exit 1
-fi
-%patch -P0 -p1
-%patch -P1 -p1
-# Some 0002 revisions mis-merged and dropped --python from the irpc.idl pidl stanza, so waf never runs
-# pidl with --python and the build dies on missing gen_ndr/py_irpc.c. The old perl fix never matched
-# because the real option string includes --header before --ndr-parser --client.
-sed -i 's/--header --ndr-parser --client" %% topinclude/--header --ndr-parser --client --python" %% topinclude/' source4/librpc/idl/wscript_build
-# smbXsrv.idl must run pidl with --python (missing gen_ndr/py_smbXsrv.c otherwise), but
-# open_files.idl must stay without --python (Python timeval/timespec FTBFS). Keep this scoped.
-python3 - <<'PY'
-from pathlib import Path
-
-path = Path("source3/librpc/idl/wscript_build")
-lines = path.read_text(encoding="utf-8").splitlines(True)
-
-current = None
-for i, line in enumerate(lines):
-    if "'''open_files.idl" in line:
-        current = "open_files"
-    elif "'''smbXsrv.idl" in line:
-        current = "smbXsrv"
-    elif line.lstrip().startswith("bld.SAMBA_PIDL_LIST("):
-        current = None
-
-    if "options='--includedir=%s --header --ndr-parser --client" in line:
-        if current == "open_files":
-            lines[i] = line.replace(" --python", "")
-        elif current == "smbXsrv" and "--python" not in line:
-            lines[i] = line.replace("--client", "--client --python", 1)
-
-path.write_text("".join(lines), encoding="utf-8")
-PY
+%autosetup -n samba-%{version}%{pre_release} -p1
 
 # Make sure we do not build with heimdal code
 rm -rfv third_party/heimdal
@@ -1407,7 +1361,6 @@ sed -i 's/#define WINBINDD_PRIV_SOCKET_SUBDIR.*/#define WINBINDD_PRIV_SOCKET_SUB
 %endif
 
 %build
-export PYTHONHASHSEED=1
 %if %{with includelibs}
 %global _talloc_lib ,talloc,pytalloc,pytalloc-util
 %global _tevent_lib ,tevent,pytevent
@@ -1451,12 +1404,12 @@ export PYTHONHASHSEED=1
 # TODO: resolve underlinked python modules
 export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 
-# Force bfd linker for Samba on ORBS (mold plus version scripts tripped hardened ld).
+# Use the mold linker if possible
 export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 
 %ifnarch i686 riscv64
 %if 0%{?fedora} >= 37
-export LDFLAGS="%{__global_ldflags} -fuse-ld=bfd"
+export LDFLAGS="%{__global_ldflags} -fuse-ld=mold"
 export python_LDFLAGS="$(echo ${LDFLAGS} | sed -e 's/-Wl,-z,defs//g')"
 #endif fedora >= 37
 %endif
@@ -1533,9 +1486,8 @@ export PYTHONARCHDIR=%{python3_sitearch}
 %endif
         --systemd-samba-extra=%{_systemd_extra}
 
-# Do not use %%make_build, make is just a wrapper around waf in Samba.
-# Call waf directly to avoid verbose "runner ['gcc', ...]" argv dumps in ORBS logs.
-./buildtools/bin/waf build --jobs=%{_smp_build_ncpus}
+# Do not use %%make_build, make is just a wrapper around waf in Samba!
+%{__make} %{?_smp_mflags} %{_make_verbose}
 
 pushd pidl
 %__perl Makefile.PL PREFIX=%{_prefix}
@@ -1548,10 +1500,9 @@ doxygen Doxyfile
 popd
 
 %install
-export PYTHONHASHSEED=1
 %if !%{with testsuite}
-# Do not use %%make_install, make is just a wrapper around waf in Samba.
-./buildtools/bin/waf install --destdir=%{buildroot}
+# Do not use %%make_install, make is just a wrapper around waf in Samba!
+%{__make} %{?_smp_mflags} %{_make_verbose} install DESTDIR=%{buildroot}
 
 install -d -m 0755 %{buildroot}/usr/{sbin,bin}
 install -d -m 0755 %{buildroot}%{_libdir}/security
@@ -1685,8 +1636,6 @@ rm -f %{buildroot}%{_mandir}/man3/PyLdb*
 # CTDB
 %if %{with clustering}
 touch %{buildroot}%{_libexecdir}/ctdb/statd_callout
-# Remove duplicate event scripts in /etc that are already in /usr/share
-rm -rf %{buildroot}%{_sysconfdir}/ctdb/events/legacy
 #endif with clustering
 %endif
 
@@ -1694,7 +1643,6 @@ rm -rf %{buildroot}%{_sysconfdir}/ctdb/events/legacy
 %endif
 
 %check
-export PYTHONHASHSEED=1
 %if %{with testsuite}
 #
 # samba3.smb2.timestamps.*:
@@ -4053,7 +4001,7 @@ fi
 
 %{_sysconfdir}/ctdb/functions
 %{_sysconfdir}/ctdb/nfs-linux-kernel-callout
-%{_sysconfdir}/ctdb/statd-callout
+%ghost %{_sysconfdir}/ctdb/statd-callout
 
 # CTDB scripts, no config files
 # script with executable bit means activated
