@@ -1409,6 +1409,7 @@ sed -i 's/#define WINBINDD_PRIV_SOCKET_SUBDIR.*/#define WINBINDD_PRIV_SOCKET_SUB
 
 %build
 cd "samba-%{version}%{pre_release}"
+export PYTHONHASHSEED=1
 %if %{with includelibs}
 %global _talloc_lib ,talloc,pytalloc,pytalloc-util
 %global _tevent_lib ,tevent,pytevent
@@ -1550,6 +1551,7 @@ popd
 
 %install
 cd "samba-%{version}%{pre_release}"
+export PYTHONHASHSEED=1
 %if !%{with testsuite}
 # Do not use %%make_install, make is just a wrapper around waf in Samba.
 ./buildtools/bin/waf install --destdir=%{buildroot}
@@ -1694,6 +1696,7 @@ touch %{buildroot}%{_libexecdir}/ctdb/statd_callout
 
 %check
 cd "samba-%{version}%{pre_release}"
+export PYTHONHASHSEED=1
 %if %{with testsuite}
 #
 # samba3.smb2.timestamps.*:
