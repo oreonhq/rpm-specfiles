@@ -93,5 +93,5 @@ export PYTHONARCHDIR=%{python3_sitearch}
 %ldconfig_scriptlets
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.15-1
+* Wed Apr 22 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.15-1
 - Prepare for Oreon 11 (RP1)
