@@ -33,7 +33,7 @@ in Unicode.\
 
 Name:           %{fontname}-fonts
 Version:        %{rpmver}
-Release:        28%{?dist}
+Release:        29%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
@@ -89,6 +89,10 @@ assert(load(body))()
 
 %prep
 %setup -q -c -n noto-fonts-%{srcver}
+# Split colon macros to one name per line under %%{_builddir}. Do not use %%{_specdir} for this:
+# parse-time Lua and %%prep/%%install can disagree on where the spec lives on ORBS workers.
+printf '%s' '%{noto_fcconflist}' | tr ':' '\n' > "%{_builddir}/noto-fcconf-install.list"
+printf '%s' '%{noto_metafilelist}' | tr ':' '\n' > "%{_builddir}/noto-metainfo-install.list"
 
 
 %build
@@ -125,19 +129,18 @@ install -m 0755 -d %{buildroot}%{_fontconfig_templatedir} \
                    %{buildroot}%{_fontconfig_confdir} \
                    %{buildroot}%{_metainfodir}
 
-# bash -x plus megabyte-long colon lists blow log parsers and can hit argv limits. gen.lua writes
-# one name per line next to the spec (same as debug scripts). Iterate with while read.
+# bash -x plus megabyte-long colon lists blow log parsers. Names are one per line in %%{_builddir} (see %%prep).
 set +x
 while IFS= read -r f || [[ -n "${f}" ]]; do
     [[ -z "${f}" ]] && continue
     install -m 0644 -p "${f}" "%{buildroot}%{_fontconfig_templatedir}/${f}"
     ln -s "$(realpath --relative-to="%{buildroot}%{_fontconfig_confdir}" "%{buildroot}%{_fontconfig_templatedir}/${f}")" \
 	  "%{buildroot}%{_fontconfig_confdir}/${f}"
-done < "%{_specdir}/noto-fcconf-install.list"
+done < "%{_builddir}/noto-fcconf-install.list"
 while IFS= read -r f || [[ -n "${f}" ]]; do
     [[ -z "${f}" ]] && continue
     install -m 0644 -p "${f}" "%{buildroot}%{_metainfodir}/${f}"
-done < "%{_specdir}/noto-metainfo-install.list"
+done < "%{_builddir}/noto-metainfo-install.list"
 set -x
 
 %check
@@ -145,11 +148,11 @@ set +x
 while IFS= read -r f || [[ -n "${f}" ]]; do
     [[ -z "${f}" ]] && continue
     xmllint --loaddtd --valid --nonet "%{buildroot}%{_fontconfig_templatedir}/${f}"
-done < "%{_specdir}/noto-fcconf-install.list"
+done < "%{_builddir}/noto-fcconf-install.list"
 while IFS= read -r f || [[ -n "${f}" ]]; do
     [[ -z "${f}" ]] && continue
     appstream-util validate-relax --nonet "%{buildroot}%{_metainfodir}/${f}" || (cat "%{buildroot}%{_metainfodir}/${f}"; exit 1)
-done < "%{_specdir}/noto-metainfo-install.list"
+done < "%{_builddir}/noto-metainfo-install.list"
 set -x
 
 %files common
@@ -158,6 +161,9 @@ set -x
 
 
 %changelog
+* Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-29
+- %%prep: write noto-fcconf-install.list and noto-metainfo-install.list under %%{_builddir} (printf plus tr). %%install/%%check read those paths so ORBS does not depend on parse-time files next to the spec in %%{_specdir}
+
 * Tue Apr 21 2026 Brandon Lester <blester@oreonhq.com> - 20260401-28
 - gen.lua: write noto-fcconf-install.list and noto-metainfo-install.list (one name per line) for %%install/%%check so huge colon lists never hit bash argv limits or bash -x log truncation
 

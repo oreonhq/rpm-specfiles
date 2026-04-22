@@ -1157,22 +1157,9 @@ A meta package for all Noto static font families
 
 rpm.define("noto_fcconflist " .. _fcconflist)
 rpm.define("noto_metafilelist " .. _metafilelist)
--- Write next to the spec so _specdir paths match at install time (cwd during parse is not SPECS).
+-- Install lists are written in %%prep under %%{_builddir} (colon to newlines) so %%install always
+-- finds them. Parse-time writes next to the spec were flaky on some workers (%%{_specdir} vs mock).
 local _noto_debug_dir = rpm.expand("%{_specdir}")
-local function _write_install_name_list(path, colonsep)
-  local out = io.open(path, "w")
-  if not out then
-    return
-  end
-  for part in string.gmatch(colonsep, "([^:]+)") do
-    if part ~= "" then
-      out:write(part .. "\n")
-    end
-  end
-  out:close()
-end
-_write_install_name_list(_noto_debug_dir .. "/noto-fcconf-install.list", _fcconflist)
-_write_install_name_list(_noto_debug_dir .. "/noto-metainfo-install.list", _metafilelist)
 local f = io.open(_noto_debug_dir .. "/debug-noto-fcconf-build.sh", "w")
 if f then
     f:write(_fcconfbuild)
