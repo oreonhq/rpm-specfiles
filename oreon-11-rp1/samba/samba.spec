@@ -1,6 +1,5 @@
 # The testsuite is disabled by default.
 #
-#
 # To build and run the tests use:
 #
 # fedpkg mockbuild --with testsuite
