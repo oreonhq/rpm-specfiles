@@ -292,6 +292,10 @@ BuildRequires: gawk
 BuildRequires: gnupg2
 BuildRequires: gnutls-devel >= 3.4.7
 BuildRequires: gpgme-devel
+# Doxygen (LDB apidocs) -> graphviz -> poppler, which needs gpgmepp. In mixed Oreon+Fedora
+# roots dnf can choose Fedora 1.x gpgmepp while gpgme-devel is Oreon 2.x; that cannot
+# be installed. Require the GPGME-2 C++ stack that matches this gpgme-devel.
+BuildRequires: gpgmepp >= 2.0.0-1
 BuildRequires: jansson-devel
 BuildRequires: krb5-devel >= %{required_mit_krb5}
 BuildRequires: libacl-devel

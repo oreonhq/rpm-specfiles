@@ -14,7 +14,7 @@
 Summary: PDF rendering library
 Name:    poppler
 Version: 26.01.0
-Release: 8%{?dist}
+Release: 9%{?dist}
 License: (GPL-2.0-only OR GPL-3.0-only) AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:     https://poppler.freedesktop.org/
 Source0: https://poppler.freedesktop.org/poppler-%{version}.tar.xz
@@ -53,6 +53,10 @@ BuildRequires: pkgconfig(libtiff-4)
 BuildRequires: pkgconfig(nss)
 BuildRequires: pkgconfig(poppler-data)
 BuildRequires: pkgconfig(libcurl)
+# Link against GPGME-2 C++ (libgpgmepp.so.7). Without this, cmake can pick 1.x Gpgmepp
+# from fedora, then runtime pulls libgpgmepp.so.6 while the distro ships gpgmepp 2 and
+# gpgme 2, and mixed stacks (e.g. samba build dep graph) cannot resolve.
+BuildRequires: gpgmepp-devel >= 2.0.0-1
 BuildRequires: cmake(Gpgmepp)
 %if 0%{?qt5}
 BuildRequires: pkgconfig(Qt5Core)
@@ -286,6 +290,10 @@ test "$(pkg-config --modversion poppler-qt6)" = "%{version}"
 %{_mandir}/man1/*
 
 %changelog
+* Wed Apr 22 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-9
+- BuildRequire gpgmepp-devel 2.x so we link to Gpgmepp from GPGME 2 (avoids .so.6 / .so.7
+  mix and broken builddep chains with gpgme 2, e.g. samba with doxygen)
+
 * Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-8
 - Rebuild
 
