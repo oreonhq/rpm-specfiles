@@ -132,7 +132,7 @@ URL: https://sourceware.org/binutils
 # correctly.  Note %%(echo) is used because you cannot directly set a
 # spec variable to a hexadecimal string value.
 
-%define commit_id %(echo "d712202846b")
+%define commit_id %(echo "c220f3ab8c0")
 
 #----End of Configure Options------------------------------------------------
 

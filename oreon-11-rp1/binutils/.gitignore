@@ -63,7 +63,9 @@ stamp-*
 /mpc*
 /gmp*
 /isl*
-/binutils-2.19.50.0.1-output-format.sed
+# Vendored; tracked in git (matches Fedora lookaside)
+# /binutils-2.19.50.0.1-output-format.sed
+/binutils-with-gold-2.46.50-c220f3ab8c0.tar.xz
 /binutils-2.44.50-13.fc43.src.rpm
 /binutils-with-gold-2.45.50-be970c68891.tar.gz
 /binutils-with-gold-2.45.50-ba5838a98fb.tar.gz

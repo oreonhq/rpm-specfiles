@@ -1071,7 +1071,7 @@ diff -rup bin.orig/ld/testsuite/ld-x86-64/sframe-pltgot-2.d binutils-2.43.50-55e
  }
  
 --- fred/binutils/testsuite/binutils-all/objdump.exp	2026-02-16 09:03:27.457277379 +0000
-+++ binutils-with-gold-2.46.50-2d306bf8a70/binutils/testsuite/binutils-all/objdump.exp	2026-02-16 09:03:30.592967621 +0000
++++ binutils-with-gold-2.46.50-c220f3ab8c0/binutils/testsuite/binutils-all/objdump.exp	2026-02-16 09:03:30.592967621 +0000
 @@ -957,7 +957,7 @@ proc test_objdump_S { } {
      }
  }
