@@ -215,13 +215,6 @@ URL: https://sourceware.org/binutils
 %define gold_tarball none
 
 #----------------------------------------------------------------------------
-# For snapshot, full Fedora lookaside URLs so spectool/curl and Source prep
-# that requires URLs can fetch. Bare filenames only work with fedpkg new-sources
-# and lookaside, not "URL sources via spectool" pipelines.
-# Tarball must match c220f3ab8c0 + src.f.o lookaside (same bytes as rawhide dist-git).
-%global binutils_lookaside_sha512 62ce8b5f4285d19184d56378a1d660ef993ce79071e3c36b036976f6a2a5727dc0f97d3c0c4f9654104142dea985f5ca2071fb0839ded5fe87dbe8d7d6e86575
-%global binutils_sed_lookaside_sha512 2f8686b0c8af13c98cda056824c2820416f6e2d003f70b78ccf5314525b9ee3684d421dfa83e638a2d42d06ea4d4bdaf5226b64d6ec26f7ff59c44ffb2a23dd2
-%global binutils_lookaside_base https://src.fedoraproject.org/repo/pkgs/rpms/binutils
 
 %if "%{source}" == "official-release"
 Source0: https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
@@ -231,12 +224,12 @@ Source0: binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "odd-pre-release"
 Source0: binutils-%%{version}.tar.xz
 %elif "%{source}" == "snapshot"
-Source0: %{binutils_lookaside_base}/binutils-with-gold-%{version}-%{commit_id}.tar.xz/sha512/%{binutils_lookaside_sha512}/binutils-with-gold-%{version}-%{commit_id}.tar.xz
+Source0: binutils-with-gold-%{version}-%{commit_id}.tar.xz
 %elif "%{source}" == "tarball"
 Source0: binutils-%{version}-%{commit_id}.tar.xz
 %endif
 
-Source1: %{binutils_lookaside_base}/binutils-2.19.50.0.1-output-format.sed/sha512/%{binutils_sed_lookaside_sha512}/binutils-2.19.50.0.1-output-format.sed
+Source1: binutils-2.19.50.0.1-output-format.sed
 
 %if "%{gold_tarball}" != "none"
 Source2: %{gold_tarball}.tar.xz

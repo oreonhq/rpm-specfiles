@@ -10,4 +10,4 @@
 /debugedit-5.2.tar.xz.sig
 /debugedit-5.3.tar.xz
 /debugedit-5.3.tar.xz.sig
-/gpgkey-CBA20376A15C6FFC11CD.gpg
+# gpgkey-CBA20376A15C6FFC11CD.gpg is tracked in git (no external key URL in spec)

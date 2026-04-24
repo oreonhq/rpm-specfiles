@@ -4,9 +4,9 @@ Release:        20.1%{?dist}
 Summary:        SRPM stage RPM packaging macros for Ansible collections
 
 License:        GPL-3.0-or-later
-URL:            https://src.fedoraproject.org/rpms/ansible-packaging
-Source0:        https://src.fedoraproject.org/rpms/ansible-packaging/raw/f44/f/macros.ansible-srpm
-Source1:        https://src.fedoraproject.org/rpms/ansible-packaging/raw/f44/f/COPYING
+URL:            https://github.com/ansible/ansible
+Source0:        macros.ansible-srpm
+Source1:        COPYING
 
 BuildArch:      noarch
 
