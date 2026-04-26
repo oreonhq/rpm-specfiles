@@ -45,12 +45,6 @@ install -p -m 0644 %{_sourcedir}/liveinst.desktop %{buildroot}%{_datadir}/applic
 %{_datadir}/centrio/
 %{_datadir}/applications/liveinst.desktop
 
-%post
-%systemd_post oreon-live-marker.service
-
-%preun
-%systemd_preun oreon-live-marker.service
-
 %changelog
 * Fri Feb 20 2026 Brandon Lester <blester@oreonhq.com> - 1.0-1
 - Prepare Centrio 2.0 for Oreon 11

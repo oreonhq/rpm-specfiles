@@ -108,10 +108,14 @@ else
 fi
 
 %post
-%glib2_gsettings_schema_post
+if [ -x %{_bindir}/glib-compile-schemas ]; then
+  %{_bindir}/glib-compile-schemas %{_datadir}/glib-2.0/schemas >/dev/null 2>&1 || :
+fi
 
 %postun
-%glib2_gsettings_schema_postun
+if [ -x %{_bindir}/glib-compile-schemas ]; then
+  %{_bindir}/glib-compile-schemas %{_datadir}/glib-2.0/schemas >/dev/null 2>&1 || :
+fi
 
 %files
 %license %{_licensedir}/%{name}/COPYING.LESSER
