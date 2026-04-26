@@ -58,11 +58,14 @@ replace @EXTRA@ '${extra_boot_args}' ${GRUB2DIR}/grub.cfg
 
 
 ## WHeeeeeeee, EFI.
+## gcd may live only under /usr/lib/efi/grub2/... (RPM payload). /boot/efi is
+## often %%ghost + %%post-copied, so squashfs-only runtimes can miss it and
+## must still be detected here or xorrisofs later grafts a missing EFI/BOOT.
 <% efiargs=""; efigraft=""; efiarch32=None; efiarch64=None %>
-%if exists("boot/efi/EFI/*/gcdia32.efi"):
+%if exists("boot/efi/EFI/*/gcdia32.efi") or glob("usr/lib/efi/grub2/*/EFI/*/gcdia32.efi"):
     <% efiarch32 = 'IA32' %>
 %endif
-%if exists("boot/efi/EFI/*/gcdx64.efi"):
+%if exists("boot/efi/EFI/*/gcdx64.efi") or glob("usr/lib/efi/grub2/*/EFI/*/gcdx64.efi"):
     <% efiarch64 = 'X64' %>
 %endif
 %if (efiarch32 or efiarch64):

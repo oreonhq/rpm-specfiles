@@ -3,7 +3,11 @@
 %global evr %{epoch}:%{version}-%{release}
 %global _libdir %{_exec_prefix}/lib
 
+%if 0%{?oreon}
+%global os_id oreon
+%else
 %global os_id %(eval echo $(grep ^ID= /etc/os-release | sed -e 's/^ID=//' -e 's/rhel/redhat/'))
+%endif
 %global grub_evr_dir %{_libdir}/efi/grub2/%{evr}
 %global grub_efi_dir %{grub_evr_dir}/EFI/%{os_id}
 

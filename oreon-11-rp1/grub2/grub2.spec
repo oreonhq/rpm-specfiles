@@ -17,7 +17,7 @@
 Name:		grub2
 Epoch:		1
 Version:	2.12
-Release:	56%{?dist}
+Release:	57%{?dist}
 Summary:	Bootloader with support for Linux, Multiboot and more
 License:	GPL-3.0-or-later
 URL:		http://www.gnu.org/software/grub/
@@ -43,7 +43,11 @@ Source11:	95-set-boot-entry.install
 %global evr %{epoch}:%{version}-%{release}
 %global _libdir %{_exec_prefix}/lib
 
+%if 0%{?oreon}
+%global os_id oreon
+%else
 %global os_id %(eval echo $(grep ^ID= /etc/os-release | sed -e 's/^ID=//' -e 's/rhel/redhat/'))
+%endif
 %global grub_evr_dir %{_libdir}/efi/grub2/%{evr}
 %global grub_efi_dir %{grub_evr_dir}/EFI/%{os_id}
 

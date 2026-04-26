@@ -1,6 +1,6 @@
 Name:           lorax-templates-rhel
 Version:        11.0
-Release:        16%{?dist}
+Release:        17%{?dist}
 Summary:        RHEL build templates for lorax and livemedia-creator
 
 License:        GPLv2+
@@ -14,7 +14,7 @@ BuildArch:      noarch
 # This tarball is generated from the contents of this dist-git repository
 # by running the command `make tar`.
 # See README for full details of how to update this package
-Source0:        lorax-templates-rhel-11.0-16.tar.gz
+Source0:        lorax-templates-rhel-11.0-17.tar.gz
 
 # Required for the template branding support
 Requires:       lorax >= 34.9.1

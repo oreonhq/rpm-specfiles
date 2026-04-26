@@ -5,7 +5,7 @@
 
 Name:       oreon-logos
 Version:    11
-Release:    1%{?dist}
+Release:    2%{?dist}
 Summary:    Oreon-related icons and pictures
 
 Group:      System Environment/Base
@@ -90,6 +90,10 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/pixmaps/bootloader
 for i in bootloader/*; do
   install -p -m 644 $i $RPM_BUILD_ROOT%{_datadir}/pixmaps/bootloader
 done
+pushd $RPM_BUILD_ROOT%{_datadir}/pixmaps/bootloader
+ln -sf fedora.icns oreon.icns
+ln -sf fedora.icns oreon-media.vol
+popd
 
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/plymouth/themes/charge
 for i in plymouth/charge/* ; do

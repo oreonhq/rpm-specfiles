@@ -52,11 +52,12 @@ replace @ROOT@ 'inst.stage2=hd:LABEL=${isolabel|udev}' ${GRUB2DIR}/grub.cfg
 
 
 ## WHeeeeeeee, EFI.
+## See live/x86.tmpl: detect gcd on /usr/lib/efi when /boot/efi is unpopulated.
 <% efiarch32=None; efiarch64=None %>
-%if exists("boot/efi/EFI/*/gcdia32.efi"):
+%if exists("boot/efi/EFI/*/gcdia32.efi") or glob("usr/lib/efi/grub2/*/EFI/*/gcdia32.efi"):
     <% efiarch32 = 'IA32' %>
 %endif
-%if exists("boot/efi/EFI/*/gcdx64.efi"):
+%if exists("boot/efi/EFI/*/gcdx64.efi") or glob("usr/lib/efi/grub2/*/EFI/*/gcdx64.efi"):
     <% efiarch64 = 'X64' %>
 %endif
 %if (efiarch32 or efiarch64):
