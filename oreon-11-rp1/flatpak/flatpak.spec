@@ -20,9 +20,9 @@ License:        LGPL-2.1-or-later
 URL:            https://flatpak.org/
 Source0:        https://github.com/flatpak/flatpak/releases/download/%{version}/%{name}-%{version}.tar.xz
 
-%if 0%{?fedora}
-# Add Fedora flatpak repositories
-Source1:        flatpak-add-fedora-repos.service
+%if 0%{?oreon}
+# Add Flathub repository
+Source1:        flatpak-add-flathub-repo.service
 %endif
 
 # ostree not on i686 for RHEL 10
@@ -80,13 +80,13 @@ Requires:       librsvg2%{?_isa}
 Requires:       ostree-libs%{?_isa} >= %{ostree_version}
 Requires:       /usr/bin/fusermount3
 Requires:       /usr/bin/xdg-dbus-proxy
-# https://fedoraproject.org/wiki/SELinux/IndependentPolicy
+# Keep SELinux policy aligned with installed target policy package.
 Requires:       (flatpak-selinux = %{?epoch:%{epoch}:}%{version}-%{release} if selinux-policy-targeted)
 Requires:       %{name}-session-helper%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Recommends:     p11-kit-server
 
 # Make sure the document portal is installed
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?oreon} || 0%{?rhel} > 7
 Recommends:     xdg-desktop-portal >= %{xdg_portal_version}
 %else
 Requires:       xdg-desktop-portal >= %{xdg_portal_version}
@@ -178,16 +178,16 @@ install -d %{buildroot}%{_sysconfdir}/%{name}/installations.d
 install -d %{buildroot}%{_sysconfdir}/%{name}/preinstall.d
 install -d %{buildroot}%{_sysconfdir}/flatpak/remotes.d
 
-%if 0%{?fedora}
+%if 0%{?oreon}
 install -D -t %{buildroot}%{_unitdir} %{SOURCE1}
 %endif
 
 %find_lang %{name}
 
 
-%if 0%{?fedora}
+%if 0%{?oreon}
 %post
-%systemd_post flatpak-add-fedora-repos.service
+%systemd_post flatpak-add-flathub-repo.service
 %endif
 
 
@@ -195,15 +195,15 @@ install -D -t %{buildroot}%{_unitdir} %{SOURCE1}
 %selinux_modules_install %{_datadir}/selinux/packages/flatpak.pp.bz2
 
 
-%if 0%{?fedora}
+%if 0%{?oreon}
 %preun
-%systemd_preun flatpak-add-fedora-repos.service
+%systemd_preun flatpak-add-flathub-repo.service
 %endif
 
 
-%if 0%{?fedora}
+%if 0%{?oreon}
 %postun
-%systemd_postun_with_restart flatpak-add-fedora-repos.service
+%systemd_postun_with_restart flatpak-add-flathub-repo.service
 %endif
 
 
@@ -261,8 +261,8 @@ fi
 %{_systemd_user_env_generator_dir}/60-flatpak
 %{_tmpfilesdir}/%{name}.conf
 
-%if 0%{?fedora}
-%{_unitdir}/flatpak-add-fedora-repos.service
+%if 0%{?oreon}
+%{_unitdir}/flatpak-add-flathub-repo.service
 %endif
 
 %files devel
