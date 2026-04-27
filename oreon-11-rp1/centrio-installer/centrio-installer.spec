@@ -46,8 +46,8 @@ install -p -m 0644 %{_sourcedir}/liveinst.desktop %{buildroot}%{_datadir}/applic
 %{_datadir}/applications/liveinst.desktop
 
 %changelog
-* Fri Feb 20 2026 Brandon Lester <blester@oreonhq.com> - 2.0-1
-- Prepare Centrio 2.0 for Oreon 11
-
 * Sun Apr 26 2026 Brandon Lester <blester@oreonhq.com> - 2.0-2
 - Fix several issues related to locale & software selection
+
+* Fri Feb 20 2026 Brandon Lester <blester@oreonhq.com> - 2.0-1
+- Prepare Centrio 2.0 for Oreon 11
