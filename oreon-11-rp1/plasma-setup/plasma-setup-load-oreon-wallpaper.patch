@@ -1,0 +1,31 @@
+From 8f0e24c4f1075367c14b5f52ade96a93845e9882 Mon Sep 17 00:00:00 2001
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Date: Fri, 5 Dec 2025 16:25:47 -0500
+Subject: [PATCH] src/qml: LandingComponent: Use the Oreon wallpaper
+
+This ensures that Plasma Setup starts up with the correct wallpaper
+branding.
+---
+ src/qml/LandingComponent.qml | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/qml/LandingComponent.qml b/src/qml/LandingComponent.qml
+index b922c27..dfde9c2 100644
+--- a/src/qml/LandingComponent.qml
++++ b/src/qml/LandingComponent.qml
+@@ -44,9 +44,9 @@ Item {
+ 
+         source: {
+             // default wallpaper background
+-            const imgFile = isLandscape ? '5120x2880.png' : '1080x1920.png';
+-            const lightWallpaperFolder = 'wallpapers/Next/contents/images/';
+-            const darkWallpaperFolder = 'wallpapers/Next/contents/images_dark/';
++            const imgFile = 'oreon-day.jpg';
++            const lightWallpaperFolder = 'backgrounds/';
++            const darkWallpaperFolder = 'backgrounds/';
+ 
+             const wallpaperUrl = StandardPaths.locate(
+                 StandardPaths.GenericDataLocation,
+-- 
+2.52.0
+

@@ -1,0 +1,143 @@
+%global qt6_minver 6.6.0
+%global kf6_minver 6.5.0
+
+%global orgname org.kde.plasmasetup
+
+# Respect distro compiler hardening flags.
+%global _hardened_build 1
+
+Name:           plasma-setup
+Version:        6.6.4
+Release:        7%{?dist}
+Summary:        Initial setup for systems using KDE Plasma
+License:        (GPL-2.0-or-later or GPL-3.0-or-later) and GPL-2.0-or-later and GPL-3.0-or-later and (LGPL-2.0-or-later or LGPL-3.0-or-later) and (LGPL-2.1-or-later or LGPL-3.0-or-later) and LGPL-2.1-or-later and BSD-2-Clause and CC0-1.0
+URL:            https://invent.kde.org/plasma/%{name}
+
+Source0: http://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
+Source1: http://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
+
+# Backported changes
+
+# Proposed changes
+# https://invent.kde.org/plasma/plasma-setup/-/merge_requests/98
+# https://bugs.kde.org/show_bug.cgi?id=514841
+# https://bugzilla.redhat.com/show_bug.cgi?id=2455469
+# grant ourselves polkit permission to create system-wide network connections
+Patch501:       0001-fix-give-us-permission-to-create-system-wide-network.patch
+# https://invent.kde.org/plasma/plasma-setup/-/merge_requests/100
+# fix incorrect addAndActivateConnection() call in wifi module, may fix
+# some of the "strange" behavior observed in
+# https://bugzilla.redhat.com/show_bug.cgi?id=2455469#c0
+Patch502:       0001-wifi-fix-bogus-addAndActivateConnection-arg-from-f80.patch
+# https://invent.kde.org/plasma/plasma-setup/-/merge_requests/101
+# https://bugzilla.redhat.com/show_bug.cgi?id=2453216
+Patch503:       101.patch
+
+# Downstream only changes
+Patch1001:      plasma-setup-load-oreon-wallpaper.patch
+Patch1002:      plasma-setup-select-oreon-lookandfeel.patch
+
+BuildRequires:  cmake(Qt6Core) >= %{qt6_minver}
+BuildRequires:  cmake(Qt6Gui) >= %{qt6_minver}
+BuildRequires:  cmake(Qt6Qml) >= %{qt6_minver}
+BuildRequires:  cmake(Qt6QuickControls2) >= %{qt6_minver}
+BuildRequires:  cmake(Qt6Svg) >= %{qt6_minver}
+BuildRequires:  cmake(Qt6Widgets) >= %{qt6_minver}
+BuildRequires:  cmake(Qt6DBus) >= %{qt6_minver}
+BuildRequires:  cmake(KF6I18n) >= %{kf6_minver}
+BuildRequires:  cmake(KF6Package) >= %{kf6_minver}
+BuildRequires:  cmake(KF6Auth) >= %{kf6_minver}
+BuildRequires:  cmake(KF6CoreAddons) >= %{kf6_minver}
+BuildRequires:  cmake(KF6Config) >= %{kf6_minver}
+BuildRequires:  cmake(KF6Screen)
+BuildRequires:  cmake(LibKWorkspace)
+BuildRequires:  cracklib-devel
+BuildRequires:  extra-cmake-modules >= %{kf6_minver}
+BuildRequires:  gcc-c++
+BuildRequires:  git-core
+BuildRequires:  systemd-rpm-macros
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  libappstream-glib
+BuildRequires:  system-backgrounds-kde
+BuildRequires:  qt6qml(org.kde.plasma.private.kcm_keyboard)
+
+Requires:       qt6qml(org.kde.plasma.private.kcm_keyboard)
+
+Requires:       dbus-common
+Requires:       kf6-filesystem
+Requires:       kf6-kauth
+
+# Oreon look and feel package
+Requires:       oreon-plasmaconfig
+Requires:       system-backgrounds-kde
+
+# Renamed from KDE Initial System Setup / kiss
+Obsoletes:      kiss < %{version}-%{release}
+Provides:       kiss = %{version}-%{release}
+Provides:       kiss%{?_isa} = %{version}-%{release}
+
+ExcludeArch:    %{ix86}
+
+# Do not check .so files in an application-specific library directory
+%global __provides_exclude_from ^%{_kf6_qmldir}/org/kde/plasmasetup/.*\\.so.*$
+
+
+%description
+%{summary}.
+
+
+%prep
+%autosetup -p1
+# e.g. RHEL 10 has .png, not .jxl
+if [ -f /usr/share/wallpapers/Default/contents/images/3840x2160.png ]; then
+sed -i -e 's|\.jxl|.png|' src/qml/LandingComponent.qml
+fi
+
+
+%build
+%cmake_kf6
+%cmake_build
+
+
+%install
+%cmake_install
+
+%find_lang %{orgname} --all-name
+rm -fv %{buildroot}%{_kf6_libdir}/libcomponentspluginplugin.a
+
+
+%preun
+%systemd_preun %{name}.service
+
+
+%post
+%systemd_post %{name}.service
+
+
+%postun
+%systemd_postun %{name}.service
+
+
+%files -f %{orgname}.lang
+%license LICENSES/*
+%config(noreplace) %{_sysconfdir}/xdg/plasmasetuprc
+%{_libexecdir}/%{name}*
+%{_kf6_libexecdir}/kauth/%{name}*
+%{_kf6_qmldir}/org/kde/plasmasetup/
+%{_kf6_plugindir}/packagestructure/plasmasetup.so
+%{_kf6_datadir}/plasma/packages/%{orgname}.*/
+%license %{_kf6_datadir}/plasma/packages/%{orgname}.finished/contents/ui/konqi-calling.png.license
+%{_unitdir}/%{name}*
+%{_sysusersdir}/%{name}*
+%{_tmpfilesdir}/%{name}*
+%{_datadir}/dbus-1/*/%{orgname}.*
+%{_datadir}/polkit-1/actions/%{orgname}.*
+%{_datadir}/polkit-1/rules.d/%{name}*
+%{_datadir}/qlogging-categories6/plasmasetup.categories
+%{_datadir}/%{name}/
+
+
+%changelog
+* Mon Apr 27 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.4-7
+- Rebrand downstream defaults for Oreon look and feel
+
