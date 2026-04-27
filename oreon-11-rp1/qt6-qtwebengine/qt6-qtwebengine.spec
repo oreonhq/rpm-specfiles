@@ -78,12 +78,12 @@
 %global prerelease rc
 %endif
 
-%global examples 1
+%global examples 0
 
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
 Version: 6.10.3
-Release: 17%{?dist}
+Release: 18%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -589,6 +589,10 @@ export MALLOC_ARENA_MAX=1
 # Qt passes this into cmake -P QtGnGen.cmake as -DGN_THREADS=... (not a CMake cache var)
 export QTWEBENGINE_GN_THREADS=1
 export NINJA_PATH=%{__ninja}
+# Keep build artifacts smaller in mock while preserving usable backtraces.
+# Patch103 already forces Chromium GN symbol_level=0, this trims remaining C/C++ debug.
+export CFLAGS="${CFLAGS} -g1"
+export CXXFLAGS="${CXXFLAGS} -g1"
 
 %ifarch aarch64
 # Qt configure.cmake udot probe needs dotprod in the default ISA (see webengine-arm64-udot-support)
@@ -600,6 +604,7 @@ export CXXFLAGS="${CXXFLAGS} -march=armv8.2-a+dotprod"
 %cmake_qt6 \
   -DCMAKE_TOOLCHAIN_FILE:STRING="%{_libdir}/cmake/Qt6/qt.toolchain.cmake" \
   -DFEATURE_webengine_build_gn:BOOL=ON \
+  -DFEATURE_webengine_full_debug_info:BOOL=OFF \
   -DFEATURE_webengine_jumbo_build:BOOL=OFF \
   -DFEATURE_webengine_developer_build:BOOL=OFF \
   -DFEATURE_qtwebengine_build:BOOL=ON \
