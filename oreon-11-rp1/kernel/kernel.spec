@@ -186,7 +186,7 @@ Summary: The Linux kernel
 #  kernel release. (This includes prepatch or "rc" releases.)
 # Set released_kernel to 0 when the upstream source tarball contains an
 #  unreleased kernel development snapshot.
-%global released_kernel 0
+%global released_kernel 1
 # Set debugbuildsenabled to 1 to build separate base and debug kernels
 #  (on supported architectures). The kernel-debug-* subpackages will
 #  contain the debug kernel.
@@ -195,19 +195,19 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.0.0
-%define specversion 7.0.0
+%define specrpmversion 7.0.2
+%define specversion 7.0.2
 %define patchversion 7.0
-%define pkgrelease 0.rc4.260317g2d1373e4246d.37
+%define pkgrelease 200
 %define kversion 7
-%define tarfile_release 7.0-rc4-5-g2d1373e4246d
-# Short git commit in Linus's tree matching this snapshot (see Source0)
-%global upstream_snapshot_commit 2d1373e4246d
+%define tarfile_release 7.0.2
+# Top-level dir from Source0 tarball (linux-7.0.2 after unpack)
+%global upstream_snapshot_commit 7.0.2
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 0.rc4.260317g2d1373e4246d.37%{?buildid}%{?dist}
-# This defines the kabi tarball version
+%define specrelease 200%{?buildid}%{?dist}
+# kABI helper tarball basename version (files are vendored as Source300/301, not fetched from Fedora)
 %define kabiversion 7.0.0
 
 # If this variable is set to 1, a bpf selftests build failure will cause a
@@ -1012,8 +1012,8 @@ BuildRequires: redhat-sb-certs >= 9.4-0.1
 # exact git commit you can run
 #
 # xzcat -qq ${TARBALL} | git get-tar-commit-id
-# Upstream Linus tree snapshot (kernel.org git). %%prep renames linux-%%{upstream_snapshot_commit} -> linux-%%{KVERREL}.
-Source0: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/snapshot/linux-%{upstream_snapshot_commit}.tar.gz
+# Stable release tarball from kernel.org. %%prep renames linux-%%{upstream_snapshot_commit} -> linux-%%{KVERREL}.
+Source0: https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-%{upstream_snapshot_commit}.tar.xz
 
 Source1: Makefile.rhelver
 Source2: %{name}.changelog
@@ -1190,9 +1190,9 @@ Source212: Module.kabi_dup_s390x
 Source213: Module.kabi_dup_x86_64
 Source214: Module.kabi_dup_riscv64
 
-# kABI helper tarballs: distribution-only metadata (no kernel.org release). Fetchable URLs so mock/spectool do not need git-committed binaries.
-Source300: https://src.fedoraproject.org/repo/pkgs/rpms/kernel/kernel-abi-stablelists-%{kabiversion}.tar.xz/sha512/02cc3ae85f53eb46df297208fa9eaaefe640b1cf6f601fd1e9f175a1764e6a8de91ccb9cb85c2cfc6bdf9f4685e9a18110162e3a8b965cdcea64c8b6fdfc12a5/kernel-abi-stablelists-%{kabiversion}.tar.xz
-Source301: https://src.fedoraproject.org/repo/pkgs/rpms/kernel/kernel-kabi-dw-%{kabiversion}.tar.xz/sha512/03ee7d4ebc47f5bdc9d6c72924c496c932ea755d39c57e7bf17ea9c24e839da5863886a7f390cf7367e8b2cd3263fe36e469fba07ab654da913870356a0d29ae/kernel-kabi-dw-%{kabiversion}.tar.xz
+# kABI helper tarballs (Oreon vendored next to this spec, same names as before). Do not use Fedora lookaside in builds.
+Source300: kernel-abi-stablelists-%{kabiversion}.tar.xz
+Source301: kernel-kabi-dw-%{kabiversion}.tar.xz
 
 %if 0%{include_rt}
 %if 0%{include_rhel}
@@ -4867,6 +4867,10 @@ fi\
 #
 #
 %changelog
-* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{specrpmversion}-1
+* Mon Apr 28 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.2-200
+- Bump to Linux 7.0.2 stable (cdn.kernel.org tarball, released_kernel=1)
+- %%oreon SBAT oreonsecureboot pesign oreon-release sources skip RHEL sb-certs
+
+* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.0-1
 - Prepare for Oreon 11 (RP1)
 - %%oreon SBAT oreonsecureboot pesign oreon-release sources skip RHEL sb-certs

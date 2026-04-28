@@ -1,3 +1,7 @@
+* Mon Apr 28 2026 Oreon Packaging Team <packaging@oreonhq.com> [7.0.2-200]
+- Linux v7.0.2 stable (kernel.org)
+Resolves: 
+
 * Tue Mar 17 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc4.2d1373e4246d.37]
 - Work around binutils update in s390x perf (Justin M. Forbes)
 Resolves: 

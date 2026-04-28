@@ -1,0 +1,6 @@
+Oreon kernel SRPM expects these files next to kernel.spec (same layout as before, without Fedora lookaside):
+
+  kernel-abi-stablelists-7.0.0.tar.xz
+  kernel-kabi-dw-7.0.0.tar.xz
+
+If you do not have them yet, obtain matching blobs from any prior SRPM or internal mirror, then commit them here. Bump %%kabiversion when you replace the files with a newer kABI set.
