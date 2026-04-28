@@ -4867,7 +4867,7 @@ fi\
 #
 #
 %changelog
-* Mon Apr 28 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.2-200
+* Tue Apr 28 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.2-200
 - Bump to Linux 7.0.2 stable (cdn.kernel.org tarball, released_kernel=1)
 - %%oreon SBAT oreonsecureboot pesign oreon-release sources skip RHEL sb-certs
 
