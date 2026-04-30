@@ -42,16 +42,8 @@ ExcludeArch: i686
 %global enable_replace_malloc 0
 %endif
 
-# wasi_sdk 30 is not compatible with llvm 18
-%if 0%{?fedora} <= 40
-  %bcond wasi_sdk 0
-%else
-  %ifarch s390x
-    %bcond wasi_sdk 0
-  %else
-    %bcond wasi_sdk 1
-  %endif
-%endif
+# Keep disabled until wasi-sdk source handling is restored.
+%bcond wasi_sdk 0
 
 %bcond build_with_clang 0
 %if %{with build_with_clang}
@@ -93,13 +85,8 @@ ExcludeArch: i686
 %global system_gbm        1
 %global system_pipewire   1
 %global build_tests       1
-# Bundled cbindgen makes build slow.
-# Enable only if system cbindgen is not available.
-%if 0%{?rhel}
-%global use_bundled_cbindgen  1
-%else
-%global use_bundled_cbindgen  1
-%endif
+# Use system cbindgen to avoid local vendored tarball sources.
+%global use_bundled_cbindgen  0
 %if %{debug_build}
 %global release_build     0
 %endif
@@ -171,7 +158,7 @@ ExcludeArch: i686
 
 %global official_branding       1
 
-%bcond_without langpacks
+%bcond_with langpacks
 
 %if %{with langpacks}
 %bcond_without langpacks_subpkg
@@ -213,10 +200,14 @@ Source0:        https://archive.mozilla.org/pub/firefox/releases/%{version}%{?pr
 %if %{with langpacks}
 Source1:        firefox-langpacks-%{version}%{?pre_version}-20260310.tar.xz
 %endif
+%if 0%{?use_bundled_cbindgen}
 Source2:        cbindgen-vendor.tar.xz
 Source3:        dump_syms-vendor.tar.xz
+%endif
+%if %{with wasi_sdk}
 Source4:        wasm-component-ld-vendor.tar.xz
 Source5:        wasm-tools-vendor.tar.xz
+%endif
 Source10:       firefox-mozconfig
 Source12:       firefox-redhat-default-prefs.js
 Source20:       firefox.desktop
@@ -235,7 +226,9 @@ Source33:       firefox.appdata.xml.in
 Source34:       org.mozilla.firefox.search-provider.ini
 Source35:       google-loc-api-key
 Source36:       firefox-default-bookmarks.html
+%if 0%{?run_firefox_tests}
 Source37:       mochitest-python.tar.gz
+%endif
 Source38:       print_results
 Source39:       print-errors
 Source40:       run-tests-x11
@@ -251,7 +244,9 @@ Source49:       wasi.patch.template
 # Created by:
 # git clone --recursive https://github.com/WebAssembly/wasi-sdk.git
 # cd wasi-sdk && git-archive-all --force-submodules wasi-sdk-30.tar.gz
+%if %{with wasi_sdk}
 Source50:       wasi-sdk-30.tar.gz
+%endif
 
 # Build patches
 Patch40:        build-aarch64-skia.patch
@@ -978,7 +973,9 @@ cat > objdir/_virtualenvs/init_py3/pip.conf << EOF
 find-links=`pwd`/mochitest-python
 no-index=true
 EOF
+%if 0%{?run_firefox_tests}
 tar xf %{SOURCE37}
+%endif
 
 #Use python 3.11 for mach
 sed -i -e 's|#!/usr/bin/env python3|#!/usr/bin/env python3.11|' mach
