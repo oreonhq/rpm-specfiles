@@ -181,7 +181,7 @@ This is the Python 3 build of SIP.
 %package -n python%{python3_pkgversion}-sip-devel
 Summary: Files needed to generate Python bindings for any C++ class library
 Requires: sip = %{version}-%{release}
-#Requires: python3-sip%{?_isa} = %{version}-%{release}
+#Requires: python3-sip%%{?_isa} = %%{version}-%%{release}
 BuildRequires: python%{python3_pkgversion}-devel
 Requires:      python%{python3_pkgversion}-devel
 %description -n python%{python3_pkgversion}-sip-devel

@@ -1,5 +1,5 @@
 #global commit 7274cfad453d770f36b53ec5a2294ddd6d905703
-#global shortcommit %(c=%{commit}; echo ${c:0:7})
+#global shortcommit %%(c=%%{commit}; echo ${c:0:7})
 
 #global pre beta.1
 

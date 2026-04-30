@@ -114,8 +114,8 @@ Requires: shared-mime-info
 %if 0%{?fedora} > 22
 # Rich deps are currently problematic
 # for any yum-based tools, see https://bugzilla.redhat.com/show_bug.cgi?id=1317481
-#Requires: (kde-platform-plugin%{?_isa} if plasma-workspace)
-#Requires: (kde-style-breeze%{?_isa} if plasma-desktop)
+#Requires: (kde-platform-plugin%%{?_isa} if plasma-workspace)
+#Requires: (kde-style-breeze%%{?_isa} if plasma-desktop)
 Recommends: kde-platform-plugin%{?_isa}
 Recommends: kde-style-breeze%{?_isa}
 %endif

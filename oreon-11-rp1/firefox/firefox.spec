@@ -400,9 +400,9 @@ Requires:       xdg-desktop-portal
 
 BuildRequires:  desktop-file-utils
 # Oreon: no system-bookmarks (we ship empty default bookmarks)
-# %if !0%{?flatpak}
-# BuildRequires:  system-bookmarks
-# %endif
+# %%if !0%%{?flatpak}
+# %%BuildRequires:  system-bookmarks
+# %%endif
 %if %{?system_ffi}
 BuildRequires:  pkgconfig(libffi)
 %endif

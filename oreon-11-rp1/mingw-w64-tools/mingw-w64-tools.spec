@@ -1,6 +1,6 @@
 #%%global snapshot_date 20140530
 #%%global snapshot_rev 430863ffea2f6101fbfc0ee35ee098ab2f96b53c
-#%%global snapshot_rev_short %(echo %snapshot_rev | cut -c1-6)
+#%%global snapshot_rev_short %%(echo %%{snapshot_rev} | cut -c1-6)
 #%%global branch trunk
 
 Name:           mingw-w64-tools
@@ -16,7 +16,7 @@ License:        GPL-3.0-or-later AND LGPL-2.0-or-later
 URL:            http://mingw-w64.sourceforge.net/
 %if 0%{?snapshot_date}
 # To regenerate a snapshot:
-# Use your regular webbrowser to open https://sourceforge.net/p/mingw-w64/mingw-w64/ci/%{snapshot_rev}/tarball
+# Use your regular webbrowser to open https://sourceforge.net/p/mingw-w64/mingw-w64/ci/%%{snapshot_rev}/tarball
 # This triggers the SourceForge instructure to generate a snapshot
 # After that you can pull in the archive with:
 # spectool -g mingw-w64-tools.spec

@@ -16,7 +16,7 @@ Patch1:         doc-fix.patch
 Patch2:         keyring-remove.patch
 
 BuildArch:      noarch
-#BuildRequires:  %{_bindir}/tox
+#BuildRequires:  %%{_bindir}/tox
 BuildRequires:  python3-devel
 
 BuildRequires:  python3-setuptools

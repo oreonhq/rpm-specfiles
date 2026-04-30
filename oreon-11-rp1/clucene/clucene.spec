@@ -62,7 +62,7 @@ date with Lucene 2.3.2. It contains most of the same functionality as the Java v
 %package core
 Summary:	Core clucene module
 Provides:	clucene = %{version}-%{release}
-#Requires: %{name} = %{version}-%{release}
+#Requires: %%{name} = %%{version}-%%{release}
 %description core
 CLucene is a C++ port of the popular Apache Lucene search engine
 (http://lucene.apache.org/java).

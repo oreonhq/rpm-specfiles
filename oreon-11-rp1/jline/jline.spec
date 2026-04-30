@@ -10,7 +10,7 @@ ExclusiveArch:  %{java_arches}
 
 Source0:        %{url}/archive/jline-%{version}.tar.gz
 
-# Fedora/RHEL specific: JNI shared objects MUST be placed in %{_prefix}/lib/%{name}
+# Fedora/RHEL specific: JNI shared objects MUST be placed in %%{_prefix}/lib/%%{name}
 Patch:          0001-Load-native-library-form-usr-lib-jline.patch
 # Patch out unwanted optional dependency on universalchardet
 Patch:          0002-Remove-optional-dependency-on-universalchardet.patch

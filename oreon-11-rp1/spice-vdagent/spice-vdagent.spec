@@ -5,7 +5,7 @@ Summary:        Agent for Spice guests
 License:        GPL-3.0-or-later
 URL:            https://spice-space.org/
 Source0:        https://spice-space.org/download/releases/%{name}-%{version}.tar.bz2
-#Source1:        https://spice-space.org/download/releases/%{name}-%{version}.tar.bz2.sig
+#Source1:        https://spice-space.org/download/releases/%%{name}-%%{version}.tar.bz2.sig
 #Source2:        victortoso-E37A484F.keyring
 
 BuildRequires: make

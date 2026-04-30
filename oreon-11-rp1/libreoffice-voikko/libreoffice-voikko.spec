@@ -19,7 +19,7 @@ URL:            http://voikko.puimula.org/
 # The usual format of stable release URLs
 Source0:        http://www.puimula.org/voikko-sources/%{name}/%{name}-%{version}.tar.gz
 # The usual format of test release URLs
-#Source0:        http://www.puimula.org/htp/testing/%{name}-%{version}rc2.tar.gz
+#Source0:        http://www.puimula.org/htp/testing/%%{name}-%%{version}rc2.tar.gz
 # https://github.com/voikko/libreoffice-voikko/pull/12
 Patch0:         0001-make-install-unpacked-flattens-the-python-hierarchy-.patch
 

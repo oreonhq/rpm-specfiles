@@ -10,10 +10,10 @@ URL:     http://kde.org/
 BuildArch: noarch
 
 Obsoletes: kdebase < 6:4.7.97-10
-#Provides: kdebase = 6:%{version}-%{release}
+#Provides: kdebase = 6:%%{version}-%%{release}
 
 Obsoletes: kdebase4 < %{version}-%{release}
-#Provides: kdebase4 = %{version}-%{release}
+#Provides: kdebase4 = %%{version}-%%{release}
 
 Requires: %{name}-common = %{version}-%{release}
 

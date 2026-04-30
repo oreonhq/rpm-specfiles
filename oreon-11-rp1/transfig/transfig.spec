@@ -10,7 +10,7 @@ Epoch:          1
 Summary:        Utility for converting FIG files (made by xfig) to other formats
 License:        Xfig
 URL:            https://sourceforge.net/projects/mcj/
-#Source0:        https://downloads.sourceforge.net/mcj/fig2dev-%{version}.tar.xz
+#Source0:        https://downloads.sourceforge.net/mcj/fig2dev-%%{version}.tar.xz
 Source0:        https://sourceforge.net/code-snapshots/git/m/mc/mcj/fig2dev.git/mcj-fig2dev-%{git_commit}.zip
 
 Patch:          0001-Avoid-integer-overflow.patch
