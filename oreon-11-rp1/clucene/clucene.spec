@@ -37,16 +37,13 @@ Patch50: clucene-core-2.3.3.4-pkgconfig.patch
 Patch51: clucene-core-2.3.3.4-install_contribs_lib.patch  
 # Don't install CLuceneConfig.cmake twice
 Patch52: clucene-core-2.3.3.4-CLuceneConfig.patch
-# Fix tests for undefined usleep
-Patch53: clucene-core-2.3.3.4-usleep.patch
-# Upstream at <https://sourceforge.net/p/clucene/bugs/232/> "Patches for
-# TestIndexSearcher failures":
-Patch54: 0001-Make-sure-to-return-value-from-non-void-function.patch
-Patch55: 0002-Avoid-deadlock-in-TestIndexSearcher.patch
+# Replaces Fedora usleep + return-value + deadlock patches: upstream tarball
+# already has _LUCENE_THREAD_FUNC_RETURN(0); uses usleep() not _LUCENE_SLEEP.
+Patch53: clucene-core-2.3.3.4-TestIndexSearcher-tests.patch
 # Upstream at <https://sourceforge.net/p/clucene/code/merge-requests/3/> "Fix
 # missing #include <time.h>":
-Patch56: 0001-Fix-missing-include-time.h.patch
-Patch57: pkgconfig.patch
+Patch54: 0001-Fix-missing-include-time.h.patch
+Patch55: pkgconfig.patch
 
 %description
 CLucene is a C++ port of the popular Apache Lucene search engine
@@ -87,11 +84,9 @@ Requires:	%{name}-core%{?_isa} = %{version}-%{release}
 %patch -P50 -p1 -b .pkgconfig
 %patch -P51 -p1 -b .install_contribs_lib
 %patch -P52 -p1 -b .CLuceneConfig
-%patch -P53 -p1 -b .usleep
-%patch -P54 -p1 -b .return-value
-%patch -P55 -p1 -b .avoid-deadlock
-%patch -P56 -p1 -b .missing-include
-%patch -P57 -p1 -b .pkgconfig
+%patch -P53 -p1 -b .testindexsearcher
+%patch -P54 -p1 -b .missing-include
+%patch -P55 -p1 -b .pkgconfig
 
 # nuke bundled code
 rm -rfv src/ext/{boost/,zlib/}

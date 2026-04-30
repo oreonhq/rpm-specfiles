@@ -1,17 +1,12 @@
-From bdc374bfbb0ca34ddb40713eb51d8535fdf11952 Mon Sep 17 00:00:00 2001
-From: Stephan Bergmann <sbergman@redhat.com>
-Date: Wed, 31 Jul 2019 16:27:33 +0200
-Subject: [PATCH 2/2] Avoid deadlock in TestIndexSearcher
-
----
- src/test/search/TestIndexSearcher.cpp | 51 +++++++++++++++++++++------
- 1 file changed, 41 insertions(+), 10 deletions(-)
-
-diff --git a/src/test/search/TestIndexSearcher.cpp b/src/test/search/TestIndexSearcher.cpp
-index 02c21aaf..a6dde5ba 100644
---- a/src/test/search/TestIndexSearcher.cpp
-+++ b/src/test/search/TestIndexSearcher.cpp
-@@ -8,9 +8,11 @@
+diff -up clucene-core-2.3.3.4/src/test/search/TestIndexSearcher.cpp.orig clucene-core-2.3.3.4/src/test/search/TestIndexSearcher.cpp
+--- clucene-core-2.3.3.4/src/test/search/TestIndexSearcher.cpp.orig	2011-03-16 19:21:07.000000000 -0500
++++ clucene-core-2.3.3.4/src/test/search/TestIndexSearcher.cpp	2026-04-30 00:00:00.000000000 +0000
+@@ -4,13 +4,16 @@
+ * Distributable under the terms of either the Apache License (Version 2.0) or
+ * the GNU Lesser General Public License, as specified in the COPYING file.
+ ------------------------------------------------------------------------------*/
++#include <unistd.h>
+ #include "test.h"
  
  DEFINE_MUTEX(searchMutex);
  DEFINE_CONDITION(searchCondition);
@@ -23,11 +18,11 @@ index 02c21aaf..a6dde5ba 100644
  
  _LUCENE_THREAD_FUNC(searchDocs, _searcher) {
  
-@@ -19,15 +21,20 @@ _LUCENE_THREAD_FUNC(searchDocs, _searcher) {
+@@ -19,15 +22,20 @@
      Query * query = QueryParser::parse(_T("one"), _T("content"), &an);
      Hits * hits = searcher->search(query);
      
--//    _LUCENE_SLEEP(9999); //make sure that searchMutex is being waited on...
+-    usleep(9999); //make sure that searchMutex is being waited on...
 +    {
 +        SCOPED_LOCK_MUTEX(searchMutex);
 +        searchReady = true;
@@ -47,7 +42,7 @@ index 02c21aaf..a6dde5ba 100644
      _LUCENE_THREAD_FUNC_RETURN(0);
  }
  
-@@ -55,13 +62,24 @@ void testEndThreadException(CuTest *tc) {
+@@ -55,13 +63,23 @@
      
      // this sequence is OK: delete searcher after search thread finish
      {
@@ -57,9 +52,9 @@ index 02c21aaf..a6dde5ba 100644
          IndexSearcher * searcher = _CLNEW IndexSearcher(&ram);
          _LUCENE_THREADID_TYPE thread = _LUCENE_THREAD_CREATE(&searchDocs, searcher);
 -        SCOPED_LOCK_MUTEX(searchMutex);
- 
+-
 -        CONDITION_WAIT(searchMutex, searchCondition);
--//        _LUCENE_SLEEP(9999); //make sure that deleteMutex is being waited on...
+-        usleep(9999); //make sure that deleteMutex is being waited on...
 -        CONDITION_NOTIFYALL(deleteCondition);
 +        {
 +            SCOPED_LOCK_MUTEX(searchMutex);
@@ -76,7 +71,7 @@ index 02c21aaf..a6dde5ba 100644
  
          _LUCENE_THREAD_JOIN(thread);
  
-@@ -71,14 +89,27 @@ void testEndThreadException(CuTest *tc) {
+@@ -71,14 +89,26 @@
  
      // this produces memory exception: delete searcher after search finish but before thread finish
      {
@@ -86,15 +81,14 @@ index 02c21aaf..a6dde5ba 100644
          IndexSearcher * searcher = _CLNEW IndexSearcher(&ram);
          _LUCENE_THREADID_TYPE thread = _LUCENE_THREAD_CREATE(&searchDocs, searcher);
 -        SCOPED_LOCK_MUTEX(searchMutex);
- 
--        CONDITION_WAIT(searchMutex, searchCondition);
 +        {
 +            SCOPED_LOCK_MUTEX(searchMutex);
 +            while (!searchReady) {
 +                CONDITION_WAIT(searchMutex, searchCondition);
 +            }
 +        }
-+
+ 
+-        CONDITION_WAIT(searchMutex, searchCondition);
          searcher->close();
          _CLLDELETE(searcher);
 -        CONDITION_NOTIFYALL(deleteCondition);
@@ -107,6 +101,3 @@ index 02c21aaf..a6dde5ba 100644
  
          _LUCENE_THREAD_JOIN(thread);
      }
--- 
-2.21.0
-
