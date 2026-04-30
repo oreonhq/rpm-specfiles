@@ -87,6 +87,10 @@ ExcludeArch: i686
 %global build_tests       1
 # Use system cbindgen to avoid local vendored tarball sources.
 %global use_bundled_cbindgen  0
+%if !0%{?use_bundled_cbindgen}
+# dump_syms vendor tarball is paired with bundled rust tooling.
+%global enable_mozilla_crashreporter 0
+%endif
 %if %{debug_build}
 %global release_build     0
 %endif
@@ -849,6 +853,7 @@ export CBINDGEN=/usr/bin/cbindgen
 %endif
 
 %if %{enable_mozilla_crashreporter}
+%if 0%{?use_bundled_cbindgen}
 mkdir -p my_rust_vendor_dump_syms
 cd my_rust_vendor_dump_syms
 tar xf %{SOURCE3}
@@ -864,6 +869,7 @@ EOL
 env CARGO_HOME=.cargo cargo install dump_syms
 export PATH=`pwd`/.cargo/bin:$PATH
 cd -
+%endif
 %endif
 
 mkdir %{_buildrootdir}/bin || :
