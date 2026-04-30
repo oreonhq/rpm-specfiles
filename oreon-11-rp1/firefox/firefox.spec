@@ -877,7 +877,18 @@ cp %{SOURCE32} %{_buildrootdir}/bin || :
 
 # Update the various config.guess to upstream release for aarch64 support
 # Do not update config.guess in the ./third_party/rust because that would break checksums
-find ./ -path ./third_party/rust -prune -o -name config.guess -exec cp /usr/lib/rpm/config.guess {} ';'
+CONFIG_GUESS_SRC=""
+for p in /usr/lib/rpm/config.guess /usr/share/misc/config.guess /usr/share/automake-*/config.guess ; do
+    if [ -f "$p" ]; then
+        CONFIG_GUESS_SRC="$p"
+        break
+    fi
+done
+if [ -n "$CONFIG_GUESS_SRC" ]; then
+    find ./ -path ./third_party/rust -prune -o -name config.guess -exec cp "$CONFIG_GUESS_SRC" {} ';'
+else
+    echo "warning: config.guess replacement source not found, skipping"
+fi
 
 MOZ_OPT_FLAGS=$(echo "%{optflags}" | sed -e 's/-Wall//')
 # Firefox is not supposed to build with exceptions globally enabled
@@ -973,19 +984,21 @@ cp %{SOURCE45} .
 . ./run-wayland-compositor
 %endif
 
+%if 0%{?run_firefox_tests}
 mkdir -p objdir/_virtualenvs/init_py3
 cat > objdir/_virtualenvs/init_py3/pip.conf << EOF
 [global]
 find-links=`pwd`/mochitest-python
 no-index=true
 EOF
-%if 0%{?run_firefox_tests}
 tar xf %{SOURCE37}
 %endif
 
 #Use python 3.11 for mach
 sed -i -e 's|#!/usr/bin/env python3|#!/usr/bin/env python3.11|' mach
 
+export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
+export MACH_NATIVE_PACKAGE_SOURCE=system
 ./mach build -v 2>&1 | cat - || exit 1
 
 %if %{build_with_pgo}
