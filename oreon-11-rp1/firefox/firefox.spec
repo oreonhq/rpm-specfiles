@@ -411,6 +411,7 @@ BuildRequires:  xorg-x11-server-Xvfb
 %endif
 BuildRequires:  rust
 BuildRequires:  cargo
+BuildRequires:  rustfmt
 BuildRequires:  clang-devel
 %if %{build_with_asan}
 BuildRequires:  libasan
@@ -923,7 +924,7 @@ MOZ_LINK_FLAGS="%{build_ldflags}"
 MOZ_LINK_FLAGS="$MOZ_LINK_FLAGS -Wl,--no-keep-memory"
 %endif
 %endif
-%ifarch %{ix86} s390x ppc64le
+%ifarch %{ix86} s390x ppc64le aarch64
 export RUSTFLAGS="-Cdebuginfo=0"
 %endif
 %if %{build_with_asan}
