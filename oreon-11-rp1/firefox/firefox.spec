@@ -33,7 +33,7 @@ ExcludeArch: i686
 %global use_pipewire_camera 0
 %endif
 
-%global system_nss        1
+%global system_nss        0
 %global system_libevent   1
 %global build_with_asan   0
 %ifarch x86_64 %{ix86}
