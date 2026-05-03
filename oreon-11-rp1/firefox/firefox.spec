@@ -642,7 +642,7 @@ echo "ac_add_options --enable-debug" >> .mozconfig
 echo "ac_add_options --disable-optimize" >> .mozconfig
 %else
 %global optimize_flags "none"
-%ifarch ppc64le aarch64
+%ifarch ppc64le
 %global optimize_flags "-g -O2"
 %endif
 %if %{optimize_flags} != "none"
@@ -893,7 +893,9 @@ MOZ_LINK_FLAGS="$MOZ_LINK_FLAGS -Wl,--no-keep-memory"
 %endif
 %endif
 %ifarch %{ix86} s390x ppc64le aarch64
-export RUSTFLAGS="-Cdebuginfo=0"
+# Append so mock redhat-rpm-config RUSTFLAGS (frame pointers, etc.) stay set.
+# Trailing -Cdebuginfo=0 wins over earlier -Cdebuginfo=2 from the environment.
+export RUSTFLAGS="${RUSTFLAGS:-} -Cdebuginfo=0"
 %endif
 %if %{build_with_asan}
 MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -fsanitize=address -Dxmalloc=myxmalloc"
@@ -941,8 +943,12 @@ echo "ac_add_options --without-sysroot" >> .mozconfig
 echo "ac_add_options --without-wasm-sandboxed-libraries" >> .mozconfig
 %endif
 
-# Require 4 GB of RAM per CPU core
+# Memory budget per parallel job (higher here means fewer jobs on small builders).
+%ifarch aarch64
+%constrain_build -m 6144
+%else
 %constrain_build -m 4096
+%endif
 echo "mk_add_options MOZ_MAKE_FLAGS=\"-j%{_smp_build_ncpus}\"" >> .mozconfig
 
 echo "mk_add_options MOZ_SERVICES_SYNC=1" >> .mozconfig
