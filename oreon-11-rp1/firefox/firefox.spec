@@ -252,7 +252,6 @@ Patch80:        wasi.patch
 Patch81:        firefox-gcc-15.0-s390.patch
 Patch82:        build-c11-threads-avail.patch
 Patch83:        build-seccomp.patch
-Patch84:        dstdint-compile-error.patch
 Patch85:        build-wasm32-wasip1.patch
 
 # Fedora specific patches
@@ -269,14 +268,6 @@ Patch242:        0026-Add-KDE-integration-to-Firefox.patch
 # Upstream patches
 Patch400:        mozilla-1196777.patch
 Patch401:        mozilla-1667096.patch
-# Bug 1999029 - Wayland buffer transaction locking
-Patch402:        D278446.patch
-Patch403:        D278447.patch
-Patch404:        D278448.patch
-Patch405:        D278449.patch
-Patch406:        D278450.patch
-
-Patch407:        D280359.patch
 # Potential fix for PipeWire camera crashes
 # https://bugzilla.mozilla.org/show_bug.cgi?id=2023103
 Patch408:        firefox-libwebrtc-potential-fix-for-pipewire-camera-crashes.patch
@@ -581,7 +572,6 @@ This package contains results of tests executed during build.
 %patch -P83 -p1 -b .build-seccomp
 %patch -P85 -p1 -b .wasm32-wasip1
 %endif
-%patch -P84 -p1 -b .dstdint-compile-error
 
 # We need to create the wasi.patch with the correct path to the wasm libclang_rt.
 %if %{with wasi_sdk}
@@ -602,14 +592,6 @@ cat %{SOURCE49} | sed -e "s|LIBCLANG_RT_PLACEHOLDER|`pwd`/wasi-sdk-30/build/sysr
 
 %patch -P400 -p1 -b .1196777
 %patch -P401 -p1 -b .1667096
-# Bug 1999029 - Wayland buffer transaction locking
-%patch -P402 -p1 -b .1999029-1
-%patch -P403 -p1 -b .1999029-2
-%patch -P404 -p1 -b .1999029-3
-%patch -P405 -p1 -b .1999029-4
-%patch -P406 -p1 -b .1999029-5
-
-%patch -P407 -p1 -b .mzbz-2012006
 %patch -P408 -p1 -b .libwebrtc-potential-fix-for-pipewire-camera-crashes
 
 # PGO patches
