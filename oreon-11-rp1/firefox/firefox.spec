@@ -248,7 +248,6 @@ Patch44:        build-arm-libopus.patch
 Patch53:        firefox-gcc-build.patch
 Patch71:        0001-GLIBCXX-fix-for-GCC-12.patch
 Patch78:        firefox-i686-build.patch
-Patch79:        firefox-gcc-13-build.patch
 Patch80:        wasi.patch
 Patch81:        firefox-gcc-15.0-s390.patch
 Patch82:        build-c11-threads-avail.patch
@@ -576,7 +575,6 @@ This package contains results of tests executed during build.
 %patch -P53 -p1 -b .firefox-gcc-build
 %patch -P71 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
 %patch -P78 -p1 -b .firefox-i686
-%patch -P79 -p1 -b .firefox-gcc-13-build
 %patch -P81 -p1 -b .firefox-gcc-15.0-s390
 %if 0%{?fedora} >= 44 || 0%{?rhel} >= 11
 %patch -P82 -p1 -b .build-c11-threads-avail
