@@ -251,7 +251,6 @@ Patch78:        firefox-i686-build.patch
 Patch80:        wasi.patch
 Patch81:        firefox-gcc-15.0-s390.patch
 Patch82:        build-c11-threads-avail.patch
-Patch83:        build-seccomp.patch
 Patch85:        build-wasm32-wasip1.patch
 
 # Fedora specific patches
@@ -569,7 +568,6 @@ This package contains results of tests executed during build.
 %patch -P81 -p1 -b .firefox-gcc-15.0-s390
 %if 0%{?fedora} >= 44 || 0%{?rhel} >= 11
 %patch -P82 -p1 -b .build-c11-threads-avail
-%patch -P83 -p1 -b .build-seccomp
 %patch -P85 -p1 -b .wasm32-wasip1
 %endif
 
