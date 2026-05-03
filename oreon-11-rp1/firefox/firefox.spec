@@ -1,5 +1,5 @@
-# Produce a build suitable for release, i.e. use PGO/LTO. You can turn it off
-# when building locally to reduce build time.
+# Keep release branding, but avoid PGO/LTO in Oreon builds. Firefox PGO runs
+# extra instrumented build/profile phases and makes builders take many hours.
 %global release_build     1
 
 # Excluded due to https://bugzilla.mozilla.org/show_bug.cgi?id=1792159
@@ -13,9 +13,9 @@ ExcludeArch: i686
 %global run_firefox_tests 0
 %endif
 
-# Don't create debuginfo rpm packages. It reduces build time as
-# exctracting debuginfo takes long time.
-%global create_debuginfo  1
+# Debuginfo extraction is very expensive for Firefox and has been a major
+# source of long mock build times.
+%global create_debuginfo  0
 
 # Produce debug (non-optimized) package build. Suitable for debugging only
 # as the build is *very* slow.
@@ -84,7 +84,7 @@ ExcludeArch: i686
 %global system_drm        1
 %global system_gbm        1
 %global system_pipewire   1
-%global build_tests       1
+%global build_tests       0
 # Use system cbindgen to avoid local vendored tarball sources.
 %global use_bundled_cbindgen  0
 %if !0%{?use_bundled_cbindgen}
@@ -94,18 +94,8 @@ ExcludeArch: i686
 %if %{debug_build}
 %global release_build     0
 %endif
-# Build PGO+LTO on x86_64 only due to build issues
-# on other arches.
+# Keep PGO+LTO disabled on all arches for builder throughput.
 %global build_with_pgo    0
-%ifarch x86_64
-%if %{release_build}
-%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11
-%global build_with_pgo    1
-%else
-%global build_with_pgo    1
-%endif
-%endif
-%endif
 %if 0%{?flatpak}
 %global build_with_pgo    0
 %endif
@@ -909,7 +899,7 @@ MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | sed -e 's/-O2//')
 # If MOZ_DEBUG_FLAGS is empty, firefox's build will default it to "-g" which
 # overrides the -g1 from line above and breaks building on s390/arm
 # (OOM when linking, rhbz#1238225)
-%ifarch %{ix86} ppc64le
+%ifarch %{ix86} ppc64le aarch64
 MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | sed -e 's/-g/-g0/')
 %else
 # this reduces backtrace quality substantially, but seems to be needed
