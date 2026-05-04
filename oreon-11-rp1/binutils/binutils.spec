@@ -224,7 +224,8 @@ Source0: binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "odd-pre-release"
 Source0: binutils-%%{version}.tar.xz
 %elif "%{source}" == "snapshot"
-Source0: binutils-with-gold-%{version}-%{commit_id}.tar.xz
+# Upstream read-only mirror (flat tarball: use %%setup -c below, not %%autosetup -n)
+Source0: https://gnu.googlesource.com/binutils-gdb/+archive/%{commit_id}.tar.gz
 %elif "%{source}" == "tarball"
 Source0: binutils-%{version}-%{commit_id}.tar.xz
 %endif
@@ -622,7 +623,8 @@ mv ../%{gold_tarball}/elfcpp .
 %autopatch -p1 
 
 %elif "%{source}" == "snapshot"
-%autosetup -p1 -n binutils-with-gold-%{version}-%{commit_id}
+%setup -q -c -n binutils-with-gold-%{version}-%{commit_id}
+%autopatch -p1
 %elif "%{source}" == "official-release"
 %autosetup -p1 -n binutils-with-gold-%{version}
 %elif "%{source}" == "even-pre-release"
