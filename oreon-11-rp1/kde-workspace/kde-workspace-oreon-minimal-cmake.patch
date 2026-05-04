@@ -5,7 +5,7 @@ diff -up kde-workspace-4.11.22/CMakeLists.txt.oreon605 kde-workspace-4.11.22/CMa
  include(KDE4Defaults)
  
  option(WITH_XINERAMA "Xinerama support for multi-headed X displays" ON)
-+option(OREON_MINIMAL_KDM_WORKSPACE "Oreon kdm-only: skip KWin-only X11 configure checks and relax feature_summary" OFF)
++option(OREON_MINIMAL_KDM_WORKSPACE "Oreon kdm-only: skip KWin-only X11 configure checks and relax feature_summary" ON)
  
  find_package(Strigi)
  

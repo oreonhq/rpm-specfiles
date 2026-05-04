@@ -313,6 +313,8 @@ popd
 %endif
 %patch 604 -p1 -b .kauth-cmake3
 %patch 605 -p1 -b .oreon-minimal-cmake
+# Never let feature_summary abort configure (patch hunk can drift across rebases).
+perl -pi -e 's/INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES\)/INCLUDE_QUIET_PACKAGES)/' CMakeLists.txt
 
 # upstream patches
 
