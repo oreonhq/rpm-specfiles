@@ -71,6 +71,8 @@ Patch59: kdm-settings-new_rundir.patch
 Patch604: kde-workspace-kauth-cmake3-target-name.patch
 # Skip KWin-only X11 fatals and feature_summary FATAL for stripped kdm-only build
 Patch605: kde-workspace-oreon-minimal-cmake.patch
+# CMake 3.20+ removed MacroWriteBasicConfigVersionFile; macro_write_basic_cmake_version_file is undefined
+Patch606: kde-workspace-cmake-config-version.patch
 ## upstream patches
 
 ## plasma active patches
@@ -313,6 +315,7 @@ popd
 %endif
 %patch 604 -p1 -b .kauth-cmake3
 %patch 605 -p1 -b .oreon-minimal-cmake
+%patch 606 -p1 -b .cmake-config-version
 # Never let feature_summary abort configure (patch hunk can drift across rebases).
 perl -pi -e 's/INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES\)/INCLUDE_QUIET_PACKAGES)/' CMakeLists.txt
 

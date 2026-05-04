@@ -1,0 +1,24 @@
+diff -up kde-workspace-4.11.22/CMakeLists.txt.cmakecfgver kde-workspace-4.11.22/CMakeLists.txt
+--- kde-workspace-4.11.22/CMakeLists.txt.cmakecfgver
++++ kde-workspace-4.11.22/CMakeLists.txt
+@@ -346,8 +346,18 @@
+ configure_file(KDE4WorkspaceConfig.cmake.in "${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfig.cmake" @ONLY)
+ 
+ # this file will be installed too and will be used by cmake when searching for the Config.cmake file to check the version of kdepimlibs, Alex
+-macro_write_basic_cmake_version_file(${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfigVersion.cmake 
+-                                     ${KDE4WORKSPACE_VERSION_MAJOR} ${KDE4WORKSPACE_VERSION_MINOR} ${KDE4WORKSPACE_VERSION_PATCH})
++# macro_write_basic_cmake_version_file came from CMake's removed MacroWriteBasicConfigVersionFile; use CMakePackageConfigHelpers on modern CMake.
++if(COMMAND macro_write_basic_cmake_version_file)
++  macro_write_basic_cmake_version_file(${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfigVersion.cmake
++                                       ${KDE4WORKSPACE_VERSION_MAJOR} ${KDE4WORKSPACE_VERSION_MINOR} ${KDE4WORKSPACE_VERSION_PATCH})
++else()
++  include(CMakePackageConfigHelpers)
++  write_basic_package_version_file(
++    "${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfigVersion.cmake"
++    VERSION "${KDE4WORKSPACE_VERSION}"
++    COMPATIBILITY AnyNewerVersion
++  )
++endif()
+ 
+ set(_KDE4WorkspaceConfig_INSTALL_DIR ${LIB_INSTALL_DIR}/KDE4Workspace/cmake)
+ # places where find_package() looks for FooConfig.cmake files:
