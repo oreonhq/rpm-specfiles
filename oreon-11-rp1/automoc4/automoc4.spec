@@ -1,5 +1,5 @@
 # Upstream KDE automoc 0.9.88 ships Automoc4Config.cmake without cmake_policy(SET CMP0002 OLD).
-# Fedora’s automoc4 added that policy for ancient CMake; CMake 3.28+ rejects OLD for CMP0002 and
+# Fedora automoc4 added that policy for ancient CMake; CMake 3.28+ rejects OLD for CMP0002 and
 # find_package(KDE4) fails. Epoch so this replaces same-version distro builds in mock.
 Epoch:   1
 Summary: KDE4 Meta Object Compiler (automoc4)
@@ -10,8 +10,9 @@ Release: 1%{?dist}
 License: BSD-3-Clause
 URL:     https://invent.kde.org/developer-tools/automoc
 
-# Unpacks to automoc-%{version}
-Source0: https://github.com/KDE/automoc/archive/refs/tags/v%{version}/automoc-%{version}.tar.gz
+# GitHub tag tarball unpacks to directory automoc-0.9.88 (matches setup -n automoc plus hyphen plus version digits).
+# Fragment after hash sets the saved tarball basename for spectool (automoc plus version tarball name).
+Source0: https://github.com/KDE/automoc/archive/refs/tags/v%{version}.tar.gz#/automoc-%{version}.tar.gz
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
