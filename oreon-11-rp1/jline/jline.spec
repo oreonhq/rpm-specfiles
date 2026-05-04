@@ -50,7 +50,8 @@ and tcsh) will find most of the command editing features of JLine to be
 familiar.
 
 %prep
-%autosetup -p1
+# GitHub archive of tag jline-%{version} unpacks as jline3-jline-%{version}, not jline-%{version}.
+%autosetup -p1 -n jline3-jline-%{version}
 cp -p console-ui/LICENSE.txt LICENSE-APACHE.txt
 
 # Remove local Maven extensions not needed for RPM build
