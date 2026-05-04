@@ -87,6 +87,8 @@ Patch606: kde-workspace-cmake-config-version.patch
 
 BuildRequires: desktop-file-utils
 BuildRequires: kdelibs4-devel >= 4.14.4
+# Use Oreon automoc4 (upstream 0.9.88) instead of Fedora’s patched tree that sets CMP0002 OLD (fails CMake 3.28+).
+BuildRequires: automoc4 >= 1:0.9.88
 BuildRequires: kactivities-devel
 BuildRequires: libjpeg-devel
 BuildRequires: pam-devel
