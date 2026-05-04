@@ -24,7 +24,8 @@ License: GPL-2.0-only
 URL:     https://github.com/KDE/%{name}
 Source0: https://github.com/KDE/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 %if 0%{?kdm_settings}
-Source1: kdm-settings-2.tar.gz
+# Fedora kde-workspace dist-git lookaside (matches rawhide f/sources SHA512 for this name).
+Source1: https://src.fedoraproject.org/repo/pkgs/rpms/kde-workspace/kdm-settings-2.tar.gz/sha512/c1e5121e35c4bd78ea598bc20f8fba93aaf7f268ee340749089e96f9a264953f51f761ac5ff9bf085b16ea331ffbcc069dde20923c17fd959cf9366620ddd723/kdm-settings-2.tar.gz
 %endif
 
 # add konsole menuitem
