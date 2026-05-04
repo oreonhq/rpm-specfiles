@@ -7,7 +7,7 @@ Name: binutils%{?_with_debug:-debug}
 # The variable %%{source} (see below) should be set to indicate which of these
 # origins is being used.
 Version: 2.46.50
-Release: 3%{?dist}
+Release: 4%{?dist}
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH Bison-exception-2.2) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND BSD-3-Clause AND GFDL-1.3-or-later AND GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later
 URL: https://sourceware.org/binutils
 
@@ -693,6 +693,9 @@ compute_global_configuration()
 {
     # Do not build gdb here. GDB is packaged in gdb RPM. Building it from the merged
     # binutils-gdb tree links against sim/libsim.a, which breaks on aarch64 and cross configs.
+    # Do not build the GNU simulator either. With gdb disabled, sim is unused here, and
+    # recent sim install rules can try to install aarch64/run (and bpf/run) that were
+    # never produced for this configuration, breaking %%install.
     CARGS="--quiet \
  --build=%{_target_platform} \
  --host=%{_target_platform} \
@@ -701,7 +704,8 @@ compute_global_configuration()
  --enable-64-bit-bfd \
  --enable-default-hash-style=gnu \
  --with-bugurl=%{dist_bug_report_url} \
- --disable-gdb"
+ --disable-gdb \
+ --disable-sim"
 
 %if %{without bootstrap}
     CARGS="$CARGS --enable-jansson=yes"
