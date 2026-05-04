@@ -36,16 +36,20 @@ automoc4 binary and the CMake module files used by KDE4 and kdelibs4.
 
 
 %build
+# Upstream asks for CMake 2.4; CMake 4 removed compatibility with that floor. Same pattern as kde-workspace.
+export CMAKE_POLICY_VERSION_MINIMUM=3.5
 mkdir build
 pushd build
 %if 0%{?automoc_lib_suffix:1}
 %__cmake .. \
+  -DCMAKE_POLICY_VERSION_MINIMUM:STRING=3.5 \
   -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
   -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
   -DLIB_SUFFIX:STRING=%{automoc_lib_suffix} \
   -DQT_QMAKE_EXECUTABLE:FILEPATH=%{_qt4_bindir}/qmake
 %else
 %__cmake .. \
+  -DCMAKE_POLICY_VERSION_MINIMUM:STRING=3.5 \
   -DCMAKE_INSTALL_PREFIX:PATH=%{_prefix} \
   -DCMAKE_BUILD_TYPE:STRING=RelWithDebInfo \
   -DQT_QMAKE_EXECUTABLE:FILEPATH=%{_qt4_bindir}/qmake
@@ -61,3 +65,8 @@ DESTDIR=%{buildroot} %__cmake --install build
 %files
 %{_bindir}/automoc4
 %{_libdir}/automoc4/
+
+
+%changelog
+* Sun May 03 2026 Oreon packaging <noreply@oreon.local> - 1:0.9.88-1
+- Initial Oreon automoc4 from upstream tag v0.9.88; CMake 4 policy floor for configure
