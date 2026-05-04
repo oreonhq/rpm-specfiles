@@ -424,11 +424,6 @@ BuildRequires: elfutils-debuginfod-client-devel
 BuildRequires: xxhash-devel
 %endif
 
-# binutils-gdb tarball runs the combined top-level configure, which configures
-# GDB and requires these (see gdb configure checks for gmp.h / mpfr.h).
-BuildRequires: gmp-devel >= 4.2
-BuildRequires: mpfr-devel >= 3.1.0
-
 Requires(post): %{_sbindir}/alternatives
 Requires(preun): %{_sbindir}/alternatives
 # We also need rm.
@@ -696,6 +691,8 @@ done
 #   Build the CARGS variable which contains the global configuration arguments.
 compute_global_configuration()
 {
+    # Do not build gdb here. GDB is packaged in gdb RPM. Building it from the merged
+    # binutils-gdb tree links against sim/libsim.a, which breaks on aarch64 and cross configs.
     CARGS="--quiet \
  --build=%{_target_platform} \
  --host=%{_target_platform} \
@@ -703,7 +700,8 @@ compute_global_configuration()
  --enable-plugins \
  --enable-64-bit-bfd \
  --enable-default-hash-style=gnu \
- --with-bugurl=%{dist_bug_report_url}"
+ --with-bugurl=%{dist_bug_report_url} \
+ --disable-gdb"
 
 %if %{without bootstrap}
     CARGS="$CARGS --enable-jansson=yes"
