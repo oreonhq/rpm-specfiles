@@ -24,8 +24,8 @@ diff -up kde-workspace-4.11.22/CMakeLists.txt.oreon605 kde-workspace-4.11.22/CMa
 +  endif()
  endif(Q_WS_X11)
  
- macro_optional_find_package(GLIB2 2.0)
-@@ -283,7 +286,7 @@
+ macro_optional_find_package(Systemd)
+@@ -290,7 +293,7 @@
    install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/startkde DESTINATION ${BIN_INSTALL_DIR})
  endif(NOT WIN32)
  
