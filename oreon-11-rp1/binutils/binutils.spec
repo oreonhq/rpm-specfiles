@@ -424,6 +424,11 @@ BuildRequires: elfutils-debuginfod-client-devel
 BuildRequires: xxhash-devel
 %endif
 
+# binutils-gdb tarball runs the combined top-level configure, which configures
+# GDB and requires these (see gdb configure checks for gmp.h / mpfr.h).
+BuildRequires: gmp-devel >= 4.2
+BuildRequires: mpfr-devel >= 3.1.0
+
 Requires(post): %{_sbindir}/alternatives
 Requires(preun): %{_sbindir}/alternatives
 # We also need rm.
@@ -920,7 +925,8 @@ run_target_configuration()
         RARGS="--disable-shared"
     fi
     
-    ../configure --target=$target $CARGS $SARGS $RARGS $TARGS  || cat config.log
+    ../configure --target=$target $CARGS $SARGS $RARGS $TARGS \
+        || { cat config.log; exit 1; }
 
     popd
 }
