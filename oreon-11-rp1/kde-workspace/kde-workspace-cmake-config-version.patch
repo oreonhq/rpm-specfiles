@@ -7,8 +7,8 @@ diff -up kde-workspace-4.11.22/CMakeLists.txt.cmakecfgver kde-workspace-4.11.22/
  # this file will be installed too and will be used by cmake when searching for the Config.cmake file to check the version of kdepimlibs, Alex
 -macro_write_basic_cmake_version_file(${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfigVersion.cmake 
 -                                     ${KDE4WORKSPACE_VERSION_MAJOR} ${KDE4WORKSPACE_VERSION_MINOR} ${KDE4WORKSPACE_VERSION_PATCH})
-+# macro_write_basic_cmake_version_file came from CMake's removed MacroWriteBasicConfigVersionFile; use CMakePackageConfigHelpers on modern CMake.
-+if(COMMAND macro_write_basic_cmake_version_file)
++# CMake 3.20+ dropped MacroWriteBasicConfigVersionFile. kdelibs can still define macro_write_basic_cmake_version_file, so do not use if(COMMAND ...).
++if(CMAKE_VERSION VERSION_LESS "3.20")
 +  macro_write_basic_cmake_version_file(${CMAKE_CURRENT_BINARY_DIR}/KDE4WorkspaceConfigVersion.cmake
 +                                       ${KDE4WORKSPACE_VERSION_MAJOR} ${KDE4WORKSPACE_VERSION_MINOR} ${KDE4WORKSPACE_VERSION_PATCH})
 +else()
