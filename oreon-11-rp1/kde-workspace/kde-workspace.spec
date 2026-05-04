@@ -69,6 +69,8 @@ Patch58: kde-workspace-4.9.11-new_rundir.patch
 Patch59: kdm-settings-new_rundir.patch
 # CMake 3.20+ rejects kde4_install_auth_actions custom target names with spaces
 Patch604: kde-workspace-kauth-cmake3-target-name.patch
+# Skip KWin-only X11 fatals and feature_summary FATAL for stripped kdm-only build
+Patch605: kde-workspace-oreon-minimal-cmake.patch
 ## upstream patches
 
 ## plasma active patches
@@ -310,6 +312,7 @@ pushd kdm-settings
 popd
 %endif
 %patch 604 -p1 -b .kauth-cmake3
+%patch 605 -p1 -b .oreon-minimal-cmake
 
 # upstream patches
 
@@ -360,6 +363,7 @@ export CFLAGS="%{optflags} -Dinline=__inline__"
 mkdir %{_target_platform}
 pushd %{_target_platform}
 %{cmake_kde4} .. \
+  -DOREON_MINIMAL_KDM_WORKSPACE:BOOL=ON \
   -DKDE4_ENABLE_FPIE:BOOL=ON \
   -DKDE4_KDM_PAM_SERVICE=kdm \
   -DKDE4_KCHECKPASS_PAM_SERVICE=kcheckpass \
