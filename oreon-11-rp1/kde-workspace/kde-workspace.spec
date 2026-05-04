@@ -67,6 +67,8 @@ Patch57: kde-workspace-4.8.0-bug796969.patch
 
 Patch58: kde-workspace-4.9.11-new_rundir.patch
 Patch59: kdm-settings-new_rundir.patch
+# CMake 3.20+ rejects kde4_install_auth_actions custom target names with spaces
+Patch604: kde-workspace-kauth-cmake3-target-name.patch
 ## upstream patches
 
 ## plasma active patches
@@ -105,6 +107,8 @@ BuildRequires: pkgconfig(xres)
 
 # For AutoReq cmake-filesystem
 BuildRequires: cmake
+# Some CMake / helper probes still import distutils on newer Python
+BuildRequires: python3-setuptools
 
 %description
 The KDE Workspace consists of what is the desktop of the
@@ -295,6 +299,7 @@ pushd kdm-settings
 %patch 59 -p1
 popd
 %endif
+%patch 604 -p1 -b .kauth-cmake3
 
 # upstream patches
 
