@@ -104,6 +104,16 @@ BuildRequires: pkgconfig(xcb-keysyms)
 BuildRequires: pkgconfig(xcb-renderutil)
 BuildRequires: pkgconfig(xdmcp)
 BuildRequires: pkgconfig(xres)
+# Top-level CMakeLists still runs KWin X11 checks even when BUILD_kwin=OFF; without
+# these, find_package(X11) components stay unset and configure hits message(FATAL_ERROR).
+BuildRequires: libXcomposite-devel
+BuildRequires: libXdamage-devel
+BuildRequires: libXfixes-devel
+BuildRequires: libXrender-devel
+BuildRequires: libXrandr-devel
+BuildRequires: libXcursor-devel
+BuildRequires: libxkbfile-devel
+BuildRequires: libXtst-devel
 
 # For AutoReq cmake-filesystem
 BuildRequires: cmake
