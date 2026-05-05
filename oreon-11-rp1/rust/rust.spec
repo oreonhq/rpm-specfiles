@@ -18,12 +18,12 @@ ExclusiveArch:  %{rust_arches}
 %global bootstrap_channel 1.93.0
 %global bootstrap_date 2026-01-22
 
-# Only the specified arches will use bootstrap binaries.
-# NOTE: Those binaries used to be uploaded with every new release, but that was
-# a waste of lookaside cache space when they're most often unused.
-# Run "spectool -g rust.spec" after changing this and then "fedpkg upload" to
-# add them to sources. Remember to remove them again after the bootstrap build!
-#global bootstrap_arches %%{rust_arches}
+# Only the specified arches will use bootstrap binaries from static.rust-lang.org
+# (see the Source1k* lines from the lua block below). That avoids BuildRequires on
+# rust/cargo in the same minor range, which breaks mock when the distro has not
+# published that toolchain yet. Limiting to the build arch keeps Source URLs to
+# the three stage0 tarballs this run actually unpacks in prep.
+%global bootstrap_arches %{_build_arch}
 
 # We need CRT files for *-wasi targets, at least as new as the commit in
 # src/ci/docker/host-x86_64/dist-various-2/build-wasi-toolchain.sh
