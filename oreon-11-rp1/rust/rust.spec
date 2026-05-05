@@ -934,10 +934,12 @@ mkdir -p "%{profraw}"
 # Build cargo as a workload to generate compiler profiles
 # We normally use `x.py`, but in this case we invoke the stage 2 compiler and libs
 # directly to ensure we use the instrumented compiler.
+# Use %%{local_rust_root}/bin/cargo so PGO works when bootstrapping from stage0
+# tarballs (no system cargo on PATH).
 env LLVM_PROFILE_FILE="%{profraw}/default_%%m_%%p.profraw" \
   LD_LIBRARY_PATH=$PWD/build/host/stage2/lib \
   RUSTC=$PWD/build/host/stage2/bin/rustc \
-  cargo build --manifest-path=src/tools/cargo/Cargo.toml
+  %{local_rust_root}/bin/cargo build --manifest-path=src/tools/cargo/Cargo.toml
 # Finalize the profile data and clean up the raw files
 llvm-profdata merge -o "%{profdata}" "%{profraw}"
 rm -r "%{profraw}" build/%{rust_triple}/stage2*/
