@@ -1,0 +1,30 @@
+From: Oreon Packaging Team <packaging@oreonhq.com>
+Date: Fri, 08 May 2026 00:00:00 +0000
+Subject: [PATCH] tests: expect R(ABI) 4.6 for current R-core
+
+Upstream golden output still pins 4.5; Oreon 11 build roots ship R 4.6.
+---
+ tests/test-R-deps.sh.out | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/test-R-deps.sh.out b/tests/test-R-deps.sh.out
+--- a/tests/test-R-deps.sh.out
++++ b/tests/test-R-deps.sh.out
+@@ -8,7 +8,7 @@
+ # Depends
+ R-core >= 4.1.0
+-R(ABI) = 4.5
++R(ABI) = 4.6
+ R(errors) >= 0.4.0
+ R(units) >= 0.8.0
+ 
+ # Imports
+@@ -53,7 +53,7 @@
+ # Depends Imports
+ R-core >= 4.1.0
+-R(ABI) = 4.5
++R(ABI) = 4.6
+ R(brio) >= 1.1.5
+ R(callr) >= 3.7.6
+ R(cli) >= 3.6.5
+ R(desc) >= 1.4.3

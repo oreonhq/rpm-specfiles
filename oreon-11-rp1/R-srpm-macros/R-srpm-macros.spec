@@ -6,6 +6,7 @@ Summary:        Source-stage rpm automation for R packages
 License:        MIT
 URL:            https://github.com/rpm-software-management/R-rpm-macros
 Source0:        https://github.com/rpm-software-management/R-rpm-macros/archive/v%{version}/R-rpm-macros-%{version}.tar.gz
+Patch0:         0001-tests-expect-R-4.6-ABI.patch
 
 BuildArch:      noarch
 
@@ -40,3 +41,4 @@ R-srpm-macros will pull in for R packages only.
 %changelog
 * Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.7-1
 - Fix prep to match R-rpm-macros tarball top-level directory name
+- Refresh test golden file for R 4.6 ABI vs upstream 4.5
