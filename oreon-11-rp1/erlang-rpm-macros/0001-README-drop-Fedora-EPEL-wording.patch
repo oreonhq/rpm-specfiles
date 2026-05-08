@@ -1,0 +1,11 @@
+--- a/README
++++ b/README
+@@ -1,7 +1,7 @@
+ Description
+ ============
+ 
+-A set of macros for building Erlang packages for Fedora/EPEL easily.
++A set of macros for building Erlang packages for RPM-based distributions.
+ 
+ These macros will help you to track down missing exported functions,
+ correctly provide dependencies between Erlang packages and in some cases
