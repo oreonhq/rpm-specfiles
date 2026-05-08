@@ -36,9 +36,14 @@ R-srpm-macros will pull in for R packages only.
 %files
 %doc README.md
 %license LICENSE
+%{_rpmconfigdir}/macros.d/macros.R-rpm
 %{_rpmconfigdir}/macros.d/macros.R-srpm
+%{_rpmconfigdir}/fileattrs/R.attr
+%{_rpmconfigdir}/R-deps.R
+%{_rpmconfigdir}/R-files.R
 
 %changelog
 * Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.7-1
 - Fix prep to match R-rpm-macros tarball top-level directory name
 - Refresh test golden file for R 4.6 ABI vs upstream 4.5
+- List all paths installed by upstream Makefile macros.R-rpm R scripts R.attr
