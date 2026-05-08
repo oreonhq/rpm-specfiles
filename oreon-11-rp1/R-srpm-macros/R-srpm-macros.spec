@@ -24,7 +24,7 @@ The rest of the automation is provided by the R-rpm-macros package, that
 R-srpm-macros will pull in for R packages only.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n R-rpm-macros-%{version}
 
 %install
 %make_install PREFIX=%{_prefix}
@@ -36,3 +36,7 @@ R-srpm-macros will pull in for R packages only.
 %doc README.md
 %license LICENSE
 %{_rpmconfigdir}/macros.d/macros.R-srpm
+
+%changelog
+* Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.7-1
+- Fix prep to match R-rpm-macros tarball top-level directory name
