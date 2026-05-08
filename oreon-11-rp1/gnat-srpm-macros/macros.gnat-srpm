@@ -1,0 +1,15 @@
+# Copyright 2011 - 2026 B. Persson, Bjorn@Rombobeorn.se
+# Copying and distribution of this file, with or without modification, are
+# permitted in any medium without royalty provided the copyright notice and
+# this notice are preserved. This file is offered as-is, without any warranty.
+
+%GNAT_arches %{GPRbuild_arches} ia64 ppc alpha %{arm}
+# GNAT_arches lists architectures where GNAT is available from the distro GCC
+# stack. Ada packages will not build on other architectures until GNAT is
+# bootstrapped for them.
+# (Keep this list aligned with the one in gcc.spec for this family when practical.)
+
+%GPRbuild_arches %{ix86} x86_64 %{power64} s390x aarch64 riscv64
+# GPRbuild_arches lists architectures where GPRbuild is available. If an
+# architecture is in GNAT_arches but not GPRbuild_arches, GPRbuild is not
+# bootstrapped there or there is an arch-specific blocker.
