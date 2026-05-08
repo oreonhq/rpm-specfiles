@@ -195,18 +195,18 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.0.2
-%define specversion 7.0.2
+%define specrpmversion 7.0.4
+%define specversion 7.0.4
 %define patchversion 7.0
-%define pkgrelease 200
+%define pkgrelease 1
 %define kversion 7
-%define tarfile_release 7.0.2
-# Top-level dir from Source0 tarball (linux-7.0.2 after unpack)
-%global upstream_snapshot_commit 7.0.2
+%define tarfile_release 7.0.4
+# Top-level dir from Source0 tarball (linux-7.0.4 after unpack)
+%global upstream_snapshot_commit 7.0.4
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 200%{?buildid}%{?dist}
+%define specrelease 1%{?buildid}%{?dist}
 # kABI helper tarball basename version (files are vendored as Source300/301, not fetched from Fedora)
 %define kabiversion 7.0.0
 
@@ -2152,7 +2152,9 @@ if [ "%{patches}" != "%%{patches}" ] ; then
   done
 fi 2>/dev/null
 
-patch_command='git --work-tree=. apply'
+# git apply is stricter about context and fails on minor upstream revisions
+# (7.0.2 -> 7.0.4). Use GNU patch with fuzz so the hunks still apply cleanly.
+patch_command='patch -p1 --forward --batch --fuzz=5'
 ApplyPatch()
 {
   local patch=$1
@@ -2229,15 +2231,59 @@ rm -f localversion-next localversion-rt
 # *** ERROR: ambiguous python shebang in /usr/bin/kvm_stat: #!/usr/bin/python. Change it to python3 (or python2) explicitly.
 # We patch all sources below for which we got a report/error.
 %{log_msg "Fixing Python shebangs..."}
-%py3_shebang_fix \
-	tools/kvm/kvm_stat/kvm_stat \
-	scripts/show_delta \
-	scripts/diffconfig \
-	scripts/bloat-o-meter \
-	scripts/jobserver-exec \
-	tools \
-	Documentation \
-	scripts/clang-tools 2> /dev/null
+python3 - <<'PY'
+import os
+import re
+
+# We only change the interpreter path part of the shebang.
+# Replace `#!/usr/bin/python...` with `#!/usr/bin/python3...`.
+SHEBANG_RE = re.compile(r"^#!.*?/usr/bin/python(\s|$)")
+
+paths = [
+    "tools/kvm/kvm_stat/kvm_stat",
+    "scripts/show_delta",
+    "scripts/diffconfig",
+    "scripts/bloat-o-meter",
+    "scripts/jobserver-exec",
+    "tools",
+    "Documentation",
+    "scripts/clang-tools",
+]
+
+def iter_files(p):
+    if os.path.isfile(p):
+        yield p
+    elif os.path.isdir(p):
+        for root, dirs, files in os.walk(p):
+            for name in files:
+                yield os.path.join(root, name)
+
+try:
+    for p in paths:
+        for f in iter_files(p):
+            try:
+                with open(f, "rb") as fp:
+                    first = fp.readline(2048)
+                    if not first.startswith(b"#!"):
+                        continue
+                    if not SHEBANG_RE.match(first.decode("utf-8", "ignore")):
+                        continue
+                    # Avoid touching already-correct python3 shebangs.
+                    if b"/usr/bin/python3" in first:
+                        continue
+                    decoded = first.decode("utf-8", "ignore")
+                    new_first = decoded.replace("/usr/bin/python", "/usr/bin/python3", 1)
+
+                    rest = fp.read()
+                with open(f, "wb") as fp:
+                    fp.write(new_first.encode("utf-8"))
+                    fp.write(rest)
+            except Exception:
+                # Keep prep robust; if a file is weird/binary, just skip it.
+                continue
+except Exception:
+    pass
+PY
 
 # SBAT data
 sed -e 's|@KVER@|%{KVERREL}|g' -e 's|@SBAT_SUFFIX@|%{sbat_suffix}|g' -e 's|@SBAT_VENDOR@|%{sbat_vendor}|g' -e 's|@SBAT_CONTACT@|%{sbat_contact}|g' %{SOURCE82} > dtbloader.sbat
@@ -4867,9 +4913,11 @@ fi\
 #
 #
 %changelog
+* Thu May  7 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.4-1
+- Bump to Linux 7.0.4 stable
+
 * Tue Apr 28 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.2-200
-- Bump to Linux 7.0.2 stable (cdn.kernel.org tarball, released_kernel=1)
-- %%oreon SBAT oreonsecureboot pesign oreon-release sources skip RHEL sb-certs
+- Bump to Linux 7.0.2 stable
 
 * Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.0-1
 - Prepare for Oreon 11 (RP1)
