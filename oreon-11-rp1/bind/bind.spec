@@ -46,9 +46,10 @@
 ## The order of libs is important. See lib/Makefile.in for details
 %define bind_export_libs isc dns isccfg irs
 %{!?_export_dir:%global _export_dir /bind9-export/}
-# libisc-nosym requires to be linked with unresolved symbols
-# When libisc-nosym linking is fixed, it can be defined to 1
-# Visit https://bugzilla.redhat.com/show_bug.cgi?id=1540300
+# libisc-nosym is linked with intentional unresolved symbols until BIND upstream
+# cleans that up. Strict %%{_strict_symbol_defs_build} (no undefined symbols at
+# link time) breaks that link. See Red Hat bug 1540300. Oreon keeps this exception
+# scoped to the bind SRPM only and should re-check each major BIND rebase.
 %undefine _strict_symbol_defs_build
 #
 # significant changes:

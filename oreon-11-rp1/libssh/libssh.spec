@@ -1,10 +1,11 @@
 Name:           libssh
 Version:        0.12.0
-Release:        1%{?dist}
+Release:        2%{?dist}
 Summary:        A library implementing the SSH protocol
 License:        LGPL-2.1-or-later
-# Upstream ctest hits flaky torture cases in mock; enable with rpmbuild --with check
-%bcond_with check
+# Run upstream ctests by default. Use rpmbuild --without check if torture tests
+# are too flaky in your builder (parallelism is forced to 1 in %%check).
+%bcond_without check
 URL:            http://www.libssh.org
 
 Source0:        https://www.libssh.org/files/0.12/%{name}-%{version}.tar.xz
@@ -146,5 +147,8 @@ popd
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/libssh/libssh_server.config
 
 %changelog
+* Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.12.0-2
+- Run %%check (ctest) by default
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.12.0-1
 - Prepare for Oreon 11 (RP1)

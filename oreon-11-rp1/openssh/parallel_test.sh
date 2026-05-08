@@ -16,20 +16,17 @@ set -uexo pipefail
 
 PARALLEL_MAKEFILE=$1
 
-SPLIT=1
-# SK enrollment is unstable in mock (key enrollment internal error), so skip
-# interop-tests and split t-exec shards here and keep deterministic suites.
-PARTS='file-tests unit '
+SPLIT=24
+PARTS='file-tests interop-tests unit '
+for ((i = 1; i < SPLIT; i++)); do ii=$(printf %02d $i);
+    PARTS+="t-exec-$ii "
+done
 
 # work around a selinux restriction:
 chcon -t unconfined_exec_t ssh-sk-helper || :
 
 # work around something else that only crops up in brew
 export TEST_SSH_UNSAFE_PERMISSIONS=1
-
-# Koji/mock often hits OpenSSL or provider quirks so sk-dummy enrollment fails and t-exec dies on sk-* keygen.
-# Without regress/misc/sk-dummy/sk-dummy.so, test-exec leaves SSH_SK_PROVIDER unset and filters sk-* from ssh -Q.
-rm -f regress/misc/sk-dummy/sk-dummy.so
 
 # create a .test directory to store all our files in:
 mkdir -p .t .ltests/{in,not-in}
@@ -50,21 +47,38 @@ sed -i 's|^RFWD_PORT=.*|RFWD_PORT=$(expr $TEST_SSH_PORT + 2)|' \
 
 # patch testsuite: speed up
 sed -i 's|sleep 1$|sleep .25|' regress/forward-control.sh
-# Force-disable SK key types in regress setup. sk-dummy.so may be rebuilt in subtrees.
-sed -i 's/sk-ssh-ed25519@openssh.com//g; s/sk-ecdsa-sha2-nistp256@openssh.com//g' regress/test-exec.sh*
 
 # extract LTESTS list to .tests/ltests/all:
 grep -Ex 'tests:[[:space:]]*file-tests t-exec interop-tests extra-tests unit' Makefile
 echo -ne '\necho-ltests:\n\techo ${LTESTS}' >> regress/Makefile
 make -s -C regress echo-ltests | tr ' ' '\n' > .ltests/all
 
-# keep ltests list generation above for debug visibility only
+# separate ltests into $SPLIT roughly equal .tests/ltests/in/$ii parts:
+grep -qFx connect .ltests/all
+( ! grep -qFx nonex .ltests/all )
+split -d -a2 --number=l/$SPLIT .ltests/all .ltests/in/
+wc -l .ltests/in/*
+grep -qFx connect .ltests/in/*
+
+# generate the inverses of them --- .ltests/not-in/$ii:
+( ! grep -qFx nonex .ltests/in/* )
+for ((i = 0; i < SPLIT; i++)); do ii=$(printf %02d $i);
+    while read -r tname; do
+        if ! grep -qFx "$tname" ".ltests/in/$ii"; then
+            echo -n "$tname " >> ".ltests/not-in/$ii"
+        fi
+    done < .ltests/all
+done
+grep . .ltests/not-in/*
+( ! grep -q ^connect .ltests/not-in/0 )
+for ((i = 1; i < SPLIT; i++)); do ii=$(printf %02d $i);
+    grep -q ^connect .ltests/not-in/$ii
+done
 
 # prepare several test directories:
 for PART in $PARTS; do
     mkdir .t/${PART}
     cp -ra * .t/${PART}/
-    rm -f .t/"${PART}"/regress/misc/sk-dummy/sk-dummy.so
     sed -i "s|abs_top_srcdir=.*|abs_top_srcdir=$(pwd)/.t/${PART}|" \
         .t/${PART}/Makefile
     sed -i "s|abs_top_builddir=.*|abs_top_builddir=$(pwd)/.t/${PART}|" \

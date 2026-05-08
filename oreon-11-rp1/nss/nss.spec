@@ -3,7 +3,7 @@
 # NOTE: To avoid NVR clashes of nspr* packages:
 # - reset %%{nspr_release} to 1, when updating %%{nspr_version}
 # - increment %%{nspr_version}, when updating the NSS part only
-%global baserelease 1
+%global baserelease 2
 %global nss_release %baserelease
 # use "%%global nspr_release %%[%%baserelease+n]" to handle offsets when
 # release number between nss and nspr are different.
@@ -17,8 +17,9 @@
 %global dracut_modules_dir %{dracutlibdir}/modules.d/05nss-softokn/
 %global dracut_conf_dir %{dracutlibdir}/dracut.conf.d
 
-# Default off on Oreon builders (SSL selftests need a full NSS trust setup)
-%bcond_with tests
+# Run NSS selftests by default. Use rpmbuild --without tests when the buildroot
+# cannot satisfy SSL selftests (e.g. mock without trust store setup).
+%bcond_without tests
 %bcond_with dbm
 
 # Produce .chk files for the final stripped binaries
@@ -1100,5 +1101,8 @@ fi
 
 
 %changelog
+* Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{nss_version}-2
+- Run selftests by default (use --without tests only when needed)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{nss_version}-1
 - Prepare for Oreon 11 (RP1)
