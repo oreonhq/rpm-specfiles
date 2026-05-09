@@ -8,6 +8,9 @@
 %global commit f5ead57eed9c9322165762f6781b01353f2de870
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
+%global macro_expander_commit 76939da7d8246c9b21a60b3b96ca04d6288d4a25
+%global container_selinux_commit add9f4a543f9fd3407f54717752ab640354654b2
+
 %define distro redhat
 %define polyinstatiate n
 %define monolithic n
@@ -26,13 +29,11 @@ Source: %{giturl}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 Source1: Makefile.devel
 Source2: selinux-policy.conf
 
-# Tool helps during policy development, to expand system m4 macros to raw allow rules
-# Git repo: https://github.com/fedora-selinux/macro-expander.git
-Source3: macro-expander
+# https://github.com/fedora-selinux/macro-expander (pinned; #/ renames to macro-expander for %%install)
+Source3: https://raw.githubusercontent.com/fedora-selinux/macro-expander/%{macro_expander_commit}/macro-expander.sh#/macro-expander
 
-# Include SELinux policy for container from separate container-selinux repo
-# Git repo: https://github.com/containers/container-selinux.git
-Source4: container-selinux.tgz
+# https://github.com/containers/container-selinux — extract container.{if,te,fc} in %%prep
+Source4: https://github.com/containers/container-selinux/archive/%{container_selinux_commit}/container-selinux-%{container_selinux_commit}.tar.gz
 
 # modules enabled in -minimum policy
 Source16: modules-minimum.lst
@@ -406,7 +407,9 @@ end
 
 %prep
 %autosetup -p 1 -n %{name}-%{commit}
-tar -C policy/modules/contrib -xf %{SOURCE4}
+tar -xf %{SOURCE4}
+cp container-selinux-%{container_selinux_commit}/container.{if,te,fc} policy/modules/contrib/
+rm -rf container-selinux-%{container_selinux_commit}
 
 %install
 # Build targeted policy

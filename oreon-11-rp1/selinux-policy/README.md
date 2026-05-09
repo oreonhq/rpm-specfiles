@@ -21,7 +21,7 @@ On GitHub, we have one repository containing the policy sources.
 Note: As opposed to dist-git, the Rawhide content resides in the _rawhide_ branch rather than _master_.
 
 ### dist-git
-Package sources in dist-git are composed from the _selinux-policy_ repository snapshot tarball, _container-selinux_ policy files snapshot, the _macro-expander_ script snapshot, and from other config files.
+In this rpm-specfiles tree, `macro-expander` and `container-selinux` are pinned GitHub `Source` URLs in the spec (not committed next to the spec). Other local config files stay as before.
 
 ## Build process
 

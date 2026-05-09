@@ -1,4 +1,6 @@
 #!/usr/bin/bash
+# Oreon: selinux-policy.spec pulls macro-expander and container-selinux from pinned
+# GitHub URLs. This script is still useful if you need legacy dist-git style files.
 
 DISTGIT_PATH=$(pwd)
 
