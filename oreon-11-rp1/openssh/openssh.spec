@@ -44,7 +44,7 @@ URL: http://www.openssh.com/portable.html
 Source0: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
 Source1: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz.asc
 Source2: sshd.pam
-Source3: gpgkey-736060BA.gpg
+Source3: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/RELEASE_KEY.asc
 Source6: ssh-keycat.pam
 Source7: sshd.sysconfig
 Source9: sshd@.service
@@ -239,7 +239,8 @@ an X11 passphrase dialog for OpenSSH.
 This package contains a test SK driver used for OpenSSH test purposes
 
 %prep
-gpgv2 --quiet --keyring %{SOURCE3} %{SOURCE1} %{SOURCE0}
+gpg --batch --dearmor --output %{_builddir}/openssh-release-keyring.gpg %{SOURCE3}
+gpgv2 --quiet --keyring %{_builddir}/openssh-release-keyring.gpg %{SOURCE1} %{SOURCE0}
 %autosetup -T -b 0 -p1
 
 autoreconf
