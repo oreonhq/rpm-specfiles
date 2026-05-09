@@ -255,12 +255,48 @@ Firefox, curl, or half the desktop rebuilt and you know the failure is NSS or Op
 
 ### Notes
 
-`nss` depends on `nspr`. Consumers of NSS belong after both.
+There is no separate `nspr` package dir here. The `nss` SRPM builds the nspr subpackages. Queue `nss` only, then NSS consumers.
 
 ### Chain
 
 ```text
-nspr nss openssl
+nss openssl
+```
+
+---
+
+## OpenSSH, NSS, and libssh (after security fixes or upgrade)
+
+### When to use
+
+OpenSSH upgrade, nss spec changes, etc... mainly where `%check` or `BuildRequires` need a newer ssh stack.
+
+### Notes
+
+- openssh builds against openssl. If you bumped crypto and openssh together, put openssl (and nss if that spec moved) before openssh.
+- libssh BRs `openssh-clients` and `openssh-server` for ctests that run sshd. Build openssh before libssh. Missing sshd in `%check` is usually wrong chain order.
+- If NSS ABI or tooling changed, add failing consumers after you read logs and `grep BuildRequires`, not a random full-tree rebuild.
+
+### Chain (full security core, sequential)
+
+When more than one of those layers changed in the same commit or tag:
+
+```text
+nss openssl openssh libssh
+```
+
+Strip packages you did not touch.
+
+OpenSSH only (rest of tag already good):
+
+```text
+openssh libssh
+```
+
+NSS only (no openssh spec change):
+
+```text
+nss
 ```
 
 ---
@@ -278,7 +314,7 @@ This tree usually builds NetworkManager with NSS in the mix. If you just rebased
 ### Chain
 
 ```text
-nspr nss NetworkManager
+nss NetworkManager
 ```
 
 If your failure mentions `libnm` from an older split package, open the NetworkManager spec and add whatever subpackage name the build service uses for that SRPM. Here `NetworkManager` is the directory name under `oreon-11-rp1`.
