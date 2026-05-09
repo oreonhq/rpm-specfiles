@@ -10,7 +10,7 @@ Source0:        https://github.com/libtom/%{name}/archive/v%{version_no_tilde}.t
 BuildRequires:  make
 BuildRequires:  libtool
 
-%if ! 0%{?flatpak}
+%if ! 0%{?flatpak} && ! 0%{?oreon}
 BuildRequires:  ghostscript
 BuildRequires:  ghostscript-tools-dvipdf
 BuildRequires:  libtiff-tools
@@ -44,7 +44,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
 
-%if ! 0%{?flatpak}
+%if ! 0%{?flatpak} && ! 0%{?oreon}
 %package        doc
 Summary:        Documentation files for %{name}
 BuildArch:      noarch
@@ -68,7 +68,7 @@ sed -i \
 %build
 %set_build_flags
 %make_build V=1 CFLAGS="$CFLAGS -I./" -f makefile.shared
-%if ! 0%{?flatpak}
+%if ! 0%{?flatpak} && ! 0%{?oreon}
 make V=1 -f makefile manual docs
 %endif
 
@@ -93,7 +93,7 @@ find %{buildroot} -name '*.a' -delete
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/*.pc
 
-%if ! 0%{?flatpak}
+%if ! 0%{?flatpak} && ! 0%{?oreon}
 %files doc
 %doc doc/bn.pdf
 %endif
