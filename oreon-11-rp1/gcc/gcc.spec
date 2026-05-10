@@ -262,6 +262,7 @@ BuildRequires: graphviz, dblatex, texlive-collection-latex, docbook5-style-xsl
 %if %{build_offload_amdgcn}
 BuildRequires: llvm >= 15, lld >= 15
 %endif
+BuildRequires: ccache
 Requires: cpp = %{version}-%{release}
 # Need .eh_frame ld optimizations
 # Need proper visibility support
@@ -1033,6 +1034,22 @@ export CONFIG_SITE=NONE
 
 CC=gcc
 CXX=g++
+
+# Wire in ccache for all bootstrap stages when the build service provides a
+# persistent CCACHE_DIR bind-mounted into the chroot.  STAGE_CC_WRAPPER is
+# GCC's own make variable that wraps the compiler at every bootstrap stage
+# (stage1, stage2, stage3, and the PGO profiling pass) — setting CC alone
+# only covers stage1.
+STAGE_CC_WRAPPER=
+if [ -n "${CCACHE_DIR:-}" ] && command -v ccache >/dev/null 2>&1; then
+  export CCACHE_MAXSIZE=${CCACHE_MAXSIZE:-25G}
+  export CCACHE_COMPRESS=1
+  export CCACHE_COMPILERCHECK=content
+  CC="ccache gcc"
+  CXX="ccache g++"
+  STAGE_CC_WRAPPER=ccache
+fi
+
 OPT_FLAGS="%{optflags}"
 OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[123]//g'`
 OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/\(-Wp,\)\?-D_FORTIFY_SOURCE=[123]//g'`
@@ -1390,9 +1407,11 @@ CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
 	$CONFIGURE_OPTS
 
 %ifarch sparc sparcv9 sparc64
-make %{?_smp_mflags} BOOT_CFLAGS="$OPT_FLAGS" LDFLAGS_FOR_TARGET=-Wl,-z,relro,-z,now bootstrap
+make %{?_smp_mflags} BOOT_CFLAGS="$OPT_FLAGS" LDFLAGS_FOR_TARGET=-Wl,-z,relro,-z,now \
+  ${STAGE_CC_WRAPPER:+STAGE_CC_WRAPPER=$STAGE_CC_WRAPPER} bootstrap
 %else
-make %{?_smp_mflags} BOOT_CFLAGS="$OPT_FLAGS" LDFLAGS_FOR_TARGET=-Wl,-z,relro,-z,now profiledbootstrap
+make %{?_smp_mflags} BOOT_CFLAGS="$OPT_FLAGS" LDFLAGS_FOR_TARGET=-Wl,-z,relro,-z,now \
+  ${STAGE_CC_WRAPPER:+STAGE_CC_WRAPPER=$STAGE_CC_WRAPPER} profiledbootstrap
 %endif
 
 CC="`%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-cc`"
