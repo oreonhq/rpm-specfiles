@@ -1,0 +1,28 @@
+--- libgfortran/configure.ac
++++ libgfortran/configure.ac
+@@ -351,6 +351,11 @@
+   ], [
+   enable_caf_shmem=false
+   ])
++# Shared-memory coarrays need a full POSIX runtime.  Disable for newlib
++# accelerator libgfortran builds (nvptx, mips bare metal).
++if test "${hardwire_newlib:-0}" -eq 1; then
++  enable_caf_shmem=false
++fi
+ AM_CONDITIONAL([ENABLE_CAF_SHMEM], [test x$enable_caf_shmem = xtrue])
+ 
+ # Check strerror_r, cannot be above as versions with two and three arguments exist
+--- libgfortran/configure
++++ libgfortran/configure
+@@ -18407,6 +18407,11 @@
+   enable_caf_shmem=false
+ 
+ fi
++# Shared-memory coarrays need a full POSIX runtime.  Disable for newlib
++# accelerator libgfortran builds (nvptx, mips bare metal).
++if test "${hardwire_newlib:-0}" -eq 1; then
++  enable_caf_shmem=false
++fi
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
