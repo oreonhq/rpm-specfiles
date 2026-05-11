@@ -2933,6 +2933,11 @@ BuildKernel() {
     cp -a include $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/include
     # Cross-reference from include/perf/events/sof.h
     cp -a sound/soc/sof/sof-audio.h $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/sound/soc/sof
+%ifarch aarch64
+    # q6afe.c includes private headers from its source directory.
+    mkdir -p $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/sound/soc/qcom/qdsp6
+    cp -a sound/soc/qcom/qdsp6/*.h $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/sound/soc/qcom/qdsp6/
+%endif
 %ifarch i686 x86_64
     # files for 'make prepare' to succeed with kernel-devel
     cp -a --parents arch/x86/entry/syscalls/syscall_32.tbl $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/
@@ -3280,6 +3285,7 @@ BuildKernel() {
 %if %{with_cross}
     make -C $RPM_BUILD_ROOT/lib/modules/$KernelVer/build M=scripts clean
     make -C $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/tools/bpf/resolve_btfids clean
+    cp -a scripts/basic/fixdep $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/scripts/basic/fixdep
     sed -i 's/REBUILD_SCRIPTS_FOR_CROSS:=0/REBUILD_SCRIPTS_FOR_CROSS:=1/' $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/Makefile
 %endif
 
@@ -4917,6 +4923,9 @@ fi\
 #
 #
 %changelog
+* Mon May 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.4-2
+- Fix aarch64 kernel-devel/header fallout from missing QDSP6, fixdep, and dqblk_xfs paths
+
 * Thu May  7 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.4-1
 - Bump to Linux 7.0.4 stable
 

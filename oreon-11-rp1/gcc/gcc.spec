@@ -126,16 +126,8 @@
 %else
 %global attr_ifunc 0
 %endif
-%ifarch x86_64 ppc64le
-%global build_offload_nvptx 1
-%else
 %global build_offload_nvptx 0
-%endif
-%ifarch x86_64
-%global build_offload_amdgcn 1
-%else
 %global build_offload_amdgcn 0
-%endif
 %if 0%{?fedora} < 32 && 0%{?rhel} < 8
 %ifarch s390x
 %global multilib_32_arch s390
@@ -4006,6 +3998,9 @@ end
 %endif
 
 %changelog
+* Mon May 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-%{gcc_release}.12
+- Disable NVPTX and AMDGCN offload subbuilds again while GCC 16 offload bootstrap is unstable
+
 * Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-%{gcc_release}.11
 - Offload trees use dedicated TMPDIR under each obj-offload dir libgomp configure conftest races default /tmp in mock
 - Restore make %%{_smp_mflags} for nvptx and amdgcn nested builds -j1 broke target libgomp configure
