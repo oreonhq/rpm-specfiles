@@ -3590,7 +3590,11 @@ pushd tools/testing/selftests
 export CFLAGS="%{build_cflags}"
 export CXXFLAGS="%{build_cxxflags}"
 
-%{make} %{?_smp_mflags} EXTRA_CFLAGS="${RPM_OPT_FLAGS}" EXTRA_CXXFLAGS="${RPM_OPT_FLAGS}" EXTRA_LDFLAGS="%{__global_ldflags}" ARCH=$Arch V=1 TARGETS="bpf cgroup kmod mm net net/can net/forwarding net/hsr net/mptcp net/netfilter net/packetdrill tc-testing memfd drivers/net drivers/net/hw iommu cachestat pid_namespace rlimits timens pidfd capabilities clone3 exec filesystems firmware landlock mount mount_setattr move_mount_set_group nsfs openat2 proc safesetid seccomp tmpfs uevent vDSO" SKIP_TARGETS="" $force_targets INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests VMLINUX_H="${RPM_VMLINUX_H}" install
+# Internal kernel headers (e.g. include/linux/fs.h, ns/ns_common_types.h) rely on
+# anonymous struct/union layout that needs -fms-extensions. Kbuild passes this for
+# the kernel proper but kselftest EXTRA_CFLAGS did not, so targets like mm that add
+# -I $(top_srcdir) failed with missing ns_id / failed filename static_assert.
+%{make} %{?_smp_mflags} EXTRA_CFLAGS="${RPM_OPT_FLAGS} -fms-extensions" EXTRA_CXXFLAGS="${RPM_OPT_FLAGS} -fms-extensions" EXTRA_LDFLAGS="%{__global_ldflags}" ARCH=$Arch V=1 TARGETS="bpf cgroup kmod mm net net/can net/forwarding net/hsr net/mptcp net/netfilter net/packetdrill tc-testing memfd drivers/net drivers/net/hw iommu cachestat pid_namespace rlimits timens pidfd capabilities clone3 exec filesystems firmware landlock mount mount_setattr move_mount_set_group nsfs openat2 proc safesetid seccomp tmpfs uevent vDSO" SKIP_TARGETS="" $force_targets INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests VMLINUX_H="${RPM_VMLINUX_H}" install
 
 # Restore the original level of source fortification
 %define _fortify_level %{_fortify_level_bak}
