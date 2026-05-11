@@ -1,0 +1,15 @@
+2026-05-11  Oreon Packaging Team  <packaging@oreonhq.com>
+
+	* gcc/m2/mc-boot-ch/Gldtoa.cc (ldtoa_ldtoa): Remove unused local `r`
+	(-Wunused-variable with -Wall bootstrap / profiledbootstrap).
+
+--- gcc/m2/mc-boot-ch/Gldtoa.cc
++++ gcc/m2/mc-boot-ch/Gldtoa.cc
+@@ -67,7 +67,6 @@
+ {
+   char format[50];
+   char *p;
+-  int r;
+   switch (mode)
+     {
+ 

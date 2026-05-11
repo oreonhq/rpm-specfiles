@@ -331,6 +331,7 @@ Patch15: gcc16-pr124547.patch
 Patch16: gcc16-uglification.patch
 Patch17: gcc16-module-exports.patch
 Patch18: gcc16-libgfortran-no-caf-shmem-newlib.patch
+Patch19: gcc16-m2-Gldtoa-remove-unused-r.patch
 
 Patch50: isl-rh2155127.patch
 
