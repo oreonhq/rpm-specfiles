@@ -1234,6 +1234,7 @@ CONFIGURE_OPTS="\
 %endif
 	--with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions \
 	--enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only \
+	--disable-fixincludes \
 	--enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=%{_datadir}/zoneinfo \
 %ifnarch %{mips}
 	--with-linker-hash-style=gnu \
@@ -4000,6 +4001,7 @@ end
 %changelog
 * Mon May 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-%{gcc_release}.12
 - Disable NVPTX and AMDGCN offload subbuilds again while GCC 16 offload bootstrap is unstable
+- Disable fixincludes to avoid native bootstrap mkheaders/fixinc_list noise
 
 * Wed Apr 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-%{gcc_release}.11
 - Offload trees use dedicated TMPDIR under each obj-offload dir libgomp configure conftest races default /tmp in mock
