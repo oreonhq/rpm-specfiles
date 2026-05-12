@@ -195,14 +195,14 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.0.4
-%define specversion 7.0.4
+%define specrpmversion 7.0.6
+%define specversion 7.0.6
 %define patchversion 7.0
 %define pkgrelease 1
 %define kversion 7
-%define tarfile_release 7.0.4
-# Top-level dir from Source0 tarball (linux-7.0.4 after unpack)
-%global upstream_snapshot_commit 7.0.4
+%define tarfile_release 7.0.6
+# Top-level dir from Source0 tarball (linux-7.0.6 after unpack)
+%global upstream_snapshot_commit 7.0.6
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
@@ -2153,7 +2153,7 @@ if [ "%{patches}" != "%%{patches}" ] ; then
 fi 2>/dev/null
 
 # git apply is stricter about context and fails on minor upstream revisions
-# (7.0.2 -> 7.0.4). Use GNU patch with fuzz so the hunks still apply cleanly.
+# (for example, 7.0.2 -> 7.0.6). Use GNU patch with fuzz so the hunks still apply cleanly.
 patch_command='patch -p1 --forward --batch --fuzz=5'
 ApplyPatch()
 {
@@ -2595,6 +2595,11 @@ BuildKernel() {
     perl -p -i -e "s/^CONFIG_BUILD_SALT.*/CONFIG_BUILD_SALT=\"%{KVERREL}\"/" .config
     %{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags}
     if [ $DoModules -eq 1 ]; then
+%ifarch x86_64
+        if [ ! -x tools/objtool/objtool ]; then
+            %{make} ARCH=$Arch tools/objtool
+        fi
+%endif
 	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} modules %{?sparse_mflags} || exit 1
     fi
 
@@ -4923,9 +4928,13 @@ fi\
 #
 #
 %changelog
+* Tue May 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.6-1
+- Bump to Linux 7.0.6 stable
+
 * Mon May 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.4-2
 - Fix aarch64 kernel-devel/header fallout from missing QDSP6, fixdep, and dqblk_xfs paths
 - Keep kselftests best-effort when BPF CO-RE tests fail against generated kernel BTF
+- Build x86_64 objtool before module finalization
 
 * Thu May  7 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.4-1
 - Bump to Linux 7.0.4 stable
