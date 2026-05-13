@@ -2597,14 +2597,22 @@ BuildKernel() {
     %{log_msg "Setup build-ids"}
     # This ensures build-ids are unique to allow parallel debuginfo
     perl -p -i -e "s/^CONFIG_BUILD_SALT.*/CONFIG_BUILD_SALT=\"%{KVERREL}\"/" .config
-    %{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags}
+    # Regenerate include/generated (and Kconfig sync) after salt tweak, before any
+    # parallel compile. Also avoids GNU Make 4.4 __sub-make races between separate
+    # image and modules invocations (missing scripts/Makefile.build, fixdep, autoconf.h).
+    %{make} ARCH=$Arch KCFLAGS="$KCFLAGS" %{?_smp_mflags} syncconfig
     if [ $DoModules -eq 1 ]; then
 %ifarch x86_64
         if [ ! -x tools/objtool/objtool ]; then
             %{make} ARCH=$Arch tools/objtool
         fi
 %endif
-	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} modules %{?sparse_mflags} || exit 1
+	# One make session for image + modules so kbuild does not re-enter
+	# __sub-make between goals (fixes missing scripts/Makefile.build, fixdep,
+	# and generated/autoconf.h on aarch64 and other arches under high -j).
+	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget modules %{?sparse_mflags} %{?kernel_mflags} || exit 1
+    else
+	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags}
     fi
 
     %{log_msg "Setup RPM_BUILD_ROOT directories"}
