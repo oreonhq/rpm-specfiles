@@ -1253,6 +1253,8 @@ Source4002: gating.yaml
 Patch1: patch-%{patchversion}-redhat.patch
 %endif
 
+Patch2: oreon-kselftests-bpf-smcmake.patch
+
 # empty final patch to facilitate testing of kernel patches
 Patch999999: linux-kernel-test.patch
 
@@ -2208,6 +2210,8 @@ cp -a %{SOURCE1} .
 
 ApplyOptionalPatch patch-%{patchversion}-redhat.patch
 %endif
+
+ApplyPatch oreon-kselftests-bpf-smcmake.patch
 
 ApplyOptionalPatch linux-kernel-test.patch
 
@@ -3605,7 +3609,7 @@ export CXXFLAGS="%{build_cxxflags}"
 # anonymous struct/union layout that needs -fms-extensions. Kbuild passes this for
 # the kernel proper but kselftest EXTRA_CFLAGS did not, so targets like mm that add
 # -I $(top_srcdir) failed with missing ns_id / failed filename static_assert.
-%{make} %{?_smp_mflags} EXTRA_CFLAGS="${RPM_OPT_FLAGS} -fms-extensions" EXTRA_CXXFLAGS="${RPM_OPT_FLAGS} -fms-extensions" EXTRA_LDFLAGS="%{__global_ldflags}" ARCH=$Arch V=1 TARGETS="bpf cgroup kmod mm net net/can net/forwarding net/hsr net/mptcp net/netfilter net/packetdrill tc-testing memfd drivers/net drivers/net/hw iommu cachestat pid_namespace rlimits timens pidfd capabilities clone3 exec filesystems firmware landlock mount mount_setattr move_mount_set_group nsfs openat2 proc safesetid seccomp tmpfs uevent vDSO" SKIP_TARGETS="" $force_targets INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests VMLINUX_H="${RPM_VMLINUX_H}" install || :
+%{make} %{?_smp_mflags} EXTRA_CFLAGS="${RPM_OPT_FLAGS} -fms-extensions" EXTRA_CXXFLAGS="${RPM_OPT_FLAGS} -fms-extensions" EXTRA_LDFLAGS="%{__global_ldflags}" ARCH=$Arch V=1 TARGETS="bpf cgroup kmod mm net net/can net/forwarding net/hsr net/mptcp net/netfilter net/packetdrill tc-testing memfd drivers/net drivers/net/hw iommu cachestat pid_namespace rlimits timens pidfd capabilities clone3 exec filesystems firmware landlock mount mount_setattr move_mount_set_group nsfs openat2 proc safesetid seccomp tmpfs uevent vDSO" SKIP_TARGETS="" $force_targets INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests VMLINUX_H="${RPM_VMLINUX_H}" install
 
 # Restore the original level of source fortification
 %define _fortify_level %{_fortify_level_bak}

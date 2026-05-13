@@ -1,0 +1,52 @@
+From: Oreon kernel packaging
+Subject: bpf selftests: honor EXTRA_CFLAGS; skip bpf_smc without CONFIG_SMC
+
+RHEL-style kernel configs disable CONFIG_SMC while progs/bpf_smc.c expects
+SMC fields in struct net / smc_hs_ctrl in generated vmlinux.h, so drop that
+program when SMC is off.
+
+Also append $(EXTRA_CFLAGS) to host CFLAGS so distro flags such as
+-fms-extensions (needed for some other selftest targets) reach bpf host
+objects the same way as other kselftest subtrees.
+
+---
+ tools/testing/selftests/bpf/Makefile | 17 +++++++++++++++++
+ 1 file changed, 16 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -64,6 +64,7 @@ LDLIBS += $(PCAP_LIBS)
+ CFLAGS += $(PCAP_CFLAGS)
+ 
+ # Some utility functions use LLVM libraries
++CFLAGS += $(EXTRA_CFLAGS)
+ jit_disasm_helpers.c-CFLAGS = $(LLVM_CFLAGS)
+ 
+ ifneq ($(LLVM),)
+@@ -523,6 +524,16 @@ HEADERS_FOR_BPF_OBJS := $(wildcard $(BPFDIR)/*.bpf.h)		\
+ 			                        bpf_helpers.h	\
+ 			                        bpf_tracing.h)
+ 
++# progs/bpf_smc.c needs CONFIG_SMC=y|m in the built kernel so vmlinux.h/BTF
++# contains struct net.smc and struct smc_hs_ctrl. Skip it when SMC is off.
++BPF_PROGS_KCONFIG_EXCLUDE :=
++ifeq ($(wildcard $(srctree)/.config),)
++else
++ifeq ($(shell grep -E '^(CONFIG_SMC=y|CONFIG_SMC=m)' $(srctree)/.config 2>/dev/null),)
++BPF_PROGS_KCONFIG_EXCLUDE += bpf_smc.c
++endif
++endif
++
+ # Set up extra TRUNNER_XXX "temporary" variables in the environment (relies on
+ # $eval()) and pass control to DEFINE_TEST_RUNNER_RULES.
+ # Parameters:
+@@ -541,7 +552,7 @@ TRUNNER_LIB_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.o,		\
+ 				 $$(filter %.c,$(TRUNNER_LIB_SOURCES)))
+ TRUNNER_EXTRA_HDRS := $$(filter %.h,$(TRUNNER_EXTRA_SOURCES))
+ TRUNNER_TESTS_HDR := $(TRUNNER_TESTS_DIR)/tests.h
+-TRUNNER_BPF_SRCS := $$(notdir $$(wildcard $(TRUNNER_BPF_PROGS_DIR)/*.c))
++TRUNNER_BPF_SRCS := $$(filter-out $(BPF_PROGS_KCONFIG_EXCLUDE),$$(notdir $$(wildcard $(TRUNNER_BPF_PROGS_DIR)/*.c)))
+ TRUNNER_BPF_OBJS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.bpf.o, $$(TRUNNER_BPF_SRCS))
+ TRUNNER_BPF_SKELS := $$(patsubst %.c,$$(TRUNNER_OUTPUT)/%.skel.h,	\
+ 				 $$(filter-out $(SKEL_BLACKLIST) $(LINKED_BPF_SRCS),\
