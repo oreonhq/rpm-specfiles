@@ -1,10 +1,11 @@
 From: Oreon Packaging Team <packaging@oreonhq.com>
 Subject: [OREON] configure: sanitize skipdirs/noconfigdirs before $notsupp
 
-Strip any word starting with '-' from skipdirs and noconfigdirs before the
-loop that builds $notsupp. That stops bogus "*** This configuration is not
-supported in the following subdirectories: -MMD -MP ..." output when a
-compiler-flag string leaks into a directory list (PR124547 class breakage).
+Strip tokens from skipdirs and noconfigdirs that are not real directory names:
+compiler flags (-*), path fragments (*/*), assignments (*=*), and common
+intermediate source/object suffixes. Complements PR bootstrap/124547
+(gas_flag vs gas in gcc/configure) when a full compile command still leaks
+into dir lists (bogus "*** not supported in subdirectories: -MMD -MP ...").
 
 --- configure
 +++ configure
@@ -12,11 +13,11 @@ compiler-flag string leaks into a directory list (PR124547 class breakage).
     skipdirs="${skipdirs} ${target_configdirs}"
  fi
  
-+# Oreon: strip tokens starting with dash from skipdirs/noconfigdirs (defensive, PR124547-related).
++# Oreon: sanitize skipdirs/noconfigdirs (compiler flags, paths, temp files; PR124547 class).
 +__oreon_sd=""
 +for __oreon_d in $skipdirs; do
 +  case $__oreon_d in
-+  -*) ;;
++  ""|-*|*/*|*=*|*.o|*.lo|*.obj|*.c|*.cc|*.cpp|*.cxx|*.d|*.S|*.s|*.h|*.hh) ;;
 +  *) __oreon_sd="$__oreon_sd $__oreon_d" ;;
 +  esac
 +done
@@ -24,7 +25,7 @@ compiler-flag string leaks into a directory list (PR124547 class breakage).
 +__oreon_sd=""
 +for __oreon_d in $noconfigdirs; do
 +  case $__oreon_d in
-+  -*) ;;
++  ""|-*|*/*|*=*|*.o|*.lo|*.obj|*.c|*.cc|*.cpp|*.cxx|*.d|*.S|*.s|*.h|*.hh) ;;
 +  *) __oreon_sd="$__oreon_sd $__oreon_d" ;;
 +  esac
 +done
