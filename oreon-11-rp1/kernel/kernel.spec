@@ -172,7 +172,7 @@ Summary: The Linux kernel
 # kernel package name (should only be used to define %{name})
 %global package_name kernel
 %global gemini 0
-# Include Fedora files
+# Optional community baseline configs and sources
 %global include_fedora 1
 # Include RHEL files
 %global include_rhel 1
@@ -207,7 +207,7 @@ Summary: The Linux kernel
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 1%{?buildid}%{?dist}
-# kABI helper tarball basename version (files are vendored as Source300/301, not fetched from Fedora)
+# kABI helper tarball basename version (vendored as Source300/301 in SRPM, no lookaside fetch)
 %define kabiversion 7.0.0
 
 # If this variable is set to 1, a bpf selftests build failure will cause a
@@ -253,7 +253,7 @@ Summary: The Linux kernel
 %define with_arm64_16k %{?_with_arm64_16k:    1} %{?!_with_arm64_16k:    0}
 # kernel-64k (aarch64 kernel with 64K page_size)
 %define with_arm64_64k %{?_without_arm64_64k: 0} %{?!_without_arm64_64k: 1}
-# we default reatime builds to off for fedora and on for rhel/centos/eln
+# RT defaults differ by target (off in community baseline, on for enterprise baselines below)
 %if 0%{?fedora}
 # kernel-rt (x86_64 and aarch64 only PREEMPT_RT enabled kernel)
 %define with_realtime  %{?_with_realtime:  1} %{?!_with_realtime:  0}
@@ -332,7 +332,7 @@ Summary: The Linux kernel
 # Cross compile requested?
 %define with_cross    %{?_with_cross:         1} %{?!_with_cross:        0}
 #
-# build a release kernel on rawhide
+# build a release kernel when with_release is set
 %define with_release   %{?_with_release:      1} %{?!_with_release:      0}
 
 # verbose build, i.e. no silent rules and V=1
@@ -356,7 +356,7 @@ Summary: The Linux kernel
 %endif
 
 %ifarch aarch64
-# dtbloader sub-package requires stubble which is only in Fedora for now
+# dtbloader needs stubble; enable only where that package exists
 %if 0%{?fedora}
 %define with_dtbloader %{?_without_dtbloader: 0} %{?!_without_dtbloader: 1}
 %else
@@ -627,7 +627,7 @@ Summary: The Linux kernel
 %endif
 
 %if 0%{?fedora}
-# This is not for Fedora
+# zfcpdump not used on community baseline
 %define with_zfcpdump 0
 %endif
 
@@ -916,7 +916,7 @@ BuildRequires: kabi-dw
 %if %{signkernel}%{signmodules}
 BuildRequires: openssl
 %if %{signkernel}
-# ELN uses Fedora signing process, so exclude. Oreon uses embedded certs like Fedora.
+# Enterprise signing via system-sb-certs; skip for ELN, Oreon, and similar embedded-cert layouts.
 %if 0%{?rhel}%{?centos} && !0%{?eln} && !0%{?oreon}
 BuildRequires: system-sb-certs
 %endif
@@ -1012,7 +1012,7 @@ BuildRequires: redhat-sb-certs >= 9.4-0.1
 # exact git commit you can run
 #
 # xzcat -qq ${TARBALL} | git get-tar-commit-id
-# Stable release tarball from kernel.org. %%prep renames linux-%%{upstream_snapshot_commit} -> linux-%%{KVERREL}.
+# Stable tarball from kernel.org. %%prep uses wrapper dir kernel-%%{upstream_snapshot_commit}/linux-%%{KVERREL} (no symlink).
 Source0: https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-%{upstream_snapshot_commit}.tar.xz
 
 Source1: Makefile.rhelver
@@ -1031,7 +1031,7 @@ Source13: oreonsecureboot-kernel.cer
 %define signing_key_filename kernel-signing-s390.cer
 %endif
 
-# Oreon: same layout as Fedora (embedded certs in SRPM); NSS DB must contain oreonsecureboot501 (and UKI if split).
+# Oreon: embedded certs in SRPM; NSS DB must contain oreonsecureboot501 (and UKI if split).
 %if 0%{?oreon}
 %define pesign_name_0 oreonsecureboot501
 %define secureboot_ca_0 %{SOURCE10}
@@ -1040,7 +1040,7 @@ Source13: oreonsecureboot-kernel.cer
 %define secureboot_key_uki_0 %{secureboot_key_0}
 %endif
 
-# Fedora/ELN pesign macro expects to see these cert file names, see:
+# pesign rpmbuild helper expects these cert file names, see:
 # https://github.com/rhboot/pesign/blob/main/src/pesign-rpmbuild-helper.in#L216
 %if 0%{?fedora}%{?eln} && !0%{?oreon}
 %define pesign_name_0 redhatsecureboot501
@@ -1190,7 +1190,7 @@ Source212: Module.kabi_dup_s390x
 Source213: Module.kabi_dup_x86_64
 Source214: Module.kabi_dup_riscv64
 
-# kABI helper tarballs (Oreon vendored next to this spec, same names as before). Do not use Fedora lookaside in builds.
+# kABI helper tarballs (vendored next to this spec). Do not use lookaside URLs in builds.
 Source300: kernel-abi-stablelists-%{kabiversion}.tar.xz
 Source301: kernel-kabi-dw-%{kabiversion}.tar.xz
 
@@ -1233,9 +1233,7 @@ Source491: %{name}-x86_64-automotive-debug-rhel.config
 # Sources for kernel-tools
 Source2002: kvm_stat.logrotate
 
-# Some people enjoy building customized kernels from the dist-git in Fedora and
-# use this to override configuration options. One day they may all use the
-# source tree, but in the mean time we carry this to support the legacy workflow
+# Local overrides for customized kernel builds (merge.py / kernel-local legacy workflow).
 Source3000: merge.py
 Source3001: kernel-local
 %if %{patchlist_changelog}
@@ -2139,7 +2137,7 @@ exit 1
 
 %if %{with_automotive}
 %if 0%{?fedora}
-%{log_msg "Cannot build automotive with a fedora baseline, must be rhel/centos/eln"}
+%{log_msg "Cannot build automotive with community baseline, must be rhel/centos/eln"}
 exit 1
 %endif
 %endif
@@ -2194,14 +2192,10 @@ ApplyOptionalPatch()
 }
 
 %{log_msg "Untar kernel tarball"}
-%setup -q -n linux-%{upstream_snapshot_commit}
-cd ..
+# %%setup -c unpacks under kernel-*/ so %%buildsubdir is stable; tree is
+# kernel-%%{upstream_snapshot_commit}/linux-%%{KVERREL} (no symlink).
+%setup -q -n kernel-%{upstream_snapshot_commit} -c
 mv linux-%{upstream_snapshot_commit} linux-%{KVERREL}
-# %%setup records %%buildsubdir as linux-%%{upstream_snapshot_commit}; redhat-rpm-config's
-# %%___build_pre still does "cd" there before %%build. Recreate that name as a symlink to
-# linux-%%{KVERREL} so %%build starts in the renamed tree.
-ln -sfn linux-%{KVERREL} linux-%{upstream_snapshot_commit}
-
 cd linux-%{KVERREL}
 cp -a %{SOURCE1} .
 
@@ -2597,22 +2591,9 @@ BuildKernel() {
     %{log_msg "Setup build-ids"}
     # This ensures build-ids are unique to allow parallel debuginfo
     perl -p -i -e "s/^CONFIG_BUILD_SALT.*/CONFIG_BUILD_SALT=\"%{KVERREL}\"/" .config
-    # Regenerate include/generated (and Kconfig sync) after salt tweak, before any
-    # parallel compile. Also avoids GNU Make 4.4 __sub-make races between separate
-    # image and modules invocations (missing scripts/Makefile.build, fixdep, autoconf.h).
-    %{make} ARCH=$Arch KCFLAGS="$KCFLAGS" %{?_smp_mflags} syncconfig
+    %{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags}
     if [ $DoModules -eq 1 ]; then
-%ifarch x86_64
-        if [ ! -x tools/objtool/objtool ]; then
-            %{make} ARCH=$Arch tools/objtool
-        fi
-%endif
-	# One make session for image + modules so kbuild does not re-enter
-	# __sub-make between goals (fixes missing scripts/Makefile.build, fixdep,
-	# and generated/autoconf.h on aarch64 and other arches under high -j).
-	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget modules %{?sparse_mflags} %{?kernel_mflags} || exit 1
-    else
-	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags}
+	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} modules %{?sparse_mflags} || exit 1
     fi
 
     %{log_msg "Setup RPM_BUILD_ROOT directories"}
@@ -3380,9 +3361,8 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/boot
 mkdir -p $RPM_BUILD_ROOT%{_libexecdir}
 
-# %%___build_pre cds into %%buildsubdir (linux-%%{upstream_snapshot_commit} symlink); cwd is *inside*
-# the tree, so a relative "cd linux-%%{KVERREL}" would wrongly look for a subdir of the source.
-cd %{_builddir}/linux-%{KVERREL}
+# %%___build_pre cds into %%buildsubdir (kernel-%%{upstream_snapshot_commit}).
+cd linux-%{KVERREL}
 
 %if %{with_debug}
 %if %{with_realtime}
@@ -3777,7 +3757,7 @@ find Documentation -type d | xargs chmod u+w
 
 %install
 
-cd %{_builddir}/linux-%{KVERREL}
+cd linux-%{KVERREL}
 
 # re-define RPM_VMLINUX_H, because it doesn't carry over from %build
 RPM_VMLINUX_H="$(cat ../vmlinux_h_path)"
