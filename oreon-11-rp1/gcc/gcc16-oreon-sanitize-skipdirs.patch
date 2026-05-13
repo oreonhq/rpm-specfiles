@@ -6,14 +6,9 @@ loop that builds $notsupp. That stops bogus "*** This configuration is not
 supported in the following subdirectories: -MMD -MP ..." output when a
 compiler-flag string leaks into a directory list (PR124547 class breakage).
 
----
- configure | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/configure b/configure
---- a/configure
-+++ b/configure
-@@ -10680,6 +10680,24 @@ if test ! -d ${srcdir}/gcc; then
+--- configure
++++ configure
+@@ -10680,6 +10680,24 @@
     skipdirs="${skipdirs} ${target_configdirs}"
  fi
  
