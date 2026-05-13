@@ -1,6 +1,5 @@
-%global glibc_git_full f6143a7848098a1d4fe4340dd6f375cf0cb9d2db
-%global glibcsrcdir glibc-%{glibc_git_full}
-%global glibcversion 2.43.9000
+%global glibcsrcdir glibc-2.43
+%global glibcversion 2.43
 # Pre-release tarballs are pulled in from git using a command that is
 # effectively:
 #
@@ -217,7 +216,7 @@ Release: %{baserelease}%{?dist}
 License: LGPL-2.1-or-later AND SunPro AND LGPL-2.1-or-later WITH GCC-exception-2.0 AND BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later WITH GNU-compiler-exception AND GPL-2.0-only AND ISC AND LicenseRef-Fedora-Public-Domain AND HPND AND CMU-Mach AND LGPL-2.0-or-later AND Unicode-3.0 AND GFDL-1.1-or-later AND GPL-1.0-or-later AND FSFUL AND MIT AND Inner-Net-2.0 AND X11 AND GPL-2.0-or-later WITH GCC-exception-2.0 AND GFDL-1.3-only AND GFDL-1.1-only AND GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Texinfo-exception
 
 URL: http://www.gnu.org/software/glibc/
-Source0: %{?glibc_release_url:%{glibc_release_url}%{glibcsrcdir}.tar.xz}%{!?glibc_release_url:https://github.com/bminor/glibc/archive/%{glibc_git_full}.tar.gz#/glibc-%{glibc_git_full}.tar.gz}
+Source0: %{?glibc_release_url:%{glibc_release_url}%{glibcsrcdir}.tar.xz}%{!?glibc_release_url:https://ftp.gnu.org/gnu/glibc/%{glibcsrcdir}.tar.xz}
 Source1: bench.mk
 Source2: glibc-bench-compare
 Source3: glibc.req.in
