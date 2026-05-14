@@ -1253,6 +1253,7 @@ Patch1: patch-%{patchversion}-redhat.patch
 
 Patch2: oreon-kselftests-bpf-smcmake.patch
 Patch3: oreon-kselftests-bpf-urandom-read-warn-unused.patch
+Patch4: oreon-kselftests-bpf-test-progs-warn-unused.patch
 
 # empty final patch to facilitate testing of kernel patches
 Patch999999: linux-kernel-test.patch
@@ -2208,6 +2209,7 @@ ApplyOptionalPatch patch-%{patchversion}-redhat.patch
 
 ApplyPatch oreon-kselftests-bpf-smcmake.patch
 ApplyPatch oreon-kselftests-bpf-urandom-read-warn-unused.patch
+ApplyPatch oreon-kselftests-bpf-test-progs-warn-unused.patch
 
 ApplyOptionalPatch linux-kernel-test.patch
 
@@ -3594,13 +3596,17 @@ pushd tools/testing/selftests
 %undefine _fortify_level
 # Selftests bpf mixes clang (-O0) and gcc, inherited distro flags must not leave
 # _FORTIFY_SOURCE without -O or pass gcc-only -Wno-complain-wrong-lang into clang.
-KSELFTEST_HOST_CFLAGS="$(echo "%{build_cflags}" | sed -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wno-complain-wrong-lang//g')"
-KSELFTEST_HOST_CXXFLAGS="$(echo "%{build_cxxflags}" | sed -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wno-complain-wrong-lang//g')"
+KSELFTEST_HOST_CFLAGS="$(echo "%{build_cflags}" | sed -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wno-complain-wrong-lang//g')"
+KSELFTEST_HOST_CFLAGS="$KSELFTEST_HOST_CFLAGS -fms-extensions"
+KSELFTEST_HOST_CXXFLAGS="$(echo "%{build_cxxflags}" | sed -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wno-complain-wrong-lang//g')"
+KSELFTEST_HOST_CXXFLAGS="$KSELFTEST_HOST_CXXFLAGS -fms-extensions"
 export CFLAGS="$KSELFTEST_HOST_CFLAGS"
 export CXXFLAGS="$KSELFTEST_HOST_CXXFLAGS"
 # bpf selftests Makefile defaults OPT_FLAGS to -O0 unless RELEASE=1, which
 # breaks distro _FORTIFY_SOURCE (needs -O). Strip fortify from EXTRA_CFLAGS too.
-KSELFTEST_EXTRA_CFLAGS="$(echo "${RPM_OPT_FLAGS}" | sed -e 's/-Wno-complain-wrong-lang//g' -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g')"
+# The combined form -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=N must also be stripped;
+# plain -Wp,-D_FORTIFY_SOURCE pattern does not match it.
+KSELFTEST_EXTRA_CFLAGS="$(echo "${RPM_OPT_FLAGS}" | sed -e 's/-Wno-complain-wrong-lang//g' -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g')"
 KSELFTEST_EXTRA_CFLAGS="$KSELFTEST_EXTRA_CFLAGS -O2 -fms-extensions"
 
 # Internal kernel headers (e.g. include/linux/fs.h, ns/ns_common_types.h) rely on
