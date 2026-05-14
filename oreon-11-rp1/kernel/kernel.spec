@@ -3986,6 +3986,9 @@ find -type d -exec install -d %{buildroot}%{_libexecdir}/kselftests/drivers/net/
 find -type f -executable -exec install -D -m755 {} %{buildroot}%{_libexecdir}/kselftests/drivers/net/mlxsw/{} \;
 find -type f ! -executable -exec install -D -m644 {} %{buildroot}%{_libexecdir}/kselftests/drivers/net/mlxsw/{} \;
 popd
+# sharedbuffer_configuration.py has an unversioned "python" shebang; make it non-executable
+# so brp-mangle-shebangs does not flag it as an error.
+chmod a-x %{buildroot}%{_libexecdir}/kselftests/drivers/net/mlxsw/sharedbuffer_configuration.py 2>/dev/null || true
 # install drivers/net/hw selftests
 pushd tools/testing/selftests/drivers/net/hw
 find -type d -exec install -d %{buildroot}%{_libexecdir}/kselftests/drivers/net/hw/{} \;
