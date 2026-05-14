@@ -1073,6 +1073,13 @@ ln -sf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib newlib
 rm -rf obj-offload-nvptx-none
 mkdir obj-offload-nvptx-none
 
+# Accelerator-only nvptx-none does not consume the host linker's hardened
+# LDFLAGS/CPPFLAGS; leaving them exported breaks libgfortran libcaf_shmem.la
+# link (libtool ends up trying to run "rpath" as a command).
+OLDFLAGS="${LDFLAGS-}"
+OCPPFLAGS="${CPPFLAGS-}"
+unset LDFLAGS CPPFLAGS
+
 cd obj-offload-nvptx-none
 mkdir -p tmp
 export TMPDIR="$(pwd)/tmp"
@@ -1092,6 +1099,8 @@ make %{?_smp_mflags}
 cd ..
 rm -f newlib
 unset TMPDIR
+export LDFLAGS="${OLDFLAGS}"
+export CPPFLAGS="${OCPPFLAGS}"
 %endif
 
 %if %{build_offload_amdgcn}
@@ -1112,6 +1121,10 @@ ln -sf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib newlib
 rm -rf obj-offload-amdgcn-amdhsa
 mkdir obj-offload-amdgcn-amdhsa
 
+OLDFLAGS="${LDFLAGS-}"
+OCPPFLAGS="${CPPFLAGS-}"
+unset LDFLAGS CPPFLAGS
+
 cd obj-offload-amdgcn-amdhsa
 mkdir -p tmp
 export TMPDIR="$(pwd)/tmp"
@@ -1131,6 +1144,8 @@ make %{?_smp_mflags}
 cd ..
 rm -f newlib
 unset TMPDIR
+export LDFLAGS="${OLDFLAGS}"
+export CPPFLAGS="${OCPPFLAGS}"
 %endif
 
 rm -rf obj-%{gcc_target_platform}
