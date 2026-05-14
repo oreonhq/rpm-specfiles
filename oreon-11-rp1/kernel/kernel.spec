@@ -195,14 +195,14 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.0.6
-%define specversion 7.0.6
+%define specrpmversion 7.0.7
+%define specversion 7.0.7
 %define patchversion 7.0
 %define pkgrelease 1
 %define kversion 7
-%define tarfile_release 7.0.6
-# Top-level dir from Source0 tarball (linux-7.0.6 after unpack)
-%global upstream_snapshot_commit 7.0.6
+%define tarfile_release 7.0.7
+# Top-level dir from Source0 tarball (linux-7.0.7 after unpack)
+%global upstream_snapshot_commit 7.0.7
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
@@ -4952,6 +4952,9 @@ fi\
 #
 #
 %changelog
+* Thu May 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.7-1
+- Bump to Linux 7.0.7 stable
+
 * Tue May 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.6-1
 - Bump to Linux 7.0.6 stable
 
