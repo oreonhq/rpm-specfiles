@@ -1252,6 +1252,7 @@ Patch1: patch-%{patchversion}-redhat.patch
 %endif
 
 Patch2: oreon-kselftests-bpf-smcmake.patch
+Patch3: oreon-kselftests-bpf-urandom-read-warn-unused.patch
 
 # empty final patch to facilitate testing of kernel patches
 Patch999999: linux-kernel-test.patch
@@ -2206,6 +2207,7 @@ ApplyOptionalPatch patch-%{patchversion}-redhat.patch
 %endif
 
 ApplyPatch oreon-kselftests-bpf-smcmake.patch
+ApplyPatch oreon-kselftests-bpf-urandom-read-warn-unused.patch
 
 ApplyOptionalPatch linux-kernel-test.patch
 
@@ -3596,7 +3598,10 @@ KSELFTEST_HOST_CFLAGS="$(echo "%{build_cflags}" | sed -e 's/-Wp,-D_FORTIFY_SOURC
 KSELFTEST_HOST_CXXFLAGS="$(echo "%{build_cxxflags}" | sed -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wno-complain-wrong-lang//g')"
 export CFLAGS="$KSELFTEST_HOST_CFLAGS"
 export CXXFLAGS="$KSELFTEST_HOST_CXXFLAGS"
-KSELFTEST_EXTRA_CFLAGS="$(echo "${RPM_OPT_FLAGS}" | sed -e 's/-Wno-complain-wrong-lang//g')"
+# bpf selftests Makefile defaults OPT_FLAGS to -O0 unless RELEASE=1, which
+# breaks distro _FORTIFY_SOURCE (needs -O). Strip fortify from EXTRA_CFLAGS too.
+KSELFTEST_EXTRA_CFLAGS="$(echo "${RPM_OPT_FLAGS}" | sed -e 's/-Wno-complain-wrong-lang//g' -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g')"
+KSELFTEST_EXTRA_CFLAGS="$KSELFTEST_EXTRA_CFLAGS -O2 -fms-extensions"
 
 # Internal kernel headers (e.g. include/linux/fs.h, ns/ns_common_types.h) rely on
 # anonymous struct/union layout that needs -fms-extensions. Kbuild passes this for
@@ -3605,7 +3610,7 @@ KSELFTEST_EXTRA_CFLAGS="$(echo "${RPM_OPT_FLAGS}" | sed -e 's/-Wno-complain-wron
 # tools/testing/selftests/Makefile ignores INSTALL_PATH and installs under
 # KSFT_INSTALL_PATH (default kselftest_install/). Point it at BUILDROOT so binaries
 # land under %%{_libexecdir}/kselftests for packaging.
-%{make} %{?_smp_mflags} KSFT_INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests EXTRA_CFLAGS="${KSELFTEST_EXTRA_CFLAGS} -fms-extensions" EXTRA_CXXFLAGS="${KSELFTEST_EXTRA_CFLAGS} -fms-extensions" EXTRA_LDFLAGS="%{__global_ldflags}" ARCH=$Arch V=1 TARGETS="bpf cgroup kmod mm net net/can net/forwarding net/hsr net/mptcp net/netfilter net/packetdrill tc-testing memfd drivers/net drivers/net/hw iommu cachestat pid_namespace rlimits timens pidfd capabilities clone3 exec filesystems firmware landlock mount mount_setattr move_mount_set_group nsfs openat2 proc safesetid seccomp tmpfs uevent vDSO" SKIP_TARGETS="" $force_targets INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests VMLINUX_H="${RPM_VMLINUX_H}" install
+%{make} %{?_smp_mflags} KSFT_INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests RELEASE=1 EXTRA_CFLAGS="${KSELFTEST_EXTRA_CFLAGS}" EXTRA_CXXFLAGS="${KSELFTEST_EXTRA_CFLAGS}" EXTRA_LDFLAGS="%{__global_ldflags}" ARCH=$Arch V=1 TARGETS="bpf cgroup kmod mm net net/can net/forwarding net/hsr net/mptcp net/netfilter net/packetdrill tc-testing memfd drivers/net drivers/net/hw iommu cachestat pid_namespace rlimits timens pidfd capabilities clone3 exec filesystems firmware landlock mount mount_setattr move_mount_set_group nsfs openat2 proc safesetid seccomp tmpfs uevent vDSO" SKIP_TARGETS="" $force_targets INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests VMLINUX_H="${RPM_VMLINUX_H}" install
 
 # Restore the original level of source fortification
 %define _fortify_level %{_fortify_level_bak}
@@ -3871,6 +3876,8 @@ pushd tools/power/cpupower/bindings/python
 %{libcpupower_python_bindings_make}
 %{log_msg "Install libcpupower Python bindings"}
 %{make} INSTALL_DIR=$RPM_BUILD_ROOT%{python3_sitearch} install
+# Module for import only; executable bit triggers brp-mangle-shebang failure (no shebang).
+chmod a-x "$RPM_BUILD_ROOT%{python3_sitearch}/raw_pylibcpupower.py" 2>/dev/null || true
 popd
 %endif
 %ifarch x86_64
