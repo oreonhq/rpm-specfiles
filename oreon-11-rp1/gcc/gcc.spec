@@ -1,6 +1,4 @@
-%global DATE 20260501
-%global gitrev f4e68dc3bdc8f1c5d202db92c8c7bcd89c638688
-%global gcc_version 16.1.1
+%global gcc_version 16.1.0
 %global gcc_major 16
 # Note, gcc_release must be integer, if you want to add suffixes to
 # %%{release}, append them after %%{gcc_release} on Release: line.
@@ -3970,5 +3968,5 @@ end
 %endif
 
 %changelog
-* Thu May 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1.1-1
-- Import from Fedora 44, debrand for Oreon
+* Thu May 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1.0-1
+- Import from Fedora 44, debrand for Oreon, use 16.1.0 release tarball
