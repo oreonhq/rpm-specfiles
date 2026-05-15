@@ -317,7 +317,6 @@ Patch9: gcc16-Wno-format-security.patch
 Patch10: gcc16-rh1574936.patch
 Patch11: gcc16-d-shared-libphobos.patch
 Patch12: gcc16-pr119006.patch
-Patch13: gcc16-pr125079.patch
 
 Patch50: isl-rh2155127.patch
 
