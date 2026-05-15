@@ -1,13 +1,14 @@
-%global DATE 20260321
-%global gitrev da66e2fe4839df86a5fcfd7440bc80d55745534b
-%global gcc_version 16.0.1
+%global DATE 20260501
+%global gitrev f4e68dc3bdc8f1c5d202db92c8c7bcd89c638688
+%global gcc_version 16.1.1
 %global gcc_major 16
 # Note, gcc_release must be integer, if you want to add suffixes to
 # %%{release}, append them after %%{gcc_release} on Release: line.
-%global gcc_release 3
-%global nvptx_tools_gitrev a0c1fff6534a4df9fb17937c3c4a4b1071212029
+%global gcc_release 1
+%global nvptx_tools_gitrev 212da2e781ed0f9423824e85eb04819958513f7a
 %global newlib_cygwin_gitrev d35cc82b5ec15bb8a5fe0fe11e183d1887992e99
 %global _unpackaged_files_terminate_build 0
+%global _find_debuginfo_opts --keep-section .a68_exports
 %if 0%{?fedora:1}
 %global _performance_build 1
 # Hardening slows the compiler way too much.
@@ -26,11 +27,7 @@
 %if 0%{?__brp_strip_lto:1}
 %global __brp_strip_lto %{__brp_strip_lto} || :
 %endif
-%if 0%{?rhel} > 0
-%define bugurl https://issues.redhat.com
-%else
-%define bugurl https://bugzilla.redhat.com/bugzilla
-%endif
+%define bugurl https://issues.oreonhq.com
 %{!?dist_bug_report_url: %global dist_bug_report_url %bugurl}
 
 %if 0%{?fedora} < 32 && 0%{?rhel} < 8
@@ -158,40 +155,38 @@
 Summary: Various compilers (C, C++, Objective-C, ...)
 Name: gcc
 Version: %{gcc_version}
-Release: %{gcc_release}.11%{?dist}
+Release: %{gcc_release}%{?dist}
 # License notes for some of the less obvious ones:
-# gcc/doc/cppinternals.texi: Linux-man-pages-copyleft-2-para
-# isl: MIT, BSD-2-Clause
-# libcody: Apache-2.0
-# libphobos/src/etc/c/curl.d: curl
+#   gcc/doc/cppinternals.texi: Linux-man-pages-copyleft-2-para
+#   isl: MIT, BSD-2-Clause
+#   libcody: Apache-2.0
+#   libphobos/src/etc/c/curl.d: curl
 # All of the remaining license soup is in newlib.
 License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
 # The source for this package was pulled from upstream's vcs.
 # %%{gitrev} is some commit from the
 # https://gcc.gnu.org/git/?p=gcc.git;h=refs/vendors/redhat/heads/gcc-%%{gcc_major}-branch
-# branch. Use the following command to generate the tarball:
+# branch.  Use the following command to generate the tarball:
 # ./update-gcc.sh %%{gitrev}
 # optionally if say /usr/src/gcc/.git/ is an existing gcc git clone
 # ./update-gcc.sh %%{gitrev} /usr/src/gcc/.git/
-# to speed up the clone operations. Note, %%{gitrev} macro in
+# to speed up the clone operations.  Note, %%{gitrev} macro in
 # gcc.spec shouldn't be updated before running the script, the script
 # will update it, fill in some %%changelog details etc.
-# Same tarball as Fedora rawhide gcc (spectool friendly). Keeps %%prep in sync with their patch queue (PR124547 etc.).
-%global gcc_source_sha512 7e246963cfcf278a9b7f775094e5ffa60b011ae32084b8923a0bddea3d695518a10b01ddbc1f7d071a72c767fb5d2c4a66acd5f4772c234445aa02afe36c8711
-Source0: https://src.fedoraproject.org/repo/pkgs/rpms/gcc/gcc-%{version}-%{DATE}.tar.xz/sha512/%{gcc_source_sha512}/gcc-%{version}-%{DATE}.tar.xz
-# The source for nvptx-tools package was pulled from upstream's vcs. Use the
+Source0: gcc-%{version}-%{DATE}.tar.xz
+# The source for nvptx-tools package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 # git clone --depth 1 https://github.com/MentorEmbedded/nvptx-tools.git nvptx-tools-dir.tmp
 # git --git-dir=nvptx-tools-dir.tmp/.git fetch --depth 1 origin %%{nvptx_tools_gitrev}
 # git --git-dir=nvptx-tools-dir.tmp/.git archive --prefix=nvptx-tools-%%{nvptx_tools_gitrev}/ %%{nvptx_tools_gitrev} | xz -9e > nvptx-tools-%%{nvptx_tools_gitrev}.tar.xz
 # rm -rf nvptx-tools-dir.tmp
-Source1: https://github.com/MentorEmbedded/nvptx-tools/archive/%{nvptx_tools_gitrev}/nvptx-tools-%{nvptx_tools_gitrev}.tar.gz
-# The source for nvptx-newlib package was pulled from upstream's vcs. Use the
+Source1: nvptx-tools-%{nvptx_tools_gitrev}.tar.xz
+# The source for nvptx-newlib package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 # git clone https://sourceware.org/git/newlib-cygwin.git newlib-cygwin-dir.tmp
 # git --git-dir=newlib-cygwin-dir.tmp/.git archive --prefix=newlib-cygwin-%%{newlib_cygwin_gitrev}/ %%{newlib_cygwin_gitrev} ":(exclude)newlib/libc/sys/linux/include/rpc/*.[hx]" | xz -9e > newlib-cygwin-%%{newlib_cygwin_gitrev}.tar.xz
 # rm -rf newlib-cygwin-dir.tmp
-Source2: https://github.com/mirror/newlib-cygwin/archive/%{newlib_cygwin_gitrev}/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz
+Source2: newlib-cygwin-%{newlib_cygwin_gitrev}.tar.xz
 %global isl_version 0.24
 Source3: https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
 URL: http://gcc.gnu.org
@@ -324,11 +319,7 @@ Patch9: gcc16-Wno-format-security.patch
 Patch10: gcc16-rh1574936.patch
 Patch11: gcc16-d-shared-libphobos.patch
 Patch12: gcc16-pr119006.patch
-Patch13: gcc16-tcl9.patch
-Patch14: gcc16-pr124531.patch
-Patch15: gcc16-pr124547.patch
-Patch16: gcc16-uglification.patch
-Patch17: gcc16-module-exports.patch
+Patch13: gcc16-pr125079.patch
 
 Patch50: isl-rh2155127.patch
 
@@ -434,7 +425,7 @@ Requires: libstdc++%{?_isa} = %{version}-%{release}
 Autoreq: true
 
 %description -n libstdc++-devel
-This is the GNU implementation of the standard C++ libraries. This
+This is the GNU implementation of the standard C++ libraries.  This
 package includes the header files and libraries needed for C++
 development. This includes rewritten implementation of STL.
 
@@ -643,7 +634,7 @@ Requires: libgomp = %{version}-%{release}
 
 %description -n libgomp-offload-nvptx
 This package contains libgomp plugin for offloading to NVidia
-PTX. The plugin needs libcuda.so.1 shared library that has to be
+PTX.  The plugin needs libcuda.so.1 shared library that has to be
 installed separately.
 
 %package -n libgomp-offload-amdgcn
@@ -932,7 +923,7 @@ Requires: gmp-devel >= 4.1.2-8, mpfr-devel >= 3.1.0, libmpc-devel >= 0.8.1
 
 %description plugin-devel
 This package contains header files and other support files
-for compiling GCC plugins. The GCC plugin ABI is currently
+for compiling GCC plugins.  The GCC plugin ABI is currently
 not stable, so plugins must be rebuilt any time GCC is updated.
 
 %package offload-nvptx
@@ -942,7 +933,7 @@ Requires: libgomp-offload-nvptx = %{version}-%{release}
 
 %description offload-nvptx
 The gcc-offload-nvptx package provides offloading support for
-NVidia PTX. OpenMP and OpenACC programs linked with -fopenmp will
+NVidia PTX.  OpenMP and OpenACC programs linked with -fopenmp will
 by default add PTX code into the binaries, which can be offloaded
 to NVidia PTX capable devices if available.
 
@@ -954,7 +945,7 @@ Requires: llvm >= 15, lld >= 15
 
 %description offload-amdgcn
 The gcc-offload-amdgcn package provides offloading support for
-AMD GCN. OpenMP and OpenACC programs linked with -fopenmp will
+AMD GCN.  OpenMP and OpenACC programs linked with -fopenmp will
 by default add GCN code into the binaries, which can be offloaded
 to AMD ROCm capable devices if available.
 
@@ -966,7 +957,7 @@ BuildRequires: annobin-plugin-gcc >= 10.62, rpm-devel, binutils-devel, xz
 %endif
 
 %description plugin-annobin
-This package adds a version of the annobin plugin for gcc. This version
+This package adds a version of the annobin plugin for gcc.  This version
 of the plugin is explicitly built by the same version of gcc that is installed
 so that there cannot be any synchronization problems.
 
@@ -996,7 +987,7 @@ rm -f gcc/testsuite/go.test/test/fixedbugs/issue19182.go
 rm -f libphobos/testsuite/libphobos.gc/forkgc2.d
 #rm -rf libphobos/testsuite/libphobos.gc
 
-echo 'Red Hat %{version}-%{gcc_release}' > gcc/DEV-PHASE
+echo 'Oreon %{version}-%{gcc_release}' > gcc/DEV-PHASE
 
 ./contrib/gcc_update --touch
 
@@ -1007,18 +998,18 @@ sed -i -e 's/m_report_bug = false;/m_report_bug = true;/' gcc/diagnostics/contex
 
 %ifarch ppc
 if [ -d libstdc++-v3/config/abi/post/powerpc64-linux-gnu ]; then
- mkdir -p libstdc++-v3/config/abi/post/powerpc64-linux-gnu/64
- mv libstdc++-v3/config/abi/post/powerpc64-linux-gnu/{,64/}baseline_symbols.txt
- mv libstdc++-v3/config/abi/post/powerpc64-linux-gnu/{32/,}baseline_symbols.txt
- rm -rf libstdc++-v3/config/abi/post/powerpc64-linux-gnu/32
+  mkdir -p libstdc++-v3/config/abi/post/powerpc64-linux-gnu/64
+  mv libstdc++-v3/config/abi/post/powerpc64-linux-gnu/{,64/}baseline_symbols.txt
+  mv libstdc++-v3/config/abi/post/powerpc64-linux-gnu/{32/,}baseline_symbols.txt
+  rm -rf libstdc++-v3/config/abi/post/powerpc64-linux-gnu/32
 fi
 %endif
 %ifarch sparc
 if [ -d libstdc++-v3/config/abi/post/sparc64-linux-gnu ]; then
- mkdir -p libstdc++-v3/config/abi/post/sparc64-linux-gnu/64
- mv libstdc++-v3/config/abi/post/sparc64-linux-gnu/{,64/}baseline_symbols.txt
- mv libstdc++-v3/config/abi/post/sparc64-linux-gnu/{32/,}baseline_symbols.txt
- rm -rf libstdc++-v3/config/abi/post/sparc64-linux-gnu/32
+  mkdir -p libstdc++-v3/config/abi/post/sparc64-linux-gnu/64
+  mv libstdc++-v3/config/abi/post/sparc64-linux-gnu/{,64/}baseline_symbols.txt
+  mv libstdc++-v3/config/abi/post/sparc64-linux-gnu/{32/,}baseline_symbols.txt
+  rm -rf libstdc++-v3/config/abi/post/sparc64-linux-gnu/32
 fi
 %endif
 
@@ -1050,10 +1041,10 @@ OPT_FLAGS=`echo $OPT_FLAGS|sed -e 's/-march=i.86//g'`
 %endif
 OPT_FLAGS=`echo "$OPT_FLAGS" | sed -e 's/[[:blank:]]\+/ /g'`
 case "$OPT_FLAGS" in
- *-fasynchronous-unwind-tables*)
- sed -i -e 's/-fno-exceptions /-fno-exceptions -fno-asynchronous-unwind-tables /' \
- libgcc/Makefile.in
- ;;
+  *-fasynchronous-unwind-tables*)
+    sed -i -e 's/-fno-exceptions /-fno-exceptions -fno-asynchronous-unwind-tables /' \
+      libgcc/Makefile.in
+    ;;
 esac
 
 %if %{build_offload_nvptx}
@@ -1073,34 +1064,22 @@ ln -sf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib newlib
 rm -rf obj-offload-nvptx-none
 mkdir obj-offload-nvptx-none
 
-# Accelerator-only nvptx-none does not consume the host linker's hardened
-# LDFLAGS/CPPFLAGS; leaving them exported breaks libgfortran libcaf_shmem.la
-# link (libtool ends up trying to run "rpath" as a command).
-OLDFLAGS="${LDFLAGS-}"
-OCPPFLAGS="${CPPFLAGS-}"
-unset LDFLAGS CPPFLAGS
-
 cd obj-offload-nvptx-none
-mkdir -p tmp
-export TMPDIR="$(pwd)/tmp"
 CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
- CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
- | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
- XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
- ../configure --disable-bootstrap --disable-sjlj-exceptions \
- --enable-newlib-io-long-long --with-build-time-tools=${IROOT}%{_prefix}/nvptx-none/bin \
- --target nvptx-none --enable-as-accelerator-for=%{gcc_target_platform} \
- --enable-languages=c,c++,fortran,lto \
- --prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir} \
- --with-bugurl=%dist_bug_report_url \
- --enable-checking=release --with-system-zlib \
- --with-gcc-major-version-only --without-isl
+	CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
+		  | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
+	XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
+	../configure --disable-bootstrap --disable-sjlj-exceptions \
+	--enable-newlib-io-long-long --with-build-time-tools=${IROOT}%{_prefix}/nvptx-none/bin \
+	--target nvptx-none --enable-as-accelerator-for=%{gcc_target_platform} \
+	--enable-languages=c,c++,fortran,lto \
+	--prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir} \
+	--with-bugurl=%dist_bug_report_url \
+	--enable-checking=release --with-system-zlib \
+	--with-gcc-major-version-only --without-isl
 make %{?_smp_mflags}
 cd ..
 rm -f newlib
-unset TMPDIR
-export LDFLAGS="${OLDFLAGS}"
-export CPPFLAGS="${OCPPFLAGS}"
 %endif
 
 %if %{build_offload_amdgcn}
@@ -1121,31 +1100,22 @@ ln -sf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib newlib
 rm -rf obj-offload-amdgcn-amdhsa
 mkdir obj-offload-amdgcn-amdhsa
 
-OLDFLAGS="${LDFLAGS-}"
-OCPPFLAGS="${CPPFLAGS-}"
-unset LDFLAGS CPPFLAGS
-
 cd obj-offload-amdgcn-amdhsa
-mkdir -p tmp
-export TMPDIR="$(pwd)/tmp"
 CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
- CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
- | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
- XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
- ../configure --disable-bootstrap --disable-sjlj-exceptions \
- --with-build-time-tools=${IAROOT}%{_prefix}/amdgcn-amdhsa/bin \
- --target amdgcn-amdhsa --enable-as-accelerator-for=%{gcc_target_platform} \
- --enable-languages=c,c++,fortran,lto \
- --prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir} \
- --with-bugurl=%dist_bug_report_url \
- --enable-checking=release --with-system-zlib \
- --with-gcc-major-version-only --without-isl --disable-libquadmath
+	CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
+		  | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
+	XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
+	../configure --disable-bootstrap --disable-sjlj-exceptions \
+	--with-build-time-tools=${IAROOT}%{_prefix}/amdgcn-amdhsa/bin \
+	--target amdgcn-amdhsa --enable-as-accelerator-for=%{gcc_target_platform} \
+	--enable-languages=c,c++,fortran,lto \
+	--prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir} \
+	--with-bugurl=%dist_bug_report_url \
+	--enable-checking=release --with-system-zlib \
+	--with-gcc-major-version-only --without-isl --disable-libquadmath
 make %{?_smp_mflags}
 cd ..
 rm -f newlib
-unset TMPDIR
-export LDFLAGS="${OLDFLAGS}"
-export CPPFLAGS="${OCPPFLAGS}"
 %endif
 
 rm -rf obj-%{gcc_target_platform}
@@ -1168,10 +1138,10 @@ cp -f -v /usr/lib/rpm/%{_vendor}/config.sub ../../isl-%{isl_version}/config.sub
 %endif
 
 sed -i 's|libisl\([^-]\)|libgcc%{gcc_major}privateisl\1|g' \
- ../../isl-%{isl_version}/Makefile.{am,in}
+  ../../isl-%{isl_version}/Makefile.{am,in}
 ../../isl-%{isl_version}/configure \
- CC=/usr/bin/gcc CXX=/usr/bin/g++ \
- CFLAGS="${CFLAGS:-%optflags} $ISL_FLAG_PIC" --prefix=`cd ..; pwd`/isl-install
+  CC=/usr/bin/gcc CXX=/usr/bin/g++ \
+  CFLAGS="${CFLAGS:-%optflags} $ISL_FLAG_PIC" --prefix=`cd ..; pwd`/isl-install
 make %{?_smp_mflags} CFLAGS="${CFLAGS:-%optflags} $ISL_FLAG_PIC"
 make install
 cd ../isl-install/lib
@@ -1217,118 +1187,118 @@ offloadtgts=nvptx-none
 offloadtgts=${offloadtgts:+${offloadtgts},}amdgcn-amdhsa
 %endif
 CONFIGURE_OPTS="\
- --prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir} \
- --with-bugurl=%dist_bug_report_url \
- --enable-shared --enable-threads=posix --enable-checking=release \
+	--prefix=%{_prefix} --mandir=%{_mandir} --infodir=%{_infodir} \
+	--with-bugurl=%dist_bug_report_url \
+	--enable-shared --enable-threads=posix --enable-checking=release \
 %ifarch ppc64le
- --enable-targets=powerpcle-linux \
+	--enable-targets=powerpcle-linux \
 %endif
 %ifarch ppc64le %{mips} s390x
 %ifarch s390x
 %if 0%{?fedora} < 32 && 0%{?rhel} < 8
- --enable-multilib \
+	--enable-multilib \
 %else
- --disable-multilib \
+	--disable-multilib \
 %endif
 %else
- --disable-multilib \
+	--disable-multilib \
 %endif
 %else
- --enable-multilib \
+	--enable-multilib \
 %endif
- --with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions \
- --enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only \
- --enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=%{_datadir}/zoneinfo \
+	--with-system-zlib --enable-__cxa_atexit --disable-libunwind-exceptions \
+	--enable-gnu-unique-object --enable-linker-build-id --with-gcc-major-version-only \
+	--enable-libstdcxx-backtrace --with-libstdcxx-zoneinfo=%{_datadir}/zoneinfo \
 %ifnarch %{mips}
- --with-linker-hash-style=gnu \
+	--with-linker-hash-style=gnu \
 %endif
- --enable-plugin --enable-initfini-array \
+	--enable-plugin --enable-initfini-array \
 %if %{build_isl}
- --with-isl=`pwd`/isl-install \
+	--with-isl=`pwd`/isl-install \
 %else
- --without-isl \
+	--without-isl \
 %endif
 %if %{build_offload_nvptx} || %{build_offload_amdgcn}
- --enable-offload-targets=$offloadtgts --enable-offload-defaulted \
+	--enable-offload-targets=$offloadtgts --enable-offload-defaulted \
 %endif
 %if %{build_offload_nvptx}
- --without-cuda-driver \
+	--without-cuda-driver \
 %endif
 %if 0%{?fedora} >= 21 || 0%{?rhel} >= 7
 %if %{attr_ifunc}
- --enable-gnu-indirect-function \
+	--enable-gnu-indirect-function \
 %endif
 %endif
 %ifarch %{arm}
- --disable-sjlj-exceptions \
+	--disable-sjlj-exceptions \
 %endif
 %ifarch ppc ppc64 ppc64le ppc64p7
- --enable-secureplt \
+	--enable-secureplt \
 %endif
 %ifarch sparc sparcv9 sparc64 ppc ppc64 ppc64le ppc64p7 s390 s390x alpha
- --with-long-double-128 \
+	--with-long-double-128 \
 %endif
 %ifarch ppc64le
- --with-long-double-format=ieee \
+	--with-long-double-format=ieee \
 %endif
 %ifarch sparc
- --disable-linux-futex \
+	--disable-linux-futex \
 %endif
 %ifarch sparc64
- --with-cpu=ultrasparc \
+	--with-cpu=ultrasparc \
 %endif
 %ifarch sparc sparcv9
- --host=%{gcc_target_platform} --build=%{gcc_target_platform} --target=%{gcc_target_platform} --with-cpu=v7
+	--host=%{gcc_target_platform} --build=%{gcc_target_platform} --target=%{gcc_target_platform} --with-cpu=v7
 %endif
 %ifarch ppc ppc64 ppc64p7
 %if 0%{?rhel} >= 7
- --with-cpu-32=power7 --with-tune-32=power7 --with-cpu-64=power7 --with-tune-64=power7 \
+	--with-cpu-32=power7 --with-tune-32=power7 --with-cpu-64=power7 --with-tune-64=power7 \
 %endif
 %if 0%{?rhel} == 6
- --with-cpu-32=power4 --with-tune-32=power6 --with-cpu-64=power4 --with-tune-64=power6 \
+	--with-cpu-32=power4 --with-tune-32=power6 --with-cpu-64=power4 --with-tune-64=power6 \
 %endif
 %endif
 %ifarch ppc64le
 %if 0%{?rhel} >= 9
 %if 0%{?rhel} >= 10
- --with-cpu-32=power9 --with-tune-32=power10 --with-cpu-64=power9 --with-tune-64=power10 \
+	--with-cpu-32=power9 --with-tune-32=power10 --with-cpu-64=power9 --with-tune-64=power10 \
 %else
- --with-cpu-32=power9 --with-tune-32=power9 --with-cpu-64=power9 --with-tune-64=power9 \
+	--with-cpu-32=power9 --with-tune-32=power9 --with-cpu-64=power9 --with-tune-64=power9 \
 %endif
 %else
- --with-cpu-32=power8 --with-tune-32=power8 --with-cpu-64=power8 --with-tune-64=power8 \
+	--with-cpu-32=power8 --with-tune-32=power8 --with-cpu-64=power8 --with-tune-64=power8 \
 %endif
 %endif
 %ifarch ppc
- --build=%{gcc_target_platform} --target=%{gcc_target_platform} --with-cpu=default32
+	--build=%{gcc_target_platform} --target=%{gcc_target_platform} --with-cpu=default32
 %endif
 %ifarch %{ix86} x86_64
- --enable-cet \
- --with-tune=generic \
+	--enable-cet \
+	--with-tune=generic \
 %if 0%{?fedora} >= 44 || 0%{?rhel} >= 11
- --with-tls=gnu2 \
+	--with-tls=gnu2 \
 %endif
 %endif
 %if 0%{?rhel} >= 7
 %ifarch %{ix86}
- --with-arch=x86-64 \
+	--with-arch=x86-64 \
 %endif
 %ifarch x86_64
 %if 0%{?rhel} > 8
 %if 0%{?rhel} > 9
- --with-arch_64=x86-64-v3 \
+	--with-arch_64=x86-64-v3 \
 %else
- --with-arch_64=x86-64-v2 \
+	--with-arch_64=x86-64-v2 \
 %endif
 %endif
- --with-arch_32=x86-64 \
+	--with-arch_32=x86-64 \
 %endif
 %else
 %ifarch %{ix86}
- --with-arch=i686 \
+	--with-arch=i686 \
 %endif
 %ifarch x86_64
- --with-arch_32=i686 \
+	--with-arch_32=i686 \
 %endif
 %endif
 %ifarch s390 s390x
@@ -1336,72 +1306,72 @@ CONFIGURE_OPTS="\
 %if 0%{?rhel} > 7
 %if 0%{?rhel} > 8
 %if 0%{?rhel} >= 9
- --with-arch=z14 --with-tune=z15 \
+	--with-arch=z14 --with-tune=z15 \
 %else
- --with-arch=z13 --with-tune=arch13 \
+	--with-arch=z13 --with-tune=arch13 \
 %endif
 %else
- --with-arch=z13 --with-tune=z14 \
+	--with-arch=z13 --with-tune=z14 \
 %endif
 %else
- --with-arch=z196 --with-tune=zEC12 \
+	--with-arch=z196 --with-tune=zEC12 \
 %endif
 %else
 %if 0%{?fedora} >= 38
- --with-arch=z13 --with-tune=z14 \
+	--with-arch=z13 --with-tune=z14 \
 %else
 %if 0%{?fedora} >= 26
- --with-arch=zEC12 --with-tune=z13 \
+	--with-arch=zEC12 --with-tune=z13 \
 %else
- --with-arch=z9-109 --with-tune=z10 \
+	--with-arch=z9-109 --with-tune=z10 \
 %endif
 %endif
 %endif
- --enable-decimal-float \
+	--enable-decimal-float \
 %endif
 %ifarch armv7hl
- --with-tune=generic-armv7-a --with-arch=armv7-a \
- --with-float=hard --with-fpu=vfpv3-d16 --with-abi=aapcs-linux \
+	--with-tune=generic-armv7-a --with-arch=armv7-a \
+	--with-float=hard --with-fpu=vfpv3-d16 --with-abi=aapcs-linux \
 %endif
 %ifarch mips mipsel
- --with-arch=mips32r2 --with-fp-32=xx \
+	--with-arch=mips32r2 --with-fp-32=xx \
 %endif
 %ifarch mips64 mips64el
- --with-arch=mips64r2 --with-abi=64 \
+	--with-arch=mips64r2 --with-abi=64 \
 %endif
 %ifarch riscv64
- --with-arch=rv64gc --with-abi=lp64d --with-multilib-list=lp64d \
+	--with-arch=rv64gc --with-abi=lp64d --with-multilib-list=lp64d \
 %endif
 %ifnarch sparc sparcv9 ppc
- --build=%{gcc_target_platform} \
+	--build=%{gcc_target_platform} \
 %endif
 %if 0%{?fedora} >= 35 || 0%{?rhel} >= 9
 %ifnarch %{arm}
- --with-build-config=bootstrap-lto --enable-link-serialization=1 \
+	--with-build-config=bootstrap-lto --enable-link-serialization=1 \
 %endif
 %endif
 %if 0%{?rhel:1}
- --enable-host-pie --enable-host-bind-now \
+	--enable-host-pie --enable-host-bind-now \
 %endif
- --disable-libssp \
+	--disable-libssp \
 %if %{build_libquadmath} == 0
- --disable-libquadmath \
+	--disable-libquadmath \
 %endif
 %if %{build_libatomic} == 0
- --disable-libatomic \
+	--disable-libatomic \
 %endif
 %if %{build_libitm} == 0
- --disable-libitm \
+	--disable-libitm \
 %endif
- "
+	"
 
 CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
- CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
- | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
- XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
- ../configure --enable-bootstrap \
- --enable-languages=c,c++,fortran${enablelobjc}${enablelada}${enablelgo}${enableld}${enablelm2}${enablelcob}${enablela68},lto \
- $CONFIGURE_OPTS
+	CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
+		  | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
+	XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
+	../configure --enable-bootstrap \
+	--enable-languages=c,c++,fortran${enablelobjc}${enablelada}${enablelgo}${enableld}${enablelm2}${enablelcob}${enablela68},lto \
+	$CONFIGURE_OPTS
 
 %ifarch sparc sparcv9 sparc64
 make %{?_smp_mflags} BOOT_CFLAGS="$OPT_FLAGS" LDFLAGS_FOR_TARGET=-Wl,-z,relro,-z,now bootstrap
@@ -1417,11 +1387,11 @@ CXX="`%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-cxx` `
 mkdir objlibgccjit
 cd objlibgccjit
 CC="$CC" CXX="$CXX" CFLAGS="$OPT_FLAGS" \
- CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
- | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
- XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
- ../../configure --disable-bootstrap --enable-host-shared \
- --enable-languages=jit --enable-libgdiagnostics $CONFIGURE_OPTS
+	CXXFLAGS="`echo " $OPT_FLAGS " | sed 's/ -Wall / /g;s/ -fexceptions / /g' \
+		  | sed 's/ -Wformat-security / -Wformat -Wformat-security /'`" \
+	XCFLAGS="$OPT_FLAGS" TCFLAGS="$OPT_FLAGS" \
+	../../configure --disable-bootstrap --enable-host-shared \
+	--enable-languages=jit --enable-libgdiagnostics $CONFIGURE_OPTS
 make %{?_smp_mflags} BOOT_CFLAGS="$OPT_FLAGS" all-gcc
 cp -a gcc/libgccjit.so* ../gcc/
 cd ../gcc/
@@ -1441,7 +1411,7 @@ cp -a isl-install/lib/libisl.so.23 gcc/
 # Make generated man pages even if Pod::Man is not new enough
 perl -pi -e 's/head3/head2/' ../contrib/texi2pod.pl
 for i in ../gcc/doc/*.texi; do
- cp -a $i $i.orig; sed 's/ftable/table/' $i.orig > $i
+  cp -a $i $i.orig; sed 's/ftable/table/' $i.orig > $i
 done
 make -C gcc generated-manpages
 for i in ../gcc/doc/*.texi; do mv -f $i.orig $i; done
@@ -1461,71 +1431,71 @@ mkdir -p rpm.doc/go rpm.doc/libgo rpm.doc/libquadmath rpm.doc/libitm
 mkdir -p rpm.doc/changelogs/{gcc/cp,gcc/ada,gcc/jit,libstdc++-v3,libobjc,libgomp,libcc1,libatomic,libsanitizer}
 
 for i in {gcc,gcc/cp,gcc/ada,gcc/jit,libstdc++-v3,libobjc,libgomp,libcc1,libatomic,libsanitizer}/ChangeLog*; do
- cp -p $i rpm.doc/changelogs/$i
+	cp -p $i rpm.doc/changelogs/$i
 done
 
 (cd gcc/fortran; for i in ChangeLog*; do
- cp -p $i ../../rpm.doc/gfortran/$i
+	cp -p $i ../../rpm.doc/gfortran/$i
 done)
 (cd libgfortran; for i in ChangeLog*; do
- cp -p $i ../rpm.doc/gfortran/$i.libgfortran
+	cp -p $i ../rpm.doc/gfortran/$i.libgfortran
 done)
 %if %{build_objc}
 (cd libobjc; for i in README*; do
- cp -p $i ../rpm.doc/objc/$i.libobjc
+	cp -p $i ../rpm.doc/objc/$i.libobjc
 done)
 %endif
 %if %{build_d}
 (cd gcc/d; for i in ChangeLog*; do
- cp -p $i ../../rpm.doc/gdc/$i.gdc
+	cp -p $i ../../rpm.doc/gdc/$i.gdc
 done)
 (cd libphobos; for i in ChangeLog*; do
- cp -p $i ../rpm.doc/libphobos/$i.libphobos
+	cp -p $i ../rpm.doc/libphobos/$i.libphobos
 done
 cp -a src/LICENSE*.txt libdruntime/LICENSE.txt ../rpm.doc/libphobos/)
 %endif
 %if %{build_m2}
 (cd gcc/m2; for i in ChangeLog*; do
- cp -p $i ../../rpm.doc/gm2/$i.gm2
+	cp -p $i ../../rpm.doc/gm2/$i.gm2
 done)
 (cd libgm2; for i in ChangeLog*; do
- cp -p $i ../rpm.doc/libgm2/$i.libgm2
+	cp -p $i ../rpm.doc/libgm2/$i.libgm2
 done)
 %endif
 %if %{build_cobol}
 (cd gcc/cobol; for i in ChangeLog*; do
- cp -p $i ../../rpm.doc/gcobol/$i.gcobol
+	cp -p $i ../../rpm.doc/gcobol/$i.gcobol
 done)
 (cd libgcobol; for i in ChangeLog*; do
- cp -p $i ../rpm.doc/libgcobol/$i.libgcobol
+	cp -p $i ../rpm.doc/libgcobol/$i.libgcobol
 done)
 %endif
 %if %{build_algol68}
 (cd gcc/algol68; for i in ChangeLog*; do
- cp -p $i ../../rpm.doc/algol68/$i.algol68
+	cp -p $i ../../rpm.doc/algol68/$i.algol68
 done)
 (cd libga68; for i in ChangeLog*; do
- cp -p $i ../rpm.doc/libga68/$i.libga68
+	cp -p $i ../rpm.doc/libga68/$i.libga68
 done)
 %endif
 %if %{build_libquadmath}
 (cd libquadmath; for i in ChangeLog* COPYING.LIB; do
- cp -p $i ../rpm.doc/libquadmath/$i.libquadmath
+	cp -p $i ../rpm.doc/libquadmath/$i.libquadmath
 done;
 sed -n '/==========/,/==========/{/==========/d;s/^ \* *//p}' math/cosq.c \
- > ../rpm.doc/libquadmath/LICENSE.SunPro)
+  > ../rpm.doc/libquadmath/LICENSE.SunPro)
 %endif
 %if %{build_libitm}
 (cd libitm; for i in ChangeLog*; do
- cp -p $i ../rpm.doc/libitm/$i.libitm
+	cp -p $i ../rpm.doc/libitm/$i.libitm
 done)
 %endif
 %if %{build_go}
 (cd gcc/go; for i in README* ChangeLog*; do
- cp -p $i ../../rpm.doc/go/$i
+	cp -p $i ../../rpm.doc/go/$i
 done)
 (cd libgo; for i in LICENSE* PATENTS* README; do
- cp -p $i ../rpm.doc/libgo/$i.libgo
+	cp -p $i ../rpm.doc/libgo/$i.libgo
 done)
 %endif
 (cd gcc/doc/libgdiagnostics; make html; \
@@ -1546,11 +1516,11 @@ ANNOBIN_CFLAGS1="$ANNOBIN_CFLAGS1 -I %{_builddir}/gcc-%{version}-%{DATE}/obj-%{g
 ANNOBIN_CFLAGS2="-I %{_builddir}/gcc-%{version}-%{DATE}/include -I %{_builddir}/gcc-%{version}-%{DATE}/libcpp/include"
 ANNOBIN_LDFLAGS="%build_ldflags -L%{_builddir}/gcc-%{version}-%{DATE}/obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/src/.libs"
 CC="`$ANNOBIN_FLAGS --build-cc`" CXX="`$ANNOBIN_FLAGS --build-cxx`" \
- CFLAGS="$ANNOBIN_CFLAGS1 $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
- CXXFLAGS="$ANNOBIN_CFLAGS1 `$ANNOBIN_FLAGS --build-includes` $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
- ./configure --with-gcc-plugin-dir=%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin \
- --without-annocheck --without-tests --without-docs --disable-rpath --without-debuginfod \
- --without-clang-plugin --without-llvm-plugin
+  CFLAGS="$ANNOBIN_CFLAGS1 $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
+  CXXFLAGS="$ANNOBIN_CFLAGS1 `$ANNOBIN_FLAGS --build-includes` $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
+  ./configure --with-gcc-plugin-dir=%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin \
+	      --without-annocheck --without-tests --without-docs --disable-rpath --without-debuginfod \
+	      --without-clang-plugin --without-llvm-plugin
 make
 cd ../..
 %endif
@@ -1564,10 +1534,10 @@ mkdir -p %{buildroot}
 # https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/thread/DRHT5YTPK4WWVGL3GIN5BF2IKX2ODHZ3/
 %ifarch riscv64
 for d in %{buildroot}%{_libdir} %{buildroot}/%{_lib} \
- %{buildroot}%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib} \
- %{buildroot}%{_prefix}/include/c++/%{gcc_major}/%{gcc_target_platform}/%{_lib}; do
- mkdir -p $d
- (cd $d && ln -sf . lp64d)
+	  %{buildroot}%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib} \
+	  %{buildroot}%{_prefix}/include/c++/%{gcc_major}/%{gcc_target_platform}/%{_lib}; do
+  mkdir -p $d
+  (cd $d && ln -sf . lp64d)
 done
 %endif
 
@@ -1580,7 +1550,7 @@ cd ../..
 ln -sf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib newlib
 cd obj-offload-nvptx-none
 make prefix=%{buildroot}%{_prefix} mandir=%{buildroot}%{_mandir} \
- infodir=%{buildroot}%{_infodir} install
+  infodir=%{buildroot}%{_infodir} install
 rm -rf %{buildroot}%{_prefix}/libexec/gcc/nvptx-none/%{gcc_major}/install-tools
 rm -rf %{buildroot}%{_prefix}/libexec/gcc/nvptx-none/%{gcc_major}/g++-mapper-server
 rm -rf %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none/{install-tools,plugin,cc1,cc1plus,f951}
@@ -1593,7 +1563,7 @@ mv -f %{buildroot}%{_prefix}/nvptx-none/lib/mgomp/*.{a,spec} %{buildroot}%{_pref
 mv -f %{buildroot}%{_prefix}/lib/gcc/nvptx-none/%{gcc_major}/*.a %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none/
 mv -f %{buildroot}%{_prefix}/lib/gcc/nvptx-none/%{gcc_major}/mgomp/*.a %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none/mgomp/
 find %{buildroot}%{_prefix}/lib/gcc/nvptx-none %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/nvptx-none \
- %{buildroot}%{_prefix}/nvptx-none/lib -name \*.la | xargs rm
+     %{buildroot}%{_prefix}/nvptx-none/lib -name \*.la | xargs rm
 cd ..
 rm -f newlib
 %endif
@@ -1614,7 +1584,7 @@ ln -sf ../../bin/amdgcn-amdhsa-ld %{buildroot}%{_prefix}/amdgcn-amdhsa/bin/ld
 ln -sf newlib-cygwin-%{newlib_cygwin_gitrev}/newlib newlib
 cd obj-offload-amdgcn-amdhsa
 make prefix=%{buildroot}%{_prefix} mandir=%{buildroot}%{_mandir} \
- infodir=%{buildroot}%{_infodir} install
+  infodir=%{buildroot}%{_infodir} install
 rm -rf %{buildroot}%{_prefix}/libexec/gcc/amdgcn-amdhsa/%{gcc_major}/install-tools
 rm -rf %{buildroot}%{_prefix}/libexec/gcc/amdgcn-amdhsa/%{gcc_major}/g++-mapper-server
 rm -rf %{buildroot}%{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa/{install-tools,plugin,cc1,cc1plus,f951}
@@ -1631,7 +1601,7 @@ mv -f %{buildroot}%{_prefix}/lib/gcc/amdgcn-amdhsa/%{gcc_major}/$i/*.a %{buildro
 done
 popd
 find %{buildroot}%{_prefix}/lib/gcc/amdgcn-amdhsa %{buildroot}%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/accel/amdgcn-amdhsa \
- %{buildroot}%{_prefix}/amdgcn-amdhsa/lib -name \*.la | xargs rm
+     %{buildroot}%{_prefix}/amdgcn-amdhsa/lib -name \*.la | xargs rm
 cd ..
 rm -f newlib
 %endif
@@ -1644,7 +1614,7 @@ TARGET_PLATFORM=%{gcc_target_platform}
 make -C %{gcc_target_platform}/libstdc++-v3
 
 make prefix=%{buildroot}%{_prefix} mandir=%{buildroot}%{_mandir} \
- infodir=%{buildroot}%{_infodir} install
+  infodir=%{buildroot}%{_infodir} install
 %if %{build_ada}
 chmod 644 %{buildroot}%{_infodir}/gnat*
 %endif
@@ -1677,8 +1647,11 @@ ln -sf /etc/alternatives/gofmt %{buildroot}%{_prefix}/bin/gofmt
 
 cxxconfig="`find %{gcc_target_platform}/libstdc++-v3/include -name c++config.h`"
 for i in `find %{gcc_target_platform}/[36]*/libstdc++-v3/include -name c++config.h 2>/dev/null`; do
- if ! diff -up $cxxconfig $i; then
- cat > %{buildroot}%{_prefix}/include/c++/%{gcc_major}/%{gcc_target_platform}/bits/c++config.h < 
+  if ! diff -up $cxxconfig $i; then
+    cat > %{buildroot}%{_prefix}/include/c++/%{gcc_major}/%{gcc_target_platform}/bits/c++config.h <<EOF
+#ifndef _CPP_CPPCONFIG_WRAPPER
+#define _CPP_CPPCONFIG_WRAPPER 1
+#include <bits/wordsize.h>
 #if __WORDSIZE == 32
 %ifarch %{multilib_64_archs}
 `cat $(find %{gcc_target_platform}/32/libstdc++-v3/include -name c++config.h)`
@@ -1694,21 +1667,21 @@ for i in `find %{gcc_target_platform}/[36]*/libstdc++-v3/include -name c++config
 #endif
 #endif
 EOF
- break
- fi
+    break
+  fi
 done
 
 for f in `find %{buildroot}%{_prefix}/include/c++/%{gcc_major}/%{gcc_target_platform}/ -name c++config.h`; do
- for i in 1 2 4 8; do
- sed -i -e 's/#define _GLIBCXX_ATOMIC_BUILTINS_'$i' 1/#ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_'$i'\
+  for i in 1 2 4 8; do
+    sed -i -e 's/#define _GLIBCXX_ATOMIC_BUILTINS_'$i' 1/#ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_'$i'\
 &\
 #endif/' $f
- done
+  done
 done
 
 # Nuke bits/*.h.gch dirs
 # 1) sometimes it is hard to match the exact options used for building
-# libstdc++-v3 or they aren't desirable
+#    libstdc++-v3 or they aren't desirable
 # 2) there are multilib issues, conflicts etc. with this
 # 3) it is huge
 # People can always precompile on their own whatever they want, but
@@ -1727,11 +1700,11 @@ find ../rpm.doc/libstdc++-v3 -name \*~ -o -name \*.orig | xargs rm -f
 
 %ifarch sparcv9 sparc64
 ln -f %{buildroot}%{_prefix}/bin/%{gcc_target_platform}-gcc \
- %{buildroot}%{_prefix}/bin/sparc-%{_vendor}-%{_target_os}-gcc
+  %{buildroot}%{_prefix}/bin/sparc-%{_vendor}-%{_target_os}-gcc
 %endif
 %ifarch ppc ppc64 ppc64p7
 ln -f %{buildroot}%{_prefix}/bin/%{gcc_target_platform}-gcc \
- %{buildroot}%{_prefix}/bin/ppc-%{_vendor}-%{_target_os}-gcc
+  %{buildroot}%{_prefix}/bin/ppc-%{_vendor}-%{_target_os}-gcc
 %endif
 
 FULLLSUBDIR=
@@ -1742,10 +1715,10 @@ FULLLSUBDIR=lib32
 FULLLSUBDIR=lib64
 %endif
 if [ -n "$FULLLSUBDIR" ]; then
- FULLLPATH=$FULLPATH/$FULLLSUBDIR
- mkdir -p $FULLLPATH
+  FULLLPATH=$FULLPATH/$FULLLSUBDIR
+  mkdir -p $FULLLPATH
 else
- FULLLPATH=$FULLPATH
+  FULLLPATH=$FULLPATH
 fi
 
 find %{buildroot} -name \*.la | xargs rm -f
@@ -1774,8 +1747,8 @@ ln -sf libgcc_s-%{gcc_major}-%{DATE}.so.1 %{buildroot}/%{_lib}/libgcc_s.so.1
 %ifarch %{ix86} x86_64 ppc ppc64 ppc64p7 ppc64le %{arm} aarch64 riscv64
 rm -f $FULLPATH/libgcc_s.so
 echo '/* GNU ld script
- Use the shared library, but some functions are only in
- the static library, so try that secondarily. */
+   Use the shared library, but some functions are only in
+   the static library, so try that secondarily.  */
 OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 GROUP ( /%{_lib}/libgcc_s.so.1 libgcc.a )' > $FULLPATH/libgcc_s.so
 %else
@@ -1783,15 +1756,15 @@ ln -sf /%{_lib}/libgcc_s.so.1 $FULLPATH/libgcc_s.so
 %endif
 rm -f $FULLPATH/libgcc_s_asneeded.so
 echo '/* GNU ld script
- Add DT_NEEDED entry for libgcc_s.so only if needed. */
+   Add DT_NEEDED entry for libgcc_s.so only if needed.  */
 OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 INPUT ( AS_NEEDED ( -lgcc_s ) )' > $FULLPATH/libgcc_s_asneeded.so
 %ifarch sparcv9 ppc
 %ifarch ppc
 rm -f $FULLPATH/64/libgcc_s.so
 echo '/* GNU ld script
- Use the shared library, but some functions are only in
- the static library, so try that secondarily. */
+   Use the shared library, but some functions are only in
+   the static library, so try that secondarily.  */
 OUTPUT_FORMAT('`gcc -m64 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 GROUP ( /lib64/libgcc_s.so.1 libgcc.a )' > $FULLPATH/64/libgcc_s.so
 %else
@@ -1799,7 +1772,7 @@ ln -sf /lib64/libgcc_s.so.1 $FULLPATH/64/libgcc_s.so
 %endif
 rm -f $FULLPATH/64/libgcc_s_asneeded.so
 echo '/* GNU ld script
- Add DT_NEEDED entry for libgcc_s.so only if needed. */
+   Add DT_NEEDED entry for libgcc_s.so only if needed.  */
 OUTPUT_FORMAT('`gcc -m64 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 INPUT ( AS_NEEDED ( -lgcc_s ) )' > $FULLPATH/64/libgcc_s_asneeded.so
 %endif
@@ -1807,8 +1780,8 @@ INPUT ( AS_NEEDED ( -lgcc_s ) )' > $FULLPATH/64/libgcc_s_asneeded.so
 %ifarch x86_64 ppc64 ppc64p7
 rm -f $FULLPATH/64/libgcc_s.so
 echo '/* GNU ld script
- Use the shared library, but some functions are only in
- the static library, so try that secondarily. */
+   Use the shared library, but some functions are only in
+   the static library, so try that secondarily.  */
 OUTPUT_FORMAT('`gcc -m32 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 GROUP ( /lib/libgcc_s.so.1 libgcc.a )' > $FULLPATH/32/libgcc_s.so
 %else
@@ -1816,7 +1789,7 @@ ln -sf /lib/libgcc_s.so.1 $FULLPATH/32/libgcc_s.so
 %endif
 rm -f $FULLPATH/32/libgcc_s_asneeded.so
 echo '/* GNU ld script
- Add DT_NEEDED entry for libgcc_s.so only if needed. */
+   Add DT_NEEDED entry for libgcc_s.so only if needed.  */
 OUTPUT_FORMAT('`gcc -m32 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 INPUT ( AS_NEEDED ( -lgcc_s ) )' > $FULLPATH/32/libgcc_s_asneeded.so
 %endif
@@ -1831,14 +1804,14 @@ rm -f $FULLPATH/adalib/libgnarl.so* $FULLPATH/adalib/libgnat.so*
 
 mkdir -p %{buildroot}%{_prefix}/libexec/getconf
 if gcc/xgcc -B gcc/ -E -P -dD -xc /dev/null | grep '__LONG_MAX__.*\(2147483647\|0x7fffffff\($\|[LU]\)\)'; then
- ln -sf POSIX_V6_ILP32_OFF32 %{buildroot}%{_prefix}/libexec/getconf/default
+  ln -sf POSIX_V6_ILP32_OFF32 %{buildroot}%{_prefix}/libexec/getconf/default
 else
- ln -sf POSIX_V6_LP64_OFF64 %{buildroot}%{_prefix}/libexec/getconf/default
+  ln -sf POSIX_V6_LP64_OFF64 %{buildroot}%{_prefix}/libexec/getconf/default
 fi
 
 mkdir -p %{buildroot}%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}
 mv -f %{buildroot}%{_prefix}/%{_lib}/libstdc++*gdb.py* \
- %{buildroot}%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}/
+      %{buildroot}%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}/
 %py_byte_compile %{python3} %{buildroot}%{_prefix}/share/gcc-%{gcc_major}/python/
 %py_byte_compile %{python3} %{buildroot}%{_datadir}/gdb/auto-load/%{_prefix}/%{_lib}/
 
@@ -1854,8 +1827,8 @@ cp -a ../gcc/libgdiagnostics*.h %{buildroot}%{_prefix}/include/
 cp -a objlibgccjit/gcc/sarif-replay %{buildroot}%{_prefix}/bin/
 
 sed -e 's,\.\./include/,../../../../include/,' \
- %{buildroot}%{_prefix}/%{_lib}/libstdc++.modules.json \
- > $FULLPATH/libstdc++.modules.json
+  %{buildroot}%{_prefix}/%{_lib}/libstdc++.modules.json \
+  > $FULLPATH/libstdc++.modules.json
 
 pushd $FULLPATH
 if [ "%{_lib}" = "lib" ]; then
@@ -1877,7 +1850,7 @@ ln -sf ../../../libgphobos.so.7.* libgphobos.so
 %endif
 %if %{build_m2}
 for i in cor iso log min pim; do
- ln -sf ../../../libm2$i.so.21.* libm2$i.so
+  ln -sf ../../../libm2$i.so.21.* libm2$i.so
 done
 %endif
 %if %{build_cobol}
@@ -1893,7 +1866,7 @@ ln -sf ../../../libitm.so.1.* libitm.so
 ln -sf ../../../libatomic.so.1.* libatomic.so
 rm -f libatomic_asneeded.so libatomic_asneeded.a
 echo '/* GNU ld script
- Add DT_NEEDED entry for -latomic only if needed. */
+   Add DT_NEEDED entry for -latomic only if needed.  */
 OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 INPUT ( AS_NEEDED ( -latomic ) )' > libatomic_asneeded.so
 ln -sf libatomic.a libatomic_asneeded.a
@@ -1924,7 +1897,7 @@ ln -sf ../../../../%{_lib}/libgphobos.so.7.* libgphobos.so
 %endif
 %if %{build_m2}
 for i in cor iso log min pim; do
- ln -sf ../../../../%{_lib}/libm2$i.so.21.* libm2$i.so
+  ln -sf ../../../../%{_lib}/libm2$i.so.21.* libm2$i.so
 done
 %endif
 %if %{build_cobol}
@@ -1940,7 +1913,7 @@ ln -sf ../../../../%{_lib}/libitm.so.1.* libitm.so
 ln -sf ../../../../%{_lib}/libatomic.so.1.* libatomic.so
 rm -f libatomic_asneeded.so libatomic_asneeded.a
 echo '/* GNU ld script
- Add DT_NEEDED entry for -latomic only if needed. */
+   Add DT_NEEDED entry for -latomic only if needed.  */
 OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 INPUT ( AS_NEEDED ( -latomic ) )' > libatomic_asneeded.so
 ln -sf libatomic.a libatomic_asneeded.a
@@ -1986,10 +1959,10 @@ mv -f %{buildroot}%{_prefix}/%{_lib}/libgphobos.*a $FULLLPATH/
 %endif
 %if %{build_m2}
 for i in cor iso log min pim; do
- mv -f %{buildroot}%{_prefix}/%{_lib}/libm2$i.*a $FULLLPATH/
- rm -f m2/m2$i/*.{a,la}
- ln -sf ../../libm2$i.so m2/m2$i/
- ln -sf ../../libm2$i.a m2/m2$i/
+  mv -f %{buildroot}%{_prefix}/%{_lib}/libm2$i.*a $FULLLPATH/
+  rm -f m2/m2$i/*.{a,la}
+  ln -sf ../../libm2$i.so m2/m2$i/
+  ln -sf ../../libm2$i.a m2/m2$i/
 done
 %endif
 %if %{build_cobol}
@@ -2090,12 +2063,12 @@ echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libgphobos.so.7.* | sed 's
 %endif
 %if %{build_m2}
 for i in cor iso log min pim; do
- rm -f libm2$i.so
- echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > libm2$i.so
- echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > 64/libm2$i.so
- rm -f 64/m2/m2$i/*.{a,la}
- ln -sf ../../libm2$i.so 64/m2/m2$i/
- ln -sf ../../libm2$i.a 64/m2/m2$i/
+  rm -f libm2$i.so
+  echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > libm2$i.so
+  echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > 64/libm2$i.so
+  rm -f 64/m2/m2$i/*.{a,la}
+  ln -sf ../../libm2$i.so 64/m2/m2$i/
+  ln -sf ../../libm2$i.a 64/m2/m2$i/
 done
 %endif
 %if %{build_cobol}
@@ -2120,12 +2093,12 @@ echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libatomic.so.1.* | sed 's,
 mv -f %{buildroot}%{_prefix}/lib64/libatomic.*a 64/
 rm -f libatomic_asneeded.so libatomic_asneeded.a 64/libatomic_asneeded.so 64/libatomic_asneeded.a
 echo '/* GNU ld script
- Add DT_NEEDED entry for -latomic only if needed. */
+   Add DT_NEEDED entry for -latomic only if needed.  */
 OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 INPUT ( AS_NEEDED ( -latomic ) )' > libatomic_asneeded.so
 ln -sf libatomic.a libatomic_asneeded.a
 echo '/* GNU ld script
- Add DT_NEEDED entry for -latomic only if needed. */
+   Add DT_NEEDED entry for -latomic only if needed.  */
 OUTPUT_FORMAT('`gcc -m64 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 INPUT ( AS_NEEDED ( -latomic ) )' > 64/libatomic_asneeded.so
 ln -sf libatomic.a 64/libatomic_asneeded.a
@@ -2167,8 +2140,8 @@ ln -sf ../lib64/libgphobos.a 64/libgphobos.a
 %endif
 %if %{build_m2}
 for i in cor iso log min pim; do
- ln -sf lib32/libm2$i.a libm2$i.a
- ln -sf ../lib64/libm2$i.a 64/libm2$i.a
+  ln -sf lib32/libm2$i.a libm2$i.a
+  ln -sf ../lib64/libm2$i.a 64/libm2$i.a
 done
 %endif
 %if %{build_cobol}
@@ -2233,12 +2206,12 @@ echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libgphobos.so.7.* | sed 's
 %endif
 %if %{build_m2}
 for i in cor iso log min pim; do
- rm -f libm2$i.so
- echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > libm2$i.so
- echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > 32/libm2$i.so
- rm -f 32/m2/m2$i/*.{a,la}
- ln -sf ../../libm2$i.so 32/m2/m2$i/
- ln -sf ../../libm2$i.a 32/m2/m2$i/
+  rm -f libm2$i.so
+  echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > libm2$i.so
+  echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libm2$i.so.21.* | sed 's,^.*libm,libm,'`' )' > 32/libm2$i.so
+  rm -f 32/m2/m2$i/*.{a,la}
+  ln -sf ../../libm2$i.so 32/m2/m2$i/
+  ln -sf ../../libm2$i.a 32/m2/m2$i/
 done
 %endif
 %if %{build_cobol}
@@ -2263,12 +2236,12 @@ echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libatomic.so.1.* | sed 's,
 mv -f %{buildroot}%{_prefix}/lib/libatomic.*a 32/
 rm -f libatomic_asneeded.so libatomic_asneeded.a 32/libatomic_asneeded.so 32/libatomic_asneeded.a
 echo '/* GNU ld script
- Add DT_NEEDED entry for -latomic only if needed. */
+   Add DT_NEEDED entry for -latomic only if needed.  */
 OUTPUT_FORMAT('`gcc -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 INPUT ( AS_NEEDED ( -latomic ) )' > libatomic_asneeded.so
 ln -sf libatomic.a libatomic_asneeded.a
 echo '/* GNU ld script
- Add DT_NEEDED entry for -latomic only if needed. */
+   Add DT_NEEDED entry for -latomic only if needed.  */
 OUTPUT_FORMAT('`gcc -m32 -Wl,--print-output-format -nostdlib -r -o /dev/null`')
 INPUT ( AS_NEEDED ( -latomic ) )' > 32/libatomic_asneeded.so
 ln -sf libatomic.a 32/libatomic_asneeded.a
@@ -2312,8 +2285,8 @@ ln -sf lib64/libgphobos.a libgphobos.a
 %endif
 %if %{build_m2}
 for i in cor iso log min pim; do
- ln -sf ../lib32/libm2$i.a 32/libm2$i.a
- ln -sf lib64/libm2$i.a libm2$i.a
+  ln -sf ../lib32/libm2$i.a 32/libm2$i.a
+  ln -sf lib64/libm2$i.a libm2$i.a
 done
 %endif
 %if %{build_cobol}
@@ -2366,7 +2339,7 @@ ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libgph
 %endif
 %if %{build_m2}
 for i in cor iso log min pim; do
- ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libm2$i.a 32/libm2$i.a
+  ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libm2$i.a 32/libm2$i.a
 done
 %endif
 %if %{build_cobol}
@@ -2401,34 +2374,34 @@ ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/adalib
 # if 0%{?_enable_debug_packages}
 %if 0
 for d in . $FULLLSUBDIR; do
- mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/debug%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/$d
- for f in `find $d -maxdepth 1 -a \
- \( -name libasan.a -o -name libatomic.a \
- -o -name libcaf_single.a -o -name libcaf_shmem.a \
- -o -name libgcc.a -o -name libgcc_eh.a \
- -o -name libgcov.a -o -name libgfortran.a \
- -o -name libgo.a -o -name libgobegin.a \
- -o -name libgolibbegin.a -o -name libgomp.a \
- -o -name libitm.a -o -name liblsan.a \
- -o -name libobjc.a -o -name libgdruntime.a -o -name libgphobos.a \
- -o -name libm2\*.a -o -name libquadmath.a -o -name libstdc++.a \
- -o -name libstdc++fs.a -o -name libstdc++exp.a \
- -o -name libsupc++.a -o -name libgcobol.a \
- -o -name libtsan.a -o -name libubsan.a \) -a -type f`; do
- cp -a $f $RPM_BUILD_ROOT%{_prefix}/lib/debug%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/$d/
- done
+  mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/debug%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/$d
+  for f in `find $d -maxdepth 1 -a \
+		\( -name libasan.a -o -name libatomic.a \
+		-o -name libcaf_single.a -o -name libcaf_shmem.a \
+		-o -name libgcc.a -o -name libgcc_eh.a \
+		-o -name libgcov.a -o -name libgfortran.a \
+		-o -name libgo.a -o -name libgobegin.a \
+		-o -name libgolibbegin.a -o -name libgomp.a \
+		-o -name libitm.a -o -name liblsan.a \
+		-o -name libobjc.a -o -name libgdruntime.a -o -name libgphobos.a \
+		-o -name libm2\*.a -o -name libquadmath.a -o -name libstdc++.a \
+		-o -name libstdc++fs.a -o -name libstdc++exp.a \
+		-o -name libsupc++.a -o -name libgcobol.a \
+		-o -name libtsan.a -o -name libubsan.a \) -a -type f`; do
+    cp -a $f $RPM_BUILD_ROOT%{_prefix}/lib/debug%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/$d/
+  done
 done
 %endif
 
 # Strip debug info from Fortran/ObjC/Java static libraries
 strip -g `find . \( -name libgfortran.a -o -name libobjc.a -o -name libgomp.a \
- -o -name libgcc.a -o -name libgcov.a -o -name libquadmath.a \
- -o -name libgdruntime.a -o -name libgphobos.a -o -name libm2\*.a \
- -o -name libitm.a -o -name libgo.a -o -name libcaf\*.a \
- -o -name libatomic.a -o -name libasan.a -o -name libtsan.a \
- -o -name libubsan.a -o -name liblsan.a -o -name libcc1.a \
- -o -name libgcobol.a \) \
- -a -type f`
+		    -o -name libgcc.a -o -name libgcov.a -o -name libquadmath.a \
+		    -o -name libgdruntime.a -o -name libgphobos.a -o -name libm2\*.a \
+		    -o -name libitm.a -o -name libgo.a -o -name libcaf\*.a \
+		    -o -name libatomic.a -o -name libasan.a -o -name libtsan.a \
+		    -o -name libubsan.a -o -name liblsan.a -o -name libcc1.a \
+		    -o -name libgcobol.a \) \
+		 -a -type f`
 popd
 chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgfortran.so.5.*
 chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgomp.so.1.*
@@ -2442,7 +2415,7 @@ chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgphobos.so.7.*
 %endif
 %if %{build_m2}
 for i in cor iso log min pim; do
- chmod 755 %{buildroot}%{_prefix}/%{_lib}/libm2$i.so.21.*
+  chmod 755 %{buildroot}%{_prefix}/%{_lib}/libm2$i.so.21.*
 done
 %endif
 %if %{build_cobol}
@@ -2492,22 +2465,22 @@ chmod 755 %{buildroot}%{_prefix}/%{_lib}/libgnat*so*
 %endif
 
 for h in `find $FULLPATH/include -name \*.h`; do
- if grep -q 'It has been auto-edited by fixincludes from' $h; then
- rh=`grep -A2 'It has been auto-edited by fixincludes from' $h | tail -1 | sed 's|^.*"\(.*\)".*$|\1|'`
- diff -up $rh $h || :
- rm -f $h
- fi
+  if grep -q 'It has been auto-edited by fixincludes from' $h; then
+    rh=`grep -A2 'It has been auto-edited by fixincludes from' $h | tail -1 | sed 's|^.*"\(.*\)".*$|\1|'`
+    diff -up $rh $h || :
+    rm -f $h
+  fi
 done
 
 cat > %{buildroot}%{_prefix}/bin/c89 <<"EOF"
 #!/bin/sh
 fl="-std=c89"
 for opt; do
- case "$opt" in
- -ansi|-std=c89|-std=iso9899:1990) fl="";;
- -std=*) echo "`basename $0` called with non ANSI/ISO C option $opt" >&2
- exit 1;;
- esac
+  case "$opt" in
+    -ansi|-std=c89|-std=iso9899:1990) fl="";;
+    -std=*) echo "`basename $0` called with non ANSI/ISO C option $opt" >&2
+	    exit 1;;
+  esac
 done
 exec gcc $fl ${1+"$@"}
 EOF
@@ -2515,11 +2488,11 @@ cat > %{buildroot}%{_prefix}/bin/c99 <<"EOF"
 #!/bin/sh
 fl="-std=c99"
 for opt; do
- case "$opt" in
- -std=c99|-std=iso9899:1999) fl="";;
- -std=*) echo "`basename $0` called with non ISO C99 option $opt" >&2
- exit 1;;
- esac
+  case "$opt" in
+    -std=c99|-std=iso9899:1999) fl="";;
+    -std=*) echo "`basename $0` called with non ISO C99 option $opt" >&2
+	    exit 1;;
+  esac
 done
 exec gcc $fl ${1+"$@"}
 EOF
@@ -2601,13 +2574,13 @@ echo gcc-%{version}-%{release}.%{_arch} > $FULLPATH/rpmver
 # Add symlink to lto plugin in the binutils plugin directory.
 %{__mkdir_p} %{buildroot}%{_libdir}/bfd-plugins/
 ln -s ../../libexec/gcc/%{gcc_target_platform}/%{gcc_major}/liblto_plugin.so \
- %{buildroot}%{_libdir}/bfd-plugins/
+  %{buildroot}%{_libdir}/bfd-plugins/
 
 %if %{build_annobin_plugin}
 mkdir -p $FULLPATH/plugin
 rm -f $FULLPATH/plugin/gcc-annobin*
 cp -a %{_builddir}/gcc-%{version}-%{DATE}/annobin-plugin/annobin*/gcc-plugin/.libs/annobin.so.0.0.0 \
- $FULLPATH/plugin/gcc-annobin.so.0.0.0
+  $FULLPATH/plugin/gcc-annobin.so.0.0.0
 ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so.0
 ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so
 %endif
@@ -2618,40 +2591,40 @@ cd obj-%{gcc_target_platform}
 # run the tests.
 LC_ALL=C make %{?_smp_mflags} -k check ALT_CC_UNDER_TEST=gcc ALT_CXX_UNDER_TEST=g++ \
 %if 0%{?fedora} >= 20 || 0%{?rhel} > 7
- RUNTESTFLAGS="--target_board=unix/'{-foffload=disable,-fstack-protector-strong/-foffload=disable}'" || :
+     RUNTESTFLAGS="--target_board=unix/'{-foffload=disable,-fstack-protector-strong/-foffload=disable}'" || :
 %else
- RUNTESTFLAGS="--target_board=unix/'{-foffload=disable,-fstack-protector/-foffload=disable}'" || :
+     RUNTESTFLAGS="--target_board=unix/'{-foffload=disable,-fstack-protector/-foffload=disable}'" || :
 %endif
 %if !%{build_annobin_plugin}
 if [ -f %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/annobin.so ]; then
- # Test whether current annobin plugin won't fail miserably with the newly built gcc.
- echo -e '#include \nint main () { printf ("Hello, world!\\n"); return 0; }' > annobin-test.c
- echo -e '#include \nint main () { std::cout << "Hello, world!" << std::endl; return 0; }' > annobin-test.C
- `%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-cc` \
- -O2 -g -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS \
- -fexceptions -fstack-protector-strong -grecord-gcc-switches -o annobin-test{c,.c} \
- -Wl,-rpath,%{gcc_target_platform}/libgcc/ \
- -fplugin=%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/annobin.so \
- 2> ANNOBINOUT1 || echo Annobin test 1 FAIL > ANNOBINOUT2;
- `%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-cxx` \
- `%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-includes` \
- -O2 -g -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS \
- -fexceptions -fstack-protector-strong -grecord-gcc-switches -o annobin-test{C,.C} \
- -Wl,-rpath,%{gcc_target_platform}/libgcc/:%{gcc_target_platform}/libstdc++-v3/src/.libs/ \
- -fplugin=%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/annobin.so \
- -B %{gcc_target_platform}/libstdc++-v3/src/.libs/ \
- 2> ANNOBINOUT3 || echo Annobin test 2 FAIL > ANNOBINOUT4;
- [ -f ./annobin-testc ] || echo Annobin test 1 MISSING > ANNOBINOUT5;
- [ -f ./annobin-testc ] && \
- ( ./annobin-testc > ANNOBINRES1 2>&1 || echo Annobin test 1 RUNFAIL > ANNOBINOUT6 );
- [ -f ./annobin-testC ] || echo Annobin test 2 MISSING > ANNOBINOUT7;
- [ -f ./annobin-testC ] && \
- ( ./annobin-testC > ANNOBINRES2 2>&1 || echo Annobin test 2 RUNFAIL > ANNOBINOUT8 );
- cat ANNOBINOUT[1-8] > ANNOBINOUT
- touch ANNOBINRES1 ANNOBINRES2
- [ -s ANNOBINOUT ] && echo Annobin testing FAILed > ANNOBINRES
- cat ANNOBINOUT ANNOBINRES[12] >> ANNOBINRES
- rm -f ANNOBINOUT* ANNOBINRES[12] annobin-test{c,C}
+  # Test whether current annobin plugin won't fail miserably with the newly built gcc.
+  echo -e '#include <stdio.h>\nint main () { printf ("Hello, world!\\n"); return 0; }' > annobin-test.c
+  echo -e '#include <iostream>\nint main () { std::cout << "Hello, world!" << std::endl; return 0; }' > annobin-test.C
+  `%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-cc` \
+  -O2 -g -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS \
+  -fexceptions -fstack-protector-strong -grecord-gcc-switches -o annobin-test{c,.c} \
+  -Wl,-rpath,%{gcc_target_platform}/libgcc/ \
+  -fplugin=%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/annobin.so \
+  2> ANNOBINOUT1 || echo Annobin test 1 FAIL > ANNOBINOUT2;
+  `%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-cxx` \
+  `%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags --build-includes` \
+  -O2 -g -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS \
+  -fexceptions -fstack-protector-strong -grecord-gcc-switches -o annobin-test{C,.C} \
+  -Wl,-rpath,%{gcc_target_platform}/libgcc/:%{gcc_target_platform}/libstdc++-v3/src/.libs/ \
+  -fplugin=%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/plugin/annobin.so \
+  -B %{gcc_target_platform}/libstdc++-v3/src/.libs/ \
+  2> ANNOBINOUT3 || echo Annobin test 2 FAIL > ANNOBINOUT4;
+  [ -f ./annobin-testc ] || echo Annobin test 1 MISSING > ANNOBINOUT5;
+  [ -f ./annobin-testc ] && \
+  ( ./annobin-testc > ANNOBINRES1 2>&1 || echo Annobin test 1 RUNFAIL > ANNOBINOUT6 );
+  [ -f ./annobin-testC ] || echo Annobin test 2 MISSING > ANNOBINOUT7;
+  [ -f ./annobin-testC ] && \
+  ( ./annobin-testC > ANNOBINRES2 2>&1 || echo Annobin test 2 RUNFAIL > ANNOBINOUT8 );
+  cat ANNOBINOUT[1-8] > ANNOBINOUT
+  touch ANNOBINRES1 ANNOBINRES2
+  [ -s ANNOBINOUT ] && echo Annobin testing FAILed > ANNOBINRES
+  cat ANNOBINOUT ANNOBINRES[12] >> ANNOBINRES
+  rm -f ANNOBINOUT* ANNOBINRES[12] annobin-test{c,C}
 fi
 %endif
 echo ====================TESTING=========================
@@ -2662,34 +2635,34 @@ echo ====================TESTING=========================
 echo ====================TESTING END=====================
 mkdir testlogs-%{_target_platform}-%{version}-%{release}
 for i in `find . -name \*.log | grep -F testsuite/ | grep -v 'config.log\|acats.*/tests/'`; do
- ln $i testlogs-%{_target_platform}-%{version}-%{release}/ || :
+  ln $i testlogs-%{_target_platform}-%{version}-%{release}/ || :
 done
 tar cf - testlogs-%{_target_platform}-%{version}-%{release} | xz -9e \
- | uuencode testlogs-%{_target_platform}.tar.xz || :
+  | uuencode testlogs-%{_target_platform}.tar.xz || :
 rm -rf testlogs-%{_target_platform}-%{version}-%{release}
 
 %post go
 %{_sbindir}/update-alternatives --install \
- %{_prefix}/bin/go go %{_prefix}/bin/go.gcc 92 \
- --slave %{_prefix}/bin/gofmt gofmt %{_prefix}/bin/gofmt.gcc
+  %{_prefix}/bin/go go %{_prefix}/bin/go.gcc 92 \
+  --slave %{_prefix}/bin/gofmt gofmt %{_prefix}/bin/gofmt.gcc
 
 %preun go
 if [ $1 = 0 ]; then
- %{_sbindir}/update-alternatives --remove go %{_prefix}/bin/go.gcc
+  %{_sbindir}/update-alternatives --remove go %{_prefix}/bin/go.gcc
 fi
 
 %{?ldconfig:
 # Because glibc Prereq's libgcc and /sbin/ldconfig
 # comes from glibc, it might not exist yet when
 # libgcc is installed
-%post -n libgcc -p 
+%post -n libgcc -p <lua>
 if posix.access ("%ldconfig", "x") then
- rpm.execute ("%ldconfig")
+  rpm.execute ("%ldconfig")
 end
 
-%postun -n libgcc -p 
+%postun -n libgcc -p <lua>
 if posix.access ("%ldconfig", "x") then
- rpm.execute ("%ldconfig")
+  rpm.execute ("%ldconfig")
 end
 }
 
@@ -3997,19 +3970,5 @@ end
 %endif
 
 %changelog
-* Wed Apr 15 2026 Oreon Packaging Team - %{gcc_version}-%{gcc_release}.11
-- Offload trees use dedicated TMPDIR under each obj-offload dir libgomp configure conftest races default /tmp in mock
-- Restore make %%{_smp_mflags} for nvptx and amdgcn nested builds -j1 broke target libgomp configure
-
-* Thu Apr 09 2026 Oreon Packaging Team - %{gcc_version}-4
-- Fedora lookaside Source0 16.0.1-20260321 tarball, DATE and gitrev aligned with rawhide so Patch14-17 apply (PR124547 fixes bootstrap gas vs gas_flag). Restore builddir naming gcc-version-DATE. Offload toolchains stay on.
-
-* Thu Apr 09 2026 Oreon Packaging Team - %{gcc_version}-3
-- Sync Fedora rawhide gcc patches pr124531 pr124547 uglification module-exports (PR124547 fixes bootstrap configure gas_flag vs libcody bogus subdir list)
-- Re-enable NVPTX and AMDGCN offload
-
-* Thu Apr 09 2026 Oreon Packaging Team - %{gcc_version}-2
-- Disable NVPTX and AMDGCN OpenMP offload subbuilds (gcc-16 snapshot breaks in obj-offload-nvptx-none)
-
-* Tue Mar 17 2026 Oreon Packaging Team - %{gcc_version}-1
-- Prepare for Oreon 11 (RP1)
+* Thu May 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1.1-1
+- Import from Fedora 44, debrand for Oreon

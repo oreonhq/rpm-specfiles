@@ -1,9 +1,232 @@
-* Mon Apr 28 2026 Oreon Packaging Team <packaging@oreonhq.com> [7.0.2-200]
-- Linux v7.0.2 stable (kernel.org)
+* Thu May 14 2026 Justin M. Forbes <jforbes@fedoraproject.org> [7.0.7-0]
+- net: skbuff: propagate shared-frag marker through frag-transfer helpers (Hyunwoo Kim)
+- Revert old fragnesia fixes in favor of more complete solution (Justin M. Forbes)
+- Revert old fragnesia fixes in favor of more complete solution (Justin M. Forbes)
+- Change version in Bugsfixed due to build (Justin M. Forbes)
+- Linux v7.0.7
 Resolves: 
 
-* Tue Mar 17 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc4.2d1373e4246d.37]
+* Wed May 13 2026 Justin M. Forbes <jforbes@fedoraproject.org> [7.0.6-0]
+- net: skbuff: propagate shared-frag marker through pskb_copy() (Hyunwoo Kim)
+- net: skbuff: preserve shared-frag marker during coalescing (William Bowling)
+- Add BugsFixed for 7.0.7 (Justin M. Forbes)
+- ovl: fix verity lazy-load guard broken by fsverity_active() semantic change (Colin Walters)
+- Revert rxrpc dirtyfrag fix in favor of version which landed upstream (Justin M. Forbes)
+- Re-enable Intel MEI for Fedora x86 (Justin M. Forbes)
+- xfrm: esp: avoid in-place decrypt on shared skb frags (Kuan-Ting Chen)
+- rxrpc: Also unshare DATA/RESPONSE packets when paged frags are present (Hyunwoo Kim)
+- Linux v7.0.6
+Resolves: 
+
+* Thu May 07 2026 Justin M. Forbes <jforbes@fedoraproject.org> [7.0.4-0]
+- wifi: mt76: mt7925: fix incorrect TLV length in CLC command (Quan Zhou)
+- ASoC: SOF: Don't allow pointer operations on unconfigured streams (Mark Brown)
+- Turn on DVB_PT3 for Fedora at user request (Justin M. Forbes)
+- Enable MEDIA_TUNER_MXL301RF for Fedora (Justin M. Forbes)
+- mfd: bcm2835-pm: Add BCM2712 PM device support (Phil Elwell)
+- mfd: bcm2835-pm: Introduce SoC-specific type identifier (Phil Elwell)
+- Linux v7.0.4
+Resolves: 
+
+* Thu Apr 30 2026 Justin M. Forbes <jforbes@fedoraproject.org> [7.0.3-0]
+- Linux v7.0.3
+Resolves: 
+
+* Mon Apr 27 2026 Justin M. Forbes <jforbes@fedoraproject.org> [7.0.2-0]
+- drm/v3d: Reject empty multisync extension to prevent infinite loop (Ashutosh Desai)
+- net: macb: Use napi_schedule_irqoff() in IRQ handler (Kevin Hao)
+- net: macb: Use netif_napi_add_tx() instead of netif_napi_add() for TX NAPI (Kevin Hao)
+- net: macb: Remove dedicated IRQ handler for WoL (Kevin Hao)
+- net: macb: Factor out the handling of non-hot IRQ events into a separate function (Kevin Hao)
+- net: macb: Introduce macb_queue_isr_clear() helper function (Kevin Hao)
+- net: macb: Replace open-coded implementation with napi_schedule() (Kevin Hao)
+- net: macb: fix use of at91_default_usrio without CONFIG_OF (Conor Dooley)
+- net: macb: drop usrio pointer on EyeQ5 config (Théo Lebrun)
+- net: macb: set MACB_CAPS_USRIO_DISABLED if no usrio config is provided (Théo Lebrun)
+- net: macb: runtime detect MACB_CAPS_USRIO_DISABLED (Théo Lebrun)
+- net: macb: timer adjust mode is not supported (Conor Dooley)
+- net: macb: clean up tsu clk rate acquisition (Conor Dooley)
+- net: macb: warn on pclk use as a tsu_clk fallback (Conor Dooley)
+- net: macb: add mpfs specific usrio configuration (Conor Dooley)
+- net: macb: np4 doesn't need a usrio pointer (Conor Dooley)
+- net: macb: rework usrio refclk selection code (Conor Dooley)
+- net: macb: split USRIO_HAS_CLKEN capability in two (Conor Dooley)
+- net: macb: rename macb_default_usrio to at91_default_usrio as not all platforms have mii mode control in usrio (Conor Dooley)
+- Revert "net: macb: Clean up the .usrio settings in macb_config instances" (Conor Dooley)
+- net: macb: add support for Microchip pic64hpsc ethernet endpoint (Charles Perry)
+- net: macb: add safeguards for jumbo frame larger than 10240 (Charles Perry)
+- net: macb: set default_an_inband to true for SGMII (Charles Perry)
+- net: macb: Clean up the .usrio settings in macb_config instances (Kevin Hao)
+- net: macb: Clean up the .init settings in macb_config instances (Kevin Hao)
+- net: macb: Clean up the .clk_init setting in the macb_config instances (Kevin Hao)
+- net: cadence: macb: enable EEE for Mobileye EyeQ5 (Nicolai Buchwitz)
+- net: cadence: macb: enable EEE for Raspberry Pi RP1 (Nicolai Buchwitz)
+- net: cadence: macb: add ethtool EEE support (Nicolai Buchwitz)
+- net: cadence: macb: implement EEE TX LPI support (Nicolai Buchwitz)
+- net: cadence: macb: add EEE LPI statistics counters (Nicolai Buchwitz)
+- net: macb: use ethtool_sprintf to fill ethtool stats strings (Sean Chang)
+- net: macb: add the .pcs_inband_caps() callback for SGMII (Charles Perry)
+- net: macb: add support for reporting SGMII inband link status (Charles Perry)
+- net: macb: fix SGMII with inband aneg disabled (Charles Perry)
+- net: cadence: macb: add ethtool nway_reset support (Nicolai Buchwitz)
+- ARM: dts: broadcom: bcm2835-rpi: Move non simple-bus nodes to root level (Rob Herring (Arm))
+- arm64: dts: broadcom: bcm2712: Move non simple-bus nodes to root level (Rob Herring (Arm))
+- arm64: dts: broadcom: bcm2712-d-rpi-5-b: update uart10 interrupt (Gregor Herburger)
+- arm64: dts: broadcom: bcm2712-d-rpi-5-b: add fixes for pinctrl/pinctrl_aon (Gregor Herburger)
+- arm64: dts: broadcom: bcm2712-rpi-5-b: add pinctrl properties for csi i2cs (Gregor Herburger)
+- arm64: dts: broadcom: bcm2712: add camera backend node pispbe (Gregor Herburger)
+- arm64: dts: broadcom: rp1: add csi nodes (Gregor Herburger)
+- arm64: dts: broadcom: rp1: add i2c controller (Gregor Herburger)
+- arm64: dts: broadcom: bcm2712: Add V3D device node (Maíra Canal)
+- arm64: dts: freescale: imx93: Add Ethos-U65 NPU and SRAM nodes (Rob Herring (Arm))
+- redhat: configs: fedora: Enable AMD ISP4 MIPI camera solution (Kate Hsuan)
+- Documentation: add documentation of AMD isp 4 driver (Bin Du)
+- media: platform: amd: isp4 debug fs logging and more descriptive errors (Bin Du)
+- media: platform: amd: isp4 video node and buffers handling added (Bin Du)
+- media: platform: amd: isp4 subdev and firmware loading handling added (Bin Du)
+- media: platform: amd: Add isp4 fw and hw interface (Bin Du)
+- media: platform: amd: low level support for isp4 firmware (Bin Du)
+- media: platform: amd: Introduce amd isp4 capture driver (Bin Du)
+- Linux v7.0.2
+Resolves: 
+
+* Thu Apr 23 2026 Justin M. Forbes <jforbes@fedoraproject.org> [7.0.1-0]
+- Initial setup for stable Fedora releases (Justin M. Forbes)
+- Fix up rebase typo in drivers/pci/quirks.c (Justin M. Forbes)
+- Linux v7.0.1
+Resolves: 
+
+* Wed Apr 15 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-63]
+- Fix up mismatc with ACPI_PLATFORM_PROFILE (Justin M. Forbes)
+Resolves: 
+
+* Mon Apr 13 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-62]
+- Add epoch support for rv and rv-debuginfo packages (John Kacur)
+- Drop the hardlink step in %%post scriptlet (Zbigniew Jędrzejewski-Szmek)
+Resolves: 
+
+* Mon Apr 13 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-61]
+- Linux v7.0.0
+Resolves: 
+
+* Sun Apr 12 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc7.f5459048c38a.60]
+- Linux v7.0.0-0.rc7.f5459048c38a
+Resolves: 
+
+* Sat Apr 11 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc7.e774d5f1bc27.59]
+- redhat: allow genlog to exclude commits and issues based on ref pattern (Jan Stancek)
+- redhat/configs: enable the DIBS driver as it is now required for the SMC networking (Dan Horák)
+- redhat/configs: enable CRYPTO_PHMAC as module on s390x (Dan Horák)
+- Linux v7.0.0-0.rc7.e774d5f1bc27
+Resolves: 
+
+* Fri Apr 10 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc7.9a9c8ce300cd.58]
+- rh_message.h: update support status of mlx5 devices (Scott Weaver)
+- Linux v7.0.0-0.rc7.9a9c8ce300cd
+Resolves: 
+
+* Thu Apr 09 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc7.7f87a5ea75f0.57]
+- Consolidate configs to common for 7.0 (Justin M. Forbes)
+- Linux v7.0.0-0.rc7.7f87a5ea75f0
+Resolves: 
+
+* Wed Apr 08 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc7.3036cd0d3328.56]
+- Remove stale config items (Justin M. Forbes)
+- redhat/configs: enable CONFIG_WATCHDOG_HRTIMER_PRETIMEOUT (David Arcari)
+- Turn on CONFIG_PREEMPT_LAZY for all arches (Justin M. Forbes)
+- redhat: selftests/bpf: Add cpuv4 variant (Viktor Malik)
+- redhat/configs: automotive: enable CONFIG_INIT_STACK_ALL_ZERO (Joe Simmons-Talbott)
+- Turn om SND_SOC_TAS2781_I2C=m for x86_64 (Justin M. Forbes)
+- Fix mismatch for CONFIG_POWER_SEQUENCING (Justin M. Forbes)
+- scriptlets: exit 0 on explicit exits (Adam Williamson)
 - Work around binutils update in s390x perf (Justin M. Forbes)
+- Linux v7.0.0-0.rc7.3036cd0d3328
+Resolves: 
+
+* Tue Apr 07 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc7.bfe62a454542.55]
+- Linux v7.0.0-0.rc7.bfe62a454542
+Resolves: 
+
+* Mon Apr 06 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc7.54]
+- Linux v7.0.0-0.rc7
+Resolves: 
+
+* Sun Apr 05 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc6.3aae9383f42f.53]
+- Linux v7.0.0-0.rc6.3aae9383f42f
+Resolves: 
+
+* Sat Apr 04 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc6.7ca6d1cfec80.52]
+- Linux v7.0.0-0.rc6.7ca6d1cfec80
+Resolves: 
+
+* Fri Apr 03 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc6.d8a9a4b11a13.51]
+- Linux v7.0.0-0.rc6.d8a9a4b11a13
+Resolves: 
+
+* Wed Apr 01 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc6.9147566d8016.50]
+- Linux v7.0.0-0.rc6.9147566d8016
+Resolves: 
+
+* Tue Mar 31 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc6.d0c3bcd5b897.49]
+- Linux v7.0.0-0.rc6.d0c3bcd5b897
+Resolves: 
+
+* Mon Mar 30 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc6.48]
+- redhat/configs: Centralize iommu debugfs options, and enable amd iommu debugfs (Jerry Snitselaar)
+- Linux v7.0.0-0.rc6
+Resolves: 
+
+* Sun Mar 29 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc5.cbfffcca2bf0.47]
+- Linux v7.0.0-0.rc5.cbfffcca2bf0
+Resolves: 
+
+* Sat Mar 28 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc5.be762d8b6dd7.46]
+- fedora: arm64: Make qcom geni i2c-adapter and i2c-hid-of drivers builtin (Hans de Goede)
+- Linux v7.0.0-0.rc5.be762d8b6dd7
+Resolves: 
+
+* Fri Mar 27 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc5.46b513250491.45]
+- Linux v7.0.0-0.rc5.46b513250491
+Resolves: 
+
+* Thu Mar 26 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc5.0138af2472df.44]
+- Linux v7.0.0-0.rc5.0138af2472df
+Resolves: 
+
+* Wed Mar 25 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc5.bbeb83d3182a.43]
+- redhat/spec: Re-enable gdb index for riscv cross-compile (Jennifer Berringer)
+- redhat/kernel.spec: add aarch64 to fedora secure boot list (Jeremy Cline)
+- Linux v7.0.0-0.rc5.bbeb83d3182a
+Resolves: 
+
+* Mon Mar 23 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc5.42]
+- Linux v7.0.0-0.rc5
+Resolves: 
+
+* Sun Mar 22 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc4.113ae7b4decc.41]
+- Linux v7.0.0-0.rc4.113ae7b4decc
+Resolves: 
+
+* Sat Mar 21 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc4.a0c83177734a.40]
+- Turn on ASUS_ARMOURY driver, fixes RHBZ 2433246 (Justin M. Forbes)
+- Turn on Uniwill x86 platform driver (Justin M. Forbes)
+- Turn on GPIB for Fedora (Justin M. Forbes)
+- Fix up RHEL pending CONFIG_PREEMPT configs for 7.0 (Justin M. Forbes)
+- Fix up Fedora configs for 7.0 (Justin M. Forbes)
+- Linux v7.0.0-0.rc4.a0c83177734a
+Resolves: 
+
+* Fri Mar 20 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc4.0e4f8f1a3d08.39]
+- Linux v7.0.0-0.rc4.0e4f8f1a3d08
+Resolves: 
+
+* Thu Mar 19 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc4.8a30aeb0d1b4.38]
+- redhat/configs: enable CONFIG_LIVEUPDATE for fedora (Luca Boccassi)
+- Linux v7.0.0-0.rc4.8a30aeb0d1b4
+Resolves: 
+
+* Wed Mar 18 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc4.a989fde763f4.37]
+- Linux v7.0.0-0.rc4.a989fde763f4
 Resolves: 
 
 * Tue Mar 17 2026 Fedora Kernel Team <kernel-team@fedoraproject.org> [7.0.0-0.rc4.2d1373e4246d.36]

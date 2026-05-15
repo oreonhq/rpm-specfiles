@@ -1,5 +1,2 @@
 *.xz
 *.bz2
-# Keep vendored kABI blobs in git for Oreon (see README.sources).
-!kernel-abi-stablelists-*.tar.xz
-!kernel-kabi-dw-*.tar.xz

@@ -109,8 +109,8 @@
 %endif
 
 Summary: The Linux kernel
-%if 0%{?fedora} || 0%{?oreon}
-%define secure_boot_arch x86_64
+%if 0%{?fedora}
+%define secure_boot_arch x86_64 aarch64
 %else
 %define secure_boot_arch x86_64 aarch64 s390x ppc64le
 %endif
@@ -122,24 +122,7 @@ Summary: The Linux kernel
 %global signkernel 0
 %endif
 
-# SBAT entries (kernel.* component lines in *.sbat.template)
-%if 0%{?oreon}
 %global sbat_suffix oreon
-%global sbat_vendor Oreon HQ
-%global sbat_contact mailto:security@oreonhq.com
-%else
-%if 0%{?centos}
-%global sbat_suffix centos
-%else
-%if 0%{?fedora}
-%global sbat_suffix fedora
-%else
-%global sbat_suffix rhel
-%endif
-%endif
-%global sbat_vendor Red Hat
-%global sbat_contact mailto:secalert@redhat.com
-%endif
 
 # Sign modules on all arches
 %global signmodules 1
@@ -172,7 +155,7 @@ Summary: The Linux kernel
 # kernel package name (should only be used to define %{name})
 %global package_name kernel
 %global gemini 0
-# Optional community baseline configs and sources
+# Include Fedora files
 %global include_fedora 1
 # Include RHEL files
 %global include_rhel 1
@@ -198,17 +181,15 @@ Summary: The Linux kernel
 %define specrpmversion 7.0.7
 %define specversion 7.0.7
 %define patchversion 7.0
-%define pkgrelease 1
+%define pkgrelease 200
 %define kversion 7
 %define tarfile_release 7.0.7
-# Top-level dir from Source0 tarball (linux-7.0.7 after unpack)
-%global upstream_snapshot_commit 7.0.7
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 1%{?buildid}%{?dist}
-# kABI helper tarball basename version (vendored as Source300/301 in SRPM, no lookaside fetch)
-%define kabiversion 7.0.0
+%define specrelease 200%{?buildid}%{?dist}
+# This defines the kabi tarball version
+%define kabiversion 7.0.7
 
 # If this variable is set to 1, a bpf selftests build failure will cause a
 # fatal kernel package build error
@@ -253,7 +234,7 @@ Summary: The Linux kernel
 %define with_arm64_16k %{?_with_arm64_16k:    1} %{?!_with_arm64_16k:    0}
 # kernel-64k (aarch64 kernel with 64K page_size)
 %define with_arm64_64k %{?_without_arm64_64k: 0} %{?!_without_arm64_64k: 1}
-# RT defaults differ by target (off in community baseline, on for enterprise baselines below)
+# we default reatime builds to off for fedora and on for rhel/centos/eln
 %if 0%{?fedora}
 # kernel-rt (x86_64 and aarch64 only PREEMPT_RT enabled kernel)
 %define with_realtime  %{?_with_realtime:  1} %{?!_with_realtime:  0}
@@ -332,7 +313,7 @@ Summary: The Linux kernel
 # Cross compile requested?
 %define with_cross    %{?_with_cross:         1} %{?!_with_cross:        0}
 #
-# build a release kernel when with_release is set
+# build a release kernel on rawhide
 %define with_release   %{?_with_release:      1} %{?!_with_release:      0}
 
 # verbose build, i.e. no silent rules and V=1
@@ -356,7 +337,7 @@ Summary: The Linux kernel
 %endif
 
 %ifarch aarch64
-# dtbloader needs stubble; enable only where that package exists
+# dtbloader sub-package requires stubble which is only in Fedora for now
 %if 0%{?fedora}
 %define with_dtbloader %{?_without_dtbloader: 0} %{?!_without_dtbloader: 1}
 %else
@@ -627,7 +608,7 @@ Summary: The Linux kernel
 %endif
 
 %if 0%{?fedora}
-# zfcpdump not used on community baseline
+# This is not for Fedora
 %define with_zfcpdump 0
 %endif
 
@@ -916,12 +897,9 @@ BuildRequires: kabi-dw
 %if %{signkernel}%{signmodules}
 BuildRequires: openssl
 %if %{signkernel}
-# Enterprise signing via system-sb-certs; skip for ELN, Oreon, and similar embedded-cert layouts.
-%if 0%{?rhel}%{?centos} && !0%{?eln} && !0%{?oreon}
+# ELN uses Fedora signing process, so exclude
+%if 0%{?rhel}%{?centos} && !0%{?eln}
 BuildRequires: system-sb-certs
-%endif
-%if 0%{?oreon}
-BuildRequires: oreon-release
 %endif
 %ifarch x86_64 aarch64 riscv64
 BuildRequires: nss-tools
@@ -943,16 +921,6 @@ BuildRequires: binutils-%{_build_arch}-linux-gnu, gcc-%{_build_arch}-linux-gnu
 # it now aborts on failure and build fails.
 # debugedit-5.1-5 in F42 added support to override tools with target versions.
 %undefine _include_gdb_index
-%endif
-
-%if 0%{?rhel}%{?centos}
-%ifarch riscv64
-# Temporary workaround to avoid using find-debuginfo and gdb.minimal.
-# The current c10s version of gdb-minimal (14.2-4.el10) crashes when given some
-# riscv64 kernel modules (see RHEL-91586). Not building the gdb index avoids
-# breaking CI for now.
-%undefine _include_gdb_index
-%endif
 %endif
 %endif
 
@@ -997,7 +965,7 @@ BuildRequires: systemd-boot-unsigned
 # For UKI kernel cmdline addons
 BuildRequires: systemd-ukify
 # For UKI sb cert
-%if 0%{?rhel}%{?centos} && !0%{?eln} && !0%{?oreon}
+%if 0%{?rhel}%{?centos} && !0%{?eln}
 %if 0%{?centos}
 BuildRequires: centos-sb-certs >= 9.0-23
 %else
@@ -1012,15 +980,13 @@ BuildRequires: redhat-sb-certs >= 9.4-0.1
 # exact git commit you can run
 #
 # xzcat -qq ${TARBALL} | git get-tar-commit-id
-# Stable tarball from kernel.org. %%prep uses wrapper dir kernel-%%{upstream_snapshot_commit}/linux-%%{KVERREL} (no symlink).
-Source0: https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-%{upstream_snapshot_commit}.tar.xz
+Source0: linux-%{tarfile_release}.tar.xz
 
 Source1: Makefile.rhelver
 Source2: %{name}.changelog
 
-# Oreon UEFI Secure Boot
-Source10: oreonsecureboot-ca.cer
-Source13: oreonsecureboot-kernel.cer
+Source10: redhatsecurebootca5.cer
+Source13: redhatsecureboot501.cer
 
 %if %{signkernel}
 # Name of the packaged file containing signing key
@@ -1031,18 +997,9 @@ Source13: oreonsecureboot-kernel.cer
 %define signing_key_filename kernel-signing-s390.cer
 %endif
 
-# Oreon: embedded certs in SRPM; NSS DB must contain oreonsecureboot501 (and UKI if split).
-%if 0%{?oreon}
-%define pesign_name_0 oreonsecureboot501
-%define secureboot_ca_0 %{SOURCE10}
-%define secureboot_key_0 %{SOURCE13}
-%define pesign_name_uki_0 %{pesign_name_0}
-%define secureboot_key_uki_0 %{secureboot_key_0}
-%endif
-
-# pesign rpmbuild helper expects these cert file names, see:
+# Fedora/ELN pesign macro expects to see these cert file names, see:
 # https://github.com/rhboot/pesign/blob/main/src/pesign-rpmbuild-helper.in#L216
-%if 0%{?fedora}%{?eln} && !0%{?oreon}
+%if 0%{?fedora}%{?eln}
 %define pesign_name_0 redhatsecureboot501
 %define secureboot_ca_0 %{SOURCE10}
 %define secureboot_key_0 %{SOURCE13}
@@ -1051,7 +1008,7 @@ Source13: oreonsecureboot-kernel.cer
 %endif
 
 # RHEL/centos certs come from system-sb-certs
-%if 0%{?rhel} && !0%{?eln} && !0%{?oreon}
+%if 0%{?rhel} && !0%{?eln}
 %define secureboot_ca_0 %{_datadir}/pki/sb-certs/secureboot-ca-%{_arch}.cer
 %define secureboot_key_0 %{_datadir}/pki/sb-certs/secureboot-kernel-%{_arch}.cer
 %define secureboot_key_uki_0 %{_datadir}/pki/sb-certs/secureboot-uki-virt-%{_arch}.cer
@@ -1190,7 +1147,6 @@ Source212: Module.kabi_dup_s390x
 Source213: Module.kabi_dup_x86_64
 Source214: Module.kabi_dup_riscv64
 
-# kABI helper tarballs (vendored next to this spec). Do not use lookaside URLs in builds.
 Source300: kernel-abi-stablelists-%{kabiversion}.tar.xz
 Source301: kernel-kabi-dw-%{kabiversion}.tar.xz
 
@@ -1233,7 +1189,9 @@ Source491: %{name}-x86_64-automotive-debug-rhel.config
 # Sources for kernel-tools
 Source2002: kvm_stat.logrotate
 
-# Local overrides for customized kernel builds (merge.py / kernel-local legacy workflow).
+# Some people enjoy building customized kernels from the dist-git in Fedora and
+# use this to override configuration options. One day they may all use the
+# source tree, but in the mean time we carry this to support the legacy workflow
 Source3000: merge.py
 Source3001: kernel-local
 %if %{patchlist_changelog}
@@ -1250,10 +1208,6 @@ Source4002: gating.yaml
 
 Patch1: patch-%{patchversion}-redhat.patch
 %endif
-
-Patch2: oreon-kselftests-bpf-smcmake.patch
-Patch3: oreon-kselftests-bpf-urandom-read-warn-unused.patch
-Patch4: oreon-kselftests-bpf-test-progs-warn-unused.patch
 
 # empty final patch to facilitate testing of kernel patches
 Patch999999: linux-kernel-test.patch
@@ -1527,6 +1481,9 @@ This package provides debug information for the rtla package.
 %endif
 
 %package -n rv
+%if 0%{gemini}
+Epoch: %{gemini}
+%endif
 Summary: RV: Runtime Verification
 %description -n rv
 Runtime Verification (RV) is a lightweight (yet rigorous) method that
@@ -1538,6 +1495,9 @@ to analyze the logical and timing behavior of Linux.
 
 %if %{with_debuginfo}
 %package -n rv-debuginfo
+%if 0%{gemini}
+Epoch: %{gemini}
+%endif
 Summary: Debug information for package rv
 Requires: %{name}-debuginfo-common-%{_target_cpu} = %{version}-%{release}
 AutoReqProv: no
@@ -1583,12 +1543,12 @@ Summary: gcov graph and source files for coverage data collection.\
 
 %if %{with_kernel_abi_stablelists}
 %package -n %{name}-abi-stablelists
-Summary: The Red Hat Enterprise Linux kernel ABI symbol stablelists
+Summary: The Oreon kernel ABI symbol stablelists
 AutoReqProv: no
 %description -n %{name}-abi-stablelists
-The kABI package contains information pertaining to the Red Hat Enterprise
-Linux kernel ABI, including lists of kernel symbols that are needed by
-external Linux kernel modules, and a yum plugin to aid enforcement.
+The kABI package contains information pertaining to the Oreon kernel ABI,
+including lists of kernel symbols that are needed by external Linux kernel
+modules, and a yum plugin to aid enforcement.
 %endif
 
 %if %{with_kabidw_base}
@@ -1597,8 +1557,8 @@ Summary: The baseline dataset for kABI verification using DWARF data
 Group: System Environment/Kernel
 AutoReqProv: no
 %description kernel-kabidw-base-internal
-The package contains data describing the current ABI of the Red Hat Enterprise
-Linux kernel, suitable for the kabi-dw tool.
+The package contains data describing the current ABI of the Oreon kernel,
+suitable for the kabi-dw tool.
 %endif
 
 #
@@ -1701,7 +1661,7 @@ Supplements: (%{name}-selftests-internal-present and %{name}-uname-r = %{KVERREL
 AutoReq: no\
 AutoProv: yes\
 %description %{?1:%{1}-}modules-internal\
-This package provides kernel modules for the %{?2:%{2} }kernel package for Red Hat internal usage.\
+This package provides kernel modules for the %{?2:%{2} }kernel package for Oreon internal usage.\
 %{nil}
 
 #
@@ -1897,7 +1857,7 @@ Requires: %{name}%{?1:-%{1}}-modules-core-uname-r = %{KVERREL}%{uname_suffix %{?
 AutoReq: no\
 AutoProv: yes\
 %description %{?1:%{1}-}modules-partner\
-This package provides kernel modules for the %{?2:%{2} }kernel package for Red Hat partners usage.\
+This package provides kernel modules for the %{?2:%{2} }kernel package for Oreon partners usage.\
 %{nil}
 
 # Now, each variant package.
@@ -2139,7 +2099,7 @@ exit 1
 
 %if %{with_automotive}
 %if 0%{?fedora}
-%{log_msg "Cannot build automotive with community baseline, must be rhel/centos/eln"}
+%{log_msg "Cannot build automotive with a fedora baseline, must be rhel/centos/eln"}
 exit 1
 %endif
 %endif
@@ -2154,9 +2114,7 @@ if [ "%{patches}" != "%%{patches}" ] ; then
   done
 fi 2>/dev/null
 
-# git apply is stricter about context and fails on minor upstream revisions
-# (for example, 7.0.2 -> 7.0.6). Use GNU patch with fuzz so the hunks still apply cleanly.
-patch_command='patch -p1 --forward --batch --fuzz=5'
+patch_command='git --work-tree=. apply'
 ApplyPatch()
 {
   local patch=$1
@@ -2194,10 +2152,9 @@ ApplyOptionalPatch()
 }
 
 %{log_msg "Untar kernel tarball"}
-# %%setup -c unpacks under kernel-*/ so %%buildsubdir is stable; tree is
-# kernel-%%{upstream_snapshot_commit}/linux-%%{KVERREL} (no symlink).
-%setup -q -n kernel-%{upstream_snapshot_commit} -c
-mv linux-%{upstream_snapshot_commit} linux-%{KVERREL}
+%setup -q -n kernel-%{tarfile_release} -c
+mv linux-%{tarfile_release} linux-%{KVERREL}
+
 cd linux-%{KVERREL}
 cp -a %{SOURCE1} .
 
@@ -2206,10 +2163,6 @@ cp -a %{SOURCE1} .
 
 ApplyOptionalPatch patch-%{patchversion}-redhat.patch
 %endif
-
-ApplyPatch oreon-kselftests-bpf-smcmake.patch
-ApplyPatch oreon-kselftests-bpf-urandom-read-warn-unused.patch
-ApplyPatch oreon-kselftests-bpf-test-progs-warn-unused.patch
 
 ApplyOptionalPatch linux-kernel-test.patch
 
@@ -2233,65 +2186,21 @@ rm -f localversion-next localversion-rt
 # *** ERROR: ambiguous python shebang in /usr/bin/kvm_stat: #!/usr/bin/python. Change it to python3 (or python2) explicitly.
 # We patch all sources below for which we got a report/error.
 %{log_msg "Fixing Python shebangs..."}
-python3 - <<'PY'
-import os
-import re
-
-# We only change the interpreter path part of the shebang.
-# Replace `#!/usr/bin/python...` with `#!/usr/bin/python3...`.
-SHEBANG_RE = re.compile(r"^#!.*?/usr/bin/python(\s|$)")
-
-paths = [
-    "tools/kvm/kvm_stat/kvm_stat",
-    "scripts/show_delta",
-    "scripts/diffconfig",
-    "scripts/bloat-o-meter",
-    "scripts/jobserver-exec",
-    "tools",
-    "Documentation",
-    "scripts/clang-tools",
-]
-
-def iter_files(p):
-    if os.path.isfile(p):
-        yield p
-    elif os.path.isdir(p):
-        for root, dirs, files in os.walk(p):
-            for name in files:
-                yield os.path.join(root, name)
-
-try:
-    for p in paths:
-        for f in iter_files(p):
-            try:
-                with open(f, "rb") as fp:
-                    first = fp.readline(2048)
-                    if not first.startswith(b"#!"):
-                        continue
-                    if not SHEBANG_RE.match(first.decode("utf-8", "ignore")):
-                        continue
-                    # Avoid touching already-correct python3 shebangs.
-                    if b"/usr/bin/python3" in first:
-                        continue
-                    decoded = first.decode("utf-8", "ignore")
-                    new_first = decoded.replace("/usr/bin/python", "/usr/bin/python3", 1)
-
-                    rest = fp.read()
-                with open(f, "wb") as fp:
-                    fp.write(new_first.encode("utf-8"))
-                    fp.write(rest)
-            except Exception:
-                # Keep prep robust; if a file is weird/binary, just skip it.
-                continue
-except Exception:
-    pass
-PY
+%py3_shebang_fix \
+	tools/kvm/kvm_stat/kvm_stat \
+	scripts/show_delta \
+	scripts/diffconfig \
+	scripts/bloat-o-meter \
+	scripts/jobserver-exec \
+	tools \
+	Documentation \
+	scripts/clang-tools 2> /dev/null
 
 # SBAT data
-sed -e 's|@KVER@|%{KVERREL}|g' -e 's|@SBAT_SUFFIX@|%{sbat_suffix}|g' -e 's|@SBAT_VENDOR@|%{sbat_vendor}|g' -e 's|@SBAT_CONTACT@|%{sbat_contact}|g' %{SOURCE82} > dtbloader.sbat
-sed -e 's|@KVER@|%{KVERREL}|g' -e 's|@SBAT_SUFFIX@|%{sbat_suffix}|g' -e 's|@SBAT_VENDOR@|%{sbat_vendor}|g' -e 's|@SBAT_CONTACT@|%{sbat_contact}|g' %{SOURCE83} > uki.sbat
-sed -e 's|@KVER@|%{KVERREL}|g' -e 's|@SBAT_SUFFIX@|%{sbat_suffix}|g' -e 's|@SBAT_VENDOR@|%{sbat_vendor}|g' -e 's|@SBAT_CONTACT@|%{sbat_contact}|g' %{SOURCE84} > uki-addons.sbat
-sed -e 's|@KVER@|%{KVERREL}|g' -e 's|@SBAT_SUFFIX@|%{sbat_suffix}|g' -e 's|@SBAT_VENDOR@|%{sbat_vendor}|g' -e 's|@SBAT_CONTACT@|%{sbat_contact}|g' %{SOURCE85} > kernel.sbat
+sed -e s,@KVER,%{KVERREL}, -e s,@SBAT_SUFFIX,%{sbat_suffix}, %{SOURCE82} > dtbloader.sbat
+sed -e s,@KVER,%{KVERREL}, -e s,@SBAT_SUFFIX,%{sbat_suffix}, %{SOURCE83} > uki.sbat
+sed -e s,@KVER,%{KVERREL}, -e s,@SBAT_SUFFIX,%{sbat_suffix}, %{SOURCE84} > uki-addons.sbat
+sed -e s,@KVER,%{KVERREL}, -e s,@SBAT_SUFFIX,%{sbat_suffix}, %{SOURCE85} > kernel.sbat
 
 # only deal with configs if we are going to build for the arch
 %ifnarch %nobuildarches
@@ -2395,14 +2304,6 @@ cat imaca.pem >> ../certs/rhel.pem
 for i in *.config; do
   sed -i 's@CONFIG_SYSTEM_TRUSTED_KEYS=""@CONFIG_SYSTEM_TRUSTED_KEYS="certs/rhel.pem"@' $i
   sed -i 's@CONFIG_EFI_SBAT_FILE=""@CONFIG_EFI_SBAT_FILE="kernel.sbat"@' $i
-done
-%endif
-
-# Adjust FIPS module name for RHEL
-%if 0%{?rhel}
-%{log_msg "Adjust FIPS module name for RHEL"}
-for i in *.config; do
-  sed -i 's/CONFIG_CRYPTO_FIPS_NAME=.*/CONFIG_CRYPTO_FIPS_NAME="Red Hat Enterprise Linux %{rhel} - Kernel Cryptographic API"/' $i
 done
 %endif
 
@@ -2581,8 +2482,7 @@ BuildKernel() {
     fi
     %{log_msg "GCOV - continuing build in: $(pwd)"}
     pushd ../linux-%{KVERREL}${Variant:+-${Variant}}
-    # Keep gcov list under %%buildsubdir (main tree), not the parent of it.
-    pwd > "$OLDPWD/kernel${Variant:+-${Variant}}-gcov.list"
+    pwd > ../kernel${Variant:+-${Variant}}-gcov.list
 %endif
 
     %{log_msg "Calling InitBuildVars for $Variant"}
@@ -2722,14 +2622,13 @@ BuildKernel() {
 
     %{log_msg "Add VDSO files"}
     # add an a noop %%defattr statement 'cause rpm doesn't like empty file list files
-    # Keep this list in the tree (not ..) so %%files -f finds it under %%buildsubdir.
-    echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-ldsoconf.list
+    echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-ldsoconf.list
     if [ $DoVDSO -ne 0 ]; then
         %{make} ARCH=$Arch INSTALL_MOD_PATH=$RPM_BUILD_ROOT vdso_install KERNELRELEASE=$KernelVer
         if [ -s ldconfig-kernel.conf ]; then
              install -D -m 444 ldconfig-kernel.conf \
                 $RPM_BUILD_ROOT/etc/ld.so.conf.d/kernel-$KernelVer.conf
-	     echo /etc/ld.so.conf.d/kernel-$KernelVer.conf >> kernel${Variant:+-${Variant}}-ldsoconf.list
+	     echo /etc/ld.so.conf.d/kernel-$KernelVer.conf >> ../kernel${Variant:+-${Variant}}-ldsoconf.list
         fi
 
         rm -rf $RPM_BUILD_ROOT/lib/modules/$KernelVer/vdso/.build-id
@@ -2935,11 +2834,6 @@ BuildKernel() {
     cp -a include $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/include
     # Cross-reference from include/perf/events/sof.h
     cp -a sound/soc/sof/sof-audio.h $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/sound/soc/sof
-%ifarch aarch64
-    # q6afe.c includes private headers from its source directory.
-    mkdir -p $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/sound/soc/qcom/qdsp6
-    cp -a sound/soc/qcom/qdsp6/*.h $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/sound/soc/qcom/qdsp6/
-%endif
 %ifarch i686 x86_64
     # files for 'make prepare' to succeed with kernel-devel
     cp -a --parents arch/x86/entry/syscalls/syscall_32.tbl $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/
@@ -3047,12 +2941,11 @@ BuildKernel() {
     if [ $DoModules -eq 0 ]; then
         %{log_msg "Create empty files for RPM packaging"}
         # Ensure important files/directories exist to let the packaging succeed
-        # Keep lists in the tree so %%files -f finds them under %%buildsubdir.
-        echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-modules-core.list
-        echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-modules.list
-        echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-modules-extra.list
-        echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-modules-internal.list
-        echo '%%defattr(-,-,-)' > kernel${Variant:+-${Variant}}-modules-partner.list
+        echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-modules-core.list
+        echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-modules.list
+        echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-modules-extra.list
+        echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-modules-internal.list
+        echo '%%defattr(-,-,-)' > ../kernel${Variant:+-${Variant}}-modules-partner.list
         mkdir -p $RPM_BUILD_ROOT/lib/modules/$KernelVer/kernel
         # Add files usually created by make modules, needed to prevent errors
         # thrown by depmod during package installation
@@ -3223,14 +3116,14 @@ BuildKernel() {
         fi
 
         if [ "$add_all_dirs" -eq 1 ]; then
-            (cd $RPM_BUILD_ROOT; find lib/modules/$KernelVer/kernel -mindepth 1 -type d | sort -n) > module-dirs.list
-            sed -e 's|^lib|%dir /lib|' module-dirs.list >> $absolute_file_list
+            (cd $RPM_BUILD_ROOT; find lib/modules/$KernelVer/kernel -mindepth 1 -type d | sort -n) > ../module-dirs.list
+            sed -e 's|^lib|%dir /lib|' ../module-dirs.list >> $absolute_file_list
         fi
     }
 
     if [ $DoModules -eq 1 ]; then
         # save modules.dep for debugging
-        cp $RPM_BUILD_ROOT/lib/modules/$KernelVer/modules.dep .
+        cp $RPM_BUILD_ROOT/lib/modules/$KernelVer/modules.dep ../
 
         %{log_msg "Create module list files for all kernel variants"}
         variants_param=""
@@ -3243,13 +3136,13 @@ BuildKernel() {
         if [[ "$Variant" == "automotive" || "$Variant" == "automotive-debug" ]]; then
             variants_param="-r automotive"
         fi
-        # this creates modules-*.list in cwd, where each kmod path is as it
+        # this creates ../modules-*.list output, where each kmod path is as it
         # appears in modules.dep (relative to lib/modules/$KernelVer)
         ret=0
-        %{SOURCE22} -l "filtermods-$KernelVer.log" sort -d $RPM_BUILD_ROOT/lib/modules/$KernelVer/modules.dep -c configs/def_variants.yaml $variants_param -o . || ret=$?
+        %{SOURCE22} -l "../filtermods-$KernelVer.log" sort -d $RPM_BUILD_ROOT/lib/modules/$KernelVer/modules.dep -c configs/def_variants.yaml $variants_param -o .. || ret=$?
         if [ $ret -ne 0 ]; then
             echo "8< --- filtermods-$KernelVer.log ---"
-            cat "filtermods-$KernelVer.log"
+            cat "../filtermods-$KernelVer.log"
             echo "--- filtermods-$KernelVer.log --- >8"
 
             echo "8< --- modules.dep ---"
@@ -3258,12 +3151,12 @@ BuildKernel() {
             exit 1
         fi
 
-        create_module_file_list "kernel" modules-core.list kernel${Variant:+-${Variant}}-modules-core.list 1 0
-        create_module_file_list "kernel" modules.list kernel${Variant:+-${Variant}}-modules.list 0 0
-        create_module_file_list "internal" modules-internal.list kernel${Variant:+-${Variant}}-modules-internal.list 0 1
-        create_module_file_list "kernel" modules-extra.list kernel${Variant:+-${Variant}}-modules-extra.list 0 1
+        create_module_file_list "kernel" ../modules-core.list ../kernel${Variant:+-${Variant}}-modules-core.list 1 0
+        create_module_file_list "kernel" ../modules.list ../kernel${Variant:+-${Variant}}-modules.list 0 0
+        create_module_file_list "internal" ../modules-internal.list ../kernel${Variant:+-${Variant}}-modules-internal.list 0 1
+        create_module_file_list "kernel" ../modules-extra.list ../kernel${Variant:+-${Variant}}-modules-extra.list 0 1
 %if 0%{!?fedora:1}
-        create_module_file_list "partner" modules-partner.list kernel${Variant:+-${Variant}}-modules-partner.list 1 1
+        create_module_file_list "partner" ../modules-partner.list ../kernel${Variant:+-${Variant}}-modules-partner.list 1 1
 %endif
     fi # $DoModules -eq 1
 
@@ -3287,7 +3180,6 @@ BuildKernel() {
 %if %{with_cross}
     make -C $RPM_BUILD_ROOT/lib/modules/$KernelVer/build M=scripts clean
     make -C $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/tools/bpf/resolve_btfids clean
-    cp -a scripts/basic/fixdep $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/scripts/basic/fixdep
     sed -i 's/REBUILD_SCRIPTS_FOR_CROSS:=0/REBUILD_SCRIPTS_FOR_CROSS:=1/' $RPM_BUILD_ROOT/lib/modules/$KernelVer/build/Makefile
 %endif
 
@@ -3319,7 +3211,7 @@ BuildKernel() {
     # prune junk from kernel-debuginfo
     find $RPM_BUILD_ROOT/usr/src/kernels -name "*.mod.c" -delete
 
-    # UEFI Secure Boot CA cert shipped with the kernel for verification (vendor: %{sbat_vendor})
+    # Red Hat UEFI Secure Boot CA cert, which can be used to authenticate the kernel
     %{log_msg "Install certs"}
     mkdir -p $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer
 %if %{signkernel}
@@ -3365,7 +3257,6 @@ rm -rf $RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/boot
 mkdir -p $RPM_BUILD_ROOT%{_libexecdir}
 
-# %%___build_pre cds into %%buildsubdir (kernel-%%{upstream_snapshot_commit}).
 cd linux-%{KVERREL}
 
 %if %{with_debug}
@@ -3594,29 +3485,10 @@ pushd tools/testing/selftests
 # Since selftests are not shipped, disable source fortification for them.
 %global _fortify_level_bak %{_fortify_level}
 %undefine _fortify_level
-# Selftests bpf mixes clang (-O0) and gcc, inherited distro flags must not leave
-# _FORTIFY_SOURCE without -O or pass gcc-only -Wno-complain-wrong-lang into clang.
-KSELFTEST_HOST_CFLAGS="$(echo "%{build_cflags}" | sed -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wno-complain-wrong-lang//g')"
-KSELFTEST_HOST_CFLAGS="$KSELFTEST_HOST_CFLAGS -fms-extensions"
-KSELFTEST_HOST_CXXFLAGS="$(echo "%{build_cxxflags}" | sed -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wno-complain-wrong-lang//g')"
-KSELFTEST_HOST_CXXFLAGS="$KSELFTEST_HOST_CXXFLAGS -fms-extensions"
-export CFLAGS="$KSELFTEST_HOST_CFLAGS"
-export CXXFLAGS="$KSELFTEST_HOST_CXXFLAGS"
-# bpf selftests Makefile defaults OPT_FLAGS to -O0 unless RELEASE=1, which
-# breaks distro _FORTIFY_SOURCE (needs -O). Strip fortify from EXTRA_CFLAGS too.
-# The combined form -Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=N must also be stripped;
-# plain -Wp,-D_FORTIFY_SOURCE pattern does not match it.
-KSELFTEST_EXTRA_CFLAGS="$(echo "${RPM_OPT_FLAGS}" | sed -e 's/-Wno-complain-wrong-lang//g' -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/-Wp,-D_FORTIFY_SOURCE=[0-9]*//g' -e 's/[[:space:]]-D_FORTIFY_SOURCE=[0-9]*//g')"
-KSELFTEST_EXTRA_CFLAGS="$KSELFTEST_EXTRA_CFLAGS -O2 -fms-extensions"
+export CFLAGS="%{build_cflags}"
+export CXXFLAGS="%{build_cxxflags}"
 
-# Internal kernel headers (e.g. include/linux/fs.h, ns/ns_common_types.h) rely on
-# anonymous struct/union layout that needs -fms-extensions. Kbuild passes this for
-# the kernel proper but kselftest EXTRA_CFLAGS did not, so targets like mm that add
-# -I $(top_srcdir) failed with missing ns_id / failed filename static_assert.
-# tools/testing/selftests/Makefile ignores INSTALL_PATH and installs under
-# KSFT_INSTALL_PATH (default kselftest_install/). Point it at BUILDROOT so binaries
-# land under %%{_libexecdir}/kselftests for packaging.
-%{make} %{?_smp_mflags} KSFT_INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests RELEASE=1 EXTRA_CFLAGS="${KSELFTEST_EXTRA_CFLAGS}" EXTRA_CXXFLAGS="${KSELFTEST_EXTRA_CFLAGS}" EXTRA_LDFLAGS="%{__global_ldflags}" ARCH=$Arch V=1 TARGETS="bpf cgroup kmod mm net net/can net/forwarding net/hsr net/mptcp net/netfilter net/packetdrill tc-testing memfd drivers/net drivers/net/hw iommu cachestat pid_namespace rlimits timens pidfd capabilities clone3 exec filesystems firmware landlock mount mount_setattr move_mount_set_group nsfs openat2 proc safesetid seccomp tmpfs uevent vDSO" SKIP_TARGETS="" $force_targets INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests VMLINUX_H="${RPM_VMLINUX_H}" install
+%{make} %{?_smp_mflags} EXTRA_CFLAGS="${RPM_OPT_FLAGS}" EXTRA_CXXFLAGS="${RPM_OPT_FLAGS}" EXTRA_LDFLAGS="%{__global_ldflags}" ARCH=$Arch V=1 TARGETS="bpf cgroup kmod mm net net/can net/forwarding net/hsr net/mptcp net/netfilter net/packetdrill tc-testing memfd drivers/net drivers/net/hw iommu cachestat pid_namespace rlimits timens pidfd capabilities clone3 exec filesystems firmware landlock mount mount_setattr move_mount_set_group nsfs openat2 proc safesetid seccomp tmpfs uevent vDSO" SKIP_TARGETS="" $force_targets INSTALL_PATH=%{buildroot}%{_libexecdir}/kselftests VMLINUX_H="${RPM_VMLINUX_H}" install
 
 # Restore the original level of source fortification
 %define _fortify_level %{_fortify_level_bak}
@@ -3626,7 +3498,7 @@ export CXXFLAGS="%{build_cxxflags}"
 # 'make install' for bpf is broken and upstream refuses to fix it.
 # Install the needed files manually.
 %{log_msg "install selftests"}
-for dir in bpf bpf/no_alu32 bpf/progs; do
+for dir in bpf bpf/no_alu32 bpf/cpuv4 bpf/progs; do
 	# In ARK, the rpm build continues even if some of the selftests
 	# cannot be built. It's not always possible to build selftests,
 	# as upstream sometimes dependens on too new llvm version or has
@@ -3640,29 +3512,21 @@ for dir in bpf bpf/no_alu32 bpf/progs; do
 done
 %buildroot_save_unstripped "usr/libexec/kselftests/bpf/test_progs"
 %buildroot_save_unstripped "usr/libexec/kselftests/bpf/test_progs-no_alu32"
+%buildroot_save_unstripped "usr/libexec/kselftests/bpf/test_progs-cpuv4"
 
 # The urandom_read binary doesn't pass the check-rpaths check and upstream
 # refuses to fix it. So, we save it to buildroot_unstripped and delete it so it
 # will be hidden from check-rpaths and will automatically get restored later.
 %buildroot_save_unstripped "usr/libexec/kselftests/bpf/urandom_read"
 %buildroot_save_unstripped "usr/libexec/kselftests/bpf/no_alu32/urandom_read"
+%buildroot_save_unstripped "usr/libexec/kselftests/bpf/cpuv4/urandom_read"
 rm -f %{buildroot}/usr/libexec/kselftests/bpf/urandom_read
 rm -f %{buildroot}/usr/libexec/kselftests/bpf/no_alu32/urandom_read
+rm -f %{buildroot}/usr/libexec/kselftests/bpf/cpuv4/urandom_read
 
-# Ensure full bpftool next to bpf selftests (install usually rsyncs OUTPUT copy;
-# fall back to scratch build path when layout differs).
-btdest="%{buildroot}%{_libexecdir}/kselftests/bpf/bpftool"
-if [ ! -x "$btdest" ]; then
-	if [ -x bpf/tools/sbin/bpftool ]; then
-		cp -a bpf/tools/sbin/bpftool "$btdest"
-	else
-		btp="$(find . -path '*/tools/sbin/bpftool' -type f -executable 2>/dev/null | head -1)"
-		if [ -n "$btp" ]; then
-			cp -a "$btp" "$btdest"
-		fi
-	fi
-fi
-test -x "$btdest"
+# Copy bpftool to kselftests so selftests is packaged with
+# the full bpftool instead of bootstrap bpftool
+cp ./bpf/tools/sbin/bpftool %{buildroot}%{_libexecdir}/kselftests/bpf/bpftool
 
 popd
 %{log_msg "end build selftests"}
@@ -3869,7 +3733,7 @@ rm -rf %{buildroot}%{_libdir}/libperf.a
 %ifarch %{cpupowerarchs}
 %{make} -C tools/power/cpupower DESTDIR=$RPM_BUILD_ROOT libdir=%{_libdir} libexecdir=%{_libexecdir} mandir=%{_mandir} unitdir=%{_unitdir} CPUFREQ_BENCH=false install
 %find_lang cpupower
-# Leave cpupower.lang in the source tree so %%files -f finds it under %%buildsubdir.
+mv cpupower.lang ../
 %ifarch x86_64
     pushd tools/power/cpupower/debug/x86_64
     install -m755 centrino-decode %{buildroot}%{_bindir}/centrino-decode
@@ -3882,8 +3746,6 @@ pushd tools/power/cpupower/bindings/python
 %{libcpupower_python_bindings_make}
 %{log_msg "Install libcpupower Python bindings"}
 %{make} INSTALL_DIR=$RPM_BUILD_ROOT%{python3_sitearch} install
-# Module for import only; executable bit triggers brp-mangle-shebang failure (no shebang).
-chmod a-x "$RPM_BUILD_ROOT%{python3_sitearch}/raw_pylibcpupower.py" 2>/dev/null || true
 popd
 %endif
 %ifarch x86_64
@@ -3986,9 +3848,6 @@ find -type d -exec install -d %{buildroot}%{_libexecdir}/kselftests/drivers/net/
 find -type f -executable -exec install -D -m755 {} %{buildroot}%{_libexecdir}/kselftests/drivers/net/mlxsw/{} \;
 find -type f ! -executable -exec install -D -m644 {} %{buildroot}%{_libexecdir}/kselftests/drivers/net/mlxsw/{} \;
 popd
-# sharedbuffer_configuration.py has an unversioned "python" shebang; make it non-executable
-# so brp-mangle-shebangs does not flag it as an error.
-chmod a-x %{buildroot}%{_libexecdir}/kselftests/drivers/net/mlxsw/sharedbuffer_configuration.py 2>/dev/null || true
 # install drivers/net/hw selftests
 pushd tools/testing/selftests/drivers/net/hw
 find -type d -exec install -d %{buildroot}%{_libexecdir}/kselftests/drivers/net/hw/{} \;
@@ -4225,9 +4084,10 @@ popd
 #
 %define kernel_devel_post() \
 %{expand:%%post %{?1:%{1}-}devel}\
+%if %{undefined __brp_linkdupes}\
 if [ -f /etc/sysconfig/kernel ]\
 then\
-    . /etc/sysconfig/kernel || exit $?\
+    . /etc/sysconfig/kernel || exit 0\
 fi\
 if [ "$HARDLINK" != "no" -a -x /usr/bin/hardlink -a ! -e /run/ostree-booted ] \
 then\
@@ -4238,6 +4098,7 @@ then\
      /usr/bin/find /usr/src/kernels -type f -name '*.hardlink-temporary' -delete\
     )\
 fi\
+%endif\
 %if %{with_cross}\
     echo "Building scripts and resolve_btfids"\
     env --unset=ARCH make -C /usr/src/kernels/%{KVERREL}%{?1:+%{1}} prepare_after_cross\
@@ -4312,7 +4173,7 @@ fi\
 if [ -f %{_localstatedir}/lib/rpm-state/%{name}/need_to_run_dracut_%{KVERREL}%{?1:+%{1}} ]; then\
 	rm -f %{_localstatedir}/lib/rpm-state/%{name}/need_to_run_dracut_%{KVERREL}%{?1:+%{1}}\
 	echo "Running: dracut -f --kver %{KVERREL}%{?1:+%{1}} /boot/initramfs-%{KVERREL}%{?1:+%{1}}.img"\
-	dracut -f --kver "%{KVERREL}%{?1:+%{1}}" /boot/initramfs-%{KVERREL}%{?1:+%{1}}.img || exit $?\
+	dracut -f --kver "%{KVERREL}%{?1:+%{1}}" /boot/initramfs-%{KVERREL}%{?1:+%{1}}.img || exit 0\
 fi\
 %{nil}
 
@@ -4343,12 +4204,12 @@ fi\
 %if !%{with_automotive}\
 if [ -x %{_sbindir}/weak-modules ]\
 then\
-    %{_sbindir}/weak-modules --add-kernel %{KVERREL}%{?-v:+%{-v*}} || exit $?\
+    %{_sbindir}/weak-modules --add-kernel %{KVERREL}%{?-v:+%{-v*}} || exit 0\
 fi\
 %endif\
 %endif\
 rm -f %{_localstatedir}/lib/rpm-state/%{name}/installing_core_%{KVERREL}%{?-v:+%{-v*}}\
-/bin/kernel-install add %{KVERREL}%{?-v:+%{-v*}} /lib/modules/%{KVERREL}%{?-v:+%{-v*}}/vmlinuz%{?-u:-%{-u*}.efi} || exit $?\
+/bin/kernel-install add %{KVERREL}%{?-v:+%{-v*}} /lib/modules/%{KVERREL}%{?-v:+%{-v*}}/vmlinuz%{?-u:-%{-u*}.efi} || exit 0\
 if [[ ! -e "/boot/symvers-%{KVERREL}%{?-v:+%{-v*}}.%compext" ]]; then\
     cp "/lib/modules/%{KVERREL}%{?-v:+%{-v*}}/symvers.%compext" "/boot/symvers-%{KVERREL}%{?-v:+%{-v*}}.%compext"\
     if command -v restorecon &>/dev/null; then\
@@ -4387,7 +4248,7 @@ fi\
 %{-r:\
 if [ `uname -i` == "x86_64" -o `uname -i` == "i386" ] &&\
    [ -f /etc/sysconfig/kernel ]; then\
-  /bin/sed -r -i -e 's/^DEFAULTKERNEL=%{-r*}$/DEFAULTKERNEL=kernel%{?-v:-%{-v*}}/' /etc/sysconfig/kernel || exit $?\
+  /bin/sed -r -i -e 's/^DEFAULTKERNEL=%{-r*}$/DEFAULTKERNEL=kernel%{?-v:-%{-v*}}/' /etc/sysconfig/kernel || exit 0\
 fi}\
 mkdir -p %{_localstatedir}/lib/rpm-state/%{name}\
 touch %{_localstatedir}/lib/rpm-state/%{name}/installing_core_%{KVERREL}%{?-v:+%{-v*}}\
@@ -4414,11 +4275,11 @@ entry_type=""\
 /bin/kernel-install --help|grep -q -- '--entry-type=' &&\
     entry_type="--entry-type %{!?-u:type1}%{?-u:type2}" \
 }\
-/bin/kernel-install remove %{KVERREL}%{?-v:+%{-v*}} $entry_type || exit $?\
+/bin/kernel-install remove %{KVERREL}%{?-v:+%{-v*}} $entry_type || exit 0\
 %if !%{with_automotive}\
 if [ -x %{_sbindir}/weak-modules ]\
 then\
-    %{_sbindir}/weak-modules --remove-kernel %{KVERREL}%{?-v:+%{-v*}} || exit $?\
+    %{_sbindir}/weak-modules --remove-kernel %{KVERREL}%{?-v:+%{-v*}} || exit 0\
 fi\
 %endif\
 %{nil}
@@ -4579,7 +4440,7 @@ fi\
 %{_libexecdir}/perf-core/*
 %{_mandir}/man[1-8]/perf*
 %{_sysconfdir}/bash_completion.d/perf
-# tools/perf/Documentation/examples.txt removed upstream (perf 7.x); do not %doc it
+%doc linux-%{KVERREL}/tools/perf/Documentation/examples.txt
 %{_docdir}/perf-tip/tips.txt
 %{_includedir}/perf/perf_dlfilter.h
 
@@ -4783,7 +4644,7 @@ fi\
 %if %{2}\
 %{expand:%%files %{?1:-f kernel-%{?3:%{3}-}ldsoconf.list} %{?3:%{3}-}core}\
 %{!?_licensedir:%global license %%doc}\
-%%license COPYING-%{version}-%{release}\
+%%license linux-%{KVERREL}/COPYING-%{version}-%{release}\
 /lib/modules/%{KVERREL}%{?3:+%{3}}/%{?-k:%{-k*}}%{!?-k:vmlinuz}\
 %ghost /%{image_install_path}/%{?-k:%{-k*}}%{!?-k:vmlinuz}-%{KVERREL}%{?3:+%{3}}\
 /lib/modules/%{KVERREL}%{?3:+%{3}}/.vmlinuz.hmac \
@@ -4863,7 +4724,7 @@ fi\
 %endif\
 %if %{with_dtbloader} && ("%{?3}" == "" || "%{3}" == "debug")\
 %{expand:%%files %{?3:%{3}-}uki-dtbloader}\
-%%license COPYING-%{version}-%{release}\
+%%license linux-%{KVERREL}/COPYING-%{version}-%{release}\
 %dir /lib/modules\
 %dir /lib/modules/%{KVERREL}%{?3:+%{3}}\
 /lib/modules/%{KVERREL}%{?3:+%{3}}/System.map\
@@ -4955,23 +4816,5 @@ fi\
 #
 #
 %changelog
-* Thu May 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.7-1
-- Bump to Linux 7.0.7 stable
-
-* Tue May 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.6-1
-- Bump to Linux 7.0.6 stable
-
-* Mon May 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.4-2
-- Fix aarch64 kernel-devel/header fallout from missing QDSP6, fixdep, and dqblk_xfs paths
-- Keep kselftests best-effort when BPF CO-RE tests fail against generated kernel BTF
-- Build x86_64 objtool before module finalization
-
-* Thu May  7 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.4-1
-- Bump to Linux 7.0.4 stable
-
-* Tue Apr 28 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.2-200
-- Bump to Linux 7.0.2 stable
-
-* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.0-1
-- Prepare for Oreon 11 (RP1)
-- %%oreon SBAT oreonsecureboot pesign oreon-release sources skip RHEL sb-certs
+* Thu May 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.7-200
+- Import from Fedora 44, debrand for Oreon
