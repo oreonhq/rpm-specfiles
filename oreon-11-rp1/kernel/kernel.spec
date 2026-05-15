@@ -2440,6 +2440,18 @@ InitBuildVars() {
     %{log_msg "InitBuildVars: USING ARCH=$Arch"}
 
     KCFLAGS="%{?kcflags}"
+
+    # gcc, gas, and GNU make (-j) use $TMPDIR for .s stubs and jobserver fifo
+    # files (e.g. /tmp/GMfifo*). A shared system /tmp can lose those mid-build
+    # (cleanup, quotas, contention) and yields cascades like "can't open *.s",
+    # missing .d deps, and bogus missing sources. Pin temp to builddir.
+    _kernel_priv_tmp="$(cd .. && pwd)/.kernel-rpm-priv-tmp"
+    rm -rf "${_kernel_priv_tmp}"
+    mkdir -p "${_kernel_priv_tmp}"
+    chmod 700 "${_kernel_priv_tmp}"
+    export TMPDIR="${_kernel_priv_tmp}"
+    export TMP="${TMPDIR}"
+    export TEMP="${TMPDIR}"
 }
 
 #Build bootstrap bpftool
