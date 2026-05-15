@@ -273,8 +273,8 @@ Summary: The Linux kernel
 %define with_ynl      %{?_without_ynl:      0} %{?!_without_ynl:      1}
 # kernel-debuginfo
 %define with_debuginfo %{?_without_debuginfo: 0} %{?!_without_debuginfo: 1}
-# kernel-abi-stablelists
-%define with_kernel_abi_stablelists %{?_without_kernel_abi_stablelists: 0} %{?!_without_kernel_abi_stablelists: 1}
+# kernel-abi-stablelists (disabled for Oreon - kabi tarballs are not available)
+%define with_kernel_abi_stablelists 0
 # internal samples and selftests
 %define with_selftests %{?_without_selftests: 0} %{?!_without_selftests: 1}
 #
@@ -301,8 +301,8 @@ Summary: The Linux kernel
 #
 # Control whether to run an extensive DWARF based kABI check.
 # Note that this option needs to have baseline setup in SOURCE300.
-%define with_kabidwchk %{?_without_kabidwchk: 0} %{?!_without_kabidwchk: 1}
-%define with_kabidw_base %{?_with_kabidw_base: 1} %{?!_with_kabidw_base: 0}
+%define with_kabidwchk 0
+%define with_kabidw_base 0
 #
 # Control whether to install the vdso directories.
 %define with_vdso_install %{?_without_vdso_install: 0} %{?!_without_vdso_install: 1}
@@ -980,7 +980,7 @@ BuildRequires: redhat-sb-certs >= 9.4-0.1
 # exact git commit you can run
 #
 # xzcat -qq ${TARBALL} | git get-tar-commit-id
-Source0: linux-%{tarfile_release}.tar.xz
+Source0: https://www.kernel.org/pub/linux/kernel/v7.x/linux-%{tarfile_release}.tar.xz
 
 Source1: Makefile.rhelver
 Source2: %{name}.changelog
@@ -1147,8 +1147,12 @@ Source212: Module.kabi_dup_s390x
 Source213: Module.kabi_dup_x86_64
 Source214: Module.kabi_dup_riscv64
 
+%if %{with_kernel_abi_stablelists}
 Source300: kernel-abi-stablelists-%{kabiversion}.tar.xz
+%endif
+%if %{with_kabidw_base} || %{with_kabidwchk}
 Source301: kernel-kabi-dw-%{kabiversion}.tar.xz
+%endif
 
 %if 0%{include_rt}
 %if 0%{include_rhel}
