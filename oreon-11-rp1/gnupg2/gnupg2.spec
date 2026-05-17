@@ -194,6 +194,8 @@ package includes additional utilities.
 
 %package verify
 Summary: GnuPG signature verification tool
+# satisfies redhat-rpm-config
+Provides: gpgverify = %{version}-%{release}
 Conflicts: gnupg2 < %{split_min_version}
 
 %description verify
