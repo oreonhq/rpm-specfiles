@@ -178,18 +178,18 @@ Summary: The Linux kernel
 #  the --with-release option overrides this setting.)
 %define debugbuildsenabled 1
 # define buildid .local
-%define specrpmversion 7.0.8
-%define specversion 7.0.8
+%define specrpmversion 7.0.9
+%define specversion 7.0.9
 %define patchversion 7.0
 %define pkgrelease 200
 %define kversion 7
-%define tarfile_release 7.0.8
+%define tarfile_release 7.0.9
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
 %define specrelease 200%{?buildid}%{?dist}
 # This defines the kabi tarball version
-%define kabiversion 7.0.8
+%define kabiversion 7.0.9
 
 # If this variable is set to 1, a bpf selftests build failure will cause a
 # fatal kernel package build error
@@ -974,12 +974,8 @@ BuildRequires: redhat-sb-certs >= 9.4-0.1
 %endif
 %endif
 
-# Because this is the kernel, it's hard to get a single upstream URL
-# to represent the base without needing to do a bunch of patching. This
-# tarball is generated from a src-git tree. If you want to see the
-# exact git commit you can run
-#
-# xzcat -qq ${TARBALL} | git get-tar-commit-id
+# Official stable tarball from kernel.org. Patches and packaging files (Source1+,
+# configs, scripts, certs) live beside this spec in the source package.
 Source0: https://www.kernel.org/pub/linux/kernel/v7.x/linux-%{tarfile_release}.tar.xz
 
 Source1: Makefile.rhelver
@@ -1193,9 +1189,7 @@ Source491: %{name}-x86_64-automotive-debug-rhel.config
 # Sources for kernel-tools
 Source2002: kvm_stat.logrotate
 
-# Some people enjoy building customized kernels from the dist-git in Fedora and
-# use this to override configuration options. One day they may all use the
-# source tree, but in the mean time we carry this to support the legacy workflow
+# Optional local overrides for kernel config merge (merge.py reads kernel-local).
 Source3000: merge.py
 Source3001: kernel-local
 %if %{patchlist_changelog}
@@ -2343,7 +2337,7 @@ if [ "%{primary_target}" == "rhel" ]; then
 : # no-op to avoid empty if-fi error
 %if 0%{?centos}
   update_scripts $update_target
-  %{log_msg "Updating scripts/sources to centos version"}
+  %{log_msg "Updating scripts for centos variant"}
   update_target=centos
 %endif
 fi
@@ -4832,5 +4826,5 @@ fi\
 #
 #
 %changelog
-* Fri May 15 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.8-200
-- Linux 7.0.8
+* Sun May 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.9-200
+- Linux 7.0.9
