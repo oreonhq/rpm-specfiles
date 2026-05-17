@@ -7,7 +7,6 @@
  arch/arm/boot/dts/broadcom/bcm2835-common.dtsi     |    7 +-
  arch/arm/boot/dts/broadcom/bcm2835-rpi.dtsi        |   16 +-
  arch/arm64/Kconfig                                 |    2 +-
- arch/arm64/boot/dts/broadcom/bcm2712-d-rpi-5-b.dts |   14 +
  .../boot/dts/broadcom/bcm2712-rpi-5-b-base.dtsi    |   55 +-
  arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b.dts   |   24 +
  arch/arm64/boot/dts/broadcom/bcm2712.dtsi          |   29 +-
@@ -32,7 +31,6 @@
  drivers/firmware/efi/libstub/fdt.c                 |    5 +
  drivers/firmware/efi/libstub/secureboot.c          |   14 +-
  drivers/firmware/efi/secureboot.c                  |   38 +
- drivers/gpu/drm/v3d/v3d_submit.c                   |    5 +
  drivers/hid/hid-rmi.c                              |   66 --
  drivers/hwtracing/coresight/coresight-etm4x-core.c |   19 +
  drivers/input/rmi4/rmi_driver.c                    |  124 ++-
@@ -76,7 +74,7 @@
  security/lockdown/lockdown.c                       |   11 +
  tools/testing/selftests/bpf/Makefile               |    2 +-
  tools/testing/selftests/bpf/prog_tests/ksyms_btf.c |   31 -
- 78 files changed, 5414 insertions(+), 547 deletions(-)
+ 76 files changed, 5395 insertions(+), 547 deletions(-)
 
 diff --git a/Documentation/admin-guide/media/amdisp4-1.rst b/Documentation/admin-guide/media/amdisp4-1.rst
 new file mode 100644
@@ -346,28 +344,6 @@ index 9ea19b74b6c3..6d2800a2a061 100644
  	help
  	  For systems with 52-bit userspace VAs enabled, the kernel will attempt
  	  to maintain compatibility with older software by providing 48-bit VAs
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2712-d-rpi-5-b.dts b/arch/arm64/boot/dts/broadcom/bcm2712-d-rpi-5-b.dts
-index 7de24d60bcd1..127be0fc27c2 100644
---- a/arch/arm64/boot/dts/broadcom/bcm2712-d-rpi-5-b.dts
-+++ b/arch/arm64/boot/dts/broadcom/bcm2712-d-rpi-5-b.dts
-@@ -35,3 +35,17 @@ &gio_aon {
- 		"PMIC_SCL", // AON_SGPIO_04
- 		"PMIC_SDA"; // AON_SGPIO_05
- };
-+
-+&pinctrl {
-+	compatible = "brcm,bcm2712d0-pinctrl";
-+	reg = <0x7d504100 0x20>;
-+};
-+
-+&pinctrl_aon {
-+	compatible = "brcm,bcm2712d0-aon-pinctrl";
-+	reg = <0x7d510700 0x1c>;
-+};
-+
-+&uart10 {
-+	interrupts = <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
-+};
 diff --git a/arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b-base.dtsi b/arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b-base.dtsi
 index 04738bf281eb..b7a6bc34ae1a 100644
 --- a/arch/arm64/boot/dts/broadcom/bcm2712-rpi-5-b-base.dtsi
@@ -1304,22 +1280,6 @@ index 000000000000..de0a3714a5d4
 +		}
 +	}
 +}
-diff --git a/drivers/gpu/drm/v3d/v3d_submit.c b/drivers/gpu/drm/v3d/v3d_submit.c
-index 18f2bf1fe89f..fc74351efad5 100644
---- a/drivers/gpu/drm/v3d/v3d_submit.c
-+++ b/drivers/gpu/drm/v3d/v3d_submit.c
-@@ -393,6 +393,11 @@ v3d_get_multisync_submit_deps(struct drm_file *file_priv,
- 	if (multisync.pad)
- 		return -EINVAL;
- 
-+	if (!multisync.in_sync_count && !multisync.out_sync_count) {
-+		drm_dbg(&v3d->drm, "Empty multisync extension\n");
-+		return -EINVAL;
-+	}
-+
- 	ret = v3d_get_multisync_post_deps(file_priv, se, multisync.out_sync_count,
- 					  multisync.out_syncs);
- 	if (ret)
 diff --git a/drivers/hid/hid-rmi.c b/drivers/hid/hid-rmi.c
 index d4af17fdba46..154f0403cbf4 100644
 --- a/drivers/hid/hid-rmi.c
