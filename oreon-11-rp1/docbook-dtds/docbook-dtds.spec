@@ -51,21 +51,20 @@ Source3: http://www.oasis-open.org/docbook/sgml/4.1/docbk41.zip
 Source4: http://www.oasis-open.org/docbook/xml/4.1.2/docbkx412.zip
 Source5: http://www.oasis-open.org/docbook/sgml/4.2/docbook-4.2.zip
 Source6: http://www.oasis-open.org/docbook/xml/4.2/docbook-xml-4.2.zip
-Source7: http://www.docbook.org/sgml/4.3/docbook-4.3.zip
-Source8: http://www.docbook.org/xml/4.3/docbook-xml-4.3.zip
-Source9: http://www.docbook.org/sgml/4.4/docbook-4.4.zip
-Source10: http://www.docbook.org/xml/4.4/docbook-xml-4.4.zip
-Source11: http://www.docbook.org/sgml/4.5/docbook-4.5.zip
-Source12: http://www.docbook.org/xml/4.5/docbook-xml-4.5.zip
-Source13: http://www.docbook.org/rng/4.2/docbook-rng-4.2.zip
-Source14: http://www.docbook.org/rng/4.3/docbook-rng-4.3.zip
-Source15: http://www.docbook.org/rng/4.4/docbook-rng-4.4.zip
-# Compressed from http://www.docbook.org/rng/4.5/ upstream archive unavailable
+Source7: https://docs.oasis-open.org/docbook/sgml/4.3/docbook-4.3.zip
+Source8: https://docs.oasis-open.org/docbook/xml/4.3/docbook-xml-4.3.zip
+Source9: https://docs.oasis-open.org/docbook/sgml/4.4/docbook-4.4.zip
+Source10: https://docs.oasis-open.org/docbook/xml/4.4/docbook-xml-4.4.zip
+Source11: https://docs.oasis-open.org/docbook/sgml/4.5/docbook-4.5.zip
+Source12: https://docs.oasis-open.org/docbook/xml/4.5/docbook-xml-4.5.zip
+Source13: https://docs.oasis-open.org/docbook/rng/4.2/docbook-rng-4.2.zip
+Source14: https://docs.oasis-open.org/docbook/rng/4.3/docbook-rng-4.3.zip
+Source15: https://docs.oasis-open.org/docbook/rng/4.4/docbook-rng-4.4.zip
+# 4.5 RNG/XSD have no upstream zip; vendored from Fedora docbook-dtds SRPM (same as F44 dist-git)
 Source16: docbook-rng-4.5.zip
-Source17: http://www.docbook.org/xsd/4.2/docbook-xsd-4.2.zip
-Source18: http://www.docbook.org/xsd/4.3/docbook-xsd-4.3.zip
-Source19: http://www.docbook.org/xsd/4.4/docbook-xsd-4.4.zip
-# Compressed from http://www.docbook.org/xsd/4.5/ upstream archive unavailable
+Source17: https://docs.oasis-open.org/docbook/xsd/4.2/docbook-xsd-4.2.zip
+Source18: https://docs.oasis-open.org/docbook/xsd/4.3/docbook-xsd-4.3.zip
+Source19: https://docs.oasis-open.org/docbook/xsd/4.4/docbook-xsd-4.4.zip
 Source20: docbook-xsd-4.5.zip
 
 # Fix old catalog files
