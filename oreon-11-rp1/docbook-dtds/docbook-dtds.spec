@@ -60,12 +60,11 @@ Source12: https://docs.oasis-open.org/docbook/xml/4.5/docbook-xml-4.5.zip
 Source13: https://docs.oasis-open.org/docbook/rng/4.2/docbook-rng-4.2.zip
 Source14: https://docs.oasis-open.org/docbook/rng/4.3/docbook-rng-4.3.zip
 Source15: https://docs.oasis-open.org/docbook/rng/4.4/docbook-rng-4.4.zip
-# 4.5 RNG/XSD have no upstream zip; vendored from Fedora docbook-dtds SRPM (same as F44 dist-git)
-Source16: docbook-rng-4.5.zip
+# 4.5 RNG/XSD have no upstream zip; ship docbook-dtds-vendor-4.5.tar.xz next to this spec
+Source16: docbook-dtds-vendor-4.5.tar.xz
 Source17: https://docs.oasis-open.org/docbook/xsd/4.2/docbook-xsd-4.2.zip
 Source18: https://docs.oasis-open.org/docbook/xsd/4.3/docbook-xsd-4.3.zip
 Source19: https://docs.oasis-open.org/docbook/xsd/4.4/docbook-xsd-4.4.zip
-Source20: docbook-xsd-4.5.zip
 
 # Fix old catalog files
 Patch0: docbook-dtd30-sgml-1.0.catalog.patch
@@ -109,11 +108,12 @@ unzip %{SOURCE12} -d 4.5-xml
 unzip %{SOURCE13} -d 4.2-rng
 unzip %{SOURCE14} -d 4.3-rng
 unzip %{SOURCE15} -d 4.4-rng
-unzip %{SOURCE16} -d 4.5-rng
+tar xf %{SOURCE16}
+unzip docbook-rng-4.5.zip -d 4.5-rng
+unzip docbook-xsd-4.5.zip -d 4.5-xsd
 unzip %{SOURCE17} -d 4.2-xsd
 unzip %{SOURCE18} -d 4.3-xsd
 unzip %{SOURCE19} -d 4.4-xsd
-unzip %{SOURCE20} -d 4.5-xsd
 
 %patch -P 0 -p0
 %patch -P 1 -p0
