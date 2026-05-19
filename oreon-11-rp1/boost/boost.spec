@@ -36,6 +36,12 @@
 
 %bcond_without python3
 
+%if %{with python3}
+# python-rpm-macros defines these in mock; fallback for spec parse / source-prep without macros.d
+%{!?python3_version: %global python3_version %(python3 -c "import sys; print('%d.%d' % sys.version_info[:2])" 2>/dev/null || echo 3.13)}
+%{!?python3_version_nodots: %global python3_version_nodots %(python3 -c "import sys; print('%d%d' % sys.version_info[:2])" 2>/dev/null || echo 313)}
+%endif
+
 %ifnarch %{ix86} x86_64
   %bcond_with quadmath
 %else
@@ -132,6 +138,7 @@ BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: xz-devel
 %if %{with python3}
+BuildRequires: python-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-numpy
 %endif
