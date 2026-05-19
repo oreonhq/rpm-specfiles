@@ -59,7 +59,7 @@ BuildRequires: bison
 BuildRequires: dos2unix
 BuildRequires: flex
 BuildRequires: libfastjson-devel >= 0.99.8
-BuildRequires: libestr-devel >= 0.1.9
+BuildRequires: libestr-devel
 BuildRequires: libtool
 BuildRequires: libuuid-devel
 BuildRequires: pkgconfig
@@ -236,7 +236,7 @@ BuildRequires: mongo-c-driver-devel snappy-devel cyrus-sasl-devel
 %package rabbitmq
 Summary: RabbitMQ support for rsyslog
 Requires: %name = %version-%release
-BuildRequires: librabbitmq-devel >= 0.2
+BuildRequires: librabbitmq-devel
 %endif
 
 
