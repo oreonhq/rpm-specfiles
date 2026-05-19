@@ -13,13 +13,11 @@ Version:        %{specversion}
 Release:        %{specrelease}
 Source0:        https://www.kernel.org/pub/linux/kernel/v7.x/linux-%{tarfile_release}.tar.xz
 
+# No gcc/glibc-devel chain: headers_install only runs scripts; pulling gcc would
+# require kernel-headers already in the repo (bootstrap deadlock with glibc-devel).
 BuildRequires:  make
-BuildRequires:  gcc
-BuildRequires:  flex
-BuildRequires:  bison
-BuildRequires:  openssl-devel
-BuildRequires:  elfutils-libelf-devel
 BuildRequires:  python3
+BuildRequires:  perl-interpreter
 
 Obsoletes:      glibc-kernheaders < 3.0-46
 Provides:       glibc-kernheaders = 3.0-46
@@ -55,7 +53,7 @@ mkdir -p "$STAGING"
 
 for karch in $ARCH_LIST; do
   mkdir -p "$STAGING/arch-$karch"
-  %make_build ARCH=$karch INSTALL_HDR_PATH="$STAGING/arch-$karch" headers_install
+  make ARCH=$karch INSTALL_HDR_PATH="$STAGING/arch-$karch" headers_install %{?_smp_mflags}
 done
 
 ARCH=%{_target_cpu}
