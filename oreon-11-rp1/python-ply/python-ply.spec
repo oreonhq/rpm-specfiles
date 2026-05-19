@@ -7,8 +7,8 @@ Summary:        Python Lex-Yacc
 Version:        3.11
 Release:        32%{?dist}
 License:        BSD-3-Clause
-URL:            http://www.dabeaz.com/ply/
-Source0:        http://www.dabeaz.com/ply/%{modname}-%{version}.tar.gz
+URL:            https://github.com/dabeaz/ply
+Source0:        %{pypi_source %{modname} %{version}}
 # Fix build against Python 3.11
 # https://github.com/dabeaz/ply/pull/262
 Patch0:		262.patch

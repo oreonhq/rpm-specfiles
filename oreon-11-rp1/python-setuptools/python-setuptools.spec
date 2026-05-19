@@ -125,6 +125,8 @@ execute the software that requires pkg_resources.
 
 %package -n     %{python_wheel_pkg_prefix}-%{srcname}-wheel
 Summary:        The setuptools wheel
+Provides:        python-setuptools-wheel = %{version}-%{release}
+Provides:        python%{python3_pkgversion}-setuptools-wheel = %{version}-%{release}
 %{bundled}
 
 %description -n %{python_wheel_pkg_prefix}-%{srcname}-wheel
@@ -230,7 +232,7 @@ PYTHONPATH=$(pwd) %pytest \
  --ignore=setuptools/tests/config/test_apply_pyprojecttoml.py \
  --ignore=tools \
  -k "not test_wheel_includes_cli_scripts and not test_equivalent_output"
-%endif # with tests
+%endif
 
 
 %files -n python%{python3_pkgversion}-setuptools %{?!with_bootstrap:-f %{pyproject_files}}
