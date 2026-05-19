@@ -25,7 +25,8 @@ generate Java source code, instead. So there finally is a YACC for
 Java now! 
 
 %prep
-%autosetup -p1
+# Upstream tarball top-level is byaccj1.15/, not byaccj-1.15/
+%autosetup -p1 -n byaccj%{version}
 chmod -c -x src/* docs/*
 sed -i -e 's|-arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4|$(LDFLAGS)|g' src/Makefile
 
