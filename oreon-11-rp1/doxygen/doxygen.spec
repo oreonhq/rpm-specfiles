@@ -13,6 +13,8 @@
 %global clang_support ON
 %global system_sqlite3 ON
 %global build_doc OFF
+# Fedora split texlive-* specs are not in oreon-11-rp1 yet; latex meta needs them.
+%bcond_with doxygen_latex 0
 
 Summary: A documentation system for C/C++
 Name:    doxygen
@@ -34,7 +36,9 @@ Source4: doxygen-unbundler
 
 BuildRequires: %{_bindir}/python3
 BuildRequires: perl-interpreter, perl-open
+%if %{with doxygen_latex}
 BuildRequires: texlive-bibtex
+%endif
 BuildRequires: web-assets-devel
 # Building an RPM package typically needs unbundling of Javascript assets.
 Requires: (js-doxygen if redhat-rpm-config)
@@ -175,6 +179,7 @@ are used by doxygen.
 %endif
 
 %if ! 0%{?_module_build}
+%if %{with doxygen_latex}
 %package latex
 Summary: Support for producing latex/pdf output from doxygen
 Requires: %{name} = %{epoch}:%{version}-%{release}
@@ -253,6 +258,7 @@ Requires: texlive-collection-fontsrecommended
 
 %description latex
 %{summary}.
+%endif
 %endif
 
 
@@ -351,8 +357,10 @@ install -m755 -D --target-directory=%{buildroot}%{_rpmconfigdir}/redhat %{SOURCE
 %{_jsdir}/doxygen/*
 
 %if ! 0%{?_module_build}
+%if %{with doxygen_latex}
 %files latex
 # intentionally left blank
+%endif
 %endif
 
 %changelog
