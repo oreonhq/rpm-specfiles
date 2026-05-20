@@ -10,9 +10,7 @@ URL:            https://junit.org/junit4/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-# ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
-Source1:        generate-tarball.sh
+Source0:        https://github.com/junit-team/junit4/archive/refs/tags/r%{version}.tar.gz
 
 Patch:          0001-Port-to-hamcrest-2.2.patch
 Patch:          0002-Port-to-OpenJDK-21.patch
@@ -45,8 +43,10 @@ Summary:        Manual for %{name}
 Documentation for %{name}.
 
 %prep
-%autosetup -p1
-
+%autosetup -p1 -n junit4-r%{version}
+find . -name '*.jar' -delete
+find . -name '*.class' -delete
+rm -rf src/site
 
 # InaccessibleBaseClassTest fails with Java 8
 sed -i /InaccessibleBaseClassTest/d src/test/java/org/junit/tests/AllTests.java
@@ -80,4 +80,4 @@ sed s/@version@/%{version}/ src/main/java/junit/runner/Version.java.template >sr
 
 %changelog
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.13.2-1
-- Prepare for Oreon 11 (RP1)
+- oreon 11 rp1

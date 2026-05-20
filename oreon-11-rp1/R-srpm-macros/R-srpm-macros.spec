@@ -44,6 +44,4 @@ R-srpm-macros will pull in for R packages only.
 
 %changelog
 * Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.7-1
-- Fix prep to match R-rpm-macros tarball top-level directory name
-- Refresh test golden file for R 4.6 ABI vs upstream 4.5
-- List all paths installed by upstream Makefile macros.R-rpm R scripts R.attr
+- prep/files fixes
