@@ -121,7 +121,7 @@ This package provides previously deprecated macros and scripts to
 support Java packaging as well as some additions to them.
 
 %prep
-%autosetup -p1
+%autosetup -n javapackages-%{version}
 
 %build
 %configure --pyinterpreter=%{python_interpreter} \
