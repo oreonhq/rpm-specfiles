@@ -10,12 +10,12 @@ removed in tree-sitter 0.26) 'ts_language_version'.
 (ts_language_abi_version) [TREE_SITTER_LANGUAGE_VERSION >= 15]:
 Define on WINDOWSNT, instead of 'ts_language_version'.
 (treesit_language_abi_version): New compatibility function.
-(treesit_load_language, Ftreesit_language_abi_version): Use
-'treesit_language_abi_version' instead of 'ts_language_version'.
+ (treesit_load_language, Ftreesit_language_abi_version): Use
+ treesit_language_abi_version instead of ts_language_version.
 (Bug#79627)
 ---
- src/treesit.c | 34 +++++++++++++++++++++++++++++++++-
- 1 file changed, 33 insertions(+), 1 deletion(-)
+ src/treesit.c | 35 +++++++++++++++++++++++++++++++++--
+ 1 file changed, 34 insertions(+), 2 deletions(-)
 
 diff --git a/src/treesit.c b/src/treesit.c
 index e2986c186b8..4d6bf9a5dbd 100644
@@ -92,6 +92,15 @@ index e2986c186b8..4d6bf9a5dbd 100644
  /* Load the dynamic library of LANGUAGE_SYMBOL and return the pointer
     to the language definition.
  
+@@ -746,7 +778,7 @@ treesit_load_language (Lisp_Object language_symbol,
+     {
+       *signal_symbol = Qtreesit_load_language_error;
+       *signal_data = list2 (Qversion_mismatch,
+-			    make_fixnum (ts_language_version (lang)));
++			    make_fixnum (treesit_language_abi_version (lang)));
+       return NULL;
+     }
+   return lang;
 @@ -817,7 +849,7 @@ DEFUN ("treesit-language-abi-version", Ftreesit_language_abi_version,
  						       &signal_data);
        if (ts_language == NULL)
