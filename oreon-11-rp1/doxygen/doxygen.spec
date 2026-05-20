@@ -25,7 +25,7 @@ Url: https://github.com/doxygen
 Source0: https://www.doxygen.nl/files/%{name}-%{version}.src.tar.gz
 # this icon is part of kdesdk
 Source1: doxywizard.desktop
-# these icons are part of doxygen and converted from doxywizard.ico
+# hicolor PNGs from doxywizard.ico; ship doxywizard-icons.tar.xz next to this spec
 Source2: doxywizard-icons.tar.xz
 Source3: README.rpm-packaging
 Source4: doxygen-unbundler
