@@ -45,4 +45,4 @@ This package provides %{summary}.
 
 %changelog
 * Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.0-1
-- Import from Fedora f44 dist-git for ivy-local / javapackages-tools chain
+- Import to oreon 11
