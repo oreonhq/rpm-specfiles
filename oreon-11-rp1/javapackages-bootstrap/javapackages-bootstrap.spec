@@ -25,144 +25,9 @@ ExclusiveArch:  %{java_arches} noarch
 Source:         https://github.com/fedora-java/javapackages-bootstrap/releases/download/%{version}/javapackages-bootstrap-%{version}.tar.zst
 # License breakdown
 Source:         javapackages-bootstrap-PACKAGE-LICENSING
-# To obtain the following sources:
-# tar -xf ${name}-${version}.tar.zst
-# pushd ${name}-${version}
-# ./downstream.sh clone
-# ./downstream.sh prep
-# ./downstream.sh archive
-# The results are in the archive directory
-Source:         ant.tar.zst
-Source:         aopalliance.tar.zst
-Source:         apache-pom.tar.zst
-Source:         apiguardian.tar.zst
-Source:         asm.tar.zst
-Source:         assertj-core.tar.zst
-Source:         bnd.tar.zst
-Source:         build-helper-maven-plugin.tar.zst
-Source:         byte-buddy.tar.zst
-Source:         cdi.tar.zst
-Source:         chhorz-javadoc-parser.tar.zst
-Source:         common-annotations-api.tar.zst
-Source:         commons-beanutils.tar.zst
-Source:         commons-cli.tar.zst
-Source:         commons-codec.tar.zst
-Source:         commons-collections.tar.zst
-Source:         commons-compress.tar.zst
-Source:         commons-io.tar.zst
-Source:         commons-jxpath.tar.zst
-Source:         commons-lang.tar.zst
-Source:         commons-logging.tar.zst
-Source:         commons-parent-pom.tar.zst
-Source:         cup.tar.zst
-Source:         disruptor.tar.zst
-Source:         dola-gleaner.tar.zst
-Source:         dola-transformer.tar.zst
-Source:         dola.tar.zst
-Source:         easymock.tar.zst
-Source:         felix-parent-pom.tar.zst
-Source:         felix-utils.tar.zst
-Source:         fusesource-pom.tar.zst
-Source:         gson.tar.zst
-Source:         guava.tar.zst
-Source:         guice.tar.zst
-Source:         hamcrest.tar.zst
-Source:         httpcomponents-client.tar.zst
-Source:         httpcomponents-core.tar.zst
-Source:         httpcomponents-parent-pom.tar.zst
-Source:         injection-api.tar.zst
-Source:         jaf-api.tar.zst
-Source:         jansi.tar.zst
-Source:         javacc-maven-plugin.tar.zst
-Source:         javacc.tar.zst
-Source:         javaparser.tar.zst
-Source:         jcommander.tar.zst
-Source:         jctools.tar.zst
-Source:         jdom.tar.zst
-Source:         jdom2.tar.zst
-Source:         jflex.tar.zst
-Source:         jline3.tar.zst
-Source:         jsoup.tar.zst
-Source:         jsr-305.tar.zst
-Source:         junit4.tar.zst
-Source:         junit5.tar.zst
-Source:         kojan-parent.tar.zst
-Source:         kojan-xml.tar.zst
-Source:         log4j.tar.zst
-Source:         mail-api.tar.zst
-Source:         maven-antrun-plugin.tar.zst
-Source:         maven-apache-resources.tar.zst
-Source:         maven-archiver.tar.zst
-Source:         maven-artifact-transfer.tar.zst
-Source:         maven-assembly-plugin.tar.zst
-Source:         maven-bundle-plugin.tar.zst
-Source:         maven-common-artifact-filters.tar.zst
-Source:         maven-compiler-plugin.tar.zst
-Source:         maven-dependency-analyzer.tar.zst
-Source:         maven-dependency-plugin.tar.zst
-Source:         maven-dependency-tree.tar.zst
-Source:         maven-file-management.tar.zst
-Source:         maven-filtering.tar.zst
-Source:         maven-jar-plugin.tar.zst
-Source:         maven-parent-pom.tar.zst
-Source:         maven-plugin-testing.tar.zst
-Source:         maven-plugin-tools.tar.zst
-Source:         maven-remote-resources-plugin.tar.zst
-Source:         maven-resolver.tar.zst
-Source:         maven-resolver2.tar.zst
-Source:         maven-resources-plugin.tar.zst
-Source:         maven-shared-incremental.tar.zst
-Source:         maven-shared-io.tar.zst
-Source:         maven-shared-utils.tar.zst
-Source:         maven-source-plugin.tar.zst
-Source:         maven-surefire.tar.zst
-Source:         maven-verifier.tar.zst
-Source:         maven-wagon.tar.zst
-Source:         maven.tar.zst
-Source:         maven4.tar.zst
-Source:         mockito.tar.zst
-Source:         modello.tar.zst
-Source:         moditect.tar.zst
-Source:         modulemaker-maven-plugin.tar.zst
-Source:         mojo-parent-pom.tar.zst
-Source:         objenesis.tar.zst
-Source:         opentest4j.tar.zst
-Source:         osgi-annotation.tar.zst
-Source:         osgi-cmpn.tar.zst
-Source:         osgi-core.tar.zst
-Source:         picocli.tar.zst
-Source:         plexus-archiver.tar.zst
-Source:         plexus-build-api.tar.zst
-Source:         plexus-build-api0.tar.zst
-Source:         plexus-cipher.tar.zst
-Source:         plexus-classworlds.tar.zst
-Source:         plexus-compiler.tar.zst
-Source:         plexus-containers.tar.zst
-Source:         plexus-interactivity.tar.zst
-Source:         plexus-interpolation.tar.zst
-Source:         plexus-io.tar.zst
-Source:         plexus-languages.tar.zst
-Source:         plexus-pom.tar.zst
-Source:         plexus-resources.tar.zst
-Source:         plexus-sec-dispatcher.tar.zst
-Source:         plexus-sec-dispatcher4.tar.zst
-Source:         plexus-testing.tar.zst
-Source:         plexus-utils.tar.zst
-Source:         plexus-utils4.tar.zst
-Source:         plexus-xml.tar.zst
-Source:         qdox.tar.zst
-Source:         servlet-api.tar.zst
-Source:         sisu.tar.zst
-Source:         slf4j.tar.zst
-Source:         slf4j2.tar.zst
-Source:         stax2-api.tar.zst
-Source:         testng.tar.zst
-Source:         univocity-parsers.tar.zst
-Source:         velocity-engine.tar.zst
-Source:         woodstox.tar.zst
-Source:         xmlunit.tar.zst
-Source:         xmvn.tar.zst
-Source:         xz-java.tar.zst
+# 132 *.tar.zst component archives ship in Fedora SRPM (not on upstream GitHub release).
+# %%prep unpacks them from Source200; or run fetch-jpb-vendor-tarballs.sh for local copies.
+Source200:      https://kojipkgs.fedoraproject.org/pub/fedora/linux/releases/44/Everything/source/tree/Packages/j/javapackages-bootstrap-%{version}-2.fc44.src.rpm
 
 Patch:          0001-Switch-Dola-to-Lua-5.5.patch
 
@@ -195,8 +60,15 @@ XMvn, allowing JPT to be used before one builds XMvn package.
 
 %prep
 %autosetup -p1
-mkdir archive/
-cp %{sources} archive/
+mkdir -p archive
+if ls archive/*.tar.zst >/dev/null 2>&1; then
+  :
+elif test -f %{SOURCE200}; then
+  rpm2cpio %{SOURCE200} | (cd archive && cpio -idmv '*.tar.zst')
+else
+  echo "No archive/*.tar.zst and missing %{SOURCE200}" >&2
+  exit 1
+fi
 ./downstream.sh prep-from-archive
 
 %build
