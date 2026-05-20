@@ -168,7 +168,7 @@ Summary: Support for editing po files within GNU Emacs
 BuildArch: noarch
 # help users find po-mode.el
 Provides: emacs-po-mode
-Requires: emacs(bin) >= %{_emacs_version}
+Requires: emacs(bin) >= %{?_emacs_version}%{!?_emacs_version:0}
 Provides: emacs-%{name}-el = %{version}-%{release}
 Obsoletes: emacs-%{name}-el < %{version}-%{release}
 
