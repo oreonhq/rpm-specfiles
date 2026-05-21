@@ -11,13 +11,7 @@ License:        ((GPL-2.0-only WITH Linux-syscall-note) OR BSD-2-Clause) AND ((G
 URL:            https://www.kernel.org/
 Version:        %{specversion}
 Release:        %{specrelease}
-Source0:        https://www.kernel.org/pub/linux/kernel/v7.x/linux-%{tarfile_release}.tar.xz
-
-# No gcc/glibc-devel chain: headers_install only runs scripts; pulling gcc would
-# require kernel-headers already in the repo (bootstrap deadlock with glibc-devel).
-BuildRequires:  make
-BuildRequires:  python3
-BuildRequires:  perl-interpreter
+Source0:        kernel-headers-%{tarfile_release}.tar.xz
 
 Obsoletes:      glibc-kernheaders < 3.0-46
 Provides:       glibc-kernheaders = 3.0-46
@@ -40,21 +34,12 @@ building most standard programs and are also needed for rebuilding the
 cross-glibc package.
 
 %prep
-%setup -q -n linux-%{tarfile_release}
+%setup -q -c
 
 %build
-# Headers are installed in %%install via headers_install (no kernel image build).
 
 %install
 ARCH_LIST="arm arm64 loongarch powerpc riscv s390 x86"
-STAGING=%{buildroot}%{_tmppath}/kernel-headers-staging
-rm -rf "$STAGING"
-mkdir -p "$STAGING"
-
-for karch in $ARCH_LIST; do
-  mkdir -p "$STAGING/arch-$karch"
-  make ARCH=$karch INSTALL_HDR_PATH="$STAGING/arch-$karch" headers_install %{?_smp_mflags}
-done
 
 ARCH=%{_target_cpu}
 case $ARCH in
@@ -81,22 +66,20 @@ case $ARCH in
 		;;
 esac
 
-cd "$STAGING/arch-$ARCH/include"
+cd arch-$ARCH/include
 mkdir -p %{buildroot}%{_includedir}
 cp -a asm-generic %{buildroot}%{_includedir}
 
-for karch in $ARCH_LIST; do
-	mkdir -p %{buildroot}%{_prefix}/${karch}-linux-gnu/include
-	cp -a asm-generic %{buildroot}%{_prefix}/${karch}-linux-gnu/include/
+for arch in $ARCH_LIST; do
+	mkdir -p %{buildroot}%{_prefix}/${arch}-linux-gnu/include
+	cp -a asm-generic %{buildroot}%{_prefix}/${arch}-linux-gnu/include/
 done
 
 rm -rf asm-generic
 cp -a * %{buildroot}%{_includedir}/
-for karch in $ARCH_LIST; do
-	cp -a * %{buildroot}%{_prefix}/${karch}-linux-gnu/include/
+for arch in $ARCH_LIST; do
+	cp -a * %{buildroot}%{_prefix}/${arch}-linux-gnu/include/
 done
-
-rm -rf "$STAGING"
 
 %files
 %defattr(-,root,root)
