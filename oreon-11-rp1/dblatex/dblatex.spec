@@ -1,3 +1,5 @@
+%bcond_with texlive_split 0
+
 Name:       dblatex
 Version:    0.3.12
 Release:    %autorelease
@@ -38,7 +40,9 @@ BuildRequires:  texlive-footmisc
 BuildRequires:  texlive-jknapltx
 BuildRequires:  texlive-multirow
 BuildRequires:  texlive-overpic
+%if %{with texlive_split}
 BuildRequires:  texlive-passivetex
+%endif
 BuildRequires:  texlive-pdfpages
 BuildRequires:  texlive-subfigure
 BuildRequires:  texlive-stmaryrd
@@ -58,7 +62,9 @@ Requires:       texlive-footmisc
 Requires:       texlive-jknapltx
 Requires:       texlive-multirow
 Requires:       texlive-overpic
+%if %{with texlive_split}
 Requires:       texlive-passivetex
+%endif
 Requires:       texlive-pdfpages
 Requires:       texlive-subfigure
 Requires:       texlive-stmaryrd
