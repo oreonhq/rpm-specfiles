@@ -9,10 +9,8 @@ URL:            https://jflex.de/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-# ./create-tarball.sh %%{version}
-Source0:        %{name}-%{version}-clean.tar.gz
+Source0:        https://jflex.de/release/%{name}-%{version}.tar.gz
 Source4:        %{name}.1
-Source5:        create-tarball.sh
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -41,6 +39,8 @@ standalone tool.
 
 %prep
 %autosetup -p1
+find . -name '*.jar' -delete
+rm -rf src/main/java/java_cup examples
 %mvn_file : %{name}
 %pom_add_dep java_cup:java_cup
 
