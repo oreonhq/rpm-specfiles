@@ -21,8 +21,8 @@ BuildRequires: libxml2 >= 2.4.8
 
 BuildArch: noarch
 
-Source0:  http://www.docbook.org/xml/5.0/docbook-5.0.zip
-Source1:  http://www.docbook.org/xml/5.1/docbook-v5.1-os.zip
+Source0:  https://archive.docbook.org/xml/5.0/docbook-5.0.zip
+Source1:  https://archive.docbook.org/xml/5.1/docbook-v5.1-os.zip
 
 %description
 Docbook 5.X is a complete rewrite of Docbook in RELAX NG and not compatible
