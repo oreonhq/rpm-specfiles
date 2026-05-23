@@ -26,14 +26,15 @@ BuildArch:      noarch
 BuildRequires:  emacs-nw
 BuildRequires:  ghostscript
 BuildRequires:  make
-BuildRequires:  tex(latex)
+BuildRequires:  texlive-collection-latexrecommended
+BuildRequires:  texlive-dvips
 BuildRequires:  texinfo-tex
 
 Requires:       dvipng
 Requires:       emacs(bin) >= %{?_emacs_version}%{!?_emacs_version:0}
 Requires:       ghostscript
-Requires:       tex(dvips)
-Requires:       tex(latex)
+Requires:       texlive-dvips
+Requires:       texlive-collection-latexrecommended
 
 %if %{separate_preview}
 Requires:       tex-preview = %{version}-%{release}
@@ -73,7 +74,7 @@ HTML and PDF.
 # CM: Knuth-CTAN
 License:        GPL-3.0-or-later AND Knuth-CTAN
 Summary:        Preview style files for LaTeX
-Requires:       tex(latex)
+Requires:       texlive-collection-latexrecommended
 Provides:       tex(preview.sty) = %{version}-%{release}
 # This is the latest build we accidentally provided from texlive
 Obsoletes:      texlive-preview <= 7:svn44883

@@ -1,0 +1,157 @@
+diff -up texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/libs/woff2/include/woff2/output.h.gcc-15-ftbfs texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/libs/woff2/include/woff2/output.h
+--- texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/libs/woff2/include/woff2/output.h.gcc-15-ftbfs	2022-08-29 09:52:14.000000000 -0400
++++ texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/libs/woff2/include/woff2/output.h	2025-06-12 10:02:45.229556020 -0400
+@@ -13,6 +13,7 @@
+ #include <cstring>
+ #include <memory>
+ #include <string>
++#include <cstdint>
+ 
+ namespace woff2 {
+ 
+diff -up texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/Character.hpp.gcc-15-ftbfs texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/Character.hpp
+diff -up texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/EPSFile.hpp.gcc-15-ftbfs texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/EPSFile.hpp
+--- texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/EPSFile.hpp.gcc-15-ftbfs	2025-01-12 09:58:51.000000000 -0500
++++ texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/EPSFile.hpp	2025-06-12 10:02:45.229874167 -0400
+@@ -21,6 +21,7 @@
+ #ifndef EPSFILE_HPP
+ #define EPSFILE_HPP
+ 
++#include <cstdint>
+ #include <fstream>
+ #include <istream>
+ #include <string>
+diff -up texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/FontMetrics.hpp.gcc-15-ftbfs texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/FontMetrics.hpp
+diff -up texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/HashFunction.cpp.gcc-15-ftbfs texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/HashFunction.cpp
+--- texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/HashFunction.cpp.gcc-15-ftbfs	2025-01-12 09:58:51.000000000 -0500
++++ texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/HashFunction.cpp	2025-06-12 10:02:45.230043675 -0400
+@@ -18,6 +18,7 @@
+ ** along with this program; if not, see <http://www.gnu.org/licenses/>. **
+ *************************************************************************/
+ 
++#include <cstdint>
+ #include <algorithm>
+ #include <iomanip>
+ #include <sstream>
+diff -up texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/HashFunction.hpp.gcc-15-ftbfs texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/HashFunction.hpp
+diff -up texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/utility.hpp.gcc-15-ftbfs texlive-base-20250308/source/texk/dvisvgm/dvisvgm-src/src/utility.hpp
+diff -up texlive-base-20250308/source/texk/web2c/luatexdir/luafontloader/fontforge/fontforge/splineutil2.c.gcc-15-ftbfs texlive-base-20250308/source/texk/web2c/luatexdir/luafontloader/fontforge/fontforge/splineutil2.c
+--- texlive-base-20250308/source/texk/web2c/luatexdir/luafontloader/fontforge/fontforge/splineutil2.c.gcc-15-ftbfs	2014-02-03 08:01:31.000000000 -0500
++++ texlive-base-20250308/source/texk/web2c/luatexdir/luafontloader/fontforge/fontforge/splineutil2.c	2025-06-12 10:02:45.229345170 -0400
+@@ -2049,7 +2049,7 @@ SplineSet *SplineSetReverse(SplineSet *s
+     Spline *spline, *first, *next;
+     BasePoint tp;
+     SplinePoint *temp;
+-    int bool;
++    int bool1;
+     /* reverse the splineset so that what was the start point becomes the end */
+     /*  and vice versa. This entails reversing every individual spline, and */
+     /*  each point */
+@@ -2062,12 +2062,12 @@ return( spl );			/* Only one point, reve
+     tp = spline->from->nextcp;
+     spline->from->nextcp = spline->from->prevcp;
+     spline->from->prevcp = tp;
+-    bool = spline->from->nonextcp;
++    bool1 = spline->from->nonextcp;
+     spline->from->nonextcp = spline->from->noprevcp;
+-    spline->from->noprevcp = bool;
+-    bool = spline->from->nextcpdef;
++    spline->from->noprevcp = bool1;
++    bool1 = spline->from->nextcpdef;
+     spline->from->nextcpdef = spline->from->prevcpdef;
+-    spline->from->prevcpdef = bool;
++    spline->from->prevcpdef = bool1;
+ 
+     for ( ; spline!=NULL && spline!=first; spline=next ) {
+ 	next = spline->to->next;
+@@ -2076,12 +2076,12 @@ return( spl );			/* Only one point, reve
+ 	    tp = spline->to->nextcp;
+ 	    spline->to->nextcp = spline->to->prevcp;
+ 	    spline->to->prevcp = tp;
+-	    bool = spline->to->nonextcp;
++	    bool1 = spline->to->nonextcp;
+ 	    spline->to->nonextcp = spline->to->noprevcp;
+-	    spline->to->noprevcp = bool;
+-	    bool = spline->to->nextcpdef;
++	    spline->to->noprevcp = bool1;
++	    bool1 = spline->to->nextcpdef;
+ 	    spline->to->nextcpdef = spline->to->prevcpdef;
+-	    spline->to->prevcpdef = bool;
++	    spline->to->prevcpdef = bool1;
+ 	}
+ 
+ 	temp = spline->to;
+diff -up texlive-base-20250308/source/texk/web2c/luatexdir/tex/textoken.c.gcc-15-ftbfs texlive-base-20250308/source/texk/web2c/luatexdir/tex/textoken.c
+--- texlive-base-20250308/source/texk/web2c/luatexdir/tex/textoken.c.gcc-15-ftbfs	2024-10-12 04:38:16.000000000 -0400
++++ texlive-base-20250308/source/texk/web2c/luatexdir/tex/textoken.c	2025-06-12 10:02:45.228150715 -0400
+@@ -2667,7 +2667,7 @@ static int do_feedback_pdf(halfword c)
+     halfword save_def_ref;
+     halfword save_warning_index;
+     /*tex temp boolean */
+-    boolean bool;
++    boolean bool1;
+     /*tex first temp string */
+     str_number s;
+     /*tex for use with |set_ff| */
+@@ -2740,7 +2740,7 @@ static int do_feedback_pdf(halfword c)
+         print_int(pdf_get_obj(static_pdf, obj_type_page, cur_val, false));
+         pop_selector;
+     } else if (scan_keyword("colorstackinit")) {
+-        bool = scan_keyword("page");
++        bool1 = scan_keyword("page");
+         if (scan_keyword("direct"))
+             cur_val = direct_always;
+         else if (scan_keyword("page"))
+@@ -2764,7 +2764,7 @@ static int do_feedback_pdf(halfword c)
+         warning_index = save_warning_index;
+         scanner_status = save_scanner_status;
+         str = makecstring(s);
+-        cur_val = newcolorstack(str, cur_val, bool);
++        cur_val = newcolorstack(str, cur_val, bool1);
+         free(str);
+         flush_str(s);
+         cur_val_level = int_val_level;
+@@ -2803,7 +2803,7 @@ void conv_toks(void)
+     halfword save_def_ref;
+     halfword save_warning_index;
+     /*tex temp boolean */
+-    boolean bool;
++    boolean bool1;
+     /*tex first temp string */
+     str_number s;
+     /*tex lua chunk name */
+@@ -2999,11 +2999,11 @@ void conv_toks(void)
+                 save_def_ref = def_ref;
+                 save_warning_index = warning_index;
+                 scan_toks(false, true);
+-                bool = in_lua_escape;
++                bool1 = in_lua_escape;
+                 in_lua_escape = true;
+                 escstr.s = (unsigned char *) tokenlist_to_cstring(def_ref, false, &l);
+                 escstr.l = (unsigned) l;
+-                in_lua_escape = bool;
++                in_lua_escape = bool1;
+                 delete_token_ref(def_ref);
+                 def_ref = save_def_ref;
+                 warning_index = save_warning_index;
+diff -up texlive-base-20250308/source/texk/web2c/luatexdir/unilib/ustring.c.gcc-15-ftbfs texlive-base-20250308/source/texk/web2c/luatexdir/unilib/ustring.c
+--- texlive-base-20250308/source/texk/web2c/luatexdir/unilib/ustring.c.gcc-15-ftbfs	2014-02-03 08:01:31.000000000 -0500
++++ texlive-base-20250308/source/texk/web2c/luatexdir/unilib/ustring.c	2025-06-12 10:02:45.229110499 -0400
+@@ -396,7 +396,7 @@ double u_strtod(const unichar_t *str, un
+     char buf[60], *pt, *ret;
+     const unichar_t *upt;
+     double val;
+-    extern double strtod();		/* Please don't delete this, not all of us have good ansi headers */
++    //extern double strtod();		/* Please don't delete this, not all of us have good ansi headers */
+ 
+     for ( upt=str, pt=buf; *upt<128 && *upt!='\0' && pt-buf<sizeof(buf)-1; )
+ 	*pt++ = *upt++;
+@@ -415,7 +415,7 @@ long u_strtol(const unichar_t *str, unic
+     char buf[60], *pt, *ret;
+     const unichar_t *upt;
+     long val;
+-    extern long strtol();		/* Please don't delete this, not all of us have good ansi headers */
++    //extern long strtol();		/* Please don't delete this, not all of us have good ansi headers */
+ 
+     for ( upt=str, pt=buf; *upt<128 && *upt!='\0' && pt<buf+sizeof(buf)-1; )
+ 	*pt++ = *upt++;
