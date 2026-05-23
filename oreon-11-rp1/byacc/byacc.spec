@@ -13,8 +13,8 @@ Release: 3%{?dist}
 # https://gitlab.com/fedora/legal/fedora-license-data/-/commit/04ec53689413bb
 License: LicenseRef-Fedora-Public-Domain AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND X11 AND X11-distribute-modifications-variant AND FSFUL
 
-URL: http://invisible-island.net/byacc/byacc.html
-Source: ftp://invisible-island.net/byacc/byacc-%{byaccdate}.tgz
+URL: https://invisible-island.net/byacc/byacc.html
+Source: https://invisible-island.net/archives/byacc/byacc-%{byaccdate}.tgz
 
 BuildRequires:  gcc
 BuildRequires: make
