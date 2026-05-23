@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 %global pkg_version 11b
 
 Name:           java_cup
