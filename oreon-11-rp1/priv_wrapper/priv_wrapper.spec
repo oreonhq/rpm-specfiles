@@ -6,9 +6,8 @@ Summary:        A library to disable resource limits and other privilege droppin
 License:        GPL-3.0-or-later
 Url:            http://cwrap.org/
 
-Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
-Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
-Source2:        priv_wrapper.keyring
+Source0:        https://download.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
+Source1:        https://download.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 
 Patch0:         priv_wrapper-fix-cmocka-1.1.6+-support.patch
 
@@ -36,7 +35,10 @@ This package does not have a devel package, because this project is for
 development/testing.
 
 %prep
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+mkdir -p .gpg-verify
+gpg --homedir .gpg-verify --import %{SOURCE1}
+gpg --homedir .gpg-verify --export > priv_wrapper-keyring.gpg
+%{gpgverify} --keyring='priv_wrapper-keyring.gpg' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
 %build

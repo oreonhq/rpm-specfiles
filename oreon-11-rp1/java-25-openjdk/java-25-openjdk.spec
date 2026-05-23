@@ -1236,6 +1236,7 @@ URL:      http://openjdk.java.net/
 # Use 'icedtea_sync.sh' to update the following
 # They are based on code contained in the IcedTea project (6.x).
 # Systemtap tapsets. Zipped up to keep it small.
+# no public mirror; small icedtea tapset bundle (required for systemtap)
 Source8: tapsets-icedtea-%{icedteaver}.tar.xz
 
 # Desktop files. Adapted from IcedTea

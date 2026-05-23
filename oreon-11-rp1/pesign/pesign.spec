@@ -43,6 +43,7 @@ BuildRequires: rh-signing-tools >= 1.20-2
 %endif
 
 Source0: https://github.com/rhboot/pesign/releases/download/%{version}/pesign-%{version}.tar.bz2
+# prebuilt NSS cert db for tests, not in github release
 Source1: certs.tar.xz
 Source2: pesign.py
 Patch0001: 0001-cms_common-Fixed-Segmentation-fault.patch

@@ -9,7 +9,7 @@ License: BSD-3-Clause AND BSD-4-Clause AND BSD-4-Clause-UC
 Source0: https://deb.debian.org/debian/pool/main/n/netkit-telnet/netkit-telnet_%{version}.orig.tar.gz#/netkit-telnet-%{version}.tar.gz
 Url: http://web.archive.org/web/20070819111735/www.hcs.harvard.edu/~dholland/computers/old-netkit.html
 # telnet-client tarball is snapshot of the OpenBSD client telnet
-Source2: telnet-client.tar.gz
+Source2: https://src.fedoraproject.org/repo/pkgs/telnet/telnet-client.tar.gz/d74983062470c5a3e7ae14f34c489e00/telnet-client.tar.gz
 Source4: telnet.wmconfig
 Source5: telnet@.service
 Source6: telnet.socket

@@ -25,8 +25,7 @@ Provides:	bundled(gumbo-parser) = 0.10.1
 URL:		https://nokogiri.org
 Source0:	https://rubygems.org/gems/%{gem_name}-%{mainver}%{?prever}.gem
 # %%{SOURCE2} %%{name} %%{version}
-Source1:	rubygem-%{gem_name}-%{version}%{?prever}-full.tar.gz
-Source2:	nokogiri-create-full-tarball.sh
+Source1:	https://github.com/sparklemotion/%{gem_name}/archive/refs/tags/v%{version}%{?prever}.tar.gz#/rubygem-%{gem_name}-%{version}%{?prever}-full.tar.gz
 # Shut down libxml2 version unmatching warning
 Patch0:	%{name}-1.11.0.rc4-shutdown-libxml2-warning.patch
 BuildRequires:	ruby(release)

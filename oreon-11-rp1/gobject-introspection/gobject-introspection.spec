@@ -43,12 +43,9 @@ Requires:       libtool
 # For g-ir-doctool
 Requires:       python3-mako
 Requires:       python3-markdown
-# This package only works with the Python version it was built with
-# https://bugzilla.redhat.com/show_bug.cgi?id=1691064
-Requires:       (python(abi) = %{python3_version} if python3)
-# The package uses distutils which is no longer part of Python 3.12+ standard library
-# https://bugzilla.redhat.com/show_bug.cgi?id=2135406
-Requires:       (python3-setuptools if python3 >= 3.12)
+# Built against the distro python3 (see bz 1691064)
+Requires:       python3-devel
+Requires:       python3-setuptools
 
 %description devel
 Libraries and headers for gobject-introspection

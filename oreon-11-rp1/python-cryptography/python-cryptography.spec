@@ -21,9 +21,7 @@ Summary:        PyCA's cryptography library
 License:        (Apache-2.0 OR BSD-3-Clause) AND PSF-2.0 AND Apache-2.0 AND BSD-3-Clause AND MIT AND (MIT OR Apache-2.0)
 URL:            https://cryptography.io/en/latest/
 Source0:        https://github.com/pyca/cryptography/archive/%{version}/%{srcname}-%{version}.tar.gz
-                # created by ./vendor_rust.py helper script
-Source1:        cryptography-%{version}-vendor.tar.bz2
-Source2:        conftest-skipper.py
+Source1:        conftest-skipper.py
 
 ExclusiveArch:  %{rust_arches}
 
@@ -72,14 +70,9 @@ cryptography is a package designed to expose cryptographic primitives and
 recipes to Python developers.
 
 %prep
-%autosetup -p1 %{!?fedora:-a1} -n %{srcname}-%{version}
-%if 0%{?fedora}
+%autosetup -p1 -n %{srcname}-%{version}
 %cargo_prep
 sed -i 's/locked = true//g' pyproject.toml
-%else
-# RHEL: use vendored Rust crates
-%cargo_prep -v vendor
-%endif
 
 %if ! 0%{?fedora}
 sed -i 's,--benchmark-disable,,' pyproject.toml
@@ -122,7 +115,7 @@ find . -name Cargo.toml -print -delete
 # skip benchmark and hypothesis tests on RHEL
 rm -rf tests/bench tests/hypothesis
 # append skipper to skip iso8601 and pretend tests
-cat < %{SOURCE2} >> tests/conftest.py
+cat < %{SOURCE1} >> tests/conftest.py
 %endif
 
 # enable SHA-1 signatures for RSA tests

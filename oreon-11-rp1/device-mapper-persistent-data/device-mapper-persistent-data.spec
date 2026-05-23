@@ -17,7 +17,6 @@ License: GPL-3.0-only AND (0BSD OR MIT OR Apache-2.0) AND Apache-2.0 AND (Apache
 URL: https://github.com/jthornber/thin-provisioning-tools
 #Source0: https://github.com/jthornber/thin-provisioning-tools/archive/thin-provisioning-tools-%%{version}.tar.gz
 Source0: https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}%{?version_suffix}.tar.gz
-Source1: dmpd131-vendor.tar.gz
 
 %if %{defined rhel}
 BuildRequires: rust-toolset
@@ -43,8 +42,8 @@ are included and era check, dump, restore and invalidate to manage
 snapshot eras
 
 %prep
-%autosetup -p1 -n thin-provisioning-tools-%{version}%{?version_suffix} -a1
-%cargo_prep -v vendor
+%autosetup -p1 -n thin-provisioning-tools-%{version}%{?version_suffix}
+%cargo_prep
 
 # NOTE: Following could replace Cargo.toml patching, but some macros are not working well with it
 # Notably at least one of cargo_license_summary, cargo_license_summary, or cargo_vendor_manifest

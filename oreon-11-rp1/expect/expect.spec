@@ -1,5 +1,5 @@
-%{!?tcl_version: %global tcl_version %(echo 'puts $tcl_version' | tclsh)}
-%{!?tcl_sitearch: %global tcl_sitearch %{_libdir}/tcl%{tcl_version}}
+%global tcl_version 8.6
+%global tcl_sitearch %{_libdir}/tcl%{tcl_version}
 %global majorver 5.45.4
 
 Summary: A program-script interaction and testing utility
@@ -8,7 +8,7 @@ Version: %{majorver}
 Release: 31%{?dist}
 License: LicenseRef-Fedora-Public-Domain
 URL: https://core.tcl.tk/expect/index
-Source: http://downloads.sourceforge.net/%{name}/%{name}%{version}.tar.gz
+Source: https://downloads.sourceforge.net/project/expect/Expect/%{version}/%{name}%{version}.tar.gz
 Buildrequires: gcc autoconf automake chrpath
 BuildRequires: tcl-devel
 BuildRequires: make

@@ -23,7 +23,7 @@ Release: 11%{?dist}
 License: gpl-1.0-or-later AND gpl-2.0-or-later AND gpl-2.0-or-later WITH rrdtool-floss-exception-2.0 AND mit AND lgpl-2.0-or-later AND lgpl-2.1-or-later AND bsd-source-code AND snprintf AND bsd-3-clause AND gpl-2.0-only AND licenseref-fedora-public-domain AND gtkbook
 URL: https://oss.oetiker.ch/rrdtool/
 Source0: https://github.com/oetiker/rrdtool-1.x/releases/download/v%{version}/%{name}-%{version}.tar.gz
-Source1: php4-%{svnrev}.tar.gz
+Source1: https://src.fedoraproject.org/repo/pkgs/rrdtool/php4-%{svnrev}.tar.gz/28074a9c368af013462631959ab90558/php4-%{svnrev}.tar.gz
 Patch1: rrdtool-1.4.4-php54.patch
 # disable logo for php 5.5.
 Patch2: rrdtool-1.4.7-php55.patch
