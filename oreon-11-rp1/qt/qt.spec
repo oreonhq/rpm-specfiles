@@ -263,8 +263,8 @@ Source24: qtdemo.desktop
 Source25: qtconfig.desktop
 
 # upstream qt4-logo, http://trolltech.com/images/products/qt/qt4-logo
-Source30: hi128-app-qt4-logo.png
-Source31: hi48-app-qt4-logo.png
+Source30: https://pkgs.fedoraproject.org/repo/pkgs/qt4/hi128-app-qt4-logo.png/d9f511e4b51983b4e10eb58b320416d5/hi128-app-qt4-logo.png
+Source31: https://pkgs.fedoraproject.org/repo/pkgs/qt4/hi48-app-qt4-logo.png/6dcc0672ff9e60a6b83f95c5f42bec5b/hi48-app-qt4-logo.png
 
 ## BOOTSTRAPPING, undef docs, demos, examples, phonon, webkit
 

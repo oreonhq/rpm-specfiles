@@ -70,7 +70,10 @@ Provides:	iptables
 Provides:  %{name}-compat = %{version}-%{release}
 Obsoletes: %{name}-compat < 1.8.9-7
 
-%sbin_merge_compat %{_prefix}/sbin/iptables
+%if "%{_sbindir}" == "%{_bindir}"
+Requires: filesystem(unmerged-sbin-symlinks)
+Provides: %{_prefix}/sbin/iptables
+%endif
 
 %description legacy
 The iptables utility controls the network packet filtering code in the
@@ -171,7 +174,10 @@ Provides: ebtables
 # due to the dropped arptables-helper symlink
 Conflicts: arptables-legacy < 0.0.5-16
 
-%sbin_merge_compat %{_prefix}/sbin/iptables
+%if "%{_sbindir}" == "%{_bindir}"
+Requires: filesystem(unmerged-sbin-symlinks)
+Provides: %{_prefix}/sbin/iptables
+%endif
 
 %description nft
 nftables compatibility for iptables, arptables and ebtables.

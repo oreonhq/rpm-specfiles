@@ -7,7 +7,7 @@ URL: https://www.paradyn.org
 Version: 13.0.0
 ExclusiveArch: x86_64 ppc64le aarch64
 
-Source0: dyninst-13.0.0.tar.gz
+Source0: https://github.com/dyninst/dyninst/archive/refs/tags/v%{version}.tar.gz#/dyninst-%{version}.tar.gz
 Patch1: github-pr1721.patch
 Patch2: github-pr1880.patch
 Patch3: github-pr1880-ish.patch

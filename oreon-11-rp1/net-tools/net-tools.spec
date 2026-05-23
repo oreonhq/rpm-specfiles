@@ -15,8 +15,7 @@ Release: 0.77.%{checkout}%{?dist}
 License: GPL-2.0-or-later
 URL: http://sourceforge.net/projects/net-tools/
 
-# git archive --format=tar --remote=git://git.code.sf.net/p/net-tools/code master | xz > net-tools-%%{version}.%%{checkout}.tar.xz
-Source0: net-tools-%{version}.%{checkout}.tar.xz
+Source0: https://github.com/Distrotech/net-tools/archive/master.tar.gz#/net-tools-%{version}.%{checkout}.tar.gz
 Source1: net-tools-config.h
 Source2: net-tools-config.make
 Source3: ether-wake.c

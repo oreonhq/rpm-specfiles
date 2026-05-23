@@ -12,17 +12,15 @@ License:        LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND (G
 # %%global commit af2aa88ab37fc48167d8c5e43b1770a4ba2ff403
 %global forgeurl https://github.com/rwmjones/augeas
 %global commit f4135e3496fbc80597942acf60d90391444b1e5b
+%global gnulibcommit 2f7479a16a3395f1429c7795f10c5d19b9b4453e
 %forgemeta
 
 Release:        0.9%{?dist}
 URL:            %{forgeurl}
 Source0:        %{forgesource}
 
-# The problem with packaging from the upstream git repo is that we
-# need to provide our own gnulib submodule.  I created this by doing:
-# (cd .gnulib && git archive --format=tar --prefix=.gnulib/ HEAD) |
-#   gzip -9 > gnulib-2f7479a16a.tar.gz
-Source1:        gnulib-2f7479a16a.tar.gz
+# git snapshot has no .gnulib submodule, ship gnulib for bootstrap
+Source1:        https://github.com/coreutils/gnulib/archive/%{gnulibcommit}.tar.gz#/gnulib-2f7479a16a.tar.gz
 
 Provides:       bundled(gnulib)
 
@@ -97,7 +95,8 @@ for %{name}.
 
 %prep
 %forgeautosetup -p1
-zcat %{SOURCE1} | tar xf -
+mkdir .gnulib
+tar -xzf %{SOURCE1} -C .gnulib --strip-components=1
 
 # Copied from upstream ./bootstrap:
 modules='argz fnmatch getline getopt-gnu gitlog-to-changelog

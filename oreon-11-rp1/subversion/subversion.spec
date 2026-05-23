@@ -174,7 +174,9 @@ passwords in the KDE Wallet.
 
 %package -n mod_dav_svn
 Summary: Apache httpd module for Subversion server
-%{?!_httpd_requires: Requires: httpd-mmn = %{_httpd_mmn}}
+%if %{!?_httpd_requires:1}
+Requires: httpd-mmn = %{_httpd_mmn}
+%endif
 Requires: subversion-libs%{?_isa} = %{version}-%{release}
 BuildRequires: httpd-devel >= 2.4.63-4
 

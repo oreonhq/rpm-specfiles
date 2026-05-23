@@ -15,7 +15,7 @@ URL: http://www.nico.schottelius.org/software/gpm/
 # 4.] rm -rf %%{name}-%%{version}/doc/specs
 # 5.] tar cJf %%{name}-%%{version}.tar.xz %%{name}-%%{version}
 
-Source: %{name}-%{version}.tar.xz
+Source: https://github.com/telmich/gpm/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1: gpm.service
 Patch:  https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
 Patch:  gpm-1.20.6-multilib.patch
@@ -75,6 +75,7 @@ mouse support to text-based Linux applications.
 
 %prep
 %autosetup -p1
+rm -rf doc/specs
 
 %build
 export CFLAGS="$CFLAGS -std=gnu17 -Wno-unused-result -Wno-sign-compare -Wno-pointer-sign"

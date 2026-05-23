@@ -10,7 +10,7 @@ Summary: Intel Processor Trace Decoder Library
 License: BSD-3-Clause
 URL: https://github.com/intel/libipt
 Source0: https://github.com/intel/libipt/archive/v%{version}.tar.gz
-Source1: doc-v%{version}.tar.xz
+%global libipt_doc_tar %{_builddir}/libipt-doc-%{version}.tar.xz
 Patch1: libipt-cmake40-compat.patch
 # c++ is required only for -DPTUNIT test "ptunit-cpp".
 BuildRequires: gcc-c++ cmake
@@ -60,10 +60,10 @@ develop programs that use the Intel Processor Trace (Intel PT) Decoder Library.
 # to the appropriate place. Otherwise, tar up the generated
 # documentation for use in subsequent builds.
 %if 0%{?_with_docs:1}
-(cd $RPM_BUILD_ROOT%{_mandir}/..; %__tar cJf %{SOURCE1} .)
+(cd $RPM_BUILD_ROOT%{_mandir}/..; %__tar cJf %{libipt_doc_tar} .)
 %else
 mkdir -p $RPM_BUILD_ROOT%{_mandir}
-(cd $RPM_BUILD_ROOT%{_mandir}/..; %__tar xJf %{SOURCE1})
+(cd $RPM_BUILD_ROOT%{_mandir}/..; %__tar xJf %{libipt_doc_tar})
 %endif
 
 %check

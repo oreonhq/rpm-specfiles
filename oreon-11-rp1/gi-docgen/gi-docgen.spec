@@ -97,9 +97,6 @@ Source:         %{url}/-/archive/%{version}/gi-docgen-%{version}.tar.bz2
 # or stand-in local system fonts.
 Patch:          0001-Downstream-only-use-local-packaged-fonts-instead-of-.patch
 
-BuildSystem:            pyproject
-BuildOption(install):   gidocgen
-
 BuildArch:      noarch
 
 BuildRequires:  python3dist(pytest)

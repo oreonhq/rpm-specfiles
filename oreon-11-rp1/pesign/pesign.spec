@@ -45,10 +45,10 @@ BuildRequires: rh-signing-tools >= 1.20-2
 Source0: https://github.com/rhboot/pesign/releases/download/%{version}/pesign-%{version}.tar.bz2
 Source1: certs.tar.xz
 Source2: pesign.py
-Source3: pesign.patches
-
-# generate with tool
-%include %{SOURCE3}
+Patch0001: 0001-cms_common-Fixed-Segmentation-fault.patch
+Patch0002: 0002-Fix-reversed-calloc-arguments.patch
+Patch0003: 0003-Work-around-OpenSC-changing-token-names-on-fedora-bu.patch
+Patch0004: 0004-cms_common-skip-authentication-on-the-Friendly-slot.patch
 
 %description
 This package contains the pesign utility for signing UEFI binaries as

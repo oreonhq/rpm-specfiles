@@ -74,10 +74,8 @@ Summary:        Encoding conversion library and mapping compiler
 License:        (LGPL-2.1-or-later OR CPL-1.0) AND (LGPL-2.1-or-later OR GPL-2.0-or-later OR MPL-2.0)
 SourceLicense:  %{license} AND LGPL-2.0-or-later AND GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND Unicode-3.0 AND (MPL-1.1 OR GPL-1.0-or-later) AND NPL-1.1 AND GPL-2.0-or-later WITH GNAT-exception AND Zlib AND BSL-1.0
 URL:            https://software.sil.org/teckit/
-# Archive repackaged with ./repackage.sh tool because of a bad license
-# <https://github.com/silnrsi/teckit/issues/34>.
-# Original URL is https://github.com/silnrsi/teckit/releases/download/v%%{version}/teckit-%%{version}.tar.xz
-Source0:        teckit-%{version}_repackaged.tar.xz
+# repackaged in %%prep via repackage.sh (license, github.com/silnrsi/teckit/issues/34)
+Source0:        https://github.com/silnrsi/teckit/releases/download/v%{version}/teckit-%{version}.tar.xz
 Source1:        https://github.com/silnrsi/teckit/releases/download/v%{version}/teckit-%{version}.tar.xz.asc
 # Exported from ppisar's keyring
 Source2:        gpgkey-15D41BC02EB807D405EFFAF6C9183BEA0288CDEE.gpg
@@ -120,7 +118,8 @@ that use TECkit, a character encoding and mapping, library.
 %prep
 %dnl verification skipped because of repackaging
 %dnl %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%autosetup -p1
+bash %{SOURCE3} %{version}
+%setup -q -n teckit-%{version}_repackaged
 # Remove bundled libraries
 rm -r zlib-*/*.{c,h} SFconv/expat
 # Remove pre-build executables

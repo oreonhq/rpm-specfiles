@@ -10,7 +10,8 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+%global ow2tag ASM_%(echo %{version} | sed 's/\\./_/g')
+Source0:        https://gitlab.ow2.org/asm/asm/-/archive/%{ow2tag}/asm-%{ow2tag}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        aggregator.pom
 Source2:        https://repo1.maven.org/maven2/org/ow2/asm/asm/%{version}/asm-%{version}.pom
 Source3:        https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/%{version}/asm-analysis-%{version}.pom
@@ -40,7 +41,13 @@ transformations and analysis algorithms allow to easily assemble
 custom complex transformations and code analysis tools.
 
 %prep
-%autosetup -p1
+%setup -q -n asm-%{ow2tag}
+find . -name '*.jar' -delete
+find */asm{,-analysis,-commons} -name '*.class' -delete
+rm -rf gradle
+cd ..
+mv asm-%{ow2tag} %{name}-%{version}
+cd %{name}-%{version}
 
 # A custom pom to aggregate the build
 cp -p %{SOURCE1} pom.xml

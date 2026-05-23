@@ -16,7 +16,7 @@ License:        Apache-2.0 OR LGPL-2.1-or-later
 
 URL:            https://github.com/java-native-access/jna/
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.zst
+Source0:        https://github.com/java-native-access/jna/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        package-list
 Source2:        generate-tarball.sh
 
@@ -80,6 +80,9 @@ This package contains the contributed examples for %{name}.
 
 %prep
 %autosetup -p1
+rm -rf dist www native/libffi
+find . -iname '*.jar' -size +1b -delete
+find . -name '*.class' -delete
 cp %{SOURCE1} .
 
 chmod -Rf a+rX,u+w,g-w,o-w .

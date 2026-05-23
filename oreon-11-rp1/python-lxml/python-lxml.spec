@@ -10,11 +10,8 @@ Summary:        XML processing library combining libxml2/libxslt with the Elemen
 License:        BSD-3-Clause AND MIT-CMU AND MIT
 URL:            https://github.com/lxml/lxml
 
-# We use the get-lxml-source.sh script to generate the tarball
-# without the isoschematron RNG validation file under a problematic license.
-# See: https://gitlab.com/fedora/legal/fedora-license-data/-/issues/154
-Source0:        lxml-%{version}-no-isoschematron-rng.tar.gz
-Source1:        get-lxml-source.sh
+# drop isoschematron rng (bad license), see fedora-license-data #154
+Source0:        https://files.pythonhosted.org/packages/source/l/lxml/lxml-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  libxml2-devel
@@ -57,6 +54,7 @@ Python 3 version.
 
 %prep
 %autosetup -n lxml-%{version} -p1
+rm -rf src/lxml/isoschematron/resources/rng
 # Don't run html5lib tests --without extras
 %{!?without_extras:rm src/lxml/html/tests/test_html5parser.py}
 

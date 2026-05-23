@@ -16,7 +16,7 @@ VCS:            git:https://github.com/libcheck/check.git
 # Easiest way to verify: unpack both tarballs and run
 #    diff -r check-0.15.2 upstream-check-0.15.2
 # Source:       https://github.com/libcheck/check/archive/{version}/{name}-{version}.tar.gz
-Source:         %{name}-%{version}.tar.gz
+Source:         https://github.com/libcheck/check/archive/%{version}/%{name}-%{version}.tar.gz
 # Only needed for autotools in Fedora
 Patch0:         %{name}-0.11.0-info-in-builddir.patch
 # Fix a texinfo error due to a missing @end verbatim
@@ -98,6 +98,8 @@ MinGW libraries and headers for developing programs with check
 
 %prep
 %autosetup -N
+rm -f index.html
+rm -rf web
 %if 0%{?fedora}
 %patch -P0 -p1 -b .info-in-builddir
 %endif
