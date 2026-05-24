@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           maven-filtering
 Version:        3.3.2

@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           xbean
 Version:        4.24

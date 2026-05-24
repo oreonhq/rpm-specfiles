@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           osgi-compendium
 Version:        7.0.0

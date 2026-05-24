@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           assertj-core
 Version:        3.26.3

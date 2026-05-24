@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           jakarta-servlet
 Version:        5.0.0

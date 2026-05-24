@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           maven-remote-resources-plugin
 Version:        3.1.0

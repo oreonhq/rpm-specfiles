@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           plexus-sec-dispatcher
 Version:        2.0

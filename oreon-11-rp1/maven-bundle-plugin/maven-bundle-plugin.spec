@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           maven-bundle-plugin
 Version:        5.1.9

@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 %if %{without bootstrap} && %{undefined rhel}
 %bcond_without bnd_maven_plugin

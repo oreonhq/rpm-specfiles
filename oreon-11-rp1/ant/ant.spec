@@ -28,7 +28,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 %if %{without bootstrap}
 %bcond_with ant_minimal

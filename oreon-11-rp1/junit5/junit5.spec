@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 # Component versions, taken from gradle.properties
 %global platform_version 1.%(v=%{version}; echo ${v:2})
 %global jupiter_version %{version}

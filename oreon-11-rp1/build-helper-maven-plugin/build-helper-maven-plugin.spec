@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           build-helper-maven-plugin
 Version:        3.6.1

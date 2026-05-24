@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           extra-enforcer-rules
 Version:        1.10.0

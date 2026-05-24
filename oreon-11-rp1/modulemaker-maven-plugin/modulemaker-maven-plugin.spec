@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 Name:           modulemaker-maven-plugin
 Version:        1.11

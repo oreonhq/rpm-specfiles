@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 %global upstream_version 2.0.0-M1
 
 Name:           maven-verifier

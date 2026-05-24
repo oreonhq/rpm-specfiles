@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 
 # Copyright (c) 2000-2012, JPackage Project
 # All rights reserved.

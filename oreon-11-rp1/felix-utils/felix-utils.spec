@@ -1,4 +1,4 @@
-%bcond_with bootstrap
+%bcond_without bootstrap
 %global bundle org.apache.felix.utils
 
 Name:           felix-utils
