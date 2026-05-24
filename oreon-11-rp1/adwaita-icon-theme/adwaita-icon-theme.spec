@@ -14,10 +14,8 @@ Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_
 BuildArch:      noarch
 
 BuildRequires:  meson
-BuildRequires:  /usr/bin/gtk4-update-icon-cache
 
-# Only require the legacy icon package on Fedora
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Requires:       %{name}-legacy >= %{adwlegacy_ver}
 %endif
 Requires:       adwaita-cursor-theme = %{version}-%{release}
@@ -34,7 +32,7 @@ designed for the GNOME desktop.
 
 %package        devel
 Summary:        Development files for %{name}
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Requires:       %{name}-legacy-devel >= %{adwlegacy_ver}
 %endif
 Requires:       %{name} = %{version}-%{release}
@@ -45,6 +43,8 @@ developing applications that use %{name}.
 
 %prep
 %autosetup -p1 -n %{name}-%{tarball_version}
+sed -i '/^gtk_update_icon_cache = find_program(/,/^)$/d' meson.build
+sed -i '/^meson.add_install_script(/,/^)$/d' meson.build
 
 %build
 %meson
