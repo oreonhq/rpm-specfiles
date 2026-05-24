@@ -2,7 +2,7 @@
 #%%global relc rc1
 
 # Simple way to disable tests
-%if 0%{?flatpak} || 0%{?rhel} || 0%{?fedora}
+%if 0%{?flatpak} || 0%{?rhel} || 0%{?fedora} || 0%{?oreon}
 %bcond_with tests
 %else
 %bcond_without tests
@@ -20,7 +20,7 @@
 
 Name:           numpy
 Version:        2.4.3
-Release:        1%{?dist}
+Release:        2%{?dist}
 Epoch:          1
 Summary:        A fast multidimensional array facility for Python
 
@@ -261,5 +261,8 @@ export PYTHONPATH=%{buildroot}%{python3_sitearch}
 
 
 %changelog
+* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.3-2
+- default tests off on oreon (no python3-hypothesis in repo yet)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.3-1
 - Prepare for Oreon 11 (RP1)
