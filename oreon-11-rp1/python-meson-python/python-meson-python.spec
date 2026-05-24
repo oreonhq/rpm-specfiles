@@ -10,23 +10,27 @@
 %bcond patchelf %{expr:%{undefined rhel} || %{defined epel}}
 %endif
 
+%global pmd_bootstrap_ver 0.11.0
+
 Name:           python-meson-python
 Summary:        Meson Python build backend (PEP 517)
 Version:        0.19.0
-Release:        3%{?dist}
+Release:        4%{?dist}
 
 License:        MIT
 URL:            https://github.com/mesonbuild/meson-python
 Source0:        https://files.pythonhosted.org/packages/source/m/meson-python/meson_python-%{version}.tar.gz
+Source1:        https://github.com/FFY00/python-pyproject-metadata/archive/%{pmd_bootstrap_ver}/pyproject-metadata-%{pmd_bootstrap_ver}.tar.gz
 Patch100:       meson-python-0.18.0-remove-patchelf.patch
 
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
+BuildRequires:  python3-pip
 BuildRequires:  pyproject-rpm-macros >= 1.15.1
 BuildRequires:  meson >= 1.2.3
 BuildRequires:  python3-packaging
-BuildRequires:  python3-pyproject-metadata >= 0.9.0
+BuildRequires:  python3-flit-core
 %if %{with tests}
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -76,11 +80,24 @@ git init -q
 git add -A
 git -c user.email=packaging@oreonhq.com -c user.name=Oreon commit -q -m . --allow-empty
 %endif
+mkdir -p %{_builddir}/meson-py-bootstrap%{python3_sitearch}
+tar -C %{_builddir} -xf %{SOURCE1}
+%pushd %{_builddir}/pyproject-metadata-%{pmd_bootstrap_ver}
+%pyproject_wheel -w %{_builddir}/pmd-bootstrap-wheel
+%popd
+python3 -m pip install --target %{_builddir}/meson-py-bootstrap%{python3_sitearch} \
+  --no-index --find-links %{_builddir}/pmd-bootstrap-wheel pyproject-metadata
 
 %generate_buildrequires
+export PYTHONPATH=%{_builddir}/meson-py-bootstrap%{python3_sitearch}${PYTHONPATH:+:${PYTHONPATH}}
 %pyproject_buildrequires -p %{?with_tests:-g test}
+brfile=$(ls ../*pyproject-buildrequires 2>/dev/null | head -1)
+if test -n "$brfile"; then
+  sed -i -e '/^python3dist(pyproject-metadata)/d' -e '/^python3-pyproject-metadata/d' "$brfile"
+fi
 
 %build
+export PYTHONPATH=%{_builddir}/meson-py-bootstrap%{python3_sitearch}${PYTHONPATH:+:${PYTHONPATH}}
 %pyproject_wheel
 
 %install
@@ -89,6 +106,7 @@ git -c user.email=packaging@oreonhq.com -c user.name=Oreon commit -q -m . --allo
 
 %check
 %if %{with tests}
+export PYTHONPATH=%{_builddir}/meson-py-bootstrap%{python3_sitearch}${PYTHONPATH:+:${PYTHONPATH}}
 ignore="${ignore-} --ignore=tests/test_pep518.py"
 %if %{without pytest_mock}
 k="${k-}${k+ and }not test_invalid_build_dir"
@@ -114,6 +132,9 @@ k="${k-}${k+ and }not test_uneeded_rpath"
 %doc README.rst
 
 %changelog
+* Sun May 24 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.0-4
+- bootstrap pyproject-metadata at build time (no repo dep for mock)
+
 * Sun May 24 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.0-3
 - classic spec (no BuildSystem tag) for spectool/rpmbuild
 
