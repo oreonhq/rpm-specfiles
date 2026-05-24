@@ -1,11 +1,11 @@
 Summary: A utility which maintains a system's symbolic links
 Name: symlinks
-URL: http://ibiblio.org/pub/Linux/utils/file/
+URL: https://github.com/brandt/symlinks
 Version: 1.7
 Release: 14%{?dist}
 License: Symlinks
-# Upstream maintainer provided tarball, ibiblio no longer allowing uploads
-Source0: http://ibiblio.org/pub/Linux/utils/file/%{name}-%{version}.tar.gz
+# ibiblio mirror dead; local tarball matches Fedora dist-git (SHA512 verified)
+Source0: %{name}-%{version}.tar.gz
 # Taken from http://packages.debian.org/changelogs/pool/main/s/symlinks/symlinks_1.2-4.2/symlinks.copyright
 Source1: symlinks-LICENSE.txt
 BuildRequires: make
