@@ -4,8 +4,8 @@ Release: 16%{?dist}
 Summary: RELAX NG schemas for all Mallard versions
 
 License: MIT
-URL:     http://projectmallard.org/download/
-Source0: http://projectmallard.org/download/%{name}-%{version}.tar.bz2
+URL:     https://gitlab.gnome.org/GNOME/mallard-rng
+Source0: http://ftp.debian.org/debian/pool/main/m/mallard-rng/mallard-rng_%{version}.orig.tar.bz2#/%{name}-%{version}.tar.bz2
 
 BuildArch:        noarch
 BuildRequires:    make
