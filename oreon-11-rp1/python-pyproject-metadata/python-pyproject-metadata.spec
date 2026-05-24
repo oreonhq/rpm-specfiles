@@ -1,23 +1,26 @@
-# Building the documentation requires the furo Sphinx theme.  But building furo
-# requires sphinx_theme_builder, which requires this package.  Avoid a
-# dependency loop with this conditional.
 %bcond doc 0
+%if 0%{?oreon} || 0%{?rhel} || 0%{?fedora}
+%bcond_with tests
+%else
+%bcond_without tests
+%endif
 
 Name:           python-pyproject-metadata
 Version:        0.11.0
-Release:        %autorelease
+Release:        2%{?dist}
 Summary:        PEP 621 metadata parsing
 
 License:        MIT
 URL:            https://github.com/FFY00/python-pyproject-metadata
-VCS:            git:%{url}.git
-Source:         %{url}/archive/%{version}/pyproject-metadata-%{version}.tar.gz
+Source0:        https://github.com/FFY00/python-pyproject-metadata/archive/%{version}/pyproject-metadata-%{version}.tar.gz
 
 BuildArch:      noarch
-BuildSystem:    pyproject
-BuildOption(install): -l pyproject_metadata
 
-BuildRequires:  %{py3_dist pytest}
+BuildRequires:  python3-devel
+BuildRequires:  pyproject-rpm-macros
+%if %{with tests}
+BuildRequires:  python3-pytest
+%endif
 %if %{with doc}
 BuildRequires:  python3-docs
 %endif
@@ -34,6 +37,8 @@ metadata (already parsed), it will validate this input and generate a PEP
 
 %package     -n python3-pyproject-metadata
 Summary:        PEP 621 metadata parsing
+%py_provides    python3-pyproject_metadata
+Provides:       python3dist(pyproject-metadata) = %{version}
 
 %description -n python3-pyproject-metadata
 %_desc
@@ -47,27 +52,33 @@ Documentation for python3-pyproject-metadata.
 %endif
 
 %prep
-%autosetup -n pyproject-metadata-%{version}
-# No need to BuildRequire pytest-cov to run pytest
+%autosetup -n pyproject-metadata-%{version} -p1
 sed -i /pytest-cov/d pyproject.toml
-
 %if %{with doc}
-# Use local objects.inv for intersphinx
 sed -e 's|\("https://docs\.python\.org/3/", \)None|\1"%{_docdir}/python3-docs/html/objects.inv"|' \
     -i docs/conf.py
 %endif
 
-%build -a
+%generate_buildrequires
+%pyproject_buildrequires
+
+%build
+%pyproject_wheel
 %if %{with doc}
-# Build the documentation
 export PYTHONPATH=$PWD
 mkdir html
 sphinx-build -b html docs html
 rm -rf html/{.buildinfo,.doctrees}
 %endif
 
+%install
+%pyproject_install
+%pyproject_save_files -l pyproject_metadata
+
 %check
+%if %{with tests}
 %pytest -v
+%endif
 
 %files -n python3-pyproject-metadata -f %{pyproject_files}
 %doc docs/changelog.md README.md
@@ -78,5 +89,8 @@ rm -rf html/{.buildinfo,.doctrees}
 %endif
 
 %changelog
+* Sun May 24 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.0-2
+- classic spec, tests off by default on oreon
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.0-1
 - Prepare for Oreon 11 (RP1)
