@@ -1,4 +1,8 @@
+%if 0%{?oreon} || 0%{?rhel} || 0%{?fedora}
+%bcond_with tests
+%else
 %bcond tests 1
+%endif
 
 # This bcond allows to ship a non-compiled version
 # Slower, but sometimes necessary with alpha Python versions
@@ -66,6 +70,7 @@ Provides:       Cython%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       cython = %{?epoch:%{epoch}:}%{version}-%{release}
 Provides:       cython%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 %py_provides    python3-Cython
+Provides:       python3dist(Cython) = %{version}
 Obsoletes:      python3-Cython < 3~~
 
 # A small templating library is bundled in Cython/Tempita
@@ -127,5 +132,11 @@ export CFLAGS="${CFLAGS} -g1"
 
 
 %changelog
+* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.4-3
+- default tests off on oreon (breaks numpy bootstrap cycle)
+
+* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.4-2
+- provide python3dist(Cython)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.4-1
 - Prepare for Oreon 11 (RP1)

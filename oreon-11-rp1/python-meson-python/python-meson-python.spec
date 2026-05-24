@@ -8,7 +8,11 @@
 # buildroot-only there and the packages built with python-meson-python will not
 # bundle shared libraries. In Fedora and EPEL, we must depend on patchelf to
 # ship a full-featured package.
+%if 0%{?oreon} || 0%{?rhel}
+%bcond patchelf 0
+%else
 %bcond patchelf %{expr:%{undefined rhel} || %{defined epel}}
+%endif
 
 Name:           python-meson-python
 Summary:        Meson Python build backend (PEP 517)
@@ -66,6 +70,7 @@ Requires:       /usr/bin/patchelf
 
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_provides_for_importable_modules
 %py_provides    python3-mesonpy
+Provides:       python3dist(meson-python) = %{version}
 
 %description -n python3-meson-python %{common_description}
 
@@ -123,5 +128,8 @@ k="${k-}${k+ and }not test_uneeded_rpath"
 
 
 %changelog
+* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.0-2
+- no patchelf on oreon, provide python3dist(meson-python)
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.0-1
 - Prepare for Oreon 11 (RP1)

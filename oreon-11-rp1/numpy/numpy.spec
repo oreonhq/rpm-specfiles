@@ -8,7 +8,7 @@
 %bcond_without tests
 %endif
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon}
 %global blaslib flexiblas
 %global blasvar %{nil}
 %else
@@ -20,7 +20,7 @@
 
 Name:           numpy
 Version:        2.4.3
-Release:        2%{?dist}
+Release:        4%{?dist}
 Epoch:          1
 Summary:        A fast multidimensional array facility for Python
 
@@ -35,10 +35,8 @@ URL:            http://www.numpy.org/
 Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Source1:        https://numpy.org/doc/%(echo %{version} | cut -d. -f1-2)/numpy-html.zip
 
-# Fix FTBFS with GCC 16
-# Sent upstream:
 # https://github.com/numpy/x86-simd-sort/pull/225
-#Patch:          fix-gcc-16-ftbfs.patch
+Patch0:         fix-gcc-16-ftbfs.patch
 
 %description
 NumPy is a general-purpose array-processing package designed to
@@ -70,6 +68,9 @@ BuildRequires:  lapack-devel
 BuildRequires:  libdivide-devel
 %endif
 BuildRequires:  ninja-build
+BuildRequires:  meson
+BuildRequires:  python3-meson-python >= 0.18
+BuildRequires:  python3-cython >= 3.0.6
 %if %{with tests}
 BuildRequires:  python3-hypothesis
 BuildRequires:  python3-pytest
@@ -141,6 +142,14 @@ sed -i 's,"numpy/libdivide/libdivide.h",<libdivide.h>,' \
 
 %generate_buildrequires
 %pyproject_buildrequires -R -Csetup-args=-Dblas=flexiblas -Csetup-args=-Dlapack=lapack
+brfile=$(ls ../*pyproject-buildrequires 2>/dev/null | head -1)
+if test -n "$brfile"; then
+  sed -i -e '/^python3dist(meson-python)/d' -e '/^python3dist(Cython)/d' "$brfile"
+  echo 'python3-meson-python >= 0.18' >> "$brfile"
+  echo 'python3-cython >= 3.0.6' >> "$brfile"
+  echo 'meson' >> "$brfile"
+  echo '%{blaslib}-devel' >> "$brfile"
+fi
 
 %build
 %set_build_flags
@@ -261,6 +270,12 @@ export PYTHONPATH=%{buildroot}%{python3_sitearch}
 
 
 %changelog
+* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.3-4
+- buildreqs file uses rpm names not python3dist for bootstrap
+
+* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.3-3
+- flexiblas on oreon, BR meson-python/Cython/meson, gcc16 patch on
+
 * Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.3-2
 - default tests off on oreon (no python3-hypothesis in repo yet)
 
