@@ -16,24 +16,11 @@ Source:         %{pypi_source pytest %{version}}
 # we might not yet have all the BRs, those conditionals allow us to do that.
 
 # This can be used to disable all tests for faster bootstrapping.
-# The tests are enabled by default except when building on RHEL/ELN
-# (to avoid pulling in extra dependencies into next RHEL).
-%bcond tests %{undefined rhel}
-
-# Only disabling the optional tests is a more complex but careful approach
-# Pytest will skip the related tests, so we only conditionalize the BRs
+# Oreon: bootstrap without test/doc extras; enable with --with tests --with docs later
+%bcond tests 0
 %bcond optional_tests %{with tests}
-
-# To run the tests in %%check we use pytest-timeout
-# When building pytest for the first time with new Python version
-# that is not possible as it depends on pytest
 %bcond timeout %{with tests}
-
-# When building pytest for the first time with new Python version
-# we also don't have sphinx yet and cannot build docs.
-# The docs are enabled by default except when building on RHEL/ELN
-# (to avoid pulling in extra dependencies into next RHEL).
-%bcond docs %{undefined rhel}
+%bcond docs 0
 
 BuildRequires:  python3-devel
 BuildRequires:  pyproject-rpm-macros >= 0-51
@@ -102,7 +89,7 @@ sed -i '/sphinx-issues/d' doc/en/requirements.txt
 
 
 %generate_buildrequires
-%pyproject_buildrequires -r
+%pyproject_buildrequires %{?with_tests:-x dev -t}%{!?with_tests:-R}
 
 
 %build
