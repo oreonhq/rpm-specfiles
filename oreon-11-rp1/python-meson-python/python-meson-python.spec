@@ -1,13 +1,9 @@
 %bcond tests 1
-# The python-pytest-mock and wheel dependencies are unwanted on RHEL;
-# we can omit them and still run most of the tests.
+%if 0%{?oreon}
+%bcond_with tests
+%endif
 %bcond pytest_mock %{undefined rhel}
 %bcond wheel %{undefined rhel}
-# RHEL will not have patchelf (which is used for adjusting RPATH in shared
-# libraries bundled in wheels); that is OK because the package is
-# buildroot-only there and the packages built with python-meson-python will not
-# bundle shared libraries. In Fedora and EPEL, we must depend on patchelf to
-# ship a full-featured package.
 %if 0%{?oreon} || 0%{?rhel}
 %bcond patchelf 0
 %else
@@ -17,27 +13,20 @@
 Name:           python-meson-python
 Summary:        Meson Python build backend (PEP 517)
 Version:        0.19.0
-Release:        %autorelease
+Release:        3%{?dist}
 
-# SPDX
 License:        MIT
 URL:            https://github.com/mesonbuild/meson-python
-Source:         %{pypi_source meson_python}
-
-# Downstream-only patch to remove the patchelf dependency (and corresponding
-# functionality), controlled by the patchelf build conditional
+Source0:        https://files.pythonhosted.org/packages/source/m/meson-python/meson_python-%{version}.tar.gz
 Patch100:       meson-python-0.18.0-remove-patchelf.patch
-
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -p %{?with_tests:-g test}
-# LICENSE duplicates LICENSES/MIT.txt, which is handled automatically.
-BuildOption(install):   -l mesonpy
 
 BuildArch:      noarch
 
-# for %%pyproject_buildrequires -p
+BuildRequires:  python3-devel
 BuildRequires:  pyproject-rpm-macros >= 1.15.1
-
+BuildRequires:  meson >= 1.2.3
+BuildRequires:  python3-packaging
+BuildRequires:  python3-pyproject-metadata >= 0.9.0
 %if %{with tests}
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -56,35 +45,25 @@ documentation for more details.}
 
 %description %{common_description}
 
-
 %package -n     python3-meson-python
 Summary:        %{summary}
-
-# When patchelf is not in the PATH, mesonpy.get_requires_for_build_wheel() adds
-# https://pypi.org/project/patchelf/ to the dependencies. We always want to use
-# the system patchelf.
+Requires:       meson >= 1.2.3
+Requires:       python3-packaging
+Requires:       python3-pyproject-metadata >= 0.9.0
 %if %{with patchelf}
 BuildRequires:  /usr/bin/patchelf
 Requires:       /usr/bin/patchelf
 %endif
-
-# https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_provides_for_importable_modules
 %py_provides    python3-mesonpy
 Provides:       python3dist(meson-python) = %{version}
 
 %description -n python3-meson-python %{common_description}
 
-
 %prep
-# We need “-S git” because test_reproducible uses “meson dist,” which only
-# works in a git or mercurial repo.
-%autosetup -n meson_python-%{version} -N -S git
-%autopatch -M 99 -p1
+%autosetup -n meson_python-%{version} -p1
 %if %{without patchelf}
 %patch 100 -p1
 %endif
-# build: used only by skipped PEP 518 test
-# pytest-cov: https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
 sed -r -i "s/^  '(build|pytest-cov)/#&/" pyproject.toml
 %if %{without pytest_mock}
 sed -r -i "s/^  '(pytest-mock)/#&/" pyproject.toml
@@ -92,15 +71,25 @@ sed -r -i "s/^  '(pytest-mock)/#&/" pyproject.toml
 %if %{without wheel}
 sed -r -i "s/^  '(wheel)/#&/" pyproject.toml
 %endif
-
-
-%check -a
 %if %{with tests}
-# Note: tests are *not* safe for parallel execution with pytest-xdist.
+git init -q
+git add -A
+git -c user.email=packaging@oreonhq.com -c user.name=Oreon commit -q -m . --allow-empty
+%endif
 
-# PEP 518 tests require network access.
+%generate_buildrequires
+%pyproject_buildrequires -p %{?with_tests:-g test}
+
+%build
+%pyproject_wheel
+
+%install
+%pyproject_install
+%pyproject_save_files -l mesonpy
+
+%check
+%if %{with tests}
 ignore="${ignore-} --ignore=tests/test_pep518.py"
-
 %if %{without pytest_mock}
 k="${k-}${k+ and }not test_invalid_build_dir"
 k="${k-}${k+ and }not test_use_ansi_escapes"
@@ -117,17 +106,17 @@ k="${k-}${k+ and }not test_rpath"
 k="${k-}${k+ and }not test_get_requires_for_build_wheel"
 k="${k-}${k+ and }not test_uneeded_rpath"
 %endif
-
 %pytest ${ignore-} -k "${k-}"
 %endif
-
 
 %files -n python3-meson-python -f %{pyproject_files}
 %doc CHANGELOG.rst
 %doc README.rst
 
-
 %changelog
+* Sun May 24 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.0-3
+- classic spec (no BuildSystem tag) for spectool/rpmbuild
+
 * Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.0-2
 - no patchelf on oreon, provide python3dist(meson-python)
 
