@@ -976,7 +976,7 @@ BuildRequires: redhat-sb-certs >= 9.4-0.1
 
 # Official stable tarball from kernel.org. Patches and packaging files (Source1+,
 # configs, scripts, certs) live beside this spec in the source package.
-Source0: https://www.kernel.org/pub/linux/kernel/v7.x/linux-%{tarfile_release}.tar.xz
+Source0: https://cdn.kernel.org/pub/linux/kernel/v7.x//linux-%{tarfile_release}.tar.xz
 
 Source1: Makefile.rhelver
 Source2: %{name}.changelog

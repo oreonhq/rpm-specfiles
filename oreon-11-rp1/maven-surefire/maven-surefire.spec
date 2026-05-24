@@ -14,7 +14,7 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        %{name}-%{version}.tar.gz
 # Remove bundled binaries which cannot be easily verified for licensing
 Source1:        generate-tarball.sh
-Source2:        https://junit.sourceforge.net/cpl-v10.html
+Source2:        https://www.eclipse.org/legal/cpl-v10.html
 
 Patch:          0001-Port-to-TestNG-7.4.0.patch
 Patch:          0002-Disable-JUnit-4.8-test-grouping.patch
