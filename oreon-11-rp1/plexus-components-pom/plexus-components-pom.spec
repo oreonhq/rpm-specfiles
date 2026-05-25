@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           plexus-components-pom
 Version:        14.2
@@ -25,7 +25,7 @@ This package provides Plexus Components parent POM used by different
 Plexus packages.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 cp -p %{SOURCE1} LICENSE
 
 %build
@@ -38,5 +38,5 @@ cp -p %{SOURCE1} LICENSE
 %doc LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 14.2-11
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 14.2-11
+- Import

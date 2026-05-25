@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 %global upstream_version 2.0.0-M1
 
 Name:           maven-verifier
@@ -33,7 +33,7 @@ Obsoletes:      %{name}-javadoc < 2.0.0~M1-18
 Provides a test harness for Maven integration tests.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # This test attempts to write outside the build directory
 rm src/test/java/org/apache/maven/shared/verifier/ForkedLauncherTest.java
@@ -52,5 +52,5 @@ rm src/test/java/org/apache/maven/shared/verifier/Embedded3xLauncherTest.java
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.0~M1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.0~M1-1
+- Import

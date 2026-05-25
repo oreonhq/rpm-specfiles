@@ -1,8 +1,0 @@
-# Release tarballs.
-byacc-20*.t*gz
-# Signatures.
-byacc-20*.t*gz.asc
-# Generated (source) RPMs.
-*.rpm
-# Expanded source trees.
-byacc-20*/

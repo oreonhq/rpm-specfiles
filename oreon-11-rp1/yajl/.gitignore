@@ -1,5 +1,0 @@
-.build*.log
-*.rpm
-i386
-x86_64
-*.tar.gz

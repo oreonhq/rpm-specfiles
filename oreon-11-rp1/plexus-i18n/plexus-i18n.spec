@@ -52,5 +52,5 @@ is like a J2EE application server, without all the baggage.
 %files -f .mfiles
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0-0.37.b10.4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0-0.37.b10.4
+- Import

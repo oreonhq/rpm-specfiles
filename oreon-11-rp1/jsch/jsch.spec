@@ -27,7 +27,7 @@ X11 forwarding, file transfer, etc., and you can integrate its
 functionality into your own Java programs.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 %mvn_file : jsch
 
 %pom_remove_parent
@@ -57,5 +57,5 @@ zip target/%{name}-%{version}.jar plugin.properties
 %license LICENSE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.55-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.55-1
+- Import

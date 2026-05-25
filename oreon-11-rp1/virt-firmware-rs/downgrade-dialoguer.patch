@@ -1,9 +1,9 @@
 diff --git a/efi-tools/Cargo.toml b/efi-tools/Cargo.toml
-index 383ea77..68b8356 100644
+index 4cbf7ed1c4a5..95ace01b1822 100644
 --- a/efi-tools/Cargo.toml
 +++ b/efi-tools/Cargo.toml
-@@ -33,7 +33,7 @@ log.workspace = true
- stderrlog.workspace = true
+@@ -33,7 +33,7 @@ env_logger.workspace = true
+ log.workspace = true
  uguid.workspace = true
  
 -dialoguer = "0.12"

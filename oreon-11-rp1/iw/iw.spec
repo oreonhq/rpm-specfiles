@@ -4,7 +4,7 @@ Release:        2%{?dist}
 Summary:        A nl80211 based wireless configuration tool
 
 # part of sha256.c is public domain
-License:        ISC AND LicenseRef-Fedora-Public-Domain
+License:        ISC AND LicenseRef-Public-Domain
 URL:            https://wireless.docs.kernel.org/en/latest/en/users/documentation/iw.html
 Source0:        http://www.kernel.org/pub/software/network/iw/iw-%{version}.tar.xz
 
@@ -41,5 +41,5 @@ export CFLAGS="$RPM_OPT_FLAGS" LDFLAGS="$RPM_LD_FLAGS"
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.17-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.17-2
+- Import

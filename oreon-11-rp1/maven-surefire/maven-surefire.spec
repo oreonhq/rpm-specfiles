@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 %global upstream_version %(echo '%{version}' | tr '~' '-')
 
 Name:           maven-surefire
@@ -14,7 +14,7 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        %{name}-%{version}.tar.gz
 # Remove bundled binaries which cannot be easily verified for licensing
 Source1:        generate-tarball.sh
-Source2:        https://www.eclipse.org/legal/cpl-v10.html
+Source2:        https://junit.sourceforge.net/cpl-v10.html
 
 Patch:          0001-Port-to-TestNG-7.4.0.patch
 Patch:          0002-Disable-JUnit-4.8-test-grouping.patch
@@ -101,7 +101,7 @@ integration-test phase thus enabling the post-integration-test phase
 to execute.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 cp -p %{SOURCE2} .
 
 
@@ -166,5 +166,5 @@ find -name *.java -exec sed -i -e s/org.apache.maven.surefire.shared.utils/org.a
 %files -n maven-failsafe-plugin -f .mfiles-failsafe-plugin
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.2-1
+- Import

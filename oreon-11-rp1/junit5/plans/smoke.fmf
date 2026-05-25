@@ -1,6 +1,0 @@
-summary: Basic smoke test
-discover:
-  how: fmf
-  url: https://gitlab.com/redhat/centos-stream/tests/junit5.git
-execute:
-  how: tmt

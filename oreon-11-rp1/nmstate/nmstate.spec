@@ -2,7 +2,7 @@
 %define libname libnmstate
 
 Name:           nmstate
-Version:        2.2.59
+Version:        2.2.57
 Release:        %autorelease
 Summary:        Declarative network manager API
 License:        Apache-2.0 AND LGPL-2.1-or-later
@@ -11,8 +11,6 @@ Source0:        %{url}/releases/download/v%{version}/%{srcname}-%{version}.tar.g
 Source1:        %{url}/releases/download/v%{version}/%{srcname}-%{version}.tar.gz.asc
 Source2:        https://nmstate.io/nmstate.gpg
 Source3:        %{url}/releases/download/v%{version}/%{srcname}-vendor-%{version}.tar.xz
-# Remove this patch once Fedora shipps rust-toml 1.0.3+
-Patch0:         0001-Change-dependent-toml-version-from-1.0.3-to-1.0.patch
 # Force nmstate-libs upgrade along with nmstate rpm when installed
 # https://issues.redhat.com/browse/RHEL-52890
 Requires:       (nmstate-libs%{?_isa} = %{version}-%{release} if nmstate-libs)
@@ -20,7 +18,7 @@ BuildRequires:  python3-devel
 BuildRequires:  gnupg2
 BuildRequires:  systemd-devel
 BuildRequires:  systemd-rpm-macros
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  rust-packaging
@@ -32,7 +30,7 @@ BuildRequires:  (crate(time/parsing) >= 0.3 with crate(time/parsing) < 0.4)
 BuildRequires:  (crate(env_logger/default) >= 0.11 with crate(env_logger/default) < 0.12)
 BuildRequires:  (crate(libc/default) >= 0.2 with crate(libc/default) < 0.3)
 BuildRequires:  (crate(log/default) >= 0.4 with crate(log/default) < 0.5)
-BuildRequires:  (crate(nispor/default) >= 2.0 with crate(nispor/default) < 3.0)
+BuildRequires:  (crate(nispor/default) >= 1.2.27 with crate(nispor/default) < 2.0)
 BuildRequires:  (crate(serde/default) >= 1.0 with crate(serde/default) < 2.0)
 BuildRequires:  (crate(serde/derive) >= 1.0 with crate(serde/derive) < 2.0)
 BuildRequires:  (crate(serde_json/default) >= 1.0 with crate(serde_json/default) < 2.0)
@@ -42,7 +40,7 @@ BuildRequires:  (crate(uuid/v5) >= 1.1 with crate(uuid/v5) < 2.0)
 BuildRequires:  (crate(zbus/default) >= 5.1 with crate(zbus/default) < 6.0)
 BuildRequires:  (crate(zvariant/default) >= 5.1 with crate(zvariant/default) < 6.0)
 BuildRequires:  (crate(nix/default) >= 0.30 with crate(nix/default) < 0.31)
-BuildRequires:  (crate(toml/default) >= 1.0 with crate(toml/default) < 2.0)
+BuildRequires:  (crate(toml/default) >= 0.9 with crate(toml/default) < 1.0)
 BuildRequires:  (crate(tokio/default) >= 1.3 with crate(tokio/default) < 2.0)
 BuildRequires:  (crate(tokio/net) >= 1.3 with crate(tokio/net) < 2.0)
 BuildRequires:  (crate(tokio/rt) >= 1.3 with crate(tokio/rt) < 2.0)
@@ -113,7 +111,7 @@ License:        Apache-2.0
 %description -n python3-%{libname}
 This package contains the Python 3 library for Nmstate.
 
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 %package -n rust-%{name}-devel
 Summary:        Rust crate of nmstate
 BuildArch:      noarch
@@ -146,7 +144,7 @@ Summary:        Rust crate of nmstate with query_apply feature
 BuildArch:      noarch
 License:        Apache-2.0
 # https://bugzilla.redhat.com/show_bug.cgi?id=2161128
-Requires:  (crate(nispor/default) >= 2.0 with crate(nispor/default) < 3.0)
+Requires:  (crate(nispor/default) >= 1.2.17 with crate(nispor/default) < 2.0)
 Requires:  (crate(nix/default) >= 0.26 with crate(nix/default) < 0.27)
 Requires:  (crate(zbus/default) >= 5.1 with crate(zbus/default) < 6.0)
 
@@ -172,7 +170,7 @@ gpgv2 --keyring ./gpgkey-mantainers.gpg %{SOURCE1} %{SOURCE0}
 %autosetup -n %{name}-%{version_no_tilde} -p1 %{?rhel:-a3}
 
 pushd rust
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 mv ../vendor ./
 %cargo_prep -v vendor
 %else
@@ -185,7 +183,7 @@ pushd rust
 %cargo_build
 %cargo_license_summary
 %{cargo_license} > ../LICENSE.dependencies
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %cargo_vendor_manifest
 %endif
 popd
@@ -205,7 +203,7 @@ pushd rust/src/python
 %pyproject_install
 popd
 
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 pushd rust/src/lib
 # Fedora cargo2rpm has problem when working with worksace dependency
 #   https://pagure.io/fedora-rust/cargo2rpm/issue/13
@@ -224,7 +222,7 @@ popd
 %files
 %doc README.md
 %license LICENSE.dependencies
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %license rust/cargo-vendor.txt
 %endif
 %doc examples/
@@ -253,7 +251,7 @@ popd
 %files static
 %{_libdir}/libnmstate.a
 
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 %files -n rust-%{name}-devel
 %license LICENSE
 %{cargo_registry}/%{name}-%{version}/
@@ -272,5 +270,5 @@ popd
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.59-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.57-1
+- Import

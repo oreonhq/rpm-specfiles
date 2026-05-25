@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           plexus-classworlds
 Version:        2.8.0
@@ -31,7 +31,7 @@ represent a 'container' can benefit from the classloading control provided by
 classworlds.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 %mvn_file : %{name} plexus/classworlds
 %mvn_alias : classworlds:classworlds
 
@@ -51,5 +51,5 @@ sed -i /testConfigure_Optionally_Existent/s/./@org.junit.jupiter.api.Disabled/ s
 %license LICENSE.txt LICENSE-Codehaus.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.8.0-1
+- Import

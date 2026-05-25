@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           plexus-build-api
 Version:        1.2.0
@@ -31,7 +31,7 @@ Obsoletes:      %{name}-javadoc < 1.2.0-17
 Plexus Build API
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 cp -p %{SOURCE1} .
 
 %mvn_file : plexus/%{name}
@@ -49,5 +49,5 @@ cp -p %{SOURCE1} .
 %license LICENSE-2.0.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-1
+- Import

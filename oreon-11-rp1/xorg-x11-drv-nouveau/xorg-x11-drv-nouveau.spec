@@ -56,5 +56,5 @@ find %{buildroot} -name "*.la" -delete
 %{_mandir}/man4/nouveau.4*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.17-14
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:1.0.17-14
+- Import

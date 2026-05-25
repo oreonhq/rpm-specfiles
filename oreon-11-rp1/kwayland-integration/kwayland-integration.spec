@@ -1,10 +1,10 @@
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 ExcludeArch: %{ix86}
 
 Name:    kwayland-integration
-Version: 6.6.2
-Release: 2%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 Summary: Provides integration plugins for various KDE Frameworks for Wayland
 
 License: CC0-1.0 AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only AND LGPL-3.0-only)
@@ -22,10 +22,8 @@ BuildRequires:  extra-cmake-modules
 BuildRequires:  kf5-rpm-macros
 BuildRequires:  kf6-rpm-macros
 
-BuildRequires:  kf5-kidletime-devel
 BuildRequires:  kf5-kwindowsystem-devel
 BuildRequires:  kf5-kwayland-devel
-BuildRequires:  cmake(KF5GuiAddons)
 
 BuildRequires:  wayland-devel
 BuildRequires:  wayland-protocols-devel
@@ -57,8 +55,5 @@ Requires:       kf5-filesystem
 
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-2
-- bump release (retry failed build)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.5-1
+- Import

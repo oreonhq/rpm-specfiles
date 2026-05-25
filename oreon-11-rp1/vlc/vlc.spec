@@ -52,6 +52,8 @@ Source:		https://get.videolan.org/vlc/%{version}/vlc-%{version}.tar.xz
 Source:		macros.vlc
 
 ## upstream patches
+# spatialaudio: fix compilation with libspatialaudio 4.0
+Patch:          8921.patch
 
 ## backported patches from master
 # freerdp: update to freerdp 2.0 api (#2278)
@@ -60,7 +62,7 @@ Patch:		freerdp2.patch
 ## upstreamable patches
 
 ## downstream patches
-# https://fedoraproject.org/wiki/Changes/CryptoPolicy
+# 
 Patch:		0001-Use-SYSTEM-wide-ciphers-for-gnutls.patch
 # Fix building with fdk-aac-2.0; backport for 3.0 from flathub
 Patch:		fdk-aac2.patch
@@ -270,7 +272,7 @@ Recommends:	%{name}-gui-skins2%{?_isa} = %{epoch}:%{version}-%{release}
 Recommends:	%{name}-plugin-ffmpeg%{?_isa} = %{epoch}:%{version}-%{release}
 
 Requires:	hicolor-icon-theme
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon}
 Requires:	kde-filesystem
 %else
 Requires:	kf5-filesystem
@@ -378,7 +380,7 @@ Installs all available plugins for VLC media player
 %package plugins-base
 Summary:	VLC media player core
 Requires:	%{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
-%if 0%{?rhel} && 0%{?rhel} < 10
+%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
 Requires:	google-noto-sans-mono-fonts
 Requires:	google-noto-serif-fonts
 %else
@@ -1300,5 +1302,5 @@ make check
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.23-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.0.23-1
+- Import

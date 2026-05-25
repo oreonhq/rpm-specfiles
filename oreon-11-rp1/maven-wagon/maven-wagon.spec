@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           maven-wagon
 Version:        3.5.3
@@ -43,7 +43,7 @@ following providers:
 * SCM (in progress)
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_remove_plugin :animal-sniffer-maven-plugin
 %pom_remove_plugin :maven-enforcer-plugin
@@ -90,5 +90,5 @@ following providers:
 %doc DEPENDENCIES
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.3-1
+- Import

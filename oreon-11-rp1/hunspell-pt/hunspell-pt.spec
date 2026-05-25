@@ -1,4 +1,4 @@
-%if 0%{?fedora} > 35
+%if 0%{?fedora} > 35 || 0%{?oreon}
 %global dict_dirname hunspell 
 %else
 %global dict_dirname myspell
@@ -69,5 +69,5 @@ popd
 %{_datadir}/%{dict_dirname}/pt_BR.*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-16
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.20131030-16
+- Import

@@ -1,7 +1,7 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           jsoup
-Version:        1.22.1
+Version:        1.21.1
 Release:        %autorelease
 Summary:        Java library for working with real-world HTML
 License:        MIT
@@ -13,8 +13,6 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        %{name}-%{version}.tar.gz
 # The sources contain non-free scraped web pages as test data
 Source1:        generate-tarball.sh
-# re2j is not yet packaged in Fedora
-Patch:          remove-re2j.patch
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -45,11 +43,9 @@ pristine and validating, to invalid tag-soup; jsoup will create a sensible parse
 tree.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_remove_plugin :animal-sniffer-maven-plugin
-%pom_remove_plugin :build-helper-maven-plugin
-%pom_remove_plugin :central-publishing-maven-plugin
 %pom_remove_plugin :maven-failsafe-plugin
 %pom_remove_plugin :maven-javadoc-plugin
 %pom_remove_plugin com.github.siom79.japicmp:japicmp-maven-plugin
@@ -59,15 +55,11 @@ tree.
 %pom_xpath_inject "pom:plugin[pom:artifactId='maven-bundle-plugin']/pom:configuration/pom:instructions" \
   "<_exportcontents>*.internal;x-internal:=true,*</_exportcontents>"
 
-# Remove optional re2j dependency (not yet packaged in Fedora)
-%pom_remove_dep com.google.re2j:re2j
-
 # Remove jspecify annotations which are used for static analysis only
 %pom_remove_dep :jspecify
-
-jurand -i -s -a src/main/java src/main/java11 \
+sed -i /org.jspecify/d src/main/java*/module-info.java
+%java_remove_annotations src/main/java src/main/java11 -s \
   -p org[.]jspecify[.]annotations[.] \
-  -m org[.]jspecify
 
 %build
 %mvn_build -j -f
@@ -80,5 +72,5 @@ jurand -i -s -a src/main/java src/main/java11 \
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.22.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.21.1-1
+- Import

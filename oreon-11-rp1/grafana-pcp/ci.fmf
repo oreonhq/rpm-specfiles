@@ -1,5 +1,0 @@
-/gating:
-  plan:
-    import:
-      name: /plans/gating
-      url: https://gitlab.com/redhat/centos-stream/tests/grafana-pcp.git

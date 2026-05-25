@@ -6,7 +6,7 @@
 %bcond xserver %[!(0%{?rhel} >= 10)]
 
 Name:           tigervnc
-Version:        1.16.0
+Version:        1.16.2
 Release:        2%{?dist}
 Summary:        A TigerVNC remote display system
 
@@ -27,8 +27,8 @@ Source5:        vncserver
 # Downstream patches
 Patch1:         tigervnc-vncsession-restore-script-systemd-service.patch
 
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
-# https://fedoraproject.org/wiki/Changes/Unify_bin_and_sbin
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon}
+# 
 Patch2:         tigervnc-sbin-bin-merge.patch
 %endif
 
@@ -49,7 +49,7 @@ BuildRequires:  zlib-devel
 
 # TigerVNC 1.4.x requires fltk 1.3.3 for keyboard handling support
 # See https://github.com/TigerVNC/tigervnc/issues/8, also bug #1208814
-%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11 || 0%{?oreon}
 BuildRequires:  fltk1.3-devel
 %else
 BuildRequires:  fltk-devel
@@ -62,7 +62,7 @@ BuildRequires:  libXrandr-devel
 BuildRequires:  libXrender-devel
 BuildRequires:  pixman-devel
 
-%if 0%{?fedora} || 0%{?epel} || 0%{?eln}
+%if 0%{?fedora} || 0%{?epel} || 0%{?eln} || 0%{?oreon}
 # Icons
 BuildRequires:  ImageMagick
 %endif
@@ -222,7 +222,7 @@ runs properly under an environment with SELinux enabled.
 
 %patch -P1 -p1 -b .vncsession-restore-script-systemd-service
 
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon}
 %patch -P2 -p1 -b .sbin-bin-merge
 %endif
 
@@ -235,7 +235,7 @@ for all in `find . -type f -perm -001`; do
         chmod -x "$all"
 done
 # EPEL 10 possibly too in the future
-%if 0%{?fedora} && 0%{?fedora} > 40
+%if 0%{?fedora} && 0%{?fedora} > 40 || 0%{?oreon}
 cat ../xserver21.patch | patch -p1
 %else
 cat ../xserver120.patch | patch -p1
@@ -257,7 +257,7 @@ export CFLAGS="$RPM_OPT_FLAGS -fpic"
 %endif
 export CXXFLAGS="$CFLAGS -std=c++11"
 
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 10 || 0%{?oreon}
 %define __cmake_builddir %{_target_platform}
 
 mkdir -p %{__cmake_builddir}
@@ -294,9 +294,9 @@ pushd unix/vncserver/selinux
 make
 popd
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 # Build icons
-%if 0%{?rhel} >= 9
+%if 0%{?rhel} >= 9 || 0%{?oreon}
 pushd %{_target_platform}/media
 %else
 pushd media
@@ -396,7 +396,7 @@ fi
 %{_bindir}/vncserver
 %{_bindir}/x0vncserver
 %{_bindir}/Xvnc
-%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon}
 %{_bindir}/vncsession
 %else
 %{_sbindir}/vncsession
@@ -438,5 +438,5 @@ fi
 %{_datadir}/icons/hicolor/*/apps/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.16.0-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.16.2-2
+- Import

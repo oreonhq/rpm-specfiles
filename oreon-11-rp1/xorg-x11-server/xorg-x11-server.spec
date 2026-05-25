@@ -16,8 +16,8 @@
 
 Summary:    X.Org X11 X server
 Name:       xorg-x11-server
-Version:    21.1.21
-Release:    2%{?dist}
+Version:    21.1.22
+Release:    1%{?dist}
 URL:        http://www.x.org
 # SPDX
 License:    Adobe-Display-PostScript AND BSD-3-Clause AND DEC-3-Clause AND HPND AND HPND-sell-MIT-disclaimer-xserver AND HPND-sell-variant AND ICU AND ISC AND MIT AND MIT-open-group AND NTP AND SGI-B-2.0 AND SMLNJ AND X11 AND X11-distribute-modifications-variant
@@ -143,7 +143,7 @@ Provides:       xserver-abi(extension-%{extension_major}) = %{extension_minor}
 # https://gitlab.freedesktop.org/xorg/xserver/-/commit/b3b81c8c2090cd49410960a021baf0d27fdd2ab3
 Obsoletes:      xorg-x11-server-Xdmx < 1.20.15
 # Legacy fbdev devices have been replaced with simpledrm:
-# https://fedoraproject.org/wiki/Changes/ReplaceFbdevDrivers
+# 
 Obsoletes:      xorg-x11-drv-fbdev < 0.5.0-19
 Obsoletes:      xorg-x11-drv-vesa < 2.6.0-3
 Obsoletes:      xorg-x11-drv-armsoc < 1.4.1-10
@@ -415,5 +415,5 @@ find %{buildroot} -type f -name '*.la' -delete
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 21.1.21-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 21.1.22-1
+- Import

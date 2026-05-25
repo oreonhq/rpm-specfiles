@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           httpcomponents-project
 Version:        13
@@ -25,7 +25,7 @@ required only for building dependant packages with Maven. Please don't
 use it as runtime requirement.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_remove_plugin :maven-site-plugin
 %pom_remove_plugin :animal-sniffer-maven-plugin
@@ -45,5 +45,5 @@ use it as runtime requirement.
 %license LICENSE.txt NOTICE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 13-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 13-1
+- Import

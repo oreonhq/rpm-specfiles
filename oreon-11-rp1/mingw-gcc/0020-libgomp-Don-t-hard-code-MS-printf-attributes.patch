@@ -1,6 +1,6 @@
-diff -rupN --no-dereference gcc-16-20260308/libgomp/libgomp.h gcc-16-20260308-new/libgomp/libgomp.h
---- gcc-16-20260308/libgomp/libgomp.h	2026-03-05 13:13:29.000000000 +0100
-+++ gcc-16-20260308-new/libgomp/libgomp.h	2026-03-07 22:54:52.640661820 +0100
+diff -rupN --no-dereference gcc-16.1.1-20260501/libgomp/libgomp.h gcc-16.1.1-20260501-new/libgomp/libgomp.h
+--- gcc-16.1.1-20260501/libgomp/libgomp.h	2026-05-01 17:17:42.000000000 +0200
++++ gcc-16.1.1-20260501-new/libgomp/libgomp.h	2026-05-06 23:06:03.460211726 +0200
 @@ -76,6 +76,13 @@
  # endif
  #endif

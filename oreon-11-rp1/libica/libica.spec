@@ -89,7 +89,7 @@ fi
 %{_bindir}/icainfo-cex
 %{_bindir}/icastats
 %if %{with_fips}
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || 0%{?oreon}
 # openssl 3.0 is available since Fedora 36 and RHEL 9
 %exclude %{_sysconfdir}/libica/openssl3-fips.cnf
 %endif
@@ -109,5 +109,5 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.4.1-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.4.1-3
+- Import

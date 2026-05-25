@@ -1,6 +1,6 @@
 %global with_mingw 0
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %global with_mingw 1
 %endif
 
@@ -141,5 +141,5 @@ popd
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.5-18
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.5-18
+- Import

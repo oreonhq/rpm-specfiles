@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           plexus-interactivity
 Version:        1.3
@@ -32,7 +32,7 @@ Plexus component that handles interactive user input from different
 sources.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 cp %{SOURCE1} .
 
 %build
@@ -45,5 +45,5 @@ cp %{SOURCE1} .
 %license LICENSE.MIT
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3-1
+- Import

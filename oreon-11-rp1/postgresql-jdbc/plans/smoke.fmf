@@ -1,0 +1,10 @@
+summary: Basic smoke test
+discover:
+  how: fmf
+  url: https://gitlab.com/redhat/centos-stream/tests/postgresql-jdbc.git
+prepare:
+  how: install
+  package:
+    - java-21-openjdk-devel
+execute:
+  how: tmt

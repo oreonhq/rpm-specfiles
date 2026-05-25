@@ -1,7 +1,7 @@
 # See the bug #429880
 %global gcc_major  %(gcc -dumpversion || echo "666")
-# See rhbz#1193591 (do not shell out to automake at spec parse time; breaks SRPM workers without automake)
-%global automake_version unknown
+# See rhbz#1193591
+%global automake_version %(set -- `automake --version | head -n 1` ; echo ${4-unknown})
 
 %bcond_without check
 
@@ -131,7 +131,7 @@ the rest of the GNU Autotools (including GNU Autoconf and GNU Automake).
 
 %package ltdl-devel
 Summary: Tools needed for development using the GNU Libtool Dynamic Module Loader
-Requires: automake
+Requires: automake = %automake_version
 Requires: %{name}-ltdl = %{version}-%{release}
 License:  LGPL-2.0-or-later WITH Libtool-exception
 
@@ -199,5 +199,5 @@ rm -f %{buildroot}%{_libdir}/libltdl.{a,la}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.4-10
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.4-10
+- Import

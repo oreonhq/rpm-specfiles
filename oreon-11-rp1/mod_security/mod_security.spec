@@ -11,8 +11,8 @@
 
 Summary: Security module for the Apache HTTP Server
 Name: mod_security
-Version: 2.9.12
-Release: 1%{?dist}
+Version: 2.9.11
+Release: 3%{?dist}
 License: Apache-2.0
 URL: http://www.modsecurity.org/
 Source: https://github.com/owasp-modsecurity/ModSecurity/releases/download/v%{version}/modsecurity-v%{version}.tar.gz
@@ -23,12 +23,9 @@ Patch1: modsecurity-2.9.3-apulibs.patch
 Patch2: mod_security-2.9.3-remote-rules-timeout.patch
 Patch3: mod_security-2.9.7-send_error_bucket.patch
 Patch4: mod_security-2.9.7-pipedlogs.patch
-# https://github.com/owasp-modsecurity/ModSecurity/commit/0843a27048c802b63122a190a63ae8469abc55eb
-# https://github.com/owasp-modsecurity/ModSecurity/commit/6d6deb10af260c907cc5b9ad522a6a103ba714e1
-Patch5: mod_security-2.9.12-lua-5.5.patch
 
 Requires: httpd httpd-mmn = %{_httpd_mmn}
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 # Ensure apache user exists for file ownership
 Requires(pre): httpd-filesystem
 %endif
@@ -57,7 +54,7 @@ as a powerful umbrella - shielding web applications from attacks.
 %package        mlogc
 Summary:        ModSecurity Audit Log Collector
 Requires:       mod_security
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 # Ensure apache user exists for file ownership
 Requires(pre):  httpd-filesystem
 %endif
@@ -151,5 +148,5 @@ install -m0644 mlogc/mlogc-default.conf %{buildroot}%{_sysconfdir}/mlogc.conf
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.12-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.11-3
+- Import

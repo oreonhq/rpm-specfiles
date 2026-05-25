@@ -50,5 +50,5 @@ make
 %fontfiles
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6-36.
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6-36.20090803cvs
+- Import

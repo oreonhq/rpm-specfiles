@@ -1103,5 +1103,5 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.metainfo
 %{_texmf_main}/tex/latex/zapfding/
 
 %changelog
-* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12:svn77161-8
-- Import TeX Live 2025 split from f44 for Oreon 11
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12:svn54074-8
+- Import

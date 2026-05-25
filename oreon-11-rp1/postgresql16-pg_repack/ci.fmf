@@ -1,8 +1,0 @@
-summary: Tier tests
-discover:
-    how: fmf
-    repository: https://src.fedoraproject.org/tests/postgresql.git
-    ref: main
-    filter: 'tag:pg_repack'
-execute:
-    how: tmt

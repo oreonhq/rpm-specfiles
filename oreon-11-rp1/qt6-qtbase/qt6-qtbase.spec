@@ -6,13 +6,13 @@
 %global no_sse2  1
 %endif
 
-%if 0%{?rhel} && 0%{?rhel} < 9
+%if 0%{?rhel} && 0%{?rhel} < 9 || 0%{?oreon}
 %ifarch %{ix86}
 %global no_sse2  1
 %endif
 %endif
 
-%if 0%{?rhel} >= 10
+%if 0%{?rhel} >= 10 || 0%{?oreon}
 # Use mutter on RHEL 10+ since it's the only shipped compositor
 %global wlheadless_compositor mutter
 %else
@@ -29,7 +29,7 @@
 %global qt_module qtbase
 
 # use external qt_settings pkg
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %global qt_settings 1
 %endif
 
@@ -47,10 +47,8 @@ BuildRequires: pkgconfig(libsystemd)
 
 Name:    qt6-qtbase
 Summary: Qt6 - QtBase components
-Version: 6.10.3
-Release: 4%{?dist}
-# Minimum libicu for DT_NEEDED sonames bundled in libQt6Core (bump when icu rebases)
-%global oreon_icu_min 77.1
+Version: 6.11.1
+Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
@@ -99,13 +97,6 @@ Patch56: qtbase-mysql.patch
 # fix FTBFS against libglvnd-1.3.4+
 Patch58: qtbase-libglvnd.patch
 
-# upstream patches
-Patch100: qtbase-wayland-convey-preference-for-server-side-decorations.patch
-Patch101: qtbase-wayland-compress-high-frequency-mouse-events.patch
-Patch102: qtbase-wayland-optimize-scroll-operations.patch
-Patch103: qtbase-wayland-enable-event-compression-and-fix-scroll-end-event.patch
-Patch104: qtbase-wayland-fix-crash-in-qwaylandshmbackingstore-scroll.patch
-
 # Do not check any files in %%{_qt6_plugindir}/platformthemes/ for requires.
 # Those themes are there for platform integration. If the required libraries are
 # not there, the platform to integrate with isn't either. Then Qt will just
@@ -125,12 +116,12 @@ BuildRequires: ninja-build
 BuildRequires: cups-devel
 BuildRequires: desktop-file-utils
 BuildRequires: findutils
-%if 0%{?fedora} || 0%{?epel}
+%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
 BuildRequires: double-conversion-devel
 %else
 Provides:      bundled(double-conversion)
 %endif
-%if 0%{?fedora} || 0%{?epel}
+%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
 BuildRequires: libb2-devel
 %else
 Provides:      bundled(libb2)
@@ -141,6 +132,9 @@ BuildRequires: libmng-devel
 BuildRequires: libtiff-devel
 BuildRequires: libzstd-devel
 BuildRequires: mtdev-devel
+%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
+BuildRequires: tslib-devel
+%endif
 BuildRequires: pkgconfig(alsa)
 # required for -accessibility
 BuildRequires: pkgconfig(atspi-2)
@@ -168,10 +162,6 @@ BuildRequires: pkgconfig(xkbcommon-x11) >= 0.4.1
 BuildRequires: pkgconfig(xkeyboard-config)
 %global vulkan 1
 BuildRequires: pkgconfig(vulkan)
-# QtGui configure.cmake compile test links RenderDoc::RenderDoc (header-only target from FindRenderDoc.cmake)
-%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
-BuildRequires: renderdoc-devel
-%endif
 %global egl 1
 BuildRequires: pkgconfig(egl)
 BuildRequires: pkgconfig(gbm)
@@ -206,13 +196,11 @@ BuildRequires: (wlheadless-run and %{wlheadless_compositor})
 %endif
 
 Requires:      qt6-filesystem
-# libQt6Core links ICU, explicit so anaconda/minimal composes pull libicu
-Requires:      libicu%{?_isa} >= %{oreon_icu_min}
 
 Requires: %{name}-common = %{version}-%{release}
 
 ## Sql drivers
-%if 0%{?fedora} || 0%{?epel}
+%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
 %global ibase 1
 %endif
 
@@ -301,7 +289,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %package mysql
 Summary: MySQL driver for Qt6's SQL classes
-%if 0%{?fedora} > 27 || 0%{?rhel} > 8
+%if 0%{?fedora} > 27 || 0%{?rhel} > 8 || 0%{?oreon}
 BuildRequires: mariadb-connector-c-devel
 %else
 BuildRequires: mysql-devel
@@ -384,12 +372,9 @@ export LDFLAGS="$LDFLAGS $RPM_LD_FLAGS"
 export MAKEFLAGS="%{?_smp_mflags}"
 
 %cmake_qt6 \
- -DCMAKE_SKIP_PRECOMPILE_HEADERS=ON \
- -DFEATURE_glibc_fortify_source=OFF \
  -DFEATURE_accessibility=ON \
  -DFEATURE_fontconfig=ON \
  -DFEATURE_glib=ON \
- -DFEATURE_tslib=OFF \
  -DFEATURE_sse2=%{?no_sse2:OFF}%{!?no_sse2:ON} \
  -DFEATURE_icu=ON \
  -DFEATURE_enable_new_dtags=ON \
@@ -428,9 +413,6 @@ export MAKEFLAGS="%{?_smp_mflags}"
 %install
 %cmake_install
 
-# tslib input is disabled in cmake but the generic plugin can still appear in some trees; never ship it so gui does not require tslib
-rm -f %{buildroot}%{_qt6_plugindir}/generic/libqtslibplugin.so
-
 install -m644 -p -D %{SOURCE1} %{buildroot}%{_qt6_datadir}/qtlogging.ini
 
 # Qt6.pc
@@ -456,7 +438,7 @@ translationdir=%{_qt6_translationdir}
 
 Name: Qt6
 Description: Qt6 Configuration
-Version: %{version}
+Version: 6.11.1
 EOF
 
 # rpm macros
@@ -517,17 +499,7 @@ install -m 644 src/plugins/platforms/xcb/*.h %{buildroot}%{_qt6_headerdir}/QtXcb
 # Copied from OpenSUSE packages
 
 # These files are only useful for the Qt continuous integration
-rm %{buildroot}%{_qt6_libexecdir}/ensure_pro_file.cmake
 rm %{buildroot}%{_qt6_libexecdir}/qt-android-runner.py
-rm %{buildroot}%{_qt6_libexecdir}/qt-testrunner.py
-rm %{buildroot}%{_qt6_libexecdir}/sanitizer-testrunner.py
-
-# Not useful for desktop installs
-rm -r %{buildroot}%{_qt6_libdir}/cmake/Qt6ExamplesAssetDownloaderPrivate
-rm -r %{buildroot}%{_qt6_headerdir}/QtExamplesAssetDownloader
-rm %{buildroot}%{_qt6_descriptionsdir}/ExamplesAssetDownloaderPrivate.json
-rm %{buildroot}%{_qt6_libdir}/libQt6ExamplesAssetDownloader.*
-rm %{buildroot}%{_qt6_libdir}/qt6/metatypes/qt6examplesassetdownloaderprivate_metatypes.json
 
 # These shouldn't be probably installed
 rm -r %{buildroot}%{_qt6_libdir}/cmake/Qt6/3rdparty/extra-cmake-modules/*.patch
@@ -585,6 +557,7 @@ make check -k ||:
 %dir %{_qt6_plugindir}/sqldrivers/
 %dir %{_qt6_plugindir}/styles/
 %dir %{_qt6_plugindir}/tls/
+%{_qt6_plugindir}/networkinformation/libqconnman.so
 %{_qt6_plugindir}/networkinformation/libqglib.so
 %{_qt6_plugindir}/networkinformation/libqnetworkmanager.so
 %{_qt6_plugindir}/sqldrivers/libqsqlite.so
@@ -636,6 +609,8 @@ make check -k ||:
 %{_bindir}/androiddeployqt
 %{_bindir}/androiddeployqt6
 %{_bindir}/androidtestrunner
+%{_bindir}/wasmdeployqt
+%{_bindir}/wasmdeployqt6
 %{_bindir}/qdbuscpp2xml*
 %{_bindir}/qdbusxml2cpp*
 %{_bindir}/qmake*
@@ -646,6 +621,8 @@ make check -k ||:
 %{_qt6_bindir}/androiddeployqt
 %{_qt6_bindir}/androiddeployqt6
 %{_qt6_bindir}/androidtestrunner
+%{_qt6_bindir}/wasmdeployqt
+%{_qt6_bindir}/wasmdeployqt6
 %{_qt6_bindir}/qdbuscpp2xml
 %{_qt6_bindir}/qdbusxml2cpp
 %{_qt6_bindir}/qmake
@@ -717,19 +694,13 @@ make check -k ||:
 %{_qt6_libdir}/cmake/Qt6/3rdparty/extra-cmake-modules/REUSE.toml
 %{_qt6_libdir}/cmake/Qt6/3rdparty/kwin/REUSE.toml
 %{_qt6_libdir}/cmake/Qt6/*.in
-%{_qt6_libdir}/cmake/Qt6/*.h.in
 %{_qt6_libdir}/cmake/Qt6/*.cmake
-%{_qt6_libdir}/cmake/Qt6/*.cmake.in
-%{_qt6_libdir}/cmake/Qt6/PkgConfigLibrary.pc.in
+%{_qt6_libdir}/cmake/Qt6/qt-configure-module-flags.txt
 %{_qt6_libdir}/cmake/Qt6/config.tests/*
 %{_qt6_libdir}/cmake/Qt6/libexec/*
 %{_qt6_libdir}/cmake/Qt6/platforms/*.cmake
 %{_qt6_libdir}/cmake/Qt6/platforms/Platform/*.cmake
 %{_qt6_libdir}/cmake/Qt6/qbatchedtestrunner.in.cpp
-%{_qt6_libdir}/cmake/Qt6/ModuleDescription.json.in
-%{_qt6_libdir}/cmake/Qt6/QtFileConfigure.txt.in
-%{_qt6_libdir}/cmake/Qt6/QtConfigureTimeExecutableCMakeLists.txt.in
-%{_qt6_libdir}/cmake/Qt6/QtSeparateDebugInfo.Info.plist.in
 %{_qt6_libdir}/cmake/Qt6/3rdparty/extra-cmake-modules/COPYING-CMAKE-SCRIPTS
 %{_qt6_libdir}/cmake/Qt6/3rdparty/extra-cmake-modules/find-modules/*.cmake
 %{_qt6_libdir}/cmake/Qt6/3rdparty/extra-cmake-modules/modules/*.cmake
@@ -795,6 +766,7 @@ make check -k ||:
 %{_qt6_metatypesdir}/qt6xml_metatypes.json
 %{_qt6_libdir}/pkgconfig/*.pc
 %{_qt6_mkspecsdir}/*
+%{_qt6_datadir}/json_schema/
 ## private-devel globs
 %exclude %{_qt6_headerdir}/*/%{qt_version}/
 
@@ -856,15 +828,6 @@ make check -k ||:
 %{_qt6_descriptionsdir}/TestInternalsPrivate.json
 
 %files static
-%dir %{_qt6_libdir}/cmake/Qt6ExampleIconsPrivate
-%{_qt6_libdir}/cmake/Qt6ExampleIconsPrivate/*.cmake
-%{_qt6_headerdir}/QtExampleIcons
-%{_qt6_libdir}/libQt6ExampleIcons.a
-%{_qt6_libdir}/libQt6ExampleIcons.prl
-%{_qt6_descriptionsdir}/ExampleIconsPrivate.json
-%dir %{_qt6_archdatadir}/objects-*
-%{_qt6_archdatadir}/objects-*/ExampleIconsPrivate_resources_1/
-%{_qt6_metatypesdir}/qt6exampleiconsprivate_metatypes.json
 %dir %{_qt6_libdir}/cmake/Qt6DeviceDiscoverySupportPrivate
 %{_qt6_libdir}/cmake/Qt6DeviceDiscoverySupportPrivate/*.cmake
 %{_qt6_headerdir}/QtDeviceDiscoverySupport
@@ -937,6 +900,9 @@ make check -k ||:
 %{_qt6_plugindir}/generic/libqevdevtabletplugin.so
 %{_qt6_plugindir}/generic/libqevdevtouchplugin.so
 %{_qt6_plugindir}/generic/libqlibinputplugin.so
+%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
+%{_qt6_plugindir}/generic/libqtslibplugin.so
+%endif
 %{_qt6_plugindir}/generic/libqtuiotouchplugin.so
 # Imageformats
 %{_qt6_plugindir}/imageformats/libqico.so
@@ -981,18 +947,5 @@ make check -k ||:
 %{_qt6_datadir}/wayland/protocols/
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
-- Skip CMake precompiled headers (mock disk)
-
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-3
-- Turn off Qt glibc_fortify_source (redhat-hardened-cc1 already sets _FORTIFY_SOURCE=3)
-
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
-- BuildRequires renderdoc-devel for Qt 6.10 RenderDoc header configure test
-
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-1
-- Bump to 6.10.3 so %%{_qt6_version} matches published qt6-qtbase (installer dep closure)
-- Qt6.pc Version follows %%{version}
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
+- Import

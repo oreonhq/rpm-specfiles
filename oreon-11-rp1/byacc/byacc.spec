@@ -11,10 +11,10 @@ Release: 3%{?dist}
 # declaration" was documented in fedora-license-data as per Fedora policy
 # via the following commit:
 # https://gitlab.com/fedora/legal/fedora-license-data/-/commit/04ec53689413bb
-License: LicenseRef-Fedora-Public-Domain AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND X11 AND X11-distribute-modifications-variant AND FSFUL
+License: LicenseRef-Public-Domain AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND X11 AND X11-distribute-modifications-variant AND FSFUL
 
-URL: https://invisible-island.net/byacc/byacc.html
-Source: https://invisible-island.net/archives/byacc/byacc-%{byaccdate}.tgz
+URL: http://invisible-island.net/byacc/byacc.html
+Source: ftp://invisible-island.net/byacc/byacc-%{byaccdate}.tgz
 
 BuildRequires:  gcc
 BuildRequires: make
@@ -59,5 +59,5 @@ echo ====================TESTING END=====================
 %{_mandir}/man1/byacc.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.%{byaccdate}-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.20241231-3
+- Import

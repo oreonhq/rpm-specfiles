@@ -64,5 +64,5 @@ rm -rf %{buildroot}/%{_libdir}/libkeybinder-3.0.la
 %{_datadir}/gtk-doc/html/keybinder-3.0/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.2-22
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.2-22
+- Import

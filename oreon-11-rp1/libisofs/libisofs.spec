@@ -2,19 +2,19 @@
 
 Summary:        Library to create ISO 9660 disk images
 Name:           libisofs
-Version:        1.5.6
-Release:        8%{?dist}
+Version:        1.5.8
+Release:        3%{?dist}
 # libisofs/make_isohybrid_mbr.c is LGPL-2.0-or-later, rest is GPL-2.0-or-later
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            https://libburnia-project.org/
-Source0:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.tar.gz
-Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.tar.gz.sig
+Source0:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.pl02.tar.gz
+Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.pl02.tar.gz.sig
 Source2:        https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB007C4DD029E9CBDFC0ABC0A854
 Patch0:         libisofs-0.6.16-multilib.patch
 Patch1:         libisofs-1.5.4-rpath.patch
 BuildRequires:  gnupg2
 BuildRequires:  gcc, make, libacl-devel, zlib-devel
-%if 0%{?rhel} && "%{name}" != "%{pkgname}"
+%if 0%{?rhel} && "%{name}" != "%{pkgname}" || 0%{?oreon}
 BuildRequires:  autoconf, automake, libtool
 %endif
 
@@ -49,12 +49,10 @@ documentation for developing applications that use %{name}.
 
 %prep
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%setup -q -n %{pkgname}-%{version}
-%patch -P0 -p1 -b .multilib
-%patch -P1 -p1 -b .rpath
+%autosetup -n %{pkgname}-%{version} -p1
 
 # Rename from libisofs to libisofs1 for EPEL
-%if 0%{?rhel} && "%{name}" != "%{pkgname}"
+%if 0%{?rhel} && "%{name}" != "%{pkgname}" || 0%{?oreon}
 sed -e 's@libisofs_libisofs@libisofs_libisofs1@g' \
     -e 's@libisofs/libisofs.la@libisofs/libisofs1.la@g' \
     -e 's@(includedir)/libisofs@(includedir)/libisofs1@g' \
@@ -98,5 +96,5 @@ rm -rf $RPM_BUILD_ROOT%{_defaultdocdir}
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.6-8
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.8-3
+- Import

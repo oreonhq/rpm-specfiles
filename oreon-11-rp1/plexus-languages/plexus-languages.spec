@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           plexus-languages
 Version:        1.2.0
@@ -34,7 +34,7 @@ Plexus Languages is a set of Plexus components that maintain shared
 language features.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 cp %{SOURCE1} .
 
@@ -51,5 +51,5 @@ cp %{SOURCE1} .
 %license LICENSE-2.0.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-1
+- Import

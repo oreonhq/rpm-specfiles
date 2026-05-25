@@ -101,5 +101,5 @@ install -p -m 644 examples/spiceqxl.xorg.conf.example \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.6-9
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.6-9
+- Import

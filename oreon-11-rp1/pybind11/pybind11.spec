@@ -1,7 +1,7 @@
 # While the headers are architecture independent, the package must be
 # built separately on all architectures so that the tests are run
 # properly. See also
-# https://fedoraproject.org/wiki/Packaging:Guidelines#Packaging_Header_Only_Libraries
+# 
 %global debug_package %{nil}
 
 # Whether to run additional tests, enabled by default
@@ -9,7 +9,7 @@
 
 
 Name:    pybind11
-Version: 3.0
+Version: 3.0.4
 Release: %autorelease
 Summary: Seamless operability between C++11 and Python
 License: BSD-3-Clause
@@ -18,9 +18,6 @@ Source0: https://github.com/pybind/pybind11/archive/v%{version}/%{name}-%{versio
 
 # Use the `/usr` prefix for the python commands
 Patch1:  pybind11-2.13.6-Use_usr_prefix.patch
-# tomlkit is only used when creating an upstream package
-# https://github.com/pybind/pybind11/pull/5990
-Patch2:  pybind11-3.0-tomlkit-dep.patch
 
 # Needed to build the python libraries
 BuildRequires: python3-devel
@@ -53,7 +50,7 @@ C++ code.
 
 %package devel
 Summary:  Development headers for pybind11
-# https://fedoraproject.org/wiki/Packaging:Guidelines#Packaging_Header_Only_Libraries
+# 
 Provides: %{name}-static = %{version}-%{release}
 
 %description devel
@@ -118,5 +115,5 @@ This package contains the Python 3 files.
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.4-1
+- Import

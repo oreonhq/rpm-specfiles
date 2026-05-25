@@ -71,5 +71,5 @@ systemctl --no-reload preset low-memory-monitor.service &>/dev/null || :
 %{_datadir}/gtk-doc/html/%{name}/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1-14
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1-14
+- Import

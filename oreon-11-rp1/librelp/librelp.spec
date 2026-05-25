@@ -1,12 +1,10 @@
 Summary: The Reliable Event Logging Protocol library
 Name: librelp
-Version: 1.11.0
-Release: 8%{?dist}
+Version: 1.12.0
+Release: 1%{?dist}
 License: GPL-3.0-or-later
 URL: http://www.rsyslog.com/
 Source0: http://download.rsyslog.com/%{name}/%{name}-%{version}.tar.gz
-# https://github.com/rsyslog/librelp/pull/266
-Patch0: 0001-tcp-avoid-deprecated-ENGINE_cleanup.patch
 
 %description
 Librelp is an easy to use library for the RELP protocol. RELP (stands
@@ -55,5 +53,5 @@ rm $RPM_BUILD_ROOT/%{_libdir}/*.la
 %{_libdir}/pkgconfig/relp.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.11.0-8
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12.0-1
+- Import

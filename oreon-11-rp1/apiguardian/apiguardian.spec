@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           apiguardian
 Version:        1.1.2
@@ -28,7 +28,7 @@ order to publish their API status and level of stability and to
 indicate how they are intended to be used by consumers of the API.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 find -name \*.jar -delete
 cp -p %{SOURCE100} pom.xml
 
@@ -103,5 +103,5 @@ mv src/module/java/* src/main/java
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.2-1
+- Import

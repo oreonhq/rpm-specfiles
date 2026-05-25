@@ -1,5 +1,3 @@
-%bcond_with xmlto_tex 0
-
 Name: xmlto
 Version: 0.0.29
 Release: 5%{?dist}
@@ -27,7 +25,6 @@ Requires: util-linux, flex
 This is a package for converting XML files to various formats using XSL
 stylesheets.
 
-%if %{with xmlto_tex}
 %package tex
 License: GPL-2.0-or-later
 Summary: A set of xmlto backends with TeX requirements
@@ -40,7 +37,6 @@ BuildArch: noarch
 %description tex
 This subpackage contains xmlto backend scripts which do require
 PassiveTeX/TeX for functionality.
-%endif
 
 %package xhtml
 License: GPL-2.0-or-later
@@ -82,17 +78,15 @@ make check
 %exclude %dir %{_datadir}/xmlto/format/xhtml1/
 %exclude %{_datadir}/xmlto/format/xhtml1
 
-%if %{with xmlto_tex}
 %files tex
 %{_datadir}/xmlto/format/fo/dvi
 %{_datadir}/xmlto/format/fo/ps
 %{_datadir}/xmlto/format/fo/pdf
-%endif
 
 %files xhtml
 %dir %{_datadir}/xmlto/format/xhtml1/
 %{_datadir}/xmlto/format/xhtml1/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.29-5
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.29-5
+- Import

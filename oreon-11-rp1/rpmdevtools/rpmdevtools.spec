@@ -27,7 +27,7 @@ BuildRequires:  perl-generators
 # python dependencies for spectool
 # spectool is executed for creating man page
 BuildRequires:  python3-devel
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 BuildRequires:  python3dist(progressbar2)
 %endif
 BuildRequires:  python3dist(requests)
@@ -37,7 +37,7 @@ BuildRequires:  emacs-common >= 1:22.3-3
 BuildRequires:  bash-completion
 Requires:       curl
 Requires:       diffutils
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 Requires:       fakeroot
 %endif
 Requires:       file
@@ -46,7 +46,7 @@ Requires:       gawk
 Requires:       grep
 Requires:       rpm-build >= 4.4.2.3
 Requires:       python3dist(argcomplete)
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 Requires:       python3dist(progressbar2)
 %endif
 Requires:       python3dist(requests)
@@ -80,7 +80,7 @@ rpmdev-bumpspec     Bump revision in specfile
 grep -lF "%{_bindir}/python " * \
 | xargs sed -i -e "s|%{_bindir}/python |%{_bindir}/python3 |"
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 # Let spectool find the bundled progressbar2 implementation
 cp %{SOURCE1} .
 sed -i \
@@ -114,7 +114,7 @@ done
 ln -sr %{buildroot}%{_bindir}/rpmdev-spectool %{buildroot}%{_bindir}/spectool
 echo ".so man1/rpmdev-spectool.1" > %{buildroot}%{_mandir}/man1/spectool.1
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 cp %{SOURCE1} %{buildroot}%{_datadir}/rpmdevtools/
 %py_byte_compile %{python3} %{buildroot}%{_datadir}/rpmdevtools/
 %endif
@@ -132,5 +132,5 @@ cp %{SOURCE1} %{buildroot}%{_datadir}/rpmdevtools/
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.6-14
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.6-14
+- Import

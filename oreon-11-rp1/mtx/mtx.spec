@@ -57,5 +57,5 @@ chmod a-x contrib/config_sgen_solaris.sh contrib/mtx-changer
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.12-37
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.12-37
+- Import

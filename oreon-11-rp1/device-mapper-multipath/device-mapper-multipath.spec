@@ -1,5 +1,5 @@
 Name:    device-mapper-multipath
-Version: 0.14.3
+Version: 0.13.1
 Release: 1%{?dist}
 Summary: Tools to manage multipath devices using device-mapper
 # readline uses GPL-3.0-only
@@ -8,8 +8,8 @@ URL:     http://christophe.varoqui.free.fr/
 
 # The source for this package was pulled from upstream's git repo.  Use the
 # following command to generate the tarball
-# curl -L https://github.com/opensvc/multipath-tools/archive/0.14.3.tar.gz -o multipath-tools-0.14.3.tgz
-Source0: multipath-tools-0.14.3.tgz
+# curl -L https://github.com/opensvc/multipath-tools/archive/0.13.1.tar.gz -o multipath-tools-0.13.1.tgz
+Source0: multipath-tools-0.13.1.tgz
 Source1: multipath.conf
 Patch0001: 0001-RH-fixup-udev-rules-for-redhat.patch
 Patch0002: 0002-RH-Remove-the-property-blacklist-exception-builtin.patch
@@ -111,7 +111,7 @@ This package contains the files needed to develop applications that use
 device-mapper-multipath's libdmmp C API library
 
 %prep
-%autosetup -n multipath-tools-0.14.3 -p1
+%autosetup -n multipath-tools-0.13.1 -p1
 cp %{SOURCE1} .
 
 %build
@@ -234,5 +234,5 @@ fi
 %{_pkgconfdir}/libdmmp.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.14.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.13.1-1
+- Import

@@ -1,5 +1,5 @@
 # build Rust binary and extensions for non-Enterprise Linux systems
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 %ifarch %{rust_arches}
 %bcond_with rust
 %else
@@ -279,5 +279,5 @@ rm -rf %{buildroot}%{python3_sitearch}/mercurial/locale
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.2-1
+- Import

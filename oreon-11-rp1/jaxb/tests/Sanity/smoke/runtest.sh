@@ -11,8 +11,8 @@ rlJournalStart
     CLASSPATH+=":$(xmvn-resolve org.glassfish.jaxb:jaxb-runtime)"
     CLASSPATH+=":$(xmvn-resolve org.glassfish.jaxb:jaxb-core)"
     export CLASSPATH
-    rlRun "/usr/lib/jvm/java-25-openjdk/bin/javac Smoke.java"
-    rlRun "/usr/lib/jvm/java-25-openjdk/bin/java -cp \"${CLASSPATH}:plans\" Smoke"
+    rlRun "/usr/lib/jvm/java-21-openjdk/bin/javac Smoke.java"
+    rlRun "/usr/lib/jvm/java-21-openjdk/bin/java -cp \"${CLASSPATH}:plans\" Smoke"
   rlPhaseEnd
 
 rlJournalEnd

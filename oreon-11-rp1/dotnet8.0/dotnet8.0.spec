@@ -12,16 +12,16 @@
 # dotnet-host and netstandard-targeting-pack-2.1
 %global is_latest_dotnet 0
 
-%global host_version 8.0.25
-%global runtime_version 8.0.25
-%global aspnetcore_runtime_version %{runtime_version}
-%global sdk_version 8.0.125
+%global host_version 8.0.27
+%global runtime_version 8.0.27
+%global aspnetcore_runtime_version 8.0.27
+%global sdk_version 8.0.127
 %global sdk_feature_band_version %(echo %{sdk_version} | cut -d '-' -f 1 | sed -e 's|[[:digit:]][[:digit:]]$|00|')
 %global templates_version %{runtime_version}
 #%%global templates_version %%(echo %%{runtime_version} | awk 'BEGIN { FS="."; OFS="." } {print $1, $2, $3+1 }')
 
 # upstream can produce releases with a different tag than the SDK version
-%global upstream_tag v%{sdk_version}
+%global upstream_tag v8.0.127
 %global upstream_tag_without_v %(echo %{upstream_tag} | sed -e 's|^v||')
 
 %global host_rpm_version %{host_version}
@@ -52,7 +52,7 @@ Name:           dotnet%{dotnetver}
 Version:        %{sdk_rpm_version}
 Release:        1%{?dist}
 Summary:        .NET Runtime and SDK
-License:        0BSD AND Apache-2.0 AND (Apache-2.0 WITH LLVM-exception) AND APSL-2.0 AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND BSL-1.0 AND bzip2-1.0.6 AND CC0-1.0 AND CC-BY-3.0 AND CC-BY-4.0 AND CC-PDDC AND CNRI-Python AND EPL-1.0 AND GPL-2.0-only AND (GPL-2.0-only WITH GCC-exception-2.0) AND GPL-2.0-or-later AND GPL-3.0-only AND ICU AND ISC AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-Fedora-Public-Domain AND LicenseRef-ISO-8879 AND MIT AND MIT-Wu AND MS-PL AND MS-RL AND NCSA AND OFL-1.1 AND OpenSSL AND Unicode-DFS-2015 AND Unicode-DFS-2016 AND W3C-19980720 AND X11 AND Zlib
+License:        0BSD AND Apache-2.0 AND (Apache-2.0 WITH LLVM-exception) AND APSL-2.0 AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND BSL-1.0 AND bzip2-1.0.6 AND CC0-1.0 AND CC-BY-3.0 AND CC-BY-4.0 AND CC-PDDC AND CNRI-Python AND EPL-1.0 AND GPL-2.0-only AND (GPL-2.0-only WITH GCC-exception-2.0) AND GPL-2.0-or-later AND GPL-3.0-only AND ICU AND ISC AND LGPL-2.1-only AND LGPL-2.1-or-later AND LicenseRef-Public-Domain AND LicenseRef-ISO-8879 AND MIT AND MIT-Wu AND MS-PL AND MS-RL AND NCSA AND OFL-1.1 AND OpenSSL AND Unicode-DFS-2015 AND Unicode-DFS-2016 AND W3C-19980720 AND X11 AND Zlib
 
 URL:            https://github.com/dotnet/
 
@@ -102,7 +102,7 @@ Patch7:         runtime-clang-20-support.patch
 ExclusiveArch:  aarch64 ppc64le s390x x86_64
 
 
-%if 0%{?fedora} >= 43
+%if 0%{?fedora} >= 43 || 0%{?oreon}
 BuildRequires:  clang20
 %else
 BuildRequires:  clang
@@ -137,7 +137,7 @@ BuildRequires:  lttng-ust-devel
 BuildRequires:  make
 #BuildRequires:  nodejs-devel
 BuildRequires:  openssl-devel
-%if 0%{?fedora} >= 41
+%if 0%{?fedora} >= 41 || 0%{?oreon}
 BuildRequires:  openssl-devel-engine
 %endif
 BuildRequires:  python3
@@ -186,7 +186,7 @@ application to drive everything.
 # code (source or build) is generally version specific. We have kept
 # it around in older versions of RHEL and Fedora. But no reason to
 # continue this mistake.
-%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 )
+%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 ) || 0%{?oreon}
 
 %package -n dotnet
 
@@ -499,7 +499,7 @@ cp -a %{_libdir}/dotnet previously-built-dotnet
 find previously-built-dotnet
 %endif
 
-%if 0%{?fedora} || 0%{?rhel} >= 9
+%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
 # Setting this macro ensures that only clang supported options will be
 # added to ldflags and cflags.
 %global toolchain clang
@@ -534,7 +534,7 @@ CXXFLAGS=$(echo $CXXFLAGS | sed -e 's/ -march=z13//')
 CXXFLAGS=$(echo $CXXFLAGS | sed -e 's/ -mtune=z14//')
 %endif
 
-%if 0%{?rhel} >= 10
+%if 0%{?rhel} >= 10 || 0%{?oreon}
 # Workaround for https://github.com/dotnet/runtime/issues/109611
 # FIXME: Remove this, and replace with upstream fix
 CFLAGS=$(echo $CFLAGS | sed -e 's/-march=x86-64-v3 //')
@@ -704,7 +704,7 @@ rm %{buildroot}%{_rpmmacrodir}/macros.dotnet
 
 
 %check
-%if 0%{?fedora} > 35
+%if 0%{?fedora} > 35 || 0%{?oreon}
 # lttng in Fedora > 35 is incompatible with .NET
 export COMPlus_LTTng=0
 %endif
@@ -715,7 +715,7 @@ export COMPlus_LTTng=0
 %endif
 
 
-%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 )
+%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 ) || 0%{?oreon}
 %files -n dotnet
 # empty package useful for dependencies
 %endif
@@ -780,5 +780,5 @@ export COMPlus_LTTng=0
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{sdk_rpm_version}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.0.127-1
+- Import

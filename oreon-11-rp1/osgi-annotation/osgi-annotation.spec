@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           osgi-annotation
 Version:        8.1.0
@@ -28,7 +28,7 @@ Annotations for use in compiling OSGi bundles. This package is not normally
 needed at run-time.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 mkdir -p src/main/java && mv OSGI-OPT/src/org src/main/java
 
@@ -68,5 +68,5 @@ cp -p %{SOURCE1} pom.xml
 %license META-INF/LICENSE META-INF/NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.1.0-1
+- Import

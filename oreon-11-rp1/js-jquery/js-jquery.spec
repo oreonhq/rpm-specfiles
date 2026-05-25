@@ -20,7 +20,7 @@ Patch1:         %{name}-disable-gzip-js.patch
 
 BuildRequires:  web-assets-devel
 BuildRequires:  nodejs-packaging
-BuildRequires:  nodejs, /usr/bin/node
+BuildRequires:  nodejs
 
 Provides:       jquery = %{version}-%{release}
 Provides:       %{name}-static = %{version}-%{release}
@@ -81,5 +81,5 @@ ln -s %{version} %{installdir}/%{ver_x}.%{ver_y}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.7.1-8
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.7.1-8
+- Import

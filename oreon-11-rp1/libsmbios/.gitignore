@@ -1,6 +1,0 @@
-.build*.log
-libsmbios-*.tar.*
-libsmbios-*/
-*.rpm
-.*.sw?
-*~

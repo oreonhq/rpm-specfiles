@@ -1,4 +1,4 @@
-%if 0%{?fedora} || 0%{?rhel} > 6
+%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
 %global python3_dbus_dir %(%{__python3} -c "import dbus.mainloop; print(dbus.mainloop.__path__[0])" 2>/dev/null || echo "%{python3_sitearch}/dbus/mainloop")
 %endif
 
@@ -41,7 +41,7 @@ BuildRequires: chrpath
 BuildRequires: findutils
 BuildRequires: pkgconfig(dbus-1)
 BuildRequires: pkgconfig(dbus-python)
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 BuildRequires: pkgconfig(phonon4qt5)
 %endif
 BuildRequires: qt5-qtbase-private-devel
@@ -291,5 +291,5 @@ sed -i \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.12-0.2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.12-0.2
+- Import

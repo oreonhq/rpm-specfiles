@@ -17,7 +17,7 @@ Release: 2%{?dist}
 # protocol/discovery/* - LGPL-2.1-or-later
 # protocol/* - GPL2only
 # scan/sane/sane.h - Public Domain
-License: GPL-2.0-or-later AND MIT AND BSD-3-Clause-HP AND IJG AND GPL-2.0-only AND LGPL-2.1-or-later AND BSD-2-Clause AND LicenseRef-Fedora-Public-Domain AND python-ldap
+License: GPL-2.0-or-later AND MIT AND BSD-3-Clause-HP AND IJG AND GPL-2.0-only AND LGPL-2.1-or-later AND BSD-2-Clause AND LicenseRef-Public-Domain AND python-ldap
 
 Url: https://developers.hp.com/hp-linux-imaging-and-printing
 # Original source tarball
@@ -258,7 +258,7 @@ Patch73: hplip-scan-size.patch
 # https://bugs.launchpad.net/hplip/+bug/2110101
 Patch74: hplip-plugin-stdout.patch
 
-%if 0%{?fedora} || 0%{?rhel} <= 8
+%if 0%{?fedora} || 0%{?rhel} <= 8 || 0%{?oreon}
 # mention hplip-gui if you want to have GUI
 Patch1000: hplip-fedora-gui.patch
 %endif
@@ -272,7 +272,7 @@ BuildRequires: automake
 BuildRequires: cups
 # uses functions from CUPS in filters, backends and libraries defining them
 BuildRequires: cups-devel
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 # needed for desktop file validation in spec file
 BuildRequires: desktop-file-utils
 %endif
@@ -309,7 +309,7 @@ BuildRequires: sane-backends-devel
 # macros: %%{_tmpfilesdir}, %%{_udevrulesdir}
 BuildRequires: systemd
 
-%if 0%{?fedora} || 0%{?rhel} <= 8
+%if 0%{?fedora} || 0%{?rhel} <= 8 || 0%{?oreon}
 Suggests: hplip-gui
 %endif
 # uses avahi-browse for discovering IPP-over-USB printers
@@ -330,7 +330,7 @@ Requires: curl
 Requires: %{_bindir}/gpg
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Requires: python3-dbus
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 Requires: python3-pillow
 %endif
 # user+group lp
@@ -365,7 +365,7 @@ Requires: python3
 %description libs
 Libraries needed by HPLIP.
 
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 %package gui
 Summary: HPLIP graphical tools
 BuildRequires: libappstream-glib
@@ -625,7 +625,7 @@ done
 %patch -P 74 -p1 -b .plugin-stdout
 
 # Fedora specific patches now, don't put a generic patches under it
-%if 0%{?fedora} || 0%{?rhel} <= 8
+%if 0%{?fedora} || 0%{?rhel} <= 8 || 0%{?oreon}
 # mention hplip-gui should be installed if you want GUI
 %patch -P 1000 -p1 -b .fedora-gui
 %endif
@@ -748,7 +748,7 @@ rm -rf %{buildroot}%{_bindir}/hp-unload \
 # window), so don't ship the launcher yet.
 rm -f %{buildroot}%{_sysconfdir}/xdg/autostart/hplip-systray.desktop
 
-%if 0%{?rhel} > 8
+%if 0%{?rhel} > 8 || 0%{?oreon}
 rm -rf %{buildroot}%{_bindir}/hp-check \
        %{buildroot}%{_bindir}/hp-devicesettings \
        %{buildroot}%{_bindir}/hp-diagnose_plugin \
@@ -788,7 +788,7 @@ rm -rf %{buildroot}%{_bindir}/hp-check \
 
 install -p -m755 hp-plugin %{buildroot}%{_bindir}/hp-plugin-download
 
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 mkdir -p %{buildroot}%{_datadir}/metainfo
 cp %{SOURCE3} %{buildroot}%{_datadir}/metainfo/
 
@@ -868,7 +868,7 @@ find doc/images -type f -exec chmod 644 {} \;
 %{_bindir}/hp-plugin-download
 %{_bindir}/hp-probe
 %{_bindir}/hp-query
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 %{_bindir}/hp-scan
 %endif
 %{_bindir}/hp-sendfax
@@ -906,7 +906,7 @@ find doc/images -type f -exec chmod 644 {} \;
 %{_datadir}/hplip/plugin.py*
 %{_datadir}/hplip/probe.py*
 %{_datadir}/hplip/query.py*
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 %{_datadir}/hplip/scan.py*
 %endif
 %{_datadir}/hplip/sendfax.py*
@@ -923,7 +923,7 @@ find doc/images -type f -exec chmod 644 {} \;
 %{_datadir}/hplip/data/ps
 %{_datadir}/hplip/installer
 %{_datadir}/hplip/prnt
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 %{_datadir}/hplip/scan
 %endif
 %{_datadir}/ppd
@@ -952,7 +952,7 @@ find doc/images -type f -exec chmod 644 {} \;
 # Python extension
 %{python3_sitearch}/*
 
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 %files gui
 %{_bindir}/hp-check
 %{_bindir}/hp-devicesettings
@@ -994,5 +994,5 @@ find doc/images -type f -exec chmod 644 {} \;
 %config(noreplace) %{_sysconfdir}/sane.d/dll.d/hpaio
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.25.8-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.25.8-2
+- Import

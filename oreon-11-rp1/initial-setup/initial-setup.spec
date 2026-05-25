@@ -3,7 +3,7 @@
 
 Name: initial-setup
 Summary: Initial system configuration utility
-URL: https://fedoraproject.org/wiki/InitialSetup
+URL: 
 License: GPL-2.0-or-later
 Version: 0.3.101
 Release: 7%{?dist}
@@ -156,5 +156,5 @@ rm -v %{buildroot}%{_libexecdir}/%{name}/firstboot-windowmanager
 %find_lang %{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.101-7
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.101-7
+- Import

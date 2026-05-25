@@ -1,7 +1,0 @@
-/*.src.rpm
-/.build-*.log
-/.*.swp
-/results_cyrus-imapd/
-/cyrus-imapd-*/
-/cyrus-imapd-*.tar.gz
-/cyrus-imapd-*.gz.sig

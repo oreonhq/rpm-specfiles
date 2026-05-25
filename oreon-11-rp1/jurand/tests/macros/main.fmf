@@ -1,0 +1,5 @@
+summary: Jurand macros test
+description: |
+  Test whether Jurand RPM macros work.
+require:
+  - rpm-build

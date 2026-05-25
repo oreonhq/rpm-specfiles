@@ -1,6 +1,6 @@
 %global gem_name coderay
 
-%if %{undefined rhel}
+%if %{undefined rhel} || 0%{?oreon}
 %bcond_without shoulda
 %endif
 
@@ -105,5 +105,5 @@ popd
 %doc %{gem_instdir}/README_INDEX.rdoc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.3-12
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.3-12
+- Import

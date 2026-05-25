@@ -8,7 +8,7 @@
 
 %global with_mingw 0
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %global with_mingw 1
 %endif
 
@@ -330,5 +330,5 @@ rm -f $RPM_BUILD_ROOT%{mingw64_mandir}/man1/gvnccapture.1*
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-1
+- Import

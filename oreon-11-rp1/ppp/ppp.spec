@@ -54,7 +54,7 @@ BuildRequires: systemd-devel
 BuildRequires: glib2-devel
 BuildRequires: openssl-devel
 BuildRequires: libxcrypt-devel
-%if %{defined rhel}
+%if %{defined rhel} || 0%{?oreon}
 Provides: bundled(linux-atm) = 2.4.1
 %else
 BuildRequires: linux-atm-libs-devel
@@ -199,5 +199,5 @@ install -m0644 -D ppp.sysusers.conf %{buildroot}%{_sysusersdir}/ppp.conf
 %{_libdir}/pkgconfig/pppd.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.1-7
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.1-7
+- Import

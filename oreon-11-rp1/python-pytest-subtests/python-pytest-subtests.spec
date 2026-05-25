@@ -18,7 +18,7 @@ BuildOption(install):   -l pytest_subtests
 # (For similar reasons, we don’t pass -t to %%pyproject_buildrequires and we
 # run tests via %%pytest directly instead of via %%tox: tox is unwanted in
 # RHEL/ELN, and the benefit of using it in this package is small.)
-%if %{undefined rhel}
+%if %{undefined rhel} || 0%{?oreon}
 BuildRequires:  python3dist(pytest-xdist)
 %endif
 
@@ -53,5 +53,5 @@ export SETUPTOOLS_SCM_PRETEND_VERSION='%{version}'
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.15.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.15.0-1
+- Import

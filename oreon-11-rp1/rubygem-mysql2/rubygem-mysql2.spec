@@ -28,7 +28,7 @@ BuildRequires: rubygem(rspec)
 # Used in mysql_install_db
 BuildRequires: %{_bindir}/hostname
 BuildRequires: rubygem(bigdecimal)
-%if !0%{?rhel}
+%if !0%{?rhel} || 0%{?oreon}
 # Used in spec/em/em_spec.rb as optional dependency.
 # If rubygem-eventmachine is not present, the tests in the file are skipped.
 BuildRequires: rubygem(eventmachine)
@@ -189,5 +189,5 @@ kill "$(cat "${MYSQL_TEST_PID_FILE}")"
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.7-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.7-3
+- Import

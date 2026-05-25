@@ -1,6 +1,6 @@
-diff -rupN --no-dereference giflib-6.1.2/getarg.c giflib-6.1.2-new/getarg.c
---- giflib-6.1.2/getarg.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/getarg.c	2026-03-10 22:37:41.874173756 +0100
+diff -rupN --no-dereference giflib-6.1.3/getarg.c giflib-6.1.3-new/getarg.c
+--- giflib-6.1.3/getarg.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/getarg.c	2026-05-12 22:33:37.039446330 +0200
 @@ -112,7 +112,7 @@ have the same length and format, i.e. si
  #include <stdlib.h>
  #include <string.h>
@@ -10,9 +10,9 @@ diff -rupN --no-dereference giflib-6.1.2/getarg.c giflib-6.1.2-new/getarg.c
  
  #define MAX_PARAM 100 /* maximum number of parameters allowed. */
  #define CTRL_STR_MAX_LEN 1024
-diff -rupN --no-dereference giflib-6.1.2/gif2rgb.c giflib-6.1.2-new/gif2rgb.c
---- giflib-6.1.2/gif2rgb.c	2026-03-10 22:37:41.849208167 +0100
-+++ giflib-6.1.2-new/gif2rgb.c	2026-03-10 22:37:41.875106382 +0100
+diff -rupN --no-dereference giflib-6.1.3/gif2rgb.c giflib-6.1.3-new/gif2rgb.c
+--- giflib-6.1.3/gif2rgb.c	2026-05-12 22:33:37.011111508 +0200
++++ giflib-6.1.3-new/gif2rgb.c	2026-05-12 22:33:37.039849495 +0200
 @@ -34,7 +34,7 @@ with our utilities mainly interesting as
  #include <io.h>
  #endif /* _WIN32 */
@@ -22,9 +22,9 @@ diff -rupN --no-dereference giflib-6.1.2/gif2rgb.c giflib-6.1.2-new/gif2rgb.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "gif2rgb"
-diff -rupN --no-dereference giflib-6.1.2/gifbg.c giflib-6.1.2-new/gifbg.c
---- giflib-6.1.2/gifbg.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/gifbg.c	2026-03-10 22:37:41.875349272 +0100
+diff -rupN --no-dereference giflib-6.1.3/gifbg.c giflib-6.1.3-new/gifbg.c
+--- giflib-6.1.3/gifbg.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/gifbg.c	2026-05-12 22:33:37.040111722 +0200
 @@ -13,7 +13,7 @@ gifbg - generate a test-pattern GIF
  #include <string.h>
  #include <limits.h>
@@ -34,9 +34,9 @@ diff -rupN --no-dereference giflib-6.1.2/gifbg.c giflib-6.1.2-new/gifbg.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "gifbg"
-diff -rupN --no-dereference giflib-6.1.2/gifbuild.c giflib-6.1.2-new/gifbuild.c
---- giflib-6.1.2/gifbuild.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/gifbuild.c	2026-03-10 22:37:41.875567543 +0100
+diff -rupN --no-dereference giflib-6.1.3/gifbuild.c giflib-6.1.3-new/gifbuild.c
+--- giflib-6.1.3/gifbuild.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/gifbuild.c	2026-05-12 22:33:37.040389361 +0200
 @@ -14,7 +14,7 @@ gifbuild - dump GIF data in a textual fo
  #include <stdint.h>
  #include <limits.h>
@@ -46,9 +46,9 @@ diff -rupN --no-dereference giflib-6.1.2/gifbuild.c giflib-6.1.2-new/gifbuild.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "gifbuild"
-diff -rupN --no-dereference giflib-6.1.2/gifclrmp.c giflib-6.1.2-new/gifclrmp.c
---- giflib-6.1.2/gifclrmp.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/gifclrmp.c	2026-03-10 22:37:41.875829799 +0100
+diff -rupN --no-dereference giflib-6.1.3/gifclrmp.c giflib-6.1.3-new/gifclrmp.c
+--- giflib-6.1.3/gifclrmp.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/gifclrmp.c	2026-05-12 22:33:37.040658803 +0200
 @@ -14,7 +14,7 @@ gifclrmap - extract colormaps from GIF i
  #include <stdlib.h>
  #include <string.h>
@@ -58,9 +58,9 @@ diff -rupN --no-dereference giflib-6.1.2/gifclrmp.c giflib-6.1.2-new/gifclrmp.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "gifclrmp"
-diff -rupN --no-dereference giflib-6.1.2/gifcolor.c giflib-6.1.2-new/gifcolor.c
---- giflib-6.1.2/gifcolor.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/gifcolor.c	2026-03-10 22:37:41.876004167 +0100
+diff -rupN --no-dereference giflib-6.1.3/gifcolor.c giflib-6.1.3-new/gifcolor.c
+--- giflib-6.1.3/gifcolor.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/gifcolor.c	2026-05-12 22:33:37.040913499 +0200
 @@ -12,7 +12,7 @@ gifcolor - generate color test-pattern G
  #include <stdlib.h>
  #include <string.h>
@@ -70,9 +70,9 @@ diff -rupN --no-dereference giflib-6.1.2/gifcolor.c giflib-6.1.2-new/gifcolor.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "gifcolor"
-diff -rupN --no-dereference giflib-6.1.2/gifecho.c giflib-6.1.2-new/gifecho.c
---- giflib-6.1.2/gifecho.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/gifecho.c	2026-03-10 22:37:41.876167009 +0100
+diff -rupN --no-dereference giflib-6.1.3/gifecho.c giflib-6.1.3-new/gifecho.c
+--- giflib-6.1.3/gifecho.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/gifecho.c	2026-05-12 22:33:37.041133635 +0200
 @@ -12,7 +12,7 @@ gifecho - generate a GIF from ASCII text
  #include <stdlib.h>
  #include <string.h>
@@ -82,9 +82,9 @@ diff -rupN --no-dereference giflib-6.1.2/gifecho.c giflib-6.1.2-new/gifecho.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "gifecho"
-diff -rupN --no-dereference giflib-6.1.2/giffilter.c giflib-6.1.2-new/giffilter.c
---- giflib-6.1.2/giffilter.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/giffilter.c	2026-03-10 22:37:41.876325132 +0100
+diff -rupN --no-dereference giflib-6.1.3/giffilter.c giflib-6.1.3-new/giffilter.c
+--- giflib-6.1.3/giffilter.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/giffilter.c	2026-05-12 22:33:37.041363707 +0200
 @@ -25,7 +25,7 @@ however, be identical (you can check thi
  #include <stdlib.h>
  #include <string.h>
@@ -94,9 +94,9 @@ diff -rupN --no-dereference giflib-6.1.2/giffilter.c giflib-6.1.2-new/giffilter.
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "giffilter"
-diff -rupN --no-dereference giflib-6.1.2/giffix.c giflib-6.1.2-new/giffix.c
---- giflib-6.1.2/giffix.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/giffix.c	2026-03-10 22:37:41.876480810 +0100
+diff -rupN --no-dereference giflib-6.1.3/giffix.c giflib-6.1.3-new/giffix.c
+--- giflib-6.1.3/giffix.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/giffix.c	2026-05-12 22:33:37.041575211 +0200
 @@ -12,7 +12,7 @@ giffix - attempt to fix a truncated GIF
  #include <stdlib.h>
  #include <string.h>
@@ -106,9 +106,9 @@ diff -rupN --no-dereference giflib-6.1.2/giffix.c giflib-6.1.2-new/giffix.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "giffix"
-diff -rupN --no-dereference giflib-6.1.2/gif_getarg.h giflib-6.1.2-new/gif_getarg.h
---- giflib-6.1.2/gif_getarg.h	1970-01-01 01:00:00.000000000 +0100
-+++ giflib-6.1.2-new/gif_getarg.h	2026-03-10 22:37:41.876638084 +0100
+diff -rupN --no-dereference giflib-6.1.3/gif_getarg.h giflib-6.1.3-new/gif_getarg.h
+--- giflib-6.1.3/gif_getarg.h	1970-01-01 01:00:00.000000000 +0100
++++ giflib-6.1.3-new/gif_getarg.h	2026-05-12 22:33:37.041786402 +0200
 @@ -0,0 +1,54 @@
 +/***************************************************************************
 +
@@ -164,9 +164,9 @@ diff -rupN --no-dereference giflib-6.1.2/gif_getarg.h giflib-6.1.2-new/gif_getar
 +#endif /* _GETARG_H */
 +
 +/* end */
-diff -rupN --no-dereference giflib-6.1.2/gifhisto.c giflib-6.1.2-new/gifhisto.c
---- giflib-6.1.2/gifhisto.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/gifhisto.c	2026-03-10 22:37:41.876736660 +0100
+diff -rupN --no-dereference giflib-6.1.3/gifhisto.c giflib-6.1.3-new/gifhisto.c
+--- giflib-6.1.3/gifhisto.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/gifhisto.c	2026-05-12 22:33:37.041900539 +0200
 @@ -12,7 +12,7 @@ gifhisto - make a color histogram from i
  #include <stdlib.h>
  #include <string.h>
@@ -176,9 +176,9 @@ diff -rupN --no-dereference giflib-6.1.2/gifhisto.c giflib-6.1.2-new/gifhisto.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "gifhisto"
-diff -rupN --no-dereference giflib-6.1.2/gifinto.c giflib-6.1.2-new/gifinto.c
---- giflib-6.1.2/gifinto.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/gifinto.c	2026-03-10 22:37:41.876920372 +0100
+diff -rupN --no-dereference giflib-6.1.3/gifinto.c giflib-6.1.3-new/gifinto.c
+--- giflib-6.1.3/gifinto.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/gifinto.c	2026-05-12 22:33:37.042130642 +0200
 @@ -19,7 +19,7 @@ gifinto - save GIF on stdin to file if s
  #include <unistd.h>
  #endif /* _WIN32 */
@@ -188,9 +188,9 @@ diff -rupN --no-dereference giflib-6.1.2/gifinto.c giflib-6.1.2-new/gifinto.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "gifinto"
-diff -rupN --no-dereference giflib-6.1.2/gifsponge.c giflib-6.1.2-new/gifsponge.c
---- giflib-6.1.2/gifsponge.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/gifsponge.c	2026-03-10 22:37:41.877071843 +0100
+diff -rupN --no-dereference giflib-6.1.3/gifsponge.c giflib-6.1.3-new/gifsponge.c
+--- giflib-6.1.3/gifsponge.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/gifsponge.c	2026-05-12 22:33:37.042363093 +0200
 @@ -25,7 +25,7 @@ however, be identical (you can check thi
  #include <stdlib.h>
  #include <string.h>
@@ -200,9 +200,9 @@ diff -rupN --no-dereference giflib-6.1.2/gifsponge.c giflib-6.1.2-new/gifsponge.
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "gifsponge"
-diff -rupN --no-dereference giflib-6.1.2/giftext.c giflib-6.1.2-new/giftext.c
---- giflib-6.1.2/giftext.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/giftext.c	2026-03-10 22:37:41.877228340 +0100
+diff -rupN --no-dereference giflib-6.1.3/giftext.c giflib-6.1.3-new/giftext.c
+--- giflib-6.1.3/giftext.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/giftext.c	2026-05-12 22:33:37.042594603 +0200
 @@ -16,7 +16,7 @@ giftext - dump GIF pixels and metadata a
  #include <io.h>
  #endif /* _WIN32 */
@@ -212,9 +212,9 @@ diff -rupN --no-dereference giflib-6.1.2/giftext.c giflib-6.1.2-new/giftext.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "giftext"
-diff -rupN --no-dereference giflib-6.1.2/giftool.c giflib-6.1.2-new/giftool.c
---- giflib-6.1.2/giftool.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/giftool.c	2026-03-10 22:37:41.877413953 +0100
+diff -rupN --no-dereference giflib-6.1.3/giftool.c giflib-6.1.3-new/giftool.c
+--- giflib-6.1.3/giftool.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/giftool.c	2026-05-12 22:33:37.042886655 +0200
 @@ -12,7 +12,7 @@ giftool.c - GIF transformation tool.
  #include <stdlib.h>
  #include <string.h>
@@ -224,9 +224,9 @@ diff -rupN --no-dereference giflib-6.1.2/giftool.c giflib-6.1.2-new/giftool.c
  #include "getopt.h"
  #include "gif_lib.h"
  
-diff -rupN --no-dereference giflib-6.1.2/gifwedge.c giflib-6.1.2-new/gifwedge.c
---- giflib-6.1.2/gifwedge.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/gifwedge.c	2026-03-10 22:37:41.877584105 +0100
+diff -rupN --no-dereference giflib-6.1.3/gifwedge.c giflib-6.1.3-new/gifwedge.c
+--- giflib-6.1.3/gifwedge.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/gifwedge.c	2026-05-12 22:33:37.043211500 +0200
 @@ -12,7 +12,7 @@ gifwedge - create a GIF test pattern
  #include <stdlib.h>
  #include <string.h>
@@ -236,9 +236,9 @@ diff -rupN --no-dereference giflib-6.1.2/gifwedge.c giflib-6.1.2-new/gifwedge.c
  #include "gif_lib.h"
  
  #define PROGRAM_NAME "gifwedge"
-diff -rupN --no-dereference giflib-6.1.2/Makefile giflib-6.1.2-new/Makefile
---- giflib-6.1.2/Makefile	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/Makefile	2026-03-10 22:37:41.877771171 +0100
+diff -rupN --no-dereference giflib-6.1.3/Makefile giflib-6.1.3-new/Makefile
+--- giflib-6.1.3/Makefile	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/Makefile	2026-05-12 22:33:37.043459338 +0200
 @@ -39,7 +39,7 @@ HEADERS = gif_hash.h  gif_lib.h  gif_lib
  OBJECTS = $(SOURCES:.c=.o)
  

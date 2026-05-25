@@ -1,4 +1,4 @@
-%if 0%{?rhel} >= 9
+%if 0%{?rhel} >= 9 || 0%{?oreon}
 %bcond_with perl_IO_Socket_SSL_test_unused_idn
 %bcond_with perl_IO_Socket_SSL_test_IO_Socket_INET6
 %else
@@ -86,7 +86,7 @@ mod_perl.
 
 # Use system-wide default cipher list to support use of system-wide
 # crypto policy (#1076390, #1127577, CPAN RT#97816)
-# https://fedoraproject.org/wiki/Changes/CryptoPolicy
+# 
 %patch -P 0
 
 # Use system-default SSL version too
@@ -127,5 +127,5 @@ make test
 %{_mandir}/man3/IO::Socket::SSL::PublicSuffix.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.098-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.098-2
+- Import

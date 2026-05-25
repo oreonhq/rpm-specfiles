@@ -1,5 +1,5 @@
 # Run optional test
-%if ! (0%{?rhel})
+%if ! (0%{?rhel}) || 0%{?oreon}
 %bcond_without perl_Compress_Raw_Bzip2_enables_optional_test
 %else
 %bcond_with perl_Compress_Raw_Bzip2_enables_optional_test
@@ -7,7 +7,7 @@
 
 Name:           perl-Compress-Raw-Bzip2
 Summary:        Low-level interface to bzip2 compression library
-Version:        2.218
+Version:        2.217
 Release:        1%{?dist}
 # Other files:  GPL-1.0-or-later OR Artistic-1.0-Perl
 ## unbundled
@@ -148,7 +148,7 @@ export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print
 make test
 
 %files
-%doc Changes README SECURITY.md
+%doc Changes README
 %{perl_vendorarch}/auto/Compress/
 %{perl_vendorarch}/Compress/
 %{_mandir}/man3/Compress::Raw::Bzip2.3*
@@ -157,5 +157,5 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.218-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.217-1
+- Import

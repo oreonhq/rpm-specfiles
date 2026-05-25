@@ -1,6 +1,6 @@
 %global _hardened_build 1
 
-%if 0%{?rhel} && 0%{?rhel} < 7
+%if 0%{?rhel} && 0%{?rhel} < 7 || 0%{?oreon}
 # If it's RHEL6 and older
 %bcond_with systemd
 %else
@@ -156,5 +156,5 @@ systemd-tmpfiles --create %{name}.conf >/dev/null 2>&1 || :
 /sbin/ldconfig
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 14-7
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 14-7
+- Import

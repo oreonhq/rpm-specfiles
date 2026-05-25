@@ -37,7 +37,7 @@ Summary: Tests for %{name}
 This package contains tests for %{name}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_remove_dep ch.qos.logback:logback-classic
 grep -l -r '^import ch\.qos\.logback\.classic' src/test | xargs rm -v
@@ -118,5 +118,5 @@ install -m 644 -D tests-classpath %{buildroot}/%{_datadir}/%{name}-tests/classpa
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.7-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.7-1
+- Import

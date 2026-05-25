@@ -102,7 +102,7 @@ popd
 %build
 ./autogen.sh
 %set_build_flags
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 CXXFLAGS="$CXXFLAGS -DFMT_HEADER_ONLY"
 %endif
 %configure --disable-static
@@ -157,5 +157,5 @@ make install DESTDIR=$RPM_BUILD_ROOT INSTALL="/usr/bin/install -p"
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8.0-15
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8.0-15
+- Import

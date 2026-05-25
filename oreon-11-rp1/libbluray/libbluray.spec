@@ -15,7 +15,6 @@ Source0:        https://download.videolan.org/pub/videolan/%{name}/%{version}/%{
 Patch0:         libbluray-0.8.0-no_doxygen_timestamp.patch
 # https://code.videolan.org/videolan/libbluray/-/commit/48d76414455ab6a7d270cec96d6e83673df8a00d
 Patch1:         libbluray-1.4.0-java_23_support.patch
-Patch2:         libbluray-1.4.0-relax-libudfread-version.patch
 
 BuildRequires:  doxygen
 BuildRequires:  fontconfig-devel
@@ -23,7 +22,7 @@ BuildRequires:  freetype-devel
 BuildRequires:  gcc
 BuildRequires:  graphviz
 BuildRequires:  libtool
-BuildRequires:  libudfread-devel
+BuildRequires:  libudfread-devel >= 1.2.0
 BuildRequires:  libxml2-devel
 BuildRequires:  meson
 BuildRequires:  texlive-latex
@@ -71,7 +70,6 @@ developing applications that use %{name}.
 %setup -q
 %patch -P0 -p1 -b .no_timestamp
 %patch -P1 -p1 -b .java_23
-%patch -P2 -p1 -b .relax_udfread
 
 rm -rf contrib/libudfread
 
@@ -120,5 +118,5 @@ mv %{buildroot}%{_docdir}/%{name}/html .
 
 
 %changelog
-* Sun Apr 19 2026 Brandon Lester <blester@oreonhq.com> - 1.4.0-3
-- import
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.0-3
+- Import

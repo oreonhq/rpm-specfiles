@@ -1,13 +1,13 @@
 # Run optional test
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 %bcond_without perl_YAML_Syck_enables_optional_test
 %else
 %bcond_with perl_YAML_Syck_enables_optional_test
 %endif
 
 Name:           perl-YAML-Syck
-Version:        1.36
-Release:        2%{?dist}
+Version:        1.45
+Release:        1%{?dist}
 Summary:        Fast, lightweight YAML loader and dumper
 # gram.*: GPL-2.0-or-later
 # *:      MIT
@@ -23,7 +23,7 @@ BuildRequires:  make
 BuildRequires:  perl-devel
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
-BuildRequires:  perl(ExtUtils::MakeMaker)
+BuildRequires:  perl(ExtUtils::MakeMaker) >= 6.76
 # Dependencies of bundled ExtUtils::HasCompiler
 BuildRequires:  perl(base)
 BuildRequires:  perl(Carp)
@@ -35,7 +35,6 @@ BuildRequires:  perl(File::Spec::Functions)
 BuildRequires:  perl(File::Temp)
 # Module Runtime
 BuildRequires:  perl(constant)
-# DynaLoader not used if XSLoader is available
 BuildRequires:  perl(Exporter)
 BuildRequires:  perl(strict)
 BuildRequires:  perl(vars)
@@ -44,6 +43,8 @@ BuildRequires:  perl(XSLoader)
 BuildRequires:  perl(Data::Dumper)
 BuildRequires:  perl(FindBin)
 BuildRequires:  perl(IO::File)
+BuildRequires:  perl(IO::Handle)
+BuildRequires:  perl(parent)
 BuildRequires:  perl(Storable)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(Tie::Hash)
@@ -51,8 +52,10 @@ BuildRequires:  perl(utf8)
 BuildRequires:  perl(warnings)
 # Optional Tests
 %if %{with perl_YAML_Syck_enables_optional_test}
+BuildRequires:  perl(B::Deparse)
 BuildRequires:  perl(Devel::Leak)
 BuildRequires:  perl(JSON)
+BuildRequires:  perl(POSIX)
 BuildRequires:  perl(Symbol)
 %endif
 # Dependencies
@@ -70,12 +73,12 @@ structures to YAML strings, and the other way around.
 %setup -q -n YAML-Syck-%{version}
 
 %build
-perl Makefile.PL INSTALLDIRS=vendor OPTIMIZE="%{optflags} -DI_STDLIB=1 -DI_STRING=1 -std=gnu17"
-make %{?_smp_mflags}
+perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1 \
+  OPTIMIZE="%{optflags} -DI_STDLIB=1 -DI_STRING=1"
+%{make_build}
 
 %install
-make pure_install DESTDIR=%{buildroot}
-find %{buildroot} -type f -name .packlist -delete
+%{make_install}
 find %{buildroot} -type f -name '*.bs' -empty -delete
 %{_fixperms} -c %{buildroot}
 
@@ -92,5 +95,5 @@ make test
 %{_mandir}/man3/YAML::Syck.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.36-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.45-1
+- Import

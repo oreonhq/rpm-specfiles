@@ -1,5 +1,3 @@
-%global tarball_version %%(echo %{version} | tr '~' '.')
-
 %bcond bundled_rust_deps %{defined rhel}
 
 # djvulibre is not available in RHEL 10+
@@ -8,8 +6,11 @@
 # Filter out soname provides for plugins
 %global __provides_exclude_from ^(%{_libdir}/papers/.*\\.so|%{_libdir}/nautilus/extensions-4/.*\\.so)$
 
+%global tarball_version %%(echo %%{version} | tr '~' '.')
+%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+
 Name:           papers
-Version:        49.3
+Version:        49.6
 Release:        %autorelease
 Summary:        View multipage documents
 
@@ -54,7 +55,7 @@ License:        %{shrink:
     (Unlicense OR MIT)
 }
 URL:            https://gitlab.gnome.org/GNOME/Incubator/papers
-Source:         https://download.gnome.org/sources/papers/49/papers-%{tarball_version}.tar.xz
+Source:         https://download.gnome.org/sources/papers/%{major_version}/papers-%{tarball_version}.tar.xz
 # To generate vendored cargo sources:
 #   tar xf papers-%%{tarball_version}.tar.xz
 #   pushd papers-%%{tarball_version}
@@ -63,7 +64,7 @@ Source:         https://download.gnome.org/sources/papers/49/papers-%{tarball_ve
 #   popd
 Source1:        papers-%{tarball_version}-vendor.tar.xz
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 ExcludeArch:    %{ix86}
 
 BuildRequires:  blueprint-compiler
@@ -99,7 +100,7 @@ BuildRequires:  pkgconfig(libspelling-1)
 BuildRequires:  /usr/bin/appstream-util
 BuildRequires:  /usr/bin/desktop-file-validate
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  cargo-rpm-macros
@@ -161,6 +162,9 @@ This package brings the Papers thumbnailer independently from Papers.
 
 
 %prep
+# check for human errors
+if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Error: Use tilde in Version field in front of alpha/beta/rc; checked '%{version}'" 1>&2; exit 1; fi
+
 %if %{without bundled_rust_deps}
 %autosetup -p1 -n papers-%{tarball_version}
 %cargo_prep
@@ -252,5 +256,5 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/*.desktop
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 49.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 49.6-1
+- Import

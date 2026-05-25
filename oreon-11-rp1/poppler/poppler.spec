@@ -1,12 +1,15 @@
+%global test_sha 03a4b9eb854a06a83c465e82de601796c458bbe9
+%global test_date 2021-01-11
+
 %bcond qt 1
 
 %if %{with qt}
 # Enable qt5 support (or not)
 # RHEL 10 drops support for Qt5, adds Qt6
-%if %{undefined rhel} || 0%{?rhel} < 10
+%if %{undefined rhel} || 0%{?rhel} < 10 || 0%{?oreon}
 %global qt5 1
 %endif
-%if %{undefined rhel} || 0%{?rhel} >= 10
+%if %{undefined rhel} || 0%{?rhel} >= 10 || 0%{?oreon}
 %global qt6 1
 %endif
 %endif
@@ -14,13 +17,15 @@
 Summary: PDF rendering library
 Name:    poppler
 Version: 26.01.0
-Release: 9%{?dist}
+Release: %autorelease
 License: (GPL-2.0-only OR GPL-3.0-only) AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:     https://poppler.freedesktop.org/
 Source0: https://poppler.freedesktop.org/poppler-%{version}.tar.xz
 Source1: https://poppler.freedesktop.org/poppler-%{version}.tar.xz.sig
 # https://pgp.surfnet.nl/pks/lookup?op=get&search=0xCA262C6C83DE4D2FB28A332A3A6A4DB839EAA6D7
 Source2: armored-keys.asc
+# git archive --prefix test/
+Source3: %{name}-test-%{test_date}-%{test_sha}.tar.xz
 
 Patch1:  poppler-0.90.0-position-independent-code.patch
 
@@ -53,10 +58,6 @@ BuildRequires: pkgconfig(libtiff-4)
 BuildRequires: pkgconfig(nss)
 BuildRequires: pkgconfig(poppler-data)
 BuildRequires: pkgconfig(libcurl)
-# Link against GPGME-2 C++ (libgpgmepp.so.7). Without this, cmake can pick 1.x Gpgmepp
-# from fedora, then runtime pulls libgpgmepp.so.6 while the distro ships gpgmepp 2 and
-# gpgme 2, and mixed stacks (e.g. samba build dep graph) cannot resolve.
-BuildRequires: gpgmepp-devel >= 2.0.0-1
 BuildRequires: cmake(Gpgmepp)
 %if 0%{?qt5}
 BuildRequires: pkgconfig(Qt5Core)
@@ -77,7 +78,10 @@ BuildRequires: boost-devel
 BuildRequires: gnupg2
 
 Requires: poppler-data
-Requires: gpgmepp%{?_isa}
+
+# Recommend Zapf Dingbats and Symbol fonts
+Recommends: font(d050000l)
+Recommends: font(standardsymbolsps)
 
 Obsoletes: poppler-glib-demos < 0.60.1-1
 
@@ -174,7 +178,7 @@ other formats.
 
 %prep
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
-%autosetup -p1
+%autosetup -p1 -b 3
 
 chmod -x poppler/CairoFontEngine.cc
 
@@ -200,7 +204,7 @@ chmod -x poppler/CairoFontEngine.cc
 %find_lang pdfsig
 
 %check
-# Upstream ctest bundle not shipped in Oreon dist-git (Source test tarball dropped)
+%make_build test
 
 # verify pkg-config sanity/version
 export PKG_CONFIG_PATH=%{buildroot}%{_datadir}/pkgconfig:%{buildroot}%{_libdir}/pkgconfig
@@ -290,21 +294,5 @@ test "$(pkg-config --modversion poppler-qt6)" = "%{version}"
 %{_mandir}/man1/*
 
 %changelog
-* Wed Apr 22 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-9
-- BuildRequire gpgmepp-devel 2.x so we link to Gpgmepp from GPGME 2 (avoids .so.6 / .so.7
-  mix and broken builddep chains with gpgme 2, e.g. samba with doxygen)
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-8
-- Rebuild
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-7
-- Rebuild for gpgmepp 7
-
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-6
-- Rebuild for current gpgmepp SONAME
-
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-4
-- Drop unpackaged git test tarball, skip ctest in check
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.01.0-1
+- Import

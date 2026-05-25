@@ -1,6 +1,6 @@
 # -*- rpm-spec -*-
 
-%if 0%{?rhel} >= 9
+%if 0%{?rhel} >= 9 || 0%{?oreon}
 %global with_govirt 0
 %global with_spice 0
 %else
@@ -60,7 +60,7 @@ the display, and libvirt for looking up VNC/SPICE server details.
 # Enable -Werror on RHEL which has stable GCC toolchain, and
 # disable on Fedora/ELN which frequently sees new warnings
 # from updated GCC versions
-%if 0%{?rhel} && !0%{?eln}
+%if 0%{?rhel} && !0%{?eln} || 0%{?oreon}
 %define werror_opt -Dwerror=true
 %else
 %define werror_opt -Dwerror=false -Dgit_werror=disabled
@@ -74,7 +74,7 @@ the display, and libvirt for looking up VNC/SPICE server details.
 %define spice_opt -Dspice=disabled
 %endif
 
-%if 0%{?rhel} > 0
+%if 0%{?rhel} > 0 || 0%{?oreon}
 %define osid_opt -Dos-id=rhel%{?rhel}
 %endif
 
@@ -99,5 +99,5 @@ the display, and libvirt for looking up VNC/SPICE server details.
 %{_datadir}/bash-completion/completions/virt-viewer
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 11.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 11.0-1
+- Import

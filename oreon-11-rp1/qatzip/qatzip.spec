@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: MIT
 
-%global githubname qatzip
+%global githubname QATzip
 %global libqatzip_soversion 3
 
 Name:           qatzip
-Version:        1.3.2
-Release:        1%{?dist}
+Version:        1.3.1
+Release:        3%{?dist}
 Summary:        Intel QuickAssist Technology (QAT) QATzip Library
 License:        BSD-3-Clause
 URL:            https://github.com/intel/%{githubname}
@@ -14,7 +14,7 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildRequires:  gcc >= 4.8.5
 BuildRequires:  zlib-devel >= 1.2.7
 BuildRequires:  qatlib-devel >= 23.08.0
-BuildRequires:  autoconf autoconf-archive automake libtool make lz4-devel numactl-devel
+BuildRequires:  autoconf automake libtool make lz4-devel numactl-devel
 # The purpose of the package is to support hardware that only exists on x86_64 platforms
 # https://bugzilla.redhat.com/show_bug.cgi?id=1987280
 ExclusiveArch:  x86_64
@@ -73,7 +73,6 @@ rm -vf %{buildroot}%{_mandir}/*.pdf
 %files
 %license LICENSE*
 %{_mandir}/man1/qzip.1*
-%{_mandir}/man1/qatzip-test.1*
 %{_bindir}/qzip
 %{_bindir}/qatzip-test
 
@@ -88,5 +87,5 @@ rm -vf %{buildroot}%{_mandir}/*.pdf
 %{_libdir}/pkgconfig/*.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.1-3
+- Import

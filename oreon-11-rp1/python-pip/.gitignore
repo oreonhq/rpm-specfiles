@@ -1,7 +1,0 @@
-/*.tar.gz
-/*.zip
-/pip-*/
-/pip/
-/results_python-pip/
-*.rpm
-*.whl

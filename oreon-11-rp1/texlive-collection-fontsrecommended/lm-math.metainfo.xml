@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>lm-math</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Latin Modern Math Fonts</name>
+  <summary>OpenType maths fonts for Latin Modern</summary>
+  <description>
+    <p>
+      Latin Modern Math is a maths companion for the Latin Modern family of 
+      fonts, in OpenType format.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/lm-math</url>
+</component>

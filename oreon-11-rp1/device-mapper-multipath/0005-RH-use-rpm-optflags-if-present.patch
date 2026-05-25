@@ -1,4 +1,4 @@
-From e9e0ca3132401289b41d4d10fe122e1a49b73a8d Mon Sep 17 00:00:00 2001
+From 8526191960a2849e2cb9d13e3c0deeaef1d611a4 Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Wed, 19 Apr 2017 06:10:01 -0500
 Subject: [PATCH] RH: use rpm optflags if present

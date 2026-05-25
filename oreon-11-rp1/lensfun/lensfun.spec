@@ -1,4 +1,4 @@
-%if !0%{?bootstrap} && (0%{?fedora} || 0%{?rhel} > 6)
+%if !0%{?bootstrap} && (0%{?fedora} || 0%{?rhel} > 6) || 0%{?oreon}
 %global tests 1
 %global python3 python%{python3_pkgversion}
 %endif
@@ -73,7 +73,7 @@ adapters in lensfun.
 %package -n %{python3}-lensfun
 Summary:  Python3 lensfun bindings
 Requires: %{name}%{?_isa} = %{version}-%{release}
-%if 0%{?rhel} == 7
+%if 0%{?rhel} == 7 || 0%{?oreon}
 ## pkgname changed in epel7 from python34- to python36-
 Obsoletes: python34-lensfun < %{version}-%{release}
 %endif
@@ -119,7 +119,7 @@ sed -i -e 's@CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12 FATAL_ERROR@CMAKE_MINIMUM_REQ
 %cmake_build --target doc
 
 # do a proper guideline-compliant build of the python library
-%if 0%{?rhel} && 0%{?rhel} < 9
+%if 0%{?rhel} && 0%{?rhel} < 9 || 0%{?oreon}
 pushd apps
 %py3_build
 %else
@@ -133,7 +133,7 @@ popd
 %cmake_install
 
 # do a proper guideline-compliant install of the python library
-%if 0%{?rhel} && 0%{?rhel} < 9
+%if 0%{?rhel} && 0%{?rhel} < 9 || 0%{?oreon}
 pushd apps
 %py3_install
 %else
@@ -182,7 +182,7 @@ export CTEST_OUTPUT_ON_FAILURE=1
 %{_mandir}/man1/lensfun-add-adapter.1*
 %{_mandir}/man1/lensfun-update-data.1*
 
-%if 0%{?rhel} && 0%{?rhel} < 9
+%if 0%{?rhel} && 0%{?rhel} < 9 || 0%{?oreon}
 %files -n %{python3}-lensfun
 %{python3_sitelib}/lensfun-*.egg-info/
 %{python3_sitelib}/lensfun/
@@ -193,5 +193,5 @@ export CTEST_OUTPUT_ON_FAILURE=1
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.4-11
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.4-11
+- Import

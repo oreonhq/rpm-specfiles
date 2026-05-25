@@ -1,7 +1,7 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           objectweb-asm
-Version:        9.9.1
+Version:        9.7.1
 Release:        %autorelease
 Summary:        Java bytecode manipulation and analysis framework
 License:        BSD-3-Clause
@@ -10,8 +10,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-%global ow2tag ASM_%(echo %{version} | sed 's/\\./_/g')
-Source0:        https://gitlab.ow2.org/asm/asm/-/archive/%{ow2tag}/asm-%{ow2tag}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        %{name}-%{version}.tar.gz
 Source1:        aggregator.pom
 Source2:        https://repo1.maven.org/maven2/org/ow2/asm/asm/%{version}/asm-%{version}.pom
 Source3:        https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/%{version}/asm-analysis-%{version}.pom
@@ -22,6 +21,8 @@ Source7:        https://repo1.maven.org/maven2/org/ow2/asm/asm-util/%{version}/a
 # The source contains binary jars that cannot be verified for licensing and could be proprietary
 Source9:        generate-tarball.sh
 Source10:       tools-retrofitter.pom
+
+Patch:          0001-Add-support-of-Java-25.patch
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -41,13 +42,7 @@ transformations and analysis algorithms allow to easily assemble
 custom complex transformations and code analysis tools.
 
 %prep
-%setup -q -n asm-%{ow2tag}
-find . -name '*.jar' -delete
-find */asm{,-analysis,-commons} -name '*.class' -delete
-rm -rf gradle
-cd ..
-mv asm-%{ow2tag} %{name}-%{version}
-cd %{name}-%{version}
+%autosetup -p1 -C
 
 # A custom pom to aggregate the build
 cp -p %{SOURCE1} pom.xml
@@ -80,5 +75,5 @@ done
 %license LICENSE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.9.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.7.1-1
+- Import

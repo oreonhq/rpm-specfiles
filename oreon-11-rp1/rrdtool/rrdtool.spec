@@ -23,7 +23,7 @@ Release: 11%{?dist}
 License: gpl-1.0-or-later AND gpl-2.0-or-later AND gpl-2.0-or-later WITH rrdtool-floss-exception-2.0 AND mit AND lgpl-2.0-or-later AND lgpl-2.1-or-later AND bsd-source-code AND snprintf AND bsd-3-clause AND gpl-2.0-only AND licenseref-fedora-public-domain AND gtkbook
 URL: https://oss.oetiker.ch/rrdtool/
 Source0: https://github.com/oetiker/rrdtool-1.x/releases/download/v%{version}/%{name}-%{version}.tar.gz
-Source1: https://src.fedoraproject.org/repo/pkgs/rrdtool/php4-%{svnrev}.tar.gz/28074a9c368af013462631959ab90558/php4-%{svnrev}.tar.gz
+Source1: php4-%{svnrev}.tar.gz
 Patch1: rrdtool-1.4.4-php54.patch
 # disable logo for php 5.5.
 Patch2: rrdtool-1.4.7-php55.patch
@@ -32,8 +32,8 @@ Patch3: rrdtool-1.6.0-ruby-2-fix.patch
 Patch4: rrdtool-1.4.8-php-ppc-fix.patch
 # fix compatibility with tcl 9.0
 Patch5: rrdtool-1.9.0-tcl90.patch
-# https://github.com/oetiker/rrdtool-1.x/issues/1304
-Patch6: rrdtool-1.9.0-lua-5.5-fix.patch
+# https://github.com/oetiker/rrdtool-1.x/commit/4218ec7127ba6c7ea1c20d7c8ea6e2b3f83df73a
+Patch6: rrdtool-1.9.0-safety-checks.patch
 
 BuildRequires: make
 BuildRequires: gcc-c++
@@ -177,12 +177,12 @@ The %{name}-lua package includes RRDtool bindings for Lua.
 %endif
 # Workaround for rhbz#92165
 # Do not apply on RHEL-6 or lower
-%if %{?rhel} %{?!rhel:7} > 6
+%if %{?rhel} %{?!rhel:7} > 6 || 0%{?oreon}
 %patch -P3 -p1 -b .ruby-2-fix
 %endif
 %patch -P4 -p1 -b .php-ppc-fix
 %patch -P5 -p1 -b .tcl90
-%patch -P6 -p1 -b .lua-5.5-fix
+%patch -P6 -p1 -b .safety-checks
 
 # Fix to find correct python dir on lib64
 perl -pi -e 's|get_python_lib\(0,0,prefix|get_python_lib\(1,0,prefix|g' \
@@ -399,5 +399,5 @@ LD_LIBRARY_PATH=%{buildroot}%{_libdir} php -n \
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.0-11
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.0-11
+- Import

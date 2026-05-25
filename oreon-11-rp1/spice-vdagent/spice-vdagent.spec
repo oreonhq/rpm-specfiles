@@ -5,7 +5,7 @@ Summary:        Agent for Spice guests
 License:        GPL-3.0-or-later
 URL:            https://spice-space.org/
 Source0:        https://spice-space.org/download/releases/%{name}-%{version}.tar.bz2
-#Source1:        https://spice-space.org/download/releases/%%{name}-%%{version}.tar.bz2.sig
+#Source1:        https://spice-space.org/download/releases/%{name}-%{version}.tar.bz2.sig
 #Source2:        victortoso-E37A484F.keyring
 
 BuildRequires: make
@@ -73,5 +73,5 @@ autoreconf -fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.23.0-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.23.0-2
+- Import

@@ -16,7 +16,7 @@ BuildRequires: libX11-devel
 BuildRequires: libxml2-devel
 BuildRequires: lynx
 BuildRequires: ncurses-devel
-%if %{undefined rhel}
+%if %{undefined rhel} || 0%{?oreon}
 %ifarch x86_64
 BuildRequires: oneapi-level-zero-devel
 %endif
@@ -172,5 +172,5 @@ LD_LIBRARY_PATH=$PWD/hwloc/.libs make check
 %{_libdir}/%{name}/hwloc*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12.0-1
+- Import

@@ -1,4 +1,6 @@
-%global privlibs libAdvancedDockingSystem
+%global privlibs libAcpClient
+%global privlibs %{privlibs}|libAcpLib
+%global privlibs %{privlibs}|libAdvancedDockingSystem
 %global privlibs %{privlibs}|libAggregation
 %global privlibs %{privlibs}|libAndroid
 %global privlibs %{privlibs}|libAnt
@@ -46,6 +48,7 @@
 %global privlibs %{privlibs}|libFossil
 %global privlibs %{privlibs}|libGLSL
 %global privlibs %{privlibs}|libGLSLEditor
+%global privlibs %{privlibs}|libGNProjectManager
 %global privlibs %{privlibs}|libGenericProjectManager
 %global privlibs %{privlibs}|libGit
 %global privlibs %{privlibs}|libGitLab
@@ -63,6 +66,7 @@
 %global privlibs %{privlibs}|libLua
 %global privlibs %{privlibs}|libLuaLanguageClient
 %global privlibs %{privlibs}|libMacros
+%global privlibs %{privlibs}|libMcpServerLib
 %global privlibs %{privlibs}|libMcuSupport
 %global privlibs %{privlibs}|libMercurial
 %global privlibs %{privlibs}|libMesonProjectManager
@@ -80,7 +84,6 @@
 %global privlibs %{privlibs}|libQmakeProjectManager
 %global privlibs %{privlibs}|libQmlDebug
 %global privlibs %{privlibs}|libQmlDesigner
-%global privlibs %{privlibs}|libQmlDesignerAi
 %global privlibs %{privlibs}|libQmlDesignerCore
 %global privlibs %{privlibs}|libQmlEditorWidgets
 %global privlibs %{privlibs}|libQmlJS
@@ -116,8 +119,10 @@
 %global privlibs %{privlibs}|libVcsBase
 %global privlibs %{privlibs}|libWebAssembly
 %global privlibs %{privlibs}|libWelcome
+%global privlibs %{privlibs}|libZenMode
 %global privlibs %{privlibs}|libcomponentsplugin
 %global privlibs %{privlibs}|libmcpserver
+%global privlibs %{privlibs}|libptracepreload
 %global privlibs %{privlibs}|libqlitehtml
 %global privlibs %{privlibs}|libqmlpreviewplugin
 %global privlibs %{privlibs}|libqtkeychain

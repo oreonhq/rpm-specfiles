@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           velocity
 Version:        2.4.1
@@ -50,7 +50,7 @@ Velocity+Turbine provides a template service that will allow web
 applications to be developed according to a true MVC model.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %mvn_alias : velocity:velocity
 %mvn_alias : org.apache.velocity:velocity
@@ -84,5 +84,5 @@ sed 's/${project.version}/%{version}/' \
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.1-1
+- Import

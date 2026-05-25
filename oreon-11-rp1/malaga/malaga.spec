@@ -60,7 +60,7 @@ sed -i.silent -e 's|--silent||' Makefile.in
 %build
 %configure --with-readline
 # Remove rpath,
-# https://fedoraproject.org/wiki/Packaging/Guidelines#Removing_Rpath
+# 
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
 %make_build
@@ -95,5 +95,5 @@ chmod 0755 $RPM_BUILD_ROOT%{_libdir}/libmalaga.so*
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.12-44
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.12-44
+- Import

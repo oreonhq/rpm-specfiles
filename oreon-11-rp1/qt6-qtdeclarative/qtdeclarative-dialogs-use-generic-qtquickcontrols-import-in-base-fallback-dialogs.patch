@@ -1,0 +1,120 @@
+From 1efa89ddfd592b49415b0bfb28f5fbf5bcd14d6e Mon Sep 17 00:00:00 2001
+From: Morten Sørvig <morten.sorvig@qt.io>
+Date: Tue, 14 Apr 2026 18:05:46 +0200
+Subject: [PATCH] Dialogs: Use generic QtQuick.Controls import in base fallback dialogs
+
+Commit f2920663dcd3 ("Dialogs: Only import the QQC2 module used by the
+style") changed the base fallback dialog QML files to import
+QtQuick.Controls.Basic instead of QtQuick.Controls. This hardcodes the
+Basic style for the fallback, preventing the active style from being
+picked up at runtime. Only the style-specific files (+Fusion/, +Material/, etc.) should hardcode their style module.
+
+Revert the base fallback imports to use the generic QtQuick.Controls
+module so the active style is applied correctly.
+
+Fixes: QTBUG-133655
+Pick-to: 6.8 6.11
+Change-Id: Ia4b98e13858c411d0b78bdc16027093bf685ce2e
+---
+
+diff --git a/src/quickdialogs/quickdialogsquickimpl/qml/ColorDialog.qml b/src/quickdialogs/quickdialogsquickimpl/qml/ColorDialog.qml
+index c311898..d2798a7 100644
+--- a/src/quickdialogs/quickdialogsquickimpl/qml/ColorDialog.qml
++++ b/src/quickdialogs/quickdialogsquickimpl/qml/ColorDialog.qml
+@@ -3,9 +3,8 @@
+ // Qt-Security score:significant reason:default
+ 
+ import QtQuick
++import QtQuick.Controls
+ import QtQuick.Controls.impl
+-import QtQuick.Controls.Basic
+-import QtQuick.Controls.Basic.impl
+ import QtQuick.Dialogs
+ import QtQuick.Dialogs.quickimpl
+ import QtQuick.Layouts
+diff --git a/src/quickdialogs/quickdialogsquickimpl/qml/ColorInputs.qml b/src/quickdialogs/quickdialogsquickimpl/qml/ColorInputs.qml
+index 7307ac2..16a6fc1 100644
+--- a/src/quickdialogs/quickdialogsquickimpl/qml/ColorInputs.qml
++++ b/src/quickdialogs/quickdialogsquickimpl/qml/ColorInputs.qml
+@@ -3,7 +3,7 @@
+ // Qt-Security score:significant reason:default
+ 
+ import QtQuick
+-import QtQuick.Controls.Basic
++import QtQuick.Controls
+ import QtQuick.Controls.impl
+ import QtQuick.Layouts
+ import QtQuick.Dialogs.quickimpl as DialogsQuickImpl
+diff --git a/src/quickdialogs/quickdialogsquickimpl/qml/FileDialog.qml b/src/quickdialogs/quickdialogsquickimpl/qml/FileDialog.qml
+index ccc0650..f7a4ace 100644
+--- a/src/quickdialogs/quickdialogsquickimpl/qml/FileDialog.qml
++++ b/src/quickdialogs/quickdialogsquickimpl/qml/FileDialog.qml
+@@ -4,9 +4,8 @@
+ 
+ import Qt.labs.folderlistmodel
+ import QtQuick
++import QtQuick.Controls
+ import QtQuick.Controls.impl
+-import QtQuick.Controls.Basic
+-import QtQuick.Controls.Basic.impl
+ import QtQuick.Dialogs
+ import QtQuick.Dialogs.quickimpl
+ import QtQuick.Layouts
+diff --git a/src/quickdialogs/quickdialogsquickimpl/qml/FolderDialog.qml b/src/quickdialogs/quickdialogsquickimpl/qml/FolderDialog.qml
+index 3128030..546d139 100644
+--- a/src/quickdialogs/quickdialogsquickimpl/qml/FolderDialog.qml
++++ b/src/quickdialogs/quickdialogsquickimpl/qml/FolderDialog.qml
+@@ -4,9 +4,8 @@
+ 
+ import Qt.labs.folderlistmodel
+ import QtQuick
++import QtQuick.Controls
+ import QtQuick.Controls.impl
+-import QtQuick.Controls.Basic
+-import QtQuick.Controls.Basic.impl
+ import QtQuick.Dialogs
+ import QtQuick.Dialogs.quickimpl
+ import QtQuick.Layouts
+diff --git a/src/quickdialogs/quickdialogsquickimpl/qml/FontDialog.qml b/src/quickdialogs/quickdialogsquickimpl/qml/FontDialog.qml
+index 588fb6f..eb4e48f 100644
+--- a/src/quickdialogs/quickdialogsquickimpl/qml/FontDialog.qml
++++ b/src/quickdialogs/quickdialogsquickimpl/qml/FontDialog.qml
+@@ -3,9 +3,8 @@
+ // Qt-Security score:significant reason:default
+ 
+ import QtQuick
++import QtQuick.Controls
+ import QtQuick.Controls.impl
+-import QtQuick.Controls.Basic
+-import QtQuick.Controls.Basic.impl
+ import QtQuick.Dialogs
+ import QtQuick.Dialogs.quickimpl
+ import QtQuick.Layouts
+diff --git a/src/quickdialogs/quickdialogsquickimpl/qml/MessageDialog.qml b/src/quickdialogs/quickdialogsquickimpl/qml/MessageDialog.qml
+index e88a2e4..2192dfd 100644
+--- a/src/quickdialogs/quickdialogsquickimpl/qml/MessageDialog.qml
++++ b/src/quickdialogs/quickdialogsquickimpl/qml/MessageDialog.qml
+@@ -3,9 +3,8 @@
+ // Qt-Security score:significant reason:default
+ 
+ import QtQuick
++import QtQuick.Controls
+ import QtQuick.Controls.impl
+-import QtQuick.Controls.Basic
+-import QtQuick.Controls.Basic.impl
+ import QtQuick.Dialogs
+ import QtQuick.Dialogs.quickimpl
+ import QtQuick.Layouts
+diff --git a/src/quickdialogs/quickdialogsquickimpl/qml/SideBar.qml b/src/quickdialogs/quickdialogsquickimpl/qml/SideBar.qml
+index 1e612af..06a370b 100644
+--- a/src/quickdialogs/quickdialogsquickimpl/qml/SideBar.qml
++++ b/src/quickdialogs/quickdialogsquickimpl/qml/SideBar.qml
+@@ -3,7 +3,7 @@
+ // Qt-Security score:significant reason:default
+ 
+ import QtQuick
+-import QtQuick.Controls.Basic
++import QtQuick.Controls
+ import QtQuick.Controls.impl
+ import QtQuick.Dialogs.quickimpl as DialogsQuickImpl
+ 

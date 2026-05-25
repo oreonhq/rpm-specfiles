@@ -2,17 +2,17 @@
 %bcond_without perl_DateTime_TimeZone_enables_optional_test
 
 # Regenerate Perl library code from upstream Olson database of this date
-%global tzversion 2026a
+%global tzversion 2026b
 
 Name:           perl-DateTime-TimeZone
-Version:        2.67
+Version:        2.68
 Release:        1%{?dist}
 Summary:        Time zone object base class and factory
-# tzdata%%{tzversion}.tar.gz archive:   LicenseRef-Fedora-Public-Domain
+# tzdata%%{tzversion}.tar.gz archive:   LicenseRef-Public-Domain
 # other files:                          GPL-1.0-or-later OR Artistic-1.0-Perl
 # Some other files are generated from tzdata%%{tzversion}.tar.gz content by
-# upstream or locally:                  LicenseRef-Fedora-Public-Domain
-License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Fedora-Public-Domain
+# upstream or locally:                  LicenseRef-Public-Domain
+License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Public-Domain
 URL:            https://metacpan.org/release/DateTime-TimeZone
 Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-TimeZone-%{version}.tar.gz
 %if %{defined tzversion}
@@ -180,5 +180,5 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.67-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.68-1
+- Import

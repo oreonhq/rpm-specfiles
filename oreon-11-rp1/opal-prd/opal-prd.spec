@@ -51,7 +51,7 @@ on such systems and update the OpenPower firmware.
 %prep
 %autosetup -p1 -n %{project}-%{version}
 
-# update for https://fedoraproject.org/wiki/Changes/Unify_bin_and_sbin
+# update for 
 sed -i -e 's|/usr/sbin|%{_sbindir}|' external/opal-prd/opal-prd.service
 
 
@@ -119,5 +119,5 @@ install -m 644 -p %{SOURCE3} %{buildroot}%{_mandir}/man1/ffspart.1
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1-9
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.1-9
+- Import

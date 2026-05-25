@@ -221,7 +221,7 @@ sed -i '/release.*be_falsey/I s/be_falsey/be_truthy/' spec/bundler/build_metadat
 sed -i '/it "stays in sync with the rubygems implementation" do/a\    skip' spec/bundler/ci_detector_spec.rb
 
 # Fix the compilation issues likely caused by:
-# https://fedoraproject.org/wiki/Changes/PortingToModernC#Use_of_incompatible_pointer_types_without_a_cast
+# 
 # https://github.com/rubygems/rubygems/issues/8694
 sed -i 's/VALUE foo()/VALUE foo(VALUE _)/' spec/install/gemfile/git_spec.rb
 
@@ -260,5 +260,5 @@ RUBYOPT=-I%{_builddir}/rubygems GEM_PATH=%{gem_dir} BUNDLER_GEM_DEFAULT_DIR=%{ge
 %doc %{gem_instdir}/README.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6.9-4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6.9-4
+- Import

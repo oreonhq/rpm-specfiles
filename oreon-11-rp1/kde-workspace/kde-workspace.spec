@@ -1,16 +1,16 @@
-%if 0%{?fedora} > 17 || 0%{?rhel} > 6
+%if 0%{?fedora} > 17 || 0%{?rhel} > 6 || 0%{?oreon}
 %global systemd_login1 1
 %endif
 
-#if 0%%{?fedora} < 24
+#if 0%{?fedora} < 24
 %global kdm 1
 #endif
 
-%if 0%{?fedora} > 23
+%if 0%{?fedora} > 23 || 0%{?oreon}
 %global kdm_settings 1
 %endif
 
-%if 0%{?fedora} < 25
+%if 0%{?fedora} < 25 || 0%{?oreon}
 %define strigi 1
 %endif
 
@@ -23,10 +23,7 @@ Release: 47%{?dist}
 License: GPL-2.0-only
 URL:     https://github.com/KDE/%{name}
 Source0: https://github.com/KDE/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-%if 0%{?kdm_settings}
-# Shipped next to this spec (no lookaside or dist fetch in mock --buildsrpm).
 Source1: kdm-settings-2.tar.gz
-%endif
 
 # add konsole menuitem
 # FIXME?  only show menu when/if konsole is installed? then we can drop the hard-dep
@@ -67,12 +64,6 @@ Patch57: kde-workspace-4.8.0-bug796969.patch
 
 Patch58: kde-workspace-4.9.11-new_rundir.patch
 Patch59: kdm-settings-new_rundir.patch
-# CMake 3.20+ rejects kde4_install_auth_actions custom target names with spaces
-Patch604: kde-workspace-kauth-cmake3-target-name.patch
-# Skip KWin-only X11 fatals and feature_summary FATAL for stripped kdm-only build
-Patch605: kde-workspace-oreon-minimal-cmake.patch
-# CMake 3.20+ removed MacroWriteBasicConfigVersionFile; macro_write_basic_cmake_version_file is undefined
-Patch606: kde-workspace-cmake-config-version.patch
 ## upstream patches
 
 ## plasma active patches
@@ -87,8 +78,6 @@ Patch606: kde-workspace-cmake-config-version.patch
 
 BuildRequires: desktop-file-utils
 BuildRequires: kdelibs4-devel >= 4.14.4
-# Use Oreon automoc4 (upstream 0.9.88) instead of Fedora’s patched tree that sets CMP0002 OLD (fails CMake 3.28+).
-BuildRequires: automoc4 >= 1:0.9.88
 BuildRequires: kactivities-devel
 BuildRequires: libjpeg-devel
 BuildRequires: pam-devel
@@ -110,21 +99,9 @@ BuildRequires: pkgconfig(xcb-keysyms)
 BuildRequires: pkgconfig(xcb-renderutil)
 BuildRequires: pkgconfig(xdmcp)
 BuildRequires: pkgconfig(xres)
-# Top-level CMakeLists still runs KWin X11 checks even when BUILD_kwin=OFF; without
-# these, find_package(X11) components stay unset and configure hits message(FATAL_ERROR).
-BuildRequires: libXcomposite-devel
-BuildRequires: libXdamage-devel
-BuildRequires: libXfixes-devel
-BuildRequires: libXrender-devel
-BuildRequires: libXrandr-devel
-BuildRequires: libXcursor-devel
-BuildRequires: libxkbfile-devel
-BuildRequires: libXtst-devel
 
 # For AutoReq cmake-filesystem
 BuildRequires: cmake
-# Some CMake / helper probes still import distutils on newer Python
-BuildRequires: python3-setuptools
 
 %description
 The KDE Workspace consists of what is the desktop of the
@@ -135,7 +112,7 @@ Summary:  Development files for %{name}
 Obsoletes: kdebase-workspace-devel < 4.7.97-10
 Provides:  kdebase-workspace-devel = %{version}-%{release}
 Provides: solid-bluetooth-devel = %{version}-%{release}
-#Requires: ksysguard-libs%%{?_isa} = %%{epoch}:%%{version}-%%{release}
+#Requires: ksysguard-libs%{?_isa} = %{epoch}:%{version}-%{release}
 Requires: libkworkspace%{?_isa} = %{epoch}:%{version}-%{release}
 Requires: kdelibs4-devel
 %description devel
@@ -156,7 +133,7 @@ The Color Selection module is comprised of several sections:
 %package -n kde-platform-plugin
 Summary: KDE4 Platform plugin
 Requires: %{name}-common = %{epoch}:%{version}-%{release}
-#if 0%%{?fedora} > 22
+#if 0%{?fedora} > 22
 ## skip Supplements until dnf handling is better/fixed:
 ## https://bugzilla.redhat.com/show_bug.cgi?id=1325471
 %if 0
@@ -209,7 +186,7 @@ Requires: kdm = %{epoch}:%{version}-%{release}
 # http://bugzilla.redhat.com/784389
 Requires: kde-wallpapers
 # kdm already pulls in -common
-#Requires: %%{name}-common = %%{epoch}:%%{version}-%%{release}
+#Requires: %{name}-common = %{epoch}:%{version}-%{release}
 BuildArch: noarch
 %description -n kdm-themes
 A collection of extra kdm themes, including: circles, horos, oxygen, oxygen-air,
@@ -315,11 +292,6 @@ pushd kdm-settings
 %patch 59 -p1
 popd
 %endif
-%patch 604 -p1 -b .kauth-cmake3
-%patch 605 -p1 -b .oreon-minimal-cmake
-%patch 606 -p1 -b .cmake-config-version
-# Never let feature_summary abort configure (patch hunk can drift across rebases).
-perl -pi -e 's/INCLUDE_QUIET_PACKAGES FATAL_ON_MISSING_REQUIRED_PACKAGES\)/INCLUDE_QUIET_PACKAGES)/' CMakeLists.txt
 
 # upstream patches
 
@@ -370,7 +342,6 @@ export CFLAGS="%{optflags} -Dinline=__inline__"
 mkdir %{_target_platform}
 pushd %{_target_platform}
 %{cmake_kde4} .. \
-  -DOREON_MINIMAL_KDM_WORKSPACE:BOOL=ON \
   -DKDE4_ENABLE_FPIE:BOOL=ON \
   -DKDE4_KDM_PAM_SERVICE=kdm \
   -DKDE4_KCHECKPASS_PAM_SERVICE=kcheckpass \
@@ -608,5 +579,5 @@ rm -rfv %{buildroot}%{_kde4_docdir}/HTML/en/kcontrol/colors/
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.11.22-47
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:4.11.22-47
+- Import

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>philokalia</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Philokalia font</name>
+  <summary>A font to typeset the Philokalia books</summary>
+  <description>
+    <p>
+      The font started as a project to digitize the typeface used to typeset 
+      the Philokalia books.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/philokalia</url>
+</component>

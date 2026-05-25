@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           guava
 Version:        33.5.0
@@ -13,8 +13,9 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/google/guava/archive/v%{version}/guava-%{version}.tar.gz
 
-Patch:          0001-Remove-NullMarked-filtering-and-annotation-collectio.patch
-Patch:          0002-Fix-invalid-Maven-attribute-values-in-compilerArgs.patch
+Patch:          0001-Remove-unused-annotation-module-dependencies.patch
+Patch:          0002-Remove-NullMarked-filtering-and-annotation-collectio.patch
+Patch:          0003-Fix-invalid-Maven-attribute-values-in-compilerArgs.patch
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -43,7 +44,7 @@ Summary:        The guava-testlib artifact
 guava-testlib provides additional functionality for conveninent unit testing
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 find . -name '*.jar' -delete
 
@@ -83,13 +84,11 @@ sed -i /Xplugin:ErrorProne/d pom.xml
 %pom_remove_dep -r :listenablefuture
 %pom_remove_dep -r :jspecify
 
-jurand -i -s -a guava guava-testlib \
+%java_remove_annotations guava guava-testlib -s \
   -p com[.]google[.]common[.]annotations[.] \
   -p com[.]google[.]errorprone[.]annotations[.] \
   -p com[.]google[.]j2objc[.]annotations[.] \
   -p org[.]jspecify[.]annotations[.] \
-  -m com[.]google[.].*[.]annotations \
-  -m org[.]jspecify
 
 %mvn_package "com.google.guava:failureaccess" guava
 
@@ -110,5 +109,5 @@ jurand -i -s -a guava guava-testlib \
 %files testlib -f .mfiles-guava-testlib
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 33.5.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 33.5.0-1
+- Import

@@ -1,4 +1,4 @@
-%if 0%{?rhel} >= 8
+%if 0%{?rhel} >= 8 || 0%{?oreon}
 %bcond_with php
 %bcond_with guile
 %else
@@ -17,12 +17,12 @@
 # Temporarily disable gtk & gdkpixbuf in Fedora 43 due to issues
 # with GDKPixbuf 2.44
 # see: https://bugzilla.redhat.com/show_bug.cgi?id=2395533
-%if 0%{?fedora} >= 43
+%if 0%{?fedora} >= 43 || 0%{?oreon}
 %bcond_with gtk2
 %bcond_with gdkpixbuf
 %else
 %bcond_without gdkpixbuf
-%if 0%{?rhel} >= 10
+%if 0%{?rhel} >= 10 || 0%{?oreon}
 %bcond_with gtk2
 %else
 %bcond_without gtk2
@@ -55,7 +55,7 @@
 %global JAVA 0
 %endif
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %global SHARP  0
 %global ARRRR  0
 %global DEVIL  0
@@ -105,8 +105,8 @@
 
 Name:			graphviz
 Summary:		Graph Visualization Tools
-Version:		14.1.3
-Release:		1%{?dist}
+Version:		14.1.4
+Release:		2%{?dist}
 License:		epl-1.0 AND cpl-1.0 AND bsd-3-clause AND mit AND gpl-3.0-or-later WITH bison-exception-2.2 AND apache-1.1 AND lgpl-2.0-or-later WITH libtool-exception AND smlnj AND hpnd-uc
 URL:			http://www.graphviz.org/
 #Source0:		https://gitlab.com/%%{name}/%%{name}/-/archive/%%{version}/%%{name}-%%{version}.tar.bz2
@@ -210,6 +210,8 @@ BuildRequires:		golang
 Requires:		urw-base35-fonts
 # rhbz#1838679
 Patch0:			graphviz-12.0.0-gvpack-neato-static.patch
+# fixes for R API 4.6
+Patch1:     swig-4.4.1-r-api-4.6.patch
 
 %if ! %{JAVA}
 Obsoletes:              graphviz-java < %{version}-%{release}
@@ -735,5 +737,5 @@ php --no-php-ini \
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 14.1.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 14.1.4-2
+- Import

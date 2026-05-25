@@ -46,7 +46,7 @@ Obsoletes:        %{name}-sysvinit
 
 Requires(post):   coreutils sed
 
-%if 0%{?fedora} && 0%{?fedora} < 28 || 0%{?rhel} && 0%{?rhel} < 8
+%if 0%{?fedora} && 0%{?fedora} < 28 || 0%{?rhel} && 0%{?rhel} < 8 || 0%{?oreon}
 %{?systemd_requires}
 %else
 %{?systemd_ordering} # does not exist on Fedora27/RHEL7
@@ -212,5 +212,5 @@ exit 0
 %attr(0644,root,root) %config(noreplace) %{_sysconfdir}/cron.d/dailyjobs
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.2-1
+- Import

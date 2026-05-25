@@ -51,7 +51,7 @@ developing applications that use %{name}.
 
 
 %prep
-%autosetup -n libzmq-%{version} -p1
+%autosetup -p1
 
 # Remove bundled code.
 rm -rf external/wepoll
@@ -109,5 +109,5 @@ make check V=1 XFAIL_TESTS=tests/test_radio_dish || ( cat test-suite.log && exit
 
 
 %changelog
-%autochangelog
-
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.3.5-1
+- Import

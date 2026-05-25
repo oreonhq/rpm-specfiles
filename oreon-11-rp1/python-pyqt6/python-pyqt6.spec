@@ -1,4 +1,4 @@
-%if 0%{?fedora} || 0%{?rhel} > 6
+%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
 %global python3_dbus_dir %(%{__python3} -c "import dbus.mainloop; print(dbus.mainloop.__path__[0])" 2>/dev/null || echo "%{python3_sitearch}/dbus/mainloop")
 %endif
 
@@ -6,12 +6,17 @@
 
 Summary: PyQt6 is Python bindings for Qt6
 Name:    python-pyqt6
-Version: 6.10.2
+Version: 6.11.0
 Release: 4%{?dist}
 License: gpl-3.0-only
 Url:     http://www.riverbankcomputing.com/software/pyqt/
 Source0: https://pypi.python.org/packages/source/P/PyQt6/pyqt6-%{version}%{?snap:.%{snap}}.tar.gz
 Source1: macros.pyqt6
+
+# Compatibility with Python 3.15
+# brings back PyWeakref_GetObject which was removed in Python 3.15
+# but is still part of the stable ABI.
+Patch:   py315.patch
 
 BuildRequires: make
 BuildRequires: chrpath
@@ -31,7 +36,7 @@ BuildRequires: cmake(Qt6Multimedia)
 BuildRequires: cmake(Qt6Nfc)
 BuildRequires: cmake(Qt6Network)
 BuildRequires: cmake(Qt6OpenGL)
-%if 0%{?fedora} || 0%{?epel}
+%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
 %ifarch %{qt6_qtwebengine_arches}
 BuildRequires: cmake(Qt6Pdf) cmake(Qt6PdfWidgets)
 %endif
@@ -171,7 +176,7 @@ sed -i \
 %{python3_sitearch}/PyQt6/QtMultimedia.*
 %{python3_sitearch}/PyQt6/QtMultimediaWidgets.*
 %{python3_sitearch}/PyQt6/QtNfc.*
-%if 0%{?fedora} || 0%{?epel}
+%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
 %ifarch %{qt6_qtwebengine_arches}
 %{python3_sitearch}/PyQt6/QtPdf.*
 %{python3_sitearch}/PyQt6/QtPdfWidgets.*
@@ -238,8 +243,5 @@ sed -i \
 
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
-- Stay on PyQt6 6.10.2 (no 6.10.3 sdist on PyPI or Riverbank static downloads)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.0-4
+- Import

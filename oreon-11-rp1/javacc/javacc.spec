@@ -92,7 +92,7 @@ Requires:       %{name} = %{version}-%{release}
 Examples for %{name}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # Remove binary information in the source tar
 find . -name "*.jar" -delete
@@ -150,5 +150,5 @@ ln -s javacc %{buildroot}%{_bindir}/javacc.sh
 %doc examples
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.13-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.13-1
+- Import

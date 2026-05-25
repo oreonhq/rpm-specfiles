@@ -1,6 +1,6 @@
-diff -rupN --no-dereference qt-creator-opensource-src-19.0.0-beta1/cmake/Findelfutils.cmake qt-creator-opensource-src-19.0.0-beta1-new/cmake/Findelfutils.cmake
---- qt-creator-opensource-src-19.0.0-beta1/cmake/Findelfutils.cmake	2026-01-27 03:56:14.000000000 +0100
-+++ qt-creator-opensource-src-19.0.0-beta1-new/cmake/Findelfutils.cmake	2026-01-31 10:21:56.055680245 +0100
+diff -rupN --no-dereference qt-creator-opensource-src-20.0.0-beta1/cmake/Findelfutils.cmake qt-creator-opensource-src-20.0.0-beta1-new/cmake/Findelfutils.cmake
+--- qt-creator-opensource-src-20.0.0-beta1/cmake/Findelfutils.cmake	2026-05-07 12:58:43.000000000 +0200
++++ qt-creator-opensource-src-20.0.0-beta1-new/cmake/Findelfutils.cmake	2026-05-12 14:30:14.575403349 +0200
 @@ -32,7 +32,7 @@ find_path(ELFUTILS_INCLUDE_DIR
      "${ELFUTILS_INSTALL_DIR}" ENV ELFUTILS_INSTALL_DIR "${CMAKE_PREFIX_PATH}"
  )

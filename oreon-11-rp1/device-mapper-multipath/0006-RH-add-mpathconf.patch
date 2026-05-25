@@ -1,4 +1,4 @@
-From c859a70d2a097b9f74161d8909ab781edf00ef20 Mon Sep 17 00:00:00 2001
+From 8a3841bdf674fdb11887e70dddb6f25ee3f91502 Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Thu, 16 Oct 2014 15:49:01 -0500
 Subject: [PATCH] RH: add mpathconf
@@ -23,7 +23,7 @@ Signed-off-by: Benjamin Marzinski <bmarzins@redhat.com>
  create mode 100644 multipath/mpathconf.8
 
 diff --git a/.github/actions/spelling/expect.txt b/.github/actions/spelling/expect.txt
-index dd39ed67..0875a1f2 100644
+index 154430db..cde289d8 100644
 --- a/.github/actions/spelling/expect.txt
 +++ b/.github/actions/spelling/expect.txt
 @@ -136,9 +136,11 @@ Marzinski
@@ -47,10 +47,10 @@ index dd39ed67..0875a1f2 100644
  partx
  pathgroup
 diff --git a/libmultipath/config.c b/libmultipath/config.c
-index f488406e..b730cd69 100644
+index b8317f4d..0bbaa981 100644
 --- a/libmultipath/config.c
 +++ b/libmultipath/config.c
-@@ -948,6 +948,8 @@ int init_config__ (const char *file, struct config *conf)
+@@ -939,6 +939,8 @@ int init_config__ (const char *file, struct config *conf)
  		validate_pctable(conf->overrides, 0, file);
  	} else {
  		condlog(0, "/etc/multipath.conf does not exist, blacklisting all devices.");

@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           maven-mapping
 Version:        3.0.0
@@ -29,7 +29,7 @@ Obsoletes:      %{name}-javadoc < 3.0.0-46
 Maven shared component that implements file name mapping.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 %pom_xpath_set "pom:project/pom:properties/pom:maven.compiler.target" "8" pom.xml
 %pom_xpath_set "pom:project/pom:properties/pom:maven.compiler.source" "8" pom.xml
 
@@ -43,5 +43,5 @@ Maven shared component that implements file name mapping.
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.0-1
+- Import

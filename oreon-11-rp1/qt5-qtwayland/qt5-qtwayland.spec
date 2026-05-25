@@ -3,13 +3,12 @@
 Summary: Qt5 - Wayland platform support and QtCompositor module
 Name:    qt5-%{qt_module}
 Version: 5.15.18
-Release: 4%{?dist}
+Release: 2%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
 %global majmin %(echo %{version} | cut -d. -f1-2)
-# 5.15.x LTS tarballs live under archive (official_releases returns 404)
-Source0: https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
+Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
 
 ## Upstream patches
 ## repo: https://invent.kde.org/qt/qt/qtwayland
@@ -185,11 +184,5 @@ popd
 
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-4
-- Source0 under download.qt.io/archive for 5.15 LTS (official_releases path 404)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-3
-- bump release (retry failed build)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
+- Import

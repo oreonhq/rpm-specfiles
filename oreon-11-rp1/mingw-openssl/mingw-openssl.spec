@@ -140,7 +140,7 @@ Patch115: 0115-skip-quic-pairwise.patch
 # Patch116: 0116-version-aliasing.patch
 # https://github.com/openssl/openssl/issues/23050
 Patch117: 0117-ignore-unknown-sigalgorithms-groups.patch
-# https://fedoraproject.org/wiki/Changes/OpenSSLDistrustSHA1SigVer
+# 
 # Patch120: 0120-Allow-disabling-of-SHA1-signatures.patch
 # From CentOS 9
 Patch121: 0121-FIPS-cms-defaults.patch
@@ -565,5 +565,5 @@ mkdir -m700 %{buildroot}%{ucrt64_sysconfdir}/pki/CA/private
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.4-4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.4-4
+- Import

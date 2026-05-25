@@ -1,4 +1,4 @@
-From de105098997fdb8844ada6a419848e3a9ccfebd9 Mon Sep 17 00:00:00 2001
+From d83dc0dfb2274dc85cbe5ef3d9eaf9fe5afe7305 Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Fri, 17 Oct 2014 11:20:34 -0500
 Subject: [PATCH] RH: add wwids from kernel cmdline mpath.wwids with -A
@@ -20,7 +20,7 @@ Signed-off-by: Benjamin Marzinski <bmarzins@redhat.com>
  3 files changed, 59 insertions(+), 3 deletions(-)
 
 diff --git a/multipath/main.c b/multipath/main.c
-index 4d9fbbaa..a5e67c15 100644
+index 31012874..a667c2ee 100644
 --- a/multipath/main.c
 +++ b/multipath/main.c
 @@ -111,7 +111,7 @@ usage (char * progname)
@@ -41,7 +41,7 @@ index 4d9fbbaa..a5e67c15 100644
  		"  -c      check if a device should be a path in a multipath device\n"
  		"  -C      check if a multipath device has usable paths\n"
  		"  -q      allow queue_if_no_path when multipathd is not running\n"
-@@ -445,6 +447,50 @@ static void cleanup_vecs(void)
+@@ -440,6 +442,50 @@ static void cleanup_vecs(void)
  	free_pathvec(vecs.pathvec, FREE_PATHS);
  }
  
@@ -92,7 +92,7 @@ index 4d9fbbaa..a5e67c15 100644
  static int
  configure (struct config *conf, enum mpath_cmds cmd,
  	   enum devtypes dev_type, char *devpath)
-@@ -856,7 +902,7 @@ main (int argc, char *argv[])
+@@ -851,7 +897,7 @@ main (int argc, char *argv[])
  		condlog(1, "failed to register cleanup handler for vecs: %m");
  	if (atexit(cleanup_bindings))
  		condlog(1, "failed to register cleanup handler for bindings: %m");
@@ -101,7 +101,7 @@ index 4d9fbbaa..a5e67c15 100644
  		switch(arg) {
  		case 'v':
  			if (!isdigit(optarg[0])) {
-@@ -927,6 +973,10 @@ main (int argc, char *argv[])
+@@ -922,6 +968,10 @@ main (int argc, char *argv[])
  		case 'T':
  			cmd = CMD_DUMP_CONFIG;
  			break;

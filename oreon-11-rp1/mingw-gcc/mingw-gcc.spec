@@ -14,19 +14,18 @@
 # Run the testsuite
 %global enable_tests 0
 
-%global DATE 20260308
-%global gitrev da9795f681c5add73add41595bb6713b45c77d4e
-%global gcc_version 16.0.1
+%global DATE 20260501
+%global gitrev f4e68dc3bdc8f1c5d202db92c8c7bcd89c638688
+%global gcc_version 16.1.1
 %global gcc_major 16
 
 Name:           mingw-gcc
 Version:        %{gcc_version}
-Release:        6%{?dist}
+Release:        1%{?dist}
 Summary:        MinGW Windows cross-compiler (GCC) for C
-ExclusiveArch:  x86_64
 
 # Sync with native 'gcc' package
-License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
 URL:            http://gcc.gnu.org
 
 # The source for this package was pulled from upstream's vcs.  Use the
@@ -35,8 +34,8 @@ URL:            http://gcc.gnu.org
 # git --git-dir=gcc-dir.tmp/.git fetch --depth 1 origin %%{gitrev}
 # git --git-dir=gcc-dir.tmp/.git archive --prefix=%%{name}-%%{version}-%%{DATE}/ %%{gitrev} | xz -9e > %%{name}-%%{version}-%%{DATE}.tar.xz
 # rm -rf gcc-dir.tmp
-%global srcdir gcc-%{gcc_major}-%{DATE}
-Source0:        https://gcc.gnu.org/pub/gcc/snapshots/%{gcc_major}-%{DATE}/gcc-%{gcc_major}-%{DATE}.tar.xz
+%global srcdir gcc-%{version}-%{DATE}
+Source0:        %{srcdir}.tar.xz
 
 # See https://sourceforge.net/p/mingw-w64/mailman/mingw-w64-public/thread/8fd2fb03-9b8a-07e1-e162-0bb48bcc3984%40gmail.com/#msg37200751
 Patch0:         0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
@@ -150,6 +149,9 @@ MinGW Windows cross-C Preprocessor for the win32 target.
 %package -n mingw32-gcc-c++
 Summary:        MinGW Windows cross-compiler for C++ for the win32 target
 Requires:       mingw32-gcc = %{version}-%{release}
+%if 0%{bootstrap} == 0
+Requires:       mingw32-libstdc++ = %{version}-%{release}
+%endif
 
 %description -n mingw32-gcc-c++
 MinGW Windows cross-compiler for C++ for the win32 target.
@@ -246,6 +248,9 @@ MinGW Windows cross-C Preprocessor for the win64 target
 %package -n mingw64-gcc-c++
 Summary:        MinGW Windows cross-compiler for C++ for the win64 target
 Requires:       mingw64-gcc = %{version}-%{release}
+%if 0%{bootstrap} == 0
+Requires:       mingw64-libstdc++ = %{version}-%{release}
+%endif
 
 %description -n mingw64-gcc-c++
 MinGW Windows cross-compiler for C++ for the win64 target.
@@ -343,6 +348,9 @@ MinGW Windows cross-C Preprocessor for the win64 target
 %package -n ucrt64-gcc-c++
 Summary:        MinGW Windows cross-compiler for C++ for the win64 target
 Requires:       ucrt64-gcc = %{version}-%{release}
+%if 0%{bootstrap} == 0
+Requires:       ucrt64-libstdc++ = %{version}-%{release}
+%endif
 
 %description -n ucrt64-gcc-c++
 MinGW Windows cross-compiler for C++ for the win64 target.
@@ -994,8 +1002,5 @@ ln -sf %{ucrt64_bindir}/libssp-0.dll %{buildroot}%{ucrt64_libdir}/libssp.dll.a
 
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-6
-- Source0 from published gcc 16 weekly snapshot tarball (16-20260308)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gcc_version}-5
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1.1-1
+- Import

@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 %global bundle org.apache.felix.utils
 
 Name:           felix-utils
@@ -32,7 +32,7 @@ Obsoletes:      %{name}-javadoc < 1.11.8-24
 Utility classes for OSGi
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_remove_parent
 %pom_xpath_inject pom:project "<groupId>org.apache.felix</groupId>"
@@ -52,5 +52,5 @@ Utility classes for OSGi
 %doc DEPENDENCIES
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.11.8-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.11.8-1
+- Import

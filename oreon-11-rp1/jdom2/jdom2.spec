@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           jdom2
 Version:        2.0.6.1
@@ -43,7 +43,7 @@ complex and memory-consumptive options that current API
 offerings provide.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 
 sed -i 's/\r//' LICENSE.txt
@@ -74,5 +74,5 @@ mkdir lib
 %license LICENSE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.6.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.6.1-1
+- Import

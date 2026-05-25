@@ -1,6 +1,6 @@
 %global python_support 1
 
-%if 0%{?rhel} && 0%{?rhel} >= 10
+%if 0%{?rhel} && 0%{?rhel} >= 10 || 0%{?oreon}
 %global python_support 0
 %endif
 
@@ -99,5 +99,5 @@ find %{buildroot} -name "*.la" -exec rm -f {} \;
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.5-24
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.5-24
+- Import

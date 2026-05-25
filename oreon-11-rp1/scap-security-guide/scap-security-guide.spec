@@ -1,10 +1,10 @@
 # SSG build system and tests count with build directory name `build`.
 # For more details see:
-# https://fedoraproject.org/wiki/Changes/CMake_to_do_out-of-source_builds
+# 
 %global _vpath_builddir build
 
 Name:		scap-security-guide
-Version:	0.1.79
+Version:	0.1.80
 Release:	2%{?dist}
 Summary:	Security guidance and baselines in SCAP formats
 License:	BSD-3-Clause
@@ -42,7 +42,7 @@ The %{name}-doc package contains HTML formatted documents containing
 hardening guidances that have been generated from XCCDF benchmarks
 present in %{name} package.
 
-%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) )
+%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || 0%{?oreon}
 %package	rule-playbooks
 Summary:	Ansible playbooks per each rule.
 Group:		System Environment/Base
@@ -57,7 +57,7 @@ The %{name}-rule-playbooks package contains individual ansible playbooks per rul
 
 %define cmake_defines_common -DSSG_SEPARATE_SCAP_FILES_ENABLED=OFF -DSSG_BASH_SCRIPTS_ENABLED=OFF -DSSG_BUILD_SCAP_12_DS=OFF
 %define cmake_defines_specific %{nil}
-%if 0%{?rhel} && ! %{defined eln}
+%if 0%{?rhel} && ! %{defined eln} || 0%{?oreon}
 %define cmake_defines_specific -DSSG_PRODUCT_DEFAULT:BOOLEAN=FALSE -DSSG_PRODUCT_RHEL%{rhel}:BOOLEAN=TRUE -DSSG_SCIENTIFIC_LINUX_DERIVATIVES_ENABLED:BOOL=OFF -DSSG_CENTOS_DERIVATIVES_ENABLED:BOOL=OFF -DSSG_ANSIBLE_PLAYBOOKS_PER_RULE_ENABLED:BOOL=ON
 %endif
 %if 0%{?centos}
@@ -81,7 +81,7 @@ rm %{buildroot}/%{_docdir}/%{name}/Contributors.md
 %{_datadir}/%{name}/tailoring
 %lang(en) %{_mandir}/man8/scap-security-guide.8.*
 %doc %{_docdir}/%{name}/LICENSE
-%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) )
+%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || 0%{?oreon}
 %exclude %{_datadir}/%{name}/ansible/rule_playbooks
 %endif
 
@@ -89,12 +89,12 @@ rm %{buildroot}/%{_docdir}/%{name}/Contributors.md
 %doc %{_docdir}/%{name}/guides/*.html
 %doc %{_docdir}/%{name}/tables/*.html
 
-%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) )
+%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || 0%{?oreon}
 %files rule-playbooks
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/ansible/rule_playbooks
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.79-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.80-2
+- Import

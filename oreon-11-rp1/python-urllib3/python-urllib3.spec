@@ -5,14 +5,14 @@
 %bcond extradeps %{undefined rhel}
 
 Name:           python-urllib3
-Version:        2.6.3
+Version:        2.7.0
 Release:        %autorelease
 Summary:        HTTP library with thread-safe connection pooling, file post, and more
 
 # SPDX
 License:        MIT
 URL:            https://github.com/urllib3/urllib3
-Source0:        https://codeload.github.com/urllib3/urllib3/tar.gz/%{version}#/urllib3-%{version}.tar.gz
+Source0:        %{url}/archive/%{version}/urllib3-%{version}.tar.gz
 # A special forked copy of Hypercorn is required for testing. We asked about
 # the possiblility of using a released version in the future in:
 #   Path toward testing with a released version of hypercorn?
@@ -29,7 +29,7 @@ Source0:        https://codeload.github.com/urllib3/urllib3/tar.gz/%{version}#/u
 # installed in the buildroot or otherwise included in any of the binary RPMs.
 %global hypercorn_url https://github.com/urllib3/hypercorn
 %global hypercorn_commit d1719f8c1570cbd8e6a3719ffdb14a4d72880abb
-Source1:        https://codeload.github.com/urllib3/hypercorn/tar.gz/%{hypercorn_commit}#/hypercorn-%{hypercorn_commit}.tar.gz
+Source1:        %{hypercorn_url}/archive/%{hypercorn_commit}/hypercorn-%{hypercorn_commit}.tar.gz
 
 BuildArch:      noarch
 
@@ -85,6 +85,11 @@ Recommends:     python3-urllib3+socks
 %autosetup -n urllib3-%{version}
 %setup -q -n urllib3-%{version} -T -D -b 1
 
+# Allow setuptools-scm 10+
+# Upstream PR pins to <11: https://github.com/urllib3/urllib3/pull/4954
+# We don't pin if we don't have to -- the build should fail if it doesn't work with future versions.
+sed -i 's/setuptools-scm>=8,<10/setuptools-scm>=8/' pyproject.toml
+
 # Make sure that the RECENT_DATE value doesn't get too far behind what the current date is.
 # RECENT_DATE must not be older that 2 years from the build time, or else test_recent_date
 # (from test/test_connection.py) would fail. However, it shouldn't be to close to the build time either,
@@ -106,9 +111,9 @@ sed -i "s/^RECENT_DATE = datetime.date(.*)/RECENT_DATE = datetime.date($recent_d
 %if %{with tests}
 # Possible improvements to dependency groups
 # https://github.com/urllib3/urllib3/issues/3594
-# Adjust the contents of the "dev" dependency group by removing:
+# Adjust the contents of the "dev-base" dependency group by removing:
 remove_from_dev() {
-  tomcli set pyproject.toml lists delitem 'dependency-groups.dev' "($1)\b.*"
+  tomcli set pyproject.toml lists delitem 'dependency-groups.dev-base' "($1)\b.*"
 }
 #   - Linters, coverage tools, profilers, etc.:
 #     https://docs.fedoraproject.org/en-US/packaging-guidelines/Python/#_linters
@@ -128,7 +133,7 @@ remove_from_dev 'hypercorn'
 # constraints, which is currently fine, but could theoretically cause trouble
 # in the future. We’ll cross that bridge if we ever arrive at it.)
 tomcli set pyproject.toml lists replace --type regex_search \
-    'dependency-groups.dev' '[>=]=.*' ''
+    'dependency-groups.dev-base' '[>=]=.*' ''
 %endif
 
 
@@ -185,5 +190,5 @@ k="${k-}${k+ and }not (TestHTTPProxyManager and test_tunneling_proxy_request_tim
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.7.0-1
+- Import

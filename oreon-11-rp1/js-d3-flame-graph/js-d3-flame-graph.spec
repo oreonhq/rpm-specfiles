@@ -23,7 +23,7 @@ Patch1:         001-remove-unused-frontend-crypto-and-patch-md4.patch
 BuildRequires:  web-assets-devel
 BuildRequires:  nodejs, /usr/bin/node
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Requires:       web-assets-filesystem
 %endif
 
@@ -105,5 +105,5 @@ cp -a dist/* %{buildroot}/%{_jsdir}/%{pkgname}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.7-12
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.7-12
+- Import

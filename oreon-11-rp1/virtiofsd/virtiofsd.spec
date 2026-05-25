@@ -18,14 +18,14 @@ ExclusiveArch:  %{rust_arches}
 # Some of our deps (i.e. vm-memory) are not available on 32 bits targets.
 ExcludeArch:    i686
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  rust-packaging >= 21
 %endif
 BuildRequires:  libcap-ng-devel
 BuildRequires:  libseccomp-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 Requires:       qemu-kvm-common
 %else
 Requires:       qemu-common
@@ -33,7 +33,7 @@ Requires:       qemu-common
 Requires:	shadow-utils
 Provides:       vhostuser-backend(fs)
 Conflicts:      qemu-virtiofsd
-%if 0%{?fedora} > 38
+%if 0%{?fedora} > 38 || 0%{?oreon}
 Obsoletes:      qemu-virtiofsd <= 2:8.0.0-1
 Provides:       qemu-virtiofsd = 2:7.2.1-1
 %endif
@@ -66,5 +66,5 @@ install -D -p -m 0644 50-virtiofsd.json %{buildroot}%{_datadir}/qemu/vhost-user/
 %{_datadir}/qemu/vhost-user/50-virtiofsd.json
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.13.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.13.3-1
+- Import

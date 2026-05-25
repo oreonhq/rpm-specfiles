@@ -19,8 +19,8 @@
 %global modname numpy
 
 Name:           numpy
-Version:        2.4.3
-Release:        4%{?dist}
+Version:        2.4.6
+Release:        1%{?dist}
 Epoch:          1
 Summary:        A fast multidimensional array facility for Python
 
@@ -35,8 +35,10 @@ URL:            http://www.numpy.org/
 Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Source1:        https://numpy.org/doc/%(echo %{version} | cut -d. -f1-2)/numpy-html.zip
 
+# Fix FTBFS with GCC 16
+# Sent upstream:
 # https://github.com/numpy/x86-simd-sort/pull/225
-Patch0:         fix-gcc-16-ftbfs.patch
+#Patch:          fix-gcc-16-ftbfs.patch
 
 %description
 NumPy is a general-purpose array-processing package designed to
@@ -64,13 +66,10 @@ Obsoletes:      numpy < 1:1.10.1-3
 BuildRequires:  python3-devel
 BuildRequires:  gcc-gfortran gcc gcc-c++
 BuildRequires:  lapack-devel
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires:  libdivide-devel
 %endif
 BuildRequires:  ninja-build
-BuildRequires:  meson
-BuildRequires:  python3-meson-python >= 0.18
-BuildRequires:  python3-cython >= 3.0.6
 %if %{with tests}
 BuildRequires:  python3-hypothesis
 BuildRequires:  python3-pytest
@@ -84,7 +83,7 @@ BuildRequires: chrpath
 #  https://bugzilla.redhat.com/show_bug.cgi?id=2332307
 Requires:       python3-numpy-f2py%{?_isa} = %{epoch}:%{version}-%{release}
 
-%if !0%{?fedora}
+%if !0%{?fedora} || 0%{?oreon}
 Provides:       bundled(libdivide) = 3.0
 %endif
 
@@ -134,7 +133,7 @@ libraries = %{blaslib}%{blasvar}
 library_dirs = %{_libdir}
 EOF
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # Unbundle libdivide
 sed -i 's,"numpy/libdivide/libdivide.h",<libdivide.h>,' \
     numpy/_core/src/umath/loops.c.src
@@ -142,20 +141,12 @@ sed -i 's,"numpy/libdivide/libdivide.h",<libdivide.h>,' \
 
 %generate_buildrequires
 %pyproject_buildrequires -R -Csetup-args=-Dblas=flexiblas -Csetup-args=-Dlapack=lapack
-brfile=$(ls ../*pyproject-buildrequires 2>/dev/null | head -1)
-if test -n "$brfile"; then
-  sed -i -e '/^python3dist(meson-python)/d' -e '/^python3dist(Cython)/d' "$brfile"
-  echo 'python3-meson-python >= 0.18' >> "$brfile"
-  echo 'python3-cython >= 3.0.6' >> "$brfile"
-  echo 'meson' >> "$brfile"
-  echo '%{blaslib}-devel' >> "$brfile"
-fi
 
 %build
 %set_build_flags
 # Allow libdivide to use vector instructions where possible
 %ifarch x86_64
-%if 0%{?rhel} > 9
+%if 0%{?rhel} > 9 || 0%{?oreon}
 # x86_64-v3
 sed -i '/libdivide\.h/i#define LIBDIVIDE_AVX2' numpy/_core/src/umath/loops.c.src
 %else
@@ -167,13 +158,13 @@ sed -i '/libdivide\.h/i#define LIBDIVIDE_NEON' numpy/_core/src/umath/loops.c.src
 %endif
 
 #fix flags for ELN ppc64le
-%if 0%{?rhel} >= 10
+%if 0%{?rhel} >= 10 || 0%{?oreon}
 %ifarch ppc64le
 find . -type f -print0 | xargs -0 sed -i s/mcpu=power8/mcpu=power9/
 %endif
 %endif
 
-%pyproject_wheel -Csetup-args=-Dblas=flexiblas -Csetup-args=-Dlapack=lapack -Ccompile-args=-v
+%pyproject_wheel -Csetup-args=-Dcpu-baseline="none" -Csetup-args=-Dblas=flexiblas -Csetup-args=-Dlapack=lapack -Ccompile-args=-v
 
 %install
 mkdir docs
@@ -192,7 +183,7 @@ popd &> /dev/null
 mkdir -p %{buildroot}%{_includedir}
 ln -s %{python3_sitearch}/%{name}/_core/include/numpy/ %{buildroot}%{_includedir}/numpy
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 rm %{buildroot}%{python3_sitearch}/numpy/_core/include/numpy/random/libdivide.h
 %endif
 
@@ -270,14 +261,5 @@ export PYTHONPATH=%{buildroot}%{python3_sitearch}
 
 
 %changelog
-* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.3-4
-- buildreqs file uses rpm names not python3dist for bootstrap
-
-* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.3-3
-- flexiblas on oreon, BR meson-python/Cython/meson, gcc16 patch on
-
-* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.3-2
-- default tests off on oreon (no python3-hypothesis in repo yet)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:2.4.6-1
+- Import

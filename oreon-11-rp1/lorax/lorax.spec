@@ -4,7 +4,7 @@
 %global forgeurl https://github.com/weldr/lorax
 
 Name:           lorax
-Version:        45.1
+Version:        44.6
 Release:        1%{?dist}
 Summary:        Tool for creating the anaconda install images
 License:        GPL-2.0-or-later
@@ -24,7 +24,7 @@ BuildRequires:  make
 BuildRequires:  systemd-rpm-macros
 
 Requires:       lorax-templates
-%if 0%{?rhel} >= 9
+%if 0%{?rhel} >= 9 || 0%{?oreon}
 Requires:       lorax-templates-rhel
 %endif
 
@@ -61,7 +61,7 @@ Requires:       python3-libdnf5
 Requires:       python3-librepo
 Requires:       python3-pycdio
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # Fedora specific deps
 %ifarch x86_64
 Requires:       hfsplus-tools
@@ -96,11 +96,11 @@ Requires: lorax = %{version}-%{release}
 %description docs
 Includes the full html documentation for lorax, livemedia-creator, and the pylorax library.
 
-%if ! (0%{?rhel} >= 10 && "%{_arch}" == "ppc64le")
+%if ! (0%{?rhel} >= 10 && "%{_arch}" == "ppc64le") || 0%{?oreon}
 %package lmc-virt
 Summary:  livemedia-creator libvirt dependencies
 Requires: lorax = %{version}-%{release}
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 # RHEL doesn't have qemu, just qemu-kvm
 Requires: qemu-kvm
 %else
@@ -176,7 +176,7 @@ make DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
 %files docs
 %doc docs/html/*
 
-%if ! (0%{?rhel} >= 10 && "%{_arch}" == "ppc64le")
+%if ! (0%{?rhel} >= 10 && "%{_arch}" == "ppc64le") || 0%{?oreon}
 %files lmc-virt
 %endif
 
@@ -187,5 +187,5 @@ make DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
 %{_datadir}/lorax/templates.d/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 45.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 44.6-1
+- Import

@@ -2,11 +2,9 @@
 %bcond tests %{without bootstrap}
 
 Name:           python-virtualenv
-Version:        21.1.0
+Version:        20.35.4
 Release:        %autorelease
 Summary:        Tool to create isolated Python environments
-
-%{?oreon:%global python_wheel_pkg_prefix python3}
 
 License:        MIT
 URL:            http://pypi.python.org/pypi/virtualenv
@@ -16,7 +14,6 @@ Source:         %{pypi_source virtualenv}
 Patch:          rpm-wheels.patch
 
 # Restore support for Python 3.6 virtual environments
-# This also requires a similar patch for python-discovery
 Patch:          python3.6.patch
 
 BuildArch:      noarch
@@ -43,8 +40,7 @@ BuildRequires:  python3-time-machine
 # RPM installed wheels
 BuildRequires:  %{python_wheel_pkg_prefix}-pip-wheel >= 25.1
 BuildRequires:  %{python_wheel_pkg_prefix}-setuptools-wheel >= 70.1
-# python-wheel-wheel was only used on Python 3.8 which is retired from Fedora 42+
-# python-wheel0.37-wheel is only used on Python 3.6 which is not used during the build
+# python-wheel-wheel is only used on Python 3.8 which is retired from Fedora 42+
 
 %global _description %{expand:
 virtualenv is a tool to create isolated Python environments.
@@ -93,12 +89,6 @@ test ! -f src/virtualenv/seed/embed/wheels/*.whl
 # On Fedora, this should change nothing, but when building for RHEL9+, it will
 sed -i "s|/usr/share/python-wheels|%{python_wheel_dir}|" src/virtualenv/util/path/_system_wheels.py
 
-# Upstream pins filelock only to fix a CVE, yet it allows older versions for older Pythons
-# https://github.com/pypa/virtualenv/commit/7c284221b4751388801355fc6ebaa2abe60427bd
-# https://github.com/pypa/virtualenv/commit/31b5d31581df3e3a7bbc55e52568b26dd01b0d57
-# We unpin it here, the CVE does not block us and filelock can be updated on its own.
-sed -i 's/filelock>=3.24.2/filelock>=3.12.2/' pyproject.toml
-
 %generate_buildrequires
 %pyproject_buildrequires
 
@@ -128,9 +118,6 @@ sed -i 's/filelock>=3.24.2/filelock>=3.12.2/' pyproject.toml
 # We don't run the tests in an active virtual environment
 # https://github.com/pypa/virtualenv/issues/2939#issuecomment-3384554583
 # - test_py_info_cache_clear
-# Flaky test
-# https://github.com/pypa/virtualenv/issues/3089
-# - test_create_no_seed[*-venv-*]
 PIP_CERT=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem \
 %pytest -vv -k "not test_bundle and \
                 not test_acquire and \
@@ -141,8 +128,7 @@ PIP_CERT=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem \
                 not test_base_bootstrap_via_pip_invoke and \
                 not test_seed_link_via_app_data and \
                 not test_py_info_cache_clear and \
-                not test_create_distutils_cfg and \
-                not (test_create_no_seed and venv)"
+                not test_create_distutils_cfg"
 %endif
 
 %files -n python3-virtualenv -f %{pyproject_files}
@@ -150,5 +136,5 @@ PIP_CERT=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem \
 %{_bindir}/virtualenv
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 21.1.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20.35.4-1
+- Import

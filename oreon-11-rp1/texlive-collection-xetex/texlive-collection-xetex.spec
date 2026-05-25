@@ -1257,5 +1257,5 @@ appstream-util validate-relax --nonet %{buildroot}%{_datadir}/appdata/*.metainfo
 %doc %{_texmf_main}/doc/xelatex/zbmath-review-template/
 
 %changelog
-* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12:svn59693-10
-- Import TeX Live 2025 split from f44 for Oreon 11
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12:svn78834-10
+- Import

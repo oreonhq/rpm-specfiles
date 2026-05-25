@@ -14,7 +14,7 @@ BuildRequires: glib2-devel >= 2.6.0
 BuildRequires: iso-codes-devel
 BuildRequires: gobject-introspection-devel
 Requires: iso-codes
-#Source: http://download.gnome.org/sources/libxklavier/5.3/%%{name}-%%{version}.tar.xz
+#Source: http://download.gnome.org/sources/libxklavier/5.3/%{name}-%{version}.tar.xz
 Source: http://people.freedesktop.org/~svu/libxklavier-5.4.tar.bz2
 
 Patch01: 0001-props-fix-the-max-lengths-for-set_name-description-s.patch
@@ -72,5 +72,5 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.{a,la}
 %{_datadir}/gir-1.0/Xkl-1.0.gir
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.4-30
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.4-30
+- Import

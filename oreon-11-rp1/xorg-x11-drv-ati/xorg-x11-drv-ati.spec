@@ -56,5 +56,5 @@ find %{buildroot} -name "*.la" -delete
 %{_datadir}/X11/xorg.conf.d/10-radeon.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 22.0.0-6
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 22.0.0-6
+- Import

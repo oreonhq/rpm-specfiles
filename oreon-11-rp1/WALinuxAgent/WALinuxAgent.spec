@@ -8,6 +8,7 @@ Summary:        The Microsoft Azure Linux Agent
 License:        Apache-2.0
 URL:            https://github.com/Azure/%{name}
 Source0:        https://github.com/Azure/%{name}/archive/v%{version}.tar.gz
+Source1:        module-setup.sh
 
 Patch1:         0001-waagent.service-set-ConditionVirtualization-microsof.patch
 
@@ -19,7 +20,7 @@ BuildRequires:  python3-distro
 BuildRequires:  python3-crypt-r
 
 Requires:       %name-udev = %version-%release
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Requires:       ntfsprogs
 %endif
 Requires:       openssh
@@ -88,27 +89,7 @@ install -m0644 -D config/waagent.logrotate %{buildroot}%{_sysconfdir}/logrotate.
 
 # Install -udev related files
 install -m0644 -D --target-directory=%{buildroot}%{_udevrulesdir}/ config/*.rules
-mkdir -p %{buildroot}%{_prefix}/lib/dracut/modules.d/%{dracut_modname}
-cat > %{buildroot}%{_prefix}/lib/dracut/modules.d/%{dracut_modname}/module-setup.sh <<'EOF'
-#!/usr/bin/bash
-
-# called by dracut
-check() {
-    return 0
-}
-
-# called by dracut
-depends() {
-    return 0
-}
-
-# called by dracut
-install() {
-    inst_multiple chmod cut readlink
-    inst_rules 66-azure-storage.rules 99-azure-product-uuid.rules
-}
-EOF
-chmod 0755 %{buildroot}%{_prefix}/lib/dracut/modules.d/%{dracut_modname}/module-setup.sh
+install -m0755 -D --target-directory=%{buildroot}%{_prefix}/lib/dracut/modules.d/%{dracut_modname}/ %{SOURCE1}
 
 sed -i 's,#!/usr/bin/env python,#!/usr/bin/python3,' %{buildroot}%{_sbindir}/waagent
 sed -i 's,/usr/bin/python ,/usr/bin/python3 ,' %{buildroot}%{_unitdir}/waagent.service
@@ -143,5 +124,5 @@ sed -i 's,ResourceDisk.Format=y,ResourceDisk.Format=n,' %{buildroot}%{_sysconfdi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.15.0.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.15.0.1-1
+- Import

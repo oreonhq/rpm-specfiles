@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           modulemaker-maven-plugin
 Version:        1.11
@@ -32,7 +32,7 @@ This plugin allows the creation of a module-info.class for projects on Java 6
 to Java 8 where a module-info.java file cannot be compiled.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 cp -p %{SOURCE1} .
 
@@ -49,5 +49,5 @@ cp -p %{SOURCE1} .
 %license LICENSE-2.0.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.11-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.11-1
+- Import

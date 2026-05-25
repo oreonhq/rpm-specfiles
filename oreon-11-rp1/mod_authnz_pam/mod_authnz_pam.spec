@@ -21,7 +21,7 @@ Requires: httpd-mmn = %{_httpd_mmn}
 Requires: pam
 
 # Suppres auto-provides for module DSO per
-# https://fedoraproject.org/wiki/Packaging:AutoProvidesAndRequiresFiltering#Summary
+# 
 %{?filter_provides_in: %filter_provides_in %{_libdir}/httpd/modules/.*\.so$}
 %{?filter_setup}
 
@@ -64,5 +64,5 @@ install -Dp -m 0644 authnz_pam.confx $RPM_BUILD_ROOT%{_httpd_confdir}/authnz_pam
 %{_httpd_moddir}/*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.3-12
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.3-12
+- Import

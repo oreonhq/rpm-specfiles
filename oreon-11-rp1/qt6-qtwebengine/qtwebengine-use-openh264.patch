@@ -1,8 +1,8 @@
 diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
-index cc992b4..7b6326f 100644
+index d3bc20cf4f..129d41d9f6 100644
 --- a/src/core/CMakeLists.txt
 +++ b/src/core/CMakeLists.txt
-@@ -449,6 +449,8 @@ foreach(arch ${archs})
+@@ -463,6 +463,8 @@ foreach(arch ${archs})
                  use_bluez=false
                  is_cfi=false
                  use_ozone=true

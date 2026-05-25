@@ -19,7 +19,7 @@ BuildRequires: libselinux-devel
 BuildRequires: libxcrypt-devel
 BuildRequires: openldap-devel
 BuildRequires: python3-devel
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || 0%{?oreon}
 BuildRequires: python3dist(crypt-r)
 %endif
 # To make sure the configure script can find it
@@ -131,5 +131,5 @@ export PYTHONPATH
 %{_datadir}/gtk-doc/html/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.64-17
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.64-17
+- Import

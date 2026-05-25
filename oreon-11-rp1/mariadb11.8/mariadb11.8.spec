@@ -50,7 +50,7 @@
 %bcond_without lzo
 %bcond_without snappy
 %bcond_without zstd
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %bcond_without lzma
 %else
 %bcond_with lzma
@@ -67,7 +67,7 @@
 %if !0%{?flatpak}
 %bcond_without pam
 %endif
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # MariaDB upstream packages this as a separate subpackage
 %bcond_without hashicorp
 %else
@@ -81,7 +81,7 @@
 # Other plugins
 # S3 storage engine
 #   https://mariadb.com/kb/en/s3-storage-engine/
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %bcond_without cracklib
 %bcond_without connect
 %bcond_without sphinx
@@ -102,7 +102,7 @@
 #   RocksDB engine is available only for x86_64
 #   RocksDB may be built with jemalloc, if specified in CMake
 %ifarch x86_64
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %bcond_without mroonga
 %bcond_without rocksdb
 %else
@@ -126,7 +126,7 @@
 # See mariadb-libfmt.patch for detailed description.
 # As the breaking issues are no longer present in fedora 41
 # and higher, this issue only remains in rhel
-%if 0%{?rhel} && 0%{?rhel} < 11
+%if 0%{?rhel} && 0%{?rhel} < 11 || 0%{?oreon}
 %bcond bundled_fmt 1
 %else
 %bcond bundled_fmt 0
@@ -265,7 +265,7 @@ BuildRequires:    libedit-devel
 BuildRequires:    ncurses-devel
 # debugging stuff
 BuildRequires:    systemtap-sdt-devel
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || 0%{?oreon}
 BuildRequires:    systemtap-sdt-dtrace
 %endif
 # Bison SQL parser; needed also for wsrep API
@@ -543,7 +543,7 @@ Requires:         %{_sysconfdir}/my.cnf.d
 # The *-selinux package should only be required on SELinux enabled systems. Therefore the following rich dependency syntax should be used:
 Requires:         (mysql-selinux >= 1.0.10 if selinux-policy-%{selinuxtype})
 # This ensures that the *-selinux package and all its dependencies are not pulled into containers and other systems that do not use SELinux.
-# https://fedoraproject.org/wiki/SELinux/IndependentPolicy#Adding_dependency_to_the_spec_file_of_corresponding_package
+# 
 %endif
 
 Requires:         coreutils
@@ -1413,7 +1413,7 @@ rm %{buildroot}%{_mandir}/man1/mbstream.1*
 %selinux_modules_install -s %{selinuxtype} %{_datadir}/selinux/packages/%{selinuxtype}/%{majorname}-server-galera.cil
 
 # Allow ports needed for the replication:
-# https://fedoraproject.org/wiki/SELinux/IndependentPolicy#Port_Labeling
+# 
 if [ $1 -eq 1 ]; then
   # https://mariadb.com/kb/en/library/configuring-mariadb-galera-cluster/#network-ports
   #   Galera Replication Port
@@ -1430,7 +1430,7 @@ if [ $1 -eq 0 ]; then
     %selinux_modules_uninstall -s %{selinuxtype} %{majorname}-server-galera
 
     # Delete port labeling when the package is removed
-    # https://fedoraproject.org/wiki/SELinux/IndependentPolicy#Port_Labeling
+    # 
     semanage port -d -t mysqld_port_t -p tcp 4567 >/dev/null 2>&1 || :
     semanage port -d -t mysqld_port_t -p udp 4567 >/dev/null 2>&1 || :
     semanage port -d -t mysqld_port_t -p tcp 4568 >/dev/null 2>&1 || :
@@ -1836,5 +1836,5 @@ fi
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{package_version}-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3:11.8.6-2
+- Import

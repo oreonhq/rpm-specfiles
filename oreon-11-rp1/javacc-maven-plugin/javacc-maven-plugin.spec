@@ -50,7 +50,7 @@ Obsoletes:      %{name}-javadoc < 3.1.1-4
 Maven Plugin for processing JavaCC grammar files.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %conf
 cp -p %{SOURCE1} .
@@ -83,5 +83,5 @@ rm src/main/java/org/codehaus/mojo/javacc/JJDocMojo.java
 %license LICENSE-2.0.txt src/main/resources/NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.0-1
+- Import

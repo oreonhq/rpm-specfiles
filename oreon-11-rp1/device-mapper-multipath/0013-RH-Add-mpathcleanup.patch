@@ -1,4 +1,4 @@
-From 1b78eefd855b87ee84b18ef8e19e356e5c348979 Mon Sep 17 00:00:00 2001
+From 5feb35f16da2922f6564c92ac0b8934aca29974f Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Fri, 7 Jul 2023 15:25:59 -0500
 Subject: [PATCH] RH: Add mpathcleanup

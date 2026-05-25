@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           jakarta-activation
 Version:        2.1.3
@@ -31,7 +31,7 @@ discover the operations available on it; and instantiate the
 appropriate bean to perform the operation(s).
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 pushd api
 %pom_remove_parent
@@ -58,5 +58,5 @@ popd
 %license LICENSE.md NOTICE.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.3-1
+- Import

@@ -1,14 +1,14 @@
 %global sdl3_minver 3.4.0
 
 # Features disabled for RHEL
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %bcond_with static
 %else
 %bcond_without static
 %endif
 
 Name:           sdl2-compat
-Version:        2.32.64
+Version:        2.32.68
 Release:        1%{?dist}
 SourceLicense:  Zlib and Apache-2.0 and MIT and BSD-3-Clause
 Summary:        SDL 2.0 runtime compatibility library using SDL 3.0
@@ -167,5 +167,5 @@ install -p -m 644 %{SOURCE2} %{buildroot}%{_includedir}/SDL2/SDL_revision.h
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.32.64-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.32.68-1
+- Import

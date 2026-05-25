@@ -1,13 +1,13 @@
 %global nspr_version 4.38.2
-%global nss_version 3.121.0
+%global nss_version 3.123.1
 # NOTE: To avoid NVR clashes of nspr* packages:
 # - reset %%{nspr_release} to 1, when updating %%{nspr_version}
 # - increment %%{nspr_version}, when updating the NSS part only
-%global baserelease 2
+%global baserelease 1
 %global nss_release %baserelease
 # use "%%global nspr_release %%[%%baserelease+n]" to handle offsets when
 # release number between nss and nspr are different.
-%global nspr_release %[%baserelease+5]
+%global nspr_release %[%baserelease+10]
 # only need to update this as we added new
 # algorithms under nss policy control
 %global crypto_policies_version 20240521
@@ -17,8 +17,6 @@
 %global dracut_modules_dir %{dracutlibdir}/modules.d/05nss-softokn/
 %global dracut_conf_dir %{dracutlibdir}/dracut.conf.d
 
-# Run NSS selftests by default. Use rpmbuild --without tests when the buildroot
-# cannot satisfy SSL selftests (e.g. mock without trust store setup).
 %bcond_without tests
 %bcond_with dbm
 
@@ -145,8 +143,9 @@ Patch61:          nss-3.118-ml-dsa-tls.patch
 Patch65:          nss-3.118-ml-dsa-test-for-sign-verify-pkcs12.patch
 Patch66:          nss-3.118-ml-dsa-tls-test.patch
 Patch67:          nss-3.118-ml-dsa-unittests.patch
+Patch68:          nss-3.123-fix-mldsa-import-regeneration.patch
 
-Patch70:          nss-3.118.1-fix-test-typo.patch
+Patch70:          nss-dbtests-sqlite-mangling.patch
 
 Patch100:         nspr-config-pc.patch
 Patch101:         nspr-gcc-atomics.patch
@@ -282,7 +281,7 @@ License:        MPL-2.0
 URL:            http://www.mozilla.org/projects/nspr/
 Conflicts:      filesystem < 3
 BuildRequires:  gcc
-BuildRequires:  binutils
+BuildRequires:  binutils >= 2.45.50-9
 
 %description -n nspr
 NSPR provides platform independence for non-GUI operating system
@@ -702,7 +701,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_libdir}/pkgconfig
 mkdir -p $RPM_BUILD_ROOT/%{saved_files_dir}
 mkdir -p $RPM_BUILD_ROOT/%{dracut_modules_dir}
 mkdir -p $RPM_BUILD_ROOT/%{dracut_conf_dir}
-%if %{defined rhel}
+%if %{defined rhel} || 0%{?oreon}
 # not needed for rhel and its derivatives only fedora
 %else
 # because of the pp.1 conflict with perl-PAR-Packer
@@ -797,7 +796,7 @@ done
 for f in certutil cmsutil crlutil derdump modutil pk12util signtool signver ssltap vfychain vfyserv; do
   install -c -m 644 ./dist/docs/nroff/${f}.1 $RPM_BUILD_ROOT%{_mandir}/man1/${f}.1
 done
-%if %{defined rhel}
+%if %{defined rhel} || 0%{?oreon}
 install -c -m 644 ./dist/docs/nroff/pp.1 $RPM_BUILD_ROOT%{_mandir}/man1/pp.1
 %else
 install -c -m 644 ./dist/docs/nroff/pp.1 $RPM_BUILD_ROOT%{_datadir}/doc/nss-tools/pp.1
@@ -892,7 +891,7 @@ fi
 # unsupported tools
 %doc %{_mandir}/man1/derdump.1*
 %doc %{_mandir}/man1/signtool.1*
-%if %{defined rhel}
+%if %{defined rhel} || 0%{?oreon}
 %doc %{_mandir}/man1/pp.1*
 %else
 %dir %{_datadir}/doc/nss-tools
@@ -1101,8 +1100,5 @@ fi
 
 
 %changelog
-* Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{nss_version}-2
-- Run selftests by default (use --without tests only when needed)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{nss_version}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.123.1-1
+- Import

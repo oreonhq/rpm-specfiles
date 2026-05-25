@@ -1,7 +1,5 @@
 %global qt_module qtwebengine
 
-%global _lto_cflags %{nil}
-
 %global _hardened_build 1
 
 # package-notes causes FTBFS (#2043178)
@@ -13,8 +11,7 @@
 %global use_system_libwebp 1
 %global use_system_opus 1
 %global use_system_ffmpeg 1
-# Chromium can keep bundled libvpx (needed for VA-API) while system FFmpeg still
-# runs configure checks that need pkgconfig(vpx) when use_system_libvpx is 0.
+# libvpx is exclusive with VA-API support (libva) which is enabled by default
 %global use_system_libvpx 0
 %global use_system_snappy 1
 %global use_system_glib 1
@@ -32,14 +29,14 @@
 %global use_system_libpci 1
 %global use_system_libudev 1
 
-%if 0%{?rhel} && 0%{?rhel} == 9
+%if 0%{?rhel} && 0%{?rhel} == 9 || 0%{?oreon}
 %global use_system_re2 0
 %global use_system_libicu 0
 %global use_system_minizip 0
 %global use_system_harfbuzz 0
 %endif
 
-%if 0%{?rhel} && 0%{?rhel} == 10
+%if 0%{?rhel} && 0%{?rhel} == 10 || 0%{?oreon}
 %global use_system_zlib 0
 %endif
 
@@ -50,7 +47,7 @@
 %global enable_pdf_v8 1
 %endif
 
-%if 0%{?fedora} && 0%{?fedora} >= 39
+%if 0%{?fedora} && 0%{?fedora} >= 39 || 0%{?oreon}
 # Bundled python-six is too old to work with Python 3.12+
 %global use_system_py_six 1
 %endif
@@ -59,9 +56,17 @@
 # FTBFS due to e.g. GCC bug https://bugzilla.redhat.com/show_bug.cgi?id=1282495
 #global arm_neon 1
 
-# Legacy qmake-era knob (unused with Qt 6 CMake plus GN). Kept empty so nothing
-# accidentally wires it back in during merges.
+# the QMake CONFIG flags to force debugging information to be produced in
+# release builds, and for all parts of the code
+%ifarch %{arm} aarch64
+# the ARM builder runs out of memory during linking with the full setting below,
+# so omit debugging information for the parts upstream deems it dispensable for
+# (webcore, v8base)
 %global debug_config %{nil}
+%else
+%global debug_config force_debug_info
+# webcore_debug v8base_debug
+%endif
 
 # spellchecking dictionary directory
 %global _qtwebengine_dictionaries_dir %{_qt6_datadir}/qtwebengine_dictionaries
@@ -78,12 +83,12 @@
 %global prerelease rc
 %endif
 
-%global examples 0
+%global examples 1
 
 Summary: Qt6 - QtWebEngine components
 Name:    qt6-qtwebengine
-Version: 6.10.3
-Release: 18%{?dist}
+Version: 6.11.1
+Release: 1%{?dist}
 
 # See LICENSE.GPL LICENSE.LGPL LGPL_EXCEPTION.txt, for details
 # See also http://qt-project.org/doc/qt-5.0/qtdoc/licensing.html
@@ -92,14 +97,14 @@ License: (LGPLv2 with exceptions or GPLv3 with exceptions) and BSD and LGPLv2+ a
 URL:     http://www.qt.io
 %global  majmin %(echo %{version} | cut -d. -f1-2)
 %global  qt_version %(echo %{version} | cut -d~ -f1)
-%global  qtweb_unpacked %{qt_module}-everywhere-src-%{qt_version}%{?prerelease:-%{prerelease}}
 
-# Official Qt tarball. Patent-encumbered bits are stripped from bundled FFmpeg in %%prep
-# (same effect as the old maintainer-built *-clean.tar.xz plus ./clean_qtwebengine.sh).
+# cleaned tarball with patent-encumbered codecs removed from the bundled FFmpeg
+# ./qtwebengine-release.sh
+# ./clean_qtwebengine.sh 6.9.0
 %if 0%{?unstable}
-Source0: https://download.qt.io/development_releases/qt/%{majmin}/%{qt_version}/submodules/%{qt_module}-everywhere-src-%{qt_version}-%{prerelease}.tar.xz
+Source0: %{qt_module}-everywhere-src-%{qt_version}-%{prerelease}-clean.tar.xz
 %else
-Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
+Source0: %{qt_module}-everywhere-src-%{version}-clean.tar.xz
 %endif
 
 # cleanup scripts used above
@@ -109,8 +114,8 @@ Source4: get_free_ffmpeg_source_files.py
 # macros
 Source10: macros.qt6-qtwebengine
 
-# PulseAudio 12.2 client headers for bundled Chromium (subset of upstream source tree)
-Source20: https://www.freedesktop.org/software/pulseaudio/releases/pulseaudio-12.2.tar.xz
+# pulseaudio headers
+Source20: pulseaudio-12.2-headers.tar.gz
 
 # workaround FTBFS against kernel-headers-5.2.0+
 Patch1:   qtwebengine-SIOCGSTAMP.patch
@@ -130,30 +135,24 @@ Patch5:   qtwebengine-chromium-141-glibc-2.42-SYS_SECCOMP.patch
 Patch80:  qtwebengine-fix-arm-build.patch
 
 ## Upstreamable patches:
-Patch100: qtwebengine-add-missing-pipewire-headers.patch
 Patch101: qtwebengine-fix-build-against-gcc16.patch
-# GN source_set("common") under importers/common/ emits obj/.../common/common/*.o.d; gcc
-# then fails opening the depfile when the nested dir is missing. Rename the target.
-Patch102: qtwebengine-perfetto-gn-avoid-common-common-objdir.patch
-# RelWithDebInfo sets GN symbol_level=1 on Linux which balloons RAM for Chromium
-Patch103: qtwebengine-relwdebinfo-gn-symbol-level-0-linux.patch
-# Ensure gen_buildflags runs before proto importers minimal compile (perfetto_build_flags.h)
-Patch104: qtwebengine-perfetto-proto-minimal-gen-buildflags-dep.patch
+Patch102: qtwebengine-fix-delay-signature.patch
+
 ## ppc64le port
 Patch200: qtwebengine-6.9-ppc64.patch
 Patch201: qtwebengine-chromium-ppc64.patch
 # https://github.com/google/highway/commit/dcc0ca1cd4245ecff9e5ba50818e47d5e2ccf699
 Patch202: qtwebengine-chromium-ppc64-highway.patch
+# disable musttail attribute for GCC build
+Patch203: qtwebengine-chromium-ppc64-skia-musttail.patch
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
-# FIXME use/update qt6_qtwebengine_arches
-# 32-bit arches not supported (https://bugreports.qt.io/browse/QTBUG-102143)
-ExclusiveArch: aarch64 x86_64 ppc64le
+ExclusiveArch: %{qt6_qtwebengine_arches}
 
 BuildRequires: cmake
 BuildRequires: ninja-build >= 1.7.2
 BuildRequires: make
-%if 0%{?rhel} && 0%{?rhel} < 10
+%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
 BuildRequires: gcc-toolset-13
 BuildRequires: gcc-toolset-13-libatomic-devel
 %else
@@ -212,8 +211,6 @@ BuildRequires: pkgconfig(libavutil) >= 58.29.100
 BuildRequires: pkgconfig(libavcodec) >= 60.31.102
 BuildRequires: pkgconfig(libavformat) >= 60.16.100
 BuildRequires: pkgconfig(openh264)
-# VP9 paths in system FFmpeg integration, without enabling bundled replacement via %%{use_system_libvpx}
-BuildRequires: pkgconfig(vpx) >= 1.10.0
 %endif
 %if %{?use_system_libvpx}
 BuildRequires: pkgconfig(vpx) >= 1.10.0
@@ -313,7 +310,7 @@ BuildRequires: pkgconfig(nss) >= 3.26
 BuildRequires: pkgconfig(poppler-cpp)
 
 
-%if 0%{?fedora} && 0%{?fedora} >= 39
+%if 0%{?fedora} && 0%{?fedora} >= 39 || 0%{?oreon}
 BuildRequires: python3-zombie-imp
 %endif
 
@@ -474,22 +471,8 @@ Requires: qt6-qtsvg%{?_isa}
 %{summary}.
 
 %prep
-# GNU tar can fail on Chromium Dawn Khronos paths (specs/katex/fonts/KaTeX_*.woff) with ENOENT if directory metadata is applied before all members under that directory are extracted (seen on EL10 xfs mock).
-export TAR_OPTIONS="--delay-directory-restore"
-%setup -q -n %{qtweb_unpacked}
-unset TAR_OPTIONS
+%setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?prerelease:-%{prerelease}} -a20
 
-pushd %{_sourcedir}
-bash %{SOURCE3} %{_builddir}/%{qtweb_unpacked}/src/3rdparty/chromium
-popd
-find %{_builddir}/%{qtweb_unpacked}/src/3rdparty/chromium/third_party/openh264/src -type f ! -name '*.h' -delete 2>/dev/null || :
-
-cd %{_builddir}
-tar xf %{SOURCE20}
-pa_root=$(echo pulseaudio-*)
-mv "$pa_root"/src/pulse %{_builddir}/%{qtweb_unpacked}/pulse
-rm -rf "$pa_root"
-cd %{_builddir}/%{qtweb_unpacked}
 mv pulse src/3rdparty/chromium/
 
 pushd src/3rdparty/chromium
@@ -499,7 +482,7 @@ popd
 %patch -P2 -p1 -b .link-pipewire
 %patch -P3 -p1 -b .aarch64-new-stat
 %patch -P4 -p1 -b .use-openh264
-%if 0%{?fedora} > 43 || 0%{?rhel} > 10
+%if 0%{?fedora} > 43 || 0%{?rhel} > 10 || 0%{?oreon}
 %patch -P5 -p1 -b .chromium-141-glibc-2.42-SYS_SECCOMP
 %endif
 
@@ -507,23 +490,14 @@ popd
 %patch -P80 -p1 -b .fix-arm-build
 
 ## upstreamable patches
-%patch -P100 -p1 -b .add-missing-pipewire-headers
 %patch -P101 -p1 -b .fix-build-against-gcc16
-%patch -P102 -p1 -b .perfetto-common-objdir
-%patch -P103 -p1 -b .gn-symbol-level-linux
-%patch -P104 -p1 -b .perfetto-gen-buildflags
-# base/BUILD.gn line numbers drift across Qt drops, so patch105 is too fragile with --fuzz=0.
-# Add the dependency directly in %prep in a stable way.
-perl -0777 -i -pe 's@(component\("base"\)\s*\{.*?\n\s*deps\s*=\s*\[\n)(\s*":check_version_internal",)@$1  ":debugging_buildflags",\n$2@s' src/3rdparty/chromium/base/BUILD.gn
+%patch -P102 -p1 -b .fix-delay-signature
 
 # ppc64le support
 %patch -P200 -p1
-pushd src/3rdparty/chromium
 %patch -P201 -p1
-pushd third_party/highway/src
 %patch -P202 -p1
-popd
-popd
+%patch -P203 -p1
 
 
 # delete all "toolprefix = " lines from build/toolchain/linux/BUILD.gn, as we
@@ -564,7 +538,7 @@ src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-librarie
 # fix/workaround
 # fatal error: QtWebEngineCore/qtwebenginecoreglobal.h: No such file or directory
 # if [ ! -f "./include/QtWebEngineCore/qtwebenginecoreglobal.h" ]; then
-# syncqt -version passed upstream Qt version string
+# {_qt6_libexecdir}/syncqt -version {version}
 # fi
 #
 # # abort if this doesn't get created by syncqt.pl
@@ -572,40 +546,18 @@ src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-librarie
 
 
 %build
-%if 0%{?rhel} && 0%{?rhel} < 10
+%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
 . /opt/rh/gcc-toolset-13/enable
 %endif
-mkdir -p "$(pwd)/tmp-qtwebengine-build"
-export TMPDIR="$(pwd)/tmp-qtwebengine-build"
 export STRIP=strip
-# Parallel ninja in Chromium hits intermittent "opening dependency file *.o.d" in mock (all arches).
-# Jumbo unity builds also trigger bad Perfetto depfile paths (common/common/*.o.d) even at -j1.
-export NINJAFLAGS="-j1 -v"
-# Inner QtWebEngineCore ninja often still used -jN from build parallel level without this.
-export NINJAJOBS=-j1
-export CMAKE_BUILD_PARALLEL_LEVEL=1
-export GOMAXPROCS=1
-export MALLOC_ARENA_MAX=1
-# Qt passes this into cmake -P QtGnGen.cmake as -DGN_THREADS=... (not a CMake cache var)
-export QTWEBENGINE_GN_THREADS=1
+export NINJAFLAGS="%{__ninja_common_opts}"
 export NINJA_PATH=%{__ninja}
-# Keep build artifacts smaller in mock while preserving usable backtraces.
-# Patch103 already forces Chromium GN symbol_level=0, this trims remaining C/C++ debug.
-export CFLAGS="${CFLAGS} -g1"
-export CXXFLAGS="${CXXFLAGS} -g1"
-
-%ifarch aarch64
-# Qt configure.cmake udot probe needs dotprod in the default ISA (see webengine-arm64-udot-support)
-export CFLAGS="${CFLAGS} -march=armv8.2-a+dotprod"
-export CXXFLAGS="${CXXFLAGS} -march=armv8.2-a+dotprod"
-%endif
 
 # this follows the logic of the Configure summary to turn on and off
 %cmake_qt6 \
   -DCMAKE_TOOLCHAIN_FILE:STRING="%{_libdir}/cmake/Qt6/qt.toolchain.cmake" \
   -DFEATURE_webengine_build_gn:BOOL=ON \
-  -DFEATURE_webengine_full_debug_info:BOOL=OFF \
-  -DFEATURE_webengine_jumbo_build:BOOL=OFF \
+  -DFEATURE_webengine_jumbo_build:BOOL=ON \
   -DFEATURE_webengine_developer_build:BOOL=OFF \
   -DFEATURE_qtwebengine_build:BOOL=ON \
   -DFEATURE_qtwebengine_core_build:BOOL=ON \
@@ -656,18 +608,9 @@ export CXXFLAGS="${CXXFLAGS} -march=armv8.2-a+dotprod"
   -DFEATURE_webengine_v8_context_snapshot:BOOL=ON \
   -DFEATURE_webenginedriver:BOOL=ON \
   -DFEATURE_pdf_v8:BOOL=%{?enable_pdf_v8} \
-%ifarch aarch64
-  -DQT_BUILD_EXAMPLES:BOOL=OFF \
-  -DQT_INSTALL_EXAMPLES_SOURCES=OFF \
-%else
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
-%endif
 
-# Work around intermittent missing depfile directories in Chromium/Perfetto ninja phase.
-mkdir -p redhat-linux-build/src/core/RelWithDebInfo/%{_arch}/obj/third_party/perfetto/src/trace_processor/importers/proto/minimal
-mkdir -p redhat-linux-build/src/core/RelWithDebInfo/%{_arch}/obj/third_party/perfetto/src/trace_processor/importers/proto/common
-mkdir -p redhat-linux-build/src/core/RelWithDebInfo/%{_arch}/obj/third_party/perfetto/src/trace_processor/util/profiler_util
 %cmake_build
 
 
@@ -707,7 +650,7 @@ sed -i -e "s|%{version} \${_Qt6WebEngine|%{lesser_version} \${_Qt6WebEngine|" \
   %{buildroot}%{_qt6_libdir}/cmake/Qt6WebEngine*/Qt6WebEngine*Config.cmake
 
 
-%if 0%{?rhel} && 0%{?rhel} < 10
+%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
 %filetriggerin -- %{_datadir}/myspell
 %else
 %filetriggerin -- %{_datadir}/hunspell
@@ -903,58 +846,5 @@ done
 %endif
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-17
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-17
-- Drop fragile Patch105 apply and inject :debugging_buildflags into Chromium base deps via %prep perl for stable line drift handling
-
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-16
-- Patch105 add :debugging_buildflags to Chromium base component deps first so debug/debugging_buildflags.h exists before stack_copier.cc
-
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-15
-- Patch104 add explicit Perfetto gn gen_buildflags dep on trace_processor importers proto minimal so perfetto_build_flags.h is generated before compile
-
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-14
-- Patch103 set GN symbol_level=0 on Linux for RelWithDebInfo to cut Chromium compile and link RAM (mock OOM)
-- Tighten MALLOC_ARENA_MAX to 1 for glibc arena overhead
-
-* Sat Apr 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-13
-- Patch102 also rewrite importers/proto/winscope (and all nested importers/**/BUILD.gn) so GN no longer resolves :common after tp_importer_common rename
-
-* Sat Apr 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-12
-- Regenerate Patch102 against Qt 6.10.2 Perfetto (not upstream main) and strip stray diff headers so %%patch applies
-
-* Sat Apr 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-11
-- Patch bundled Perfetto GN to rename importers/common source_set away from target name common (fixes slice_tracker.o.d missing under common/common with gcc -MD)
-
-* Sat Apr 11 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-10
-- Clear %%_lto_cflags and set TMPDIR under build dir to dodge Chromium *.o.d depfile and tmp races in mock
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-9
-- Disable webengine jumbo on all arches (fixes Perfetto process_tracker.o.d missing depfile with serial ninja)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-8
-- With system FFmpeg add pkgconfig(vpx) so VPX configure probe passes while bundled Chromium libvpx stays on for VA-API
-- aarch64 append -march=armv8.2-a+dotprod so Qt udot compile test enables webengine-arm64-udot-support
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-7
-- %%prep set TAR_OPTIONS --delay-directory-restore for Khronos OpenGL-Registry katex font extract ENOENT
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-6
-- All arches serial Chromium ninja NINJAFLAGS NINJAJOBS CMAKE_BUILD_PARALLEL_LEVEL gn threads 1 fix .o.d flakes on x86_64
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
-- aarch64 set QTWEBENGINE_GN_THREADS=1 so gn gen actually gets --threads=1
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
-- aarch64 GN_THREADS=1 GOMAXPROCS examples off and malloc arenas to trim gn OOM
-
-* Wed Apr 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
-- aarch64 ease OOM during gn gen (disable jumbo build, NINJAFLAGS -j1)
-
-* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- Add sources checksum list for bundled scripts, drop stale headers tarball name
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
+- Import

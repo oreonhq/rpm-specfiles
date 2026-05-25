@@ -36,7 +36,7 @@
 %{!?_make_verbose:%define _make_verbose V=1 VERBOSE=1}
 
 # Build with Active Directory Domain Controller support by default on Fedora
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %bcond dc 1
 %else
 %bcond dc 0
@@ -49,7 +49,7 @@
 %bcond libwbclient 1
 
 # Build with winexe by default
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 
 %ifarch x86_64
 %bcond winexe 1
@@ -63,7 +63,7 @@
 %endif
 
 # Build vfs_ceph module and ctdb cepth mutex helper by default on 64bit Fedora
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 
 %ifarch aarch64 ppc64le s390x x86_64 riscv64
 %bcond vfs_cephfs 1
@@ -80,7 +80,7 @@
 #endif fedora
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 
 %ifarch aarch64 ppc64le s390x x86_64 riscv64
 %bcond vfs_glusterfs 1
@@ -102,7 +102,7 @@
 
 # Build the ctdb-pcp-pmda package by default on Fedora, except for i686 where
 # pcp is no longer supported
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %ifnarch i686
 %bcond pcp_pmda 1
 %endif
@@ -111,7 +111,7 @@
 %endif
 
 # Build the etcd helpers by default on Fedora
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # disable etcd mutex helper as etcd is orphaned in Fedora now
 %bcond etcd_mutex 0
 %else
@@ -119,7 +119,7 @@
 %endif
 
 # Build the prometheus exporter by default on Fedora
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %bcond prometheus 1
 %else
 %bcond prometheus 0
@@ -131,13 +131,13 @@
 %bcond lmdb 0
 %endif
 
-%if 0%{?fedora} >= 43
+%if 0%{?fedora} >= 43 || 0%{?oreon}
 %bcond varlink 1
 %else
 %bcond varlink 0
 %endif
 
-%global samba_version 4.24.1
+%global samba_version 4.24.2
 
 # The release field is extended:
 # <pkgrel>[.<extraver>][.<snapinfo>]%%{?dist}[.<minorbump>]
@@ -208,7 +208,7 @@ Name:           samba
 Version:        %{samba_version}
 Release:        %{samba_release}
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Epoch:          2
 %else
 Epoch:          0
@@ -238,8 +238,6 @@ Source18:       samba-winbind-systemd-sysusers.conf
 
 Source201:      README.downgrade
 Source202:      samba.abignore
-
-Patch:          0001-printing-Set-default-value-in-case-of-non-exisiting-.patch
 
 Requires(pre): %{name}-common = %{samba_depver}
 Requires: %{name}-common = %{samba_depver}
@@ -292,10 +290,6 @@ BuildRequires: gawk
 BuildRequires: gnupg2
 BuildRequires: gnutls-devel >= 3.4.7
 BuildRequires: gpgme-devel
-# Doxygen (LDB apidocs) -> graphviz -> poppler, which needs gpgmepp. In mixed Oreon+Fedora
-# roots dnf can choose Fedora 1.x gpgmepp while gpgme-devel is Oreon 2.x; that cannot
-# be installed. Require the GPGME-2 C++ stack that matches this gpgme-devel.
-BuildRequires: gpgmepp >= 2.0.0-1
 BuildRequires: jansson-devel
 BuildRequires: krb5-devel >= %{required_mit_krb5}
 BuildRequires: libacl-devel
@@ -345,7 +339,7 @@ BuildRequires: zlib-devel >= 1.2.3
 
 BuildRequires: pkgconfig(libsystemd)
 # TODO FIXME This is not in RHEL yet
-%if 0%{?fedora} >= 43
+%if 0%{?fedora} >= 43 || 0%{?oreon}
 BuildRequires: pkgconfig(libngtcp2)
 BuildRequires: pkgconfig(libngtcp2_crypto_gnutls)
 %else
@@ -357,7 +351,7 @@ BuildRequires: pkgconfig(libvarlink) >= 24
 %endif
 
 %ifnarch i686
-%if 0%{?fedora} >= 37
+%if 0%{?fedora} >= 37 || 0%{?oreon}
 BuildRequires: mold
 %endif
 %endif
@@ -409,7 +403,7 @@ BuildRequires: python3-tdb >= %{tdb_version}
 %if %{with dc}
 BuildRequires: bind
 BuildRequires: krb5-server >= %{required_mit_krb5}
-%if 0%{?fedora} || 0%{?rhel} >= 9
+%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
 BuildRequires: python3-dateutil
 %else
 BuildRequires: python3-iso8601
@@ -566,7 +560,7 @@ Summary: Files used by both Samba servers and clients
 BuildArch: noarch
 
 Requires(post): (systemd-standalone-tmpfiles or systemd)
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Recommends:     logrotate
 %endif
 
@@ -1347,7 +1341,7 @@ Provides: python3-ldb-devel = %{samba_depver}
 Python bindings for the LDB library
 
 %prep
-%if 0%{?fedora} || 0%{?rhel} >= 9
+%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
 xzcat %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %else
 xzcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
@@ -1412,7 +1406,7 @@ export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 
 %ifnarch i686 riscv64
-%if 0%{?fedora} >= 37
+%if 0%{?fedora} >= 37 || 0%{?oreon}
 export LDFLAGS="%{__global_ldflags} -fuse-ld=mold"
 export python_LDFLAGS="$(echo ${LDFLAGS} | sed -e 's/-Wl,-z,defs//g')"
 #endif fedora >= 37
@@ -2156,7 +2150,7 @@ fi
 %{_libdir}/samba/libndr-samba-private-samba.so
 %{_libdir}/samba/libndr-samba4-private-samba.so
 %{_libdir}/samba/libnetif-private-samba.so
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %{_libdir}/samba/libngtcp2-crypto-gnutls-private-samba.so
 %{_libdir}/samba/libngtcp2-private-samba.so
 %endif
@@ -4203,4 +4197,5 @@ fi
 %endif
 
 %changelog
-%autochangelog
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2:4.24.2-1
+- Import

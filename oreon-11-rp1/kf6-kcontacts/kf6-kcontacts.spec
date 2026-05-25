@@ -1,12 +1,8 @@
 %global framework kcontacts
 
-%global stable_kf6 stable
-%global majmin_ver_kf6 6.24
-
-
 Name:    kf6-%{framework}
-Version: 6.24.0
-Release:	6%{?dist}
+Version: 6.26.0
+Release: 1%{?dist}
 Summary: The KContacts Library
 
 # The following licenses are present in LICENSES but go unused: BSD-3-Clause, MIT, Unicode-DFS-2016
@@ -41,6 +37,17 @@ Requires:       cmake(KF6Codecs)
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
+%package        doc
+Summary:        Developer Documentation files for %{name}
+BuildArch:      noarch
+%description    doc
+Developer Documentation files for %{name} for use with KDevelop or QtCreator.
+
+%package        html
+Summary:        Developer Documentation files for %{name}
+BuildArch:      noarch
+%description    html
+Developer Documentation files for %{name} in HTML format
 
 %prep
 %autosetup -n %{framework}-%{version} -p1
@@ -48,9 +55,11 @@ developing applications that use %{name}.
 
 %build
 %cmake_kf6
-%{__cmake} --build "%{__cmake_builddir}" %{?_smp_mflags} --verbose
+%cmake_build_kf6
+
 %install
-DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
+%cmake_install_kf6
+
 %find_lang %{name} --all-name --with-html
 
 %files -f %{name}.lang
@@ -64,21 +73,17 @@ DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 %{_kf6_libdir}/libKF6Contacts.so
 %{_kf6_libdir}/cmake/KF6Contacts/
 %{_kf6_qmldir}/org/kde/contacts/libkcontactsqml.so
+%{_qt6_docdir}/*/*.tags
+%{_qt6_docdir}/*/*.index
 
+%files doc
+%{_qt6_docdir}/*.qch
+
+%files html
+%{_qt6_docdir}/*/*
+%exclude %{_qt6_docdir}/*/*.tags
+%exclude %{_qt6_docdir}/*/*.index
 
 %changelog
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- inline cmake --build (no qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop Qt6 qdoc -html packaging (kf6 macros skip qt6 prepare_docs pass)
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Qt6 qdoc: -html file list via find, tags/index in -devel
-
-* Sat Apr 04 2026 Oreon Packaging Team <packaging@oreonhq.com>
-- Drop -DQDOC_BIN=/bin/true now that qt6-qttools qdoc is patched (QTBUG-142742)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.24.0-1
-- Prepare for Oreon 11 (RP1)
-
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.26.0-1
+- Import

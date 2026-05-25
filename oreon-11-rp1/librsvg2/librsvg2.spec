@@ -1,15 +1,18 @@
 %bcond check 1
 
-# Oreon buildroots do not ship the full Fedora rust-gtk stack needed for
-# %%cargo_generate_buildrequires. Use the same vendored vendor/ tree as Fedora
-# ships in dist-git lookaside (byte-for-byte identical SHA512).
+# Use bundled deps as we don't ship the exact right versions for all the
+# required rust libraries
+%if 0%{?rhel} || 0%{?oreon}
 %global bundled_rust_deps 1
+%else
+%global bundled_rust_deps 0
+%endif
 
 %global cairo_version 1.18.0
 
 Name:           librsvg2
 Summary:        An SVG library based on cairo
-Version:        2.62.0
+Version:        2.62.2
 Release:        %autorelease
 
 # librsvg itself is LGPL-2.1-or-later
@@ -46,9 +49,12 @@ License:        %{shrink:
     }
 URL:            https://wiki.gnome.org/Projects/LibRsvg
 Source0:        https://download.gnome.org/sources/librsvg/2.62/librsvg-%{version}.tar.xz
-Source1:        https://src.fedoraproject.org/repo/pkgs/rpms/librsvg2/librsvg-%{version}-vendor.tar.xz/sha512/35af37349ac1f22ee79e26479e31a499f59f4763657a026c5eb272ea841185435e5874474dee226274136ac7e86e6d44ef630f3b82b5c8a897a7c6ad1ed87710/librsvg-%{version}-vendor.tar.xz
+# upstream dropped vendoring since 2.55.0 (GNOME/librsvg#718), to create:
+#   tar xf librsvg-%%{version}.tar.xz ; pushd librsvg-%%{version} ; \
+#   cargo vendor --versioned-dirs && tar Jcvf ../librsvg-%%{version}-vendor.tar.xz vendor/ ; popd
+Source1:        librsvg-%{version}-vendor.tar.xz
 
-# Patches to build with vendored or Fedora-packaged rust crates
+# Patches to build with Fedora-packaged rust crates
 Patch:          0001-Fedora-Drop-dependencies-required-for-benchmarking.patch
 Patch:          0002-Fedora-Drop-dependencies-and-references-to-mutation-.patch
 Patch:          0003-Fedora-Drop-windows-specific-dependencies.patch
@@ -61,8 +67,6 @@ BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  pkgconfig(cairo) >= %{cairo_version}
 BuildRequires:  pkgconfig(cairo-gobject) >= %{cairo_version}
 BuildRequires:  pkgconfig(cairo-png) >= %{cairo_version}
-# AVIF decoding (default on non-RHEL); meson requires dav1d when Avif is enabled.
-BuildRequires:  pkgconfig(dav1d)
 BuildRequires:  pkgconfig(fontconfig)
 BuildRequires:  pkgconfig(gdk-pixbuf-2.0)
 BuildRequires:  pkgconfig(gio-2.0)
@@ -74,8 +78,7 @@ BuildRequires:  pkgconfig(pangoft2)
 BuildRequires:  vala
 BuildRequires:  /usr/bin/rst2man
 %if 0%{?bundled_rust_deps}
-BuildRequires:  rust
-BuildRequires:  cargo-rpm-macros
+BuildRequires:  rust-toolset
 %else
 BuildRequires:  cargo-rpm-macros
 %endif
@@ -109,10 +112,12 @@ This package provides extra utilities based on the librsvg library.
 
 %prep
 %if ! 0%{?bundled_rust_deps}
+# use packaged Rust dependencies
 %autosetup -p1 -n librsvg-%{version}
 %cargo_prep
 %else
-%autosetup -p1 -n librsvg-%{version} -a1
+# use vendored Rust dependencies
+%autosetup -N -n librsvg-%{version} -a1
 %cargo_prep -v vendor
 %endif
 
@@ -173,5 +178,5 @@ sed -i 's/, "--locked"//g' meson/cargo_wrapper.py
 %{_mandir}/man1/rsvg-convert.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.62.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.62.2-1
+- Import

@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           plexus-compiler
 Version:        2.15.0
@@ -51,7 +51,7 @@ Summary:        Maven POM files for %{name}
 This package provides %{summary}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 find -name '.class' -delete
 
@@ -100,5 +100,5 @@ cp %{SOURCE2} LICENSE.MIT
 %files pom -f .mfiles-pom
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.15.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.15.0-1
+- Import

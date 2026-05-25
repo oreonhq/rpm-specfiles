@@ -7,7 +7,7 @@ License:        Apache-2.0 and LGPL-2.0-or-later
 URL:            https://github.com/FasterXML/jackson-databind
 Source0:        %{url}/archive/%{name}-%{version}.tar.gz
 
-%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
+%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || 0%{?oreon}
 BuildRequires:  maven-local
 %else
 BuildRequires:  maven-local-openjdk25
@@ -22,7 +22,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.mockito:mockito-core)
 
 BuildArch:      noarch
-%if 0%{?fedora} || 0%{?rhel} >= 10
+%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon}
 ExclusiveArch:  %{java_arches} noarch
 %endif
 
@@ -69,5 +69,5 @@ rm src/test/java/com/fasterxml/jackson/databind/introspect/NoClassDefFoundWorkar
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.18.2-6
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.18.2-6
+- Import

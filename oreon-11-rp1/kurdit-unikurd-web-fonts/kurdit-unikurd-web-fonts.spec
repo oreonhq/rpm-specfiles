@@ -37,5 +37,5 @@ Source1:       65-%{fontpkgname}.conf
 %fontfiles
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20020502-39
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20020502-39
+- Import

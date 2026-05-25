@@ -1,4 +1,4 @@
-%if 0%{?rhel} > 10
+%if 0%{?rhel} > 10 || 0%{?oreon}
 %bcond build_from_src 0
 %else
 %bcond build_from_src 1
@@ -63,5 +63,5 @@ cp -p %{SOURCE2} %{SOURCE6} .
 %fontfiles
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.000-43
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.000-43
+- Import

@@ -10,8 +10,8 @@
 
 Summary: Qt6 - Wayland platform support and QtCompositor module
 Name:    qt6-%{qt_module}
-Version: 6.10.3
-Release: 5%{?dist}
+Version: 6.11.1
+Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -82,7 +82,7 @@ Supplements: (qt6-qtbase and gnome-shell)
 %package examples
 Summary: Programming examples for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-# BuildRequires: qt6-qtwayland-devel (same version as this package)
+# BuildRequires: qt6-qtwayland-devel >= %{version}
 %description examples
 %{summary}.
 %endif
@@ -122,6 +122,7 @@ popd
 %license LICENSES/*
 %{_qt6_archdatadir}/sbom/%{qt_module}-%{qt_version}.spdx
 %{_qt6_libdir}/libQt6WaylandCompositor.so.6*
+%{_qt6_libdir}/libQt6WaylandCompositor.so.6*
 %{_qt6_libdir}/libQt6WaylandCompositorIviapplication.so.6*
 %{_qt6_libdir}/libQt6WaylandCompositorPresentationTime.so.6*
 %{_qt6_libdir}/libQt6WaylandCompositorWLShell.so.6*
@@ -150,16 +151,26 @@ popd
 %{_qt6_libdir}/libQt6WaylandEglCompositorHwIntegration.so
 %{_qt6_libdir}/libQt6WaylandCompositor.prl
 %{_qt6_libdir}/libQt6WaylandEglCompositorHwIntegration.prl
+%{_qt6_libdir}/cmake/Qt6WaylandCompositor/Qt6WaylandCompositorConfig*.cmake
 %{_qt6_archdatadir}/mkspecs/modules/*.pri
 %dir %{_qt6_libdir}/cmake/Qt6WaylandClientFeaturesPrivate/
+%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositor/
+%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorIviapplication/
+%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorIviapplicationPrivate
+%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorPresentationTime/
+%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorPresentationTimePrivate
+%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorPrivate
+%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorWLShell/
+%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorWLShellPrivate
+%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorXdgShell/
+%dir %{_qt6_libdir}/cmake/Qt6WaylandCompositorXdgShellPrivate
+%dir %{_qt6_libdir}/cmake/Qt6WaylandEglCompositorHwIntegrationPrivate/
 %{_qt6_libdir}/cmake/Qt6/*.cmake
 %{_qt6_libdir}/cmake/Qt6BuildInternals/StandaloneTests/QtWaylandTestsConfig.cmake
 %{_qt6_libdir}/cmake/Qt6Qml/QmlPlugins/*.cmake
+%{_qt6_libdir}/cmake/Qt6Gui/Qt6QWaylandIviShellIntegration*.cmake
+%{_qt6_libdir}/cmake/Qt6Gui/Qt6QWaylandQtShellIntegration*.cmake
 %{_qt6_libdir}/cmake/Qt6WaylandClientFeaturesPrivate/*.cmake
-# Plugin CMake is installed next to Qt6Gui (Qt 6.10), not under WaylandClient
-%{_qt6_libdir}/cmake/Qt6Gui/Qt6QWaylandAdwaitaDecorationPlugin*.cmake
-%{_qt6_libdir}/cmake/Qt6Gui/Qt6QWaylandIviShellIntegrationPlugin*.cmake
-%{_qt6_libdir}/cmake/Qt6Gui/Qt6QWaylandQtShellIntegrationPlugin*.cmake
 %{_qt6_libdir}/cmake/Qt6WaylandCompositor/
 %{_qt6_libdir}/cmake/Qt6WaylandCompositorIviapplication/
 %{_qt6_libdir}/cmake/Qt6WaylandCompositorIviapplicationPrivate/*.cmake
@@ -174,9 +185,11 @@ popd
 %{_qt6_libdir}/qt6/metatypes/qt6*_metatypes.json
 %{_qt6_libdir}/qt6/modules/*.json
 %{_qt6_libdir}/pkgconfig/*.pc
+%exclude %{_qt6_libdir}/cmake/Qt6Gui/Qt6QWaylandAdwaitaDecoration*.cmake
 
 %files adwaita-decoration
 %{_qt6_plugindir}/wayland-decoration-client/libadwaita.so
+%{_qt6_libdir}/cmake/Qt6Gui/Qt6QWaylandAdwaitaDecoration*.cmake
 
 %if 0%{?examples}
 %files examples
@@ -184,23 +197,5 @@ popd
 %endif
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
-- bump release (retry failed build)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
-- devel owns Qt6Gui QWayland decoration and shell integration plugin CMake
-- remove duplicate Qt6WaylandCompositorConfig lines (tree %%{_qt6_libdir}/cmake/Qt6WaylandCompositor/ already)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
-- adwaita subpackage ships only the plugin (Qt 6.10 does not install Adwaita cmake there)
-- drop duplicate compositor cmake directory globs in devel
-
-* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- devel no longer lists cmake/Qt6WaylandClient (owned by qt6-qtbase-devel since Qt 6.10)
-- drop duplicate compositor soname glob in main package
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
+- Import

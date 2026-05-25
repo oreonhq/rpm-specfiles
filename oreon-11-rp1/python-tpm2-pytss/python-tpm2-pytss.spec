@@ -22,7 +22,7 @@ Patch4:         %{name}-copy-dunder.patch
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
-%if %{undefined rhel}
+%if %{undefined rhel} || 0%{?oreon}
 BuildRequires:  python3-pytest-xdist
 %endif
 BuildRequires:  tpm2-tss-devel >= 2.0.0
@@ -83,5 +83,5 @@ Summary:        %{summary}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.0-10
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.0-10
+- Import

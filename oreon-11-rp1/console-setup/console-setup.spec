@@ -1,11 +1,11 @@
 
 Name:		console-setup
-Version:	1.246
-Release:	1%{?dist}
+Version:	1.245
+Release:	3%{?dist}
 Summary:	Tools for configuring the console using X Window System key maps
 
 # For a breakdown of the licensing, see COPYRIGHT, copyright, copyright.fonts and copyright.xkb
-License:	GPL-2.0-or-later AND MIT AND LicenseRef-Fedora-Public-Domain
+License:	GPL-2.0-or-later AND MIT AND LicenseRef-Public-Domain
 URL:		http://packages.debian.org/cs/sid/console-setup
 Source0:	http://ftp.de.debian.org/debian/pool/main/c/%{name}/%{name}_%{version}.tar.xz
 
@@ -94,5 +94,5 @@ cp -a Fonts/fontsets Fonts/*.equivalents Fonts/*.set \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.246-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.245-3
+- Import

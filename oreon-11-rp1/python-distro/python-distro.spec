@@ -30,7 +30,7 @@ for more information.
 
 %package -n     python3-%{pypi_name}
 Summary:        %{summary}
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Suggests:       /usr/bin/lsb_release
 %endif
 
@@ -60,5 +60,5 @@ Suggests:       /usr/bin/lsb_release
 %pytest
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.0-11
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.0-11
+- Import

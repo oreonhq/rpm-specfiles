@@ -2,7 +2,7 @@
 
 Name:    kwayland-server
 Version: 5.24.5
-Release: 14%{?dist}
+Release: 11%{?dist}
 Summary: Wayland server components built on KDE Frameworks
 
 # Automatically converted from old format: LGPLv2+ and MIT and BSD - review is highly recommended.
@@ -16,7 +16,6 @@ URL:     https://invent.kde.org/plasma/%{name}
 %global stable stable
 %endif
 Source0: http://download.kde.org/%{stable}/plasma/%{version}/%{name}-%{version}.tar.xz
-Patch0:  kwayland-server-drm-fourcc-linux-types.patch
 
 BuildRequires:  qt5-qtbase-devel
 
@@ -69,14 +68,5 @@ developing applications that use %{name}.
 
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.24.5-14
-- Fix drm_fourcc patch complete hunk counts so patch applies in prep
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.24.5-13
-- Patch drm_fourcc.h use linux types on Linux fix aarch64 __u64 conflict
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.24.5-12
-- bump release (retry failed build)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.24.5-11
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.24.5-11
+- Import

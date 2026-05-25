@@ -1,5 +1,5 @@
 # Keep the *.la file around
-# See https://fedoraproject.org/wiki/Changes/RemoveLaFiles
+# See 
 %global __brp_remove_la_files %nil
 
 Name:		libnxz
@@ -88,5 +88,5 @@ install -m0644 -D libnxz.sysusers.conf %{buildroot}%{_sysusersdir}/libnxz.conf
 %{_libdir}/libnxz.la
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.64-10
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.64-10
+- Import

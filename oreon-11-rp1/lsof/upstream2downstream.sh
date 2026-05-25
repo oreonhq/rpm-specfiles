@@ -23,8 +23,7 @@ cd $TMP/$NAME
 echo " done."
 
 echo -n "Removing non-Linux dialects..."
-rm -rf ./src/dialects/darwin
-rm -rf ./lib/dialects/{aix,darwin,freebsd,hpux,netbsd,openbsd,osr,sun,uw}
+rm -rf ./dialects/{aix,darwin,du,freebsd,hpux,n+obsd,n+os,osr,sun,uw}
 echo " done."
 
 echo -n "Removing unused distribution scripts..."

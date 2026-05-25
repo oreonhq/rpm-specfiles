@@ -28,7 +28,7 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 %if %{without bootstrap}
 %bcond_with ant_minimal
@@ -328,7 +328,7 @@ Documentation pour %{name}.
 # -----------------------------------------------------------------------------
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # clean jar files
 find . -name "*.jar" | xargs -t rm
@@ -645,5 +645,5 @@ install -p -m 644 man/%{name}.1 %{buildroot}%{_mandir}/man1/%{name}.1
 # -----------------------------------------------------------------------------
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.15-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.10.15-1
+- Import

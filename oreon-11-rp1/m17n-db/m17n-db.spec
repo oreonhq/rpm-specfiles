@@ -1,6 +1,6 @@
 Name:       m17n-db
 Summary:    Multilingualization datafiles for m17n-lib
-Version:    1.8.10
+Version:    1.8.11
 Release:    %autorelease
 License:    LGPL-2.1-or-later
 URL:        http://www.nongnu.org/m17n
@@ -116,5 +116,5 @@ rm %{buildroot}%{_datadir}/m17n/ispell.mim
 %{_datadir}/pkgconfig/m17n-db.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.10-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.11-1
+- Import

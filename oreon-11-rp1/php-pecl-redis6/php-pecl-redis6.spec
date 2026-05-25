@@ -3,7 +3,7 @@
 #
 # remirepo spec file for php-pecl-redis6
 #
-# SPDX-FileCopyrightText:  Copyright 2012-2026 Remi Collet
+# SPDX-FileCopyrightText:  Copyright 2012-2025 Remi Collet
 # SPDX-License-Identifier: CECILL-2.1
 # http://www.cecill.info/licences/Licence_CeCILL_V2-en.txt
 #
@@ -13,7 +13,7 @@
 %global php_base     php
 
 %bcond_without       tests
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # optional compressors/serializers enabled by default
 %bcond_without       igbinary
 %bcond_without       msgpack
@@ -34,27 +34,22 @@
 
 %global upstream_version 6.3.0
 #global upstream_prever  RC2
+%global sources          %{pecl_name}-%{upstream_version}%{?upstream_prever}
 
-# Github forge
-%global gh_vend          %{pie_vend}
-%global gh_proj          %{pie_proj}
-%global forgeurl         https://github.com/%{gh_vend}/%{gh_proj}
-%global tag              %{version}
-
-Name:          %{php_base}-pecl-redis6
 Summary:       PHP extension for interfacing with key-value stores
-License:       PHP-3.01
+Name:          %{php_base}-pecl-redis6
 Version:       %{upstream_version}%{?upstream_prever:~%{upstream_prever}}
-Release:       3%{?dist}
-%forgemeta
-URL:           %{forgeurl}
-Source0:       %{forgesource}
+Release:       2%{?dist}
+License:       PHP-3.01
+URL:           https://pecl.php.net/package/redis
+Source0:       https://pecl.php.net/get/%{sources}.tgz
 
 ExcludeArch:   %{ix86}
 
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: %{php_base}-devel >= 8.0
+BuildRequires: php-pear
 %if %{with igbinary}
 BuildRequires: %{php_base}-pecl-igbinary-devel
 %endif
@@ -128,8 +123,15 @@ some doesn't work with an old server version.
 
 
 %prep
-%forgesetup
+%setup -q -c
 
+# Don't install/register tests, license, and bundled library
+sed -e 's/role="test"/role="src"/' \
+    -e '/LICENSE/s/role="doc"/role="src"/' \
+    -e '/liblzf/d' \
+    -i package.xml
+
+cd %{sources}
 # Use system library
 rm -r liblzf
 
@@ -139,6 +141,7 @@ if test "x${extver}" != "x%{upstream_version}%{?upstream_prever}"; then
    : Error: Upstream extension version is ${extver}, expecting %{upstream_version}%{?upstream_prever}.
    exit 1
 fi
+cd ..
 
 # Drop in the bit of configuration
 cat > %{ini_name} << 'EOF'
@@ -217,6 +220,7 @@ peclconf() {
     --with-php-config=$1
 }
 
+cd %{sources}
 %{__phpize}
 sed -e 's/INSTALL_ROOT/DESTDIR/' -i build/Makefile.global
 
@@ -228,7 +232,16 @@ peclconf %{__phpconfig}
 # Install the configuration file
 install -D -m 644 %{ini_name} %{buildroot}%{php_inidir}/%{ini_name}
 
+# Install the package XML file
+install -D -m 644 package.xml %{buildroot}%{pecl_xmldir}/%{name}.xml
+
+cd %{sources}
 %make_install
+
+# Documentation
+for i in $(grep 'role="doc"' ../package.xml | sed -e 's/^.*name="//;s/".*$//')
+do install -Dpm 644 $i %{buildroot}%{pecl_docdir}/%{pecl_name}/$i
+done
 
 
 %check
@@ -243,7 +256,7 @@ done
     --modules | grep '^%{pecl_name}$'
 
 %if %{with tests}
-cd tests
+cd %{sources}/tests
 : Ignore ONLINE test
 sed -e 's/testConnectException/skipConnectException/' -i RedisTest.php
 
@@ -290,15 +303,14 @@ exit $ret
 %endif
 
 %files
-%license LICENSE
-%doc composer.json
-%doc CREDITS
-%doc *.md
+%license %{sources}/LICENSE
+%doc %{pecl_docdir}/%{pecl_name}
+%{pecl_xmldir}/%{name}.xml
 
 %{php_extdir}/%{pecl_name}.so
 %config(noreplace) %{php_inidir}/%{ini_name}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{upstream_version}%{?upstream_prever:~%{upstream_prever}}-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.3.0-2
+- Import

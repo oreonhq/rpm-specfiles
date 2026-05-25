@@ -16,7 +16,7 @@ Source:         %{crate}-%{version}-vendor.tar.gz
 # Upstream PR (https://github.com/msekletar/prefixdevname/pull/29)
 Patch0001:      0001-Drop-unnecessary-cast.patch
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  rust-packaging >= 23
@@ -42,7 +42,7 @@ License:        MIT AND (MIT OR Apache-2.0) AND (Unlicense OR MIT) AND Unicode-D
 %files       -n %{crate}
 %license LICENSE
 %license LICENSE.dependencies
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %license cargo-vendor.txt
 %endif
 %doc README.md
@@ -53,7 +53,7 @@ License:        MIT AND (MIT OR Apache-2.0) AND (Unlicense OR MIT) AND Unicode-D
 
 %prep
 %autosetup -n %{crate}-%{version_no_tilde} -p1 %{?rhel:-a1}
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %cargo_prep -v vendor
 rm -f Cargo.lock
 %else
@@ -67,7 +67,7 @@ rm -f Cargo.lock
 %cargo_build
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %cargo_vendor_manifest
 %endif
 
@@ -80,5 +80,5 @@ rm -f Cargo.lock
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.0-1
+- Import

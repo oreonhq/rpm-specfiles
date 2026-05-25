@@ -19,7 +19,7 @@ BuildRequires:	make
 BuildRequires:	pkgconfig
 BuildRequires:	sed
 # systemd-rpm-macros needed for definition of %%{_tmpfilesdir}
-%if (0%{?fedora} && 0%{?fedora} <= 30)
+%if (0%{?fedora} && 0%{?fedora} <= 30) || 0%{?oreon}
 BuildRequires:	systemd
 %else
 BuildRequires:	systemd-rpm-macros
@@ -41,7 +41,7 @@ cp -p %{SOURCE3} README.SELinux
 cp -p %{SOURCE5} fcgid24.conf
 
 # Fix shellbang in fixconf script for our location of sed
-%if (0%{?rhel} && 0%{?rhel} <= 7) || (0%{?fedora} && 0%{?fedora} <= 23)
+%if (0%{?rhel} && 0%{?rhel} <= 7) || (0%{?fedora} && 0%{?fedora} <= 23) || 0%{?oreon}
 %patch -P 0 -p1
 %endif
 
@@ -80,5 +80,5 @@ install -p -m 644 %{SOURCE4} %{buildroot}%{_tmpfilesdir}/mod_fcgid.conf
 %dir %attr(0775,root,apache) /run/mod_fcgid/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.9-37
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.9-37
+- Import

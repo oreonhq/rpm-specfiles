@@ -13,7 +13,7 @@ BuildRequires: nspr-devel nss-devel nss-static
 
 BuildRequires: pcsc-lite-devel
 BuildRequires: desktop-file-utils
-%if ! 0%{?rhel} >= 9
+%if ! 0%{?rhel} >= 9 || 0%{?oreon}
 BuildRequires: pkgconfig(gconf-2.0)
 %endif
 BuildRequires: dbus-devel
@@ -132,5 +132,5 @@ chrpath --delete %{buildroot}%{escdir}/lib/libcoolkeymgr-1.0.so
 %{pixmapdir}/esc.png
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.2-23
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.2-23
+- Import

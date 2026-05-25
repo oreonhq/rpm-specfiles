@@ -10,8 +10,8 @@
 
 Summary: Qt6 - ScXml component
 Name:    qt6-%{qt_module}
-Version: 6.10.3
-Release: 4%{?dist}
+Version: 6.11.1
+Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -32,7 +32,6 @@ BuildRequires: qt6-qtbase-private-devel
 %{?_qt6:Requires: %{_qt6}%{?_isa} = %{_qt6_version}}
 BuildRequires: qt6-qtdeclarative-devel >= %{version}
 BuildRequires: pkgconfig(xkbcommon)
-BuildRequires: openssl-devel
 
 %description
 The Qt SCXML module provides functionality to create state machines from SCXML files.
@@ -52,7 +51,7 @@ Requires: qt6-qtdeclarative-devel%{?_isa}
 %package examples
 Summary: Programming examples for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-# BuildRequires: qt6-qtscxml-devel (same version as this package)
+# BuildRequires: qt6-qtscxml-devel >= %{version}
 %description examples
 %{summary}.
 %endif
@@ -63,13 +62,8 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %build
 %cmake_qt6 \
-%if 0%{?examples}
-  -DQT_BUILD_EXAMPLES:BOOL=ON \
-  -DQT_INSTALL_EXAMPLES_SOURCES=ON \
-%else
-  -DQT_BUILD_EXAMPLES:BOOL=OFF \
-  -DQT_INSTALL_EXAMPLES_SOURCES=OFF \
-%endif
+  -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
+  -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
 
 %cmake_build
 
@@ -139,11 +133,5 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-4
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-4
-- Remove aarch64 and s390x OOM workarounds (%%_smp_mflags, %%_lto_cflags, NINJAFLAGS, IPO, PCH off)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
+- Import

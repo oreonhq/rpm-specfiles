@@ -21,7 +21,7 @@ BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: openssl-devel
 BuildRequires: python3-pytest
-%if %{undefined rhel}
+%if %{undefined rhel} || 0%{?oreon}
 BuildRequires: python3-pytest-xdist
 %endif
 BuildRequires: unzip
@@ -60,7 +60,7 @@ rm -rf src/kem/ntruprime
 # code_conventions is for upstream CI, requires astyle
 # pytest-xdist is not available in RHEL due to dependencies
 sed -e '/COMMAND.*pytest/s|$| --ignore tests/test_code_conventions.py|' \
-%if %{defined rhel}
+%if %{defined rhel} || 0%{?oreon}
     -e 's/--numprocesses=auto//' \
 %endif
     -i tests/CMakeLists.txt
@@ -103,5 +103,5 @@ done
 #%doc %%{_datadir}/doc/oqs/xml/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{oqs_version}-6
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.12.0-6
+- Import

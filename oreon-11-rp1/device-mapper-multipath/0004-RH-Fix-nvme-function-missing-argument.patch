@@ -1,4 +1,4 @@
-From e8d504e1dc3598bfd598367fe3f15499068fd390 Mon Sep 17 00:00:00 2001
+From dcbdb36068a245fd3655b8e68b38ec571a727b0f Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Fri, 25 Jan 2019 14:54:56 -0600
 Subject: [PATCH] RH: Fix nvme function missing argument

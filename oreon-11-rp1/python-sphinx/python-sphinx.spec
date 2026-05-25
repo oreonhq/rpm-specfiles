@@ -22,7 +22,7 @@
 %bcond latex_tests 1
 
 Name:       python-sphinx
-%global     general_version 9.1.0
+%global     general_version 8.2.3
 #global     prerel ...
 %global     upstream_version %{general_version}%{?prerel}
 Version:    %{general_version}%{?prerel:~%{prerel}}
@@ -57,6 +57,14 @@ Patch:      sphinx-test_theming.patch
 # https://github.com/sphinx-doc/sphinx/pull/11747
 Patch:      Make-the-first-party-extensions-optional.patch
 
+# Compatibility with Python 3.14
+Patch:      https://github.com/sphinx-doc/sphinx/commit/8962398b761c3d85a.patch
+Patch:      https://github.com/sphinx-doc/sphinx/commit/e01e42f5fc738815b.patch
+Patch:      https://github.com/sphinx-doc/sphinx/pull/13527.patch
+# Compatibility with docutils 0.22+
+Patch:      https://github.com/sphinx-doc/sphinx/pull/13610.patch
+Patch:      https://github.com/sphinx-doc/sphinx/pull/13883.patch
+
 BuildArch:     noarch
 
 BuildRequires: make
@@ -85,7 +93,7 @@ BuildRequires: texinfo
 BuildRequires: ImageMagick
 %endif
 
-%if %{undefined rhel} && %{with latex_tests}
+%if %{undefined rhel} && %{with latex_tests} || 0%{?oreon}
 BuildRequires: texlive-collection-fontsrecommended
 BuildRequires: texlive-collection-latex
 BuildRequires: texlive-gnu-freefont
@@ -225,7 +233,7 @@ the Python docs:
       snippets and inclusion of appropriately formatted docstrings.
 
 
-%if %{undefined rhel}
+%if %{undefined rhel} || 0%{?oreon}
 %package -n python%{python3_pkgversion}-sphinx-latex
 Summary:       LaTeX builder dependencies for python%{python3_pkgversion}-sphinx
 
@@ -350,12 +358,12 @@ This package contains documentation in the HTML format.
 # Drop test-dependency on pytest-xdist
 # This allows for parallel testing, but has a lot of dependencies.
 # We want to avoid the dependency in RHEL, where it is not available.
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 sed -i -e '/pytest-xdist/d' pyproject.toml
 %endif
 
-# sphinx 9.1.0 requires pytest >= 9, which we don't have in Fedora yet
-sed -i '/"pytest>=/ s/>=[^",]*//' pyproject.toml
+# Support for docutils 0.22+
+sed -i -e 's/docutils>=0.20,<0.22/docutils>=0.20,<0.23/' pyproject.toml
 
 # Drop test-dependency on defusedxml,
 # use xml from the standard library instead.
@@ -379,12 +387,12 @@ _EOF
 %endif
 
 %if %{without imagemagick_tests}
-rm -r tests/test_ext_imgconverter/
+rm tests/test_extensions/test_ext_imgconverter.py
 %endif
 
 
 %generate_buildrequires
-%pyproject_buildrequires %{?with_tests:-g test}
+%pyproject_buildrequires -r %{?with_tests:-x test}
 
 
 %build
@@ -492,7 +500,7 @@ k="${k} and not test_check_js_search_indexes"
 %dir %{_datadir}/sphinx/locale/*
 %{_mandir}/man1/sphinx-*
 
-%if %{undefined rhel}
+%if %{undefined rhel} || 0%{?oreon}
 %files -n python%{python3_pkgversion}-sphinx-latex
 # empty, this is a metapackage
 %endif
@@ -503,5 +511,5 @@ k="${k} and not test_check_js_search_indexes"
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:8.2.3-1
+- Import

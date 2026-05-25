@@ -1,4 +1,4 @@
-From 0c785110d8863803a48388ca3a6103b7edcfa5b7 Mon Sep 17 00:00:00 2001
+From 9e2997e15d5a2f33f71ee1245c1771d8e6930b39 Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Thu, 13 Apr 2017 07:22:23 -0500
 Subject: [PATCH] RH: fixup udev rules for redhat

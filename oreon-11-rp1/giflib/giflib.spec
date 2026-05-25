@@ -1,7 +1,7 @@
 Name:          giflib
 Summary:       A library and utilities for processing GIFs
-Version:       6.1.2
-Release:       1%{?dist}
+Version:       6.1.3
+Release:       2%{?dist}
 
 License:       MIT
 URL:           http://www.sourceforge.net/projects/%{name}/
@@ -15,6 +15,9 @@ Patch2:        giflib_html-docs-consistent-ids.patch
 # Rename getarg.h to gif_getarg.h
 # https://sourceforge.net/p/giflib/code/merge-requests/18/
 Patch3:        getarg.patch
+# Proposed fix for CVE-2026-26740
+# https://sourceforge.net/p/giflib/bugs/199/
+Patch4:        CVE-2026-26740.patch
 
 BuildRequires: cmake
 BuildRequires: gcc
@@ -148,5 +151,5 @@ rm -rf %{buildroot}%{mingw64_mandir}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.1.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.1.3-2
+- Import

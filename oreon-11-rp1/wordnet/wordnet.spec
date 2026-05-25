@@ -94,7 +94,7 @@ rm -rf dict/dbfiles
 libtoolize && aclocal
 autoupdate
 autoreconf -i
-%if 0%{?fedora} >= 21 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 21 || 0%{?rhel} > 7 || 0%{?oreon}
 export CFLAGS="%{?optflags} -DUSE_INTERP_RESULT"
 export CXXFLAGS="%{?optflags} -DUSE_INTERP_RESULT"
 %endif
@@ -143,5 +143,5 @@ rm -rf doc/{html,ps,pdf}/Makefile*
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0-50
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0-50
+- Import

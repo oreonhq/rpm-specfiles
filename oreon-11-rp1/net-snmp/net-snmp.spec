@@ -240,7 +240,7 @@ cp %{SOURCE10} .
 
 %patch 101 -p1 -b .modern-rpm-api
 %patch 102 -p1
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %patch 103 -p1
 %endif
 
@@ -506,5 +506,5 @@ LD_LIBRARY_PATH=%{buildroot}/%{_libdir} make test
 %{_libdir}/libnetsnmptrapd*.so.%{soname}*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.9.5.2-4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:5.9.5.2-4
+- Import

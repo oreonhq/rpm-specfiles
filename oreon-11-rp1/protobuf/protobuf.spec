@@ -10,7 +10,7 @@
 %bcond_without python_cpp
 %endif
 # Build -java subpackage
-%if %{defined rhel}
+%if %{defined rhel} || 0%{?oreon}
 %bcond_with java
 %else
 %bcond_without java
@@ -491,5 +491,5 @@ install -p -m 0644 %{SOURCE2} %{buildroot}%{_emacs_sitestartdir}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.19.6-20
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.19.6-20
+- Import

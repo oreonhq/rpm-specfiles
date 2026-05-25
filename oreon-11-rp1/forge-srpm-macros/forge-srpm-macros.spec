@@ -25,7 +25,7 @@ BuildRequires:  python3-rpm-macros
 # We require macros and lua defined in redhat-rpm-config
 # We constrain this to the version released after the code was split out that
 # doesn't contain the same files.
-%if (0%{?fedora} >= 40 || 0%{?rhel} >= 10)
+%if (0%{?fedora} >= 40 || 0%{?rhel} >= 10) || 0%{?oreon}
 Requires:       redhat-rpm-config >= 266-1
 %elif 0%{?fedora} == 39
 Requires:       redhat-rpm-config >= 265-1
@@ -78,5 +78,5 @@ export MACRO_LUA_DIR="%{buildroot}%{_rpmluadir}"
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4.0-4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.4.0-4
+- Import

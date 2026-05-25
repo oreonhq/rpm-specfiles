@@ -7,15 +7,11 @@
 %endif
 
 %global examples 1
-# Examples plus QML import blow mock disk on some aarch64 workers
-%ifarch aarch64
-%global examples 0
-%endif
 
 Summary: Qt6 - WebSockets component
 Name:    qt6-%{qt_module}
-Version: 6.10.3
-Release: 5%{?dist}
+Version: 6.11.1
+Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
@@ -42,7 +38,6 @@ BuildRequires: qt6-qtbase-private-devel
 BuildRequires: qt6-qtdeclarative-devel
 
 BuildRequires: pkgconfig(xkbcommon) >= 0.5.0
-BuildRequires: openssl-devel
 
 %description
 The QtWebSockets module implements the WebSocket protocol as specified in RFC
@@ -59,7 +54,7 @@ Requires: qt6-qtbase-devel%{?_isa}
 %package examples
 Summary: Programming examples for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-# BuildRequires: qt6-qtwebsockets-devel (same version as this package)
+# BuildRequires: qt6-qtwebsockets-devel >= %{version}
 %description examples
 %{summary}.
 %endif
@@ -70,23 +65,14 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %build
 %cmake_qt6 \
-%if 0%{?examples}
-  -DQT_BUILD_EXAMPLES:BOOL=ON \
-  -DQT_INSTALL_EXAMPLES_SOURCES=ON \
-%else
-  -DQT_BUILD_EXAMPLES:BOOL=OFF \
-  -DQT_INSTALL_EXAMPLES_SOURCES=OFF \
-%endif
+  -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
+  -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
 
 %cmake_build
 
 
 %install
 %cmake_install
-%if ! 0%{?examples}
-# Belt and suspenders if anything still lands under examples
-rm -rf %{buildroot}%{_qt6_examplesdir}/websockets
-%endif
 
 ## .prl/.la file love
 # nuke .prl reference(s) to %%buildroot, excessive (.la-like) libs
@@ -131,18 +117,5 @@ popd
 
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-5
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-5
-- Drop aarch64 %%_smp_mflags -j1 (still skip examples on aarch64 for mock disk)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-3
-- fix %%{?examples ON} so value 0 does not still enable QT_BUILD_EXAMPLES
-- rm examples tree from buildroot when examples subpackage is off
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- aarch64 skip examples and single-job build to avoid ENOSPC in mock
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
+- Import

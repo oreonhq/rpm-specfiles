@@ -3,7 +3,7 @@
 %global khtml 1
 %endif
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %global khtml 1
 %endif
 
@@ -80,7 +80,7 @@ sed -i.InitialPreference \
 %find_lang kwebkitpart
 
 
-%if 0%{?rhel} && 0%{?rhel} < 8
+%if 0%{?rhel} && 0%{?rhel} < 8 || 0%{?oreon}
 %post
 touch --no-create %{_kde4_iconsdir}/hicolor &> /dev/null ||:
 
@@ -107,5 +107,5 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.0-0.21.
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.0-0.21.20190110
+- Import

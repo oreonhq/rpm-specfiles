@@ -2,7 +2,7 @@ Summary: Tool for generating C, C++, and go recognizers from regular expressions
 Name: re2c
 Version: 3.1
 Release: 6%{?dist}
-License: LicenseRef-Fedora-Public-Domain
+License: LicenseRef-Public-Domain
 URL: https://re2c.org/
 Source: https://github.com/skvadrik/re2c/releases/download/%{version}/re2c-%{version}.tar.xz
 
@@ -50,5 +50,5 @@ make tests
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1-6
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1-6
+- Import

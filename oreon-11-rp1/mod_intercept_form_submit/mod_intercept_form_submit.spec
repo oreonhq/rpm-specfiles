@@ -20,7 +20,7 @@ Requires: httpd-mmn = %{_httpd_mmn}
 Requires: mod_authnz_pam >= 0.7
 
 # Suppres auto-provides for module DSO per
-# https://fedoraproject.org/wiki/Packaging:AutoProvidesAndRequiresFiltering#Summary
+# 
 %{?filter_provides_in: %filter_provides_in %{_libdir}/httpd/modules/.*\.so$}
 %{?filter_setup}
 
@@ -63,5 +63,5 @@ install -Dp -m 0644 intercept_form_submit.confx $RPM_BUILD_ROOT%{_httpd_confdir}
 %{_httpd_moddir}/*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-11
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.0-11
+- Import

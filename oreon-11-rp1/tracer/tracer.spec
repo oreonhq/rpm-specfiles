@@ -1,6 +1,6 @@
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 
-%if 0%{?rhel} <= 7
+%if 0%{?rhel} <= 7 || 0%{?oreon}
 %bcond_without python2
 %bcond_with python3
 %bcond_with suggest
@@ -59,7 +59,7 @@ Obsoletes:      %{name} <= 0.6.11
 %endif
 BuildRequires:  python2-devel
 BuildRequires:  python2-sphinx
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
 BuildRequires:  rpm-python
 BuildRequires:  python2-mock
 Requires:       rpm-python
@@ -104,7 +104,7 @@ BuildRequires:  python3-dbus
 BuildRequires:  python3-rpm
 BuildRequires:  python3-distro
 BuildRequires:  python3-setuptools
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires:  python3-libdnf5
 %endif
 Requires:       python3-rpm
@@ -113,7 +113,7 @@ Requires:       python3-dbus
 Requires:       python3-six
 Requires:       python3-distro
 Requires:       %{name}-common = %{version}-%{release}
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Requires:       python3-libdnf5
 %endif
 %if %{with suggest}
@@ -205,5 +205,5 @@ make DESTDIR=%{buildroot}%{_datadir} mo
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4-2
+- Import

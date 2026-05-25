@@ -57,5 +57,5 @@ Headers, pkg-config, and CMake files for building against packagekit-qt6.
 %{_libdir}/cmake/packagekitqt6/
 
 %changelog
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.4-1
-- Add PackageKit-Qt for Plasma and Discover (Qt6 bindings)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.4-2
+- Import

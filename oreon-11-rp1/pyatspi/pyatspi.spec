@@ -1,13 +1,14 @@
 %global debug_package %{nil}
+%global major_minor_version %%(echo %%{version} | cut -d "." -f 1-2)
 
 Name:           pyatspi
-Version:        2.58.1
+Version:        2.58.2
 Release:        %autorelease
 Summary:        Python bindings for at-spi
 
 License:        LGPL-2.0-or-later AND GPL-2.0-or-later
-URL:            http://www.linuxfoundation.org/en/AT-SPI_on_D-Bus
-Source0:        https://download.gnome.org/sources/pyatspi/2.58/%{name}-%{version}.tar.xz
+URL:            https://gitlab.gnome.org/GNOME/pyatspi2/
+Source0:        https://download.gnome.org/sources/%{name}/%{major_minor_version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -77,5 +78,5 @@ sed -i '1s|^#!/usr/bin/python|#!%{__python3}|' examples/magFocusTracker.py
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.58.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.58.2-1
+- Import

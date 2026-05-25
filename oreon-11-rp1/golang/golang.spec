@@ -1,5 +1,4 @@
 %bcond_with bootstrap
-%bcond_with dwarf5
 
 # build ids are not currently generated:
 # https://code.google.com/p/go/issues/detail?id=5238
@@ -33,14 +32,14 @@
 # Golang build options.
 
 # Build golang using external/internal(close to cgo disabled) linking.
-%ifarch %{ix86} x86_64 ppc64le %{arm} aarch64 s390x riscv64 loongarch64
+%ifarch %{ix86} x86_64 ppc64le %{arm} aarch64 s390x riscv64
 %global external_linker 1
 %else
 %global external_linker 0
 %endif
 
 # Build golang with cgo enabled/disabled(later equals more or less to internal linking).
-%ifarch %{ix86} x86_64 ppc64le %{arm} aarch64 s390x riscv64 loongarch64
+%ifarch %{ix86} x86_64 ppc64le %{arm} aarch64 s390x riscv64
 %global cgo_enabled 1
 %else
 %global cgo_enabled 0
@@ -98,14 +97,11 @@
 %ifarch riscv64
 %global gohostarch  riscv64
 %endif
-%ifarch loongarch64
-%global gohostarch  loong64
-%endif
 
 # Comment out go_prerelease and go_patch as needed
 %global go_api 1.26
 #global go_prerelease rc3
-%global go_patch 1
+%global go_patch 3
 
 %global go_version %{go_api}%{?go_patch:.%{go_patch}}%{?go_prerelease:~%{go_prerelease}}
 %global go_source %{go_api}%{?go_patch:.%{go_patch}}%{?go_prerelease}
@@ -115,7 +111,7 @@ Version:        %{go_version}
 Release:        %autorelease
 Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
-License:        BSD-3-Clause AND LicenseRef-Fedora-Public-Domain
+License:        BSD-3-Clause AND LicenseRef-Public-Domain
 URL:            https://go.dev
 Source0:        https://go.dev/dl/go%{go_source}.src.tar.gz
 # make possible to override default traceback level at build time by setting build tag rpm_crashtraceback
@@ -157,7 +153,6 @@ Requires:       go-filesystem
 
 Patch1:         0001-Modify-go.env.patch
 Patch5:         0005-Skip-TestCrashDumpsAllThreads.patch
-Patch6:         0006-Default-to-ld.bfd-on-ARM64.patch
 # Related to https://gcc.gnu.org/PR118497
 Patch8:         fix_cgo_panic-with-gcc15-in-368.patch
 # Related to https://github.com/golang/go/issues/74476
@@ -256,7 +251,7 @@ Requires(preun): %{_sbindir}/update-alternatives
 # This is an odd issue, still looking for a better fix.
 Requires:       glibc
 Requires:       gcc
-Recommends:     git-core
+Recommends:     git-core, subversion, mercurial
 
 %description    bin
 %{summary}
@@ -293,10 +288,6 @@ Requires:       %{name} = %{version}-%{release}
 %autosetup -p1 -n go
 
 cp %{SOURCE1} ./src/runtime/
-
-%if %{with dwarf5}
-sed -i '/^GOEXPERIMENT=nodwarf5$/d' go.env
-%endif
 
 %build
 # print out system information
@@ -547,5 +538,5 @@ fi
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{go_version}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.26.3-1
+- Import

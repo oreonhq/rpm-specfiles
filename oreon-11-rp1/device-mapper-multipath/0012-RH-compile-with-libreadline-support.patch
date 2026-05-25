@@ -1,4 +1,4 @@
-From ca64d7d2f5173a8919a9b8f1375a061379c3b37e Mon Sep 17 00:00:00 2001
+From 65292dcf69c6706d0268f1f3ca99011b9923290e Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Tue, 15 Nov 2022 18:03:33 -0600
 Subject: [PATCH] RH: compile with libreadline support

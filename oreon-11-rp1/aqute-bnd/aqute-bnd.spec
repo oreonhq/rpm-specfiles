@@ -1,6 +1,6 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
-%if %{without bootstrap} && %{undefined rhel}
+%if %{without bootstrap} && %{undefined rhel} || 0%{?oreon}
 %bcond_without bnd_maven_plugin
 %else
 %bcond_with bnd_maven_plugin
@@ -93,7 +93,7 @@ Summary:        BND Maven plugin
 %endif
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # the commands pull in more dependencies than we want (felix-resolver, jetty)
 rm biz.aQute.bnd/src/aQute/bnd/main/{ExportReportCommand,MbrCommand,RemoteCommand,ReporterLogger,ResolveCommand,Shell}.java
@@ -231,5 +231,5 @@ echo "aqute-bnd slf4j/api slf4j/simple osgi-annotation osgi-core osgi-compendium
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.3.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.3.1-1
+- Import

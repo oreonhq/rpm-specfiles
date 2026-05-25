@@ -1,5 +1,5 @@
 Name:           perl-Sys-Virt
-Version:        12.1.0
+Version:        12.0.0
 Release:        1%{?dist}
 Summary:        Represent and manage a libvirt hypervisor connection
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
@@ -12,7 +12,7 @@ BuildRequires:  gcc
 BuildRequires:  git-core
 BuildRequires:  libvirt-devel >= %{version}
 BuildRequires:  perl-devel
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
 %endif
@@ -33,7 +33,7 @@ BuildRequires:  perl(Time::HiRes)
 BuildRequires:  perl(XML::XPath)
 BuildRequires:  perl(XML::XPath::XMLParser)
 # Optional tests
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 BuildRequires:  perl(Test::CPAN::Changes)
 BuildRequires:  perl(Test::Pod) >= 1.00
 BuildRequires:  perl(Test::Pod::Coverage) >= 1.00
@@ -97,5 +97,5 @@ export HARNESS_OPTIONS=j$(perl -e 'if ($ARGV[0] =~ /.*-j([0-9][0-9]*).*/) {print
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12.1.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12.0.0-1
+- Import

@@ -31,7 +31,7 @@ Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
 #   cargo vendor && tar Jcvf ../%%{name}-%%{version}-vendor.tar.xz vendor/ ; popd
 Source1:        %{name}-%{version}-vendor.tar.xz
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires:  rust-toolset
 BuildRequires:  clang-devel
 BuildRequires:  openssl-devel
@@ -47,7 +47,7 @@ Requires:       clevis
 
 %prep
 %autosetup -p1 %{?rhel:-a1}
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %cargo_prep -v vendor
 %else
 %cargo_prep
@@ -60,7 +60,7 @@ Requires:       clevis
 %cargo_build
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %cargo_vendor_manifest
 %endif
 
@@ -77,7 +77,7 @@ ln -s /usr/bin/clevis-pin-tpm2 %{buildroot}/usr/bin/clevis-decrypt-tpm2plus
 %files
 %license LICENSES/MIT.txt
 %license LICENSE.dependencies
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %license cargo-vendor.txt
 %endif
 %doc README.md
@@ -85,5 +85,5 @@ ln -s /usr/bin/clevis-pin-tpm2 %{buildroot}/usr/bin/clevis-decrypt-tpm2plus
 %{_bindir}/clevis-*-tpm2plus
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.4-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.4-1
+- Import

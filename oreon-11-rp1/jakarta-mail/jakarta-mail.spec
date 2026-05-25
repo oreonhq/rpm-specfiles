@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           jakarta-mail
 Version:        2.1.5
@@ -28,7 +28,7 @@ Jakarta Mail defines a platform-independent and protocol-independent
 framework to build mail and messaging applications.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 pushd api
 # Remove unnecessary dependency on parent POM
@@ -56,5 +56,5 @@ popd
 %doc README.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.5-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.5-1
+- Import

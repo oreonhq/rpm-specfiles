@@ -1,6 +1,6 @@
 # When distributed in RHEL, EPEL shouldn't be used. Mingw shouldn't be in RHEL,
 # so it shouldn't be used anywhere, but in fedora.
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %bcond_without mingw
 %else
 %bcond_with mingw
@@ -161,5 +161,5 @@ rm -f %{buildroot}%{mingw64_bindir}/geos-config
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.1-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.1-2
+- Import

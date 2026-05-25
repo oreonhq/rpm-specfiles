@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           jansi
 Version:        2.4.2
@@ -38,7 +38,7 @@ which don't support it like Windows and provides graceful degradation for
 when output is being sent to output devices which cannot support ANSI sequences.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # We don't need the Fuse JXR skin
 %pom_xpath_remove "pom:build/pom:extensions"
@@ -87,5 +87,5 @@ cp -p src/main/native/libjansi.so %{buildroot}%{_prefix}/lib/%{name}
 %{_prefix}/lib/%{name}/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.4.2-1
+- Import

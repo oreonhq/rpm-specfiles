@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 %global bundled_slf4j_version 1.7.36
 %global homedir %{_datadir}/maven%{?maven_version_suffix}
@@ -77,7 +77,7 @@ BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 %endif
 
 # XXX
-#BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %%{bundled_slf4j_version}
+#BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %{bundled_slf4j_version}
 %if %{without bootstrap}
 BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:)
 %endif
@@ -92,7 +92,7 @@ Requires(postun): alternatives
 # TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 1:3.9.9-13
 # TODO Remove in Fedora 47
-Obsoletes:      %{name}-openjdk21 < 1:3.9.11-12
+Obsoletes:      %{name}-openjdk21 < 1:3.9.11-11
 
 %description
 Maven is a software project management and comprehension tool. Based on the
@@ -111,11 +111,16 @@ OrderWithRequires: xmvn-minimal
 # maven-slf4j-provider.jar, together with Maven-specific additions.
 Provides:       bundled(slf4j) = %{bundled_slf4j_version}
 
+# Remove in Fedora 45
+Obsoletes:      maven-openjdk8 < 1:3.9.9-2
+Obsoletes:      maven-openjdk11 < 1:3.9.9-2
+Obsoletes:      maven-openjdk17 < 1:3.9.9-2
+
 %description lib
 Core part of Apache Maven that can be used as a library.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 find -name '*.java' -exec sed -i 's/\r//' {} +
 find -name 'pom.xml' -exec sed -i 's/\r//' {} +
@@ -252,5 +257,5 @@ if [[ $1 -eq 0 ]]; then update-alternatives --remove mvn %{homedir}/bin/mvn; fi
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.9.11-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.9.11-1
+- Import

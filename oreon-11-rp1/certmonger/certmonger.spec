@@ -1,4 +1,4 @@
-%if 0%{?fedora} > 15 || 0%{?rhel} > 6
+%if 0%{?fedora} > 15 || 0%{?rhel} > 6 || 0%{?oreon}
 %global systemd 1
 %global	sysvinit 0
 %else
@@ -6,19 +6,19 @@
 %global	sysvinit 1
 %endif
 
-%if 0%{?fedora} > 15 && 0%{?fedora} < 20
+%if 0%{?fedora} > 15 && 0%{?fedora} < 20 || 0%{?oreon}
 %global systemdsysv 1
 %else
 %global systemdsysv 0
 %endif
 
-%if 0%{?fedora} > 14 || 0%{?rhel} > 6
+%if 0%{?fedora} > 14 || 0%{?rhel} > 6 || 0%{?oreon}
 %global tmpfiles 1
 %else
 %global tmpfiles 0
 %endif
 
-%if 0%{?fedora} > 9 || 0%{?rhel} > 5
+%if 0%{?fedora} > 9 || 0%{?rhel} > 5 || 0%{?oreon}
 %global sysvinitdir %{_initddir}
 %else
 %global sysvinitdir %{_initrddir}
@@ -51,13 +51,13 @@ BuildRequires:	openldap-devel
 BuildRequires:	krb5-devel
 BuildRequires:	libidn2-devel
 BuildRequires:	dbus-devel, nspr-devel, nss-devel, openssl-devel
-%if 0%{?fedora} >= 12 || 0%{?rhel} >= 6
+%if 0%{?fedora} >= 12 || 0%{?rhel} >= 6 || 0%{?oreon}
 BuildRequires:	libuuid-devel
 %else
 BuildRequires:	e2fsprogs-devel
 %endif
 BuildRequires:	libtalloc-devel, libtevent-devel
-%if 0%{?rhel} >= 6 || 0%{?fedora} >= 9
+%if 0%{?rhel} >= 6 || 0%{?fedora} >= 9 || 0%{?oreon}
 BuildRequires:	libcurl-devel
 %else
 BuildRequires:	curl-devel
@@ -67,7 +67,7 @@ BuildRequires:	libxml2-devel
 BuildRequires:  xmlrpc-c-devel
 %endif
 BuildRequires:  jansson-devel
-%if 0%{?rhel} && 0%{?rhel} < 6
+%if 0%{?rhel} && 0%{?rhel} < 6 || 0%{?oreon}
 BuildRequires:	bind-libbind-devel
 BuildRequires:	mktemp
 %endif
@@ -119,7 +119,7 @@ Requires(post):	/sbin/chkconfig, /sbin/service
 Requires(preun):	/sbin/chkconfig, /sbin/service, dbus, sed
 %endif
 
-%if 0%{?fedora} >= 15
+%if 0%{?fedora} >= 15 || 0%{?oreon}
 # Certain versions of libtevent have incorrect internal ABI versions.
 Conflicts: libtevent < 0.9.13
 %endif
@@ -131,7 +131,7 @@ system enrolled with a certificate authority (CA) and keeping it enrolled.
 %prep
 %autosetup -p1
 
-%if 0%{?rhel} > 0
+%if 0%{?rhel} > 0 || 0%{?oreon}
 # Enabled by default for RHEL for bug #765600, still disabled by default for
 # Fedora pending a similar bug report there.
 sed -i 's,^# chkconfig: - ,# chkconfig: 345 ,g' sysvinit/certmonger.in
@@ -271,5 +271,5 @@ exit 0
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.79.21-4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.79.21-4
+- Import

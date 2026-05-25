@@ -33,7 +33,7 @@ optimizers, obsfuscators and analysis tools, the most popular probably
 being the Xalan XSLT processor at Apache.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_remove_plugin :maven-source-plugin
 %pom_remove_plugin :spotbugs-maven-plugin
@@ -53,5 +53,5 @@ being the Xalan XSLT processor at Apache.
 %license LICENSE.txt NOTICE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.0-1
+- Import

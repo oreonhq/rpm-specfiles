@@ -7,8 +7,6 @@
 %define vte_version 0.79.90
 %define desktop_file_utils_version 0.2.90
 
-%global major_minor_version %%(echo %%{version} | cut -d "." -f 1-2)
-
 Name:    gnome-terminal
 Version: 3.60.0
 Release: %autorelease
@@ -16,7 +14,7 @@ Summary: Terminal emulator for GNOME
 
 License: GPL-3.0-or-later AND GFDL-1.3-only
 URL:     https://wiki.gnome.org/Apps/Terminal
-Source0: https://download.gnome.org/sources/%{name}/%{major_minor_version}/%{name}-%{version}.tar.xz
+Source0: https://download.gnome.org/sources/%{name}/3.60/%{name}-%{version}.tar.xz
 Source1: org.gnome.Terminal.gschema.override
 
 BuildRequires: pkgconfig(dconf)
@@ -47,7 +45,7 @@ Requires: gtk3%{?_isa} >= %{gtk3_version}
 Requires: libhandy%{?_isa} >= %{libhandy_version}
 Requires: vte291%{?_isa} >= %{vte_version}
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 ExcludeArch: %{ix86}
 
 %description
@@ -118,5 +116,5 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.Terminal.de
 %{_metainfodir}/org.gnome.Terminal.Nautilus.metainfo.xml
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.60.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.60.0-1
+- Import

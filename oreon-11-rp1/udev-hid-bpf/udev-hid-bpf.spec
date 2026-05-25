@@ -4,7 +4,7 @@
 %global crate udev-hid-bpf
 %global _firmware /usr/lib/firmware
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %global bundled_rust_deps 1
 %global build_testing 0
 %global build_tracing 1
@@ -14,7 +14,7 @@
 %endif
 
 # Fedora 42 never shipped a kernel 6.12 so no need for our tracing sources
-%if 0%{?fedora} >= 42
+%if 0%{?fedora} >= 42 || 0%{?oreon}
 %global build_tracing "false"
 %else
 %global build_tracing "true"
@@ -64,7 +64,7 @@ Patch02:        0001-Cargo.toml-drop-libbpf-sys-to-1.5.0.patch
 # Here, we still allow 0.5 as well for compatibility with vendored deps.
 Patch03:        udev-hid-bpf-2.2.0-20251121-stderrlog-0.6.patch
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  cargo-rpm-macros >= 26
@@ -213,5 +213,5 @@ export RUSTFLAGS="%build_rustflags"
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{upstream_version}.%{upstream_version_date}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.0.20251121-1
+- Import

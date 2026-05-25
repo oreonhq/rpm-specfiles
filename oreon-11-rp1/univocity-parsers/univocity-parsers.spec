@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           univocity-parsers
 Version:        2.9.1
@@ -30,7 +30,7 @@ file formats, and a solid framework for the development of new
 parsers.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_remove_plugin :nexus-staging-maven-plugin
 %pom_remove_plugin :maven-compiler-plugin
@@ -48,5 +48,5 @@ parsers.
 %license LICENSE-2.0.html
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.1-1
+- Import

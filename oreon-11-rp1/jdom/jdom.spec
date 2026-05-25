@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 # Copyright (c) 2000-2012, JPackage Project
 # All rights reserved.
@@ -71,7 +71,7 @@ Requires:       %{name} = %{version}-%{release}
 Demonstrations and samples for %{name}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;
 find . -name "*.class" -exec rm -f {} \;
@@ -98,5 +98,5 @@ cp -pr samples $RPM_BUILD_ROOT%{_datadir}/%{name}
 %license LICENSE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.3-1
+- Import

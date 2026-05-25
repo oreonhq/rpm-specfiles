@@ -5,12 +5,9 @@ Version:        0.49.0
 Release:        %autorelease
 Summary:        A configuration system
 
-# Official GNOME release tarball includes meson subprojects (gvdb). GitLab tag
-# archives omit subproject files and fail with missing gvdb/meson.build.
-Source0:        https://download.gnome.org/sources/dconf/0.49/%{name}-%{version}.tar.xz
-
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later
 URL:            https://wiki.gnome.org/Projects/dconf
+Source0:        https://download.gnome.org/sources/dconf/0.40/dconf-%{version}.tar.xz
 
 Patch1:         dconf-override.patch
 
@@ -107,5 +104,5 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/dconf/db/distro.d/locks
 %{_datadir}/vala
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.49.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.49.0-1
+- Import

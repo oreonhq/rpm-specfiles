@@ -1,5 +1,5 @@
 # note this duplicates native anthy IMEs
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %bcond_without anthy
 %else
 %bcond_with anthy
@@ -126,5 +126,5 @@ find %{buildroot} -name '*.la' -exec rm -f {} ';'
 %{_libdir}/libm17n-gui.so.*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.6-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.6-1
+- Import

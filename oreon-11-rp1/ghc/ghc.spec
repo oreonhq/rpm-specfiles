@@ -35,7 +35,7 @@
 %global xhtml_ver 3000.2.2.1
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=2390105
-# https://fedoraproject.org/wiki/Changes/StaticLibraryPreserveDebuginfo
+# 
 # debugedit-5.2 adds 1-3 hours to koji build times
 %define _find_debuginfo_opts --no-ar-files
 
@@ -856,5 +856,5 @@ make test
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{ghc_major}.%{ghc_patchlevel}-155
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.10.3-155
+- Import

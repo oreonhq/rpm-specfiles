@@ -36,7 +36,7 @@ Summary:        Lightweight Scripting for Java
 URL:            https://beanshell.github.io/
 # bundled asm is BSD
 # bsf/src/bsh/util/BeanShellBSFEngine.java is public-domain
-License:        Apache-2.0 AND BSD-3-Clause AND LicenseRef-Fedora-Public-Domain
+License:        Apache-2.0 AND BSD-3-Clause AND LicenseRef-Public-Domain
 
 # ./generate-tarball.sh
 Source0:        %{name}-%{version}.tar.gz
@@ -161,5 +161,5 @@ cat scripts/bshdoc.bsh >> %{buildroot}%{_bindir}/bshdoc
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.0-19
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0:2.1.0-19
+- Import

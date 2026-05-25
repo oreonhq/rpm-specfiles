@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           google-gson
 Version:        2.12.1
@@ -29,7 +29,7 @@ equivalent Java object. Gson can work with arbitrary Java objects including
 pre-existing objects that you do not have source-code of.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin -r :spotless-maven-plugin
@@ -40,7 +40,8 @@ pre-existing objects that you do not have source-code of.
 %pom_remove_plugin :maven-compiler-plugin
 
 %pom_remove_dep -r :error_prone_annotations
-jurand -i -s -a gson extras -p com[.]google[.]errorprone[.]annotations[.]
+%java_remove_annotations gson extras -s \
+  -p com[.]google[.]errorprone[.]annotations[.] \
 
 # The test EnumWithObfuscatedTest requires the plugins copy-rename-maven-plugin, proguard-maven-plugin and maven-resources-plugin to work correctly because it tests Gson interaction with a class obfuscated by ProGuard.
 # https://github.com/google/gson/issues/2045
@@ -82,5 +83,5 @@ sed 's/${project.version}/%{version}/' gson/src/main/java-templates/com/google/g
 %doc README.md CHANGELOG.md UserGuide.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12.1-1
+- Import

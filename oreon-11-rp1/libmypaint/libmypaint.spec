@@ -1,32 +1,30 @@
 Name: libmypaint
 Version: 1.6.1
-Release: %autorelease
+Release: 16%{?dist}
 Summary: Library for making brush strokes
 
 # Compute some version related macros.
-%global major %{lua:
-    print((string.gsub(macros.version, '^(%d+)%..*$', '%1')))
-}
-%global minor %{lua:
-    print((string.gsub(macros.version, '^%d+%.(%d+)%..*$', '%1')))
-}
-%global micro %{lua:
-    print((string.gsub(macros.version, '^%d+%.%d+%.(%d+).*$', '%1')))
-}
+# Ugly, need to get quoting percent signs straight.
+%global major %(ver=%{version}; echo ${ver%%%%.*})
+%global minor %(ver=%{version}; ver=${ver#%major.}; echo ${ver%%%%.*})
+%global micro %(ver=%{version}; ver=${ver#%major.%minor.}; echo ${ver%%%%.*})
 
 License: ISC
 URL: https://github.com/mypaint/libmypaint
 Source0: https://github.com/mypaint/libmypaint/releases/download/v%{version}/libmypaint-%{version}.tar.xz
 
-BuildRequires: doxygen
+BuildRequires: babl-devel
 BuildRequires: gcc
+BuildRequires: doxygen
+BuildRequires: glib2-devel
+BuildRequires: gobject-introspection-devel
 BuildRequires: intltool
-BuildRequires: make
-BuildRequires: pkgconfig(gobject-2.0)
-BuildRequires: pkgconfig(gobject-introspection-1.0) >= 1.32.0
-BuildRequires: pkgconfig(json-c)
+BuildRequires: json-c-devel
 BuildRequires: python3-breathe
 BuildRequires: python3-sphinx
+BuildRequires: make
+
+Conflicts: mypaint < 1.3.0
 
 %description
 This is a self-contained library containing the MyPaint brush engine.
@@ -42,6 +40,9 @@ This package contains files needed for development with libmypaint.
 %prep
 %autosetup -p1
 
+# Make sure the build uses python3
+sed -i -e 's/python -c/python3 -c/g' configure
+
 %build
 %configure --enable-docs --enable-introspection=yes --disable-gegl
 %make_build
@@ -53,9 +54,6 @@ find %{buildroot}%{_libdir} -name '*.la' -delete -print
 %find_lang %{name}
 
 %ldconfig_scriptlets
-
-%check
-make check
 
 %files -f %{name}.lang
 %license COPYING
@@ -73,5 +71,5 @@ make check
 %{_datadir}/gir-1.0/MyPaint-%{major}.%{minor}.gir
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.1-16
+- Import

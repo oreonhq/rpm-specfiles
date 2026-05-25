@@ -1,7 +1,7 @@
 Summary:  A python module for system storage configuration
 Name: python-blivet
 Url: https://storageapis.wordpress.com/projects/blivet
-Version: 3.13.1
+Version: 3.13.2
 
 #%%global prerelease .b2
 # prerelease, if defined, should be something like .a1, .b1, .b2.dev1, or .c2
@@ -13,9 +13,11 @@ License: LGPL-2.1-or-later
 Source0: http://github.com/storaged-project/blivet/releases/download/%{realname}-%{realversion}/%{realname}-%{realversion}.tar.gz
 Source1: http://github.com/storaged-project/blivet/releases/download/%{realname}-%{realversion}/%{realname}-%{realversion}-tests.tar.gz
 
-%if 0%{?rhel} >= 9
+%if 0%{?rhel} >= 9 || 0%{?oreon}
 Patch0: 0001-remove-btrfs-plugin.patch
 %endif
+
+Patch1: 0002-Ignore-btrfs-mount-errors-during-storage-scan.patch
 
 # Versions of required components (done so we make sure the buildrequires
 # match the requires versions of things).
@@ -133,5 +135,5 @@ make DESTDIR=%{buildroot} install
 %{python3_sitelib}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.13.1-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.13.2-2
+- Import

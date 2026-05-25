@@ -7,7 +7,7 @@
 
 # https://github.com/go-delve/delve
 %global goipath         github.com/go-delve/delve
-Version:                1.26.1
+Version:                1.26.2
 
 %global common_description %{expand:
 Delve is a debugger for the Go programming language. The goal of the project
@@ -79,5 +79,5 @@ done
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.26.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.26.2-1
+- Import

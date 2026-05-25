@@ -38,7 +38,7 @@
 # Turn that off to ensure such files don't get included in RPMs.
 %global _default_patch_flags --no-backup-if-mismatch
 
-# https://fedoraproject.org/wiki/Packaging:Guidelines#Packaging_of_Additional_RPM_Macros
+# 
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 # Don't create note file, added package_note_flags to linker by redhat-rpm-config
@@ -48,7 +48,7 @@
 Summary: PostgreSQL client programs
 Name: %{majorname}%{majorversion}
 Version: 18.3
-Release: 1%{?dist}
+Release: 2%{?dist}
 
 # The PostgreSQL license is very similar to other MIT licenses, but the OSI
 # recognizes it as an independent license, so we do as well.
@@ -67,7 +67,7 @@ Url: http://www.postgresql.org/
 %global prev_prefix16 %{_libdir}/pgsql/postgresql-%{prevmajorversion16}
 %global precise_version %{?epoch:%epoch:}%version-%release
 
-%global setup_version 8.10
+%global setup_version 8.12
 
 %global service_name postgresql.service
 
@@ -118,7 +118,7 @@ BuildRequires: perl(ExtUtils::MakeMaker) glibc-devel bison flex gawk
 BuildRequires: perl(ExtUtils::Embed), perl-devel
 BuildRequires: perl(Opcode)
 BuildRequires: perl-FindBin
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 BuildRequires: perl-generators
 %endif
 BuildRequires: readline-devel zlib-devel
@@ -487,7 +487,7 @@ benchmarks.
 %package -n %{pkgname}-llvmjit
 Summary:	Just-in-time compilation support for PostgreSQL
 Requires:	%{pkgname}-server%{?_isa} = %{version}-%{release}
-%if 0%{?rhel} && 0%{?rhel} == 7
+%if 0%{?rhel} && 0%{?rhel} == 7 || 0%{?oreon}
 Requires:	llvm5.0 >= 5.0
 %else
 Requires:	llvm => 5.0
@@ -1506,5 +1506,5 @@ make -C postgresql-setup-%{setup_version} check
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 18.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 18.3-2
+- Import

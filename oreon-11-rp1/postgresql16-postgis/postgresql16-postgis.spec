@@ -19,7 +19,7 @@
 %global        __provides_exclude_from %{_libdir}/pgsql
 
 Name:          postgresql%{pgversion}-postgis
-Version:       3.6.2
+Version:       3.6.3
 Release:       1%{?dist}
 Summary:       Geographic Information Systems Extensions to PostgreSQL
 License:       GPL-2.0-or-later
@@ -36,7 +36,7 @@ Patch2:	       postgis-c99.patch
 Patch3:	       postgis-c99-2.patch
 %endif
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 ExcludeArch: %{ix86}
 
 %if %{?postgresql_default}
@@ -47,7 +47,7 @@ Summary: Open-source vector similarity search for Postgres
 %global pkgname %name
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires: SFCGAL-devel
 BuildRequires: gtk2-devel
 %endif
@@ -184,7 +184,7 @@ version of PostgreSQL.
 %endif
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %package -n %{pkgname}-gui
 Summary:       The shp2pgsql-gui utility for PostGIS
 Requires:      %{pkgname}%{?_isa} = %{version}-%{release}
@@ -228,7 +228,7 @@ cp -p %{SOURCE2} .
 %if %llvmjit
 	--with-llvm \
 %endif
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 	--with-sfcgal \
 	--with-gui
 %endif
@@ -356,7 +356,7 @@ find %buildroot \( -name '*.la' -or -name '*.a' \) -delete
 
 
 %check
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 desktop-file-validate %{buildroot}/%{_datadir}/applications/shp2pgsql-gui.desktop
 %endif
 %if %runselftest
@@ -389,13 +389,13 @@ fi
 %{_datadir}/pgsql/extension/address_standardizer*.control
 %{_datadir}/pgsql/extension/postgis-*.sql
 %{_datadir}/pgsql/extension/postgis_raster*.sql
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %{_datadir}/pgsql/extension/postgis_sfcgal*.sql
 %endif
 %{_datadir}/pgsql/extension/postgis_topology*.sql
 %{_datadir}/pgsql/extension/postgis.control
 %{_datadir}/pgsql/extension/postgis_raster.control
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %{_datadir}/pgsql/extension/postgis_sfcgal.control
 %endif
 %{_datadir}/pgsql/extension/postgis_topology.control
@@ -408,7 +408,7 @@ fi
 %{_datadir}/postgis/repo_revision.pl
 %{_libdir}/pgsql/address_standardizer-%{soversion}.so
 %{_libdir}/pgsql/postgis_raster-%{soversion}.so
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %{_libdir}/pgsql/postgis_sfcgal-%{soversion}.so
 %endif
 %{_libdir}/pgsql/postgis_topology-%{soversion}.so
@@ -428,7 +428,7 @@ fi
 %{_mandir}/man1/postgis_restore.1*
 %{_mandir}/man1/shp2pgsql.1*
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %files -n %{pkgname}-gui
 %{_bindir}/shp2pgsql-gui
 %{_datadir}/applications/shp2pgsql-gui.desktop
@@ -441,7 +441,7 @@ fi
 %{_libdir}/pgsql/bitcode/address_standardizer-*
 %{_libdir}/pgsql/bitcode/postgis-*
 %{_libdir}/pgsql/bitcode/postgis_raster-*
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %{_libdir}/pgsql/bitcode/postgis_sfcgal-*
 %endif
 %{_libdir}/pgsql/bitcode/postgis_topology-*
@@ -493,5 +493,5 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.3-1
+- Import

@@ -288,5 +288,5 @@ EOF
 %{_datadir}/ibus-table/icons/mongol_bichig.svg
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.22-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.22-1
+- Import

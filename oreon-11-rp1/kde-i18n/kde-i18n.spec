@@ -767,7 +767,7 @@ rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdeqt.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdessh.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdesu.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdesud.mo
-%if 0%{?fedora} > 12
+%if 0%{?fedora} > 12 || 0%{?oreon}
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdevelop.mo
 %endif
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdf.mo
@@ -1644,5 +1644,5 @@ rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/libkicker.mo
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.10-46
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.5.10-46
+- Import

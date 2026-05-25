@@ -1,12 +1,12 @@
 # No Mojolicious in EPEL
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %global have_mojo 1
 %else
 %global have_mojo 0
 %endif
 
 # Run extra test
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %bcond_with perl_MIME_Types_enables_extra_test
 %else
 %bcond_without perl_MIME_Types_enables_extra_test
@@ -108,5 +108,5 @@ make test TEST_FILES="xt/*.t"
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.30-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.30-2
+- Import

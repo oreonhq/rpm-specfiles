@@ -1,5 +1,5 @@
 #global commit 7274cfad453d770f36b53ec5a2294ddd6d905703
-#global shortcommit %%(c=%%{commit}; echo ${c:0:7})
+#global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 #global pre beta.1
 
@@ -304,5 +304,5 @@ rm -f %{buildroot}/%{_datadir}/tesseract/tessdata/pdf.ttf
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.1.0-12
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.1.0-12
+- Import

@@ -12,7 +12,7 @@ Source2: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x25B62C9821501AA
 
 BuildRequires: gcc
 BuildRequires: make
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires: bsdtar
 %else
 BuildRequires: lzip
@@ -28,7 +28,7 @@ replaced in normal usage by full-screen editors (emacs and vi, for example).
 %prep
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 # no lzip in RHEL; bsdtar can handle it but not from within %%setup.
 %setup -q -c -T
 bsdtar -xf %{SOURCE0} -C %{_builddir}
@@ -70,5 +70,5 @@ rm -vrf %{buildroot}%{_infodir}/dir
 %{_infodir}/ed.info*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.22.5-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.22.5-1
+- Import

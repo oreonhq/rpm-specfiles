@@ -10,7 +10,7 @@ Epoch:          1
 Summary:        Utility for converting FIG files (made by xfig) to other formats
 License:        Xfig
 URL:            https://sourceforge.net/projects/mcj/
-#Source0:        https://downloads.sourceforge.net/mcj/fig2dev-%%{version}.tar.xz
+#Source0:        https://downloads.sourceforge.net/mcj/fig2dev-%{version}.tar.xz
 Source0:        https://sourceforge.net/code-snapshots/git/m/mc/mcj/fig2dev.git/mcj-fig2dev-%{git_commit}.zip
 
 Patch:          0001-Avoid-integer-overflow.patch
@@ -44,7 +44,7 @@ Install transfig if you need a utility for translating FIG or PIC figures into
 certain graphics languages.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 autoreconf -i
 
 # Fix the manpage not being in UTF-8
@@ -74,5 +74,5 @@ mv fig2dev.1.in.new man/fig2dev.1.in
 %{_mandir}/man1/*.1.gz
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.9a^20250619.%{git_short_commit}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.2.9a^20250619.-1
+- Import

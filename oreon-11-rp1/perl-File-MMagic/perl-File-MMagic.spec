@@ -12,7 +12,7 @@ BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
-%if 0%{?fedora} > 34 || 0%{?rhel} > 8
+%if 0%{?fedora} > 34 || 0%{?rhel} > 8 || 0%{?oreon}
 BuildRequires:  glibc-gconv-extra
 %endif
 BuildRequires:  glibc-common
@@ -63,5 +63,5 @@ make test
 %{_mandir}/man3/File::MMagic.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.30-37
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.30-37
+- Import

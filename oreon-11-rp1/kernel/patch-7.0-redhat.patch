@@ -1,6 +1,7 @@
  Documentation/admin-guide/media/amdisp4-1.rst      |   63 ++
  Documentation/admin-guide/media/amdisp4.dot        |    6 +
  Documentation/admin-guide/media/v4l-drivers.rst    |    1 +
+ Documentation/crypto/krb5.rst                      |   17 +-
  MAINTAINERS                                        |   25 +
  Makefile                                           |   30 +
  arch/arm/Kconfig                                   |    4 +-
@@ -17,6 +18,7 @@
  arch/s390/kernel/ipl.c                             |    5 +
  arch/s390/kernel/setup.c                           |    4 +
  arch/x86/kernel/setup.c                            |   22 +-
+ crypto/krb5/krb5_api.c                             |   54 +-
  crypto/sig.c                                       |    3 +-
  crypto/testmgr.c                                   |    2 +-
  drivers/acpi/apei/hest.c                           |    8 +
@@ -30,6 +32,7 @@
  drivers/firmware/efi/libstub/fdt.c                 |    5 +
  drivers/firmware/efi/libstub/secureboot.c          |   14 +-
  drivers/firmware/efi/secureboot.c                  |   38 +
+ drivers/gpu/drm/i915/display/intel_dp_tunnel.c     |   11 +-
  drivers/hid/hid-rmi.c                              |   66 --
  drivers/hwtracing/coresight/coresight-etm4x-core.c |   19 +
  drivers/input/rmi4/rmi_driver.c                    |  124 ++-
@@ -55,22 +58,42 @@
  drivers/mfd/bcm2835-pm.c                           |    9 +-
  drivers/net/ethernet/cadence/macb.h                |   35 +
  drivers/net/ethernet/cadence/macb_main.c           |  736 ++++++++------
+ drivers/nfc/nxp-nci/i2c.c                          |   21 +-
  drivers/pci/quirks.c                               |   24 +
  drivers/usb/core/hub.c                             |    7 +
+ include/crypto/krb5.h                              |    9 +-
  include/linux/efi.h                                |   22 +-
  include/linux/lsm_hook_defs.h                      |    1 +
  include/linux/mfd/bcm2835-pm.h                     |    7 +
  include/linux/rmi.h                                |    1 +
  include/linux/security.h                           |    9 +
+ include/trace/events/rxrpc.h                       |    1 +
  kernel/module/signing.c                            |    9 +-
+ net/core/gro.c                                     |    3 +
+ net/ipv4/esp4.c                                    |    5 +-
+ net/ipv6/esp6.c                                    |    5 +-
+ net/rxrpc/ar-internal.h                            |   14 +-
+ net/rxrpc/call_event.c                             |   22 +-
+ net/rxrpc/call_object.c                            |    2 +
+ net/rxrpc/conn_event.c                             |   32 +-
+ net/rxrpc/insecure.c                               |    8 +-
+ net/rxrpc/recvmsg.c                                |   68 +-
+ net/rxrpc/rxgk.c                                   |  160 ++-
+ net/rxrpc/rxgk_app.c                               |   46 +-
+ net/rxrpc/rxgk_common.h                            |   66 +-
+ net/rxrpc/rxkad.c                                  |  115 +--
+ net/sched/act_pedit.c                              |   72 +-
  scripts/Makefile.lib                               |    3 +
  scripts/tags.sh                                    |    2 +
  security/integrity/platform_certs/load_uefi.c      |    6 +-
  security/lockdown/Kconfig                          |   13 +
  security/lockdown/lockdown.c                       |   11 +
+ sound/soc/amd/acp/acp-sdw-legacy-mach.c            |   18 +-
+ sound/soc/codecs/rt722-sdca.c                      |   77 +-
+ sound/soc/codecs/rt722-sdca.h                      |    4 +
  tools/testing/selftests/bpf/Makefile               |    2 +-
  tools/testing/selftests/bpf/prog_tests/ksyms_btf.c |   31 -
- 76 files changed, 5395 insertions(+), 547 deletions(-)
+ 95 files changed, 5872 insertions(+), 888 deletions(-)
 
 diff --git a/Documentation/admin-guide/media/amdisp4-1.rst b/Documentation/admin-guide/media/amdisp4-1.rst
 new file mode 100644
@@ -165,6 +188,37 @@ index 393f83e8dc4d..0fb88449fffd 100644
  	bttv
  	c3-isp
  	cafe_ccic
+diff --git a/Documentation/crypto/krb5.rst b/Documentation/crypto/krb5.rst
+index beffa0133446..f62e07ac6811 100644
+--- a/Documentation/crypto/krb5.rst
++++ b/Documentation/crypto/krb5.rst
+@@ -158,13 +158,22 @@ returned.
+ When a message has been received, the location and size of the data with the
+ message can be determined by calling::
+ 
+-	void crypto_krb5_where_is_the_data(const struct krb5_enctype *krb5,
+-					   enum krb5_crypto_mode mode,
+-					   size_t *_offset, size_t *_len);
++	int crypto_krb5_where_is_the_data(const struct krb5_enctype *krb5,
++					  enum krb5_crypto_mode mode,
++					  size_t *_offset, size_t *_len);
+ 
+ The caller provides the offset and length of the message to the function, which
+ then alters those values to indicate the region containing the data (plus any
+-padding).  It is up to the caller to determine how much padding there is.
++padding).  It is up to the caller to determine how much padding there is.  The
++function returns an error if the length is too small or if the mode is
++unsupported.  An additional function::
++
++	int crypto_krb5_check_data_len(const struct krb5_enctype *krb5,
++				       enum krb5_crypto_mode mode,
++				       size_t len, size_t min_content);
++
++is provided to just do a basic check that the decrypted/verified message would
++have a sufficient minimum payload.
+ 
+ Preparation Functions
+ ---------------------
 diff --git a/MAINTAINERS b/MAINTAINERS
 index d1cc0e12fe1f..985c66951475 100644
 --- a/MAINTAINERS
@@ -202,7 +256,7 @@ index d1cc0e12fe1f..985c66951475 100644
  M:	Felix Kuehling <Felix.Kuehling@amd.com>
  L:	amd-gfx@lists.freedesktop.org
 diff --git a/Makefile b/Makefile
-index a0565b83ae40..af6f72ebe8f2 100644
+index a95f0b3d26bf..99b2c764c4c9 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -356,6 +356,17 @@ ifneq ($(filter install,$(MAKECMDGOALS)),)
@@ -223,7 +277,7 @@ index a0565b83ae40..af6f72ebe8f2 100644
  ifdef mixed-build
  # ===========================================================================
  # We're called with mixed targets (*config and build targets).
-@@ -1364,6 +1375,8 @@ uapi-asm-generic:
+@@ -1366,6 +1377,8 @@ uapi-asm-generic:
  # Generate some files
  # ---------------------------------------------------------------------------
  
@@ -232,7 +286,7 @@ index a0565b83ae40..af6f72ebe8f2 100644
  # KERNELRELEASE can change from a few different places, meaning version.h
  # needs to be updated, so this check is forced on all builds
  
-@@ -2029,6 +2042,23 @@ endif
+@@ -2031,6 +2044,23 @@ endif
  
  ifdef CONFIG_MODULES
  
@@ -809,6 +863,86 @@ index eebcc9db1a1b..779aca6969df 100644
  
  	reserve_initrd();
  
+diff --git a/crypto/krb5/krb5_api.c b/crypto/krb5/krb5_api.c
+index 23026d4206c8..c7ea40f900a7 100644
+--- a/crypto/krb5/krb5_api.c
++++ b/crypto/krb5/krb5_api.c
+@@ -134,27 +134,69 @@ EXPORT_SYMBOL(crypto_krb5_how_much_data);
+  * Find the offset and size of the data in a secure message so that this
+  * information can be used in the metadata buffer which will get added to the
+  * digest by crypto_krb5_verify_mic().
++ *
++ * Return: 0 if successful, -EBADMSG if the message is too short or -EINVAL if
++ * the mode is unsupported.
+  */
+-void crypto_krb5_where_is_the_data(const struct krb5_enctype *krb5,
+-				   enum krb5_crypto_mode mode,
+-				   size_t *_offset, size_t *_len)
++int crypto_krb5_where_is_the_data(const struct krb5_enctype *krb5,
++				  enum krb5_crypto_mode mode,
++				  size_t *_offset, size_t *_len)
+ {
+ 	switch (mode) {
+ 	case KRB5_CHECKSUM_MODE:
++		if (*_len < krb5->cksum_len)
++			return -EBADMSG;
+ 		*_offset += krb5->cksum_len;
+ 		*_len -= krb5->cksum_len;
+-		return;
++		return 0;
+ 	case KRB5_ENCRYPT_MODE:
++		if (*_len < krb5->conf_len + krb5->cksum_len)
++			return -EBADMSG;
+ 		*_offset += krb5->conf_len;
+ 		*_len -= krb5->conf_len + krb5->cksum_len;
+-		return;
++		return 0;
+ 	default:
+ 		WARN_ON_ONCE(1);
+-		return;
++		return -EINVAL;
+ 	}
+ }
+ EXPORT_SYMBOL(crypto_krb5_where_is_the_data);
+ 
++/**
++ * crypto_krb5_check_data_len - Check a message is big enough
++ * @krb5: The encoding to use.
++ * @mode: Mode of operation.
++ * @len: The length of the secure blob.
++ * @min_content: Minimum length of the content inside the blob.
++ *
++ * Check that a message is large enough to hold whatever bits the encryption
++ * type wants to glue on (nonce, checksum) plus a minimum amount of content.
++ *
++ * Return: 0 if successful, -EBADMSG if the message is too short or -EINVAL if
++ * the mode is unsupported.
++ */
++int crypto_krb5_check_data_len(const struct krb5_enctype *krb5,
++			       enum krb5_crypto_mode mode,
++			       size_t len, size_t min_content)
++{
++	switch (mode) {
++	case KRB5_CHECKSUM_MODE:
++		if (len < krb5->cksum_len ||
++		    len - krb5->cksum_len < min_content)
++			return -EBADMSG;
++		return 0;
++	case KRB5_ENCRYPT_MODE:
++		if (len < krb5->conf_len + krb5->cksum_len ||
++		    len - (krb5->conf_len + krb5->cksum_len) < min_content)
++			return -EBADMSG;
++		return 0;
++	default:
++		WARN_ON_ONCE(1);
++		return -EINVAL;
++	}
++}
++EXPORT_SYMBOL(crypto_krb5_check_data_len);
++
+ /*
+  * Prepare the encryption with derived key data.
+  */
 diff --git a/crypto/sig.c b/crypto/sig.c
 index beba745b6405..fd41f6d3abf9 100644
 --- a/crypto/sig.c
@@ -1261,6 +1395,39 @@ index 000000000000..de0a3714a5d4
 +		}
 +	}
 +}
+diff --git a/drivers/gpu/drm/i915/display/intel_dp_tunnel.c b/drivers/gpu/drm/i915/display/intel_dp_tunnel.c
+index 55b423fd6b6f..7894ae25e2a7 100644
+--- a/drivers/gpu/drm/i915/display/intel_dp_tunnel.c
++++ b/drivers/gpu/drm/i915/display/intel_dp_tunnel.c
+@@ -150,11 +150,9 @@ static int allocate_initial_tunnel_bw_for_pipes(struct intel_dp *intel_dp, u8 pi
+ 			    drm_dp_tunnel_name(intel_dp->tunnel),
+ 			    encoder->base.base.id, encoder->base.name,
+ 			    ERR_PTR(err));
+-
+-		return err;
+ 	}
+ 
+-	return update_tunnel_state(intel_dp);
++	return err;
+ }
+ 
+ static int allocate_initial_tunnel_bw(struct intel_dp *intel_dp,
+@@ -200,10 +198,13 @@ static int detect_new_tunnel(struct intel_dp *intel_dp, struct drm_modeset_acqui
+ 	}
+ 
+ 	ret = allocate_initial_tunnel_bw(intel_dp, ctx);
+-	if (ret < 0)
++	if (ret < 0) {
+ 		intel_dp_tunnel_destroy(intel_dp);
+ 
+-	return ret;
++		return ret;
++	}
++
++	return update_tunnel_state(intel_dp);
+ }
+ 
+ /**
 diff --git a/drivers/hid/hid-rmi.c b/drivers/hid/hid-rmi.c
 index d4af17fdba46..154f0403cbf4 100644
 --- a/drivers/hid/hid-rmi.c
@@ -1607,7 +1774,7 @@ index ccd9338a44db..5c54e522e8a4 100644
  	if (data->f01_container->dev.driver) {
  		/* Driver already bound, so enable ATTN now. */
 diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index ee83850c7060..53ad11f18182 100644
+index ef08c2c4ec95..c22d02658ea4 100644
 --- a/drivers/iommu/iommu.c
 +++ b/drivers/iommu/iommu.c
 @@ -8,6 +8,7 @@
@@ -1618,7 +1785,7 @@ index ee83850c7060..53ad11f18182 100644
  #include <linux/kernel.h>
  #include <linux/bits.h>
  #include <linux/bug.h>
-@@ -3068,6 +3069,27 @@ int iommu_fwspec_add_ids(struct device *dev, const u32 *ids, int num_ids)
+@@ -3108,6 +3109,27 @@ int iommu_fwspec_add_ids(struct device *dev, const u32 *ids, int num_ids)
  }
  EXPORT_SYMBOL_GPL(iommu_fwspec_add_ids);
  
@@ -7222,6 +7389,54 @@ index 99e7d5cf3786..a12aa21244e8 100644
  		disable_irq_wake(bp->queues[0].irq);
  
  		/* Now make sure we disable phy before moving
+diff --git a/drivers/nfc/nxp-nci/i2c.c b/drivers/nfc/nxp-nci/i2c.c
+index b3d34433bd14..a6c08175d9dd 100644
+--- a/drivers/nfc/nxp-nci/i2c.c
++++ b/drivers/nfc/nxp-nci/i2c.c
+@@ -16,6 +16,7 @@
+ #include <linux/delay.h>
+ #include <linux/i2c.h>
+ #include <linux/interrupt.h>
++#include <linux/irq.h>
+ #include <linux/module.h>
+ #include <linux/nfc.h>
+ #include <linux/gpio/consumer.h>
+@@ -267,6 +268,7 @@ static int nxp_nci_i2c_probe(struct i2c_client *client)
+ {
+ 	struct device *dev = &client->dev;
+ 	struct nxp_nci_i2c_phy *phy;
++	unsigned long irqflags;
+ 	int r;
+ 
+ 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
+@@ -303,9 +305,26 @@ static int nxp_nci_i2c_probe(struct i2c_client *client)
+ 	if (r < 0)
+ 		return r;
+ 
++	/*
++	 * ACPI platforms may report incorrect IRQ trigger types
++	 * (e.g. level-high), which can lead to interrupt storms.
++	 *
++	 * Use the historically stable rising-edge trigger for ACPI devices.
++	 *
++	 * On non-ACPI systems (e.g. Device Tree), prefer the firmware-
++	 * provided trigger type, falling back to rising-edge if not set.
++	 */
++	if (ACPI_COMPANION(dev)) {
++		irqflags = IRQF_TRIGGER_RISING;
++	} else {
++		irqflags = irq_get_trigger_type(client->irq);
++		if (!irqflags)
++			irqflags = IRQF_TRIGGER_RISING;
++	}
++
+ 	r = request_threaded_irq(client->irq, NULL,
+ 				 nxp_nci_i2c_irq_thread_fn,
+-				 IRQF_ONESHOT,
++				 irqflags | IRQF_ONESHOT,
+ 				 NXP_NCI_I2C_DRIVER_NAME, phy);
+ 	if (r < 0)
+ 		nfc_err(&client->dev, "Unable to register IRQ handler\n");
 diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
 index 48946cca4be7..a1f5fe8e583f 100644
 --- a/drivers/pci/quirks.c
@@ -7275,6 +7490,26 @@ index 24960ba9caa9..32597cdb72ef 100644
  	/* Lock the device, then check to see if we were
  	 * disconnected while waiting for the lock to succeed. */
  	usb_lock_device(hdev);
+diff --git a/include/crypto/krb5.h b/include/crypto/krb5.h
+index 71dd38f59be1..aac3ecf88467 100644
+--- a/include/crypto/krb5.h
++++ b/include/crypto/krb5.h
+@@ -121,9 +121,12 @@ size_t crypto_krb5_how_much_buffer(const struct krb5_enctype *krb5,
+ size_t crypto_krb5_how_much_data(const struct krb5_enctype *krb5,
+ 				 enum krb5_crypto_mode mode,
+ 				 size_t *_buffer_size, size_t *_offset);
+-void crypto_krb5_where_is_the_data(const struct krb5_enctype *krb5,
+-				   enum krb5_crypto_mode mode,
+-				   size_t *_offset, size_t *_len);
++int crypto_krb5_where_is_the_data(const struct krb5_enctype *krb5,
++				  enum krb5_crypto_mode mode,
++				  size_t *_offset, size_t *_len);
++int crypto_krb5_check_data_len(const struct krb5_enctype *krb5,
++			       enum krb5_crypto_mode mode,
++			       size_t len, size_t min_content);
+ struct crypto_aead *crypto_krb5_prepare_encryption(const struct krb5_enctype *krb5,
+ 						   const struct krb5_buffer *TK,
+ 						   u32 usage, gfp_t gfp);
 diff --git a/include/linux/efi.h b/include/linux/efi.h
 index 664898d09ff5..34f476d02181 100644
 --- a/include/linux/efi.h
@@ -7408,6 +7643,18 @@ index 8d2d4856934e..d6b1aec4340f 100644
 +#endif /* CONFIG_SECURITY_LOCKDOWN_LSM */
 +
  #endif /* ! __LINUX_SECURITY_H */
+diff --git a/include/trace/events/rxrpc.h b/include/trace/events/rxrpc.h
+index 573f2df3a2c9..704a10de6670 100644
+--- a/include/trace/events/rxrpc.h
++++ b/include/trace/events/rxrpc.h
+@@ -71,6 +71,7 @@
+ 	EM(rxkad_abort_resp_unknown_tkt,	"rxkad-resp-unknown-tkt") \
+ 	EM(rxkad_abort_resp_version,		"rxkad-resp-version")	\
+ 	/* RxGK security errors */					\
++	EM(rxgk_abort_1_short_header,		"rxgk1-short-hdr")	\
+ 	EM(rxgk_abort_1_verify_mic_eproto,	"rxgk1-vfy-mic-eproto")	\
+ 	EM(rxgk_abort_2_decrypt_eproto,		"rxgk2-dec-eproto")	\
+ 	EM(rxgk_abort_2_short_data,		"rxgk2-short-data")	\
 diff --git a/kernel/module/signing.c b/kernel/module/signing.c
 index a2ff4242e623..f0d2be1ee4f1 100644
 --- a/kernel/module/signing.c
@@ -7431,6 +7678,1250 @@ index a2ff4242e623..f0d2be1ee4f1 100644
  }
  
  int module_sig_check(struct load_info *info, int flags)
+diff --git a/net/core/gro.c b/net/core/gro.c
+index 9f8960789b2c..c7b8eab61e02 100644
+--- a/net/core/gro.c
++++ b/net/core/gro.c
+@@ -123,6 +123,9 @@ int skb_gro_receive(struct sk_buff *p, struct sk_buff *skb)
+ 	lp = NAPI_GRO_CB(p)->last;
+ 	pinfo = skb_shinfo(lp);
+ 
++	if (skb_zcopy(skb) || skb_zcopy(lp))
++		return -ETOOMANYREFS;
++
+ 	if (headlen <= offset) {
+ 		skb_frag_t *frag;
+ 		skb_frag_t *frag2;
+diff --git a/net/ipv4/esp4.c b/net/ipv4/esp4.c
+index 6a5febbdbee4..2d7daca8516c 100644
+--- a/net/ipv4/esp4.c
++++ b/net/ipv4/esp4.c
+@@ -410,6 +410,7 @@ int esp_output_head(struct xfrm_state *x, struct sk_buff *skb, struct esp_info *
+ 	struct page *page;
+ 	struct sk_buff *trailer;
+ 	int tailen = esp->tailen;
++	unsigned int allocsize;
+ 
+ 	/* this is non-NULL only with TCP/UDP Encapsulation */
+ 	if (x->encap) {
+@@ -419,8 +420,8 @@ int esp_output_head(struct xfrm_state *x, struct sk_buff *skb, struct esp_info *
+ 			return err;
+ 	}
+ 
+-	if (ALIGN(tailen, L1_CACHE_BYTES) > PAGE_SIZE ||
+-	    ALIGN(skb->data_len, L1_CACHE_BYTES) > PAGE_SIZE)
++	allocsize = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
++	if (allocsize > PAGE_SIZE)
+ 		goto cow;
+ 
+ 	if (!skb_cloned(skb)) {
+diff --git a/net/ipv6/esp6.c b/net/ipv6/esp6.c
+index 9c06c5a1419d..0fad1dc558b8 100644
+--- a/net/ipv6/esp6.c
++++ b/net/ipv6/esp6.c
+@@ -440,6 +440,7 @@ int esp6_output_head(struct xfrm_state *x, struct sk_buff *skb, struct esp_info
+ 	struct page *page;
+ 	struct sk_buff *trailer;
+ 	int tailen = esp->tailen;
++	unsigned int allocsize;
+ 
+ 	if (x->encap) {
+ 		int err = esp6_output_encap(x, skb, esp);
+@@ -448,8 +449,8 @@ int esp6_output_head(struct xfrm_state *x, struct sk_buff *skb, struct esp_info
+ 			return err;
+ 	}
+ 
+-	if (ALIGN(tailen, L1_CACHE_BYTES) > PAGE_SIZE ||
+-	    ALIGN(skb->data_len, L1_CACHE_BYTES) > PAGE_SIZE)
++	allocsize = ALIGN(skb->data_len + tailen, L1_CACHE_BYTES);
++	if (allocsize > PAGE_SIZE)
+ 		goto cow;
+ 
+ 	if (!skb_cloned(skb)) {
+diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
+index 27c2aa2dd023..98f2165159d7 100644
+--- a/net/rxrpc/ar-internal.h
++++ b/net/rxrpc/ar-internal.h
+@@ -213,8 +213,6 @@ struct rxrpc_skb_priv {
+ 		struct {
+ 			u16		offset;		/* Offset of data */
+ 			u16		len;		/* Length of data */
+-			u8		flags;
+-#define RXRPC_RX_VERIFIED	0x01
+ 		};
+ 		struct {
+ 			rxrpc_seq_t	first_ack;	/* First packet in acks table */
+@@ -309,15 +307,16 @@ struct rxrpc_security {
+ 				    struct sk_buff *challenge);
+ 
+ 	/* verify a response */
+-	int (*verify_response)(struct rxrpc_connection *,
+-			       struct sk_buff *);
++	int (*verify_response)(struct rxrpc_connection *conn,
++			       struct sk_buff *response_skb,
++			       void *response, unsigned int len);
+ 
+ 	/* clear connection security */
+ 	void (*clear)(struct rxrpc_connection *);
+ 
+ 	/* Default ticket -> key decoder */
+ 	int (*default_decode_ticket)(struct rxrpc_connection *conn, struct sk_buff *skb,
+-				     unsigned int ticket_offset, unsigned int ticket_len,
++				     void *ticket, unsigned int ticket_len,
+ 				     struct key **_key);
+ };
+ 
+@@ -774,6 +773,11 @@ struct rxrpc_call {
+ 	struct sk_buff_head	recvmsg_queue;	/* Queue of packets ready for recvmsg() */
+ 	struct sk_buff_head	rx_queue;	/* Queue of packets for this call to receive */
+ 	struct sk_buff_head	rx_oos_queue;	/* Queue of out of sequence packets */
++	void			*rx_dec_buffer;	/* Decryption buffer */
++	unsigned short		rx_dec_bsize;	/* rx_dec_buffer size */
++	unsigned short		rx_dec_offset;	/* Decrypted packet data offset */
++	unsigned short		rx_dec_len;	/* Decrypted packet data len */
++	rxrpc_seq_t		rx_dec_seq;	/* Packet in decryption buffer */
+ 
+ 	rxrpc_seq_t		rx_highest_seq;	/* Higest sequence number received */
+ 	rxrpc_seq_t		rx_consumed;	/* Highest packet consumed */
+diff --git a/net/rxrpc/call_event.c b/net/rxrpc/call_event.c
+index 2b19b252225e..fec59d9338b9 100644
+--- a/net/rxrpc/call_event.c
++++ b/net/rxrpc/call_event.c
+@@ -332,27 +332,7 @@ bool rxrpc_input_call_event(struct rxrpc_call *call)
+ 
+ 			saw_ack |= sp->hdr.type == RXRPC_PACKET_TYPE_ACK;
+ 
+-			if (sp->hdr.type == RXRPC_PACKET_TYPE_DATA &&
+-			    sp->hdr.securityIndex != 0 &&
+-			    (skb_cloned(skb) ||
+-			     skb_has_frag_list(skb) ||
+-			     skb_has_shared_frag(skb))) {
+-				/* Unshare the packet so that it can be
+-				 * modified by in-place decryption.
+-				 */
+-				struct sk_buff *nskb = skb_copy(skb, GFP_ATOMIC);
+-
+-				if (nskb) {
+-					rxrpc_new_skb(nskb, rxrpc_skb_new_unshared);
+-					rxrpc_input_call_packet(call, nskb);
+-					rxrpc_free_skb(nskb, rxrpc_skb_put_call_rx);
+-				} else {
+-					/* OOM - Drop the packet. */
+-					rxrpc_see_skb(skb, rxrpc_skb_see_unshare_nomem);
+-				}
+-			} else {
+-				rxrpc_input_call_packet(call, skb);
+-			}
++			rxrpc_input_call_packet(call, skb);
+ 			rxrpc_free_skb(skb, rxrpc_skb_put_call_rx);
+ 			did_receive = true;
+ 		}
+diff --git a/net/rxrpc/call_object.c b/net/rxrpc/call_object.c
+index f035f486c139..fcb9d38bb521 100644
+--- a/net/rxrpc/call_object.c
++++ b/net/rxrpc/call_object.c
+@@ -152,6 +152,7 @@ struct rxrpc_call *rxrpc_alloc_call(struct rxrpc_sock *rx, gfp_t gfp,
+ 	spin_lock_init(&call->notify_lock);
+ 	refcount_set(&call->ref, 1);
+ 	call->debug_id		= debug_id;
++	call->rx_pkt_offset	= USHRT_MAX;
+ 	call->tx_total_len	= -1;
+ 	call->tx_jumbo_max	= 1;
+ 	call->next_rx_timo	= 20 * HZ;
+@@ -553,6 +554,7 @@ static void rxrpc_cleanup_rx_buffers(struct rxrpc_call *call)
+ 	rxrpc_purge_queue(&call->recvmsg_queue);
+ 	rxrpc_purge_queue(&call->rx_queue);
+ 	rxrpc_purge_queue(&call->rx_oos_queue);
++	kfree(call->rx_dec_buffer);
+ }
+ 
+ /*
+diff --git a/net/rxrpc/conn_event.c b/net/rxrpc/conn_event.c
+index 442414d90ba1..c96ca615b787 100644
+--- a/net/rxrpc/conn_event.c
++++ b/net/rxrpc/conn_event.c
+@@ -243,28 +243,22 @@ static void rxrpc_call_is_secure(struct rxrpc_call *call)
+ static int rxrpc_verify_response(struct rxrpc_connection *conn,
+ 				 struct sk_buff *skb)
+ {
++	unsigned int len = skb->len - sizeof(struct rxrpc_wire_header);
++	void *buffer;
+ 	int ret;
+ 
+-	if (skb_cloned(skb) || skb_has_frag_list(skb) ||
+-	    skb_has_shared_frag(skb)) {
+-		/* Copy the packet if shared so that we can do in-place
+-		 * decryption.
+-		 */
+-		struct sk_buff *nskb = skb_copy(skb, GFP_NOFS);
+-
+-		if (nskb) {
+-			rxrpc_new_skb(nskb, rxrpc_skb_new_unshared);
+-			ret = conn->security->verify_response(conn, nskb);
+-			rxrpc_free_skb(nskb, rxrpc_skb_put_response_copy);
+-		} else {
+-			/* OOM - Drop the packet. */
+-			rxrpc_see_skb(skb, rxrpc_skb_see_unshare_nomem);
+-			ret = -ENOMEM;
+-		}
+-	} else {
+-		ret = conn->security->verify_response(conn, skb);
+-	}
++	buffer = kmalloc(len, GFP_NOFS);
++	if (!buffer)
++		return -ENOMEM;
++
++	ret = skb_copy_bits(skb, sizeof(struct rxrpc_wire_header), buffer, len);
++	if (ret < 0)
++		goto out;
++
++	ret = conn->security->verify_response(conn, skb, buffer, len);
+ 
++out:
++	kfree(buffer);
+ 	return ret;
+ }
+ 
+diff --git a/net/rxrpc/insecure.c b/net/rxrpc/insecure.c
+index 0a260df45d25..0b39046bdc61 100644
+--- a/net/rxrpc/insecure.c
++++ b/net/rxrpc/insecure.c
+@@ -32,9 +32,6 @@ static int none_secure_packet(struct rxrpc_call *call, struct rxrpc_txbuf *txb)
+ 
+ static int none_verify_packet(struct rxrpc_call *call, struct sk_buff *skb)
+ {
+-	struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
+-
+-	sp->flags |= RXRPC_RX_VERIFIED;
+ 	return 0;
+ }
+ 
+@@ -57,9 +54,10 @@ static int none_sendmsg_respond_to_challenge(struct sk_buff *challenge,
+ }
+ 
+ static int none_verify_response(struct rxrpc_connection *conn,
+-				struct sk_buff *skb)
++				struct sk_buff *response_skb,
++				void *response, unsigned int len)
+ {
+-	return rxrpc_abort_conn(conn, skb, RX_PROTOCOL_ERROR, -EPROTO,
++	return rxrpc_abort_conn(conn, response_skb, RX_PROTOCOL_ERROR, -EPROTO,
+ 				rxrpc_eproto_rxnull_response);
+ }
+ 
+diff --git a/net/rxrpc/recvmsg.c b/net/rxrpc/recvmsg.c
+index e1f7513a46db..c940600117a4 100644
+--- a/net/rxrpc/recvmsg.c
++++ b/net/rxrpc/recvmsg.c
+@@ -147,15 +147,52 @@ static void rxrpc_rotate_rx_window(struct rxrpc_call *call)
+ }
+ 
+ /*
+- * Decrypt and verify a DATA packet.
++ * Decrypt and verify a DATA packet.  The content of the packet is pulled out
++ * into a flat buffer rather than decrypting in place in the skbuff.  This also
++ * has the advantage of aligning the buffer correctly for the crypto routines.
++ *
++ * We keep track of the sequence number of the packet currently decrypted into
++ * the buffer in ->rx_dec_seq.  If MSG_PEEK is used and steps onto a new
++ * packet, subsequent recvmsg() calls will have to go back and re-decrypt the
++ * current packet.
+  */
+ static int rxrpc_verify_data(struct rxrpc_call *call, struct sk_buff *skb)
+ {
+ 	struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
++	int ret;
+ 
+-	if (sp->flags & RXRPC_RX_VERIFIED)
+-		return 0;
+-	return call->security->verify_packet(call, skb);
++	if (sp->len > call->rx_dec_bsize) {
++		/* Make sure we can hold a 1412-byte jumbo subpacket and make
++		 * sure that the buffer size is aligned to a crypto blocksize.
++		 */
++		size_t size = clamp(round_up(sp->len, 32), 2048, 65535);
++		void *buffer = krealloc(call->rx_dec_buffer, size, GFP_NOFS);
++
++		if (!buffer)
++			return -ENOMEM;
++		call->rx_dec_buffer = buffer;
++		call->rx_dec_bsize = size;
++	}
++
++	ret = -EFAULT;
++	if (skb_copy_bits(skb, sp->offset, call->rx_dec_buffer, sp->len) < 0)
++		goto err;
++
++	call->rx_dec_offset = 0;
++	call->rx_dec_len = sp->len;
++	call->rx_dec_seq = sp->hdr.seq;
++	ret = call->security->verify_packet(call, skb);
++	if (ret < 0)
++		goto err;
++	return 0;
++
++err:
++	kfree(call->rx_dec_buffer);
++	call->rx_dec_buffer = NULL;
++	call->rx_dec_bsize = 0;
++	call->rx_dec_offset = 0;
++	call->rx_dec_len = 0;
++	return ret;
+ }
+ 
+ /*
+@@ -283,16 +320,21 @@ static int rxrpc_recvmsg_data(struct socket *sock, struct rxrpc_call *call,
+ 		if (msg)
+ 			sock_recv_timestamp(msg, sock->sk, skb);
+ 
+-		if (rx_pkt_offset == 0) {
++		if (call->rx_dec_seq != sp->hdr.seq ||
++		    !call->rx_dec_buffer) {
+ 			ret2 = rxrpc_verify_data(call, skb);
+ 			trace_rxrpc_recvdata(call, rxrpc_recvmsg_next, seq,
+-					     sp->offset, sp->len, ret2);
++					     call->rx_dec_offset,
++					     call->rx_dec_len, ret2);
+ 			if (ret2 < 0) {
+ 				ret = ret2;
+ 				goto out;
+ 			}
+-			rx_pkt_offset = sp->offset;
+-			rx_pkt_len = sp->len;
++		}
++
++		if (rx_pkt_offset == USHRT_MAX) {
++			rx_pkt_offset = call->rx_dec_offset;
++			rx_pkt_len = call->rx_dec_len;
+ 		} else {
+ 			trace_rxrpc_recvdata(call, rxrpc_recvmsg_cont, seq,
+ 					     rx_pkt_offset, rx_pkt_len, 0);
+@@ -304,10 +346,10 @@ static int rxrpc_recvmsg_data(struct socket *sock, struct rxrpc_call *call,
+ 		if (copy > remain)
+ 			copy = remain;
+ 		if (copy > 0) {
+-			ret2 = skb_copy_datagram_iter(skb, rx_pkt_offset, iter,
+-						      copy);
+-			if (ret2 < 0) {
+-				ret = ret2;
++			ret2 = copy_to_iter(call->rx_dec_buffer + rx_pkt_offset,
++					    copy, iter);
++			if (ret2 != copy) {
++				ret = -EFAULT;
+ 				goto out;
+ 			}
+ 
+@@ -328,7 +370,7 @@ static int rxrpc_recvmsg_data(struct socket *sock, struct rxrpc_call *call,
+ 		/* The whole packet has been transferred. */
+ 		if (sp->hdr.flags & RXRPC_LAST_PACKET)
+ 			ret = 1;
+-		rx_pkt_offset = 0;
++		rx_pkt_offset = USHRT_MAX;
+ 		rx_pkt_len = 0;
+ 
+ 		skb = skb_peek_next(skb, &call->recvmsg_queue);
+diff --git a/net/rxrpc/rxgk.c b/net/rxrpc/rxgk.c
+index 0d5e654da918..a1ee102abae1 100644
+--- a/net/rxrpc/rxgk.c
++++ b/net/rxrpc/rxgk.c
+@@ -473,15 +473,20 @@ static int rxgk_verify_packet_integrity(struct rxrpc_call *call,
+ 	struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
+ 	struct rxgk_header *hdr;
+ 	struct krb5_buffer metadata;
+-	unsigned int offset = sp->offset, len = sp->len;
++	unsigned int len = call->rx_dec_len;
+ 	size_t data_offset = 0, data_len = len;
++	void *data = call->rx_dec_buffer, *p = data;
+ 	u32 ac = 0;
+ 	int ret = -ENOMEM;
+ 
+ 	_enter("");
+ 
+-	crypto_krb5_where_is_the_data(gk->krb5, KRB5_CHECKSUM_MODE,
+-				      &data_offset, &data_len);
++	if (crypto_krb5_where_is_the_data(gk->krb5, KRB5_CHECKSUM_MODE,
++					  &data_offset, &data_len) < 0) {
++		ret = rxrpc_abort_eproto(call, skb, RXGK_PACKETSHORT,
++					 rxgk_abort_1_short_header);
++		goto put_gk;
++	}
+ 
+ 	hdr = kzalloc_obj(*hdr, GFP_NOFS);
+ 	if (!hdr)
+@@ -496,16 +501,15 @@ static int rxgk_verify_packet_integrity(struct rxrpc_call *call,
+ 
+ 	metadata.len = sizeof(*hdr);
+ 	metadata.data = hdr;
+-	ret = rxgk_verify_mic_skb(gk->krb5, gk->rx_Kc, &metadata,
+-				  skb, &offset, &len, &ac);
++	ret = rxgk_verify_mic(gk->krb5, gk->rx_Kc, &metadata, &p, &len, &ac);
+ 	kfree(hdr);
+ 	if (ret < 0) {
+ 		if (ret != -ENOMEM)
+ 			rxrpc_abort_eproto(call, skb, ac,
+ 					   rxgk_abort_1_verify_mic_eproto);
+ 	} else {
+-		sp->offset = offset;
+-		sp->len = len;
++		call->rx_dec_offset = p - data;
++		call->rx_dec_len = len;
+ 	}
+ 
+ put_gk:
+@@ -522,49 +526,53 @@ static int rxgk_verify_packet_encrypted(struct rxrpc_call *call,
+ 					struct sk_buff *skb)
+ {
+ 	struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
+-	struct rxgk_header hdr;
+-	unsigned int offset = sp->offset, len = sp->len;
++	struct rxgk_header *hdr;
++	unsigned int offset = 0, len = call->rx_dec_len;
++	void *data = call->rx_dec_buffer, *p = data;
+ 	int ret;
+ 	u32 ac = 0;
+ 
+ 	_enter("");
+ 
+-	ret = rxgk_decrypt_skb(gk->krb5, gk->rx_enc, skb, &offset, &len, &ac);
++	if (crypto_krb5_check_data_len(gk->krb5, KRB5_ENCRYPT_MODE,
++				       len, sizeof(*hdr)) < 0) {
++		ret = rxrpc_abort_eproto(call, skb, RXGK_PACKETSHORT,
++					 rxgk_abort_2_short_header);
++		goto error;
++	}
++
++	ret = rxgk_decrypt(gk->krb5, gk->rx_enc, &p, &len, &ac);
+ 	if (ret < 0) {
+ 		if (ret != -ENOMEM)
+ 			rxrpc_abort_eproto(call, skb, ac, rxgk_abort_2_decrypt_eproto);
+ 		goto error;
+ 	}
++	offset = p - data;
+ 
+-	if (len < sizeof(hdr)) {
++	if (len < sizeof(*hdr)) {
+ 		ret = rxrpc_abort_eproto(call, skb, RXGK_PACKETSHORT,
+ 					 rxgk_abort_2_short_header);
+ 		goto error;
+ 	}
+ 
+ 	/* Extract the header from the skb */
+-	ret = skb_copy_bits(skb, offset, &hdr, sizeof(hdr));
+-	if (ret < 0) {
+-		ret = rxrpc_abort_eproto(call, skb, RXGK_PACKETSHORT,
+-					 rxgk_abort_2_short_encdata);
+-		goto error;
+-	}
+-	offset += sizeof(hdr);
+-	len -= sizeof(hdr);
+-
+-	if (ntohl(hdr.epoch)		!= call->conn->proto.epoch ||
+-	    ntohl(hdr.cid)		!= call->cid ||
+-	    ntohl(hdr.call_number)	!= call->call_id ||
+-	    ntohl(hdr.seq)		!= sp->hdr.seq ||
+-	    ntohl(hdr.sec_index)	!= call->security_ix ||
+-	    ntohl(hdr.data_len)		> len) {
++	hdr = data + offset;
++	offset += sizeof(*hdr);
++	len -= sizeof(*hdr);
++
++	if (ntohl(hdr->epoch)		!= call->conn->proto.epoch ||
++	    ntohl(hdr->cid)		!= call->cid ||
++	    ntohl(hdr->call_number)	!= call->call_id ||
++	    ntohl(hdr->seq)		!= sp->hdr.seq ||
++	    ntohl(hdr->sec_index)	!= call->security_ix ||
++	    ntohl(hdr->data_len)	> len) {
+ 		ret = rxrpc_abort_eproto(call, skb, RXGK_SEALEDINCON,
+ 					 rxgk_abort_2_short_data);
+ 		goto error;
+ 	}
+ 
+-	sp->offset = offset;
+-	sp->len = ntohl(hdr.data_len);
++	call->rx_dec_offset = offset;
++	call->rx_dec_len = ntohl(hdr->data_len);
+ 	ret = 0;
+ error:
+ 	rxgk_put(gk);
+@@ -1076,11 +1084,12 @@ static int rxgk_sendmsg_respond_to_challenge(struct sk_buff *challenge,
+  *	unsigned int call_numbers<>;
+  * };
+  */
+-static int rxgk_do_verify_authenticator(struct rxrpc_connection *conn,
+-					const struct krb5_enctype *krb5,
+-					struct sk_buff *skb,
+-					__be32 *p, __be32 *end)
++static int rxgk_verify_authenticator(struct rxrpc_connection *conn,
++				     const struct krb5_enctype *krb5,
++				     struct sk_buff *skb,
++				     void *auth, unsigned int auth_len)
+ {
++	__be32 *p = auth, *end = auth + auth_len;
+ 	u32 app_len, call_count, level, epoch, cid, i;
+ 
+ 	_enter("");
+@@ -1143,37 +1152,6 @@ static int rxgk_do_verify_authenticator(struct rxrpc_connection *conn,
+ 	return 0;
+ }
+ 
+-/*
+- * Extract the authenticator and verify it.
+- */
+-static int rxgk_verify_authenticator(struct rxrpc_connection *conn,
+-				     const struct krb5_enctype *krb5,
+-				     struct sk_buff *skb,
+-				     unsigned int auth_offset, unsigned int auth_len)
+-{
+-	void *auth;
+-	__be32 *p;
+-	int ret;
+-
+-	auth = kmalloc(auth_len, GFP_NOFS);
+-	if (!auth)
+-		return -ENOMEM;
+-
+-	ret = skb_copy_bits(skb, auth_offset, auth, auth_len);
+-	if (ret < 0) {
+-		ret = rxrpc_abort_conn(conn, skb, RXGK_NOTAUTH, -EPROTO,
+-				       rxgk_abort_resp_short_auth);
+-		goto error;
+-	}
+-
+-	p = auth;
+-	ret = rxgk_do_verify_authenticator(conn, krb5, skb, p,
+-					   p + auth_len / sizeof(*p));
+-error:
+-	kfree(auth);
+-	return ret;
+-}
+-
+ /*
+  * Verify a response.
+  *
+@@ -1184,49 +1162,45 @@ static int rxgk_verify_authenticator(struct rxrpc_connection *conn,
+  * };
+  */
+ static int rxgk_verify_response(struct rxrpc_connection *conn,
+-				struct sk_buff *skb)
++				struct sk_buff *skb,
++				void *buffer, unsigned int len)
+ {
+ 	const struct krb5_enctype *krb5;
+ 	struct rxrpc_key_token *token;
+ 	struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
+-	struct rxgk_response rhdr;
++	struct rxgk_response *rhdr;
+ 	struct rxgk_context *gk;
+ 	struct key *key = NULL;
+-	unsigned int offset = sizeof(struct rxrpc_wire_header);
+-	unsigned int len = skb->len - sizeof(struct rxrpc_wire_header);
+-	unsigned int token_offset, token_len;
+-	unsigned int auth_offset, auth_len;
++	unsigned int resp_token_len, auth_len;
++	void *resp_token, *auth;
+ 	__be32 xauth_len;
+ 	int ret, ec;
+ 
+ 	_enter("{%d}", conn->debug_id);
+ 
+ 	/* Parse the RXGK_Response object */
+-	if (sizeof(rhdr) + sizeof(__be32) > len)
++	if (len < sizeof(*rhdr) + sizeof(__be32))
+ 		goto short_packet;
+-
+-	if (skb_copy_bits(skb, offset, &rhdr, sizeof(rhdr)) < 0)
+-		goto short_packet;
+-	offset	+= sizeof(rhdr);
+-	len	-= sizeof(rhdr);
+-
+-	token_offset	= offset;
+-	token_len	= ntohl(rhdr.token_len);
+-	if (token_len > len ||
+-	    xdr_round_up(token_len) + sizeof(__be32) > len)
++	rhdr = buffer;
++	buffer	+= sizeof(*rhdr);
++	len	-= sizeof(*rhdr);
++
++	resp_token	= buffer;
++	resp_token_len	= ntohl(rhdr->token_len);
++	if (resp_token_len > len ||
++	    xdr_round_up(resp_token_len) + sizeof(__be32) > len)
+ 		goto short_packet;
+ 
+-	trace_rxrpc_rx_response(conn, sp->hdr.serial, 0, sp->hdr.cksum, token_len);
++	trace_rxrpc_rx_response(conn, sp->hdr.serial, 0, sp->hdr.cksum, resp_token_len);
+ 
+-	offset	+= xdr_round_up(token_len);
+-	len	-= xdr_round_up(token_len);
++	buffer	+= xdr_round_up(resp_token_len);
++	len	-= xdr_round_up(resp_token_len);
+ 
+-	if (skb_copy_bits(skb, offset, &xauth_len, sizeof(xauth_len)) < 0)
+-		goto short_packet;
+-	offset	+= sizeof(xauth_len);
++	xauth_len = *(__be32 *)buffer;
++	buffer	+= sizeof(xauth_len);
+ 	len	-= sizeof(xauth_len);
+ 
+-	auth_offset	= offset;
++	auth		= buffer;
+ 	auth_len	= ntohl(xauth_len);
+ 	if (auth_len > len)
+ 		goto short_packet;
+@@ -1241,7 +1215,7 @@ static int rxgk_verify_response(struct rxrpc_connection *conn,
+ 	 * to the app to deal with - which might mean a round trip to
+ 	 * userspace.
+ 	 */
+-	ret = rxgk_extract_token(conn, skb, token_offset, token_len, &key);
++	ret = rxgk_extract_token(conn, skb, resp_token, resp_token_len, &key);
+ 	if (ret < 0)
+ 		goto out;
+ 
+@@ -1255,7 +1229,7 @@ static int rxgk_verify_response(struct rxrpc_connection *conn,
+ 	 */
+ 	token = key->payload.data[0];
+ 	conn->security_level = token->rxgk->level;
+-	conn->rxgk.start_time = __be64_to_cpu(rhdr.start_time);
++	conn->rxgk.start_time = __be64_to_cpu(rhdr->start_time);
+ 
+ 	gk = rxgk_generate_transport_key(conn, token->rxgk, sp->hdr.cksum, GFP_NOFS);
+ 	if (IS_ERR(gk)) {
+@@ -1265,18 +1239,18 @@ static int rxgk_verify_response(struct rxrpc_connection *conn,
+ 
+ 	krb5 = gk->krb5;
+ 
+-	trace_rxrpc_rx_response(conn, sp->hdr.serial, krb5->etype, sp->hdr.cksum, token_len);
++	trace_rxrpc_rx_response(conn, sp->hdr.serial, krb5->etype, sp->hdr.cksum,
++				resp_token_len);
+ 
+ 	/* Decrypt, parse and verify the authenticator. */
+-	ret = rxgk_decrypt_skb(krb5, gk->resp_enc, skb,
+-			       &auth_offset, &auth_len, &ec);
++	ret = rxgk_decrypt(krb5, gk->resp_enc, &auth, &auth_len, &ec);
+ 	if (ret < 0) {
+ 		rxrpc_abort_conn(conn, skb, RXGK_SEALEDINCON, ret,
+ 				 rxgk_abort_resp_auth_dec);
+ 		goto out_gk;
+ 	}
+ 
+-	ret = rxgk_verify_authenticator(conn, krb5, skb, auth_offset, auth_len);
++	ret = rxgk_verify_authenticator(conn, krb5, skb, auth, auth_len);
+ 	if (ret < 0)
+ 		goto out_gk;
+ 
+diff --git a/net/rxrpc/rxgk_app.c b/net/rxrpc/rxgk_app.c
+index 0ef2a29eb695..200a30064fae 100644
+--- a/net/rxrpc/rxgk_app.c
++++ b/net/rxrpc/rxgk_app.c
+@@ -40,7 +40,7 @@
+  * };
+  */
+ int rxgk_yfs_decode_ticket(struct rxrpc_connection *conn, struct sk_buff *skb,
+-			   unsigned int ticket_offset, unsigned int ticket_len,
++			   void *buffer, unsigned int ticket_len,
+ 			   struct key **_key)
+ {
+ 	struct rxrpc_key_token *token;
+@@ -49,7 +49,7 @@ int rxgk_yfs_decode_ticket(struct rxrpc_connection *conn, struct sk_buff *skb,
+ 	size_t pre_ticket_len, payload_len;
+ 	unsigned int klen, enctype;
+ 	void *payload, *ticket;
+-	__be32 *t, *p, *q, tmp[2];
++	__be32 *t, *p, *q, *tmp;
+ 	int ret;
+ 
+ 	_enter("");
+@@ -59,10 +59,7 @@ int rxgk_yfs_decode_ticket(struct rxrpc_connection *conn, struct sk_buff *skb,
+ 					rxgk_abort_resp_short_yfs_tkt);
+ 
+ 	/* Get the session key length */
+-	ret = skb_copy_bits(skb, ticket_offset, tmp, sizeof(tmp));
+-	if (ret < 0)
+-		return rxrpc_abort_conn(conn, skb, RXGK_INCONSISTENCY, -EPROTO,
+-					rxgk_abort_resp_short_yfs_klen);
++	tmp = buffer;
+ 	enctype = ntohl(tmp[0]);
+ 	klen = ntohl(tmp[1]);
+ 
+@@ -84,12 +81,7 @@ int rxgk_yfs_decode_ticket(struct rxrpc_connection *conn, struct sk_buff *skb,
+ 	 * it.
+ 	 */
+ 	ticket = payload + pre_ticket_len;
+-	ret = skb_copy_bits(skb, ticket_offset, ticket, ticket_len);
+-	if (ret < 0) {
+-		ret = rxrpc_abort_conn(conn, skb, RXGK_INCONSISTENCY, -EPROTO,
+-				       rxgk_abort_resp_short_yfs_tkt);
+-		goto error;
+-	}
++	memcpy(ticket, buffer, ticket_len);
+ 
+ 	/* Fill out the form header. */
+ 	p = payload;
+@@ -131,7 +123,7 @@ int rxgk_yfs_decode_ticket(struct rxrpc_connection *conn, struct sk_buff *skb,
+ 		goto error;
+ 	}
+ 
+-	/* Ticket read in with skb_copy_bits above */
++	/* Ticket appended above. */
+ 	q += xdr_round_up(ticket_len) / 4;
+ 	if (WARN_ON((unsigned long)q - (unsigned long)payload != payload_len)) {
+ 		ret = -EIO;
+@@ -182,14 +174,15 @@ int rxgk_yfs_decode_ticket(struct rxrpc_connection *conn, struct sk_buff *skb,
+  * [tools.ietf.org/html/draft-wilkinson-afs3-rxgk-afs-08 sec 6.1]
+  */
+ int rxgk_extract_token(struct rxrpc_connection *conn, struct sk_buff *skb,
+-		       unsigned int token_offset, unsigned int token_len,
++		       void *token, unsigned int token_len,
+ 		       struct key **_key)
+ {
+ 	const struct krb5_enctype *krb5;
+ 	const struct krb5_buffer *server_secret;
+ 	struct crypto_aead *token_enc = NULL;
+ 	struct key *server_key;
+-	unsigned int ticket_offset, ticket_len;
++	unsigned int ticket_len;
++	void *ticket;
+ 	u32 kvno, enctype;
+ 	int ret, ec = 0;
+ 
+@@ -197,24 +190,23 @@ int rxgk_extract_token(struct rxrpc_connection *conn, struct sk_buff *skb,
+ 		__be32 kvno;
+ 		__be32 enctype;
+ 		__be32 token_len;
+-	} container;
++	} *container;
+ 
+-	if (token_len < sizeof(container))
++	if (token_len < sizeof(*container))
+ 		goto short_packet;
+ 
+ 	/* Decode the RXGK_TokenContainer object.  This tells us which server
+ 	 * key we should be using.  We can then fetch the key, get the secret
+ 	 * and set up the crypto to extract the token.
+ 	 */
+-	if (skb_copy_bits(skb, token_offset, &container, sizeof(container)) < 0)
+-		goto short_packet;
++	container = token;
++	token += sizeof(*container);
+ 
+-	kvno		= ntohl(container.kvno);
+-	enctype		= ntohl(container.enctype);
+-	ticket_len	= ntohl(container.token_len);
+-	ticket_offset	= token_offset + sizeof(container);
++	kvno		= ntohl(container->kvno);
++	enctype		= ntohl(container->enctype);
++	ticket_len	= ntohl(container->token_len);
+ 
+-	if (ticket_len > xdr_round_down(token_len - sizeof(container)))
++	if (ticket_len > xdr_round_down(token_len - sizeof(*container)))
+ 		goto short_packet;
+ 
+ 	_debug("KVNO %u", kvno);
+@@ -237,8 +229,8 @@ int rxgk_extract_token(struct rxrpc_connection *conn, struct sk_buff *skb,
+ 	 * gain access to K0, from which we can derive the transport key and
+ 	 * thence decode the authenticator.
+ 	 */
+-	ret = rxgk_decrypt_skb(krb5, token_enc, skb,
+-			       &ticket_offset, &ticket_len, &ec);
++	ticket = token;
++	ret = rxgk_decrypt(krb5, token_enc, &ticket, &ticket_len, &ec);
+ 	crypto_free_aead(token_enc);
+ 	token_enc = NULL;
+ 	if (ret < 0) {
+@@ -248,7 +240,7 @@ int rxgk_extract_token(struct rxrpc_connection *conn, struct sk_buff *skb,
+ 		return ret;
+ 	}
+ 
+-	ret = conn->security->default_decode_ticket(conn, skb, ticket_offset,
++	ret = conn->security->default_decode_ticket(conn, skb, ticket,
+ 						    ticket_len, _key);
+ 	if (ret < 0)
+ 		goto cant_get_token;
+diff --git a/net/rxrpc/rxgk_common.h b/net/rxrpc/rxgk_common.h
+index 1e257d7ab8ec..3deed5863f5a 100644
+--- a/net/rxrpc/rxgk_common.h
++++ b/net/rxrpc/rxgk_common.h
+@@ -41,10 +41,10 @@ struct rxgk_context {
+  * rxgk_app.c
+  */
+ int rxgk_yfs_decode_ticket(struct rxrpc_connection *conn, struct sk_buff *skb,
+-			   unsigned int ticket_offset, unsigned int ticket_len,
++			   void *ticket, unsigned int ticket_len,
+ 			   struct key **_key);
+ int rxgk_extract_token(struct rxrpc_connection *conn, struct sk_buff *skb,
+-		       unsigned int token_offset, unsigned int token_len,
++		       void *token, unsigned int token_len,
+ 		       struct key **_key);
+ 
+ /*
+@@ -62,31 +62,30 @@ int rxgk_set_up_token_cipher(const struct krb5_buffer *server_key,
+ 			     gfp_t gfp);
+ 
+ /*
+- * Apply decryption and checksumming functions to part of an skbuff.  The
+- * offset and length are updated to reflect the actual content of the encrypted
++ * Apply decryption and checksumming functions a flat data buffer.  The data
++ * point and length are updated to reflect the actual content of the encrypted
+  * region.
+  */
+-static inline
+-int rxgk_decrypt_skb(const struct krb5_enctype *krb5,
+-		     struct crypto_aead *aead,
+-		     struct sk_buff *skb,
+-		     unsigned int *_offset, unsigned int *_len,
+-		     int *_error_code)
++static inline int rxgk_decrypt(const struct krb5_enctype *krb5,
++			       struct crypto_aead *aead,
++			       void **_data, unsigned int *_len,
++			       int *_error_code)
+ {
+-	struct scatterlist sg[16];
++	struct scatterlist sg[1];
+ 	size_t offset = 0, len = *_len;
+-	int nr_sg, ret;
++	int ret;
+ 
+-	sg_init_table(sg, ARRAY_SIZE(sg));
+-	nr_sg = skb_to_sgvec(skb, sg, *_offset, len);
+-	if (unlikely(nr_sg < 0))
+-		return nr_sg;
++	sg_init_one(sg, *_data, len);
+ 
+-	ret = crypto_krb5_decrypt(krb5, aead, sg, nr_sg,
+-				  &offset, &len);
++	ret = crypto_krb5_decrypt(krb5, aead, sg, 1, &offset, &len);
+ 	switch (ret) {
+ 	case 0:
+-		*_offset += offset;
++		if (offset & 3) {
++			*_error_code = RXGK_INCONSISTENCY;
++			ret = -EPROTO;
++			break;
++		}
++		*_data += offset;
+ 		*_len = len;
+ 		break;
+ 	case -EBADMSG: /* Checksum mismatch. */
+@@ -106,31 +105,26 @@ int rxgk_decrypt_skb(const struct krb5_enctype *krb5,
+ }
+ 
+ /*
+- * Check the MIC on a region of an skbuff.  The offset and length are updated
+- * to reflect the actual content of the secure region.
++ * Check the MIC on a flat buffer.  The data pointer and length are updated to
++ * reflect the actual content of the secure region.
+  */
+ static inline
+-int rxgk_verify_mic_skb(const struct krb5_enctype *krb5,
+-			struct crypto_shash *shash,
+-			const struct krb5_buffer *metadata,
+-			struct sk_buff *skb,
+-			unsigned int *_offset, unsigned int *_len,
+-			u32 *_error_code)
++int rxgk_verify_mic(const struct krb5_enctype *krb5,
++		    struct crypto_shash *shash,
++		    const struct krb5_buffer *metadata,
++		    void **_data, unsigned int *_len,
++		    u32 *_error_code)
+ {
+-	struct scatterlist sg[16];
++	struct scatterlist sg[1];
+ 	size_t offset = 0, len = *_len;
+-	int nr_sg, ret;
++	int ret;
+ 
+-	sg_init_table(sg, ARRAY_SIZE(sg));
+-	nr_sg = skb_to_sgvec(skb, sg, *_offset, len);
+-	if (unlikely(nr_sg < 0))
+-		return nr_sg;
++	sg_init_one(sg, *_data, len);
+ 
+-	ret = crypto_krb5_verify_mic(krb5, shash, metadata, sg, nr_sg,
+-				     &offset, &len);
++	ret = crypto_krb5_verify_mic(krb5, shash, metadata, sg, 1, &offset, &len);
+ 	switch (ret) {
+ 	case 0:
+-		*_offset += offset;
++		*_data += offset;
+ 		*_len = len;
+ 		break;
+ 	case -EBADMSG: /* Checksum mismatch */
+diff --git a/net/rxrpc/rxkad.c b/net/rxrpc/rxkad.c
+index cba7935977f0..6fbd883401ac 100644
+--- a/net/rxrpc/rxkad.c
++++ b/net/rxrpc/rxkad.c
+@@ -430,27 +430,25 @@ static int rxkad_verify_packet_1(struct rxrpc_call *call, struct sk_buff *skb,
+ 				 rxrpc_seq_t seq,
+ 				 struct skcipher_request *req)
+ {
+-	struct rxkad_level1_hdr sechdr;
++	struct rxkad_level1_hdr *sechdr;
+ 	struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
+ 	struct rxrpc_crypt iv;
+-	struct scatterlist sg[16];
+-	u32 data_size, buf;
++	struct scatterlist sg[1];
++	void *data = call->rx_dec_buffer;
++	u32 len = sp->len, data_size, buf;
+ 	u16 check;
+ 	int ret;
+ 
+ 	_enter("");
+ 
+-	if (sp->len < 8)
++	if (len < 8)
+ 		return rxrpc_abort_eproto(call, skb, RXKADSEALEDINCON,
+ 					  rxkad_abort_1_short_header);
+ 
+ 	/* Decrypt the skbuff in-place.  TODO: We really want to decrypt
+ 	 * directly into the target buffer.
+ 	 */
+-	sg_init_table(sg, ARRAY_SIZE(sg));
+-	ret = skb_to_sgvec(skb, sg, sp->offset, 8);
+-	if (unlikely(ret < 0))
+-		return ret;
++	sg_init_one(sg, data, len);
+ 
+ 	/* start the decryption afresh */
+ 	memset(&iv, 0, sizeof(iv));
+@@ -464,13 +462,11 @@ static int rxkad_verify_packet_1(struct rxrpc_call *call, struct sk_buff *skb,
+ 		return ret;
+ 
+ 	/* Extract the decrypted packet length */
+-	if (skb_copy_bits(skb, sp->offset, &sechdr, sizeof(sechdr)) < 0)
+-		return rxrpc_abort_eproto(call, skb, RXKADDATALEN,
+-					  rxkad_abort_1_short_encdata);
+-	sp->offset += sizeof(sechdr);
+-	sp->len    -= sizeof(sechdr);
++	sechdr = data;
++	call->rx_dec_offset = sizeof(*sechdr);
++	len -= sizeof(*sechdr);
+ 
+-	buf = ntohl(sechdr.data_size);
++	buf = ntohl(sechdr->data_size);
+ 	data_size = buf & 0xffff;
+ 
+ 	check = buf >> 16;
+@@ -479,10 +475,10 @@ static int rxkad_verify_packet_1(struct rxrpc_call *call, struct sk_buff *skb,
+ 	if (check != 0)
+ 		return rxrpc_abort_eproto(call, skb, RXKADSEALEDINCON,
+ 					  rxkad_abort_1_short_check);
+-	if (data_size > sp->len)
++	if (data_size > len)
+ 		return rxrpc_abort_eproto(call, skb, RXKADDATALEN,
+ 					  rxkad_abort_1_short_data);
+-	sp->len = data_size;
++	call->rx_dec_len = data_size;
+ 
+ 	_leave(" = 0 [dlen=%x]", data_size);
+ 	return 0;
+@@ -496,43 +492,28 @@ static int rxkad_verify_packet_2(struct rxrpc_call *call, struct sk_buff *skb,
+ 				 struct skcipher_request *req)
+ {
+ 	const struct rxrpc_key_token *token;
+-	struct rxkad_level2_hdr sechdr;
++	struct rxkad_level2_hdr *sechdr;
+ 	struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
+ 	struct rxrpc_crypt iv;
+-	struct scatterlist _sg[4], *sg;
+-	u32 data_size, buf;
++	struct scatterlist sg[1];
++	void *data = call->rx_dec_buffer;
++	u32 len = sp->len, data_size, buf;
+ 	u16 check;
+-	int nsg, ret;
++	int ret;
+ 
+-	_enter(",{%d}", sp->len);
++	_enter(",{%d}", len);
+ 
+-	if (sp->len < 8)
++	if (len < 8)
+ 		return rxrpc_abort_eproto(call, skb, RXKADSEALEDINCON,
+ 					  rxkad_abort_2_short_header);
+ 
+ 	/* Don't let the crypto algo see a misaligned length. */
+-	sp->len = round_down(sp->len, 8);
++	len = round_down(len, 8);
+ 
+-	/* Decrypt the skbuff in-place.  TODO: We really want to decrypt
+-	 * directly into the target buffer.
++	/* Decrypt in place in the call's decryption buffer.  TODO: We really
++	 * want to decrypt directly into the target buffer.
+ 	 */
+-	sg = _sg;
+-	nsg = skb_shinfo(skb)->nr_frags + 1;
+-	if (nsg <= 4) {
+-		nsg = 4;
+-	} else {
+-		sg = kmalloc_objs(*sg, nsg, GFP_NOIO);
+-		if (!sg)
+-			return -ENOMEM;
+-	}
+-
+-	sg_init_table(sg, nsg);
+-	ret = skb_to_sgvec(skb, sg, sp->offset, sp->len);
+-	if (unlikely(ret < 0)) {
+-		if (sg != _sg)
+-			kfree(sg);
+-		return ret;
+-	}
++	sg_init_one(sg, data, len);
+ 
+ 	/* decrypt from the session key */
+ 	token = call->conn->key->payload.data[0];
+@@ -540,11 +521,9 @@ static int rxkad_verify_packet_2(struct rxrpc_call *call, struct sk_buff *skb,
+ 
+ 	skcipher_request_set_sync_tfm(req, call->conn->rxkad.cipher);
+ 	skcipher_request_set_callback(req, 0, NULL, NULL);
+-	skcipher_request_set_crypt(req, sg, sg, sp->len, iv.x);
++	skcipher_request_set_crypt(req, sg, sg, len, iv.x);
+ 	ret = crypto_skcipher_decrypt(req);
+ 	skcipher_request_zero(req);
+-	if (sg != _sg)
+-		kfree(sg);
+ 	if (ret < 0) {
+ 		if (ret == -ENOMEM)
+ 			return ret;
+@@ -553,13 +532,11 @@ static int rxkad_verify_packet_2(struct rxrpc_call *call, struct sk_buff *skb,
+ 	}
+ 
+ 	/* Extract the decrypted packet length */
+-	if (skb_copy_bits(skb, sp->offset, &sechdr, sizeof(sechdr)) < 0)
+-		return rxrpc_abort_eproto(call, skb, RXKADDATALEN,
+-					  rxkad_abort_2_short_len);
+-	sp->offset += sizeof(sechdr);
+-	sp->len    -= sizeof(sechdr);
++	sechdr = data;
++	call->rx_dec_offset = sizeof(*sechdr);
++	len -= sizeof(*sechdr);
+ 
+-	buf = ntohl(sechdr.data_size);
++	buf = ntohl(sechdr->data_size);
+ 	data_size = buf & 0xffff;
+ 
+ 	check = buf >> 16;
+@@ -569,17 +546,18 @@ static int rxkad_verify_packet_2(struct rxrpc_call *call, struct sk_buff *skb,
+ 		return rxrpc_abort_eproto(call, skb, RXKADSEALEDINCON,
+ 					  rxkad_abort_2_short_check);
+ 
+-	if (data_size > sp->len)
++	if (data_size > len)
+ 		return rxrpc_abort_eproto(call, skb, RXKADDATALEN,
+ 					  rxkad_abort_2_short_data);
+ 
+-	sp->len = data_size;
++	call->rx_dec_len = data_size;
+ 	_leave(" = 0 [dlen=%x]", data_size);
+ 	return 0;
+ }
+ 
+ /*
+- * Verify the security on a received packet and the subpackets therein.
++ * Verify the security on a received (sub)packet.  If the packet needs
++ * modifying (e.g. decrypting), it must be copied.
+  */
+ static int rxkad_verify_packet(struct rxrpc_call *call, struct sk_buff *skb)
+ {
+@@ -985,7 +963,6 @@ static int rxkad_decrypt_ticket(struct rxrpc_connection *conn,
+ 	*_expiry = 0;
+ 
+ 	ASSERT(server_key->payload.data[0] != NULL);
+-	ASSERTCMP((unsigned long) ticket & 7UL, ==, 0);
+ 
+ 	memcpy(&iv, &server_key->payload.data[2], sizeof(iv));
+ 
+@@ -1134,14 +1111,15 @@ static int rxkad_decrypt_response(struct rxrpc_connection *conn,
+  * verify a response
+  */
+ static int rxkad_verify_response(struct rxrpc_connection *conn,
+-				 struct sk_buff *skb)
++				 struct sk_buff *skb,
++				 void *buffer, unsigned int len)
+ {
+ 	struct rxkad_response *response;
+ 	struct rxrpc_skb_priv *sp = rxrpc_skb(skb);
+ 	struct rxrpc_crypt session_key;
+ 	struct key *server_key;
+ 	time64_t expiry;
+-	void *ticket = NULL;
++	void *ticket;
+ 	u32 version, kvno, ticket_len, level;
+ 	__be32 csum;
+ 	int ret, i;
+@@ -1164,13 +1142,8 @@ static int rxkad_verify_response(struct rxrpc_connection *conn,
+ 		}
+ 	}
+ 
+-	ret = -ENOMEM;
+-	response = kzalloc_obj(struct rxkad_response, GFP_NOFS);
+-	if (!response)
+-		goto error;
+-
+-	if (skb_copy_bits(skb, sizeof(struct rxrpc_wire_header),
+-			  response, sizeof(*response)) < 0) {
++	response = buffer;
++	if (len < sizeof(*response)) {
+ 		ret = rxrpc_abort_conn(conn, skb, RXKADPACKETSHORT, -EPROTO,
+ 				       rxkad_abort_resp_short);
+ 		goto error;
+@@ -1182,6 +1155,9 @@ static int rxkad_verify_response(struct rxrpc_connection *conn,
+ 
+ 	trace_rxrpc_rx_response(conn, sp->hdr.serial, version, kvno, ticket_len);
+ 
++	buffer	+= sizeof(*response);
++	len	-= sizeof(*response);
++
+ 	if (version != RXKAD_VERSION) {
+ 		ret = rxrpc_abort_conn(conn, skb, RXKADINCONSISTENCY, -EPROTO,
+ 				       rxkad_abort_resp_version);
+@@ -1201,13 +1177,8 @@ static int rxkad_verify_response(struct rxrpc_connection *conn,
+ 	}
+ 
+ 	/* extract the kerberos ticket and decrypt and decode it */
+-	ret = -ENOMEM;
+-	ticket = kmalloc(ticket_len, GFP_NOFS);
+-	if (!ticket)
+-		goto error;
+-
+-	if (skb_copy_bits(skb, sizeof(struct rxrpc_wire_header) + sizeof(*response),
+-			  ticket, ticket_len) < 0) {
++	ticket = buffer;
++	if (ticket_len > len) {
+ 		ret = rxrpc_abort_conn(conn, skb, RXKADPACKETSHORT, -EPROTO,
+ 				       rxkad_abort_resp_short_tkt);
+ 		goto error;
+@@ -1287,8 +1258,6 @@ static int rxkad_verify_response(struct rxrpc_connection *conn,
+ 	ret = rxrpc_get_server_data_key(conn, &session_key, expiry, kvno);
+ 
+ error:
+-	kfree(ticket);
+-	kfree(response);
+ 	key_put(server_key);
+ 	_leave(" = %d", ret);
+ 	return ret;
+diff --git a/net/sched/act_pedit.c b/net/sched/act_pedit.c
+index bc20f08a2789..1aa95c34ad87 100644
+--- a/net/sched/act_pedit.c
++++ b/net/sched/act_pedit.c
+@@ -16,6 +16,7 @@
+ #include <linux/ip.h>
+ #include <linux/ipv6.h>
+ #include <linux/slab.h>
++#include <linux/overflow.h>
+ #include <net/ipv6.h>
+ #include <net/netlink.h>
+ #include <net/pkt_sched.h>
+@@ -323,8 +324,10 @@ static bool offset_valid(struct sk_buff *skb, int offset)
+ 	if (offset > 0 && offset > skb->len)
+ 		return false;
+ 
+-	if  (offset < 0 && -offset > skb_headroom(skb))
+-		return false;
++	if (offset < 0) {
++		if (offset == INT_MIN || -offset > skb_headroom(skb))
++			return false;
++	}
+ 
+ 	return true;
+ }
+@@ -398,12 +401,21 @@ TC_INDIRECT_SCOPE int tcf_pedit_act(struct sk_buff *skb,
+ 
+ 	parms = rcu_dereference_bh(p->parms);
+ 
+-	max_offset = (skb_transport_header_was_set(skb) ?
+-		      skb_transport_offset(skb) :
+-		      skb_network_offset(skb)) +
+-		     parms->tcfp_off_max_hint;
+-	if (skb_ensure_writable(skb, min(skb->len, max_offset)))
+-		goto done;
++	max_offset = min_t(u32, skb->len,
++			   (skb_transport_header_was_set(skb) ?
++			    skb_transport_offset(skb) :
++			    skb_network_offset(skb)) +
++			   parms->tcfp_off_max_hint);
++
++	/* If the skb has shared frags the user is likely using zero-copy
++	 * (e.g. sendfile).  Those page frags may point to page-cache pages;
++	 * writing into them would silently corrupt the page cache.
++	 * Linearize so pedit operates on a private copy.
++	 * TL;DR if you want to use ZC, don't use pedit */
++	if (skb_has_shared_frag(skb)) {
++		if (__skb_linearize(skb))
++			goto bad;
++	}
+ 
+ 	tcf_lastuse_update(&p->tcf_tm);
+ 	tcf_action_update_bstats(&p->common, skb);
+@@ -414,8 +426,9 @@ TC_INDIRECT_SCOPE int tcf_pedit_act(struct sk_buff *skb,
+ 	for (i = parms->tcfp_nkeys; i > 0; i--, tkey++) {
+ 		int offset = tkey->off;
+ 		int hoffset = 0;
++		int write_offset, write_len;
+ 		u32 *ptr, hdata;
+-		u32 val;
++		u32 val, write_end;
+ 		int rc;
+ 
+ 		if (tkey_ex) {
+@@ -451,12 +464,45 @@ TC_INDIRECT_SCOPE int tcf_pedit_act(struct sk_buff *skb,
+ 			}
+ 		}
+ 
+-		if (!offset_valid(skb, hoffset + offset)) {
+-			pr_info_ratelimited("tc action pedit offset %d out of bounds\n", hoffset + offset);
++		write_offset = hoffset + offset;
++		if (unlikely(check_add_overflow(hoffset, offset,
++						&write_offset))) {
++			pr_info_ratelimited("tc action pedit offset overflow\n");
+ 			goto bad;
+ 		}
+ 
+-		ptr = skb_header_pointer(skb, hoffset + offset,
++		if (!offset_valid(skb, write_offset)) {
++			pr_info_ratelimited("tc action pedit offset %d out of bounds\n",
++					    write_offset);
++			goto bad;
++		}
++
++		/* Earlier edits can change later header-relative offsets, so
++		 * grow the writable window from the final per-key store.
++		 */
++		if (write_offset >= 0) {
++			write_end = (u32)write_offset + sizeof(hdata);
++			if (write_end > max_offset) {
++				max_offset = min_t(u32, skb->len, write_end);
++				if (skb_ensure_writable(skb, max_offset))
++					goto bad;
++			}
++		}
++
++		if (write_offset < 0) {
++			if (skb_cow(skb, -write_offset))
++				goto bad;
++		} else {
++			if (unlikely(check_add_overflow(write_offset,
++							(int)sizeof(hdata),
++							&write_len)))
++				goto bad;
++			if (skb_ensure_writable(skb, min_t(int, skb->len,
++							   write_len)))
++				goto bad;
++		}
++
++		ptr = skb_header_pointer(skb, write_offset,
+ 					 sizeof(hdata), &hdata);
+ 		if (!ptr)
+ 			goto bad;
+@@ -475,7 +521,7 @@ TC_INDIRECT_SCOPE int tcf_pedit_act(struct sk_buff *skb,
+ 
+ 		*ptr = ((*ptr & tkey->mask) ^ val);
+ 		if (ptr == &hdata)
+-			skb_store_bits(skb, hoffset + offset, ptr, 4);
++			skb_store_bits(skb, write_offset, ptr, sizeof(hdata));
+ 	}
+ 
+ 	goto done;
 diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
 index 0718e39cedda..10e94a1b8b6e 100644
 --- a/scripts/Makefile.lib
@@ -7529,6 +9020,173 @@ index 8d46886d2cca..14a9cdff942b 100644
  static struct security_hook_list lockdown_hooks[] __ro_after_init = {
  	LSM_HOOK_INIT(locked_down, lockdown_is_locked_down),
  };
+diff --git a/sound/soc/amd/acp/acp-sdw-legacy-mach.c b/sound/soc/amd/acp/acp-sdw-legacy-mach.c
+index a9c8d9545281..097e191cedde 100644
+--- a/sound/soc/amd/acp/acp-sdw-legacy-mach.c
++++ b/sound/soc/amd/acp/acp-sdw-legacy-mach.c
+@@ -95,6 +95,22 @@ static const struct dmi_system_id soc_sdw_quirk_table[] = {
+ 		},
+ 		.driver_data = (void *)(ASOC_SDW_CODEC_SPKR),
+ 	},
++	{
++		.callback = soc_sdw_quirk_cb,
++		.matches = { /* Lenovo P16s G5 AMD */
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_SKU, "21XG"),
++		},
++		.driver_data = (void *)(ASOC_SDW_ACP_DMIC),
++	},
++	{
++		.callback = soc_sdw_quirk_cb,
++		.matches = { /* Lenovo P16s G5 AMD */
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_SKU, "21XH"),
++		},
++		.driver_data = (void *)(ASOC_SDW_ACP_DMIC),
++	},
+ 	{
+ 		.callback = soc_sdw_quirk_cb,
+ 		.matches = {
+@@ -553,7 +569,7 @@ static int mc_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 	if (soc_sdw_quirk & ASOC_SDW_ACP_DMIC) {
+ 		card->components = devm_kasprintf(card->dev, GFP_KERNEL,
+-						  "%s mic:dmic cfg-mics:%d",
++						  "%s mic:acp-dmic cfg-mics:%d",
+ 						  card->components,
+ 						  1);
+ 		if (!card->components)
+diff --git a/sound/soc/codecs/rt722-sdca.c b/sound/soc/codecs/rt722-sdca.c
+index 79b8b7e70a33..23d2f63d68ef 100644
+--- a/sound/soc/codecs/rt722-sdca.c
++++ b/sound/soc/codecs/rt722-sdca.c
+@@ -517,6 +517,61 @@ static int rt722_sdca_fu1e_capture_put(struct snd_kcontrol *kcontrol,
+ 	return changed;
+ }
+ 
++static int rt722_sdca_set_fu06_playback_ctl(struct rt722_sdca_priv *rt722)
++{
++	int err;
++	unsigned int ch_l, ch_r;
++
++	ch_l = (rt722->fu06_dapm_mute || rt722->fu06_mixer_l_mute) ? 0x01 : 0x00;
++	ch_r = (rt722->fu06_dapm_mute || rt722->fu06_mixer_r_mute) ? 0x01 : 0x00;
++
++	err = regmap_write(rt722->regmap,
++			SDW_SDCA_CTL(FUNC_NUM_AMP, RT722_SDCA_ENT_USER_FU06,
++			RT722_SDCA_CTL_FU_MUTE, CH_L), ch_l);
++	if (err < 0)
++		return err;
++
++	err = regmap_write(rt722->regmap,
++			SDW_SDCA_CTL(FUNC_NUM_AMP, RT722_SDCA_ENT_USER_FU06,
++			RT722_SDCA_CTL_FU_MUTE, CH_R), ch_r);
++	if (err < 0)
++		return err;
++
++	return 0;
++}
++
++static int rt722_sdca_fu06_playback_get(struct snd_kcontrol *kcontrol,
++			struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
++	struct rt722_sdca_priv *rt722 = snd_soc_component_get_drvdata(component);
++
++	ucontrol->value.integer.value[0] = !rt722->fu06_mixer_l_mute;
++	ucontrol->value.integer.value[1] = !rt722->fu06_mixer_r_mute;
++	return 0;
++}
++
++static int rt722_sdca_fu06_playback_put(struct snd_kcontrol *kcontrol,
++			struct snd_ctl_elem_value *ucontrol)
++{
++	struct snd_soc_component *component = snd_kcontrol_chip(kcontrol);
++	struct rt722_sdca_priv *rt722 = snd_soc_component_get_drvdata(component);
++	int err, changed = 0;
++
++	if (rt722->fu06_mixer_l_mute != !ucontrol->value.integer.value[0] ||
++		rt722->fu06_mixer_r_mute != !ucontrol->value.integer.value[1])
++		changed = 1;
++
++	rt722->fu06_mixer_l_mute = !ucontrol->value.integer.value[0];
++	rt722->fu06_mixer_r_mute = !ucontrol->value.integer.value[1];
++
++	err = rt722_sdca_set_fu06_playback_ctl(rt722);
++	if (err < 0)
++		return err;
++
++	return changed;
++}
++
+ static int rt722_sdca_set_fu0f_capture_ctl(struct rt722_sdca_priv *rt722)
+ {
+ 	int err;
+@@ -718,6 +773,8 @@ static const struct snd_kcontrol_new rt722_sdca_controls[] = {
+ 			RT722_SDCA_CTL_FU_CH_GAIN, CH_R), 8, 3, 0,
+ 		rt722_sdca_set_gain_get, rt722_sdca_set_gain_put, boost_vol_tlv),
+ 	/* AMP playback settings */
++	SOC_DOUBLE_EXT("FU06 Playback Switch", SND_SOC_NOPM, 0, 1, 1, 0,
++		rt722_sdca_fu06_playback_get, rt722_sdca_fu06_playback_put),
+ 	SOC_DOUBLE_R_EXT_TLV("FU06 Playback Volume",
+ 		SDW_SDCA_CTL(FUNC_NUM_AMP, RT722_SDCA_ENT_USER_FU06,
+ 			RT722_SDCA_CTL_FU_VOLUME, CH_L),
+@@ -807,27 +864,17 @@ static int rt722_sdca_fu21_event(struct snd_soc_dapm_widget *w,
+ 	struct snd_soc_component *component =
+ 		snd_soc_dapm_to_component(w->dapm);
+ 	struct rt722_sdca_priv *rt722 = snd_soc_component_get_drvdata(component);
+-	unsigned char unmute = 0x0, mute = 0x1;
+ 
+ 	switch (event) {
+ 	case SND_SOC_DAPM_POST_PMU:
+-		regmap_write(rt722->regmap,
+-			SDW_SDCA_CTL(FUNC_NUM_AMP, RT722_SDCA_ENT_USER_FU06,
+-				RT722_SDCA_CTL_FU_MUTE, CH_L), unmute);
+-		regmap_write(rt722->regmap,
+-			SDW_SDCA_CTL(FUNC_NUM_AMP, RT722_SDCA_ENT_USER_FU06,
+-				RT722_SDCA_CTL_FU_MUTE, CH_R), unmute);
++		rt722->fu06_dapm_mute = false;
+ 		break;
+ 	case SND_SOC_DAPM_PRE_PMD:
+-		regmap_write(rt722->regmap,
+-			SDW_SDCA_CTL(FUNC_NUM_AMP, RT722_SDCA_ENT_USER_FU06,
+-				RT722_SDCA_CTL_FU_MUTE, CH_L), mute);
+-		regmap_write(rt722->regmap,
+-			SDW_SDCA_CTL(FUNC_NUM_AMP, RT722_SDCA_ENT_USER_FU06,
+-				RT722_SDCA_CTL_FU_MUTE, CH_R), mute);
++		rt722->fu06_dapm_mute = true;
+ 		break;
+ 	}
+-	return 0;
++
++	return rt722_sdca_set_fu06_playback_ctl(rt722);
+ }
+ 
+ static int rt722_sdca_fu113_event(struct snd_soc_dapm_widget *w,
+@@ -1324,6 +1371,8 @@ int rt722_sdca_init(struct device *dev, struct regmap *regmap, struct sdw_slave
+ 	rt722->first_hw_init = false;
+ 	rt722->fu1e_dapm_mute = true;
+ 	rt722->fu0f_dapm_mute = true;
++	rt722->fu06_dapm_mute = true;
++	rt722->fu06_mixer_l_mute = rt722->fu06_mixer_r_mute = false;
+ 	rt722->fu0f_mixer_l_mute = rt722->fu0f_mixer_r_mute = true;
+ 	rt722->fu1e_mixer_mute[0] = rt722->fu1e_mixer_mute[1] =
+ 		rt722->fu1e_mixer_mute[2] = rt722->fu1e_mixer_mute[3] = true;
+diff --git a/sound/soc/codecs/rt722-sdca.h b/sound/soc/codecs/rt722-sdca.h
+index 823abee9ab76..fc50beff9424 100644
+--- a/sound/soc/codecs/rt722-sdca.h
++++ b/sound/soc/codecs/rt722-sdca.h
+@@ -36,6 +36,10 @@ struct  rt722_sdca_priv {
+ 	bool fu0f_dapm_mute;
+ 	bool fu0f_mixer_l_mute;
+ 	bool fu0f_mixer_r_mute;
++	/* For AMP */
++	bool fu06_dapm_mute;
++	bool fu06_mixer_l_mute;
++	bool fu06_mixer_r_mute;
+ 	/* For DMIC */
+ 	bool fu1e_dapm_mute;
+ 	bool fu1e_mixer_mute[4];
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
 index 65485967c968..e44f47e01027 100644
 --- a/tools/testing/selftests/bpf/Makefile

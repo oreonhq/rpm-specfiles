@@ -1,4 +1,4 @@
-%if 0%{?fedora:1}
+%if 0%{?fedora:1} || 0%{?oreon}
 %bcond_without oniguruma
 %else
 %bcond_with oniguruma
@@ -108,5 +108,5 @@ make check
 %{_includedir}/slang
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.3-9
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.3.3-9
+- Import

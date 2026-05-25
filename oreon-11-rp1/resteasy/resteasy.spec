@@ -15,11 +15,11 @@ Patch3:         0001-Replace-javax.activation-imports-with-jakarta.activa.patch
 Patch4:         0001-Update-to-new-jakarta-xml-bind-namespace.patch
 
 BuildArch:      noarch
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 ExclusiveArch:  %{java_arches} noarch
 %endif
 
-%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} < 43
+%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} < 43 || 0%{?oreon}
 BuildRequires:  maven-local
 %else
 BuildRequires:  maven-local-openjdk21
@@ -31,7 +31,7 @@ BuildRequires:  mvn(jakarta.xml.bind:jakarta.xml.bind-api)
 BuildRequires:  mvn(org.apache.httpcomponents:httpclient)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 
-%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?fedora} && 0%{?fedora} < 43
+%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?fedora} && 0%{?fedora} < 43 || 0%{?oreon}
 BuildRequires:  mvn(org.apache.tomcat:tomcat-servlet-api)
 %elif 0%{?rhel}
 BuildRequires:  tomcat9-servlet-4.0-api
@@ -133,7 +133,7 @@ Provides:       %{name}-servlet-initializer = %{version}-%{release}
 %patch 2 -p 1
 %patch 3 -p 1
 %patch 4 -p 1
-%if 0%{?fedora} >= 43
+%if 0%{?fedora} >= 43 || 0%{?oreon}
 patch -p 1 < %{_sourcedir}/resteasy-jakarta.patch
 %endif
 
@@ -245,7 +245,7 @@ find -name '*.jar' -print -delete
 
 %mvn_install
 
-%if 0%{?rhel} >= 10 || 0%{?fedora} && 0%{?fedora} >= 43
+%if 0%{?rhel} >= 10 || 0%{?fedora} && 0%{?fedora} >= 43 || 0%{?oreon}
 /usr/bin/javax2jakarta -logLevel=ALL -profile=EE %{buildroot}%{_datadir}/java/resteasy/%{name}-client.jar %{buildroot}%{_datadir}/java/resteasy/%{name}-client.jar
 /usr/bin/javax2jakarta -logLevel=ALL -profile=EE %{buildroot}%{_datadir}/java/resteasy/%{name}-jackson2-provider.jar %{buildroot}%{_datadir}/java/resteasy/%{name}-jackson2-provider.jar
 /usr/bin/javax2jakarta -logLevel=ALL -profile=EE %{buildroot}%{_datadir}/java/resteasy/%{name}-jaxrs.jar  %{buildroot}%{_datadir}/java/resteasy/%{name}-jaxrs.jar
@@ -269,5 +269,5 @@ find -name '*.jar' -print -delete
 %license License.html
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.26-41
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.26-41
+- Import

@@ -38,7 +38,7 @@ BuildRequires:	rubygem(rake)
 # Some features in expectations needs this
 BuildRequires:	rubygem(rspec-support) >= 3.9.3
 BuildRequires:	rubygem(minitest) >= 5
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 BuildRequires:	rubygem(aruba)
 BuildRequires:	rubygem(cucumber)
 %endif
@@ -88,7 +88,7 @@ LANG=C.UTF-8
 export RUBYLIB=$(pwd)/lib
 rspec spec/
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 # Skip cucumber test
 exit 0
 %endif
@@ -125,5 +125,5 @@ cucumber \
 %{gem_docdir}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{majorver}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.13.5-5
+- Import

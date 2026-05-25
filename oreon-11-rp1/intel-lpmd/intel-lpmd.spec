@@ -75,5 +75,5 @@ install -D -p -m 644 src/%{daemon_name}_dbus_interface.xml %{buildroot}/%{_datad
 %{_mandir}/man8/%{daemon_name}_control.8*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.9-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0.9-1
+- Import

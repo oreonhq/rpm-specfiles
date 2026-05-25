@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 %global srcname JCTools
 
 Name:           jctools
@@ -37,7 +37,7 @@ currently missing from the JDK:
 ° Executor
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # drop some failure-prone tests (race conditions?)
 rm jctools-core/src/test/java/org/jctools/queues/MpqSanityTestMpscCompound.java
@@ -86,5 +86,5 @@ rm -r jctools-core/src/test/java/org/jctools/maps/linearizability_test/
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.5-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.5-1
+- Import

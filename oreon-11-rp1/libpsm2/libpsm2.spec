@@ -118,7 +118,7 @@ rm -f %{buildroot}%{_libdir}/*.a
 %license COPYING
 %{_libdir}/libpsm2.so.2.*
 %{_libdir}/libpsm2.so.2
-%if 0%{?rhel} >= 8
+%if 0%{?rhel} >= 8 || 0%{?oreon}
 %{_udevrulesdir}/40-psm.rules
 %endif
 
@@ -134,13 +134,13 @@ rm -f %{buildroot}%{_libdir}/*.a
 %{_libdir}/psm2-compat
 %{_udevrulesdir}/40-psm-compat.rules
 %{_prefix}/lib/libpsm2
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %{_prefix}/lib/modprobe.d/libpsm2-compat.conf
 %endif
-%if 0%{?rhel} >= 8
+%if 0%{?rhel} >= 8 || 0%{?oreon}
 %{_sysconfdir}/modprobe.d/libpsm2-compat.conf
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12.0.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12.0.1-1
+- Import

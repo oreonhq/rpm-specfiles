@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           apache-commons-parent
 Version:        89
@@ -31,8 +31,7 @@ Requires:       mvn(org.moditect:moditect-maven-plugin)
 The Project Object Model files for the apache-commons packages.
 
 %prep
-# GitHub archive top dir is commons-parent-rel-commons-parent-V not %%{name}-%%{version}
-%autosetup -p1 -n commons-parent-rel-commons-parent-%{version}
+%autosetup -p1 -C
 
 # Plugin is not in fedora
 %pom_remove_plugin org.apache.commons:commons-build-plugin
@@ -67,11 +66,5 @@ done
 %license LICENSE.txt NOTICE.txt
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 89-3
-- bump release (retry failed build)
-
-* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 89-2
-- Fix %%prep directory for GitHub commons-parent tarball layout
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 89-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 89-1
+- Import

@@ -3,15 +3,14 @@
 %global gitdate 20260218.085444
 
 Name:          plasma-bigscreen
-# Plain semver in Version, git snapshot in Release (avoids illegal '-' and '^' macro glitches)
-Version:       6.5.80
-Release:       0.%{gitdate}.%{shortcommit}.1%{?dist}
+Version:       6.5.80^%{gitdate}.%{shortcommit}
+Release:       4%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later and CC-BY-SA-4.0
 Summary:       A big launcher giving you access to any installed apps and skills
 Url:           https://invent.kde.org/plasma/plasma-bigscreen
 
 # Not currently in the plasma releases. Getting from gitlab tags.
-# Source0:       http://download.kde.org/%%{stable_kf6}/plasma/%%{version}/%%{name}-%%{version}.tar.xz
+# Source0:       http://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source0:       https://invent.kde.org/plasma/%{name}/-/archive/%{commit}/%{name}-%{commit}.tar.gz
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
@@ -123,77 +122,5 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.5.80-0.20260218.085444.a1b44a8.1
-- bump release (retry failed build)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.5.80-0.20260218.085444.a1b44a8
-- escape percent in commented kde.org Source template line for rpmbuild
-
-* Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.5.80-0.20260218.085444.a1b44a8
-- Move git snapshot from Version into Release for rpmspec and macros
-
-* Thu Feb 26 2026 Yaakov Selkowitz <yselkowi@redhat.com> - 6.5.80^20260218.085444.a1b44a8-2
-- Rebuild (libplasma)
-
-* Thu Feb 19 2026 Steve Cossette <farchord@gmail.com> - 6.5.80^20260218.085444.a1b44a8-1
-- Updated to latest git snapshot
-
-* Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 6.4.80~20251021.093642.6a767b3-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
-
-* Wed Oct 29 2025 Steve Cossette <farchord@gmail.com> - 6.4.80~20251021.093642.6a767b3-2
-- Bump for rebuild for plasma 6.5 + PackageKit-Qt
-
-* Sun Oct 26 2025 Steve Cossette <farchord@gmail.com> - 6.4.80~20251021.093642.6a767b3-1
-- Updated to latest git snapshot
-
-* Thu Oct 23 2025 Steve Cossette <farchord@gmail.com> - 5.27.80~20240204.214319.046d404-8
-- Rebuild for plasma-activities change
-
-* Fri Jul 25 2025 Fedora Release Engineering <releng@fedoraproject.org> - 5.27.80~20240204.214319.046d404-7
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
-
-* Sat Jan 18 2025 Fedora Release Engineering <releng@fedoraproject.org> - 5.27.80~20240204.214319.046d404-6
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
-
-* Fri Jul 19 2024 Fedora Release Engineering <releng@fedoraproject.org> - 5.27.80~20240204.214319.046d404-5
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
-
-* Tue May 21 2024 Jan Grulich <jgrulich@redhat.com> - 5.27.80~20240204.214319.046d404-4
-- Rebuild (qt6)
-
-* Thu Apr 04 2024 Jan Grulich <jgrulich@redhat.com> - 5.27.80~20240204.214319.046d404-3
-- Rebuild (qt6)
-
-* Mon Mar 18 2024 Steve Cossette <farchord@gmail.com> - 5.27.80~20240204.214319.046d404-2
-- Building to accomodate new depend library sonames
-
-* Mon Feb 05 2024 Steve Cossette <farchord@gmail.com> - 5.27.80~20240204.214319.046d404-1
-- Updated to Qt6
-
-* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 5.27.9-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 5.27.9-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Sun Nov 05 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 5.27.9-1
-- 5.27.9
-
-* Sun Oct 15 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 5.27.8-1
-- Update to 5.27.8
-
-* Thu Mar 02 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 5.27.2-4
-- Fixes on the spec file
-
-* Thu Mar 02 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 5.27.2-3
-- Add plasma-workspace requirements.
-
-* Thu Mar 02 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 5.27.2-2
-- Create wayland/x11 subpackages
-
-* Wed Mar 01 2023 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 5.27.2-1
-- Update to 5.27.2
-
-* Sun Jan 22 2023 Marc Deop <marcdeop@fedoraproject.org> - 5.26.90-1
-- Initial Package
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.5.80^20260218.085444.a1b44a8-4
+- Import

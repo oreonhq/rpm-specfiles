@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           sisu
 Epoch:          1
@@ -55,13 +55,15 @@ style dependency injection.
 
 %package maven-plugin
 Summary:        Sisu plugin for Apache Maven
+# Remove in Fedora 45
+Obsoletes:      sisu-mojos < 1:0.9.0~M3
 
 %description maven-plugin
 The Sisu Plugin for Maven provides mojos to generate
 META-INF/sisu/javax.inject.Named index files for the Sisu container.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_disable_module org.eclipse.sisu.inject.extender
 %pom_disable_module org.eclipse.sisu.plexus.extender
@@ -94,5 +96,5 @@ META-INF/sisu/javax.inject.Named index files for the Sisu container.
 %files maven-plugin -f .mfiles-maven-plugin
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9.0~M3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:0.9.0~M3-1
+- Import

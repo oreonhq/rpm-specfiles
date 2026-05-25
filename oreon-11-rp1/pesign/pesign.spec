@@ -6,7 +6,7 @@
 Name:    pesign
 Summary: Signing utility for UEFI binaries
 Version: 116
-Release: 9%{?dist}
+Release: 8%{?dist}
 License: GPL-2.0-only
 URL:     https://github.com/rhboot/pesign
 
@@ -28,7 +28,7 @@ BuildRequires: python3
 BuildRequires: python3-rpm-macros
 BuildRequires: tar
 BuildRequires: xz
-%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17
+%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || 0%{?oreon}
 BuildRequires: systemd-rpm-macros
 %endif
 Requires:      nspr
@@ -38,18 +38,17 @@ Requires:      nss-util
 Requires:      popt
 Requires:      rpm
 ExclusiveArch: %{ix86} x86_64 ia64 aarch64 %{arm} riscv64
-%if 0%{?rhel} == 7
+%if 0%{?rhel} == 7 || 0%{?oreon}
 BuildRequires: rh-signing-tools >= 1.20-2
 %endif
 
 Source0: https://github.com/rhboot/pesign/releases/download/%{version}/pesign-%{version}.tar.bz2
-# prebuilt NSS cert db for tests, not in github release
 Source1: certs.tar.xz
 Source2: pesign.py
-Patch0001: 0001-cms_common-Fixed-Segmentation-fault.patch
-Patch0002: 0002-Fix-reversed-calloc-arguments.patch
-Patch0003: 0003-Work-around-OpenSC-changing-token-names-on-fedora-bu.patch
-Patch0004: 0004-cms_common-skip-authentication-on-the-Friendly-slot.patch
+Source3: pesign.patches
+
+# generate with tool
+%include %{SOURCE3}
 
 %description
 This package contains the pesign utility for signing UEFI binaries as
@@ -59,8 +58,8 @@ well as other associated tools.
 %setup -q -T -b 0
 %setup -q -T -D -c -n pesign-%{version}/ -a 1
 git init
-git config user.email "packaging@oreonhq.com"
-git config user.name "Oreon Packaging"
+git config user.email "pesign-owner@fedoraproject.org"
+git config user.name "Fedora Ninjas"
 git add .
 git commit -a -q -m "%{version} baseline."
 git am %{patches} </dev/null
@@ -79,7 +78,7 @@ make PREFIX=%{_prefix} LIBDIR=%{_libdir}
 mkdir -p %{buildroot}/%{_libdir}
 make PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot} \
 	install
-%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17
+%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || 0%{?oreon}
 make PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot} \
 	install_systemd
 %endif
@@ -109,7 +108,7 @@ install -m 0755 %{SOURCE2} %{buildroot}%{python3_sitelib}/mockbuild/plugins/
 install -m0644 -D pesign.sysusers.conf %{buildroot}%{_sysusersdir}/pesign.conf
 
 
-%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17
+%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || 0%{?oreon}
 %post
 %systemd_post pesign.service
 
@@ -155,7 +154,7 @@ certutil -d %{_sysconfdir}/pki/pesign/ -X -L > /dev/null
 %dir %attr(0770, pesign, pesign) %{_rundir}/%{name}
 %ghost %attr(0660, -, -) %{_rundir}/%{name}/socket
 %ghost %attr(0660, -, -) %{_rundir}/%{name}/pesign.pid
-%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17
+%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || 0%{?oreon}
 %{_tmpfilesdir}/pesign.conf
 %{_unitdir}/pesign.service
 %endif
@@ -164,8 +163,5 @@ certutil -d %{_sysconfdir}/pki/pesign/ -X -L > /dev/null
 %{_sysusersdir}/pesign.conf
 
 %changelog
-* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 116-9
-- Oreon git identity on baseline commit
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 116-8
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 116-8
+- Import

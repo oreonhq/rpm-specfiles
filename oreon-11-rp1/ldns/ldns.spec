@@ -3,7 +3,7 @@
 %bcond_without python3
 %bcond_without  perl
 %bcond_without  ecdsa
-%if 0%{?fedora} >= 26 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 26 || 0%{?rhel} > 7 || 0%{?oreon}
 %bcond_without  eddsa
 %bcond_without  dane_ta
 %else
@@ -128,7 +128,7 @@ This package contains documentation for the ldns library
 
 %prep
 %{?extra_version:%global pkgname %{name}-%{version}%{extra_version}}%{!?extra_version:%global pkgname %{name}-%{version}}
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %gpgverify -d 0 -s 1 -k 2
 %endif
 
@@ -285,5 +285,5 @@ rm -rf doc/man
 %doc doc/*.dox
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.0-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9.0-2
+- Import

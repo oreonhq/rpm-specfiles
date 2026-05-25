@@ -2,7 +2,7 @@
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9
 %global multilib_basearchs x86_64 %{?mips64} ppc64 s390x sparc64
 
-%if 0%{?fedora} < 29 && 0%{?rhel} < 9
+%if 0%{?fedora} < 29 && 0%{?rhel} < 9 || 0%{?oreon}
 %ifarch %{ix86}
 %global no_sse2  -no-sse2
 %endif
@@ -11,11 +11,11 @@
 
 # workaround https://bugzilla.redhat.com/show_bug.cgi?id=1668865
 # for current stable releases
-%if 0%{?fedora} < 30  || 0%{?rhel} > 6
+%if 0%{?fedora} < 30  || 0%{?rhel} > 6 || 0%{?oreon}
 %global no_feature_statx -no-feature-statx
 %global no_feature_renameat2 -no-feature-renameat2
 %endif
-%if 0%{?rhel} && 0%{?rhel} > 6
+%if 0%{?rhel} && 0%{?rhel} > 6 || 0%{?oreon}
 %global no_feature_getentropy -no-feature-getentropy
 %endif
 
@@ -46,7 +46,7 @@
 %global rpm_macros_dir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 # use external qt_settings pkg
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %global qt_settings 1
 %endif
 
@@ -159,15 +159,15 @@ Patch103: qtbase-QTBUG-112136.patch
 
 # qt5 backport of https://codereview.qt-project.org/c/qt/qtbase/+/664056
 # to fix ssl trust store discovery with
-# https://fedoraproject.org/wiki/Changes/dropingOfCertPemFile
+# 
 Patch104: 0001-Update-SSL-trust-store-locations-for-modern-Red-Hat-.patch
 
 ## Qt 6 backports for better Gtk/GNOME integration
-# https://fedoraproject.org/wiki/Changes/Qt_Wayland_By_Default_On_Gnome
+# 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1732129
 Patch150: 0001-Use-Wayland-by-default-on-GNOME.patch
 
-# https://fedoraproject.org/wiki/Changes/NoCustomQtThemingForWorkstation
+# 
 # https://bugzilla.redhat.com/show_bug.cgi?id=2226797
 Patch151: 0002-Add-enum-class-Qt-Appearance.patch
 Patch152: 0003-Sync-and-assert-StandardPixmap-enums-in-QPlatformThe.patch
@@ -243,7 +243,7 @@ BuildRequires: pkgconfig(xkbcommon-x11) >= 0.4.1
 BuildRequires: pkgconfig(xkeyboard-config)
 %global vulkan 1
 BuildRequires: pkgconfig(vulkan)
-%if 0%{?fedora} || 0%{?rhel} > 6
+%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
 %global egl 1
 BuildRequires: pkgconfig(egl)
 BuildRequires: pkgconfig(gbm)
@@ -251,12 +251,12 @@ BuildRequires: pkgconfig(gbm)
 BuildRequires: pkgconfig(glesv2)
 %global sqlite -system-sqlite
 BuildRequires: pkgconfig(sqlite3) >= 3.7
-%if 0%{?fedora} > 22
+%if 0%{?fedora} > 22 || 0%{?oreon}
 %global harfbuzz -system-harfbuzz
 BuildRequires: pkgconfig(harfbuzz) >= 0.9.42
 %endif
 BuildRequires: pkgconfig(icu-i18n)
-%if 0%{?fedora} > 37 || 0%{?rhel} > 7
+%if 0%{?fedora} > 37 || 0%{?rhel} > 7 || 0%{?oreon}
 BuildRequires: pkgconfig(libpcre2-16) >= 10.20
 %else
 BuildRequires: pkgconfig(libpcre) >= 8.0
@@ -285,7 +285,7 @@ BuildRequires: xorg-x11-server-Xvfb
 Requires:      qt5-filesystem
 
 %if 0%{?qtchooser}
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Conflicts: qt < 1:4.8.6-10
 %endif
 Requires(post): %{_sbindir}/update-alternatives
@@ -297,7 +297,7 @@ Requires: qt-settings
 Requires: %{name}-common = %{version}-%{release}
 
 ## Sql drivers
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %global ibase -no-sql-ibase
 %global tds -no-sql-tds
 %endif
@@ -389,7 +389,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %package mysql
 Summary: MySQL driver for Qt5's SQL classes
-%if 0%{?rhel} && 0%{?rhel} < 9
+%if 0%{?rhel} && 0%{?rhel} < 9 || 0%{?oreon}
 BuildRequires: mysql-devel
 %else
 BuildRequires: mariadb-connector-c-devel
@@ -426,7 +426,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Summary: Qt5 GUI-related libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 # where Recommends are supported
-%if 0%{?fedora} || 0%{?rhel} >= 8
+%if 0%{?fedora} || 0%{?rhel} >= 8 || 0%{?oreon}
 Recommends: mesa-dri-drivers%{?_isa}
 Recommends: qt5-qtwayland%{?_isa}
 # Required for some locales: https://pagure.io/fedora-kde/SIG/issue/311
@@ -462,12 +462,12 @@ Qt5 libraries used for drawing widgets and OpenGL items.
 %patch -P55 -p1 -b .no_relocatable
 %patch -P56 -p1 -b .libglvnd
 %patch -P57 -p1 -b .qt5-qtbase-cxxflag
-%if 0%{?fedora} < 35
+%if 0%{?fedora} < 35 || 0%{?oreon}
 %patch -P58 -p1 -b .firebird
 %else
 %patch -P59 -p1 -b .firebird
 %endif
-%if 0%{?fedora} > 27
+%if 0%{?fedora} > 27 || 0%{?oreon}
 %patch -P60 -p1 -b .mysql
 %endif
 %patch -P61 -p1
@@ -484,10 +484,10 @@ Qt5 libraries used for drawing widgets and OpenGL items.
 %patch -P104 -p1
 
 ## Qt 6 backports
-%if 0%{?fedora} > 30 || 0%{?rhel} > 8
+%if 0%{?fedora} > 30 || 0%{?rhel} > 8 || 0%{?oreon}
 %patch -P150 -p1 -b .use-wayland-on-gnome.patch
 %endif
-%if 0%{?fedora} > 38 || 0%{?rhel} > 9
+%if 0%{?fedora} > 38 || 0%{?rhel} > 9 || 0%{?oreon}
 %patch -P151 -p1
 %patch -P152 -p1
 %patch -P153 -p1
@@ -509,7 +509,7 @@ Qt5 libraries used for drawing widgets and OpenGL items.
 %patch -P169 -p1
 %endif
 
-%if 0%{?fedora} < 39
+%if 0%{?fedora} < 39 || 0%{?oreon}
 # Use QGnomePlatform by default
 %patch -P200 -p1
 %endif
@@ -742,7 +742,7 @@ popd
 install -p -m755 -D %{SOURCE6} %{buildroot}%{_sysconfdir}/X11/xinit/xinitrc.d/10-qt5-check-opengl2.sh
 
 # f29+ enables sse2 unconditionally on ix86 -- rex
-%if 0%{?fedora} < 29 && 0%{?rhel} < 9
+%if 0%{?fedora} < 29 && 0%{?rhel} < 9 || 0%{?oreon}
 # fix bz#1442553 multilib issue
 privat_header_file=%{buildroot}%{_qt5_headerdir}/QtCore/%{version}/QtCore/private/qconfig_p.h
 grep -v QT_FEATURE_sse2 $privat_header_file > ${privat_header_file}.me
@@ -788,25 +788,44 @@ make check -k ||:
 %if 0%{?qtchooser}
 %pre
 if [ $1 -gt 1 ] ; then
-  # remove short-lived qt5.conf alternatives
-  %{_sbindir}/update-alternatives --remove qtchooser-qt5 %{_sysconfdir}/xdg/qtchooser/qt5-%{__isa_bits}.conf >& /dev/null ||:
-  %{_sbindir}/update-alternatives --remove qtchooser-default %{_sysconfdir}/xdg/qtchooser/qt5.conf >& /dev/null ||:
+# remove short-lived qt5.conf alternatives
+%{_sbindir}/update-alternatives  \
+  --remove qtchooser-qt5 \
+  %{_sysconfdir}/xdg/qtchooser/qt5-%{__isa_bits}.conf >& /dev/null ||:
+
+%{_sbindir}/update-alternatives  \
+  --remove qtchooser-default \
+  %{_sysconfdir}/xdg/qtchooser/qt5.conf >& /dev/null ||:
 fi
 %endif
 
 %post
 %{?ldconfig}
 %if 0%{?qtchooser}
-%{_sbindir}/update-alternatives --install %{_sysconfdir}/xdg/qtchooser/5.conf qtchooser-5 %{_sysconfdir}/xdg/qtchooser/5-%{__isa_bits}.conf %{priority}
-%{_sbindir}/update-alternatives --install %{_sysconfdir}/xdg/qtchooser/default.conf qtchooser-default %{_sysconfdir}/xdg/qtchooser/5.conf %{priority}
+%{_sbindir}/update-alternatives \
+  --install %{_sysconfdir}/xdg/qtchooser/5.conf \
+  qtchooser-5 \
+  %{_sysconfdir}/xdg/qtchooser/5-%{__isa_bits}.conf \
+  %{priority}
+
+%{_sbindir}/update-alternatives \
+  --install %{_sysconfdir}/xdg/qtchooser/default.conf \
+  qtchooser-default \
+  %{_sysconfdir}/xdg/qtchooser/5.conf \
+  %{priority}
 %endif
 
 %postun
 %{?ldconfig}
 %if 0%{?qtchooser}
 if [ $1 -eq 0 ]; then
-  %{_sbindir}/update-alternatives --remove qtchooser-5 %{_sysconfdir}/xdg/qtchooser/5-%{__isa_bits}.conf
-  %{_sbindir}/update-alternatives --remove qtchooser-default %{_sysconfdir}/xdg/qtchooser/5.conf
+%{_sbindir}/update-alternatives  \
+  --remove qtchooser-5 \
+  %{_sysconfdir}/xdg/qtchooser/5-%{__isa_bits}.conf
+
+%{_sbindir}/update-alternatives  \
+  --remove qtchooser-default \
+  %{_sysconfdir}/xdg/qtchooser/5.conf
 fi
 %endif
 
@@ -1159,5 +1178,5 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
+- Import

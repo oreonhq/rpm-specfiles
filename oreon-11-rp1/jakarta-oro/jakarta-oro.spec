@@ -59,7 +59,7 @@ successor to the OROMatcher, AwkTools, PerlTools, and TextTools
 libraries from ORO, Inc. (www.oroinc.com). 
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;
 # remove all CVS files
@@ -82,5 +82,5 @@ ant -Dfinal.name=%{base_name} jar -Dant.build.javac.source=1.8 -Dant.build.javac
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.8-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.8-1
+- Import

@@ -32,7 +32,7 @@ BuildRequires:	rubygems-devel
 # rspec
 BuildRequires:	rubygem(rspec)
 BuildRequires:	rubygem(rake)
-%if %{undefined rhel}
+%if %{undefined rhel} || 0%{?oreon}
 # cucumber
 BuildRequires:	rubygem(aruba)
 BuildRequires:	rubygem(cucumber)
@@ -84,7 +84,7 @@ rm -f %{buildroot}%{gem_instdir}/{.document,.yardopts}
 exit 0
 %endif
 
-%if %{defined rhel}
+%if %{defined rhel} || 0%{?oreon}
 # avoid aruba dep on RHEL, but tests fail if files are removed entirely
 echo -n > spec/integration/rails_support_spec.rb
 echo -n > spec/support/aruba.rb
@@ -99,7 +99,7 @@ LANG=C.UTF-8
 export RUBYLIB=$(pwd)/lib
 rspec spec/
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 # Don't do cucumber test
 exit 0
 %endif
@@ -122,5 +122,5 @@ cucumber
 %{gem_docdir}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{majorver}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.13.8-1
+- Import

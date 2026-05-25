@@ -13,7 +13,7 @@
 Summary: Qt5 - QtTool components
 Name:    qt5-qttools
 Version: 5.15.18
-Release: 3%{?dist}
+Release: 4%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -35,7 +35,7 @@ Patch102: qttools-opensource-src-5.13.2-runqttools-with-qt5-suffix.patch
 # 32-bit MIPS needs explicit -latomic
 Patch104: qttools-opensource-src-5.7-add-libatomic.patch
 # Link against libclang-cpp.so
-# https://fedoraproject.org/wiki/Changes/Stop-Shipping-Individual-Component-Libraries-In-clang-lib-Package
+# 
 Patch105: Link-against-libclang-cpp.so-instead-of-the-clang-co.patch
 
 Source20: assistant.desktop
@@ -45,7 +45,7 @@ Source23: qdbusviewer.desktop
 
 BuildRequires: make
 # %%check needs cmake (and don't want to mess with cmake28)
-%if 0%{?fedora} || 0%{?rhel} > 6
+%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
 BuildRequires: cmake
 %endif
 BuildRequires: desktop-file-utils
@@ -252,8 +252,10 @@ sed -i -e 's| Qt5UiPlugin||g' %{buildroot}%{_qt5_libdir}/pkgconfig/Qt5Designer.p
 
 
 ## work-in-progress... -- rex
-%if 0%{?fedora} || 0%{?rhel} > 6
+%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
 %check
+# TODO: Please submit an issue to upstream (rhbz#2381396)
+export CMAKE_POLICY_VERSION_MINIMUM=3.5
 # verify validity of Qt5Designer.pc
 export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig:$PKG_CONFIG_PATH
 pkg-config --print-requires --print-requires-private Qt5Designer
@@ -307,7 +309,7 @@ popd
 %files  libs-help
 %{_qt5_libdir}/libQt5Help.so.5*
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
 %post -n qt5-assistant
 touch --no-create %{_datadir}/icons/hicolor ||:
 
@@ -327,7 +329,7 @@ fi
 %{_datadir}/applications/*assistant.desktop
 %{_datadir}/icons/hicolor/*/apps/assistant*.*
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
 %post -n qt5-doctools
 touch --no-create %{_datadir}/icons/hicolor ||:
 
@@ -351,7 +353,7 @@ fi
 %{_bindir}/qtattributionsscanner-qt5
 %{_qt5_bindir}/qtattributionsscanner*
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
 %post -n qt5-designer
 touch --no-create %{_datadir}/icons/hicolor ||:
 
@@ -380,7 +382,7 @@ fi
 %{_qt5_libdir}/cmake/Qt5Designer/Qt5Designer_QWebViewPlugin.cmake
 %endif
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
 %post -n qt5-linguist
 touch --no-create %{_datadir}/icons/hicolor ||:
 
@@ -416,7 +418,7 @@ fi
 %{_qt5_libdir}/cmake/Qt5LinguistTools/Qt5LinguistToolsConfig*.cmake
 %{_qt5_libdir}/cmake/Qt5LinguistTools/Qt5LinguistToolsMacros.cmake
 
-%if 0%{?rhel} && 0%{?rhel} <= 7
+%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
 %post -n qt5-qdbusviewer
 touch --no-create %{_datadir}/icons/hicolor ||:
 
@@ -493,5 +495,5 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-4
+- Import

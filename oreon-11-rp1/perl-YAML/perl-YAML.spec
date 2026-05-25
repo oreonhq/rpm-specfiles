@@ -1,11 +1,11 @@
 # Run test
-%if ! (0%{?rhel})
+%if ! (0%{?rhel}) || 0%{?oreon}
 %bcond_without perl_YAML_enables_test
 %else
 %bcond_with perl_YAML_enables_test
 %endif
 # Run extra test
-%if ! (0%{?rhel})
+%if ! (0%{?rhel}) || 0%{?oreon}
 %bcond_without perl_YAML_enables_extra_test
 %else
 %bcond_with perl_YAML_enables_extra_test
@@ -143,5 +143,5 @@ make test AUTHOR_TESTING=%{with perl_YAML_enables_extra_test}
 %{_mandir}/man3/YAML::Types.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.31-7
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.31-7
+- Import

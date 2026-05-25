@@ -9,7 +9,7 @@ Release: 50%{?dist}
 
 License: GPL-2.0-or-later
 URL:     http://kasumi.sourceforge.jp/
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires: anthy-devel
 %endif
 BuildRequires: autoconf automake libtool
@@ -70,7 +70,7 @@ autoreconf -f -i
 %configure
 make %{?_smp_mflags}
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 mv kasumi kasumi-unicode
 make clean
 cp configure.in.orig configure.in
@@ -84,7 +84,7 @@ make %{?_smp_mflags}
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 install -pm 755 kasumi-unicode $RPM_BUILD_ROOT%{_bindir}/kasumi-unicode
 %else
 mv $RPM_BUILD_ROOT%{_bindir}/kasumi $RPM_BUILD_ROOT%{_bindir}/kasumi-unicode
@@ -96,7 +96,7 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/applications/*.desktop
 %find_lang %{name}
 
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %files
 %{_bindir}/kasumi
 %doc AUTHORS ChangeLog NEWS README
@@ -114,5 +114,5 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/applications/*.desktop
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5-50
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5-50
+- Import

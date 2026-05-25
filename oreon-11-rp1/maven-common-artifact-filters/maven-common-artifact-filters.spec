@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           maven-common-artifact-filters
 Version:        3.4.0
@@ -35,7 +35,7 @@ A collection of ready-made filters to control inclusion/exclusion of artifacts
 during dependency resolution.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # Test depends on jmh performance benchmarking library
 %pom_remove_dep org.openjdk.jmh:jmh-core
@@ -53,5 +53,5 @@ rm src/test/java/org/apache/maven/shared/artifact/filter/PatternFilterPerfTest.j
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.4.0-1
+- Import

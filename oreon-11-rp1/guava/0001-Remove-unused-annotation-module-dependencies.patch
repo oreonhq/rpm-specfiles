@@ -1,0 +1,41 @@
+From 7f0e423fafd1f00ea1c642af14153a4fffe396bb Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ond=C5=99ej=20Poho=C5=99elsk=C3=BD?= <opohorel@redhat.com>
+Date: Mon, 26 Jan 2026 15:00:08 +0100
+Subject: [PATCH] Remove unused annotation module dependencies
+
+---
+ guava-testlib/src/module-info.java | 3 ---
+ guava/src/module-info.java         | 3 ---
+ 2 files changed, 6 deletions(-)
+
+diff --git a/guava-testlib/src/module-info.java b/guava-testlib/src/module-info.java
+index 4625d2c337..71fca60608 100644
+--- a/guava-testlib/src/module-info.java
++++ b/guava-testlib/src/module-info.java
+@@ -17,9 +17,6 @@ module com.google.common.testlib {
+   requires java.logging;
+   requires transitive com.google.common;
+   requires transitive junit;
+-  requires static com.google.errorprone.annotations;
+-  requires static com.google.j2objc.annotations;
+-  requires static org.jspecify;
+ 
+   exports com.google.common.collect.testing;
+   exports com.google.common.collect.testing.features;
+diff --git a/guava/src/module-info.java b/guava/src/module-info.java
+index c0b7edee88..d04fba873a 100644
+--- a/guava/src/module-info.java
++++ b/guava/src/module-info.java
+@@ -19,9 +19,6 @@ module com.google.common {
+   requires java.logging;
+   requires transitive com.google.common.util.concurrent.internal;
+   requires static jdk.unsupported;
+-  requires static com.google.errorprone.annotations;
+-  requires static com.google.j2objc.annotations;
+-  requires static org.jspecify;
+ 
+   exports com.google.common.annotations;
+   exports com.google.common.base;
+-- 
+2.52.0
+

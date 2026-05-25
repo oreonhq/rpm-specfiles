@@ -35,7 +35,7 @@ bytecode-level API allows the users to directly edit a class file as
 other editors.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # remove unnecessary maven plugins
 %pom_remove_plugin :maven-source-plugin
@@ -63,4 +63,6 @@ find src/test -name "*.class" -print -delete
 %license License.html
 %doc README.md
 
-%autochangelog
+%changelog
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.30.2-1
+- Import

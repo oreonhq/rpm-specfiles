@@ -54,5 +54,5 @@ ln -s %{_fontconfig_templatedir}/%{fontconf}.conf \
 %doc PakType_Naqsh_License.txt PakTypeNaqshFeatures.pdf 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.0-13
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.0-13
+- Import

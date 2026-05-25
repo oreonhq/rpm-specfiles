@@ -6,13 +6,13 @@
 %{?!fedora:%global fedora 0}
 
 # Map RHEL to Fedora version
-%if 0%{?rhel} == 6
+%if 0%{?rhel} == 6 || 0%{?oreon}
 %global fedora 12
 %endif
-%if 0%{?rhel} == 7
+%if 0%{?rhel} == 7 || 0%{?oreon}
 %global fedora 19
 %endif
-%if 0%{?rhel} > 7
+%if 0%{?rhel} > 7 || 0%{?oreon}
 %global fedora 27
 %endif
 
@@ -43,79 +43,79 @@
 %global farstream_version       0.1
 
 # RHEL4: Use ALSA aplay to output sounds because it lacks gstreamer
-%if 0%{?fedora} < 5
+%if 0%{?fedora} < 5 || 0%{?oreon}
 %global force_sound_aplay       1
 %endif
 # RHEL4+ and FC5+: dbus, gstreamer, NetworkManager, modular X
-%if 0%{?fedora} >= 5
+%if 0%{?fedora} >= 5 || 0%{?oreon}
 %global dbus_integration        1
 %global gstreamer_integration   1
 %global nm_integration          1
 %global modular_x               1
 %endif
 # RHEL4+ and FC6+: dbus-glib split, bonjour, meanwhile
-%if 0%{?fedora} >= 6
+%if 0%{?fedora} >= 6 || 0%{?oreon}
 %global dbus_glib_splt          1
 %global bonjour_support         1
 %global meanwhile_integration   1
 %endif
 # RHEL4 and RHEL5: Use gnome-open instead of xdg-open (RHEL4 and RHEL5)
-%if 0%{?fedora} <= 6
+%if 0%{?fedora} <= 6 || 0%{?oreon}
 %global use_gnome_open          1
 %endif
 # F7+: Perl devel separated out
-%if 0%{?fedora} >= 7
+%if 0%{?fedora} >= 7 || 0%{?oreon}
 %global perl_devel_separated    1
 %endif
 # F8+: Perl embed separated out, generate pidgin API documentation
-%if 0%{?fedora} >= 8
+%if 0%{?fedora} >= 8 || 0%{?oreon}
 %global perl_embed_separated    1
 %global api_docs                1
 %endif
 # F10+: New NSS (3.12.3) disables weaker MD2 algorithm
-%if 0%{?fedora} >= 10
+%if 0%{?fedora} >= 10 || 0%{?oreon}
 %global nss_md2_disabled        1
 %endif
 # F11+: libidn for punycode domain support, voice and video support,
 # use system SSL certificates
-%if 0%{?fedora} >= 11
+%if 0%{?fedora} >= 11 || 0%{?oreon}
 %global vv_support              1
 %global libidn_support          1
 %global use_system_certs        1
 %endif
 # F12+: krb4 removed
-%if 0%{?fedora} >= 12
+%if 0%{?fedora} >= 12 || 0%{?oreon}
 %global krb4_removed            1
 %endif
 # F13+ Split Evolution plugin to separate package (#581144)
-%if 0%{?fedora} >= 13
+%if 0%{?fedora} >= 13 || 0%{?oreon}
 %global split_evolution         1
 %endif
 # F16+ Use system libgadu (#713888)
-%if 0%{?fedora} >= 16
+%if 0%{?fedora} >= 16 || 0%{?oreon}
 %global use_system_libgadu      1
 %endif
 # RHEL does not have libgadu
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %global use_system_libgadu      0
 %endif
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} >= 7 || 0%{?oreon}
 %global api_docs                0
 %endif
 # F18+ Disable evolution integration (temporarily?)
 # due to evolution-data-server 3.6 API changes
-%if 0%{?fedora} >= 18
+%if 0%{?fedora} >= 18 || 0%{?oreon}
 %global disable_evolution       1
 %global split_evolution         0
 %endif
 # F2+ Build against GStreamer 1.x
-%if 0%{?fedora} >= 22
+%if 0%{?fedora} >= 22 || 0%{?oreon}
 %global gstreamer_version       1.0
 %global farstream_version       0.2
 %global gst1                    1
 %endif
 # F29 doesn't support nm-glib anymore.
-%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8 || 0%{?oreon}
 %global nm_libnm_integration    1
 %endif
 # valgrind available only on selected arches
@@ -125,7 +125,7 @@
 
 Name:           pidgin
 Version:        2.14.14
-Release:        3%{?dist}
+Release:        4%{?dist}
 # Automatically converted from old format: BSD and GPLv2+ and GPLv2 and LGPLv2+ and MIT - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND GPL-2.0-or-later AND GPL-2.0-only AND LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-MIT
 # GPLv2+ - libpurple, finch, pidgin, most prpls
@@ -163,6 +163,11 @@ Source1:        purple-fedora-prefs.xml
 ## Patches 0-99: Fedora specific or upstream wont accept
 Patch0:         pidgin-NOT-UPSTREAM-2.5.2-rhel4-sound-migration.patch
 Patch1:         pidgin-2.14.4-valgrind.patch
+
+# Taken from https://reviews.imfreedom.org/r/4404/ to fix a crash on fedora >= 44:
+# https://issues.imfreedom.org/issue/PIDGIN-18152/Pidgin-Keeps-Crashing-and-I-dont-know-why
+# https://bugzilla.redhat.com/show_bug.cgi?id=2441401
+Patch100:       pidgin-rb4404.patch
 
 ## Patches 100+: To be Included in Future Upstream
 
@@ -265,13 +270,13 @@ BuildRequires:  perl(ExtUtils::Embed)
 %endif
 # Voice and video support (F11+)
 %if %{vv_support}
-%if 0%{?fedora} >= 17
+%if 0%{?fedora} >= 17 || 0%{?oreon}
 BuildRequires:  pkgconfig(farstream-%{farstream_version})
 %else
 BuildRequires:  farsight2-devel
 %endif
 Requires:       gstreamer%{?gst1}-plugins-good
-%if 0%{?fedora} >= 12
+%if 0%{?fedora} >= 12 || 0%{?oreon}
 Requires:       gstreamer%{?gst1}-plugins-bad-free
 %endif
 %endif
@@ -293,7 +298,7 @@ BuildRequires:  valgrind-devel
 %endif
 
 # Need rpm 4.9+ to be able to do this filtering in arch packages with binaries
-%if 0%{?fedora} >= 15
+%if 0%{?fedora} >= 15 || 0%{?oreon}
 # Filter out plugins from provides
 %global __provides_exclude_from ^%{_libdir}/purple
 # Use define to delay evaluation
@@ -361,7 +366,7 @@ Requires:   glib2 >= %{glib_ver}
 # Bug #212817 Jabber needs cyrus-sasl plugins for authentication
 Requires:   cyrus-sasl-plain, cyrus-sasl-md5
 # Bug #979052 - Can't connect to xmpp server since upgrade from f18 to f19
-%if 0%{?fedora} >= 19
+%if 0%{?fedora} >= 19 || 0%{?oreon}
 Requires:   cyrus-sasl-scram
 %endif
 # Use system SSL certificates (F11+)
@@ -369,7 +374,7 @@ Requires:   cyrus-sasl-scram
 Requires:   ca-certificates
 %endif
 # Workaround for accidental shipping of pidgin-docs
-%if 0%{?rhel} == 5
+%if 0%{?rhel} == 5 || 0%{?oreon}
 Obsoletes:  pidgin-docs = 2.5.2
 %endif
 %if %{dbus_integration}
@@ -464,6 +469,7 @@ echo "FEDORA=%{fedora} RHEL=%{rhel}"
 %patch -P1 -p1 -b .valgrind
 
 ## Patches 100+: To be Included in Future Upstream
+%patch -P100 -p1 -b .rb4404
 
 
 # Our preferences
@@ -500,7 +506,7 @@ SWITCHES="--with-extraversion=%{release}"
 %endif
 %if %{dbus_integration}
     SWITCHES="$SWITCHES --enable-dbus"
-%if 0%{?fedora} >= 27
+%if 0%{?fedora} >= 27 || 0%{?oreon}
     SWITCHES="$SWITCHES --with-python=%{__python3}"
 %endif
 %else
@@ -699,5 +705,5 @@ find %{buildroot}/%{_libdir}/purple-2 -name \*.so\* -printf '%f|' | sed -e 's/|$
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.14.14-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.14.14-4
+- Import

@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        RPM Macros and Utilities for Node.js Packaging
 BuildArch:      noarch
 License:        MIT
-URL:            https://fedoraproject.org/wiki/Node.js/Packagers
+URL:            
 ExclusiveArch:  %{nodejs_arches} noarch
 
 Source0001: LICENSE
@@ -83,5 +83,5 @@ install -Dpm0755 nodejs-packaging-bundler %{buildroot}%{_bindir}/nodejs-packagin
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2023.10-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2023.10-1
+- Import

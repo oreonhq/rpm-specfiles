@@ -62,7 +62,7 @@ BuildRequires:  perl(FindBin)
 BuildRequires:  perl(Test::More)
 # Optional tests:
 %if !%{defined perl_bootstrap}
-%if !( 0%{?rhel} >= 7 )
+%if !( 0%{?rhel} >= 7 ) || 0%{?oreon}
 %if %{with perl_Pod_Perldoc_enables_tk_test}
 BuildRequires:  perl(Tk)
 # Tk::FcyEntry is optional
@@ -121,5 +121,5 @@ make test
 %{_mandir}/man3/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.28.01-522
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.28.01-522
+- Import

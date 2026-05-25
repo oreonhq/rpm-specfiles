@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: MIT
-%if 0%{?rhel} > 10
+%if 0%{?rhel} > 10 || 0%{?oreon}
 %bcond build_from_src 0
 %else
 %bcond build_from_src 1
@@ -28,7 +28,7 @@ Release: 29%{?dist}
 # original bitstream glyphs are Bitstream Vera
 # glyphs modifications by dejavu project are Public Domain
 # glyphs imported from Arev fonts are under BitStream Vera compatible license
-License: Bitstream-Vera AND LicenseRef-Fedora-Public-Domain
+License: Bitstream-Vera AND LicenseRef-Public-Domain
 URL:     https://dejavu-fonts.github.io/
 
 %global common_description %{expand:
@@ -236,5 +236,5 @@ make check
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.37-29
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.37-29
+- Import

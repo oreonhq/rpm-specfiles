@@ -1,9 +1,8 @@
 diff -up cdrkit-1.1.11/CMakeLists.txt.orig cdrkit-1.1.11/CMakeLists.txt
 --- cdrkit-1.1.11/CMakeLists.txt.orig	2025-02-24 18:50:43.262679848 +0100
 +++ cdrkit-1.1.11/CMakeLists.txt	2025-03-19 19:54:11.042940132 +0100
-@@ -1,5 +1,6 @@
- cmake_minimum_required(VERSION 2.8)
- cmake_policy(SET CMP0015 OLD)
+@@ -1,4 +1,5 @@
+ cmake_minimum_required(VERSION 3.5)
  PROJECT (cdrkit C)
 +include(GNUInstallDirs)
  SUBDIRS(include genisoimage wodim libedc libhfs_iso icedax libusal librols libunls readom netscsid 3rd-party/dirsplit)

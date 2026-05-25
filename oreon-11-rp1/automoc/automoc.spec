@@ -1,14 +1,19 @@
+#define snaptag .20080527svn811390
 %define beta 0.9.88
 %define beta_tag rc3
+
+# trim changelog included in binary rpms
+%global _changelog_trimtime %(date +%s -d "1 year ago")
 
 Name:           automoc
 Version:        1.0
 Release:        0.53.%{?beta_tag}%{?dist}
 Summary:        Automatic moc for Qt 4
 License:        BSD-2-Clause
-URL:            https://community.kde.org/Development/Tutorials/Automoc
-Source0:        https://download.kde.org/stable/automoc4/%{beta}/automoc4-%{beta}.tar.bz2
+URL:            http://www.kde.org
+Source0:        ftp://ftp.kde.org/pub/kde/stable/automoc4/%{beta}/automoc4-%{beta}.tar.bz2
 
+## upstream patches
 Patch1: 0001-fix-make-clean-it-s-SET_directory_properties-and-not.patch
 Patch2: 0002-automoc-did-not-understand-.mm-files-objc.patch
 Patch3: 0003-support-for-Objective-C-i.e.-mm-files-is-enough-to-i.patch
@@ -47,7 +52,7 @@ Provides: automoc4 = %{beta}
 
 Requires:       cmake >= 2.8.9
 BuildRequires:  cmake >= 2.8.9
-BuildRequires:  gcc-c++
+Buildrequires:  gcc-c++
 BuildRequires:  qt4-devel
 BuildRequires:  kde4-macros(api)
 BuildRequires: make
@@ -83,5 +88,5 @@ make install DESTDIR=%{buildroot} -C %{_target_platform}
 
 
 %changelog
-* Mon May 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0-0.53.rc3
-- Import from Fedora 44 dist-git, debrand, URL-only Source0
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0-0.53.rc3
+- Import

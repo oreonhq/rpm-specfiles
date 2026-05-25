@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 %global upstream_version %(echo %{version} | tr '~' '-')
 
 Name:           hamcrest
@@ -29,7 +29,7 @@ frameworks. Typical scenarios include testing frameworks, mocking libraries and
 UI validation rules.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 pushd hamcrest
 cp -p %{SOURCE1} pom.xml
@@ -80,5 +80,5 @@ popd
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0-1
+- Import

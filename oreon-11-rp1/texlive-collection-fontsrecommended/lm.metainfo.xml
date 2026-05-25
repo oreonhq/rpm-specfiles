@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>lm</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>Latin Modern</name>
+  <summary>Latin modern fonts in outline formats</summary>
+  <description>
+    <p>
+      The Latin Modern family of fonts consists of 72 text fonts and 20 
+      mathematics fonts, and is based on the Computer Modern fonts released into
+      public domain by AMS (copyright © 1997 AMS). The lm font set contains a 
+      lot of additional characters, mainly accented ones, but not exclusively. 
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/lm</url>
+</component>

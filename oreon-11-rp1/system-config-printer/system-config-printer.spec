@@ -106,7 +106,7 @@ BuildArch: noarch
 The common code used by both the graphical and non-graphical parts of
 the configuration tool.
 
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 %package applet
 Summary: Print job notification applet
 Requires: %{name}-libs
@@ -144,7 +144,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 
 %find_lang system-config-printer
 
-%if 0%{?rhel} > 8
+%if 0%{?rhel} > 8 || 0%{?oreon}
 rm -rf %{buildroot}%{_bindir}/%{name}-applet \
        %{buildroot}%{_datadir}/%{name}/__pycache__/applet* \
        %{buildroot}%{_datadir}/%{name}/applet.py* \
@@ -236,7 +236,7 @@ rm -rf %{buildroot}%{_bindir}/%{name}-applet \
 %{python3_sitelib}/cupshelpers
 %{python3_sitelib}/*.egg-info/
 
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 %files applet
 %{_bindir}/%{name}-applet
 %{_datadir}/%{name}/__pycache__/applet*
@@ -252,7 +252,7 @@ rm -rf %{buildroot}%{_bindir}/%{name}-applet \
 %ghost %verify(not md5 size mtime) %config(noreplace,missingok) %attr(0644,root,root) %{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_unitdir}/configure-printer@.service
 
-%if 0%{?rhel} <= 8 || 0%{?fedora}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
 %files
 %doc ChangeLog NEWS ABOUT-NLS AUTHORS ChangeLog-OLD
 %license COPYING
@@ -291,5 +291,5 @@ exit 0
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.18-17
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.18-17
+- Import

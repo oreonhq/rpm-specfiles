@@ -99,8 +99,5 @@ install -m 644 %{SOURCE12} %{buildroot}%{_prefix}/lib/systemd/system-preset/
 %{_rpmmacrodir}/macros.oreon-release
 
 %changelog
-* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 11-2
-- Add %%oreon via macros.oreon-release
-
-* Tue Jan 06 2026 Oreon HQ Packaging Team <packaging@oreonhq.com> - 11-1
-- Oreon 11
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 11-2
+- Import

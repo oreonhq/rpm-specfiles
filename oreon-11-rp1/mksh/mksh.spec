@@ -11,7 +11,7 @@ Source2:          rtchecks.expected
 Provides:         /bin/ksh
 Provides:         /bin/lksh
 Provides:         /bin/mksh
-%if 0%{?fedora} || 0%{?rhel} > 8
+%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
 Provides:         /bin/rksh
 %endif
 Provides:         /bin/rlksh
@@ -88,7 +88,7 @@ ln -s %{name} $RPM_BUILD_ROOT%{_bindir}/rmksh
 ln -s lksh $RPM_BUILD_ROOT%{_bindir}/rlksh
 ln -s %{name}.1 $RPM_BUILD_ROOT%{_mandir}/man1/rmksh.1
 ln -s lksh.1 $RPM_BUILD_ROOT%{_mandir}/man1/rlksh.1
-%if 0%{?fedora} || 0%{?rhel} > 8
+%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
 touch $RPM_BUILD_ROOT{%{_bindir}/{ksh,rksh},%{_mandir}/man1/{ksh,rksh}.1}
 %else
 touch $RPM_BUILD_ROOT{%{_bindir}/ksh,%{_mandir}/man1/ksh.1}
@@ -115,7 +115,7 @@ done
 
 %post
 for d in /bin %{_bindir}; do
-%if 0%{?fedora} || 0%{?rhel} > 8
+%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
   for s in ksh %{name} rksh rmksh; do
 %else
   for s in ksh %{name} rmksh; do
@@ -125,11 +125,11 @@ for d in /bin %{_bindir}; do
 done
 
 alternatives --install %{_bindir}/ksh ksh %{_bindir}/%{name} 10 \
-%if 0%{?fedora} || 0%{?rhel} > 8
+%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
   --slave %{_bindir}/rksh rksh %{_bindir}/%{name} \
 %endif
   --slave %{_mandir}/man1/ksh.1.gz ksh-man %{_mandir}/man1/%{name}.1.gz \
-%if 0%{?fedora} || 0%{?rhel} > 8
+%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
   --slave %{_mandir}/man1/rksh.1.gz rksh-man %{_mandir}/man1/%{name}.1.gz
 %endif
 
@@ -153,7 +153,7 @@ done
 %ghost %{_bindir}/ksh
 %{_bindir}/lksh
 %{_bindir}/%{name}
-%if 0%{?fedora} || 0%{?rhel} > 8
+%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
 %ghost %{_bindir}/rksh
 %endif
 %{_bindir}/rlksh
@@ -163,12 +163,12 @@ done
 %ghost %{_mandir}/man1/ksh.1*
 %{_mandir}/man1/lksh.1*
 %{_mandir}/man1/%{name}.1*
-%if 0%{?fedora} || 0%{?rhel} > 8
+%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
 %ghost %{_mandir}/man1/rksh.1*
 %endif
 %{_mandir}/man1/rlksh.1*
 %{_mandir}/man1/rmksh.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 59c-15
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 59c-15
+- Import

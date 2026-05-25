@@ -81,7 +81,7 @@ pushd docs
 %{gobuilddir}/bin/mangen
 popd
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 GO_LDFLAGS="-X 'github.com/git-lfs/git-lfs/config.Vendor=Fedora %{?fedora}' "
 %endif
 %gobuild -o %{gobuilddir}/bin/git-lfs %{goipath}
@@ -147,5 +147,5 @@ PATH=%{buildroot}%{_bindir}:%{gobuilddir}/bin:$PATH \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.7.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.7.1-1
+- Import

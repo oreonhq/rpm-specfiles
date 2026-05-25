@@ -1,4 +1,4 @@
-From 59252e64b8276875340935fba3b36517559c881d Mon Sep 17 00:00:00 2001
+From 7e069c1d9862b36475799a5c8ffe2166a3e839b6 Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Thu, 25 Mar 2021 13:05:10 -0500
 Subject: [PATCH] RH: make parse_vpd_pg83 match scsi_id output
@@ -14,10 +14,10 @@ Signed-off-by: Benjamin Marzinski <bmarzins@redhat.com>
  2 files changed, 8 insertions(+), 10 deletions(-)
 
 diff --git a/libmultipath/discovery.c b/libmultipath/discovery.c
-index 0efb8213..51797d2b 100644
+index 4da8ea4a..062280a4 100644
 --- a/libmultipath/discovery.c
 +++ b/libmultipath/discovery.c
-@@ -1236,13 +1236,9 @@ parse_vpd_pg83(const unsigned char *in, size_t in_len,
+@@ -1227,13 +1227,9 @@ parse_vpd_pg83(const unsigned char *in, size_t in_len,
  				good_len = 8;
  				break;
  			case 2:
@@ -33,7 +33,7 @@ index 0efb8213..51797d2b 100644
  				good_len = 8;
  				break;
  			default:
-@@ -1260,10 +1256,6 @@ parse_vpd_pg83(const unsigned char *in, size_t in_len,
+@@ -1251,10 +1247,6 @@ parse_vpd_pg83(const unsigned char *in, size_t in_len,
  			break;
  		case 0x8:
  			/* SCSI Name: Prio 3 */
@@ -45,7 +45,7 @@ index 0efb8213..51797d2b 100644
  		case 0x1:
  			/* T-10 Vendor ID: Prio 2 */
 diff --git a/tests/vpd.c b/tests/vpd.c
-index f9e22cd8..ab86ef0b 100644
+index a7286533..5fa1e2af 100644
 --- a/tests/vpd.c
 +++ b/tests/vpd.c
 @@ -232,11 +232,13 @@ static const char * const str_prefix[] = {

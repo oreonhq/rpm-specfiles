@@ -1,6 +1,6 @@
-diff -rupN --no-dereference giflib-6.1.2/gif2rgb.c giflib-6.1.2-new/gif2rgb.c
---- giflib-6.1.2/gif2rgb.c	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/gif2rgb.c	2026-03-10 22:37:41.832993188 +0100
+diff -rupN --no-dereference giflib-6.1.3/gif2rgb.c giflib-6.1.3-new/gif2rgb.c
+--- giflib-6.1.3/gif2rgb.c	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/gif2rgb.c	2026-05-12 22:33:36.993203251 +0200
 @@ -163,6 +163,8 @@ static void SaveGif(GifByteType *OutputB
  	/* Open stdout for the output file: */
  	if ((GifFile = EGifOpenFileHandle(1, &Error)) == NULL) {

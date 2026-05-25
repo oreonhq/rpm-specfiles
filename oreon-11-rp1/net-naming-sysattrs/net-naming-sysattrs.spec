@@ -57,5 +57,5 @@ make test
 %{dracutmoddir}/70net-naming-sysattrs/module-setup.sh
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 263-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 263-1
+- Import

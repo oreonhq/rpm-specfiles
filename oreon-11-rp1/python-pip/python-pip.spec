@@ -1,7 +1,7 @@
-# Full pytest needs setuptools/flit_core/coverage wheels in SOURCES plus VCS BRs.
-# Default off so rpmbuild -bs inside mock (Fedora defines %%fedora) does not
-# require those sources. Build with: rpmbuild --with tests after spectool -g.
-%bcond_with tests
+# The original RHEL N+1 content set is defined by (build)dependencies
+# of the packages in Fedora ELN. Hence we disable tests here
+# to prevent pulling many unwanted packages in.
+%bcond tests %{defined fedora}
 # Whether to build the manual pages (useful for bootstrapping Sphinx)
 %bcond man 1
 
@@ -12,10 +12,8 @@
 
 Name:           python-%{srcname}
 Version:        %{base_version}%{?prerel:~%{prerel}}
-Release:        3%{?dist}
+Release:        %autorelease
 Summary:        A tool for installing and managing Python packages
-
-%{?oreon:%global python_wheel_pkg_prefix python3}
 
 # We bundle a lot of libraries with pip, which itself is under MIT license.
 # Here is the list of the libraries with corresponding licenses:
@@ -48,7 +46,6 @@ Source0:        https://github.com/pypa/pip/archive/%{upstream_version}/%{srcnam
 # They are not bundled in the built package and do not contribute to the overall license.
 # They are pre-built but only contain text files, rebuilding them in %%build has very little benefit.
 
-%if %{with tests}
 # setuptools.whl
 # We cannot use RPM-packaged python-setuptools-wheel because upstream pins to <80.
 # See https://github.com/pypa/pip/pull/13357 for rationale.
@@ -64,7 +61,6 @@ Source3:        https://files.pythonhosted.org/packages/f2/65/b6ba90634c984a4fcc
 # This is a dummy placeholder package that only contains empty coverage.process_startup().
 # That way, we don't need to patch the usage out of conftest.py.
 Source4:        coverage-0-py3-none-any.whl
-%endif
 
 BuildArch:      noarch
 
@@ -146,7 +142,7 @@ Provides: bundled(python%{1}dist(urllib3)) = 1.26.20
 # Manylinux1, a common (as of 2019) platform tag for binary wheels, relies
 # on a glibc version that included ancient crypto functions, which were
 # moved to libxcrypt and then removed in:
-#  https://fedoraproject.org/wiki/Changes/FullyRemoveDeprecatedAndUnsafeFunctionsFromLibcrypt
+#  
 # The manylinux1 standard assumed glibc would keep ABI compatibility,
 # but that's only the case if libcrypt.so.1 (libxcrypt-compat) is around.
 # This should be solved in the next manylinux standard (but it may be
@@ -193,8 +189,6 @@ Packages" or "Pip Installs Python".
 %package -n     %{python_wheel_pkg_prefix}-%{srcname}-wheel
 Summary:        The pip wheel
 Requires:       ca-certificates
-# ISO/compose pieces still require the Fedora main-Python wheel name
-%{?oreon:Provides: python-pip-wheel = %{version}-%{release}}
 
 # Virtual provides for the packages bundled by pip:
 %{bundled %{python3_pkgversion}}
@@ -363,8 +357,5 @@ pytest_k="$pytest_k and not test_check_unsupported"
 %{python_wheel_dir}/%{python_wheel_name}
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{base_version}%{?prerel:~%{prerel}}-2
-- On oreon default off full pip pytest wheel downloads
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{base_version}%{?prerel:~%{prerel}}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.0.1-1
+- Import

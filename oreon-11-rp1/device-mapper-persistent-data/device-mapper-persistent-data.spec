@@ -9,16 +9,17 @@
 
 Summary: Device-mapper Persistent Data Tools
 Name: device-mapper-persistent-data
-Version: 1.3.1
-Release: 3%{?dist}%{?release_suffix}
+Version: 1.3.2
+Release: 1%{?dist}%{?release_suffix}
 License: GPL-3.0-only AND (0BSD OR MIT OR Apache-2.0) AND Apache-2.0 AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND BSD-3-Clause AND MIT AND (MIT OR Apache-2.0) AND (MIT OR Zlib OR Apache-2.0) AND (Unlicense OR MIT) AND (Zlib OR Apache-2.0 OR MIT)
 
 #ExcludeArch: %%{ix86}
 URL: https://github.com/jthornber/thin-provisioning-tools
 #Source0: https://github.com/jthornber/thin-provisioning-tools/archive/thin-provisioning-tools-%%{version}.tar.gz
 Source0: https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}%{?version_suffix}.tar.gz
+Source1: dmpd132-vendor.tar.gz
 
-%if %{defined rhel}
+%if %{defined rhel} || 0%{?oreon}
 BuildRequires: rust-toolset
 %else
 BuildRequires: rust-packaging
@@ -42,8 +43,8 @@ are included and era check, dump, restore and invalidate to manage
 snapshot eras
 
 %prep
-%autosetup -p1 -n thin-provisioning-tools-%{version}%{?version_suffix}
-%cargo_prep
+%autosetup -p1 -n thin-provisioning-tools-%{version}%{?version_suffix} -a1
+%cargo_prep -v vendor
 
 # NOTE: Following could replace Cargo.toml patching, but some macros are not working well with it
 # Notably at least one of cargo_license_summary, cargo_license_summary, or cargo_vendor_manifest
@@ -130,5 +131,5 @@ echo %{version}-%{release} > VERSION
 #% {_sbindir}/thin_show_duplicates
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.1-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.2-1
+- Import

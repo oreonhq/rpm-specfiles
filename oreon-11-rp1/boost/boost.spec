@@ -16,7 +16,7 @@
 # All arches have mpich
 %bcond_without mpich
 
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon}
 %ifarch %{ix86}
     # No OpenMPI support on these arches
     %bcond_with openmpi
@@ -36,12 +36,6 @@
 
 %bcond_without python3
 
-%if %{with python3}
-# python-rpm-macros defines these in mock; fallback for spec parse / source-prep without macros.d
-%{!?python3_version: %global python3_version %(python3 -c "import sys; print('%d.%d' % sys.version_info[:2])" 2>/dev/null || echo 3.13)}
-%{!?python3_version_nodots: %global python3_version_nodots %(python3 -c "import sys; print('%d%d' % sys.version_info[:2])" 2>/dev/null || echo 313)}
-%endif
-
 %ifnarch %{ix86} x86_64
   %bcond_with quadmath
 %else
@@ -58,7 +52,7 @@ Name: boost
 %global real_name boost
 Summary: The free peer-reviewed portable C++ source libraries
 Version: 1.90.0
-Release: 6%{?dist}
+Release: 7%{?dist}
 License: BSL-1.0 AND MIT AND Python-2.0.1
 
 # Replace each . with _ in %%{version}
@@ -138,7 +132,6 @@ BuildRequires: bzip2-devel
 BuildRequires: zlib-devel
 BuildRequires: xz-devel
 %if %{with python3}
-BuildRequires: python-rpm-macros
 BuildRequires: python3-devel
 BuildRequires: python3-numpy
 %endif
@@ -148,6 +141,7 @@ BuildRequires: libquadmath-devel
 %endif
 BuildRequires: bison
 BuildRequires: libzstd-devel
+BuildRequires: which
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1541035
 Patch0: boost-1.81.0-build-optflags.patch
@@ -198,6 +192,7 @@ variables.
 
 %package charconv
 Summary: Run-time component of boost charconv library
+License: BSL-1.0 AND (BSL-1.0 OR Apache-2.0 WITH LLVM-exception)
 
 %description charconv
 
@@ -206,6 +201,7 @@ in C++11.
 
 %package chrono
 Summary: Run-time component of boost chrono library
+License: BSL-1.0 AND (MIT OR NCSA)
 Obsoletes: boost-system < 1.90.0
 Conflicts: boost-system < 1.90.0
 
@@ -300,6 +296,7 @@ directories.
 
 %package graph
 Summary: Run-time component of boost graph library
+License: BSL-1.0 AND (BSL-1.0 OR MIT)
 Requires: %{name}-regex%{?_isa} = %{version}-%{release}
 
 %description graph
@@ -318,6 +315,7 @@ stream buffers and i/o filters.
 
 %package json
 Summary: Run-time component of boost json library
+License: BSL-1.0 OR Apache-2.0
 Requires: %{name}-container%{?_isa} = %{version}-%{release}
 
 %description json
@@ -453,6 +451,7 @@ program execution monitoring.
 
 %package thread
 Summary: Run-time component of boost thread library
+License: BSL-1.0 AND (MIT OR NCSA)
 Obsoletes: boost-system < 1.90.0
 Conflicts: boost-system < 1.90.0
 
@@ -512,6 +511,7 @@ preprocessor functionality.
 
 %package devel
 Summary: The Boost C++ headers and shared development libraries
+License: BSL-1.0 AND MIT AND (MIT OR NCSA) AND (BSL-1.0 OR MIT) AND HPND-sell-variant AND Zlib AND Apache-2.0 AND (BSL-1.0 OR Apache-2.0) AND (BSL-1.0 OR Apache-2.0 WITH LLVM-exception)
 Requires: %{name}%{?_isa} = %{version}-%{release}
 Requires: libicu-devel%{?_isa}
 %if %{with quadmath}
@@ -537,7 +537,7 @@ Static Boost C++ libraries.
 
 %package doc
 Summary: HTML documentation for the Boost C++ libraries
-%if 0%{?rhel} >= 6
+%if 0%{?rhel} >= 6 || 0%{?oreon}
 BuildArch: noarch
 %endif
 
@@ -548,7 +548,7 @@ web page (http://www.boost.org/doc/libs/%{version_enc}).
 
 %package examples
 Summary: Source examples for the Boost C++ libraries
-%if 0%{?rhel} >= 6
+%if 0%{?rhel} >= 6 || 0%{?oreon}
 BuildArch: noarch
 %endif
 Requires: %{name}-devel = %{version}-%{release}
@@ -1372,5 +1372,5 @@ fi
 %{_mandir}/man1/b2.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.90.0-6
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.90.0-7
+- Import

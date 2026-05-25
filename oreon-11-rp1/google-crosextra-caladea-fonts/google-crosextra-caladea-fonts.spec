@@ -48,5 +48,5 @@ cp -p %{SOURCE3} .
 %fontfiles
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.002-0.22.20130214
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:1.002-0.22.20130214
+- Import

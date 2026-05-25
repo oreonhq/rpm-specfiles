@@ -1,6 +1,6 @@
 %global checkout 20160912git
 
-%if !0%{?fedora} || 0%{?fedora} >= 44
+%if !0%{?fedora} || 0%{?fedora} >= 44 || 0%{?oreon}
 %bcond remove_german_man8 1
 %bcond remove_french_man8 1
 %else
@@ -15,7 +15,8 @@ Release: 0.77.%{checkout}%{?dist}
 License: GPL-2.0-or-later
 URL: http://sourceforge.net/projects/net-tools/
 
-Source0: https://github.com/Distrotech/net-tools/archive/master.tar.gz#/net-tools-%{version}.%{checkout}.tar.gz
+# git archive --format=tar --remote=git://git.code.sf.net/p/net-tools/code master | xz > net-tools-%%{version}.%%{checkout}.tar.xz
+Source0: net-tools-%{version}.%{checkout}.tar.xz
 Source1: net-tools-config.h
 Source2: net-tools-config.make
 Source3: ether-wake.c
@@ -174,5 +175,5 @@ install -D -p -m 644 %{SOURCE9} %{buildroot}%{_unitdir}/arp-ethers.service
 %attr(0644,root,root)   %{_unitdir}/arp-ethers.service
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0-0.77.
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0-0.77.20160912git
+- Import

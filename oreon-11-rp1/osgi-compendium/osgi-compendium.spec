@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           osgi-compendium
 Version:        7.0.0
@@ -26,7 +26,7 @@ Obsoletes:      %{name}-javadoc < 7.0.0-38
 OSGi Compendium, Interfaces and Classes for use in compiling bundles.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # Delete pre-built binaries
 rm -r org
@@ -81,5 +81,5 @@ rm -r src/main/java/org/osgi/service/transaction/control/jpa
 %doc about.html
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.0-1
+- Import

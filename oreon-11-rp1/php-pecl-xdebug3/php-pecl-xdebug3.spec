@@ -16,35 +16,33 @@
 %global pie_vend   xdebug
 %global pie_proj   xdebug
 %global pecl_name  xdebug
+%global gh_commit  af9280fff4eeb014309f8f66633c5e8f40e88b04
+%global gh_short   %(c=%{gh_commit}; echo ${c:0:7})
 
 # version/release
 %global upstream_version 3.5.1
 #global upstream_prever  alpha3
 #global upstream_lower   %%(echo %%{upstream_prever} | tr '[:upper:]' '[:lower:]')
-
-# Github forge
-%global gh_vend     %{pecl_name}
-%global gh_proj     %{pecl_name}
-%global forgeurl    https://github.com/%{gh_vend}/%{gh_proj}
-%global tag         %{upstream_version}%{?upstream_prever}
+%global sources          src
 
 # XDebug should be loaded after opcache
 %global ini_name  15-%{pecl_name}.ini
 
 Name:           %{php_base}-pecl-xdebug3
 Summary:        Provides functions for function traces and profiling
-License:        Xdebug-1.03
 Version:        %{upstream_version}%{?upstream_prever:~%{upstream_lower}}
-Release:        3%{?dist}
-%forgemeta
+Release:        1%{?dist}
+Source0:        https://github.com/%{pecl_name}/%{pecl_name}/archive/%{gh_commit}/%{pecl_name}-%{upstream_version}%{?upstream_prever}-%{gh_short}.tar.gz
+
+License:        Xdebug-1.03
 URL:            https://xdebug.org/
-Source0:        %{forgesource}
 
 ExcludeArch:    %{ix86}
 
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires: (%{php_base}-devel >= 8.0 with %{php_base}-devel < 8.6)
+BuildRequires:  php-pear
 BuildRequires:  libtool
 BuildRequires:  %{php_base}-xml
 BuildRequires:  %{php_base}-soap
@@ -98,14 +96,20 @@ Documentation: https://xdebug.org/docs/
 
 
 %prep
-%forgesetup
+%setup -qc
+mv %{pecl_name}-%{gh_commit} %{sources}
+mv %{sources}/package.xml .
 
+sed -e '/LICENSE/s/role="doc"/role="src"/' -i package.xml
+
+pushd %{sources}
 # Check extension version
 ver=$(sed -n '/XDEBUG_VERSION/{s/.* "//;s/".*$//;p}' php_xdebug.h)
 if test "$ver" != "%{upstream_version}%{?upstream_prever}%{?gh_date:-dev}"; then
    : Error: Upstream XDEBUG_VERSION version is ${ver}, expecting %{upstream_version}%{?upstream_perver}%{?gh_date:-dev}.
    exit 1
 fi
+popd
 
 cat << 'EOF' >%{ini_name}
 ; Enable xdebug extension module
@@ -114,12 +118,13 @@ zend_extension=%{pecl_name}.so
 ; Configuration
 ; See https://xdebug.org/docs/all_settings
 EOF
-sed -e '1,2d' %{pecl_name}.ini >>%{ini_name}
+sed -e '1,2d' %{sources}/%{pecl_name}.ini >>%{ini_name}
 
 head -n15 <%{ini_name}
 
 
 %build
+cd %{sources}
 %{__phpize}
 sed -e 's/INSTALL_ROOT/DESTDIR/' -i build/Makefile.global
 
@@ -132,12 +137,24 @@ sed -e 's/INSTALL_ROOT/DESTDIR/' -i build/Makefile.global
 
 
 %install
+
+: Install package registration file
+install -Dpm 644 package.xml %{buildroot}%{pecl_xmldir}/%{name}.xml
+
 : Install config file
 install -Dpm 644 %{ini_name} %{buildroot}%{php_inidir}/%{ini_name}
 
 
 : Install the extension
+cd %{sources}
 %make_install
+
+: Install the Documentation
+for i in $(grep 'role="doc"' ../package.xml | sed -e 's/^.*name="//;s/".*$//')
+do
+  [ -f contrib/$i ] && j=contrib/$i || j=$i
+  install -Dpm 644 $j %{buildroot}%{pecl_docdir}/%{pecl_name}/$j
+done
 
 
 %check
@@ -171,6 +188,7 @@ if [ -s err.log ]; then
 fi
 
 %if %{with tests}
+cd %{sources}
 : Upstream test suite
 
 # see https://bugs.xdebug.org/view.php?id=2048
@@ -189,16 +207,14 @@ TEST_PHP_ARGS="-n $modules -d zend_extension=%{buildroot}%{php_extdir}/%{pecl_na
 
 
 %files
-%license LICENSE
-%doc composer.json
-%doc CREDITS
-%doc CONTRIBUTING.rst
-%doc README.rst
+%license %{sources}/LICENSE
+%doc %{pecl_docdir}/%{pecl_name}
+%{pecl_xmldir}/%{name}.xml
 
 %config(noreplace) %{php_inidir}/%{ini_name}
 %{php_extdir}/%{pecl_name}.so
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{upstream_version}%{?upstream_prever:~%{upstream_lower}}-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.1-1
+- Import

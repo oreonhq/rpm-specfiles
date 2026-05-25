@@ -57,7 +57,7 @@ autoreconf -i
 
 cp %{SOURCE2} .
 cp %{SOURCE3} .
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 mv README.Fedora README.RHEL
 %endif
 
@@ -107,7 +107,7 @@ rm %{name}.sysconfig
 
 %files
 %doc AUTHORS ChangeLog COPYING examples/ IAFA-PACKAGE NEWS README TODO README.watchdog.ipmi
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %doc README.RHEL
 %else
 %doc README.Fedora
@@ -127,5 +127,5 @@ rm %{name}.sysconfig
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.16-12
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.16-12
+- Import

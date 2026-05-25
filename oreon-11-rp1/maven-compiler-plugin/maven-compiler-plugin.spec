@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           maven-compiler-plugin
 Version:        3.12.1
@@ -42,7 +42,7 @@ Obsoletes:      %{name}-javadoc < 3.12.1-13
 The Compiler Plugin is used to compile the sources of your project.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # Replace path to junit in a test case with the system wide .jar
 sed -i 's|localRepository,\ "junit/junit/3.8.1/junit-3.8.1.jar"|"%(find-jar junit || find-jar javapackages-bootstrap/junit)"|' src/test/java/org/apache/maven/plugin/compiler/CompilerMojoTestCase.java
@@ -59,5 +59,5 @@ export JAVA_HOME=%{java_home}
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.12.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.12.1-1
+- Import

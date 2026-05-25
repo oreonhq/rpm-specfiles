@@ -73,7 +73,7 @@ Requires:       %{name} = %{version}-%{release}
 %{summary}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # Copy the custom ant task into place
 mkdir -p tools/org/apache/xerces/util
@@ -138,5 +138,5 @@ cp -pr data %{buildroot}%{_datadir}/%{name}
 %{_datadir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.12.2-1
+- Import

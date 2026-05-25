@@ -9,13 +9,13 @@
 
 %global gomodulesmode GO111MODULE=on
 
-%if %{defined fedora}
+%if %{defined fedora} || 0%{?oreon}
 %define build_with_btrfs 1
 # qemu-system* isn't packageed for CentOS Stream / RHEL
 %define qemu 1
 # bats is included in the default repos (No epel/copr etc.)
 %define distro_bats 1
-%if %{?fedora} >= 43
+%if %{?fedora} >= 43 || 0%{?oreon}
 %define sequoia 1
 %endif
 %endif
@@ -28,7 +28,7 @@
 %endif
 
 # Only RHEL and CentOS Stream rpms are built with fips-enabled go compiler
-%if %{defined rhel}
+%if %{defined rhel} || 0%{?oreon}
 %define fips_enabled 1
 %endif
 
@@ -63,7 +63,7 @@ Epoch: 5
 # If that's what you're reading, Version must be 0, and will be updated by Packit for
 # copr and koji builds.
 # If you're reading this on dist-git, the version is automatically filled in by Packit.
-Version: 5.8.1
+Version: 5.8.2
 # The `AND` needs to be uppercase in the License for SPDX compatibility
 License: Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MIT AND MPL-2.0
 Release: %autorelease
@@ -87,7 +87,7 @@ BuildRequires: glibc-devel
 BuildRequires: glibc-static
 BuildRequires: golang
 BuildRequires: git-core
-%if %{undefined rhel} || 0%{?rhel} >= 10
+%if %{undefined rhel} || 0%{?rhel} >= 10 || 0%{?oreon}
 BuildRequires: go-rpm-macros
 %endif
 BuildRequires: gpgme-devel
@@ -104,7 +104,7 @@ BuildRequires: systemd
 BuildRequires: systemd-devel
 Requires: catatonit
 Requires: conmon >= 2:2.1.7-2
-%if %{defined fedora} && 0%{?fedora} >= 40
+%if %{defined fedora} && 0%{?fedora} >= 40 || 0%{?oreon}
 # TODO: Remove the f40 conditional after a few releases to keep conditionals to
 # a minimum
 # Ref: https://bugzilla.redhat.com/show_bug.cgi?id=2269148
@@ -227,7 +227,7 @@ https://docs.podman.io/en/latest/markdown/podman-machine.1.html
 sed -i 's;@@PODMAN@@\;$(BINDIR);@@PODMAN@@\;%{_bindir};' Makefile
 
 # cgroups-v1 is supported on rhel9
-%if 0%{?rhel} == 9
+%if 0%{?rhel} == 9 || 0%{?oreon}
 sed -i '/DELETE ON RHEL9/,/DELETE ON RHEL9/d' libpod/runtime.go
 %endif
 
@@ -254,7 +254,7 @@ LDFLAGS="-X %{ld_libpod}/define.buildInfo=${SOURCE_DATE_EPOCH:-$(date +%s)} \
 
 # This variable will be set by Packit actions. See .packit.yaml in the root dir
 # of the repo (upstream as well as Fedora dist-git).
-GIT_COMMIT="c6077f645788743258a1a749f8005b4fb3cbe533"
+GIT_COMMIT="5b263b5f5b48004a87caac44e67349a8266d9ef4"
 LDFLAGS="$LDFLAGS -X %{ld_libpod}/define.gitCommit=$GIT_COMMIT"
 
 # build rootlessport first
@@ -354,8 +354,8 @@ ln -s ../qemu-kvm %{buildroot}%{_libexecdir}/%{name}/qemu-system-%{arch}
 %{_systemdusergeneratordir}/%{name}-user-generator
 # iptables modules are only needed with iptables-legacy,
 # as of f41 netavark will default to nftables so do not load unessary modules
-# https://fedoraproject.org/wiki/Changes/NetavarkNftablesDefault
-%if %{defined fedora} && 0%{?fedora} < 41
+# 
+%if %{defined fedora} && 0%{?fedora} < 41 || 0%{?oreon}
 %{_modulesloaddir}/%{name}-iptables.conf
 %endif
 
@@ -394,5 +394,5 @@ ln -s ../qemu-kvm %{buildroot}%{_libexecdir}/%{name}/qemu-system-%{arch}
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.8.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5:5.8.2-1
+- Import

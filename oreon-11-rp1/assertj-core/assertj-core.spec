@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           assertj-core
 Version:        3.26.3
@@ -29,7 +29,7 @@ A rich and intuitive set of strongly-typed assertions to use for unit testing
 (either with JUnit or TestNG).
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_remove_plugin -r :maven-javadoc-plugin
 %pom_remove_plugin -r :maven-enforcer-plugin
@@ -72,5 +72,5 @@ A rich and intuitive set of strongly-typed assertions to use for unit testing
 %license LICENSE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.26.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.26.3-1
+- Import

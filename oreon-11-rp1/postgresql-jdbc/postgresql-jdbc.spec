@@ -48,7 +48,7 @@
 
 Summary:        JDBC driver for PostgreSQL
 Name:           postgresql-jdbc
-Version:        42.7.10
+Version:        42.7.8
 Release:        %autorelease
 License:        BSD-2-Clause
 URL:            https://jdbc.postgresql.org/
@@ -86,16 +86,14 @@ PostgreSQL is an advanced Object-Relational database management system. The
 postgresql-jdbc package includes the .jar files needed for Java programs to
 access a PostgreSQL database.
 
-%package        tests
+%package tests
 Summary:        Tests for %{name}
-# NOTE Do not use yet, we would need special configuration for CI tests.
-# Requires:       postgresql-test-rpm-macros-any
 
-%description    tests
+%description tests
 This package contains tests for %{name}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n postgresql-%{version}-jdbc-src
 
 # remove any binary libs
 find -type f \( -name "*.jar" -or -name "*.class" \) -delete
@@ -163,5 +161,5 @@ install -m 755 -D -t %{buildroot}%{_libexecdir}/%{name}-tests %{SOURCE1}
 %{_libexecdir}/%{name}-tests
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 42.7.10-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 42.7.8-1
+- Import

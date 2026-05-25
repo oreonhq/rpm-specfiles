@@ -2,7 +2,7 @@
 %global debug_package %{nil}
 
 # Build- and run-time version of OpenJDK Java
-%if 0%{?fedora} || 0%{?rhel} > 9
+%if 0%{?fedora} || 0%{?rhel} > 9 || 0%{?oreon}
 %global java_version 21
 %else
 %global java_version 17
@@ -235,5 +235,5 @@ exit 0
 %{_datadir}/%{name}/javaws.src.zip
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.8-11
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.8-11
+- Import

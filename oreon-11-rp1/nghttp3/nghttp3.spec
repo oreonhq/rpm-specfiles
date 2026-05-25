@@ -76,4 +76,5 @@ rm -f %{buildroot}%{_docdir}/nghttp3/README.rst
 
 
 %changelog
-%autochangelog
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.15.0-1
+- Import

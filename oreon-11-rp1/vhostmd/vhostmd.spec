@@ -99,7 +99,7 @@ rm $RPM_BUILD_ROOT%{_sysconfdir}/vhostmd/metric.dtd
 rm $RPM_BUILD_ROOT%{_sysconfdir}/vhostmd/vhostmd.conf
 cp %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/vhostmd/vhostmd.conf
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 # Remove Perl script (https://bugzilla.redhat.com/show_bug.cgi?id=749875)
 rm $RPM_BUILD_ROOT%{_datadir}/vhostmd/scripts/pagerate.pl
 %endif
@@ -136,7 +136,7 @@ rm $RPM_BUILD_ROOT%{_datadir}/vhostmd/scripts/pagerate.pl
 
 %dir %{_datadir}/vhostmd
 %dir %{_datadir}/vhostmd/scripts
-%if !0%{?rhel}
+%if !0%{?rhel} || 0%{?oreon}
 %{_datadir}/vhostmd/scripts/pagerate.pl
 %endif
 
@@ -159,5 +159,5 @@ rm $RPM_BUILD_ROOT%{_datadir}/vhostmd/scripts/pagerate.pl
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2-1
+- Import

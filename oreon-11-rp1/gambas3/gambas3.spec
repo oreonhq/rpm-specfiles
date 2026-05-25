@@ -21,7 +21,7 @@
 %global qt6 1
 
 # Qt4 webkit is abandoned in Fedora 44+
-%if 0%{?fedora} <= 43
+%if 0%{?fedora} <= 43 || 0%{?oreon}
 %global qt4webkit 1
 %else
 %global qt4webkit 0
@@ -29,8 +29,8 @@
 
 Name:		gambas3
 Summary:	IDE based on a basic interpreter with object extensions
-Version:	3.21.3
-Release:	2%{?dist}
+Version:	3.21.6
+Release:	1%{?dist}
 License:	GPL-1.0-or-later
 URL:		http://gambas.sourceforge.net/
 Source0:	https://gitlab.com/gambas/gambas/-/archive/%{version}/gambas-%{version}.tar.bz2
@@ -39,7 +39,7 @@ BuildRequires:	gcc, gcc-c++
 BuildRequires:	automake, autoconf, SDL-devel, SDL_mixer-devel
 BuildRequires:	SDL2-devel, SDL2_mixer-devel, SDL2_image-devel, SDL2_ttf-devel
 BuildRequires:	mariadb-connector-c-devel, postgresql-server-devel
-%if 0%{?fedora} >= 35
+%if 0%{?fedora} >= 35 || 0%{?oreon}
 BuildRequires:	postgresql-private-devel
 %else
 BuildRequires:	libpq-devel
@@ -74,7 +74,7 @@ BuildRequires:	poppler-cpp-devel
 # We need this since linux/videodev.h is dead
 BuildRequires:	libv4l-devel
 BuildRequires:	openssl-devel, gmp-devel, glew-devel
-%if 0%{?fedora} >= 41
+%if 0%{?fedora} >= 41 || 0%{?oreon}
 BuildRequires:	openssl-devel-engine
 %endif
 BuildRequires:	gstreamer1-plugins-base-devel gstreamer1-devel
@@ -100,9 +100,6 @@ Patch5:		%{name}-3.14.1-gst1.patch
 
 # If we're using C++20 then we can't override toupper/tolower, it is not allowed.
 Patch6:		gambas3-3.19.4-c++20-do-not-try-to-override-std-functions.patch
-
-# Fix new getText() usage in Poppler 26
-Patch7:		gambas-3.21.2-poppler26.patch
 
 %description
 Gambas3 is a free development environment based on a Basic interpreter
@@ -1212,7 +1209,6 @@ Requires:	%{name}-gb-xml = %{version}-%{release}
 %patch -P 2 -p1 -b .noliconv
 %patch -P 5 -p1 -b .gst1
 %patch -P 6 -p1 -b .c++20
-%patch -P 7 -p1 -b .poppler26
 for i in `find . |grep acinclude.m4`; do
 	sed -i 's|$AM_CFLAGS -O3|$AM_CFLAGS|g' $i
 	sed -i 's|$AM_CXXFLAGS -Os -fno-omit-frame-pointer|$AM_CXXFLAGS|g' $i
@@ -1234,7 +1230,7 @@ chmod -x main/lib/option/main.c
 %build
 # This is handled in a cleaner way with F38+, see:
 # https://src.fedoraproject.org/rpms/redhat-rpm-config/blob/rawhide/f/buildflags.md#source-fortification
-%if 0%{?fedora} <= 37
+%if 0%{?fedora} <= 37 || 0%{?oreon}
 # Gambas can't deal with -Wp,-D_FORTIFY_SOURCE=2 (or 3)
 MY_CFLAGS=`echo %{build_cflags} | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g' | sed -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3//g'`
 %endif
@@ -1286,7 +1282,7 @@ MY_CFLAGS=`echo %{build_cflags} | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g' | sed -e
 	--with-xml-libraries=%{_libdir} \
 	--with-xslt-libraries=%{_libdir} \
 	--with-zlib-libraries=%{_libdir} \
-%if %{?fedora} <= 37
+%if %{?fedora} <= 37 || 0%{?oreon}
 	AM_CFLAGS="$MY_CFLAGS" AM_CXXFLAGS="$MY_CFLAGS" CC="%{build_cc} $MY_CFLAGS"
 %else
 	AM_CFLAGS="%{build_cflags}" AM_CXXFLAGS="%{build_cflags}" CC="%{build_cc} %{build_cflags}"
@@ -2049,5 +2045,5 @@ install -m 0644 -p main/mime/application-x-gambas3.xml %{buildroot}%{_datadir}/m
 %{_datadir}/%{name}/info/gb.xml.xslt.*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.21.3-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.21.6-1
+- Import

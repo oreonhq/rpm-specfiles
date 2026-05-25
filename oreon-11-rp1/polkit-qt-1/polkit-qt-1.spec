@@ -46,7 +46,7 @@ Polkit-qt is a library that lets developers use the PolicyKit API
 through a nice Qt-styled API.
 
 %package -n polkit-qt6-1-devel
-Summary: Development files for PolicyKit Qt6 bindings
+Summary: Development files for PolicyKit Qt5 bindings
 Requires: polkit-qt6-1%{?_isa} = %{version}-%{release}
 %description -n polkit-qt6-1-devel
 %{summary}.
@@ -108,5 +108,5 @@ Requires: polkit-qt6-1%{?_isa} = %{version}-%{release}
 %{_libdir}/cmake/PolkitQt6-1/
 
 %changelog
-* Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.201.1-1
-- Import from Fedora dist-git f43 for Oreon 11
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.201.1-1
+- Import

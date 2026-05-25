@@ -43,5 +43,5 @@ R-srpm-macros will pull in for R packages only.
 %{_rpmconfigdir}/R-files.R
 
 %changelog
-* Fri May 08 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.7-1
-- prep/files fixes
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.7-1
+- Import

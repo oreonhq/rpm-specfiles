@@ -30,8 +30,8 @@ BuildRequires: xorg-x11-server-devel >= 1.14.0
 BuildRequires: libudev-devel libevdev-devel libinput-devel >= 0.6.0-3
 BuildRequires: xorg-x11-util-macros
 
-Requires: Xorg %(if command -v xserver-sdk-abi-requires >/dev/null 2>&1; then xserver-sdk-abi-requires ansic; else echo 'xorg-x11-server(X-ABI-ANSIC)'; fi)
-Requires: Xorg %(if command -v xserver-sdk-abi-requires >/dev/null 2>&1; then xserver-sdk-abi-requires xinput; else echo 'xorg-x11-server(X-ABI-XINPUT)'; fi)
+Requires: Xorg %(xserver-sdk-abi-requires ansic)
+Requires: Xorg %(xserver-sdk-abi-requires xinput)
 Requires: xkeyboard-config
 Requires: libinput >= 0.21.0
 
@@ -80,5 +80,5 @@ Xorg X11 libinput input driver development files.
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-4
+- Import

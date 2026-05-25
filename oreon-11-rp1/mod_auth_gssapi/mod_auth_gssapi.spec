@@ -14,7 +14,7 @@ Requires:       httpd-mmn = %{_httpd_mmn}
 Requires:       krb5-libs >= 1.11.5
 
 # If you're reading this: NTLM is insecure.  Migrate off it.
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %else
 BuildRequires: gssntlmssp-devel
 %endif
@@ -49,5 +49,5 @@ install -m 644 10-auth_gssapi.conf %{buildroot}%{_httpd_modconfdir}
 %{_httpd_moddir}/mod_auth_gssapi.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.5-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.5-1
+- Import

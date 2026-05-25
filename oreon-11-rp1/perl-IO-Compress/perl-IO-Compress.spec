@@ -1,19 +1,19 @@
 # Run time expensive tests
 %bcond_without long_tests
 # Run optional test
-%if ! (0%{?rhel})
+%if ! (0%{?rhel}) || 0%{?oreon}
 %bcond_without perl_IO_Compress_enables_optional_test
 %else
 %bcond_with perl_IO_Compress_enables_optional_test
 %endif
 
 # Dependency version if different to this package version
-%global depver 2.218
+#global depver 2.201
 
 %{?perl_default_filter}
 
 Name:           perl-IO-Compress
-Version:        2.219
+Version:        2.217
 Release:        1%{?dist}
 Summary:        Read and write compressed data
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
@@ -178,7 +178,7 @@ export TEST_SKIP_VERSION_CHECK=1
 make test COMPRESS_ZLIB_RUN_%{?with_long_tests:ALL}%{!?with_long_tests:MOST}=1
 
 %files
-%doc Changes README SECURITY.md examples/*
+%doc Changes README examples/*
 %{_bindir}/streamzip
 %{_bindir}/zipdetails
 %{perl_privlib}/Compress/
@@ -211,5 +211,5 @@ make test COMPRESS_ZLIB_RUN_%{?with_long_tests:ALL}%{!?with_long_tests:MOST}=1
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.219-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.217-1
+- Import

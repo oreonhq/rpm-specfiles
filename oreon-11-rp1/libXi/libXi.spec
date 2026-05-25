@@ -4,8 +4,8 @@
 
 Summary: X.Org X11 libXi runtime library
 Name: libXi
-Version: 1.8.2
-Release: 4%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 1.8.3
+Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT-open-group AND SMLNJ AND MIT
 URL: http://www.x.org
 
@@ -74,5 +74,5 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/*.la
 %{_mandir}/man3/*.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.2-4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.3-1
+- Import

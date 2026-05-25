@@ -1,5 +1,5 @@
 # Do not build with zstd for RHEL < 8
-%if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?suse_version} && 0%{?suse_version} < 1500)
+%if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?suse_version} && 0%{?suse_version} < 1500) || 0%{?oreon}
 %bcond_with zstd
 %else
 %bcond_without zstd
@@ -66,7 +66,7 @@ The drpm-devel package provides a C interface (drpm.h) for the drpm library.
 %check
 %ctest
 
-%if (0%{?rhel} && 0%{?rhel} < 8) || 0%{?suse_version}
+%if (0%{?rhel} && 0%{?rhel} < 8) || 0%{?suse_version} || 0%{?oreon}
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
@@ -83,5 +83,5 @@ The drpm-devel package provides a C interface (drpm.h) for the drpm library.
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.3-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.3-2
+- Import

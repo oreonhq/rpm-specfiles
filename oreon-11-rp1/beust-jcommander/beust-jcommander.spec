@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           beust-jcommander
 Version:        1.82
@@ -32,7 +32,7 @@ JCommander is a very small Java framework that makes it trivial to
 parse command line parameters (with annotations).
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 chmod -x license.txt
 
 cp -p %SOURCE1 pom.xml
@@ -54,5 +54,5 @@ cp -p %SOURCE1 pom.xml
 %doc README.markdown
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.82-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.82-1
+- Import

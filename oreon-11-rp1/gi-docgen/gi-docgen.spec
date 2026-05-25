@@ -97,6 +97,9 @@ Source:         %{url}/-/archive/%{version}/gi-docgen-%{version}.tar.bz2
 # or stand-in local system fonts.
 Patch:          0001-Downstream-only-use-local-packaged-fonts-instead-of-.patch
 
+BuildSystem:            pyproject
+BuildOption(install):   gidocgen
+
 BuildArch:      noarch
 
 BuildRequires:  python3dist(pytest)
@@ -264,5 +267,5 @@ cp -rp examples '%{buildroot}%{_pkgdocdir}/'
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026.1-1
+- Import

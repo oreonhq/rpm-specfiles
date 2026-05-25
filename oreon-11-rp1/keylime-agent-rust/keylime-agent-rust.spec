@@ -5,7 +5,7 @@
 
 %global crate keylime_agent
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 # RHEL: Use bundled deps as it doesn't ship Rust libraries
 %global bundled_rust_deps 1
 %global __brp_mangle_shebangs_exclude_from ^/usr/src/debug/.*$
@@ -80,7 +80,7 @@ Requires:       util-linux-core
 
 # The keylime-base package provides the keylime user creation. It is available
 # from Fedora 36
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || 0%{?oreon}
 Requires:       keylime-base
 %endif
 
@@ -125,7 +125,7 @@ Requires: keylime-agent-rust-ima-emulator%{?_isa} = %{version}-%{release}
 
 # The keylime-base package provides the keylime user creation. It is available
 # from Fedora 36
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || 0%{?oreon}
 Requires:       keylime-base
 %endif
 
@@ -147,7 +147,7 @@ Requires:       keylime-agent-rust-common = %{version}-%{release}
 
 # The keylime-base package provides the keylime user creation. It is available
 # from Fedora 36
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || 0%{?oreon}
 Requires:       keylime-base
 %endif
 
@@ -273,5 +273,5 @@ chown -R keylime:keylime %{_sysconfdir}/keylime
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.9-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.9-1
+- Import

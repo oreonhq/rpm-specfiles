@@ -5,16 +5,16 @@
 %global _python_bytecompile_errors_terminate_build 0
 
 Name:           qt-creator
-Version:        19.0.0
-Release:        0.2%{?dist}
+Version:        20.0.0
+Release:        0.3%{?prerelease:.%prerelease}%{?dist}
 Summary:        Cross-platform IDE for Qt
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 ExcludeArch:    %{ix86}
 
 License:        GPL-3.0-only WITH Qt-GPL-exception-1.0
 URL:            https://www.qt.io/ide/
-Source0:        https://download.qt.io/%{?prerelease:development}%{?!prerelease:official}_releases/qtcreator/19.0/%{version}%{?prerelease:-%prerelease}/qt-creator-opensource-src-%{version}%{?prerelease:-%prerelease}.tar.xz
+Source0:        https://download.qt.io/%{?prerelease:development}%{?!prerelease:official}_releases/qtcreator/20.0/%{version}%{?prerelease:-%prerelease}/qt-creator-opensource-src-%{version}%{?prerelease:-%prerelease}.tar.xz
 Source1:        qt-creator-Fedora-privlibs
 
 # Fix leading whitespace in desktop file
@@ -23,8 +23,6 @@ Patch1:         qt-creator_desktop.patch
 Patch2:         qt-creator_qmake-names.patch
 # Fix debuginfod detection
 Patch3:         qt-creator-debuginfod.patch
-# Add ppc64le and s390x to OsArch enum
-Patch4:         qt-creator-osarch.patch
 
 BuildRequires:  chrpath
 BuildRequires:  cmake
@@ -174,7 +172,7 @@ rm -rf src/plugins/help/qlitehtml/litehtml
 
 %check
 desktop-file-validate %{buildroot}/%{_datadir}/applications/org.qt-project.qtcreator.desktop
-%if 0%{?fedora} || 0%{?rhel} > 9
+%if 0%{?fedora} || 0%{?rhel} > 9 || 0%{?oreon}
 appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/org.qt-project.qtcreator.appdata.xml
 %endif
 chrpath -l %{buildroot}%{_bindir}/qtcreator
@@ -222,5 +220,5 @@ diff -u %{SOURCE1} $outfile
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 19.0.0-0.2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20.0.0-0.3
+- Import

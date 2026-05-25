@@ -2045,5 +2045,5 @@ rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/*.tlpobj
 %doc %{_texmf_main}/doc/xelatex/xunicode/
 
 %changelog
-* Sat May 23 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12:svn77682-3
-- Import TeX Live 2025 split from f44 for Oreon 11
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12:svn78568-3
+- Import

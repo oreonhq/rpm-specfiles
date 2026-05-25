@@ -1,4 +1,4 @@
-From 8daa3995270331234f12a469f7e000c9cd57d71e Mon Sep 17 00:00:00 2001
+From 7670a687918edb9eb12f40137d6099aa545414f1 Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Thu, 7 Jun 2018 17:43:52 -0500
 Subject: [PATCH] RH: reset default find_mutipaths value to off
@@ -14,7 +14,7 @@ Signed-off-by: Benjamin Marzinski <bmarzins@redhat.com>
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/libmultipath/defaults.h b/libmultipath/defaults.h
-index d80dd7d4..d112e0ad 100644
+index 134b690a..e2fe7ac4 100644
 --- a/libmultipath/defaults.h
 +++ b/libmultipath/defaults.h
 @@ -24,7 +24,7 @@
@@ -27,7 +27,7 @@ index d80dd7d4..d112e0ad 100644
  #define DEFAULT_DEV_LOSS_TMO	600
  #define DEFAULT_RETAIN_HWHANDLER RETAIN_HWHANDLER_ON
 diff --git a/multipath/multipath.conf.5.in b/multipath/multipath.conf.5.in
-index 11289fb2..6f97acfd 100644
+index ba291e11..b8389db3 100644
 --- a/multipath/multipath.conf.5.in
 +++ b/multipath/multipath.conf.5.in
 @@ -1227,7 +1227,7 @@ as non-multipath and passed on to upper layers.

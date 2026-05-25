@@ -1,13 +1,13 @@
 # Do not generate provides for private libraries
 %global __provides_exclude_from ^%{_libdir}/stunnel/.*$
 
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 %bcond_with libwrap
 %else
 %bcond_without libwrap
 %endif
 
-%if 0%{?rhel} >= 10
+%if 0%{?rhel} >= 10 || 0%{?oreon}
 %bcond openssl_engine 0
 %else
 %bcond openssl_engine 1
@@ -15,7 +15,7 @@
 
 Summary: A TLS-encrypting socket wrapper
 Name: stunnel
-Version: 5.75
+Version: 5.78
 Release: %autorelease
 License: GPL-2.0-or-later WITH stunnel-exception AND MIT
 URL: https://www.stunnel.org/
@@ -33,8 +33,6 @@ Source7: stunnel@.service
 Source99: pgp.asc
 # Apply patch stunnel-5.50-authpriv.patch
 Patch0:   stunnel-5.50-authpriv.patch
-# Apply patch stunnel-5.61-systemd-service.patch
-Patch1:   stunnel-5.61-systemd-service.patch
 # Use cipher configuration from crypto-policies
 # 
 # On Fedora, CentOS and RHEL, the system's crypto policies are the best
@@ -48,22 +46,19 @@ Patch3:   stunnel-5.69-system-ciphers.patch
 # crypto-policies unless a TLS minimum or maximum version are explicitly
 # specified in the stunnel configuration.
 Patch5:   stunnel-5.72-default-tls-version.patch
-# Apply patch stunnel-5.56-curves-doc-update.patch
-Patch6:   stunnel-5.56-curves-doc-update.patch
 # util-linux is needed for rename
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: gnupg2
 BuildRequires: openssl-devel, pkgconfig, util-linux
-%if %{with openssl_engine} && 0%{?fedora} >= 41
+%if %{with openssl_engine} && 0%{?fedora} >= 41 || 0%{?oreon}
 BuildRequires: openssl-devel-engine
 %endif
 BuildRequires: autoconf automake libtool
 %if %{with libwrap}
 Buildrequires: tcp_wrappers-devel
 %endif
-BuildRequires: /usr/bin/pod2man
-BuildRequires: /usr/bin/pod2html
+BuildRequires: pandoc
 # build test requirements
 BuildRequires: /usr/bin/nc, /usr/bin/lsof, /usr/bin/ps
 BuildRequires: python3 python3-cryptography openssl
@@ -159,5 +154,5 @@ fi
 %systemd_postun_with_restart %{name}.service
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.75-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.78-1
+- Import

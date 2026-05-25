@@ -13,6 +13,7 @@
 %global _with_static_uwac 1
 
 # Disable unwanted dependencies for RHEL
+%{!?rhel:%global _with_aom 1}
 %{!?rhel:%global _with_openh264 1}
 %{!?rhel:%global _with_sdl_client 1}
 %{!?rhel:%global _with_soxr 1}
@@ -23,16 +24,16 @@
 
 Name:           freerdp
 Epoch:          2
-Version:        3.24.0
-Release:        2%{?dist}
+Version:        3.26.0
+Release:        4%{?dist}
 Summary:        Free implementation of the Remote Desktop Protocol (RDP)
 
 # The effective license is Apache-2.0 but:
 # client/SDL/dialogs/font/* is OFL-1.1
 # uwac/libuwac/* is HPND
 # uwac/protocols/server-decoration.xml is LGPL-2.1-or-later
-# winpr/libwinpr/ncrypt/pkcs11-headers/pkcs11.h is LicenseRef-Fedora-Public-Domain
-License:        Apache-2.0 AND HPND AND LGPL-2.1-or-later AND LicenseRef-Fedora-Public-Domain AND OFL-1.1
+# winpr/libwinpr/ncrypt/pkcs11-headers/pkcs11.h is LicenseRef-Public-Domain
+License:        Apache-2.0 AND HPND AND LGPL-2.1-or-later AND LicenseRef-Public-Domain AND OFL-1.1
 URL:            http://www.freerdp.com/
 
 # The license of the winpr/libwinpr/crt/unicode_builtin.c file is not allowed.
@@ -41,10 +42,8 @@ URL:            http://www.freerdp.com/
 Source0:        FreeRDP-%{version}-repack.tar.gz
 Source1:        freerdp_download_and_repack.sh
 
-# https://github.com/FreeRDP/FreeRDP/pull/12484
-# Fix multiple bugs in NTLM auth which break RDP installs and GNOME
-# remote desktop
-Patch:          0001-winpr-sam-fix-reading-SAM-entries.patch
+# Fix TestNTLM with OpenSSL without legacy provider
+Patch0:         https://github.com/FreeRDP/FreeRDP/commit/e9b95a5a3cf6a182837773b92c825f48df953821.patch#/FreeRDP-e9b95a5.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -79,21 +78,26 @@ BuildRequires:  cmake(json-c)
 # Fixed in https://src.fedoraproject.org/rpms/uriparser/c/1b07302bfc80983fbf84283783370e8338d36429
 %{?_with_uriparser:BuildRequires:  (cmake(uriparser) and uriparser-devel)}
 
+%{?_with_aom:BuildRequires:  pkgconfig(aom)}
 BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(krb5)
 BuildRequires:  pkgconfig(fdk-aac)
 BuildRequires:  pkgconfig(fuse3)
+BuildRequires:  pkgconfig(libcbor)
+BuildRequires:  pkgconfig(libfido2)
 BuildRequires:  pkgconfig(libpcsclite)
 BuildRequires:  pkgconfig(libpulse)
 BuildRequires:  pkgconfig(libsystemd)
 BuildRequires:  pkgconfig(libusb-1.0)
 BuildRequires:  pkgconfig(libwebp)
+%{?_with_aom:BuildRequires:  pkgconfig(libyuv)}
 BuildRequires:  pkgconfig(openssl)
 BuildRequires:  pkgconfig(opus)
 %{?_with_sdl_client:BuildRequires:  cmake(SDL3)}
 %{?_with_sdl_client:BuildRequires:  cmake(SDL3_image)}
 %{?_with_sdl_client:BuildRequires:  cmake(SDL3_ttf)}
 %{?_with_soxr:BuildRequires:  pkgconfig(soxr)}
+BuildRequires:  pkgconfig(sso-mib)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-scanner)
 %{?_with_webview:BuildRequires:  pkgconfig(webkit2gtk-4.0)}
@@ -181,6 +185,8 @@ find . -name "*.c" -exec chmod 664 {} \;
     -DBUILD_TESTING_NO_H264=ON \
     -DCHANNEL_RDP2TCP=ON \
     -DCHANNEL_RDP2TCP_CLIENT=ON \
+    -DCHANNEL_RDPEWA=ON \
+    -DCHANNEL_RDPEWA_CLIENT=ON \
     -DCMAKE_SKIP_INSTALL_RPATH=ON \
     -DCMAKE_INSTALL_LIBDIR:PATH=%{_lib} \
     -DWITH_ALSA=ON \
@@ -196,6 +202,7 @@ find . -name "*.c" -exec chmod 664 {} \;
     -DWITH_FFMPEG=%{?_with_ffmpeg:ON}%{?!_with_ffmpeg:OFF} \
     -DWITH_FUSE=ON \
     -DWITH_GSM=ON \
+    -DWITH_GFX_AV1=%{?_with_aom:ON}%{?!_with_aom:OFF} \
     -DWITH_IPP=OFF \
     -DWITH_JPEG=ON \
     -DWITH_JSONC_REQUIRED=ON \
@@ -217,6 +224,7 @@ find . -name "*.c" -exec chmod 664 {} \;
     -DWITH_SHADOW_X11=ON \
     -DWITH_SHADOW_MAC=ON \
     -DWITH_SOXR=%{?_with_soxr:ON}%{?!_with_soxr:OFF} \
+    -DWITH_SSO_MIB=ON \
     -DWITH_SWSCALE=%{?_with_ffmpeg:ON}%{?!_with_ffmpeg:OFF} \
     -DWITH_TIMEZONE_COMPILED=OFF \
     -DWITH_TIMEZONE_FROM_FILE=ON \
@@ -364,5 +372,5 @@ find %{buildroot} -name "*.a" -delete
 %{_libdir}/pkgconfig/winpr-tools3.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.24.0-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2:3.26.0-4
+- Import

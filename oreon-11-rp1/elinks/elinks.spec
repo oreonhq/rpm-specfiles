@@ -1,4 +1,4 @@
-%if 0%{?rhel} >= 10 || 0%{?rescue}
+%if 0%{?rhel} >= 10 || 0%{?rescue} || 0%{?oreon}
 %bcond_with gpm
 %else
 %bcond_without gpm
@@ -6,8 +6,8 @@
 
 Name:      elinks
 Summary:   A text-mode Web browser
-Version:   0.19.1
-Release:   1%{?dist}
+Version:   0.19.0
+Release:   2%{?dist}
 License:   GPL-2.0-only
 URL:       https://github.com/rkd77/elinks
 Source:    https://github.com/rkd77/elinks/releases/download/v%{version}/elinks-%{version}.tar.xz
@@ -136,5 +136,5 @@ exit 0
 %{_mandir}/man5/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.19.0-2
+- Import

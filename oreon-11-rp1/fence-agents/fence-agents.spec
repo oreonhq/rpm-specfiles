@@ -118,7 +118,7 @@ BuildRequires: python3-suds-community
 %else
 BuildRequires: python3-suds
 %endif
-%if 0%{?fedora} || 0%{?centos} || 0%{?rhel}
+%if 0%{?fedora} || 0%{?centos} || 0%{?rhel} || 0%{?oreon}
 BuildRequires: openwsman-python3
 %if %{boto3_br}
 BuildRequires: python3-boto3
@@ -176,7 +176,7 @@ make install DESTDIR=%{buildroot}
 mkdir -p %{buildroot}/%{_unitdir}/
 install -m 0644 agents/virt/fence_virtd.service %{buildroot}/%{_unitdir}/
 # bytecompile Python source code in a non-standard location
-%if 0%{?fedora} || 0%{?centos} || 0%{?rhel}
+%if 0%{?fedora} || 0%{?centos} || 0%{?rhel} || 0%{?oreon}
 %py_byte_compile %{__python3} %{buildroot}%{_datadir}/fence
 %endif
 # XXX unsure if /usr/sbin/fence_* should be compiled as well
@@ -192,14 +192,14 @@ rm -f %{buildroot}/%{_libdir}/fence-virt/*.*a
 
 %post
 ccs_update_schema > /dev/null 2>&1 ||:
-# https://fedoraproject.org/wiki/Packaging:ScriptletSnippets#Systemd
+# 
 if [ $1 -eq 1 ] ; then
     # Initial installation
     /bin/systemctl daemon-reload >/dev/null 2>&1 || :
 fi
 
 %preun
-# https://fedoraproject.org/wiki/Packaging:ScriptletSnippets#Systemd
+# 
 if [ $1 -eq 0 ] ; then
     # Package removal, not upgrade
     /bin/systemctl --no-reload disable fence_virtd.service &> /dev/null || :
@@ -207,7 +207,7 @@ if [ $1 -eq 0 ] ; then
 fi
 
 %postun
-# https://fedoraproject.org/wiki/Packaging:ScriptletSnippets#Systemd
+# 
 /bin/systemctl daemon-reload &> /dev/null || :
 if [ $1 -ge 1 ] ; then
     # Package upgrade, not uninstall
@@ -215,7 +215,7 @@ if [ $1 -ge 1 ] ; then
 fi
 
 %triggerun -- fence_virtd < 0.3.0-1
-# https://fedoraproject.org/wiki/Packaging:ScriptletSnippets#Packages_migrating_to_a_systemd_unit_file_from_a_SysV_initscript
+# 
 /usr/bin/systemd-sysv-convert --save fence_virtd &> /dev/null || :
 /sbin/chkconfig --del fence_virtd &> /dev/null || :
 /bin/systemctl daemon-reload >/dev/null 2>&1 || :
@@ -294,7 +294,7 @@ The fence-agents-aliyun package contains a fence agent for Alibaba Cloud (Aliyun
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for SUN ALOM
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -322,7 +322,7 @@ Fence agent for AMT compatibile devices that are accessed via
 License: Apache-2.0
 Summary: Fence agent for Intel AMT (WS-Man) devices
 Requires: fence-agents-common = %{version}-%{release}
-%if 0%{?fedora} || 0%{?centos} || 0%{?rhel}
+%if 0%{?fedora} || 0%{?centos} || 0%{?rhel} || 0%{?oreon}
 Requires: openwsman-python3
 %else
 Requires: python3-openwsman
@@ -338,7 +338,7 @@ Fence agent for AMT (WS-Man) devices.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for APC devices
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -393,14 +393,14 @@ Fence agent for Amazon AWS instances that fences by modifying aws sec groups
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for Azure Resource Manager
 Requires: fence-agents-common = %{version}-%{release}
-%if 0%{?rhel} && 0%{?rhel} < 9
+%if 0%{?rhel} && 0%{?rhel} < 9 || 0%{?oreon}
 Requires: python3-azure-sdk
 %else
 Requires: python3-azure-common
 Requires: python3-azure-identity
 Requires: python3-azure-mgmt-compute
 Requires: python3-azure-mgmt-network
-%if 0%{?rhel} && 0%{?rhel} < 10
+%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
 Requires: python3-msrestazure
 %endif
 %endif
@@ -411,7 +411,7 @@ Fence agent for Azure Resource Manager instances.
 %files azure-arm
 %{_sbindir}/fence_azure_arm
 %{_datadir}/fence/azure_fence.py*
-%if 0%{?fedora} || 0%{?centos} || 0%{?rhel}
+%if 0%{?fedora} || 0%{?centos} || 0%{?rhel} || 0%{?oreon}
 %{_datadir}/fence/__pycache__/azure_fence.*
 %endif
 %{_mandir}/man8/fence_azure_arm.8*
@@ -420,7 +420,7 @@ Fence agent for Azure Resource Manager instances.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for IBM BladeCenter
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -436,7 +436,7 @@ via telnet or SSH.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for Brocade switches
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -541,7 +541,7 @@ via telnet.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for Dell DRAC 5
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -618,7 +618,7 @@ via the HTTP(s) protocol.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for GCE (Google Cloud Engine)
 Requires: fence-agents-common = %{version}-%{release}
-%if 0%{?fedora} || 0%{?centos} || 0%{?rhel}
+%if 0%{?fedora} || 0%{?centos} || 0%{?rhel} || 0%{?oreon}
 Requires: python3-google-api-client
 %else
 Requires: python3-google-api-python-client
@@ -672,7 +672,7 @@ ping-heuristics.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for HP BladeSystem devices
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -764,7 +764,7 @@ the HTTP(s) protocol.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for HP iLO Moonshot devices
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -780,7 +780,7 @@ via telnet or SSH.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for HP iLO MP devices
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -901,7 +901,7 @@ Fence agent for KubeVirt platform.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for Sun LDom virtual machines
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -916,7 +916,7 @@ Fence agent for APC devices that are accessed via telnet or SSH.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for IBM LPAR
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -945,7 +945,7 @@ Device Mapper Multipath.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for Koukaam NETIO devices
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -1077,7 +1077,7 @@ Fence agent for RHEV-M via REST API.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for IBM RSA II
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -1093,7 +1093,7 @@ via telnet or SSH.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for Fujitsu RSB
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -1235,7 +1235,7 @@ Fence agent for VMWare vCloud Director.
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Summary: Fence agent for WTI Network power switches
 Requires: openssh-clients
-%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
+%if 0%{?fedora} < 33 || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
 Recommends: telnet
 %endif
 Requires: fence-agents-common = %{version}-%{release}
@@ -1258,7 +1258,7 @@ Fence agent for Citrix XenServer accessed over XenAPI.
 %files xenapi
 %{_sbindir}/fence_xenapi
 %{_datadir}/fence/XenAPI.py*
-%if 0%{?fedora} || 0%{?centos} || 0%{?rhel}
+%if 0%{?fedora} || 0%{?centos} || 0%{?rhel} || 0%{?oreon}
 %{_datadir}/fence/__pycache__/XenAPI.*
 %endif
 %{_mandir}/man8/fence_xenapi.8*
@@ -1355,5 +1355,5 @@ are located on corosync cluster nodes.
 %{_libdir}/fence-virt/cpg.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.17.0-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.17.0-2
+- Import

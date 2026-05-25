@@ -3,7 +3,7 @@
 %global cpan_version %{cpan_version_major}%{?cpan_version_minor}
 
 # Run optional tests
-%if ! (0%{?rhel})
+%if ! (0%{?rhel}) || 0%{?oreon}
 %bcond_without perl_Module_Build_enables_optional_test
 %else
 %bcond_with perl_Module_Build_enables_optional_test
@@ -67,7 +67,7 @@ BuildRequires:  perl(strict)
 BuildRequires:  perl(Archive::Zip)
 BuildRequires:  perl(File::ShareDir) >= 1.00
 BuildRequires:  perl(PAR::Dist)
-%if 0%{?fedora}  || 0%{?rhel} < 7
+%if 0%{?fedora}  || 0%{?rhel} < 7 || 0%{?oreon}
 BuildRequires:  perl(Pod::Readme)
 %endif
 %endif
@@ -224,5 +224,5 @@ LANG=C TEST_SIGNATURE=1 MB_TEST_EXPERIMENTAL=1 ./Build test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{cpan_version_major}%{?cpan_version_minor:.%cpan_version_minor}-10
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2:0.42.34-10
+- Import

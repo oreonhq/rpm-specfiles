@@ -51,10 +51,10 @@ Source0:        https://download.gnome.org/sources/loupe/50/loupe-%{tarball_vers
 #   popd
 Source1:        loupe-%{tarball_version}-vendor.tar.xz
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 ExcludeArch:    %{ix86}
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  cargo-rpm-macros
@@ -152,5 +152,5 @@ desktop-file-validate $RPM_BUILD_ROOT%{_datadir}/applications/org.gnome.Loupe.de
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50.0-1
+- Import

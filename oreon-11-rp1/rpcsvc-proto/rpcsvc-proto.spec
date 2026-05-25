@@ -20,8 +20,8 @@ Name:           rpcsvc-proto
 Version:        1.4
 Release:        19%{?dist}
 Summary:        RPC protocol definitions
-# sources were initially copied from glibc and not the original Sun sources and glibc is LGPL-2.1-or-later
-License:        BSD-3-Clause AND LGPL-2.1-or-later
+# Automatically converted from old format: BSD and LGPLv2+ - review is highly recommended.
+License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-LGPLv2+
 Url:            https://github.com/thkukuk/rpcsvc-proto
 Source0:        https://github.com/thkukuk/rpcsvc-proto/releases/v%{version}/%{name}-%{version}.tar.xz
 
@@ -76,5 +76,5 @@ rm -f $RPM_BUILD_ROOT%{_prefix}/include/rpcsvc/rquota.[hx]
 %{_mandir}/man1/rpcgen.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4-19
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4-19
+- Import

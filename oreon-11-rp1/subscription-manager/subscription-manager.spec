@@ -4,7 +4,7 @@
 %global use_inotify 1
 
 # Plugin for container (docker, podman) is not supported on RHEL
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %global use_container_plugin 0
 %else
 %global use_container_plugin 1
@@ -156,7 +156,7 @@ Requires: python3-gobject-base
 
 # rhel 8 has different naming for setuptools going forward
 # on newer rhels and Fedora setuptools is not needed on runtime at all
-%if (0%{?rhel} && 0%{?rhel} == 8)
+%if (0%{?rhel} && 0%{?rhel} == 8) || 0%{?oreon}
 Requires:  platform-python-setuptools
 %endif
 
@@ -263,7 +263,7 @@ e.g. microdnf.
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 
-%if (0%{?fedora} || 0%{?rhel})
+%if (0%{?fedora} || 0%{?rhel}) || 0%{?oreon}
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
@@ -369,7 +369,7 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 %if %{use_dnf}
 pushd src/plugins/libdnf
 %cmake -DCMAKE_BUILD_TYPE="Release"
-%if (0%{?rhel} && 0%{?rhel} <= 8)
+%if (0%{?rhel} && 0%{?rhel} <= 8) || 0%{?oreon}
 %make_build
 %else
 %cmake_build
@@ -394,7 +394,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
 %if %{use_dnf}
 pushd src/plugins/libdnf
 mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
-%if (0%{?rhel} && 0%{?rhel} <= 8)
+%if (0%{?rhel} && 0%{?rhel} <= 8) || 0%{?oreon}
 %make_install
 %else
 %cmake_install
@@ -678,7 +678,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # When subscription-manager is upgraded on RHEL 8 (from RHEL 8.2 to RHEL 8.3), then kill
 # instance of rhsmd, because it is not necessary anymore and it can cause issues.
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=1840364
-%if ( 0%{?rhel} || 0%{?fedora} )
+%if ( 0%{?rhel} || 0%{?fedora} ) || 0%{?oreon}
 if [ "$1" = "2" ] ; then
     killall rhsmd 2> /dev/null || true
 fi
@@ -736,5 +736,5 @@ rm -f /var/lib/rhsm/cache/rhsm_icon.json
 rm -f /var/lib/rhsm/cache/content_access_mode.json
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.30.5-6
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.30.5-6
+- Import

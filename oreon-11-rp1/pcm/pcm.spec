@@ -1,6 +1,6 @@
 Name:           pcm
-Version:        202509
-Release:        1%{?dist}
+Version:        202604
+Release:        0%{?dist}
 Summary:        Intel(r) Performance Counter Monitor
 License:        BSD-3-Clause
 Url:            https://github.com/intel/pcm
@@ -65,5 +65,5 @@ rm -rf %{buildroot}/usr/share/doc/PCM/*.txt
 %{_unitdir}/%{name}-sensor-server.service
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 202509-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 202604-0
+- Import

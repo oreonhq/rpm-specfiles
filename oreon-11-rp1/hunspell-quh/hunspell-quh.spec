@@ -1,4 +1,4 @@
-%if 0%{?fedora} > 35
+%if 0%{?fedora} > 35 || 0%{?oreon}
 %global dict_dirname hunspell 
 %else
 %global dict_dirname myspell
@@ -38,5 +38,5 @@ cp -p quh_BO/quh_BO.* $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}/
 %{_datadir}/%{dict_dirname}/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.%{upstreamid}-32
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.20110816-32
+- Import

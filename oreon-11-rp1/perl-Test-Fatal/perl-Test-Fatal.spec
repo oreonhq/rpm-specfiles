@@ -1,4 +1,4 @@
-%if ! (0%{?rhel})
+%if ! (0%{?rhel}) || 0%{?oreon}
 # Run extra test
 %bcond_without perl_Test_Fatal_enables_extra_test
 # Run optional test
@@ -80,5 +80,5 @@ make test TEST_FILES="$(echo $(find xt/ -name '*.t'))"
 %{_mandir}/man3/Test::Fatal.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.018-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.018-2
+- Import

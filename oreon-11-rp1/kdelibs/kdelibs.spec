@@ -13,33 +13,34 @@
 %define apidocs 1
 %endif
 %endif
-%if 0%{?epel} || 0%{?fedora}
+%if 0%{?epel} || 0%{?fedora} || 0%{?oreon}
 %define webkit 0
 %endif
-%if 0%{?fedora} && 0%{?fedora} < 40
+%if 0%{?fedora} && 0%{?fedora} < 40 || 0%{?oreon}
 %define herqq 1
 %endif
-%if 0%{?fedora} < 24
+%if 0%{?fedora} < 24 || 0%{?oreon}
 %define nepomuk 1
 %endif
-%if 0%{?fedora} < 25
+%if 0%{?fedora} < 25 || 0%{?oreon}
 %define strigi 1
 %endif
 # to build/include QCH apidocs or not (currently broken)
 #define apidocs_qch 1
-%if 0%{?rhel} > 6 || 0%{?fedora} > 17
+%if 0%{?rhel} > 6 || 0%{?fedora} > 17 || 0%{?oreon}
 %define udisks udisks2
 %define udisks2 1
 %else
 %define udisks udisks
 %endif
-%if 0%{?rhel} == 6
+%if 0%{?rhel} == 6 || 0%{?oreon}
 %define hal 1
 %else
 %define upower 1
 %endif
-# enable tests (disabled by default)
-#global tests 1
+%if 0%{?fedora} < 44 || 0%{?oreon}
+%define libpcre 1
+%endif
 
 # unconditionally enable hardening, http://bugzilla.redhat.com/965527
 %global _hardened_build 1
@@ -55,7 +56,7 @@ Summary: KDE Libraries
 # shipped with kde applications, version...
 %global apps_version 17.08.3
 Version: 4.14.38
-Release: 51%{?dist}
+Release: 53%{?dist}
 
 Name: kdelibs
 Epoch: 6
@@ -79,7 +80,7 @@ Source1: macros.kde-apps
 Source10: SOLID_HAL_LEGACY.sh
 
 BuildRequires: kde4-macros(api) >= 2
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon}
 BuildRequires: kde4-filesystem
 %else
 BuildRequires: kde-filesystem >= 4-23
@@ -93,7 +94,7 @@ Requires: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 Requires: dbusmenu-qt%{?_isa} >= %{dbusmenu_qt_version}
 Requires: docbook-dtds docbook-style-xsl
 Requires: hicolor-icon-theme
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon}
 Requires: kde4-filesystem
 %else
 Requires: kde-filesystem >= 4-23
@@ -111,11 +112,9 @@ Requires: kde-l10n
 Requires: phonon%{?_isa} >= %{phonon_version} 
 Requires: shared-mime-info
 
-%if 0%{?fedora} > 22
+%if 0%{?fedora} > 22 || 0%{?oreon}
 # Rich deps are currently problematic
 # for any yum-based tools, see https://bugzilla.redhat.com/show_bug.cgi?id=1317481
-#Requires: (kde-platform-plugin%%{?_isa} if plasma-workspace)
-#Requires: (kde-style-breeze%%{?_isa} if plasma-desktop)
 Recommends: kde-platform-plugin%{?_isa}
 Recommends: kde-style-breeze%{?_isa}
 %endif
@@ -286,7 +285,7 @@ BuildRequires: libacl-devel libattr-devel
 BuildRequires: libjpeg-devel
 BuildRequires: libpng-devel
 BuildRequires: libutempter-devel
-%if 0%{?fedora} < 24
+%if 0%{?fedora} < 24 || 0%{?oreon}
 # strictly only a runtime dependency, but makes cmake happier at buildtime too -- rex
 BuildRequires: media-player-info
 Requires:      media-player-info
@@ -303,7 +302,9 @@ BuildRequires: pkgconfig(enchant)
 BuildRequires: pkgconfig(jasper)
 BuildRequires: pkgconfig(libattica) >= %{attica_ver}
 BuildRequires: pkgconfig(liblzma)
+%if 0%{?libpcre}
 BuildRequires: pkgconfig(libpcre)
+%endif
 %if 0%{?strigi}
 BuildRequires: pkgconfig(libstreams)
 %endif
@@ -348,7 +349,7 @@ Provides: katepart%{?_isa} = %{version}-%{release}
 Provides: kross(javascript) = %{version}-%{release}
 Provides: kross(qtscript) = %{version}-%{release}
 
-%if 0%{?rhel} && 0%{?rhel} < 8
+%if 0%{?rhel} && 0%{?rhel} < 8 || 0%{?oreon}
 Provides: kdelibs-experimental = %{version}-%{release}
 Obsoletes: kdelibs-experimental < 4.3.75
 %endif
@@ -358,6 +359,10 @@ Obsoletes: kdelibs-experimental < 4.3.75
 Obsoletes: kdelibs < 6:4.14.17-5
 %else
 Obsoletes: kdelibs-nepomuk < %{?epoch:%{epoch}:}%{version}-%{release}
+%endif
+
+%if ! 0%{?webkit}
+Obsoletes: kdelibs-webkit < %{version}-%{release}
 %endif
 
 Requires: kde-apps-rpm-macros = %{?epoch:%{epoch}:}%{version}-%{release}
@@ -380,7 +385,7 @@ Requires: %{name}-ktexteditor%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes: kdelibs4-devel < %{version}-%{release}
 Provides:  kdelibs4-devel = %{version}-%{release}
 Provides:  kdelibs4-devel%{?_isa} = %{version}-%{release}
-%if 0%{?rhel} && 0%{?rhel} < 8
+%if 0%{?rhel} && 0%{?rhel} < 8 || 0%{?oreon}
 Conflicts: kdebase-workspace-devel < 4.3.80
 Obsoletes: kdelibs-experimental-devel < 4.3.75
 Provides:  kdelibs-experimental-devel = %{version}-%{release}
@@ -501,7 +506,7 @@ format for use with the Qt 4 Assistant or KDevelop 4.
 %setup -q -n kdelibs-%{version}
 
 %patch -P0 -p1 -b .parallel_devel
-%if 0%{?fedora} > 23
+%if 0%{?fedora} > 23 || 0%{?oreon}
 %patch -P1 -p1 -b .no_fake_mimetypes
 %endif
 %patch -P2 -p1 -b .kde149705
@@ -540,7 +545,7 @@ sed -i -e "s|@@VERSION_RELEASE@@|%{version}-%{release}|" kio/kio/kprotocolmanage
 %patch -P71 -p1 -b .narror-warning
 %patch -P72 -p1 -b .qiodevice
 %patch -P73 -p1 -b .gcc11
-%if 0%{?fedora} > 36
+%if 0%{?fedora} > 36 || 0%{?oreon}
 %patch -P74 -p1 -b .jasper3
 %endif
 %patch -P75 -p1 -b .stdint
@@ -553,10 +558,27 @@ sed -i -e "s|@@VERSION_RELEASE@@|%{version}-%{release}|" kio/kio/kprotocolmanage
 %if ! 0%{?webkit}
 %patch -P300 -p1 -b .webkit
 %endif
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %patch -P301 -p1 -b .abrt
 %endif
 
+# FTBFS Workaround for new cmake
+cat << 'EOF' > cmake4-kde4-compat.cmake
+cmake_policy(VERSION 3.10...3.30)
+cmake_policy(SET CMP0153 OLD)
+link_libraries(QtCore QtGui QtXml QtNetwork QtDBus Qt3Support)
+EOF
+
+mkdir -p cmake-compat
+cp /usr/lib*/automoc4/automoc4.files.in /usr/lib*/automoc4/Automoc4* cmake-compat/ 2>/dev/null || :
+
+find . -type f \( -name "CMakeLists.txt" -o -name "*.cmake" \) -exec sed -i \
+    -e '/LINK_INTERFACE_LIBRARIES/d' \
+    -e '/EXPORT_LINK_INTERFACE_LIBRARIES/d' \
+    -e '/set_target_properties.*PROPERTIES.*INTERFACE_LINK_LIBRARIES/d' \
+    -e 's/VERSION 2\.[68]\.[49] FATAL_ERROR/VERSION 3.10/g' \
+    -e 's/CMP0002 OLD/CMP0002 NEW/g' \
+    {} +
 
 %build
 
@@ -567,6 +589,12 @@ pushd %{_target_platform}
   -DKAUTH_BACKEND:STRING="PolkitQt-1" \
   -DKDE_DISTRIBUTION_TEXT="%{version}-%{release}%{?fedora: Fedora}%{?rhel: Red Hat Enterprise Linux}" \
   -DKIO_NO_SOPRANO:BOOL=ON \
+  -DCMAKE_PROJECT_TOP_LEVEL_INCLUDES=cmake4-kde4-compat.cmake \
+  -DAutomoc4_DIR=cmake-compat \
+  -DAUTOMOC4_EXECUTABLE=%{_bindir}/automoc4 \
+%if ! 0%{?libpcre}
+  -DKJS_FORCE_DISABLE_PCRE=true \
+%endif
   %{?udisks2:-DWITH_SOLID_UDISKS2:BOOL=ON} \
   ..
 popd
@@ -907,5 +935,5 @@ time xvfb-run -a dbus-launch --exit-with-session make -C %{_target_platform}/ te
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.14.38-51
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6:4.14.38-53
+- Import

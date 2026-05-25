@@ -35,7 +35,7 @@
 
 %global suitesparse_builds SuiteSparse %{?build64:SuiteSparse64 SuiteSparse64_}
 
-%if 0%{?fedora} || 0%{?rhel} >= 9
+%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
 %global blaslib flexiblas
 %else
 %global blaslib openblas
@@ -79,7 +79,7 @@ Summary:        A collection of sparse matrix libraries
 License:        BSD-3-Clause AND LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:            http://faculty.cse.tamu.edu/davis/suitesparse.html
 Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v%{version}/%{name}-%{version}.tar.gz
-#Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/%%{commit}/%%{name}-%%{commit}.tar.gz
+#Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/%{commit}/%{name}-%{commit}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -468,5 +468,5 @@ done
 %doc Doc/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.11.0-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.11.0-2
+- Import

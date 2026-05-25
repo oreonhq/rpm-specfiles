@@ -1,7 +1,7 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           xmlunit
-Version:        2.11.0
+Version:        2.10.0
 Release:        %autorelease
 Summary:        Provides classes to do asserts on xml
 # The whole package is ASL 2.0 except for xmlunit-legacy which is BSD
@@ -74,7 +74,7 @@ Summary:        Placeholders for %{name}
 This package provides %{summary}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 
 rm -r xmlunit-core/src/main/java/org/xmlunit/builder/javax_jaxb\
@@ -85,10 +85,9 @@ rm -r xmlunit-core/src/main/java/org/xmlunit/builder/javax_jaxb\
 
 
 # Port to hamcrest 2.1
-jurand -i -s -a xmlunit-matchers -p org[.]hamcrest[.]Factory
+%java_remove_annotations xmlunit-matchers -p org[.]hamcrest[.]Factory
 
 %pom_disable_module xmlunit-assertj
-%pom_disable_module xmlunit-bom
 %pom_disable_module xmlunit-jakarta-jaxb-impl
 
 %pom_remove_plugin org.codehaus.mojo:buildnumber-maven-plugin
@@ -125,5 +124,5 @@ rm -rf xmlunit-core/src/{main,test}/java/org/xmlunit/builder/{jaxb/,JaxbBuilder.
 %files placeholders -f .mfiles-xmlunit-placeholders
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.11.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.10.0-1
+- Import

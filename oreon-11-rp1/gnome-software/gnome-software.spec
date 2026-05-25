@@ -7,7 +7,7 @@
 %global libadwaita_version 1.8.0
 %global libxmlb_version 0.3.4
 %global packagekit_version 1.2.5
-%global dnf5_version 5.2.16
+%global dnf5_version 5.4.2
 
 # Disable WebApps for RHEL builds
 %bcond webapps %[!0%{?rhel}]
@@ -24,19 +24,18 @@
 # this is not a library version
 %define gs_plugin_version 23
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %%(echo %{version} | tr '~' '.')
 
 %global __provides_exclude_from ^%{_libdir}/%{name}/plugins-%{gs_plugin_version}/.*\\.so.*$
 
 Name:      gnome-software
-Version:   50.0
-Release:   2%{?dist}
+Version:   50.2
+Release:   %autorelease
 Summary:   A software center for GNOME
 
 License:   GPL-2.0-or-later
 URL:       https://apps.gnome.org/Software
-Source0:   https://download.gnome.org/sources/gnome-software/%{major_version}/%{name}-%{tarball_version}.tar.xz
+Source0:   https://download.gnome.org/sources/gnome-software/50/%{name}-%{tarball_version}.tar.xz
 
 %if %{with dnf5}
 # to update the patch enter the ./dnf5-plugin/ directory and run from
@@ -48,7 +47,7 @@ Patch:     0002-plain-package-update-notification.patch
 
 # ostree and flatpak not on i686 for Fedora and RHEL 10
 # https://github.com/containers/composefs/pull/229#issuecomment-1838735764
-%if 0%{?fedora} || 0%{?rhel} >= 10
+%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon}
 ExcludeArch:    %{ix86}
 %endif
 
@@ -106,7 +105,7 @@ Requires: flatpak%{?_isa} >= %{flatpak_version}
 Requires: flatpak-libs%{?_isa} >= %{flatpak_version}
 Requires: fwupd%{?_isa} >= %{fwupd_version}
 Requires: glib2%{?_isa} >= %{glib2_version}
-%if !0%{?rhel}
+%if !0%{?rhel} || 0%{?oreon}
 Requires: gnome-app-list
 %endif
 # gnome-menus is needed for app folder .directory entries
@@ -163,9 +162,6 @@ This package includes the rpm-ostree backend.
 %endif
 
 %prep
-# check for human errors
-if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Error: Use tilde in Version field in front of alpha/beta/rc; checked '%{version}'" 1>&2; exit 1; fi
-
 %autosetup -p1 -S gendiff -n %{name}-%{tarball_version}
 
 %build
@@ -223,7 +219,7 @@ desktop-file-edit %{buildroot}%{_datadir}/applications/org.gnome.Software.deskto
 # set up for Fedora
 cat >> %{buildroot}%{_datadir}/glib-2.0/schemas/org.gnome.software-fedora.gschema.override << FOE
 [org.gnome.software]
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 official-repos = [ 'rhel-%{?rhel}' ]
 %else
 official-repos = [ 'anaconda', 'fedora', 'fedora-debuginfo', 'fedora-source', 'koji-override-0', 'koji-override-1', 'rawhide', 'rawhide-debuginfo', 'rawhide-source', 'updates', 'updates-debuginfo', 'updates-source', 'updates-testing', 'updates-testing-debuginfo', 'updates-testing-source', 'fedora-modular', 'fedora-modular-debuginfo', 'fedora-modular-source', 'rawhide-modular', 'rawhide-modular-debuginfo', 'rawhide-modular-source', 'fedora-cisco-openh264', 'fedora-cisco-openh264-debuginfo' ]
@@ -330,5 +326,5 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/*.desktop
 %{_datadir}/gtk-doc/html/gnome-software/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50.0-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50.2-1
+- Import

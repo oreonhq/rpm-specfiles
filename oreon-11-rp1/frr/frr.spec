@@ -29,7 +29,7 @@ Patch0003:      0003-disable-eigrp-crypto.patch
 Patch0004:      0004-fips-mode.patch
 Patch0005:      0005-remove-grpc-test.patch
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 %if %{undefined fc40} && %{undefined fc41}
 ExcludeArch:       %{ix86}
 %endif
@@ -315,5 +315,5 @@ rm tests/lib/*grpc*
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.5.0-8
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.5.0-8
+- Import

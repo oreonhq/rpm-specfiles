@@ -149,7 +149,7 @@
 %global sleef_arches aarch64 riscv64
 # Set of architectures where we verify backtraces with gdb
 # s390x fails on RHEL 7 so we exclude it there
-%if (0%{?rhel} > 0 && 0%{?rhel} < 8)
+%if (0%{?rhel} > 0 && 0%{?rhel} < 8) || 0%{?oreon}
 %global gdb_arches %{arm} %{aarch64} %{ix86} %{power64} sparcv9 sparc64 x86_64 %{zero_arches}
 %else
 %global gdb_arches %{jit_arches} %{zero_arches}
@@ -289,12 +289,12 @@
 # New Version-String scheme-style defines
 %global featurever 25
 %global interimver 0
-%global updatever 2
+%global updatever 3
 %global patchver 0
 
 # We don't add any LTS designator for STS packages (Fedora and EPEL).
 # We need to explicitly exclude EPEL as it would have the %%{rhel} macro defined.
-%if 0%{?rhel} && !0%{?epel}
+%if 0%{?rhel} && !0%{?epel} || 0%{?oreon}
   %global lts_designator "LTS"
   %global lts_designator_zip -%{lts_designator}
 %else
@@ -310,11 +310,11 @@
 %if 0%{?epel}
 %global oj_vendor_bug_url  https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora%20EPEL&component=%{name}&version=epel%{epel}
 %else
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # Does not work for rawhide, keeps the version field empty
 %global oj_vendor_bug_url  https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora&component=%{name}&version=%{fedora}
 %else
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %global oj_vendor_bug_url https://access.redhat.com/support/cases/
 %else
 %global oj_vendor_bug_url  https://bugzilla.redhat.com/enter_bug.cgi
@@ -326,9 +326,9 @@
 # Define IcedTea version used for SystemTap tapsets and desktop file
 %global icedteaver      6.0.0pre00-c848b93a8598
 # Define current Git revision for the crypto policy & FIPS support patches
-%global fipsver df044414ef4
-# Define nssadapter version
-%global nssadapter_version 0.1.0
+%global fipsver 57722aab802
+# Define nssadapter variables
+%global nssadapter_version 0.1.1
 %global nssadapter_name nssadapter-%{nssadapter_version}
 # Define whether the crypto policy is expected to be active when testing
 %global crypto_policy_active true
@@ -345,8 +345,8 @@
 %global origin_nice     OpenJDK
 %global top_level_dir_name   %{vcstag}
 %global top_level_dir_name_backup %{top_level_dir_name}-backup
-%global buildver        10
-%global rpmrelease      4
+%global buildver        9
+%global rpmrelease      1
 # Priority must be 8 digits in total; up to openjdk 1.8, we were using 18..... so when we moved to 11, we had to add another digit
 %if %is_system_jdk
 # Using 10 digits may overflow the int used for priority, so we combine the patch and build versions
@@ -561,7 +561,7 @@ fi
 # https://lists.fedoraproject.org/archives/list/packaging\
 # @lists.fedoraproject.org/thread/HXIIKIHBMT3HELPKWH2BAXRNIF7BPPJD/
 # and:
-# https://fedoraproject.org/wiki/Archive:PackagingDrafts/Icon_Cache
+# 
 %define posttrans_script() %{expand:
 %{update_desktop_icons}
 }
@@ -1049,7 +1049,7 @@ Requires: %{name}-headless%{?1}%{?_isa} = %{epoch}:%{version}-%{release}
 OrderWithRequires: %{name}-headless%{?1}%{?_isa} = %{epoch}:%{version}-%{release}
 # for java-X-openjdk package's desktop binding
 # Where recommendations are available, recommend Gtk+ for the Swing look and feel
-%if 0%{?rhel} >= 8 || 0%{?fedora} > 0
+%if 0%{?rhel} >= 8 || 0%{?fedora} > 0 || 0%{?oreon}
 Recommends: gtk3%{?_isa}
 %endif
 
@@ -1090,7 +1090,7 @@ Requires(post):   %{alternatives_requires}
 Requires(postun): %{alternatives_requires}
 # Where suggestions are available, recommend the sctp and pcsc libraries
 # for optional support of kernel stream control and card reader
-%if 0%{?rhel} >= 8 || 0%{?fedora} > 0
+%if 0%{?rhel} >= 8 || 0%{?fedora} > 0 || 0%{?oreon}
 Suggests: lksctp-tools%{?_isa}, pcsc-lite-libs%{?_isa}
 %endif
 # for libnssadapter.so
@@ -1211,7 +1211,7 @@ Release: %{?eaprefix}%{rpmrelease}%{?extraver}%{?dist}
 Epoch:   1
 Summary: %{origin_nice} %{featurever} Runtime Environment
 # Groups are only used up to RHEL 8 and on Fedora versions prior to F30
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1236,7 +1236,6 @@ URL:      http://openjdk.java.net/
 # Use 'icedtea_sync.sh' to update the following
 # They are based on code contained in the IcedTea project (6.x).
 # Systemtap tapsets. Zipped up to keep it small.
-# no public mirror; small icedtea tapset bundle (required for systemtap)
 Source8: tapsets-icedtea-%{icedteaver}.tar.xz
 
 # Desktop files. Adapted from IcedTea
@@ -1327,19 +1326,19 @@ BuildRequires: libpng-devel
 BuildRequires: zlib-devel
 %else
 # Version in src/java.desktop/share/legal/freetype.md
-Provides: bundled(freetype) = 2.13.3
+Provides: bundled(freetype) = 2.14.2
 # Version in src/java.desktop/share/native/libsplashscreen/giflib/gif_lib.h
-Provides: bundled(giflib) = 5.2.2
+Provides: bundled(giflib) = 6.1.2
 # Version in src/java.desktop/share/native/libharfbuzz/hb-version.h
-Provides: bundled(harfbuzz) = 10.4.0
+Provides: bundled(harfbuzz) = 12.3.2
 # Version in src/java.desktop/share/native/liblcms/lcms2.h
 Provides: bundled(lcms2) = 2.17.0
 # Version in src/java.desktop/share/native/libjavajpeg/jpeglib.h
 Provides: bundled(libjpeg) = 6b
 # Version in src/java.desktop/share/native/libsplashscreen/libpng/png.h
-Provides: bundled(libpng) = 1.6.51
+Provides: bundled(libpng) = 1.6.57
 # Version in src/java.base/share/native/libzip/zlib/zlib.h
-Provides: bundled(zlib) = 1.3.1
+Provides: bundled(zlib) = 1.3.2
 %endif
 %ifarch %{sleef_arches}
 # SLEEF is always bundled
@@ -1357,7 +1356,7 @@ The %{origin_nice} %{featurever} runtime environment.
 %if %{include_debug_build}
 %package slowdebug
 Summary: %{origin_nice} %{featurever} Runtime Environment %{debug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1370,7 +1369,7 @@ The %{origin_nice} %{featurever} runtime environment.
 %if %{include_fastdebug_build}
 %package fastdebug
 Summary: %{origin_nice} %{featurever} Runtime Environment %{fastdebug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1383,7 +1382,7 @@ The %{origin_nice} %{featurever} runtime environment.
 %if %{include_normal_build}
 %package headless
 Summary: %{origin_nice} %{featurever} Headless Runtime Environment
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1417,7 +1416,7 @@ package or when debugging this package.
 %if %{include_debug_build}
 %package headless-slowdebug
 Summary: %{origin_nice} %{featurever} Runtime Environment %{debug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1431,7 +1430,7 @@ The %{origin_nice} %{featurever} runtime environment without audio and video sup
 %if %{include_fastdebug_build}
 %package headless-fastdebug
 Summary: %{origin_nice} %{featurever} Runtime Environment %{fastdebug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1445,7 +1444,7 @@ The %{origin_nice} %{featurever} runtime environment without audio and video sup
 %if %{include_normal_build}
 %package devel
 Summary: %{origin_nice} %{featurever} Development Environment
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1458,7 +1457,7 @@ The %{origin_nice} %{featurever} development tools.
 %if %{include_debug_build}
 %package devel-slowdebug
 Summary: %{origin_nice} %{featurever} Development Environment %{debug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1472,7 +1471,7 @@ The %{origin_nice} %{featurever} development tools.
 %if %{include_fastdebug_build}
 %package devel-fastdebug
 Summary: %{origin_nice} %{featurever} Development Environment %{fastdebug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Tools
 %endif
 
@@ -1523,7 +1522,7 @@ The %{origin_nice} %{featurever} libraries for static linking.
 %if %{include_normal_build}
 %package jmods
 Summary: JMods for %{origin_nice} %{featurever}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1536,7 +1535,7 @@ The JMods for %{origin_nice} %{featurever}.
 %if %{include_debug_build}
 %package jmods-slowdebug
 Summary: JMods for %{origin_nice} %{featurever} %{debug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1550,7 +1549,7 @@ The JMods for %{origin_nice} %{featurever}.
 %if %{include_fastdebug_build}
 %package jmods-fastdebug
 Summary: JMods for %{origin_nice} %{featurever} %{fastdebug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Tools
 %endif
 
@@ -1564,7 +1563,7 @@ The JMods for %{origin_nice} %{featurever}.
 %if %{include_normal_build}
 %package demo
 Summary: %{origin_nice} %{featurever} Demos
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1577,7 +1576,7 @@ The %{origin_nice} %{featurever} demos.
 %if %{include_debug_build}
 %package demo-slowdebug
 Summary: %{origin_nice} %{featurever} Demos %{debug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1591,7 +1590,7 @@ The %{origin_nice} %{featurever} demos.
 %if %{include_fastdebug_build}
 %package demo-fastdebug
 Summary: %{origin_nice} %{featurever} Demos %{fastdebug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1605,7 +1604,7 @@ The %{origin_nice} %{featurever} demos.
 %if %{include_normal_build}
 %package src
 Summary: %{origin_nice} %{featurever} Source Bundle
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1619,7 +1618,7 @@ class library source code for use by IDE indexers and debuggers.
 %if %{include_debug_build}
 %package src-slowdebug
 Summary: %{origin_nice} %{featurever} Source Bundle %{for_debug}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1633,7 +1632,7 @@ The %{compatiblename}-src-slowdebug sub-package contains the complete %{origin_n
 %if %{include_fastdebug_build}
 %package src-fastdebug
 Summary: %{origin_nice} %{featurever} Source Bundle %{for_fastdebug}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1647,7 +1646,7 @@ The %{compatiblename}-src-fastdebug sub-package contains the complete %{origin_n
 %if %{include_normal_build}
 %package javadoc
 Summary: %{origin_nice} %{featurever} API documentation
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Documentation
 %endif
 Requires: javapackages-filesystem
@@ -1662,7 +1661,7 @@ The %{origin_nice} %{featurever} API documentation.
 %if %{include_normal_build}
 %package javadoc-zip
 Summary: %{origin_nice} %{featurever} API documentation compressed in a single archive
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Documentation
 %endif
 Requires: javapackages-filesystem
@@ -1679,7 +1678,7 @@ The %{origin_nice} %{featurever} API documentation compressed in a single archiv
 %if %{include_normal_build}
 %package crypto-adapter
 Summary: %{origin_nice} %{featurever} Cryptography Adapter Library
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1694,7 +1693,7 @@ The %{origin_nice} %{featurever} cryptography adapter library.
 %if %{include_debug_build}
 %package crypto-adapter-slowdebug
 Summary: %{origin_nice} %{featurever} Cryptography Adapter Library %{debug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -1706,7 +1705,7 @@ The %{origin_nice} %{featurever} cryptography adapter library.
 %if %{include_fastdebug_build}
 %package crypto-adapter-fastdebug
 Summary: %{origin_nice} %{featurever} Cryptography Adapter Library %{fastdebug_on}
-%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30)
+%if (0%{?rhel} > 0 && 0%{?rhel} <= 8) || (0%{?fedora} >= 0 && 0%{?fedora} < 30) || 0%{?oreon}
 Group:   Development/Languages
 %endif
 
@@ -2130,7 +2129,7 @@ popd
 
   install -d -m 755 $RPM_BUILD_ROOT%{_libdir}/%{sdkdir -- ${suffix}}
 # RPM 4.20 (F41+) uses rpm-controlled per-package build directories
-%if 0%{?fedora} || 0%{?rhel} >= 11
+%if 0%{?fedora} || 0%{?rhel} >= 11 || 0%{?oreon}
   mv $RPM_BUILD_ROOT/../%{name}/%{installoutputdir -- $suffix}/lib/libnssadapter.so          $RPM_BUILD_ROOT%{_libdir}/%{sdkdir -- ${suffix}}
 %else
   mv $RPM_BUILD_ROOT/../../BUILD/%{name}/%{installoutputdir -- $suffix}/lib/libnssadapter.so $RPM_BUILD_ROOT%{_libdir}/%{sdkdir -- ${suffix}}
@@ -2560,5 +2559,5 @@ exit 0
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{newjavaver}.%{buildver}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:25.0.3.0.9-1
+- Import

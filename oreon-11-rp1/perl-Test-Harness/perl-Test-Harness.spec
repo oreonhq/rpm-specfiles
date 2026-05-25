@@ -1,5 +1,5 @@
 # Run optional tests
-%if ! (0%{?rhel})
+%if ! (0%{?rhel}) || 0%{?oreon}
 %bcond_without perl_Test_Harness_enables_optional_test
 %else
 %bcond_with perl_Test_Harness_enables_optional_test
@@ -156,5 +156,5 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.52-5
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.52-5
+- Import

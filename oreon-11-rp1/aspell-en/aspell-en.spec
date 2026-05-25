@@ -16,7 +16,7 @@ Source: ftp://ftp.gnu.org/gnu/aspell/dict/%{lang}/aspell%{aspellversion}-%{lang}
 # The reason behind this is that upstream has been inactive for more than 4 years
 # and there are other variants like hunspell or enchant which has active upstream
 # FESCo approval is located here: https://pagure.io/fesco/issue/3009
-# Change proposal is located here: https://fedoraproject.org/wiki/Changes/AspellDeprecation
+# Change proposal is located here: 
 Provides:  deprecated()
 
 Buildrequires: aspell >= 12:0.60
@@ -49,5 +49,5 @@ make install DESTDIR=$RPM_BUILD_ROOT
 %{_libdir}/aspell-0.60/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2020.12.07-16
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50:2020.12.07-16
+- Import

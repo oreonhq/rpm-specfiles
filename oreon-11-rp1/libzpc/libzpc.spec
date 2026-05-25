@@ -1,5 +1,5 @@
 Name:		libzpc
-Version:	1.5.0
+Version:	1.4.1
 Release:	%autorelease
 Summary:	Open Source library for the IBM Z Protected-key crypto feature
 
@@ -75,5 +75,5 @@ developing applications that use %{name}.
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.5.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.1-1
+- Import

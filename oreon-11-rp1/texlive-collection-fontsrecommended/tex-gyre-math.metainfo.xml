@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>tex-gyre-math</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>TEX-Gyre-Math fonts</name>
+  <summary>Maths fonts to match tex-gyre text fonts</summary>
+  <description>
+    <p>
+      TEX-Gyre-Math is a collection of maths fonts to match the text fonts of 
+      the TEX-Gyre collection. The collection is available in OpenType format 
+      only; fonts conform to the developing standards for OpenType maths fonts.
+      TEX-Gyre-Math-Bonum (to match TEX-Gyre-Bonum), TEX-Gyre-Math-Pagella (to
+      match TEX-Gyre-Pagella), TEX-Gyre-Math-Schola (to match TEX-Gyre-Schola)
+      and TEX-Gyre-Math-Termes (to match TEX-Gyre-Termes) fonts are provided.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/tex-gyre-math</url>
+</component>

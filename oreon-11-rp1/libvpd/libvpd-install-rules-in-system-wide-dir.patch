@@ -1,0 +1,22 @@
+diff -up libvpd-2.2.10/Makefile.am.me libvpd-2.2.10/Makefile.am
+--- libvpd-2.2.10/Makefile.am.me	2025-09-23 10:19:07.836805451 +0200
++++ libvpd-2.2.10/Makefile.am	2025-09-23 10:49:26.932917705 +0200
+@@ -49,6 +49,8 @@ libvpd_cxx_la_SOURCES = src/vpdretriever
+ CXX_VERSION=@GENERIC_CXX_LIBRARY_VERSION@
+ C_VERSION=@GENERIC_C_LIBRARY_VERSION@
+ 
++udevrulesdir = $(prefix)/lib/udev/rules.d
++
+ pkgconfigdir = $(libdir)/pkgconfig
+ pkgconfig_DATA = libvpd-2.pc libvpd_cxx-2.pc
+ 
+@@ -65,7 +67,7 @@ libtool: $(LIBTOOL_DEPS)
+ 	$(SHELL) ./config.status --recheck
+ 
+ install-exec-hook:
+-	mkdir -p $(DESTDIR)/${sysconfdir}/udev/rules.d/
++	mkdir -p $(DESTDIR)/${udevrulesdir}
+ 	mkdir -p $(DESTDIR)/${localstatedir}/lib/lsvpd/
+ 	install -D --mode=644 90-vpdupdate.rules \
+-                ${DESTDIR}/${sysconfdir}/udev/rules.d/90-vpdupdate.rules
++                ${DESTDIR}/${udevrulesdir}/90-vpdupdate.rules

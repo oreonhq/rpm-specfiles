@@ -1,31 +1,31 @@
-%if 0%{?fedora} || 0%{?epel}
+%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
 %global flags 1
 %global webkit 0
 %endif
 
 # newer libsmbclient incompatible?
 # https://bugzilla.redhat.com/show_bug.cgi?id=1604473
-%if 0%{?fedora} < 28
+%if 0%{?fedora} < 28 || 0%{?oreon}
 %global smb 1
 %endif
 
-%if 0%{?fedora} > 21
+%if 0%{?fedora} > 21 || 0%{?oreon}
 %global plasma5 1
 %endif
 
-%if 0%{?plasma5} && 0%{?fedora} < 24
+%if 0%{?plasma5} && 0%{?fedora} < 24 || 0%{?oreon}
 %global kuiserver 1
 %endif
 
-%if 0%{?fedora} < 26
+%if 0%{?fedora} < 26 || 0%{?oreon}
 %global drkonqi 1
 %endif
 
-%if 0%{?fedora} < 25
+%if 0%{?fedora} < 25 || 0%{?oreon}
 %global strigi 1
 %endif
 
-%if 0%{?fedora} < 28
+%if 0%{?fedora} < 28 || 0%{?oreon}
 # kf5-kwallet supports the same interfaces now
 %global kwallet 1
 %endif
@@ -177,7 +177,7 @@ BuildRequires: pkgconfig(libtirpc)
 BuildRequires: pkgconfig(libwebp)
 BuildRequires: pkgconfig(liblzma)
 BuildRequires: pkgconfig(glib-2.0)
-%if 0%{?fedora} > 21
+%if 0%{?fedora} > 21 || 0%{?oreon}
 BuildRequires: pkgconfig(libnm)
 %else
 BuildRequires: pkgconfig(libnm-glib) pkgconfig(libnm-util)
@@ -186,10 +186,10 @@ BuildRequires: pkgconfig(libnm-glib) pkgconfig(libnm-util)
 BuildRequires: pkgconfig(soprano) >= 2.6.50
 BuildRequires: pkgconfig(xproto)
 BuildRequires: pkgconfig(xscrnsaver)
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires: openslp-devel
 %endif
-%if 0%{?fedora} || 0%{?rhel} > 6
+%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
 BuildRequires: libssh-devel >= 0.6
 %endif
 BuildRequires: zlib-devel
@@ -220,7 +220,7 @@ Requires: %{name}-libs%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Summary: DrKonqi crash handler for KDE4
 BuildRequires: kdepimlibs-devel
 Requires: %{name} = %{version}-%{release}
-%if 0%{?fedora} > 23
+%if 0%{?fedora} > 23 || 0%{?oreon}
 Requires: dnf-command(debuginfo-install)
 %endif
 Requires: kdialog
@@ -305,11 +305,11 @@ BuildArch: noarch
 %patch -P7 -p1 -b .htsearch
 %patch -P8 -p1 -b .config
 %patch -P9 -p1 -b .man-overrides
-%if 0%{?fedora} < 19 && 0%{?rhel} < 7
+%if 0%{?fedora} < 19 && 0%{?rhel} < 7 || 0%{?oreon}
 %patch -P10 -p1 -b .kde310486
 %endif
 %patch -P11 -p1 -b .trash-readonly
-%if 0%{?fedora} > 22
+%if 0%{?fedora} > 22 || 0%{?oreon}
 %patch -P53 -p1 -b .installdgbsymbols-dnf
 %else
 %patch -P50 -p1 -b .installdgbsymbols
@@ -379,7 +379,7 @@ chrpath --delete %{buildroot}%{_libdir}/kde4/plugins/phonon_platform/kde.so
 ## unpackaged files
 # FIXME: -devel type files, omit for now
 rm -vf  %{buildroot}%{_kde4_libdir}/lib{kwalletbackend,molletnetwork}.so
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 rm -fv %{buildroot}%{_kde4_datadir}/kde4/services/searchproviders/fedora.desktop
 %endif
 
@@ -523,7 +523,7 @@ done
 %{_datadir}/dbus-1/interfaces/*.xml
 
 %if 0%{?drkonqi}
-%if 0%{?fedora} > 16 || 0%{?rhel} > 6
+%if 0%{?fedora} > 16 || 0%{?rhel} > 6 || 0%{?oreon}
 %post drkonqi
 # make DrKonqi work by default by taming SELinux enough (suggested by dwalsh)
 # if KDE_DEBUG is set, DrKonqi is disabled, so do nothing
@@ -601,5 +601,5 @@ fi
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.08.3-36
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.08.3-36
+- Import

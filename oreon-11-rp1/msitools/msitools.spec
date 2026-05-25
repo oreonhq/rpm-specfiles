@@ -72,7 +72,7 @@ BuildRequires:  mingw32-winpthreads
 BuildRequires:  mingw64-winpthreads
 BuildRequires:  mingw32-zlib
 BuildRequires:  mingw64-zlib
-%if %{undefined rhel}
+%if %{undefined rhel} || 0%{?oreon}
 BuildRequires:  mingw32-adwaita-icon-theme
 BuildRequires:  mingw64-adwaita-icon-theme
 BuildRequires:  mingw32-atk
@@ -288,5 +288,5 @@ The libmsi1-devel package includes the header files for libmsi.
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.106.58-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.106.58-1
+- Import

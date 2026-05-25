@@ -30,3 +30,7 @@ install -Dpm0644 %{SOURCE1} %{buildroot}%{_datadir}/licenses/%{name}/COPYING
 %files
 %license %{_datadir}/licenses/%{name}/COPYING
 %{_rpmmacrodir}/macros.ansible-srpm
+
+%changelog
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1-20.1
+- Import

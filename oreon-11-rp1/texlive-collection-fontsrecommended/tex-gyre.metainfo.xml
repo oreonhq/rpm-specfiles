@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2020 Tom Callaway <spot AT fedoraproject DOT org> -->
+<component type="font">
+  <id>tex-gyre</id>
+  <metadata_license>CC-BY-3.0</metadata_license>
+  <name>TEX-Gyre fonts</name>
+  <summary>TeX fonts extending freely available URW fonts</summary>
+  <description>
+    <p>
+      TEX-Gyre is a collection of text fonts, consisting of six font
+      families: TEX Gyre Adventor is based on the URW Gothic L family of 
+      fonts (which is derived from ITC Avant Garde Gothic, designed by Herb 
+      Lubalin and Tom Carnase), TEX Gyre Bonum is based on the URW Bookman L 
+      family (from Bookman Old Style, designed by Alexander Phemister), TEX 
+      Gyre Chorus is based on URW Chancery L Medium Italic (from ITC Zapf 
+      Chancery, designed by Hermann Zapf in 1979), TEX Gyre Cursor is based 
+      on URW Nimbus Mono L (based on Courier, designed by Howard G. Kettler 
+      in 1955, for IBM), TEX Gyre Heros is based on URW Nimbus Sans L (from
+      Helvetica, prepared by Max Miedinger, with Eduard Hoffmann in 1957), 
+      TEX Gyre Pagella is based on URW Palladio L (from Palatino, designed
+      by Hermann Zapf in the 1940s), TEX Gyre Schola is based on the URW 
+      Century Schoolbook L family (from Century Schoolbook, designed by
+      Morris Fuller Benton for the American Type Founders), and TEX Gyre 
+      Termes is based on the URW Nimbus Roman No9 L family of fonts (from
+      Times New Roman, designed by Stanley Morison together with Starling 
+      Burgess and Victor Lardent and first offered by Monotype).
+      The constituent standard faces of each family have been greatly 
+      extended (though Chorus omits Greek support and has no small-caps 
+      family). Each family is available in Adobe Type 1 and Open Type 
+      formats, and LATEX support (for use with a variety of encodings) is
+      provided. Vietnamese characters were added by Han The Thanh.
+    </p>
+  </description>
+  <updatecontact>spotrh_at_gmail_dot_com</updatecontact>
+  <url type="homepage">https://ctan.org/pkg/tex-gyre</url>
+</component>

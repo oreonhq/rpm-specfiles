@@ -13,7 +13,7 @@ Name:           gpgme
 Summary:        GnuPG Made Easy - high level crypto API
 Version:        2.0.1
 %global spversion 2.0.0
-Release:        6%{?dist}
+Release:        4%{?dist}
 
 # MIT: src/cJSON.{c,h} (used by gpgme-json)
 License:        LGPL-2.1-or-later AND MIT
@@ -22,10 +22,10 @@ Source0:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
 Source2:        gpgme-multilib.h
 Source3:        https://gnupg.org/signature_key.asc
-Source4:        https://gnupg.org/ftp/gcrypt/qgpgme/qgpgme-%{spversion}.tar.xz
+Source4:        https://gnupg.org/ftp/gcrypt/gpgmepp/qgpgme-%{spversion}.tar.xz
 Source5:        https://gnupg.org/ftp/gcrypt/gpgmepp/gpgmepp-%{spversion}.tar.xz
 Source6:        https://gnupg.org/ftp/gcrypt/gpgmepy/gpgmepy-%{spversion}.tar.bz2
-Source7:        https://gnupg.org/ftp/gcrypt/qgpgme/qgpgme-%{spversion}.tar.xz.sig
+Source7:        https://gnupg.org/ftp/gcrypt/gpgmepp/qgpgme-%{spversion}.tar.xz.sig
 Source8:        https://gnupg.org/ftp/gcrypt/gpgmepp/gpgmepp-%{spversion}.tar.xz.sig
 Source9:        https://gnupg.org/ftp/gcrypt/gpgmepy/gpgmepy-%{spversion}.tar.bz2.sig
 
@@ -44,6 +44,10 @@ Patch3001:      1001-qt-skip-test-remarks-for-gnupg2-2.4.patch
 # prevent soname .so.15 conflict for qgpgme with compat-qgpgme124-qt{5,6}
 Patch3002:      gpgme-2.0.1-soname2.patch
 
+# for qgpgme <= 2.0.0, rhbz#2464335
+# https://github.com/gpg/gpgmeqt/commit/150b23c105f3ea7034e6f106e60686aea4e4a13e
+Patch3003:      qgpgme-2.0-fixdnparsing.patch
+
 BuildRequires:  make
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -60,14 +64,6 @@ BuildRequires:  chrpath
 
 # For AutoReq cmake-filesystem
 BuildRequires:  cmake
-
-# gpgmepy [build-system] requires setuptools + swig (see gpgmepy/pyproject.toml). Do not use
-# %%pyproject_buildrequires here: it maps "swig" to python3dist(swig), which no Fedora package provides.
-BuildRequires:  swig
-BuildRequires:  python3-setuptools
-BuildRequires:  python3-packaging
-BuildRequires:  python3-pip
-BuildRequires:  pyproject-rpm-macros
 
 Requires:       gnupg2 >= %{gnupg2_min_ver}
 
@@ -201,6 +197,10 @@ sed -i -e 's|^libdir=@libdir@$|libdir=@exec_prefix@/lib|g' src/gpgme-config.in
 
 # The build machinery does not support the newest Pythons
 sed -i 's/3.13/%{python3_version}/g' configure
+
+%generate_buildrequires
+cd gpgmepy
+%pyproject_buildrequires
 
 %build
 # People neeed to learn that you can't run autogen.sh anymore
@@ -407,5 +407,5 @@ popd
 %{python3_sitearch}/gpg/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.1-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.1-4
+- Import

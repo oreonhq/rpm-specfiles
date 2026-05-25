@@ -7,8 +7,8 @@
 %define min_fedora 41
 
 %define arches_qemu_kvm         %{ix86} x86_64 %{power64} aarch64 s390x riscv64
-%if 0%{?rhel}
-    %if 0%{?rhel} >= 10
+%if 0%{?rhel} || 0%{?oreon}
+    %if 0%{?rhel} >= 10 || 0%{?oreon}
         %define arches_qemu_kvm     x86_64 aarch64 s390x riscv64
     %else
         %define arches_qemu_kvm     x86_64 aarch64 s390x
@@ -21,7 +21,7 @@
 %define arches_systemtap_64bit  %{arches_64bit}
 %define arches_dmidecode        %{arches_x86} aarch64 riscv64
 %define arches_xen              %{arches_x86} aarch64
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
     %define arches_xen          x86_64 aarch64
 %endif
 %define arches_vbox             %{arches_x86}
@@ -41,7 +41,7 @@
     %define with_qemu      0%{!?_without_qemu:1}
 %else
     # QEMU drops 32-bit in Fedora 44
-    %if 0%{?fedora} > 43
+    %if 0%{?fedora} > 43 || 0%{?oreon}
         %define with_qemu  0
     %else
         %define with_qemu  0%{!?_without_qemu:1}
@@ -54,7 +54,7 @@
     %define with_qemu_kvm      0
 %endif
 
-%if 0%{?fedora} >= 42
+%if 0%{?fedora} >= 42 || 0%{?oreon}
     %define with_account_add 0
 %else
     %define with_account_add 1
@@ -63,7 +63,7 @@
 %define with_qemu_tcg      %{with_qemu}
 
 # RHEL disables TCG on all architectures
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
     %define with_qemu_tcg 0
 %endif
 
@@ -81,7 +81,7 @@
 %define with_storage_rbd      0%{!?_without_storage_rbd:1}
 
 %define with_storage_gluster 0%{!?_without_storage_gluster:1}
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
     # Glusterfs has been dropped in RHEL-9.
     %define with_storage_gluster 0
 %endif
@@ -89,7 +89,7 @@
 # On Fedora 43, the 'zfs-fuse' package was removed, but is obtainable via
 # other means. Build the backend, but it's no longer considered to be part
 # of 'daemon-driver-storage'.
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
     %define with_storage_zfs      0%{!?_without_storage_zfs:1}
 %else
     %define with_storage_zfs      0
@@ -97,7 +97,7 @@
 
 %define with_storage_iscsi_direct 0%{!?_without_storage_iscsi_direct:1}
 # libiscsi has been dropped in RHEL-9
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
     %define with_storage_iscsi_direct 0
 %endif
 
@@ -140,7 +140,7 @@
 %endif
 
 # RHEL doesn't ship many hypervisor drivers
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
     %define with_openvz 0
     %define with_vbox 0
     %define with_vmware 0
@@ -159,17 +159,17 @@
 
 # Enable sanlock library for lock management with QEMU
 # Sanlock is available only on arches where kvm is available for RHEL
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
     %define with_sanlock 0%{!?_without_sanlock:1}
 %endif
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
     %ifarch %{arches_qemu_kvm}
         %define with_sanlock 0%{!?_without_sanlock:1}
     %endif
 %endif
 
 # Enable libssh2 transport for new enough distros
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
     %define with_libssh2 0%{!?_without_libssh2:1}
 %endif
 
@@ -193,7 +193,7 @@
 # Right now that's not the case anywhere, but things should be fine by the time
 # Fedora 40 is released.
 %if %{with_qemu}
-    %if 0%{?fedora} || 0%{?rhel}
+    %if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
         %define with_nbdkit 0%{!?_without_nbdkit:1}
 
         # setting 'with_nbdkit_config_default' must be done only when compiling
@@ -201,7 +201,7 @@
         #
         # TODO: add RHEL 9 once a minor release that contains the necessary SELinux
         #       bits exists (we only support the most recent minor release)
-        %if 0%{?fedora}
+        %if 0%{?fedora} || 0%{?oreon}
             %define with_nbdkit_config_default 0%{!?_without_nbdkit_config_default:1}
         %endif
     %endif
@@ -212,13 +212,13 @@
 %endif
 
 %define with_modular_daemons 0
-%if 0%{?fedora} || 0%{?rhel}
+%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
     %define with_modular_daemons 1
 %endif
 
 # Prefer nftables for future OS releases but keep using iptables
 # for existing ones
-%if 0%{?rhel} >= 10 || 0%{?fedora}
+%if 0%{?rhel} >= 10 || 0%{?fedora} || 0%{?oreon}
     %define prefer_nftables 1
     %define firewall_backend_priority nftables,iptables
 %else
@@ -242,7 +242,7 @@
 %define with_mingw32 0
 %define with_mingw64 0
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
     %if 0%{!?_without_mingw:1}
         %define with_mingw32 0%{!?_without_mingw32:1}
         %define with_mingw64 0%{!?_without_mingw64:1}
@@ -265,7 +265,7 @@
 # compiler warning into errors without being worried about frequent
 # changes in reported warnings. ELN is a rebuild of Rawhide so should
 # be treated as unstable for this flag
-%if 0%{?rhel} && !0%{?eln}
+%if 0%{?rhel} && !0%{?eln} || 0%{?oreon}
     %define enable_werror -Dwerror=true
 %else
     %define enable_werror -Dwerror=false -Dgit_werror=disabled
@@ -294,8 +294,8 @@
 
 Summary: Library providing a simple virtualization API
 Name: libvirt
-Version: 12.1.0
-Release: 1%{?dist}
+Version: 12.0.0
+Release: 3%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND OFL-1.1
 URL: https://libvirt.org/
 
@@ -303,6 +303,10 @@ URL: https://libvirt.org/
     %define mainturl stable_updates/
 %endif
 Source: https://download.libvirt.org/%{?mainturl}libvirt-%{version}.tar.xz
+
+# Fix IPv6 connections to ESXi
+# Upstream in > 12.0.0
+Patch: 0001-esx-Allow-connecting-to-IPv6-server.patch
 
 Requires: libvirt-daemon = %{version}-%{release}
 Requires: libvirt-daemon-config-network = %{version}-%{release}
@@ -528,7 +532,7 @@ Requires: dbus
 Requires(pre): shadow-utils
     %endif
 # Needed by /usr/libexec/libvirt-guests.sh script.
-    %if 0%{?fedora}
+    %if 0%{?fedora} || 0%{?oreon}
 Requires: gettext-runtime
     %else
 Requires: gettext
@@ -752,10 +756,10 @@ multipath storage using device mapper.
 Summary: Storage driver plugin for gluster
 Requires: libvirt-daemon-driver-storage-core = %{version}-%{release}
 Requires: libvirt-libs = %{version}-%{release}
-        %if 0%{?fedora}
+        %if 0%{?fedora} || 0%{?oreon}
 Requires: glusterfs-client >= 2.0.1
         %endif
-        %if 0%{?fedora} || 0%{?with_storage_gluster}
+        %if 0%{?fedora} || 0%{?with_storage_gluster} || 0%{?oreon}
 Requires: /usr/sbin/gluster
         %endif
 
@@ -783,7 +787,7 @@ Requires: libvirt-libs = %{version}-%{release}
 # Starting with Fedora 43 the 'zfs-fuse' is no longer shipped but obtainable
 # externally. The package builds fine without these. Users will have to provide
 # their own implementation.
-        %if 0%{?fedora} && 0%{?fedora} < 43
+        %if 0%{?fedora} && 0%{?fedora} < 43 || 0%{?oreon}
 Requires: /sbin/zfs
 Requires: /sbin/zpool
         %endif
@@ -813,7 +817,7 @@ Requires: libvirt-daemon-driver-storage-rbd = %{version}-%{release}
 # Starting with Fedora 43 the 'zfs-fuse' is no longer shipped but obtainable
 # externally. We do not want to install this as part of 'daemon-driver-storage'
 # any more.
-    %if %{with_storage_zfs} && 0%{?fedora} && 0%{?fedora} < 43
+    %if %{with_storage_zfs} && 0%{?fedora} && 0%{?fedora} < 43 || 0%{?oreon}
 Requires: libvirt-daemon-driver-storage-zfs = %{version}-%{release}
     %endif
 
@@ -840,7 +844,7 @@ Requires: swtpm-tools
         %if %{with_numad}
 Requires: numad
         %endif
-        %if 0%{?fedora} || 0%{?rhel}
+        %if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
 Recommends: passt
 Recommends: passt-selinux
         %endif
@@ -1170,7 +1174,7 @@ MinGW Windows libvirt virtualization library.
 %autosetup -S git_am
 
 %build
-%if 0%{?fedora} >= %{min_fedora} || 0%{?rhel} >= %{min_rhel}
+%if 0%{?fedora} >= %{min_fedora} || 0%{?rhel} >= %{min_rhel} || 0%{?oreon}
     %define supported_platform 1
 %else
     %define supported_platform 0
@@ -1891,16 +1895,13 @@ exit 0
 %pre daemon-driver-secret
 %libvirt_sysconfig_pre virtsecretd
 %libvirt_systemd_unix_pre virtsecretd
-%libvirt_systemd_oneshot_pre virt-secret-init-encryption
 
 %posttrans daemon-driver-secret
 %libvirt_sysconfig_posttrans virtsecretd
 %libvirt_systemd_unix_posttrans virtsecretd
-%libvirt_systemd_unix_posttrans virt-secret-init-encryption
 
 %preun daemon-driver-secret
 %libvirt_systemd_unix_preun virtsecretd
-%libvirt_systemd_unix_preun virt-secret-init-encryption
 
 %pre daemon-driver-storage-core
 %libvirt_sysconfig_pre virtstoraged
@@ -2251,17 +2252,12 @@ exit 0
 %config(noreplace) %{_sysconfdir}/libvirt/virtsecretd.conf
 %{_datadir}/augeas/lenses/virtsecretd.aug
 %{_datadir}/augeas/lenses/tests/test_virtsecretd.aug
-%{_datadir}/augeas/lenses/libvirt_secrets.aug
-%{_datadir}/augeas/lenses/tests/test_libvirt_secrets.aug
-%config(noreplace) %{_sysconfdir}/libvirt/secret.conf
 %{_unitdir}/virtsecretd.service
-%{_unitdir}/virt-secret-init-encryption.service
 %{_unitdir}/virtsecretd.socket
 %{_unitdir}/virtsecretd-ro.socket
 %{_unitdir}/virtsecretd-admin.socket
 %attr(0755, root, root) %{_sbindir}/virtsecretd
 %dir %attr(0700, root, root) %{_sysconfdir}/libvirt/secrets/
-%dir %attr(0700, root, root) %{_localstatedir}/lib/libvirt/secrets/
 %ghost %dir %attr(0700, root, root) %{_rundir}/libvirt/secrets/
 %{_libdir}/libvirt/connection-driver/libvirt_driver_secret.so
 %{_mandir}/man8/virtsecretd.8*
@@ -2349,7 +2345,6 @@ exit 0
 %dir %attr(0751, %{qemu_user}, %{qemu_group}) %{_localstatedir}/lib/libvirt/qemu/ram/
 %dir %attr(0751, %{qemu_user}, %{qemu_group}) %{_localstatedir}/lib/libvirt/qemu/save/
 %dir %attr(0751, %{qemu_user}, %{qemu_group}) %{_localstatedir}/lib/libvirt/qemu/snapshot/
-%dir %attr(0751, %{qemu_user}, %{qemu_group}) %{_localstatedir}/lib/libvirt/qemu/varstore/
 %dir %attr(0750, root, root) %{_localstatedir}/cache/libvirt/qemu/
 %{_datadir}/augeas/lenses/libvirtd_qemu.aug
 %{_datadir}/augeas/lenses/tests/test_libvirtd_qemu.aug
@@ -2698,6 +2693,7 @@ exit 0
 %{mingw64_mandir}/man7/virkey*.7*
 %endif
 
+
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12.1.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 12.0.0-3
+- Import

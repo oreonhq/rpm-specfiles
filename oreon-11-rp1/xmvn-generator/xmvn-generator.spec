@@ -33,7 +33,7 @@ XMvn Generator is a dependency generator for RPM Package Manager
 written in Java and Lua.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 %mvn_file : %{name}
 
 %build
@@ -57,5 +57,5 @@ install -D -p -m 644 src/main/conf/xmvn-generator.conf %{buildroot}%{_javaconfdi
 %doc README.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.1-1
+- Import

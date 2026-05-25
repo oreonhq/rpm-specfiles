@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           jakarta-annotations
 Version:        1.3.5
@@ -28,7 +28,7 @@ common semantic concepts that enable a declarative style of
 programming that applies across a variety of Java technologies.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # remove unnecessary dependency on parent POM
 # org.eclipse.ee4j:project is not packaged and isn't needed
@@ -67,5 +67,5 @@ programming that applies across a variety of Java technologies.
 %doc README.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-1
+- Import

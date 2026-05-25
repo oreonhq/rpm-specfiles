@@ -10,7 +10,7 @@ ExcludeArch: i686
 %global rustflags_debuginfo 1
 %endif
 
-%if 0%{?fedora} > 35 || 0%{?rhel} > 9
+%if 0%{?fedora} > 35 || 0%{?rhel} > 9 || 0%{?oreon}
 %global dictionarydir hunspell
 %else
 %global dictionarydir myspell
@@ -78,7 +78,7 @@ ExcludeArch: armv7hl
 %global only_wayland %[0%{?fedora} || 0%{?rhel} >= 10]
 
 # Where to place node-stdout-nonblocking-wrapper for build.
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || 0%{?oreon}
 # RPM 4.20 defines %builddir
 %global nodewrapperdir %{builddir}/bin
 %else
@@ -91,13 +91,13 @@ ExcludeArch: armv7hl
 
 Summary:        Mozilla Thunderbird mail/newsgroup client
 Name:           thunderbird
-Version:        148.0
+Version:        150.0.2
 Release:        %autorelease
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPL-2.0 OR GPL-2.0-or-later OR LGPL-2.0-or-later
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
-Source1:        thunderbird-langpacks-%{version}%{?pre_version}-20260225.tar.xz
+Source1:        thunderbird-langpacks-%{version}%{?pre_version}-20260514.tar.xz
 %endif
 Source3:        get-calendar-langpacks.sh
 Source4:        cbindgen-vendor.tar.xz
@@ -113,9 +113,7 @@ Source32:       node-stdout-nonblocking-wrapper
 Source33:       net.thunderbird.Thunderbird.desktop
 Source34:       net.thunderbird.Thunderbird.appdata.xml
 
-#Patch416:       firefox-SIOCGSTAMP.patch
 Patch418:       mozilla-1512162.patch
-#Patch419:       bindgen-d0dfc52706f23db9dc9d74642eeebd89d73cb8d0.patch
 # gcc 12 build fix patches
 Patch422:       0001-GLIBCXX-fix-for-GCC-12.patch
 Patch425:       build-disable-elfhack.patch
@@ -126,20 +124,13 @@ Patch35:        build-ppc-jit.patch
 Patch36:        build-botan-target.patch
 Patch37:        build-c11-threads-avail.patch
 # Fixing missing cacheFlush when JS_CODEGEN_NONE is used (s390x)
-Patch40:        build-aarch64-skia.patch
 Patch44:        build-arm-libopus.patch
-Patch53:        firefox-gcc-build.patch
 Patch71:        0001-GLIBCXX-fix-for-GCC-12.patch
 Patch78:        firefox-i686-build.patch
-Patch79:        firefox-gcc-13-build.patch
 # PROTOBUF_MUSTTAIL return ...  error: cannot tail-call: target is not able to optimize the call into a sibling call
 Patch82:        build-s390x-protobuf-musttail.patch
 # Build failure on rawhide of wrongly defined SYS_SECCOMP
 Patch83:        build-seccomp.patch
-Patch84:        build-minimal-lexical.patch
-Patch85:        build-libcubeb.patch
-Patch86:        build-missing-gitmodules.patch
-Patch87:        dstdint-compile-error.patch
 
 # PPC fix
 
@@ -154,12 +145,6 @@ Patch406:        mozilla-1170092.patch
 # fix crash on aarch64
 
 # Bundled expat backported patches
-
-# Tentative patch for RUSTFLAGS parsing issue,
-# borrowed from firefox commit 24c9accce19c5cae9394430b24eaf938a9c17882:
-# https://bugzilla.redhat.com/show_bug.cgi?id=2184743
-# https://bugzilla.mozilla.org/show_bug.cgi?id=1474486
-Patch1200:       rustflags-commasplit.patch
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -297,36 +282,18 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 # Build patches
 
-#ARM run-time patch
-%ifarch aarch64
-#%patch -P 226 -p1 -b .1354671
-%endif
-#FIXME %%patch -P 416 -p1 -b .SIOCGSTAMP
 %patch -P36 -p1 -b .build-botan
 %patch -P37 -p1 -b .build-c11-threads-avail
 %patch -P 418 -p1 -b .mozbz-1512162
-# most likely fixed
-#%%patch -P 419 -p1 -b .bindgen
-
 %patch -P 402 -p1 -b .526293
 %patch -P 406 -p1 -b .1170092-etc-conf
-
 %patch -P 422 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
-
-#patch -P40 -p1 -b .aarch64-skia
 %patch -P44 -p1 -b .build-arm-libopus
-#patch -P53 -p1 -b .firefox-gcc-build
 %patch -P71 -p1 -b .0001-GLIBCXX-fix-for-GCC-12
 %patch -P78 -p1 -b .firefox-i686
-%patch -P79 -p1 -b .firefox-gcc-13-build
 %patch -P82 -p1 -b .build-s390x-protobuf-musttail
 %patch -P83 -p1 -b .build-seccomp
-%patch -P84 -p1 -b .minimal-lexical
-%patch -P85 -p1 -b .libcubeb
-%patch -P86 -p1 -b .missing-gitmodules
-%patch -P87 -p1 -b .dstdint-compile-error
 
-#patch -P 1200 -p1 -b .rustflags-commasplit
 
 %if %{official_branding}
 # Required by Mozilla Corporation
@@ -480,7 +447,7 @@ MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | sed -e 's/-fexceptions//')
 # -Werror=format-security causes build failures when -Wno-format is explicitly given
 # for some sources
 # Explicitly force the hardening flags for Firefox so it passes the checksec test;
-# See also https://fedoraproject.org/wiki/Changes/Harden_All_Packages
+# See also 
 # Workaround for mozbz#1531309
 MOZ_OPT_FLAGS=$(echo "$MOZ_OPT_FLAGS" | %{__sed} -e 's/-Werror=format-security//')
 %if %{?debug_build}
@@ -773,5 +740,5 @@ gtk-update-icon-cache %{_datadir}/icons/hicolor &>/dev/null || :
 #===============================================================================
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 148.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 150.0.2-1
+- Import

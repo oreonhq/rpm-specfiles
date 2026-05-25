@@ -1,70 +1,69 @@
-%undefine __cmake_in_source_build
+Name:    pulseaudio-qt
+Summary: Qt bindings for PulseAudio
+Version: 1.8.1
+Release: 1%{?dist}
 
-Name:           pulseaudio-qt
-Version:        1.8.1
-Release:        6%{?dist}
-Summary:        Qt bindings to PulseAudio (Qt 6)
-License:        LGPL-2.1-only
-URL:            https://invent.kde.org/libraries/pulseaudio-qt
-Source0:        https://invent.kde.org/libraries/pulseaudio-qt/-/archive/v%{version}/pulseaudio-qt-v%{version}.tar.bz2
+License: CC0-1.0 AND LGPL-2.1-only AND LGPL-3.0-only
+URL:     https://invent.kde.org/libraries/pulseaudio-qt
+Source:  https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
 
-BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
-BuildRequires:  gcc-c++
-BuildRequires:  ninja-build
+BuildRequires:  kf6-rpm-macros
+BuildRequires:  kf5-rpm-macros
 BuildRequires:  pkgconfig(libpulse)
-BuildRequires:  pkgconfig(libpulse-mainloop-glib)
-BuildRequires:  qt6-qtbase-devel
-BuildRequires:  qt6-qtdeclarative-devel
+BuildRequires:  pkgconfig(glib-2.0)
+BuildRequires:  cmake(Qt6Gui)
+BuildRequires:  cmake(Qt6Qml)
+BuildRequires:  cmake(Qt6Test)
+BuildRequires:  cmake(Qt6DBus)
 
 %description
-Qt 6 library for talking to PulseAudio over D-Bus.
+Pulseaudio-Qt is a library providing Qt bindings to PulseAudio.
 
-
-%package -n kf6-pulseaudio-qt
-Summary:        Qt 6 PulseAudio client library
-
-%description -n kf6-pulseaudio-qt
+%package qt6
+Summary: Qt6 bindings for PulseAudio
+%description qt6
 %{summary}.
 
-%package -n kf6-pulseaudio-qt-devel
-Summary:        Development files for kf6-pulseaudio-qt
-Requires:       kf6-pulseaudio-qt%{?_isa} = %{version}-%{release}
-Requires:       qt6-qtbase-devel
-Requires:       cmake(Qt6DBus)
+%package qt6-devel
+Summary: Development files for %{name} (Qt6)
+Requires: %{name}-qt6%{?_isa} = %{version}-%{release}
+%description qt6-devel
+%{summary}.
 
-%description -n kf6-pulseaudio-qt-devel
-Headers, pkg-config, and CMake files for kf6-pulseaudio-qt.
+%package qt6-doc
+Summary: Developer Documentation files for %{name}
+%description qt6-doc
+Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 
 %prep
-%autosetup -n pulseaudio-qt-v%{version} -p1
-
+%autosetup -p1
 
 %build
-%cmake \
-  -DQT_MAJOR_VERSION=6 \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DKDE_INSTALL_USE_QT_SYS_PATHS:BOOL=ON
+%cmake_kf6
 %cmake_build
-
 
 %install
 %cmake_install
+rm %{buildroot}%{_kf6_includedir}/pulseaudioqt_version.h
 
+%files qt6
+%license LICENSES/*.txt
+%doc README.md
+%{_kf6_libdir}/libKF6PulseAudioQt.so.5
+%{_kf6_libdir}/libKF6PulseAudioQt.so.%{version}
 
-%files -n kf6-pulseaudio-qt
-%license LICENSES/*
-# Real name is .so.<upstream-version> (e.g. 1.8.1); SONAME is still .so.5
-%{_libdir}/libKF6PulseAudioQt.so.*
+%files qt6-devel
+%{_kf6_includedir}/KF6PulseAudioQt/
+%{_kf6_libdir}/libKF6PulseAudioQt.so
+%{_kf6_libdir}/cmake/KF6PulseAudioQt/
+%{_kf6_libdir}/pkgconfig/KF6PulseAudioQt.pc
+%{_qt6_docdir}/*.tags
 
-%files -n kf6-pulseaudio-qt-devel
-%{_includedir}/KF6/*
-%{_libdir}/libKF6PulseAudioQt.so
-%{_libdir}/pkgconfig/KF6PulseAudioQt.pc
-%{_libdir}/cmake/KF6PulseAudioQt/
-
+%files qt6-doc
+%{_qt6_docdir}/*.qch
 
 %changelog
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-2
-- Add pulseaudio-qt for Plasma audio applets
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.8.1-1
+- Import

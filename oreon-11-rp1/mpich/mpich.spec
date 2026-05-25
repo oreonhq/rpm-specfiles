@@ -27,7 +27,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
 BuildRequires:  hwloc-devel >= 2.0
-%if ! (0%{?rhel} >= 10)
+%if ! (0%{?rhel} >= 10) || 0%{?oreon}
 %ifarch x86_64
 # BuildRequires:  json-c-devel
 BuildRequires:  libpsm2-devel
@@ -40,7 +40,7 @@ BuildRequires:  numactl-devel
 %ifarch aarch64 ppc64le x86_64 riscv64
 BuildRequires:  ucx-devel
 %endif
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 BuildRequires:  yaksa-devel
 %else
 Provides:       bundled(yaksa) = 0.2
@@ -154,7 +154,7 @@ CONFIGURE_OPTS=(
 %ifarch aarch64 ppc64le x86_64 riscv64
         --with-ucx
 %endif
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
         --with-yaksa
 %endif
 )
@@ -278,5 +278,5 @@ make check VERBOSE=1 \
 %{python3_sitearch}/%{name}.pth
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.2.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.2.2-1
+- Import

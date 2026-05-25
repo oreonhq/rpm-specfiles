@@ -1,4 +1,0 @@
-summary:
-    Basic smoke test for iptraf-ng
-execute:
-    script: iptraf-ng --help

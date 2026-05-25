@@ -20,7 +20,7 @@
 #
 
 %global upstream_prefix ClusterLabs-resource-agents
-%global upstream_version 7a4080a0
+%global upstream_version 496e9a45
 
 # Whether this platform defaults to using systemd as an init system
 # (needs to be evaluated prior to BuildRequires being enumerated and
@@ -51,8 +51,8 @@
 
 Name:		resource-agents
 Summary:	Open Source HA Reusable Cluster Resource Scripts
-Version:	4.17.0
-Release:	1%{?rcver:%{rcver}}%{?numcomm:.%{numcomm}}%{?alphatag:.%{alphatag}}%{?dirty:.%{dirty}}%{?dist}.1
+Version:	4.18.0
+Release:	1%{?rcver:%{rcver}}%{?numcomm:.%{numcomm}}%{?alphatag:.%{alphatag}}%{?dirty:.%{dirty}}%{?dist}
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later
 URL:		https://github.com/ClusterLabs/resource-agents
 Source0:	%{upstream_prefix}-%{upstream_version}.tar.gz
@@ -67,21 +67,21 @@ BuildRequires: libxslt glib2-devel libqb-devel
 BuildRequires: systemd
 BuildRequires: which
 
-%if 0%{?fedora} || 0%{?centos} > 7 || 0%{?rhel} > 7 || 0%{?suse_version}
+%if 0%{?fedora} || 0%{?centos} > 7 || 0%{?rhel} > 7 || 0%{?suse_version} || 0%{?oreon}
 BuildRequires: python3-devel
 %else
 BuildRequires: python-devel
 %endif
 
 %ifarch x86_64
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires: python3-pyroute2
 %endif
 %endif
 
-%if 0%{?fedora} || 0%{?centos} || 0%{?rhel}
+%if 0%{?fedora} || 0%{?centos} || 0%{?rhel} || 0%{?oreon}
 BuildRequires: docbook-style-xsl docbook-dtds
-%if 0%{?rhel} == 0
+%if 0%{?rhel} == 0 || 0%{?oreon}
 BuildRequires: libnet-devel
 %endif
 %endif
@@ -108,24 +108,24 @@ Requires: /usr/sbin/fuser
 %endif
 
 # Filesystem / fs.sh / netfs.sh
-%if 0%{?fedora} > 39 || 0%{?rhel} > 9 || 0%{?suse_version}
+%if 0%{?fedora} > 39 || 0%{?rhel} > 9 || 0%{?suse_version} || 0%{?oreon}
 Requires: /usr/sbin/fsck
 %else
 Requires: /sbin/fsck
 %endif
 Requires: /usr/sbin/fsck.ext2 /usr/sbin/fsck.ext3 /usr/sbin/fsck.ext4
 Requires: /usr/sbin/fsck.xfs
-%if 0%{?fedora} > 40 || 0%{?rhel} > 9 || 0%{?suse_version}
+%if 0%{?fedora} > 40 || 0%{?rhel} > 9 || 0%{?suse_version} || 0%{?oreon}
 Recommends: /usr/sbin/mount.nfs /usr/sbin/mount.nfs4
 %else
-%if 0%{?rhel} > 8
+%if 0%{?rhel} > 8 || 0%{?oreon}
 Recommends: /sbin/mount.nfs /sbin/mount.nfs4
 %else
 Requires: /sbin/mount.nfs /sbin/mount.nfs4
 %endif
 %endif
-%if (0%{?fedora} && 0%{?fedora} < 33) || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version}
-%if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?centos} && 0%{?centos} < 8)
+%if (0%{?fedora} && 0%{?fedora} < 33) || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
+%if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?centos} && 0%{?centos} < 8) || 0%{?oreon}
 Requires: /usr/sbin/mount.cifs
 %else
 Recommends: /usr/sbin/mount.cifs
@@ -139,16 +139,16 @@ Requires: /sbin/ip
 Requires: /usr/sbin/lvm
 
 # nfsserver / netfs.sh
-%if 0%{?fedora} > 40 || 0%{?rhel} > 9 || 0%{?suse_version}
+%if 0%{?fedora} > 40 || 0%{?rhel} > 9 || 0%{?suse_version} || 0%{?oreon}
 Recommends: /usr/sbin/rpc.statd
 %else
-%if 0%{?rhel} > 8
+%if 0%{?rhel} > 8 || 0%{?oreon}
 Recommends: /sbin/rpc.statd
 %else
 Requires: /sbin/rpc.statd
 %endif
 %endif
-%if 0%{?fedora} > 40 || 0%{?rhel} > 8 || 0%{?suse_version}
+%if 0%{?fedora} > 40 || 0%{?rhel} > 8 || 0%{?suse_version} || 0%{?oreon}
 Recommends: /usr/sbin/rpc.nfsd /usr/sbin/rpc.mountd
 %else
 Requires: /usr/sbin/rpc.nfsd /usr/sbin/rpc.mountd
@@ -161,7 +161,7 @@ Requires: /usr/sbin/ethtool
 Requires: /sbin/rdisc /usr/sbin/arping /bin/ping /bin/ping6
 
 # nfsexport.sh
-%if 0%{?fedora} > 39 || 0%{?rhel} > 9
+%if 0%{?fedora} > 39 || 0%{?rhel} > 9 || 0%{?oreon}
 Requires: /usr/sbin/findfs
 Requires: /usr/sbin/quotaon /usr/sbin/quotacheck
 %else
@@ -181,15 +181,15 @@ License:	GPL-2.0-or-later
 Summary:	A Monitoring Daemon for Maintaining High Availability Resources
 Obsoletes:	heartbeat-ldirectord <= %{version}
 Provides:	heartbeat-ldirectord = %{version}
-%if 0%{?fedora} > 18 || 0%{?centos} > 6 || 0%{?rhel} > 6
+%if 0%{?fedora} > 18 || 0%{?centos} > 6 || 0%{?rhel} > 6 || 0%{?oreon}
 BuildRequires: perl-podlators
 %endif
 Requires:       %{SSLeay} perl-libwww-perl perl-MailTools
 Requires:       ipvsadm logrotate
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Requires:	perl-Net-IMAP-Simple-SSL perl-IO-Socket-INET6
 %endif
-%if 0%{?fedora} < 34
+%if 0%{?fedora} < 34 || 0%{?oreon}
 Requires(post):  /sbin/chkconfig
 Requires(preun): /sbin/chkconfig
 %endif
@@ -211,7 +211,7 @@ See 'ldirectord -h' and linux-ha/doc/ldirectord for more information.
 %endif
 
 %prep
-%if 0%{?suse_version} == 0 && 0%{?fedora} == 0 && 0%{?centos} == 0 && 0%{?rhel} == 0
+%if 0%{?suse_version} == 0 && 0%{?fedora} == 0 && 0%{?centos} == 0 && 0%{?rhel} == 0 || 0%{?oreon}
 %{error:Unable to determine the distribution/version. This is generally caused by missing /etc/rpm/macros.dist. Please install the correct build packages or define the required macros manually.}
 exit 1
 %endif
@@ -222,7 +222,7 @@ if [ ! -f configure ]; then
 	./autogen.sh
 fi
 
-%if 0%{?fedora} >= 11 || 0%{?centos} > 5 || 0%{?rhel} > 5
+%if 0%{?fedora} >= 11 || 0%{?centos} > 5 || 0%{?rhel} > 5 || 0%{?oreon}
 CFLAGS="$(echo '%{optflags}')"
 %global conf_opt_fatal "--enable-fatal-warnings=no"
 %else
@@ -243,7 +243,7 @@ CFLAGS="${CFLAGS} ${RPM_OPT_FLAGS}"
 export CFLAGS
 
 %configure \
-%if 0%{?fedora} || 0%{?centos} > 7 || 0%{?rhel} > 7 || 0%{?suse_version}
+%if 0%{?fedora} || 0%{?centos} > 7 || 0%{?rhel} > 7 || 0%{?suse_version} || 0%{?oreon}
 	PYTHON="%{__python3}" \
 %endif
 	%{conf_opt_fatal} \
@@ -360,7 +360,7 @@ ccs_update_schema > /dev/null 2>&1 ||:
 %insserv_cleanup
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %preun -n ldirectord
 %if %{defined _unitdir}
 %systemd_preun ldirectord.service
@@ -400,11 +400,11 @@ ccs_update_schema > /dev/null 2>&1 ||:
 %if 0%{?suse_version}
 /sbin/rcldirectord
 %endif
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %{_usr}/lib/ocf/resource.d/heartbeat/ldirectord
 %endif
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.17.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.18.0-1}}}}
+- Import

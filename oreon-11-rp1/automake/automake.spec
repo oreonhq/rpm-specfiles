@@ -30,8 +30,8 @@ Release:    4%{?dist}
 #   Automake/* - GPL-2.0-or-later
 #   am/* - GPL-2.0-or-later
 #   INSTALL - FSFAP
-#   install-sh - X11 AND LicenseRef-Fedora-Public-Domain (added by autoconf)
-#   mkinstalldirs - LicenseRef-Fedora-Public-Domain
+#   install-sh - X11 AND LicenseRef-Public-Domain (added by autoconf)
+#   mkinstalldirs - LicenseRef-Public-Domain
 #   config.{guess,sub} - GPL-3.0-or-later WITH Autoconf-exception-generic-3.0
 #   texinfo.tex - GPL-3.0-or-later WITH Texinfo-exception
 #   * - GPL-2.0-or-later WITH Autoconf-exception-generic
@@ -43,13 +43,13 @@ Release:    4%{?dist}
 #     {Makefile.in,aclocal.m4} - FSFULLRWD
 #     {Makefile.am,configure,configure.ac} - FSFUL
 #     {compile,depcomp,missing} - GPL-2.0-or-later WITH Autoconf-exception-generic
-#     install-sh - X11 AND LicenseRef-Fedora-Public-Domain (added by autoconf)
+#     install-sh - X11 AND LicenseRef-Public-Domain (added by autoconf)
 # usr/share/info:
 #  * - GFDL-1.3-or-later
 # usr/share/man/man1/*: generated from usr/bin/{aclocal,automake} using help2man
-License:    GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Texinfo-exception AND GFDL-1.3-or-later AND FSFAP AND FSFUL AND FSFULLR AND FSFULLRWD AND X11 AND LicenseRef-Fedora-Public-Domain
+License:    GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Texinfo-exception AND GFDL-1.3-or-later AND FSFAP AND FSFUL AND FSFULLR AND FSFULLRWD AND X11 AND LicenseRef-Public-Domain
 
-Source:     https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.xz
+Source:     ftp://ftp.gnu.org/gnu/automake/automake-%{version}.tar.xz
 
 # ~> downstream
 # The patch is only made necessary due to fedora specific changes
@@ -93,7 +93,7 @@ BuildRequires: sharutils
 BuildREquires: texlive-dvips
 BuildRequires: texinfo-tex
 BuildRequires: vala
-%if !0%{?rhel:1}
+%if !0%{?rhel:1} || 0%{?oreon}
 BuildRequires: gcc-objc
 BuildRequires: gcc-objc++
 BuildRequires: imake
@@ -159,5 +159,5 @@ make -k %{?_smp_mflags} check %{?TESTS_FLAGS: TESTS="%{TESTS_FLAGS}"} \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{api_version}.1-4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.18.1-4
+- Import

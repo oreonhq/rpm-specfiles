@@ -105,5 +105,5 @@ install -pm 0644 libmpeg2/mpeg2_internal.h \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.1-33
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.1-33
+- Import

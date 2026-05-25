@@ -1,9 +1,0 @@
-discover:
-  how: fmf
-prepare:
-  how: install
-  exclude:
-    - libcurl-minimal
-    - curl-minimal
-execute:
-  how: tmt

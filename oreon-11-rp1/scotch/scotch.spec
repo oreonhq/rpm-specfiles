@@ -1,5 +1,5 @@
 %bcond mpich %{undefined flatpak}
-%if 0%{?fedora} >= 40
+%if 0%{?fedora} >= 40 || 0%{?oreon}
 %ifarch %{ix86}
 %bcond openmpi 0
 %else
@@ -15,8 +15,8 @@
 
 Name:          scotch
 Summary:       Graph, mesh and hypergraph partitioning library
-Version:       7.0.11
-Release:       1%{?dist}
+Version:       7.0.10
+Release:       2%{?dist}
 
 License:       CeCILL-C
 URL:           https://gitlab.inria.fr/scotch/scotch
@@ -453,5 +453,5 @@ rm -rf %{buildroot}%{_mandir}/*
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.11-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.10-2
+- Import

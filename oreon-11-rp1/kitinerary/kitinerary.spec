@@ -1,5 +1,5 @@
 Name:    kitinerary
-Version: 26.03.80
+Version: 26.04.1
 Release: 1%{?dist}
 Summary: A library containing itinerary data model and itinerary extraction code
 
@@ -8,7 +8,7 @@ URL:     https://invent.kde.org/frameworks/%{name}
 
 Source0:        http://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 %if !%{defined fc40} && !%{defined fc41}
 ExcludeArch:   %{ix86}
 %endif
@@ -40,7 +40,7 @@ BuildRequires:  pkgconfig(Qt6Qml)
 
 BuildRequires:  pkgconfig(libxml-2.0)
 BuildRequires:  pkgconfig(poppler)
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires:  libphonenumber-devel
 BuildRequires:  protobuf-devel
 %endif
@@ -103,174 +103,5 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 
 %changelog
-* Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
-- 26.03.80
-
-* Sun Mar 08 2026 Steve Cossette <farchord@gmail.com> - 25.12.3-1
-- 25.12.3
-
-* Thu Feb 12 2026 Steve Cossette <farchord@gmail.com> - 25.12.2-2
-- Full Stack Rebuild (kio abi break)
-
-* Wed Feb 04 2026 Steve Cossette <farchord@gmail.com> - 25.12.2-1
-- 25.12.2
-
-* Mon Jan 19 2026 Steve Cossette <farchord@gmail.com> - 25.12.1-3
-- Rebuild for poppler update
-
-* Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org> - 25.12.1-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
-
-* Wed Jan 07 2026 farchord@gmail.com - 25.12.1-1
-- 25.12.1
-
-* Sat Dec 06 2025 Steve Cossette <farchord@gmail.com> - 25.12.0-1
-- 25.12.0
-
-* Fri Nov 28 2025 Steve Cossette <farchord@gmail.com> - 25.11.90-1
-- 25.11.90
-
-* Sat Nov 15 2025 Steve Cossette <farchord@gmail.com> - 25.11.80-1
-- 25.11.80
-
-* Tue Nov 04 2025 Steve Cossette <farchord@gmail.com> - 25.08.3-1
-- 25.08.3
-
-* Wed Oct 08 2025 Steve Cossette <farchord@gmail.com> - 25.08.2-1
-- 25.08.2
-
-* Sun Sep 21 2025 Steve Cossette <farchord@gmail.com> - 25.08.1-1
-- 25.08.1
-
-* Fri Aug 08 2025 Steve Cossette <farchord@gmail.com> - 25.08.0-1
-- 25.08.0
-
-* Fri Jul 25 2025 Steve Cossette <farchord@gmail.com> - 25.07.90-1
-- 25.07.90
-
-* Thu Jul 24 2025 Fedora Release Engineering <releng@fedoraproject.org> - 25.07.80-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
-
-* Thu Jul 17 2025 Steve Cossette <farchord@gmail.com> - 25.07.80-2
-- Rebuild for poppler update
-
-* Fri Jul 11 2025 Steve Cossette <farchord@gmail.com> - 25.07.80-1
-- 25.07.80
-
-* Thu Jul 03 2025 Steve Cossette <farchord@gmail.com> - 25.04.3-1
-- 25.04.3
-
-* Wed Jun 04 2025 Steve Cossette <farchord@gmail.com> - 25.04.2-1
-- 25.04.2
-
-* Wed May 14 2025 Steve Cossette <farchord@gmail.com> - 25.04.1-1
-- 25.04.1
-
-* Sat Apr 12 2025 Steve Cossette <farchord@gmail.com> - 25.04.0-1
-- 25.04.0
-
-* Thu Mar 20 2025 Steve Cossette <farchord@gmail.com> - 25.03.80-1
-- 25.03.80 (Beta)
-
-* Tue Mar 04 2025 Steve Cossette <farchord@gmail.com> - 24.12.3-1
-- 24.12.3
-
-* Sun Feb 23 2025 Neal Gompa <ngompa@fedoraproject.org> - 24.12.2-4
-- Rebuild for poppler 25.02.0 again
-
-* Fri Feb 21 2025 Steve Cossette <farchord@gmail.com> - 24.12.2-3
-- Rebuild for ppc64le enablement
-
-* Mon Feb 10 2025 Steve Cossette <farchord@gmail.com> - 24.12.2-2
-- Rebuild (for poppler 25.02.0)
-
-* Wed Feb 05 2025 Steve Cossette <farchord@gmail.com> - 24.12.2-1
-- 24.12.2
-
-* Fri Jan 17 2025 Fedora Release Engineering <releng@fedoraproject.org> - 24.12.1-4
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
-
-* Wed Jan 08 2025 Alessandro Astone <ales.astone@gmail.com> - 24.12.1-3
-- devel subpackage requires KPim6PkPass, KF6CalendarCore, KF6Contacts
-
-* Wed Jan 08 2025 Alessandro Astone <ales.astone@gmail.com> - 24.12.1-2
-- devel subpackage requires KPim6Mime
-
-* Tue Jan 07 2025 Steve Cossette <farchord@gmail.com> - 24.12.1-1
-- 24.12.1
-
-* Mon Jan 06 2025 Benjamin A. Beasley <code@musicinmybrain.net> - 24.12.0-3
-- Drop i686 support (leaf package)
-
-* Sat Dec 14 2024 Adam Williamson <awilliam@redhat.com> - 24.12.0-2
-- Rebuild for new libphonenumber
-
-* Sat Dec 07 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.12.0-1
-- 24.12.0
-
-* Fri Nov 29 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.11.90-1
-- 24.11.90
-
-* Tue Nov 19 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.11.80-1
-- 24.11.80
-
-* Tue Nov 19 2024 Steve Cossette <farchord@gmail.com> - 24.08.3-2
-- Version bump for libphonenumber
-
-* Tue Nov 05 2024 Steve Cossette <farchord@gmail.com> - 24.08.3-1
-- 24.08.3
-
-* Tue Oct 08 2024 Steve Cossette <farchord@gmail.com> - 24.08.2-1
-- 24.08.2
-
-* Wed Sep 25 2024 Alessandro Astone <ales.astone@gmail.com> - 24.08.1-1
-- 24.08.1
-
-* Thu Aug 22 2024 Steve Cossette <farchord@gmail.com> - 24.08.0-1
-- 24.08.0
-
-* Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 24.05.2-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
-
-* Sun Jul 07 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.05.2-1
-- 24.05.2
-
-* Fri Jun 14 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.05.1-1
-- 24.05.1
-
-* Fri May 17 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.05.0-1
-- 24.05.0
-
-* Fri Apr 12 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.02.2-1
-- 24.02.2
-
-* Fri Mar 29 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.02.1-1
-- 24.02.1
-
-* Sun Mar 10 2024 Marie Loise Nolden <loise@kde.org> - 24.02.0-2
-- add missing BuildArch: noarch to -doc package
-
-* Wed Feb 21 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.02.0-1
-- 24.02.0
-
-* Thu Feb 08 2024 Marek Kasik <mkasik@redhat.com> - 24.01.95-2
-- Rebuild for poppler 24.02.0
-
-* Wed Jan 31 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.01.95-1
-- 24.01.95
-
-* Thu Jan 25 2024 Fedora Release Engineering <releng@fedoraproject.org> - 24.01.90-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Sun Jan 21 2024 Fedora Release Engineering <releng@fedoraproject.org> - 24.01.90-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
-
-* Thu Jan 11 2024 Marc Deop i Argemí <marcdeop@fedoraproject.org> - 24.01.90-1
-- 24.01.90
-- Add doc package for KF6 API
-
-* Sat Dec 23 2023 ales.astone@gmail.com - 24.01.85-1
-- 24.01.85
-
-* Fri Dec 8 2023 Steve Cossette <farchord@gmail.com> - 24.01.80-1
-- 24.01.80
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.04.1-1
+- Import

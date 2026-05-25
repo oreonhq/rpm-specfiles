@@ -9,7 +9,7 @@ Source0:        http://libspectre.freedesktop.org/releases/%{name}-%{version}.ta
 
 BuildRequires: make
 BuildRequires:  gcc
-%if 0%{?fedora} > 27
+%if 0%{?fedora} > 27 || 0%{?oreon}
 BuildRequires: libgs-devel
 %else
 BuildRequires: ghostscript-devel >= 8.61
@@ -61,5 +61,5 @@ rm -fv %{buildroot}%{_libdir}/libspectre.la
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.12-11
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.12-11
+- Import

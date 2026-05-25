@@ -1,5 +1,5 @@
 # Disable check to avoid pulling unwanted package (fish) into RHEL 9
-%if 0%{?rhel} >= 9 && !0%{?epel}
+%if 0%{?rhel} >= 9 && !0%{?epel} || 0%{?oreon}
 %bcond_with check
 %else
 %bcond_without check
@@ -102,5 +102,5 @@ export PIP_NO_BUILD_ISOLATION=0
 %{_sysconfdir}/bash_completion.d/_%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.6.3-1
+- Import

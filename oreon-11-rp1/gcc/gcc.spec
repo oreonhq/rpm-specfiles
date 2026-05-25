@@ -1,19 +1,21 @@
-%global gcc_version 16.1.0
+%global DATE 20260515
+%global gitrev d776f42bb910ebccf652b010b80c22bcca736f7f
+%global gcc_version 16.1.1
 %global gcc_major 16
 # Note, gcc_release must be integer, if you want to add suffixes to
 # %%{release}, append them after %%{gcc_release} on Release: line.
-%global gcc_release 1
+%global gcc_release 2
 %global nvptx_tools_gitrev 212da2e781ed0f9423824e85eb04819958513f7a
 %global newlib_cygwin_gitrev d35cc82b5ec15bb8a5fe0fe11e183d1887992e99
 %global _unpackaged_files_terminate_build 0
 %global _find_debuginfo_opts --keep-section .a68_exports
-%if 0%{?fedora:1}
+%if 0%{?fedora:1} || 0%{?oreon}
 %global _performance_build 1
 # Hardening slows the compiler way too much.
 %undefine _hardened_build
 %endif
 %undefine _auto_set_build_flags
-%if 0%{?fedora} > 27 || 0%{?rhel} > 7
+%if 0%{?fedora} > 27 || 0%{?rhel} > 7 || 0%{?oreon}
 # Until annobin is fixed (#1519165).
 %undefine _annotated_build
 %endif
@@ -25,15 +27,19 @@
 %if 0%{?__brp_strip_lto:1}
 %global __brp_strip_lto %{__brp_strip_lto} || :
 %endif
-%define bugurl https://issues.oreonhq.com
+%if 0%{?rhel} > 0 || 0%{?oreon}
+%define bugurl https://issues.redhat.com
+%else
+%define bugurl https://bugzilla.redhat.com/bugzilla
+%endif
 %{!?dist_bug_report_url: %global dist_bug_report_url %bugurl}
 
-%if 0%{?fedora} < 32 && 0%{?rhel} < 8
+%if 0%{?fedora} < 32 && 0%{?rhel} < 8 || 0%{?oreon}
 %global multilib_64_archs sparc64 ppc64 ppc64p7 s390x x86_64
 %else
 %global multilib_64_archs sparc64 ppc64 ppc64p7 x86_64
 %endif
-%if 0%{?rhel} > 7
+%if 0%{?rhel} > 7 || 0%{?oreon}
 %global build_ada 0
 %global build_objc 0
 %global build_go 0
@@ -110,7 +116,7 @@
 %else
 %global build_libitm 0
 %endif
-%if 0%{?rhel} > 8
+%if 0%{?rhel} > 8 || 0%{?oreon}
 %global build_isl 0
 %else
 %global build_isl 1
@@ -131,7 +137,7 @@
 %else
 %global build_offload_amdgcn 0
 %endif
-%if 0%{?fedora} < 32 && 0%{?rhel} < 8
+%if 0%{?fedora} < 32 && 0%{?rhel} < 8 || 0%{?oreon}
 %ifarch s390x
 %global multilib_32_arch s390
 %endif
@@ -145,7 +151,7 @@
 %ifarch x86_64
 %global multilib_32_arch i686
 %endif
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 10
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 10 || 0%{?oreon}
 %global build_annobin_plugin 1
 %else
 %global build_annobin_plugin 0
@@ -160,7 +166,7 @@ Release: %{gcc_release}%{?dist}
 #   libcody: Apache-2.0
 #   libphobos/src/etc/c/curl.d: curl
 # All of the remaining license soup is in newlib.
-License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Fedora-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
+License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND (GPL-3.0-or-later WITH Texinfo-exception) AND (LGPL-2.1-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND (GPL-2.0-or-later WITH GNU-compiler-exception) AND BSL-1.0 AND GFDL-1.3-or-later AND Linux-man-pages-copyleft-2-para AND SunPro AND BSD-1-Clause AND BSD-2-Clause AND BSD-2-Clause-Views AND BSD-3-Clause AND BSD-4-Clause AND BSD-Source-Code AND Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 WITH LLVM-Exception) AND ZPL-2.1 AND ISC AND LicenseRef-Public-Domain AND HP-1986 AND curl AND Martin-Birgmeier AND HPND-Markus-Kuhn AND dtoa AND SMLNJ AND AMD-newlib AND OAR AND HPND-merchantability-variant AND HPND-Intel
 # The source for this package was pulled from upstream's vcs.
 # %%{gitrev} is some commit from the
 # https://gcc.gnu.org/git/?p=gcc.git;h=refs/vendors/redhat/heads/gcc-%%{gcc_major}-branch
@@ -171,20 +177,20 @@ License: GPL-3.0-or-later AND LGPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-e
 # to speed up the clone operations.  Note, %%{gitrev} macro in
 # gcc.spec shouldn't be updated before running the script, the script
 # will update it, fill in some %%changelog details etc.
-Source0: https://gcc.gnu.org/pub/gcc/releases/gcc-%{version}/gcc-%{version}.tar.xz
+Source0: gcc-%{version}-%{DATE}.tar.xz
 # The source for nvptx-tools package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 # git clone --depth 1 https://github.com/MentorEmbedded/nvptx-tools.git nvptx-tools-dir.tmp
 # git --git-dir=nvptx-tools-dir.tmp/.git fetch --depth 1 origin %%{nvptx_tools_gitrev}
 # git --git-dir=nvptx-tools-dir.tmp/.git archive --prefix=nvptx-tools-%%{nvptx_tools_gitrev}/ %%{nvptx_tools_gitrev} | xz -9e > nvptx-tools-%%{nvptx_tools_gitrev}.tar.xz
 # rm -rf nvptx-tools-dir.tmp
-Source1: https://github.com/MentorEmbedded/nvptx-tools/archive/%{nvptx_tools_gitrev}/nvptx-tools-%{nvptx_tools_gitrev}.tar.gz
+Source1: nvptx-tools-%{nvptx_tools_gitrev}.tar.xz
 # The source for nvptx-newlib package was pulled from upstream's vcs.  Use the
 # following commands to generate the tarball:
 # git clone https://sourceware.org/git/newlib-cygwin.git newlib-cygwin-dir.tmp
 # git --git-dir=newlib-cygwin-dir.tmp/.git archive --prefix=newlib-cygwin-%%{newlib_cygwin_gitrev}/ %%{newlib_cygwin_gitrev} ":(exclude)newlib/libc/sys/linux/include/rpc/*.[hx]" | xz -9e > newlib-cygwin-%%{newlib_cygwin_gitrev}.tar.xz
 # rm -rf newlib-cygwin-dir.tmp
-Source2: https://github.com/mirror/newlib-cygwin/archive/%{newlib_cygwin_gitrev}/newlib-cygwin-%{newlib_cygwin_gitrev}.tar.gz
+Source2: newlib-cygwin-%{newlib_cygwin_gitrev}.tar.xz
 %global isl_version 0.24
 Source3: https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
 URL: http://gcc.gnu.org
@@ -281,7 +287,7 @@ Requires: glibc-devel >= 2.2.90-12
 # Make sure glibc supports TFmode long double
 Requires: glibc >= 2.3.90-35
 %endif
-%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7 || 0%{?oreon}
 %ifarch %{arm}
 Requires: glibc >= 2.16
 %endif
@@ -406,7 +412,7 @@ Summary: GNU Standard C++ Library
 Autoreq: true
 Requires: glibc >= 2.10.90-7
 BuildRequires: tzdata >= 2017c
-%if 0%{?fedora} > 38 || 0%{?rhel} > 9
+%if 0%{?fedora} > 38 || 0%{?rhel} > 9 || 0%{?oreon}
 Recommends: tzdata >= 2017c
 %else
 Requires: tzdata >= 2017c
@@ -488,7 +494,7 @@ programs with the GNU Compiler Collection.
 %package -n libgfortran
 Summary: Fortran runtime
 Autoreq: true
-%if 0%{?fedora} < 28 && 0%{?rhel} < 8
+%if 0%{?fedora} < 28 && 0%{?rhel} < 8 || 0%{?oreon}
 %if %{build_libquadmath}
 Requires: libquadmath = %{version}-%{release}
 %endif
@@ -637,7 +643,7 @@ installed separately.
 %package -n libgomp-offload-amdgcn
 Summary: GCC OpenMP v5.2 plugin for offloading to AMD GCN
 Requires: libgomp = %{version}-%{release}
-%if 0%{?fedora:1}
+%if 0%{?fedora:1} || 0%{?oreon}
 Requires: rocm-runtime >= 6.0.0
 %endif
 
@@ -661,7 +667,7 @@ This package contains shared library with GCC JIT front-end.
 
 %package -n libgccjit-devel
 Summary: Support for embedding GCC inside programs and libraries
-%if 0%{?fedora} > 27 || 0%{?rhel} > 7
+%if 0%{?fedora} > 27 || 0%{?rhel} > 7 || 0%{?oreon}
 BuildRequires: python3-sphinx
 %else
 BuildRequires: python-sphinx
@@ -959,7 +965,7 @@ of the plugin is explicitly built by the same version of gcc that is installed
 so that there cannot be any synchronization problems.
 
 %prep
-%setup -q -n gcc-%{version} -a 1 -a 2 -a 3
+%setup -q -n gcc-%{version}-%{DATE} -a 1 -a 2 -a 3
 %autopatch -p0 -m 0 -M 4
 %if %{build_isl}
 %autopatch -p0 -m 5 -M 6
@@ -968,13 +974,13 @@ so that there cannot be any synchronization problems.
 %autopatch -p0 7
 %endif
 %autopatch -p0 -m 8 -M 9
-%if 0%{?fedora} >= 29 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 29 || 0%{?rhel} > 7 || 0%{?oreon}
 %autopatch -p0 10
 %endif
 %autopatch -p0 -m 11 -M 99
 touch -r isl-0.24/m4/ax_prog_cxx_for_build.m4 isl-0.24/m4/ax_prog_cc_for_build.m4
 
-%if 0%{?rhel} >= 9
+%if 0%{?rhel} >= 9 || 0%{?oreon}
 %autopatch -p1 100
 %endif
 
@@ -984,7 +990,7 @@ rm -f gcc/testsuite/go.test/test/fixedbugs/issue19182.go
 rm -f libphobos/testsuite/libphobos.gc/forkgc2.d
 #rm -rf libphobos/testsuite/libphobos.gc
 
-echo 'Oreon %{version}-%{gcc_release}' > gcc/DEV-PHASE
+echo 'Red Hat %{version}-%{gcc_release}' > gcc/DEV-PHASE
 
 ./contrib/gcc_update --touch
 
@@ -1192,7 +1198,7 @@ CONFIGURE_OPTS="\
 %endif
 %ifarch ppc64le %{mips} s390x
 %ifarch s390x
-%if 0%{?fedora} < 32 && 0%{?rhel} < 8
+%if 0%{?fedora} < 32 && 0%{?rhel} < 8 || 0%{?oreon}
 	--enable-multilib \
 %else
 	--disable-multilib \
@@ -1221,7 +1227,7 @@ CONFIGURE_OPTS="\
 %if %{build_offload_nvptx}
 	--without-cuda-driver \
 %endif
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7 || 0%{?oreon}
 %if %{attr_ifunc}
 	--enable-gnu-indirect-function \
 %endif
@@ -1248,16 +1254,16 @@ CONFIGURE_OPTS="\
 	--host=%{gcc_target_platform} --build=%{gcc_target_platform} --target=%{gcc_target_platform} --with-cpu=v7
 %endif
 %ifarch ppc ppc64 ppc64p7
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} >= 7 || 0%{?oreon}
 	--with-cpu-32=power7 --with-tune-32=power7 --with-cpu-64=power7 --with-tune-64=power7 \
 %endif
-%if 0%{?rhel} == 6
+%if 0%{?rhel} == 6 || 0%{?oreon}
 	--with-cpu-32=power4 --with-tune-32=power6 --with-cpu-64=power4 --with-tune-64=power6 \
 %endif
 %endif
 %ifarch ppc64le
-%if 0%{?rhel} >= 9
-%if 0%{?rhel} >= 10
+%if 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || 0%{?oreon}
 	--with-cpu-32=power9 --with-tune-32=power10 --with-cpu-64=power9 --with-tune-64=power10 \
 %else
 	--with-cpu-32=power9 --with-tune-32=power9 --with-cpu-64=power9 --with-tune-64=power9 \
@@ -1272,17 +1278,17 @@ CONFIGURE_OPTS="\
 %ifarch %{ix86} x86_64
 	--enable-cet \
 	--with-tune=generic \
-%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11 || 0%{?oreon}
 	--with-tls=gnu2 \
 %endif
 %endif
-%if 0%{?rhel} >= 7
+%if 0%{?rhel} >= 7 || 0%{?oreon}
 %ifarch %{ix86}
 	--with-arch=x86-64 \
 %endif
 %ifarch x86_64
-%if 0%{?rhel} > 8
-%if 0%{?rhel} > 9
+%if 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?rhel} > 9 || 0%{?oreon}
 	--with-arch_64=x86-64-v3 \
 %else
 	--with-arch_64=x86-64-v2 \
@@ -1299,10 +1305,10 @@ CONFIGURE_OPTS="\
 %endif
 %endif
 %ifarch s390 s390x
-%if 0%{?rhel} >= 7
-%if 0%{?rhel} > 7
-%if 0%{?rhel} > 8
-%if 0%{?rhel} >= 9
+%if 0%{?rhel} >= 7 || 0%{?oreon}
+%if 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?rhel} >= 9 || 0%{?oreon}
 	--with-arch=z14 --with-tune=z15 \
 %else
 	--with-arch=z13 --with-tune=arch13 \
@@ -1314,10 +1320,10 @@ CONFIGURE_OPTS="\
 	--with-arch=z196 --with-tune=zEC12 \
 %endif
 %else
-%if 0%{?fedora} >= 38
+%if 0%{?fedora} >= 38 || 0%{?oreon}
 	--with-arch=z13 --with-tune=z14 \
 %else
-%if 0%{?fedora} >= 26
+%if 0%{?fedora} >= 26 || 0%{?oreon}
 	--with-arch=zEC12 --with-tune=z13 \
 %else
 	--with-arch=z9-109 --with-tune=z10 \
@@ -1342,12 +1348,12 @@ CONFIGURE_OPTS="\
 %ifnarch sparc sparcv9 ppc
 	--build=%{gcc_target_platform} \
 %endif
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9 || 0%{?oreon}
 %ifnarch %{arm}
 	--with-build-config=bootstrap-lto --enable-link-serialization=1 \
 %endif
 %endif
-%if 0%{?rhel:1}
+%if 0%{?rhel:1} || 0%{?oreon}
 	--enable-host-pie --enable-host-bind-now \
 %endif
 	--disable-libssp \
@@ -1508,10 +1514,10 @@ tar xf %{_usrsrc}/annobin/latest-annobin.tar.xz
 cd annobin*
 touch aclocal.m4 configure Makefile.in */configure */config.h.in */Makefile.in
 ANNOBIN_FLAGS=../../obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/scripts/testsuite_flags
-ANNOBIN_CFLAGS1="%build_cflags -I %{_builddir}/gcc-%{version}/gcc"
-ANNOBIN_CFLAGS1="$ANNOBIN_CFLAGS1 -I %{_builddir}/gcc-%{version}/obj-%{gcc_target_platform}/gcc"
-ANNOBIN_CFLAGS2="-I %{_builddir}/gcc-%{version}/include -I %{_builddir}/gcc-%{version}/libcpp/include"
-ANNOBIN_LDFLAGS="%build_ldflags -L%{_builddir}/gcc-%{version}/obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/src/.libs"
+ANNOBIN_CFLAGS1="%build_cflags -I %{_builddir}/gcc-%{version}-%{DATE}/gcc"
+ANNOBIN_CFLAGS1="$ANNOBIN_CFLAGS1 -I %{_builddir}/gcc-%{version}-%{DATE}/obj-%{gcc_target_platform}/gcc"
+ANNOBIN_CFLAGS2="-I %{_builddir}/gcc-%{version}-%{DATE}/include -I %{_builddir}/gcc-%{version}-%{DATE}/libcpp/include"
+ANNOBIN_LDFLAGS="%build_ldflags -L%{_builddir}/gcc-%{version}-%{DATE}/obj-%{gcc_target_platform}/%{gcc_target_platform}/libstdc++-v3/src/.libs"
 CC="`$ANNOBIN_FLAGS --build-cc`" CXX="`$ANNOBIN_FLAGS --build-cxx`" \
   CFLAGS="$ANNOBIN_CFLAGS1 $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
   CXXFLAGS="$ANNOBIN_CFLAGS1 `$ANNOBIN_FLAGS --build-includes` $ANNOBIN_CFLAGS2 $ANNOBIN_LDFLAGS" \
@@ -1738,9 +1744,9 @@ mv %{buildroot}%{_prefix}/%{_lib}/libga68.spec $FULLPATH/
 %endif
 
 mkdir -p %{buildroot}/%{_lib}
-mv -f %{buildroot}%{_prefix}/%{_lib}/libgcc_s.so.1 %{buildroot}/%{_lib}/libgcc_s-%{gcc_major}-%{version}.so.1
-chmod 755 %{buildroot}/%{_lib}/libgcc_s-%{gcc_major}-%{version}.so.1
-ln -sf libgcc_s-%{gcc_major}-%{version}.so.1 %{buildroot}/%{_lib}/libgcc_s.so.1
+mv -f %{buildroot}%{_prefix}/%{_lib}/libgcc_s.so.1 %{buildroot}/%{_lib}/libgcc_s-%{gcc_major}-%{DATE}.so.1
+chmod 755 %{buildroot}/%{_lib}/libgcc_s-%{gcc_major}-%{DATE}.so.1
+ln -sf libgcc_s-%{gcc_major}-%{DATE}.so.1 %{buildroot}/%{_lib}/libgcc_s.so.1
 %ifarch %{ix86} x86_64 ppc ppc64 ppc64p7 ppc64le %{arm} aarch64 riscv64
 rm -f $FULLPATH/libgcc_s.so
 echo '/* GNU ld script
@@ -1855,6 +1861,7 @@ ln -sf ../../../libgcobol.so.2.* libgcobol.so
 %endif
 %if %{build_algol68}
 ln -sf ../../../libga68.so.2.* libga68.so
+objcopy --dump-section .a68_exports=ga68.m68 ../../../libga68.so.2.*
 %endif
 %if %{build_libitm}
 ln -sf ../../../libitm.so.1.* libitm.so
@@ -1902,6 +1909,7 @@ ln -sf ../../../../%{_lib}/libgcobol.so.2.* libgcobol.so
 %endif
 %if %{build_algol68}
 ln -sf ../../../../%{_lib}/libga68.so.2.* libga68.so
+objcopy --dump-section .a68_exports=ga68.m68 ../../../../%{_lib}/libga68.so.2.*
 %endif
 %if %{build_libitm}
 ln -sf ../../../../%{_lib}/libitm.so.1.* libitm.so
@@ -2077,6 +2085,7 @@ echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libgcobol.so.2.* | sed 's,
 rm -f libga68.so
 echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib/libga68.so.2.* | sed 's,^.*libg,libg,'`' )' > libga68.so
 echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib/libga68.so.2.* | sed 's,^.*libg,libg,'`' )' > 64/libga68.so
+objcopy --dump-section .a68_exports=64/ga68.m68 ../../../../lib/libga68.so.2.*
 %endif
 %if %{build_libitm}
 rm -f libitm.so
@@ -2220,6 +2229,7 @@ echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libgcobol.so.2.* | sed '
 rm -f libga68.so
 echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libga68.so.2.* | sed 's,^.*libg,libg,'`' )' > libga68.so
 echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libga68.so.2.* | sed 's,^.*libg,libg,'`' )' > 32/libga68.so
+objcopy --dump-section .a68_exports=32/ga68.m68 ../../../../lib64/libga68.so.2.*
 %endif
 %if %{build_libitm}
 rm -f libitm.so
@@ -2576,7 +2586,7 @@ ln -s ../../libexec/gcc/%{gcc_target_platform}/%{gcc_major}/liblto_plugin.so \
 %if %{build_annobin_plugin}
 mkdir -p $FULLPATH/plugin
 rm -f $FULLPATH/plugin/gcc-annobin*
-cp -a %{_builddir}/gcc-%{version}/annobin-plugin/annobin*/gcc-plugin/.libs/annobin.so.0.0.0 \
+cp -a %{_builddir}/gcc-%{version}-%{DATE}/annobin-plugin/annobin*/gcc-plugin/.libs/annobin.so.0.0.0 \
   $FULLPATH/plugin/gcc-annobin.so.0.0.0
 ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so.0
 ln -sf gcc-annobin.so.0.0.0 $FULLPATH/plugin/gcc-annobin.so
@@ -2587,7 +2597,7 @@ cd obj-%{gcc_target_platform}
 
 # run the tests.
 LC_ALL=C make %{?_smp_mflags} -k check ALT_CC_UNDER_TEST=gcc ALT_CXX_UNDER_TEST=g++ \
-%if 0%{?fedora} >= 20 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 20 || 0%{?rhel} > 7 || 0%{?oreon}
      RUNTESTFLAGS="--target_board=unix/'{-foffload=disable,-fstack-protector-strong/-foffload=disable}'" || :
 %else
      RUNTESTFLAGS="--target_board=unix/'{-foffload=disable,-fstack-protector/-foffload=disable}'" || :
@@ -3106,7 +3116,7 @@ end
 %{_prefix}/libexec/gcc/%{gcc_target_platform}/%{gcc_major}/cc1
 
 %files -n libgcc
-/%{_lib}/libgcc_s-%{gcc_major}-%{version}.so.1
+/%{_lib}/libgcc_s-%{gcc_major}-%{DATE}.so.1
 /%{_lib}/libgcc_s.so.1
 %{!?_licensedir:%global license %%doc}
 %license gcc/COPYING* COPYING.RUNTIME
@@ -3480,15 +3490,18 @@ end
 %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libga68.a
 %endif
 %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/libga68.so
+%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/ga68.m68
 %ifarch sparcv9 ppc
 %dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64
 %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libga68.a
 %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/libga68.so
+%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/64/ga68.m68
 %endif
 %ifarch %{multilib_64_archs}
 %dir %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32
 %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libga68.a
 %{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/libga68.so
+%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/32/ga68.m68
 %endif
 %{_infodir}/ga68*
 %doc rpm.doc/algol68/*
@@ -3967,5 +3980,5 @@ end
 %endif
 
 %changelog
-* Thu May 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1.0-1
-- Import from Fedora 44, debrand for Oreon, use 16.1.0 release tarball
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 16.1.1-2
+- Import

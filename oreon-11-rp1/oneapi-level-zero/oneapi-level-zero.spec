@@ -1,6 +1,7 @@
 %global srcname level-zero
 %global lib_version 1.28
-%global patch_version 2
+%global patch_version 6
+%global _lto_cflags %nil
 
 Name:           oneapi-%{srcname}
 Version:        %{lib_version}.%{patch_version}
@@ -59,7 +60,7 @@ export CXXFLAGS="%{build_cxxflags} -DFMT_HEADER_ONLY=1"
 %cmake_install
 # Install also the zello_world binary to ease up testing of the l0
 mkdir -p %{buildroot}%{_bindir}/
-install -p -m 755 ./redhat-linux-build/bin/zello_world %{buildroot}%{_bindir}/zello_world
+install -p -m 755 ./%{_vpath_builddir}/bin/zello_world %{buildroot}%{_bindir}/zello_world
 chrpath --delete %{buildroot}%{_bindir}/zello_world
 
 # Generate and install man pages.
@@ -96,5 +97,5 @@ done
 %{_libdir}/pkgconfig/%{srcname}.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{lib_version}.%{patch_version}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.6-1
+- Import

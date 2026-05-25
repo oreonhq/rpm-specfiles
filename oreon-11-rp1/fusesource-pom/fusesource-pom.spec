@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           fusesource-pom
 Version:        1.12
@@ -21,7 +21,7 @@ BuildRequires:  maven-local-openjdk25
 This is a shared POM parent for FuseSource Maven projects.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 mv fusesource-pom/pom.xml .
 
 %pom_remove_plugin :maven-scm-plugin
@@ -39,5 +39,5 @@ mv fusesource-pom/pom.xml .
 %license license.txt notice.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.12-1
+- Import

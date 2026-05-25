@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           jsr-305
 Version:        3.0.2
@@ -30,7 +30,7 @@ documents for Java Specification Request 305: Annotations for Software Defect
 Detection.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # Replace javax.annotation.concurrent annotations (that are based on
 # code from https://jcip.net/ and are licensed under CC-BY-2.5, which
@@ -73,5 +73,5 @@ sed -i /^package/s/net.jcip.annotations/javax.annotation.concurrent/ ri/src/main
 %doc sampleUses
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.0.2-1
+- Import

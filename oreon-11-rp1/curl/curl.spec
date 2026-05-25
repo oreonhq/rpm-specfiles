@@ -1,6 +1,6 @@
 # OpenSSL ENGINE support
 # This is deprecated by OpenSSL since OpenSSL 3.0 and by Fedora since Fedora 41
-# https://fedoraproject.org/wiki/Changes/OpensslDeprecateEngine
+# 
 # Change the bcond to 0 to turn off ENGINE support by default
 %bcond openssl_engine_support %[%{defined fedora} || 0%{?rhel} < 10]
 
@@ -11,9 +11,8 @@
 
 Summary: A utility for getting files from remote servers (FTP, HTTP, and others)
 Name: curl
-Version: 8.19.0
-%global version_no_tilde %(echo %{version} | sed 's/~/-/g')
-Release: 3%{?dist}
+Version: 8.18.0
+Release: 6%{?dist}
 License: curl
 Source0: https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz
 Source1: https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz.asc
@@ -21,6 +20,27 @@ Source1: https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz.asc
 # to Daniel's address page https://daniel.haxx.se/address.html for the GPG Key,
 # which points to the GPG key as of April 7th 2016 of https://daniel.haxx.se/mykey.asc
 Source2: mykey.asc
+
+# update timer unconditionally in multi_remove_handle
+# rubygem-ethon: FTBFS in Fedora Rawhide
+# https://bugzilla.redhat.com/show_bug.cgi?id=2405328
+Patch001: 0001-curl-8.18.0-multi-update-timer-unconditionally-in-multi_remove_h.patch
+
+# Fix `Could not find digest algorithm UNDEF (NID 0)`
+# https://bugzilla.redhat.com/show_bug.cgi?id=2438170
+Patch002: 0002-curl-8.18.0-openssl-channel_binding-lookup-digest-algorithm-with.patch
+
+# Fix bad reuse of HTTP Negotiate connection (CVE-2026-1965)
+Patch003: 0003-curl-8.18.0-CVE-2026-1965.patch
+
+# Fix token leak with redirect and netrc (CVE-2026-3783)
+Patch004: 0004-curl-8.18.0-CVE-2026-3783.patch
+
+# Fix wrong proxy connection reuse with credentials (CVE-2026-3784)
+Patch005: 0005-curl-8.18.0-CVE-2026-3784.patch
+
+# Fix use after free in SMB connection reuse (CVE-2026-3805)
+Patch006: 0006-curl-8.18.0-CVE-2026-3805.patch
 
 # patch making libcurl multilib ready
 Patch101: 0101-curl-7.32.0-multilib.patch
@@ -31,7 +51,7 @@ Provides: curl-minimal = %{version}-%{release}
 Provides: webclient
 URL: https://curl.se/
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # instead of bundled wcurl utility, recommend wcurl package
 Recommends: wcurl
 %endif
@@ -64,7 +84,7 @@ BuildRequires: openssh-clients
 BuildRequires: openssh-server
 BuildRequires: openssl
 BuildRequires: openssl-devel
-%if %{with openssl_engine_support} && 0%{?fedora} >= 41
+%if %{with openssl_engine_support} && 0%{?fedora} >= 41 || 0%{?oreon}
 BuildRequires:  openssl-devel-engine
 %endif
 BuildRequires: perl-interpreter
@@ -120,7 +140,7 @@ BuildRequires: perl(Time::HiRes)
 BuildRequires: perl(Time::Local)
 BuildRequires: perl(vars)
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # needed for upstream test 1451
 BuildRequires: python3-impacket
 %endif
@@ -356,8 +376,11 @@ sed -e 's/^runpath_var=.*/runpath_var=/' \
 export OPENSSL_SYSTEM_CIPHERS_OVERRIDE=XXX
 export OPENSSL_CONF=
 
+# make runtests.pl work for out-of-tree builds
+export srcdir=../../tests
+
 # prevent valgrind from being extremely slow (#1662656)
-# https://fedoraproject.org/wiki/Changes/DebuginfodByDefault
+# 
 unset DEBUGINFOD_URLS
 
 # run the upstream test-suite for both curl-minimal and curl-full
@@ -368,11 +391,7 @@ for size in minimal full; do (
     export LD_LIBRARY_PATH="${PWD}/lib/.libs"
 
     cd tests
-    # Absolute srcdir so server subprocesses always find tests/data (e.g. test 199) if cwd shifts.
-    export srcdir="$(cd ../.. && pwd)/tests"
-    mkdir -p log/lock log/server
-    # -n skips valgrind here libtool+valgrind in %%check often breaks relative log/ paths for sws.
-    perl -I../../tests ../../tests/runtests.pl -a -p -n -v '!flaky'
+    perl -I../../tests ../../tests/runtests.pl -a -p -v '!flaky'
 )
 done
 
@@ -444,11 +463,5 @@ rm -f ${RPM_BUILD_ROOT}%{_mandir}/man1/wcurl.1*
 %{_libdir}/libcurl.so.4.[0-9].[0-9].minimal
 
 %changelog
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.19.0-3
-- %%check use absolute srcdir mkdir log subdirs runtests -n so sws and data files resolve under rpmbuild
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.19.0-2
-- 8.19.0 stable tarballs on curl.se (RC snapshots 404 there)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.19.0~rc3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.18.0-6
+- Import

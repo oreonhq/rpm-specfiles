@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           maven-file-management
 Epoch:          1
@@ -31,7 +31,7 @@ Obsoletes:      %{name}-javadoc < 1:3.1.0-19
 Provides a component for plugins to easily resolve project dependencies.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %build
 %mvn_build -j
@@ -43,5 +43,5 @@ Provides a component for plugins to easily resolve project dependencies.
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:3.1.0-1
+- Import

@@ -22,7 +22,7 @@ BuildRequires: systemd-rpm-macros
 Obsoletes: ledctl = 0.1-1
 Provides: ledctl = %{version}-%{release}
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 ExcludeArch: %{ix86}
 
 %description
@@ -87,5 +87,5 @@ autoreconf -fiv
 %{_libdir}/pkgconfig/%{name}.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0-4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0-4
+- Import

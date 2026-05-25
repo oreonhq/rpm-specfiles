@@ -1,5 +1,5 @@
 %define buildall 0
-%if 0%{?fedora} > 21
+%if 0%{?fedora} > 21 || 0%{?oreon}
 %define omit_plasma5_bits 1
 %endif
 
@@ -114,7 +114,7 @@ Conflicts: kde-i18n < 1:3.5.10-13
 # khelpcenter moved to kde-apps-16.04, and so did it's translations
 Conflicts: khelpcenter < 1:16.04
 
-%if 0%{?fedora} > 22
+%if 0%{?fedora} > 22 || 0%{?oreon}
 %global kdenlive 1
 Conflicts: kdenlive < 15.08
 %endif
@@ -1637,5 +1637,5 @@ rm -rfv %{buildroot}%{_kde4_docdir}/HTML/*/khelpcenter/
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.08.3-22
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 17.08.3-22
+- Import

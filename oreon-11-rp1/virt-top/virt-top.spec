@@ -3,11 +3,11 @@ ExcludeArch: %{ix86}
 
 Name:           virt-top
 Version:        1.1.2
-Release:        7%{?dist}
+Release:        6%{?dist}
 Summary:        Utility like top(1) for displaying virtualization stats
 License:        GPL-2.0-or-later
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 # No qemu-kvm on POWER (RHBZ#1946532).
 ExcludeArch:    %{power64}
 %endif
@@ -63,7 +63,7 @@ different virtualization systems.
 %{gpgverify} --keyring='%{SOURCE4}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 
-%if 0%{?rhel} >= 6
+%if 0%{?rhel} >= 6 || 0%{?oreon}
 %patch -P1 -p1
 %endif
 
@@ -80,7 +80,7 @@ make
 rm -f src/virt-top.1
 make -C src virt-top.1
 
-%if 0%{?rhel} >= 6
+%if 0%{?rhel} >= 6 || 0%{?oreon}
 # Build processcsv.py.1.
 pod2man -c "Virtualization Support" --release "%{name}-%{version}" \
   %{SOURCE3} > processcsv.py.1
@@ -97,7 +97,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
 install -m 0644 src/virt-top.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
-%if 0%{?rhel} >= 6
+%if 0%{?rhel} >= 6 || 0%{?oreon}
 # Install processcsv.py.
 install -m 0755 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}
 
@@ -111,12 +111,12 @@ install -m 0644 processcsv.py.1 $RPM_BUILD_ROOT%{_mandir}/man1/
 %license COPYING
 %{_bindir}/virt-top
 %{_mandir}/man1/virt-top.1*
-%if 0%{?rhel} >= 6
+%if 0%{?rhel} >= 6 || 0%{?oreon}
 %{_bindir}/processcsv.py
 %{_mandir}/man1/processcsv.py.1*
 %endif
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.2-7
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.2-6
+- Import

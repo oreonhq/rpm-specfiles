@@ -5,7 +5,7 @@
 %global apidocs 1
 # upstream says tests busted, maybe to be fixed in some future point release
 %global tests 1
-%if 0%{?fedora} < 24 && 0%{?rhel} <= 7 
+%if 0%{?fedora} < 24 && 0%{?rhel} <= 7 || 0%{?oreon} 
 %global virtuoso 1
 %endif
 
@@ -15,8 +15,8 @@ Version: 2.9.4
 Release: 38%{?dist}
 
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
-License: LGPL-2.0-or-later
-URL:     https://invent.kde.org/kde/soprano
+License: LicenseRef-Callaway-LGPLv2+
+URL:     https://quickgit.kde.org/?p=soprano.git
 #URL:    http://sourceforge.net/projects/soprano
 
 %if 0%{?snap:1}
@@ -24,7 +24,7 @@ URL:     https://invent.kde.org/kde/soprano
 # git archive --prefix=soprano-%{version}/ master | bzip2 > soprano-%{version}-%{snap}.tar.bz2
 Source0: soprano-%{version}-%{snap}.tar.bz2
 %else
-Source0: https://downloads.sourceforge.net/project/soprano/soprano/%{version}/soprano-%{version}.tar.bz2
+Source0: http://downloads.sf.net/soprano/soprano-%{version}.tar.bz2
 %endif
 
 ## upstreamable patches
@@ -191,5 +191,5 @@ time make -C %{_vpath_builddir} test ARGS="--timeout 300 --output-on-failure -R 
 
 
 %changelog
-* Mon May 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.4-38
-- Import from Fedora 44 dist-git, debrand
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.9.4-38
+- Import

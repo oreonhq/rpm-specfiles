@@ -1,7 +1,7 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           jaxb
-Version:        4.0.6
+Version:        4.0.5
 Release:        %autorelease
 Summary:        JAXB Reference Implementation
 License:        BSD-3-Clause
@@ -109,7 +109,7 @@ Summary:        TXW2 Compiler
 JAXB schema generator. The tool to generate XML schema based on java classes.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 pushd jaxb-ri
 
@@ -183,5 +183,5 @@ popd
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.6-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.0.5-1
+- Import

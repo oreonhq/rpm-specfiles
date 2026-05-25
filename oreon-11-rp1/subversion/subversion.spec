@@ -174,9 +174,7 @@ passwords in the KDE Wallet.
 
 %package -n mod_dav_svn
 Summary: Apache httpd module for Subversion server
-%if %{!?_httpd_requires:1}
-Requires: httpd-mmn = %{_httpd_mmn}
-%endif
+%{?!_httpd_requires: Requires: httpd-mmn = %{_httpd_mmn}}
 Requires: subversion-libs%{?_isa} = %{version}-%{release}
 BuildRequires: httpd-devel >= 2.4.63-4
 
@@ -264,7 +262,7 @@ perl -pi -e 's|/usr/bin/env python.*|%{svn_python}|' subversion/tests/cmdline/sv
 export svn_cv_ruby_link="%{__cc} -shared"
 export svn_cv_ruby_sitedir_libsuffix=""
 export svn_cv_ruby_sitedir_archsuffix=""
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || 0%{?oreon}
 # Fix include path for ruby2.7
 export svn_cv_ruby_includes="-I%{_includedir}"
 %endif
@@ -591,5 +589,5 @@ make check-javahl
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.14.5-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.14.5-1
+- Import

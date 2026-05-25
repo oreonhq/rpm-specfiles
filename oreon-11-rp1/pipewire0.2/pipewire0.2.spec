@@ -4,7 +4,7 @@
 #global snap       20141103
 #global gitrel     327
 #global gitcommit  aec811798cd883a454b9b5cd82c77831906bbd2d
-#global shortcommit %%(c=%%{gitcommit}; echo ${c:0:5})
+#global shortcommit %(c=%{gitcommit}; echo ${c:0:5})
 
 # https://bugzilla.redhat.com/983606
 %global _hardened_build 1
@@ -128,5 +128,5 @@ rm -rf $RPM_BUILD_ROOT%{_sysconfdir}/*
 %{_libdir}/pkgconfig/libspa-%{spaversion}.pc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.7-17
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.2.7-17
+- Import

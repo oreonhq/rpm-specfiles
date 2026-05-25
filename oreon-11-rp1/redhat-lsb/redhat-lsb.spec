@@ -85,5 +85,5 @@ cp -p lsb_release/src/README README.lsb_release
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0-0.18
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0-0.18.20231006git8d00acdc
+- Import

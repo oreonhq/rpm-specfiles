@@ -3,7 +3,7 @@ Version:        5.20250619
 Release:        521%{?dist}
 Summary:        Frequently asked questions about Perl
 # Code examples are Public Domain
-License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Fedora-Public-Domain
+License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Public-Domain
 URL:            https://metacpan.org/release/perlfaq
 Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/perlfaq-%{version}.tar.gz
 BuildArch:      noarch
@@ -79,5 +79,5 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.20250619-521
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.20250619-521
+- Import

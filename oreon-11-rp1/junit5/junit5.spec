@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 # Component versions, taken from gradle.properties
 %global platform_version 1.%(v=%{version}; echo ${v:2})
 %global jupiter_version %{version}
@@ -62,17 +62,10 @@ Obsoletes:      %{name}-javadoc < 5.10.2-16
 %description
 JUnit is a popular regression testing framework for Java platform.
 
-%package        platform-console
-Summary:        Console launcher for junit5
-Requires:       junit5 = %{version}-%{release}
-Requires:       %{name}-platform-console-jdk-binding
-Suggests:       %{name}-platform-console-openjdk25 = %{version}-%{release}
-%description    platform-console
-%{summary}.
-
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 find -name '*.jar' -delete
+
 
 cp -p %{SOURCE100} pom.xml
 
@@ -113,27 +106,12 @@ done
 %install
 %mvn_install
 
-%jpackage_script -h -c %{name}-platform-console org.junit.platform.console.ConsoleLauncher "" "" junit5:opentest4j:picocli:junit:hamcrest:univocity-parsers junit-platform-console
-
-# JDK bindings
-install -d -m 755 %{buildroot}%{_javaconfdir}/
-ln -s %{_jpbindingdir}/%{name}-platform-console.conf %{buildroot}%{_javaconfdir}/%{name}-platform-console.conf
-#
-echo 'JAVA_HOME=%{_jvmdir}/jre-25-openjdk' > %{buildroot}%{_javaconfdir}/%{name}-platform-console-openjdk25.conf
-%jp_binding --verbose --variant platform-console-openjdk25 --ghost %{name}-platform-console.conf --target %{_javaconfdir}/%{name}-platform-console-openjdk25.conf --provides %{name}-platform-console-jdk-binding --requires %{name}-platform-console --requires java-25-openjdk-headless
-#
-touch %{buildroot}%{_javaconfdir}/%{name}-platform-console-unbound.conf
-%jp_binding --verbose --variant platform-console-unbound --ghost %{name}-platform-console.conf --target %{_javaconfdir}/%{name}-platform-console-unbound.conf --provides %{name}-platform-console-jdk-binding --requires %{name}-platform-console
-#
+%jpackage_script org.junit.platform.console.ConsoleLauncher "" "" junit5:opentest4j:picocli:junit:hamcrest:univocity-parsers junit-platform-console
 
 %files -f .mfiles
-%license LICENSE.md NOTICE.md
-
-%files platform-console
 %{_bindir}/junit-platform-console
-%config %{_javaconfdir}/%{name}*.conf
 %license LICENSE.md NOTICE.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.13.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.13.3-1
+- Import

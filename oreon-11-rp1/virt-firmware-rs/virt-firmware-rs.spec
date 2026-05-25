@@ -1,7 +1,7 @@
 %bcond efi_apps 0
 %bcond check    1
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 
 %ifarch aarch64
 %bcond efi_apps 1
@@ -18,7 +18,7 @@ BuildRequires:  rust-std-static-x86_64-unknown-uefi
 %endif
 
 Name:           virt-firmware-rs
-Version:        26.3
+Version:        26.4
 Release:        %autorelease
 Summary:        Tools for EFI and virtual machine firmware
 
@@ -63,6 +63,7 @@ firmware.  This package has EFI applications for %{efiarch}.
 %prep
 %autosetup -n %{name}-v%{version} -p1
 # drop unused packages from workspace to reduce dependencies.
+sed -i Cargo.toml -e '/experimental/d'
 sed -i Cargo.toml -e '/mefisto/d'
 %if %{without efi_apps}
 sed -i Cargo.toml -e '/efi-apps/d'
@@ -141,5 +142,5 @@ done
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 26.4-1
+- Import

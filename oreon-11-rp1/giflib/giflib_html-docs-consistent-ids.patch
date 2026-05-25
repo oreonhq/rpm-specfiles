@@ -1,6 +1,6 @@
-diff -rupN --no-dereference giflib-6.1.2/doc/Makefile giflib-6.1.2-new/doc/Makefile
---- giflib-6.1.2/doc/Makefile	2026-03-10 18:50:52.000000000 +0100
-+++ giflib-6.1.2-new/doc/Makefile	2026-03-10 22:37:41.853549806 +0100
+diff -rupN --no-dereference giflib-6.1.3/doc/Makefile giflib-6.1.3-new/doc/Makefile
+--- giflib-6.1.3/doc/Makefile	2026-04-12 19:17:27.000000000 +0200
++++ giflib-6.1.3-new/doc/Makefile	2026-05-12 22:33:37.015795932 +0200
 @@ -1,7 +1,7 @@
  .SUFFIXES: .xml .html .txt .adoc .1 .7
  

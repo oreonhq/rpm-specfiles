@@ -33,7 +33,7 @@
 %global spatialite "--with-spatialite"
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %bcond_without mingw
 %bcond_without python3
 %ifarch %{java_arches}
@@ -51,7 +51,7 @@
 
 
 Name:          gdal
-Version:       3.12.2
+Version:       3.12.4
 Release:       1%{?dist}
 Summary:       GIS file format library
 License:       MIT
@@ -97,7 +97,7 @@ BuildRequires: unzip
 BuildRequires: xz-devel
 BuildRequires: zlib-devel
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # Fedora dependencies
 BuildRequires: armadillo-devel
 BuildRequires: blosc-devel
@@ -241,7 +241,7 @@ BuildRequires: mingw64-python3-setuptools
 %endif
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Requires:      gpsbabel
 %endif
 Requires:      %{name}-libs%{?_isa} = %{version}-%{release}
@@ -416,7 +416,7 @@ cp -a %{SOURCE4} .
   -DGDAL_JAVA_INSTALL_DIR=%{_jnidir}/%{name} \
   -DGDAL_JAVA_JNI_INSTALL_DIR=%{_jnidir}/%{name} \
 %endif
-%if ! 0%{?fedora}
+%if ! 0%{?fedora} || 0%{?oreon}
   -DGDAL_BUILD_OPTIONAL_DRIVERS=OFF \
   -DOGR_BUILD_OPTIONAL_DRIVERS=OFF \
   -DBUILD_PYTHON_BINDINGS=OFF \
@@ -509,7 +509,7 @@ done
 %{_bindir}/ogrlineref
 %{_bindir}/ogrtindex
 %{_bindir}/sozip
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %{_bindir}/8211*
 %{_bindir}/s57dump
 %endif
@@ -880,5 +880,5 @@ done
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.12.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.12.4-1
+- Import

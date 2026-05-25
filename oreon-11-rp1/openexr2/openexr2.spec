@@ -146,5 +146,5 @@ rm -rf %{buildroot}%{_docdir}/OpenEXR/
 
 
 %changelog
-* Mon May 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.8-12
-- Import from Fedora 44 dist-git, debrand
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.5.8-12
+- Import

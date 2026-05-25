@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           byte-buddy
 Version:        1.17.7
@@ -64,7 +64,7 @@ Summary:        Byte Buddy Maven plugin
 A plugin for post-processing class files via Byte Buddy in a Maven build.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 
 find -name '*.class' -delete
@@ -100,7 +100,7 @@ rm byte-buddy-agent/src/test/java/net/bytebuddy/agent/VirtualMachineAttachmentTe
 
 # Drop build dep on findbugs annotations, used only by the above check plugins
 %pom_remove_dep -r :findbugs-annotations
-jurand -i -s -a byte-buddy-agent byte-buddy-dep byte-buddy-maven-plugin -n SuppressFBWarnings
+%java_remove_annotations byte-buddy-agent byte-buddy-dep byte-buddy-maven-plugin -n SuppressFBWarnings
 
 %pom_remove_dep org.ow2.asm:asm-deprecated
 
@@ -134,5 +134,5 @@ profiles='-Pjava-8-precompile -Pjava-8-parameters-precompile -Pjava-11-precompil
 %files maven-plugin -f .mfiles-%{name}-maven-plugin
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.17.7-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.17.7-1
+- Import

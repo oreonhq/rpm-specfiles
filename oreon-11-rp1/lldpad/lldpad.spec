@@ -1,6 +1,6 @@
 %global _default_patch_fuzz 2
 
-# https://fedoraproject.org/wiki/Packaging:Guidelines#Compiler_flags
+# 
 %global _hardened_build 1
 
 %global checkout 85e5583
@@ -83,5 +83,5 @@ rm -f %{buildroot}%{_libdir}/liblldp_clif.la
 %{_libdir}/liblldp_clif.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0-16.git
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.1.0-16.git85e5583
+- Import

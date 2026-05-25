@@ -1,6 +1,6 @@
 # Run optional test
 %if !%{defined perl_bootstrap}
-%if ! (0%{?rhel})
+%if ! (0%{?rhel}) || 0%{?oreon}
 %bcond_without perl_B_Debug_enables_optional_test
 %else
 %bcond_with perl_B_Debug_enables_optional_test
@@ -91,5 +91,5 @@ make test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.26-444
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.26-444
+- Import

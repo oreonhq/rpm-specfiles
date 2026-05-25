@@ -1,7 +1,7 @@
 # This file is licensed under the terms of GNU GPLv2+.
 
 # Run optional test
-%if ! (0%{?rhel})
+%if ! (0%{?rhel}) || 0%{?oreon}
 %bcond_without perl_Devel_CallChecker_enables_optional_test
 %else
 %bcond_with perl_Devel_CallChecker_enables_optional_test
@@ -122,5 +122,5 @@ chmod +x %{buildroot}%{_libexecdir}/%{name}/test
 %{_libexecdir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.009-11
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.009-11
+- Import

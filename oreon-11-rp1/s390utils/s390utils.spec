@@ -1,11 +1,11 @@
 # secure boot support is for RHEL only
-%if 0%{?rhel} >= 8
+%if 0%{?rhel} >= 8 || 0%{?oreon}
 %bcond_without signzipl
 %else
 %bcond_with signzipl
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %bcond_without pandoc
 %else
 %bcond_with pandoc
@@ -49,7 +49,7 @@ Source0:        https://github.com/ibm-s390-linux/s390-tools/archive/v%{version}
 #   tar xf s390-tools-%%{version}.tar.gz ; pushd s390-tools-%%{version}/rust ; \
 #   rm -f Cargo.lock && cargo vendor && \
 #   tar Jvcf ../../s390-tools-%%{version}-rust-vendor.tar.xz vendor/ ; popd
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 Source1:        s390-tools-%{version}-rust-vendor.tar.xz
 %endif
 Source5:        https://fedorapeople.org/cgit/sharkcz/public_git/utils.git/tree/zfcpconf.sh
@@ -66,11 +66,7 @@ Source24:       52-zipl-rescue.install
 Source25:       91-zipl.install
 
 %if %{with signzipl}
-%if 0%{?oreon}
-%define pesign_name oreonsecureboot302
-%else
 %define pesign_name redhatsecureboot302
-%endif
 %endif
 
 # change the defaults to match Fedora environment
@@ -80,7 +76,7 @@ Patch1:         s390-tools-zipl-blscfg-rpm-nvr-sort.patch
 # upstream fixes/updates
 #Patch100:       s390utils-%%{version}-fedora.patch
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 ExcludeArch:    %{ix86}
 
 # Add Provides for upstream name
@@ -107,7 +103,7 @@ Requires:       s390utils-se-data = %{epoch}:%{version}-%{release}
 BuildRequires:  make
 BuildRequires:  gcc-c++
 BuildRequires:  glib2-devel
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires:  libcurl-devel
 BuildRequires:  openssl-devel
 BuildRequires:  rust-toolset
@@ -126,7 +122,7 @@ be used together with the zSeries (s390) Linux kernel and device drivers.
 %prep
 %autosetup -n s390-tools-%{version} -p1
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 pushd rust
 tar xf %{SOURCE1}
 %cargo_prep -v vendor
@@ -144,7 +140,7 @@ echo 'g cpacfstats' > s390utils-cpacfstatsd.conf.usr
 # Create tmpfiles config files
 echo 'd /var/log/ts-shell 2770 root ts-shell' > s390utils-iucvterm.conf.tmp
 
-%if !0%{?rhel}
+%if !0%{?rhel} || 0%{?oreon}
 %generate_buildrequires
 pushd rust >/dev/null
 %cargo_generate_buildrequires
@@ -171,7 +167,7 @@ make \
 pushd rust
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %cargo_vendor_manifest
 %endif
 popd
@@ -285,7 +281,7 @@ done
 %doc README.md
 %license LICENSE
 %license rust/LICENSE.dependencies
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %license rust/cargo-vendor.txt
 %endif
 %{_bindir}/genprotimg
@@ -594,7 +590,7 @@ For more information refer to the following publications:
 %files base
 %doc README.md zdev/src/lszdev_usage.txt
 %license rust/LICENSE.dependencies
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %license rust/cargo-vendor.txt
 %endif
 %{_sbindir}/chccwdev
@@ -1139,8 +1135,5 @@ User-space development files for the s390/s390x architecture.
 
 
 %changelog
-* Sat Mar 21 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.0-2
-- pesign oreonsecureboot302 if %%{?oreon}
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.41.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2:2.41.0-2
+- Import

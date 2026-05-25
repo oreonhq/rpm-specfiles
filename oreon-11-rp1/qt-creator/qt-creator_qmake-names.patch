@@ -1,6 +1,6 @@
-diff -rupN --no-dereference qt-creator-opensource-src-19.0.0-beta1/src/libs/utils/buildablehelperlibrary.cpp qt-creator-opensource-src-19.0.0-beta1-new/src/libs/utils/buildablehelperlibrary.cpp
---- qt-creator-opensource-src-19.0.0-beta1/src/libs/utils/buildablehelperlibrary.cpp	2026-01-27 03:56:15.000000000 +0100
-+++ qt-creator-opensource-src-19.0.0-beta1-new/src/libs/utils/buildablehelperlibrary.cpp	2026-01-31 10:21:54.968864177 +0100
+diff -rupN --no-dereference qt-creator-opensource-src-20.0.0-beta1/src/libs/utils/buildablehelperlibrary.cpp qt-creator-opensource-src-20.0.0-beta1-new/src/libs/utils/buildablehelperlibrary.cpp
+--- qt-creator-opensource-src-20.0.0-beta1/src/libs/utils/buildablehelperlibrary.cpp	2026-05-07 12:58:45.000000000 +0200
++++ qt-creator-opensource-src-20.0.0-beta1-new/src/libs/utils/buildablehelperlibrary.cpp	2026-05-12 14:30:13.620131878 +0200
 @@ -179,7 +179,10 @@ QStringList BuildableHelperLibrary::poss
      // Qt 6 CMake built targets, such as Android, are dependent on the host installation
      // and use a script wrapper around the host qmake executable

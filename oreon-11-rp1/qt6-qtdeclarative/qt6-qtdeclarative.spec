@@ -1,12 +1,7 @@
 
 %global qt_module qtdeclarative
 
-# Mock Ninja can hit "opening dependency file *.o.d: No such file or directory" on Quick / moc autogen
-# (GCC -MD with Ninja). Use Unix Makefiles plus serial %%cmake_build instead of serial Ninja.
-%global _lto_cflags %{nil}
-# %%cmake_build passes %%{_smp_mflags} to cmake --build, which must be -j1 here.
-%global _smp_mflags -j1
-%global _qt6_build_tool make
+%define _lto_cflags %{nil}
 
 # definition borrowed from qtbase
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9
@@ -20,8 +15,8 @@
 
 Summary: Qt6 - QtDeclarative component
 Name:    qt6-%{qt_module}
-Version: 6.10.3
-Release: 14%{?dist}
+Version: 6.11.1
+Release: 2%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
@@ -39,8 +34,8 @@ Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submod
 Source5: qv4global_p-multilib.h
 
 ## upstream patches
-# https://codereview.qt-project.org/c/qt/qtdeclarative/+/678924
-Patch0:  qtdeclarative-quickshapes-make-module-public.patch
+Patch0:  qtdeclarative-dialogs-use-generic-qtquickcontrols-import-in-base-fallback-dialogs.patch
+Patch1:  qtdeclarative-qmltableinstancemodel-refactor-qmodelindex-calculation-out-of-qquicktableview.patch
 
 ## upstreamable patches
 
@@ -49,7 +44,7 @@ Patch0:  qtdeclarative-quickshapes-make-module-public.patch
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
-BuildRequires: make
+BuildRequires: ninja-build
 BuildRequires: qt6-rpm-macros
 BuildRequires: qt6-qtbase-devel >= %{version}
 BuildRequires: qt6-qtbase-private-devel
@@ -96,7 +91,7 @@ Summary: Programming examples for %{name}
 Requires:  %{name}%{?_isa} = %{version}-%{release}
 Obsoletes: qt6-qtquickcontrols2-examples < 6.2.0~beta3-1
 Provides:  qt6-qtquickcontrols2-examples = %{version}-%{release}
-# BuildRequires: qt6-qtdeclarative-devel (same version as this package)
+# BuildRequires: qt6-qtdeclarative-devel >= %{version}
 %description examples
 %{summary}.
 %endif
@@ -107,19 +102,11 @@ Provides:  qt6-qtquickcontrols2-examples = %{version}-%{release}
 
 %build
 
-mkdir -p "$(pwd)/tmp-qtdeclarative-build"
-export TMPDIR="$(pwd)/tmp-qtdeclarative-build"
-export NINJAFLAGS="-j1 -v"
-export CMAKE_BUILD_PARALLEL_LEVEL=1
-export MALLOC_ARENA_MAX=1
-
 # HACK so calls to "python" get what we want
 ln -s %{__python3} python
 export PATH=`pwd`:$PATH
 
 %cmake_qt6 \
-  -DCMAKE_DISABLE_PRECOMPILE_HEADERS=ON \
-  -DCMAKE_AUTOGEN_PARALLEL=1 \
   -DQT_BUILD_EXAMPLES:BOOL=%{?examples:ON}%{!?examples:OFF} \
   -DQT_INSTALL_EXAMPLES_SOURCES=%{?examples:ON}%{!?examples:OFF}
 
@@ -188,6 +175,8 @@ make check -k -C tests ||:
 %{_qt6_libdir}/libQt6LabsSettings.so.6*
 %{_qt6_libdir}/libQt6LabsSynchronizer.so.6*
 %{_qt6_libdir}/libQt6LabsSharedImage.so.6*
+%{_qt6_libdir}/libQt6LabsStyleKit.so.6*
+%{_qt6_libdir}/libQt6LabsStyleKitImpl.so.6*
 %{_qt6_libdir}/libQt6LabsWavefrontMesh.so.6*
 %{_qt6_libdir}/libQt6Qml.so.6*
 %{_qt6_libdir}/libQt6QmlCompiler.so.*
@@ -248,6 +237,8 @@ make check -k -C tests ||:
 %dir %{_qt6_libdir}/cmake/Qt6LabsQmlModels
 %dir %{_qt6_libdir}/cmake/Qt6LabsSettings
 %dir %{_qt6_libdir}/cmake/Qt6LabsSharedImage
+%dir %{_qt6_libdir}/cmake/Qt6LabsStyleKit
+%dir %{_qt6_libdir}/cmake/Qt6LabsStyleKitImpl
 %dir %{_qt6_libdir}/cmake/Qt6LabsSynchronizer
 %dir %{_qt6_libdir}/cmake/Qt6LabsWavefrontMesh
 %dir %{_qt6_libdir}/cmake/Qt6Qml
@@ -401,6 +392,8 @@ make check -k -C tests ||:
 %{_qt6_libdir}/cmake/Qt6LabsQmlModels/*.cmake
 %{_qt6_libdir}/cmake/Qt6LabsSettings/*.cmake
 %{_qt6_libdir}/cmake/Qt6LabsSharedImage/*.cmake
+%{_qt6_libdir}/cmake/Qt6LabsStyleKit/*.cmake
+%{_qt6_libdir}/cmake/Qt6LabsStyleKitImpl/*.cmake
 %{_qt6_libdir}/cmake/Qt6LabsSynchronizer/*.cmake
 %{_qt6_libdir}/cmake/Qt6LabsWavefrontMesh/*.cmake
 %{_qt6_libdir}/cmake/Qt6Qml/*.cmake*
@@ -507,7 +500,16 @@ make check -k -C tests ||:
 %{_qt6_metatypesdir}/qt6quickvectorimage_metatypes.json
 %{_qt6_metatypesdir}/qt6quickvectorimagehelpers_metatypes.json
 %{_qt6_metatypesdir}/qt6quickwidgets_metatypes.json
-%{_qt6_mkspecsdir}/modules/qt_lib_labs*.pri
+%{_qt6_mkspecsdir}/modules/qt_lib_labsanimation.pri
+%{_qt6_mkspecsdir}/modules/qt_lib_labsfolderlistmodel.pri
+%{_qt6_mkspecsdir}/modules/qt_lib_labsplatform.pri
+%{_qt6_mkspecsdir}/modules/qt_lib_labsqmlmodels.pri
+%{_qt6_mkspecsdir}/modules/qt_lib_labssettings.pri
+%{_qt6_mkspecsdir}/modules/qt_lib_labssharedimage.pri
+%{_qt6_mkspecsdir}/modules/qt_lib_labsstylekit.pri
+%{_qt6_mkspecsdir}/modules/qt_lib_labsstylekitimpl.pri
+%{_qt6_mkspecsdir}/modules/qt_lib_labssynchronizer.pri
+%{_qt6_mkspecsdir}/modules/qt_lib_labswavefrontmesh.pri
 %{_qt6_mkspecsdir}/modules/qt_lib_qml.pri
 %{_qt6_mkspecsdir}/modules/qt_lib_qmlcompiler.pri
 %{_qt6_mkspecsdir}/modules/qt_lib_qmlcore.pri
@@ -569,12 +571,14 @@ make check -k -C tests ||:
 # This (split to -private-devel) didn't work out because of rhbz#2330219
 # Might be something to consider in the future.
 # Private stuff
-# private headers live in versioned subdirs under the qt6 header prefix
+# {_qt6_headerdir}/*/{qt_version}
 %dir %{_qt6_libdir}/cmake/Qt6LabsAnimationPrivate
 %dir %{_qt6_libdir}/cmake/Qt6LabsFolderListModelPrivate
 %dir %{_qt6_libdir}/cmake/Qt6LabsPlatformPrivate
 %dir %{_qt6_libdir}/cmake/Qt6LabsQmlModelsPrivate
 %dir %{_qt6_libdir}/cmake/Qt6LabsSettingsPrivate
+%dir %{_qt6_libdir}/cmake/Qt6LabsStyleKitPrivate
+%dir %{_qt6_libdir}/cmake/Qt6LabsStyleKitImplPrivate
 %dir %{_qt6_libdir}/cmake/Qt6LabsSynchronizerPrivate
 %dir %{_qt6_libdir}/cmake/Qt6LabsSharedImagePrivate
 %dir %{_qt6_libdir}/cmake/Qt6LabsWavefrontMeshPrivate
@@ -612,7 +616,6 @@ make check -k -C tests ||:
 %dir %{_qt6_libdir}/cmake/Qt6QuickTemplates2Private
 %dir %{_qt6_libdir}/cmake/Qt6QuickTestPrivate
 %dir %{_qt6_libdir}/cmake/Qt6QuickVectorImageGeneratorPrivate
-%dir %{_qt6_libdir}/cmake/Qt6QuickVectorImageHelpers
 %dir %{_qt6_libdir}/cmake/Qt6QuickVectorImagePrivate
 %dir %{_qt6_libdir}/cmake/Qt6QuickVectorImageHelpersPrivate/
 %dir %{_qt6_libdir}/cmake/Qt6QuickWidgetsPrivate
@@ -622,6 +625,8 @@ make check -k -C tests ||:
 %{_qt6_libdir}/cmake/Qt6LabsQmlModelsPrivate/*.cmake
 %{_qt6_libdir}/cmake/Qt6LabsSettingsPrivate/*.cmake
 %{_qt6_libdir}/cmake/Qt6LabsSharedImagePrivate/*.cmake
+%{_qt6_libdir}/cmake/Qt6LabsStyleKitPrivate/*.cmake
+%{_qt6_libdir}/cmake/Qt6LabsStyleKitImplPrivate/*.cmake
 %{_qt6_libdir}/cmake/Qt6LabsSynchronizerPrivate/*.cmake
 %{_qt6_libdir}/cmake/Qt6LabsWavefrontMeshPrivate/*.cmake
 %{_qt6_libdir}/cmake/Qt6QmlCompilerPrivate/*.cmake
@@ -749,23 +754,5 @@ make check -k -C tests ||:
 %endif
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-14
-- Force %%_qt6_build_tool make (Unix Makefiles) to avoid Ninja moc *.o.d races, BuildRequires make
-
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-13
-- Set CMAKE_AUTOGEN_PARALLEL=1 (with NINJAFLAGS -j1) to avoid moc *.o.d races in mock
-
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-12
-- Drop Patch1 (QTBUG-142514) already in upstream 6.10.3, redundant %%prep patch
-
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-11
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Mon Apr 13 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-11
-- Restore %%_lto_cflags clear, %%_smp_mflags -j1 (cmake --build), TMPDIR under build dir, NINJAFLAGS -j1, CMAKE_BUILD_PARALLEL_LEVEL 1, MALLOC_ARENA_MAX 1 to fix QuickTemplates2 *.o.d races in mock
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-10
-- Drop %%_lto_cflags, %%_smp_mflags -j1, ninja env, aarch64 Make generator, aarch64 IPO (keep CMAKE_DISABLE_PRECOMPILE_HEADERS)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-2
+- Import

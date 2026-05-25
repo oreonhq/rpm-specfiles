@@ -60,5 +60,5 @@ install -m644 '%{SOURCE1}' \
 %config(noreplace) %{_sysconfdir}/pki/tls/openssl.d/oqsprovider.conf
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{oqs_version}-5
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8.0-5
+- Import

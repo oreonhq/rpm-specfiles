@@ -708,5 +708,5 @@ install -Dm 0644 -p %{SOURCE88} \
 %doc Docs/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{common_ver}-31
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20120413-31
+- Import

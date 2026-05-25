@@ -9,9 +9,10 @@
 # of users do not need -- use this to avoid dragging python onto CoreOS
 %global __requires_exclude ^%{python3}$
 
-# Tests are flaky in mock due snapd socket integration assumptions.
-# Keep disabled in this packaging branch to avoid non-deterministic %check failures.
-%global enable_tests 0
+# PPC64 is too slow to complete the tests under 3 minutes...
+%ifnarch ppc64le
+%global enable_tests 1
+%endif
 
 %global enable_dummy 1
 
@@ -30,21 +31,21 @@
 %endif
 
 # only available recently
-%if 0%{?fedora} >= 30
+%if 0%{?fedora} >= 30 || 0%{?oreon}
 %global have_modem_manager 1
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %global have_passim 1
 %endif
 
 Summary:   Firmware update daemon
 Name:      fwupd
-Version:   2.1.1
+Version:   2.1.3
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/fwupd/fwupd
-Source0:   %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source0:   http://people.freedesktop.org/~hughsient/releases/%{name}-%{version}.tar.xz
 
 BuildRequires: gettext
 BuildRequires: hwdata
@@ -59,7 +60,6 @@ BuildRequires: python3-jinja2
 BuildRequires: sqlite-devel
 BuildRequires: systemd >= %{systemd_version}
 BuildRequires: systemd-devel
-BuildRequires: libcbor-devel
 BuildRequires: libblkid-devel
 BuildRequires: readline-devel
 BuildRequires: libmnl-devel
@@ -211,6 +211,11 @@ or server machines.
 %else
     -Dpassim=disabled \
 %endif
+%ifarch i686 x86_64
+    -Dhsi=enabled \
+%else
+    -Dhsi=disabled \
+%endif
     -Dman=true \
     -Dsystemd_unit_user="" \
     -Dbluez=enabled \
@@ -351,5 +356,5 @@ systemctl --no-reload preset fwupd-refresh.timer &>/dev/null || :
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.3-1
+- Import

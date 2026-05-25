@@ -2,7 +2,7 @@
 # is attached as a webpack tarball (in case of an unsuitable nodejs version on the build system)
 %define compile_frontend 0
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %define enable_fips_mode 1
 %else
 %define enable_fips_mode 0
@@ -112,7 +112,7 @@ BuildRequires:    openssl-devel
 # grafana-server service daemon uses systemd
 %{?systemd_requires}
 
-%if 0%{?fedora} >= 42
+%if 0%{?fedora} >= 42 || 0%{?oreon}
 %elif 0%{?fedora} || 0%{?rhel} >= 9
 Requires(pre):    shadow-utils
 %endif
@@ -121,7 +121,7 @@ Requires(pre):    shadow-utils
 BuildRequires:    shared-mime-info
 Requires:         shared-mime-info
 
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || 0%{?oreon}
 # This ensures that the grafana-selinux package and all its dependencies are
 # not pulled into containers and other systems that do not use SELinux
 Requires: (grafana-selinux = %{version}-%{release} if selinux-policy-any)
@@ -129,7 +129,7 @@ Requires: (grafana-selinux = %{version}-%{release} if selinux-policy-any)
 Requires: grafana-selinux = %{version}-%{release}
 %endif
 
-%if 0%{?fedora} || 0%{?rhel} > 7
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
 Recommends: grafana-pcp
 %endif
 
@@ -884,7 +884,7 @@ do
     %{buildroot}%{_datadir}/selinux/devel/include/distributed/grafana.if
 done
 
-%if 0%{?fedora} >= 42
+%if 0%{?fedora} >= 42 || 0%{?oreon}
 %elif 0%{?fedora} || 0%{?rhel} >= 9
 %pre
 %sysusers_create_compat %{SOURCE3}
@@ -1026,5 +1026,5 @@ done
 %ghost %verify(not md5 size mode mtime) %{_sharedstatedir}/selinux/*/active/modules/200/grafana
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2.6-24
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 10.2.6-24
+- Import

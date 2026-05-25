@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           jakarta-servlet
 Version:        5.0.0
@@ -30,7 +30,7 @@ Jakarta Servlet defines a server-side API for handling HTTP requests
 and responses.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent . api
@@ -74,5 +74,5 @@ sed -i -e 's/jakarta\./javax./g' $(find api/src/main/java/javax -name *.java)
 %doc README.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.0-1
+- Import

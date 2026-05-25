@@ -23,7 +23,7 @@ BuildRequires: qt5-qtbase-private-devel
 BuildRequires: qt5-qtdeclarative-devel
 BuildRequires: qt5-qtimageformats
 BuildRequires: qt5-qtxmlpatterns-devel
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires: pkgconfig(assimp) >= 3.3.1
 %endif
 Requires: qt5-qtimageformats%{?_isa} >= %{version}
@@ -179,5 +179,5 @@ popd
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.15.18-2
+- Import

@@ -125,5 +125,5 @@ touch /var/account/pacct && chmod 0600 /var/account/pacct
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.4-26
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.4-26
+- Import

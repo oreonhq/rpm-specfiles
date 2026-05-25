@@ -8,7 +8,7 @@
 #
 # We also use the previous build of Python in "make regen-all".
 #
-# Procedure: https://fedoraproject.org/wiki/SIGs/Python/UpgradingPython
+# Procedure: 
 #
 # Bootstrap enabled:
 # - disables regen-all with the same Python version
@@ -18,14 +18,12 @@
 
 # Whether to use RPM build wheels from the python-{pip,setuptools,wheel}-wheel packages
 # Uses upstream bundled prebuilt wheels otherwise
-# Oreon: off (python3-pip-wheel / python3-setuptools-wheel not in compose yet; avoid builddep failure)
-%bcond_with rpmwheels
+%bcond rpmwheels %{without bootstrap}
 
-# Expensive optimizations (mainly, profile-guided optimizations / PGO).
-# Oreon: always off. Up to four configurations (optimized, debug, freethreading x2)
-# with LTO makes PGO link steps a frequent mock OOM or killed-after-hours build.
-# Use rpmbuild --with optimizations if you really want PGO locally.
-%bcond optimizations 0
+# Expensive optimizations (mainly, profile-guided optimizations)
+# We don't have to switch it off for bootstrap, but it speeds up the first build,
+# so we opt to only run them during the "full" build
+%bcond optimizations %{without bootstrap}
 
 # Run the test suite in %%check
 # Technically, we can run the tests even during the bootstrap build, but since
@@ -47,12 +45,13 @@ URL: https://www.python.org/
 
 #  WARNING  When rebasing to a new Python version,
 #           remember to update the python3-docs package as well
-%global general_version %{pybasever}.3
+%global general_version %{pybasever}.5
 #global prerel ...
 %global upstream_version %{general_version}%{?prerel}
 Version: %{general_version}%{?prerel:~%{prerel}}
-Release: 7%{?dist}
+Release: 1%{?dist}
 License: Python-2.0.1
+
 
 # ==================================
 # Conditionals controlling the build
@@ -71,45 +70,28 @@ License: Python-2.0.1
 
 # Extra build for debugging the interpreter or C-API extensions
 # (the -debug subpackages)
-%if 0%{?oreon}
-# Oreon mock jobs often hit time and disk limits when building every ABI at once
-%bcond debug_build 0
-%else
 %bcond debug_build 1
-%endif
 
 # Extra build without GIL, the freethreading PEP 703 way
 # (the -freethreading subpackage)
-%if 0%{?oreon}
-%bcond freethreading_build 0
-%else
 %bcond freethreading_build 1
-%endif
 
 # PEP 744: JIT Compilation
 # Whether to build with the experimental JIT compiler
 # Only possible on certain architectures: https://peps.python.org/pep-0744/#support
-# The freethreading build (when enabled) does not support JIT yet.
-# Disable by default in Oreon to avoid missing pre-generated jit_stencils sources.
-%bcond jit 0
+# The freethreading build (when enabled) does not support JIT yet
+%bcond jit %["%{_arch}" == "x86_64" || "%{_arch}" == "aarch64"]
 # Whether to build the JIT stencils (or else use the prebuilt ones)
 # We can only do this on Fedora 41+, where clang 19 is available
 # We don't do it in RHEL, see https://github.com/fedora-eln/eln/issues/207
 %bcond jit_build_stencils %[%{with jit} && 0%{?fedora} >= 41]
 %if %{with jit}
 # When built with JIT, it still needs to be enabled on runtime via PYTHON_JIT=1
-%global jit_flag --enable-experimental-jit=yes-off
+%global jit_flag --enable-experimental-jit=yes-off %{!?with_jit_build_stencils:--enable-prebuilt-jit-stencils}
 %endif
 
 # Main interpreter loop optimization
 %bcond computed_gotos 1
-
-# Limit parallel compile/link (LTO) jobs so mock does not OOM on hosts that advertise many CPUs.
-%ifarch aarch64
-%global _smp_mflags -j2
-%else
-%global _smp_mflags -j4
-%endif
 
 # =====================
 # General global macros
@@ -125,45 +107,35 @@ License: Python-2.0.1
 %global python3_pkgversion %{pybasever}
 %endif
 
-# With rpmwheels, -libs BR/Requires %%{python_wheel_pkg_prefix}-*-wheel. Fedora
-# defaults to python-*-wheel; Oreon ships python3-*-wheel (macros.oreon-release).
-# Do not rely on %%{?oreon} here (often undefined in early mock parse).
-%if %{with main_python}
-%global python_wheel_pkg_prefix python3
-%else
-%{?oreon:%global python_wheel_pkg_prefix python%{python3_pkgversion}}
-%endif
-
 # If the rpmwheels condition is disabled, we use the bundled wheel packages
 # from Python with the versions below.
 # This needs to be manually updated when we update Python.
 # Explore the sources tarball (you need the version before %%prep is executed):
 #  $ tar -tf Python-%%{upstream_version}.tar.xz | grep whl
-%global pip_version 25.3
+%global pip_version 26.1.1
 %global setuptools_version 79.0.1
 # All of those also include a list of indirect bundled libs:
 # pip
 #  $ %%{_rpmconfigdir}/pythonbundles.py <(unzip -p Lib/ensurepip/_bundled/pip-*.whl pip/_vendor/vendor.txt)
 %global pip_bundled_provides %{expand:
-Provides: bundled(python3dist(cachecontrol)) = 0.14.3
-Provides: bundled(python3dist(certifi)) = 2025.10.5
-Provides: bundled(python3dist(dependency-groups)) = 1.3.1
+Provides: bundled(python3dist(cachecontrol)) = 0.14.4
+Provides: bundled(python3dist(certifi)) = 2026.2.25
 Provides: bundled(python3dist(distlib)) = 0.4
 Provides: bundled(python3dist(distro)) = 1.9
-Provides: bundled(python3dist(idna)) = 3.10
+Provides: bundled(python3dist(idna)) = 3.11
 Provides: bundled(python3dist(msgpack)) = 1.1.2
-Provides: bundled(python3dist(packaging)) = 25
-Provides: bundled(python3dist(platformdirs)) = 4.5
+Provides: bundled(python3dist(packaging)) = 26.2
+Provides: bundled(python3dist(platformdirs)) = 4.5.1
 Provides: bundled(python3dist(pygments)) = 2.19.2
 Provides: bundled(python3dist(pyproject-hooks)) = 1.2
-Provides: bundled(python3dist(requests)) = 2.32.5
+Provides: bundled(python3dist(requests)) = 2.33.1
 Provides: bundled(python3dist(resolvelib)) = 1.2.1
 Provides: bundled(python3dist(rich)) = 14.2
 Provides: bundled(python3dist(setuptools)) = 70.3
-Provides: bundled(python3dist(tomli)) = 2.3
+Provides: bundled(python3dist(tomli)) = 2.3.1
 Provides: bundled(python3dist(tomli-w)) = 1.2
 Provides: bundled(python3dist(truststore)) = 0.10.4
-Provides: bundled(python3dist(urllib3)) = 1.26.20
+Provides: bundled(python3dist(urllib3)) = 2.6.3
 }
 # setuptools
 # vendor.txt not in .whl
@@ -242,7 +214,7 @@ Provides: bundled(python3dist(zipp)) = 3.19.2
 %global py_INSTSONAME_freethreading_debug libpython%{LDVERSION_freethreading_debug}.so.%{py_SOVERSION}
 
 # The -O flag for the compiler, optimized builds
-# https://fedoraproject.org/wiki/Changes/Python_built_with_gcc_O3
+# 
 %global optflags_optimized -O3
 # The -O flag for the compiler, debug builds
 # -Wno-cpp avoids some warnings with -O0
@@ -274,7 +246,7 @@ Provides: bundled(python3dist(zipp)) = 3.19.2
 # preferable to an "extra" interpreter. For example, python3-3.6.1 will
 # replace python3.6-3.6.2.
 %define unversioned_obsoletes_of_python3_X_if_main() %{expand:\
-Obsoletes: python%{pybasever}%{?1:-%{1}} < %{version}-%{release}\
+Obsoletes: python%{pybasever}%{?1:-%{1}}\
 }
 %else
 %define unversioned_obsoletes_of_python3_X_if_main() %{nil}
@@ -303,7 +275,6 @@ BuildRequires: libzstd-devel
 BuildRequires: make
 BuildRequires: mpdecimal-devel
 BuildRequires: ncurses-devel
-BuildRequires: openssl-devel
 BuildRequires: pkgconfig
 BuildRequires: python-rpm-macros
 BuildRequires: readline-devel
@@ -315,6 +286,10 @@ BuildRequires: tk-devel
 BuildRequires: xz-devel
 BuildRequires: zlib-devel
 BuildRequires: /usr/bin/dtrace
+
+# Support for OpenSSL 4 only landed in Python 3.15 for now
+# https://github.com/python/cpython/issues/146207
+BuildRequires: (openssl-devel < 1:4 or openssl3-devel)
 
 %if %{with tests}
 BuildRequires: gcc-c++
@@ -340,7 +315,7 @@ BuildRequires: libappstream-glib
 %if %{with rpmwheels}
 # Python 3.12 removed the deprecated imp module,
 # the first compatible version of pip is 23.1.2.
-BuildRequires: (%{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2 or python-pip-wheel >= 23.1.2)
+BuildRequires: %{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2
 %if %{with tests}
 BuildRequires: %{python_wheel_pkg_prefix}-setuptools-wheel
 BuildRequires: (%{python_wheel_pkg_prefix}-wheel-wheel if %{python_wheel_pkg_prefix}-setuptools-wheel < 71)
@@ -407,7 +382,7 @@ Source34: Python-%{upstream_version}-x86_64-optimized-jit_stencils.h
 # to /usr/local when RPM build is not detected
 # to make pip and similar tools install into separate location.
 #
-# Fedora Change: https://fedoraproject.org/wiki/Changes/Making_sudo_pip_safe
+# Fedora Change: 
 # Downstream only.
 #
 # We've tried to rework in Fedora 36/Python 3.10 to follow https://bugs.python.org/issue43976
@@ -471,6 +446,10 @@ Patch475: 00475-cve-2025-15367.patch
 # direct call to the check function.
 Patch477: 00477-raise-an-error-when-importing-stdlib-modules-compiled-for-a-different-python-version.patch
 
+# 00486 # 5ae0b81b3135319f8d75a886fb7a11fa40ac11f4
+# gh-148646: Add --enable-prebuilt-jit-stencils configure flag
+Patch486: 00486-gh-148646-add---enable-prebuilt-jit-stencils-configure-flag.patch
+
 # (New patches go here ^^^)
 #
 # When adding new patches to "python" and "python3" in Fedora, EL, etc.,
@@ -478,7 +457,7 @@ Patch477: 00477-raise-an-error-when-importing-stdlib-modules-compiled-for-a-diff
 #
 # More information, and a patch number catalog, is at:
 #
-#     https://fedoraproject.org/wiki/SIGs/Python/PythonPatches
+#     
 #
 # The patches are stored and rebased at:
 #
@@ -510,8 +489,8 @@ Provides: python%{pybasever}%{?_isa} = %{version}-%{release}
 
 %unversioned_obsoletes_of_python3_X_if_main
 
-# https://fedoraproject.org/wiki/Changes/Move_usr_bin_python_into_separate_package
-# https://fedoraproject.org/wiki/Changes/Python_means_Python3
+# 
+# 
 # We recommend /usr/bin/python so users get it by default
 # Versioned recommends are problematic, and we know that the package requires
 # python3 back with fixed version, so we just use the path here:
@@ -565,8 +544,8 @@ the "%{pkgname}-" prefix.
 
 
 %if %{with main_python}
-# https://fedoraproject.org/wiki/Changes/Move_usr_bin_python_into_separate_package
-# https://fedoraproject.org/wiki/Changes/Python_means_Python3
+# 
+# 
 %package -n python-unversioned-command
 Summary: The "python" command that runs Python 3
 BuildArch: noarch
@@ -585,7 +564,7 @@ Provides: python-is-python3 = %{version}-%{release}
 %description -n python-unversioned-command
 This package contains /usr/bin/python - the "python" command that runs Python 3.
 
-%endif
+%endif # with main_python
 
 
 %package -n %{pkgname}-libs
@@ -621,7 +600,7 @@ Summary:        Python runtime libraries
 # Zstandard bindings in Modules/_zstd and Lib/compression/zstd are BSD-3-Clause
 %global libs_license Python-2.0.1 AND MIT AND BSD-3-Clause AND MIT-CMU AND HPND-SMC AND BSD-2-Clause AND dtoa
 %if %{with rpmwheels}
-Requires: (%{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2 or python-pip-wheel >= 23.1.2)
+Requires: %{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2
 License: %{libs_license}
 %else
 Provides: bundled(python3dist(pip)) = %{pip_version}
@@ -663,8 +642,12 @@ Requires: tzdata
 # We avoid this problem by requiring at least the same version of expat that
 # was used during the build time.
 # Other subpackages (like -debug) also need this, but they all depend on -libs.
+# Since expat 2.7.4, the library has versioned symbols and this is no longer needed,
+# as the generated requirement will be in the form of libexpat.so.1(LIBEXPAT_2.7.2) etc.
 %global expat_version %(LANG=C rpm -q --qf '%%{version}' expat.%{_target_cpu} | sed 's/.*not installed/0/')
+%if v"%{expat_version}" < v"2.7.4"
 Requires: expat%{?_isa} >= %{expat_version}
+%endif
 
 
 %description -n %{pkgname}-libs
@@ -813,7 +796,7 @@ of Python.
 
 The debug runtime additionally supports debug builds of C-API extensions
 (with the "d" ABI flag) for debugging issues in those extensions.
-%endif
+%endif # with debug_build
 
 
 %if %{with freethreading_build}
@@ -851,7 +834,7 @@ which may need to be installed separately.
 %package -n python%{pybasever}-freethreading-libs
 Summary: Free Threading Python runtime libraries
 %if %{with rpmwheels}
-Requires: (%{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2 or python-pip-wheel >= 23.1.2)
+Requires: %{python_wheel_pkg_prefix}-pip-wheel >= 23.1.2
 License: %{libs_license}
 %else
 Provides: bundled(python3dist(pip)) = %{pip_version}
@@ -863,7 +846,9 @@ License: %{libs_license} AND Apache-2.0 AND ISC AND LGPL-2.1-only AND MPL-2.0 AN
 # See the comments in the definition of main -libs subpackage for detailed explanations
 Provides: bundled(mimalloc) = 2.12
 Requires: tzdata
+%if v"%{expat_version}" < v"2.7.4"
 Requires: expat%{?_isa} >= %{expat_version}
+%endif
 
 # There are files in the standard library that have python shebang.
 # We've filtered the automatic requirement out so libs are installable without
@@ -962,7 +947,7 @@ The self-test suite for the Free Threading Python interpreter.
 This is only useful to test Free Threading Python itself. For testing general
 Python code with the Free Threading build, you should use the unittest module
 from python%{pybasever}-freethreading-libs, or a library such as pytest.
-%endif
+%endif  # with freethreading_build
 
 %if %{with freethreading_build} && %{with debug_build}
 %package -n python%{pybasever}-freethreading-debug
@@ -993,7 +978,7 @@ and with the necessary changes needed to make the interpreter thread-safe.
 This package provides a version of the Python runtime with numerous debugging
 features enabled, aimed at advanced Python users such as developers of Python
 extension modules.
-%endif
+%endif # with freethreading_build && debug_build
 
 
 # ======================================================
@@ -1080,8 +1065,8 @@ topdir=$(pwd)
 # in Fedora RPMs.
 # Standard library built here will still use the %%build_...flags,
 # Fedora packages utilizing %%py3_build will use them as well
-# https://fedoraproject.org/wiki/Changes/Python_Extension_Flags
-# https://fedoraproject.org/wiki/Changes/Python_Extension_Flags_Reduction
+# 
+# 
 export CFLAGS="%{extension_cflags}"
 export CFLAGS_NODIST="%{build_cflags} -D_GNU_SOURCE -fPIC -fwrapv"
 export CXXFLAGS="%{extension_cxxflags}"
@@ -1161,7 +1146,7 @@ BuildPython() {
 BuildPython debug \
   "--without-ensurepip --with-pydebug %{?jit_flag}" \
   "%{optflags_debug}"
-%endif
+%endif # with debug_build
 
 BuildPython optimized \
   "--without-ensurepip %{?jit_flag} %{optimizations_flag}" \
@@ -1171,13 +1156,13 @@ BuildPython optimized \
 BuildPython freethreading-debug \
   "--without-ensurepip --with-pydebug --disable-gil" \
   "%{optflags_debug}"
-%endif
+%endif # with freethreading_build && debug_build
 
 %if %{with freethreading_build}
 BuildPython freethreading \
   "--without-ensurepip %{optimizations_flag} --disable-gil" \
   "%{optflags_optimized}"
-%endif
+%endif # with freethreading_build
 
 # ======================================================
 # Installing the built code:
@@ -1204,17 +1189,11 @@ topdir=$(pwd)
 #  /usr/lib/debug/usr/lib/libpython3.2.so.1.0.debug-gdb.py
 # (note that the debug path is /usr/lib/debug for both 32/64 bit)
 #
-# See https://fedoraproject.org/wiki/Features/EasierPythonDebugging for more
+# See  for more
 # information
 
 DirHoldingGdbPy=%{_usr}/lib/debug/%{_libdir}
 mkdir -p %{buildroot}$DirHoldingGdbPy
-
-# When the actual %%{dynload_dir} exists (it does when python3.X is installed for regen-all)
-# %%{buildroot}%%{dynload_dir} is not created by make install and the extension modules are missing
-# Reported upstream as https://github.com/python/cpython/issues/98782
-# A workaround is to create the directory before running make install
-mkdir -p %{buildroot}%{dynload_dir}
 
 # Multilib support for pyconfig.h
 # 32- and 64-bit versions of pyconfig.h are different. For multilib support
@@ -1281,14 +1260,14 @@ InstallPython freethreading-debug \
   %{py_INSTSONAME_freethreading_debug} \
   "%{optflags_debug}" \
   %{LDVERSION_freethreading_debug}
-%endif
+%endif # with freethreading_build && debug_build
 
 %if %{with debug_build}
 InstallPython debug \
   %{py_INSTSONAME_debug} \
   "%{optflags_debug}" \
   %{LDVERSION_debug}
-%endif
+%endif # with debug_build
 
 %if %{with freethreading_build}
 # Now the freethreading optimized build:
@@ -1296,7 +1275,7 @@ InstallPython freethreading \
   %{py_INSTSONAME_freethreading} \
   "%{optflags_optimized}" \
   %{LDVERSION_freethreading}
-%endif
+%endif # with freethreading_build
 
 # Now the optimized build:
 InstallPython optimized \
@@ -1318,7 +1297,7 @@ install -d -m 0755 %{buildroot}%{pylibdir_freethreading}/site-packages/__pycache
 install -d -m 0755 %{buildroot}%{_prefix}/lib/python%{pybasever}/site-packages/__pycache__
 %if %{with freethreading_build}
 install -d -m 0755 %{buildroot}%{_prefix}/lib/python%{pybasever}%{ABIFLAGS_freethreading}/site-packages/__pycache__
-%endif
+%endif # with freethreading_build
 %endif
 
 %if %{with main_python}
@@ -1380,7 +1359,7 @@ find . -name "*~" -exec rm -f {} \;
 # Python CMD line options:
 # -s - don't add user site directory to sys.path
 # -B - don't write .pyc files on import
-# Clamp the source mtime first, see https://fedoraproject.org/wiki/Changes/ReproducibleBuildsClampMtimes
+# Clamp the source mtime first, see 
 # The clamp_source_mtime module is only guaranteed to exist on Fedoras that enabled this option:
 %if 0%{?clamp_mtime_to_source_date_epoch}
 LD_LIBRARY_PATH="%{buildroot}%{dynload_dir}/:%{buildroot}%{_libdir}" \
@@ -1432,7 +1411,7 @@ rm %{buildroot}%{_libdir}/pkgconfig/python3.pc
 rm %{buildroot}%{_libdir}/pkgconfig/python3-embed.pc
 %else
 # Link the unversioned stuff
-# https://fedoraproject.org/wiki/Changes/Python_means_Python3
+# 
 ln -s ./python3 %{buildroot}%{_bindir}/python
 ln -s ./pydoc3 %{buildroot}%{_bindir}/pydoc
 ln -s ./pygettext3.py %{buildroot}%{_bindir}/pygettext.py
@@ -1498,7 +1477,8 @@ done
 %if %{with jit_build_stencils}
 for ConfName in %{?with_debug_build:debug} optimized; do
   if [ -s %{jit_stencils_source} ]; then
-    diff -u %{jit_stencils_source} build/${ConfName}/%{jit_stencils_filename}
+    # The -I option ignores the checksum line (calculated from files incl. pyconfig.h which may change with new autoconf)
+    diff -u -I '^// [0-9a-f]\{64\}$' %{jit_stencils_source} build/${ConfName}/%{jit_stencils_filename}
   else
     echo "%{jit_stencils_source} is empty, not checking if it is up to date"
   fi
@@ -1545,16 +1525,16 @@ CheckPython() {
 # Check each of the configurations:
 %if %{with debug_build}
 CheckPython debug
-%endif
+%endif # with debug_build
 CheckPython optimized
 %if %{with freethreading_build} && %{with debug_build}
 CheckPython freethreading-debug
-%endif
+%endif # with freethreading_build && debug_build
 %if %{with freethreading_build}
 CheckPython freethreading
-%endif
+%endif # with freethreading_build
 
-%endif
+%endif # with tests
 
 
 %files -n %{pkgname}
@@ -1875,7 +1855,7 @@ CheckPython freethreading
 %{pylibdir}/__pycache__/_sysconfigdata_%{ABIFLAGS_debug}_linux_%{platform_triplet}%{bytecode_suffixes}
 %{pylibdir}/_sysconfig_vars_%{ABIFLAGS_debug}_linux_%{platform_triplet}.json
 
-%endif
+%endif # with debug_build
 
 %if %{with freethreading_build}
 %files -n python%{pybasever}-freethreading
@@ -1973,7 +1953,7 @@ CheckPython freethreading
 # Extension modules
 %extension_modules_test %{dynload_dir_freethreading} %{SOABI_freethreading}
 
-%endif
+%endif # with freethreading_build
 
 %if %{with freethreading_build} && %{with debug_build}
 %files -n python%{pybasever}-freethreading-debug
@@ -2001,7 +1981,7 @@ CheckPython freethreading
 %{pylibdir_freethreading}/__pycache__/_sysconfigdata_%{ABIFLAGS_freethreading_debug}_linux_%{platform_triplet}%{bytecode_suffixes}
 %{pylibdir_freethreading}/_sysconfig_vars_%{ABIFLAGS_freethreading_debug}_linux_%{platform_triplet}.json
 
-%endif
+%endif # with freethreading_build && debug_build
 
 # We put the debug-gdb.py file inside /usr/lib/debug to avoid noise from ldconfig
 # See https://bugzilla.redhat.com/show_bug.cgi?id=562980
@@ -2024,14 +2004,5 @@ CheckPython freethreading
 # ======================================================
 
 %changelog
-* Sun Apr 19 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.3-7
-- When %%{?oreon}, skip debug and freethreading ABIs (mock time and disk)
-
-* Fri Apr 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.3-6
-- rpmwheels: accept python3-pip-wheel or legacy python-pip-wheel Provides
-
-* Sun Apr 12 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-2
-- Default off PGO (%%bcond optimizations 0), cap %%{_smp_mflags} (mock OOM / killed builds)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{general_version}%{?prerel:~%{prerel}}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.14.5-1
+- Import

@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 # Copyright (c) 2000-2009, JPackage Project
 # All rights reserved.
@@ -110,7 +110,7 @@ Summary:        SLF4J Source JARs
 SLF4J Source JARs.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 find -name '*.jar' -delete
 install -p -m 0644 %{SOURCE1} LICENSE-2.0.txt
 
@@ -187,5 +187,5 @@ sed -i '/Import-Package/s/\}$/};resolution:=optional/' slf4j-api/src/main/resour
 %license LICENSE.txt LICENSE-2.0.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.36-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.36-1
+- Import

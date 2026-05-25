@@ -1,9 +1,0 @@
-*~
-*.sh
-*.tar.*
-*.rpm
-.build*.log
-.*.sw?
-clog
-rhtest.cer
-shim-*/

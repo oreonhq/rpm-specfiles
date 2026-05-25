@@ -30,7 +30,6 @@ Patch6:   wireshark-0006-Move-tmp-to-var-tmp.patch
 Patch7:   wireshark-0007-cmakelists.patch
 Patch8:   wireshark-0008-pkgconfig.patch
 Patch9:   wireshark-0009-remove-strato-manpages.patch
-Patch10:  wireshark-0010-find-lua-5.5.patch
 
 #install tshark together with wireshark GUI
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
@@ -38,7 +37,7 @@ Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 Requires:	xdg-utils
 Requires:	hicolor-icon-theme
 
-%if %{with_maxminddb} && 0%{?fedora}
+%if %{with_maxminddb} && 0%{?fedora} || 0%{?oreon}
 Requires:	libmaxminddb
 %endif
 
@@ -74,10 +73,10 @@ BuildRequires:	qt6-qtsvg-devel
 BuildRequires:  qt6-qtimageformats
 BuildRequires:	zlib-devel
 BuildRequires:	asciidoctor
-%if %{with_maxminddb} && 0%{?fedora}
+%if %{with_maxminddb} && 0%{?fedora} || 0%{?oreon}
 BuildRequires:	libmaxminddb-devel
 %endif
-%if %{with_lua} && 0%{?fedora}
+%if %{with_lua} && 0%{?fedora} || 0%{?oreon}
 BuildRequires:	lua-devel
 %endif
 Buildrequires:	git-core
@@ -96,7 +95,7 @@ BuildRequires:	snappy-devel
 BuildRequires:	brotli-devel
 BuildRequires:	opus-devel
 BuildRequires:	sbc-devel
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires:	ilbc-devel
 BuildRequires:	opencore-amr-devel
 # bcg729 for G.729
@@ -131,9 +130,9 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 Requires:	glibc-devel
 Requires:	glib2-devel
-%if %{with_pytools} && 0%{?fedora}
-Requires:	python3-ply
-Requires:	omniORB-devel
+%if %{with_pytools} && 0%{?fedora} || 0%{?oreon}
+Requires: python3-ply
+Requires: omniORB-devel
 %endif
 
 %description devel
@@ -149,12 +148,12 @@ and plugins.
 %cmake -G "Unix Makefiles" \
   -DDISABLE_WERROR=ON \
   -DBUILD_wireshark=ON \
-%if %{with_lua} && 0%{?fedora}
+%if %{with_lua} && 0%{?fedora} || 0%{?oreon}
   -DENABLE_LUA=ON \
 %else
   -DENABLE_LUA=OFF \
 %endif
-%if %{with_maxminddb} && 0%{?fedora} 
+%if %{with_maxminddb} && 0%{?fedora} || 0%{?oreon} 
   -DBUILD_mmdbresolve=ON \
 %else
   -DBUILD_mmdbresolve=OFF \
@@ -185,7 +184,7 @@ mkdir -p %{buildroot}%{_udevrulesdir}
 install -m 0644 %{SOURCE2}		%{buildroot}%{_udevrulesdir}
 install -Dpm 0644 %{SOURCE3}		%{buildroot}%{_sysusersdir}/%{name}.conf
 
-%if %{with_pytools} && 0%{?fedora}
+%if %{with_pytools} && 0%{?fedora} || 0%{?oreon}
 #install asn2wrs.py, idl2wrs and make-plugin-reg.py tools
 mkdir -p %{buildroot}%{_libexecdir}/wireshark/pytools
 install -m 0755 tools/asn2wrs.py %{buildroot}%{_libexecdir}/wireshark/pytools/
@@ -235,7 +234,7 @@ fi
 %{_bindir}/sharkd
 %{_bindir}/text2pcap
 %{_bindir}/tshark
-%if %{with_maxminddb} && 0%{?fedora}
+%if %{with_maxminddb} && 0%{?fedora} || 0%{?oreon}
 %{_bindir}/mmdbresolve
 %endif
 %attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_bindir}/dumpcap
@@ -284,7 +283,7 @@ fi
 %{_mandir}/man4/extcap.*
 %{_datadir}/doc/wireshark/*
 
-%if %{with_maxminddb} && 0%{?fedora}
+%if %{with_maxminddb} && 0%{?fedora} || 0%{?oreon}
 %{_mandir}/man1/mmdbresolve.*
 %endif
 %dir %{_datadir}/wireshark
@@ -298,12 +297,12 @@ fi
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/cmake/%{name}/*.cmake
-%if %{with_pytools} && 0%{?fedora}
+%if %{with_pytools} && 0%{?fedora} || 0%{?oreon}
 %dir %{_libexecdir}/wireshark/pytools
 %{_libexecdir}/wireshark/pytools/*.py
 %{_libexecdir}/wireshark/pytools/idl2wrs
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 4.6.4-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:4.6.4-2
+- Import

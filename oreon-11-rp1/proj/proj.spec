@@ -1,4 +1,4 @@
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %bcond_without mingw
 %else
 %bcond_with mingw
@@ -7,7 +7,7 @@
 %global data_version 1.24
 Name:           proj
 # Also check whether there is a new proj-data release when upgrading!
-Version:        9.8.0
+Version:        9.8.1
 Release:        1%{?dist}
 Summary:        Cartographic projection software (PROJ)
 
@@ -20,7 +20,7 @@ Source1:        https://download.osgeo.org/%{name}/%{name}-data-%{data_version}.
 BuildRequires:  cmake
 BuildRequires:  curl-devel
 BuildRequires:  gcc-c++
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires:  gmock-devel
 BuildRequires:  gtest-devel >= 1.8.0
 %endif
@@ -42,7 +42,7 @@ BuildRequires: mingw64-libtiff
 BuildRequires: mingw64-sqlite
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Obsoletes:      proj-datumgrid < 1.8-6.3.2.6
 %endif
 
@@ -57,7 +57,7 @@ projection functions.
 %package devel
 Summary:        Development files for PROJ
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 Obsoletes:      %{name}-static < 7.2.0
 %endif
 
@@ -73,7 +73,7 @@ BuildArch:      noarch
 Proj arch independent data files.
 
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %package data-europe
 Summary:        Compat package for old proj-datumgrid-europe
 BuildArch:      noarch
@@ -245,7 +245,7 @@ projection functions. Proj docs: http://www.remotesensing.org/dl/new_docs/
 
 %build
 # Native build
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %cmake -DUSE_EXTERNAL_GTEST=ON
 %else
 %cmake -DBUILD_TESTING=OFF
@@ -281,7 +281,7 @@ rm -rf %{buildroot}%{mingw64_datadir}/bash-completion
 %endif
 
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %check
 # nkg test requires internet connection
 %ctest -E nkg
@@ -364,5 +364,5 @@ rm -rf %{buildroot}%{mingw64_datadir}/bash-completion
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.8.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 9.8.1-1
+- Import

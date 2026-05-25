@@ -4,7 +4,7 @@
 # https://github.com/opencontainers/runc
 %global goipath github.com/opencontainers/runc
 Epoch:          2
-Version:        1.4.1
+Version:        1.4.2
 %global tag     v%{gsub %{version} ~ -}
 
 %gometa -L -f
@@ -79,5 +79,5 @@ install -m 0644 -vp contrib/completions/bash/%{name} %{buildroot}/%{bash_complet
 %{_bindir}/runc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2:1.4.2-1
+- Import

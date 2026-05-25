@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 %bcond_without jp_minimal
 
 Name:           log4j
@@ -131,7 +131,7 @@ Use NoSQL databases such as MongoDB and CouchDB to append log messages.
 %endif
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %pom_remove_plugin -r :apache-rat-plugin
 %pom_remove_plugin -r :maven-site-plugin
@@ -298,5 +298,5 @@ rm log4j-core/src/main/java/org/apache/logging/log4j/core/filter/MutableThreadCo
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.20.0-1
+- Import

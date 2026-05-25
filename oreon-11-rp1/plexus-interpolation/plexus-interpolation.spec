@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           plexus-interpolation
 Version:        1.27
@@ -33,7 +33,7 @@ the expression language style commonly seen in Maven, Plexus, and other
 related projects.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 %pom_add_dep junit:junit:4.13.1:test
 %pom_remove_plugin :maven-release-plugin
 %pom_remove_plugin :maven-scm-publish-plugin
@@ -48,5 +48,5 @@ related projects.
 %files -f .mfiles
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.27-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.27-1
+- Import

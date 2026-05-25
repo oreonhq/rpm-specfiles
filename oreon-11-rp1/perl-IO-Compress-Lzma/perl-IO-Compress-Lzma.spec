@@ -1,5 +1,5 @@
 # Perform optional tests
-%if 0%{?rhel} >= 9
+%if 0%{?rhel} >= 9 || 0%{?oreon}
 %bcond_with perl_IO_Compress_Lzma_enables_optional_test
 %else
 %bcond_without perl_IO_Compress_Lzma_enables_optional_test
@@ -101,5 +101,5 @@ make test COMPRESS_ZLIB_RUN_MOST=1
 %{_mandir}/man3/IO::Uncompress::UnXz.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.217-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.217-1
+- Import

@@ -5,18 +5,17 @@
 %global libadwaita_version 1.6.0
 %global libspelling_version 0.4.0
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %%(echo %{version} | tr '~' '.')
 
 Name:		gnome-text-editor
-Version:	50.0
+Version:	50.1
 Release:	%autorelease
 Summary:	A simple text editor for the GNOME desktop
 
 # Code is GPL-3.0-or-later and the Appdata is CC0-1.0
 License:	GPL-3.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:		https://gitlab.gnome.org/GNOME/gnome-text-editor
-Source0:	https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
+Source0:	https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
 
 BuildRequires:	pkgconfig(editorconfig)
 BuildRequires:	pkgconfig(enchant-2) >= %{enchant_version}
@@ -46,9 +45,6 @@ You can come back to your work even if you've never saved it to a file.
 
 
 %prep
-# check for human errors
-if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Error: Use tilde in Version field in front of alpha/beta/rc; checked '%{version}'" 1>&2; exit 1; fi
-
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 
@@ -82,5 +78,5 @@ desktop-file-validate %{buildroot}%{_datadir}/applications/org.gnome.TextEditor.
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 50.1-1
+- Import

@@ -59,7 +59,7 @@ BuildRequires:  make, nodejs >= 1:14, yarnpkg, golang-github-google-jsonnet
 %{?systemd_requires}
 Requires:       grafana >= 9.0.9
 Suggests:       pcp >= 5.2.2
-%if 0%{?rhel} > 9 || 0%{?fedora} > 39
+%if 0%{?rhel} > 9 || 0%{?fedora} > 39 || 0%{?oreon}
 Suggests:       valkey
 %else
 Suggests:       redis >= 5.0.0
@@ -198,5 +198,5 @@ yarn test
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.3.0-6
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.3.0-6
+- Import

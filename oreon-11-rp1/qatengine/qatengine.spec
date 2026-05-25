@@ -13,8 +13,8 @@
 %endif
 
 Name:           qatengine
-Version:        2.0.0
-Release:        3%{?dist}
+Version:        2.1.0
+Release:        1%{?dist}
 Summary:        Intel QuickAssist Technology (QAT) OpenSSL Engine
 
 # Most of the source code is BSD, with the following exceptions:
@@ -32,7 +32,7 @@ BuildRequires:  gcc
 BuildRequires:  libtool
 BuildRequires:  openssl-devel >= 1.1.1
 BuildRequires:  qatlib-devel >= 23.02.0
-%if !0%{?rhel}
+%if !0%{?rhel} || 0%{?oreon}
 BuildRequires:  intel-ipp-crypto-mb-devel >= 1.0.6
 BuildRequires:  intel-ipsec-mb-devel >= 2.0
 %endif
@@ -55,7 +55,7 @@ autoreconf -ivf
 %install
 %make_install
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 find %{buildroot} -name "*.la" -delete
 %endif
 
@@ -78,5 +78,5 @@ openssl engine -v %{name}
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.0.0-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.0-1
+- Import

@@ -1,4 +1,4 @@
-From 92f605c199a98a645ee08a92fca2443a38d9ea8d Mon Sep 17 00:00:00 2001
+From d10eb6e06e0925b91a1567953168124c3ad9891a Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Miro=20Hron=C4=8Dok?= <miro@hroncok.cz>
 Date: Fri, 9 Jan 2026 11:52:40 +0100
 Subject: [PATCH] Restore support for Python 3.6 virtual environments
@@ -7,15 +7,15 @@ This allows our users to continue using virtualenv (and tox) with Python 3.6.
 
 It's only tested on Fedora CI, not in %check.
 ---
- .../create/via_global_ref/_virtualenv.py         | 16 ++++------------
- src/virtualenv/discovery/py_info.py              |  2 --
- 2 files changed, 4 insertions(+), 14 deletions(-)
+ src/virtualenv/create/via_global_ref/_virtualenv.py | 2 --
+ src/virtualenv/discovery/py_info.py                 | 4 +---
+ 2 files changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/src/virtualenv/create/via_global_ref/_virtualenv.py b/src/virtualenv/create/via_global_ref/_virtualenv.py
-index f63332c..7eacf13 100644
+index 0d95b28..5387248 100644
 --- a/src/virtualenv/create/via_global_ref/_virtualenv.py
 +++ b/src/virtualenv/create/via_global_ref/_virtualenv.py
-@@ -1,21 +1,13 @@
+@@ -1,7 +1,5 @@
  """Patches that are applied at runtime to the virtual environment."""
  
 -from __future__ import annotations
@@ -23,60 +23,28 @@ index f63332c..7eacf13 100644
  import contextlib
  import os
  import sys
--from typing import TYPE_CHECKING
--
--if TYPE_CHECKING:
--    import types
--    from collections.abc import Callable
--    from importlib.machinery import ModuleSpec
- 
- VIRTUALENV_PATCH_FILE = os.path.abspath(__file__)
- 
- 
--def patch_dist(dist: types.ModuleType) -> None:
-+def patch_dist(dist) -> None:
-     """Distutils allows user to configure some arguments via a configuration file: https://docs.python.org/3/install/index.html#distutils-configuration-files.
- 
-     Some of this arguments though don't make sense in context of the virtual environment files, let's fix them up.
-@@ -55,7 +47,7 @@ class _Finder:
-     # See https://github.com/pypa/virtualenv/issues/1895 for details.
-     lock = []  # noqa: RUF012
- 
--    def find_spec(self, fullname: str, path: object, target: object = None) -> ModuleSpec | None:  # noqa: ARG002
-+    def find_spec(self, fullname: str, path: object, target: object = None):  # noqa: ARG002
-         # Guard against race conditions during file rewrite by checking if _DISTUTILS_PATCH is defined.
-         # This can happen when the file is being overwritten while it's being imported by another process.
-         # See https://github.com/pypa/virtualenv/issues/2969 for details.
-@@ -100,7 +92,7 @@ class _Finder:
-         return None
- 
-     @staticmethod
--    def exec_module(old: Callable[..., object], module: types.ModuleType) -> None:
-+    def exec_module(old, module) -> None:
-         old(module)
-         try:
-             distutils_patch = _DISTUTILS_PATCH
-@@ -112,7 +104,7 @@ class _Finder:
-                 patch_dist(module)
- 
-     @staticmethod
--    def load_module(old: Callable[..., types.ModuleType], name: str) -> types.ModuleType:
-+    def load_module(old, name: str):
-         module = old(name)
-         try:
-             distutils_patch = _DISTUTILS_PATCH
 diff --git a/src/virtualenv/discovery/py_info.py b/src/virtualenv/discovery/py_info.py
-index 5115865..fc5c4c6 100644
+index c2310cd..4eff06f 100644
 --- a/src/virtualenv/discovery/py_info.py
 +++ b/src/virtualenv/discovery/py_info.py
-@@ -1,7 +1,5 @@
- """Backward-compatibility re-export — use ``python_discovery.PythonInfo`` directly."""
+@@ -4,8 +4,6 @@ The PythonInfo contains information about a concrete instance of a Python interp
+ Note: this file is also used to query target interpreters, so can only use standard library methods
+ """
  
 -from __future__ import annotations
 -
- from python_discovery import PythonInfo
+ import json
+ import logging
+ import os
+@@ -441,7 +439,7 @@ class PythonInfo:  # noqa: PLR0904
+         return cls._current
  
- __all__ = [
+     @classmethod
+-    def current_system(cls, app_data=None) -> PythonInfo:
++    def current_system(cls, app_data=None) -> "PythonInfo":
+         """
+         This locates the current host interpreter information. This might be different than what we run into in case
+         the host python has been upgraded from underneath us.
 -- 
-2.53.0
+2.52.0
 

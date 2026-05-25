@@ -10,8 +10,8 @@
 
 Summary: Qt6 - WebChannel component
 Name:    qt6-%{qt_module}
-Version: 6.10.3
-Release: 2%{?dist}
+Version: 6.11.1
+Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt.io
@@ -38,7 +38,6 @@ BuildRequires: qt6-qtdeclarative-devel
 BuildRequires: qt6-qtwebsockets-devel
 
 BuildRequires: pkgconfig(xkbcommon) >= 0.5.0
-BuildRequires: openssl-devel
 
 %description
 The Qt WebChannel module provides a library for seamless integration of C++
@@ -56,7 +55,7 @@ Requires: qt6-qtbase-devel%{?_isa}
 %package examples
 Summary: Programming examples for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-# BuildRequires: qt6-qtwebchannel-devel (same version as this package)
+# BuildRequires: qt6-qtwebchannel-devel >= %{version}
 %description examples
 %{summary}.
 %endif
@@ -98,6 +97,7 @@ popd
 %{_qt6_libdir}/libQt6WebChannel.so.6*
 %{_qt6_libdir}/libQt6WebChannelQuick.so.6*
 %{_qt6_archdatadir}/qml/QtWebChannel/
+%{_qt6_datadir}/webchannel/
 
 %files devel
 %{_qt6_headerdir}/QtWebChannel/
@@ -128,11 +128,5 @@ popd
 
 
 %changelog
-* Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.3-2
-- Sync module to Qt 6.10.3 (match qt6-qtbase / qt6-rpm-macros)
-
-* Thu Apr 09 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-2
-- bump release (retry failed build)
-
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.10.2-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.11.1-1
+- Import

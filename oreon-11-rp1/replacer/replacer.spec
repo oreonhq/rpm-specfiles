@@ -42,7 +42,7 @@ Summary:       Javadoc for %{name}
 This package contains javadoc for %{name}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent
@@ -72,5 +72,5 @@ This package contains javadoc for %{name}.
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6-1
+- Import

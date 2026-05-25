@@ -2,7 +2,7 @@ Summary:        Parser Generator with Java Extension
 Name:           byaccj
 Version:        1.15
 Release:        %autorelease
-License:        LicenseRef-Fedora-Public-Domain
+License:        LicenseRef-Public-Domain
 URL:            http://byaccj.sourceforge.net/
 
 Source0:        http://sourceforge.net/projects/byaccj/files/byaccj/1.15/byaccj1.15_src.tar.gz
@@ -25,8 +25,7 @@ generate Java source code, instead. So there finally is a YACC for
 Java now! 
 
 %prep
-# Upstream tarball top-level is byaccj1.15/, not byaccj-1.15/
-%autosetup -p1 -n byaccj%{version}
+%autosetup -p1 -C
 chmod -c -x src/* docs/*
 sed -i -e 's|-arch i386 -isysroot /Developer/SDKs/MacOSX10.4u.sdk -mmacosx-version-min=10.4|$(LDFLAGS)|g' src/Makefile
 
@@ -44,5 +43,5 @@ install -p -m 755 src/yacc %{buildroot}%{_bindir}/%{name}
 %{_bindir}/%{name}
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.15-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.15-1
+- Import

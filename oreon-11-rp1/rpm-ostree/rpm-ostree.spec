@@ -13,16 +13,17 @@ Source0: https://github.com/coreos/rpm-ostree/releases/download/v%{version}/rpm-
 
 Patch0: 0001-rpmostreed-transaction-types-fix-override-reset.patch
 Patch1: 0001-Fix-silent-upgrade-failure-on-container-systems.patch
+Patch2: 0001-deploy-Print-status-message-on-container-early-retur.patch
 
 # See https://github.com/coreos/fedora-coreos-tracker/issues/1716
 # ostree not on i686 for RHEL 10
 # https://github.com/containers/composefs/pull/229#issuecomment-1838735764
-%if 0%{?fedora} || 0%{?rhel} >= 10
+%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon}
 ExcludeArch:    %{ix86}
 %endif
 
 BuildRequires: make
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires: rust-toolset
 %else
 BuildRequires: rust-packaging
@@ -37,14 +38,14 @@ BuildRequires: rust
 
 # Don't add the ostree-container binaries; this version
 # conditional needs to be kept in sync with the bootc one.
-%if 0%{?rhel} >= 10 || 0%{?fedora} > 41
+%if 0%{?rhel} >= 10 || 0%{?fedora} > 41 || 0%{?oreon}
     %bcond_with ostree_ext
 %else
     %bcond_without ostree_ext
 %endif
 
 # This is copied from the libdnf spec
-%if 0%{?rhel} && ! 0%{?centos}
+%if 0%{?rhel} && ! 0%{?centos} || 0%{?oreon}
 %bcond_without rhsm
 %else
 %bcond_with rhsm
@@ -52,7 +53,7 @@ BuildRequires: rust
 
 # RHEL (8,9) doesn't ship zchunk today.  Keep this in sync
 # with libdnf: https://gitlab.com/redhat/centos-stream/rpms/libdnf/-/blob/762f631e36d1e42c63a794882269d26c156b68c1/libdnf.spec#L45
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %bcond_with zchunk
 %else
 %bcond_without zchunk
@@ -136,7 +137,7 @@ BuildRequires:  gettext
 Requires:       libmodulemd%{?_isa} >= %{libmodulemd_version}
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
-%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11
+%if 0%{?fedora} >= 43 || 0%{?rhel} >= 11 || 0%{?oreon}
 Requires:       rpm-libs%{?_isa} >= 5.99.90
 %endif
 
@@ -155,7 +156,7 @@ Requires: bubblewrap
 # However our code is just calling fuse's fusermount.
 # We are updating our spec and code based on the discusion on:
 # https://github.com/coreos/rpm-ostree/pull/5047
-%if %{defined rhel} && 0%{?rhel} < 10
+%if %{defined rhel} && 0%{?rhel} < 10 || 0%{?oreon}
 Requires: fuse
 %else
 Requires: fuse3
@@ -210,7 +211,7 @@ export RUSTFLAGS="%{build_rustflags}"
   %{?with_rhsm:--enable-featuresrs=rhsm}
 
 %make_build
-%if 0%{?fedora} || 0%{?rhel} >= 10
+%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon}
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
 %cargo_vendor_manifest
@@ -256,7 +257,7 @@ $PYTHON autofiles.py > files \
   '%{_libdir}/%{name}' \
   '%{_mandir}/man*/*' \
   '%{_datadir}/dbus-1/system.d/*' \
-  '%{_sysconfdir}/rpm-ostreed.conf' \
+  '%config(noreplace) %{_sysconfdir}/rpm-ostreed.conf' \
   '%{_prefix}/lib/systemd/system/*' \
   '%{_prefix}/lib/kernel/install.d/*' \
   '%{_libexecdir}/rpm-ostree*' \
@@ -298,7 +299,7 @@ fi
 %doc COPYING.GPL COPYING.LGPL LICENSE README.md
 
 %files libs -f files.lib
-%if 0%{?fedora} || 0%{?rhel} >= 10
+%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon}
 %license LICENSE.dependencies
 %license cargo-vendor.txt
 %endif
@@ -306,5 +307,5 @@ fi
 %files devel -f files.devel
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2026.1-1
+- Import

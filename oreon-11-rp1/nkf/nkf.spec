@@ -81,5 +81,5 @@ make test
 %{_mandir}/man3/NKF.3pm.gz
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.4-38
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:2.1.4-38
+- Import

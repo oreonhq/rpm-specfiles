@@ -1,6 +1,6 @@
 Summary:	Library for extracting extra information from image files
 Name:		libexif
-Version:	0.6.25
+Version:	0.6.26
 Release:	%autorelease
 License:	LGPL-2.1-or-later
 URL:		https://libexif.github.io/
@@ -74,5 +74,5 @@ rm -rf %{buildroot}%{_datadir}/doc/libexif
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.25-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.6.26-1
+- Import

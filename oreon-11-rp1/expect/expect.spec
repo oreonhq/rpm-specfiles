@@ -1,14 +1,14 @@
-%global tcl_version 8.6
-%global tcl_sitearch %{_libdir}/tcl%{tcl_version}
+%{!?tcl_version: %global tcl_version %(echo 'puts $tcl_version' | tclsh)}
+%{!?tcl_sitearch: %global tcl_sitearch %{_libdir}/tcl%{tcl_version}}
 %global majorver 5.45.4
 
 Summary: A program-script interaction and testing utility
 Name: expect
 Version: %{majorver}
 Release: 31%{?dist}
-License: LicenseRef-Fedora-Public-Domain
+License: LicenseRef-Public-Domain
 URL: https://core.tcl.tk/expect/index
-Source: https://downloads.sourceforge.net/project/expect/Expect/%{version}/%{name}%{version}.tar.gz
+Source: http://downloads.sourceforge.net/%{name}/%{name}%{version}.tar.gz
 Buildrequires: gcc autoconf automake chrpath
 BuildRequires: tcl-devel
 BuildRequires: make
@@ -217,5 +217,5 @@ chrpath --delete $RPM_BUILD_ROOT%{_libdir}/libexpect%{version}.so
 %{_mandir}/man1/tknewsbiff.1*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{majorver}-31
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.45.4-31
+- Import

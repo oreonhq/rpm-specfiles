@@ -1,5 +1,0 @@
-summary: Run all tests in this repository
-discover:
-    how: fmf
-execute:
-    how: tmt

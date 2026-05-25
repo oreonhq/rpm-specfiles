@@ -18,12 +18,12 @@ BuildRequires: httpd-devel
 BuildRequires: dbus-devel
 BuildRequires: pkgconfig
 Requires: httpd-mmn = %{_httpd_mmn}
-%if 0%{?fedora} || 0%{?rhel} >= 8
+%if 0%{?fedora} || 0%{?rhel} >= 8 || 0%{?oreon}
 Recommends: sssd-dbus
 %endif
 
 # Suppres auto-provides for module DSO per
-# https://fedoraproject.org/wiki/Packaging:AutoProvidesAndRequiresFiltering#Summary
+# 
 %{?filter_provides_in: %filter_provides_in %{_libdir}/httpd/modules/.*\.so$}
 %{?filter_setup}
 
@@ -66,5 +66,5 @@ install -Dp -m 0644 lookup_identity.confx $RPM_BUILD_ROOT%{_httpd_confdir}/looku
 %{_httpd_moddir}/*.so
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.0-25
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0.0-25
+- Import

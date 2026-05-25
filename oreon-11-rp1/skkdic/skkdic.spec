@@ -79,5 +79,5 @@ popd
 %{_datadir}/skk/
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gitdate_num}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20240131-6.gitb798a46b88
+- Import

@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           google-guice
 Version:        5.1.0
@@ -118,11 +118,11 @@ Guice is a lightweight dependency injection framework for Java 5
 and above. This package provides Bill of Materials module for Guice.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
-jurand -i -s -a core/src/ \
-  -p com[.]google[.]common[.]annotations[.] \
-  -p com[.]google[.]errorprone[.]annotations[.] \
+%java_remove_annotations core/src/ \
+  -p ^com.google.common.annotations. \
+  -p ^com.google.errorprone.annotations. \
 
 # We don't have struts2 in Fedora yet.
 %pom_disable_module struts2 extensions
@@ -209,5 +209,5 @@ jurand -i -s -a core/src/ \
 %files -n guice-bom -f .mfiles-guice-bom
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.1.0-1
+- Import

@@ -57,5 +57,5 @@ sed 's;<java.version>1.7</java.version>;<java.version>1.8</java.version>;' -i po
 %license LICENSE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.0-29
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.7.0-29
+- Import

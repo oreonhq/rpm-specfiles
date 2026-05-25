@@ -1,4 +1,4 @@
-From 3074a701414a32df6314f42096b07ef22ecb6a5f Mon Sep 17 00:00:00 2001
+From 402936aded6bac2f5c7e55129ba72ffd9df0ab93 Mon Sep 17 00:00:00 2001
 From: Benjamin Marzinski <bmarzins@redhat.com>
 Date: Fri, 25 Mar 2022 18:12:06 -0500
 Subject: [PATCH] RH: add scsi device handlers to modules-load.d

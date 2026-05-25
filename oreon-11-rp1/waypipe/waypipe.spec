@@ -25,7 +25,7 @@ URL:            https://gitlab.freedesktop.org/mstoeckl/waypipe
 Source0:        https://gitlab.freedesktop.org/mstoeckl/waypipe/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 Source1:        waypipe.1
 Patch1:         0001-Cargo.toml-features-remove-test_proto-from-defaults.patch
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 Patch2:         0002-Cargo.toml-features-remove-video-from-defaults-for-r.patch
 %endif
 
@@ -35,11 +35,11 @@ BuildRequires:  gcc
 # required for bindgen to resolve some include paths..
 BuildRequires:  clang
 BuildRequires:  meson
-%if !0%{?rhel}
+%if !0%{?rhel} || 0%{?oreon}
 BuildRequires:  scdoc
 %endif
 BuildRequires:  pkgconfig(gbm)
-%if !0%{?rhel}
+%if !0%{?rhel} || 0%{?oreon}
 BuildRequires:  pkgconfig(libavcodec)
 BuildRequires:  pkgconfig(libavutil)
 BuildRequires:  pkgconfig(libswscale)
@@ -70,13 +70,13 @@ BuildRequires:  pkgconfig(wayland-server)
 %cargo_build
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
-%if !0%{?rhel}
+%if !0%{?rhel} || 0%{?oreon}
 scdoc < waypipe.scd > waypipe.1
 %endif
 
 %install
 %cargo_install
-%if !0%{?rhel}
+%if !0%{?rhel} || 0%{?oreon}
 install -D -p -m 0644 waypipe.1 %{buildroot}%{_mandir}/man1/waypipe.1
 %else
 install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_mandir}/man1/waypipe.1
@@ -96,5 +96,5 @@ install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_mandir}/man1/waypipe.1
 %license LICENSE.dependencies
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.11.0-1
+- Import

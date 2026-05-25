@@ -1,0 +1,32 @@
+# HG changeset patch
+# Node ID 0a0f975cec4183cb48903041769283de3846ddb7
+# Parent  1267f4588c03c6ab9e1d710d9980761fd719c555
+diff --git a/libpurple/mediamanager.c b/libpurple/mediamanager.c
+--- a/libpurple/mediamanager.c
++++ b/libpurple/mediamanager.c
+@@ -2216,7 +2216,8 @@
+ 			"create-cb", gst_device_create_cb,
+ 			NULL);
+ 
+-	g_object_set_data(G_OBJECT(info), "gst-device", device);
++	g_object_set_data_full(G_OBJECT(info), "gst-device", g_object_ref(device),
++	                       g_object_unref);
+ 
+ 	purple_media_manager_register_element(manager, info);
+ 
+@@ -2259,12 +2260,11 @@
+ 				gchar *id;
+ 
+ 				id = purple_media_element_info_get_id(info);
+-				purple_media_manager_unregister_element(manager,
+-						id);
++				purple_media_manager_unregister_element(manager, id);
+ 
+ 				purple_debug_info("mediamanager",
+-						"Unregistered %s device %s",
+-						device_class, name);
++				                  "Unregistered %s device %s\n",
++				                  device_class, name);
+ 
+ 				g_free(id);
+ 

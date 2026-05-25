@@ -1,5 +1,5 @@
 %global with_qt4 1
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %global with_qt4 0
 %endif
 
@@ -172,5 +172,5 @@ xvfb-run -a dbus-launch --exit-with-session make -C %{_target_platform} check AR
 
 
 %changelog
-* Mon May 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9.3-0.40.%{snapshot}
-- Import from Fedora 44 dist-git, debrand
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9.3-0.40.20160218
+- Import

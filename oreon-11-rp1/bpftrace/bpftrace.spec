@@ -27,7 +27,7 @@ BuildRequires:  libbpf-static
 BuildRequires:  binutils-devel
 BuildRequires:  cereal-devel
 BuildRequires:  lldb-devel
-%if ! 0%{?rhel}
+%if ! 0%{?rhel} || 0%{?oreon}
 BuildRequires:  libpcap-devel
 %endif
 BuildRequires:  rubygem-asciidoctor
@@ -72,7 +72,7 @@ and predecessor tracers such as DTrace and SystemTap
 
 %cmake_install
 
-# Fix shebangs (https://fedoraproject.org/wiki/Packaging:Guidelines#Shebang_lines)
+# Fix shebangs ()
 find %{buildroot}%{_datadir}/%{name}/tools -type f -exec \
   sed -i -e '1s=^#!/usr/bin/env %{name}\([0-9.]\+\)\?$=#!%{_bindir}/%{name}=' {} \;
 
@@ -93,5 +93,5 @@ find %{buildroot}%{_datadir}/%{name}/tools -type f -exec \
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.24.2-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.24.2-3
+- Import

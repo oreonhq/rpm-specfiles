@@ -1,4 +1,4 @@
-%if !(0%{?fedora} >= 32 || 0%{?rhel} >= 8)
+%if !(0%{?fedora} >= 32 || 0%{?rhel} >= 8) || 0%{?oreon}
 %global with_python2 1
 %endif
 
@@ -110,5 +110,5 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libnewt.a
 %{python3_sitearch}/__pycache__/*.py*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.52.25-6
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.52.25-6
+- Import

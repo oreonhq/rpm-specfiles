@@ -5,7 +5,7 @@
 
 Summary:   Library for querying compressed XML metadata
 Name:      libxmlb
-Version:   0.3.25
+Version:   0.3.27
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/hughsie/%{name}
@@ -157,5 +157,5 @@ rm -f $RPM_BUILD_ROOT/%{mingw64_mandir}/man1/xb-tool.1*
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.25-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.3.27-1
+- Import

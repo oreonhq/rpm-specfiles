@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           mockito
 Version:        5.8.0
@@ -52,7 +52,7 @@ Requires:       %{name} = %{version}-%{release}
 Mockito JUnit 5 support.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 cp %{SOURCE2} aggregator.pom
 cp %{SOURCE3} pom.xml
@@ -120,5 +120,5 @@ echo 'mock-maker-subclass' > src/main/resources/mockito-extensions/org.mockito.p
 %files junit-jupiter -f .mfiles-junit-jupiter
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.8.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.8.0-1
+- Import

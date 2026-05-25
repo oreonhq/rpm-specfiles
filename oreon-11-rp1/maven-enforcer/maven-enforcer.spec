@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           maven-enforcer
 Version:        3.5.0
@@ -75,7 +75,7 @@ making use of pom inheritence. This way you don't have to adjust the
 pom.xml, but you can enforce a set of rules.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 find -name '*.java' -exec sed -i 's/\r//' {} +
 
 find -name EvaluateBeanshell.java -delete
@@ -102,5 +102,5 @@ find -name EvaluateBeanshell.java -delete
 %files extension -f .mfiles-maven-enforcer-extension
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.0-1
+- Import

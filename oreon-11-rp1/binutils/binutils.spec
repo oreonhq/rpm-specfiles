@@ -6,8 +6,8 @@ Name: binutils%{?_with_debug:-debug}
 # A version number of X.XX.90 is a pre-release snapshot.
 # The variable %%{source} (see below) should be set to indicate which of these
 # origins is being used.
-Version: 2.46.50
-Release: 4%{?dist}
+Version: 2.46
+Release: 3%{?dist}
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH Bison-exception-2.2) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND BSD-3-Clause AND GFDL-1.3-or-later AND GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later
 URL: https://sourceware.org/binutils
 
@@ -27,6 +27,7 @@ URL: https://sourceware.org/binutils
 # --without systemzlib   Use the binutils version of zlib.  Default is to use the system version.
 # --without testsuite    Do not run the testsuite.  Default is to run it.
 # --without xxhash       Do not link against the xxhash library.
+# --without zstd         Do not link against the zstd library.
 
 # Other configuration options can be set by modifying the following defines.
 
@@ -56,7 +57,7 @@ URL: https://sourceware.org/binutils
 # Enable support for generating new dtags in the linker
 # Disable if it is necessary to use RPATH instead.
 # Currently enabled for Fedora, disabled for RHEL.
-%if 0%{?fedora} != 0
+%if 0%{?fedora} != 0 || 0%{?oreon}
 %define enable_new_dtags 1
 %else
 %define enable_new_dtags 0
@@ -109,9 +110,8 @@ URL: https://sourceware.org/binutils
 # Pre releases come from:       https://sourceware.org/pub/binutils/snapshots/
 #   (Even numbered pre releases include gold)
 # Snapshots come from:          https://snapshots.sourceware.org/binutils/trunk/
-#  and are turned into commits by following this process:
-#                               https://fedoraproject.org/wiki/BinutilsRawhideSync
-# Tarballs are made by hand as and when necessary.
+# Tarballs are made by hand following a process outlined in this document:
+#                               
 #
 # Note - the Linux Kernel binutils releases are too unstable and contain
 # too many controversial patches so we stick with the official GNU version
@@ -121,10 +121,10 @@ URL: https://sourceware.org/binutils
 # They are a "snapshot" of the about to be released branch sources, rather than
 # a snapshot of the mainline development sources.
 
-# %%define source official-release
+%define source official-release
 # %%define source even-pre-release
 # %%define source odd-pre-release
-%define source snapshot
+# %%define source snapshot
 # %%define source tarball
 
 # For snapshots and tarballs an extension is used to indicate the commit ID.
@@ -132,7 +132,7 @@ URL: https://sourceware.org/binutils
 # correctly.  Note %%(echo) is used because you cannot directly set a
 # spec variable to a hexadecimal string value.
 
-%define commit_id %(echo "c220f3ab8c0")
+%define commit_id %(echo "ba5838a98fb")
 
 #----End of Configure Options------------------------------------------------
 
@@ -152,6 +152,8 @@ URL: https://sourceware.org/binutils
 %bcond_without testsuite
 # Default: Use the xxhash-devel library.
 %bcond_without xxhash
+# Default: Use the libztsd-devel library.
+%bcond_without zstd
 
 # Note - in the future the gold linker may become deprecated.
 %ifnarch riscv64
@@ -224,8 +226,7 @@ Source0: binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "odd-pre-release"
 Source0: binutils-%%{version}.tar.xz
 %elif "%{source}" == "snapshot"
-# Upstream read-only mirror (flat tarball: use %%setup -c below, not %%autosetup -n)
-Source0: https://gnu.googlesource.com/binutils-gdb/+archive/%{commit_id}.tar.gz
+Source0: binutils-with-gold-%{version}-%{commit_id}.tar.gz
 %elif "%{source}" == "tarball"
 Source0: binutils-%{version}-%{commit_id}.tar.xz
 %endif
@@ -424,6 +425,10 @@ BuildRequires: elfutils-debuginfod-client-devel
 BuildRequires: xxhash-devel
 %endif
 
+%if %{with zstd}
+BuildRequires: libzstd-devel
+%endif
+
 Requires(post): %{_sbindir}/alternatives
 Requires(preun): %{_sbindir}/alternatives
 # We also need rm.
@@ -500,7 +505,7 @@ using libelf instead of BFD.
 %package gold
 Summary: The GOLD linker, a faster alternative to the BFD linker
 # The GOLD linker is now deprecated as it is not being developed upstream.
-# For more details see: https://fedoraproject.org/wiki/Changes/DeprecateGoldLinker
+# For more details see: 
 Provides: deprecated()
 Requires: binutils >= %{version}
 
@@ -623,8 +628,7 @@ mv ../%{gold_tarball}/elfcpp .
 %autopatch -p1 
 
 %elif "%{source}" == "snapshot"
-%setup -q -c -n binutils-with-gold-%{version}-%{commit_id}
-%autopatch -p1
+%autosetup -p1 -n binutils-with-gold-%{version}-%{commit_id}
 %elif "%{source}" == "official-release"
 %autosetup -p1 -n binutils-with-gold-%{version}
 %elif "%{source}" == "even-pre-release"
@@ -691,11 +695,6 @@ done
 #   Build the CARGS variable which contains the global configuration arguments.
 compute_global_configuration()
 {
-    # Do not build gdb here. GDB is packaged in gdb RPM. Building it from the merged
-    # binutils-gdb tree links against sim/libsim.a, which breaks on aarch64 and cross configs.
-    # Do not build the GNU simulator either. With gdb disabled, sim is unused here, and
-    # recent sim install rules can try to install aarch64/run (and bpf/run) that were
-    # never produced for this configuration, breaking %%install.
     CARGS="--quiet \
  --build=%{_target_platform} \
  --host=%{_target_platform} \
@@ -703,9 +702,7 @@ compute_global_configuration()
  --enable-plugins \
  --enable-64-bit-bfd \
  --enable-default-hash-style=gnu \
- --with-bugurl=%{dist_bug_report_url} \
- --disable-gdb \
- --disable-sim"
+ --with-bugurl=%{dist_bug_report_url}"
 
 %if %{without bootstrap}
     CARGS="$CARGS --enable-jansson=yes"
@@ -727,6 +724,14 @@ compute_global_configuration()
 
 %if %{with xxhash}
     CARGS="$CARGS --with-xxhash=yes"
+%else
+    CARGS="$CARGS --with-xxhash=no"
+%endif
+
+%if %{with zstd}
+    CARGS="$CARGS --with-zstd=yes"
+%else
+    CARGS="$CARGS --with-zstd=no"
 %endif
 
 %if %{default_compress_debug}
@@ -927,8 +932,7 @@ run_target_configuration()
         RARGS="--disable-shared"
     fi
     
-    ../configure --target=$target $CARGS $SARGS $RARGS $TARGS \
-        || { cat config.log; exit 1; }
+    ../configure --target=$target $CARGS $SARGS $RARGS $TARGS  || cat config.log
 
     popd
 }
@@ -1502,5 +1506,5 @@ exit 0
 
 #----------------------------------------------------------------------------
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.46.50-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.46-3
+- Import

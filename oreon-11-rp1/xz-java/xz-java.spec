@@ -1,10 +1,10 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           xz-java
 Version:        1.9
 Release:        %autorelease
 Summary:        Java implementation of XZ data compression
-License:        LicenseRef-Fedora-Public-Domain
+License:        LicenseRef-Public-Domain
 URL:            https://tukaani.org/xz/java.html
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -29,7 +29,7 @@ decompression with limited random access support, raw streams (no .xz headers)
 for advanced users, including LZMA2 with preset dictionary.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %mvn_file : %{name} xz
 
@@ -50,5 +50,5 @@ mkdir -p extdoc && touch extdoc/package-list
 %license COPYING
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.9-1
+- Import

@@ -3,7 +3,7 @@ Version: 1.3
 Release: 51%{?dist}
 Summary: Java standard interface for CSS parser
 License: W3C
-#Original source: http://www.w3.org/2002/06/%%{name}java-%%{version}.zip
+#Original source: http://www.w3.org/2002/06/%{name}java-%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
 Source0: %{name}java-%{version}-jarsdeleted.zip
@@ -12,7 +12,7 @@ Source2: %{name}-MANIFEST.MF
 Source3: https://repo1.maven.org/maven2/org/w3c/css/sac/1.3/sac-1.3.pom
 URL: http://www.w3.org/Style/CSS/SAC/
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires: ant-openjdk25 
 BuildRequires: javapackages-local-openjdk25
 %else
@@ -56,5 +56,5 @@ jar ufm build/lib/sac.jar %{SOURCE2}
 %license COPYRIGHT.html
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3-51
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3-51
+- Import

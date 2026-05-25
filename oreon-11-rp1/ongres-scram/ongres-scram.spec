@@ -42,7 +42,7 @@ find \( -name '*.jar' -o -name '*.class' \) -delete
 
 %pom_remove_dep org.jetbrains:annotations scram-parent
 
-jurand -i -s -a . -n NotNull -n Unmodifiable -n Nullable
+%java_remove_annotations . -s -n NotNull -n Unmodifiable -n Nullable
 
 %mvn_package com.ongres.scram:scram-aggregator __noinstall
 %mvn_package com.ongres.scram:scram-parent __noinstall
@@ -66,5 +66,5 @@ jurand -i -s -a . -n NotNull -n Unmodifiable -n Nullable
 %license LICENSE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %(echo%{upstream_version}|sed's/-/~/g')-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2-1
+- Import

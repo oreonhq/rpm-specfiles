@@ -6,7 +6,7 @@
 Summary:        Network support for the Lua language
 Name:           lua-socket
 Version:        3.1.0
-Release:        10%{?dist}
+Release:        9%{?dist}
 License:        MIT
 URL:            https://lunarmodules.github.io/luasocket/
 Source0:        https://github.com/lunarmodules/luasocket/archive/v%{version}/luasocket-%{version}.tar.gz
@@ -26,7 +26,7 @@ applications that deal with the Internet.
 Among the support modules, the most commonly used implement the SMTP, HTTP
 and FTP. In addition there are modules for MIME, URL handling and LTN12.
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %package -n lua%{lua_compat_version}-socket
 Summary:        Network support for the Lua %{lua_compat_version} language
 Obsoletes:      lua-socket-compat < 3.0-0.28.rc1
@@ -49,7 +49,7 @@ and FTP. In addition there are modules for MIME, URL handling and LTN12.
 %prep
 %setup -q -n luasocket-%{version}
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 rm -rf %{lua_compat_builddir}
 cp -a . %{lua_compat_builddir}
 %endif
@@ -60,7 +60,7 @@ cp -a . %{lua_compat_builddir}
   CFLAGS_linux="$RPM_OPT_FLAGS -fPIC -I%{_includedir} -DLUASOCKET_NODEBUG -DLUA_COMPAT_APIINTCASTS" \
   LDFLAGS_linux="$RPM_LD_FLAGS -shared -o "
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 pushd %{lua_compat_builddir}
 %make_build linux \
   LUAV=%{lua_compat_version} \
@@ -75,7 +75,7 @@ make install-unix INSTALL_DATA='install -p -m 644' \
   INSTALL_TOP_CDIR=$RPM_BUILD_ROOT%{lua_libdir} \
   INSTALL_TOP_LDIR=$RPM_BUILD_ROOT%{lua_pkgdir}
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 pushd %{lua_compat_builddir}
 make install-unix INSTALL_DATA='install -p -m 644' \
   INSTALL_TOP=$RPM_BUILD_ROOT \
@@ -90,7 +90,7 @@ lua -e \
    package.path="%{buildroot}%{lua_pkgdir}/?.lua;"..package.path;
    dofile("test/hello.lua");'
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 lua-%{lua_compat_version} -e \
   'package.cpath="%{buildroot}%{lua_compat_libdir}/?.so;"..package.cpath;
    package.path="%{buildroot}%{lua_compat_pkgdir}/?.lua;"..package.path;
@@ -105,7 +105,7 @@ lua-%{lua_compat_version} -e \
 %{lua_pkgdir}/*.lua
 %{lua_pkgdir}/socket/
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %files -n lua%{lua_compat_version}-socket
 %license LICENSE
 %doc CHANGELOG.md README.md docs/*.html docs/*.css docs/*.png
@@ -116,5 +116,5 @@ lua-%{lua_compat_version} -e \
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1.0-10
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.1.0-9
+- Import

@@ -4,7 +4,7 @@
 # Pythran is an optional build dependency.
 # When used, it makes some modules faster,
 # but it is usually not available soon enough for new major Python versions.
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %bcond_with pythran
 %bcond_with pooch
 %bcond_with tests
@@ -27,7 +27,7 @@
 # Set to pre-release version suffix if building pre-release, else %%{nil}
 %global rcver %{nil}
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon}
 %global blaslib flexiblas
 %global blasvar %{nil}
 %else
@@ -65,8 +65,8 @@ Release:    3%{?dist}
 #            scipy/special/cephes
 # Boehm-GC -- scipy/sparse/linalg/_dsolve/SuperLU
 # Qhull -- scipy/spatial/qhull_src
-# LicenseRef-Fedora-Public-Domain -- scipy/odr/__odrpack.c
-License:    BSD-3-Clause AND BSD-2-Clause AND MIT AND BSL-1.0 AND Boehm-GC AND Qhull AND LicenseRef-Fedora-Public-Domain
+# LicenseRef-Public-Domain -- scipy/odr/__odrpack.c
+License:    BSD-3-Clause AND BSD-2-Clause AND MIT AND BSL-1.0 AND Boehm-GC AND Qhull AND LicenseRef-Public-Domain
 Url:        https://scipy.org/
 Source0:    https://github.com/scipy/scipy/releases/download/v%{version}/scipy-%{version}.tar.gz
 
@@ -166,7 +166,7 @@ sed -Ei '/^[[:blank:]]*"(asv|pytest-cov|pytest-timeout)"/d' pyproject.toml
 sed -i '/^[[:blank:]]*"scikit-umfpack"/d' pyproject.toml
 
 # No pytest-xdist in RHEL
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 sed -i '/^[[:blank:]]*"pytest-xdist"/d' pyproject.toml
 %endif
 
@@ -230,7 +230,7 @@ not test_distance_transform_cdt05'"
 %endif
 
 %ifarch x86_64
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 # test_minimize_constrained started failing on ELN without any direct changes to scipy
 export PYTEST_ADDOPTS="-k '$SKIP_ALL and \
 not test_gh7799 and \
@@ -297,5 +297,5 @@ popd
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.16.2-3
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.16.2-3
+- Import

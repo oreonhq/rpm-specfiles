@@ -1,18 +1,47 @@
+# Copyright (c) 2000-2008, JPackage Project
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in the
+#    documentation and/or other materials provided with the
+#    distribution.
+# 3. Neither the name of the JPackage Project nor the names of its
+#    contributors may be used to endorse or promote products derived
+#    from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+
 %global jspspec 3.1
 %global major_version 10
 %global minor_version 1
-%global micro_version 52
+%global micro_version 55
 %global packdname apache-tomcat-%{version}-src
 %global servletspec 6.0
 %global elspec 5.0
 %global tcuid 53
 # Recommended version is specified in java/org/apache/catalina/core/AprLifecycleListener.java
-%global native_version 2.0.8
+%global native_version 2.0.14
+
 
 # FHS 3.0 compliant tree structure - http://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html
 %global basedir %{_var}/lib/%{name}
-%global baseconfdir %{basedir}/conf
-%global baselogdir %{basedir}/logs
 %global appdir %{basedir}/webapps
 %global homedir %{_datadir}/%{name}
 %global bindir %{homedir}/bin
@@ -20,140 +49,89 @@
 %global libdir %{_javadir}/%{name}
 %global logdir %{_var}/log/%{name}
 %global cachedir %{_var}/cache/%{name}
-%global workdir %{basedir}/work
-%global userinstancedir %{homedir}/user-instance
+%global tempdir %{cachedir}/temp
+%global workdir %{cachedir}/work
 
 Name:          tomcat
 Epoch:         1
 Version:       %{major_version}.%{minor_version}.%{micro_version}
 Release:       %autorelease
-Summary:       Apache Tomcat - Servlet and JSP engine for system-wide deployment
+Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{jspspec} API
 
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:       Apache-2.0
 URL:           http://tomcat.apache.org/
 Source0:       http://www.apache.org/dist/tomcat/tomcat-%{major_version}/v%{version}/src/%{packdname}.tar.gz
-Source1:       http://www.apache.org/dist/tomcat/tomcat-%{major_version}/v%{version}/src/%{packdname}.tar.gz.asc
-# https://www.apache.org/dist/tomcat/tomcat-10/KEYS
-Source2:       KEYS
-Source3:       %{name}-%{major_version}.%{minor_version}.conf
-Source4:       %{name}-%{major_version}.%{minor_version}.service
-Source5:       %{name}-%{major_version}.%{minor_version}-locate-java.sh
-Source6:       %{name}-%{major_version}.%{minor_version}-run.sh
-Source7:       %{name}-%{major_version}.%{minor_version}-RUNNING.txt
-Source8:       %{name}-%{major_version}.%{minor_version}-user-instance-create.sh
-Source9:       %{name}-%{major_version}.%{minor_version}-setenv.sh
-Source10:       %{name}-%{major_version}.%{minor_version}-user-instance-create.asciidoc
+Source1:       %{name}-%{major_version}.%{minor_version}.conf
+Source2:       %{name}-%{major_version}.%{minor_version}.sysconfig
+Source3:       %{name}-%{major_version}.%{minor_version}.wrapper
+Source4:       %{name}-%{major_version}.%{minor_version}.logrotate
+Source5:       %{name}-%{major_version}.%{minor_version}-digest.script
+Source6:       %{name}-%{major_version}.%{minor_version}-tool-wrapper.script
+Source7:       %{name}-%{major_version}.%{minor_version}.service
+Source8:       %{name}-functions
+Source9:       %{name}-preamble
+Source10:      %{name}-server
+Source11:      %{name}-named.service
+Source12:      module-start-up-parameters.conf
 
-# https://bugzilla.redhat.com/show_bug.cgi?id=435829
 Patch0:        %{name}-%{major_version}.%{minor_version}-bootstrap-MANIFEST.MF.patch
-Patch1:        %{name}-%{major_version}.%{minor_version}-users-webapp.patch
-Patch2:        %{name}-%{major_version}.%{minor_version}-build.patch
-# catalina.policy patch to allow ECJ usage under the Security Manager
+Patch1:        %{name}-%{major_version}.%{minor_version}-tomcat-users-webapp.patch
+Patch2:        %{name}-build.patch
 Patch3:        %{name}-%{major_version}.%{minor_version}-catalina-policy.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=1857043
 Patch4:        %{name}-%{major_version}.%{minor_version}-bnd-annotation.patch
-# Fixes not available constants in ECJ
 Patch5:        %{name}-%{major_version}.%{minor_version}-JDTCompiler.patch
-# https://bugzilla.redhat.com/show_bug.cgi?id=1857043
 Patch6:        rhbz-1857043.patch
 
 BuildArch:     noarch
-# Can't use noarch since we are packaging tomcat-jni.jar.
-# See: https://docs.fedoraproject.org/en-US/packaging-guidelines/Java/#_architecture_support
 ExclusiveArch:  %{java_arches} noarch
 
-BuildRequires: gnupg2
-BuildRequires: ant-openjdk25
-BuildRequires: ecj
+BuildRequires: ant-openjdk25  >= 1.10.2
+BuildRequires: ecj >= 4.20
 BuildRequires: findutils
 BuildRequires: java-25-devel
 BuildRequires: javapackages-local-openjdk25
 BuildRequires: aqute-bnd
-BuildRequires: tomcat-jakartaee-migration
+BuildRequires: aqute-bndlib
 BuildRequires: systemd
-BuildRequires: rubygem-asciidoctor
+BuildRequires: tomcat-jakartaee-migration
 
-Requires: %{name}-common = %{epoch}:%{version}-%{release}
-Requires: systemd
+Requires:      (java-25-headless or java-25)
+Requires:      javapackages-tools
+Requires:      %{name}-lib = %{epoch}:%{version}-%{release}
+%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
+Recommends:    tomcat-native >= %{native_version}
+%endif
+Requires(post):   systemd
+Requires(preun):  systemd
+Requires(postun): systemd
 
-Recommends: tomcat-native >= %{native_version}
-
-Suggests: %{name}-admin-webapps = %{epoch}:%{version}-%{release}
-Suggests: %{name}-docs-webapp = %{epoch}:%{version}-%{release}
-Suggests: %{name}-webapps = %{epoch}:%{version}-%{release}
-Suggests: %{name}-user-instance = %{epoch}:%{version}-%{release}
+# added after log4j sub-package was removed
+Provides:         %{name}-log4j = %{epoch}:%{version}-%{release}
 
 %description
-Apache Tomcat is an open-source implementation of the Java Servlet, JavaServer Pages (JSP), and WebSocket technologies.
-It provides a pure Java HTTP web server environment for running Java applications.
-This package includes only the startup scripts for managing a system-wide Tomcat daemon.
-It does not include documentation or web applications.
-    * To install the default web applications, use the tomcat-webapps package.
-    * To access online documentation, install tomcat-docs-webapps package.
-    * To create user instances without running Tomcat as a system service, use tomcat-user-instance package instead.
+Tomcat is the servlet container that is used in the official Reference
+Implementation for the Java Servlet and JavaServer Pages technologies.
+The Java Servlet and JavaServer Pages specifications are developed by
+Sun under the Java Community Process.
 
-%package user-instance
-Summary: Apache Tomcat - Tools for creating user-managed instances
-Requires: %{name}-common = %{epoch}:%{version}-%{release}
-Suggests: %{name} = %{epoch}:%{version}-%{release}
-Suggests: %{name}-admin-webapps = %{epoch}:%{version}-%{release}
-Suggests: %{name}-docs-webapp = %{epoch}:%{version}-%{release}
-Suggests: %{name}-webapps = %{epoch}:%{version}-%{release}
-
-%description user-instance
-This package provides the tools necessary to create user-managed Tomcat instances,
-allowing users to run Tomcat independently of the system-wide service.
-A user instance includes its own configuration, libraries, and web applications,
-which can be started and stopped using scripts inside the instance directory.
-
-%package common
-Summary: Apache Tomcat - Common files for Tomcat packages
-Requires: (java-25-headless or java-25)
-Requires: %{name}-lib = %{epoch}:%{version}-%{release}
-
-%description common
-This package contains common files required by both tomcat and tomcat-user-instance packages, including essential Tomcat
-scripts and libraries. Installing this package alone does not provide a functional Tomcat installation,
-but is required as a dependency for other Tomcat-related packages.
-
-%package lib
-Summary: Apache Tomcat - Core libraries for embedding Tomcat
-Requires: %{name}-jsp-%{jspspec}-api = %{epoch}:%{version}-%{release}
-Requires: %{name}-servlet-%{servletspec}-api = %{epoch}:%{version}-%{release}
-Requires: %{name}-el-%{elspec}-api = %{epoch}:%{version}-%{release}
-Requires: ecj >= 4.20
-Recommends: tomcat-jakartaee-migration
-
-%description lib
-This package contains the core libraries of Apache Tomcat, which allow other Java applications to embed Tomcat
-as a lightweight servlet container. It is primarily intended for use by developers and applications that need Tomcat
-as an embedded runtime.
+Tomcat is developed in an open and participatory environment and
+released under the Apache Software License version 2.0. Tomcat is intended
+to be a collaboration of the best-of-breed developers from around the world.
 
 %package admin-webapps
-Summary: Apache Tomcat - Administrative web applications
+Summary: The host-manager and manager web applications for Apache Tomcat
 Requires: %{name} = %{epoch}:%{version}-%{release}
 
 %description admin-webapps
-This package provides the Tomcat Web Application Manager and Virtual Host Manager, which allow administrators to deploy,
-manage, and configure web applications through a web interface.
-These tools simplify application lifecycle management without requiring direct filesystem access.
+The host-manager and manager web applications for Apache Tomcat.
 
 %package docs-webapp
-Summary: Apache Tomcat - Online documentation web application
+Summary: The docs web application for Apache Tomcat
 Requires: %{name} = %{epoch}:%{version}-%{release}
 
 %description docs-webapp
-This package provides the Tomcat documentation web application, accessible via the Tomcat server.
-It includes API references, configuration guidelines, and development documentation.
-
-%package webapps
-Summary: Apache Tomcat - Default ROOT web application
-Requires: %{name} = %{epoch}:%{version}-%{release}
-
-%description webapps
-This package includes the default ROOT web applications bundled with Apache Tomcat,
-which serves as the default homepage when accessing Tomcat in a browser.
+The docs web application for Apache Tomcat.
 
 %package jsp-%{jspspec}-api
 Summary: Apache Tomcat JavaServer Pages v%{jspspec} API Implementation Classes
@@ -166,6 +144,18 @@ Provides:  %{name}-jsp-2.3-api = %{?epoch:%{epoch}:}%{version}-%{release}
 
 %description jsp-%{jspspec}-api
 Apache Tomcat JSP API Implementation Classes.
+
+%package lib
+Summary: Libraries needed to run the Tomcat Web container
+Requires: %{name}-jsp-%{jspspec}-api = %{epoch}:%{version}-%{release}
+Requires: %{name}-servlet-%{servletspec}-api = %{epoch}:%{version}-%{release}
+Requires: %{name}-el-%{elspec}-api = %{epoch}:%{version}-%{release}
+Requires: ecj >= 4.20
+Recommends: tomcat-jakartaee-migration
+Requires(preun): coreutils
+
+%description lib
+Libraries needed to run the Tomcat Web container.
 
 %package servlet-%{servletspec}-api
 Summary: Apache Tomcat Java Servlet v%{servletspec} API Implementation Classes
@@ -185,9 +175,14 @@ Provides:  %{name}-el-3.0-api = %{?epoch:%{epoch}:}%{version}-%{release}
 %description el-%{elspec}-api
 Apache Tomcat EL API Implementation Classes.
 
-%prep
-%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%package webapps
+Summary: The ROOT web application for Apache Tomcat
+Requires: %{name} = %{epoch}:%{version}-%{release}
 
+%description webapps
+The ROOT web application for Apache Tomcat.
+
+%prep
 %setup -q -n %{packdname}
 # remove pre-built binaries and windows files
 find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "*.gz" -o \
@@ -204,18 +199,18 @@ find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "
 # Remove webservices naming resources as it's generally unused
 %{__rm} -rf java/org/apache/naming/factory/webservices
 
-sed -i -e "s/@VERSION@/%{version}/g" \
-       -e "s/@VERSION_MAJOR_MINOR@/%{major_version}.%{minor_version}/g" \
-       -e "s/@VERSION_MAJOR@/%{major_version}/g" \
-       -e "s/@MIN_JAVA_VERSION@/11/g" \
-       -e "s/@JDT_VERSION@/x/g" RELEASE-NOTES
+# Configure maven files
+%mvn_package ":tomcat-el-api" tomcat-el-api
+%mvn_alias "org.apache.tomcat:tomcat-el-api" "jakarta.servlet:jakarta.servlet-api"
+%mvn_package ":tomcat-jsp-api" tomcat-jsp-api
+%mvn_alias "org.apache.tomcat:tomcat-jsp-api" "jakarta.servlet:jakarta.servlet.jsp"
+%mvn_package ":tomcat-servlet-api" tomcat-servlet-api
 
 # Create a sysusers.d config file
 cat >tomcat.sysusers.conf <<EOF
 u tomcat %{tcuid} 'Apache Tomcat' %{homedir} -
 EOF
 
-sed -i -e "s/Server port=\"8005\" shutdown=\"SHUTDOWN\"/Server port=\"-1\" shutdown=\"SHUTDOWN\"/" "conf/server.xml"
 
 %build
 # we don't care about the tarballs and we're going to replace jars
@@ -238,7 +233,7 @@ touch HACK
   -Dbnd-annotation.jar="$(build-classpath aqute-bnd/biz.aQute.bnd.annotation)" \
   -Dversion="%{version}" \
   -Dversion.build="%{micro_version}" \
-  -Dmigration-lib.jar="$(build-classpath tomcat-jakartaee-migration/jakartaee-migration)" \
+  -Dmigration-lib.jar="$(build-classpath tomcat-jakartaee-migration/jakartaee-migration.jar)" \
   deploy
 
 # remove some jars that we'll replace with symlinks later
@@ -247,192 +242,286 @@ touch HACK
 # see https://tomcat.apache.org/tomcat-10.1-doc/security-howto.html
 %{__rm} -rf output/build/webapps/examples
 
+
 %install
 # build initial path structure
-%{__install} -d ${RPM_BUILD_ROOT}%{appdir}
-%{__install} -d ${RPM_BUILD_ROOT}%{appdir}-javaee
-%{__install} -d ${RPM_BUILD_ROOT}%{bindir}
-%{__install} -d ${RPM_BUILD_ROOT}%{confdir}/Catalina/localhost
-%{__install} -d ${RPM_BUILD_ROOT}%{confdir}/conf.d
+%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{_bindir}
+%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{_sbindir}
+%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d
+%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{_sysconfdir}/sysconfig
+%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{appdir}
+%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{bindir}
+%{__install} -d -m 0775 ${RPM_BUILD_ROOT}%{confdir}
+%{__install} -d -m 0775 ${RPM_BUILD_ROOT}%{confdir}/Catalina/localhost
+%{__install} -d -m 0775 ${RPM_BUILD_ROOT}%{confdir}/conf.d
 /bin/echo "Place your custom *.conf files here. Shell expansion is supported." > ${RPM_BUILD_ROOT}%{confdir}/conf.d/README
-%{__install} -d ${RPM_BUILD_ROOT}%{logdir}
-%{__install} -d ${RPM_BUILD_ROOT}%{cachedir}
+%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{libdir}
+%{__install} -d -m 0775 ${RPM_BUILD_ROOT}%{logdir}
+%{__install} -d -m 0775 ${RPM_BUILD_ROOT}%{_localstatedir}/lib/tomcats
+%{__install} -d -m 0775 ${RPM_BUILD_ROOT}%{homedir}
+%{__install} -d -m 0775 ${RPM_BUILD_ROOT}%{tempdir}
+%{__install} -d -m 0775 ${RPM_BUILD_ROOT}%{workdir}
+%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{_unitdir}
+%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{_libexecdir}/%{name}
 
-%{__install} -D -p %{SOURCE3} ${RPM_BUILD_ROOT}%{confdir}/%{name}.conf
-%{__install} -D -p %{SOURCE4} ${RPM_BUILD_ROOT}%{_unitdir}/%{name}.service
-%{__install} -D -p %{SOURCE5} ${RPM_BUILD_ROOT}%{_libexecdir}/%{name}/%{name}-locate-java.sh
-%{__install} -D -p %{SOURCE6} ${RPM_BUILD_ROOT}%{_libexecdir}/%{name}/%{name}-run.sh
-%{__install} -D -p %{SOURCE7} ${RPM_BUILD_ROOT}%{homedir}/doc/RUNNING.txt
+# move things into place
+# First copy supporting libs to tomcat lib
+pushd output/build
+    %{__cp} -a bin/*.{jar,xml} ${RPM_BUILD_ROOT}%{bindir}
+    %{__cp} -a conf/*.{policy,properties,xml,xsd} ${RPM_BUILD_ROOT}%{confdir}
+    %{__cp} -a lib/*.jar ${RPM_BUILD_ROOT}%{libdir}
+    %{__cp} -a webapps/* ${RPM_BUILD_ROOT}%{appdir}
+popd
 
-%{__install} -D tomcat.sysusers.conf ${RPM_BUILD_ROOT}%{_sysusersdir}/tomcat.conf
+%{__sed} -e "s|\@\@\@TCHOME\@\@\@|%{homedir}|g" \
+   -e "s|\@\@\@TCTEMP\@\@\@|%{tempdir}|g" \
+   -e "s|\@\@\@LIBDIR\@\@\@|%{_libdir}|g" %{SOURCE1} \
+    > ${RPM_BUILD_ROOT}%{confdir}/%{name}.conf
+%{__sed} -e "s|\@\@\@TCHOME\@\@\@|%{homedir}|g" \
+   -e "s|\@\@\@TCTEMP\@\@\@|%{tempdir}|g" \
+   -e "s|\@\@\@LIBDIR\@\@\@|%{_libdir}|g" %{SOURCE2} \
+    > ${RPM_BUILD_ROOT}%{_sysconfdir}/sysconfig/%{name}
+%{__install} -m 0755 %{SOURCE3} \
+    ${RPM_BUILD_ROOT}%{_sbindir}/%{name}
+%{__install} -m 0644 %{SOURCE7} \
+    ${RPM_BUILD_ROOT}%{_unitdir}/%{name}.service
+%{__sed} -e "s|\@\@\@TCLOG\@\@\@|%{logdir}|g" %{SOURCE4} \
+    > ${RPM_BUILD_ROOT}%{_sysconfdir}/logrotate.d/%{name}.disabled
+%{__sed} -e "s|\@\@\@TCHOME\@\@\@|%{homedir}|g" \
+   -e "s|\@\@\@TCTEMP\@\@\@|%{tempdir}|g" \
+   -e "s|\@\@\@LIBDIR\@\@\@|%{_libdir}|g" %{SOURCE5} \
+    > ${RPM_BUILD_ROOT}%{_bindir}/%{name}-digest
+%{__sed} -e "s|\@\@\@TCHOME\@\@\@|%{homedir}|g" \
+   -e "s|\@\@\@TCTEMP\@\@\@|%{tempdir}|g" \
+   -e "s|\@\@\@LIBDIR\@\@\@|%{_libdir}|g" %{SOURCE6} \
+    > ${RPM_BUILD_ROOT}%{_bindir}/%{name}-tool-wrapper
 
-%{__install} -d ${RPM_BUILD_ROOT}%{userinstancedir}/conf
-%{__install} -D -p %{SOURCE8} ${RPM_BUILD_ROOT}%{_bindir}/tomcat-user-instance-create
-%{__install} -D -p %{SOURCE9} ${RPM_BUILD_ROOT}%{userinstancedir}/bin/setenv.sh
+%{__install} -m 0644 %{SOURCE8} \
+    ${RPM_BUILD_ROOT}%{_libexecdir}/%{name}/functions
+%{__install} -m 0755 %{SOURCE9} \
+    ${RPM_BUILD_ROOT}%{_libexecdir}/%{name}/preamble
+%{__install} -m 0755 %{SOURCE10} \
+    ${RPM_BUILD_ROOT}%{_libexecdir}/%{name}/server
+%{__install} -m 0644 %{SOURCE11} \
+    ${RPM_BUILD_ROOT}%{_unitdir}/%{name}@.service
 
-asciidoctor -b manpage -D ${RPM_BUILD_ROOT}%{_mandir}/man1 -o tomcat-user-instance-create.1 %{SOURCE10}
+%{__install} -m 0644 %{SOURCE12} ${RPM_BUILD_ROOT}%{confdir}/conf.d/
 
-for jar in output/build/lib/*.jar; do
-    # Skip Jar if empty
-    jar tf ${jar} | grep -E -q '.*\.class' || continue
+# Substitute libnames in catalina-tasks.xml
+sed -i \
+   "s,el-api.jar,%{name}-el-%{elspec}-api.jar,;
+    s,servlet-api.jar,%{name}-servlet-%{servletspec}-api.jar,;
+    s,jsp-api.jar,%{name}-jsp-%{jspspec}-api.jar,;" \
+    ${RPM_BUILD_ROOT}%{bindir}/catalina-tasks.xml
 
-    jarname=$(basename $jar .jar)
+# create jsp and servlet API symlinks
+pushd ${RPM_BUILD_ROOT}%{_javadir}
+   %{__mv} %{name}/jsp-api.jar %{name}-jsp-%{jspspec}-api.jar
+   %{__ln_s} %{name}-jsp-%{jspspec}-api.jar %{name}-jsp-api.jar
+   %{__mv} %{name}/servlet-api.jar %{name}-servlet-%{servletspec}-api.jar
+   %{__ln_s} %{name}-servlet-%{servletspec}-api.jar %{name}-servlet-api.jar
+   %{__mv} %{name}/el-api.jar %{name}-el-%{elspec}-api.jar
+   %{__ln_s} %{name}-el-%{elspec}-api.jar %{name}-el-api.jar
+popd
 
-    case "${jarname}" in
-        jasper) pom="res/maven/tomcat-jasper.pom" ;;
-        catalina-tribes) pom="res/maven/tomcat-tribes.pom" ;;
-        catalina-ssi) pom="res/maven/tomcat-ssi.pom" ;;
-        catalina-storeconfig) pom="res/maven/tomcat-storeconfig.pom" ;;
-        *) pom=$(ls res/maven/*"${jarname}".pom 2>/dev/null) ;;
-    esac
+pushd output/build
+    %{_bindir}/build-jar-repository lib ecj 2>&1
+    %{_bindir}/build-jar-repository lib tomcat-jakartaee-migration 2>&1
+popd
 
-    sed -i "s/@MAVEN.DEPLOY.VERSION@/%{version}/g" ${pom}
+pushd ${RPM_BUILD_ROOT}%{libdir}
+    # symlink JSP and servlet API jars
+    %{__ln_s} ../../java/%{name}-jsp-%{jspspec}-api.jar .
+    %{__ln_s} ../../java/%{name}-servlet-%{servletspec}-api.jar .
+    %{__ln_s} ../../java/%{name}-el-%{elspec}-api.jar .
+    %{__ln_s} $(build-classpath ecj/ecj) jasper-jdt.jar
+    %{__ln_s} $(build-classpath tomcat-jakartaee-migration/jakartaee-migration) jakartaee-migration.jar
+    
+    cp ../../%{name}/bin/tomcat-juli.jar .
+popd
 
-    case "${jarname}" in
-        tomcat-jni) %mvn_file org.apache.tomcat:tomcat-jni tomcat/tomcat-jni %{libdir}/tomcat-jni ;;
-        jsp-api) %mvn_file org.apache.tomcat:tomcat-jsp-api tomcat/jsp-api tomcat/%{name}-jsp-%{jspspec}-api %{name}-jsp-%{jspspec}-api %{name}-jsp-api ;;
-        servlet-api) %mvn_file org.apache.tomcat:tomcat-servlet-api tomcat/servlet-api tomcat/%{name}-servlet-%{servletspec}-api %{name}-servlet-%{servletspec}-api %{name}-servlet-api ;;
-        el-api) %mvn_file org.apache.tomcat:tomcat-el-api tomcat/el-api tomcat/%{name}-el-%{servletspec}-api %{name}-el-%{servletspec}-api %{name}-el-api ;;
-        catalina-tribes) %mvn_file org.apache.tomcat:tomcat-tribes tomcat/catalina-tribes ;;
-        catalina-ssi) %mvn_file org.apache.tomcat:tomcat-ssi tomcat/catalina-ssi ;;
-        catalina-storeconfig) %mvn_file org.apache.tomcat:tomcat-storeconfig tomcat/catalina-storeconfig ;;
-        *) %mvn_file org.apache.tomcat:$(sed -n "/<artifactId>.*${jarname}.*<\/artifactId>/ { s/.*<artifactId>\(.*${jarname}.*\)<\/artifactId>.*/\1/; p; q; }" "${pom}" 2>/dev/null) tomcat/${jarname} ;;
-    esac
+# symlink to the FHS locations where we've installed things
+pushd ${RPM_BUILD_ROOT}%{homedir}
+    %{__ln_s} %{appdir} webapps
+    %{__ln_s} %{confdir} conf
+    %{__ln_s} %{libdir} lib
+    %{__ln_s} %{logdir} logs
+    %{__ln_s} %{tempdir} temp
+    %{__ln_s} %{workdir} work
+popd
 
-    %mvn_artifact ${pom} ${jar}
-done
+# Install the maven metadata for the spec impl artifacts as other projects use them
+#%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{_mavenpomdir}
+pushd res/maven
+    for pom in *.pom; do
+        # fix-up version in all pom files
+        sed -i 's/@MAVEN.DEPLOY.VERSION@/%{version}/g' $pom
+    done
+popd
 
-sed -i "s/@MAVEN.DEPLOY.VERSION@/%{version}/g" res/maven/tomcat-juli.pom
-%mvn_artifact res/maven/tomcat-juli.pom output/build/bin/tomcat-juli.jar
-# bootstrap does not have a pom, generate one
-%mvn_artifact 'org.apache.tomcat:tomcat-bootstrap:%{version}' output/build/bin/bootstrap.jar
+# Configure and install maven artifacts
+%mvn_artifact res/maven/tomcat-el-api.pom output/build/lib/el-api.jar
+%mvn_artifact res/maven/tomcat-jsp-api.pom output/build/lib/jsp-api.jar
+%mvn_artifact res/maven/tomcat-servlet-api.pom output/build/lib/servlet-api.jar
 
-%mvn_file org.apache.tomcat:tomcat-bootstrap tomcat/tomcat-bootstrap
-%mvn_file org.apache.tomcat:tomcat-juli tomcat/tomcat-juli
-
-# tomcat-parent pom
-sed -i "s/@MAVEN.DEPLOY.VERSION@/%{version}/g" res/maven/tomcat.pom
+%mvn_file org.apache.tomcat:tomcat-annotations-api tomcat/annotations-api
+%mvn_artifact res/maven/tomcat-annotations-api.pom ${RPM_BUILD_ROOT}%{libdir}/annotations-api.jar
+%mvn_artifact res/maven/tomcat-api.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-api.jar
+%mvn_file org.apache.tomcat:tomcat-catalina-ant tomcat/catalina-ant
+%mvn_artifact res/maven/tomcat-catalina-ant.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-ant.jar
+%mvn_file org.apache.tomcat:tomcat-catalina-ha tomcat/catalina-ha
+%mvn_artifact res/maven/tomcat-catalina-ha.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-ha.jar
+%mvn_file org.apache.tomcat:tomcat-catalina tomcat/catalina
+%mvn_artifact res/maven/tomcat-catalina.pom ${RPM_BUILD_ROOT}%{libdir}/catalina.jar
+%mvn_artifact res/maven/tomcat-coyote.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-coyote.jar
+%mvn_artifact res/maven/tomcat-dbcp.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-dbcp.jar
+%mvn_artifact res/maven/tomcat-i18n-cs.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-cs.jar
+%mvn_artifact res/maven/tomcat-i18n-de.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-de.jar
+%mvn_artifact res/maven/tomcat-i18n-es.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-es.jar
+%mvn_artifact res/maven/tomcat-i18n-fr.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-fr.jar
+%mvn_artifact res/maven/tomcat-i18n-ja.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-ja.jar
+%mvn_artifact res/maven/tomcat-i18n-ko.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-ko.jar
+%mvn_artifact res/maven/tomcat-i18n-pt-BR.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-pt-BR.jar
+%mvn_artifact res/maven/tomcat-i18n-ru.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-ru.jar
+%mvn_artifact res/maven/tomcat-i18n-zh-CN.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-i18n-zh-CN.jar
+%mvn_file org.apache.tomcat:tomcat-jasper-el tomcat/jasper-el
+%mvn_artifact res/maven/tomcat-jasper-el.pom ${RPM_BUILD_ROOT}%{libdir}/jasper-el.jar
+%mvn_file org.apache.tomcat:tomcat-jasper tomcat/jasper
+%mvn_artifact res/maven/tomcat-jasper.pom ${RPM_BUILD_ROOT}%{libdir}/jasper.jar
+%mvn_file org.apache.tomcat:tomcat-jaspic-api tomcat/jaspic-api
+%mvn_artifact res/maven/tomcat-jaspic-api.pom ${RPM_BUILD_ROOT}%{libdir}/jaspic-api.jar
+%mvn_artifact res/maven/tomcat-jdbc.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-jdbc.jar
+%mvn_artifact res/maven/tomcat-jni.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-jni.jar
+%mvn_artifact res/maven/tomcat-juli.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-juli.jar
+%mvn_file org.apache.tomcat:tomcat-ssi tomcat/catalina-ssi
+%mvn_artifact res/maven/tomcat-ssi.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-ssi.jar
+%mvn_file org.apache.tomcat:tomcat-storeconfig tomcat/catalina-storeconfig
+%mvn_artifact res/maven/tomcat-storeconfig.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-storeconfig.jar
+%mvn_file org.apache.tomcat:tomcat-tribes tomcat/catalina-tribes
+%mvn_artifact res/maven/tomcat-tribes.pom ${RPM_BUILD_ROOT}%{libdir}/catalina-tribes.jar
+%mvn_artifact res/maven/tomcat-util-scan.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-util-scan.jar
+%mvn_artifact res/maven/tomcat-util.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-util.jar
+%mvn_file org.apache.tomcat:tomcat-websocket-api tomcat/websocket-api
+%mvn_artifact res/maven/tomcat-websocket-api.pom ${RPM_BUILD_ROOT}%{libdir}/websocket-api.jar
+%mvn_artifact res/maven/tomcat-websocket.pom ${RPM_BUILD_ROOT}%{libdir}/tomcat-websocket.jar
+%mvn_artifact res/maven/tomcat-websocket-client-api.pom ${RPM_BUILD_ROOT}%{libdir}/websocket-client-api.jar
 %mvn_artifact res/maven/tomcat.pom
-
-%mvn_package ":tomcat-el-api" tomcat-el-api
-%mvn_package ":tomcat-jsp-api" tomcat-jsp-api
-%mvn_package ":tomcat-servlet-api" tomcat-servlet-api
-%mvn_package ":tomcat-bootstrap" tomcat-common
-%mvn_package ":tomcat-juli" tomcat-common
 
 %mvn_install
 
-# Fixes JAR must have Javapackages-GroupId manifest attribute error
-jar ufm ${RPM_BUILD_ROOT}%{libdir}/el-api.jar <(echo "JavaPackages-GroupId: org.apache.tomcat")
-jar ufm ${RPM_BUILD_ROOT}%{libdir}/jsp-api.jar <(echo "JavaPackages-GroupId: org.apache.tomcat")
-jar ufm ${RPM_BUILD_ROOT}%{libdir}/servlet-api.jar <(echo "JavaPackages-GroupId: org.apache.tomcat")
-
-# move things into place
-pushd output/build
-    rm -f bin/daemon.sh
-    %{__cp} -ap bin/* ${RPM_BUILD_ROOT}%{bindir}
-    %{__cp} -ap conf/*.{policy,properties,xml} ${RPM_BUILD_ROOT}%{confdir}
-    %{__cp} -ap conf/*.{policy,properties,xml} ${RPM_BUILD_ROOT}%{userinstancedir}/conf
-    %{__cp} -ap webapps/* ${RPM_BUILD_ROOT}%{appdir}
-popd
-
-ln -sr $(build-classpath ecj/ecj) ${RPM_BUILD_ROOT}%{libdir}/ecj-x.jar
-ln -sr $(build-classpath tomcat-jakartaee-migration/jakartaee-migration) ${RPM_BUILD_ROOT}%{libdir}/jakartaee-migration-x.jar
-ln -sr $(build-classpath apache-commons-compress/commons-compress) ${RPM_BUILD_ROOT}%{libdir}/commons-compress.jar
-ln -sr $(build-classpath apache-commons-io/commons-io) ${RPM_BUILD_ROOT}%{libdir}/commons-io.jar
-ln -sr $(build-classpath bcel/bcel) ${RPM_BUILD_ROOT}%{libdir}/bcel.jar
-ln -sr $(build-classpath apache-commons-lang3/commons-lang3) ${RPM_BUILD_ROOT}%{libdir}/commons-lang3.jar
-
-ln -sr %{confdir} ${RPM_BUILD_ROOT}%{baseconfdir}
-ln -sr %{cachedir} ${RPM_BUILD_ROOT}%{workdir}
-ln -sr %{logdir} ${RPM_BUILD_ROOT}%{baselogdir}
-ln -sr %{libdir} ${RPM_BUILD_ROOT}%{homedir}/lib
+install -m0644 -D tomcat.sysusers.conf %{buildroot}%{_sysusersdir}/tomcat.conf
 
 %post
 # install but don't activate
 %systemd_post %{name}.service
 
 %preun
+# clean tempdir and workdir on removal or upgrade
+%{__rm} -rf %{workdir}/* %{tempdir}/*
 %systemd_preun %{name}.service
 
 %postun
 %systemd_postun_with_restart %{name}.service
 
-%files
-%license LICENSE
-%{homedir}/doc/RUNNING.txt
-%{_unitdir}/%{name}.service
-%{_libexecdir}/%{name}/tomcat-run.sh
-%{_sysusersdir}/tomcat.conf
-%{baseconfdir}
-%{baselogdir}
-%{workdir}
-%attr(2750,tomcat,adm) %dir %{logdir}
-%attr(750,tomcat,tomcat) %dir %{cachedir}
-%attr(2775,tomcat,tomcat) %dir %{appdir}
-%attr(2775,tomcat,tomcat) %dir %{appdir}-javaee
+%files 
+%defattr(0664,root,tomcat,0755)
+%doc {LICENSE,NOTICE,RELEASE*}
+%attr(0755,root,root) %{_bindir}/%{name}-digest
+%attr(0755,root,root) %{_bindir}/%{name}-tool-wrapper
+%attr(0755,root,root) %{_sbindir}/%{name}
+%attr(0644,root,root) %{_unitdir}/%{name}.service
+%attr(0644,root,root) %{_unitdir}/%{name}@.service
+%attr(0755,root,root) %dir %{_libexecdir}/%{name}
+%attr(0755,root,root) %dir %{_localstatedir}/lib/tomcats
+%attr(0644,root,root) %{_libexecdir}/%{name}/functions
+%attr(0755,root,root) %{_libexecdir}/%{name}/preamble
+%attr(0755,root,root) %{_libexecdir}/%{name}/server
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
+%attr(0644,root,root) %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}.disabled
+%attr(0755,root,tomcat) %dir %{basedir}
+%attr(0755,root,tomcat) %dir %{confdir}
 
-%{confdir}/conf.d
+%defattr(0664,tomcat,root,0770)
+%attr(0770,tomcat,root) %dir %{logdir}
+
+%defattr(0664,root,tomcat,0770)
+%attr(0770,root,tomcat) %dir %{cachedir}
+%attr(0770,root,tomcat) %dir %{tempdir}
+%attr(0770,root,tomcat) %dir %{workdir}
+
+%defattr(0644,root,tomcat,0775)
+%attr(0775,root,tomcat) %dir %{appdir}
+%attr(0775,root,tomcat) %dir %{confdir}/Catalina
+%attr(0775,root,tomcat) %dir %{confdir}/Catalina/localhost
+%attr(0755,root,tomcat) %dir %{confdir}/conf.d
+%{confdir}/conf.d/README
+%{confdir}/conf.d/module-start-up-parameters.conf
 %config(noreplace) %{confdir}/%{name}.conf
-# Configuration files should not be modifiable by the tomcat user, as this can be
-# a security issue (an attacker may insert code in a webapp and rewrite the tomcat
-# configuration) but those files should be readable by tomcat, so we set the group to tomcat.
-%attr(640,root,tomcat) %config(noreplace) %{confdir}/tomcat-users.xml
-%attr(640,root,tomcat) %config(noreplace) %{confdir}/web.xml
-%attr(640,root,tomcat) %config(noreplace) %{confdir}/server.xml
-%attr(640,root,tomcat) %config(noreplace) %{confdir}/logging.properties
-%attr(640,root,tomcat) %config(noreplace) %{confdir}/catalina.properties
-%attr(640,root,tomcat) %config(noreplace) %{confdir}/context.xml
-%attr(640,root,tomcat) %config(noreplace) %{confdir}/jaspic-providers.xml
-%attr(640,root,tomcat) %config(noreplace) %{confdir}/catalina.policy
-%attr(2775,root,tomcat) %dir %{confdir}/Catalina
-%attr(2775,root,tomcat) %dir %{confdir}/Catalina/localhost
-
-%files user-instance
-%license LICENSE
-%{userinstancedir}
-%{_bindir}/tomcat-user-instance-create
-%{_mandir}/man1/tomcat-user-instance-create.1*
-
-%files common -f .mfiles-tomcat-common
-%license LICENSE
-%doc {NOTICE,RELEASE-NOTES}
-%{_libexecdir}/%{name}/tomcat-locate-java.sh
-%{homedir}/bin
-
-%files lib -f .mfiles
-%license LICENSE
+%config(noreplace) %{confdir}/*.policy
+%config(noreplace) %{confdir}/*.properties
+%config(noreplace) %{confdir}/context.xml
+%config(noreplace) %{confdir}/server.xml
+%attr(0640,root,tomcat) %config(noreplace) %{confdir}/tomcat-users.xml
+%attr(0664,root,tomcat) %{confdir}/tomcat-users.xsd
+%attr(0664,root,tomcat) %config(noreplace) %{confdir}/jaspic-providers.xml
+%attr(0664,root,tomcat) %{confdir}/jaspic-providers.xsd
+%config(noreplace) %{confdir}/web.xml
+%dir %{homedir}
+%{bindir}/bootstrap.jar
+%{bindir}/catalina-tasks.xml
 %{homedir}/lib
-%{libdir}/jakartaee-migration-x.jar
-%{libdir}/commons-compress.jar
-%{libdir}/commons-io.jar
-%{libdir}/bcel.jar
-%{libdir}/commons-lang3.jar
-%{libdir}/ecj-x.jar
-%exclude %{libdir}/tomcat-jni.pom
+%{homedir}/temp
+%{homedir}/webapps
+%{homedir}/work
+%{homedir}/logs
+%{homedir}/conf
+%{_sysusersdir}/tomcat.conf
 
 %files admin-webapps
-%license LICENSE
+%defattr(0664,root,tomcat,0755)
 %{appdir}/host-manager
 %{appdir}/manager
 
 %files docs-webapp
-%license LICENSE
 %{appdir}/docs
 
-%files webapps
-%license LICENSE
-%{appdir}/ROOT
+%files lib -f .mfiles
+%dir %{libdir}
+%{libdir}/*.jar
+%{_javadir}/*.jar
+%{bindir}/tomcat-juli.jar
+%exclude %{libdir}/%{name}-el-%{elspec}-api.jar
+%exclude %{libdir}/%{name}-servlet-%{servletspec}*.jar
+%exclude %{libdir}/%{name}-jsp-%{jspspec}*.jar
+%exclude %{_javadir}/%{name}-servlet-%{servletspec}*.jar
+%exclude %{_javadir}/%{name}-el-%{elspec}-api.jar
+%exclude %{_javadir}/%{name}-jsp-%{jspspec}*.jar
+%exclude %{_javadir}/%{name}-servlet-api.jar
+%exclude %{_javadir}/%{name}-el-api.jar
+%exclude %{_javadir}/%{name}-jsp-api.jar
+%exclude %{_jnidir}/*
 
 %files jsp-%{jspspec}-api -f .mfiles-tomcat-jsp-api
-%license LICENSE
+%{_javadir}/%{name}-jsp-%{jspspec}*.jar
+%{libdir}/%{name}-jsp-%{jspspec}*.jar
+%{_javadir}/%{name}-jsp-api.jar
 
 %files servlet-%{servletspec}-api -f .mfiles-tomcat-servlet-api
-%license LICENSE
+%doc LICENSE
+%{_javadir}/%{name}-servlet-%{servletspec}*.jar
+%{libdir}/%{name}-servlet-%{servletspec}*.jar
+%{_javadir}/%{name}-servlet-api.jar
 
 %files el-%{elspec}-api -f .mfiles-tomcat-el-api
-%license LICENSE
+%doc LICENSE
+%{_javadir}/%{name}-el-%{elspec}-api.jar
+%{libdir}/%{name}-el-%{elspec}-api.jar
+%{_javadir}/%{name}-el-api.jar
+
+%files webapps
+%defattr(0644,tomcat,tomcat,0755)
+%{appdir}/ROOT
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{major_version}.%{minor_version}.%{micro_version}-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1:10.1.55-1
+- Import

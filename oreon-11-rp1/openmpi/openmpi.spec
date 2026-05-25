@@ -27,7 +27,7 @@
 %bcond_with java
 %endif
 
-%if %{defined rhel}
+%if %{defined rhel} || 0%{?oreon}
 %bcond_with orangefs
 %bcond_with sphinx
 %else
@@ -36,7 +36,7 @@
 %endif
 
 %ifarch x86_64
-%if 0%{?rhel} >= 10
+%if 0%{?rhel} >= 10 || 0%{?oreon}
 %bcond_with psm2
 %else
 %bcond_without psm2
@@ -52,19 +52,19 @@
 %bcond autogen 0
 
 Name:           openmpi%{?_cc_name_suffix}
-Version:        5.0.10
+Version:        5.0.9
 Release:        %autorelease
 Summary:        Open Message Passing Interface
 # Automatically converted from old format: BSD and MIT and Romio - review is highly recommended.
 # main code is BSD-3-Clause-Open-MPI
 # 3rd-party/romio341 is mpich2
 # 3rd-party/treematch is BSD-3-Clause
-# oshmem/mca/memheap/ptmalloc/malloc.c is LicenseRef-Fedora-Public-Domain
+# oshmem/mca/memheap/ptmalloc/malloc.c is LicenseRef-Public-Domain
 # opal/util/qsort.c is BSD-4-Clause-UC
 # java/ (in subpackage) is Apache-2.0
 # 3rd-party/openpmix/src/mca/psec/munge/psec_munge.c is LGPL-2.0-or-later
 # doc/ see bellow in subpackage
-License:        BSD-3-Clause-Open-MPI AND mpich2 AND BSD-3-Clause AND LicenseRef-Fedora-Public-Domain AND BSD-4-Clause-UC
+License:        BSD-3-Clause-Open-MPI AND mpich2 AND BSD-3-Clause AND LicenseRef-Public-Domain AND BSD-4-Clause-UC
 URL:            http://www.open-mpi.org/
 ExcludeArch:    %{ix86}
 
@@ -107,7 +107,9 @@ Obsoletes:      %{name}-java < %{version}-%{release}
 Obsoletes:      %{name}-java-devel < %{version}-%{release}
 %endif
 # Old libevent causes issues
+%if !0%{?el7}
 BuildRequires:  libevent-devel
+%endif
 BuildRequires:  libfabric-devel
 %ifnarch s390x
 BuildRequires:  papi-devel
@@ -132,7 +134,9 @@ BuildRequires:  libpsm2-devel
 BuildRequires:  ucx-devel
 %endif
 BuildRequires:  zlib-devel
+%if !0%{?el7}
 BuildRequires:  rpm-mpi-hooks
+%endif
 %if %{with sphinx}
 # For docs
 BuildRequires:  /usr/bin/sphinx-build
@@ -141,6 +145,10 @@ BuildRequires:  python3-sphinx_rtd_theme
 %endif
 
 Provides:       mpi
+%if 0%{?rhel} == 7 || 0%{?oreon}
+# Need this for /etc/profile.d/modules.sh
+Requires:       environment-modules
+%endif
 Requires:       environment(modules)
 Requires:       prrte
 # openmpi currently requires ssh to run
@@ -164,11 +172,13 @@ researchers. For more information, see http://www.open-mpi.org/ .
 Summary:	Development files for openmpi
 Requires:	%{name} = %{version}-%{release}, gcc-gfortran
 Provides:	mpi-devel
+%if !0%{?el7}
 Requires:	rpm-mpi-hooks
 # Make sure this package is rebuilt with correct Python version when updating
 # Otherwise mpi.req from rpm-mpi-hooks doesn't work
 # https://bugzilla.redhat.com/show_bug.cgi?id=1705296
 Requires:	(python(abi) = %{python3_version} if python3)
+%endif
 
 %description devel
 Contains development headers and libraries for openmpi.
@@ -244,9 +254,11 @@ OpenMPI support for Python 3.
 	--enable-memchecker \
 %endif
 	--with-hwloc=/usr \
+%if !0%{?el7}
 	--with-libevent=external \
 %if %{with pmix}
 	--with-pmix=external \
+%endif
 %endif
 
 %make_build V=1
@@ -313,6 +325,7 @@ make check || ( cat test/*/test-suite.log && exit $fail )
 %dir %{_libdir}/%{name}/bin
 %dir %{_libdir}/%{name}/lib
 %dir %{_libdir}/%{name}/lib/openmpi
+%dir %{_libdir}/%{name}/lib/openmpi/cmake
 %dir %{_libdir}/%{name}/include
 %dir %{_mandir}/%{namearch}
 %dir %{_mandir}/%{namearch}/man*
@@ -341,6 +354,9 @@ make check || ( cat test/*/test-suite.log && exit $fail )
 %{_mandir}/%{namearch}/man7/Open-MPI.7*
 %{_libdir}/%{name}/lib/*.so.40*
 %{_libdir}/%{name}/lib/*.so.80*
+%if 0%{?el7}
+%{_libdir}/%{name}/lib/pmix/
+%endif
 %{_mandir}/%{namearch}/man1/mpirun.1*
 %{_mandir}/%{namearch}/man1/mpisync.1*
 %{_mandir}/%{namearch}/man1/ompi*
@@ -353,6 +369,9 @@ make check || ( cat test/*/test-suite.log && exit $fail )
 %dir %{_libdir}/%{name}/share/openmpi
 %{_libdir}/%{name}/share/openmpi/amca-param-sets
 %{_libdir}/%{name}/share/openmpi/help*.txt
+%if 0%{?el7}
+%{_libdir}/%{name}/share/pmix/
+%endif
 
 %files devel
 %dir %{_includedir}/%{namearch}
@@ -405,5 +424,5 @@ make check || ( cat test/*/test-suite.log && exit $fail )
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.10-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.9-1
+- Import

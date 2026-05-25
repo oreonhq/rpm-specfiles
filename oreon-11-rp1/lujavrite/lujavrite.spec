@@ -21,7 +21,7 @@ from Lua code.  It does so by launching embedded Java Virtual Machine
 and using JNI interface to invoke Java methods.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %conf
 %cmake
@@ -41,5 +41,5 @@ and using JNI interface to invoke Java methods.
 %doc README.md
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.2.3-1
+- Import

@@ -1,22 +1,21 @@
 %bcond_without check
 %bcond_with tests
-%if 0%{?rhel} >= 9 || 0%{?fedora} > 41
+%if 0%{?rhel} >= 9 || 0%{?fedora} > 41 || 0%{?oreon}
     %bcond_without ostree_ext
 %else
     %bcond_with ostree_ext
 %endif
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
     %bcond_without rhsm
 %else
     %bcond_with rhsm
 %endif
 
-# Avoid %%(rustc...) at spec-parse time. Workers often parse the spec before Rust exists in PATH.
-%global rust_minor 89
+%global rust_minor %(rustc --version | cut -f2 -d" " | cut -f2 -d".")
 
 # https://github.com/bootc-dev/bootc/issues/1640
-%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?rust_minor} >= 89
+%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?rust_minor} >= 89 || 0%{?oreon}
     %global new_cargo_macros 1
 %else
     %global new_cargo_macros 0
@@ -24,7 +23,7 @@
 
 Name:           bootc
 # Ensure this local build overrides anything else.
-Version:        1.14.1
+Version:        1.15.2
 Release:        %{autorelease}
 Summary:        Bootable container system
 
@@ -41,7 +40,7 @@ URL:            https://github.com/bootc-dev/bootc
 Source0:        %{url}/releases/download/v%{version}/bootc-%{version}.tar.zstd
 Source1:        %{url}/releases/download/v%{version}/bootc-%{version}-vendor.tar.zstd
 
-# https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
+# 
 ExcludeArch:    %{ix86}
 
 BuildRequires: libzstd-devel
@@ -49,7 +48,7 @@ BuildRequires: make
 BuildRequires: ostree-devel
 BuildRequires: openssl-devel
 BuildRequires: go-md2man
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 BuildRequires: rust-toolset
 %else
 BuildRequires: cargo-rpm-macros >= 25
@@ -195,7 +194,7 @@ fi
 %endif
 %{_unitdir}/*
 %{_mandir}/man*/*bootc*
-%if 0%{?rhel} && 0%{?rhel} <= 9
+%if 0%{?rhel} && 0%{?rhel} <= 9 || 0%{?oreon}
 %{_datadir}/bash-completion/completions/bootc
 %{_datadir}/zsh/site-functions/_bootc
 %{_datadir}/fish/vendor_completions.d/bootc.fish
@@ -215,5 +214,5 @@ fi
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.14.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.15.2-1
+- Import

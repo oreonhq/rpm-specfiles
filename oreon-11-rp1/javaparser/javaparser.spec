@@ -1,5 +1,5 @@
-%bcond_without bootstrap
-%if !0%{?rhel} && %{without bootstrap}
+%bcond_with bootstrap
+%if !0%{?rhel} && %{without bootstrap} || 0%{?oreon}
 %bcond_without bnd_maven_plugin
 %else
 %bcond_with bnd_maven_plugin
@@ -40,7 +40,7 @@ and comments. It is also possible to change the AST nodes or create new
 ones to modify the source code.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 sed -i 's/\r//' readme.md
 
@@ -103,5 +103,5 @@ sed -i \
 %license LICENSE LICENSE.APACHE LICENSE.GPL LICENSE.LGPL
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.27.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.27.1-1
+- Import

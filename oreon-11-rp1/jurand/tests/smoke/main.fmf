@@ -8,4 +8,4 @@ require:
   - tar
   - gzip
   - findutils
-  - java-25-openjdk-devel
+  - java-21-openjdk-devel

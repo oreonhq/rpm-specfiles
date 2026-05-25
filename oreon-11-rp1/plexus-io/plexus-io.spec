@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           plexus-io
 Version:        3.5.0
@@ -37,7 +37,7 @@ Plexus IO is a set of plexus components, which are designed for use
 in I/O operations.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 cp %{SOURCE1} .
 
 # Test fails in mock
@@ -55,5 +55,5 @@ sed -i /class/i@org.junit.jupiter.api.Disabled src/test/java/org/codehaus/plexus
 %license NOTICE.txt LICENSE-2.0.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.5.0-1
+- Import

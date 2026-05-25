@@ -23,7 +23,7 @@ BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby-devel
 # Compiler is required for build of gem binary extension.
-# https://fedoraproject.org/wiki/Packaging:C_and_C++#BuildRequires_and_Requires
+# 
 BuildRequires: gcc
 
 BuildRequires: postgresql-server libpq-devel
@@ -119,5 +119,5 @@ popd
 %{gem_instdir}/sample
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.3-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.6.3-2
+- Import

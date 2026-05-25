@@ -109,7 +109,7 @@
 %endif
 
 Summary: The Linux kernel
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %define secure_boot_arch x86_64 aarch64
 %else
 %define secure_boot_arch x86_64 aarch64 s390x ppc64le
@@ -122,7 +122,16 @@ Summary: The Linux kernel
 %global signkernel 0
 %endif
 
-%global sbat_suffix oreon
+# RHEL/CentOS specific .SBAT entries
+%if 0%{?centos}
+%global sbat_suffix centos
+%else
+%if 0%{?fedora} || 0%{?oreon}
+%global sbat_suffix fedora
+%else
+%global sbat_suffix rhel
+%endif
+%endif
 
 # Sign modules on all arches
 %global signmodules 1
@@ -142,7 +151,7 @@ Summary: The Linux kernel
 %global compression_flags --compress --check=crc32 --lzma2=dict=1MiB
 %global compext xz
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %define primary_target fedora
 %else
 %define primary_target rhel
@@ -181,13 +190,13 @@ Summary: The Linux kernel
 %define specrpmversion 7.0.10
 %define specversion 7.0.10
 %define patchversion 7.0
-%define pkgrelease 1
+%define pkgrelease 200
 %define kversion 7
 %define tarfile_release 7.0.10
 # This is needed to do merge window version magic
 %define patchlevel 0
 # This allows pkg_release to have configurable %%{?dist} tag
-%define specrelease 1%{?buildid}%{?dist}
+%define specrelease 200%{?buildid}%{?dist}
 # This defines the kabi tarball version
 %define kabiversion 7.0.10
 
@@ -235,7 +244,7 @@ Summary: The Linux kernel
 # kernel-64k (aarch64 kernel with 64K page_size)
 %define with_arm64_64k %{?_without_arm64_64k: 0} %{?!_without_arm64_64k: 1}
 # we default reatime builds to off for fedora and on for rhel/centos/eln
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # kernel-rt (x86_64 and aarch64 only PREEMPT_RT enabled kernel)
 %define with_realtime  %{?_with_realtime:  1} %{?!_with_realtime:  0}
 # kernel-rt-64k (aarch64 RT kernel with 64K page_size)
@@ -273,8 +282,8 @@ Summary: The Linux kernel
 %define with_ynl      %{?_without_ynl:      0} %{?!_without_ynl:      1}
 # kernel-debuginfo
 %define with_debuginfo %{?_without_debuginfo: 0} %{?!_without_debuginfo: 1}
-# kernel-abi-stablelists (disabled for Oreon - kabi tarballs are not available)
-%define with_kernel_abi_stablelists 0
+# kernel-abi-stablelists
+%define with_kernel_abi_stablelists %{?_without_kernel_abi_stablelists: 0} %{?!_without_kernel_abi_stablelists: 1}
 # internal samples and selftests
 %define with_selftests %{?_without_selftests: 0} %{?!_without_selftests: 1}
 #
@@ -301,8 +310,8 @@ Summary: The Linux kernel
 #
 # Control whether to run an extensive DWARF based kABI check.
 # Note that this option needs to have baseline setup in SOURCE300.
-%define with_kabidwchk 0
-%define with_kabidw_base 0
+%define with_kabidwchk %{?_without_kabidwchk: 0} %{?!_without_kabidwchk: 1}
+%define with_kabidw_base %{?_with_kabidw_base: 1} %{?!_with_kabidw_base: 0}
 #
 # Control whether to install the vdso directories.
 %define with_vdso_install %{?_without_vdso_install: 0} %{?!_without_vdso_install: 1}
@@ -338,7 +347,7 @@ Summary: The Linux kernel
 
 %ifarch aarch64
 # dtbloader sub-package requires stubble which is only in Fedora for now
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %define with_dtbloader %{?_without_dtbloader: 0} %{?!_without_dtbloader: 1}
 %else
 %define with_dtbloader 0
@@ -347,7 +356,7 @@ Summary: The Linux kernel
 %define with_dtbloader 0
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # Kernel headers are being split out into a separate package
 %define with_headers 0
 %define with_cross_headers 0
@@ -567,7 +576,7 @@ Summary: The Linux kernel
 %define doc_build_fail true
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # don't do debug builds on anything but aarch64 and x86_64
 %ifnarch aarch64 x86_64
 %define with_debug 0
@@ -607,7 +616,7 @@ Summary: The Linux kernel
 %define with_realtime_arm64_64k 0
 %endif
 
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # This is not for Fedora
 %define with_zfcpdump 0
 %endif
@@ -668,7 +677,7 @@ Summary: The Linux kernel
 # Which is a BadThing(tm).
 
 # We only build kernel-headers on the following...
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %define nobuildarches i386
 %else
 %define nobuildarches i386 i686
@@ -694,7 +703,7 @@ Summary: The Linux kernel
 %endif
 
 # Architectures we build tools/cpupower on
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %define cpupowerarchs %{ix86} x86_64 ppc64le aarch64 riscv64
 %else
 %define cpupowerarchs i686 x86_64 ppc64le aarch64 riscv64
@@ -764,7 +773,7 @@ Version: %{specrpmversion}
 Release: %{pkg_release}
 # DO NOT CHANGE THE 'ExclusiveArch' LINE TO TEMPORARILY EXCLUDE AN ARCHITECTURE BUILD.
 # SET %%nobuildarches (ABOVE) INSTEAD
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 ExclusiveArch: noarch x86_64 s390x aarch64 ppc64le riscv64
 %else
 ExclusiveArch: noarch i386 i686 x86_64 s390x aarch64 ppc64le riscv64
@@ -898,7 +907,7 @@ BuildRequires: kabi-dw
 BuildRequires: openssl
 %if %{signkernel}
 # ELN uses Fedora signing process, so exclude
-%if 0%{?rhel}%{?centos} && !0%{?eln}
+%if 0%{?rhel}%{?centos} && !0%{?eln} || 0%{?oreon}
 BuildRequires: system-sb-certs
 %endif
 %ifarch x86_64 aarch64 riscv64
@@ -913,7 +922,7 @@ BuildRequires: binutils-%{_build_arch}-linux-gnu, gcc-%{_build_arch}-linux-gnu
 %define cross_opts CROSS_COMPILE=%{_build_arch}-linux-gnu-
 %define __strip %{_build_arch}-linux-gnu-strip
 
-%if 0%{?fedora} && 0%{?fedora} <= 41
+%if 0%{?fedora} && 0%{?fedora} <= 41 || 0%{?oreon}
 # Work around find-debuginfo for cross builds.
 # find-debuginfo doesn't support any of CROSS options (RHEL-21797),
 # and since debugedit > 5.0-16.el10, or since commit
@@ -965,7 +974,7 @@ BuildRequires: systemd-boot-unsigned
 # For UKI kernel cmdline addons
 BuildRequires: systemd-ukify
 # For UKI sb cert
-%if 0%{?rhel}%{?centos} && !0%{?eln}
+%if 0%{?rhel}%{?centos} && !0%{?eln} || 0%{?oreon}
 %if 0%{?centos}
 BuildRequires: centos-sb-certs >= 9.0-23
 %else
@@ -974,9 +983,13 @@ BuildRequires: redhat-sb-certs >= 9.4-0.1
 %endif
 %endif
 
-# Official stable tarball from kernel.org. Patches and packaging files (Source1+,
-# configs, scripts, certs) live beside this spec in the source package.
-Source0: https://cdn.kernel.org/pub/linux/kernel/v7.x//linux-%{tarfile_release}.tar.xz
+# Because this is the kernel, it's hard to get a single upstream URL
+# to represent the base without needing to do a bunch of patching. This
+# tarball is generated from a src-git tree. If you want to see the
+# exact git commit you can run
+#
+# xzcat -qq ${TARBALL} | git get-tar-commit-id
+Source0: linux-%{tarfile_release}.tar.xz
 
 Source1: Makefile.rhelver
 Source2: %{name}.changelog
@@ -995,7 +1008,7 @@ Source13: redhatsecureboot501.cer
 
 # Fedora/ELN pesign macro expects to see these cert file names, see:
 # https://github.com/rhboot/pesign/blob/main/src/pesign-rpmbuild-helper.in#L216
-%if 0%{?fedora}%{?eln}
+%if 0%{?fedora}%{?eln} || 0%{?oreon}
 %define pesign_name_0 redhatsecureboot501
 %define secureboot_ca_0 %{SOURCE10}
 %define secureboot_key_0 %{SOURCE13}
@@ -1004,7 +1017,7 @@ Source13: redhatsecureboot501.cer
 %endif
 
 # RHEL/centos certs come from system-sb-certs
-%if 0%{?rhel} && !0%{?eln}
+%if 0%{?rhel} && !0%{?eln} || 0%{?oreon}
 %define secureboot_ca_0 %{_datadir}/pki/sb-certs/secureboot-ca-%{_arch}.cer
 %define secureboot_key_0 %{_datadir}/pki/sb-certs/secureboot-kernel-%{_arch}.cer
 %define secureboot_key_uki_0 %{_datadir}/pki/sb-certs/secureboot-uki-virt-%{_arch}.cer
@@ -1036,7 +1049,7 @@ Source22: filtermods.py
 
 %define modsign_cmd %{SOURCE21}
 
-%if 0%{?include_rhel}
+%if 0%{?include_rhel} || 0%{?oreon}
 Source24: %{name}-aarch64-rhel.config
 Source25: %{name}-aarch64-debug-rhel.config
 Source27: %{name}-ppc64le-rhel.config
@@ -1054,13 +1067,13 @@ Source44: %{name}-riscv64-rhel.config
 Source45: %{name}-riscv64-debug-rhel.config
 %endif
 
-%if %{include_rhel} || %{include_automotive}
+%if %{include_rhel} || %{include_automotive} || 0%{?oreon}
 Source23: x509.genkey.rhel
 Source34: def_variants.yaml.rhel
 Source41: x509.genkey.centos
 %endif
 
-%if 0%{?include_fedora}
+%if 0%{?include_fedora} || 0%{?oreon}
 Source50: x509.genkey.fedora
 
 Source52: %{name}-aarch64-fedora.config
@@ -1112,11 +1125,11 @@ Source106: fedoraimaca.x509
 Source107: nvidiajetsonsoc.x509
 Source108: nvidiabfdpu.x509
 
-%if 0%{?fedora}%{?eln}
+%if 0%{?fedora}%{?eln} || 0%{?oreon}
 %define ima_ca_cert %{SOURCE106}
 %endif
 
-%if 0%{?rhel} && !0%{?eln}
+%if 0%{?rhel} && !0%{?eln} || 0%{?oreon}
 %define ima_ca_cert %{SOURCE103}
 # rhel && !eln
 %endif
@@ -1143,15 +1156,11 @@ Source212: Module.kabi_dup_s390x
 Source213: Module.kabi_dup_x86_64
 Source214: Module.kabi_dup_riscv64
 
-%if %{with_kernel_abi_stablelists}
 Source300: kernel-abi-stablelists-%{kabiversion}.tar.xz
-%endif
-%if %{with_kabidw_base} || %{with_kabidwchk}
 Source301: kernel-kabi-dw-%{kabiversion}.tar.xz
-%endif
 
 %if 0%{include_rt}
-%if 0%{include_rhel}
+%if 0%{include_rhel} || 0%{?oreon}
 Source474: %{name}-aarch64-rt-rhel.config
 Source475: %{name}-aarch64-rt-debug-rhel.config
 Source476: %{name}-aarch64-rt-64k-rhel.config
@@ -1159,7 +1168,7 @@ Source477: %{name}-aarch64-rt-64k-debug-rhel.config
 Source478: %{name}-x86_64-rt-rhel.config
 Source479: %{name}-x86_64-rt-debug-rhel.config
 %endif
-%if 0%{include_fedora}
+%if 0%{include_fedora} || 0%{?oreon}
 Source480: %{name}-aarch64-rt-fedora.config
 Source481: %{name}-aarch64-rt-debug-fedora.config
 Source482: %{name}-aarch64-rt-64k-fedora.config
@@ -1189,7 +1198,9 @@ Source491: %{name}-x86_64-automotive-debug-rhel.config
 # Sources for kernel-tools
 Source2002: kvm_stat.logrotate
 
-# Optional local overrides for kernel config merge (merge.py reads kernel-local).
+# Some people enjoy building customized kernels from the dist-git in Fedora and
+# use this to override configuration options. One day they may all use the
+# source tree, but in the mean time we carry this to support the legacy workflow
 Source3000: merge.py
 Source3001: kernel-local
 %if %{patchlist_changelog}
@@ -1541,12 +1552,12 @@ Summary: gcov graph and source files for coverage data collection.\
 
 %if %{with_kernel_abi_stablelists}
 %package -n %{name}-abi-stablelists
-Summary: The Oreon kernel ABI symbol stablelists
+Summary: The Red Hat Enterprise Linux kernel ABI symbol stablelists
 AutoReqProv: no
 %description -n %{name}-abi-stablelists
-The kABI package contains information pertaining to the Oreon kernel ABI,
-including lists of kernel symbols that are needed by external Linux kernel
-modules, and a yum plugin to aid enforcement.
+The kABI package contains information pertaining to the Red Hat Enterprise
+Linux kernel ABI, including lists of kernel symbols that are needed by
+external Linux kernel modules, and a yum plugin to aid enforcement.
 %endif
 
 %if %{with_kabidw_base}
@@ -1555,8 +1566,8 @@ Summary: The baseline dataset for kABI verification using DWARF data
 Group: System Environment/Kernel
 AutoReqProv: no
 %description kernel-kabidw-base-internal
-The package contains data describing the current ABI of the Oreon kernel,
-suitable for the kabi-dw tool.
+The package contains data describing the current ABI of the Red Hat Enterprise
+Linux kernel, suitable for the kabi-dw tool.
 %endif
 
 #
@@ -1659,7 +1670,7 @@ Supplements: (%{name}-selftests-internal-present and %{name}-uname-r = %{KVERREL
 AutoReq: no\
 AutoProv: yes\
 %description %{?1:%{1}-}modules-internal\
-This package provides kernel modules for the %{?2:%{2} }kernel package for Oreon internal usage.\
+This package provides kernel modules for the %{?2:%{2} }kernel package for Red Hat internal usage.\
 %{nil}
 
 #
@@ -1798,7 +1809,7 @@ Requires: %{name}-%{?1:%{1}-}-modules-core-uname-r = %{KVERREL}%{uname_variant %
 %{expand:%%kernel_modules_extra_package %{?1:%{1}} %{!?{-n}:%{1}}%{?{-n}:%{-n*}} %{-m:%{-m}}}\
 %if %{-m:0}%{!-m:1}\
 %{expand:%%kernel_modules_internal_package %{?1:%{1}} %{!?{-n}:%{1}}%{?{-n}:%{-n*}}}\
-%if 0%{!?fedora:1}\
+%if 0%{!?fedora:1}\ || 0%{?oreon}
 %{expand:%%kernel_modules_partner_package %{?1:%{1}} %{!?{-n}:%{1}}%{?{-n}:%{-n*}}}\
 %endif\
 %{expand:%%kernel_debuginfo_package %{?1:%{1}}}\
@@ -1855,7 +1866,7 @@ Requires: %{name}%{?1:-%{1}}-modules-core-uname-r = %{KVERREL}%{uname_suffix %{?
 AutoReq: no\
 AutoProv: yes\
 %description %{?1:%{1}-}modules-partner\
-This package provides kernel modules for the %{?2:%{2} }kernel package for Oreon partners usage.\
+This package provides kernel modules for the %{?2:%{2} }kernel package for Red Hat partners usage.\
 %{nil}
 
 # Now, each variant package.
@@ -2096,7 +2107,7 @@ exit 1
 %endif
 
 %if %{with_automotive}
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %{log_msg "Cannot build automotive with a fedora baseline, must be rhel/centos/eln"}
 exit 1
 %endif
@@ -2275,8 +2286,8 @@ done
 
 # Add DUP and kpatch certificates to system trusted keys for RHEL
 truncate -s0 ../certs/rhel.pem
-%if 0%{?rhel}
-%if %{rhelkeys}
+%if 0%{?rhel} || 0%{?oreon}
+%if %{rhelkeys} || 0%{?oreon}
 %{log_msg "Add DUP and kpatch certificates to system trusted keys for RHEL"}
 openssl x509 -inform der -in %{SOURCE100} -out rheldup3.pem
 openssl x509 -inform der -in %{SOURCE101} -out rhelkpatch1.pem
@@ -2337,7 +2348,7 @@ if [ "%{primary_target}" == "rhel" ]; then
 : # no-op to avoid empty if-fi error
 %if 0%{?centos}
   update_scripts $update_target
-  %{log_msg "Updating scripts for centos variant"}
+  %{log_msg "Updating scripts/sources to centos version"}
   update_target=centos
 %endif
 fi
@@ -2434,18 +2445,6 @@ InitBuildVars() {
     %{log_msg "InitBuildVars: USING ARCH=$Arch"}
 
     KCFLAGS="%{?kcflags}"
-
-    # gcc, gas, and GNU make (-j) use $TMPDIR for .s stubs and jobserver fifo
-    # files (e.g. /tmp/GMfifo*). A shared system /tmp can lose those mid-build
-    # (cleanup, quotas, contention) and yields cascades like "can't open *.s",
-    # missing .d deps, and bogus missing sources. Pin temp to builddir.
-    _kernel_priv_tmp="$(cd .. && pwd)/.kernel-rpm-priv-tmp"
-    rm -rf "${_kernel_priv_tmp}"
-    mkdir -p "${_kernel_priv_tmp}"
-    chmod 700 "${_kernel_priv_tmp}"
-    export TMPDIR="${_kernel_priv_tmp}"
-    export TMP="${TMPDIR}"
-    export TEMP="${TMPDIR}"
 }
 
 #Build bootstrap bpftool
@@ -3165,7 +3164,7 @@ BuildKernel() {
         create_module_file_list "kernel" ../modules.list ../kernel${Variant:+-${Variant}}-modules.list 0 0
         create_module_file_list "internal" ../modules-internal.list ../kernel${Variant:+-${Variant}}-modules-internal.list 0 1
         create_module_file_list "kernel" ../modules-extra.list ../kernel${Variant:+-${Variant}}-modules-extra.list 0 1
-%if 0%{!?fedora:1}
+%if 0%{!?fedora:1} || 0%{?oreon}
         create_module_file_list "partner" ../modules-partner.list ../kernel${Variant:+-${Variant}}-modules-partner.list 1 1
 %endif
     fi # $DoModules -eq 1
@@ -3233,7 +3232,7 @@ BuildKernel() {
     %endif
 %endif
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
     # Red Hat IMA code-signing cert, which is used to authenticate package files
     install -m 0644 %{ima_signing_cert} $RPM_BUILD_ROOT%{_datadir}/doc/kernel-keys/$KernelVer/%{ima_cert_name}
 %endif
@@ -4210,7 +4209,7 @@ fi\
 #
 %define kernel_variant_posttrans(v:u:) \
 %{expand:%%posttrans %{?-v:%{-v*}-}%{!?-u*:core}%{?-u*:uki-%{-u*}}}\
-%if 0%{!?fedora:1}\
+%if 0%{!?fedora:1}\ || 0%{?oreon}
 %if !%{with_automotive}\
 if [ -x %{_sbindir}/weak-modules ]\
 then\
@@ -4250,7 +4249,7 @@ fi\
 %{expand:%%kernel_modules_core_post %{?-v*}}\
 %{expand:%%kernel_modules_extra_post %{?-v*}}\
 %{expand:%%kernel_modules_internal_post %{?-v*}}\
-%if 0%{!?fedora:1}\
+%if 0%{!?fedora:1}\ || 0%{?oreon}
 %{expand:%%kernel_modules_partner_post %{?-v*}}\
 %endif\
 %{expand:%%kernel_variant_posttrans %{?-v*:-v %{-v*}}}\
@@ -4709,7 +4708,7 @@ fi\
 %{expand:%%files %{?3:%{3}-}devel-matched}\
 %{expand:%%files -f kernel-%{?3:%{3}-}modules-extra.list %{?3:%{3}-}modules-extra}\
 %{expand:%%files -f kernel-%{?3:%{3}-}modules-internal.list %{?3:%{3}-}modules-internal}\
-%if 0%{!?fedora:1}\
+%if 0%{!?fedora:1}\ || 0%{?oreon}
 %{expand:%%files -f kernel-%{?3:%{3}-}modules-partner.list %{?3:%{3}-}modules-partner}\
 %endif\
 %if %{with_debuginfo}\
@@ -4826,5 +4825,5 @@ fi\
 #
 #
 %changelog
-* Sun May 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.9-200
-- Linux 7.0.9
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gemini}
+- Import

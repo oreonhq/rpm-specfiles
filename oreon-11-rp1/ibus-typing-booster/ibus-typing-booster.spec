@@ -1,5 +1,5 @@
 Name:       ibus-typing-booster
-Version:    2.30.4
+Version:    2.30.8
 Release:    %autorelease
 Summary:    A completion input method
 License:    GPL-3.0-or-later AND Apache-2.0
@@ -12,11 +12,11 @@ Requires:   python3-dbus
 Requires:   python3-distro
 Requires:   python3-enchant
 Requires:   python3-pyxdg
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 # To make emoji and Unicode symbol matching faster:
 Requires:     python3-rapidfuzz
 %endif
-%if 0%{?fedora} >= 24 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 24 || 0%{?rhel} > 7 || 0%{?oreon}
 # Recommend reasonably good fonts which have most of the emoji:
 Recommends: google-noto-emoji-color-fonts
 Recommends: google-noto-emoji-fonts
@@ -37,7 +37,7 @@ Recommends: wl-clipboard
 # For ollama support
 Recommends: python3-httpx
 %endif
-%if 0%{?fedora} >= 26 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 26 || 0%{?rhel} > 7 || 0%{?oreon}
 # Save some space in the binary rpm by requiring the Fedora
 # packages which contain the emoji data files:
 Requires: cldr-emoji-annotation
@@ -45,7 +45,7 @@ Requires: unicode-ucd
 %endif
 BuildRequires:  ibus-devel
 BuildRequires:  gcc
-%if 0%{?fedora} >= 24 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 24 || 0%{?rhel} > 7 || 0%{?oreon}
 BuildRequires:  python3-devel >= 3.6.0
 BuildRequires:  python3-pyxdg
 %else
@@ -58,15 +58,15 @@ BuildRequires:  m17n-db-devel
 BuildRequires:  python3-enchant
 BuildRequires:  enchant2
 BuildRequires:  hunspell-en
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 BuildRequires:  python3-rapidfuzz
 BuildRequires:  python3-regex
 %endif
-%if 0%{?fedora} >= 35
+%if 0%{?fedora} >= 35 || 0%{?oreon}
 # to make the python3-enchant test work for hunspell dictionaries which are not yet UTF-8:
 BuildRequires:   glibc-gconv-extra
 %endif
-%if 0%{?fedora} && 0%{?fedora} >= 34
+%if 0%{?fedora} && 0%{?fedora} >= 34 || 0%{?oreon}
 BuildRequires:  python3-libvoikko
 BuildRequires:  voikko-fi
 %endif
@@ -138,7 +138,7 @@ export PYTHON=%{__python3}
 %make_install NO_INDEX=true  pkgconfigdir=%{_datadir}/pkgconfig
 %py_byte_compile %{python3} /usr/share/ibus-typing-booster/engine
 %py_byte_compile %{python3} /usr/share/ibus-typing-booster/setup
-%if 0%{?fedora} >= 26 || 0%{?rhel} > 7
+%if 0%{?fedora} >= 26 || 0%{?rhel} > 7 || 0%{?oreon}
     # These files are in the required package “cldr-emoji-annotation”
     rm $RPM_BUILD_ROOT/%{_datadir}/%{name}/data/annotations/*.xml
     rm $RPM_BUILD_ROOT/%{_datadir}/%{name}/data/annotationsDerived/*.xml
@@ -192,7 +192,8 @@ pushd engine
         echo "/usr/share/m17n/si-wijesekara.mim does not exist, m17n-db probably < 1.8.6, skipping doctest of m17n_translit.py"
     fi
     python3 itb_emoji.py -v
-    python3 itb_util.py -v
+    python3 itb_util_core.py -v
+    python3 itb_util_gui.py -v
 popd
 mkdir -p /tmp/glib-2.0/schemas/
 cp org.freedesktop.ibus.engine.typing-booster.gschema.xml \
@@ -255,5 +256,5 @@ fi
 %{_datadir}/applications/emoji-picker.desktop
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.30.4-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.30.8-1
+- Import

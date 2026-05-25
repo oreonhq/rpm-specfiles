@@ -1,5 +1,5 @@
 # Run optional tests
-%if ! (0%{?rhel})
+%if ! (0%{?rhel}) || 0%{?oreon}
 %bcond_without perl_Devel_Hide_enables_optional_test
 %else
 %bcond_with perl_Devel_Hide_enables_optional_test
@@ -59,5 +59,5 @@ make test
 %{_mandir}/man3/Devel::Hide.3*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0016-2
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.0016-2
+- Import

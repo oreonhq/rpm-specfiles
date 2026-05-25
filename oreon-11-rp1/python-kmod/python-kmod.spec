@@ -40,5 +40,5 @@ Linux kernel modules, using libkmod.
 %doc COPYING.LESSER README
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9.2-12
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.9.2-12
+- Import

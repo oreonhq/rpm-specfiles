@@ -10,7 +10,7 @@ Summary: Intel Processor Trace Decoder Library
 License: BSD-3-Clause
 URL: https://github.com/intel/libipt
 Source0: https://github.com/intel/libipt/archive/v%{version}.tar.gz
-%global libipt_doc_tar %{_builddir}/libipt-doc-%{version}.tar.xz
+Source1: doc-v%{version}.tar.xz
 Patch1: libipt-cmake40-compat.patch
 # c++ is required only for -DPTUNIT test "ptunit-cpp".
 BuildRequires: gcc-c++ cmake
@@ -60,10 +60,10 @@ develop programs that use the Intel Processor Trace (Intel PT) Decoder Library.
 # to the appropriate place. Otherwise, tar up the generated
 # documentation for use in subsequent builds.
 %if 0%{?_with_docs:1}
-(cd $RPM_BUILD_ROOT%{_mandir}/..; %__tar cJf %{libipt_doc_tar} .)
+(cd $RPM_BUILD_ROOT%{_mandir}/..; %__tar cJf %{SOURCE1} .)
 %else
 mkdir -p $RPM_BUILD_ROOT%{_mandir}
-(cd $RPM_BUILD_ROOT%{_mandir}/..; %__tar xJf %{libipt_doc_tar})
+(cd $RPM_BUILD_ROOT%{_mandir}/..; %__tar xJf %{SOURCE1})
 %endif
 
 %check
@@ -81,5 +81,5 @@ ctest -V %{?_smp_mflags}
 %{_mandir}/*/*.gz
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.2-4
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.2-4
+- Import

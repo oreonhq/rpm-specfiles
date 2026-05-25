@@ -1,5 +1,5 @@
 Name:           jurand
-Version:        1.4.0
+Version:        1.3.5
 Release:        %autorelease
 Summary:        A tool for manipulating Java symbols
 License:        Apache-2.0
@@ -18,7 +18,7 @@ insufficient due to Java language syntax. The tool follows Java language rules
 rather than applying simple regular expressions on the source code.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %build
 %{make_build} test-compile manpages
@@ -26,6 +26,7 @@ rather than applying simple regular expressions on the source code.
 %install
 export buildroot=%{buildroot}
 export bindir=%{_bindir}
+export rpmmacrodir=%{_rpmmacrodir}
 export mandir=%{_mandir}
 
 ./install.sh
@@ -34,9 +35,11 @@ export mandir=%{_mandir}
 make test
 
 %files -f target/installed_files
+%dir %{_rpmconfigdir}
+%dir %{_rpmmacrodir}
 %license LICENSE NOTICE
 %doc README.adoc
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.3.5-1
+- Import

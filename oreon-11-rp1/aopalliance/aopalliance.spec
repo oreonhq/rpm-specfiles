@@ -1,10 +1,10 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           aopalliance
 Version:        1.0
 Release:        %autorelease
 Summary:        Java/J2EE AOP standards
-License:        LicenseRef-Fedora-Public-Domain
+License:        LicenseRef-Public-Domain
 URL:            https://aopalliance.sourceforge.net
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -35,7 +35,7 @@ interoperability between Java/J2EE AOP implementations to build a
 larger AOP community.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 %build
 export CLASSPATH=
@@ -54,5 +54,5 @@ export OPT_JAR_LIST=:
 %files -f .mfiles
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.0-1
+- Import

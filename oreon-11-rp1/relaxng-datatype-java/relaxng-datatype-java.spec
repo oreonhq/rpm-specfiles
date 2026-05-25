@@ -21,7 +21,7 @@ Obsoletes:      %{name}-javadoc < 2011.1-14
 Interface between RELAX NG validators and datatype libraries.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 cp %{SOURCE1} .
 
 %pom_remove_parent
@@ -40,5 +40,5 @@ cp %{SOURCE1} .
 %license copying.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2011.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2011.1-1
+- Import

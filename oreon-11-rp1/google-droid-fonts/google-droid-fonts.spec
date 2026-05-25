@@ -79,15 +79,13 @@ Droid Naskh name.}
 %global googledroidsans %{googledroid}-sans
 
 
-# Same blob as Fedora f43 SRPM (lookaside). Upstream has no stable HTTP for this snapshot.
-Source0:  https://src.fedoraproject.org/lookaside/pkgs/rpms/google-droid-fonts/google-droid-fonts-%{version}.tar.xz/sha512/4ab5462819fbef043e4cc7df565a11da21e0f6afaee002576d52decbf43449053919a0787a1a06ce7187d5308afcf3c044cedf87ed2a6bb28ce18d981928d346/google-droid-fonts-%{version}.tar.xz
+Source0:  %{archivename}.tar.xz
 # Brutal script used to pull sources from upstream git
 # Needs at least 2 Gib of space in /var/tmp
 Source1:  getdroid.sh
-# Literal names so dist-git source checks match committed files (macros in Source filenames break that step)
-Source11: 66-google-droid-sans-fonts.conf
-Source12:  60-google-droid-sans-mono-fonts.conf
-Source13:  66-google-droid-serif-fonts.conf
+Source11: 66-%{fontpkgname1}.conf
+Source12: 60-%{fontpkgname2}.conf
+Source13: 66-%{fontpkgname3}.conf
 Source14: 69-%{googledroid}-arabic-kufi-fonts.conf
 Source15: 69-%{googledroid}-arabic-naskh-fonts.conf
 Source16: 69-%{googledroidsans}-armenian-fonts.conf
@@ -124,5 +122,5 @@ Summary:  A set of general-purpose font families released by Google as part of A
 %fontfiles -a
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20200215-24
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 20200215-24
+- Import

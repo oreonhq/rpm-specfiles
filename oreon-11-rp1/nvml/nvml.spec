@@ -21,7 +21,7 @@
 # pmemcheck is not packaged by Fedora
 %bcond_with pmemcheck
 
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %bcond_with pandoc
 %else
 %bcond_without pandoc
@@ -499,5 +499,5 @@ cp utils/pmdk.magic %{buildroot}%{_datadir}/pmdk/
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{upstreamversion}-5
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.1.0-5
+- Import

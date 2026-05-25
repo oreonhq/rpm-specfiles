@@ -1,4 +1,4 @@
-%if ! 0%{?fedora} || 0%{?fedora} >= 41
+%if ! 0%{?fedora} || 0%{?fedora} >= 41 || 0%{?oreon}
 %bcond gimp 0
 %bcond pixbuf_extra_modules 1
 %else
@@ -291,5 +291,5 @@ EOF
 %{_datadir}/sane/xsane
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.999-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.999-1
+- Import

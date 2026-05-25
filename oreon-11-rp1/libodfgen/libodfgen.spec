@@ -72,5 +72,5 @@ rm -rf %{buildroot}/%{_docdir}/%{name}
 %doc docs/doxygen/html
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.8-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.1.8-1
+- Import

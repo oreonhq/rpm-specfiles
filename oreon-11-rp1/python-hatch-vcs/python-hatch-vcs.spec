@@ -18,6 +18,8 @@ BuildOption(install):   -l hatch_vcs
 
 BuildArch:      noarch
 
+BuildRequires:  python3-devel
+
 %if %{with tests}
 BuildRequires:  python3dist(pytest)
 BuildRequires:  git-core
@@ -48,5 +50,5 @@ Summary:        %{summary}
 
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.5.0-1
+- Import

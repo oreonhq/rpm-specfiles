@@ -31,7 +31,7 @@ BuildRequires: valgrind-devel
 %endif
 BuildRequires: systemd
 BuildRequires: systemd-devel
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 8 || 0%{?oreon}
 %define with_pyverbs %{?_with_pyverbs: 1} %{?!_with_pyverbs: %{?!_without_pyverbs: 1} %{?_without_pyverbs: 0}}
 %else
 %define with_pyverbs %{?_with_pyverbs: 1} %{?!_with_pyverbs: 0}
@@ -40,20 +40,20 @@ BuildRequires: systemd-devel
 BuildRequires: python3-devel
 BuildRequires: python3-Cython
 %else
-%if 0%{?rhel} >= 8 || 0%{?fedora} >= 30
+%if 0%{?rhel} >= 8 || 0%{?fedora} >= 30 || 0%{?oreon}
 BuildRequires: python3
 %else
 BuildRequires: python
 %endif
 %endif
 
-%if 0%{?rhel} >= 8 || 0%{?fedora} >= 30 || %{with_pyverbs}
+%if 0%{?rhel} >= 8 || 0%{?fedora} >= 30 || %{with_pyverbs} || 0%{?oreon}
 BuildRequires: python3-docutils
 %else
 BuildRequires: python-docutils
 %endif
 
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 8 || 0%{?oreon}
 BuildRequires: perl-generators
 %endif
 
@@ -67,11 +67,11 @@ Conflicts: infiniband-diags <= 1.6.7
 
 # Since we recommend developers use Ninja, so should packagers, for consistency.
 %define CMAKE_FLAGS %{nil}
-%if 0%{?fedora} >= 23 || 0%{?rhel} >= 8
+%if 0%{?fedora} >= 23 || 0%{?rhel} >= 8 || 0%{?oreon}
 # Ninja was introduced in FC23
 BuildRequires: ninja-build
 %define CMAKE_FLAGS -GNinja
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon}
 %define make_jobs ninja-build -C %{_vpath_builddir} -v %{?_smp_mflags}
 %define cmake_install DESTDIR=%{buildroot} ninja-build -C %{_vpath_builddir} install
 %else
@@ -85,12 +85,12 @@ BuildRequires: make
 %define cmake_install DESTDIR=%{buildroot} make install
 %endif
 
-%if 0%{?fedora} >= 25 || 0%{?rhel} == 8
+%if 0%{?fedora} >= 25 || 0%{?rhel} == 8 || 0%{?oreon}
 # pandoc was introduced in FC25, Centos8
 BuildRequires: pandoc
 %endif
 
-%if 0%{?fedora} >= 34
+%if 0%{?fedora} >= 34 || 0%{?oreon}
 # self obsoletes to remove i686 multilib package when updating to F34
 Obsoletes: rdma-core < %{version}-%{release}
 %endif
@@ -184,7 +184,7 @@ Provides: libocrdma = %{version}-%{release}
 Obsoletes: libocrdma < %{version}-%{release}
 Provides: librxe = %{version}-%{release}
 Obsoletes: librxe < %{version}-%{release}
-%if 0%{?fedora} >= 34
+%if 0%{?fedora} >= 34 || 0%{?oreon}
 Obsoletes: libibverbs-core < %{version}-%{release}
 %endif
 
@@ -303,10 +303,10 @@ easy, object-oriented access to IB verbs.
 
 %prep
 %setup -q
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?oreon}
 %patch 9998 -p1
 %endif
-%if 0%{?rhel}
+%if 0%{?rhel} || 0%{?oreon}
 %patch 9999 -p1
 %endif
 
@@ -716,5 +716,5 @@ fi
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 61.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 61.0-1
+- Import

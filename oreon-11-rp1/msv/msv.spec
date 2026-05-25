@@ -48,7 +48,7 @@ MSV XML Datatypes Library, Java implementation of W3C’s XML Schema Part 2, is
 intended for use with applications that incorporate XML Schema Part 2.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # Disable runtime dependency on Apache Xerces
 rm xsdlib/src/main/java/com/sun/msv/datatype/xsd/regex/XercesImpl.java
@@ -78,5 +78,5 @@ rm xsdlib/src/main/java/com/sun/msv/datatype/xsd/regex/XercesImpl.java
 %license Apache-LICENSE-1.1.txt license.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2022.7-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2022.7-1
+- Import

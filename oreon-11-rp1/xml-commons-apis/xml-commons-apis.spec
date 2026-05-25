@@ -29,7 +29,7 @@ the various externally-defined standard interfaces for XML. This
 includes the DOM, SAX, and JAXP.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 # Make sure upstream hasn't sneaked in any jars we don't know about
 find -name '*.class' -exec rm -f '{}' \;
 find -name '*.jar' -exec rm -f '{}' \;
@@ -71,5 +71,5 @@ rm -rf build/docs/javadoc
 %doc LICENSE.sax.txt README-sax  README.sax.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.01-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.4.01-1
+- Import

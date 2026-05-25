@@ -1,10 +1,12 @@
 %global         majorminor 1.0
 
-# Git snapshot workflow is disabled (see upstream release tarballs).
+#global gitrel     140
+#global gitcommit  4ca3a22b6b33ad8be4383063e76f79c4d346535d
+#global shortcommit %(c=%{gitcommit}; echo ${c:0:5})
 
 Name:           gstreamer1-plugins-ugly-free
-Version:        1.26.7
-Release:        3%{?dist}
+Version:        1.28.3
+Release:        1%{?dist}
 Summary:        GStreamer streaming media framework "ugly" plugins
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND CC0-1.0
@@ -146,5 +148,5 @@ find $RPM_BUILD_ROOT -name '*.la' -exec rm -f {} ';'
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.1-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 1.28.3-1
+- Import

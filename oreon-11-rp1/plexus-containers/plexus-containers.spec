@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           plexus-containers
 Version:        2.2.0
@@ -59,7 +59,7 @@ Summary:        Component API from %{name}
 %{summary}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 cp %{SOURCE1} .
 cp %{SOURCE2} .
 
@@ -84,5 +84,5 @@ rm plexus-component-metadata/src/test/java/org/codehaus/plexus/metadata/DefaultC
 %license LICENSE-2.0.txt LICENSE.MIT
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.2.0-1
+- Import

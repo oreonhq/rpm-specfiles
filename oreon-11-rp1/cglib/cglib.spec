@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 %global tarball_name RELEASE_%(echo '%{version}' | tr . _)
 
 Name:           cglib
@@ -33,7 +33,7 @@ for Java. It is used to extend Java classes and implements interfaces
 at run-time.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent
@@ -73,5 +73,5 @@ at run-time.
 %license LICENSE NOTICE
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.3.0-1
+- Import

@@ -10,13 +10,13 @@ Summary:        An archiving tool with ACL support
 
 # libschily: CDDL-1.0 AND BSD-3-Clause AND BSD-4-Clause
 # libdeflt: CDDL-1.0
-# libmdigest: BSD-2-Clause AND BSD-3-Clause AND LicenseRef-Fedora-Public-Domain
+# libmdigest: BSD-2-Clause AND BSD-3-Clause AND LicenseRef-Public-Domain
 # libfind: CDDL-1.0
 # librmt: CDDL-1.0
 # rmt: CDDL-1.0
 # star: CDDL-1.0 AND BSD-3-Clause
 
-License:        CDDL-1.0 AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND LicenseRef-Fedora-Public-Domain
+License:        CDDL-1.0 AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND LicenseRef-Public-Domain
 URL:            https://codeberg.org/schilytools/schilytools
 
 Source0:        %{url}/archive/%{version_schily}.tar.gz#/schily-%{version_schily}.tar.gz
@@ -40,7 +40,7 @@ BuildRequires:  libattr-devel libacl-devel libselinux-devel libcap-devel
 BuildRequires:  make e2fsprogs-devel
 BuildRequires:  sed
 
-# drop i686 support (https://fedoraproject.org/wiki/Changes/Noi686Repositories)
+# drop i686 support ()
 ExcludeArch:    %{ix86}
 
 Provides:       star = %{version}-%{release}
@@ -240,5 +240,5 @@ fi
 %{_libdir}/librmt.so.1.0
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - %(echo%version_schily|tr'-''.')-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2024.03.21-1
+- Import

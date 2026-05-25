@@ -1,4 +1,0 @@
-*.rpm
-.build*.log
-/libvirt-dbus-*.tar.gz
-/libvirt-dbus-*.tar.xz

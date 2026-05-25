@@ -57,7 +57,7 @@ License:        Apache-2.0
 Documentation for %{name}.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 sed -i '/<bootclasspath/d' build.xml
 
@@ -108,5 +108,5 @@ sed -i 's/\r//' KEYS LICENSE.txt NOTICE.txt xdocs/style/resources/script.js \
 %doc build/docs/*
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.7.3-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.7.3-1
+- Import

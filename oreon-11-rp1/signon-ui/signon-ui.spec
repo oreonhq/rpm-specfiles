@@ -10,7 +10,7 @@ Summary:        Online Accounts Sign-on Ui
 License:        GPL-3.0-only
 URL:            https://launchpad.net/signon-ui
 
-# Source0:      https://launchpad.net/signon-ui/trunk/%%{version}/+download/signon-ui-%%{version}.tar.bz2
+# Source0:      https://launchpad.net/signon-ui/trunk/%{version}/+download/signon-ui-%{version}.tar.bz2
 Source0:        https://gitlab.com/accounts-sso/%{name}/-/archive/%{commit0}/%{name}-%{commit0}.tar.bz2
 
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}
@@ -67,5 +67,5 @@ mkdir -p %{buildroot}/%{_sysconfdir}/signon-ui/webkit-options.d
 %{_sysconfdir}/signon-ui
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.15^%{gitdate}.%{shortcommit0}-6
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.15^20240205.eef943f-6
+- Import

@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           osgi-core
 Version:        8.0.0
@@ -25,7 +25,7 @@ Obsoletes:      %{name}-javadoc < 8.0.0-34
 OSGi Core, Interfaces and Classes for use in compiling bundles.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 # Delete pre-built binaries
 rm -r org
@@ -70,5 +70,5 @@ mv META-INF/maven/org.osgi/osgi.core/pom.xml .
 %doc about.html
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.0.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 8.0.0-1
+- Import

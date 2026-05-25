@@ -1,4 +1,4 @@
-%bcond_without bootstrap
+%bcond_with bootstrap
 
 Name:           testng
 Version:        7.8.0
@@ -40,7 +40,7 @@ distributed test running.  It is designed to cover unit tests as well as
 functional, end-to-end, integration, etc.
 
 %prep
-%autosetup -p1
+%autosetup -p1 -C
 
 cp %{SOURCE1} pom.xml
 
@@ -78,5 +78,5 @@ cp -p ./src/main/java/*.dtd.html ./src/main/resources/.
 %license LICENSE.txt
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.8.0-1
-- Prepare for Oreon 11 (RP1)
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.8.0-1
+- Import
