@@ -508,72 +508,6 @@ Source6:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/vendor-
 Source7:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/Cargo-3.2.0-14.lock/sha512/bdd7228ebcc4d312d414f642cf59ac9f6c043b98482ea6dec780a3830d248429262c76993eec7b52939e9a750713cecb618cbff6b94ff7e3e76f6f240c76d322/Cargo-3.2.0-14.lock
 Source8:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/cockpit_dist-3.2.0-14.tar.bz2/sha512/70c7dc376676821b05fca257bc01f80202f7cee97221f52ad7ead237a547ee950edf2efb8c501d466d88b3dcaf1677c6c3a96ec20729a6896efdcdad9a96aed0/cockpit_dist-3.2.0-14.tar.bz2
 
-Patch:            0001-Issue-7096-During-replication-online-total-init-the-.patch
-Patch:            0002-Issue-Revise-paged-result-search-locking.patch
-Patch:            0003-Issue-7108-Fix-shutdown-crash-in-entry-cache-destruc.patch
-Patch:            0004-Issue-7172-Index-ordering-mismatch-after-upgrade-717.patch
-Patch:            0005-Issue-7172-2nd-Index-ordering-mismatch-after-upgrade.patch
-Patch:            0006-Issue-6753-Port-ticket-548-test-7101.patch
-Patch:            0007-Issue-7152-ns-slapd-fails-to-shutdown-when-deferred-.patch
-Patch:            0008-Issue-7169-Fix-automember_plugin-CI-test-failures-71.patch
-Patch:            0009-Issue-6758-Use-OUIA-selectors-for-WebUI-plugin-tests.patch
-Patch:            0010-Issue-7196-DynamicCertificates-returns-empty-DER-719.patch
-Patch:            0011-Issue-7189-DSBLE0007-generates-incorrect-remediation.patch
-Patch:            0012-Issue-7170-Support-of-PQC-keys-7188.patch
-Patch:            0013-Bump-lodash-from-4.17.21-to-4.17.23-in-src-cockpit-3.patch
-Patch:            0014-Issue-7198-Web-console-doesn-t-show-sub-suffix-when-.patch
-Patch:            0015-Issue-7014-memberOf-ignored-deferred-updates-with-LM.patch
-Patch:            0016-Issue-7184-argparse.HelpFormatter-_format_actions_us.patch
-Patch:            0017-Issue-6947-Revise-time-skew-check-in-healthcheck-too.patch
-Patch:            0018-Issue-7201-Syscall-overhead-in-LMDB-import-writer-th.patch
-Patch:            0019-Issue-7096-2nd-During-replication-online-total-init-.patch
-Patch:            0020-Issue-7206-Should-log-whether-TLS-key-is-PQC-or-not-.patch
-Patch:            0021-Issue-7027-2nd-389-ds-base-OpenScanHub-Leaks-Detecte.patch
-Patch:            0022-Issue-7213-MDB_BAD_VALSIZE-error-while-handling-VLV-.patch
-Patch:            0023-Issue-6753-Port-ticket-47781-test-7210.patch
-Patch:            0024-Issue-7194-Repl-Log-Analysis-Add-CSN-propagation-det.patch
-Patch:            0025-Issue-6753-Port-ticket-48896-test.patch
-Patch:            0026-Issue-6810-Fix-PAM-PTA-test-7219.patch
-Patch:            0027-Issue-7076-Fix-revert_cache-never-called-in-modrdn-7.patch
-Patch:            0028-Issue-6951-Dynamic-Certificate-refresh-phase-4-Updat.patch
-Patch:            0029-Issue-7224-CI-Test-Simplify-test_reserve_descriptor_.patch
-Patch:            0030-Issue-7178-Bundled-jemalloc-fails-to-build-with-GCC-.patch
-Patch:            0031-Issue-7121-2nd-LeakSanitizer-various-leaks-during-re.patch
-Patch:            0032-Issue-7223-Revert-index-scan-limits-for-system-index.patch
-Patch:            0033-Issue-7223-Add-upgrade-function-to-remove-nsIndexIDL.patch
-Patch:            0034-Issue-7223-Add-upgrade-function-to-remove-ancestorid.patch
-Patch:            0035-Issue-7223-Detect-and-log-index-ordering-mismatch-du.patch
-Patch:            0036-Issue-7223-Add-dsctl-index-check-command-for-offline.patch
-Patch:            0037-Issue-7230-Regression-in-healtcheck-NssCheck-7235.patch
-Patch:            0038-Issue-3555-UI-Fix-audit-issue-with-npm-isaacs-brace-.patch
-Patch:            0039-Issue-7221-CI-tests-fix-some-flaky-tests.patch
-Patch:            0040-Issue-7233-test_produce_division_by_zero-fails-with-.patch
-Patch:            0041-Issue-7241-Drop-dateutil-7242.patch
-Patch:            0042-Issue-7231-Sync-repl-tests-fail-in-FIPS-mode-due-to-.patch
-Patch:            0043-Issue-7248-CLI-attribute-uniqueness-fix-usage-for-ex.patch
-Patch:            0044-Issue-CLI-dsctl-db2index-needs-some-hardening-with-M.patch
-Patch:            0045-Issue-7252-PQC-Need-to-iterate-on-SECOidTag-instead-.patch
-Patch:            0046-Issue-6951-Dynamic-Certificas-Refresh-CI-tests-7238.patch
-Patch:            0047-Issue-7184-2nd-argparse.HelpFormatter-_format_action.patch
-Patch:            0048-Issue-7213-2nd-MDB_BAD_VALSIZE-error-while-handling-.patch
-Patch:            0049-Issue-7223-Use-lexicographical-order-for-ancestorid-.patch
-Patch:            0050-Issue-3134-Fix-build-break-7260.patch
-Patch:            0051-Issue-7066-7052-allow-password-history-to-be-set-to-.patch
-Patch:            0052-Issue-7243-UI-add-support-for-hot-certificates.patch
-Patch:            0053-Issue-6758-Fix-Enable-Replication-dropdown-not-openi.patch
-Patch:            0054-Issue-7223-Remove-integerOrderingMatch-requirement-f.patch
-Patch:            0055-Issue-7236-Fix-GSSAPI-tests-7237.patch
-Patch:            0056-Issue-6753-Port-ticket-49039-test.patch
-Patch:            0057-Issue-5853-Update-concread-to-0.5.10.patch
-#Patch:            0058-Issue-7271-plugins-that-create-threads-need-to-updat.patch
-Patch:            0059-Issue-7273-In-a-chaining-environment-binding-as-remo.patch
-Patch:            0060-Issue-7279-UI-Fix-typo-in-export-certificate-dialog-.patch
-Patch:            0061-Issue-7275-UI-Improve-password-policy-field-validati.patch
-Patch:            0062-Issue-7246-correct-formatting-of-Gen-as-CSN-in-dsctl.patch
-Patch:            0063-Security-fix-for-CVE-2025-14905.patch
-Patch:            0064-Issue-7267-MDB_BAD_VALSIZE-error-when-updating-index.patch
-Patch:            0065-Issue-7277-UI-Fix-Japanese-translation-for-Successfu.patch
-Patch:            0066-Issue-7284-Creating-local-password-policy-succeeds-w.patch
 # oreon url source checksums begin
 %global source0_sha256 a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559
 %global source0_file 389-ds-base-3.2.1.tar.bz2
@@ -720,13 +654,10 @@ cd src/lib389
 %prep
 # oreon verify url source checksums begin
 %(f=%{_sourcedir}/389-ds-base-3.2.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559" || { echo "oreon: Source0 SHA256 mismatch for 389-ds-base-3.2.1.tar.bz2" >&2; exit 1; })
-%(f=%{_sourcedir}/jemalloc-5.3.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa" || { echo "oreon: Source3 SHA256 mismatch for jemalloc-5.3.0.tar.bz2" >&2; exit 1; })
-%(f=%{_sourcedir}/libdb-5.3.28-59.tar.bz2; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22" || { echo "oreon: Source5 SHA256 mismatch for libdb-5.3.28-59.tar.bz2" >&2; exit 1; })
-%(f=%{_sourcedir}/vendor-3.2.0-14.tar.gz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f0515ff035156f8344ac583aa9f4a0c9d66a14c0b59542c3d6ccc7e15eba201" || { echo "oreon: Source6 SHA256 mismatch for vendor-3.2.0-14.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/cockpit_dist-3.2.0-14.tar.bz2; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "89e0ab01efe53312efcf8d921c41569043df99a730fc03f187671b55b9aa2fca" || { echo "oreon: Source8 SHA256 mismatch for cockpit_dist-3.2.0-14.tar.bz2" >&2; exit 1; })
 # oreon verify url source checksums end
 %autosetup -S git -p1 -n %{name}-%{version}
 %if %{defined SOURCE6}
+%(f=%{_sourcedir}/vendor-3.2.0-14.tar.gz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f0515ff035156f8344ac583aa9f4a0c9d66a14c0b59542c3d6ccc7e15eba201" || { echo "oreon: Source6 SHA256 mismatch for vendor-3.2.0-14.tar.gz" >&2; exit 1; })
 rm -rf vendor
 tar xzf %{SOURCE6}
 %endif
@@ -735,14 +666,17 @@ cp %{SOURCE7} src/Cargo.lock
 %endif
 
 %if %{with bundle_jemalloc}
+%(f=%{_sourcedir}/jemalloc-5.3.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa" || { echo "oreon: Source3 SHA256 mismatch for jemalloc-5.3.0.tar.bz2" >&2; exit 1; })
 %setup -q -n %{name}-%{version} -T -D -b 3
 %endif
 
 %if %{with bundle_libdb}
+%(f=%{_sourcedir}/libdb-5.3.28-59.tar.bz2; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22" || { echo "oreon: Source5 SHA256 mismatch for libdb-5.3.28-59.tar.bz2" >&2; exit 1; })
 %setup -q -n %{name}-%{version} -T -D -b 5
 %endif
 
 %if %{defined SOURCE8}
+%(f=%{_sourcedir}/cockpit_dist-3.2.0-14.tar.bz2; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "89e0ab01efe53312efcf8d921c41569043df99a730fc03f187671b55b9aa2fca" || { echo "oreon: Source8 SHA256 mismatch for cockpit_dist-3.2.0-14.tar.bz2" >&2; exit 1; })
 # Unpack prebuilt cockpit files
 tar xvjf %{SOURCE8} -C src/cockpit/389-console
 %endif
@@ -1182,6 +1116,7 @@ exit 0
 
 %changelog
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org>
+- drop patches for 3.2.1 (41 upstreamed, 24 stale)
 - Update 389-ds-base to 3.2.1
 
 
