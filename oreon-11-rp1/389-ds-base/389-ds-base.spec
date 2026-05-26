@@ -80,7 +80,7 @@ ExcludeArch: i686
 
 Summary:          389 Directory Server (%{variant})
 Name:             389-ds-base
-Version:          3.2.0
+Version:          3.2.1
 Release:          %{autorelease -n %{?with_asan:-e asan}}%{?dist}
 License:          GPL-3.0-or-later WITH GPL-3.0-389-ds-base-exception AND (Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT) AND (Apache-2.0 OR LGPL-2.1-or-later OR MIT) AND (Apache-2.0 OR MIT) AND (CC-BY-4.0 AND MIT) AND (MIT OR Apache-2.0) AND Unicode-3.0 AND (MIT OR CC0-1.0) AND (MIT OR Unlicense) AND 0BSD AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MIT AND MIT AND ISC AND MPL-2.0 AND PSF-2.0 AND Zlib
 URL:              https://www.port389.org
@@ -575,8 +575,8 @@ Patch:            0064-Issue-7267-MDB_BAD_VALSIZE-error-when-updating-index.patc
 Patch:            0065-Issue-7277-UI-Fix-Japanese-translation-for-Successfu.patch
 Patch:            0066-Issue-7284-Creating-local-password-policy-succeeds-w.patch
 # oreon url source checksums begin
-%global source0_sha256 4b033ccad6125cf385e97f2a9245704da1c05d7e0dfb74f69bee16bdf881c4d7
-%global source0_file 389-ds-base-3.2.0.tar.bz2
+%global source0_sha256 a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559
+%global source0_file 389-ds-base-3.2.1.tar.bz2
 %global source3_sha256 2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa
 %global source3_file jemalloc-5.3.0.tar.bz2
 %global source5_sha256 13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22
@@ -719,7 +719,7 @@ cd src/lib389
 
 %prep
 # oreon verify url source checksums begin
-%(f=%{_sourcedir}/389-ds-base-3.2.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4b033ccad6125cf385e97f2a9245704da1c05d7e0dfb74f69bee16bdf881c4d7" || { echo "oreon: Source0 SHA256 mismatch for 389-ds-base-3.2.0.tar.bz2" >&2; exit 1; })
+%(f=%{_sourcedir}/389-ds-base-3.2.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559" || { echo "oreon: Source0 SHA256 mismatch for 389-ds-base-3.2.1.tar.bz2" >&2; exit 1; })
 %(f=%{_sourcedir}/jemalloc-5.3.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa" || { echo "oreon: Source3 SHA256 mismatch for jemalloc-5.3.0.tar.bz2" >&2; exit 1; })
 %(f=%{_sourcedir}/libdb-5.3.28-59.tar.bz2; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22" || { echo "oreon: Source5 SHA256 mismatch for libdb-5.3.28-59.tar.bz2" >&2; exit 1; })
 %(f=%{_sourcedir}/vendor-3.2.0-14.tar.gz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f0515ff035156f8344ac583aa9f4a0c9d66a14c0b59542c3d6ccc7e15eba201" || { echo "oreon: Source6 SHA256 mismatch for vendor-3.2.0-14.tar.gz" >&2; exit 1; })
@@ -1181,5 +1181,9 @@ exit 0
 %endif
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org>
+- Update 389-ds-base to 3.2.1
+
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 3.2.0-1
 - Prepare for Oreon 11 (RP1)
