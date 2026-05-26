@@ -8,8 +8,8 @@
 
 
 Name:           plasma-login-manager
-Version:        6.6.3
-Release:        1%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 License:        BSD-3-Clause and CC0-1.0 and (GPL-2.0-only or GPL-3.0-only) and GPL-2.0-or-later and LGPL-2.0-or-later and LGPL-2.1-or-later
 Summary:        QML based login manager from KDE
 
@@ -221,6 +221,9 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/kcm_plasmalogin.desk
 
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Tue Apr 28 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-1
 - Import plasma-login-manager for Oreon 11
 

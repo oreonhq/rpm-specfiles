@@ -9,8 +9,8 @@
 %global orig_name org.kde.plasma.translator
 
 Name:           plasma-applet-translator
-Version:        0.8
-Release:        13%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 Summary:        Plasma 5 applet for translate-shell
 
 License:        MIT
@@ -50,5 +50,8 @@ desktop-file-validate %{buildroot}%{_datadir}/plasma/plasmoids/%{orig_name}/meta
 %{_datadir}/plasma/plasmoids/%{orig_name}
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 0.8-13
 - Prepare for Oreon 11 (RP1)

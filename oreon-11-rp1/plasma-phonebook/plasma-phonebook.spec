@@ -1,6 +1,6 @@
 Name:           plasma-phonebook
-Version:        26.03.80
-Release:        1%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 License:        CC0 and GPLv2 and GPLv3 and GPLv3+ and LGPLv2+
 Summary:        Convergent Plasma Mobile phonebook application
 Url:            https://invent.kde.org/plasma-mobile/%{name}
@@ -62,6 +62,9 @@ Contacts application which allows adding, modifying and removing contacts.
 %{_qt6_plugindir}/kpeople/actions/phonebook_kpeople_plugin.so
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

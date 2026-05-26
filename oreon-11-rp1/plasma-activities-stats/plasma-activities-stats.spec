@@ -1,7 +1,7 @@
 Name:    plasma-activities-stats
 Summary: Library to access the usage statistics data collected by the KDE activity manager
-Version: 6.6.3
-Release: 3%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 
 License: CC0-1.0, GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
@@ -69,6 +69,9 @@ Provides:       kf6-kactivities-stats-devel = 1:%{version}-%{release}
 %{_kf6_libdir}/pkgconfig/PlasmaActivitiesStats.pc
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
 - Force BUILD_QCH off so -devel does not expect missing qt doc tags
 

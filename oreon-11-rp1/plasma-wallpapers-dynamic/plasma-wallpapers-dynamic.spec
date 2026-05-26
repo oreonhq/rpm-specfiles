@@ -11,8 +11,8 @@
 %global somajor 5
 
 Name:           plasma-%{component}
-Version:        5.0.1
-Release:        %autorelease
+Version: 6.6.5
+Release: 1%{?dist}
 Summary:        Dynamic wallpaper plugin for KDE Plasma
 
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later AND BSD-3-Clause AND CC0-1.0 AND CC-BY-SA-4.0
@@ -132,5 +132,8 @@ Files needed to support zsh completion.
 %{_datadir}/zsh/site-functions/_kdynamicwallpaperbuilder
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 5.0.1-1
 - Prepare for Oreon 11 (RP1)

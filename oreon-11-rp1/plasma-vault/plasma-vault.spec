@@ -10,8 +10,8 @@ ExcludeArch: %{ix86}
 
 Name:    plasma-vault
 Summary: Plasma Vault offers strong encryption features in a user-friendly way
-Version: 6.6.3
-Release: 3%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 
 License: CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
@@ -77,6 +77,9 @@ prying eyes even when the user is logged in.
 %{_kf6_datadir}/plasma/plasmoids/org.kde.plasma.vault/
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Tue Apr 07 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
 - Disable IPO in cmake on aarch64 and s390x so LTO does not blow RAM
 

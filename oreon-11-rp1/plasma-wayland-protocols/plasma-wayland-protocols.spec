@@ -10,8 +10,8 @@
 %global debug_package %{nil}
 
 Name:    plasma-wayland-protocols
-Version: 1.20.0
-Release: 2%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 Summary: Plasma Specific Protocols for Wayland
 
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-or-later AND MIT-CMU
@@ -59,6 +59,9 @@ developing applications that use %{name}.
 
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.20.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

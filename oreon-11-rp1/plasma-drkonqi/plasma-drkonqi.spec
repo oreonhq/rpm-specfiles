@@ -122,5 +122,8 @@ desktop-file-validate %{buildroot}/%{_datadir}/applications/org.kde.{drkonqi.cor
 %{_kf6_datadir}/polkit-1/actions/org.kde.drkonqi.policy
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.5-1
 - Import

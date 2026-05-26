@@ -8,7 +8,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-%{base_name}
-Version: 6.6.3
+Version: 6.6.5
 Release: 1%{?dist}
 Summary: Plasma and Qt widget style and window decorations for Plasma
 
@@ -175,6 +175,9 @@ popd
 
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Tue Mar 17 2026 Steve Cossette <farchord@gmail.com> - 6.6.3-1
 - 6.6.3
 

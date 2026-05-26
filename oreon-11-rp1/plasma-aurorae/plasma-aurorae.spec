@@ -4,7 +4,7 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-%{base_name}
-Version: 6.6.3
+Version: 6.6.5
 Release: 1%{?dist}
 Summary: Window decoration engine for KWin (Aurorae)
 
@@ -86,5 +86,8 @@ Development files (CMake package config) for Aurorae.
 
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Tue Apr 14 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-1
 - Add Plasma Aurorae window decoration engine for KWin

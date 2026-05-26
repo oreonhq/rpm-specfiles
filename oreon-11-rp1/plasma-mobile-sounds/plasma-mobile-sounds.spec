@@ -9,8 +9,8 @@
 %global debug_package %{nil}
 
 Name:           plasma-mobile-sounds
-Version:        0.1
-Release:        12%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 # Automatically converted from old format: CC-BY-SA and CC0 and CC-BY - review is highly recommended.
 License:        LicenseRef-Callaway-CC-BY-SA AND CC0-1.0 AND LicenseRef-Callaway-CC-BY
 Summary:        Plasma Mobile Sound Theme
@@ -44,6 +44,9 @@ BuildRequires: kf6-rpm-macros
 %{_datadir}/sounds/plasma-mobile
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-12
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

@@ -7,8 +7,8 @@
 # oreon source sha256 end
 
 Name:           plasma-pass
-Version:        1.3.0
-Release:        2%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 Summary:        Plasma applet to access passwords from the Pass password manager
 License:        CC0-1.0 AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/%{name}.git
@@ -76,6 +76,9 @@ password manager.
 
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 1.3.0-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

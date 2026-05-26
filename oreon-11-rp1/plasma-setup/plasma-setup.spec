@@ -7,8 +7,8 @@
 %global _hardened_build 1
 
 Name:           plasma-setup
-Version:        6.6.4
-Release:        7%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 Summary:        Initial setup for systems using KDE Plasma
 License:        (GPL-2.0-or-later or GPL-3.0-or-later) and GPL-2.0-or-later and GPL-3.0-or-later and (LGPL-2.0-or-later or LGPL-3.0-or-later) and (LGPL-2.1-or-later or LGPL-3.0-or-later) and LGPL-2.1-or-later and BSD-2-Clause and CC0-1.0
 URL:            https://invent.kde.org/plasma/%{name}
@@ -138,6 +138,9 @@ rm -fv %{buildroot}%{_kf6_libdir}/libcomponentspluginplugin.a
 
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Mon Apr 27 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.4-7
 - Rebrand downstream defaults for Oreon look and feel
 

@@ -11,8 +11,8 @@
 %global gitdate 20260218.085444
 
 Name:          plasma-bigscreen
-Version:       6.5.80^%{gitdate}.%{shortcommit}
-Release:       4%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later and CC-BY-SA-4.0
 Summary:       A big launcher giving you access to any installed apps and skills
 Url:           https://invent.kde.org/plasma/plasma-bigscreen
@@ -131,5 +131,8 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.metainfo.xml
 
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.5.80^20260218.085444.a1b44a8-4
 - Import

@@ -10,8 +10,8 @@
 ExcludeArch: %{ix86}
 
 Name:    plasma-keyboard
-Version: 6.6.3
-Release: 5%{?dist}
+Version: 6.6.5
+Release: 1%{?dist}
 Summary: Virtual keyboard for Plasma based on Qt Virtual Keyboard
 
 License: BSD-2-Clause
@@ -95,6 +95,9 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/kcm_plasmakeyboar
 
 
 %changelog
+* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
+- Update to KDE Plasma 6.6.5
+
 * Sat Apr 18 2026 Oreon Packaging Team <packaging@oreonhq.com> - 6.6.3-3
 - Use kf6-kcmutils-devel instead of bogus cmake(KF6KCMUtilsQuick) for KCM QML deps
 
