@@ -10,11 +10,15 @@ License: X11
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:    %{tarball}-%{gitdate}.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/libXres-1.2.2.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 9a7446f3484b9b7538ac5ee30d2c1ce9e5b7fbbaf1440e02f6cca186a1fa745f
+%global source0_file libXres-1.2.2.tar.xz
+# oreon url source checksums end
 %endif
 # Fixes a bug which causes metacity 3.38.0+ to crash on startup:
 # https://bugzilla.redhat.com/show_bug.cgi?id=1888993
@@ -41,6 +45,9 @@ Requires: %{name} = %{version}-%{release}
 X.Org X11 libXres development package
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libXres-1.2.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9a7446f3484b9b7538ac5ee30d2c1ce9e5b7fbbaf1440e02f6cca186a1fa745f" || { echo "oreon: Source0 SHA256 mismatch for libXres-1.2.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

@@ -4,6 +4,10 @@ Release: %autorelease
 Summary: Unobtrusive window manager
 URL: https://wiki.gnome.org/Projects/Metacity
 Source0: https://download.gnome.org/sources/metacity/3.58/metacity-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 e430c8a92409ef2f91a4dabd50a71e3d3bbcc474a3dec1caec3813b381d7d1b0
+%global source0_file metacity-3.58.1.tar.xz
+# oreon url source checksums end
 
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT-open-group
 
@@ -56,6 +60,9 @@ exists purely for technical reasons.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/metacity-3.58.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e430c8a92409ef2f91a4dabd50a71e3d3bbcc474a3dec1caec3813b381d7d1b0" || { echo "oreon: Source0 SHA256 mismatch for metacity-3.58.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # force regeneration
 rm -f src/org.gnome.%{name}.gschema.valid

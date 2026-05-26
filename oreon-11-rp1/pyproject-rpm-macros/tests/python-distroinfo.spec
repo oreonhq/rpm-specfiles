@@ -4,7 +4,7 @@ Release:          0%{?dist}
 Summary:          Parsing and querying distribution metadata stored in text/YAML files
 License:          Apache-2.0
 URL:              https://github.com/softwarefactory-project/distroinfo
-Source0:          %{pypi_source distroinfo}
+Source0:        https://files.pythonhosted.org/packages/source/d/distroinfo/distroinfo-0.3.2.tar.gz
 BuildArch:        noarch
 
 BuildRequires:    pyproject-rpm-macros

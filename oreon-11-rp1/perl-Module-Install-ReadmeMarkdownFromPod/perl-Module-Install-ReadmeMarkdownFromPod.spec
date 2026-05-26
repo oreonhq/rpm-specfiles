@@ -5,6 +5,10 @@ Summary:        Create README.mkdn from POD
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-ReadmeMarkdownFromPod
 Source0:        https://cpan.metacpan.org/authors/id/M/MA/MATTN/Module-Install-ReadmeMarkdownFromPod-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 300b2e244f83b9a54a95f8404c1cd3af0635b4fae974ca65390ee428ec668591
+%global source0_file Module-Install-ReadmeMarkdownFromPod-0.04.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  glibc-common
@@ -44,6 +48,9 @@ containing POD whenever the author runs Makefile.PL. This file is used by
 GitHub to display nicely formatted information about a repository.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Install-ReadmeMarkdownFromPod-0.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "300b2e244f83b9a54a95f8404c1cd3af0635b4fae974ca65390ee428ec668591" || { echo "oreon: Source0 SHA256 mismatch for Module-Install-ReadmeMarkdownFromPod-0.04.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Install-ReadmeMarkdownFromPod-%{version}
 
 # README is ISO-8859-1 encoded

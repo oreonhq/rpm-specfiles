@@ -15,6 +15,10 @@ Source1:        http://www.apache.org/licenses/LICENSE-2.0.txt
 # Forwarded upstream: https://github.com/sonatype/sisu-build-api/pull/2
 Patch:          %{name}-migration-to-component-metadata.patch
 Patch:          0000-Port-to-plexus-utils-3.3.0.patch
+# oreon url source checksums begin
+%global source0_sha256 4ef78b6045141242d39ce17de848067cd3ba004437eda119f1bffd7f5b63f84d
+%global source0_file plexus-build-api-0.0.7.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -31,6 +35,9 @@ Obsoletes:      %{name}-javadoc < 0.0.7-52
 Plexus Build API
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plexus-build-api-0.0.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4ef78b6045141242d39ce17de848067cd3ba004437eda119f1bffd7f5b63f84d" || { echo "oreon: Source0 SHA256 mismatch for plexus-build-api-0.0.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 cp -p %{SOURCE1} .
 

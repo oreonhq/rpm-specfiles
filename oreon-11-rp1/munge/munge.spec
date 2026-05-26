@@ -13,6 +13,10 @@ Source1:        https://github.com/dun/munge/releases/download/%{name}-%{version
 Source2:        https://github.com/dun.gpg
 Source3:        munge.sysusers
 Source4:        README.md
+# oreon url source checksums begin
+%global source0_sha256 39c3ec6ef5604bfa206e8aa10fc05d5119040f6de4a554bc0fb98ca1aed838dc
+%global source0_file munge-0.5.18.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc
@@ -57,6 +61,9 @@ Runtime libraries for using MUNGE.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/munge-0.5.18.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "39c3ec6ef5604bfa206e8aa10fc05d5119040f6de4a554bc0fb98ca1aed838dc" || { echo "oreon: Source0 SHA256 mismatch for munge-0.5.18.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -N -S git
 cp "%{SOURCE4}"  README-Fedora.md

@@ -14,6 +14,10 @@ Requires:       lua-json
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1134853
 Patch0: 0001-guardian.lua-Update-for-website-changes.patch
+# oreon url source checksums begin
+%global source0_sha256 17f21f9fac10cf60af2741f2c86a8ffd8007aa334d1eb78ff6ece130cb3777e3
+%global source0_file libquvi-scripts-0.9.20131130.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires: make
@@ -23,6 +27,9 @@ uses for parsing the media details. Some additional utility
 scripts are also included.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libquvi-scripts-0.9.20131130.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "17f21f9fac10cf60af2741f2c86a8ffd8007aa334d1eb78ff6ece130cb3777e3" || { echo "oreon: Source0 SHA256 mismatch for libquvi-scripts-0.9.20131130.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1
 

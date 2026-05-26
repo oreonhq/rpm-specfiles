@@ -14,6 +14,10 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 Source2:        LICENSE.MIT
+# oreon url source checksums begin
+%global source0_sha256 b078cd0b107ad0c5831b93ffa4b30ae7c65f1cc619fa7a6d35aebdb2a80f72e3
+%global source0_file plexus-compiler-2.15.0.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -51,6 +55,9 @@ Summary:        Maven POM files for %{name}
 This package provides %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plexus-compiler-2.15.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b078cd0b107ad0c5831b93ffa4b30ae7c65f1cc619fa7a6d35aebdb2a80f72e3" || { echo "oreon: Source0 SHA256 mismatch for plexus-compiler-2.15.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 find -name '.class' -delete

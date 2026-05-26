@@ -48,6 +48,10 @@ Source3:        %{name}-%{version}-vendor.tar.gz
 Source4:        neovim-bundled-licenses.txt
 
 Patch1000:      neovim-lua-bit32.patch
+# oreon url source checksums begin
+%global source0_sha256 ef9f58da7d687ed4d1dad9715542bf0dabdeedbfe8089e2ce17fff21b920a268
+%global source0_file neovim-0.12.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -111,6 +115,9 @@ excisions, Neovim is Vim. It is built for users who want the good
 parts of Vim, without compromise, and more.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/neovim-0.12.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ef9f58da7d687ed4d1dad9715542bf0dabdeedbfe8089e2ce17fff21b920a268" || { echo "oreon: Source0 SHA256 mismatch for neovim-0.12.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -b3
 
 cp %{SOURCE4} .

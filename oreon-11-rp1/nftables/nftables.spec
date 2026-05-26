@@ -7,8 +7,8 @@ Summary:        Netfilter Tables userspace utilities
 
 License:        GPL-2.0-only
 URL:            https://netfilter.org/projects/nftables/
-Source0:        %{url}/files/%{name}-%{version}.tar.xz
-Source1:        %{url}/files/%{name}-%{version}.tar.xz.sig
+Source0:        https://netfilter.org/projects/nftables//files/nftables-1.1.6.tar.xz
+Source1:        https://netfilter.org/projects/nftables//files/nftables-1.1.6.tar.xz.sig
 SOURCE2:        coreteam-gpg-key-0xD70D1A666ACF2B21.txt
 Source3:        nftables.service
 Source4:        nftables.conf
@@ -18,6 +18,10 @@ Source7:        nat.nft
 
 Patch01: 0001-build-fix-.-configure-with-non-bash-shell.patch
 Patch02: 0002-doc-fix-typo-in-man-page.patch
+# oreon url source checksums begin
+%global source0_sha256 372931bda8556b310636a2f9020adc710f9bab66f47efe0ce90bff800ac2530c
+%global source0_file nftables-1.1.6.tar.xz
+# oreon url source checksums end
 
 #BuildRequires: autogen
 BuildRequires: autoconf
@@ -77,6 +81,9 @@ Manage an nftables-based firewall defined by ruleset snippets in /etc/nftables
 and /etc/sysconfig/nftables.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/nftables-1.1.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "372931bda8556b310636a2f9020adc710f9bab66f47efe0ce90bff800ac2530c" || { echo "oreon: Source0 SHA256 mismatch for nftables-1.1.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

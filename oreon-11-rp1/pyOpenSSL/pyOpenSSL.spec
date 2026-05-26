@@ -6,9 +6,13 @@ Release:        %autorelease
 Summary:        Python wrapper module around the OpenSSL library
 License:        Apache-2.0
 URL:            https://pyopenssl.readthedocs.org/
-Source0:        %{pypi_source %{srcname} %{version}}
+Source0:        https://files.pythonhosted.org/packages/source/p/pyopenssl/pyopenssl-25.3.0.tar.gz
 
 Patch:          0001-Limit-list-of-elliptic-curves-tested-to-those-in-Fed.patch
+# oreon url source checksums begin
+%global source0_sha256 c981cb0a3fd84e8602d7afc209522773b94c1c2446a3c710a75b06fe1beae329
+%global source0_file pyopenssl-25.3.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -41,6 +45,9 @@ BuildArch: noarch
 Documentation for pyOpenSSL
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pyopenssl-25.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c981cb0a3fd84e8602d7afc209522773b94c1c2446a3c710a75b06fe1beae329" || { echo "oreon: Source0 SHA256 mismatch for pyopenssl-25.3.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires

@@ -7,7 +7,11 @@ Summary:	%{summary}
 
 License:	Apache-2.0
 URL:		https://github.com/snapshotmanager/%{name}
-Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/snapshotmanager/snapm/archive/v0.7.0/snapm-0.7.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8ebe068a9ba716a0f3fcd23a1c232eec92a30d981959289227b41ff2d7c9f0c5
+%global source0_file snapm-0.7.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:	noarch
 
@@ -53,6 +57,9 @@ the same time, representing the system state at the time the set was created.
 This package provides the python3 snapm module documentation in HTML format.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/snapm-0.7.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8ebe068a9ba716a0f3fcd23a1c232eec92a30d981959289227b41ff2d7c9f0c5" || { echo "oreon: Source0 SHA256 mismatch for snapm-0.7.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}
 
 %generate_buildrequires

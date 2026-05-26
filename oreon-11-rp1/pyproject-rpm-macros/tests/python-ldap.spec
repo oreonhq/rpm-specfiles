@@ -3,7 +3,7 @@ Version:        3.3.0
 Release:        0%{?dist}
 License:        python-ldap
 Summary:        An object-oriented API to access LDAP directory servers
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/p/python-ldap/python-ldap-3.3.0.tar.gz
 
 # OpenLDAP 2.5+ is not yet supported by python-ldap
 # https://github.com/python-ldap/python-ldap/issues/432

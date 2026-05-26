@@ -7,7 +7,12 @@ Release:        3%{?dist}
 Summary:        CPAN signature management utilities and modules
 License:        CC0-1.0
 URL:            https://metacpan.org/release/Module-Signature
-Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Signature-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/Module-Signature-0.93.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 d0b128ec34152540f05187b8412808ed3661aa57e81c1cf959d06c35295b1f3a
+%global source0_file Module-Signature-0.93.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module build
 BuildRequires:  coreutils
@@ -55,6 +60,9 @@ This package contains a command line tool and module for checking and creating
 SIGNATURE files for Perl CPAN distributions.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Signature-0.93.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d0b128ec34152540f05187b8412808ed3661aa57e81c1cf959d06c35295b1f3a" || { echo "oreon: Source0 SHA256 mismatch for Module-Signature-0.93.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Signature-%{version}
 
 %build

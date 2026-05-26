@@ -12,6 +12,10 @@ Release:	30%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/namespace-clean
 Source0:	https://cpan.metacpan.org/authors/id/R/RI/RIBASUSHI/namespace-clean-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8a10a83c3e183dc78f9e7b7aa4d09b47c11fb4e7d3a33b9a12912fd22e31af9d
+%global source0_file namespace-clean-0.27.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -66,6 +70,9 @@ Functions called in the package itself will still be bound by their
 name, but they won't show up as methods on your class or instances.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/namespace-clean-0.27.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8a10a83c3e183dc78f9e7b7aa4d09b47c11fb4e7d3a33b9a12912fd22e31af9d" || { echo "oreon: Source0 SHA256 mismatch for namespace-clean-0.27.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n namespace-clean-%{version}
 
 %build

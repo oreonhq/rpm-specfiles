@@ -5,6 +5,10 @@ Summary:        Process Management Interface Exascale (PMIx)
 License:        BSD-3-Clause
 URL:            https://pmix.org/
 Source0:        https://github.com/openpmix/openpmix/releases/download/v%{version}/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 b9e6ad482fcdcb58c9b9553ae56956b6d7df875d5605b6ecb96adaff16b2b07a
+%global source0_file pmix-5.0.7.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -59,6 +63,9 @@ based starters (e.g., mpirun).
 * pevent - inject an event into the system
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pmix-5.0.7.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b9e6ad482fcdcb58c9b9553ae56956b6d7df875d5605b6ecb96adaff16b2b07a" || { echo "oreon: Source0 SHA256 mismatch for pmix-5.0.7.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # touch lexer sources to recompile them

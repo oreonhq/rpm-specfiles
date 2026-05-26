@@ -15,7 +15,7 @@ Summary:        SDL 1.2 runtime compatibility library using SDL 2.0
 # SDL12_compat.c is Zlib AND LicenseRef-Fedora-Public-Domain
 License:        Zlib AND (MIT-0 OR Unlicense OR CC0-1.0) AND MIT AND LicenseRef-Fedora-Public-Domain
 URL:            https://github.com/libsdl-org/sdl12-compat
-Source0:        %{url}/archive/release-%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/libsdl-org/sdl12-compat/archive/release-1.2.74/sdl12-compat-1.2.74.tar.gz
 # Multilib aware-header stub
 Source1:        SDL_config.h
 
@@ -25,6 +25,10 @@ Source1:        SDL_config.h
 
 # Fedora specific patches (1001+)
 Patch1001:      sdl12-compat-sdlconfig-multilib.patch
+# oreon url source checksums begin
+%global source0_sha256 2588686c0972e1785829dc3bf436b543c317e6afa30a9b91d48013dd9c110e81
+%global source0_file sdl12-compat-1.2.74.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -109,6 +113,9 @@ this layer.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sdl12-compat-1.2.74.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2588686c0972e1785829dc3bf436b543c317e6afa30a9b91d48013dd9c110e81" || { echo "oreon: Source0 SHA256 mismatch for sdl12-compat-1.2.74.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-release-%{version} -S git_am
 
 

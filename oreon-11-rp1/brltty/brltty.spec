@@ -48,6 +48,10 @@ Source4: brltty.sysusers
 Patch1: brltty-6.3-loadLibrary.patch
 # libspeechd.h moved in latest speech-dispatch (NOT sent upstream)
 Patch2: brltty-6.8-libspeechd.patch
+# oreon url source checksums begin
+%global source0_sha256 356680d63fca885806c49987ebd4720107873ecbcb050fe8711a8131cc68c268
+%global source0_file brltty-6.9.tar.xz
+# oreon url source checksums end
 Summary: Braille display driver for Linux/Unix
 BuildRequires: byacc
 BuildRequires: glibc-kernheaders
@@ -249,6 +253,9 @@ installer.
 %define version %{pkg_version}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/brltty-6.9.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "356680d63fca885806c49987ebd4720107873ecbcb050fe8711a8131cc68c268" || { echo "oreon: Source0 SHA256 mismatch for brltty-6.9.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -qc
 mv %{name}-%{version} python2
 

@@ -13,7 +13,7 @@ Summary:        Setuptools Rust extension plugin
 
 License:        MIT
 URL:            https://github.com/PyO3/setuptools-rust
-Source0:        %{pypi_source setuptools_rust}
+Source0:        https://files.pythonhosted.org/packages/source/s/setuptools_rust/setuptools_rust-1.12.0.tar.gz
 
 # Allow building examples with PyO3 0.26, 0.27, and 0.28:
 # https://github.com/PyO3/setuptools-rust/commit/6868a518681cfd99544c45c33ccd8d752d386c1c
@@ -23,6 +23,10 @@ Source0:        %{pypi_source setuptools_rust}
 # https://github.com/PyO3/setuptools-rust/commit/8a76c7dd45af4cdaced3da756b4f898a34035bf5
 # https://github.com/PyO3/setuptools-rust/pull/576
 Patch:          setuptools_rust-1.12.0-pyo3-0.28.patch
+# oreon url source checksums begin
+%global source0_sha256 d94a93f0c97751c17014565f07bdc324bee45d396cd1bba83d8e7af92b945f0c
+%global source0_file setuptools_rust-1.12.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -54,6 +58,9 @@ Requires:       cargo
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/setuptools_rust-1.12.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d94a93f0c97751c17014565f07bdc324bee45d396cd1bba83d8e7af92b945f0c" || { echo "oreon: Source0 SHA256 mismatch for setuptools_rust-1.12.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n setuptools_rust-%{version}
 
 %cargo_prep

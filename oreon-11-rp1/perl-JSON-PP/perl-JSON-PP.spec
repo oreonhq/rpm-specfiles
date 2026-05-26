@@ -8,8 +8,13 @@ Release:	523%{?dist}
 Summary:	JSON::XS compatible pure-Perl module
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/JSON-PP
-Source0:	https://cpan.metacpan.org/modules/by-module/JSON/JSON-PP-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/JSON-PP-4.16.tar.gz
+
 Patch0:		https://patch-diff.githubusercontent.com/raw/makamaka/JSON-PP/pull/93.patch
+# oreon url source checksums begin
+%global source0_sha256 8bc2f162bafc42645c489905ad72540f0d3c284b360c96299095183c30cc9789
+%global source0_file JSON-PP-4.16.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -66,6 +71,9 @@ Marc Lehmann in C, so must be compiled and installed in the used environment.
 JSON::PP is a pure-Perl module and is compatible with JSON::XS.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/JSON-PP-4.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8bc2f162bafc42645c489905ad72540f0d3c284b360c96299095183c30cc9789" || { echo "oreon: Source0 SHA256 mismatch for JSON-PP-4.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n JSON-PP-%{version}
 
 # Silence Getopt::Long warning (fix already committed upstream)

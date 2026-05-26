@@ -43,12 +43,16 @@ Requires: (fuse-overlayfs if fedora-release-identity-server)
 Suggests: fuse-overlayfs
 %endif
 URL: https://github.com/%{project}/%{repo}
-Source0: %{url}/archive/refs/tags/common/v%{version}.tar.gz
+Source0:        https://github.com/containers/container-libs/archive/refs/tags/common/v0.67.0.tar.gz
 Source1: https://raw.githubusercontent.com/containers/shortnames/refs/heads/main/shortnames.conf
 # Fetch RPM-GPG-KEY-redhat-release from the authoritative source instead of storing
 # a copy in repo or dist-git. Depending on distribution-gpg-keys rpm is also
 # not an option because that package doesn't exist on CentOS Stream.
 Source2: https://access.redhat.com/security/data/fd431d51.txt
+# oreon url source checksums begin
+%global source0_sha256 503756a080d66141fc3103952b6a5c0253c45da8475673c8d4ee5c948f4dade4
+%global source0_file v0.67.0.tar.gz
+# oreon url source checksums end
 
 %description
 This package contains common configuration files and documentation for container
@@ -82,6 +86,9 @@ This subpackage will handle dependencies common to Podman and Buildah which are
 not required by Skopeo.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.67.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "503756a080d66141fc3103952b6a5c0253c45da8475673c8d4ee5c948f4dade4" || { echo "oreon: Source0 SHA256 mismatch for v0.67.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -Sgit -n %{repo}-common-v%{version}
 
 # Fine-grain distro- and release-specific tuning of config files,

@@ -128,6 +128,10 @@ Patch101:	https://github.com/Kitware/CMake/commit/261b7b933c6604095687d473503e24
 # Patch for renaming on EPEL
 %if 0%{?name_suffix:1}
 Patch1:         %{name}-rename.patch
+# oreon url source checksums begin
+%global source0_sha256 7efaccde8c5a6b2968bad6ce0fe60e19b6e10701a12fce948c2bf79bac8a11e9
+%global source0_file cmake-4.2.3.tar.gz
+# oreon url source checksums end
 %endif
 
 BuildRequires:  coreutils
@@ -326,6 +330,9 @@ using anything from the PyPI package called cmake.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cmake-4.2.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7efaccde8c5a6b2968bad6ce0fe60e19b6e10701a12fce948c2bf79bac8a11e9" || { echo "oreon: Source0 SHA256 mismatch for cmake-4.2.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{orig_name}-%{tar_version} -p 1
 
 %if %{with rpm}

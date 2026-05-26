@@ -174,6 +174,10 @@ Source9: readme-ifcfg-rh-migrated.txt
 
 Patch1: 0001-polkit-noauth-group.patch
 Patch2: 0002-secret-permission-fixes.patch
+# oreon url source checksums begin
+%global source0_sha256 59a32d385cc1e7ae26e43798c6f12d07ff6198abd041ec0620b3a08cfc021ccc
+%global source0_file NetworkManager-1.56.0.tar.xz
+# oreon url source checksums end
 
 Requires(post): systemd
 Requires(post): systemd-udev
@@ -568,6 +572,9 @@ Preferably use nmcli instead.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/NetworkManager-1.56.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "59a32d385cc1e7ae26e43798c6f12d07ff6198abd041ec0620b3a08cfc021ccc" || { echo "oreon: Source0 SHA256 mismatch for NetworkManager-1.56.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n NetworkManager-%{version_no_tilde}
 
 

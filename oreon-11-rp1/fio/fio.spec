@@ -8,6 +8,10 @@ URL:		http://git.kernel.dk/?p=fio.git;a=summary
 Source0:	http://brick.kernel.dk/snaps/%{name}-%{version}.tar.bz2
 Source1:	https://brick.kernel.dk/snaps/%{name}-%{version}.tar.bz2.asc
 Source2:	https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/F7D358FB2971E0A6.asc
+# oreon url source checksums begin
+%global source0_sha256 cc1b5c8ef9efa20d44fe90b59515fddf8b4e884d782a0b33b26a70ab48ec04c1
+%global source0_file fio-3.40.tar.bz2
+# oreon url source checksums end
 
 %if 0%{?rhel} && 0%{?rhel} < 10
 %bcond_without nbd
@@ -204,6 +208,9 @@ RDMA engine for %{name}.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fio-3.40.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cc1b5c8ef9efa20d44fe90b59515fddf8b4e884d782a0b33b26a70ab48ec04c1" || { echo "oreon: Source0 SHA256 mismatch for fio-3.40.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 

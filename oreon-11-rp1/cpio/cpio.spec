@@ -40,6 +40,10 @@ Patch7: cpio-2.10-longnames-split.patch
 
 # Cpio does Sum32 checksum, not CRC (downstream)
 Patch8: cpio-2.11-crc-fips-nit.patch
+# oreon url source checksums begin
+%global source0_sha256 937610b97c329a1ec9268553fb780037bcfff0dcffe9725ebc4fd9c1aa9075db
+%global source0_file cpio-2.15.tar.bz2
+# oreon url source checksums end
 
 Provides: bundled(gnulib)
 Provides: bundled(paxutils)
@@ -65,6 +69,9 @@ Install cpio if you need a program to manage file archives.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cpio-2.15.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "937610b97c329a1ec9268553fb780037bcfff0dcffe9725ebc4fd9c1aa9075db" || { echo "oreon: Source0 SHA256 mismatch for cpio-2.15.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE3}' --signature='%{SOURCE2}' --data='%{SOURCE0}'
 %autosetup -p1
 

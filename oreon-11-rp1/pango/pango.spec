@@ -15,6 +15,10 @@ Summary: System for layout and rendering of internationalized text
 License: LGPL-2.0-or-later
 URL:     https://pango.gnome.org/
 Source0: https://download.gnome.org/sources/%{name}/1.57/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 890640c841dae77d3ae3d8fe8953784b930fa241b17423e6120c7bfdf8b891e7
+%global source0_file pango-1.57.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires: pkgconfig(cairo) >= %{cairo_version}
 BuildRequires: pkgconfig(cairo-gobject) >= %{cairo_version}
@@ -80,6 +84,9 @@ The pango-doc package contains developer documentation for the pango package.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pango-1.57.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "890640c841dae77d3ae3d8fe8953784b930fa241b17423e6120c7bfdf8b891e7" || { echo "oreon: Source0 SHA256 mismatch for pango-1.57.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n pango-%{version} -p1
 
 

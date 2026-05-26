@@ -15,6 +15,10 @@ Summary:        Frei0r - a minimalist plugin API for video effects
 License:        GPL-2.0-or-later
 URL:            https://frei0r.dyne.org/
 Source0:        https://github.com/dyne/frei0r/archive/v%{version}/frei0r-plugins-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e2d01f58fa0f96a7452715f052fe452212044da4bad50bf7cc1d5d0db514a9a9
+%global source0_file frei0r-plugins-2.5.5.tar.gz
+# oreon url source checksums end
 
 
 Buildrequires:  cmake
@@ -46,6 +50,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/frei0r-plugins-2.5.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e2d01f58fa0f96a7452715f052fe452212044da4bad50bf7cc1d5d0db514a9a9" || { echo "oreon: Source0 SHA256 mismatch for frei0r-plugins-2.5.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n frei0r-%{version} -p1
 
 

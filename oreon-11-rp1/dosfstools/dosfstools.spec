@@ -4,6 +4,10 @@ Release: 18%{?dist}
 Summary: Utilities for making and checking MS-DOS FAT filesystems on Linux
 License: GPL-3.0-or-later
 Source0: https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 64926eebf90092dca21b14259a5301b7b98e7b1943e8a201c7d726084809b527
+%global source0_file dosfstools-4.2.tar.gz
+# oreon url source checksums end
 URL: https://github.com/dosfstools/dosfstools
 
 BuildRequires: gcc
@@ -26,6 +30,9 @@ which respectively make and check MS-DOS FAT filesystems on hard
 drives or on floppies.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dosfstools-4.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "64926eebf90092dca21b14259a5301b7b98e7b1943e8a201c7d726084809b527" || { echo "oreon: Source0 SHA256 mismatch for dosfstools-4.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -6,6 +6,10 @@ Summary:        Extended processing of command line options
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Getopt-Long
 Source0:        https://cpan.metacpan.org/authors/id/J/JV/JV/Getopt-Long-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1305ed46ea21f794304e97aa3dcd3a38519059785e9db7415daf2c218506c569
+%global source0_file Getopt-Long-2.58.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -51,6 +55,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Getopt-Long-2.58.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1305ed46ea21f794304e97aa3dcd3a38519059785e9db7415daf2c218506c569" || { echo "oreon: Source0 SHA256 mismatch for Getopt-Long-2.58.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Getopt-Long-%{version}
 
 # Help generators to recognize Perl scripts

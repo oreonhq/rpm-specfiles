@@ -5,6 +5,10 @@ Summary:        Embedded Linux library
 License:        LGPL-2.0-or-later
 URL:            https://01.org/ell
 Source0:        https://www.kernel.org/pub/linux/libs/ell/ell-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 39a562f5ab2768e69da1ffbb1f98a8eb3483baffc7d2ef6adc3705e4fd4e53fb
+%global source0_file ell-0.83.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -27,6 +31,9 @@ Headers for developing against libell.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ell-0.83.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "39a562f5ab2768e69da1ffbb1f98a8eb3483baffc7d2ef6adc3705e4fd4e53fb" || { echo "oreon: Source0 SHA256 mismatch for ell-0.83.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n ell-%{version}
 
 

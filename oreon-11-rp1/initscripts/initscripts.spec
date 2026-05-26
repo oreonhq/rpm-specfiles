@@ -25,6 +25,10 @@ License:          GPL-2.0-only
 
 URL:              https://github.com/fedora-sysv/initscripts
 Source:           https://github.com/fedora-sysv/initscripts/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5265f110f1d94e6719fa5e57f0f63ce490cc7eb66132fe75e30ffb653a597184
+%global source0_file 10.27.tar.gz
+# oreon url source checksums end
 
 %shared_requirements
 
@@ -165,6 +169,9 @@ Please use systemd-volatile-root functionality instead, if possible.
 # === BUILD INSTRUCTIONS ======================================================
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/10.27.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5265f110f1d94e6719fa5e57f0f63ce490cc7eb66132fe75e30ffb653a597184" || { echo "oreon: Source0 SHA256 mismatch for 10.27.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 # ---------------

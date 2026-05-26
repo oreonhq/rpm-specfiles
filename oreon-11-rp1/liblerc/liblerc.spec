@@ -10,6 +10,10 @@ URL:            https://github.com/Esri/lerc
 Source0:        https://github.com/Esri/lerc/archive/v%{version}/lerc-%{version}.tar.gz
 # Add version suffix to mingw dll
 Patch0:         lerc-dllver.patch
+# oreon url source checksums begin
+%global source0_sha256 f05b24d2368becab9144873878655bb718910631550d4f786262378c16ab94a7
+%global source0_file lerc-4.1.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -58,6 +62,9 @@ BuildArch:     noarch
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lerc-4.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f05b24d2368becab9144873878655bb718910631550d4f786262378c16ab94a7" || { echo "oreon: Source0 SHA256 mismatch for lerc-4.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n lerc-%{version}
 
 # Fix line endings

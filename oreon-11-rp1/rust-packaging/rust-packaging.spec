@@ -12,6 +12,10 @@ Source0:        https://pagure.io/fedora-rust/rust-packaging/archive/%{version}/
 # cargo_prep -V exists on some EL spec copies; this branch accepts the flag and
 # errors only when %%{?fedora} is defined so one macro file can be shared.
 Patch0:        0001-Temporarily-accept-cargo_prep-V-flag-for-spec-compat.patch
+# oreon url source checksums begin
+%global source0_sha256 a4514b547cd305060c0e8ee018c2a0e87b5d203b0230153d4dee70ddcd38bf54
+%global source0_file rust-packaging-26.4.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -52,6 +56,9 @@ Requires:       rust-srpm-macros
 RPM macros for building projects with cargo.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rust-packaging-26.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a4514b547cd305060c0e8ee018c2a0e87b5d203b0230153d4dee70ddcd38bf54" || { echo "oreon: Source0 SHA256 mismatch for rust-packaging-26.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

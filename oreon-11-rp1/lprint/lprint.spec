@@ -18,6 +18,10 @@ Source1: lprint.conf
 Patch001: 0001-Update-state-filename-to-current-PAPPL-standard-rena.patch
 # https://github.com/michaelrsweet/lprint/pull/151
 Patch002: 0001-lprint.c-Enable-TLS-support-in-Web-UI.patch
+# oreon url source checksums begin
+%global source0_sha256 bebdf14615f292972c9c939a003f2ad79eef32ddf9ff8d67f611a5da5a2a4598
+%global source0_file lprint-1.3.1.tar.gz
+# oreon url source checksums end
 
 # uses CUPS API for arrays, options, rastering, HTTP, IPP support
 BuildRequires: pkgconfig(cups) >= 2.4.0
@@ -52,6 +56,9 @@ to send the print data to USB and network-connected label printers.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lprint-1.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bebdf14615f292972c9c939a003f2ad79eef32ddf9ff8d67f611a5da5a2a4598" || { echo "oreon: Source0 SHA256 mismatch for lprint-1.3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 

@@ -17,6 +17,10 @@ URL:            https://hackage.haskell.org/package/network-uri
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+# oreon url source checksums begin
+%global source0_sha256 9c188973126e893250b881f20e8811dca06c223c23402b06f7a1f2e995797228
+%global source0_file network-uri-2.6.4.2.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -83,6 +87,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/network-uri-2.6.4.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9c188973126e893250b881f20e8811dca06c223c23402b06f7a1f2e995797228" || { echo "oreon: Source0 SHA256 mismatch for network-uri-2.6.4.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 cp -bp %{SOURCE1} %{pkg_name}.cabal

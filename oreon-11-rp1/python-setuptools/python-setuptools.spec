@@ -34,25 +34,29 @@ Summary:        Easily build and distribute Python packages
 # the setuptools logo is MIT
 License:        MIT AND Apache-2.0 AND (BSD-2-Clause OR Apache-2.0) AND LGPL-3.0-only
 URL:            https://pypi.python.org/pypi/%{srcname}
-Source0:        %{pypi_source %{srcname} %{version}}
+Source0:        https://files.pythonhosted.org/packages/source/s/setuptools/setuptools-80.10.2.tar.gz
 
 # Some test deps are optional and either not desired or not available in Fedora, thus this patch removes them.
-Patch:          Remove-optional-or-unpackaged-test-deps.patch
+Patch:        https://github.com/pypa/setuptools/pull/5194.patch
 
 # The `setup.py install` deprecation notice might be confusing for RPM packagers
 # adjust it, but only when $RPM_BUILD_ROOT is set
-Patch:          Adjust-the-setup.py-install-deprecation-message.patch
+Patch:        https://github.com/pypa/setuptools/pull/5194.patch
 
 # setuptools rewrites all shebangs to "#!python" which breaks workflows
 # where no external installers (usually rewriting this) are involved.
 # https://github.com/pypa/setuptools/issues/4883
 # - Resolution: deprecated functionality won't be fixed.
 # brp-mangle-shebang script cannot mangle this and fails for many pkgs.
-Patch:          Revert-Always-rewrite-a-Python-shebang-to-python.patch
+Patch:        https://github.com/pypa/setuptools/pull/5194.patch
 
 # Avoid using (deprecated in Python 3.15) json.__version__ in tests,
 # merged upstream.
 Patch:          https://github.com/pypa/setuptools/pull/5194.patch
+# oreon url source checksums begin
+%global source0_sha256 8b0e9d10c784bf7d262c4e5ec5d4ec94127ce206e8738f29a437945fbc219b70
+%global source0_file setuptools-80.10.2.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -134,6 +138,9 @@ A Python wheel of setuptools to use with venv.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/setuptools-80.10.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b0e9d10c784bf7d262c4e5ec5d4ec94127ce206e8738f29a437945fbc219b70" || { echo "oreon: Source0 SHA256 mismatch for setuptools-80.10.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{srcname}-%{version}
 %if %{without bootstrap}
 # If we don't have setuptools installed yet, we use the pre-generated .egg-info

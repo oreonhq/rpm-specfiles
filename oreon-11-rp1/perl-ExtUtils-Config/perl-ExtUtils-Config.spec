@@ -4,7 +4,12 @@ Release:	4%{?dist}
 Summary:	A wrapper for perl's configuration
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/ExtUtils-Config
-Source0:	https://cpan.metacpan.org/modules/by-module/ExtUtils/ExtUtils-Config-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-Config-0.010.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 82e7e4e90cbe380e152f5de6e3e403746982d502dd30197a123652e46610c66d
+%global source0_file ExtUtils-Config-0.010.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
@@ -33,6 +38,9 @@ Requires:	perl(Data::Dumper)
 ExtUtils::Config is an abstraction around the %%Config hash.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ExtUtils-Config-0.010.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "82e7e4e90cbe380e152f5de6e3e403746982d502dd30197a123652e46610c66d" || { echo "oreon: Source0 SHA256 mismatch for ExtUtils-Config-0.010.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n ExtUtils-Config-%{version}
 
 %build

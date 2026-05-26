@@ -14,6 +14,10 @@ URL:            https://invent.kde.org/frameworks/%{framework}
 
 Source0: http://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1: http://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 7e9d35863e2227e37623f390f0e53a216931cd17920582cfc8282a42e04f16e2
+%global source0_file kimageformats-6.24.0.tar.xz
+# oreon url source checksums end
 
 # upstream patches
 
@@ -59,6 +63,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kimageformats-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7e9d35863e2227e37623f390f0e53a216931cd17920582cfc8282a42e04f16e2" || { echo "oreon: Source0 SHA256 mismatch for kimageformats-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 %build

@@ -21,8 +21,13 @@ Release:        2%{?dist}
 # GPL-1.0-or-later OR Artistic-1.0-Perl: the rest of the distribution
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND CC0-1.0 AND LicenseRef-Public-Domain
 URL:            https://metacpan.org/release/Test-Simple
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Simple-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Simple-1.302219.tar.gz
+
 Patch0:         Test-Simple-1.302200-add_perl.patch
+# oreon url source checksums begin
+%global source0_sha256 420600911230de768427f6646758d89b6c07977b565e5b40118e5b8440dbb30b
+%global source0_file Test-Simple-1.302219.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -154,6 +159,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Simple-1.302219.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "420600911230de768427f6646758d89b6c07977b565e5b40118e5b8440dbb30b" || { echo "oreon: Source0 SHA256 mismatch for Test-Simple-1.302219.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Simple-%{version}
 
 # Help generators to recognize Perl scripts

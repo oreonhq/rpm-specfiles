@@ -14,6 +14,10 @@ License:	CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:		https://invent.kde.org/frameworks/%{framework}
 Source0:	https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:	https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 be8ce0c791900a1f55e9973bf5faefbe172740424ac9f254ba541552ba3ccb06
+%global source0_file kidletime-6.24.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	cmake
 BuildRequires:	gcc-c++
@@ -61,6 +65,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kidletime-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "be8ce0c791900a1f55e9973bf5faefbe172740424ac9f254ba541552ba3ccb06" || { echo "oreon: Source0 SHA256 mismatch for kidletime-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 %build

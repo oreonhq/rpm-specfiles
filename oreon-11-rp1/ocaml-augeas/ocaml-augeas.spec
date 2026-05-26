@@ -11,6 +11,10 @@ URL:            https://people.redhat.com/~rjones/augeas/
 Source0:        https://download.libguestfs.org/ocaml-augeas/ocaml-augeas-%{version}.tar.gz
 Source1:        https://download.libguestfs.org/ocaml-augeas/ocaml-augeas-%{version}.tar.gz.sig
 Source2:        libguestfs.keyring
+# oreon url source checksums begin
+%global source0_sha256 ee3899c85d5b22cdcc659183e571add0980725a8a705a9fe7bf53ddc2ba2dd63
+%global source0_file ocaml-augeas-0.7.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  ocaml >= 3.09.0
@@ -37,6 +41,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ocaml-augeas-0.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ee3899c85d5b22cdcc659183e571add0980725a8a705a9fe7bf53ddc2ba2dd63" || { echo "oreon: Source0 SHA256 mismatch for ocaml-augeas-0.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

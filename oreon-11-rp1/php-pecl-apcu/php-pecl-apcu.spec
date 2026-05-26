@@ -28,10 +28,14 @@ Release:        3%{?dist}
 %forgemeta
 URL:            %{forgeurl}
 
-Source0:        %{forgesource}
+Source0:        https://github.com/krakjoe/apcu/archive/v5.1.28/apcu-5.1.28.tar.gz
 Source1:        %{pecl_name}.ini
 Source2:        %{pecl_name}-panel.conf
 Source3:        %{pecl_name}.conf.php
+# oreon url source checksums begin
+%global source0_sha256 0e60ba9d0fa4021c57a70c071f3d8f71de236275d084e560d5959fec4edd8c32
+%global source0_file apcu-5.1.28.tar.gz
+# oreon url source checksums end
 
 ExcludeArch:    %{ix86}
 
@@ -106,6 +110,9 @@ configuration, available on http://localhost/apcu-panel/
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/apcu-5.1.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0e60ba9d0fa4021c57a70c071f3d8f71de236275d084e560d5959fec4edd8c32" || { echo "oreon: Source0 SHA256 mismatch for apcu-5.1.28.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %forgesetup
 
 # Sanity check, really often broken

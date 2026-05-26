@@ -12,6 +12,10 @@ Source:         https://download.gnome.org/sources/%{name}/1.86/%{name}-%{versio
 # Workaround for Python 3.12 compatibility
 # https://bugzilla.redhat.com/show_bug.cgi?id=2208966
 Patch:          workaround.patch
+# oreon url source checksums begin
+%global source0_sha256 920d1a3fcedeadc32acff95c2e203b319039dd4b4a08dd1a2dfd283d19c0b9ae
+%global source0_file gobject-introspection-1.86.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  bison
 BuildRequires:  flex
@@ -51,6 +55,9 @@ Requires:       python3-setuptools
 Libraries and headers for gobject-introspection
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gobject-introspection-1.86.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "920d1a3fcedeadc32acff95c2e203b319039dd4b4a08dd1a2dfd283d19c0b9ae" || { echo "oreon: Source0 SHA256 mismatch for gobject-introspection-1.86.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 mv giscanner/ast.py giscanner/gio_ast.py
 

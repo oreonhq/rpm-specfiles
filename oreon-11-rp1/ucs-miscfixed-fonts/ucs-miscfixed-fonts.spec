@@ -12,6 +12,10 @@ License: LicenseRef-Fedora-Public-Domain
 URL: http://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html
 Source0: http://www.cl.cam.ac.uk/~mgk25/download/ucs-fonts.tar.gz
 Source1: 66-ucs-miscfixed.conf
+# oreon url source checksums begin
+%global source0_sha256 702fd1cdef9123e1871622a897727977c0933a420c50c94198f5bb22de8f0f8a
+%global source0_file ucs-fonts.tar.gz
+# oreon url source checksums end
 BuildArch: noarch
 Summary: Selected set of bitmap fonts
 BuildRequires: fontpackages-devel
@@ -31,6 +35,9 @@ Conflicts:      ucs-miscfixed-fonts
 This package contains the fonts in OpenType format.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ucs-fonts.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "702fd1cdef9123e1871622a897727977c0933a420c50c94198f5bb22de8f0f8a" || { echo "oreon: Source0 SHA256 mismatch for ucs-fonts.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c
 rm helvR12.bdf
 

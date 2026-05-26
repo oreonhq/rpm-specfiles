@@ -348,6 +348,10 @@ Patch13: glibc-fedora-localedata-rh61908.patch
 Patch17: glibc-cs-path.patch
 Patch23: glibc-python3.patch
 Patch24: glibc-rh2426825.patch
+# oreon url source checksums begin
+%global source0_sha256 d9c86c6b5dbddb43a3e08270c5844fc5177d19442cf5b8df4be7c07cd5fa3831
+%global source0_file glibc-2.43.tar.xz
+# oreon url source checksums end
 
 ##############################################################################
 # Continued list of core "glibc" package information:
@@ -1186,6 +1190,9 @@ distribution build enviroment. Regular users can install both 32-bit and
 # Prepare for the build.
 ##############################################################################
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/glibc-2.43.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d9c86c6b5dbddb43a3e08270c5844fc5177d19442cf5b8df4be7c07cd5fa3831" || { echo "oreon: Source0 SHA256 mismatch for glibc-2.43.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{glibcsrcdir} -p1
 
 ##############################################################################

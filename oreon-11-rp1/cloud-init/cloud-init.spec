@@ -11,13 +11,17 @@ Summary:        Cloud instance init scripts
 License:        Apache-2.0 OR GPL-3.0-only
 URL:            https://github.com/canonical/cloud-init
 
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/canonical/cloud-init/archive/25.3/cloud-init-25.3.tar.gz
 Source1:        cloud-init-tmpfiles.conf
 
 # https://github.com/canonical/cloud-init/pull/6423
 # Fixes systemd dependency cycle on Fedora by adding DefaultDependencies=no
 # and including Fedora in distribution-specific conditional blocks
 Patch:          0001-fix-avoid-dependency-cycle-on-Fedora.patch
+# oreon url source checksums begin
+%global source0_sha256 a6c0a28a4055d5cde35ac9249ad0596ee6aa10f0a29bd88a6e197d29adee0a3c
+%global source0_file cloud-init-25.3.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -75,6 +79,9 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cloud-init-25.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a6c0a28a4055d5cde35ac9249ad0596ee6aa10f0a29bd88a6e197d29adee0a3c" || { echo "oreon: Source0 SHA256 mismatch for cloud-init-25.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Removing shebang manually because of rpmlint, will update upstream later

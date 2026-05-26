@@ -11,6 +11,10 @@ Source:         https://github.com/httplib2/httplib2/archive/v%{version}/%{srcna
 # Patch to use the Fedora ca certs instead of the bundled ones
 #
 Patch1:         python-%{srcname}.certfile.patch
+# oreon url source checksums begin
+%global source0_sha256 f0463bc04d2546325eaba1da15f8e45763ed2a52b47c0331c721f1c85470c9ca
+%global source0_file httplib2-0.22.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -35,6 +39,9 @@ BuildRequires:  python3-pyparsing
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/httplib2-0.22.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f0463bc04d2546325eaba1da15f8e45763ed2a52b47c0331c721f1c85470c9ca" || { echo "oreon: Source0 SHA256 mismatch for httplib2-0.22.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{srcname}-%{version}
 
 # Drop coverage

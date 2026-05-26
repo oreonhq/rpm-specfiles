@@ -23,6 +23,10 @@ Source0:        https://github.com/flatpak/flatpak/releases/download/%{version}/
 %if 0%{?oreon}
 # Add Flathub repository
 Source1:        flatpak-add-flathub-repo.service
+# oreon url source checksums begin
+%global source0_sha256 363e95339739f8388b4a51a9431cc979461ee47942f9fb39920202147b01c1a0
+%global source0_file flatpak-1.17.2.tar.xz
+# oreon url source checksums end
 %endif
 
 # ostree not on i686 for RHEL 10
@@ -148,6 +152,9 @@ This package contains installed tests for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/flatpak-1.17.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "363e95339739f8388b4a51a9431cc979461ee47942f9fb39920202147b01c1a0" || { echo "oreon: Source0 SHA256 mismatch for flatpak-1.17.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

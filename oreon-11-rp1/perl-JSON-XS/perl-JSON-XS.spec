@@ -5,7 +5,12 @@ Version:        4.04
 Release:        2%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/JSON-XS
-Source0:        https://cpan.metacpan.org/modules/by-module/JSON/JSON-XS-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/JSON-XS-4.04.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8eff1e9f304c5625b59ab7b42258415f6d3e3681c1ddab6b725518a018a7f5e0
+%global source0_file JSON-XS-4.04.tar.gz
+# oreon url source checksums end
+
 # Build
 BuildRequires:  coreutils
 BuildRequires:  gcc
@@ -56,6 +61,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/JSON-XS-4.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8eff1e9f304c5625b59ab7b42258415f6d3e3681c1ddab6b725518a018a7f5e0" || { echo "oreon: Source0 SHA256 mismatch for JSON-XS-4.04.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n JSON-XS-%{version}
 
 sed -i 's/\r//' t/*

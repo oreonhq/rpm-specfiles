@@ -11,6 +11,10 @@ Release:	4%{?dist}
 License:	MIT
 URL:		https://metacpan.org/release/Try-Tiny
 Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Try-Tiny-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ef2d6cab0bad18e3ab1c4e6125cc5f695c7e459899f512451c8fa3ef83fa7fc0
+%global source0_file Try-Tiny-0.32.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -54,6 +58,9 @@ problematic, and the additional catch filtering uses Moose type constraints,
 which may not be desirable either.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Try-Tiny-0.32.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ef2d6cab0bad18e3ab1c4e6125cc5f695c7e459899f512451c8fa3ef83fa7fc0" || { echo "oreon: Source0 SHA256 mismatch for Try-Tiny-0.32.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Try-Tiny-%{version}
 
 %build

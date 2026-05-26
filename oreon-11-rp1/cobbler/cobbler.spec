@@ -32,6 +32,10 @@ Patch2:         cobbler-reposync.patch
 # Use systemctl is-active to prevent some SELinux denials checking service status
 # https://bugzilla.redhat.com/show_bug.cgi?id=2353898
 Patch3:         https://github.com/cobbler/cobbler/pull/3945.patch
+# oreon url source checksums begin
+%global source0_sha256 942b55da21586dde7b1467ce9970a435296ed78dfc193f785f1fe9450ca69ca6
+%global source0_file cobbler-3.3.7.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires: make
@@ -128,6 +132,9 @@ Dockerfiles and scripts to setup testing containers.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cobbler-3.3.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "942b55da21586dde7b1467ce9970a435296ed78dfc193f785f1fe9450ca69ca6" || { echo "oreon: Source0 SHA256 mismatch for cobbler-3.3.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 mkdir -p selinux
 cp -p %{SOURCE2} %{SOURCE3} %{SOURCE4} selinux/

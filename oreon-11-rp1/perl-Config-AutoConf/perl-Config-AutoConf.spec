@@ -10,6 +10,10 @@ Summary:        A module to implement some of AutoConf macros in pure Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Config-AutoConf
 Source0:        https://cpan.metacpan.org/authors/id/A/AM/AMBS/Config-AutoConf-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 bb57a958ef49d3f7162276dae14a7bd5af43fd1d8513231af35d665459454023
+%global source0_file Config-AutoConf-0.320.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  gcc
@@ -53,6 +57,9 @@ This module simulates some of the tasks autoconf macros do.  To detect
 a command, a library and similar.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Config-AutoConf-0.320.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bb57a958ef49d3f7162276dae14a7bd5af43fd1d8513231af35d665459454023" || { echo "oreon: Source0 SHA256 mismatch for Config-AutoConf-0.320.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Config-AutoConf-%{version}
 
 %build

@@ -11,6 +11,10 @@ Release: 32%{?dist}
 # Following links are dead now
 # don't report any bugs
 Source: http://www.runasimipi.org/quh_BO-pack.zip
+# oreon url source checksums begin
+%global source0_sha256 d4f4b2033b09c4bc784e4fbe0a395932786938d6f5f8e278b8fb64f641899434
+%global source0_file quh_BO-pack.zip
+# oreon url source checksums end
 URL: http://www.runasimipi.org/blanco-en.php?file=desarrollar-orto
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -22,6 +26,9 @@ Supplements: (hunspell and langpacks-quh)
 Quechua South Bolivia hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/quh_BO-pack.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d4f4b2033b09c4bc784e4fbe0a395932786938d6f5f8e278b8fb64f641899434" || { echo "oreon: Source0 SHA256 mismatch for quh_BO-pack.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n quh_BO-pack
 unzip -qq quh_BO.zip
 

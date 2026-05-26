@@ -19,6 +19,10 @@ Summary:        %{summary}
 License:        GPL-3.0-or-later
 URL:            https://github.com/latchset/keycloak-httpd-client-install
 Source0:        https://github.com/latchset/keycloak-httpd-client-install/releases/download/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 d68cf4307be116611a3956d55dc95d008e62f0d6c44e4f48d373df862d3b4db3
+%global source0_file keycloak-httpd-client-install-1.3.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 %if %{with python2}
@@ -80,6 +84,9 @@ of a Keycloak server.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/keycloak-httpd-client-install-1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d68cf4307be116611a3956d55dc95d008e62f0d6c44e4f48d373df862d3b4db3" || { echo "oreon: Source0 SHA256 mismatch for keycloak-httpd-client-install-1.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version} -p1
 
 %build

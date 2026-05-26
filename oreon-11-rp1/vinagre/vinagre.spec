@@ -28,6 +28,10 @@ Patch1:         %{name}-rdp-let-cancel-auth-dialog.patch
 # https://gitlab.gnome.org/GNOME/vinagre/merge_requests/7
 Patch2:         fix-appstream-data.patch
 Patch3: vinagre-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 cd1cdbacca25c8d1debf847455155ee798c3e67a20903df8b228d4ece5505e82
+%global source0_file vinagre-3.22.0.tar.xz
+# oreon url source checksums end
 
 %if 0%{?with_spice}
 BuildRequires:  pkgconfig(spice-client-gtk-3.0)
@@ -74,6 +78,9 @@ Apart from the VNC protocol, vinagre supports Spice and RDP.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vinagre-3.22.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cd1cdbacca25c8d1debf847455155ee798c3e67a20903df8b228d4ece5505e82" || { echo "oreon: Source0 SHA256 mismatch for vinagre-3.22.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

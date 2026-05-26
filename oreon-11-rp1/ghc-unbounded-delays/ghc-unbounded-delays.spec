@@ -14,6 +14,10 @@ License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/unbounded-delays
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 59ad7e53bfe32ffbf0e703b31490d41d14c70e4745ed49e8adf592ed68dd6185
+%global source0_file unbounded-delays-0.1.1.1.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -68,6 +72,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/unbounded-delays-0.1.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "59ad7e53bfe32ffbf0e703b31490d41d14c70e4745ed49e8adf592ed68dd6185" || { echo "oreon: Source0 SHA256 mismatch for unbounded-delays-0.1.1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

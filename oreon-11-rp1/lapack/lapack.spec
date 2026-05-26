@@ -22,6 +22,10 @@ Source4: http://www.netlib.org/lapack/lapackqref.ps
 Source5: http://www.netlib.org/blas/blasqr.ps
 # https://github.com/Reference-LAPACK/lapack/pull/959
 Patch0: lapack-3.12.0-fix-dmd-issues.patch
+# oreon url source checksums begin
+%global source1_sha256 f5991ee1ab5402ba6fa70bed7a292ea3e4507a0cc78f575d9eff72d561597cb8
+%global source1_file manpages.tgz
+# oreon url source checksums end
 BuildRequires: gcc-gfortran, gawk
 BuildRequires: make, cmake
 # There isn't any c++ code here, but cmake checks for a working c++ compiler?
@@ -121,6 +125,9 @@ This build has 64bit INTEGER support and a symbol name suffix.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/manpages.tgz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f5991ee1ab5402ba6fa70bed7a292ea3e4507a0cc78f575d9eff72d561597cb8" || { echo "oreon: Source1 SHA256 mismatch for manpages.tgz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 %setup -q -n %{name}-%{version} -D -T -a1
 %patch -P0 -p1

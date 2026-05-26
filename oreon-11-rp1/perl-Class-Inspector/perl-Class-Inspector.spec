@@ -5,6 +5,10 @@ Summary:	Get information about a class and its structure
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Class-Inspector
 Source0:	https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Class-Inspector-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 cc295d23a472687c24489d58226ead23b9fdc2588e522f0b5f0747741700694e
+%global source0_file Class-Inspector-1.36.tar.gz
+# oreon url source checksums end
 
 BuildArch: noarch
 
@@ -25,6 +29,9 @@ wizardry, or strange and unusual looking code. Class::Inspector attempts to
 provide an easier, more friendly interface to this information.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Class-Inspector-1.36.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cc295d23a472687c24489d58226ead23b9fdc2588e522f0b5f0747741700694e" || { echo "oreon: Source0 SHA256 mismatch for Class-Inspector-1.36.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Class-Inspector-%{version}
 
 %build

@@ -11,7 +11,12 @@ Release:        3%{?dist}
 Summary:        Override subroutines in a module for unit testing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-MockModule
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-MockModule-v%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/G/GF/GFRANKS/Test-MockModule-v0.180.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 390e60361d2c1c404463a46d496681b05458d50d811ee99282992b9b61ed6cf6
+%global source0_file Test-MockModule-v0.180.0.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -48,6 +53,9 @@ happens automatically when all MockModule objects for the given module go out
 of scope, or when you unmock() the subroutine.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-MockModule-v0.180.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "390e60361d2c1c404463a46d496681b05458d50d811ee99282992b9b61ed6cf6" || { echo "oreon: Source0 SHA256 mismatch for Test-MockModule-v0.180.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-MockModule-v%{version}
 
 %build

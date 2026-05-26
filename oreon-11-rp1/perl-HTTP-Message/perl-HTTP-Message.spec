@@ -9,6 +9,10 @@ Summary:        HTTP style message
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND CC0-1.0
 URL:            https://metacpan.org/release/HTTP-Message
 Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTTP-Message-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 82b79ce680251045c244ee059626fecbf98270bed1467f0175ff5ea91071437e
+%global source0_file HTTP-Message-7.01.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -97,6 +101,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/HTTP-Message-7.01.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "82b79ce680251045c244ee059626fecbf98270bed1467f0175ff5ea91071437e" || { echo "oreon: Source0 SHA256 mismatch for HTTP-Message-7.01.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n HTTP-Message-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

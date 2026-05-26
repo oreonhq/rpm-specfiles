@@ -10,6 +10,10 @@ Source0:        http://downloads.sourceforge.net/gmerlin/gavl-%{version}.tar.gz
 Patch1:         gavl-1.1.1-system_libgdither.patch
 Patch2: gavl-configure-c99.patch
 Patch3: gavl-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 51aaac41391a915bd9bad07710957424b046410a276e7deaff24a870929d33ce
+%global source0_file gavl-1.4.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  libtool
 
@@ -45,6 +49,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gavl-1.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "51aaac41391a915bd9bad07710957424b046410a276e7deaff24a870929d33ce" || { echo "oreon: Source0 SHA256 mismatch for gavl-1.4.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P1 -p1 -b .gdither
 %patch -P2 -p1

@@ -8,9 +8,15 @@ Release:        9%{?dist}
 Summary:        Library for encoding and decoding AVIF images
 License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/AOMediaCodec/libavif/archive/v1.3.0/libavif-1.3.0.tar.gz
 # Vendored libargparse tarball so we never use FetchContent/git in mock (see ext/libargparse.patch)
 Source1:        https://github.com/kmurray/libargparse/archive/%{libargparse_commit}/libargparse-%{libargparse_commit}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0a545e953cc049bf5bcf4ee467306a2f113a75110edf59e61248873101cd26c1
+%global source0_file libavif-1.3.0.tar.gz
+%global source1_sha256 7727b0498851e5b6a6fcd734eb667a8a231897e2c86a357aec51cc0664813060
+%global source1_file libargparse-ee74d1b53bd680748af14e737378de57e2a0a954.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -43,6 +49,10 @@ Summary:        AVIF encoder and decoder command line tools
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libavif-1.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0a545e953cc049bf5bcf4ee467306a2f113a75110edf59e61248873101cd26c1" || { echo "oreon: Source0 SHA256 mismatch for libavif-1.3.0.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/libargparse-ee74d1b53bd680748af14e737378de57e2a0a954.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7727b0498851e5b6a6fcd734eb667a8a231897e2c86a357aec51cc0664813060" || { echo "oreon: Source1 SHA256 mismatch for libargparse-ee74d1b53bd680748af14e737378de57e2a0a954.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 mkdir -p ext
 tar -xzf %{SOURCE1} -C ext

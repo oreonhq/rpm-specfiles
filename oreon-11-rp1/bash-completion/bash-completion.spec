@@ -13,6 +13,10 @@ Summary:        Programmable completion for Bash
 License:        GPL-2.0-or-later
 URL:            https://github.com/scop/bash-completion
 Source0:        https://github.com/scop/bash-completion/releases/download/%{upstream_version}/%{name}-%{upstream_version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 dd9d825e496435fb3beba3ae7bea9f77e821e894667d07431d1d4c8c570b9e58
+%global source0_file bash-completion-2.17.0.tar.xz
+# oreon url source checksums end
 
 BuildArch:      noarch
 %if %{with tests}
@@ -38,6 +42,9 @@ Requires: %{name} =  %{epoch}:%{version}-%{release}
 This package contains development files for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/bash-completion-2.17.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dd9d825e496435fb3beba3ae7bea9f77e821e894667d07431d1d4c8c570b9e58" || { echo "oreon: Source0 SHA256 mismatch for bash-completion-2.17.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{upstream_version} -p1
 
 %build

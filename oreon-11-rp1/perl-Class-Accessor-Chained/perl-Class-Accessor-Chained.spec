@@ -6,6 +6,10 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Accessor-Chained
 Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Class-Accessor-Chained-%{version}.tar.gz
 Patch0:         Class-Accessor-Chained-0.01-pod.patch
+# oreon url source checksums begin
+%global source0_sha256 a5bf49d3804f83ad25a1b16f327d14d4cbee2270132104b28705031dbccc34d2
+%global source0_file Class-Accessor-Chained-0.01.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  /usr/bin/pod2text
 BuildRequires:  make
@@ -27,6 +31,9 @@ This module subclasses Class::Accessor in order to provide the same
 mk_accessors interface.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Class-Accessor-Chained-0.01.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a5bf49d3804f83ad25a1b16f327d14d4cbee2270132104b28705031dbccc34d2" || { echo "oreon: Source0 SHA256 mismatch for Class-Accessor-Chained-0.01.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Class-Accessor-Chained-%{version}
 
 # Fix broken POD in README (#914250)

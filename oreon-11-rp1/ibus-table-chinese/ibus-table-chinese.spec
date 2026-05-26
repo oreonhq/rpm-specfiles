@@ -10,6 +10,10 @@ Summary(zh_TW): 中文碼表輸入法
 License:        GPL-3.0-or-later
 URL:            https://github.com/mike-fabian/ibus-table-chinese
 Source0:        https://github.com/mike-fabian/ibus-table-chinese/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 341aa937f258c600fb748d0a998dc4bbdca4b54a594d66cbe61e84bbbeb1b784
+%global source0_file 1.8.14.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake >= 3.0.0
 BuildRequires:  ibus-table-devel >= 1.10.0
@@ -298,6 +302,9 @@ Requires:       %{name} = %{version}-%{release}
 Cantonese input method based on yale romanization
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/1.8.14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "341aa937f258c600fb748d0a998dc4bbdca4b54a594d66cbe61e84bbbeb1b784" || { echo "oreon: Source0 SHA256 mismatch for 1.8.14.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 
 %build

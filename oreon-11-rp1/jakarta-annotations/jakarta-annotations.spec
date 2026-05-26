@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/jakartaee/common-annotations-api/archive/%{version}/common-annotations-api-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 fbb00059662432e2af31e63abe02cb52be35dbca7befbe32626ae5cd58f289ff
+%global source0_file common-annotations-api-1.3.5.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -28,6 +32,9 @@ common semantic concepts that enable a declarative style of
 programming that applies across a variety of Java technologies.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/common-annotations-api-1.3.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fbb00059662432e2af31e63abe02cb52be35dbca7befbe32626ae5cd58f289ff" || { echo "oreon: Source0 SHA256 mismatch for common-annotations-api-1.3.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 # remove unnecessary dependency on parent POM

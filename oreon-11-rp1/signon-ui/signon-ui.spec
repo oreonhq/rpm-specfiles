@@ -12,6 +12,10 @@ URL:            https://launchpad.net/signon-ui
 
 # Source0:      https://launchpad.net/signon-ui/trunk/%{version}/+download/signon-ui-%{version}.tar.bz2
 Source0:        https://gitlab.com/accounts-sso/%{name}/-/archive/%{commit0}/%{name}-%{commit0}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 aa5577db9db2727ef9bc3f7e490b2f316e7cfc153c371c5a8586ef1be2ab4099
+%global source0_file signon-ui-eef943f0edf3beee8ecb85d4a9dae3656002fc24.tar.bz2
+# oreon url source checksums end
 
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}
 
@@ -41,6 +45,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/signon-ui-eef943f0edf3beee8ecb85d4a9dae3656002fc24.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aa5577db9db2727ef9bc3f7e490b2f316e7cfc153c371c5a8586ef1be2ab4099" || { echo "oreon: Source0 SHA256 mismatch for signon-ui-eef943f0edf3beee8ecb85d4a9dae3656002fc24.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{commit0}
 
 

@@ -42,7 +42,11 @@ Epoch: 102
 Version: 1.26
 Release: %autorelease
 URL: https://github.com/containers/%{name}
-Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.zst
+Source0:        https://github.com/containers/crun/releases/download/1.26/crun-1.26.tar.zst
+# oreon url source checksums begin
+%global source0_sha256 8218cf0f59c6cf2931b4ba8d19dbab1efc1557cbb94662903d17d6787442244d
+%global source0_file crun-1.26.tar.zst
+# oreon url source checksums end
 License: GPL-2.0-only
 %if %{defined golang_arches_future}
 ExclusiveArch: %{golang_arches_future}
@@ -106,6 +110,9 @@ Recommends: wasmedge
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/crun-1.26.tar.zst; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8218cf0f59c6cf2931b4ba8d19dbab1efc1557cbb94662903d17d6787442244d" || { echo "oreon: Source0 SHA256 mismatch for crun-1.26.tar.zst" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -Sgit -n %{name}-%{version}
 
 %build

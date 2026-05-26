@@ -4,7 +4,12 @@ Release:        53%{?dist}
 Summary:        Format times in .beat notation 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Format-IBeat            
-Source0:        https://cpan.metacpan.org/modules/by-module/DateTime/DateTime-Format-IBeat-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/EM/EMARTIN/DateTime-Format-IBeat-0.161.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1873a67ea73129a915e1e71cf50404ebee871ea11964620c020796f18a42d5cb
+%global source0_file DateTime-Format-IBeat-0.161.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch 
 # Build
 BuildRequires:  coreutils
@@ -35,6 +40,9 @@ seconds. That means that 12 noon in the old time system is the equivalent of
 500 Swatch .beats.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DateTime-Format-IBeat-0.161.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1873a67ea73129a915e1e71cf50404ebee871ea11964620c020796f18a42d5cb" || { echo "oreon: Source0 SHA256 mismatch for DateTime-Format-IBeat-0.161.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DateTime-Format-IBeat-%{version}
 
 %build

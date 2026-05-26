@@ -5,6 +5,10 @@ Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/hughsie/libgusb
 Source0:   https://github.com/hughsie/libgusb/releases/download/%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 9df5ef301d6a4b361002aa52cce1165a87a89744055879bdbab31e7e86f1e846
+%global source0_file libgusb-0.4.9.tar.xz
+# oreon url source checksums end
 
 BuildRequires: glib2-devel >= 2.38.0
 BuildRequires: json-glib-devel
@@ -28,6 +32,9 @@ Requires: %{name} = %{version}-%{release}
 GLib headers and libraries for gusb.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libgusb-0.4.9.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9df5ef301d6a4b361002aa52cce1165a87a89744055879bdbab31e7e86f1e846" || { echo "oreon: Source0 SHA256 mismatch for libgusb-0.4.9.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

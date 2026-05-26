@@ -16,6 +16,10 @@ Patch0:         %{name}-thirdparty.patch
 
 # Do not forcibly disable RTTI
 Patch1:         %{name}-do-not-disable-rtti.patch
+# oreon url source checksums begin
+%global source0_sha256 90f74bc1fbf78a6c56b3c4a082a05103b3a56bb17bca1a27e052ea11723292dc
+%global source0_file snappy-1.2.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -41,6 +45,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/snappy-1.2.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "90f74bc1fbf78a6c56b3c4a082a05103b3a56bb17bca1a27e052ea11723292dc" || { echo "oreon: Source0 SHA256 mismatch for snappy-1.2.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 

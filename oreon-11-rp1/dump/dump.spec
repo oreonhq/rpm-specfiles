@@ -31,6 +31,10 @@ Provides:      dump-static
 
 # No dump package in RHEL (restore remains)
 Patch101:      dump-replacement.patch
+# oreon url source checksums begin
+%global source0_sha256 4042997bdfed463c7a0bf8788229718b9c692ce2cfafe46ea54d478bcd663591
+%global source0_file dump-0.4b52.tar.gz
+# oreon url source checksums end
 
 %if 0%{?rhel}
 %description
@@ -56,6 +60,9 @@ restoring filesystems after backups.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dump-0.4b52.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4042997bdfed463c7a0bf8788229718b9c692ce2cfafe46ea54d478bcd663591" || { echo "oreon: Source0 SHA256 mismatch for dump-0.4b52.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n dump-%{DUMP_VERSION}
 
 %if 0%{?rhel}

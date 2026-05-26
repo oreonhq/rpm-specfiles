@@ -26,6 +26,10 @@ Conflicts: passivetex < 1.21
 
 BuildArch: noarch
 Source0: https://github.com/docbook/xslt10-stylesheets/releases/download/release%2F%{version}/docbook-xsl-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 316524ea444e53208a2fb90eeb676af755da96e1417835ba5f5eb719c81fa371
+%global source0_file docbook-xsl-1.79.2.tar.bz2
+# oreon url source checksums end
 
 %description
 These XSL namespace aware stylesheets allow you to transform any
@@ -54,6 +58,9 @@ This package contains Java extensions for XSL namespace aware stylesheets.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/docbook-xsl-1.79.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "316524ea444e53208a2fb90eeb676af755da96e1417835ba5f5eb719c81fa371" || { echo "oreon: Source0 SHA256 mismatch for docbook-xsl-1.79.2.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n docbook-xsl-%{version}
 
 # Remove .gitignore files

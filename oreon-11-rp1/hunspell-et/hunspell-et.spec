@@ -10,6 +10,10 @@ Summary: Estonian hunspell dictionaries
 Version: 0.%{upstreamid}
 Release: 38%{?dist}
 Source: http://www.meso.ee/~jjpp/speller/ispell-et_%{upstreamid}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4aea338eef90a977134e81e075277912938ce1a97344d7a0dbf238e274a86116
+%global source0_file ispell-et_20030606.tar.gz
+# oreon url source checksums end
 URL: http://www.meso.ee/~jjpp/speller/
 License: LGPL-2.1-or-later AND LPPL-1.3a
 BuildArch: noarch
@@ -31,6 +35,9 @@ Supplements: (hyphen and langpacks-et)
 Estonian hyphenation rules.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ispell-et_20030606.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4aea338eef90a977134e81e075277912938ce1a97344d7a0dbf238e274a86116" || { echo "oreon: Source0 SHA256 mismatch for ispell-et_20030606.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n ispell-et-%{upstreamid}
 
 %build

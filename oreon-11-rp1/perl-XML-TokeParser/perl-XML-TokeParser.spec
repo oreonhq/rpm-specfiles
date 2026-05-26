@@ -6,6 +6,10 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:            https://metacpan.org/release/XML-TokeParser
 Source0:        https://cpan.metacpan.org/authors/id/P/PO/PODMASTER/XML-TokeParser-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8539b4f98436b1a6d088341a8b4530b7922acd651f3f29377f8b1948c7e2d7c2
+%global source0_file XML-TokeParser-0.05.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  make
@@ -30,6 +34,9 @@ a procedural interface to HTML::Parser. XML::TokeParser splits its XML
 input up into "tokens," each corresponding to an XML::Parser event.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-TokeParser-0.05.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8539b4f98436b1a6d088341a8b4530b7922acd651f3f29377f8b1948c7e2d7c2" || { echo "oreon: Source0 SHA256 mismatch for XML-TokeParser-0.05.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-TokeParser-%{version}
 find . -type f | xargs sed -i -e 's/\r//'
 find . -type f | xargs chmod 0644

@@ -8,6 +8,10 @@ URL:            https://gitlab.com/accounts-sso/accounts-qml-module
 # https://gitlab.com/accounts-sso/accounts-qml-module/-/commit/05e79ebbbf3784a87f72b7be571070125c10dfe3
 %global gitrev 05e79ebbbf3784a87f72b7be571070125c10dfe3
 Source0:        https://gitlab.com/accounts-sso/accounts-qml-module/-/archive/%{gitrev}/accounts-qml-module-%{gitrev}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 8df325b97db47a414fe38cbf5ff29701aa69dd57d6aaa1660d4e80879d844f8c
+%global source0_file accounts-qml-module-05e79ebbbf3784a87f72b7be571070125c10dfe3.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  libaccounts-qt6-devel
@@ -41,6 +45,9 @@ Qt 6 QML plugin installed under qml/SSO.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/accounts-qml-module-05e79ebbbf3784a87f72b7be571070125c10dfe3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8df325b97db47a414fe38cbf5ff29701aa69dd57d6aaa1660d4e80879d844f8c" || { echo "oreon: Source0 SHA256 mismatch for accounts-qml-module-05e79ebbbf3784a87f72b7be571070125c10dfe3.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 # GitLab commit archive unpacks as accounts-qml-module-<full-hash>, not VERSION_ tag path
 %autosetup -n accounts-qml-module-%{gitrev} -p1
 

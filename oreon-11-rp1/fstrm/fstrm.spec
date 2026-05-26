@@ -14,6 +14,10 @@ Patch1: fstrm-0.6.1-Fix-deadcode-and-check-return-code.patch
 Patch2: fstrm-0.6.1-Invalid-dereference.patch
 Patch3: fstrm-0.6.1-Possible-resource-leak-fix.patch
 Patch4: fstrm-0.6.1-Fix-CLANG_WARNING.patch
+# oreon url source checksums begin
+%global source0_sha256 bca4ac1e982a2d923ccd24cce2c98f4ceeed5009694430f73fc0dcebca8f098f
+%global source0_file fstrm-0.6.1.tar.gz
+# oreon url source checksums end
 BuildRequires: autoconf automake libtool
 BuildRequires: libevent-devel
 # Upstream repository without a single release
@@ -63,6 +67,9 @@ The fstrm-doc package contains Doxygen generated API documentation for
 fstrm library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fstrm-0.6.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bca4ac1e982a2d923ccd24cce2c98f4ceeed5009694430f73fc0dcebca8f098f" || { echo "oreon: Source0 SHA256 mismatch for fstrm-0.6.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # regenerated build scripts to:
 # - remove RPATHs

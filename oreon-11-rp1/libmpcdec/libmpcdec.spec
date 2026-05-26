@@ -32,6 +32,10 @@ Patch:   0013-mpc2sv8-fix-a-segfault-caused-by-commit-r476.patch
 
 ## downstream patches
 Patch:  r475-cmake.patch
+# oreon url source checksums begin
+%global source0_sha256 a4b1742f997f83e1056142d556a8c20845ba764b70365ff9ccf2e3f81c427b2b
+%global source0_file musepack_src_r475.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: sed
@@ -65,6 +69,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/musepack_src_r475.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a4b1742f997f83e1056142d556a8c20845ba764b70365ff9ccf2e3f81c427b2b" || { echo "oreon: Source0 SHA256 mismatch for musepack_src_r475.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n musepack_src_r%{svn_release}
 
 %if %{without cuefile}

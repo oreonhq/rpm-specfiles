@@ -7,7 +7,11 @@ Summary:        ISO639-2 support for Python
 
 License:        MIT
 URL:            https://github.com/janpipek/iso639-python
-Source0:        %{url}/archive/v%{version}/%{modname}-%{version}.tar.gz
+Source0:        https://github.com/janpipek/iso639-python/archive/v0.1.4/iso639-0.1.4.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3a9db79836977e53806dff2c160a258ebba2eba8d3a2fc9435aeac94c1434cde
+%global source0_file iso639-0.1.4.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -26,6 +30,9 @@ A simple (really simple) library for working with ISO639-2 language codes.
 Python 3 version.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/iso639-0.1.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3a9db79836977e53806dff2c160a258ebba2eba8d3a2fc9435aeac94c1434cde" || { echo "oreon: Source0 SHA256 mismatch for iso639-0.1.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{modname}-python-%{version}
 
 %build

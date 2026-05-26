@@ -9,6 +9,10 @@ License: GPL-2.0-or-later
 URL: https://po4a.org/
 
 Source0: https://github.com/mquinson/po4a/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6e390eb7707501a86f2e648d78fddb0d211d1e8699aa1ee201176e9f966a798b
+%global source0_file po4a-0.74.tar.gz
+# oreon url source checksums end
 
 BuildArch: noarch
 BuildRequires: /usr/bin/xsltproc
@@ -96,6 +100,9 @@ more interestingly, the maintenance of translations) using gettext
 tools on areas where they were not expected like documentation.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/po4a-0.74.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6e390eb7707501a86f2e648d78fddb0d211d1e8699aa1ee201176e9f966a798b" || { echo "oreon: Source0 SHA256 mismatch for po4a-0.74.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 chmod +x scripts/*
 

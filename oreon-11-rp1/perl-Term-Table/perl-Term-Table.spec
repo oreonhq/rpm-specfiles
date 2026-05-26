@@ -10,6 +10,10 @@ Summary:        Format a header and rows into a table
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Term-Table
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Term-Table-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f2ba62a52f32d18aea8a8ca73299bef0e52409332cfe514a9c475316f6d5351c
+%global source0_file Term-Table-0.028.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -62,6 +66,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Term-Table-0.028.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f2ba62a52f32d18aea8a8ca73299bef0e52409332cfe514a9c475316f6d5351c" || { echo "oreon: Source0 SHA256 mismatch for Term-Table-0.028.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Term-Table-%{version}
 # XXX Don't unbundle Term::Table::HashBase, the module is in Perl Core.
 # Help generators to recognize Perl scripts

@@ -11,10 +11,14 @@ License:        Apache-2.0
 Summary:        Python driver for MongoDB
 URL:            https://pymongo.readthedocs.io/en/stable/
 VCS:            git:%{giturl}.git
-Source0:        %{giturl}/archive/%{version}/pymongo-%{version}.tar.gz
+Source0:        https://github.com/mongodb/mongo-python-driver/archive/4.13.2/pymongo-4.13.2.tar.gz
 # Don't fail tests on python 3.14 deprecation warnings
 # Downstream patch
 Patch0:         pymongo-nonfatal-warnings.patch
+# oreon url source checksums begin
+%global source0_sha256 cd19cfa41fcee212f9ed2499b9368a4cef29e0f0935340e96789d026f78ec0be
+%global source0_file pymongo-4.13.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -97,6 +101,9 @@ contains the python3 version of this module.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pymongo-4.13.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cd19cfa41fcee212f9ed2499b9368a4cef29e0f0935340e96789d026f78ec0be" || { echo "oreon: Source0 SHA256 mismatch for pymongo-4.13.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n mongo-python-driver-%{version} -p1
 
 # Permit use of pytest-asyncio 0.23

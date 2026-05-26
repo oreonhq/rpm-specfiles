@@ -17,6 +17,10 @@ Source1: odbcinst.ini
 
 Patch8:  so-version-bump.patch
 Patch9:  keep-typedefs.patch
+# oreon url source checksums begin
+%global source0_sha256 4e2814de3e01fc30b0b9f75e83bb5aba91ab0384ee951286504bb70205524771
+%global source0_file unixODBC-2.3.14.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make automake autoconf libtool libtool-ltdl-devel bison flex
 BuildRequires: readline-devel
@@ -45,6 +49,9 @@ ODBC, you need to install this package.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/unixODBC-2.3.14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4e2814de3e01fc30b0b9f75e83bb5aba91ab0384ee951286504bb70205524771" || { echo "oreon: Source0 SHA256 mismatch for unixODBC-2.3.14.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P8 -p1 -b .soname-bump
 %patch -P9 -p1

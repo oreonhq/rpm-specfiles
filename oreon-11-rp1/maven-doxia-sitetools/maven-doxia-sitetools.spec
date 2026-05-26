@@ -17,6 +17,10 @@ Source1:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-site
 Source2:        https://downloads.apache.org/maven/KEYS
 
 Patch:          0001-Remove-dependency-on-velocity-tools.patch
+# oreon url source checksums begin
+%global source0_sha256 97e7d88575b0918ed257c4e25be274d430e8573d3b92b38a1f4378bc19bbc085
+%global source0_file doxia-sitetools-2.0.0-source-release.zip
+# oreon url source checksums end
 
 BuildRequires:  gpgverify
 BuildRequires:  maven-local-openjdk25
@@ -84,6 +88,9 @@ Summary:        Javadoc for %{name}
 API documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/doxia-sitetools-2.0.0-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "97e7d88575b0918ed257c4e25be274d430e8573d3b92b38a1f4378bc19bbc085" || { echo "oreon: Source0 SHA256 mismatch for doxia-sitetools-2.0.0-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --data=%{SOURCE0} --signature=%{SOURCE1} --keyring=%{SOURCE2}
 %autosetup -p1 -n doxia-sitetools-%{version}
 

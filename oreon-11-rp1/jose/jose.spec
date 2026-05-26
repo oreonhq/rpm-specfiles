@@ -6,6 +6,10 @@ Summary:        Tools for JSON Object Signing and Encryption (JOSE)
 License:        Apache-2.0
 URL:            https://github.com/latchset/%{name}
 Source0:        https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 cee329ef9fce97c4c025604a8d237092f619aaa9f6d35fdf9d8c9052bc1ff95b
+%global source0_file jose-14.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  pkgconfig
@@ -48,6 +52,9 @@ Obsoletes:      lib%{name}-zlib-devel < %{version}-%{release}
 This package contains development files for lib%{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jose-14.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cee329ef9fce97c4c025604a8d237092f619aaa9f6d35fdf9d8c9052bc1ff95b" || { echo "oreon: Source0 SHA256 mismatch for jose-14.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

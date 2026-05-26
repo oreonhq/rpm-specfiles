@@ -12,6 +12,10 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://github.com/uniVocity/univocity-parsers/archive/v%{version}.tar.gz
 
 Patch:          0001-Resolve-import-clash-with-OpenJDK-17.patch
+# oreon url source checksums begin
+%global source0_sha256 d9f377d6fb2e98afd2e83a544ee0762885816908cb3b909679bcc9ef4175dd35
+%global source0_file v2.9.1.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -30,6 +34,9 @@ file formats, and a solid framework for the development of new
 parsers.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.9.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d9f377d6fb2e98afd2e83a544ee0762885816908cb3b909679bcc9ef4175dd35" || { echo "oreon: Source0 SHA256 mismatch for v2.9.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 %pom_remove_plugin :nexus-staging-maven-plugin

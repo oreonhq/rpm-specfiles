@@ -6,6 +6,10 @@ Summary:        A Perl module for time and date manipulation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/TimeDate
 Source0:        https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/TimeDate-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4571da8fad4393e7051be0098bd3ad028b3c60c2d75adf88b1f81b912154d6d2
+%global source0_file TimeDate-2.34.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -42,6 +46,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/TimeDate-2.34.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4571da8fad4393e7051be0098bd3ad028b3c60c2d75adf88b1f81b912154d6d2" || { echo "oreon: Source0 SHA256 mismatch for TimeDate-2.34.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n TimeDate-%{version}
 # Bogus exec permissions on some language modules
 chmod -x lib/Date/Language/{Russian_cp1251,Russian_koi8r,Turkish}.pm

@@ -18,6 +18,10 @@ License:        MIT
 URL:            http://www.inf.puc-rio.br/~roberto/%{lua_pkg_name}/
 Source0:        http://www.inf.puc-rio.br/~roberto/%{lua_pkg_name}/%{lua_pkg_name}-%{version}.tar.gz
 Patch1:         0001-inject-ldflags.patch
+# oreon url source checksums begin
+%global source0_sha256 4b155d67d2246c1ffa7ad7bc466c1ea899bbc40fef0257cc9c03cecbaed4352a
+%global source0_file lpeg-1.1.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  lua-devel >= %{lua_version}
@@ -48,6 +52,9 @@ LPeg is a new pattern-matching library for Lua %{lua_compat_version}
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lpeg-1.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4b155d67d2246c1ffa7ad7bc466c1ea899bbc40fef0257cc9c03cecbaed4352a" || { echo "oreon: Source0 SHA256 mismatch for lpeg-1.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{lua_pkg_name}-%{version}
 
 %if %{with compat}

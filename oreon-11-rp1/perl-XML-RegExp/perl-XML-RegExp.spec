@@ -6,6 +6,10 @@ Summary:        Regular expressions for XML tokens
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-RegExp
 Source0:        https://cpan.metacpan.org/authors/id/T/TJ/TJMATHER/XML-RegExp-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 df1990096036085c8e2d45904fe180f82bfed40f1a7e05243f334ea10090fc54
+%global source0_file XML-RegExp-0.04.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  coreutils
@@ -23,6 +27,9 @@ Name, NmToken, and AttValue.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-RegExp-0.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "df1990096036085c8e2d45904fe180f82bfed40f1a7e05243f334ea10090fc54" || { echo "oreon: Source0 SHA256 mismatch for XML-RegExp-0.04.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-RegExp-%{version}
 
 

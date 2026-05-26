@@ -9,9 +9,13 @@ License:        LGPL-2.1-only WITH OCaml-LGPL-linking-exception
 
 URL:            https://github.com/Chris00/ocaml-csv
 VCS:            git:%{url}.git
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/Chris00/ocaml-csv/archive/2.4/ocaml-csv-2.4.tar.gz
 # Remove references to a bytes library for OCaml 5.0 support
 Patch0:         %{name}-bytes.patch
+# oreon url source checksums begin
+%global source0_sha256 14b1173d2a64053e06571cbe4a86fa4be4b48ea190d1f0c389ce34fd9800c665
+%global source0_file ocaml-csv-2.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  ocaml >= 4.03.0
 BuildRequires:  ocaml-dune
@@ -60,6 +64,9 @@ developing applications that use LWT with %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ocaml-csv-2.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "14b1173d2a64053e06571cbe4a86fa4be4b48ea190d1f0c389ce34fd9800c665" || { echo "oreon: Source0 SHA256 mismatch for ocaml-csv-2.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

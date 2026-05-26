@@ -9,6 +9,10 @@ URL:		https://launchpad.net/libindicator
 Source0:	https://launchpad.net/libindicator/12.10/12.10.1/+download/%{name}-%{version}.tar.gz
 # From GLib 2.62
 Patch1:	libindicator-12.10.1-glib262-g_define_type_with_private.patch
+# oreon url source checksums begin
+%global source0_sha256 b2d2e44c10313d5c9cd60db455d520f80b36dc39562df079a3f29495e8f9447f
+%global source0_file libindicator-12.10.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	gtk-doc
 BuildRequires:	libtool
@@ -79,6 +83,9 @@ tools for the GTK+3 build of %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libindicator-12.10.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b2d2e44c10313d5c9cd60db455d520f80b36dc39562df079a3f29495e8f9447f" || { echo "oreon: Source0 SHA256 mismatch for libindicator-12.10.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P1 -p2 -b .orig
 

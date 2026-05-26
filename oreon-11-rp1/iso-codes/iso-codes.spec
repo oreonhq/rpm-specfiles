@@ -5,6 +5,10 @@ Release:    3%{?dist}
 License:    LGPL-2.1-or-later
 URL:        https://salsa.debian.org/iso-codes-team/iso-codes
 Source0:    https://salsa.debian.org/iso-codes-team/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2d7d9f6084ab9ce6c534ce71a3dd5144b6e474f3c97616459a88f73f44a64bff
+%global source0_file iso-codes-v4.20.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gettext
 BuildRequires: python3
@@ -28,6 +32,9 @@ This package contains the pkg-config files for development
 when building programs that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/iso-codes-v4.20.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2d7d9f6084ab9ce6c534ce71a3dd5144b6e474f3c97616459a88f73f44a64bff" || { echo "oreon: Source0 SHA256 mismatch for iso-codes-v4.20.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-v%{version}
 
 # The '&' character is not getting parsed using xmllint

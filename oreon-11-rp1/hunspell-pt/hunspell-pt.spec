@@ -10,6 +10,10 @@ Version: 0.%{upstreamid}
 Release: 16%{?dist}
 Source0: http://natura.di.uminho.pt/download/sources/Dictionaries/hunspell/hunspell-pt_PT-20130125.tar.gz
 Source1: https://pt-br.libreoffice.org/assets/Uploads/PT-BR-Documents/VERO/ptBR-2013-10-30AOC-2.zip
+# oreon url source checksums begin
+%global source0_sha256 2700674e9fe644151362c32a78bb816fc844a37be690cfad6ee18e2bc744deb9
+%global source0_file hunspell-pt_PT-20130125.tar.gz
+# oreon url source checksums end
 URL: https://pt-br.libreoffice.org/projetos/vero
 # pt_BR dicts are under LGPLv3 or MPL, pt_PT under GPLv2 or LGPLv2 or MPLv1.1
 License: ( ( LGPL-3.0-only OR MPL-1.1 ) AND LGPL-2.1-only ) AND ( GPL-2.0-only OR LGPL-2.1-only OR MPL-1.1 )
@@ -30,6 +34,9 @@ Supplements: (hunspell and langpacks-pt_BR)
 Brazilian Portuguese hunspell dictionaries
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hunspell-pt_PT-20130125.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2700674e9fe644151362c32a78bb816fc844a37be690cfad6ee18e2bc744deb9" || { echo "oreon: Source0 SHA256 mismatch for hunspell-pt_PT-20130125.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n hunspell-pt_PT-20130125
 unzip -q -o %{SOURCE1}
 for i in README_pt_BR.TXT README_pt_PT.txt; do

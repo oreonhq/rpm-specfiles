@@ -11,8 +11,12 @@ Release:        %autorelease
 Summary:        Library for generating PDFs and graphics
 License:        BSD-3-Clause AND BSD-4-Clause AND MIT
 URL:            https://www.reportlab.com/opensource/
-Source0:        %pypi_source
+Source0:        https://files.pythonhosted.org/packages/source/r/reportlab/reportlab-4.4.10.tar.gz
 Patch0:         %{name}-fix_python_3.15.patch
+# oreon url source checksums begin
+%global source0_sha256 5cbbb34ac3546039d0086deb2938cdec06b12da3cdb836e813258eb33cd28487
+%global source0_file reportlab-4.4.10.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  gcc
@@ -47,6 +51,9 @@ formats.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/reportlab-4.4.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5cbbb34ac3546039d0086deb2938cdec06b12da3cdb836e813258eb33cd28487" || { echo "oreon: Source0 SHA256 mismatch for reportlab-4.4.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pypi_name}-%{version} -N
 
 %if 0%{?python3_version_nodots} >= 315

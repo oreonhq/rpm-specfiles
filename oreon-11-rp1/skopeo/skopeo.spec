@@ -52,7 +52,11 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: Inspect container images and repositories on registries
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
-Source0: %{url}/archive/v%{version}.tar.gz
+Source0:        https://github.com/containers/skopeo/archive/v1.22.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 dc9aa749973b10d3c2672d2839e61bac75cf32d5e5106463420b83653c9df3ff
+%global source0_file v1.22.0.tar.gz
+# oreon url source checksums end
 BuildRequires: %{_bindir}/go-md2man
 %if %{defined build_with_btrfs}
 BuildRequires: btrfs-progs-devel
@@ -99,6 +103,9 @@ Recommends: fakeroot
 This package installs system test dependencies for %{name}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.22.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dc9aa749973b10d3c2672d2839e61bac75cf32d5e5106463420b83653c9df3ff" || { echo "oreon: Source0 SHA256 mismatch for v1.22.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -Sgit %{name}-%{version}
 # The %%install stage should not rebuild anything but only install what's
 # built in the %%build stage. So, remove any dependency on build targets.

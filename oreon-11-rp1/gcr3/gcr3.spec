@@ -15,6 +15,10 @@ Summary:        A library for bits of crypto UI and parsing
 License:        LGPL-2.1-or-later AND LicenseRef-Fedora-Public-Domain AND FSFULLRWD AND (LGPL-3.0-or-later OR CC-BY-SA-3.0) AND (MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.1-or-later) AND GCR-docs
 URL:            https://wiki.gnome.org/Projects/CryptoGlue
 Source0:        https://download.gnome.org/sources/gcr/3.41/gcr-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 bb7128a3c2febbfee9c03b90d77d498d0ceb237b0789802d60185c71c4bea24f
+%global source0_file gcr-3.41.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gettext
 BuildRequires:  gi-docgen
@@ -71,6 +75,9 @@ Conflicts: gcr-base < 3.90.0
 The %{name}-base package includes the gcr-base library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gcr-3.41.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bb7128a3c2febbfee9c03b90d77d498d0ceb237b0789802d60185c71c4bea24f" || { echo "oreon: Source0 SHA256 mismatch for gcr-3.41.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n gcr-%{version}
 
 %build

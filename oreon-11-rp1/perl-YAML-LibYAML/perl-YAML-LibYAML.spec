@@ -12,8 +12,13 @@ Release:        5%{?dist}
 Summary:        Perl YAML Serialization using XS and libyaml
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/YAML-LibYAML
-Source0:        https://cpan.metacpan.org/modules/by-module/YAML/YAML-LibYAML-v%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-v0.904.0.tar.gz
+
 Patch0:         YAML-LibYAML-0.79-Unbundled-libyaml.patch
+# oreon url source checksums begin
+%global source0_sha256 b656b0b11a4219c125679e8cbf7436a3f636e833fd63cf322d171dcb7c3eaf3e
+%global source0_file YAML-LibYAML-v0.904.0.tar.gz
+# oreon url source checksums end
 
 # Build
 BuildRequires:  coreutils
@@ -95,6 +100,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/YAML-LibYAML-v0.904.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b656b0b11a4219c125679e8cbf7436a3f636e833fd63cf322d171dcb7c3eaf3e" || { echo "oreon: Source0 SHA256 mismatch for YAML-LibYAML-v0.904.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n YAML-LibYAML-v%{version}
 # Unbundled libyaml, the source files are the same as in libyaml-0.2.4
 # It was determined by comparing commits in upstream repo:

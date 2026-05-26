@@ -6,6 +6,10 @@ License: MIT-open-group
 URL: http://www.x.org
 
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 d8a5222828c3adab70adf69a5583f1d32eb5ece04304f7f8392b6a353aa2228c
+%global source0_file libXdmcp-1.1.5.tar.xz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: xorg-x11-util-macros
@@ -24,6 +28,9 @@ Requires: %{name} = %{version}-%{release}
 libXdmcp development package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libXdmcp-1.1.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d8a5222828c3adab70adf69a5583f1d32eb5ece04304f7f8392b6a353aa2228c" || { echo "oreon: Source0 SHA256 mismatch for libXdmcp-1.1.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

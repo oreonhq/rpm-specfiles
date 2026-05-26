@@ -7,7 +7,11 @@ URL:            https://github.com/eclipse-ee4j/jaxb-istack-commons
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-istack-commons/archive/4.2.0/jaxb-istack-commons-4.2.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c6d43fff872c91905b237fdc430ee17f5926a6c6375bd425abfbe23b01f727ad
+%global source0_file jaxb-istack-commons-4.2.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)
@@ -48,6 +52,9 @@ Summary:        istack-commons tools
 This package contains istack-commons tools.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jaxb-istack-commons-4.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c6d43fff872c91905b237fdc430ee17f5926a6c6375bd425abfbe23b01f727ad" || { echo "oreon: Source0 SHA256 mismatch for jaxb-istack-commons-4.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 pushd istack-commons

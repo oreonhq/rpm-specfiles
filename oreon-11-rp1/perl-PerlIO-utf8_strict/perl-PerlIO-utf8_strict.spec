@@ -4,7 +4,12 @@ Release:        12%{?dist}
 Summary:        Fast and correct UTF-8 I/O
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/PerlIO-utf8_strict
-Source0:        https://cpan.metacpan.org/modules/by-module/PerlIO/PerlIO-utf8_strict-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/PerlIO-utf8_strict-0.010.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 bcd2848b72df290b5e984fae8b1a6ca96f6d072003cf222389a8c9e8e1c570cd
+%global source0_file PerlIO-utf8_strict-0.010.tar.gz
+# oreon url source checksums end
+
 # Build:
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -37,6 +42,9 @@ This module provides a fast and correct UTF-8 PerlIO layer. Unlike perl's
 default :utf8 layer it checks the input for correctness.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/PerlIO-utf8_strict-0.010.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bcd2848b72df290b5e984fae8b1a6ca96f6d072003cf222389a8c9e8e1c570cd" || { echo "oreon: Source0 SHA256 mismatch for PerlIO-utf8_strict-0.010.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n PerlIO-utf8_strict-%{version}
 
 %build

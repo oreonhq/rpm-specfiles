@@ -5,7 +5,11 @@ Summary:        Library with common code among libimobiledevice projects
 
 License:        LGPL-2.1-or-later
 URL:            https://github.com/libimobiledevice/libimobiledevice-glue
-Source:         %{url}/releases/download/%{version}/libimobiledevice-glue-%{version}.tar.bz2
+Source:        https://github.com/libimobiledevice/libimobiledevice-glue/releases/download/1.3.1/libimobiledevice-glue-1.3.1.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 6e2849f221e6ab970566a115d42f3c20f8848e4d40c2ed61ac20dc85f40fa54f
+%global source0_file libimobiledevice-glue-1.3.1.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -25,6 +29,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libimobiledevice-glue-1.3.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6e2849f221e6ab970566a115d42f3c20f8848e4d40c2ed61ac20dc85f40fa54f" || { echo "oreon: Source0 SHA256 mismatch for libimobiledevice-glue-1.3.1.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

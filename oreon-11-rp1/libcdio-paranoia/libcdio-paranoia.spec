@@ -9,6 +9,10 @@ Source0: https://github.com/libcdio/libcdio-paranoia/releases/download/release-%
 # Fix for https://bugzilla.redhat.com/show_bug.cgi?id=2334834
 # Based on https://github.com/libcdio/libcdio-paranoia/pull/52.patch
 Patch0: 2334834.patch
+# oreon url source checksums begin
+%global source0_sha256 186892539dedd661276014d71318c8c8f97ecb1250a86625256abd4defbf0d0c
+%global source0_file libcdio-paranoia-10.2+2.0.2.tar.bz2
+# oreon url source checksums end
 BuildRequires: gcc
 BuildRequires: pkgconfig
 BuildRequires: gettext-devel
@@ -35,6 +39,9 @@ This package contains header files and libraries for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libcdio-paranoia-10.2+2.0.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "186892539dedd661276014d71318c8c8f97ecb1250a86625256abd4defbf0d0c" || { echo "oreon: Source0 SHA256 mismatch for libcdio-paranoia-10.2+2.0.2.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P 0 -p 1
 

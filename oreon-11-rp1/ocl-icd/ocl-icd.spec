@@ -5,7 +5,11 @@ Summary:        OpenCL Library (Installable Client Library) Bindings
 License:        BSD-2-Clause
 URL:            https://github.com/OCL-dev/%{name}/
 
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/OCL-dev/ocl-icd//archive/v2.3.4/ocl-icd-2.3.4.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1a302b71b7304cca5a36f69d017b1af2b762cc4c2dd1c0c0e2fc1933db25c9cc
+%global source0_file ocl-icd-2.3.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  asciidoc
 BuildRequires:  automake
@@ -29,6 +33,9 @@ Requires:       opencl-headers
 This package contains the development files for the OpenCL ICD bindings.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ocl-icd-2.3.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1a302b71b7304cca5a36f69d017b1af2b762cc4c2dd1c0c0e2fc1933db25c9cc" || { echo "oreon: Source0 SHA256 mismatch for ocl-icd-2.3.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

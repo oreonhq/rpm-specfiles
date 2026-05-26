@@ -7,7 +7,12 @@ Release:        1%{?dist}
 Summary:        Recursively copy perl data types
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Clone
-Source0:        https://cpan.metacpan.org/modules/by-module/Clone/Clone-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/Clone-0.48.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 321d4cd1078e19519600abd7bda2991b468603c58455479e3d2e25a5acb1911f
+%global source0_file Clone-0.48.tar.gz
+# oreon url source checksums end
+
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -64,6 +69,9 @@ can be used to limit the depth of the copy. To duplicate lists,
 arrays or hashes, pass them in by reference.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Clone-0.48.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "321d4cd1078e19519600abd7bda2991b468603c58455479e3d2e25a5acb1911f" || { echo "oreon: Source0 SHA256 mismatch for Clone-0.48.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Clone-%{version}
 
 %build

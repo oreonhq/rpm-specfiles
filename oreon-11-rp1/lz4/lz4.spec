@@ -8,6 +8,10 @@ Summary:        Extremely fast compression algorithm
 License:        GPL-2.0-or-later AND BSD-2-Clause
 URL:            https://lz4.github.io/lz4/
 Source0:        https://github.com/lz4/lz4/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b
+%global source0_file lz4-1.10.0.tar.gz
+# oreon url source checksums end
 
 Obsoletes:      %{name} < 1.7.5-3
 
@@ -44,6 +48,9 @@ LZ4 is an extremely fast loss-less compression algorithm. This package
 contains static libraries for static linking of applications.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lz4-1.10.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "537512904744b35e232912055ccf8ec66d768639ff3abe5788d90d792ec5f48b" || { echo "oreon: Source0 SHA256 mismatch for lz4-1.10.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

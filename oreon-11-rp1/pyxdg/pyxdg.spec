@@ -4,13 +4,17 @@ Release:        1%{?dist}
 Summary:        Python library to access freedesktop.org standards
 License:        LGPL-2.0-only
 URL:            http://freedesktop.org/Software/pyxdg
-Source0:        %pypi_source
+Source0:        https://files.pythonhosted.org/packages/source/p/pyxdg/pyxdg-0.28.tar.gz
 # https://cgit.freedesktop.org/xdg/pyxdg/commit/?id=275865e620471c194560824232be632c9cb61600
 Patch0:         pyxdg-replace-imp-with-importlib.patch
 # https://cgit.freedesktop.org/xdg/pyxdg/commit/?id=9291d419017263c922869d79ac1fe8d423e5f929
 Patch1:         pyxdg-handle-python-3.14-ast.Str-changes.patch
 # https://cgit.freedesktop.org/xdg/pyxdg/commit/?id=63033ac306aa26d32e1439417e59ae8f8a4c9820
 Patch2:         pyxdg-handle-python-3.15-deprecations.patch
+# oreon url source checksums begin
+%global source0_sha256 3267bb3074e934df202af2ee0868575484108581e6f3cb006af1da35395e88b4
+%global source0_file pyxdg-0.28.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 # These are needed for the tests.
@@ -30,6 +34,9 @@ PyXDG is a python library to access freedesktop.org standards. This
 package contains a Python 3 version of PyXDG.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pyxdg-0.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3267bb3074e934df202af2ee0868575484108581e6f3cb006af1da35395e88b4" || { echo "oreon: Source0 SHA256 mismatch for pyxdg-0.28.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b .replace-imp-with-importlib
 %patch -P1 -p1 -b .handle-python-3.14-ast.Str-changes

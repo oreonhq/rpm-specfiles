@@ -7,6 +7,10 @@ URL:            http://lame.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Patch1:         %{name}-noexecstack.patch
 Patch2:         libmp3lame-symbols.patch
+# oreon url source checksums begin
+%global source0_sha256 ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e
+%global source0_file lame-3.100.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -36,6 +40,9 @@ This package development files for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lame-3.100.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ddfe36cab873794038ae2c1210557ad34857a4b6bdc515785d1da9e175b1da1e" || { echo "oreon: Source0 SHA256 mismatch for lame-3.100.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

@@ -9,6 +9,10 @@ URL: https://ftp.altlinux.org/pub/people/ldv/utempter
 
 # spectool uses HTTP clients that do not speak FTP; same tree is on HTTPS.
 Source0: https://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 967fef372f391de501843ad87570c6cf5dabd9651f00f1783090fbc12b2a34cb
+%global source0_file libutempter-1.2.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: make
@@ -30,6 +34,9 @@ This package contains development files required to build
 utempter-based software.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libutempter-1.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "967fef372f391de501843ad87570c6cf5dabd9651f00f1783090fbc12b2a34cb" || { echo "oreon: Source0 SHA256 mismatch for libutempter-1.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 cat > %{name}.sysusers.conf <<_EOF

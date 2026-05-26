@@ -7,10 +7,14 @@ Summary:        Jackson modules: Base
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-modules-base
-Source0:        %{url}/archive/%{name}-%{version}-take-2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-modules-base/archive/jackson-modules-base-2.18.2-take-2.tar.gz
 Patch1:         0001-Expose-javax.security.auth-from-JDK-internals.patch
 Patch2:         0001-Replace-javax.activation-imports-with-jakarta.activa.patch
 Patch3:         0001-Use-jakarta.activation-namespace-in-jaxb-api.patch
+# oreon url source checksums begin
+%global source0_sha256 135cbd1ebd5d00740131abaa2788aca492cf4ce0600ad304f8d87d014008a3c4
+%global source0_file jackson-modules-base-2.18.2-take-2.tar.gz
+# oreon url source checksums end
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || 0%{?oreon}
 BuildRequires:  maven-local
@@ -50,6 +54,9 @@ used to make it easier to reuse existing data beans that used with JAXB
 framework to read and write XML.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jackson-modules-base-2.18.2-take-2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "135cbd1ebd5d00740131abaa2788aca492cf4ce0600ad304f8d87d014008a3c4" || { echo "oreon: Source0 SHA256 mismatch for jackson-modules-base-2.18.2-take-2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{name}-%{version} -p 1
 
 %pom_remove_dep -r org.glassfish.jaxb:jaxb-runtime

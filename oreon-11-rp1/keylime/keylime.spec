@@ -17,6 +17,12 @@ Source3:        %{name}.tmpfiles
 
 Patch: 0001-Fix-timestamp-conversion-to-use-UTC-timezone.patch
 Patch: 0002-Fix-efivar-availability-check-in-test_create_mb_poli.patch
+# oreon url source checksums begin
+%global source0_sha256 9bfc081988e8b4d199213f8b1683efa1bd09b75ccb051271f79f15767ceccbe1
+%global source0_file v7.14.1.tar.gz
+%global source1_sha256 c4d12e0a9cb0c0a443b9c9cff07a1b8581e891d334e37273117334ddf2883a64
+%global source1_file keylime-selinux-43.1.1.tar.gz
+# oreon url source checksums end
 
 # Main program: Apache-2.0
 # Icons: MIT
@@ -203,6 +209,10 @@ The keylime tools package includes miscelaneous tools.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v7.14.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9bfc081988e8b4d199213f8b1683efa1bd09b75ccb051271f79f15767ceccbe1" || { echo "oreon: Source0 SHA256 mismatch for v7.14.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/keylime-selinux-43.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c4d12e0a9cb0c0a443b9c9cff07a1b8581e891d334e37273117334ddf2883a64" || { echo "oreon: Source1 SHA256 mismatch for keylime-selinux-43.1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git -n %{name}-%{version} -a1
 
 %generate_buildrequires

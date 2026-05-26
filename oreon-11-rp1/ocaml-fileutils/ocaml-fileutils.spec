@@ -15,7 +15,7 @@ Summary:        OCaml library for common file and filename operations
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 URL:            https://gildor478.github.io/ocaml-fileutils/
 VCS:            git:%{giturl}.git
-Source0:        %{giturl}/releases/download/v%{version}/fileutils-%{version}.tbz
+Source0:        https://github.com/gildor478/ocaml-fileutils/releases/download/v0.6.6/fileutils-0.6.6.tbz
 
 BuildRequires:  ocaml >= 4.14
 BuildRequires:  ocaml-dune >= 2.9

@@ -30,6 +30,12 @@ Patch0:   alsa-git.patch
 %endif
 Patch1:   alsa-lib-1.2.3.1-config.patch
 Patch2:   alsa-lib-1.2.10-glibc-open.patch
+# oreon url source checksums begin
+%global source1_sha256 9f79e813c08fc86cfa46dd75c4fcda1a4a51b482db2607e1fcfaafb92f588a31
+%global source1_file alsa-ucm-conf-1.2.15.3.tar.bz2
+%global source2_sha256 8bfa8306ca63e1d0cbe80be984660273b91bd5b7dd0800a6c5aa71dd8c8d775c
+%global source2_file alsa-topology-conf-1.2.5.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  doxygen
 BuildRequires:  autoconf automake libtool
@@ -76,6 +82,10 @@ The Advanced Linux Sound Architecture (ALSA) topology configuration
 contains alsa-lib configuration of SoC topology
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/alsa-ucm-conf-1.2.15.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9f79e813c08fc86cfa46dd75c4fcda1a4a51b482db2607e1fcfaafb92f588a31" || { echo "oreon: Source1 SHA256 mismatch for alsa-ucm-conf-1.2.15.3.tar.bz2" >&2; exit 1; })
+%(f=%{_sourcedir}/alsa-topology-conf-1.2.5.tar.bz2; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8bfa8306ca63e1d0cbe80be984660273b91bd5b7dd0800a6c5aa71dd8c8d775c" || { echo "oreon: Source2 SHA256 mismatch for alsa-topology-conf-1.2.5.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}%{?prever}%{?postver}
 %if %{lib_patch}
 %patch -P0 -p1 -b .alsa-git

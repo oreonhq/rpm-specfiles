@@ -23,7 +23,11 @@ License:        Zlib
 #   - docs/clipboard.js
 SourceLicense:  %{license} AND LicenseRef-Fedora-Public-Domain AND MIT
 URL:            https://github.com/leethomason/tinyxml2
-Source:         %{url}/archive/%{version}/tinyxml2-%{version}.tar.gz
+Source:        https://github.com/leethomason/tinyxml2/archive/11.0.0/tinyxml2-11.0.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5556deb5081fb246ee92afae73efd943c889cef0cafea92b0b82422d6a18f289
+%global source0_file tinyxml2-11.0.0.tar.gz
+# oreon url source checksums end
 
 # Upstream supports CMake, meson, and plain makefiles. Of these, CMake and
 # meson are reasonable choices; choosing CMake allows us to generate and
@@ -56,6 +60,9 @@ for writing applications with the tinyxml2 library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tinyxml2-11.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5556deb5081fb246ee92afae73efd943c889cef0cafea92b0b82422d6a18f289" || { echo "oreon: Source0 SHA256 mismatch for tinyxml2-11.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Demonstrate that bundled JS/CSS sources from pre-rendered HTML documentation

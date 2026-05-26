@@ -5,6 +5,10 @@ Summary:	Cross-platform path specification manipulation
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Path-Class
 Source0:	https://cpan.metacpan.org/authors/id/K/KW/KWILLIAMS/Path-Class-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 654781948602386f2cb2e4473a739f17dc6953d92aabc2498a4ca2561bc248ce
+%global source0_file Path-Class-0.37.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -44,6 +48,9 @@ platform Perl runs on, including Unix, Windows, Mac, VMS, Epoc, Cygwin, OS/2,
 and NetWare.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Path-Class-0.37.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "654781948602386f2cb2e4473a739f17dc6953d92aabc2498a4ca2561bc248ce" || { echo "oreon: Source0 SHA256 mismatch for Path-Class-0.37.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Path-Class-%{version}
 
 %build

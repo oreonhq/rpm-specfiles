@@ -16,6 +16,10 @@ Release: 3%{?dist}
 URL: https://github.com/freeipa/ansible-freeipa
 License: GPL-3.0-or-later
 Source: https://github.com/freeipa/ansible-freeipa/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8b9bbb3366c9b0959006fc7813017c8219eb50817c399e55bc6c8edb4a2b4214
+%global source0_file v1.16.0.tar.gz
+# oreon url source checksums end
 BuildArch: noarch
 Requires: ansible-core >= 2.14.0
 BuildRequires: ansible-core >= 2.14.0
@@ -121,6 +125,9 @@ a separate step before starting the server installation.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.16.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b9bbb3366c9b0959006fc7813017c8219eb50817c399e55bc6c8edb4a2b4214" || { echo "oreon: Source0 SHA256 mismatch for v1.16.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 # Do not create backup files with patches
 

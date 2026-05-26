@@ -20,6 +20,10 @@ Patch0001: 0001-ABI-update-for-newer-libabigail.patch
 Patch0002: 0002-ABI-update-after-glibc-changes.patch
 Patch0003: 0003-ABI-update-after-glibc-changes.patch
 Patch0004: 0004-efivarfs-Update-a-file-variable-store-On-SetVariable.patch
+# oreon url source checksums begin
+%global source0_sha256 c9edd15f2eeeea63232f3e669a48e992c7be9aff57ee22672ac31f5eca1609a6
+%global source0_file 39.tar.gz
+# oreon url source checksums end
 
 %description
 efivar provides a simple command line interface to the UEFI variable facility.
@@ -38,6 +42,9 @@ Requires: %{name}-libs = %{version}-%{release}
 development headers required to use libefivar.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/39.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c9edd15f2eeeea63232f3e669a48e992c7be9aff57ee22672ac31f5eca1609a6" || { echo "oreon: Source0 SHA256 mismatch for 39.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 git init
 git config user.email "%{name}-owner@fedoraproject.org"

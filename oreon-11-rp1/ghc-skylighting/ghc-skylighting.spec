@@ -30,6 +30,20 @@ Source3:        https://hackage.haskell.org/package/%{skylightingformatblazehtml
 Source4:        https://hackage.haskell.org/package/%{skylightingformatcontext}/%{skylightingformatcontext}.tar.gz
 Source5:        https://hackage.haskell.org/package/%{skylightingformatlatex}/%{skylightingformatlatex}.tar.gz
 Source6:        https://hackage.haskell.org/package/%{skylightingformattypst}/%{skylightingformattypst}.tar.gz
+# oreon url source checksums begin
+%global source1_sha256 e04fbc7b4243b5cb69819ae10f26bd375f94d8986a939cd4e6f6ca555dab7dbd
+%global source1_file skylighting-core-0.14.7.tar.gz
+%global source2_sha256 23dfa86c2ecd2601a2efed4967eb2ec0505a52c14776054ce4d89707c2de0a9b
+%global source2_file skylighting-format-ansi-0.1.tar.gz
+%global source3_sha256 44e82ceaebb240f22882e7640633d747453887f74384dd5ffd258d802d7352e6
+%global source3_file skylighting-format-blaze-html-0.1.1.3.tar.gz
+%global source4_sha256 004213e13d89b692ea0912d7ffa6ee98c93146d1a7962a849ad7860697bc88bd
+%global source4_file skylighting-format-context-0.1.0.2.tar.gz
+%global source5_sha256 97b66c9ab60451e41a94aa80a684e792fbe69816835f735224222beea22afb78
+%global source5_file skylighting-format-latex-0.1.tar.gz
+%global source6_sha256 994cd2db976f6818bfb7644674c5f7c5830e9c5a339243541ac24611ff672ce4
+%global source6_file skylighting-format-typst-0.1.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -179,6 +193,14 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/skylighting-core-0.14.7.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e04fbc7b4243b5cb69819ae10f26bd375f94d8986a939cd4e6f6ca555dab7dbd" || { echo "oreon: Source1 SHA256 mismatch for skylighting-core-0.14.7.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/skylighting-format-ansi-0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "23dfa86c2ecd2601a2efed4967eb2ec0505a52c14776054ce4d89707c2de0a9b" || { echo "oreon: Source2 SHA256 mismatch for skylighting-format-ansi-0.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/skylighting-format-blaze-html-0.1.1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "44e82ceaebb240f22882e7640633d747453887f74384dd5ffd258d802d7352e6" || { echo "oreon: Source3 SHA256 mismatch for skylighting-format-blaze-html-0.1.1.3.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/skylighting-format-context-0.1.0.2.tar.gz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "004213e13d89b692ea0912d7ffa6ee98c93146d1a7962a849ad7860697bc88bd" || { echo "oreon: Source4 SHA256 mismatch for skylighting-format-context-0.1.0.2.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/skylighting-format-latex-0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "97b66c9ab60451e41a94aa80a684e792fbe69816835f735224222beea22afb78" || { echo "oreon: Source5 SHA256 mismatch for skylighting-format-latex-0.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/skylighting-format-typst-0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "994cd2db976f6818bfb7644674c5f7c5830e9c5a339243541ac24611ff672ce4" || { echo "oreon: Source6 SHA256 mismatch for skylighting-format-typst-0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver} -a1 -a2 -a3 -a4 -a5 -a6
 # End cabal-rpm setup

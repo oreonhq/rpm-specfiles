@@ -5,6 +5,10 @@ Summary:          Ansible Metric collection for Performance Co-Pilot
 License:          MIT
 URL:              https://github.com/performancecopilot/ansible-pcp
 Source:           https://github.com/performancecopilot/ansible-pcp/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b54de378b6524fc3c59334b9089aa583d8b373488141fad025d88a7e0f80391f
+%global source0_file ansible-pcp-2.4.2.tar.gz
+# oreon url source checksums end
 BuildArch:        noarch
 
 %if %{defined rhel}
@@ -70,6 +74,9 @@ values (and metadata) to ElasticSearch for the indexing and querying
 of performance data.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ansible-pcp-2.4.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b54de378b6524fc3c59334b9089aa583d8b373488141fad025d88a7e0f80391f" || { echo "oreon: Source0 SHA256 mismatch for ansible-pcp-2.4.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %if 0%{?rhel}
 rm -vr roles/repository tests/*repository* tests/*/*repository* docs/repository

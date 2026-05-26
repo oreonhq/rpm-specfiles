@@ -22,6 +22,12 @@ URL:            https://github.com/fukuchi/libqrencode
 Source0:        https://github.com/fukuchi/libqrencode/archive/refs/tags/v%{version}/libqrencode-%{version}.tar.gz
 %if 0%{?bootstrap}
 Source1:        https://github.com/fukuchi/libqrencode/archive/refs/tags/v%{version_old}/libqrencode-%{version_old}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5385bc1b8c2f20f3b91d258bf8ccc8cf62023935df2d2676b5b67049f31a049c
+%global source0_file libqrencode-4.1.1.tar.gz
+%global source1_sha256 5385bc1b8c2f20f3b91d258bf8ccc8cf62023935df2d2676b5b67049f31a049c
+%global source1_file libqrencode-4.1.1.tar.gz
+# oreon url source checksums end
 %endif
 
 BuildRequires: make
@@ -58,6 +64,10 @@ applications that use qrencode.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libqrencode-4.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5385bc1b8c2f20f3b91d258bf8ccc8cf62023935df2d2676b5b67049f31a049c" || { echo "oreon: Source0 SHA256 mismatch for libqrencode-4.1.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/libqrencode-4.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5385bc1b8c2f20f3b91d258bf8ccc8cf62023935df2d2676b5b67049f31a049c" || { echo "oreon: Source1 SHA256 mismatch for libqrencode-4.1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n libqrencode-%{version} -p1
 
 %if 0%{?bootstrap}

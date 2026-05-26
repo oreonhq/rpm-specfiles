@@ -12,6 +12,10 @@ Patch1:         jbigkit-2.0-warnings.patch
 Patch2:         jbigkit-ldflags.patch
 # patch for coverity issues - backported from upstream
 Patch3:         jbigkit-covscan.patch
+# oreon url source checksums begin
+%global source0_sha256 de7106b6bfaf495d6865c7dd7ac6ca1381bd12e0d81405ea81e7f2167263d932
+%global source0_file jbigkit-2.1.tar.gz
+# oreon url source checksums end
 
 # gcc is no longer in buildroot by default
 # gcc needed for libjbig library and several filters - jbigtopbm, pbmtojbig e.g.
@@ -54,6 +58,9 @@ formats.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jbigkit-2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "de7106b6bfaf495d6865c7dd7ac6ca1381bd12e0d81405ea81e7f2167263d932" || { echo "oreon: Source0 SHA256 mismatch for jbigkit-2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n jbigkit-2.1 -S git
 
 

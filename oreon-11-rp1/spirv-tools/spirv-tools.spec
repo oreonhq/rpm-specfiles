@@ -9,10 +9,14 @@ Summary:        API and commands for processing SPIR-V modules
 
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/SPIRV-Tools
-Source0:        %url/archive/vulkan-sdk-%{sdkver}.tar.gz#/SPIRV-Tools-sdk-%{sdkver}.tar.gz
+Source0:        https://github.com/KhronosGroup/SPIRV-Tools/archive/vulkan-sdk-1.4.341.0.tar.gz#/SPIRV-Tools-sdk-1.4.341.0.tar.gz
 
 Patch0: fix-gcc12-build.patch
 Patch1: 0001-opt-Fix-build-issue-with-gcc-16.patch
+# oreon url source checksums begin
+%global source0_sha256 15bfb678138cdf9cd1480dfb952547bbb66b763a735b6d5582578572f5c2e6f9
+%global source0_file vulkan-sdk-1.4.341.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -46,6 +50,9 @@ Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Development files for %{name}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vulkan-sdk-1.4.341.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "15bfb678138cdf9cd1480dfb952547bbb66b763a735b6d5582578572f5c2e6f9" || { echo "oreon: Source0 SHA256 mismatch for vulkan-sdk-1.4.341.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n SPIRV-Tools-vulkan-sdk-%{sdkver}
 
 %build

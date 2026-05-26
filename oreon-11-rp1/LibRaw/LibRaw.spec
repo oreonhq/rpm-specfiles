@@ -6,8 +6,12 @@ Version: 0.22.0
 Release: 1%{?dist}
 License: BSD-3-Clause and (CDDL-1.0 or LGPL-2.1-only)
 URL: https://www.libraw.org
-Source0: %{url}/data/%{name}-%{version}.tar.gz
+Source0:        https://www.libraw.org/data/LibRaw-0.22.0.tar.gz
 Patch0: LibRaw-pkgconfig.patch
+# oreon url source checksums begin
+%global source0_sha256 1071e6e8011593c366ffdadc3d3513f57c90202d526e133174945ec1dd53f2a1
+%global source0_file LibRaw-0.22.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc-c++
 BuildRequires: pkgconfig(lcms2)
@@ -50,6 +54,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 LibRaw sample programs
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/LibRaw-0.22.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1071e6e8011593c366ffdadc3d3513f57c90202d526e133174945ec1dd53f2a1" || { echo "oreon: Source0 SHA256 mismatch for LibRaw-0.22.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}
 
 %build

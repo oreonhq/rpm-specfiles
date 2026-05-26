@@ -12,6 +12,10 @@ Summary: Library for making brush strokes
 License: ISC
 URL: https://github.com/mypaint/libmypaint
 Source0: https://github.com/mypaint/libmypaint/releases/download/v%{version}/libmypaint-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 741754f293f6b7668f941506da07cd7725629a793108bb31633fb6c3eae5315f
+%global source0_file libmypaint-1.6.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires: babl-devel
 BuildRequires: gcc
@@ -38,6 +42,9 @@ Requires: pkgconfig
 This package contains files needed for development with libmypaint.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libmypaint-1.6.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "741754f293f6b7668f941506da07cd7725629a793108bb31633fb6c3eae5315f" || { echo "oreon: Source0 SHA256 mismatch for libmypaint-1.6.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Make sure the build uses python3

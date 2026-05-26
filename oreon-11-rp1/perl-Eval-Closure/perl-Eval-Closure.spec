@@ -12,6 +12,10 @@ Summary:        Safely and cleanly create closures via string eval
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Eval-Closure
 Source0:        https://cpan.metacpan.org/authors/id/D/DO/DOY/Eval-Closure-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ea0944f2f5ec98d895bef6d503e6e4a376fea6383a6bc64c7670d46ff2218cad
+%global source0_file Eval-Closure-0.14.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -65,6 +69,9 @@ string to be evaled, so it must also be the same (or non-existent) if caching
 is to work properly).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Eval-Closure-0.14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ea0944f2f5ec98d895bef6d503e6e4a376fea6383a6bc64c7670d46ff2218cad" || { echo "oreon: Source0 SHA256 mismatch for Eval-Closure-0.14.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Eval-Closure-%{version}
 
 %build

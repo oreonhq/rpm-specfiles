@@ -10,6 +10,10 @@ URL:            https://github.com/pythongssapi/python-gssapi
 Source0:        https://github.com/pythongssapi/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 # https://github.com/pythongssapi/python-gssapi/pull/321
 Patch0:         cython3.patch
+# oreon url source checksums begin
+%global source0_sha256 0e56ee44222d2df37c337c376973861af300a7f86b8ff9dc199c2b3349a3d204
+%global source0_file python-gssapi-1.7.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  krb5-devel >= 1.19
 BuildRequires:  gcc
@@ -34,6 +38,9 @@ Requires:       krb5-libs >= 1.19
 %description -n python3-gssapi %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/python-gssapi-1.7.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0e56ee44222d2df37c337c376973861af300a7f86b8ff9dc199c2b3349a3d204" || { echo "oreon: Source0 SHA256 mismatch for python-gssapi-1.7.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git -n %{name}-%{version}
 
 %generate_buildrequires

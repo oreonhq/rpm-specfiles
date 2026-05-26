@@ -5,6 +5,10 @@ Summary:        Date conversion routines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Date
 Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTTP-Date-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7b685191c6acc3e773d1fc02c95ee1f9fae94f77783175f5e78c181cc92d2b52
+%global source0_file HTTP-Date-6.06.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -50,6 +54,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/HTTP-Date-6.06.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b685191c6acc3e773d1fc02c95ee1f9fae94f77783175f5e78c181cc92d2b52" || { echo "oreon: Source0 SHA256 mismatch for HTTP-Date-6.06.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n HTTP-Date-%{version}
 # Help generators to recognize Perl scripts
 for F in $(find t/ -name '*.t'); do

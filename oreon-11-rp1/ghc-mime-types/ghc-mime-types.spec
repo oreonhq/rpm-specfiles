@@ -14,6 +14,10 @@ License:        MIT
 URL:            https://hackage.haskell.org/package/mime-types
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1cca5a2e861f9ba1b879dc0f6295afb8c4f436b67916ab8d07e386006c076359
+%global source0_file mime-types-0.1.2.1.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -72,6 +76,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mime-types-0.1.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1cca5a2e861f9ba1b879dc0f6295afb8c4f436b67916ab8d07e386006c076359" || { echo "oreon: Source0 SHA256 mismatch for mime-types-0.1.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

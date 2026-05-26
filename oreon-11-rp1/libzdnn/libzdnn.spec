@@ -5,7 +5,11 @@ Summary:	Driver library for the IBM Z Neural Network Processing Assist Facility
 
 License:	Apache-2.0
 Url:		https://github.com/IBM/zDNN
-Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/IBM/zDNN/archive/v1.0.1/libzdnn-1.0.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 154acbb56f374e9b88a30d55180d2da776e1742d252ae216d94e9c0b4cef28bd
+%global source0_file libzdnn-1.0.1.tar.gz
+# oreon url source checksums end
 
 ExclusiveArch:	s390x
 BuildRequires:	gcc
@@ -43,6 +47,9 @@ The %{name}-static package contains the static library of %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libzdnn-1.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "154acbb56f374e9b88a30d55180d2da776e1742d252ae216d94e9c0b4cef28bd" || { echo "oreon: Source0 SHA256 mismatch for libzdnn-1.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n zDNN-%{version}
 autoreconf -i
 

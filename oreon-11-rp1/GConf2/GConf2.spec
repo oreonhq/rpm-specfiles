@@ -54,6 +54,10 @@ Patch3: GConf-3.2.6-Use-gettext-0.21.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=755992
 Patch99: workaround-crash.patch
 Patch100: pkill-hack.patch
+# oreon url source checksums begin
+%global source0_sha256 1912b91803ab09a5eed34d364bf09fe3a2a9c96751fde03a4e0cfa51a04d784c
+%global source0_file GConf-3.2.6.tar.xz
+# oreon url source checksums end
 
 BuildRequires: autoconf >= 2.60
 BuildRequires: automake >= 1.9
@@ -96,6 +100,9 @@ GConf development package. Contains files needed for doing
 development using GConf.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/GConf-3.2.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1912b91803ab09a5eed34d364bf09fe3a2a9c96751fde03a4e0cfa51a04d784c" || { echo "oreon: Source0 SHA256 mismatch for GConf-3.2.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n GConf-%{version}
 # Remove bundled and generated files
 rm ABOUT-NLS aclocal.m4 backends/Makefile.in config.guess config.h.in \

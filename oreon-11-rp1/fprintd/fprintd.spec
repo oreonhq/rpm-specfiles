@@ -6,6 +6,10 @@ Summary:	D-Bus service for Fingerprint reader access
 # man page is GFDL-1.1-or-later
 License:	GPL-2.0-or-later AND GFDL-1.1-or-later
 Source0:	https://gitlab.freedesktop.org/libfprint/fprintd/-/archive/v%{version}/fprintd-v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a026ef34c31b25975275cc29a5e4eba2b54524769672095a5228098a08acd82c
+%global source0_file fprintd-v1.94.5.tar.gz
+# oreon url source checksums end
 Url:		http://www.freedesktop.org/wiki/Software/fprint/fprintd
 
 BuildRequires:	meson
@@ -55,6 +59,9 @@ Development documentation for fprintd, the D-Bus service for
 fingerprint readers access.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fprintd-v1.94.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a026ef34c31b25975275cc29a5e4eba2b54524769672095a5228098a08acd82c" || { echo "oreon: Source0 SHA256 mismatch for fprintd-v1.94.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git -n %{name}-v%{version}
 
 %build

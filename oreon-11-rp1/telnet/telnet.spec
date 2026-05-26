@@ -43,6 +43,12 @@ Patch32: telnet-log-address.patch
 Patch33: telnet-0.17-overflow-exploit.patch
 Patch34: telnet-0.17-pty-retry.patch
 Patch35: telnet-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 9c80d5c7838361a328fb6b60016d503def9ce53ad3c589f3b08ff71a2bb88e00
+%global source0_file netkit-telnet_0.17.orig.tar.gz
+%global source2_sha256 fef13d44c600f7c8defc57b8b82d6edd312a39c960eebdbbeda6d01716e77a51
+%global source2_file telnet-client.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: ncurses-devel systemd gcc gcc-c++
@@ -66,6 +72,10 @@ logins into the host machine. The daemon is disabled by default.
 You may enable the daemon by editing /etc/xinetd.d/telnet
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/netkit-telnet_0.17.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9c80d5c7838361a328fb6b60016d503def9ce53ad3c589f3b08ff71a2bb88e00" || { echo "oreon: Source0 SHA256 mismatch for netkit-telnet_0.17.orig.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/telnet-client.tar.gz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fef13d44c600f7c8defc57b8b82d6edd312a39c960eebdbbeda6d01716e77a51" || { echo "oreon: Source2 SHA256 mismatch for telnet-client.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n netkit-telnet-%{version}
 
 mv telnet telnet-NETKIT

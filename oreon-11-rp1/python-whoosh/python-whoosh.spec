@@ -13,6 +13,10 @@ License:        LicenseRef-Callaway-BSD
 URL:            http://pythonhosted.org/Whoosh/
 Source0:        https://pypi.python.org/packages/source/W/%{mod_name}/%{mod_name}-%{version}.tar.gz
 Patch1:         whoosh-fix-sphinx.patch
+# oreon url source checksums begin
+%global source0_sha256 7ca5633dbfa9e0e0fa400d3151a8a0c4bec53bd2ecedc0a67705b17565c31a83
+%global source0_file Whoosh-2.7.4.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -41,6 +45,9 @@ functionality to their applications and websites. Every part of how Whoosh
 works can be extended or replaced to meet your needs exactly.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Whoosh-2.7.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7ca5633dbfa9e0e0fa400d3151a8a0c4bec53bd2ecedc0a67705b17565c31a83" || { echo "oreon: Source0 SHA256 mismatch for Whoosh-2.7.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{mod_name}-%{version}
 %patch -p1 -P1
 # pytest 4

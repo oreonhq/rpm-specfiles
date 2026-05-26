@@ -13,6 +13,10 @@ URL:		http://fontawesome.io
 Source0:	http://fontawesome.io/assets/font-awesome-%{version}.zip
 Source1:	%{name}-fontconfig.conf
 Source2:	README-Trademarks.txt
+# oreon url source checksums begin
+%global source0_sha256 494144427ba5dc235e69a2be02576591a8d9f84a7f62cdddf905ad88d2f089e8
+%global source0_file font-awesome-4.7.0.zip
+# oreon url source checksums end
 BuildArch:	noarch
 BuildRequires:	fontpackages-devel
 BuildRequires:	ttembed
@@ -45,6 +49,9 @@ Format versions 1 and 2, Embedded OpenType and SVG font files which are
 typically used on the web.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/font-awesome-4.7.0.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "494144427ba5dc235e69a2be02576591a8d9f84a7f62cdddf905ad88d2f089e8" || { echo "oreon: Source0 SHA256 mismatch for font-awesome-4.7.0.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n font-awesome-%{version}
 cp -p %SOURCE2 .
 

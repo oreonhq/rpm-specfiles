@@ -9,14 +9,20 @@ Summary:        A rust implementation of the FIDO Device Onboard Specification
 License:        BSD-3-Clause
 
 URL:            https://github.com/fdo-rs/fido-device-onboard-rs
-Source0:        %{url}/archive/v%{version}/%{name}-rs-%{version}.tar.gz
-Source1:        %{name}-rs-%{version}-vendor-patched.tar.xz
+Source0:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/v0.5.5/fido-device-onboard-rs-0.5.5.tar.gz
+Source1:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/refs/tags/v0.5.5.tar.gz
 Patch1:         0001-use-released-aws-nitro-enclaves-cose-version.patch
 
 # Patches >=1000 are only applied when using system Rust dependencies:
 # - Update nix dependency from 0.26 to 0.31
 #   https://github.com/fdo-rs/fido-device-onboard-rs/pull/803
 Patch1000:      fido-device-onboard-fix-metadata.diff
+# oreon url source checksums begin
+%global source0_sha256 8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c
+%global source0_file fido-device-onboard-rs-0.5.5.tar.gz
+%global source1_sha256 8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c
+%global source1_file v0.5.5.tar.gz
+# oreon url source checksums end
 
 # Because nobody cares
 ExcludeArch: %{ix86}
@@ -41,6 +47,10 @@ BuildRequires:  libpq-devel
 
 %prep
 
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fido-device-onboard-rs-0.5.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c" || { echo "oreon: Source0 SHA256 mismatch for fido-device-onboard-rs-0.5.5.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/v0.5.5.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c" || { echo "oreon: Source1 SHA256 mismatch for v0.5.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?rhel} || 0%{?oreon}
 %autosetup -a1 -n %{name}-rs-%{version} -N
 %autopatch -p1 -M999

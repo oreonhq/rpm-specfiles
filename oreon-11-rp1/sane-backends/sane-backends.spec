@@ -62,6 +62,10 @@ Patch3: 0001-sanei_thread.c-Use-deferred-cancellation-mode.patch
 # be used when changing the original string.
 # https://gitlab.com/sane-project/backends/-/merge_requests/894
 Patch4: gphoto2-gcc16-ftbfs.patch
+# oreon url source checksums begin
+%global source0_sha256 f99205c903dfe2fb8990f0c531232c9a00ec9c2c66ac7cb0ce50b4af9f407a72
+%global source0_file sane-backends-1.4.0.tar.gz
+# oreon url source checksums end
 
 
 # we need autoconf during build
@@ -188,6 +192,9 @@ access image acquisition devices available on the local host.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sane-backends-1.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f99205c903dfe2fb8990f0c531232c9a00ec9c2c66ac7cb0ce50b4af9f407a72" || { echo "oreon: Source0 SHA256 mismatch for sane-backends-1.4.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 

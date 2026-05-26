@@ -12,6 +12,10 @@ License:	BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND MPL-
 URL:		https://invent.kde.org/frameworks/%{framework}
 Source0:	https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:	https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 bc2fb0d94de859f6e6bc7413620584f072ace1487e302c65b3398d7c6b0eff7c
+%global source0_file kcoreaddons-6.24.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -57,6 +61,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kcoreaddons-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bc2fb0d94de859f6e6bc7413620584f072ace1487e302c65b3398d7c6b0eff7c" || { echo "oreon: Source0 SHA256 mismatch for kcoreaddons-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 %build

@@ -4,6 +4,10 @@ Version:        3.83
 Release:        5%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTML-Parser-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7278ce9791256132b26a71a5719451844704bb9674b58302c3486df43584f8c0
+%global source0_file HTML-Parser-3.83.tar.gz
+# oreon url source checksums end
 URL:            https://metacpan.org/release/HTML-Parser
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -53,6 +57,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/HTML-Parser-3.83.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7278ce9791256132b26a71a5719451844704bb9674b58302c3486df43584f8c0" || { echo "oreon: Source0 SHA256 mismatch for HTML-Parser-3.83.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n HTML-Parser-%{version}
 chmod -c a-x eg/*
 

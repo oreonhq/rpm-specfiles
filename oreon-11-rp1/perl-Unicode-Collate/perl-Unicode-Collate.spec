@@ -8,6 +8,10 @@ Summary:        Unicode Collation Algorithm
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Unicode-DFS-2016
 URL:            https://metacpan.org/release/Unicode-Collate
 Source0:        https://cpan.metacpan.org/authors/id/S/SA/SADAHIRO/Unicode-Collate-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b75dd07bbc252937b1b87064bf79ccd0a1b7ee993b8cf0e80f47406c3205639f
+%global source0_file Unicode-Collate-1.31.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  gcc
 BuildRequires:  findutils
@@ -42,6 +46,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Unicode-Collate-1.31.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b75dd07bbc252937b1b87064bf79ccd0a1b7ee993b8cf0e80f47406c3205639f" || { echo "oreon: Source0 SHA256 mismatch for Unicode-Collate-1.31.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Unicode-Collate-%{version}
 
 # Remove pregenerated files

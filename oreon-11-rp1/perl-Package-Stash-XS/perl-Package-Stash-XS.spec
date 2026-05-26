@@ -11,7 +11,12 @@ Release:	13%{?dist}
 Summary:	Faster and more correct implementation of the Package::Stash API
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Package-Stash-XS
-Source0:	https://cpan.metacpan.org/modules/by-module/Package/Package-Stash-XS-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Package-Stash-XS-0.30.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 26bad65c1959c57379b3e139dc776fbec5f702906617ef27cdc293ddf1239231
+%global source0_file Package-Stash-XS-0.30.tar.gz
+# oreon url source checksums end
+
 # Module Build
 BuildRequires:	coreutils
 BuildRequires:	findutils
@@ -55,6 +60,9 @@ way that's less buggy and much faster. It will be used by default if it's
 installed, and should be preferred in all environments with a compiler.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Package-Stash-XS-0.30.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "26bad65c1959c57379b3e139dc776fbec5f702906617ef27cdc293ddf1239231" || { echo "oreon: Source0 SHA256 mismatch for Package-Stash-XS-0.30.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Package-Stash-XS-%{version}
 
 %build

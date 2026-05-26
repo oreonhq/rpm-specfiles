@@ -106,7 +106,11 @@ URL: https://strace.io
 Source: https://strace.io/files/%{version}/strace-%{version}.tar.xz
 BuildRequires: xz
 %else
-Source: strace-%{version}.tar.gz
+Source:        https://strace.io/files/%{version}/strace-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 e076c851eec0972486ec842164fdc54547f9d17abd3d1449de8b120f5d299143
+%global source0_file strace-6.19.tar.xz
+# oreon url source checksums end
 %endif
 BuildRequires: gcc gzip make
 
@@ -149,6 +153,9 @@ Install strace if you need a tool to track the system calls made and
 received by a process.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/strace-6.19.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e076c851eec0972486ec842164fdc54547f9d17abd3d1449de8b120f5d299143" || { echo "oreon: Source0 SHA256 mismatch for strace-6.19.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 echo -n %version-%release > .tarball-version
 echo -n 2026 > .year

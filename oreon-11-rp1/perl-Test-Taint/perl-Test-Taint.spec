@@ -5,6 +5,10 @@ Release:        23%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Taint
 Source0:        https://cpan.metacpan.org/authors/id/P/PE/PETDANCE/Test-Taint-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5d594d4257352c93785024c63aa0a7b73d912ceca9611cd975ce83aab021a97d
+%global source0_file Test-Taint-1.08.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  %{__perl}
@@ -40,6 +44,9 @@ easy ways to check and report on the taintedness of your data, in standard
 Test::More style.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Taint-1.08.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5d594d4257352c93785024c63aa0a7b73d912ceca9611cd975ce83aab021a97d" || { echo "oreon: Source0 SHA256 mismatch for Test-Taint-1.08.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Taint-%{version}
 
 %build

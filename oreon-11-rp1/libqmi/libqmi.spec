@@ -5,6 +5,10 @@ Summary: Support library to use the Qualcomm MSM Interface (QMI) protocol
 License: LGPL-2.1-or-later
 URL: https://gitlab.freedesktop.org/mobile-broadband/libqmi/
 Source: https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/archive/%{version}/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 67c97feee86e6709b9cdec303c3650059b298f1c2b886b6053a56aced1616b3f
+%global source0_file libqmi-1.36.0.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: meson >= 0.53
 BuildRequires: gcc
@@ -44,6 +48,9 @@ from the command line.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libqmi-1.36.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "67c97feee86e6709b9cdec303c3650059b298f1c2b886b6053a56aced1616b3f" || { echo "oreon: Source0 SHA256 mismatch for libqmi-1.36.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

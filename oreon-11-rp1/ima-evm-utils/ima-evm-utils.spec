@@ -12,7 +12,7 @@ Release: 10%{?dist}
 Summary: IMA/EVM support utilities
 License: GPL-2.0-or-later
 Url:     https://github.com/linux-integrity/
-Source0: %{url}/ima-evm-utils/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/linux-integrity//ima-evm-utils/releases/download/v1.6.2/ima-evm-utils-1.6.2.tar.gz
 
 # IMA setup tools
 Source2: dracut-98-integrity.conf
@@ -25,6 +25,10 @@ Source200: policy_list
 %if 0%{bootstrap}
 # compat source and patches
 Source10: ima-evm-utils-1.5.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 9346a5ccd5ca77caf6a9d2ac0d83873c04d0372414a632126df4e7a88bedff4a
+%global source0_file ima-evm-utils-1.6.2.tar.gz
+# oreon url source checksums end
 BuildRequires: openssl-devel-engine
 %endif
 
@@ -72,6 +76,9 @@ Requires: %{name}-libs = %{version}-%{release}
 This package provides the header files for %{name}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ima-evm-utils-1.6.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9346a5ccd5ca77caf6a9d2ac0d83873c04d0372414a632126df4e7a88bedff4a" || { echo "oreon: Source0 SHA256 mismatch for ima-evm-utils-1.6.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %if 0%{bootstrap}

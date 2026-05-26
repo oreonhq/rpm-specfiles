@@ -14,6 +14,10 @@ URL:     https://github.com/tpm2-software/tpm2-abrmd
 Source0: https://github.com/tpm2-software/tpm2-abrmd/archive/%{version}/tpm2-abrmd-%{version}.tar.gz
 
 Patch0: selinux-allow-fwupd-to-communicate-with-tpm2-abrmd.patch
+# oreon url source checksums begin
+%global source0_sha256 dade3fffa441b75a0d2dc216ac8fbf8a392e5b85344bfb618bd6d02216177bb3
+%global source0_file tpm2-abrmd-2.3.1.tar.gz
+# oreon url source checksums end
 
 BuildArch: noarch
 Requires: selinux-policy >= %{selinux_policyver}
@@ -36,6 +40,9 @@ Requires(post): policycoreutils-python
 SELinux policy modules for tpm2-abrmd.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tpm2-abrmd-2.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dade3fffa441b75a0d2dc216ac8fbf8a392e5b85344bfb618bd6d02216177bb3" || { echo "oreon: Source0 SHA256 mismatch for tpm2-abrmd-2.3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n tpm2-abrmd-%{version}
 
 %build

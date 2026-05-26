@@ -33,6 +33,10 @@ URL:     https://gtk.org
 Source0: https://download.gnome.org/sources/gtk/3.24/gtk-%{version}.tar.xz
 
 patch0: drop-down-menu-fix.patch
+# oreon url source checksums begin
+%global source0_sha256 0013877c6bd23c2dbe42ad7c70a053d0e449be66736574e37867c49c5f905a4f
+%global source0_file gtk-3.24.51.tar.xz
+# oreon url source checksums end
 
 BuildRequires: pkgconfig(atk) >= %{atk_version}
 BuildRequires: pkgconfig(atk-bridge-2.0)
@@ -172,6 +176,9 @@ The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gtk-3.24.51.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0013877c6bd23c2dbe42ad7c70a053d0e449be66736574e37867c49c5f905a4f" || { echo "oreon: Source0 SHA256 mismatch for gtk-3.24.51.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n gtk-%{version} -p1
 
 %build

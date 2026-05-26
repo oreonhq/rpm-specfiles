@@ -8,6 +8,10 @@ License: GPL-2.0-only
 Summary: Debugging Information Manipulation Tools (pahole & friends)
 URL: http://acmel.wordpress.com
 Source: http://fedorapeople.org/~acme/dwarves/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 1c89f47dc4f127c4b9d3fb46c8386a40be45c36ef82e8df472418de9423fc5bb
+%global source0_file dwarves-1.30.tar.xz
+# oreon url source checksums end
 Requires: %{libname}%{libver} = %{version}-%{release}
 BuildRequires: gcc
 BuildRequires: cmake >= 2.8.12
@@ -64,6 +68,9 @@ Requires: %{libname}%{libver} = %{version}-%{release}
 Debugging information processing library development files.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dwarves-1.30.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1c89f47dc4f127c4b9d3fb46c8386a40be45c36ef82e8df472418de9423fc5bb" || { echo "oreon: Source0 SHA256 mismatch for dwarves-1.30.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

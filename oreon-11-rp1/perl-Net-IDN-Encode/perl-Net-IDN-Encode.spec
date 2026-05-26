@@ -11,6 +11,10 @@ Patch0:         Net-IDN-Encode-2.500-Make-generated-arrays-available-at-compile-
 # Adapt to perl-5.38.0 and stricter GCC, bug #2241714, CPAN RT#149108,
 # proposed to an upstream.
 Patch1:         Net-IDN-Encode-2.500-use_uvchr_to_utf8_flags_instead_of_uvuni_to_utf8_flags.patch
+# oreon url source checksums begin
+%global source0_sha256 55453633e3ff24ce325b34bc2c8157b9859962a31ab5cf28bf7ccc1c9b3a3eaa
+%global source0_file Net-IDN-Encode-2.500.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -49,6 +53,9 @@ Internationalized Domain Names (IDNs).
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Net-IDN-Encode-2.500.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "55453633e3ff24ce325b34bc2c8157b9859962a31ab5cf28bf7ccc1c9b3a3eaa" || { echo "oreon: Source0 SHA256 mismatch for Net-IDN-Encode-2.500.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n Net-IDN-Encode-%{version}
 
 # Remove incorrect executable bits

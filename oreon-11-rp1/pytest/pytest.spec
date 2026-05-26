@@ -6,6 +6,10 @@ Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            https://pytest.org
 Source:         %{pypi_source pytest %{version}}
+# oreon url source checksums begin
+%global source0_sha256 86c0d0b93306b961d58d62a4db4879f27fe25513d4b969df351abdddb3c30e01
+%global source0_file pytest-8.4.2.tar.gz
+# oreon url source checksums end
 
 # Remove -s from Python shebang,
 # ensure that packages installed with pip to user locations are testable
@@ -93,6 +97,9 @@ complex functional testing for applications and libraries.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pytest-8.4.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "86c0d0b93306b961d58d62a4db4879f27fe25513d4b969df351abdddb3c30e01" || { echo "oreon: Source0 SHA256 mismatch for pytest-8.4.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}
 
 # documentation dependencies missing in Fedora

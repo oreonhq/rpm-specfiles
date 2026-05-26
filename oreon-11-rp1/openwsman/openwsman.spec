@@ -55,6 +55,10 @@ Patch8:		openwsman-2.7.2-ssl-certs-gen-changes.patch
 Patch9:		openwsman-2.8.1-rdoc-ruby34.patch
 Patch10:	openwsman-2.8.1-fix-ruby-io.patch
 Patch11:	openwsman-2.8.1-rdoc-6_16.patch
+# oreon url source checksums begin
+%global source0_sha256 22f7dd418eda4d6e4d1c497fcc2a3e2ee91eeff3c19f4a4447dfaec38fd2b87b
+%global source0_file v2.8.1.tar.gz
+# oreon url source checksums end
 BuildRequires:	make
 BuildRequires:	swig
 BuildRequires:	libcurl-devel libxml2-devel pam-devel sblim-sfcc-devel
@@ -192,6 +196,9 @@ Custom SELinux policy module
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.8.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "22f7dd418eda4d6e4d1c497fcc2a3e2ee91eeff3c19f4a4447dfaec38fd2b87b" || { echo "oreon: Source0 SHA256 mismatch for v2.8.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %autopatch -p1

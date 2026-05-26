@@ -8,6 +8,10 @@ License:	LicenseRef-Callaway-LGPLv2+
 Url:		https://wiki.gnome.org/Apps/Videos
 Source0:	https://download.gnome.org/sources/%{name}/3.26/%{name}-%{version}.tar.xz
 Patch0: totem-pl-parser-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 c0df0f68d5cf9d7da43c81c7f13f11158358368f98c22d47722f3bd04bd3ac1c
+%global source0_file totem-pl-parser-3.26.6.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	glib2-devel
 BuildRequires:	libxml2-devel
@@ -31,6 +35,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/totem-pl-parser-3.26.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c0df0f68d5cf9d7da43c81c7f13f11158358368f98c22d47722f3bd04bd3ac1c" || { echo "oreon: Source0 SHA256 mismatch for totem-pl-parser-3.26.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

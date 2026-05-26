@@ -12,6 +12,10 @@ Release: 29%{?dist}
 License:        GPL-2.0-or-later
 URL: https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
 Source0: http://anishpatil.fedorapeople.org/or_in.%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 bd97fac716b69493a3160fc5afb04f9a9f34a772086c9f3588bd759ec8dbf63f
+%global source0_file or_in.1.0.0.tar.gz
+# oreon url source checksums end
 BuildRequires:  hunspell-devel
 Requires:       hunspell
 Supplements: (hunspell and langpacks-or)
@@ -22,6 +26,9 @@ Odia hunspell dictionaries.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/or_in.1.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bd97fac716b69493a3160fc5afb04f9a9f34a772086c9f3588bd759ec8dbf63f" || { echo "oreon: Source0 SHA256 mismatch for or_in.1.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -c -n or_IN
 
 iconv -f ISO-8859-1 -t UTF-8 or_IN/Copyright > or_IN/Copyright.utf8

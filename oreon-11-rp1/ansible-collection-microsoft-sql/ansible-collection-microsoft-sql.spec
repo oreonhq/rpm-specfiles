@@ -14,8 +14,8 @@ BuildRequires: ansible-core >= 2.11.0
 Name: ansible-collection-microsoft-sql
 Url: https://github.com/linux-system-roles/mssql
 Summary: The Ansible collection for Microsoft SQL Server management
-Version: 2.6.4
-Release: 3%{?dist}
+Version: 2.6.6
+Release: 1%{?dist}
 
 License: MIT
 
@@ -52,11 +52,17 @@ Requires: linux-system-roles
 # %%global source1id 50edba099ab2c8b25b225fe760cb5a459b320030
 %global source1id %{version}
 %global parenturl https://github.com/linux-system-roles
-Source: %{parenturl}/auto-maintenance/archive/%{mainid}/auto-maintenance-%{mainid}.tar.gz
-Source1: %{parenturl}/%{rolename}/archive/%{source1id}/%{rolename}-%{source1id}.tar.gz
+Source:        https://github.com/linux-system-roles/auto-maintenance/archive/eadd06cfa98d244b096cff24cd11b668428b1613/auto-maintenance-eadd06cfa98d244b096cff24cd11b668428b1613.tar.gz
+Source1:        https://github.com/linux-system-roles/mssql/archive/2.6.6/mssql-2.6.6.tar.gz
 
 # EL only, includes macros available from ansible-packaging that is not available on EL
 Source1002: ansible-packaging.inc
+# oreon url source checksums begin
+%global source0_sha256 148ef212d064a16ef4cad87be39663c29d0e36610d4df8d1bc7be2461160cddf
+%global source0_file auto-maintenance-eadd06cfa98d244b096cff24cd11b668428b1613.tar.gz
+%global source1_sha256 ca7164cf520a5f74247a76f02ab50703eeae536345e5c6026e3aa54c2011b9c7
+%global source1_file mssql-2.6.6.tar.gz
+# oreon url source checksums end
 %include %{SOURCE1002}
 
 BuildArch: noarch
@@ -92,6 +98,10 @@ if st and st.type == "link" then
 end
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/auto-maintenance-eadd06cfa98d244b096cff24cd11b668428b1613.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "148ef212d064a16ef4cad87be39663c29d0e36610d4df8d1bc7be2461160cddf" || { echo "oreon: Source0 SHA256 mismatch for auto-maintenance-eadd06cfa98d244b096cff24cd11b668428b1613.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/mssql-2.6.6.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ca7164cf520a5f74247a76f02ab50703eeae536345e5c6026e3aa54c2011b9c7" || { echo "oreon: Source1 SHA256 mismatch for mssql-2.6.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -a1 -n auto-maintenance-%{mainid}
 
 mv %{rolename}-%{source1id} %{rolename}
@@ -316,5 +326,255 @@ find %{buildroot}%{ansible_roles_dir} -mindepth 1 -maxdepth 1 | \
 %endif
 
 %changelog
-* Tue Mar 17 2026 Oreon Packaging Team <packaging@oreonhq.com> - 2.6.4-3
-- Prepare for Oreon 11 (RP1)
+* Fri Feb 6 2026 Packit <hello@packit.dev> - 2.6.6-1
+- Update to version 2.6.6
+
+* Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org>
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Fri Jan 16 2026 Fedora Release Engineering <releng@fedoraproject.org>
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
+
+* Wed Aug 13 2025 Packit <hello@packit.dev> - 2.6.4-1
+- Update to version 2.6.4
+
+* Mon Jul 28 2025 Packit <hello@packit.dev> - 2.6.3-1
+- Update to version 2.6.3
+
+* Wed Jul 23 2025 Fedora Release Engineering <releng@fedoraproject.org>
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_43_Mass_Rebuild
+
+* Thu Jan 16 2025 Fedora Release Engineering <releng@fedoraproject.org>
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_42_Mass_Rebuild
+
+* Wed Nov 27 2024 Packit <hello@packit.dev> - 2.5.2-1
+- Update to version 2.5.2
+
+* Mon Nov 25 2024 Packit <hello@packit.dev> - 2.5.1-1
+- Update to version 2.5.1
+
+* Wed Nov 20 2024 Sergei Petrosian <spetrosi@redhat.com> - 2.5.0-1
+- Add mssql_tools_versions, mssql_tls_self_sign to allow installing different versions of mssql-tools
+
+* Fri Nov 15 2024 Sergei Petrosian <spetrosi@redhat.com> - 2.4.0-1
+- Support OpenSUSE/SLES
+- Fail on RHEL or CentOS 10 because it's not supported
+- Use new adutil functionality to enable AES encryption
+- Add support for Fedora
+
+* Wed Jul 17 2024 Fedora Release Engineering <releng@fedoraproject.org>
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
+
+* Wed May 22 2024 Sergei Petrosian <spetrosi@redhat.com> - 2.2.3-2
+- Use downstream ansible-packaging.inc to fix eln build
+
+* Tue Mar 12 2024 Sergei Petrosian <spetrosi@redhat.com> - 2.2.3-1
+- Add support for running SQL Server as a SELinux unconfined application with SELinux in enforcing mode on RHEL 9
+  Resolves: RHEL-17080
+- ExcludeArch: i686
+
+* Fri Feb 9 2024 Sergei Petrosian <spetrosi@redhat.com> - 2.2.2-1
+- Update role to version 2.2.2 to fix HA
+- CHANGELOG.md was missing in some places
+- In legacy role, sed repalced unexpected strings at some places
+
+* Wed Jan 31 2024 Sergei Petrosian <spetrosi@redhat.com> - 2.2.1-1
+- Support installing SQL Server 2022 on RHEL 9 and running as a selinux-confined application
+- Remove unnecessary variable and RPM requirements for read-scale clusters
+- Add the mssql_ha_prep_for_pacemaker variable to configure SQL Server for Pacemaker
+- Deprecate `mssql_ha_cluster_run_role` for `mssql_manage_ha_cluster`
+
+* Mon Jan 22 2024 Fedora Release Engineering <releng@fedoraproject.org>
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Fri Jan 19 2024 Fedora Release Engineering <releng@fedoraproject.org>
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_40_Mass_Rebuild
+
+* Tue Nov 21 2023 Sergei Petrosian <spetrosi@redhat.com> - 2.1.0-1
+- Update role to 2.1.0 to add support for installing mssql on RHEL 9
+
+* Mon Sep 18 2023 Sergei Petrosian <spetrosi@redhat.com> - 2.0.2-2
+- Use latest auto-maintenance for updates in lsr_role2collection.py
+
+* Wed Aug 16 2023 Sergei Petrosian <spetrosi@redhat.com> - 2.0.2-1
+- Update role to version 2.0.2 to improve collection readme
+- Remove with_html, instead use built-in .README.html
+- Update galaxy fields
+
+* Fri Jul 28 2023 Sergei Petrosian <spetrosi@redhat.com> - 2.0.1-1
+- Update role to version 2.0.1 to fix issue in IDM CI
+
+* Thu Jul 27 2023 Sergei Petrosian <spetrosi@redhat.com> - 2.0.0-1
+- Update role to version 2.0.0 to enhance AD integration
+Resolves: RHEL-877
+Resolves: RHEL-878
+Resolves: RHEL-879
+Resolves: RHEL-880
+
+* Wed Jul 19 2023 Fedora Release Engineering <releng@fedoraproject.org>
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_39_Mass_Rebuild
+
+* Wed May 31 2023 Sergei Petrosian <spetrosi@redhat.com> - 1.4.1-1
+- Update BuiildRequires to use ansible-core on RHEL > 8.8
+- Update role to version 1.4.1 to add customizable storage paths
+
+* Tue May 30 2023 Sergei Petrosian <spetrosi@redhat.com> - 1.3.0-4
+- Move RHEL related code into an include for spec readability
+
+* Mon Feb 27 2023 Sergei Petrosian <spetrosi@redhat.com> - 1.3.0-3
+- Spec: add functionality to build from a commit hash
+- Use latest 1.3.0 to add flexibility to AD integration functionality
+  Resolves: rhbz#2163709
+
+* Fri Feb 3 2023 Sergei Petrosian <spetrosi@redhat.com> - 1.3.0-1
+- On SQL Server Enterprise Edition, support configuring asynchronous replication
+  Resolves: rhbz#2144820
+- Support configuring a read-scale SQL server availability group (without pacemaker
+  Resolves: rhbz#2144821
+- Use the certificate role to create the cert and the key
+  Resolves: rhbz#2144852
+- Support SQL Server version 2022
+  Resolves: rhbz#2153427
+- Support integrating with AD Server for authentication
+  Resolves: rhbz#2163696
+- md2html.sh - use -t to generate TOC
+- Replace installbase with ansible_roles_dir in pretrans scriplet
+
+* Wed Jan 18 2023 Fedora Release Engineering <releng@fedoraproject.org> - 1.2.4-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_38_Mass_Rebuild
+
+* Fri Nov 11 2022 Sergei Petrosian <spetrosi@redhat.com> - 1.2.4-4
+- Keep spec consistent with linux-system-roles
+  - Return conditionals related to EL to keep up- and downstream consistent
+  - Add pretrans scriplet to remove symlinks if exist to fix issue with update
+  - Instead of copying doc and license files create symlinks
+  - Dynamically generate %%files section
+
+* Thu Sep 22 2022 Sergei Petrosian <spetrosi@redhat.com> - 1.2.4-3
+- Further simplify spec file
+  - Do not install roles to /usr/share/microsoft and then create symlinks
+    to /usr/share/ansible/roles/, instead install directly to
+    /usr/share/ansible/roles/
+  - Remove unused removal of ambiguous python shebangs
+
+* Tue Sep 20 2022 Sergei Petrosian <spetrosi@redhat.com> - 1.2.4-2
+- Remove all code unrelated to Fedora to siplify the file
+  - Remove bcond_with ansible because Fedora always have ansible
+  - Replace the ansible_build_dep macro with simple ansible-packaging
+  - Remove %%bcond_with html because Fedora always can convert md to html
+  - Remove conditions related to RHEL
+  - Replace ansible_collection_build_install with biult-in build & install
+  - Remove unrelated to Fedora Provides
+  - Remove all loops because this RPM contains only one role
+  - Remove definition of ansible_collection_files as its part of ansible-packaging
+  - Clean up %%files section
+    - Use ansible_collection_files in %%files section
+    - Remove duplicated lines and wildcards
+  - Remove defsource - simply define the source for mssql
+  - Escape macros in comments with a second %
+  - 's|$RPM_BUILD_ROOT|%%{buildroot}|' for consistency
+  -  Remove getarchivedir for simplicity
+  - Wrap description by 80 symbols and clarify it
+  - Remove tests/.fmf dir from the RPM
+  Resolves: rhbz#2126901
+
+* Thu Sep 1 2022 Sergei Petrosian <spetrosi@redhat.com> - 1.2.4-1
+- Replicate all provided databases
+  - This change fixes the bug where only the first database provided with
+mssql_ha_db_names got replicated
+  - Clarify that the role does not remove not listed databases
+  Resolves: rhbz#2066337
+- Input multiple sql scripts
+  - Allow _input_sql_file vars to accept list of files
+  - Flush handlers prior to inputting post sql script
+  Resolves: rhbz#2120712
+- Note that ha_cluster is not idempotent
+- SPEC: Do not update dates in CHANGELOG.md
+
+* Thu Aug 25 2022 Sergei Petrosian <spetrosi@redhat.com> - 1.2.3-1
+- Use firewall role to configure firewall for SQL Server
+  Resolves: rhbz#2120709
+- Add mssql_ha_virtual_ip
+  Replace mssql_ha_db_name with mssql_ha_db_names to let users replicate multiple DBs
+  Resolves: rhbz#2066337
+
+- Replace simple `mssql_input_sql_file` with `pre` and `post` variables
+  Resolves: rhbz#2120712
+- Add Requires: linux-system-roles or rhel-system-roles
+- Replace fedora.linux_system_roles:redhat.rhel_system_roles on RHEL
+- Add downstream values to galaxy.yml
+- Change defcommit to defsource that takes both tags and commits
+- Update CHANGELOG.md with the current date and copy it to collection dir
+
+* Wed Jul 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_37_Mass_Rebuild
+
+* Mon Mar 21 2022 Sergei Petrosian <spetrosi@redhat.com> - 1.1.1-3
+- Fix inserting ansible_managed
+  Resolves: rhbz#2057651 (EL8)
+  Resolves: rhbz#2064690 (EL9)
+- Users now can provide a custom URLs to pull packages and RPM key from
+  Resolves: rhbz#2038256 (EL8)
+  Resolves: rhbz#2064648 (EL9)
+
+* Fri Mar 18 2022 Sergei Petrosian <spetrosi@redhat.com> - 1.1.1-2
+- RHEL8.6, 9 - add "Requires: ansible-core or ansible"
+  Resolves: rhbz#2065664 (EL8)
+  Resolves: rhbz#2065669 (EL8)
+
+* Thu Mar 17 2022 Sergei Petrosian <spetrosi@redhat.com> - 1.1.1-1
+- Insert the "Ansible managed" comment to the /var/opt/mssql/mssql.conf file
+  Resolves rhbz#2057651 (EL8)
+  Resolves rhbz#2064690 (EL9)
+
+* Wed Jan 19 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
+
+* Wed Jul 21 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1.1.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
+
+* Wed Jul 21 2021 Sergei Petrosian <spetrosi@redhat.com> - 1.1.0-1
+- Add support for Microsoft SQL Server 2017
+
+* Mon Jul 19 2021 Sergei Petrosian <spetrosi@redhat.com> - 1.0.12-2
+- Copy fix for RHEL 7 builds from rhel-system-roles
+  Link to the original fix:
+  https://src.fedoraproject.org/rpms/linux-system-roles/c/093981119f99ac51a6e06a2714b587e4e2fe287c
+
+* Tue Jul 13 2021 Sergei Petrosian <spetrosi@redhat.com> - 1.0.12-1
+- Add the meta-runtime option from the latest auto-maintenance
+- Use the latest mssql that ships fixes for issues #24,#25,#26,#27,#28,35
+
+* Tue Jun 29 2021 Sergei Petrosian <spetrosi@redhat.com> - 1.0.11-3
+- Add a missing slash at the {ansible_collection_files} definition for rhel 7
+
+* Thu Jun 17 2021 Sergei Petrosian <spetrosi@redhat.com> - 1.0.11-2
+- Make the ansible_collection_files macro defined in Fedora automatically and
+  in RHEL manually consistent - having slash at the end to clean double-slashes
+
+* Thu Jun 17 2021 Sergei Petrosian <spetrosi@redhat.com> - 1.0.11-1
+- Update the version to be consistent with the Galaxy collection at
+  https://galaxy.ansible.com/microsoft/sql
+
+* Wed Jun 16 2021 Sergei Petrosian <spetrosi@redhat.com> - 0.0.1-5
+- Update commit hash for mssql
+
+* Wed Jun 16 2021 Sergei Petrosian <spetrosi@redhat.com> - 0.0.1-4
+- Generate symlinks for roles in /usr/share/ansible/roles
+
+* Wed Jun 16 2021 Sergei Petrosian <spetrosi@redhat.com> - 0.0.1-3
+- Copy changes made to linux-system-roles in this PR:
+  https://src.fedoraproject.org/rpms/linux-system-roles/pull-request/13#
+- Make spec file available for older versions of OSes.
+- Drop python3-six dependency which was used by lsr_role2collection.py.
+- Drop html files from rpm if the version has no markdown parser.
+- Drop unnecessary python scripts which include python3 only code, e.g.,
+  f-strings.
+  Resolves rhbz#1970165
+
+* Mon Jun 14 2021 Sergei Petrosian <spetrosi@redhat.com> - 0.0.1-2
+- Fix long description lines
+- Fix incorrect role includes in microsoft/sql-server/tests/
+
+* Thu Jun 3 2021 Sergei Petrosian <spetrosi@redhat.com> - 0.0.1-1
+- Initial release

@@ -11,6 +11,10 @@ License:        GPL-3.0-or-later AND FSFAP AND GFDL-1.3-no-invariants-or-later A
 URL:            https://www.gnu.org/software/auctex/
 VCS:            git:https://git.savannah.gnu.org/cgit/auctex.git
 Source:         https://github.com/emacsmirror/auctex/archive/auctex-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1814914a78ad597173253bf007b384488c65fbaefc8639ffd8a32dcc6eb1f293
+%global source0_file auctex-14.1.2.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  emacs-nw
@@ -84,6 +88,9 @@ postprocessed by Ghostscript).
 The tex-preview package is generated from the AUCTeX package for Emacs.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/auctex-14.1.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1814914a78ad597173253bf007b384488c65fbaefc8639ffd8a32dcc6eb1f293" || { echo "oreon: Source0 SHA256 mismatch for auctex-14.1.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n auctex-auctex-%{version}
 
 %build

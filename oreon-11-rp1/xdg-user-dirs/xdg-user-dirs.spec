@@ -15,6 +15,10 @@ Patch0001:	0001-Add-a-systemd-service-to-run-xdg-user-dirs-update.patch
 Patch0002:	0002-Install-systemd-service-file.patch
 # https://gitlab.freedesktop.org/xdg/xdg-user-dirs/-/merge_requests/16
 Patch0003:      0003-Fix-autopoint-invocation.patch
+# oreon url source checksums begin
+%global source0_sha256 ec6f06d7495cdba37a732039f9b5e1578bcb296576fde0da40edb2f52220df3c
+%global source0_file xdg-user-dirs-0.18.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -36,6 +40,9 @@ Contains xdg-user-dirs-update that updates folders in a users
 homedirectory based on the defaults configured by the administrator.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xdg-user-dirs-0.18.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ec6f06d7495cdba37a732039f9b5e1578bcb296576fde0da40edb2f52220df3c" || { echo "oreon: Source0 SHA256 mismatch for xdg-user-dirs-0.18.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am
 
 %conf

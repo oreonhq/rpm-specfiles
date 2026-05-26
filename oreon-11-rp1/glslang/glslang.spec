@@ -7,10 +7,14 @@ Summary:        OpenGL and OpenGL ES shader front end and validator
 
 License:        BSD-2-Clause AND BSD-3-Clause AND GPL-3.0-or-later AND Apache-2.0
 URL:            https://github.com/KhronosGroup/%{name}
-Source0:        %url/archive/vulkan-sdk-%{sdkver}.tar.gz#/%{name}-sdk-%{sdkver}.tar.gz
+Source0:        https://github.com/KhronosGroup/glslang/archive/vulkan-sdk-1.4.341.0.tar.gz#/glslang-sdk-1.4.341.0.tar.gz
 # Patch to build against system spirv-tools (rebased locally)
 #Patch3:         https://patch-diff.githubusercontent.com/raw/KhronosGroup/glslang/pull/1722.patch#/0001-pkg-config-compatibility.patch
 Patch3:         0001-pkg-config-compatibility.patch
+# oreon url source checksums begin
+%global source0_sha256 18cdf7d40a39001dde842c6a1338b2c9321ac5e487139b9d52b4b9c666da3c86
+%global source0_file vulkan-sdk-1.4.341.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -32,6 +36,9 @@ ES and OpenGL shading languages. It implements a strict
 interpretation of the specifications for these languages.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vulkan-sdk-1.4.341.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "18cdf7d40a39001dde842c6a1338b2c9321ac5e487139b9d52b4b9c666da3c86" || { echo "oreon: Source0 SHA256 mismatch for vulkan-sdk-1.4.341.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-vulkan-sdk-%{sdkver}
 # Fix rpmlint warning on debuginfo
 find . -name '*.h' -or -name '*.cpp' -or -name '*.hpp'| xargs chmod a-x

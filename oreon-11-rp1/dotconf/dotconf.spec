@@ -6,6 +6,10 @@ Summary:    Libraries to parse configuration files
 License:    LGPL-2.1-only AND Apache-1.1
 URL:        https://github.com/williamh/dotconf/
 Source:     https://github.com/williamh/dotconf/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5922c46cacf99b2ecc4853d28a2bda4a489292e73276e604bd9cba29dfca892d
+%global source0_file dotconf-1.4.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: autoconf
 BuildRequires: automake
@@ -28,6 +32,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dotconf-1.4.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5922c46cacf99b2ecc4853d28a2bda4a489292e73276e604bd9cba29dfca892d" || { echo "oreon: Source0 SHA256 mismatch for dotconf-1.4.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -7,7 +7,7 @@ Summary:            Python utility / library to sort Python imports
 
 License:            MIT
 URL:                https://github.com/timothycrosley/%{modname}
-Source0:            %{url}/archive/%{version}-2/%{modname}-%{version}-2.tar.gz
+Source0:        https://github.com/timothycrosley/isort/archive/4.3.21-2/isort-4.3.21-2.tar.gz
 BuildArch:          noarch
 BuildRequires:      pyproject-rpm-macros
 

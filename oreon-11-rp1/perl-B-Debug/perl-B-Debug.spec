@@ -17,6 +17,10 @@ Summary:        Walk Perl syntax tree, print debug information about op-codes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/B-Debug
 Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/B-Debug-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8d6d3f5134f0ddd8dde68e6581f5b30b73b7db40fd28d076e4f6e5386f570d3a
+%global source0_file B-Debug-1.26.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -54,6 +58,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/B-Debug-1.26.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8d6d3f5134f0ddd8dde68e6581f5b30b73b7db40fd28d076e4f6e5386f570d3a" || { echo "oreon: Source0 SHA256 mismatch for B-Debug-1.26.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n B-Debug-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

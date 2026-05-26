@@ -29,6 +29,10 @@ Patch21: cdrkit-1.1.11-devname.patch
 Patch22: cdrkit-1.1.11-sysmacros.patch
 Patch23: cdrkit-1.1.11-gcc10.patch
 Patch24: cdrkit-1.1.11-cmakesbin.patch
+# oreon url source checksums begin
+%global source0_sha256 6dc9c7fc93bb488bb0520a6c780a8d3c0fb5486a4711aca49b4c53fac7393023
+%global source0_file cdrkit-1.1.11.tar.gz
+# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires: cmake libcap-devel zlib-devel perl-interpreter perl-generators file-devel bzip2-devel
 
@@ -106,6 +110,9 @@ for developing applications that use libusal for communication with
 SCSI devices.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cdrkit-1.1.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6dc9c7fc93bb488bb0520a6c780a8d3c0fb5486a4711aca49b4c53fac7393023" || { echo "oreon: Source0 SHA256 mismatch for cdrkit-1.1.11.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q 
 %patch -P1 -p1 -b .werror
 %patch -P2 -p1 -b .efi

@@ -12,6 +12,10 @@ Summary:        Minimalist class construction
 License:        Apache-2.0
 URL:            https://metacpan.org/release/Class-Tiny
 Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Class-Tiny-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ee058a63912fa1fcb9a72498f56ca421a2056dc7f9f4b67837446d6421815615
+%global source0_file Class-Tiny-1.008.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -63,6 +67,9 @@ of code. Here is a list of features:
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Class-Tiny-1.008.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ee058a63912fa1fcb9a72498f56ca421a2056dc7f9f4b67837446d6421815615" || { echo "oreon: Source0 SHA256 mismatch for Class-Tiny-1.008.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Class-Tiny-%{version}
 
 %build

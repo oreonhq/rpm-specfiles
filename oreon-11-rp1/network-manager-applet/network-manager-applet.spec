@@ -27,6 +27,10 @@ Obsoletes: NetworkManager-gnome < %{obsoletes_ver}
 
 Source: https://download.gnome.org/sources/network-manager-applet/1.36/%{name}-%{version}.tar.xz
 Patch1: 0001-nm-applet-no-notifications.patch
+# oreon url source checksums begin
+%global source0_sha256 a84704487ea3afe1485c47fb2ab598b8f779f540ae0dcbf0a1c5f85e64a7e253
+%global source0_file network-manager-applet-1.36.0.tar.xz
+# oreon url source checksums end
 
 %if ! 0%{?flatpak}
 Requires: NetworkManager >= %{nm_version}
@@ -87,6 +91,9 @@ environment.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/network-manager-applet-1.36.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a84704487ea3afe1485c47fb2ab598b8f779f540ae0dcbf0a1c5f85e64a7e253" || { echo "oreon: Source0 SHA256 mismatch for network-manager-applet-1.36.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

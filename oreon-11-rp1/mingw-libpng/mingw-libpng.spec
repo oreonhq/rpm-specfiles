@@ -8,6 +8,10 @@ Summary:        MinGW Windows Libpng library
 License:        Zlib
 URL:            http://www.libpng.org/pub/png/
 Source0:        http://downloads.sourceforge.net/libpng/libpng-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 d925722864837ad5ae2a82070d4b2e0603dc72af44bd457c3962298258b8e82d
+%global source0_file libpng-1.6.55.tar.xz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -66,6 +70,9 @@ This package contains static cross-compiled libraries.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libpng-1.6.55.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d925722864837ad5ae2a82070d4b2e0603dc72af44bd457c3962298258b8e82d" || { echo "oreon: Source0 SHA256 mismatch for libpng-1.6.55.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n libpng-%{version}
 
 

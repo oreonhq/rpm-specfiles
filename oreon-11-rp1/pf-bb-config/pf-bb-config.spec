@@ -5,7 +5,11 @@ Summary:        PF BBDEV (baseband device) Configuration Application
 
 License:        Apache-2.0
 URL:            https://github.com/intel/pf-bb-config
-Source0:        %{url}/archive/v%{version}/pf-bb-config-%{version}.tar.gz
+Source0:        https://github.com/intel/pf-bb-config/archive/v24.07/pf-bb-config-24.07.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f5c2b7733ca731d15bab3defb177e2a705ab6cea02230969c7a1559e5dd4cdb9
+%global source0_file pf-bb-config-24.07.tar.gz
+# oreon url source checksums end
 
 # Currently big endian is not supported due to a bug
 ExcludeArch:    s390x
@@ -22,6 +26,9 @@ through memory-mapped IO read/writes.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pf-bb-config-24.07.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f5c2b7733ca731d15bab3defb177e2a705ab6cea02230969c7a1559e5dd4cdb9" || { echo "oreon: Source0 SHA256 mismatch for pf-bb-config-24.07.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 sed -i "s/#VERSION_STRING#/%{version}/g" config_app.c
 

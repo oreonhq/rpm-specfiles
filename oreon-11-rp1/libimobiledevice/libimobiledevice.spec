@@ -10,9 +10,13 @@ Summary:        Library for connecting to mobile devices
 
 License:        LGPL-2.0-or-later
 URL:            https://libimobiledevice.org/
-Source:         %{forgeurl}/archive/%{commit}/%{name}-%{commit}.tar.gz
+Source:        https://github.com/libimobiledevice/libimobiledevice/archive/ed9703db1ee6d54e3801b618cee9524563d709e1/libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz
 # Use SHA256 signature, instead of SHA1 for pairing
-Patch:          %{forgeurl}/pull/1616.patch
+Patch:        https://github.com/libimobiledevice/libimobiledevice/pull/1616.patch
+# oreon url source checksums begin
+%global source0_sha256 abd343e0f5a5fea43ed36e3fc54b803d0ef0a53ffd28304bae20111e93ee39e4
+%global source0_file libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -55,6 +59,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Utilities for use with libimobiledevice.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "abd343e0f5a5fea43ed36e3fc54b803d0ef0a53ffd28304bae20111e93ee39e4" || { echo "oreon: Source0 SHA256 mismatch for libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{commit}
 
 %if %{defined commit}

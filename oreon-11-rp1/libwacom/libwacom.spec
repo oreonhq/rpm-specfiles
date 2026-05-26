@@ -8,6 +8,10 @@ License:        HPND
 URL:            https://github.com/linuxwacom/libwacom
 
 Source0:        https://github.com/linuxwacom/libwacom/releases/download/%{name}-%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 7dbb9ab37df9df47ae2fdbb644916c986728291749bcd5ad8bcaa26f1e15f002
+%global source0_file libwacom-2.18.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  meson gcc
 BuildRequires:  glib2-devel libgudev1-devel libevdev-devel
@@ -46,6 +50,9 @@ Requires:       python3-libevdev python3-pyudev
 Utilities to handle and/or debug libwacom devices.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libwacom-2.18.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7dbb9ab37df9df47ae2fdbb644916c986728291749bcd5ad8bcaa26f1e15f002" || { echo "oreon: Source0 SHA256 mismatch for libwacom-2.18.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

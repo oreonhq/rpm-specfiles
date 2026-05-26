@@ -5,6 +5,10 @@ Release:        25%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 Source:         http://www.kernel.org/pub/linux/libs/ieee1394/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 03ccc69761d22c7deb1127fc301010dd13e70e44bb7134b8ff0d07590259a55e
+%global source0_file libraw1394-2.1.2.tar.xz
+# oreon url source checksums end
 URL:            http://www.dennedy.org/libraw1394/
 ExcludeArch:    s390 s390x
 BuildRequires:  gcc
@@ -25,6 +29,9 @@ Requires:       pkgconfig
 Development libraries needed to build applications against libraw1394.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libraw1394-2.1.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "03ccc69761d22c7deb1127fc301010dd13e70e44bb7134b8ff0d07590259a55e" || { echo "oreon: Source0 SHA256 mismatch for libraw1394-2.1.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

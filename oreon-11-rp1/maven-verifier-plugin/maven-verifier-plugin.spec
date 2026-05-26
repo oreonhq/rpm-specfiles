@@ -7,6 +7,10 @@ Summary:        Maven Verifier Plugin
 License:        Apache-2.0
 URL:            http://maven.apache.org/plugins/maven-verifier-plugin/
 Source0:        http://www.apache.org/dist/maven/plugins/%{name}-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 71e2b04a50f965a5e4de4c14f85c295190d3a8ecc889efbfb073b6d904132a81
+%global source0_file maven-verifier-plugin-1.1-source-release.zip
+# oreon url source checksums end
 
 BuildArch: noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -30,6 +34,9 @@ Summary:        Javadoc for %{name}
 API documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-verifier-plugin-1.1-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "71e2b04a50f965a5e4de4c14f85c295190d3a8ecc889efbfb073b6d904132a81" || { echo "oreon: Source0 SHA256 mismatch for maven-verifier-plugin-1.1-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q 
 
 %mvn_file :%{name} %{name}

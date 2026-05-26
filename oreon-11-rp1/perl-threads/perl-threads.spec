@@ -11,6 +11,10 @@ Source0:        https://cpan.metacpan.org/authors/id/J/JD/JDHEDDEN/threads-%{bas
 Patch0:         threads-2.21-Upgrade-to-2.40.patch
 # Unbundled from perl 5.42.0
 Patch1:         threads-2.40-Upgrade-to-2.43.patch
+# oreon url source checksums begin
+%global source0_sha256 28394c98a2bcae6f20ffb8a3d965a1c194b764c650169e2050ee38dbaa10f110
+%global source0_file threads-2.21.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -70,6 +74,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/threads-2.21.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "28394c98a2bcae6f20ffb8a3d965a1c194b764c650169e2050ee38dbaa10f110" || { echo "oreon: Source0 SHA256 mismatch for threads-2.21.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n threads-%{base_version}
 %patch -P0 -p1
 %patch -P1 -p1

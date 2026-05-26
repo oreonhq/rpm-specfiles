@@ -11,6 +11,10 @@ Source0:    https://github.com/jdcasey/directory-maven-plugin/archive/directory-
 # Fixes bz 2261062 - no mojo definition build error
 # https://github.com/knight-of-ni/directory-maven-plugin/commit/ce51a6ea81b583c7b7b75e859bb1a508eb713fbe.patch
 Patch0:     directory-maven-plugin-fix-no-mojo-definition.patch
+# oreon url source checksums begin
+%global source0_sha256 89936bd705abf6a70828d743374c3f716802699852c1d03361394d690850c964
+%global source0_file directory-maven-plugin-1.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:  noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -39,6 +43,9 @@ Summary:  Javadoc for %{name}
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/directory-maven-plugin-1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "89936bd705abf6a70828d743374c3f716802699852c1d03361394d690850c964" || { echo "oreon: Source0 SHA256 mismatch for directory-maven-plugin-1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n directory-maven-plugin-directory-maven-plugin-%{version}
 
 %pom_remove_parent

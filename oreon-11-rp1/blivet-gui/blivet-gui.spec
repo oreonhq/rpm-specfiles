@@ -6,6 +6,10 @@ Summary:        Graphical tool for storage configuration
 License:        GPL-2.0-or-later
 URL:            https://github.com/storaged-project/blivet-gui
 Source0:        https://github.com/storaged-project/blivet-gui/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5fba88e535012357b10f8a62bb5dd3379a981f0e9ad1c9292ae226f6d4ff0112
+%global source0_file 2.6.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -34,6 +38,9 @@ Runtime files for blivet-gui, including Python modules, daemon, UI assets,
 translations, policy files, and desktop integration data.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/2.6.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5fba88e535012357b10f8a62bb5dd3379a981f0e9ad1c9292ae226f6d4ff0112" || { echo "oreon: Source0 SHA256 mismatch for 2.6.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version}
 
 %build

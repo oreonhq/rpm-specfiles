@@ -6,6 +6,10 @@ Summary:	An advanced twin-panel (commander-style) file-manager for KDE
 License:	GPL-2.0-or-later
 URL:		https://www.krusader.org/
 Source0:	https://download.kde.org/stable/%{name}/%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 c9b79bfade6cc69fe0e341ecef932fcac8afd9fe94e8cbcfbd729feb54394e04
+%global source0_file krusader-2.9.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	bzip2-devel
 BuildRequires:	cmake
@@ -54,6 +58,9 @@ such as smb or fish. It is (almost) completely customizable, very user
 friendly, fast and looks great on your desktop! You should give it a try.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/krusader-2.9.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c9b79bfade6cc69fe0e341ecef932fcac8afd9fe94e8cbcfbd729feb54394e04" || { echo "oreon: Source0 SHA256 mismatch for krusader-2.9.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

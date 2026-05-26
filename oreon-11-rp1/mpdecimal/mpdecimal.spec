@@ -13,6 +13,12 @@ License:        BSD-2-Clause
 URL:            https://www.bytereef.org/mpdecimal/index.html
 Source0:        https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-%{version}.tar.gz
 Source1:        https://speleotrove.com/decimal/dectest.zip
+# oreon url source checksums begin
+%global source0_sha256 96d33abb4bb0070c7be0fed4246cd38416188325f820468214471938545b1ac8
+%global source0_file mpdecimal-4.0.1.tar.gz
+%global source1_sha256 b70a224cd52e82b7a8150aedac5efa2d0cb3941696fd829bdbe674f9f65c3926
+%global source1_file dectest.zip
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc
@@ -47,6 +53,10 @@ Summary:        Development headers for mpdecimal library
 The package contains development headers for the mpdecimal library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mpdecimal-4.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "96d33abb4bb0070c7be0fed4246cd38416188325f820468214471938545b1ac8" || { echo "oreon: Source0 SHA256 mismatch for mpdecimal-4.0.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/dectest.zip; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b70a224cd52e82b7a8150aedac5efa2d0cb3941696fd829bdbe674f9f65c3926" || { echo "oreon: Source1 SHA256 mismatch for dectest.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 unzip -d tests/testdata %{SOURCE1}
 

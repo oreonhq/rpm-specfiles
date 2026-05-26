@@ -8,6 +8,10 @@ Summary:        Module and a script for converting Perl XS code into C code
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-ParseXS
 Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-ParseXS-%{cpan_version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 454df98b92124094764aad2145d18d5c0aaf814f050c9e9765fb47dc3f9638f9
+%global source0_file ExtUtils-ParseXS-3.61.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -63,6 +67,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ExtUtils-ParseXS-3.61.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "454df98b92124094764aad2145d18d5c0aaf814f050c9e9765fb47dc3f9638f9" || { echo "oreon: Source0 SHA256 mismatch for ExtUtils-ParseXS-3.61.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n ExtUtils-ParseXS-%{cpan_version}
 
 # Help generators to recognize Perl scripts

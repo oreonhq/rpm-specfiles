@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/extra-enforcer-rules/%{version}/extra-enforcer-rules-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 e68d466c189c9c461e5329153cdc2bbe685f3e3f890800bbba069007754b1357
+%global source0_file extra-enforcer-rules-1.10.0-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -34,6 +38,9 @@ projects. The Enforcer plugin ships with a set of standard rules. This project
 provides extra rules which are not part of the standard rule set.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/extra-enforcer-rules-1.10.0-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e68d466c189c9c461e5329153cdc2bbe685f3e3f890800bbba069007754b1357" || { echo "oreon: Source0 SHA256 mismatch for extra-enforcer-rules-1.10.0-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Integration tests fetch upstream poms

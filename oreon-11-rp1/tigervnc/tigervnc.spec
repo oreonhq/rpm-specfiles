@@ -30,6 +30,10 @@ Patch1:         tigervnc-vncsession-restore-script-systemd-service.patch
 %if 0%{?fedora} >= 42 || 0%{?rhel} >= 11 || 0%{?oreon}
 # 
 Patch2:         tigervnc-sbin-bin-merge.patch
+# oreon url source checksums begin
+%global source0_sha256 b107c0c8b8a962594281690366c24186e95c2ea4a169acbc0076aa62ed01f467
+%global source0_file v1.16.2.tar.gz
+# oreon url source checksums end
 %endif
 
 # Upstream patches
@@ -218,6 +222,9 @@ This package provides the SELinux policy module to ensure TigerVNC
 runs properly under an environment with SELinux enabled.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.16.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b107c0c8b8a962594281690366c24186e95c2ea4a169acbc0076aa62ed01f467" || { echo "oreon: Source0 SHA256 mismatch for v1.16.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %patch -P1 -p1 -b .vncsession-restore-script-systemd-service

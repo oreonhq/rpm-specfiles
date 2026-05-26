@@ -32,6 +32,10 @@ Source1:        https://dist.libuv.org/dist/v%{version}/%{name}-v%{version}.tar.
 # cp temp/keysuv.gpg .
 Source2:        keysuv.gpg
 Source3:        libuv.abignore
+# oreon url source checksums begin
+%global source0_sha256 66d511b9e6e334c0e62279eb234fbfb2b3110b1479c09b95b44c7afca8cff9e7
+%global source0_file libuv-v1.52.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -64,6 +68,9 @@ Static library (.a) version of libuv.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libuv-v1.52.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "66d511b9e6e334c0e62279eb234fbfb2b3110b1479c09b95b44c7afca8cff9e7" || { echo "oreon: Source0 SHA256 mismatch for libuv-v1.52.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %autosetup -n %{name}-v%{version} -p1
 

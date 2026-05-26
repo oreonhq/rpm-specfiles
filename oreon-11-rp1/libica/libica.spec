@@ -11,6 +11,10 @@ Source0: https://github.com/opencryptoki/%{name}/archive/v%{version}/%{name}-%{v
 # https://bugzilla.redhat.com/show_bug.cgi?id=1630582
 # https://github.com/opencryptoki/libica/pull/24
 Patch0: %{name}-4.0.0-annotate.patch
+# oreon url source checksums begin
+%global source0_sha256 edc755494797331427c5f7900c7eecd8b5ecd3e69b7502313bf764f490b8e87a
+%global source0_file libica-4.4.1.tar.gz
+# oreon url source checksums end
 # post GA fixes
 #Patch1: %%{name}-%%{version}-fixes.patch
 BuildRequires: gcc
@@ -42,6 +46,9 @@ IBM z Systems.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libica-4.4.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "edc755494797331427c5f7900c7eecd8b5ecd3e69b7502313bf764f490b8e87a" || { echo "oreon: Source0 SHA256 mismatch for libica-4.4.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 sh ./bootstrap.sh

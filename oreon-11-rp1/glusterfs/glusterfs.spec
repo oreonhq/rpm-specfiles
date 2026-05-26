@@ -211,7 +211,7 @@ Source2:          glusterfsd.sysconfig
 Source7:          glusterfsd.service
 Source8:          glusterfsd.init
 %else
-Source0:          @PACKAGE_NAME@-@PACKAGE_VERSION@.tar.gz
+Source0:        http://github.com/gluster/glusterfs/archive/v%{version}%{?prereltag}/glusterfs-%{version}%{?prereltag}.tar.gz
 %endif
 Patch0001:        0001-configure.ac.patch
 Patch0002:        0002-contrib-aclocal-python.m4.patch

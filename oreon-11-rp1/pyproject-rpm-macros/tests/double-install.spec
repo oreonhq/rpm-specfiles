@@ -6,7 +6,7 @@ License:        BSD-3-Clause AND MIT
 %global         markupsafe_version 2.0.1
 %global         tldr_version 0.4.4
 Source1:        https://github.com/pallets/markupsafe/archive/%{markupsafe_version}/MarkupSafe-%{markupsafe_version}.tar.gz
-Source2:        %{pypi_source tldr %{tldr_version}}
+Source2:        https://files.pythonhosted.org/packages/source/t/tldr/tldr-0.4.4.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel

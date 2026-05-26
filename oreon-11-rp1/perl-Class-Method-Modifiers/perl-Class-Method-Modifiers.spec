@@ -11,7 +11,12 @@ Version:        2.15
 Release:        8%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Method-Modifiers
-Source0:        https://cpan.metacpan.org/modules/by-module/Class/Class-Method-Modifiers-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Class-Method-Modifiers-2.15.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 65cd85bfe475d066e9186f7a8cc636070985b30b0ebb1cde8681cf062c2e15fc
+%global source0_file Class-Method-Modifiers-2.15.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -59,6 +64,9 @@ original method. See the 'MODIFIERS' section for more details on how the
 particular modifiers work.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Class-Method-Modifiers-2.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "65cd85bfe475d066e9186f7a8cc636070985b30b0ebb1cde8681cf062c2e15fc" || { echo "oreon: Source0 SHA256 mismatch for Class-Method-Modifiers-2.15.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Class-Method-Modifiers-%{version}
 
 %build

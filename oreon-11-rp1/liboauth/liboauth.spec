@@ -6,6 +6,10 @@ Summary:        OAuth library functions
 License:        MIT
 URL:            http://liboauth.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0df60157b052f0e774ade8a8bac59d6e8d4b464058cc55f9208d72e41156811f
+%global source0_file liboauth-1.0.3.tar.gz
+# oreon url source checksums end
 %if 0%{?el5}
 %endif
 
@@ -35,6 +39,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/liboauth-1.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0df60157b052f0e774ade8a8bac59d6e8d4b464058cc55f9208d72e41156811f" || { echo "oreon: Source0 SHA256 mismatch for liboauth-1.0.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 

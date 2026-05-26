@@ -6,6 +6,10 @@ Summary:        Configurable sidebar-enabled Sphinx theme
 License:        BSD-3-Clause
 URL:            https://pypi.python.org/pypi/alabaster
 Source:         %{pypi_source alabaster}
+# oreon url source checksums begin
+%global source0_sha256 75a8b99c28a5dad50dd7f8ccdd447a121ddb3892da9e53d1ca5cca3106d58d65
+%global source0_file alabaster-0.7.16.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
@@ -35,6 +39,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/alabaster-0.7.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "75a8b99c28a5dad50dd7f8ccdd447a121ddb3892da9e53d1ca5cca3106d58d65" || { echo "oreon: Source0 SHA256 mismatch for alabaster-0.7.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n alabaster-%{version}
 
 

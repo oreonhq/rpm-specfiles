@@ -6,6 +6,10 @@ Summary:        Servicelog Tools
 License:        GPL-2.0-only
 URL:            https://github.com/power-ras/servicelog
 Source0:        https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 95188d847aa13eb69fcd8169f16d25b5c427d010b7e6daa5bbea34ecde34e46a
+%global source0_file servicelog-1.1.16.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  libservicelog-devel >= 1.1.9-2
@@ -21,6 +25,9 @@ for performing system service operations, and for providing a history
 of service operations that have been performed on the system.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/servicelog-1.1.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "95188d847aa13eb69fcd8169f16d25b5c427d010b7e6daa5bbea34ecde34e46a" || { echo "oreon: Source0 SHA256 mismatch for servicelog-1.1.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -8,6 +8,10 @@ Summary: Romanian hunspell dictionaries
 Version: 3.3.10
 Release: 11%{?dist}
 Source: http://downloads.sourceforge.net/rospell/ro_RO.%{version}.zip
+# oreon url source checksums begin
+%global source0_sha256 7f128d64ea06c9e6711c30b118c0afeefb014d8f33c92daccdf455aba2d04519
+%global source0_file ro_RO.3.3.10.zip
+# oreon url source checksums end
 URL: http://rospell.sourceforge.net/
 License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
 BuildArch: noarch
@@ -19,6 +23,9 @@ Supplements: (hunspell and langpacks-ro)
 Romanian hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ro_RO.3.3.10.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7f128d64ea06c9e6711c30b118c0afeefb014d8f33c92daccdf455aba2d04519" || { echo "oreon: Source0 SHA256 mismatch for ro_RO.3.3.10.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c
 
 %build

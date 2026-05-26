@@ -6,6 +6,10 @@ Summary:        Mouse accessibility support for the GNOME desktop
 License:        GPL-3.0-only AND LicenseRef-Callaway-GFDL
 URL:            https://wiki.gnome.org/Projects/Mousetweaks
 Source0:        http://download.gnome.org/sources/mousetweaks/3.32/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 0ebd5cdef01547787cbc3697ae758c57db1eec10eab613704d4a17b27685ae00
+%global source0_file mousetweaks-3.32.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  gcc
@@ -26,6 +30,9 @@ tab of the Mouse Preferences of GNOME Control Center or through command-line.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mousetweaks-3.32.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0ebd5cdef01547787cbc3697ae758c57db1eec10eab613704d4a17b27685ae00" || { echo "oreon: Source0 SHA256 mismatch for mousetweaks-3.32.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

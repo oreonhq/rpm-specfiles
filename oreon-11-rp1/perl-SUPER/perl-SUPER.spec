@@ -5,6 +5,10 @@ Summary:	Sane superclass method dispatcher
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/SUPER
 Source0:	https://cpan.metacpan.org/authors/id/C/CH/CHROMATIC/SUPER-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 685d1ee76e7f0e9006942923bf7df8b11c107132992917593dcf7397d417d39a
+%global source0_file SUPER-1.20190531.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 # =============== Module Build =================
 BuildRequires:	coreutils
@@ -34,6 +38,9 @@ an easier, cleaner way for class methods to access their ancestor's
 implementation.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/SUPER-1.20190531.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "685d1ee76e7f0e9006942923bf7df8b11c107132992917593dcf7397d417d39a" || { echo "oreon: Source0 SHA256 mismatch for SUPER-1.20190531.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n SUPER-%{version}
 
 %build

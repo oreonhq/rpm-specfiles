@@ -9,7 +9,11 @@ Summary:       A coroutine-based Python networking library
 
 License:       MIT
 URL:           http://www.gevent.org/
-Source0:       %{pypi_source %{modname} %{version} tar.gz}
+Source0:        https://files.pythonhosted.org/packages/source/g/gevent/gevent-25.9.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 adf9cd552de44a4e6754c51ff2e78d9193b7fa6eab123db9578a210e657235dd
+%global source0_file gevent-25.9.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: c-ares-devel
@@ -49,6 +53,9 @@ Features include:
   * monkey patching utility to get pure Python modules to cooperate
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gevent-25.9.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "adf9cd552de44a4e6754c51ff2e78d9193b7fa6eab123db9578a210e657235dd" || { echo "oreon: Source0 SHA256 mismatch for gevent-25.9.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{modname}-%{version}
 # Remove bundled libraries
 rm -r deps

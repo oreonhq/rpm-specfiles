@@ -17,7 +17,11 @@ Summary:        Library for retro-fitting legacy printer drivers
 # https://lists.fedoraproject.org/archives/list/legal@lists.fedoraproject.org/message/A7GFSD6M3GYGSI32L2FC5KB22DUAEQI3/
 License:        Apache-2.0 WITH LLVM-exception
 URL:            https://github.com/OpenPrinting/libppd
-Source0:        %{URL}/releases/download/%{upstream_version}/%{name}-%{upstream_version}.tar.gz
+Source0:        https://github.com/OpenPrinting/libppd/releases/download/2.1.1/libppd-2.1.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b356aeed1335ef0ca7f799741782a2544e7acee63fb4b047b94e4e0395a9cb62
+%global source0_file libppd-2.1.1.tar.gz
+# oreon url source checksums end
 
 
 # for autogen.sh
@@ -95,6 +99,9 @@ PPD files from *.drv files.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libppd-2.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b356aeed1335ef0ca7f799741782a2544e7acee63fb4b047b94e4e0395a9cb62" || { echo "oreon: Source0 SHA256 mismatch for libppd-2.1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git -n %{name}-%{upstream_version}
 
 %build

@@ -10,6 +10,10 @@ URL:            https://wiki.gnome.org/Projects/Libpeas
 Source0:        https://download.gnome.org/sources/%{name}/2.2/%{name}-%{version}.tar.xz
 
 Patch0:         libpeas-fix-py-wrapper-refcount-test.patch
+# oreon url source checksums begin
+%global source0_sha256 589eca89b437006edf3755478df037c740a2a84cfa5d202dbad6095e828e2488
+%global source0_file libpeas-2.2.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -58,6 +62,9 @@ This package contains development libraries and header files
 that are needed to write applications that use libpeas.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libpeas-2.2.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "589eca89b437006edf3755478df037c740a2a84cfa5d202dbad6095e828e2488" || { echo "oreon: Source0 SHA256 mismatch for libpeas-2.2.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

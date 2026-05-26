@@ -44,6 +44,10 @@ Patch53: clucene-core-2.3.3.4-TestIndexSearcher-tests.patch
 # missing #include <time.h>":
 Patch54: 0001-Fix-missing-include-time.h.patch
 Patch55: pkgconfig.patch
+# oreon url source checksums begin
+%global source0_sha256 ddfdc433dd8ad31b5c5819cc4404a8d2127472a3b720d3e744e8c51d79732eab
+%global source0_file clucene-core-2.3.3.4.tar.gz
+# oreon url source checksums end
 
 %description
 CLucene is a C++ port of the popular Apache Lucene search engine
@@ -79,6 +83,9 @@ Requires:	%{name}-core%{?_isa} = %{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/clucene-core-2.3.3.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ddfdc433dd8ad31b5c5819cc4404a8d2127472a3b720d3e744e8c51d79732eab" || { echo "oreon: Source0 SHA256 mismatch for clucene-core-2.3.3.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -n %{name}-core-%{version}
 
 %patch -P50 -p1 -b .pkgconfig

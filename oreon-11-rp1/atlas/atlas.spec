@@ -59,6 +59,10 @@ Patch14: 0008-Add-IBM-z15-support.patch
 Patch15:		atlas-fgrep.patch
 #Covscan
 Patch101:		atlas-getri.patch
+# oreon url source checksums begin
+%global source0_sha256 2688eb733a6c5f78a18ef32144039adcd62fabce66f2eb51dd59dde806a6d2b7
+%global source0_file atlas3.10.3.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  gcc-gfortran, lapack-static, gcc
@@ -334,6 +338,9 @@ CPUs. The base ATLAS builds for the ppc64 architecture are made for the Power 5 
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/atlas3.10.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2688eb733a6c5f78a18ef32144039adcd62fabce66f2eb51dd59dde806a6d2b7" || { echo "oreon: Source0 SHA256 mismatch for atlas3.10.3.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 #cat /proc/cpuinfo
 %setup -q -n ATLAS
 

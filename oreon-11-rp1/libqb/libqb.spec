@@ -8,6 +8,10 @@ Summary:        Library providing high performance logging, tracing, ipc, and po
 License:        LGPL-2.1-or-later
 URL:            https://github.com/ClusterLabs/libqb
 Source0:        https://github.com/ClusterLabs/libqb/releases/download/v%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 61a83753199c86a47a69f615778e81b56ac0a58d07751230444e76500b6b210b
+%global source0_file libqb-2.0.9.tar.xz
+# oreon url source checksums end
 
 
 BuildRequires:  autoconf automake libtool
@@ -29,6 +33,9 @@ architecture, such as logging, tracing, inter-process communication (IPC),
 and polling.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libqb-2.0.9.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61a83753199c86a47a69f615778e81b56ac0a58d07751230444e76500b6b210b" || { echo "oreon: Source0 SHA256 mismatch for libqb-2.0.9.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 
 %build

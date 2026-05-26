@@ -7,6 +7,10 @@ Summary:        Framework for parsing POD documentation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Simple
 Source0:        https://cpan.metacpan.org/authors/id/K/KH/KHW/Pod-Simple-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ab3e3845337b78ee14b50fdbc68197c71f5ea66ebdde0870dee4e642c305c514
+%global source0_file Pod-Simple-3.47.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -67,6 +71,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Pod-Simple-3.47.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ab3e3845337b78ee14b50fdbc68197c71f5ea66ebdde0870dee4e642c305c514" || { echo "oreon: Source0 SHA256 mismatch for Pod-Simple-3.47.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Pod-Simple-%{version}
 
 # Help generators to recognize Perl scripts

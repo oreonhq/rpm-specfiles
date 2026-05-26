@@ -75,7 +75,11 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64 riscv64
 Summary: Manage Pods, Containers and Container Images
 URL: https://%{name}.io/
 # All SourceN files fetched from upstream
-Source0: %{git0}/archive/v%{version_no_tilde}.tar.gz
+Source0:        https://github.com/containers/podman/archive/v%{version_no_tilde}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b20ea65afc5a58ea1cea019bd51a5d84eb9042d25d3eb82c55010c8815732d84
+%global source0_file v5.8.2.tar.gz
+# oreon url source checksums end
 Provides: %{name}-manpages = %{epoch}:%{version}-%{release}
 BuildRequires: %{_bindir}/envsubst
 %if %{defined build_with_btrfs}
@@ -223,6 +227,9 @@ https://docs.podman.io/en/latest/markdown/podman-machine.1.html
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v5.8.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b20ea65afc5a58ea1cea019bd51a5d84eb9042d25d3eb82c55010c8815732d84" || { echo "oreon: Source0 SHA256 mismatch for v5.8.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -Sgit -n %{name}-%{version_no_tilde}
 sed -i 's;@@PODMAN@@\;$(BINDIR);@@PODMAN@@\;%{_bindir};' Makefile
 

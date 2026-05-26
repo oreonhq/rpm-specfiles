@@ -4,6 +4,10 @@ Version:        4.71
 Release:        2%{?dist}
 License:        Artistic-2.0
 Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEEJO/CGI-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 9da85b30d9404d183da7ca7aedb83702cb07ed73c3078bf6f36c87f1e8a0196a
+%global source0_file CGI-4.71.tar.gz
+# oreon url source checksums end
 URL:            https://metacpan.org/release/CGI
 BuildArch:      noarch
 BuildRequires:  coreutils
@@ -81,6 +85,9 @@ Tests from %{name}-%{version}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/CGI-4.71.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9da85b30d9404d183da7ca7aedb83702cb07ed73c3078bf6f36c87f1e8a0196a" || { echo "oreon: Source0 SHA256 mismatch for CGI-4.71.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n CGI-%{version}
 iconv -f iso8859-1 -t utf-8 < Changes > Changes.1
 mv Changes.1 Changes

@@ -14,6 +14,10 @@ Patch1:		pciutils-2.2.1-idpath.patch
 
 #add support for directory with another pci.ids, rejected by upstream, rhbz#195327
 Patch2:		pciutils-dir-d.patch
+# oreon url source checksums begin
+%global source0_sha256 e7713409882813991d2269d125e40dad1f54a019a52b78b3962941c1d4a6f86f
+%global source0_file pciutils-3.14.0.tar.xz
+# oreon url source checksums end
 
 Requires:	hwdata
 Requires:	%{name}-libs = %{version}-%{release}
@@ -49,6 +53,9 @@ This package contains a static library for inspecting and setting
 devices connected to the PCI bus.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pciutils-3.14.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e7713409882813991d2269d125e40dad1f54a019a52b78b3962941c1d4a6f86f" || { echo "oreon: Source0 SHA256 mismatch for pciutils-3.14.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

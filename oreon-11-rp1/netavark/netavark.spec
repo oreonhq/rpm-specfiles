@@ -42,8 +42,14 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: OCI network stack
 URL: https://github.com/containers/%{name}
 # Tarballs fetched from upstream's release page
-Source0: %{url}/archive/v%{version}.tar.gz
-Source1: %{url}/releases/download/v%{version}/%{name}-v%{version}-vendor.tar.gz
+Source0:        https://github.com/containers/netavark/archive/v1.17.2.tar.gz
+Source1:        https://github.com/containers/netavark/releases/download/v1.17.2/netavark-v1.17.2-vendor.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 284faa7cc525b869cbac4053e0a4127ac743ca7da1457c49fffb35558ea9c78d
+%global source0_file v1.17.2.tar.gz
+%global source1_sha256 afa8e99a9691ef6ea485d6cb6b1897684d9f8a26719deaa3cbf37b5f17198e6f
+%global source1_file netavark-v1.17.2-vendor.tar.gz
+# oreon url source checksums end
 BuildRequires: cargo
 BuildRequires: %{_bindir}/go-md2man
 # aardvark-dns and %%{name} are usually released in sync
@@ -88,6 +94,10 @@ Its features include:
 * Support for container DNS resolution via aardvark-dns.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.17.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "284faa7cc525b869cbac4053e0a4127ac743ca7da1457c49fffb35558ea9c78d" || { echo "oreon: Source0 SHA256 mismatch for v1.17.2.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/netavark-v1.17.2-vendor.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "afa8e99a9691ef6ea485d6cb6b1897684d9f8a26719deaa3cbf37b5f17198e6f" || { echo "oreon: Source1 SHA256 mismatch for netavark-v1.17.2-vendor.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -Sgit %{name}-%{version}
 # Following steps are only required on environments like koji which have no
 # network access and thus depend on the vendored tarball. Copr pulls

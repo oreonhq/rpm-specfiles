@@ -26,6 +26,10 @@ URL:            https://github.com/facebook/zstd
 Source0:        https://github.com/facebook/zstd/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 Patch1:         man-pages-1.5.7.patch
+# oreon url source checksums begin
+%global source0_sha256 37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3
+%global source0_file v1.5.7.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  make
@@ -69,6 +73,9 @@ Header files for Zstd library.
 Static variant of the Zstd library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.5.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3" || { echo "oreon: Source0 SHA256 mismatch for v1.5.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 find -name .gitignore -delete
 %patch 1 -p1

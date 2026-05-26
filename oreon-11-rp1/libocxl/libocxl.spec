@@ -6,6 +6,10 @@ Summary:        Allows to implement a user-space driver for an OpenCAPI accelera
 License:        Apache-2.0
 URL:            https://github.com/OpenCAPI/libocxl
 Source0:        https://github.com/OpenCAPI/libocxl/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8a851ee54cac2ea87e1b22745d98ea06b062884c948f35fede238f2520bc26d0
+%global source0_file libocxl-1.2.1.tar.gz
+# oreon url source checksums end
 
 ExclusiveArch:  ppc64le
 
@@ -39,6 +43,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libocxl-1.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8a851ee54cac2ea87e1b22745d98ea06b062884c948f35fede238f2520bc26d0" || { echo "oreon: Source0 SHA256 mismatch for libocxl-1.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -10,6 +10,10 @@ URL:            http://packages.python.org/sphinxcontrib-httpdomain/
 Source0:        https://files.pythonhosted.org/packages/source/s/%{upstream_name}/%{upstream_name}-%{version}.tar.gz
 # issue to be filed(?)
 Patch4:         0004-httpdomain-bump-domain-data-version.patch
+# oreon url source checksums begin
+%global source0_sha256 6c2dfe6ca282d75f66df333869bb0ce7331c01b475db6809ff9d107b7cdfe04b
+%global source0_file sphinxcontrib-httpdomain-1.8.1.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 %description
@@ -30,6 +34,9 @@ for generating documentation from Flask routing tables.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sphinxcontrib-httpdomain-1.8.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6c2dfe6ca282d75f66df333869bb0ce7331c01b475db6809ff9d107b7cdfe04b" || { echo "oreon: Source0 SHA256 mismatch for sphinxcontrib-httpdomain-1.8.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{upstream_name}-%{version}
 %patch -P4 -p2
 rm -r *.egg-info

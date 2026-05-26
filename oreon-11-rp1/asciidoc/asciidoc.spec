@@ -10,6 +10,10 @@ Source0:        https://github.com/asciidoc-py/asciidoc-py/archive/%{version}/%{
 BuildArch:      noarch
 
 Patch1:         asciidoc-table-separator.patch
+# oreon url source checksums begin
+%global source0_sha256 684ea53c1f5b71d6d1ac6086bbc96906b1f709ecc7ab536615b0f0c9e1baa3cc
+%global source0_file asciidoc-py-10.2.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-pip
@@ -57,6 +61,9 @@ Requires: texlive-dvipng-bin
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/asciidoc-py-10.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "684ea53c1f5b71d6d1ac6086bbc96906b1f709ecc7ab536615b0f0c9e1baa3cc" || { echo "oreon: Source0 SHA256 mismatch for asciidoc-py-10.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-py-%{version} -p1
 
 %build

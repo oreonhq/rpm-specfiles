@@ -5,9 +5,13 @@ Summary:        HTTP request/response parser for C
 
 License:        MIT
 URL:            https://github.com/nodejs/http-parser
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/nodejs/http-parser/archive/v2.9.4/http-parser-2.9.4.tar.gz
 # https://github.com/nodejs/http-parser/pull/483
 Patch0001:      0001-url-treat-empty-port-as-default.patch
+# oreon url source checksums begin
+%global source0_sha256 467b9e30fd0979ee301065e70f637d525c28193449e1b13fbcb1b1fab3ad224f
+%global source0_file http-parser-2.9.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -28,6 +32,9 @@ Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Development headers and libraries for http-parser.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/http-parser-2.9.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "467b9e30fd0979ee301065e70f637d525c28193449e1b13fbcb1b1fab3ad224f" || { echo "oreon: Source0 SHA256 mismatch for http-parser-2.9.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %ifarch %{arm}
 # https://github.com/nodejs/http-parser/issues/507

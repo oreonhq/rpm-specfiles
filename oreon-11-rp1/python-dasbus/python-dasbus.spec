@@ -8,10 +8,14 @@ Summary:        DBus library in Python 3
 License:        LGPL-2.1-or-later
 URL:            https://pypi.python.org/pypi/dasbus
 %if %{defined suse_version}
-Source0:        %{srcname}-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/d/dasbus/dasbus-1.7.tar.gz
 Group:          Development/Libraries/Python
 %else
 Source0:        %{pypi_source}
+# oreon url source checksums begin
+%global source0_sha256 a8850d841adfe8ee5f7bb9f82cf449ab9b4950dc0633897071718e0d0036b6f6
+%global source0_file dasbus-1.7.tar.gz
+# oreon url source checksums end
 %endif
 
 BuildArch:      noarch
@@ -39,6 +43,9 @@ Requires:       python3-gobject-base
 %description -n python3-%{srcname} %{_description}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dasbus-1.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a8850d841adfe8ee5f7bb9f82cf449ab9b4950dc0633897071718e0d0036b6f6" || { echo "oreon: Source0 SHA256 mismatch for dasbus-1.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{srcname}-%{version}
 
 %build

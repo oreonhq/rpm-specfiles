@@ -10,6 +10,10 @@ License: GPL-2.0-or-later AND LGPL-2.1-or-later
 #URL:     http://www.freedesktop.org/wiki/Distributions/AppStream
 URL:     https://github.com/ximion/appstream
 Source0: https://www.freedesktop.org/software/appstream/releases/AppStream-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 298b4732a2670503328e022d68d6ebbb253c716dad0b6ba127a4065262dd2f2c
+%global source0_file AppStream-1.1.0.tar.xz
+# oreon url source checksums end
 
 # upstream patches
 
@@ -94,6 +98,9 @@ Requires: pkgconfig(Qt6Core) >= 6.2.4
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/AppStream-1.1.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "298b4732a2670503328e022d68d6ebbb253c716dad0b6ba127a4065262dd2f2c" || { echo "oreon: Source0 SHA256 mismatch for AppStream-1.1.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n AppStream-%{version} -S git_am
 
 

@@ -17,6 +17,10 @@ Source1: %{gem_name}-%{version}-tests.txz
 # Fix test suite for ruby 3.0 change for methods on subclass of Array
 # https://github.com/rubychan/coderay/pull/255
 Patch0: rubygem-coderay-1.1.3-fix-tests-Array-on-ruby-3.0.patch
+# oreon url source checksums begin
+%global source0_sha256 dc530018a4684512f8f38143cd2a096c9f02a1fc2459edcfe534787a7fc77d4b
+%global source0_file coderay-1.1.3.gem
+# oreon url source checksums end
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby >= 1.8.6
@@ -41,6 +45,9 @@ BuildArch: noarch
 Documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/coderay-1.1.3.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dc530018a4684512f8f38143cd2a096c9f02a1fc2459edcfe534787a7fc77d4b" || { echo "oreon: Source0 SHA256 mismatch for coderay-1.1.3.gem" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{gem_name}-%{version} -b 1
 
 pushd ..

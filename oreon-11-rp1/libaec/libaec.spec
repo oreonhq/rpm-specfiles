@@ -5,6 +5,10 @@ Summary:        Adaptive Entropy Coding library
 License:        LicenseRef-Callaway-BSD
 Url:            https://gitlab.dkrz.de/k202009/libaec
 Source0:        https://gitlab.dkrz.de/k202009/libaec/-/archive/v%{version}/libaec-v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e50f323418eb451587891102b6014730e1aa936e763c47f2ae166a4745d1bed2
+%global source0_file libaec-v1.1.6.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  cmake >= 3.1
@@ -39,6 +43,9 @@ Requires:       %{name}-devel = %{version}-%{release}
 Static variant of libaec (Adaptive Entropy Coding library).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libaec-v1.1.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e50f323418eb451587891102b6014730e1aa936e763c47f2ae166a4745d1bed2" || { echo "oreon: Source0 SHA256 mismatch for libaec-v1.1.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-v%{version}
 
 %build

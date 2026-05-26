@@ -34,8 +34,14 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: Authoritative DNS server for A/AAAA container records
 URL: https://github.com/containers/%{name}
 # Tarballs fetched from upstream's release page
-Source0: %{url}/archive/v%{version}.tar.gz
-Source1: %{url}/releases/download/v%{version}/%{name}-v%{version}-vendor.tar.gz
+Source0:        https://github.com/containers/aardvark-dns/archive/v1.17.0.tar.gz
+Source1:        https://github.com/containers/aardvark-dns/releases/download/v1.17.0/aardvark-dns-v1.17.0-vendor.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 42556bf547c435a8f0ccb586b4f5000da3106a58c26f82e22d9db81ee5bd7eb2
+%global source0_file v1.17.0.tar.gz
+%global source1_sha256 dcfad0419e30124fcb33aa9583c27cd12f2e11b2c67f118fcc54b68d1bed4dde
+%global source1_file aardvark-dns-v1.17.0-vendor.tar.gz
+# oreon url source checksums end
 BuildRequires: cargo
 BuildRequires: git-core
 BuildRequires: make
@@ -71,6 +77,10 @@ This package contains system tests for %{name} and is only intended to be used
 for gating tests.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.17.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "42556bf547c435a8f0ccb586b4f5000da3106a58c26f82e22d9db81ee5bd7eb2" || { echo "oreon: Source0 SHA256 mismatch for v1.17.0.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/aardvark-dns-v1.17.0-vendor.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dcfad0419e30124fcb33aa9583c27cd12f2e11b2c67f118fcc54b68d1bed4dde" || { echo "oreon: Source1 SHA256 mismatch for aardvark-dns-v1.17.0-vendor.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -Sgit %{name}-%{version}
 # Following steps are only required on environments like koji which have no
 # network access and thus depend on the vendored tarball. Copr pulls

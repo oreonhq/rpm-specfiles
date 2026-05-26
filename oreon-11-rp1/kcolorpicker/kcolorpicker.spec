@@ -8,6 +8,10 @@ License:        LGPL-3.0-or-later
 URL:            https://github.com/ksnip/kColorPicker
 
 Source0:        https://github.com/ksnip/kColorPicker/archive/refs/tags/v%{version}.tar.gz#/kColorPicker-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e78c785ec4a8a22a48a91835c97601f5704b5076b154415353b0d2697dc0b4f7
+%global source0_file v0.3.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -35,6 +39,9 @@ Requires:       cmake(Qt6Widgets)
 Headers and CMake config for kColorPicker-Qt6.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e78c785ec4a8a22a48a91835c97601f5704b5076b154415353b0d2697dc0b4f7" || { echo "oreon: Source0 SHA256 mismatch for v0.3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n kColorPicker-%{version}
 
 %build

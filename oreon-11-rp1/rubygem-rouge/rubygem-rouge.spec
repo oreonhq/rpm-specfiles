@@ -15,6 +15,10 @@ Source1:        %{gem_name}-%{version}-test-missing-files.tar.gz
 Source2:        rouge-create-missing-test-files.sh
 Source10:       spec_helper_assert.rb
 Source11:       bundler.rb
+# oreon url source checksums begin
+%global source0_sha256 dba5896715c0325c362e895460a6d350803dbf6427454f49a47500f3193ea739
+%global source0_file rouge-4.7.0.gem
+# oreon url source checksums end
 BuildRequires:  ruby(release)
 BuildRequires:  rubygems-devel
 BuildRequires:  help2man
@@ -37,6 +41,9 @@ Documentation for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rouge-4.7.0.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dba5896715c0325c362e895460a6d350803dbf6427454f49a47500f3193ea739" || { echo "oreon: Source0 SHA256 mismatch for rouge-4.7.0.gem" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{gem_name}-%{version} -a 1
 mv ../%{gem_name}-%{version}.gemspec .
 

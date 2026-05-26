@@ -19,6 +19,10 @@ Release: 4%{?dist}
 License: BSD-3-Clause
 URL: http://corosync.github.io/corosync/
 Source0: https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 be361c827f99b215b3bd3fa2fb071c03dac6831c2a351963d938caef62604bc8
+%global source0_file corosync-3.1.10.tar.gz
+# oreon url source checksums end
 
 # Runtime bits
 # The automatic dependency overridden in favor of explicit version lock
@@ -68,6 +72,9 @@ BuildRequires: make
 BuildRequires: git
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/corosync-3.1.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "be361c827f99b215b3bd3fa2fb071c03dac6831c2a351963d938caef62604bc8" || { echo "oreon: Source0 SHA256 mismatch for corosync-3.1.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am
 
 %build

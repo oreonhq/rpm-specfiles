@@ -6,6 +6,10 @@ Summary:        Small gobject library for playing system sounds
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/GSound
 Source0:        http://download.gnome.org/sources/gsound/1.0/gsound-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 ca2d039e1ebd148647017a7f548862350bc9af01986d39f10cfdc8e95f07881a
+%global source0_file gsound-1.0.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
 BuildRequires:  pkgconfig(libcanberra)
@@ -30,6 +34,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gsound-1.0.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ca2d039e1ebd148647017a7f548862350bc9af01986d39f10cfdc8e95f07881a" || { echo "oreon: Source0 SHA256 mismatch for gsound-1.0.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 

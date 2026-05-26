@@ -20,7 +20,7 @@ Summary:        An optimized BLAS library based on GotoBLAS2
 
 License:        BSD-3-Clause
 URL:            https://github.com/OpenMathLib/OpenBLAS
-Source0:        %url/archive/v%{version}/OpenBLAS-%{version}.tar.gz
+Source0:        https://github.com/OpenMathLib/OpenBLAS/archive/v0.3.29/OpenBLAS-0.3.29.tar.gz
 
 # Use system lapack
 Patch0:         openblas-0.2.15-system_lapack.patch
@@ -30,6 +30,10 @@ Patch1:         openblas-0.2.5-libname.patch
 Patch2:         openblas-0.2.15-constructor.patch
 # Supply the proper flags to the test makefile
 Patch3:         openblas-0.3.11-tests.patch
+# oreon url source checksums begin
+%global source0_sha256 38240eee1b29e2bde47ebb5d61160207dc68668a54cac62c076bb5032013b1eb
+%global source0_file OpenBLAS-0.3.29.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  gcc
@@ -230,6 +234,9 @@ This package contains the static libraries.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/OpenBLAS-0.3.29.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "38240eee1b29e2bde47ebb5d61160207dc68668a54cac62c076bb5032013b1eb" || { echo "oreon: Source0 SHA256 mismatch for OpenBLAS-0.3.29.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c -T
 
 # Untar source

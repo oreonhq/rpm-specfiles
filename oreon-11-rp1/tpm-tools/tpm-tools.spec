@@ -11,6 +11,10 @@ Patch0001:        0003-Allocate-OpenSSL-cipher-contexts-for-seal-unseal.patch
 Patch0002:        0001-tpm_version-avoid-outputting-NULL-bytes-from-tpmVend.patch
 Patch0003:        0001-tpm_version-avoid-outputting-undefined-data-on-stder.patch
 Patch0004:        0001-tpm-tools-fix-outdated-function-signature-in-tpmUnse.patch
+# oreon url source checksums begin
+%global source0_sha256 8af837949a2ec30b195389ac8a2b31bc49fe315050751b7d4d0d432bf7812a97
+%global source0_file tpm-tools-1.3.9.2.tar.gz
+# oreon url source checksums end
 
 %description
 tpm-tools is a group of tools to manage and utilize the Trusted Computing
@@ -38,6 +42,9 @@ tpm-tools-devel is a package that contains the libraries and headers necessary
 for developing tpm-tools applications.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tpm-tools-1.3.9.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8af837949a2ec30b195389ac8a2b31bc49fe315050751b7d4d0d432bf7812a97" || { echo "oreon: Source0 SHA256 mismatch for tpm-tools-1.3.9.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

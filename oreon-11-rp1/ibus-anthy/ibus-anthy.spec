@@ -28,6 +28,12 @@ Source1:        https://github.com/ibus/%{name}/releases/download/%{version}/%{n
 # Upstreamed patches.
 # Patch0:         %%{name}-HEAD.patch
 Patch1:         %{name}-1938129-default-hiragana.patch
+# oreon url source checksums begin
+%global source0_sha256 cad0d6e2c6fd27ea71299efdfa19954ad098fa9e54c6a232161bd25786c492e6
+%global source0_file ibus-anthy-1.5.18.tar.gz
+%global source1_sha256 93d71c9a5c087ec863be19cbb7ee9f78cb0379a9dcf49839edee520447e6b1a2
+%global source1_file ibus-anthy-1.5.18.tar.gz.sum
+# oreon url source checksums end
 
 BuildRequires:  anthy-unicode-devel
 BuildRequires:  desktop-file-utils
@@ -88,6 +94,10 @@ the functionality of the installed %{name} package.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ibus-anthy-1.5.18.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cad0d6e2c6fd27ea71299efdfa19954ad098fa9e54c6a232161bd25786c492e6" || { echo "oreon: Source0 SHA256 mismatch for ibus-anthy-1.5.18.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/ibus-anthy-1.5.18.tar.gz.sum; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "93d71c9a5c087ec863be19cbb7ee9f78cb0379a9dcf49839edee520447e6b1a2" || { echo "oreon: Source1 SHA256 mismatch for ibus-anthy-1.5.18.tar.gz.sum" >&2; exit 1; })
+# oreon verify url source checksums end
 SAVED_SUM=$(grep sha512sum %SOURCE1 | awk '{print $2}')
 MY_SUM=$(sha512sum %SOURCE0 | awk '{print $1}')
 if test x"$SAVED_SUM" != x"$MY_SUM" ; then

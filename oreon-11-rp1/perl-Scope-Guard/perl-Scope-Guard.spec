@@ -4,7 +4,12 @@ Version:        0.21
 Release:        31%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Scope-Guard
-Source0:        https://cpan.metacpan.org/modules/by-module/Scope/Scope-Guard-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CH/CHOCOLATE/Scope-Guard-0.21.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8c9b1bea5c56448e2c3fadc65d05be9e4690a3823a80f39d2f10fdd8f777d278
+%global source0_file Scope-Guard-0.21.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -33,6 +38,9 @@ execution is aborted prematurely. This effectively allows lexically-scoped
 collector.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Scope-Guard-0.21.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8c9b1bea5c56448e2c3fadc65d05be9e4690a3823a80f39d2f10fdd8f777d278" || { echo "oreon: Source0 SHA256 mismatch for Scope-Guard-0.21.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Scope-Guard-%{version}
 
 %build

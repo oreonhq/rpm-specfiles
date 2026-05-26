@@ -183,16 +183,20 @@ Summary:        Extended crypt library for descrypt, md5crypt, bcrypt, and other
 # LICENSING file in the source tarball.
 License:        LGPL-2.1-or-later AND BSD-3-Clause AND BSD-2-Clause AND BSD-2-Clause-FreeBSD AND 0BSD AND CC0-1.0 AND LicenseRef-Fedora-Public-Domain
 URL:            https://github.com/besser82/%{name}
-Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz
-Source1:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz.asc
-Source2:        %{url}/releases/download/v%{version}/%{name}-gpgkey.asc
-Source3:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz.sha256sum
+Source0:        https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-4.5.2.tar.xz
+Source1:        https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-4.5.2.tar.xz.asc
+Source2:        https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-gpgkey.asc
+Source3:        https://github.com/besser82/libxcrypt/releases/download/v4.5.2/libxcrypt-4.5.2.tar.xz.sha256sum
 
 # Patch 0000 - 2999: Backported patches from upstream.
-Patch0000:      %{url}/commit/174c24d6e87a.patch#/%{name}-%{version}-Werror_discarded-qualifiers.patch
+Patch0000:        https://github.com/besser82/libxcrypt/commit/174c24d6e87a.patch#/libxcrypt-4.5.2-Werror_discarded-qualifiers.patch
 # Patch 3000 - 5999: Backported patches from pull requests.
 # Do not use github .../commit/ba67911314f5.patch here: that diff does not apply to the v4.5.2 release tarball (Makefile.am, doc/crypt_gensalt.3).
-Patch3000:      %{name}-%{version}-Make-crypt-and-crypt_gensalt-use-thread-local-output.patch
+Patch3000:        https://github.com/besser82/libxcrypt/archive/refs/tags/v4.5.2.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 71513a31c01a428bccd5367a32fd95f115d6dac50fb5b60c779d5c7942aec071
+%global source0_file libxcrypt-4.5.2.tar.xz
+# oreon url source checksums end
 # Patch 6000 - 9999: Downstream patches.
 
 BuildRequires:  autoconf
@@ -338,6 +342,9 @@ discouraged.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libxcrypt-4.5.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "71513a31c01a428bccd5367a32fd95f115d6dac50fb5b60c779d5c7942aec071" || { echo "oreon: Source0 SHA256 mismatch for libxcrypt-4.5.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{without bootstrap}
 # Omitted during bootstrap.
 %{gpgverify} --keyring=%{SOURCE2} --signature=%{SOURCE1} --data=%{SOURCE0}

@@ -6,6 +6,10 @@ Summary:        Convert docbook into man and Texinfo
 License:        MIT
 URL:            http://docbook2x.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/docbook2x/docbook2X-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4077757d367a9d1b1427e8d5dfc3c49d993e90deabc6df23d05cfe9cd2fcdc45
+%global source0_file docbook2X-0.8.8.tar.gz
+# oreon url source checksums end
 
 
 BuildRequires:  gcc
@@ -29,6 +33,9 @@ documents.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/docbook2X-0.8.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4077757d367a9d1b1427e8d5dfc3c49d993e90deabc6df23d05cfe9cd2fcdc45" || { echo "oreon: Source0 SHA256 mismatch for docbook2X-0.8.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

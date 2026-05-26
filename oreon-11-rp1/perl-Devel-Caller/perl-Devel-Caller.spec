@@ -4,7 +4,12 @@ Release:        11%{?dist}
 Summary:        Meatier versions of caller
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-Caller
-Source0:        https://cpan.metacpan.org/modules/by-module/Devel/Devel-Caller-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Devel-Caller-2.07.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b679a2b18034b0b720de82c3708724c364b10a6ca164cbc67cdc3af283f3503f
+%global source0_file Devel-Caller-2.07.tar.gz
+# oreon url source checksums end
+
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -35,6 +40,9 @@ Requires:       perl(PadWalker) >= 0.08
 Devel::Caller - Meatier versions of caller.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Devel-Caller-2.07.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b679a2b18034b0b720de82c3708724c364b10a6ca164cbc67cdc3af283f3503f" || { echo "oreon: Source0 SHA256 mismatch for Devel-Caller-2.07.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Devel-Caller-%{version}
 
 %build

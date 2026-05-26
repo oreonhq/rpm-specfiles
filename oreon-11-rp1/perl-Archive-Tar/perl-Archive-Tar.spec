@@ -14,6 +14,10 @@ URL:            https://metacpan.org/release/Archive-Tar
 Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Archive-Tar-%{version}.tar.gz
 # Remove annoying sleep after warnings in the build script
 Patch0:         Archive-Tar-2.02-Do-not-sleep-in-Makefile.PL.patch
+# oreon url source checksums begin
+%global source0_sha256 ba6b8addbedc43a463edcddf7b93accb7676c7b79c40f425b619d99545c4cb8c
+%global source0_file Archive-Tar-3.04.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Most of the BRS are needed only for tests, compression support at run-time
 # is optional soft dependency.
@@ -105,6 +109,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Archive-Tar-3.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ba6b8addbedc43a463edcddf7b93accb7676c7b79c40f425b619d99545c4cb8c" || { echo "oreon: Source0 SHA256 mismatch for Archive-Tar-3.04.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Archive-Tar-%{version}
 %patch -P0 -p1
 

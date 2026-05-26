@@ -50,7 +50,7 @@ Summary:        Package dependency solver
 License:        BSD-3-Clause
 SourceLicense:  %{license} AND BSD-2-Clause AND MIT
 URL:            https://github.com/openSUSE/libsolv
-Source:         %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/openSUSE/libsolv/archive/0.7.36/libsolv-0.7.36.tar.gz
 # Provides: python3dist(solv) in python3-solv
 # https://github.com/openSUSE/libsolv/pull/602
 # https://bugzilla.redhat.com/show_bug.cgi?id=2252743
@@ -59,6 +59,10 @@ Patch:          0001-Python-Provide-dist-info-metadata.patch
 # Replaces <https://src.fedoraproject.org/rpms/libsolv/pull-request/14>.
 # Requires Python-Provide-dist-info-metadata.patch.
 Patch:          0002-Add-INSTALLER-to-Python-metadata.patch
+# oreon url source checksums begin
+%global source0_sha256 32b8a565b70b6ba81d9ad68070de4561dfc8462be12288725a267a90423c0fa6
+%global source0_file libsolv-0.7.36.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake >= 3.5
 BuildRequires:  gcc-c++
@@ -169,6 +173,9 @@ Python 3 version.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libsolv-0.7.36.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "32b8a565b70b6ba81d9ad68070de4561dfc8462be12288725a267a90423c0fa6" || { echo "oreon: Source0 SHA256 mismatch for libsolv-0.7.36.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

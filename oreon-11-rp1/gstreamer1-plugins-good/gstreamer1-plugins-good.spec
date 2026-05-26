@@ -39,7 +39,7 @@ URL:            http://gstreamer.freedesktop.org/
 
 %if 0%{?gitrel}
 # Git snapshot workflow disabled (use release tarball).
-Source0:        gst-plugins-good-%{version}.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.26.7.tar.xz
 %else
 Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-%{version}.tar.xz
 %endif
@@ -49,6 +49,10 @@ Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugin
 # project, translated and installed into the right place during `make install`.
 # See http://www.freedesktop.org/software/appstream/docs/ for more details.
 Source1:        gstreamer-good.appdata.xml
+# oreon url source checksums begin
+%global source0_sha256 82af18a1f3e4a060db61d2630fbb975269b80b55bb2fdcfddfab5c6440d30781
+%global source0_file gst-plugins-good-1.26.7.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  meson >= 0.48.0
 BuildRequires:  gcc
@@ -215,6 +219,9 @@ to be installed.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gst-plugins-good-1.26.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "82af18a1f3e4a060db61d2630fbb975269b80b55bb2fdcfddfab5c6440d30781" || { echo "oreon: Source0 SHA256 mismatch for gst-plugins-good-1.26.7.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n gst-plugins-good-%{version}
 
 %build

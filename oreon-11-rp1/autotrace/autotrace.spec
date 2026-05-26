@@ -9,6 +9,10 @@ Source0:        https://github.com/%{name}/%{name}/archive/%{version}/%{name}-%{
 Patch0:	autotrace-0.31.9-pr105-ImageMagick7.patch
 # https://github.com/autotrace/autotrace/pull/108
 Patch1:	autotrace-0.31.9-expected-test-failure-no-imagemagick.patch
+# oreon url source checksums begin
+%global source0_sha256 670d43797b37e067e0317e90e2c05eedeeb8ab630cf794c2abc1079a84120a68
+%global source0_file autotrace-0.31.9.tar.gz
+# oreon url source checksums end
 # No ImageMagick in RHEL 8 and future releases
 %if 0%{?rhel} < 8
 BuildRequires:	ImageMagick-devel
@@ -52,6 +56,9 @@ This package contains header files and development libraries for autotrace.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/autotrace-0.31.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "670d43797b37e067e0317e90e2c05eedeeb8ab630cf794c2abc1079a84120a68" || { echo "oreon: Source0 SHA256 mismatch for autotrace-0.31.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

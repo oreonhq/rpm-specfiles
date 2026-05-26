@@ -4,7 +4,12 @@ Version:	1.16
 Release:	31%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/IO-Multiplex
-Source0:	https://cpan.metacpan.org/modules/by-module/IO/IO-Multiplex-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/B/BB/BBB/IO-Multiplex-1.16.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 74d22c44b5ad2e7190e2786e8a17d74bbf4cef89b4d1157ba33598b5a2720dad
+%global source0_file IO-Multiplex-1.16.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -40,6 +45,9 @@ to/from the file handles. It can also accept incoming connections on one or
 more listen sockets.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IO-Multiplex-1.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "74d22c44b5ad2e7190e2786e8a17d74bbf4cef89b4d1157ba33598b5a2720dad" || { echo "oreon: Source0 SHA256 mismatch for IO-Multiplex-1.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IO-Multiplex-%{version}
 
 %build

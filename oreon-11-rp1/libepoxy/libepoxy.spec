@@ -9,6 +9,10 @@ Source0: https://download.gnome.org/sources/%{name}/1.5/%{name}-%{version}.tar.x
 
 # https://github.com/anholt/libepoxy/pull/270
 Patch0: Fix-dlwrap-on-riscv64.patch
+# oreon url source checksums begin
+%global source0_sha256 072cda4b59dd098bba8c2363a6247299db1fa89411dc221c8b81b8ee8192e623
+%global source0_file libepoxy-1.5.10.tar.xz
+# oreon url source checksums end
 
 BuildRequires: meson
 BuildRequires: gcc
@@ -35,6 +39,9 @@ This package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libepoxy-1.5.10.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "072cda4b59dd098bba8c2363a6247299db1fa89411dc221c8b81b8ee8192e623" || { echo "oreon: Source0 SHA256 mismatch for libepoxy-1.5.10.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

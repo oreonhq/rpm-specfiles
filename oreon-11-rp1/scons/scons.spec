@@ -14,11 +14,17 @@ Summary:   An Open Source software construction tool
 # MIT is main license
 License:   MIT AND DocBook-Stylesheet
 URL:       http://www.scons.org
-Source0:   %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/s/scons/scons-4.10.1.tar.gz
 Source1:   https://scons.org/doc/production/scons-doc-%{version}.tar.gz
 
 # Support python-setuptools < 79
 Patch0:    scons-4.10.1-license_old_style.patch
+# oreon url source checksums begin
+%global source0_sha256 99c0e94a42a2c1182fa6859b0be697953db07ba936ecc9817ae0d218ced20b15
+%global source0_file scons-4.10.1.tar.gz
+%global source1_sha256 26846230517c4b953edb444a3f22756f2b283eab1f3ecfb712de00f20478adf2
+%global source1_file scons-doc-4.10.1.tar.gz
+# oreon url source checksums end
 
 BuildArch: noarch
 BuildRequires: make
@@ -78,6 +84,10 @@ supports side-by-side variant builds, and is easily extended with user-
 defined Builder and/or Scanner objects.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/scons-4.10.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "99c0e94a42a2c1182fa6859b0be697953db07ba936ecc9817ae0d218ced20b15" || { echo "oreon: Source0 SHA256 mismatch for scons-4.10.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/scons-doc-4.10.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "26846230517c4b953edb444a3f22756f2b283eab1f3ecfb712de00f20478adf2" || { echo "oreon: Source1 SHA256 mismatch for scons-doc-4.10.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{with prebuilt_doc}
 %autosetup -n scons-%{version} -N
 %setup -n scons-%{version} -q -T -D -a 1

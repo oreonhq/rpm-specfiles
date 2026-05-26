@@ -16,6 +16,10 @@ Patch:          0002-Port-to-current-maven-artifact.patch
 Patch:          0003-Port-to-maven-3.8.1.patch
 # From upstream commit 43b8eaaf
 Patch:          0004-Stabilize-project.patch
+# oreon url source checksums begin
+%global source0_sha256 e59a7fc8179f0cd659875d94c396020a66f1c8c2b716c00ef9d39623b2926f97
+%global source0_file maven-plugin-testing-3.3.0-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -46,6 +50,9 @@ Summary:        Maven Plugin Testing Mechanism
 The Maven Plugin Testing Harness provides mechanisms to manage tests on Mojo.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-plugin-testing-3.3.0-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e59a7fc8179f0cd659875d94c396020a66f1c8c2b716c00ef9d39623b2926f97" || { echo "oreon: Source0 SHA256 mismatch for maven-plugin-testing-3.3.0-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

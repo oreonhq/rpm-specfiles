@@ -4,7 +4,11 @@ Release:        9%{?dist}
 Summary:        JPEG XL reference encoder and decoder (libjxl)
 License:        BSD-3-Clause
 URL:            https://github.com/libjxl/libjxl
-Source0:        %{url}/archive/v%{version}/libjxl-%{version}.tar.gz
+Source0:        https://github.com/libjxl/libjxl/archive/v0.11.1/libjxl-0.11.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1492dfef8dd6c3036446ac3b340005d92ab92f7d48ee3271b5dac1d36945d3d9
+%global source0_file libjxl-0.11.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -51,6 +55,9 @@ cjxl, djxl, jxlinfo, and benchmark_xl from libjxl.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libjxl-0.11.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1492dfef8dd6c3036446ac3b340005d92ab92f7d48ee3271b5dac1d36945d3d9" || { echo "oreon: Source0 SHA256 mismatch for libjxl-0.11.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n libjxl-%{version} -p1
 
 

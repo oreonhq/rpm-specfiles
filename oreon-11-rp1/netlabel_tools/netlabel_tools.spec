@@ -6,6 +6,10 @@ License: GPL-2.0-only
 URL: https://github.com/netlabel/netlabel_tools
 Source: https://github.com/netlabel/netlabel_tools/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Patch0: rhbz1683434.patch
+# oreon url source checksums begin
+%global source0_sha256 6192e9715b45b34136f90e7505d4416028e32aa296e12f72f9d7245bcb9e1d59
+%global source0_file netlabel_tools-0.30.0.tar.gz
+# oreon url source checksums end
 
 Requires: libnl3
 Requires(post): systemd
@@ -26,6 +30,9 @@ package provides the necessary user space tools to query and configure the
 kernel subsystem.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/netlabel_tools-0.30.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6192e9715b45b34136f90e7505d4416028e32aa296e12f72f9d7245bcb9e1d59" || { echo "oreon: Source0 SHA256 mismatch for netlabel_tools-0.30.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1
 
 %build

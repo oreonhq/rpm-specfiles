@@ -6,7 +6,7 @@ Summary:        The plugin manager stripped of pytest specific details
 
 License:        MIT
 URL:            https://github.com/pytest-dev/pluggy
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/p/pluggy/pluggy-1.5.0.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  pyproject-rpm-macros

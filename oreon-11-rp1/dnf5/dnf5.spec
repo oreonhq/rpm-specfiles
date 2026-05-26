@@ -11,12 +11,16 @@ Release:        3%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5
-Source0:        %{url}/archive/%{version}/dnf5-%{version}.tar.gz
+Source0:        https://github.com/rpm-software-management/dnf5/archive/5.4.0.0/dnf5-5.4.0.0.tar.gz
 Patch1:         0001-Honor-localpkg_gpgcheck-in-RPM-transaction-per-eleme.patch
 Patch2:         0002-Fix-segmentation-fault-in-cmd_requires_privileges.patch
 Patch3:         0003-dnf5daemon-server-Fix-daemon-crash-for-invalid-local.patch
 Patch4:         0004-libdnf5-cli-handle-C-or-POSIX-locale-gracefully-in-p.patch
 Patch5:         0005-tests-Fix-a-type-mismatch-in-libdnf5-cli-test_progre.patch
+# oreon url source checksums begin
+%global source0_sha256 9e8ed27088daaaaf9e76120a06cb320e2d6b5c50e75762facf2e5227d946e063
+%global source0_file dnf5-5.4.0.0.tar.gz
+# oreon url source checksums end
 
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
@@ -956,6 +960,9 @@ DNF5 plugin for working with RPM package manifest files.
 # ========== unpack, build, check & install ==========
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dnf5-5.4.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9e8ed27088daaaaf9e76120a06cb320e2d6b5c50e75762facf2e5227d946e063" || { echo "oreon: Source0 SHA256 mismatch for dnf5-5.4.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n dnf5-%{version}
 
 

@@ -11,11 +11,15 @@ License: MIT
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:    %{tarball}-%{gitdate}.tar.xz
+Source0:        https://xorg.freedesktop.org/archive/individual/lib/libdmx-1.1.5.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
 Source0: https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 35a4e26a8b0b2b4fe36441dca463645c3fa52d282ac3520501a38ea942cbf74f
+%global source0_file libdmx-1.1.5.tar.xz
+# oreon url source checksums end
 %endif
 
 Requires: libX11 >= 1.6.0
@@ -36,6 +40,9 @@ Requires: %{name} = %{version}-%{release}
 The X.Org X11 DMX (Distributed Multihead X) development files.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdmx-1.1.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "35a4e26a8b0b2b4fe36441dca463645c3fa52d282ac3520501a38ea942cbf74f" || { echo "oreon: Source0 SHA256 mismatch for libdmx-1.1.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

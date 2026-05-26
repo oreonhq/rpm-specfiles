@@ -27,7 +27,11 @@ Summary:        Butane config transpiler
 
 License:        Apache-2.0
 URL:            %{gourl}
-Source0:        %{gosource}
+Source0:        https://github.com/coreos/butane/archive/v0.27.0/butane-0.27.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a13ca441c3b4797e9c78fb7ea8335d889c346e5003f2fa7fb3ffaf6cb6de4c86
+%global source0_file butane-0.27.0.tar.gz
+# oreon url source checksums end
 
 # Upgrade path from old FCCT package; can be dropped in Fedora 36
 Provides:       fedora-coreos-config-transpiler = %{version}-%{release}
@@ -87,6 +91,9 @@ used for building release binaries to be signed by Fedora release
 engineering and uploaded to the Butane GitHub releases page.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/butane-0.27.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a13ca441c3b4797e9c78fb7ea8335d889c346e5003f2fa7fb3ffaf6cb6de4c86" || { echo "oreon: Source0 SHA256 mismatch for butane-0.27.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %goprep -k
 %autopatch -p1
 

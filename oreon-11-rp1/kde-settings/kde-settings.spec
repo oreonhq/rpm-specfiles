@@ -11,7 +11,7 @@ Release: 5%{?dist}
 
 License: MIT
 URL:     https://pagure.io/fedora-kde/kde-settings
-Source0: %{url}/archive/%{version}/kde-settings-%{version}.tar.gz
+Source0:        https://pagure.io/fedora-kde/kde-settings/archive/43.101/kde-settings-43.101.tar.gz
 Source1: COPYING
 
 BuildArch: noarch
@@ -20,6 +20,10 @@ BuildRequires: kde-filesystem
 # ssh-agent.service
 BuildRequires: systemd-rpm-macros
 Source10: ssh-agent.sh
+# oreon url source checksums begin
+%global source0_sha256 dc1a5b631bc4576e1b53e647cdd71e51c509131cd505b010e8622e8bfa6533cd
+%global source0_file kde-settings-43.101.tar.gz
+# oreon url source checksums end
 
 BuildRequires: system-backgrounds-kde
 
@@ -119,6 +123,9 @@ Enhances: (initial-setup-gui and kwin-wayland)
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kde-settings-43.101.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dc1a5b631bc4576e1b53e647cdd71e51c509131cd505b010e8622e8bfa6533cd" || { echo "oreon: Source0 SHA256 mismatch for kde-settings-43.101.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # omit crud

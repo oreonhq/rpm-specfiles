@@ -7,7 +7,12 @@ Release:        11%{?dist}
 Summary:        Static variables without name space pollution
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Lexical-Var
-Source0:        https://cpan.metacpan.org/modules/by-module/Lexical/Lexical-Var-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/Lexical-Var-0.010.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 26f7e63a19508d23588ddbda7a35bdf803424955badb05ddcbd3c75151e40a9a
+%global source0_file Lexical-Var-0.010.tar.gz
+# oreon url source checksums end
+
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -58,6 +63,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Lexical-Var-0.010.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "26f7e63a19508d23588ddbda7a35bdf803424955badb05ddcbd3c75151e40a9a" || { echo "oreon: Source0 SHA256 mismatch for Lexical-Var-0.010.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Lexical-Var-%{version}
 # Help generators to recognize Perl scripts
 for F in `find t -name *.t`; do

@@ -21,6 +21,10 @@ ExcludeArch:    %{ix86}
 
 # Needed for https://src.fedoraproject.org/rpms/dracut/pull-request/90
 Patch0: 0001-boot-dracut-use-systemdsystemunitdir-instead-of-syst.patch
+# oreon url source checksums begin
+%global source0_sha256 af8d080b9585e7fd1faba8f022967e1c268ae62e20ecf32ee7b364c1e307570b
+%global source0_file libostree-2025.7.tar.xz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: git
@@ -110,6 +114,9 @@ the functionality of the installed %{name} package.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libostree-2025.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "af8d080b9585e7fd1faba8f022967e1c268ae62e20ecf32ee7b364c1e307570b" || { echo "oreon: Source0 SHA256 mismatch for libostree-2025.7.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -Sgit -n libostree-%{version}
 
 %build

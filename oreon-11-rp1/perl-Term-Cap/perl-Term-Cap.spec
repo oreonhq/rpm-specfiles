@@ -5,6 +5,10 @@ Summary:        Perl termcap interface
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Term-Cap
 Source0:        https://cpan.metacpan.org/authors/id/J/JS/JSTOWE/Term-Cap-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7d5b155824223b4c5cc2587b9dea15f7a5c8f7fd9eaf704a9a6828557a527d0a
+%global source0_file Term-Cap-1.18.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -39,6 +43,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Term-Cap-1.18.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7d5b155824223b4c5cc2587b9dea15f7a5c8f7fd9eaf704a9a6828557a527d0a" || { echo "oreon: Source0 SHA256 mismatch for Term-Cap-1.18.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Term-Cap-%{version}
 # Help generators to recognize Perl scripts
 perl -i -MConfig -ple 'print $Config{startperl} if $. == 1 && !s{\A#!.*perl\b}{$Config{startperl}}' test.pl

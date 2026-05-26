@@ -8,6 +8,10 @@ Summary(de):	USB Modeswitch aktiviert UMTS-Karten
 License:	GPL-2.0-or-later
 URL:		http://www.draisberghof.de/usb_modeswitch/
 Source0:	http://www.draisberghof.de/usb_modeswitch/%{source_name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 3f039b60791c21c7cb15c7986cac89650f076dc274798fa242231b910785eaf9
+%global source0_file usb-modeswitch-data-20191128.tar.bz2
+# oreon url source checksums end
 BuildArch:	noarch
 BuildRequires: make
 BuildRequires:	systemd
@@ -35,6 +39,9 @@ um zu funktionieren.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/usb-modeswitch-data-20191128.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3f039b60791c21c7cb15c7986cac89650f076dc274798fa242231b910785eaf9" || { echo "oreon: Source0 SHA256 mismatch for usb-modeswitch-data-20191128.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{source_name}-%{version}
 
 %build

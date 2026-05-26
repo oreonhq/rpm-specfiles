@@ -15,6 +15,10 @@ URL:     https://invent.kde.org/frameworks/%{framework}
 
 Source0: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 baf43148a5bd6e30d25c0f1da66bbafd4c6df70cf8a55df5699fd6773527aef0
+%global source0_file kconfigwidgets-6.24.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -53,6 +57,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kconfigwidgets-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "baf43148a5bd6e30d25c0f1da66bbafd4c6df70cf8a55df5699fd6773527aef0" || { echo "oreon: Source0 SHA256 mismatch for kconfigwidgets-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 

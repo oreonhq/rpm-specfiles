@@ -11,6 +11,10 @@ Source0:        https://cpan.metacpan.org/authors/id/J/JF/JFEARN/XML-Catalog-%{c
 # Adapt to changes in XML-Parser-2.48, bug #2457783, CPAN RT#176391,
 # proposed to upstream.
 Patch:          XML-Catalog-1.03-Adapt-to-changes-in-XML-Parser-2.48.patch
+# oreon url source checksums begin
+%global source0_sha256 55cd8f68ffc0899cc5d265b4f4573c88c435a2620fd85993d25f5f81bfa169d7
+%global source0_file XML-Catalog-1.03.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -47,6 +51,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-Catalog-1.03.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "55cd8f68ffc0899cc5d265b4f4573c88c435a2620fd85993d25f5f81bfa169d7" || { echo "oreon: Source0 SHA256 mismatch for XML-Catalog-1.03.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n XML-Catalog-%{cpan_version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

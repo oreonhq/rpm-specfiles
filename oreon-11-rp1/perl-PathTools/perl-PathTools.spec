@@ -23,6 +23,10 @@ Patch4:         PathTools-3.84-Upgrade-to-3.89.patch
 Patch5:         PathTools-3.89-Upgrade-to-3.91.patch
 # Unbundled from perl 5.42.0
 Patch6:         PathTools-3.91-Upgrade-to-3.94.patch
+# oreon url source checksums begin
+%global source0_sha256 a558503aa6b1f8c727c0073339081a77888606aa701ada1ad62dd9d8c3f945a2
+%global source0_file PathTools-3.75.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -71,6 +75,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/PathTools-3.75.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a558503aa6b1f8c727c0073339081a77888606aa701ada1ad62dd9d8c3f945a2" || { echo "oreon: Source0 SHA256 mismatch for PathTools-3.75.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n PathTools-%{base_version}
 
 # Do not distribute File::Spec::VMS as it works on VMS only (bug #973713)

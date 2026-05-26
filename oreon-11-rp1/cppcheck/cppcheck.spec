@@ -14,6 +14,10 @@ Source0:        https://github.com/danmar/%{name}/archive/%{version}.tar.gz#/%{n
 
 # Fix location of translations
 Patch0:         cppcheck-2.11-translations.patch
+# oreon url source checksums begin
+%global source0_sha256 7be7992439339017edb551d8e7d2315f9bb57c402da50c2cee9cd0e2724600a1
+%global source0_file 2.20.0.tar.gz
+# oreon url source checksums end
 
 
 BuildRequires:  gcc-c++
@@ -59,6 +63,9 @@ This package contains the Python utility for generating html reports
 from xml files first generated using cppcheck.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/2.20.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7be7992439339017edb551d8e7d2315f9bb57c402da50c2cee9cd0e2724600a1" || { echo "oreon: Source0 SHA256 mismatch for 2.20.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P 0 -p1 -b .translations
 # Make sure bundled tinyxml2 is not used

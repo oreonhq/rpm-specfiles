@@ -24,10 +24,17 @@ and covers the entire GBK code points (20932 Han glyphs).
 
 Source0:  http://downloads.sourceforge.net/wqy/%{archivename}.tar.gz
 Source10: 66-%{fontpkgname}.conf
+# oreon url source checksums begin
+%global source0_sha256 2802ac8023aa36a66ea6e7445854e3a078d377ffff42169341bd237871f7213e
+%global source0_file wqy-microhei-0.2.0-beta.tar.gz
+# oreon url source checksums end
 
 %fontpkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/wqy-microhei-0.2.0-beta.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2802ac8023aa36a66ea6e7445854e3a078d377ffff42169341bd237871f7213e" || { echo "oreon: Source0 SHA256 mismatch for wqy-microhei-0.2.0-beta.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{fontname}
 %linuxtext -e iso8859-1 AUTHORS.txt README.txt
 

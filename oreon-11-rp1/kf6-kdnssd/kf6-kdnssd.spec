@@ -12,6 +12,10 @@ License:	BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later
 URL:		https://invent.kde.org/frameworks/%{framework}
 Source0:	https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:	https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 2cfbf6d316112a11436b4eb7125f75cf4cc77c9f17ac6365f5fe28ac8d1cc9a0
+%global source0_file kdnssd-6.24.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	cmake
 BuildRequires:	gcc-c++
@@ -37,6 +41,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kdnssd-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2cfbf6d316112a11436b4eb7125f75cf4cc77c9f17ac6365f5fe28ac8d1cc9a0" || { echo "oreon: Source0 SHA256 mismatch for kdnssd-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 %build

@@ -8,6 +8,10 @@ Summary:        Perl extension for generating and using LALR parsers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Parse-Yapp
 Source0:        https://cpan.metacpan.org/authors/id/W/WB/WBRASWELL/Parse-Yapp-%{cpan_version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3810e998308fba2e0f4f26043035032b027ce51ce5c8a52a8b8e340ca65f13e5
+%global source0_file Parse-Yapp-1.21.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -36,6 +40,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Parse-Yapp-1.21.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3810e998308fba2e0f4f26043035032b027ce51ce5c8a52a8b8e340ca65f13e5" || { echo "oreon: Source0 SHA256 mismatch for Parse-Yapp-1.21.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Parse-Yapp-%{cpan_version}
 chmod 644 README lib/Parse/{*.pm,Yapp/*.pm}
 

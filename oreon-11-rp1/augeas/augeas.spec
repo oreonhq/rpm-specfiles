@@ -16,13 +16,17 @@ License:        LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND (G
 
 Release:        0.11%{?dist}
 URL:            %{forgeurl}
-Source0:        %{forgesource}
+Source0:        https://github.com/rwmjones/augeas/archive/ada6219325d9a835b71b62a42c3e150427b91882/augeas-ada6219325d9a835b71b62a42c3e150427b91882.tar.gz
 
 # The problem with packaging from the upstream git repo is that we
 # need to provide our own gnulib submodule.  I created this by doing:
 # (cd .gnulib && git archive --format=tar --prefix=.gnulib/ HEAD) |
 #   gzip -9 > gnulib-2f7479a16a.tar.gz
 Source1:        gnulib-2f7479a16a.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b50ab817b7e246e63af3b489e572542986a3aa88dd63b83616a1f67fd347bf74
+%global source0_file augeas-ada6219325d9a835b71b62a42c3e150427b91882.tar.gz
+# oreon url source checksums end
 
 Provides:       bundled(gnulib)
 
@@ -96,6 +100,9 @@ for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/augeas-ada6219325d9a835b71b62a42c3e150427b91882.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b50ab817b7e246e63af3b489e572542986a3aa88dd63b83616a1f67fd347bf74" || { echo "oreon: Source0 SHA256 mismatch for augeas-ada6219325d9a835b71b62a42c3e150427b91882.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %forgeautosetup -p1
 zcat %{SOURCE1} | tar xf -
 

@@ -12,6 +12,10 @@ Source0:        http://downloads.sourceforge.net/pdcurses/PDCurses-%{version}.ta
 BuildArch:      noarch
 
 Patch0001:      0001-build-sys-add-WINDRES-variable.patch
+# oreon url source checksums begin
+%global source0_sha256 b88356684aa3e77069f07d8cfb1d35b6d146d1b1c711ad41fa56edc6ea046446
+%global source0_file PDCurses-3.8.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  mingw32-filesystem >= 95
@@ -69,6 +73,9 @@ don't use any of the extensions specific to ncurses.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/PDCurses-3.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b88356684aa3e77069f07d8cfb1d35b6d146d1b1c711ad41fa56edc6ea046446" || { echo "oreon: Source0 SHA256 mismatch for PDCurses-3.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am -n PDCurses-%{version}
 
 cp -a wincon win32

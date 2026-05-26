@@ -13,8 +13,13 @@ Release:	5%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:	Execute code after scope compilation finishes
 URL:		https://metacpan.org/release/B-Hooks-EndOfScope
-Source0:	https://cpan.metacpan.org/modules/by-module/B/B-Hooks-EndOfScope-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.28.tar.gz
+
 Patch0:		B-Hooks-EndOfScope-0.13-shellbangs.patch
+# oreon url source checksums begin
+%global source0_sha256 edac77a17fc36620c8324cc194ce1fad2f02e9fcbe72d08ad0b2c47f0c7fd8ef
+%global source0_file B-Hooks-EndOfScope-0.28.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
@@ -96,6 +101,9 @@ This module allows you to execute code when Perl has finished compiling the
 surrounding scope.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/B-Hooks-EndOfScope-0.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "edac77a17fc36620c8324cc194ce1fad2f02e9fcbe72d08ad0b2c47f0c7fd8ef" || { echo "oreon: Source0 SHA256 mismatch for B-Hooks-EndOfScope-0.28.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n B-Hooks-EndOfScope-%{version}
 
 # Remove shellbangs from tests to placate rpmlint

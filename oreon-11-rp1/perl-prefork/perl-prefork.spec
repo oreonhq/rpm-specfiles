@@ -5,6 +5,10 @@ Summary: 	Optimized module loading for forking or non-forking processes
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/prefork
 Source0: 	https://cpan.metacpan.org/authors/id/E/ET/ETHER/prefork-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6d87bcdfa63b28cefcfa870803a519b6590e3ea19c300f98cecb0e190bb19305
+%global source0_file prefork-1.05.tar.gz
+# oreon url source checksums end
 
 BuildArch: noarch
 
@@ -35,6 +39,9 @@ point for state detection (are we running in compile-time or run-time
 mode) and to act as a relatively light-weight module loader.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/prefork-1.05.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6d87bcdfa63b28cefcfa870803a519b6590e3ea19c300f98cecb0e190bb19305" || { echo "oreon: Source0 SHA256 mismatch for prefork-1.05.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n prefork-%{version}
 
 %build

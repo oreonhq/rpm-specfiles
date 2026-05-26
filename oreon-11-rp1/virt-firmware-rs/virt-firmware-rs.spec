@@ -39,6 +39,10 @@ URL:            https://gitlab.com/kraxel/virt-firmware-rs
 Source:         https://gitlab.com/kraxel/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 
 Patch1:		downgrade-dialoguer.patch
+# oreon url source checksums begin
+%global source0_sha256 b59598682ac7940f51d774ed3ac42de0a82797b3da0670b15b48e098f88e9461
+%global source0_file virt-firmware-rs-v26.4.tar.gz
+# oreon url source checksums end
 
 ExclusiveArch:  x86_64 aarch64 riscv64
 BuildRequires:  cargo-rpm-macros >= 24
@@ -61,6 +65,9 @@ firmware.  This package has EFI applications for %{efiarch}.
 %endif # build_efi_apps
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/virt-firmware-rs-v26.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b59598682ac7940f51d774ed3ac42de0a82797b3da0670b15b48e098f88e9461" || { echo "oreon: Source0 SHA256 mismatch for virt-firmware-rs-v26.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-v%{version} -p1
 # drop unused packages from workspace to reduce dependencies.
 sed -i Cargo.toml -e '/experimental/d'

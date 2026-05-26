@@ -91,6 +91,118 @@ Source82: http://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n
 Source83: http://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-zh_CN-%{version}.tar.xz
 Source84: http://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-zh_TW-%{version}.tar.xz
 Source1000: subdirs-kde-l10n
+# oreon url source checksums begin
+%global source1_sha256 be7253e01b70aa111455a909c2f91d2498dad7e988ed226a5f2255f5d2c80648
+%global source1_file kde-l10n-ar-17.08.3.tar.xz
+%global source2_sha256 e1ce4d0225b39e227fbe2a294abe7361e02723beff8565f0346cd51467836237
+%global source2_file kde-l10n-bg-17.08.3.tar.xz
+%global source3_sha256 826ada178a4679b45ac1981e927c885e049245c932378a4431daca299e625355
+%global source3_file kde-l10n-bs-17.08.3.tar.xz
+%global source4_sha256 a3640674471be0396de5a01e57d64aa1ef7653eae6ca6a615153595673f2c08e
+%global source4_file kde-l10n-ca-17.08.3.tar.xz
+%global source5_sha256 b2fede5fc5c1c1086a1ff244537e5223ee4ce57164dd1dd2da94f8bfa5fd9140
+%global source5_file kde-l10n-ca@valencia-17.08.3.tar.xz
+%global source6_sha256 4d30b295b4b13a6978159bf28200a762ee9f10d290480bf07d6adff3ead34d35
+%global source6_file kde-l10n-cs-17.08.3.tar.xz
+%global source8_sha256 ebda37c3793853376c17817321276fc2616da198a9634255d0bca5b6a402bbce
+%global source8_file kde-l10n-ast-17.08.3.tar.xz
+%global source10_sha256 ce62a17f165fa9dce179a89364afe35b9c72f9e4d10012c09e1fdc3131658113
+%global source10_file kde-l10n-da-17.08.3.tar.xz
+%global source11_sha256 88e565297ab5c6cc0b2ff57e10c1a6cbf3fe20726693a21ff6c1557f376fb7b3
+%global source11_file kde-l10n-de-17.08.3.tar.xz
+%global source12_sha256 bbdaa45ba2e600ba2aa3f63614563bb03cd139e028e658f2dc34eb86cc9f5ab3
+%global source12_file kde-l10n-el-17.08.3.tar.xz
+%global source13_sha256 9e6373690b534b958f55b08eccac996d5276c827e3458aff4e19c7b89081c6ed
+%global source13_file kde-l10n-en_GB-17.08.3.tar.xz
+%global source14_sha256 d636bd012d9850f3a5f2a5d22ddfde259f44ebb9b629f90590ff60e8ba99fc28
+%global source14_file kde-l10n-eo-17.08.3.tar.xz
+%global source15_sha256 7fbab1eb9976f6d48b376295e571c5083bcf9d98a09b74f6d0a82c1619fbf2ac
+%global source15_file kde-l10n-es-17.08.3.tar.xz
+%global source16_sha256 e8cc87b5910af2c87615facdc2377a2996c002fd71fcfd017b50bad210f620b4
+%global source16_file kde-l10n-et-17.08.3.tar.xz
+%global source17_sha256 78d2633683998441dbe56b05c0e03e5b0eac69a75e0b1634990e3fb5a2f4d6e4
+%global source17_file kde-l10n-eu-17.08.3.tar.xz
+%global source19_sha256 7245746bac2343f410d0ad7d877f4508923a876bb8a673f61f033e8eaece996a
+%global source19_file kde-l10n-fa-17.08.3.tar.xz
+%global source20_sha256 fc904f22d301c06efe9a786ba7d2806bc46889bdfce660b17b6bf80ac4905d81
+%global source20_file kde-l10n-fi-17.08.3.tar.xz
+%global source21_sha256 af5dd4359d7506a9b3ee36ba651ba695e899b90dc843e8255742d6ce21c0153f
+%global source21_file kde-l10n-fr-17.08.3.tar.xz
+%global source23_sha256 c4b5bddc040bb132c1608cad33bbe1d0209c57714133e5aa612e740175f1f25c
+%global source23_file kde-l10n-ga-17.08.3.tar.xz
+%global source24_sha256 24427edb1cd84be24f17909596c7173a469b7cad74c43bc95394121009e2bea0
+%global source24_file kde-l10n-gl-17.08.3.tar.xz
+%global source30_sha256 a461bcbb3a6efa20268c727a614bd6120628f66b41018572f4f3aa4de8aea037
+%global source30_file kde-l10n-he-17.08.3.tar.xz
+%global source31_sha256 9b5c8c0b32f1de02bce3a95c467052b6b1b2b4ec96588d559347e2bdf93ad738
+%global source31_file kde-l10n-hi-17.08.3.tar.xz
+%global source32_sha256 e21845945aa285c6e09f7015058d5f5dde54ae33a497f2e2298aa5a21cd6a479
+%global source32_file kde-l10n-hr-17.08.3.tar.xz
+%global source33_sha256 cf6d2e04094770e9d65a6886b2b9124efa2818f9b625d3f38edd394bb57c7be8
+%global source33_file kde-l10n-hu-17.08.3.tar.xz
+%global source34_sha256 978188c26de9a28631de3c5d0e4657dc643f7bb4319f091ba329ca0291a2fbca
+%global source34_file kde-l10n-ia-17.08.3.tar.xz
+%global source35_sha256 fd591e27e62d8a31352939419266ba392e46971bd79d673d7df32fb265213da4
+%global source35_file kde-l10n-id-17.08.3.tar.xz
+%global source36_sha256 75ca8bf7c1f612de8f69cd561da1f938e6f32d7e01e46203e4c6696d73e277c0
+%global source36_file kde-l10n-is-17.08.3.tar.xz
+%global source37_sha256 c850b43e5362f09cf86b4126277212d00837a985dff252c880872c263ddb9158
+%global source37_file kde-l10n-it-17.08.3.tar.xz
+%global source40_sha256 2aabe7f14ccc06fc28bccb3a3100cb3fbb4410e11ede802c9cbc0743113bae63
+%global source40_file kde-l10n-ja-17.08.3.tar.xz
+%global source41_sha256 42734c02bdc0e5936ba974c06be8af6bca945fb19bb486a4804aa8fb66da9f72
+%global source41_file kde-l10n-kk-17.08.3.tar.xz
+%global source42_sha256 79c562033c73e57a8c91d8e8e653ffcbbd5073cb880c571f953d15dc39dd591d
+%global source42_file kde-l10n-km-17.08.3.tar.xz
+%global source44_sha256 8e2ff52bb17778a222c530ea670fbbd60cf7c030fa0c4e2961301d8c23d88633
+%global source44_file kde-l10n-ko-17.08.3.tar.xz
+%global source45_sha256 637358e7ba3b6697d796e816b1eb1b3edc5bfecb5803c8b8653cdddeb00d6357
+%global source45_file kde-l10n-lt-17.08.3.tar.xz
+%global source46_sha256 f4a0e28ed7730b80129e38f3f538421d353cf4d011402884873016182415d053
+%global source46_file kde-l10n-lv-17.08.3.tar.xz
+%global source52_sha256 3ef15adbd139b0c1470bdbd0e602248cb9131ae0d7113eaf341acc3e0c8fecfe
+%global source52_file kde-l10n-mr-17.08.3.tar.xz
+%global source53_sha256 5af743402544fc1db4467e744909fe7c58152b0d39db30cd138ea21f8b889108
+%global source53_file kde-l10n-nb-17.08.3.tar.xz
+%global source54_sha256 963d1003492441e8dca32b3b9f3e2270f23c7563066bd568af067d73c455e92e
+%global source54_file kde-l10n-nds-17.08.3.tar.xz
+%global source55_sha256 1470b5375d955556b0483ba05b0b2ca1cab44653772b3b3a8a606481ccccbf02
+%global source55_file kde-l10n-nl-17.08.3.tar.xz
+%global source56_sha256 649cd24b9a5fac3f0737f933a6c184467c6d1b76e41882acb8676e78ac788534
+%global source56_file kde-l10n-nn-17.08.3.tar.xz
+%global source60_sha256 92c9b6bacc0fac98ab272c3e3971e106555b1682db4d98fdb74367c0ab2be369
+%global source60_file kde-l10n-pa-17.08.3.tar.xz
+%global source61_sha256 1d84d21b03e6253bd8c0e8fefb7677ac50ecebbc6886d28ca98d4e9fe04f616a
+%global source61_file kde-l10n-pl-17.08.3.tar.xz
+%global source62_sha256 fc8aef888e439a35bfda16cbd874714d2ff1ade589071f36df6f3a263007af8c
+%global source62_file kde-l10n-pt-17.08.3.tar.xz
+%global source63_sha256 60c616807998db40ce19c88c51ef2f28900662eb1bcfaf614c30682c23cc8373
+%global source63_file kde-l10n-pt_BR-17.08.3.tar.xz
+%global source64_sha256 e500d2697b8fe17e64e8e171f6d7c210ecb2d8845b178eb97cffd7d0fb9185b4
+%global source64_file kde-l10n-ro-17.08.3.tar.xz
+%global source65_sha256 f2027434ba6f5ac91b93157f236a1c2c80979511792d9da756ecdd4a3e1bfe82
+%global source65_file kde-l10n-ru-17.08.3.tar.xz
+%global source70_sha256 fc9cc6538cbbf34db4437bce262fdd104b677a3a976a5b40ae5ae82a503ac004
+%global source70_file kde-l10n-sk-17.08.3.tar.xz
+%global source72_sha256 1f777fcd5e37fcc7be291437f4fd6aa70d860db93a60190d586fbd2cc77f9282
+%global source72_file kde-l10n-sl-17.08.3.tar.xz
+%global source73_sha256 560a93c6004e29655382cb99ba3566e38bd4bf364d255f333bc9920af8e922d4
+%global source73_file kde-l10n-sr-17.08.3.tar.xz
+%global source74_sha256 e2198d1718f03fdbeace9590dbf3180d95ebba01a3640948b898b0a93af119e3
+%global source74_file kde-l10n-sv-17.08.3.tar.xz
+%global source77_sha256 c0af6f3f4132fbd8ac39855661861ecafbfbdcf4a6db8ec3d062bca8e50e43ab
+%global source77_file kde-l10n-tr-17.08.3.tar.xz
+%global source78_sha256 5f3320fc8ff8db4084b4dc2bbd420a40379cd303c3df1252fa6ef9cf7a79a2cb
+%global source78_file kde-l10n-ug-17.08.3.tar.xz
+%global source80_sha256 c8b1382911f2ff422d91067f1eeed5115cd939d57e2c2719e3da46244f078391
+%global source80_file kde-l10n-uk-17.08.3.tar.xz
+%global source82_sha256 476280db5df4e338c0b3de9bc8af3bbfd782baaf7b7e10c9daa97ce2a079e057
+%global source82_file kde-l10n-wa-17.08.3.tar.xz
+%global source83_sha256 a9143072c281c829eae7938d2d754defd8f101c405ad326352b3381679fac0d0
+%global source83_file kde-l10n-zh_CN-17.08.3.tar.xz
+%global source84_sha256 0096e2a80cf59af10a9f0919b262116707d647158f8cb66fcb7ad9be303a27af
+%global source84_file kde-l10n-zh_TW-17.08.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: findutils
@@ -1000,6 +1112,63 @@ Obsoletes: %{name}-Chinese-Traditional < 4.14.3-2
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kde-l10n-ar-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "be7253e01b70aa111455a909c2f91d2498dad7e988ed226a5f2255f5d2c80648" || { echo "oreon: Source1 SHA256 mismatch for kde-l10n-ar-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-bg-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e1ce4d0225b39e227fbe2a294abe7361e02723beff8565f0346cd51467836237" || { echo "oreon: Source2 SHA256 mismatch for kde-l10n-bg-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-bs-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "826ada178a4679b45ac1981e927c885e049245c932378a4431daca299e625355" || { echo "oreon: Source3 SHA256 mismatch for kde-l10n-bs-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-ca-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a3640674471be0396de5a01e57d64aa1ef7653eae6ca6a615153595673f2c08e" || { echo "oreon: Source4 SHA256 mismatch for kde-l10n-ca-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-ca@valencia-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b2fede5fc5c1c1086a1ff244537e5223ee4ce57164dd1dd2da94f8bfa5fd9140" || { echo "oreon: Source5 SHA256 mismatch for kde-l10n-ca@valencia-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-cs-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4d30b295b4b13a6978159bf28200a762ee9f10d290480bf07d6adff3ead34d35" || { echo "oreon: Source6 SHA256 mismatch for kde-l10n-cs-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-ast-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ebda37c3793853376c17817321276fc2616da198a9634255d0bca5b6a402bbce" || { echo "oreon: Source8 SHA256 mismatch for kde-l10n-ast-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-da-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ce62a17f165fa9dce179a89364afe35b9c72f9e4d10012c09e1fdc3131658113" || { echo "oreon: Source10 SHA256 mismatch for kde-l10n-da-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-de-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "88e565297ab5c6cc0b2ff57e10c1a6cbf3fe20726693a21ff6c1557f376fb7b3" || { echo "oreon: Source11 SHA256 mismatch for kde-l10n-de-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-el-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bbdaa45ba2e600ba2aa3f63614563bb03cd139e028e658f2dc34eb86cc9f5ab3" || { echo "oreon: Source12 SHA256 mismatch for kde-l10n-el-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-en_GB-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9e6373690b534b958f55b08eccac996d5276c827e3458aff4e19c7b89081c6ed" || { echo "oreon: Source13 SHA256 mismatch for kde-l10n-en_GB-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-eo-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d636bd012d9850f3a5f2a5d22ddfde259f44ebb9b629f90590ff60e8ba99fc28" || { echo "oreon: Source14 SHA256 mismatch for kde-l10n-eo-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-es-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source15 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7fbab1eb9976f6d48b376295e571c5083bcf9d98a09b74f6d0a82c1619fbf2ac" || { echo "oreon: Source15 SHA256 mismatch for kde-l10n-es-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-et-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source16 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e8cc87b5910af2c87615facdc2377a2996c002fd71fcfd017b50bad210f620b4" || { echo "oreon: Source16 SHA256 mismatch for kde-l10n-et-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-eu-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source17 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "78d2633683998441dbe56b05c0e03e5b0eac69a75e0b1634990e3fb5a2f4d6e4" || { echo "oreon: Source17 SHA256 mismatch for kde-l10n-eu-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-fa-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source19 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7245746bac2343f410d0ad7d877f4508923a876bb8a673f61f033e8eaece996a" || { echo "oreon: Source19 SHA256 mismatch for kde-l10n-fa-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-fi-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fc904f22d301c06efe9a786ba7d2806bc46889bdfce660b17b6bf80ac4905d81" || { echo "oreon: Source20 SHA256 mismatch for kde-l10n-fi-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-fr-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source21 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "af5dd4359d7506a9b3ee36ba651ba695e899b90dc843e8255742d6ce21c0153f" || { echo "oreon: Source21 SHA256 mismatch for kde-l10n-fr-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-ga-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source23 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c4b5bddc040bb132c1608cad33bbe1d0209c57714133e5aa612e740175f1f25c" || { echo "oreon: Source23 SHA256 mismatch for kde-l10n-ga-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-gl-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source24 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "24427edb1cd84be24f17909596c7173a469b7cad74c43bc95394121009e2bea0" || { echo "oreon: Source24 SHA256 mismatch for kde-l10n-gl-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-he-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source30 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a461bcbb3a6efa20268c727a614bd6120628f66b41018572f4f3aa4de8aea037" || { echo "oreon: Source30 SHA256 mismatch for kde-l10n-he-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-hi-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source31 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9b5c8c0b32f1de02bce3a95c467052b6b1b2b4ec96588d559347e2bdf93ad738" || { echo "oreon: Source31 SHA256 mismatch for kde-l10n-hi-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-hr-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source32 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e21845945aa285c6e09f7015058d5f5dde54ae33a497f2e2298aa5a21cd6a479" || { echo "oreon: Source32 SHA256 mismatch for kde-l10n-hr-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-hu-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source33 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cf6d2e04094770e9d65a6886b2b9124efa2818f9b625d3f38edd394bb57c7be8" || { echo "oreon: Source33 SHA256 mismatch for kde-l10n-hu-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-ia-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source34 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "978188c26de9a28631de3c5d0e4657dc643f7bb4319f091ba329ca0291a2fbca" || { echo "oreon: Source34 SHA256 mismatch for kde-l10n-ia-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-id-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source35 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fd591e27e62d8a31352939419266ba392e46971bd79d673d7df32fb265213da4" || { echo "oreon: Source35 SHA256 mismatch for kde-l10n-id-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-is-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source36 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "75ca8bf7c1f612de8f69cd561da1f938e6f32d7e01e46203e4c6696d73e277c0" || { echo "oreon: Source36 SHA256 mismatch for kde-l10n-is-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-it-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source37 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c850b43e5362f09cf86b4126277212d00837a985dff252c880872c263ddb9158" || { echo "oreon: Source37 SHA256 mismatch for kde-l10n-it-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-ja-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source40 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2aabe7f14ccc06fc28bccb3a3100cb3fbb4410e11ede802c9cbc0743113bae63" || { echo "oreon: Source40 SHA256 mismatch for kde-l10n-ja-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-kk-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source41 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "42734c02bdc0e5936ba974c06be8af6bca945fb19bb486a4804aa8fb66da9f72" || { echo "oreon: Source41 SHA256 mismatch for kde-l10n-kk-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-km-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source42 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "79c562033c73e57a8c91d8e8e653ffcbbd5073cb880c571f953d15dc39dd591d" || { echo "oreon: Source42 SHA256 mismatch for kde-l10n-km-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-ko-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source44 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8e2ff52bb17778a222c530ea670fbbd60cf7c030fa0c4e2961301d8c23d88633" || { echo "oreon: Source44 SHA256 mismatch for kde-l10n-ko-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-lt-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source45 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "637358e7ba3b6697d796e816b1eb1b3edc5bfecb5803c8b8653cdddeb00d6357" || { echo "oreon: Source45 SHA256 mismatch for kde-l10n-lt-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-lv-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source46 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f4a0e28ed7730b80129e38f3f538421d353cf4d011402884873016182415d053" || { echo "oreon: Source46 SHA256 mismatch for kde-l10n-lv-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-mr-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source52 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3ef15adbd139b0c1470bdbd0e602248cb9131ae0d7113eaf341acc3e0c8fecfe" || { echo "oreon: Source52 SHA256 mismatch for kde-l10n-mr-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-nb-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source53 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5af743402544fc1db4467e744909fe7c58152b0d39db30cd138ea21f8b889108" || { echo "oreon: Source53 SHA256 mismatch for kde-l10n-nb-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-nds-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source54 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "963d1003492441e8dca32b3b9f3e2270f23c7563066bd568af067d73c455e92e" || { echo "oreon: Source54 SHA256 mismatch for kde-l10n-nds-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-nl-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source55 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1470b5375d955556b0483ba05b0b2ca1cab44653772b3b3a8a606481ccccbf02" || { echo "oreon: Source55 SHA256 mismatch for kde-l10n-nl-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-nn-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source56 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "649cd24b9a5fac3f0737f933a6c184467c6d1b76e41882acb8676e78ac788534" || { echo "oreon: Source56 SHA256 mismatch for kde-l10n-nn-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-pa-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source60 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "92c9b6bacc0fac98ab272c3e3971e106555b1682db4d98fdb74367c0ab2be369" || { echo "oreon: Source60 SHA256 mismatch for kde-l10n-pa-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-pl-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source61 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1d84d21b03e6253bd8c0e8fefb7677ac50ecebbc6886d28ca98d4e9fe04f616a" || { echo "oreon: Source61 SHA256 mismatch for kde-l10n-pl-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-pt-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source62 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fc8aef888e439a35bfda16cbd874714d2ff1ade589071f36df6f3a263007af8c" || { echo "oreon: Source62 SHA256 mismatch for kde-l10n-pt-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-pt_BR-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source63 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "60c616807998db40ce19c88c51ef2f28900662eb1bcfaf614c30682c23cc8373" || { echo "oreon: Source63 SHA256 mismatch for kde-l10n-pt_BR-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-ro-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source64 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e500d2697b8fe17e64e8e171f6d7c210ecb2d8845b178eb97cffd7d0fb9185b4" || { echo "oreon: Source64 SHA256 mismatch for kde-l10n-ro-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-ru-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source65 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f2027434ba6f5ac91b93157f236a1c2c80979511792d9da756ecdd4a3e1bfe82" || { echo "oreon: Source65 SHA256 mismatch for kde-l10n-ru-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-sk-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source70 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fc9cc6538cbbf34db4437bce262fdd104b677a3a976a5b40ae5ae82a503ac004" || { echo "oreon: Source70 SHA256 mismatch for kde-l10n-sk-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-sl-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source72 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1f777fcd5e37fcc7be291437f4fd6aa70d860db93a60190d586fbd2cc77f9282" || { echo "oreon: Source72 SHA256 mismatch for kde-l10n-sl-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-sr-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source73 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "560a93c6004e29655382cb99ba3566e38bd4bf364d255f333bc9920af8e922d4" || { echo "oreon: Source73 SHA256 mismatch for kde-l10n-sr-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-sv-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source74 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e2198d1718f03fdbeace9590dbf3180d95ebba01a3640948b898b0a93af119e3" || { echo "oreon: Source74 SHA256 mismatch for kde-l10n-sv-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-tr-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source77 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c0af6f3f4132fbd8ac39855661861ecafbfbdcf4a6db8ec3d062bca8e50e43ab" || { echo "oreon: Source77 SHA256 mismatch for kde-l10n-tr-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-ug-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source78 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5f3320fc8ff8db4084b4dc2bbd420a40379cd303c3df1252fa6ef9cf7a79a2cb" || { echo "oreon: Source78 SHA256 mismatch for kde-l10n-ug-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-uk-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source80 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c8b1382911f2ff422d91067f1eeed5115cd939d57e2c2719e3da46244f078391" || { echo "oreon: Source80 SHA256 mismatch for kde-l10n-uk-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-wa-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source82 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "476280db5df4e338c0b3de9bc8af3bbfd782baaf7b7e10c9daa97ce2a079e057" || { echo "oreon: Source82 SHA256 mismatch for kde-l10n-wa-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-zh_CN-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source83 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a9143072c281c829eae7938d2d754defd8f101c405ad326352b3381679fac0d0" || { echo "oreon: Source83 SHA256 mismatch for kde-l10n-zh_CN-17.08.3.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kde-l10n-zh_TW-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source84 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0096e2a80cf59af10a9f0919b262116707d647158f8cb66fcb7ad9be303a27af" || { echo "oreon: Source84 SHA256 mismatch for kde-l10n-zh_TW-17.08.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -T -q -n %{name}-%{version} -c
 
 for i in $(cat %{SOURCE1000}) ; do

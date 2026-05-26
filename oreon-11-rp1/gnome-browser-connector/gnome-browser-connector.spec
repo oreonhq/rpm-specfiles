@@ -8,6 +8,10 @@ Summary:        GNOME Shell browser connector
 License:        GPL-3.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-browser-connector
 Source0:        https://download.gnome.org/sources/gnome-browser-connector/42/gnome-browser-connector-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 bd9702ce1c163606ca32b8c13d1f3ba6e82b247cf87aac60610b411df1556212
+%global source0_file gnome-browser-connector-42.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  meson
@@ -29,6 +33,9 @@ the corresponding extensions repository https://extensions.gnome.org.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gnome-browser-connector-42.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bd9702ce1c163606ca32b8c13d1f3ba6e82b247cf87aac60610b411df1556212" || { echo "oreon: Source0 SHA256 mismatch for gnome-browser-connector-42.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

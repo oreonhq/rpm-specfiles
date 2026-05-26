@@ -15,6 +15,10 @@ Patch1:         gphoto2-pkgcfg.patch
 Patch2:         gphoto2-device-return.patch
 # https://github.com/gphoto/libgphoto2/commit/7c5e5f66bb1a113123e289c221728a2eaee2411f
 Patch3:         0001-merge-music-players.h-from-libmtp.patch
+# oreon url source checksums begin
+%global source0_sha256 c55504e725cf44b6ca67e1cd7504ad36dc98d7a0469a9e8d627fd0fb3848aa1d
+%global source0_file libgphoto2-2.5.33.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -65,6 +69,9 @@ This package contains files needed to compile applications that
 use libgphoto2.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libgphoto2-2.5.33.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c55504e725cf44b6ca67e1cd7504ad36dc98d7a0469a9e8d627fd0fb3848aa1d" || { echo "oreon: Source0 SHA256 mismatch for libgphoto2-2.5.33.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 for f in AUTHORS ChangeLog COPYING libgphoto2_port/AUTHORS libgphoto2_port/COPYING.LIB `find -name 'README.*'`; do
     iconv -f ISO-8859-1 -t UTF-8 $f > $f.conv && mv -f $f.conv $f

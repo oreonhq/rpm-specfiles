@@ -5,7 +5,12 @@ Summary:        Test fallback behavior in absence of modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:            https://metacpan.org/release/Test-Without-Module
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Without-Module-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CO/CORION/Test-Without-Module-0.23.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8289e1cd7f57017a816ab4127e29ecd7a754ae7cd5c037c41b3b3bf849c21d21
+%global source0_file Test-Without-Module-0.23.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -31,6 +36,9 @@ though they are installed. This is mostly useful for testing modules that
 have a fallback when a certain dependency module is not installed.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Without-Module-0.23.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8289e1cd7f57017a816ab4127e29ecd7a754ae7cd5c037c41b3b3bf849c21d21" || { echo "oreon: Source0 SHA256 mismatch for Test-Without-Module-0.23.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Without-Module-%{version}
 perl -pi -e 's/\r//' README Changes
 chmod 644 README Changes

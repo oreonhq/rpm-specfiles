@@ -8,6 +8,10 @@ Summary:        Netfilter queue userspace library
 License:        GPL-2.0-only
 URL:            http://netfilter.org
 Source0:        http://netfilter.org/projects/%{name}/files/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 f9ff3c11305d6e03d81405957bdc11aea18e0d315c3e3f48da53a24ba251b9f5
+%global source0_file libnetfilter_queue-1.0.5.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  libnfnetlink-devel >= %{libnfnetlink}, pkgconfig, kernel-headers
 BuildRequires:  autoconf, automake, libtool, libmnl-devel >= 1.0.3
@@ -33,6 +37,9 @@ deprecates the old ip_queue / libipq mechanism.
 libnetfilter_queue has been previously known as libnfnetlink_queue.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libnetfilter_queue-1.0.5.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f9ff3c11305d6e03d81405957bdc11aea18e0d315c3e3f48da53a24ba251b9f5" || { echo "oreon: Source0 SHA256 mismatch for libnetfilter_queue-1.0.5.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

@@ -11,6 +11,10 @@ Source: http://dev-www.libreoffice.org/src/%{name}/%{name}-%{version}.tar.xz
 
 Patch0: gcc10.patch
 Patch1: includes.patch
+# oreon url source checksums begin
+%global source0_sha256 ef36c1a1aabb2ba3b0bedaaafe717bf4480be2ba8de6f3894be5fd3702b013ba
+%global source0_file libmspub-0.1.4.tar.xz
+# oreon url source checksums end
 
 BuildRequires: boost-devel
 BuildRequires: doxygen
@@ -52,6 +56,9 @@ Tools to transform Microsoft Publisher documents into other formats.
 Currently supported: XHTML, raw.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libmspub-0.1.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ef36c1a1aabb2ba3b0bedaaafe717bf4480be2ba8de6f3894be5fd3702b013ba" || { echo "oreon: Source0 SHA256 mismatch for libmspub-0.1.4.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

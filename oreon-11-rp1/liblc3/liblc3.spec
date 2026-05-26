@@ -5,8 +5,12 @@ Summary:       Low Complexity Communication Codec (LC3)
 
 License:       Apache-2.0
 URL:           https://github.com/google/liblc3
-Source0:       %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/google/liblc3/archive/v1.1.3/liblc3-1.1.3.tar.gz
 Patch0:        0001-Revert-build-fix-rpath-issue.patch
+# oreon url source checksums begin
+%global source0_sha256 276752ff54ce6a77d54ec133397b9d7e71f90caf3d9afa32d8b0e891b8ecb8af
+%global source0_file liblc3-1.1.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: meson
@@ -42,6 +46,9 @@ Uitlities for command line use of and testing
 the %{name} library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/liblc3-1.1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "276752ff54ce6a77d54ec133397b9d7e71f90caf3d9afa32d8b0e891b8ecb8af" || { echo "oreon: Source0 SHA256 mismatch for liblc3-1.1.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

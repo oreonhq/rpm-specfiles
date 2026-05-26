@@ -53,6 +53,12 @@ Patch0: spamassassin-4.0.0-gnupg2.patch
 Patch1: spamassassin-4.0.0-add-logfile-homedir-options.patch
 # Removing of Digest::SHA1 dependency, perl-Razor-Agent hasn't this in Fedora
 Patch2: spamassassin-4.0.1-remove_dep_to_digest_sha1.patch
+# oreon url source checksums begin
+%global source0_sha256 da8192cf76d8871830d44d7bdc914bd1641105ac813798ddeac5f65ab8f73cee
+%global source0_file Mail-SpamAssassin-4.0.2.tar.bz2
+%global source1_sha256 f82128687117113dbe40bdc4e3141b87f96c2b01519c9022597da47e726a613e
+%global source1_file Mail-SpamAssassin-rules-4.0.2.r1928015.tgz
+# oreon url source checksums end
 # end of patches
 Requires(post): diffutils
 
@@ -148,6 +154,10 @@ This subpackage provides the 'sa-compile' tool.
 sa-compile uses "re2c" to compile the site-wide parts of the SpamAssassin ruleset.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Mail-SpamAssassin-4.0.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "da8192cf76d8871830d44d7bdc914bd1641105ac813798ddeac5f65ab8f73cee" || { echo "oreon: Source0 SHA256 mismatch for Mail-SpamAssassin-4.0.2.tar.bz2" >&2; exit 1; })
+%(f=%{_sourcedir}/Mail-SpamAssassin-rules-4.0.2.r1928015.tgz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f82128687117113dbe40bdc4e3141b87f96c2b01519c9022597da47e726a613e" || { echo "oreon: Source1 SHA256 mismatch for Mail-SpamAssassin-rules-4.0.2.r1928015.tgz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE102}' --signature='%{SOURCE100}' --data='%{SOURCE0}'
 %{gpgverify} --keyring='%{SOURCE102}' --signature='%{SOURCE101}' --data='%{SOURCE1}'
 %setup -q -n Mail-SpamAssassin-%{version}

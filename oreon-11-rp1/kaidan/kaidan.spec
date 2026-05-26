@@ -6,7 +6,11 @@ Release:        %autorelease
 Summary:        A XMPP client based on KDE Framework
 License:        GPL-3.0-or-later AND MIT AND Apache-2.0 AND CC-BY-SA-4.0 AND LGPL-2.0-or-later
 URL:            https://invent.kde.org/network/kaidan
-Source0:        %{url}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source0:        https://invent.kde.org/network/kaidan/-/archive/v0.15.0/kaidan-v0.15.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 01195879fb28cfb33e58d9d788d9d3d3a4e9d1af8c0fa960413e1311f8687b19
+%global source0_file kaidan-v0.15.0.tar.gz
+# oreon url source checksums end
 
 %if 0%{?fedora} || 0%{?epel} > 7
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
@@ -75,6 +79,9 @@ and QtQuick, while the back-end of Kaidan is entirely written in C++ using Qt
 and the Qt-based XMPP library QXmpp.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kaidan-v0.15.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "01195879fb28cfb33e58d9d788d9d3d3a4e9d1af8c0fa960413e1311f8687b19" || { echo "oreon: Source0 SHA256 mismatch for kaidan-v0.15.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-v%{version}
 
 sed -i 's|Qt6Keychain 0.15|Qt6Keychain|' CMakeLists.txt

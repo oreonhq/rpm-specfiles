@@ -19,6 +19,10 @@ Release:   3%{?dist}
 License:   GPL-2.0-or-later
 URL:       https://gitlab.gnome.org/GNOME/NetworkManager-libreswan
 Source0:   https://download.gnome.org/sources/NetworkManager-libreswan/1.2/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 6670af36d3bb4887e528f803babb689e42711e4ebbd29d8df6a178d3f17a11d3
+%global source0_file NetworkManager-libreswan-1.2.30.tar.xz
+# oreon url source checksums end
 
 #Patch1: 0001-some.patch
 
@@ -78,6 +82,9 @@ the libreswan server with NetworkManager (GNOME files).
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/NetworkManager-libreswan-1.2.30.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6670af36d3bb4887e528f803babb689e42711e4ebbd29d8df6a178d3f17a11d3" || { echo "oreon: Source0 SHA256 mismatch for NetworkManager-libreswan-1.2.30.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

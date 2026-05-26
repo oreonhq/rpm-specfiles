@@ -12,6 +12,10 @@ Source:         https://download.kde.org/stable/plasma-mobile-sounds/0.1/plasma-
 # Use cmake datadir
 # https://invent.kde.org/plasma-mobile/plasma-mobile-sounds/-/merge_requests/2
 Patch1:         0001-Use-cmake-datadir.patch
+# oreon url source checksums begin
+%global source0_sha256 f1aed3ddd1de209e0d60df54e968b141b4c868ff0c4706dedb85e4cce29f26af
+%global source0_file plasma-mobile-sounds-0.1.tar.xz
+# oreon url source checksums end
 
 BuildArch: noarch
 
@@ -22,6 +26,9 @@ BuildRequires: kf6-rpm-macros
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plasma-mobile-sounds-0.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f1aed3ddd1de209e0d60df54e968b141b4c868ff0c4706dedb85e4cce29f26af" || { echo "oreon: Source0 SHA256 mismatch for plasma-mobile-sounds-0.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

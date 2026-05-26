@@ -21,6 +21,12 @@ Patch7:         wordnet-3.0-libtool.patch
 Patch8:         wordnet-3.0-error_message.patch
 # Bug #1037386
 Patch9:         wordnet-3.0-Pass-compilation-with-Werror-format-security.patch
+# oreon url source checksums begin
+%global source0_sha256 6c492d0c7b4a40e7674d088191d3aa11f373bb1da60762e098b8ee2dda96ef22
+%global source0_file WordNet-3.0.tar.bz2
+%global source1_sha256 3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a
+%global source1_file wn3.1.dict.tar.gz
+# oreon url source checksums end
 BuildRequires:  automake >= 1.8
 BuildRequires:  coreutils
 BuildRequires:  gcc
@@ -70,6 +76,10 @@ and PostScript format.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/WordNet-3.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6c492d0c7b4a40e7674d088191d3aa11f373bb1da60762e098b8ee2dda96ef22" || { echo "oreon: Source0 SHA256 mismatch for WordNet-3.0.tar.bz2" >&2; exit 1; })
+%(f=%{_sourcedir}/wn3.1.dict.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3f7d8be8ef6ecc7167d39b10d66954ec734280b5bdcd57f7d9eafe429d11c22a" || { echo "oreon: Source1 SHA256 mismatch for wn3.1.dict.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n WordNet-%{version}
 %patch -P 0 -p1 -b .cve-2008-2149
 %patch -P 1 -p1 -b .cve-2008-3908

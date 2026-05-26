@@ -22,7 +22,7 @@ URL:            https://pipewire.org/
 %if 0%{?gitrel}
 # git clone git://anongit.freedesktop.org/gstreamer/pipewire
 # cd pipewire; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
-Source0:        pipewire-%{version}-%{gitrel}-g%{shortcommit}.tar.gz
+Source0:        https://github.com/PipeWire/pipewire/archive/0.2.7/pipewire-0.2.7.tar.gz
 %else
 Source0:	https://github.com/PipeWire/pipewire/archive/%{version}/pipewire-%{version}.tar.gz
 %endif
@@ -30,6 +30,10 @@ Source0:	https://github.com/PipeWire/pipewire/archive/%{version}/pipewire-%{vers
 ## upstream patches
 Patch1:		0001-build-and-link-a2dp-codecs.c-as-well.patch
 Patch2:		0001-bluez5-declare-factory-as-extern.patch
+# oreon url source checksums begin
+%global source0_sha256 bfaa0f6ae6c0791e2e0b59234d399753bf24f1b33dbf587682363a8463dd8df1
+%global source0_file pipewire-0.2.7.tar.gz
+# oreon url source checksums end
 
 ## upstreamable patches
 
@@ -92,6 +96,9 @@ Headers and libraries for developing applications that can communicate with
 a PipeWire media server.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pipewire-0.2.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bfaa0f6ae6c0791e2e0b59234d399753bf24f1b33dbf587682363a8463dd8df1" || { echo "oreon: Source0 SHA256 mismatch for pipewire-0.2.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -T -b0 -n pipewire-%{version}%{?gitrel:-%{gitrel}-g%{shortcommit}}
 
 %patch -P1 -p1 -b .0001

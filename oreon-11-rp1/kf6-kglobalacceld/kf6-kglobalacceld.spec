@@ -7,6 +7,10 @@ Summary:        Plasma daemon for global keyboard shortcuts
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 URL:            https://invent.kde.org/plasma/kglobalacceld
 Source0:        https://download.kde.org/stable/plasma/%{plasmaver}/kglobalacceld-%{plasmaver}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 bcb5d43146df016fe568401912538de8c70e01c4e6da78740e6f2181a8b29ea7
+%global source0_file kglobalacceld-6.6.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -57,6 +61,9 @@ Headers and CMake config for libKGlobalAccelD.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kglobalacceld-6.6.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bcb5d43146df016fe568401912538de8c70e01c4e6da78740e6f2181a8b29ea7" || { echo "oreon: Source0 SHA256 mismatch for kglobalacceld-6.6.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n kglobalacceld-%{plasmaver} -p1
 
 

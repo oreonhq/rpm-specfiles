@@ -10,6 +10,10 @@ Summary:        MinGW Windows Streaming-Media Framework Runtime
 License:        LGPL-2.0-or-later
 URL:            http://gstreamer.freedesktop.org/
 Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 ce5cd44d4ffeafdcc3dddaa072b2179c0b7cb1abf4e6c5d18d4375f8a39fe491
+%global source0_file gstreamer-1.28.2.tar.xz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -70,6 +74,9 @@ installing new plug-ins.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gstreamer-1.28.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ce5cd44d4ffeafdcc3dddaa072b2179c0b7cb1abf4e6c5d18d4375f8a39fe491" || { echo "oreon: Source0 SHA256 mismatch for gstreamer-1.28.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n gstreamer-%{version}
 
 

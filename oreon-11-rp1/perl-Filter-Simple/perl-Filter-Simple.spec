@@ -11,6 +11,10 @@ BuildArch:      noarch
 Patch0:         Filter-Simple-0.94-Upgrade-to-0.95.patch
 # Unbundled from perl 5.32.0
 Patch1:         Filter-Simple-0.94-Upgrade-to-0.96.patch
+# oreon url source checksums begin
+%global source0_sha256 cffc0b960d783dfbcf7b247f5fea65c84de230ee2f091f142ca9b8aeb07e79d2
+%global source0_file Filter-Simple-0.94.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -49,6 +53,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Filter-Simple-0.94.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cffc0b960d783dfbcf7b247f5fea65c84de230ee2f091f142ca9b8aeb07e79d2" || { echo "oreon: Source0 SHA256 mismatch for Filter-Simple-0.94.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Filter-Simple-%{base_version}
 %patch -P0 -p1
 %patch -P1 -p1

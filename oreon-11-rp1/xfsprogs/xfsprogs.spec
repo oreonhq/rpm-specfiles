@@ -7,6 +7,10 @@ URL:		https://xfs.wiki.kernel.org
 Source0:	http://kernel.org/pub/linux/utils/fs/xfs/xfsprogs/%{name}-%{version}.tar.xz
 Source1:	http://kernel.org/pub/linux/utils/fs/xfs/xfsprogs/%{name}-%{version}.tar.sign
 Source2:	https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/46A7EA18AC33E108.asc
+# oreon url source checksums begin
+%global source0_sha256 3a6dc7b1245ce9bccd197bab00691f1b190bd3694d3ccc301d21b83afc133199
+%global source0_file xfsprogs-6.18.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	make
 BuildRequires:	gcc
@@ -75,6 +79,9 @@ Extra utilities for XFS filesystems, such as xfs_protofile, that may require
 Python.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xfsprogs-6.18.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3a6dc7b1245ce9bccd197bab00691f1b190bd3694d3ccc301d21b83afc133199" || { echo "oreon: Source0 SHA256 mismatch for xfsprogs-6.18.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %autosetup -p1
 

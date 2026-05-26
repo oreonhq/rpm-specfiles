@@ -5,7 +5,7 @@ Release:        0%{?dist}
 Summary:        The blessed package to manage your versions by SCM tags
 License:        MIT
 URL:            https://github.com/pypa/setuptools_scm/
-Source0:        %{pypi_source setuptools_scm}
+Source0:        https://files.pythonhosted.org/packages/source/s/setuptools_scm/setuptools_scm-6.3.2.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

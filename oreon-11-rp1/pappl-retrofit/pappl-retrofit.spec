@@ -20,7 +20,7 @@ Release: 10%{?dist}
 License: Apache-2.0 WITH LLVM-exception
 Summary: Library for common functions used in retrofitting printer applications
 URL: https://github.com/OpenPrinting/pappl-retrofit/
-Source0: %{URL}/releases/download/%{version}/pappl-retrofit-%{version}.tar.gz
+Source0:        https://github.com/OpenPrinting/pappl-retrofit//releases/download/1.0b2/pappl-retrofit-1.0b2.tar.gz
 Source1: legacy-printer-app.conf
 
 # Patches
@@ -42,6 +42,10 @@ Patch007: 0001-Protect-_prASCII-from-negative-lengths.patch
 Patch008: 0001-Fix-potential-memory-leaks.patch
 # https://github.com/OpenPrinting/pappl-retrofit/pull/31
 Patch009: 0001-Fix-memory-leaks-from-compiled_re_list.patch
+# oreon url source checksums begin
+%global source0_sha256 752e2c54c730d33e1fe10069bb20cb11c324594c051a2beeb2822b63534a588c
+%global source0_file pappl-retrofit-1.0b2.tar.gz
+# oreon url source checksums end
 
 
 # for autogen.sh - generating configure scripts
@@ -124,6 +128,9 @@ so such printer will be seen by CUPS.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pappl-retrofit-1.0b2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "752e2c54c730d33e1fe10069bb20cb11c324594c051a2beeb2822b63534a588c" || { echo "oreon: Source0 SHA256 mismatch for pappl-retrofit-1.0b2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 

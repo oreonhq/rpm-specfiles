@@ -9,7 +9,11 @@ URL:            https://github.com/codehaus-plexus/plexus-cipher
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        %{url}/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-cipher/archive/plexus-cipher-2.0/plexus-cipher-2.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 99b45a9f1b434529cc397116cf6f52ab7a29659f1dc05a0937c73e25596a67fd
+%global source0_file plexus-cipher-2.0.tar.gz
+# oreon url source checksums end
 
 # TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.0-28

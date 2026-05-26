@@ -15,11 +15,18 @@ Requires: mythes
 Supplements: (mythes and langpacks-en)
 
 Patch0: mythes-en.python3.patch
+# oreon url source checksums begin
+%global source0_sha256 8bc8b1c8a71c82e98c418d7d66217359669569e81e0e679f4756bcac67d71e0d
+%global source0_file wn2ooo20050723.tgz
+# oreon url source checksums end
 
 %description
 English thesaurus.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/wn2ooo20050723.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8bc8b1c8a71c82e98c418d7d66217359669569e81e0e679f4756bcac67d71e0d" || { echo "oreon: Source0 SHA256 mismatch for wn2ooo20050723.tgz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c %{name}-%{version}
 %patch -P0 -p1 -b .python3
 

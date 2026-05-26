@@ -44,6 +44,10 @@ Patch006: 0006-curl-8.18.0-CVE-2026-3805.patch
 
 # patch making libcurl multilib ready
 Patch101: 0101-curl-7.32.0-multilib.patch
+# oreon url source checksums begin
+%global source0_sha256 40df79166e74aa20149365e11ee4c798a46ad57c34e4f68fd13100e2c9a91946
+%global source0_file curl-8.18.0.tar.xz
+# oreon url source checksums end
 
 Provides: curl-full = %{version}-%{release}
 # do not fail when trying to install curl-minimal after drop
@@ -256,6 +260,9 @@ other hand, the package is smaller and requires fewer run-time dependencies to
 be installed.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/curl-8.18.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "40df79166e74aa20149365e11ee4c798a46ad57c34e4f68fd13100e2c9a91946" || { echo "oreon: Source0 SHA256 mismatch for curl-8.18.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -n %{name}-%{version_no_tilde} -p1
 

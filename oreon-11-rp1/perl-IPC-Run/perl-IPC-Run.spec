@@ -12,7 +12,12 @@ Summary:        Perl module for interacting with child processes
 # lib/IPC/Run/Win32IO.pm:       GPLv2 or Artistic
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IPC-Run
-Source0:        https://cpan.metacpan.org/modules/by-module/IPC/IPC-Run-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/N/NJ/NJM/IPC-Run-20250809.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b1e85a30405786ed8378b68dd57159315ad7ddc0a55e432aa9eeca6166ca53fe
+%global source0_file IPC-Run-20250809.0.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -71,6 +76,9 @@ Various redirection operators reminiscent of those seen on common Unix
 and DOS command lines are provided.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IPC-Run-20250809.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b1e85a30405786ed8378b68dd57159315ad7ddc0a55e432aa9eeca6166ca53fe" || { echo "oreon: Source0 SHA256 mismatch for IPC-Run-20250809.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IPC-Run-%{version}
 
 # Remove Windows-only features that could add unnecessary dependencies

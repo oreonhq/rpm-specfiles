@@ -13,6 +13,10 @@ URL:            https://www.khronos.org/registry/cl/
 
 Source0:        https://github.com/KhronosGroup/OpenCL-Headers/archive/%{commit0}/OpenCL-Headers-%{shortcommit0}.tar.gz
 Source1:        https://github.com/KhronosGroup/OpenCL-CLHPP/archive/v%{cl_hpp_ver}/OpenCL-CLHPP-v%{cl_hpp_ver}.tar.gz
+# oreon url source checksums begin
+%global source1_sha256 c1031afde6e9eb042e6fcfbc17078f4b437a7e8d55482a1ca6e0fa762d262a89
+%global source1_file OpenCL-CLHPP-v2025.07.22.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -20,6 +24,9 @@ BuildArch:      noarch
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/OpenCL-CLHPP-v2025.07.22.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c1031afde6e9eb042e6fcfbc17078f4b437a7e8d55482a1ca6e0fa762d262a89" || { echo "oreon: Source1 SHA256 mismatch for OpenCL-CLHPP-v2025.07.22.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n OpenCL-Headers-%{commit0}
 
 tar -xf %{SOURCE1}

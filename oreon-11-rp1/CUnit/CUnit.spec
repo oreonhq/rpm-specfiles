@@ -9,6 +9,10 @@ License:        LGPL-2.0-or-later
 URL:            http://cunit.sourceforge.net/
 Provides:       cunit = %{version}-%{release}
 Source0:        http://downloads.sourceforge.net/cunit/%{name}-%{tarver}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 f5b29137f845bb08b77ec60584fdb728b4e58f1023e6f249a464efa49a40f214
+%global source0_file CUnit-2.1-3.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  automake
 BuildRequires:  libtool
@@ -29,6 +33,9 @@ The %{name}-devel package contains the header files
 and libraries for use with CUnit package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/CUnit-2.1-3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f5b29137f845bb08b77ec60584fdb728b4e58f1023e6f249a464efa49a40f214" || { echo "oreon: Source0 SHA256 mismatch for CUnit-2.1-3.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{tarver}
 find -name *.c -exec chmod -x {} \;
 

@@ -35,6 +35,10 @@ Source11:          openvpn.rpmlintrc
 Patch1:            0001-Change-the-default-cipher-to-AES-256-GCM-for-server-.patch
 Patch2:            fedora-crypto-policy-compliance.patch
 Patch50:           openvpn-2.4-change-tmpfiles-permissions.patch
+# oreon url source checksums begin
+%global source0_sha256 13702526f687c18b2540c1a3f2e189187baaa65211edcf7ff6772fa69f0536cf
+%global source0_file openvpn-2.6.19.tar.gz
+# oreon url source checksums end
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:           GPL-2.0-only
 BuildRequires:     gnupg2
@@ -95,6 +99,9 @@ written in C and provides a more low-level and information rich access
 to similar features as the various script-hooks.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/openvpn-2.6.19.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "13702526f687c18b2540c1a3f2e189187baaa65211edcf7ff6772fa69f0536cf" || { echo "oreon: Source0 SHA256 mismatch for openvpn-2.6.19.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 gpgv2 --quiet --keyring %{SOURCE10} %{SOURCE1} %{SOURCE0}
 %autosetup -p1
 

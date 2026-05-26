@@ -55,6 +55,10 @@ Patch0001: 0001-build-customize-configuration.patch
 Patch0002: 0002-Use-spec-compliant-timeouts.patch
 # https://github.com/ipxe/ipxe/issues/1419
 Patch0003: gcc15.patch
+# oreon url source checksums begin
+%global source0_sha256 58c75f036970d47baebd549270c70cfc368ba6761ab732fa76e6a2a6f2341872
+%global source0_file de8a0821c7bc737e724fa3dfb6d89dc36f591d7a.tar.gz
+# oreon url source checksums end
 
 %ifarch %{buildarches}
 BuildRequires: perl-interpreter
@@ -140,6 +144,9 @@ replacement for proprietary PXE ROMs, with many extra features such as
 DNS, HTTP, iSCSI, etc.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/de8a0821c7bc737e724fa3dfb6d89dc36f591d7a.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "58c75f036970d47baebd549270c70cfc368ba6761ab732fa76e6a2a6f2341872" || { echo "oreon: Source0 SHA256 mismatch for de8a0821c7bc737e724fa3dfb6d89dc36f591d7a.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{githash}
 %autopatch -p1
 # ath9k drivers are too big for an Option ROM, and ipxe devs say it doesn't

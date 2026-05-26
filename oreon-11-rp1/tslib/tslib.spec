@@ -5,6 +5,10 @@ Summary:        Touchscreen Access Library
 License:        LGPL-2.1-only
 URL:            https://github.com/kergoth/tslib
 Source0:        https://github.com/kergoth/tslib/releases/download/%{version}/tslib-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 463faa78f53fbf88f18dd2e9852c33a341f6fc310483bfff973a25c33375c43e
+%global source0_file tslib-1.24.tar.bz2
+# oreon url source checksums end
 BuildRequires:  make
 BuildRequires:  libtool, autoconf, automake
 BuildRequires:  SDL2-devel
@@ -31,6 +35,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tslib-1.24.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "463faa78f53fbf88f18dd2e9852c33a341f6fc310483bfff973a25c33375c43e" || { echo "oreon: Source0 SHA256 mismatch for tslib-1.24.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 ./autogen.sh
 

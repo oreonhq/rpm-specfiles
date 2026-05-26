@@ -11,7 +11,12 @@ Release:        18%{?dist}
 Summary:        Capture STDOUT/STDERR from sub-processes and XS/C modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-CaptureOutput
-Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-CaptureOutput-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/IO-CaptureOutput-1.1105.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ae99009fca1273800f169ecb82f4ed1cc6c76795f156bee5c0093005d572f487
+%global source0_file IO-CaptureOutput-1.1105.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils
@@ -45,6 +50,9 @@ BuildRequires:  perl(Inline::C)
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IO-CaptureOutput-1.1105.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ae99009fca1273800f169ecb82f4ed1cc6c76795f156bee5c0093005d572f487" || { echo "oreon: Source0 SHA256 mismatch for IO-CaptureOutput-1.1105.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IO-CaptureOutput-%{version}
 
 %build

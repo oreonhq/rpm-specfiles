@@ -5,6 +5,10 @@ Release:    32%{?dist}
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    A Module::Install extension to include GitHub meta information in META.yml 
 Source:     https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-Install-GithubMeta-%{version}.tar.gz 
+# oreon url source checksums begin
+%global source0_sha256 2ead44c973c748d72d9f199e41c44dc1801fe9ae06b0fadc59447693a3c98281
+%global source0_file Module-Install-GithubMeta-0.30.tar.gz
+# oreon url source checksums end
 Url:        https://metacpan.org/release/Module-Install-GithubMeta
 BuildArch:  noarch
 
@@ -43,6 +47,9 @@ appropriate URLs for GitHub.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Install-GithubMeta-0.30.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2ead44c973c748d72d9f199e41c44dc1801fe9ae06b0fadc59447693a3c98281" || { echo "oreon: Source0 SHA256 mismatch for Module-Install-GithubMeta-0.30.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Install-GithubMeta-%{version}
 
 cat README | iconv -f `file --mime-encoding --brief README` -t UTF-8 > x

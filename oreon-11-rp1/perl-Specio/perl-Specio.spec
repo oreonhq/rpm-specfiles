@@ -14,7 +14,12 @@ Summary:	Type constraints and coercions for Perl
 # Other files:			Artistic-2.0
 License:	Artistic-2.0 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:		https://metacpan.org/release/Specio
-Source0:	https://cpan.metacpan.org/modules/by-module/Test/Specio-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Specio-0.53.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0d0eecfb9e89bd0f5f710fac42e1200a882d513a862f98497eaef5927ac6c183
+%global source0_file Specio-0.53.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -100,6 +105,9 @@ This package provides some helper functions and variables for testing Specio
 types.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Specio-0.53.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0d0eecfb9e89bd0f5f710fac42e1200a882d513a862f98497eaef5927ac6c183" || { echo "oreon: Source0 SHA256 mismatch for Specio-0.53.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Specio-%{version}
 
 %build

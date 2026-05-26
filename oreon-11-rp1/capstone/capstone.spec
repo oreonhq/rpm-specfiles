@@ -35,6 +35,10 @@ Source1:        cstool.1
 
 # Ocaml binding is not using local path for the includes/links
 Patch1:         capstone-5.0.1-ocaml.patch
+# oreon url source checksums begin
+%global source0_sha256 240ebc834c51aae41ca9215d3190cc372fd132b9c5c8aa2d5f19ca0c325e28f9
+%global source0_file 5.0.6.tar.gz
+# oreon url source checksums end
 
 
 # Build with python3 package by default
@@ -172,6 +176,9 @@ The ocaml-%{name} package contains OCaml bindings for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/5.0.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "240ebc834c51aae41ca9215d3190cc372fd132b9c5c8aa2d5f19ca0c325e28f9" || { echo "oreon: Source0 SHA256 mismatch for 5.0.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # autosetup -n %%{gitname}-%%{commit} -S git
 %autosetup -n %{gitname}-%{version} -p1
 

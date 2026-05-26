@@ -17,10 +17,14 @@ VCS:            git:%{giturl}
 #               https://github.com/secdev/scapy/releases
 #               https://bitbucket.org/secdev/scapy/pull-request/80
 #               https://scapy.readthedocs.io/en/latest/introduction.html
-Source0:        %{giturl}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/secdev/scapy/archive/v2.7.0.tar.gz#/scapy-2.7.0.tar.gz
 
 # Allow build with older setuptools for EPEL9
 Patch0:         scapy-2.7.0-rhel9.patch
+# oreon url source checksums begin
+%global source0_sha256 2274261bd3bceb18d815197349031d99fe236649644007a8cb7987280af10d7b
+%global source0_file v2.7.0.tar.gz
+# oreon url source checksums end
 
 %global         common_desc %{expand:
 Scapy is a powerful interactive packet manipulation program built on top
@@ -91,6 +95,9 @@ BuildRequires:  python%{python3_pkgversion}-sphinx_rtd_theme
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.7.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2274261bd3bceb18d815197349031d99fe236649644007a8cb7987280af10d7b" || { echo "oreon: Source0 SHA256 mismatch for v2.7.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1 -n %{name}-%{version}
 
 # Remove shebang

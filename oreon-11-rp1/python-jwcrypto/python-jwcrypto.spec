@@ -8,6 +8,10 @@ Summary:        Implements JWK, JWS, JWE specifications using python-cryptograph
 License:        LGPL-3.0-or-later
 URL:            https://github.com/latchset/%{srcname}
 Source0:        https://github.com/latchset/%{srcname}/releases/download/v%{version}/%{srcname}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e68023b0bfdb8cf6d9436f850029900964e9977305763ba12be9c3474ea13175
+%global source0_file jwcrypto-1.4.2.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
@@ -35,6 +39,9 @@ Implements JWK, JWS, JWE specifications using python-cryptography
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jwcrypto-1.4.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e68023b0bfdb8cf6d9436f850029900964e9977305763ba12be9c3474ea13175" || { echo "oreon: Source0 SHA256 mismatch for jwcrypto-1.4.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{srcname}-%{version}
 %if %{defined rhel}
 # avoid python-deprecated dependency

@@ -47,6 +47,14 @@ Patch3002:      gpgme-2.0.1-soname2.patch
 # for qgpgme <= 2.0.0, rhbz#2464335
 # https://github.com/gpg/gpgmeqt/commit/150b23c105f3ea7034e6f106e60686aea4e4a13e
 Patch3003:      qgpgme-2.0-fixdnparsing.patch
+# oreon url source checksums begin
+%global source0_sha256 821ab0695c842eab51752a81980c92b0410c7eadd04103f791d5d2a526784966
+%global source0_file gpgme-2.0.1.tar.bz2
+%global source5_sha256 d4796049c06708a26f3096f748ef095347e1a3c1e570561701fe952c3f565382
+%global source5_file gpgmepp-2.0.0.tar.xz
+%global source6_sha256 07e1265648ff51da238c9af7a18b3f1dc7b0c66b4f21a72f27c74b396cd3336d
+%global source6_file gpgmepy-2.0.0.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  cmake
@@ -173,6 +181,11 @@ Obsoletes:      platform-python-gpg < %{version}-%{release}
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gpgme-2.0.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "821ab0695c842eab51752a81980c92b0410c7eadd04103f791d5d2a526784966" || { echo "oreon: Source0 SHA256 mismatch for gpgme-2.0.1.tar.bz2" >&2; exit 1; })
+%(f=%{_sourcedir}/gpgmepp-2.0.0.tar.xz; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d4796049c06708a26f3096f748ef095347e1a3c1e570561701fe952c3f565382" || { echo "oreon: Source5 SHA256 mismatch for gpgmepp-2.0.0.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/gpgmepy-2.0.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "07e1265648ff51da238c9af7a18b3f1dc7b0c66b4f21a72f27c74b396cd3336d" || { echo "oreon: Source6 SHA256 mismatch for gpgmepy-2.0.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -N -p1 -S gendiff
 # verify sources
 gpg2 --import --import-options import-export,import-minimal %{SOURCE3} > ./gpg-keyring.gpg

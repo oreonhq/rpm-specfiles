@@ -14,6 +14,10 @@ License:        GPL-2.0-or-later
 URL:            https://i2c.wiki.kernel.org/index.php/I2C_Tools
 
 Source0:        https://www.kernel.org/pub/software/utils/i2c-tools/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 8b15f0a880ab87280c40cfd7235cfff28134bf14d5646c07518b1ff6642a2473
+%global source0_file i2c-tools-4.4.tar.xz
+# oreon url source checksums end
 
 # for /etc/udev/makedev.d resp /usr/lib/modprobe.d ownership
 Requires:       systemd-udev kmod
@@ -74,6 +78,9 @@ Obsoletes:      i2c-tools-devel < 4.0-1
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/i2c-tools-4.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b15f0a880ab87280c40cfd7235cfff28134bf14d5646c07518b1ff6642a2473" || { echo "oreon: Source0 SHA256 mismatch for i2c-tools-4.4.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

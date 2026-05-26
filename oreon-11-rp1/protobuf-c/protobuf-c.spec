@@ -7,7 +7,11 @@ Summary:        C bindings for Google's Protocol Buffers
 
 License:        BSD-2-Clause
 URL:            https://github.com/protobuf-c/protobuf-c
-Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/protobuf-c/protobuf-c/releases/download/v1.5.2/protobuf-c-1.5.2.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e2c86271873a79c92b58fef7ebf8de1aa0df4738347a8bd5d4e65a80a16d0d24
+%global source0_file protobuf-c-1.5.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -39,6 +43,9 @@ Requires:       %{name}-compiler%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{relea
 This package contains protobuf-c headers and libraries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/protobuf-c-1.5.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e2c86271873a79c92b58fef7ebf8de1aa0df4738347a8bd5d4e65a80a16d0d24" || { echo "oreon: Source0 SHA256 mismatch for protobuf-c-1.5.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -8,7 +8,11 @@ Summary:        Test utilities for code working with files and commands
 License:        BSD-3-Clause
 URL:            https://github.com/jupyter/testpath
 
-Source0:        %{pypi_source testpath}
+Source0:        https://files.pythonhosted.org/packages/source/t/testpath/testpath-0.6.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2f1b97e6442c02681ebe01bd84f531028a7caea1af3825000f52345c30285e0f
+%global source0_file testpath-0.6.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -44,6 +48,9 @@ Documentation for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/testpath-0.6.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2f1b97e6442c02681ebe01bd84f531028a7caea1af3825000f52345c30285e0f" || { echo "oreon: Source0 SHA256 mismatch for testpath-0.6.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n testpath-%{version}
 
 # The exe files are only needed on Microsoft Windows

@@ -6,6 +6,10 @@ License: BSD-2-Clause AND BSD-4-Clause-UC AND HPND-sell-variant AND MIT-open-gro
 URL: http://www.x.org
 
 Source0: http://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 8b7b82fdeba48769b69433e8e3fbb984a5f6bf368b0d5f47abeec49de3e58efb
+%global source0_file libXfont2-2.0.7.tar.xz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: autoconf automake libtool
@@ -29,6 +33,9 @@ Requires: libfontenc-devel%{?_isa}
 X.Org X11 libXfont development package
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libXfont2-2.0.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b7b82fdeba48769b69433e8e3fbb984a5f6bf368b0d5f47abeec49de3e58efb" || { echo "oreon: Source0 SHA256 mismatch for libXfont2-2.0.7.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

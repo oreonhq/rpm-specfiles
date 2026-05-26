@@ -8,6 +8,10 @@ License: MIT-open-group AND X11 AND HPND AND HPND-sell-variant AND SMLNJ AND NTP
 URL: http://www.x.org
 
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 731d572b54c708f81e197a6afa8016918e2e06dfd3025e066ca642a5b8c39c8f
+%global source0_file libXaw-1.0.16.tar.xz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: autoconf automake libtool
@@ -28,6 +32,9 @@ Requires: pkgconfig(xproto) pkgconfig(xmu) pkgconfig(xt) pkgconfig(xpm)
 X.Org X11 libXaw development package
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libXaw-1.0.16.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "731d572b54c708f81e197a6afa8016918e2e06dfd3025e066ca642a5b8c39c8f" || { echo "oreon: Source0 SHA256 mismatch for libXaw-1.0.16.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

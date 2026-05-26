@@ -32,6 +32,10 @@ Patch0:         fltk-cmake.patch
 Patch1:         fltk-1.4.4-fltk_config.patch
 # Fix cairo include
 Patch2:         fltk-cairo_h.patch
+# oreon url source checksums begin
+%global source0_sha256 94b464cce634182c8407adac1be5fc49678986ca93285699b444352af89b4efe
+%global source0_file fltk-1.4.4-source.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  desktop-file-utils
@@ -169,6 +173,9 @@ Summary:       MinGW compiled fltk for the Win64 target
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fltk-1.4.4-source.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "94b464cce634182c8407adac1be5fc49678986ca93285699b444352af89b4efe" || { echo "oreon: Source0 SHA256 mismatch for fltk-1.4.4-source.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

@@ -7,6 +7,10 @@ Summary:	Map view for Clutter
 License:	LicenseRef-Callaway-LGPLv2+
 URL:		https://wiki.gnome.org/Projects/libchamplain
 Source0:	https://download.gnome.org/sources/libchamplain/0.12/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 a915cd172a0c52944c5579fcb4683f8a878c571bf5e928254b5dafefc727e5a7
+%global source0_file libchamplain-0.12.21.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	clutter-devel
 BuildRequires:	clutter-gtk-devel
@@ -43,6 +47,9 @@ Libchamplain-gtk is a library providing a GtkWidget to embed %{name}
 into Gtk+ applications.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libchamplain-0.12.21.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a915cd172a0c52944c5579fcb4683f8a878c571bf5e928254b5dafefc727e5a7" || { echo "oreon: Source0 SHA256 mismatch for libchamplain-0.12.21.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

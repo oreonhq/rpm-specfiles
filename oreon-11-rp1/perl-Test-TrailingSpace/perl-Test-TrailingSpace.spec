@@ -4,7 +4,12 @@ Release:        13%{?dist}
 Summary:        Test for trailing space in source files
 License:        MIT
 URL:            https://metacpan.org/release/Test-TrailingSpace
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-TrailingSpace-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/Test-TrailingSpace-0.0601.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 abb8ce74483a63d73fe1ef603b7ce0a6d47c98ede731955d735784fad1dc4fcc
+%global source0_file Test-TrailingSpace-0.0601.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils
@@ -35,6 +40,9 @@ BuildRequires:  perl(Test::Builder::Tester)
 This module is used to test for presence of trailing space.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-TrailingSpace-0.0601.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "abb8ce74483a63d73fe1ef603b7ce0a6d47c98ede731955d735784fad1dc4fcc" || { echo "oreon: Source0 SHA256 mismatch for Test-TrailingSpace-0.0601.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -qn Test-TrailingSpace-%{version}
 
 %build

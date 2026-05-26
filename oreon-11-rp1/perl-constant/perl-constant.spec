@@ -16,6 +16,10 @@ URL:            https://metacpan.org/release/constant
 Source0:        https://cpan.metacpan.org/authors/id/S/SA/SAPER/constant-%{cpan_version}.tar.gz
 # Update to 1.33
 Patch0:         constant-1.33-update.patch
+# oreon url source checksums begin
+%global source0_sha256 744453124b07800d6fd6b901061892cbbcc134a316adbe0f1edfc5f89e04312b
+%global source0_file constant-1.27.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -66,6 +70,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/constant-1.27.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "744453124b07800d6fd6b901061892cbbcc134a316adbe0f1edfc5f89e04312b" || { echo "oreon: Source0 SHA256 mismatch for constant-1.27.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n constant-%{cpan_version}
 %patch -P0 -p1
 

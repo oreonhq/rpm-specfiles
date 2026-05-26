@@ -17,6 +17,10 @@ Patch:          0002-Remove-support-for-maven-3.0.X.patch
 Patch:          0003-Port-to-maven-3.8.1.patch
 # From upstream commit 75a99b21
 Patch:          0004-Bump-maven-shared-components-from-34-to-37.patch
+# oreon url source checksums begin
+%global source0_sha256 e65f0a33059442f259fa4a924412ff050268d6272239be2bcc4c49aae7a48776
+%global source0_file maven-artifact-transfer-0.13.1-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -44,6 +48,9 @@ Obsoletes:      %{name}-javadoc < 1:0.13.1-34
 An API to either install or deploy artifacts with Maven 3.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-artifact-transfer-0.13.1-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e65f0a33059442f259fa4a924412ff050268d6272239be2bcc4c49aae7a48776" || { echo "oreon: Source0 SHA256 mismatch for maven-artifact-transfer-0.13.1-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 find -name '*.java' -exec sed -i 's/\r//' {} +
 

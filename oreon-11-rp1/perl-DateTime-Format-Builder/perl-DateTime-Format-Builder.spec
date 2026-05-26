@@ -17,7 +17,12 @@ Summary:        Create DateTime parser classes and objects
 # LICENSE:                          Artistic-2.0 text
 License:        Artistic-2.0 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/DateTime-Format-Builder            
-Source0:        https://cpan.metacpan.org/modules/by-module/DateTime/DateTime-Format-Builder-%{real_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-Format-Builder-0.83.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 61ffb23d85b3ca1786b2da3289e99b57e0625fe0e49db02a6dc0cb62c689e2f2
+%global source0_file DateTime-Format-Builder-0.83.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -68,6 +73,9 @@ to any sub-classes, or for when you need to do something slightly beyond what
 is expected.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DateTime-Format-Builder-0.83.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61ffb23d85b3ca1786b2da3289e99b57e0625fe0e49db02a6dc0cb62c689e2f2" || { echo "oreon: Source0 SHA256 mismatch for DateTime-Format-Builder-0.83.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DateTime-Format-Builder-%{real_version}
 
 # POD doesn't like E<copy> very much...

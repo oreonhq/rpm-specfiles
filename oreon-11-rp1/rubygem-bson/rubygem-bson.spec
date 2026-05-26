@@ -14,6 +14,10 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # https://github.com/mongodb/bson-ruby/blob/e560ee5c65f9f82d8f3430b5a72d8c9a3f1e0fdb/lib/bson/decimal128.rb#L16
 # https://github.com/mongodb/bson-ruby/pull/340
 Patch0:  bson-pr340-testsuite-explicit-require.patch
+# oreon url source checksums begin
+%global source0_sha256 13266611fde7dcc5bd63d147e6ae7300a3500cb3d2fa9f9d3c6dfbff73d26fa7
+%global source0_file bson-4.15.0.gem
+# oreon url source checksums end
 Requires: rubygem(bigdecimal)
 # https://github.com/mongodb/bson-ruby/blob/e560ee5c65f9f82d8f3430b5a72d8c9a3f1e0fdb/lib/bson/ext_json.rb#L18
 Requires: rubygem(json)
@@ -48,6 +52,9 @@ BuildArch: noarch
 Documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/bson-4.15.0.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "13266611fde7dcc5bd63d147e6ae7300a3500cb3d2fa9f9d3c6dfbff73d26fa7" || { echo "oreon: Source0 SHA256 mismatch for bson-4.15.0.gem" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{gem_name}-%{version}
 %patch -P0 -p1
 

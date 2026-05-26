@@ -11,7 +11,12 @@ Release:	3%{?dist}
 Summary:	Test for warnings and the lack of them
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Warnings
-Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-Warnings-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Test-Warnings-0.038.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3da27e003a3c3cafed3c09b42be05cf9bdbff0bee5c8590a731b02853880a273
+%global source0_file Test-Warnings-0.038.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
@@ -69,6 +74,9 @@ enthusiastically encouraged, to perform a global search-replace of the above
 with use Test::Warnings; whether or not your tests have a plan.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Warnings-0.038.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3da27e003a3c3cafed3c09b42be05cf9bdbff0bee5c8590a731b02853880a273" || { echo "oreon: Source0 SHA256 mismatch for Test-Warnings-0.038.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Warnings-%{version}
 
 %build

@@ -53,7 +53,7 @@ Release:        20%{?dist}
 #   conformance/third_party/jsoncpp/jsoncpp.cpp
 License:        BSD-3-Clause
 URL:            https://github.com/protocolbuffers/protobuf
-Source0:        %{url}/archive/v%{version}%{?rcver}/protobuf-%{version}%{?rcver}-all.tar.gz
+Source0:        https://github.com/protocolbuffers/protobuf/archive/v3.19.6/protobuf-3.19.6-all.tar.gz
 
 Source1:        ftdetect-proto.vim
 Source2:        protobuf-init.el
@@ -69,7 +69,7 @@ Source2:        protobuf-init.el
 %global gtest_commit 5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081
 %global gtest_dir googletest-%{gtest_commit}
 # For tests (using exactly the same version as the release)
-Source3:        %{gtest_url}/archive/%{gtest_commit}/%{gtest_dir}.tar.gz
+Source3:        https://github.com/google/googletest/archive/5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081/googletest-5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.tar.gz
 
 # Man page hand-written for Fedora in groff_man(7) format based on “protoc
 # --help” output.
@@ -97,6 +97,12 @@ Patch5:         protobuf-3.19.6-jre21.patch
 #  and https://github.com/protocolbuffers/protobuf/commit/47c1998e4e7f21175bc1e3840907d4219a11b25a
 #  and https://github.com/protocolbuffers/protobuf/commit/a2859cc2ce25711613002104022186c0c37d9f1f
 Patch6:         protobuf-3.19.6-gcc15.patch
+# oreon url source checksums begin
+%global source0_sha256 9a301cf94a8ddcb380b901e7aac852780b826595075577bb967004050c835056
+%global source0_file protobuf-3.19.6-all.tar.gz
+%global source3_sha256 0e2f36e8e403c125fd0ab02171bdb786d3b6b3875b6ccf3b2eb7969be8faecd0
+%global source3_file googletest-5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.tar.gz
+# oreon url source checksums end
 
 # A bundled copy of jsoncpp is included in the conformance tests, but the
 # result is not packaged, so we do not treat it as a formal bundled
@@ -289,6 +295,10 @@ This package contains syntax highlighting for Google Protocol Buffers
 descriptions in the Emacs editor.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/protobuf-3.19.6-all.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9a301cf94a8ddcb380b901e7aac852780b826595075577bb967004050c835056" || { echo "oreon: Source0 SHA256 mismatch for protobuf-3.19.6-all.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/googletest-5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.tar.gz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0e2f36e8e403c125fd0ab02171bdb786d3b6b3875b6ccf3b2eb7969be8faecd0" || { echo "oreon: Source3 SHA256 mismatch for googletest-5ec7f0c4a113e2f18ac2c6cc7df51ad6afc24081.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n protobuf-%{version}%{?rcver} -a 3
 %ifarch %{ix86}
 # IoTest.LargeOutput fails on 32bit arches

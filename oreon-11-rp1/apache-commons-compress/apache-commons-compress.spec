@@ -14,6 +14,10 @@ Source0:        https://archive.apache.org/dist/commons/compress/source/commons-
 Patch:          0001-Remove-Brotli-compressor.patch
 Patch:          0002-Remove-ZSTD-compressor.patch
 Patch:          0003-Remove-Pack200-compressor.patch
+# oreon url source checksums begin
+%global source0_sha256 5c870fa454221b24c81d10a28031a9183d55f2baab92c160ecc985e51a387662
+%global source0_file commons-compress-1.28.0-src.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -39,6 +43,9 @@ In version 1.14 read-only support for Brotli decompression has been added,
 but it has been removed form this package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/commons-compress-1.28.0-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5c870fa454221b24c81d10a28031a9183d55f2baab92c160ecc985e51a387662" || { echo "oreon: Source0 SHA256 mismatch for commons-compress-1.28.0-src.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n commons-compress-%{version}-src
 
 # Unavailable Google Brotli library (org.brotli.dec)

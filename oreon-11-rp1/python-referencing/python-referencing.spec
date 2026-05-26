@@ -7,6 +7,10 @@ Summary:        An implementation-agnostic implementation of JSON reference reso
 License:        MIT
 URL:            https://pypi.python.org/pypi/%{srcname}
 Source:         %{pypi_source referencing}
+# oreon url source checksums begin
+%global source0_sha256 44aefc3142c5b842538163acb373e24cce6632bd54bdb01b21ad5863489f50d8
+%global source0_file referencing-0.37.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -31,6 +35,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/referencing-0.37.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "44aefc3142c5b842538163acb373e24cce6632bd54bdb01b21ad5863489f50d8" || { echo "oreon: Source0 SHA256 mismatch for referencing-0.37.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{srcname}-%{version} -p1
 
 

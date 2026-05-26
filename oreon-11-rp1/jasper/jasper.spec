@@ -16,6 +16,10 @@ Source0: https://github.com/jasper-software/%{name}/archive/refs/tags/version-%{
 Patch100: jasper-2.0.2-test-ppc64-disable.patch
 Patch101: jasper-2.0.2-test-ppc64le-disable.patch
 Patch102: jasper-4.1.0-test-i686-disable.patch
+# oreon url source checksums begin
+%global source0_sha256 987e8c8b4afcff87553833b6f0fa255b5556a0ecc617b45ee1882e10c1b5ec14
+%global source0_file version-4.2.8.tar.gz
+# oreon url source checksums end
 
 # autoreconf
 BuildRequires: cmake
@@ -59,6 +63,9 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/version-4.2.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "987e8c8b4afcff87553833b6f0fa255b5556a0ecc617b45ee1882e10c1b5ec14" || { echo "oreon: Source0 SHA256 mismatch for version-4.2.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-version-%{version}
 
 # Need to disable one test to be able to build it on ppc64 arch

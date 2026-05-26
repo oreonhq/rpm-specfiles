@@ -12,7 +12,11 @@ Summary:        SANE backend for AirScan (eSCL) and WSD document scanners
 # the exception is defined in LICENSE, meant for SANE project in most cases
 License:        GPL-2.0-or-later WITH SANE-exception AND MIT
 URL:            https://github.com/alexpevzner/sane-airscan
-Source:         %{URL}/archive/%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/alexpevzner/sane-airscan/archive/0.99.36/sane-airscan-0.99.36.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 43d3436c0199496ee18aca4f875fe3926a40a0fae781bc280cdb96f7b5068ac0
+%global source0_file sane-airscan-0.99.36.tar.gz
+# oreon url source checksums end
 
 # backported from upstream
 
@@ -65,6 +69,9 @@ scanning protocol.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sane-airscan-0.99.36.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "43d3436c0199496ee18aca4f875fe3926a40a0fae781bc280cdb96f7b5068ac0" || { echo "oreon: Source0 SHA256 mismatch for sane-airscan-0.99.36.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

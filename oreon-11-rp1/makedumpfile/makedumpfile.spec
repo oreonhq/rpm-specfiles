@@ -9,6 +9,10 @@ License: GPL-2.0-only
 URL: https://github.com/makedumpfile/makedumpfile
 Source0: https://github.com/makedumpfile/makedumpfile/archive/%{version}/%{name}-%{version}.tar.gz
 Source1: https://github.com/lucchouina/eppic/archive/%{eppic_ver}/eppic-%{eppic_shortver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b54e88bef256c589eb4adce17bc856da898a762626fe54f76a77a7f22ad9a844
+%global source0_file makedumpfile-1.7.8.tar.gz
+# oreon url source checksums end
 
 Conflicts: kexec-tools < 2.0.28-5
 BuildRequires: make
@@ -32,6 +36,9 @@ makedumpfile is a tool to compress and filter out unneeded data from kernel
 dumps to reduce its file size. It is typically used with the kdump mechanism.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/makedumpfile-1.7.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b54e88bef256c589eb4adce17bc856da898a762626fe54f76a77a7f22ad9a844" || { echo "oreon: Source0 SHA256 mismatch for makedumpfile-1.7.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -a 0 -a 1
 sed -r -i 's|/usr/sbin|%_sbindir|g' Makefile
 

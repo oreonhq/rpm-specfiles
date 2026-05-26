@@ -8,6 +8,10 @@ Summary:        C/C++ port of the Sass CSS precompiler
 License:        MIT AND BSL-1.0
 URL:            https://sass-lang.com/libsass
 Source0:        https://github.com/sass/libsass/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 11f0bb3709a4f20285507419d7618f3877a425c0131ea8df40fe6196129df15d
+%global source0_file libsass-3.6.6.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  automake
 BuildRequires:  autoconf
@@ -36,6 +40,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libsass-3.6.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "11f0bb3709a4f20285507419d7618f3877a425c0131ea8df40fe6196129df15d" || { echo "oreon: Source0 SHA256 mismatch for libsass-3.6.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 export LIBSASS_VERSION=%{version}
 autoreconf --force --install

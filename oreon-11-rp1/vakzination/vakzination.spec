@@ -10,6 +10,10 @@ License:        CC-PDDC AND Apache-2.0 AND LGPL-2.0-or-later AND CC0-1.0 AND BSD
 Summary:        Vakzination manages your health certificates like vaccination, test, and recovery certificates.
 Url:            https://invent.kde.org/plasma-mobile/vakzination
 Source:         https://invent.kde.org/pim/%{name}/-/archive/%{commit0}/%{name}-%{commit0}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0d197218a2c84f9208ac8c323e88fa2e7be8dbbc7f581d98e5c97d5c9abe7a75
+%global source0_file vakzination-851a9fb0178003bb931d637356ee82c4ecfc4bc4.tar.gz
+# oreon url source checksums end
 
 ExclusiveArch:  %{java_arches}
 
@@ -36,6 +40,9 @@ BuildRequires: cmake(Qt6Svg)
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vakzination-851a9fb0178003bb931d637356ee82c4ecfc4bc4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0d197218a2c84f9208ac8c323e88fa2e7be8dbbc7f581d98e5c97d5c9abe7a75" || { echo "oreon: Source0 SHA256 mismatch for vakzination-851a9fb0178003bb931d637356ee82c4ecfc4bc4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{commit0}
 
 %build

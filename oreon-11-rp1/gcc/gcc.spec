@@ -327,6 +327,10 @@ Patch12: gcc16-pr119006.patch
 Patch50: isl-rh2155127.patch
 
 Patch100: gcc16-fortran-fdec-duplicates.patch
+# oreon url source checksums begin
+%global source3_sha256 fcf78dd9656c10eb8cf9fbd5f59a0b6b01386205fe1934b3b287a0a1898145c0
+%global source3_file isl-0.24.tar.bz2
+# oreon url source checksums end
 
 # On ARM EABI systems, we do want -gnueabi to be part of the
 # target triple.
@@ -965,6 +969,9 @@ of the plugin is explicitly built by the same version of gcc that is installed
 so that there cannot be any synchronization problems.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/isl-0.24.tar.bz2; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fcf78dd9656c10eb8cf9fbd5f59a0b6b01386205fe1934b3b287a0a1898145c0" || { echo "oreon: Source3 SHA256 mismatch for isl-0.24.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n gcc-%{version}-%{DATE} -a 1 -a 2 -a 3
 %autopatch -p0 -m 0 -M 4
 %if %{build_isl}

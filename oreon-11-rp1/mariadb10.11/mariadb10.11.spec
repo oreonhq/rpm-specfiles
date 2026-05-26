@@ -230,6 +230,14 @@ Patch14:          %{majorname}-mtr.patch
 Patch15:          mark-RISC-V64-as-64-bit-architecture.patch
 #   Patch16: fixup for SISGSEGV while using skip-grant-tables
 Patch16:          upstream_87309d3d4bb8f48910d05b0ca5ee989bcdd6b053.patch
+# oreon url source checksums begin
+%global source0_sha256 90f670ad7fbbe0f2b6af3d39e8ce86cc3b729da9fefd2c96f66c14acfeb1b221
+%global source0_file mariadb-.tar.gz
+%global source1_sha256 40fc58bebcf38c759e11a7bd8fdc163507d2423ef5058bba7f26280c5b9c5465
+%global source1_file fmt-11.0.2.zip
+%global source4_sha256 59c8556fd45e68599897cd5d74efad9c4a43f85e981fe7ac3ac5fd7aa70672ac
+%global source4_file pcre2-10.45.zip
+# oreon url source checksums end
 
 # This macro is used for package/sub-package names in the entire specfile
 %if %?mariadb_default
@@ -838,6 +846,11 @@ sources.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mariadb-.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "90f670ad7fbbe0f2b6af3d39e8ce86cc3b729da9fefd2c96f66c14acfeb1b221" || { echo "oreon: Source0 SHA256 mismatch for mariadb-.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/fmt-11.0.2.zip; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "40fc58bebcf38c759e11a7bd8fdc163507d2423ef5058bba7f26280c5b9c5465" || { echo "oreon: Source1 SHA256 mismatch for fmt-11.0.2.zip" >&2; exit 1; })
+%(f=%{_sourcedir}/pcre2-10.45.zip; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "59c8556fd45e68599897cd5d74efad9c4a43f85e981fe7ac3ac5fd7aa70672ac" || { echo "oreon: Source4 SHA256 mismatch for pcre2-10.45.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{majorname}-%{version}
 
 # Remove bundled code that is unused (all cases in which we use the system version of the library instead)

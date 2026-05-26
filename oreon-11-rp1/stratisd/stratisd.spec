@@ -10,11 +10,17 @@ Summary:        Daemon that manages block devices to create filesystems
 
 License:        (MIT OR Apache-2.0) AND Unicode-DFS-2016 AND Apache-2.0 AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND MIT AND MPL-2.0 AND (Unlicense OR MIT)
 URL:            https://github.com/stratis-storage/stratisd
-Source0:        %{url}/archive/stratisd-v%{version}/%{name}-%{version}.tar.gz
-Source1:        %{url}/releases/download/stratisd-v%{version}/%{name}-%{version}-vendor.tar.gz
+Source0:        https://github.com/stratis-storage/stratisd/archive/stratisd-v3.8.6/stratisd-3.8.6.tar.gz
+Source1:        https://github.com/stratis-storage/stratisd/releases/download/stratisd-v3.8.6/stratisd-3.8.6-vendor.tar.gz
 
 # * Allow procfs 0.18: https://github.com/stratis-storage/stratisd/pull/3951
 Patch:          stratisd-fix-metadata.diff
+# oreon url source checksums begin
+%global source0_sha256 c9d5fb075e54594b3e36f6f3cc2d90155bda6ce1f34aa25310d9b748fcf24272
+%global source0_file stratisd-3.8.6.tar.gz
+%global source1_sha256 7466a53fe9416230e39c053b895a2e5277c1fdec3b3e4b4193d2df8b0d50850d
+%global source1_file stratisd-3.8.6-vendor.tar.gz
+# oreon url source checksums end
 
 ExclusiveArch:  %{rust_arches}
 %if 0%{?rhel}
@@ -85,6 +91,10 @@ Requires:     stratisd
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/stratisd-3.8.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c9d5fb075e54594b3e36f6f3cc2d90155bda6ce1f34aa25310d9b748fcf24272" || { echo "oreon: Source0 SHA256 mismatch for stratisd-3.8.6.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/stratisd-3.8.6-vendor.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7466a53fe9416230e39c053b895a2e5277c1fdec3b3e4b4193d2df8b0d50850d" || { echo "oreon: Source1 SHA256 mismatch for stratisd-3.8.6-vendor.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n stratisd-stratisd-v%{version} -p1 %{?rhel:-a1}
 
 %if 0%{?rhel}

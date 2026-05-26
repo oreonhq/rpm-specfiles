@@ -6,6 +6,10 @@ Summary:        Library for working with Data Matrix 2D bar-codes
 License:        BSD-2-Clause-Views
 URL:            https://github.com/dmtx
 Source0:        https://github.com/dmtx/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2394bf1d1d693a5a4ca3cfcc1bb28a4d878bdb831ea9ca8f3d5c995d274bdc39
+%global source0_file libdmtx-0.7.8.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  libtool
@@ -29,6 +33,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdmtx-0.7.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2394bf1d1d693a5a4ca3cfcc1bb28a4d878bdb831ea9ca8f3d5c995d274bdc39" || { echo "oreon: Source0 SHA256 mismatch for libdmtx-0.7.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 ./autogen.sh

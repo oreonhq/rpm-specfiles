@@ -11,6 +11,10 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/voxik/abrt-ruby.git && cd abrt-ruby
 # git archive -v -o abrt-0.5.0-spec.tar.gz v0.5.0 spec/
 Source1: %{gem_name}-%{version}-spec.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6a97058583b091ad62d00ef18cc0b77e44ca7d20729d6f9fb40a01a41fd18735
+%global source0_file abrt-0.5.0.gem
+# oreon url source checksums end
 Requires: libreport-filesystem
 # `logger` is now used instead of Ruby `Syslog`
 # https://github.com/voxik/abrt-ruby/pull/15/commits/ae31cc838a576794309209ec3ea83a18d12eb14e
@@ -34,6 +38,9 @@ BuildArch: noarch
 Documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/abrt-0.5.0.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6a97058583b091ad62d00ef18cc0b77e44ca7d20729d6f9fb40a01a41fd18735" || { echo "oreon: Source0 SHA256 mismatch for abrt-0.5.0.gem" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %build

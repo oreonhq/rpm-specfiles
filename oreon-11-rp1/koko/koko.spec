@@ -13,6 +13,10 @@ Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version
 Source1:        https://download.geonames.org/export/dump/cities1000.zip
 Source2:        https://download.geonames.org/export/dump/admin1CodesASCII.txt
 Source3:        https://download.geonames.org/export/dump/admin2Codes.txt
+# oreon url source checksums begin
+%global source1_sha256 fc42c245de29c69fea0e038c12094104e9e83b0915c9f36c8d77e9f6596d1223
+%global source1_file cities1000.zip
+# oreon url source checksums end
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules
@@ -63,6 +67,9 @@ Obsoletes:     %{name}-devel < 24.01.80
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cities1000.zip; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fc42c245de29c69fea0e038c12094104e9e83b0915c9f36c8d77e9f6596d1223" || { echo "oreon: Source1 SHA256 mismatch for cities1000.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 # Copying these to src dir as per https://invent.kde.org/graphics/koko/-/blob/master/README.md Packaging section.
 cp %{_topdir}/SOURCES/cities1000.zip src/

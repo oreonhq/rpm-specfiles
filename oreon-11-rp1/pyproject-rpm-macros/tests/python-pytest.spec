@@ -5,7 +5,7 @@ Release:        0%{?dist}
 Summary:        Simple powerful testing with Python
 License:        MIT
 URL:            https://pytest.org
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/p/pytest/pytest-8.0.2.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

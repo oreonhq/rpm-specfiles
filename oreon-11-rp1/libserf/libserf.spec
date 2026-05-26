@@ -19,6 +19,10 @@ Patch1:         %{name}-1.3.9-errgetfunc.patch
 Patch2:		%{name}-1.3.9-multihome.patch
 Patch3:		%{name}-1.3.9-cmake.patch
 Patch4:		%{name}-1.3.10-gssapi.patch
+# oreon url source checksums begin
+%global source0_sha256 be81ef08baa2516ecda76a77adf7def7bc3227eeb578b9a33b45f7b41dc064e6
+%global source0_file serf-1.3.10.tar.bz2
+# oreon url source checksums end
 
 %description
 The serf library is a C-based HTTP client library built upon the Apache 
@@ -36,6 +40,9 @@ This package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/serf-1.3.10.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "be81ef08baa2516ecda76a77adf7def7bc3227eeb578b9a33b45f7b41dc064e6" || { echo "oreon: Source0 SHA256 mismatch for serf-1.3.10.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n serf-%{version} -p1
 %ifnarch %ix86
 pushd test/server

@@ -222,13 +222,13 @@ URL: https://sourceware.org/binutils
 Source0: https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 # Source0: https://ftp.gnu.org/gnu/binutils/binutils-%%{version}.tar.xz
 %elif "%{source}" == "even-pre-release"
-Source0: binutils-with-gold-%{version}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "odd-pre-release"
-Source0: binutils-%%{version}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "snapshot"
-Source0: binutils-with-gold-%{version}-%{commit_id}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "tarball"
-Source0: binutils-%{version}-%{commit_id}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %endif
 
 Source1: binutils-2.19.50.0.1-output-format.sed

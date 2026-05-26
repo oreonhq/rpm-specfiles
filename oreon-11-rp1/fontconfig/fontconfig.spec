@@ -24,6 +24,10 @@ Patch4:		%{name}-drop-lang-from-pkgkit-format.patch
 Patch5:		%{name}-disable-network-required-test.patch
 Patch6:		%{name}-lower-nonlatin-conf.patch
 Patch7:		%{name}-fix-crash.patch
+# oreon url source checksums begin
+%global source0_sha256 486c53e63c07cefd56ccd1234a665bc45fa2f37072c189ccb06373b97c7d73c2
+%global source0_file fontconfig-2.17.0.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:	libxml2-devel
 BuildRequires:	freetype-devel >= %{freetype_version}
@@ -72,6 +76,9 @@ The fontconfig-devel-doc package contains the documentation files
 which is useful for developing applications that uses fontconfig.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fontconfig-2.17.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "486c53e63c07cefd56ccd1234a665bc45fa2f37072c189ccb06373b97c7d73c2" || { echo "oreon: Source0 SHA256 mismatch for fontconfig-2.17.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # To reduce a maintenance cost of fontconfig-lower-nonlatin-conf.patch
 mv conf.d/65-nonlatin.conf conf.d/69-nonlatin.conf

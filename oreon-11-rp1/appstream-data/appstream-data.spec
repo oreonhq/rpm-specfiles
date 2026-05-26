@@ -9,6 +9,10 @@ Source1:   https://dl.fedoraproject.org/pub/alt/screenshots/f%{version}/fedora-%
 Source2:   https://dl.fedoraproject.org/pub/alt/screenshots/f%{version}/fedora-%{version}-icons.tar.gz
 Source3:   gstreamer-non-free.xml
 Source4:   other-repos.xml
+# oreon url source checksums begin
+%global source2_sha256 0007ab31a22059bd1a83aa4a79a68e1d9ba257efbe1d29ea9d720b586c33137a
+%global source2_file fedora-44-icons.tar.gz
+# oreon url source checksums end
 
 BuildRequires: libappstream-glib
 

@@ -15,7 +15,7 @@ Version:        6.17
 Release:        8%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://github.com/nhorman/rng-tools
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/nhorman/rng-tools/archive/v6.17/rng-tools-6.17.tar.gz
 Source1:        rngd.service
 Source2:        rngd.sysconfig
 
@@ -46,6 +46,10 @@ Requires: (selinux-policy >= 36.5 if selinux-policy)
 
 Patch0: 1-rt-comment-out-have-aesni.patch
 Patch1: 2-rt-revert-build-randstat.patch
+# oreon url source checksums begin
+%global source0_sha256 4aa50994232da74499b60b3ebf79118e30a1943be375b7d931dcf18df5442fd3
+%global source0_file rng-tools-6.17.tar.gz
+# oreon url source checksums end
 
 %description
 This is a random number generator daemon and its tools. It monitors
@@ -53,6 +57,9 @@ a set of entropy sources present on a system (like /dev/hwrng, RDRAND,
 TPM, jitter) and supplies entropy from them to a kernel entropy pool.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rng-tools-6.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4aa50994232da74499b60b3ebf79118e30a1943be375b7d931dcf18df5442fd3" || { echo "oreon: Source0 SHA256 mismatch for rng-tools-6.17.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p0
 
 %build

@@ -8,6 +8,10 @@ Summary:	module implementing HTTP/2 for Apache 2
 License:	Apache-2.0
 URL:		https://icing.github.io/mod_h2/
 Source0:	https://github.com/icing/mod_h2/releases/download/v%{version}/mod_http2-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 dd12cbff378deaf192ec60b8b003aa409994fda46c9acbc5e2b757e5eefc1e61
+%global source0_file mod_http2-2.0.37.tar.gz
+# oreon url source checksums end
 BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  pkgconfig, httpd-devel >= 2.4.20, libnghttp2-devel >= 1.7.0, openssl-devel >= 1.0.2
@@ -22,6 +26,9 @@ The mod_h2 Apache httpd module implements the HTTP2 protocol (h2+h2c) on
 top of libnghttp2 for httpd 2.4 servers.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mod_http2-2.0.37.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dd12cbff378deaf192ec60b8b003aa409994fda46c9acbc5e2b757e5eefc1e61" || { echo "oreon: Source0 SHA256 mismatch for mod_http2-2.0.37.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

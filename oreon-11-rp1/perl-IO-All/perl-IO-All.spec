@@ -20,6 +20,10 @@ Summary:        IO::All Perl module
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-All
 Source0:        https://cpan.metacpan.org/authors/id/F/FR/FREW/IO-All-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 54e21d250c0229127e30b77a3461e10077854ec244f26fb670f1b445ed4c4d5b
+%global source0_file IO-All-0.87.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -96,6 +100,9 @@ adds dozens of other helpful idiomatic methods including file stat and
 manipulation functions.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IO-All-0.87.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "54e21d250c0229127e30b77a3461e10077854ec244f26fb670f1b445ed4c4d5b" || { echo "oreon: Source0 SHA256 mismatch for IO-All-0.87.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IO-All-%{version}
 find -type f -perm /0100 -name '*.pm' -exec chmod -c a-x {} \;
 

@@ -7,6 +7,10 @@ URL:            http://sf.net/projects/linefold/
 Source0:        https://github.com/hatukanezumi/sombok/archive/%{name}-%{version}.tar.gz
 # A multilib-safe wrapper, bug #1853260
 Source1:        sombok.h
+# oreon url source checksums begin
+%global source0_sha256 14d9dcd3621bf9d591a7158aeac99b4d4a60296558173be51d57b54b8f9d70a2
+%global source0_file sombok-2.4.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  libthai-devel
@@ -34,6 +38,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sombok-2.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "14d9dcd3621bf9d591a7158aeac99b4d4a60296558173be51d57b54b8f9d70a2" || { echo "oreon: Source0 SHA256 mismatch for sombok-2.4.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{name}-%{version}
 
 

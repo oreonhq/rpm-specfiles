@@ -17,6 +17,10 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://github.com/javaparser/javaparser/archive/%{name}-parent-%{version}.tar.gz
 
 Patch:          0001-Port-to-OpenJDK-21.patch
+# oreon url source checksums begin
+%global source0_sha256 848c0d7d50d802045dcd3cd4205b9a9984903da6b2589d550d66ed8f3d4667be
+%global source0_file javaparser-parent-3.27.1.tar.gz
+# oreon url source checksums end
 
 %if %{with bnd_maven_plugin}
 BuildRequires:  mvn(biz.aQute.bnd:bnd-maven-plugin)
@@ -40,6 +44,9 @@ and comments. It is also possible to change the AST nodes or create new
 ones to modify the source code.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/javaparser-parent-3.27.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "848c0d7d50d802045dcd3cd4205b9a9984903da6b2589d550d66ed8f3d4667be" || { echo "oreon: Source0 SHA256 mismatch for javaparser-parent-3.27.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 sed -i 's/\r//' readme.md

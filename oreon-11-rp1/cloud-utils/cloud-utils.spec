@@ -12,7 +12,11 @@ Release:	%autorelease
 License:	GPL-3.0-only
 URL:		https://github.com/canonical/%{name}
 
-Source:		%{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/canonical/cloud-utils/archive/0.33/cloud-utils-0.33.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 338770d637788466aacfcbcec17a8d0046f92a13cc3b25fce8fceadb02a7339f
+%global source0_file cloud-utils-0.33.tar.gz
+# oreon url source checksums end
 
 BuildArch:	noarch
 
@@ -124,6 +128,9 @@ into a temporary directory and runs a user-specified command in it.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cloud-utils-0.33.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "338770d637788466aacfcbcec17a8d0046f92a13cc3b25fce8fceadb02a7339f" || { echo "oreon: Source0 SHA256 mismatch for cloud-utils-0.33.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

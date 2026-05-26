@@ -67,6 +67,10 @@ URL:		https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
 Source0:	https://www.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
 Source1:	weak-modules
 Source2:	depmod.conf.dist
+# oreon url source checksums begin
+%global source0_sha256 5a5d5073070cc7e0c7a7a3c6ec2a0e1780850c8b47b3e3892226b93ffcb9cb54
+%global source0_file kmod-34.2.tar.xz
+# oreon url source checksums end
 Exclusiveos:	Linux
 
 BuildRequires:  gcc
@@ -122,6 +126,9 @@ The kmod-devel package provides header files used for development of
 applications that wish to load or unload Linux kernel modules.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kmod-34.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5a5d5073070cc7e0c7a7a3c6ec2a0e1780850c8b47b3e3892226b93ffcb9cb54" || { echo "oreon: Source0 SHA256 mismatch for kmod-34.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

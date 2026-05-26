@@ -5,9 +5,13 @@ Release: 5%{?dist}
 
 URL:     https://www.freedesktop.org/wiki/Software/xdg-utils/
 %if 0%{?snap:1}
-Source0: xdg-utils-%{version}-%{snap}.tar.gz
+Source0:        https://gitlab.freedesktop.org/xdg/xdg-utils/-/archive/v1.2.1/xdg-utils-v1.2.1.tar.gz
 %else
 Source0:  https://gitlab.freedesktop.org/xdg/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f6b648c064464c2636884c05746e80428110a576f8daacf46ef2e554dcfdae75
+%global source0_file xdg-utils-v1.2.1.tar.gz
+# oreon url source checksums end
 %endif
 License: MIT
 
@@ -47,6 +51,9 @@ The following scripts are provided at this time:
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xdg-utils-v1.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f6b648c064464c2636884c05746e80428110a576f8daacf46ef2e554dcfdae75" || { echo "oreon: Source0 SHA256 mismatch for xdg-utils-v1.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-v%{version} -p1
 
 

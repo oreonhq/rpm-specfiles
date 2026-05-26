@@ -7,7 +7,11 @@ Summary:        Support for unittest subTest() and subtests fixture
 License:        MIT
 URL:            https://github.com/pytest-dev/pytest-subtests
 # We *could* package from the PyPI sdist without losing anything, if we liked.
-Source:         %{url}/archive/v%{version}/pytest-subtests-%{version}.tar.gz
+Source:        https://github.com/pytest-dev/pytest-subtests/archive/v0.15.0/pytest-subtests-0.15.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6b7fa262aebf73fae9edf5bc9e03b298710ac7a2034b51d78e30af04f533bccb
+%global source0_file pytest-subtests-0.15.0.tar.gz
+# oreon url source checksums end
 
 BuildSystem:            pyproject
 BuildOption(install):   -l pytest_subtests

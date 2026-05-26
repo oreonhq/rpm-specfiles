@@ -17,6 +17,10 @@ Source0: https://salsa.debian.org/minicom-team/minicom/-/archive/%{version}/%{na
 # src/sysdep.h: remove cfset{i,o}speed macros for glibc
 # https://salsa.debian.org/minicom-team/minicom/-/commit/964ae563cb5a78545ae1a4a3b6784c69ec73bc48
 Patch0: minicom-2.10-fix-baudrate-setting.patch
+# oreon url source checksums begin
+%global source0_sha256 66ff82661c3cc49ab2e447f8a070ec1a64ba71d64219906d80a49da284a5d43e
+%global source0_file minicom-2.10.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: lockdev-devel ncurses-devel autoconf automake gettext-devel
@@ -34,6 +38,9 @@ language, and other features.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/minicom-2.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "66ff82661c3cc49ab2e447f8a070ec1a64ba71d64219906d80a49da284a5d43e" || { echo "oreon: Source0 SHA256 mismatch for minicom-2.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am
 
 cp -pr doc doc_

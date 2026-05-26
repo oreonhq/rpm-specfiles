@@ -56,10 +56,14 @@ Summary:        %{pkg_summary}
 # For a breakdown of the licensing, see PACKAGE-LICENSING
 License:        GPL-2.0-or-later AND GPL-1.0-only
 URL:            https://github.com/rpm-software-management/dnf
-Source0:        %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
-Source1:        %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz.asc
+Source0:        https://github.com/rpm-software-management/dnf/releases/download/4.24.0/dnf-4.24.0.tar.gz
+Source1:        https://github.com/rpm-software-management/dnf/releases/download/4.24.0/dnf-4.24.0.tar.gz.asc
 # Key exported from Petr Pisar's keyring
 Source2:        gpgkey-E3F42FCE156830A80358E6E94FD1AEC3365AF7BF.gpg
+# oreon url source checksums begin
+%global source0_sha256 fabdc4436e9a8a152d38060602f491bee4245ad54656f01991f33d511c87bfb1
+%global source0_file dnf-4.24.0.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  cmake >= 3.5.0
 BuildRequires:  gettext
@@ -185,6 +189,9 @@ Additional dependencies needed to perform transactions on booted bootc (bootable
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dnf-4.24.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fabdc4436e9a8a152d38060602f491bee4245ad54656f01991f33d511c87bfb1" || { echo "oreon: Source0 SHA256 mismatch for dnf-4.24.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

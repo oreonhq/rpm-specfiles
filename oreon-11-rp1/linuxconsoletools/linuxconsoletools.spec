@@ -7,6 +7,10 @@ Summary:        Tools for connecting joysticks & legacy devices to the kernel's 
 License:        GPL-2.0-or-later
 URL:            http://sourceforge.net/projects/linuxconsole/
 Source:         http://downloads.sourceforge.net/linuxconsole/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 4da29745c782b7db18f5f37c49e77bf163121dd3761e2fc7636fa0cbf35c2456
+%global source0_file linuxconsoletools-1.8.1.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  pkgconfig(sdl2)
@@ -27,6 +31,9 @@ for serial mice, touchscreens etc.), and test the input event layer.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/linuxconsoletools-1.8.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4da29745c782b7db18f5f37c49e77bf163121dd3761e2fc7636fa0cbf35c2456" || { echo "oreon: Source0 SHA256 mismatch for linuxconsoletools-1.8.1.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 

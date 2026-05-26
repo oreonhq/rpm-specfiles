@@ -15,6 +15,10 @@ Source0:    http://www.x.org/pub/individual/font/font-util-%{font_util}.tar.xz
 # helper script used in post for xorg-x11-fonts
 Source5:    xorg-x11-fonts-update-dirs
 Source6:    xorg-x11-fonts-update-dirs.1
+# oreon url source checksums begin
+%global source0_sha256 5c9f64123c194b150fee89049991687386e6ff36ef2af7b80ba53efaf368cc95
+%global source0_file font-util-1.4.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc make libtool
 BuildRequires:  pkgconfig(xorg-macros) >= 1.8
@@ -34,6 +38,9 @@ X.Org X11 font utilities required for font installation, conversion, and
 generation.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/font-util-1.4.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5c9f64123c194b150fee89049991687386e6ff36ef2af7b80ba53efaf368cc95" || { echo "oreon: Source0 SHA256 mismatch for font-util-1.4.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n font-util-%{font_util}
 
 %build

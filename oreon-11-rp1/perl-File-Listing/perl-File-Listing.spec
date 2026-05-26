@@ -5,6 +5,10 @@ Summary:        Parse directory listing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Listing
 Source0:        https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/File-Listing-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 189b3a13fc0a1ba412b9d9ec5901e9e5e444cc746b9f0156d4399370d33655c6
+%global source0_file File-Listing-6.16.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -41,6 +45,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-Listing-6.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "189b3a13fc0a1ba412b9d9ec5901e9e5e444cc746b9f0156d4399370d33655c6" || { echo "oreon: Source0 SHA256 mismatch for File-Listing-6.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n File-Listing-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

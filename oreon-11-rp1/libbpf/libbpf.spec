@@ -22,6 +22,12 @@ BuildRequires: make
 
 Patch1:         libbpf-Add-the-ability-to-suppress-perf-event-enable.patch
 Patch2:         libbpf-sync-bpf_stream_vprintk-declaration-with-kern.patch
+# oreon url source checksums begin
+%global source0_sha256 989ed3c1a3db8ff0f7c08dd43953c6b9d0c3ac252653a48d566aaedf98bc80ca
+%global source0_file v1.6.3.tar.gz
+%global source1_sha256 69467234c3c009952fea99dd057e5200160603c7e3e04ecb74458e29746e5b95
+%global source1_file usdt-0.1.0.tar.gz
+# oreon url source checksums end
 
 # This package supersedes libbpf from kernel-tools,
 # which has default Epoch: 0. By having Epoch: > 0
@@ -68,6 +74,10 @@ triggering USDTs (User Statically-Defined Tracepoints).
 	-Wl,--no-as-needed" LIBDIR=/%{_libdir} NO_PKG_CONFIG=1
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.6.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "989ed3c1a3db8ff0f7c08dd43953c6b9d0c3ac252653a48d566aaedf98bc80ca" || { echo "oreon: Source0 SHA256 mismatch for v1.6.3.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/usdt-0.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "69467234c3c009952fea99dd057e5200160603c7e3e04ecb74458e29746e5b95" || { echo "oreon: Source1 SHA256 mismatch for usdt-0.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{githubfull} -p1 -a1
 
 %build

@@ -4,7 +4,12 @@ Release:	1%{?dist}
 Summary:	Tool for indenting and re-formatting Perl scripts
 License:	GPL-2.0-or-later
 URL:		http://perltidy.sourceforge.net/
-Source0:	https://cpan.metacpan.org/modules/by-module/Perl/Perl-Tidy-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/S/SH/SHANCOCK/Perl-Tidy-20260204.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 56a1fc2f1f813e49026a0f284b9209a6b2824620993e7598c85b01c444ff0f64
+%global source0_file Perl-Tidy-20260204.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -60,6 +65,9 @@ errors with missing or extra braces, parentheses, and square brackets
 because it is very good at localizing errors.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Perl-Tidy-20260204.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "56a1fc2f1f813e49026a0f284b9209a6b2824620993e7598c85b01c444ff0f64" || { echo "oreon: Source0 SHA256 mismatch for Perl-Tidy-20260204.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Perl-Tidy-%{version}
 
 # Don't need Windows batch file

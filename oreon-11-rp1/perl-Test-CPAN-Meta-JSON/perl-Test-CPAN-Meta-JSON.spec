@@ -4,8 +4,13 @@ Release:	32%{?dist}
 Summary:	Validate a META.json file within a CPAN distribution
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Test-CPAN-Meta-YAML
-Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-CPAN-Meta-JSON-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/B/BA/BARBIE/Test-CPAN-Meta-JSON-0.16.tar.gz
+
 Patch0:		Test-CPAN-Meta-JSON-0.16-utf8.patch
+# oreon url source checksums begin
+%global source0_sha256 67ac509adffb1d2b256a8f8c0523e00761d960166192c6070298f7088a9ae9c9
+%global source0_file Test-CPAN-Meta-JSON-0.16.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -40,6 +45,9 @@ Module::Build and Module::Install.
 See CPAN::Meta for further details of the CPAN Meta Specification.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-CPAN-Meta-JSON-0.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "67ac509adffb1d2b256a8f8c0523e00761d960166192c6070298f7088a9ae9c9" || { echo "oreon: Source0 SHA256 mismatch for Test-CPAN-Meta-JSON-0.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-CPAN-Meta-JSON-%{version}
 
 # Recode LICENSE as UTF-8

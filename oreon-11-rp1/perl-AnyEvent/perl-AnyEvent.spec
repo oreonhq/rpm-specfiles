@@ -40,7 +40,12 @@ Release:        23%{?dist}
 Summary:        Framework for multiple event loops
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/AnyEvent
-Source0:        https://cpan.metacpan.org/modules/by-module/AnyEvent/AnyEvent-%{version}%{?subver}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/AnyEvent-7.17.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 50beea689c098fe4aaeb83806c40b9fe7f946d5769acf99f849f099091a4b985
+%global source0_file AnyEvent-7.17.tar.gz
+# oreon url source checksums end
+
 
 # Build requirements
 BuildRequires:  coreutils
@@ -176,6 +181,9 @@ time).
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/AnyEvent-7.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "50beea689c098fe4aaeb83806c40b9fe7f946d5769acf99f849f099091a4b985" || { echo "oreon: Source0 SHA256 mismatch for AnyEvent-7.17.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n AnyEvent-%{version}%{?subver}
 
 

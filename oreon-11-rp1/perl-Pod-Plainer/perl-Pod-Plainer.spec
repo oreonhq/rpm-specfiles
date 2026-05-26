@@ -8,6 +8,10 @@ Summary:    Perl extension for converting modern POD to old-style POD
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:        https://metacpan.org/release/Pod-Plainer
 Source0:    https://cpan.metacpan.org/authors/id/R/RM/RMBARKER/Pod-Plainer-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1bbfbf7d1d4871e5a83bab2137e22d089078206815190eb1d5c1260a3499456f
+%global source0_file Pod-Plainer-1.04.tar.gz
+# oreon url source checksums end
 BuildArch:  noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -43,6 +47,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Pod-Plainer-1.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1bbfbf7d1d4871e5a83bab2137e22d089078206815190eb1d5c1260a3499456f" || { echo "oreon: Source0 SHA256 mismatch for Pod-Plainer-1.04.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Pod-Plainer-%{version}
 # Help generators to recognize Perl scripts
 for F in $(find t/ -name '*.t'); do

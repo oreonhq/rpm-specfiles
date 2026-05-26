@@ -14,6 +14,10 @@ Patch1:         65f002e.patch
 # Downstream-only because the package is significantly behind upstream, and the
 # code in question has changed quite a bit in the latest release.
 Patch2:         webrtc-audio-processing-1.3-gcc15.patch
+# oreon url source checksums begin
+%global source0_sha256 2365e93e778d7b61b5d6e02d21c47d97222e9c7deff9e1d0838ad6ec2e86f1b9
+%global source0_file webrtc-audio-processing-1.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires: meson
 BuildRequires: gcc gcc-c++
@@ -34,6 +38,9 @@ The %{name}-devel package contains libraries and header
 files for developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/webrtc-audio-processing-1.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2365e93e778d7b61b5d6e02d21c47d97222e9c7deff9e1d0838ad6ec2e86f1b9" || { echo "oreon: Source0 SHA256 mismatch for webrtc-audio-processing-1.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n webrtc-audio-processing-%{version} -p1
 
 %build

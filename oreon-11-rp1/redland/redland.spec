@@ -9,6 +9,10 @@ URL:            http://librdf.org/
 Source0:        http://download.librdf.org/source/%{name}-%{version}.tar.gz
 
 Patch1:         0001-rhbz-1936659-stub-deprecated.patch
+# oreon url source checksums begin
+%global source0_sha256 de1847f7b59021c16bdc72abb4d8e2d9187cd6124d69156f3326dd34ee043681
+%global source0_file redland-1.0.17.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  curl-devel
@@ -65,6 +69,9 @@ persistently with PostgreSQL files or URIs.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/redland-1.0.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "de1847f7b59021c16bdc72abb4d8e2d9187cd6124d69156f3326dd34ee043681" || { echo "oreon: Source0 SHA256 mismatch for redland-1.0.17.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %if 0%{?rhel}
 %patch -P1 -p1 -b .stub-deprecated

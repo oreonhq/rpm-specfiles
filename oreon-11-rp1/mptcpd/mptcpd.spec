@@ -19,6 +19,10 @@ BuildRequires: systemd-units
 BuildRequires: systemd-rpm-macros
 
 Source0: https://github.com/multipath-tcp/mptcpd/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 34810a09d167370c64b5766687b2eb4f6d3f7a1ab33ee71d821cdac819552be1
+%global source0_file mptcpd-0.14.tar.gz
+# oreon url source checksums end
 
 %description
 The Multipath TCP Daemon is a daemon for Linux based operating systems that
@@ -38,6 +42,9 @@ License: BSD-3-Clause
 Header files for adding MPTCP path manager support to applications
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mptcpd-0.14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "34810a09d167370c64b5766687b2eb4f6d3f7a1ab33ee71d821cdac819552be1" || { echo "oreon: Source0 SHA256 mismatch for mptcpd-0.14.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

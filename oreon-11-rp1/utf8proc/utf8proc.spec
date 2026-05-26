@@ -5,6 +5,10 @@ Release: %autorelease
 License: MIT AND Unicode-DFS-2015
 URL:     http://julialang.org/utf8proc/
 Source:  https://github.com/JuliaLang/utf8proc/archive/v%{version}.tar.gz#/%{name}-v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 abfed50b6d4da51345713661370290f4f4747263ee73dc90356299dfc7990c78
+%global source0_file v2.11.3.tar.gz
+# oreon url source checksums end
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: perl-interpreter
@@ -33,6 +37,9 @@ The documentation for the C library is found in the utf8proc.h header file.
 strings, unless you want to allocate memory yourself.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.11.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "abfed50b6d4da51345713661370290f4f4747263ee73dc90356299dfc7990c78" || { echo "oreon: Source0 SHA256 mismatch for v2.11.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 # Disable slow tests and tests which require network access
 sed -i '/-C bench/d;/\ttest.* data/d' Makefile

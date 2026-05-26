@@ -18,6 +18,12 @@ Source0:       https://github.com/brailcom/speechd/releases/download/%{version}/
 Source1:       http://www.freebsoft.org/pub/projects/sound-icons/sound-icons-0.1.tar.gz
 
 Patch1:        0001-Remove-pyxdg-dependency.patch
+# oreon url source checksums begin
+%global source0_sha256 b14a5238d287d2dcce4dd42bbd66ca65fa228e7e683708267f7b34036f7ba4b4
+%global source0_file speech-dispatcher-0.12.1.tar.gz
+%global source1_sha256 382dda1d14a07b3125a8b5084695aa9ba5cb0fff02e5aab69fd6c7e23cbcf4d7
+%global source1_file sound-icons-0.1.tar.gz
+# oreon url source checksums end
 #Patch2:        4ba45da405fe8dba5ed56725d20a388d6d0269a4.patch
 #Patch3:        de9588a29ed6deda8ced1bab98abccebfe1ee788.patch
 
@@ -139,6 +145,10 @@ License:        GPL-2.0-or-later
 Python 3 module for speech-dispatcher
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/speech-dispatcher-0.12.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b14a5238d287d2dcce4dd42bbd66ca65fa228e7e683708267f7b34036f7ba4b4" || { echo "oreon: Source0 SHA256 mismatch for speech-dispatcher-0.12.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/sound-icons-0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "382dda1d14a07b3125a8b5084695aa9ba5cb0fff02e5aab69fd6c7e23cbcf4d7" || { echo "oreon: Source1 SHA256 mismatch for sound-icons-0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 tar xf %{SOURCE1}

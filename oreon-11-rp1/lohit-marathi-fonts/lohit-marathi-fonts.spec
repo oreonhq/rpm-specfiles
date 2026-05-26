@@ -22,10 +22,17 @@ BuildRequires: make
 BuildRequires: fontforge
 Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
 Source10:       66-%{fontpkgname}.conf
+# oreon url source checksums begin
+%global source0_sha256 f2a071e796edd188ab19184c748a17f85a2816b96c893a6cdc5f745d9728ace4
+%global source0_file lohit-marathi-2.94.2.tar.gz
+# oreon url source checksums end
 
 %fontpkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lohit-marathi-2.94.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f2a071e796edd188ab19184c748a17f85a2816b96c893a6cdc5f745d9728ace4" || { echo "oreon: Source0 SHA256 mismatch for lohit-marathi-2.94.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{fontname}-%{version}
 %linuxtext OFL.txt AUTHORS README ChangeLog COPYRIGHT test-marathi.txt
 

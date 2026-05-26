@@ -13,6 +13,10 @@ Source:         %{pypi_source pyproject_hooks}
 
 # Upstream fix for compatibility with Python 3.15
 Patch:          f230da76.patch
+# oreon url source checksums begin
+%global source0_sha256 1e859bd5c40fae9448642dd871adf459e5e2084186e8d2c2a79a824c970da1f8
+%global source0_file pyproject_hooks-1.2.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -33,6 +37,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pyproject_hooks-1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1e859bd5c40fae9448642dd871adf459e5e2084186e8d2c2a79a824c970da1f8" || { echo "oreon: Source0 SHA256 mismatch for pyproject_hooks-1.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n pyproject_hooks-%{version}
 sed -i "/flake8/d" dev-requirements.txt
 

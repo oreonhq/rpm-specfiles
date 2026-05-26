@@ -21,6 +21,10 @@ URL:		https://launchpad.net/libappindicator
 # see https://launchpad.net/ubuntu/+source/libappindicator/12.10.1+20.10.20200706.1-0ubuntu1
 Source0:	https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/%{name}/%{version}+20.10.20200706.1-0ubuntu1/%{name}_%{version}+20.10.20200706.1.orig.tar.gz
 Patch0:		0001_Fix_mono_dir.patch
+# oreon url source checksums begin
+%global source0_sha256 94e7096a49c400628ecddcafe313d63bf917d95a90ab994930909de724604e0a
+%global source0_file libappindicator_12.10.1+20.10.20200706.1.orig.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:	autoconf
@@ -125,6 +129,9 @@ This package contains the development files for the appindicator-sharp library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libappindicator_12.10.1+20.10.20200706.1.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "94e7096a49c400628ecddcafe313d63bf917d95a90ab994930909de724604e0a" || { echo "oreon: Source0 SHA256 mismatch for libappindicator_12.10.1+20.10.20200706.1.orig.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c
 %patch -P0 -p1 -b .monodir
 

@@ -16,12 +16,19 @@ Patch2:		0002-test-test.c-Whitespace-cleanup.patch
 Patch3:		0003-test-Implement-self-test-functionality.patch
 Patch4:		0004-Makefile-Make-self-test-accessible-by-make-test.patch
 Patch5:		0005-Makefile-Allow-setting-custom-compiler-flags.patch
+# oreon url source checksums begin
+%global source0_sha256 fb577b132a49d289ff3cd0c2a670ddc50028c6dbecfb164958ac031376a82dd2
+%global source0_file libkeepalive-0.3.tar.gz
+# oreon url source checksums end
 
 %description
 libkeepalive is a library that enables tcp keepalive features in glibc based
 binary dynamic executables, without any change in the original program.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libkeepalive-0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fb577b132a49d289ff3cd0c2a670ddc50028c6dbecfb164958ac031376a82dd2" || { echo "oreon: Source0 SHA256 mismatch for libkeepalive-0.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

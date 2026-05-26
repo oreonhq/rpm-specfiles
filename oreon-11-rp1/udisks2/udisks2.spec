@@ -33,6 +33,10 @@ Release: 2%{?dist}
 License: GPL-2.0-or-later
 URL:     https://github.com/storaged-project/udisks
 Source0: https://github.com/storaged-project/udisks/releases/download/udisks-%{version}/udisks-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 e88c52bae02fa13414604bbef42c6bb91c2e24177ee0057ed55c6bd7451bcb6d
+%global source0_file udisks-2.11.1.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: glib2-devel >= %{glib2_version}
@@ -196,6 +200,9 @@ This package contains module for LSM configuration.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/udisks-2.11.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e88c52bae02fa13414604bbef42c6bb91c2e24177ee0057ed55c6bd7451bcb6d" || { echo "oreon: Source0 SHA256 mismatch for udisks-2.11.1.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n udisks-%{version}
 rm -f src/tests/dbus-tests/config_h.py
 rm -f src/udisks-daemon-resources.{c,h}

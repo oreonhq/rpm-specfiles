@@ -5,7 +5,7 @@ Summary:        Simplified and community-driven man pages
 
 License:        MIT
 URL:            https://github.com/tldr-pages/tldr-python-client
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/t/tldr/tldr-0.4.4.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

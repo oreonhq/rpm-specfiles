@@ -45,6 +45,10 @@ Source30:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-sandbox/
 Source31:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-spatial3d/%{version}/lucene-spatial3d-%{version}.pom
 Source32:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-suggest/%{version}/lucene-suggest-%{version}.pom
 Source33:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-test-framework/%{version}/lucene-test-framework-%{version}.pom
+# oreon url source checksums begin
+%global source0_sha256 b5cac76c4a6945bdcf25857f187168147fde3402b33a6b1a3b1c00361719982c
+%global source0_file lucene-10.3.2-src.tgz
+# oreon url source checksums end
 
 
 BuildRequires:  maven-local-openjdk25
@@ -222,6 +226,9 @@ Summary:        Lucene module: suggest
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lucene-10.3.2-src.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b5cac76c4a6945bdcf25857f187168147fde3402b33a6b1a3b1c00361719982c" || { echo "oreon: Source0 SHA256 mismatch for lucene-10.3.2-src.tgz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 find -mindepth 1 -maxdepth 1 ! -name lucene ! -name LICENSE.txt ! -name NOTICE.txt ! -name README.md -exec rm -rf {} +

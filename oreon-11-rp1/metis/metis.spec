@@ -27,6 +27,10 @@ Patch3:  %{name}-GKREGEX-GKRAND-LIBSUFFIX-fix.patch
 Patch4: %{name}_lib64.patch
 
 Patch5: %{name}-pcre2.patch
+# oreon url source checksums begin
+%global source0_sha256 c860b393f61ef017f288692b00fd26eec2d3fdbc7a2bb3bed8b0f01e836e53cf
+%global source0_file METIS-5.1.0.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: cmake, gcc, gcc-c++
@@ -78,6 +82,9 @@ OpenMP version (64bit INTEGER).
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/METIS-5.1.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c860b393f61ef017f288692b00fd26eec2d3fdbc7a2bb3bed8b0f01e836e53cf" || { echo "oreon: Source0 SHA256 mismatch for METIS-5.1.0.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -qc 
  
 pushd METIS-%{version}

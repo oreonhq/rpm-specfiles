@@ -9,6 +9,10 @@ Summary:        Inspection and simple manipulation of eBPF programs and maps
 License:        GPL-2.0-only OR BSD-2-Clause
 URL:            https://github.com/libbpf/bpftool
 Source:         https://github.com/libbpf/bpftool/releases/download/v%{version}/%{sources}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 786dd16887fa97649eb6abed42c56aa45fd4592c8bd3a7aa4d4e7ca5d1b5f2fb
+%global source0_file bpftool-libbpf-v7.6.0-sources.tar.gz
+# oreon url source checksums end
 
 ExcludeArch:    %{ix86}
 
@@ -27,6 +31,9 @@ This package contains the bpftool, which allows inspection and simple
 manipulation of eBPF programs and maps.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/bpftool-libbpf-v7.6.0-sources.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "786dd16887fa97649eb6abed42c56aa45fd4592c8bd3a7aa4d4e7ca5d1b5f2fb" || { echo "oreon: Source0 SHA256 mismatch for bpftool-libbpf-v7.6.0-sources.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{sources}
 
 %build

@@ -11,6 +11,10 @@ Release: 3%{?dist}
 License: BSD-3-Clause
 URL: https://github.com/corosync/corosync-qdevice
 Source0: https://github.com/corosync/corosync-qdevice/releases/download/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c2821329ed1efd6bf8f82e2878f75ca66889439d27c788785fd0ccc972ac307c
+%global source0_file corosync-qdevice-3.0.4.tar.gz
+# oreon url source checksums end
 
 # Runtime bits
 Requires: corosync >= 2.4.0
@@ -36,6 +40,9 @@ BuildRequires: make
 BuildRequires: git
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/corosync-qdevice-3.0.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c2821329ed1efd6bf8f82e2878f75ca66889439d27c788785fd0ccc972ac307c" || { echo "oreon: Source0 SHA256 mismatch for corosync-qdevice-3.0.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am
 
 %build

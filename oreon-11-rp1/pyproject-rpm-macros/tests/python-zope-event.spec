@@ -4,7 +4,7 @@ Release:        0%{?dist}
 Summary:        Zope Event Publication
 License:        ZPL-2.1
 URL:            https://pypi.python.org/pypi/zope.event/
-Source0:        %{pypi_source zope.event}
+Source0:        https://files.pythonhosted.org/packages/source/z/zope.event/zope.event-4.2.0.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  pyproject-rpm-macros

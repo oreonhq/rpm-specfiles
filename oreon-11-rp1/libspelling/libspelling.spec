@@ -5,6 +5,10 @@ Summary:        Spellcheck library for GTK 4
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/libspelling
 Source:         https://download.gnome.org/sources/libspelling/0.4/libspelling-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 56e3f01a3a18b575beea4c34349f99cdaba316e1f7c271b1231f7bcf5d9af73b
+%global source0_file libspelling-0.4.10.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -36,6 +40,9 @@ applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libspelling-0.4.10.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "56e3f01a3a18b575beea4c34349f99cdaba316e1f7c271b1231f7bcf5d9af73b" || { echo "oreon: Source0 SHA256 mismatch for libspelling-0.4.10.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n libspelling-%{version}
 
 

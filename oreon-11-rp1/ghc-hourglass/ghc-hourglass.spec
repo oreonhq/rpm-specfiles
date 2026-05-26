@@ -18,6 +18,10 @@ URL:            https://hackage.haskell.org/package/hourglass
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+# oreon url source checksums begin
+%global source0_sha256 44335b5c402e80c60f1db6a74462be4ea29d1a9043aa994334ffee1164f1ca4a
+%global source0_file hourglass-0.2.12.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -86,6 +90,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hourglass-0.2.12.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "44335b5c402e80c60f1db6a74462be4ea29d1a9043aa994334ffee1164f1ca4a" || { echo "oreon: Source0 SHA256 mismatch for hourglass-0.2.12.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 dos2unix -k -n %{SOURCE1} %{pkg_name}.cabal

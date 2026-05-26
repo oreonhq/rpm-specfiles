@@ -18,17 +18,21 @@ Summary:        Built-package format for Python
 # packaging is Apache-2.0 OR BSD-2-Clause
 License:        MIT AND (Apache-2.0 OR BSD-2-Clause)
 URL:            https://github.com/pypa/wheel
-Source:         %{url}/archive/%{version}/wheel-%{version}.tar.gz
+Source:        https://github.com/pypa/wheel/archive/0.45.1/wheel-0.45.1.tar.gz
 # Compatibility with the setuptools 75+
 # https://github.com/pypa/wheel/issues/650
 Patch:          https://github.com/pypa/wheel/commit/3028d3.patch
 # Compatibility with the setuptools 78+ (PEP 639)
 # Upstream has removed this code entirely instead
 # https://github.com/pypa/wheel/pull/655
-Patch:          adjusts-tests-for-setuptools-78.patch
+Patch:        https://github.com/pypa/wheel/commit/3028d3.patch
 # Security fix for CVE-2026-24049: Privilege Escalation or Arbitrary Code Execution via malicious wheel file unpacking
 # https://github.com/pypa/wheel/commit/7a7d2d (from 0.46.2+)
-Patch:          CVE-2026-24049.patch
+Patch:        https://github.com/pypa/wheel/commit/3028d3.patch
+# oreon url source checksums begin
+%global source0_sha256 398fe0a1a609b1084bcab897c65596613544fbe6109408e505e29e4ce0c3175d
+%global source0_file wheel-0.45.1.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python%{python3_pkgversion}-devel
@@ -67,6 +71,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/wheel-0.45.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "398fe0a1a609b1084bcab897c65596613544fbe6109408e505e29e4ce0c3175d" || { echo "oreon: Source0 SHA256 mismatch for wheel-0.45.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n wheel-%{version} -p1
 
 

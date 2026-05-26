@@ -16,6 +16,10 @@ License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/async
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 148571bc188003101241da6c49131d07324e63a88ed283a84def2e9694599619
+%global source0_file async-2.2.6.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -85,6 +89,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/async-2.2.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "148571bc188003101241da6c49131d07324e63a88ed283a84def2e9694599619" || { echo "oreon: Source0 SHA256 mismatch for async-2.2.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

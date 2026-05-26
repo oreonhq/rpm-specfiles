@@ -5,7 +5,11 @@ Summary:        A python SOAP client
 
 License:        LGPL-3.0-or-later
 URL:            https://github.com/suds-community/suds
-Source:         %{url}/archive/v%{version}.tar.gz#/suds-%{version}.tar.gz
+Source:        https://github.com/suds-community/suds/archive/v1.2.0.tar.gz#/suds-1.2.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5c8752020826c8bc93fd6422b347ae3cfa2aeb76b477868644e5630c70d6d644
+%global source0_file v1.2.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -25,6 +29,9 @@ Summary:        %{summary}
 %description -n python3-suds %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5c8752020826c8bc93fd6422b347ae3cfa2aeb76b477868644e5630c70d6d644" || { echo "oreon: Source0 SHA256 mismatch for v1.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n suds-%{version}
 
 %build

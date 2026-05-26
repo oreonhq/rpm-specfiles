@@ -7,6 +7,10 @@ License:        Artistic-2.0
 URL:            https://github.com/sleinen/snmp-session/
 Source0:        https://github.com/sleinen/snmp-session/archive/v%{version}/SNMP_Session-%{version}.tar.gz
 Patch0:         SNMP_Session-1.13-fix_ivp6.patch
+# oreon url source checksums begin
+%global source0_sha256 6f0ab25325afad69fbdd1637f78a9e5cbdd6887fea66e751880ba2609eebf1fa
+%global source0_file SNMP_Session-1.16.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -23,6 +27,9 @@ and "set", as well as trap generation and reception.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/SNMP_Session-1.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6f0ab25325afad69fbdd1637f78a9e5cbdd6887fea66e751880ba2609eebf1fa" || { echo "oreon: Source0 SHA256 mismatch for SNMP_Session-1.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n SNMP_Session-%{version}
 %patch -P 0 -p1
 %{__perl} -pi -e 's{^#!/usr/local/bin/perl\b}{#!%{__perl}}' test/*

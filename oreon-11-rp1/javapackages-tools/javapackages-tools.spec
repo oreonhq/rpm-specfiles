@@ -20,6 +20,10 @@ URL:            https://github.com/fedora-java/javapackages
 BuildArch:      noarch
 
 Source:         https://github.com/fedora-java/javapackages/archive/%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 234bc496110e4ee334b589232c655426a57001aec187c1ff7316f0f838008947
+%global source0_file 6.5.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  coreutils
 BuildRequires:  rubygem-asciidoctor
@@ -121,6 +125,9 @@ This package provides previously deprecated macros and scripts to
 support Java packaging as well as some additions to them.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/6.5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "234bc496110e4ee334b589232c655426a57001aec187c1ff7316f0f838008947" || { echo "oreon: Source0 SHA256 mismatch for 6.5.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n javapackages-%{version}
 
 %build

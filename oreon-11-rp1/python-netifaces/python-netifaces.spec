@@ -7,6 +7,10 @@ Summary:        Python library to retrieve information about network interfaces
 License:        MIT
 URL:            https://pypi.python.org/pypi/netifaces
 Source0:        https://files.pythonhosted.org/packages/source/n/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 043a79146eb2907edf439899f262b3dfe41717d34124298ed281139a8b93ca32
+%global source0_file netifaces-0.11.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 
@@ -29,6 +33,9 @@ from network interfaces.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/netifaces-0.11.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "043a79146eb2907edf439899f262b3dfe41717d34124298ed281139a8b93ca32" || { echo "oreon: Source0 SHA256 mismatch for netifaces-0.11.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{pypi_name}-%{version}
 
 

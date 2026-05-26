@@ -8,6 +8,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        http://archive.apache.org/dist/commons/bcel/source/bcel-%{version}-src.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8ee16c601567363b484183f1816738d337ae93413cd2aa052e59f0003513151e
+%global source0_file bcel-6.10.0-src.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.commons:commons-lang3)
@@ -33,6 +37,9 @@ optimizers, obsfuscators and analysis tools, the most popular probably
 being the Xalan XSLT processor at Apache.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/bcel-6.10.0-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8ee16c601567363b484183f1816738d337ae93413cd2aa052e59f0003513151e" || { echo "oreon: Source0 SHA256 mismatch for bcel-6.10.0-src.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 %pom_remove_plugin :maven-source-plugin

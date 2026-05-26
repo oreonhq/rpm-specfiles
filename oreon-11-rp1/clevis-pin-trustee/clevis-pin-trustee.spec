@@ -21,6 +21,10 @@ Summary:        Clevis PIN for Trustee attestation
 License:        BSD-3-Clause AND Unicode-DFS-2016 AND (0BSD OR MIT OR Apache-2.0) AND Apache-2.0 AND (Apache-2.0 OR BSL-1.0) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND MIT AND (MIT OR Zlib OR Apache-2.0) AND Unicode-3.0 AND (Unlicense OR MIT)
 URL:            https://github.com/latchset/clevis-pin-trustee
 Source0:        https://github.com/latchset/%{name}/archive/refs/tags/v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5f229eed038f5259174b908614dff86a011c8dd837a29ed64495e6c4ef5b4dcc
+%global source0_file v0.1.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cargo-rpm-macros
 
@@ -35,6 +39,9 @@ unlocking of LUKS-encrypted volumes in confidential computing environments by
 fetching encryption keys from Trustee servers after successful attestation.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5f229eed038f5259174b908614dff86a011c8dd837a29ed64495e6c4ef5b4dcc" || { echo "oreon: Source0 SHA256 mismatch for v0.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 %cargo_prep
 

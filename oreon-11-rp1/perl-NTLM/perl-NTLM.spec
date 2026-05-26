@@ -11,6 +11,10 @@ Source0:        https://cpan.metacpan.org/authors/id/N/NB/NBEBOUT/NTLM-%{version
 # Remove useless shebangs from the module files, CPAN RT#132167,
 # submitted to the upstream
 Patch0:         NTLM-1.09-Remove-shebangs-from-the-modules.patch
+# oreon url source checksums begin
+%global source0_sha256 c823e30cda76bc15636e584302c960e2b5eeef9517c2448f7454498893151f85
+%global source0_file NTLM-1.09.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -38,6 +42,9 @@ the challenge/response mechanism for NTLM connections or it can be used
 on its own for NTLM authentication with other protocols (eg. HTTP).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/NTLM-1.09.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c823e30cda76bc15636e584302c960e2b5eeef9517c2448f7454498893151f85" || { echo "oreon: Source0 SHA256 mismatch for NTLM-1.09.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n NTLM-%{version}
 %patch -P0 -p1
 

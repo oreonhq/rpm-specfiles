@@ -29,6 +29,10 @@ Patch42: 0042-Don-t-show-an-error-for-a-failed-automatic-refresh.patch
 
 # Downstream patches
 Patch100: plasma-pk-updates-0.3.2-notif.patch
+# oreon url source checksums begin
+%global source0_sha256 2ffdbd645ceec85ceb8002f4fbb73e46145612a9ceb831a770e6295f426d2f6c
+%global source0_file plasma-pk-updates-0.3.2.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf5-kcoreaddons-devel
@@ -53,6 +57,9 @@ Requires:       kf5-solid%{?_isa} >= 5.75.0-2
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plasma-pk-updates-0.3.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2ffdbd645ceec85ceb8002f4fbb73e46145612a9ceb831a770e6295f426d2f6c" || { echo "oreon: Source0 SHA256 mismatch for plasma-pk-updates-0.3.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

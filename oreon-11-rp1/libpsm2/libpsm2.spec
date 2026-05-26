@@ -59,6 +59,10 @@ License: LicenseRef-Callaway-BSD OR GPL-2.0-only
 URL: https://github.com/cornelisnetworks/opa-psm2/
 
 Source0: https://github.com/cornelisnetworks/opa-psm2/archive/refs/tags/PSM2_%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e41af2d7d36a6ab67639ecbd5c1012aa20b2b464bf5cfbdac60e7eb37bfe58de
+%global source0_file PSM2_12.0.1.tar.gz
+# oreon url source checksums end
 
 # The OPA product is supported on x86_64 only:
 ExclusiveArch: x86_64
@@ -102,6 +106,9 @@ Support for MPIs linked with PSM versions < 2
 0002-Fix-unaligned-heap-allocations-of-aligned-structs.patch
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/PSM2_12.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e41af2d7d36a6ab67639ecbd5c1012aa20b2b464bf5cfbdac60e7eb37bfe58de" || { echo "oreon: Source0 SHA256 mismatch for PSM2_12.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n opa-psm2-PSM2_%{version}
 
 %build

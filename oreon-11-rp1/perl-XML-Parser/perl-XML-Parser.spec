@@ -6,6 +6,10 @@ Summary:        Perl module for parsing XML documents
 License:        Artistic-2.0
 Url:            https://metacpan.org/release/XML-Parser
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ad4aae643ec784f489b956abe952432871a622d4e2b5c619e8855accbfc4d1d8
+%global source0_file XML-Parser-2.47.tar.gz
+# oreon url source checksums end
 
 # Build
 BuildRequires:  coreutils
@@ -71,6 +75,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-Parser-2.47.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ad4aae643ec784f489b956abe952432871a622d4e2b5c619e8855accbfc4d1d8" || { echo "oreon: Source0 SHA256 mismatch for XML-Parser-2.47.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-Parser-%{version} 
 chmod 644 samples/{canonical,xml*}
 perl -MConfig -pi -e 's|^#!/usr/local/bin/perl\b|$Config{startperl}|' samples/{canonical,xml*}

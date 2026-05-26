@@ -9,6 +9,10 @@ Source2: https://gnupg.org/signature_key.asc
 Patch1: libgcrypt-1.10.1-annobin.patch
 # https://gitlab.com/redhat-crypto/libgcrypt/libgcrypt-mirror/-/merge_requests/19/
 Patch5: libgcrypt-1.11.0-marvin.patch
+# oreon url source checksums begin
+%global source0_sha256 7df5c08d952ba33f9b6bdabdb06a61a78b2cf62d2122c2d1d03a91a79832aa3c
+%global source0_file libgcrypt-1.12.1.tar.bz2
+# oreon url source checksums end
 
 %global gcrylibdir %{_libdir}
 %global gcrysoname libgcrypt.so.20
@@ -40,6 +44,9 @@ in GNU Privacy Guard.  This package contains files needed to develop
 applications using libgcrypt.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libgcrypt-1.12.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7df5c08d952ba33f9b6bdabdb06a61a78b2cf62d2122c2d1d03a91a79832aa3c" || { echo "oreon: Source0 SHA256 mismatch for libgcrypt-1.12.1.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 %patch 1 -p1

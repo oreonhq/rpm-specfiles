@@ -11,10 +11,14 @@ Summary:        EDID and DisplayID library
 # test/data: CC-BY-4.0, MIT (see test/data/README.md).
 License:        MIT
 URL:            https://gitlab.freedesktop.org/emersion/libdisplay-info
-Source0:        %{url}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz
-Source1:        %{url}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz.sig
+Source0:        https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.3.0/downloads/libdisplay-info-0.3.0.tar.xz
+Source1:        https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.3.0/downloads/libdisplay-info-0.3.0.tar.xz.sig
 # 0FDE7BE0E88F5E48: emersion <contact@emersion.fr>
 Source2:        https://emersion.fr/.well-known/openpgpkey/hu/dj3498u4hyyarh35rkjfnghbjxug6b19#/gpgkey-0FDE7BE0E88F5E48.gpg
+# oreon url source checksums begin
+%global source0_sha256 6ae77cd937f9cf7d1321d35c116062c4911e8447010a6a713ac4286f7a9d5987
+%global source0_file libdisplay-info-0.3.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gnupg2
@@ -41,6 +45,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdisplay-info-0.3.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6ae77cd937f9cf7d1321d35c116062c4911e8447010a6a713ac4286f7a9d5987" || { echo "oreon: Source0 SHA256 mismatch for libdisplay-info-0.3.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup
 

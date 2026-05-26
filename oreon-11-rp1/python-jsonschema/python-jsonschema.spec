@@ -15,7 +15,11 @@ Version:        4.26.0
 Release:        1%{?dist}
 License:        MIT
 URL:            https://github.com/Julian/jsonschema
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/j/jsonschema/jsonschema-4.26.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0c26707e2efad8aa1bfc5b7ce170f3fccc2e4918ff85989ba9ffa9facb2be326
+%global source0_file jsonschema-4.26.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -40,6 +44,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jsonschema-4.26.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0c26707e2efad8aa1bfc5b7ce170f3fccc2e4918ff85989ba9ffa9facb2be326" || { echo "oreon: Source0 SHA256 mismatch for jsonschema-4.26.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pypi_name}-%{version}
 
 # Requires a checkout of the JSON-Schema-Test-Suite

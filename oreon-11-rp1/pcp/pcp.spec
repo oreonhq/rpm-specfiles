@@ -15,6 +15,10 @@ Patch2: pcp-qa-avc-check.patch
 Patch3: pcp-selinux2.patch
 Patch4: pcp-avc-rocestat.patch
 Patch5: pcp-avc-nvidia.patch
+# oreon url source checksums begin
+%global source0_sha256 39c8394b1019137614fb28013234a47b317e4e00b1cdb74db40631e9d84b0754
+%global source0_file pcp-7.1.0.tar.gz
+# oreon url source checksums end
 
 # The additional linker flags break out-of-tree PMDAs.
 # https://bugzilla.redhat.com/show_bug.cgi?id=2043092
@@ -2265,6 +2269,9 @@ updated policy package.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pcp-7.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "39c8394b1019137614fb28013234a47b317e4e00b1cdb74db40631e9d84b0754" || { echo "oreon: Source0 SHA256 mismatch for pcp-7.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

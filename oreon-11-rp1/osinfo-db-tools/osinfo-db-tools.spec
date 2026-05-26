@@ -11,6 +11,10 @@ Version: 1.12.0
 Release: %autorelease
 License: GPL-2.0-or-later
 Source: https://releases.pagure.org/libosinfo/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 f3315f675d18770f25dea8ed04b20b8fc80efb00f60c37ee5e815f9c3776e7f3
+%global source0_file osinfo-db-tools-1.12.0.tar.xz
+# oreon url source checksums end
 URL: https://libosinfo.org
 
 BuildRequires: meson
@@ -83,6 +87,9 @@ information about operating systems for use with virtualization
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/osinfo-db-tools-1.12.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f3315f675d18770f25dea8ed04b20b8fc80efb00f60c37ee5e815f9c3776e7f3" || { echo "oreon: Source0 SHA256 mismatch for osinfo-db-tools-1.12.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

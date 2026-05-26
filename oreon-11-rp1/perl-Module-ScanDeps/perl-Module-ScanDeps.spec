@@ -14,6 +14,10 @@ Release:        4%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-ScanDeps
 Source0:        https://cpan.metacpan.org/authors/id/R/RS/RSCHUPP/Module-ScanDeps-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1f5e119cade1466c39c71e5bc35a8d4f4e672635db03d79a5a0dcf08c4e2b5a3
+%global source0_file Module-ScanDeps-1.37.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -118,6 +122,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-ScanDeps-1.37.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1f5e119cade1466c39c71e5bc35a8d4f4e672635db03d79a5a0dcf08c4e2b5a3" || { echo "oreon: Source0 SHA256 mismatch for Module-ScanDeps-1.37.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-ScanDeps-%{version}
 
 # Help file to recognise the Perl scripts

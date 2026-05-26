@@ -6,6 +6,10 @@ Summary:        Use modules bundled in inc/ if they are newer than installed one
 License:        Apache-2.0
 URL:            https://metacpan.org/release/inc-latest
 Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/inc-latest-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 daa905f363c6a748deb7c408473870563fcac79b9e3e95b26e130a4a8dc3c611
+%global source0_file inc-latest-0.500.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -36,6 +40,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/inc-latest-0.500.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "daa905f363c6a748deb7c408473870563fcac79b9e3e95b26e130a4a8dc3c611" || { echo "oreon: Source0 SHA256 mismatch for inc-latest-0.500.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n inc-latest-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

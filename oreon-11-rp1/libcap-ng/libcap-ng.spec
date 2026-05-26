@@ -5,7 +5,11 @@ Version: 0.9.1
 Release: 1%{?dist}
 License: LGPL-2.0-or-later
 URL: https://github.com/stevegrubb/libcap-ng
-Source0: %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/stevegrubb/libcap-ng/archive/refs/tags/v0.9.1.tar.gz#/libcap-ng-0.9.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 52418b8940f83dcc00dcd01d187e67c3399ff65f3fa558442e3a21b415cc46c0
+%global source0_file v0.9.1.tar.gz
+# oreon url source checksums end
 BuildRequires: gcc make
 BuildRequires: autoconf automake libtool
 BuildRequires: kernel-headers >= 2.6.11 
@@ -57,6 +61,9 @@ lets you set the file system based capabilities, and use cap-audit
 to determine the necessary capabilities for a program.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.9.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "52418b8940f83dcc00dcd01d187e67c3399ff65f3fa558442e3a21b415cc46c0" || { echo "oreon: Source0 SHA256 mismatch for v0.9.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 touch NEWS
 autoreconf -fv --install

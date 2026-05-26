@@ -24,6 +24,10 @@ Source2:        https://github.com/git-lfs/git-lfs/releases/download/v%{version}
 Source3:        https://api.github.com/repos/git-lfs/git-lfs/tarball/core-gpg-keys#/core-gpg-keys.tar.gz
 Source4:        README.Fedora
 Source5:        go-vendor-tools.toml
+# oreon url source checksums begin
+%global source0_sha256 8f56058622edfea1d111e50e9844ef2f5ce670b2dbe4d55d48e765c943af4351
+%global source0_file git-lfs-v3.7.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  go-vendor-tools
 
@@ -50,6 +54,9 @@ storing the file contents on a remote server.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/git-lfs-v3.7.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8f56058622edfea1d111e50e9844ef2f5ce670b2dbe4d55d48e765c943af4351" || { echo "oreon: Source0 SHA256 mismatch for git-lfs-v3.7.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 tar xf %{SOURCE3}
 %{gpgverify} --keyrings git-lfs-git-lfs-*/keys.asc --data='%{SOURCE2}' \
              --output=trusted_checksums

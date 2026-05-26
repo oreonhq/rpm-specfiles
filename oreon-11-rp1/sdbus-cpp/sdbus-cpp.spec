@@ -9,6 +9,10 @@ License:        LGPL-2.1-or-later
 URL:            https://github.com/Kistler-Group/sdbus-cpp
 
 Source0:        https://github.com/Kistler-Group/sdbus-cpp/archive/refs/tags/v%{version}.tar.gz#/sdbus-cpp-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 da69a0104beb6e51415a59f1571a47beb1eacc65cc6027b250eb1cf13ff4f802
+%global source0_file v2.2.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -28,6 +32,9 @@ Headers, CMake package config, and pkg-config file for building against
 libsdbus-c++.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "da69a0104beb6e51415a59f1571a47beb1eacc65cc6027b250eb1cf13ff4f802" || { echo "oreon: Source0 SHA256 mismatch for v2.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n sdbus-cpp-%{version}
 
 %build

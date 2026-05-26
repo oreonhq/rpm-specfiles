@@ -8,6 +8,10 @@ Summary:        Detection and verification of Java ClassLoader leaks
 License:        Apache-2.0
 URL:            https://github.com/mjiderhamn/classloader-leak-prevention/tree/master/%{name}
 Source0:        https://github.com/mjiderhamn/classloader-leak-prevention/archive/%{nwname}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 97465fe025149bcfbfd2fbea072da710a99dc0eb1c63fb040d291dd64a102562
+%global source0_file classloader-leak-prevention-parent-2.7.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -29,6 +33,9 @@ Summary:        Javadoc for %{name}
 This package contains the API documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/classloader-leak-prevention-parent-2.7.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "97465fe025149bcfbfd2fbea072da710a99dc0eb1c63fb040d291dd64a102562" || { echo "oreon: Source0 SHA256 mismatch for classloader-leak-prevention-parent-2.7.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n classloader-leak-prevention-%{nwname}-%{version}
 
 rm -r classloader-leak-prevention

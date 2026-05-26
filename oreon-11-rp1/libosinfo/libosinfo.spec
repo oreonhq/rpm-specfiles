@@ -11,6 +11,10 @@ Version: 1.12.0
 Release: %autorelease
 License: LGPL-2.1-or-later
 Source: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 ad8557ece26793da43d26de565e3d68ce2ee6bfb8d0113b7cc7dfe07f6bfc6b6
+%global source0_file libosinfo-1.12.0.tar.xz
+# oreon url source checksums end
 URL: https://libosinfo.org/
 
 BuildRequires: meson
@@ -106,6 +110,9 @@ combination.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libosinfo-1.12.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ad8557ece26793da43d26de565e3d68ce2ee6bfb8d0113b7cc7dfe07f6bfc6b6" || { echo "oreon: Source0 SHA256 mismatch for libosinfo-1.12.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

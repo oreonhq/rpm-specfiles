@@ -5,6 +5,10 @@ Summary:        Transparent big number support for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/bignum
 Source0:        https://cpan.metacpan.org/authors/id/P/PJ/PJACKLAM/bignum-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1c9a824ab323e3e58d9808011c10ad27589dba1202806278215012ca7f522875
+%global source0_file bignum-0.67.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -61,6 +65,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/bignum-0.67.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1c9a824ab323e3e58d9808011c10ad27589dba1202806278215012ca7f522875" || { echo "oreon: Source0 SHA256 mismatch for bignum-0.67.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n bignum-%{version}
 
 # Correct shebangs and permission

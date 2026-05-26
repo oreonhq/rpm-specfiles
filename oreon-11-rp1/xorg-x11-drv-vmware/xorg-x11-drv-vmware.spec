@@ -12,6 +12,10 @@ URL:        http://www.x.org
 License:    MIT AND X11
 
 Source0:    https://ftp.x.org/archive/individual/driver/%{tarball}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 aed31ee5ed5ecc6e2226705383e7ad06f7602c1376a295305f376b17af3eb81a
+%global source0_file xf86-video-vmware-13.4.0.tar.xz
+# oreon url source checksums end
 
 ExclusiveArch: %{ix86} x86_64 ia64
 
@@ -36,6 +40,9 @@ Requires: mesa-compat-libxatracker
 X.Org X11 vmware video driver.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xf86-video-vmware-13.4.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aed31ee5ed5ecc6e2226705383e7ad06f7602c1376a295305f376b17af3eb81a" || { echo "oreon: Source0 SHA256 mismatch for xf86-video-vmware-13.4.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{tarball}-%{version}
 
 %build

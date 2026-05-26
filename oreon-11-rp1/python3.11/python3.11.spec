@@ -267,8 +267,8 @@ BuildRequires: python3-rpm-generators
 # Source code and patches
 # =======================
 
-Source0: %{url}ftp/python/%{general_version}/Python-%{upstream_version}.tar.xz
-Source1: %{url}ftp/python/%{general_version}/Python-%{upstream_version}.tar.xz.asc
+Source0:        https://www.python.org/ftp/python/3.11.15/Python-3.11.15.tar.xz
+Source1:        https://www.python.org/ftp/python/3.11.15/Python-3.11.15.tar.xz.asc
 # The release manager for Python 3.11 is pablogsal
 Source2: https://keybase.io/pablogsal/pgp_keys.asc
 
@@ -363,6 +363,10 @@ Patch474: 00474-cve-2025-15366.patch
 #
 # (cherry-picked from commit b234a2b67539f787e191d2ef19a7cbdce32874e7)
 Patch475: 00475-cve-2025-15367.patch
+# oreon url source checksums begin
+%global source0_sha256 272179ddd9a2e41a0fc8e42e33dfbdca0b3711aa5abf372d3f2d51543d09b625
+%global source0_file Python-3.11.15.tar.xz
+# oreon url source checksums end
 
 # (New patches go here ^^^)
 #
@@ -679,6 +683,9 @@ The debug runtime additionally supports debug builds of C-API extensions
 # ======================================================
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Python-3.11.15.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "272179ddd9a2e41a0fc8e42e33dfbdca0b3711aa5abf372d3f2d51543d09b625" || { echo "oreon: Source0 SHA256 mismatch for Python-3.11.15.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %gpgverify -k2 -s1 -d0
 %autosetup -S git_am -n Python-%{upstream_version}
 

@@ -7,6 +7,10 @@ Summary:        A nl80211 based wireless configuration tool
 License:        ISC AND LicenseRef-Public-Domain
 URL:            https://wireless.docs.kernel.org/en/latest/en/users/documentation/iw.html
 Source0:        http://www.kernel.org/pub/software/network/iw/iw-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 7d182e498289ab39b257da6780d562e415377107f50358ee5b55b8cfe40b1e33
+%global source0_file iw-6.17.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  kernel-headers
@@ -22,6 +26,9 @@ only because most new wireless devices being sold are now SoftMAC.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/iw-6.17.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7d182e498289ab39b257da6780d562e415377107f50358ee5b55b8cfe40b1e33" || { echo "oreon: Source0 SHA256 mismatch for iw-6.17.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 

@@ -15,6 +15,10 @@ Source0:       https://github.com/rrthomas/enchant/releases/download/v%{version}
 # can't currently go upstream, because aspell.pc is a Fedora addition
 # that itself has not gone upstream.
 Patch:         0001-Use-pkg-config-to-configure-Aspell.patch
+# oreon url source checksums begin
+%global source0_sha256 d3fd9e4170bfb5110b0bda577fe764a38fb606b3c25d2f0c3840234521ff1252
+%global source0_file enchant-2.8.15.tar.gz
+# oreon url source checksums end
 %endif
 
 BuildRequires: automake autoconf libtool
@@ -118,6 +122,9 @@ MinGW Windows %{name} library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/enchant-2.8.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d3fd9e4170bfb5110b0bda577fe764a38fb606b3c25d2f0c3840234521ff1252" || { echo "oreon: Source0 SHA256 mismatch for enchant-2.8.15.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n enchant-%{version}
 
 # Needed for 0001-Use-pkg-config-to-configure-Aspell.patch

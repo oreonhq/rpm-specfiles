@@ -11,6 +11,10 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/fedora-java/xmvn/releases/download/%{version}/xmvn-%{version}.tar.xz
 Source25:       toolchains-openjdk25.xml
+# oreon url source checksums begin
+%global source0_sha256 a0aed0f5bcdba5d03f086f8aaeef269a74832bd646d361068c09d1bc25c6da83
+%global source0_file xmvn-4.3.0.tar.xz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -120,6 +124,9 @@ This package provides various XMvn tools:
   with symbolic links to corresponding files in artifact repository.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xmvn-4.3.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a0aed0f5bcdba5d03f086f8aaeef269a74832bd646d361068c09d1bc25c6da83" || { echo "oreon: Source0 SHA256 mismatch for xmvn-4.3.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %mvn_package ::tar.gz: __noinstall

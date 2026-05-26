@@ -23,6 +23,10 @@ Patch6: fuse2-0006-Correct-errno-comparison-571.patch
 # cherry-picked from upstream
 # https://bugzilla.redhat.com/show_bug.cgi?id=1984776
 Patch7: fuse2-0007-util-ulockmgr_server.c-conditionally-define-closefro.patch
+# oreon url source checksums begin
+%global source0_sha256 d0e69d5d608cc22ff4843791ad097f554dd32540ddc9bed7638cc6fea7c1b4b5
+%global source0_file fuse-2.9.9.tar.gz
+# oreon url source checksums end
 
 Requires:	which
 Conflicts:	filesystem < 3
@@ -59,6 +63,9 @@ userspace program. This package contains development files (headers,
 pgk-config) to develop FUSE v2 based applications/filesystems.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fuse-2.9.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d0e69d5d608cc22ff4843791ad097f554dd32540ddc9bed7638cc6fea7c1b4b5" || { echo "oreon: Source0 SHA256 mismatch for fuse-2.9.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1
 
 export ACLOCAL_PATH=/usr/share/gettext/m4/

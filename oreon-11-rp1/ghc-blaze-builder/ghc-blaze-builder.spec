@@ -16,6 +16,10 @@ License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/blaze-builder
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 971d360428ac97af9a4e55e4f2c23649f6cedc0ce5d6e94d520e663f33ea5113
+%global source0_file blaze-builder-0.4.4.1.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -81,6 +85,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/blaze-builder-0.4.4.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "971d360428ac97af9a4e55e4f2c23649f6cedc0ce5d6e94d520e663f33ea5113" || { echo "oreon: Source0 SHA256 mismatch for blaze-builder-0.4.4.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

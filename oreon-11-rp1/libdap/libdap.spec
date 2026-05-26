@@ -13,6 +13,10 @@ Patch0: libdap-offline.patch
 # Add missing includes
 # https://github.com/OPENDAP/libdap4/pull/258
 Patch1: libdap-include.patch
+# oreon url source checksums begin
+%global source0_sha256 fd3dc8f74a24ba2e87b1128e9d9139806decb1af951a11ad5b6dbd7d1274835a
+%global source0_file libdap-3.21.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc-c++
@@ -66,6 +70,9 @@ Documentation of the libdap library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdap-3.21.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fd3dc8f74a24ba2e87b1128e9d9139806decb1af951a11ad5b6dbd7d1274835a" || { echo "oreon: Source0 SHA256 mismatch for libdap-3.21.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n libdap4-%{libdap_tag} -p1
 iconv -f latin1 -t utf8 < COPYRIGHT_W3C > COPYRIGHT_W3C.utf8
 touch -r COPYRIGHT_W3C COPYRIGHT_W3C.utf8

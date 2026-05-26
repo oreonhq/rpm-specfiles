@@ -8,6 +8,10 @@ Summary:        A pure Python network address representation and manipulation li
 License:        BSD-3-Clause
 URL:            https://github.com/netaddr/netaddr
 Source0:        https://pypi.python.org/packages/source/n/netaddr/netaddr-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5c3c3d9895b551b763779ba7db7a03487dc1f8e3b385af819af341ae9ef6e48a
+%global source0_file netaddr-1.3.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -60,6 +64,9 @@ Requires:  python3-netaddr = %{version}-%{release}
 An interactive shell environment for the netaddr library
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/netaddr-1.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5c3c3d9895b551b763779ba7db7a03487dc1f8e3b385af819af341ae9ef6e48a" || { echo "oreon: Source0 SHA256 mismatch for netaddr-1.3.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n netaddr-%{version} -p1
 
 # Make rpmlint happy, rip out python shebang lines from most python

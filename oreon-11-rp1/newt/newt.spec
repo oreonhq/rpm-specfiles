@@ -9,6 +9,10 @@ Release: 6%{?dist}
 License: LGPL-2.0-only
 URL: https://pagure.io/newt
 Source: https://pagure.io/releases/newt/newt-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ef0ca9ee27850d1a5c863bb7ff9aa08096c9ed312ece9087b30f3a426828de82
+%global source0_file newt-0.52.25.tar.gz
+# oreon url source checksums end
 BuildRequires: make
 BuildRequires: gcc popt-devel python3-devel slang-devel
 %{?with_python2:BuildRequires: python2-devel}
@@ -66,6 +70,9 @@ The python3-newt package contains the Python 3 bindings for the newt library
 providing a python API for creating text mode interfaces.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/newt-0.52.25.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ef0ca9ee27850d1a5c863bb7ff9aa08096c9ed312ece9087b30f3a426828de82" || { echo "oreon: Source0 SHA256 mismatch for newt-0.52.25.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

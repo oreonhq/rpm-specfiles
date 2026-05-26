@@ -17,6 +17,10 @@ Summary:        Low-level interface to the zlib compression library
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Zlib
 URL:            https://metacpan.org/release/Compress-Raw-Zlib
 Source0:        https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Zlib-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1dfd7d511a655627c81815d30d3babc28fa5b88455ff03f8b04099dcb51286b8
+%global source0_file Compress-Raw-Zlib-2.222.tar.gz
+# oreon url source checksums end
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -100,6 +104,9 @@ Tests from %{name}-%{version}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Compress-Raw-Zlib-2.222.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1dfd7d511a655627c81815d30d3babc28fa5b88455ff03f8b04099dcb51286b8" || { echo "oreon: Source0 SHA256 mismatch for Compress-Raw-Zlib-2.222.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Compress-Raw-Zlib-%{version}
 
 # Remove bundled zlib

@@ -5,7 +5,7 @@ Summary:        Idiomatic assertion toolkit with human-friendly failure messages
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/gabrielfalcao/sure
-Source0:        %{url}/archive/%{version}/sure-%{version}.tar.gz
+Source0:        https://github.com/gabrielfalcao/sure/archive/2.0.1/sure-2.0.1.tar.gz
 
 # Trivial downstream man page for (nearly pointless) executable
 Source1:        sure.1
@@ -18,9 +18,13 @@ Patch:          python3.10-workaround.patch
 # Drop PyPI mock dependency; use unittest.mock instead
 # https://github.com/gabrielfalcao/sure/pull/188
 # https://discussion.fedoraproject.org/t/f40-change-proposal-remove-python-mock-useage-system-wide/100082
-Patch:          %{url}/pull/188.patch
+Patch:        https://github.com/gabrielfalcao/sure/pull/188.patch
 
 Patch:          ast.patch
+# oreon url source checksums begin
+%global source0_sha256 fbd0f29738015d9613741932d189f0de706ef1f875cf51b04f9d23da7231701d
+%global source0_file sure-2.0.1.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -52,6 +56,9 @@ Obsoletes:      python-sure-doc < 2.0.1-9
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sure-2.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fbd0f29738015d9613741932d189f0de706ef1f875cf51b04f9d23da7231701d" || { echo "oreon: Source0 SHA256 mismatch for sure-2.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n sure-%{version}
 
 # Do not generate a coverage report; this obviates the BR on pytest-cov

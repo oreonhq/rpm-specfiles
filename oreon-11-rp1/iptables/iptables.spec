@@ -12,7 +12,7 @@ Summary: Tools for managing Linux kernel packet filtering capabilities
 URL: https://www.netfilter.org/projects/iptables
 Version: 1.8.13
 Release: 1%{?dist}
-Source0: %{url}/files/%{name}-%{version}.tar.xz
+Source0:        https://www.netfilter.org/projects/iptables/files/iptables-1.8.13.tar.xz
 source1: %{url}/files/%{name}-%{version}.tar.xz.sig
 Source2: coreteam-gpg-key-0xD70D1A666ACF2B21.txt
 Source3: iptables.init
@@ -25,6 +25,10 @@ Source9: arptables.service
 Source10: ebtables.service
 Source11: ebtables-helper
 Source12: ebtables-config
+# oreon url source checksums begin
+%global source0_sha256 1afcd33da9e8f913ace6a2126788162e207e26f5d5e29c6573c0e581ffc58b99
+%global source0_file iptables-1.8.13.tar.xz
+# oreon url source checksums end
 
 # pf.os: ISC license
 # iptables-apply: Artistic Licence 2.0
@@ -183,6 +187,9 @@ Provides: %{_prefix}/sbin/iptables
 nftables compatibility for iptables, arptables and ebtables.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/iptables-1.8.13.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1afcd33da9e8f913ace6a2126788162e207e26f5d5e29c6573c0e581ffc58b99" || { echo "oreon: Source0 SHA256 mismatch for iptables-1.8.13.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

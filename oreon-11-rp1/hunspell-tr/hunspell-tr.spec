@@ -12,6 +12,10 @@ Release:    11%{?dist}
 
 URL:        https://github.com/tdd-ai/hunspell-tr
 Source:     https://github.com/tdd-ai/hunspell-tr/archive/v%{version}/%{name}-v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 59948c131b98200f7b8221f4735b19ae77f5e842d3d2dbc7a6aa5b7e5f7aeef8
+%global source0_file hunspell-tr-v1.1.0.tar.gz
+# oreon url source checksums end
 
 
 BuildArch:  noarch
@@ -23,6 +27,9 @@ Supplements: (hunspell and langpacks-tr)
 Turkish hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hunspell-tr-v1.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "59948c131b98200f7b8221f4735b19ae77f5e842d3d2dbc7a6aa5b7e5f7aeef8" || { echo "oreon: Source0 SHA256 mismatch for hunspell-tr-v1.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 rm trspell10.csv
 

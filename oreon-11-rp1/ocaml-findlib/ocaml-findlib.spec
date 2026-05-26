@@ -17,6 +17,10 @@ Source0:        http://download.camlcity.org/download/findlib-%{version}.tar.gz
 
 # Fix the toolbox build with OCaml 5.x
 Patch0:         %{name}-toolbox.patch
+# oreon url source checksums begin
+%global source0_sha256 662c910f774e9fee3a19c4e057f380581ab2fc4ee52da4761304ac9c31b8869d
+%global source0_file findlib-1.9.8.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  ocaml >= 4.02.0
 BuildRequires:  ocaml-labltk-devel
@@ -47,6 +51,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/findlib-1.9.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "662c910f774e9fee3a19c4e057f380581ab2fc4ee52da4761304ac9c31b8869d" || { echo "oreon: Source0 SHA256 mismatch for findlib-1.9.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n findlib-%{version}
 
 # Fix character encoding

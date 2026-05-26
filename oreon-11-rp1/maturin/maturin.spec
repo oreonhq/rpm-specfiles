@@ -49,7 +49,7 @@ License:        %{shrink:
 # LICENSE.dependencies contains a full license breakdown
 
 URL:            https://github.com/PyO3/maturin
-Source0:        %{pypi_source maturin %{pypi_version}}
+Source0:        https://files.pythonhosted.org/packages/source/m/maturin/maturin-1.9.6.tar.gz
 
 # * disable features with missing dependencies:
 #   - cross (support for cross compiling with zig / xwin)
@@ -78,6 +78,10 @@ Patch:          0005-revert-to-using-setuptools-for-non-maturin-bootstrap.patch
 #   considered upstream in https://github.com/PyO3/maturin/pull/2817, but
 #   rejected for now due (solely) to MSRV.
 Patch:          0006-Update-cargo_metadata-to-0.20.0-2864.patch
+# oreon url source checksums begin
+%global source0_sha256 2c2ae37144811d365509889ed7220b0598487f1278c2441829c3abf56cc6324a
+%global source0_file maturin-1.9.6.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cargo-rpm-macros >= 24
 BuildRequires:  python3-devel
@@ -92,6 +96,9 @@ Build and publish crates with pyo3, rust-cpython and cffi bindings as
 well as rust binaries as python packages.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maturin-1.9.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c2ae37144811d365509889ed7220b0598487f1278c2441829c3abf56cc6324a" || { echo "oreon: Source0 SHA256 mismatch for maturin-1.9.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n maturin-%{pypi_version} -p1
 %cargo_prep
 

@@ -7,6 +7,10 @@ License:        Apache-2.0
 
 URL:            https://maven.apache.org/plugins/%{name}
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 2c2d767373f7fe00a45507ddc6db5cbfda1e11f4d9a900980e1b0b6be33d4590
+%global source0_file maven-shade-plugin-3.6.1-source-release.zip
+# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -49,6 +53,9 @@ packages of some of the dependencies.
 %javadoc_package
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-shade-plugin-3.6.1-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c2d767373f7fe00a45507ddc6db5cbfda1e11f4d9a900980e1b0b6be33d4590" || { echo "oreon: Source0 SHA256 mismatch for maven-shade-plugin-3.6.1-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 rm src/test/jars/plexus-utils-1.4.1.jar

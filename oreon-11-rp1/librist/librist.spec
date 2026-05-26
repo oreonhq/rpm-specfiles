@@ -11,11 +11,15 @@ Summary:        Library for Reliable Internet Stream Transport (RIST) protocol
 # Everything used is BSD-2-Clause except getopt-shim, which is ISC as well
 License:        BSD-2-Clause and ISC
 URL:            https://code.videolan.org/rist/librist
-Source0:        %{url}/-/archive/v%{version}/librist-v%{version}.tar.gz
+Source0:        https://code.videolan.org/rist/librist/-/archive/v0.2.7/librist-v0.2.7.tar.gz
 
 # Backport from upstream
 ## From: https://code.videolan.org/rist/librist/-/commit/809390b3b75a259a704079d0fb4d8f1b5f7fa956
 Patch0001:      0001-meson.build-fix-reference-to-libcjson-pc-file.patch
+# oreon url source checksums begin
+%global source0_sha256 7e2507fdef7b57c87b461d0f2515771b70699a02c8675b51785a73400b3c53a1
+%global source0_file librist-v0.2.7.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -55,6 +59,9 @@ This package contains the user tools for the RIST protocol library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/librist-v0.2.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7e2507fdef7b57c87b461d0f2515771b70699a02c8675b51785a73400b3c53a1" || { echo "oreon: Source0 SHA256 mismatch for librist-v0.2.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-v%{version} -p1
 
 

@@ -5,6 +5,10 @@ Summary:        Generic file fetching mechanism
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Fetch
 Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/File-Fetch-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b1de94ab9977d347afd22d9f864dd9efcb40e749dcba69e8307141cb1b075ae4
+%global source0_file File-Fetch-1.08.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -64,6 +68,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-Fetch-1.08.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b1de94ab9977d347afd22d9f864dd9efcb40e749dcba69e8307141cb1b075ae4" || { echo "oreon: Source0 SHA256 mismatch for File-Fetch-1.08.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n File-Fetch-%{version}
 
 # Help generators to recognize Perl scripts

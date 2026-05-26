@@ -5,7 +5,12 @@ Release:        2%{?dist}
 Summary:        Parse and format strptime and strftime patterns
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/DateTime-Format-Strptime
-Source0:        https://cpan.metacpan.org/modules/by-module/DateTime/DateTime-Format-Strptime-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-Format-Strptime-1.80.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 efe5e2be70425efc123a4e57f4b96b2d23beb03200c8326495b5b433b6b77158
+%global source0_file DateTime-Format-Strptime-1.80.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -53,6 +58,9 @@ pattern and returns a string, strptime takes a string and a pattern and
 returns the DateTime object associated.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DateTime-Format-Strptime-1.80.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "efe5e2be70425efc123a4e57f4b96b2d23beb03200c8326495b5b433b6b77158" || { echo "oreon: Source0 SHA256 mismatch for DateTime-Format-Strptime-1.80.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DateTime-Format-Strptime-%{version}
 
 %build

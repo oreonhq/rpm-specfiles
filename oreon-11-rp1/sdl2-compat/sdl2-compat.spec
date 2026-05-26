@@ -14,7 +14,7 @@ SourceLicense:  Zlib and Apache-2.0 and MIT and BSD-3-Clause
 Summary:        SDL 2.0 runtime compatibility library using SDL 3.0
 License:        Zlib
 URL:            https://github.com/libsdl-org/sdl2-compat
-Source0:        %{url}/archive/release-%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/libsdl-org/sdl2-compat/archive/release-2.32.68/sdl2-compat-2.32.68.tar.gz
 # Multilib aware-header stub
 Source1:        SDL2_config.h
 Source2:        SDL2_revision.h
@@ -25,6 +25,10 @@ Source2:        SDL2_revision.h
 
 # Fedora specific patches (1001+)
 Patch1001:      sdl2-compat-sdlconfig-multilib.patch
+# oreon url source checksums begin
+%global source0_sha256 72f846becfd2d321da3d2e7a15410f5f156d904257f4c4c608b546614113936b
+%global source0_file sdl2-compat-2.32.68.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -110,6 +114,9 @@ this layer.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sdl2-compat-2.32.68.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "72f846becfd2d321da3d2e7a15410f5f156d904257f4c4c608b546614113936b" || { echo "oreon: Source0 SHA256 mismatch for sdl2-compat-2.32.68.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-release-%{version} -S git_am
 
 

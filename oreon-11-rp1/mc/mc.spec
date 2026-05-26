@@ -11,6 +11,10 @@ License:	GPL-3.0-or-later
 URL:		https://midnight-commander.org/
 Source:		http://ftp.midnight-commander.org/mc-%{version}.tar.xz
 Patch:		%{name}-spec.syntax.patch
+# oreon url source checksums begin
+%global source0_sha256 cae149d42f844e5185d8c81d7db3913a8fa214c65f852200a9d896b468af164c
+%global source0_file mc-4.8.33.tar.xz
+# oreon url source checksums end
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gcc
@@ -46,6 +50,9 @@ Requires:	python3-boto
 Midnight Commander s3+ and UC1541 EXTFS backend scripts.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mc-4.8.33.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cae149d42f844e5185d8c81d7db3913a8fa214c65f852200a9d896b468af164c" || { echo "oreon: Source0 SHA256 mismatch for mc-4.8.33.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

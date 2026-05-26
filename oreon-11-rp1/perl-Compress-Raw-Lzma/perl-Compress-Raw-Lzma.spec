@@ -7,7 +7,12 @@ Release:	1%{?dist}
 Summary:	Low-level interface to lzma compression library
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Compress-Raw-Lzma
-Source0:	https://cpan.metacpan.org/modules/by-module/Compress/Compress-Raw-Lzma-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Lzma-2.221.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e8b2d17c7f29b3e4f286cc3d3f5353df8e811615c42298eedad7cdbfec4aed7f
+%global source0_file Compress-Raw-Lzma-2.221.tar.gz
+# oreon url source checksums end
+
 # Module Build
 BuildRequires:	coreutils
 BuildRequires:	findutils
@@ -68,6 +73,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Compress-Raw-Lzma-2.221.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e8b2d17c7f29b3e4f286cc3d3f5353df8e811615c42298eedad7cdbfec4aed7f" || { echo "oreon: Source0 SHA256 mismatch for Compress-Raw-Lzma-2.221.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Compress-Raw-Lzma-%{version}
 
 # Remove bundled test modules

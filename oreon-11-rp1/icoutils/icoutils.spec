@@ -12,6 +12,10 @@ Source0:        http://savannah.nongnu.org/download/%{name}/%{name}-%{version}.t
 Patch1:         0001-wrestool-Fix-get_resource_id_quoted-to-return-heap-a.patch
 # Fix build for GCC 15
 Patch2:         0002-gcc15.patch
+# oreon url source checksums begin
+%global source0_sha256 cc9fa14f1bfc113e58dc45060d62742a14b19d2622d923ffb0902f6b64be9f11
+%global source0_file icoutils-0.32.3.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -32,6 +36,9 @@ extension .ico or .cur, but they can also be embedded in executables or
 libraries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/icoutils-0.32.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cc9fa14f1bfc113e58dc45060d62742a14b19d2622d923ffb0902f6b64be9f11" || { echo "oreon: Source0 SHA256 mismatch for icoutils-0.32.3.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %patch 1 -p1

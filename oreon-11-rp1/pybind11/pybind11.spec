@@ -18,6 +18,10 @@ Source0: https://github.com/pybind/pybind11/archive/v%{version}/%{name}-%{versio
 
 # Use the `/usr` prefix for the python commands
 Patch1:  pybind11-2.13.6-Use_usr_prefix.patch
+# oreon url source checksums begin
+%global source0_sha256 74b6a2c2b4573a400cafb6ecbf60c98df300cd3d0041296b913d02b2cbbb2676
+%global source0_file pybind11-3.0.4.tar.gz
+# oreon url source checksums end
 
 # Needed to build the python libraries
 BuildRequires: python3-devel
@@ -69,6 +73,9 @@ Requires: %{name}-devel%{?_isa} = %{version}-%{release}
 This package contains the Python 3 files.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pybind11-3.0.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "74b6a2c2b4573a400cafb6ecbf60c98df300cd3d0041296b913d02b2cbbb2676" || { echo "oreon: Source0 SHA256 mismatch for pybind11-3.0.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

@@ -11,6 +11,10 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/codehaus-plexus/plexus-build-api/archive/refs/tags/plexus-build-api-%{version}.tar.gz
 Source1:        http://www.apache.org/licenses/LICENSE-2.0.txt
+# oreon url source checksums begin
+%global source0_sha256 47aae8f94b6fffd3ea0816eca79094541a28fbf35a9d0ac1fd6459196b30ee1b
+%global source0_file plexus-build-api-1.2.0.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -31,6 +35,9 @@ Obsoletes:      %{name}-javadoc < 1.2.0-17
 Plexus Build API
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plexus-build-api-1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "47aae8f94b6fffd3ea0816eca79094541a28fbf35a9d0ac1fd6459196b30ee1b" || { echo "oreon: Source0 SHA256 mismatch for plexus-build-api-1.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 cp -p %{SOURCE1} .
 

@@ -32,13 +32,17 @@ Release:        1%{?dist}
 # license of the binary RPMs.
 License:        BSD-2-Clause AND BSD-3-Clause AND BSD-1-Clause
 URL:            https://github.com/editorconfig/editorconfig-core-c
-Source0:        %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/editorconfig/editorconfig-core-c/archive/v0.12.10/editorconfig-core-c-0.12.10.tar.gz
 
 # Downstream-only: Do not compile with -Werror
 #
 # This makes sense upstream, but is too strict for downstream packaging
 # across various architectures, compiler versions, and so on.
 Patch0:         0001-Downstream-only-Do-not-compile-with-Werror.patch
+# oreon url source checksums begin
+%global source0_sha256 ab9f897a90fb36cfc34e5b67221e55ab0e3119b3512de8e31029d376c6bab870
+%global source0_file editorconfig-core-c-0.12.10.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  doxygen
@@ -99,6 +103,9 @@ This package contains the files needed for development.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/editorconfig-core-c-0.12.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ab9f897a90fb36cfc34e5b67221e55ab0e3119b3512de8e31029d376c6bab870" || { echo "oreon: Source0 SHA256 mismatch for editorconfig-core-c-0.12.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{srcname}-%{version} -p1
 %if %{with system_uthash}
 # Unbundle uthash

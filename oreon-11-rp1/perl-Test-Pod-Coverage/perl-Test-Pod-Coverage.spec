@@ -5,6 +5,10 @@ Summary:        Check for pod coverage in your distribution
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Test-Pod-Coverage
 Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEILB/Test-Pod-Coverage-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 48c9cca9f7d99eee741176445b431adf09c029e1aa57c4703c9f46f7601d40d4
+%global source0_file Test-Pod-Coverage-1.10.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  perl-interpreter
@@ -30,6 +34,9 @@ ensure that all relevant files in your distribution are appropriately
 documented in pod.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Pod-Coverage-1.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "48c9cca9f7d99eee741176445b431adf09c029e1aa57c4703c9f46f7601d40d4" || { echo "oreon: Source0 SHA256 mismatch for Test-Pod-Coverage-1.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Pod-Coverage-%{version}
 
 %build

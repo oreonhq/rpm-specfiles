@@ -8,6 +8,10 @@ URL:		http://sourceforge.net/projects/f2fs-tools/
 Source0:	http://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot/%{name}-%{version}.tar.gz
 # Patch  from https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/patch/?id=6617d15a660becc23825007ab3fc2d270b5b250f
 Patch0:		f2fs-tools-1.16.0-c23.patch
+# oreon url source checksums begin
+%global source0_sha256 208c7a07e95383fbd7b466b5681590789dcb41f41bf197369c41a95383b57c5e
+%global source0_file f2fs-tools-1.16.0.tar.gz
+# oreon url source checksums end
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	uuid-devel
@@ -47,6 +51,9 @@ This package contains the libraries needed to develop applications
 that use %{name}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/f2fs-tools-1.16.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "208c7a07e95383fbd7b466b5681590789dcb41f41bf197369c41a95383b57c5e" || { echo "oreon: Source0 SHA256 mismatch for f2fs-tools-1.16.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch 0 -p1 -b .c23
 sed -i 's/AC_PROG_LIBTOOL/LT_INIT/' configure.ac

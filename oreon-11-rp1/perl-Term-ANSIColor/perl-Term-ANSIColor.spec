@@ -11,7 +11,12 @@ Release:        522%{?dist}
 Summary:        Color screen output using ANSI escape sequences
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Term-ANSIColor
-Source0:        https://cpan.metacpan.org/modules/by-module/Term/Term-ANSIColor-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RR/RRA/Term-ANSIColor-5.01.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6281bd87cced7a885c38aa104498e3cd4b5f4c276087442cf68c67379318f27d
+%global source0_file Term-ANSIColor-5.01.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -62,6 +67,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Term-ANSIColor-5.01.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6281bd87cced7a885c38aa104498e3cd4b5f4c276087442cf68c67379318f27d" || { echo "oreon: Source0 SHA256 mismatch for Term-ANSIColor-5.01.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Term-ANSIColor-%{version}
 chmod -c -x examples/*
 

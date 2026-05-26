@@ -9,6 +9,10 @@ Release: 2%{?dist}
 License: GPL-2.0-only
 Summary: Linux /proc abstraction classes
 Source: https://cdn.kernel.org/pub/software/libs/python/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 3a15e97b5e19279978e9aab5567416d76b8101f2cc82f95aca0f6f2dade4fbd7
+%global source0_file python-linux-procfs-0.7.4.tar.xz
+# oreon url source checksums end
 URL: https://www.kernel.org/pub/software/libs/python/python-linux-procfs
 BuildArch: noarch
 BuildRequires: python3-devel
@@ -28,6 +32,9 @@ Summary: %summary
 %description -n python3-linux-procfs %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/python-linux-procfs-0.7.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3a15e97b5e19279978e9aab5567416d76b8101f2cc82f95aca0f6f2dade4fbd7" || { echo "oreon: Source0 SHA256 mismatch for python-linux-procfs-0.7.4.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %generate_buildrequires

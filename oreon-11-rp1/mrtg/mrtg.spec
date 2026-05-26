@@ -39,6 +39,12 @@ Patch1:    mrtg-2.17.2-socket6-fix.patch
 # Patch2: some devices return 2**32-2 on ifSpeed (e. g. IBM FibreChannel switches)
 Patch2:    mrtg-2.17.4-cfgmaker-ifhighspeed.patch
 Patch3:    mrtg-configure-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 c7f11cb5e217a500d87ee3b5d26c58a8652edbc0d3291688bb792b010fae43ac
+%global source0_file mrtg-2.17.10.tar.gz
+%global source1_sha256 db0332605d859748a29a0c3c04cefd9163b6890f55c640bcf9602930e467fe37
+%global source1_file mrtg-2.17.10.tar.gz.md5
+# oreon url source checksums end
 License:   GPL-2.0-or-later
 Requires(post): systemd-units
 Requires(preun): systemd-units
@@ -79,6 +85,10 @@ Custom SELinux policy module
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mrtg-2.17.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c7f11cb5e217a500d87ee3b5d26c58a8652edbc0d3291688bb792b010fae43ac" || { echo "oreon: Source0 SHA256 mismatch for mrtg-2.17.10.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/mrtg-2.17.10.tar.gz.md5; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "db0332605d859748a29a0c3c04cefd9163b6890f55c640bcf9602930e467fe37" || { echo "oreon: Source1 SHA256 mismatch for mrtg-2.17.10.tar.gz.md5" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b .lib64
 %patch -P1 -p1 -b .socket6

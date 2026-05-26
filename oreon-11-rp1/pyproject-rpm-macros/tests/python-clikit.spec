@@ -6,7 +6,7 @@ Summary:        Builds beautiful and testable command line interfaces
 
 License:        MIT
 URL:            https://github.com/sdispater/clikit
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/c/clikit/clikit-0.3.1.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  pyproject-rpm-macros

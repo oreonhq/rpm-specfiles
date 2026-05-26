@@ -5,6 +5,10 @@ Summary:        Perl interface to OpenSSL for RSA
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-OpenSSL-RSA
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Crypt-OpenSSL-RSA-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 917f7312532f8f4af4f3acbf6ba10e0151f8577d2ef1f38e1035229be86eb6f4
+%global source0_file Crypt-OpenSSL-RSA-0.37.tar.gz
+# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  findutils
 BuildRequires:  make
@@ -36,6 +40,9 @@ Requires:	perl(Crypt::OpenSSL::Bignum)
 Crypt::OpenSSL::RSA - RSA encoding and decoding, using the openSSL libraries
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Crypt-OpenSSL-RSA-0.37.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "917f7312532f8f4af4f3acbf6ba10e0151f8577d2ef1f38e1035229be86eb6f4" || { echo "oreon: Source0 SHA256 mismatch for Crypt-OpenSSL-RSA-0.37.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n Crypt-OpenSSL-RSA-%{version}
 
 %build

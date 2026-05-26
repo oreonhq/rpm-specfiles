@@ -6,6 +6,10 @@ Summary: Python bindings for the cairo library
 License: LGPL-2.1-only OR MPL-1.1
 URL: https://www.cairographics.org/pycairo
 Source0: https://github.com/pygobject/pycairo/releases/download/v%{version}/pycairo-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 26ec5c6126781eb167089a123919f87baa2740da2cca9098be8b3a6b91cc5fbc
+%global source0_file pycairo-1.28.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: meson
@@ -33,6 +37,9 @@ This package contains files required to build wrappers for cairo add-on
 libraries so that they interoperate with py3cairo.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pycairo-1.28.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "26ec5c6126781eb167089a123919f87baa2740da2cca9098be8b3a6b91cc5fbc" || { echo "oreon: Source0 SHA256 mismatch for pycairo-1.28.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

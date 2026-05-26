@@ -25,11 +25,17 @@ License:        MIT AND Apache-2.0 AND EUPL-1.2 AND Unicode-DFS-2016 AND (0BSD O
 # LICENSE.dependencies contains a full license breakdown
 
 URL:            https://github.com/fedora-iot/clevis-pin-tpm2/
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/fedora-iot/clevis-pin-tpm2//archive/v0.5.4/clevis-pin-tpm2-0.5.4.tar.gz
 # To create the vendor tarball:
 #   tar xf %%{name}-%%{version}.crate ; pushd %%{name}-%%{version} ; \
 #   cargo vendor && tar Jcvf ../%%{name}-%%{version}-vendor.tar.xz vendor/ ; popd
-Source1:        %{name}-%{version}-vendor.tar.xz
+Source1:        https://github.com/fedora-iot/clevis-pin-tpm2/archive/refs/tags/v0.5.4.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 fced6d07c5d9d848afb23b7440a06ce5d1b4e9d14549199228dbfe92bb10fb81
+%global source0_file clevis-pin-tpm2-0.5.4.tar.gz
+%global source1_sha256 fced6d07c5d9d848afb23b7440a06ce5d1b4e9d14549199228dbfe92bb10fb81
+%global source1_file v0.5.4.tar.gz
+# oreon url source checksums end
 
 %if 0%{?rhel} || 0%{?oreon}
 BuildRequires:  rust-toolset
@@ -46,6 +52,10 @@ Requires:       clevis
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/clevis-pin-tpm2-0.5.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fced6d07c5d9d848afb23b7440a06ce5d1b4e9d14549199228dbfe92bb10fb81" || { echo "oreon: Source0 SHA256 mismatch for clevis-pin-tpm2-0.5.4.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/v0.5.4.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fced6d07c5d9d848afb23b7440a06ce5d1b4e9d14549199228dbfe92bb10fb81" || { echo "oreon: Source1 SHA256 mismatch for v0.5.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 %{?rhel:-a1}
 %if 0%{?rhel} || 0%{?oreon}
 %cargo_prep -v vendor

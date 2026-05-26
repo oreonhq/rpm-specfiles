@@ -7,6 +7,10 @@ Summary:    The M17N engine for IBus platform
 License:    GPL-2.0-or-later
 URL:        https://github.com/ibus/ibus-m17n
 Source0:    https://github.com/ibus/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 fdc30c2efdb03104912d1d607197b5e06108f15e16eaa3a8e93833f1ae2b17a1
+%global source0_file ibus-m17n-1.4.39.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gettext-devel >= 0.19
 BuildRequires:  libtool
@@ -25,6 +29,9 @@ M17N engine for IBus input platform. It allows input of many languages using
 the input table maps from m17n-db.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ibus-m17n-1.4.39.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fdc30c2efdb03104912d1d607197b5e06108f15e16eaa3a8e93833f1ae2b17a1" || { echo "oreon: Source0 SHA256 mismatch for ibus-m17n-1.4.39.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

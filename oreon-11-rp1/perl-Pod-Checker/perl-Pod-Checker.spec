@@ -7,6 +7,10 @@ Summary:        Check POD documents for syntax errors
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Checker
 Source0:        https://cpan.metacpan.org/authors/id/M/MA/MAREKR/Pod-Checker-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 131a7c049bed758cab29901792c999ca315d4e881c630d3f93bf6aae69e9e242
+%global source0_file Pod-Checker-1.77.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -49,6 +53,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Pod-Checker-1.77.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "131a7c049bed758cab29901792c999ca315d4e881c630d3f93bf6aae69e9e242" || { echo "oreon: Source0 SHA256 mismatch for Pod-Checker-1.77.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Pod-Checker-%{version}
 for F in CHANGES README; do
     perl -pi -e 's/\r//' "$F"

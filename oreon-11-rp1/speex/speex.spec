@@ -10,6 +10,10 @@ BuildRequires:	gcc
 BuildRequires:	pkgconfig(ogg)
 BuildRequires:	pkgconfig(speexdsp)
 Patch0:		speex-1.2.0-guard-against-invalid-channel-numbers.patch
+# oreon url source checksums begin
+%global source0_sha256 eaae8af0ac742dc7d542c9439ac72f1f385ce838392dc849cae4536af9210094
+%global source0_file speex-1.2.0.tar.gz
+# oreon url source checksums end
 
 %description
 Speex is a patent-free compression format designed especially for
@@ -35,6 +39,9 @@ Speex is a patent-free compression format designed especially for
 speech. This package contains tools files and user's manual for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/speex-1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "eaae8af0ac742dc7d542c9439ac72f1f385ce838392dc849cae4536af9210094" || { echo "oreon: Source0 SHA256 mismatch for speex-1.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b.CVE-2020-23903
 

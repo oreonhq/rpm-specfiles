@@ -14,6 +14,10 @@ URL:            https://metacpan.org/release/Net-CalDAVTalk
 Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-CalDAVTalk-%{version}.tar.gz
 # Fix using Data::Dumper, CPAN RT#123646
 Patch0:         Net-CalDAVTalk-0.12-Load-Data-Dumper.patch
+# oreon url source checksums begin
+%global source0_sha256 0db62283742617ef80d9f19705a034dc639840d87296b4cd6a7f082ce88dad6a
+%global source0_file Net-CalDAVTalk-0.12.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -81,6 +85,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Net-CalDAVTalk-0.12.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0db62283742617ef80d9f19705a034dc639840d87296b4cd6a7f082ce88dad6a" || { echo "oreon: Source0 SHA256 mismatch for Net-CalDAVTalk-0.12.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Net-CalDAVTalk-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

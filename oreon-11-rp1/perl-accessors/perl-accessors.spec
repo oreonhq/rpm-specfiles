@@ -5,6 +5,10 @@ Summary:        Create accessor methods in caller's package
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/accessors
 Source0:        https://cpan.metacpan.org/authors/id/S/SP/SPURKIS/accessors-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3a8db00f38148f3afadbe5330dc5490d9933f9cae137e842ec225a4d3adb2d9f
+%global source0_file accessors-1.01.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -31,6 +35,9 @@ BuildRequires:  perl(Test::More) >= 0.01
 The accessors pragma lets you create simple accessors at compile-time.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/accessors-1.01.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3a8db00f38148f3afadbe5330dc5490d9933f9cae137e842ec225a4d3adb2d9f" || { echo "oreon: Source0 SHA256 mismatch for accessors-1.01.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n accessors-%{version}
 
 # A few of the .pm modules have bogus execute permission

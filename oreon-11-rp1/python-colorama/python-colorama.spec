@@ -7,7 +7,11 @@ Summary:        Cross-platform colored terminal text
 
 License:        BSD-3-Clause
 URL:            https://github.com/tartley/colorama
-Source0:        %{url}/archive/%{version}/colorama-%{version}.tar.gz
+Source0:        https://github.com/tartley/colorama/archive/0.4.6/colorama-0.4.6.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2d0543c3970840160b32656ab83d43b7f3533208c2c5f3ee5b839940d00af0bd
+%global source0_file colorama-0.4.6.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
@@ -41,6 +45,9 @@ in conjunction with any other ANSI sequence generation library, such as
 Termcolor.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/colorama-0.4.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2d0543c3970840160b32656ab83d43b7f3533208c2c5f3ee5b839940d00af0bd" || { echo "oreon: Source0 SHA256 mismatch for colorama-0.4.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires

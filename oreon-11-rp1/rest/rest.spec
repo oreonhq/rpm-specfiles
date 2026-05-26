@@ -6,6 +6,10 @@ Summary:       A library for access to RESTful web services
 License:       LGPL-2.1-only
 URL:           https://gitlab.gnome.org/GNOME/librest
 Source0:       https://download.gnome.org/sources/librest/0.10/librest-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 7b6cb912bb3a22cfa7dcf005925dcb62883024db0c09099486e7d6851185c9b8
+%global source0_file librest-0.10.2.tar.xz
+# oreon url source checksums end
 
 BuildRequires: meson
 BuildRequires: pkgconfig(glib-2.0)
@@ -46,6 +50,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Demo application for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/librest-0.10.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b6cb912bb3a22cfa7dcf005925dcb62883024db0c09099486e7d6851185c9b8" || { echo "oreon: Source0 SHA256 mismatch for librest-0.10.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n librest-%{version} -S gendiff
 
 %build

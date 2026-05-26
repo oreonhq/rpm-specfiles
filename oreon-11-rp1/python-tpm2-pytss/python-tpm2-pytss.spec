@@ -19,6 +19,10 @@ Patch3:         %{name}-gcc15.patch
 # cryptography >= 45.0.0 requires the copy dunder for private key implementations.
 # https://github.com/tpm2-software/tpm2-pytss/commit/6ab4c74e6fb3da7cd38e97c1f8e92532312f8439
 Patch4:         %{name}-copy-dunder.patch
+# oreon url source checksums begin
+%global source0_sha256 20071129379656f5f3c3bc16d364612672b147d81191fb4eb9f9ff9fbee48410
+%global source0_file tpm2-pytss-2.3.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
@@ -49,6 +53,9 @@ Summary:        %{summary}
 %description -n python3-%{pypi_name} %{_description}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tpm2-pytss-2.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "20071129379656f5f3c3bc16d364612672b147d81191fb4eb9f9ff9fbee48410" || { echo "oreon: Source0 SHA256 mismatch for tpm2-pytss-2.3.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{pypi_name}-%{version}
 
 %generate_buildrequires

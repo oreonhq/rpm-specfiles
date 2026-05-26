@@ -23,6 +23,10 @@ Source0:	http://downloads.sourceforge.net/mecab/%{name}-%{majorver}-%{date}.tar.
 #Source2:	http://www.icot.or.jp/ARCHIVE/terms-and-conditions-for-IFS-J.html
 Source2:	http://www.jipdec.or.jp/icot/ARCHIVE/terms-and-conditions-for-IFS-J.html
 Source3:	LICENSE.Fedora
+# oreon url source checksums begin
+%global source0_sha256 b62f527d881c504576baed9c6ef6561554658b175ce6ae0096a60307e49e3523
+%global source0_file mecab-ipadic-2.7.0-20070801.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:	mecab-devel >= %{mecabver}
@@ -44,6 +48,9 @@ based on IPA corpus.
 This dictionary is for EUC-JP use.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mecab-ipadic-2.7.0-20070801.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b62f527d881c504576baed9c6ef6561554658b175ce6ae0096a60307e49e3523" || { echo "oreon: Source0 SHA256 mismatch for mecab-ipadic-2.7.0-20070801.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{majorver}-%{date}
 
 %build

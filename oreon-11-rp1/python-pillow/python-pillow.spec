@@ -28,6 +28,10 @@ Source0:        https://github.com/python-pillow/Pillow/archive/%{version}/Pillo
 
 # MinGW build fixes
 Patch0:         pillow_mingw.patch
+# oreon url source checksums begin
+%global source0_sha256 d29fefc0ba637833b59cafc7649e1237186741c31b210178b0a4e9cd9e01ffdf
+%global source0_file Pillow-12.1.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  freetype-devel
 BuildRequires:  gcc
@@ -187,6 +191,9 @@ MinGW Windows Python2 %{srcname} library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Pillow-12.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d29fefc0ba637833b59cafc7649e1237186741c31b210178b0a4e9cd9e01ffdf" || { echo "oreon: Source0 SHA256 mismatch for Pillow-12.1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n Pillow-%{version}
 
 

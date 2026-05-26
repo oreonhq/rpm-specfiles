@@ -15,6 +15,10 @@ Summary:        Read multiple hunks of data out of your DATA section
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-Section
 Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Data-Section-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 83acc7a55d3dd7ed36e9d78d350af3138c69cfa178a44765822712ff433b990e
+%global source0_file Data-Section-0.200008.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -51,6 +55,9 @@ line-oriented data in your module's DATA section. It was written to allow
 modules to store their own templates, but probably has other uses.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Data-Section-0.200008.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "83acc7a55d3dd7ed36e9d78d350af3138c69cfa178a44765822712ff433b990e" || { echo "oreon: Source0 SHA256 mismatch for Data-Section-0.200008.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Data-Section-%{version}
 
 %build

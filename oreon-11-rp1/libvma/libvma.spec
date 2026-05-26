@@ -14,6 +14,10 @@ Summary: A library for boosting TCP and UDP traffic (over RDMA hardware)
 License: GPL-2.0-only OR BSD-2-Clause
 Url: https://github.com/Mellanox/libvma
 Source0: https://github.com/Mellanox/libvma/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6d3967b87f300e18b3f4771387e1fdf0ef8f6b860a1b3b34c73d337c33eb4118
+%global source0_file libvma-9.8.84.tar.gz
+# oreon url source checksums end
 
 # libvma currently supports only the following architectures
 ExclusiveArch: x86_64 ppc64le ppc64 aarch64
@@ -56,6 +60,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 This package contains the tool for collecting and analyzing libvma statistic.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libvma-9.8.84.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6d3967b87f300e18b3f4771387e1fdf0ef8f6b860a1b3b34c73d337c33eb4118" || { echo "oreon: Source0 SHA256 mismatch for libvma-9.8.84.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

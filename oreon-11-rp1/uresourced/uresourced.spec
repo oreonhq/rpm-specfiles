@@ -5,7 +5,11 @@ Summary:        Dynamically allocate resources to the active user
 
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.freedesktop.org/benzea/uresourced
-Source0:        %{url}/-/archive/v%{version}/%{name}-v%{version}.tar.bz2
+Source0:        https://gitlab.freedesktop.org/benzea/uresourced/-/archive/v0.5.4/uresourced-v0.5.4.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 4c3b586bcd51f4221c80790c23c6560a3c48ff7b11fe0f2a5c98f33b9da615a3
+%global source0_file uresourced-v0.5.4.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -22,6 +26,9 @@ using systemd (e.g. GNOME), then the memory allocation will be used
 to protect the sessions core processes (session.slice).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/uresourced-v0.5.4.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4c3b586bcd51f4221c80790c23c6560a3c48ff7b11fe0f2a5c98f33b9da615a3" || { echo "oreon: Source0 SHA256 mismatch for uresourced-v0.5.4.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-v%{version} -p1
 
 %build

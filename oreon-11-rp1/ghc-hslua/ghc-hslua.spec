@@ -38,6 +38,24 @@ Source5:        https://hackage.haskell.org/package/%{hsluaobjectorientation}/%{
 Source6:        https://hackage.haskell.org/package/%{hsluapackaging}/%{hsluapackaging}.tar.gz
 Source7:        https://hackage.haskell.org/package/%{hsluatyping}/%{hsluatyping}.tar.gz
 Source8:        https://hackage.haskell.org/package/%{lua_hs}/%{lua_hs}.tar.gz
+# oreon url source checksums begin
+%global source1_sha256 b94661c55e9ef54ea1a789faa662c995a9ae643f97c408bb840b970e110298d0
+%global source1_file hslua-aeson-2.3.2.tar.gz
+%global source2_sha256 fbb0449a9fededd73e48c01088bd76e9cdebfe438511576c0e5cfc17ebd6867a
+%global source2_file hslua-classes-2.3.2.tar.gz
+%global source3_sha256 681672f798cd0211c901a038742cb300927b8631f1352c2d3d496c1ee9fd4eab
+%global source3_file hslua-core-2.3.2.1.tar.gz
+%global source4_sha256 1507f5514ac875235c2830796f8c9767d7b27e6e99bf54908a64a038140833ca
+%global source4_file hslua-marshalling-2.3.2.tar.gz
+%global source5_sha256 1824b71160f2c545277b6f29f0dbde3da1a223c70406d5466c9c4c91198e7dab
+%global source5_file hslua-objectorientation-2.3.1.tar.gz
+%global source6_sha256 36dcaed69a9f7a3fc4adb4e1c7a063774b6b75d7c02ad2c1ec04035cc1572173
+%global source6_file hslua-packaging-2.3.1.tar.gz
+%global source7_sha256 449ac7b351b71a64fcc68f2dbbe16a222ccd8d14d2b53c9459ad44ed4f7a094c
+%global source7_file hslua-typing-0.1.1.tar.gz
+%global source8_sha256 54ec77f216459e72e3e1160da3433fc8af5d9e66a94805642bd79d41edbc52fe
+%global source8_file lua-2.3.4.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -149,6 +167,16 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hslua-aeson-2.3.2.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b94661c55e9ef54ea1a789faa662c995a9ae643f97c408bb840b970e110298d0" || { echo "oreon: Source1 SHA256 mismatch for hslua-aeson-2.3.2.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/hslua-classes-2.3.2.tar.gz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fbb0449a9fededd73e48c01088bd76e9cdebfe438511576c0e5cfc17ebd6867a" || { echo "oreon: Source2 SHA256 mismatch for hslua-classes-2.3.2.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/hslua-core-2.3.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "681672f798cd0211c901a038742cb300927b8631f1352c2d3d496c1ee9fd4eab" || { echo "oreon: Source3 SHA256 mismatch for hslua-core-2.3.2.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/hslua-marshalling-2.3.2.tar.gz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1507f5514ac875235c2830796f8c9767d7b27e6e99bf54908a64a038140833ca" || { echo "oreon: Source4 SHA256 mismatch for hslua-marshalling-2.3.2.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/hslua-objectorientation-2.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1824b71160f2c545277b6f29f0dbde3da1a223c70406d5466c9c4c91198e7dab" || { echo "oreon: Source5 SHA256 mismatch for hslua-objectorientation-2.3.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/hslua-packaging-2.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "36dcaed69a9f7a3fc4adb4e1c7a063774b6b75d7c02ad2c1ec04035cc1572173" || { echo "oreon: Source6 SHA256 mismatch for hslua-packaging-2.3.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/hslua-typing-0.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "449ac7b351b71a64fcc68f2dbbe16a222ccd8d14d2b53c9459ad44ed4f7a094c" || { echo "oreon: Source7 SHA256 mismatch for hslua-typing-0.1.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/lua-2.3.4.tar.gz; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "54ec77f216459e72e3e1160da3433fc8af5d9e66a94805642bd79d41edbc52fe" || { echo "oreon: Source8 SHA256 mismatch for lua-2.3.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver} -a1 -a2 -a3 -a4 -a5 -a6 -a7 -a8
 # End cabal-rpm setup

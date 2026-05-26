@@ -5,6 +5,10 @@ Summary:    New Zhuyin engine based on libzhuyin for IBus
 License:    GPL-2.0-or-later
 URL:        https://github.com/libzhuyin/ibus-libzhuyin
 Source0:    http://downloads.sourceforge.net/libzhuyin/ibus-libzhuyin/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c21a3e1d7a8d9e6357f5ed0e3246111868b3fda04fcbb8cc726dab2d6363f265
+%global source0_file ibus-libzhuyin-1.10.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  gettext-devel
@@ -29,6 +33,9 @@ It includes a Chinese Zhuyin (Bopomofo) input method
 based on libzhuyin for IBus.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ibus-libzhuyin-1.10.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c21a3e1d7a8d9e6357f5ed0e3246111868b3fda04fcbb8cc726dab2d6363f265" || { echo "oreon: Source0 SHA256 mismatch for ibus-libzhuyin-1.10.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

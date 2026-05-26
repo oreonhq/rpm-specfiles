@@ -9,6 +9,10 @@ Release: 5%{?dist}
 License: MIT
 URL: http://www.x.org
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 7b02c3d405236e0d86806b1de9d6868fe60c313628b38350b032914aa4fd14c6
+%global source0_file libfontenc-1.1.8.tar.xz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: libtool
@@ -29,6 +33,9 @@ Requires: %{name} = %{version}-%{release}
 X.Org X11 libfontenc development package
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libfontenc-1.1.8.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b02c3d405236e0d86806b1de9d6868fe60c313628b38350b032914aa4fd14c6" || { echo "oreon: Source0 SHA256 mismatch for libfontenc-1.1.8.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

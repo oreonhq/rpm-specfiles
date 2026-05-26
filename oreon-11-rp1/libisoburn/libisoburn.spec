@@ -16,6 +16,10 @@ Source2:         https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB00
 Source3:         xorriso_extract_iso_image.desktop
 Patch0:          libisoburn-1.0.8-multilib.patch
 Patch1:          libisoburn-1.5.4-rpath.patch
+# oreon url source checksums begin
+%global source0_sha256 2b80a6f73dd633a5d243facbe97a15e5c9a07644a5e1a242c219b9375a45f71b
+%global source0_file libisoburn-1.5.6.tar.gz
+# oreon url source checksums end
 BuildRequires:   gnupg2
 BuildRequires:   gcc, gcc-c++, make, readline-devel, libacl-devel, zlib-devel
 %if 0%{?rhel} == 7
@@ -94,6 +98,9 @@ supported media: CD-R, CD-RW, DVD-R, DVD-RW, DVD+R, DVD+R DL, DVD+RW,
 DVD-RAM, BD-R and BD-RE.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libisoburn-1.5.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2b80a6f73dd633a5d243facbe97a15e5c9a07644a5e1a242c219b9375a45f71b" || { echo "oreon: Source0 SHA256 mismatch for libisoburn-1.5.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -n %{pkgname}-%{version}
 

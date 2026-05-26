@@ -18,7 +18,12 @@ Release:        2%{?dist}
 Summary:        MIME types module for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/MIME-Types
-Source0:        https://cpan.metacpan.org/modules/by-module/MIME/MIME-Types-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARKOV/MIME-Types-2.30.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f31b1666bdf420b4b65c373ce0129ee349dd24bab4cd16c7f01b698fe450be6f
+%global source0_file MIME-Types-2.30.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -76,6 +81,9 @@ contain useful information.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/MIME-Types-2.30.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f31b1666bdf420b4b65c373ce0129ee349dd24bab4cd16c7f01b698fe450be6f" || { echo "oreon: Source0 SHA256 mismatch for MIME-Types-2.30.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n MIME-Types-%{version}
 
 %build

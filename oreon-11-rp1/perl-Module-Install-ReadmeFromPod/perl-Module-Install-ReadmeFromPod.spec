@@ -21,6 +21,10 @@ Patch0:         Module-Install-ReadmeFromPod-0.26-Regenerate-README-in-UTF-8.pat
 Patch1:         Module-Install-ReadmeFromPod-0.30-Do-not-test-PDF-file-for-new-lines.patch
 # Avoid an unnecessary development dependency
 Patch2:         Module-Install-ReadmeFromPod-0.30-Test-InDistDir.patch
+# oreon url source checksums begin
+%global source0_sha256 79f6df5536619faffbda696bdd25ccad17c469bf32e51cd3e613366d49400169
+%global source0_file Module-Install-ReadmeFromPod-0.30.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -82,6 +86,9 @@ POD, whenever the author runs Makefile.PL. Several output formats are
 supported: plain-text, HTML, PDF or manual page.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Install-ReadmeFromPod-0.30.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "79f6df5536619faffbda696bdd25ccad17c469bf32e51cd3e613366d49400169" || { echo "oreon: Source0 SHA256 mismatch for Module-Install-ReadmeFromPod-0.30.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Install-ReadmeFromPod-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

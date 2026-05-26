@@ -5,6 +5,10 @@ Release:	4%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/MailTools
 Source0:	https://cpan.metacpan.org/authors/id/M/MA/MARKOV/MailTools-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3bf68bb212298fa699a52749dddff35583a74f36a92ca89c843b854f29d87c77
+%global source0_file MailTools-2.22.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -40,6 +44,9 @@ Requires:	perl(Net::NNTP)
 MailTools is a set of ancient Perl modules related to mail applications.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/MailTools-2.22.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3bf68bb212298fa699a52749dddff35583a74f36a92ca89c843b854f29d87c77" || { echo "oreon: Source0 SHA256 mismatch for MailTools-2.22.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n MailTools-%{version}
 
 # Set up example scripts

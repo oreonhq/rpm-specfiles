@@ -5,7 +5,11 @@ Summary:        Vulkan ICD desktop loader
 
 License:        Apache-2.0
 URL:            https://github.com/KhronosGroup/Vulkan-Loader
-Source0:        %url/archive/vulkan-sdk-%{version}.tar.gz#/Vulkan-Loader-sdk-%{version}.tar.gz
+Source0:        https://github.com/KhronosGroup/Vulkan-Loader/archive/vulkan-sdk-1.4.341.0.tar.gz#/Vulkan-Loader-sdk-1.4.341.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 fe982697c780a950641bfcf94707135c26c501352242d285fa95d087d691292e
+%global source0_file vulkan-sdk-1.4.341.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -46,6 +50,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vulkan-sdk-1.4.341.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fe982697c780a950641bfcf94707135c26c501352242d285fa95d087d691292e" || { echo "oreon: Source0 SHA256 mismatch for vulkan-sdk-1.4.341.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n Vulkan-Loader-vulkan-sdk-%{version}
 
 

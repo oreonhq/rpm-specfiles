@@ -5,6 +5,10 @@ Release:	3%{?dist}
 License:	LGPL-2.1-or-later
 URL:		https://github.com/libhangul/libhangul
 Source0:	https://github.com/libhangul/libhangul/releases/download/libhangul-%{version}/libhangul-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ea04e6a0cf4840a2a3b5641c1761068c78691036db839d0838f4e7a6553a5120
+%global source0_file libhangul-0.2.0.tar.gz
+# oreon url source checksums end
 
 Summary:	Hangul input library
 BuildRequires:	  gettext-devel, automake, libtool
@@ -25,6 +29,9 @@ providing Hangul input.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libhangul-0.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ea04e6a0cf4840a2a3b5641c1761068c78691036db839d0838f4e7a6553a5120" || { echo "oreon: Source0 SHA256 mismatch for libhangul-0.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

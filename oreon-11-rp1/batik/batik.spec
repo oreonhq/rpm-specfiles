@@ -9,6 +9,10 @@ License:        Apache-2.0 AND W3C
 URL:            https://xmlgraphics.apache.org/batik/
 Source0:        http://archive.apache.org/dist/xmlgraphics/batik/source/batik-src-%{version}.zip
 Source1:        %{name}-security.policy
+# oreon url source checksums begin
+%global source0_sha256 285caa875a814c2554961f3e5a8a4fde0322afd3894c9dcd9d3a49669cf68ea5
+%global source0_file batik-src-1.19.zip
+# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -114,6 +118,9 @@ Demonstrations and samples for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/batik-src-1.19.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "285caa875a814c2554961f3e5a8a4fde0322afd3894c9dcd9d3a49669cf68ea5" || { echo "oreon: Source0 SHA256 mismatch for batik-src-1.19.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 
 find -name '*.class' -exec rm -f '{}' \;

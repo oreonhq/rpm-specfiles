@@ -38,6 +38,10 @@ BuildRequires:    libtool
 #Patch000: example000.patch
 # https://git.ghostscript.com/?p=ghostpdl.git;a=commitdiff;h=eb770edd1c
 Patch: 0001-Squash-compiler-warning-in-ijs-code.patch
+# oreon url source checksums begin
+%global source0_sha256 a8e3d10f5c4dd307655a7b6ff4002aeb827c44ba5ec41e99c6c46edfcf07aecc
+%global source0_file 0.35.tar.gz
+# oreon url source checksums end
 
 
 # Downstream patches -- these should be always included when doing rebase:
@@ -91,6 +95,9 @@ which is useful for development purposes only.
 # We have to override the folder name, because upstream's archive cotains the
 # name 'ijs' (not 'libijs')...
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/0.35.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a8e3d10f5c4dd307655a7b6ff4002aeb827c44ba5ec41e99c6c46edfcf07aecc" || { echo "oreon: Source0 SHA256 mismatch for 0.35.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n ijs-%{version} -S git
 
 # ---------------

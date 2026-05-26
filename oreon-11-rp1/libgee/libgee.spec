@@ -6,6 +6,10 @@ Summary:        GObject collection library
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/Libgee
 Source0:        https://download.gnome.org/sources/libgee/0.20/libgee-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 189815ac143d89867193b0c52b7dc31f3aa108a15f04d6b5dca2b6adfad0b0ee
+%global source0_file libgee-0.20.8.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
@@ -61,6 +65,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libgee-0.20.8.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "189815ac143d89867193b0c52b7dc31f3aa108a15f04d6b5dca2b6adfad0b0ee" || { echo "oreon: Source0 SHA256 mismatch for libgee-0.20.8.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 find -name '*.vala' -exec touch {} \;
 

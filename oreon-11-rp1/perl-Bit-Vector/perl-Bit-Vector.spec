@@ -8,6 +8,10 @@ License:        ( GPL-2.0-or-later OR Artistic-1.0-Perl ) AND LGPL-2.0-or-later
 URL:            https://metacpan.org/release/Bit-Vector
 Source0:        https://cpan.metacpan.org/authors/id/S/ST/STBEY/Bit-Vector-%{version}.tar.gz
 Patch0:         0001-Fix-bool-detection.patch
+# oreon url source checksums begin
+%global source0_sha256 3c6daa671fecfbc35f92a9385b563d65f50dfc6bdc8b4805f9ef46c0d035a926
+%global source0_file Bit-Vector-7.4.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -52,6 +56,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Bit-Vector-7.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3c6daa671fecfbc35f92a9385b563d65f50dfc6bdc8b4805f9ef46c0d035a926" || { echo "oreon: Source0 SHA256 mismatch for Bit-Vector-7.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Bit-Vector-%{version} 
 %patch -P0 -p1
 chmod -c 644 examples/*.pl

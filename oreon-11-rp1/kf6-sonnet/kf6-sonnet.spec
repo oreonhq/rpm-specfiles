@@ -16,6 +16,10 @@ Source1:	https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{f
 # patch out default excluded file list to have it empty
 # https://bugs.kde.org/show_bug.cgi?id=482376
 Patch0:		sonnet6-default-list.patch
+# oreon url source checksums begin
+%global source0_sha256 f5f107bd4d154c93bbacc717ec3411bcebce3513df103945e202ffa1f0ee9ae7
+%global source0_file sonnet-6.24.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	appstream
 BuildRequires:	extra-cmake-modules >= %{version}
@@ -85,6 +89,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sonnet-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f5f107bd4d154c93bbacc717ec3411bcebce3513df103945e202ffa1f0ee9ae7" || { echo "oreon: Source0 SHA256 mismatch for sonnet-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 %build

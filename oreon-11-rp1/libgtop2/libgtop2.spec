@@ -6,6 +6,10 @@ Summary:        LibGTop library (version 2)
 License:        GPL-2.0-or-later
 URL:            https://download.gnome.org/sources/libgtop
 Source0:        https://download.gnome.org/sources/libgtop/2.41/libgtop-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 775676df958e2ea2452f7568f28b2ea581063d312773dd5c0b7624c1b9b2da8c
+%global source0_file libgtop-2.41.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  pkgconfig(gobject-2.0)
 BuildRequires:  pkgconfig(gobject-introspection-1.0)
@@ -25,6 +29,9 @@ This package provides the necessary development libraries and include
 files to allow you to develop with LibGTop.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libgtop-2.41.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "775676df958e2ea2452f7568f28b2ea581063d312773dd5c0b7624c1b9b2da8c" || { echo "oreon: Source0 SHA256 mismatch for libgtop-2.41.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n libgtop-%{version}
 
 %build

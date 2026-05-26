@@ -6,6 +6,10 @@ Summary:        Typesafe signal framework for C++
 License:        LGPL-2.1-or-later
 URL:            https://github.com/libsigcplusplus/libsigcplusplus
 Source0:        https://github.com/libsigcplusplus/libsigcplusplus/releases/download/%{version}/libsigc++-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 a9dbee323351d109b7aee074a9cb89ca3e7bcf8ad8edef1851f4cf359bd50843
+%global source0_file libsigc++-2.12.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  docbook-style-xsl
 BuildRequires:  doxygen
@@ -45,6 +49,9 @@ This package contains the full API documentation for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libsigc++-2.12.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a9dbee323351d109b7aee074a9cb89ca3e7bcf8ad8edef1851f4cf359bd50843" || { echo "oreon: Source0 SHA256 mismatch for libsigc++-2.12.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n libsigc++-%{version}
 
 chmod -x NEWS

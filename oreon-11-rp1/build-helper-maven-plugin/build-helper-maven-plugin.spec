@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/build-helper-maven-plugin/%{version}/build-helper-maven-plugin-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 9f79c0c19597b832e7a7a3dcf4252f1808405dffde96b6ae34cf936df160c525
+%global source0_file build-helper-maven-plugin-3.6.1-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -35,6 +39,9 @@ This plugin contains various small independent goals to assist with
 Maven build lifecycle.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/build-helper-maven-plugin-3.6.1-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9f79c0c19597b832e7a7a3dcf4252f1808405dffde96b6ae34cf936df160c525" || { echo "oreon: Source0 SHA256 mismatch for build-helper-maven-plugin-3.6.1-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %pom_add_dep junit:junit::test

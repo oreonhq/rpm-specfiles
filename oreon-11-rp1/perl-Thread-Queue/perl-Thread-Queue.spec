@@ -8,6 +8,10 @@ URL:            https://metacpan.org/release/Thread-Queue
 Source0:        https://cpan.metacpan.org/authors/id/J/JD/JDHEDDEN/Thread-Queue-%{base_version}.tar.gz
 # Unbundled from perl 5.32.0
 Patch0:         Thread-Queue-3.13-Upgrade-to-3.14.patch
+# oreon url source checksums begin
+%global source0_sha256 6ba3dacddd2fbb66822b4aa1d11a0a5273cd04c825cb3ff31c20d7037cbfdce8
+%global source0_file Thread-Queue-3.13.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -45,6 +49,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Thread-Queue-3.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6ba3dacddd2fbb66822b4aa1d11a0a5273cd04c825cb3ff31c20d7037cbfdce8" || { echo "oreon: Source0 SHA256 mismatch for Thread-Queue-3.13.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Thread-Queue-%{base_version}
 %patch -P0 -p1
 # Correct shell bang

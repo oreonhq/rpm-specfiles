@@ -5,6 +5,10 @@ Summary:        Experimental features made easy
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/experimental
 Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/experimental-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 42612937c20f0c758547d0519bf535d7f378aa2a01fb20453b2a015a14d6720c
+%global source0_file experimental-0.036.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -38,6 +42,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/experimental-0.036.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "42612937c20f0c758547d0519bf535d7f378aa2a01fb20453b2a015a14d6720c" || { echo "oreon: Source0 SHA256 mismatch for experimental-0.036.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n experimental-%{version}
 
 # Help file to recognise the Perl scripts

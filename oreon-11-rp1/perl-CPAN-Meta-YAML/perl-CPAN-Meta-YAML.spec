@@ -18,7 +18,12 @@ Release:	522%{?dist}
 Summary:	Read and write a subset of YAML for CPAN Meta files
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/CPAN-Meta-YAML
-Source0:	https://www.cpan.org/modules/by-module/CPAN/CPAN-Meta-YAML-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/CPAN-Meta-YAML-0.020.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 36c45e0e954fb6d9e4b71ce3da4a244157439969a3af12c515909d7d6c053b2c
+%global source0_file CPAN-Meta-YAML-0.020.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Build:
 BuildRequires:	coreutils
@@ -70,6 +75,9 @@ and writing CPAN metadata files like META.yml and MYMETA.yml. It should not be
 used for any other general YAML parsing or generation task.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/CPAN-Meta-YAML-0.020.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "36c45e0e954fb6d9e4b71ce3da4a244157439969a3af12c515909d7d6c053b2c" || { echo "oreon: Source0 SHA256 mismatch for CPAN-Meta-YAML-0.020.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n CPAN-Meta-YAML-%{version}
 
 %build

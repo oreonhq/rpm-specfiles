@@ -6,8 +6,12 @@ Summary:        Lotus Sametime Community Client library
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://github.com/obriencj/%{name}
 
-Source:         %{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source:        https://github.com/obriencj/meanwhile/archive/refs/tags/v1.1.1.tar.gz#/meanwhile-1.1.1.tar.gz
 Patch0:         %{name}-file-transfer.patch
+# oreon url source checksums begin
+%global source0_sha256 10de306f03897572b30ce68ca80dffd04ec218f6842bbe0a47bb8cce933698d0
+%global source0_file v1.1.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -42,6 +46,9 @@ BuildArch:      noarch
 Documentation for the %{name} library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "10de306f03897572b30ce68ca80dffd04ec218f6842bbe0a47bb8cce933698d0" || { echo "oreon: Source0 SHA256 mismatch for v1.1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

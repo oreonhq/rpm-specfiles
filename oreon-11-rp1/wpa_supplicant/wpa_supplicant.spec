@@ -51,6 +51,10 @@ Patch11: wpa_supplicant-Send-signal-change-as-debug-msg.patch
 Patch12: wpa_supplicant-OpenSSL-Use-pkcs11-provider-when-OPENSSL_NO_ENGINE-i.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2439303
 Patch13: wpa_supplicant-OpenSSL-Support-PEM-encoded-chain-from-ca_cert-blob.patch
+# oreon url source checksums begin
+%global source0_sha256 912ea06f74e30a8e36fbb68064d6cdff218d8d591db0fc5d75dee6c81ac7fc0a
+%global source0_file wpa_supplicant-2.11.tar.gz
+# oreon url source checksums end
 
 URL: http://w1.fi/wpa_supplicant/
 
@@ -101,6 +105,9 @@ Graphical User Interface for wpa_supplicant written using QT
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/wpa_supplicant-2.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "912ea06f74e30a8e36fbb68064d6cdff218d8d591db0fc5d75dee6c81ac7fc0a" || { echo "oreon: Source0 SHA256 mismatch for wpa_supplicant-2.11.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}
 
 

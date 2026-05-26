@@ -4,8 +4,12 @@ Release:	22%{?dist}
 Summary:	A library for registering global keyboard shortcuts
 License:	MIT
 URL:		https://github.com/kupferlauncher/keybinder
-Source0:	%{url}/releases/download/keybinder-3.0-v%{version}/keybinder-3.0-%{version}.tar.gz
-Patch0:     %{url}/pull/18.patch#/fix_gtkdoc.patch
+Source0:        https://github.com/kupferlauncher/keybinder/releases/download/keybinder-3.0-v0.3.2/keybinder-3.0-0.3.2.tar.gz
+Patch0:        https://github.com/kupferlauncher/keybinder/pull/18.patch#/fix_gtkdoc.patch
+# oreon url source checksums begin
+%global source0_sha256 e6e3de4e1f3b201814a956ab8f16dfc8a262db1937ff1eee4d855365398c6020
+%global source0_file keybinder-3.0-0.3.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	pkgconfig(gtk+-3.0), gtk-doc, gobject-introspection-devel
 BuildRequires: make
@@ -33,6 +37,9 @@ Requires: devhelp
 This package contains documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/keybinder-3.0-0.3.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e6e3de4e1f3b201814a956ab8f16dfc8a262db1937ff1eee4d855365398c6020" || { echo "oreon: Source0 SHA256 mismatch for keybinder-3.0-0.3.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n keybinder-3.0-%{version}
 
 %build

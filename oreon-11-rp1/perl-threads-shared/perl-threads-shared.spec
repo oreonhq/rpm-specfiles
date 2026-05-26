@@ -24,6 +24,10 @@ Patch5:         threads-shared-1.64-Upgrade-to-1.68.patch
 Patch6:         threads-shared-1.68-Upgrade-to-1.69.patch
 # Unbundled from perl 5.42.0
 Patch7:         threads-shared-1.69-Upgrade-to-1.70.patch
+# oreon url source checksums begin
+%global source0_sha256 d1fc985e70e1e1dd53c2b9b07cf0d3bd526b4f404ef1c4a0033feaa167323fcf
+%global source0_file threads-shared-1.59.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -75,6 +79,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/threads-shared-1.59.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d1fc985e70e1e1dd53c2b9b07cf0d3bd526b4f404ef1c4a0033feaa167323fcf" || { echo "oreon: Source0 SHA256 mismatch for threads-shared-1.59.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n threads-shared-%{base_version}
 
 # Generate ppport.h

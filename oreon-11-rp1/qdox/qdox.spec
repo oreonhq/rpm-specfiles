@@ -10,7 +10,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/paul-hammant/qdox/archive/refs/tags/v2.1.0.tar.gz
 Source1:        qdox-MANIFEST.MF
 # Remove bundled binaries which are possibly proprietary
 Source2:        generate-tarball.sh

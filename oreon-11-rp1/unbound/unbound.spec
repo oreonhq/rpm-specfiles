@@ -45,7 +45,7 @@ Release: %autorelease %{?extra_version:-e %{extra_version}}
 License: BSD-3-Clause
 Url: https://nlnetlabs.nl/projects/unbound/
 VCS: git:%{forgeurl0}
-Source: %{downloads}/%{name}/%{name}-%{version}%{?extra_version}.tar.gz
+Source:        https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2%{?extra_version}.tar.gz
 Source1: unbound.service
 Source3: unbound.munin
 Source4: unbound_munin_
@@ -60,7 +60,7 @@ Source14: unbound.sysconfig
 Source15: unbound-anchor.timer
 Source16: unbound-munin.README
 Source17: unbound-anchor.service
-Source18: %{downloads}/%{name}/%{name}-%{version}%{?extra_version}.tar.gz.asc
+Source18:        https://nlnetlabs.nl/downloads/unbound/unbound-1.24.2%{?extra_version}.tar.gz.asc
 # https://nlnetlabs.nl/signing-keys/
 Source19: https://nlnetlabs.nl/downloads/keys/releases-g2.asc#/nlnetlabs2026-g2.asc
 Source20: unbound.sysusers
@@ -82,9 +82,9 @@ Patch2:   unbound-1.24-swig-function.patch
 # https://github.com/NLnetLabs/unbound/pull/1381
 Patch3:   unbound-1.24-quic-on-demand-only.patch
 # https://github.com/NLnetLabs/unbound/pull/1349
-Patch4:   %{forgeurl0}/pull/1349.patch#/unbound-1.25-tls-crypto-policy.patch
+Patch4:        https://github.com/NLnetLabs/unbound/pull/1349.patch#/unbound-1.25-tls-crypto-policy.patch
 # https://github.com/NLnetLabs/unbound/pull/1401
-Patch5:   %{forgeurl0}/pull/1401.patch#/unbound-1.25-tls-crypto-policy-default.patch
+Patch5:        https://github.com/NLnetLabs/unbound/pull/1401.patch#/unbound-1.25-tls-crypto-policy-default.patch
 
 BuildRequires: gcc
 BuildRequires: make

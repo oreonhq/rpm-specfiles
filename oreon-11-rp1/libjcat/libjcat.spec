@@ -8,6 +8,10 @@ Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/hughsie/%{name}
 Source0:   https://github.com/hughsie/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 066e402168c51bffddcf325190e5901402b266fbda2a4eed772fd06a88b941bf
+%global source0_file libjcat-0.2.5.tar.xz
+# oreon url source checksums end
 
 BuildRequires: gtk-doc
 BuildRequires: meson
@@ -42,6 +46,9 @@ Summary: Files for installed tests
 Executable and data files for installed tests.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libjcat-0.2.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "066e402168c51bffddcf325190e5901402b266fbda2a4eed772fd06a88b941bf" || { echo "oreon: Source0 SHA256 mismatch for libjcat-0.2.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p0
 
 %build

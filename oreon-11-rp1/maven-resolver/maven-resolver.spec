@@ -14,6 +14,10 @@ Source0:        https://archive.apache.org/dist/maven/resolver/maven-resolver-%{
 
 Patch:          0001-Remove-use-of-deprecated-SHA-1-and-MD5-algorithms.patch
 Patch:          0002-Make-I-O-errors-during-test-cleanup-non-fatal.patch
+# oreon url source checksums begin
+%global source0_sha256 7243dd525200ff0335cdae96721369d222432b175a83a62f8370184102b18b4c
+%global source0_file maven-resolver-1.9.24-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -63,6 +67,9 @@ specification of local repository, remote repository, developer workspaces,
 artifact transports and artifact resolution.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-resolver-1.9.24-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7243dd525200ff0335cdae96721369d222432b175a83a62f8370184102b18b4c" || { echo "oreon: Source0 SHA256 mismatch for maven-resolver-1.9.24-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Skip tests that equire internet connection

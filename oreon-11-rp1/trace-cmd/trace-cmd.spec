@@ -21,6 +21,10 @@ Source0: https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/t
 Source1: trace-cmd.conf
 Source2: trace-cmd.service
 Source3: 98-trace-cmd.rules
+# oreon url source checksums begin
+%global source0_sha256 2efe103389367e93c764c4a788880ba51018a65dec21b0411965a5f06a6338c1
+%global source0_file trace-cmd-v3.3.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc
@@ -52,6 +56,9 @@ BuildRequires: python3-devel
 Python plugin support for trace-cmd
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/trace-cmd-v3.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2efe103389367e93c764c4a788880ba51018a65dec21b0411965a5f06a6338c1" || { echo "oreon: Source0 SHA256 mismatch for trace-cmd-v3.3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-v%{srcversion}
 cp %{SOURCE1} .
 cp %{SOURCE2} .

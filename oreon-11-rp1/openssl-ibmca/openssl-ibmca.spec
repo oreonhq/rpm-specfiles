@@ -7,6 +7,10 @@ Release: 3%{?dist}
 License: Apache-2.0
 URL: https://github.com/opencryptoki
 Source0: https://github.com/opencryptoki/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5903c029ef3fc98e17e4209450df554819ceee548b3a6eeb6d55983a1d55843c
+%global source0_file openssl-ibmca-2.5.0.tar.gz
+# oreon url source checksums end
 # post GA fixes
 #Patch0: %%{name}-%%{version}-fixes.patch
 Requires: libica >= 4.0.0
@@ -25,6 +29,9 @@ to accelerate cryptographic operations.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/openssl-ibmca-2.5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5903c029ef3fc98e17e4209450df554819ceee548b3a6eeb6d55983a1d55843c" || { echo "oreon: Source0 SHA256 mismatch for openssl-ibmca-2.5.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 ./bootstrap.sh

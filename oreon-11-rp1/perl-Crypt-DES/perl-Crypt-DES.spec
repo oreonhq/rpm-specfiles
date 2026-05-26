@@ -11,9 +11,14 @@ Release:        43%{?dist}
 Summary:        Perl DES encryption module
 License:        BSD-Systemics
 URL:            https://metacpan.org/release/Crypt-DES
-Source0:        https://cpan.metacpan.org/modules/by-module/Crypt/Crypt-DES-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DP/DPARIS/Crypt-DES-2.07.tar.gz
+
 Patch0:         perl-Crypt-DES-init-braces.patch
 Patch99:        perl-Crypt-DES-fedora-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 2db1ebb5837b4cb20051c0ee5b733b4453e3137df0a92306034c867621edd7e7
+%global source0_file Crypt-DES-2.07.tar.gz
+# oreon url source checksums end
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -43,6 +48,9 @@ BuildRequires:  perl(Crypt::CBC) > 1.22
 DES encryption module. The module implements the Crypt::CBC interface.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Crypt-DES-2.07.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2db1ebb5837b4cb20051c0ee5b733b4453e3137df0a92306034c867621edd7e7" || { echo "oreon: Source0 SHA256 mismatch for Crypt-DES-2.07.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Crypt-DES-%{version}
 
 # Fix "warning: missing braces around initializer [-Wmissing-braces]"

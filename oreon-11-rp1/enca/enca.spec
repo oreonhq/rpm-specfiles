@@ -5,6 +5,10 @@ Release: 19%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 Source: http://dl.cihar.com/enca/enca-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 3a487eca40b41021e2e4b7a6440b97d822e6532db5464471f572ecf77295e8b8
+%global source0_file enca-1.19.tar.xz
+# oreon url source checksums end
 URL: http://cihar.com/software/enca
 
 BuildRequires: gcc
@@ -43,6 +47,9 @@ library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/enca-1.19.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3a487eca40b41021e2e4b7a6440b97d822e6532db5464471f572ecf77295e8b8" || { echo "oreon: Source0 SHA256 mismatch for enca-1.19.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 

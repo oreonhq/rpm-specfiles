@@ -41,6 +41,10 @@ License: BSD-3-Clause AND MIT AND CC-PDDC AND (BSD-3-Clause OR Apache-2.0)
 URL: http://www.openucx.org
 Source: https://github.com/openucx/%{name}/releases/download/v%{version}/ucx-%{version}.tar.gz
 Patch: Avoid-build-failure.patch
+# oreon url source checksums begin
+%global source0_sha256 9af07d55281059542f20c5b411db668643543174e51ac71f53f7ac839164f285
+%global source0_file ucx-1.19.0.tar.gz
+# oreon url source checksums end
 
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
 Prefix: %{_prefix}
@@ -117,6 +121,9 @@ Summary: Header files required for developing with UCX
 Provides header files and examples for developing with UCX.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ucx-1.19.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9af07d55281059542f20c5b411db668643543174e51ac71f53f7ac839164f285" || { echo "oreon: Source0 SHA256 mismatch for ucx-1.19.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1
 # https://github.com/openucx/ucx/issues/10542

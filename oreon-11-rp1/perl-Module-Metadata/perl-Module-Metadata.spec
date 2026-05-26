@@ -4,7 +4,12 @@ Release:	521%{?dist}
 Summary:	Gather package and POD information from perl module files
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Module-Metadata
-Source0:	https://cpan.metacpan.org/modules/by-module/Module/Module-Metadata-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Module-Metadata-1.000038.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b599d8770a9a9fa0a8ae3cd0ed395a9cf71b4eb53aed82989a6bece33485a9cd
+%global source0_file Module-Metadata-1.000038.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
@@ -46,6 +51,9 @@ This module provides a standard way to gather metadata about a .pm file
 without executing unsafe code.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Metadata-1.000038.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b599d8770a9a9fa0a8ae3cd0ed395a9cf71b4eb53aed82989a6bece33485a9cd" || { echo "oreon: Source0 SHA256 mismatch for Module-Metadata-1.000038.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Metadata-%{version}
 
 %build

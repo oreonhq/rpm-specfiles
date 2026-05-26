@@ -6,6 +6,10 @@ Summary:	A CBOR parsing library
 License:	MIT
 URL:		http://libcbor.org
 Source0:	https://github.com/PJK/%{name}/archive/v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 95a7f0dd333fd1dce3e4f92691ca8be38227b27887599b21cd3c4f6d6a7abb10
+%global source0_file v0.13.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	cmake
 BuildRequires:	doxygen
@@ -28,6 +32,9 @@ Requires:	%{name}%{?_isa} = %{version}-%{release}
 %{name}-devel contains development libraries and header files for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.13.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "95a7f0dd333fd1dce3e4f92691ca8be38227b27887599b21cd3c4f6d6a7abb10" || { echo "oreon: Source0 SHA256 mismatch for v0.13.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 

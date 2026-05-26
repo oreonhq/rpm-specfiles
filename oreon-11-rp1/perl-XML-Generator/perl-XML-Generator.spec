@@ -5,6 +5,10 @@ Release:            8%{?dist}
 License:            GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:                https://metacpan.org/release/XML-Generator
 Source0:            https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/XML-Generator-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 30ef32fac30f268a3d9062c44fd5ab7518499bf993b50ef8ee372d8787bcb9a8
+%global source0_file XML-Generator-1.13.tar.gz
+# oreon url source checksums end
 BuildArch:          noarch
 BuildRequires:      coreutils
 BuildRequires:      make
@@ -43,6 +47,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-Generator-1.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "30ef32fac30f268a3d9062c44fd5ab7518499bf993b50ef8ee372d8787bcb9a8" || { echo "oreon: Source0 SHA256 mismatch for XML-Generator-1.13.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-Generator-%{version}
 
 # Help generators to recognize Perl scripts

@@ -27,6 +27,10 @@ License:        Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 OR MIT)
 URL:            http://www.libsdl.org/
 Source0:        http://www.libsdl.org/release/%{name}-%{version}.tar.gz
 Source1:        SDL3_revision.h
+# oreon url source checksums begin
+%global source0_sha256 082cbf5f429e0d80820f68dc2b507a94d4cc1b4e70817b119bbb8ec6a69584b8
+%global source0_file SDL3-3.4.0.tar.gz
+# oreon url source checksums end
 
 # Patches from upstream
 
@@ -138,6 +142,9 @@ Testing libraries for SDL3.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/SDL3-3.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "082cbf5f429e0d80820f68dc2b507a94d4cc1b4e70817b119bbb8ec6a69584b8" || { echo "oreon: Source0 SHA256 mismatch for SDL3-3.4.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am
 sed -e 's/\r//g' -i README.md WhatsNew.txt BUGS.txt LICENSE.txt CREDITS.md
 

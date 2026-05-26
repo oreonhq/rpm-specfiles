@@ -10,6 +10,10 @@ Source:         https://github.com/thkukuk/libnss_nis/archive/v%{version}.tar.gz
 # https://github.com/systemd/systemd/issues/7074
 # https://bugzilla.redhat.com/show_bug.cgi?id=1829572
 Source2:        nss_nis.conf
+# oreon url source checksums begin
+%global source0_sha256 1c62306a379e8e6720fcb464b6c29883a93203df28657d9c8195e6160b95ec24
+%global source0_file v3.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  libnsl2-devel
@@ -27,6 +31,9 @@ The nss_nis Name Service Switch module uses the Network Information System (NIS)
 to obtain user, group, host name, and other data.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v3.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1c62306a379e8e6720fcb464b6c29883a93203df28657d9c8195e6160b95ec24" || { echo "oreon: Source0 SHA256 mismatch for v3.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n libnss_nis-%{version}
 
 %build

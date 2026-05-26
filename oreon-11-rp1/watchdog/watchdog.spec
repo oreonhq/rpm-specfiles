@@ -18,6 +18,10 @@ Patch2:           0002-mem-leak-verbose.patch
 
 # Non-upstream patch to document SELinux support.
 Patch99:          0099-watchdog-5.16-rhseldoc.patch
+# oreon url source checksums begin
+%global source0_sha256 b8e7c070e1b72aee2663bdc13b5cc39f76c9232669cfbb1ac0adc7275a3b019d
+%global source0_file watchdog-5.16.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:    gcc
@@ -49,6 +53,9 @@ expiration) initiated by the BMC.
 
  
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/watchdog-5.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b8e7c070e1b72aee2663bdc13b5cc39f76c9232669cfbb1ac0adc7275a3b019d" || { echo "oreon: Source0 SHA256 mismatch for watchdog-5.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 %patch 1 -p1
 %patch 2 -p1

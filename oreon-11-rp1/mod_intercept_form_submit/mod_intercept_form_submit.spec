@@ -13,6 +13,10 @@ Release: 11%{?dist}
 License: Apache-2.0
 URL: https://www.adelton.com/apache/mod_intercept_form_submit/
 Source0: https://www.adelton.com/apache/mod_intercept_form_submit/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 578ef277ef85b64c692a25f3f61d798d9f27b14ccb0961ae096d2e7252ff3966
+%global source0_file mod_intercept_form_submit-1.2.0.tar.gz
+# oreon url source checksums end
 BuildRequires: gcc
 BuildRequires: httpd-devel
 BuildRequires: pkgconfig
@@ -31,6 +35,9 @@ HTTP request, runs PAM authentication with those credentials, and sets
 the REMOTE_USER environment variable if the authentication passes.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mod_intercept_form_submit-1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "578ef277ef85b64c692a25f3f61d798d9f27b14ccb0961ae096d2e7252ff3966" || { echo "oreon: Source0 SHA256 mismatch for mod_intercept_form_submit-1.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 
 %build

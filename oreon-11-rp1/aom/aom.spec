@@ -22,6 +22,10 @@ URL:        http://aomedia.org/
 Source:     https://aomedia.googlesource.com/%{name}/+archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # Building static library breaks .cmake files if we don't ship it, so drop it
 Patch:      aom-nostatic.patch
+# oreon url source checksums begin
+%global source0_sha256 e452890b987235406bf4e7ffb45eeb2a6465b8bf883ac6e7f6396f8547a0e60a
+%global source0_file v3.13.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  gcc
@@ -84,6 +88,9 @@ Documentation for libaom, the royalty-free next-generation
 video format.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v3.13.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e452890b987235406bf4e7ffb45eeb2a6465b8bf883ac6e7f6396f8547a0e60a" || { echo "oreon: Source0 SHA256 mismatch for v3.13.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -c %{name}-%{version}
 # Set GIT revision in version
 sed -i 's@set(aom_version "")@set(aom_version "%{aom_version}")@' build/cmake/version.cmake

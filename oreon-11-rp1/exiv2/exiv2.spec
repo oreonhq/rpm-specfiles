@@ -24,6 +24,10 @@ Source:         %{vcs}/archive/v%{version}/%{name}-%{version}.tar.gz
 # https://github.com/Exiv2/exiv2/pull/3378
 # Will be fixed in 0.28.7.
 Patch0:         3378.patch
+# oreon url source checksums begin
+%global source0_sha256 9d481117b97afa5324bf3ea0ad79f5c2939ae94ba0d0f5f8eb23aee16d9ec58d
+%global source0_file exiv2-0.28.6.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -98,6 +102,9 @@ API documentation for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/exiv2-0.28.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9d481117b97afa5324bf3ea0ad79f5c2939ae94ba0d0f5f8eb23aee16d9ec58d" || { echo "oreon: Source0 SHA256 mismatch for exiv2-0.28.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version}%{?beta:-%{beta}} -p1
 
 

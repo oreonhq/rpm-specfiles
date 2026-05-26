@@ -9,8 +9,12 @@ URL:            https://github.com/codehaus-plexus/plexus-interactivity
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        %{url}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-interactivity/archive/plexus-interactivity-1.3.tar.gz
 Source1:        LICENSE.MIT
+# oreon url source checksums begin
+%global source0_sha256 20451c05c96785fbf9a864679b293c194a0d5ccc51d4abcd30354ab89f065d23
+%global source0_file plexus-interactivity-1.3.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -32,6 +36,9 @@ Plexus component that handles interactive user input from different
 sources.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plexus-interactivity-1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "20451c05c96785fbf9a864679b293c194a0d5ccc51d4abcd30354ab89f065d23" || { echo "oreon: Source0 SHA256 mismatch for plexus-interactivity-1.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 cp %{SOURCE1} .
 

@@ -21,6 +21,10 @@ Patch:         0001-Fix-build-with-abseil-cpp-202508.patch
 
 # Downstream patches
 Patch:         abseil-cpp-wrap.patch
+# oreon url source checksums begin
+%global source0_sha256 ae9302824b2038d394f10213cab05312c564a038434269f11dbf68f511f9f9fe
+%global source0_file webrtc-audio-processing-2.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires: meson
 BuildRequires: gcc gcc-c++
@@ -42,6 +46,9 @@ The %{name}-devel package contains libraries and header
 files for developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/webrtc-audio-processing-2.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ae9302824b2038d394f10213cab05312c564a038434269f11dbf68f511f9f9fe" || { echo "oreon: Source0 SHA256 mismatch for webrtc-audio-processing-2.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %if %{with bundled_absl}
 mkdir -p subprojects/packagefiles

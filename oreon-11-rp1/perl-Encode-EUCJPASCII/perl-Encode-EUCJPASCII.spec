@@ -4,7 +4,12 @@ Release:        49%{?dist}
 Summary:        EucJP-ascii - An eucJP-open mapping
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Encode-EUCJPASCII
-Source0:        https://cpan.metacpan.org/modules/by-module/Encode/Encode-EUCJPASCII-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEZUMI/Encode-EUCJPASCII-0.03.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f998d34d55fd9c82cf910786a0448d1edfa60bf68e2c2306724ca67c629de861
+%global source0_file Encode-EUCJPASCII-0.03.tar.gz
+# oreon url source checksums end
+
 BuildRequires: make
 BuildRequires:  gcc
 BuildRequires:  perl(ExtUtils::MakeMaker)
@@ -29,6 +34,9 @@ This module provides eucJP-ascii, one of eucJP-open mappings, and its
 derivative.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Encode-EUCJPASCII-0.03.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f998d34d55fd9c82cf910786a0448d1edfa60bf68e2c2306724ca67c629de861" || { echo "oreon: Source0 SHA256 mismatch for Encode-EUCJPASCII-0.03.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Encode-EUCJPASCII-%{version}
 
 %build

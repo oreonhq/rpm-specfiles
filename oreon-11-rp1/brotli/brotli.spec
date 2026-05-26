@@ -5,7 +5,11 @@ Summary:        Lossless compression algorithm
 
 License:        MIT
 URL:            https://github.com/google/brotli
-Source0:        %{url}/archive/v%{version}/brotli-%{version}.tar.gz
+Source0:        https://github.com/google/brotli/archive/v1.2.0/brotli-1.2.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec
+%global source0_file brotli-1.2.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -44,6 +48,9 @@ Requires: libbrotli%{?_isa} = %{version}-%{release}
 This package installs the development files.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/brotli-1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "816c96e8e8f193b40151dad7e8ff37b1221d019dbcb9c35cd3fadbfe6477dfec" || { echo "oreon: Source0 SHA256 mismatch for brotli-1.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # fix permissions for -debuginfo
 # rpmlint will complain if I create an extra %%files section for

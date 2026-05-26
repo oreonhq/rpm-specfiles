@@ -19,6 +19,10 @@ URL:     https://invent.kde.org/games/%{name}
 %global stable stable
 %endif
 Source0: http://download.kde.org/%{stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 35a95123cc98563970f854a73acf063c139670f592bd0076d997230c4c86b27a
+%global source0_file kpat-26.04.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules
@@ -68,6 +72,9 @@ special order — moving, turning and reordering them.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kpat-26.04.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "35a95123cc98563970f854a73acf063c139670f592bd0076d997230c4c86b27a" || { echo "oreon: Source0 SHA256 mismatch for kpat-26.04.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 

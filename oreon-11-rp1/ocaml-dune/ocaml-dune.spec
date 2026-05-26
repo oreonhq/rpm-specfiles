@@ -53,7 +53,7 @@ Summary:        Composable build system for OCaml and Reason
 License:        MIT AND BSD-2-Clause AND BSD-3-Clause AND ISC AND LGPL-2.1-only AND LGPL-2.1-only WITH OCaml-LGPL-linking-exception AND LGPL-2.1-or-later
 URL:            https://dune.build
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/%{version}/dune-%{version}.tar.gz
+Source:        https://github.com/ocaml/dune/archive/3.23.1/dune-3.23.1.tar.gz
 # Unbundle lmdb
 Patch:          %{name}-unbundle-lmdb.patch
 # Unbundle libev
@@ -61,6 +61,10 @@ Patch:          %{name}-unbundle-libev.patch
 # Temporary workaround for broken debuginfo (rhbz#2168932)
 # See https://github.com/ocaml/dune/issues/6929
 Patch:          %{name}-debuginfo.patch
+# oreon url source checksums begin
+%global source0_sha256 63fbef75d09dd4a05ee2624d41e574d658e33faff5c5b7d6bc67eab2af03dc71
+%global source0_file dune-3.23.1.tar.gz
+# oreon url source checksums end
 
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch:    %{ix86}
@@ -396,6 +400,9 @@ The ocaml-top-closure-devel package contains libraries and signature files for
 developing applications that use ocaml-top-closure.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dune-3.23.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "63fbef75d09dd4a05ee2624d41e574d658e33faff5c5b7d6bc67eab2af03dc71" || { echo "oreon: Source0 SHA256 mismatch for dune-3.23.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n dune-%{version} -p1
 
 # Make sure we don't use the bundled lmdb

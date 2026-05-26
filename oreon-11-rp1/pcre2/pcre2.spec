@@ -53,7 +53,7 @@ Source1:    https://github.com/PCRE2Project/pcre2/releases/download/pcre2-%{vers
 # gpg --export --armor A95536204A3BB489715231282A98E77EB6F24CA8 > New-Public-Key
 # The GPG key changed with the new upstream maintainer
 # More in https://github.com/PCRE2Project/pcre2/blob/master/SECURITY.md
-Source2:    New-Public-Key
+Source2:        https://ftp.pcre.org/pub/pcre/New-Public-Key
 # Do no set RPATH if libdir is not /usr/lib
 Patch0:     pcre2-10.10-Fix-multilib.patch
 

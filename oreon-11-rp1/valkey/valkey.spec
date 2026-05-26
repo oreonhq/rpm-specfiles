@@ -36,6 +36,12 @@ Patch1:            %{name}-loadmod.patch
 # Properly inherits linker flags for modules
 # See https://github.com/valkey-io/valkey/pull/3344
 Patch2:            %{name}-bindnow.patch
+# oreon url source checksums begin
+%global source0_sha256 e220f4b0143292ee6ea6d705aa40d45a0c8a77759b3e94c201cb5c25dbdca42f
+%global source0_file valkey-9.0.3.tar.gz
+%global source50_sha256 c0b56c1d0b0e9b5d69b309d2afd404b090bc77ab174a55d5435aceea9e0dfbb1
+%global source50_file valkey-doc-9.0.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:     make
 BuildRequires:     gcc
@@ -183,6 +189,10 @@ Provides:          redis-doc = %{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/valkey-9.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e220f4b0143292ee6ea6d705aa40d45a0c8a77759b3e94c201cb5c25dbdca42f" || { echo "oreon: Source0 SHA256 mismatch for valkey-9.0.3.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/valkey-doc-9.0.2.tar.gz; test -f "$f" || { echo "oreon: missing Source50 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c0b56c1d0b0e9b5d69b309d2afd404b090bc77ab174a55d5435aceea9e0dfbb1" || { echo "oreon: Source50 SHA256 mismatch for valkey-doc-9.0.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # no autosetup due to no support for multiple source extraction
 %setup -n %{name}-%{version} -a50
 %patch -P0 -p1 -b .rpm

@@ -11,6 +11,10 @@ Summary:        Perl interface to the MD5 algorithm
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Digest-MD5
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Digest-MD5-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b5ecba079bd5907d52663a659cd977b6247526abe6aed9b818d083dd99af77d2
+%global source0_file Digest-MD5-2.59.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  gcc
 BuildRequires:  make
@@ -54,6 +58,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Digest-MD5-2.59.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b5ecba079bd5907d52663a659cd977b6247526abe6aed9b818d083dd99af77d2" || { echo "oreon: Source0 SHA256 mismatch for Digest-MD5-2.59.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Digest-MD5-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

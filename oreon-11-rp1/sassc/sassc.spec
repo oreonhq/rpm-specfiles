@@ -15,6 +15,10 @@ Source0:        https://github.com/sass/sassc/archive/%{version}/%{name}-%{versi
 # https://github.com/sass/sass-spec/archive/master.zip
 # https://github.com/sass/sass-spec/archive/v%%{testspec_version}.tar.gz
 Source1:        sass-spec-libsass-%{testspec_version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 608dc9002b45a91d11ed59e352469ecc05e4f58fc1259fc9a9f5b8f0f8348a03
+%global source0_file sassc-3.6.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  automake
 BuildRequires:  libtool
@@ -38,6 +42,9 @@ application that can be installed and packaged for several operating systems.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sassc-3.6.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "608dc9002b45a91d11ed59e352469ecc05e4f58fc1259fc9a9f5b8f0f8348a03" || { echo "oreon: Source0 SHA256 mismatch for sassc-3.6.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -a 1
 mv sass-spec-libsass-%{testspec_version} sass-spec
 autoreconf -fiv

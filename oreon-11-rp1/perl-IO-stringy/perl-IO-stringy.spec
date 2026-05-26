@@ -4,7 +4,12 @@ Version:	2.113
 Release:	18%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/IO-stringy
-Source0:	https://cpan.metacpan.org/modules/by-module/IO/IO-Stringy-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/C/CA/CAPOEIRAB/IO-Stringy-2.113.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 51220fcaf9f66a639b69d251d7b0757bf4202f4f9debd45bdd341a6aca62fe4e
+%global source0_file IO-Stringy-2.113.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -56,6 +61,9 @@ and stop worrying about whether your function's caller handed you a
 string, a globref, or a FileHandle.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IO-Stringy-2.113.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "51220fcaf9f66a639b69d251d7b0757bf4202f4f9debd45bdd341a6aca62fe4e" || { echo "oreon: Source0 SHA256 mismatch for IO-Stringy-2.113.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IO-Stringy-%{version}
 
 %build

@@ -11,6 +11,10 @@ Release:	%autorelease
 License:	(GPL-2.0-only OR Linux-OpenIB) AND BSD-3-Clause AND MIT AND blessing
 Url:		https://github.com/Mellanox/%{name}
 Source0: 	https://github.com/Mellanox/%{name}/releases/download/v%{version}-2/%{name}-%{version}-2.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a72f5efe6f599721f86c20e033f35f75540342b0270ad4461fab71dd50e7f6ef
+%global source0_file mstflint-4.34.0-2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	make
 BuildRequires:	libstdc++-devel, zlib-devel, libibmad-devel, gcc-c++, gcc
@@ -29,6 +33,9 @@ This package contains firmware update tool, vpd dump and register dump tools
 for network adapters based on Mellanox Technologies chips.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mstflint-4.34.0-2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a72f5efe6f599721f86c20e033f35f75540342b0270ad4461fab71dd50e7f6ef" || { echo "oreon: Source0 SHA256 mismatch for mstflint-4.34.0-2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}
 
 find . -type f -perm /a+x \( -name '*.[ch]' -o -name '*.cpp' \) -exec chmod a-x '{}' '+'

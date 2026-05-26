@@ -34,10 +34,14 @@ License:        GPL-2.0-or-later
 %endif
 
 URL:            https://github.com/Scribery/%{name}
-Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/Scribery/tlog/releases/download/v14/tlog-14.tar.gz
 Source1:        tlog.sysusers
 
 Patch0001: 0001-Add-missing-argument-for-sigchld-handler.patch
+# oreon url source checksums begin
+%global source0_sha256 5e8e725db97e91cf4d14f82c1d75b45428b6f972eb4e5bd695e5aeefcad3686b
+%global source0_file tlog-14.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -84,6 +88,9 @@ shell afterwards. The recorded I/O can then be forwarded to a logging server
 in JSON format.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tlog-14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5e8e725db97e91cf4d14f82c1d75b45428b6f972eb4e5bd695e5aeefcad3686b" || { echo "oreon: Source0 SHA256 mismatch for tlog-14.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

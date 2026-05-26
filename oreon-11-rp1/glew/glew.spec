@@ -8,6 +8,10 @@ URL:            https://github.com/nigels-com/glew
 Source0:        https://github.com/nigels-com/glew/releases/download/glew-%{version}/glew-%{version}.tgz
 Patch0:         glew-2.1.0-install.patch
 Patch1:         glew-2.2.0-gcc12-cplusplus.patch
+# oreon url source checksums begin
+%global source0_sha256 d4fc82893cfb00109578d0a1a2337fb8ca335b3ceccf97b97e5cc7f08e4353e1
+%global source0_file glew-2.2.0.tgz
+# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  libGLU-devel
 BuildRequires:  make
@@ -39,6 +43,9 @@ Summary:        libGLEW
 libGLEW
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/glew-2.2.0.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d4fc82893cfb00109578d0a1a2337fb8ca335b3ceccf97b97e5cc7f08e4353e1" || { echo "oreon: Source0 SHA256 mismatch for glew-2.2.0.tgz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # update config.guess for new arch support

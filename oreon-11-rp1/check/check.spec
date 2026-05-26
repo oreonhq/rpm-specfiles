@@ -25,6 +25,10 @@ Patch0:         %{name}-0.11.0-info-in-builddir.patch
 Patch1:         %{name}-0.15.2-texinfo.patch
 # Fix test failures due to varying floating point behavior across platforms
 Patch2:         %{name}-0.11.0-fp.patch
+# oreon url source checksums begin
+%global source0_sha256 998d355294bb94072f40584272cf4424571c396c631620ce463f6ea97aa67d2e
+%global source0_file check-0.15.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -97,6 +101,9 @@ MinGW libraries and headers for developing programs with check
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/check-0.15.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "998d355294bb94072f40584272cf4424571c396c631620ce463f6ea97aa67d2e" || { echo "oreon: Source0 SHA256 mismatch for check-0.15.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -N
 rm -f index.html
 rm -rf web

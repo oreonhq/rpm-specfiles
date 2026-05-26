@@ -3,6 +3,10 @@ Version: 0.8
 Release: 32%{?dist}
 Summary: Asynchronous Name Service Library
 Source0: http://0pointer.de/lennart/projects/libasyncns/libasyncns-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4f1a66e746cbe54ff3c2fbada5843df4fbbbe7481d80be003e8d11161935ab74
+%global source0_file libasyncns-0.8.tar.gz
+# oreon url source checksums end
 License: LGPL-2.1-or-later
 Url: http://0pointer.de/lennart/projects/libasyncns/
 
@@ -23,6 +27,9 @@ Development Files for libasyncns Client Development
 %ldconfig_scriptlets
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libasyncns-0.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4f1a66e746cbe54ff3c2fbada5843df4fbbbe7481d80be003e8d11161935ab74" || { echo "oreon: Source0 SHA256 mismatch for libasyncns-0.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

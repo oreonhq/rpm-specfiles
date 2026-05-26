@@ -4,7 +4,12 @@ Release:	28%{?dist}
 Summary:	Only use Sub::Exporter if you need it
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Exporter-Progressive
-Source0:	https://cpan.metacpan.org/modules/by-module/Sub/Sub-Exporter-Progressive-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/F/FR/FREW/Sub-Exporter-Progressive-0.001013.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 d535b7954d64da1ac1305b1fadf98202769e3599376854b2ced90c382beac056
+%global source0_file Sub-Exporter-Progressive-0.001013.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # =============== Module Build ======================
 BuildRequires:	coreutils
@@ -42,6 +47,9 @@ features like currying, this module will only ever use Sub::Exporter, so you
 might as well use it directly.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Sub-Exporter-Progressive-0.001013.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d535b7954d64da1ac1305b1fadf98202769e3599376854b2ced90c382beac056" || { echo "oreon: Source0 SHA256 mismatch for Sub-Exporter-Progressive-0.001013.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Sub-Exporter-Progressive-%{version}
 
 %build

@@ -34,6 +34,10 @@ Patch4: rrdtool-1.4.8-php-ppc-fix.patch
 Patch5: rrdtool-1.9.0-tcl90.patch
 # https://github.com/oetiker/rrdtool-1.x/commit/4218ec7127ba6c7ea1c20d7c8ea6e2b3f83df73a
 Patch6: rrdtool-1.9.0-safety-checks.patch
+# oreon url source checksums begin
+%global source0_sha256 5e65385e51f4a7c4b42aa09566396c20e7e1a0a30c272d569ed029a81656e56b
+%global source0_file rrdtool-1.9.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc-c++
@@ -170,6 +174,9 @@ The %{name}-lua package includes RRDtool bindings for Lua.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rrdtool-1.9.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5e65385e51f4a7c4b42aa09566396c20e7e1a0a30c272d569ed029a81656e56b" || { echo "oreon: Source0 SHA256 mismatch for rrdtool-1.9.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version} %{?with_php: -a 1}
 %if %{with_php}
 %patch -P1 -p1 -b .php54

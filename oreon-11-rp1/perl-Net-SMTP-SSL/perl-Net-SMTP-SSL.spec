@@ -4,7 +4,12 @@ Release:        28%{?dist}
 Summary:        SSL support for Net::SMTP
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-SMTP-SSL
-Source0:        https://cpan.metacpan.org/modules/by-module/Net/Net-SMTP-SSL-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Net-SMTP-SSL-1.04.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7b29c45add19d3d5084b751f7ba89a8e40479a446ce21cfd9cc741e558332a00
+%global source0_file Net-SMTP-SSL-1.04.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -34,6 +39,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Net-SMTP-SSL-1.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b29c45add19d3d5084b751f7ba89a8e40479a446ce21cfd9cc741e558332a00" || { echo "oreon: Source0 SHA256 mismatch for Net-SMTP-SSL-1.04.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Net-SMTP-SSL-%{version}
 
 # Help generators to recognize Perl scripts

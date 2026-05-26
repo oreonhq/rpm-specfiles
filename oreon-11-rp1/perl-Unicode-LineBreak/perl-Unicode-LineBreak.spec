@@ -12,6 +12,10 @@ Summary:        UAX #14 Unicode Line Breaking Algorithm
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Unicode-LineBreak
 Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEZUMI/Unicode-LineBreak-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 486762e4cacddcc77b13989f979a029f84630b8175e7fef17989e157d4b6318a
+%global source0_file Unicode-LineBreak-2019.001.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  libthai-devel
@@ -78,6 +82,9 @@ positions.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Unicode-LineBreak-2019.001.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "486762e4cacddcc77b13989f979a029f84630b8175e7fef17989e157d4b6318a" || { echo "oreon: Source0 SHA256 mismatch for Unicode-LineBreak-2019.001.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Unicode-LineBreak-%{version}
 # Remove bundled library
 rm -rf sombok

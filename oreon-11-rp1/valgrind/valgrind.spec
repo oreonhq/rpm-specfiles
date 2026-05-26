@@ -97,6 +97,10 @@ Patch12: 0008-Bug-514206-Assertion-sr_isError-sr-failed-mmap-fd-po.patch
 
 # Refix for https://bugs.kde.org/show_bug.cgi?id=514613
 Patch100: 0001-Refix-still_reachable-xml-closing-tag-and-add-testca.patch
+# oreon url source checksums begin
+%global source0_sha256 8d54c717029106f1644aadaf802ab9692e53d93dd015cbd19e74190eba616bd7
+%global source0_file valgrind-3.26.0.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: glibc-devel
@@ -270,6 +274,9 @@ Valgrind User Manual for details.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/valgrind-3.26.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8d54c717029106f1644aadaf802ab9692e53d93dd015cbd19e74190eba616bd7" || { echo "oreon: Source0 SHA256 mismatch for valgrind-3.26.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{?scl:%{pkg_name}}%{!?scl:%{name}}-%{version}
 
 %patch -P1 -p1

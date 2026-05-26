@@ -18,6 +18,10 @@ Requires: bc
 Patch1:	rt-tests-hwlatdetect-Add-timestamp-delta.patch
 Patch2:	cyclictest-fix-growing-shm-stat-file.patch
 Patch3:	Makefile-Use-relative-symlinks-for-Python-scripts.patch
+# oreon url source checksums begin
+%global source0_sha256 1d1184ab0b578a91c586ea9ed0c50e4b42f9f038d5465eae15beb14751e88ba6
+%global source0_file rt-tests-2.10.tar.xz
+# oreon url source checksums end
 
 %description
 realtime-tests is a set of programs that test and measure various components of
@@ -25,6 +29,9 @@ real-time kernel behavior. This package measures timer, signal, and hardware
 latency. It also tests the functioning of priority-inheritance mutexes.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rt-tests-2.10.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1d1184ab0b578a91c586ea9ed0c50e4b42f9f038d5465eae15beb14751e88ba6" || { echo "oreon: Source0 SHA256 mismatch for rt-tests-2.10.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n rt-tests-%{version}
 
 %build

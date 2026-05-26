@@ -8,6 +8,10 @@ Release: 4%{?dist}
 License: LGPL-2.0-or-later OR MPL-1.1
 URL: http://zziplib.sourceforge.net/
 Source: https://github.com/gdraheim/zziplib/archive/v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 feaeee7c34f18aa27bd3da643cc6a47d04d2c41753a59369d09102d79b9b0a31
+%global source0_file v0.13.78.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc
@@ -59,6 +63,9 @@ This package contains files required to build applications that will use the
 zziplib library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.13.78.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "feaeee7c34f18aa27bd3da643cc6a47d04d2c41753a59369d09102d79b9b0a31" || { echo "oreon: Source0 SHA256 mismatch for v0.13.78.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

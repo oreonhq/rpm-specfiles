@@ -5,9 +5,13 @@ Release:	14%{?dist}
 Epoch:		3
 License:	GPL-2.0-only
 URL:		https://github.com/andikleen/mcelog
-Source0:	%{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/andikleen/mcelog/archive/v175/mcelog-175.tar.gz
 # note that this source OVERRIDES the one on the tarball above!
 Source1:	mcelog.conf
+# oreon url source checksums begin
+%global source0_sha256 ed25a39bb20178e79e18cc5d3202b198868986ec3e964b6285f6a7bac8469fdf
+%global source0_file mcelog-175.tar.gz
+# oreon url source checksums end
 ExclusiveArch:	i686 x86_64
 Requires(post): systemd
 Requires(preun): systemd
@@ -21,6 +25,9 @@ mcelog is a utility that collects and decodes Machine Check Exception data
 on x86-32 and x86-64 systems.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mcelog-175.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ed25a39bb20178e79e18cc5d3202b198868986ec3e964b6285f6a7bac8469fdf" || { echo "oreon: Source0 SHA256 mismatch for mcelog-175.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

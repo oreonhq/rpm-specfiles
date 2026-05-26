@@ -10,7 +10,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-languages/archive/refs/tags/v1.2.0.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 # Sources contain bundled jars that we cannot verify for licensing
 Source2:        generate-tarball.sh

@@ -18,7 +18,7 @@ Summary:        Creates and Manipulates Graphs and Networks
 License:        BSD-3-Clause
 URL:            https://networkx.org/
 VCS:            git:%{giturl}.git
-Source0:        %{giturl}/archive/networkx-%{version}.tar.gz
+Source0:        https://github.com/networkx/networkx/archive/networkx-3.6.1.tar.gz
 # For intersphinx
 Source1:        https://numpy.org/neps/objects.inv#/objects-neps.inv
 Source2:        https://matplotlib.org/stable/objects.inv#/objects-matplotlib.inv
@@ -39,6 +39,12 @@ Patch:          %{name}-doc.patch
 # Undo upstream change to use intersphinx_registry.  Fedora does not have it,
 # and it does not let us use local documentation in the build.
 Patch:          %{name}-intersphinx.patch
+# oreon url source checksums begin
+%global source0_sha256 e12df70fc51003f7d19e93220ff9ab919033056e658a38d1520532ece7af6fda
+%global source0_file networkx-3.6.1.tar.gz
+%global source9_sha256 147081ba047c919782896b26852f812e65880a9e52f69070069f950eea90c396
+%global source9_file football.zip
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildSystem:    pyproject
@@ -124,6 +130,10 @@ Documentation for networkx
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/networkx-3.6.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e12df70fc51003f7d19e93220ff9ab919033056e658a38d1520532ece7af6fda" || { echo "oreon: Source0 SHA256 mismatch for networkx-3.6.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/football.zip; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "147081ba047c919782896b26852f812e65880a9e52f69070069f950eea90c396" || { echo "oreon: Source9 SHA256 mismatch for football.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n networkx-networkx-%{version}
 
 # Use local objects.inv for intersphinx

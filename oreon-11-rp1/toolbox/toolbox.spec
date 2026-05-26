@@ -59,6 +59,10 @@ Patch100:      toolbox-Make-the-build-flags-match-Fedora.patch
 Patch200:      toolbox-Make-the-build-flags-match-RHEL-9.patch
 Patch201:      toolbox-Make-the-build-flags-match-RHEL-10.patch
 Patch202:      toolbox-Add-migration-paths-for-coreos-toolbox-users.patch
+# oreon url source checksums begin
+%global source0_sha256 0243bd995743ea73464426839ee80e2a13a8c529e3053292783f603b882dd125
+%global source0_file toolbox-0.3-vendored.tar.xz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: go-md2man
@@ -123,6 +127,9 @@ The %{name}-tests package contains system tests for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/toolbox-0.3-vendored.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0243bd995743ea73464426839ee80e2a13a8c529e3053292783f603b882dd125" || { echo "oreon: Source0 SHA256 mismatch for toolbox-0.3-vendored.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %if 0%{?fedora}

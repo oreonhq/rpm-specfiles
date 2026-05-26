@@ -12,6 +12,10 @@ Summary:        System V and POSIX timezone strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-TimeZone-SystemV
 Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/DateTime-TimeZone-SystemV-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 827bce3c45c2777331cba201e31801945aeeb18c59aed3d94c2b2adb209d954a
+%global source0_file DateTime-TimeZone-SystemV-0.010.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -45,6 +49,9 @@ This class implements the DateTime::TimeZone interface, so that its instances
 can be used with DateTime objects.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DateTime-TimeZone-SystemV-0.010.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "827bce3c45c2777331cba201e31801945aeeb18c59aed3d94c2b2adb209d954a" || { echo "oreon: Source0 SHA256 mismatch for DateTime-TimeZone-SystemV-0.010.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DateTime-TimeZone-SystemV-%{version}
 
 %build

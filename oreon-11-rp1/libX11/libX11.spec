@@ -10,7 +10,7 @@ License: MIT AND X11
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:    %{tarball}-%{gitdate}.tar.bz2
+Source0:        https://xorg.freedesktop.org/archive/individual/lib/libX11-1.8.12.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
@@ -19,6 +19,10 @@ Source0: https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.
 
 
 Patch2: dont-forward-keycode-0.patch
+# oreon url source checksums begin
+%global source0_sha256 fa026f9bb0124f4d6c808f9aef4057aad65e7b35d8ff43951cef0abe06bb9a9a
+%global source0_file libX11-1.8.12.tar.xz
+# oreon url source checksums end
 
 BuildRequires: libtool
 BuildRequires: make
@@ -57,6 +61,9 @@ Conflicts: %{name} < %{version}-%{release}
 libX11/libxcb interoperability library
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libX11-1.8.12.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fa026f9bb0124f4d6c808f9aef4057aad65e7b35d8ff43951cef0abe06bb9a9a" || { echo "oreon: Source0 SHA256 mismatch for libX11-1.8.12.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

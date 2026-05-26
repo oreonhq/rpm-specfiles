@@ -12,6 +12,10 @@ Summary: Set of ABI analysis tools
 License: Apache-2.0 WITH LLVM-exception
 URL: https://sourceware.org/libabigail/
 Source0: http://mirrors.kernel.org/sourceware/libabigail/%{tarball_name}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 b4b86baa3105a28ada25091f1ef0535e7a60616d3d5d4cb1ee2aceaba341d738
+%global source0_file libabigail-2.9.tar.xz
+# oreon url source checksums end
 
 BuildRequires: git
 BuildRequires: libbpf-devel
@@ -102,6 +106,9 @@ them manually.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libabigail-2.9.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b4b86baa3105a28ada25091f1ef0535e7a60616d3d5d4cb1ee2aceaba341d738" || { echo "oreon: Source0 SHA256 mismatch for libabigail-2.9.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -v -S git
 
 %build

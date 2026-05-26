@@ -9,7 +9,11 @@ Summary:        Python 2 and 3 compatibility utilities
 # SPDX
 License:        MIT
 URL:            https://github.com/benjaminp/six
-Source0:        %{pypi_source six}
+Source0:        https://files.pythonhosted.org/packages/source/s/six/six-1.17.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81
+%global source0_file six-1.17.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -36,6 +40,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/six-1.17.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81" || { echo "oreon: Source0 SHA256 mismatch for six-1.17.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n six-%{version}
 
 

@@ -14,7 +14,12 @@ Version:	0.018
 Release:	2%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Fatal
-Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-Fatal-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Test-Fatal-0.018.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b8d2cccf9ee467271bc478f9cf7eba49545452be9302ae359bc538b8bf687cd6
+%global source0_file Test-Fatal-0.018.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -54,6 +59,9 @@ less, but should allow greater flexibility in testing exception-throwing code
 with about the same amount of typing.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Fatal-0.018.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b8d2cccf9ee467271bc478f9cf7eba49545452be9302ae359bc538b8bf687cd6" || { echo "oreon: Source0 SHA256 mismatch for Test-Fatal-0.018.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Fatal-%{version}
 
 # Avoid doc-file dependencies

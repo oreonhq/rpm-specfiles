@@ -8,6 +8,10 @@ Summary:        MinGW Windows port of expat XML parser library
 License:        MIT
 URL:            http://www.libexpat.org/
 Source0:        http://downloads.sourceforge.net/expat/expat-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 f5833dd2e1cd7739ec9182804a1a29c4f0cc7c2f26b633d3a2188b7766a88ecb
+%global source0_file expat-2.8.1.tar.bz2
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -72,6 +76,9 @@ Static version of the MinGW Windows expat XML parser library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/expat-2.8.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f5833dd2e1cd7739ec9182804a1a29c4f0cc7c2f26b633d3a2188b7766a88ecb" || { echo "oreon: Source0 SHA256 mismatch for expat-2.8.1.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n expat-%{version}
 
 

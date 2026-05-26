@@ -6,7 +6,11 @@ Summary:        An administration shell for storage targets
 Version:        3.0.1
 Release:        5%{?dist}
 URL:            https://github.com/open-iscsi/%{oname}
-Source:         %{url}/archive/v%{version}/%{oname}-%{version}.tar.gz
+Source:        https://github.com/open-iscsi/targetcli-fb/archive/v3.0.1/targetcli-fb-3.0.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 711735915516975af34564b905bdf4a89be6344428932db724d78e8ff35f2c2e
+%global source0_file targetcli-fb-3.0.1.tar.gz
+# oreon url source checksums end
 # Proposed upstream
 ## From: https://github.com/open-iscsi/targetcli-fb/pull/176
 BuildArch:      noarch
@@ -21,6 +25,9 @@ users will also need to install and use fcoe-utils.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/targetcli-fb-3.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "711735915516975af34564b905bdf4a89be6344428932db724d78e8ff35f2c2e" || { echo "oreon: Source0 SHA256 mismatch for targetcli-fb-3.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{oname}-%{version}
 
 %generate_buildrequires

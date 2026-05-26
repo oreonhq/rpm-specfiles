@@ -3,6 +3,10 @@ Summary: French thesaurus
 Version: 2.3
 Release: 29%{?dist}
 Source: http://www.dicollecte.org/download/fr/thesaurus-v%{version}.zip
+# oreon url source checksums begin
+%global source0_sha256 61ec17d669a21e75969a2050a4615d7cea612ffd66d35fe9f4a8259c6d4bcd91
+%global source0_file thesaurus-v2.3.zip
+# oreon url source checksums end
 URL: http://www.dicollecte.org/home.php?prj=fr
 License: LGPL-2.1-or-later
 BuildArch: noarch
@@ -13,6 +17,9 @@ Supplements: (mythes and langpacks-fr)
 French thesaurus.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/thesaurus-v2.3.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61ec17d669a21e75969a2050a4615d7cea612ffd66d35fe9f4a8259c6d4bcd91" || { echo "oreon: Source0 SHA256 mismatch for thesaurus-v2.3.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c
 
 %build

@@ -11,7 +11,12 @@ Release:	17%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:	Run commands simply, with detailed diagnostics
 URL:		https://metacpan.org/release/IPC-System-Simple
-Source0:	https://cpan.metacpan.org/modules/by-module/IPC/IPC-System-Simple-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/IPC-System-Simple-1.30.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 22e6f5222b505ee513058fdca35ab7a1eab80539b98e5ca4a923a70a8ae9ba9e
+%global source0_file IPC-System-Simple-1.30.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -57,6 +62,9 @@ and all of your "system" commands will either succeed (run to completion and
 return a zero exit value), or die with rich diagnostic messages.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IPC-System-Simple-1.30.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "22e6f5222b505ee513058fdca35ab7a1eab80539b98e5ca4a923a70a8ae9ba9e" || { echo "oreon: Source0 SHA256 mismatch for IPC-System-Simple-1.30.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IPC-System-Simple-%{version}
 
 # Avoid doc-file dependencies

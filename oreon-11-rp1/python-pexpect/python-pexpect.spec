@@ -13,7 +13,7 @@ Release:        15%{?dist}
 # python-pexpect/pexpect-4.8.0/pexpect/spawnbase.py
 License:        ISC AND BSD-3-Clause
 URL:            https://github.com/pexpect/pexpect
-Source0:        %{url}/archive/%{version}/%{modname}-%{version}.tar.gz
+Source0:        https://github.com/pexpect/pexpect/archive/4.9.0/pexpect-4.9.0.tar.gz
 
 # Force NO_COLOR=1 to fix test failures with Python 3.13+ REPL
 Patch:          https://github.com/pexpect/pexpect/pull/794.patch

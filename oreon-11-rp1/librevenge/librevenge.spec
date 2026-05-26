@@ -9,6 +9,10 @@ Summary: A base library for writing document import filters
 License: ( LGPL-2.1-or-later OR MPL-2.0 ) AND BSD-3-Clause
 URL: http://sourceforge.net/p/libwpd/wiki/librevenge/
 Source: http://downloads.sourceforge.net/libwpd/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 106d0c44bb6408b1348b9e0465666fa83b816177665a22cd017e886c1aaeeb34
+%global source0_file librevenge-0.0.5.tar.xz
+# oreon url source checksums end
 
 BuildRequires: boost-devel
 BuildRequires: doxygen
@@ -52,6 +56,9 @@ debugging applications that use %{name}.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/librevenge-0.0.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "106d0c44bb6408b1348b9e0465666fa83b816177665a22cd017e886c1aaeeb34" || { echo "oreon: Source0 SHA256 mismatch for librevenge-0.0.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -5,7 +5,11 @@ Summary:        Wayland client side decoration library
 
 License:        MIT
 URL:            https://gitlab.freedesktop.org/libdecor/libdecor
-Source:         %{url}/-/releases/%{version}/downloads/libdecor-%{version}.tar.xz
+Source:        https://gitlab.freedesktop.org/libdecor/libdecor/-/releases/0.2.5/downloads/libdecor-0.2.5.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 7fd50f780a4fee90a03f7b2c09055033e488654cbaff4a0c4bbae616bac9cd1c
+%global source0_file libdecor-0.2.5.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -33,6 +37,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdecor-0.2.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7fd50f780a4fee90a03f7b2c09055033e488654cbaff4a0c4bbae616bac9cd1c" || { echo "oreon: Source0 SHA256 mismatch for libdecor-0.2.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

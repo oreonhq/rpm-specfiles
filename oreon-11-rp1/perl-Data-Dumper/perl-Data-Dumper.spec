@@ -15,6 +15,10 @@ Patch1:         Data-Dumper-2.184-Upgrade-to-2.188.patch
 Patch2:         Data-Dumper-2.188-Upgrade-to-2.189.patch
 # Upgrade to 2.191 based on perl-5.42.0
 Patch3:         Data-Dumper-2.189-Upgrade-to-2.191.patch
+# oreon url source checksums begin
+%global source0_sha256 e42736890b7dae1b37818d9c5efa1f1fdc52dec04f446a33a4819bf1d4ab5ad3
+%global source0_file Data-Dumper-2.183.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -76,6 +80,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Data-Dumper-2.183.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e42736890b7dae1b37818d9c5efa1f1fdc52dec04f446a33a4819bf1d4ab5ad3" || { echo "oreon: Source0 SHA256 mismatch for Data-Dumper-2.183.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Data-Dumper-%{base_version}
 %patch -P0 -p1
 %patch -P1 -p1

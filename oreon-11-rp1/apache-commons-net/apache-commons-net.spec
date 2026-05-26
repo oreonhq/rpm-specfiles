@@ -10,6 +10,10 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://archive.apache.org/dist/commons/net/source/commons-net-%{version}-src.tar.gz
 Source1:        https://downloads.apache.org/commons/net/source/commons-net-%{version}-src.tar.gz.asc
 Source2:        https://downloads.apache.org/commons/KEYS
+# oreon url source checksums begin
+%global source0_sha256 3686e1446dff59245432b0679c760d3bf3f40bfb64d8c8312d71feed7114d0a0
+%global source0_file commons-net-3.12.0-src.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-io:commons-io)
@@ -34,6 +38,9 @@ as BSD R command support. The purpose of the library is to provide
 fundamental protocol access, not higher-level abstractions.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/commons-net-3.12.0-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3686e1446dff59245432b0679c760d3bf3f40bfb64d8c8312d71feed7114d0a0" || { echo "oreon: Source0 SHA256 mismatch for commons-net-3.12.0-src.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n commons-net-%{version}-src
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 

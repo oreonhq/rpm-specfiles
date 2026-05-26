@@ -59,6 +59,12 @@ Version:        357
 Release:        2%{?dist}
 Source0:        https://github.com/cockpit-project/cockpit/releases/download/%{version}/cockpit-%{version}.tar.xz
 Source1:        https://github.com/cockpit-project/cockpit/releases/download/%{version}/cockpit-node-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 8cfb30784d196e9fed885736bb560d82e49a7f96122c9c28ad768572a8078fe8
+%global source0_file cockpit-357.tar.xz
+%global source1_sha256 03a33b50e468271dd1d7a525b8eed2a369e5d86da5135375633d06698638176a
+%global source1_file cockpit-node-357.tar.xz
+# oreon url source checksums end
 
 %if 0%{?fedora} >= 41 || 0%{?rhel}
 ExcludeArch: %{ix86}
@@ -156,6 +162,10 @@ BuildRequires:  python3-pytest-timeout
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cockpit-357.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8cfb30784d196e9fed885736bb560d82e49a7f96122c9c28ad768572a8078fe8" || { echo "oreon: Source0 SHA256 mismatch for cockpit-357.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/cockpit-node-357.tar.xz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "03a33b50e468271dd1d7a525b8eed2a369e5d86da5135375633d06698638176a" || { echo "oreon: Source1 SHA256 mismatch for cockpit-node-357.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n cockpit-%{version}
 %if 0%{?rebuild_bundle}
 %setup -q -D -T -a 1 -n cockpit-%{version}

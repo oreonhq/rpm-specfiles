@@ -4,7 +4,7 @@ Release:        3%{?dist}
 Summary:        Enhanced seccomp library
 License:        LGPL-2.1-only
 URL:            https://github.com/seccomp/libseccomp
-Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/seccomp/libseccomp/releases/download/v2.6.0/libseccomp-2.6.0.tar.gz
 
 # Backports from upstream
 
@@ -12,6 +12,10 @@ Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Patch0101:      fix-murmur-hash-strict-aliasing-violation.patch
 # https://github.com/seccomp/libseccomp/pull/452
 Patch0102: remove-fuzzer-test-from-62-sim-arch_transactions.patch
+# oreon url source checksums begin
+%global source0_sha256 83b6085232d1588c379dc9b9cae47bb37407cf262e6e74993c61ba72d2a784dc
+%global source0_file libseccomp-2.6.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gperf
@@ -53,6 +57,9 @@ application is allowed to execute, all of which are enforced by the Linux
 Kernel.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libseccomp-2.6.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "83b6085232d1588c379dc9b9cae47bb37407cf262e6e74993c61ba72d2a784dc" || { echo "oreon: Source0 SHA256 mismatch for libseccomp-2.6.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

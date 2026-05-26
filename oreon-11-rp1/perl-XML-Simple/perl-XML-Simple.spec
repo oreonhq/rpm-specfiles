@@ -12,6 +12,10 @@ Summary:        Easy API to maintain XML in Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Simple
 Source0:        https://cpan.metacpan.org/authors/id/G/GR/GRANTM/XML-Simple-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 531fddaebea2416743eb5c4fdfab028f502123d9a220405a4100e68fc480dbf8
+%global source0_file XML-Simple-2.25.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -73,6 +77,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-Simple-2.25.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "531fddaebea2416743eb5c4fdfab028f502123d9a220405a4100e68fc480dbf8" || { echo "oreon: Source0 SHA256 mismatch for XML-Simple-2.25.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-Simple-%{version}
 
 # Remove author tests

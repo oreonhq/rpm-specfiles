@@ -5,6 +5,10 @@ Release:  4%{?dist}
 License:  LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:      https://github.com/flatpak/flatpak-xdg-utils
 Source:   https://github.com/flatpak/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 53705e4cfe81460d8cf6be6ce1b1f6a79c9d12b27b6fd6c6b8d48f6a863a17ff
+%global source0_file flatpak-xdg-utils-1.0.6.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -35,6 +39,9 @@ Requires:  flatpak-spawn%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 This package contains installed tests for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/flatpak-xdg-utils-1.0.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "53705e4cfe81460d8cf6be6ce1b1f6a79c9d12b27b6fd6c6b8d48f6a863a17ff" || { echo "oreon: Source0 SHA256 mismatch for flatpak-xdg-utils-1.0.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

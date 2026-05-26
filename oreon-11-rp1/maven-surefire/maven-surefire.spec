@@ -11,10 +11,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/%{upstream_version}/surefire-%{upstream_version}-source-release.zip
 # Remove bundled binaries which cannot be easily verified for licensing
 Source1:        generate-tarball.sh
-Source2:        https://junit.sourceforge.net/cpl-v10.html
+Source2:        https://raw.githubusercontent.com/junit-team/junit4/r3.8.2/cpl-v10.html
 
 Patch:          0001-Port-to-TestNG-7.4.0.patch
 Patch:          0002-Disable-JUnit-4.8-test-grouping.patch
@@ -101,7 +101,8 @@ integration-test phase thus enabling the post-integration-test phase
 to execute.
 
 %prep
-%autosetup -p1 -C
+%setup -q -T -b1 -n surefire-%{upstream_version}
+%autopatch -p1
 cp -p %{SOURCE2} .
 
 

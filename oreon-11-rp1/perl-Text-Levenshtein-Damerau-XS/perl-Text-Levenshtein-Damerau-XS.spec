@@ -5,6 +5,10 @@ Summary:        XS Damerau Levenshtein edit distance
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-Levenshtein-Damerau-XS
 Source0:        https://cpan.metacpan.org/authors/id/U/UG/UGEXE/Text-Levenshtein-Damerau-XS-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 154e376a909cb358cafe8571d02832f25838bd7dd11df3f87b619fd81eeb59fe
+%global source0_file Text-Levenshtein-Damerau-XS-3.2.tar.gz
+# oreon url source checksums end
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make
@@ -26,6 +30,9 @@ This is an XS implementation of the true Damerau Levenshtein edit distance
 algorithm.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Text-Levenshtein-Damerau-XS-3.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "154e376a909cb358cafe8571d02832f25838bd7dd11df3f87b619fd81eeb59fe" || { echo "oreon: Source0 SHA256 mismatch for Text-Levenshtein-Damerau-XS-3.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Text-Levenshtein-Damerau-XS-%{version}
 
 %build

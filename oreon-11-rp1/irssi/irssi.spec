@@ -41,6 +41,10 @@ Requires:	perl(lib)
 Requires:	perl(Symbol)
 # https://github.com/irssi/irssi/issues/1374
 Patch0:		irssi-1.4.1-botti-perl-link-fix.patch
+# oreon url source checksums begin
+%global source0_sha256 72a951cb0ad622785a8962801f005a3a412736c7e7e3ce152f176287c52fe062
+%global source0_file irssi-1.4.5.tar.xz
+# oreon url source checksums end
 
 %package devel
 Summary:	Development package for irssi
@@ -61,6 +65,9 @@ being maintained.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/irssi-1.4.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "72a951cb0ad622785a8962801f005a3a412736c7e7e3ce152f176287c52fe062" || { echo "oreon: Source0 SHA256 mismatch for irssi-1.4.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

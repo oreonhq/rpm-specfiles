@@ -49,7 +49,7 @@ Source:		https://code.videolan.org/videolan/vlc/-/archive/%{commit}/vlc-%{commit
 %else
 Source:		https://get.videolan.org/vlc/%{version}/vlc-%{version}.tar.xz
 %endif
-Source:		macros.vlc
+Source:        https://get.videolan.org/vlc/%{version}/vlc-%{version}.tar.xz
 
 ## upstream patches
 # spatialaudio: fix compilation with libspatialaudio 4.0
@@ -80,6 +80,10 @@ Patch:		flatpak-cache.patch
 Patch:		gstreamer128.patch
 # fix build with libupnp-1.18
 Patch:		libupnp118.patch
+# oreon url source checksums begin
+%global source0_sha256 e891cae6aa3ccda69bf94173d5105cbc55c7a7d9b1d21b9b21666e69eff3e7e0
+%global source0_file vlc-3.0.23.tar.xz
+# oreon url source checksums end
 
 %{load:%{S:1}}
 %global __provides_exclude_from ^%{vlc_plugindir}/.*$
@@ -577,6 +581,9 @@ developing applications and plugins that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vlc-3.0.23.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e891cae6aa3ccda69bf94173d5105cbc55c7a7d9b1d21b9b21666e69eff3e7e0" || { echo "oreon: Source0 SHA256 mismatch for vlc-3.0.23.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 %{?commit:-n %{name}-%{commit}}
 
 rm -f aclocal.m4 m4/lib*.m4 m4/lt*.m4

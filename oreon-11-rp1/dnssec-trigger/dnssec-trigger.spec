@@ -11,7 +11,7 @@ Url: https://www.nlnetlabs.nl/projects/dnssec-trigger/
 
 %if 0%{?snapshot:1}
 # generated using './makedist.sh -s' in the cloned upstream trunk
-Source0: %{name}-%{version}_%{snapshot}.tar.gz
+Source0:        https://www.nlnetlabs.nl/downloads/dnssec-trigger/dnssec-trigger-0.17.tar.gz
 %else
 Source0: https://www.nlnetlabs.nl/downloads/dnssec-trigger/%{name}-%{version}.tar.gz
 Source1: https://www.nlnetlabs.nl/downloads/dnssec-trigger/%{name}-%{version}.tar.gz.asc
@@ -36,6 +36,10 @@ Patch6: dnssec-trigger-0.17-allowed-characters.patch
 Patch7: dnssec-trigger-0.17-openssl-3.2.patch
 # https://github.com/NLnetLabs/dnssec-trigger/pull/15
 Patch8: dnssec-trigger-0.17-server-recipe.patch
+# oreon url source checksums begin
+%global source0_sha256 c02519ca689014b219cf9a708494bcddbf6fff2cb48304943139750308462281
+%global source0_file dnssec-trigger-0.17.tar.gz
+# oreon url source checksums end
 
 # to obsolete the version in which the panel was in main package
 Obsoletes: %{name} < 0.12-22
@@ -94,6 +98,9 @@ some user input is needed, the panel creates a dialog window.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dnssec-trigger-0.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c02519ca689014b219cf9a708494bcddbf6fff2cb48304943139750308462281" || { echo "oreon: Source0 SHA256 mismatch for dnssec-trigger-0.17.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?fedora} && ! 0%{?snapshot:1}
 %gpgverify -d 0 -s 1 -k 2
 %endif

@@ -9,6 +9,10 @@ Url:            http://cwrap.org/
 Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
 Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        pam_wrapper.keyring
+# oreon url source checksums begin
+%global source0_sha256 6549c0b3e41d1ebe0c94a1be63c25eec918191462b602ab6f47d4a5fa709c3e4
+%global source0_file pam_wrapper-1.1.8.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gpgverify
@@ -83,6 +87,9 @@ Python module to quickly write tests in Python.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pam_wrapper-1.1.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6549c0b3e41d1ebe0c94a1be63c25eec918191462b602ab6f47d4a5fa709c3e4" || { echo "oreon: Source0 SHA256 mismatch for pam_wrapper-1.1.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 # Not compatible with Python 3.12 headers

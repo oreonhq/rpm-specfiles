@@ -14,6 +14,10 @@ Source0:        https://github.com/junit-team/junit4/archive/refs/tags/r%{versio
 
 Patch:          0001-Port-to-hamcrest-2.2.patch
 Patch:          0002-Port-to-OpenJDK-21.patch
+# oreon url source checksums begin
+%global source0_sha256 1b6d700fc374c82951d247f6d80238951d87c61661ceb151f9fbf40f65413561
+%global source0_file r4.13.2.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -43,6 +47,9 @@ Summary:        Manual for %{name}
 Documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/r4.13.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1b6d700fc374c82951d247f6d80238951d87c61661ceb151f9fbf40f65413561" || { echo "oreon: Source0 SHA256 mismatch for r4.13.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n junit4-r%{version}
 find . -name '*.jar' -delete
 find . -name '*.class' -delete

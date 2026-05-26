@@ -25,6 +25,10 @@ Patch3: autofs-5.1.9-fix-crash-in-make_options_string.patch
 Patch4: autofs-5.1.9-Fix-incompatible-function-pointer-types-in-cyrus-sasl-module.patch
 Patch5: autofs-5.1.9-fix-always-recreate-credential-cache.patch
 Patch6: autofs-5.1.9-fix-changelog.patch
+# oreon url source checksums begin
+%global source0_sha256 46c30b763ef896f4c4a6df6d62aaaef7afc410e0b7f50d52dbfc6cf728cacd4f
+%global source0_file autofs-5.1.9.tar.gz
+# oreon url source checksums end
 
 %if %{with systemd}
 BuildRequires: systemd-units
@@ -83,6 +87,9 @@ unmountar dem när de har varit oanvända en bestämd tid.  Detta kan
 inkludera nätfilsystem, CD-ROM, floppydiskar, och så vidare.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/autofs-5.1.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "46c30b763ef896f4c4a6df6d62aaaef7afc410e0b7f50d52dbfc6cf728cacd4f" || { echo "oreon: Source0 SHA256 mismatch for autofs-5.1.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}
 echo %{version}-%{release} > .version
 %if %{with systemd}

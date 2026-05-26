@@ -7,6 +7,10 @@ Summary:        Efficiently compute time from local and GMT time
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Time-Local
 Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Time-Local-%{cpan_version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1d136b71bd041cbe6f66c43180ee79e675b72ad5a3596abd6a44d211072ada29
+%global source0_file Time-Local-1.35.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -46,6 +50,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Time-Local-1.35.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1d136b71bd041cbe6f66c43180ee79e675b72ad5a3596abd6a44d211072ada29" || { echo "oreon: Source0 SHA256 mismatch for Time-Local-1.35.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Time-Local-%{cpan_version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

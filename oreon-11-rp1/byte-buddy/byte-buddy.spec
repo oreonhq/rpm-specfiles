@@ -14,6 +14,10 @@ Source0:        https://github.com/raphw/byte-buddy/archive/refs/tags/byte-buddy
 # Patch the build to avoid bundling inside shaded jars
 Patch:          0001-Avoid-bundling-asm.patch
 Patch:          0002-Remove-dependencies.patch
+# oreon url source checksums begin
+%global source0_sha256 f8324360e2ed3f3ed9e4d2bd124941982261d40edc7b6abf9f401b86d8cf1ab8
+%global source0_file byte-buddy-1.17.7.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -64,6 +68,9 @@ Summary:        Byte Buddy Maven plugin
 A plugin for post-processing class files via Byte Buddy in a Maven build.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/byte-buddy-1.17.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f8324360e2ed3f3ed9e4d2bd124941982261d40edc7b6abf9f401b86d8cf1ab8" || { echo "oreon: Source0 SHA256 mismatch for byte-buddy-1.17.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 

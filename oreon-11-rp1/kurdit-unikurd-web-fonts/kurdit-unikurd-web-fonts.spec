@@ -19,10 +19,17 @@ A widely used Kurdish font which supports various Arabic-like scripts
 
 Source0:       https://www.kurditgroup.org/sites/default/files/%{archivename}.zip
 Source1:       65-%{fontpkgname}.conf
+# oreon url source checksums begin
+%global source0_sha256 b049a7cffd9747ad834663f7785e23c00a9b30a949cfe407ad54fdcbbbca68ee
+%global source0_file unikurdweb_0.zip
+# oreon url source checksums end
 
 %fontpkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/unikurdweb_0.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b049a7cffd9747ad834663f7785e23c00a9b30a949cfe407ad54fdcbbbca68ee" || { echo "oreon: Source0 SHA256 mismatch for unikurdweb_0.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -c %{archivename}
 
 %build

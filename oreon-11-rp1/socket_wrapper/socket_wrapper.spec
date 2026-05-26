@@ -9,6 +9,10 @@ Url:            http://cwrap.org/
 Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
 Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        socket_wrapper.keyring
+# oreon url source checksums begin
+%global source0_sha256 8b0f4d6c2ae7f5f0f475f03fad5496cadb8cb57914a811616599092cd830b56e
+%global source0_file socket_wrapper-1.5.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -48,6 +52,9 @@ Development headers for applications with the need to call
 socket_wrapper_enabled().
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/socket_wrapper-1.5.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b0f4d6c2ae7f5f0f475f03fad5496cadb8cb57914a811616599092cd830b56e" || { echo "oreon: Source0 SHA256 mismatch for socket_wrapper-1.5.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

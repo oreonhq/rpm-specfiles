@@ -7,6 +7,10 @@ Summary:        What modules are shipped with versions of perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-CoreList
 Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-CoreList-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 df85be58cdf25dfe375820a9b3038972d75a12af75dc478003bd1442d5fac88a
+%global source0_file Module-CoreList-5.20260308.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -59,6 +63,9 @@ Tests from %{name}-%{version}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-CoreList-5.20260308.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "df85be58cdf25dfe375820a9b3038972d75a12af75dc478003bd1442d5fac88a" || { echo "oreon: Source0 SHA256 mismatch for Module-CoreList-5.20260308.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-CoreList-%{version}
 
 # Help file to recognise the Perl scripts and normalize shebangs

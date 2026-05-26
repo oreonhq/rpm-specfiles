@@ -5,7 +5,11 @@ Summary:        A library for stubbing in Python
 
 License:        BSD-3-Clause
 URL:            https://github.com/alex/pretend
-Source0:        %{url}/archive/v%{version}/pretend-%{version}.tar.gz
+Source0:        https://github.com/alex/pretend/archive/v1.0.9/pretend-1.0.9.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 890313320280455daeaa11100e8b765093fee7839ae946de38333601fe544a16
+%global source0_file pretend-1.0.9.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -26,6 +30,9 @@ Pretend is a library to make stubbing with Python easier.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pretend-1.0.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "890313320280455daeaa11100e8b765093fee7839ae946de38333601fe544a16" || { echo "oreon: Source0 SHA256 mismatch for pretend-1.0.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n pretend-%{version}
 
 

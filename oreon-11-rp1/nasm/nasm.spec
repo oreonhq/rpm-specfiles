@@ -14,6 +14,12 @@ License: BSD-2-Clause
 URL: http://www.nasm.us
 Source0: https://www.nasm.us/pub/nasm/releasebuilds/%{version}/%{name}-%{version}.tar.xz
 Source1: https://www.nasm.us/pub/nasm/releasebuilds/%{version}/%{name}-%{version}-xdoc.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 b7324cbe86e767b65f26f467ed8b12ad80e124e3ccb89076855c98e43a9eddd4
+%global source0_file nasm-3.01.tar.xz
+%global source1_sha256 47762f066c032306cd0723b438ffd9862aad2729225433cc9fcd5e21cf10f114
+%global source1_file nasm-3.01-xdoc.tar.xz
+# oreon url source checksums end
 
 BuildRequires: perl(Env)
 BuildRequires: autoconf
@@ -51,6 +57,10 @@ in HTML, PDF, PostScript, and text formats.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/nasm-3.01.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b7324cbe86e767b65f26f467ed8b12ad80e124e3ccb89076855c98e43a9eddd4" || { echo "oreon: Source0 SHA256 mismatch for nasm-3.01.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/nasm-3.01-xdoc.tar.xz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "47762f066c032306cd0723b438ffd9862aad2729225433cc9fcd5e21cf10f114" || { echo "oreon: Source1 SHA256 mismatch for nasm-3.01-xdoc.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 tar xJf %{SOURCE1} --strip-components 1

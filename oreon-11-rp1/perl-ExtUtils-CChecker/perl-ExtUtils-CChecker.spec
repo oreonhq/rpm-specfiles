@@ -4,7 +4,12 @@ Release:        5%{?dist}
 Summary:        Configure-time utilities for using C headers, libraries, or OS features
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-CChecker
-Source0:        https://cpan.metacpan.org/modules/by-module/ExtUtils/ExtUtils-CChecker-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/ExtUtils-CChecker-0.12.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8b87d145337dec1ee754d30871d0b105c180ad4c92c7dc0c7fadd76cec8c57d3
+%global source0_file ExtUtils-CChecker-0.12.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils
@@ -32,6 +37,9 @@ Build.PL or Makefile.PL file to check for the existence of these
 requirements before attempting to actually build the module.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ExtUtils-CChecker-0.12.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b87d145337dec1ee754d30871d0b105c180ad4c92c7dc0c7fadd76cec8c57d3" || { echo "oreon: Source0 SHA256 mismatch for ExtUtils-CChecker-0.12.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -qn ExtUtils-CChecker-%{version}
 
 %build

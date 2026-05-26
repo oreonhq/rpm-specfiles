@@ -14,7 +14,7 @@ URL:        http://www.x.org
 License:    MIT
 
 %if 0%{?gitdate}
-Source0:    %{tarball}-%{gitdate}.tar.xz
+Source0:        https://www.x.org/pub/individual/driver/xf86-input-libinput-1.5.0.tar.xz
 %else
 Source0:    https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
 %endif
@@ -23,6 +23,10 @@ Source1:    71-libinput-overrides-wacom.conf
 # Fedora-only hack for hidpi screens
 # https://bugzilla.redhat.com/show_bug.cgi?id=1413306
 Patch01:    0001-Add-a-DPIScaleFactor-option-as-temporary-solution-to.patch
+# oreon url source checksums begin
+%global source0_sha256 2524c35f196554ea11aef3bba1cf324759454e1d49f98ac026ace2f6003580e6
+%global source0_file xf86-input-libinput-1.5.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: autoconf automake libtool
@@ -43,6 +47,9 @@ A generic input driver for the X.Org X11 X server based on libinput,
 supporting all devices.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xf86-input-libinput-1.5.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2524c35f196554ea11aef3bba1cf324759454e1d49f98ac026ace2f6003580e6" || { echo "oreon: Source0 SHA256 mismatch for xf86-input-libinput-1.5.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1 -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

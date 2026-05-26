@@ -27,6 +27,10 @@ The google-noto-serif-cjk-vf-fonts package contains Google Noto Serif CJK Variab
 Source0:  https://github.com/googlefonts/noto-cjk/releases/download/Serif%{version}/02_NotoSerifCJK-OTF-VF.zip
 Source1:  genfontconf.py
 Source10: 65-%{fontpkgname}.conf
+# oreon url source checksums begin
+%global source0_sha256 7898cfb54156cc0d8a2f2c00d5645c573ff367d03d29085bb495966d99d2529e
+%global source0_file 02_NotoSerifCJK-OTF-VF.zip
+# oreon url source checksums end
 
 %global obsoletes_epoch_version_release 0:20201206-8
 
@@ -54,6 +58,9 @@ Provides:       %{subpkgname} = %{epoch}:%{version}-%{release}\
 %fontpkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/02_NotoSerifCJK-OTF-VF.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7898cfb54156cc0d8a2f2c00d5645c573ff367d03d29085bb495966d99d2529e" || { echo "oreon: Source0 SHA256 mismatch for 02_NotoSerifCJK-OTF-VF.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -c
 
 cp -p Variable/OTC/NotoSerifCJK-VF.otf.ttc NotoSerifCJK-VF.ttc

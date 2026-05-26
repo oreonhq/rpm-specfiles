@@ -4,6 +4,10 @@ Release: 32%{?dist}
 Summary: ATA S.M.A.R.T. Disk Health Monitoring Library
 Source0: http://0pointer.de/public/libatasmart-%{version}.tar.xz
 Patch0: libatasmart-0.19-wd-fix.patch
+# oreon url source checksums begin
+%global source0_sha256 61f0ea345f63d28ab2ff0dc352c22271661b66bf09642db3a4049ac9dbdb0f8d
+%global source0_file libatasmart-0.19.tar.xz
+# oreon url source checksums end
 License: LGPL-2.1-or-later
 Url: http://git.0pointer.de/?p=libatasmart.git;a=summary
 BuildRequires:  gcc
@@ -26,6 +30,9 @@ Development Files for libatasmart Client Development
 %ldconfig_scriptlets
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libatasmart-0.19.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61f0ea345f63d28ab2ff0dc352c22271661b66bf09642db3a4049ac9dbdb0f8d" || { echo "oreon: Source0 SHA256 mismatch for libatasmart-0.19.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

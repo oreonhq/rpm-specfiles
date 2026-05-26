@@ -58,6 +58,10 @@ Requires:         java-25-headless >= 1:1.8
 # Related pieces removed via pom_xpath_remove macros
 Patch1:           remove_submit_integration_test_verification.patch
 Patch2:           testng7_port.patch
+# oreon url source checksums begin
+%global source0_sha256 d022c4607faada4ab70ffe85b2d0d1465b1f090785aba1b3330f1db4a4d74bfb
+%global source0_file 4.0.26.tar.gz
+# oreon url source checksums end
 
 %description
 Byteman is a tool which simplifies tracing and testing of Java programs.
@@ -98,6 +102,9 @@ remote server hosts and validation of assertions describing the expected
 operation of the instrumented methods.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/4.0.26.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d022c4607faada4ab70ffe85b2d0d1465b1f090785aba1b3330f1db4a4d74bfb" || { echo "oreon: Source0 SHA256 mismatch for 4.0.26.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n byteman-%{version}
 
 # Fix the gid:aid for java_cup

@@ -7,6 +7,10 @@ Summary:        Manages IPv4 and IPv6 addresses and subnets
 License:        GPL-2.0-or-later AND (GPL-2.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/NetAddr-IP
 Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIKER/NetAddr-IP-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ec5a82dfb7028bcd28bb3d569f95d87dd4166cc19867f2184ed3a59f6d6ca0e7
+%global source0_file NetAddr-IP-4.079.tar.gz
+# oreon url source checksums end
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -47,6 +51,9 @@ This module provides an object-oriented abstraction on top of IP addresses
 or IP subnets, that allows for easy manipulations.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/NetAddr-IP-4.079.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ec5a82dfb7028bcd28bb3d569f95d87dd4166cc19867f2184ed3a59f6d6ca0e7" || { echo "oreon: Source0 SHA256 mismatch for NetAddr-IP-4.079.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n NetAddr-IP-%{version}
 
 %build

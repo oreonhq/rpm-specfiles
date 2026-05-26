@@ -9,6 +9,10 @@ Summary: Dutch hunspell dictionaries
 Version: 2.20.19
 Release: 17%{?dist}
 Source: https://github.com/OpenTaal/opentaal-hunspell/archive/2.20.19.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0a86ec393450d7070bd69ee83f69c37ff27dbbc5fe684803375f113d7128bd87
+%global source0_file 2.20.19.tar.gz
+# oreon url source checksums end
 URL: https://opentaal.org/
 License: BSD-3-Clause OR CC-BY-3.0
 BuildArch: noarch
@@ -20,6 +24,9 @@ Supplements: (hunspell and langpacks-nl)
 Dutch hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/2.20.19.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0a86ec393450d7070bd69ee83f69c37ff27dbbc5fe684803375f113d7128bd87" || { echo "oreon: Source0 SHA256 mismatch for 2.20.19.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n opentaal-hunspell-%{version}
 
 %build

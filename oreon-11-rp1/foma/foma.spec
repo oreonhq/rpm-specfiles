@@ -28,6 +28,10 @@ Source0:        https://github.com/mhulden/%{name}/archive/%{commit0}.tar.gz#/%{
 Patch0:         foma-harden-build-fedora.patch
 Patch1: foma-c99.patch
 Patch2: foma-avoid-deprecated-inet-functions.patch
+# oreon url source checksums begin
+%global source0_sha256 8016c800eca020a28ac2805841cce20562b617ffafe215d53a23dc9a3e252186
+%global source0_file dfe1ccb1055af99be0232a26520d247b5fe093bc.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc zlib-devel readline-devel flex bison
 BuildRequires: make
@@ -66,6 +70,9 @@ The libfoma-devel package contains libraries and header files for
 developing applications that use libfoma.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dfe1ccb1055af99be0232a26520d247b5fe093bc.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8016c800eca020a28ac2805841cce20562b617ffafe215d53a23dc9a3e252186" || { echo "oreon: Source0 SHA256 mismatch for dfe1ccb1055af99be0232a26520d247b5fe093bc.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{commit0} -p1
 
 

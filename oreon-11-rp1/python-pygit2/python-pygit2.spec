@@ -12,6 +12,10 @@ Source0:        https://github.com/libgit2/pygit2/archive/v%{version}.tar.gz#/%{
 # that capability through a DNS resolution is not always accurate.
 # Forcefully disable all network tests to avoid unnecessary build failures.
 Patch:          python-pygit2-network-tests.patch
+# oreon url source checksums begin
+%global source0_sha256 85f41fea3d6bd10676e6f0ee1803995fab456897215dde3f23c32f7d59189917
+%global source0_file v1.19.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc
@@ -44,6 +48,9 @@ Documentation for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.19.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "85f41fea3d6bd10676e6f0ee1803995fab456897215dde3f23c32f7d59189917" || { echo "oreon: Source0 SHA256 mismatch for v1.19.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pkgname}-%{version} -p1
 
 

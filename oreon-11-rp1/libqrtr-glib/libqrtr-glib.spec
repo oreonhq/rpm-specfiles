@@ -5,6 +5,10 @@ Summary: Support library to use and manage the QRTR (Qualcomm IPC Router) bus.
 License: LGPL-2.1-or-later
 URL: https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib
 Source: https://gitlab.freedesktop.org/mobile-broadband/libqrtr-glib/-/archive/%{version}/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 69ec8883d887a426c6402440b200fa53c41e9da8e098333369f2388d3559e856
+%global source0_file libqrtr-glib-1.2.2.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: meson >= 0.53
 BuildRequires: gcc
@@ -30,6 +34,9 @@ applications using QRTR functionality from applications that use glib.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libqrtr-glib-1.2.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "69ec8883d887a426c6402440b200fa53c41e9da8e098333369f2388d3559e856" || { echo "oreon: Source0 SHA256 mismatch for libqrtr-glib-1.2.2.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

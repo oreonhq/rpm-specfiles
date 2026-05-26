@@ -5,9 +5,13 @@ Summary:        Library for low-level interaction with nftables Netlink's API ov
 
 License:        GPL-2.0-or-later
 URL:            https://netfilter.org/projects/libnftnl/
-Source0:        %{url}/files/%{name}-%{version}.tar.xz
-Source1:        %{url}/files/%{name}-%{version}.tar.xz.sig
+Source0:        https://netfilter.org/projects/libnftnl//files/libnftnl-1.3.1.tar.xz
+Source1:        https://netfilter.org/projects/libnftnl//files/libnftnl-1.3.1.tar.xz.sig
 Source2:        coreteam-gpg-key-0xD70D1A666ACF2B21.txt
+# oreon url source checksums begin
+%global source0_sha256 607da28dba66fbdeccf8ef1395dded9077e8d19f2995f9a4d45a9c2f0bcffba8
+%global source0_file libnftnl-1.3.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  libmnl-devel
 BuildRequires:  gcc
@@ -26,6 +30,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libnftnl-1.3.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "607da28dba66fbdeccf8ef1395dded9077e8d19f2995f9a4d45a9c2f0bcffba8" || { echo "oreon: Source0 SHA256 mismatch for libnftnl-1.3.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

@@ -12,6 +12,10 @@ URL:            https://gitlab.com/accounts-sso/signond
 
 # Temporary source, for plasma6 compatibility (fork archive; upstream is accounts-sso/signond).
 Source0:        https://gitlab.com/nicolasfella/signond/-/archive/%{commit0}/signond-%{commit0}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2c3dd97fcdb90f38bb9884f7e11d0fb9ba214f78bddaacb27e4969cefff7d690
+%global source0_file signond-c8ad98249af541514ff7a81634d3295e712f1a39.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  dbus-x11
@@ -80,6 +84,9 @@ The %{name}-doc package contains documentation for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/signond-c8ad98249af541514ff7a81634d3295e712f1a39.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c3dd97fcdb90f38bb9884f7e11d0fb9ba214f78bddaacb27e4969cefff7d690" || { echo "oreon: Source0 SHA256 mismatch for signond-c8ad98249af541514ff7a81634d3295e712f1a39.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n signond-%{commit0} -p1
 
 

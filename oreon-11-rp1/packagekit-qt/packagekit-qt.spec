@@ -9,6 +9,10 @@ URL:            https://github.com/PackageKit/PackageKit-Qt
 
 # Tag archive (consistent saved name for spectool)
 Source0:        https://github.com/PackageKit/PackageKit-Qt/archive/refs/tags/v%{version}.tar.gz#/PackageKit-Qt-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 bbb8398d0f98c46e2ed7fd3ce526d4f7fc8476f5a449e89269f01b1bc751c4ad
+%global source0_file v1.1.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -34,6 +38,9 @@ Requires:       cmake(Qt6DBus)
 Headers, pkg-config, and CMake files for building against packagekit-qt6.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.1.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bbb8398d0f98c46e2ed7fd3ce526d4f7fc8476f5a449e89269f01b1bc751c4ad" || { echo "oreon: Source0 SHA256 mismatch for v1.1.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n PackageKit-Qt-%{version} -p1
 
 %build

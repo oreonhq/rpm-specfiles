@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://archive.apache.org/dist/maven/plugins/%{name}-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 5d1fd38ee713684b991d6551b4fc305b12ef51731e8498bf1b40668e4e24c0e6
+%global source0_file maven-compiler-plugin-3.12.1-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -42,6 +46,9 @@ Obsoletes:      %{name}-javadoc < 3.12.1-13
 The Compiler Plugin is used to compile the sources of your project.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-compiler-plugin-3.12.1-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5d1fd38ee713684b991d6551b4fc305b12ef51731e8498bf1b40668e4e24c0e6" || { echo "oreon: Source0 SHA256 mismatch for maven-compiler-plugin-3.12.1-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 # Replace path to junit in a test case with the system wide .jar

@@ -259,6 +259,10 @@ Source14:  66-%{fontpkgname14}.conf
 Source15:  66-%{fontpkgname15}.conf
 Source16:  66-%{fontpkgname16}.conf
 Source17:  modify-font-metadata.pe
+# oreon url source checksums begin
+%global source0_sha256 c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05
+%global source0_file culmus-0.133.tar.gz
+# oreon url source checksums end
 
 Name:      culmus-fonts
 Summary:   Fonts for Hebrew from Culmus project
@@ -270,6 +274,9 @@ Summary:   Fonts for Hebrew from Culmus project
 %fontmetapkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/culmus-0.133.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05" || { echo "oreon: Source0 SHA256 mismatch for culmus-0.133.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n culmus-%{version}
 cp -p %{SOURCE17} .
 

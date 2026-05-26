@@ -28,6 +28,10 @@ Patch1: shadow-4.19.0-account-tools-setuid.patch
 Patch2: shadow-4-19-useradd-support-btrfs.patch
 # https://github.com/shadow-maint/shadow/commit/6be13b2f84a2c1a0d0f4129b5258b4b443e7f86c
 Patch3: shadow-4.19.3-chkhash.patch
+# oreon url source checksums begin
+%global source0_sha256 11a8f358910712cf957dd4fd205063fce7e386b68fc7dfe3a0e1e53155ec53c5
+%global source0_file shadow-4.19.3.tar.xz
+# oreon url source checksums end
 
 ### Dependencies ###
 Requires: audit-libs >= 1.6.5
@@ -106,6 +110,9 @@ Requires: shadow-utils-subid = %{epoch}:%{version}-%{release}
 Development files for shadow-utils-subid.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/shadow-4.19.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "11a8f358910712cf957dd4fd205063fce7e386b68fc7dfe3a0e1e53155ec53c5" || { echo "oreon: Source0 SHA256 mismatch for shadow-4.19.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1 -S git -n shadow-4.19.3
 
 iconv -f ISO88591 -t utf-8  doc/HOWTO > doc/HOWTO.utf8

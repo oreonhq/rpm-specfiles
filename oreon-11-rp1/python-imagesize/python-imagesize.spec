@@ -11,6 +11,10 @@ Summary:        %{sum}
 License:        MIT
 URL:            https://github.com/shibukawa/imagesize_py
 Source0:        https://files.pythonhosted.org/packages/source/i/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8e8358c4a05c304f1fccf7ff96f036e7243a189e9e42e90851993c558cfe9ee3
+%global source0_file imagesize-2.0.0.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python%{python3_pkgversion}-setuptools
@@ -44,6 +48,9 @@ The imagesize package parses image file headers and returns the image sizes.
 This is a pure Python library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/imagesize-2.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8e8358c4a05c304f1fccf7ff96f036e7243a189e9e42e90851993c558cfe9ee3" || { echo "oreon: Source0 SHA256 mismatch for imagesize-2.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pypi_name}-%{version}
 # Remove bundled egg-info
 rm -rf %{pypi_name}.egg-info

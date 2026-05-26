@@ -24,6 +24,10 @@ URL:     https://projects.kde.org/projects/kde/kdelibs/kactivities
 %global stable stable
 %endif
 Source0: http://download.kde.org/%{stable}/%{version}/src/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 c7cb9d023f6e5cd01d76568c3590303ea3ecb4ebe9535b31862957846f5e898a
+%global source0_file kactivities-4.13.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires: kdelibs4-devel >= %{version}
 %if ! 0%{?nepomuk}
@@ -99,6 +103,9 @@ Requires: %{name}-devel%{?_isa} = %{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kactivities-4.13.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c7cb9d023f6e5cd01d76568c3590303ea3ecb4ebe9535b31862957846f5e898a" || { echo "oreon: Source0 SHA256 mismatch for kactivities-4.13.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q 
 
 

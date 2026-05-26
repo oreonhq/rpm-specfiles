@@ -5,7 +5,12 @@ Release:        3%{?dist}
 Summary:        Error/exception handling in an OO-ish way
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND X11
 URL:            https://metacpan.org/release/Error
-Source0:        https://cpan.metacpan.org/modules/by-module/Error/Error-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/Error-0.17030.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 34d382276c0fb0d6b38355b94c96a30b12d834d5662eb53f088ee25e3e712924
+%global source0_file Error-0.17030.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -44,6 +49,9 @@ for errors/exceptions that can either be thrown, for subsequent catch, or
 can simply be recorded.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Error-0.17030.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "34d382276c0fb0d6b38355b94c96a30b12d834d5662eb53f088ee25e3e712924" || { echo "oreon: Source0 SHA256 mismatch for Error-0.17030.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Error-%{version}
 
 %build

@@ -9,6 +9,10 @@ License:        LGPL-2.1-or-later
 
 URL:            https://ocaml.libvirt.org/
 Source0:        https://download.libvirt.org/ocaml/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0e024711f33fb4cefc3670da014d21395ab83985423bb5850082412e583341cd
+%global source0_file ocaml-libvirt-0.6.1.7.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  ocaml >= 3.10.0
@@ -39,6 +43,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ocaml-libvirt-0.6.1.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0e024711f33fb4cefc3670da014d21395ab83985423bb5850082412e583341cd" || { echo "oreon: Source0 SHA256 mismatch for ocaml-libvirt-0.6.1.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %autopatch -p1
 

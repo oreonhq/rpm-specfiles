@@ -13,7 +13,7 @@ Summary:        RPM buildroot helper to make builds reproducible and hardlink id
 
 License:        GPL-3.0-or-later
 URL:            https://crates.io/crates/add-determinism
-Source0:        %{crates_source}
+Source0:        https://crates.io/api/v1/crates/add-determinism/0.7.3/download#/add-determinism-0.7.3.crate
 # Manually created patch for downstream crate metadata changes
 # * relax rlimit dependency to allow 0.11.x
 #   https://github.com/keszybz/add-determinism/pull/76

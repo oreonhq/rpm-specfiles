@@ -7,6 +7,10 @@ Summary:		Transport Independent RPC Library
 License:		SISSL AND BSD-3-Clause
 URL:  			http://git.linux-nfs.org/?p=steved/libtirpc.git;a=summary
 Source0:		http://downloads.sourceforge.net/libtirpc/libtirpc-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 b47d3ac19d3549e54a05d0019a6c400674da716123858cfdb6d3bdd70a66c702
+%global source0_file libtirpc-1.3.7.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:		automake, autoconf, libtool, pkgconfig
 BuildRequires:		krb5-devel
@@ -36,6 +40,9 @@ developing programs which use the tirpc library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libtirpc-1.3.7.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b47d3ac19d3549e54a05d0019a6c400674da716123858cfdb6d3bdd70a66c702" || { echo "oreon: Source0 SHA256 mismatch for libtirpc-1.3.7.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Remove .orig files

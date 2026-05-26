@@ -33,6 +33,10 @@ Patch7:         perl-Tk-Avoid-using-incompatible-pointer-type-for-old_warn.patch
 # Avoid using incompatible pointer type in function 'GetTextIndex'
 # https://github.com/eserte/perl-tk/issues/103
 Patch8:         perl-Tk-Fix-incompatible-pointer-type-in-function-GetTextIndex.patch
+# oreon url source checksums begin
+%global source0_sha256 32aa7271a6bdfedc3330119b3825daddd0aa4b5c936f84ad74eabb932a200a5e
+%global source0_file Tk-804.036.tar.gz
+# oreon url source checksums end
 
 # Versions before this have Unicode issues
 BuildRequires:  make
@@ -169,6 +173,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Tk-804.036.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "32aa7271a6bdfedc3330119b3825daddd0aa4b5c936f84ad74eabb932a200a5e" || { echo "oreon: Source0 SHA256 mismatch for Tk-804.036.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Tk-%{version}
 find . -type f -exec perl -MConfig -pi -e \
 's,^(#!)(/usr/local)?/bin/perl\b,$Config{startperl}, if ($. == 1)' {} \;

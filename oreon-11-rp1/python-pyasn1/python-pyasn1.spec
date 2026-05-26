@@ -8,6 +8,12 @@ Summary:        ASN.1 tools for Python
 License:        BSD-2-Clause
 Source0:        https://github.com/pyasn1/pyasn1/archive/v%{version}.tar.gz
 Source1:        https://github.com/pyasn1/pyasn1-modules/archive/v%{modules_version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3f57055e9caa26338e353ee8c1107882ad36f60f300a3e65f33d5fbb12cf8846
+%global source0_file v0.6.2.tar.gz
+%global source1_sha256 8cf7cfdf1bb976f8b60c7bd06439902d2c132412235c288af4b68a7a74378a78
+%global source1_file v0.4.1.tar.gz
+# oreon url source checksums end
 URL:            https://github.com/pyasn1/pyasn1
 BuildArch:      noarch
 
@@ -41,6 +47,10 @@ BuildRequires:  python3-sphinx
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.6.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3f57055e9caa26338e353ee8c1107882ad36f60f300a3e65f33d5fbb12cf8846" || { echo "oreon: Source0 SHA256 mismatch for v0.6.2.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/v0.4.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8cf7cfdf1bb976f8b60c7bd06439902d2c132412235c288af4b68a7a74378a78" || { echo "oreon: Source1 SHA256 mismatch for v0.4.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -n %{module}-%{version} -q -b1
 
 

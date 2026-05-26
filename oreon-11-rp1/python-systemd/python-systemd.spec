@@ -8,6 +8,10 @@ URL:            https://github.com/systemd/python-systemd
 Source0:        https://github.com/systemd/python-systemd/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 Patch:          https://github.com/systemd/python-systemd/pull/140.patch
+# oreon url source checksums begin
+%global source0_sha256 38181dbd451fd418d316a92a34bc2118967930684cdd62c3e979fe8c8ebacffa
+%global source0_file v235.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc
@@ -44,6 +48,9 @@ Requires:       js-jquery
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v235.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "38181dbd451fd418d316a92a34bc2118967930684cdd62c3e979fe8c8ebacffa" || { echo "oreon: Source0 SHA256 mismatch for v235.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 sed -i 's/py\.test/pytest/' Makefile
 

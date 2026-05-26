@@ -34,10 +34,17 @@ This package provide monospace version of overpass fonts.}
 Source0: https://github.com/RedHatBrand/Overpass/archive/%{version}.tar.gz
 Source10: 60-%{fontpkgname0}.conf
 Source11: 60-%{fontpkgname1}.conf
+# oreon url source checksums begin
+%global source0_sha256 07600d6745f5199ad210c7f39e934dcd9716b54615e44ccf1f830001a0da3597
+%global source0_file 3.0.4.tar.gz
+# oreon url source checksums end
 
 %fontpkg -a
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/3.0.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "07600d6745f5199ad210c7f39e934dcd9716b54615e44ccf1f830001a0da3597" || { echo "oreon: Source0 SHA256 mismatch for 3.0.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n Overpass-%{version}
 
 %build

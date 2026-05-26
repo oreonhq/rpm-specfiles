@@ -4,7 +4,12 @@ Release:	8%{?dist}
 Summary:	Manage deprecation warnings for your distribution
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Package-DeprecationManager
-Source0:	https://cpan.metacpan.org/modules/by-module/Package/Package-DeprecationManager-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Package-DeprecationManager-0.18.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b68d3f0ced55b7615fddbb6029b89f92a34fe0dd8c6fd6bceffc157d56834fe8
+%global source0_file Package-DeprecationManager-0.18.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -41,6 +46,9 @@ When you import Package::DeprecationManager, you must provide a set of
 the version when that feature was deprecated.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Package-DeprecationManager-0.18.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b68d3f0ced55b7615fddbb6029b89f92a34fe0dd8c6fd6bceffc157d56834fe8" || { echo "oreon: Source0 SHA256 mismatch for Package-DeprecationManager-0.18.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Package-DeprecationManager-%{version}
 
 %build

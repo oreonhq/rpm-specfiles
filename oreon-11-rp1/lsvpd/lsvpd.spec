@@ -6,6 +6,10 @@ Summary:	VPD/hardware inventory utilities for Linux
 License:	GPL-2.0-or-later
 URL:    https://github.com/power-ras/%{name}/releases
 Source: https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7ca765fdae52e1995b38a7080b023ca606d8621751d9dd5bb57ba5a0f5672b48
+%global source0_file lsvpd-1.7.15.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc-c++
 BuildRequires: libvpd-devel >= 2.2.9
@@ -32,6 +36,9 @@ firmware levels.  lsvio lists virtual devices, usually only found
 on POWER PC based systems.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lsvpd-1.7.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7ca765fdae52e1995b38a7080b023ca606d8621751d9dd5bb57ba5a0f5672b48" || { echo "oreon: Source0 SHA256 mismatch for lsvpd-1.7.15.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

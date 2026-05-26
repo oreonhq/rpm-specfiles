@@ -20,6 +20,12 @@ Patch3: libcgroup-0.40.rc1-fread.patch
 Patch4: libcgroup-0.40.rc1-templates-fix.patch
 
 Patch100: libcgroup-tests-unbundle-gtest.patch
+# oreon url source checksums begin
+%global source0_sha256 64378ec85eb4b46d1536a26120ad6cf9012a3a66d33ec9dec2fba88055c6001a
+%global source0_file libcgroup-v3.0.tar.gz
+%global source1_sha256 20cb815c855bf97fb79b50b93464e397e267a6d077bacda338f752b28390da6e
+%global source1_file 7c998caddcd8236fe4191841e361b401697fb777.tar.gz
+# oreon url source checksums end
 
 BuildRequires: autoconf, automake, libtool
 BuildRequires: gcc, gcc-c++
@@ -65,6 +71,10 @@ future allow creation of persistent configuration for control groups and
 provide scripts to manage that configuration.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libcgroup-v3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "64378ec85eb4b46d1536a26120ad6cf9012a3a66d33ec9dec2fba88055c6001a" || { echo "oreon: Source0 SHA256 mismatch for libcgroup-v3.0.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/7c998caddcd8236fe4191841e361b401697fb777.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "20cb815c855bf97fb79b50b93464e397e267a6d077bacda338f752b28390da6e" || { echo "oreon: Source1 SHA256 mismatch for 7c998caddcd8236fe4191841e361b401697fb777.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup  -q  -n %{name}-%{version}
 %patch -P0 -p1 -b .config-patch
 %patch -P1 -p1 -b .chmod

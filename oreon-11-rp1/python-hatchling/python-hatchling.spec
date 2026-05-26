@@ -6,7 +6,7 @@ Summary:        The build backend used by Hatch
 # SPDX
 License:        MIT
 URL:            https://pypi.org/project/hatchling
-Source0:        %{pypi_source hatchling}
+Source0:        https://files.pythonhosted.org/packages/source/h/hatchling/hatchling-1.29.0.tar.gz
 # Written for Fedora in groff_man(7) format based on --help output
 Source100:      hatchling.1
 Source200:      hatchling-build.1
@@ -14,6 +14,10 @@ Source300:      hatchling-dep.1
 Source310:      hatchling-dep-synced.1
 Source400:      hatchling-metadata.1
 Source500:      hatchling-version.1
+# oreon url source checksums begin
+%global source0_sha256 793c31816d952cee405b83488ce001c719f325d9cda69f1fc4cd750527640ea6
+%global source0_file hatchling-1.29.0.tar.gz
+# oreon url source checksums end
 
 BuildSystem:            pyproject
 BuildOption(install):   -l hatchling

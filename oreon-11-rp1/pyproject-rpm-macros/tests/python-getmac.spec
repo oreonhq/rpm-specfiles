@@ -4,7 +4,7 @@ Release:        0%{?dist}
 Summary:        Get MAC addresses of remote hosts and local interfaces
 License:        MIT
 URL:            https://github.com/GhostofGoes/getmac
-Source0:        %{pypi_source getmac}
+Source0:        https://files.pythonhosted.org/packages/source/g/getmac/getmac-0.8.3.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

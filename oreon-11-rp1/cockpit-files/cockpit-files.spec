@@ -11,6 +11,12 @@ License: LGPL-2.1-or-later
 
 Source0: https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 Source1: https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-node-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 0d67375ece3f4609e97244b5fc9b9a1146117a6c48e088bd5b14d667fbfdcb3d
+%global source0_file cockpit-files-37.tar.xz
+%global source1_sha256 01ab936f75135fd8f910b95b47c566d6ed0b96106806455e4e96b12edaf84f8c
+%global source1_file cockpit-files-node-37.tar.xz
+# oreon url source checksums end
 
 BuildArch: noarch
 BuildRequires: make
@@ -52,6 +58,10 @@ Provides: bundled(npm(tslib)) = 2.8.1
 A filesystem browser for Cockpit
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cockpit-files-37.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0d67375ece3f4609e97244b5fc9b9a1146117a6c48e088bd5b14d667fbfdcb3d" || { echo "oreon: Source0 SHA256 mismatch for cockpit-files-37.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/cockpit-files-node-37.tar.xz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "01ab936f75135fd8f910b95b47c566d6ed0b96106806455e4e96b12edaf84f8c" || { echo "oreon: Source1 SHA256 mismatch for cockpit-files-node-37.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}
 %if %{defined rebuild_bundle}
 %setup -q -D -T -a 1 -n %{name}

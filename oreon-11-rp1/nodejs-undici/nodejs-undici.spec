@@ -20,12 +20,16 @@ Release:    %autorelease
 License:    MIT
 URL:        https://undici.nodejs.org
 # See Source4 on how these archives were generated
-Source0:    %{npm_name}-%{version}-stripped.tar.gz
+Source0:    https://github.com/nodejs/undici/archive/v%{version}/%{npm_name}-v%{version}.tar.gz
 Source1:    %{npm_name}-%{version}-nm-prod.tgz
 Source2:    %{npm_name}-%{version}-nm-dev.tgz
 Source3:    %{npm_name}-%{version}-bundled-licenses.txt
 Source4:    %{npm_name}-sources.sh
 Source5:    test-runner.sh
+# oreon url source checksums begin
+%global source0_sha256 ad5d01bb4c91ff274a8333cbad06da2c15fd637db4954bf3c69572245a54f19b
+%global source0_file undici-v7.24.0.tar.gz
+# oreon url source checksums end
 
 # Binary artifacts in this package are aimed at the wasm32-wasi "architecture".
 %global     _binaries_in_noarch_packages_terminate_build 0
@@ -49,6 +53,9 @@ Provides:   bundled(llhttp) = %{llhttp_version_major}.%{llhttp_version_minor}.%{
 An HTTP/1.1 client, written from scratch for Node.js.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/undici-v7.24.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ad5d01bb4c91ff274a8333cbad06da2c15fd637db4954bf3c69572245a54f19b" || { echo "oreon: Source0 SHA256 mismatch for undici-v7.24.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{npm_name}-%{version} -S git_am
 cp -p %{S:3} .
 

@@ -12,6 +12,10 @@ License:	BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-only AND LGP
 URL:		https://invent.kde.org/frameworks/%{framework}
 Source0:	http://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:	http://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 5010a371944e052f65d94ed694c52b618d4c468855b1c77f078a8f614aefd6f7
+%global source0_file kcodecs-6.24.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	fdupes
 BuildRequires:	cmake
@@ -36,6 +40,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kcodecs-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5010a371944e052f65d94ed694c52b618d4c468855b1c77f078a8f614aefd6f7" || { echo "oreon: Source0 SHA256 mismatch for kcodecs-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 %build

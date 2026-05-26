@@ -4,7 +4,11 @@ Version: 1.1.0
 Release: 4%{?dist}
 License: GPL-2.0-only AND LGPL-2.1-only
 URL: https://github.com/intel/ledmon
-Source0: %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/intel/ledmon/archive/v1.1.0/ledmon-1.1.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4f626400e41ab1e4317b886db5b5df1afa517e8e4faa80fd4378fd22b0bcd055
+%global source0_file ledmon-1.1.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: autoconf automake
 BuildRequires: autoconf-archive
@@ -52,6 +56,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ledmon-1.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4f626400e41ab1e4317b886db5b5df1afa517e8e4faa80fd4378fd22b0bcd055" || { echo "oreon: Source0 SHA256 mismatch for ledmon-1.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 autoreconf -fiv
 

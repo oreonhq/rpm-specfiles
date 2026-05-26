@@ -20,6 +20,10 @@ Url: https://github.com/SELinuxProject/selinux/wiki
 # $ i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 # Patch list start
 Patch0001: 0001-Use-SHA-2-instead-of-SHA-1.patch
+# oreon url source checksums begin
+%global source0_sha256 1ef216c5b56fb7e0a51cd2909787a175a17ee391e0467894807873539ebe766b
+%global source0_file libselinux-3.10.tar.gz
+# oreon url source checksums end
 # Patch list end
 BuildRequires: gcc make
 BuildRequires: ruby-devel ruby libsepol-static >= %{libsepolver} swig pcre2-devel
@@ -92,6 +96,9 @@ The libselinux-static package contains the static libraries
 needed for developing SELinux applications. 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libselinux-3.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1ef216c5b56fb7e0a51cd2909787a175a17ee391e0467894807873539ebe766b" || { echo "oreon: Source0 SHA256 mismatch for libselinux-3.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n libselinux-%{version}
 

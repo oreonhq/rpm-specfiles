@@ -11,7 +11,12 @@ Version:	0.018
 Release:	7%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/CPAN-Meta-Check
-Source0:	https://cpan.metacpan.org/modules/by-module/CPAN/CPAN-Meta-Check-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEONT/CPAN-Meta-Check-0.018.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f619d2df5ea0fd91c8cf83eb54acccb5e43d9e6ec1a3f727b3d0ac15d0cf378a
+%global source0_file CPAN-Meta-Check-0.018.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
@@ -56,6 +61,9 @@ This module verifies if requirements described in a CPAN::Meta object are
 present.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/CPAN-Meta-Check-0.018.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f619d2df5ea0fd91c8cf83eb54acccb5e43d9e6ec1a3f727b3d0ac15d0cf378a" || { echo "oreon: Source0 SHA256 mismatch for CPAN-Meta-Check-0.018.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n CPAN-Meta-Check-%{version}
 
 %build

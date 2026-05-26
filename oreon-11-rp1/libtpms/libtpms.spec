@@ -5,12 +5,16 @@ Summary:        Library providing Trusted Platform Module (TPM) functionality
 License:        BSD-3-Clause AND LicenseRef-TCGL
 
 URL:            https://github.com/stefanberger/libtpms
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
-Source1:        %{url}/releases/download/v%{version}/v%{version}.tar.gz.asc#/%{name}-%{version}.tar.gz.asc
+Source0:        https://github.com/stefanberger/libtpms/archive/v0.10.2/libtpms-0.10.2.tar.gz
+Source1:        https://github.com/stefanberger/libtpms/releases/download/v0.10.2/v0.10.2.tar.gz.asc#/libtpms-0.10.2.tar.gz.asc
 # https://github.com/stefanberger.gpg
 Source2:        gpgkey-B818B9CADF9089C2D5CEC66B75AD65802A0B4211.asc
 
 Patch0001:      0001-Fix-a-compilation-error-in-TPMLIB_GetPlaintext.patch
+# oreon url source checksums begin
+%global source0_sha256 edac03680f8a4a1c5c1d609a10e3f41e1a129e38ff5158f0c8deaedc719fb127
+%global source0_file libtpms-0.10.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -36,6 +40,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Libtpms header files and documentation.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libtpms-0.10.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "edac03680f8a4a1c5c1d609a10e3f41e1a129e38ff5158f0c8deaedc719fb127" || { echo "oreon: Source0 SHA256 mismatch for libtpms-0.10.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

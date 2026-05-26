@@ -18,6 +18,10 @@ Source0:        https://github.com/GrahamDumpleton/mod_wsgi/archive/%{version}.t
 Source1:        wsgi.conf
 Source2:        wsgi-python3.conf
 Patch1:         mod_wsgi-4.5.20-exports.patch
+# oreon url source checksums begin
+%global source0_sha256 9a0fdb61405abc300ec6b100c440dd98cf31cb5f97aeef4207390937298cad20
+%global source0_file 5.0.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  httpd-devel
 BuildRequires:  gcc
@@ -69,6 +73,9 @@ Obsoletes: mod_wsgi < %{version}-%{release}
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/5.0.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9a0fdb61405abc300ec6b100c440dd98cf31cb5f97aeef4207390937298cad20" || { echo "oreon: Source0 SHA256 mismatch for 5.0.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}
 
 : Python2=%{with python2} Python3=%{with python3}

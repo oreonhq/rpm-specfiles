@@ -15,6 +15,10 @@ Patch0:         libtheora-1.1.1-fix-pp_sharp_mod-calc.patch
 # https://bugs.archlinux.org/task/35985
 Patch1:         libtheora-1.1.1-libpng16.patch
 Patch2:         libtheora-1.1.1-libm.patch
+# oreon url source checksums begin
+%global source0_sha256 f36da409947aa2b3dcc6af0a8c2e3144bc19db2ed547d64e9171c59c66561c61
+%global source0_file libtheora-1.1.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  autoconf automake libtool
@@ -66,6 +70,9 @@ with theora bitstreams.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libtheora-1.1.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f36da409947aa2b3dcc6af0a8c2e3144bc19db2ed547d64e9171c59c66561c61" || { echo "oreon: Source0 SHA256 mismatch for libtheora-1.1.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1
 %patch -P1 -p0 -b .libpng16

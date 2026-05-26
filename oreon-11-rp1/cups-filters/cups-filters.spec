@@ -25,7 +25,7 @@ Release: 15%{?dist}
 License: Apache-2.0 WITH LLVM-exception
 
 URL:     https://github.com/OpenPrinting/cups-filters
-Source0: %{URL}/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/OpenPrinting/cups-filters/releases/download/2.0.1/cups-filters-2.0.1.tar.gz
 Source1: lftocrlf.ppd
 Source2: lftocrlf
 
@@ -44,6 +44,10 @@ Patch003: foomatic-ripdie-error.patch
 Patch004: foomaticrip-reject-unknown-values.patch
 # CVE-2025-64524 fix
 Patch005: 0001-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
+# oreon url source checksums begin
+%global source0_sha256 3de1cbb889d06e5a6a945dcb921292544477ab89da95ca89f1eec2de29937afb
+%global source0_file cups-filters-2.0.1.tar.gz
+# oreon url source checksums end
 
 
 # driverless backend/driver was moved into a separate package to
@@ -128,6 +132,9 @@ queues.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cups-filters-2.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3de1cbb889d06e5a6a945dcb921292544477ab89da95ca89f1eec2de29937afb" || { echo "oreon: Source0 SHA256 mismatch for cups-filters-2.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git -N
 
 %if 0%{?fedora} >= 43 || 0%{?rhel} >=9

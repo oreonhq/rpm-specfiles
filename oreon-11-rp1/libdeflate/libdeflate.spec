@@ -8,10 +8,14 @@ Summary:       Fast implementation of DEFLATE, gzip, and zlib
 # SPDX
 License:       MIT
 URL:           https://github.com/ebiggers/libdeflate
-Source:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/ebiggers/libdeflate/archive/v1.25/libdeflate-1.25.tar.gz
 
 # Add a library version to the mingw dll
 Patch:         libdeflate-mingw-libver.patch
+# oreon url source checksums begin
+%global source0_sha256 d11473c1ad4c57d874695e8026865e38b47116bbcb872bfc622ec8f37a86017d
+%global source0_file libdeflate-1.25.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: cmake
@@ -79,6 +83,9 @@ MinGW Windows %{name} binaries.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdeflate-1.25.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d11473c1ad4c57d874695e8026865e38b47116bbcb872bfc622ec8f37a86017d" || { echo "oreon: Source0 SHA256 mismatch for libdeflate-1.25.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

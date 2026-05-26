@@ -23,6 +23,10 @@ Source0: https://www.mercurial-scm.org/release/%{name}-%{upstreamversion}.tar.gz
 Source1: mercurial-site-start.el
 # Patch cargo metadata for dependency versions available in Fedora
 Patch0:  mercurial-rust-metadata.patch
+# oreon url source checksums begin
+%global source0_sha256 a250227eba47c6ad5aa32b9a72281343762f5d274ff38c53c2f43df5c63af3ec
+%global source0_file mercurial-7.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: emacs-el
@@ -134,6 +138,9 @@ in mind.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mercurial-7.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a250227eba47c6ad5aa32b9a72281343762f5d274ff38c53c2f43df5c63af3ec" || { echo "oreon: Source0 SHA256 mismatch for mercurial-7.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{upstreamversion}
 
 # Use tk8 with better handling of 8-bit encodings than the default tk9

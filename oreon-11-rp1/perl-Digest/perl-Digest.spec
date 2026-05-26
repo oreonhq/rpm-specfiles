@@ -5,6 +5,10 @@ Summary:        Modules that calculate message digests
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Digest
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Digest-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 72f55db5c21b808607cb38f75f9b9d5d0bfcb9bd5aa636568db7488f04de689a
+%global source0_file Digest-1.20.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -44,6 +48,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Digest-1.20.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "72f55db5c21b808607cb38f75f9b9d5d0bfcb9bd5aa636568db7488f04de689a" || { echo "oreon: Source0 SHA256 mismatch for Digest-1.20.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Digest-%{version}
 chmod -x digest-bench
 

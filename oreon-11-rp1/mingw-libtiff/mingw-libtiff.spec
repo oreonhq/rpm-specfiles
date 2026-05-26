@@ -7,6 +7,10 @@ Release:        2%{?dist}
 License:        libtiff
 URL:            http://www.simplesystems.org/libtiff/
 Source:         https://download.osgeo.org/libtiff/tiff-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 b92017489bdc1db3a4c97191aa4b75366673cb746de0dce5d7a749d5954681ba
+%global source0_file tiff-4.7.1.tar.xz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -81,6 +85,9 @@ Static version of the MinGW Windows LibTIFF library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tiff-4.7.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b92017489bdc1db3a4c97191aa4b75366673cb746de0dce5d7a749d5954681ba" || { echo "oreon: Source0 SHA256 mismatch for tiff-4.7.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n tiff-%{version}
 
 

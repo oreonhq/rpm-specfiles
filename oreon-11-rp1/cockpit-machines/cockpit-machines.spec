@@ -16,6 +16,12 @@ URL:            https://github.com/cockpit-project/cockpit-machines
 
 Source0: https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 Source1: https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-node-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 130c3639ed6b44f14f79b497cadd35c178761d1e70dc6bb1afeb35fac466424d
+%global source0_file cockpit-machines-349.1.tar.xz
+%global source1_sha256 2e0bfb252887f0d6fb8a0a5651f4b976620ddf45921c2e58d1390ccb51fe694a
+%global source1_file cockpit-machines-node-349.1.tar.xz
+# oreon url source checksums end
 
 BuildArch:      noarch
 %if 0%{?suse_version}
@@ -91,6 +97,10 @@ Provides: bundled(npm(tslib)) = 2.8.1
 Cockpit component for managing libvirt virtual machines.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cockpit-machines-349.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "130c3639ed6b44f14f79b497cadd35c178761d1e70dc6bb1afeb35fac466424d" || { echo "oreon: Source0 SHA256 mismatch for cockpit-machines-349.1.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/cockpit-machines-node-349.1.tar.xz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2e0bfb252887f0d6fb8a0a5651f4b976620ddf45921c2e58d1390ccb51fe694a" || { echo "oreon: Source1 SHA256 mismatch for cockpit-machines-node-349.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}
 %if %{defined rebuild_bundle}
 %setup -q -D -T -a 1 -n %{name}

@@ -14,6 +14,10 @@ ExclusiveArch:  %{java_arches} noarch
 # ./generate-tarball.sh
 Source0:        %{name}-%{version}.tar.gz
 Source1:        https://github.com/stephenc/jcip-annotations/archive/refs/tags/jcip-annotations-1.0-1.tar.gz
+# oreon url source checksums begin
+%global source1_sha256 57d47e633507ce6e039dd52752720fdc96262093d58e1f43a117a995e312cf09
+%global source1_file jcip-annotations-1.0-1.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -30,6 +34,9 @@ documents for Java Specification Request 305: Annotations for Software Defect
 Detection.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jcip-annotations-1.0-1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "57d47e633507ce6e039dd52752720fdc96262093d58e1f43a117a995e312cf09" || { echo "oreon: Source1 SHA256 mismatch for jcip-annotations-1.0-1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 # Replace javax.annotation.concurrent annotations (that are based on

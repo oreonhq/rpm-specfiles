@@ -12,6 +12,10 @@ Summary:        Install subroutines into packages easily
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sub-Install
 Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Sub-Install-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 80b1e281d8cd3b2b31dac711f5c8a1657a87cd80bbe69af3924bcbeb4e5db077
+%global source0_file Sub-Install-0.929.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # ================= Module Build ============================
 BuildRequires:  coreutils
@@ -42,6 +46,9 @@ unsightly mess of no strict or typeglobs lying about where just anyone
 can see them.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Sub-Install-0.929.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "80b1e281d8cd3b2b31dac711f5c8a1657a87cd80bbe69af3924bcbeb4e5db077" || { echo "oreon: Source0 SHA256 mismatch for Sub-Install-0.929.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Sub-Install-%{version}
 
 %build

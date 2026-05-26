@@ -5,6 +5,10 @@ Summary:        Distribution of modules to handle locale codes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Locale-Codes
 Source0:        https://cpan.metacpan.org/authors/id/S/SB/SBECK/Locale-Codes-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 97e1c4d1661961ac50e64eb313d63b8f70f21a2ce03c155076920226097078d2
+%global source0_file Locale-Codes-3.86.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -50,6 +54,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Locale-Codes-3.86.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "97e1c4d1661961ac50e64eb313d63b8f70f21a2ce03c155076920226097078d2" || { echo "oreon: Source0 SHA256 mismatch for Locale-Codes-3.86.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Locale-Codes-%{version}
 chmod -x examples/*
 chmod +x t/*.pl

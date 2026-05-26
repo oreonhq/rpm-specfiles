@@ -24,6 +24,10 @@ BuildRequires: grep
 Patch0: words-3.0-typos.patch
 #470921 -"Barack" and "Obama" are not in /usr/share/dict/words
 Patch1: words-3.0-presidents.patch
+# oreon url source checksums begin
+%global source0_sha256 f26d2cd2471dba491d3c41804cd612a10c23a7b1b1c278a2008addc489603eab
+%global source0_file mwords.tar.Z
+# oreon url source checksums end
 
 %description
 The words file is a dictionary of English words for the
@@ -32,6 +36,9 @@ words to check spelling. Password checkers use it to look for bad
 passwords.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mwords.tar.Z; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f26d2cd2471dba491d3c41804cd612a10c23a7b1b1c278a2008addc489603eab" || { echo "oreon: Source0 SHA256 mismatch for mwords.tar.Z" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n mwords
 
 %build

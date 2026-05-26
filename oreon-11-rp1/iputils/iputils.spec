@@ -19,6 +19,12 @@ Source4: bsd.txt
 Source5: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 
 Patch100: iputils-ifenslave.patch
+# oreon url source checksums begin
+%global source0_sha256 19e680c9eef8c079da4da37040b5f5453763205b4edfb1e2c114de77908927e4
+%global source0_file iputils-20250605.tar.gz
+%global source1_sha256 7917bf34de80a2492eb225adf9168c83a4854ac8a008ed0fd5b3fd147ccd3041
+%global source1_file ifenslave-2.6_1.1.0.orig.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: meson
@@ -41,6 +47,10 @@ ECHO_REQUEST packets to a specified network host to discover whether
 the target machine is alive and receiving network traffic.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/iputils-20250605.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "19e680c9eef8c079da4da37040b5f5453763205b4edfb1e2c114de77908927e4" || { echo "oreon: Source0 SHA256 mismatch for iputils-20250605.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/ifenslave-2.6_1.1.0.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7917bf34de80a2492eb225adf9168c83a4854ac8a008ed0fd5b3fd147ccd3041" || { echo "oreon: Source1 SHA256 mismatch for ifenslave-2.6_1.1.0.orig.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 tar -xf %{SOURCE1}
 # .orig layout varies; ifenslave.8 is often only in Debian's debian/ tarball, not in .orig

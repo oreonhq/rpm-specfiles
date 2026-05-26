@@ -11,7 +11,12 @@ Release:	28%{?dist}
 Summary:	Utility functions for checking references
 License:	MIT
 URL:		https://metacpan.org/release/Ref-Util-XS
-Source0:	https://cpan.metacpan.org/modules/by-module/Ref/Ref-Util-XS-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/Ref-Util-XS-0.117.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 fb64c5a823787f6600257918febd9fbc6f0305936fc3287b81a30c099b65633c
+%global source0_file Ref-Util-XS-0.117.tar.gz
+# oreon url source checksums end
+
 # Build
 BuildRequires:	coreutils
 BuildRequires:	findutils
@@ -47,6 +52,9 @@ Ref::Util::XS introduces several functions to help identify references in a
 faster and smarter way.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Ref-Util-XS-0.117.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fb64c5a823787f6600257918febd9fbc6f0305936fc3287b81a30c099b65633c" || { echo "oreon: Source0 SHA256 mismatch for Ref-Util-XS-0.117.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Ref-Util-XS-%{version}
 
 %build

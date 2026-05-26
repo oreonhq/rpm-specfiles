@@ -9,6 +9,10 @@ Summary:        Sphinx extension for QtHelp documents
 License:        BSD-2-Clause
 URL:            http://sphinx-doc.org/
 Source:         %{pypi_source sphinxcontrib_qthelp}
+# oreon url source checksums begin
+%global source0_sha256 4fe7d0ac8fc171045be623aba3e2a8f613f8682731f9153bb2e40ece16b9bbab
+%global source0_file sphinxcontrib_qthelp-2.0.0.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  gettext
@@ -30,6 +34,9 @@ sphinxcontrib-qthelp is a sphinx extension which outputs QtHelp document.
 %pyproject_buildrequires %{?with_tests: -x test, -x standalone}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sphinxcontrib_qthelp-2.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4fe7d0ac8fc171045be623aba3e2a8f613f8682731f9153bb2e40ece16b9bbab" || { echo "oreon: Source0 SHA256 mismatch for sphinxcontrib_qthelp-2.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n sphinxcontrib_qthelp-%{version}
 find -name '*.mo' -delete
 

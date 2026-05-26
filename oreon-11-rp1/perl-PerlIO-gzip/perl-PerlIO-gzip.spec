@@ -4,7 +4,12 @@ Release:        31%{?dist}
 Summary:        Perl extension to provide a PerlIO layer to gzip/gunzip
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/PerlIO-gzip
-Source0:        https://cpan.metacpan.org/modules/by-module/PerlIO/PerlIO-gzip-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/PerlIO-gzip-0.20.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4848679a3f201e3f3b0c5f6f9526e602af52923ffa471a2a3657db786bd3bdc5
+%global source0_file PerlIO-gzip-0.20.tar.gz
+# oreon url source checksums end
+
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -38,6 +43,9 @@ This is akin to Compress::Zlib, except that it operates at the lower PerlIO
 layer.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/PerlIO-gzip-0.20.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4848679a3f201e3f3b0c5f6f9526e602af52923ffa471a2a3657db786bd3bdc5" || { echo "oreon: Source0 SHA256 mismatch for PerlIO-gzip-0.20.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n PerlIO-gzip-%{version}
 
 %build

@@ -4,7 +4,12 @@ Release:        521%{?dist}
 Summary:        Looking up module information / loading at run-time
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Load-Conditional
-Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Load-Conditional-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-Load-Conditional-0.74.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 54c354a9393820f1ebc2a095da084ea0392dcbccb0cb38a187a71831cc60a730
+%global source0_file Module-Load-Conditional-0.74.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils
@@ -58,6 +63,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Load-Conditional-0.74.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "54c354a9393820f1ebc2a095da084ea0392dcbccb0cb38a187a71831cc60a730" || { echo "oreon: Source0 SHA256 mismatch for Module-Load-Conditional-0.74.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Load-Conditional-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

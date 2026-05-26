@@ -6,6 +6,10 @@ Summary:          Mock hardware devices
 License:          LGPL-2.1-or-later
 URL:              https://github.com/martinpitt/%{name}
 Source0:          https://github.com/martinpitt/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 e90820d2e2a95abf01c5b9813a98b74241391862254906017641bee30cc4ad08
+%global source0_file umockdev-0.19.5.tar.xz
+# oreon url source checksums end
 
 BuildRequires:    git
 BuildRequires:    meson
@@ -32,6 +36,9 @@ The %{name}-devel package contains the libraries to develop
 using %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/umockdev-0.19.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e90820d2e2a95abf01c5b9813a98b74241391862254906017641bee30cc4ad08" || { echo "oreon: Source0 SHA256 mismatch for umockdev-0.19.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git -n %{name}-%{version}
 
 %build

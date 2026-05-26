@@ -15,6 +15,10 @@ Patch2: 0002-agent-helper-Send-standard-error-to-journal.patch
 Patch3: 0004-polkitsubject-Fix-GVariant-ref-leak-for-pidfd-withou.patch
 Patch4: 0005-Aisle-www.aisle.com-reported-an-issue-with-unsanitiz.patch
 Patch5: 0006-Add-Kazakh-translation.patch
+# oreon url source checksums begin
+%global source0_sha256 9b7bc16f086479dcc626c575976568ba4a85d34297a750d8ab3d2e57f6d8b988
+%global source0_file 127.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc-c++
 BuildRequires: glib2-devel >= 2.30.0
@@ -84,6 +88,9 @@ Libraries files for polkit.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/127.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9b7bc16f086479dcc626c575976568ba4a85d34297a750d8ab3d2e57f6d8b988" || { echo "oreon: Source0 SHA256 mismatch for 127.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

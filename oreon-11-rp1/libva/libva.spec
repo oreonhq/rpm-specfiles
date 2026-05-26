@@ -8,7 +8,11 @@ Summary:	Video Acceleration (VA) API for Linux
 # va/x11/va_dri* are ICU
 License:	MIT AND HPND-sell-variant AND ICU
 URL:		https://github.com/intel/libva
-Source0:	%{url}/archive/%{version}%{?pre_release}/%{name}-%{version}%{?pre_release}.tar.gz
+Source0:        https://github.com/intel/libva/archive/2.23.0/libva-2.23.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b10aceb30e93ddf13b2030eb70079574ba437be9b3b76065caf28a72c07e23e7
+%global source0_file libva-2.23.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -44,6 +48,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libva-2.23.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b10aceb30e93ddf13b2030eb70079574ba437be9b3b76065caf28a72c07e23e7" || { echo "oreon: Source0 SHA256 mismatch for libva-2.23.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}%{?pre_release}
 
 %build

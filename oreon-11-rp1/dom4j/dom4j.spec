@@ -41,6 +41,10 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/dom4j/dom4j/archive/version-%{version}.tar.gz
 Source1:        https://repo1.maven.org/maven2/org/%{name}/%{name}/%{version}/%{name}-%{version}.pom
+# oreon url source checksums begin
+%global source0_sha256 a908e65bf3695cca03041fee27a62087ef5d3f07dce7690b724ae1e058da798e
+%global source0_file version-2.1.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(jaxen:jaxen)
@@ -65,6 +69,9 @@ Javadoc for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/version-2.1.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a908e65bf3695cca03041fee27a62087ef5d3f07dce7690b724ae1e058da798e" || { echo "oreon: Source0 SHA256 mismatch for version-2.1.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-version-%{version}
 
 %mvn_alias org.%{name}:%{name} %{name}:%{name}

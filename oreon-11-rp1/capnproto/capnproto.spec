@@ -11,6 +11,10 @@ Summary:        A data interchange format and capability-based RPC system
 License:        MIT
 URL:            https://capnproto.org
 Source0:        https://capnproto.org/%{modulename}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 098f824a495a1a837d56ae17e07b3f721ac86f8dbaf58896a389923458522108
+%global source0_file capnproto-c++-1.3.0.tar.gz
+# oreon url source checksums end
 
 # We need C++
 BuildRequires:  gcc-c++
@@ -45,6 +49,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/capnproto-c++-1.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "098f824a495a1a837d56ae17e07b3f721ac86f8dbaf58896a389923458522108" || { echo "oreon: Source0 SHA256 mismatch for capnproto-c++-1.3.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{modulename}-%{version} -p2
 
 

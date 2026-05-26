@@ -22,6 +22,10 @@ Summary:        Scalable Video Technology for AV1 Encoder
 License:        LicenseRef-BSD-3-Clause-Clear-WITH-AdditionRef-AOMPL-1.0 AND MIT AND ISC AND LicenseRef-Fedora-Public-Domain AND BSD-2-Clause
 URL:            https://gitlab.com/AOMediaCodec/SVT-AV1
 Source:         %url/-/archive/v%{version}/SVT-AV1-v%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 802e9bb2b14f66e8c638f54857ccb84d3536144b0ae18b9f568bbf2314d2de88
+%global source0_file SVT-AV1-v3.1.2.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  cmake >= 3.28
 BuildRequires:  gcc >= 5.4.0
@@ -63,6 +67,9 @@ BuildArch:  noarch
 This package contains the documentation for development of SVT-AV1.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/SVT-AV1-v3.1.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "802e9bb2b14f66e8c638f54857ccb84d3536144b0ae18b9f568bbf2314d2de88" || { echo "oreon: Source0 SHA256 mismatch for SVT-AV1-v3.1.2.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n SVT-AV1-v%{version}
 
 # Mitigate name collisions

@@ -14,6 +14,10 @@ Source2: olivier.pgp
 
 # Build against the new gupnp-igd
 Patch0:         libnice-gupnp-1.6.patch
+# oreon url source checksums begin
+%global source0_sha256 618fc4e8de393b719b1641c1d8eec01826d4d39d15ade92679d221c7f5e4e70d
+%global source0_file libnice-0.1.23.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  glib2-devel
 BuildRequires:  gnupg2
@@ -57,6 +61,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libnice-0.1.23.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "618fc4e8de393b719b1641c1d8eec01826d4d39d15ade92679d221c7f5e4e70d" || { echo "oreon: Source0 SHA256 mismatch for libnice-0.1.23.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 

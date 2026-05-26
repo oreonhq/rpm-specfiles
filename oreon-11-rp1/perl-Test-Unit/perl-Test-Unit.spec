@@ -6,6 +6,10 @@ Summary:        The PerlUnit testing framework
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://perlunit.sourceforge.net/
 Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Test-Unit-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 02f86e62206e5f8eb5665ca2627e2a2480c92f34adee7ed3f5193e69f068891a
+%global source0_file Test-Unit-0.29.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  coreutils
@@ -50,6 +54,9 @@ Gamma.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Unit-0.29.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "02f86e62206e5f8eb5665ca2627e2a2480c92f34adee7ed3f5193e69f068891a" || { echo "oreon: Source0 SHA256 mismatch for Test-Unit-0.29.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Unit-%{version}
 perl -pi -e 's/\r//' examples/Experimental/Sample.pm
 chmod a+x TkTestRunner.pl TestRunner.pl

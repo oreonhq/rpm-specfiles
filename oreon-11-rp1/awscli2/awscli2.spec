@@ -29,6 +29,10 @@ Patch4:             urllib3-v2.patch
 Patch5:             python314.patch
 # https://github.com/aws/aws-cli/pull/9684#issuecomment-3804078566
 Patch6:             prompt-toolkit-3.0.52.patch
+# oreon url source checksums begin
+%global source0_sha256 8bebe606ad8a903b895811e80130fefe1595b3adc6649fefc805203fd488f93b
+%global source0_file aws-cli-2.33.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:          noarch
 
@@ -57,6 +61,9 @@ interface to Amazon Web Services.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/aws-cli-2.33.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8bebe606ad8a903b895811e80130fefe1595b3adc6649fefc805203fd488f93b" || { echo "oreon: Source0 SHA256 mismatch for aws-cli-2.33.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{pkgname}-%{version}
 
 # fix permissions

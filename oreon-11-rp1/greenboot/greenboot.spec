@@ -12,6 +12,10 @@ License:            LGPL-2.1-or-later
 
 URL:                https://github.com/%{repo_owner}/%{repo_name}
 Source0:            https://github.com/%{repo_owner}/%{repo_name}/archive/%{repo_tag}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ba8d385311282cbd8ce7375b726d058cb1f7d905550852255019ca71bef20735
+%global source0_file v0.15.8.tar.gz
+# oreon url source checksums end
 
 ExcludeArch: s390x {%ix86}
 BuildRequires:      systemd-rpm-macros
@@ -50,6 +54,9 @@ Obsoletes:          greenboot-update-platforms-check <= 0.12.0
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.15.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ba8d385311282cbd8ce7375b726d058cb1f7d905550852255019ca71bef20735" || { echo "oreon: Source0 SHA256 mismatch for v0.15.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

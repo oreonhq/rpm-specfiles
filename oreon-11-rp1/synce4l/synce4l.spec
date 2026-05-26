@@ -10,6 +10,10 @@ Source1:	synce4l.service
 
 # Fix compiler warnings to avoid build failures with -Werror
 Patch1:		synce4l-ccwarns.patch
+# oreon url source checksums begin
+%global source0_sha256 200100ab77e9b5e11062e0185a6f3d898a9f1c817414df1c5d893243bafabe60
+%global source0_file synce4l-1.1.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	gcc make systemd
 BuildRequires:	libnl3-devel
@@ -24,6 +28,9 @@ supported hardware by processing Ethernet Synchronization Messaging Channel
 (NIC).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/synce4l-1.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "200100ab77e9b5e11062e0185a6f3d898a9f1c817414df1c5d893243bafabe60" || { echo "oreon: Source0 SHA256 mismatch for synce4l-1.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 sed \

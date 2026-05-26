@@ -42,6 +42,10 @@ Source0:       https://github.com/%{gituser}/%{gitname}/archive/%{commit}/%{name
 # Use default sphix theme to generate documentation rather than sphinx_rtd_theme
 # to avoid static installation of font files on fedora >= 24
 Patch1:         yara-docs-theme.patch
+# oreon url source checksums begin
+%global source0_sha256 d38e30fd9c1e1c7921d1c4568262d94f5c2d6b5da139fe49572a43ffbc5c53f6
+%global source0_file v4.5.5.tar.gz
+# oreon url source checksums end
 
 
 BuildRequires:  git
@@ -97,6 +101,9 @@ developing applications that use %{name}.
 %{common_description}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v4.5.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d38e30fd9c1e1c7921d1c4568262d94f5c2d6b5da139fe49572a43ffbc5c53f6" || { echo "oreon: Source0 SHA256 mismatch for v4.5.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{with release}
     %autosetup -n %{gitname}-%{version} -p 1 -S git
 %else

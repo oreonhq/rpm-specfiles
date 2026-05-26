@@ -7,6 +7,10 @@ License: GPL-2.0-or-later
 URL: http://sourceforge.net/projects/linux-udf/
 Source: https://github.com/pali/udftools/releases/download/%{version}/udftools-%{version}.tar.gz
 Patch1: udftools-2.3-backported_fixes.patch
+# oreon url source checksums begin
+%global source0_sha256 750dcf5c797765eb42265e0a56d1a99f97f94b7f6f4534263a5410503f0caf59
+%global source0_file udftools-2.3.tar.gz
+# oreon url source checksums end
 BuildRequires: make
 BuildRequires: readline-devel, ncurses-devel
 BuildRequires: autoconf, automake, libtool, perl-Carp
@@ -18,6 +22,9 @@ Linux UDF Filesystem userspace utilities.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/udftools-2.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "750dcf5c797765eb42265e0a56d1a99f97f94b7f6f4534263a5410503f0caf59" || { echo "oreon: Source0 SHA256 mismatch for udftools-2.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -11,7 +11,12 @@ Release:        4%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:        Keep imports out of your namespace
 URL:            https://metacpan.org/release/namespace-autoclean
-Source0:        https://cpan.metacpan.org/modules/by-module/namespace/namespace-autoclean-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/namespace-autoclean-0.31.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 d3b32c82e1d2caa9d58b8c8075965240e6cab66ab9350bd6f6bea4ca07e938d6
+%global source0_file namespace-autoclean-0.31.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -69,6 +74,9 @@ imported them before or after you 'use'd the pragma. It will also not touch
 anything that looks like a method.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/namespace-autoclean-0.31.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d3b32c82e1d2caa9d58b8c8075965240e6cab66ab9350bd6f6bea4ca07e938d6" || { echo "oreon: Source0 SHA256 mismatch for namespace-autoclean-0.31.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n namespace-autoclean-%{version}
 
 %build

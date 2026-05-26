@@ -36,6 +36,10 @@ Patch1:        libwebp-mingw-libsuffix.patch
 Patch2:        libwebp-cmakedir.patch
 # Kill rpath
 Patch3:        libwebp-rpath.patch
+# oreon url source checksums begin
+%global source0_sha256 e4ab7009bf0629fd11982d4c2aa83964cf244cffba7347ecd39019a9e38c4564
+%global source0_file libwebp-1.6.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: freeglut-devel
@@ -133,6 +137,9 @@ MinGW Windows %{name} library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libwebp-1.6.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e4ab7009bf0629fd11982d4c2aa83964cf244cffba7347ecd39019a9e38c4564" || { echo "oreon: Source0 SHA256 mismatch for libwebp-1.6.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

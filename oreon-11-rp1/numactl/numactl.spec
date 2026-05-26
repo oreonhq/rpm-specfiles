@@ -6,7 +6,11 @@ Release:	4%{?dist}
 # numactl binaries are GPLv2 only
 License:	GPL-2.0-only
 URL:		https://github.com/numactl/numactl
-Source0:	%{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/numactl/numactl/releases/download/v2.0.19/numactl-2.0.19.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f2672a0381cb59196e9c246bf8bcc43d5568bc457700a697f1a1df762b9af884
+%global source0_file numactl-2.0.19.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: libtool automake autoconf
@@ -35,6 +39,9 @@ License: LGPL-2.1-only and GPL-2.0-only
 Provides development headers for numa library calls
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/numactl-2.0.19.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f2672a0381cb59196e9c246bf8bcc43d5568bc457700a697f1a1df762b9af884" || { echo "oreon: Source0 SHA256 mismatch for numactl-2.0.19.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

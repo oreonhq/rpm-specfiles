@@ -13,6 +13,10 @@ Source0:        https://github.com/%{name}/%{name}/archive/%{name}_%{version}/%{
 # From https://github.com/pyparsing/pyparsing/commit/28ef77eb03
 # Unrelated changes removed
 Patch:          28ef77eb03.patch
+# oreon url source checksums begin
+%global source0_sha256 9655507e4583fa20d2b6909ce4bf7fee71a9976ea94c734dd857fa9ae7c9c7dd
+%global source0_file pyparsing-3.1.2.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  dos2unix
@@ -72,6 +76,9 @@ The package contains documentation for pyparsing.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pyparsing-3.1.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9655507e4583fa20d2b6909ce4bf7fee71a9976ea94c734dd857fa9ae7c9c7dd" || { echo "oreon: Source0 SHA256 mismatch for pyparsing-3.1.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{name}_%{version}
 
 dos2unix -k examples/*

@@ -31,6 +31,10 @@ Patch8:		libsmi-c5830721-include-fix.patch
 Patch9:		libsmi-c5830721-missing-semicolon.patch
 Patch10:	libsmi-c5830721-cleanups.patch
 Patch11:	libsmi-c5830721-test-fix-typo.patch
+# oreon url source checksums begin
+%global source0_sha256 516044e684ff13abf56632e87a9db6b4bca2bfe5d87f108012bf4f74ae7df0b8
+%global source0_file libsmi-c5830721.tar.gz
+# oreon url source checksums end
 BuildRequires:	libtool
 BuildRequires:	flex, bison
 BuildRequires:	make
@@ -60,6 +64,9 @@ This package contains development files needed to develop
 libsmi-based applications.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libsmi-c5830721.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "516044e684ff13abf56632e87a9db6b4bca2bfe5d87f108012bf4f74ae7df0b8" || { echo "oreon: Source0 SHA256 mismatch for libsmi-c5830721.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{commit}
 %patch -P 0 -p1 -b .wget111
 %patch -P 2 -p1 -b .clash

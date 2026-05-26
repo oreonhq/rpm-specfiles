@@ -22,6 +22,10 @@ Patch001: 0001-List-raw-sockets-during-printers-subcommand-if-avail.patch
 # raise MAX_VENDOR https://sourceforge.net/p/gimp-print/mailman/gimp-print-devel/thread/e24b2385-6576-a949-a40d-3786c8067520%40gmail.com/#msg37353830
 # downstream only, Mike does not want to merge the change
 Patch002: pappl-max-vendors.patch
+# oreon url source checksums begin
+%global source0_sha256 50fec863a28a3c39af639de29d58bf8cefdafa258b66e3c0dfbe2097801dc9db
+%global source0_file pappl-1.4.9.tar.gz
+# oreon url source checksums end
 
 
 BuildRequires: avahi-devel
@@ -62,6 +66,9 @@ BuildRequires: avahi-devel
 This package provides the PAPPL headers and development environment.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pappl-1.4.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "50fec863a28a3c39af639de29d58bf8cefdafa258b66e3c0dfbe2097801dc9db" || { echo "oreon: Source0 SHA256 mismatch for pappl-1.4.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

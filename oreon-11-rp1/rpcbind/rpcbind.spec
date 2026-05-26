@@ -25,6 +25,10 @@ Requires(postun): systemd coreutils
 
 Patch100: rpcbind-0.2.3-systemd-tmpfiles.patch
 Patch101: rpcbind-0.2.4-systemd-rundir.patch
+# oreon url source checksums begin
+%global source0_sha256 964132c389918e8964d7334936b6dd10ef025b300c6b29e693ba0f29550e3de5
+%global source0_file rpcbind-1.2.8.tar.bz2
+# oreon url source checksums end
 
 Provides: portmap = %{version}-%{release}
 Obsoletes: portmap <= 4.0-65.3
@@ -43,6 +47,9 @@ universal addresses.  It must be running on the host to be able to make
 RPC calls on a server on that machine.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rpcbind-1.2.8.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "964132c389918e8964d7334936b6dd10ef025b300c6b29e693ba0f29550e3de5" || { echo "oreon: Source0 SHA256 mismatch for rpcbind-1.2.8.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Create a sysusers.d config file

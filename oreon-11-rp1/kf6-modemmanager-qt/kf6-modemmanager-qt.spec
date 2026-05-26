@@ -11,6 +11,10 @@ License: GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (
 URL:     https://invent.kde.org/frameworks/%{framework}
 Source0: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 c658ff8e19e27c9d7980552d4094233fbe0ad286f5a6927fa687255e84e80ed2
+%global source0_file modemmanager-qt-6.24.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros
@@ -34,6 +38,9 @@ that use ModemManager.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/modemmanager-qt-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c658ff8e19e27c9d7980552d4094233fbe0ad286f5a6927fa687255e84e80ed2" || { echo "oreon: Source0 SHA256 mismatch for modemmanager-qt-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 %build

@@ -17,6 +17,10 @@ URL: http://www.keepalived.org/
 
 Source0: http://www.keepalived.org/software/keepalived-%{version}.tar.gz
 Source1: keepalived.service
+# oreon url source checksums begin
+%global source0_sha256 85882eb62974f395d4c631be990a41a839594a7e62fbfebcb5649a937a7a1bb6
+%global source0_file keepalived-2.2.8.tar.gz
+# oreon url source checksums end
 #Patch0: keepalived-configure-c99.patch
 
 Requires(post): systemd
@@ -57,6 +61,9 @@ can be used independently or all together to provide resilient
 infrastructures.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/keepalived-2.2.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "85882eb62974f395d4c631be990a41a839594a7e62fbfebcb5649a937a7a1bb6" || { echo "oreon: Source0 SHA256 mismatch for keepalived-2.2.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Prevent re-running autotools.

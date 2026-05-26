@@ -13,6 +13,10 @@ URL:            https://www.videolan.org/developers/libdvdnav.html
 Source0:        https://download.videolan.org/pub/videolan/libdvdread/%{version}/libdvdread-%{version}.tar.xz
 Source1:        https://download.videolan.org/pub/videolan/libdvdread/%{version}/libdvdread-%{version}.tar.xz.asc
 Source2:        https://download.videolan.org/pub/keys/7180713BE58D1ADC.asc
+# oreon url source checksums begin
+%global source0_sha256 2e3e04a305c15c3963aa03ae1b9a83c1d239880003fcf3dde986d3943355d407
+%global source0_file libdvdread-7.0.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  doxygen
 BuildRequires:  gcc
@@ -36,6 +40,9 @@ It provides the functionality that is required to access many DVDs.
 This package contains development files for libdvdread.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdvdread-7.0.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2e3e04a305c15c3963aa03ae1b9a83c1d239880003fcf3dde986d3943355d407" || { echo "oreon: Source0 SHA256 mismatch for libdvdread-7.0.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{S:2}' --signature='%{S:1}' --data='%{S:0}'
 %setup -q
 

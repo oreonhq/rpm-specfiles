@@ -22,6 +22,10 @@ Source:		https://www.wavpack.com/%{name}-%{version}.tar.bz2
 Patch1:		wavpack-0001-fix-for-MinGW.patch
 # Fedora-specific (we do not build any C++ code)
 Patch2:		wavpack-0002-We-compile-only-ANSI-C-sources.patch
+# oreon url source checksums begin
+%global source0_sha256 b0038f515d322042aaa6bd352d437729c6f5f904363cc85bbc9b0d8bd4a81927
+%global source0_file wavpack-5.9.0.tar.bz2
+# oreon url source checksums end
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gettext-devel
@@ -89,6 +93,9 @@ This package is MinGW compiled wavpack tools for the Win64 target.
 %{?mingw_debug_package}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/wavpack-5.9.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b0038f515d322042aaa6bd352d437729c6f5f904363cc85bbc9b0d8bd4a81927" || { echo "oreon: Source0 SHA256 mismatch for wavpack-5.9.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

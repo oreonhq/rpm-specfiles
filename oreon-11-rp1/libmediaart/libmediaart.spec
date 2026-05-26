@@ -10,6 +10,10 @@ Source0:        https://download.gnome.org/sources/%{name}/1.9/%{name}-%{version
 # https://gitlab.gnome.org/GNOME/libmediaart/-/merge_requests/21
 # move to glycin to avoid https://gitlab.gnome.org/GNOME/gdk-pixbuf/-/issues/293
 Patch: 21.patch
+# oreon url source checksums begin
+%global source0_sha256 2b43dd9f54f0d8d0b89e2addb83341ab06d7b98cb1b2e704383584af9c560f6b
+%global source0_file libmediaart-1.9.7.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gtk-doc
 BuildRequires:  meson
@@ -39,6 +43,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libmediaart-1.9.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2b43dd9f54f0d8d0b89e2addb83341ab06d7b98cb1b2e704383584af9c560f6b" || { echo "oreon: Source0 SHA256 mismatch for libmediaart-1.9.7.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

@@ -23,9 +23,16 @@ BuildRequires: check-devel
 BuildRequires: bzip2-devel
 BuildRequires: make
 Source: https://releases.pagure.org/gfs2-utils/gfs2-utils-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2604105ec64abbb17690593a4ab05262b409c0a9128fafaf49f5490c77420e34
+%global source0_file gfs2-utils-3.6.1.tar.gz
+# oreon url source checksums end
 URL: https://pagure.io/gfs2-utils
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gfs2-utils-3.6.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2604105ec64abbb17690593a4ab05262b409c0a9128fafaf49f5490c77420e34" || { echo "oreon: Source0 SHA256 mismatch for gfs2-utils-3.6.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

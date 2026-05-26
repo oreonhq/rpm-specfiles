@@ -57,6 +57,10 @@ Source4:	60-%{fontpkgname2}.conf
 # font files, rather than to the eot, svg, ttf, woff, and woff2 web fonts, as
 # required by Fedora's font packaging guidelines.
 Patch:          %{name}-opentype-css.patch
+# oreon url source checksums begin
+%global source0_sha256 fdebdf3f1b8641a4b665c61f1f48e482b140a817ce619113559201b8a1fcdd51
+%global source0_file Font-Awesome-6.7.2.tar.gz
+# oreon url source checksums end
 
 %description %_desc
 
@@ -98,6 +102,9 @@ It also contains JavaScript, TTF, and SVG files, which are typically
 used on web pages.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Font-Awesome-6.7.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fdebdf3f1b8641a4b665c61f1f48e482b140a817ce619113559201b8a1fcdd51" || { echo "oreon: Source0 SHA256 mismatch for Font-Awesome-6.7.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n Font-Awesome-%{version} -p1
 cp -p %SOURCE2 .
 

@@ -14,6 +14,10 @@ Source2:        https://github.com/publicsuffix/list/raw/main/tests/test_psl.txt
 # do not need that RPM installed before publicsuffix-list-dafsa exists.
 %global libpsl_tools_ver 0.21.5
 Source3:        https://github.com/rockdaboot/libpsl/releases/download/%{libpsl_tools_ver}/libpsl-%{libpsl_tools_ver}.tar.gz
+# oreon url source checksums begin
+%global source3_sha256 1dcc9ceae8b128f3c0b3f654decd0e1e891afc6ff81098f227ef260449dae208
+%global source3_file libpsl-0.21.5.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -48,6 +52,9 @@ for runtime loading.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libpsl-0.21.5.tar.gz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1dcc9ceae8b128f3c0b3f654decd0e1e891afc6ff81098f227ef260449dae208" || { echo "oreon: Source3 SHA256 mismatch for libpsl-0.21.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -c -T
 cp -av %{SOURCE0} .
 install -m 644 -p -v %{SOURCE1} COPYING

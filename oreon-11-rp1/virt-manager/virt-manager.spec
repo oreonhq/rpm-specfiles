@@ -19,6 +19,10 @@ URL: https://virt-manager.org/
 Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.xz
 
 Patch1: 0001-virtinst-cloudinit-include-empty-meta-data-file.patch
+# oreon url source checksums begin
+%global source0_sha256 ccfc44b6c1c0be8398beb687c675d9ea4ca1c721dfb67bd639209a7b0dec11b1
+%global source0_file virt-manager-5.1.0.tar.xz
+# oreon url source checksums end
 
 Requires: virt-manager-common = %{verrel}
 Requires: python3-gobject >= 3.31.3
@@ -109,6 +113,9 @@ machine).
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/virt-manager-5.1.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ccfc44b6c1c0be8398beb687c675d9ea4ca1c721dfb67bd639209a7b0dec11b1" || { echo "oreon: Source0 SHA256 mismatch for virt-manager-5.1.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

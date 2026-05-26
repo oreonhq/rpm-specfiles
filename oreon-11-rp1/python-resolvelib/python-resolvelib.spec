@@ -13,13 +13,17 @@ License:        ISC
 URL:            %{forgeurl}
 Source:         %{forgesource}
 # Avoid commentjson/json5 build dependency just for a couple tests
-Patch:          %{url}/pull/141.patch#/remove-commentjson-dep.patch
+Patch:        https://github.com/sarugaku/resolvelib/pull/141.patch#/remove-commentjson-dep.patch
 # Drop wheel from direct build dependencies
 # https://github.com/sarugaku/resolvelib/pull/175 rebased
 Patch:          remove-wheel-dep.patch
 # Correct PythonInputProvider._iter_matches to fix tests with packaging 26.0
 # https://github.com/sarugaku/resolvelib/pull/201 rebased
 Patch:          packaging-26-fix.patch
+# oreon url source checksums begin
+%global source0_sha256 717e92fcf64e4b7f535ebbf00d0ba21a083fa27031045af2f5040bcd38612187
+%global source0_file resolvelib-1.0.1.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -43,6 +47,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/resolvelib-1.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "717e92fcf64e4b7f535ebbf00d0ba21a083fa27031045af2f5040bcd38612187" || { echo "oreon: Source0 SHA256 mismatch for resolvelib-1.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup %{forgesetupargs} -p1
 
 

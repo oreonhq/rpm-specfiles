@@ -18,6 +18,10 @@ Patch1: aspell-0.60.7-pspell_conf.patch
 Patch2: aspell-0.60.7-mp.patch
 # https://github.com/GNUAspell/aspell/commit/ee6cbb1.patch
 Patch3: aspell-0.60.8-gcc15.patch
+# oreon url source checksums begin
+%global source0_sha256 d6da12b34d42d457fa604e435ad484a74b2effcd120ff40acd6bb3fb2887d21b
+%global source0_file aspell-0.60.8.1.tar.gz
+# oreon url source checksums end
 
 # IMPORTANT
 # This package has been deprecated since Fedora 39
@@ -54,6 +58,9 @@ The aspell-devel package includes libraries
 and header files needed for Aspell development.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/aspell-0.60.8.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d6da12b34d42d457fa604e435ad484a74b2effcd120ff40acd6bb3fb2887d21b" || { echo "oreon: Source0 SHA256 mismatch for aspell-0.60.8.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b .fc
 %patch -P1 -p1 -b .mlib

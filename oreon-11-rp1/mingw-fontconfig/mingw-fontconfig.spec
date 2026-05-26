@@ -11,6 +11,10 @@ Source0:        https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/%
 
 # Allow disabling tests (do not build)
 Patch0:         fontconfig_tests.patch
+# oreon url source checksums begin
+%global source0_sha256 bc1a90697eb8ec6c3eed118105ef9cbdfdd676e563905bf1cb571a705598300e
+%global source0_file fontconfig-2.17.1.tar.bz2
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -75,6 +79,9 @@ Static version of the cross compiled Fontconfig library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fontconfig-2.17.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bc1a90697eb8ec6c3eed118105ef9cbdfdd676e563905bf1cb571a705598300e" || { echo "oreon: Source0 SHA256 mismatch for fontconfig-2.17.1.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n fontconfig-%{version}
 
 

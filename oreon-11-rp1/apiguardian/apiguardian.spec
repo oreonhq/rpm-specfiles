@@ -11,6 +11,10 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/apiguardian-team/apiguardian/archive/r%{version}.tar.gz
 Source100:      https://repo1.maven.org/maven2/org/apiguardian/apiguardian-api/%{version}/apiguardian-api-%{version}.pom
+# oreon url source checksums begin
+%global source0_sha256 59655868b2f301868ae85745d3e003e17f7d75608f9d5dac8879c3f5d0e970ec
+%global source0_file r1.1.2.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -28,6 +32,9 @@ order to publish their API status and level of stability and to
 indicate how they are intended to be used by consumers of the API.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/r1.1.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "59655868b2f301868ae85745d3e003e17f7d75608f9d5dac8879c3f5d0e970ec" || { echo "oreon: Source0 SHA256 mismatch for r1.1.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 find -name \*.jar -delete
 cp -p %{SOURCE100} pom.xml

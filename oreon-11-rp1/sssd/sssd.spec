@@ -24,10 +24,10 @@ Release: %autorelease
 Summary: System Security Services Daemon
 License: GPL-3.0-or-later
 URL: https://github.com/SSSD/sssd/
-Source0: %{url}/releases/download/%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz
+Source0:        https://github.com/SSSD/sssd//releases/download/2.12.0/sssd-2.12.0.tar.gz
 Source1: sssd.sysusers
 %if %{verify_signature}
-Source2: %{url}/releases/download/%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz.asc
+Source2:        https://github.com/SSSD/sssd//releases/download/2.12.0/sssd-2.12.0.tar.gz.asc
 Source3: pubkey.asc
 %endif
 
@@ -37,6 +37,10 @@ Patch0001: 0001-Fix-libini_config-related-includes.patch
 Patch0002: 0002-INI-get-rid-of-useless-macros.patch
 Patch0003: 0003-INI-use-proper-deallocators.patch
 Patch0004: 0004-Add-support-for-Plasma-Login-Manager-as-a-supported-PAM-service.patch
+# oreon url source checksums begin
+%global source0_sha256 5cef12b47fcb76f250bd9e00e5e5fea2df3b1ffc6d3d7e9ba1dbe753acac8880
+%global source0_file sssd-2.12.0.tar.gz
+# oreon url source checksums end
 
 ### Downstream only patches ###
 # Place your downstream only patches here:
@@ -485,6 +489,9 @@ This package provides helper processes and Kerberos plugins that are required to
 enable authentication with passkey token.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sssd-2.12.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5cef12b47fcb76f250bd9e00e5e5fea2df3b1ffc6d3d7e9ba1dbe753acac8880" || { echo "oreon: Source0 SHA256 mismatch for sssd-2.12.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{verify_signature}
 %{gpgverify} --keyring='%{SOURCE3}' --signature='%{SOURCE2}' --data='%{SOURCE0}'
 %endif

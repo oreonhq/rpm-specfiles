@@ -61,6 +61,10 @@ Release: 3%{?dist}
 License: GPL-2.0-or-later
 URL: https://abrt.readthedocs.org/
 Source: https://github.com/abrt/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4d11f7ca6791a7ed3c3069984cb76418335c253563e264e8c178d8033302e421
+%global source0_file abrt-2.17.8.tar.gz
+# oreon url source checksums end
 BuildRequires: git-core
 BuildRequires: %{dbus_devel}
 BuildRequires: hostname
@@ -471,6 +475,9 @@ A small script which prints a count of detected problems when someone logs in
 to the shell
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/abrt-2.17.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4d11f7ca6791a7ed3c3069984cb76418335c253563e264e8c178d8033302e421" || { echo "oreon: Source0 SHA256 mismatch for abrt-2.17.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %global __scm_apply_git(qp:m:) %{__git} am --exclude doc/design --exclude doc/project/abrt.tex
 %autosetup -S git -p 0
 

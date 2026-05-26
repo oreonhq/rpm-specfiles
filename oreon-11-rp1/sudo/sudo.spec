@@ -11,8 +11,12 @@ Version: 1.9.17
 Release: %autorelease -e %{?extraver}
 License: ISC
 URL: https://www.sudo.ws
-Source0: %{url}/dist/%{name}-%{version}%{?extraver}.tar.gz
+Source0:        https://www.sudo.ws/dist/sudo-1.9.17p2.tar.gz
 Source1: sudoers
+# oreon url source checksums begin
+%global source0_sha256 4a38a1ab3adb1199257edc2a7c4a2bd714665eb605b04368843b06dada2cfcfb
+%global source0_file sudo-1.9.17p2.tar.gz
+# oreon url source checksums end
 Requires: pam
 Recommends: system-default-editor
 Recommends: %{name}-python-plugin%{?_isa} = %{version}-%{release}
@@ -70,6 +74,9 @@ BuildRequires:  python3-devel
 %{name}-python-plugin allows using sudo plugins written in Python.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sudo-1.9.17p2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4a38a1ab3adb1199257edc2a7c4a2bd714665eb605b04368843b06dada2cfcfb" || { echo "oreon: Source0 SHA256 mismatch for sudo-1.9.17p2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}%{?extraver}
 
 %build

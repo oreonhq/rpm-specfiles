@@ -17,6 +17,10 @@ Source0: https://github.com/lsh123/xmlsec/releases/download/%{version}/xmlsec1-%
 URL: http://www.aleksey.com/xmlsec/
 
 Patch0: 0001-Conditional-include-for-openssl-engines.patch
+# oreon url source checksums begin
+%global source0_sha256 a0aecfdf1f190c6b866a278e42746b6582729a493f6ac6a1556a4663ff3ce625
+%global source0_file xmlsec1-1.2.41.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: pkgconfig(libxml-2.0) >= 2.8.0
@@ -133,6 +137,9 @@ Libraries, includes, etc. for developing XML Security applications with NSS.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xmlsec1-1.2.41.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a0aecfdf1f190c6b866a278e42746b6582729a493f6ac6a1556a4663ff3ce625" || { echo "oreon: Source0 SHA256 mismatch for xmlsec1-1.2.41.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

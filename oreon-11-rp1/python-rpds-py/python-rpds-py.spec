@@ -15,6 +15,10 @@ Patch:          do_not_require_win_only_pyo3_extension.patch
 # Remove pytest-run-parallel from test dependencies
 # and relax pytest version requirement
 Patch:          fix_test_group_dependencies.patch
+# oreon url source checksums begin
+%global source0_sha256 dd8ff7cf90014af0c0f787eea34794ebf6415242ee1d6fa91eaba725cc441e84
+%global source0_file rpds_py-0.30.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cargo-rpm-macros
 BuildRequires:  dos2unix
@@ -36,6 +40,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rpds_py-0.30.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dd8ff7cf90014af0c0f787eea34794ebf6415242ee1d6fa91eaba725cc441e84" || { echo "oreon: Source0 SHA256 mismatch for rpds_py-0.30.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{modname}-%{version}
 
 # Fix line terminations

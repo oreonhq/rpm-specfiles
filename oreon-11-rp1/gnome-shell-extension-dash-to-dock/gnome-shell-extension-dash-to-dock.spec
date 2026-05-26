@@ -15,11 +15,15 @@ Summary:        Dock for the Gnome Shell by micxgx@gmail.com
 License:        GPL-2.0-or-later
 URL:            https://micheleg.github.io/dash-to-dock
 %if 0%{?commit:1}
-Source0:        %{giturl}/archive/%{commit}.tar.gz
+Source0:        https://github.com/micheleg/dash-to-dock/archive/%{commit}.tar.gz
 %else
-Source0:        %{giturl}/archive/extensions.gnome.org-v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/micheleg/dash-to-dock/archive/extensions.gnome.org-v103.tar.gz#/gnome-shell-extension-dash-to-dock-103.tar.gz
 %endif
 Source1:        stylesheet.css
+# oreon url source checksums begin
+%global source0_sha256 7528faff5b97f0298e5f6bf09c925893a2de5b0e38cd3f96b0fa4e51bda6ec9b
+%global source0_file extensions.gnome.org-v103.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -45,6 +49,9 @@ to leave the desktop view.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/extensions.gnome.org-v103.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7528faff5b97f0298e5f6bf09c925893a2de5b0e38cd3f96b0fa4e51bda6ec9b" || { echo "oreon: Source0 SHA256 mismatch for extensions.gnome.org-v103.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?commit:1}
 %autosetup -n dash-to-dock-%{commit} -p 1
 %else

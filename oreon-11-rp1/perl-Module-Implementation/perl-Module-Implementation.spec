@@ -14,7 +14,12 @@ Release:	43%{?dist}
 Summary:	Loads one of several alternate underlying implementations for a module
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/perl-Module-Implementation
-Source0:	https://cpan.metacpan.org/modules/by-module/Module/Module-Implementation-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Module-Implementation-0.09.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c15f1a12f0c2130c9efff3c2e1afe5887b08ccd033bd132186d1e7d5087fd66d
+%global source0_file Module-Implementation-0.09.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # ===================================================================
 # Build requirements
@@ -95,6 +100,9 @@ time. If you want to load arbitrary implementations then you probably want
 something like a plugin system, not this module.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Implementation-0.09.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c15f1a12f0c2130c9efff3c2e1afe5887b08ccd033bd132186d1e7d5087fd66d" || { echo "oreon: Source0 SHA256 mismatch for Module-Implementation-0.09.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Implementation-%{version}
 
 %build

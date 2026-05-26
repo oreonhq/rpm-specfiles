@@ -17,11 +17,15 @@ Summary:        Unicode library for OCaml
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception AND ICU AND Unicode-3.0
 URL:            https://github.com/ocaml-community/Camomile
 VCS:            git:%{url}.git
-Source0:        %{url}/archive/v%{version}/Camomile-%{version}.tar.gz
+Source0:        https://github.com/ocaml-community/Camomile/archive/v2.0.0/Camomile-2.0.0.tar.gz
 
 # Fix a licensing issue in EO Unicode files.  Submitted but not
 # accepted upstream: https://github.com/yoriyuki/Camomile/pull/84
 Patch1:         0001-Camomile-locales-eo.txt-Fix-license-by-importing-dat.patch
+# oreon url source checksums begin
+%global source0_sha256 6bb421d0bb81594acb5dd902101a0609022d576fe373d956724fa60120bfd03d
+%global source0_file Camomile-2.0.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  ocaml >= 4.13
 BuildRequires:  ocaml-camlp-streams-devel
@@ -66,6 +70,9 @@ applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Camomile-2.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6bb421d0bb81594acb5dd902101a0609022d576fe373d956724fa60120bfd03d" || { echo "oreon: Source0 SHA256 mismatch for Camomile-2.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n Camomile-%{version}
 
 

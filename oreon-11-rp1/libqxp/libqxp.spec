@@ -8,6 +8,10 @@ Summary: Library for import of QuarkXPress documents
 License: MPL-2.0
 URL: http://wiki.documentfoundation.org/DLP/Libraries/libqxp
 Source: http://dev-www.libreoffice.org/src/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 e137b6b110120a52c98edd02ebdc4095ee08d0d5295a94316a981750095a945c
+%global source0_file libqxp-0.0.2.tar.xz
+# oreon url source checksums end
 
 BuildRequires: boost-devel
 BuildRequires: doxygen
@@ -49,6 +53,9 @@ Tools to transform QuarkXPress documents into other formats.
 Currently supported: SVG, plain text, raw.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libqxp-0.0.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e137b6b110120a52c98edd02ebdc4095ee08d0d5295a94316a981750095a945c" || { echo "oreon: Source0 SHA256 mismatch for libqxp-0.0.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -8,6 +8,10 @@ URL:		https://github.com/ueno/ibus-kkc
 Source0:	https://github.com/ueno/ibus-kkc/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Patch0:		ibus-kkc-content-type.patch
 Patch1:         ibus-HEAD.patch
+# oreon url source checksums begin
+%global source0_sha256 22fe2552f08a34a751cef7d1ea3c088e8dc0f0af26fd7bba9cdd27ff132347ce
+%global source0_file ibus-kkc-1.5.22.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	vala
 BuildRequires:	intltool
@@ -23,6 +27,9 @@ A Japanese Kana Kanji Input Method Engine for ibus.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ibus-kkc-1.5.22.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "22fe2552f08a34a751cef7d1ea3c088e8dc0f0af26fd7bba9cdd27ff132347ce" || { echo "oreon: Source0 SHA256 mismatch for ibus-kkc-1.5.22.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 rm src/*vala.stamp
 # don't touch XKB layout under Fedora

@@ -10,6 +10,10 @@ Summary:        Git library for GLib
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://wiki.gnome.org/Projects/Libgit2-glib
 Source0:        https://download.gnome.org/sources/libgit2-glib/1.2/libgit2-glib-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 97423a779002b3be8751c75f9d79049dfccca3616a26159fc162486772ba785f
+%global source0_file libgit2-glib-1.2.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gi-docgen
@@ -39,6 +43,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libgit2-glib-1.2.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "97423a779002b3be8751c75f9d79049dfccca3616a26159fc162486772ba785f" || { echo "oreon: Source0 SHA256 mismatch for libgit2-glib-1.2.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

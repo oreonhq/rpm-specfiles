@@ -54,6 +54,10 @@ License:        BSD-2-Clause
 URL:            https://jdbc.postgresql.org/
 Source0:        https://repo1.maven.org/maven2/org/postgresql/postgresql/%{version}/postgresql-%{version}-jdbc-src.tar.gz
 Source1:        postgresql_jdbc_tests_init.sh
+# oreon url source checksums begin
+%global source0_sha256 04737d6e1d87794d9d5da35fa9a0a9914455b17fc7d6f49c630d35d53d54dd36
+%global source0_file postgresql-42.7.8-jdbc-src.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
@@ -93,6 +97,9 @@ Summary:        Tests for %{name}
 This package contains tests for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/postgresql-42.7.8-jdbc-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "04737d6e1d87794d9d5da35fa9a0a9914455b17fc7d6f49c630d35d53d54dd36" || { echo "oreon: Source0 SHA256 mismatch for postgresql-42.7.8-jdbc-src.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n postgresql-%{version}-jdbc-src
 
 # remove any binary libs

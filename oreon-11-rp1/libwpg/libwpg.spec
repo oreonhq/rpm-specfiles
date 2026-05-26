@@ -8,6 +8,10 @@ Summary:        A library for import of WordPerfect Graphics images
 License:        LGPL-2.1-or-later OR MPL-2.0
 URL:            http://libwpg.sourceforge.net/
 Source0:        http://download.sourceforge.net/libwpg/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 b55fda9440d1e070630eb2487d8b8697cf412c214a27caee9df69cec7c004de3
+%global source0_file libwpg-0.3.4.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  boost-devel
 BuildRequires:  doxygen
@@ -54,6 +58,9 @@ Tools to convert WordPerfect Graphics images to other formats. Supported
 are: SVG, raw.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libwpg-0.3.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b55fda9440d1e070630eb2487d8b8697cf412c214a27caee9df69cec7c004de3" || { echo "oreon: Source0 SHA256 mismatch for libwpg-0.3.4.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

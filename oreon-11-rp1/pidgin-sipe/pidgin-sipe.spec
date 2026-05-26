@@ -11,6 +11,10 @@ Patch2:         pidgin-sipe-1.25.0-fix-glib-2.68-build.patch
 Patch3:         pidgin-sipe-1.25.0-fix-libxml2-2.12-build.patch
 Patch4:         pidgin-sipe-1.25.0-add-appstreamcli-no-net.patch
 Patch5:         pidgin-sipe-1.25.0-core-fix-build-for-stricter-strstr.patch
+# oreon url source checksums begin
+%global source0_sha256 5a42810e447c3af2632961e88d7c683b6619aeda03accdcbaad222d8337ec676
+%global source0_file pidgin-sipe-1.25.0.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  pkgconfig(dbus-1)
 BuildRequires:  pkgconfig(farstream-0.2)
@@ -80,6 +84,9 @@ This package provides the protocol plugin for libpurple clients.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pidgin-sipe-1.25.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5a42810e447c3af2632961e88d7c683b6619aeda03accdcbaad222d8337ec676" || { echo "oreon: Source0 SHA256 mismatch for pidgin-sipe-1.25.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

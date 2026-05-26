@@ -31,6 +31,10 @@ Source1: doxywizard.desktop
 Source2: doxywizard-icons.tar.xz
 Source3: README.rpm-packaging
 Source4: doxygen-unbundler
+# oreon url source checksums begin
+%global source0_sha256 201ce33b514ea87cc1697c0dcf829692c2695c1812683a9cc622194b05e263a8
+%global source0_file doxygen-1.16.1.src.tar.gz
+# oreon url source checksums end
 
 # upstream fixes
 
@@ -263,6 +267,9 @@ Requires: texlive-collection-fontsrecommended
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/doxygen-1.16.1.src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "201ce33b514ea87cc1697c0dcf829692c2695c1812683a9cc622194b05e263a8" || { echo "oreon: Source0 SHA256 mismatch for doxygen-1.16.1.src.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -a2
 
 cp %{SOURCE3} .

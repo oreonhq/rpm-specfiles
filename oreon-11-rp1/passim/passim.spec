@@ -8,6 +8,10 @@ Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/hughsie/%{name}
 Source0:   https://github.com/hughsie/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 53ede935a788fbb9bd569ca16347e02a2a4d39f6154beb672161dbb79f56419b
+%global source0_file passim-0.1.10.tar.xz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gettext
@@ -49,6 +53,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Files for development with %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/passim-0.1.10.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "53ede935a788fbb9bd569ca16347e02a2a4d39f6154beb672161dbb79f56419b" || { echo "oreon: Source0 SHA256 mismatch for passim-0.1.10.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

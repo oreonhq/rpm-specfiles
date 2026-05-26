@@ -10,7 +10,11 @@ Summary:        Macros to simplify packaging of forge-hosted projects
 
 License:        GPL-1.0-or-later
 URL:            https://git.sr.ht/~gotmax23/forge-srpm-macros
-Source0:        %{url}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://git.sr.ht/~gotmax23/forge-srpm-macros/archive/v0.4.0.tar.gz#/forge-srpm-macros-0.4.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7b0d7aee291273ae02b661d14330e4e803ab6b673cd4aec39c0a00a5de2b793d
+%global source0_file v0.4.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -41,6 +45,9 @@ Requires:       redhat-rpm-config
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b0d7aee291273ae02b661d14330e4e803ab6b673cd4aec39c0a00a5de2b793d" || { echo "oreon: Source0 SHA256 mismatch for v0.4.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-v%{version}
 
 

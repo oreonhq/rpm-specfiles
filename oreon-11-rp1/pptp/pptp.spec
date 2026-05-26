@@ -13,6 +13,10 @@ Requires:	ppp >= 2.4.2, /sbin/ip
 Requires:	systemd-units
 # Patch sent upstream
 Patch0:		pptp-1.10.0-man-fix.patch
+# oreon url source checksums begin
+%global source0_sha256 82492db8e487ce73b182ee7f444251d20c44f5c26d6e96c553ec7093aefb5af4
+%global source0_file pptp-1.10.0.tar.gz
+# oreon url source checksums end
 
 %description
 Client for the proprietary Microsoft Point-to-Point Tunneling
@@ -28,6 +32,9 @@ This package provides a simple configuration script for setting up PPTP
 tunnels.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pptp-1.10.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "82492db8e487ce73b182ee7f444251d20c44f5c26d6e96c553ec7093aefb5af4" || { echo "oreon: Source0 SHA256 mismatch for pptp-1.10.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %patch -P0 -p1 -b .man-fix

@@ -5,6 +5,10 @@ Summary:        A simple generic name space support class
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Url:            https://metacpan.org/release/XML-NamespaceSupport
 Source0:        https://cpan.metacpan.org/authors/id/P/PE/PERIGRIN/XML-NamespaceSupport-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 47e995859f8dd0413aa3f22d350c4a62da652e854267aa0586ae544ae2bae5ef
+%global source0_file XML-NamespaceSupport-1.12.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -36,6 +40,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-NamespaceSupport-1.12.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "47e995859f8dd0413aa3f22d350c4a62da652e854267aa0586ae544ae2bae5ef" || { echo "oreon: Source0 SHA256 mismatch for XML-NamespaceSupport-1.12.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-NamespaceSupport-%{version}
 
 %build

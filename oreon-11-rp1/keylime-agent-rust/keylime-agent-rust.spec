@@ -40,7 +40,7 @@ License: (Apache-2.0 OR MIT) AND BSD-3-Clause AND (MIT OR Apache-2.0) AND Unicod
 URL:            https://github.com/keylime/rust-keylime/
 # The source tarball is downloaded using the following commands:
 #   spectool -g keylime-agent-rust.spec
-Source0:        %{url}/archive/refs/tags/v%{version}.tar.gz
+Source0:        https://github.com/keylime/rust-keylime//archive/refs/tags/v0.2.9.tar.gz
 # The vendor tarball is created using cargo-vendor-filterer to remove Windows
 # related files (https://github.com/cgwalters/cargo-vendor-filterer)
 #   tar xf rust-keylime-%%{version}.tar.gz
@@ -59,6 +59,10 @@ Source1:        rust-keylime-%{version}-vendor.tar.zstd
 Patch0:       0001-rust-keylime-metadata.patch
 # Remove the check that requires /usr/libexec/keylime to be available
 Patch1:       0002-rust-keylime-do-not-require-usr-libexec.patch
+# oreon url source checksums begin
+%global source0_sha256 6cb94da09d5d23b458013147e45c1e5fd642ff5a8d31a8d3c3d5968b1ccf74a7
+%global source0_file v0.2.9.tar.gz
+# oreon url source checksums end
 ## (100-199) Patches for building from system Rust libraries (Fedora)
 ## (200+) Patches for building from vendored Rust libraries (RHEL)
 
@@ -159,6 +163,9 @@ The Keylime IMA emulator for testing with emulated TPM
 #===============================================================================
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.2.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6cb94da09d5d23b458013147e45c1e5fd642ff5a8d31a8d3c3d5968b1ccf74a7" || { echo "oreon: Source0 SHA256 mismatch for v0.2.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git -n rust-keylime-%{version} -N %{?bundled_rust_deps:-a1}
 %autopatch -M 99 -p1
 %if 0%{?bundled_rust_deps}

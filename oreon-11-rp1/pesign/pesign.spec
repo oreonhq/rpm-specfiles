@@ -46,6 +46,10 @@ Source0: https://github.com/rhboot/pesign/releases/download/%{version}/pesign-%{
 Source1: certs.tar.xz
 Source2: pesign.py
 Source3: pesign.patches
+# oreon url source checksums begin
+%global source0_sha256 35331f75689863e5be595f2bb04a8bc934ce734b8d76fa5d6aeb4d85424e8996
+%global source0_file pesign-116.tar.bz2
+# oreon url source checksums end
 
 # generate with tool
 %include %{SOURCE3}
@@ -55,6 +59,9 @@ This package contains the pesign utility for signing UEFI binaries as
 well as other associated tools.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pesign-116.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "35331f75689863e5be595f2bb04a8bc934ce734b8d76fa5d6aeb4d85424e8996" || { echo "oreon: Source0 SHA256 mismatch for pesign-116.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -T -b 0
 %setup -q -T -D -c -n pesign-%{version}/ -a 1
 git init

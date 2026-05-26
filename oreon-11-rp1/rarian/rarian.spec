@@ -7,6 +7,10 @@ Summary: Documentation meta-data library
 URL: http://rarian.freedesktop.org/
 Source: https://gitlab.freedesktop.org/rarian/rarian/-/releases/%{version}/downloads/assets/rarian-%{version}.tar.bz2
 Source1: scrollkeeper-omf.dtd
+# oreon url source checksums begin
+%global source0_sha256 9d4f7873009d2e31b8b1ec762606b12bee5526e1fe75de48e9495382bfef2bea
+%global source0_file rarian-0.8.6.tar.bz2
+# oreon url source checksums end
 
 ### Dependencies ###
 
@@ -59,6 +63,9 @@ This package contains files required to develop applications that use the
 Rarian library ("librarian").
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rarian-0.8.6.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9d4f7873009d2e31b8b1ec762606b12bee5526e1fe75de48e9495382bfef2bea" || { echo "oreon: Source0 SHA256 mismatch for rarian-0.8.6.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

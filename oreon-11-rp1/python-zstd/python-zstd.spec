@@ -16,6 +16,10 @@ Source:         %{pypi_source}
 
 # Patches to fix test execution
 Patch:          python-zstd-1.5.5.1-test-external.patch
+# oreon url source checksums begin
+%global source0_sha256 403e5205f4ac04b92e6b0cda654be2f51de268228a0db0067bc087faacf2f495
+%global source0_file zstd-1.5.7.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel
@@ -36,6 +40,9 @@ Simple Python bindings for the Zstd compression library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/zstd-1.5.7.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "403e5205f4ac04b92e6b0cda654be2f51de268228a0db0067bc087faacf2f495" || { echo "oreon: Source0 SHA256 mismatch for zstd-1.5.7.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{pypi_name}-%{version}
 # Remove bundled egg-info
 rm -rf src/%{pypi_name}.egg-info

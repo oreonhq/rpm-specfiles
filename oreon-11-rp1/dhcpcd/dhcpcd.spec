@@ -8,13 +8,17 @@ License: BSD-2-Clause AND ISC AND MIT
 URL: http://roy.marples.name/projects/%{name}/
 # Moved to github
 VCS: git:%{forgeurl0}
-Source0: %{forgeurl0}/releases/download/v%{version}/%{name}-%{version}.tar.xz
-Source1: %{forgeurl0}/releases/download/v%{version}/%{name}-%{version}.tar.xz.asc
+Source0:        https://github.com/NetworkConfiguration/dhcpcd/releases/download/v10.3.0/dhcpcd-10.3.0.tar.xz
+Source1:        https://github.com/NetworkConfiguration/dhcpcd/releases/download/v10.3.0/dhcpcd-10.3.0.tar.xz.asc
 Source2: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xa785ed2755955d9e93ea59f6597f97ea9ad45549#/roy-marples.name.asc
 Source3: %{name}.service
 Source4: %{name}@.service
 Source5: systemd-sysusers.conf
 Source6: systemd-tmpfiles.conf
+# oreon url source checksums begin
+%global source0_sha256 06e4c1aaf958523f3fd1c57258c613c6c7ae56b8f1d678fa7943495d5ea6aeb5
+%global source0_file dhcpcd-10.3.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: systemd-rpm-macros
@@ -35,6 +39,9 @@ that supports IPv4 and IPv6 configuration including configuration discovery
 through NDP, DHCPv4 and DHCPv6 protocols.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dhcpcd-10.3.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "06e4c1aaf958523f3fd1c57258c613c6c7ae56b8f1d678fa7943495d5ea6aeb5" || { echo "oreon: Source0 SHA256 mismatch for dhcpcd-10.3.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?fedora} || 0%{?rhel} > 8
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

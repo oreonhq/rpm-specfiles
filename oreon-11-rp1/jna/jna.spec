@@ -16,7 +16,7 @@ License:        Apache-2.0 OR LGPL-2.1-or-later
 
 URL:            https://github.com/java-native-access/jna/
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.zst
+Source0:        https://github.com/java-native-access/jna/archive/refs/tags/v5.17.0.tar.gz
 Source1:        package-list
 Source2:        generate-tarball.sh
 

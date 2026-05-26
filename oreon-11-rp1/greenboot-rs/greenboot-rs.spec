@@ -13,8 +13,14 @@ Summary:	Generic Health Check Framework for systemd
 # Aggregated license of statically linked dependencies as per %%cargo_license_summary
 License:	BSD-3-Clause AND ISC AND MIT AND Unicode-DFS-2016 AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
 URL:		https://github.com/fedora-iot/greenboot-rs
-Source0:	%{url}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Source1:	%{name}-%{version}-vendor-patched.tar.xz
+Source0:        https://github.com/fedora-iot/greenboot-rs/archive/refs/tags/v0.16.3.tar.gz#/greenboot-rs-0.16.3.tar.gz
+Source1:        https://github.com/fedora-iot/greenboot-rs/archive/refs/tags/v0.16.3.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e
+%global source0_file v0.16.3.tar.gz
+%global source1_sha256 ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e
+%global source1_file v0.16.3.tar.gz
+# oreon url source checksums end
 
 ExcludeArch:	%{ix86}
 
@@ -57,6 +63,10 @@ Requires:	jq
 This package adds some default healthchecks for greenboot.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.16.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e" || { echo "oreon: Source0 SHA256 mismatch for v0.16.3.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/v0.16.3.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e" || { echo "oreon: Source1 SHA256 mismatch for v0.16.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{with bundled_rust_deps}
 %autosetup -p1 -a1 -n %{name}-%{version}
 %cargo_prep -v vendor

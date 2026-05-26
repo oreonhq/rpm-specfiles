@@ -12,6 +12,10 @@ URL:            https://github.com/lxml/lxml
 
 # drop isoschematron rng (bad license), see fedora-license-data #154
 Source0:        https://files.pythonhosted.org/packages/source/l/lxml/lxml-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 cd79f3367bd74b317dda655dc8fcfa304d9eb6e4fb06b7168c5cf27f96e0cd62
+%global source0_file lxml-6.0.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  libxml2-devel
@@ -53,6 +57,9 @@ Python 3 version.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lxml-6.0.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cd79f3367bd74b317dda655dc8fcfa304d9eb6e4fb06b7168c5cf27f96e0cd62" || { echo "oreon: Source0 SHA256 mismatch for lxml-6.0.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n lxml-%{version} -p1
 rm -rf src/lxml/isoschematron/resources/rng
 # Don't run html5lib tests --without extras

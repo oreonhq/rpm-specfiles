@@ -16,7 +16,7 @@ Summary:        HTTP request mock tool for Python
 
 License:        MIT
 URL:            https://github.com/%{github_owner}/%{github_name}
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/h/httpretty/httpretty-1.1.4.tar.gz
 # Avoid unnecessary remote access requirement (note: test only actually
 # does a remote connection after PR #313)
 Patch1:         python-httpretty-fakesock_getpeercert_noconnect.patch
@@ -39,6 +39,10 @@ Patch6:         485.patch
 Patch7:         remove_deprecations_in_python_3_13.patch
 # Maintainers, please upstream
 Patch8:         python-httpretty-rm-python-mock-usage.patch
+# oreon url source checksums begin
+%global source0_sha256 20de0e5dd5a18292d36d928cc3d6e52f8b2ac73daec40d41eb62dee154933b68
+%global source0_file httpretty-1.1.4.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -82,6 +86,9 @@ Don't worry, HTTPretty is here for you.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/httpretty-1.1.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "20de0e5dd5a18292d36d928cc3d6e52f8b2ac73daec40d41eb62dee154933b68" || { echo "oreon: Source0 SHA256 mismatch for httpretty-1.1.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n httpretty-%{version} -p1
 
 %if %{run_tests}

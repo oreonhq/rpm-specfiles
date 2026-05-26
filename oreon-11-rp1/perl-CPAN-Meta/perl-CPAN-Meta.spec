@@ -5,6 +5,10 @@ Release:        1%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CPAN-Meta
 Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/CPAN-Meta-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7c2bcbaf988d50ba8902a0d0cdf3c66b22aa7e968f5b67d1339a8995aff25dbd
+%global source0_file CPAN-Meta-2.150013.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -57,6 +61,9 @@ the requirements for building and installing the distribution. The data
 structure stored in the META.json file is described in CPAN::Meta::Spec.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/CPAN-Meta-2.150013.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7c2bcbaf988d50ba8902a0d0cdf3c66b22aa7e968f5b67d1339a8995aff25dbd" || { echo "oreon: Source0 SHA256 mismatch for CPAN-Meta-2.150013.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n CPAN-Meta-%{version}
 
 # Silence rpmlint warnings

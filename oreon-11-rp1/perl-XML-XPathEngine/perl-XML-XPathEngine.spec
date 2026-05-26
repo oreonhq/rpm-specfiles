@@ -7,7 +7,12 @@ Release:        34%{?dist}
 Summary:        Re-usable XPath engine for DOM-like trees
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-XPathEngine
-Source0:        https://cpan.metacpan.org/modules/by-module/XML/XML-XPathEngine-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIROD/XML-XPathEngine-0.14.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 d2fe7bcbbd0beba1444f4a733401e7b8aa5282fad4266d42735dd74582b2e264
+%global source0_file XML-XPathEngine-0.14.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -37,6 +42,9 @@ This module provides an XPath engine, that can be re-used by other
 module/classes that implement trees.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-XPathEngine-0.14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d2fe7bcbbd0beba1444f4a733401e7b8aa5282fad4266d42735dd74582b2e264" || { echo "oreon: Source0 SHA256 mismatch for XML-XPathEngine-0.14.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-XPathEngine-%{version}
 
 %build

@@ -4,7 +4,11 @@ Release:        4%{?dist}
 Summary:        Compressed file format that allows easy deltas
 License:        BSD-2-Clause AND MIT
 URL:            https://github.com/zchunk/zchunk
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/zchunk/zchunk/archive/1.5.1/zchunk-1.5.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2c187055e2206e62cef4559845e7c2ec6ec5a07ce1e0a6044e4342e0c5d7771d
+%global source0_file zchunk-1.5.1.tar.gz
+# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  pkgconfig(libzstd)
 BuildRequires:  pkgconfig(libcurl)
@@ -47,6 +51,9 @@ This package contains the headers necessary for building against the zchunk
 library, libzck.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/zchunk-1.5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c187055e2206e62cef4559845e7c2ec6ec5a07ce1e0a6044e4342e0c5d7771d" || { echo "oreon: Source0 SHA256 mismatch for zchunk-1.5.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 # Remove bundled sha libraries
 rm -rf src/lib/hash/sha*

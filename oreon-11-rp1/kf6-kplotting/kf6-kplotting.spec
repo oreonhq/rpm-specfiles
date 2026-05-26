@@ -13,6 +13,10 @@ License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            https://invent.kde.org/frameworks/%{framework}
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 398cea5da5fb5b505eb34582ec5c318abec75b8c40af98b50f7cf9b6d8a0fecf
+%global source0_file kplotting-6.24.0.tar.xz
+# oreon url source checksums end
 
 # Compile Tools
 BuildRequires:  cmake
@@ -46,6 +50,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kplotting-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "398cea5da5fb5b505eb34582ec5c318abec75b8c40af98b50f7cf9b6d8a0fecf" || { echo "oreon: Source0 SHA256 mismatch for kplotting-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 %build

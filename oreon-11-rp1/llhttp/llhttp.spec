@@ -33,10 +33,16 @@ Summary:        Port of http_parser to llparse
 # SPDX
 License:        MIT
 URL:            https://github.com/nodejs/llhttp
-Source0:        %{url}/archive/refs/tags/release/v%{version}/llhttp-release-v%{version}.tar.gz
+Source0:        https://github.com/nodejs/llhttp/archive/refs/tags/release/v9.3.1/llhttp-release-v9.3.1.tar.gz
 # Contains the original TypeScript sources, which we must include in the source
 # RPM per packaging guidelines.
-Source1:        %{url}/archive/v%{version}/llhttp-%{version}.tar.gz
+Source1:        https://github.com/nodejs/llhttp/archive/v9.3.1/llhttp-9.3.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c14a93f287d3dbd6580d08af968294f8bcc61e1e1e3c34301549d00f3cf09365
+%global source0_file llhttp-release-v9.3.1.tar.gz
+%global source1_sha256 ed965f2b205e7f7df65b305edfd8c662d8b0ebe4dc3b58109e6ad03d0f5ee233
+%global source1_file llhttp-9.3.1.tar.gz
+# oreon url source checksums end
 
 # For compiling the C library
 BuildRequires:  cmake
@@ -69,6 +75,10 @@ developing applications that use llhttp.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/llhttp-release-v9.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c14a93f287d3dbd6580d08af968294f8bcc61e1e1e3c34301549d00f3cf09365" || { echo "oreon: Source0 SHA256 mismatch for llhttp-release-v9.3.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/llhttp-9.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ed965f2b205e7f7df65b305edfd8c662d8b0ebe4dc3b58109e6ad03d0f5ee233" || { echo "oreon: Source1 SHA256 mismatch for llhttp-9.3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n llhttp-release-v%{version}
 
 

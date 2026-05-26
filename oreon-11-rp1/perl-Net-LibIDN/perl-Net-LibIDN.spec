@@ -9,6 +9,10 @@ URL:            https://metacpan.org/release/%{pkgname}
 Source:         https://cpan.metacpan.org/authors/id/T/TH/THOR/%{pkgname}-%{version}.tar.gz
 # Use distribution CFLAGS for tests, bug #1242794, CPAN RT#105853
 Patch0:         Net-LibIDN-0.12-Respect-Config-s-cc-ccflags-and-ldflags.patch
+# oreon url source checksums begin
+%global source0_sha256 2f8acc9442b3866ec7dc63cd449fc693ae3e930d5d3e5e9430fbb6f393bdbb17
+%global source0_file Net-LibIDN-0.12.tar.gz
+# oreon url source checksums end
 BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  libidn-devel >= 0.4.0
@@ -33,6 +37,9 @@ Internationalized Domain Names according to IDNA (RFC 3490), in
 a way very much inspired by Turbo Fredriksson's PHP-IDN.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Net-LibIDN-0.12.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2f8acc9442b3866ec7dc63cd449fc693ae3e930d5d3e5e9430fbb6f393bdbb17" || { echo "oreon: Source0 SHA256 mismatch for Net-LibIDN-0.12.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{pkgname}-%{version}
 %patch -P0 -p1
 # Change man page encoding into UTF-8

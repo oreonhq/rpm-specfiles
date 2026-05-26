@@ -11,6 +11,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://archive.apache.org/dist/commons/io/source/commons-io-%{version}-src.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 301f655a687bc7cbc0c43b69fef807aba00e6c3bea4a4f7512c957faa379a33c
+%global source0_file commons-io-2.20.0-src.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -32,6 +36,9 @@ file filters, and endian classes. It is a library of utilities
 to assist with developing IO functionality.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/commons-io-2.20.0-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "301f655a687bc7cbc0c43b69fef807aba00e6c3bea4a4f7512c957faa379a33c" || { echo "oreon: Source0 SHA256 mismatch for commons-io-2.20.0-src.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n commons-io-%{version}-src
 
 sed -i 's/\r//' *.txt

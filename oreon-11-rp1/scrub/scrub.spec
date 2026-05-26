@@ -13,6 +13,10 @@ Patch2:		scrub-2.6.1-extentonly.patch
 Patch3:		scrub-2.5.2-test-use-power-2-filesizes.patch
 # https://github.com/chaos/scrub/commit/864a454f16ac3e47103064b0e4fe3a9111593e49
 Patch4:		scrub-2.6.1-analyzer-fixes.patch
+# oreon url source checksums begin
+%global source0_sha256 43d98d3795bc2de7920efe81ef2c5de4e9ed1f903c35c939a7d65adc416d6cb8
+%global source0_file scrub-2.6.1.tar.gz
+# oreon url source checksums end
 BuildRequires:	make
 BuildRequires:	gcc
 BuildRequires:	libgcrypt-devel
@@ -28,6 +32,9 @@ entry) is destroyed; or 3) a regular file is created, expanded until
 the file system is full, then scrubbed as in 2).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/scrub-2.6.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "43d98d3795bc2de7920efe81ef2c5de4e9ed1f903c35c939a7d65adc416d6cb8" || { echo "oreon: Source0 SHA256 mismatch for scrub-2.6.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b .symlinks-to-block-devices
 %patch -P1 -p1 -b .libgcrypt

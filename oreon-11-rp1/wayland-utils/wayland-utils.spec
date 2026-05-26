@@ -7,6 +7,10 @@ License:        MIT
 URL:            https://wayland.freedesktop.org/
 # freedesktop.org/releases .tar.xz for this version returns 404 use git tag archive
 Source0:        https://gitlab.freedesktop.org/wayland/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 898ceff3007b11aaec5b13844ac673b99ee186b2706b9b2ab41ba6be8c29ad06
+%global source0_file wayland-utils-1.3.0.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -24,6 +28,9 @@ protocols it knows about, namely Linux DMABUF, presentation time, tablet and
 XDG output protocols.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/wayland-utils-1.3.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "898ceff3007b11aaec5b13844ac673b99ee186b2706b9b2ab41ba6be8c29ad06" || { echo "oreon: Source0 SHA256 mismatch for wayland-utils-1.3.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

@@ -9,9 +9,13 @@ Summary:          JBoss Logging I18n Annotation Processor
 # ./annotations/src/main/java/org/jboss/logging/annotations/*.java: Apache (v2.0)
 License:          Apache-2.0 and LGPL-2.0-or-later
 URL:              https://github.com/jboss-logging/jboss-logging-tools
-Source0:          %{url}/archive/%{namedversion}/%{name}-%{namedversion}.tar.gz
+Source0:        https://github.com/jboss-logging/jboss-logging-tools/archive/2.2.1.Final/jboss-logging-tools-2.2.1.Final.tar.gz
 Source1:          http://www.apache.org/licenses/LICENSE-2.0.txt
 Patch1:           0001-Add-getEnclosingMethod-to-DelegatingExecutableElemen.patch
+# oreon url source checksums begin
+%global source0_sha256 f3275efdea6f52f2d8b8544e156de05809231cea57416dd206f8823da98dc40b
+%global source0_file jboss-logging-tools-2.2.1.Final.tar.gz
+# oreon url source checksums end
 
 BuildArch:        noarch
 ExclusiveArch:    %{java_arches} noarch
@@ -31,6 +35,9 @@ BuildRequires:    mvn(org.jboss.logging:jboss-logging)
 This pacakge contains JBoss Logging I18n Annotation Processor
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jboss-logging-tools-2.2.1.Final.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f3275efdea6f52f2d8b8544e156de05809231cea57416dd206f8823da98dc40b" || { echo "oreon: Source0 SHA256 mismatch for jboss-logging-tools-2.2.1.Final.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{namedversion} -p 1
 
 cp %{SOURCE1} .

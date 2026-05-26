@@ -4,7 +4,12 @@ Release:	28%{?dist}
 Summary:	Check to see that versions in modules are sane
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Test-Version
-Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-Version-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Test-Version-2.09.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 9ce1dd2897a5f30e1b7f8966ec66f57d8d8f280f605f28c7ca221fa79aca38e0
+%global source0_file Test-Version-2.09.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # ===================================================================
 # Module build requirements
@@ -69,6 +74,9 @@ This module's goal is to be a one stop shop for checking to see that your
 versions across your dist are sane.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Version-2.09.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9ce1dd2897a5f30e1b7f8966ec66f57d8d8f280f605f28c7ca221fa79aca38e0" || { echo "oreon: Source0 SHA256 mismatch for Test-Version-2.09.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Version-%{version}
 
 %build

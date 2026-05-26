@@ -7,6 +7,10 @@ Summary:        Encoding and decoding of Base64 and quoted-printable strings
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND metamail
 URL:            https://metacpan.org/release/MIME-Base64
 Source0:        https://cpan.metacpan.org/authors/id/C/CA/CAPOEIRAB/MIME-Base64-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 77f73d6f7aeb8d33be08b0d8c2617f9b6c77fb7fc45422d507ca8bafe4246017
+%global source0_file MIME-Base64-3.16.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -45,6 +49,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/MIME-Base64-3.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "77f73d6f7aeb8d33be08b0d8c2617f9b6c77fb7fc45422d507ca8bafe4246017" || { echo "oreon: Source0 SHA256 mismatch for MIME-Base64-3.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n MIME-Base64-%{version}
 
 # Help generators to recognize Perl scripts

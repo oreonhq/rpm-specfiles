@@ -4,7 +4,12 @@ Release:        9%{?dist}
 Summary:        Perl extension to test methods for warnings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Warn
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Warn-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BIGJ/Test-Warn-0.37.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 98ca32e7f2f5ea89b8bfb9a0609977f3d153e242e2e51705126cb954f1a06b57
+%global source0_file Test-Warn-0.37.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -38,6 +43,9 @@ This module provides a few convenience methods for testing warning
 based code.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Warn-0.37.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "98ca32e7f2f5ea89b8bfb9a0609977f3d153e242e2e51705126cb954f1a06b57" || { echo "oreon: Source0 SHA256 mismatch for Test-Warn-0.37.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Warn-%{version}
 
 # Fix line endings

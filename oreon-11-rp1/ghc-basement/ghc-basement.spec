@@ -17,6 +17,10 @@ Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 # https://github.com/haskell-foundation/foundation/issues/565
 Patch0:         https://patch-diff.githubusercontent.com/raw/haskell-foundation/foundation/pull/573.patch
+# oreon url source checksums begin
+%global source0_sha256 7fb77e249aef76ba5aed3059d556800ce02b614597c488ba01f0a16449146300
+%global source0_file basement-0.0.16.tar.gz
+# oreon url source checksums end
 
 # Begin cabal-rpm deps:
 BuildRequires:  ghc-rpm-macros
@@ -67,6 +71,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/basement-0.0.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7fb77e249aef76ba5aed3059d556800ce02b614597c488ba01f0a16449146300" || { echo "oreon: Source0 SHA256 mismatch for basement-0.0.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 %autopatch -p2

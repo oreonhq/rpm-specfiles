@@ -6,6 +6,10 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:            https://metacpan.org/release/Test-Needs
 Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/Test-Needs-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 923ffdc78fcba96609753e4bae26b0ba0186893de4a63cd5236e012c7c90e208
+%global source0_file Test-Needs-0.002010.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  make
@@ -46,6 +50,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Needs-0.002010.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "923ffdc78fcba96609753e4bae26b0ba0186893de4a63cd5236e012c7c90e208" || { echo "oreon: Source0 SHA256 mismatch for Test-Needs-0.002010.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Needs-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

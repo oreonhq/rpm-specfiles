@@ -22,6 +22,10 @@ Source0:        http://www.kernel.org/pub/software/network/wireless-regdb/wirele
 Source1:        setregdomain
 Source2:        setregdomain.1
 Source3:        85-regulatory.rules
+# oreon url source checksums begin
+%global source0_sha256 0ff48a5cd9e9cfe8e815a24e023734919e9a3b7ad2f039243ad121cf5aabf6c6
+%global source0_file wireless-regdb-2026.02.04.tar.xz
+# oreon url source checksums end
 
 
 %description
@@ -31,6 +35,9 @@ with radio frequency regulatory rules around the world.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/wireless-regdb-2026.02.04.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0ff48a5cd9e9cfe8e815a24e023734919e9a3b7ad2f039243ad121cf5aabf6c6" || { echo "oreon: Source0 SHA256 mismatch for wireless-regdb-2026.02.04.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

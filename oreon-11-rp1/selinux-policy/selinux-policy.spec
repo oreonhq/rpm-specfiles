@@ -25,7 +25,7 @@ Name: selinux-policy
 Version: 43.1
 Release: 1%{?dist}
 License: GPL-2.0-or-later
-Source: %{giturl}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source:        https://github.com/fedora-selinux/selinux-policy/archive/f5ead57eed9c9322165762f6781b01353f2de870/selinux-policy-%(c=f5ead57eed9c9322165762f6781b01353f2de870;.tar.gz
 Source1: Makefile.devel
 Source2: selinux-policy.conf
 
@@ -50,6 +50,10 @@ Source40: binsbin-convert.sh
 
 # Provide rpm macros for packages installing SELinux modules
 Source5: rpm.macros
+# oreon url source checksums begin
+%global source4_sha256 40838e73978af24ffa4be6c9754df59e26e776c41bb7c81cd11d87079a3f6f3a
+%global source4_file container-selinux-add9f4a543f9fd3407f54717752ab640354654b2.tar.gz
+# oreon url source checksums end
 
 Url: %{giturl}
 BuildArch: noarch
@@ -406,6 +410,9 @@ end
 %build
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/container-selinux-add9f4a543f9fd3407f54717752ab640354654b2.tar.gz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "40838e73978af24ffa4be6c9754df59e26e776c41bb7c81cd11d87079a3f6f3a" || { echo "oreon: Source4 SHA256 mismatch for container-selinux-add9f4a543f9fd3407f54717752ab640354654b2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1 -n %{name}-%{commit}
 tar -xf %{SOURCE4}
 cp container-selinux-%{container_selinux_commit}/container.{if,te,fc} policy/modules/contrib/

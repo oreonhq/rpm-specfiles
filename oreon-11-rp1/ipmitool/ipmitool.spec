@@ -32,6 +32,10 @@ Patch14:      0014-lanplus-cipher-retry.patch
 Patch100:     0100-fix_buf_overflow.patch
 # https://sourceforge.net/p/ipmitool/bugs/490/
 Patch105:     0105-sensor_reading.patch
+# oreon url source checksums begin
+%global source0_sha256 48b010e7bcdf93e4e4b6e43c53c7f60aa6873d574cbd45a8d86fa7aaeebaff9c
+%global source0_file ipmitool-1.8.19.tar.gz
+# oreon url source checksums end
 
 BuildRequires: openssl-devel readline-devel ncurses-devel
 %{?systemd_requires}
@@ -95,6 +99,9 @@ for the host OS to use.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ipmitool-1.8.19.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "48b010e7bcdf93e4e4b6e43c53c7f60aa6873d574cbd45a8d86fa7aaeebaff9c" || { echo "oreon: Source0 SHA256 mismatch for ipmitool-1.8.19.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{gitname}_%{gitversion} -p1
 
 for f in AUTHORS ChangeLog; do

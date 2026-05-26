@@ -5,6 +5,10 @@ Summary:	Cursor library on top of libxcb
 License:	X11-distribute-modifications-variant
 URL:		http://xcb.freedesktop.org
 Source0:	http://xcb.freedesktop.org/dist/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 fdeb8bd127873519be5cc70dcd0d3b5d33b667877200f9925a59fdcad8f7a933
+%global source0_file xcb-util-cursor-0.1.6.tar.xz
+# oreon url source checksums end
 BuildRequires:	make
 BuildRequires:	gcc
 BuildRequires:	pkgconfig(xcb-util) >= 0.3.8
@@ -28,6 +32,9 @@ Development files for xcb-util-cursor.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xcb-util-cursor-0.1.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fdeb8bd127873519be5cc70dcd0d3b5d33b667877200f9925a59fdcad8f7a933" || { echo "oreon: Source0 SHA256 mismatch for xcb-util-cursor-0.1.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 

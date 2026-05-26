@@ -46,10 +46,14 @@ Summary:        A parser/scanner generator for java
 License:        BSD-3-Clause AND BSD-2-Clause
 URL:            https://javacc.org/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/archive/%{name}-%{version}.tar.gz
+Source:        https://github.com/javacc/javacc/archive/javacc-7.0.13.tar.gz
 # Fix javadoc errors in the JavaCharStream template
 # https://github.com/javacc/javacc/pull/257
 Patch:          0001-Fix-javadoc-errors-in-JavaCharStream.template.patch
+# oreon url source checksums begin
+%global source0_sha256 d1bfebb4ca9261c5c3b16b00280b3278a41b193ca8503f2987f72de453bf99c6
+%global source0_file javacc-7.0.13.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -92,6 +96,9 @@ Requires:       %{name} = %{version}-%{release}
 Examples for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/javacc-7.0.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d1bfebb4ca9261c5c3b16b00280b3278a41b193ca8503f2987f72de453bf99c6" || { echo "oreon: Source0 SHA256 mismatch for javacc-7.0.13.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 # Remove binary information in the source tar

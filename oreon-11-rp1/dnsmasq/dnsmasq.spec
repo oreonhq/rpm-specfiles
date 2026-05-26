@@ -31,13 +31,13 @@ Summary:        A lightweight DHCP/caching DNS server
 License:        GPL-2.0-only OR GPL-3.0-only
 URL:            http://www.thekelleys.org.uk/dnsmasq/
 VCS:            git:%{forgeurl0}
-Source0:        %{url}%{?extrapath}%{name}-%{version}%{?extraversion}.tar.xz
+Source0:        http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.92.tar.xz
 Source1:        %{name}.service
 Source2:        dnsmasq-systemd-sysusers.conf
-Source3:        %{url}%{?extrapath}%{name}-%{version}%{?extraversion}.tar.xz.asc
+Source3:        http://www.thekelleys.org.uk/dnsmasq/dnsmasq-2.92.tar.xz.asc
 # GPG public key
 %if 0%{?testrelease} || 0%{?releasecandidate}
-Source4:        %{url}%{?extrapath}test-release-public-key
+Source4:        http://www.thekelleys.org.uk/srkgpg.txt
 %else
 Source4:        http://www.thekelleys.org.uk/srkgpg.txt
 %endif
@@ -53,6 +53,10 @@ Patch7:         dnsmasq-2.90-dbus-interfaces.patch
 Patch8:         https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=f603a4f920e6953b11667d424956fd47373870e9#/dnsmasq-2.92-dnssec-wildcard.patch
 # https://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2026q1/018383.html
 Patch9:         https://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=1269f074f86bb959863012063060a3a082d37dc4#/dnsmasq-2.93-dnssec-rrsig-owner.patch
+# oreon url source checksums begin
+%global source0_sha256 4bf50c2c1018f9fbc26037df51b90ecea0cb73d46162846763b92df0d6c3a458
+%global source0_file dnsmasq-2.92.tar.xz
+# oreon url source checksums end
 
 
 Requires:       nettle
@@ -112,6 +116,9 @@ Translations for few languages on dnsmasq.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dnsmasq-2.92.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4bf50c2c1018f9fbc26037df51b90ecea0cb73d46162846763b92df0d6c3a458" || { echo "oreon: Source0 SHA256 mismatch for dnsmasq-2.92.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?fedora}
 sqv --keyring=%{SOURCE4} --signature-file=%{SOURCE3} %{SOURCE0}
 %endif

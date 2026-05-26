@@ -7,6 +7,10 @@ URL:            https://metacpan.org/release/Pod-Coverage
 Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Pod-Coverage-%{version}.tar.gz
 # Make pod_cover more secure, CPAN RT#85540
 Patch0:         Pod-Coverage-0.23-Do-not-search-.-lib-by-pod_cover.patch
+# oreon url source checksums begin
+%global source0_sha256 30b7a0b0c942f44a7552c0d34e9b1f2e0ba0b67955c61e3b1589ec369074b107
+%global source0_file Pod-Coverage-0.23.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  perl-interpreter
@@ -44,6 +48,9 @@ This module provides a mechanism for determining if the pod for a given
 module is comprehensive.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Pod-Coverage-0.23.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "30b7a0b0c942f44a7552c0d34e9b1f2e0ba0b67955c61e3b1589ec369074b107" || { echo "oreon: Source0 SHA256 mismatch for Pod-Coverage-0.23.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Pod-Coverage-%{version}
 %patch -P0 -p1
 

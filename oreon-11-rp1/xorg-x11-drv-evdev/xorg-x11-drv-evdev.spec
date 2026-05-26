@@ -13,11 +13,15 @@ URL:        http://www.x.org
 License:    HPND-sell-variant AND MIT
 
 %if 0%{?gitdate}
-Source0:    %{tarball}-%{gitdate}.tar.bz2
+Source0:        https://www.x.org/pub/individual/driver/xf86-input-evdev-2.11.0.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
 Source0:    https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 730022de934cc366bb12439daf202a7bfff52a028cf4573e457642e25a071315
+%global source0_file xf86-input-evdev-2.11.0.tar.xz
+# oreon url source checksums end
 %endif
 
 BuildRequires: make
@@ -38,6 +42,9 @@ Obsoletes: xorg-x11-drv-keyboard < 1.8.0-6
 X.Org X11 evdev input driver.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xf86-input-evdev-2.11.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "730022de934cc366bb12439daf202a7bfff52a028cf4573e457642e25a071315" || { echo "oreon: Source0 SHA256 mismatch for xf86-input-evdev-2.11.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

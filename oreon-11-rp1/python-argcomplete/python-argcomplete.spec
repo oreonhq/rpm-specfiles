@@ -14,7 +14,11 @@ Version:       3.6.3
 Release:       %autorelease
 License:       Apache-2.0
 URL:           https://github.com/kislyuk/argcomplete
-Source0:       %pypi_source argcomplete
+Source0:        https://files.pythonhosted.org/packages/source/a/argcomplete/argcomplete-3.6.3.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 62e8ed4fd6a45864acc8235409461b72c9a28ee785a2011cc5eb78318786c89c
+%global source0_file argcomplete-3.6.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires: python3-devel
 
@@ -49,6 +53,9 @@ Summary:        %{summary}
 %description -n python3-argcomplete %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/argcomplete-3.6.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "62e8ed4fd6a45864acc8235409461b72c9a28ee785a2011cc5eb78318786c89c" || { echo "oreon: Source0 SHA256 mismatch for argcomplete-3.6.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n argcomplete-%{version}
 # Remove useless BRs (aka linters)
 sed -i -r -e '/test = /s/"(coverage|ruff|mypy)"[, ]*//g' pyproject.toml

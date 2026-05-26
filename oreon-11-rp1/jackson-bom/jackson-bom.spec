@@ -5,7 +5,11 @@ Summary:        Bill of materials POM for Jackson projects
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-bom
-Source0:        %{url}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/FasterXML/jackson-bom/archive/jackson-bom-2.18.2.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 9b6bfdaea317c0cb26949e2b81c7c5f5d616ef77b47f327673c2ac7283507340
+%global source0_file jackson-bom-2.18.2.tar.gz
+# oreon url source checksums end
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local
@@ -25,6 +29,9 @@ ExclusiveArch:  %{java_arches} noarch
 A "bill of materials" POM for Jackson dependencies.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jackson-bom-2.18.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9b6bfdaea317c0cb26949e2b81c7c5f5d616ef77b47f327673c2ac7283507340" || { echo "oreon: Source0 SHA256 mismatch for jackson-bom-2.18.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{name}-%{version}
 
 # Disable plugins not needed during RPM builds

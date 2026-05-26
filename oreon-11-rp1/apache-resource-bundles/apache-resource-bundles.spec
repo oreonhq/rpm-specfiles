@@ -15,6 +15,10 @@ Source0:        https://repo1.maven.org/maven2/org/apache/apache/resources/apach
 Patch:          0001-Port-ITs-to-Maven-Verifier-2.0.0-M1.patch
 # From upstream commit 5eab384b
 Patch:          0002-MASFRES-68-Upgrade-parent-pom-to-42.patch
+# oreon url source checksums begin
+%global source0_sha256 5251f985714e37cfb27e31578a802dccd353200429786162b1a0dc7175793e61
+%global source0_file apache-resource-bundles-1.5-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -33,6 +37,9 @@ An archive which contains templates for generating the necessary license files
 and notices for all Apache releases.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/apache-resource-bundles-1.5-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5251f985714e37cfb27e31578a802dccd353200429786162b1a0dc7175793e61" || { echo "oreon: Source0 SHA256 mismatch for apache-resource-bundles-1.5-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %pom_disable_module resources-bundles-sample
 %mvn_alias :apache-jar-resource-bundle org.apache:

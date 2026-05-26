@@ -100,6 +100,10 @@ Patch5:		%{name}-3.14.1-gst1.patch
 
 # If we're using C++20 then we can't override toupper/tolower, it is not allowed.
 Patch6:		gambas3-3.19.4-c++20-do-not-try-to-override-std-functions.patch
+# oreon url source checksums begin
+%global source0_sha256 284130fca5f7d2cd44c82352a6206c598bc4552a4bb70fc1e226e10438e01fdf
+%global source0_file gambas-3.21.6.tar.bz2
+# oreon url source checksums end
 
 %description
 Gambas3 is a free development environment based on a Basic interpreter
@@ -1204,6 +1208,9 @@ Requires:	%{name}-gb-xml = %{version}-%{release}
 %{summary}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gambas-3.21.6.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "284130fca5f7d2cd44c82352a6206c598bc4552a4bb70fc1e226e10438e01fdf" || { echo "oreon: Source0 SHA256 mismatch for gambas-3.21.6.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n gambas-%{version}
 %patch -P 1 -p1 -b .nolintl
 %patch -P 2 -p1 -b .noliconv

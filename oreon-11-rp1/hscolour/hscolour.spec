@@ -24,6 +24,10 @@ License:        LGPL-2.1-or-later
 URL:            https://hackage.haskell.org/package/hscolour
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 54ce30da55599e872fd38d927aa518369e2971b284acc67ed0caac6ae14cc77c
+%global source0_file hscolour-1.25.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -97,6 +101,9 @@ This package provides the Haskell %{name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hscolour-1.25.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "54ce30da55599e872fd38d927aa518369e2971b284acc67ed0caac6ae14cc77c" || { echo "oreon: Source0 SHA256 mismatch for hscolour-1.25.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q
 # End cabal-rpm setup

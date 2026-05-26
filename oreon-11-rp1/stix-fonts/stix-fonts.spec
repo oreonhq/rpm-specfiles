@@ -27,8 +27,12 @@ creation through final publication, both in electronic and print formats.
 }
 
 
-Source0:  %{forgesource0}
+Source0:        https://github.com/stipub/stixfonts/archive/v2.13b171/stixfonts-2.13b171.tar.gz
 Source10: 65-%{fontpkgname0}.xml
+# oreon url source checksums begin
+%global source0_sha256 1e76b9ab0bb08372ff73ad5b58d9116260e9058d1fce4b83fe1e213c3b9c947f
+%global source0_file stixfonts-2.13b171.tar.gz
+# oreon url source checksums end
 
 %fontpkg -a
 
@@ -40,6 +44,9 @@ This package provides optional documentation files shipped with
 %{source_name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/stixfonts-2.13b171.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1e76b9ab0bb08372ff73ad5b58d9116260e9058d1fce4b83fe1e213c3b9c947f" || { echo "oreon: Source0 SHA256 mismatch for stixfonts-2.13b171.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %forgesetup
 
 %build

@@ -9,7 +9,11 @@ Release:        2%{?dist}
 # scripts/generator/* are Apache-2.0
 License:        BSD-3-Clause and Apache-2.0
 URL:            %forgeurl
-Source0:        %forgesource
+Source0:        https://github.com/google/googletest/archive/v1.17.0/googletest-1.17.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c
+%global source0_file googletest-1.17.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -56,6 +60,9 @@ Requires:       gmock = %{version}-%{release}
 This package contains development files for gmock.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/googletest-1.17.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "65fab701d9829d38cb77c14acdc431d2108bfdbf8979e40eb8ae567edf10b27c" || { echo "oreon: Source0 SHA256 mismatch for googletest-1.17.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %forgeautosetup -p1
 
 

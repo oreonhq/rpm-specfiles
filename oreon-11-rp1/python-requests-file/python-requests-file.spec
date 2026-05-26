@@ -7,7 +7,11 @@ Summary:        Transport adapter for using file:// URLs with python-requests
 
 License:        Apache-2.0
 URL:            https://codeberg.org/dashea/requests-file
-Source0:        %pypi_source
+Source0:        https://files.pythonhosted.org/packages/source/r/requests_file/requests_file-3.0.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 68789589cfde7098e8933fe3e69bbd864f7f0c22f118937b424d94d0e1b7760f
+%global source0_file requests_file-3.0.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -25,6 +29,9 @@ Summary:        %{summary}
 %description -n python3-requests-file %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/requests_file-3.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "68789589cfde7098e8933fe3e69bbd864f7f0c22f118937b424d94d0e1b7760f" || { echo "oreon: Source0 SHA256 mismatch for requests_file-3.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires

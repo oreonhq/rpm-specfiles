@@ -5,6 +5,10 @@ Summary:        KDE daemon for wall and write messages
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/plasma/kwrited
 Source0:        https://download.kde.org/stable/plasma/%{version}/kwrited-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 7d254573de29330bd47cb332de97a824e0ea23bcabc516cc917ba16823a40c80
+%global source0_file kwrited-6.6.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -27,6 +31,9 @@ Requires:       kf6-filesystem
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kwrited-6.6.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7d254573de29330bd47cb332de97a824e0ea23bcabc516cc917ba16823a40c80" || { echo "oreon: Source0 SHA256 mismatch for kwrited-6.6.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n kwrited-%{version} -p1
 
 

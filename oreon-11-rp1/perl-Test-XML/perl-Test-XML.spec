@@ -4,7 +4,12 @@ Release:	33%{?dist}
 Summary:	Compare XML in perl tests
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-XML
-Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-XML-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/S/SE/SEMANTICO/Test-XML-0.08.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 eb54cc23cdec860d3ad8ac8a697cbf038d0dec95229912d975c301890ca83ee2
+%global source0_file Test-XML-0.08.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
@@ -63,6 +68,9 @@ is_good_xml(XML [, TESTNAME ])
     This is an alias for is_well_formed_xml().
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-XML-0.08.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "eb54cc23cdec860d3ad8ac8a697cbf038d0dec95229912d975c301890ca83ee2" || { echo "oreon: Source0 SHA256 mismatch for Test-XML-0.08.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-XML-%{version}
 
 %build

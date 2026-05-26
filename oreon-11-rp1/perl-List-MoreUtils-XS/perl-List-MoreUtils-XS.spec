@@ -15,8 +15,13 @@ Summary:	Provide compiled List::MoreUtils functions
 # determine the license of any particular chunk of code
 License:	(GPL-1.0-or-later OR Artistic-1.0-Perl) AND Apache-2.0
 URL:		https://metacpan.org/release/List-MoreUtils-XS
-Source0:	https://cpan.metacpan.org/modules/by-module/List/List-MoreUtils-XS-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/R/RE/REHSACK/List-MoreUtils-XS-0.430.tar.gz
+
 Patch0:		List-MoreUtils-XS-0.430-unbundle.patch
+# oreon url source checksums begin
+%global source0_sha256 e8ce46d57c179eecd8758293e9400ff300aaf20fefe0a9d15b9fe2302b9cb242
+%global source0_file List-MoreUtils-XS-0.430.tar.gz
+# oreon url source checksums end
 # Module Build
 BuildRequires:	coreutils
 BuildRequires:	findutils
@@ -58,6 +63,9 @@ BuildRequires:	perl(Tie::Array)
 This module provides accelerated versions of functions in List::MoreUtils.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/List-MoreUtils-XS-0.430.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e8ce46d57c179eecd8758293e9400ff300aaf20fefe0a9d15b9fe2302b9cb242" || { echo "oreon: Source0 SHA256 mismatch for List-MoreUtils-XS-0.430.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n List-MoreUtils-XS-%{version}
 
 # Unbundle bundled modules except private inc::Config::AutoConf::LMU

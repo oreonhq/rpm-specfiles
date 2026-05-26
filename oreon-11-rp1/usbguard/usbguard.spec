@@ -47,6 +47,12 @@ Patch4: protobuf-3.0.patch
 Patch5: catch2-support.patch
 Patch6: disable-catch.patch
 Patch7: selinux-bin-sbin.patch
+# oreon url source checksums begin
+%global source0_sha256 707dad2938923202697f636c2b4e0be80f192242039a2af3fc7ac35d03f78551
+%global source0_file usbguard-1.1.3.tar.gz
+%global source1_sha256 bd70162b31f65497b2f5254cd287dbc1290c2c036ba0c2c8fa92fa8caca9dc71
+%global source1_file v0.0.5.tar.gz
+# oreon url source checksums end
 
 %description
 The USBGuard software framework helps to protect your computer against rogue USB
@@ -103,6 +109,10 @@ daemon.
 
 # usbguard
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/usbguard-1.1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "707dad2938923202697f636c2b4e0be80f192242039a2af3fc7ac35d03f78551" || { echo "oreon: Source0 SHA256 mismatch for usbguard-1.1.3.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/v0.0.5.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bd70162b31f65497b2f5254cd287dbc1290c2c036ba0c2c8fa92fa8caca9dc71" || { echo "oreon: Source1 SHA256 mismatch for v0.0.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 # selinux

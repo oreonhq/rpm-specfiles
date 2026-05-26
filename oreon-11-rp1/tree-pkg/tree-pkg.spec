@@ -30,6 +30,10 @@ Patch3: tree-static-analysis.patch
 # fix programming mistakes detected by static analysis
 # Upstream is not active
 Patch4: tree-static-analysis-2.patch
+# oreon url source checksums begin
+%global source0_sha256 621ff2b4faf214d7023143f6f9d496117c7c75131927837750b904140aff48a1
+%global source0_file 2.3.1.tar.gz
+# oreon url source checksums end
 
 %description
 The source RPM package of tree, which has to be named differently due to
@@ -44,6 +48,9 @@ tree-like format.  Tree is basically a UNIX port of the DOS tree
 utility.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/2.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "621ff2b4faf214d7023143f6f9d496117c7c75131927837750b904140aff48a1" || { echo "oreon: Source0 SHA256 mismatch for 2.3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n tree-%{version} -S git
 
 # do not escape UTF-8 chars in file names by default in UTF-8 locale (#1480778)

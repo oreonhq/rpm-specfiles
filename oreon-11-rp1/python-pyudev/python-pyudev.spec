@@ -13,6 +13,10 @@ Summary:          A libudev binding
 License:          LGPL-2.1-or-later
 URL:              http://pypi.python.org/pypi/pyudev
 Source0:          https://pypi.io/packages/source/p/%{srcname}/%{srcname}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e788bb983700b1a84efc2e88862b0a51af2a995d5b86bc9997546505cf7b36bc
+%global source0_file pyudev-0.24.4.tar.gz
+# oreon url source checksums end
 
 BuildArch:        noarch
 
@@ -55,6 +59,9 @@ integrating a pyudev monitor with the Qt5 main loop.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pyudev-0.24.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e788bb983700b1a84efc2e88862b0a51af2a995d5b86bc9997546505cf7b36bc" || { echo "oreon: Source0 SHA256 mismatch for pyudev-0.24.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires

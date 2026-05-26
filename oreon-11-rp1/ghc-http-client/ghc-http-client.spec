@@ -18,6 +18,10 @@ License:        MIT AND BSD-3-Clause
 URL:            https://hackage.haskell.org/package/http-client
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a02c1be082e8f48c959ac7150a48a405f8d4383e0942639481e84b220f29ad61
+%global source0_file http-client-0.7.19.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -123,6 +127,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/http-client-0.7.19.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a02c1be082e8f48c959ac7150a48a405f8d4383e0942639481e84b220f29ad61" || { echo "oreon: Source0 SHA256 mismatch for http-client-0.7.19.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

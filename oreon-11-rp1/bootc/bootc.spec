@@ -37,8 +37,8 @@ Summary:        Bootable container system
 # Unlicense OR MIT
 License:        Apache-2.0 AND BSD-3-Clause AND MIT AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
 URL:            https://github.com/bootc-dev/bootc
-Source0:        %{url}/releases/download/v%{version}/bootc-%{version}.tar.zstd
-Source1:        %{url}/releases/download/v%{version}/bootc-%{version}-vendor.tar.zstd
+Source0:        https://github.com/bootc-dev/bootc/releases/download/v1.15.2/bootc-1.15.2.tar.zstd
+Source1:        https://github.com/bootc-dev/bootc/releases/download/v1.15.2/bootc-1.15.2-vendor.tar.zstd
 
 # 
 ExcludeArch:    %{ix86}

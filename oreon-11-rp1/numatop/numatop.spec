@@ -6,6 +6,10 @@ Summary:        Memory access locality characterization and analysis
 License:        BSD-3-Clause
 URL:            https://01.org/numatop
 Source:         https://github.com/intel/numatop/archive/refs/tags/v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c312d4b6cc10d12680aa8ff04db5a02fca7b39a5494b0f41d280a7e1772db9c8
+%global source0_file v2.5.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -31,6 +35,9 @@ processors.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c312d4b6cc10d12680aa8ff04db5a02fca7b39a5494b0f41d280a7e1772db9c8" || { echo "oreon: Source0 SHA256 mismatch for v2.5.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

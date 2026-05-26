@@ -5,6 +5,10 @@ Summary:        Expand tabs and do simple line wrapping
 License:        TTWL
 URL:            https://metacpan.org/release/Text-Tabs%2BWrap
 Source0:        https://cpan.metacpan.org/authors/id/A/AR/ARISTOTLE/Text-Tabs+Wrap-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 fa83812ad59b111c543a3678115012aeb3e4ab3067c2261a38fdbcacf1b761cd
+%global source0_file Text-Tabs+Wrap-2024.001.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -44,6 +48,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Text-Tabs+Wrap-2024.001.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fa83812ad59b111c543a3678115012aeb3e4ab3067c2261a38fdbcacf1b761cd" || { echo "oreon: Source0 SHA256 mismatch for Text-Tabs+Wrap-2024.001.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Text-Tabs+Wrap-%{version}
 
 # Help generators to recognize Perl scripts

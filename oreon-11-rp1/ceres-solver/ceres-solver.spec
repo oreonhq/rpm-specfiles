@@ -11,6 +11,10 @@ URL:            http://ceres-solver.org/
 Source0:        http://%{name}.org/%{name}-%{version}.tar.gz
 # Relax eigen version constraints
 Patch0:         ceres-solver-Support-Eigen3-5.0.0.patch
+# oreon url source checksums begin
+%global source0_sha256 48b2302a7986ece172898477c3bcd6deb8fb5cf19b3327bc49969aad4cede82d
+%global source0_file ceres-solver-2.2.0.tar.gz
+# oreon url source checksums end
 
 %if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon}
 %global blaslib flexiblas
@@ -88,6 +92,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ceres-solver-2.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "48b2302a7986ece172898477c3bcd6deb8fb5cf19b3327bc49969aad4cede82d" || { echo "oreon: Source0 SHA256 mismatch for ceres-solver-2.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

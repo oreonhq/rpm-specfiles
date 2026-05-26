@@ -14,6 +14,10 @@ Source1: %{gem_name}-%{version}-test.tar.gz
 # https://github.com/apjanke/ronn-ng/pull/125
 # load fileutils explicitly for ruby34
 Patch0:         ronn-ng-pr125-ruby34-fileutils-deps.patch
+# oreon url source checksums begin
+%global source0_sha256 4eeb0185c0fbfa889efed923b5b50e949cd869e7d82ac74138acd0c9c7165ec0
+%global source0_file ronn-ng-0.10.1.gem
+# oreon url source checksums end
 BuildRequires:  ruby(release)
 BuildRequires:  rubygems-devel
 BuildRequires:  ruby
@@ -45,6 +49,9 @@ BuildArch:      noarch
 Documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ronn-ng-0.10.1.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4eeb0185c0fbfa889efed923b5b50e949cd869e7d82ac74138acd0c9c7165ec0" || { echo "oreon: Source0 SHA256 mismatch for ronn-ng-0.10.1.gem" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{gem_name}-%{version} -b 1
 (
 cd %{_builddir}/test

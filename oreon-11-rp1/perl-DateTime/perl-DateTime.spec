@@ -12,7 +12,12 @@ Release:        5%{?dist}
 Summary:        Date and time object for Perl
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/DateTime
-Source0:        https://cpan.metacpan.org/modules/by-module/DateTime/DateTime-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-1.66.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 afabd686fb83d3ebf49ee453974f9122f3eec9b25ff8d2ddf4f12de92af1e5e2
+%global source0_file DateTime-1.66.tar.gz
+# oreon url source checksums end
+
 # Build:
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -82,6 +87,9 @@ first day of year 1, which corresponds to the date which was (incorrectly)
 believed to be the birth of Jesus Christ.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DateTime-1.66.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "afabd686fb83d3ebf49ee453974f9122f3eec9b25ff8d2ddf4f12de92af1e5e2" || { echo "oreon: Source0 SHA256 mismatch for DateTime-1.66.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DateTime-%{version}
 
 %build

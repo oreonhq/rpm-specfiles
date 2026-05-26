@@ -12,6 +12,10 @@ Summary:        Perl module for processing huge XML documents in tree mode
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Twig
 Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIROD/XML-Twig-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0b744a9737a070f95c32154afd526bf5ebe76a59feb8bc1f5dbc6cdaa5e0e529
+%global source0_file XML-Twig-3.54.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  expat >= 2.0.1
@@ -102,6 +106,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-Twig-3.54.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0b744a9737a070f95c32154afd526bf5ebe76a59feb8bc1f5dbc6cdaa5e0e529" || { echo "oreon: Source0 SHA256 mismatch for XML-Twig-3.54.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-Twig-%{version}
 iconv -f iso88591 -t utf8 < Changes > Changes.utf8 && \
     mv -f Changes.utf8 Changes

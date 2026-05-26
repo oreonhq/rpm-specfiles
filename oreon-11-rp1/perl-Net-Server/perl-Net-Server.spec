@@ -4,9 +4,14 @@ Release:        10%{?dist}
 Summary:        Extensible, general Perl server engine
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-Server
-Source0:        https://cpan.metacpan.org/modules/by-module/Net/Net-Server-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RH/RHANDOM/Net-Server-2.014.tar.gz
+
 # Only initialize existing Net::SSLeay methods (RT#154333)
 Patch0:         https://github.com/rhandom/perl-net-server/pull/Net-Server-2.014-Fix-using-OpenSSL-ENGINE-API-routines.patch
+# oreon url source checksums begin
+%global source0_sha256 3406b9ca5a662a0075eed47fb78de1316b601c94f62a0ee34a5544db9baa3720
+%global source0_file Net-Server-2.014.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  coreutils
@@ -84,6 +89,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Net-Server-2.014.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3406b9ca5a662a0075eed47fb78de1316b601c94f62a0ee34a5544db9baa3720" || { echo "oreon: Source0 SHA256 mismatch for Net-Server-2.014.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n Net-Server-%{version}
 
 # Do not want to pull in any packaging deps here.

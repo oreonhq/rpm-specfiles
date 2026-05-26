@@ -30,6 +30,10 @@ Requires:       shadow-utils
 Patch10001:     0001-mocklibc-Fix-compiler-warning.patch
 Patch10002:     0002-user-manager-Fix-another-compiler-warning.patch
 Patch10003:     0003-act-user-Use-the-reentrant-interfaces-of-crypt-_gens.patch
+# oreon url source checksums begin
+%global source0_sha256 adda4cdeae24fa0992e7df3ffff9effa7090be3ac233a3edfdf69d5a9c9b924f
+%global source0_file accountsservice-23.13.9.tar.xz
+# oreon url source checksums end
 
 %description
 The accountsservice project provides a set of D-Bus interfaces for
@@ -55,6 +59,9 @@ files needed to build applications that use accountsservice-libs.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/accountsservice-23.13.9.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "adda4cdeae24fa0992e7df3ffff9effa7090be3ac233a3edfdf69d5a9c9b924f" || { echo "oreon: Source0 SHA256 mismatch for accountsservice-23.13.9.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

@@ -22,6 +22,10 @@ License: GPL-1.0-or-later
 BuildArch: noarch
 
 Patch1:  rhbz959989.badsfxrules.patch
+# oreon url source checksums begin
+%global source0_sha256 ab10c668f050eef16bb717c09f52eccf0887f248eb3738d255e169d72171d2fb
+%global source0_file no_NO-pack2-2.2.zip
+# oreon url source checksums end
 
 %description
 Norwegian hunspell dictionaries.
@@ -77,6 +81,9 @@ Nynorsk thesaurus.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/no_NO-pack2-2.2.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ab10c668f050eef16bb717c09f52eccf0887f248eb3738d255e169d72171d2fb" || { echo "oreon: Source0 SHA256 mismatch for no_NO-pack2-2.2.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c
 unzip -q nb_NO.zip
 unzip -q nn_NO.zip

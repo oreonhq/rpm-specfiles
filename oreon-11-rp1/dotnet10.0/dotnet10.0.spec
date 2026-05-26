@@ -115,6 +115,10 @@ Patch0:         runtime-re-enable-implicit-rejection.patch
 Patch1:         runtime-openssl-sha1.patch
 # fix an error caused by combining Fedora's CFLAGS with how .NET builds some assembly files
 Patch2:         runtime-disable-fortify-on-ilasm-parser.patch
+# oreon url source checksums begin
+%global source0_sha256 6069eba9493bd0c20394ccb145380768fcecaed2b4799e2524f0dc7186ec1c79
+%global source0_file v10.0.104.tar.gz
+# oreon url source checksums end
 
 
 ExclusiveArch:  aarch64 ppc64le s390x x86_64
@@ -470,6 +474,9 @@ These are not meant for general use.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v10.0.104.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6069eba9493bd0c20394ccb145380768fcecaed2b4799e2524f0dc7186ec1c79" || { echo "oreon: Source0 SHA256 mismatch for v10.0.104.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 release_json_tag=$(grep tag %{SOURCE3} | cut -d: -f2 | sed -E 's/[," ]*//g')

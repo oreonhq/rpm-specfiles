@@ -13,10 +13,14 @@ Summary:        Accessing and Modifying INI files
 #   as well.  The Python license (LICENSE-PSF) applies to that code.
 License:        MIT AND Python-2.0.1
 URL:            https://github.com/candlepin/python-iniparse
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/candlepin/python-iniparse/archive/0.5.1/python-iniparse-0.5.1.tar.gz
 
 # Python 3.14 support: Avoid the multiprocessing forkserver method
 Patch:          https://github.com/candlepin/python-iniparse/pull/38.patch
+# oreon url source checksums begin
+%global source0_sha256 aa7e6a5340f149ecaa9f2b1059b422937f94387baae96ad4455d527d1071c3d7
+%global source0_file python-iniparse-0.5.1.tar.gz
+# oreon url source checksums end
 
 BuildArch: noarch
 
@@ -39,6 +43,9 @@ Summary:        %{summary}
 %{_description}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/python-iniparse-0.5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aa7e6a5340f149ecaa9f2b1059b422937f94387baae96ad4455d527d1071c3d7" || { echo "oreon: Source0 SHA256 mismatch for python-iniparse-0.5.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 chmod -c -x html/index.html
 

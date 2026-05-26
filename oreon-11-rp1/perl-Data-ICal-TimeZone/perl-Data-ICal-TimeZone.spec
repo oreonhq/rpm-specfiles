@@ -5,6 +5,10 @@ Summary:        Time zones for Data::ICal
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-ICal-TimeZone
 Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Data-ICal-TimeZone-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3c422bb69dff33ae884c746e6015ed2da19deb2804b59c4c7978428c49def1bf
+%global source0_file Data-ICal-TimeZone-1.23.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  make
@@ -40,6 +44,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Data-ICal-TimeZone-1.23.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3c422bb69dff33ae884c746e6015ed2da19deb2804b59c4c7978428c49def1bf" || { echo "oreon: Source0 SHA256 mismatch for Data-ICal-TimeZone-1.23.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Data-ICal-TimeZone-%{version}
 # Remove MacOS attribute failes creeping into DESTDIR, CPAN RT#35597
 find -depth -name '._*' -delete

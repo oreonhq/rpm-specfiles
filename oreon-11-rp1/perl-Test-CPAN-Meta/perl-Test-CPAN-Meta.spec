@@ -11,8 +11,13 @@ Release:        40%{?dist}
 Summary:        Validation of the META.yml file in a CPAN distribution
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Test-CPAN-Meta
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-CPAN-Meta-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BA/BARBIE/Test-CPAN-Meta-0.25.tar.gz
+
 Patch0:         Test-CPAN-Meta-0.25-utf8.patch
+# oreon url source checksums begin
+%global source0_sha256 f55b4f9cf6bc396d0fe8027267685cb2ac4affce897d0967a317fac6db5a8db5
+%global source0_file Test-CPAN-Meta-0.25.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -49,6 +54,9 @@ and installers such as ExtUtils::MakeMaker, Module::Build and
 Module::Install.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-CPAN-Meta-0.25.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f55b4f9cf6bc396d0fe8027267685cb2ac4affce897d0967a317fac6db5a8db5" || { echo "oreon: Source0 SHA256 mismatch for Test-CPAN-Meta-0.25.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-CPAN-Meta-%{version}
 
 # Re-code documentation as UTF-8

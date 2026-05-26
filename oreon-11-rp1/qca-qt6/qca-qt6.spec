@@ -21,6 +21,10 @@ URL:     https://userbase.kde.org/QCA
 Source0: https://invent.kde.org/libraries/qca/-/archive/v%{version}/qca-v%{version}.tar.gz
 # Also generate pkgconfig file for qt6
 Patch0:  qca-qt6-pkgconfig.patch
+# oreon url source checksums begin
+%global source0_sha256 615452d2f39f9e46edfc489f5aa219f6c3a8c59fec4969e306a232085ec2a5f2
+%global source0_file qca-v2.3.10.tar.gz
+# oreon url source checksums end
 ## upstream patches
 
 ## upstreamable patches
@@ -223,6 +227,9 @@ Requires: %{name}-qt6%{?_isa} = %{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/qca-v2.3.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "615452d2f39f9e46edfc489f5aa219f6c3a8c59fec4969e306a232085ec2a5f2" || { echo "oreon: Source0 SHA256 mismatch for qca-v2.3.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n qca-v%{version}
 
 

@@ -7,6 +7,10 @@ URL: https://waterlan.home.xs4all.nl/dos2unix.html
 Source: https://waterlan.home.xs4all.nl/dos2unix/%{name}-%{version}.tar.gz
 Source: https://waterlan.home.xs4all.nl/dos2unix/%{name}-%{version}.tar.gz.asc
 Source: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x38C1F572B12725BE#./38C1F572B12725BE.asc
+# oreon url source checksums begin
+%global source0_sha256 28a4b0d9f9179da4e44c567b9c01f818b070a20827115fffd96f760dcfa0f3b2
+%global source0_file dos2unix-7.5.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gettext
@@ -25,6 +29,9 @@ Convert text files with DOS or Mac line endings to Unix line endings and
 vice versa.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dos2unix-7.5.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "28a4b0d9f9179da4e44c567b9c01f818b070a20827115fffd96f760dcfa0f3b2" || { echo "oreon: Source0 SHA256 mismatch for dos2unix-7.5.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup
 

@@ -61,11 +61,11 @@ URL:            https://github.com/dotnet/
 %global tarball_name dotnet-%{upstream_tag}-x64-bootstrap
 # The source is generated on a Fedora box via:
 # ./build-dotnet-tarball --bootstrap %%{upstream_tag}
-Source0:        %{tarball_name}.tar.xz
+Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/v8.0.127.tar.gz#/dotnet-8.0.127.tar.gz
 # Generated via ./build-arm64-bootstrap-tarball
-Source1:        dotnet-prebuilts-%{bootstrap_sdk_version}-arm64.tar.gz
+Source1:        https://github.com/dotnet/dotnet/releases/download/v8.0.127/dotnet-8.0.127.tar.gz.sig
 # Generated manually, same pattern as the arm64 tarball
-Source2:        dotnet-prebuilts-%{bootstrap_sdk_version}-ppc64le.tar.gz
+Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 # Generated manually, same pattern as the arm64 tarball
 Source3:        dotnet-prebuilts-%{bootstrap_sdk_version}-s390x.tar.gz
 %else
@@ -97,6 +97,10 @@ Patch5:         runtime-openssl-sha1.patch
 Patch6:         runtime-119706-clang-21.patch
 # TODO send upstream
 Patch7:         runtime-clang-20-support.patch
+# oreon url source checksums begin
+%global source0_sha256 ac0797ae1492db0810f6470f1887e8b24ccdebf993d7f0fc38fe1a6b9c8e6295
+%global source0_file v8.0.127.tar.gz
+# oreon url source checksums end
 
 
 ExclusiveArch:  aarch64 ppc64le s390x x86_64
@@ -414,6 +418,9 @@ These are not meant for general use.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v8.0.127.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ac0797ae1492db0810f6470f1887e8b24ccdebf993d7f0fc38fe1a6b9c8e6295" || { echo "oreon: Source0 SHA256 mismatch for v8.0.127.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{without bootstrap}
 # check gpg signatures only for non-bootstrap builds; bootstrap "sources" are hand-crafted
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'

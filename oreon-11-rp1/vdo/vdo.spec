@@ -5,7 +5,11 @@ Release: 2%{?dist}
 
 License: GPL-2.0-only
 URL: https://github.com/dm-vdo/vdo
-Source0: %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/dm-vdo/vdo/archive/8.3.2.1/vdo-8.3.2.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 d778eb3bd69ff613f88117e17afc57602bde3381401b0f3be8dcf3efe6f2e1fe
+%global source0_file vdo-8.3.2.1.tar.gz
+# oreon url source checksums end
 
 %if 0%{?fedora}
 ExcludeArch: %{ix86}
@@ -46,6 +50,9 @@ block-level deduplication, compression, and thin provisioning.
 This package provides the user-space support tools for VDO.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vdo-8.3.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d778eb3bd69ff613f88117e17afc57602bde3381401b0f3be8dcf3efe6f2e1fe" || { echo "oreon: Source0 SHA256 mismatch for vdo-8.3.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

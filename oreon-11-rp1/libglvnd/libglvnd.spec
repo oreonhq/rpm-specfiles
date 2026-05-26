@@ -20,8 +20,12 @@ Summary:        The GL Vendor-Neutral Dispatch library
 
 License:        MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause AND GPL-3.0-or-later WITH Autoconf-exception-macro
 URL:            https://gitlab.freedesktop.org/glvnd/libglvnd
-Source0:        %{url}/-/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://gitlab.freedesktop.org/glvnd/libglvnd/-/archive/v1.7.0/libglvnd-1.7.0.tar.gz
 Patch1:         0001-glx-Add-another-fallback-library-name.patch
+# oreon url source checksums begin
+%global source0_sha256 8797914ff69e62d7d89b331cab311b29fff5cfaddae5aae09695a7ccbaf353d7
+%global source0_file libglvnd-1.7.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  libtool
@@ -145,6 +149,9 @@ libGL and libGLX are the common dispatch interface for the GLX API.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libglvnd-1.7.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8797914ff69e62d7d89b331cab311b29fff5cfaddae5aae09695a7ccbaf353d7" || { echo "oreon: Source0 SHA256 mismatch for libglvnd-1.7.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-v%{version}-%{?commit0}
 autoreconf -vif
 

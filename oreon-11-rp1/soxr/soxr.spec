@@ -12,6 +12,10 @@ Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}-Sour
 # Don't use non-standard CMake variables
 # https://bugzilla.redhat.com/show_bug.cgi?id=2381660
 Patch0:         soxr-cmake.patch
+# oreon url source checksums begin
+%global source0_sha256 b111c15fdc8c029989330ff559184198c161100a59312f5dc19ddeb9b5a15889
+%global source0_file soxr-0.1.3-Source.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  cmake gcc
 
@@ -30,6 +34,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/soxr-0.1.3-Source.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b111c15fdc8c029989330ff559184198c161100a59312f5dc19ddeb9b5a15889" || { echo "oreon: Source0 SHA256 mismatch for soxr-0.1.3-Source.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version}-Source
 
 

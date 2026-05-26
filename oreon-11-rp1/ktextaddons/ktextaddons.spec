@@ -8,6 +8,10 @@ License:       CC0-1.0 AND LGPL-2.0-or-later AND GPL-2.0-or-later AND BSD-3-Clau
 URL:           https://invent.kde.org/libraries/%{name}
 
 Source0:       http://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 b52356be07215f0ace0b8e2a6df8bcd8f3572ef5c0aff89631b043b10adb0c8a
+%global source0_file ktextaddons-2.0.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
@@ -58,6 +62,9 @@ BuildArch:      noarch
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ktextaddons-2.0.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b52356be07215f0ace0b8e2a6df8bcd8f3572ef5c0aff89631b043b10adb0c8a" || { echo "oreon: Source0 SHA256 mismatch for ktextaddons-2.0.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

@@ -10,6 +10,10 @@ URL:            http://sphinx-doc.org/
 Source:         %{pypi_source sphinxcontrib_htmlhelp}
 # Compatibility with Sphinx 9+
 Patch:          https://github.com/sphinx-doc/sphinxcontrib-htmlhelp/pull/44.patch
+# oreon url source checksums begin
+%global source0_sha256 c9e2916ace8aad64cc13a0d233ee22317f2b9025b9cf3295249fa985cc7082e9
+%global source0_file sphinxcontrib_htmlhelp-2.1.0.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  gettext
@@ -28,6 +32,9 @@ sphinxcontrib-htmlhelp is a sphinx extension which renders HTML help files.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sphinxcontrib_htmlhelp-2.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c9e2916ace8aad64cc13a0d233ee22317f2b9025b9cf3295249fa985cc7082e9" || { echo "oreon: Source0 SHA256 mismatch for sphinxcontrib_htmlhelp-2.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n sphinxcontrib_htmlhelp-%{version}
 find -name '*.mo' -delete
 

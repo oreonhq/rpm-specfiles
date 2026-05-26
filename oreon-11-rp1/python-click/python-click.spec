@@ -8,7 +8,11 @@ Summary:        Simple wrapper around optparse for powerful command line utiliti
 
 License:        BSD-3-Clause
 URL:            https://github.com/pallets/click
-Source0:        %{url}/archive/%{version}/click-%{version}.tar.gz
+Source0:        https://github.com/pallets/click/archive/8.3.1/click-8.3.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 df2fb64b9c3f0b5fbf65f1b69dd164cd2d8e7d5d8f6ee3abdafcff7fe2d63719
+%global source0_file click-8.3.1.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
@@ -29,6 +33,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/click-8.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "df2fb64b9c3f0b5fbf65f1b69dd164cd2d8e7d5d8f6ee3abdafcff7fe2d63719" || { echo "oreon: Source0 SHA256 mismatch for click-8.3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n click-%{version} -p1
 
 

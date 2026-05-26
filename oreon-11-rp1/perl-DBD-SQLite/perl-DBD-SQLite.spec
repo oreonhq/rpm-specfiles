@@ -21,6 +21,10 @@ Patch0:         perl-DBD-SQLite-bz543982.patch
 Patch1:         DBD-SQLite-1.62-Remove-bundled-source-extentions.patch
 # Adapt tests to unbundled Test::FailWarnings
 Patch2:         DBD-SQLite-1.64-Unbundle-Test-FailWarnings.patch
+# oreon url source checksums begin
+%global source0_sha256 efbad7794bafaa4e7476c07445a33bbfe1040e380baa3395a02635eebe3859d5
+%global source0_file DBD-SQLite-1.78.tar.gz
+# oreon url source checksums end
 # if sqlite >= 3.6.0 then
 #   perl-DBD-SQLite uses the external library
 # else
@@ -94,6 +98,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DBD-SQLite-1.78.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "efbad7794bafaa4e7476c07445a33bbfe1040e380baa3395a02635eebe3859d5" || { echo "oreon: Source0 SHA256 mismatch for DBD-SQLite-1.78.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DBD-SQLite-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

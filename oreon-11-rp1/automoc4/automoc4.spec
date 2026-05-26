@@ -13,6 +13,10 @@ URL:     https://invent.kde.org/developer-tools/automoc
 # GitHub tag tarball unpacks to directory automoc-0.9.88 (matches setup -n automoc plus hyphen plus version digits).
 # Fragment after hash sets the saved tarball basename for spectool (automoc plus version tarball name).
 Source0: https://github.com/KDE/automoc/archive/refs/tags/v%{version}.tar.gz#/automoc-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 991d0376a63983c1b62e85624b613fa2d1168f73ba166939c216cbd0a2990856
+%global source0_file v0.9.88.tar.gz
+# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
@@ -32,6 +36,9 @@ automoc4 binary and the CMake module files used by KDE4 and kdelibs4.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.9.88.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "991d0376a63983c1b62e85624b613fa2d1168f73ba166939c216cbd0a2990856" || { echo "oreon: Source0 SHA256 mismatch for v0.9.88.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n automoc-%{version}
 
 

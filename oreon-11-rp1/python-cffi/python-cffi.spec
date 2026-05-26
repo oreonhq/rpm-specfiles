@@ -6,7 +6,11 @@ Summary:        Foreign Function Interface for Python to call C code
 # cffi/_imp_emulation.py has bits copied from CPython (PSF-2.0)
 License:        MIT AND PSF-2.0
 URL:            https://github.com/python-cffi/cffi
-Source:         %{url}/archive/v%{version}/cffi-%{version}.tar.gz
+Source:        https://github.com/python-cffi/cffi/archive/v2.0.0/cffi-2.0.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e32bea840b50779a43dcaff13dcf6fa8bc29aa1b071c2cb4e27c1bd79114a202
+%global source0_file cffi-2.0.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
@@ -42,6 +46,9 @@ Documentation for CFFI, the Foreign Function Interface for Python.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cffi-2.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e32bea840b50779a43dcaff13dcf6fa8bc29aa1b071c2cb4e27c1bd79114a202" || { echo "oreon: Source0 SHA256 mismatch for cffi-2.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n cffi-%{version}
 
 

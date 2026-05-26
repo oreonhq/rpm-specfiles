@@ -9,7 +9,11 @@ URL:            https://github.com/eclipse-ee4j/jaxb-fi
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-fi/archive/2.1.1/jaxb-fi-2.1.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e4a3c86648681e58bb84313c2e97eb199498ec6b354eb60cd46ec4dc4806f0b3
+%global source0_file jaxb-fi-2.1.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
@@ -36,6 +40,9 @@ License:        Apache-2.0 AND BSD-3-Clause
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jaxb-fi-2.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e4a3c86648681e58bb84313c2e97eb199498ec6b354eb60cd46ec4dc4806f0b3" || { echo "oreon: Source0 SHA256 mismatch for jaxb-fi-2.1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %pom_remove_parent

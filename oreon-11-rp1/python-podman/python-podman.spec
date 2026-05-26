@@ -27,7 +27,11 @@ Release: %autorelease
 Summary: RESTful API for Podman
 URL: https://github.com/containers/%{pypi_name}-py
 # Tarball fetched from upstream
-Source0: %{url}/archive/v%{version}.tar.gz
+Source0:        https://github.com/containers/podman-py/archive/v5.6.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4c596cb0f17085e590f8ac497e103f3db3215f9554ef24e33316e89467d8aade
+%global source0_file v5.6.0.tar.gz
+# oreon url source checksums end
 BuildArch: noarch
 
 %description
@@ -57,6 +61,9 @@ Summary: %{summary}
 %desc
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v5.6.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4c596cb0f17085e590f8ac497e103f3db3215f9554ef24e33316e89467d8aade" || { echo "oreon: Source0 SHA256 mismatch for v5.6.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -Sgit -n %{pypi_name}-py-%{version}
 
 %if !%{defined rhel8_py}

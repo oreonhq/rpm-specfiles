@@ -8,6 +8,10 @@ Summary:       An encoding detector library ported from Mozilla
 License:       MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.0-or-later
 URL:           https://www.freedesktop.org/wiki/Software/%{name}
 Source0:       https://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 e97a60cfc00a1c147a674b097bb1422abd9fa78a2d9ce3f3fdcc2e78a34ac5f0
+%global source0_file uchardet-0.0.8.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -29,6 +33,9 @@ The %{name}-devel package contains headers and shared libraries
 for developing tools for uchardet.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/uchardet-0.0.8.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e97a60cfc00a1c147a674b097bb1422abd9fa78a2d9ce3f3fdcc2e78a34ac5f0" || { echo "oreon: Source0 SHA256 mismatch for uchardet-0.0.8.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

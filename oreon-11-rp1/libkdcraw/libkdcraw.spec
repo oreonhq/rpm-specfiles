@@ -8,6 +8,10 @@ Release: 4%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later
 URL:     https://invent.kde.org/graphics/%{name}
 Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 23b220f14bbaa21858b6f8e18169499389835b6693e73a877f8e0d788f4499af
+%global source0_file libkdcraw-25.12.3.tar.xz
+# oreon url source checksums end
 
 
 ## upstream patches
@@ -36,6 +40,9 @@ Requires: cmake(Qt6Gui)
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libkdcraw-25.12.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "23b220f14bbaa21858b6f8e18169499389835b6693e73a877f8e0d788f4499af" || { echo "oreon: Source0 SHA256 mismatch for libkdcraw-25.12.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

@@ -9,7 +9,12 @@ Summary:	Globally/Universally Unique Identifiers (GUIDs/UUIDs)
 # https://github.com/bleargh45/Data-UUID/issues/26
 License:	HP-1989 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:		https://metacpan.org/release/Data-UUID
-Source0:	https://cpan.metacpan.org/modules/by-module/Data/Data-UUID-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/Data-UUID-1.227.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 95bda7276265f57bc48ffdeddec5ef28cd6f765e3a183757fa5f09f0ce6b98ac
+%global source0_file Data-UUID-1.227.tar.gz
+# oreon url source checksums end
+
 # Module Build
 BuildRequires:	coreutils
 BuildRequires:	findutils
@@ -69,6 +74,9 @@ This module provides several methods to create a UUID. In all methods,
 <namespace> is a UUID and <name> is a free form string.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Data-UUID-1.227.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "95bda7276265f57bc48ffdeddec5ef28cd6f765e3a183757fa5f09f0ce6b98ac" || { echo "oreon: Source0 SHA256 mismatch for Data-UUID-1.227.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Data-UUID-%{version}
 
 %build

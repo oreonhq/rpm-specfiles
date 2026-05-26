@@ -6,6 +6,10 @@ Summary: Library for Multiple-image Network Graphics support
 # This is a common zlib variant.
 License: Zlib
 Source0: http://download.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 cf112a1fb02f5b1c0fce5cab11ea8243852c139e669c44014125874b14b7dfaa
+%global source0_file libmng-2.0.3.tar.gz
+# oreon url source checksums end
 BuildRequires: zlib-devel
 BuildRequires: libjpeg-turbo-devel
 BuildRequires: lcms2-devel
@@ -31,6 +35,9 @@ libmng-devel package contains files needed for developing or compiling
 applications which use MNG graphics.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libmng-2.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cf112a1fb02f5b1c0fce5cab11ea8243852c139e669c44014125874b14b7dfaa" || { echo "oreon: Source0 SHA256 mismatch for libmng-2.0.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

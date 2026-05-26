@@ -42,12 +42,12 @@ SourceLicense:  %{shrink:
                 }
 
 %global src_base https://www.cairographics.org/releases
-Source0:        %{src_base}/cairomm-%{version}.tar.xz
+Source0:        https://www.cairographics.org/releases/cairomm-1.14.5.tar.xz
 # No keyring with authorized GPG signing keys is published
 # (https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/331), but we
 # are able to verify the signature using the key for Kjell Ahlstedt from
 # https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/290.
-Source1:        %{src_base}/cairomm-%{version}.tar.xz.asc
+Source1:        https://www.cairographics.org/releases/cairomm-1.14.5.tar.xz.asc
 Source2:        https://gitlab.freedesktop.org/freedesktop/freedesktop/uploads/0ac64e9582659f70a719d59fb02cd037/gpg_key.pub
 
 # Fix outdated FSF mailing address in COPYING
@@ -71,6 +71,10 @@ Patch:          https://gitlab.freedesktop.org/cairo/cairomm/-/commit/2b73bbba0f
 # Was incorrectly corrected in the previous commit.
 # https://gitlab.freedesktop.org/cairo/cairomm/-/commit/871393804b0bdec39e365a59ceaed7aaee774355
 Patch:          https://gitlab.freedesktop.org/cairo/cairomm/-/commit/871393804b0bdec39e365a59ceaed7aaee774355.patch
+# oreon url source checksums begin
+%global source0_sha256 70136203540c884e89ce1c9edfb6369b9953937f6cd596d97c78c9758a5d48db
+%global source0_file cairomm-1.14.5.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gpgverify
 
@@ -159,6 +163,9 @@ The API/ABI version series is %{apiver}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cairomm-1.14.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "70136203540c884e89ce1c9edfb6369b9953937f6cd596d97c78c9758a5d48db" || { echo "oreon: Source0 SHA256 mismatch for cairomm-1.14.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} \
     --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 

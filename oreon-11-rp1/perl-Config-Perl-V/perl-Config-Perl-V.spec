@@ -7,6 +7,10 @@ URL:            https://metacpan.org/release/Config-Perl-V
 Source0:        https://cpan.metacpan.org/authors/id/H/HM/HMBRAND/Config-Perl-V-%{version}.tgz
 # Correct example
 Patch0:         Config-Perl-V-0.24-Remove-invalid-shellbang.patch
+# oreon url source checksums begin
+%global source0_sha256 a83e8e28f416d9a3f70afee8a37cb0ac1515cbf941c677e9f1f97b643bffedab
+%global source0_file Config-Perl-V-0.39.tgz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -49,6 +53,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Config-Perl-V-0.39.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a83e8e28f416d9a3f70afee8a37cb0ac1515cbf941c677e9f1f97b643bffedab" || { echo "oreon: Source0 SHA256 mismatch for Config-Perl-V-0.39.tgz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Config-Perl-V-%{version}
 %patch -P0 -p1
 chmod -x examples/*

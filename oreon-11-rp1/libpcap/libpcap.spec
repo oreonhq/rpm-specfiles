@@ -19,6 +19,10 @@ Source1:  https://www.tcpdump.org/release/%{name}-%{version}.tar.xz.sig
 Patch0001:      0001-man-tcpdump-and-tcpslice-have-manpages-in-man8.patch
 Patch0002:      0002-pcap-config-mitigate-multilib-conflict.patch
 Patch0003:      0003-pcap-linux-apparently-ctc-interfaces-on-s390-has-eth.patch
+# oreon url source checksums begin
+%global source0_sha256 ec97d1206bdd19cb6bdd043eaa9f0037aa732262ec68e070fd7c7b5f834d5dfc
+%global source0_file libpcap-1.10.6.tar.xz
+# oreon url source checksums end
 
 %description
 Libpcap provides a portable framework for low-level network
@@ -49,6 +53,9 @@ This package provides the libraries, include files, and other
 resources needed for developing libpcap applications.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libpcap-1.10.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ec97d1206bdd19cb6bdd043eaa9f0037aa732262ec68e070fd7c7b5f834d5dfc" || { echo "oreon: Source0 SHA256 mismatch for libpcap-1.10.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 #sparc needs -fPIC

@@ -7,7 +7,12 @@ Release:        55%{?dist}
 Summary:        Perl interface to the UNIX syslog(3) calls
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Unix-Syslog
-Source0:        https://cpan.metacpan.org/modules/by-module/Unix/Unix-Syslog-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MH/MHARNISCH/Unix-Syslog-1.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 08d268384365dec42a8e9e2dd2c39b87f8afe2d5bacc48e2e93ad8379169e4bd
+%global source0_file Unix-Syslog-1.1.tar.gz
+# oreon url source checksums end
+
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -39,6 +44,9 @@ libc-functions of your system, so that anyone being familiar with
 syslog.h should be able to use this module right away.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Unix-Syslog-1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "08d268384365dec42a8e9e2dd2c39b87f8afe2d5bacc48e2e93ad8379169e4bd" || { echo "oreon: Source0 SHA256 mismatch for Unix-Syslog-1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Unix-Syslog-%{version}
 
 %build

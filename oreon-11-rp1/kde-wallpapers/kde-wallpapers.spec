@@ -13,6 +13,10 @@ URL:     http://www.kde.org/
 %global stable stable
 %endif
 Source0: http://download.kde.org/%{stable}/applications/%{version}/src/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 4dae4b2fcb58ac259435d46a560000b0dc7d0c79ea3f7e2fb0a431cbbd009593
+%global source0_file kde-wallpapers-15.08.3.tar.xz
+# oreon url source checksums end
 
 BuildArch: noarch
 
@@ -32,6 +36,9 @@ Provides:  kdebase-workspace-wallpapers = %{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kde-wallpapers-15.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4dae4b2fcb58ac259435d46a560000b0dc7d0c79ea3f7e2fb0a431cbbd009593" || { echo "oreon: Source0 SHA256 mismatch for kde-wallpapers-15.08.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q 
 
 

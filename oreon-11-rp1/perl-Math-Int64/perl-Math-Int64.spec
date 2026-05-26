@@ -4,7 +4,12 @@ Release:        7%{?dist}
 Summary:        Manipulate 64 bits integers in Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Fedora-Public-Domain AND BSD-3-Clause
 URL:            https://metacpan.org/release/Math-Int64
-Source0:        https://cpan.metacpan.org/modules/by-module/Math/Math-Int64-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SA/SALVA/Math-Int64-0.57.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 12c60111c1cfceb257ac2ccc5b2e1721879efa09a1b0a73e8836afca107a7d75
+%global source0_file Math-Int64-0.57.tar.gz
+# oreon url source checksums end
+
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  make
@@ -49,6 +54,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Math-Int64-0.57.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "12c60111c1cfceb257ac2ccc5b2e1721879efa09a1b0a73e8836afca107a7d75" || { echo "oreon: Source0 SHA256 mismatch for Math-Int64-0.57.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Math-Int64-%{version}
 
 # Help generators to recognize Perl scripts

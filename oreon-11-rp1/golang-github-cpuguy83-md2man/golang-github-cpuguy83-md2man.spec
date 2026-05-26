@@ -21,7 +21,11 @@ Summary:        Converts markdown into roff (man pages)
 
 License:        MIT
 URL:            %{gourl}
-Source0:        %{gosource}
+Source0:        https://github.com/cpuguy83/go-md2man/archive/v2.0.7/go-md2man-2.0.7.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ca3a5b57e2c01759f5a00ad2a578d034c5370fae9aa7a6c3af5648b2fc802a92
+%global source0_file go-md2man-2.0.7.tar.gz
+# oreon url source checksums end
 
 Provides:       go-md2man = %{version}-%{release}
 
@@ -30,6 +34,9 @@ Provides:       go-md2man = %{version}-%{release}
 %gopkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/go-md2man-2.0.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ca3a5b57e2c01759f5a00ad2a578d034c5370fae9aa7a6c3af5648b2fc802a92" || { echo "oreon: Source0 SHA256 mismatch for go-md2man-2.0.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %goprep
 
 %generate_buildrequires

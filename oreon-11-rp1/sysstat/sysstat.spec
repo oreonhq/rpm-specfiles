@@ -7,6 +7,10 @@ License: GPL-2.0-or-later
 URL: https://sysstat.github.io
 Source: https://github.com/sysstat/sysstat/archive/v%{version}.tar.gz
 Source1: sysstat-tmpfiles.conf
+# oreon url source checksums begin
+%global source0_sha256 e48fc69401135dc08d2cd4ff58dbdbfce9b7485f76fc9049d97848e313c08dda
+%global source0_file v12.7.9.tar.gz
+# oreon url source checksums end
 
 # PCP is no longer available for %%{ix86} on F40
 %if 0%{?fedora} >= 40 || 0%{?rhel} >= 10
@@ -46,6 +50,9 @@ The pidstat command reports statistics for Linux tasks (processes).
 The cifsiostat command reports I/O statistics for CIFS file systems.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v12.7.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e48fc69401135dc08d2cd4ff58dbdbfce9b7485f76fc9049d97848e313c08dda" || { echo "oreon: Source0 SHA256 mismatch for v12.7.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am
 
 %build

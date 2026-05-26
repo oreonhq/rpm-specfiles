@@ -5,6 +5,10 @@ Summary:        Config file reading, writing, and validation
 License:        BSD-3-Clause
 URL:            http://configobj.readthedocs.org/
 Source0:        https://pypi.python.org/packages/source/c/configobj/configobj-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 03c881bbf23aa07bccf1b837005975993c4ab4427ba57f959afdd9d1a2386848
+%global source0_file configobj-5.0.9.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-pytest
@@ -19,6 +23,9 @@ Summary:        %{summary}
 %description -n python%{python3_pkgversion}-configobj %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/configobj-5.0.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "03c881bbf23aa07bccf1b837005975993c4ab4427ba57f959afdd9d1a2386848" || { echo "oreon: Source0 SHA256 mismatch for configobj-5.0.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n configobj-%{version}
 
 %generate_buildrequires

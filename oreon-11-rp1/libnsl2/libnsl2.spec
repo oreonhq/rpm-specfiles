@@ -16,6 +16,10 @@ License:    BSD-3-Clause AND LGPL-2.1-or-later
 URL:        https://github.com/thkukuk/libnsl
 
 Source0:    https://github.com/thkukuk/libnsl/archive/v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 59048b53be8d3904bf939313debf13956a881b0de79da40f7719a77bcd1e9c53
+%global source0_file v2.0.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: autoconf, automake, gettext-devel, libtool, libtirpc-devel
 BuildRequires: make
@@ -40,6 +44,9 @@ Development files for libnsl2
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "59048b53be8d3904bf939313debf13956a881b0de79da40f7719a77bcd1e9c53" || { echo "oreon: Source0 SHA256 mismatch for v2.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n libnsl-%{version}
 
 %build

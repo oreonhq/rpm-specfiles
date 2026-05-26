@@ -19,6 +19,10 @@ Patch0:         Pod-Perldoc-3.28-Upgrade-to-3.2801.patch
 Patch1:         Pod-Perldoc-3.28-Add-a-test-for-a-truncated-perldoc-f-tr-output.patch
 # 1/2 Fix searching for builtins in perlop POD, bug #1739463, CPAN RT#126015
 Patch2:         Pod-Perldoc-3.28-Search-for-X-in-the-whole-perlop-document.patch
+# oreon url source checksums begin
+%global source0_sha256 cc41e605b8e13c40a8ee6504ff46347b5ba7fbd92203b3bb055422051befc64d
+%global source0_file Pod-Perldoc-3.28.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -97,6 +101,9 @@ in the perl installation tree or in a Perl script, and displays it via
 the Perl library modules.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Pod-Perldoc-3.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cc41e605b8e13c40a8ee6504ff46347b5ba7fbd92203b3bb055422051befc64d" || { echo "oreon: Source0 SHA256 mismatch for Pod-Perldoc-3.28.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Pod-Perldoc-%{base_version}
 %patch -P0 -p1
 %patch -P1 -p1

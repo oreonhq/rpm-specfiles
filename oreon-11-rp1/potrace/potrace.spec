@@ -10,6 +10,10 @@ Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # Documentation
 Source1:	http://potrace.sourceforge.net/potrace.pdf
 Source2:	http://potrace.sourceforge.net/potracelib.pdf
+# oreon url source checksums begin
+%global source0_sha256 be8248a17dedd6ccbaab2fcc45835bb0502d062e40fbded3bc56028ce5eb7acc
+%global source0_file potrace-1.16.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:	gcc
@@ -50,6 +54,9 @@ This package contains documentation for the potrace algorithm and the potrace
 library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/potrace-1.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "be8248a17dedd6ccbaab2fcc45835bb0502d062e40fbded3bc56028ce5eb7acc" || { echo "oreon: Source0 SHA256 mismatch for potrace-1.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 cp -a %{SOURCE1} .
 cp -a %{SOURCE2} .

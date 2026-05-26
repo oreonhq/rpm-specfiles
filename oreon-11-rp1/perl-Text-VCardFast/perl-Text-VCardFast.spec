@@ -5,6 +5,10 @@ Summary:        Perl extension for very fast parsing of VCards
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-VCardFast
 Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Text-VCardFast-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 05ba5c43f88dd4e08137db872d16a01f6be5efd1fb470b3f2069da88410fea46
+%global source0_file Text-VCardFast-0.11.tar.gz
+# oreon url source checksums end
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make
@@ -43,6 +47,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Text-VCardFast-0.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "05ba5c43f88dd4e08137db872d16a01f6be5efd1fb470b3f2069da88410fea46" || { echo "oreon: Source0 SHA256 mismatch for Text-VCardFast-0.11.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Text-VCardFast-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

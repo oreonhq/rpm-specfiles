@@ -56,6 +56,10 @@ Patch13:        sblim-gather-2.2.9-gcc15-fix.patch
 # Patch14: suppress msg when repeated value is detected
 # see https://sourceforge.net/p/sblim/bugs/2739/
 Patch14:        sblim-gather-2.2.9-suppress-repeated-value-msg.patch
+# oreon url source checksums begin
+%global source0_sha256 faf38add90ccfed34917506894a4dfe6faab58abdf5ca44a4d48e2040cebcd36
+%global source0_file sblim-gather-2.2.9.tar.bz2
+# oreon url source checksums end
 
 Requires:       cim-server
 Requires(post): systemd
@@ -103,6 +107,9 @@ Testsuite
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sblim-gather-2.2.9.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "faf38add90ccfed34917506894a4dfe6faab58abdf5ca44a4d48e2040cebcd36" || { echo "oreon: Source0 SHA256 mismatch for sblim-gather-2.2.9.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 # for missing providers
 tar xfvz %{SOURCE4}

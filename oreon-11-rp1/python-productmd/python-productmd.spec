@@ -6,6 +6,10 @@ Summary:        Library providing parsers for metadata related to OS installatio
 License:        LGPL-2.1-only
 URL:            https://github.com/release-engineering/productmd
 Source:         %{pypi_source productmd}
+# oreon url source checksums begin
+%global source0_sha256 a27df6835de352b6ad06e0781c83105037069b99350c0ed294e8a5c7fd379aba
+%global source0_file productmd-1.50.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -23,6 +27,9 @@ Summary:        %{summary}
 %description -n python3-productmd %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/productmd-1.50.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a27df6835de352b6ad06e0781c83105037069b99350c0ed294e8a5c7fd379aba" || { echo "oreon: Source0 SHA256 mismatch for productmd-1.50.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n productmd-%{version} -p1
 
 %generate_buildrequires

@@ -39,10 +39,17 @@ URL:            https://github.com/adobe-fonts/source-code-pro
 Source:         https://github.com/adobe-fonts/source-code-pro/archive/%{version_roman}R-u/%{version_italic}R-i/%{version_vf}R-vf.tar.gz#/source-code-pro-%{version_roman}R-u-%{version_italic}R-i-%{version_vf}R-vf.tar.gz
 Source10:       61-%{name}.conf
 Source11:       61-%{fontpkgname2}.conf
+# oreon url source checksums begin
+%global source0_sha256 19d2c07eff0d91927c47a482c38e591ba855664fc65440006fb65d0157841249
+%global source0_file 1.026R-vf.tar.gz
+# oreon url source checksums end
 
 %fontpkg -a
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/1.026R-vf.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "19d2c07eff0d91927c47a482c38e591ba855664fc65440006fb65d0157841249" || { echo "oreon: Source0 SHA256 mismatch for 1.026R-vf.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n source-code-pro-%{version_roman}R-u-%{version_italic}R-i-%{version_vf}R-vf
 
 %build

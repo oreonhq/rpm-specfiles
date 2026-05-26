@@ -12,6 +12,10 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://github.com/apache/velocity-engine/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 Patch:          0001-Template-is-a-reserved-keyword-in-javacc.patch
+# oreon url source checksums begin
+%global source0_sha256 108aa00adc92d24ba88fc02f53183ca3b191791ebf5dc4d0ed96b585c9bc4a99
+%global source0_file 2.4.1.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -50,6 +54,9 @@ Velocity+Turbine provides a template service that will allow web
 applications to be developed according to a true MVC model.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/2.4.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "108aa00adc92d24ba88fc02f53183ca3b191791ebf5dc4d0ed96b585c9bc4a99" || { echo "oreon: Source0 SHA256 mismatch for 2.4.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 %mvn_alias : velocity:velocity

@@ -7,7 +7,12 @@ Release:	23%{?dist}
 Summary:	Testing Module for YAML Implementations
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-YAML
-Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-YAML-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/T/TI/TINITA/Test-YAML-1.07.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1f300d034f46298cb92960912cc04bac33fb27f05b8852d8f051e110b9cd995f
+%global source0_file Test-YAML-1.07.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -34,6 +39,9 @@ Requires:	perl(Data::Dumper)
 Test::YAML is a subclass of Test::Base with YAML specific support.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-YAML-1.07.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1f300d034f46298cb92960912cc04bac33fb27f05b8852d8f051e110b9cd995f" || { echo "oreon: Source0 SHA256 mismatch for Test-YAML-1.07.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-YAML-%{version}
 
 %build

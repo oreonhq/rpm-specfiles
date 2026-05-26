@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 76773effbb33efdc28d91219e473b2142dac2da40686dd123d7d4d785dc81942
+%global source0_file maven-antrun-plugin-3.1.0-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -36,6 +40,9 @@ This plugin provides the ability to run Ant tasks from within Maven.
 It is even possible to embed Ant scripts in the POM.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-antrun-plugin-3.1.0-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "76773effbb33efdc28d91219e473b2142dac2da40686dd123d7d4d785dc81942" || { echo "oreon: Source0 SHA256 mismatch for maven-antrun-plugin-3.1.0-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

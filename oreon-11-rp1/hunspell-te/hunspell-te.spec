@@ -13,6 +13,10 @@ Epoch:   1
 License:        GPL-1.0-or-later
 URL:            https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
 Source0:        http://anishpatil.fedorapeople.org/te_in.%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4c3f92167f486e0f69f14c16a566f0b2acc09fff4d7e28f0848e17a95a677e68
+%global source0_file te_in.1.0.0.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 Requires:       hunspell
@@ -22,6 +26,9 @@ Supplements: (hunspell and langpacks-te)
 Telugu hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/te_in.1.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4c3f92167f486e0f69f14c16a566f0b2acc09fff4d7e28f0848e17a95a677e68" || { echo "oreon: Source0 SHA256 mismatch for te_in.1.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -c -n te_IN
 
 %build

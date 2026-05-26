@@ -80,6 +80,10 @@ Patch0:         libshout-2.4.3-Allow-disabling-ckport-database-installation.patc
 # Enforce a Fedora system-wide crypto policy
 # <https://docs.fedoraproject.org/en-US/packaging-guidelines/CryptoPolicies/#_cc_applications>
 Patch1:         libshout-2.4.3-Default-OpenSSL-cipher-list-is-PROFILE-SYSTEM.patch
+# oreon url source checksums begin
+%global source0_sha256 39cbd4f0efdfddc9755d88217e47f8f2d7108fa767f9d58a2ba26a16d8f7c910
+%global source0_file libshout-2.4.6.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -110,6 +114,9 @@ applications that send data to an icecast server.  Install libshout-devel if
 you want to develop applications using libshout.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libshout-2.4.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "39cbd4f0efdfddc9755d88217e47f8f2d7108fa767f9d58a2ba26a16d8f7c910" || { echo "oreon: Source0 SHA256 mismatch for libshout-2.4.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1
 %patch -P1 -p1

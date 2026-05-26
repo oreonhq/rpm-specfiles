@@ -10,7 +10,11 @@ Summary: Real time MPEG 1.0/2.0/2.5 audio player/decoder for layers 1, 2 and 3
 License: GPL-2.0-or-later
 URL: https://mpg123.org
 
-Source0: %{url}/download/%{name}-%{version}.tar.bz2
+Source0:        https://mpg123.org/download/mpg123-1.32.10.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 87b2c17fe0c979d3ef38eeceff6362b35b28ac8589fbf1854b5be75c9ab6557c
+%global source0_file mpg123-1.32.10.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: autoconf
 BuildRequires: automake
@@ -92,6 +96,9 @@ Obsoletes: %{name}-libs-devel < 1.23.8-3
 Development files for decoding and output libraries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mpg123-1.32.10.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "87b2c17fe0c979d3ef38eeceff6362b35b28ac8589fbf1854b5be75c9ab6557c" || { echo "oreon: Source0 SHA256 mismatch for mpg123-1.32.10.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

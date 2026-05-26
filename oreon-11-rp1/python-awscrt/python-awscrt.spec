@@ -14,7 +14,7 @@ Summary:        Python bindings for the AWS Common Runtime
 License:        Apache-2.0 AND MIT AND BSD-3-Clause
 URL:            https://github.com/awslabs/aws-crt-python
 
-Source0:        %{pypi_source awscrt}
+Source0:        https://files.pythonhosted.org/packages/source/a/awscrt/awscrt-0.31.1.tar.gz
 
 # two tests require internet connection, skip them
 Patch0:         skip-tests-requiring-network.patch
@@ -22,6 +22,10 @@ Patch0:         skip-tests-requiring-network.patch
 Patch1:         skip-SHA1-in-test_crypto.patch
 # websockets test fail fix
 Patch2:         websockets.patch
+# oreon url source checksums begin
+%global source0_sha256 abb64768d25bf563da8e2165d477a491cba18bc22c4ec8db7acbdae94e59ebc4
+%global source0_file awscrt-0.31.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  python%{python3_pkgversion}-devel
 
@@ -48,6 +52,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/awscrt-0.31.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "abb64768d25bf563da8e2165d477a491cba18bc22c4ec8db7acbdae94e59ebc4" || { echo "oreon: Source0 SHA256 mismatch for awscrt-0.31.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n awscrt-%{version}
 
 # relax version requirements

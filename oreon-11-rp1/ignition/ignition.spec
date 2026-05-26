@@ -28,12 +28,16 @@ Summary:        First boot installer and configuration tool
 # Upstream license specification: Apache-2.0
 License:        Apache-2.0
 URL:            %{gourl}
-Source0:        %{gosource}
+Source0:        https://github.com/coreos/ignition/archive/v2.26.0/ignition-2.26.0.tar.gz
 Source1:        https://github.com/fedora-iot/ignition-edge/archive/%{ignedgecommit}/ignition-edge-%{ignedgeshortcommit}.tar.gz
 Source2:        91-ignition-authorized-keys-file.conf
 
 # Fix format specifier for systemd version warning (Go 1.26 compatibility)
 Patch0:         0001-fix-systemd-version-warning-format-specifier.patch
+# oreon url source checksums begin
+%global source0_sha256 4c0ff576e958bf77ee55d67871d5b85f9cd489a21e1d6050519fd983465c1d1a
+%global source0_file ignition-2.26.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: libblkid-devel
 BuildRequires: systemd-rpm-macros
@@ -255,6 +259,9 @@ Obsoletes:     ignition-ignition-grub < %{version}-%{release}
 This package contains the grub2 config which is compatable with bootupd.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ignition-2.26.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4c0ff576e958bf77ee55d67871d5b85f9cd489a21e1d6050519fd983465c1d1a" || { echo "oreon: Source0 SHA256 mismatch for ignition-2.26.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?fedora}
 %goprep -k
 %autopatch -p1

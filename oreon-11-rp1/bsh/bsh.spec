@@ -39,7 +39,7 @@ URL:            https://beanshell.github.io/
 License:        Apache-2.0 AND BSD-3-Clause AND LicenseRef-Public-Domain
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/beanshell/beanshell/archive/%{version}.tar.gz
 # Remove bundled jars which cannot be easily verified for licensing
 # Remove code marked as SUN PROPRIETARY/CONFIDENTAIL
 Source2:        generate-tarball.sh
@@ -49,6 +49,10 @@ Source2:        generate-tarball.sh
 Patch0:         0000-source-target-1.8.patch
 # - remove references to invisible symbols and methods
 Patch1:         0001-java-11-compatibility.patch
+# oreon url source checksums begin
+%global source0_sha256 0b20c57708a7e98c70b400749c7bdf5c028d4e352e4ed0b0750004df793dfa90
+%global source0_file 2.1.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -109,6 +113,9 @@ Summary:        API documentation for %{name}
 This package provides %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/2.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0b20c57708a7e98c70b400749c7bdf5c028d4e352e4ed0b0750004df793dfa90" || { echo "oreon: Source0 SHA256 mismatch for 2.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n beanshell-%{version}
 %patch 0 -p1
 %patch 1 -p1

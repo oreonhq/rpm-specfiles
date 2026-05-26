@@ -10,6 +10,10 @@ Patch1: dcraw-CVE-2018-5801.patch
 Patch2: dcraw-CVE-2017-13735.patch
 Patch3: dcraw-CVE-2017-14608.patch
 Patch4: dcraw-CVE-2018-19655.patch
+# oreon url source checksums begin
+%global source0_sha256 2890c3da2642cd44c5f3bfed2c9b2c1db83da5cec09cc17e0fa72e17541fb4b9
+%global source0_file dcraw-9.28.0.tar.gz
+# oreon url source checksums end
 BuildRequires: gcc
 BuildRequires: gettext
 BuildRequires: libjpeg-devel
@@ -22,6 +26,9 @@ This package contains dcraw, a command line tool to decode raw image data
 downloaded from digital cameras.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dcraw-9.28.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2890c3da2642cd44c5f3bfed2c9b2c1db83da5cec09cc17e0fa72e17541fb4b9" || { echo "oreon: Source0 SHA256 mismatch for dcraw-9.28.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n dcraw
 
 %build

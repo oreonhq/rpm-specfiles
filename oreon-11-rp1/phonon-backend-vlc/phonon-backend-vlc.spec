@@ -8,6 +8,10 @@ Release:        %autorelease
 License:        LGPL-2.1-or-later
 URL:            https://invent.kde.org/libraries/phonon-vlc
 Source:         https://download.kde.org/stable/phonon/%{name}/%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 338479dc451e4b94b3ca5b578def741dcf82f5c626a2807d36235be2dce7c9a5
+%global source0_file phonon-backend-vlc-0.12.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -72,6 +76,9 @@ BuildArch:      noarch
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/phonon-backend-vlc-0.12.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "338479dc451e4b94b3ca5b578def741dcf82f5c626a2807d36235be2dce7c9a5" || { echo "oreon: Source0 SHA256 mismatch for phonon-backend-vlc-0.12.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

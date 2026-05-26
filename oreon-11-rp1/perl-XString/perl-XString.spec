@@ -5,6 +5,10 @@ Summary:	Isolated String helpers from B
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/XString
 Source0:	https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/XString-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f247f55c19aee6ba4a1ae73c0804259452e02ea85a9be07f8acf700a5138f884
+%global source0_file XString-0.005.tar.gz
+# oreon url source checksums end
 # Build
 BuildRequires:	coreutils
 BuildRequires:	findutils
@@ -34,6 +38,9 @@ XString provides the B string helpers in one isolated package. Right now only
 cstring and perlstring are available.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XString-0.005.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f247f55c19aee6ba4a1ae73c0804259452e02ea85a9be07f8acf700a5138f884" || { echo "oreon: Source0 SHA256 mismatch for XString-0.005.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XString-%{version}
 
 %build

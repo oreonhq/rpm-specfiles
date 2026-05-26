@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 84e8c90032551b79c392596cf7231ff6ce9403c5644d6433c51029ac506f944d
+%global source0_file maven-resources-plugin-3.3.1-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -41,6 +45,9 @@ The Resources Plugin handles the copying of project resources
 to the output directory.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-resources-plugin-3.3.1-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "84e8c90032551b79c392596cf7231ff6ce9403c5644d6433c51029ac506f944d" || { echo "oreon: Source0 SHA256 mismatch for maven-resources-plugin-3.3.1-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

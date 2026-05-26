@@ -6,6 +6,10 @@ License: HPND-sell-variant
 URL: http://www.x.org
 
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 52733c1f5262fca35f64e7d5060c6fcd81a880ba8e1e65c9621cf0727afb5d11
+%global source0_file libXdamage-1.1.6.tar.xz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: xorg-x11-util-macros
@@ -24,6 +28,9 @@ Requires: %{name} = %{version}-%{release}
 X.Org X11 libXdamage development package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libXdamage-1.1.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "52733c1f5262fca35f64e7d5060c6fcd81a880ba8e1e65c9621cf0727afb5d11" || { echo "oreon: Source0 SHA256 mismatch for libXdamage-1.1.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

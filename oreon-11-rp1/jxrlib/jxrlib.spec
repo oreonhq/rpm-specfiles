@@ -9,6 +9,10 @@ Source0:        https://deb.debian.org/debian/pool/main/j/jxrlib/jxrlib_1.2~git2
 # CMake build from Debian (upstream tarball is Makefile-only at top level)
 Source1:        jxrlib-CMakeLists.txt
 Patch0:         jxrlib-01-linux-portability.patch
+# oreon url source checksums begin
+%global source0_sha256 3e3c9d3752b0bbf018ed9ce01b43dcd4be866521dc2370dc9221520b5bd440d4
+%global source0_file jxrlib_1.2~git20170615.f752187.orig.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -33,6 +37,9 @@ Headers for building against jxrlib.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jxrlib_1.2~git20170615.f752187.orig.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3e3c9d3752b0bbf018ed9ce01b43dcd4be866521dc2370dc9221520b5bd440d4" || { echo "oreon: Source0 SHA256 mismatch for jxrlib_1.2~git20170615.f752187.orig.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n jxrlib-1.2~git20170615.f752187
 # CRLF in a few sources breaks unified diffs
 sed -i 's/\r$//' jxrgluelib/JXRGlueJxr.c jxrencoderdecoder/JxrEncApp.c jxrencoderdecoder/JxrDecApp.c

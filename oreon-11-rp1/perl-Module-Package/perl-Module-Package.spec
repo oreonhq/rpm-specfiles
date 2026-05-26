@@ -7,6 +7,10 @@ URL:            https://metacpan.org/release/Module-Package
 Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Module-Package-%{version}.tar.gz
 # Fix building on Perl without "." in @INC, CPAN RT#121748
 Patch0:         Module-Package-0.30-Fix-building-on-Perl-without-.-in-INC.patch
+# oreon url source checksums begin
+%global source0_sha256 7c3c89e779baa83afaf0dc9599c20f90b3e613ea3ece0328931257ab7cc24a99
+%global source0_file Module-Package-0.30.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -31,6 +35,9 @@ This module is a drop-in replacement for Module::Install. It does everything
 Module::Install does, but just a bit better.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Package-0.30.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7c3c89e779baa83afaf0dc9599c20f90b3e613ea3ece0328931257ab7cc24a99" || { echo "oreon: Source0 SHA256 mismatch for Module-Package-0.30.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Package-%{version}
 %patch -P0 -p1
 # XXX: Do not unbundle ./inc/ because of bootstrap

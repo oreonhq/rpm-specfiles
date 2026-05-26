@@ -9,6 +9,10 @@ License:        GPL-3.0-or-later
 URL:            https://github.com/fontforge/libspiro/
 # Let's use libspiro-dist tarball from upstream as it does not require autoreconf
 Source0:        https://github.com/fontforge/libspiro/releases/download/%{version}/libspiro-dist-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1412a21b943c6e1db834ee2d74145aad20b3f62b12152d475613b8241d9cde10
+%global source0_file libspiro-dist-20240903.tar.gz
+# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires: make
 
@@ -26,6 +30,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libspiro-dist-20240903.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1412a21b943c6e1db834ee2d74145aad20b3f62b12152d475613b8241d9cde10" || { echo "oreon: Source0 SHA256 mismatch for libspiro-dist-20240903.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n libspiro-%{version}
 
 %build

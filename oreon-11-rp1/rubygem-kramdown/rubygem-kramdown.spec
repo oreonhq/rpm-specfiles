@@ -10,6 +10,10 @@ Summary: Fast, pure-Ruby Markdown-superset converter
 License:	MIT
 URL:		http://kramdown.gettalong.org
 Source0:	https://rubygems.org/gems/%{gem_name}-%{version}.gem
+# oreon url source checksums begin
+%global source0_sha256 1ba542204c66b6f9111ff00dcc26075b95b220b07f2905d8261740c82f7f02fa
+%global source0_file kramdown-2.5.2.gem
+# oreon url source checksums end
 BuildRequires:	ruby(release)
 BuildRequires:	rubygems-devel
 BuildRequires:	rubygem(minitest) >= 5
@@ -58,6 +62,9 @@ BuildArch:	noarch
 Documentation for %{name}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kramdown-2.5.2.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1ba542204c66b6f9111ff00dcc26075b95b220b07f2905d8261740c82f7f02fa" || { echo "oreon: Source0 SHA256 mismatch for kramdown-2.5.2.gem" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{gem_name}-%{version}
 mv ../%{gem_name}-%{version}.gemspec .
 

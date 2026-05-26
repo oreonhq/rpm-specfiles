@@ -10,7 +10,11 @@ Summary:        The sip module support for PyQt5
 
 License:        BSD-2-Clause
 URL:            https://www.riverbankcomputing.com/software/sip/
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/p/pyqt5_sip/pyqt5_sip-12.17.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0eab72bcb628f1926bf5b9ac51259d4fa18e8b2a81d199071135458f7d087ea8
+%global source0_file pyqt5_sip-12.17.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel
@@ -29,6 +33,9 @@ Provides: python3-pyqt5-sip-api(%{_sip_api_major})%{?_isa} = %{_sip_api}
 %description -n python3-pyqt5-sip %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pyqt5_sip-12.17.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0eab72bcb628f1926bf5b9ac51259d4fa18e8b2a81d199071135458f7d087ea8" || { echo "oreon: Source0 SHA256 mismatch for pyqt5_sip-12.17.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pypi_name}-%{version}
 
 %generate_buildrequires

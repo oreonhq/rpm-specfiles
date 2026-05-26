@@ -12,6 +12,10 @@ Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%
 
 # Patch rejected upstream
 Patch1:         %{name}-MSHARED-279.patch
+# oreon url source checksums begin
+%global source0_sha256 c1b3f56b4342c78f3ecc2144b720a8ce40cb422e7cd3590e36d43ea1debbf110
+%global source0_file maven-invoker-3.3.0-source-release.zip
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(javax.inject:javax.inject)
@@ -39,6 +43,9 @@ Summary:        Javadoc for %{name}
 API documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-invoker-3.3.0-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c1b3f56b4342c78f3ecc2144b720a8ce40cb422e7cd3590e36d43ea1debbf110" || { echo "oreon: Source0 SHA256 mismatch for maven-invoker-3.3.0-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

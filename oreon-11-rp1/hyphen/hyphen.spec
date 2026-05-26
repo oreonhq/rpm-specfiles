@@ -3,6 +3,10 @@ Summary:   A text hyphenation library
 Version:   2.8.8
 Release:   28%{?dist}
 Source:    http://downloads.sourceforge.net/hunspell/hyphen-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 304636d4eccd81a14b6914d07b84c79ebb815288c76fe027b9ebff6ff24d5705
+%global source0_file hyphen-2.8.8.tar.gz
+# oreon url source checksums end
 URL:       http://hunspell.sf.net
 License:   GPL-2.0-only OR LGPL-2.1-or-later OR MPL-1.1
 BuildRequires: perl-interpreter, patch, autoconf, automake, libtool
@@ -30,6 +34,9 @@ BuildArch: noarch
 English hyphenation rules.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hyphen-2.8.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "304636d4eccd81a14b6914d07b84c79ebb815288c76fe027b9ebff6ff24d5705" || { echo "oreon: Source0 SHA256 mismatch for hyphen-2.8.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

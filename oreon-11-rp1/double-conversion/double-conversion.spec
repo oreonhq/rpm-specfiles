@@ -5,7 +5,11 @@ Release:        3%{?dist}
 
 License:        BSD-3-Clause
 URL:            https://github.com/google/double-conversion
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/google/double-conversion/archive/v3.4.0/double-conversion-3.4.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 42fd4d980ea86426e457b24bdfa835a6f5ad9517ddb01cdb42b99ab9c8dd5dc9
+%global source0_file double-conversion-3.4.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -30,6 +34,9 @@ There is extensive documentation in src/double-conversion.h. Other
 examples can be found in test/cctest/test-conversions.cc.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/double-conversion-3.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "42fd4d980ea86426e457b24bdfa835a6f5ad9517ddb01cdb42b99ab9c8dd5dc9" || { echo "oreon: Source0 SHA256 mismatch for double-conversion-3.4.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

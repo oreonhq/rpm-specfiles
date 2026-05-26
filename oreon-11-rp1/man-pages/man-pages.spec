@@ -58,11 +58,18 @@ Patch21: man-pages-3.42-close.patch
 
 # Add rtas.2, swapcontext.2 and cons.saver.8 man pages
 Patch28: additional-man-pages.patch
+# oreon url source checksums begin
+%global source0_sha256 a2c8a0c2efe8a978ce51ce800461eb9e8931f12cc7ba4b7faa3082b69ba7f12c
+%global source0_file man-pages-6.13.tar.xz
+# oreon url source checksums end
 
 %description
 A large collection of manual pages from the Linux Documentation Project (LDP).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/man-pages-6.13.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a2c8a0c2efe8a978ce51ce800461eb9e8931f12cc7ba4b7faa3082b69ba7f12c" || { echo "oreon: Source0 SHA256 mismatch for man-pages-6.13.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %patch -P 21 -p1

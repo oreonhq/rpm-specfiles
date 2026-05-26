@@ -11,13 +11,17 @@ License: Apache-2.0 AND BSD-3-Clause
 URL:     https://uxlfoundation.github.io/oneTBB/
 VCS:     git:%{giturl}.git
 
-Source0: %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/uxlfoundation/oneTBB/archive/v2022.3.0/tbb-2022.3.0.tar.gz
 # These two are downstream sources.
 Source7: tbbmalloc.pc
 Source8: tbbmalloc_proxy.pc
 
 # Fix failure to link with GCC 15
 Patch:   tbb-c++-linkage.patch
+# oreon url source checksums begin
+%global source0_sha256 01598a46c1162c27253a0de0236f520fd8ee8166e9ebb84a4243574f88e6e50a
+%global source0_file tbb-2022.3.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
@@ -76,6 +80,9 @@ Python 3 TBB module.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tbb-2022.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "01598a46c1162c27253a0de0236f520fd8ee8166e9ebb84a4243574f88e6e50a" || { echo "oreon: Source0 SHA256 mismatch for tbb-2022.3.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n oneTBB-%{version}
 
 %generate_buildrequires

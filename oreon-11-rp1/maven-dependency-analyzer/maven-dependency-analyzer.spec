@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 27c67ec8f81bd3bdb860f4a15d9cf785de01fef655d22f9b55d379a70408ed3d
+%global source0_file maven-dependency-analyzer-1.13.2-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -40,6 +44,9 @@ javadoc) which can lead to wrong result if they are the only use of a
 dependency.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-dependency-analyzer-1.13.2-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "27c67ec8f81bd3bdb860f4a15d9cf785de01fef655d22f9b55d379a70408ed3d" || { echo "oreon: Source0 SHA256 mismatch for maven-dependency-analyzer-1.13.2-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

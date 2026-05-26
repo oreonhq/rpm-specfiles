@@ -18,6 +18,10 @@ URL:     https://invent.kde.org/frameworks/%{framework}
 
 Source0: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 fd703c777712ad0e20a849f837c3ad7880eb82c1beb50196608cb326373f78e3
+%global source0_file ktexteditor-6.24.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  cmake
@@ -64,6 +68,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ktexteditor-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fd703c777712ad0e20a849f837c3ad7880eb82c1beb50196608cb326373f78e3" || { echo "oreon: Source0 SHA256 mismatch for ktexteditor-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 %build

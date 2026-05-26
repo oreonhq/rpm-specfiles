@@ -19,6 +19,10 @@ Source0:        https://www.puimula.org/voikko-sources/%{name}/%{name}-%{version
 #  gpg2 --export --export-options export-minimal AC5D65F10C8596D7E2DAE2633D309B604AE3942E > gpgkey-AC5D65F10C8596D7E2DAE2633D309B604AE3942E.gpg
 Source1:        http://www.puimula.org/voikko-sources/%{name}/%{name}-%{version}.tar.gz.asc
 Source2:        gpgkey-AC5D65F10C8596D7E2DAE2633D309B604AE3942E.gpg
+# oreon url source checksums begin
+%global source0_sha256 d1162965c61de44f72162fd87ec1394bd4f90f87bc8152d13fe4ae692fdc73fa
+%global source0_file libvoikko-4.3.3.tar.gz
+# oreon url source checksums end
 
 Requires: voikko-fi
 BuildRequires:  gcc-c++
@@ -67,6 +71,9 @@ This module can be used to perform various natural language analysis
 tasks on Finnish text.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libvoikko-4.3.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d1162965c61de44f72162fd87ec1394bd4f90f87bc8152d13fe4ae692fdc73fa" || { echo "oreon: Source0 SHA256 mismatch for libvoikko-4.3.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup

@@ -11,6 +11,10 @@ Source0: http://festvox.org/packed/festival/%{version}/speech_tools-%{version}.0
 Source1: LICENSE
 Patch0: enable_shared.patch
 Patch1: fix_editline_types.patch
+# oreon url source checksums begin
+%global source0_sha256 e4fd97ed78f14464358d09f36dfe91bc1721b7c0fa6503e04364fb5847805dcc
+%global source0_file speech_tools-2.5.0-release.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc-c++
@@ -30,6 +34,9 @@ have been written, along with audio software
 and some basic signal processing software.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/speech_tools-2.5.0-release.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e4fd97ed78f14464358d09f36dfe91bc1721b7c0fa6503e04364fb5847805dcc" || { echo "oreon: Source0 SHA256 mismatch for speech_tools-2.5.0-release.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n speech_tools -p 0
 
 %build

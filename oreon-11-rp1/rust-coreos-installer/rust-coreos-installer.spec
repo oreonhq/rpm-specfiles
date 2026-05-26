@@ -17,10 +17,14 @@ Summary:        Installer for Fedora CoreOS and RHEL CoreOS
 
 License:        Apache-2.0
 URL:            https://crates.io/crates/coreos-installer
-Source0:        %{crates_source}
+Source0:        https://crates.io/api/v1/crates/coreos-installer/0.26.0/download#/coreos-installer-0.26.0.crate
 # not used on Fedora
 Source1:        https://github.com/coreos/%{crate}/releases/download/v%{version}/%{crate}-%{version}-vendor.tar.gz
 Source2:        https://github.com/coreos/coreos-installer-dracut/archive/%{dracutcommit}/coreos-installer-dracut-%{dracutshortcommit}.tar.gz
+# oreon url source checksums begin
+%global source1_sha256 77a34d1e82e1b8ae3f530b5b23c366b37e566e51291855f48298b88a19b12922
+%global source1_file coreos-installer-0.26.0-vendor.tar.gz
+# oreon url source checksums end
 ExcludeArch:    %{ix86}
 
 %if 0%{?rhel}
@@ -140,6 +144,9 @@ from the initramfs in IoT/Edge and is supported by the community.
 %{dracutlibdir}/modules.d/51coreos-installer/
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/coreos-installer-0.26.0-vendor.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "77a34d1e82e1b8ae3f530b5b23c366b37e566e51291855f48298b88a19b12922" || { echo "oreon: Source1 SHA256 mismatch for coreos-installer-0.26.0-vendor.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{crate}-%{version} -a 2 -p1
 %if 0%{?rhel}
 tar xf %{SOURCE1}

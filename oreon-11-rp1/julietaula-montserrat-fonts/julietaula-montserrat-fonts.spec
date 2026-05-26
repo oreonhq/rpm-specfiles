@@ -44,14 +44,21 @@ This package provides an alternate version of the fonts.}
 
 This package provides an underline version of the fonts.}
 
-Source0:  %{url}/archive/v%{version}.tar.gz#/Montserrat-%{version}.tar.gz
+Source0:        https://github.com/JulietaUla/Montserrat/archive/v9.000.tar.gz#/Montserrat-9.000.tar.gz
 Source10: 61-%{fontpkgname0}.conf
 Source11: 61-%{fontpkgname1}.conf
 Source12: 61-%{fontpkgname2}.conf
+# oreon url source checksums begin
+%global source0_sha256 991b3f971c65081c780fa15645a030bdf9e21ee8734b9f6010638b83bae1ff83
+%global source0_file v9.000.tar.gz
+# oreon url source checksums end
 
 %fontpkg -a
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v9.000.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "991b3f971c65081c780fa15645a030bdf9e21ee8734b9f6010638b83bae1ff83" || { echo "oreon: Source0 SHA256 mismatch for v9.000.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n Montserrat-%{version}
 
 %build

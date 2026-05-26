@@ -6,6 +6,10 @@ Summary:        Filtering proxy for D-Bus connections
 License:        LGPL-2.1-or-later
 URL:            https://github.com/flatpak/xdg-dbus-proxy/
 Source0:        https://github.com/flatpak/xdg-dbus-proxy/releases/download/%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 131bf59fce7c7ee7ecbc5d9106d6750f4f597bfe609966573240f7e4952973a1
+%global source0_file xdg-dbus-proxy-0.1.6.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  docbook-style-xsl
@@ -23,6 +27,9 @@ part of the flatpak project, but it has been broken out as a standalone module
 to facilitate using it in other contexts.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xdg-dbus-proxy-0.1.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "131bf59fce7c7ee7ecbc5d9106d6750f4f597bfe609966573240f7e4952973a1" || { echo "oreon: Source0 SHA256 mismatch for xdg-dbus-proxy-0.1.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

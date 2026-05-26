@@ -13,7 +13,11 @@ Patch0: hfsplus-tools-no-blocks.patch
 Patch1: hfsplus-tools-learn-to-stdarg.patch
 Patch2: hfsplus-tools-sysctl.patch
 
-Source100:      apsl-2.0.txt
+Source100:        http://www.opensource.org/licenses/apsl-2.0.txt
+# oreon url source checksums begin
+%global source0_sha256 b01b203a97f9a3bf36a027c13ddfc59292730552e62722d690d33bd5c24f5497
+%global source0_file hfsprogs_540.1.linux3.orig.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires: openssl-devel 
@@ -47,6 +51,9 @@ commit.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hfsprogs_540.1.linux3.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b01b203a97f9a3bf36a027c13ddfc59292730552e62722d690d33bd5c24f5497" || { echo "oreon: Source0 SHA256 mismatch for hfsprogs_540.1.linux3.orig.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n diskdev_cmds-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

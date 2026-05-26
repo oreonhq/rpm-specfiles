@@ -13,6 +13,10 @@ URL: http://chanae.walon.org/walon/aspell.php
 License: LGPL-2.1-or-later
 BuildArch: noarch
 Patch0: hunspell-wa-0.4.15-buildfix.patch
+# oreon url source checksums begin
+%global source0_sha256 2b19e0ea6d0ba16221df9ca7e5b34d4f176706016d60432576da9952bad4093b
+%global source0_file aspell-wa-0.4.17.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: make
 
@@ -23,6 +27,9 @@ Supplements: (hunspell and langpacks-wa)
 Walloon hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/aspell-wa-0.4.17.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2b19e0ea6d0ba16221df9ca7e5b34d4f176706016d60432576da9952bad4093b" || { echo "oreon: Source0 SHA256 mismatch for aspell-wa-0.4.17.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n aspell-wa-%{version}
 %patch -P0 -p1 -b .buildfix
 

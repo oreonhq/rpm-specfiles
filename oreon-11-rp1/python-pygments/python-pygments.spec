@@ -10,10 +10,14 @@ Summary:        Syntax highlighting engine written in Python
 
 License:        BSD-2-Clause
 URL:            https://pygments.org/
-Source0:        %{pypi_source pygments}
+Source0:        https://files.pythonhosted.org/packages/source/p/pygments/pygments-2.19.1.tar.gz
 # https://github.com/pygments/pygments/issues/2992
 # https://github.com/pygments/pygments/pull/3016
 Patch0:         0001-Fix-test_lexer_classes-search-path.patch
+# oreon url source checksums begin
+%global source0_sha256 61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f
+%global source0_file pygments-2.19.1.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -61,6 +65,9 @@ Provides:       pygmentize = %{?epoch:%{epoch}:}%{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pygments-2.19.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61c16d2a8576dc0649d9f39e089b5f02bcd27fba10d8fb4dcc28173f7a45151f" || { echo "oreon: Source0 SHA256 mismatch for pygments-2.19.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n pygments-%{version}
 
 

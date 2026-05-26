@@ -10,6 +10,10 @@ URL: http://cyberelk.net/tim/portreserve/
 Source0: http://cyberelk.net/tim/data/portreserve/stable/%{name}-%{version}.tar.bz2
 Source1: portreserve.service
 Patch1: portreserve-pid-file.patch
+# oreon url source checksums begin
+%global source0_sha256 1ffbdb6fee656914c9184a8e6553c4716aee38524f0f00c57a041f35861eacdc
+%global source0_file portreserve-0.0.5.tar.bz2
+# oreon url source checksums end
 Requires(post): systemd-units
 Requires(preun): systemd-units
 Requires(postun): systemd-units
@@ -32,6 +36,9 @@ by occupying it itself, until the real service tells it to release the
 port (generally in the init script).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/portreserve-0.0.5.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1ffbdb6fee656914c9184a8e6553c4716aee38524f0f00c57a041f35861eacdc" || { echo "oreon: Source0 SHA256 mismatch for portreserve-0.0.5.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 # Avoid a race during start-up if there are no configured ports (bug #1034139).

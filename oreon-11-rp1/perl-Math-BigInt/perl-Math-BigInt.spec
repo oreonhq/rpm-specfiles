@@ -8,6 +8,10 @@ Summary:        Arbitrary-size integer and float mathematics
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Math-BigInt
 Source0:        https://cpan.metacpan.org/authors/id/P/PJ/PJACKLAM/Math-BigInt-%{cpan_version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c4adc1202349f7fcd14d01e6949fee0ec969049d45c9ca59aa29ec58a65966db
+%global source0_file Math-BigInt-2.005003.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -64,6 +68,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Math-BigInt-2.005003.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c4adc1202349f7fcd14d01e6949fee0ec969049d45c9ca59aa29ec58a65966db" || { echo "oreon: Source0 SHA256 mismatch for Math-BigInt-2.005003.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Math-BigInt-%{cpan_version}
 
 # Help generators to recognize Perl scripts

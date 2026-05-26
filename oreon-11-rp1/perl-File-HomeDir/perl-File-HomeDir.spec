@@ -5,6 +5,10 @@ Summary:        Find your home and other directories on any platform
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-HomeDir
 Source0:        https://cpan.metacpan.org/authors/id/R/RE/REHSACK/File-HomeDir-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 593737c62df0f6dab5d4122e0b4476417945bb6262c33eedc009665ef1548852
+%global source0_file File-HomeDir-1.006.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -49,6 +53,9 @@ arise trying to find them consistently across a wide variety of
 platforms.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-HomeDir-1.006.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "593737c62df0f6dab5d4122e0b4476417945bb6262c33eedc009665ef1548852" || { echo "oreon: Source0 SHA256 mismatch for File-HomeDir-1.006.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n File-HomeDir-%{version}
 
 %build

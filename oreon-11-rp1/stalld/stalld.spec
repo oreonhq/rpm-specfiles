@@ -6,6 +6,10 @@ Summary:	Daemon that finds starving tasks and gives them a temporary boost
 License:	GPL-2.0-or-later AND GPL-2.0-only
 URL:		https://gitlab.com/rt-linux-tools/%{name}/%{name}.git
 Source0:	https://gitlab.com/rt-linux-tools/%{name}/-/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6aaedfa18f150e7898a633fbde60ec3a9bd583111f6791d7e0adda018f47957b
+%global source0_file stalld-1.27.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	glibc-devel
 BuildRequires:	gcc
@@ -34,6 +38,9 @@ boost using the SCHED_DEADLINE policy. The default is to
 allow 10 microseconds of runtime for 1 second of clock time.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/stalld-1.27.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6aaedfa18f150e7898a633fbde60ec3a9bd583111f6791d7e0adda018f47957b" || { echo "oreon: Source0 SHA256 mismatch for stalld-1.27.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

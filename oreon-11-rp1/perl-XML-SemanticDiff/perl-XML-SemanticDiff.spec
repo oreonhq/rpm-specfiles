@@ -4,7 +4,12 @@ Version:	1.0007
 Release:	22%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/XML-SemanticDiff
-Source0:	https://cpan.metacpan.org/modules/by-module/XML/XML-SemanticDiff-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/P/PE/PERIGRIN/XML-SemanticDiff-1.0007.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 05fdefefbbc3f6b62fc7c9b5fabafb6b695ed68f0a3d958577251d1f0402a0f5
+%global source0_file XML-SemanticDiff-1.0007.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -38,6 +43,9 @@ XML documents. By default, it returns a list of hashrefs where each hashref
 describes a single difference between the two docs.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-SemanticDiff-1.0007.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "05fdefefbbc3f6b62fc7c9b5fabafb6b695ed68f0a3d958577251d1f0402a0f5" || { echo "oreon: Source0 SHA256 mismatch for XML-SemanticDiff-1.0007.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-SemanticDiff-%{version}
 
 %build

@@ -222,6 +222,10 @@ Patch:		0059-iso646.patch
 Patch:		0061-gcc-16.patch
 Patch:		0062-src-rgw-driver-dbstore-CMakeLists.txt.patch
 Patch:		0063-src-jaegertracing-opentelemetry-cpp-CMakeLists.txt.patch
+# oreon url source checksums begin
+%global source0_sha256 de779aa0141839388bb201e0a9d622b8433982e1c4d7bfc3ac6117b763972542
+%global source0_file ceph-20.2.1.tar.gz
+# oreon url source checksums end
 
 # ceph 14.0.1 does not support 32-bit architectures, bugs #1727788, #1727787
 ExcludeArch:	i686 armv7hl
@@ -1392,6 +1396,9 @@ This package provides a Ceph hardware monitoring agent.
 # common
 #################################################################################
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ceph-20.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "de779aa0141839388bb201e0a9d622b8433982e1c4d7bfc3ac6117b763972542" || { echo "oreon: Source0 SHA256 mismatch for ceph-20.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Create two sysusers.d config files

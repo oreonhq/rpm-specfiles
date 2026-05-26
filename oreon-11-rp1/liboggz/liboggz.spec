@@ -8,6 +8,10 @@ URL:            http://www.xiph.org/oggz/
 Source0:        http://downloads.xiph.org/releases/liboggz/%{name}-%{version}.tar.gz
 # Always have oggz_off_t == loff_t even on 64-bit platforms
 Patch0:		liboggz-1.1.1-multilib.patch
+# oreon url source checksums begin
+%global source0_sha256 2466d03b67ef0bcba0e10fb352d1a9ffd9f96911657abce3cbb6ba429c656e2f
+%global source0_file liboggz-1.1.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  libogg-devel >= 1.0
@@ -51,6 +55,9 @@ liboggz.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/liboggz-1.1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2466d03b67ef0bcba0e10fb352d1a9ffd9f96911657abce3cbb6ba429c656e2f" || { echo "oreon: Source0 SHA256 mismatch for liboggz-1.1.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 %patch -P0 -p1 -b .multilib
 

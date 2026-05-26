@@ -8,6 +8,10 @@ Summary:        MinGW Windows Cairo library
 License:        LGPL-2.1-only OR MPL-1.1
 URL:            http://cairographics.org
 Source0:        https://www.cairographics.org/releases/cairo-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb
+%global source0_file cairo-1.18.4.tar.xz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -82,6 +86,9 @@ Static version of the MinGW Windows Cairo library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cairo-1.18.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "445ed8208a6e4823de1226a74ca319d3600e83f6369f99b14265006599c32ccb" || { echo "oreon: Source0 SHA256 mismatch for cairo-1.18.4.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n cairo-%{version}
 
 

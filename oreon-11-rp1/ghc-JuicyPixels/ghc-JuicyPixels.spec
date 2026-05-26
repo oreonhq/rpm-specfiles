@@ -15,6 +15,10 @@ URL:            https://hackage.haskell.org/package/JuicyPixels
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+# oreon url source checksums begin
+%global source0_sha256 3e44ac5d3e684b65e9efaf60ca9a907a86edc879dfcf63f86eebc721e542864d
+%global source0_file JuicyPixels-3.3.9.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -86,6 +90,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/JuicyPixels-3.3.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3e44ac5d3e684b65e9efaf60ca9a907a86edc879dfcf63f86eebc721e542864d" || { echo "oreon: Source0 SHA256 mismatch for JuicyPixels-3.3.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 dos2unix -k -n %{SOURCE1} %{pkg_name}.cabal

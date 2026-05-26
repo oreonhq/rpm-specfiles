@@ -7,6 +7,10 @@ URL:            https://www.spice-space.org/usbredir.html
 Source0:        http://spice-space.org/download/%{name}/%{name}-%{version}.tar.xz
 Source1:        http://spice-space.org/download/%{name}/%{name}-%{version}.tar.xz.sig
 Source2:        victortoso-E37A484F.keyring
+# oreon url source checksums begin
+%global source0_sha256 6dc2a380277688a068191245dac2ab7063a552999d8ac3ad8e841c10ff050961
+%global source0_file usbredir-0.15.0.tar.xz
+# oreon url source checksums end
 BuildRequires:  gnupg2
 BuildRequires:  gcc g++
 BuildRequires:  glib2-devel
@@ -49,6 +53,9 @@ Includes usbredirect that uses libusbredirhost to export an USB device for use
 in another (virtual) machine
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/usbredir-0.15.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6dc2a380277688a068191245dac2ab7063a552999d8ac3ad8e841c10ff050961" || { echo "oreon: Source0 SHA256 mismatch for usbredir-0.15.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %autosetup -S git_am
 

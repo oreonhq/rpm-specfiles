@@ -38,6 +38,10 @@ License:	BSD-3-Clause
 URL:		http://pmem.io/pmdk
 
 Source0:	https://github.com/pmem/pmdk/releases/download/%{upstreamversion}/pmdk-%{upstreamversion}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 265e7f65b8f89f74e04ee6c8f543f1ae88e02a38187e3c80d52f1c610cd4c492
+%global source0_file pmdk-2.1.0.tar.gz
+# oreon url source checksums end
 #Patch0:		0001-test-don-t-print-the-address-of-a-FILE-after-fclose.patch
 
 
@@ -413,6 +417,9 @@ provided in the command line options to check whether files are in a consistent 
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pmdk-2.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "265e7f65b8f89f74e04ee6c8f543f1ae88e02a38187e3c80d52f1c610cd4c492" || { echo "oreon: Source0 SHA256 mismatch for pmdk-2.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n pmdk-%{upstreamversion}
 #%patch0 -p1
 

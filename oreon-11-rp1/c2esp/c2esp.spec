@@ -13,6 +13,10 @@ Patch01: c2esp-ftbfs-gcc7.patch
 Patch02: c2esp-gcc10.patch
 Patch03: c2esp-c99.patch
 Patch04: c2esp-use-libcupsfilters.patch
+# oreon url source checksums begin
+%global source0_sha256 f095f9cbb539cd48b75cec6fe2f844ba0cb8866ce5e4318ad4ca5ba0224396d4
+%global source0_file c2esp-27.tar.gz
+# oreon url source checksums end
 
 
 # for autoreconf
@@ -42,6 +46,9 @@ Requires: cups-filesystem
 CUPS filters and drivers for Kodak ESP and Hero all in one printers.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/c2esp-27.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f095f9cbb539cd48b75cec6fe2f844ba0cb8866ce5e4318ad4ca5ba0224396d4" || { echo "oreon: Source0 SHA256 mismatch for c2esp-27.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n c2esp-%{version_no_dot} -S git
 
 

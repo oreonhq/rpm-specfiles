@@ -12,6 +12,10 @@ BuildRequires: ncurses-devel gcc gettext findutils libtool gnupg2
 BuildRequires: make
 Patch2: dialog-multilib.patch
 Patch3: dialog-libs.patch
+# oreon url source checksums begin
+%global source0_sha256 68406329827b783d0a8959cc20a94c6e1791ac861a27f854e06e9020541816dd
+%global source0_file dialog-1.3-20250116.tgz
+# oreon url source checksums end
 
 %description
 Dialog is a utility that allows you to show dialog boxes (containing
@@ -33,6 +37,9 @@ contains the files needed for developing applications, which use the
 dialog library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dialog-1.3-20250116.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "68406329827b783d0a8959cc20a94c6e1791ac861a27f854e06e9020541816dd" || { echo "oreon: Source0 SHA256 mismatch for dialog-1.3-20250116.tgz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring=%{SOURCE2} --signature=%{SOURCE1} --data=%{SOURCE0}
 %setup -q -n dialog-%{version}-%{dialogsubversion}
 %patch -P2 -p1 -b .multilib

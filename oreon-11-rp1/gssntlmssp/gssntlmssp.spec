@@ -6,6 +6,10 @@ Summary:	GSSAPI NTLMSSP Mechanism
 License:	LGPL-3.0-or-later
 URL:		https://github.com/gssapi/gss-ntlmssp
 Source0:        https://github.com/gssapi/gss-ntlmssp/releases/download/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 eb87b4c2c1137959025b355296fa556b4d5a09c480e75918ee4b13c354eae29d
+%global source0_file gssntlmssp-1.3.1.tar.gz
+# oreon url source checksums end
 
 Requires: krb5-libs%{?_isa} >= 1.19
 
@@ -38,6 +42,9 @@ Adds a header file with definition for custom GSSAPI extensions for NTLMSSP
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gssntlmssp-1.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "eb87b4c2c1137959025b355296fa556b4d5a09c480e75918ee4b13c354eae29d" || { echo "oreon: Source0 SHA256 mismatch for gssntlmssp-1.3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

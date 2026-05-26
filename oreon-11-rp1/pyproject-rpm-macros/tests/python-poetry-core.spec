@@ -5,7 +5,7 @@ Summary:        Poetry PEP 517 Build Backend
 
 License:        MIT
 URL:            https://pypi.org/project/poetry-core/
-Source0:        %{pypi_source poetry-core}
+Source0:        https://files.pythonhosted.org/packages/source/p/poetry-core/poetry-core-1.1.0.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

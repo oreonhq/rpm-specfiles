@@ -20,6 +20,10 @@ License:        BSD-3-Clause AND (CC0-1.0 OR Apache-2.0) AND (CC0-1.0 OR Apache-
 URL:            https://hackage.haskell.org/package/cryptonite
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 56099c8a8aa01d2ee914b670c97c1f818186dbb886e2025b73d9c2afe3496b1d
+%global source0_file cryptonite-0.30.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -116,6 +120,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cryptonite-0.30.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "56099c8a8aa01d2ee914b670c97c1f818186dbb886e2025b73d9c2afe3496b1d" || { echo "oreon: Source0 SHA256 mismatch for cryptonite-0.30.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

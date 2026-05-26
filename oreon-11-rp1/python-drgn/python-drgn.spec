@@ -20,7 +20,11 @@ Summary:        Programmable debugger
 
 License:        LGPL-2.1-or-later
 URL:            https://github.com/osandov/drgn
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/d/drgn/drgn-0.1.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6493eb999cc24521216f76aa7ecf89ed8fae28077bbe7aa638385934659eed22
+%global source0_file drgn-0.1.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  python3-devel
 BuildRequires:  python3dist(setuptools)
@@ -67,6 +71,9 @@ This package contains additional documentation for %{pypi_name}.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/drgn-0.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6493eb999cc24521216f76aa7ecf89ed8fae28077bbe7aa638385934659eed22" || { echo "oreon: Source0 SHA256 mismatch for drgn-0.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pypi_name}-%{version} -p1
 # Remove bundled egg-info
 rm -rf %{pypi_name}.egg-info

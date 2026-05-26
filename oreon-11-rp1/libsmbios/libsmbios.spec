@@ -10,6 +10,10 @@ Summary: Libsmbios C/C++ shared libraries
 License: GPL-2.0-or-later or OSL-2.1
 URL: https://github.com/dell/libsmbios
 Source0: https://github.com/dell/libsmbios/archive/v%{version}/libsmbios-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 36c36a0f6b59190d6b4fef11696886e4511091929a5eb7ae7cf5fea0c32d3f58
+%global source0_file libsmbios-2.4.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires: autoconf
 BuildRequires: automake
@@ -87,6 +91,9 @@ This package contains the headers and .a files necessary to compile new client
 programs against libsmbios.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libsmbios-2.4.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "36c36a0f6b59190d6b4fef11696886e4511091929a5eb7ae7cf5fea0c32d3f58" || { echo "oreon: Source0 SHA256 mismatch for libsmbios-2.4.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 find . -type d -exec chmod -f 755 {} \;

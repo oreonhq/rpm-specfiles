@@ -25,6 +25,10 @@ Source12:       %{name}-constants.1
 Patch:          %{name}-build.patch
 # Patch the manifest so that it includes OSGi stuff
 Patch:          %{name}-manifest.patch
+# oreon url source checksums begin
+%global source0_sha256 6dd1ebd4c88e935c182375346cd7365514bd8dd2ad2f30f0d0b05257bab34ee8
+%global source0_file Xerces-J-src.2.12.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  ant-openjdk25 
@@ -73,6 +77,9 @@ Requires:       %{name} = %{version}-%{release}
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Xerces-J-src.2.12.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6dd1ebd4c88e935c182375346cd7365514bd8dd2ad2f30f0d0b05257bab34ee8" || { echo "oreon: Source0 SHA256 mismatch for Xerces-J-src.2.12.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 # Copy the custom ant task into place

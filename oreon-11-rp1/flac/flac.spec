@@ -6,6 +6,10 @@ Summary:        An encoder/decoder for the Free Lossless Audio Codec
 License:        BSD-3-Clause AND GPL-2.0-or-later AND GFDL-1.3-or-later
 URL:            https://www.xiph.org/flac/
 Source:         https://downloads.xiph.org/releases/flac/flac-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 f2c1c76592a82ffff8413ba3c4a1299b6c7ab06c734dee03fd88630485c2b920
+%global source0_file flac-1.5.0.tar.xz
+# oreon url source checksums end
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 
 BuildRequires:  cmake
@@ -52,6 +56,9 @@ This package contains all the files needed to develop applications that
 will use the Free Lossless Audio Codec.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/flac-1.5.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f2c1c76592a82ffff8413ba3c4a1299b6c7ab06c734dee03fd88630485c2b920" || { echo "oreon: Source0 SHA256 mismatch for flac-1.5.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Disable thorough tests

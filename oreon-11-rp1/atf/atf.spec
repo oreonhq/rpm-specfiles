@@ -5,8 +5,12 @@ Release: 4%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL:     https://github.com/freebsd/atf
-Source0: %{url}/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/freebsd/atf/archive/atf-0.23/atf-0.23.tar.gz
 Source1: README.Fedora
+# oreon url source checksums begin
+%global source0_sha256 37aa5341f2b51ffee245db3456d9bc25f718ca12beb7b990dc16d686890115e3
+%global source0_file atf-0.23.tar.gz
+# oreon url source checksums end
 
 %global _testsdir %{_libexecdir}/atf/tests
 
@@ -119,6 +123,9 @@ This package provides the supporting files and documentation to develop
 applications that use the ATF POSIX shell bindings.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/atf-0.23.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "37aa5341f2b51ffee245db3456d9bc25f718ca12beb7b990dc16d686890115e3" || { echo "oreon: Source0 SHA256 mismatch for atf-0.23.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{name}-%{version}
 
 # Put the README.Fedora file in the top-level directory of the source tree so

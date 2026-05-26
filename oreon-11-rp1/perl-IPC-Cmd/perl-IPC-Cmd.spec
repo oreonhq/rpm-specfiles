@@ -13,6 +13,10 @@ Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/IPC-Cmd-%{versi
 # Replace ExtUtils::MakeMaker dependency with ExtUtils::MM::Utils.
 # This enables not to require perl-devel. Bug #1129443
 Patch0:         IPC-Cmd-0.96-Replace-EU-MM-dependency-with-EU-MM-Utils.patch
+# oreon url source checksums begin
+%global source0_sha256 d110a0f60e35c65721454200f0d2f0f8965529a2add9649d1fa6f4f9eccb6430
+%global source0_file IPC-Cmd-1.04.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils
@@ -84,6 +88,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IPC-Cmd-1.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d110a0f60e35c65721454200f0d2f0f8965529a2add9649d1fa6f4f9eccb6430" || { echo "oreon: Source0 SHA256 mismatch for IPC-Cmd-1.04.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IPC-Cmd-%{version}
 %patch -P0 -p1
 

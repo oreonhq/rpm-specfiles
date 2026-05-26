@@ -8,6 +8,10 @@ URL:		https://github.com/ColinIanKing/stress-ng
 Source0:	https://github.com/ColinIanKing/stress-ng/archive/V%{version}/%{name}-%{version}.tar.gz
 # darn is not supported in Power ISA < 3.0, while Fedora aims for Power ISA 2.07
 Patch0:     0_18_01-poewrpc-remove-darn.patch
+# oreon url source checksums begin
+%global source0_sha256 f974863d1861e7e7b5d19e381a17f22d653dcafa12096ac96d11b2e62a22ea77
+%global source0_file stress-ng-0.20.01.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	make
 BuildRequires:	gcc
@@ -33,6 +37,9 @@ various physical subsystems of a computer as well as the various operating
 system kernel interfaces.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/stress-ng-0.20.01.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f974863d1861e7e7b5d19e381a17f22d653dcafa12096ac96d11b2e62a22ea77" || { echo "oreon: Source0 SHA256 mismatch for stress-ng-0.20.01.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version}
 
 %build

@@ -11,7 +11,12 @@ Release:        4%{?dist}
 Summary:        Read/Write YAML files with as little code as possible
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/YAML-Tiny
-Source0:        https://www.cpan.org/modules/by-module/YAML/YAML-Tiny-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/YAML-Tiny-1.76.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a8d584394cf069bf8f17cba3dd5099003b097fce316c31fb094f1b1c171c08a3
+%global source0_file YAML-Tiny-1.76.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -60,6 +65,9 @@ written with as little code as possible, reducing load time and
 memory overhead.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/YAML-Tiny-1.76.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a8d584394cf069bf8f17cba3dd5099003b097fce316c31fb094f1b1c171c08a3" || { echo "oreon: Source0 SHA256 mismatch for YAML-Tiny-1.76.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n YAML-Tiny-%{version}
 
 %build

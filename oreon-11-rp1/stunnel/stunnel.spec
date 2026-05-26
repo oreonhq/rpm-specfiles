@@ -46,6 +46,10 @@ Patch3:   stunnel-5.69-system-ciphers.patch
 # crypto-policies unless a TLS minimum or maximum version are explicitly
 # specified in the stunnel configuration.
 Patch5:   stunnel-5.72-default-tls-version.patch
+# oreon url source checksums begin
+%global source0_sha256 8727e53bb8b7528f850327a2a149158422c02183bc120d1d733cc65b1e2c349d
+%global source0_file stunnel-5.78.tar.gz
+# oreon url source checksums end
 # util-linux is needed for rename
 BuildRequires: make
 BuildRequires: gcc
@@ -72,6 +76,9 @@ to ordinary applications. For example, it can be used in
 conjunction with imapd to create a TLS secure IMAP server.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/stunnel-5.78.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8727e53bb8b7528f850327a2a149158422c02183bc120d1d733cc65b1e2c349d" || { echo "oreon: Source0 SHA256 mismatch for stunnel-5.78.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE99}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -S gendiff -p1
 

@@ -6,6 +6,10 @@ Summary:       A collection of helpers for building UPnP AV applications
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://www.gupnp.org/
 Source0:       http://ftp.gnome.org/pub/GNOME/sources/%{name}/0.12/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 3d53b96f85bc5628d33e367ec9bf2adb38ef2b34d7ad0434a6ba0cf4ad9048e6
+%global source0_file gupnp-dlna-0.12.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires: glib2-devel
 BuildRequires: gobject-introspection-devel
@@ -44,6 +48,9 @@ BuildArch: noarch
 Contains developer documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gupnp-dlna-0.12.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3d53b96f85bc5628d33e367ec9bf2adb38ef2b34d7ad0434a6ba0cf4ad9048e6" || { echo "oreon: Source0 SHA256 mismatch for gupnp-dlna-0.12.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

@@ -14,6 +14,10 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://github.com/eclipse-sisu/sisu-project/archive/refs/tags/milestones/0.9.0.M3.tar.gz#/sisu-%{version}.tar.gz
 
 Patch:          0001-Add-ASM-support-for-Java-24-and-25.patch
+# oreon url source checksums begin
+%global source0_sha256 0b3032e6d66bfdb166c956c6f9bdf661010be652f67900099f8ffd83ae07a8c2
+%global source0_file 0.9.0.M3.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -63,6 +67,9 @@ The Sisu Plugin for Maven provides mojos to generate
 META-INF/sisu/javax.inject.Named index files for the Sisu container.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/0.9.0.M3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0b3032e6d66bfdb166c956c6f9bdf661010be652f67900099f8ffd83ae07a8c2" || { echo "oreon: Source0 SHA256 mismatch for 0.9.0.M3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 %pom_disable_module org.eclipse.sisu.inject.extender

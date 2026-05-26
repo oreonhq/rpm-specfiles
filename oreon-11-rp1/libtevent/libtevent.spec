@@ -10,6 +10,10 @@ Source0:        http://samba.org/ftp/tevent/tevent-%{version}.tar.gz
 Source1:        http://samba.org/ftp/tevent/tevent-%{version}.tar.asc
 # gpg2 --no-default-keyring --keyring ./tevent.keyring --recv-keys 9147A339719518EE9011BCB54793916113084025
 Source2:        tevent.keyring
+# oreon url source checksums begin
+%global source0_sha256 1be2dea737cde25fe06621f84945e63eb71259e0c43e9f8f5da482dab1a7be92
+%global source0_file tevent-0.17.1.tar.gz
+# oreon url source checksums end
 
 # Patches
 
@@ -54,6 +58,9 @@ Requires: libtevent%{?_isa} = %{version}-%{release}
 Python 3 bindings for libtevent
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tevent-0.17.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1be2dea737cde25fe06621f84945e63eb71259e0c43e9f8f5da482dab1a7be92" || { echo "oreon: Source0 SHA256 mismatch for tevent-0.17.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 zcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
 %autosetup -n tevent-%{version} -p1
 

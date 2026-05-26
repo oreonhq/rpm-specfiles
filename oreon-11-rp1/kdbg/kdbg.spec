@@ -4,6 +4,10 @@ Version: 3.2.0
 Release: 3%{?dist}
 Epoch: 1
 Source: http://download.sourceforge.net/kdbg/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1a858b2960ff9d65c14e24db0cbc5e340ac33323c8fe04b3003ab23a0c6b3471
+%global source0_file kdbg-3.2.0.tar.gz
+# oreon url source checksums end
 # No version specified.
 License: GPL-1.0-or-later
 URL: http://www.kdbg.org/
@@ -31,6 +35,9 @@ breakpoints, inspecting variables, and stepping through code. KDbg
 requires X and KDE to be installed in order to run.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kdbg-3.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1a858b2960ff9d65c14e24db0cbc5e340ac33323c8fe04b3003ab23a0c6b3471" || { echo "oreon: Source0 SHA256 mismatch for kdbg-3.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

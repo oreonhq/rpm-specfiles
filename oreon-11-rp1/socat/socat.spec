@@ -9,6 +9,10 @@ Url:  http://www.dest-unreach.org/socat/
 Source: http://www.dest-unreach.org/socat/download/%{name}-%{version}.tar.gz
 
 Patch1: socat-1.8.1.0-printtime.patch
+# oreon url source checksums begin
+%global source0_sha256 9a884880b1b00dfb2ffc6959197b1554b200af731018174cd048115dc28ef239
+%global source0_file socat-1.8.1.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  gcc
@@ -26,6 +30,9 @@ line editor (readline), a program, or a combination of two of these.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/socat-1.8.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9a884880b1b00dfb2ffc6959197b1554b200af731018174cd048115dc28ef239" || { echo "oreon: Source0 SHA256 mismatch for socat-1.8.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 iconv -f iso8859-1 -t utf-8 CHANGES > CHANGES.utf8
 mv CHANGES.utf8 CHANGES

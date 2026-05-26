@@ -91,6 +91,10 @@ Summary:     A library for low-level manipulation with block devices
 License:     LGPL-2.1-or-later
 URL:         https://github.com/storaged-project/libblockdev
 Source0:     https://github.com/storaged-project/libblockdev/releases/download/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 65ef9a37babd44b85b8ff9b273f90f9f7d5f8ff7b0c76a8edb69240325fd83f4
+%global source0_file libblockdev-3.4.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: glib2-devel
@@ -632,6 +636,9 @@ A meta-package that pulls all the libblockdev plugins as dependencies.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libblockdev-3.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "65ef9a37babd44b85b8ff9b273f90f9f7d5f8ff7b0c76a8edb69240325fd83f4" || { echo "oreon: Source0 SHA256 mismatch for libblockdev-3.4.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version} -p1
 
 %build

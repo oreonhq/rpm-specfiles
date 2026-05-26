@@ -6,6 +6,10 @@ Summary:	A Library for handling OpenType Font
 License:	LGPL-2.1-or-later
 URL:            http://www.nongnu.org/m17n/
 Source0:        http://download.savannah.gnu.org/releases/m17n/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 68db0ca3cda2d46a663a92ec26e6eb5adc392ea5191bcda74268f0aefa78066b
+%global source0_file libotf-0.9.16.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	gcc chrpath freetype-devel libXaw-devel
 BuildRequires: make
@@ -33,6 +37,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libotf-0.9.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "68db0ca3cda2d46a663a92ec26e6eb5adc392ea5191bcda74268f0aefa78066b" || { echo "oreon: Source0 SHA256 mismatch for libotf-0.9.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 

@@ -5,6 +5,10 @@ Summary:    The Table engine for IBus platform
 License:    LGPL-2.1-or-later
 URL:        https://github.com/mike-fabian/ibus-table
 Source0:    https://github.com/mike-fabian/ibus-table/releases/download/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c1040d4928308b85b3576a418c5cbd6622f199208f80d4a153d1b829ee8508b8
+%global source0_file ibus-table-1.17.16.tar.gz
+# oreon url source checksums end
 Requires:       ibus > 1.3.0
 %{?__python3:Requires: %{__python3}}
 # To play a sound on error:
@@ -54,6 +58,9 @@ The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ibus-table-1.17.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c1040d4928308b85b3576a418c5cbd6622f199208f80d4a153d1b829ee8508b8" || { echo "oreon: Source0 SHA256 mismatch for ibus-table-1.17.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

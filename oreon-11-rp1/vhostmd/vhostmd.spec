@@ -14,6 +14,10 @@ Source1:       vhostmd.conf
 Patch0001:     0001-Add-channel_path-setting-to-daemon-config-file.patch
 Patch0002:     0002-Support-libvirts-new-channel-path-naming-scheme.patch
 Patch0003:     0003-Fix-parsing-of-vmstat-output.patch
+# oreon url source checksums begin
+%global source0_sha256 ffedbec1a5acd46632e439d44b47ff725ee1c20d41f9415f98d49ca34f4e270e
+%global source0_file vhostmd-1.2.tar.gz
+# oreon url source checksums end
 ExcludeArch: %{ix86}
 
 BuildRequires: make
@@ -64,6 +68,9 @@ Header and libraries necessary for metrics gathering development
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vhostmd-1.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ffedbec1a5acd46632e439d44b47ff725ee1c20d41f9415f98d49ca34f4e270e" || { echo "oreon: Source0 SHA256 mismatch for vhostmd-1.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 

@@ -12,10 +12,14 @@ Summary:        Simple cloud provider agent
 
 License:        Apache-2.0
 URL:            https://crates.io/crates/afterburn
-Source0:        %{crates_source}
+Source0:        https://crates.io/api/v1/crates/afterburn/5.10.0/download#/afterburn-5.10.0.crate
 # not used on Fedora
 Source1:        https://github.com/coreos/%{crate}/releases/download/v%{version}/%{crate}-%{version}-vendor.tar.gz
 Source2:        90-afterburn-authorized-keys-file.conf
+# oreon url source checksums begin
+%global source1_sha256 4e0ec8de768cca45f71ee87e853cb71915050b1e167835f0ae520c0a4c8e4590
+%global source1_file afterburn-5.10.0-vendor.tar.gz
+# oreon url source checksums end
 
 # build(deps): bump mailparse from 0.15.0 to 0.16.1
 # (Only the Cargo.toml portion, not the Cargo.lock portion)
@@ -116,6 +120,9 @@ to run in the initramfs on boot.
 %{dracutmodulesdir}/30afterburn/
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/afterburn-5.10.0-vendor.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4e0ec8de768cca45f71ee87e853cb71915050b1e167835f0ae520c0a4c8e4590" || { echo "oreon: Source1 SHA256 mismatch for afterburn-5.10.0-vendor.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{crate}-%{version_no_tilde} -p1 %{?rhel:-a1}
 %if 0%{?rhel}
 %cargo_prep -v vendor

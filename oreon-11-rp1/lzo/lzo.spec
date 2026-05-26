@@ -8,6 +8,10 @@ URL:            http://www.oberhumer.com/opensource/lzo/
 Source0:        http://www.oberhumer.com/opensource/lzo/download/%{name}-%{version}.tar.gz
 Patch0:         lzo-2.08-configure.patch
 Patch1:         lzo-2.08-rhbz1309225.patch
+# oreon url source checksums begin
+%global source0_sha256 c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072
+%global source0_file lzo-2.10.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc
@@ -42,6 +46,9 @@ This package contains development files needed for lzo.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lzo-2.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c0f892943208266f9b6543b3ae308fab6284c5c90e627931446fb49b4221a072" || { echo "oreon: Source0 SHA256 mismatch for lzo-2.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # mark asm files as NOT needing execstack
 for i in asm/i386/src_gas/*.S; do

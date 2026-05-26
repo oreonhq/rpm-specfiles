@@ -4,8 +4,13 @@ Release:        27%{?dist}
 Summary:        IPv6 related part of the C socket.h defines and structure manipulators
 License:        BSD-3-Clause
 URL:            https://metacpan.org/release/Socket6
-Source0:        https://cpan.metacpan.org/modules/by-module/Socket6/Socket6-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/U/UM/UMEMOTO/Socket6-0.29.tar.gz
+
 Patch0:         Socket6-0.29-remove_support_of_gethostname2.patch
+# oreon url source checksums begin
+%global source0_sha256 468915fa3a04dcf6574fc957eff495915e24569434970c91ee8e4e1459fc9114
+%global source0_file Socket6-0.29.tar.gz
+# oreon url source checksums end
 # Build:
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -37,6 +42,9 @@ protocol independent programming. If your environment supports IPv6, IPv6
 related defines such as AF_INET6 are included.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Socket6-0.29.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "468915fa3a04dcf6574fc957eff495915e24569434970c91ee8e4e1459fc9114" || { echo "oreon: Source0 SHA256 mismatch for Socket6-0.29.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Socket6-%{version}
 %patch -P0 -p1
 

@@ -15,9 +15,13 @@ Summary:        Utilities for video4linux and DVB devices
 License:        GPL-2.0-or-later AND GPL-2.0-only AND (GPL-2.0-only OR BSD-3-Clause) AND LicenseRef-Fedora-Public-Domain AND HPND-sell-variant
 URL:            http://www.linuxtv.org/downloads/v4l-utils/
 
-Source0:        %{url}/v4l-utils-%{version}.tar.xz
+Source0:        http://www.linuxtv.org/downloads/v4l-utils//v4l-utils-1.32.0.tar.xz
 # TODO: submit upstream
 Patch0:         sbin-location.diff
+# oreon url source checksums begin
+%global source0_sha256 6828828a17775526eb93fb258a9294d1d1073d633c344dd71ecd4e7a1ffb7dfc
+%global source0_file v4l-utils-1.32.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  alsa-lib-devel
 BuildRequires:  gettext
@@ -165,6 +169,9 @@ Utilities for Infrared receivers and transmitters using RC core.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v4l-utils-1.32.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6828828a17775526eb93fb258a9294d1d1073d633c344dd71ecd4e7a1ffb7dfc" || { echo "oreon: Source0 SHA256 mismatch for v4l-utils-1.32.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

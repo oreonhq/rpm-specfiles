@@ -16,6 +16,10 @@ Patch: https://gitlab.gnome.org/GNOME/gtk-doc/-/merge_requests/74.patch
 # Update CMake minimum version from 3.2 to 3.12: support CMake 4.0
 # https://gitlab.gnome.org/GNOME/gtk-doc/-/merge_requests/101
 Patch: https://gitlab.gnome.org/GNOME/gtk-doc/-/merge_requests/101.patch
+# oreon url source checksums begin
+%global source0_sha256 611c9f24edd6d88a8ae9a79d73ab0dc63c89b81e90ecc31d6b9005c5f05b25e2
+%global source0_file gtk-doc-1.35.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires: dblatex
 BuildRequires: docbook-utils
@@ -47,6 +51,9 @@ It is used for generating the documentation for GTK+, GLib
 and GNOME.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gtk-doc-1.35.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "611c9f24edd6d88a8ae9a79d73ab0dc63c89b81e90ecc31d6b9005c5f05b25e2" || { echo "oreon: Source0 SHA256 mismatch for gtk-doc-1.35.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Move this doc file to avoid name collisions

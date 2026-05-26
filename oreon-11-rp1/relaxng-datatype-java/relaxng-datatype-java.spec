@@ -12,6 +12,10 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/java-schema-utilities/%{name}/archive/refs/tags/relaxngDatatype-%{version}.tar.gz
 Source1:        copying.txt
+# oreon url source checksums begin
+%global source0_sha256 bca3509ed30aacbb6bf6cbc5108d1f19fec40c0db7f01e22c38a3213ffc98167
+%global source0_file relaxngDatatype-2011.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 # TODO Remove in Fedora 46
@@ -21,6 +25,9 @@ Obsoletes:      %{name}-javadoc < 2011.1-14
 Interface between RELAX NG validators and datatype libraries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/relaxngDatatype-2011.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bca3509ed30aacbb6bf6cbc5108d1f19fec40c0db7f01e22c38a3213ffc98167" || { echo "oreon: Source0 SHA256 mismatch for relaxngDatatype-2011.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 cp %{SOURCE1} .
 

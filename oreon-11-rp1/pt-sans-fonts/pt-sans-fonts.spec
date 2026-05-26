@@ -48,6 +48,10 @@ Source24: http://rus.paratype.ru/system/attachments/652/original/ptsanscaption55
 Source25: http://rus.paratype.ru/system/attachments/653/original/ptsanscaption57bold.pdf
 Source26: http://rus.paratype.ru/system/attachments/649/original/ptsans57narrow.pdf
 Source27: http://rus.paratype.ru/system/attachments/655/original/ptsans77narrowbold.pdf
+# oreon url source checksums begin
+%global source0_sha256 f07a2d749d6ea16ff069cd8e409e97d28d50af2e70447c528e2190194e15e41c
+%global source0_file PTSansOFL.zip
+# oreon url source checksums end
 
 %fontpkg
 
@@ -60,6 +64,9 @@ This package provides optional documentation files shipped with
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/PTSansOFL.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f07a2d749d6ea16ff069cd8e409e97d28d50af2e70447c528e2190194e15e41c" || { echo "oreon: Source0 SHA256 mismatch for PTSansOFL.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c
 %linuxtext *.txt
 install -m 0644 -vp %{SOURCE20} %{SOURCE21} %{SOURCE22} %{SOURCE23} \

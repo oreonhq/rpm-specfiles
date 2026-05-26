@@ -10,6 +10,10 @@ Version: 1.0.0
 Release: 29%{?dist}
 Epoch: 1
 Source: http://anishpatil.fedorapeople.org/bn_in.%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 378f40fc81f176b31122bf2d1eb2da13858f660c808f853bed49b726dffe2674
+%global source0_file bn_in.1.0.0.tar.gz
+# oreon url source checksums end
 URL: https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -21,6 +25,9 @@ Supplements: (hunspell and langpacks-bn)
 Bengali hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/bn_in.1.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "378f40fc81f176b31122bf2d1eb2da13858f660c808f853bed49b726dffe2674" || { echo "oreon: Source0 SHA256 mismatch for bn_in.1.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -c -n bn_IN
 # fix file permissions
 chmod 644 bn_IN/*

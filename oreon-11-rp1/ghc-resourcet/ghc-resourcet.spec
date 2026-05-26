@@ -16,6 +16,10 @@ License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/resourcet
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ec601785ee42a201f32adb205b8685c983f18757b1bd33d2e806d571e0f9996b
+%global source0_file resourcet-1.3.0.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -84,6 +88,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/resourcet-1.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ec601785ee42a201f32adb205b8685c983f18757b1bd33d2e806d571e0f9996b" || { echo "oreon: Source0 SHA256 mismatch for resourcet-1.3.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

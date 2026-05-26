@@ -8,7 +8,11 @@ Summary:        A Python library for writing TOML
 # SPDX
 License:        MIT
 URL:            https://github.com/hukkin/tomli-w
-Source0:        %{url}/archive/%{version}/tomli-w-%{version}.tar.gz
+Source0:        https://github.com/hukkin/tomli-w/archive/1.2.0/tomli-w-1.2.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3b423098831faf35be897c5018c93e7c67eabf95d3359e1d5e97e5a4c0265ace
+%global source0_file tomli-w-1.2.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -27,6 +31,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tomli-w-1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3b423098831faf35be897c5018c93e7c67eabf95d3359e1d5e97e5a4c0265ace" || { echo "oreon: Source0 SHA256 mismatch for tomli-w-1.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n tomli-w-%{version}
 # Measuring coverage is discouraged in Python packaging guidelines:
 sed -i '/pytest-cov/d' tests/requirements.txt

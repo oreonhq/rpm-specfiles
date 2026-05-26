@@ -9,7 +9,11 @@ License:        Unicode-3.0
 URL:            https://icu.unicode.org/
 VCS:            git:%{giturl}.git
 
-Source:         %{giturl}/archive/release-%{version}.tar.gz
+Source:        https://github.com/unicode-org/icu/archive/release-78.3.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f06bcab72736ee9d55689033b8198a178562354128cf38edb2afc2e67e3fd931
+%global source0_file release-78.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.code.gson:gson)
@@ -75,6 +79,9 @@ Provides:       bundled(js-jquery)
 API documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/release-78.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f06bcab72736ee9d55689033b8198a178562354128cf38edb2afc2e67e3fd931" || { echo "oreon: Source0 SHA256 mismatch for release-78.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n icu-release-%{version}
 
 %conf

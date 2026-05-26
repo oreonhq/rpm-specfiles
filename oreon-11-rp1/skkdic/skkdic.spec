@@ -21,6 +21,10 @@ Source0:	https://github.com/skk-dev/dict/archive/%{githash}/%{name}-%{gitdate_nu
 Source1:	https://raw.githubusercontent.com/skk-dev/skktools/%{githash_tools}/unannotation.awk
 Source2:	license-investigation.txt
 Source200:	README-skkdic.rh.ja
+# oreon url source checksums begin
+%global source0_sha256 59b32e1a664ac8ed90f2ef8558f3d26eabeaa4e9de930b5b0ce9d3b85ed928cf
+%global source0_file skkdic-20240131.gitb798a46b886f71c0c25ad2a9e78b1c3e8933970c.tar.gz
+# oreon url source checksums end
 
 URL:		https://skk-dev.github.io/dict/
 BuildArch:	noarch
@@ -32,6 +36,9 @@ This package includes the SKK dictionaries, including the large dictionary
 SKK-JISYO.L and pubdic+ dictionary.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/skkdic-20240131.gitb798a46b886f71c0c25ad2a9e78b1c3e8933970c.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "59b32e1a664ac8ed90f2ef8558f3d26eabeaa4e9de930b5b0ce9d3b85ed928cf" || { echo "oreon: Source0 SHA256 mismatch for skkdic-20240131.gitb798a46b886f71c0c25ad2a9e78b1c3e8933970c.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c -T -a 0
 ln -sf dict-%{githash} src
 mkdir tools

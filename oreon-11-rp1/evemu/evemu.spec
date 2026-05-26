@@ -14,11 +14,15 @@ License:        GPL-3.0-only AND LGPL-3.0-only AND GPL-3.0-or-later
 URL:            http://www.freedesktop.org/wiki/Evemu
 
 %if 0%{?gitdate}
-Source0:        %{name}-%{gitdate}.tar.bz2
+Source0:        http://www.freedesktop.org/software/evemu/evemu-2.7.0.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
 Source0:        http://www.freedesktop.org/software/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 78c9400d55eeeb5ab75161360543f9376438c4da4934cb34cdda5b46021ae379
+%global source0_file evemu-2.7.0.tar.xz
+# oreon url source checksums end
 %endif
 
 BuildRequires:  automake libtool gcc gcc-c++ make
@@ -53,6 +57,9 @@ Requires:       pkgconfig
 %{name} development files.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/evemu-2.7.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "78c9400d55eeeb5ab75161360543f9376438c4da4934cb34cdda5b46021ae379" || { echo "oreon: Source0 SHA256 mismatch for evemu-2.7.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

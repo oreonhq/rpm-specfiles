@@ -7,7 +7,12 @@ Summary:        Programmable DNS resolver class for offline emulation of DNS
 # Clarification requested at https://rt.cpan.org/Ticket/Display.html?id=147412
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-DNS-Resolver-Programmable
-Source0:        https://cpan.metacpan.org/modules/by-module/Net/Net-DNS-Resolver-Programmable-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BIGPRESH/Net-DNS-Resolver-Programmable-0.009.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8080a2ab776629585911af1179bdb7c4dc2bebfd4b5efd77b11d1dac62454bf8
+%global source0_file Net-DNS-Resolver-Programmable-0.009.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -37,6 +42,9 @@ specified as a means for retrieving DNS records, or even generating them
 on the fly.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Net-DNS-Resolver-Programmable-0.009.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8080a2ab776629585911af1179bdb7c4dc2bebfd4b5efd77b11d1dac62454bf8" || { echo "oreon: Source0 SHA256 mismatch for Net-DNS-Resolver-Programmable-0.009.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Net-DNS-Resolver-Programmable-%{version}
 
 %build

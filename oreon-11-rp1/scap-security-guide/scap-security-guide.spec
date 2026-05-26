@@ -10,6 +10,10 @@ Summary:	Security guidance and baselines in SCAP formats
 License:	BSD-3-Clause
 URL:		https://github.com/ComplianceAsCode/content/
 Source0:	https://github.com/ComplianceAsCode/content/releases/download/v%{version}/scap-security-guide-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 3e056f460d6626b7109202cb94b2f7dd6af6ff89db22b699fede65ba9316919f
+%global source0_file scap-security-guide-0.1.80.tar.bz2
+# oreon url source checksums end
 BuildArch:	noarch
 
 BuildRequires:	libxslt
@@ -53,6 +57,9 @@ The %{name}-rule-playbooks package contains individual ansible playbooks per rul
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/scap-security-guide-0.1.80.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3e056f460d6626b7109202cb94b2f7dd6af6ff89db22b699fede65ba9316919f" || { echo "oreon: Source0 SHA256 mismatch for scap-security-guide-0.1.80.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %define cmake_defines_common -DSSG_SEPARATE_SCAP_FILES_ENABLED=OFF -DSSG_BASH_SCRIPTS_ENABLED=OFF -DSSG_BUILD_SCAP_12_DS=OFF

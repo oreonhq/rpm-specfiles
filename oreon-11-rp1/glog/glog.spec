@@ -8,6 +8,10 @@ Summary:        A C++ application logging library
 License:        BSD-3-Clause AND Apache-2.0
 URL:            https://github.com/google/glog
 Source0:        https://github.com/google/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 00e4a87e87b7e7612f519a41e491f16623b12423620006f59f5688bfd8d13b08
+%global source0_file glog-0.7.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -33,6 +37,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/glog-0.7.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "00e4a87e87b7e7612f519a41e491f16623b12423620006f59f5688bfd8d13b08" || { echo "oreon: Source0 SHA256 mismatch for glog-0.7.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 

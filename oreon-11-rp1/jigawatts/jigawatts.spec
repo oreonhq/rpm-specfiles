@@ -17,6 +17,10 @@ Source0: https://github.com/chflood/jigawatts/archive/%{uversion}.tar.gz
 
 # Pathces to move library out of the jar. This must be usptreamed in one or another way
 Patch0:  output_loc.patch
+# oreon url source checksums begin
+%global source0_sha256 ce7d6457409925cf5beca2ee8502ac764d0331e257758ffbf986a9103e1e84d2
+%global source0_file 6c78499af1a1d536368267e5ab5449232b05f878.tar.gz
+# oreon url source checksums end
 
 BuildRequires: java-25-devel
 BuildRequires: criu-devel
@@ -51,6 +55,9 @@ Summary: Javadoc for %{name}
 Javadoc for %{name}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/6c78499af1a1d536368267e5ab5449232b05f878.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ce7d6457409925cf5beca2ee8502ac764d0331e257758ffbf986a9103e1e84d2" || { echo "oreon: Source0 SHA256 mismatch for 6c78499af1a1d536368267e5ab5449232b05f878.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{uname}-%{uversion}
 %patch -P0 -p1
 %pom_add_dep org.apache.commons:commons-lang3:3.12.0:test

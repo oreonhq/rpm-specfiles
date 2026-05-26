@@ -7,14 +7,18 @@ Summary:        Implementation of RFC 9000 QUIC protocol
 
 License:        MIT
 URL:            https://github.com/ngtcp2/ngtcp2
-Source0:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz
-Source1:        %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz.asc
+Source0:        https://github.com/ngtcp2/ngtcp2/releases/download/v1.21.0/ngtcp2-1.21.0.tar.xz
+Source1:        https://github.com/ngtcp2/ngtcp2/releases/download/v1.21.0/ngtcp2-1.21.0.tar.xz.asc
 Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf4f3b91474d1eb29889bd0ef7e8403d5d673c366#/tatsuhiro-t.asc
 # Release does not contain all parts to build documentation
 # https://github.com/ngtcp2/ngtcp2/pull/1404
-Source3:        %{url}/raw/refs/tags/v%{version}/doc/mkapiref.py
-Source4:        %{url}/raw/refs/tags/v%{version}/doc/source/index.rst
-Source5:        %{url}/raw/refs/tags/v%{version}/doc/source/programmers-guide.rst
+Source3:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v1.21.0/doc/mkapiref.py
+Source4:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v1.21.0/doc/source/index.rst
+Source5:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v1.21.0/doc/source/programmers-guide.rst
+# oreon url source checksums begin
+%global source0_sha256 2d1c07e6aa509c017516c08307b0b707cd165a17275ab5f1caff9aaa0e3b6c7d
+%global source0_file ngtcp2-1.21.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  gcc
@@ -97,6 +101,9 @@ BuildArch:      noarch
 Development API documentation.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ngtcp2-1.21.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2d1c07e6aa509c017516c08307b0b707cd165a17275ab5f1caff9aaa0e3b6c7d" || { echo "oreon: Source0 SHA256 mismatch for ngtcp2-1.21.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 install -p -m 755 %{SOURCE3} doc/

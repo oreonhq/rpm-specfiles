@@ -7,6 +7,10 @@ License:        GPL-3.0-or-later
 URL:            https://github.com/latchset/%{name}
 Source0:        https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1:        tang.sysusers
+# oreon url source checksums begin
+%global source0_sha256 eaf4a2abfea3d05f454a8841e98332be1e1e2432744c70bb7765651ed82c3f7c
+%global source0_file tang-15.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -43,6 +47,9 @@ Requires:       sed
 Tang is a small daemon for binding data to the presence of a third party.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tang-15.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "eaf4a2abfea3d05f454a8841e98332be1e1e2432744c70bb7765651ed82c3f7c" || { echo "oreon: Source0 SHA256 mismatch for tang-15.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

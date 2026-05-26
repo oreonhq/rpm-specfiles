@@ -11,7 +11,7 @@ Summary:        Efficient and performance-portable SIMD
 
 License:        Apache-2.0
 URL:            https://github.com/google/highway
-Source:         %url/archive/%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/google/highway/archive/refs/tags/v1.3.0.tar.gz
 
 # https://github.com/google/highway/commit/4201022df1c66193863b7d58fea8ac899bd56c45
 Patch: 0001-Detect-clang-19-20-21-also-allow-user-override.patch

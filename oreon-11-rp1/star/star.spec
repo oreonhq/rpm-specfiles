@@ -19,7 +19,7 @@ Summary:        An archiving tool with ACL support
 License:        CDDL-1.0 AND BSD-2-Clause AND BSD-3-Clause AND BSD-4-Clause AND LicenseRef-Public-Domain
 URL:            https://codeberg.org/schilytools/schilytools
 
-Source0:        %{url}/archive/%{version_schily}.tar.gz#/schily-%{version_schily}.tar.gz
+Source0:        https://codeberg.org/schilytools/schilytools/archive/2024-03-21.tar.gz#/schily-2024-03-21.tar.gz
 
 # Allow rmt to access all files.
 # ~> downstream
@@ -34,6 +34,10 @@ Patch3:         star-2024.03.21-manpagereferences.patch
 # Prevent buffer overflow for filenames with length of 100 characters (#556664)
 # Although I couldn't replicate it with 2024.03.21-4, candidate for removal
 Patch4:         star-2024.03.21-bufferoverflow.patch
+# oreon url source checksums begin
+%global source0_sha256 4d66bf35a5bc2927248fac82266b56514fde07c1acda66f25b9c42ccff560a02
+%global source0_file 2024-03-21.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  libattr-devel libacl-devel libselinux-devel libcap-devel
@@ -77,6 +81,9 @@ Obsoletes:      star-libs <= 2023.09.28-1
 This package provides the shared libraries for star.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/2024-03-21.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4d66bf35a5bc2927248fac82266b56514fde07c1acda66f25b9c42ccff560a02" || { echo "oreon: Source0 SHA256 mismatch for 2024-03-21.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n schilytools
 
 # Convert files to utf8 for german letters:

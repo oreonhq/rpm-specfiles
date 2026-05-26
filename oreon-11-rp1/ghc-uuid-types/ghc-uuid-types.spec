@@ -17,6 +17,10 @@ URL:            https://hackage.haskell.org/package/uuid-types
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+# oreon url source checksums begin
+%global source0_sha256 7e0dd953483d6fd3ca49bcaed6b11f9e3c2787213479b2581e07747836b8357e
+%global source0_file uuid-types-1.0.6.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -90,6 +94,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/uuid-types-1.0.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7e0dd953483d6fd3ca49bcaed6b11f9e3c2787213479b2581e07747836b8357e" || { echo "oreon: Source0 SHA256 mismatch for uuid-types-1.0.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 cp -bp %{SOURCE1} %{pkg_name}.cabal

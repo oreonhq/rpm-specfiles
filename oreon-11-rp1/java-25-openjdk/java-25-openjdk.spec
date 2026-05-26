@@ -1261,6 +1261,10 @@ Source18: TestTranslations.java
 Source31: https://github.com/rh-openjdk/nss-native-fips-key-import-export-adapter/releases/download/%{nssadapter_version}/%{nssadapter_name}.tar.xz
 # Create OpenJDK's crypto-policies hierarchy (RHEL-128409)
 Source32: create-redhat-properties-files.bash
+# oreon url source checksums begin
+%global source31_sha256 dee152c42d1c0be89c94d6dd59de82b27301209a65d1a4f90e69c2b2637e2fbb
+%global source31_file nssadapter-0.1.1.tar.xz
+# oreon url source checksums end
 
 
 BuildRequires: %{portable_name}-sources >= %{portable_version}
@@ -1715,6 +1719,9 @@ The %{origin_nice} %{featurever} cryptography adapter library.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/nssadapter-0.1.1.tar.xz; test -f "$f" || { echo "oreon: missing Source31 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dee152c42d1c0be89c94d6dd59de82b27301209a65d1a4f90e69c2b2637e2fbb" || { echo "oreon: Source31 SHA256 mismatch for nssadapter-0.1.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 echo "Preparing %{oj_vendor_version}"
 
 if [ %{include_normal_build} -eq 0 -o  %{include_normal_build} -eq 1 ] ; then

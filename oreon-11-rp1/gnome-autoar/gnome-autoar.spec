@@ -6,6 +6,10 @@ Summary:        Archive library
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-autoar
 Source0:        https://download.gnome.org/sources/%{name}/0.4/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 838c5306fc38bfaa2f23abe24262f4bf15771e3303fb5dcb74f5b9c7a615dabe
+%global source0_file gnome-autoar-0.4.5.tar.xz
+# oreon url source checksums end
 
 
 BuildRequires:  gcc
@@ -33,6 +37,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gnome-autoar-0.4.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "838c5306fc38bfaa2f23abe24262f4bf15771e3303fb5dcb74f5b9c7a615dabe" || { echo "oreon: Source0 SHA256 mismatch for gnome-autoar-0.4.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

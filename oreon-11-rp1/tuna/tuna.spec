@@ -6,6 +6,10 @@ Release: 3%{?dist}
 License: GPL-2.0-only AND LGPL-2.1-only
 Summary: Application tuning GUI & command line utility
 Source: https://www.kernel.org/pub/software/utils/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 c41acab31a716783273c55aa4fe82bf21e586ad570ee6e7fbf5b3e34bce4a506
+%global source0_file tuna-0.20.tar.xz
+# oreon url source checksums end
 URL: https://rt.wiki.kernel.org/index.php/Tuna
 BuildArch: noarch
 BuildRequires: python3-devel, gettext
@@ -43,6 +47,9 @@ priority is changed, be it using tuna or plain chrt & taskset.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tuna-0.20.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c41acab31a716783273c55aa4fe82bf21e586ad570ee6e7fbf5b3e34bce4a506" || { echo "oreon: Source0 SHA256 mismatch for tuna-0.20.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -v -p1
 # Delete setup.py so pyproject.toml build doesn't use it
 rm -f setup.py

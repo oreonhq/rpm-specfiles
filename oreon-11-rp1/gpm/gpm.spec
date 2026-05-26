@@ -18,14 +18,14 @@ URL: http://www.nico.schottelius.org/software/gpm/
 Source: %{name}-%{version}.tar.xz
 Source1: gpm.service
 Patch:  https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
-Patch:  gpm-1.20.6-multilib.patch
-Patch:  gpm-1.20.1-lib-silent.patch
-Patch:  gpm-1.20.5-close-fds.patch
-Patch:  gpm-1.20.1-weak-wgetch.patch
-Patch:  gpm-1.20.7-rhbz-668480-gpm-types-7-manpage-fixes.patch
-Patch:  0001-src-daemon-remove-obvious-use-of-unitialized-data.patch
-Patch:  0002-src-daemon-reindent-switch-statement-to-avoid-compil.patch
-Patch:  0003-configure-drop-broken-configure-code.patch
+Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
+Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
+Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
+Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
+Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
+Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
+Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
+Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
 
 # Disabled, need to be reviewed
 # Patch: gpm-1.20.6-capability.patch

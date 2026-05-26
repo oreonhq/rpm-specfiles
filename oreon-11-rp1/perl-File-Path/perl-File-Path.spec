@@ -5,6 +5,10 @@ Summary:        Create or remove directory trees
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Path
 Source0:        https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/File-Path-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 980f0a17edb353df46e9cd7b357f9f5929cde0f80c45fd7a06cf7e0e8bd6addd
+%global source0_file File-Path-2.18.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -51,6 +55,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-Path-2.18.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "980f0a17edb353df46e9cd7b357f9f5929cde0f80c45fd7a06cf7e0e8bd6addd" || { echo "oreon: Source0 SHA256 mismatch for File-Path-2.18.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n File-Path-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

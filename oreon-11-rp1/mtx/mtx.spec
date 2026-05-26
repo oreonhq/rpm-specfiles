@@ -12,6 +12,10 @@ Patch0: %{name}-1.3.12-destdir.patch
 Patch1: %{name}-1.3.12-argc.patch
 # update for GCC 15 / C23
 Patch2: %{name}-1.3.12-bool.patch
+# oreon url source checksums begin
+%global source0_sha256 0261c5e90b98b6138cd23dadecbc7bc6e2830235145ed2740290e1f35672d843
+%global source0_file mtx-1.3.12.tar.gz
+# oreon url source checksums end
 #URL: http://mtx.sourceforge.net/
 URL: https://github.com/mtx-org/mtx
 BuildRequires: make
@@ -30,6 +34,9 @@ tape at a time, you should install MTX.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mtx-1.3.12.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0261c5e90b98b6138cd23dadecbc7bc6e2830235145ed2740290e1f35672d843" || { echo "oreon: Source0 SHA256 mismatch for mtx-1.3.12.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %patch -P0 -p2 -b .destdir

@@ -6,6 +6,10 @@ Summary:        On-the-fly spell checking for GtkTextView widgets
 License:        GPL-2.0-or-later
 URL:            https://gtkspell.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/gtkspell/gtkspell3-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 b040f63836b347eb344f5542443dc254621805072f7141d49c067ecb5a375732
+%global source0_file gtkspell3-3.0.10.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  enchant2-devel
 BuildRequires:  gettext
@@ -68,6 +72,9 @@ MinGW Windows GtkSpell3 library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gtkspell3-3.0.10.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b040f63836b347eb344f5542443dc254621805072f7141d49c067ecb5a375732" || { echo "oreon: Source0 SHA256 mismatch for gtkspell3-3.0.10.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

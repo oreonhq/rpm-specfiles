@@ -13,6 +13,10 @@ BuildRequires: meson
 %endif
 BuildRequires: make
 Patch0: fribidi-drop-bundled-gnulib.patch
+# oreon url source checksums begin
+%global source0_sha256 1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c
+%global source0_file fribidi-1.0.16.tar.xz
+# oreon url source checksums end
 
 %description
 A library to handle bidirectional scripts (for example Hebrew, Arabic),
@@ -28,6 +32,9 @@ Include files and libraries needed for developing applications which use
 FriBidi.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fribidi-1.0.16.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1b1cde5b235d40479e91be2f0e88a309e3214c8ab470ec8a2744d82a5a9ea05c" || { echo "oreon: Source0 SHA256 mismatch for fribidi-1.0.16.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %if 0%{?rhel} && 0%{?rhel} <= 8
 autoreconf -i

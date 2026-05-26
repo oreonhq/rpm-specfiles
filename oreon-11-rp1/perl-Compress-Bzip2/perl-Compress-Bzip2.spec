@@ -16,6 +16,10 @@ Summary:        Interface to Bzip2 compression library
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Compress-Bzip2
 Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Compress-Bzip2-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 859f835c3f5c998810d8b2a6f9e282ff99d6cb66ccfa55cae7e66dafb035116e
+%global source0_file Compress-Bzip2-2.28.tar.gz
+# oreon url source checksums end
 BuildRequires:  bzip2-devel >= 1.0.5
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -76,6 +80,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Compress-Bzip2-2.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "859f835c3f5c998810d8b2a6f9e282ff99d6cb66ccfa55cae7e66dafb035116e" || { echo "oreon: Source0 SHA256 mismatch for Compress-Bzip2-2.28.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Compress-Bzip2-%{version}
 # Remove bundled bzip2 library
 find bzlib-src -mindepth 1 -type f \! -name 'sample*' -delete

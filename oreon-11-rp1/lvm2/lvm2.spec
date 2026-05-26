@@ -54,6 +54,10 @@ Release: %autorelease
 License: GPL-2.0-only
 URL: https://sourceware.org/lvm2
 Source0: https://sourceware.org/pub/lvm2/releases/LVM2.%{version}.tgz
+# oreon url source checksums begin
+%global source0_sha256 23bc9067e28fe0d37b3cc441f2865b9e022ce3c624babe22918b8dd90c031ee8
+%global source0_file LVM2.2.03.39.tgz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc
@@ -115,6 +119,9 @@ or more physical volumes and creating one or more logical volumes
 (kind of logical partitions) in volume groups.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/LVM2.2.03.39.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "23bc9067e28fe0d37b3cc441f2865b9e022ce3c624babe22918b8dd90c031ee8" || { echo "oreon: Source0 SHA256 mismatch for LVM2.2.03.39.tgz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n LVM2.%{version}
 
 %build

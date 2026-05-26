@@ -24,6 +24,10 @@ URL: https://launchpad.net/libdbusmenu-qt/
 Source0:  https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libdbusmenu-qt/%{version}+%{ubuntu}.%{snapshot}-0ubuntu1/libdbusmenu-qt_%{version}+%{ubuntu}.%{snapshot}.orig.tar.gz
 %else
 Source0:  https://launchpad.net/libdbusmenu-qt/trunk/%{version}/+download/libdbusmenu-qt-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 a8e6358a31c44ccdf1bfc46c95a77a6bfc7fc1f536aadb913ed4f4405c570cf6
+%global source0_file libdbusmenu-qt_0.9.3+16.04.20160218.orig.tar.gz
+# oreon url source checksums end
 %endif
 
 
@@ -85,6 +89,9 @@ Requires: dbusmenu-qt5%{?_isa} = %{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdbusmenu-qt_0.9.3+16.04.20160218.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a8e6358a31c44ccdf1bfc46c95a77a6bfc7fc1f536aadb913ed4f4405c570cf6" || { echo "oreon: Source0 SHA256 mismatch for libdbusmenu-qt_0.9.3+16.04.20160218.orig.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n libdbusmenu-qt-%{version}+%{ubuntu}.%{snapshot}
 
 

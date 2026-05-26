@@ -21,9 +21,13 @@ License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 
 URL:            https://ocaml-community.github.io/calendar/
 VCS:            git:%{giturl}.git
-Source0:        %{giturl}/archive/v%{version}/calendar-%{version}.tar.gz
+Source0:        https://github.com/ocaml-community/calendar/archive/v3.0.0/calendar-3.0.0.tar.gz
 # Work around https://github.com/ocaml-community/calendar/issues/43
 Patch:          %{name}-timezone-test.patch
+# oreon url source checksums begin
+%global source0_sha256 ea04d31762d3f18837af0311cdbfe7b7788aa0f2e7e9f98d2b0decec1e506e9e
+%global source0_file calendar-3.0.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  ocaml >= 4.03
 BuildRequires:  ocaml-dune >= 1.0
@@ -49,6 +53,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/calendar-3.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ea04d31762d3f18837af0311cdbfe7b7788aa0f2e7e9f98d2b0decec1e506e9e" || { echo "oreon: Source0 SHA256 mismatch for calendar-3.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n calendar-%{version} -p1
 
 

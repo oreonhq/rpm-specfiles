@@ -7,6 +7,10 @@ Summary:       A collection of helpers for building UPnP AV applications
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://www.gupnp.org/
 Source0:       http://download.gnome.org/sources/gupnp-av/0.14/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 21d974b3275cb5dcf5b8aa1d9a3fc80e7edca706935f6fbd004c79787138f8c7
+%global source0_file gupnp-av-0.14.4.tar.xz
+# oreon url source checksums end
 
 BuildRequires: gi-docgen
 BuildRequires: gobject-introspection-devel
@@ -40,6 +44,9 @@ BuildArch: noarch
 This package contains developer documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gupnp-av-0.14.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "21d974b3275cb5dcf5b8aa1d9a3fc80e7edca706935f6fbd004c79787138f8c7" || { echo "oreon: Source0 SHA256 mismatch for gupnp-av-0.14.4.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

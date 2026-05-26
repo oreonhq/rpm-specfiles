@@ -6,6 +6,10 @@ Summary:        GObject-based wrapper library for libudev
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/libgudev
 Source0:        https://download.gnome.org/sources/libgudev/%{version}/libgudev-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 61266ab1afc9d73dbc60a8b2af73e99d2fdff47d99544d085760e4fa667b5dd1
+%global source0_file libgudev-238.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  glib2-devel
 BuildRequires:  gobject-introspection-devel
@@ -38,6 +42,9 @@ Obsoletes:      libgudev1-devel < 230
 This package is necessary to build programs using %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libgudev-238.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61266ab1afc9d73dbc60a8b2af73e99d2fdff47d99544d085760e4fa667b5dd1" || { echo "oreon: Source0 SHA256 mismatch for libgudev-238.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

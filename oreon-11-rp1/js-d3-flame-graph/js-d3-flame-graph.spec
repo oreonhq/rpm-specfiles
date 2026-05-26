@@ -11,7 +11,7 @@ BuildArch:      noarch
 License:        Apache-2.0
 URL:            %{github}
 
-Source0:        %{github}/archive/%{version}/%{pkgname}-%{version}.tar.gz
+Source0:        https://github.com/spiermar/d3-flame-graph/archive/4.0.7/d3-flame-graph-4.0.7.tar.gz
 # Note: In case there were no changes to this tarball, the NVR of this tarball
 # lags behind the NVR of this package.
 Source1:        js-d3-flame-graph-vendor-%{version}-1.tar.xz
@@ -19,6 +19,10 @@ Source2:        Makefile
 Source3:        list_bundled_nodejs_packages.py
 
 Patch1:         001-remove-unused-frontend-crypto-and-patch-md4.patch
+# oreon url source checksums begin
+%global source0_sha256 83fbada3ba50f16993142dce679938bb41b4364d234538dbd08b1c1f1c89118e
+%global source0_file d3-flame-graph-4.0.7.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  web-assets-devel
 BuildRequires:  nodejs, /usr/bin/node
@@ -69,6 +73,9 @@ Documentation and example files for js-d3-flame-graph.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/d3-flame-graph-4.0.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "83fbada3ba50f16993142dce679938bb41b4364d234538dbd08b1c1f1c89118e" || { echo "oreon: Source0 SHA256 mismatch for d3-flame-graph-4.0.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -T -D -b 0 -n %{pkgname}-%{version}
 %setup -q -T -D -b 1 -n %{pkgname}-%{version}
 

@@ -7,14 +7,18 @@ Release:       %autorelease
 Summary:       A PKCS#11 provider for OpenSSL 3.0+
 License:       Apache-2.0
 URL:           https://github.com/latchset/pkcs11-provider
-Source0:       %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/latchset/pkcs11-provider/releases/download/v1.2.0/pkcs11-provider-1.2.0.tar.xz
 %if %{with gpgcheck}
-Source1:       %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz.asc
+Source1:        https://github.com/latchset/pkcs11-provider/releases/download/v1.2.0/pkcs11-provider-1.2.0.tar.xz.asc
 Source2:       https://people.redhat.com/~ssorce/simo_redhat.asc
 %endif
 Source3:       pkcs11-provider.conf
 # https://github.com/latchset/pkcs11-provider/pull/689
 Patch1:        0001-Fix-i686-build-failures-in-cipher.c.patch
+# oreon url source checksums begin
+%global source0_sha256 36a2f13859f3e2a9c74d1d4064f8d406689b0201e25968aba952010ed73bfec2
+%global source0_file pkcs11-provider-1.2.0.tar.xz
+# oreon url source checksums end
 
 
 BuildRequires: openssl-devel >= 3.0.7
@@ -46,6 +50,9 @@ compatible to previous versions as well.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pkcs11-provider-1.2.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "36a2f13859f3e2a9c74d1d4064f8d406689b0201e25968aba952010ed73bfec2" || { echo "oreon: Source0 SHA256 mismatch for pkcs11-provider-1.2.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{with gpgcheck}
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

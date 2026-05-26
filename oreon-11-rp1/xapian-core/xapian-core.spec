@@ -12,6 +12,10 @@ Summary:       The Xapian Probabilistic Information Retrieval Library
 License:       GPL-2.0-or-later
 URL:           https://www.xapian.org/
 Source0:       https://www.oligarchy.co.uk/xapian/%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 4edf9989499e8bc95085c9f7108ed41d69546c34c6eea81da0fa22d95043bf72
+%global source0_file xapian-core-1.4.30.tar.xz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gcc-c++
@@ -51,6 +55,9 @@ indexing and search facilities to applications. This package provides the
 files needed for building packages which use Xapian
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xapian-core-1.4.30.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4edf9989499e8bc95085c9f7108ed41d69546c34c6eea81da0fa22d95043bf72" || { echo "oreon: Source0 SHA256 mismatch for xapian-core-1.4.30.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

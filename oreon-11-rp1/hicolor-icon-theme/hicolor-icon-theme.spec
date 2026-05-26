@@ -6,6 +6,10 @@ Summary: Basic requirement for icon themes
 License: GPL-2.0-or-later
 URL: https://www.freedesktop.org/wiki/Software/icon-theme/
 Source0: https://icon-theme.freedesktop.org/releases/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 db0e50a80aa3bf64bb45cbca5cf9f75efd9348cf2ac690b907435238c3cf81d7
+%global source0_file hicolor-icon-theme-0.18.tar.xz
+# oreon url source checksums end
 
 BuildArch: noarch
 
@@ -15,6 +19,9 @@ BuildRequires: meson
 Contains the basic directories and files needed for icon theme support.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hicolor-icon-theme-0.18.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "db0e50a80aa3bf64bb45cbca5cf9f75efd9348cf2ac690b907435238c3cf81d7" || { echo "oreon: Source0 SHA256 mismatch for hicolor-icon-theme-0.18.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # for some reason this file is executable in the tarball

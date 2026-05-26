@@ -9,7 +9,7 @@ Version: 1.5.18
 Release: 17%{?dist}
 License: GPL-2.0-or-later
 URL: https://github.com/%{username}/%{name}
-Source0: %{url}/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/OpenPrinting/system-config-printer/releases/download/1.5.18/system-config-printer-1.5.18.tar.xz
 
 # all upstream patches, remove with new release
 Patch0001: 0001-Fix-debugprint-in-options.py-fixes-291.patch

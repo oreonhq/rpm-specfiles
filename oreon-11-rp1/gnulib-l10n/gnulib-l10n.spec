@@ -6,8 +6,8 @@ License:        GPL-3.0-or-later
 URL:            https://www.gnu.org/software/gnulib/
 BuildArch:      noarch
 
-Source0:        LICENSE
-Source1:        README.oreon
+Source0:        https://ftp.gnu.org/gnu/gnulib/%{name}-%{version}.tar.gz
+Source1:        https://ftp.gnu.org/gnu/gnulib/%{name}-%{version}.tar.gz.sig
 
 Provides:       gnulib-l10n = %{version}-%{release}
 

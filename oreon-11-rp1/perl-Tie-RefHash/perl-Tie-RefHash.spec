@@ -8,6 +8,10 @@ Summary:        Use references as hash keys
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tie-RefHash
 Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Tie-RefHash-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 48143505b176665896ac4276167c2cabe94ddb59c59d81610444f1bd36843138
+%global source0_file Tie-RefHash-1.41.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -55,6 +59,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Tie-RefHash-1.41.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "48143505b176665896ac4276167c2cabe94ddb59c59d81610444f1bd36843138" || { echo "oreon: Source0 SHA256 mismatch for Tie-RefHash-1.41.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Tie-RefHash-%{version}
 %if !%{with perl_Tie_RefHash_enables_optional_test}
 rm t/refhash.t

@@ -6,6 +6,10 @@ Summary:        Library to deal with pinyin
 License:        GPL-3.0-or-later
 URL:            https://github.com/libpinyin/libpinyin
 Source0:        http://downloads.sourceforge.net/libpinyin/libpinyin/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ff3047b19d17b82e26891abbe1bb354a9da3f66393c07c71072de0615e21788c
+%global source0_file libpinyin-2.11.91.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  kyotocabinet-devel, glib2-devel
@@ -52,6 +56,9 @@ The libzhuyin package contains libzhuyin compatibility library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libpinyin-2.11.91.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ff3047b19d17b82e26891abbe1bb354a9da3f66393c07c71072de0615e21788c" || { echo "oreon: Source0 SHA256 mismatch for libpinyin-2.11.91.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

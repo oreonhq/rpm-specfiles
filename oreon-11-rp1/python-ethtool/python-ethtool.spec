@@ -12,7 +12,11 @@ Summary:        Python module to interface with %{pypi_name}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            https://github.com/fedora-python/%{name}
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/e/ethtool/ethtool-0.15.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 567260ea5805063bbcff71dabd6fb820f89bc84f720e9ebe315c7eef1449d908
+%global source0_file ethtool-0.15.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 
@@ -38,6 +42,9 @@ PCI locations.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ethtool-0.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "567260ea5805063bbcff71dabd6fb820f89bc84f720e9ebe315c7eef1449d908" || { echo "oreon: Source0 SHA256 mismatch for ethtool-0.15.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pypi_name}-%{version}
 # Remove bundled egg-info
 rm -rf %{pypi_name}.egg-info

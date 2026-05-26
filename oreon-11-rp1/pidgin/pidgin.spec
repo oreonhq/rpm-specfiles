@@ -168,6 +168,10 @@ Patch1:         pidgin-2.14.4-valgrind.patch
 # https://issues.imfreedom.org/issue/PIDGIN-18152/Pidgin-Keeps-Crashing-and-I-dont-know-why
 # https://bugzilla.redhat.com/show_bug.cgi?id=2441401
 Patch100:       pidgin-rb4404.patch
+# oreon url source checksums begin
+%global source0_sha256 0ffc9994def10260f98a55cd132deefa8dc4a9835451cc0e982747bd458e2356
+%global source0_file pidgin-2.14.14.tar.bz2
+# oreon url source checksums end
 
 ## Patches 100+: To be Included in Future Upstream
 
@@ -460,6 +464,9 @@ Doxygen generated API documentation.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pidgin-2.14.14.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0ffc9994def10260f98a55cd132deefa8dc4a9835451cc0e982747bd458e2356" || { echo "oreon: Source0 SHA256 mismatch for pidgin-2.14.14.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 echo "FEDORA=%{fedora} RHEL=%{rhel}"
 %setup -q
 ## Patches 0-99: Fedora specific or upstream wont accept

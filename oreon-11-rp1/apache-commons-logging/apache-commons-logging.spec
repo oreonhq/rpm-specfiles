@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://archive.apache.org/dist/commons/logging/source/commons-logging-%{version}-src.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 52acdfbc1a1b916d7445bdb225e8d826fbdc99d381ccb43384fc7ae42cdaf3aa
+%global source0_file commons-logging-1.3.5-src.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -40,6 +44,9 @@ the two, and to allow a developer to not tie himself to a particular
 logging implementation.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/commons-logging-1.3.5-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "52acdfbc1a1b916d7445bdb225e8d826fbdc99d381ccb43384fc7ae42cdaf3aa" || { echo "oreon: Source0 SHA256 mismatch for commons-logging-1.3.5-src.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n commons-logging-%{version}-src
 
 %pom_remove_dep :avalon-framework

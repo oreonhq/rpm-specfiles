@@ -41,6 +41,10 @@ Patch1:     0001-xfree86-use-modesetting-driver-by-default-on-GeForce.patch
 Patch2:     0001-xf86-dri2-Use-va_gl-as-vdpau_driver-for-Intel-i965-G.patch
 # because the display-managers are not ready yet, do not upstream
 Patch3:     0001-Fedora-hack-Make-the-suid-root-wrapper-always-start-.patch
+# oreon url source checksums begin
+%global source0_sha256 1a242c8917c49ba29ccc1f6021613d8a2b9805dd0d271a66ae9d09f4b0bb06b3
+%global source0_file xorg-server-21.1.22.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  bison
 BuildRequires:  flex
@@ -223,6 +227,9 @@ Xserver source code needed to build VNC server (Xvnc).
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xorg-server-21.1.22.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1a242c8917c49ba29ccc1f6021613d8a2b9805dd0d271a66ae9d09f4b0bb06b3" || { echo "oreon: Source0 SHA256 mismatch for xorg-server-21.1.22.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{pkgname}-%{version}
 
 # check the ABI in the source against what we expect.

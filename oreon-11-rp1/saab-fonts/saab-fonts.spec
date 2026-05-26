@@ -19,10 +19,17 @@ Source10: 67-saab-fonts.conf
 #Font file itself does not add exception text, so add it manually
 #from http://guca.sourceforge.net/typography/fonts/saab/
 Source20: License_font_exception.txt
+# oreon url source checksums begin
+%global source0_sha256 2c0c73bdba4a51393e642e232f67ccb80fe516fe8b1b6a173283aa18a3769bd7
+%global source0_file saab.0.91.zip
+# oreon url source checksums end
 
 %fontpkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/saab.0.91.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c0c73bdba4a51393e642e232f67ccb80fe516fe8b1b6a173283aa18a3769bd7" || { echo "oreon: Source0 SHA256 mismatch for saab.0.91.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -c
 cp -p %{SOURCE20} .
 

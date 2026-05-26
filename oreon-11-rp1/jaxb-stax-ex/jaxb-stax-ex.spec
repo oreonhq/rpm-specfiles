@@ -7,7 +7,11 @@ URL:            https://github.com/eclipse-ee4j/jaxb-stax-ex
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-stax-ex/archive/2.1.0/jaxb-stax-ex-2.1.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e4241780478c837ead3adaa931f5d5cc4d4e22615e8439b3f9d37c8eff31f3c0
+%global source0_file jaxb-stax-ex-2.1.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)
@@ -30,6 +34,9 @@ the following areas:
 - Improve the namespace support.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jaxb-stax-ex-2.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e4241780478c837ead3adaa931f5d5cc4d4e22615e8439b3f9d37c8eff31f3c0" || { echo "oreon: Source0 SHA256 mismatch for jaxb-stax-ex-2.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %pom_remove_parent

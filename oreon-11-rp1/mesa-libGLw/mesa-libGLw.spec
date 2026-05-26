@@ -7,6 +7,10 @@ URL: http://www.mesa3d.org
 # archived project
 %global gitver b060a0782f09ebe4f60c8fd4564c11ba043c331f
 Source0: https://gitlab.freedesktop.org/mesa/glw/-/archive/%{gitver}/glw-%{gitver}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 84671643a479182b35a77756af9042070950d4a05f96cbf073fa5848622083da
+%global source0_file glw-b060a0782f09ebe4f60c8fd4564c11ba043c331f.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: autoconf automake libtool
@@ -39,6 +43,9 @@ Provides: libGLw-devel
 Mesa libGLw development package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/glw-b060a0782f09ebe4f60c8fd4564c11ba043c331f.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "84671643a479182b35a77756af9042070950d4a05f96cbf073fa5848622083da" || { echo "oreon: Source0 SHA256 mismatch for glw-b060a0782f09ebe4f60c8fd4564c11ba043c331f.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n glw-%{gitver}
 
 %build

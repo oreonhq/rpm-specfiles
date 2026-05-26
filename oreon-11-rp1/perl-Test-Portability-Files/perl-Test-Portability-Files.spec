@@ -5,6 +5,10 @@ Summary:        Check file names portability
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Portability-Files
 Source0:        https://cpan.metacpan.org/authors/id/A/AB/ABRAXXA/Test-Portability-Files-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 08e4b432492dc1b44b55d5db57952eb76379c7f434ee8f16aca64d491f401a16
+%global source0_file Test-Portability-Files-0.10.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  make
@@ -36,6 +40,9 @@ use the advice given in "Files and Filesystems" in perlport. The author of
 a distribution can select which tests to execute.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Portability-Files-0.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "08e4b432492dc1b44b55d5db57952eb76379c7f434ee8f16aca64d491f401a16" || { echo "oreon: Source0 SHA256 mismatch for Test-Portability-Files-0.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Portability-Files-%{version}
 
 %build

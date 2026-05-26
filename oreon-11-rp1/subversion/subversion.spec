@@ -69,6 +69,10 @@ Patch10: subversion-1.14.5-python314.patch
 Patch11: subversion-1.14.5-davgetpath.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2405291
 Patch12: subversion-1.14.5-r1929560.patch
+# oreon url source checksums begin
+%global source0_sha256 e78a29e7766b8b7b354497d08f71a55641abc53675ce1875584781aae35644a1
+%global source0_file subversion-1.14.5.tar.bz2
+# oreon url source checksums end
 BuildRequires: make
 BuildRequires: libxcrypt-devel
 BuildRequires: autoconf, libtool, texinfo, which, gcc, gcc-c++
@@ -228,6 +232,9 @@ Requires: subversion-libs%{?_isa} = %{version}-%{release}
 This package includes supplementary tools for use with Subversion.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/subversion-1.14.5.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e78a29e7766b8b7b354497d08f71a55641abc53675ce1875584781aae35644a1" || { echo "oreon: Source0 SHA256 mismatch for subversion-1.14.5.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -S gendiff
 
 :

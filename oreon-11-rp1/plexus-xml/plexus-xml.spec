@@ -19,6 +19,10 @@ Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{ver
 Patch:          0001-Upgrade-to-Maven-4.0.0-rc-2.patch
 # https://github.com/codehaus-plexus/plexus-xml/pull/65
 Patch:          0002-Bump-org.apache.maven-maven-xml-from-4.0.0-rc-3-to-4.patch
+# oreon url source checksums begin
+%global source0_sha256 82359f0a2e638a7cd30f46888dc892b262915a7145a57303b0256d01fac2c9d8
+%global source0_file plexus-xml-4.0.4.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -34,6 +38,9 @@ Obsoletes:      %{name}-javadoc < 4.0.4-5
 A collection of various utility classes to ease working with XML.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plexus-xml-4.0.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "82359f0a2e638a7cd30f46888dc892b262915a7145a57303b0256d01fac2c9d8" || { echo "oreon: Source0 SHA256 mismatch for plexus-xml-4.0.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

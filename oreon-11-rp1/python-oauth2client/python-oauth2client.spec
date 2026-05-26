@@ -14,6 +14,10 @@ Source0:        https://github.com/google/%{srcname}/archive/v%{version}.tar.gz#
 Patch0:         docs-build-fix.patch
 Patch1:         doc-fix.patch
 Patch2:         keyring-remove.patch
+# oreon url source checksums begin
+%global source0_sha256 65a05310e3f16b930454aed7bed619edca8025ba96324c3e9b57dd508f1a014f
+%global source0_file v4.1.3.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 #BuildRequires:  %%{_bindir}/tox
@@ -40,6 +44,9 @@ Requires:       python3-fasteners
 This is a python client module for accessing resources protected by OAuth 2.0
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v4.1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "65a05310e3f16b930454aed7bed619edca8025ba96324c3e9b57dd508f1a014f" || { echo "oreon: Source0 SHA256 mismatch for v4.1.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{srcname}-%{version}
 %patch -P0 -p1 -b .doc
 %patch -P1 -p1 -b .doc2

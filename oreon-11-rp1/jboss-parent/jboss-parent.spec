@@ -11,6 +11,10 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/jboss/jboss-parent-pom/archive/%{name}-%{version}.tar.gz
 Source1:        http://repository.jboss.org/licenses/cc0-1.0.txt
+# oreon url source checksums begin
+%global source0_sha256 c7a9309394c3d533dc954e4e6e78590644da4eee5259becba692780ee392cc76
+%global source0_file jboss-parent-20.tar.gz
+# oreon url source checksums end
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local
@@ -24,6 +28,9 @@ BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 The Project Object Model files for JBoss packages.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jboss-parent-20.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c7a9309394c3d533dc954e4e6e78590644da4eee5259becba692780ee392cc76" || { echo "oreon: Source0 SHA256 mismatch for jboss-parent-20.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-pom-%{name}-%{version}
 
 # NOT available plugins

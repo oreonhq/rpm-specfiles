@@ -6,6 +6,10 @@ License: AGPL-3.0-only
 URL: http://hspell.ivrix.org.il/
 Source: http://hspell.ivrix.org.il/%{name}-%{version}.tar.gz
 Patch0: 0001-require-local-module-explicitly.patch
+# oreon url source checksums begin
+%global source0_sha256 7310f5d58740d21d6d215c1179658602ef7da97a816bc1497c8764be97aabea3
+%global source0_file hspell-1.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc, make, hunspell-devel
 BuildRequires:  perl-generators, perl-interpreter, zlib-devel
@@ -44,6 +48,9 @@ Requires: hunspell
 Hebrew hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hspell-1.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7310f5d58740d21d6d215c1179658602ef7da97a816bc1497c8764be97aabea3" || { echo "oreon: Source0 SHA256 mismatch for hspell-1.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P 0 -p1 -b .localreq
 /usr/bin/iconv -f hebrew -t utf8 -o WHATSNEW WHATSNEW

@@ -5,6 +5,10 @@ Summary:    Intelligent Pinyin engine based on libpinyin for IBus
 License:    GPL-3.0-or-later
 URL:        https://github.com/libpinyin/ibus-libpinyin
 Source0:    http://downloads.sourceforge.net/libpinyin/ibus-libpinyin/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 cc652d48e68b8b03afc5e9e08509676aee89f9d492b9a3897cd028bcc800ce31
+%global source0_file ibus-libpinyin-1.16.5.tar.gz
+# oreon url source checksums end
 
 Requires:       python3-gobject
 Requires:       ibus >= 1.5.11
@@ -33,6 +37,9 @@ It includes a Chinese Pinyin input method and a Chinese ZhuYin (Bopomofo)
 input method based on libpinyin for IBus.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ibus-libpinyin-1.16.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cc652d48e68b8b03afc5e9e08509676aee89f9d492b9a3897cd028bcc800ce31" || { echo "oreon: Source0 SHA256 mismatch for ibus-libpinyin-1.16.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

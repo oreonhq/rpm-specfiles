@@ -20,6 +20,10 @@ Buildrequires: libtool automake autoconf
 
 Patch: libotr-4.1.1-versioning.patch
 Patch: libotr-4.1.1-socket-h.patch
+# oreon url source checksums begin
+%global source0_sha256 8b3b182424251067a952fb4e6c7b95a21e644fbb27fbd5f8af2b2ed87ca419f5
+%global source0_file libotr-4.1.1.tar.gz
+# oreon url source checksums end
 
 %description
 Off-the-Record Messaging Library and Toolkit
@@ -36,6 +40,9 @@ Conflicts: libotr3-devel
 The devel package contains the libotr library and include files.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libotr-4.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b3b182424251067a952fb4e6c7b95a21e644fbb27fbd5f8af2b2ed87ca419f5" || { echo "oreon: Source0 SHA256 mismatch for libotr-4.1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %if %{snapshot}

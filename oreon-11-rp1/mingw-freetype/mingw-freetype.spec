@@ -18,6 +18,10 @@ Patch0:         freetype-2.3.0-enable-spr.patch
 Patch1:         freetype-2.2.1-enable-valid.patch
 # Re-add symbol downstream for ABI compatibility only. Remove once soname has been bumped from -6.
 Patch2:         freetype-2.10.0-internal-outline.patch
+# oreon url source checksums begin
+%global source0_sha256 32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc
+%global source0_file freetype-2.14.1.tar.xz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -74,6 +78,9 @@ Static version of the MinGW Windows Freetype library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/freetype-2.14.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc" || { echo "oreon: Source0 SHA256 mismatch for freetype-2.14.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n freetype-%{version}
 
 

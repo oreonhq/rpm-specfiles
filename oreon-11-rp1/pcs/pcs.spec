@@ -61,7 +61,7 @@ BuildArch: noarch
 %endif
 
 # part after the last slash is recognized as filename in look-aside cache
-Source0: %{url}/archive/%{?v_prefix}%{version_or_commit}/%{pcs_source_name}.tar.gz
+Source0:        https://github.com/ClusterLabs/pcs/archive/v0.12.2/pcs-0.12.2.tar.gz
 
 Source41: https://github.com/ondrejmular/pyagentx/archive/v%{pyagentx_version}/pyagentx-%{pyagentx_version}.tar.gz
 Source42: https://github.com/konradhalas/dacite/archive/v%{dacite_version}/dacite-%{dacite_version}.tar.gz
@@ -75,6 +75,18 @@ Source101: https://github.com/ClusterLabs/pcs-web-ui/releases/download/%{ui_vers
 Patch1: show-info-page-instead-of-webui.patch
 Patch2: drop-dependency-on-rubygem-cgi.patch
 Patch3: typing-fixes-for-python-3.15.patch
+# oreon url source checksums begin
+%global source0_sha256 d74cda35bcaec3efac7f032944adb6cfac8a496f8f93c93315ad1ab586e1f74b
+%global source0_file pcs-0.12.2.tar.gz
+%global source41_sha256 9aa8ec276e253ab8fffe04b786e322a1c1fe988e5e2af06fb617a43a4413d139
+%global source41_file pyagentx-0.4.pcs.2.tar.gz
+%global source42_sha256 cec83bf402dc6ac0e5a2030500ef7296ad4d5c77e756475252b99e89a4d5ebfa
+%global source42_file dacite-1.9.2.tar.gz
+%global source100_sha256 8ddc952a290821bde82a158dae0591aff2a0218e26f35d0b8decb9c672609a0f
+%global source100_file pcs-web-ui-0.1.24.2.tar.gz
+%global source101_sha256 3543108bb93f27ef00cd1c4381ac9a5b160ab8a1481a8a1df6359d0799fc18c5
+%global source101_file pcs-web-ui-node-modules-0.1.24.2.tar.xz
+# oreon url source checksums end
 
 # ui patches: >200
 # Patch201: name-web-ui.patch
@@ -280,6 +292,13 @@ Pacemaker/Corosync Configuration System (pcs) in the background.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pcs-0.12.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d74cda35bcaec3efac7f032944adb6cfac8a496f8f93c93315ad1ab586e1f74b" || { echo "oreon: Source0 SHA256 mismatch for pcs-0.12.2.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/pyagentx-0.4.pcs.2.tar.gz; test -f "$f" || { echo "oreon: missing Source41 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9aa8ec276e253ab8fffe04b786e322a1c1fe988e5e2af06fb617a43a4413d139" || { echo "oreon: Source41 SHA256 mismatch for pyagentx-0.4.pcs.2.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/dacite-1.9.2.tar.gz; test -f "$f" || { echo "oreon: missing Source42 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cec83bf402dc6ac0e5a2030500ef7296ad4d5c77e756475252b99e89a4d5ebfa" || { echo "oreon: Source42 SHA256 mismatch for dacite-1.9.2.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/pcs-web-ui-0.1.24.2.tar.gz; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8ddc952a290821bde82a158dae0591aff2a0218e26f35d0b8decb9c672609a0f" || { echo "oreon: Source100 SHA256 mismatch for pcs-web-ui-0.1.24.2.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/pcs-web-ui-node-modules-0.1.24.2.tar.xz; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3543108bb93f27ef00cd1c4381ac9a5b160ab8a1481a8a1df6359d0799fc18c5" || { echo "oreon: Source101 SHA256 mismatch for pcs-web-ui-node-modules-0.1.24.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 # -- following is inspired by python-simplejon.el5 --
 # Update timestamps on the files touched by a patch, to avoid non-equal
 # .pyc/.pyo files across the multilib peers within a build

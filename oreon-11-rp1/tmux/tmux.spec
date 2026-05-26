@@ -10,6 +10,10 @@ URL:            https://tmux.github.io/
 Source0:        https://github.com/tmux/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source2:        tmux@.service
 Source3:        README.polkit
+# oreon url source checksums begin
+%global source0_sha256 b6d8d9c76585db8ef5fa00d4931902fa4b8cbe8166f528f44fc403961a3f3759
+%global source0_file tmux-3.6a.tar.gz
+# oreon url source checksums end
 BuildRequires:  byacc
 BuildRequires:  gcc
 BuildRequires:  systemd-devel
@@ -30,6 +34,9 @@ intended to be a simple, modern, BSD-licensed alternative to programs such
 as GNU Screen.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tmux-3.6a.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b6d8d9c76585db8ef5fa00d4931902fa4b8cbe8166f528f44fc403961a3f3759" || { echo "oreon: Source0 SHA256 mismatch for tmux-3.6a.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

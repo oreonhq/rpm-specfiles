@@ -8,6 +8,10 @@ Epoch:		1
 License:	BSD-3-Clause
 URL:		https://www.xiph.org/
 Source:		https://downloads.xiph.org/releases/vorbis/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b
+%global source0_file libvorbis-1.3.7.tar.xz
+# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:	pkgconfig(ogg) >= 1.0
 BuildRequires: make
@@ -38,6 +42,9 @@ Documentation for developing applications with libvorbis.
 
 %prep
 
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libvorbis-1.3.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b33cc4934322bcbf6efcbacf49e3ca01aadbea4114ec9589d1b1e9d20f72954b" || { echo "oreon: Source0 SHA256 mismatch for libvorbis-1.3.7.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 sed -i "s/-ffast-math//" configure
 sed -i "s/-mcpu=750//" configure

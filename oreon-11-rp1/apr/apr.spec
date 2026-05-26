@@ -30,6 +30,10 @@ Patch1: apr-1.7.2-libdir.patch
 Patch2: apr-1.2.7-pkgconf.patch
 Patch3: apr-1.7.0-deepbind.patch
 Patch4: apr-1.7.6-autoconf.patch
+# oreon url source checksums begin
+%global source0_sha256 49030d92d2575da735791b496dc322f3ce5cff9494779ba8cc28c7f46c5deb32
+%global source0_file apr-1.7.6.tar.bz2
+# oreon url source checksums end
 BuildRequires: gcc, autoconf, libtool, libuuid-devel, python3
 BuildRequires: make
 BuildRequires: libxcrypt-devel
@@ -52,6 +56,9 @@ Apache Portable Runtime (APR) is to provide a free library of
 C data structures and routines.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/apr-1.7.6.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "49030d92d2575da735791b496dc322f3ce5cff9494779ba8cc28c7f46c5deb32" || { echo "oreon: Source0 SHA256 mismatch for apr-1.7.6.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -S gendiff
 
 %build

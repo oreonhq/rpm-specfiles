@@ -26,6 +26,10 @@ Patch0:	    intel-gcc-pr65873.patch
 Patch1:     0001-sna-Avoid-clobbering-output-physical-size-with-xf86O.patch
 # https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/issues/180
 Patch2:     xvmc-workaround.patch
+# oreon url source checksums begin
+%global source0_sha256 00b781eea055582820a123c47b62411bdf6aabf4f03dc0568faec55faf9667c9
+%global source0_file xf86-video-intel-2.99.917.tar.bz2
+# oreon url source checksums end
 
 ExclusiveArch: %{ix86} x86_64
 
@@ -73,6 +77,9 @@ Requires: polkit
 X.Org X11 Intel video driver.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xf86-video-intel-2.99.917.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "00b781eea055582820a123c47b62411bdf6aabf4f03dc0568faec55faf9667c9" || { echo "oreon: Source0 SHA256 mismatch for xf86-video-intel-2.99.917.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?tag:1}
 %autosetup -p1 -n xf86-video-intel-%{version}
 %else

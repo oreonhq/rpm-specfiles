@@ -23,9 +23,9 @@ Summary:        Parsing and printing of S-expressions in canonical form
 License:        MIT
 URL:            https://ocaml-dune.github.io/csexp/
 VCS:            git:%{giturl}.git
-Source:         %{giturl}/releases/download/%{version}/csexp-%{version}.tbz
+Source:        https://github.com/ocaml-dune/csexp/releases/download/1.5.2/csexp-1.5.2.tbz
 # Fix an optimization annotation
-Patch:          %{giturl}/commit/07eb898.patch
+Patch:        https://github.com/ocaml-dune/csexp/commit/07eb898.patch
 
 BuildRequires:  ocaml >= 4.03.0
 %if %{with dune}

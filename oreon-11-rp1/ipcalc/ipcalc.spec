@@ -5,6 +5,10 @@ Summary: IP network address calculator
 License: GPL-2.0-or-later
 URL: https://gitlab.com/ipcalc/ipcalc
 Source0: https://gitlab.com/ipcalc/ipcalc/-/archive/%{version}/ipcalc-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 451f323764f37ea6057e0ade60a0473938232ab2a92b97ffdc8c4860a8c76cfc
+%global source0_file ipcalc-1.0.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc, libmaxminddb-devel, meson, rubygem-ronn-ng
 Recommends:    libmaxminddb, geolite2-city, geolite2-country
@@ -23,6 +27,9 @@ parsing in scripts, generate random private addresses, resolve an IP address,
 or check the validity of an address.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ipcalc-1.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "451f323764f37ea6057e0ade60a0473938232ab2a92b97ffdc8c4860a8c76cfc" || { echo "oreon: Source0 SHA256 mismatch for ipcalc-1.0.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

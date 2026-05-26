@@ -9,6 +9,10 @@ Summary:        Guessing reasonable defaults for locale, keyboard layout, territ
 License:        GPL-3.0-or-later
 URL:            https://github.com/mike-fabian/langtable
 Source0:        https://github.com/mike-fabian/langtable/releases/download/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 725b94121856a3b76d2345e8596954b82ed1eda78513e55ac55fbe4a4823e66e
+%global source0_file langtable-0.0.70.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  perl-interpreter
 BuildRequires:  python3-devel
@@ -32,6 +36,9 @@ This package contains a Python module to query the data
 from langtable-data.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/langtable-0.0.70.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "725b94121856a3b76d2345e8596954b82ed1eda78513e55ac55fbe4a4823e66e" || { echo "oreon: Source0 SHA256 mismatch for langtable-0.0.70.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %generate_buildrequires

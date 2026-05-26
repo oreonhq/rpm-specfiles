@@ -8,10 +8,14 @@ Summary:        Collection of tools, libraries, and tests for Vulkan shader comp
 
 License:        Apache-2.0
 URL:            https://github.com/google/shaderc
-Source:         %{url}/archive/%{glslang_version}.tar.gz
+Source:        https://github.com/google/shaderc/archive/301b4ede53d59b68bf55f95bb26412d9233c8187.tar.gz
 # Patch to unbundle 3rd party code
 Patch:          0001-Drop-third-party-code-in-CMakeLists.txt.patch
 Patch:          glslang_linker_flags.patch
+# oreon url source checksums begin
+%global source0_sha256 b938f85dec78ca7eb8139dcd1f613930eb7a84a8ce5ea944b6f861c291d916bc
+%global source0_file 301b4ede53d59b68bf55f95bb26412d9233c8187.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -65,6 +69,9 @@ A library for compiling shader strings into SPIR-V.
 Static libraries for libshaderc.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/301b4ede53d59b68bf55f95bb26412d9233c8187.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b938f85dec78ca7eb8139dcd1f613930eb7a84a8ce5ea944b6f861c291d916bc" || { echo "oreon: Source0 SHA256 mismatch for 301b4ede53d59b68bf55f95bb26412d9233c8187.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{glslang_version}
 
 rm -r third_party

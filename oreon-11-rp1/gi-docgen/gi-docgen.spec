@@ -83,7 +83,7 @@ SourceLicense:  %{shrink:
                 OFL-1.1
                 }
 URL:            https://gitlab.gnome.org/GNOME/gi-docgen
-Source:         %{url}/-/archive/%{version}/gi-docgen-%{version}.tar.bz2
+Source:        https://gitlab.gnome.org/GNOME/gi-docgen/-/archive/2026.1/gi-docgen-2026.1.tar.bz2
 
 # We are prohibited from bundling fonts, and we are prohibited from shipping
 # fonts in web font formats; see
@@ -96,6 +96,10 @@ Source:         %{url}/-/archive/%{version}/gi-docgen-%{version}.tar.bz2
 # must remove in %%prep) and ensures the CSS correctly references corresponding
 # or stand-in local system fonts.
 Patch:          0001-Downstream-only-use-local-packaged-fonts-instead-of-.patch
+# oreon url source checksums begin
+%global source0_sha256 24123f3e2beb2246790b5875b9cdd1109481cba4139d63ad824de8f33012041d
+%global source0_file gi-docgen-2026.1.tar.bz2
+# oreon url source checksums end
 
 BuildSystem:            pyproject
 BuildOption(install):   gidocgen

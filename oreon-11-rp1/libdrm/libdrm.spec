@@ -55,7 +55,7 @@ License:        MIT
 %global lib_version %(echo %{version} | sed "s/.*\\.//")
 
 URL:            https://dri.freedesktop.org
-Source0:        %{url}/libdrm/%{name}-%{version}.tar.xz
+Source0:        https://dri.freedesktop.org/libdrm/libdrm-2.4.131.tar.xz
 Source1:        README.rst
 Source2:        91-drm-modeset.rules
 
@@ -84,6 +84,10 @@ BuildRequires:  chrpath
 Patch1001:      libdrm-make-dri-perms-okay.patch
 # remove backwards compat not needed on Fedora
 Patch1002:      libdrm-2.4.0-no-bc.patch
+# oreon url source checksums begin
+%global source0_sha256 45ba9983b51c896406a3d654de81d313b953b76e6391e2797073d543c5f617d5
+%global source0_file libdrm-2.4.131.tar.xz
+# oreon url source checksums end
 
 %description
 Direct Rendering Manager runtime library
@@ -106,6 +110,9 @@ Utility programs for the kernel DRM interface.  Will void your warranty.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdrm-2.4.131.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "45ba9983b51c896406a3d654de81d313b953b76e6391e2797073d543c5f617d5" || { echo "oreon: Source0 SHA256 mismatch for libdrm-2.4.131.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

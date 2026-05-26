@@ -27,6 +27,10 @@ extended to cover the full Unicode Arabic repertoire.
 
 Source0:    https://software.sil.org/downloads/r/scheherazade/ScheherazadeNew-%{version}.zip
 Source1:    65-%{fontpkgname1}.conf
+# oreon url source checksums begin
+%global source0_sha256 fe526c7a2e234f2f08ce3d8f58611ba37bb0495940510767697c034288ba61c3
+%global source0_file ScheherazadeNew-3.300.zip
+# oreon url source checksums end
 
 Name:       sil-scheherazade-fonts
 Summary:    An Arabic script unicode font 
@@ -38,6 +42,9 @@ License:    OFL-1.1
 %fontpkg -a
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ScheherazadeNew-3.300.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fe526c7a2e234f2f08ce3d8f58611ba37bb0495940510767697c034288ba61c3" || { echo "oreon: Source0 SHA256 mismatch for ScheherazadeNew-3.300.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n ScheherazadeNew-%{version}
 rm -rf documentation/source documentation/pdf
 %linuxtext FONTLOG.txt OFL.txt OFL-FAQ.txt README.txt documentation/DOCUMENTATION.txt documentation/assets/css/*

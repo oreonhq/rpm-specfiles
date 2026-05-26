@@ -6,6 +6,10 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-AutoLicense
 Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-Install-AutoLicense-%{version}.tar.gz
 Patch0:         Use-Module-Install-AutoLicense-for-tarball.patch
+# oreon url source checksums begin
+%global source0_sha256 5bd263365f0375ceb988cab6d3e4418695afa3ece770db12768974cee77aefe0
+%global source0_file Module-Install-AutoLicense-0.10.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -43,6 +47,9 @@ a LICENSE file automatically whenever the author runs Makefile.PL. On the
 user side it does nothing.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Install-AutoLicense-0.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5bd263365f0375ceb988cab6d3e4418695afa3ece770db12768974cee77aefe0" || { echo "oreon: Source0 SHA256 mismatch for Module-Install-AutoLicense-0.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Install-AutoLicense-%{version}
 %patch -P0 -p1
 rm -r inc

@@ -12,6 +12,10 @@ Summary:        Object interface to System V IPC
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IPC-SysV
 Source0:        https://cpan.metacpan.org/authors/id/M/MH/MHX/IPC-SysV-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1897541c74d548fd1007eb6c07f3419d3c7575d8056a62b5ba5270a2166d2dbd
+%global source0_file IPC-SysV-2.09.tar.gz
+# oreon url source checksums end
 %if !%{with perl_IPC_SysV_enables_optional_test} || %{defined perl_bootstrap}
 BuildRequires:  coreutils
 %endif
@@ -58,6 +62,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IPC-SysV-2.09.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1897541c74d548fd1007eb6c07f3419d3c7575d8056a62b5ba5270a2166d2dbd" || { echo "oreon: Source0 SHA256 mismatch for IPC-SysV-2.09.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IPC-SysV-%{version}
 %if !%{with perl_IPC_SysV_enables_optional_test} || %{defined perl_bootstrap}
 rm t/pod*

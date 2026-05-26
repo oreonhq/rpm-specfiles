@@ -12,6 +12,10 @@ Summary:        A basic GTK clutter widget
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            http://www.clutter-project.org
 Source0:        http://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 521493ec038973c77edcb8bc5eac23eed41645117894aaee7300b2487cb42b06
+%global source0_file clutter-gtk-1.8.4.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  clutter-devel >= %{clutter_version}
 BuildRequires:  gtk3-devel >= %{gtk3_version}
@@ -36,6 +40,9 @@ clutter-gtk.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/clutter-gtk-1.8.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "521493ec038973c77edcb8bc5eac23eed41645117894aaee7300b2487cb42b06" || { echo "oreon: Source0 SHA256 mismatch for clutter-gtk-1.8.4.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 

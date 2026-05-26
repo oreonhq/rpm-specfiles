@@ -25,7 +25,11 @@ Summary:        An enhanced interactive Python shell
 # which are MIT licensed
 License:        BSD-3-Clause AND MIT
 URL:            http://ipython.org/
-Source0:        %pypi_source
+Source0:        https://files.pythonhosted.org/packages/source/i/ipython/ipython-9.10.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 cd9e656be97618a0676d058134cd44e6dc7012c0e5cb36a9ce96a8c904adaf77
+%global source0_file ipython-9.10.0.tar.gz
+# oreon url source checksums end
 
 # Unset -s on python shebang - ensure that packages installed with pip
 # to user locations are seen and properly loaded.
@@ -122,6 +126,9 @@ This package contains the documentation of %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ipython-9.10.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cd9e656be97618a0676d058134cd44e6dc7012c0e5cb36a9ce96a8c904adaf77" || { echo "oreon: Source0 SHA256 mismatch for ipython-9.10.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Remove shebangs

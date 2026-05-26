@@ -5,6 +5,10 @@ Release: 3%{?dist}
 License: GPL-2.0-or-later
 URL: https://ctags.io/
 Source0: https://github.com/universal-ctags/ctags/releases/download/v%{version}/universal-%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2c63efe9e0e083dc50e6fdd8c5414781cc8873d8c8940cf553c01870ed962f8c
+%global source0_file universal-ctags-6.2.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: autoconf
 BuildRequires: automake
@@ -37,6 +41,9 @@ objects found in source files.
 Install ctags if you are going to use your system for C programming.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/universal-ctags-6.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c63efe9e0e083dc50e6fdd8c5414781cc8873d8c8940cf553c01870ed962f8c" || { echo "oreon: Source0 SHA256 mismatch for universal-ctags-6.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n universal-%{name}-%{version}
 
 %build

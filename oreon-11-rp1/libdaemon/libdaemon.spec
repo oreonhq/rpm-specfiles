@@ -5,6 +5,10 @@ Summary: Library for writing UNIX daemons
 License: LGPL-2.1-or-later
 URL: http://0pointer.de/lennart/projects/libdaemon/
 Source0: http://0pointer.de/lennart/projects/libdaemon/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 fd23eb5f6f986dcc7e708307355ba3289abe03cc381fc47a80bca4a50aa6b834
+%global source0_file libdaemon-0.14.tar.gz
+# oreon url source checksums end
 
 # Requires lynx to build the docs
 BuildRequires:  gcc
@@ -33,6 +37,9 @@ The libdaemon-devel package contains the header files and libraries
 necessary for developing programs using libdaemon.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdaemon-0.14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fd23eb5f6f986dcc7e708307355ba3289abe03cc381fc47a80bca4a50aa6b834" || { echo "oreon: Source0 SHA256 mismatch for libdaemon-0.14.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

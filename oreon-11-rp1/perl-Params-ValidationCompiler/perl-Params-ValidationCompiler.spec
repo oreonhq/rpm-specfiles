@@ -11,7 +11,12 @@ Release:	9%{?dist}
 Summary:	Build an optimized subroutine parameter validator once, use it forever
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Params-ValidationCompiler
-Source0:	https://cpan.metacpan.org/modules/by-module/Params/Params-ValidationCompiler-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Params-ValidationCompiler-0.31.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7b6497173f1b6adb29f5d51d8cf9ec36d2f1219412b4b2410e9d77a901e84a6d
+%global source0_file Params-ValidationCompiler-0.31.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
@@ -64,6 +69,9 @@ Create a customized, optimized, non-lobotomized, uncompromised, and thoroughly
 specialized parameter checking subroutine.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Params-ValidationCompiler-0.31.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b6497173f1b6adb29f5d51d8cf9ec36d2f1219412b4b2410e9d77a901e84a6d" || { echo "oreon: Source0 SHA256 mismatch for Params-ValidationCompiler-0.31.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Params-ValidationCompiler-%{version}
 
 %build

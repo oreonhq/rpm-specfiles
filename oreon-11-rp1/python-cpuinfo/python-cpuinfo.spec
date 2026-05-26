@@ -12,6 +12,10 @@ Source0:        https://files.pythonhosted.org/packages/source/p/py-%{srcname}/p
 
 # s390x support
 Patch0:         py-cpuinfo-s390x.patch
+# oreon url source checksums begin
+%global source0_sha256 3cdbbf3fac90dc6f118bfd64384f309edeadd902d7c8fb17f02ffa1fc3f49690
+%global source0_file py-cpuinfo-9.0.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -49,6 +53,9 @@ These approaches are used for getting info:
     Querying x86 CPUID register
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/py-cpuinfo-9.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3cdbbf3fac90dc6f118bfd64384f309edeadd902d7c8fb17f02ffa1fc3f49690" || { echo "oreon: Source0 SHA256 mismatch for py-cpuinfo-9.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n py-%{srcname}-%{version}
 rm -rf *.egg-info
 

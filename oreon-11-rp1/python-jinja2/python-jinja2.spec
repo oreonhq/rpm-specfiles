@@ -6,7 +6,11 @@ Release:        7%{?dist}
 Summary:        General purpose template engine
 License:        BSD-3-Clause
 URL:            https://palletsprojects.com/p/jinja/
-Source0:        %{pypi_source %srcname}
+Source0:        https://files.pythonhosted.org/packages/source/j/jinja2/jinja2-3.1.6.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d
+%global source0_file jinja2-3.1.6.tar.gz
+# oreon url source checksums end
 
 # Enable building without docs to avoid a circular dependency between this
 # and python-sphinx:
@@ -54,6 +58,9 @@ BuildRequires:  python3-sphinx-issues
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jinja2-3.1.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d" || { echo "oreon: Source0 SHA256 mismatch for jinja2-3.1.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{srcname}-%{version}
 
 

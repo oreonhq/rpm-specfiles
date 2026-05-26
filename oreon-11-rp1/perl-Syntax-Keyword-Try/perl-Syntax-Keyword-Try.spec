@@ -12,6 +12,10 @@ Summary:        try/catch/finally syntax for perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Syntax-Keyword-Try/
 Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Syntax-Keyword-Try-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7bc6242d746378982a599b34de35f07d3decc9e09d5646f8fa3b87f459414a4a
+%global source0_file Syntax-Keyword-Try-0.31.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -67,6 +71,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Syntax-Keyword-Try-0.31.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7bc6242d746378982a599b34de35f07d3decc9e09d5646f8fa3b87f459414a4a" || { echo "oreon: Source0 SHA256 mismatch for Syntax-Keyword-Try-0.31.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Syntax-Keyword-Try-%{version}
 
 %if %{without perl_Syntax_Keyword_Try_enables_extra_tests}

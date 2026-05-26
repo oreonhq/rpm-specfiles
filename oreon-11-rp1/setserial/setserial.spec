@@ -13,6 +13,10 @@ Patch4: setserial-hayesesp.patch
 Patch5: setserial-aarch64.patch
 Patch6: setserial-configure-c99.patch
 Patch7: setserial-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a
+%global source0_file setserial-2.17.tar.gz
+# oreon url source checksums end
 License: GPL-1.0-or-later
 URL: http://setserial.sourceforge.net/
 ExcludeArch: s390 s390x
@@ -27,6 +31,9 @@ port information. Setserial can reveal and allow you to alter the I/O
 port and IRQ that a particular serial device is using, and more.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/setserial-2.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7e4487d320ac31558563424189435d396ddf77953bb23111a17a3d1487b5794a" || { echo "oreon: Source0 SHA256 mismatch for setserial-2.17.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 # Use FHS directory layout.
 %patch -P0 -p1 -b .fhs

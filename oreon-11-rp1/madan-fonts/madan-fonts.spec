@@ -34,10 +34,17 @@ Source3: sfd2ttf.pe
 Source4: madan.py
 Source5: madan_u0970_glyph.svg
 Source6: madan.ttf
+# oreon url source checksums begin
+%global source0_sha256 0c325228d16ea798ff5b2a2ebc685fcca0237ea23f08e9336ad98905a4dc9e3e
+%global source0_file fonts.zip
+# oreon url source checksums end
 
 %fontpkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fonts.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0c325228d16ea798ff5b2a2ebc685fcca0237ea23f08e9336ad98905a4dc9e3e" || { echo "oreon: Source0 SHA256 mismatch for fonts.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{with build_from_src}
 %autosetup -c
 cp -p %{SOURCE2} %{SOURCE3} \

@@ -8,6 +8,10 @@ Summary: Kernel crash dump collection utilities
 License: GPL-2.0-only
 URL: https://github.com/rhkdump/kdump-utils
 Source0: https://github.com/rhkdump/kdump-utils/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6fc7db1c5c2eff73c98b37377515ebc2c3d0281f439bc9ffbc77166d881db047
+%global source0_file kdump-utils-1.0.60.tar.gz
+# oreon url source checksums end
 
 %ifarch ppc64 ppc64le
 Requires(post): servicelog
@@ -38,6 +42,9 @@ kdump kernel and initramfs to save the collected crash kernel dump to specified
 target.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kdump-utils-1.0.60.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6fc7db1c5c2eff73c98b37377515ebc2c3d0281f439bc9ffbc77166d881db047" || { echo "oreon: Source0 SHA256 mismatch for kdump-utils-1.0.60.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %install

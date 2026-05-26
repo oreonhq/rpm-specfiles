@@ -14,6 +14,10 @@ Patch2:	libsndfile-1.2.2-stdbool.patch
 # Test sdlcomp_test_short fails with opus version 1.6
 # https://github.com/libsndfile/libsndfile/issues/1107
 Patch3: libsndfile-1.2.2-tests-opus.patch
+# oreon url source checksums begin
+%global source0_sha256 3799ca9924d3125038880367bf1468e53a1b7e3686a934f098b7e1d286cdb80e
+%global source0_file libsndfile-1.2.2.tar.xz
+# oreon url source checksums end
 
 %if %{undefined rhel}
 # used to regenerate test .c sources from .def files
@@ -67,6 +71,9 @@ This package contains command line utilities for libsndfile.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libsndfile-1.2.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3799ca9924d3125038880367bf1468e53a1b7e3686a934f098b7e1d286cdb80e" || { echo "oreon: Source0 SHA256 mismatch for libsndfile-1.2.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b .system-gsm
 %patch -P 1 -p1 -b .cve-2024-50612

@@ -5,6 +5,10 @@ Summary:	Python bindings to augeas
 License:	LGPL-2.1-or-later
 URL:		http://augeas.net/
 Source0:	https://github.com/hercules-team/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ee2c1e74cad61124097c5f540f063fa2dd3b8cd3159f1706f11167814c9bfcd5
+%global source0_file python-augeas-1.2.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	python3-devel
 BuildRequires:	augeas-devel
@@ -30,6 +34,9 @@ python3-augeas is a set of Python bindings around augeas.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/python-augeas-1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ee2c1e74cad61124097c5f540f063fa2dd3b8cd3159f1706f11167814c9bfcd5" || { echo "oreon: Source0 SHA256 mismatch for python-augeas-1.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

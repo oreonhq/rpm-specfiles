@@ -5,6 +5,10 @@ Summary:        DateTime::Set extension for create basic recurrence sets
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Event-Recurrence
 Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/DateTime-Event-Recurrence-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f9408789a461107766ca1a232bb3ec1e702eec7ca8167401ea6ec3f4b6d0b5a5
+%global source0_file DateTime-Event-Recurrence-0.19.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  make
@@ -37,6 +41,9 @@ DateTime::Set objects for various recurrences, such as "once a month" or
 "every Monday, Wednesday and Thursday at 10:00 AM and 2:00 PM".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DateTime-Event-Recurrence-0.19.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f9408789a461107766ca1a232bb3ec1e702eec7ca8167401ea6ec3f4b6d0b5a5" || { echo "oreon: Source0 SHA256 mismatch for DateTime-Event-Recurrence-0.19.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DateTime-Event-Recurrence-%{version}
 
 %build

@@ -21,6 +21,10 @@ Summary:	OpenID Connect auth module for Apache HTTP Server
 License:	Apache-2.0
 URL:		https://github.com/OpenIDC/mod_auth_openidc
 Source0:	https://github.com/OpenIDC/mod_auth_openidc/releases/download/v%{version}/mod_auth_openidc-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 499004f81763921cd8566c5120f9ad0363a704beacf89c6e566819841f2887b3
+%global source0_file mod_auth_openidc-2.4.19.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: libxcrypt-devel
@@ -42,6 +46,9 @@ This module enables an Apache 2.x web server to operate as
 an OpenID Connect Relying Party and/or OAuth 2.0 Resource Server.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mod_auth_openidc-2.4.19.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "499004f81763921cd8566c5120f9ad0363a704beacf89c6e566819841f2887b3" || { echo "oreon: Source0 SHA256 mismatch for mod_auth_openidc-2.4.19.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

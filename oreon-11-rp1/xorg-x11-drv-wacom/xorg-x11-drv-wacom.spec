@@ -14,11 +14,15 @@ URL:        http://www.x.org
 License:    GPL-2.0-or-later
 
 %if 0%{?gitdate}
-Source0: %{tarball}-%{gitdate}.tar.bz2
+Source0:        https://github.com/linuxwacom/xf86-input-wacom/releases/download/xf86-input-wacom-1.2.4/xf86-input-wacom-1.2.4.tar.bz2
 Source1: make-git-snapshot.sh
 Source2: commitid
 %else
 Source0: https://github.com/linuxwacom/xf86-input-wacom/releases/download/xf86-input-wacom-%{version}/xf86-input-wacom-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 cbc5fccda8994b9314e60da6933d8e5f901e4c3f208dd9fc09a611fe25b71a0d
+%global source0_file xf86-input-wacom-1.2.4.tar.bz2
+# oreon url source checksums end
 %endif
 
 BuildRequires: make
@@ -39,6 +43,9 @@ Obsoletes: linuxwacom <= 0.8.4.3
 X.Org X11 wacom input driver for Wacom tablets.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xf86-input-wacom-1.2.4.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cbc5fccda8994b9314e60da6933d8e5f901e4c3f208dd9fc09a611fe25b71a0d" || { echo "oreon: Source0 SHA256 mismatch for xf86-input-wacom-1.2.4.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1 -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

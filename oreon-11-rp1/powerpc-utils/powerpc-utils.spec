@@ -8,6 +8,10 @@ URL:            https://github.com/ibm-power-utilities/powerpc-utils
 Source0:        https://github.com/ibm-power-utilities/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        nx-gzip.udev
 Patch0:         powerpc-utils-1.3.11-manpages.patch
+# oreon url source checksums begin
+%global source0_sha256 35efb04063f1b7bd9d715f1d8d3ab75352b595b1fd12349d7570a7ba19ba6d86
+%global source0_file powerpc-utils-1.3.13.tar.gz
+# oreon url source checksums end
 
 ExclusiveArch:  ppc %{power64}
 
@@ -59,6 +63,9 @@ Core utilities for maintaining and servicing PowerPC systems.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/powerpc-utils-1.3.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "35efb04063f1b7bd9d715f1d8d3ab75352b595b1fd12349d7570a7ba19ba6d86" || { echo "oreon: Source0 SHA256 mismatch for powerpc-utils-1.3.13.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

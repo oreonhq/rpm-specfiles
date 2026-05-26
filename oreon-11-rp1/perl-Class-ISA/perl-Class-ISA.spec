@@ -5,6 +5,10 @@ Summary:        Report the search path for a class's ISA tree
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-ISA
 Source0:        https://cpan.metacpan.org/authors/id/S/SM/SMUELLER/Class-ISA-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8816f34e9a38e849a10df756030dccf9fe061a196c11ac3faafd7113c929b964
+%global source0_file Class-ISA-0.36.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -27,6 +31,9 @@ This library provides functions that return the list (in order) of names of
 (super-)classes Perl would search to find a method, with no duplicates.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Class-ISA-0.36.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8816f34e9a38e849a10df756030dccf9fe061a196c11ac3faafd7113c929b964" || { echo "oreon: Source0 SHA256 mismatch for Class-ISA-0.36.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Class-ISA-%{version}
 
 %build

@@ -12,6 +12,10 @@ License:        CC0-1.0 AND LGPL-2.0-or-later
 URL:            https://invent.kde.org/frameworks/%{framework}
 Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 f76c77dcc27a60007330329a6d6c60298c11ddddba82f710a90715ec81f886ff
+%global source0_file kstatusnotifieritem-6.24.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  extra-cmake-modules >= %{version}
@@ -51,6 +55,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kstatusnotifieritem-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f76c77dcc27a60007330329a6d6c60298c11ddddba82f710a90715ec81f886ff" || { echo "oreon: Source0 SHA256 mismatch for kstatusnotifieritem-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version}
 
 %build

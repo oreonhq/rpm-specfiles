@@ -9,6 +9,10 @@ Summary: Korean hunspell dictionaries
 Version: 0.7.0
 Release: 23%{?dist}
 Source: https://github.com/spellcheck-ko/hunspell-dict-ko/archive/%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 98ee3400994203680e464a072845da59d31f10281b1e6f092df3503ca5005a16
+%global source0_file 0.7.0.tar.gz
+# oreon url source checksums end
 URL: https://github.com/spellcheck-ko/hunspell-dict-ko
 License: MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-only
 BuildArch: noarch
@@ -22,6 +26,9 @@ Supplements: (hunspell and langpacks-ko)
 Korean hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/0.7.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "98ee3400994203680e464a072845da59d31f10281b1e6f092df3503ca5005a16" || { echo "oreon: Source0 SHA256 mismatch for 0.7.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n hunspell-dict-ko-%{version}
 
 %build

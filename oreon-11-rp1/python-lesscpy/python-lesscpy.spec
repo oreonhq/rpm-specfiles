@@ -13,6 +13,10 @@ License:        MIT
 URL:            https://github.com/robotis/lesscpy
 Source0:        https://pypi.python.org/packages/source/l/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 Patch1:         0001-Remove-tabfile-support-as-PLY-removed-it-as-well.patch
+# oreon url source checksums begin
+%global source0_sha256 7b664f60818a16afa8cc9f1dd6d9b17f944e0ce94e50787d76f81bc7a8648cce
+%global source0_file lesscpy-0.14.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
  
@@ -43,6 +47,9 @@ of lesscss are supported (yet).  Some features wil probably never be
 supported (JavaScript evaluation).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lesscpy-0.14.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b664f60818a16afa8cc9f1dd6d9b17f944e0ce94e50787d76f81bc7a8648cce" || { echo "oreon: Source0 SHA256 mismatch for lesscpy-0.14.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{pypi_name}-%{version}
 
 %build

@@ -10,6 +10,10 @@ Version: 1.0.0
 Release: 28%{?dist}
 Epoch:   1
 Source: http://anishpatil.fedorapeople.org/ta_in.%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 59e76d6b16657bbcd4d85c9c379cd9d28f4bd5bbfe952c754f427949cc2f5db2
+%global source0_file ta_in.1.0.0.tar.gz
+# oreon url source checksums end
 URL: https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -21,6 +25,9 @@ Supplements: (hunspell and langpacks-ta)
 Tamil hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ta_in.1.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "59e76d6b16657bbcd4d85c9c379cd9d28f4bd5bbfe952c754f427949cc2f5db2" || { echo "oreon: Source0 SHA256 mismatch for ta_in.1.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -c -n ta_IN
 
 %build

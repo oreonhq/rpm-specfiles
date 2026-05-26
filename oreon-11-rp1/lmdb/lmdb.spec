@@ -18,6 +18,10 @@ Source:         lmdb.pc.in
 # Patch description in the corresponding file
 Patch:          lmdb-make.patch
 Patch:          lmdb-s390-check.patch
+# oreon url source checksums begin
+%global source0_sha256 a0beaa2f4c495afaa7e218885d2457c01a38edb05e0f0342aa9f535aece4dbac
+%global source0_file openldap-LMDB_0.9.34.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc
@@ -56,6 +60,9 @@ The %{name}-doc package contains automatically generated documentation for %{nam
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/openldap-LMDB_0.9.34.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a0beaa2f4c495afaa7e218885d2457c01a38edb05e0f0342aa9f535aece4dbac" || { echo "oreon: Source0 SHA256 mismatch for openldap-LMDB_0.9.34.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # forgeautosetup does not pass the -n argument
 %autosetup -n %{archivename} -p1
 

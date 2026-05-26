@@ -18,6 +18,10 @@ Source3: missing-words.gz
 
 Patch: cracklib-2.9.11-packlib-reentrant.patch
 Patch: cracklib-2.9.11-simplistic.patch
+# oreon url source checksums begin
+%global source0_sha256 6213b986a5209fc0d4ca93734e349b8f66b36bfe9a3fae6eead14a15d82a68dc
+%global source0_file cracklib-2.9.11.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: words, gettext
@@ -68,6 +72,9 @@ contains the utilities necessary for the creation of new dictionaries.
 If you are installing CrackLib, you should also install cracklib-dicts.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cracklib-2.9.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6213b986a5209fc0d4ca93734e349b8f66b36bfe9a3fae6eead14a15d82a68dc" || { echo "oreon: Source0 SHA256 mismatch for cracklib-2.9.11.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1 
 
 # Replace zn_CN.po with one that wasn't mis-transcoded at some point.

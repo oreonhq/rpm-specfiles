@@ -159,9 +159,9 @@ Suggests:  font(dejavusansmono)
 This package consists of the DejaVu sans-serif mono-space font faces, with
 Unicode coverage restricted to Latin, Greek and Cyrillic.}
 
-Source0:  %{forgeurl}/archive/version_2_37/dejavu-fonts-version_2_37.tar.gz
-Source1:  %{forgeurl}/releases/download/%{tag}/dejavu-fonts-ttf-%{version}.tar.bz2
-Source2:  %{forgeurl}/releases/download/%{tag}/dejavu-lgc-fonts-ttf-%{version}.tar.bz2
+Source0:        https://github.com/dejavu-fonts/dejavu-fonts/archive/version_2_37/dejavu-fonts-version_2_37.tar.gz
+Source1:        https://github.com/dejavu-fonts/dejavu-fonts/releases/download/%{lua:t=string.gsub(rpm.expand("version/dejavu-fonts-ttf-2.37.tar.bz2
+Source2:        https://github.com/dejavu-fonts/dejavu-fonts/releases/download/%{lua:t=string.gsub(rpm.expand("version/dejavu-lgc-fonts-ttf-2.37.tar.bz2
 Source11: 57-%{fontpkgname1}.xml
 Source12: 57-%{fontpkgname2}.xml
 Source13: 57-%{fontpkgname3}.xml
@@ -171,6 +171,10 @@ Source16: 58-%{fontpkgname6}.xml
 Patch0:   dejavu-fonts-ttf-urn-dtd.patch
 Patch1:   dejavu-lgc-fonts-ttf-urn-dtd.patch
 Patch2:   dejavu-fonts-urn-dtd.patch
+# oreon url source checksums begin
+%global source0_sha256 c4d10a1b665db893adc0c0aaee7ecd81b2b47c877d5cea0b40216707cbf327e4
+%global source0_file dejavu-fonts-version_2_37.tar.gz
+# oreon url source checksums end
 
 Name:     dejavu-fonts
 Summary:  The DejaVu font families
@@ -198,6 +202,9 @@ This package provides optional documentation files shipped with
 %{source_name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dejavu-fonts-version_2_37.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c4d10a1b665db893adc0c0aaee7ecd81b2b47c877d5cea0b40216707cbf327e4" || { echo "oreon: Source0 SHA256 mismatch for dejavu-fonts-version_2_37.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{with build_from_src}
 %setup -n %{name}-%{tag}
 %patch -P2 -p1

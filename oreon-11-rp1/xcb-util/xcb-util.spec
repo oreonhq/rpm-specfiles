@@ -5,6 +5,10 @@ Summary:	Convenience libraries sitting on top of libxcb
 License:	X11-distribute-modifications-variant
 URL:		http://xcb.freedesktop.org
 Source0:	http://xcb.freedesktop.org/dist/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 5abe3bbbd8e54f0fa3ec945291b7e8fa8cfd3cccc43718f8758430f94126e512
+%global source0_file xcb-util-0.4.1.tar.xz
+# oreon url source checksums end
 BuildRequires:	make
 BuildRequires:	gcc
 BuildRequires:	pkgconfig(xcb) >= 1.4
@@ -28,6 +32,9 @@ Development files for xcb-util.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xcb-util-0.4.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5abe3bbbd8e54f0fa3ec945291b7e8fa8cfd3cccc43718f8758430f94126e512" || { echo "oreon: Source0 SHA256 mismatch for xcb-util-0.4.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 

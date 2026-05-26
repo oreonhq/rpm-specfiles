@@ -11,6 +11,10 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://jflex.de/release/%{name}-%{version}.tar.gz
 Source4:        %{name}.1
+# oreon url source checksums begin
+%global source0_sha256 739202ab2ff3c80787ed01525178d1fffd15be1f2a02d65b7ac9145b03c7ebcc
+%global source0_file jflex-1.7.0.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -38,6 +42,9 @@ used together with other parser generators like ANTLR or as a
 standalone tool.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jflex-1.7.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "739202ab2ff3c80787ed01525178d1fffd15be1f2a02d65b7ac9145b03c7ebcc" || { echo "oreon: Source0 SHA256 mismatch for jflex-1.7.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 find . -name '*.jar' -delete
 rm -rf src/main/java/java_cup examples

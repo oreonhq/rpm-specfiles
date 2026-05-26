@@ -12,6 +12,10 @@ Source:         %{pypi_source lark}
 
 # Python 3.14 compatibility
 Patch:          https://github.com/lark-parser/lark/pull/1483.patch
+# oreon url source checksums begin
+%global source0_sha256 ca807d0162cd16cef15a8feecb862d7319e7a09bdb13aef927968e45040fed80
+%global source0_file lark-1.2.2.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -74,6 +78,9 @@ Main Features:
       are supported.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lark-1.2.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ca807d0162cd16cef15a8feecb862d7319e7a09bdb13aef927968e45040fed80" || { echo "oreon: Source0 SHA256 mismatch for lark-1.2.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n lark-%{version}
 
 # Fix wrong-file-end-of-line-encoding.

@@ -5,6 +5,10 @@ Summary:        Write your linewise code for handles; this does the rest
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Mixin-Linewise
 Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Mixin-Linewise-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 d28e88516ce9b5295c31631dcccdc0fc8f2ab7d8a5cc876bb1b20131087b01db
+%global source0_file Mixin-Linewise-0.111.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -39,6 +43,9 @@ Mixin::Linewise::Writers, you can just write a method to handle handles,
 and methods for handling strings and file names are added for you.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Mixin-Linewise-0.111.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d28e88516ce9b5295c31631dcccdc0fc8f2ab7d8a5cc876bb1b20131087b01db" || { echo "oreon: Source0 SHA256 mismatch for Mixin-Linewise-0.111.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Mixin-Linewise-%{version}
 
 %build

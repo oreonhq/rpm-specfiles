@@ -8,6 +8,10 @@ URL:		https://github.com/power-ras/%{name}/releases
 Source0:		https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:		99-libvpd.conf
 Patch1:		libvpd-install-rules-in-system-wide-dir.patch
+# oreon url source checksums begin
+%global source0_sha256 557a5ead6d15d4f5a6d0e3d0ac0344cc028e17a162d9174680d41b37c99b1431
+%global source0_file libvpd-2.2.11.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	autoconf automake libtool
 BuildRequires:	gcc-c++
@@ -30,6 +34,9 @@ Requires:	sqlite-devel
 Contains header files for building with libvpd.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libvpd-2.2.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "557a5ead6d15d4f5a6d0e3d0ac0344cc028e17a162d9174680d41b37c99b1431" || { echo "oreon: Source0 SHA256 mismatch for libvpd-2.2.11.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

@@ -9,6 +9,10 @@ License:        MIT
 URL:            https://github.com/latchset/%{realname}
 Source0:        https://github.com/latchset/%{realname}/releases/download/v%{version}/%{realname}-%{version}.tar.gz
 Source1:        https://github.com/latchset/%{realname}/releases/download/v%{version}/%{realname}-%{version}.tar.gz.sha512sum.txt
+# oreon url source checksums begin
+%global source0_sha256 95e83872892f20d1499ba2a370c19b69f7c571d918475e76f241d443b103d81d
+%global source0_file kdcproxy-1.1.0.tar.gz
+# oreon url source checksums end
 
 # Patches
 
@@ -39,6 +43,9 @@ Requires:       python3-pyasn1
 %description -n python3-%{realname} %{_description}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kdcproxy-1.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "95e83872892f20d1499ba2a370c19b69f7c571d918475e76f241d443b103d81d" || { echo "oreon: Source0 SHA256 mismatch for kdcproxy-1.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am -n %{realname}-%{version}
 
 %build

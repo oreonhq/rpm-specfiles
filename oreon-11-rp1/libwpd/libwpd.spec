@@ -6,6 +6,10 @@ Version: 0.10.3
 Release: %autorelease
 Source: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
 Patch0: %{name}-gcc11.patch
+# oreon url source checksums begin
+%global source0_sha256 2465b0b662fdc5d4e3bebcdc9a79027713fb629ca2bff04a3c9251fdec42dd09
+%global source0_file libwpd-0.10.3.tar.xz
+# oreon url source checksums end
 URL: http://libwpd.sf.net/
 License: LGPL-2.1-or-later OR MPL-2.0
 
@@ -45,6 +49,9 @@ BuildArch: noarch
 The %{name}-doc package contains API documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libwpd-0.10.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2465b0b662fdc5d4e3bebcdc9a79027713fb629ca2bff04a3c9251fdec42dd09" || { echo "oreon: Source0 SHA256 mismatch for libwpd-0.10.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

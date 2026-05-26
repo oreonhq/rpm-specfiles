@@ -41,6 +41,10 @@ Patch9:            icedtea-web-1.8.8-java21-autoconf.patch
 Patch10:           https://github.com/AdoptOpenJDK/IcedTea-Web/pull/970.patch#/icedtea-web-1.8.8-javadoc-21.patch
 # Prepend -Djava.security.manager as workaround for Java 21
 Patch11:           https://github.com/AdoptOpenJDK/IcedTea-Web/pull/971.patch#/icedtea-web-1.8.8-java21-security-manager.patch
+# oreon url source checksums begin
+%global source0_sha256 f4203a605a3c9c50acdcc6eef4a366b9fdd36d95edcd76bcbfede01107cb5fe6
+%global source0_file icedtea-web-1.8.8.tar.gz
+# oreon url source checksums end
 ExclusiveArch:     %{java_arches}
 BuildRequires:     autoconf
 BuildRequires:     automake
@@ -97,6 +101,9 @@ This package contains the zipped sources of the IcedTea-Web project for
 debugging IcedTea-Web.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/icedtea-web-1.8.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f4203a605a3c9c50acdcc6eef4a366b9fdd36d95edcd76bcbfede01107cb5fe6" || { echo "oreon: Source0 SHA256 mismatch for icedtea-web-1.8.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IcedTea-Web-%{name}-%{version}
 %patch -P0 -p1 -b .upstream-changes
 %patch -P1 -p1 -b .remove-dunce

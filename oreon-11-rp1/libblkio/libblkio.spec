@@ -15,12 +15,16 @@ Summary:       Block device I/O library
 Name:          libblkio
 Release:       8%{?dist}
 URL:           %{forgeurl}
-Source0:       %{forgesource}
+Source0:        https://gitlab.com/libblkio/libblkio/-/archive/v1.5.0/libblkio-v1.5.0.tar.bz2
 %if %{with libblkio_vendor}
 # To create the vendor tarball:
 #   tar xf %%{name}-v%%{version}.tar.bz2 ; pushd %%{name}-v%%{version} ; \
 #   cargo vendor && tar Jcvf ../%%{name}-v%%{version}-vendor.tar.xz vendor/ ; popd
 Source1:       %{name}-v%{version}-vendor.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 7fb70998f56e4ad9a1eeb749b04b7b5c2ede6f7aad561f18bbd3c71db537c11d
+%global source0_file libblkio-v1.5.0.tar.bz2
+# oreon url source checksums end
 %endif
 License:       (Apache-2.0 OR MIT) AND (Apache-2.0 OR BSD-3-Clause) AND (Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR MIT) AND BSD-3-Clause
 
@@ -83,6 +87,9 @@ This package contains development tools for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libblkio-v1.5.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7fb70998f56e4ad9a1eeb749b04b7b5c2ede6f7aad561f18bbd3c71db537c11d" || { echo "oreon: Source0 SHA256 mismatch for libblkio-v1.5.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{defined copr_build}
 %autosetup -Sgit %{name}-%{version}
 %else

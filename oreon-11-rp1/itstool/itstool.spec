@@ -10,6 +10,10 @@ Source0:        http://files.itstool.org/itstool/%{name}-%{version}.tar.bz2
 Patch0:         https://sources.debian.org/data/main/i/itstool/2.0.5-2/debian/patches/fix_crash_912099.patch#/%{name}-2.0.5-fix-crash-wrong-encoding.patch
 # Filed upstream at https://github.com/itstool/itstool/pull/51
 Patch1:         0001-Fix-insufficiently-quoted-regular-expressions.patch
+# oreon url source checksums begin
+%global source0_sha256 6b9a7cd29a12bb95598f5750e8763cee78836a1a207f85b74d8b3275b27e87ca
+%global source0_file itstool-2.0.7.tar.bz2
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -24,6 +28,9 @@ the W3C Internationalization Tag Set (ITS) to determine what to translate and
 how to separate it into PO file messages.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/itstool-2.0.7.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6b9a7cd29a12bb95598f5750e8763cee78836a1a207f85b74d8b3275b27e87ca" || { echo "oreon: Source0 SHA256 mismatch for itstool-2.0.7.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b .encoding
 %patch -P1 -p1 -b .py312-regex

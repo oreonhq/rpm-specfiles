@@ -20,6 +20,10 @@ Patch9:         libtar-1.2.20-CVE-2021-33643-CVE-2021-33644.patch
 # fix memory leaks through gnu_long{name,link} (CVE-2021-33645 CVE-2021-33646)
 Patch10:        libtar-1.2.20-CVE-2021-33645-CVE-2021-33646.patch
 Patch11: libtar-configure-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 8f207e8323a1ad470787f94e76e9fefbe8939989e334b6b0e900a03615dabf20
+%global source0_file v1.2.20.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  libtool
 BuildRequires:  make
@@ -41,6 +45,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.2.20.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8f207e8323a1ad470787f94e76e9fefbe8939989e334b6b0e900a03615dabf20" || { echo "oreon: Source0 SHA256 mismatch for v1.2.20.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n libtar-v%{version} -p1
 
 # set correct version for .so build

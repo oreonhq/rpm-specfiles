@@ -23,6 +23,10 @@ Requires(preun): /usr/sbin/alternatives
 Recommends: %{name}-info%{?_isa} = %{version}-%{release}
 
 Source0:         https://download.samba.org/pub/linux-cifs/cifs-utils/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 7face85e3d2d5eb5e7adbd181adee6759097f135b10d6fb30be8e070af7e7054
+%global source0_file cifs-utils-7.5.tar.bz2
+# oreon url source checksums end
 
 %description
 The SMB/CIFS protocol is a standard file sharing protocol widely deployed
@@ -54,6 +58,9 @@ for each user from somewhere. The pam_cifscreds module can be used to
 provide these credentials to the kernel automatically at login.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cifs-utils-7.5.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7face85e3d2d5eb5e7adbd181adee6759097f135b10d6fb30be8e070af7e7054" || { echo "oreon: Source0 SHA256 mismatch for cifs-utils-7.5.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version}%{pre_release} -p1
 
 %build

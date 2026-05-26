@@ -16,6 +16,10 @@ Source0:        https://github.com/google/guava/archive/v%{version}/guava-%{vers
 Patch:          0001-Remove-unused-annotation-module-dependencies.patch
 Patch:          0002-Remove-NullMarked-filtering-and-annotation-collectio.patch
 Patch:          0003-Fix-invalid-Maven-attribute-values-in-compilerArgs.patch
+# oreon url source checksums begin
+%global source0_sha256 19bce47d3ed0631379a606d9ef86b4224689db49ba863621a8395f351904988f
+%global source0_file guava-33.5.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -44,6 +48,9 @@ Summary:        The guava-testlib artifact
 guava-testlib provides additional functionality for conveninent unit testing
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/guava-33.5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "19bce47d3ed0631379a606d9ef86b4224689db49ba863621a8395f351904988f" || { echo "oreon: Source0 SHA256 mismatch for guava-33.5.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 find . -name '*.jar' -delete

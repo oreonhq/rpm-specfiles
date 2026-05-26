@@ -28,6 +28,10 @@ Source0: https://download.kde.org/%{stable}/release-service/%{version}/src/calli
 
 ## downstream patches
 Patch200: calligra-disable_products.patch
+# oreon url source checksums begin
+%global source0_sha256 193ce06bf7dc3225a8961123aa131c245d49519154bf095804dacaee06197685
+%global source0_file calligra-26.04.1.tar.xz
+# oreon url source checksums end
 
 # 
 ExcludeArch: %{ix86}
@@ -252,6 +256,9 @@ Supplements: (%{name}-words and okular)
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/calligra-26.04.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "193ce06bf7dc3225a8961123aa131c245d49519154bf095804dacaee06197685" || { echo "oreon: Source0 SHA256 mismatch for calligra-26.04.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

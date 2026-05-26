@@ -17,6 +17,10 @@ Summary:        Character encodings in Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Artistic-2.0
 URL:            https://metacpan.org/release/Encode
 Source0:        https://cpan.metacpan.org/authors/id/D/DA/DANKOGAI/Encode-%{cpan_version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 eacf71c5eb49e0e590de797f1982d7fb95d8481e4d13c3ce79eb32ef9373b3db
+%global source0_file Encode-3.21.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -140,6 +144,9 @@ with "%{_libexecdir}/%{name}/test".
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\(Mod_EUCJP\\)
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Encode-3.21.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "eacf71c5eb49e0e590de797f1982d7fb95d8481e4d13c3ce79eb32ef9373b3db" || { echo "oreon: Source0 SHA256 mismatch for Encode-3.21.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Encode-%{cpan_version}
 
 # Help generators to recognize Perl scripts

@@ -17,6 +17,10 @@ URL:            https://hackage.haskell.org/package/haddock-library
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+# oreon url source checksums begin
+%global source0_sha256 7c075ec9a378b0a2d9d605e72135201e6c7ff316564f2c974113582f43bea20a
+%global source0_file haddock-library-1.11.0.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -80,6 +84,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/haddock-library-1.11.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7c075ec9a378b0a2d9d605e72135201e6c7ff316564f2c974113582f43bea20a" || { echo "oreon: Source0 SHA256 mismatch for haddock-library-1.11.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 dos2unix -k -n %{SOURCE1} %{pkg_name}.cabal

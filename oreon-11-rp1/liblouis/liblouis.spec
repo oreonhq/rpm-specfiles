@@ -12,6 +12,10 @@ Summary:        Braille translation and back-translation library
 License:        LGPL-2.1-or-later AND LGPL-2.0-or-later
 URL:            https://liblouis.io
 Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e2ad56d132d0cd63f08f3122391a0472adcc8c5d046d7cd81bcadf48a55deea4
+%global source0_file liblouis-3.33.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  hardlink
@@ -111,6 +115,9 @@ This package provides the documentation for liblouis.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/liblouis-3.33.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e2ad56d132d0cd63f08f3122391a0472adcc8c5d046d7cd81bcadf48a55deea4" || { echo "oreon: Source0 SHA256 mismatch for liblouis-3.33.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 chmod 664 tables/*
 

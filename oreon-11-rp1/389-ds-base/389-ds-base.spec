@@ -504,9 +504,9 @@ Source4:          389-ds-base.sysusers
 Source5:          https://fedorapeople.org/groups/389ds/libdb-5.3.28-59.tar.bz2
 %endif
 
-Source6:          %{fedora_lookaside}/vendor-%{version}-%{fedora_vendor_rel}.tar.gz/sha512/27cc2630fea6b73fa4c5370b5b33ec5a2ea8cdaef72604cc5f48f6c72473c944e67f11c10fd6e7820419bcb1988bc3ee904cda9b11d414a0aa6940968f67d383/vendor-%{version}-%{fedora_vendor_rel}.tar.gz
-Source7:          %{fedora_lookaside}/Cargo-%{version}-%{fedora_vendor_rel}.lock/sha512/bdd7228ebcc4d312d414f642cf59ac9f6c043b98482ea6dec780a3830d248429262c76993eec7b52939e9a750713cecb618cbff6b94ff7e3e76f6f240c76d322/Cargo-%{version}-%{fedora_vendor_rel}.lock
-Source8:          %{fedora_lookaside}/cockpit_dist-%{version}-%{fedora_vendor_rel}.tar.bz2/sha512/70c7dc376676821b05fca257bc01f80202f7cee97221f52ad7ead237a547ee950edf2efb8c501d466d88b3dcaf1677c6c3a96ec20729a6896efdcdad9a96aed0/cockpit_dist-%{version}-%{fedora_vendor_rel}.tar.bz2
+Source6:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/vendor-3.2.0-14.tar.gz/sha512/27cc2630fea6b73fa4c5370b5b33ec5a2ea8cdaef72604cc5f48f6c72473c944e67f11c10fd6e7820419bcb1988bc3ee904cda9b11d414a0aa6940968f67d383/vendor-3.2.0-14.tar.gz
+Source7:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/Cargo-3.2.0-14.lock/sha512/bdd7228ebcc4d312d414f642cf59ac9f6c043b98482ea6dec780a3830d248429262c76993eec7b52939e9a750713cecb618cbff6b94ff7e3e76f6f240c76d322/Cargo-3.2.0-14.lock
+Source8:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/cockpit_dist-3.2.0-14.tar.bz2/sha512/70c7dc376676821b05fca257bc01f80202f7cee97221f52ad7ead237a547ee950edf2efb8c501d466d88b3dcaf1677c6c3a96ec20729a6896efdcdad9a96aed0/cockpit_dist-3.2.0-14.tar.bz2
 
 Patch:            0001-Issue-7096-During-replication-online-total-init-the-.patch
 Patch:            0002-Issue-Revise-paged-result-search-locking.patch
@@ -574,6 +574,18 @@ Patch:            0063-Security-fix-for-CVE-2025-14905.patch
 Patch:            0064-Issue-7267-MDB_BAD_VALSIZE-error-when-updating-index.patch
 Patch:            0065-Issue-7277-UI-Fix-Japanese-translation-for-Successfu.patch
 Patch:            0066-Issue-7284-Creating-local-password-policy-succeeds-w.patch
+# oreon url source checksums begin
+%global source0_sha256 4b033ccad6125cf385e97f2a9245704da1c05d7e0dfb74f69bee16bdf881c4d7
+%global source0_file 389-ds-base-3.2.0.tar.bz2
+%global source3_sha256 2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa
+%global source3_file jemalloc-5.3.0.tar.bz2
+%global source5_sha256 13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22
+%global source5_file libdb-5.3.28-59.tar.bz2
+%global source6_sha256 0f0515ff035156f8344ac583aa9f4a0c9d66a14c0b59542c3d6ccc7e15eba201
+%global source6_file vendor-3.2.0-14.tar.gz
+%global source8_sha256 89e0ab01efe53312efcf8d921c41569043df99a730fc03f187671b55b9aa2fca
+%global source8_file cockpit_dist-3.2.0-14.tar.bz2
+# oreon url source checksums end
 
 %description
 389 Directory Server is an LDAPv3 compliant server.  The base package includes
@@ -706,6 +718,13 @@ cd src/lib389
 %pyproject_buildrequires -g test
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/389-ds-base-3.2.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4b033ccad6125cf385e97f2a9245704da1c05d7e0dfb74f69bee16bdf881c4d7" || { echo "oreon: Source0 SHA256 mismatch for 389-ds-base-3.2.0.tar.bz2" >&2; exit 1; })
+%(f=%{_sourcedir}/jemalloc-5.3.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa" || { echo "oreon: Source3 SHA256 mismatch for jemalloc-5.3.0.tar.bz2" >&2; exit 1; })
+%(f=%{_sourcedir}/libdb-5.3.28-59.tar.bz2; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22" || { echo "oreon: Source5 SHA256 mismatch for libdb-5.3.28-59.tar.bz2" >&2; exit 1; })
+%(f=%{_sourcedir}/vendor-3.2.0-14.tar.gz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f0515ff035156f8344ac583aa9f4a0c9d66a14c0b59542c3d6ccc7e15eba201" || { echo "oreon: Source6 SHA256 mismatch for vendor-3.2.0-14.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/cockpit_dist-3.2.0-14.tar.bz2; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "89e0ab01efe53312efcf8d921c41569043df99a730fc03f187671b55b9aa2fca" || { echo "oreon: Source8 SHA256 mismatch for cockpit_dist-3.2.0-14.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git -p1 -n %{name}-%{version}
 %if %{defined SOURCE6}
 rm -rf vendor

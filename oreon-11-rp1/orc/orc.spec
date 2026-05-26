@@ -6,6 +6,10 @@ Summary:	The Oil Run-time Compiler
 License:	BSD-2-Clause AND BSD-3-Clause
 URL:		http://cgit.freedesktop.org/gstreamer/orc/
 Source0:	http://gstreamer.freedesktop.org/src/orc/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 cb1bfd4f655289cd39bc04642d597be9de5427623f0861c1fc19c08d98467fa2
+%global source0_file orc-0.4.41.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	meson >= 0.47.0
 BuildRequires:  gcc
@@ -46,6 +50,9 @@ The Orc compiler, to produce optimized code.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/orc-0.4.41.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cb1bfd4f655289cd39bc04642d597be9de5427623f0861c1fc19c08d98467fa2" || { echo "oreon: Source0 SHA256 mismatch for orc-0.4.41.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -5,7 +5,7 @@ Summary:              Example Python library
 
 License:              MIT-0
 URL:                  https://github.com/fedora-python/Pello
-Source:               %{url}/archive/v%{version}/Pello-%{version}.tar.gz
+Source:        https://github.com/fedora-python/Pello/archive/v1.0.4/Pello-1.0.4.tar.gz
 
 BuildArch:            noarch
 

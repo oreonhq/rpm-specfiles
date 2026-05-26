@@ -7,6 +7,10 @@ URL:		https://dbmx.net/tokyocabinet/
 Source:		https://dbmx.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:		tokyocabinet-fedora.patch
 Patch1:		tokyocabinet-manhelp.patch
+# oreon url source checksums begin
+%global source0_sha256 a003f47c39a91e22d76bc4fe68b9b3de0f38851b160bbb1ca07a4f6441de1f90
+%global source0_file tokyocabinet-1.4.48.tar.gz
+# oreon url source checksums end
 BuildRequires: make
 BuildRequires:	pkgconfig zlib-devel bzip2-devel autoconf gcc
 
@@ -40,6 +44,9 @@ This package contains documentation files for the libraries and header files
 needed for developing with %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tokyocabinet-1.4.48.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a003f47c39a91e22d76bc4fe68b9b3de0f38851b160bbb1ca07a4f6441de1f90" || { echo "oreon: Source0 SHA256 mismatch for tokyocabinet-1.4.48.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p0 -b .fedora
 %patch -P1 -p1 -b .manhelp

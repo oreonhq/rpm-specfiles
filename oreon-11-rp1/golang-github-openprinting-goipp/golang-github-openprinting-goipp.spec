@@ -26,12 +26,19 @@ Summary:        Package goipp implements the IPP core protocol in pure Go (RFC 8
 License:        BSD-2-Clause
 URL:            %{gourl}
 Source:         %{gosource}
+# oreon url source checksums begin
+%global source0_sha256 afd62b6a104ccbb42b276699e3ad461ad381a02dab147876e3b65a5f97f725ca
+%global source0_file goipp-1.2.0.tar.gz
+# oreon url source checksums end
 
 %description %{common_description}
 
 %gopkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/goipp-1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "afd62b6a104ccbb42b276699e3ad461ad381a02dab147876e3b65a5f97f725ca" || { echo "oreon: Source0 SHA256 mismatch for goipp-1.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %goprep -A
 %autopatch -p1
 

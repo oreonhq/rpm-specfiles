@@ -11,6 +11,10 @@ Source1: requirements.txt
 Patch0: marisa-fix-python-setup.patch
 Patch1: marisa-fix-cmake.patch
 Patch2: marisa-fix-cmake-vars.patch
+# oreon url source checksums begin
+%global source0_sha256 a3057d0c2da0a9a57f43eb8e07b73715bc5ff053467ee8349844d01da91b5efb
+%global source0_file v0.3.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: make
@@ -85,6 +89,9 @@ Ruby language binding for groonga
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a3057d0c2da0a9a57f43eb8e07b73715bc5ff053467ee8349844d01da91b5efb" || { echo "oreon: Source0 SHA256 mismatch for v0.3.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-trie-%{version}
 
 

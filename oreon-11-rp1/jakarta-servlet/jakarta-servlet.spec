@@ -13,6 +13,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/jakartaee/servlet/archive/%{version}-RELEASE/servlet-api-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 afb0cd16dce07c45ff3fb4388f9b3f32704e665f2fdbad2f18a8b29fdd46fd43
+%global source0_file servlet-api-5.0.0.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -30,6 +34,9 @@ Jakarta Servlet defines a server-side API for handling HTTP requests
 and responses.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/servlet-api-5.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "afb0cd16dce07c45ff3fb4388f9b3f32704e665f2fdbad2f18a8b29fdd46fd43" || { echo "oreon: Source0 SHA256 mismatch for servlet-api-5.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 # remove unnecessary dependency on parent POM

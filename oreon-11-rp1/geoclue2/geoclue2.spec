@@ -7,6 +7,10 @@ License:        GPL-2.0-or-later
 URL:            http://www.freedesktop.org/wiki/Software/GeoClue/
 Source0:        https://gitlab.freedesktop.org/geoclue/geoclue/-/archive/%{version}/geoclue-%{version}.tar.bz2
 Source1:        geoclue2.sysusers
+# oreon url source checksums begin
+%global source0_sha256 c07aeb35cccf959ec1dc2e8f9a71a9d8bdd643879ef0a8d37926499541da1685
+%global source0_file geoclue-2.8.0.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  avahi-glib-devel
 BuildRequires:  gettext
@@ -70,6 +74,9 @@ The %{name}-demos package contains demo applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/geoclue-2.8.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c07aeb35cccf959ec1dc2e8f9a71a9d8bdd643879ef0a8d37926499541da1685" || { echo "oreon: Source0 SHA256 mismatch for geoclue-2.8.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n geoclue-%{version} -S git_am
 
 

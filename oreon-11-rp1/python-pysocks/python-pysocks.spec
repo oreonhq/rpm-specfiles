@@ -13,7 +13,11 @@ Summary:            %{sum}
 
 License:            BSD-3-Clause
 URL:                https://github.com/Anorov/%{pypi_name}
-Source0:            %pypi_source
+Source0:        https://files.pythonhosted.org/packages/source/P/PySocks/PySocks-1.7.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3f8804571ebe159c380ac6de37643bb4685970655d3bba243530d6558b799aa0
+%global source0_file PySocks-1.7.1.tar.gz
+# oreon url source checksums end
 BuildArch:          noarch
 
 %global _description \
@@ -71,6 +75,9 @@ This package is for Python3 version %{python3_other_version} only.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/PySocks-1.7.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3f8804571ebe159c380ac6de37643bb4685970655d3bba243530d6558b799aa0" || { echo "oreon: Source0 SHA256 mismatch for PySocks-1.7.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pypi_name}-%{version}
 # drop useless 3rdparty code
 rm -rfv test/bin

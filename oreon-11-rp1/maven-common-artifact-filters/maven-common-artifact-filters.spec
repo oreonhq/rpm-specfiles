@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 b70647b98612d7867f3e4154badc440af92fceb0dc3b594e819e057605626729
+%global source0_file maven-common-artifact-filters-3.4.0-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -35,6 +39,9 @@ A collection of ready-made filters to control inclusion/exclusion of artifacts
 during dependency resolution.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-common-artifact-filters-3.4.0-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b70647b98612d7867f3e4154badc440af92fceb0dc3b594e819e057605626729" || { echo "oreon: Source0 SHA256 mismatch for maven-common-artifact-filters-3.4.0-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 # Test depends on jmh performance benchmarking library

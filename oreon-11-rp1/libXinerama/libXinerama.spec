@@ -10,11 +10,15 @@ License: MIT AND MIT-open-group AND X11
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:    %{tarball}-%{gitdate}.tar.bz2
+Source0:        http://xorg.freedesktop.org/archive/individual/lib/libXinerama-1.1.5.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
 Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 5094d1f0fcc1828cb1696d0d39d9e866ae32520c54d01f618f1a3c1e30c2085c
+%global source0_file libXinerama-1.1.5.tar.xz
+# oreon url source checksums end
 %endif
 
 Requires: libX11 >= 1.5.99.902
@@ -38,6 +42,9 @@ Requires: %{name} = %{version}-%{release}
 X.Org X11 libXinerama development package
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libXinerama-1.1.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5094d1f0fcc1828cb1696d0d39d9e866ae32520c54d01f618f1a3c1e30c2085c" || { echo "oreon: Source0 SHA256 mismatch for libXinerama-1.1.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

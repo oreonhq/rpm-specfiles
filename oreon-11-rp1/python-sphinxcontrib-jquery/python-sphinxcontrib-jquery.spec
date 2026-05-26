@@ -8,11 +8,15 @@ Summary:        Extension to include jQuery on newer Sphinx releases
 # jquery-3.6.0.js and jquery.js are MIT
 License:        0BSD AND BSD-2-Clause AND MIT
 URL:            https://github.com/sphinx-contrib/jquery/
-Source:         %{url}/archive/v%{version}/sphinxcontrib-jquery-%{version}.tar.gz
+Source:        https://github.com/sphinx-contrib/jquery//archive/v4.1/sphinxcontrib-jquery-4.1.tar.gz
 
 # Make the tests pass with Sphinx 7.1+
 # Based on the original work in https://github.com/sphinx-contrib/jquery/pull/26
 Patch:          Fix-tests-failures-with-Sphinx-7.2.patch
+# oreon url source checksums begin
+%global source0_sha256 f6a7578b00a8458e5edd38431d3ea4037b928a21ba1f82469ec2015127955c34
+%global source0_file sphinxcontrib-jquery-4.1.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -32,6 +36,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sphinxcontrib-jquery-4.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f6a7578b00a8458e5edd38431d3ea4037b928a21ba1f82469ec2015127955c34" || { echo "oreon: Source0 SHA256 mismatch for sphinxcontrib-jquery-4.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n jquery-%{version}
 
 

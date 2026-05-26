@@ -11,6 +11,10 @@ Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        resolv_wrapper.keyring
 
 Patch0:         resolv_wrapper-fix-cmocka-1.1.6+-support.patch
+# oreon url source checksums begin
+%global source0_sha256 fbc30f77da3e12ecd4ef66ccf5ab77e0b744930ccd89062404082f928a8ec2e0
+%global source0_file resolv_wrapper-1.1.8.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gnupg2
@@ -37,6 +41,9 @@ This package doesn't have a devel package because this project is for
 development/testing.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/resolv_wrapper-1.1.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fbc30f77da3e12ecd4ef66ccf5ab77e0b744930ccd89062404082f928a8ec2e0" || { echo "oreon: Source0 SHA256 mismatch for resolv_wrapper-1.1.8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

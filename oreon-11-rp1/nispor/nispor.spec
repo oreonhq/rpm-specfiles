@@ -9,6 +9,12 @@ License:        Apache-2.0
 URL:            https://github.com/nispor/nispor
 Source:         https://github.com/nispor/nispor/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        https://github.com/nispor/nispor/releases/download/v%{version}/nispor-vendor-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 96ec8fa18a6db6e1d96f6ddce584fbc407eb8834767841cbeda5baae890bd35f
+%global source0_file v1.2.27.tar.gz
+%global source1_sha256 15c47e1562a12ad5b373199a0651c0c3daf4afedb9892a6e149a8cc2cd519c96
+%global source1_file nispor-vendor-1.2.27.tar.xz
+# oreon url source checksums end
 BuildRequires:  make
 BuildRequires:  pkg-config
 BuildRequires:  python3-devel
@@ -78,6 +84,10 @@ Requires:       nispor%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 This package contains C binding of %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.2.27.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "96ec8fa18a6db6e1d96f6ddce584fbc407eb8834767841cbeda5baae890bd35f" || { echo "oreon: Source0 SHA256 mismatch for v1.2.27.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/nispor-vendor-1.2.27.tar.xz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "15c47e1562a12ad5b373199a0651c0c3daf4afedb9892a6e149a8cc2cd519c96" || { echo "oreon: Source1 SHA256 mismatch for nispor-vendor-1.2.27.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version_no_tilde} -p1 %{?rhel:-a1}
 
 %if 0%{?rhel} || 0%{?oreon}

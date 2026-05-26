@@ -144,6 +144,10 @@ Patch32: bind-9.18-partial-additional-records.patch
 Patch33: bind-9.18-dig-idn-input-always.patch
 # downstream only too
 Patch34: bind-9.18-dig-idn-input-always-test.patch
+# oreon url source checksums begin
+%global source0_sha256 81f5035a25c576af1a93f0061cf70bde6d00a0c7bd1274abf73f5b5389a6f82d
+%global source0_file bind-9.18.44.tar.xz
+# oreon url source checksums end
 
 %{?systemd_ordering}
 # https://fedoraproject.org/wiki/Changes/RPMSuportForSystemdSysusers
@@ -335,6 +339,9 @@ in HTML and PDF format.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/bind-9.18.44.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "81f5035a25c576af1a93f0061cf70bde6d00a0c7bd1274abf73f5b5389a6f82d" || { echo "oreon: Source0 SHA256 mismatch for bind-9.18.44.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?fedora}
 # RHEL does not yet support this verification
 %{gpgverify} --keyring='%{SOURCE4}' --signature='%{SOURCE2}' --data='%{SOURCE0}'

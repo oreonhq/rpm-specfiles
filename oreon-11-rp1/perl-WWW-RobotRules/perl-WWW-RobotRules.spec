@@ -5,6 +5,10 @@ Summary:        Database of robots.txt-derived permissions
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/WWW-RobotRules
 Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/WWW-RobotRules-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 46b502e7a288d559429891eeb5d979461dd3ecc6a5c491ead85d165b6e03a51e
+%global source0_file WWW-RobotRules-6.02.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -47,6 +51,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/WWW-RobotRules-6.02.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "46b502e7a288d559429891eeb5d979461dd3ecc6a5c491ead85d165b6e03a51e" || { echo "oreon: Source0 SHA256 mismatch for WWW-RobotRules-6.02.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n WWW-RobotRules-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

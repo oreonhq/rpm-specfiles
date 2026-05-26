@@ -10,7 +10,11 @@ Summary: Linux Key Management Utilities
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 Url:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git
 
-Source0: %{url}/snapshot/keyutils-%{version}.tar.gz
+Source0:        https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/keyutils.git/snapshot/keyutils-1.6.3.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a61d5706136ae4c05bd48f86186bcfdbd88dd8bd5107e3e195c924cfc1b39bb4
+%global source0_file keyutils-1.6.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: glibc-kernheaders >= 2.4-9.1.92
@@ -38,6 +42,9 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 This package provides headers and libraries for building key utilities.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/keyutils-1.6.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a61d5706136ae4c05bd48f86186bcfdbd88dd8bd5107e3e195c924cfc1b39bb4" || { echo "oreon: Source0 SHA256 mismatch for keyutils-1.6.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

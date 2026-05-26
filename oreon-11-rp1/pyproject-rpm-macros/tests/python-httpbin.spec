@@ -4,7 +4,7 @@ Release:        0%{?dist}
 Summary:        HTTP Request & Response Service, written in Python + Flask
 License:        MIT
 URL:            https://github.com/Runscope/httpbin
-Source0:        %{url}/archive/v%{version}/httpbin-%{version}.tar.gz
+Source0:        https://github.com/Runscope/httpbin/archive/v0.7.0/httpbin-0.7.0.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

@@ -5,7 +5,11 @@ Epoch:          2
 Summary:        IRQ balancing daemon
 License:        GPL-2.0-only
 URL:            https://github.com/Irqbalance/irqbalance
-Source0:        %{url}/archive/v%{version}/irqbalance-%{version}.tar.gz
+Source0:        https://github.com/Irqbalance/irqbalance/archive/v1.9.5/irqbalance-1.9.5.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c5fc3b1880136437d297afe9a7833781e7849939e104d0780888ffcafc37e339
+%global source0_file irqbalance-1.9.5.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: glib2-devel
@@ -29,6 +33,9 @@ irqbalance is a daemon that evenly distributes IRQ load across multiple CPUs
 for enhanced performance.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/irqbalance-1.9.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c5fc3b1880136437d297afe9a7833781e7849939e104d0780888ffcafc37e339" || { echo "oreon: Source0 SHA256 mismatch for irqbalance-1.9.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -22,6 +22,10 @@ License:        (Apache-2.0 OR BSD-3-Clause) AND PSF-2.0 AND Apache-2.0 AND BSD-
 URL:            https://cryptography.io/en/latest/
 Source0:        https://github.com/pyca/cryptography/archive/%{version}/%{srcname}-%{version}.tar.gz
 Source1:        conftest-skipper.py
+# oreon url source checksums begin
+%global source0_sha256 7571f0e09a6d6eb22168993f94d35867b4dcbd0d34224e0eb7b392b905b3f12f
+%global source0_file cryptography-46.0.5.tar.gz
+# oreon url source checksums end
 
 ExclusiveArch:  %{rust_arches}
 
@@ -70,6 +74,9 @@ cryptography is a package designed to expose cryptographic primitives and
 recipes to Python developers.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cryptography-46.0.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7571f0e09a6d6eb22168993f94d35867b4dcbd0d34224e0eb7b392b905b3f12f" || { echo "oreon: Source0 SHA256 mismatch for cryptography-46.0.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{srcname}-%{version}
 %cargo_prep
 sed -i 's/locked = true//g' pyproject.toml

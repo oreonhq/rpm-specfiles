@@ -7,6 +7,10 @@ Summary:        Time zone map widget for Gtk+
 License:        GPL-3.0-only
 URL:            https://launchpad.net/timezonemap
 Source0:        https://codeberg.org/dashea/timezonemap/archive/%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 501e53c9db669db5e5cf37bbcfc52b6be64e213e128fc9f9d1ab70fc6b0930e9
+%global source0_file 0.4.5.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  autoconf automake libtool
 BuildRequires:  glib2-devel >= 2.26
@@ -34,6 +38,9 @@ libtimezonemap is a time zone map widget for Gtk+. This package contains header
 files used for building applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/0.4.5.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "501e53c9db669db5e5cf37bbcfc52b6be64e213e128fc9f9d1ab70fc6b0930e9" || { echo "oreon: Source0 SHA256 mismatch for 0.4.5.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n timezonemap
 
 %build

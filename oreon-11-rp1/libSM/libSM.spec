@@ -6,6 +6,10 @@ License: MIT AND MIT-open-group
 URL: http://www.x.org
 
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 2af9e12da5ef670dc3a7bce1895c9c0f1bfb0cb9e64e8db40fcc33f883bd20bc
+%global source0_file libSM-1.2.5.tar.xz
+# oreon url source checksums end
 
 BuildRequires: xorg-x11-util-macros
 BuildRequires: autoconf automake libtool make
@@ -27,6 +31,9 @@ Requires: %{name} = %{version}-%{release}
 The X.Org X11 SM (Session Management) development package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libSM-1.2.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2af9e12da5ef670dc3a7bce1895c9c0f1bfb0cb9e64e8db40fcc33f883bd20bc" || { echo "oreon: Source0 SHA256 mismatch for libSM-1.2.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

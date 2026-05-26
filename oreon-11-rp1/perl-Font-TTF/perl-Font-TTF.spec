@@ -8,6 +8,10 @@ Summary:       Perl library for modifying TTF font files
 License:       Artistic-2.0
 URL:           https://metacpan.org/release/Font-TTF
 Source0:       http://cpan.org/authors/id/B/BH/BHALLISSY/Font-TTF-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4b697d444259759ea02d2c442c9bffe5ffe14c9214084a01f743693a944cc293
+%global source0_file Font-TTF-1.06.tar.gz
+# oreon url source checksums end
 BuildArch:     noarch
 # Build
 BuildRequires: make
@@ -58,6 +62,9 @@ of the package.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Font-TTF-1.06.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4b697d444259759ea02d2c442c9bffe5ffe14c9214084a01f743693a944cc293" || { echo "oreon: Source0 SHA256 mismatch for Font-TTF-1.06.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Font-TTF-%{version}
 
 %build

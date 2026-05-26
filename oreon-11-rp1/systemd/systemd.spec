@@ -143,14 +143,14 @@ Patch:          https://github.com/systemd/systemd/pull/26494.patch
 
 # Create user journals for users with high UIDs
 # https://bugzilla.redhat.com/show_bug.cgi?id=2251843
-Patch:          30846.patch
+Patch:        https://github.com/systemd/systemd/pull/26494.patch
 
 # userdb: create userdb root directory with correct label
 # We can drop this after SELinux policy is updated to handle the transition.
-Patch:          38769.patch
+Patch:        https://github.com/systemd/systemd/pull/26494.patch
 
 # Workaround for https://bugzilla.redhat.com/show_bug.cgi?id=2415701
-Patch:          0002-machined-continue-without-resolve.hook-socket.patch
+Patch:        https://github.com/systemd/systemd/pull/26494.patch
 
 %endif
 

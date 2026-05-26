@@ -105,6 +105,10 @@ Patch4:            0005-Compile-perl-module-with-O2.patch
 
 # upstream patch - https://github.com/nginx/nginx/pull/1089
 Patch5:            0006-Clarify-binding-behavior-of-t-option.patch
+# oreon url source checksums begin
+%global source0_sha256 20e5e0f2c917acfb51120eec2fba9a4ba4e1e10fd28465067cc87a7d81a829a3
+%global source0_file nginx-1.28.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:     make
 BuildRequires:     gcc
@@ -256,6 +260,9 @@ Requires:          zlib-devel
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/nginx-1.28.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "20e5e0f2c917acfb51120eec2fba9a4ba4e1e10fd28465067cc87a7d81a829a3" || { echo "oreon: Source0 SHA256 mismatch for nginx-1.28.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Combine all keys from upstream into one file
 cat %{S:3} %{S:4} %{S:5} %{S:6} > %{_builddir}/%{name}.gpg
 %{gpgverify} --keyring='%{_builddir}/%{name}.gpg' --signature='%{SOURCE1}' --data='%{SOURCE0}'

@@ -12,6 +12,10 @@ Summary:	Retrieve names of code references
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Identify
 Source0:	https://cpan.metacpan.org/authors/id/R/RG/RGARCIA/Sub-Identify-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 068d272086514dd1e842b6a40b1bedbafee63900e5b08890ef6700039defad6f
+%global source0_file Sub-Identify-0.14.tar.gz
+# oreon url source checksums end
 # Module Build
 BuildRequires:	coreutils
 BuildRequires:	findutils
@@ -51,6 +55,9 @@ Sub::Identify allows you to retrieve the real name of code references. For
 this, it uses Perl's introspection mechanism, provided by the B module.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Sub-Identify-0.14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "068d272086514dd1e842b6a40b1bedbafee63900e5b08890ef6700039defad6f" || { echo "oreon: Source0 SHA256 mismatch for Sub-Identify-0.14.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Sub-Identify-%{version}
 
 # Fix script interpreters

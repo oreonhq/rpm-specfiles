@@ -13,7 +13,11 @@ Release: %autorelease
 Summary: Mobile broadband modem management service
 License: GPL-2.0-or-later
 URL: %{forgeurl}
-Source: %{forgeurl}/-/archive/%{version}/%{name}-%{version}.tar.bz2
+Source:        https://gitlab.freedesktop.org/mobile-broadband/ModemManager/-/archive/1.24.2/ModemManager-1.24.2.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 691aa026aee458d4e92f95be3fc19989c0484bf51b3ba00673c28909ce5b6729
+%global source0_file ModemManager-1.24.2.tar.bz2
+# oreon url source checksums end
 
 # For mbim-proxy and qmi-proxy
 Requires: libmbim-utils
@@ -107,6 +111,9 @@ Vala bindings for ModemManager
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ModemManager-1.24.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "691aa026aee458d4e92f95be3fc19989c0484bf51b3ba00673c28909ce5b6729" || { echo "oreon: Source0 SHA256 mismatch for ModemManager-1.24.2.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

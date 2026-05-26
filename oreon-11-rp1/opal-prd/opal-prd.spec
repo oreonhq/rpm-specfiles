@@ -28,6 +28,10 @@ Source3: ffspart.man
 
 # Annocheck FAIL: bind-now fortify pie
 Patch0: opal-prd-ffspart-annocheck.patch
+# oreon url source checksums begin
+%global source0_sha256 3e68565653acab7a2caaec9791bbf132e83fb43973234826660cbcd13efc80ae
+%global source0_file skiboot-7.1.tar.gz
+# oreon url source checksums end
 
 %description
 This package provides a daemon to load and run the OpenPower firmware's
@@ -49,6 +53,9 @@ on such systems and update the OpenPower firmware.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/skiboot-7.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3e68565653acab7a2caaec9791bbf132e83fb43973234826660cbcd13efc80ae" || { echo "oreon: Source0 SHA256 mismatch for skiboot-7.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{project}-%{version}
 
 # update for 

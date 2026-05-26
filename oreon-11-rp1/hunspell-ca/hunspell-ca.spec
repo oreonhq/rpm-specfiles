@@ -9,6 +9,10 @@ Summary: Catalan hunspell dictionaries
 Version: 3.0.8
 Release: 7%{?dist}
 Source: https://github.com/Softcatala/catalan-dict-tools/releases/download/v%{version}/ca.%{version}-hunspell.zip
+# oreon url source checksums begin
+%global source0_sha256 ad15f06dceed621c305b687140b945517e3b74ffa57ebf37f0c898e7a266c423
+%global source0_file ca.3.0.8-hunspell.zip
+# oreon url source checksums end
 URL: https://www.softcatala.org/projectes/corrector-ortografic/
 License: GPL-2.0-or-later OR LGPL-2.1-or-later
 BuildArch: noarch
@@ -20,6 +24,9 @@ Supplements: (hunspell and langpacks-ca)
 Catalan hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ca.3.0.8-hunspell.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ad15f06dceed621c305b687140b945517e3b74ffa57ebf37f0c898e7a266c423" || { echo "oreon: Source0 SHA256 mismatch for ca.3.0.8-hunspell.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c
 
 %build

@@ -14,16 +14,20 @@ Summary:        HAProxy reverse proxy for high availability environments
 License:        GPL-2.0-or-later
 
 URL:            http://www.haproxy.org/
-Source0:        %{url}/download/3.0/src/haproxy-%{version}.tar.gz
+Source0:        http://www.haproxy.org//download/3.0/src/haproxy-3.0.17.tar.gz
 Source1:        %{name}.service
 Source2:        %{name}.cfg
 Source3:        %{name}.logrotate
 Source4:        %{name}.sysconfig
 Source5:        %{name}.sysusers
-Source6:        halog.1
+Source6:        https://salsa.debian.org/haproxy-team/haproxy/-/raw/c30a7411203b8c4234698e47325d2543359f9d66/debian/halog.1
 
 # https://github.com/haproxy/haproxy/commit/1c0f781994a89b5cbd7b4b893c23e6d2b75b1764
-Patch0:		haproxy-3.0.17-lua-5.5.patch
+Patch0:        https://github.com/haproxy/haproxy/commit/1c0f781994a89b5cbd7b4b893c23e6d2b75b1764.patch#/haproxy-3.0.17-lua-5.5.patch
+# oreon url source checksums begin
+%global source0_sha256 58492710f8c82d81988e94f1188afc84eafd05d77393732241b252a8d14bd8a3
+%global source0_file haproxy-3.0.17.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  libxcrypt-devel
@@ -53,6 +57,9 @@ availability environments. Indeed, it can:
    intercepted from the application
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/haproxy-3.0.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "58492710f8c82d81988e94f1188afc84eafd05d77393732241b252a8d14bd8a3" || { echo "oreon: Source0 SHA256 mismatch for haproxy-3.0.17.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b .lua55
 

@@ -22,6 +22,10 @@ Summary:        Tools for internationalizing Python applications
 License:        BSD-3-Clause
 URL:            https://babel.pocoo.org/
 Source:         %{pypi_source}
+# oreon url source checksums begin
+%global source0_sha256 b80b99a14bd085fcacfa15c9165f651fbb3406e66cc603abf11c5750937c992d
+%global source0_file babel-2.18.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -77,6 +81,9 @@ Documentation for Babel
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/babel-2.18.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b80b99a14bd085fcacfa15c9165f651fbb3406e66cc603abf11c5750937c992d" || { echo "oreon: Source0 SHA256 mismatch for babel-2.18.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n babel-%{version}
 
 %generate_buildrequires

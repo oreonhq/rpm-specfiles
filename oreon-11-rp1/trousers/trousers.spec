@@ -13,6 +13,10 @@ Patch1:  trousers-0.3.14-noinline.patch
 Patch2: trousers-0.3.14-unlock-in-err-path.patch
 Patch3: trousers-0.3.14-fix-indent-obj_policy.patch
 Patch4: trousers-0.3.14-fix-indent-tspi_key.patch
+# oreon url source checksums begin
+%global source0_sha256 1e5be93e518372acf1d92d2f567d01a46fdb0b730487e544e6fb896c59cac77f
+%global source0_file trousers-0.3.15.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: libtool openssl-devel gettext-devel autoconf automake
@@ -59,6 +63,9 @@ Header files and man pages for use in creating Trusted Computing enabled
 applications.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/trousers-0.3.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1e5be93e518372acf1d92d2f567d01a46fdb0b730487e544e6fb896c59cac77f" || { echo "oreon: Source0 SHA256 mismatch for trousers-0.3.15.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # fix man page paths
 sed -i -e 's|/var/tpm|/var/lib/tpm|g' -e 's|/usr/local/var|/var|g' man/man5/tcsd.conf.5.in man/man8/tcsd.8.in

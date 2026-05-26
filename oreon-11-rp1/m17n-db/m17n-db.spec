@@ -8,6 +8,10 @@ URL:        http://www.nongnu.org/m17n
 Source0:    http://download-mirror.savannah.gnu.org/releases/m17n/%{name}-%{version}.tar.gz
 # Following is awaiting for upstream commit
 Source1:    https://raw.githubusercontent.com/gnuman/m17n-inglish-mims/master/minglish/minglish.mim
+# oreon url source checksums begin
+%global source0_sha256 b5791f38e66d0a452730331e027ac9b52d5c43c6d8709289db640069f68487f4
+%global source0_file m17n-db-1.8.11.tar.gz
+# oreon url source checksums end
 
 BuildArch:  noarch
 BuildRequires: make
@@ -42,6 +46,9 @@ m17n-db development files
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/m17n-db-1.8.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b5791f38e66d0a452730331e027ac9b52d5c43c6d8709289db640069f68487f4" || { echo "oreon: Source0 SHA256 mismatch for m17n-db-1.8.11.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -N
 
 %autopatch -p0

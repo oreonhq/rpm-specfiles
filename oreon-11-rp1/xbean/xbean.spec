@@ -13,6 +13,10 @@ Source0:        https://repo1.maven.org/maven2/org/apache/%{name}/%{name}/%{vers
 
 Patch:          0001-Unbundle-ASM.patch
 Patch:          0002-Remove-dependency-on-log4j-and-commons-logging.patch
+# oreon url source checksums begin
+%global source0_sha256 e4b64b40641ffe64eb5d27361addf132ab0db5d712da9e4b67c7a71b78be2b5b
+%global source0_file xbean-4.24-source-release.zip
+# oreon url source checksums end
 
 # TODO Remove in Fedora 47
 Obsoletes:      %{name}-javadoc < 4.24-9
@@ -39,6 +43,9 @@ lifecycle and class loader management, and a rock solid Spring
 integration.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xbean-4.24-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e4b64b40641ffe64eb5d27361addf132ab0db5d712da9e4b67c7a71b78be2b5b" || { echo "oreon: Source0 SHA256 mismatch for xbean-4.24-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 cp xbean-asm-util/src/main/java/org/apache/xbean/asm9/original/commons/AsmConstants.java xbean-reflect/src/main/java/org/apache/xbean/recipe/

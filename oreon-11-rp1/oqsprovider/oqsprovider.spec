@@ -15,6 +15,10 @@ Patch01:    01-remove-prenist.patch
 # https://github.com/open-quantum-safe/oqs-provider/pull/606
 Patch02:    02-mlkem1024-hybrid.patch
 Patch03:    03-iana-kem-only.patch
+# oreon url source checksums begin
+%global source0_sha256 36d83229c360d694c1ce968f985375aa4e1d15b262ca4f8c354e53ea99fe9195
+%global source0_file 0.8.0.tar.gz
+# oreon url source checksums end
 
 Requires: liboqs >= %{liboqs_min_version}
 Requires: openssl
@@ -33,6 +37,9 @@ functionality are available via the OpenSSL EVP interface. Key persistence is
 provided via the encode/decode mechanism and X.509 data structures.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/0.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "36d83229c360d694c1ce968f985375aa4e1d15b262ca4f8c354e53ea99fe9195" || { echo "oreon: Source0 SHA256 mismatch for 0.8.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -T -b 0 -p1 -n oqs-provider-%{oqs_version}
 
 %build

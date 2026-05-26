@@ -21,6 +21,10 @@ Patch0002: 0002-Make-systemd-use-0700-mode-on-cache-folders.patch
 Patch0003: 0003-gssproxy-Change-daemon-to-Type-notify-with-systemd.patch
 Patch0004: 0004-Remove-unneeded-include-in-configure-script.patch
 Patch0005: 0005-Don-t-check-for-libref_array-explicitly.patch
+# oreon url source checksums begin
+%global source0_sha256 1fe43ea1b03d19e0f1eda3c82ba5bd8bba04e9bc7e629c117dad094d0a6fc1de
+%global source0_file gssproxy-0.9.2.tar.gz
+# oreon url source checksums end
 
 ### Dependencies ###
 Requires: krb5-libs >= 1.12.0
@@ -63,6 +67,9 @@ BuildRequires: systemd-devel
 A proxy for GSSAPI credential handling
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gssproxy-0.9.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1fe43ea1b03d19e0f1eda3c82ba5bd8bba04e9bc7e629c117dad094d0a6fc1de" || { echo "oreon: Source0 SHA256 mismatch for gssproxy-0.9.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

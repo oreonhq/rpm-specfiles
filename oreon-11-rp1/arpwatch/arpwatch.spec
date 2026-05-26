@@ -93,6 +93,10 @@ Patch:          arpwatch-3.5-devlookup.patch
 # compatibility (https://bugzilla.redhat.com/show_bug.cgi?id=2166336). Sent
 # upstream by email 2023-02-01.
 Patch:          arpwatch-3.3-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 832d20a5a508d9694a84a17e2627de3b3aa8b42b19ebdd97e264c511168f6eb4
+%global source0_file arpwatch-3.9.tar.gz
+# oreon url source checksums end
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch:    %{ix86}
@@ -110,6 +114,9 @@ will automatically keep track of the IP addresses on your network.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/arpwatch-3.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "832d20a5a508d9694a84a17e2627de3b3aa8b42b19ebdd97e264c511168f6eb4" || { echo "oreon: Source0 SHA256 mismatch for arpwatch-3.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Substitute absolute paths to awk scripts in shell scripts

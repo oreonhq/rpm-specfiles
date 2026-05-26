@@ -7,6 +7,10 @@ Summary:        Library for CAB and related files compression and decompression
 License:        LGPL-2.1-only AND LicenseRef-Fedora-UltraPermissive AND MIT
 URL:            http://www.cabextract.org.uk/libmspack/
 Source0:        http://www.cabextract.org.uk/libmspack/%{name}-%{version}alpha.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 bac862dee6e0fc10d92c70212441d9f8ad9b0222edc9a708c3ead4adb1b24a8e
+%global source0_file libmspack-0.10.1alpha.tar.gz
+# oreon url source checksums end
 #Source0:        https://github.com/kyz/libmspack/archive/v%%{version}alpha/%%{name}-v%%{version}alpha.tar.gz
 
 BuildRequires:  doxygen
@@ -32,6 +36,9 @@ for developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libmspack-0.10.1alpha.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bac862dee6e0fc10d92c70212441d9f8ad9b0222edc9a708c3ead4adb1b24a8e" || { echo "oreon: Source0 SHA256 mismatch for libmspack-0.10.1alpha.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}alpha
 
 chmod a-x mspack/mspack.h

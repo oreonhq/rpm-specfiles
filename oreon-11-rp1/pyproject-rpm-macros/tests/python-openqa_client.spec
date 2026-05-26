@@ -6,7 +6,7 @@ Summary:        Python client library for openQA API
 
 License:        GPL-2.0-or-later
 URL:            https://github.com/os-autoinst/openQA-python-client
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/o/openqa_client/openqa_client-4.0.0.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

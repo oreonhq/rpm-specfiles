@@ -11,7 +11,12 @@ Release:	1%{?dist}
 Summary:	Read and write lzma compressed data
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/IO-Compress-Lzma
-Source0:	https://cpan.metacpan.org/modules/by-module/IO/IO-Compress-Lzma-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/P/PM/PMQS/IO-Compress-Lzma-2.217.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3462ecd1e67e85d5e4fa911bc6d8e38a884ba1d6e90a03535f0d28fe2ad0aacf
+%global source0_file IO-Compress-Lzma-2.217.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -66,6 +71,9 @@ This distribution provides a Perl interface to allow reading and writing of
 compressed data created with the lzma library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IO-Compress-Lzma-2.217.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3462ecd1e67e85d5e4fa911bc6d8e38a884ba1d6e90a03535f0d28fe2ad0aacf" || { echo "oreon: Source0 SHA256 mismatch for IO-Compress-Lzma-2.217.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IO-Compress-Lzma-%{version}
 
 # Remove bundled test modules

@@ -20,6 +20,10 @@ Patch4: gmp-6.3.0-c23.patch
 # https://gmplib.org/repo/gmp/rev/372acfd0c33e
 Patch5: gmp-6.3.0-s390x-popcount.patch
 Patch6: gmp-devel-arm64-pac-bti.patch
+# oreon url source checksums begin
+%global source0_sha256 a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898
+%global source0_file gmp-6.3.0.tar.xz
+# oreon url source checksums end
 # * Main sources are dual licensed under LGPL-3.0-or-later and GPL-2.0-or-later
 #   Either only one may be active or both simultaneously.
 # * Some docs are under GFDL-1.3-invariants-or-later.
@@ -79,6 +83,9 @@ The static libraries for using the GNU MP arbitrary precision library
 in applications.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gmp-6.3.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a3c2b80201b89e68616f4ad30bc66aee4927c3ce50e33929ca819d5c43538898" || { echo "oreon: Source0 SHA256 mismatch for gmp-6.3.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

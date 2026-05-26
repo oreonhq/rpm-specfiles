@@ -16,8 +16,14 @@ License:        Apache-2.0
 
 URL:            %{forgeurl}
 
-Source0:        %{forgesource}
+Source0:        https://github.com/osbuild/osbuild/archive/v176/osbuild-176.tar.gz
 Source1:        https://github.com/osbuild/initrd/releases/download/%{osbuild_initrd_version}/osbuild-initrd-%{osbuild_initrd_version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 175193156b2ec3748861f638eb6401161f18b57a19ba0771032b228c7b91d1a3
+%global source0_file osbuild-176.tar.gz
+%global source1_sha256 5de56a55da00e2909fc9a56aa881592501fb329416f9934c86d89b7e5de8d3d6
+%global source1_file osbuild-initrd-0.1.tar.gz
+# oreon url source checksums end
 Summary:        A build system for OS images
 
 # There is no golang support for i686 on centos and RHEL
@@ -209,6 +215,10 @@ Provides: osbuild-dnf-json-api = 8
 Contains depsolving capabilities for package managers.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/osbuild-176.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "175193156b2ec3748861f638eb6401161f18b57a19ba0771032b228c7b91d1a3" || { echo "oreon: Source0 SHA256 mismatch for osbuild-176.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/osbuild-initrd-0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5de56a55da00e2909fc9a56aa881592501fb329416f9934c86d89b7e5de8d3d6" || { echo "oreon: Source1 SHA256 mismatch for osbuild-initrd-0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %forgeautosetup -p1
 tar xf %SOURCE1
 

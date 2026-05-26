@@ -25,6 +25,10 @@ Source1:        https://hackage.haskell.org/package/%{libyaml}/%{libyaml}.tar.gz
 Source2:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 Patch0:         system-libyaml.patch
+# oreon url source checksums begin
+%global source1_sha256 d6297ec9b1ebb4e4b580a4357d840d08a6f53e13a10c0c53ee74b973bba6fa13
+%global source1_file libyaml-0.1.4.tar.gz
+# oreon url source checksums end
 
 # Begin cabal-rpm deps:
 BuildRequires:  dos2unix
@@ -123,6 +127,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libyaml-0.1.4.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d6297ec9b1ebb4e4b580a4357d840d08a6f53e13a10c0c53ee74b973bba6fa13" || { echo "oreon: Source1 SHA256 mismatch for libyaml-0.1.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver} -a1
 dos2unix -k -n %{SOURCE2} %{pkg_name}.cabal

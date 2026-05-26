@@ -7,6 +7,10 @@ Summary:        KDE wrapper around Exiv2 (Qt 6)
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/graphics/libkexiv2
 Source0:        https://download.kde.org/stable/release-service/%{version}/src/libkexiv2-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 8ed6de46cdd084a834dd0f2049d6490977a8eedc50a2e59f715fb1cecf6653ec
+%global source0_file libkexiv2-25.12.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -39,6 +43,9 @@ Headers and CMake files for libkexiv2.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libkexiv2-25.12.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8ed6de46cdd084a834dd0f2049d6490977a8eedc50a2e59f715fb1cecf6653ec" || { echo "oreon: Source0 SHA256 mismatch for libkexiv2-25.12.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n libkexiv2-%{version} -p1
 
 

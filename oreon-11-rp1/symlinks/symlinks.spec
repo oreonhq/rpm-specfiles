@@ -5,9 +5,13 @@ Version: 1.7
 Release: 14%{?dist}
 License: Symlinks
 # ibiblio mirror dead; local tarball matches Fedora dist-git (SHA512 verified)
-Source0: %{name}-%{version}.tar.gz
+Source0:        http://ibiblio.org/pub/Linux/utils/file/%{name}-%{version}.tar.gz
 # Taken from http://packages.debian.org/changelogs/pool/main/s/symlinks/symlinks_1.2-4.2/symlinks.copyright
 Source1: symlinks-LICENSE.txt
+# oreon url source checksums begin
+%global source0_sha256 596fa828d6425c47aa1a11418139cc572dae07a96c87eb1b9c70acf0c1836cd3
+%global source0_file symlinks-1.7.tar.gz
+# oreon url source checksums end
 BuildRequires: make
 BuildRequires: gcc
 
@@ -21,6 +25,9 @@ Install the symlinks package if you need a program for maintaining
 symlinks on your system.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/symlinks-1.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "596fa828d6425c47aa1a11418139cc572dae07a96c87eb1b9c70acf0c1836cd3" || { echo "oreon: Source0 SHA256 mismatch for symlinks-1.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 cp %{SOURCE1} .
 

@@ -10,6 +10,10 @@ Summary:        Storage array management library
 License:        LGPL-2.1-or-later
 URL:            https://github.com/libstorage/libstoragemgmt
 Source0:        https://github.com/libstorage/libstoragemgmt/releases/download/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 66ccac385eb2759e47422d35d5325d2d8f077e4693a6663be12d100ebf608a10
+%global source0_file libstoragemgmt-1.10.3.tar.gz
+# oreon url source checksums end
 Requires:       python3-%{name}%{_isa}
 Requires:       ledmon-libs
 
@@ -172,6 +176,9 @@ The %{name}-local-plugin is a plugin that provides auto
 plugin selection for locally managed storage.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libstoragemgmt-1.10.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "66ccac385eb2759e47422d35d5325d2d8f077e4693a6663be12d100ebf608a10" || { echo "oreon: Source0 SHA256 mismatch for libstoragemgmt-1.10.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

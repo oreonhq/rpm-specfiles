@@ -12,6 +12,10 @@ Summary:        CardDAV client
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Net-CardDAVTalk
 Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-CardDAVTalk-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e39ce5d284747d83505feb13c64b5aa92e477049c863880cec6540b86c8ff22d
+%global source0_file Net-CardDAVTalk-0.09.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -69,6 +73,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Net-CardDAVTalk-0.09.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e39ce5d284747d83505feb13c64b5aa92e477049c863880cec6540b86c8ff22d" || { echo "oreon: Source0 SHA256 mismatch for Net-CardDAVTalk-0.09.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Net-CardDAVTalk-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

@@ -4,9 +4,14 @@ Release:        5%{?dist}
 Summary:        Automatically sets repository URL from Svn/Svk/Git checkout
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-Repository
-Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Install-Repository-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIYAGAWA/Module-Install-Repository-0.08.tar.gz
+
 Patch0:         Module-Install-Repository-0.06-Fix-building-on-Perl-without-dot-in-INC.patch
 Patch1:         Module-Install-Repository-0.08-Update-test_requires.patch
+# oreon url source checksums begin
+%global source0_sha256 849205d0d2c065d916c5cc7438a101ae50ec561e0adc844c0e90a823448595f9
+%global source0_file Module-Install-Repository-0.08.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -36,6 +41,9 @@ figure out repository URL and set it via repository(), which then will be
 added to resources under META.yml.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Install-Repository-0.08.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "849205d0d2c065d916c5cc7438a101ae50ec561e0adc844c0e90a823448595f9" || { echo "oreon: Source0 SHA256 mismatch for Module-Install-Repository-0.08.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Install-Repository-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

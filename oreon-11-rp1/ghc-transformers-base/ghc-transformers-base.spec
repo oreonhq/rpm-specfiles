@@ -14,6 +14,10 @@ License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/transformers-base
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 323bf8689eb691b122661cffa41a25e00fea7a768433fe2dde35d3da7d32cf90
+%global source0_file transformers-base-0.4.6.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -74,6 +78,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/transformers-base-0.4.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "323bf8689eb691b122661cffa41a25e00fea7a768433fe2dde35d3da7d32cf90" || { echo "oreon: Source0 SHA256 mismatch for transformers-base-0.4.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

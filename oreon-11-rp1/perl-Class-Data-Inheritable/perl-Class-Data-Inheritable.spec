@@ -12,9 +12,12 @@ Summary:        Inheritable, overridable class data
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Data-Inheritable
 # has non-free and possibly outdated jp docs
-# rm -rf doc
 # Source0:      https://cpan.metacpan.org/modules/by-module/Class/Class-Data-Inheritable-%%{version}.tar.gz
-Source0:        Class-Data-Inheritable-%{version}-clean.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RS/RSHERER/Class-Data-Inheritable-0.10.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 aa1ae68a611357b7bfd9a2f64907cc196ddd6d047cae64ef9d0ad099d98ae54a
+%global source0_file Class-Data-Inheritable-0.10.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -42,7 +45,11 @@ class as a whole (instead of about a single object). This data
 is then inherited by your sub-classes and can be overridden.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Class-Data-Inheritable-0.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aa1ae68a611357b7bfd9a2f64907cc196ddd6d047cae64ef9d0ad099d98ae54a" || { echo "oreon: Source0 SHA256 mismatch for Class-Data-Inheritable-0.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Class-Data-Inheritable-%{version}
+rm -rf doc
 
 %build
 perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1

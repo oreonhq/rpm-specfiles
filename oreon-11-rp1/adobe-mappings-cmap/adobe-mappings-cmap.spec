@@ -6,6 +6,10 @@ License:          BSD-3-Clause
 
 URL:              https://www.adobe.com/
 Source:           https://github.com/adobe-type-tools/cmap-resources/archive/%{version}.tar.gz#/cmap-resources-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a88c3beee8d2f139b47f9d7e932ec198be24991dd46fcaef2961b4b5ea855ea2
+%global source0_file 20231115.tar.gz
+# oreon url source checksums end
 
 BuildArch:        noarch
 BuildRequires:    git
@@ -71,6 +75,9 @@ as well as all the fonts contained in this font set.
 #       postscript format as intended. That's why there is no %%build phase.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/20231115.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a88c3beee8d2f139b47f9d7e932ec198be24991dd46fcaef2961b4b5ea855ea2" || { echo "oreon: Source0 SHA256 mismatch for 20231115.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n cmap-resources-%{version} -S git
 
 %install

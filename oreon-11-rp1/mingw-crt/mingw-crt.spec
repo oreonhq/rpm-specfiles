@@ -37,6 +37,10 @@ Source1:       standard-dlls-mingw32
 Source2:       standard-dlls-mingw64
 # (rpm -ql ucrt64-crt | grep '\.a$' | while read f ; do x86_64-w64-mingw32ucrt-dlltool -I $f 2>/dev/null ; done) | sort | uniq | tr A-Z a-z > standard-dlls-ucrt64
 Source3:       standard-dlls-ucrt64
+# oreon url source checksums begin
+%global source0_sha256 5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf
+%global source0_file mingw-w64-v13.0.0.tar.bz2
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -96,6 +100,9 @@ MinGW Windows cross-compiler runtime, base libraries for the win64 target.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mingw-w64-v13.0.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf" || { echo "oreon: Source0 SHA256 mismatch for mingw-w64-v13.0.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n mingw-w64-v%{version}
 
 

@@ -19,6 +19,10 @@ Release: 10%{?dist}
 License: GPL-2.0-or-later
 URL: https://abrt.readthedocs.org/
 Source: https://github.com/abrt/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 cf181ed248f6bf12233b459e4a504fab645b3ce8040b6855a073453756311166
+%global source0_file libreport-2.17.15.tar.gz
+# oreon url source checksums end
 BuildRequires: %{dbus_devel}
 BuildRequires: gtk3-devel
 BuildRequires: curl-devel
@@ -286,6 +290,9 @@ data over ftp/scp...
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libreport-2.17.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cf181ed248f6bf12233b459e4a504fab645b3ce8040b6855a073453756311166" || { echo "oreon: Source0 SHA256 mismatch for libreport-2.17.15.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

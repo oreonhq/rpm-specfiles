@@ -35,6 +35,12 @@ Patch5:         kbd-2.0.2-unicode-start-font.patch
 Patch6:         kbd-2.4.0-covscan-fixes.patch
 # Patch7: adds vlock option to issue prompt before invokation of pam stack
 Patch7:         kbd-2.0.4-vlock-add-prompt-option.patch
+# oreon url source checksums begin
+%global source0_sha256 fb3197f17a99eb44d22a3a1a71f755f9622dd963e66acfdea1a45120951b02ed
+%global source0_file kbd-2.9.0.tar.xz
+%global source1_sha256 9eda617f2db0302cb2bcbd3ad40037f961a76f0606dc486d096248c89e1685e5
+%global source1_file kbd-latsun-fonts.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc, bison, flex, gettext, pam-devel, check-devel, automake
 BuildRequires:  console-setup, xkeyboard-config
@@ -69,6 +75,10 @@ The %{name}-legacy package contains original keymaps for kbd package.
 Please note that %{name}-legacy is not helpful without kbd.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kbd-2.9.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fb3197f17a99eb44d22a3a1a71f755f9622dd963e66acfdea1a45120951b02ed" || { echo "oreon: Source0 SHA256 mismatch for kbd-2.9.0.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/kbd-latsun-fonts.tar.bz2; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9eda617f2db0302cb2bcbd3ad40037f961a76f0606dc486d096248c89e1685e5" || { echo "oreon: Source1 SHA256 mismatch for kbd-latsun-fonts.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -a 1
 cp -fp %{SOURCE3} .
 cp -fp %{SOURCE6} .

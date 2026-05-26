@@ -24,7 +24,7 @@ URL:           http://libgd.github.io/
 %if 0%{?commit:1}
 # git clone https://github.com/libgd/libgd.git; cd gd-libgd
 # git archive  --format=tgz --output=libgd-%{version}-%{commit}.tgz --prefix=libgd-%{version}/  master
-Source0:       libgd-%{version}-%{commit}.tgz
+Source0:        https://github.com/libgd/libgd/releases/download/gd-2.3.3/libgd-2.3.3.tar.xz
 %else
 Source0:       https://github.com/libgd/libgd/releases/download/gd-%{version}/libgd-%{version}.tar.xz
 %endif
@@ -33,6 +33,10 @@ Source0:       https://github.com/libgd/libgd/releases/download/gd-%{version}/li
 Patch0:        libgd-flip.patch
 # Missing header see https://github.com/libgd/libgd/pull/766
 Patch1:        libgd-iostream.patch
+# oreon url source checksums begin
+%global source0_sha256 3fe822ece20796060af63b7c60acb151e5844204d289da0ce08f8fdf131e5a61
+%global source0_file libgd-2.3.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires: freetype-devel
 BuildRequires: fontconfig-devel
@@ -116,6 +120,9 @@ files for gd, a graphics library for creating PNG and JPEG graphics.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libgd-2.3.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3fe822ece20796060af63b7c60acb151e5844204d289da0ce08f8fdf131e5a61" || { echo "oreon: Source0 SHA256 mismatch for libgd-2.3.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n libgd-%{version}%{?prever:-%{prever}}
 %patch -P0 -p1
 %patch -P1 -p1

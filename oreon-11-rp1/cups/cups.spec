@@ -75,6 +75,10 @@ Patch100: cups-lspp.patch
 #### UPSTREAM PATCHES (starts with 1000) ####
 Patch1000: 0001-scheduler-Fix-possible-use_after_free-in-cupsdReadCl.patch
 Patch1001: 0001-tls-gnutls.c-Do-not-check-for-errno-after-I-O-operat.patch
+# oreon url source checksums begin
+%global source0_sha256 0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d
+%global source0_file cups-2.4.16-source.tar.gz
+# oreon url source checksums end
 
 
 ##### Patches removed because IMHO they aren't no longer needed
@@ -271,6 +275,9 @@ is installed with a printer application, its print queue acts as IPP everywhere 
 to CUPS daemon. This solution will substitute printer drivers and raw queues in the future.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cups-2.4.16-source.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d" || { echo "oreon: Source0 SHA256 mismatch for cups-2.4.16-source.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n cups-%{VERSION}
 # Prevent multilib conflict in cups-config script.
 %patch -P 1 -p1 -b .multilib

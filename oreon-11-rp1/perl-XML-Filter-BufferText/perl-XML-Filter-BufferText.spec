@@ -5,7 +5,12 @@ Summary:        Filter to put all characters() in one event
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Filter-BufferText
-Source0:        https://cpan.metacpan.org/modules/by-module/XML/XML-Filter-BufferText-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RB/RBERJON/XML-Filter-BufferText-1.01.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8fd2126d3beec554df852919f4739e689202cbba6a17506e9b66ea165841a75c
+%global source0_file XML-Filter-BufferText-1.01.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  perl-generators
@@ -23,6 +28,9 @@ does the trivial but oft-repeated task of putting all characters into a
 single event.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-Filter-BufferText-1.01.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8fd2126d3beec554df852919f4739e689202cbba6a17506e9b66ea165841a75c" || { echo "oreon: Source0 SHA256 mismatch for XML-Filter-BufferText-1.01.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-Filter-BufferText-%{version}
 chmod 644 Changes README BufferText.pm
 

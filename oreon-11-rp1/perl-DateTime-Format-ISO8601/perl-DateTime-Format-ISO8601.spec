@@ -6,6 +6,10 @@ License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    Parses ISO8601 date-time formats
 Url:        https://metacpan.org/release/DateTime-Format-ISO8601
 Source:     https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-Format-ISO8601-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 04899f3b1896b2e0933a1d728b3094ccd2f7d09e434c4eac2696cd931bbf0551
+%global source0_file DateTime-Format-ISO8601-0.17.tar.gz
+# oreon url source checksums end
 BuildArch:  noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -52,6 +56,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DateTime-Format-ISO8601-0.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "04899f3b1896b2e0933a1d728b3094ccd2f7d09e434c4eac2696cd931bbf0551" || { echo "oreon: Source0 SHA256 mismatch for DateTime-Format-ISO8601-0.17.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DateTime-Format-ISO8601-%{version}
 # Help file to recognise the Perl scripts
 for F in t/*.t; do

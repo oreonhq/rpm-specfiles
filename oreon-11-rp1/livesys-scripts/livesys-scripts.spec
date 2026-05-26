@@ -5,12 +5,16 @@ Summary:        Scripts for auto-configuring live media during boot
 
 License:        GPL-3.0-or-later
 URL:            https://pagure.io/livesys-scripts
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://pagure.io/livesys-scripts/archive/0.8.0/livesys-scripts-0.8.0.tar.gz
 
 # https://pagure.io/livesys-scripts/pull-request/28
 # https://bugzilla.redhat.com/show_bug.cgi?id=2240823
 # Fix installer launch on i3
 Patch0:         0001-livesys-i3-restore-the-hack-to-fix-the-installer.patch
+# oreon url source checksums begin
+%global source0_sha256 c581e7ae72b2c8bd9421d2ec88cce1c8890f86c3d8fac4a1e7b86b7a4848d416
+%global source0_file livesys-scripts-0.8.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  make
@@ -23,6 +27,9 @@ BuildArch:      noarch
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/livesys-scripts-0.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c581e7ae72b2c8bd9421d2ec88cce1c8890f86c3d8fac4a1e7b86b7a4848d416" || { echo "oreon: Source0 SHA256 mismatch for livesys-scripts-0.8.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

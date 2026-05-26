@@ -31,6 +31,10 @@ Source20:       config.vga-ramfb
 Source21:       config.vga-bochs-display
 Source22:       config.vga-ati
 Source23:       config.seabios-microvm
+# oreon url source checksums begin
+%global source0_sha256 cb708a548e4244c5021590a5e78ab6e331ded1750120b687039042994033a07c
+%global source0_file rel-1.17.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc
@@ -88,6 +92,9 @@ SeaVGABIOS is an open-source VGABIOS implementation.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rel-1.17.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cb708a548e4244c5021590a5e78ab6e331ded1750120b687039042994033a07c" || { echo "oreon: Source0 SHA256 mismatch for rel-1.17.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n seabios-rel-%{version}
 %autopatch -p1
 

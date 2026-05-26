@@ -5,6 +5,10 @@ Release:	%autorelease
 License:	LGPL-2.1-or-later
 URL:		https://libexif.github.io/
 Source0:	https://github.com/libexif/libexif/releases/download/v%{version}/libexif-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 0830ed253fceeb60444fb309598bc8a9491d3007dc054aad3a50a347c5597c57
+%global source0_file libexif-0.6.26.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -36,6 +40,9 @@ API Documentation for programmers wishing to use libexif in their programs.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libexif-0.6.26.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0830ed253fceeb60444fb309598bc8a9491d3007dc054aad3a50a347c5597c57" || { echo "oreon: Source0 SHA256 mismatch for libexif-0.6.26.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 autoreconf -fiv
 iconv -f latin1 -t utf-8 < COPYING > COPYING.utf8; cp COPYING.utf8 COPYING

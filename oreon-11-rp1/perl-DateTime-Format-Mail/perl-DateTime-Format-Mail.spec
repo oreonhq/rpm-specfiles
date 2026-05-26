@@ -8,7 +8,12 @@ Release:        28%{?dist}
 Summary:        Convert between DateTime and RFC2822/822 formats
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Format-Mail            
-Source0:        https://cpan.metacpan.org/modules/by-module/DateTime/DateTime-Format-Mail-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BO/BOOK/DateTime-Format-Mail-0.403.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8df8e35c4477388ff5c7ce8b3e8b6ae4ed30209c7a5051d41737bd14d755fcb0
+%global source0_file DateTime-Format-Mail-0.403.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -49,6 +54,9 @@ Despite the ease of generating and parsing perfectly valid RFC822 and RFC2822
 people still get it wrong. This module aims to correct that.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DateTime-Format-Mail-0.403.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8df8e35c4477388ff5c7ce8b3e8b6ae4ed30209c7a5051d41737bd14d755fcb0" || { echo "oreon: Source0 SHA256 mismatch for DateTime-Format-Mail-0.403.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DateTime-Format-Mail-%{version}
 
 %build

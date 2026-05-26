@@ -5,6 +5,10 @@ Summary:    Remove embedding limitations from TrueType fonts
 License:    Unlicense
 URL:        https://github.com/hisdeedsaredust/ttembed
 Source0:    https://github.com/hisdeedsaredust/ttembed/archive/v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2d66e7b2f8bb9c4ab808dedc07df29b4980a84685e57fa07b56c090b6f4482db
+%global source0_file v1.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  gcc
@@ -13,6 +17,9 @@ Remove embedding limitations from TrueType fonts, by setting the fsType field
 in the OS/2 table to zero. That's it; this program is a one-trick pony.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2d66e7b2f8bb9c4ab808dedc07df29b4980a84685e57fa07b56c090b6f4482db" || { echo "oreon: Source0 SHA256 mismatch for v1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

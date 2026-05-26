@@ -6,8 +6,13 @@ Summary:        A Perl module emulating the file(1) command
 # license, BSD license, and ASL 1.0 license.
 License:        App-s2p AND Apache-1.0 AND Spencer-94
 URL:            https://metacpan.org/release/File-MMagic
-Source0:        https://cpan.metacpan.org/modules/by-module/File/File-MMagic-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/K/KN/KNOK/File-MMagic-1.30.tar.gz
+
 Patch0:         File-MMagic-1.30-rt109673.patch
+# oreon url source checksums begin
+%global source0_sha256 cf0c1b1eb29705c02d97c2913648009c0be42ce93ec24b36c696bf2d4f5ebd7e
+%global source0_file File-MMagic-1.30.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -36,6 +41,9 @@ This module attempts to guess a file's type from its contents like the file(1)
 command.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-MMagic-1.30.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cf0c1b1eb29705c02d97c2913648009c0be42ce93ec24b36c696bf2d4f5ebd7e" || { echo "oreon: Source0 SHA256 mismatch for File-MMagic-1.30.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n File-MMagic-%{version}
 
 # Fix "Redundant argument in sprintf" warning (CPAN RT#109673)

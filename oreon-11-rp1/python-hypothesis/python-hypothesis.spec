@@ -32,11 +32,15 @@ Summary:        Library for property based testing
 
 License:        MPL-2.0
 URL:            https://github.com/HypothesisWorks/hypothesis
-Source:         %{url}/archive/hypothesis-python-%{version}/hypothesis-%{version}.tar.gz
+Source:        https://github.com/HypothesisWorks/hypothesis/archive/hypothesis-python-6.123.0/hypothesis-6.123.0.tar.gz
 # Patch to use the version of attrs that works with Python 3.14
 # see https://github.com/python-attrs/attrs/pull/1329
 #     https://github.com/python-attrs/attrs/commit/7373d88f9bef8a2ff70972f81e8d8b9dfb7c5653
 Patch:          hypothesis-attrs-py314.diff
+# oreon url source checksums begin
+%global source0_sha256 590d2574a7711de78c1d4d5bfed92fad11c08248482724b772ceb8401421f634
+%global source0_file hypothesis-6.123.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -86,6 +90,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hypothesis-6.123.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "590d2574a7711de78c1d4d5bfed92fad11c08248482724b772ceb8401421f634" || { echo "oreon: Source0 SHA256 mismatch for hypothesis-6.123.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n hypothesis-hypothesis-python-%{version}/hypothesis-python -N
 # make it possible to patch files outside hypothesis-python
 pushd ..

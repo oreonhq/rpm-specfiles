@@ -13,6 +13,10 @@ Patch0:         yaml-cpp-include.patch
 
 # Allow CMake 4.0 build
 Patch1:         https://github.com/jbeder/yaml-cpp/pull/1211.patch
+# oreon url source checksums begin
+%global source0_sha256 fbe74bbdcee21d656715688706da3c8becfd946d92cd44705cc6098bb23b3a16
+%global source0_file yaml-cpp-0.8.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -38,6 +42,9 @@ Requires:       %{name}-devel%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 The %{name}-static package contains the static library for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/yaml-cpp-0.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fbe74bbdcee21d656715688706da3c8becfd946d92cd44705cc6098bb23b3a16" || { echo "oreon: Source0 SHA256 mismatch for yaml-cpp-0.8.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

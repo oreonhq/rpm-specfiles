@@ -68,12 +68,19 @@ This package provides the Google “Noto Emoji” Black-and-White emoji variable
 
 Source0:        https://github.com/googlefonts/noto-emoji/archive/%{commit0}.tar.gz#/noto-emoji-%{shortcommit0}.tar.gz
 Source4:        Noto_Emoji.zip
+# oreon url source checksums begin
+%global source0_sha256 a58c57d95242a17cfe3adf40c764b15b1b1354ed689b684315c093e5b531538f
+%global source0_file b3e3051a088047d19fd4d49b1c3ac42fb8c3aaf8.tar.gz
+# oreon url source checksums end
 
 
 %fontpkg -a
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/b3e3051a088047d19fd4d49b1c3ac42fb8c3aaf8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a58c57d95242a17cfe3adf40c764b15b1b1354ed689b684315c093e5b531538f" || { echo "oreon: Source0 SHA256 mismatch for b3e3051a088047d19fd4d49b1c3ac42fb8c3aaf8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -a 4 -n noto-emoji-%{commit0}
 
 rm -rf third_party/pngquant

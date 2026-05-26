@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/%{name}/%{version}/%{name}-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 6eef96011f3674fc1720fa61c6d1d5b276e96bb8902f33b5e28df0ee7b6ea47e
+%global source0_file maven-parent-43-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -26,6 +30,9 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 Apache Maven parent POM file used by other Maven projects.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-parent-43-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6eef96011f3674fc1720fa61c6d1d5b276e96bb8902f33b5e28df0ee7b6ea47e" || { echo "oreon: Source0 SHA256 mismatch for maven-parent-43-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin :maven-checkstyle-plugin

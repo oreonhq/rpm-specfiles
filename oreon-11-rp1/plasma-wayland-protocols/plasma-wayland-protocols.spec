@@ -10,6 +10,10 @@ License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-or-later AND MIT-CMU
 URL:     https://invent.kde.org/libraries/%{name}
 
 Source0: https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 9818bb1462211ce5982e670abf0d964eb11fe1d0c02a1c26084db30695a79d6a
+%global source0_file plasma-wayland-protocols-1.20.0.tar.xz
+# oreon url source checksums end
 
 ## upstream patches (lookaside cache)
 BuildRequires:  kf6-rpm-macros
@@ -29,6 +33,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plasma-wayland-protocols-1.20.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9818bb1462211ce5982e670abf0d964eb11fe1d0c02a1c26084db30695a79d6a" || { echo "oreon: Source0 SHA256 mismatch for plasma-wayland-protocols-1.20.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version} -p1
 
 

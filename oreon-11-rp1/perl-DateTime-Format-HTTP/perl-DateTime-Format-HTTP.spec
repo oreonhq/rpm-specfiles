@@ -4,7 +4,12 @@ Release:        4%{?dist}
 Summary:        HTTP protocol date conversion routines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Format-HTTP
-Source0:        https://cpan.metacpan.org/modules/by-module/DateTime/DateTime-Format-HTTP-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CK/CKRAS/DateTime-Format-HTTP-0.43.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4e7e82211f3749a73f6f2556f7048cff0725c7d7e52cb819fd51b1bba9fa0b58
+%global source0_file DateTime-Format-HTTP-0.43.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -33,6 +38,9 @@ This module provides functions that deal with the date formats used by the
 HTTP protocol (and then some).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DateTime-Format-HTTP-0.43.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4e7e82211f3749a73f6f2556f7048cff0725c7d7e52cb819fd51b1bba9fa0b58" || { echo "oreon: Source0 SHA256 mismatch for DateTime-Format-HTTP-0.43.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DateTime-Format-HTTP-%{version}
 
 %build

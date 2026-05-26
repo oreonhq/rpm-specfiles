@@ -5,6 +5,10 @@ Summary:        Extract distribution name and version from a distribution filena
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CPAN-DistnameInfo
 Source0:        https://cpan.metacpan.org/authors/id/G/GB/GBARR/CPAN-DistnameInfo-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2f24fbe9f7eeacbc269d35fc61618322fc17be499ee0cd9018f370934a9f2435
+%global source0_file CPAN-DistnameInfo-0.12.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -42,6 +46,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/CPAN-DistnameInfo-0.12.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2f24fbe9f7eeacbc269d35fc61618322fc17be499ee0cd9018f370934a9f2435" || { echo "oreon: Source0 SHA256 mismatch for CPAN-DistnameInfo-0.12.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n CPAN-DistnameInfo-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

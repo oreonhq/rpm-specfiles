@@ -6,6 +6,10 @@ Release: 1%{?dist}
 License: MIT
 URL: https://sourceforge.net/projects/logwatch/
 Source0: https://sourceforge.net/projects/logwatch/files/%{name}-%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2fc66eca83419053991484b7d6e778f46b03704ce778893473d7a9cb7dd915f9
+%global source0_file logwatch-7.14.tar.gz
+# oreon url source checksums end
 BuildRequires: perl-generators
 Requires: grep
 Requires: dnf5
@@ -31,6 +35,9 @@ that you wish with the detail that you wish.  Easy to use - works right out
 of the package on many systems.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/logwatch-7.14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2fc66eca83419053991484b7d6e778f46b03704ce778893473d7a9cb7dd915f9" || { echo "oreon: Source0 SHA256 mismatch for logwatch-7.14.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

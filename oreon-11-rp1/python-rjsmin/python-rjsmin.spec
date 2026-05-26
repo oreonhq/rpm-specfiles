@@ -17,6 +17,10 @@ Summary:        Javascript Minifier
 License:        Apache-2.0
 URL:            http://opensource.perlig.de/rjsmin/
 Source0:        https://pypi.python.org/packages/source/r/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a3f8040b0273dec773e0e807e86a4d0a9535516c0a0a35aa1bb6de6e15bb1f09
+%global source0_file rjsmin-1.2.5.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel
@@ -41,6 +45,9 @@ Summary:	Javascript Minifier - docs
 %{desc}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rjsmin-1.2.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a3f8040b0273dec773e0e807e86a4d0a9535516c0a0a35aa1bb6de6e15bb1f09" || { echo "oreon: Source0 SHA256 mismatch for rjsmin-1.2.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pypi_name}-%{version}
 
 # strip bang path from rjsmin.py

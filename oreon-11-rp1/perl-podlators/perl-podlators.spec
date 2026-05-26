@@ -29,6 +29,10 @@ Summary:        Format POD source into various output formats
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND FSFAP
 URL:            https://metacpan.org/release/podlators
 Source0:        https://cpan.metacpan.org/authors/id/R/RR/RRA/podlators-v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2992125eab7d2b1c5a2b15a26ad7955f7d989eba6c831abdcaf2000e86a91337
+%global source0_file podlators-v6.0.2.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -107,6 +111,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/podlators-v6.0.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2992125eab7d2b1c5a2b15a26ad7955f7d989eba6c831abdcaf2000e86a91337" || { echo "oreon: Source0 SHA256 mismatch for podlators-v6.0.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n podlators-v%{version}
 
 %build

@@ -35,6 +35,10 @@ Patch1:         FCGI-0.82-Update-fcgiapp.c.patch
 # <https://github.com/perl-catalyst/FCGI/issues/14>, copied from fcgi2 library
 # <https://github.com/FastCGI-Archives/fcgi2/issues/67>.
 Patch2:         FCGI-0.82-Fix-size_t-overflow-in-Malloc-argument-in-ReadParams.patch
+# oreon url source checksums begin
+%global source0_sha256 4c7d60e26da2c07f058a4e345021e92505273b33c9542215977e084611f09ecf
+%global source0_file FCGI-0.82.tar.gz
+# oreon url source checksums end
 URL:            https://metacpan.org/release/FCGI
 # bash for sh executed from Makefile.PL
 BuildRequires:  bash
@@ -97,6 +101,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/FCGI-0.82.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4c7d60e26da2c07f058a4e345021e92505273b33c9542215977e084611f09ecf" || { echo "oreon: Source0 SHA256 mismatch for FCGI-0.82.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n FCGI-%{version}
 find . -type f -exec chmod -c -x {} +
 %if %{without perl_FCGI_enables_client_tests}

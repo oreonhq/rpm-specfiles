@@ -6,6 +6,10 @@ Summary:        A voice compression format (DSP)
 License:        BSD-3-Clause
 URL:            http://www.speex.org/
 Source0:        http://downloads.xiph.org/releases/speex/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8c777343e4a6399569c72abc38a95b24db56882c83dbdb6c6424a5f4aeb54d3d
+%global source0_file speexdsp-1.2.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -37,6 +41,9 @@ This is the DSP package, see the speex package for the codec part.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/speexdsp-1.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8c777343e4a6399569c72abc38a95b24db56882c83dbdb6c6424a5f4aeb54d3d" || { echo "oreon: Source0 SHA256 mismatch for speexdsp-1.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -6,6 +6,10 @@ Summary:        Digest-SHA1 Perl module
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Digest-SHA1
 Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/Digest-SHA1-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 68c1dac2187421f0eb7abf71452a06f190181b8fc4b28ededf5b90296fb943cc
+%global source0_file Digest-SHA1-2.13.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -49,6 +53,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Digest-SHA1-2.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "68c1dac2187421f0eb7abf71452a06f190181b8fc4b28ededf5b90296fb943cc" || { echo "oreon: Source0 SHA256 mismatch for Digest-SHA1-2.13.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Digest-SHA1-%{version} 
 f=Changes ; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 ; mv $f.utf8 $f
 

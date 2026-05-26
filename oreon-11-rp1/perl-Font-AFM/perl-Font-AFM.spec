@@ -6,6 +6,10 @@ Summary:        Perl interface to Adobe Font Metrics files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Font-AFM
 Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/Font-AFM-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 32671166da32596a0f6baacd0c1233825a60acaf25805d79c81a3f18d6088bc1
+%global source0_file Font-AFM-1.20.tar.gz
+# oreon url source checksums end
 
 
 BuildArch:      noarch
@@ -26,6 +30,9 @@ BuildRequires:  %{_fontbasedir}/urw-base35/NimbusSans-Bold.afm
 Interface to Adobe Font Metrics files
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Font-AFM-1.20.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "32671166da32596a0f6baacd0c1233825a60acaf25805d79c81a3f18d6088bc1" || { echo "oreon: Source0 SHA256 mismatch for Font-AFM-1.20.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Font-AFM-%{version}
 # We don't have Helvetica, use NimbusSans-Bold.afm instead
 sed -i -e 's,Helvetica,NimbusSans-Bold,g' t/afm.t

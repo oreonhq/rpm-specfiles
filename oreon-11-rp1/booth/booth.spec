@@ -45,6 +45,10 @@ Summary:        Ticket Manager for Multi-site Clusters
 License:        GPL-2.0-or-later
 Url:            https://github.com/%{github_owner}/%{name}
 Source0:        https://github.com/%{github_owner}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4f1c4581f71af1188893cce6bbe7d69ac7d9e8593ffd18a3a5f2449f4a5df3bf
+%global source0_file booth-1.2.tar.gz
+# oreon url source checksums end
 
 # direct build process dependencies
 BuildRequires:  autoconf
@@ -172,6 +176,9 @@ Automated tests for running Booth, ticket manager for multi-site clusters.
 # BUILD #
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/booth-1.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4f1c4581f71af1188893cce6bbe7d69ac7d9e8593ffd18a3a5f2449f4a5df3bf" || { echo "oreon: Source0 SHA256 mismatch for booth-1.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version} -S git_am
 
 %build

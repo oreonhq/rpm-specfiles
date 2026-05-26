@@ -14,6 +14,10 @@ License: GPL-2.0-only OR LGPL-2.1-only OR MPL-1.1
 
 URL: http://ayaspell.sourceforge.net/
 Source: http://sourceforge.net/projects/ayaspell/files/hunspell-ar_%{version}.%{ver_date}.zip
+# oreon url source checksums begin
+%global source0_sha256 966faf94e7d05d52e9afdd20b266e28932edf5b32fe26aa83d554d6a2c6021ea
+%global source0_file hunspell-ar_3.5.2014-11-08.zip
+# oreon url source checksums end
 
 BuildArch: noarch
 Requires: hunspell-filesystem
@@ -23,6 +27,9 @@ Supplements: (hunspell and langpacks-ar)
 Arabic (Egypt, Algeria, etc.) hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hunspell-ar_3.5.2014-11-08.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "966faf94e7d05d52e9afdd20b266e28932edf5b32fe26aa83d554d6a2c6021ea" || { echo "oreon: Source0 SHA256 mismatch for hunspell-ar_3.5.2014-11-08.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c
 
 %build

@@ -40,13 +40,17 @@ Release: 2%{?dist}
 License: BSD-3-Clause
 Url: https://www.nlnetlabs.nl/%{name}/
 Vcs: git:%{forgeurl}
-Source0: %{downloadurl}/%{name}-%{version}.tar.gz
-Source1: %{downloadurl}/%{name}-%{version}.tar.gz.asc
+Source0:        https://www.nlnetlabs.nl/downloads/ldns/ldns-1.9.0.tar.gz
+Source1:        https://www.nlnetlabs.nl/downloads/ldns/ldns-1.9.0.tar.gz.asc
 # Willem Toorop, https://www.nlnetlabs.nl/people/
 Source2: https://keys.openpgp.org/vks/v1/by-fingerprint/DC34EE5DB2417BCC151E5100E5F8F8212F77A498#/wtoorop.asc
 Patch1: ldns-1.7.0-multilib.patch
 # https://github.com/NLnetLabs/ldns/pull/288
 Patch8: ldns-1.9-std23-bool.patch
+# oreon url source checksums begin
+%global source0_sha256 abaeed2858fbea84a4eb9833e19e7d23380cc0f3d9b6548b962be42276ffdcb3
+%global source0_file ldns-1.9.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: libtool
 BuildRequires: autoconf
@@ -127,6 +131,9 @@ BuildArch: noarch
 This package contains documentation for the ldns library
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ldns-1.9.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "abaeed2858fbea84a4eb9833e19e7d23380cc0f3d9b6548b962be42276ffdcb3" || { echo "oreon: Source0 SHA256 mismatch for ldns-1.9.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{?extra_version:%global pkgname %{name}-%{version}%{extra_version}}%{!?extra_version:%global pkgname %{name}-%{version}}
 %if 0%{?fedora} || 0%{?oreon}
 %gpgverify -d 0 -s 1 -k 2

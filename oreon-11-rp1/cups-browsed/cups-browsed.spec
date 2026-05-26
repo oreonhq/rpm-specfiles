@@ -17,12 +17,16 @@ Summary: Daemon for local auto-installation of remote printers
 # https://lists.fedoraproject.org/archives/list/legal@lists.fedoraproject.org/message/A7GFSD6M3GYGSI32L2FC5KB22DUAEQI3/
 License: Apache-2.0 WITH LLVM-exception
 URL: https://github.com/OpenPrinting/cups-browsed
-Source0: %{URL}/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/OpenPrinting/cups-browsed/releases/download/2.1.1/cups-browsed-2.1.1.tar.gz
 
 
 # Patches
 # https://github.com/OpenPrinting/cups-browsed/pull/50
 Patch01: 0001-Add-BrowseOptionsUpdate-configuration-directive-50.patch
+# oreon url source checksums begin
+%global source0_sha256 bc9ed54ef6940a6ee076f8627458fbc3cfed9b2f7bf4ef6e865be7644a51ce8f
+%global source0_file cups-browsed-2.1.1.tar.gz
+# oreon url source checksums end
 
 
 # remove once CentOS Stream 10 is released, cups-browsed
@@ -88,6 +92,9 @@ broadcast, or by polling a remote print server.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cups-browsed-2.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bc9ed54ef6940a6ee076f8627458fbc3cfed9b2f7bf4ef6e865be7644a51ce8f" || { echo "oreon: Source0 SHA256 mismatch for cups-browsed-2.1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 

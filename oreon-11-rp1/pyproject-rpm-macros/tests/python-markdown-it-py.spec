@@ -4,7 +4,7 @@ Release:        0%{?dist}
 Summary:        Python port of markdown-it
 License:        MIT
 URL:            https://github.com/executablebooks/markdown-it-py
-Source0:        %{url}/archive/v%{version}/markdown-it-py-%{version}.tar.gz
+Source0:        https://github.com/executablebooks/markdown-it-py/archive/v3.0.0/markdown-it-py-3.0.0.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

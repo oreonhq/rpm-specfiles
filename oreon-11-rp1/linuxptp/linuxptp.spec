@@ -33,6 +33,14 @@ Source22:	linuxptp.te
 
 # add support for dropping root privileges
 Patch1:		linuxptp-droproot.patch
+# oreon url source checksums begin
+%global source0_sha256 61757bc0a58d789b8fcbdddf56c88a0230597184a70dcb2ac05b4c6b619f7d5c
+%global source0_file linuxptp-4.4.tgz
+%global source10_sha256 ed21012c5b99da72abea53e9499f8df35b2394d3558bfcb4dbd1e61ee7e6381d
+%global source10_file linuxptp-testsuite-d27dbd.tar.gz
+%global source11_sha256 63dfb389efc15323892a971200b65324fba102b5db2fa4a2269c3c57c8775453
+%global source11_file clknetsim-64df92.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	gcc gcc-c++ gnutls-devel libcap-devel make systemd
 
@@ -68,6 +76,11 @@ linuxptp SELinux policy module
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/linuxptp-4.4.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61757bc0a58d789b8fcbdddf56c88a0230597184a70dcb2ac05b4c6b619f7d5c" || { echo "oreon: Source0 SHA256 mismatch for linuxptp-4.4.tgz" >&2; exit 1; })
+%(f=%{_sourcedir}/linuxptp-testsuite-d27dbd.tar.gz; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ed21012c5b99da72abea53e9499f8df35b2394d3558bfcb4dbd1e61ee7e6381d" || { echo "oreon: Source10 SHA256 mismatch for linuxptp-testsuite-d27dbd.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/clknetsim-64df92.tar.gz; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "63dfb389efc15323892a971200b65324fba102b5db2fa4a2269c3c57c8775453" || { echo "oreon: Source11 SHA256 mismatch for clknetsim-64df92.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -N
 # autosetup doesn't accept multiple -a options
 %__rpmuncompress -x %{SOURCE10}

@@ -44,7 +44,7 @@ Version:        %{package_version}
 Release:        5%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/createrepo_c
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/rpm-software-management/createrepo_c/archive/1.2.1/createrepo_c-1.2.1.tar.gz
 Patch1:         0001-Fix-libname-of-Libs.private.patch
 Patch2:         0002-Use-IMPORTED_TARGET-for-3rd-party-dependencies.patch
 Patch3:         0003-Don-t-try-to-use-imported-targets-of-turned-off-depe.patch
@@ -52,6 +52,10 @@ Patch4:         0004-spec-require-cmake-3.7.0.patch
 Patch5:         0005-Include-unistd.h-for-STDOUT_FILENO.patch
 Patch6:         0006-Use-RPMTAG_SHA1HEADER-instead-of-RPMTAG_HDRID.patch
 Patch7:         0007-spec-Consistently-use-CMake-RPM-macros.patch
+# oreon url source checksums begin
+%global source0_sha256 5252911bb5ab0732922e298348a94f0e348e0891935ff0876042ac1bd8c5eeed
+%global source0_file createrepo_c-1.2.1.tar.gz
+# oreon url source checksums end
 
 %global epoch_dep %{?epoch:%{epoch}:}
 
@@ -139,6 +143,9 @@ Requires:       %{name}-libs = %{epoch_dep}%{version}-%{release}
 Python 3 bindings for the createrepo_c library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/createrepo_c-1.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5252911bb5ab0732922e298348a94f0e348e0891935ff0876042ac1bd8c5eeed" || { echo "oreon: Source0 SHA256 mismatch for createrepo_c-1.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %py3_shebang_fix examples/python
 mkdir build-py3

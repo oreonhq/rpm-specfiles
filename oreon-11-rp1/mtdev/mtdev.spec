@@ -13,11 +13,15 @@ URL:            http://bitmath.org/code/mtdev/
 # upstream doesn't have tarballs
 
 %if 0%{?gitdate}
-Source0:        %{tarball}-%{gitdate}.tar.bz2
+Source0:        http://bitmath.org/code/mtdev/mtdev-1.1.6.tar.bz2
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
 Source0:        http://bitmath.org/code/%{name}/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 15d7b28da8ac71d8bc8c9287c2045fd174267bc740bec10cfda332dc1204e0e0
+%global source0_file mtdev-1.1.6.tar.bz2
+# oreon url source checksums end
 %endif
 
 BuildRequires:  autoconf automake libtool gcc make make make make
@@ -37,6 +41,9 @@ Requires:       pkgconfig
 Multitouch protocol translation library development package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mtdev-1.1.6.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "15d7b28da8ac71d8bc8c9287c2045fd174267bc740bec10cfda332dc1204e0e0" || { echo "oreon: Source0 SHA256 mismatch for mtdev-1.1.6.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

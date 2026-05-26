@@ -18,9 +18,13 @@ Summary:    A utility for viewing problems that have occurred with the system
 License:    GPL-2.0-or-later
 URL:        https://github.com/abrt/%{name}
 %if 0%{?snapshot}
-Source0:    %{url}/archive/%{commit}.tar.gz#/%{name}-%{commit}.tar.gz
+Source0:        https://github.com/abrt/gnome-abrt/archive/1.4.3/gnome-abrt-1.4.3.tar.gz
 %else
-Source0:    %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/abrt/gnome-abrt/archive/1.4.3/gnome-abrt-1.4.3.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 38fe08b8e1a3e5c6e7f2265be0e655804e0741258d753653d31bd8d36199f8e1
+%global source0_file gnome-abrt-1.4.3.tar.gz
+# oreon url source checksums end
 %endif
 
 BuildRequires: git-core
@@ -57,6 +61,9 @@ provides them with convenient way for managing these problems.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gnome-abrt-1.4.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "38fe08b8e1a3e5c6e7f2265be0e655804e0741258d753653d31bd8d36199f8e1" || { echo "oreon: Source0 SHA256 mismatch for gnome-abrt-1.4.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git %{?snapshot:-n %{name}%-%{commit}}
 
 

@@ -11,10 +11,14 @@ Summary:        Zero-dependency DBus library for Python with asyncio support
 License:        MIT
 URL:            https://github.com/altdesktop/python-dbus-next
 # pypi_source archive does not include test data
-Source:         %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/altdesktop/python-dbus-next/archive/v0.2.3/python-dbus-next-0.2.3.tar.gz
 Patch:          0001-glib-destroy-the-_AuthLineSource-explicitly.patch
 Patch:          0002-Address-Python-3.15-and-3.16-deprecations.patch
 Patch:          0003-Fix-compatibility-with-pytest-asyncio-1.x.patch
+# oreon url source checksums begin
+%global source0_sha256 db19689b0de50edd8587e8b55fcc6c30fe5155d813b9972e152ee05790beef59
+%global source0_file python-dbus-next-0.2.3.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -62,6 +66,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/python-dbus-next-0.2.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "db19689b0de50edd8587e8b55fcc6c30fe5155d813b9972e152ee05790beef59" || { echo "oreon: Source0 SHA256 mismatch for python-dbus-next-0.2.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # Fix permissions for examples
 chmod -x examples/*.py

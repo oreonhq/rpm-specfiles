@@ -5,6 +5,10 @@ Summary:	Reusable Module::Install bits
 License:	CC0-1.0
 URL:		https://metacpan.org/release/Module-Package-Au
 Source0:	https://cpan.metacpan.org/authors/id/A/AU/AUDREYT/Module-Package-Au-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c72c51a1da70c306562f3f1cd5e5591266a0ba3e7590812b6a7dbfb8acfd5552
+%global source0_file Module-Package-Au-2.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 BuildRequires:	coreutils
 BuildRequires:	make
@@ -30,6 +34,9 @@ This module defines a set of standard configurations for Makefile.PL
 files based on Module::Package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Package-Au-2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c72c51a1da70c306562f3f1cd5e5591266a0ba3e7590812b6a7dbfb8acfd5552" || { echo "oreon: Source0 SHA256 mismatch for Module-Package-Au-2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Package-Au-%{version}
 rm -rf inc/*
 perl -i -ne 'print $_ unless m{^inc/}' MANIFEST

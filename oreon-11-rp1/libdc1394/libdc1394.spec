@@ -10,6 +10,10 @@ ExcludeArch:    s390 s390x
 
 Source:     http://downloads.sourceforge.net/project/%{name}/%{name}-2/%{version}/%{name}-%{version}.tar.gz
 Patch0:     %{name}-sdl.patch
+# oreon url source checksums begin
+%global source0_sha256 537ceb78dd3cef271a183f4a176191d1cecf85f025520e6bd3758b0e19e6609f
+%global source0_file libdc1394-2.2.7.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -52,6 +56,9 @@ This package contains tools that are useful when working and developing with
 %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdc1394-2.2.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "537ceb78dd3cef271a183f4a176191d1cecf85f025520e6bd3758b0e19e6609f" || { echo "oreon: Source0 SHA256 mismatch for libdc1394-2.2.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

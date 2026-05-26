@@ -7,7 +7,11 @@ Version: 1.16.1
 Release: 2%{?dist}
 License: LGPL-2.1-or-later
 URL:     https://github.com/linux-nvme/libnvme
-Source0: %{url}/archive/v%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz
+Source0:        https://github.com/linux-nvme/libnvme/archive/v1.16.1/libnvme-1.16.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ce1d9d393feb84c4e82ca096db2bdb7dd4a5fd1997d711cc1904796944f2c579
+%global source0_file libnvme-1.16.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc gcc-c++
 BuildRequires: swig
@@ -56,6 +60,9 @@ Obsoletes: python3-nvme < 1.0~rc7
 This package contains Python bindings for libnvme.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libnvme-1.16.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ce1d9d393feb84c4e82ca096db2bdb7dd4a5fd1997d711cc1904796944f2c579" || { echo "oreon: Source0 SHA256 mismatch for libnvme-1.16.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version_no_tilde}
 
 %build

@@ -33,6 +33,10 @@ Source5:        rtas_errd.8
 
 # fix paths and permissions
 Patch0:         ppc64-diag-2.7.9-fedora.patch
+# oreon url source checksums begin
+%global source0_sha256 b0b56e08c0d6dee5ad98270cdede05ff68b9c2be05fc25ebcaddd70c52ab8766
+%global source0_file ppc64-diag-2.7.11.tar.gz
+# oreon url source checksums end
 # Upstream fixes
 
 %description
@@ -54,6 +58,9 @@ Requires:       powerpc-utils-core >= 1.3.7-5
 This package contains only rtas_errd daemon.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ppc64-diag-2.7.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b0b56e08c0d6dee5ad98270cdede05ff68b9c2be05fc25ebcaddd70c52ab8766" || { echo "oreon: Source0 SHA256 mismatch for ppc64-diag-2.7.11.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Fix warning mangling shebang

@@ -6,6 +6,10 @@ License: GPL-2.0-or-later
 Source0: http://brick.kernel.dk/snaps/blktrace-%{version}.tar.bz2
 Source1: https://brick.kernel.dk/snaps/blktrace-%{version}.tar.bz2.asc
 Source2: https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/F7D358FB2971E0A6.asc
+# oreon url source checksums begin
+%global source0_sha256 d6deda03862de2bd1b1b9fba729bbb862d9bca795e6aa7f7ca86b656811a70d6
+%global source0_file blktrace-1.3.0.tar.bz2
+# oreon url source checksums end
 
 Url: http://brick.kernel.dk/snaps
 
@@ -26,6 +30,9 @@ You should install the blktrace package if you need to gather detailed
 information about IO patterns.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/blktrace-1.3.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d6deda03862de2bd1b1b9fba729bbb862d9bca795e6aa7f7ca86b656811a70d6" || { echo "oreon: Source0 SHA256 mismatch for blktrace-1.3.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 

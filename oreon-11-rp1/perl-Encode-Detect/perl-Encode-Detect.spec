@@ -6,6 +6,10 @@ Summary: Encode::Encoding subclass that detects the encoding of data
 License: MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.0-or-later
 URL: https://metacpan.org/release/Encode-Detect
 Source0: https://cpan.metacpan.org/authors/id/J/JG/JGMYERS/Encode-Detect-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 834d893aa7db6ce3f158afbd0e432d6ed15a276e0940db0a74be13fd9c4bbbf1
+%global source0_file Encode-Detect-1.01.tar.gz
+# oreon url source checksums end
 
 BuildRequires: coreutils
 BuildRequires: perl-devel
@@ -29,6 +33,9 @@ Encode::Detect::Detector to determine the charset of the input data and then
 decodes it using the encoder of the detected charset.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Encode-Detect-1.01.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "834d893aa7db6ce3f158afbd0e432d6ed15a276e0940db0a74be13fd9c4bbbf1" || { echo "oreon: Source0 SHA256 mismatch for Encode-Detect-1.01.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Encode-Detect-%{version}
 
 %build

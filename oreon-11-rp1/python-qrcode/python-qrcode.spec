@@ -10,8 +10,12 @@ Summary:        Python QR Code image generator
 
 License:        BSD-3-Clause
 URL:            https://github.com/lincolnloop/python-qrcode
-Source0:        %{pypi_source qrcode}
+Source0:        https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-8.0.tar.gz
 Source1:        flit-pyproject.toml.in
+# oreon url source checksums begin
+%global source0_sha256 025ce2b150f7fe4296d116ee9bad455a6643ab4f6e7dce541613a4758cbce347
+%global source0_file qrcode-8.0.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
@@ -47,6 +51,9 @@ generation of QR Codes. Python 3 version.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/qrcode-8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "025ce2b150f7fe4296d116ee9bad455a6643ab4f6e7dce541613a4758cbce347" || { echo "oreon: Source0 SHA256 mismatch for qrcode-8.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n qrcode-%{version} -p1
 # Remove shebang
 sed -i '1d' qrcode/console_scripts.py

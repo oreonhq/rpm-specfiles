@@ -7,6 +7,10 @@ Summary:        Use the Freedesktop.org base directory specification
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-BaseDir
 Source0:        https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/File-BaseDir-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6da6f7281562ac8f11ef1a3af6aedb51c41182b60f1f122ced0079efd92967d9
+%global source0_file File-BaseDir-0.09.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -71,6 +75,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-BaseDir-0.09.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6da6f7281562ac8f11ef1a3af6aedb51c41182b60f1f122ced0079efd92967d9" || { echo "oreon: Source0 SHA256 mismatch for File-BaseDir-0.09.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n File-BaseDir-%{version}
 
 # Help generators to recognize Perl scripts

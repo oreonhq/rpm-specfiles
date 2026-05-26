@@ -18,11 +18,17 @@ Summary:        Snowball compiler and stemming algorithms
 License:        BSD-3-Clause
 URL:            https://snowballstem.org/
 VCS:            git:%{giturl}.git
-Source0:        %{giturl}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/snowballstem/snowball/archive/v3.0.1/snowball-3.0.1.tar.gz
 # Test data for the compiler (must match algorithms shipped in this snowball release)
 Source1:        https://github.com/snowballstem/snowball-data/archive/%{snowball_data_git}/%{snowball_data_git}.tar.gz
 # Build a shared library instead of a static library
 Patch:          %{name}-sharedlib.patch
+# oreon url source checksums begin
+%global source0_sha256 80ac10ce40dc4fcfbfed8d085c457b5613da0e86a73611a3d5527d044a142d60
+%global source0_file snowball-3.0.1.tar.gz
+%global source1_sha256 cc26b2fc76cfefe39d0f57061985e36184dd5b28e1245c42f3c71e789aaf6ebc
+%global source1_file 381b447563f9bef87b218ebbedde3159afdc3032.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -148,6 +154,10 @@ Stemming algorithms written in Python 3.
 %langlist
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/snowball-3.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "80ac10ce40dc4fcfbfed8d085c457b5613da0e86a73611a3d5527d044a142d60" || { echo "oreon: Source0 SHA256 mismatch for snowball-3.0.1.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/381b447563f9bef87b218ebbedde3159afdc3032.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cc26b2fc76cfefe39d0f57061985e36184dd5b28e1245c42f3c71e789aaf6ebc" || { echo "oreon: Source1 SHA256 mismatch for 381b447563f9bef87b218ebbedde3159afdc3032.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -b 1
 
 # Fix an RST error

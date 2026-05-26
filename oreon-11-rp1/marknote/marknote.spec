@@ -6,6 +6,10 @@ Summary:       A simple markdown note management app for KDE
 URL:           https://apps.kde.org/%{name}/
 
 Source0:       https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 96c2f551c3d9a09cdbc2d6cc242e64b3a9c811df7f29410d5b85871ec2ad2799
+%global source0_file marknote-1.4.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires: extra-cmake-modules
 BuildRequires: gcc-c++
@@ -51,6 +55,9 @@ between them and keep your notes at your fingertips.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/marknote-1.4.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "96c2f551c3d9a09cdbc2d6cc242e64b3a9c811df7f29410d5b85871ec2ad2799" || { echo "oreon: Source0 SHA256 mismatch for marknote-1.4.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

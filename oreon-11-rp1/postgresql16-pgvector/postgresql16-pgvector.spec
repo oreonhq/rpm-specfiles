@@ -17,6 +17,10 @@ Summary:	Open-source vector similarity search for Postgres
 License:	PostgreSQL
 URL:		https://github.com/%{sname}/%{sname}/
 Source0:	https://github.com/%{sname}/%{sname}/archive/refs/tags/v%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a11cc249a9f3f3d7b13069a1696f2915ac28991a72d7ba4e2bcfdceddbaeae49
+%global source0_file v0.6.2.tar.gz
+# oreon url source checksums end
 
 %if %?postgresql_default
 %global pkgname %{sname}
@@ -60,6 +64,9 @@ This packages provides JIT support for pgvector
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.6.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a11cc249a9f3f3d7b13069a1696f2915ac28991a72d7ba4e2bcfdceddbaeae49" || { echo "oreon: Source0 SHA256 mismatch for v0.6.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{sname}-%{version}
 
 %build

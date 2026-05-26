@@ -11,6 +11,10 @@ Release: 39%{?dist}
 Summary: Portable Sound Event Library
 Source0: http://0pointer.de/lennart/projects/libcanberra/libcanberra-%{version}.tar.xz
 Patch0: 0001-gtk-Don-t-assume-all-GdkDisplays-are-GdkX11Displays-.patch
+# oreon url source checksums begin
+%global source0_sha256 c2b671e67e0c288a69fc33dc1b6f1b534d07882c2aceed37004bf48c601afa72
+%global source0_file libcanberra-0.30.tar.xz
+# oreon url source checksums end
 License: LGPL-2.1-or-later
 Url: http://git.0pointer.de/?p=libcanberra.git;a=summary
 BuildRequires: gcc
@@ -73,6 +77,9 @@ Development Files for libcanberra Client Development
 %systemd_preun canberra-system-bootup.service canberra-system-shutdown.service canberra-system-shutdown-reboot.service
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libcanberra-0.30.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c2b671e67e0c288a69fc33dc1b6f1b534d07882c2aceed37004bf48c601afa72" || { echo "oreon: Source0 SHA256 mismatch for libcanberra-0.30.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 
 

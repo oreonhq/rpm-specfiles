@@ -11,6 +11,10 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/LMAX-Exchange/disruptor/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        https://repo1.maven.org/maven2/com/lmax/%{name}/%{version}/%{name}-%{version}.pom
+# oreon url source checksums begin
+%global source0_sha256 7fe7df10ea6d0f0b87442aafe2420a28250835e975a542b8c490a72a0e205b5c
+%global source0_file disruptor-3.4.4.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -26,6 +30,9 @@ Obsoletes:      %{name}-javadoc < 3.4.4-29
 A High Performance Inter-Thread Messaging Library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/disruptor-3.4.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7fe7df10ea6d0f0b87442aafe2420a28250835e975a542b8c490a72a0e205b5c" || { echo "oreon: Source0 SHA256 mismatch for disruptor-3.4.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # Cleanup
 find . -name "*.class" -print -delete

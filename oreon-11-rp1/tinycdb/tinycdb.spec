@@ -7,6 +7,10 @@ URL:		http://www.corpit.ru/mjt/tinycdb.html
 Source0:	http://www.corpit.ru/mjt/%{name}/%{name}-%{version}.tar.gz
 # taken from the 0.77 tarball
 Source1:	libcdb.pc
+# oreon url source checksums begin
+%global source0_sha256 c321b905e902c2ca99a3ff8a8dddfd8823247fe1edec8a4bb85f83869c639fb8
+%global source0_file tinycdb-0.80.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	make
 BuildRequires:	gcc
@@ -29,6 +33,9 @@ This package contains tinycdb development library and header file for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tinycdb-0.80.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c321b905e902c2ca99a3ff8a8dddfd8823247fe1edec8a4bb85f83869c639fb8" || { echo "oreon: Source0 SHA256 mismatch for tinycdb-0.80.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 cp %{SOURCE1} .
 # Fix libdir pathing in pkgconfig file.

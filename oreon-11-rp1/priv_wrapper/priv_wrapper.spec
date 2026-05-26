@@ -11,6 +11,10 @@ Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        priv_wrapper.keyring
 
 Patch0:         priv_wrapper-fix-cmocka-1.1.6+-support.patch
+# oreon url source checksums begin
+%global source0_sha256 b10bff1672640e9e0dc92a821e8173bd0d727a148b5939f01e95abc89621e3c1
+%global source0_file priv_wrapper-1.0.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  cmake
@@ -36,6 +40,9 @@ This package does not have a devel package, because this project is for
 development/testing.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/priv_wrapper-1.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b10bff1672640e9e0dc92a821e8173bd0d727a148b5939f01e95abc89621e3c1" || { echo "oreon: Source0 SHA256 mismatch for priv_wrapper-1.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

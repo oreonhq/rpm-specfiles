@@ -5,10 +5,14 @@ Summary:          Manage Linux IP sets
 
 License:          GPL-2.0-only
 URL:              http://ipset.netfilter.org/
-Source0:          %{url}/%{name}-%{version}.tar.bz2
+Source0:        http://ipset.netfilter.org//ipset-7.24.tar.bz2
 Source1:          %{name}.service
 Source2:          %{name}.start-stop
 Source3:          %{name}-config
+# oreon url source checksums begin
+%global source0_sha256 fbe3424dff222c1cb5e5c34d38b64524b2217ce80226c14fdcbb13b29ea36112
+%global source0_file ipset-7.24.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:    libmnl-devel
 BuildRequires:    automake
@@ -71,6 +75,9 @@ out of the base package since it is not active by default.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ipset-7.24.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fbe3424dff222c1cb5e5c34d38b64524b2217ce80226c14fdcbb13b29ea36112" || { echo "oreon: Source0 SHA256 mismatch for ipset-7.24.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

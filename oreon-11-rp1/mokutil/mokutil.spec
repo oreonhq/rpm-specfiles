@@ -24,12 +24,19 @@ Obsoletes:      mokutil < 0.2.0
 
 Patch0001: 0001-mokutil-remove-unused-int_to_b64.patch
 Patch0002: 0002-mokutil.c-show-help-if-no-args-or-help-even-on-unsup.patch
+# oreon url source checksums begin
+%global source0_sha256 839d677c4fc9805f1565703ca32863e4652692c53da66a88ae9b9e30676f9e17
+%global source0_file 0.7.2.tar.gz
+# oreon url source checksums end
 
 %description
 mokutil provides a tool to manage keys for Secure Boot through the MoK
 ("Machine's Own Keys") mechanism.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/0.7.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "839d677c4fc9805f1565703ca32863e4652692c53da66a88ae9b9e30676f9e17" || { echo "oreon: Source0 SHA256 mismatch for 0.7.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am -b 0 -T
 
 %build

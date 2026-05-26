@@ -8,6 +8,10 @@ URL: https://heasarc.gsfc.nasa.gov/fitsio/
 Source: https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-%{version}.tar.gz
 # Remove soname version check
 Patch0: cfitsio-noversioncheck.patch
+# oreon url source checksums begin
+%global source0_sha256 fad44fff274fdda5ffcc0c0fff3bc3c596362722b9292fc8944db91187813600
+%global source0_file cfitsio-4.6.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc-gfortran
 BuildRequires: make
@@ -58,6 +62,9 @@ Obsoletes: fitsverify <= 4.22-4
 This package contains utility programas provided by CFITSIO
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cfitsio-4.6.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fad44fff274fdda5ffcc0c0fff3bc3c596362722b9292fc8944db91187813600" || { echo "oreon: Source0 SHA256 mismatch for cfitsio-4.6.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

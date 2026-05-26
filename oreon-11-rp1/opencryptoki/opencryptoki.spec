@@ -19,6 +19,10 @@ Patch2: opencryptoki-3.24.0-tmpfiles-image-mode.patch
 # everything using /var/lock should be fixed in the end to use /run/lock
 # https://gitlab.com/fedora/bootc/base-images/-/issues/48
 Patch3: opencryptoki-lockdir-image-mode.patch
+# oreon url source checksums begin
+%global source0_sha256 b84707edf20c3c0641661ca87f4a606cebb623ce5f2d70581142c9a6d2467c2c
+%global source0_file opencryptoki-3.26.0.tar.gz
+# oreon url source checksums end
 
 Requires(pre): coreutils
 Requires: (selinux-policy >= 34.9-1 if selinux-policy-targeted)
@@ -188,6 +192,9 @@ configured with Enterprise PKCS#11 (EP11) firmware.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/opencryptoki-3.26.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b84707edf20c3c0641661ca87f4a606cebb623ce5f2d70581142c9a6d2467c2c" || { echo "oreon: Source0 SHA256 mismatch for opencryptoki-3.26.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

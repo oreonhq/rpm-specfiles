@@ -7,7 +7,11 @@ URL:            https://github.com/eclipse-ee4j/jaxb-dtd-parser
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-dtd-parser/archive/1.5.1/jaxb-dtd-parser-1.5.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 9c84a170e3f88b0281870ee9425311f2c3b5e1464a66c62657e269a29dcb6920
+%global source0_file jaxb-dtd-parser-1.5.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
@@ -20,6 +24,9 @@ Obsoletes:      %{name}-javadoc < 1.5.1-14
 SAX-like API for parsing XML DTDs.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jaxb-dtd-parser-1.5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9c84a170e3f88b0281870ee9425311f2c3b5e1464a66c62657e269a29dcb6920" || { echo "oreon: Source0 SHA256 mismatch for jaxb-dtd-parser-1.5.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 pushd dtd-parser

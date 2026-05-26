@@ -33,6 +33,10 @@ Patch2001:    PackageKit-0.3.8-Fedora-Vendor.conf.patch
 
 ## RHEL patches (3001~4000)
 Patch3001:    PackageKit-0.3.8-RHEL-Vendor.conf.patch
+# oreon url source checksums begin
+%global source0_sha256 5d79d97a66fd9a50fcc82419ab530fe7b2102aa3afb1dec53df5d29efba2e687
+%global source0_file PackageKit-1.3.4.tar.xz
+# oreon url source checksums end
 
 BuildRequires: docbook-utils
 BuildRequires: docbook5-schemas
@@ -228,6 +232,9 @@ A simple helper that offers to install new packages on the command line
 using PackageKit.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/PackageKit-1.3.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5d79d97a66fd9a50fcc82419ab530fe7b2102aa3afb1dec53df5d29efba2e687" || { echo "oreon: Source0 SHA256 mismatch for PackageKit-1.3.4.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -N
 
 # Fun patching times :)

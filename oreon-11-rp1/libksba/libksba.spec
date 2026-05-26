@@ -14,6 +14,10 @@ Source1: https://www.gnupg.org/ftp/gcrypt/libksba/libksba-%{version}.tar.bz2.sig
 Source2: https://gnupg.org/signature_key.asc
 
 Patch1: libksba-1.3.0-multilib.patch
+# oreon url source checksums begin
+%global source0_sha256 0f4510f1c7a679c3545990a31479f391ad45d84e039176309d42f80cf41743f5
+%global source0_file libksba-1.6.8.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gawk
@@ -40,6 +44,9 @@ Requires: pkgconfig
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libksba-1.6.8.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f4510f1c7a679c3545990a31479f391ad45d84e039176309d42f80cf41743f5" || { echo "oreon: Source0 SHA256 mismatch for libksba-1.6.8.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{without bootstrap}
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

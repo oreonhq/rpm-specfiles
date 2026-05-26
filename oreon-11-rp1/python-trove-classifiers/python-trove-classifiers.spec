@@ -11,6 +11,10 @@ Source:         %{pypi_source trove_classifiers}
 # This patch is rebased version of upstream PR:
 # https://github.com/pypa/trove-classifiers/pull/126/commits/809156bb35852bcaa1c753e0165f1814f2bcedf6
 Patch:          Move-to-PEP-621-declarative-metadata.patch
+# oreon url source checksums begin
+%global source0_sha256 00492545a1402b09d4858605ba190ea33243d361e2b01c9c296ce06b5c3325f3
+%global source0_file trove_classifiers-2026.1.14.14.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -38,6 +42,9 @@ Summary:        %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/trove_classifiers-2026.1.14.14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "00492545a1402b09d4858605ba190ea33243d361e2b01c9c296ce06b5c3325f3" || { echo "oreon: Source0 SHA256 mismatch for trove_classifiers-2026.1.14.14.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n trove_classifiers-%{version}
 # Replace @@VERSION@@ with %%version
 %writevars -f pyproject.toml version

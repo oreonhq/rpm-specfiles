@@ -67,10 +67,17 @@ Source0:  https://github.com/googlefonts/noto-cjk/releases/download/Sans%{versio
 Source1:  genfontconf.py
 Source10: 65-%{fontpkgname0}.conf
 Source11: 65-%{fontpkgname1}.conf
+# oreon url source checksums begin
+%global source0_sha256 d5e33aebad9f8a0c0896a4a29199ef85ca966134db164426c74e83e6f13c43cd
+%global source0_file 01_NotoSansCJK-OTF-VF.zip
+# oreon url source checksums end
 
 %fontpkg -a
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/01_NotoSansCJK-OTF-VF.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d5e33aebad9f8a0c0896a4a29199ef85ca966134db164426c74e83e6f13c43cd" || { echo "oreon: Source0 SHA256 mismatch for 01_NotoSansCJK-OTF-VF.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -c
 
 cp -p Variable/OTC/NotoSansCJK-VF.otf.ttc NotoSansCJK-VF.ttc

@@ -7,7 +7,11 @@ Summary:  Simple INI file parser library
 
 License:  BSD-3-Clause
 URL:      https://github.com/benhoyt/inih
-Source0:  %{url}/archive/r%{version}/%{name}-r%{version}.tar.gz
+Source0:        https://github.com/benhoyt/inih/archive/r62/inih-r62.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 9c15fa751bb8093d042dae1b9f125eb45198c32c6704cd5481ccde460d4f8151
+%global source0_file inih-r62.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gcc-c++
@@ -70,6 +74,9 @@ MinGW Windows %{name} library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/inih-r62.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9c15fa751bb8093d042dae1b9f125eb45198c32c6704cd5481ccde460d4f8151" || { echo "oreon: Source0 SHA256 mismatch for inih-r62.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-r%{version}
 
 

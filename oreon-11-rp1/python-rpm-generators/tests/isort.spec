@@ -3,7 +3,7 @@ Version:        5.7.0
 Release:        0
 Summary:        A Python package with a console_scripts entrypoint
 License:        MIT
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/i/isort/isort-5.7.0.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools

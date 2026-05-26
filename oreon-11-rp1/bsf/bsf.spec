@@ -12,6 +12,10 @@ Source1:        %{name}-pom.xml
 
 Patch:          build-file.patch
 Patch:          build.properties.patch
+# oreon url source checksums begin
+%global source0_sha256 5ab58cf5738c144f4d85a4a442c2f33be2c4c502dca6e29e0c570c2a51ae6ae9
+%global source0_file bsf-src-2.4.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  ant-openjdk25 
@@ -48,6 +52,9 @@ engines:
 * JudoScript
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/bsf-src-2.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5ab58cf5738c144f4d85a4a442c2f33be2c4c502dca6e29e0c570c2a51ae6ae9" || { echo "oreon: Source0 SHA256 mismatch for bsf-src-2.4.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 find -name \*.jar -delete
 

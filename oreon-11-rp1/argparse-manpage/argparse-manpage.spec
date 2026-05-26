@@ -36,7 +36,11 @@ BuildArch:      noarch
 
 License:        Apache-2.0
 URL:            https://github.com/praiskup/%{name}
-Source0:        %pypi_source %pip_module_name
+Source0:        https://files.pythonhosted.org/packages/source/a/argparse_manpage/argparse_manpage-4.7.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1deab76b212ac8753cbb67b9d2d2bc0949bbc338bb1cc3547f0890cb34108b32
+%global source0_file argparse_manpage-4.7.tar.gz
+# oreon url source checksums end
 
 %if %{with python2}
 BuildRequires: python2-setuptools python2-devel
@@ -104,6 +108,9 @@ Requires:       python3-setuptools
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/argparse_manpage-4.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1deab76b212ac8753cbb67b9d2d2bc0949bbc338bb1cc3547f0890cb34108b32" || { echo "oreon: Source0 SHA256 mismatch for argparse_manpage-4.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{pip_module_name}-%{version}
 
 %if %{with pyproject}

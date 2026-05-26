@@ -33,6 +33,10 @@ Source10: digikam-import.desktop
 
 ## upstream patches
 Patch0: https://invent.kde.org/graphics/digikam/-/commit/9dd5e992b71b6a855fc419114344d4bd181bc08f.patch
+# oreon url source checksums begin
+%global source0_sha256 7680ea024fe00e10c96090e45fe4b7b4a1c3993bc5e87576eddd4e0eefd08ef3
+%global source0_file digiKam-9.0.0.tar.xz
+# oreon url source checksums end
 
 ## upstreamable patches
 
@@ -202,6 +206,9 @@ needed to develop applications using %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/digiKam-9.0.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7680ea024fe00e10c96090e45fe4b7b4a1c3993bc5e87576eddd4e0eefd08ef3" || { echo "oreon: Source0 SHA256 mismatch for digiKam-9.0.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version}%{?beta:-%{beta}} -p1
 
 %build

@@ -7,6 +7,10 @@ License:        Apache-2.0 AND BSD-3-Clause
 URL:            https://maxmind.github.io/libmaxminddb/
 Source0:        https://github.com/maxmind/libmaxminddb/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source1:        maxminddb_config.h
+# oreon url source checksums begin
+%global source0_sha256 a66502ea76eadbe17f2cd6fd708946777253972d2ae8157dee1b23a2fb528171
+%global source0_file libmaxminddb-1.13.3.tar.gz
+# oreon url source checksums end
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libtool
@@ -41,6 +45,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libmaxminddb-1.13.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a66502ea76eadbe17f2cd6fd708946777253972d2ae8157dee1b23a2fb528171" || { echo "oreon: Source0 SHA256 mismatch for libmaxminddb-1.13.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 autoreconf --force --install
 

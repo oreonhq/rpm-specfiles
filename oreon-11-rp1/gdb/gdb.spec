@@ -51,6 +51,10 @@ License: GPL-3.0-or-later AND BSD-3-Clause AND FSFAP AND LGPL-2.1-or-later AND G
 # Do not provide URL for snapshots as the file lasts there only for 2 days.
 # ftp://sourceware.org/pub/gdb/releases/FIXME{tarname}.tar.xz
 Source: https://sourceware.org/pub/gdb/releases/%{tarname}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 14996f5f74c9f68f5a543fdc45bca7800207f91f92aeea6c2e791822c7c6d876
+%global source0_file gdb-17.1.tar.xz
+# oreon url source checksums end
 URL: https://gnu.org/software/gdb/
 
 # For our convenience
@@ -377,6 +381,9 @@ and printing their data.
 This package provides INFO, HTML and PDF user manual for GDB.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gdb-17.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "14996f5f74c9f68f5a543fdc45bca7800207f91f92aeea6c2e791822c7c6d876" || { echo "oreon: Source0 SHA256 mismatch for gdb-17.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{gdb_src}
 
 # Files have `# <number> <file>' statements breaking VPATH / find-debuginfo.sh .

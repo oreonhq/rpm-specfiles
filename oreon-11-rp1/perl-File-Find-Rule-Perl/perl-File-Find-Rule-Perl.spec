@@ -7,6 +7,10 @@ URL:            https://metacpan.org/release/File-Find-Rule-Perl
 Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Find-Rule-Perl-%{version}.tar.gz
 # Filter out the files rpm generates in sourcedir.
 Patch0:         0001-File-Find-Rule-Perl-1.16-fedora.patch
+# oreon url source checksums begin
+%global source0_sha256 ae1886050d9ca21223c073e2870abdc80dc30e3f55289a11c37da3820a8321ff
+%global source0_file File-Find-Rule-Perl-1.16.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  %{__make}
@@ -27,6 +31,9 @@ BuildRequires:  perl(Test::More) >= 0.47
 Common rules for searching for Perl things.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-Find-Rule-Perl-1.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ae1886050d9ca21223c073e2870abdc80dc30e3f55289a11c37da3820a8321ff" || { echo "oreon: Source0 SHA256 mismatch for File-Find-Rule-Perl-1.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n File-Find-Rule-Perl-%{version}
 %patch -P0 -p1
 

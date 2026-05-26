@@ -5,6 +5,10 @@ Summary:        Keyed-Hashing for Message Authentication
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Digest-HMAC
 Source0:        https://cpan.metacpan.org/authors/id/A/AR/ARODLAND/Digest-HMAC-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 215cb59cba610745cfb2d4b3f8ef756d590e57e3ad7986a992e87c4969fcdc7a
+%global source0_file Digest-HMAC-1.05.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -46,6 +50,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Digest-HMAC-1.05.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "215cb59cba610745cfb2d4b3f8ef756d590e57e3ad7986a992e87c4969fcdc7a" || { echo "oreon: Source0 SHA256 mismatch for Digest-HMAC-1.05.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Digest-HMAC-%{version} 
 
 # Help file to recognise the Perl scripts

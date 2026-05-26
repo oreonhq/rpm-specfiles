@@ -16,6 +16,10 @@ Summary:        Language for writing Python extension modules
 License:        Apache-2.0
 URL:            http://www.cython.org
 Source:         https://github.com/cython/cython/archive/%{version}/Cython-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 9631e586c49b9d3f72c3962c376119479a6a98e3c0e3c14d5218e199ef563b18
+%global source0_file Cython-3.2.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  python3-devel
 
@@ -83,6 +87,9 @@ Provides:       bundled(python3dist(tempita))
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Cython-3.2.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9631e586c49b9d3f72c3962c376119479a6a98e3c0e3c14d5218e199ef563b18" || { echo "oreon: Source0 SHA256 mismatch for Cython-3.2.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n cython-%{version} -p1
 
 

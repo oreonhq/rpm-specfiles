@@ -5,6 +5,10 @@ Summary:        Generating XML in Perl way
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Spice
 Source0:        https://cpan.metacpan.org/authors/id/R/RO/ROBN/XML-Spice-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 67b64024d25b7152e5cb01f43e3218845dba254676fa2acb937997c73735d138
+%global source0_file XML-Spice-0.05.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  make
@@ -41,6 +45,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-Spice-0.05.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "67b64024d25b7152e5cb01f43e3218845dba254676fa2acb937997c73735d138" || { echo "oreon: Source0 SHA256 mismatch for XML-Spice-0.05.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-Spice-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

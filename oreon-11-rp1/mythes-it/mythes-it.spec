@@ -6,7 +6,11 @@ Release:      %autorelease
 # Here we specify the thesaurus license only as other files are not packaged 
 License:      GPL-3.0-only
 URL:          https://pagure.io/dizionario_italiano
-Source:       %{url}/archive/%{version}/dizionario_italiano-%{version}.tar.gz
+Source:        https://pagure.io/dizionario_italiano/archive/5.1.1/dizionario_italiano-5.1.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ed840e5e90fa7752761edc5729a5c5bcb66caa3cc31fcd738235d235160ccc88
+%global source0_file dizionario_italiano-5.1.1.tar.gz
+# oreon url source checksums end
 
 BuildArch:    noarch
 Requires:     mythes
@@ -17,6 +21,9 @@ Italian thesaurus.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dizionario_italiano-5.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ed840e5e90fa7752761edc5729a5c5bcb66caa3cc31fcd738235d235160ccc88" || { echo "oreon: Source0 SHA256 mismatch for dizionario_italiano-5.1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n dizionario_italiano-%{version}
 
 

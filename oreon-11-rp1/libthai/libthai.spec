@@ -5,6 +5,10 @@ Release: 4%{?dist}
 License: LGPL-2.1-or-later
 Source: http://linux.thai.net/pub/thailinux/software/libthai/libthai-%{version}.tar.xz
 Patch0: libthai-0.1.9-multilib.patch
+# oreon url source checksums begin
+%global source0_sha256 ddba8b53dfe584c3253766030218a88825488a51a7deef041d096e715af64bdd
+%global source0_file libthai-0.1.30.tar.xz
+# oreon url source checksums end
 URL: http://linux.thai.net
 
 Requires: libdatrie%{?_isa}
@@ -33,6 +37,9 @@ Install libthai-devel if you want to develop programs which will use
 libthai.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libthai-0.1.30.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ddba8b53dfe584c3253766030218a88825488a51a7deef041d096e715af64bdd" || { echo "oreon: Source0 SHA256 mismatch for libthai-0.1.30.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

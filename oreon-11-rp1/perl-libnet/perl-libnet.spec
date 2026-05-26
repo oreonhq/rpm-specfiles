@@ -22,6 +22,10 @@ Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHAY/libnet-%{base_ver
 Patch0:         libnet-3.09-Normalize-Changes-encoding.patch
 # Do not create Net/libnet.cfg, bug #1238689
 Patch1:         libnet-3.08-Do-not-create-Net-libnet.cfg.patch
+# oreon url source checksums begin
+%global source0_sha256 a71f4db580e1a767d6936faa5baf38f1fa617824342da078b561283e86f8f4a2
+%global source0_file libnet-3.15.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -100,6 +104,9 @@ consistent programming interface (API) to the client side of various
 protocols used in the internet community.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libnet-3.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a71f4db580e1a767d6936faa5baf38f1fa617824342da078b561283e86f8f4a2" || { echo "oreon: Source0 SHA256 mismatch for libnet-3.15.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n libnet-%{base_version}
 %patch -P0 -p1
 %patch -P1 -p1

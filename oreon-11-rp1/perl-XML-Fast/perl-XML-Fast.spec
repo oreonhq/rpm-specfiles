@@ -7,6 +7,10 @@ URL:            https://metacpan.org/release/XML-Fast
 Source0:        https://cpan.metacpan.org/authors/id/M/MO/MONS/XML-Fast-%{version}.tar.gz
 # Do not override OPTIMIZE, CPAN RT#118714
 Patch0:         XML-Fast-0.17-Do-not-override-OPTIMIZE-by-default.patch
+# oreon url source checksums begin
+%global source0_sha256 5ac61e309d65281b14fb215e70e2c53a9e06ee2be38fac793a54747bfb62031b
+%global source0_file XML-Fast-0.17.tar.gz
+# oreon url source checksums end
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make
@@ -45,6 +49,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-Fast-0.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5ac61e309d65281b14fb215e70e2c53a9e06ee2be38fac793a54747bfb62031b" || { echo "oreon: Source0 SHA256 mismatch for XML-Fast-0.17.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-Fast-%{version}
 %patch -P0 -p1
 # Help generators to recognize Perl scripts

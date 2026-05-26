@@ -7,7 +7,12 @@ Release:	18%{?dist}
 Summary:	Perl wrapper/interface for libmagic
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/File-LibMagic
-Source0:	https://cpan.metacpan.org/modules/by-module/File/File-LibMagic-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/File-LibMagic-1.23.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 52e6b1dc7cb2d87a4cdf439ba145e0b9e8cf28cc26a48a3cf9977c83463967ee
+%global source0_file File-LibMagic-1.23.tar.gz
+# oreon url source checksums end
+
 # Build
 BuildRequires:	coreutils
 BuildRequires:	file-devel
@@ -49,6 +54,9 @@ The File::LibMagic module is a simple perl interface to libmagic from the
 file (4.x or 5.x) package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-LibMagic-1.23.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "52e6b1dc7cb2d87a4cdf439ba145e0b9e8cf28cc26a48a3cf9977c83463967ee" || { echo "oreon: Source0 SHA256 mismatch for File-LibMagic-1.23.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n File-LibMagic-%{version}
 
 %build

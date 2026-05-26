@@ -15,8 +15,12 @@ Release: 2%{?dist}
 Summary: Zstandard bindings for Python
 License: (BSD-3-Clause OR GPL-2.0-only) AND MIT
 URL: https://github.com/indygreg/python-zstandard
-Source0: %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/z/zstandard/zstandard-0.25.0.tar.gz
 Patch0: %{name}-py313.patch
+# oreon url source checksums begin
+%global source0_sha256 7713e1179d162cf5c7906da876ec2ccb9c3a9dcbdffef0cc7f70c3667a205f0b
+%global source0_file zstandard-0.25.0.tar.gz
+# oreon url source checksums end
 
 %description
 %{desc}
@@ -39,6 +43,9 @@ Provides: bundled(zstd) = 1.5.7
 %pyproject_extras_subpkg -n python3-%{pypi_name} cffi
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/zstandard-0.25.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7713e1179d162cf5c7906da876ec2ccb9c3a9dcbdffef0cc7f70c3667a205f0b" || { echo "oreon: Source0 SHA256 mismatch for zstandard-0.25.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{pypi_name}-%{version}
 rm -r %{pypi_name}.egg-info
 

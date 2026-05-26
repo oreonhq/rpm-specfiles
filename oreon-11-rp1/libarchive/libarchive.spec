@@ -42,6 +42,10 @@ BuildRequires: make
 # loaded, which breaks the RIPEMD-160 test. This patch disables the RIPEMD-160
 # support explicitly.
 Patch0001: 0001-Drop-rmd160-from-OpenSSL.patch
+# oreon url source checksums begin
+%global source0_sha256 213269b05aac957c98f6e944774bb438d0bd168a2ec60b9e4f8d92035925821c
+%global source0_file libarchive-3.8.6.tar.gz
+# oreon url source checksums end
 
 %description
 Libarchive is a programming library that can create and read several different
@@ -96,6 +100,9 @@ libarchive packages. It is designed to provide an interface compatible with Info
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libarchive-3.8.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "213269b05aac957c98f6e944774bb438d0bd168a2ec60b9e4f8d92035925821c" || { echo "oreon: Source0 SHA256 mismatch for libarchive-3.8.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

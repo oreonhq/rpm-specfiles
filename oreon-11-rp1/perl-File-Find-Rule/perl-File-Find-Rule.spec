@@ -5,6 +5,10 @@ Summary: 	Perl module implementing an alternative interface to File::Find
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/File-Find-Rule
 Source0: 	https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/File-Find-Rule-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2bd556289a6d44ad2ee74803258bb0b0050d246f1e81caab0b263c303acf0c82
+%global source0_file File-Find-Rule-0.35.tar.gz
+# oreon url source checksums end
 
 BuildArch: 	noarch
 
@@ -32,6 +36,9 @@ File::Find::Rule is a friendlier interface to File::Find.  It allows
 you to build rules which specify the desired files and directories.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-Find-Rule-0.35.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2bd556289a6d44ad2ee74803258bb0b0050d246f1e81caab0b263c303acf0c82" || { echo "oreon: Source0 SHA256 mismatch for File-Find-Rule-0.35.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n File-Find-Rule-%{version}
 
 %build

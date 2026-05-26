@@ -21,6 +21,10 @@ Requires(post): systemd-sysv
 Requires(preun): systemd-units
 Requires(postun): systemd-units
 Source0:        https://releases.pagure.org/sanlock/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2e5e1acd05af897f0027cc271b0b59f5ef527821bb00fd9e8840aecbf41fee3e
+%global source0_file sanlock-5.0.0.tar.gz
+# oreon url source checksums end
 
 # Patch0: 0001-foo.patch
 
@@ -28,6 +32,9 @@ Source0:        https://releases.pagure.org/sanlock/%{name}-%{version}.tar.gz
 The sanlock daemon manages leases for applications on hosts using shared storage.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sanlock-5.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2e5e1acd05af897f0027cc271b0b59f5ef527821bb00fd9e8840aecbf41fee3e" || { echo "oreon: Source0 SHA256 mismatch for sanlock-5.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 #%%patch0 -p1
 

@@ -17,6 +17,10 @@ URL:            https://github.com/micktwomey/pyiso8601
 Source:         %{pypi_source}
 # https://github.com/micktwomey/pyiso8601/pull/19
 Patch:          0001-Add-docs-and-test-extras.patch
+# oreon url source checksums begin
+%global source0_sha256 6b1d3829ee8921c4301998c909f7829fa9ed3cbdac0d3b16af2d743aed1ba8df
+%global source0_file iso8601-2.1.0.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 %description %{pkgdesc}
@@ -28,6 +32,9 @@ BuildRequires:  python3-devel
 %description -n python3-%{srcname} %{pkgdesc}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/iso8601-2.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6b1d3829ee8921c4301998c909f7829fa9ed3cbdac0d3b16af2d743aed1ba8df" || { echo "oreon: Source0 SHA256 mismatch for iso8601-2.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1 -n %{srcname}-%{version}
 
 %generate_buildrequires

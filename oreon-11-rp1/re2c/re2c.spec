@@ -5,6 +5,10 @@ Release: 6%{?dist}
 License: LicenseRef-Public-Domain
 URL: https://re2c.org/
 Source: https://github.com/skvadrik/re2c/releases/download/%{version}/re2c-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 0ac299ad359e3f512b06a99397d025cfff81d3be34464ded0656f8a96676c029
+%global source0_file re2c-3.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gcc-c++
@@ -21,6 +25,9 @@ quality.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/re2c-3.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0ac299ad359e3f512b06a99397d025cfff81d3be34464ded0656f8a96676c029" || { echo "oreon: Source0 SHA256 mismatch for re2c-3.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 

@@ -6,7 +6,11 @@ Summary:        IIO accelerometer sensor to input device proxy
 # tests/unittest_inspector.py is LGPL-2.1-or-later but it is not packaged
 License:        GPL-3.0-or-later
 URL:            https://gitlab.freedesktop.org/hadess/iio-sensor-proxy
-Source0:        %{url}/-/archive/%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/archive/3.8/iio-sensor-proxy-3.8.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 cdf9bdb6ef125d6189069d3f6dc9afb301ce5a17213971e65c5e20a57494593d
+%global source0_file iio-sensor-proxy-3.8.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -34,6 +38,9 @@ BuildArch:      noarch
 This package contains the documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/iio-sensor-proxy-3.8.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cdf9bdb6ef125d6189069d3f6dc9afb301ce5a17213971e65c5e20a57494593d" || { echo "oreon: Source0 SHA256 mismatch for iio-sensor-proxy-3.8.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am
 
 %build

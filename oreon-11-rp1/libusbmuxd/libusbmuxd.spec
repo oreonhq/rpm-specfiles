@@ -7,7 +7,11 @@ Summary:        Client library USB multiplex daemon for Apple's iOS devices
 
 License:        LGPL-2.0-or-later AND GPL-2.0-or-later
 URL:            https://www.libimobiledevice.org/
-Source:         %{forgeurl}/releases/download/%{version}/%{name}-%{version}.tar.bz2
+Source:        https://github.com/libimobiledevice/libusbmuxd/releases/download/2.1.0/libusbmuxd-2.1.0.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 c35bf68f8e248434957bd5b234c389b02206a06ecd9303a7fb931ed7a5636b16
+%global source0_file libusbmuxd-2.1.0.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -35,6 +39,9 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Files for development with %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libusbmuxd-2.1.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c35bf68f8e248434957bd5b234c389b02206a06ecd9303a7fb931ed7a5636b16" || { echo "oreon: Source0 SHA256 mismatch for libusbmuxd-2.1.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

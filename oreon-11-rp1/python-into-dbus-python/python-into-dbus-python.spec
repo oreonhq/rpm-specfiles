@@ -7,7 +7,11 @@ Summary:        Transformer to dbus-python types
 
 License:        Apache-2.0
 URL:            https://github.com/stratis-storage/into-dbus-python
-Source0:        %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/stratis-storage/into-dbus-python/archive/v0.8.2/into-dbus-python-0.8.2.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 df54a6f37ccd3b3f0df7f557ad8d7bdd412152b568beccd8d71cd73d4a9343e6
+%global source0_file into-dbus-python-0.8.2.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -28,6 +32,9 @@ BuildRequires:  python3-devel
 Python 3 version.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/into-dbus-python-0.8.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "df54a6f37ccd3b3f0df7f557ad8d7bdd412152b568beccd8d71cd73d4a9343e6" || { echo "oreon: Source0 SHA256 mismatch for into-dbus-python-0.8.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires

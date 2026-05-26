@@ -6,6 +6,10 @@ Release:        13%{?dist}
 License:        Artistic-2.0 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/Params-Validate
 Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Params-Validate-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1bf2518ef2c4869f91590e219f545c8ef12ed53cf313e0eb5704adf7f1b2961e
+%global source0_file Params-Validate-1.31.tar.gz
+# oreon url source checksums end
 
 
 BuildRequires:  perl-devel
@@ -49,6 +53,9 @@ that it is an object of a certain class hierarchy, that it possesses
 certain methods, or applying validation callbacks to arguments.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Params-Validate-1.31.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1bf2518ef2c4869f91590e219f545c8ef12ed53cf313e0eb5704adf7f1b2961e" || { echo "oreon: Source0 SHA256 mismatch for Params-Validate-1.31.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Params-Validate-%{version}
 
 %build

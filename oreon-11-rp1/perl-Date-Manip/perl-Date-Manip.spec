@@ -5,6 +5,10 @@ Summary:        Date manipulation routines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Date-Manip
 Source0:        https://cpan.metacpan.org/authors/id/S/SB/SBECK/Date-Manip-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3239e5f671e1af74d4a91b8278f3ae64f214184f7fc27ed4f80409ec2e6c4f54
+%global source0_file Date-Manip-6.99.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -68,6 +72,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Date-Manip-6.99.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3239e5f671e1af74d4a91b8278f3ae64f214184f7fc27ed4f80409ec2e6c4f54" || { echo "oreon: Source0 SHA256 mismatch for Date-Manip-6.99.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Date-Manip-%{version}
 
 # Help generators to recognize Perl scripts

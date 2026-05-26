@@ -9,6 +9,10 @@ Url:            http://cwrap.org/
 Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
 Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        uid_wrapper.keyring
+# oreon url source checksums begin
+%global source0_sha256 ae4bf3b8f0a748f470531a650436b39182c8217ee9269a9c7e925c64380a9bda
+%global source0_file uid_wrapper-1.3.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  cmake
@@ -33,6 +37,9 @@ This package doesn't have a devel package cause this project is for
 development/testing.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/uid_wrapper-1.3.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ae4bf3b8f0a748f470531a650436b39182c8217ee9269a9c7e925c64380a9bda" || { echo "oreon: Source0 SHA256 mismatch for uid_wrapper-1.3.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

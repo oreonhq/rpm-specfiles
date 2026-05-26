@@ -4,7 +4,12 @@ Version:	0.053
 Release:	1%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Module-Build-Tiny
-Source0:	https://cpan.metacpan.org/modules/by-module/Module/Module-Build-Tiny-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEONT/Module-Build-Tiny-0.053.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3726d622da6f655e88fdf89e4fd597709c44970b47de65082003e8d86b5e193a
+%global source0_file Module-Build-Tiny-0.053.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -65,6 +70,9 @@ Whereas Module::Build has over 6,700 lines of code; this module has less than
 70, yet supports the features needed by most pure-Perl distributions.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Build-Tiny-0.053.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3726d622da6f655e88fdf89e4fd597709c44970b47de65082003e8d86b5e193a" || { echo "oreon: Source0 SHA256 mismatch for Module-Build-Tiny-0.053.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Module-Build-Tiny-%{version}
 
 %build

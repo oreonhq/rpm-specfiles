@@ -7,6 +7,10 @@ Summary:        Sphinx extension for serialized HTML
 License:        BSD-2-Clause
 URL:            http://sphinx-doc.org/
 Source:         %{pypi_source sphinxcontrib_serializinghtml}
+# oreon url source checksums begin
+%global source0_sha256 e9d912827f872c029017a53f0ef2180b327c3f7fd23c87229f7a8e8b70031d4d
+%global source0_file sphinxcontrib_serializinghtml-2.0.0.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  gettext
@@ -31,6 +35,9 @@ HTML files (json and pickle).
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sphinxcontrib_serializinghtml-2.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e9d912827f872c029017a53f0ef2180b327c3f7fd23c87229f7a8e8b70031d4d" || { echo "oreon: Source0 SHA256 mismatch for sphinxcontrib_serializinghtml-2.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n sphinxcontrib_serializinghtml-%{version}
 find -name '*.mo' -delete
 

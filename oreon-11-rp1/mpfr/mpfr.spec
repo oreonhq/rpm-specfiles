@@ -12,6 +12,10 @@ BuildRequires: make
 BuildRequires: texinfo
 
 Source: https://www.mpfr.org/%{name}-%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01
+%global source0_file mpfr-4.2.2.tar.xz
+# oreon url source checksums end
 
 # Upstream post-release patches.  This currently contains:
 #Patch0: https://www.mpfr.org/%%{name}-%%{version}/allpatches
@@ -45,6 +49,9 @@ BuildArch: noarch
 Documentation for the MPFR library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mpfr-4.2.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01" || { echo "oreon: Source0 SHA256 mismatch for mpfr-4.2.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

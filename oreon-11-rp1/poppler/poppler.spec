@@ -32,6 +32,10 @@ Patch1:  poppler-0.90.0-position-independent-code.patch
 Patch2:  poppler-21.01.0-glib-introspection.patch
 
 Patch3:  poppler-26.01.0-climits.patch
+# oreon url source checksums begin
+%global source0_sha256 1cb944a4b88847f5fb6551683bc799db59f04990f5d8be07aba2acbf38601089
+%global source0_file poppler-26.01.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: cmake
@@ -177,6 +181,9 @@ Command line tools for manipulating PDF files and converting them to
 other formats.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/poppler-26.01.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1cb944a4b88847f5fb6551683bc799db59f04990f5d8be07aba2acbf38601089" || { echo "oreon: Source0 SHA256 mismatch for poppler-26.01.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -b 3
 

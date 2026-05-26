@@ -5,6 +5,10 @@ Summary:        Perl client for JMAP protocol
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Mail-JMAPTalk
 Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Mail-JMAPTalk-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a99d5837a1f88da4e2fcdc227430a6c80d1aaa0706088cd16e9be09c96682f6f
+%global source0_file Mail-JMAPTalk-0.17.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -37,6 +41,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Mail-JMAPTalk-0.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a99d5837a1f88da4e2fcdc227430a6c80d1aaa0706088cd16e9be09c96682f6f" || { echo "oreon: Source0 SHA256 mismatch for Mail-JMAPTalk-0.17.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Mail-JMAPTalk-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

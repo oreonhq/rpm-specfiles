@@ -12,6 +12,10 @@ Summary:        Module for sending mails with attachments through an SMTP server
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Mail-Sender
 Source0:        https://cpan.metacpan.org/authors/id/C/CA/CAPOEIRAB/Mail-Sender-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4413eb49f520a8318151811ccb05a8d542973aada20aa503ad32f9ffc98a39bf
+%global source0_file Mail-Sender-0.903.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  coreutils
@@ -45,6 +49,9 @@ BuildRequires:  perl(warnings)
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Mail-Sender-0.903.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4413eb49f520a8318151811ccb05a8d542973aada20aa503ad32f9ffc98a39bf" || { echo "oreon: Source0 SHA256 mismatch for Mail-Sender-0.903.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Mail-Sender-%{version}
 %{__perl} -pi -e 's/\r\n/\n/' README
 

@@ -23,6 +23,10 @@ URL:            https://hackage.haskell.org/package/vector
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 Source1:        https://hackage.haskell.org/package/%{vectorstream}/%{vectorstream}.tar.gz
 Source2:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+# oreon url source checksums begin
+%global source1_sha256 d0f507334bdea5431a2f07f525a97f29e76522c32210f5de6d5a2b4f1d42bf7c
+%global source1_file vector-stream-0.1.0.1.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -95,6 +99,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vector-stream-0.1.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d0f507334bdea5431a2f07f525a97f29e76522c32210f5de6d5a2b4f1d42bf7c" || { echo "oreon: Source1 SHA256 mismatch for vector-stream-0.1.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver} -a1
 dos2unix -k -n %{SOURCE2} %{pkg_name}.cabal

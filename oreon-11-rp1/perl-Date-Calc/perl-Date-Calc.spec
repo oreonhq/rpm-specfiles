@@ -5,6 +5,10 @@ Summary:        Gregorian calendar date calculations
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Date-Calc
 Source0:        https://cpan.metacpan.org/authors/id/S/ST/STBEY/Date-Calc-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7ce137b2e797b7c0901f3adf1a05a19343356cd1f04676aa1c56a9f624f859ad
+%global source0_file Date-Calc-6.4.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -49,6 +53,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Date-Calc-6.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7ce137b2e797b7c0901f3adf1a05a19343356cd1f04676aa1c56a9f624f859ad" || { echo "oreon: Source0 SHA256 mismatch for Date-Calc-6.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Date-Calc-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

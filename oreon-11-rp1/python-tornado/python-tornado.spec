@@ -17,6 +17,10 @@ Summary:        Scalable, non-blocking web server and tools
 License:        Apache-2.0 
 URL:            https://www.tornadoweb.org
 Source0:        https://github.com/tornadoweb/tornado/archive/v%{version}/%{srcname}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 051973247a5807cbdcad8af7fe6e511077ca55e5f024bde5799b4a6418937a23
+%global source0_file tornado-6.5.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel
@@ -36,6 +40,9 @@ Summary:        Examples for %{name}
 This package contains some example applications.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tornado-6.5.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "051973247a5807cbdcad8af7fe6e511077ca55e5f024bde5799b4a6418937a23" || { echo "oreon: Source0 SHA256 mismatch for tornado-6.5.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires

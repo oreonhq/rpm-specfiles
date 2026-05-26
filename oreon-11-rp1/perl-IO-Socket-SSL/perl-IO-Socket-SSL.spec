@@ -12,12 +12,17 @@ Release:	2%{?dist}
 Summary:	Perl library for transparent SSL
 License:	(GPL-1.0-or-later OR Artistic-1.0-Perl) AND MPL-2.0
 URL:		https://metacpan.org/release/IO-Socket-SSL
-Source0:	https://cpan.metacpan.org/modules/by-module/IO/IO-Socket-SSL-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/S/SU/SULLR/IO-Socket-SSL-2.098.tar.gz
+
 Patch0:		IO-Socket-SSL-2.096-use-system-default-cipher-list.patch
 Patch1:		IO-Socket-SSL-2.098-use-system-default-SSL-version.patch
 # A test for Enable-Post-Handshake-Authentication-TLSv1.3-feature.patch,
 # bug #1632660, requires openssl tool
 Patch2:		IO-Socket-SSL-2.087-Test-client-performs-Post-Handshake-Authentication.patch
+# oreon url source checksums begin
+%global source0_sha256 b38473be20256b1a06447dd6769ad162bfad6a258234ed2c7e2e1819c16c4df7
+%global source0_file IO-Socket-SSL-2.098.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -82,6 +87,9 @@ SSL version selection. As an extra bonus, it works perfectly with
 mod_perl.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IO-Socket-SSL-2.098.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b38473be20256b1a06447dd6769ad162bfad6a258234ed2c7e2e1819c16c4df7" || { echo "oreon: Source0 SHA256 mismatch for IO-Socket-SSL-2.098.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IO-Socket-SSL-%{version}
 
 # Use system-wide default cipher list to support use of system-wide

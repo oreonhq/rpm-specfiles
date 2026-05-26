@@ -34,7 +34,11 @@ ExcludeArch:    i686 armv7hl
 # Upstream license specification: Apache-2.0
 License:        Apache-2.0
 URL:            %{gourl}
-Source0:        %{gosource}
+Source0:        https://github.com/osbuild/osbuild-composer/archive/v165/osbuild-composer-165.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 cf09e18db18e93c60e5d5fa4827fb0de04d7515a8614929cb9f4232403f65b8a
+%global source0_file osbuild-composer-165.tar.gz
+# oreon url source checksums end
 
 
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
@@ -292,6 +296,9 @@ Provides: weldr
 %{common_description}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/osbuild-composer-165.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cf09e18db18e93c60e5d5fa4827fb0de04d7515a8614929cb9f4232403f65b8a" || { echo "oreon: Source0 SHA256 mismatch for osbuild-composer-165.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?rhel}
 %forgeautosetup -p1
 %else

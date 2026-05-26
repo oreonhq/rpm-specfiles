@@ -12,6 +12,10 @@ License: BSD-2-Clause and CC0-1.0 and LGPL-2.0-or-later and LGPL-2.1-only and LG
 URL:     https://invent.kde.org/frameworks/%{framework}
 Source0: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+# oreon url source checksums begin
+%global source0_sha256 e9c9e0155e9b8049ad8588049645c998494b91145648467ddcbef178e31e84c5
+%global source0_file kcolorscheme-6.24.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++
@@ -37,6 +41,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kcolorscheme-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e9c9e0155e9b8049ad8588049645c998494b91145648467ddcbef178e31e84c5" || { echo "oreon: Source0 SHA256 mismatch for kcolorscheme-6.24.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{framework}-%{version} -p1
 
 %build

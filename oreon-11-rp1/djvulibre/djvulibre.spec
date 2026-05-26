@@ -5,6 +5,10 @@ Summary:        DjVu viewers, encoders, and libraries
 License:        GPL-2.0-or-later
 URL:            https://djvu.sourceforge.net/
 Source0:        https://downloads.sourceforge.net/djvu/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 fcd009ea7654fde5a83600eb80757bd3a76998e47d13c66b54c8db849f8f2edc
+%global source0_file djvulibre-3.5.28.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  libtiff-devel
@@ -33,6 +37,9 @@ Headers and pkg-config data for building against djvulibre.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/djvulibre-3.5.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fcd009ea7654fde5a83600eb80757bd3a76998e47d13c66b54c8db849f8f2edc" || { echo "oreon: Source0 SHA256 mismatch for djvulibre-3.5.28.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

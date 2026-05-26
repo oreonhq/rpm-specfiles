@@ -8,6 +8,10 @@ Summary: A library for import of Microsoft Visio diagrams
 License: MPL-2.0
 URL: http://wiki.documentfoundation.org/DLP/Libraries/libvisio
 Source: http://dev-www.libreoffice.org/src/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 9e9eff75112d4d92d92262ad7fc2599c21e26f8fc5ba54900efdc83c0501e472
+%global source0_file libvisio-0.1.10.tar.xz
+# oreon url source checksums end
 
 BuildRequires: boost-devel
 BuildRequires: doxygen
@@ -52,6 +56,9 @@ Tools to transform Microsoft Visio diagrams into other formats.
 Currently supported: XHTML, raw, plain text.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libvisio-0.1.10.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9e9eff75112d4d92d92262ad7fc2599c21e26f8fc5ba54900efdc83c0501e472" || { echo "oreon: Source0 SHA256 mismatch for libvisio-0.1.10.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

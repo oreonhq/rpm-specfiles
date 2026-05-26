@@ -27,7 +27,7 @@ Source0:	https://ftp.gnu.org/gnu/grub/grub-%{tarversion}.tar.xz
 Source1:	https://github.com/coreutils/gnulib/archive/%{gnulibversion}.tar.gz#/gnulib-%{gnulibversion}.tar.gz
 Source2:	99-grub-mkconfig.install
 Source3:	http://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
-Source4:	gitignore
+Source4:        http://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
 Source5:	bootstrap
 Source6:	bootstrap.conf
 Source7:	strtoull_test.c
@@ -1454,6 +1454,10 @@ Patch0425: 0425-tests-lib-functional_test-Unregister-commands-on-mod.patch
 Patch0426: 0426-commands-usbtest-Use-correct-string-length-field.patch
 Patch0427: 0427-commands-usbtest-Ensure-string-length-is-sufficient-.patch
 Patch0428: 0428-verifiers-Allocate-EFI-pages-instead-of-grub_malloc-.patch
+# oreon url source checksums begin
+%global source1_sha256 00a25a5c3a18d9d7b0deb456344f7ab02f6f9ef8422fbe6174afafc546c8ee36
+%global source1_file 9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz
+# oreon url source checksums end
 
 
 %description
@@ -1550,6 +1554,9 @@ This subpackage provides the GRUB user-space emulation modules.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "00a25a5c3a18d9d7b0deb456344f7ab02f6f9ef8422fbe6174afafc546c8ee36" || { echo "oreon: Source1 SHA256 mismatch for 9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %do_common_setup
 %if 0%{with_efi_arch}
 mkdir grub-%{grubefiarch}-%{tarversion}

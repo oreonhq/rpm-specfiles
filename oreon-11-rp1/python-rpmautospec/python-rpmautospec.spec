@@ -61,8 +61,12 @@ Release: %autorelease
 Summary: Package and CLI tool to generate release fields and changelogs
 License: MIT AND GPL-2.0-only WITH GCC-exception-2.0 AND (MIT OR GPL-2.0-or-later WITH GCC-exception-2.0)
 URL: https://github.com/fedora-infra/%{srcname}
-Source0: %{pypi_source %{srcname}}
+Source0:        https://files.pythonhosted.org/packages/source/r/rpmautospec/rpmautospec-0.8.3.tar.gz
 Source1: rpmautospec.in
+# oreon url source checksums begin
+%global source0_sha256 66fa5540871c1140ed051c89b0624f14eaf59609452448360fa58cd7211e7a41
+%global source0_file rpmautospec-0.8.3.tar.gz
+# oreon url source checksums end
 
 %if 0%{!?pyproject_files:1}
 %global pyproject_files %{_builddir}/%{name}-%{version}-%{release}.%{_arch}-pyproject-files
@@ -153,6 +157,9 @@ enabled packages locally.
 %pyproject_buildrequires %{!?with_minimal:-x all}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rpmautospec-0.8.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "66fa5540871c1140ed051c89b0624f14eaf59609452448360fa58cd7211e7a41" || { echo "oreon: Source0 SHA256 mismatch for rpmautospec-0.8.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{srcname}-%{version}
 %if %{with old_hatchling}
 sed -i -e 's/license-files = \(\[.*\]\)/license-files = {globs = \1}/' pyproject.toml

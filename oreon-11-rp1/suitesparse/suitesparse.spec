@@ -79,6 +79,10 @@ Summary:        A collection of sparse matrix libraries
 License:        BSD-3-Clause AND LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:            http://faculty.cse.tamu.edu/davis/suitesparse.html
 Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 93ed4c4e546a49fc75884c3a8b807d5af4a91e39d191fbbc60a07380b12a35d1
+%global source0_file suitesparse-7.11.0.tar.gz
+# oreon url source checksums end
 #Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/%{commit}/%{name}-%{commit}.tar.gz
 
 BuildRequires:  cmake
@@ -219,6 +223,9 @@ This package contains documentation files for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/suitesparse-7.11.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "93ed4c4e546a49fc75884c3a8b807d5af4a91e39d191fbbc60a07380b12a35d1" || { echo "oreon: Source0 SHA256 mismatch for suitesparse-7.11.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -c -q
 mkdir Doc Licenses
 pushd SuiteSparse-%{version}

@@ -6,7 +6,11 @@ Summary:        Parser for Python internal Marshal format
 # SPDX
 License:        MIT
 URL:            https://github.com/fedora-python/%{name}
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/fedora-python/marshalparser/archive/v0.5.0/marshalparser-0.5.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4c1e5a4330047c7640d86c324ef458cf4f2a1e3756f38f3e510f88389d2a6f0e
+%global source0_file marshalparser-0.5.0.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
@@ -35,6 +39,9 @@ Parser for Python internal Marshal format which can fix pyc files
 reproducibility.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/marshalparser-0.5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4c1e5a4330047c7640d86c324ef458cf4f2a1e3756f38f3e510f88389d2a6f0e" || { echo "oreon: Source0 SHA256 mismatch for marshalparser-0.5.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

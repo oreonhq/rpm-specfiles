@@ -7,7 +7,11 @@ Release:        2%{?dist}
 Summary:        Integrated icon taskbar and status panel for Gnome Shell
 License:        GPL-2.0-or-later
 URL:            https://github.com/home-sweet-gnome/dash-to-panel
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/home-sweet-gnome/dash-to-panel/archive/v72/gnome-shell-extension-dash-to-panel-72.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 42fe9e4dfaee72cfb7f6b21393c15e598c0087dca05f0eca73fcea7e0928cd3a
+%global source0_file gnome-shell-extension-dash-to-panel-72.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  gettext
 BuildRequires:  make
@@ -22,6 +26,9 @@ combined into a single panel, similar to that found in KDE Plasma and Windows
 applications.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gnome-shell-extension-dash-to-panel-72.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "42fe9e4dfaee72cfb7f6b21393c15e598c0087dca05f0eca73fcea7e0928cd3a" || { echo "oreon: Source0 SHA256 mismatch for gnome-shell-extension-dash-to-panel-72.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{ename}-%{version} -p1
 
 %build

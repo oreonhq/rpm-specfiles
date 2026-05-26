@@ -24,6 +24,10 @@ Patch:     move_parsing_code.patch
 Patch:     crontab-fix-backup-failure.patch
 # https://github.com/cronie-crond/cronie/pull/210
 Patch:     forward-XDG_SESSION_CLASS-to-PAM-for-session-classification.patch
+# oreon url source checksums begin
+%global source0_sha256 f1da374a15ba7605cf378347f96bc8b678d3d7c0765269c8242cfe5b0789c571
+%global source0_file cronie-1.7.2.tar.gz
+# oreon url source checksums end
 
 Requires:  dailyjobs
 
@@ -90,6 +94,9 @@ Old style of running {hourly,daily,weekly,monthly}.jobs without anacron. No
 extra features.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cronie-1.7.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f1da374a15ba7605cf378347f96bc8b678d3d7c0765269c8242cfe5b0789c571" || { echo "oreon: Source0 SHA256 mismatch for cronie-1.7.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

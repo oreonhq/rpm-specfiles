@@ -18,6 +18,10 @@ Source5:          vmtoolsd.pam
 
 Patch0:           open-vm-tools-gcc16.patch
 Patch1:           open-vm-tools-sigc++3.patch
+# oreon url source checksums begin
+%global source0_sha256 67a23d505aca77127b081445f758e269b1009e8824cf7f6f2d6efafb0b14d0fd
+%global source0_file open-vm-tools-13.1.0-25218885.tar.gz
+# oreon url source checksums end
 
 ExclusiveArch:    %{ix86} x86_64 aarch64
 
@@ -131,6 +135,9 @@ useful for verifying the functioning of %{name} in VMware virtual
 machines.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/open-vm-tools-13.1.0-25218885.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "67a23d505aca77127b081445f758e269b1009e8824cf7f6f2d6efafb0b14d0fd" || { echo "oreon: Source0 SHA256 mismatch for open-vm-tools-13.1.0-25218885.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}-%{toolsbuild}
 
 %build

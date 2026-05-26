@@ -7,6 +7,10 @@ Group:			Applications/System
 License:		GPL-2.0-only
 URL:			http://git.infradead.org/users/mchehab/rasdaemon.git
 Source0:		http://www.infradead.org/~mchehab/rasdaemon/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 ef0b8df430746b3907f8d0808e7fdd1f8bf2ebdfa098a4f8db1edbf89a760349
+%global source0_file rasdaemon-0.8.0.tar.bz2
+# oreon url source checksums end
 
 ExcludeArch:		s390 s390x
 BuildRequires:		make
@@ -40,6 +44,9 @@ EDAC drivers and DIMM labels are loaded at system startup, as well as
 an utility for reporting current error counts from the EDAC sysfs files.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rasdaemon-0.8.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ef0b8df430746b3907f8d0808e7fdd1f8bf2ebdfa098a4f8db1edbf89a760349" || { echo "oreon: Source0 SHA256 mismatch for rasdaemon-0.8.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 autoreconf -vfi
 

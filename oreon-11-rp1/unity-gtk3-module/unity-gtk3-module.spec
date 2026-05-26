@@ -6,6 +6,10 @@ Summary:        GTK3 module for exporting old-style menus as GMenuModels
 License:        LGPL-3.0-or-later
 URL:            https://launchpad.net/unity-gtk-module
 Source0:        https://launchpad.net/ubuntu/+archive/primary/+files/unity-gtk-module_0.0.0+18.04.20171202.orig.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5a78ae6b021aaf35f573a56c7803773b0accdf34112ebfebd00651be87c0e28e
+%global source0_file unity-gtk-module_0.0.0+18.04.20171202.orig.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  glib2-devel
@@ -39,6 +43,9 @@ Headers and pkg-config metadata for the Unity GTK3 menu parser library
 (libunity-gtk3-parser).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/unity-gtk-module_0.0.0+18.04.20171202.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5a78ae6b021aaf35f573a56c7803773b0accdf34112ebfebd00651be87c0e28e" || { echo "oreon: Source0 SHA256 mismatch for unity-gtk-module_0.0.0+18.04.20171202.orig.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 mkdir -p %{name}-%{version}
 tar -xzf %{SOURCE0} -C %{name}-%{version}
 # tests/ is wired in configure.ac + Makefile.am; deleting it without editing breaks automake.

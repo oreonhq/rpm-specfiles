@@ -13,6 +13,10 @@ URL: https://wiki.gnome.org/Projects/libsoup
 Source0: https://download.gnome.org/sources/%{name}/2.74/%{name}-%{version}.tar.xz
 # https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/385
 Patch:   libsoup-2.74.3-libxml2-2.12.0-includes.patch
+# oreon url source checksums begin
+%global source0_sha256 e4b77c41cfc4c8c5a035fcdc320c7bc6cfb75ef7c5a034153df1413fa1d92f13
+%global source0_file libsoup-2.74.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires: gettext
 BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}
@@ -66,6 +70,9 @@ This package contains developer documentation for %{name}.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libsoup-2.74.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e4b77c41cfc4c8c5a035fcdc320c7bc6cfb75ef7c5a034153df1413fa1d92f13" || { echo "oreon: Source0 SHA256 mismatch for libsoup-2.74.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

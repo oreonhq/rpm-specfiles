@@ -9,6 +9,10 @@ Release: 22%{?dist}
 License: GPL-2.0-only
 URL: http://bogofilter.sourceforge.net/
 Source0: http://downloads.sourceforge.net/bogofilter/bogofilter-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 3248a1373bff552c500834adbea4b6caee04224516ae581fb25a4c6a6dee89ea
+%global source0_file bogofilter-1.2.5.tar.xz
+# oreon url source checksums end
 BuildRequires: gcc
 BuildRequires: flex
 BuildRequires: pkgconfig(sqlite3)
@@ -54,6 +58,9 @@ bogoupgrade is in an extra package to remove the perl dependency on the
 main bogofilter package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/bogofilter-1.2.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3248a1373bff552c500834adbea4b6caee04224516ae581fb25a4c6a6dee89ea" || { echo "oreon: Source0 SHA256 mismatch for bogofilter-1.2.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 iconv -f iso-8859-1 -t utf-8 \
  doc/bogofilter-faq-fr.html > doc/bogofilter-faq-fr.html.utf8

@@ -8,6 +8,10 @@ Summary: A library for import of AbiWord files
 License: MPL-2.0
 URL: https://wiki.documentfoundation.org/DLP/Libraries/libabw
 Source: http://dev-www.libreoffice.org/src/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 e763a9dc21c3d2667402d66e202e3f8ef4db51b34b79ef41f56cacb86dcd6eed
+%global source0_file libabw-0.1.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires: boost-devel
 BuildRequires: doxygen
@@ -49,6 +53,9 @@ Tools to transform AbiWord files into other formats. Currently
 supported: XHTML, raw, text.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libabw-0.1.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e763a9dc21c3d2667402d66e202e3f8ef4db51b34b79ef41f56cacb86dcd6eed" || { echo "oreon: Source0 SHA256 mismatch for libabw-0.1.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

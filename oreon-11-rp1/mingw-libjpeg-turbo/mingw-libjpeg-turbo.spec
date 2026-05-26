@@ -11,7 +11,11 @@ Summary:        MinGW Windows Libjpeg-turbo library
 
 License:        Zlib AND BSD-3-Clause AND MIT AND IJG
 URL:            https://github.com/libjpeg-turbo/libjpeg-turbo
-Source0:        %{url}/releases/download/%{version}/libjpeg-turbo-%{version}.tar.gz
+Source0:        https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.1.3/libjpeg-turbo-3.1.3.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 075920b826834ac4ddf97661cc73491047855859affd671d52079c6867c1c6c0
+%global source0_file libjpeg-turbo-3.1.3.tar.gz
+# oreon url source checksums end
 #Patch1:         libjpeg-turbo-CET.patch
 
 BuildArch:      noarch
@@ -109,6 +113,9 @@ Static version of the MinGW Windows turbojpeg library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libjpeg-turbo-3.1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "075920b826834ac4ddf97661cc73491047855859affd671d52079c6867c1c6c0" || { echo "oreon: Source0 SHA256 mismatch for libjpeg-turbo-3.1.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n libjpeg-turbo-%{version} -p1
 
 

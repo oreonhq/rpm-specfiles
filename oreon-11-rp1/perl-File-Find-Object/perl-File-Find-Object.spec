@@ -4,7 +4,12 @@ Release:        4%{?dist}
 Summary:        Object oriented File::Find replacement
 License:        GPL-2.0-or-later OR Artistic-2.0
 URL:            https://metacpan.org/release/File-Find-Object
-Source0:        https://www.cpan.org/modules/by-module/File/File-Find-Object-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/File-Find-Object-0.3.9.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7e99afe4a9d992fcef1dfea42e1f95475706aed94f185068a89f729b512735f8
+%global source0_file File-Find-Object-0.3.9.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -42,6 +47,9 @@ File::Find is its file processing: after starting its main loop, one cannot
 easily wait for another event and so get the next result.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-Find-Object-0.3.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7e99afe4a9d992fcef1dfea42e1f95475706aed94f185068a89f729b512735f8" || { echo "oreon: Source0 SHA256 mismatch for File-Find-Object-0.3.9.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -qn File-Find-Object-%{version}
 chmod -c 644 examples/tree
 

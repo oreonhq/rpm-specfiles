@@ -16,11 +16,15 @@ License:    HPND AND HPND-sell-variant AND X11 AND X11-distribute-modifications-
 URL:        http://www.freedesktop.org/wiki/Software/XKeyboardConfig
 
 %if 0%{?gitdate}
-Source0:    %{name}-%{gitdate}.tar.bz2
+Source0:        http://xorg.freedesktop.org/archive/individual/data/xkeyboard-config/xkeyboard-config-2.47.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
 Source0:    http://xorg.freedesktop.org/archive/individual/data/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 e59984416a72d58b46a52bfec1b1361aa7d84354628227ee2783626c7a6db6b6
+%global source0_file xkeyboard-config-2.47.tar.xz
+# oreon url source checksums end
 %endif
 
 BuildArch:  noarch
@@ -49,6 +53,9 @@ Requires:   pkgconfig
 Development files for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xkeyboard-config-2.47.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e59984416a72d58b46a52bfec1b1361aa7d84354628227ee2783626c7a6db6b6" || { echo "oreon: Source0 SHA256 mismatch for xkeyboard-config-2.47.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

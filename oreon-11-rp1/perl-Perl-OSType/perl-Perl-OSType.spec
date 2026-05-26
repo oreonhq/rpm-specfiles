@@ -7,8 +7,13 @@ Release:	522%{?dist}
 Summary:	Map Perl operating system names to generic types
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Perl-OSType
-Source0:	https://cpan.metacpan.org/modules/by-module/Perl/Perl-OSType-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Perl-OSType-1.010.tar.gz
+
 Patch2:		Perl-OSType-1.010-stopwords.patch
+# oreon url source checksums begin
+%global source0_sha256 e7ed4994b5d547cb23aadb84dc6044c5eb085d5a67a6c5624f42542edd3403b2
+%global source0_file Perl-OSType-1.010.tar.gz
+# oreon url source checksums end
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
@@ -61,6 +66,9 @@ provided in Module::Build and ExtUtils::CBuilder (thus, Microsoft operating
 systems are given the type 'Windows' rather than 'Win32').
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Perl-OSType-1.010.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e7ed4994b5d547cb23aadb84dc6044c5eb085d5a67a6c5624f42542edd3403b2" || { echo "oreon: Source0 SHA256 mismatch for Perl-OSType-1.010.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Perl-OSType-%{version}
 
 # More stopwords for the spell checker

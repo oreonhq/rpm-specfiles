@@ -11,7 +11,11 @@ Summary:        PEP 621 metadata parsing
 License:        MIT
 URL:            https://github.com/FFY00/python-pyproject-metadata
 VCS:            git:%{url}.git
-Source:         %{url}/archive/%{version}/pyproject-metadata-%{version}.tar.gz
+Source:        https://github.com/FFY00/python-pyproject-metadata/archive/0.11.0/pyproject-metadata-0.11.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e15d2f1bab8b3cf18161773b96f34f0199ef483034c577da2731c3a3290cfe76
+%global source0_file pyproject-metadata-0.11.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildSystem:    pyproject
@@ -47,6 +51,9 @@ Documentation for python3-pyproject-metadata.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pyproject-metadata-0.11.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e15d2f1bab8b3cf18161773b96f34f0199ef483034c577da2731c3a3290cfe76" || { echo "oreon: Source0 SHA256 mismatch for pyproject-metadata-0.11.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n pyproject-metadata-%{version}
 # No need to BuildRequire pytest-cov to run pytest
 sed -i /pytest-cov/d pyproject.toml

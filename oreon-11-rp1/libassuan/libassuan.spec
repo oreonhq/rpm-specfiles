@@ -11,6 +11,10 @@ URL:     https://www.gnupg.org/
 
 Patch1:  libassuan-2.5.2-multilib.patch
 Patch2:  libassuan-2.5.5-coverity.patch
+# oreon url source checksums begin
+%global source0_sha256 0103081ffc27838a2e50479153ca105e873d3d65d8a9593282e9c94c7e6afb76
+%global source0_file libassuan-2.5.7.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gawk
@@ -35,6 +39,9 @@ This package contains files needed to develop applications using %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libassuan-2.5.7.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0103081ffc27838a2e50479153ca105e873d3d65d8a9593282e9c94c7e6afb76" || { echo "oreon: Source0 SHA256 mismatch for libassuan-2.5.7.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %patch 1 -p1 -b .multilib

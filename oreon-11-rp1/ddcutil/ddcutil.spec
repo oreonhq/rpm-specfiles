@@ -8,6 +8,10 @@ Summary:    Query and update monitor settings
 License:    GPL-2.0-or-later
 URL:        http://www.ddcutil.com
 Source0:    https://github.com/rockowitz/ddcutil/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ff8eb39b4559fcbc83de7b16834a010262dfa825938625272212fcaeefaef692
+%global source0_file ddcutil-2.2.1.tar.gz
+# oreon url source checksums end
 
 # Excluding arch s390/s390x due to i2c-tools does so
 ExcludeArch:    s390 s390x
@@ -66,6 +70,9 @@ Development files for libddcutil
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ddcutil-2.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ff8eb39b4559fcbc83de7b16834a010262dfa825938625272212fcaeefaef692" || { echo "oreon: Source0 SHA256 mismatch for ddcutil-2.2.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

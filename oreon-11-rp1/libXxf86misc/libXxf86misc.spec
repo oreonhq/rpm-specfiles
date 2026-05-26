@@ -10,6 +10,10 @@ Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.bz2
 # copied out of xorgproto 2018.4
 Source1: xf86misc.h
 Source2: xf86mscstr.h
+# oreon url source checksums begin
+%global source0_sha256 a89c03e2b0f16239d67a2031b9003f31b5a686106bbdb3c797fb88ae472af380
+%global source0_file libXxf86misc-1.0.4.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: sed
@@ -34,6 +38,9 @@ X.Org X11 libXxf86misc development package
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libXxf86misc-1.0.4.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a89c03e2b0f16239d67a2031b9003f31b5a686106bbdb3c797fb88ae472af380" || { echo "oreon: Source0 SHA256 mismatch for libXxf86misc-1.0.4.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 sed -i s/xf86miscproto// configure.ac
 mkdir -p src/X11/extensions/

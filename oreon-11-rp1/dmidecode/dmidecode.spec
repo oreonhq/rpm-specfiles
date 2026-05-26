@@ -5,6 +5,10 @@ Release:        9%{?dist}
 Epoch:          1
 License:        GPL-2.0-or-later
 Source0:        https://download.savannah.gnu.org/releases/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 e40c65f3ec3dafe31ad8349a4ef1a97122d38f65004ed66575e1a8d575dd8bae
+%global source0_file dmidecode-3.6.tar.xz
+# oreon url source checksums end
 URL:            https://www.nongnu.org/dmidecode/
 BuildRequires:  gcc make
 BuildRequires:  pkgconfig(bash-completion)
@@ -28,6 +32,9 @@ slots (e.g. AGP, PCI, ISA) and memory module slots, and the list of
 I/O ports (e.g. serial, parallel, USB).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dmidecode-3.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e40c65f3ec3dafe31ad8349a4ef1a97122d38f65004ed66575e1a8d575dd8bae" || { echo "oreon: Source0 SHA256 mismatch for dmidecode-3.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

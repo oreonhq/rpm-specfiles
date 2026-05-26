@@ -8,6 +8,10 @@ Summary:	A library for import of Microsoft Works documents
 License:	LGPL-2.1-or-later OR MPL-2.0
 URL:		http://libwps.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 365b968e270e85a8469c6b160aa6af5619a4e6c995dbb04c1ecc1b4dd13e80de
+%global source0_file libwps-0.4.14.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	doxygen
 BuildRequires:	gcc-c++
@@ -47,6 +51,9 @@ BuildArch:	noarch
 The %{name}-doc package contains documentation files for %{name}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libwps-0.4.14.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "365b968e270e85a8469c6b160aa6af5619a4e6c995dbb04c1ecc1b4dd13e80de" || { echo "oreon: Source0 SHA256 mismatch for libwps-0.4.14.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

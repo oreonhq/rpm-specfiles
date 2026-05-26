@@ -4,7 +4,11 @@ Release:        38%{?dist}
 Summary:        Perl version normalization for RPM
 License:        GPL-3.0-or-later
 URL:            https://ppisar.fedorapeople.org/Fedora-VSP/
-Source0:        %{url}Fedora-VSP-%{version}.tar.gz
+Source0:        https://ppisar.fedorapeople.org/Fedora-VSP/Fedora-VSP-0.001.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0fff1f02c61b7098a6d2eb9698a052cf00b87becf2705d2d1f0d395f8d87a7e3
+%global source0_file Fedora-VSP-0.001.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  make
@@ -43,6 +47,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Fedora-VSP-0.001.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0fff1f02c61b7098a6d2eb9698a052cf00b87becf2705d2d1f0d395f8d87a7e3" || { echo "oreon: Source0 SHA256 mismatch for Fedora-VSP-0.001.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Fedora-VSP-%{version}
 # Help generators to recognize Perl scripts
 for F in $(find t/ -name '*.t'); do

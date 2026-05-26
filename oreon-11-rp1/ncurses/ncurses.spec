@@ -14,6 +14,10 @@ Source2: https://invisible-island.net/public/dickey@invisible-island.net-rsa3072
 Patch8: ncurses-config.patch
 Patch9: ncurses-libs.patch
 Patch11: ncurses-urxvt.patch
+# oreon url source checksums begin
+%global source0_sha256 355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11
+%global source0_file ncurses-6.6.tar.gz
+# oreon url source checksums end
 BuildRequires: gcc gcc-c++ gnupg2 make pkgconfig
 %{?with_gpm:BuildRequires: gpm-devel}
 
@@ -106,6 +110,9 @@ Requires: %{name}-devel%{?_isa} = %{version}-%{release}
 The ncurses-static package includes static libraries of the ncurses library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/ncurses-6.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11" || { echo "oreon: Source0 SHA256 mismatch for ncurses-6.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring=%{SOURCE2} --signature=%{SOURCE1} --data=%{SOURCE0}
 
 %setup -q -n %{name}-%{version}

@@ -11,6 +11,10 @@ Summary:        A PKCS#11 engine for use with OpenSSL
 License:        LGPL-2.1-or-later AND BSD-2-Clause AND OpenSSL
 URL:            https://github.com/OpenSC/libp11
 Source0:        https://github.com/OpenSC/libp11/releases/download/libp11-%{version}/libp11-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 d25dd9cff1b623e12d51b6d2c100e26063582d25c9a6f57c99d41f2da9567086
+%global source0_file libp11-0.4.13.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  autoconf automake libtool
@@ -62,6 +66,9 @@ developing applications that use libp11.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libp11-0.4.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d25dd9cff1b623e12d51b6d2c100e26063582d25c9a6f57c99d41f2da9567086" || { echo "oreon: Source0 SHA256 mismatch for libp11-0.4.13.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1 -n libp11-%{version}
 
 %build

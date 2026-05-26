@@ -12,6 +12,10 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://archive.apache.org/dist/commons/lang/source/commons-lang3-%{version}-src.tar.gz
 
 Patch:          0001-Remove-test-dependency-on-JUnit-Pioneer.patch
+# oreon url source checksums begin
+%global source0_sha256 297f62c560ca8aefefeac161003a38dde0d5a1664dbf08a9abd8994cd3c1df57
+%global source0_file commons-lang3-3.19.0-src.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -47,6 +51,9 @@ the new version, while apache-commons-lang is the compatibility
 package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/commons-lang3-3.19.0-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "297f62c560ca8aefefeac161003a38dde0d5a1664dbf08a9abd8994cd3c1df57" || { echo "oreon: Source0 SHA256 mismatch for commons-lang3-3.19.0-src.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n commons-lang3-%{version}-src
 
 %pom_remove_plugin :maven-javadoc-plugin

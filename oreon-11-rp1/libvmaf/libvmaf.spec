@@ -5,7 +5,11 @@ Summary:        Video Multi-Method Assessment Fusion
 
 License:        BSD-2-Clause-Patent
 URL:            https://github.com/netflix/vmaf
-Source0:        %{url}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/netflix/vmaf/archive/v3.1.0/vmaf-3.1.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 80090e29d7fd0db472ddc663513f5be89bc936815e62b767e630c1d627279fe2
+%global source0_file vmaf-3.1.0.tar.gz
+# oreon url source checksums end
 
 # This project relies on AVX for the default x86 tuning; other arches are allowed on Oreon
 %if !0%{?oreon}
@@ -66,6 +70,9 @@ The %{name}-models package contains model files.
 These are needed for apps that can't use the builtin models.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vmaf-3.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "80090e29d7fd0db472ddc663513f5be89bc936815e62b767e630c1d627279fe2" || { echo "oreon: Source0 SHA256 mismatch for vmaf-3.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # Unbundle
 rm -rf third_party/

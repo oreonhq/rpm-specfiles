@@ -25,6 +25,10 @@ BuildRequires: libXau-devel
 BuildRequires: libtool automake autoconf gettext
 
 Patch0: add-proto-files.patch
+# oreon url source checksums begin
+%global source0_sha256 1f19e3b8e82a34a8fd9889a7d9af0abe8588cb03fb57c37c569634cf3b9df1a4
+%global source0_file libXp-1.0.4.tar.xz
+# oreon url source checksums end
 
 %description
 X.Org X11 libXp runtime library
@@ -41,6 +45,9 @@ BuildRequires: xorg-x11-proto-devel
 X.Org X11 libXp development package
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libXp-1.0.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1f19e3b8e82a34a8fd9889a7d9af0abe8588cb03fb57c37c569634cf3b9df1a4" || { echo "oreon: Source0 SHA256 mismatch for libXp-1.0.4.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b .add-proto-files
 

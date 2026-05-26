@@ -22,6 +22,10 @@ Source0: https://github.com/rhboot/%{name}/releases/download/%{version}/%{name}-
 
 # Was efibootmgr.patches (%%include needs SOURCES at parse time for spectool)
 Patch0001: 0001-Update-efibootmgr.c.patch
+# oreon url source checksums begin
+%global source0_sha256 2b195f912aa353f0d11f21f207684c91460fbc37f9a4f2673e63e5e32d108b10
+%global source0_file efibootmgr-18.tar.bz2
+# oreon url source checksums end
 
 %description
 %{name} displays and allows the user to edit the Intel Extensible
@@ -29,6 +33,9 @@ Firmware Interface (EFI) Boot Manager variables.  Additional
 information about EFI can be found at https://uefi.org/.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/efibootmgr-18.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2b195f912aa353f0d11f21f207684c91460fbc37f9a4f2673e63e5e32d108b10" || { echo "oreon: Source0 SHA256 mismatch for efibootmgr-18.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 git config --local --add efibootmgr.efidir %{efi_vendor}
 

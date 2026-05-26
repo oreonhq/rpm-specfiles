@@ -7,7 +7,7 @@ Release: %autorelease
 License: LicenseRef-Fedora-Public-Domain
 # This package is a downstream-only project
 URL: https://src.fedoraproject.org/rpms/filesystem
-Source1: lang-exceptions
+Source1:        https://pagure.io/filesystem/raw/master/f/lang-exceptions
 Source2: glibc-SUPPORTED.locales
 Source3: iso_639-2.locales
 Source4: sbin-filenames

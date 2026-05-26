@@ -9,6 +9,10 @@ URL:            https://developer.gnome.org/clutter-gst/stable/
 Source0:        https://download.gnome.org/sources/clutter-gst/3.0/clutter-gst-%{version}.tar.xz
 
 Patch0:         remove-rgbx-bgrx-support.patch
+# oreon url source checksums begin
+%global source0_sha256 fe69bd6c659d24ab30da3f091eb91cd1970026d431179b0724f13791e8ad9f9d
+%global source0_file clutter-gst-3.0.27.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  /usr/bin/chrpath
 BuildRequires:  pkgconfig(clutter-1.0)
@@ -47,6 +51,9 @@ developing applications that use clutter-gst API version 3.0.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/clutter-gst-3.0.27.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fe69bd6c659d24ab30da3f091eb91cd1970026d431179b0724f13791e8ad9f9d" || { echo "oreon: Source0 SHA256 mismatch for clutter-gst-3.0.27.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n clutter-gst-%{version}
 
 

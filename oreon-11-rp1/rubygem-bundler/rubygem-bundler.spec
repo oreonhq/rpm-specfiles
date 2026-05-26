@@ -35,6 +35,10 @@ Source1: %{gem_name}-%{version}-specs.tar.gz
 # This revert changes which seems to require some setup prior running specs.
 # https://github.com/rubygems/rubygems/issues/8698
 Patch0: rubygem-bundler-2.6.9-Revert-changes-in-spec-sectup.patch
+# oreon url source checksums begin
+%global source0_sha256 a25675ffbd055ae1186766cc1e120b4cf62588e88abb59b99c57e22b1c55c9eb
+%global source0_file bundler-2.6.9.gem
+# oreon url source checksums end
 # ruby package has just soft dependency on rubygem(io-console), while
 # Bundler always requires it.
 Requires: rubygem(io-console)
@@ -76,6 +80,9 @@ BuildArch: noarch
 Documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/bundler-2.6.9.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a25675ffbd055ae1186766cc1e120b4cf62588e88abb59b99c57e22b1c55c9eb" || { echo "oreon: Source0 SHA256 mismatch for bundler-2.6.9.gem" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{gem_name}-%{version} -b 1
 
 ( cd %{builddir}

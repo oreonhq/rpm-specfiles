@@ -87,6 +87,10 @@ Patch1001:        1001-vendor-patch-removed-backend-crypto.patch
 Patch1002:        1002-vendor-use-pbkdf2-from-OpenSSL.patch
 Patch1003:        1003-vendor-skip-goldenfiles-tests.patch
 Patch1004:        1004-vendor-Redacted-Url-in-logs.patch
+# oreon url source checksums begin
+%global source0_sha256 25af66dfcbd3b1609311d0ca46f37fc586891fae621377aadbb2c9c4d7d935d2
+%global source0_file grafana-10.2.6.tar.gz
+# oreon url source checksums end
 
 # Intersection of go_arches and nodejs_arches
 ExclusiveArch:    %{grafana_arches}
@@ -757,6 +761,9 @@ BuildRequires:       selinux-policy-devel
 SELinux policy module supporting grafana
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/grafana-10.2.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "25af66dfcbd3b1609311d0ca46f37fc586891fae621377aadbb2c9c4d7d935d2" || { echo "oreon: Source0 SHA256 mismatch for grafana-10.2.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -T -D -b 0
 %setup -q -T -D -b 1
 %if %{compile_frontend} == 0

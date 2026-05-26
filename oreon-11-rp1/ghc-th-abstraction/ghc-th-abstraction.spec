@@ -14,6 +14,10 @@ License:        ISC
 URL:            https://hackage.haskell.org/package/th-abstraction
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 946654bcd8ea2dff7d0058061861a8c898be9addf20c92d3cfa53b679e737622
+%global source0_file th-abstraction-0.7.2.0.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -72,6 +76,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/th-abstraction-0.7.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "946654bcd8ea2dff7d0058061861a8c898be9addf20c92d3cfa53b679e737622" || { echo "oreon: Source0 SHA256 mismatch for th-abstraction-0.7.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

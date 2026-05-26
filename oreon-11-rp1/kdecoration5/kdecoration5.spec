@@ -4,7 +4,11 @@ Version:        5.27.11
 Release:        %autorelease
 License:        LGPL-2.1-only OR LGPL-3.0-only
 URL:            https://invent.kde.org/plasma/kdecoration
-Source0:        %{url}/-/archive/v%{version}/kdecoration-v%{version}.tar.bz2
+Source0:        https://invent.kde.org/plasma/kdecoration/-/archive/v5.27.11/kdecoration-v5.27.11.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 74abe7c2c800fa77783b23e86741a1e9051a94b5d8f2c6c24df765a13c94fe03
+%global source0_file kdecoration-v5.27.11.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -38,6 +42,9 @@ Conflicts:      kdecoration
 This package contains translations for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kdecoration-v5.27.11.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "74abe7c2c800fa77783b23e86741a1e9051a94b5d8f2c6c24df765a13c94fe03" || { echo "oreon: Source0 SHA256 mismatch for kdecoration-v5.27.11.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n kdecoration-v%{version}
 
 %build

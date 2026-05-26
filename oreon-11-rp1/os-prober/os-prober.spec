@@ -25,6 +25,10 @@ Patch12:        os-prober-efi-shell.patch
 Patch13:        os-prober-trap_unmount.patch
 Patch14:        os-prober-90fallback-include-possible-kernel-parameters-from-g.patch
 Patch15:        os-prober-common.sh-do-not-resolve-symbolic-link-on-mapped-dev.patch
+# oreon url source checksums begin
+%global source0_sha256 2fd928ec86538227711e2adf49cfd6a1ef74f6bb3555c5dad4e0425ccd978883
+%global source0_file os-prober_1.81.tar.xz
+# oreon url source checksums end
 
 Requires:       udev coreutils util-linux
 Requires:       grep /bin/sed /sbin/modprobe
@@ -39,6 +43,9 @@ in a generic machine-readable format. Support for new OSes and Linux
 distributions can be added easily. 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/os-prober_1.81.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2fd928ec86538227711e2adf49cfd6a1ef74f6bb3555c5dad4e0425ccd978883" || { echo "oreon: Source0 SHA256 mismatch for os-prober_1.81.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version} -S git
 
 find -type f -exec sed -i -e 's|usr/lib|usr/libexec|g' {} \;

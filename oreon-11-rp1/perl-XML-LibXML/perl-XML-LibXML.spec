@@ -19,6 +19,10 @@ Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-LibXML-%{ver
 Patch0:         XML-LibXML-2.0202-Parse-an-ampersand-entity-in-SAX-interface.patch
 # To reduce dependencies replace Alien::Libxml2 with pkg-config
 Patch1:         XML-LibXML-2.0212-Use-pkgconfig-instead-of-Alien-Libxml2.patch
+# oreon url source checksums begin
+%global source0_sha256 2af21c5d61ac34ea26a5fabf15ba5a5841e648f7189db3e33b6f28b5489802ab
+%global source0_file XML-LibXML-2.0213.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  glibc-common
@@ -119,6 +123,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-LibXML-2.0213.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2af21c5d61ac34ea26a5fabf15ba5a5841e648f7189db3e33b6f28b5489802ab" || { echo "oreon: Source0 SHA256 mismatch for XML-LibXML-2.0213.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n XML-LibXML-%{version}
 chmod -x *.c
 for i in Changes; do

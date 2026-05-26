@@ -10,6 +10,10 @@ Summary:        A module for reading .ini-style configuration files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Config-IniFiles
 Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/Config-IniFiles-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3c457b65d98e5ff40bdb9cf814b0d5983eb0c53fb8696bda3ba035ad2acd6802
+%global source0_file Config-IniFiles-3.000003.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  make
@@ -59,6 +63,9 @@ stacked,...), sections can be grouped, and settings can be accessed
 from a tied hash.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Config-IniFiles-3.000003.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3c457b65d98e5ff40bdb9cf814b0d5983eb0c53fb8696bda3ba035ad2acd6802" || { echo "oreon: Source0 SHA256 mismatch for Config-IniFiles-3.000003.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Config-IniFiles-%{version}
 # Normalize end-of-lines
 sed -i -e 's/\r$//' Changes OLD-Changes.txt

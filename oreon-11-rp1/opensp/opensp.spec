@@ -11,6 +11,10 @@ Patch1: opensp-nodeids.patch
 Patch2: opensp-sigsegv.patch
 Patch3: opensp-manpage.patch
 Patch4: opensp-configure-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 57f4898498a368918b0d49c826aa434bb5b703d2c3b169beb348016ab25617ce
+%global source0_file OpenSP-1.5.2.tar.gz
+# oreon url source checksums end
 License: X11
 
 BuildRequires: make
@@ -35,6 +39,9 @@ Header files and libtool library for developing applications that use OpenSP.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/OpenSP-1.5.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "57f4898498a368918b0d49c826aa434bb5b703d2c3b169beb348016ab25617ce" || { echo "oreon: Source0 SHA256 mismatch for OpenSP-1.5.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n OpenSP-%{version}
 %patch -P0 -p1 -b .multilib
 %patch -P1 -p1 -b .nodeids

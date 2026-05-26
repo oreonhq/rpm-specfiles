@@ -4,9 +4,13 @@ Version:        0.7.2
 Release:        19%{?dist}
 License:        LGPL-2.1-or-later
 URL:            https://pyxattr.k1024.org/
-Source0:        %{URL}/downloads/%{name}-%{version}.tar.gz
-Source1:        %{URL}/downloads/%{name}-%{version}.tar.gz.asc
+Source0:        https://pyxattr.k1024.org//downloads/pyxattr-0.7.2.tar.gz
+Source1:        https://pyxattr.k1024.org//downloads/pyxattr-0.7.2.tar.gz.asc
 Source2:        https://k1024.org/files/key.asc
+# oreon url source checksums begin
+%global source0_sha256 68477027e6d3310669f98aaef15393bfcd9b2823d7a7f00a6f1d91a3c971ae64
+%global source0_file pyxattr-0.7.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  libattr-devel
@@ -28,6 +32,9 @@ Summary: %{summary}
 %description -n python3-%{name} %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pyxattr-0.7.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "68477027e6d3310669f98aaef15393bfcd9b2823d7a7f00a6f1d91a3c971ae64" || { echo "oreon: Source0 SHA256 mismatch for pyxattr-0.7.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup
 

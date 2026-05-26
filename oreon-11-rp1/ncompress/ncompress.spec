@@ -33,6 +33,10 @@ Patch4: ncompress-5.0-endians.patch
 # ~> 760657
 # ~> downstream
 Patch5: ncompress-5.0-memmove.patch
+# oreon url source checksums begin
+%global source0_sha256 96ec931d06ab827fccad377839bfb91955274568392ddecf809e443443aead46
+%global source0_file v5.0.tar.gz
+# oreon url source checksums end
 
 # silence gcc warnings
 # ~> downstream
@@ -55,6 +59,9 @@ which are compatible with the original UNIX compress utility.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "96ec931d06ab827fccad377839bfb91955274568392ddecf809e443443aead46" || { echo "oreon: Source0 SHA256 mismatch for v5.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %ifarch sparc m68k armv4l ppc s390 s390x ppc64 sparc64
 ARCH_FLAGS="$ARCH_FLAGS -DBYTEORDER=1234"
 %endif

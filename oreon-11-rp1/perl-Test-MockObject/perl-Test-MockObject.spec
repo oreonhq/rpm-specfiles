@@ -5,7 +5,12 @@ Summary:        Perl extension for emulating troublesome interfaces
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-MockObject
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-MockObject-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CH/CHROMATIC/Test-MockObject-1.20200122.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2b7f80da87f5a6fe0360d9ee521051053017442c3a26e85db68dfac9f8307623
+%global source0_file Test-MockObject-1.20200122.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils
@@ -45,6 +50,9 @@ up your own data.  (Another option is not to test difficult things.
 Now you have no excuse.)
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-MockObject-1.20200122.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2b7f80da87f5a6fe0360d9ee521051053017442c3a26e85db68dfac9f8307623" || { echo "oreon: Source0 SHA256 mismatch for Test-MockObject-1.20200122.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-MockObject-%{version}
 
 %build

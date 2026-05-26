@@ -5,7 +5,11 @@ Summary:        Tools for virtual machine firmware volumes
 
 License:        GPL-2.0-only
 URL:            https://pypi.org/project/virt-firmware/
-Source0:        %{pypi_source virt_firmware}
+Source0:        https://files.pythonhosted.org/packages/source/v/virt_firmware/virt_firmware-26.2.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 920655632768cb7b8c729b796a3e94486e05d60f8f676ab3efcc698ea9a2d47e
+%global source0_file virt_firmware-26.2.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
@@ -61,6 +65,9 @@ be used for a more finegrained secure boot configuration for virtual
 machines.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/virt_firmware-26.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "920655632768cb7b8c729b796a3e94486e05d60f8f676ab3efcc698ea9a2d47e" || { echo "oreon: Source0 SHA256 mismatch for virt_firmware-26.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n virt_firmware-%{version} -p1
 
 %build

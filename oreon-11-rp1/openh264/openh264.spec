@@ -26,6 +26,10 @@ Source0:        https://github.com/cisco/openh264/archive/v%{version}/openh264-%
 Source1:        https://github.com/mozilla/gmp-api/archive/%{commit1}/gmp-api-%{shortcommit1}.tar.gz
 
 Patch0:         0001-Update-shared-lib-version-for-meson-3860.patch
+# oreon url source checksums begin
+%global source0_sha256 558544ad358283a7ab2930d69a9ceddf913f4a51ee9bf1bfb9e377322af81a69
+%global source0_file openh264-2.6.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  make
@@ -62,6 +66,9 @@ browsers.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/openh264-2.6.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "558544ad358283a7ab2930d69a9ceddf913f4a51ee9bf1bfb9e377322af81a69" || { echo "oreon: Source0 SHA256 mismatch for openh264-2.6.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P 0 -p1
 

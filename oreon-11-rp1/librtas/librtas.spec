@@ -19,6 +19,10 @@ Patch8: librtas-08-lockdown-compatible-abi-phase.patch
 Patch9: librtas-09-end-lockdown-compatible-abi-phase.patch
 Patch10: librtas-check-warning-null-pointer.patch
 Patch11: librtas-format-mismatch-size_t.patch
+# oreon url source checksums begin
+%global source0_sha256 b88ca9ac5acafb924cd0aaf56c89a7f149c84ade0fc6840f3ef8356ab96a1254
+%global source0_file librtas-2.0.6.tar.gz
+# oreon url source checksums end
 
 BuildRequires: autoconf
 BuildRequires: libtool
@@ -45,6 +49,9 @@ The librtas-devel packages contains the header files necessary for
 developing programs using librtas.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/librtas-2.0.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b88ca9ac5acafb924cd0aaf56c89a7f149c84ade0fc6840f3ef8356ab96a1254" || { echo "oreon: Source0 SHA256 mismatch for librtas-2.0.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

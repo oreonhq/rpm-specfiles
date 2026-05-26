@@ -10,6 +10,10 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # Fix test race condition.
 # https://github.com/mustache/mustache/pull/258
 Patch0: rubygem-mustache-1.1.1-Fix-test-race-condition.patch
+# oreon url source checksums begin
+%global source0_sha256 90891fdd50b53919ca334c8c1031eada1215e78d226d5795e523d6123a2717d0
+%global source0_file mustache-1.1.1.gem
+# oreon url source checksums end
 BuildRequires: ruby(release)
 BuildRequires: rubygems-devel
 BuildRequires: ruby
@@ -40,6 +44,9 @@ BuildArch: noarch
 Documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mustache-1.1.1.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "90891fdd50b53919ca334c8c1031eada1215e78d226d5795e523d6123a2717d0" || { echo "oreon: Source0 SHA256 mismatch for mustache-1.1.1.gem" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{gem_name}-%{version}
 
 %patch 0 -p1

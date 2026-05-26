@@ -68,6 +68,10 @@ Source7:       libguestfs.keyring
 
 # Maintainer script which helps with handling patches.
 Source8:       copy-patches.sh
+# oreon url source checksums begin
+%global source0_sha256 c9b4a9f7c05a725086dc7eab8cb151a60ad811ea0c75a7d1a8c422d5d22b598c
+%global source0_file libguestfs-1.59.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires: autoconf, automake, libtool, gettext-devel
 
@@ -616,6 +620,9 @@ for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libguestfs-1.59.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c9b4a9f7c05a725086dc7eab8cb151a60ad811ea0c75a7d1a8c422d5d22b598c" || { echo "oreon: Source0 SHA256 mismatch for libguestfs-1.59.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{verify_tarball_signature}
 %{gpgverify} --keyring='%{SOURCE7}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

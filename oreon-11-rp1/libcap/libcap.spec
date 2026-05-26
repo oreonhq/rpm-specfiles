@@ -9,6 +9,10 @@ Source0: https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/lib
 Source1: https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/libcap2/%{name}-%{version}.tar.sign
 Source2: https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/29EE848AE2CCF3F4.asc
 Patch0: _makenames-build.patch
+# oreon url source checksums begin
+%global source0_sha256 f07fcec6f01edc4bb18373067494fdcb718186aed720b97ec6c7a5d67b218f69
+%global source0_file libcap-2.77.tar.gz
+# oreon url source checksums end
 
 BuildRequires: pam-devel gcc
 BuildRequires: make
@@ -65,6 +69,9 @@ the capability status of processes and threads.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libcap-2.77.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f07fcec6f01edc4bb18373067494fdcb718186aed720b97ec6c7a5d67b218f69" || { echo "oreon: Source0 SHA256 mismatch for libcap-2.77.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 gzip -cd %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %autosetup -p1
 

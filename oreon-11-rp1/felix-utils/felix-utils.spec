@@ -15,6 +15,10 @@ Source0:        https://repo1.maven.org/maven2/org/apache/felix/%{bundle}/%{vers
 # The module org.osgi.cmpn requires implementing methods which were not
 # implemented in previous versions where org.osgi.compendium was used
 Patch:          0000-Port-to-osgi-cmpn.patch
+# oreon url source checksums begin
+%global source0_sha256 c8c5a4716b0f18f70ef47f019b81967932f4487d0730aae81c595cb672dabae6
+%global source0_file org.apache.felix.utils-1.11.8-source-release.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -32,6 +36,9 @@ Obsoletes:      %{name}-javadoc < 1.11.8-24
 Utility classes for OSGi
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/org.apache.felix.utils-1.11.8-source-release.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c8c5a4716b0f18f70ef47f019b81967932f4487d0730aae81c595cb672dabae6" || { echo "oreon: Source0 SHA256 mismatch for org.apache.felix.utils-1.11.8-source-release.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 %pom_remove_parent

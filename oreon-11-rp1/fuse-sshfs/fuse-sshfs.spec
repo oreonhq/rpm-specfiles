@@ -20,6 +20,10 @@ Source1:        https://github.com/libfuse/sshfs/releases/download/sshfs-%{versi
 Source2:        A56509CB6B3585A814B1A735C76141536EC77B36.gpg
 
 Patch1:         sshfs-0001-Refer-to-mount.fuse3-instead-of-mount.fuse.patch
+# oreon url source checksums begin
+%global source0_sha256 0e45db63c2d00919db3174134fa234c6e0682d6fe573c46312d1d53d1d61a8bb
+%global source0_file sshfs-3.7.5.tar.xz
+# oreon url source checksums end
 
 Provides:       sshfs = %{version}-%{release}
 Requires:       fuse3 >= 3.1.0
@@ -47,6 +51,9 @@ mounting the filesystem is as easy as logging into the server with ssh.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sshfs-3.7.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0e45db63c2d00919db3174134fa234c6e0682d6fe573c46312d1d53d1d61a8bb" || { echo "oreon: Source0 SHA256 mismatch for sshfs-3.7.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -n sshfs-%{version}
 # fix tests

@@ -21,10 +21,17 @@ The font supports the standard combinations used in most texts.}
 
 Source0: http://chris.fynn.googlepages.com/%{archivename}.zip
 Source1:        65-0-%{fontpkgname}.conf 
+# oreon url source checksums begin
+%global source0_sha256 03877d8c31ab4b85e344f3e53c8465afb7acd6a13111354514556eca4aad9172
+%global source0_file jomolhari-alpha003c.zip
+# oreon url source checksums end
 
 %fontpkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jomolhari-alpha003c.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "03877d8c31ab4b85e344f3e53c8465afb7acd6a13111354514556eca4aad9172" || { echo "oreon: Source0 SHA256 mismatch for jomolhari-alpha003c.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c
 %linuxtext FONTLOG.txt OFL-FAQ.txt OFL.txt
 

@@ -22,13 +22,17 @@ URL:     https://quickgit.kde.org/?p=soprano.git
 %if 0%{?snap:1}
 # git clone git://anongit.kde.org/soprano ; cd soprano
 # git archive --prefix=soprano-%{version}/ master | bzip2 > soprano-%{version}-%{snap}.tar.bz2
-Source0: soprano-%{version}-%{snap}.tar.bz2
+Source0:        http://downloads.sf.net/soprano/soprano-2.9.4.tar.bz2
 %else
 Source0: http://downloads.sf.net/soprano/soprano-%{version}.tar.bz2
 %endif
 
 ## upstreamable patches
 Patch1: soprano-2.9.4-gcc6.patch
+# oreon url source checksums begin
+%global source0_sha256 64066fbd54e71d7ae4c8a4116997448a72808a2813cff3bb5d2c28f0fce9e0e5
+%global source0_file soprano-2.9.4.tar.bz2
+# oreon url source checksums end
 
 ## upstream patches
 
@@ -103,6 +107,9 @@ format for easy browsing.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/soprano-2.9.4.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "64066fbd54e71d7ae4c8a4116997448a72808a2813cff3bb5d2c28f0fce9e0e5" || { echo "oreon: Source0 SHA256 mismatch for soprano-2.9.4.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n soprano-%{version}%{?pre:-%{pre}}
 
 %patch -P1 -p1 -b .gcc6

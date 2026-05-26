@@ -10,6 +10,10 @@ Patch1:         0001-ao_pulse.c-fix-latency-calculation.patch
 # CVE 2017-11548
 Patch2:         d5221655dfd1a2156aa6be83b5aadea7c1e0f5bd.diff
 Patch3:         libao-nanosleep.patch
+# oreon url source checksums begin
+%global source0_sha256 03ad231ad1f9d64b52474392d63c31197b0bc7bd416e58b1c10a329a5ed89caf
+%global source0_file libao-1.2.0.tar.gz
+# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  alsa-lib-devel
 BuildRequires:  pkgconfig(libpulse)
@@ -30,6 +34,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libao-1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "03ad231ad1f9d64b52474392d63c31197b0bc7bd416e58b1c10a329a5ed89caf" || { echo "oreon: Source0 SHA256 mismatch for libao-1.2.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P1 -p1
 %patch -P2 -p1

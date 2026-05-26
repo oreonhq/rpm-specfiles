@@ -9,6 +9,10 @@ Summary:        A tool for generating human-readable reports from (SCAP) XCCDF a
 License:        LGPLv2+ and GPLv2+ and MIT and Public Domain
 URL:            https://github.com/OpenSCAP/%{name}
 Source0:        https://github.com/OpenSCAP/%{name}/releases/download/v%{version}/%{pymodule_name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ecdd455bb933a65076e9da9161b510c1dccbe2c452aa43efb117694c968d8763
+%global source0_file openscap_report-1.0.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -33,6 +37,9 @@ human-readable reports from SCAP XCCDF and ARF results.}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/openscap_report-1.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ecdd455bb933a65076e9da9161b510c1dccbe2c452aa43efb117694c968d8763" || { echo "oreon: Source0 SHA256 mismatch for openscap_report-1.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{pymodule_name}-%{version}
 
 

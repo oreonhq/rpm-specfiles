@@ -7,6 +7,10 @@ Url:            https://metacpan.org/release/local-lib
 Source:         https://cpan.metacpan.org/authors/id/H/HA/HAARG/local-lib-%{version}.tar.gz
 Source10:       perl-homedir.sh
 Source11:       perl-homedir.csh
+# oreon url source checksums begin
+%global source0_sha256 8df87a10c14c8e909c5b47c5701e4b8187d519e5251e87c80709b02bb33efdd7
+%global source0_file local-lib-2.000029.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -89,6 +93,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/local-lib-2.000029.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8df87a10c14c8e909c5b47c5701e4b8187d519e5251e87c80709b02bb33efdd7" || { echo "oreon: Source0 SHA256 mismatch for local-lib-2.000029.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n local-lib-%{version}
 
 # Help generators to recognize Perl scripts

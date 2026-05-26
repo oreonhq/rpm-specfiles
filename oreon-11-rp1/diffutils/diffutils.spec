@@ -13,6 +13,10 @@ Patch: diffutils-3.12-sdiff-continue-break.patch
 Patch: 0001-sdiff-pacify-gcc-flto-Wmaybe-uninitialized.patch
 # sdiff: port back to C17
 Patch: 0001-sdiff-port-back-to-C17.patch
+# oreon url source checksums begin
+%global source0_sha256 7c8b7f9fc8609141fdea9cece85249d308624391ff61dedaf528fcb337727dfd
+%global source0_file diffutils-3.12.tar.xz
+# oreon url source checksums end
 License: GPL-3.0-or-later
 Provides: bundled(gnulib)
 BuildRequires: gcc
@@ -34,6 +38,9 @@ to merge two files interactively.
 Install diffutils if you need to compare text files.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/diffutils-3.12.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7c8b7f9fc8609141fdea9cece85249d308624391ff61dedaf528fcb337727dfd" || { echo "oreon: Source0 SHA256 mismatch for diffutils-3.12.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Run autoreconf for aarch64 support (bug #925256).

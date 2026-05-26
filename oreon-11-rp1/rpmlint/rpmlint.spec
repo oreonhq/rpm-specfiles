@@ -7,13 +7,17 @@ Release:        3%{?dist}
 Summary:        Tool for checking common errors in RPM packages
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/rpmlint
-Source0:        %{url}/archive/%{version}/rpmlint-%{version}.tar.gz
+Source0:        https://github.com/rpm-software-management/rpmlint/archive/2.8.0/rpmlint-2.8.0.tar.gz
 
 # Taken from https://github.com/rpm-software-management/rpmlint/tree/main/configs/Fedora
 Source1:        fedora.toml
 Source3:        scoring.toml
 Source4:        users-groups.toml
 Source5:        warn-on-functions.toml
+# oreon url source checksums begin
+%global source0_sha256 69884a3b80438698e41dc4b39658fae611b45ad6cfb31e38db76279bfb4288b1
+%global source0_file rpmlint-2.8.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -47,6 +51,9 @@ rpmlint is a tool for checking common errors in RPM packages. Binary
 and source packages as well as spec files can be checked.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rpmlint-2.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "69884a3b80438698e41dc4b39658fae611b45ad6cfb31e38db76279bfb4288b1" || { echo "oreon: Source0 SHA256 mismatch for rpmlint-2.8.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -Sgit_am
 
 # Replace python-magic dep with file-magic (rhbz#1899279)

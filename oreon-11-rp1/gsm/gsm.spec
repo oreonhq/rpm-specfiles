@@ -13,6 +13,10 @@ URL:            https://www.quut.com/gsm/
 Source:         https://www.quut.com/gsm/%{name}-%{version}.tar.gz
 Patch0:         %{name}-makefile.patch
 Patch1:         %{name}-warnings.patch
+# oreon url source checksums begin
+%global source0_sha256 a3c40c6471928383f4abfcb2e8f24012a1f562be2f17b8d672145d5986681a92
+%global source0_file gsm-1.0.24.tar.gz
+# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  make
 
@@ -58,6 +62,9 @@ full-rate speech transcoding, prI-ETS 300 036, which uses RPE/LTP
 (residual pulse excitation/long term prediction) coding at 13 kbit/s.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gsm-1.0.24.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a3c40c6471928383f4abfcb2e8f24012a1f562be2f17b8d672145d5986681a92" || { echo "oreon: Source0 SHA256 mismatch for gsm-1.0.24.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -n gsm-%{srcver} -q
 %patch -P0 -p1 -b .mk
 %patch -P1 -p1 -b .warn

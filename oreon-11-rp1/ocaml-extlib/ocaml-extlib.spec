@@ -13,7 +13,11 @@ License:        LGPL-2.1-or-later with OCaml-LGPL-linking-exception
 
 URL:            https://github.com/ygrek/ocaml-extlib
 VCS:            git:%{url}.git
-Source0:        %{url}/releases/download/%{version}/extlib-%{version}.tar.gz
+Source0:        https://github.com/ygrek/ocaml-extlib/releases/download/1.8.0/extlib-1.8.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 964277f001280a8eddfc08e0701d59ca0c6bdc5d052313b3e40e5088f6d45d70
+%global source0_file extlib-1.8.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  ocaml >= 4.02
@@ -44,6 +48,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/extlib-1.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "964277f001280a8eddfc08e0701d59ca0c6bdc5d052313b3e40e5088f6d45d70" || { echo "oreon: Source0 SHA256 mismatch for extlib-1.8.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git -n extlib-%{version}
 
 # Remove references to the bytes library for OCaml 5.0

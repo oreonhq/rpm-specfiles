@@ -7,7 +7,11 @@ Summary:        Jackson JAX-RS providers
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-jaxrs-providers
-Source0:        %{url}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/FasterXML/jackson-jaxrs-providers/archive/jackson-jaxrs-providers-2.18.2.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 1771ada2f5a5bd52c11a65cbf8c306359cb8b941e2fec8d831939e07c9dea0cd
+%global source0_file jackson-jaxrs-providers-2.18.2.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 %if 0%{?fedora} || 0%{?rhel} >= 10
@@ -107,6 +111,9 @@ Summary: Javadoc for %{name}
 This package contains API documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jackson-jaxrs-providers-2.18.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1771ada2f5a5bd52c11a65cbf8c306359cb8b941e2fec8d831939e07c9dea0cd" || { echo "oreon: Source0 SHA256 mismatch for jackson-jaxrs-providers-2.18.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{name}-%{version}
 
 cp -p xml/src/main/resources/META-INF/LICENSE .

@@ -8,6 +8,10 @@ Summary:          Mock D-Bus objects
 License:          LGPL-3.0-or-later
 URL:              https://pypi.python.org/pypi/python-dbusmock
 Source0:          https://files.pythonhosted.org/packages/source/p/%{name}/python_%{modname}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ac25017dc67df1eb9b954c733484552f1bde0c13d456d380d14c277caee2cf2e
+%global source0_file python_dbusmock-0.38.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:        noarch
 BuildRequires:    git
@@ -32,6 +36,9 @@ Requires:         python3-dbus, python3-gobject, dbus-x11
 %description -n python3-dbusmock %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/python_dbusmock-0.38.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ac25017dc67df1eb9b954c733484552f1bde0c13d456d380d14c277caee2cf2e" || { echo "oreon: Source0 SHA256 mismatch for python_dbusmock-0.38.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n python_%{modname}-%{version}
 rm -rf python-%{modname}.egg-info
 

@@ -16,6 +16,10 @@ Patch:          0002-dlopen-notes-group-two-helper-functions-together.patch
 Patch:          0003-rpm-add-fileattr-multifile-generator.patch
 Patch:          0004-fakelib-add-test-for-the-new-fileattr-plugin.patch
 Patch:          0005-rpm-use-a-r-.-guard-around-package-notes-LDFLAGS.patch
+# oreon url source checksums begin
+%global source0_sha256 1dfe42d83a51282260afb6f2438b345198dc483d287a791d9f716306a0372c89
+%global source0_file package-notes-0.17.tar.gz
+# oreon url source checksums end
 
 %description
 This package provides rpm macros to generate an '.note.package' ELF note in
@@ -52,6 +56,9 @@ RPM macros to insert a section with an ELF note with a JSON payload that
 describes the package the binary was built for via a compiler spec file.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/package-notes-0.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1dfe42d83a51282260afb6f2438b345198dc483d287a791d9f716306a0372c89" || { echo "oreon: Source0 SHA256 mismatch for package-notes-0.17.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

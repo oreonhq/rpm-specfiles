@@ -19,6 +19,12 @@ Patch0: 0001-Remove-sub-classing-from-OO.o-mime-types.patch
 # Fix build with libxml2 2.12.0
 # https://gitlab.freedesktop.org/xdg/shared-mime-info/-/issues/219
 Patch1: 0002-Fix-build-with-libxml2-2.12.0.patch
+# oreon url source checksums begin
+%global source0_sha256 32dc32ae39ff1c1bf8434dd3b36770b48538a1772bc0298509d034f057005992
+%global source0_file shared-mime-info-2.4.tar.bz2
+%global source6_sha256 825dff4e6d0b310e04eadcfa79ff7a4fa99199b44ee839cd4c33937d742e78bc
+%global source6_file xdgmime-4cc93f9381e0eddd2cac1e92c0f36b29dcd8c1ce.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -42,6 +48,10 @@ a file. This is generally done by examining the file's name or contents,
 and looking up the correct MIME type in a database.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/shared-mime-info-2.4.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "32dc32ae39ff1c1bf8434dd3b36770b48538a1772bc0298509d034f057005992" || { echo "oreon: Source0 SHA256 mismatch for shared-mime-info-2.4.tar.bz2" >&2; exit 1; })
+%(f=%{_sourcedir}/xdgmime-4cc93f9381e0eddd2cac1e92c0f36b29dcd8c1ce.tar.bz2; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "825dff4e6d0b310e04eadcfa79ff7a4fa99199b44ee839cd4c33937d742e78bc" || { echo "oreon: Source6 SHA256 mismatch for xdgmime-4cc93f9381e0eddd2cac1e92c0f36b29dcd8c1ce.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am
 rmdir xdgmime
 tar xjf %SOURCE6

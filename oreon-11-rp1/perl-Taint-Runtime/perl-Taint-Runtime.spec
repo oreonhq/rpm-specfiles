@@ -4,7 +4,12 @@ Release:        58%{?dist}
 Summary:        Runtime enable taint checking
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Taint-Runtime
-Source0:        https://cpan.metacpan.org/modules/by-module/Taint/Taint-Runtime-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RH/RHANDOM/Taint-Runtime-0.03.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6ece97234a19a6f627481b44ec28a71374a95e6fc94d417d2dccb397a00aa706
+%global source0_file Taint-Runtime-0.03.tar.gz
+# oreon url source checksums end
+
 # Build:
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -35,6 +40,9 @@ use this module instead of the -T switch. Unless you have a specific and
 good reason for not using the -T option, you should use the -T option.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Taint-Runtime-0.03.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6ece97234a19a6f627481b44ec28a71374a95e6fc94d417d2dccb397a00aa706" || { echo "oreon: Source0 SHA256 mismatch for Taint-Runtime-0.03.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Taint-Runtime-%{version}
 chmod -c +x is_taint_bench.pl
 

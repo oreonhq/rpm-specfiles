@@ -5,7 +5,11 @@ Summary:        Core annotations for Jackson data processor
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-annotations
-Source0:        %{url}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/FasterXML/jackson-annotations/archive/jackson-annotations-2.18.2.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 dcfe3d203c5ebfec618300c23ebe317450e579a3659012ce57c577ff9045432b
+%global source0_file jackson-annotations-2.18.2.tar.gz
+# oreon url source checksums end
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local
@@ -33,6 +37,9 @@ Summary: Javadoc for %{name}
 This package contains API documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jackson-annotations-2.18.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dcfe3d203c5ebfec618300c23ebe317450e579a3659012ce57c577ff9045432b" || { echo "oreon: Source0 SHA256 mismatch for jackson-annotations-2.18.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{name}-%{version}
 
 %pom_remove_plugin "org.moditect:moditect-maven-plugin"

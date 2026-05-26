@@ -10,11 +10,15 @@ License: MIT
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:    %{tarball}-%{gitdate}.tar.bz2
+Source0:        https://xorg.freedesktop.org/archive/individual/lib/libXvMC-1.0.13.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
 Source0: https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 0a9ebe6dea7888a747e5aca1b891d53cd7d3a5f141a9645f77d9b6a12cee657c
+%global source0_file libXvMC-1.0.13.tar.xz
+# oreon url source checksums end
 %endif
 
 Requires: libX11 >= 1.5.99.902
@@ -36,6 +40,9 @@ Requires: %{name} = %{version}-%{release}
 X.Org X11 libXvMC development package
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libXvMC-1.0.13.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0a9ebe6dea7888a747e5aca1b891d53cd7d3a5f141a9645f77d9b6a12cee657c" || { echo "oreon: Source0 SHA256 mismatch for libXvMC-1.0.13.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

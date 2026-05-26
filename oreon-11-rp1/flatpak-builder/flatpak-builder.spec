@@ -16,6 +16,10 @@ Summary:        Tool to build flatpaks from source
 License:        LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:            https://flatpak.org/
 Source0:        https://github.com/flatpak/flatpak-builder/releases/download/%{version}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 fd5bc36fe3b974395f782e6c920d8955cee168f513370c32cc800b69acd980d0
+%global source0_file flatpak-builder-1.4.7.tar.xz
+# oreon url source checksums end
 
 # ostree not on i686 for RHEL 10
 # https://github.com/containers/composefs/pull/229#issuecomment-1838735764
@@ -80,6 +84,9 @@ This package contains installed tests for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/flatpak-builder-1.4.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fd5bc36fe3b974395f782e6c920d8955cee168f513370c32cc800b69acd980d0" || { echo "oreon: Source0 SHA256 mismatch for flatpak-builder-1.4.7.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

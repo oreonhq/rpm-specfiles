@@ -40,7 +40,11 @@ Release: %autorelease
 License: GPL-2.0-only
 URL: https://github.com/containers/%{name}
 Summary: SELinux policies for container runtimes
-Source0: %{url}/archive/v%{version}.tar.gz
+Source0:        https://github.com/containers/container-selinux/archive/v2.247.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 873ab158c8b32ab6574a4a73bfd9e4e378aa89878e3d8f993b413ac35d259618
+%global source0_file v2.247.0.tar.gz
+# oreon url source checksums end
 BuildArch: noarch
 BuildRequires: make
 BuildRequires: git-core
@@ -65,6 +69,9 @@ Conflicts: k3s-selinux <= 0.4-1
 SELinux policy modules for use with container runtimes.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.247.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "873ab158c8b32ab6574a4a73bfd9e4e378aa89878e3d8f993b413ac35d259618" || { echo "oreon: Source0 SHA256 mismatch for v2.247.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -Sgit %{name}-%{version}
 
 sed -i 's/^man: install-policy/man:/' Makefile

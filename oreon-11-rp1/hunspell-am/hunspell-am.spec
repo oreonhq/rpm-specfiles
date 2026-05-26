@@ -10,6 +10,10 @@ Summary: Amharic hunspell dictionaries
 Version: 0.%{upstreamid}
 Release: 33%{?dist}
 Source: http://www.cs.ru.nl/~biniam/geez/dict/am_ET.zip
+# oreon url source checksums begin
+%global source0_sha256 c6abf8b090c390257637433dfb4f3190eea4131d5c469f8774cf023e395b0a10
+%global source0_file am_ET.zip
+# oreon url source checksums end
 URL: http://www.cs.ru.nl/~biniam/geez/index.php
 License: GPL-1.0-or-later
 BuildArch: noarch
@@ -21,6 +25,9 @@ Supplements: (hunspell and langpacks-am)
 Amharic hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/am_ET.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c6abf8b090c390257637433dfb4f3190eea4131d5c469f8774cf023e395b0a10" || { echo "oreon: Source0 SHA256 mismatch for am_ET.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n am_ET
 
 %build

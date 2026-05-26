@@ -10,6 +10,10 @@ Summary: Mossi hunspell dictionaries
 Version: 0.%{upstreamid}
 Release: 32%{?dist}
 Source: http://www.abcburkina.net/ancien/documents/lingu/DicoMoore.zip
+# oreon url source checksums begin
+%global source0_sha256 d9366f7e8baa913cb88de96c056fcc814c515283dcb083f8010d2f8bff681589
+%global source0_file DicoMoore.zip
+# oreon url source checksums end
 URL: http://www.abcburkina.net/content/view/377/48/lang,fr
 License: LGPL-3.0-only
 BuildArch: noarch
@@ -20,6 +24,9 @@ Supplements: (hunspell and langpacks-mos)
 Mossi hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DicoMoore.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d9366f7e8baa913cb88de96c056fcc814c515283dcb083f8010d2f8bff681589" || { echo "oreon: Source0 SHA256 mismatch for DicoMoore.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c
 
 %build

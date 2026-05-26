@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/%{name}/%{version}/%{name}-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 7afcbc38b650dda4cd07168e792f8d5137ae630fc10ea31135735e0da04aee47
+%global source0_file maven-archiver-3.6.2-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -33,6 +37,9 @@ The Maven Archiver is used by other Maven plugins
 to handle packaging
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-archiver-3.6.2-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7afcbc38b650dda4cd07168e792f8d5137ae630fc10ea31135735e0da04aee47" || { echo "oreon: Source0 SHA256 mismatch for maven-archiver-3.6.2-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %pom_remove_dep :junit-bom
 

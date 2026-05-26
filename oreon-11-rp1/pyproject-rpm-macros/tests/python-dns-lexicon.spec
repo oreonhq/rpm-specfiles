@@ -4,7 +4,7 @@ Release:        0%{?dist}
 Summary:        Manipulate DNS records on various DNS providers in a standardized/agnostic way
 License:        MIT
 URL:            https://github.com/AnalogJ/lexicon
-Source0:        %{url}/archive/v%{version}/lexicon-%{version}.tar.gz
+Source0:        https://github.com/AnalogJ/lexicon/archive/v3.8.1/lexicon-3.8.1.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  pyproject-rpm-macros

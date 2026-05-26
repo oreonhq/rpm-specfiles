@@ -58,6 +58,10 @@ Patch5:         0005-Fedora-remove-ttrpc-dependency.patch
 Patch6:         0006-Fedora-remove-jwt-simple-dependency.patch
 # * remove dependency testcontainers - not in Fedora
 Patch7:         0007-Fedora-remove-testcontainers-dependency.patch
+# oreon url source checksums begin
+%global source0_sha256 1fd6a51fdab1ca03017b8f26bd6236070c9d2bab2c30b1fe6cb00538830f62b9
+%global source0_file guest-components-0.17.0.tar.gz
+# oreon url source checksums end
 
 ExclusiveArch:  x86_64
 BuildRequires:  cargo-rpm-macros >= 24
@@ -71,6 +75,9 @@ A part of the confidential-containers project}
 %description %{_description}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/guest-components-0.17.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1fd6a51fdab1ca03017b8f26bd6236070c9d2bab2c30b1fe6cb00538830f62b9" || { echo "oreon: Source0 SHA256 mismatch for guest-components-0.17.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{projectname}-%{version} -p1
 # Cargo.lock isn't uptodate and rpmbuild set --offline
 rm -f Cargo.lock

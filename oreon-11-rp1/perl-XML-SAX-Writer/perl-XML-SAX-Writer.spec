@@ -5,7 +5,12 @@ Summary:        SAX2 Writer
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-SAX-Writer
-Source0:        https://cpan.metacpan.org/modules/by-module/XML/XML-SAX-Writer-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PE/PERIGRIN/XML-SAX-Writer-0.57.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3d61d07ef43b0126f5b4de4f415a256fa859fa88dc4fdabaad70b7be7c682cf0
+%global source0_file XML-SAX-Writer-0.57.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -30,6 +35,9 @@ BuildRequires:  perl(XML::SAX::Exception) >= 1.01
 A new XML Writer to match the SAX2 effort.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/XML-SAX-Writer-0.57.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3d61d07ef43b0126f5b4de4f415a256fa859fa88dc4fdabaad70b7be7c682cf0" || { echo "oreon: Source0 SHA256 mismatch for XML-SAX-Writer-0.57.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n XML-SAX-Writer-%{version}
 find -type f -exec chmod -x {} +
 

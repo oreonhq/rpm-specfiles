@@ -6,6 +6,10 @@ Summary: D-Bus Python Bindings
 License: MIT
 URL:     http://www.freedesktop.org/wiki/Software/DBusBindings/
 Source0: http://dbus.freedesktop.org/releases/dbus-python/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 c36b28f10ffcc8f1f798aca973bcc132f91f33eb9b6b8904381b4077766043d5
+%global source0_file dbus-python-1.4.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires: pkgconfig(dbus-1)
 BuildRequires: pkgconfig(glib-2.0)
@@ -43,6 +47,9 @@ Headers and static libraries for hooking up custom mainloops to the dbus python
 bindings.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/dbus-python-1.4.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c36b28f10ffcc8f1f798aca973bcc132f91f33eb9b6b8904381b4077766043d5" || { echo "oreon: Source0 SHA256 mismatch for dbus-python-1.4.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

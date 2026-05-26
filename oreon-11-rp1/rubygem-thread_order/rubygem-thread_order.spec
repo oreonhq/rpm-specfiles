@@ -8,6 +8,10 @@ Summary:	Test helper for ordering threaded code
 License:	MIT
 URL:		https://github.com/JoshCheek/thread_order
 Source0:	https://rubygems.org/gems/%{gem_name}-%{version}.gem
+# oreon url source checksums begin
+%global source0_sha256 370fbe090fa1f696e450ff83f859049a7a2ca7a35985e141450e3e7dad949e3a
+%global source0_file thread_order-1.1.1.gem
+# oreon url source checksums end
 
 BuildRequires:	ruby(release)
 BuildRequires:	rubygems-devel
@@ -26,6 +30,9 @@ BuildArch:	noarch
 Documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/thread_order-1.1.1.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "370fbe090fa1f696e450ff83f859049a7a2ca7a35985e141450e3e7dad949e3a" || { echo "oreon: Source0 SHA256 mismatch for thread_order-1.1.1.gem" >&2; exit 1; })
+# oreon verify url source checksums end
 gem unpack %{SOURCE0}
 %setup -q -D -T -n %{gem_name}-%{version}
 gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec

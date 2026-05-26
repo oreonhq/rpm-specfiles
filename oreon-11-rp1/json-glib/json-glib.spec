@@ -8,6 +8,10 @@ Summary:        Library for JavaScript Object Notation format
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/JsonGlib
 Source0:        https://download.gnome.org/sources/%{name}/1.10/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 55c5c141a564245b8f8fbe7698663c87a45a7333c2a2c56f06f811ab73b212dd
+%global source0_file json-glib-1.10.8.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  docbook-style-xsl
 BuildRequires:  gettext
@@ -49,6 +53,9 @@ the functionality of the installed json-glib package.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/json-glib-1.10.8.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "55c5c141a564245b8f8fbe7698663c87a45a7333c2a2c56f06f811ab73b212dd" || { echo "oreon: Source0 SHA256 mismatch for json-glib-1.10.8.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 
 

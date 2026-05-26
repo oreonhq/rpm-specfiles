@@ -6,6 +6,10 @@ Summary: A library for reading tracing instances stored in a trace file
 
 URL: https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/
 Source0: https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-libtracecmd-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 55b5039a792d3fd5c6995fc1738136821fc7d1aded59220e9fefbc7d35213d95
+%global source0_file trace-cmd-libtracecmd-1.5.2.tar.gz
+# oreon url source checksums end
 
 ExcludeArch: %{ix86} %{arm}
 
@@ -36,6 +40,9 @@ Requires: libtracecmd%{_isa} = %{version}-%{release}
 Development files of the libtracecmd library
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/trace-cmd-libtracecmd-1.5.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "55b5039a792d3fd5c6995fc1738136821fc7d1aded59220e9fefbc7d35213d95" || { echo "oreon: Source0 SHA256 mismatch for trace-cmd-libtracecmd-1.5.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n trace-cmd-libtracecmd-%{version}
 
 %build

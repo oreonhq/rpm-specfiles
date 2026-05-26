@@ -5,7 +5,7 @@ Release:        0%{?dist}
 Summary:        Discover and load entry points from installed packages
 License:        MIT
 URL:            https://entrypoints.readthedocs.io/
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/e/entrypoints/entrypoints-0.3.tar.gz
 
 BuildArch:      noarch
 

@@ -545,6 +545,10 @@ Patch2105: 43cb4631c1f42dbfce78288b8ae30b5840ed59b3.patch
 
 # Fix for s390x vector miscompilation (rhbz#2430017)
 Patch2106: 0001-SystemZ-Fix-code-in-widening-vector-multiplication-1.patch
+# oreon url source checksums begin
+%global source3000_sha256 6898f963c8e938981e6c4a302e83ec5beb4630147c7311183cf61069af16333d
+%global source3000_file llvm-project-20.1.8.src.tar.xz
+# oreon url source checksums end
 
 %if 0%{?rhel} == 8
 %global python3_pkgversion 3.12
@@ -1295,6 +1299,9 @@ Flang runtime libraries.
 
 #region prep
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/llvm-project-20.1.8.src.tar.xz; test -f "$f" || { echo "oreon: missing Source3000 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6898f963c8e938981e6c4a302e83ec5beb4630147c7311183cf61069af16333d" || { echo "oreon: Source3000 SHA256 mismatch for llvm-project-20.1.8.src.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{without snapshot_build}
 # llvm
 %{gpgverify} --keyring='%{SOURCE6}' --signature='%{SOURCE1}' --data='%{SOURCE0}'

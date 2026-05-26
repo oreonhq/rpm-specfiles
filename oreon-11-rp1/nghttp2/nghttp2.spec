@@ -23,6 +23,10 @@ URL: https://nghttp2.org/
 Source0: https://github.com/tatsuhiro-t/nghttp2/releases/download/v%{version}/nghttp2-%{version}.tar.xz
 Source1: https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz.asc
 Source2: tatsuhiro-t.pgp
+# oreon url source checksums begin
+%global source0_sha256 6abd7ab0a7f1580d5914457cb3c85eb80455657ee5119206edbd7f848c14f0b2
+%global source0_file nghttp2-1.68.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires: CUnit-devel
 BuildRequires: c-ares-devel
@@ -110,6 +114,9 @@ This is the MinGW cross-compiled Windows library.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/nghttp2-1.68.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6abd7ab0a7f1580d5914457cb3c85eb80455657ee5119206edbd7f848c14f0b2" || { echo "oreon: Source0 SHA256 mismatch for nghttp2-1.68.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

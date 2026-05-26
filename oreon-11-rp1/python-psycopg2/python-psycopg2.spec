@@ -32,6 +32,10 @@ BuildRequires:	postgresql-test-rpm-macros
 # Remove test 'test_from_tables' for s390 architecture
 # from ./tests/test_types_extras.py
 Patch0: test_types_extras-2.9.3-test_from_tables.patch
+# oreon url source checksums begin
+%global source0_sha256 bb1a37d679522089f6dc3751669e3dbe51bd56922f959ef3ce2706939b775217
+%global source0_file psycopg2-2.9.10.tar.gz
+# oreon url source checksums end
 
 %description
 %{desc}
@@ -63,6 +67,9 @@ database adapter.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/psycopg2-2.9.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bb1a37d679522089f6dc3751669e3dbe51bd56922f959ef3ce2706939b775217" || { echo "oreon: Source0 SHA256 mismatch for psycopg2-2.9.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n psycopg2-%{version}
 
 # The patch is applied only for s390 architecture as 

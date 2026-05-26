@@ -7,6 +7,10 @@ Summary:        A perlish implementation of Java like inner classes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Inner
 SOurce0:        https://cpan.metacpan.org/authors/id/A/AR/ARUNBEAR/Class-Inner-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2b14b6a301412aa73fff8fe2e275c755828de2e4c5463ffc73b184c2d33b8cdc
+%global source0_file Class-Inner-0.200001.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires: make
@@ -21,6 +25,9 @@ parent class's method.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Class-Inner-0.200001.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2b14b6a301412aa73fff8fe2e275c755828de2e4c5463ffc73b184c2d33b8cdc" || { echo "oreon: Source0 SHA256 mismatch for Class-Inner-0.200001.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Class-Inner-%{version}
 
 

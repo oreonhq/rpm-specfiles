@@ -4,7 +4,11 @@ Release:	3%{?dist}
 Summary:	Library for extraction of system information for Linux on z Systems
 License:	BSD-3-Clause
 URL:		https://github.com/ibm-s390-linux/qclib
-Source0:	%{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/ibm-s390-linux/qclib/archive/2.5.1/qclib-2.5.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4624bc68aa5c550cd311d928cffadbb2359a4479ac1e7514886f409124e2eec1
+%global source0_file qclib-2.5.1.tar.gz
+# oreon url source checksums end
 ExclusiveArch:	s390 s390x
 BuildRequires:	make
 BuildRequires:	gcc
@@ -48,6 +52,9 @@ Provides:	%{name}-static = %{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/qclib-2.5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4624bc68aa5c550cd311d928cffadbb2359a4479ac1e7514886f409124e2eec1" || { echo "oreon: Source0 SHA256 mismatch for qclib-2.5.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 

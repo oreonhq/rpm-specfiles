@@ -15,13 +15,13 @@ Obsoletes: festival-speechtools-utils
 
 # Files needed for everything...
 %global baseURL  http://festvox.org/packed/festival/2.5
-Source0: %{baseURL}/festival-%{version}-release.tar.gz
+Source0:        http://festvox.org/packed/festival/2.5/festival-2.5.0-release.tar.gz
 
 ### DICTIONARIES
 # Generic English dictionary
-Source100: %{baseURL}/festlex_POSLEX.tar.gz
+Source100:        http://festvox.org/packed/festival/2.5/festlex_POSLEX.tar.gz
 # American English dictionary
-Source101: %{baseURL}/festlex_CMU.tar.gz
+Source101:        http://festvox.org/packed/festival/2.5/festlex_CMU.tar.gz
 # OALD isn't included because it's got a more restrictive (non-commercial
 # only) license. OALD voices not included for same reason.
 
@@ -31,16 +31,16 @@ Source101: %{baseURL}/festlex_CMU.tar.gz
 
 ### DIPHONE VOICES
 %global diphoneversion 0.19990610
-Source200: %{baseURL}/voices/festvox_kallpc16k.tar.gz
-Source202: %{baseURL}/voices/festvox_rablpc16k.tar.gz
+Source200:        http://festvox.org/packed/festival/2.5/voices/festvox_kallpc16k.tar.gz
+Source202:        http://festvox.org/packed/festival/2.5/voices/festvox_rablpc16k.tar.gz
 
 ### HTS VOICES
-Source220: %{baseURL}/voices/festvox_cmu_us_awb_cg.tar.gz
-Source221: %{baseURL}/voices/festvox_cmu_us_bdl_cg.tar.gz
-Source222: %{baseURL}/voices/festvox_cmu_us_clb_cg.tar.gz
-Source223: %{baseURL}/voices/festvox_cmu_us_jmk_cg.tar.gz
-Source224: %{baseURL}/voices/festvox_cmu_us_rms_cg.tar.gz
-Source225: %{baseURL}/voices/festvox_cmu_us_slt_cg.tar.gz
+Source220:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_awb_cg.tar.gz
+Source221:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_bdl_cg.tar.gz
+Source222:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_clb_cg.tar.gz
+Source223:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_jmk_cg.tar.gz
+Source224:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_rms_cg.tar.gz
+Source225:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_slt_cg.tar.gz
 
 ### Hispavoces Spanish voices left out; did they move?
 
@@ -57,6 +57,30 @@ Patch102: festival-2.5.0-use-system-libs.patch
 Patch103: festival-2.5.0-filesystem-standard.patch
 Patch104: festival-2.5.0-siteinit.patch
 Patch105: festival-configure-c99.patch
+# oreon url source checksums begin
+%global source0_sha256 4c9007426b125290599d931df410e2def51e68a8aeebd89b4a61c7c96c09a4b4
+%global source0_file festival-2.5.0-release.tar.gz
+%global source100_sha256 e7c6e3642dbd5b0d64942bc015a986fdd6244a79e51ec2e8309e63d569e49ea3
+%global source100_file festlex_POSLEX.tar.gz
+%global source101_sha256 c19430919bca45d5368cd4c82af6153fbcc96a487ebd30b78b5f3c08718b7c07
+%global source101_file festlex_CMU.tar.gz
+%global source200_sha256 809c4ab5ed9e4df4a658b58d5c56fe35055723f00d81a238168f5a1ebdaed08c
+%global source200_file festvox_kallpc16k.tar.gz
+%global source202_sha256 ecd14b77c528e94dfb076e44050102fe8fba57e5fe813acf78a66629317f52a5
+%global source202_file festvox_rablpc16k.tar.gz
+%global source220_sha256 b2adbdfeda0cba289bb4da68dd14114d3eb3e7f72049cc8d2cbdfb2df39f6934
+%global source220_file festvox_cmu_us_awb_cg.tar.gz
+%global source221_sha256 1dc6792af9e2c1660a46fe499aa67af4affa665a0bdc08207cc11719baa62f6d
+%global source221_file festvox_cmu_us_bdl_cg.tar.gz
+%global source222_sha256 11c82d1c18ce3db6fb11ca788cc5d84f69f9346aff77c7495f50005d6b042148
+%global source222_file festvox_cmu_us_clb_cg.tar.gz
+%global source223_sha256 711db388bc500331cfda86a46a72193ca1e2c9dc7d5ef16dfc86827e499946f2
+%global source223_file festvox_cmu_us_jmk_cg.tar.gz
+%global source224_sha256 3167afa3a6ffb5bbc305c94a1e6b671e40783a87a49372fce04c54942872c421
+%global source224_file festvox_cmu_us_rms_cg.tar.gz
+%global source225_sha256 78cb93e361ab016fd23833c56853ddf21e2f1356310f54eed1c09a9755ce9f43
+%global source225_file festvox_cmu_us_slt_cg.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gcc-c++
@@ -278,6 +302,19 @@ you can also interface with Festival in via the shell or with BSD sockets.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/festival-2.5.0-release.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4c9007426b125290599d931df410e2def51e68a8aeebd89b4a61c7c96c09a4b4" || { echo "oreon: Source0 SHA256 mismatch for festival-2.5.0-release.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/festlex_POSLEX.tar.gz; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e7c6e3642dbd5b0d64942bc015a986fdd6244a79e51ec2e8309e63d569e49ea3" || { echo "oreon: Source100 SHA256 mismatch for festlex_POSLEX.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/festlex_CMU.tar.gz; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c19430919bca45d5368cd4c82af6153fbcc96a487ebd30b78b5f3c08718b7c07" || { echo "oreon: Source101 SHA256 mismatch for festlex_CMU.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/festvox_kallpc16k.tar.gz; test -f "$f" || { echo "oreon: missing Source200 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "809c4ab5ed9e4df4a658b58d5c56fe35055723f00d81a238168f5a1ebdaed08c" || { echo "oreon: Source200 SHA256 mismatch for festvox_kallpc16k.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/festvox_rablpc16k.tar.gz; test -f "$f" || { echo "oreon: missing Source202 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ecd14b77c528e94dfb076e44050102fe8fba57e5fe813acf78a66629317f52a5" || { echo "oreon: Source202 SHA256 mismatch for festvox_rablpc16k.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/festvox_cmu_us_awb_cg.tar.gz; test -f "$f" || { echo "oreon: missing Source220 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b2adbdfeda0cba289bb4da68dd14114d3eb3e7f72049cc8d2cbdfb2df39f6934" || { echo "oreon: Source220 SHA256 mismatch for festvox_cmu_us_awb_cg.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/festvox_cmu_us_bdl_cg.tar.gz; test -f "$f" || { echo "oreon: missing Source221 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1dc6792af9e2c1660a46fe499aa67af4affa665a0bdc08207cc11719baa62f6d" || { echo "oreon: Source221 SHA256 mismatch for festvox_cmu_us_bdl_cg.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/festvox_cmu_us_clb_cg.tar.gz; test -f "$f" || { echo "oreon: missing Source222 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "11c82d1c18ce3db6fb11ca788cc5d84f69f9346aff77c7495f50005d6b042148" || { echo "oreon: Source222 SHA256 mismatch for festvox_cmu_us_clb_cg.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/festvox_cmu_us_jmk_cg.tar.gz; test -f "$f" || { echo "oreon: missing Source223 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "711db388bc500331cfda86a46a72193ca1e2c9dc7d5ef16dfc86827e499946f2" || { echo "oreon: Source223 SHA256 mismatch for festvox_cmu_us_jmk_cg.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/festvox_cmu_us_rms_cg.tar.gz; test -f "$f" || { echo "oreon: missing Source224 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3167afa3a6ffb5bbc305c94a1e6b671e40783a87a49372fce04c54942872c421" || { echo "oreon: Source224 SHA256 mismatch for festvox_cmu_us_rms_cg.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/festvox_cmu_us_slt_cg.tar.gz; test -f "$f" || { echo "oreon: missing Source225 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "78cb93e361ab016fd23833c56853ddf21e2f1356310f54eed1c09a9755ce9f43" || { echo "oreon: Source225 SHA256 mismatch for festvox_cmu_us_slt_cg.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n festival
 
 # dictionaries

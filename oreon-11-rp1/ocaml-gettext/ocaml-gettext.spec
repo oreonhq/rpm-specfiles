@@ -19,7 +19,7 @@ License:        LGPL-2.1-or-later with OCaml-LGPL-linking-exception
 URL:            https://github.com/gildor478/ocaml-gettext
 VCS:            git:%{url}.git
 
-Source0:        %{url}/archive/v%{version}.tar.gz
+Source0:        https://github.com/gildor478/ocaml-gettext/archive/v0.5.0.tar.gz
 
 # Fix to stop using dune-site
 # https://github.com/gildor478/ocaml-gettext/issues/36
@@ -29,7 +29,11 @@ Patch:          https://github.com/gildor478/ocaml-gettext/pull/37.patch
 # Fix for OCaml >= 5.4
 # https://github.com/gildor478/ocaml-gettext/issues/40
 # https://github.com/gildor478/ocaml-gettext/pull/41
-Patch:          0001-xgettext-Fix-type-for-OCaml-5.4.patch
+Patch:        https://github.com/gildor478/ocaml-gettext/pull/37.patch
+# oreon url source checksums begin
+%global source0_sha256 e0c6d8e9801d905343eb92a79a5bd46687c2781c287641f6cf7c13dd35b6e4cd
+%global source0_file v0.5.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  ocaml >= 4.03.0
 BuildRequires:  ocaml-fileutils-devel >= 0.6.6-1
@@ -106,6 +110,9 @@ signature files for developing applications that use
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v0.5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e0c6d8e9801d905343eb92a79a5bd46687c2781c287641f6cf7c13dd35b6e4cd" || { echo "oreon: Source0 SHA256 mismatch for v0.5.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Remove ocaml-seq dependency.  See note above.

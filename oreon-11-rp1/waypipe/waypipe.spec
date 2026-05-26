@@ -27,6 +27,10 @@ Source1:        waypipe.1
 Patch1:         0001-Cargo.toml-features-remove-test_proto-from-defaults.patch
 %if 0%{?rhel} || 0%{?oreon}
 Patch2:         0002-Cargo.toml-features-remove-video-from-defaults-for-r.patch
+# oreon url source checksums begin
+%global source0_sha256 dc4741bd4435666b4b45ef9b8354c9f742e9c2c5fb99bb49b2ac4f32a371bcd7
+%global source0_file waypipe-v0.11.0.tar.gz
+# oreon url source checksums end
 %endif
 
 BuildRequires:  cargo-rpm-macros >= 26
@@ -60,6 +64,9 @@ BuildRequires:  pkgconfig(wayland-server)
 %description %{_description}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/waypipe-v0.11.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dc4741bd4435666b4b45ef9b8354c9f742e9c2c5fb99bb49b2ac4f32a371bcd7" || { echo "oreon: Source0 SHA256 mismatch for waypipe-v0.11.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n waypipe-v%{version} -p1
 %cargo_prep
 

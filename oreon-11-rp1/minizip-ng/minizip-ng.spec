@@ -20,6 +20,10 @@ License:        Zlib
 URL:            https://github.com/nmoinvaz/%{name}
 Source0:        https://github.com/nmoinvaz/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         minizip-ng-4.0.7-openssl_no_engine.patch
+# oreon url source checksums begin
+%global source0_sha256 c362e35ee973fa7be58cc5e38a4a6c23cc8f7e652555daf4f115a9eb2d3a6be7
+%global source0_file minizip-ng-4.0.10.tar.gz
+# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
@@ -93,6 +97,9 @@ developing application that use minizip.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/minizip-ng-4.0.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c362e35ee973fa7be58cc5e38a4a6c23cc8f7e652555daf4f115a9eb2d3a6be7" || { echo "oreon: Source0 SHA256 mismatch for minizip-ng-4.0.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p 1 -n %{name}-%{version}
 
 

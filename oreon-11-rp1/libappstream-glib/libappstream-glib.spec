@@ -9,6 +9,10 @@ Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       http://people.freedesktop.org/~hughsient/appstream-glib/
 Source0:   http://people.freedesktop.org/~hughsient/appstream-glib/releases/appstream-glib-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 84754064c560fca6e1ab151dc64354fc235a5798f016b91b38c9617253a8cf11
+%global source0_file appstream-glib-0.8.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires: glib2-devel >= %{glib2_version}
 BuildRequires: docbook-utils
@@ -72,6 +76,9 @@ This library and command line tool is used for building AppStream metadata
 from a directory of packages.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/appstream-glib-0.8.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "84754064c560fca6e1ab151dc64354fc235a5798f016b91b38c9617253a8cf11" || { echo "oreon: Source0 SHA256 mismatch for appstream-glib-0.8.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n appstream-glib-%{version}
 
 %build

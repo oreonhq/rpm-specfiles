@@ -26,6 +26,10 @@ URL:       https://docs.fedoraproject.org/en-US/packaging-guidelines/FontsPolicy
 Source:    %{forgesource}
 # Avoid assigning to a const lua variable
 Patch0:    https://pagure.io/fonts-rpm-macros/pull-request/31.patch
+# oreon url source checksums begin
+%global source0_sha256 9737d7a8de5ee8b445fa3f0d3d21f726d7c44f1a24b6de94413da116288504a6
+%global source0_file fonts-rpm-macros-5.0.0.tar.gz
+# oreon url source checksums end
 
 Requires:  fonts-srpm-macros = %{?epoch:%{epoch}:}%{version}-%{release}
 Requires:  fonts-filesystem  = %{?epoch:%{epoch}:}%{version}-%{release}
@@ -95,6 +99,9 @@ This package contains documented rpm spec templates showcasing how to use the
 macros provided by fonts-rpm-macros to create fonts packages.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fonts-rpm-macros-5.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9737d7a8de5ee8b445fa3f0d3d21f726d7c44f1a24b6de94413da116288504a6" || { echo "oreon: Source0 SHA256 mismatch for fonts-rpm-macros-5.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %forgesetup
 %patch -P0 -p1
 %writevars -f rpm/macros.d/macros.fonts-srpm _fontbasedir _fontconfig_masterdir _fontconfig_confdir _fontconfig_templatedir

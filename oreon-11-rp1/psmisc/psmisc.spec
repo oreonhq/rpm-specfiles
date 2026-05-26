@@ -6,6 +6,10 @@ License: GPL-2.0-or-later
 URL: https://gitlab.com/psmisc/psmisc
 
 Source: https://sourceforge.net/projects/%{name}/files/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 58c55d9c1402474065adae669511c191de374b0871eec781239ab400b907c327
+%global source0_file psmisc-23.7.tar.xz
+# oreon url source checksums end
 
 #The following has been reworked by upstream in a different way ... we'll see
 #Patch1: psmisc-22.13-fuser-silent.patch
@@ -35,6 +39,9 @@ of processes that are using specified files or filesystems. The pslog
 command shows the path of log files owned by a given process.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/psmisc-23.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "58c55d9c1402474065adae669511c191de374b0871eec781239ab400b907c327" || { echo "oreon: Source0 SHA256 mismatch for psmisc-23.7.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git
 
 %build

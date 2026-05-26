@@ -16,6 +16,10 @@ License: GPL-3.0-or-later AND GFDL-1.3-only
 URL:     https://wiki.gnome.org/Apps/Terminal
 Source0: https://download.gnome.org/sources/%{name}/3.60/%{name}-%{version}.tar.xz
 Source1: org.gnome.Terminal.gschema.override
+# oreon url source checksums begin
+%global source0_sha256 b8daf3f08545172c4d2885733f720361ab0349ea669b99245eed4ad16ed3de28
+%global source0_file gnome-terminal-3.60.0.tar.xz
+# oreon url source checksums end
 
 BuildRequires: pkgconfig(dconf)
 BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}
@@ -64,6 +68,9 @@ This package provides a Nautilus extension that adds the 'Open in Terminal'
 option to the right-click context menu in Nautilus.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gnome-terminal-3.60.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b8daf3f08545172c4d2885733f720361ab0349ea669b99245eed4ad16ed3de28" || { echo "oreon: Source0 SHA256 mismatch for gnome-terminal-3.60.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

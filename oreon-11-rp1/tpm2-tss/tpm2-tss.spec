@@ -10,12 +10,16 @@ Summary:       TPM2.0 Software Stack
 
 License:       BSD-2-Clause
 URL:           https://github.com/tpm2-software/tpm2-tss
-Source0:       %{url}/releases/download/%{version}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.gz
+Source0:        https://github.com/tpm2-software/tpm2-tss/releases/download/4.1.3/tpm2-tss-4.1.3.tar.gz
 Source1:       tpm2-tss-systemd-sysusers.conf
 # doxygen crash
 Patch0:        tpm2-tss-3.0.0-doxygen.patch
 # Do not use <openssl/engine.h> (fixed upstream for 4.2)
 Patch1:        tpm2-tss-4.1.3-openssl-no-engine.patch
+# oreon url source checksums begin
+%global source0_sha256 37f1580200ab78305d1fc872d89241aaee0c93cbe85bc559bf332737a60d3be8
+%global source0_file tpm2-tss-4.1.3.tar.gz
+# oreon url source checksums end
 
 %global udevrules_prefix 60-
 
@@ -56,6 +60,9 @@ APIs for applications to access TPM module through kernel TPM drivers.
 This package provides the high-level "Feature API" library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tpm2-tss-4.1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "37f1580200ab78305d1fc872d89241aaee0c93cbe85bc559bf332737a60d3be8" || { echo "oreon: Source0 SHA256 mismatch for tpm2-tss-4.1.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version}%{?candidate:-%{candidate}} -p1
 
 %build

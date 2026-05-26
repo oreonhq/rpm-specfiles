@@ -4,7 +4,12 @@ Version:	0.11
 Release:	18%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Requires
-Source0:	https://cpan.metacpan.org/modules/by-module/Test/Test-Requires-%{version}.tar.gz
+Source0:	https://cpan.metacpan.org/authors/id/T/TO/TOKUHIROM/Test-Requires-0.11.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4b88de549597eecddf7c3c38a4d0204a16f59ad804577b671896ac04e24e040f
+%global source0_file Test-Requires-0.11.tar.gz
+# oreon url source checksums end
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -28,6 +33,9 @@ Test::Requires checks to see if the module can be loaded.
 If this fails, rather than failing tests this skips all tests.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-Requires-0.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4b88de549597eecddf7c3c38a4d0204a16f59ad804577b671896ac04e24e040f" || { echo "oreon: Source0 SHA256 mismatch for Test-Requires-0.11.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-Requires-%{version}
 
 %build

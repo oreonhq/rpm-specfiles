@@ -6,6 +6,10 @@ Summary: Text categorization library
 License: BSD-3-Clause
 URL: https://wiki.documentfoundation.org/Libexttextcat
 Source: http://dev-www.libreoffice.org/src/libexttextcat/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 6d77eace20e9ea106c1330e268ede70c9a4a89744ddc25715682754eca3368df
+%global source0_file libexttextcat-3.4.6.tar.xz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: make
@@ -31,6 +35,9 @@ The %{name}-tools package contains the createfp program that allows
 you to easily create your own document fingerprints.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libexttextcat-3.4.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6d77eace20e9ea106c1330e268ede70c9a4a89744ddc25715682754eca3368df" || { echo "oreon: Source0 SHA256 mismatch for libexttextcat-3.4.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

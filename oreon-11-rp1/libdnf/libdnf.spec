@@ -60,10 +60,14 @@ Release:        2%{?dist}
 Summary:        Library providing simplified C and Python API to libsolv
 License:        LGPL-2.1-or-later
 URL:            https://github.com/rpm-software-management/libdnf
-Source0:        %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz
-Source1:        %{url}/releases/download/%{version}/%{name}-%{version}.tar.gz.asc
+Source0:        https://github.com/rpm-software-management/libdnf/releases/download/0.75.0/libdnf-0.75.0.tar.gz
+Source1:        https://github.com/rpm-software-management/libdnf/releases/download/0.75.0/libdnf-0.75.0.tar.gz.asc
 # Key exported from Petr Pisar's keyring
 Source2:        gpgkey-E3F42FCE156830A80358E6E94FD1AEC3365AF7BF.gpg
+# oreon url source checksums begin
+%global source0_sha256 eac54d61f99c7497f07a7d11defb4e43dbb4f56887bfd0dfcf8ed9521a9c08af
+%global source0_file libdnf-0.75.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake >= 3.5.0
 BuildRequires:  gcc
@@ -193,6 +197,9 @@ Python 3 bindings for the hawkey library.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libdnf-0.75.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "eac54d61f99c7497f07a7d11defb4e43dbb4f56887bfd0dfcf8ed9521a9c08af" || { echo "oreon: Source0 SHA256 mismatch for libdnf-0.75.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 %if %{with python2}

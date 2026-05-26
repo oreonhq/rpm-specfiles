@@ -22,6 +22,10 @@ URL:            https://hackage.haskell.org/package/texmath
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 Source1:        https://hackage.haskell.org/package/%{typstsymbols}/%{typstsymbols}.tar.gz
+# oreon url source checksums begin
+%global source1_sha256 2f7398262895ba298c1f43aa055f509021ebec82593b7e745d80832c4e4f42ed
+%global source1_file typst-symbols-0.1.8.1.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -107,6 +111,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/typst-symbols-0.1.8.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2f7398262895ba298c1f43aa055f509021ebec82593b7e745d80832c4e4f42ed" || { echo "oreon: Source1 SHA256 mismatch for typst-symbols-0.1.8.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver} -a1
 # End cabal-rpm setup

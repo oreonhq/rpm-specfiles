@@ -25,6 +25,10 @@ Source0:      https://pecl.php.net/get/%{sources}.tgz
 
 Patch0:       %{pecl_name}-build.patch
 Patch1:       %{pecl_name}-php85.patch
+# oreon url source checksums begin
+%global source0_sha256 a42161e58cdc8a853b72cff298989dcbde82b0f76456dd59ce02854c92b730f7
+%global source0_file rrd-2.0.3.tgz
+# oreon url source checksums end
 
 ExcludeArch:   %{ix86}
 
@@ -60,6 +64,9 @@ system for time series data.
 
 
 %prep 
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rrd-2.0.3.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a42161e58cdc8a853b72cff298989dcbde82b0f76456dd59ce02854c92b730f7" || { echo "oreon: Source0 SHA256 mismatch for rrd-2.0.3.tgz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -c -q
 
 # Don't install/register tests

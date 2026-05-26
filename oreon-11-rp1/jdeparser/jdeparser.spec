@@ -8,8 +8,12 @@ Summary:          Source generator library for Java
 License:          Apache-2.0
 URL:              https://github.com/jdeparser/jdeparser2
 # old repos https://github.com/jdeparser/jdeparser
-Source0:          %{url}/archive/%{namedversion}/%{name}-%{namedversion}.tar.gz
+Source0:        https://github.com/jdeparser/jdeparser2/archive/2.0.3.Final/jdeparser-2.0.3.Final.tar.gz
 Patch1:           0001-Drop-Assertions.callerIs.patch
+# oreon url source checksums begin
+%global source0_sha256 8861b3f8b3d75246ae39e5c942cb96efb6a3aa6dff626b81dafb4a78b0867ffc
+%global source0_file jdeparser-2.0.3.Final.tar.gz
+# oreon url source checksums end
 
 BuildArch:        noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -30,6 +34,9 @@ dead and not actively accepting outside contribution. All JBoss projects are
 urged to use this project instead for source code generation.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jdeparser-2.0.3.Final.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8861b3f8b3d75246ae39e5c942cb96efb6a3aa6dff626b81dafb4a78b0867ffc" || { echo "oreon: Source0 SHA256 mismatch for jdeparser-2.0.3.Final.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n jdeparser2-%{namedversion} -p 1
 
 %build

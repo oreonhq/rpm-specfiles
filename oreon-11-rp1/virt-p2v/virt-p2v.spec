@@ -28,6 +28,10 @@ Source1:       http://download.libguestfs.org/%{name}/%{name}-%{version}.tar.gz.
 # Keyring used to verify tarball signature.
 %if 0%{verify_tarball_signature}
 Source2:       libguestfs.keyring
+# oreon url source checksums begin
+%global source0_sha256 20ff7bec5ed630ae1928da026e6e6e471e8eb1869222762fd9ab4681975b98c5
+%global source0_file virt-p2v-1.42.4.tar.gz
+# oreon url source checksums end
 %endif
 
 # Basic build requirements.
@@ -74,6 +78,9 @@ To convert virtual machines from other hypervisors, see virt-v2v.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/virt-p2v-1.42.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "20ff7bec5ed630ae1928da026e6e6e471e8eb1869222762fd9ab4681975b98c5" || { echo "oreon: Source0 SHA256 mismatch for virt-p2v-1.42.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{verify_tarball_signature}
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

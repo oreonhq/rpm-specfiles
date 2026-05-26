@@ -20,6 +20,10 @@ Patch:          relax-setuptools_scm-requires.patch
 
 # Fix dateutil module import in sphinx config file
 Patch:          fix-sphinx-import.patch
+# oreon url source checksums begin
+%global source0_sha256 37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3
+%global source0_file python-dateutil-2.9.0.post0.tar.gz
+# oreon url source checksums end
 
 # when bootstrapping dateutil-freezegun, we cannot run tests
 # on RHEL, we do not have or want all test dependencies
@@ -62,6 +66,9 @@ This package contains %{summary}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/python-dateutil-2.9.0.post0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3" || { echo "oreon: Source0 SHA256 mismatch for python-dateutil-2.9.0.post0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version}
 
 iconv --from=ISO-8859-1 --to=UTF-8 NEWS > NEWS.new

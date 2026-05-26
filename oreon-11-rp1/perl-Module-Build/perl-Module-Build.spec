@@ -16,9 +16,14 @@ Release:        10%{?dist}
 Summary:        Build and install Perl modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Build
-Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Build-%{cpan_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/Module-Build-0.4234.tar.gz
+
 # Handle missing ExtUtils::CBuilder as a missing compiler, bug #1547165.
 Patch1:         Module-Build-0.4231-Do-not-die-on-missing-ExtUtils-CBuilder-in-have_c_co.patch
+# oreon url source checksums begin
+%global source0_sha256 66aeac6127418be5e471ead3744648c766bd01482825c5b66652675f2bc86a8f
+%global source0_file Module-Build-0.4234.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  perl-devel
@@ -162,6 +167,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Module-Build-0.4234.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "66aeac6127418be5e471ead3744648c766bd01482825c5b66652675f2bc86a8f" || { echo "oreon: Source0 SHA256 mismatch for Module-Build-0.4234.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n Module-Build-%{cpan_version}
 
 # Help generators to recognize Perl scripts

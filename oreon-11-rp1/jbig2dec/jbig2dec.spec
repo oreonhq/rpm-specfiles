@@ -5,6 +5,10 @@ Summary:	A decoder implementation of the JBIG2 image compression format
 License:	AGPL-3.0-or-later
 URL:		https://jbig2dec.com
 Source0:	https://github.com/ArtifexSoftware/jbig2dec/releases/download/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7b63ff6470289547e7a3a0f145cb8ea6c2afffdd65645b7d87d3b7febc96fb3a
+%global source0_file jbig2dec-0.20.tar.gz
+# oreon url source checksums end
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRequires:	libtool
 BuildRequires:	libpng-devel
@@ -45,6 +49,9 @@ which requires the jbig2dec library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jbig2dec-0.20.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b63ff6470289547e7a3a0f145cb8ea6c2afffdd65645b7d87d3b7febc96fb3a" || { echo "oreon: Source0 SHA256 mismatch for jbig2dec-0.20.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 

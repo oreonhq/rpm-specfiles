@@ -12,6 +12,10 @@ Summary:        Perl extension for finding the memory usage of Perl variables
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-Size
 Source0:        https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/Devel-Size-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 db2f7787f62ee2e5094b2f60238ad767edd8743bfd5215e869eb4bc51f339b30
+%global source0_file Devel-Size-0.86.tar.gz
+# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -61,6 +65,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Devel-Size-0.86.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "db2f7787f62ee2e5094b2f60238ad767edd8743bfd5215e869eb4bc51f339b30" || { echo "oreon: Source0 SHA256 mismatch for Devel-Size-0.86.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Devel-Size-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

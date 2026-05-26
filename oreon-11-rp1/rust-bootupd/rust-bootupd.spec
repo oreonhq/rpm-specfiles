@@ -9,8 +9,8 @@ Summary:        Bootloader updater
 
 License:        Apache-2.0
 URL:            https://github.com/coreos/bootupd
-Source0:        %{crates_source}
-Source1:        %{url}/releases/download/v%{version}/bootupd-%{version}-vendor.tar.zstd
+Source0:        https://crates.io/api/v1/crates/bootupd/0.2.32/download#/bootupd-0.2.32.crate
+Source1:        https://github.com/coreos/bootupd/releases/download/v0.2.32/bootupd-0.2.32-vendor.tar.zstd
 ExcludeArch:    %{ix86}
 
 # For now, see upstream

@@ -4,7 +4,11 @@ Version: 2.4.1
 Release: 6%{?dist}
 License: Apache-2.0
 URL:     https://github.com/linux-nvme/nvme-stas
-Source0: %{url}/archive/v%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz
+Source0:        https://github.com/linux-nvme/nvme-stas/archive/v2.4.1/nvme-stas-2.4.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b5b06f1d71ba85fd9a61b8bbbb187d0d40ba55649c9db6153cef747fbaf9b09e
+%global source0_file nvme-stas-2.4.1.tar.gz
+# oreon url source checksums end
 
 BuildArch:     noarch
 
@@ -40,6 +44,9 @@ and Manual configuration. nvme-stas is composed of two daemons:
 stafd (STorage Appliance Finder) and stacd (STorage Appliance Connector).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/nvme-stas-2.4.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b5b06f1d71ba85fd9a61b8bbbb187d0d40ba55649c9db6153cef747fbaf9b09e" || { echo "oreon: Source0 SHA256 mismatch for nvme-stas-2.4.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}-%{version_no_tilde}
 
 %build

@@ -10,6 +10,10 @@ Summary: Amazigh hunspell dictionaries
 Version: 0.%{upstreamid}
 Release: 34%{?dist}
 Source: http://ayaspell.sourceforge.net/data/hunspell-am_test.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 fc55dd5fad595312eed80a0418d5a0210fc08bc2e281fa262edaee41700ddb89
+%global source0_file hunspell-am_test.tar.gz
+# oreon url source checksums end
 URL: http://ayaspell.sourceforge.net/am.html
 License: GPL-1.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
 BuildArch: noarch
@@ -21,6 +25,9 @@ Supplements: (hunspell and langpacks-ber)
 Amazigh hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/hunspell-am_test.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fc55dd5fad595312eed80a0418d5a0210fc08bc2e281fa262edaee41700ddb89" || { echo "oreon: Source0 SHA256 mismatch for hunspell-am_test.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n spelling_tifinagh
 
 %build

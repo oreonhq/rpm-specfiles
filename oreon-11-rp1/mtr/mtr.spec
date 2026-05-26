@@ -13,6 +13,10 @@ Source1: net-x%{name}.desktop
 Patch0: https://github.com/traviscross/mtr/commit/5908af4c19188cb17b62f23368b6ef462831a0cb.patch#/mtr-0.95-snprintf-sizes.patch
 # https://github.com/traviscross/mtr/issues/232, https://github.com/traviscross/mtr/pull/484
 Patch1: https://github.com/traviscross/mtr/commit/74d312d7e67d002e184b37c7f278597ab06bf8e7.patch#/mtr-0.95-socket-binding.patch
+# oreon url source checksums begin
+%global source0_sha256 12490fb660ba5fb34df8c06a0f62b4f9cbd11a584fc3f6eceda0a99124e8596f
+%global source0_file mtr-0.95.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc make ncurses-devel libcap-devel jansson-devel
 BuildRequires: autoconf automake libtool git
@@ -50,6 +54,9 @@ the link to each machine. While doing this, it prints running statistics
 about each machine.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mtr-0.95.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "12490fb660ba5fb34df8c06a0f62b4f9cbd11a584fc3f6eceda0a99124e8596f" || { echo "oreon: Source0 SHA256 mismatch for mtr-0.95.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b .snprintf-sizes
 %patch -P1 -p1 -b .socket-binding

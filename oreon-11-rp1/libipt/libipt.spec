@@ -12,6 +12,10 @@ URL: https://github.com/intel/libipt
 Source0: https://github.com/intel/libipt/archive/v%{version}.tar.gz
 Source1: doc-v%{version}.tar.xz
 Patch1: libipt-cmake40-compat.patch
+# oreon url source checksums begin
+%global source0_sha256 713d3e76b6c3073b122a9f5b6c025bc301a0436582f132caf782814363acf60f
+%global source0_file v2.1.2.tar.gz
+# oreon url source checksums end
 # c++ is required only for -DPTUNIT test "ptunit-cpp".
 BuildRequires: gcc-c++ cmake
 %if 0%{?_with_docs:1}
@@ -38,6 +42,9 @@ The %{name}-devel package contains the header files and libraries needed to
 develop programs that use the Intel Processor Trace (Intel PT) Decoder Library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.1.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "713d3e76b6c3073b122a9f5b6c025bc301a0436582f132caf782814363acf60f" || { echo "oreon: Source0 SHA256 mismatch for v2.1.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n libipt-%{version}
 %patch -P 1 -p1
 

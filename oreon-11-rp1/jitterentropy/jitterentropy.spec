@@ -6,13 +6,17 @@ Summary:        Library implementing the jitter entropy source
 
 License:        BSD-3-Clause OR GPL-2.0-only
 URL:            https://github.com/smuellerDD/jitterentropy-library
-Source0:        %{url}/archive/v%{version}/%{name}-library-%{version}.tar.gz
+Source0:        https://github.com/smuellerDD/jitterentropy-library/archive/v3.6.0/jitterentropy-library-3.6.0.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make
 
 # Disable Upstream Makefiles debuginfo strip on install
 Patch0: jitterentropy-rh-makefile.patch
+# oreon url source checksums begin
+%global source0_sha256 e2af325cdc7d951a66af782fad4bcdd622e9d8355dd024b7562e2f8b3f6079cd
+%global source0_file jitterentropy-library-3.6.0.tar.gz
+# oreon url source checksums end
 
 %description
 Library implementing the CPU jitter entropy source
@@ -25,6 +29,9 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Development headers and libraries for jitterentropy
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jitterentropy-library-3.6.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e2af325cdc7d951a66af782fad4bcdd622e9d8355dd024b7562e2f8b3f6079cd" || { echo "oreon: Source0 SHA256 mismatch for jitterentropy-library-3.6.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p0 -n %{name}-library-%{version}
 
 %build

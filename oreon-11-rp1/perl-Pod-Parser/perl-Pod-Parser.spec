@@ -12,6 +12,10 @@ Summary:        Basic perl modules for handling Plain Old Documentation (POD)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Parser
 Source0:        https://cpan.metacpan.org/authors/id/M/MA/MAREKR/Pod-Parser-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 5deccbf55d750ce65588cd211c1a03fa1ef3aaa15d1ac2b8d85383a42c1427ea
+%global source0_file Pod-Parser-1.67.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -52,6 +56,9 @@ Old Documentation). See the "perlpod" and "perlsyn" manual pages from your
 Perl5 distribution for more information about POD.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Pod-Parser-1.67.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5deccbf55d750ce65588cd211c1a03fa1ef3aaa15d1ac2b8d85383a42c1427ea" || { echo "oreon: Source0 SHA256 mismatch for Pod-Parser-1.67.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Pod-Parser-%{version}
 find -type f -exec chmod -x {} +
 chmod +x scripts/*

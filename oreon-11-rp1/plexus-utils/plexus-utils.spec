@@ -18,6 +18,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/codehaus-plexus/plexus-utils/archive/plexus-utils-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 cb2b59f6c9c97ec39aec5d117dd480da34a5521978d9589e2098877dda940119
+%global source0_file plexus-utils-3.5.1.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -37,6 +41,9 @@ velocity, etc. Plexus also includes an application server which
 is like a J2EE application server, without all the baggage.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plexus-utils-3.5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cb2b59f6c9c97ec39aec5d117dd480da34a5521978d9589e2098877dda940119" || { echo "oreon: Source0 SHA256 mismatch for plexus-utils-3.5.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %mvn_file : plexus/utils

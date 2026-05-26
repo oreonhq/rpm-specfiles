@@ -9,6 +9,10 @@ Summary: Bulgarian hunspell dictionaries
 Version: 4.3
 Release: 33%{?dist}
 Source: http://downloads.sourceforge.net/bgoffice/OOo-spell-bg-%{version}.zip
+# oreon url source checksums begin
+%global source0_sha256 33c71a42faf1e247d112450c932d41ecae2fc584e17face60c5731376ee83168
+%global source0_file OOo-spell-bg-4.3.zip
+# oreon url source checksums end
 URL: http://bgoffice.sourceforge.net/
 License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
 BuildArch: noarch
@@ -20,6 +24,9 @@ Supplements: (hunspell and langpacks-bg)
 Bulgarian hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/OOo-spell-bg-4.3.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "33c71a42faf1e247d112450c932d41ecae2fc584e17face60c5731376ee83168" || { echo "oreon: Source0 SHA256 mismatch for OOo-spell-bg-4.3.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n OOo-spell-bg-%{version}
 
 %build

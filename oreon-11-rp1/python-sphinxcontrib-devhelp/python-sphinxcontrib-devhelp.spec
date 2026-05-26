@@ -7,6 +7,10 @@ Summary:        Sphinx extension for Devhelp documents
 License:        BSD-2-Clause
 URL:            http://sphinx-doc.org/
 Source:         %{pypi_source sphinxcontrib_devhelp}
+# oreon url source checksums begin
+%global source0_sha256 411f5d96d445d1d73bb5d52133377b4248ec79db5c793ce7dbe59e074b4dd1ad
+%global source0_file sphinxcontrib_devhelp-2.0.0.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  gettext
@@ -29,6 +33,9 @@ sphinxcontrib-devhelp is a sphinx extension which outputs Devhelp document.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sphinxcontrib_devhelp-2.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "411f5d96d445d1d73bb5d52133377b4248ec79db5c793ce7dbe59e074b4dd1ad" || { echo "oreon: Source0 SHA256 mismatch for sphinxcontrib_devhelp-2.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n sphinxcontrib_devhelp-%{version}
 find -name '*.mo' -delete
 

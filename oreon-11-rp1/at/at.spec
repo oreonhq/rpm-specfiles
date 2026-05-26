@@ -33,6 +33,10 @@ Patch:      at-3.2.2-lock-locks.patch
 Patch:      at-3.1.23-document-n.patch
 Patch:      at-3.1.20-log-jobs.patch
 Patch:      at-3.2.5-past-date.patch
+# oreon url source checksums begin
+%global source0_sha256 bb066b389d7c9bb9d84a35738032b85c30cba7d949f758192adc72c9477fd3b8
+%global source0_file at_3.2.5.orig.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: flex flex-static bison autoconf
@@ -68,6 +72,9 @@ need to be repeated at the same time every day/week, etc. you should
 use crontab instead.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/at_3.2.5.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bb066b389d7c9bb9d84a35738032b85c30cba7d949f758192adc72c9477fd3b8" || { echo "oreon: Source0 SHA256 mismatch for at_3.2.5.orig.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -N
 cp %{SOURCE1} .
 %autopatch -p1

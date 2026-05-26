@@ -16,6 +16,10 @@ URL:            https://metacpan.org/release/Locale-Maketext
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Locale-Maketext-%{base_version}.tar.gz
 # Unbundled from perl 5.37.11
 Patch0:         Locale-Maketext-1.32-Upgrade-to-1.33.patch
+# oreon url source checksums begin
+%global source0_sha256 9cf49f5cb3db81a2db0459c7ddaa824edc0533ba233dc64b062b8f2f022d55d7
+%global source0_file Locale-Maketext-1.32.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -68,6 +72,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Locale-Maketext-1.32.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9cf49f5cb3db81a2db0459c7ddaa824edc0533ba233dc64b062b8f2f022d55d7" || { echo "oreon: Source0 SHA256 mismatch for Locale-Maketext-1.32.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Locale-Maketext-%{base_version}
 %patch -P0 -p1
 perl -i -ne 'print $_ unless m{^t/00_load.t}' MANIFEST

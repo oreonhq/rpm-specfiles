@@ -14,6 +14,10 @@ Patch0: x3270-3.5-paths.patch
 # workaround C23 related issues
 Patch1: c23.patch
 Patch2: mkversion.patch
+# oreon url source checksums begin
+%global source0_sha256 01576fa58598ccdd3d366febfaef61e3d1de93eb60a93f9ac6ba5faf84144c6f
+%global source0_file suite3270-4.5ga5-src.tgz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: ncurses-devel
@@ -61,6 +65,9 @@ Install the %{name}-text package if you need to access IBM hosts using an IBM
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/suite3270-4.5ga5-src.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "01576fa58598ccdd3d366febfaef61e3d1de93eb60a93f9ac6ba5faf84144c6f" || { echo "oreon: Source0 SHA256 mismatch for suite3270-4.5ga5-src.tgz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n suite3270-%{majorver}
 
 

@@ -107,6 +107,184 @@ Source88:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zb
 
 # AppStream metadata for font components
 Source89:        philokalia.metainfo.xml
+# oreon url source checksums begin
+%global source0_sha256 418e2de52bd2b2c83549b1fc18150d7a4d30270c9c4ff5cc5b87e98f16b7a33c
+%global source0_file collection-xetex.tar.xz
+%global source2_sha256 1402b5826e9805792a0d33752514822bd134d80a4ce81ac6c1bfd2f35fa1d44c
+%global source2_file arabxetex.tar.xz
+%global source3_sha256 573a68916ac43c498291eb809ca61e84ad5a2b09f20baa5a69a90ba046e417b2
+%global source3_file arabxetex.doc.tar.xz
+%global source4_sha256 1e2a310fd192e47c71574519ef571b8f3e858800dd22938e844d3ad21030d2a6
+%global source4_file bidi-atbegshi.tar.xz
+%global source5_sha256 4744539db60403c7314b219360d3eb7720d61ca3843e7b597eb9716fd8a243b2
+%global source5_file bidi-atbegshi.doc.tar.xz
+%global source6_sha256 1af1bc5dcf8ee6264d01977e3e08d10bfb6df4df9a0150c047363daf7f521bb9
+%global source6_file bidicontour.tar.xz
+%global source7_sha256 b71056a6081b34ee88e56bffa7a25266283578fef7ad45bdcf57208390345f5d
+%global source7_file bidicontour.doc.tar.xz
+%global source8_sha256 e7904ed059d624d7b7f9c6731d33d2baa8262ff127b7a695f7bb32c821d6d2a5
+%global source8_file bidipagegrid.tar.xz
+%global source9_sha256 b98710d64068f6307bc535f6dc1d85f8f47d4de9768d707c72afcb695d9615f6
+%global source9_file bidipagegrid.doc.tar.xz
+%global source10_sha256 40cdbc1824c051c7f83221e1f86b179fe3a31d2fd7e185a6a28a90635fcbd6ab
+%global source10_file bidipresentation.tar.xz
+%global source11_sha256 db52b97936442efc51a1b60fcebfbb575eb5da6bd3f26a7a9ce048b7f15de942
+%global source11_file bidipresentation.doc.tar.xz
+%global source12_sha256 4e5f17ba32775fa0347d47344beca6994e5778db30e3dd21d9a73fbdba6cb898
+%global source12_file bidishadowtext.tar.xz
+%global source13_sha256 6d2ca5300d76e3f12aec82221b919a41e579555d7a4d1d786039c79fd632c333
+%global source13_file bidishadowtext.doc.tar.xz
+%global source14_sha256 6b154dd86ee8e143bb9d674f4b09d223a95d6b4063e546c5515c9d6ba27ab2be
+%global source14_file businesscard-qrcode.tar.xz
+%global source15_sha256 8c91ec3a0581f8ae01e77a8dd927134173b126d5db084b5ece33e2f1881aa6b2
+%global source15_file businesscard-qrcode.doc.tar.xz
+%global source16_sha256 d203e73cc4b9f38ca4e8fea3c95e1791c02b07b95f240c75cf6a4405d3790211
+%global source16_file cqubeamer.tar.xz
+%global source17_sha256 56ea815018f2b465bb7aa3c3af2c16850f5c914289758012c91fb1409ba43d59
+%global source17_file cqubeamer.doc.tar.xz
+%global source18_sha256 906b771c12a53e7f770c2a4ff5ab7502a78975bd185a9aae95344473bfb90a88
+%global source18_file ctex.tar.xz
+%global source19_sha256 12db6b7914f4a5b53536d7d768bc52252763b7513b5c82c9c7287494ed80ac65
+%global source19_file ctex.doc.tar.xz
+%global source20_sha256 63e4e597b7fb7bdcbd10aaf11f706de14ad9f7de874658a3b1478ae80bc84f8f
+%global source20_file ctex-faq.tar.xz
+%global source21_sha256 4a130de70a5e00e30569528945c8513b6dfabc092daba4d6111061d4a2af2f7e
+%global source21_file ctex-faq.doc.tar.xz
+%global source22_sha256 c947331575c6a177fbaaac3e0fc6ddf38e8bf777f463b6f0bea963d97bf8b54c
+%global source22_file fixlatvian.tar.xz
+%global source23_sha256 1bbc85f2c63619c1e765bb1c16d42854ed1b03312af8a81baec2e6795c799976
+%global source23_file fixlatvian.doc.tar.xz
+%global source24_sha256 e8a254e69284b2e4f9b7167174ba856cca14dced1f56edec7838358696e03722
+%global source24_file font-change-xetex.tar.xz
+%global source25_sha256 f97936baf2d1a299149a116cd410412cc94a62bfd905337fc556d66da1e0f72c
+%global source25_file font-change-xetex.doc.tar.xz
+%global source26_sha256 43f5516f0a2d3e4da3099d40cfe1408f913041570deedf1830ae00ba8cdbd212
+%global source26_file fontbook.tar.xz
+%global source27_sha256 2cd8c5199f9cbf8f1f8fc9c1707646b82790821dbc2c36fd1a659072ea434559
+%global source27_file fontbook.doc.tar.xz
+%global source28_sha256 5746e17c35c412783de7e0cdda542594adea56603e4788d8bb080d8ea44e6616
+%global source28_file fontwrap.tar.xz
+%global source29_sha256 eb9c5389acbe741973783dd354642d28877544d886c3d62fc7d4818263457f2d
+%global source29_file fontwrap.doc.tar.xz
+%global source30_sha256 0cea538c05b04e68b79f02ed1a925cdd0b9960ed55a57ee508ba5885a265defd
+%global source30_file interchar.tar.xz
+%global source31_sha256 87009b419ba0f5c2c5c34499aed533311fcdc3e5490052ecb1e47b5965a8a47c
+%global source31_file interchar.doc.tar.xz
+%global source32_sha256 733c505cf2bf1e82e2f8543424bc147a44d1dcbaf8d246a1b1b18546f7a0b664
+%global source32_file na-position.tar.xz
+%global source33_sha256 b69d39825aa997e8c79110b242e1eb1853609736c36ed5785332311b9d8e4ed1
+%global source33_file na-position.doc.tar.xz
+%global source34_sha256 fd47b6965a373503f4592cba72790e9ff6e204f330fa89f390f0a0e146bfbddd
+%global source34_file philokalia.tar.xz
+%global source35_sha256 8d9495819bf6e9551ada8242663e820371fe443d0fafb05a50ec3675b5eb7f25
+%global source35_file philokalia.doc.tar.xz
+%global source36_sha256 d85a4f68ebacd76bbddabb530c9f029aa92e698b9fc6dec634cb4b461f00787a
+%global source36_file ptext.tar.xz
+%global source37_sha256 a95745ffd0fd45773adf4e4bf9588b4ca569cf3356c691b343d919018cd0d4ef
+%global source37_file ptext.doc.tar.xz
+%global source38_sha256 c49dd4e733944cb2dc7383b11c9c8685e124f70c66f9be97cac81659b96bf0a4
+%global source38_file shtthesis.tar.xz
+%global source39_sha256 dc2120790d82db827ddefa744797ba744d724d0d2da7638fbcd685b6e9ecacc4
+%global source39_file shtthesis.doc.tar.xz
+%global source40_sha256 a4f61a537cc686cfdf41d7dafb2841c7ee834d6a960ee99f899c6b51ed0e210d
+%global source40_file simple-resume-cv.tar.xz
+%global source41_sha256 0bd378cf9cfc5236f27be708b229164e26c2b8afb06eefadb6b9ad173db28cd2
+%global source41_file simple-resume-cv.doc.tar.xz
+%global source42_sha256 3cd3395ab2f23fa1d22589bfb448878f2a93469a34c7c1dbfe828bd5988d2c50
+%global source42_file simple-thesis-dissertation.tar.xz
+%global source43_sha256 b011cd1c7c9ea5f1153c693c4a1f637fa4b477a9ef040c42879e5b1396d58645
+%global source43_file simple-thesis-dissertation.doc.tar.xz
+%global source44_sha256 1b38f79676e1c7d06b85203c9e52aa9231b9a9110eff41309c7ee946399d0ead
+%global source44_file tetragonos.tar.xz
+%global source45_sha256 ecafffd4798f9c654a8aa7f6bafa39203c2ee442beb4b49528567a910d92f3fa
+%global source45_file tetragonos.doc.tar.xz
+%global source46_sha256 f081c0d08dffa8802f0d90bbab87d57c3b581f2a7cab540797ae5b815370c3c9
+%global source46_file ucharclasses.tar.xz
+%global source47_sha256 51095f75cc0b2bb2978fb0ebedf4bafffdb2f33bf8a4c1da94def4824cccd027
+%global source47_file ucharclasses.doc.tar.xz
+%global source48_sha256 75d3efdb248351edcc57eb55a1b478f5fc833c536d876f79dc8c4ef1a00f8956
+%global source48_file unicode-bidi.tar.xz
+%global source49_sha256 d96bfbc0c21ea847ab37af4e4a46fe2d597e30d62053595da32d83f57abdf57a
+%global source49_file unicode-bidi.doc.tar.xz
+%global source50_sha256 cf45710828f3ae50904a90bbd97f90bd9b7da490bcf537fb717f0db5875bb054
+%global source50_file unimath-plain-xetex.tar.xz
+%global source51_sha256 680f8fb97b57a5a6044a7ccbff512edc9123f05ebea80643066046b68547c0ba
+%global source51_file unimath-plain-xetex.doc.tar.xz
+%global source52_sha256 3acd0b75546976ae26b00c5af92e2b22bd33ca06c74eabca84a8d89764180a32
+%global source52_file unisugar.tar.xz
+%global source53_sha256 aa2b098f4920476933cb6582ef8fab163a0a663f7895ea10ff74512068cf6efe
+%global source53_file unisugar.doc.tar.xz
+%global source54_sha256 4da56b1ca094fbfea63d3f0b35407d107827ad1751a849f2f2231d0a9460ac37
+%global source54_file xebaposter.tar.xz
+%global source55_sha256 d0a6d1b181b37cd2fb7fe2303b49180fcb494082652aebb441050d2ebbe7515f
+%global source55_file xebaposter.doc.tar.xz
+%global source56_sha256 1bed93d19602cabecfb2ce5ce9fb7c3f94ee542c721400def05098255fe86797
+%global source56_file xechangebar.tar.xz
+%global source57_sha256 df9fd28e0890cb908d17ab31615d3a6ed432db8c3da868b970334976a7462274
+%global source57_file xechangebar.doc.tar.xz
+%global source58_sha256 f8675df08091c74a0c3e348c9da76c38f1ac561349c5dfa5b245cdc7840da399
+%global source58_file xecjk.tar.xz
+%global source59_sha256 c978798a1c434cb1017845cd36b9af4b565a2fd8f4d5af1aa8271f2ad3adfe19
+%global source59_file xecjk.doc.tar.xz
+%global source60_sha256 66d88a80b0528f57237c78e61ee67032db01fa2cffff59ad5918a2213b320311
+%global source60_file xecolor.tar.xz
+%global source61_sha256 09163917b3eac1118466b68681ecaf846bf46b2a5e748145e6b562e062e02994
+%global source61_file xecolor.doc.tar.xz
+%global source62_sha256 593896b80b3a4ac794d6364b6601a3eb709272fe46454d23e784413370339d64
+%global source62_file xecyr.tar.xz
+%global source63_sha256 2d9d9c2c738f0e1e3621ec401c5adf7cba1b024446966b870a04b744bb95bfef
+%global source63_file xecyr.doc.tar.xz
+%global source64_sha256 64847058845da0a915fcbcbb6efb212c4160ad0ace73260a4ed054dc5f97fb1c
+%global source64_file xeindex.tar.xz
+%global source65_sha256 51db9843e25b40f6aa1e2069a43b6b40ead1d9b0b0a29f966d8d322b39f1b984
+%global source65_file xeindex.doc.tar.xz
+%global source66_sha256 db9981ca6bd973df205f0c94a02f5e296b40d2f7ef4046aaa51e0bb1fb213fee
+%global source66_file xesearch.tar.xz
+%global source67_sha256 0ff83388fd451709806f2e46e9804aa0f46be48c097dd4291ebac828df224326
+%global source67_file xesearch.doc.tar.xz
+%global source68_sha256 3955c4b87241821e8c546e5a44d0576be933c64adfad445dbd53501d619683a2
+%global source68_file xespotcolor.tar.xz
+%global source69_sha256 ef79a5e84a6ce5599e6c9e50c8402d653fa78e6da1ff660964e8cf39d762d27f
+%global source69_file xespotcolor.doc.tar.xz
+%global source70_sha256 2b8ff45641f207deacaa06b1e7c0d0e025f3c8a813829c0ef330b019b35fd2b5
+%global source70_file xetex-devanagari.tar.xz
+%global source71_sha256 3b0a68e7575ac8c6e824707c3d9584804c6635427806a216f9c7f794e3b1ac61
+%global source71_file xetex-devanagari.doc.tar.xz
+%global source72_sha256 8c20f36ae226d089fee5bf8be80614cb418d8615b2900e8c742a7e3e65180523
+%global source72_file xetex-itrans.tar.xz
+%global source73_sha256 7e0c9709ed0bc9c4c96411b6ff119678a0fd0d0f6fa94a5d96dac13708aafd81
+%global source73_file xetex-itrans.doc.tar.xz
+%global source74_sha256 e7de90016a418a7ac6a6f11d2042106b1af97682c53e5bbd508f9c5ec2c72820
+%global source74_file xetex-pstricks.tar.xz
+%global source75_sha256 2e4f73c41088219765fd609e143ebb1e04f05be8c5cef1deb0cf137154816c9e
+%global source75_file xetex-pstricks.doc.tar.xz
+%global source76_sha256 b16ea132c2a42f89dd75c435e5c179cd52148dc68cff514c2be043c68f8f16fe
+%global source76_file xetex-tibetan.tar.xz
+%global source77_sha256 22c5f7b2913bcd12e0bc8eed327c33f665d299b1ca2219b6f0f82d39f6465532
+%global source77_file xetex-tibetan.doc.tar.xz
+%global source78_sha256 9a505894bdf246695cd1d7140f459f6589e36253da6cfe406c86bfadc70e104c
+%global source78_file xetexconfig.tar.xz
+%global source79_sha256 8208b938d8112b12c132059b287dbfa16befa1d466f6a0bb0b2668c43231bbc0
+%global source79_file xetexfontinfo.tar.xz
+%global source80_sha256 dba709aeb0a857ca99de94af7f02606ec4df296a4ad74485752bf262b1916e40
+%global source80_file xetexfontinfo.doc.tar.xz
+%global source81_sha256 c3167cf55470716b18900f08928d7e36419381b7a2511bd86f314b5defc50e30
+%global source81_file xetexko.tar.xz
+%global source82_sha256 a4308a671cb5cdb675375db7aac2279f2289e5179ba64f152a6fac35b5e34fd0
+%global source82_file xetexko.doc.tar.xz
+%global source83_sha256 1234b66aac2c5bb6c29830a29a287c6a68a172cac59e713cc374f302490fbce0
+%global source83_file xetexref.tar.xz
+%global source84_sha256 467461140a0b87e78eb2838d24c8f55906863b05c6ec7fd01f041288a956c9c4
+%global source84_file xetexref.doc.tar.xz
+%global source85_sha256 fb029d5dfbe0f3f50f2097e50efd31553d12cda6d565cf2009d7d54928ebfe31
+%global source85_file xevlna.tar.xz
+%global source86_sha256 0eb253eed6b9ab943fcd3982fe9c265c94d5734dbf53404e045fc611503bd84f
+%global source86_file xevlna.doc.tar.xz
+%global source87_sha256 41b88cd20b737535afaaf96d1daacffd301d7287f4516847f05bd5cd73c2573f
+%global source87_file zbmath-review-template.tar.xz
+%global source88_sha256 11337a0dd3e50540ba8752f45720a26f7af3472c3225e25d623df8d0fdd7cc88
+%global source88_file zbmath-review-template.doc.tar.xz
+# oreon url source checksums end
 BuildRequires:  texlive-base
 BuildRequires:  libappstream-glib
 Requires:       texlive-base
@@ -912,6 +1090,96 @@ mathtools, stmaryrd, textcomp, tikz-cd, xcolor, and xparse.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/collection-xetex.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "418e2de52bd2b2c83549b1fc18150d7a4d30270c9c4ff5cc5b87e98f16b7a33c" || { echo "oreon: Source0 SHA256 mismatch for collection-xetex.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/arabxetex.tar.xz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1402b5826e9805792a0d33752514822bd134d80a4ce81ac6c1bfd2f35fa1d44c" || { echo "oreon: Source2 SHA256 mismatch for arabxetex.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/arabxetex.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "573a68916ac43c498291eb809ca61e84ad5a2b09f20baa5a69a90ba046e417b2" || { echo "oreon: Source3 SHA256 mismatch for arabxetex.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/bidi-atbegshi.tar.xz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1e2a310fd192e47c71574519ef571b8f3e858800dd22938e844d3ad21030d2a6" || { echo "oreon: Source4 SHA256 mismatch for bidi-atbegshi.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/bidi-atbegshi.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4744539db60403c7314b219360d3eb7720d61ca3843e7b597eb9716fd8a243b2" || { echo "oreon: Source5 SHA256 mismatch for bidi-atbegshi.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/bidicontour.tar.xz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1af1bc5dcf8ee6264d01977e3e08d10bfb6df4df9a0150c047363daf7f521bb9" || { echo "oreon: Source6 SHA256 mismatch for bidicontour.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/bidicontour.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b71056a6081b34ee88e56bffa7a25266283578fef7ad45bdcf57208390345f5d" || { echo "oreon: Source7 SHA256 mismatch for bidicontour.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/bidipagegrid.tar.xz; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e7904ed059d624d7b7f9c6731d33d2baa8262ff127b7a695f7bb32c821d6d2a5" || { echo "oreon: Source8 SHA256 mismatch for bidipagegrid.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/bidipagegrid.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b98710d64068f6307bc535f6dc1d85f8f47d4de9768d707c72afcb695d9615f6" || { echo "oreon: Source9 SHA256 mismatch for bidipagegrid.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/bidipresentation.tar.xz; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "40cdbc1824c051c7f83221e1f86b179fe3a31d2fd7e185a6a28a90635fcbd6ab" || { echo "oreon: Source10 SHA256 mismatch for bidipresentation.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/bidipresentation.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "db52b97936442efc51a1b60fcebfbb575eb5da6bd3f26a7a9ce048b7f15de942" || { echo "oreon: Source11 SHA256 mismatch for bidipresentation.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/bidishadowtext.tar.xz; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4e5f17ba32775fa0347d47344beca6994e5778db30e3dd21d9a73fbdba6cb898" || { echo "oreon: Source12 SHA256 mismatch for bidishadowtext.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/bidishadowtext.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6d2ca5300d76e3f12aec82221b919a41e579555d7a4d1d786039c79fd632c333" || { echo "oreon: Source13 SHA256 mismatch for bidishadowtext.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/businesscard-qrcode.tar.xz; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6b154dd86ee8e143bb9d674f4b09d223a95d6b4063e546c5515c9d6ba27ab2be" || { echo "oreon: Source14 SHA256 mismatch for businesscard-qrcode.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/businesscard-qrcode.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source15 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8c91ec3a0581f8ae01e77a8dd927134173b126d5db084b5ece33e2f1881aa6b2" || { echo "oreon: Source15 SHA256 mismatch for businesscard-qrcode.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/cqubeamer.tar.xz; test -f "$f" || { echo "oreon: missing Source16 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d203e73cc4b9f38ca4e8fea3c95e1791c02b07b95f240c75cf6a4405d3790211" || { echo "oreon: Source16 SHA256 mismatch for cqubeamer.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/cqubeamer.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source17 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "56ea815018f2b465bb7aa3c3af2c16850f5c914289758012c91fb1409ba43d59" || { echo "oreon: Source17 SHA256 mismatch for cqubeamer.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/ctex.tar.xz; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "906b771c12a53e7f770c2a4ff5ab7502a78975bd185a9aae95344473bfb90a88" || { echo "oreon: Source18 SHA256 mismatch for ctex.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/ctex.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source19 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "12db6b7914f4a5b53536d7d768bc52252763b7513b5c82c9c7287494ed80ac65" || { echo "oreon: Source19 SHA256 mismatch for ctex.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/ctex-faq.tar.xz; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "63e4e597b7fb7bdcbd10aaf11f706de14ad9f7de874658a3b1478ae80bc84f8f" || { echo "oreon: Source20 SHA256 mismatch for ctex-faq.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/ctex-faq.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source21 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4a130de70a5e00e30569528945c8513b6dfabc092daba4d6111061d4a2af2f7e" || { echo "oreon: Source21 SHA256 mismatch for ctex-faq.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/fixlatvian.tar.xz; test -f "$f" || { echo "oreon: missing Source22 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c947331575c6a177fbaaac3e0fc6ddf38e8bf777f463b6f0bea963d97bf8b54c" || { echo "oreon: Source22 SHA256 mismatch for fixlatvian.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/fixlatvian.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source23 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1bbc85f2c63619c1e765bb1c16d42854ed1b03312af8a81baec2e6795c799976" || { echo "oreon: Source23 SHA256 mismatch for fixlatvian.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/font-change-xetex.tar.xz; test -f "$f" || { echo "oreon: missing Source24 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e8a254e69284b2e4f9b7167174ba856cca14dced1f56edec7838358696e03722" || { echo "oreon: Source24 SHA256 mismatch for font-change-xetex.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/font-change-xetex.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source25 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f97936baf2d1a299149a116cd410412cc94a62bfd905337fc556d66da1e0f72c" || { echo "oreon: Source25 SHA256 mismatch for font-change-xetex.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/fontbook.tar.xz; test -f "$f" || { echo "oreon: missing Source26 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "43f5516f0a2d3e4da3099d40cfe1408f913041570deedf1830ae00ba8cdbd212" || { echo "oreon: Source26 SHA256 mismatch for fontbook.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/fontbook.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source27 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2cd8c5199f9cbf8f1f8fc9c1707646b82790821dbc2c36fd1a659072ea434559" || { echo "oreon: Source27 SHA256 mismatch for fontbook.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/fontwrap.tar.xz; test -f "$f" || { echo "oreon: missing Source28 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5746e17c35c412783de7e0cdda542594adea56603e4788d8bb080d8ea44e6616" || { echo "oreon: Source28 SHA256 mismatch for fontwrap.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/fontwrap.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source29 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "eb9c5389acbe741973783dd354642d28877544d886c3d62fc7d4818263457f2d" || { echo "oreon: Source29 SHA256 mismatch for fontwrap.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/interchar.tar.xz; test -f "$f" || { echo "oreon: missing Source30 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0cea538c05b04e68b79f02ed1a925cdd0b9960ed55a57ee508ba5885a265defd" || { echo "oreon: Source30 SHA256 mismatch for interchar.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/interchar.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source31 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "87009b419ba0f5c2c5c34499aed533311fcdc3e5490052ecb1e47b5965a8a47c" || { echo "oreon: Source31 SHA256 mismatch for interchar.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/na-position.tar.xz; test -f "$f" || { echo "oreon: missing Source32 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "733c505cf2bf1e82e2f8543424bc147a44d1dcbaf8d246a1b1b18546f7a0b664" || { echo "oreon: Source32 SHA256 mismatch for na-position.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/na-position.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source33 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b69d39825aa997e8c79110b242e1eb1853609736c36ed5785332311b9d8e4ed1" || { echo "oreon: Source33 SHA256 mismatch for na-position.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/philokalia.tar.xz; test -f "$f" || { echo "oreon: missing Source34 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fd47b6965a373503f4592cba72790e9ff6e204f330fa89f390f0a0e146bfbddd" || { echo "oreon: Source34 SHA256 mismatch for philokalia.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/philokalia.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source35 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8d9495819bf6e9551ada8242663e820371fe443d0fafb05a50ec3675b5eb7f25" || { echo "oreon: Source35 SHA256 mismatch for philokalia.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/ptext.tar.xz; test -f "$f" || { echo "oreon: missing Source36 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d85a4f68ebacd76bbddabb530c9f029aa92e698b9fc6dec634cb4b461f00787a" || { echo "oreon: Source36 SHA256 mismatch for ptext.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/ptext.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source37 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a95745ffd0fd45773adf4e4bf9588b4ca569cf3356c691b343d919018cd0d4ef" || { echo "oreon: Source37 SHA256 mismatch for ptext.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/shtthesis.tar.xz; test -f "$f" || { echo "oreon: missing Source38 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c49dd4e733944cb2dc7383b11c9c8685e124f70c66f9be97cac81659b96bf0a4" || { echo "oreon: Source38 SHA256 mismatch for shtthesis.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/shtthesis.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source39 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dc2120790d82db827ddefa744797ba744d724d0d2da7638fbcd685b6e9ecacc4" || { echo "oreon: Source39 SHA256 mismatch for shtthesis.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/simple-resume-cv.tar.xz; test -f "$f" || { echo "oreon: missing Source40 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a4f61a537cc686cfdf41d7dafb2841c7ee834d6a960ee99f899c6b51ed0e210d" || { echo "oreon: Source40 SHA256 mismatch for simple-resume-cv.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/simple-resume-cv.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source41 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0bd378cf9cfc5236f27be708b229164e26c2b8afb06eefadb6b9ad173db28cd2" || { echo "oreon: Source41 SHA256 mismatch for simple-resume-cv.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/simple-thesis-dissertation.tar.xz; test -f "$f" || { echo "oreon: missing Source42 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3cd3395ab2f23fa1d22589bfb448878f2a93469a34c7c1dbfe828bd5988d2c50" || { echo "oreon: Source42 SHA256 mismatch for simple-thesis-dissertation.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/simple-thesis-dissertation.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source43 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b011cd1c7c9ea5f1153c693c4a1f637fa4b477a9ef040c42879e5b1396d58645" || { echo "oreon: Source43 SHA256 mismatch for simple-thesis-dissertation.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/tetragonos.tar.xz; test -f "$f" || { echo "oreon: missing Source44 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1b38f79676e1c7d06b85203c9e52aa9231b9a9110eff41309c7ee946399d0ead" || { echo "oreon: Source44 SHA256 mismatch for tetragonos.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/tetragonos.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source45 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ecafffd4798f9c654a8aa7f6bafa39203c2ee442beb4b49528567a910d92f3fa" || { echo "oreon: Source45 SHA256 mismatch for tetragonos.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/ucharclasses.tar.xz; test -f "$f" || { echo "oreon: missing Source46 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f081c0d08dffa8802f0d90bbab87d57c3b581f2a7cab540797ae5b815370c3c9" || { echo "oreon: Source46 SHA256 mismatch for ucharclasses.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/ucharclasses.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source47 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "51095f75cc0b2bb2978fb0ebedf4bafffdb2f33bf8a4c1da94def4824cccd027" || { echo "oreon: Source47 SHA256 mismatch for ucharclasses.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/unicode-bidi.tar.xz; test -f "$f" || { echo "oreon: missing Source48 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "75d3efdb248351edcc57eb55a1b478f5fc833c536d876f79dc8c4ef1a00f8956" || { echo "oreon: Source48 SHA256 mismatch for unicode-bidi.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/unicode-bidi.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source49 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d96bfbc0c21ea847ab37af4e4a46fe2d597e30d62053595da32d83f57abdf57a" || { echo "oreon: Source49 SHA256 mismatch for unicode-bidi.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/unimath-plain-xetex.tar.xz; test -f "$f" || { echo "oreon: missing Source50 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cf45710828f3ae50904a90bbd97f90bd9b7da490bcf537fb717f0db5875bb054" || { echo "oreon: Source50 SHA256 mismatch for unimath-plain-xetex.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/unimath-plain-xetex.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source51 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "680f8fb97b57a5a6044a7ccbff512edc9123f05ebea80643066046b68547c0ba" || { echo "oreon: Source51 SHA256 mismatch for unimath-plain-xetex.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/unisugar.tar.xz; test -f "$f" || { echo "oreon: missing Source52 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3acd0b75546976ae26b00c5af92e2b22bd33ca06c74eabca84a8d89764180a32" || { echo "oreon: Source52 SHA256 mismatch for unisugar.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/unisugar.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source53 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aa2b098f4920476933cb6582ef8fab163a0a663f7895ea10ff74512068cf6efe" || { echo "oreon: Source53 SHA256 mismatch for unisugar.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xebaposter.tar.xz; test -f "$f" || { echo "oreon: missing Source54 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4da56b1ca094fbfea63d3f0b35407d107827ad1751a849f2f2231d0a9460ac37" || { echo "oreon: Source54 SHA256 mismatch for xebaposter.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xebaposter.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source55 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d0a6d1b181b37cd2fb7fe2303b49180fcb494082652aebb441050d2ebbe7515f" || { echo "oreon: Source55 SHA256 mismatch for xebaposter.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xechangebar.tar.xz; test -f "$f" || { echo "oreon: missing Source56 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1bed93d19602cabecfb2ce5ce9fb7c3f94ee542c721400def05098255fe86797" || { echo "oreon: Source56 SHA256 mismatch for xechangebar.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xechangebar.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source57 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "df9fd28e0890cb908d17ab31615d3a6ed432db8c3da868b970334976a7462274" || { echo "oreon: Source57 SHA256 mismatch for xechangebar.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xecjk.tar.xz; test -f "$f" || { echo "oreon: missing Source58 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f8675df08091c74a0c3e348c9da76c38f1ac561349c5dfa5b245cdc7840da399" || { echo "oreon: Source58 SHA256 mismatch for xecjk.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xecjk.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source59 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c978798a1c434cb1017845cd36b9af4b565a2fd8f4d5af1aa8271f2ad3adfe19" || { echo "oreon: Source59 SHA256 mismatch for xecjk.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xecolor.tar.xz; test -f "$f" || { echo "oreon: missing Source60 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "66d88a80b0528f57237c78e61ee67032db01fa2cffff59ad5918a2213b320311" || { echo "oreon: Source60 SHA256 mismatch for xecolor.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xecolor.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source61 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "09163917b3eac1118466b68681ecaf846bf46b2a5e748145e6b562e062e02994" || { echo "oreon: Source61 SHA256 mismatch for xecolor.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xecyr.tar.xz; test -f "$f" || { echo "oreon: missing Source62 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "593896b80b3a4ac794d6364b6601a3eb709272fe46454d23e784413370339d64" || { echo "oreon: Source62 SHA256 mismatch for xecyr.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xecyr.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source63 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2d9d9c2c738f0e1e3621ec401c5adf7cba1b024446966b870a04b744bb95bfef" || { echo "oreon: Source63 SHA256 mismatch for xecyr.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xeindex.tar.xz; test -f "$f" || { echo "oreon: missing Source64 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "64847058845da0a915fcbcbb6efb212c4160ad0ace73260a4ed054dc5f97fb1c" || { echo "oreon: Source64 SHA256 mismatch for xeindex.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xeindex.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source65 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "51db9843e25b40f6aa1e2069a43b6b40ead1d9b0b0a29f966d8d322b39f1b984" || { echo "oreon: Source65 SHA256 mismatch for xeindex.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xesearch.tar.xz; test -f "$f" || { echo "oreon: missing Source66 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "db9981ca6bd973df205f0c94a02f5e296b40d2f7ef4046aaa51e0bb1fb213fee" || { echo "oreon: Source66 SHA256 mismatch for xesearch.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xesearch.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source67 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0ff83388fd451709806f2e46e9804aa0f46be48c097dd4291ebac828df224326" || { echo "oreon: Source67 SHA256 mismatch for xesearch.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xespotcolor.tar.xz; test -f "$f" || { echo "oreon: missing Source68 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3955c4b87241821e8c546e5a44d0576be933c64adfad445dbd53501d619683a2" || { echo "oreon: Source68 SHA256 mismatch for xespotcolor.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xespotcolor.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source69 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ef79a5e84a6ce5599e6c9e50c8402d653fa78e6da1ff660964e8cf39d762d27f" || { echo "oreon: Source69 SHA256 mismatch for xespotcolor.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetex-devanagari.tar.xz; test -f "$f" || { echo "oreon: missing Source70 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2b8ff45641f207deacaa06b1e7c0d0e025f3c8a813829c0ef330b019b35fd2b5" || { echo "oreon: Source70 SHA256 mismatch for xetex-devanagari.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetex-devanagari.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source71 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3b0a68e7575ac8c6e824707c3d9584804c6635427806a216f9c7f794e3b1ac61" || { echo "oreon: Source71 SHA256 mismatch for xetex-devanagari.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetex-itrans.tar.xz; test -f "$f" || { echo "oreon: missing Source72 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8c20f36ae226d089fee5bf8be80614cb418d8615b2900e8c742a7e3e65180523" || { echo "oreon: Source72 SHA256 mismatch for xetex-itrans.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetex-itrans.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source73 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7e0c9709ed0bc9c4c96411b6ff119678a0fd0d0f6fa94a5d96dac13708aafd81" || { echo "oreon: Source73 SHA256 mismatch for xetex-itrans.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetex-pstricks.tar.xz; test -f "$f" || { echo "oreon: missing Source74 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e7de90016a418a7ac6a6f11d2042106b1af97682c53e5bbd508f9c5ec2c72820" || { echo "oreon: Source74 SHA256 mismatch for xetex-pstricks.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetex-pstricks.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source75 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2e4f73c41088219765fd609e143ebb1e04f05be8c5cef1deb0cf137154816c9e" || { echo "oreon: Source75 SHA256 mismatch for xetex-pstricks.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetex-tibetan.tar.xz; test -f "$f" || { echo "oreon: missing Source76 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b16ea132c2a42f89dd75c435e5c179cd52148dc68cff514c2be043c68f8f16fe" || { echo "oreon: Source76 SHA256 mismatch for xetex-tibetan.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetex-tibetan.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source77 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "22c5f7b2913bcd12e0bc8eed327c33f665d299b1ca2219b6f0f82d39f6465532" || { echo "oreon: Source77 SHA256 mismatch for xetex-tibetan.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetexconfig.tar.xz; test -f "$f" || { echo "oreon: missing Source78 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9a505894bdf246695cd1d7140f459f6589e36253da6cfe406c86bfadc70e104c" || { echo "oreon: Source78 SHA256 mismatch for xetexconfig.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetexfontinfo.tar.xz; test -f "$f" || { echo "oreon: missing Source79 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8208b938d8112b12c132059b287dbfa16befa1d466f6a0bb0b2668c43231bbc0" || { echo "oreon: Source79 SHA256 mismatch for xetexfontinfo.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetexfontinfo.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source80 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dba709aeb0a857ca99de94af7f02606ec4df296a4ad74485752bf262b1916e40" || { echo "oreon: Source80 SHA256 mismatch for xetexfontinfo.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetexko.tar.xz; test -f "$f" || { echo "oreon: missing Source81 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c3167cf55470716b18900f08928d7e36419381b7a2511bd86f314b5defc50e30" || { echo "oreon: Source81 SHA256 mismatch for xetexko.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetexko.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source82 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a4308a671cb5cdb675375db7aac2279f2289e5179ba64f152a6fac35b5e34fd0" || { echo "oreon: Source82 SHA256 mismatch for xetexko.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetexref.tar.xz; test -f "$f" || { echo "oreon: missing Source83 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1234b66aac2c5bb6c29830a29a287c6a68a172cac59e713cc374f302490fbce0" || { echo "oreon: Source83 SHA256 mismatch for xetexref.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xetexref.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source84 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "467461140a0b87e78eb2838d24c8f55906863b05c6ec7fd01f041288a956c9c4" || { echo "oreon: Source84 SHA256 mismatch for xetexref.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xevlna.tar.xz; test -f "$f" || { echo "oreon: missing Source85 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fb029d5dfbe0f3f50f2097e50efd31553d12cda6d565cf2009d7d54928ebfe31" || { echo "oreon: Source85 SHA256 mismatch for xevlna.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/xevlna.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source86 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0eb253eed6b9ab943fcd3982fe9c265c94d5734dbf53404e045fc611503bd84f" || { echo "oreon: Source86 SHA256 mismatch for xevlna.doc.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/zbmath-review-template.tar.xz; test -f "$f" || { echo "oreon: missing Source87 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "41b88cd20b737535afaaf96d1daacffd301d7287f4516847f05bd5cd73c2573f" || { echo "oreon: Source87 SHA256 mismatch for zbmath-review-template.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/zbmath-review-template.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source88 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "11337a0dd3e50540ba8752f45720a26f7af3472c3225e25d623df8d0fdd7cc88" || { echo "oreon: Source88 SHA256 mismatch for zbmath-review-template.doc.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Extract license files
 tar -xf %{SOURCE1}
 

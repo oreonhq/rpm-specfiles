@@ -13,6 +13,10 @@ Source0: https://github.com/laurikari/tre/archive/v%{version}/tre-%{version}.tar
 %endif
 # don't force build-time LDFLAGS into tre.pc
 Patch2: %{name}-ldflags.patch
+# oreon url source checksums begin
+%global source0_sha256 31d5776d8c56186704ec272b97fadf52a0a7ae9caca19487a0c3b17ef1626340
+%global source0_file tre-d0e0c997336b3210f05b3e1daa7bb5cb9900d274.tar.gz
+# oreon url source checksums end
 Summary: POSIX compatible regexp library with approximate matching
 URL: https://laurikari.net/tre/
 # rebuild autotools for bug #926655
@@ -68,6 +72,9 @@ Unlike other agrep implementations, TRE agrep allows full POSIX
 regexps of any length, any number of errors, and non-uniform costs.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/tre-d0e0c997336b3210f05b3e1daa7bb5cb9900d274.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "31d5776d8c56186704ec272b97fadf52a0a7ae9caca19487a0c3b17ef1626340" || { echo "oreon: Source0 SHA256 mismatch for tre-d0e0c997336b3210f05b3e1daa7bb5cb9900d274.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?git}
 %setup -q -n tre-%{commit}
 %else

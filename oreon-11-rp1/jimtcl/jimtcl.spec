@@ -10,6 +10,10 @@ URL:            http://jim.tcl.tk
 Source:         https://github.com/msteveb/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 # readline expects applications to include stdio.h, jimtcl was not
 Patch:          https://github.com/msteveb/jimtcl/commit/35e0e1f9b1f018666e5170a35366c5fc3b97309c.patch#/jimtcl-stdio-for-readline.diff
+# oreon url source checksums begin
+%global source0_sha256 6f2df00009f5ac4ad654c1ae1d2f8ed18191de38d1f5a88a54ea99cc16936686
+%global source0_file jimtcl-0.83.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  asciidoc
@@ -47,6 +51,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jimtcl-0.83.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6f2df00009f5ac4ad654c1ae1d2f8ed18191de38d1f5a88a54ea99cc16936686" || { echo "oreon: Source0 SHA256 mismatch for jimtcl-0.83.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 rm -rf sqlite3
 

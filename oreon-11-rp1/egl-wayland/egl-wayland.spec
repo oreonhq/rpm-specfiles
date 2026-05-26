@@ -11,9 +11,13 @@ License:        MIT
 URL:            https://github.com/NVIDIA/%{name}
 
 %if 0%{?tag:1}
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/NVIDIA/egl-wayland/archive/1.1.21/egl-wayland-1.1.21.tar.gz
 %else
-Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
+Source0:        https://github.com/NVIDIA/egl-wayland/archive/3acc51828aceba310081c72a18f938f04d4487de/egl-wayland-%(c=3acc51828aceba310081c72a18f938f04d4487de;.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 da232d46ec4553b2f4b057b705acfa63466318f91f7e8de38dcfb30243fb6898
+%global source0_file egl-wayland-1.1.21.tar.gz
+# oreon url source checksums end
 %endif
 
 BuildRequires:  cmake
@@ -53,6 +57,9 @@ EGL drivers that support the external platform mechanism.
 This package contains development files.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/egl-wayland-1.1.21.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "da232d46ec4553b2f4b057b705acfa63466318f91f7e8de38dcfb30243fb6898" || { echo "oreon: Source0 SHA256 mismatch for egl-wayland-1.1.21.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?tag:1}
 %autosetup -p1
 %else

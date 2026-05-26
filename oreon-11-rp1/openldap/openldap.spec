@@ -58,6 +58,12 @@ Patch10: openldap-ITS-10297-Defer-hostname-resolution-til-first-use.patch
 # check-password module specific patches
 Patch90: check-password-makefile.patch
 Patch91: check-password.patch
+# oreon url source checksums begin
+%global source0_sha256 d693b49517a42efb85a1a364a310aed16a53d428d1b46c0d31ef3fba78fcb656
+%global source0_file openldap-2.6.13.tgz
+%global source10_sha256 45188b404eb71c3ba47e9eb5d77bfda53e636571bb1db70e9da8e88d48b17400
+%global source10_file openldap-ppolicy-check-password-1.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires: cyrus-sasl-devel
 BuildRequires: gcc
@@ -165,6 +171,10 @@ over the Internet. The openldap-clients package contains the client
 programs needed for accessing and modifying OpenLDAP directories.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/openldap-2.6.13.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d693b49517a42efb85a1a364a310aed16a53d428d1b46c0d31ef3fba78fcb656" || { echo "oreon: Source0 SHA256 mismatch for openldap-2.6.13.tgz" >&2; exit 1; })
+%(f=%{_sourcedir}/openldap-ppolicy-check-password-1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "45188b404eb71c3ba47e9eb5d77bfda53e636571bb1db70e9da8e88d48b17400" || { echo "oreon: Source10 SHA256 mismatch for openldap-ppolicy-check-password-1.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c -a 0 -a 10
 
 pushd openldap-%{version}

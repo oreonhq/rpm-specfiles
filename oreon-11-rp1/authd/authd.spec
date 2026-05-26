@@ -13,6 +13,10 @@ Requires(post): openssl
 Source0: https://github.com/InfrastructureServices/authd/releases/download/v1.4.4/authd-1.4.4.tar.gz
 Source1: auth.socket
 Source2: auth@.service
+# oreon url source checksums begin
+%global source0_sha256 71ee3d1c3e107c93e082148f75ee460c949b203c861dd20d48f7c5cfdc272bf8
+%global source0_file authd-1.4.4.tar.gz
+# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires: openssl-devel gettext help2man systemd-units
 BuildRequires: make
@@ -27,6 +31,9 @@ supports IPv6 and IPv4 as well as the more popular features
 of pidentd.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/authd-1.4.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "71ee3d1c3e107c93e082148f75ee460c949b203c861dd20d48f7c5cfdc272bf8" || { echo "oreon: Source0 SHA256 mismatch for authd-1.4.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

@@ -10,6 +10,10 @@ Summary:       A framework for creating UPnP devices & control points
 License:       LGPL-2.1-or-later
 URL:           https://www.gupnp.org/
 Source0:       https://download.gnome.org/sources/%{name}/1.6/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 2edb6ee3613558e62f538735368aee27151b7e09d4e2e2c51606833da801869b
+%global source0_file gupnp-1.6.9.tar.xz
+# oreon url source checksums end
 
 BuildRequires: docbook-style-xsl
 BuildRequires: gi-docgen
@@ -47,6 +51,9 @@ BuildArch: noarch
 This package contains developer documentation for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gupnp-1.6.9.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2edb6ee3613558e62f538735368aee27151b7e09d4e2e2c51606833da801869b" || { echo "oreon: Source0 SHA256 mismatch for gupnp-1.6.9.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

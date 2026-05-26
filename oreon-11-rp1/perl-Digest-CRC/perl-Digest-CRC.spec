@@ -4,7 +4,12 @@ Release:        13%{?dist}
 Summary:        Generic CRC functions
 License:        LicenseRef-Fedora-Public-Domain
 URL:            https://metacpan.org/release/Digest-CRC
-Source0:        https://cpan.metacpan.org/modules/by-module/Digest/Digest-CRC-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/O/OL/OLIMAUL/Digest-CRC-0.24.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 ba022a05b1adbec73712c46f233d8489fe13a1b9fc40a1fcceed9b52f90defc1
+%global source0_file Digest-CRC-0.24.tar.gz
+# oreon url source checksums end
+
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -33,6 +38,9 @@ functions with the correct parameters for CRC-SAE-J1850, CRC-CCITT, CRC-16 and
 CRC-32.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Digest-CRC-0.24.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ba022a05b1adbec73712c46f233d8489fe13a1b9fc40a1fcceed9b52f90defc1" || { echo "oreon: Source0 SHA256 mismatch for Digest-CRC-0.24.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -qn Digest-CRC-%{version}
 
 %build

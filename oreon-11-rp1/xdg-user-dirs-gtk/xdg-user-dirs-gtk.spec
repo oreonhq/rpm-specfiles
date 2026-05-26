@@ -9,6 +9,10 @@ Source0:	https://download.gnome.org/sources/xdg-user-dirs-gtk/%{version}/%{name}
 
 # https://gitlab.gnome.org/GNOME/xdg-user-dirs-gtk/-/merge_requests/22
 Patch0:		xdg-user-dirs-gtk-0.16-not-showin-kde.patch
+# oreon url source checksums begin
+%global source0_sha256 be825de7f89175db5ead0cd3744d2761109c70943251a87092259163025520a9
+%global source0_file xdg-user-dirs-gtk-0.16.tar.xz
+# oreon url source checksums end
 
 BuildRequires:	desktop-file-utils
 BuildRequires:	gcc
@@ -25,6 +29,9 @@ desktop, including creating default bookmarks and detecting
 locale changes.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xdg-user-dirs-gtk-0.16.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "be825de7f89175db5ead0cd3744d2761109c70943251a87092259163025520a9" || { echo "oreon: Source0 SHA256 mismatch for xdg-user-dirs-gtk-0.16.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

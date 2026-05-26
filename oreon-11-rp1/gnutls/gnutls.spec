@@ -135,6 +135,12 @@ Source102:	gmp-6.2.1-c23.patch
 Provides:	bundled(leancrypto) = 1.6.0
 # GitHub release has no upload asset, use archive URL that Content-Disposition names leancrypto-1.6.0.tar.gz
 Source300:	https://github.com/smuellerDD/leancrypto/archive/v1.6.0/leancrypto-1.6.0.tar.gz
+# oreon url source checksums begin
+%global source100_sha256 fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
+%global source100_file gmp-6.2.1.tar.xz
+%global source300_sha256 b5057cfb990108c4a9f21832f1f35f3d98115012d1628e00650558e6b49e8285
+%global source300_file leancrypto-1.6.0.tar.gz
+# oreon url source checksums end
 %endif
 
 # Wildcard bundling exception https://fedorahosted.org/fpc/ticket/174
@@ -256,6 +262,10 @@ for MinGW.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gmp-6.2.1.tar.xz; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2" || { echo "oreon: Source100 SHA256 mismatch for gmp-6.2.1.tar.xz" >&2; exit 1; })
+%(f=%{_sourcedir}/leancrypto-1.6.0.tar.gz; test -f "$f" || { echo "oreon: missing Source300 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b5057cfb990108c4a9f21832f1f35f3d98115012d1628e00650558e6b49e8285" || { echo "oreon: Source300 SHA256 mismatch for leancrypto-1.6.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup -p1 -S git

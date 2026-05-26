@@ -11,6 +11,10 @@ Source0:        https://github.com/Azure/%{name}/archive/v%{version}.tar.gz
 Source1:        module-setup.sh
 
 Patch1:         0001-waagent.service-set-ConditionVirtualization-microsof.patch
+# oreon url source checksums begin
+%global source0_sha256 f405cb90179dbe582a1c71a36af8016072c0defeb969aeee7861d5aab10499d8
+%global source0_file v2.15.0.1.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -50,6 +54,9 @@ Summary:        Udev rules for Microsoft Azure
 Udev rules specific to Microsoft Azure Virtual Machines.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.15.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f405cb90179dbe582a1c71a36af8016072c0defeb969aeee7861d5aab10499d8" || { echo "oreon: Source0 SHA256 mismatch for v2.15.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{version} -p1
 
 

@@ -14,6 +14,10 @@ Patch0:  Add-PL_ARCH-for-AArch64.patch
 Patch1: execstack-configure-c99.patch
 
 Patch10:    0001-Add-minimal-support-for-RISC-V-64-bit-riscv64.patch
+# oreon url source checksums begin
+%global source0_sha256 fab35685d704de83e71b84a6875ce50218bf45ff9e64d114427975489840ff46
+%global source0_file 4c79120bcdbde0616f592458ccde7035e92ca3d8.tar.gz
+# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gcc-c++
@@ -32,6 +36,9 @@ execstack binary. It can be used manipulate ELF binaries to run
 with or without executable stack.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/4c79120bcdbde0616f592458ccde7035e92ca3d8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fab35685d704de83e71b84a6875ce50218bf45ff9e64d114427975489840ff46" || { echo "oreon: Source0 SHA256 mismatch for 4c79120bcdbde0616f592458ccde7035e92ca3d8.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n prelink-%{commit} -p1 -Sgit
 
 %build

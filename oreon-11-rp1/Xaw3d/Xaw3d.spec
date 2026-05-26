@@ -9,6 +9,10 @@ Patch5: Xaw3d-1.5-debian-fixes.patch
 Patch7: Xaw3d-1.6.1-3Dlabel.patch
 Patch10: Xaw3d-1.6.5-fontset.patch
 Patch11: Xaw3d-1.6.1-hsbar.patch
+# oreon url source checksums begin
+%global source0_sha256 a41c3e37135ad616b1f28bbde70002afbf3cb59a30df34141f829d32eadc8646
+%global source0_file libXaw3d-1.6.6.tar.xz
+# oreon url source checksums end
 
 License: MIT AND X11 AND GPL-3.0-or-later
 URL: http://xorg.freedesktop.org/
@@ -59,6 +63,9 @@ package.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libXaw3d-1.6.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a41c3e37135ad616b1f28bbde70002afbf3cb59a30df34141f829d32eadc8646" || { echo "oreon: Source0 SHA256 mismatch for libXaw3d-1.6.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q -n libXaw3d-%{version}
 # This doesn't apply cleanly, but has not been applied

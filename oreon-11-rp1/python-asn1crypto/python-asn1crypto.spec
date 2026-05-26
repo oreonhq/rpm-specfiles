@@ -11,6 +11,10 @@ Summary:        Fast Python ASN.1 parser and serializer
 License:        MIT
 URL:            https://github.com/wbond/asn1crypto
 Source0:        https://files.pythonhosted.org/packages/source/a/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 13ae38502be632115abf8a24cbe5f4da52e3b5231990aff31123c805306ccb9c
+%global source0_file asn1crypto-1.5.1.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python%{python3_pkgversion}-devel
@@ -33,6 +37,9 @@ public keys, certificates, CRL, OCSP, CMS, PKCS#3, PKCS#7, PKCS#8,
 PKCS#12, PKCS#5, X.509 and TSP.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/asn1crypto-1.5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "13ae38502be632115abf8a24cbe5f4da52e3b5231990aff31123c805306ccb9c" || { echo "oreon: Source0 SHA256 mismatch for asn1crypto-1.5.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{pypi_name}-%{version}
 
 %build

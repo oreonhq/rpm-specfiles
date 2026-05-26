@@ -20,10 +20,17 @@ This package provides a free Kannada opentype serif font.}
 
 Source0:        https://github.com/aravindavk/Gubbi/archive/v%{version}.tar.gz#/%{fontfamily}-%{version}.tar.gz
 Source1:        65-0-%{fontpkgname}.conf
+# oreon url source checksums begin
+%global source0_sha256 49011eb884137a403520214a67a046e508de4cc693406a5a311305529f337b51
+%global source0_file v1.3.tar.gz
+# oreon url source checksums end
 
 %fontpkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "49011eb884137a403520214a67a046e508de4cc693406a5a311305529f337b51" || { echo "oreon: Source0 SHA256 mismatch for v1.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{fontfamily}-%{version}
 
 %build

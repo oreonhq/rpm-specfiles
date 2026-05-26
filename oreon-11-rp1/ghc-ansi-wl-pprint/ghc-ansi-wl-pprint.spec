@@ -19,6 +19,10 @@ URL:            https://hackage.haskell.org/package/ansi-wl-pprint
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 Source1:        https://hackage.haskell.org/package/%{prettyprintercompatansiwlpprint}/%{prettyprintercompatansiwlpprint}.tar.gz
+# oreon url source checksums begin
+%global source1_sha256 05b27251f18b91efbf14c687c2851323b92032220337cd04ab1f741a84019e55
+%global source1_file prettyprinter-compat-ansi-wl-pprint-1.0.2.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -93,6 +97,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/prettyprinter-compat-ansi-wl-pprint-1.0.2.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "05b27251f18b91efbf14c687c2851323b92032220337cd04ab1f741a84019e55" || { echo "oreon: Source1 SHA256 mismatch for prettyprinter-compat-ansi-wl-pprint-1.0.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver} -a1
 # End cabal-rpm setup

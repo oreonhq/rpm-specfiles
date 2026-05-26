@@ -9,8 +9,12 @@ Summary:          API for Linux kernel LIO SCSI target
 Version:          2.2.3
 Release:          5%{?dist}
 URL:              https://github.com/open-iscsi/%{oname}
-Source:           %{url}/archive/v%{version}/%{oname}-%{version}.tar.gz
+Source:        https://github.com/open-iscsi/rtslib-fb/archive/v2.2.3/rtslib-fb-2.2.3.tar.gz
 Patch0:           0001-disable-xen_pvscsi.patch
+# oreon url source checksums begin
+%global source0_sha256 c33a0f512e6cb89849b6591548928e7b850295672166c5181613480cc5deb6d3
+%global source0_file rtslib-fb-2.2.3.tar.gz
+# oreon url source checksums end
 BuildArch:        noarch
 %if %{with apidocs}
 BuildRequires:    epydoc
@@ -64,6 +68,9 @@ on system restart.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rtslib-fb-2.2.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c33a0f512e6cb89849b6591548928e7b850295672166c5181613480cc5deb6d3" || { echo "oreon: Source0 SHA256 mismatch for rtslib-fb-2.2.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{oname}-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

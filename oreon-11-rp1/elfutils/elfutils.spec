@@ -109,6 +109,10 @@ Patch4: elfutils-0.194-sh_addr-non-zero.patch
 # Recognize SHT_AARCH64_ATTRIBUTES.
 # https://sourceware.org/bugzilla/show_bug.cgi?id=33923
 Patch5: elfutils-0.194-aarch64-Recognize-SHT_AARCH64_ATTRIBUTES.patch
+# oreon url source checksums begin
+%global source0_sha256 09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e
+%global source0_file elfutils-0.194.tar.bz2
+# oreon url source checksums end
 
 %description
 Elfutils is a collection of utilities, including stack (to show
@@ -313,6 +317,9 @@ The ELF/DWARF file searching functions in libdwfl can query
 such servers to download those files on demand.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/elfutils-0.194.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "09e2ff033d39baa8b388a2d7fbc5390bfde99ae3b7c67c7daaf7433fbcf0f01e" || { echo "oreon: Source0 SHA256 mismatch for elfutils-0.194.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 autoreconf -f -v -i

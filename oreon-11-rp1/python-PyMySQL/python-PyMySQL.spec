@@ -6,6 +6,10 @@ Summary:        Pure-Python MySQL client library
 License:        MIT
 URL:            https://pypi.org/project/pymysql/
 Source:         %{pypi_source pymysql}
+# oreon url source checksums begin
+%global source0_sha256 4961d3e165614ae65014e361811a724e2044ad3ea3739de9903ae7c21f539f03
+%global source0_file pymysql-1.1.2.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -30,6 +34,9 @@ and Jython.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pymysql-1.1.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4961d3e165614ae65014e361811a724e2044ad3ea3739de9903ae7c21f539f03" || { echo "oreon: Source0 SHA256 mismatch for pymysql-1.1.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n pymysql-%{version}
 
 

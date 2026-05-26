@@ -12,11 +12,15 @@ Summary:        Input device library
 License:        MIT
 URL:            http://www.freedesktop.org/wiki/Software/libinput/
 %if 0%{?gitdate}
-Source0:        %{name}-%{gitdate}.tar.xz
+Source0:        https://gitlab.freedesktop.org/libinput/libinput/-/archive/1.31.0/libinput-1.31.0.tar.bz2
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
 Source0:        https://gitlab.freedesktop.org/libinput/libinput/-/archive/%{version}/libinput-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 af04645cef8ec4ef9b571664828086ea5a610c6f3e872880055c7fe2c9377de5
+%global source0_file libinput-1.31.0.tar.bz2
+# oreon url source checksums end
 %endif
 
 BuildRequires:  git-core
@@ -66,6 +70,9 @@ The %{name}-test package contains the libinput test suite. It is not
 intended to be run by users.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libinput-1.31.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "af04645cef8ec4ef9b571664828086ea5a610c6f3e872880055c7fe2c9377de5" || { echo "oreon: Source0 SHA256 mismatch for libinput-1.31.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git -p1
 # Replace whatever the source uses with the approved call
 %py3_shebang_fix $(git grep -l  '#!/usr/bin/.*python3')

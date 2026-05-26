@@ -41,6 +41,10 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/qos-ch/slf4j/archive/v_%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
+# oreon url source checksums begin
+%global source0_sha256 a2deaffa191c81abbf830d4060eb84129f31b9b3b945b7791344e8875b595286
+%global source0_file v_1.7.36.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -110,6 +114,9 @@ Summary:        SLF4J Source JARs
 SLF4J Source JARs.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v_1.7.36.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a2deaffa191c81abbf830d4060eb84129f31b9b3b945b7791344e8875b595286" || { echo "oreon: Source0 SHA256 mismatch for v_1.7.36.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 find -name '*.jar' -delete
 install -p -m 0644 %{SOURCE1} LICENSE-2.0.txt

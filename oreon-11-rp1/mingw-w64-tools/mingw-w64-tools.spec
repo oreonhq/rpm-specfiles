@@ -23,6 +23,10 @@ URL:            http://mingw-w64.sourceforge.net/
 Source0:        http://sourceforge.net/code-snapshots/git/m/mi/mingw-w64/mingw-w64.git/mingw-w64-mingw-w64-%{snapshot_rev}.zip
 %else
 Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf
+%global source0_file mingw-w64-v13.0.0.tar.bz2
+# oreon url source checksums end
 %endif
 
 BuildRequires:  make
@@ -38,6 +42,9 @@ It contains gendef, genidl and mingw-w64-widl
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mingw-w64-v13.0.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf" || { echo "oreon: Source0 SHA256 mismatch for mingw-w64-v13.0.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{?snapshot_date}
 rm -rf mingw-w64-v%{version}
 mkdir mingw-w64-v%{version}

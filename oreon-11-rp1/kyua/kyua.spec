@@ -9,10 +9,14 @@ Summary:        Testing framework for infrastructure software
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://github.com/jmmv/kyua
-Source0:        %{url}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/jmmv/kyua/releases/download/kyua-0.13/kyua-0.13.tar.gz
 # https://github.com/freebsd/kyua/pull/238
 # Fix test failure wrt empty test result on container
 Patch0:         kyua-pr238-add-more-info-for-failed-tests.patch
+# oreon url source checksums begin
+%global source0_sha256 db6e5d341d5cf7e49e50aa361243e19087a00ba33742b0855d2685c0b8e721d6
+%global source0_file kyua-0.13.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc-c++
@@ -54,6 +58,9 @@ Obsoletes:      kyua-testers-tests < 0.10
 %{summary}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kyua-0.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "db6e5d341d5cf7e49e50aa361243e19087a00ba33742b0855d2685c0b8e721d6" || { echo "oreon: Source0 SHA256 mismatch for kyua-0.13.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 # Disable problematic test

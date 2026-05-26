@@ -60,6 +60,10 @@ Source2:       libguestfs.keyring
 
 # Maintainer script which helps with handling patches.
 Source3:       copy-patches.sh
+# oreon url source checksums begin
+%global source0_sha256 206d792a8cf4ee1e99dc0a02e03a4576b77b9693d08154436f8d474f8dc5eccb
+%global source0_file virt-v2v-2.11.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires: autoconf, automake, libtool
 BuildRequires: make
@@ -222,6 +226,9 @@ for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/virt-v2v-2.11.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "206d792a8cf4ee1e99dc0a02e03a4576b77b9693d08154436f8d474f8dc5eccb" || { echo "oreon: Source0 SHA256 mismatch for virt-v2v-2.11.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if 0%{verify_tarball_signature}
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

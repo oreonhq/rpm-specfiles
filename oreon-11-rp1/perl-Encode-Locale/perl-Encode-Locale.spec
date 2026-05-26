@@ -5,6 +5,10 @@ Summary:        Determine the locale encoding
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Encode-Locale
 Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/Encode-Locale-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 176fa02771f542a4efb1dbc2a4c928e8f4391bf4078473bd6040d8f11adb0ec1
+%global source0_file Encode-Locale-1.05.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -53,6 +57,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Encode-Locale-1.05.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "176fa02771f542a4efb1dbc2a4c928e8f4391bf4078473bd6040d8f11adb0ec1" || { echo "oreon: Source0 SHA256 mismatch for Encode-Locale-1.05.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Encode-Locale-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

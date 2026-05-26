@@ -6,6 +6,10 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Set
 Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/DateTime-Set-%{version}.tar.gz
 Patch0:         DateTime-Set-0.32-version.patch
+# oreon url source checksums begin
+%global source0_sha256 94f41c3924aafde4ef7fa6b58e0595d4038d8ac5ffd62ba111b13c5f4dbc0946
+%global source0_file DateTime-Set-0.3900.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  perl-interpreter
@@ -38,6 +42,9 @@ the end of time", or "every Wednesday after 2003-03-05 until the end of
 time", or "every Wednesday between 2003-03-05 and 2004-01-07".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/DateTime-Set-0.3900.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "94f41c3924aafde4ef7fa6b58e0595d4038d8ac5ffd62ba111b13c5f4dbc0946" || { echo "oreon: Source0 SHA256 mismatch for DateTime-Set-0.3900.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n DateTime-Set-%{version}
 # Make perl/rpm version comparisons work the same way
 %patch -P0

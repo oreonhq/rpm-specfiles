@@ -9,7 +9,11 @@ URL:            https://github.com/codehaus-plexus/plexus-classworlds
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        %{url}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-classworlds/archive/plexus-classworlds-2.8.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6c85f80a054e91b4bc59fc6fc7e26f95645699ecef913ec3489a260a8e82324a
+%global source0_file plexus-classworlds-2.8.0.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -31,6 +35,9 @@ represent a 'container' can benefit from the classloading control provided by
 classworlds.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plexus-classworlds-2.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6c85f80a054e91b4bc59fc6fc7e26f95645699ecef913ec3489a260a8e82324a" || { echo "oreon: Source0 SHA256 mismatch for plexus-classworlds-2.8.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 %mvn_file : %{name} plexus/classworlds
 %mvn_alias : classworlds:classworlds

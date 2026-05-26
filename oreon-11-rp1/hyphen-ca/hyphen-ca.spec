@@ -4,6 +4,10 @@ Epoch: 1
 Version: 1.5
 Release: 7%{?dist}
 Source: https://github.com/jaumeortola/hyphen-ca/archive/refs/tags/v1.5.tar.gz#/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a5a2d675946075374cf384e2d44628e6b22110289dd8d291858cbdedc37f1c62
+%global source0_file v1.5.tar.gz
+# oreon url source checksums end
 URL: https://github.com/jaumeortola/hyphen-ca
 License: GPL-3.0-or-later
 BuildArch: noarch
@@ -15,6 +19,9 @@ Supplements: (hyphen and langpacks-ca)
 Catalan hyphenation rules.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a5a2d675946075374cf384e2d44628e6b22110289dd8d291858cbdedc37f1c62" || { echo "oreon: Source0 SHA256 mismatch for v1.5.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

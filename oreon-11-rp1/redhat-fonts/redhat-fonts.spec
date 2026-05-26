@@ -32,13 +32,17 @@ Summary:        Red Hat Typeface fonts
 License:        OFL-1.1-RFN AND CC-BY-SA-4.0
 URL:            https://github.com/RedHatOfficial/%{projname}
 
-Source0:        %{url}/archive/%{version}/%{projname}-%{version}.tar.gz
+Source0:        https://github.com/RedHatOfficial/RedHatFont/archive/4.1.0/RedHatFont-4.1.0.tar.gz
 Source1:        %{fontconf}-display-fontconfig.conf
 Source2:        %{fontconf}-text-fontconfig.conf
 Source3:        %{fontconf}-mono-fontconfig.conf
 Source4:        %{fontconf}-display-vf-fontconfig.conf
 Source5:        %{fontconf}-text-vf-fontconfig.conf
 Source6:        %{fontconf}-mono-vf-fontconfig.conf
+# oreon url source checksums begin
+%global source0_sha256 c620b2b84df0f7bf8c176f74881b7614a835ed18189d28bb1a9945c74488e5b5
+%global source0_file RedHatFont-4.1.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  %{_bindir}/appstream-util
@@ -99,6 +103,9 @@ Provides:	font(redhatmonovf)
 This package provides the variable font version of the Monospace fonts variant.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/RedHatFont-4.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c620b2b84df0f7bf8c176f74881b7614a835ed18189d28bb1a9945c74488e5b5" || { echo "oreon: Source0 SHA256 mismatch for RedHatFont-4.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{projname}-%{version} -p1
 
 

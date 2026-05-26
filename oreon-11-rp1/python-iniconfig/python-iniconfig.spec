@@ -16,7 +16,11 @@ BuildRequires:      python3-devel
 BuildRequires:      python3-pytest
 %endif
 
-Source:             %{url}/archive/v%{version}/iniconfig-%{version}.tar.gz
+Source:        http://github.com/pytest-dev/iniconfig/archive/v2.3.0/iniconfig-2.3.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 b485a7f6c060b2e758b6e58fd1bf7349a6f99954110ca61ceb59af25cf4ff458
+%global source0_file iniconfig-2.3.0.tar.gz
+# oreon url source checksums end
 
 %global _description %{expand:
 iniconfig is a small and simple INI-file parser module
@@ -38,6 +42,9 @@ Summary:            %{summary}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/iniconfig-2.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b485a7f6c060b2e758b6e58fd1bf7349a6f99954110ca61ceb59af25cf4ff458" || { echo "oreon: Source0 SHA256 mismatch for iniconfig-2.3.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n iniconfig-%{version}
 
 

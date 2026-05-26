@@ -6,6 +6,10 @@ Summary:        A Perl module for inspecting Perl's symbol table
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Url:            https://metacpan.org/release/Devel-Symdump
 Source0:        https://cpan.metacpan.org/authors/id/A/AN/ANDK/Devel-Symdump-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 826f81a107f5592a2516766ed43beb47e10cc83edc9ea48090b02a36040776c0
+%global source0_file Devel-Symdump-2.18.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -54,6 +58,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Devel-Symdump-2.18.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "826f81a107f5592a2516766ed43beb47e10cc83edc9ea48090b02a36040776c0" || { echo "oreon: Source0 SHA256 mismatch for Devel-Symdump-2.18.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Devel-Symdump-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

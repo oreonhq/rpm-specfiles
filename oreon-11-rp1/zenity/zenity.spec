@@ -6,6 +6,10 @@ Summary:       Display dialog boxes from shell scripts
 License:       LGPL-2.1-or-later
 URL:           https://wiki.gnome.org/Projects/Zenity
 Source:        https://download.gnome.org/sources/%{name}/4.2/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 5a9fd8d8316f90cb2e1a5a8f0d411eb9fcaf85957a8229ea3e803e81004a1ebd
+%global source0_file zenity-4.2.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires: pkgconfig(libadwaita-1) >= 1.2
 BuildRequires: /usr/bin/help2man
@@ -27,6 +31,9 @@ shell scripts. It is similar to gdialog, but is intended to be saner. It comes
 from the same family as dialog, Xdialog, and cdialog.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/zenity-4.2.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5a9fd8d8316f90cb2e1a5a8f0d411eb9fcaf85957a8229ea3e803e81004a1ebd" || { echo "oreon: Source0 SHA256 mismatch for zenity-4.2.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

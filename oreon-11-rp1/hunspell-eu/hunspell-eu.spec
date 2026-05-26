@@ -9,6 +9,10 @@ Summary: Basque hunspell dictionaries
 Version: 5.1
 Release: 15%{?dist}
 Source0: http://xuxen.eus/static/hunspell/xuxen_%{version}_hunspell.zip
+# oreon url source checksums begin
+%global source0_sha256 12934d021558bf001c0bcaf0a1fc6f08ce6c7e8b7d48a8cb0bfe31763f0f5988
+%global source0_file xuxen_5.1_hunspell.zip
+# oreon url source checksums end
 URL: http://xuxen.eus
 License: LGPL-3.0-or-later
 BuildArch: noarch
@@ -20,6 +24,9 @@ Supplements: (hunspell and langpacks-eu)
 Basque hunspell dictionaries.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xuxen_5.1_hunspell.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "12934d021558bf001c0bcaf0a1fc6f08ce6c7e8b7d48a8cb0bfe31763f0f5988" || { echo "oreon: Source0 SHA256 mismatch for xuxen_5.1_hunspell.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -c -n hunspell-eu
 
 %build

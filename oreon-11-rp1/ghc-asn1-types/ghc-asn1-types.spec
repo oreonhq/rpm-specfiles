@@ -14,6 +14,10 @@ License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/asn1-types
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 78ee92a251379298ca820fa53edbf4b33c539b9fcd887c86f520c30e3b4e21a8
+%global source0_file asn1-types-0.3.4.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -71,6 +75,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/asn1-types-0.3.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "78ee92a251379298ca820fa53edbf4b33c539b9fcd887c86f520c30e3b4e21a8" || { echo "oreon: Source0 SHA256 mismatch for asn1-types-0.3.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

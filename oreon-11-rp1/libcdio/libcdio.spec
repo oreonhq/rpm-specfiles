@@ -9,6 +9,10 @@ URL: http://www.gnu.org/software/libcdio/
 Source0: https://github.com/libcdio/libcdio/releases/download/%{version}/libcdio-%{version}.tar.bz2
 Source2: libcdio-no_date_footer.hml
 Source3: cdio_config.h
+# oreon url source checksums begin
+%global source0_sha256 53e83d284667535a767fd2d31edad1a6701591960459df373a10f1f21e80a7ed
+%global source0_file libcdio-2.3.0.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: gcc gcc-c++
 BuildRequires: pkgconfig doxygen
@@ -34,6 +38,9 @@ This package contains header files and libraries for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libcdio-2.3.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "53e83d284667535a767fd2d31edad1a6701591960459df373a10f1f21e80a7ed" || { echo "oreon: Source0 SHA256 mismatch for libcdio-2.3.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 iconv -f ISO88591 -t utf-8 -o THANKS.utf8 THANKS && mv THANKS.utf8 THANKS

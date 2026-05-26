@@ -24,12 +24,16 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source:         https://github.com/fedora-java/javapackages-bootstrap/releases/download/%{version}/javapackages-bootstrap-%{version}.tar.zst
 # License breakdown
-Source:         javapackages-bootstrap-PACKAGE-LICENSING
+Source:        https://github.com/fedora-java/javapackages-bootstrap/releases/download/%{version}/javapackages-bootstrap-%{version}.tar.zst
 # 132 *.tar.zst component archives ship in Fedora SRPM (not on upstream GitHub release).
 # %%prep unpacks them from Source200; or run fetch-jpb-vendor-tarballs.sh for local copies.
 Source200:      https://kojipkgs.fedoraproject.org/pub/fedora/linux/releases/44/Everything/source/tree/Packages/j/javapackages-bootstrap-%{version}-2.fc44.src.rpm
 
 Patch:          0001-Switch-Dola-to-Lua-5.5.patch
+# oreon url source checksums begin
+%global source0_sha256 b8484d46d5161232315a359d94b21e834d4f65ac95ac1c7bbf55f096719bd0e6
+%global source0_file javapackages-bootstrap-1.27.0.tar.zst
+# oreon url source checksums end
 
 BuildRequires:  byaccj
 BuildRequires:  java-25-openjdk-devel
@@ -59,6 +63,9 @@ example, JPB contains embedded version of XMvn, removing dependency of JPT on
 XMvn, allowing JPT to be used before one builds XMvn package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/javapackages-bootstrap-1.27.0.tar.zst; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b8484d46d5161232315a359d94b21e834d4f65ac95ac1c7bbf55f096719bd0e6" || { echo "oreon: Source0 SHA256 mismatch for javapackages-bootstrap-1.27.0.tar.zst" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 mkdir -p archive
 if ls archive/*.tar.zst >/dev/null 2>&1; then

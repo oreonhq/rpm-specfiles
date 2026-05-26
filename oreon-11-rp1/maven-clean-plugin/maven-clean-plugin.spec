@@ -8,6 +8,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
+# oreon url source checksums begin
+%global source0_sha256 fbdbe1121da3397c6a50892346c3239c8b1c3c78df2fe3e57a4d1609782cbab6
+%global source0_file maven-clean-plugin-3.3.2-source-release.zip
+# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
@@ -30,6 +34,9 @@ This package provides %{summary}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-clean-plugin-3.3.2-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fbdbe1121da3397c6a50892346c3239c8b1c3c78df2fe3e57a4d1609782cbab6" || { echo "oreon: Source0 SHA256 mismatch for maven-clean-plugin-3.3.2-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 # junit dependency was removed in Plexus 1.6

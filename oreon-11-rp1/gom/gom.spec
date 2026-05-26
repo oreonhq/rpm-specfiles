@@ -7,6 +7,10 @@ Summary:        GObject to SQLite object mapper library
 License:        LGPL-2.1-or-later AND GFDL-1.1-or-later
 URL:            https://wiki.gnome.org/Projects/Gom
 Source0:        https://download.gnome.org/sources/gom/0.5/gom-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 4d7a5e268698c8e7e40603e36e9e3a2b76133931ce1b637c1136301491b54cc3
+%global source0_file gom-0.5.6.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gobject-introspection-devel
 BuildRequires:  meson
@@ -32,6 +36,9 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gom-0.5.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4d7a5e268698c8e7e40603e36e9e3a2b76133931ce1b637c1136301491b54cc3" || { echo "oreon: Source0 SHA256 mismatch for gom-0.5.6.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

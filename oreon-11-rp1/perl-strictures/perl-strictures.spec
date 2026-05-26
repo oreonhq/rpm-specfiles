@@ -12,6 +12,10 @@ Summary:        Turn on strict and make most warnings fatal
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/strictures
 Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/strictures-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 09d57974a6d1b2380c802870fed471108f51170da81458e2751859f2714f8d57
+%global source0_file strictures-2.000006.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -51,6 +55,9 @@ Requires:       perl(Carp)
 This package turns on strict and makes most warnings fatal.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/strictures-2.000006.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "09d57974a6d1b2380c802870fed471108f51170da81458e2751859f2714f8d57" || { echo "oreon: Source0 SHA256 mismatch for strictures-2.000006.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n strictures-%{version}
 
 %build

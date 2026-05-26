@@ -7,6 +7,10 @@ License:        Apache-2.0
 
 URL:            http://weld.cdi-spec.org
 Source0:        https://github.com/weld/parent/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e013b6525b10994fb9be6c3559d5b7e32c7d12df7bfb38d03c5cda729a1836e9
+%global source0_file weld-parent-46.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -18,6 +22,9 @@ BuildRequires:  mvn(org.codehaus.mojo:build-helper-maven-plugin)
 Parent POM for Weld
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/weld-parent-46.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e013b6525b10994fb9be6c3559d5b7e32c7d12df7bfb38d03c5cda729a1836e9" || { echo "oreon: Source0 SHA256 mismatch for weld-parent-46.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n parent-%{version}
 
 %pom_remove_plugin :buildnumber-maven-plugin

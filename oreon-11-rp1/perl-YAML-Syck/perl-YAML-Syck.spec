@@ -14,7 +14,12 @@ Summary:        Fast, lightweight YAML loader and dumper
 # Note that libsyck COPYING file describes itself as BSD but it's actually MIT
 License:        GPL-2.0-or-later AND MIT
 URL:            https://metacpan.org/release/YAML-Syck
-Source0:        https://cpan.metacpan.org/modules/by-module/YAML/YAML-Syck-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/YAML-Syck-1.45.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 f2de1afb4f0c56c36e6d5260aa0bd2c8f18e4d85009dcf5842204ea2a7fbc3df
+%global source0_file YAML-Syck-1.45.tar.gz
+# oreon url source checksums end
+
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -70,6 +75,9 @@ library. It exports the Dump and Load functions for converting Perl data
 structures to YAML strings, and the other way around.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/YAML-Syck-1.45.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f2de1afb4f0c56c36e6d5260aa0bd2c8f18e4d85009dcf5842204ea2a7fbc3df" || { echo "oreon: Source0 SHA256 mismatch for YAML-Syck-1.45.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n YAML-Syck-%{version}
 
 %build

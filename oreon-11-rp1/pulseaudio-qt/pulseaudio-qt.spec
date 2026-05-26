@@ -6,6 +6,10 @@ Release: 1%{?dist}
 License: CC0-1.0 AND LGPL-2.1-only AND LGPL-3.0-only
 URL:     https://invent.kde.org/libraries/pulseaudio-qt
 Source:  https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 79619c55b94808aa7d307fb234ad39a1096d088f21f806be0e788be79a76b3c9
+%global source0_file pulseaudio-qt-1.8.1.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros
@@ -38,6 +42,9 @@ Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pulseaudio-qt-1.8.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "79619c55b94808aa7d307fb234ad39a1096d088f21f806be0e788be79a76b3c9" || { echo "oreon: Source0 SHA256 mismatch for pulseaudio-qt-1.8.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -13,6 +13,10 @@ Source0:        https://download.gnome.org/sources/%{name}/0.56/%{name}-%{versio
 # warn instead of erroring out on unknown XML
 # needed to build libadwaita on c10s and jhbuild but somehow not on f42
 Patch0:         https://gitlab.gnome.org/GNOME/vala/-/merge_requests/423.patch#/%{name}-warn-on-unknown-xml.patch
+# oreon url source checksums begin
+%global source0_sha256 f2affe7d40ab63db8e7b9ecc3f6bdc9c2fc7e3134c84ff2d795f482fe926a382
+%global source0_file vala-0.56.18.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  bison
 BuildRequires:  flex
@@ -122,6 +126,9 @@ developing applications that use valadoc.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/vala-0.56.18.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f2affe7d40ab63db8e7b9ecc3f6bdc9c2fc7e3134c84ff2d795f482fe926a382" || { echo "oreon: Source0 SHA256 mismatch for vala-0.56.18.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

@@ -72,6 +72,10 @@ Source25:       91-zipl.install
 # change the defaults to match Fedora environment
 Patch0:         s390-tools-zipl-invert-script-options.patch
 Patch1:         s390-tools-zipl-blscfg-rpm-nvr-sort.patch
+# oreon url source checksums begin
+%global source0_sha256 640c56c4bcf8ce8f2aa65d6a633c19d58370527a5213e71aa76546c930c6a6fb
+%global source0_file v2.41.0.tar.gz
+# oreon url source checksums end
 
 # upstream fixes/updates
 #Patch100:       s390utils-%%{version}-fedora.patch
@@ -120,6 +124,9 @@ The s390utils packages contain a set of user space utilities that should to
 be used together with the zSeries (s390) Linux kernel and device drivers.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v2.41.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "640c56c4bcf8ce8f2aa65d6a633c19d58370527a5213e71aa76546c930c6a6fb" || { echo "oreon: Source0 SHA256 mismatch for v2.41.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n s390-tools-%{version} -p1
 
 %if 0%{?rhel} || 0%{?oreon}

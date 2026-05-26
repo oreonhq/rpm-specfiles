@@ -40,10 +40,17 @@ http://wenq.org/eindex.cgi?Unicode_Chart_EN
 
 Source0:  http://downloads.sourceforge.net/wqy/wqy-unibit-bdf-%{version}-1.tar.gz
 Patch0:   wqy-unibit-fixes-build.patch
+# oreon url source checksums begin
+%global source0_sha256 93189626cc0a1ae4f432ee0e0bb3c26e80f94b8ee8a6a20e16c55e9dcfd60624
+%global source0_file wqy-unibit-bdf-1.1.0-1.tar.gz
+# oreon url source checksums end
 
 %fontpkg
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/wqy-unibit-bdf-1.1.0-1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "93189626cc0a1ae4f432ee0e0bb3c26e80f94b8ee8a6a20e16c55e9dcfd60624" || { echo "oreon: Source0 SHA256 mismatch for wqy-unibit-bdf-1.1.0-1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{fontname}
 
 

@@ -12,6 +12,10 @@ Summary: GNOME Structured File library
 License: LGPL-2.1-only
 URL:     https://gitlab.gnome.org/GNOME/libgsf/
 Source:  https://download.gnome.org/sources/%{name}/1.14/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 9d21d30df1d12feaf03e181afd6067f65e3048ab69cb6ad174a3c5b72b92d297
+%global source0_file libgsf-1.14.56.tar.xz
+# oreon url source checksums end
 
 BuildRequires: bzip2-devel
 BuildRequires: chrpath
@@ -72,6 +76,9 @@ A library for reading and writing structured files (e.g. MS OLE and Zip)
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libgsf-1.14.56.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9d21d30df1d12feaf03e181afd6067f65e3048ab69cb6ad174a3c5b72b92d297" || { echo "oreon: Source0 SHA256 mismatch for libgsf-1.14.56.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

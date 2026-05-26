@@ -29,6 +29,10 @@ Source:         https://github.com/abseil/abseil-cpp/archive/%{version}/%{name}-
 # Work around failure to compile with GCC 16,
 # https://github.com/abseil/abseil-cpp/issues/1992.
 Patch:          0001-Omit-the-bind-block-in-test-Test-Mutex-FunctorCondit.patch
+# oreon url source checksums begin
+%global source0_sha256 4314e2a7cbac89cac25a2f2322870f343d81579756ceff7f431803c2c9090195
+%global source0_file abseil-cpp-20260107.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 # The default make backend would work just as well; ninja is observably faster
@@ -79,6 +83,9 @@ Provides:       bundled(cctz)
 Development headers for %{name}
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/abseil-cpp-20260107.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4314e2a7cbac89cac25a2f2322870f343d81579756ceff7f431803c2c9090195" || { echo "oreon: Source0 SHA256 mismatch for abseil-cpp-20260107.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -S gendiff
 
 %build

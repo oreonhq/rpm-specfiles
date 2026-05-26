@@ -7,7 +7,11 @@ Summary:        Lightweight implementation of DNF in C
 
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/microdnf
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/rpm-software-management/microdnf/archive/3.10.1/microdnf-3.10.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 0f48bb1e255bfa3379d9ab06cc675454c47480fbb2f2e59897faa2b43b631fff
+%global source0_file microdnf-3.10.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson >= 0.36.0
@@ -34,6 +38,9 @@ minimal environment possible so you can build up to exactly what you need.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/microdnf-3.10.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f48bb1e255bfa3379d9ab06cc675454c47480fbb2f2e59897faa2b43b631fff" || { echo "oreon: Source0 SHA256 mismatch for microdnf-3.10.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

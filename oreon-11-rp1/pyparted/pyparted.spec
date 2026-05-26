@@ -10,6 +10,10 @@ Source0:       https://github.com/dcantrell/pyparted/releases/download/v%{versio
 Source1:       https://github.com/dcantrell/pyparted/releases/download/v%{version}/%{name}-%{version}.tar.gz.asc
 Source2:       keyring.gpg
 Source3:       trustdb.gpg
+# oreon url source checksums begin
+%global source0_sha256 8fc6758abd16c7b0429fd4c07b6a7672678d493bfe1811040cd77d45e04964ea
+%global source0_file pyparted-3.13.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc
@@ -32,6 +36,9 @@ Python module for the parted library.  It is used for manipulating
 partition tables. This package provides Python 3 bindings for parted.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pyparted-3.13.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8fc6758abd16c7b0429fd4c07b6a7672678d493bfe1811040cd77d45e04964ea" || { echo "oreon: Source0 SHA256 mismatch for pyparted-3.13.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Verify source archive signature
 gpg --no-default-keyring --keyring %{SOURCE2} --trustdb-name %{SOURCE3} --verify %{SOURCE1} %{SOURCE0} || exit 1
 

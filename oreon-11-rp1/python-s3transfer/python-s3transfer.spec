@@ -9,7 +9,11 @@ Summary:        Amazon S3 Transfer Manager
 
 License:        Apache-2.0
 URL:            https://pypi.org/project/s3transfer/
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/s/s3transfer/s3transfer-0.16.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8e990f13268025792229cd52fa10cb7163744bf56e719e0b9cb925ab79abf920
+%global source0_file s3transfer-0.16.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -29,6 +33,9 @@ BuildRequires:  python3dist(pytest)
 Python 3 version.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/s3transfer-0.16.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8e990f13268025792229cd52fa10cb7163744bf56e719e0b9cb925ab79abf920" || { echo "oreon: Source0 SHA256 mismatch for s3transfer-0.16.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{srcname}-%{version} -p1
 
 %generate_buildrequires

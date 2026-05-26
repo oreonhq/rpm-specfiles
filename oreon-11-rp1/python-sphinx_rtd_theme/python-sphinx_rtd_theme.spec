@@ -11,7 +11,7 @@ Summary:        Sphinx theme for readthedocs.org
 # SPDX
 License:        MIT
 URL:            https://github.com/readthedocs/%{srcname}/
-Source:         %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
+Source:        https://docs.readthedocs.io/en/latest/objects.inv
 # The koji builders do not have network access, and this file is not included
 # in any Fedora package, so we retrieve it for offline use.
 Source:         https://docs.readthedocs.io/en/latest/objects.inv

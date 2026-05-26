@@ -5,6 +5,10 @@ Summary:        Compatibility and migration support between KDE Frameworks 5 and
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/plasma5support
 Source0:        https://download.kde.org/stable/plasma/%{version}/plasma5support-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 7f764826ef8967990eb42da3636bbfdd29c85e3928eeb917b8d8fed4b77f730c
+%global source0_file plasma5support-6.6.3.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -63,6 +67,9 @@ Headers and CMake files for libplasma5support.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plasma5support-6.6.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7f764826ef8967990eb42da3636bbfdd29c85e3928eeb917b8d8fed4b77f730c" || { echo "oreon: Source0 SHA256 mismatch for plasma5support-6.6.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n plasma5support-%{version} -p1
 
 

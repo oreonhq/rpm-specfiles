@@ -47,7 +47,11 @@ Summary:    PostScript utilities
 # pre-inst-env.in:          GPLv2+
 License:    GPL-3.0-or-later
 URL:        https://github.com/rrthomas/%{name}
-Source:     %{url}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/rrthomas/psutils/releases/download/v2.10/psutils-2.10.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6f8339fd5322df5c782bfb355d9f89e513353220fca0700a5a28775404d7e98b
+%global source0_file psutils-2.10.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  autoconf
 BuildRequires:  automake >= 1.11
@@ -112,6 +116,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/psutils-2.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6f8339fd5322df5c782bfb355d9f89e513353220fca0700a5a28775404d7e98b" || { echo "oreon: Source0 SHA256 mismatch for psutils-2.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %if %{with psutils_enables_unbundling_gnulib}
 gnulib-tool --import --no-changelog relocatable-perl

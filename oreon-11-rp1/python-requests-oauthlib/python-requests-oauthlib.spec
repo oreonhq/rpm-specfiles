@@ -14,6 +14,10 @@ URL:                http://pypi.python.org/pypi/requests-oauthlib
 Source0:            https://github.com/requests/requests-oauthlib/archive/v%{version}/requests-oauthlib-%{version}.tar.gz
 # Updated tests to support oauthlib 3.3.0 wrt expires_at
 Patch0:             https://github.com/requests/requests-oauthlib/commit/b1dd93c5d024500b6236dea06734d6e6482c3565.patch
+# oreon url source checksums begin
+%global source0_sha256 ef958f83da020629259afd41f793e6d10ef32139ce849ada8a9c3b9d3ef2e56b
+%global source0_file requests-oauthlib-2.0.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:          noarch
 
@@ -36,6 +40,9 @@ BuildRequires:      python3-selenium, selenium-manager
 This project provides first-class OAuth library support for python-request.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/requests-oauthlib-2.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ef958f83da020629259afd41f793e6d10ef32139ce849ada8a9c3b9d3ef2e56b" || { echo "oreon: Source0 SHA256 mismatch for requests-oauthlib-2.0.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{distname}-%{version} -p1
 # Requires python-selenium fix from unmerged https://src.fedoraproject.org/rpms/python-selenium/pull-request/9
 # Furthermore then throws error on insisting on only chrome-146 but fedora has 148

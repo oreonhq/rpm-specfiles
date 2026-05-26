@@ -31,6 +31,10 @@ Patch7: freeradius-ease-openssl-version-check.patch
 Patch8: freeradius-configure-c99.patch
 Patch9: freeradius-openssl-no-engine.patch
 Patch10: freeradius-no-sqlippool-tool.patch
+# oreon url source checksums begin
+%global source0_sha256 2c6483baeba65f939734473fafa31c4f727e8e139dd884563121412b6aba681b
+%global source0_file freeradius-server-3.2.8.tar.bz2
+# oreon url source checksums end
 
 %global docdir %{?_pkgdocdir}%{!?_pkgdocdir:%{_docdir}/%{name}-%{version}}
 
@@ -215,6 +219,9 @@ BuildRequires: librdkafka-devel
 This plugin provides Kafka producer support for the FreeRADIUS server project.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/freeradius-server-3.2.8.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c6483baeba65f939734473fafa31c4f727e8e139dd884563121412b6aba681b" || { echo "oreon: Source0 SHA256 mismatch for freeradius-server-3.2.8.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{dist_base}
 # Note: We explicitly do not make patch backup files because 'make install'
 # mistakenly includes the backup files, especially problematic for raddb config files.

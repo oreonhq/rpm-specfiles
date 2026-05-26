@@ -18,6 +18,10 @@ Patch:          0004-Make-mpich.module-useful.patch
 Patch:          mpich-configure-max_align_t.patch
 Patch:          mpich-aclocal_cc-implicit-int.patch
 Patch:          mpich-json-configure-__thread.patch
+# oreon url source checksums begin
+%global source0_sha256 883f5bb3aeabf627cb8492ca02a03b191d09836bbe0f599d8508351179781d41
+%global source0_file mpich-4.2.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  autoconf
@@ -126,6 +130,9 @@ Requires:       python(abi) = %{python3_version}
 mpich support for Python 3.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mpich-4.2.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "883f5bb3aeabf627cb8492ca02a03b191d09836bbe0f599d8508351179781d41" || { echo "oreon: Source0 SHA256 mismatch for mpich-4.2.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

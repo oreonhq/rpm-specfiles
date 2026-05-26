@@ -10,7 +10,11 @@ License: GPL-3.0-or-later
 Summary: FUSE overlay+shiftfs implementation for rootless containers
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
-Source0: %{url}/archive/v%{version}.tar.gz
+Source0:        https://github.com/containers/fuse-overlayfs/archive/v1.16.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 45968517603389ead067222d234bc8d8ed33e4b4f8ba16216bdd3e6aedcccea9
+%global source0_file v1.16.tar.gz
+# oreon url source checksums end
 BuildRequires: autoconf
 BuildRequires: automake
 Requires: fuse3
@@ -37,6 +41,9 @@ building other packages which use import path with
 %{import_path} prefix.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v1.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "45968517603389ead067222d234bc8d8ed33e4b4f8ba16216bdd3e6aedcccea9" || { echo "oreon: Source0 SHA256 mismatch for v1.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -Sgit %{name}-%{version}
 
 %build

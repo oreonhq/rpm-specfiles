@@ -16,6 +16,10 @@ License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/unordered-containers
 # Begin cabal-rpm sources:
 Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 708a60513d6da61e09b60b9a486106af703a889b5b43472a27c3b60bf35246ab
+%global source0_file unordered-containers-0.2.20.1.tar.gz
+# oreon url source checksums end
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:
@@ -86,6 +90,9 @@ This package provides the Haskell %{pkg_name} profiling library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/unordered-containers-0.2.20.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "708a60513d6da61e09b60b9a486106af703a889b5b43472a27c3b60bf35246ab" || { echo "oreon: Source0 SHA256 mismatch for unordered-containers-0.2.20.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Begin cabal-rpm setup:
 %setup -q -n %{pkgver}
 # End cabal-rpm setup

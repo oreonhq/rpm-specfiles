@@ -16,6 +16,10 @@ Summary:        Determine file type and open application
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-MimeInfo
 Source0:        https://cpan.metacpan.org/authors/id/M/MI/MICHIELB/File-MimeInfo-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 a90bff48cacc03f44e8e62f27d4db7385c5f9c7374f3b97b0b5cb5c2061790b8
+%global source0_file File-MimeInfo-0.36.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -92,6 +96,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/File-MimeInfo-0.36.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a90bff48cacc03f44e8e62f27d4db7385c5f9c7374f3b97b0b5cb5c2061790b8" || { echo "oreon: Source0 SHA256 mismatch for File-MimeInfo-0.36.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n File-MimeInfo-%{version}
 # Remove test, which tests tool app in different place.
 rm -f t/11mimeinfo.t

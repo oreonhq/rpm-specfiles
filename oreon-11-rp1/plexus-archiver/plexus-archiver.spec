@@ -13,6 +13,10 @@ Source0:        https://github.com/codehaus-plexus/plexus-archiver/archive/plexu
 
 Patch:          0001-Remove-support-for-snappy.patch
 Patch:          0002-Remove-support-for-zstd.patch
+# oreon url source checksums begin
+%global source0_sha256 8b9611281dfb4e0fae306cbc46ef50a6eac104160d15e335eeec53e5a5567f3d
+%global source0_file plexus-archiver-4.10.0.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -47,6 +51,9 @@ velocity, etc. Plexus also includes an application server which
 is like a J2EE application server, without all the baggage.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plexus-archiver-4.10.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b9611281dfb4e0fae306cbc46ef50a6eac104160d15e335eeec53e5a5567f3d" || { echo "oreon: Source0 SHA256 mismatch for plexus-archiver-4.10.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -C
 
 %mvn_file :%{name} plexus/archiver

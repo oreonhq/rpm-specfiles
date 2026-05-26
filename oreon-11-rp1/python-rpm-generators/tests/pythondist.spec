@@ -3,7 +3,7 @@ Version:        4.3.0
 Release:        0
 Summary:        ...
 License:        ZPLv2.1
-Source0:        %{pypi_source zope.component}
+Source0:        https://files.pythonhosted.org/packages/source/z/zope.component/zope.component-4.3.0.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools

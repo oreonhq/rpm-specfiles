@@ -9,6 +9,10 @@ Release:        %autorelease
 License:        Unlicense AND MIT
 URL:            https://github.com/eliben/pyelftools
 Source0:        https://github.com/eliben/pyelftools/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 82d0399bce74d162fba75b3568ad47bf48ed2c5e028b72026bdc2f678903de7d
+%global source0_file pyelftools-0.32.tar.gz
+# oreon url source checksums end
 %global _description \
 Pure-Python library for parsing and analyzing ELF files\
 and DWARF debugging information.
@@ -25,6 +29,9 @@ BuildArch:      noarch
 %description -n python3-%{name} %_description
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pyelftools-0.32.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "82d0399bce74d162fba75b3568ad47bf48ed2c5e028b72026bdc2f678903de7d" || { echo "oreon: Source0 SHA256 mismatch for pyelftools-0.32.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 %ifnarch x86_64
 rm test/external_tools/llvm-dwarfdump

@@ -22,6 +22,10 @@ Patch1: pinentry-1.1.1-coverity.patch
 
 # borrowed from opensuse
 Source10: pinentry-wrapper
+# oreon url source checksums begin
+%global source0_sha256 8e986ed88561b4da6e9efe0c54fa4ca8923035c99264df0b0464497c5fb94e9e
+%global source0_file pinentry-1.3.2.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: autoconf automake gettext-devel
 BuildRequires: make
@@ -109,6 +113,9 @@ http://www.gnupg.org/aegypten/ for details.
 This package contains the tty version of the PIN entry dialog.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pinentry-1.3.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8e986ed88561b4da6e9efe0c54fa4ca8923035c99264df0b0464497c5fb94e9e" || { echo "oreon: Source0 SHA256 mismatch for pinentry-1.3.2.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

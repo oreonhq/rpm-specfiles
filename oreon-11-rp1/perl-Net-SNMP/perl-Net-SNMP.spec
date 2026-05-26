@@ -11,6 +11,10 @@ Patch1:         Net-SNMP-v6.0.1-Simple_rewrite_to_Digest-HMAC-helpers.patch
 Patch2:         Net-SNMP-v6.0.1-Split_usm.t_to_two_parts.patch
 Patch3:         Net-SNMP-v6.0.1-Add_tests_for_another_usm_scenarios.patch
 Patch4:         Net-SNMP-v6.0.1-Rewrite_from_Digest-SHA1-to-Digest-SHA.patch
+# oreon url source checksums begin
+%global source0_sha256 14c37bc1cbb3f3cdc7d6c13e0f27a859f14cdcfd5ea54a0467a88bc259b0b741
+%global source0_file Net-SNMP-v6.0.1.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  coreutils
@@ -74,6 +78,9 @@ with "%{_libexecdir}/%{name}/test".
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Net-SNMP-v6.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "14c37bc1cbb3f3cdc7d6c13e0f27a859f14cdcfd5ea54a0467a88bc259b0b741" || { echo "oreon: Source0 SHA256 mismatch for Net-SNMP-v6.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Net-SNMP-v%{version}
 %patch -P0 -p1
 %patch -P1 -p1

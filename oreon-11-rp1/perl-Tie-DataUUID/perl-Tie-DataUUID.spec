@@ -5,6 +5,10 @@ Summary:        Tie interface to Data::UUID
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tie-DataUUID
 Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARKF/Tie-DataUUID-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 670201ab9076b200856e0e17cf8a8fe3be4c1a2049d7e469b386465d5852170b
+%global source0_file Tie-DataUUID-1.02.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -45,6 +49,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Tie-DataUUID-1.02.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "670201ab9076b200856e0e17cf8a8fe3be4c1a2049d7e469b386465d5852170b" || { echo "oreon: Source0 SHA256 mismatch for Tie-DataUUID-1.02.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Tie-DataUUID-%{version}
 # Remove bundles modules
 rm -rf inc/*

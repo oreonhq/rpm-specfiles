@@ -21,9 +21,13 @@ BuildRequires:    pkgconfig(systemd)
 BuildRequires:    dbus-devel >= 1.2
 BuildRequires:    libcap-devel
 BuildRequires:    polkit-devel
-Source0:          %{forgesource}
+Source0:        https://gitlab.freedesktop.org/pipewire/rtkit/-/archive/v0.14/rtkit-v0.14.tar.bz2
 
 Patch:            remove-debug-messages.patch
+# oreon url source checksums begin
+%global source0_sha256 bd6c1a236e479c59658b1e7be072e5990ad97439a2ecac433b0edfeb2531b52c
+%global source0_file rtkit-v0.14.tar.bz2
+# oreon url source checksums end
 
 %description
 RealtimeKit is a D-Bus system service that changes the
@@ -33,6 +37,9 @@ mechanism to allow real-time scheduling to be used by normal user
 processes.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rtkit-v0.14.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bd6c1a236e479c59658b1e7be072e5990ad97439a2ecac433b0edfeb2531b52c" || { echo "oreon: Source0 SHA256 mismatch for rtkit-v0.14.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 # GitLab archive unpacks to rtkit-v%{version}, not rtkit-%{version}
 %autosetup -p1 -n rtkit-v%{version}
 

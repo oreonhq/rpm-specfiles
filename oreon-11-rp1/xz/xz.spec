@@ -23,6 +23,10 @@ Source2:	https://tukaani.org/misc/lasse_collin_pubkey.txt
 
 Source100:	colorxzgrep.sh
 Source101:	colorxzgrep.csh
+# oreon url source checksums begin
+%global source0_sha256 ce09c50a5962786b83e5da389c90dd2c15ecd0980a258dd01f70f9e7ce58a8f1
+%global source0_file xz-5.8.2.tar.gz
+# oreon url source checksums end
 
 URL:		https://tukaani.org/%{name}/
 Requires:	%{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
@@ -91,6 +95,9 @@ commands that deal with the older LZMA format.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xz-5.8.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ce09c50a5962786b83e5da389c90dd2c15ecd0980a258dd01f70f9e7ce58a8f1" || { echo "oreon: Source0 SHA256 mismatch for xz-5.8.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 autoreconf -fi

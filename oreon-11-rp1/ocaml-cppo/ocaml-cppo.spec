@@ -11,7 +11,11 @@ Summary:        Equivalent of the C preprocessor for OCaml programs
 License:        BSD-3-Clause
 URL:            https://ocaml-community.github.io/cppo/
 VCS:            git:%{giturl}.git
-Source0:        %{giturl}/archive/v%{version}/cppo-%{version}.tar.gz
+Source0:        https://github.com/ocaml-community/cppo/archive/v1.8.0/cppo-1.8.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6e62a8ee0217c9cc38d5860110eb18eb8d89c05c420353d298e1431fe8bac00f
+%global source0_file cppo-1.8.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  ocaml >= 4.02.3
 BuildRequires:  ocaml-dune
@@ -47,6 +51,9 @@ at build time.  To use it, call ocamlbuild with the argument
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/cppo-1.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6e62a8ee0217c9cc38d5860110eb18eb8d89c05c420353d298e1431fe8bac00f" || { echo "oreon: Source0 SHA256 mismatch for cppo-1.8.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n cppo-%{version}
 
 

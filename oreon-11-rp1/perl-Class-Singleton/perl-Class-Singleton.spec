@@ -4,7 +4,12 @@ Release:        15%{?dist}
 Summary:        Implementation of a "Singleton" class
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Singleton
-Source0:        https://cpan.metacpan.org/modules/by-module/Class/Class-Singleton-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHAY/Class-Singleton-1.6.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 27ba13f0d9512929166bbd8c9ef95d90d630fc80f0c9a1b7458891055e9282a4
+%global source0_file Class-Singleton-1.6.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -31,6 +36,9 @@ Class::Singleton, your module will inherit the Singleton instantiation
 method and can implement whatever specific functionality is required.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Class-Singleton-1.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "27ba13f0d9512929166bbd8c9ef95d90d630fc80f0c9a1b7458891055e9282a4" || { echo "oreon: Source0 SHA256 mismatch for Class-Singleton-1.6.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Class-Singleton-%{version}
 
 %build

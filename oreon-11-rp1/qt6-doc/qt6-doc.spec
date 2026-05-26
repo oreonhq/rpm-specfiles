@@ -14,6 +14,10 @@ Url:     http://qt-project.org/
 Source0: https://src.fedoraproject.org/repo/pkgs/rpms/qt6-doc/qt-doc-opensource-src-%{version}.tar.xz/sha512/%{qt_doc_tarball_sha512}/qt-doc-opensource-src-%{version}.tar.xz
 Source1: generate-qt6-doc.sh
 Source2: qtbase-tell-the-truth-about-private-API.patch
+# oreon url source checksums begin
+%global source0_sha256 415c3c7da62fe3b2ad1e524df342f1c534330ed5fa579bfe7127150e9a364b49
+%global source0_file qt-doc-opensource-src-6.9.1.tar.xz
+# oreon url source checksums end
 
 # optimize build, skip unecessary steps
 %global debug_package   %{nil}
@@ -40,6 +44,9 @@ Summary: tags files for crosslinking to Qt QCH files
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/qt-doc-opensource-src-6.9.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "415c3c7da62fe3b2ad1e524df342f1c534330ed5fa579bfe7127150e9a364b49" || { echo "oreon: Source0 SHA256 mismatch for qt-doc-opensource-src-6.9.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 # intentionally left blank
 # though could be used to initially unpack (rex)
 

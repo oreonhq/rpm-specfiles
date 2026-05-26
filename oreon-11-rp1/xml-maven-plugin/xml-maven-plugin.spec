@@ -6,6 +6,10 @@ License:        Apache-2.0
 
 URL:            https://www.mojohaus.org/xml-maven-plugin/
 Source0:        https://github.com/mojohaus/xml-maven-plugin/archive/%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 d3e57f6952ec4a9f241d9ed24ca2a0a168d5ed0a1462beb7c339cabe855d1dd1
+%global source0_file xml-maven-plugin-1.1.0.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -34,6 +38,9 @@ This package contains the API documentation for %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xml-maven-plugin-1.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d3e57f6952ec4a9f241d9ed24ca2a0a168d5ed0a1462beb7c339cabe855d1dd1" || { echo "oreon: Source0 SHA256 mismatch for xml-maven-plugin-1.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 # Add the version

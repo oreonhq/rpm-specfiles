@@ -10,6 +10,10 @@ Source1:          powertop.service
 
 # Sent upstream
 Patch0:           powertop-2.7-always-create-params.patch
+# oreon url source checksums begin
+%global source0_sha256 e58ab3fd7b8ff5f4dd0d17f11848817e7d83c0a6918145ac81de03b5dccf8f49
+%global source0_file powertop-2.15.tar.gz
+# oreon url source checksums end
 BuildRequires:    make
 BuildRequires:    gettext-devel
 BuildRequires:    ncurses-devel
@@ -34,6 +38,9 @@ PowerTOP is a tool that finds the software component(s) that make your
 computer use more power than necessary while it is idle.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/powertop-2.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e58ab3fd7b8ff5f4dd0d17f11848817e7d83c0a6918145ac81de03b5dccf8f49" || { echo "oreon: Source0 SHA256 mismatch for powertop-2.15.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # https://www.gnu.org/software/gettext/manual/html_node/autopoint-Invocation.html
 sed -i -e 's|AM_GNU_GETTEXT_VERSION|AM_GNU_GETTEXT_REQUIRE_VERSION|' configure.ac

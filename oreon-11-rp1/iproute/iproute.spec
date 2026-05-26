@@ -8,6 +8,10 @@ Source0:            https://kernel.org/pub/linux/utils/net/%{name}2/%{name}2-%{v
 Source1:            rt_dsfield.deprecated
 %endif
 Source2:            README.etc
+# oreon url source checksums begin
+%global source0_sha256 9781e59410ab7dea8e9f79bb10ff1488e63d10fcbb70503b94426ba27a8e2dec
+%global source0_file iproute2-6.17.0.tar.xz
+# oreon url source checksums end
 
 License:            GPL-2.0-or-later AND NIST-PD
 BuildRequires:      bison
@@ -74,6 +78,9 @@ Provides:           iproute-static = %{version}-%{release}
 The libnetlink static library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/iproute2-6.17.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9781e59410ab7dea8e9f79bb10ff1488e63d10fcbb70503b94426ba27a8e2dec" || { echo "oreon: Source0 SHA256 mismatch for iproute2-6.17.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n %{name}2-%{version}
 
 %build

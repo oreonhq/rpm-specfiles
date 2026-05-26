@@ -7,7 +7,7 @@ Release: 8%{?dist}
 License: GPL-3.0-or-later
 URL: http://sed.sourceforge.net/
 Source0: https://ftp.gnu.org/gnu/sed/sed-%{version}.tar.xz
-Source1: sedfaq.txt
+Source1:        http://sed.sourceforge.net/sedfaq.txt
 Patch0: sed-b-flag.patch
 Patch1: sed-c-flag.patch
 Patch2: sed-covscan-annotations.patch

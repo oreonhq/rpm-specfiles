@@ -8,6 +8,10 @@ Summary: A library for import of Adobe PageMaker documents
 License: MPL-2.0
 URL: http://wiki.documentfoundation.org/DLP/Libraries/libpagemaker
 Source: http://dev-www.libreoffice.org/src/%{name}/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 66adacd705a7d19895e08eac46d1e851332adf2e736c566bef1164e7a442519d
+%global source0_file libpagemaker-0.0.4.tar.xz
+# oreon url source checksums end
 
 BuildRequires: boost-devel
 BuildRequires: doxygen
@@ -46,6 +50,9 @@ Tools to transform Adobe PageMaker documents into other formats.
 Currently supported: SVG, plain text, raw.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libpagemaker-0.0.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "66adacd705a7d19895e08eac46d1e851332adf2e736c566bef1164e7a442519d" || { echo "oreon: Source0 SHA256 mismatch for libpagemaker-0.0.4.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

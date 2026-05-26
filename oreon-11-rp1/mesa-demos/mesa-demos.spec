@@ -13,6 +13,10 @@ Source: https://archive.mesa3d.org/demos/%{name}-%{version}.tar.xz
 Patch0: mesa-demos-8.5.0-legal.patch
 # Install glsl demos data
 Patch1: mesa-demos-system-data.patch
+# oreon url source checksums begin
+%global source0_sha256 3046a3d26a7b051af7ebdd257a5f23bfeb160cad6ed952329cdff1e9f1ed496b
+%global source0_file mesa-demos-9.0.0.tar.xz
+# oreon url source checksums end
 BuildRequires: meson
 BuildRequires: gcc
 BuildRequires: gcc-c++
@@ -58,6 +62,9 @@ Provides: eglinfo es2_info
 The egl-utils package provides the eglinfo, eglgears, es2_info and es2gears utilities.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/mesa-demos-9.0.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3046a3d26a7b051af7ebdd257a5f23bfeb160cad6ed952329cdff1e9f1ed496b" || { echo "oreon: Source0 SHA256 mismatch for mesa-demos-9.0.0.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n %{name}-%{version}
 %patch -P0 -p1 -b .legal
 %patch -P1 -p1 -b .systemdata

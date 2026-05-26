@@ -6,6 +6,10 @@ Summary:        Third-Party Modified Version of the Fraunhofer FDK AAC Codec Lib
 License:        FDK-AAC
 URL:            https://cgit.freedesktop.org/~wtay/fdk-aac/log/?h=fedora
 Source0:        https://wtaymans.fedorapeople.org/fdk-aac-free-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2dc6952b70283888994ae6e551a79039781f0a64c67fb637bffd5a8f483c34c5
+%global source0_file fdk-aac-free-2.0.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc gcc-c++
 BuildRequires:  automake libtool
@@ -28,6 +32,9 @@ developing applications that use %{name}.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/fdk-aac-free-2.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2dc6952b70283888994ae6e551a79039781f0a64c67fb637bffd5a8f483c34c5" || { echo "oreon: Source0 SHA256 mismatch for fdk-aac-free-2.0.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n fdk-aac-%{version}
 autoreconf -vif
 

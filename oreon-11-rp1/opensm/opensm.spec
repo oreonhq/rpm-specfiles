@@ -14,6 +14,10 @@ Source5: opensm.service
 Source6: opensm.launch
 Source7: opensm.rwtab
 Source8: opensm.partitions
+# oreon url source checksums begin
+%global source0_sha256 a3335e371a4b044427574dff9d324c6c334e502e8facdf58bc070ee151d7e460
+%global source0_file opensm-3.3.24.tar.gz
+# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  gcc
@@ -57,6 +61,9 @@ Requires: %{name}-devel%{?_isa} = %{version}-%{release}
 Static version of opensm libraries
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/opensm-3.3.24.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a3335e371a4b044427574dff9d324c6c334e502e8facdf58bc070ee151d7e460" || { echo "oreon: Source0 SHA256 mismatch for opensm-3.3.24.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 %build

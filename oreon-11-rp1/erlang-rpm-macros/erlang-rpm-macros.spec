@@ -6,6 +6,10 @@ License:        MIT
 URL:            https://github.com/fedora-erlang/erlang-rpm-macros
 Source0:        https://github.com/fedora-erlang/erlang-rpm-macros/archive/%{version}/%{name}-%{version}.tar.gz
 Patch0:         0001-README-drop-Fedora-EPEL-wording.patch
+# oreon url source checksums begin
+%global source0_sha256 1a5640d7726768867c7992175d7174730088b51606aa9351bd7d8b97cb1640d2
+%global source0_file erlang-rpm-macros-0.3.11.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 # These BRs needed only for testing
@@ -39,6 +43,9 @@ This package contains a minimal implementation of buildrequires. When used in
 When both packages are installed, the full version takes precedence.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/erlang-rpm-macros-0.3.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1a5640d7726768867c7992175d7174730088b51606aa9351bd7d8b97cb1640d2" || { echo "oreon: Source0 SHA256 mismatch for erlang-rpm-macros-0.3.11.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -8,6 +8,10 @@ Summary:        Command-line JSON processor
 License:        MIT AND ICU AND CC-BY-3.0
 URL:            https://jqlang.org/
 Source0:        https://github.com/jqlang/jq/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 2be64e7129cecb11d5906290eba10af694fb9e3e7f9fc208a311dc33ca837eb0
+%global source0_file jq-1.8.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  flex
@@ -46,6 +50,9 @@ Development files for %{name}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jq-1.8.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2be64e7129cecb11d5906290eba10af694fb9e3e7f9fc208a311dc33ca837eb0" || { echo "oreon: Source0 SHA256 mismatch for jq-1.8.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

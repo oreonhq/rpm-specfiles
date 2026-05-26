@@ -13,6 +13,10 @@ URL:		https://www.jedsoft.org/slang/
 Source:		https://www.jedsoft.org/releases/%{name}/%{name}-%{version}.tar.bz2
 # disable test that fails with SIGHUP ignored (e.g. in koji)
 Patch2:		slang-sighuptest.patch
+# oreon url source checksums begin
+%global source0_sha256 f9145054ae131973c61208ea82486d5dd10e3c5cdad23b7c4a0617743c8f5a18
+%global source0_file slang-2.3.3.tar.bz2
+# oreon url source checksums end
 BuildRequires: make
 BuildRequires:	gcc libpng-devel zlib-devel
 %{?with_oniguruma:BuildRequires: oniguruma-devel}
@@ -52,6 +56,9 @@ Install the slang-devel package if you want to develop applications
 based on the S-Lang extension language.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/slang-2.3.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f9145054ae131973c61208ea82486d5dd10e3c5cdad23b7c4a0617743c8f5a18" || { echo "oreon: Source0 SHA256 mismatch for slang-2.3.3.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P2 -p1 -b .sighuptest
 

@@ -8,12 +8,16 @@ License:        BSD-3-Clause AND Apache-2.0
 URL:            https://github.com/jline/jline3
 ExclusiveArch:  %{java_arches}
 
-Source0:        %{url}/archive/jline-%{version}.tar.gz
+Source0:        https://github.com/jline/jline3/archive/jline-3.30.4.tar.gz
 
 # Fedora/RHEL specific: JNI shared objects MUST be placed in %%{_prefix}/lib/%%{name}
 Patch:          0001-Load-native-library-form-usr-lib-jline.patch
 # Patch out unwanted optional dependency on universalchardet
 Patch:          0002-Remove-optional-dependency-on-universalchardet.patch
+# oreon url source checksums begin
+%global source0_sha256 7f764fe6d67fdab5e3a0db32a94a61b8404260b5fbebe3c15c18da7d3d6aa81e
+%global source0_file jline-3.30.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 %if %{with bootstrap}
@@ -50,6 +54,9 @@ and tcsh) will find most of the command editing features of JLine to be
 familiar.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/jline-3.30.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7f764fe6d67fdab5e3a0db32a94a61b8404260b5fbebe3c15c18da7d3d6aa81e" || { echo "oreon: Source0 SHA256 mismatch for jline-3.30.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # GitHub archive of tag jline-%{version} unpacks as jline3-jline-%{version}, not jline-%{version}.
 %autosetup -p1 -n jline3-jline-%{version}
 cp -p console-ui/LICENSE.txt LICENSE-APACHE.txt

@@ -13,6 +13,10 @@ Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/
 
 Patch:          0001-Port-tests-to-maven-model-3.6.X.patch
 Patch:          0002-MDEP-952-Cut-another-dependency-on-commons-lang3-479.patch
+# oreon url source checksums begin
+%global source0_sha256 77e50babee8e8e00fe35954e79f168ad9addf392eb669f8d0973e67d786522e4
+%global source0_file maven-dependency-plugin-3.6.1-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -51,6 +55,9 @@ artifacts. It can copy and/or unpack artifacts from local or remote
 repositories to a specified location.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/maven-dependency-plugin-3.6.1-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "77e50babee8e8e00fe35954e79f168ad9addf392eb669f8d0973e67d786522e4" || { echo "oreon: Source0 SHA256 mismatch for maven-dependency-plugin-3.6.1-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 find src -name '*.java' -exec sed -i 's/\r//' {} +
 

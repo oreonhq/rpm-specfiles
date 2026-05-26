@@ -6,6 +6,10 @@ Summary:        GObject based library for handling and rendering XPS documents
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/libgxps
 Source0:        https://ftp.gnome.org/pub/gnome/sources/%{name}/0.3/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 6d27867256a35ccf9b69253eb2a88a32baca3b97d5f4ef7f82e3667fa435251c
+%global source0_file libgxps-0.3.2.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -42,6 +46,9 @@ documents using the %{name} library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libgxps-0.3.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6d27867256a35ccf9b69253eb2a88a32baca3b97d5f4ef7f82e3667fa435251c" || { echo "oreon: Source0 SHA256 mismatch for libgxps-0.3.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

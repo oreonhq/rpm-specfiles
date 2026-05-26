@@ -12,11 +12,15 @@ License:        LGPL-2.1-or-later
 URL:            http://gstreamer.freedesktop.org/
 %if 0%{?gitrel}
 # Git snapshot workflow disabled (use release tarball).
-Source0:        gst-plugins-base-%{version}.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.26.7.tar.xz
 %else
 Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-%{version}.tar.xz
 %endif
 Patch0:         0001-missing-plugins-Remove-the-mpegaudioversion-field.patch
+# oreon url source checksums begin
+%global source0_sha256 969e3cbf05dfab92cf37e94840fbe398517d7ba3275331d1c216a2e30a7208d0
+%global source0_file gst-plugins-base-1.26.7.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  meson >= 0.48.0
 BuildRequires:  gcc
@@ -122,6 +126,9 @@ for the GStreamer Base Plugins library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gst-plugins-base-1.26.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "969e3cbf05dfab92cf37e94840fbe398517d7ba3275331d1c216a2e30a7208d0" || { echo "oreon: Source0 SHA256 mismatch for gst-plugins-base-1.26.7.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n gst-plugins-base-%{version}
 %patch -P 0 -p1
 

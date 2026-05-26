@@ -25,7 +25,7 @@ URL:            http://gstreamer.freedesktop.org/
 %if 0%{?gitrel}
 # git clone git://anongit.freedesktop.org/gstreamer/gstreamer
 # cd gstreamer; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
-Source0:        gstreamer-%{version}.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.26.7.tar.xz
 %else
 Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-%{version}.tar.xz
 %endif
@@ -33,6 +33,10 @@ Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-%{versi
 Patch0:         0001-gst-inspect-add-mode-to-output-RPM-requires-format.patch
 Source1:        gstreamer1.prov
 Source2:        gstreamer1.attr
+# oreon url source checksums begin
+%global source0_sha256 18a5e214114dc501407697dd458514bba62cadd5414c60f793cf70141a4d0bb3
+%global source0_file gstreamer-1.26.7.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  meson >= 0.48.0
 BuildRequires:  gcc
@@ -92,6 +96,9 @@ GStreamer streaming media framework.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/gstreamer-1.26.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "18a5e214114dc501407697dd458514bba62cadd5414c60f793cf70141a4d0bb3" || { echo "oreon: Source0 SHA256 mismatch for gstreamer-1.26.7.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n gstreamer-%{version}
 %patch -P 0 -p3 -b .rpm-provides
 

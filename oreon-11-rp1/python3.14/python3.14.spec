@@ -339,7 +339,7 @@ BuildRequires: python3-rpm-generators
 # Source code and patches
 # =======================
 
-Source0: %{url}ftp/python/%{general_version}/Python-%{upstream_version}.tar.xz
+Source0:        https://www.python.org/ftp/python/3.14.5/Python-3.14.5.tar.xz
 
 # A simple script to check timestamps of bytecode files
 # Run in check section with Python that is currently being built
@@ -449,6 +449,10 @@ Patch477: 00477-raise-an-error-when-importing-stdlib-modules-compiled-for-a-diff
 # 00486 # 5ae0b81b3135319f8d75a886fb7a11fa40ac11f4
 # gh-148646: Add --enable-prebuilt-jit-stencils configure flag
 Patch486: 00486-gh-148646-add---enable-prebuilt-jit-stencils-configure-flag.patch
+# oreon url source checksums begin
+%global source0_sha256 7e32597b99e5d9a39abed35de4693fa169df3e5850d4c334337ffd6a19a36db6
+%global source0_file Python-3.14.5.tar.xz
+# oreon url source checksums end
 
 # (New patches go here ^^^)
 #
@@ -986,6 +990,9 @@ extension modules.
 # ======================================================
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Python-3.14.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7e32597b99e5d9a39abed35de4693fa169df3e5850d4c334337ffd6a19a36db6" || { echo "oreon: Source0 SHA256 mismatch for Python-3.14.5.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -S git_am -n Python-%{upstream_version}
 
 # Verify the second level of bundled provides is up to date

@@ -21,6 +21,10 @@ Source1: version_1-2024-06-27.tar.bz2
 ## upstreamable patches
 # install manpages only when INSTALL_HELPER_SCRIPTS=ON
 Patch200: lensfun-0.3.2-INSTALL_HELPER_SCRIPTS.patch
+# oreon url source checksums begin
+%global source0_sha256 dafb39c08ef24a0e2abd00d05d7341b1bf1f0c38bfcd5a4c69cf5f0ecb6db112
+%global source0_file lensfun-0.3.4.tar.gz
+# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: doxygen
@@ -82,6 +86,9 @@ Obsoletes: python34-lensfun < %{version}-%{release}
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/lensfun-0.3.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dafb39c08ef24a0e2abd00d05d7341b1bf1f0c38bfcd5a4c69cf5f0ecb6db112" || { echo "oreon: Source0 SHA256 mismatch for lensfun-0.3.4.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # extract the updated data
 pushd data/db

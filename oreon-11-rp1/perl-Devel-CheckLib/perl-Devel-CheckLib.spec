@@ -12,7 +12,12 @@ Summary:        Check that a library is available
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-CheckLib
-Source0:        https://cpan.metacpan.org/modules/by-module/Devel/Devel-CheckLib-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MA/MATTN/Devel-CheckLib-1.16.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 869d38c258e646dcef676609f0dd7ca90f085f56cf6fd7001b019a5d5b831fca
+%global source0_file Devel-CheckLib-1.16.tar.gz
+# oreon url source checksums end
+
 
 BuildArch:      noarch
 
@@ -65,6 +70,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Devel-CheckLib-1.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "869d38c258e646dcef676609f0dd7ca90f085f56cf6fd7001b019a5d5b831fca" || { echo "oreon: Source0 SHA256 mismatch for Devel-CheckLib-1.16.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Devel-CheckLib-%{version}
 
 # Help generators to recognize Perl scripts

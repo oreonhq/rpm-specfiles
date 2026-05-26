@@ -5,6 +5,10 @@ Summary:        Convert POD data to formatted LaTeX
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-LaTeX
 Source0:        https://cpan.metacpan.org/authors/id/T/TJ/TJENNESS/Pod-LaTeX-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 15a840ea1c8a76cd3c865fbbf2fec33b03615c0daa50f9c800c54e0cf0659d46
+%global source0_file Pod-LaTeX-0.61.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  perl-interpreter
 BuildRequires:  perl-generators
@@ -43,6 +47,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Pod-LaTeX-0.61.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "15a840ea1c8a76cd3c865fbbf2fec33b03615c0daa50f9c800c54e0cf0659d46" || { echo "oreon: Source0 SHA256 mismatch for Pod-LaTeX-0.61.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Pod-LaTeX-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

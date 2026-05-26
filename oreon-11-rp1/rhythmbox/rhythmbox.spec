@@ -13,6 +13,10 @@ Summary: Music Management Application
 License: LicenseRef-Callaway-GPLv2+-with-exceptions AND GFDL-1.1-no-invariants-or-later
 URL:     https://wiki.gnome.org/Apps/Rhythmbox
 Source0: https://download.gnome.org/sources/rhythmbox/3.4/%{name}-%{version}.tar.xz
+# oreon url source checksums begin
+%global source0_sha256 e42291a18df7a21ffe6b352bf73f05d7e298bb4e05bce5967f98ee8cee4408f1
+%global source0_file rhythmbox-3.4.9.tar.xz
+# oreon url source checksums end
 
 BuildRequires: pkgconfig(gobject-introspection-1.0) >= 0.10.0
 BuildRequires: pkgconfig(grilo-0.3) >= 0.3.1
@@ -82,6 +86,9 @@ This package contains the development files necessary to create
 a Rhythmbox plugin.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/rhythmbox-3.4.9.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e42291a18df7a21ffe6b352bf73f05d7e298bb4e05bce5967f98ee8cee4408f1" || { echo "oreon: Source0 SHA256 mismatch for rhythmbox-3.4.9.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

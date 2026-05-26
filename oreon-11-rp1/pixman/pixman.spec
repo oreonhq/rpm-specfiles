@@ -15,6 +15,10 @@ URL:            https://gitlab.freedesktop.org/pixman/pixman
 # if no revision specified, makes a new one from HEAD.
 Source0:        https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
 Source1:        make-pixman-snapshot.sh
+# oreon url source checksums begin
+%global source0_sha256 d075209d18728b1ca5d0bb864aa047a262a1fde206da8a677d6af75b2ee1ae98
+%global source0_file pixman-0.46.2.tar.xz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -31,6 +35,9 @@ Requires: pkgconfig
 Pixel manipulation library for X and Cairo development package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/pixman-0.46.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d075209d18728b1ca5d0bb864aa047a262a1fde206da8a677d6af75b2ee1ae98" || { echo "oreon: Source0 SHA256 mismatch for pixman-0.46.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

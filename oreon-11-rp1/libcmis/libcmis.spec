@@ -16,6 +16,10 @@ Patch:  0001-Fix-boost-1.86-breakage.patch
 Patch:  0002-sha1-test-fails-with-older-boost.patch
 Patch:  0003-Fix-build-with-boost-1.66-and-simplify-a-bit.patch
 Patch:  0004-Fix-comment-and-sync-the-if-BOOST_VERSION.patch
+# oreon url source checksums begin
+%global source0_sha256 1b5c2d7258ff93eb5f9958ff0e4dfd7332dc75a071bb717dde2217a26602a644
+%global source0_file libcmis-0.6.2.tar.xz
+# oreon url source checksums end
 
 
 BuildRequires: boost-devel
@@ -51,6 +55,9 @@ The %{name}-tools package contains a tool for accessing CMIS from the
 command line.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libcmis-0.6.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1b5c2d7258ff93eb5f9958ff0e4dfd7332dc75a071bb717dde2217a26602a644" || { echo "oreon: Source0 SHA256 mismatch for libcmis-0.6.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

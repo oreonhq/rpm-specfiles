@@ -106,6 +106,10 @@ Patch55: kde-runtime-optional_components.patch
 
 # rhel patches
 Patch300: kde-runtime-4.9.2-webkit.patch
+# oreon url source checksums begin
+%global source0_sha256 682c18afb11cda41288c4508831cb59797417b9d81ea916e0e99722ebe9bce96
+%global source0_file kde-runtime-17.08.3.tar.xz
+# oreon url source checksums end
 
 Obsoletes: kdebase-runtime < 4.7.97-10
 Provides:  kdebase-runtime = %{version}-%{release}
@@ -296,6 +300,9 @@ BuildArch: noarch
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kde-runtime-17.08.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "682c18afb11cda41288c4508831cb59797417b9d81ea916e0e99722ebe9bce96" || { echo "oreon: Source0 SHA256 mismatch for kde-runtime-17.08.3.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n kde-runtime-%{version}
 
 ## upstream patches

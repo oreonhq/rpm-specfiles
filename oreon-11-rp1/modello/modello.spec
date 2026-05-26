@@ -16,6 +16,10 @@ Source0:        https://repo1.maven.org/maven2/org/codehaus/%{name}/%{name}/%{ve
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 Patch:          0001-Revert-Switch-to-codehaus-plexus-build-api-1.2.0-345.patch
+# oreon url source checksums begin
+%global source0_sha256 665bfe6e1a5494d304bbb10949d6d740cb7dc2ba8a24c6d5641f88a5e537e942
+%global source0_file modello-2.1.2-source-release.zip
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -50,6 +54,9 @@ from the single model, including Java POJOs, XML
 marshallers/unmarshallers, XSD and documentation.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/modello-2.1.2-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "665bfe6e1a5494d304bbb10949d6d740cb7dc2ba8a24c6d5641f88a5e537e942" || { echo "oreon: Source0 SHA256 mismatch for modello-2.1.2-source-release.zip" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 cp -p %{SOURCE1} LICENSE
 # We don't generate site; don't pull extra dependencies.

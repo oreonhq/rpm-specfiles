@@ -12,6 +12,10 @@ URL:            https://intel.github.io/libvpl/latest/index.html
 # only care about x86_64 can still skip via repo compose.
 
 Source0:        https://github.com/intel/libvpl/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 d60931937426130ddad9f1975c010543f0da99e67edb1c6070656b7947f633b6
+%global source0_file libvpl-2.16.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -64,6 +68,9 @@ Provides:       oneVPL-samples%{?_isa} == %{?epoch:%{epoch}:}%{version}-%{releas
 This package contains sample programs and applications that use %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libvpl-2.16.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d60931937426130ddad9f1975c010543f0da99e67edb1c6070656b7947f633b6" || { echo "oreon: Source0 SHA256 mismatch for libvpl-2.16.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n libvpl-%{version}
 
 %build

@@ -10,6 +10,10 @@ License:            BSD-3-Clause
 URL:                https://github.com/oauthlib/oauthlib
 
 Source0:            https://github.com/oauthlib/oauthlib/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 eb93759adad48251a472c5d20fbce3e08ee53fcec2909a22448d48c9fa100ea0
+%global source0_file python-oauthlib-3.3.1.tar.gz
+# oreon url source checksums end
 
 BuildArch:          noarch
 
@@ -40,6 +44,9 @@ very little effort.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/python-oauthlib-3.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "eb93759adad48251a472c5d20fbce3e08ee53fcec2909a22448d48c9fa100ea0" || { echo "oreon: Source0 SHA256 mismatch for python-oauthlib-3.3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n oauthlib-%{version} -p1
 
 %generate_buildrequires

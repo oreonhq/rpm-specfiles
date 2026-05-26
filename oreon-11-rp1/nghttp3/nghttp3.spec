@@ -7,8 +7,8 @@ Summary:        HTTP/3 library written in C
 
 License:        MIT
 URL:            https://github.com/ngtcp2/nghttp3
-Source:         %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz
-Source:         %{url}/releases/download/v%{version}/%{name}-%{version}.tar.xz.asc
+Source:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf4f3b91474d1eb29889bd0ef7e8403d5d673c366#/tatsuhiro-t.asc
+Source:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf4f3b91474d1eb29889bd0ef7e8403d5d673c366#/tatsuhiro-t.asc
 Source:         https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf4f3b91474d1eb29889bd0ef7e8403d5d673c366#/tatsuhiro-t.asc
 
 BuildRequires:  autoconf

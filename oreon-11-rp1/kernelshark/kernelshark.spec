@@ -11,6 +11,10 @@ Summary: GUI analysis for Ftrace data captured by trace-cmd
 URL: https://kernelshark.org
 Source0: https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/snapshot/kernel-shark-kernelshark-v%{version}.tar.gz
 Source1: %{name}.appdata.xml
+# oreon url source checksums begin
+%global source0_sha256 6ec307876b28fb08fc4833f14d29e02cb51fcb7d48054b51b24b3f2a6e5db9d9
+%global source0_file kernel-shark-kernelshark-v2.3.1.tar.gz
+# oreon url source checksums end
 
 ExcludeArch: %{ix86} %{arm}
 
@@ -55,6 +59,9 @@ file. kernelshark can read this file and produce a graph and list
 view of its data. 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/kernel-shark-kernelshark-v2.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6ec307876b28fb08fc4833f14d29e02cb51fcb7d48054b51b24b3f2a6e5db9d9" || { echo "oreon: Source0 SHA256 mismatch for kernel-shark-kernelshark-v2.3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n kernel-shark-%{name}-v%{version}
 
 %build

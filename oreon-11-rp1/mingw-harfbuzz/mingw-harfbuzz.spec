@@ -11,6 +11,10 @@ Source0:        https://github.com/harfbuzz/harfbuzz/releases/download/%{version
 
 # Invoke versioned python
 Patch0:         harfbuzz-python.patch
+# oreon url source checksums begin
+%global source0_sha256 3553d943401c34ab9b8c75f35cdb8452ca660233b0e9d4a22395ce5245484bd7
+%global source0_file harfbuzz-13.0.1.tar.xz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -71,6 +75,9 @@ Static version of the MinGW Windows Harfbuzz library.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/harfbuzz-13.0.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3553d943401c34ab9b8c75f35cdb8452ca660233b0e9d4a22395ce5245484bd7" || { echo "oreon: Source0 SHA256 mismatch for harfbuzz-13.0.1.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n harfbuzz-%{version}
 
 

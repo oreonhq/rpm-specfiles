@@ -10,6 +10,10 @@ Release:        9%{?dist}
 License:        MIT
 URL:            https://lunarmodules.github.io/luasocket/
 Source0:        https://github.com/lunarmodules/luasocket/archive/v%{version}/luasocket-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 bf033aeb9e62bcaa8d007df68c119c966418e8c9ef7e4f2d7e96bddeca9cca6e
+%global source0_file luasocket-3.1.0.tar.gz
+# oreon url source checksums end
 Requires:       lua(abi) = %{lua_version}
 BuildRequires:  gcc
 BuildRequires:  make
@@ -47,6 +51,9 @@ and FTP. In addition there are modules for MIME, URL handling and LTN12.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/luasocket-3.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bf033aeb9e62bcaa8d007df68c119c966418e8c9ef7e4f2d7e96bddeca9cca6e" || { echo "oreon: Source0 SHA256 mismatch for luasocket-3.1.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n luasocket-%{version}
 
 %if 0%{?fedora} || 0%{?oreon}

@@ -11,6 +11,10 @@ License:        GPL-1.0-or-later and BSD-3-Clause and GPL-2.0-or-later and GPL-2
 URL:            https://www.alsa-project.org/
 # HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
 Source0:        https://www.alsa-project.org/files/pub/firmware/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 b67b6d7d08bcfc247ef6ff0ab88a99c188305a3cf57ae2dfd0bcd9a5b36cd5bb
+%global source0_file alsa-firmware-1.2.4.tar.bz2
+# oreon url source checksums end
 
 Requires:       alsa-tools-firmware >= 1.1.7
 Requires:       systemd
@@ -27,6 +31,9 @@ the alsa-tools-firmware package.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/alsa-firmware-1.2.4.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b67b6d7d08bcfc247ef6ff0ab88a99c188305a3cf57ae2dfd0bcd9a5b36cd5bb" || { echo "oreon: Source0 SHA256 mismatch for alsa-firmware-1.2.4.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 

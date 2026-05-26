@@ -29,7 +29,11 @@ Release:	58.%{snap}cvs%{?dist}
 # - src/strlcpy.c
 License:	BSD-3-Clause AND BSD-2-Clause AND ISC
 URL:		https://www.thrysoee.dk/editline/
-Source:		%{url}/%{name}-%{snap}-%{version}.tar.gz
+Source:        https://www.thrysoee.dk/editline//libedit-20251016-3.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 21362b00653bbfc1c71f71a7578da66b5b5203559d43134d2dd7719e313ce041
+%global source0_file libedit-20251016-3.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	gcc
 BuildRequires:	make
@@ -54,6 +58,9 @@ Requires:	ncurses-devel%{?_isa}
 This package contains development files for %{name}.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libedit-20251016-3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "21362b00653bbfc1c71f71a7578da66b5b5203559d43134d2dd7719e313ce041" || { echo "oreon: Source0 SHA256 mismatch for libedit-20251016-3.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -n %{name}-%{snap}-%{version}
 
 %conf

@@ -12,6 +12,10 @@ Source1: macros.sblim-cmpi-devel
 
 # Patch0:       remove version from docdir
 Patch0:         sblim-cmpi-devel-2.0.3-docdir.patch
+# oreon url source checksums begin
+%global source0_sha256 1671cabff6b922b6fde897673d9fdafd56c9310f82a7eacc0547d596b9cdfea6
+%global source0_file sblim-cmpi-devel-2.0.3.tar.bz2
+# oreon url source checksums end
 BuildRequires: make
 BuildRequires:  gcc
 
@@ -32,6 +36,9 @@ BuildRequires:  gcc-c++
 This packages provides the C++ wrapper library for CMPI development
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sblim-cmpi-devel-2.0.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1671cabff6b922b6fde897673d9fdafd56c9310f82a7eacc0547d596b9cdfea6" || { echo "oreon: Source0 SHA256 mismatch for sblim-cmpi-devel-2.0.3.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 %patch -P0 -p1 -b .docdir
 

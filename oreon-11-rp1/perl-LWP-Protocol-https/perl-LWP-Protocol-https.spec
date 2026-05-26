@@ -8,6 +8,10 @@ Summary:        Provide HTTPS support for LWP::UserAgent
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/LWP-Protocol-https
 Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/LWP-Protocol-https-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 44eec2da147ba0511090871b0ca82f69794376bc31e8c76d1040961ba57f59b8
+%global source0_file LWP-Protocol-https-6.15.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -63,6 +67,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/LWP-Protocol-https-6.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "44eec2da147ba0511090871b0ca82f69794376bc31e8c76d1040961ba57f59b8" || { echo "oreon: Source0 SHA256 mismatch for LWP-Protocol-https-6.15.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n LWP-Protocol-https-%{version}
 %if !%{with perl_LWP_Protocol_https_enables_internet_test}
 rm t/example.t

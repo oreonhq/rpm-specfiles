@@ -5,6 +5,10 @@ Summary: Support library for the Mobile Broadband Interface Model protocol
 License: LGPL-2.1-or-later
 URL: https://gitlab.freedesktop.org/mobile-broadband/libmbim/
 Source: https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/%{version}/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 47228f0c07dfb2fbf51e35eb60f12c22113ef6923a0e23fcae3b2a4efee5ed29
+%global source0_file libmbim-1.32.0.tar.bz2
+# oreon url source checksums end
 
 BuildRequires: meson >= 0.53
 BuildRequires: gcc
@@ -42,6 +46,9 @@ functionality from the command line.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/libmbim-1.32.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "47228f0c07dfb2fbf51e35eb60f12c22113ef6923a0e23fcae3b2a4efee5ed29" || { echo "oreon: Source0 SHA256 mismatch for libmbim-1.32.0.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 

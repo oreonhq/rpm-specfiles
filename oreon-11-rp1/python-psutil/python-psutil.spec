@@ -8,7 +8,11 @@ Summary:        A process and system utilities module for Python
 
 License:        BSD-3-Clause
 URL:            https://github.com/giampaolo/psutil
-Source:         %{url}/archive/release-%{version}/psutil-%{version}.tar.gz
+Source:        https://github.com/giampaolo/psutil/archive/release-7.2.2/psutil-7.2.2.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 38f406bf21acc67e45f414b7980463b2e6e6270ba3616ffd41995d997078cbe6
+%global source0_file psutil-7.2.2.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -44,6 +48,9 @@ ifconfig, nice, ionice, iostat, iotop, uptime, pidof, tty, who, taskset, pmap.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/psutil-7.2.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "38f406bf21acc67e45f414b7980463b2e6e6270ba3616ffd41995d997078cbe6" || { echo "oreon: Source0 SHA256 mismatch for psutil-7.2.2.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n psutil-release-%{version}
 
 # Remove shebangs

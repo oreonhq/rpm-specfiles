@@ -4,7 +4,12 @@ Release:        50%{?dist}
 Summary:        Provide utility methods for factory classes 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Factory-Util            
-Source0:        https://cpan.metacpan.org/modules/by-module/Class/Class-Factory-Util-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Class-Factory-Util-1.7.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 6c516b445b44f87363fb3a148431d31e9ecb5e6f21fb6481c89b2406b6692e26
+%global source0_file Class-Factory-Util-1.7.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -30,6 +35,9 @@ BuildRequires:  perl(Test::Pod::Coverage) >= 1.04
 This module exports utility functions that are useful for factory classes.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Class-Factory-Util-1.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6c516b445b44f87363fb3a148431d31e9ecb5e6f21fb6481c89b2406b6692e26" || { echo "oreon: Source0 SHA256 mismatch for Class-Factory-Util-1.7.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Class-Factory-Util-%{version}
 
 %build

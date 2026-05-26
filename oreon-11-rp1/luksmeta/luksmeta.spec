@@ -6,6 +6,10 @@ Summary:        Utility for storing small metadata in the LUKSv1 header
 License:        LGPL-2.1-or-later
 URL:            https://github.com/latchset/%{name}
 Source0:        https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 a842538ba39680c8319c41dac0bcc082fe40fb43342561761925c0daa1a48f28
+%global source0_file luksmeta-10.tar.bz2
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  asciidoc
@@ -35,6 +39,9 @@ Requires:       pkgconfig
 This package contains development files for the LUKSMeta library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/luksmeta-10.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a842538ba39680c8319c41dac0bcc082fe40fb43342561761925c0daa1a48f28" || { echo "oreon: Source0 SHA256 mismatch for luksmeta-10.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 %build

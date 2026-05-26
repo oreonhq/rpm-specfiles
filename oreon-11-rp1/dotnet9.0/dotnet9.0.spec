@@ -82,7 +82,7 @@ URL:            https://github.com/dotnet/
 %if %{with bootstrap}
 # The source is generated on a Fedora box via:
 # ./build-dotnet-bootstrap-tarball %%{upstream_tag}
-Source0:        dotnet-%{upstream_tag}-x64-bootstrap.tar.gz
+Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/v9.0.117.tar.gz#/dotnet-9.0.117.tar.gz
 # The bootstrap SDK version is one listed in the global.json file of the main source archive
 %global bootstrap_sdk_version 9.0.100-rc.1.24452.12
 # Binaries can be at one of several different URLs:
@@ -100,7 +100,7 @@ Source1:        https://dotnetbuilds.azureedge.net/public/Sdk/%{bootstrap_sdk_ve
 # 5. Update the version below to match the SDK that was built from the VMR
 # The ppc64le/s390x SDK version is one produced
 %global bootstrap_sdk_version_ppc64le_s390x 9.0.100-rc.1.24452.1
-Source2:        dotnet-prebuilts-%{bootstrap_sdk_version_ppc64le_s390x}-ppc64le.tar.gz
+Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 Source3:        dotnet-prebuilts-%{bootstrap_sdk_version_ppc64le_s390x}-s390x.tar.gz
 %else
 Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{upstream_tag_without_v}.tar.gz
@@ -128,6 +128,10 @@ Patch2:         runtime-disable-fortify-on-ilasm-parser.patch
 Patch3:         roslyn-analyzers-ppc64le-apphost.patch
 # https://github.com/dotnet/runtime/issues/119706
 Patch4:         runtime-119706-clang-21.patch
+# oreon url source checksums begin
+%global source0_sha256 3f052a13a2fe76ba19a05956b3c9baca954b5d4526818552c91a8563ba2e05b2
+%global source0_file v9.0.117.tar.gz
+# oreon url source checksums end
 
 
 ExclusiveArch:  aarch64 ppc64le s390x x86_64
@@ -470,6 +474,9 @@ These are not meant for general use.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/v9.0.117.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3f052a13a2fe76ba19a05956b3c9baca954b5d4526818552c91a8563ba2e05b2" || { echo "oreon: Source0 SHA256 mismatch for v9.0.117.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %if %{without bootstrap}
 # check gpg signatures only for non-bootstrap builds; bootstrap "sources" are hand-crafted
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'

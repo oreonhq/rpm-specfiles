@@ -8,7 +8,11 @@ Summary:        Configures authentication and identity sources from supported pr
 URL:            https://github.com/authselect/authselect
 
 License:        GPL-3.0-or-later
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/authselect/authselect/archive/1.7.1/authselect-1.7.1.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 3f49c53a8dfd231cd40232dae9518e1c74e60707c80d86f6feacd6123c758f76
+%global source0_file authselect-1.7.1.tar.gz
+# oreon url source checksums end
 
 %global makedir %{_builddir}/%{name}-%{version}
 
@@ -85,6 +89,9 @@ System header files and development libraries for authselect. Useful if
 you develop a front-end for the authselect library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/authselect-1.7.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3f49c53a8dfd231cd40232dae9518e1c74e60707c80d86f6feacd6123c758f76" || { echo "oreon: Source0 SHA256 mismatch for authselect-1.7.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q
 
 for p in %patches ; do

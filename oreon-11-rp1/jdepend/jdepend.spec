@@ -8,6 +8,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/clarkware/jdepend/archive/refs/tags/2.10.tar.gz#/jdepend-2.10.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 8c19f5d62127c11c20976ae130d1914a64f0115e5113810c38fe53bf8715378b
+%global source0_file 2.10.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  ant-openjdk25 
@@ -22,6 +26,9 @@ extensibility, reusability, and maintainability to effectively manage
 and control package dependencies.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/2.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8c19f5d62127c11c20976ae130d1914a64f0115e5113810c38fe53bf8715378b" || { echo "oreon: Source0 SHA256 mismatch for 2.10.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 # remove all binary libs
 find . -name "*.jar" -delete

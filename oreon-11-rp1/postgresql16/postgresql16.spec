@@ -95,6 +95,12 @@ Patch9: postgresql-server-pg_config.patch
 # rhbz#1940964
 Patch10: postgresql-datalayout-mismatch-on-s390.patch
 Patch12: postgresql-no-libecpg.patch
+# oreon url source checksums begin
+%global source3_sha256 ae14f24c14727e0b2ded1c5553031666099bd1054db3ef44bfa6e2bd6d554a56
+%global source3_file postgresql-15.17.tar.bz2
+%global source12_sha256 8f1635afabb95e4fafe2f67d89c7052a1270d615bab5b85f1b54225695540c5a
+%global source12_file postgresql-setup-8.12.tar.gz
+# oreon url source checksums end
 
 # This macro is used for package names in the files section
 %if %?postgresql_default
@@ -501,6 +507,10 @@ goal of accelerating analytics queries.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/postgresql-15.17.tar.bz2; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ae14f24c14727e0b2ded1c5553031666099bd1054db3ef44bfa6e2bd6d554a56" || { echo "oreon: Source3 SHA256 mismatch for postgresql-15.17.tar.bz2" >&2; exit 1; })
+%(f=%{_sourcedir}/postgresql-setup-8.12.tar.gz; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8f1635afabb95e4fafe2f67d89c7052a1270d615bab5b85f1b54225695540c5a" || { echo "oreon: Source12 SHA256 mismatch for postgresql-setup-8.12.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 (
   cd "$(dirname "%{SOURCE0}")"
   sha256sum -c %{SOURCE16}

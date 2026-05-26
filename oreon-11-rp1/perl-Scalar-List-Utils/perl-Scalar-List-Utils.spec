@@ -6,6 +6,10 @@ Summary:        A selection of general-utility scalar and list subroutines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Scalar-List-Utils
 Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Scalar-List-Utils-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e0cc03f9fe3565cdf4d6102654f87bba3bca2d8ff989da38307e857d0ae3c886
+%global source0_file Scalar-List-Utils-1.70.tar.gz
+# oreon url source checksums end
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -67,6 +71,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Scalar-List-Utils-1.70.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e0cc03f9fe3565cdf4d6102654f87bba3bca2d8ff989da38307e857d0ae3c886" || { echo "oreon: Source0 SHA256 mismatch for Scalar-List-Utils-1.70.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Scalar-List-Utils-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

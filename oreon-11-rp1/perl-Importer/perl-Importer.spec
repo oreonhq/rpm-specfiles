@@ -5,6 +5,10 @@ Summary:        Alternative interface to modules that export symbols
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Importer
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Importer-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 e08fa84e13cb998b7a897fc8ec9c3459fcc1716aff25cc343e36ef875891b0ef
+%global source0_file Importer-0.026.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -39,6 +43,9 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Importer-0.026.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e08fa84e13cb998b7a897fc8ec9c3459fcc1716aff25cc343e36ef875891b0ef" || { echo "oreon: Source0 SHA256 mismatch for Importer-0.026.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Importer-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

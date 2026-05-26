@@ -10,6 +10,10 @@ Release: 31%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://cgit.kde.org/oxygen-gtk.git/
 Source0: http://download.kde.org/stable/oxygen-gtk2/%{version}/src/%{name}-%{version}.tar.bz2
+# oreon url source checksums begin
+%global source0_sha256 a289434347cc96054c75d1e4e4408b84adc2e8c7862f0be4e2da8fafbf26bf26
+%global source0_file oxygen-gtk2-1.4.6.tar.bz2
+# oreon url source checksums end
 
 ## upstream patches
 
@@ -34,6 +38,9 @@ otherwise breaks every time some setting is changed in KDE.
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/oxygen-gtk2-1.4.6.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a289434347cc96054c75d1e4e4408b84adc2e8c7862f0be4e2da8fafbf26bf26" || { echo "oreon: Source0 SHA256 mismatch for oxygen-gtk2-1.4.6.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup
 
 

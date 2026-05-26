@@ -4,7 +4,12 @@ Release:        9%{?dist}
 Summary:        Read a POD document as a series of trivial events
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Eventual
-Source0:        https://cpan.metacpan.org/modules/by-module/Pod/Pod-Eventual-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Pod-Eventual-0.094003.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 7f060cc34d11656ce069db061e3d60edc0cabc8f89a4a2dc7eaae95dac856d2d
+%global source0_file Pod-Eventual-0.094003.tar.gz
+# oreon url source checksums end
+
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils
@@ -43,6 +48,9 @@ sub-classes. If it isn't, Pod::Eventual's own handle_event will be called, and
 will raise an exception.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Pod-Eventual-0.094003.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7f060cc34d11656ce069db061e3d60edc0cabc8f89a4a2dc7eaae95dac856d2d" || { echo "oreon: Source0 SHA256 mismatch for Pod-Eventual-0.094003.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Pod-Eventual-%{version}
 
 %build

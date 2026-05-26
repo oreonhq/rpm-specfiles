@@ -22,6 +22,12 @@ Source2:        https://pagure.io/memcached-selinux/blob/master/f/memcached-seli
 Source3:	memcached.conf
 
 Patch1:         memcached-unit.patch
+# oreon url source checksums begin
+%global source0_sha256 e097073c156eeff9e12655b054f446d57374cfba5c132dcdbe7fac64e728286a
+%global source0_file memcached-1.6.41.tar.gz
+%global source2_sha256 4feb34eb8ce7f76b33211cb7fd666ef590bfccd705d4512aadb8f83f14ba4b2e
+%global source2_file memcached-selinux-1.0.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc libevent-devel systemd
@@ -67,6 +73,10 @@ Install memcached-selinux to ensure your system contains the latest SELinux poli
 optimised for use with this version of memcached.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/memcached-1.6.41.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e097073c156eeff9e12655b054f446d57374cfba5c132dcdbe7fac64e728286a" || { echo "oreon: Source0 SHA256 mismatch for memcached-1.6.41.tar.gz" >&2; exit 1; })
+%(f=%{_sourcedir}/memcached-selinux-1.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4feb34eb8ce7f76b33211cb7fd666ef590bfccd705d4512aadb8f83f14ba4b2e" || { echo "oreon: Source2 SHA256 mismatch for memcached-selinux-1.0.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Unpack memcached sources into memcached-X.X.X directory
 # and SELinux policy sources into memcached-selinux-X.X
 %setup -q -b 2

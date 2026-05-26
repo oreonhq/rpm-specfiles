@@ -11,6 +11,10 @@ URL:            http://glm.g-truc.net/
 Source0:        https://github.com/g-truc/glm/archive/%{version}.tar.gz
 Patch0:         glm-1.0.1-noarch.patch
 Patch1:         glm-1.0.1-without-werror.patch
+# oreon url source checksums begin
+%global source0_sha256 9f3174561fd26904b23f0db5e560971cbf9b3cbda0b280f04d5c379d03bf234c
+%global source0_file 1.0.1.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -50,6 +54,9 @@ The %{name}-doc package contains reference documentation and
 a programming manual for the %{name}-devel package.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/1.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9f3174561fd26904b23f0db5e560971cbf9b3cbda0b280f04d5c379d03bf234c" || { echo "oreon: Source0 SHA256 mismatch for 1.0.1.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 # Some glm releases, like version 0.9.3.1, place contents of
 # the source archive directly into the archive root. Others,
 # like glm 0.9.3.2, place them into a single subdirectory.

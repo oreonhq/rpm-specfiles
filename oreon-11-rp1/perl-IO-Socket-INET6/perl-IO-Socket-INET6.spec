@@ -10,11 +10,16 @@ Release:        12%{?dist}
 Summary:        Perl Object interface for AF_INET|AF_INET6 domain sockets
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Socket-INET6
-Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Socket-INET6-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/IO-Socket-INET6-2.73.tar.gz
+
 # Fix bad code in test. Original code hides error, related to BZ#1207174
 Patch0:         IO-Socket-INET6-2.72-fix_die_in_test.patch
 # Fix random test error in binding to socket BZ#1207174
 Patch1:         IO-Socket-INET6-2.72-bz1207174-fix_random_test_error.patch
+# oreon url source checksums begin
+%global source0_sha256 b6da746853253d5b4ac43191b4f69a4719595ee13a7ca676a8054cf36e6d16bb
+%global source0_file IO-Socket-INET6-2.73.tar.gz
+# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -48,6 +53,9 @@ BuildRequires:  perl(Test::TrailingSpace)
 Perl Object interface for AF_INET|AF_INET6 domain sockets.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/IO-Socket-INET6-2.73.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b6da746853253d5b4ac43191b4f69a4719595ee13a7ca676a8054cf36e6d16bb" || { echo "oreon: Source0 SHA256 mismatch for IO-Socket-INET6-2.73.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n IO-Socket-INET6-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

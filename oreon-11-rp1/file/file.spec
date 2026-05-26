@@ -50,6 +50,10 @@ Patch4: file-5.46-fix-tests-rpm-magic.patch
 
 # Fix tabs->spaces in python/magic.py (upstream 5.47 used tabs; rhbz#2419719)
 Patch5: file-5.47-python-magic-close-fix-whitespace.patch
+# oreon url source checksums begin
+%global source0_sha256 45672fec165cb4cc1358a2d76b5d57d22876dcb97ab169427ac385cbe1d5597a
+%global source0_file file-5.47.tar.gz
+# oreon url source checksums end
 
 URL: https://www.darwinsys.com/file/
 Requires: file-libs%{?_isa} = %{version}-%{release}
@@ -119,6 +123,9 @@ file(1) command.
 %endif
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/file-5.47.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "45672fec165cb4cc1358a2d76b5d57d22876dcb97ab169427ac385cbe1d5597a" || { echo "oreon: Source0 SHA256 mismatch for file-5.47.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

@@ -8,6 +8,10 @@ Summary:	Extremely fast hash algorithm
 License:	BSD-2-Clause AND GPL-2.0-or-later
 URL:		https://www.xxhash.com/
 Source0:	https://github.com/Cyan4973/xxHash/archive/v%{version}/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 aae608dfe8213dfd05d909a57718ef82f30722c392344583d3f39050c7f29a80
+%global source0_file xxhash-0.8.3.tar.gz
+# oreon url source checksums end
 
 BuildRequires:	make
 BuildRequires:	gcc
@@ -51,6 +55,9 @@ BuildArch:	noarch
 Documentation files for the xxhash library
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/xxhash-0.8.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aae608dfe8213dfd05d909a57718ef82f30722c392344583d3f39050c7f29a80" || { echo "oreon: Source0 SHA256 mismatch for xxhash-0.8.3.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n xxHash-%{version}
 
 %build

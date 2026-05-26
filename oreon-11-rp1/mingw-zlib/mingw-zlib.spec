@@ -11,6 +11,10 @@ URL:            https://www.zlib.net/
 Source0:        https://www.zlib.net/zlib-%{version}.tar.xz
 # Use UNIX naming convention for libraries
 Patch0:         mingw-zlib-cmake.patch
+# oreon url source checksums begin
+%global source0_sha256 d7a0654783a4da529d1bb793b7ad9c3318020af77667bcae35f95d0e42a792f3
+%global source0_file zlib-1.3.2.tar.xz
+# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -81,6 +85,9 @@ The ucrt64-zlib-static package contains static library for ucrt64-zlib developme
 
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/zlib-1.3.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d7a0654783a4da529d1bb793b7ad9c3318020af77667bcae35f95d0e42a792f3" || { echo "oreon: Source0 SHA256 mismatch for zlib-1.3.2.tar.xz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1 -n zlib-%{version}
 
 

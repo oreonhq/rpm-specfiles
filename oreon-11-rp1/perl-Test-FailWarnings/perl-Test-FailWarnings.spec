@@ -6,6 +6,10 @@ License:        Apache-2.0
 
 URL:            https://metacpan.org/release/Test-FailWarnings
 Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Test-FailWarnings-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 da34ef9029f6849d6026201d49127d054ee6ac4b979c82210315f5721964a96f
+%global source0_file Test-FailWarnings-0.008.tar.gz
+# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  make
@@ -38,6 +42,9 @@ fail() calls. It is designed to be used with done_testing, when you don't
 need to know the test count in advance.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/Test-FailWarnings-0.008.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "da34ef9029f6849d6026201d49127d054ee6ac4b979c82210315f5721964a96f" || { echo "oreon: Source0 SHA256 mismatch for Test-FailWarnings-0.008.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -n Test-FailWarnings-%{version}
 
 %build

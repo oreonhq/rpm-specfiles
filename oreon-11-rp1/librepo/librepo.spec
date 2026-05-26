@@ -36,7 +36,11 @@ Summary:        Repodata downloading library
 
 License:        LGPL-2.1-or-later
 URL:            https://github.com/rpm-software-management/librepo
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/rpm-software-management/librepo/archive/1.20.0/librepo-1.20.0.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 c21dd3caefe97ea58bc865f92095a9d2db2ec8aab49d0c714d4742094db930b6
+%global source0_file librepo-1.20.0.tar.gz
+# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -98,6 +102,9 @@ Conflicts:      python3-dnf < %{dnf_conflict}
 Python 3 bindings for the librepo library.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/librepo-1.20.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c21dd3caefe97ea58bc865f92095a9d2db2ec8aab49d0c714d4742094db930b6" || { echo "oreon: Source0 SHA256 mismatch for librepo-1.20.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 
 %build

@@ -10,6 +10,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz
+# oreon url source checksums begin
+%global source0_sha256 4274def676a736ed8933f16fbc767f2a60e67948abc1c8d5e363008c3c5a78f9
+%global source0_file plexus-testing-1.3.0.tar.gz
+# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -31,6 +35,9 @@ The Plexus Testing contains the necessary classes to be able to test
 Plexus components.
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/plexus-testing-1.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4274def676a736ed8933f16fbc767f2a60e67948abc1c8d5e363008c3c5a78f9" || { echo "oreon: Source0 SHA256 mismatch for plexus-testing-1.3.0.tar.gz" >&2; exit 1; })
+# oreon verify url source checksums end
 %autosetup -p1
 %pom_add_dep org.codehaus.plexus:plexus-utils
 %pom_add_dep org.codehaus.plexus:plexus-xml

@@ -46,6 +46,10 @@ Patch10: sblim-sfcb-1.4.9-docdir-license.patch
 # Patch11: adds configuration options to specify fallback SSL cert/key pair
 #   and disables default ECDH ephemeral key generation
 Patch11: sblim-sfcb-1.4.9-post-quantum.patch
+# oreon url source checksums begin
+%global source0_sha256 634a67b2f7ac3b386a79160eb44413d618e33e4e7fc74ae68b0240484af149dd
+%global source0_file sblim-sfcb-1.4.9.tar.bz2
+# oreon url source checksums end
 Provides: cim-server = 0
 Requires: cim-schema
 Requires: sblim-sfcCommon
@@ -75,6 +79,9 @@ sfcb supports providers written against the Common Manageability
 Programming Interface (CMPI).
 
 %prep
+# oreon verify url source checksums begin
+%(f=%{_sourcedir}/sblim-sfcb-1.4.9.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "634a67b2f7ac3b386a79160eb44413d618e33e4e7fc74ae68b0240484af149dd" || { echo "oreon: Source0 SHA256 mismatch for sblim-sfcb-1.4.9.tar.bz2" >&2; exit 1; })
+# oreon verify url source checksums end
 %setup -q -T -b 0 -n %{name}-%{version}
 %patch -P0 -p1 -b .sfcbrepos-schema-location
 %patch -P1 -p1 -b .fix-provider-debugging
