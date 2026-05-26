@@ -3,13 +3,15 @@
 %global source0_sha256 a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559
 %global source3_sha256 2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa
 %global source5_sha256 13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22
-%global source6_sha256 0f0515ff035156f8344ac583aa9f4a0c9d66a14c0b59542c3d6ccc7e15eba201
-%global source8_sha256 89e0ab01efe53312efcf8d921c41569043df99a730fc03f187671b55b9aa2fca
+%global source6_sha256 cafc44c3f157dbf0074a4555649949c69887036ba61636dbf3217a76edbf9f96
+%global source7_sha256 f519b2902bcc325ce6e86710c1cdb1ff90ab7fa17402f899cbd4d15d099cf137
+%global source8_sha256 9e921b9aaa951883d3f7a6db1e95e9892469bb7be0d111745782abec2ef500f5
 %global oreon_verify_sources \
 %{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
 %{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })} \
 %{?source5_sha256:%(test -z "%{source5_sha256}" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_sha256}" || { echo "oreon: Source5 sha256 mismatch" >&2; exit 1; }; })} \
 %{?source6_sha256:%(test -z "%{source6_sha256}" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_sha256}" || { echo "oreon: Source6 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source7_sha256:%(test -z "%{source7_sha256}" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source7_sha256}" || { echo "oreon: Source7 sha256 mismatch" >&2; exit 1; }; })} \
 %{?source8_sha256:%(test -z "%{source8_sha256}" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_sha256}" || { echo "oreon: Source8 sha256 mismatch" >&2; exit 1; }; })}
 %(true)
 # oreon source sha256 end
@@ -75,11 +77,6 @@ ExcludeArch: i686
 # Build cockpit plugin
 %bcond cockpit 1
 
-# Fedora dist-git lookaside URLs (plain names are not in git; spectool/fetch will download)
-%global fedora_lookaside https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base
-# Must match the bundled rust/cockpit snapshot tied to this Fedora release bump
-%global fedora_vendor_rel 14
-
 # fedora 15 and later uses tmpfiles.d
 # otherwise, comment this out
 %{!?with_tmpfiles_d: %global with_tmpfiles_d %{_sysconfdir}/tmpfiles.d}
@@ -106,13 +103,15 @@ Provides:         ldif2ldbm >= 0
 
 ##### Bundled cargo crates list - START #####
 Provides:  bundled(crate(allocator-api2)) = 0.2.21
+Provides:  bundled(crate(anyhow)) = 1.0.102
 Provides:  bundled(crate(atty)) = 0.2.14
 Provides:  bundled(crate(autocfg)) = 1.5.0
 Provides:  bundled(crate(base64)) = 0.13.1
-Provides:  bundled(crate(bitflags)) = 2.10.0
+Provides:  bundled(crate(bitflags)) = 2.11.0
+Provides:  bundled(crate(bumpalo)) = 3.20.2
 Provides:  bundled(crate(byteorder)) = 1.5.0
 Provides:  bundled(crate(cbindgen)) = 0.26.0
-Provides:  bundled(crate(cc)) = 1.2.51
+Provides:  bundled(crate(cc)) = 1.2.56
 Provides:  bundled(crate(cfg-if)) = 1.0.4
 Provides:  bundled(crate(clap)) = 3.2.25
 Provides:  bundled(crate(clap_lex)) = 0.2.4
@@ -124,36 +123,40 @@ Provides:  bundled(crate(equivalent)) = 1.0.2
 Provides:  bundled(crate(errno)) = 0.3.14
 Provides:  bundled(crate(fastrand)) = 2.3.0
 Provides:  bundled(crate(fernet)) = 0.1.4
-Provides:  bundled(crate(find-msvc-tools)) = 0.1.6
+Provides:  bundled(crate(find-msvc-tools)) = 0.1.9
 Provides:  bundled(crate(foldhash)) = 0.2.0
 Provides:  bundled(crate(foreign-types)) = 0.3.2
 Provides:  bundled(crate(foreign-types-shared)) = 0.1.1
-Provides:  bundled(crate(getrandom)) = 0.3.4
+Provides:  bundled(crate(getrandom)) = 0.4.1
 Provides:  bundled(crate(hashbrown)) = 0.16.1
-Provides:  bundled(crate(heck)) = 0.4.1
+Provides:  bundled(crate(heck)) = 0.5.0
 Provides:  bundled(crate(hermit-abi)) = 0.1.19
-Provides:  bundled(crate(indexmap)) = 1.9.3
+Provides:  bundled(crate(id-arena)) = 2.3.0
+Provides:  bundled(crate(indexmap)) = 2.13.0
 Provides:  bundled(crate(itoa)) = 1.0.17
 Provides:  bundled(crate(jobserver)) = 0.1.34
-Provides:  bundled(crate(libc)) = 0.2.179
+Provides:  bundled(crate(js-sys)) = 0.3.95
+Provides:  bundled(crate(leb128fmt)) = 0.1.0
+Provides:  bundled(crate(libc)) = 0.2.182
 Provides:  bundled(crate(linux-raw-sys)) = 0.11.0
 Provides:  bundled(crate(log)) = 0.4.29
 Provides:  bundled(crate(lru)) = 0.16.3
-Provides:  bundled(crate(memchr)) = 2.7.6
+Provides:  bundled(crate(memchr)) = 2.8.0
 Provides:  bundled(crate(once_cell)) = 1.21.3
-Provides:  bundled(crate(openssl)) = 0.10.75
+Provides:  bundled(crate(openssl)) = 0.10.78
 Provides:  bundled(crate(openssl-macros)) = 0.1.1
-Provides:  bundled(crate(openssl-sys)) = 0.9.111
+Provides:  bundled(crate(openssl-sys)) = 0.9.114
 Provides:  bundled(crate(os_str_bytes)) = 6.6.1
-Provides:  bundled(crate(paste)) = 0.1.18
-Provides:  bundled(crate(paste-impl)) = 0.1.18
+Provides:  bundled(crate(paste)) = 1.0.15
 Provides:  bundled(crate(pin-project-lite)) = 0.2.16
 Provides:  bundled(crate(pkg-config)) = 0.3.32
-Provides:  bundled(crate(proc-macro-hack)) = 0.5.20+deprecated
-Provides:  bundled(crate(proc-macro2)) = 1.0.105
-Provides:  bundled(crate(quote)) = 1.0.43
+Provides:  bundled(crate(prettyplease)) = 0.2.37
+Provides:  bundled(crate(proc-macro2)) = 1.0.106
+Provides:  bundled(crate(quote)) = 1.0.44
 Provides:  bundled(crate(r-efi)) = 5.3.0
 Provides:  bundled(crate(rustix)) = 1.1.3
+Provides:  bundled(crate(rustversion)) = 1.0.22
+Provides:  bundled(crate(semver)) = 1.0.27
 Provides:  bundled(crate(serde)) = 1.0.228
 Provides:  bundled(crate(serde_core)) = 1.0.228
 Provides:  bundled(crate(serde_derive)) = 1.0.228
@@ -162,8 +165,8 @@ Provides:  bundled(crate(shlex)) = 1.3.0
 Provides:  bundled(crate(smallvec)) = 1.15.1
 Provides:  bundled(crate(sptr)) = 0.3.2
 Provides:  bundled(crate(strsim)) = 0.10.0
-Provides:  bundled(crate(syn)) = 2.0.114
-Provides:  bundled(crate(tempfile)) = 3.24.0
+Provides:  bundled(crate(syn)) = 2.0.117
+Provides:  bundled(crate(tempfile)) = 3.25.0
 Provides:  bundled(crate(termcolor)) = 1.4.1
 Provides:  bundled(crate(textwrap)) = 0.16.2
 Provides:  bundled(crate(tokio)) = 1.49.0
@@ -171,35 +174,39 @@ Provides:  bundled(crate(toml)) = 0.5.11
 Provides:  bundled(crate(tracing)) = 0.1.44
 Provides:  bundled(crate(tracing-attributes)) = 0.1.31
 Provides:  bundled(crate(tracing-core)) = 0.1.36
-Provides:  bundled(crate(unicode-ident)) = 1.0.22
-Provides:  bundled(crate(uuid)) = 0.8.2
+Provides:  bundled(crate(unicode-ident)) = 1.0.24
+Provides:  bundled(crate(unicode-xid)) = 0.2.6
+Provides:  bundled(crate(uuid)) = 1.23.1
 Provides:  bundled(crate(vcpkg)) = 0.2.15
 Provides:  bundled(crate(wasi)) = 0.11.1+wasi_snapshot_preview1
-Provides:  bundled(crate(wasip2)) = 1.0.1+wasi_0.2.4
+Provides:  bundled(crate(wasip2)) = 1.0.2+wasi_0.2.9
+Provides:  bundled(crate(wasip3)) = 0.4.0+wasi_0.3.0_rc_2026_01_06
+Provides:  bundled(crate(wasm-bindgen)) = 0.2.118
+Provides:  bundled(crate(wasm-bindgen-macro)) = 0.2.118
+Provides:  bundled(crate(wasm-bindgen-macro-support)) = 0.2.118
+Provides:  bundled(crate(wasm-bindgen-shared)) = 0.2.118
+Provides:  bundled(crate(wasm-encoder)) = 0.244.0
+Provides:  bundled(crate(wasm-metadata)) = 0.244.0
+Provides:  bundled(crate(wasmparser)) = 0.244.0
 Provides:  bundled(crate(winapi)) = 0.3.9
 Provides:  bundled(crate(winapi-i686-pc-windows-gnu)) = 0.4.0
 Provides:  bundled(crate(winapi-util)) = 0.1.11
 Provides:  bundled(crate(winapi-x86_64-pc-windows-gnu)) = 0.4.0
 Provides:  bundled(crate(windows-link)) = 0.2.1
 Provides:  bundled(crate(windows-sys)) = 0.61.2
-Provides:  bundled(crate(wit-bindgen)) = 0.46.0
+Provides:  bundled(crate(wit-bindgen)) = 0.51.0
+Provides:  bundled(crate(wit-bindgen-core)) = 0.51.0
+Provides:  bundled(crate(wit-bindgen-rust)) = 0.51.0
+Provides:  bundled(crate(wit-bindgen-rust-macro)) = 0.51.0
+Provides:  bundled(crate(wit-component)) = 0.244.0
+Provides:  bundled(crate(wit-parser)) = 0.244.0
 Provides:  bundled(crate(zeroize)) = 1.8.2
 Provides:  bundled(crate(zeroize_derive)) = 1.4.3
-Provides:  bundled(crate(zmij)) = 1.0.12
-Provides:  bundled(npm(@eslint-community/eslint-utils)) = 4.4.1
-Provides:  bundled(npm(@eslint-community/regexpp)) = 4.12.1
-Provides:  bundled(npm(@eslint/eslintrc)) = 2.1.4
-Provides:  bundled(npm(@eslint/js)) = 8.57.1
+Provides:  bundled(crate(zmij)) = 1.0.21
 Provides:  bundled(npm(@fortawesome/fontawesome-common-types)) = 0.2.36
 Provides:  bundled(npm(@fortawesome/fontawesome-svg-core)) = 1.2.36
 Provides:  bundled(npm(@fortawesome/free-solid-svg-icons)) = 5.15.4
 Provides:  bundled(npm(@fortawesome/react-fontawesome)) = 0.1.19
-Provides:  bundled(npm(@humanwhocodes/config-array)) = 0.13.0
-Provides:  bundled(npm(@humanwhocodes/module-importer)) = 1.0.1
-Provides:  bundled(npm(@humanwhocodes/object-schema)) = 2.0.3
-Provides:  bundled(npm(@nodelib/fs.scandir)) = 2.1.5
-Provides:  bundled(npm(@nodelib/fs.stat)) = 2.0.5
-Provides:  bundled(npm(@nodelib/fs.walk)) = 1.2.8
 Provides:  bundled(npm(@patternfly/patternfly)) = 5.4.1
 Provides:  bundled(npm(@patternfly/react-charts)) = 7.4.3
 Provides:  bundled(npm(@patternfly/react-core)) = 5.4.1
@@ -212,31 +219,17 @@ Provides:  bundled(npm(@types/d3-array)) = 3.2.1
 Provides:  bundled(npm(@types/d3-color)) = 3.1.3
 Provides:  bundled(npm(@types/d3-ease)) = 3.0.2
 Provides:  bundled(npm(@types/d3-interpolate)) = 3.0.4
-Provides:  bundled(npm(@types/d3-path)) = 3.1.0
-Provides:  bundled(npm(@types/d3-scale)) = 4.0.8
-Provides:  bundled(npm(@types/d3-shape)) = 3.1.6
-Provides:  bundled(npm(@types/d3-time)) = 3.0.3
+Provides:  bundled(npm(@types/d3-path)) = 3.1.1
+Provides:  bundled(npm(@types/d3-scale)) = 4.0.9
+Provides:  bundled(npm(@types/d3-shape)) = 3.1.7
+Provides:  bundled(npm(@types/d3-time)) = 3.0.4
 Provides:  bundled(npm(@types/d3-timer)) = 3.0.2
-Provides:  bundled(npm(@ungap/structured-clone)) = 1.2.0
 Provides:  bundled(npm(@xterm/addon-canvas)) = 0.7.0
 Provides:  bundled(npm(@xterm/xterm)) = 5.5.0
-Provides:  bundled(npm(acorn)) = 8.14.0
-Provides:  bundled(npm(acorn-jsx)) = 5.3.2
-Provides:  bundled(npm(ajv)) = 6.14.0
-Provides:  bundled(npm(ansi-regex)) = 5.0.1
-Provides:  bundled(npm(ansi-styles)) = 4.3.0
-Provides:  bundled(npm(argparse)) = 2.0.1
-Provides:  bundled(npm(attr-accept)) = 2.2.4
+Provides:  bundled(npm(argparse)) = 1.0.10
+Provides:  bundled(npm(attr-accept)) = 2.2.5
 Provides:  bundled(npm(autolinker)) = 3.16.2
-Provides:  bundled(npm(balanced-match)) = 1.0.2
-Provides:  bundled(npm(brace-expansion)) = 1.1.12
-Provides:  bundled(npm(callsites)) = 3.1.0
-Provides:  bundled(npm(chalk)) = 4.1.2
-Provides:  bundled(npm(color-convert)) = 2.0.1
-Provides:  bundled(npm(color-name)) = 1.1.4
-Provides:  bundled(npm(concat-map)) = 0.0.1
 Provides:  bundled(npm(core-util-is)) = 1.0.3
-Provides:  bundled(npm(cross-spawn)) = 7.0.6
 Provides:  bundled(npm(d3-array)) = 3.2.4
 Provides:  bundled(npm(d3-color)) = 3.1.0
 Provides:  bundled(npm(d3-ease)) = 3.0.1
@@ -248,142 +241,68 @@ Provides:  bundled(npm(d3-shape)) = 3.2.0
 Provides:  bundled(npm(d3-time)) = 3.1.0
 Provides:  bundled(npm(d3-time-format)) = 4.1.0
 Provides:  bundled(npm(d3-timer)) = 3.0.1
-Provides:  bundled(npm(debug)) = 4.3.7
-Provides:  bundled(npm(deep-is)) = 0.1.4
 Provides:  bundled(npm(delaunator)) = 4.0.1
 Provides:  bundled(npm(delaunay-find)) = 0.0.6
 Provides:  bundled(npm(dequal)) = 2.0.3
-Provides:  bundled(npm(doctrine)) = 3.0.0
 Provides:  bundled(npm(encoding)) = 0.1.13
-Provides:  bundled(npm(escape-string-regexp)) = 4.0.0
-Provides:  bundled(npm(eslint)) = 8.57.1
-Provides:  bundled(npm(eslint-plugin-react-hooks)) = 4.6.2
-Provides:  bundled(npm(eslint-scope)) = 7.2.2
-Provides:  bundled(npm(eslint-visitor-keys)) = 3.4.3
-Provides:  bundled(npm(espree)) = 9.6.1
-Provides:  bundled(npm(esquery)) = 1.6.0
-Provides:  bundled(npm(esrecurse)) = 4.3.0
-Provides:  bundled(npm(estraverse)) = 5.3.0
-Provides:  bundled(npm(esutils)) = 2.0.3
-Provides:  bundled(npm(fast-deep-equal)) = 3.1.3
-Provides:  bundled(npm(fast-json-stable-stringify)) = 2.1.0
-Provides:  bundled(npm(fast-levenshtein)) = 2.0.6
-Provides:  bundled(npm(fastq)) = 1.17.1
-Provides:  bundled(npm(file-entry-cache)) = 6.0.1
-Provides:  bundled(npm(file-selector)) = 2.1.0
-Provides:  bundled(npm(find-up)) = 5.0.0
-Provides:  bundled(npm(flat-cache)) = 3.2.0
-Provides:  bundled(npm(flatted)) = 3.3.1
+Provides:  bundled(npm(file-selector)) = 2.1.2
 Provides:  bundled(npm(focus-trap)) = 7.5.4
-Provides:  bundled(npm(fs.realpath)) = 1.0.0
 Provides:  bundled(npm(gettext-parser)) = 2.1.0
-Provides:  bundled(npm(glob)) = 7.2.3
-Provides:  bundled(npm(glob-parent)) = 6.0.2
-Provides:  bundled(npm(globals)) = 13.24.0
-Provides:  bundled(npm(graphemer)) = 1.4.0
-Provides:  bundled(npm(has-flag)) = 4.0.0
 Provides:  bundled(npm(hoist-non-react-statics)) = 3.3.2
 Provides:  bundled(npm(iconv-lite)) = 0.6.3
-Provides:  bundled(npm(ignore)) = 5.3.2
-Provides:  bundled(npm(import-fresh)) = 3.3.0
-Provides:  bundled(npm(imurmurhash)) = 0.1.4
-Provides:  bundled(npm(inflight)) = 1.0.6
 Provides:  bundled(npm(inherits)) = 2.0.4
 Provides:  bundled(npm(internmap)) = 2.0.3
-Provides:  bundled(npm(is-extglob)) = 2.1.1
-Provides:  bundled(npm(is-glob)) = 4.0.3
-Provides:  bundled(npm(is-path-inside)) = 3.0.3
 Provides:  bundled(npm(isarray)) = 1.0.0
-Provides:  bundled(npm(isexe)) = 2.0.0
 Provides:  bundled(npm(js-sha1)) = 0.7.0
 Provides:  bundled(npm(js-sha256)) = 0.11.0
 Provides:  bundled(npm(js-tokens)) = 4.0.0
-Provides:  bundled(npm(js-yaml)) = 4.1.1
-Provides:  bundled(npm(json-buffer)) = 3.0.1
-Provides:  bundled(npm(json-schema-traverse)) = 0.4.1
 Provides:  bundled(npm(json-stable-stringify-without-jsonify)) = 1.0.1
 Provides:  bundled(npm(json-stringify-safe)) = 5.0.1
-Provides:  bundled(npm(keyv)) = 4.5.4
-Provides:  bundled(npm(levn)) = 0.4.1
-Provides:  bundled(npm(locate-path)) = 6.0.0
 Provides:  bundled(npm(lodash)) = 4.17.23
-Provides:  bundled(npm(lodash.merge)) = 4.6.2
 Provides:  bundled(npm(loose-envify)) = 1.4.0
 Provides:  bundled(npm(memoize-one)) = 5.2.1
-Provides:  bundled(npm(minimatch)) = 3.1.5
-Provides:  bundled(npm(ms)) = 2.1.3
-Provides:  bundled(npm(natural-compare)) = 1.4.0
 Provides:  bundled(npm(object-assign)) = 4.1.1
-Provides:  bundled(npm(once)) = 1.4.0
-Provides:  bundled(npm(optionator)) = 0.9.4
-Provides:  bundled(npm(p-limit)) = 3.1.0
-Provides:  bundled(npm(p-locate)) = 5.0.0
-Provides:  bundled(npm(parent-module)) = 1.0.1
-Provides:  bundled(npm(path-exists)) = 4.0.0
-Provides:  bundled(npm(path-is-absolute)) = 1.0.1
-Provides:  bundled(npm(path-key)) = 3.1.1
-Provides:  bundled(npm(prelude-ls)) = 1.2.1
-Provides:  bundled(npm(prettier)) = 3.3.3
 Provides:  bundled(npm(process-nextick-args)) = 2.0.1
 Provides:  bundled(npm(prop-types)) = 15.8.1
-Provides:  bundled(npm(punycode)) = 2.3.1
-Provides:  bundled(npm(queue-microtask)) = 1.2.3
 Provides:  bundled(npm(react)) = 18.3.1
 Provides:  bundled(npm(react-dom)) = 18.3.1
-Provides:  bundled(npm(react-dropzone)) = 14.3.5
+Provides:  bundled(npm(react-dropzone)) = 14.3.8
 Provides:  bundled(npm(react-fast-compare)) = 3.2.2
 Provides:  bundled(npm(react-is)) = 16.13.1
 Provides:  bundled(npm(readable-stream)) = 2.3.8
 Provides:  bundled(npm(remarkable)) = 2.0.1
-Provides:  bundled(npm(resolve-from)) = 4.0.0
-Provides:  bundled(npm(reusify)) = 1.0.4
-Provides:  bundled(npm(rimraf)) = 3.0.2
-Provides:  bundled(npm(run-parallel)) = 1.2.0
 Provides:  bundled(npm(safe-buffer)) = 5.2.1
 Provides:  bundled(npm(safer-buffer)) = 2.1.2
 Provides:  bundled(npm(scheduler)) = 0.23.2
-Provides:  bundled(npm(shebang-command)) = 2.0.0
-Provides:  bundled(npm(shebang-regex)) = 3.0.0
 Provides:  bundled(npm(sprintf-js)) = 1.0.3
 Provides:  bundled(npm(string_decoder)) = 1.1.1
-Provides:  bundled(npm(strip-ansi)) = 6.0.1
-Provides:  bundled(npm(strip-json-comments)) = 3.1.1
-Provides:  bundled(npm(supports-color)) = 7.2.0
 Provides:  bundled(npm(tabbable)) = 6.2.0
-Provides:  bundled(npm(text-table)) = 0.2.0
 Provides:  bundled(npm(throttle-debounce)) = 5.0.2
 Provides:  bundled(npm(tslib)) = 2.8.1
-Provides:  bundled(npm(type-check)) = 0.4.0
-Provides:  bundled(npm(type-fest)) = 0.20.2
-Provides:  bundled(npm(uri-js)) = 4.4.1
 Provides:  bundled(npm(util-deprecate)) = 1.0.2
 Provides:  bundled(npm(uuid)) = 10.0.0
-Provides:  bundled(npm(victory-area)) = 37.3.1
-Provides:  bundled(npm(victory-axis)) = 37.3.1
-Provides:  bundled(npm(victory-bar)) = 37.3.1
-Provides:  bundled(npm(victory-box-plot)) = 37.3.1
-Provides:  bundled(npm(victory-brush-container)) = 37.3.1
-Provides:  bundled(npm(victory-chart)) = 37.3.1
-Provides:  bundled(npm(victory-core)) = 37.3.1
-Provides:  bundled(npm(victory-create-container)) = 37.3.1
-Provides:  bundled(npm(victory-cursor-container)) = 37.3.1
-Provides:  bundled(npm(victory-group)) = 37.3.1
-Provides:  bundled(npm(victory-legend)) = 37.3.1
-Provides:  bundled(npm(victory-line)) = 37.3.1
-Provides:  bundled(npm(victory-pie)) = 37.3.1
-Provides:  bundled(npm(victory-polar-axis)) = 37.3.1
-Provides:  bundled(npm(victory-scatter)) = 37.3.1
-Provides:  bundled(npm(victory-selection-container)) = 37.3.1
-Provides:  bundled(npm(victory-shared-events)) = 37.3.1
-Provides:  bundled(npm(victory-stack)) = 37.3.1
-Provides:  bundled(npm(victory-tooltip)) = 37.3.1
-Provides:  bundled(npm(victory-vendor)) = 37.3.1
-Provides:  bundled(npm(victory-voronoi-container)) = 37.3.1
-Provides:  bundled(npm(victory-zoom-container)) = 37.3.1
-Provides:  bundled(npm(which)) = 2.0.2
-Provides:  bundled(npm(word-wrap)) = 1.2.5
-Provides:  bundled(npm(wrappy)) = 1.0.2
-Provides:  bundled(npm(yocto-queue)) = 0.1.0
+Provides:  bundled(npm(victory-area)) = 37.3.6
+Provides:  bundled(npm(victory-axis)) = 37.3.6
+Provides:  bundled(npm(victory-bar)) = 37.3.6
+Provides:  bundled(npm(victory-box-plot)) = 37.3.6
+Provides:  bundled(npm(victory-brush-container)) = 37.3.6
+Provides:  bundled(npm(victory-chart)) = 37.3.6
+Provides:  bundled(npm(victory-core)) = 37.3.6
+Provides:  bundled(npm(victory-create-container)) = 37.3.6
+Provides:  bundled(npm(victory-cursor-container)) = 37.3.6
+Provides:  bundled(npm(victory-group)) = 37.3.6
+Provides:  bundled(npm(victory-legend)) = 37.3.6
+Provides:  bundled(npm(victory-line)) = 37.3.6
+Provides:  bundled(npm(victory-pie)) = 37.3.6
+Provides:  bundled(npm(victory-polar-axis)) = 37.3.6
+Provides:  bundled(npm(victory-scatter)) = 37.3.6
+Provides:  bundled(npm(victory-selection-container)) = 37.3.6
+Provides:  bundled(npm(victory-shared-events)) = 37.3.6
+Provides:  bundled(npm(victory-stack)) = 37.3.6
+Provides:  bundled(npm(victory-tooltip)) = 37.3.6
+Provides:  bundled(npm(victory-vendor)) = 37.3.6
+Provides:  bundled(npm(victory-voronoi-container)) = 37.3.6
+Provides:  bundled(npm(victory-zoom-container)) = 37.3.6
 ##### Bundled cargo crates list - END #####
 
 # Attach the buildrequires to the top level package:
@@ -520,9 +439,9 @@ Source4:          389-ds-base.sysusers
 Source5:          https://fedorapeople.org/groups/389ds/libdb-5.3.28-59.tar.bz2
 %endif
 
-Source6:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/vendor-3.2.0-14.tar.gz/sha512/27cc2630fea6b73fa4c5370b5b33ec5a2ea8cdaef72604cc5f48f6c72473c944e67f11c10fd6e7820419bcb1988bc3ee904cda9b11d414a0aa6940968f67d383/vendor-3.2.0-14.tar.gz
-Source7:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/Cargo-3.2.0-14.lock/sha512/bdd7228ebcc4d312d414f642cf59ac9f6c043b98482ea6dec780a3830d248429262c76993eec7b52939e9a750713cecb618cbff6b94ff7e3e76f6f240c76d322/Cargo-3.2.0-14.lock
-Source8:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/cockpit_dist-3.2.0-14.tar.bz2/sha512/70c7dc376676821b05fca257bc01f80202f7cee97221f52ad7ead237a547ee950edf2efb8c501d466d88b3dcaf1677c6c3a96ec20729a6896efdcdad9a96aed0/cockpit_dist-3.2.0-14.tar.bz2
+Source6:          vendor-%{version}-1.tar.gz
+Source7:          Cargo-%{version}-1.lock
+Source8:          cockpit_dist-%{version}-1.tar.bz2
 
 
 %description
@@ -659,7 +578,6 @@ cd src/lib389
 %oreon_verify_sources
 %autosetup -S git -p1 -n %{name}-%{version}
 %if %{defined SOURCE6}
-%(f=%{_sourcedir}/vendor-3.2.0-14.tar.gz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f0515ff035156f8344ac583aa9f4a0c9d66a14c0b59542c3d6ccc7e15eba201" || { echo "oreon: Source6 SHA256 mismatch for vendor-3.2.0-14.tar.gz" >&2; exit 1; })
 rm -rf vendor
 tar xzf %{SOURCE6}
 %endif
@@ -678,7 +596,6 @@ cp %{SOURCE7} src/Cargo.lock
 %endif
 
 %if %{defined SOURCE8}
-%(f=%{_sourcedir}/cockpit_dist-3.2.0-14.tar.bz2; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "89e0ab01efe53312efcf8d921c41569043df99a730fc03f187671b55b9aa2fca" || { echo "oreon: Source8 SHA256 mismatch for cockpit_dist-3.2.0-14.tar.bz2" >&2; exit 1; })
 # Unpack prebuilt cockpit files
 tar xvjf %{SOURCE8} -C src/cockpit/389-console
 %endif
