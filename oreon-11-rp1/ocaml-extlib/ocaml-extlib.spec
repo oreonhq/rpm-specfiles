@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 964277f001280a8eddfc08e0701d59ca0c6bdc5d052313b3e40e5088f6d45d70
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
 
@@ -14,10 +22,6 @@ License:        LGPL-2.1-or-later with OCaml-LGPL-linking-exception
 URL:            https://github.com/ygrek/ocaml-extlib
 VCS:            git:%{url}.git
 Source0:        https://github.com/ygrek/ocaml-extlib/releases/download/1.8.0/extlib-1.8.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 964277f001280a8eddfc08e0701d59ca0c6bdc5d052313b3e40e5088f6d45d70
-%global source0_file extlib-1.8.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  ocaml >= 4.02
@@ -48,9 +52,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/extlib-1.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "964277f001280a8eddfc08e0701d59ca0c6bdc5d052313b3e40e5088f6d45d70" || { echo "oreon: Source0 SHA256 mismatch for extlib-1.8.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -n extlib-%{version}
 
 # Remove references to the bytes library for OCaml 5.0

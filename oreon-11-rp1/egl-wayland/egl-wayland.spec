@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 da232d46ec4553b2f4b057b705acfa63466318f91f7e8de38dcfb30243fb6898
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global commit0 3acc51828aceba310081c72a18f938f04d4487de
 %global date 20250407
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
@@ -14,10 +22,6 @@ URL:            https://github.com/NVIDIA/%{name}
 Source0:        https://github.com/NVIDIA/egl-wayland/archive/1.1.21/egl-wayland-1.1.21.tar.gz
 %else
 Source0:        https://github.com/NVIDIA/egl-wayland/archive/3acc51828aceba310081c72a18f938f04d4487de/egl-wayland-%(c=3acc51828aceba310081c72a18f938f04d4487de;.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 da232d46ec4553b2f4b057b705acfa63466318f91f7e8de38dcfb30243fb6898
-%global source0_file egl-wayland-1.1.21.tar.gz
-# oreon url source checksums end
 %endif
 
 BuildRequires:  cmake
@@ -57,9 +61,7 @@ EGL drivers that support the external platform mechanism.
 This package contains development files.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/egl-wayland-1.1.21.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "da232d46ec4553b2f4b057b705acfa63466318f91f7e8de38dcfb30243fb6898" || { echo "oreon: Source0 SHA256 mismatch for egl-wayland-1.1.21.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if 0%{?tag:1}
 %autosetup -p1
 %else

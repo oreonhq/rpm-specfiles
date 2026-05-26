@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d227a9626d16504b4074ffedd53161bca8e1831179044fc6d6de7e61418fc766
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # When bootstrapping Python, we cannot test this yet
 # RHEL does not include the test dependencies
 %bcond tests    %{undefined rhel}
@@ -24,10 +32,6 @@ Patch:          system-certs.patch
 # Upstream PR: https://github.com/psf/requests/pull/5953
 # This change is backported also into RHEL 9.4 (via CS)
 Patch:          support_IPv6_CIDR_in_no_proxy.patch
-# oreon url source checksums begin
-%global source0_sha256 d227a9626d16504b4074ffedd53161bca8e1831179044fc6d6de7e61418fc766
-%global source0_file requests-v2.33.1.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
@@ -65,9 +69,7 @@ designed to make HTTP requests easy for developers.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/requests-v2.33.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d227a9626d16504b4074ffedd53161bca8e1831179044fc6d6de7e61418fc766" || { echo "oreon: Source0 SHA256 mismatch for requests-v2.33.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n requests-%{version}
 
 # env shebang in nonexecutable file

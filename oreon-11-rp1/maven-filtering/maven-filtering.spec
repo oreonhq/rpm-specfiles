@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ab8a1ca83aeaf57360023ac6e7fcfff531b99dbc197181a22a9ea14982c0e828
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without bootstrap
 
 Name:           maven-filtering
@@ -12,10 +20,6 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
 Patch:          0001-Skip-failed-tests.patch
-# oreon url source checksums begin
-%global source0_sha256 ab8a1ca83aeaf57360023ac6e7fcfff531b99dbc197181a22a9ea14982c0e828
-%global source0_file maven-filtering-3.3.2-source-release.zip
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -51,9 +55,7 @@ Maven Resources Plugin. The goal is to provide a shared component for all
 plugins that needs to filter resources.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/maven-filtering-3.3.2-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ab8a1ca83aeaf57360023ac6e7fcfff531b99dbc197181a22a9ea14982c0e828" || { echo "oreon: Source0 SHA256 mismatch for maven-filtering-3.3.2-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0a800e9e94dca2ab702d65d72777ae8cae078e3d74d0bcbed64ba0849e8029a1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:        List SCSI devices (or hosts) and associated information
 Name:           lsscsi
 Version:        0.32
@@ -5,10 +13,6 @@ Release:        15%{?dist}
 License:        GPL-2.0-or-later
 # official git repository: https://github.com/doug-gilbert/lsscsi
 Source0:        http://sg.danny.cz/scsi/%{name}-%{version}.tgz
-# oreon url source checksums begin
-%global source0_sha256 0a800e9e94dca2ab702d65d72777ae8cae078e3d74d0bcbed64ba0849e8029a1
-%global source0_file lsscsi-0.32.tgz
-# oreon url source checksums end
 URL:            http://sg.danny.cz/scsi/lsscsi.html
 BuildRequires:  gcc
 BuildRequires:  make
@@ -25,9 +29,7 @@ Author:
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/lsscsi-0.32.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0a800e9e94dca2ab702d65d72777ae8cae078e3d74d0bcbed64ba0849e8029a1" || { echo "oreon: Source0 SHA256 mismatch for lsscsi-0.32.tgz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

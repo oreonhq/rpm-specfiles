@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 84e7a56680cd0f1866f98e89bb9ae8d05bd9f87892e6e50dafc63415dbee3122
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           jackson-core
 Version:        2.18.2
 Release:        6%{?dist}
@@ -7,10 +15,6 @@ License:        Apache-2.0
 URL:            https://github.com/FasterXML/jackson-core
 Source0:        https://github.com/FasterXML/jackson-core/archive/jackson-core-2.18.2.tar.gz
 Patch1:         0001-Remove-ch.randelshofer.fastdoubleparser.patch
-# oreon url source checksums begin
-%global source0_sha256 84e7a56680cd0f1866f98e89bb9ae8d05bd9f87892e6e50dafc63415dbee3122
-%global source0_file jackson-core-2.18.2.tar.gz
-# oreon url source checksums end
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42
 BuildRequires:  maven-local
@@ -33,9 +37,7 @@ Core part of Jackson that defines Streaming API as well
 as basic shared abstractions.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jackson-core-2.18.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "84e7a56680cd0f1866f98e89bb9ae8d05bd9f87892e6e50dafc63415dbee3122" || { echo "oreon: Source0 SHA256 mismatch for jackson-core-2.18.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{name}-%{version} -p 1
 
 # Remove plugins unnecessary for RPM builds

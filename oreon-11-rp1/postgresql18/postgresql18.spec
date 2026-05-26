@@ -1,3 +1,17 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d95663fbbf3a80f81a9d98d895266bdcb74ba274bcc04ef6d76630a72dee016f
+%global source3_sha256 3b9a62538a8da151e807a3ddb1198e8605f2032544d78f403ae883d27ecf1ee4
+%global source12_sha256 8f1635afabb95e4fafe2f67d89c7052a1270d615bab5b85f1b54225695540c5a
+%global source18_sha256 6deb08c23d03d77d8f8bd1c14049eeef64aef8968fd8891df2dfc0b42f178eac
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source12_sha256:%(test -z "%{source12_sha256}" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_sha256}" || { echo "oreon: Source12 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source18_sha256:%(test -z "%{source18_sha256}" || { f="%{SOURCE18}"; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source18_sha256}" || { echo "oreon: Source18 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # This is the PostgreSQL Global Development Group Official RPMset spec file,
 # or a derivative thereof.
 
@@ -100,16 +114,6 @@ Patch9: postgresql-server-pg_config.patch
 # rhbz#1940964
 Patch10: postgresql-datalayout-mismatch-on-s390.patch
 Patch12: postgresql-no-libecpg.patch
-# oreon url source checksums begin
-%global source0_sha256 d95663fbbf3a80f81a9d98d895266bdcb74ba274bcc04ef6d76630a72dee016f
-%global source0_file postgresql-18.3.tar.bz2
-%global source3_sha256 3b9a62538a8da151e807a3ddb1198e8605f2032544d78f403ae883d27ecf1ee4
-%global source3_file postgresql-17.9.tar.bz2
-%global source12_sha256 8f1635afabb95e4fafe2f67d89c7052a1270d615bab5b85f1b54225695540c5a
-%global source12_file postgresql-setup-8.12.tar.gz
-%global source18_sha256 6deb08c23d03d77d8f8bd1c14049eeef64aef8968fd8891df2dfc0b42f178eac
-%global source18_file postgresql-16.11.tar.bz2
-# oreon url source checksums end
 
 # This macro is used for package names in the files section
 %if %?postgresql_default
@@ -518,12 +522,7 @@ goal of accelerating analytics queries.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/postgresql-18.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d95663fbbf3a80f81a9d98d895266bdcb74ba274bcc04ef6d76630a72dee016f" || { echo "oreon: Source0 SHA256 mismatch for postgresql-18.3.tar.bz2" >&2; exit 1; })
-%(f=%{_sourcedir}/postgresql-17.9.tar.bz2; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3b9a62538a8da151e807a3ddb1198e8605f2032544d78f403ae883d27ecf1ee4" || { echo "oreon: Source3 SHA256 mismatch for postgresql-17.9.tar.bz2" >&2; exit 1; })
-%(f=%{_sourcedir}/postgresql-setup-8.12.tar.gz; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8f1635afabb95e4fafe2f67d89c7052a1270d615bab5b85f1b54225695540c5a" || { echo "oreon: Source12 SHA256 mismatch for postgresql-setup-8.12.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/postgresql-16.11.tar.bz2; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6deb08c23d03d77d8f8bd1c14049eeef64aef8968fd8891df2dfc0b42f178eac" || { echo "oreon: Source18 SHA256 mismatch for postgresql-16.11.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 (
   cd "$(dirname "%{SOURCE0}")"
   sha256sum -c %{SOURCE16}

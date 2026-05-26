@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c0e0bead458224b9ac5bb32ed2b1fa088963b565521c1bb1a6a3566d522c2e35
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Parallel-ForkManager
 Version:        2.03
 Release:        4%{?dist}
@@ -5,10 +13,6 @@ Summary:        Simple parallel processing fork manager
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Parallel-ForkManager
 Source0:        https://cpan.metacpan.org/authors/id/Y/YA/YANICK/Parallel-ForkManager-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 c0e0bead458224b9ac5bb32ed2b1fa088963b565521c1bb1a6a3566d522c2e35
-%global source0_file Parallel-ForkManager-2.03.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -45,9 +49,7 @@ where the number of processes to be forked off should be limited. Typical
 use is a downloader which will be retrieving hundreds/thousands of files.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Parallel-ForkManager-2.03.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c0e0bead458224b9ac5bb32ed2b1fa088963b565521c1bb1a6a3566d522c2e35" || { echo "oreon: Source0 SHA256 mismatch for Parallel-ForkManager-2.03.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Parallel-ForkManager-%{version}
 
 # Prepare the example scripts for inclusion as documentation, as they are not

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7d550dccdfcd286e33895501829ed971eeb65c614e73aadb4a08aeef719b143a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global expat_version 1.95.5
 %global glib2_version 2.40.0
 %global dbus_version 1.8
@@ -17,10 +25,6 @@ Source1: https://dbus.freedesktop.org/releases/dbus-glib/%{name}-%{version}.tar.
 # gpg --keyserver keyring.debian.org --recv-keys 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
 # gpg --export --export-options export-minimal 0x36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F > gpgkey-36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F.gpg
 Source2: gpgkey-36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F.gpg
-# oreon url source checksums begin
-%global source0_sha256 7d550dccdfcd286e33895501829ed971eeb65c614e73aadb4a08aeef719b143a
-%global source0_file dbus-glib-0.112.tar.gz
-# oreon url source checksums end
 
 BuildRequires: pkgconfig(dbus-1) >= %{dbus_version}
 BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}
@@ -46,9 +50,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Headers and static libraries for the D-Bus GLib bindings
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dbus-glib-0.112.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7d550dccdfcd286e33895501829ed971eeb65c614e73aadb4a08aeef719b143a" || { echo "oreon: Source0 SHA256 mismatch for dbus-glib-0.112.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 55f81be395929c8fc15ad8c6e8bacff9ff24cbd7e58477b86dd14e70101516bd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           pcm
 Version:        202604
 Release:        0%{?dist}
@@ -5,10 +13,6 @@ Summary:        Intel(r) Performance Counter Monitor
 License:        BSD-3-Clause
 Url:            https://github.com/intel/pcm
 Source0:        https://github.com/intel/pcm/archive/202604/pcm-202604.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 55f81be395929c8fc15ad8c6e8bacff9ff24cbd7e58477b86dd14e70101516bd
-%global source0_file pcm-202604.tar.gz
-# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  make
@@ -26,9 +30,7 @@ Atom(tm) and Xeon Phi(tm) processors. PCM works on Linux, Windows,
 Mac OS X, FreeBSD and DragonFlyBSD operating systems.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pcm-202604.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "55f81be395929c8fc15ad8c6e8bacff9ff24cbd7e58477b86dd14e70101516bd" || { echo "oreon: Source0 SHA256 mismatch for pcm-202604.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

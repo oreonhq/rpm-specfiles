@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 cb7d112433cf7c2e37a8ec918fb24f0ea5cb293cfa1002488e431de26482f47b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global glib2_ver 2.40
 %global gst_ver 1.0.0
 %global gst_plugins_base_ver 1.0.0
@@ -16,10 +24,6 @@ Source0:        https://freedesktop.org/software/%{far}/releases/%{far}/%{far}-%
 # patch for upstream issue https://gitlab.freedesktop.org/farstream/farstream/issues/16
 Patch0:         farstream-0.2.8-configure-add-check-for-glib-mkenums.patch
 Patch1:         farstream-0.2.9-build-Adapt-to-backwards-incompatible-change-in-GNU-.patch
-# oreon url source checksums begin
-%global source0_sha256 cb7d112433cf7c2e37a8ec918fb24f0ea5cb293cfa1002488e431de26482f47b
-%global source0_file farstream-0.2.9.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -57,9 +61,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/farstream-0.2.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cb7d112433cf7c2e37a8ec918fb24f0ea5cb293cfa1002488e431de26482f47b" || { echo "oreon: Source0 SHA256 mismatch for farstream-0.2.9.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{far}-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

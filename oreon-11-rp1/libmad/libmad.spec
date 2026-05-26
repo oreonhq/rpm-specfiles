@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f4eb229452252600ce48f3c2704c9e6d97b789f81e31c37b0c67dd66f445ea35
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:          libmad
 Version:       0.16.4
 Release:       %autorelease
@@ -8,10 +16,6 @@ Source0:        https://codeberg.org/tenacityteam/libmad/archive/0.16.4.tar.gz#/
 Patch0:        https://codeberg.org/tenacityteam/libmad/commit/326363f04e583b563f63941db3cf7f50e76aceb2.patch#/cmake_fix.patch
 # fix CPU arch detection on x86
 Patch1:        libmad-x86.patch
-# oreon url source checksums begin
-%global source0_sha256 f4eb229452252600ce48f3c2704c9e6d97b789f81e31c37b0c67dd66f445ea35
-%global source0_file 0.16.4.tar.gz
-# oreon url source checksums end
 BuildRequires: cmake
 BuildRequires: gcc-c++
 
@@ -29,9 +33,7 @@ Requires:      %{name}%{?_isa} = %{version}-%{release}
 %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/0.16.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f4eb229452252600ce48f3c2704c9e6d97b789f81e31c37b0c67dd66f445ea35" || { echo "oreon: Source0 SHA256 mismatch for 0.16.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}
 
 %build

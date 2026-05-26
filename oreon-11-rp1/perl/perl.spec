@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 098c7f76e7a28443f6403610c7e339777905360c5225798fd142b8d33b05c6b4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global perl_version    5.42.1
 %global perl_epoch      4
 %global perl_arch_stem -thread-multi
@@ -191,10 +199,6 @@ Patch201:       perl-5.16.3-Link-XS-modules-to-libperl.so-with-EU-MM-on-Linux.pa
 
 # If optimizing -O is used, add the definition to .ph files, bug #2152012
 Patch202:       perl-5.36.0-Add-definition-of-OPTIMIZE-to-.ph-files.patch
-# oreon url source checksums begin
-%global source0_sha256 098c7f76e7a28443f6403610c7e339777905360c5225798fd142b8d33b05c6b4
-%global source0_file perl-5.42.1.tar.xz
-# oreon url source checksums end
 
 # Update some of the bundled modules
 # see http://fedoraproject.org/wiki/Perl/perl.spec for instructions
@@ -4211,9 +4215,7 @@ The "vmsish" pragma control VMS-specific features of the Perl language. If
 you're not running VMS, this module does nothing.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/perl-5.42.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "098c7f76e7a28443f6403610c7e339777905360c5225798fd142b8d33b05c6b4" || { echo "oreon: Source0 SHA256 mismatch for perl-5.42.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n perl-%{perl_version}
 %patch -P1 -p1
 %ifarch %{multilib_64_archs}

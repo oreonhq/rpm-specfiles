@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f2360feb5a32ace226c583df4faf6eff74145c81264aaea11e17a1af2f6f101a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           game-music-emu
 Version:        0.6.4
 Release:        3%{?dist}
@@ -7,10 +15,6 @@ Summary:        Video game music file emulation/playback library
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://github.com/libgme/game-music-emu
 Source0:        https://github.com/libgme/game-music-emu/archive/0.6.4/game-music-emu-0.6.4.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 f2360feb5a32ace226c583df4faf6eff74145c81264aaea11e17a1af2f6f101a
-%global source0_file game-music-emu-0.6.4.tar.gz
-# oreon url source checksums end
 
 
 BuildRequires:  gcc
@@ -55,9 +59,7 @@ This package contains the demo player for files supported by Game_Music_Emu.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/game-music-emu-0.6.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f2360feb5a32ace226c583df4faf6eff74145c81264aaea11e17a1af2f6f101a" || { echo "oreon: Source0 SHA256 mismatch for game-music-emu-0.6.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 # add install rule for the player
 echo -e "\ninstall(TARGETS gme_player RUNTIME DESTINATION %{_bindir})" >> player/CMakeLists.txt

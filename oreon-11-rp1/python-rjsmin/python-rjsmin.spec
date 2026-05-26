@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a3f8040b0273dec773e0e807e86a4d0a9535516c0a0a35aa1bb6de6e15bb1f09
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # cloud-sptheme is not included in RHEL
 %bcond docs %[%{undefined rhel} || %{defined epel}]
 
@@ -17,10 +25,6 @@ Summary:        Javascript Minifier
 License:        Apache-2.0
 URL:            http://opensource.perlig.de/rjsmin/
 Source0:        https://pypi.python.org/packages/source/r/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 a3f8040b0273dec773e0e807e86a4d0a9535516c0a0a35aa1bb6de6e15bb1f09
-%global source0_file rjsmin-1.2.5.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel
@@ -45,9 +49,7 @@ Summary:	Javascript Minifier - docs
 %{desc}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rjsmin-1.2.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a3f8040b0273dec773e0e807e86a4d0a9535516c0a0a35aa1bb6de6e15bb1f09" || { echo "oreon: Source0 SHA256 mismatch for rjsmin-1.2.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{pypi_name}-%{version}
 
 # strip bang path from rjsmin.py

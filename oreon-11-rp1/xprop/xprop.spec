@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d689e2adb7ef7b439f6469b51cda8a7daefc83243854c2a3b8f84d0f029d67ee
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:    X property display utility
 Name:       xprop
 Version:    1.2.8
@@ -5,10 +13,6 @@ Release:    %autorelease
 License:    MIT
 URL:        https://www.x.org
 Source0:    https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 d689e2adb7ef7b439f6469b51cda8a7daefc83243854c2a3b8f84d0f029d67ee
-%global source0_file xprop-1.2.8.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc make
 BuildRequires:  gettext-devel
@@ -22,9 +26,7 @@ Obsoletes: xorg-x11-utils < 7.5-39
 The xprop utility is for displaying window and font properties in an X server.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xprop-1.2.8.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d689e2adb7ef7b439f6469b51cda8a7daefc83243854c2a3b8f84d0f029d67ee" || { echo "oreon: Source0 SHA256 mismatch for xprop-1.2.8.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

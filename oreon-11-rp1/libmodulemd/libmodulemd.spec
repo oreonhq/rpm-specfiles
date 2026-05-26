@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6fb926e270ba44d1981d1abadaa6728c5e357636eee3b3bb533e95b92d104970
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if  0%{?rhel} && 0%{?rhel} <= 7
   # There is no python3-gobject-base in RHEL 7. But it exists in EPEL 7.
   %global meson_python_flags -Dwith_py2=true -Dwith_py3=true
@@ -45,10 +53,6 @@ Source2:        gpgkey-E3F42FCE156830A80358E6E94FD1AEC3365AF7BF.gpg
 Patch0:         modulemd-2.15.2-tests-Adapt-to-glib-2.87.0.patch
 # Adapt tests to pygobject 3.55.0, in upstream after 2.15.2, bug #2440570
 Patch1:         modulemd-2.15.2-tests-Adapt-to-pygobject-3.55.0.patch
-# oreon url source checksums begin
-%global source0_sha256 6fb926e270ba44d1981d1abadaa6728c5e357636eee3b3bb533e95b92d104970
-%global source0_file modulemd-2.15.2.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gnupg2
 BuildRequires:  meson >= 0.47
@@ -125,9 +129,7 @@ Development files for %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/modulemd-2.15.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6fb926e270ba44d1981d1abadaa6728c5e357636eee3b3bb533e95b92d104970" || { echo "oreon: Source0 SHA256 mismatch for modulemd-2.15.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -n modulemd-%{version}
 

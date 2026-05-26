@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a3b7c7b593b279c46d25a48b583371ab762968e98b6a46457d8d52a755852eb9
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: slirp4netns
 Version: 1.3.1
 Release: %autorelease
@@ -6,10 +14,6 @@ Summary: slirp for network namespaces
 URL: https://github.com/rootless-containers/%{name}
 # Tarball fetched from upstream
 Source0:        https://github.com/rootless-containers/slirp4netns/archive/v1.3.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 a3b7c7b593b279c46d25a48b583371ab762968e98b6a46457d8d52a755852eb9
-%global source0_file v1.3.1.tar.gz
-# oreon url source checksums end
 ExclusiveArch: %{golang_arches_future}
 BuildRequires: autoconf
 BuildRequires: automake
@@ -37,9 +41,7 @@ building other packages which use import path with
 %{import_path} prefix.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v1.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a3b7c7b593b279c46d25a48b583371ab762968e98b6a46457d8d52a755852eb9" || { echo "oreon: Source0 SHA256 mismatch for v1.3.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -Sgit %{name}-%{built_tag_strip}
 
 %build

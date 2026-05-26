@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9968979aae46a1750452eb934558af81c6eda957eaee00f7ec72b24ee8ead547
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # For deep debugging we need to build binaries with extra debug info
 %bcond debug 0
 
@@ -9,10 +17,6 @@ Release:        2%{?with_debug:.debug}%{?dist}
 Summary:        The MariaDB Native Client library (ODBC driver)
 License:        LGPL-2.1-or-later
 Source:         https://archive.mariadb.org/connector-odbc-%{version}/%{name}-%{version}-src.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 9968979aae46a1750452eb934558af81c6eda957eaee00f7ec72b24ee8ead547
-%global source0_file mariadb-connector-odbc-3.2.8-src.tar.gz
-# oreon url source checksums end
 Url:            https://mariadb.org/en/
 # Online documentation can be found at: https://mariadb.com/kb/en/library/mariadb-connector-odbc/
 
@@ -35,9 +39,7 @@ this connector easier.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mariadb-connector-odbc-3.2.8-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9968979aae46a1750452eb934558af81c6eda957eaee00f7ec72b24ee8ead547" || { echo "oreon: Source0 SHA256 mismatch for mariadb-connector-odbc-3.2.8-src.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{version}-src
 
 sed -i -e "s|/usr/include/mariadb|$(pkg-config --variable=includedir libmariadb)|" CMakeLists.txt

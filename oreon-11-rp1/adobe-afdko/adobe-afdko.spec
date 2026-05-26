@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5feed7c2468e25b25fce0479c04af07f4ed2680bc9251bb4c4aef9ec2fba5720
+%global source1_sha256 0ed13668906e86dbc0dcddf30fdee68c10203dea4e83852b4edb810821bee3c4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Upstream actually uses a post-release snapshot of commit
 # df4d68c09cdef73e023b8838a8bc7ca4dff1d1de “that addresses a missing include
 # directive needed in more recent Visual Studio releases;” we should be able to
@@ -30,12 +40,6 @@ License:	Apache-2.0
 URL:		https://github.com/adobe-type-tools/afdko
 Source0:        https://github.com/adobe-type-tools/afdko/releases/download/4.0.3/afdko-4.0.3.tar.gz
 Source1:	https://www.antlr.org/download/antlr4-cpp-runtime-%{antl4_ver}-source.zip
-# oreon url source checksums begin
-%global source0_sha256 5feed7c2468e25b25fce0479c04af07f4ed2680bc9251bb4c4aef9ec2fba5720
-%global source0_file afdko-4.0.3.tar.gz
-%global source1_sha256 0ed13668906e86dbc0dcddf30fdee68c10203dea4e83852b4edb810821bee3c4
-%global source1_file antlr4-cpp-runtime-4.13.2-source.zip
-# oreon url source checksums end
 BuildRequires:	gcc g++
 BuildRequires:	cmake
 BuildRequires:	libuuid-devel
@@ -48,10 +52,7 @@ The AFDKO is a set of tools for building OpenType font files
 from PostScript and TrueType font data.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/afdko-4.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5feed7c2468e25b25fce0479c04af07f4ed2680bc9251bb4c4aef9ec2fba5720" || { echo "oreon: Source0 SHA256 mismatch for afdko-4.0.3.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/antlr4-cpp-runtime-4.13.2-source.zip; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0ed13668906e86dbc0dcddf30fdee68c10203dea4e83852b4edb810821bee3c4" || { echo "oreon: Source1 SHA256 mismatch for antlr4-cpp-runtime-4.13.2-source.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n afdko-%{version}
 
 %build

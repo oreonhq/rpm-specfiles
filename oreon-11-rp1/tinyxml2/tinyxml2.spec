@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5556deb5081fb246ee92afae73efd943c889cef0cafea92b0b82422d6a18f289
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           tinyxml2
 Version:        11.0.0
 %global so_version 11
@@ -24,10 +32,6 @@ License:        Zlib
 SourceLicense:  %{license} AND LicenseRef-Fedora-Public-Domain AND MIT
 URL:            https://github.com/leethomason/tinyxml2
 Source:        https://github.com/leethomason/tinyxml2/archive/11.0.0/tinyxml2-11.0.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 5556deb5081fb246ee92afae73efd943c889cef0cafea92b0b82422d6a18f289
-%global source0_file tinyxml2-11.0.0.tar.gz
-# oreon url source checksums end
 
 # Upstream supports CMake, meson, and plain makefiles. Of these, CMake and
 # meson are reasonable choices; choosing CMake allows us to generate and
@@ -60,9 +64,7 @@ for writing applications with the tinyxml2 library.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/tinyxml2-11.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5556deb5081fb246ee92afae73efd943c889cef0cafea92b0b82422d6a18f289" || { echo "oreon: Source0 SHA256 mismatch for tinyxml2-11.0.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # Demonstrate that bundled JS/CSS sources from pre-rendered HTML documentation

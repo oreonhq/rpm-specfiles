@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0c6e51af878e63df7391e6dffbbe5f0ced429bc9f1e5a603020bfd2503065c39
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global py_prefix python3
 %global py_binary %{py_prefix}
 
@@ -27,10 +35,6 @@ Patch1: 0001-tty-fix-compiler-error.patch
 Patch99: criu.pc.patch
 
 Source5: criu-tmpfiles.conf
-# oreon url source checksums begin
-%global source0_sha256 0c6e51af878e63df7391e6dffbbe5f0ced429bc9f1e5a603020bfd2503065c39
-%global source0_file criu-4.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: systemd
@@ -119,9 +123,7 @@ tree that might require a specific PID that is already used on the system.
 This script can help to workaround the so called "PID mismatch" problem.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/criu-4.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0c6e51af878e63df7391e6dffbbe5f0ced429bc9f1e5a603020bfd2503065c39" || { echo "oreon: Source0 SHA256 mismatch for criu-4.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P 0 -p1
 %patch -P 1 -p1

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # tests are enabled by default
 %bcond_without tests
 
@@ -10,10 +18,6 @@ Summary:        Python 2 and 3 compatibility utilities
 License:        MIT
 URL:            https://github.com/benjaminp/six
 Source0:        https://files.pythonhosted.org/packages/source/s/six/six-1.17.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81
-%global source0_file six-1.17.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -40,9 +44,7 @@ Summary:        %{summary}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/six-1.17.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81" || { echo "oreon: Source0 SHA256 mismatch for six-1.17.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n six-%{version}
 
 

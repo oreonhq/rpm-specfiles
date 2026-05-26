@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 025ce2b150f7fe4296d116ee9bad455a6643ab4f6e7dce541613a4758cbce347
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # RHEL does not include pillow or pypng
 %bcond extras %[%{undefined rhel} || %{defined epel}]
 
@@ -12,10 +20,6 @@ License:        BSD-3-Clause
 URL:            https://github.com/lincolnloop/python-qrcode
 Source0:        https://files.pythonhosted.org/packages/source/q/qrcode/qrcode-8.0.tar.gz
 Source1:        flit-pyproject.toml.in
-# oreon url source checksums begin
-%global source0_sha256 025ce2b150f7fe4296d116ee9bad455a6643ab4f6e7dce541613a4758cbce347
-%global source0_file qrcode-8.0.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
@@ -51,9 +55,7 @@ generation of QR Codes. Python 3 version.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/qrcode-8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "025ce2b150f7fe4296d116ee9bad455a6643ab4f6e7dce541613a4758cbce347" || { echo "oreon: Source0 SHA256 mismatch for qrcode-8.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n qrcode-%{version} -p1
 # Remove shebang
 sed -i '1d' qrcode/console_scripts.py

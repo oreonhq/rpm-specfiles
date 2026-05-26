@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1a085faa8ace52cffde2f5e9bc611bdb5f81481caaabf46f0437b719ca089d2f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?rhel} < 10
 %bcond_without db
 %else
@@ -107,10 +115,6 @@ Patch23: sendmail-8.18.2-sasl2-in-etc.patch
 # upstream reserved option ID 0xe7 for testing of this new feature, #576643
 Patch25: sendmail-8.18.2-qos.patch
 Patch26: sendmail-8.17.1-libmilter-socket-activation.patch
-# oreon url source checksums begin
-%global source0_sha256 1a085faa8ace52cffde2f5e9bc611bdb5f81481caaabf46f0437b719ca089d2f
-%global source0_file sendmail.8.18.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 %{?with_db:BuildRequires: libdb-devel}
@@ -214,9 +218,7 @@ filter meta-information and content.
 This package includes the milter shared library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sendmail.8.18.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1a085faa8ace52cffde2f5e9bc611bdb5f81481caaabf46f0437b719ca089d2f" || { echo "oreon: Source0 SHA256 mismatch for sendmail.8.18.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %patch -P3 -p1 -b .makemapman

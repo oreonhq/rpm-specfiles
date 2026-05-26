@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 59d0f1e17b18efaa60ea3ccf89a9cad3217f8d3b23c18d2fe34b25c8969d60ae
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: NFS utilities and supporting clients and daemons for the kernel NFS server
 Name: nfs-utils
 URL: http://linux-nfs.org/
@@ -21,10 +29,6 @@ Patch103: nfs-utils-2.3.1-systemd-gssproxy-restart.patch
 Patch104: nfs-utils-2.3.3-man-tcpwrappers.patch
 Patch105: nfs-utils-2.3.3-nfsconf-usegssproxy.patch
 Patch106: nfs-utils-2.4.2-systemd-svcgssd.patch
-# oreon url source checksums begin
-%global source0_sha256 59d0f1e17b18efaa60ea3ccf89a9cad3217f8d3b23c18d2fe34b25c8969d60ae
-%global source0_file nfs-utils-2.8.7.tar.xz
-# oreon url source checksums end
 
 %global rpcuser_uid 29
 
@@ -195,9 +199,7 @@ related tools, which provides a much higher level of performance than the
 traditional Linux NFS server used by most users.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/nfs-utils-2.8.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "59d0f1e17b18efaa60ea3ccf89a9cad3217f8d3b23c18d2fe34b25c8969d60ae" || { echo "oreon: Source0 SHA256 mismatch for nfs-utils-2.8.7.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # Remove .orig files

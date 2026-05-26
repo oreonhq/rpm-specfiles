@@ -1,3 +1,32 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4cf445ece3de2dbfa0069cd1f24e497dd23bd0d215049acf875ca3496a49763d
+%global source2_sha256 c9295f5fd3f489b2fbd5f0d33836b09420976506ac834bc9c9a401f4a6a1204a
+%global source4_sha256 6a303a49efae2f9579640d152dab12ea17abd3b4674addb0470202e93fd0d646
+%global source5_sha256 ad7ec847da044f727a16597b3c6e63aa7f6db31036e44ca1b33f630b164ab801
+%global source6_sha256 fb12160e787e5a3ee5349b422f8a3a5e9babebc6483fc544a458b87487be8124
+%global source7_sha256 7a1f0f5ee32214a278dd89f8d8f66b9cd8422f922abf6f1db578f9320834b9e5
+%global source8_sha256 a218ee3127cd1be6748308a3eed1924f1c5057666dcc15a6f56468812c27012c
+%global source10_sha256 dfdd77e4ea1b57ff3a6dbde6b0bdc3f31db5ac99e7fdd4eaf9e1fbb6ec2db8ce
+%global source11_sha256 e75f712215d7b7e5c89ef322a09b701f7159f028b8b48978865725f00f79875b
+%global source12_sha256 0227bd6e0356b211341075c7997c837f0b388c01379bd256aa525566a5553f03
+%global source13_sha256 4ac27e697a3e64959756624d68ec18ce5fc54a2d3f31f1b3f702be6fcd48a7d8
+%global source14_sha256 3bdf15128ba16686e69bce256cc468e76c7b94ff2c7f391cc5ec09e40bff3839
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source4_sha256:%(test -z "%{source4_sha256}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_sha256}" || { echo "oreon: Source4 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source5_sha256:%(test -z "%{source5_sha256}" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_sha256}" || { echo "oreon: Source5 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source6_sha256:%(test -z "%{source6_sha256}" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_sha256}" || { echo "oreon: Source6 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source7_sha256:%(test -z "%{source7_sha256}" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source7_sha256}" || { echo "oreon: Source7 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source8_sha256:%(test -z "%{source8_sha256}" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_sha256}" || { echo "oreon: Source8 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source10_sha256:%(test -z "%{source10_sha256}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_sha256}" || { echo "oreon: Source10 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source11_sha256:%(test -z "%{source11_sha256}" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_sha256}" || { echo "oreon: Source11 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source12_sha256:%(test -z "%{source12_sha256}" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_sha256}" || { echo "oreon: Source12 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source13_sha256:%(test -z "%{source13_sha256}" || { f="%{SOURCE13}"; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source13_sha256}" || { echo "oreon: Source13 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source14_sha256:%(test -z "%{source14_sha256}" || { f="%{SOURCE14}"; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source14_sha256}" || { echo "oreon: Source14 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
 
 # The enclave code must be built with very specific build
 # flags, that are different from what is used to build
@@ -418,32 +447,6 @@ Patch0401: 0401-pccsadmin-remove-leftover-debugging-print-args-state.patch
 Patch0402: 0402-pccsadmin-make-keyring-module-optional.patch
 Patch0403: 0403-pccsadmin-ignore-errors-trying-to-clear-the-keyring.patch
 Patch0404: 0404-service-force-override-tar-module-to-7.0.0-series.patch
-# oreon url source checksums begin
-%global source0_sha256 4cf445ece3de2dbfa0069cd1f24e497dd23bd0d215049acf875ca3496a49763d
-%global source0_file sgx_2.27.tar.gz
-%global source2_sha256 c9295f5fd3f489b2fbd5f0d33836b09420976506ac834bc9c9a401f4a6a1204a
-%global source2_file DCAP_1.24.tar.gz
-%global source4_sha256 6a303a49efae2f9579640d152dab12ea17abd3b4674addb0470202e93fd0d646
-%global source4_file 3.0_Rev5.1.tar.gz
-%global source5_sha256 ad7ec847da044f727a16597b3c6e63aa7f6db31036e44ca1b33f630b164ab801
-%global source5_file ippcp_2021.12.1.tar.gz
-%global source6_sha256 fb12160e787e5a3ee5349b422f8a3a5e9babebc6483fc544a458b87487be8124
-%global source6_file sgx-emm-1.0.3.tar.gz
-%global source7_sha256 7a1f0f5ee32214a278dd89f8d8f66b9cd8422f922abf6f1db578f9320834b9e5
-%global source7_file DCAP_1.24.tar.gz
-%global source8_sha256 a218ee3127cd1be6748308a3eed1924f1c5057666dcc15a6f56468812c27012c
-%global source8_file DCAP_1.24.tar.gz
-%global source10_sha256 dfdd77e4ea1b57ff3a6dbde6b0bdc3f31db5ac99e7fdd4eaf9e1fbb6ec2db8ce
-%global source10_file openssl-3.0.17.tar.gz
-%global source11_sha256 e75f712215d7b7e5c89ef322a09b701f7159f028b8b48978865725f00f79875b
-%global source11_file v0.10.2.tar.gz
-%global source12_sha256 0227bd6e0356b211341075c7997c837f0b388c01379bd256aa525566a5553f03
-%global source12_file v0.6.0.tar.gz
-%global source13_sha256 4ac27e697a3e64959756624d68ec18ce5fc54a2d3f31f1b3f702be6fcd48a7d8
-%global source13_file WAMR-2.4.3.tar.gz
-%global source14_sha256 3bdf15128ba16686e69bce256cc468e76c7b94ff2c7f391cc5ec09e40bff3839
-%global source14_file 10.0.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires: sgx-rpm-macros
 BuildRequires: autoconf
@@ -699,20 +702,7 @@ in applications
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sgx_2.27.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4cf445ece3de2dbfa0069cd1f24e497dd23bd0d215049acf875ca3496a49763d" || { echo "oreon: Source0 SHA256 mismatch for sgx_2.27.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/DCAP_1.24.tar.gz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c9295f5fd3f489b2fbd5f0d33836b09420976506ac834bc9c9a401f4a6a1204a" || { echo "oreon: Source2 SHA256 mismatch for DCAP_1.24.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/3.0_Rev5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6a303a49efae2f9579640d152dab12ea17abd3b4674addb0470202e93fd0d646" || { echo "oreon: Source4 SHA256 mismatch for 3.0_Rev5.1.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/ippcp_2021.12.1.tar.gz; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ad7ec847da044f727a16597b3c6e63aa7f6db31036e44ca1b33f630b164ab801" || { echo "oreon: Source5 SHA256 mismatch for ippcp_2021.12.1.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/sgx-emm-1.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fb12160e787e5a3ee5349b422f8a3a5e9babebc6483fc544a458b87487be8124" || { echo "oreon: Source6 SHA256 mismatch for sgx-emm-1.0.3.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/DCAP_1.24.tar.gz; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7a1f0f5ee32214a278dd89f8d8f66b9cd8422f922abf6f1db578f9320834b9e5" || { echo "oreon: Source7 SHA256 mismatch for DCAP_1.24.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/DCAP_1.24.tar.gz; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a218ee3127cd1be6748308a3eed1924f1c5057666dcc15a6f56468812c27012c" || { echo "oreon: Source8 SHA256 mismatch for DCAP_1.24.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/openssl-3.0.17.tar.gz; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dfdd77e4ea1b57ff3a6dbde6b0bdc3f31db5ac99e7fdd4eaf9e1fbb6ec2db8ce" || { echo "oreon: Source10 SHA256 mismatch for openssl-3.0.17.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/v0.10.2.tar.gz; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e75f712215d7b7e5c89ef322a09b701f7159f028b8b48978865725f00f79875b" || { echo "oreon: Source11 SHA256 mismatch for v0.10.2.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/v0.6.0.tar.gz; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0227bd6e0356b211341075c7997c837f0b388c01379bd256aa525566a5553f03" || { echo "oreon: Source12 SHA256 mismatch for v0.6.0.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/WAMR-2.4.3.tar.gz; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4ac27e697a3e64959756624d68ec18ce5fc54a2d3f31f1b3f702be6fcd48a7d8" || { echo "oreon: Source13 SHA256 mismatch for WAMR-2.4.3.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/10.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3bdf15128ba16686e69bce256cc468e76c7b94ff2c7f391cc5ec09e40bff3839" || { echo "oreon: Source14 SHA256 mismatch for 10.0.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n confidential-computing.sgx-sgx_%{linux_sgx_version}
 
 %autopatch -m 0 -M 49 -p1

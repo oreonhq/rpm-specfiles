@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0b5b4f48fc7c29dff300fb2b6cfc66ca8922c9fbf7ae50f0f40e69869f9144e7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           librhsm
 Version:        0.0.4
 Release:        2%{?dist}
@@ -8,10 +16,6 @@ Source0:        https://github.com/rpm-software-management/librhsm/releases/down
 Source1:        https://github.com/rpm-software-management/librhsm/releases/download/v0.0.4/librhsm-0.0.4.tar.gz.asc
 # Key exported from Petr Pisar's keyring
 Source2:        gpgkey-E3F42FCE156830A80358E6E94FD1AEC3365AF7BF.gpg
-# oreon url source checksums begin
-%global source0_sha256 0b5b4f48fc7c29dff300fb2b6cfc66ca8922c9fbf7ae50f0f40e69869f9144e7
-%global source0_file librhsm-0.0.4.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gnupg2
 BuildRequires:  meson >= 0.37.0
@@ -33,9 +37,7 @@ Requires:       %{name}%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/librhsm-0.0.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0b5b4f48fc7c29dff300fb2b6cfc66ca8922c9fbf7ae50f0f40e69869f9144e7" || { echo "oreon: Source0 SHA256 mismatch for librhsm-0.0.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

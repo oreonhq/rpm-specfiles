@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ce32e38b0500eddf2fc8072ca17679817fc2d35eb91f6ff7b9904209c14b5afd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora} < 36 && 0%{?rhel} < 9
 %bcond_with gtk4
 %else
@@ -14,10 +22,6 @@ URL:       http://www.gnome.org/projects/NetworkManager/
 
 Source0:   https://download.gnome.org/sources/NetworkManager-openvpn/1.12/%{name}-%{version}.tar.xz
 Patch0:    https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/merge_requests/104.patch
-# oreon url source checksums begin
-%global source0_sha256 ce32e38b0500eddf2fc8072ca17679817fc2d35eb91f6ff7b9904209c14b5afd
-%global source0_file NetworkManager-openvpn-1.12.5.tar.xz
-# oreon url source checksums end
 
 
 BuildRequires: make
@@ -60,9 +64,7 @@ the OpenVPN server with NetworkManager (GNOME files).
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/NetworkManager-openvpn-1.12.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ce32e38b0500eddf2fc8072ca17679817fc2d35eb91f6ff7b9904209c14b5afd" || { echo "oreon: Source0 SHA256 mismatch for NetworkManager-openvpn-1.12.5.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

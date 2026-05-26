@@ -1,3 +1,10 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
 
 %define aprver 1
 
@@ -58,10 +65,6 @@ Patch7: apr-util-1.6.3-r1908584.patch
 Patch8: apr-util-1.6.3-r1908585.patch
 Patch9: apr-util-1.6.3-drop-engine-headers.patch
 Patch10: apr-util-1.6.3-r1928729.patch
-# oreon url source checksums begin
-%global source0_sha256 a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5
-%global source0_file apr-util-1.6.3.tar.bz2
-# oreon url source checksums end
 BuildRequires: gcc
 BuildRequires: autoconf, apr-devel >= 1.3.0
 BuildRequires: %{dbdep}, expat-devel, libuuid-devel
@@ -181,9 +184,7 @@ This package provides the NSS crypto support for the apr-util.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/apr-util-1.6.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a41076e3710746326c3945042994ad9a4fcac0ce0277dd8fea076fec3c9772b5" || { echo "oreon: Source0 SHA256 mismatch for apr-util-1.6.3.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 : Configured for LDAP library: %{ldaplib}

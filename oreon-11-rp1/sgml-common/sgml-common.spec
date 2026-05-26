@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7dc418c1d361123ffc5e45d61f1b97257940a8eb35d0bfbbc493381cc5b1f959
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global xmlxsdver 2009/01
 
 Name: sgml-common
@@ -31,10 +39,6 @@ Source10: sgml.conf.5
 Patch0: sgml-common-umask.patch
 Patch1: sgml-common-xmldir.patch
 Patch2: sgml-common-quotes.patch
-# oreon url source checksums begin
-%global source0_sha256 7dc418c1d361123ffc5e45d61f1b97257940a8eb35d0bfbbc493381cc5b1f959
-%global source0_file sgml-common-0.6.3.tgz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: libxml2
@@ -58,9 +62,7 @@ a collection XML catalogs that are useful for processing XML,
 but that don't need to be included in main package.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sgml-common-0.6.3.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7dc418c1d361123ffc5e45d61f1b97257940a8eb35d0bfbbc493381cc5b1f959" || { echo "oreon: Source0 SHA256 mismatch for sgml-common-0.6.3.tgz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1 -b .umask
 %patch -P1 -p1 -b .xmldir

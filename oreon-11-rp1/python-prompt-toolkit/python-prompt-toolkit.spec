@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 28cde192929c8e7321de85de1ddbe736f1375148b02f2e17edd840042b1be855
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global common_description %{expand:
 prompt_toolkit is a library for building powerful interactive command line
 applications in Python.}
@@ -9,10 +17,6 @@ Summary:        Library for building powerful interactive command line applicati
 License:        BSD-3-Clause
 URL:            https://github.com/prompt-toolkit/python-prompt-toolkit
 Source:         %{pypi_source prompt_toolkit}
-# oreon url source checksums begin
-%global source0_sha256 28cde192929c8e7321de85de1ddbe736f1375148b02f2e17edd840042b1be855
-%global source0_file prompt_toolkit-3.0.52.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 
 
@@ -31,9 +35,7 @@ Recommends:     python3-pygments
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/prompt_toolkit-3.0.52.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "28cde192929c8e7321de85de1ddbe736f1375148b02f2e17edd840042b1be855" || { echo "oreon: Source0 SHA256 mismatch for prompt_toolkit-3.0.52.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n prompt_toolkit-%{version}
 # Workaround for https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1988
 sed -i 's/^__version__ = .*/__version__ = "%{version}"/' src/prompt_toolkit/__init__.py

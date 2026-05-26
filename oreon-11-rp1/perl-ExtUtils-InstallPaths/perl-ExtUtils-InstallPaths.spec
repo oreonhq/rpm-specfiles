@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7d64eb2dfa87ead010cdf55c8a1bdfde50b7b5852d7cb8cf2304f55bea2eb007
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		perl-ExtUtils-InstallPaths
 Version:	0.015
 Release:	2%{?dist}
@@ -5,10 +13,6 @@ Summary:	Build.PL install path logic made easy
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/ExtUtils-InstallPaths
 Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-InstallPaths-0.015.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 7d64eb2dfa87ead010cdf55c8a1bdfde50b7b5852d7cb8cf2304f55bea2eb007
-%global source0_file ExtUtils-InstallPaths-0.015.tar.gz
-# oreon url source checksums end
 
 BuildArch:	noarch
 # Build
@@ -44,9 +48,7 @@ lets you specify a temporary installation directory like /tmp/install in case
 you want to create bundled-up installable packages.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ExtUtils-InstallPaths-0.015.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7d64eb2dfa87ead010cdf55c8a1bdfde50b7b5852d7cb8cf2304f55bea2eb007" || { echo "oreon: Source0 SHA256 mismatch for ExtUtils-InstallPaths-0.015.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n ExtUtils-InstallPaths-%{version}
 
 %build

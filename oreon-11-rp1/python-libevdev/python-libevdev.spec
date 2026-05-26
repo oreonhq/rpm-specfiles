@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2eb3688fc52244330c4837f0e446122b9726da777a3f301fe3b0c73f92202036
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		python-libevdev
 Version:	0.13.1
 Release:	2%{?dist}
@@ -7,10 +15,6 @@ Summary:	Python bindings to the libevdev evdev device wrapper library
 License:	MIT
 URL:		https://pypi.python.org/pypi/libevdev/
 Source0:	https://gitlab.freedesktop.org/libevdev/python-libevdev/-/archive/%{version}/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 2eb3688fc52244330c4837f0e446122b9726da777a3f301fe3b0c73f92202036
-%global source0_file python-libevdev-0.13.1.tar.gz
-# oreon url source checksums end
 
 BuildArch:	noarch
 
@@ -38,9 +42,7 @@ devices and create uinput devices.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/python-libevdev-0.13.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2eb3688fc52244330c4837f0e446122b9726da777a3f301fe3b0c73f92202036" || { echo "oreon: Source0 SHA256 mismatch for python-libevdev-0.13.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{version} -p1
 
 

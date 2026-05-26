@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4db53b1fde9abecbb74d91230d32ab626d94f6badfc575d6db9194a49df29968
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           python-docutils
 Version:        0.22.4
 Release:        %autorelease
@@ -10,10 +18,6 @@ Summary:        System for processing plaintext documentation
 License:        LicenseRef-Fedora-Public-Domain AND BSD-2-Clause AND BSD-3-Clause AND PSF-2.0 AND GPL-3.0-or-later
 URL:            https://docutils.sourceforge.net
 Source0:        https://sourceforge.net/projects/docutils/files/docutils/%{version}/docutils-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 4db53b1fde9abecbb74d91230d32ab626d94f6badfc575d6db9194a49df29968
-%global source0_file docutils-0.22.4.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -41,9 +45,7 @@ Summary:        %{summary}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/docutils-0.22.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4db53b1fde9abecbb74d91230d32ab626d94f6badfc575d6db9194a49df29968" || { echo "oreon: Source0 SHA256 mismatch for docutils-0.22.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n docutils-%{version}
 
 # Remove shebang from library files

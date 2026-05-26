@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5d5ebc40843f7156d5ede30e50016798ac7336467f7ad347e716510516cc2130
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without debug
 %bcond_without imap
 %bcond_without pop
@@ -38,10 +46,6 @@ Patch9: mutt-1.9.0-ssl_ciphers.patch
 Patch10: mutt-1.9.4-lynx_no_backscapes.patch
 Patch12: mutt-1.9.5-nodotlock.patch
 Patch13: mutt-1.12.1-optusegpgagent.patch
-# oreon url source checksums begin
-%global source0_sha256 5d5ebc40843f7156d5ede30e50016798ac7336467f7ad347e716510516cc2130
-%global source0_file mutt-2.3.0.tar.gz
-# oreon url source checksums end
 
 Url: http://www.mutt.org
 Requires: mailcap, urlview
@@ -83,9 +87,7 @@ for selecting groups of messages.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mutt-2.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5d5ebc40843f7156d5ede30e50016798ac7336467f7ad347e716510516cc2130" || { echo "oreon: Source0 SHA256 mismatch for mutt-2.3.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 # unpack; cd
 %setup -q
 # do not run ./prepare -V, because it also runs ./configure

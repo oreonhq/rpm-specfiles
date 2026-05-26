@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7ad60056f01af4f786cfe93b3a7707447711626fc8da2637bec71a90409babe5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global tarball libXi
 #global gitdate 20130524
 %global gitversion 661c45ca1
@@ -14,10 +22,6 @@ Source0:        https://www.x.org/pub/individual/lib/libXi-1.8.3.tar.xz
 Source1:    make-git-snapshot.sh
 %else
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 7ad60056f01af4f786cfe93b3a7707447711626fc8da2637bec71a90409babe5
-%global source0_file libXi-1.8.3.tar.xz
-# oreon url source checksums end
 %endif
 
 BuildRequires: make
@@ -45,9 +49,7 @@ Requires: pkgconfig
 X.Org X11 libXi development package
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libXi-1.8.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7ad60056f01af4f786cfe93b3a7707447711626fc8da2637bec71a90409babe5" || { echo "oreon: Source0 SHA256 mismatch for libXi-1.8.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

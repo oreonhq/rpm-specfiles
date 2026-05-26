@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 20202c84b96625bab3d1ea2577c255fceb088f9c0ad187ed09757a8e8acca9a2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond tests 1
 # We would like to have a BuildRequires and weak runtime dependency on
 # python3-awscrt, which enables additional functionality and tests, but it is
@@ -14,10 +22,6 @@ Summary:        The AWS SDK for Python
 License:        Apache-2.0
 URL:            https://github.com/boto/boto3
 Source:        https://github.com/boto/boto3/archive/1.42.70/boto3-1.42.70.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 20202c84b96625bab3d1ea2577c255fceb088f9c0ad187ed09757a8e8acca9a2
-%global source0_file boto3-1.42.70.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
@@ -56,9 +60,7 @@ Recommends:     %{py3_dist awscrt} >= 0.19.18
 %description -n python3-boto3 %{_description}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/boto3-1.42.70.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "20202c84b96625bab3d1ea2577c255fceb088f9c0ad187ed09757a8e8acca9a2" || { echo "oreon: Source0 SHA256 mismatch for boto3-1.42.70.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n boto3-%{version}
 
 %generate_buildrequires

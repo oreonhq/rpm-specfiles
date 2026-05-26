@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bc60be5904330faaa3ddd2aed7874bee2f29e4387c245d6787552f067eb0523a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:       bdftopcf
 Version:    1.1.2
 Release:    5%{?dist}
@@ -6,10 +14,6 @@ Summary:    Font compiler for the X server and font server
 License:    MIT-open-group
 URL:        https://www.x.org
 Source0:    https://www.x.org/archive/individual/util/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 bc60be5904330faaa3ddd2aed7874bee2f29e4387c245d6787552f067eb0523a
-%global source0_file bdftopcf-1.1.2.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc make libtool
 BuildRequires:  pkgconfig(x11) pkgconfig(fontsproto)
@@ -26,9 +30,7 @@ appropriate machine, but the files are still portable (but read more
 slowly) on other machines.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/bdftopcf-1.1.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bc60be5904330faaa3ddd2aed7874bee2f29e4387c245d6787552f067eb0523a" || { echo "oreon: Source0 SHA256 mismatch for bdftopcf-1.1.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

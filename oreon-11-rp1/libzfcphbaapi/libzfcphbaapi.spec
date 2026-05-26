@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 70cee88660334342b17e73d4b46f13f356332c04e7f07c09f6fc2d669b20ccca
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libzfcphbaapi
 Summary:        HBA API for the zFCP device driver
 Version:        3.0.3
@@ -6,10 +14,6 @@ License:        EPL-1.0
 URL:            https://github.com/ibm-s390-linux/libzfcphbaapi
 Source0:        https://github.com/ibm-s390-linux/libzfcphbaapi/archive/v3.0.3/libzfcphbaapi-3.0.3.tar.gz
 Patch1:         %{name}-3.0.2-fedora.patch
-# oreon url source checksums begin
-%global source0_sha256 70cee88660334342b17e73d4b46f13f356332c04e7f07c09f6fc2d669b20ccca
-%global source0_file libzfcphbaapi-3.0.3.tar.gz
-# oreon url source checksums end
 
 ExclusiveArch:  s390 s390x
 
@@ -42,9 +46,7 @@ Documentation in HTML format for the zFCP HBA API Library.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libzfcphbaapi-3.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "70cee88660334342b17e73d4b46f13f356332c04e7f07c09f6fc2d669b20ccca" || { echo "oreon: Source0 SHA256 mismatch for libzfcphbaapi-3.0.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 

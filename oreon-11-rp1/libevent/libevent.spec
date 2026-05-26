@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 92e6de1be9ec176428fd2367677e61ceffc2ee1cb119035037a27d346b0403bb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global develdocdir %{_docdir}/%{name}-devel
 
 Name:           libevent
@@ -32,10 +40,6 @@ Patch03: 0001-build-add-doxygen-to-all.patch
 # issue is fixed.
 # https://github.com/transmission/transmission/issues/1437
 Patch04: 0001-Revert-Fix-checking-return-value-of-the-evdns_base_r.patch
-# oreon url source checksums begin
-%global source0_sha256 92e6de1be9ec176428fd2367677e61ceffc2ee1cb119035037a27d346b0403bb
-%global source0_file libevent-2.1.12-stable.tar.gz
-# oreon url source checksums end
 
 %description
 The libevent API provides a mechanism to execute a callback function
@@ -65,9 +69,7 @@ BuildArch: noarch
 This package contains the development documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libevent-2.1.12-stable.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "92e6de1be9ec176428fd2367677e61ceffc2ee1cb119035037a27d346b0403bb" || { echo "oreon: Source0 SHA256 mismatch for libevent-2.1.12-stable.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n libevent-%{version}-stable
 
 %{__python3} %{_rpmconfigdir}/redhat/pathfix.py -i %{__python3} -pn test/check-dumpevents.py \

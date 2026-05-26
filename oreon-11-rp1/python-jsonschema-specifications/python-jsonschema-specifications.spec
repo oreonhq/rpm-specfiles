@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0f38b83639958ce1152d02a7f062902c41c8fd20d558b0c34344292d417ae272
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pypi_name jsonschema-specifications
 %global pkg_name jsonschema_specifications
 %global with_tests 1
@@ -19,10 +27,6 @@ Release:        7%{?dist}
 License:        MIT
 URL:            https://github.com/python-jsonschema/jsonschema-specifications
 Source0:        https://files.pythonhosted.org/packages/source/j/jsonschema_specifications/jsonschema_specifications-2024.10.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 0f38b83639958ce1152d02a7f062902c41c8fd20d558b0c34344292d417ae272
-%global source0_file jsonschema_specifications-2024.10.1.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -62,9 +66,7 @@ Documentation for the JSON Schema specifications
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jsonschema_specifications-2024.10.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f38b83639958ce1152d02a7f062902c41c8fd20d558b0c34344292d417ae272" || { echo "oreon: Source0 SHA256 mismatch for jsonschema_specifications-2024.10.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{pkg_name}-%{version}
 
 sed -i "/^file:.*/d" docs/requirements.in

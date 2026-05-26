@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 16a7ad9b31ba5880dac55d62b5d6f243c3ebc8d46a3514149e56b5e7ea81f85f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Debuginfo packages are disabled to prevent rpmbuild from generating an empty
 # debuginfo package for the empty main package.
 %global debug_package %{nil}
@@ -14,10 +22,6 @@ Summary:        A header-only C++11 serialization library
 License:        BSD-3-Clause AND BSL-1.0 AND Zlib AND MIT AND (MIT OR BSL-1.0)
 Url:            http://uscilab.github.io/cereal/
 Source0:        https://github.com/USCiLab/cereal/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 16a7ad9b31ba5880dac55d62b5d6f243c3ebc8d46a3514149e56b5e7ea81f85f
-%global source0_file v1.3.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  boost-devel
@@ -69,9 +73,7 @@ MinGW Windows %{name} library.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v1.3.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "16a7ad9b31ba5880dac55d62b5d6f243c3ebc8d46a3514149e56b5e7ea81f85f" || { echo "oreon: Source0 SHA256 mismatch for v1.3.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

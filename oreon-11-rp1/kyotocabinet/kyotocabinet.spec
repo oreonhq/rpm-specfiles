@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4c85d736668d82920bfdbdb92ac3d66b7db1108f09581a769dd9160a02def349
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:        A straightforward implementation of DBM
 Name:           kyotocabinet
 Version:        1.2.80
@@ -7,10 +15,6 @@ URL:            https://dbmx.net/%{name}/
 Source:         https://dbmx.net/%{name}/pkg/%{name}-%{version}.tar.gz
 Patch0:         kyotocabinet-1.2.76-cflags.patch
 Patch1:         kyotocabinet-1.2.76-8-byte-atomics.patch
-# oreon url source checksums begin
-%global source0_sha256 4c85d736668d82920bfdbdb92ac3d66b7db1108f09581a769dd9160a02def349
-%global source0_file kyotocabinet-1.2.80.tar.gz
-# oreon url source checksums end
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 BuildRequires:  gcc-c++, zlib-devel, lzo-devel, xz-devel
 
@@ -52,9 +56,7 @@ The kyotocabinet-apidocs package contains API documentation for developing
 applications that use Kyoto Cabinet.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kyotocabinet-1.2.80.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4c85d736668d82920bfdbdb92ac3d66b7db1108f09581a769dd9160a02def349" || { echo "oreon: Source0 SHA256 mismatch for kyotocabinet-1.2.80.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

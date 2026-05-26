@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 869d38c258e646dcef676609f0dd7ca90f085f56cf6fd7001b019a5d5b831fca
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %if ! (0%{?rhel})
 %bcond_without perl_Devel_CheckLib_enables_optional_test
@@ -13,10 +21,6 @@ Summary:        Check that a library is available
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-CheckLib
 Source0:        https://cpan.metacpan.org/authors/id/M/MA/MATTN/Devel-CheckLib-1.16.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 869d38c258e646dcef676609f0dd7ca90f085f56cf6fd7001b019a5d5b831fca
-%global source0_file Devel-CheckLib-1.16.tar.gz
-# oreon url source checksums end
 
 
 BuildArch:      noarch
@@ -70,9 +74,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Devel-CheckLib-1.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "869d38c258e646dcef676609f0dd7ca90f085f56cf6fd7001b019a5d5b831fca" || { echo "oreon: Source0 SHA256 mismatch for Devel-CheckLib-1.16.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Devel-CheckLib-%{version}
 
 # Help generators to recognize Perl scripts

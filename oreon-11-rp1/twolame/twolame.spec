@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 cc35424f6019a88c6f52570b63e1baf50f62963a3eac52a03a800bb070d7c87d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:       twolame
 Version:    0.4.0
 Release:    9%{?dist}
@@ -7,10 +15,6 @@ License:    LGPL-2.1-or-later
 URL:        http://www.twolame.org/
 
 Source:     http://downloads.sourceforge.net/twolame/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 cc35424f6019a88c6f52570b63e1baf50f62963a3eac52a03a800bb070d7c87d
-%global source0_file twolame-0.4.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -48,9 +52,7 @@ This package contains the header files and documentation needed to develop
 applications with TwoLAME.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/twolame-0.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cc35424f6019a88c6f52570b63e1baf50f62963a3eac52a03a800bb070d7c87d" || { echo "oreon: Source0 SHA256 mismatch for twolame-0.4.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

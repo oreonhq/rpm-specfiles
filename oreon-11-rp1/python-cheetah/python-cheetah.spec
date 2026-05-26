@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0f1fb60c0df8acec48561ba561d023b55498bd04e7b3763d4ca14adaf3d62405
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           python-cheetah
 Version:        3.4.0
 Release:        %autorelease
@@ -13,10 +21,6 @@ Summary:        Template engine and code generator
 License:        MIT AND BSD-3-Clause-HP AND LGPL-2.1-or-later AND LicenseRef-Fedora-Public-Domain
 URL:            https://cheetahtemplate.org/
 Source:         https://github.com/CheetahTemplate3/cheetah3/archive/%{version}/cheetah3-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 0f1fb60c0df8acec48561ba561d023b55498bd04e7b3763d4ca14adaf3d62405
-%global source0_file cheetah3-3.4.0.tar.gz
-# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  python3-devel
 
@@ -38,9 +42,7 @@ Summary:        %{summary}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cheetah3-3.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f1fb60c0df8acec48561ba561d023b55498bd04e7b3763d4ca14adaf3d62405" || { echo "oreon: Source0 SHA256 mismatch for cheetah3-3.4.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n cheetah3-%{version}
 
 # remove unnecessary shebang lines to silence rpmlint

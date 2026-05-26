@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b2f6ef1c37fe2c6a5a85212efe71311ee21847766a7d45fcb711f3b270a5f79a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 ### Abstract ###
 %bcond servers %{undefined rhel}
 
@@ -15,10 +23,6 @@ Source0:        https://files.pythonhosted.org/packages/source/p/python_ldap/pyt
 
 # Conditionally applied paches, numbereed > 100
 Patch101: 0101-Disable-openldap-servers-tests.patch
-# oreon url source checksums begin
-%global source0_sha256 b2f6ef1c37fe2c6a5a85212efe71311ee21847766a7d45fcb711f3b270a5f79a
-%global source0_file python_ldap-3.4.5.tar.gz
-# oreon url source checksums end
 
 ### Build Dependencies ###
 BuildRequires: gcc
@@ -53,9 +57,7 @@ Provides:  python3-pyldap%{?_isa} = %{version}-%{release}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/python_ldap-3.4.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b2f6ef1c37fe2c6a5a85212efe71311ee21847766a7d45fcb711f3b270a5f79a" || { echo "oreon: Source0 SHA256 mismatch for python_ldap-3.4.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n python_ldap-%{version}%{?prerelease} -N
 %autopatch -p1 -M100
 %if %{without servers}

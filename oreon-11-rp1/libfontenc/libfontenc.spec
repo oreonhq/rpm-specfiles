@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7b02c3d405236e0d86806b1de9d6868fe60c313628b38350b032914aa4fd14c6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Must be kept in sync with xorg-x11-fonts !
 %define _x11fontdir		%{_datadir}/X11/fonts
 
@@ -9,10 +17,6 @@ Release: 5%{?dist}
 License: MIT
 URL: http://www.x.org
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 7b02c3d405236e0d86806b1de9d6868fe60c313628b38350b032914aa4fd14c6
-%global source0_file libfontenc-1.1.8.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: libtool
@@ -33,9 +37,7 @@ Requires: %{name} = %{version}-%{release}
 X.Org X11 libfontenc development package
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libfontenc-1.1.8.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b02c3d405236e0d86806b1de9d6868fe60c313628b38350b032914aa4fd14c6" || { echo "oreon: Source0 SHA256 mismatch for libfontenc-1.1.8.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

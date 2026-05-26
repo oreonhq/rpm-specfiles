@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e2f389fe3e7a9e4b61488692919ad723b98f3b479b5288f610daa8c27995b351
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Perform optional tests
 # Support XML serialization of LDAP schemata (DSML languge)
 %if 0%{?rhel}
@@ -23,10 +31,6 @@ Patch1:         perl-ldap-0.66-test-Remove-a-test-for-cancelling-asynchronous-ca
 # Fix resolving localhost on loopback-only machines,
 # <https://github.com/perl-ldap/perl-ldap/pull/60>, CPAN RT#104793
 Patch2:         perl-ldap-0.68-Do-not-default-IO-Socket-IP-to-AI_ADDRCONFIG-flag.patch
-# oreon url source checksums begin
-%global source0_sha256 e2f389fe3e7a9e4b61488692919ad723b98f3b479b5288f610daa8c27995b351
-%global source0_file perl-ldap-0.68.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -146,9 +150,7 @@ Tests from %{name}-%{version}. Execute them with "%{_libexecdir}/%{name}/test".
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/perl-ldap-0.68.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e2f389fe3e7a9e4b61488692919ad723b98f3b479b5288f610daa8c27995b351" || { echo "oreon: Source0 SHA256 mismatch for perl-ldap-0.68.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n perl-ldap-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

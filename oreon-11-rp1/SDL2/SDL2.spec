@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 332cb37d0be20cb9541739c61f79bae5a477427d79ae85e352089afdaf6666e4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # For the generated library symbol suffix
 %if 0%{?__isa_bits} == 32
 %global libsymbolsuffix %{nil}
@@ -21,10 +29,6 @@ Source2:        SDL_revision.h
 Patch0:         multilib.patch
 # Prefer Wayland by default
 Patch1:         SDL2-2.0.22-prefer-wayland.patch
-# oreon url source checksums begin
-%global source0_sha256 332cb37d0be20cb9541739c61f79bae5a477427d79ae85e352089afdaf6666e4
-%global source0_file SDL2-2.28.5.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  git-core
 BuildRequires:  cmake
@@ -103,9 +107,7 @@ Conflicts:      %{name}-devel < 2.0.18-4
 Static libraries for SDL2.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/SDL2-2.28.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "332cb37d0be20cb9541739c61f79bae5a477427d79ae85e352089afdaf6666e4" || { echo "oreon: Source0 SHA256 mismatch for SDL2-2.28.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git
 sed -i -e 's/\r//g' TODO.txt README.md WhatsNew.txt BUGS.txt LICENSE.txt CREDITS.txt README-SDL.txt
 

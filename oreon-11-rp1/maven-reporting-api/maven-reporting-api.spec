@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a4fbb1f99ed82903029a5a16ad0424b687dc7eb6db13947d1ae6387d8b1912ac
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           maven-reporting-api
 Version:        4.0.0
 Release:        6%{?dist}
@@ -12,10 +20,6 @@ Source0:        https://archive.apache.org/dist/maven/reporting/%{name}-%{versio
 Source1:        https://archive.apache.org/dist/maven/reporting/%{name}-%{version}-source-release.zip.asc
 # Apache Maven public key
 Source2:        https://downloads.apache.org/maven/KEYS
-# oreon url source checksums begin
-%global source0_sha256 a4fbb1f99ed82903029a5a16ad0424b687dc7eb6db13947d1ae6387d8b1912ac
-%global source0_file maven-reporting-api-4.0.0-source-release.zip
-# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -33,9 +37,7 @@ API to manage report generation.  Maven-reporting-api is included in the Maven
 decoupling from the Maven 3 core.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/maven-reporting-api-4.0.0-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a4fbb1f99ed82903029a5a16ad0424b687dc7eb6db13947d1ae6387d8b1912ac" || { echo "oreon: Source0 SHA256 mismatch for maven-reporting-api-4.0.0-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --data=%{SOURCE0} --signature=%{SOURCE1} --keyring=%{SOURCE2}
 %autosetup
 

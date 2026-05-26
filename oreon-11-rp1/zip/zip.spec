@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f0e8bb1f9b7eb0b01285495a2699df3a4b766784c1765a8f1aeedf63c0806369
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: A file compression and packaging utility compatible with PKZIP
 Name: zip
 Version: 3.0
@@ -19,10 +27,6 @@ Patch6: zipnote.patch
 Patch7: zip-gnu89-build.patch
 Patch8: buffer_overflow.patch
 Patch9: zip-3.0-man-strip-extra.patch
-# oreon url source checksums begin
-%global source0_sha256 f0e8bb1f9b7eb0b01285495a2699df3a4b766784c1765a8f1aeedf63c0806369
-%global source0_file zip30.tar.gz
-# oreon url source checksums end
 BuildRequires: make
 BuildRequires: bzip2-devel, gcc
 Requires: unzip
@@ -37,9 +41,7 @@ Install the zip package if you need to compress files using the zip
 program.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/zip30.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f0e8bb1f9b7eb0b01285495a2699df3a4b766784c1765a8f1aeedf63c0806369" || { echo "oreon: Source0 SHA256 mismatch for zip30.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n zip30
 %patch -P1 -p1 -b .exec-shield
 %patch -P2 -p1 -b .currdir

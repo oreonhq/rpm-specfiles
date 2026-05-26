@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a4aa6e0ddbf39d5ad49bddfe0f89d9da864e3bc00f627125d1bc580472f53fbd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Data-Dump
 Version:        1.25
 Release:        14%{?dist}
@@ -5,10 +13,6 @@ Summary:        Pretty printing of data structures
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-Dump
 Source0:        https://cpan.metacpan.org/authors/id/G/GA/GARU/Data-Dump-1.25.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 a4aa6e0ddbf39d5ad49bddfe0f89d9da864e3bc00f627125d1bc580472f53fbd
-%global source0_file Data-Dump-1.25.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 # Build
@@ -43,9 +47,7 @@ contains Perl code that, when evaled, produces a deep copy of the original
 arguments. The string is formatted for easy reading.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Data-Dump-1.25.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a4aa6e0ddbf39d5ad49bddfe0f89d9da864e3bc00f627125d1bc580472f53fbd" || { echo "oreon: Source0 SHA256 mismatch for Data-Dump-1.25.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Data-Dump-%{version}
 
 %build

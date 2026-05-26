@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 55c5c141a564245b8f8fbe7698663c87a45a7333c2a2c56f06f811ab73b212dd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define glib2_version 2.72.0
 
 Name:           json-glib
@@ -8,10 +16,6 @@ Summary:        Library for JavaScript Object Notation format
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/JsonGlib
 Source0:        https://download.gnome.org/sources/%{name}/1.10/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 55c5c141a564245b8f8fbe7698663c87a45a7333c2a2c56f06f811ab73b212dd
-%global source0_file json-glib-1.10.8.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  docbook-style-xsl
 BuildRequires:  gettext
@@ -53,9 +57,7 @@ the functionality of the installed json-glib package.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/json-glib-1.10.8.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "55c5c141a564245b8f8fbe7698663c87a45a7333c2a2c56f06f811ab73b212dd" || { echo "oreon: Source0 SHA256 mismatch for json-glib-1.10.8.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{version}
 
 

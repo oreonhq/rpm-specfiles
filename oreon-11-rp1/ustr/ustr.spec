@@ -1,3 +1,10 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3daf6eae9f78de1e872c0b2b83cce35515b94d4bb8a074e48f331fd99e1fc2c4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
 
 %define show_all_cmds       1
 %define broken_fed_dbg_opts 0
@@ -34,10 +41,6 @@ License: LicenseRef-Callaway-MIT OR LicenseRef-Callaway-LGPLv2+ OR LicenseRef-Ca
 URL: http://www.and.org/ustr/
 Source0: http://www.and.org/ustr/%{version}/%{name}-%{version}.tar.bz2
 Patch0: c99-inline.patch
-# oreon url source checksums begin
-%global source0_sha256 3daf6eae9f78de1e872c0b2b83cce35515b94d4bb8a074e48f331fd99e1fc2c4
-%global source0_file ustr-1.0.4.tar.bz2
-# oreon url source checksums end
 # BuildRequires: make gcc sed
 
 BuildRequires: make
@@ -86,9 +89,7 @@ Requires: %{name}-debug = %{version}-%{release}
  Static library for the debug build of the Ustr string library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ustr-1.0.4.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3daf6eae9f78de1e872c0b2b83cce35515b94d4bb8a074e48f331fd99e1fc2c4" || { echo "oreon: Source0 SHA256 mismatch for ustr-1.0.4.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1
 

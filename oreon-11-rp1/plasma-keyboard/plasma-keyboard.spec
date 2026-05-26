@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 771d46212e99529deef89b881cb3f0c717a51e893061f0a979c3040edbbded03
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
@@ -11,10 +19,6 @@ URL:     https://invent.kde.org/plasma/%{name}
 
 # download.kde.org can redirect to mirrors that fail on Plasma tarballs
 Source0: https://invent.kde.org/plasma/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 771d46212e99529deef89b881cb3f0c717a51e893061f0a979c3040edbbded03
-%global source0_file plasma-keyboard-v6.6.3.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++
@@ -55,9 +59,7 @@ keyboard layouts, styles and KCM configuration integration.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/plasma-keyboard-v6.6.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "771d46212e99529deef89b881cb3f0c717a51e893061f0a979c3040edbbded03" || { echo "oreon: Source0 SHA256 mismatch for plasma-keyboard-v6.6.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-v%{version} -p1
 # Tag still asks for ECM/KF6 6.22 while this branch is Plasma 6.6.x on distro KF 6.6
 sed -i 's/set(KF6_MIN_VERSION "6.22.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeLists.txt

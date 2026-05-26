@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 10bd584d8f00d8091e814902b9f0a3e209f16e938f510fc23ba05f3fa469db5a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pkgname libisofs
 
 Summary:        Library to create ISO 9660 disk images
@@ -12,10 +20,6 @@ Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{versio
 Source2:        https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB007C4DD029E9CBDFC0ABC0A854
 Patch0:         libisofs-0.6.16-multilib.patch
 Patch1:         libisofs-1.5.4-rpath.patch
-# oreon url source checksums begin
-%global source0_sha256 10bd584d8f00d8091e814902b9f0a3e209f16e938f510fc23ba05f3fa469db5a
-%global source0_file libisofs-1.5.8.pl02.tar.gz
-# oreon url source checksums end
 BuildRequires:  gnupg2
 BuildRequires:  gcc, make, libacl-devel, zlib-devel
 %if 0%{?rhel} && "%{name}" != "%{pkgname}" || 0%{?oreon}
@@ -52,9 +56,7 @@ documentation for developing applications that use %{name}.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libisofs-1.5.8.pl02.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "10bd584d8f00d8091e814902b9f0a3e209f16e938f510fc23ba05f3fa469db5a" || { echo "oreon: Source0 SHA256 mismatch for libisofs-1.5.8.pl02.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -n %{pkgname}-%{version} -p1
 

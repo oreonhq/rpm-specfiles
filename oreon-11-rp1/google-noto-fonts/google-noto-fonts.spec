@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 aec80a14589ab243d7c3a5c14ee6bb066f00f2db0a4076c6703261a29c6f0189
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global cionly 0
 
 %global _fontname google-noto
@@ -43,10 +51,6 @@ Source2:        google-noto-sans-math.conf
 Source3:        google-noto-naskh-arabic-ex.conf
 Source4:        google-noto-znamenny-musical-notation.conf
 Source8:	google-noto-sans-sinhala-ex.conf
-# oreon url source checksums begin
-%global source0_sha256 aec80a14589ab243d7c3a5c14ee6bb066f00f2db0a4076c6703261a29c6f0189
-%global source0_file noto-monthly-release-2025.12.01.zip
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  fonts-rpm-macros
@@ -1163,9 +1167,7 @@ rpm.define("notobuild_filelist " .. _filelistbuild .. "\n")
 } ## end of lua
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/noto-monthly-release-2025.12.01.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aec80a14589ab243d7c3a5c14ee6bb066f00f2db0a4076c6703261a29c6f0189" || { echo "oreon: Source0 SHA256 mismatch for noto-monthly-release-2025.12.01.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -c -n noto-fonts-%{srcver}
 
 

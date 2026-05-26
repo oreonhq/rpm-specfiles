@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 49b4b9323dd8728b4350c5240708dfc6ac89a09355b011a6bbedc3b49ed889af
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %global dict_dirname hunspell
 %else
@@ -10,10 +18,6 @@ Version: 1.0.0
 Release: 28%{?dist}
 Epoch: 1
 Source: http://anishpatil.fedorapeople.org/gu_in.%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 49b4b9323dd8728b4350c5240708dfc6ac89a09355b011a6bbedc3b49ed889af
-%global source0_file gu_in.1.0.0.tar.gz
-# oreon url source checksums end
 URL: https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
 License: GPL-1.0-or-later
 BuildArch: noarch
@@ -25,9 +29,7 @@ Supplements: (hunspell and langpacks-gu)
 Gujarati hunspell dictionaries.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gu_in.1.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "49b4b9323dd8728b4350c5240708dfc6ac89a09355b011a6bbedc3b49ed889af" || { echo "oreon: Source0 SHA256 mismatch for gu_in.1.0.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -c -n gu_IN
 
 %build

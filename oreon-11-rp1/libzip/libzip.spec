@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8a247f57d1e3e6f6d11413b12a6f28a9d388de110adc0ec608d893180ed7097b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without tests
 
 Name:    libzip
@@ -8,10 +16,6 @@ Summary: C library for reading, creating, and modifying zip archives
 License: BSD-3-Clause
 URL:     https://libzip.org/
 Source0: https://libzip.org/download/libzip-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 8a247f57d1e3e6f6d11413b12a6f28a9d388de110adc0ec608d893180ed7097b
-%global source0_file libzip-1.11.4.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  zlib-devel
@@ -54,9 +58,7 @@ The %{name}-tools package provides command line tools split off %{name}:
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libzip-1.11.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8a247f57d1e3e6f6d11413b12a6f28a9d388de110adc0ec608d893180ed7097b" || { echo "oreon: Source0 SHA256 mismatch for libzip-1.11.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # unwanted in package documentation

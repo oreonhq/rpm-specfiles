@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 964132c389918e8964d7334936b6dd10ef025b300c6b29e693ba0f29550e3de5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # These are macros to be usable outside of the build section
 %global rpcbind_user_group rpc
 %global rpcbind_state_dir %{_rundir}/rpcbind
@@ -25,10 +33,6 @@ Requires(postun): systemd coreutils
 
 Patch100: rpcbind-0.2.3-systemd-tmpfiles.patch
 Patch101: rpcbind-0.2.4-systemd-rundir.patch
-# oreon url source checksums begin
-%global source0_sha256 964132c389918e8964d7334936b6dd10ef025b300c6b29e693ba0f29550e3de5
-%global source0_file rpcbind-1.2.8.tar.bz2
-# oreon url source checksums end
 
 Provides: portmap = %{version}-%{release}
 Obsoletes: portmap <= 4.0-65.3
@@ -47,9 +51,7 @@ universal addresses.  It must be running on the host to be able to make
 RPC calls on a server on that machine.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rpcbind-1.2.8.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "964132c389918e8964d7334936b6dd10ef025b300c6b29e693ba0f29550e3de5" || { echo "oreon: Source0 SHA256 mismatch for rpcbind-1.2.8.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # Create a sysusers.d config file

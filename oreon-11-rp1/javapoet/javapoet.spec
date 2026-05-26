@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1632e64e80360fb3a52e53212cfdff5e623e55f461945704479de87bd92892dc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:          javapoet
 Version:       1.7.0
 Release:       29%{?dist}
@@ -6,10 +14,6 @@ Summary:       A Java API for generating .java source files
 License:       Apache-2.0
 URL:           https://github.com/square/javapoet
 Source0:       https://github.com/square/%{name}/archive/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 1632e64e80360fb3a52e53212cfdff5e623e55f461945704479de87bd92892dc
-%global source0_file javapoet-1.7.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires: maven-local-openjdk25
 
@@ -37,9 +41,7 @@ Summary:       Javadoc for %{name}
 This package contains javadoc for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/javapoet-1.7.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1632e64e80360fb3a52e53212cfdff5e623e55f461945704479de87bd92892dc" || { echo "oreon: Source0 SHA256 mismatch for javapoet-1.7.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{name}-%{version}
 sed 's;<java.version>1.7</java.version>;<java.version>1.8</java.version>;' -i pom.xml
 # remove unnecessary dependency on parent POM

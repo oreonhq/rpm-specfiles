@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8774e9a12c70b0180b95d6b0b563c5aa4bea8d5960c15e18ae3b6d2521d64f8b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: General dimension convex hull programs
 Name: qhull
 Version: 8.0.2
@@ -16,10 +24,6 @@ Patch0: qhull-lib64.patch
 Patch1: qhull-install.patch
 # The static_r library needs fPIC
 Patch2: qhull-staticr-pic.patch
-# oreon url source checksums begin
-%global source0_sha256 8774e9a12c70b0180b95d6b0b563c5aa4bea8d5960c15e18ae3b6d2521d64f8b
-%global source0_file v8.0.2.tar.gz
-# oreon url source checksums end
 
 URL: http://www.qhull.org
 
@@ -69,9 +73,7 @@ diagrams, furthest-site Voronoi diagrams, and halfspace intersections
 about a point.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v8.0.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8774e9a12c70b0180b95d6b0b563c5aa4bea8d5960c15e18ae3b6d2521d64f8b" || { echo "oreon: Source0 SHA256 mismatch for v8.0.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1 -b .lib64
 %patch -P1 -p1 -b .install

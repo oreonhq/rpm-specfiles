@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ea27de56eaa3a24e39c4d4223e516f5c46bd6a2b056e6b4fae9a36797b6a9fec
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           dlm
 Version:        4.3.0
 Release:        8%{?dist}
@@ -13,10 +21,6 @@ BuildRequires:  systemd-units
 BuildRequires:  systemd-devel
 BuildRequires: make
 Source0:	https://releases.pagure.org/dlm/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ea27de56eaa3a24e39c4d4223e516f5c46bd6a2b056e6b4fae9a36797b6a9fec
-%global source0_file dlm-4.3.0.tar.gz
-# oreon url source checksums end
 
 %if 0%{?rhel} && 0%{?rhel} <= 7
 ExclusiveArch: i686 x86_64
@@ -33,9 +37,7 @@ Requires(postun): systemd-units
 The kernel dlm requires a user daemon to control membership.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dlm-4.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ea27de56eaa3a24e39c4d4223e516f5c46bd6a2b056e6b4fae9a36797b6a9fec" || { echo "oreon: Source0 SHA256 mismatch for dlm-4.3.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

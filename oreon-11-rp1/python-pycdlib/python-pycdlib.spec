@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 39e95a0d90cee4ecc3472d0fcf7167d2a5c30b209dc4b156e39e0cdc441529f2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global desc Pycdlib is a pure python library for reading, writing, and\
 otherwise manipulating ISO9660 files.  It is focused on speed, correctness,\
 and conformance to the various standards around ISO9660, including ISO9660\
@@ -13,10 +21,6 @@ Release:        6%{?dist}
 License:        LGPL-2.0-only
 URL:            https://github.com/clalancette/%{srcname}
 Source0:        https://github.com/clalancette/pycdlib/archive/v1.15.0/pycdlib-1.15.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 39e95a0d90cee4ecc3472d0fcf7167d2a5c30b209dc4b156e39e0cdc441529f2
-%global source0_file pycdlib-1.15.0.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
@@ -41,9 +45,7 @@ Requires:       python3-%{srcname} = %{version}-%{release}
 Some tools that use the %{srcname} library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pycdlib-1.15.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "39e95a0d90cee4ecc3472d0fcf7167d2a5c30b209dc4b156e39e0cdc441529f2" || { echo "oreon: Source0 SHA256 mismatch for pycdlib-1.15.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires

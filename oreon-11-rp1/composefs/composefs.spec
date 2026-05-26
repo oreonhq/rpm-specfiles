@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 207384deb196198ac4764c5b42bb558f7c661494302b380afc09447678538386
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %ifarch %{golang_arches}
 %bcond man 1
 %endif
@@ -10,10 +18,6 @@ Summary:        Tools to handle creating and mounting composefs images
 License:        LGPL-2.0-or-later AND Apache-2.0
 URL:            https://github.com/containers/composefs
 Source0:        https://github.com/containers/composefs/releases/download/v%{version}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 207384deb196198ac4764c5b42bb558f7c661494302b380afc09447678538386
-%global source0_file composefs-1.0.8.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc meson openssl-devel fuse3-devel
 %if %{with man}
@@ -46,9 +50,7 @@ License:        LGPL-2.1-or-later AND (GPL-2.0-only OR Apache-2.0)
 Library files for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/composefs-1.0.8.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "207384deb196198ac4764c5b42bb558f7c661494302b380afc09447678538386" || { echo "oreon: Source0 SHA256 mismatch for composefs-1.0.8.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

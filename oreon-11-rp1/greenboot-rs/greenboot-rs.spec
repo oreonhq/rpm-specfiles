@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e
+%global source1_sha256 ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pkgname greenboot
 
 # Tests require privileged operations (grub edits, fs remount) and cannot run in mock.
@@ -15,12 +25,6 @@ License:	BSD-3-Clause AND ISC AND MIT AND Unicode-DFS-2016 AND (Apache-2.0 OR BS
 URL:		https://github.com/fedora-iot/greenboot-rs
 Source0:        https://github.com/fedora-iot/greenboot-rs/archive/refs/tags/v0.16.3.tar.gz#/greenboot-rs-0.16.3.tar.gz
 Source1:        https://github.com/fedora-iot/greenboot-rs/archive/refs/tags/v0.16.3.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e
-%global source0_file v0.16.3.tar.gz
-%global source1_sha256 ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e
-%global source1_file v0.16.3.tar.gz
-# oreon url source checksums end
 
 ExcludeArch:	%{ix86}
 
@@ -63,10 +67,7 @@ Requires:	jq
 This package adds some default healthchecks for greenboot.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v0.16.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e" || { echo "oreon: Source0 SHA256 mismatch for v0.16.3.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/v0.16.3.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e" || { echo "oreon: Source1 SHA256 mismatch for v0.16.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if %{with bundled_rust_deps}
 %autosetup -p1 -a1 -n %{name}-%{version}
 %cargo_prep -v vendor

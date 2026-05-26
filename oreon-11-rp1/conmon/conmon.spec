@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 814fb5979a3a4b8576b1f901e606b482bebb41cb7e57926e6d5765ee786b96d3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global with_debug 1
 
 %if 0%{?with_debug}
@@ -26,10 +34,6 @@ Summary: OCI container runtime monitor
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
 Source0:        https://github.com/containers/conmon/archive/v2.2.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 814fb5979a3a4b8576b1f901e606b482bebb41cb7e57926e6d5765ee786b96d3
-%global source0_file v2.2.1.tar.gz
-# oreon url source checksums end
 %if %{with docs}
 BuildRequires: go-md2man
 %endif
@@ -49,9 +53,7 @@ Requires: libseccomp
 %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v2.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "814fb5979a3a4b8576b1f901e606b482bebb41cb7e57926e6d5765ee786b96d3" || { echo "oreon: Source0 SHA256 mismatch for v2.2.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -Sgit %{name}-%{version}
 sed -i 's/install.bin: bin\/conmon/install.bin:/' Makefile
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 99f144540c6070591e4c53bcb977eb42664c62b7b36cb35a29cf72ded339621d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora} || 0%{?rhel} <= 8
 %bcond_without deprecated
 %else
@@ -18,10 +26,6 @@ Patch1: big-endian-5.86.patch
 Patch2: 0001-a2dp-connect-source-profile-after-sink.patch
 # https://patchwork.kernel.org/project/bluetooth/list/?series=1058931
 Patch3: bluetoothctl-no-output.patch
-# oreon url source checksums begin
-%global source0_sha256 99f144540c6070591e4c53bcb977eb42664c62b7b36cb35a29cf72ded339621d
-%global source0_file bluez-5.86.tar.xz
-# oreon url source checksums end
 
 BuildRequires: dbus-devel >= 1.6
 BuildRequires: glib2-devel
@@ -144,9 +148,7 @@ Requires: bluez-libs%{?_isa} = %{version}-%{release}
 Object Exchange daemon for sharing files, contacts etc over bluetooth
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/bluez-5.86.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "99f144540c6070591e4c53bcb977eb42664c62b7b36cb35a29cf72ded339621d" || { echo "oreon: Source0 SHA256 mismatch for bluez-5.86.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

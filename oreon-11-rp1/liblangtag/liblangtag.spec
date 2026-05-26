@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5ed6bcd4ae3f3c05c912e62f216cd1a44123846147f729a49fb5668da51e030e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global girname LangTag
 %global girapiversion 0.6
 %global soversion 1
@@ -12,10 +20,6 @@ License: LGPL-3.0-or-later OR MPL-2.0
 URL: https://bitbucket.org/tagoh/liblangtag/
 Source0: https://bitbucket.org/tagoh/%{name}/downloads/%{name}-%{version}.tar.bz2
 Patch0: liblangtag-noparallel-gir.patch
-# oreon url source checksums begin
-%global source0_sha256 5ed6bcd4ae3f3c05c912e62f216cd1a44123846147f729a49fb5668da51e030e
-%global source0_file liblangtag-0.6.7.tar.bz2
-# oreon url source checksums end
 
 Requires: %{name}-data = %{version}-%{release}
 
@@ -82,9 +86,7 @@ BuildArch: noarch
 The %{name}-doc package contains documentation files for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/liblangtag-0.6.7.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5ed6bcd4ae3f3c05c912e62f216cd1a44123846147f729a49fb5668da51e030e" || { echo "oreon: Source0 SHA256 mismatch for liblangtag-0.6.7.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

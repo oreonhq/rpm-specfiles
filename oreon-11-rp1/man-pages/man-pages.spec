@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a2c8a0c2efe8a978ce51ce800461eb9e8931f12cc7ba4b7faa3082b69ba7f12c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Linux kernel and C library user-space interface documentation
 Name: man-pages
 Version: 6.13
@@ -58,18 +66,12 @@ Patch21: man-pages-3.42-close.patch
 
 # Add rtas.2, swapcontext.2 and cons.saver.8 man pages
 Patch28: additional-man-pages.patch
-# oreon url source checksums begin
-%global source0_sha256 a2c8a0c2efe8a978ce51ce800461eb9e8931f12cc7ba4b7faa3082b69ba7f12c
-%global source0_file man-pages-6.13.tar.xz
-# oreon url source checksums end
 
 %description
 A large collection of manual pages from the Linux Documentation Project (LDP).
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/man-pages-6.13.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a2c8a0c2efe8a978ce51ce800461eb9e8931f12cc7ba4b7faa3082b69ba7f12c" || { echo "oreon: Source0 SHA256 mismatch for man-pages-6.13.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %patch -P 21 -p1

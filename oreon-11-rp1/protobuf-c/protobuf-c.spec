@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e2c86271873a79c92b58fef7ebf8de1aa0df4738347a8bd5d4e65a80a16d0d24
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global sover 1
 
 Name:           protobuf-c
@@ -8,10 +16,6 @@ Summary:        C bindings for Google's Protocol Buffers
 License:        BSD-2-Clause
 URL:            https://github.com/protobuf-c/protobuf-c
 Source0:        https://github.com/protobuf-c/protobuf-c/releases/download/v1.5.2/protobuf-c-1.5.2.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 e2c86271873a79c92b58fef7ebf8de1aa0df4738347a8bd5d4e65a80a16d0d24
-%global source0_file protobuf-c-1.5.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -43,9 +47,7 @@ Requires:       %{name}-compiler%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{relea
 This package contains protobuf-c headers and libraries.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/protobuf-c-1.5.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e2c86271873a79c92b58fef7ebf8de1aa0df4738347a8bd5d4e65a80a16d0d24" || { echo "oreon: Source0 SHA256 mismatch for protobuf-c-1.5.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

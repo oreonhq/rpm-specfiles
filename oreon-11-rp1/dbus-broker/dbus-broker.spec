@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f819a8db8795fa08c767612e3823fd594694a0990f2543ecf35d6a1a6bf2ab5b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global dbus_user_id 81
 
 Name:                 dbus-broker
@@ -8,10 +16,6 @@ License:              Apache-2.0 AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND
 URL:                  https://github.com/bus1/dbus-broker
 Source0:              https://github.com/bus1/dbus-broker/releases/download/v%{version}/dbus-broker-%{version}.tar.xz
 Patch0:               0001-test-sockopt-loosen-verification-of-stale-pidfds.patch
-# oreon url source checksums begin
-%global source0_sha256 f819a8db8795fa08c767612e3823fd594694a0990f2543ecf35d6a1a6bf2ab5b
-%global source0_file dbus-broker-37.tar.xz
-# oreon url source checksums end
 BuildRequires:        pkgconfig(audit)
 BuildRequires:        pkgconfig(expat)
 BuildRequires:        pkgconfig(dbus-1)
@@ -46,9 +50,7 @@ dbus-broker's unit and reference tests that can be used to verify the functional
 of the installed dbus-broker.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dbus-broker-37.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f819a8db8795fa08c767612e3823fd594694a0990f2543ecf35d6a1a6bf2ab5b" || { echo "oreon: Source0 SHA256 mismatch for dbus-broker-37.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # Create a sysusers.d config file

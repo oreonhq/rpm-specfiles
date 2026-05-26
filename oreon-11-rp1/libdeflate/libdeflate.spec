@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d11473c1ad4c57d874695e8026865e38b47116bbcb872bfc622ec8f37a86017d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond mingw 1
 
 Name:          libdeflate
@@ -12,10 +20,6 @@ Source:        https://github.com/ebiggers/libdeflate/archive/v1.25/libdeflate-1
 
 # Add a library version to the mingw dll
 Patch:         libdeflate-mingw-libver.patch
-# oreon url source checksums begin
-%global source0_sha256 d11473c1ad4c57d874695e8026865e38b47116bbcb872bfc622ec8f37a86017d
-%global source0_file libdeflate-1.25.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: cmake
@@ -83,9 +87,7 @@ MinGW Windows %{name} binaries.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libdeflate-1.25.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d11473c1ad4c57d874695e8026865e38b47116bbcb872bfc622ec8f37a86017d" || { echo "oreon: Source0 SHA256 mismatch for libdeflate-1.25.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

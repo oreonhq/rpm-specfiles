@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7b1995333d1d9a2d857ba85c493df323055e64248a45c2af32ebe9ae8dce663b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pypi_name packaging
 
 # Specify --with bootstrap to build in bootstrap mode
@@ -28,10 +36,6 @@ Summary:        Core utilities for Python packages
 License:        BSD-2-Clause OR Apache-2.0
 URL:            https://github.com/pypa/packaging
 Source0:        https://github.com/pypa/packaging/archive/26.0/packaging-26.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 7b1995333d1d9a2d857ba85c493df323055e64248a45c2af32ebe9ae8dce663b
-%global source0_file packaging-26.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -84,9 +88,7 @@ Documentation for python-packaging
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/packaging-26.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b1995333d1d9a2d857ba85c493df323055e64248a45c2af32ebe9ae8dce663b" || { echo "oreon: Source0 SHA256 mismatch for packaging-26.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{pypi_name}-%{version}
 
 

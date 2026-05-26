@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 393f0d516af101304390da79f702e2a4e03da50d0b0c5bacdb17e81ddc816148
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond tests %{undefined rhel}
 
 Name:           python-fasteners
@@ -9,10 +17,6 @@ License:        Apache-2.0
 URL:            https://github.com/harlowja/fasteners
 # We need to use the GitHub archive instead of the PyPI sdist to get tests.
 Source:        https://github.com/harlowja/fasteners/archive/0.20/fasteners-0.20.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 393f0d516af101304390da79f702e2a4e03da50d0b0c5bacdb17e81ddc816148
-%global source0_file fasteners-0.20.tar.gz
-# oreon url source checksums end
 
 BuildSystem:            pyproject
 %if %{with tests}

@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3dcd65e1f5d9c0c891b3be204fa2bb418ce485d32310e1ca052e81d36623208e
+%global source1_sha256 b3f3413654003c1e773360d7fc60ebb8abd0e8c9af8e7d6c4b55f124f34d1e7f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: docbook5-schemas
 Version: 5.1
 Release: 17%{?dist}
@@ -23,12 +33,6 @@ BuildArch: noarch
 
 Source0:  https://archive.docbook.org/xml/5.0/docbook-5.0.zip
 Source1:  https://archive.docbook.org/xml/5.1/docbook-v5.1-os.zip
-# oreon url source checksums begin
-%global source0_sha256 3dcd65e1f5d9c0c891b3be204fa2bb418ce485d32310e1ca052e81d36623208e
-%global source0_file docbook-5.0.zip
-%global source1_sha256 b3f3413654003c1e773360d7fc60ebb8abd0e8c9af8e7d6c4b55f124f34d1e7f
-%global source1_file docbook-v5.1-os.zip
-# oreon url source checksums end
 
 %description
 Docbook 5.X is a complete rewrite of Docbook in RELAX NG and not compatible
@@ -37,10 +41,7 @@ schema for Docbook 5.X. Syntax of those schemas is XML-compliant and is
 developed by the OASIS consortium.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/docbook-5.0.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3dcd65e1f5d9c0c891b3be204fa2bb418ce485d32310e1ca052e81d36623208e" || { echo "oreon: Source0 SHA256 mismatch for docbook-5.0.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-v5.1-os.zip; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b3f3413654003c1e773360d7fc60ebb8abd0e8c9af8e7d6c4b55f124f34d1e7f" || { echo "oreon: Source1 SHA256 mismatch for docbook-v5.1-os.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -c -T 
 mkdir 5.0
 mkdir 5.1

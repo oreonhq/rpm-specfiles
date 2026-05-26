@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c5505ae075a871a9cd8d9801859b0ff1c09782075df281c72c23e72115d9f159
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if !0%{?rhel} && 0%{?fedora} < 36
 %bcond_without xemacs
 %else
@@ -36,10 +44,6 @@ Patch12: dist-2-cscope-indexer-help.patch
 Patch13: dist-3-add-selftests.patch
 Patch14: dist-4-fix-printf.patch
 Patch15: dist-5-fix-signal-handler.patch
-# oreon url source checksums begin
-%global source0_sha256 c5505ae075a871a9cd8d9801859b0ff1c09782075df281c72c23e72115d9f159
-%global source0_file cscope-15.9.tar.gz
-# oreon url source checksums end
 
 %define cscope_share_path %{_datadir}/cscope
 %if %{with xemacs}
@@ -58,9 +62,7 @@ Results are returned in lists, from which the user can select individual
 matches for use in file editing.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cscope-15.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c5505ae075a871a9cd8d9801859b0ff1c09782075df281c72c23e72115d9f159" || { echo "oreon: Source0 SHA256 mismatch for cscope-15.9.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

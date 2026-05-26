@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f7f669d27c997d3eb3f3e014b4c0aa1aa4d07ce4d6f9e41fa835240f2bf38810
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global so_major_version 2
 %global so_minor_version 0
 %global so_patch_version 1
@@ -12,10 +20,6 @@ License:        GPL-2.0-only
 Source0:        https://github.com/linux-ras/sysfsutils/archive/v%{version}.tar.gz
 
 Patch0:         sysfsutils-2.1.1-fix-my-strncat.patch
-# oreon url source checksums begin
-%global source0_sha256 f7f669d27c997d3eb3f3e014b4c0aa1aa4d07ce4d6f9e41fa835240f2bf38810
-%global source0_file v2.1.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -45,9 +49,7 @@ libsysfs-devel provides the header files and static libraries required
 to build programs using the libsysfs API.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v2.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f7f669d27c997d3eb3f3e014b4c0aa1aa4d07ce4d6f9e41fa835240f2bf38810" || { echo "oreon: Source0 SHA256 mismatch for v2.1.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

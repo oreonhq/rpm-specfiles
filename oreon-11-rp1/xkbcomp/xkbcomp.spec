@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2ac31f26600776db6d9cd79b3fcd272263faebac7eb85fb2f33c7141b8486060
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:       xkbcomp
 Version:    1.5.0
 Release:    2%{?dist}
@@ -7,10 +15,6 @@ License:    MIT-open-group AND HPND-DEC
 URL:        https://www.x.org
 
 Source0:    https://www.x.org/pub/individual/app/xkbcomp-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 2ac31f26600776db6d9cd79b3fcd272263faebac7eb85fb2f33c7141b8486060
-%global source0_file xkbcomp-1.5.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires: make gcc
 BuildRequires: libxkbfile-devel
@@ -31,9 +35,7 @@ Requires:   %{name}%{?_isa} = %{version}-%{release}
 X.Org XKB keymap compiler development files
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xkbcomp-1.5.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2ac31f26600776db6d9cd79b3fcd272263faebac7eb85fb2f33c7141b8486060" || { echo "oreon: Source0 SHA256 mismatch for xkbcomp-1.5.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0b72bbf60911e17398e9c0ce29866e4f13a26e8da4aa2e8304e73152ac4d4ef3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without bootstrap
 
 Name:           maven-shared-utils
@@ -12,10 +20,6 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
 Patch:          0001-Avoid-setting-POSIX-attributes-for-symbolic-links.patch
-# oreon url source checksums begin
-%global source0_sha256 0b72bbf60911e17398e9c0ce29866e4f13a26e8da4aa2e8304e73152ac4d4ef3
-%global source0_file maven-shared-utils-3.4.2-source-release.zip
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -41,9 +45,7 @@ improvements: lots of methods got cleaned up, generics got added and we dropped
 a lot of unused code.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/maven-shared-utils-3.4.2-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0b72bbf60911e17398e9c0ce29866e4f13a26e8da4aa2e8304e73152ac4d4ef3" || { echo "oreon: Source0 SHA256 mismatch for maven-shared-utils-3.4.2-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 find -name '*.java' -exec sed -i 's/\r//' {} +

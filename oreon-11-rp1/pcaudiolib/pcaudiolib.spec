@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 699a5a347b1e12dc5b122e192e19f4db01621826bf41b9ebefb1cbc63ae2180b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           pcaudiolib
 Version:        1.1
 Release:        19%{?dist}
@@ -8,10 +16,6 @@ Summary:        Portable C Audio Library
 License:        GPL-3.0-or-later
 URL:            https://github.com/rhdunn/pcaudiolib
 Source0:        https://github.com/rhdunn/pcaudiolib/archive/1.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 699a5a347b1e12dc5b122e192e19f4db01621826bf41b9ebefb1cbc63ae2180b
-%global source0_file 1.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc make autoconf automake libtool pkgconfig
 BuildRequires:  alsa-lib-devel pulseaudio-libs-devel
@@ -28,9 +32,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Development files for the Portable C Audio Library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "699a5a347b1e12dc5b122e192e19f4db01621826bf41b9ebefb1cbc63ae2180b" || { echo "oreon: Source0 SHA256 mismatch for 1.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 rm -rf src/TPCircularBuffer
 

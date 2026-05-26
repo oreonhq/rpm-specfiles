@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e13f4df8ad055c05bcca2226d92e298156eb9ea6de81415c844e567e4e7ab117
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:       beakerlib
 Summary:    A shell-level integration testing library
 Version:    1.33.2
@@ -72,15 +80,9 @@ Patch0: bugzilla-links.patch
 Patch1: bugzilla-links-epel.patch
 Patch2: python3.patch
 Patch3: python-platform.patch
-# oreon url source checksums begin
-%global source0_sha256 e13f4df8ad055c05bcca2226d92e298156eb9ea6de81415c844e567e4e7ab117
-%global source0_file beakerlib-1.33.2.tar.gz
-# oreon url source checksums end
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/beakerlib-1.33.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e13f4df8ad055c05bcca2226d92e298156eb9ea6de81415c844e567e4e7ab117" || { echo "oreon: Source0 SHA256 mismatch for beakerlib-1.33.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -N
 %if 0%{?fedora}
 # Patch0: bugzilla-links.patch

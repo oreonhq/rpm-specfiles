@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 87daefacd7958b4a69f88c6856dbd1634261963c414079d0c371f589cd66a2e3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: A front end for testing other programs
 Name: dejagnu
 Version: 1.6.3
@@ -16,10 +24,6 @@ BuildRequires: expect texinfo
 BuildRequires: make
 
 Patch0: rhbz460153.patch
-# oreon url source checksums begin
-%global source0_sha256 87daefacd7958b4a69f88c6856dbd1634261963c414079d0c371f589cd66a2e3
-%global source0_file dejagnu-1.6.3.tar.gz
-# oreon url source checksums end
 
 %description
 DejaGnu is an Expect/Tcl based framework for testing other programs.
@@ -30,9 +34,7 @@ output format of all tests (making it easier to integrate the testing
 into software development).
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dejagnu-1.6.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "87daefacd7958b4a69f88c6856dbd1634261963c414079d0c371f589cd66a2e3" || { echo "oreon: Source0 SHA256 mismatch for dejagnu-1.6.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1
 

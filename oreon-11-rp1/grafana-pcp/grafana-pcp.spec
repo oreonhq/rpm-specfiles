@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 06e931554949c850a00601574d2c485007335818361e98d49bb8535eac99cee2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Specify if the frontend will be compiled as part of the build or
 # is attached as a webpack tarball (in case of an unsuitable nodejs version on the build system)
 %define compile_frontend 0
@@ -39,10 +47,6 @@ Source6:        create_bundles_in_container.sh
 Patch1:         0001-remove-unused-frontend-crypto.patch
 Patch2:         0002-remove-faulty-metric-tables.patch
 Patch3:         0003-fix-create_bundles-issue.patch
-# oreon url source checksums begin
-%global source0_sha256 06e931554949c850a00601574d2c485007335818361e98d49bb8535eac99cee2
-%global source0_file grafana-pcp-5.3.0.tar.gz
-# oreon url source checksums end
 
 # Intersection of go_arches and nodejs_arches
 ExclusiveArch:  %{grafanapcp_arches}
@@ -134,9 +138,7 @@ scalable time series from pmseries(1) and Redis, live PCP metrics and
 bpftrace scripts from pmdabpftrace(1), as well as several dashboards.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/grafana-pcp-5.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "06e931554949c850a00601574d2c485007335818361e98d49bb8535eac99cee2" || { echo "oreon: Source0 SHA256 mismatch for grafana-pcp-5.3.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -T -D -b 0
 %setup -q -T -D -b 1
 %if %{compile_frontend} == 0

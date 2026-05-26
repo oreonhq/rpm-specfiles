@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e0d9b7f11885fdfdc4987f06b2aa0565ad2a4af52b22e5ebf79e1a98abd0ae2f
+%global source1_sha256 df0ad8413f1e4bc0b6e5f964192879b0dc66d7be521f9666357ac30bad4c7a32
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 #
 # Important notes regarding the package:
 # ======================================
@@ -160,12 +170,6 @@ BuildArch:        noarch
 Patch01:          urw-base35-fonts-20200910-dont-config-d050000l-as-fantasy-font.patch
 Patch02:          urw-base35-fonts-20200910-Nimbus-Mono-substitution.patch
 Patch03:          urw-base35-fonts-20200910-add-alias-to-Century.patch
-# oreon url source checksums begin
-%global source0_sha256 e0d9b7f11885fdfdc4987f06b2aa0565ad2a4af52b22e5ebf79e1a98abd0ae2f
-%global source0_file 20200910.tar.gz
-%global source1_sha256 df0ad8413f1e4bc0b6e5f964192879b0dc66d7be521f9666357ac30bad4c7a32
-%global source1_file urw-fonts-1.0.7pre44.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:    fontpackages-devel
 BuildRequires:    libappstream-glib
@@ -308,10 +312,7 @@ required by some of the software, like e.g. xfig, X11, etc.
 
 # We need to ship the legacy fonts for now as well (BZ #1551219):
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/20200910.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e0d9b7f11885fdfdc4987f06b2aa0565ad2a4af52b22e5ebf79e1a98abd0ae2f" || { echo "oreon: Source0 SHA256 mismatch for 20200910.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/urw-fonts-1.0.7pre44.tar.bz2; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "df0ad8413f1e4bc0b6e5f964192879b0dc66d7be521f9666357ac30bad4c7a32" || { echo "oreon: Source1 SHA256 mismatch for urw-fonts-1.0.7pre44.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -N -S git
 
 mkdir -p legacy

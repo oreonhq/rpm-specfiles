@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ec8e16c8614550a076f3c06b52b6d4c8c9fce2c6da691376bdbd882f3db57449
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without bootstrap
 
 Name:           apache-commons-codec
@@ -13,10 +21,6 @@ Source0:        https://archive.apache.org/dist/commons/codec/source/commons-cod
 # Data in DoubleMetaphoneTest.java originally has an inadmissible license.
 # The author gives MIT in e-mail communication.
 Source1:        aspell-mail.txt
-# oreon url source checksums begin
-%global source0_sha256 ec8e16c8614550a076f3c06b52b6d4c8c9fce2c6da691376bdbd882f3db57449
-%global source0_file commons-codec-1.19.0-src.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -37,9 +41,7 @@ commonly used encoders and decoders. Examples include Base64, Hex,
 Phonetic and URLs.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/commons-codec-1.19.0-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ec8e16c8614550a076f3c06b52b6d4c8c9fce2c6da691376bdbd882f3db57449" || { echo "oreon: Source0 SHA256 mismatch for commons-codec-1.19.0-src.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n commons-codec-%{version}-src
 cp %{SOURCE1} aspell-mail.txt
 sed -i 's/\r//' RELEASE-NOTES*.txt LICENSE.txt NOTICE.txt

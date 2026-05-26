@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           python-html5lib
 Summary:        A python based HTML parser/tokenizer
 Version:        1.1
@@ -15,10 +23,6 @@ Patch:        https://github.com/html5lib/html5lib-python/pull/573.patch
 Patch:        https://github.com/html5lib/html5lib-python/pull/583.patch
 # Avoid ResourceWarning: Implicitly cleaning up <addinfourl ...>
 Patch:        https://github.com/html5lib/html5lib-python/pull/591.patch
-# oreon url source checksums begin
-%global source0_sha256 b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f
-%global source0_file html5lib-1.1.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -45,9 +49,7 @@ specification for maximum compatibility with major desktop web browsers.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/html5lib-1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b2e5b40261e20f354d198eae92afc10d750afb487ed5e50f9c4eaf07c184146f" || { echo "oreon: Source0 SHA256 mismatch for html5lib-1.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n html5lib-%{version}
 
 # Use standard library unittest.mock instead of 3rd party mock

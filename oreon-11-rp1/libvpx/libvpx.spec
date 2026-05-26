@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e935eded7d81631a538bfae703fd1e293aad1c7fd3407ba00440c95105d2011e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global somajor 9
 %global sominor 0
 %global sotiny  0
@@ -24,10 +32,6 @@ BuildRequires:		nasm
 BuildRequires:		doxygen, perl(Getopt::Long)
 
 Patch1:                 0001-vpx_codec_enc_init_multi-fix-double-free-on-init-fai.patch
-# oreon url source checksums begin
-%global source0_sha256 e935eded7d81631a538bfae703fd1e293aad1c7fd3407ba00440c95105d2011e
-%global source0_file v1.15.0.tar.gz
-# oreon url source checksums end
 
 %description
 libvpx provides the VP8/VP9 SDK, which allows you to integrate your applications
@@ -51,9 +55,7 @@ A selection of utilities and tools for VP8, including a sample encoder
 and decoder.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v1.15.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e935eded7d81631a538bfae703fd1e293aad1c7fd3407ba00440c95105d2011e" || { echo "oreon: Source0 SHA256 mismatch for v1.15.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n libvpx-%{version}
 %patch -P0 -p1 -b .fortify-source-on
 %patch -P1 -p1 -b .0001

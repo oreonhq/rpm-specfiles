@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7cb1ff09506ae911ca9860bef4af08c2403f3e131f6c913a2cbd6ddca4215b53
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:        Audio/Video Control library for IEEE-1394 devices
 Name:           libavc1394
 Version:        0.5.4
@@ -6,10 +14,6 @@ License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            http://sourceforge.net/projects/libavc1394/
 Source:         https://sourceforge.net/projects/libavc1394/files/libavc1394/libavc1394-%{version}.tar.gz
 Patch1:         libavc1394-%{version}-librom.patch
-# oreon url source checksums begin
-%global source0_sha256 7cb1ff09506ae911ca9860bef4af08c2403f3e131f6c913a2cbd6ddca4215b53
-%global source0_file libavc1394-0.5.4.tar.gz
-# oreon url source checksums end
 BuildRequires:  libraw1394-devel
 BuildRequires:  chrpath, gcc
 BuildRequires:  make
@@ -32,9 +36,7 @@ Requires: libraw1394-devel%{?_isa}
 Development libraries required to build applications using libavc1394.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libavc1394-0.5.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7cb1ff09506ae911ca9860bef4af08c2403f3e131f6c913a2cbd6ddca4215b53" || { echo "oreon: Source0 SHA256 mismatch for libavc1394-0.5.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -N
 %patch -P 1 -p1 -b .librom
 chmod -x test/dvcont.c

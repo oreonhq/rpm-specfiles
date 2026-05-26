@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e5d5f669c3c759da81ec39293330f532b4181231c5e967e9cbc993bae5d40aa4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global reponame crash-gcore
 
 Summary: Gcore extension module for the crash utility
@@ -17,19 +25,13 @@ Patch0: crash-gcore-1.6.4-coredump-fix-building-failure-due-to-undefined-macro.p
 # https://github.com/fujitsu/crash-gcore/pull/6
 Patch1: crash-gcore-1.6.4-set_context-third-arg.patch
 Patch2: crash-gcore-1.6.4-x86-fix-the-issue-that-core-files-for-64-bit-tasks-a.patch
-# oreon url source checksums begin
-%global source0_sha256 e5d5f669c3c759da81ec39293330f532b4181231c5e967e9cbc993bae5d40aa4
-%global source0_file crash-gcore-command-1.6.4.tar.gz
-# oreon url source checksums end
 
 %description
 Command for creating a core dump file of a user-space task that was
 running in a kernel dump file.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/crash-gcore-command-1.6.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e5d5f669c3c759da81ec39293330f532b4181231c5e967e9cbc993bae5d40aa4" || { echo "oreon: Source0 SHA256 mismatch for crash-gcore-command-1.6.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{reponame}-%{version} -p1
 
 %build

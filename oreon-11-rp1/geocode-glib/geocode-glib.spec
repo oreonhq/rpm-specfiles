@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2d9a6826d158470449a173871221596da0f83ebdcff98b90c7049089056a37aa
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global json_glib_version 0.99.2
 
 Name:           geocode-glib
@@ -9,10 +17,6 @@ Summary:        Geocoding helper library
 License:        LGPL-2.0-or-later AND BSD-3-Clause
 URL:            http://www.gnome.org/
 Source0:        http://download.gnome.org/sources/%{name}/3.26/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 2d9a6826d158470449a173871221596da0f83ebdcff98b90c7049089056a37aa
-%global source0_file geocode-glib-3.26.4.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gettext
 BuildRequires:  gtk-doc
@@ -49,9 +53,7 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/geocode-glib-3.26.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2d9a6826d158470449a173871221596da0f83ebdcff98b90c7049089056a37aa" || { echo "oreon: Source0 SHA256 mismatch for geocode-glib-3.26.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

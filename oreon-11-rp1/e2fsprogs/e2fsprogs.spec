@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fd5bf388cbdbe006a3d3b318d983b2948382440acc85a87f1e7d108653e8db0b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Utilities for managing ext2, ext3, and ext4 file systems
 Name: e2fsprogs
 Version: 1.47.4
@@ -14,10 +22,6 @@ Source1: https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version
 # note that the GPG key linked off his MIT page is likely old, and is *not* the
 # same as the above key ( http://web.mit.edu/tytso/www/home.html )
 Source2: tytso-key.asc
-# oreon url source checksums begin
-%global source0_sha256 fd5bf388cbdbe006a3d3b318d983b2948382440acc85a87f1e7d108653e8db0b
-%global source0_file e2fsprogs-1.47.4.tar.xz
-# oreon url source checksums end
 
 Url: http://e2fsprogs.sourceforge.net/
 Requires: e2fsprogs-libs%{?_isa} = %{version}-%{release}
@@ -182,9 +186,7 @@ which means that it can only be done on file systems that are on a lvm
 managed device with some free space available in respective volume group.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/e2fsprogs-1.47.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fd5bf388cbdbe006a3d3b318d983b2948382440acc85a87f1e7d108653e8db0b" || { echo "oreon: Source0 SHA256 mismatch for e2fsprogs-1.47.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %setup -q
 

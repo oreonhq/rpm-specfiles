@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4376bf16787a321e39dd3d88523314985d5e7fa6e3123f790390d26496d63615
+%global source1_sha256 25db846049e5aa047252c57b4446182bc9a8c062ba4c44d2fbb4e674f25e1a39
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           acpica-tools
 Version:        20251212
 Release:        4%{?dist}
@@ -34,12 +44,6 @@ Patch05:        str-trunc-warn.patch
 Patch07:	dangling-ptr.patch
 Patch08:	uuid-len.patch
 Patch09: 0001-Fix-unused-attribute-error.patch
-# oreon url source checksums begin
-%global source0_sha256 4376bf16787a321e39dd3d88523314985d5e7fa6e3123f790390d26496d63615
-%global source0_file acpica-unix2-20251212.tar.gz
-%global source1_sha256 25db846049e5aa047252c57b4446182bc9a8c062ba4c44d2fbb4e674f25e1a39
-%global source1_file acpitests-unix-20251212.tar.gz
-# oreon url source checksums end
 #Patch11:	0002-Correct-dumping-of-SLIC-tables.patch
 #Patch12:	0003-PHAT-FW-health-table-can-be-zero-length.patch
 
@@ -88,10 +92,7 @@ are installed:
 This version of the tools is being released under GPLv2 license.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/acpica-unix2-20251212.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4376bf16787a321e39dd3d88523314985d5e7fa6e3123f790390d26496d63615" || { echo "oreon: Source0 SHA256 mismatch for acpica-unix2-20251212.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/acpitests-unix-20251212.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "25db846049e5aa047252c57b4446182bc9a8c062ba4c44d2fbb4e674f25e1a39" || { echo "oreon: Source1 SHA256 mismatch for acpitests-unix-20251212.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n acpica-unix2-%{version}
 gzip -dc %{SOURCE1} | tar -x --strip-components=1 -f -
 

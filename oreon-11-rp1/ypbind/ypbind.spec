@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3d20741ba04d9d421a5462555177e1b88aefd279b4f882b0f0083077a557f51f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: The NIS daemon which binds NIS clients to an NIS domain
 Name: ypbind
 Epoch: 3
@@ -18,10 +26,6 @@ Source5: ypbind-post-waitbind
 Patch1: ypbind-1.11-gettextdomain.patch
 # Not sent to upstream.
 Patch2: ypbind-2.5-helpman.patch
-# oreon url source checksums begin
-%global source0_sha256 3d20741ba04d9d421a5462555177e1b88aefd279b4f882b0f0083077a557f51f
-%global source0_file v2.7.2.tar.gz
-# oreon url source checksums end
 
 # This is for /bin/systemctl
 Requires(post): systemd
@@ -60,9 +64,7 @@ Install the ypbind package on any machines running NIS client programs
 also need to install the ypserv package to a machine on your network.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v2.7.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3d20741ba04d9d421a5462555177e1b88aefd279b4f882b0f0083077a557f51f" || { echo "oreon: Source0 SHA256 mismatch for v2.7.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n ypbind-mt-%{version}
 
 autoreconf -fiv

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 76c5ed142abba1f1df2335849681c83d83cc0842fe854af71081d2c411efb0bb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Perform optional tests
 %bcond_without perl_XS_Parse_Keyword_enables_optional_test
 
@@ -9,10 +17,6 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XS-Parse-Keyword
 Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/XS-Parse-Keyword-%{version}.tar.gz
 Source1:        macros.perl-XS-Parse-Keyword
-# oreon url source checksums begin
-%global source0_sha256 76c5ed142abba1f1df2335849681c83d83cc0842fe854af71081d2c411efb0bb
-%global source0_file XS-Parse-Keyword-0.49.tar.gz
-# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  perl-devel
 BuildRequires:  perl-generators
@@ -95,9 +99,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/XS-Parse-Keyword-0.49.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "76c5ed142abba1f1df2335849681c83d83cc0842fe854af71081d2c411efb0bb" || { echo "oreon: Source0 SHA256 mismatch for XS-Parse-Keyword-0.49.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n XS-Parse-Keyword-%{version}
 %if !%{with perl_XS_Parse_Keyword_enables_optional_test}
 rm t/99pod.t

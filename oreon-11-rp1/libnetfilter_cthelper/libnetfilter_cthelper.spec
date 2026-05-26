@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 07618e71c4d9a6b6b3dc1986540486ee310a9838ba754926c7d14a17d8fccf3d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libnetfilter_cthelper
 Version:        1.0.0
 Release:        32%{?dist}
@@ -5,10 +13,6 @@ Summary:        User-space infrastructure for connection tracking helpers
 License:        GPL-2.0-only
 URL:            http://www.netfilter.org/projects/libnetfilter_cthelper/index.html
 Source0:        http://www.netfilter.org/projects/libnetfilter_cthelper/files/libnetfilter_cthelper-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 07618e71c4d9a6b6b3dc1986540486ee310a9838ba754926c7d14a17d8fccf3d
-%global source0_file libnetfilter_cthelper-1.0.0.tar.bz2
-# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  libmnl-devel >= 1.0.0, pkgconfig, kernel-headers
 BuildRequires: make
@@ -28,9 +32,7 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libnetfilter_cthelper-1.0.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "07618e71c4d9a6b6b3dc1986540486ee310a9838ba754926c7d14a17d8fccf3d" || { echo "oreon: Source0 SHA256 mismatch for libnetfilter_cthelper-1.0.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

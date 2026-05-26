@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 592272df3cf01e85e7db300c449df5061092574d099da275d19e97ef0510f8a6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global origname mesa
 
 # We've gotten a report that enabling LTO for mesa breaks some games. See
@@ -24,10 +32,6 @@ Patch01:        0001-c11-threads-fix-build-on-fedora-44.patch
 
 # Support LLVM 21
 Patch02:        cd129dbf8af2d16b1243f2ce287ff69c6a5dc557.patch
-# oreon url source checksums begin
-%global source0_sha256 592272df3cf01e85e7db300c449df5061092574d099da275d19e97ef0510f8a6
-%global source0_file mesa-25.0.7.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  meson >= 1.3.0
 BuildRequires:  gcc
@@ -89,9 +93,7 @@ Provides:       deprecated()
 %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mesa-25.0.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "592272df3cf01e85e7db300c449df5061092574d099da275d19e97ef0510f8a6" || { echo "oreon: Source0 SHA256 mismatch for mesa-25.0.7.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{origname}-%{ver} -p1
 cp %{SOURCE1} docs/
 

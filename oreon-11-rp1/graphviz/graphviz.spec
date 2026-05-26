@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 043877c0857d8d46067cd2f18809d54fc876c399f0ecd438f60ea7f4d8037451
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?rhel} >= 8 || 0%{?oreon}
 %bcond_with php
 %bcond_with guile
@@ -212,10 +220,6 @@ Requires:		urw-base35-fonts
 Patch0:			graphviz-12.0.0-gvpack-neato-static.patch
 # fixes for R API 4.6
 Patch1:     swig-4.4.1-r-api-4.6.patch
-# oreon url source checksums begin
-%global source0_sha256 043877c0857d8d46067cd2f18809d54fc876c399f0ecd438f60ea7f4d8037451
-%global source0_file graphviz-14.1.4.tar.xz
-# oreon url source checksums end
 
 %if ! %{JAVA}
 Obsoletes:              graphviz-java < %{version}-%{release}
@@ -414,9 +418,7 @@ Go extension for graphviz.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/graphviz-14.1.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "043877c0857d8d46067cd2f18809d54fc876c399f0ecd438f60ea7f4d8037451" || { echo "oreon: Source0 SHA256 mismatch for graphviz-14.1.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # Attempt to fix rpmlint warnings about executable sources

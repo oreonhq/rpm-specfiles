@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 82cd9a96c41a4a3205c050206f0564ff4456f773a8f9ffc9235ff8f1907ca5e6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Tests require specl which is not yet packaged
 %bcond_with check
 
@@ -8,10 +16,6 @@ Summary:        POSIX library for Lua
 License:        MIT
 URL:            http://luaposix.github.io/luaposix/
 Source0:        https://github.com/luaposix/luaposix/archive/v%{version}/lua-posix-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 82cd9a96c41a4a3205c050206f0564ff4456f773a8f9ffc9235ff8f1907ca5e6
-%global source0_file lua-posix-36.3.tar.gz
-# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  libxcrypt-devel
 BuildRequires:  lua-devel
@@ -23,9 +27,7 @@ to Lua programs.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/lua-posix-36.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "82cd9a96c41a4a3205c050206f0564ff4456f773a8f9ffc9235ff8f1907ca5e6" || { echo "oreon: Source0 SHA256 mismatch for lua-posix-36.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n luaposix-%{version}
 
 

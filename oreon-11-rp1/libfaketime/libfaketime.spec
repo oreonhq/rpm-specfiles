@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4fc32218697c052adcdc5ee395581f2554ca56d086ac817ced2be0d6f1f8a9fa
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define _lto_cflags %{nil}
 
 Name:       libfaketime
@@ -28,10 +36,6 @@ Patch1:     libfaketime-0.9.12-Dynamic-libraries-are-expected-to-be-executable-o
 # Adapt to GCC 16, in upstream after 0.9.12,
 # <https://github.com/wolfcw/libfaketime/pull/528>
 Patch2:     libfaketime-0.9.12-tests-Silence-an-unused-but-set-variable-warning-wit.patch
-# oreon url source checksums begin
-%global source0_sha256 4fc32218697c052adcdc5ee395581f2554ca56d086ac817ced2be0d6f1f8a9fa
-%global source0_file libfaketime-0.9.12.tar.gz
-# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  gcc
 BuildRequires:  make
@@ -48,9 +52,7 @@ specified by you, the user) to these programs. This means you can modify the
 system time a program sees without having to change the time system-wide.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libfaketime-0.9.12.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4fc32218697c052adcdc5ee395581f2554ca56d086ac817ced2be0d6f1f8a9fa" || { echo "oreon: Source0 SHA256 mismatch for libfaketime-0.9.12.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

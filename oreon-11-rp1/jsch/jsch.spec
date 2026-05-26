@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 063bf66e163f43b7d7897ac14efe1e80ed094d4016afe1181fe2285e3797bed3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           jsch
 Version:        0.1.55
 Release:        %autorelease
@@ -12,10 +20,6 @@ Source0:        http://download.sourceforge.net/sourceforge/jsch/jsch-%{version}
 # https://download.eclipse.org/tools/orbit/downloads/drops2/R20201130205003/repository/plugins/com.jcraft.jsch_0.1.55.v20190404-1902.jar
 Source1:        MANIFEST.MF
 Source2:        plugin.properties
-# oreon url source checksums begin
-%global source0_sha256 063bf66e163f43b7d7897ac14efe1e80ed094d4016afe1181fe2285e3797bed3
-%global source0_file jsch-0.1.55.zip
-# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.jcraft:jzlib)
@@ -31,9 +35,7 @@ X11 forwarding, file transfer, etc., and you can integrate its
 functionality into your own Java programs.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jsch-0.1.55.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "063bf66e163f43b7d7897ac14efe1e80ed094d4016afe1181fe2285e3797bed3" || { echo "oreon: Source0 SHA256 mismatch for jsch-0.1.55.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 %mvn_file : jsch
 

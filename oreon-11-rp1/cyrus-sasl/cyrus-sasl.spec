@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7ccfc6abd01ed67c1a0924b353e526f1b766b21f42d4562ee635a8ebfc5bb38c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global username    saslauth
 
 %global _plugindir2 %{_libdir}/sasl2
@@ -48,10 +56,6 @@ Patch503: cyrus-sasl-2.1.28-SAST.patch
 
 Patch599: cyrus-sasl-2.1.28-fedora-c99.patch
 Patch600: cyrus-sasl-2.1.28-gcc15.patch
-# oreon url source checksums begin
-%global source0_sha256 7ccfc6abd01ed67c1a0924b353e526f1b766b21f42d4562ee635a8ebfc5bb38c
-%global source0_file cyrus-sasl-2.1.28.tar.gz
-# oreon url source checksums end
 
 BuildRequires: autoconf, automake, libtool, gdbm-devel, groff
 BuildRequires: krb5-devel >= 1.2.2, openssl-devel, pam-devel, pkgconfig
@@ -165,9 +169,7 @@ the GS2 authentication scheme.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cyrus-sasl-2.1.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7ccfc6abd01ed67c1a0924b353e526f1b766b21f42d4562ee635a8ebfc5bb38c" || { echo "oreon: Source0 SHA256 mismatch for cyrus-sasl-2.1.28.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n cyrus-sasl-%{version}
 rm -rf dlcompat* 2>/dev/null || :
 rm -rf plugins/srp* 2>/dev/null || :

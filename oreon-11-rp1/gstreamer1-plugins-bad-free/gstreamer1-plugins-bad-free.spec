@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a0ab17dddd4c029ecd7a423c30badd5a3c7599ea42707016d1d57545f5723ccf
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global         majorminor 1.0
 %global         _gobject_introspection  1.31.1
 
@@ -57,10 +65,6 @@ Source:         https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugin
 
 # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/5622
 Patch0:          openh264-add-license-file.patch
-# oreon url source checksums begin
-%global source0_sha256 a0ab17dddd4c029ecd7a423c30badd5a3c7599ea42707016d1d57545f5723ccf
-%global source0_file gst-plugins-bad-1.26.7.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  meson >= 0.48.0
 BuildRequires:  gcc-c++
@@ -350,9 +354,7 @@ aren't tested well enough, or the code is not of good enough quality.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gst-plugins-bad-1.26.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a0ab17dddd4c029ecd7a423c30badd5a3c7599ea42707016d1d57545f5723ccf" || { echo "oreon: Source0 SHA256 mismatch for gst-plugins-bad-1.26.7.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n gst-plugins-bad-%{version} -p3
 
 %build

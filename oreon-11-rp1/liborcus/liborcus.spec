@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3555660197d6d38d720643f430804bb0f95a484c1fe6c28c00808ae67f978d15
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global apiversion 0.21
 
 %if 0%{?rhel}
@@ -24,10 +32,6 @@ License: MPL-2.0
 URL: https://gitlab.com/orcus/orcus
 Source0: https://gitlab.com/orcus/orcus/-/archive/%{version}/orcus-%{version}.tar.bz2
 Patch0: include.patch
-# oreon url source checksums begin
-%global source0_sha256 3555660197d6d38d720643f430804bb0f95a484c1fe6c28c00808ae67f978d15
-%global source0_file orcus-0.21.0.tar.bz2
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: boost-devel
@@ -97,9 +101,7 @@ BuildArch: noarch
 API documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/orcus-0.21.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3555660197d6d38d720643f430804bb0f95a484c1fe6c28c00808ae67f978d15" || { echo "oreon: Source0 SHA256 mismatch for orcus-0.21.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n orcus-%{version} -p0
 
 %if %{without convtools}

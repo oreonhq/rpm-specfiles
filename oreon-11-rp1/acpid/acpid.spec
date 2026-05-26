@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2d095c8cfcbc847caec746d62cdc8d0bff1ec1bc72ef7c674c721e04da6ab333
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # hardened build if not overridden
 %{!?_hardened_build:%global _hardened_build 1}
 
@@ -18,10 +26,6 @@ Source6: acpid.sysconfig
 Source7: acpid.socket
 # https://sourceforge.net/p/acpid2/tickets/14/
 Patch0: acpid-2.0.32-kacpimon-dynamic-connections.patch
-# oreon url source checksums begin
-%global source0_sha256 2d095c8cfcbc847caec746d62cdc8d0bff1ec1bc72ef7c674c721e04da6ab333
-%global source0_file acpid-2.0.34.tar.xz
-# oreon url source checksums end
 %if 0%{?rhel}
 ExclusiveArch: x86_64 aarch64 riscv64
 %endif
@@ -37,9 +41,7 @@ Requires: systemd
 acpid is a daemon that dispatches ACPI events to user-space programs.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/acpid-2.0.34.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2d095c8cfcbc847caec746d62cdc8d0bff1ec1bc72ef7c674c721e04da6ab333" || { echo "oreon: Source0 SHA256 mismatch for acpid-2.0.34.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1 -b .kacpimon-dynamic-connections
 

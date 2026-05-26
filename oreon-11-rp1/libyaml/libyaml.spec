@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global with_mingw 0
 
 %if 0%{?fedora} || 0%{?oreon}
@@ -13,10 +21,6 @@ Summary:    YAML 1.1 parser and emitter written in C
 License:    MIT
 URL:        https://github.com/yaml/libyaml
 Source0:    https://github.com/yaml/libyaml/releases/download/%{version}/yaml-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4
-%global source0_file yaml-0.2.5.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -72,9 +76,7 @@ emitter written in C.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/yaml-0.2.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4" || { echo "oreon: Source0 SHA256 mismatch for yaml-0.2.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n yaml-%{version}
 
 

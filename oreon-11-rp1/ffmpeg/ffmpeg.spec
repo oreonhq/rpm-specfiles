@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 089bc60fb59d6aecc5d994ff530fd0dcb3ee39aa55867849a2bbc4e555f9c304
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # For a complete build enable this
 %bcond all_codecs 0
 
@@ -132,10 +140,6 @@ Patch10:        https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7f9c7f9849a215522
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=2240127
 # Reference: https://crbug.com/1306560
 Patch1002:      ffmpeg-chromium.patch
-# oreon url source checksums begin
-%global source0_sha256 089bc60fb59d6aecc5d994ff530fd0dcb3ee39aa55867849a2bbc4e555f9c304
-%global source0_file ffmpeg-7.1.2.tar.xz
-# oreon url source checksums end
 
 
 Requires:       libavcodec%{?pkg_suffix}%{_isa} = %{version}-%{release}
@@ -737,9 +741,7 @@ This build includes the full range of codecs offered by ffmpeg.
 %dnl --------------------------------------------------------------------------------
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ffmpeg-7.1.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "089bc60fb59d6aecc5d994ff530fd0dcb3ee39aa55867849a2bbc4e555f9c304" || { echo "oreon: Source0 SHA256 mismatch for ffmpeg-7.1.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup -S git_am

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a8fa7e069e1167cbb9c828243a956697466341893b8b0f4a192563759138fbf6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Pass --without tests to skip building composer-cli-tests
 %bcond_without tests
 # Pass --without signed to skip gpg signed tar.gz (DO NOT DO THAT IN PRODUCTION)
@@ -24,10 +32,6 @@ Source2:        go-vendor-tools.toml
 %if %{with signed}
 Source3:        https://github.com/osbuild/weldr-client/archive/v36.2/weldr-client-36.2.tar.gz.asc
 Source4:        https://keys.openpgp.org/vks/v1/by-fingerprint/872F3A8A0B84905AFFBC8766FF9868A2D488A5A9#/gpg-872F3A8A0B84905AFFBC8766FF9868A2D488A5A9.key
-# oreon url source checksums begin
-%global source0_sha256 a8fa7e069e1167cbb9c828243a956697466341893b8b0f4a192563759138fbf6
-%global source0_file weldr-client-36.2.tar.gz
-# oreon url source checksums end
 %endif
 
 Obsoletes: composer-cli < 35.0
@@ -45,9 +49,7 @@ Go client library and cmdline tool for WELDR API servers like lorax-composer
 and osbuild-composer.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/weldr-client-36.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a8fa7e069e1167cbb9c828243a956697466341893b8b0f4a192563759138fbf6" || { echo "oreon: Source0 SHA256 mismatch for weldr-client-36.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if %{with signed}
 %{gpgverify} --keyring='%{SOURCE4}' --signature='%{SOURCE3}' --data='%{SOURCE0}'
 %endif

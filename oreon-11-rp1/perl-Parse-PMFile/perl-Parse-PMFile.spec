@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 26817cf3d72e245452375dcff9e923a061ee0a40bbf060d3a08ebe60a334aaae
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %bcond_without perl_Parse_PMFile_enables_optional_test
 
@@ -10,10 +18,6 @@ URL:            https://metacpan.org/release/Parse-PMFile
 Source0:        https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/Parse-PMFile-%{version}.tar.gz
 # Remove useless dependency on ExtUtils::MakeMaker::CPANfile
 Patch0:         Parse-PMFile-0.41-Do-not-use-ExtUtils-MakeMaker-CPANfile.patch
-# oreon url source checksums begin
-%global source0_sha256 26817cf3d72e245452375dcff9e923a061ee0a40bbf060d3a08ebe60a334aaae
-%global source0_file Parse-PMFile-0.47.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -64,9 +68,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Parse-PMFile-0.47.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "26817cf3d72e245452375dcff9e923a061ee0a40bbf060d3a08ebe60a334aaae" || { echo "oreon: Source0 SHA256 mismatch for Parse-PMFile-0.47.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Parse-PMFile-%{version}
 %patch -P0 -p1
 for F in t/*.t; do

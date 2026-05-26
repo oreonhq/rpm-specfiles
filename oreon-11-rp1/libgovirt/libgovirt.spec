@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 081c1fb5091cb8a1660ea9c152b689de9ba191d10a1109df503f5754f318af7e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # -*- rpm-spec -*-
 Summary: A GObject library for interacting with oVirt REST API
 Name: libgovirt
@@ -5,10 +13,6 @@ Version: 0.3.11
 Release: 1%{?dist}%{?extra_release}
 License: LGPL-2.1-or-later
 Source0: http://download.gnome.org/sources/libgovirt/0.3/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 081c1fb5091cb8a1660ea9c152b689de9ba191d10a1109df503f5754f318af7e
-%global source0_file libgovirt-0.3.11.tar.xz
-# oreon url source checksums end
 URL: https://gitlab.gnome.org/GNOME/libgovirt
 
 BuildRequires: meson
@@ -40,9 +44,7 @@ parameters needed to make a SPICE/VNC connection to them.
 Libraries, includes, etc. to compile with the libgovirt library
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libgovirt-0.3.11.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "081c1fb5091cb8a1660ea9c152b689de9ba191d10a1109df503f5754f318af7e" || { echo "oreon: Source0 SHA256 mismatch for libgovirt-0.3.11.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git_am
 
 %build

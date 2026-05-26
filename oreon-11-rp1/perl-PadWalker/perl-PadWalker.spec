@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 07b26abb841146af32072a8d68cb90176ffb176fd9268e6f2f7d106f817a0cd0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-PadWalker
 Version:        2.5
 Release:        19%{?dist}
@@ -5,10 +13,6 @@ Summary:        Play with other people's lexical variables
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/PadWalker
 Source0:        https://cpan.metacpan.org/authors/id/R/RO/ROBIN/PadWalker-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 07b26abb841146af32072a8d68cb90176ffb176fd9268e6f2f7d106f817a0cd0
-%global source0_file PadWalker-2.5.tar.gz
-# oreon url source checksums end
 # Build:
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -35,9 +39,7 @@ lexical variables in any subroutine that called you. It will only show
 those variables that are in scope at the point of the call.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/PadWalker-2.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "07b26abb841146af32072a8d68cb90176ffb176fd9268e6f2f7d106f817a0cd0" || { echo "oreon: Source0 SHA256 mismatch for PadWalker-2.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n PadWalker-%{version}
 
 %build

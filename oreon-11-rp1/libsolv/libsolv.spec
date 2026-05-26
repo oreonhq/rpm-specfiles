@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 32b8a565b70b6ba81d9ad68070de4561dfc8462be12288725a267a90423c0fa6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global libname solv
 
 %bcond_without python_bindings
@@ -59,10 +67,6 @@ Patch:          0001-Python-Provide-dist-info-metadata.patch
 # Replaces <https://src.fedoraproject.org/rpms/libsolv/pull-request/14>.
 # Requires Python-Provide-dist-info-metadata.patch.
 Patch:          0002-Add-INSTALLER-to-Python-metadata.patch
-# oreon url source checksums begin
-%global source0_sha256 32b8a565b70b6ba81d9ad68070de4561dfc8462be12288725a267a90423c0fa6
-%global source0_file libsolv-0.7.36.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cmake >= 3.5
 BuildRequires:  gcc-c++
@@ -173,9 +177,7 @@ Python 3 version.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libsolv-0.7.36.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "32b8a565b70b6ba81d9ad68070de4561dfc8462be12288725a267a90423c0fa6" || { echo "oreon: Source0 SHA256 mismatch for libsolv-0.7.36.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

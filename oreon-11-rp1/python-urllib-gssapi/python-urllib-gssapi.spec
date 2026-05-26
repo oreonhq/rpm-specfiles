@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fb3cf359f487b61d53c757fe3d8499f39c40f7f24475144cad36aa92de6596e1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global sname urllib-gssapi
 %global s_name urllib_gssapi
 
@@ -9,10 +17,6 @@ Summary:        A GSSAPI/SPNEGO authentication handler for urllib/urllib2
 License:        Apache-2.0
 URL:            https://github.com/pythongssapi/%{sname}
 Source0:        https://github.com/pythongssapi/%{sname}/releases/download/v%{version}/%{s_name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 fb3cf359f487b61d53c757fe3d8499f39c40f7f24475144cad36aa92de6596e1
-%global source0_file urllib_gssapi-1.0.2.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 
 # Patches
@@ -37,9 +41,7 @@ Requires:       python3-gssapi
 %description -n python3-%{sname} %_description
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/urllib_gssapi-1.0.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fb3cf359f487b61d53c757fe3d8499f39c40f7f24475144cad36aa92de6596e1" || { echo "oreon: Source0 SHA256 mismatch for urllib_gssapi-1.0.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -n %{s_name}-%{version}
 
 %build

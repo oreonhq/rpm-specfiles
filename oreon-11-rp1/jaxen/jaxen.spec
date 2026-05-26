@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ff2edcea3873a8e1bbe15a5494013c01b602b83a32272cc05c4e1e9ac82b0a17
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without dom4j
 
 Name:           jaxen
@@ -10,10 +18,6 @@ License:        LicenseRef-Callaway-BSD
 
 URL:            https://github.com/jaxen-xpath/jaxen
 Source0:        https://github.com/jaxen-xpath/jaxen/archive/v1.2.0/jaxen-1.2.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ff2edcea3873a8e1bbe15a5494013c01b602b83a32272cc05c4e1e9ac82b0a17
-%global source0_file jaxen-1.2.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -52,9 +56,7 @@ Summary:        Javadoc for %{name}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jaxen-1.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ff2edcea3873a8e1bbe15a5494013c01b602b83a32272cc05c4e1e9ac82b0a17" || { echo "oreon: Source0 SHA256 mismatch for jaxen-1.2.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 # remove unnecessary maven plugins

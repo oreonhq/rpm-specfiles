@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9fcd4009c41e6d12348b4a0ff2563ba56a2923a7dfee731d004e212e1ee5030c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pypi_name jsonpatch
 
 Name:           python-%{pypi_name}
@@ -13,10 +21,6 @@ Source0:        https://pypi.io/packages/source/j/jsonpatch/%{pypi_name}-%{versi
 Patch0:         0001-Skip-unit-test-in-packaging.patch
 # Avoid usage of unittest.makeSuite, removed from Python 3.13
 Patch1:         https://github.com/stefankoegl/python-json-patch/pull/159.patch
-# oreon url source checksums begin
-%global source0_sha256 9fcd4009c41e6d12348b4a0ff2563ba56a2923a7dfee731d004e212e1ee5030c
-%global source0_file jsonpatch-1.33.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -37,9 +41,7 @@ Requires:       python3-jsonpointer
 Library to apply JSON Patches according to RFC 6902 - Python 3 build.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jsonpatch-1.33.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9fcd4009c41e6d12348b4a0ff2563ba56a2923a7dfee731d004e212e1ee5030c" || { echo "oreon: Source0 SHA256 mismatch for jsonpatch-1.33.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -qn %{pypi_name}-%{version}
 %patch -P 0 -p1
 %patch -P 1 -p1

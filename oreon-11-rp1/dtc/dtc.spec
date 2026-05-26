@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 92d8ca769805ae1f176204230438fe52808f4e1c7944053c9eec0e649b237539
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global with_mingw 0
 
 %if 0%{?fedora}
@@ -16,10 +24,6 @@ URL:           https://devicetree.org/
 Source0:       https://www.kernel.org/pub/software/utils/%{name}/%{name}-%{version}.tar.xz
 Patch0001:     0001-build-fix-Dtools-false-build.patch
 Patch0002:     dtc-Fix-discarded-const-qualifiers.patch
-# oreon url source checksums begin
-%global source0_sha256 92d8ca769805ae1f176204230438fe52808f4e1c7944053c9eec0e649b237539
-%global source0_file dtc-1.7.2.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gcc make
 BuildRequires: flex bison swig
@@ -112,9 +116,7 @@ This package provides the static library of mingw64-libfdt
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dtc-1.7.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "92d8ca769805ae1f176204230438fe52808f4e1c7944053c9eec0e649b237539" || { echo "oreon: Source0 SHA256 mismatch for dtc-1.7.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 # to prevent setuptools from installing an .egg, we need to pass --root to setup.py install
 # since $(PREFIX) already contains %%{buildroot}, we set root to /

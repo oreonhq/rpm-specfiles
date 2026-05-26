@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4a20634e3052f716c2dcf9ec92173c4790bd38d8ca29b9841e2436208caf793d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 #
 # spec file for package sbd
 #
@@ -58,10 +66,6 @@ Patch2:         0003-spec-convert-license-naming-to-SPDX.patch
 Patch3:         0004-Fix-sbd-cluster-cleanly-include-crm-crm.h-for-crm_sy.patch
 Patch4:         0005-avoid-parsing-SBD_DELAY_START-as-integer.patch
 Patch5:         0006-Fix-sbd-pacemaker-remove-unused-update-counter.patch
-# oreon url source checksums begin
-%global source0_sha256 4a20634e3052f716c2dcf9ec92173c4790bd38d8ca29b9841e2436208caf793d
-%global source0_file sbd-cf5c2208bad2db2dff9b09624b89b05415c3bc11.tar.gz
-# oreon url source checksums end
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  libuuid-devel
@@ -100,9 +104,7 @@ regression-testing sbd.
 ###########################################################
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sbd-cf5c2208bad2db2dff9b09624b89b05415c3bc11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4a20634e3052f716c2dcf9ec92173c4790bd38d8ca29b9841e2436208caf793d" || { echo "oreon: Source0 SHA256 mismatch for sbd-cf5c2208bad2db2dff9b09624b89b05415c3bc11.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{longcommit} -p1
 
 ###########################################################

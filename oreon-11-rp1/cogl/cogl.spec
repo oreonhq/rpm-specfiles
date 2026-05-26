@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a805b2b019184710ff53d0496f9f0ce6dcca420c141a0f4f6fcc02131581d759
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global with_tests 1
 
 Name:          cogl
@@ -23,10 +31,6 @@ Patch1: 0002-add-GL_ARB_shader_texture_lod-support.patch
 # effect by being abel to copy partial of framebuffer contents as texture
 # and do post blurring.
 Patch2: 0003-texture-support-copy_sub_image.patch
-# oreon url source checksums begin
-%global source0_sha256 a805b2b019184710ff53d0496f9f0ce6dcca420c141a0f4f6fcc02131581d759
-%global source0_file cogl-1.22.8.tar.xz
-# oreon url source checksums end
 
 BuildRequires: chrpath
 BuildRequires: pkgconfig(cairo)
@@ -94,9 +98,7 @@ This package contains the installable tests for %{name}.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cogl-1.22.8.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a805b2b019184710ff53d0496f9f0ce6dcca420c141a0f4f6fcc02131581d759" || { echo "oreon: Source0 SHA256 mismatch for cogl-1.22.8.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8e73b5f704466f1f915ae1e656e781eac0439bc40a45ef1ed26422341d54f256
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:       ibus-typing-booster
 Version:    2.30.8
 Release:    %autorelease
@@ -5,10 +13,6 @@ Summary:    A completion input method
 License:    GPL-3.0-or-later AND Apache-2.0
 URL:        https://mike-fabian.github.io/ibus-typing-booster/
 Source0:    https://github.com/mike-fabian/ibus-typing-booster/releases/download/%{version}/ibus-typing-booster-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 8e73b5f704466f1f915ae1e656e781eac0439bc40a45ef1ed26422341d54f256
-%global source0_file ibus-typing-booster-2.30.8.tar.gz
-# oreon url source checksums end
 Requires:   ibus >= 1.5.3
 Requires:   m17n-lib
 %{?__python3:Requires: %{__python3}}
@@ -129,9 +133,7 @@ A simple application to find and insert emoji and other
 Unicode symbols.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ibus-typing-booster-2.30.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8e73b5f704466f1f915ae1e656e781eac0439bc40a45ef1ed26422341d54f256" || { echo "oreon: Source0 SHA256 mismatch for ibus-typing-booster-2.30.8.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 

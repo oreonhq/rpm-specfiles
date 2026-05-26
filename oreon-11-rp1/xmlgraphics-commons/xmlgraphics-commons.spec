@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6cb4b78bbd4b56e2b0b0110e8f78da8dd7f029ba18ef0ca8055308397be170ee
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           xmlgraphics-commons
 Version:        2.11
 Release:        6%{?dist}
@@ -8,10 +16,6 @@ License:        Apache-2.0
 URL:            http://xmlgraphics.apache.org/
 Source0:        http://archive.apache.org/dist/xmlgraphics/commons/source/xmlgraphics-commons-%{version}-src.tar.gz
 Patch1:         jdk25.patch
-# oreon url source checksums begin
-%global source0_sha256 6cb4b78bbd4b56e2b0b0110e8f78da8dd7f029ba18ef0ca8055308397be170ee
-%global source0_file xmlgraphics-commons-2.11-src.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -40,9 +44,7 @@ Summary: Javadoc for %{name}
 This package contains API documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xmlgraphics-commons-2.11-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6cb4b78bbd4b56e2b0b0110e8f78da8dd7f029ba18ef0ca8055308397be170ee" || { echo "oreon: Source0 SHA256 mismatch for xmlgraphics-commons-2.11-src.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q %{name}-%{version}
 patch -p1 < %{PATCH1}
 find -name "*.jar" -delete

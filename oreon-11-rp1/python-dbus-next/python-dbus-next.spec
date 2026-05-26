@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 db19689b0de50edd8587e8b55fcc6c30fe5155d813b9972e152ee05790beef59
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pypi_name dbus-next
 %global srcname   dbus_next
 
@@ -15,10 +23,6 @@ Source:        https://github.com/altdesktop/python-dbus-next/archive/v0.2.3/pyt
 Patch:          0001-glib-destroy-the-_AuthLineSource-explicitly.patch
 Patch:          0002-Address-Python-3.15-and-3.16-deprecations.patch
 Patch:          0003-Fix-compatibility-with-pytest-asyncio-1.x.patch
-# oreon url source checksums begin
-%global source0_sha256 db19689b0de50edd8587e8b55fcc6c30fe5155d813b9972e152ee05790beef59
-%global source0_file python-dbus-next-0.2.3.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -66,9 +70,7 @@ Summary:        %{summary}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/python-dbus-next-0.2.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "db19689b0de50edd8587e8b55fcc6c30fe5155d813b9972e152ee05790beef59" || { echo "oreon: Source0 SHA256 mismatch for python-dbus-next-0.2.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 # Fix permissions for examples
 chmod -x examples/*.py

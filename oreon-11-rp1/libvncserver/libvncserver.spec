@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 62352c7795e231dfce044beb96156065a05a05c974e5de9e023d688d8ff675d7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %undefine __cmake_in_source_build
 
 Summary:    Library to make writing a VNC server easy
@@ -19,10 +27,6 @@ Patch14: 0004-libvncclient-fix-memory-leak-in-CompressClipData.patch
 
 ## downstream patches
 Patch102: libvncserver-LibVNCServer-0.9.13-system-crypto-policy.patch
-# oreon url source checksums begin
-%global source0_sha256 62352c7795e231dfce044beb96156065a05a05c974e5de9e023d688d8ff675d7
-%global source0_file LibVNCServer-0.9.15.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -94,9 +98,7 @@ Requires:       %{name}-devel%{?_isa} = %{version}-%{release}
 This package contains examples making use of %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/LibVNCServer-0.9.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "62352c7795e231dfce044beb96156065a05a05c974e5de9e023d688d8ff675d7" || { echo "oreon: Source0 SHA256 mismatch for LibVNCServer-0.9.15.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-LibVNCServer-%{version}
 
 # Nuke bundled minilzo

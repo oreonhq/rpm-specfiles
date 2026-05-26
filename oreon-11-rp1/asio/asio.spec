@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9f12cef05c0477eace9c68ccabd19f9e3a04b875d4768c323714cbd3a5fa3c2b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # asio only ships headers, so no debuginfo package is needed
 %global debug_package %{nil}
 
@@ -9,10 +17,6 @@ Summary:        A cross-platform C++ library for network programming
 License:        BSL-1.0
 URL:            https://think-async.com
 Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 9f12cef05c0477eace9c68ccabd19f9e3a04b875d4768c323714cbd3a5fa3c2b
-%global source0_file asio-1.30.2.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -55,9 +59,7 @@ that provides developers with a consistent asynchronous I/O model using a
 modern C++ approach.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/asio-1.30.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9f12cef05c0477eace9c68ccabd19f9e3a04b875d4768c323714cbd3a5fa3c2b" || { echo "oreon: Source0 SHA256 mismatch for asio-1.30.2.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

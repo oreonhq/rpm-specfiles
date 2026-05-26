@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 989682ed7b250a2c7a8127e362ffc5d29f5c370127abe405be09c73216da2b97
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # RHEL 8 compatibility
 %{!?version_no_tilde: %define version_no_tilde %{shrink:%(echo '%{version}' | tr '~' '-')}}
 
@@ -13,10 +21,6 @@ URL:            https://github.com/linux-nvme/nvme-cli
 Source0:        https://github.com/linux-nvme/nvme-cli/archive/v2.16/nvme-cli-2.16.tar.gz
 Source1:        99-nvme-nbft-connect.sh
 Source2:        99-nvme-nbft-no-ignore-carrier.conf
-# oreon url source checksums begin
-%global source0_sha256 989682ed7b250a2c7a8127e362ffc5d29f5c370127abe405be09c73216da2b97
-%global source0_file nvme-cli-2.16.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  meson >= 0.53
 BuildRequires:  gcc gcc-c++
@@ -41,9 +45,7 @@ Requires:       util-linux
 nvme-cli provides NVM-Express user space tooling for Linux.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/nvme-cli-2.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "989682ed7b250a2c7a8127e362ffc5d29f5c370127abe405be09c73216da2b97" || { echo "oreon: Source0 SHA256 mismatch for nvme-cli-2.16.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version_no_tilde}
 
 

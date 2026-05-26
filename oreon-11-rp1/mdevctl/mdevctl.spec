@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source1_sha256 e418172c99f9c3c9231191de271fe7dd24388d6c194683282c56939459a43672
+%global oreon_verify_sources \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without check
 
 %global crate mdevctl
@@ -16,10 +24,6 @@ Source1:        https://github.com/mdevctl/mdevctl/releases/download/v%{version}
 # - Update nix dev-dependency to 0.31
 #   https://github.com/mdevctl/mdevctl/pull/132
 Patch1000:      mdevctl-fix-metadata.diff
-# oreon url source checksums begin
-%global source1_sha256 e418172c99f9c3c9231191de271fe7dd24388d6c194683282c56939459a43672
-%global source1_file mdevctl-1.4.0-vendor.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make systemd python3-docutils
 BuildRequires: sed
@@ -38,9 +42,7 @@ can be dynamically created and potentially used by drivers like
 vfio-mdev for assignment to virtual machines.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mdevctl-1.4.0-vendor.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e418172c99f9c3c9231191de271fe7dd24388d6c194683282c56939459a43672" || { echo "oreon: Source1 SHA256 mismatch for mdevctl-1.4.0-vendor.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{crate}-%{version_no_tilde} -p1 %{?rhel:-a1 -N}
 sed  -e 's/SBINDIR=/SBINDIR\?=/' -i Makefile.in
 %if 0%{?rhel}

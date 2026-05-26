@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6bc9723c7a50dd00c7da83d40b3bbb4b0746819f4d6e377c9bd897c898993e28
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define with_numactl          0%{!?_without_numactl:1}
 
 # Numactl is not available on armhf
@@ -24,10 +32,6 @@ Source1:        https://lttng.org/files/lttng-ust/%{name}-%{version}.tar.bz2.asc
 # gpg2 --export --export-options export-minimal 2A0B4ED915F2D3FA45F5B16217280A9781186ACF > gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Source2:        gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Patch0:         lttng-gen-tp-shebang.patch
-# oreon url source checksums begin
-%global source0_sha256 6bc9723c7a50dd00c7da83d40b3bbb4b0746819f4d6e377c9bd897c898993e28
-%global source0_file lttng-ust-2.15.0.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -72,9 +76,7 @@ applications that use %{name}'s Python logging backend.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/lttng-ust-2.15.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6bc9723c7a50dd00c7da83d40b3bbb4b0746819f4d6e377c9bd897c898993e28" || { echo "oreon: Source0 SHA256 mismatch for lttng-ust-2.15.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

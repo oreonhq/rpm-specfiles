@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3c20919cda9a505db07b5216baa980bacdaa0702da715b43f176fb07eff7e716
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # When distributed in RHEL, EPEL shouldn't be used. Mingw shouldn't be in RHEL,
 # so it shouldn't be used anywhere, but in fedora.
 %if 0%{?fedora} || 0%{?oreon}
@@ -14,10 +22,6 @@ Summary:       GEOS is a C++ port of the Java Topology Suite
 License:       LGPL-2.1-only
 URL:           http://trac.osgeo.org/geos/
 Source0:       http://download.osgeo.org/%{name}/%{name}-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 3c20919cda9a505db07b5216baa980bacdaa0702da715b43f176fb07eff7e716
-%global source0_file geos-3.14.1.tar.bz2
-# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: doxygen
@@ -77,9 +81,7 @@ MinGW Windows GEOS library.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/geos-3.14.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3c20919cda9a505db07b5216baa980bacdaa0702da715b43f176fb07eff7e716" || { echo "oreon: Source0 SHA256 mismatch for geos-3.14.1.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

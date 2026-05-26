@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b68d3f0ced55b7615fddbb6029b89f92a34fe0dd8c6fd6bceffc157d56834fe8
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		perl-Package-DeprecationManager
 Version:	0.18
 Release:	8%{?dist}
@@ -5,10 +13,6 @@ Summary:	Manage deprecation warnings for your distribution
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Package-DeprecationManager
 Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Package-DeprecationManager-0.18.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 b68d3f0ced55b7615fddbb6029b89f92a34fe0dd8c6fd6bceffc157d56834fe8
-%global source0_file Package-DeprecationManager-0.18.tar.gz
-# oreon url source checksums end
 
 BuildArch:	noarch
 # Module Build
@@ -46,9 +50,7 @@ When you import Package::DeprecationManager, you must provide a set of
 the version when that feature was deprecated.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Package-DeprecationManager-0.18.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b68d3f0ced55b7615fddbb6029b89f92a34fe0dd8c6fd6bceffc157d56834fe8" || { echo "oreon: Source0 SHA256 mismatch for Package-DeprecationManager-0.18.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Package-DeprecationManager-%{version}
 
 %build

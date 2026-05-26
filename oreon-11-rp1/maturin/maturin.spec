@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2c2ae37144811d365509889ed7220b0598487f1278c2441829c3abf56cc6324a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond check 1
 
 Name:           maturin
@@ -78,10 +86,6 @@ Patch:          0005-revert-to-using-setuptools-for-non-maturin-bootstrap.patch
 #   considered upstream in https://github.com/PyO3/maturin/pull/2817, but
 #   rejected for now due (solely) to MSRV.
 Patch:          0006-Update-cargo_metadata-to-0.20.0-2864.patch
-# oreon url source checksums begin
-%global source0_sha256 2c2ae37144811d365509889ed7220b0598487f1278c2441829c3abf56cc6324a
-%global source0_file maturin-1.9.6.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cargo-rpm-macros >= 24
 BuildRequires:  python3-devel
@@ -96,9 +100,7 @@ Build and publish crates with pyo3, rust-cpython and cffi bindings as
 well as rust binaries as python packages.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/maturin-1.9.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c2ae37144811d365509889ed7220b0598487f1278c2441829c3abf56cc6324a" || { echo "oreon: Source0 SHA256 mismatch for maturin-1.9.6.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n maturin-%{pypi_version} -p1
 %cargo_prep
 

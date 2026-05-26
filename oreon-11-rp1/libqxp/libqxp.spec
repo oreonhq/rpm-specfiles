@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e137b6b110120a52c98edd02ebdc4095ee08d0d5295a94316a981750095a945c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global apiversion 0.0
 
 Name: libqxp
@@ -8,10 +16,6 @@ Summary: Library for import of QuarkXPress documents
 License: MPL-2.0
 URL: http://wiki.documentfoundation.org/DLP/Libraries/libqxp
 Source: http://dev-www.libreoffice.org/src/%{name}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 e137b6b110120a52c98edd02ebdc4095ee08d0d5295a94316a981750095a945c
-%global source0_file libqxp-0.0.2.tar.xz
-# oreon url source checksums end
 
 BuildRequires: boost-devel
 BuildRequires: doxygen
@@ -53,9 +57,7 @@ Tools to transform QuarkXPress documents into other formats.
 Currently supported: SVG, plain text, raw.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libqxp-0.0.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e137b6b110120a52c98edd02ebdc4095ee08d0d5295a94316a981750095a945c" || { echo "oreon: Source0 SHA256 mismatch for libqxp-0.0.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

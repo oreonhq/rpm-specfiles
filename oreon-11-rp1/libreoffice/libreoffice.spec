@@ -1,3 +1,15 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source9_sha256 0082d0684f7db6f62361b76c4b7faba19e0c7ce5cb8e36c4b65fea8281e711b4
+%global source11_sha256 75823776fb51a9c526af904f1503a7afaaab900fba83eda64f8a41073724c870
+%global source12_sha256 d30b13f4ba2e3b6a2d4f020c0dee0a9fb9fc6fbcc2d561f36b78da4bf3802370
+%global oreon_verify_sources \
+%{?source9_sha256:%(test -z "%{source9_sha256}" || { f="%{SOURCE9}"; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source9_sha256}" || { echo "oreon: Source9 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source11_sha256:%(test -z "%{source11_sha256}" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_sha256}" || { echo "oreon: Source11 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source12_sha256:%(test -z "%{source12_sha256}" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_sha256}" || { echo "oreon: Source12 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # download path contains version without the last (fourth) digit
 %global libo_version 26.2.3
 # This is the last (fourth) digit of LO version
@@ -331,14 +343,6 @@ Patch12: cflags.patch
 Patch13: fix_or_exclude-tests-with-missing-glyphs.patch
 # https://lists.freedesktop.org/archives/libreoffice/2023-September/090948.html
 Patch501: kahansum_test_fix_for_aarc64_s390x.patch
-# oreon url source checksums begin
-%global source9_sha256 0082d0684f7db6f62361b76c4b7faba19e0c7ce5cb8e36c4b65fea8281e711b4
-%global source9_file dtoa-20180411.tgz
-%global source11_sha256 75823776fb51a9c526af904f1503a7afaaab900fba83eda64f8a41073724c870
-%global source11_file a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
-%global source12_sha256 d30b13f4ba2e3b6a2d4f020c0dee0a9fb9fc6fbcc2d561f36b78da4bf3802370
-%global source12_file 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
-# oreon url source checksums end
 
 %global instdir %{_libdir}
 %global baseinstdir %{instdir}/libreoffice
@@ -1087,11 +1091,7 @@ done \
 %{!?-l:%{error:-l must be present}}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dtoa-20180411.tgz; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0082d0684f7db6f62361b76c4b7faba19e0c7ce5cb8e36c4b65fea8281e711b4" || { echo "oreon: Source9 SHA256 mismatch for dtoa-20180411.tgz" >&2; exit 1; })
-%(f=%{_sourcedir}/a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "75823776fb51a9c526af904f1503a7afaaab900fba83eda64f8a41073724c870" || { echo "oreon: Source11 SHA256 mismatch for a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d30b13f4ba2e3b6a2d4f020c0dee0a9fb9fc6fbcc2d561f36b78da4bf3802370" || { echo "oreon: Source12 SHA256 mismatch for 17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 # verify tarballs
 gpg2 --dearmor < %{SOURCE6} > keyring.gpg
 gpgv2 --keyring ./keyring.gpg %{SOURCE1} %{SOURCE0}

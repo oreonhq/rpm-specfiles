@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9d43013002eab2fd6d0dcc671cd1e9149e2fc1c56d5e796fad94d076d6cb69ef
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # test dependencies are not available on el9+
 %if 0%{?fedora}
 %bcond_without tests
@@ -20,10 +28,6 @@ Source0:        https://files.pythonhosted.org/packages/source/p/pycurl/pycurl-7
 Patch1:         0001-python-pycurl-7.45.1-tls-backend.patch
 # skip Kerberos tests on libcurl >= 8.17.0
 Patch2:         ea92e3ca230a3ff3d464cb6816102fa157177aca.patch
-# oreon url source checksums begin
-%global source0_sha256 9d43013002eab2fd6d0dcc671cd1e9149e2fc1c56d5e796fad94d076d6cb69ef
-%global source0_file pycurl-7.45.7.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  libcurl-devel
@@ -64,9 +68,7 @@ Requires:       libcurl%{?_isa} >= %{libcurl_ver}
 %description -n python3-%{modname} %_description
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pycurl-7.45.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9d43013002eab2fd6d0dcc671cd1e9149e2fc1c56d5e796fad94d076d6cb69ef" || { echo "oreon: Source0 SHA256 mismatch for pycurl-7.45.7.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{modname}-%{version} -p1
 
 # use %%{python3} instead of python to invoke tests

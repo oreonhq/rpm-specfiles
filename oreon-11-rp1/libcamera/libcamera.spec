@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a77c3ba82804668bb289362b37d181cfa7cbe47922ce099bcec87d0cc4c546c6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:    libcamera
 Version: 0.7.0
 Release: 1%{?dist}
@@ -12,10 +20,6 @@ Source2: qcam.metainfo.xml
 Source3: 70-libcamera.rules
 
 Patch01: 0001-disable-rpi-pisp.patch
-# oreon url source checksums begin
-%global source0_sha256 a77c3ba82804668bb289362b37d181cfa7cbe47922ce099bcec87d0cc4c546c6
-%global source0_file libcamera-v0.7.0.tar.bz2
-# oreon url source checksums end
 
 # libcamera does not currently build on these architectures
 ExcludeArch: s390x ppc64le
@@ -119,9 +123,7 @@ Requires:    %{name}%{?_isa} = %{version}-%{release}
 Python bindings for %{name}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libcamera-v0.7.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a77c3ba82804668bb289362b37d181cfa7cbe47922ce099bcec87d0cc4c546c6" || { echo "oreon: Source0 SHA256 mismatch for libcamera-v0.7.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-v%{version}
 
 %build

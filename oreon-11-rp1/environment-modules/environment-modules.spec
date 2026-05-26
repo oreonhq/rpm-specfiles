@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5d36fd90b83a06fd3ed0ff951ab1101f22eb310fde3492f9d0455a68569abe5b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:           environment-modules
@@ -8,10 +16,6 @@ Summary:        Provides dynamic modification of a user's environment
 License:        GPL-2.0-or-later
 URL:            https://envmodules.io
 Source0:        http://downloads.sourceforge.net/modules/modules-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 5d36fd90b83a06fd3ed0ff951ab1101f22eb310fde3492f9d0455a68569abe5b
-%global source0_file modules-5.6.1.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  tcl
 BuildRequires:  dejagnu
@@ -71,9 +75,7 @@ have access to the module alias.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/modules-5.6.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5d36fd90b83a06fd3ed0ff951ab1101f22eb310fde3492f9d0455a68569abe5b" || { echo "oreon: Source0 SHA256 mismatch for modules-5.6.1.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n modules-%{version}
 
 

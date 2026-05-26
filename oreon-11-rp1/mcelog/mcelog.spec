@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ed25a39bb20178e79e18cc5d3202b198868986ec3e964b6285f6a7bac8469fdf
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:	Tool to translate x86-64 CPU Machine Check Exception data
 Name:		mcelog
 Version:	175
@@ -8,10 +16,6 @@ URL:		https://github.com/andikleen/mcelog
 Source0:        https://github.com/andikleen/mcelog/archive/v175/mcelog-175.tar.gz
 # note that this source OVERRIDES the one on the tarball above!
 Source1:	mcelog.conf
-# oreon url source checksums begin
-%global source0_sha256 ed25a39bb20178e79e18cc5d3202b198868986ec3e964b6285f6a7bac8469fdf
-%global source0_file mcelog-175.tar.gz
-# oreon url source checksums end
 ExclusiveArch:	i686 x86_64
 Requires(post): systemd
 Requires(preun): systemd
@@ -25,9 +29,7 @@ mcelog is a utility that collects and decodes Machine Check Exception data
 on x86-32 and x86-64 systems.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mcelog-175.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ed25a39bb20178e79e18cc5d3202b198868986ec3e964b6285f6a7bac8469fdf" || { echo "oreon: Source0 SHA256 mismatch for mcelog-175.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

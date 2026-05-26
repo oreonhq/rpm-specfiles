@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 234e72fb8396d45527e6fd45e43759c5c3f3a208cf8f29e6a22161a996fd42dc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Crypt-OpenSSL-Bignum
 Version:        0.09
 Release:        32%{?dist}
@@ -5,10 +13,6 @@ Summary:        Perl interface to OpenSSL's multiprecision integer arithmetic
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-OpenSSL-Bignum
 Source0:        https://cpan.metacpan.org/authors/id/K/KM/KMX/Crypt-OpenSSL-Bignum-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 234e72fb8396d45527e6fd45e43759c5c3f3a208cf8f29e6a22161a996fd42dc
-%global source0_file Crypt-OpenSSL-Bignum-0.09.tar.gz
-# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -48,9 +52,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Crypt-OpenSSL-Bignum-0.09.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "234e72fb8396d45527e6fd45e43759c5c3f3a208cf8f29e6a22161a996fd42dc" || { echo "oreon: Source0 SHA256 mismatch for Crypt-OpenSSL-Bignum-0.09.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Crypt-OpenSSL-Bignum-%{version}
 chmod a-x LICENSE README Changes
 

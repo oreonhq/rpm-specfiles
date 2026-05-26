@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ec5a82dfb7028bcd28bb3d569f95d87dd4166cc19867f2184ed3a59f6d6ca0e7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-NetAddr-IP
 Version:        4.079
 Release:        35%{?dist}
@@ -7,10 +15,6 @@ Summary:        Manages IPv4 and IPv6 addresses and subnets
 License:        GPL-2.0-or-later AND (GPL-2.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/NetAddr-IP
 Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIKER/NetAddr-IP-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ec5a82dfb7028bcd28bb3d569f95d87dd4166cc19867f2184ed3a59f6d6ca0e7
-%global source0_file NetAddr-IP-4.079.tar.gz
-# oreon url source checksums end
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -51,9 +55,7 @@ This module provides an object-oriented abstraction on top of IP addresses
 or IP subnets, that allows for easy manipulations.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/NetAddr-IP-4.079.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ec5a82dfb7028bcd28bb3d569f95d87dd4166cc19867f2184ed3a59f6d6ca0e7" || { echo "oreon: Source0 SHA256 mismatch for NetAddr-IP-4.079.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n NetAddr-IP-%{version}
 
 %build

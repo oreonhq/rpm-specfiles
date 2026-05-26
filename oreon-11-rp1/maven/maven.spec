@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f312bb9db25937f1fd7ca1d53a086a3cdde596086147a42a75af027058810b9e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with bootstrap
 
 %global bundled_slf4j_version 1.7.36
@@ -24,10 +32,6 @@ Patch:          0001-Adapt-mvn-script.patch
 # Downstream-specific, avoids build-dependency on logback
 Patch:          0002-Invoke-logback-via-reflection.patch
 Patch:          0003-Remove-dependency-on-powermock.patch
-# oreon url source checksums begin
-%global source0_sha256 f312bb9db25937f1fd7ca1d53a086a3cdde596086147a42a75af027058810b9e
-%global source0_file apache-maven-3.9.11-src.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -124,9 +128,7 @@ Obsoletes:      maven-openjdk17 < 1:3.9.9-2
 Core part of Apache Maven that can be used as a library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/apache-maven-3.9.11-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f312bb9db25937f1fd7ca1d53a086a3cdde596086147a42a75af027058810b9e" || { echo "oreon: Source0 SHA256 mismatch for apache-maven-3.9.11-src.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 
 find -name '*.java' -exec sed -i 's/\r//' {} +

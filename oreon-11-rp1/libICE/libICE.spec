@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 974e4ed414225eb3c716985df9709f4da8d22a67a2890066bc6dfc89ad298625
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: X.Org X11 ICE runtime library
 Name: libICE
 Version: 1.1.2
@@ -6,10 +14,6 @@ License: MIT-open-group
 URL: http://www.x.org
 
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 974e4ed414225eb3c716985df9709f4da8d22a67a2890066bc6dfc89ad298625
-%global source0_file libICE-1.1.2.tar.xz
-# oreon url source checksums end
 
 # Needed for pre-glibc-2.25, which at this point would mean RHEL7 but not 8
 # Patch1: 0002-Add-getentropy-emulation-through-syscall.patch
@@ -31,9 +35,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 The X.Org X11 ICE (Inter-Client Exchange) development package.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libICE-1.1.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "974e4ed414225eb3c716985df9709f4da8d22a67a2890066bc6dfc89ad298625" || { echo "oreon: Source0 SHA256 mismatch for libICE-1.1.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 #patch1 -p1 -b .cve-2017-2626
 

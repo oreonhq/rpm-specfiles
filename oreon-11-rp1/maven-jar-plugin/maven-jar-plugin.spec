@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 87d77c76b594d5ebb6d719d5ea5ccd1249411183ff243e50d6c315c358307b4f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without bootstrap
 
 Name:           maven-jar-plugin
@@ -10,10 +18,6 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
-# oreon url source checksums begin
-%global source0_sha256 87d77c76b594d5ebb6d719d5ea5ccd1249411183ff243e50d6c315c358307b4f
-%global source0_file maven-jar-plugin-3.3.0-source-release.zip
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -41,9 +45,7 @@ Builds a Java Archive (JAR) file from the compiled
 project classes and resources.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/maven-jar-plugin-3.3.0-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "87d77c76b594d5ebb6d719d5ea5ccd1249411183ff243e50d6c315c358307b4f" || { echo "oreon: Source0 SHA256 mismatch for maven-jar-plugin-3.3.0-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 # System version of maven-jar-plugin should be used, not reactor version
 %pom_xpath_inject pom:pluginManagement/pom:plugins "<plugin><artifactId>maven-jar-plugin</artifactId><version>SYSTEM</version></plugin>"

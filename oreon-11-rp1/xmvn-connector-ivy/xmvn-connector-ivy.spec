@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a5357ab35f1123d6f295c393e122a43097d1717fb72b807a795af54ddfe1beb2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           xmvn-connector-ivy
 Version:        4.0.0
 Release:        %autorelease
@@ -8,10 +16,6 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/fedora-java/xmvn-connector-ivy/releases/download/%{version}/xmvn-connector-ivy-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 a5357ab35f1123d6f295c393e122a43097d1717fb72b807a795af54ddfe1beb2
-%global source0_file xmvn-connector-ivy-4.0.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.ivy:ivy)
@@ -33,9 +37,7 @@ Summary:        API documentation for %{name}
 This package provides %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xmvn-connector-ivy-4.0.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a5357ab35f1123d6f295c393e122a43097d1717fb72b807a795af54ddfe1beb2" || { echo "oreon: Source0 SHA256 mismatch for xmvn-connector-ivy-4.0.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

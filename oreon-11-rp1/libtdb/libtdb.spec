@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fba09d8df1f1b9072aeae8e78b2bd43c5afef20b2f6deefa633aa14a377a8dd2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:            libtdb
 Version:         1.4.15
 Release:         %autorelease
@@ -8,10 +16,6 @@ Source0:         http://samba.org/ftp/tdb/tdb-%{version}.tar.gz
 Source1:         http://samba.org/ftp/tdb/tdb-%{version}.tar.asc
 # gpg2 --no-default-keyring --keyring ./tdb.keyring --recv-keys 9147A339719518EE9011BCB54793916113084025
 Source2:         tdb.keyring
-# oreon url source checksums begin
-%global source0_sha256 fba09d8df1f1b9072aeae8e78b2bd43c5afef20b2f6deefa633aa14a377a8dd2
-%global source0_file tdb-1.4.15.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc
@@ -51,9 +55,7 @@ Requires: libtdb = %{version}-%{release}
 Python3 bindings for libtdb
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/tdb-1.4.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fba09d8df1f1b9072aeae8e78b2bd43c5afef20b2f6deefa633aa14a377a8dd2" || { echo "oreon: Source0 SHA256 mismatch for tdb-1.4.15.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n tdb-%{version} -p1
 
 %build

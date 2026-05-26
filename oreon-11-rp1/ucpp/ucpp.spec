@@ -1,13 +1,17 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6765412754337b919ee5df2c23ccb17436bf2703e2cda7dfdccc7bdcd406a56c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Embeddable, quick, light and fully compliant ISO C99 preprocessor
 Name: ucpp
 Version: 1.3.5
 Release: 17%{?dist}
 URL: https://gitlab.com/scarabeusiv/ucpp
 Source0: https://gitlab.com/scarabeusiv/ucpp/-/archive/%{version}/ucpp-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 6765412754337b919ee5df2c23ccb17436bf2703e2cda7dfdccc7bdcd406a56c
-%global source0_file ucpp-1.3.5.tar.bz2
-# oreon url source checksums end
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 BuildRequires: make
@@ -42,9 +46,7 @@ code. It will output tokens, one at a time, on demand, as an integrated lexer.
 This package contains the development files for the library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ucpp-1.3.5.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6765412754337b919ee5df2c23ccb17436bf2703e2cda7dfdccc7bdcd406a56c" || { echo "oreon: Source0 SHA256 mismatch for ucpp-1.3.5.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 # convert README to UTF-8
 iconv -f iso8859-1 -t utf8 README >README.utf8 && \

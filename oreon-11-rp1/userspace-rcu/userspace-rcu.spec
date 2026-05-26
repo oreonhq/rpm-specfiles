@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 850b192096eb11ebf2c70e8f97bc7da7479ee41da1bebeb44e3986908bac414f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           userspace-rcu
 Version:        0.15.6
 Release:        1%{?dist}
@@ -10,10 +18,6 @@ Source1:        https://lttng.org/files/urcu/%{name}-%{version}.tar.bz2.asc
 # gpg2 --export --export-options export-minimal 2A0B4ED915F2D3FA45F5B16217280A9781186ACF > gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Source2:        gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Patch0:         regtest-without-bench.patch
-# oreon url source checksums begin
-%global source0_sha256 850b192096eb11ebf2c70e8f97bc7da7479ee41da1bebeb44e3986908bac414f
-%global source0_file userspace-rcu-0.15.6.tar.bz2
-# oreon url source checksums end
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  gcc
@@ -40,9 +44,7 @@ that use %{name}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/userspace-rcu-0.15.6.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "850b192096eb11ebf2c70e8f97bc7da7479ee41da1bebeb44e3986908bac414f" || { echo "oreon: Source0 SHA256 mismatch for userspace-rcu-0.15.6.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d471718c4ac7a1a2f10715b93cb3fcd2ecbab60384b73ad1c089712e47bd8d1f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with bootstrap
 
 # Copyright (c) 2000-2012, JPackage Project
@@ -45,10 +53,6 @@ Patch:          %{name}-crosslink.patch
 Patch:          %{name}-1.1-OSGiManifest.patch
 # Security patches
 Patch:          CVE-2021-33813.patch
-# oreon url source checksums begin
-%global source0_sha256 d471718c4ac7a1a2f10715b93cb3fcd2ecbab60384b73ad1c089712e47bd8d1f
-%global source0_file jdom-1.1.3.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -75,9 +79,7 @@ Requires:       %{name} = %{version}-%{release}
 Demonstrations and samples for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jdom-1.1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d471718c4ac7a1a2f10715b93cb3fcd2ecbab60384b73ad1c089712e47bd8d1f" || { echo "oreon: Source0 SHA256 mismatch for jdom-1.1.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;

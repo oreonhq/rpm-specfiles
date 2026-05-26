@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 aace1ac913e3c9f259181d50e14ed8b8b50d84fc7afdb47ef6cda2d0806f64f3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Sys-Virt
 Version:        12.0.0
 Release:        1%{?dist}
@@ -5,10 +13,6 @@ Summary:        Represent and manage a libvirt hypervisor connection
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sys-Virt
 Source0:        https://cpan.metacpan.org/authors/id/D/DA/DANBERR/Sys-Virt-v%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 aace1ac913e3c9f259181d50e14ed8b8b50d84fc7afdb47ef6cda2d0806f64f3
-%global source0_file Sys-Virt-v12.0.0.tar.gz
-# oreon url source checksums end
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -58,9 +62,7 @@ Tests from %{name}-%{version}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Sys-Virt-v12.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aace1ac913e3c9f259181d50e14ed8b8b50d84fc7afdb47ef6cda2d0806f64f3" || { echo "oreon: Source0 SHA256 mismatch for Sys-Virt-v12.0.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -n Sys-Virt-v%{version}
 
 # Help file to recognise the Perl scripts and normalize shebangs

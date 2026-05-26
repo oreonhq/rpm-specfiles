@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1f19e3b8e82a34a8fd9889a7d9af0abe8588cb03fb57c37c569634cf3b9df1a4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # NOTE: This library has been deprecated in RHEL and Fedora for some
 # time now.  While we have removed the word "deprecated" from the package
 # name in modular X, the library does remain deprecated and will be
@@ -25,10 +33,6 @@ BuildRequires: libXau-devel
 BuildRequires: libtool automake autoconf gettext
 
 Patch0: add-proto-files.patch
-# oreon url source checksums begin
-%global source0_sha256 1f19e3b8e82a34a8fd9889a7d9af0abe8588cb03fb57c37c569634cf3b9df1a4
-%global source0_file libXp-1.0.4.tar.xz
-# oreon url source checksums end
 
 %description
 X.Org X11 libXp runtime library
@@ -45,9 +49,7 @@ BuildRequires: xorg-x11-proto-devel
 X.Org X11 libXp development package
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libXp-1.0.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1f19e3b8e82a34a8fd9889a7d9af0abe8588cb03fb57c37c569634cf3b9df1a4" || { echo "oreon: Source0 SHA256 mismatch for libXp-1.0.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1 -b .add-proto-files
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3112c1f25d39eca661fe3fc663431e130cc6e2f900c081738317fba49d29e298
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?_pkgdocdir:%global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 # We don't want accidental SONAME bumps.
@@ -38,10 +46,6 @@ Source0:        https://github.com/json-c/json-c/archive/json-c-0.18-20240915.ta
 # Add libver to mingw dll
 Patch0:         json-c_mingw-libver.patch
 Patch1:         json-c-0.18-utf8-validation.patch
-# oreon url source checksums begin
-%global source0_sha256 3112c1f25d39eca661fe3fc663431e130cc6e2f900c081738317fba49d29e298
-%global source0_file json-c-0.18-20240915.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -103,9 +107,7 @@ BuildRequires: mingw64-gcc
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/json-c-0.18-20240915.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3112c1f25d39eca661fe3fc663431e130cc6e2f900c081738317fba49d29e298" || { echo "oreon: Source0 SHA256 mismatch for json-c-0.18-20240915.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{name}-%{version}-%{reldate} -p 1
 
 # Remove pre-built html documentation.

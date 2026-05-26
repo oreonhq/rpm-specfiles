@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7f73580bdbe47c20d1d1d5a47c77264ae1ef44f5af1231040c4ceec16f1ad318
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Filter provides for plugin .so files
 %global __provides_exclude_from ^%{_libdir}/gedit/plugins/
 
@@ -12,10 +20,6 @@ Summary:        Plugins for gedit
 License:        GPL-2.0-or-later
 URL:            https://gedit-text-editor.org/
 Source:         https://gitlab.gnome.org/World/gedit/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 7f73580bdbe47c20d1d1d5a47c77264ae1ef44f5af1231040c4ceec16f1ad318
-%global source0_file gedit-plugins-49.0.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gettext
@@ -65,9 +69,7 @@ Requires:       %{name}-data = %{version}-%{release}
 The gedit wordcompletion plugin.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gedit-plugins-49.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7f73580bdbe47c20d1d1d5a47c77264ae1ef44f5af1231040c4ceec16f1ad318" || { echo "oreon: Source0 SHA256 mismatch for gedit-plugins-49.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build

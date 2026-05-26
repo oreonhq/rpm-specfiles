@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1ad3268671b520a23bb99569f1c0ab903ba333bedbcad776ffa698a374475d39
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global namedreltag .Final
 %global namedversion %{version}%{?namedreltag}
 
@@ -12,10 +20,6 @@ Source0:        https://github.com/jboss-logging/jboss-logging/archive/3.6.0.Fin
 Patch1:           0001-Drop-log4j-dependency.patch
 Patch2:           0002-Drop-jboss-logmanager-dependency.patch
 Patch3:           0003-Drop-TestCase-that-depend-on-retired-package.patch
-# oreon url source checksums begin
-%global source0_sha256 1ad3268671b520a23bb99569f1c0ab903ba333bedbcad776ffa698a374475d39
-%global source0_file jboss-logging-3.6.0.Final.tar.gz
-# oreon url source checksums end
 
 BuildArch:        noarch
 ExclusiveArch:    %{java_arches} noarch
@@ -35,9 +39,7 @@ BuildRequires:    mvn(org.slf4j:slf4j-api)
 This package contains the JBoss Logging Framework.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jboss-logging-3.6.0.Final.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1ad3268671b520a23bb99569f1c0ab903ba333bedbcad776ffa698a374475d39" || { echo "oreon: Source0 SHA256 mismatch for jboss-logging-3.6.0.Final.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{namedversion} -p 1
 
 # Unneeded tasks

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 dc2c77cc5ee9c49ad38b25c63e4f921163d309a1f55ec712324c9c943cd68e44
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 # Disable automatic compilation of Python files in extra directories
@@ -10,10 +18,6 @@ Release: 6%{?dist}
 License: GPL-2.0-or-later
 URL: https://gitlab.com/setroubleshoot/plugins
 Source0: https://gitlab.com/-/project/24478430/uploads/1d856bff1c9fb16a8c6fc877d7fe91ca/setroubleshoot-plugins-3.3.15.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 dc2c77cc5ee9c49ad38b25c63e4f921163d309a1f55ec712324c9c943cd68e44
-%global source0_file setroubleshoot-plugins-3.3.15.tar.gz
-# oreon url source checksums end
 # git format-patch -N setroubleshoot-plugins-<version> -- plugins
 # i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 BuildArch: noarch
@@ -34,9 +38,7 @@ data and system data to provide user friendly reports describing how
 to interpret SELinux AVC denials.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/setroubleshoot-plugins-3.3.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dc2c77cc5ee9c49ad38b25c63e4f921163d309a1f55ec712324c9c943cd68e44" || { echo "oreon: Source0 SHA256 mismatch for setroubleshoot-plugins-3.3.15.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p 1
 
 %build

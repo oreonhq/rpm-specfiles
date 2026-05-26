@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname py
 
 Name:           python-%{srcname}
@@ -9,10 +17,6 @@ License:        LicenseRef-Callaway-MIT AND LicenseRef-Callaway-Public-Domain
 #               main package: MIT, except: doc/style.css: Public Domain
 URL:            http://py.readthedocs.io/
 Source:         %{pypi_source}
-# oreon url source checksums begin
-%global source0_sha256 51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719
-%global source0_file py-1.11.0.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  python3-devel
 
@@ -46,9 +50,7 @@ following tools and modules:
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/py-1.11.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719" || { echo "oreon: Source0 SHA256 mismatch for py-1.11.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{srcname}-%{version}
 
 # remove shebangs and fix permissions

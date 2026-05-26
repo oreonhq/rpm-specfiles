@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5841e503acd5baae310ac4c9c74921f606479442ec6d59ef2f9cbbfb94a8c980
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global libpqos_ver 6.0.1
 %global desc %{expand: \
 This package provides basic support for Intel Resource Director Technology
@@ -17,10 +25,6 @@ Source:        https://github.com/intel/intel-cmt-cat/archive/v25.04/intel-cmt-c
 Patch0:		0001-alter-install-paths.patch
 Patch1:		0002-remove-build-and-install-of-examples.patch
 Patch2:		0003-allow-debian-flags-to-be-added.patch
-# oreon url source checksums begin
-%global source0_sha256 5841e503acd5baae310ac4c9c74921f606479442ec6d59ef2f9cbbfb94a8c980
-%global source0_file intel-cmt-cat-25.04.tar.gz
-# oreon url source checksums end
 
 ExclusiveArch:	x86_64
 
@@ -39,9 +43,7 @@ Requires:	%{name}%{?_isa} = %{version}-%{release}
 Development files.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/intel-cmt-cat-25.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5841e503acd5baae310ac4c9c74921f606479442ec6d59ef2f9cbbfb94a8c980" || { echo "oreon: Source0 SHA256 mismatch for intel-cmt-cat-25.04.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}
 
 %build

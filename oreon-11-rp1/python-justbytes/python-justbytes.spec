@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c4cbeefc383014508933f03a47100dd22f4b01ac83f4fa204e13144a80c1cbcc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname justbytes
 
 Name:           python-%{srcname}
@@ -8,10 +16,6 @@ Summary:        Library for handling computation with address ranges in bytes
 License:        LGPL-2.1-or-later
 URL:            http://pypi.python.org/pypi/justbytes
 Source0:        https://pypi.io/packages/source/j/%{srcname}/%{srcname}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 c4cbeefc383014508933f03a47100dd22f4b01ac83f4fa204e13144a80c1cbcc
-%global source0_file justbytes-0.15.2.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -30,9 +34,7 @@ BuildRequires:  python3-devel
 Python 3 version.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/justbytes-0.15.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c4cbeefc383014508933f03a47100dd22f4b01ac83f4fa204e13144a80c1cbcc" || { echo "oreon: Source0 SHA256 mismatch for justbytes-0.15.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires

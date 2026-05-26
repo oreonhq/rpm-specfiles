@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a165628b277d1e833f5b657ca836db81bc44e04c107cfe9f5b8bd94755642ed5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Math-BigInt-GMP
 Version:        1.7003
 Release:        4%{?dist}
@@ -5,10 +13,6 @@ Summary:        Use the GMP library for Math::BigInt routines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Math-BigInt-GMP
 Source0:        https://cpan.metacpan.org/authors/id/P/PJ/PJACKLAM/Math-BigInt-GMP-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 a165628b277d1e833f5b657ca836db81bc44e04c107cfe9f5b8bd94755642ed5
-%global source0_file Math-BigInt-GMP-1.7003.tar.gz
-# oreon url source checksums end
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -58,9 +62,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Math-BigInt-GMP-1.7003.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a165628b277d1e833f5b657ca836db81bc44e04c107cfe9f5b8bd94755642ed5" || { echo "oreon: Source0 SHA256 mismatch for Math-BigInt-GMP-1.7003.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Math-BigInt-GMP-%{version}
 
 # Remove bundled libraries

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2c7462fe0cecb5b8ac0a3d92014b8d0b88bd4d9f8646709dab5286d9416f45bc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Do not force clang as the C++ compiler for generated wrappers. Clang 16+ hits
 # -Wcast-function-type-mismatch on thousands of shiboken-generated PyMethodDef lines.
 # Libclang is still used for API parsing (LLVM_INSTALL_DIR / CMAKE_PREFIX_PATH).
@@ -35,10 +43,6 @@ Patch2:         0001-Fix-installation.patch
 Patch3:         0001-shiboken6-Fix-build-with-clang-22.patch
 Patch4:         0004-shiboken6-define-LLVM_VERSION-for-apiextractor.patch
 Patch5:         0005-QtCore-QDir-match-Qt-6.10-optional-QFile-Permissions.patch
-# oreon url source checksums begin
-%global source0_sha256 2c7462fe0cecb5b8ac0a3d92014b8d0b88bd4d9f8646709dab5286d9416f45bc
-%global source0_file pyside-setup-everywhere-src-6.10.3.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  ninja-build
@@ -239,9 +243,7 @@ Summary: Qt API Documentation in HTML and QCH format
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pyside-setup-everywhere-src-6.10.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c7462fe0cecb5b8ac0a3d92014b8d0b88bd4d9f8646709dab5286d9416f45bc" || { echo "oreon: Source0 SHA256 mismatch for pyside-setup-everywhere-src-6.10.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n pyside-setup-everywhere-src-%{qt6ver}
 # https://build.opensuse.org/package/view_file/KDE:Qt6/python3-pyside6/python3-pyside6.spec?expand=1
 # Restore 6.6.1 RPATH value. rpmlint will complain otherwise

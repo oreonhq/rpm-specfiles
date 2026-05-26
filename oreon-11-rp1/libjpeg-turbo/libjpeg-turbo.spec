@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 075920b826834ac4ddf97661cc73491047855859affd671d52079c6867c1c6c0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libjpeg-turbo
 Version:        3.1.3
 Release:        1%{?dist}
@@ -7,10 +15,6 @@ URL:            https://github.com/%{name}/%{name}
 
 Source0:        https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/3.1.3/libjpeg-turbo-3.1.3.tar.gz
 Patch0:         libjpeg-turbo-cmake.patch
-# oreon url source checksums begin
-%global source0_sha256 075920b826834ac4ddf97661cc73491047855859affd671d52079c6867c1c6c0
-%global source0_file libjpeg-turbo-3.1.3.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  cmake
@@ -71,9 +75,7 @@ This package contains header files necessary for developing programs which will
 manipulate JPEG files using the TurboJPEG library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libjpeg-turbo-3.1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "075920b826834ac4ddf97661cc73491047855859affd671d52079c6867c1c6c0" || { echo "oreon: Source0 SHA256 mismatch for libjpeg-turbo-3.1.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -S gendiff
 
 #rm -rf doc

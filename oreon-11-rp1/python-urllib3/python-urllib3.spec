@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 74317bc088603618b7bd9a57d7f3a043cef29123b672a5c280d373f5b3a8c317
+%global source1_sha256 4c5a9da30a8060bc2b57cf3ed95520e08a53a0f4d8f63985ea44c176712d16da
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # When bootstrapping Python, we cannot test this yet
 # RHEL does not include the test dependencies and the dependencies for extras
 %bcond tests %{undefined rhel}
@@ -30,12 +40,6 @@ Source0:        https://github.com/urllib3/urllib3/archive/2.7.0/urllib3-2.7.0.t
 %global hypercorn_url https://github.com/urllib3/hypercorn
 %global hypercorn_commit d1719f8c1570cbd8e6a3719ffdb14a4d72880abb
 Source1:        https://github.com/urllib3/hypercorn/archive/d1719f8c1570cbd8e6a3719ffdb14a4d72880abb/hypercorn-d1719f8c1570cbd8e6a3719ffdb14a4d72880abb.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 74317bc088603618b7bd9a57d7f3a043cef29123b672a5c280d373f5b3a8c317
-%global source0_file urllib3-2.7.0.tar.gz
-%global source1_sha256 4c5a9da30a8060bc2b57cf3ed95520e08a53a0f4d8f63985ea44c176712d16da
-%global source1_file hypercorn-d1719f8c1570cbd8e6a3719ffdb14a4d72880abb.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -88,10 +92,7 @@ Recommends:     python3-urllib3+socks
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/urllib3-2.7.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "74317bc088603618b7bd9a57d7f3a043cef29123b672a5c280d373f5b3a8c317" || { echo "oreon: Source0 SHA256 mismatch for urllib3-2.7.0.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/hypercorn-d1719f8c1570cbd8e6a3719ffdb14a4d72880abb.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4c5a9da30a8060bc2b57cf3ed95520e08a53a0f4d8f63985ea44c176712d16da" || { echo "oreon: Source1 SHA256 mismatch for hypercorn-d1719f8c1570cbd8e6a3719ffdb14a4d72880abb.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n urllib3-%{version}
 %setup -q -n urllib3-%{version} -T -D -b 1
 

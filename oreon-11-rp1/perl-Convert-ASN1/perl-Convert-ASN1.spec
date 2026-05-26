@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a628d7c9d390568fb76359975fa03f626ce57f10dc17980e8e3587d7713e4ee7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Perform optional tests
 %bcond_without perl_Convert_ASN1_enables_optional_test
 
@@ -11,10 +19,6 @@ Source0:        https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/Convert-ASN1-
 # Allow running tests from a read-only location,
 # <https://github.com/gbarr/perl-Convert-ASN1/pull/40>
 Patch0:         Convert-ASN1-0.27-Use-temporary-output-files-for-tests.patch
-# oreon url source checksums begin
-%global source0_sha256 a628d7c9d390568fb76359975fa03f626ce57f10dc17980e8e3587d7713e4ee7
-%global source0_file Convert-ASN1-0.34.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -73,9 +77,7 @@ Tests from %{name}-%{version}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Convert-ASN1-0.34.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a628d7c9d390568fb76359975fa03f626ce57f10dc17980e8e3587d7713e4ee7" || { echo "oreon: Source0 SHA256 mismatch for Convert-ASN1-0.34.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n Convert-ASN1-%{version}
 
 # Help file to recognise the Perl scripts

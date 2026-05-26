@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 84bef53cc808bd11830fbb434c9836c3dc4b24a58db878f5073db198fb9a586c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %if ! (0%{?rhel})
 %bcond_without perl_Date_ISO8601_enables_optional_test
@@ -12,10 +20,6 @@ Summary:        Three ISO 8601 numerical calendars
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Date-ISO8601
 Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/Date-ISO8601-0.005.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 84bef53cc808bd11830fbb434c9836c3dc4b24a58db878f5073db198fb9a586c
-%global source0_file Date-ISO8601-0.005.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 # Module Build
@@ -55,9 +59,7 @@ also covers time of day and time periods, but this module does nothing
 relating to those parts of the standard; this is only about labeling days.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Date-ISO8601-0.005.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "84bef53cc808bd11830fbb434c9836c3dc4b24a58db878f5073db198fb9a586c" || { echo "oreon: Source0 SHA256 mismatch for Date-ISO8601-0.005.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Date-ISO8601-%{version}
 
 %build

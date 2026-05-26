@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e322802ebfd5fe79368efd864aeb87b063566ae61911dccb2714e28a45ed7561
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without optional_tests
 
 Name:           python-sphinxcontrib-websupport
@@ -10,10 +18,6 @@ URL:            https://github.com/sphinx-doc/sphinxcontrib-websupport
 Source:         %{pypi_source sphinxcontrib_websupport}
 # Compatibility with Sphinx 9+
 Patch:          https://github.com/sphinx-doc/sphinxcontrib-websupport/pull/91.patch
-# oreon url source checksums begin
-%global source0_sha256 e322802ebfd5fe79368efd864aeb87b063566ae61911dccb2714e28a45ed7561
-%global source0_file sphinxcontrib_websupport-1.2.7.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 
 %description
@@ -36,9 +40,7 @@ documentation into your Web application.
 %pyproject_extras_subpkg -n python3-sphinxcontrib-websupport whoosh
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sphinxcontrib_websupport-1.2.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e322802ebfd5fe79368efd864aeb87b063566ae61911dccb2714e28a45ed7561" || { echo "oreon: Source0 SHA256 mismatch for sphinxcontrib_websupport-1.2.7.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n sphinxcontrib_websupport-%{version} -p1
 
 %generate_buildrequires

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c5d24d8c096546353fbc7cedf208392d5a02afe9d56ebcc1cccb258d7c4d2220
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond autoreconf 1
 
 Name:           libIDL
@@ -84,10 +92,6 @@ Patch:          libIDL-0.8.14-lexer-sscanf-type-punning.patch
 # Fix references to the old libIDL-config script by changing them to
 # libIDL-config-2.
 Patch:          libIDL-0.8.14-old-libIDL-config-script.patch
-# oreon url source checksums begin
-%global source0_sha256 c5d24d8c096546353fbc7cedf208392d5a02afe9d56ebcc1cccb258d7c4d2220
-%global source0_file libIDL-0.8.14.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -137,9 +141,7 @@ This page contains info pages and HTML and PDF documentation for libIDL.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libIDL-0.8.14.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c5d24d8c096546353fbc7cedf208392d5a02afe9d56ebcc1cccb258d7c4d2220" || { echo "oreon: Source0 SHA256 mismatch for libIDL-0.8.14.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

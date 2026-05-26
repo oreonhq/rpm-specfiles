@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1ad5b065375f4a85915aa60611cc6407c060492a214d7f9daf214be752c3b4d3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global tarball libXrandr
 #global gitdate 20130524
 %global gitversion c90f74497
@@ -15,10 +23,6 @@ Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
 Source0: https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 1ad5b065375f4a85915aa60611cc6407c060492a214d7f9daf214be752c3b4d3
-%global source0_file libXrandr-1.5.4.tar.xz
-# oreon url source checksums end
 %endif
 
 Requires: libX11 >= 1.6.0
@@ -43,9 +47,7 @@ Requires: %{name} = %{version}-%{release}
 X.Org X11 libXrandr development package
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libXrandr-1.5.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1ad5b065375f4a85915aa60611cc6407c060492a214d7f9daf214be752c3b4d3" || { echo "oreon: Source0 SHA256 mismatch for libXrandr-1.5.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0fc184ef4c90878d183e719c6a11e77320471e1d4c0fe1a61020132553ad2a72
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:       Performs a verified launch using Intel TXT
 Name:          tboot
 Version:       1.11.7
@@ -11,10 +19,6 @@ Patch0:        tboot-gcc14.patch
 Patch1:        openssl-no-engine.patch
 Patch2:        tboot-sbin.patch
 Patch3:        tboot-1.11.7-len.patch
-# oreon url source checksums begin
-%global source0_sha256 0fc184ef4c90878d183e719c6a11e77320471e1d4c0fe1a61020132553ad2a72
-%global source0_file tboot-1.11.7.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc
@@ -30,9 +34,7 @@ Intel Trusted Execution Technology (Intel TXT) to perform a measured
 and verified launch of an OS kernel/VMM.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/tboot-1.11.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0fc184ef4c90878d183e719c6a11e77320471e1d4c0fe1a61020132553ad2a72" || { echo "oreon: Source0 SHA256 mismatch for tboot-1.11.7.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f8518ff7c16481d63b9d6d305cf5d666889da4ee5d0a7950189933f2825704ff
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global with_debug 1
 
 %if 0%{?with_debug}
@@ -19,10 +27,6 @@ Summary: OCI Hook to generate seccomp json files based on EBF syscalls used by c
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
 Source0:        https://github.com/containers/oci-seccomp-bpf-hook/archive/v1.2.10.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 f8518ff7c16481d63b9d6d305cf5d666889da4ee5d0a7950189933f2825704ff
-%global source0_file v1.2.10.tar.gz
-# oreon url source checksums end
 BuildRequires: golang
 BuildRequires: go-md2man
 BuildRequires: go-rpm-macros
@@ -55,9 +59,7 @@ Requires: podman
 This package contains system tests for %{name}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v1.2.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f8518ff7c16481d63b9d6d305cf5d666889da4ee5d0a7950189933f2825704ff" || { echo "oreon: Source0 SHA256 mismatch for v1.2.10.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -Sgit -n %{name}-%{version}
 sed -i 's;HOOK_BIN_DIR;%{_libexecdir}/oci/hooks.d;' %{name}.json
 sed -i '/$(HOOK_DIR)\/%{name}.json/d' Makefile

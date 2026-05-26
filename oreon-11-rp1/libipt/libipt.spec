@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 713d3e76b6c3073b122a9f5b6c025bc301a0436582f132caf782814363acf60f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # rmpbuild parameters:
 # --with docs: Build pre-generated documentation.
 
@@ -12,10 +20,6 @@ URL: https://github.com/intel/libipt
 Source0: https://github.com/intel/libipt/archive/v%{version}.tar.gz
 Source1: doc-v%{version}.tar.xz
 Patch1: libipt-cmake40-compat.patch
-# oreon url source checksums begin
-%global source0_sha256 713d3e76b6c3073b122a9f5b6c025bc301a0436582f132caf782814363acf60f
-%global source0_file v2.1.2.tar.gz
-# oreon url source checksums end
 # c++ is required only for -DPTUNIT test "ptunit-cpp".
 BuildRequires: gcc-c++ cmake
 %if 0%{?_with_docs:1}
@@ -42,9 +46,7 @@ The %{name}-devel package contains the header files and libraries needed to
 develop programs that use the Intel Processor Trace (Intel PT) Decoder Library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v2.1.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "713d3e76b6c3073b122a9f5b6c025bc301a0436582f132caf782814363acf60f" || { echo "oreon: Source0 SHA256 mismatch for v2.1.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n libipt-%{version}
 %patch -P 1 -p1
 

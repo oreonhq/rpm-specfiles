@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8b15f0a880ab87280c40cfd7235cfff28134bf14d5646c07518b1ff6642a2473
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Copyright (c) 2007 SUSE LINUX Products GmbH, Nuernberg, Germany.
 # Copyright (c) 2007 Hans de Goede <j.w.r.degoede@hhs>, the Fedora project.
 #
@@ -14,10 +22,6 @@ License:        GPL-2.0-or-later
 URL:            https://i2c.wiki.kernel.org/index.php/I2C_Tools
 
 Source0:        https://www.kernel.org/pub/software/utils/i2c-tools/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 8b15f0a880ab87280c40cfd7235cfff28134bf14d5646c07518b1ff6642a2473
-%global source0_file i2c-tools-4.4.tar.xz
-# oreon url source checksums end
 
 # for /etc/udev/makedev.d resp /usr/lib/modprobe.d ownership
 Requires:       systemd-udev kmod
@@ -78,9 +82,7 @@ Obsoletes:      i2c-tools-devel < 4.0-1
 %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/i2c-tools-4.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b15f0a880ab87280c40cfd7235cfff28134bf14d5646c07518b1ff6642a2473" || { echo "oreon: Source0 SHA256 mismatch for i2c-tools-4.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

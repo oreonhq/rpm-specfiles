@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 74d92c017e8beb41730a8be07c2c6e4ff6547660c84bf91f832d8f325dd0cf82
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:	A library for generating Enhanced Metafiles
 Summary(pl):	Biblioteka do generowania plików w formacie Enhanced Metafile
 Name:		libEMF
@@ -10,10 +18,6 @@ License:	LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:		http://libemf.sourceforge.net/
 Source0:	https://downloads.sourceforge.net/project/libemf/libemf/%{version}/libemf-%{version}.tar.gz
 Patch:		add-riscv64-support.patch
-# oreon url source checksums begin
-%global source0_sha256 74d92c017e8beb41730a8be07c2c6e4ff6547660c84bf91f832d8f325dd0cf82
-%global source0_file libemf-1.0.13.tar.gz
-# oreon url source checksums end
 BuildRequires:	gcc-c++
 BuildRequires: make
 
@@ -44,9 +48,7 @@ libEMF header files.
 Pliki nagłówkowe libEMF.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libemf-1.0.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "74d92c017e8beb41730a8be07c2c6e4ff6547660c84bf91f832d8f325dd0cf82" || { echo "oreon: Source0 SHA256 mismatch for libemf-1.0.13.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n libemf-%{version} -p1
 
 %build

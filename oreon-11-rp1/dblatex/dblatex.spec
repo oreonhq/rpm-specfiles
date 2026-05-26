@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 16e82786272ed1806a079d37914d7ba7a594db792dc4cc34c1c3737dbd4da079
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with texlive_split 0
 
 Name:       dblatex
@@ -25,10 +33,6 @@ Patch3:     dblatex-0.3.12-replace-imp-by-importlib.patch
 Patch4:     dblatex-0.3.12-adjust-submodule-imports.patch
 # Upstreamable
 Patch5:     dblatex-0.3.12-remove-shebangs-from-non-scripts.patch
-# oreon url source checksums begin
-%global source0_sha256 16e82786272ed1806a079d37914d7ba7a594db792dc4cc34c1c3737dbd4da079
-%global source0_file dblatex3-0.3.12.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  python3-devel
 BuildRequires:  libxslt
@@ -93,9 +97,7 @@ Authors:
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dblatex3-0.3.12.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "16e82786272ed1806a079d37914d7ba7a594db792dc4cc34c1c3737dbd4da079" || { echo "oreon: Source0 SHA256 mismatch for dblatex3-0.3.12.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}3-%{version} -p 1
 # build_scripts uses install command arguments
 sed -i -e "/if not(install.install_data)/i \        install.install_data = '%{_prefix}'" setup.py

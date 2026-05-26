@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b356aeed1335ef0ca7f799741782a2544e7acee63fb4b047b94e4e0395a9cb62
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global _hardened_build 1
 
 %global upstream_version 2.1.1
@@ -18,10 +26,6 @@ Summary:        Library for retro-fitting legacy printer drivers
 License:        Apache-2.0 WITH LLVM-exception
 URL:            https://github.com/OpenPrinting/libppd
 Source0:        https://github.com/OpenPrinting/libppd/releases/download/2.1.1/libppd-2.1.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 b356aeed1335ef0ca7f799741782a2544e7acee63fb4b047b94e4e0395a9cb62
-%global source0_file libppd-2.1.1.tar.gz
-# oreon url source checksums end
 
 
 # for autogen.sh
@@ -99,9 +103,7 @@ PPD files from *.drv files.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libppd-2.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b356aeed1335ef0ca7f799741782a2544e7acee63fb4b047b94e4e0395a9cb62" || { echo "oreon: Source0 SHA256 mismatch for libppd-2.1.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -n %{name}-%{upstream_version}
 
 %build

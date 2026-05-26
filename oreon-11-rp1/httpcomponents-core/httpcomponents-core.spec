@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bf5a518e781459385baf51ce3e5fee37f97ff80cb8ad7195ae8670f6dfc5ad91
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without bootstrap
 
 Name:           httpcomponents-core
@@ -13,10 +21,6 @@ Source0:        https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcom
 
 Patch:          0001-Port-to-mockito-2.patch
 Patch:          0002-Port-to-Mockito-5.patch
-# oreon url source checksums begin
-%global source0_sha256 bf5a518e781459385baf51ce3e5fee37f97ff80cb8ad7195ae8670f6dfc5ad91
-%global source0_file httpcomponents-core-4.4.16-source-release.zip
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -46,9 +50,7 @@ less important than the ability to handle thousands of simultaneous
 HTTP connections in a resource efficient manner.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/httpcomponents-core-4.4.16-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bf5a518e781459385baf51ce3e5fee37f97ff80cb8ad7195ae8670f6dfc5ad91" || { echo "oreon: Source0 SHA256 mismatch for httpcomponents-core-4.4.16-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # Tests failing without networking

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c4d61f6bb4c61452e83de0427f444cdec296d87333f6c7676fb7dae09480f4d2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global framework ksvg
 
 %global stable_kf6 stable
@@ -18,10 +26,6 @@ License: CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/frameworks/%{framework}
 Source0: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
-# oreon url source checksums begin
-%global source0_sha256 c4d61f6bb4c61452e83de0427f444cdec296d87333f6c7676fb7dae09480f4d2
-%global source0_file ksvg-6.24.0.tar.xz
-# oreon url source checksums end
 
 # upstream patches
 
@@ -55,9 +59,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ksvg-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c4d61f6bb4c61452e83de0427f444cdec296d87333f6c7676fb7dae09480f4d2" || { echo "oreon: Source0 SHA256 mismatch for ksvg-6.24.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{framework}-%{version}
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 84640ea0f43831850434e50134d0554b7a94f97fb02e2488ffbe252c9fb05a56
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           iperf3
 Version:        3.20
 Release:        2%{?dist}
@@ -12,10 +20,6 @@ Summary:        Measurement tool for TCP/UDP bandwidth performance
 License:        BSD-3-Clause-LBNL AND MIT AND dtoa AND BSD-3-Clause AND NCSA AND LicenseRef-Fedora-Public-Domain
 URL:            https://github.com/esnet/iperf
 Source0:        https://github.com/esnet/iperf/archive/3.20/iperf-3.20.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 84640ea0f43831850434e50134d0554b7a94f97fb02e2488ffbe252c9fb05a56
-%global source0_file iperf-3.20.tar.gz
-# oreon url source checksums end
 BuildRequires:  libuuid-devel
 BuildRequires:  gcc
 BuildRequires:  lksctp-tools-devel
@@ -36,9 +40,7 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/iperf-3.20.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "84640ea0f43831850434e50134d0554b7a94f97fb02e2488ffbe252c9fb05a56" || { echo "oreon: Source0 SHA256 mismatch for iperf-3.20.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n iperf-%{version} -p1
 
 %build

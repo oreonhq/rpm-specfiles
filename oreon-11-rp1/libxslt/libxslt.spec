@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libxslt
 Summary:        Library providing the Gnome XSLT engine
 Version:        1.1.43
@@ -21,10 +29,6 @@ BuildRequires:  python3-devel
 Patch0:         multilib.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=1467435
 Patch1:         multilib2.patch
-# oreon url source checksums begin
-%global source0_sha256 5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a
-%global source0_file libxslt-1.1.43.tar.xz
-# oreon url source checksums end
 
 %description
 This C library allows to transform XML files into other XML files
@@ -65,9 +69,7 @@ with XPath functions written in Python.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libxslt-1.1.43.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5a3d6b383ca5afc235b171118e90f5ff6aa27e9fea3303065231a6d403f0183a" || { echo "oreon: Source0 SHA256 mismatch for libxslt-1.1.43.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 chmod 644 python/tests/*
 

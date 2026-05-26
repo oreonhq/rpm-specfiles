@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b001c90b404308d962858b95cbd7cb1e7f13bd5bcf2249a66321d4db406b4268
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora} || 0%{?rhel} > 7
 # Enable python3 build by default
 %bcond_without python3
@@ -27,10 +35,6 @@ Source0: https://github.com/abrt/%{name}/releases/download/%{version}/%{name}-%{
 # Fix needed for Python 3.14
 # https://bugzilla.redhat.com/2325452
 Patch: https://github.com/abrt/satyr/pull/343.patch
-# oreon url source checksums begin
-%global source0_sha256 b001c90b404308d962858b95cbd7cb1e7f13bd5bcf2249a66321d4db406b4268
-%global source0_file satyr-0.43.tar.gz
-# oreon url source checksums end
 
 %if %{with python3}
 BuildRequires: python3-devel
@@ -82,9 +86,7 @@ Python 3 bindings for %{name}.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/satyr-0.43.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b001c90b404308d962858b95cbd7cb1e7f13bd5bcf2249a66321d4db406b4268" || { echo "oreon: Source0 SHA256 mismatch for satyr-0.43.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

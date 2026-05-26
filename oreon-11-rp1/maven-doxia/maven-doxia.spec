@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 46932b1aea6ee980aee484e96e4e9eedc0d2a7b192b9ed42b16a9903556fe96c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           maven-doxia
 Epoch:          0
 Version:        2.0.0
@@ -10,10 +18,6 @@ VCS:            git:https://github.com/apache/maven-doxia.git
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia/%{version}/doxia-%{version}-source-release.zip
 Source1:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia/%{version}/doxia-%{version}-source-release.zip.asc
 Source2:        https://downloads.apache.org/maven/KEYS
-# oreon url source checksums begin
-%global source0_sha256 46932b1aea6ee980aee484e96e4e9eedc0d2a7b192b9ed42b16a9903556fe96c
-%global source0_file doxia-2.0.0-source-release.zip
-# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -192,9 +196,7 @@ Summary:        API documentation for %{name}
 API documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/doxia-2.0.0-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "46932b1aea6ee980aee484e96e4e9eedc0d2a7b192b9ed42b16a9903556fe96c" || { echo "oreon: Source0 SHA256 mismatch for doxia-2.0.0-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --data=%{SOURCE0} --signature=%{SOURCE1} --keyring=%{SOURCE2}
 %autosetup -p1 -n doxia-%{version}
 

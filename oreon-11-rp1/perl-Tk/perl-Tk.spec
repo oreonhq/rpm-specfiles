@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 32aa7271a6bdfedc3330119b3825daddd0aa4b5c936f84ad74eabb932a200a5e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global use_x11_tests 1
 %if 0%{?fedora} || 0%{?rhel} > 9
 %global use_xwayland_run 1
@@ -33,10 +41,6 @@ Patch7:         perl-Tk-Avoid-using-incompatible-pointer-type-for-old_warn.patch
 # Avoid using incompatible pointer type in function 'GetTextIndex'
 # https://github.com/eserte/perl-tk/issues/103
 Patch8:         perl-Tk-Fix-incompatible-pointer-type-in-function-GetTextIndex.patch
-# oreon url source checksums begin
-%global source0_sha256 32aa7271a6bdfedc3330119b3825daddd0aa4b5c936f84ad74eabb932a200a5e
-%global source0_file Tk-804.036.tar.gz
-# oreon url source checksums end
 
 # Versions before this have Unicode issues
 BuildRequires:  make
@@ -173,9 +177,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Tk-804.036.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "32aa7271a6bdfedc3330119b3825daddd0aa4b5c936f84ad74eabb932a200a5e" || { echo "oreon: Source0 SHA256 mismatch for Tk-804.036.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Tk-%{version}
 find . -type f -exec perl -MConfig -pi -e \
 's,^(#!)(/usr/local)?/bin/perl\b,$Config{startperl}, if ($. == 1)' {} \;

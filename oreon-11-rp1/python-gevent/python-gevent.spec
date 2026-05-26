@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 adf9cd552de44a4e6754c51ff2e78d9193b7fa6eab123db9578a210e657235dd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global __provides_exclude_from ^%{python3_sitearch}/.*\\.so$
 %global modname gevent
 %global optflags %(echo %{optflags} -I%{_includedir}/libev)
@@ -10,10 +18,6 @@ Summary:       A coroutine-based Python networking library
 License:       MIT
 URL:           http://www.gevent.org/
 Source0:        https://files.pythonhosted.org/packages/source/g/gevent/gevent-25.9.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 adf9cd552de44a4e6754c51ff2e78d9193b7fa6eab123db9578a210e657235dd
-%global source0_file gevent-25.9.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: c-ares-devel
@@ -53,9 +57,7 @@ Features include:
   * monkey patching utility to get pure Python modules to cooperate
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gevent-25.9.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "adf9cd552de44a4e6754c51ff2e78d9193b7fa6eab123db9578a210e657235dd" || { echo "oreon: Source0 SHA256 mismatch for gevent-25.9.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{modname}-%{version}
 # Remove bundled libraries
 rm -r deps

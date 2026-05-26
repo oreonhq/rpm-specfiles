@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c79030436a84827ea68173b13c36ac951a5170a54f1dd8f523506b674f2b9e0e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %if ! (0%{?rhel})
 %bcond_without perl_DateTime_TimeZone_Tzfile_enables_optional_test
@@ -12,10 +20,6 @@ Summary:        Tzfile (zoneinfo) timezone files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-TimeZone-Tzfile
 Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/DateTime-TimeZone-Tzfile-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 c79030436a84827ea68173b13c36ac951a5170a54f1dd8f523506b674f2b9e0e
-%global source0_file DateTime-TimeZone-Tzfile-0.011.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -52,9 +56,7 @@ This class implements the DateTime::TimeZone interface, so that its instances
 can be used with DateTime objects.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/DateTime-TimeZone-Tzfile-0.011.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c79030436a84827ea68173b13c36ac951a5170a54f1dd8f523506b674f2b9e0e" || { echo "oreon: Source0 SHA256 mismatch for DateTime-TimeZone-Tzfile-0.011.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n DateTime-TimeZone-Tzfile-%{version}
 
 %build

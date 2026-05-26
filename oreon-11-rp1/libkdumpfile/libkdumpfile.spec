@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 16415528e870791ac8d392422f0986b4c3f83e6cb4267b4daffe6982fc5f4a3a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora} >= 42 || 0%{?rhel} >= 10
 # Python bindings removed post-0.5.5
 # see commit 40c9ff981f1f3bd968af37a50b50c3478d8267cd
@@ -17,10 +25,6 @@ Summary:        Kernel coredump file access
 License:        LGPL-3.0-or-later OR GPL-2.0-or-later
 URL:            https://github.com/ptesarik/libkdumpfile
 Source:        https://github.com/ptesarik/libkdumpfile/releases/download/v0.5.5/libkdumpfile-0.5.5.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 16415528e870791ac8d392422f0986b4c3f83e6cb4267b4daffe6982fc5f4a3a
-%global source0_file libkdumpfile-0.5.5.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  doxygen
@@ -89,9 +93,7 @@ The %{name}-devel package contains misc utilities built with %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libkdumpfile-0.5.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "16415528e870791ac8d392422f0986b4c3f83e6cb4267b4daffe6982fc5f4a3a" || { echo "oreon: Source0 SHA256 mismatch for libkdumpfile-0.5.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 # Remove unneeded shebang
 sed -e "\|#!/usr/bin/env python|d" -i python/*/*.py

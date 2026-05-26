@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a02697a885da3655c55c15eb155148b79d25ca57c5ac7578cb1ca9ac8f141b89
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %global dict_dirname hunspell
 %else
@@ -11,10 +19,6 @@ Version: 0.%{upstreamid}
 Epoch: 1
 Release: 19%{?dist}
 Source: http://www.esperantilo.org/literumilo-fontoj.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 a02697a885da3655c55c15eb155148b79d25ca57c5ac7578cb1ca9ac8f141b89
-%global source0_file literumilo-fontoj.tar.gz
-# oreon url source checksums end
 URL: http://www.esperantilo.org
 License: GPL-2.0-or-later
 BuildArch: noarch
@@ -26,9 +30,7 @@ Supplements: (hunspell and langpacks-eo)
 Esperanto hunspell dictionaries.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/literumilo-fontoj.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a02697a885da3655c55c15eb155148b79d25ca57c5ac7578cb1ca9ac8f141b89" || { echo "oreon: Source0 SHA256 mismatch for literumilo-fontoj.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n literumilo-fontoj
 
 %build

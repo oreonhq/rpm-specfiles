@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3d86b6383fb5fd9eb9578d2cd47d92801191f4bf3f9bc61419bfefc8aa1e531a
+%global source2_sha256 894213fafbb557d40fba28dcc66f557fa0b4bf0ab32b0e4931b1d2be47e381fc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond nis %[!(0%{?rhel} >= 9)]
 
 %global so_ver 0
@@ -34,12 +44,6 @@ Source17: postlogin.5
 Source18: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 Patch1:  pam-1.7.0-redhat-modules.patch
 Patch2:  pam-1.5.3-unix-nomsg.patch
-# oreon url source checksums begin
-%global source0_sha256 3d86b6383fb5fd9eb9578d2cd47d92801191f4bf3f9bc61419bfefc8aa1e531a
-%global source0_file Linux-PAM-1.7.2.tar.xz
-%global source2_sha256 894213fafbb557d40fba28dcc66f557fa0b4bf0ab32b0e4931b1d2be47e381fc
-%global source2_file pam-redhat-1.3.1.tar.xz
-# oreon url source checksums end
 
 %global _pam_libdir %{_libdir}
 %global _pam_moduledir %{_libdir}/security
@@ -131,10 +135,7 @@ having to recompile programs that handle authentication. The pam-libs
 contains the shared libraries for PAM.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Linux-PAM-1.7.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3d86b6383fb5fd9eb9578d2cd47d92801191f4bf3f9bc61419bfefc8aa1e531a" || { echo "oreon: Source0 SHA256 mismatch for Linux-PAM-1.7.2.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/pam-redhat-1.3.1.tar.xz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "894213fafbb557d40fba28dcc66f557fa0b4bf0ab32b0e4931b1d2be47e381fc" || { echo "oreon: Source2 SHA256 mismatch for pam-redhat-1.3.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Linux-PAM-%{version} -a 2
 
 # Add custom modules.

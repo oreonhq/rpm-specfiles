@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source1_sha256 57d47e633507ce6e039dd52752720fdc96262093d58e1f43a117a995e312cf09
+%global oreon_verify_sources \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with bootstrap
 
 Name:           jsr-305
@@ -14,10 +22,6 @@ ExclusiveArch:  %{java_arches} noarch
 # ./generate-tarball.sh
 Source0:        %{name}-%{version}.tar.gz
 Source1:        https://github.com/stephenc/jcip-annotations/archive/refs/tags/jcip-annotations-1.0-1.tar.gz
-# oreon url source checksums begin
-%global source1_sha256 57d47e633507ce6e039dd52752720fdc96262093d58e1f43a117a995e312cf09
-%global source1_file jcip-annotations-1.0-1.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -34,9 +38,7 @@ documents for Java Specification Request 305: Annotations for Software Defect
 Detection.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jcip-annotations-1.0-1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "57d47e633507ce6e039dd52752720fdc96262093d58e1f43a117a995e312cf09" || { echo "oreon: Source1 SHA256 mismatch for jcip-annotations-1.0-1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 
 # Replace javax.annotation.concurrent annotations (that are based on

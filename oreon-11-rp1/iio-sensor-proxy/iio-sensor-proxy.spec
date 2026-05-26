@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 cdf9bdb6ef125d6189069d3f6dc9afb301ce5a17213971e65c5e20a57494593d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           iio-sensor-proxy
 Version:        3.8
 Release:        %autorelease
@@ -7,10 +15,6 @@ Summary:        IIO accelerometer sensor to input device proxy
 License:        GPL-3.0-or-later
 URL:            https://gitlab.freedesktop.org/hadess/iio-sensor-proxy
 Source0:        https://gitlab.freedesktop.org/hadess/iio-sensor-proxy/-/archive/3.8/iio-sensor-proxy-3.8.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 cdf9bdb6ef125d6189069d3f6dc9afb301ce5a17213971e65c5e20a57494593d
-%global source0_file iio-sensor-proxy-3.8.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -38,9 +42,7 @@ BuildArch:      noarch
 This package contains the documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/iio-sensor-proxy-3.8.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cdf9bdb6ef125d6189069d3f6dc9afb301ce5a17213971e65c5e20a57494593d" || { echo "oreon: Source0 SHA256 mismatch for iio-sensor-proxy-3.8.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git_am
 
 %build

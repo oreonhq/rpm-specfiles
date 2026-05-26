@@ -1,3 +1,15 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 778694ef49ae25492c929e158eeccbc50e6ef37312db2c02fb494e2348029aaa
+%global source1_sha256 3f687227fc9c9f2c342b12fa2c03cd60b6172dda3c6a13884b6b443398939a05
+%global source20_sha256 e10382ab75518bad8319eb922ad04f907cb20cccb451a3aa980c9d005e661acc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source20_sha256:%(test -z "%{source20_sha256}" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source20_sha256}" || { echo "oreon: Source20 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global selinuxtype targeted
 %global moduletype distributed
 %define semodule_version 1.1
@@ -16,14 +28,6 @@ Source10: https://github.com/linux-application-whitelisting/fapolicyd/releases/d
 Source11: https://github.com/linux-application-whitelisting/%{name}-selinux/releases/download/v%{semodule_version}/%{name}-selinux-%{semodule_version}.tar.gz.asc
 # we bundle uthash for eln
 Source20: https://github.com/troydhanson/uthash/archive/refs/tags/v2.3.0.tar.gz#/uthash-2.3.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 778694ef49ae25492c929e158eeccbc50e6ef37312db2c02fb494e2348029aaa
-%global source0_file fapolicyd-1.4.3.tar.gz
-%global source1_sha256 3f687227fc9c9f2c342b12fa2c03cd60b6172dda3c6a13884b6b443398939a05
-%global source1_file fapolicyd-selinux-1.1.tar.gz
-%global source20_sha256 e10382ab75518bad8319eb922ad04f907cb20cccb451a3aa980c9d005e661acc
-%global source20_file v2.3.0.tar.gz
-# oreon url source checksums end
 
 # https://github.com/linux-application-whitelisting/fapolicyd
 # $ git format-patch -N v1.4.1
@@ -75,11 +79,7 @@ BuildArch: noarch
 The %{name}-selinux package contains selinux policy for the %{name} daemon.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/fapolicyd-1.4.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "778694ef49ae25492c929e158eeccbc50e6ef37312db2c02fb494e2348029aaa" || { echo "oreon: Source0 SHA256 mismatch for fapolicyd-1.4.3.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/fapolicyd-selinux-1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3f687227fc9c9f2c342b12fa2c03cd60b6172dda3c6a13884b6b443398939a05" || { echo "oreon: Source1 SHA256 mismatch for fapolicyd-selinux-1.1.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/v2.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e10382ab75518bad8319eb922ad04f907cb20cccb451a3aa980c9d005e661acc" || { echo "oreon: Source20 SHA256 mismatch for v2.3.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE10}' --data='%{SOURCE0}'
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE11}' --data='%{SOURCE1}'
 

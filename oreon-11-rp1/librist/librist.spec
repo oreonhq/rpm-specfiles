@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7e2507fdef7b57c87b461d0f2515771b70699a02c8675b51785a73400b3c53a1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global somajor 4
 
 # Tests are flaky in Koji
@@ -16,10 +24,6 @@ Source0:        https://code.videolan.org/rist/librist/-/archive/v0.2.7/librist-
 # Backport from upstream
 ## From: https://code.videolan.org/rist/librist/-/commit/809390b3b75a259a704079d0fb4d8f1b5f7fa956
 Patch0001:      0001-meson.build-fix-reference-to-libcjson-pc-file.patch
-# oreon url source checksums begin
-%global source0_sha256 7e2507fdef7b57c87b461d0f2515771b70699a02c8675b51785a73400b3c53a1
-%global source0_file librist-v0.2.7.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -59,9 +63,7 @@ This package contains the user tools for the RIST protocol library.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/librist-v0.2.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7e2507fdef7b57c87b461d0f2515771b70699a02c8675b51785a73400b3c53a1" || { echo "oreon: Source0 SHA256 mismatch for librist-v0.2.7.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-v%{version} -p1
 
 

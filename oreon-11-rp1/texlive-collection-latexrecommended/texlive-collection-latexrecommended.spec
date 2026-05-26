@@ -1,3 +1,281 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 51c4498ff42534cd4fc3b34e948598a382bb601afb28c85cacba8007d2d50740
+%global source2_sha256 64dba6c2eb17dd92d445d2909cf026fdd3f9b1ce829115288556f5208e80179f
+%global source3_sha256 1df2798ac76ea263f85fcf931246a613b4e99ea68011d393fb584a5d64086929
+%global source4_sha256 111ba50e6c4f33edc325dd7f744a9809368275b4b843076bd28030fb17e5a6b6
+%global source5_sha256 9bcdb3564961bf7aa75d30c3c5eaf5c7b14cc09e0cff283936b3e6dcad34cba4
+%global source6_sha256 a5a9ed5c865f6aad4cd197f189f796f87b272bf9e0ebd2851debca2eef5fb613
+%global source7_sha256 fe9a26bb83c3d9e14a767192bc8fafe0f05b5841a9e959d4499f0ab8688a3612
+%global source8_sha256 fdbfd54f21ca74e2cd888b9bce1562cb61d300dedb693904c5c897e9759657d5
+%global source9_sha256 bbcf49e940e43ed8c93fcce35954b76effffe8edc22a5fb68a1fcfb8ad3b57d4
+%global source10_sha256 1725381d488e0a542c1878a805e1a9f341a9cb6e2703ef626d7f5d2e012ae076
+%global source11_sha256 26c0c3fc623fa017b0d1fa6538fd2049dd64e0de866f9d797859698f2592d665
+%global source12_sha256 75cbdc62a5db4489fc16a83cbfcfa12c5bfd055674eb7a3037e0f5b7f4af49a9
+%global source13_sha256 94dc8009049e1819e9d06053b1502d8617e46bba4a440dfb9945934170c4cc4d
+%global source14_sha256 cd6661b64d1859851b451b0d2461da77a8b3839056ba6210d4b1a35da4209edb
+%global source15_sha256 8e087fa81bd22570f549b6f6e8c45b31f1559c8a273607d3e1561079228a6e1e
+%global source16_sha256 8fc6c328fafe42d50cda044f22efb0d4b505bec7cf4c27169170fb3b389b1452
+%global source17_sha256 c2df3c1c7d108b7b79b2abe86bc6ee9b712e0592229cc307c18c93e9cb0fd8a1
+%global source18_sha256 fdb6b5ed86dbfde569099e238a37746de99552fdf549de7aab9e12bca2099209
+%global source19_sha256 0a11029ce6b683c815ff9ac1f35d04e42f19bd464c4b4dd35db1fac1446f608c
+%global source20_sha256 3c39706d791dd3943637e499d9c32b1e0e4920f49220af42141b7bb7ff0e7c42
+%global source21_sha256 dd2a294b918ff018ae6a92c5143568c06fc4bb62ba28b775e42e070ab52c1519
+%global source22_sha256 a9083d0184dea873338881fbcccb29cd7e9b2bb3ad7befea563a8acf7eae5c66
+%global source23_sha256 4fdab26ecbfaee3bc14d8fba1412d09a44e2b80a3d275a8cc248d03019128a4f
+%global source24_sha256 a71f2492d6c4582ed2f61d4e2f092d7db2befd9a64906825343476ddb7c7b3b9
+%global source25_sha256 5820b77657ac718748761facb58faea853acf821ea4adebc34e05bd13be8ce55
+%global source26_sha256 35c04613080faab79bf9776d60f0e996ff7de6e70c9ec588d6df8c0013534297
+%global source27_sha256 39a621ecf0f4c703f8e83fbce9d83c37a39f347a9f86bc4fdea6acdf9f866a02
+%global source28_sha256 3c9b382d0f1bd277218d5744c743d79d07e9c82f1b151127b0a2dfec0a8d205e
+%global source29_sha256 1370217321152378ff85c12422245c9daf8714d5789ac7560473b80d2e0480c0
+%global source30_sha256 36cc90e00c8c44028da8bbd03fac3b5dac3ddb47e03af8031a7c4d939896cdda
+%global source31_sha256 a872149c40a355fdd777ce2bdf1833b9fcf57e68fadc1836f329290ef1fc63bf
+%global source32_sha256 663954cd8269ebdeffaa867a1e709caa43860f6856befc60865ab4475a9c201e
+%global source33_sha256 364bc03d192680f051234bbf6d30e29de77943cd85ebd7a78f76eaf004df220d
+%global source34_sha256 6cd43aedc1c85a4c897056d73967471ee6b93d23c3ffdcded4ab3ef226bda31d
+%global source35_sha256 87c8fae57379a572a185d88715819c9a6e3ab7beb46f4ce37dfca39d1e7b3837
+%global source36_sha256 7165cfa315248faa25225fec9be2b26af22cae455e3d7a19ef17a716d5583226
+%global source37_sha256 cca3d50f3e2a5a97f591bcb20160a8dc841fddb999846674211c7b623b72ccde
+%global source38_sha256 7c8d8798cc7eb5c1515db86592187f14a4d5406dffdbb819de77cfed446e63bb
+%global source39_sha256 a37da6a65a235c6e1d7b9ded26a69e209373c76f32829e7a2b9e4ab70767bd8d
+%global source40_sha256 17263af26dea83a9e4f35518a0c7c933a8fca7dce3ad555be3652a03dbf660cd
+%global source41_sha256 6cf5a4704cd79d1f7a42aa80fc97688e71b2d800d46bca2af2cec126fb6db95c
+%global source42_sha256 d1c3061a1ee035841e87350d099016c913cd912cf445d61a766b2e0a625118d4
+%global source43_sha256 87a6eb7b4a33022f06117c360e084a402abb4e1c90a4d38d903dc40b74097675
+%global source44_sha256 19020ccd8e38361231b1b38d59f112d6cc276b68d169b698d03cbbea21de0bcb
+%global source45_sha256 8a92e75e9b2411221bce70d66ed866d9f74bc9d62f0f32aa8974d632127a3a4d
+%global source46_sha256 caa167593809c64e9479ef38f4dbf530b8200e167a3bc998a88196c9fb2abd38
+%global source47_sha256 b86a19bfe7ee8d88590dab15bd52dd26ed2971fbdac10110b16f3842bd96a936
+%global source48_sha256 3d69eec467657f71c9c3eb76e41f3387a70c6972b19e4ee29f9e8d31a168662d
+%global source49_sha256 dfb54b750a6687dc149c9645ce28293875fbf4dbdfbaa287f2532597dfe8fca0
+%global source50_sha256 6c17813dc85a9e5f4db12f9b020035d347c298710f6f9fc46cde2c39e0d5d4e0
+%global source51_sha256 33a8e7454f93ece86bf28ddf8033efac116a5be167c56f8ca7543020e7428789
+%global source52_sha256 96e49a5ccd06f077ada65213e766b6b90667b765d10fd626859cb5be70d97f88
+%global source53_sha256 faf2c3813542e55458a268d34ec197e380789fc7ac3fef140d83458104d22d09
+%global source54_sha256 55cd43104a80c66c5872d5237a701462e877243058efc29461a389919c3e4fad
+%global source55_sha256 b3ebd6ef0756df0865fe5534edd5937d302d3ceb48941c65b17cff62162ee074
+%global source56_sha256 31ea5fc9b07272552899b0c753751961bf51327cf2109d1bae2ce53ccc60e638
+%global source57_sha256 b035942ce2c219ffb2cb045cdf96abfd031e9f90ac8ca2d9bf8f3352f8807274
+%global source58_sha256 047ba93b4895f64ea830d3bf7d6557dc5dae7085b3b763486736e277168005fb
+%global source59_sha256 99c54a7d1cc578a96d972b2ab8515df756d3ec2f5964ac7e5c441dc0344b695b
+%global source60_sha256 882d19863421fd824b5a243b7f87278ae8c063deaf2611da9860beb5d049165c
+%global source61_sha256 a1bd68209209a1ff9ab0f64ee50f0620ce238a44ad0125ae4eb3f67e1b0b99ee
+%global source62_sha256 e8406f4e922b84dd70aa96f87daed67ec071c731826771cc3d2c2ee617ab9ed3
+%global source63_sha256 8d97d5308d0edb3c20156ea5164a8ec8a6c7c69cd7d781891c3faa17adba94a5
+%global source64_sha256 600bc5a78806323790b9176e1c744010ba6875b13d0ed32d475d6c8e105a71f3
+%global source65_sha256 ba1a9cdb71d04dfbacf5ce3db3769d84849956595ab092e5cfd23082787b57c2
+%global source66_sha256 0307812df3db18ad553e42fdfea6a871a5b2ea80a18fa6c4ccf3d50a783f5e45
+%global source67_sha256 c16f5cea1ba46e27b6276dd3314a83e10056808090387280b02860e54c541a8b
+%global source68_sha256 19f5da8484d547d83b38a234d10c040f639a5a21f1b3d27111db23eed4e98cb4
+%global source69_sha256 f7059401b3312e2b0c56f9dff486632f7db35e5660348109cfb2fdbdf75ffce4
+%global source70_sha256 46e12e6903841f24b6a51bdfa1a00f42364379e1bb9438f8f33c4689060aa4a8
+%global source71_sha256 ef7a80f1b7b55c661ccdde02c6a347d01e4a930b181581ef4a8b03998e13b510
+%global source72_sha256 d8171c5901f126ac636abb2327e100224d5b043be9bcd6e19fce0ff73e75c71a
+%global source73_sha256 36f506864454e08e255a69c24811f9a5f7567198d4371a5ddd54c33e6b881a85
+%global source74_sha256 feb7eb2fde739bc75264e78838b982a6c584cd50f91828aa378589bf408b654f
+%global source75_sha256 7ec924de85dae1e7c61791268863ff0137825e1c74805d6faee2e06f92a0cab5
+%global source76_sha256 7192690ba5896c767da0e5dc8a7c27f94b4e4abb6308d347a7a89376fd0c8522
+%global source77_sha256 96446e06d32fcc209332dcaa7932d6c845981270c0f7342749f9c9102a9872f0
+%global source78_sha256 5757513ce7da967b2b15a4ff42ee0c1a922c893bb3b2a246a73279c21f4a7c17
+%global source79_sha256 e4302864ab92570780ef1bd2b72f3adc74d6800074fb0183ce1d020d0094b6b0
+%global source80_sha256 6757c7070ff42da16e40d22374f361d52af51b37e61b75f672fdbea11bb6b894
+%global source81_sha256 19611cfc7ae6e929aaf1f3945da1a14be774d9d138f48e40257886874e1e8885
+%global source82_sha256 62eded685fdb1fd180232701a167b66aece88b2cc88b1e31a4671b6326578feb
+%global source83_sha256 669a53bd6cd801ddc8920327c414069563eb28a77dd1a96de9fe2c364c29e66f
+%global source84_sha256 7d82463f3d2e878a63670c7f51d13cc8a718b60c87797db8dddd71077ea9f1d4
+%global source85_sha256 d0091902c12b8441fc5fcd9b6c8cd6a1d28d88db67c2838013b7bb46853f6322
+%global source86_sha256 6756b856ca9242eded3fd7f5b64cbf3dc4cbedf90b6afe88a464e7c87851ef92
+%global source87_sha256 4dfce424501202b2ce95bd254dfccebb5dd78bb3924155996c670945a090c725
+%global source88_sha256 5fd9bd44ccf073ec1fd532fae617b7490f3693369b85cd4d5154722d210d863d
+%global source89_sha256 1307078cd7b011bf956f15a231020fd55a7f51fc66ad175aad8c26969c247db4
+%global source90_sha256 badde08bc989e5a8b3fbafa57b3849415b10b2450ece66ef5066e6fb40af79d3
+%global source91_sha256 9a828729a9421dc0a2df0205bec631e8b38ef0ea077437e7b1a5860c6dc5e09d
+%global source92_sha256 d2f9f870cd7b1d557fddaf1f5db21088ed7f1bc033098505eec14a3a600b4e6a
+%global source93_sha256 8a22406374e8ed2e971efc4b2d8526212af46237cef4c827eb7776a7a43bbc44
+%global source94_sha256 db323b35ce5b93f4bc385ce385b58a7253ca493b5c725727438f0ad542cce820
+%global source95_sha256 a1990f0939669ed0e18b3fc7b3483b19b96adffce26445afdcdb8af69a7c8578
+%global source96_sha256 0883182234b9f634508e3f6b54be048ae3d5676f245d9fac993dcd89930dcc06
+%global source97_sha256 1f75c7b2da2638abab284c26e1864aff74b26e3ae65fbbd569329feb2560d3fe
+%global source98_sha256 d19f61a4e07b46d4365c410a6eb9259e5343eb91c69432530e8650c98e227f6d
+%global source99_sha256 6f47b1169920a39c1656308679d1debf4cdec77121aad5048d459f303633e476
+%global source100_sha256 fd6816299629cdc304a80b67ab44e6f70542df581e9635268b023672ca6fc70e
+%global source101_sha256 1971c0f157538299f1abae3473f0f25ad4530303ff16da9b4d2145db30a68fbb
+%global source102_sha256 c705afd2a23d0d16930fa8eac6d4e82af0aae9fefc0e82685d9e0587e2a585ac
+%global source103_sha256 961c88e153829db7c7e71f103d3a7bf6ffa14c4ae6acb5429fad8bd25e0cac23
+%global source104_sha256 18c15fc3f8242770bba58d1c5d1d48f1af13345fe25c8e90616c899c6e22456a
+%global source105_sha256 7510c98ce653d07e6723207aebfdb7e68c737901cca292af8f7964f058f309bf
+%global source106_sha256 34677ce4575cfd78b33676bf3a73d3f23521e7a62eaffc3ad23a5482850b3c62
+%global source107_sha256 141736ccf595e39fac37e68c4fd269fcaec561bcf8ab647478335e9592b59c41
+%global source108_sha256 96987b3bc5813147d5ea00804446ef5a09872505d19d8a0cd427744b85911a9f
+%global source109_sha256 1d0056a39ac24f7f529ed3e09f87e2a9e049f10db50d859f85356a2d2774729c
+%global source110_sha256 411750d5505901f257c43d5ef0e4f987be1e0d4a370717ace4aff1f46c148d03
+%global source111_sha256 92f124451fb6de7d0a0cd535cebffdcbd646c5f02699e0e717dba60496378046
+%global source112_sha256 00e6beb695db032f0d1ecd663015c9885b22b0f3e040d4b36a2dcc4f099f8b39
+%global source113_sha256 69da765d8abff4614d03ba335180185c9732bc56ba417fb642de92e6fdf4a2df
+%global source114_sha256 f9fab873b6809ede6e24671a7f780369a2d65dc81a3ff5b4b12fb100528674b8
+%global source115_sha256 c36d4fea9dc6deaebb7a477b17b0304f0d9dec2491268f9b0ae9c96286ef6d08
+%global source116_sha256 42be677d9db436b9421b4f5cd385069a79959dd7732fea12b04705d8c3ba96db
+%global source117_sha256 012cbe2665ec07486d83ed68c830f3ad7215023370b0f6903ef092622cabbf50
+%global source118_sha256 823a14823f09f75e0f354cd27585a1a236b8c35375419395e6ee27ebbf9e1154
+%global source119_sha256 3c946908886ea81680f0e183973f3cc501bed22b4d5220b77c09dd629f8ec557
+%global source120_sha256 b2ace8b1305f95009fa10c0488c19646742c932a070e8fa64946aff7af9625d4
+%global source121_sha256 962aa0ae08a6118f5f1f3e3e222d834a5023272340b84f808bf44eecf752919f
+%global source122_sha256 4f61f063a511ed99c8a05e7dec1c0e2d2c353c7ce2cf2bf3aba4fbf2ad88b924
+%global source123_sha256 e70a700a6e4b8517c7db16773cfcce1cbbe8e93b631fdc70d1ccdb6eb791aa06
+%global source124_sha256 e9bcd6d26b884fe82fbff554f449cc7a4ca6c94de9f90494a7e2b0bfb1d7b8b4
+%global source125_sha256 b942cda7caec4a597f839890af02553aaad319a873579a41e19344a95747633d
+%global source126_sha256 3448444ecc07295092e2803b9f5d19127bed74bf90d6dd83a59f372f76afde45
+%global source127_sha256 081d28d119901fca408b82a4c12862ed829e45f14a8678034ef02f8ecfd5da54
+%global source128_sha256 0968bcd9227b228058fdc14595a1adad4eb645e20aacda9096e9a5e9f730e6f0
+%global source129_sha256 a663f461d834bcccd7ad525e8cfdf14b3c175e3ecfa3fe7d12839f7c054b688b
+%global source130_sha256 40c658705d672dbe93cdcd036ee88644c24e618baae54c66375ab440d7af3022
+%global source131_sha256 b9ff864c4f6e029b20c4f15f26a378bc9c089016225d4e19949af939259e0161
+%global source132_sha256 8539784e5f0d375bb0556a971e46147780064c3c57b321ab5b8431120b308d90
+%global source133_sha256 9a42c28340a004d9cc35b0ca94eb21f09491617a7b4d308760d76d4ede6a99e8
+%global source134_sha256 0bcafa21a36c28b43cd9e4bdf147dbecdf5172c24bfd2b20c0c0ec2979d05c82
+%global source135_sha256 e0ab404031563884e3769dda49113ddb363c01172b0008a2efdbc0560420b4db
+%global source136_sha256 e15130c1ace91a2a4ff39a0881b32f97b8f730e452eaa739ea855c6078436c58
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source4_sha256:%(test -z "%{source4_sha256}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_sha256}" || { echo "oreon: Source4 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source5_sha256:%(test -z "%{source5_sha256}" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_sha256}" || { echo "oreon: Source5 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source6_sha256:%(test -z "%{source6_sha256}" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_sha256}" || { echo "oreon: Source6 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source7_sha256:%(test -z "%{source7_sha256}" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source7_sha256}" || { echo "oreon: Source7 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source8_sha256:%(test -z "%{source8_sha256}" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_sha256}" || { echo "oreon: Source8 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source9_sha256:%(test -z "%{source9_sha256}" || { f="%{SOURCE9}"; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source9_sha256}" || { echo "oreon: Source9 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source10_sha256:%(test -z "%{source10_sha256}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_sha256}" || { echo "oreon: Source10 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source11_sha256:%(test -z "%{source11_sha256}" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_sha256}" || { echo "oreon: Source11 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source12_sha256:%(test -z "%{source12_sha256}" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_sha256}" || { echo "oreon: Source12 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source13_sha256:%(test -z "%{source13_sha256}" || { f="%{SOURCE13}"; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source13_sha256}" || { echo "oreon: Source13 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source14_sha256:%(test -z "%{source14_sha256}" || { f="%{SOURCE14}"; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source14_sha256}" || { echo "oreon: Source14 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source15_sha256:%(test -z "%{source15_sha256}" || { f="%{SOURCE15}"; test -f "$f" || { echo "oreon: missing Source15 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source15_sha256}" || { echo "oreon: Source15 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source16_sha256:%(test -z "%{source16_sha256}" || { f="%{SOURCE16}"; test -f "$f" || { echo "oreon: missing Source16 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source16_sha256}" || { echo "oreon: Source16 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source17_sha256:%(test -z "%{source17_sha256}" || { f="%{SOURCE17}"; test -f "$f" || { echo "oreon: missing Source17 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source17_sha256}" || { echo "oreon: Source17 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source18_sha256:%(test -z "%{source18_sha256}" || { f="%{SOURCE18}"; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source18_sha256}" || { echo "oreon: Source18 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source19_sha256:%(test -z "%{source19_sha256}" || { f="%{SOURCE19}"; test -f "$f" || { echo "oreon: missing Source19 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source19_sha256}" || { echo "oreon: Source19 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source20_sha256:%(test -z "%{source20_sha256}" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source20_sha256}" || { echo "oreon: Source20 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source21_sha256:%(test -z "%{source21_sha256}" || { f="%{SOURCE21}"; test -f "$f" || { echo "oreon: missing Source21 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source21_sha256}" || { echo "oreon: Source21 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source22_sha256:%(test -z "%{source22_sha256}" || { f="%{SOURCE22}"; test -f "$f" || { echo "oreon: missing Source22 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source22_sha256}" || { echo "oreon: Source22 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source23_sha256:%(test -z "%{source23_sha256}" || { f="%{SOURCE23}"; test -f "$f" || { echo "oreon: missing Source23 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source23_sha256}" || { echo "oreon: Source23 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source24_sha256:%(test -z "%{source24_sha256}" || { f="%{SOURCE24}"; test -f "$f" || { echo "oreon: missing Source24 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source24_sha256}" || { echo "oreon: Source24 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source25_sha256:%(test -z "%{source25_sha256}" || { f="%{SOURCE25}"; test -f "$f" || { echo "oreon: missing Source25 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source25_sha256}" || { echo "oreon: Source25 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source26_sha256:%(test -z "%{source26_sha256}" || { f="%{SOURCE26}"; test -f "$f" || { echo "oreon: missing Source26 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source26_sha256}" || { echo "oreon: Source26 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source27_sha256:%(test -z "%{source27_sha256}" || { f="%{SOURCE27}"; test -f "$f" || { echo "oreon: missing Source27 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source27_sha256}" || { echo "oreon: Source27 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source28_sha256:%(test -z "%{source28_sha256}" || { f="%{SOURCE28}"; test -f "$f" || { echo "oreon: missing Source28 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source28_sha256}" || { echo "oreon: Source28 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source29_sha256:%(test -z "%{source29_sha256}" || { f="%{SOURCE29}"; test -f "$f" || { echo "oreon: missing Source29 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source29_sha256}" || { echo "oreon: Source29 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source30_sha256:%(test -z "%{source30_sha256}" || { f="%{SOURCE30}"; test -f "$f" || { echo "oreon: missing Source30 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source30_sha256}" || { echo "oreon: Source30 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source31_sha256:%(test -z "%{source31_sha256}" || { f="%{SOURCE31}"; test -f "$f" || { echo "oreon: missing Source31 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source31_sha256}" || { echo "oreon: Source31 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source32_sha256:%(test -z "%{source32_sha256}" || { f="%{SOURCE32}"; test -f "$f" || { echo "oreon: missing Source32 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source32_sha256}" || { echo "oreon: Source32 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source33_sha256:%(test -z "%{source33_sha256}" || { f="%{SOURCE33}"; test -f "$f" || { echo "oreon: missing Source33 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source33_sha256}" || { echo "oreon: Source33 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source34_sha256:%(test -z "%{source34_sha256}" || { f="%{SOURCE34}"; test -f "$f" || { echo "oreon: missing Source34 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source34_sha256}" || { echo "oreon: Source34 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source35_sha256:%(test -z "%{source35_sha256}" || { f="%{SOURCE35}"; test -f "$f" || { echo "oreon: missing Source35 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source35_sha256}" || { echo "oreon: Source35 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source36_sha256:%(test -z "%{source36_sha256}" || { f="%{SOURCE36}"; test -f "$f" || { echo "oreon: missing Source36 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source36_sha256}" || { echo "oreon: Source36 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source37_sha256:%(test -z "%{source37_sha256}" || { f="%{SOURCE37}"; test -f "$f" || { echo "oreon: missing Source37 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source37_sha256}" || { echo "oreon: Source37 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source38_sha256:%(test -z "%{source38_sha256}" || { f="%{SOURCE38}"; test -f "$f" || { echo "oreon: missing Source38 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source38_sha256}" || { echo "oreon: Source38 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source39_sha256:%(test -z "%{source39_sha256}" || { f="%{SOURCE39}"; test -f "$f" || { echo "oreon: missing Source39 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source39_sha256}" || { echo "oreon: Source39 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source40_sha256:%(test -z "%{source40_sha256}" || { f="%{SOURCE40}"; test -f "$f" || { echo "oreon: missing Source40 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source40_sha256}" || { echo "oreon: Source40 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source41_sha256:%(test -z "%{source41_sha256}" || { f="%{SOURCE41}"; test -f "$f" || { echo "oreon: missing Source41 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source41_sha256}" || { echo "oreon: Source41 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source42_sha256:%(test -z "%{source42_sha256}" || { f="%{SOURCE42}"; test -f "$f" || { echo "oreon: missing Source42 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source42_sha256}" || { echo "oreon: Source42 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source43_sha256:%(test -z "%{source43_sha256}" || { f="%{SOURCE43}"; test -f "$f" || { echo "oreon: missing Source43 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source43_sha256}" || { echo "oreon: Source43 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source44_sha256:%(test -z "%{source44_sha256}" || { f="%{SOURCE44}"; test -f "$f" || { echo "oreon: missing Source44 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source44_sha256}" || { echo "oreon: Source44 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source45_sha256:%(test -z "%{source45_sha256}" || { f="%{SOURCE45}"; test -f "$f" || { echo "oreon: missing Source45 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source45_sha256}" || { echo "oreon: Source45 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source46_sha256:%(test -z "%{source46_sha256}" || { f="%{SOURCE46}"; test -f "$f" || { echo "oreon: missing Source46 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source46_sha256}" || { echo "oreon: Source46 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source47_sha256:%(test -z "%{source47_sha256}" || { f="%{SOURCE47}"; test -f "$f" || { echo "oreon: missing Source47 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source47_sha256}" || { echo "oreon: Source47 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source48_sha256:%(test -z "%{source48_sha256}" || { f="%{SOURCE48}"; test -f "$f" || { echo "oreon: missing Source48 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source48_sha256}" || { echo "oreon: Source48 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source49_sha256:%(test -z "%{source49_sha256}" || { f="%{SOURCE49}"; test -f "$f" || { echo "oreon: missing Source49 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source49_sha256}" || { echo "oreon: Source49 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source50_sha256:%(test -z "%{source50_sha256}" || { f="%{SOURCE50}"; test -f "$f" || { echo "oreon: missing Source50 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source50_sha256}" || { echo "oreon: Source50 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source51_sha256:%(test -z "%{source51_sha256}" || { f="%{SOURCE51}"; test -f "$f" || { echo "oreon: missing Source51 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source51_sha256}" || { echo "oreon: Source51 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source52_sha256:%(test -z "%{source52_sha256}" || { f="%{SOURCE52}"; test -f "$f" || { echo "oreon: missing Source52 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source52_sha256}" || { echo "oreon: Source52 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source53_sha256:%(test -z "%{source53_sha256}" || { f="%{SOURCE53}"; test -f "$f" || { echo "oreon: missing Source53 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source53_sha256}" || { echo "oreon: Source53 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source54_sha256:%(test -z "%{source54_sha256}" || { f="%{SOURCE54}"; test -f "$f" || { echo "oreon: missing Source54 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source54_sha256}" || { echo "oreon: Source54 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source55_sha256:%(test -z "%{source55_sha256}" || { f="%{SOURCE55}"; test -f "$f" || { echo "oreon: missing Source55 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source55_sha256}" || { echo "oreon: Source55 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source56_sha256:%(test -z "%{source56_sha256}" || { f="%{SOURCE56}"; test -f "$f" || { echo "oreon: missing Source56 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source56_sha256}" || { echo "oreon: Source56 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source57_sha256:%(test -z "%{source57_sha256}" || { f="%{SOURCE57}"; test -f "$f" || { echo "oreon: missing Source57 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source57_sha256}" || { echo "oreon: Source57 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source58_sha256:%(test -z "%{source58_sha256}" || { f="%{SOURCE58}"; test -f "$f" || { echo "oreon: missing Source58 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source58_sha256}" || { echo "oreon: Source58 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source59_sha256:%(test -z "%{source59_sha256}" || { f="%{SOURCE59}"; test -f "$f" || { echo "oreon: missing Source59 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source59_sha256}" || { echo "oreon: Source59 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source60_sha256:%(test -z "%{source60_sha256}" || { f="%{SOURCE60}"; test -f "$f" || { echo "oreon: missing Source60 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source60_sha256}" || { echo "oreon: Source60 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source61_sha256:%(test -z "%{source61_sha256}" || { f="%{SOURCE61}"; test -f "$f" || { echo "oreon: missing Source61 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source61_sha256}" || { echo "oreon: Source61 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source62_sha256:%(test -z "%{source62_sha256}" || { f="%{SOURCE62}"; test -f "$f" || { echo "oreon: missing Source62 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source62_sha256}" || { echo "oreon: Source62 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source63_sha256:%(test -z "%{source63_sha256}" || { f="%{SOURCE63}"; test -f "$f" || { echo "oreon: missing Source63 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source63_sha256}" || { echo "oreon: Source63 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source64_sha256:%(test -z "%{source64_sha256}" || { f="%{SOURCE64}"; test -f "$f" || { echo "oreon: missing Source64 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source64_sha256}" || { echo "oreon: Source64 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source65_sha256:%(test -z "%{source65_sha256}" || { f="%{SOURCE65}"; test -f "$f" || { echo "oreon: missing Source65 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source65_sha256}" || { echo "oreon: Source65 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source66_sha256:%(test -z "%{source66_sha256}" || { f="%{SOURCE66}"; test -f "$f" || { echo "oreon: missing Source66 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source66_sha256}" || { echo "oreon: Source66 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source67_sha256:%(test -z "%{source67_sha256}" || { f="%{SOURCE67}"; test -f "$f" || { echo "oreon: missing Source67 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source67_sha256}" || { echo "oreon: Source67 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source68_sha256:%(test -z "%{source68_sha256}" || { f="%{SOURCE68}"; test -f "$f" || { echo "oreon: missing Source68 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source68_sha256}" || { echo "oreon: Source68 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source69_sha256:%(test -z "%{source69_sha256}" || { f="%{SOURCE69}"; test -f "$f" || { echo "oreon: missing Source69 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source69_sha256}" || { echo "oreon: Source69 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source70_sha256:%(test -z "%{source70_sha256}" || { f="%{SOURCE70}"; test -f "$f" || { echo "oreon: missing Source70 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source70_sha256}" || { echo "oreon: Source70 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source71_sha256:%(test -z "%{source71_sha256}" || { f="%{SOURCE71}"; test -f "$f" || { echo "oreon: missing Source71 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source71_sha256}" || { echo "oreon: Source71 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source72_sha256:%(test -z "%{source72_sha256}" || { f="%{SOURCE72}"; test -f "$f" || { echo "oreon: missing Source72 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source72_sha256}" || { echo "oreon: Source72 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source73_sha256:%(test -z "%{source73_sha256}" || { f="%{SOURCE73}"; test -f "$f" || { echo "oreon: missing Source73 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source73_sha256}" || { echo "oreon: Source73 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source74_sha256:%(test -z "%{source74_sha256}" || { f="%{SOURCE74}"; test -f "$f" || { echo "oreon: missing Source74 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source74_sha256}" || { echo "oreon: Source74 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source75_sha256:%(test -z "%{source75_sha256}" || { f="%{SOURCE75}"; test -f "$f" || { echo "oreon: missing Source75 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source75_sha256}" || { echo "oreon: Source75 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source76_sha256:%(test -z "%{source76_sha256}" || { f="%{SOURCE76}"; test -f "$f" || { echo "oreon: missing Source76 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source76_sha256}" || { echo "oreon: Source76 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source77_sha256:%(test -z "%{source77_sha256}" || { f="%{SOURCE77}"; test -f "$f" || { echo "oreon: missing Source77 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source77_sha256}" || { echo "oreon: Source77 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source78_sha256:%(test -z "%{source78_sha256}" || { f="%{SOURCE78}"; test -f "$f" || { echo "oreon: missing Source78 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source78_sha256}" || { echo "oreon: Source78 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source79_sha256:%(test -z "%{source79_sha256}" || { f="%{SOURCE79}"; test -f "$f" || { echo "oreon: missing Source79 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source79_sha256}" || { echo "oreon: Source79 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source80_sha256:%(test -z "%{source80_sha256}" || { f="%{SOURCE80}"; test -f "$f" || { echo "oreon: missing Source80 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source80_sha256}" || { echo "oreon: Source80 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source81_sha256:%(test -z "%{source81_sha256}" || { f="%{SOURCE81}"; test -f "$f" || { echo "oreon: missing Source81 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source81_sha256}" || { echo "oreon: Source81 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source82_sha256:%(test -z "%{source82_sha256}" || { f="%{SOURCE82}"; test -f "$f" || { echo "oreon: missing Source82 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source82_sha256}" || { echo "oreon: Source82 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source83_sha256:%(test -z "%{source83_sha256}" || { f="%{SOURCE83}"; test -f "$f" || { echo "oreon: missing Source83 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source83_sha256}" || { echo "oreon: Source83 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source84_sha256:%(test -z "%{source84_sha256}" || { f="%{SOURCE84}"; test -f "$f" || { echo "oreon: missing Source84 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source84_sha256}" || { echo "oreon: Source84 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source85_sha256:%(test -z "%{source85_sha256}" || { f="%{SOURCE85}"; test -f "$f" || { echo "oreon: missing Source85 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source85_sha256}" || { echo "oreon: Source85 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source86_sha256:%(test -z "%{source86_sha256}" || { f="%{SOURCE86}"; test -f "$f" || { echo "oreon: missing Source86 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source86_sha256}" || { echo "oreon: Source86 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source87_sha256:%(test -z "%{source87_sha256}" || { f="%{SOURCE87}"; test -f "$f" || { echo "oreon: missing Source87 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source87_sha256}" || { echo "oreon: Source87 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source88_sha256:%(test -z "%{source88_sha256}" || { f="%{SOURCE88}"; test -f "$f" || { echo "oreon: missing Source88 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source88_sha256}" || { echo "oreon: Source88 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source89_sha256:%(test -z "%{source89_sha256}" || { f="%{SOURCE89}"; test -f "$f" || { echo "oreon: missing Source89 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source89_sha256}" || { echo "oreon: Source89 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source90_sha256:%(test -z "%{source90_sha256}" || { f="%{SOURCE90}"; test -f "$f" || { echo "oreon: missing Source90 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source90_sha256}" || { echo "oreon: Source90 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source91_sha256:%(test -z "%{source91_sha256}" || { f="%{SOURCE91}"; test -f "$f" || { echo "oreon: missing Source91 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source91_sha256}" || { echo "oreon: Source91 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source92_sha256:%(test -z "%{source92_sha256}" || { f="%{SOURCE92}"; test -f "$f" || { echo "oreon: missing Source92 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source92_sha256}" || { echo "oreon: Source92 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source93_sha256:%(test -z "%{source93_sha256}" || { f="%{SOURCE93}"; test -f "$f" || { echo "oreon: missing Source93 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source93_sha256}" || { echo "oreon: Source93 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source94_sha256:%(test -z "%{source94_sha256}" || { f="%{SOURCE94}"; test -f "$f" || { echo "oreon: missing Source94 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source94_sha256}" || { echo "oreon: Source94 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source95_sha256:%(test -z "%{source95_sha256}" || { f="%{SOURCE95}"; test -f "$f" || { echo "oreon: missing Source95 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source95_sha256}" || { echo "oreon: Source95 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source96_sha256:%(test -z "%{source96_sha256}" || { f="%{SOURCE96}"; test -f "$f" || { echo "oreon: missing Source96 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source96_sha256}" || { echo "oreon: Source96 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source97_sha256:%(test -z "%{source97_sha256}" || { f="%{SOURCE97}"; test -f "$f" || { echo "oreon: missing Source97 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source97_sha256}" || { echo "oreon: Source97 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source98_sha256:%(test -z "%{source98_sha256}" || { f="%{SOURCE98}"; test -f "$f" || { echo "oreon: missing Source98 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source98_sha256}" || { echo "oreon: Source98 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source99_sha256:%(test -z "%{source99_sha256}" || { f="%{SOURCE99}"; test -f "$f" || { echo "oreon: missing Source99 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source99_sha256}" || { echo "oreon: Source99 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source100_sha256:%(test -z "%{source100_sha256}" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_sha256}" || { echo "oreon: Source100 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source101_sha256:%(test -z "%{source101_sha256}" || { f="%{SOURCE101}"; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source101_sha256}" || { echo "oreon: Source101 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source102_sha256:%(test -z "%{source102_sha256}" || { f="%{SOURCE102}"; test -f "$f" || { echo "oreon: missing Source102 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source102_sha256}" || { echo "oreon: Source102 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source103_sha256:%(test -z "%{source103_sha256}" || { f="%{SOURCE103}"; test -f "$f" || { echo "oreon: missing Source103 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source103_sha256}" || { echo "oreon: Source103 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source104_sha256:%(test -z "%{source104_sha256}" || { f="%{SOURCE104}"; test -f "$f" || { echo "oreon: missing Source104 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source104_sha256}" || { echo "oreon: Source104 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source105_sha256:%(test -z "%{source105_sha256}" || { f="%{SOURCE105}"; test -f "$f" || { echo "oreon: missing Source105 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source105_sha256}" || { echo "oreon: Source105 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source106_sha256:%(test -z "%{source106_sha256}" || { f="%{SOURCE106}"; test -f "$f" || { echo "oreon: missing Source106 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source106_sha256}" || { echo "oreon: Source106 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source107_sha256:%(test -z "%{source107_sha256}" || { f="%{SOURCE107}"; test -f "$f" || { echo "oreon: missing Source107 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source107_sha256}" || { echo "oreon: Source107 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source108_sha256:%(test -z "%{source108_sha256}" || { f="%{SOURCE108}"; test -f "$f" || { echo "oreon: missing Source108 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source108_sha256}" || { echo "oreon: Source108 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source109_sha256:%(test -z "%{source109_sha256}" || { f="%{SOURCE109}"; test -f "$f" || { echo "oreon: missing Source109 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source109_sha256}" || { echo "oreon: Source109 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source110_sha256:%(test -z "%{source110_sha256}" || { f="%{SOURCE110}"; test -f "$f" || { echo "oreon: missing Source110 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source110_sha256}" || { echo "oreon: Source110 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source111_sha256:%(test -z "%{source111_sha256}" || { f="%{SOURCE111}"; test -f "$f" || { echo "oreon: missing Source111 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source111_sha256}" || { echo "oreon: Source111 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source112_sha256:%(test -z "%{source112_sha256}" || { f="%{SOURCE112}"; test -f "$f" || { echo "oreon: missing Source112 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source112_sha256}" || { echo "oreon: Source112 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source113_sha256:%(test -z "%{source113_sha256}" || { f="%{SOURCE113}"; test -f "$f" || { echo "oreon: missing Source113 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source113_sha256}" || { echo "oreon: Source113 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source114_sha256:%(test -z "%{source114_sha256}" || { f="%{SOURCE114}"; test -f "$f" || { echo "oreon: missing Source114 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source114_sha256}" || { echo "oreon: Source114 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source115_sha256:%(test -z "%{source115_sha256}" || { f="%{SOURCE115}"; test -f "$f" || { echo "oreon: missing Source115 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source115_sha256}" || { echo "oreon: Source115 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source116_sha256:%(test -z "%{source116_sha256}" || { f="%{SOURCE116}"; test -f "$f" || { echo "oreon: missing Source116 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source116_sha256}" || { echo "oreon: Source116 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source117_sha256:%(test -z "%{source117_sha256}" || { f="%{SOURCE117}"; test -f "$f" || { echo "oreon: missing Source117 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source117_sha256}" || { echo "oreon: Source117 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source118_sha256:%(test -z "%{source118_sha256}" || { f="%{SOURCE118}"; test -f "$f" || { echo "oreon: missing Source118 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source118_sha256}" || { echo "oreon: Source118 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source119_sha256:%(test -z "%{source119_sha256}" || { f="%{SOURCE119}"; test -f "$f" || { echo "oreon: missing Source119 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source119_sha256}" || { echo "oreon: Source119 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source120_sha256:%(test -z "%{source120_sha256}" || { f="%{SOURCE120}"; test -f "$f" || { echo "oreon: missing Source120 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source120_sha256}" || { echo "oreon: Source120 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source121_sha256:%(test -z "%{source121_sha256}" || { f="%{SOURCE121}"; test -f "$f" || { echo "oreon: missing Source121 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source121_sha256}" || { echo "oreon: Source121 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source122_sha256:%(test -z "%{source122_sha256}" || { f="%{SOURCE122}"; test -f "$f" || { echo "oreon: missing Source122 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source122_sha256}" || { echo "oreon: Source122 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source123_sha256:%(test -z "%{source123_sha256}" || { f="%{SOURCE123}"; test -f "$f" || { echo "oreon: missing Source123 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source123_sha256}" || { echo "oreon: Source123 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source124_sha256:%(test -z "%{source124_sha256}" || { f="%{SOURCE124}"; test -f "$f" || { echo "oreon: missing Source124 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source124_sha256}" || { echo "oreon: Source124 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source125_sha256:%(test -z "%{source125_sha256}" || { f="%{SOURCE125}"; test -f "$f" || { echo "oreon: missing Source125 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source125_sha256}" || { echo "oreon: Source125 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source126_sha256:%(test -z "%{source126_sha256}" || { f="%{SOURCE126}"; test -f "$f" || { echo "oreon: missing Source126 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source126_sha256}" || { echo "oreon: Source126 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source127_sha256:%(test -z "%{source127_sha256}" || { f="%{SOURCE127}"; test -f "$f" || { echo "oreon: missing Source127 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source127_sha256}" || { echo "oreon: Source127 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source128_sha256:%(test -z "%{source128_sha256}" || { f="%{SOURCE128}"; test -f "$f" || { echo "oreon: missing Source128 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source128_sha256}" || { echo "oreon: Source128 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source129_sha256:%(test -z "%{source129_sha256}" || { f="%{SOURCE129}"; test -f "$f" || { echo "oreon: missing Source129 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source129_sha256}" || { echo "oreon: Source129 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source130_sha256:%(test -z "%{source130_sha256}" || { f="%{SOURCE130}"; test -f "$f" || { echo "oreon: missing Source130 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source130_sha256}" || { echo "oreon: Source130 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source131_sha256:%(test -z "%{source131_sha256}" || { f="%{SOURCE131}"; test -f "$f" || { echo "oreon: missing Source131 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source131_sha256}" || { echo "oreon: Source131 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source132_sha256:%(test -z "%{source132_sha256}" || { f="%{SOURCE132}"; test -f "$f" || { echo "oreon: missing Source132 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source132_sha256}" || { echo "oreon: Source132 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source133_sha256:%(test -z "%{source133_sha256}" || { f="%{SOURCE133}"; test -f "$f" || { echo "oreon: missing Source133 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source133_sha256}" || { echo "oreon: Source133 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source134_sha256:%(test -z "%{source134_sha256}" || { f="%{SOURCE134}"; test -f "$f" || { echo "oreon: missing Source134 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source134_sha256}" || { echo "oreon: Source134 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source135_sha256:%(test -z "%{source135_sha256}" || { f="%{SOURCE135}"; test -f "$f" || { echo "oreon: missing Source135 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source135_sha256}" || { echo "oreon: Source135 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source136_sha256:%(test -z "%{source136_sha256}" || { f="%{SOURCE136}"; test -f "$f" || { echo "oreon: missing Source136 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source136_sha256}" || { echo "oreon: Source136 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global __brp_mangle_shebangs_exclude_from ^%{_texmf_main}/doc/.*$
 %global __requires_exclude_from ^%{_texmf_main}/doc/.*$
 %global tl_version 2025
@@ -152,280 +430,6 @@ Source133:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/x
 Source134:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xltxtra.doc.tar.xz
 Source135:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xunicode.tar.xz
 Source136:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/xunicode.doc.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 51c4498ff42534cd4fc3b34e948598a382bb601afb28c85cacba8007d2d50740
-%global source0_file collection-latexrecommended.tar.xz
-%global source2_sha256 64dba6c2eb17dd92d445d2909cf026fdd3f9b1ce829115288556f5208e80179f
-%global source2_file anysize.tar.xz
-%global source3_sha256 1df2798ac76ea263f85fcf931246a613b4e99ea68011d393fb584a5d64086929
-%global source3_file anysize.doc.tar.xz
-%global source4_sha256 111ba50e6c4f33edc325dd7f744a9809368275b4b843076bd28030fb17e5a6b6
-%global source4_file beamer.tar.xz
-%global source5_sha256 9bcdb3564961bf7aa75d30c3c5eaf5c7b14cc09e0cff283936b3e6dcad34cba4
-%global source5_file beamer.doc.tar.xz
-%global source6_sha256 a5a9ed5c865f6aad4cd197f189f796f87b272bf9e0ebd2851debca2eef5fb613
-%global source6_file booktabs.tar.xz
-%global source7_sha256 fe9a26bb83c3d9e14a767192bc8fafe0f05b5841a9e959d4499f0ab8688a3612
-%global source7_file booktabs.doc.tar.xz
-%global source8_sha256 fdbfd54f21ca74e2cd888b9bce1562cb61d300dedb693904c5c897e9759657d5
-%global source8_file breqn.tar.xz
-%global source9_sha256 bbcf49e940e43ed8c93fcce35954b76effffe8edc22a5fb68a1fcfb8ad3b57d4
-%global source9_file breqn.doc.tar.xz
-%global source10_sha256 1725381d488e0a542c1878a805e1a9f341a9cb6e2703ef626d7f5d2e012ae076
-%global source10_file caption.tar.xz
-%global source11_sha256 26c0c3fc623fa017b0d1fa6538fd2049dd64e0de866f9d797859698f2592d665
-%global source11_file caption.doc.tar.xz
-%global source12_sha256 75cbdc62a5db4489fc16a83cbfcfa12c5bfd055674eb7a3037e0f5b7f4af49a9
-%global source12_file cite.tar.xz
-%global source13_sha256 94dc8009049e1819e9d06053b1502d8617e46bba4a440dfb9945934170c4cc4d
-%global source13_file cite.doc.tar.xz
-%global source14_sha256 cd6661b64d1859851b451b0d2461da77a8b3839056ba6210d4b1a35da4209edb
-%global source14_file cmap.tar.xz
-%global source15_sha256 8e087fa81bd22570f549b6f6e8c45b31f1559c8a273607d3e1561079228a6e1e
-%global source15_file cmap.doc.tar.xz
-%global source16_sha256 8fc6c328fafe42d50cda044f22efb0d4b505bec7cf4c27169170fb3b389b1452
-%global source16_file crop.tar.xz
-%global source17_sha256 c2df3c1c7d108b7b79b2abe86bc6ee9b712e0592229cc307c18c93e9cb0fd8a1
-%global source17_file crop.doc.tar.xz
-%global source18_sha256 fdb6b5ed86dbfde569099e238a37746de99552fdf549de7aab9e12bca2099209
-%global source18_file ctable.tar.xz
-%global source19_sha256 0a11029ce6b683c815ff9ac1f35d04e42f19bd464c4b4dd35db1fac1446f608c
-%global source19_file ctable.doc.tar.xz
-%global source20_sha256 3c39706d791dd3943637e499d9c32b1e0e4920f49220af42141b7bb7ff0e7c42
-%global source20_file eso-pic.tar.xz
-%global source21_sha256 dd2a294b918ff018ae6a92c5143568c06fc4bb62ba28b775e42e070ab52c1519
-%global source21_file eso-pic.doc.tar.xz
-%global source22_sha256 a9083d0184dea873338881fbcccb29cd7e9b2bb3ad7befea563a8acf7eae5c66
-%global source22_file euenc.tar.xz
-%global source23_sha256 4fdab26ecbfaee3bc14d8fba1412d09a44e2b80a3d275a8cc248d03019128a4f
-%global source23_file euenc.doc.tar.xz
-%global source24_sha256 a71f2492d6c4582ed2f61d4e2f092d7db2befd9a64906825343476ddb7c7b3b9
-%global source24_file euler.tar.xz
-%global source25_sha256 5820b77657ac718748761facb58faea853acf821ea4adebc34e05bd13be8ce55
-%global source25_file euler.doc.tar.xz
-%global source26_sha256 35c04613080faab79bf9776d60f0e996ff7de6e70c9ec588d6df8c0013534297
-%global source26_file everysel.tar.xz
-%global source27_sha256 39a621ecf0f4c703f8e83fbce9d83c37a39f347a9f86bc4fdea6acdf9f866a02
-%global source27_file everysel.doc.tar.xz
-%global source28_sha256 3c9b382d0f1bd277218d5744c743d79d07e9c82f1b151127b0a2dfec0a8d205e
-%global source28_file everyshi.tar.xz
-%global source29_sha256 1370217321152378ff85c12422245c9daf8714d5789ac7560473b80d2e0480c0
-%global source29_file everyshi.doc.tar.xz
-%global source30_sha256 36cc90e00c8c44028da8bbd03fac3b5dac3ddb47e03af8031a7c4d939896cdda
-%global source30_file extsizes.tar.xz
-%global source31_sha256 a872149c40a355fdd777ce2bdf1833b9fcf57e68fadc1836f329290ef1fc63bf
-%global source31_file extsizes.doc.tar.xz
-%global source32_sha256 663954cd8269ebdeffaa867a1e709caa43860f6856befc60865ab4475a9c201e
-%global source32_file fancybox.tar.xz
-%global source33_sha256 364bc03d192680f051234bbf6d30e29de77943cd85ebd7a78f76eaf004df220d
-%global source33_file fancybox.doc.tar.xz
-%global source34_sha256 6cd43aedc1c85a4c897056d73967471ee6b93d23c3ffdcded4ab3ef226bda31d
-%global source34_file fancyref.tar.xz
-%global source35_sha256 87c8fae57379a572a185d88715819c9a6e3ab7beb46f4ce37dfca39d1e7b3837
-%global source35_file fancyref.doc.tar.xz
-%global source36_sha256 7165cfa315248faa25225fec9be2b26af22cae455e3d7a19ef17a716d5583226
-%global source36_file fancyvrb.tar.xz
-%global source37_sha256 cca3d50f3e2a5a97f591bcb20160a8dc841fddb999846674211c7b623b72ccde
-%global source37_file fancyvrb.doc.tar.xz
-%global source38_sha256 7c8d8798cc7eb5c1515db86592187f14a4d5406dffdbb819de77cfed446e63bb
-%global source38_file filehook.tar.xz
-%global source39_sha256 a37da6a65a235c6e1d7b9ded26a69e209373c76f32829e7a2b9e4ab70767bd8d
-%global source39_file filehook.doc.tar.xz
-%global source40_sha256 17263af26dea83a9e4f35518a0c7c933a8fca7dce3ad555be3652a03dbf660cd
-%global source40_file float.tar.xz
-%global source41_sha256 6cf5a4704cd79d1f7a42aa80fc97688e71b2d800d46bca2af2cec126fb6db95c
-%global source41_file float.doc.tar.xz
-%global source42_sha256 d1c3061a1ee035841e87350d099016c913cd912cf445d61a766b2e0a625118d4
-%global source42_file fontspec.tar.xz
-%global source43_sha256 87a6eb7b4a33022f06117c360e084a402abb4e1c90a4d38d903dc40b74097675
-%global source43_file fontspec.doc.tar.xz
-%global source44_sha256 19020ccd8e38361231b1b38d59f112d6cc276b68d169b698d03cbbea21de0bcb
-%global source44_file footnotehyper.tar.xz
-%global source45_sha256 8a92e75e9b2411221bce70d66ed866d9f74bc9d62f0f32aa8974d632127a3a4d
-%global source45_file footnotehyper.doc.tar.xz
-%global source46_sha256 caa167593809c64e9479ef38f4dbf530b8200e167a3bc998a88196c9fb2abd38
-%global source46_file fp.tar.xz
-%global source47_sha256 b86a19bfe7ee8d88590dab15bd52dd26ed2971fbdac10110b16f3842bd96a936
-%global source47_file fp.doc.tar.xz
-%global source48_sha256 3d69eec467657f71c9c3eb76e41f3387a70c6972b19e4ee29f9e8d31a168662d
-%global source48_file grffile.tar.xz
-%global source49_sha256 dfb54b750a6687dc149c9645ce28293875fbf4dbdfbaa287f2532597dfe8fca0
-%global source49_file grffile.doc.tar.xz
-%global source50_sha256 6c17813dc85a9e5f4db12f9b020035d347c298710f6f9fc46cde2c39e0d5d4e0
-%global source50_file hologo.tar.xz
-%global source51_sha256 33a8e7454f93ece86bf28ddf8033efac116a5be167c56f8ca7543020e7428789
-%global source51_file hologo.doc.tar.xz
-%global source52_sha256 96e49a5ccd06f077ada65213e766b6b90667b765d10fd626859cb5be70d97f88
-%global source52_file index.tar.xz
-%global source53_sha256 faf2c3813542e55458a268d34ec197e380789fc7ac3fef140d83458104d22d09
-%global source53_file index.doc.tar.xz
-%global source54_sha256 55cd43104a80c66c5872d5237a701462e877243058efc29461a389919c3e4fad
-%global source54_file infwarerr.tar.xz
-%global source55_sha256 b3ebd6ef0756df0865fe5534edd5937d302d3ceb48941c65b17cff62162ee074
-%global source55_file infwarerr.doc.tar.xz
-%global source56_sha256 31ea5fc9b07272552899b0c753751961bf51327cf2109d1bae2ce53ccc60e638
-%global source56_file jknapltx.tar.xz
-%global source57_sha256 b035942ce2c219ffb2cb045cdf96abfd031e9f90ac8ca2d9bf8f3352f8807274
-%global source57_file jknapltx.doc.tar.xz
-%global source58_sha256 047ba93b4895f64ea830d3bf7d6557dc5dae7085b3b763486736e277168005fb
-%global source58_file koma-script.tar.xz
-%global source59_sha256 99c54a7d1cc578a96d972b2ab8515df756d3ec2f5964ac7e5c441dc0344b695b
-%global source59_file l3experimental.tar.xz
-%global source60_sha256 882d19863421fd824b5a243b7f87278ae8c063deaf2611da9860beb5d049165c
-%global source60_file l3experimental.doc.tar.xz
-%global source61_sha256 a1bd68209209a1ff9ab0f64ee50f0620ce238a44ad0125ae4eb3f67e1b0b99ee
-%global source61_file latexbug.tar.xz
-%global source62_sha256 e8406f4e922b84dd70aa96f87daed67ec071c731826771cc3d2c2ee617ab9ed3
-%global source62_file latexbug.doc.tar.xz
-%global source63_sha256 8d97d5308d0edb3c20156ea5164a8ec8a6c7c69cd7d781891c3faa17adba94a5
-%global source63_file lineno.tar.xz
-%global source64_sha256 600bc5a78806323790b9176e1c744010ba6875b13d0ed32d475d6c8e105a71f3
-%global source64_file lineno.doc.tar.xz
-%global source65_sha256 ba1a9cdb71d04dfbacf5ce3db3769d84849956595ab092e5cfd23082787b57c2
-%global source65_file listings.tar.xz
-%global source66_sha256 0307812df3db18ad553e42fdfea6a871a5b2ea80a18fa6c4ccf3d50a783f5e45
-%global source66_file listings.doc.tar.xz
-%global source67_sha256 c16f5cea1ba46e27b6276dd3314a83e10056808090387280b02860e54c541a8b
-%global source67_file ltx-talk.tar.xz
-%global source68_sha256 19f5da8484d547d83b38a234d10c040f639a5a21f1b3d27111db23eed4e98cb4
-%global source68_file ltx-talk.doc.tar.xz
-%global source69_sha256 f7059401b3312e2b0c56f9dff486632f7db35e5660348109cfb2fdbdf75ffce4
-%global source69_file lua-unicode-math.tar.xz
-%global source70_sha256 46e12e6903841f24b6a51bdfa1a00f42364379e1bb9438f8f33c4689060aa4a8
-%global source70_file lua-unicode-math.doc.tar.xz
-%global source71_sha256 ef7a80f1b7b55c661ccdde02c6a347d01e4a930b181581ef4a8b03998e13b510
-%global source71_file mathspec.tar.xz
-%global source72_sha256 d8171c5901f126ac636abb2327e100224d5b043be9bcd6e19fce0ff73e75c71a
-%global source72_file mathspec.doc.tar.xz
-%global source73_sha256 36f506864454e08e255a69c24811f9a5f7567198d4371a5ddd54c33e6b881a85
-%global source73_file mathtools.tar.xz
-%global source74_sha256 feb7eb2fde739bc75264e78838b982a6c584cd50f91828aa378589bf408b654f
-%global source74_file mathtools.doc.tar.xz
-%global source75_sha256 7ec924de85dae1e7c61791268863ff0137825e1c74805d6faee2e06f92a0cab5
-%global source75_file mdwtools.tar.xz
-%global source76_sha256 7192690ba5896c767da0e5dc8a7c27f94b4e4abb6308d347a7a89376fd0c8522
-%global source76_file mdwtools.doc.tar.xz
-%global source77_sha256 96446e06d32fcc209332dcaa7932d6c845981270c0f7342749f9c9102a9872f0
-%global source77_file memoir.tar.xz
-%global source78_sha256 5757513ce7da967b2b15a4ff42ee0c1a922c893bb3b2a246a73279c21f4a7c17
-%global source78_file memoir.doc.tar.xz
-%global source79_sha256 e4302864ab92570780ef1bd2b72f3adc74d6800074fb0183ce1d020d0094b6b0
-%global source79_file metalogo.tar.xz
-%global source80_sha256 6757c7070ff42da16e40d22374f361d52af51b37e61b75f672fdbea11bb6b894
-%global source80_file metalogo.doc.tar.xz
-%global source81_sha256 19611cfc7ae6e929aaf1f3945da1a14be774d9d138f48e40257886874e1e8885
-%global source81_file microtype.tar.xz
-%global source82_sha256 62eded685fdb1fd180232701a167b66aece88b2cc88b1e31a4671b6326578feb
-%global source82_file microtype.doc.tar.xz
-%global source83_sha256 669a53bd6cd801ddc8920327c414069563eb28a77dd1a96de9fe2c364c29e66f
-%global source83_file newfloat.tar.xz
-%global source84_sha256 7d82463f3d2e878a63670c7f51d13cc8a718b60c87797db8dddd71077ea9f1d4
-%global source84_file newfloat.doc.tar.xz
-%global source85_sha256 d0091902c12b8441fc5fcd9b6c8cd6a1d28d88db67c2838013b7bb46853f6322
-%global source85_file ntgclass.tar.xz
-%global source86_sha256 6756b856ca9242eded3fd7f5b64cbf3dc4cbedf90b6afe88a464e7c87851ef92
-%global source86_file ntgclass.doc.tar.xz
-%global source87_sha256 4dfce424501202b2ce95bd254dfccebb5dd78bb3924155996c670945a090c725
-%global source87_file parskip.tar.xz
-%global source88_sha256 5fd9bd44ccf073ec1fd532fae617b7490f3693369b85cd4d5154722d210d863d
-%global source88_file parskip.doc.tar.xz
-%global source89_sha256 1307078cd7b011bf956f15a231020fd55a7f51fc66ad175aad8c26969c247db4
-%global source89_file pdfcolfoot.tar.xz
-%global source90_sha256 badde08bc989e5a8b3fbafa57b3849415b10b2450ece66ef5066e6fb40af79d3
-%global source90_file pdfcolfoot.doc.tar.xz
-%global source91_sha256 9a828729a9421dc0a2df0205bec631e8b38ef0ea077437e7b1a5860c6dc5e09d
-%global source91_file pdflscape.tar.xz
-%global source92_sha256 d2f9f870cd7b1d557fddaf1f5db21088ed7f1bc033098505eec14a3a600b4e6a
-%global source92_file pdflscape.doc.tar.xz
-%global source93_sha256 8a22406374e8ed2e971efc4b2d8526212af46237cef4c827eb7776a7a43bbc44
-%global source93_file pdfpages.tar.xz
-%global source94_sha256 db323b35ce5b93f4bc385ce385b58a7253ca493b5c725727438f0ad542cce820
-%global source94_file pdfpages.doc.tar.xz
-%global source95_sha256 a1990f0939669ed0e18b3fc7b3483b19b96adffce26445afdcdb8af69a7c8578
-%global source95_file polyglossia.tar.xz
-%global source96_sha256 0883182234b9f634508e3f6b54be048ae3d5676f245d9fac993dcd89930dcc06
-%global source96_file polyglossia.doc.tar.xz
-%global source97_sha256 1f75c7b2da2638abab284c26e1864aff74b26e3ae65fbbd569329feb2560d3fe
-%global source97_file psfrag.tar.xz
-%global source98_sha256 d19f61a4e07b46d4365c410a6eb9259e5343eb91c69432530e8650c98e227f6d
-%global source98_file psfrag.doc.tar.xz
-%global source99_sha256 6f47b1169920a39c1656308679d1debf4cdec77121aad5048d459f303633e476
-%global source99_file ragged2e.tar.xz
-%global source100_sha256 fd6816299629cdc304a80b67ab44e6f70542df581e9635268b023672ca6fc70e
-%global source100_file ragged2e.doc.tar.xz
-%global source101_sha256 1971c0f157538299f1abae3473f0f25ad4530303ff16da9b4d2145db30a68fbb
-%global source101_file rcs.tar.xz
-%global source102_sha256 c705afd2a23d0d16930fa8eac6d4e82af0aae9fefc0e82685d9e0587e2a585ac
-%global source102_file rcs.doc.tar.xz
-%global source103_sha256 961c88e153829db7c7e71f103d3a7bf6ffa14c4ae6acb5429fad8bd25e0cac23
-%global source103_file sansmath.tar.xz
-%global source104_sha256 18c15fc3f8242770bba58d1c5d1d48f1af13345fe25c8e90616c899c6e22456a
-%global source104_file sansmath.doc.tar.xz
-%global source105_sha256 7510c98ce653d07e6723207aebfdb7e68c737901cca292af8f7964f058f309bf
-%global source105_file section.tar.xz
-%global source106_sha256 34677ce4575cfd78b33676bf3a73d3f23521e7a62eaffc3ad23a5482850b3c62
-%global source106_file section.doc.tar.xz
-%global source107_sha256 141736ccf595e39fac37e68c4fd269fcaec561bcf8ab647478335e9592b59c41
-%global source107_file seminar.tar.xz
-%global source108_sha256 96987b3bc5813147d5ea00804446ef5a09872505d19d8a0cd427744b85911a9f
-%global source108_file seminar.doc.tar.xz
-%global source109_sha256 1d0056a39ac24f7f529ed3e09f87e2a9e049f10db50d859f85356a2d2774729c
-%global source109_file sepnum.tar.xz
-%global source110_sha256 411750d5505901f257c43d5ef0e4f987be1e0d4a370717ace4aff1f46c148d03
-%global source110_file sepnum.doc.tar.xz
-%global source111_sha256 92f124451fb6de7d0a0cd535cebffdcbd646c5f02699e0e717dba60496378046
-%global source111_file setspace.tar.xz
-%global source112_sha256 00e6beb695db032f0d1ecd663015c9885b22b0f3e040d4b36a2dcc4f099f8b39
-%global source112_file setspace.doc.tar.xz
-%global source113_sha256 69da765d8abff4614d03ba335180185c9732bc56ba417fb642de92e6fdf4a2df
-%global source113_file subfig.tar.xz
-%global source114_sha256 f9fab873b6809ede6e24671a7f780369a2d65dc81a3ff5b4b12fb100528674b8
-%global source114_file subfig.doc.tar.xz
-%global source115_sha256 c36d4fea9dc6deaebb7a477b17b0304f0d9dec2491268f9b0ae9c96286ef6d08
-%global source115_file textcase.tar.xz
-%global source116_sha256 42be677d9db436b9421b4f5cd385069a79959dd7732fea12b04705d8c3ba96db
-%global source116_file textcase.doc.tar.xz
-%global source117_sha256 012cbe2665ec07486d83ed68c830f3ad7215023370b0f6903ef092622cabbf50
-%global source117_file translator.tar.xz
-%global source118_sha256 823a14823f09f75e0f354cd27585a1a236b8c35375419395e6ee27ebbf9e1154
-%global source118_file translator.doc.tar.xz
-%global source119_sha256 3c946908886ea81680f0e183973f3cc501bed22b4d5220b77c09dd629f8ec557
-%global source119_file typehtml.tar.xz
-%global source120_sha256 b2ace8b1305f95009fa10c0488c19646742c932a070e8fa64946aff7af9625d4
-%global source120_file typehtml.doc.tar.xz
-%global source121_sha256 962aa0ae08a6118f5f1f3e3e222d834a5023272340b84f808bf44eecf752919f
-%global source121_file ucharcat.tar.xz
-%global source122_sha256 4f61f063a511ed99c8a05e7dec1c0e2d2c353c7ce2cf2bf3aba4fbf2ad88b924
-%global source122_file ucharcat.doc.tar.xz
-%global source123_sha256 e70a700a6e4b8517c7db16773cfcce1cbbe8e93b631fdc70d1ccdb6eb791aa06
-%global source123_file underscore.tar.xz
-%global source124_sha256 e9bcd6d26b884fe82fbff554f449cc7a4ca6c94de9f90494a7e2b0bfb1d7b8b4
-%global source124_file underscore.doc.tar.xz
-%global source125_sha256 b942cda7caec4a597f839890af02553aaad319a873579a41e19344a95747633d
-%global source125_file unicode-math.tar.xz
-%global source126_sha256 3448444ecc07295092e2803b9f5d19127bed74bf90d6dd83a59f372f76afde45
-%global source126_file unicode-math.doc.tar.xz
-%global source127_sha256 081d28d119901fca408b82a4c12862ed829e45f14a8678034ef02f8ecfd5da54
-%global source127_file xcolor.tar.xz
-%global source128_sha256 0968bcd9227b228058fdc14595a1adad4eb645e20aacda9096e9a5e9f730e6f0
-%global source128_file xcolor.doc.tar.xz
-%global source129_sha256 a663f461d834bcccd7ad525e8cfdf14b3c175e3ecfa3fe7d12839f7c054b688b
-%global source129_file xfrac.tar.xz
-%global source130_sha256 40c658705d672dbe93cdcd036ee88644c24e618baae54c66375ab440d7af3022
-%global source130_file xfrac.doc.tar.xz
-%global source131_sha256 b9ff864c4f6e029b20c4f15f26a378bc9c089016225d4e19949af939259e0161
-%global source131_file xkeyval.tar.xz
-%global source132_sha256 8539784e5f0d375bb0556a971e46147780064c3c57b321ab5b8431120b308d90
-%global source132_file xkeyval.doc.tar.xz
-%global source133_sha256 9a42c28340a004d9cc35b0ca94eb21f09491617a7b4d308760d76d4ede6a99e8
-%global source133_file xltxtra.tar.xz
-%global source134_sha256 0bcafa21a36c28b43cd9e4bdf147dbecdf5172c24bfd2b20c0c0ec2979d05c82
-%global source134_file xltxtra.doc.tar.xz
-%global source135_sha256 e0ab404031563884e3769dda49113ddb363c01172b0008a2efdbc0560420b4db
-%global source135_file xunicode.tar.xz
-%global source136_sha256 e15130c1ace91a2a4ff39a0881b32f97b8f730e452eaa739ea855c6078436c58
-%global source136_file xunicode.doc.tar.xz
-# oreon url source checksums end
 BuildRequires:  texlive-base
 Requires:       texlive-base
 Requires:       texlive-anysize
@@ -1815,144 +1819,7 @@ character for output. The package also covers glyphs specified by packages
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/collection-latexrecommended.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "51c4498ff42534cd4fc3b34e948598a382bb601afb28c85cacba8007d2d50740" || { echo "oreon: Source0 SHA256 mismatch for collection-latexrecommended.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/anysize.tar.xz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "64dba6c2eb17dd92d445d2909cf026fdd3f9b1ce829115288556f5208e80179f" || { echo "oreon: Source2 SHA256 mismatch for anysize.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/anysize.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1df2798ac76ea263f85fcf931246a613b4e99ea68011d393fb584a5d64086929" || { echo "oreon: Source3 SHA256 mismatch for anysize.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/beamer.tar.xz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "111ba50e6c4f33edc325dd7f744a9809368275b4b843076bd28030fb17e5a6b6" || { echo "oreon: Source4 SHA256 mismatch for beamer.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/beamer.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9bcdb3564961bf7aa75d30c3c5eaf5c7b14cc09e0cff283936b3e6dcad34cba4" || { echo "oreon: Source5 SHA256 mismatch for beamer.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/booktabs.tar.xz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a5a9ed5c865f6aad4cd197f189f796f87b272bf9e0ebd2851debca2eef5fb613" || { echo "oreon: Source6 SHA256 mismatch for booktabs.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/booktabs.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fe9a26bb83c3d9e14a767192bc8fafe0f05b5841a9e959d4499f0ab8688a3612" || { echo "oreon: Source7 SHA256 mismatch for booktabs.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/breqn.tar.xz; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fdbfd54f21ca74e2cd888b9bce1562cb61d300dedb693904c5c897e9759657d5" || { echo "oreon: Source8 SHA256 mismatch for breqn.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/breqn.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bbcf49e940e43ed8c93fcce35954b76effffe8edc22a5fb68a1fcfb8ad3b57d4" || { echo "oreon: Source9 SHA256 mismatch for breqn.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/caption.tar.xz; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1725381d488e0a542c1878a805e1a9f341a9cb6e2703ef626d7f5d2e012ae076" || { echo "oreon: Source10 SHA256 mismatch for caption.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/caption.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "26c0c3fc623fa017b0d1fa6538fd2049dd64e0de866f9d797859698f2592d665" || { echo "oreon: Source11 SHA256 mismatch for caption.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/cite.tar.xz; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "75cbdc62a5db4489fc16a83cbfcfa12c5bfd055674eb7a3037e0f5b7f4af49a9" || { echo "oreon: Source12 SHA256 mismatch for cite.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/cite.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "94dc8009049e1819e9d06053b1502d8617e46bba4a440dfb9945934170c4cc4d" || { echo "oreon: Source13 SHA256 mismatch for cite.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/cmap.tar.xz; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cd6661b64d1859851b451b0d2461da77a8b3839056ba6210d4b1a35da4209edb" || { echo "oreon: Source14 SHA256 mismatch for cmap.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/cmap.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source15 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8e087fa81bd22570f549b6f6e8c45b31f1559c8a273607d3e1561079228a6e1e" || { echo "oreon: Source15 SHA256 mismatch for cmap.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/crop.tar.xz; test -f "$f" || { echo "oreon: missing Source16 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8fc6c328fafe42d50cda044f22efb0d4b505bec7cf4c27169170fb3b389b1452" || { echo "oreon: Source16 SHA256 mismatch for crop.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/crop.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source17 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c2df3c1c7d108b7b79b2abe86bc6ee9b712e0592229cc307c18c93e9cb0fd8a1" || { echo "oreon: Source17 SHA256 mismatch for crop.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ctable.tar.xz; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fdb6b5ed86dbfde569099e238a37746de99552fdf549de7aab9e12bca2099209" || { echo "oreon: Source18 SHA256 mismatch for ctable.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ctable.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source19 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0a11029ce6b683c815ff9ac1f35d04e42f19bd464c4b4dd35db1fac1446f608c" || { echo "oreon: Source19 SHA256 mismatch for ctable.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/eso-pic.tar.xz; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3c39706d791dd3943637e499d9c32b1e0e4920f49220af42141b7bb7ff0e7c42" || { echo "oreon: Source20 SHA256 mismatch for eso-pic.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/eso-pic.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source21 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dd2a294b918ff018ae6a92c5143568c06fc4bb62ba28b775e42e070ab52c1519" || { echo "oreon: Source21 SHA256 mismatch for eso-pic.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/euenc.tar.xz; test -f "$f" || { echo "oreon: missing Source22 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a9083d0184dea873338881fbcccb29cd7e9b2bb3ad7befea563a8acf7eae5c66" || { echo "oreon: Source22 SHA256 mismatch for euenc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/euenc.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source23 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4fdab26ecbfaee3bc14d8fba1412d09a44e2b80a3d275a8cc248d03019128a4f" || { echo "oreon: Source23 SHA256 mismatch for euenc.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/euler.tar.xz; test -f "$f" || { echo "oreon: missing Source24 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a71f2492d6c4582ed2f61d4e2f092d7db2befd9a64906825343476ddb7c7b3b9" || { echo "oreon: Source24 SHA256 mismatch for euler.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/euler.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source25 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5820b77657ac718748761facb58faea853acf821ea4adebc34e05bd13be8ce55" || { echo "oreon: Source25 SHA256 mismatch for euler.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/everysel.tar.xz; test -f "$f" || { echo "oreon: missing Source26 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "35c04613080faab79bf9776d60f0e996ff7de6e70c9ec588d6df8c0013534297" || { echo "oreon: Source26 SHA256 mismatch for everysel.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/everysel.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source27 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "39a621ecf0f4c703f8e83fbce9d83c37a39f347a9f86bc4fdea6acdf9f866a02" || { echo "oreon: Source27 SHA256 mismatch for everysel.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/everyshi.tar.xz; test -f "$f" || { echo "oreon: missing Source28 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3c9b382d0f1bd277218d5744c743d79d07e9c82f1b151127b0a2dfec0a8d205e" || { echo "oreon: Source28 SHA256 mismatch for everyshi.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/everyshi.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source29 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1370217321152378ff85c12422245c9daf8714d5789ac7560473b80d2e0480c0" || { echo "oreon: Source29 SHA256 mismatch for everyshi.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/extsizes.tar.xz; test -f "$f" || { echo "oreon: missing Source30 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "36cc90e00c8c44028da8bbd03fac3b5dac3ddb47e03af8031a7c4d939896cdda" || { echo "oreon: Source30 SHA256 mismatch for extsizes.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/extsizes.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source31 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a872149c40a355fdd777ce2bdf1833b9fcf57e68fadc1836f329290ef1fc63bf" || { echo "oreon: Source31 SHA256 mismatch for extsizes.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/fancybox.tar.xz; test -f "$f" || { echo "oreon: missing Source32 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "663954cd8269ebdeffaa867a1e709caa43860f6856befc60865ab4475a9c201e" || { echo "oreon: Source32 SHA256 mismatch for fancybox.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/fancybox.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source33 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "364bc03d192680f051234bbf6d30e29de77943cd85ebd7a78f76eaf004df220d" || { echo "oreon: Source33 SHA256 mismatch for fancybox.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/fancyref.tar.xz; test -f "$f" || { echo "oreon: missing Source34 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6cd43aedc1c85a4c897056d73967471ee6b93d23c3ffdcded4ab3ef226bda31d" || { echo "oreon: Source34 SHA256 mismatch for fancyref.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/fancyref.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source35 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "87c8fae57379a572a185d88715819c9a6e3ab7beb46f4ce37dfca39d1e7b3837" || { echo "oreon: Source35 SHA256 mismatch for fancyref.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/fancyvrb.tar.xz; test -f "$f" || { echo "oreon: missing Source36 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7165cfa315248faa25225fec9be2b26af22cae455e3d7a19ef17a716d5583226" || { echo "oreon: Source36 SHA256 mismatch for fancyvrb.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/fancyvrb.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source37 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cca3d50f3e2a5a97f591bcb20160a8dc841fddb999846674211c7b623b72ccde" || { echo "oreon: Source37 SHA256 mismatch for fancyvrb.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/filehook.tar.xz; test -f "$f" || { echo "oreon: missing Source38 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7c8d8798cc7eb5c1515db86592187f14a4d5406dffdbb819de77cfed446e63bb" || { echo "oreon: Source38 SHA256 mismatch for filehook.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/filehook.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source39 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a37da6a65a235c6e1d7b9ded26a69e209373c76f32829e7a2b9e4ab70767bd8d" || { echo "oreon: Source39 SHA256 mismatch for filehook.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/float.tar.xz; test -f "$f" || { echo "oreon: missing Source40 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "17263af26dea83a9e4f35518a0c7c933a8fca7dce3ad555be3652a03dbf660cd" || { echo "oreon: Source40 SHA256 mismatch for float.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/float.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source41 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6cf5a4704cd79d1f7a42aa80fc97688e71b2d800d46bca2af2cec126fb6db95c" || { echo "oreon: Source41 SHA256 mismatch for float.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/fontspec.tar.xz; test -f "$f" || { echo "oreon: missing Source42 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d1c3061a1ee035841e87350d099016c913cd912cf445d61a766b2e0a625118d4" || { echo "oreon: Source42 SHA256 mismatch for fontspec.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/fontspec.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source43 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "87a6eb7b4a33022f06117c360e084a402abb4e1c90a4d38d903dc40b74097675" || { echo "oreon: Source43 SHA256 mismatch for fontspec.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/footnotehyper.tar.xz; test -f "$f" || { echo "oreon: missing Source44 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "19020ccd8e38361231b1b38d59f112d6cc276b68d169b698d03cbbea21de0bcb" || { echo "oreon: Source44 SHA256 mismatch for footnotehyper.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/footnotehyper.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source45 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8a92e75e9b2411221bce70d66ed866d9f74bc9d62f0f32aa8974d632127a3a4d" || { echo "oreon: Source45 SHA256 mismatch for footnotehyper.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/fp.tar.xz; test -f "$f" || { echo "oreon: missing Source46 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "caa167593809c64e9479ef38f4dbf530b8200e167a3bc998a88196c9fb2abd38" || { echo "oreon: Source46 SHA256 mismatch for fp.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/fp.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source47 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b86a19bfe7ee8d88590dab15bd52dd26ed2971fbdac10110b16f3842bd96a936" || { echo "oreon: Source47 SHA256 mismatch for fp.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/grffile.tar.xz; test -f "$f" || { echo "oreon: missing Source48 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3d69eec467657f71c9c3eb76e41f3387a70c6972b19e4ee29f9e8d31a168662d" || { echo "oreon: Source48 SHA256 mismatch for grffile.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/grffile.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source49 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dfb54b750a6687dc149c9645ce28293875fbf4dbdfbaa287f2532597dfe8fca0" || { echo "oreon: Source49 SHA256 mismatch for grffile.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/hologo.tar.xz; test -f "$f" || { echo "oreon: missing Source50 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6c17813dc85a9e5f4db12f9b020035d347c298710f6f9fc46cde2c39e0d5d4e0" || { echo "oreon: Source50 SHA256 mismatch for hologo.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/hologo.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source51 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "33a8e7454f93ece86bf28ddf8033efac116a5be167c56f8ca7543020e7428789" || { echo "oreon: Source51 SHA256 mismatch for hologo.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/index.tar.xz; test -f "$f" || { echo "oreon: missing Source52 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "96e49a5ccd06f077ada65213e766b6b90667b765d10fd626859cb5be70d97f88" || { echo "oreon: Source52 SHA256 mismatch for index.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/index.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source53 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "faf2c3813542e55458a268d34ec197e380789fc7ac3fef140d83458104d22d09" || { echo "oreon: Source53 SHA256 mismatch for index.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/infwarerr.tar.xz; test -f "$f" || { echo "oreon: missing Source54 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "55cd43104a80c66c5872d5237a701462e877243058efc29461a389919c3e4fad" || { echo "oreon: Source54 SHA256 mismatch for infwarerr.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/infwarerr.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source55 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b3ebd6ef0756df0865fe5534edd5937d302d3ceb48941c65b17cff62162ee074" || { echo "oreon: Source55 SHA256 mismatch for infwarerr.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/jknapltx.tar.xz; test -f "$f" || { echo "oreon: missing Source56 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "31ea5fc9b07272552899b0c753751961bf51327cf2109d1bae2ce53ccc60e638" || { echo "oreon: Source56 SHA256 mismatch for jknapltx.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/jknapltx.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source57 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b035942ce2c219ffb2cb045cdf96abfd031e9f90ac8ca2d9bf8f3352f8807274" || { echo "oreon: Source57 SHA256 mismatch for jknapltx.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/koma-script.tar.xz; test -f "$f" || { echo "oreon: missing Source58 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "047ba93b4895f64ea830d3bf7d6557dc5dae7085b3b763486736e277168005fb" || { echo "oreon: Source58 SHA256 mismatch for koma-script.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/l3experimental.tar.xz; test -f "$f" || { echo "oreon: missing Source59 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "99c54a7d1cc578a96d972b2ab8515df756d3ec2f5964ac7e5c441dc0344b695b" || { echo "oreon: Source59 SHA256 mismatch for l3experimental.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/l3experimental.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source60 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "882d19863421fd824b5a243b7f87278ae8c063deaf2611da9860beb5d049165c" || { echo "oreon: Source60 SHA256 mismatch for l3experimental.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/latexbug.tar.xz; test -f "$f" || { echo "oreon: missing Source61 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a1bd68209209a1ff9ab0f64ee50f0620ce238a44ad0125ae4eb3f67e1b0b99ee" || { echo "oreon: Source61 SHA256 mismatch for latexbug.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/latexbug.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source62 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e8406f4e922b84dd70aa96f87daed67ec071c731826771cc3d2c2ee617ab9ed3" || { echo "oreon: Source62 SHA256 mismatch for latexbug.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/lineno.tar.xz; test -f "$f" || { echo "oreon: missing Source63 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8d97d5308d0edb3c20156ea5164a8ec8a6c7c69cd7d781891c3faa17adba94a5" || { echo "oreon: Source63 SHA256 mismatch for lineno.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/lineno.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source64 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "600bc5a78806323790b9176e1c744010ba6875b13d0ed32d475d6c8e105a71f3" || { echo "oreon: Source64 SHA256 mismatch for lineno.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/listings.tar.xz; test -f "$f" || { echo "oreon: missing Source65 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ba1a9cdb71d04dfbacf5ce3db3769d84849956595ab092e5cfd23082787b57c2" || { echo "oreon: Source65 SHA256 mismatch for listings.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/listings.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source66 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0307812df3db18ad553e42fdfea6a871a5b2ea80a18fa6c4ccf3d50a783f5e45" || { echo "oreon: Source66 SHA256 mismatch for listings.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ltx-talk.tar.xz; test -f "$f" || { echo "oreon: missing Source67 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c16f5cea1ba46e27b6276dd3314a83e10056808090387280b02860e54c541a8b" || { echo "oreon: Source67 SHA256 mismatch for ltx-talk.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ltx-talk.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source68 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "19f5da8484d547d83b38a234d10c040f639a5a21f1b3d27111db23eed4e98cb4" || { echo "oreon: Source68 SHA256 mismatch for ltx-talk.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/lua-unicode-math.tar.xz; test -f "$f" || { echo "oreon: missing Source69 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f7059401b3312e2b0c56f9dff486632f7db35e5660348109cfb2fdbdf75ffce4" || { echo "oreon: Source69 SHA256 mismatch for lua-unicode-math.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/lua-unicode-math.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source70 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "46e12e6903841f24b6a51bdfa1a00f42364379e1bb9438f8f33c4689060aa4a8" || { echo "oreon: Source70 SHA256 mismatch for lua-unicode-math.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/mathspec.tar.xz; test -f "$f" || { echo "oreon: missing Source71 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ef7a80f1b7b55c661ccdde02c6a347d01e4a930b181581ef4a8b03998e13b510" || { echo "oreon: Source71 SHA256 mismatch for mathspec.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/mathspec.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source72 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d8171c5901f126ac636abb2327e100224d5b043be9bcd6e19fce0ff73e75c71a" || { echo "oreon: Source72 SHA256 mismatch for mathspec.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/mathtools.tar.xz; test -f "$f" || { echo "oreon: missing Source73 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "36f506864454e08e255a69c24811f9a5f7567198d4371a5ddd54c33e6b881a85" || { echo "oreon: Source73 SHA256 mismatch for mathtools.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/mathtools.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source74 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "feb7eb2fde739bc75264e78838b982a6c584cd50f91828aa378589bf408b654f" || { echo "oreon: Source74 SHA256 mismatch for mathtools.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/mdwtools.tar.xz; test -f "$f" || { echo "oreon: missing Source75 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7ec924de85dae1e7c61791268863ff0137825e1c74805d6faee2e06f92a0cab5" || { echo "oreon: Source75 SHA256 mismatch for mdwtools.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/mdwtools.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source76 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7192690ba5896c767da0e5dc8a7c27f94b4e4abb6308d347a7a89376fd0c8522" || { echo "oreon: Source76 SHA256 mismatch for mdwtools.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/memoir.tar.xz; test -f "$f" || { echo "oreon: missing Source77 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "96446e06d32fcc209332dcaa7932d6c845981270c0f7342749f9c9102a9872f0" || { echo "oreon: Source77 SHA256 mismatch for memoir.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/memoir.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source78 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5757513ce7da967b2b15a4ff42ee0c1a922c893bb3b2a246a73279c21f4a7c17" || { echo "oreon: Source78 SHA256 mismatch for memoir.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/metalogo.tar.xz; test -f "$f" || { echo "oreon: missing Source79 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e4302864ab92570780ef1bd2b72f3adc74d6800074fb0183ce1d020d0094b6b0" || { echo "oreon: Source79 SHA256 mismatch for metalogo.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/metalogo.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source80 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6757c7070ff42da16e40d22374f361d52af51b37e61b75f672fdbea11bb6b894" || { echo "oreon: Source80 SHA256 mismatch for metalogo.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/microtype.tar.xz; test -f "$f" || { echo "oreon: missing Source81 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "19611cfc7ae6e929aaf1f3945da1a14be774d9d138f48e40257886874e1e8885" || { echo "oreon: Source81 SHA256 mismatch for microtype.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/microtype.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source82 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "62eded685fdb1fd180232701a167b66aece88b2cc88b1e31a4671b6326578feb" || { echo "oreon: Source82 SHA256 mismatch for microtype.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/newfloat.tar.xz; test -f "$f" || { echo "oreon: missing Source83 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "669a53bd6cd801ddc8920327c414069563eb28a77dd1a96de9fe2c364c29e66f" || { echo "oreon: Source83 SHA256 mismatch for newfloat.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/newfloat.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source84 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7d82463f3d2e878a63670c7f51d13cc8a718b60c87797db8dddd71077ea9f1d4" || { echo "oreon: Source84 SHA256 mismatch for newfloat.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ntgclass.tar.xz; test -f "$f" || { echo "oreon: missing Source85 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d0091902c12b8441fc5fcd9b6c8cd6a1d28d88db67c2838013b7bb46853f6322" || { echo "oreon: Source85 SHA256 mismatch for ntgclass.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ntgclass.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source86 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6756b856ca9242eded3fd7f5b64cbf3dc4cbedf90b6afe88a464e7c87851ef92" || { echo "oreon: Source86 SHA256 mismatch for ntgclass.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/parskip.tar.xz; test -f "$f" || { echo "oreon: missing Source87 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4dfce424501202b2ce95bd254dfccebb5dd78bb3924155996c670945a090c725" || { echo "oreon: Source87 SHA256 mismatch for parskip.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/parskip.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source88 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5fd9bd44ccf073ec1fd532fae617b7490f3693369b85cd4d5154722d210d863d" || { echo "oreon: Source88 SHA256 mismatch for parskip.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/pdfcolfoot.tar.xz; test -f "$f" || { echo "oreon: missing Source89 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1307078cd7b011bf956f15a231020fd55a7f51fc66ad175aad8c26969c247db4" || { echo "oreon: Source89 SHA256 mismatch for pdfcolfoot.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/pdfcolfoot.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source90 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "badde08bc989e5a8b3fbafa57b3849415b10b2450ece66ef5066e6fb40af79d3" || { echo "oreon: Source90 SHA256 mismatch for pdfcolfoot.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/pdflscape.tar.xz; test -f "$f" || { echo "oreon: missing Source91 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9a828729a9421dc0a2df0205bec631e8b38ef0ea077437e7b1a5860c6dc5e09d" || { echo "oreon: Source91 SHA256 mismatch for pdflscape.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/pdflscape.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source92 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d2f9f870cd7b1d557fddaf1f5db21088ed7f1bc033098505eec14a3a600b4e6a" || { echo "oreon: Source92 SHA256 mismatch for pdflscape.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/pdfpages.tar.xz; test -f "$f" || { echo "oreon: missing Source93 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8a22406374e8ed2e971efc4b2d8526212af46237cef4c827eb7776a7a43bbc44" || { echo "oreon: Source93 SHA256 mismatch for pdfpages.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/pdfpages.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source94 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "db323b35ce5b93f4bc385ce385b58a7253ca493b5c725727438f0ad542cce820" || { echo "oreon: Source94 SHA256 mismatch for pdfpages.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/polyglossia.tar.xz; test -f "$f" || { echo "oreon: missing Source95 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a1990f0939669ed0e18b3fc7b3483b19b96adffce26445afdcdb8af69a7c8578" || { echo "oreon: Source95 SHA256 mismatch for polyglossia.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/polyglossia.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source96 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0883182234b9f634508e3f6b54be048ae3d5676f245d9fac993dcd89930dcc06" || { echo "oreon: Source96 SHA256 mismatch for polyglossia.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/psfrag.tar.xz; test -f "$f" || { echo "oreon: missing Source97 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1f75c7b2da2638abab284c26e1864aff74b26e3ae65fbbd569329feb2560d3fe" || { echo "oreon: Source97 SHA256 mismatch for psfrag.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/psfrag.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source98 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d19f61a4e07b46d4365c410a6eb9259e5343eb91c69432530e8650c98e227f6d" || { echo "oreon: Source98 SHA256 mismatch for psfrag.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ragged2e.tar.xz; test -f "$f" || { echo "oreon: missing Source99 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6f47b1169920a39c1656308679d1debf4cdec77121aad5048d459f303633e476" || { echo "oreon: Source99 SHA256 mismatch for ragged2e.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ragged2e.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fd6816299629cdc304a80b67ab44e6f70542df581e9635268b023672ca6fc70e" || { echo "oreon: Source100 SHA256 mismatch for ragged2e.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/rcs.tar.xz; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1971c0f157538299f1abae3473f0f25ad4530303ff16da9b4d2145db30a68fbb" || { echo "oreon: Source101 SHA256 mismatch for rcs.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/rcs.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source102 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c705afd2a23d0d16930fa8eac6d4e82af0aae9fefc0e82685d9e0587e2a585ac" || { echo "oreon: Source102 SHA256 mismatch for rcs.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/sansmath.tar.xz; test -f "$f" || { echo "oreon: missing Source103 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "961c88e153829db7c7e71f103d3a7bf6ffa14c4ae6acb5429fad8bd25e0cac23" || { echo "oreon: Source103 SHA256 mismatch for sansmath.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/sansmath.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source104 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "18c15fc3f8242770bba58d1c5d1d48f1af13345fe25c8e90616c899c6e22456a" || { echo "oreon: Source104 SHA256 mismatch for sansmath.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/section.tar.xz; test -f "$f" || { echo "oreon: missing Source105 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7510c98ce653d07e6723207aebfdb7e68c737901cca292af8f7964f058f309bf" || { echo "oreon: Source105 SHA256 mismatch for section.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/section.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source106 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "34677ce4575cfd78b33676bf3a73d3f23521e7a62eaffc3ad23a5482850b3c62" || { echo "oreon: Source106 SHA256 mismatch for section.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/seminar.tar.xz; test -f "$f" || { echo "oreon: missing Source107 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "141736ccf595e39fac37e68c4fd269fcaec561bcf8ab647478335e9592b59c41" || { echo "oreon: Source107 SHA256 mismatch for seminar.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/seminar.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source108 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "96987b3bc5813147d5ea00804446ef5a09872505d19d8a0cd427744b85911a9f" || { echo "oreon: Source108 SHA256 mismatch for seminar.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/sepnum.tar.xz; test -f "$f" || { echo "oreon: missing Source109 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1d0056a39ac24f7f529ed3e09f87e2a9e049f10db50d859f85356a2d2774729c" || { echo "oreon: Source109 SHA256 mismatch for sepnum.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/sepnum.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source110 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "411750d5505901f257c43d5ef0e4f987be1e0d4a370717ace4aff1f46c148d03" || { echo "oreon: Source110 SHA256 mismatch for sepnum.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/setspace.tar.xz; test -f "$f" || { echo "oreon: missing Source111 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "92f124451fb6de7d0a0cd535cebffdcbd646c5f02699e0e717dba60496378046" || { echo "oreon: Source111 SHA256 mismatch for setspace.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/setspace.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source112 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "00e6beb695db032f0d1ecd663015c9885b22b0f3e040d4b36a2dcc4f099f8b39" || { echo "oreon: Source112 SHA256 mismatch for setspace.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/subfig.tar.xz; test -f "$f" || { echo "oreon: missing Source113 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "69da765d8abff4614d03ba335180185c9732bc56ba417fb642de92e6fdf4a2df" || { echo "oreon: Source113 SHA256 mismatch for subfig.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/subfig.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source114 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f9fab873b6809ede6e24671a7f780369a2d65dc81a3ff5b4b12fb100528674b8" || { echo "oreon: Source114 SHA256 mismatch for subfig.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/textcase.tar.xz; test -f "$f" || { echo "oreon: missing Source115 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c36d4fea9dc6deaebb7a477b17b0304f0d9dec2491268f9b0ae9c96286ef6d08" || { echo "oreon: Source115 SHA256 mismatch for textcase.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/textcase.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source116 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "42be677d9db436b9421b4f5cd385069a79959dd7732fea12b04705d8c3ba96db" || { echo "oreon: Source116 SHA256 mismatch for textcase.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/translator.tar.xz; test -f "$f" || { echo "oreon: missing Source117 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "012cbe2665ec07486d83ed68c830f3ad7215023370b0f6903ef092622cabbf50" || { echo "oreon: Source117 SHA256 mismatch for translator.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/translator.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source118 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "823a14823f09f75e0f354cd27585a1a236b8c35375419395e6ee27ebbf9e1154" || { echo "oreon: Source118 SHA256 mismatch for translator.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/typehtml.tar.xz; test -f "$f" || { echo "oreon: missing Source119 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3c946908886ea81680f0e183973f3cc501bed22b4d5220b77c09dd629f8ec557" || { echo "oreon: Source119 SHA256 mismatch for typehtml.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/typehtml.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source120 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b2ace8b1305f95009fa10c0488c19646742c932a070e8fa64946aff7af9625d4" || { echo "oreon: Source120 SHA256 mismatch for typehtml.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ucharcat.tar.xz; test -f "$f" || { echo "oreon: missing Source121 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "962aa0ae08a6118f5f1f3e3e222d834a5023272340b84f808bf44eecf752919f" || { echo "oreon: Source121 SHA256 mismatch for ucharcat.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ucharcat.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source122 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4f61f063a511ed99c8a05e7dec1c0e2d2c353c7ce2cf2bf3aba4fbf2ad88b924" || { echo "oreon: Source122 SHA256 mismatch for ucharcat.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/underscore.tar.xz; test -f "$f" || { echo "oreon: missing Source123 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e70a700a6e4b8517c7db16773cfcce1cbbe8e93b631fdc70d1ccdb6eb791aa06" || { echo "oreon: Source123 SHA256 mismatch for underscore.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/underscore.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source124 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e9bcd6d26b884fe82fbff554f449cc7a4ca6c94de9f90494a7e2b0bfb1d7b8b4" || { echo "oreon: Source124 SHA256 mismatch for underscore.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/unicode-math.tar.xz; test -f "$f" || { echo "oreon: missing Source125 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b942cda7caec4a597f839890af02553aaad319a873579a41e19344a95747633d" || { echo "oreon: Source125 SHA256 mismatch for unicode-math.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/unicode-math.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source126 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3448444ecc07295092e2803b9f5d19127bed74bf90d6dd83a59f372f76afde45" || { echo "oreon: Source126 SHA256 mismatch for unicode-math.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xcolor.tar.xz; test -f "$f" || { echo "oreon: missing Source127 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "081d28d119901fca408b82a4c12862ed829e45f14a8678034ef02f8ecfd5da54" || { echo "oreon: Source127 SHA256 mismatch for xcolor.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xcolor.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source128 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0968bcd9227b228058fdc14595a1adad4eb645e20aacda9096e9a5e9f730e6f0" || { echo "oreon: Source128 SHA256 mismatch for xcolor.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xfrac.tar.xz; test -f "$f" || { echo "oreon: missing Source129 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a663f461d834bcccd7ad525e8cfdf14b3c175e3ecfa3fe7d12839f7c054b688b" || { echo "oreon: Source129 SHA256 mismatch for xfrac.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xfrac.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source130 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "40c658705d672dbe93cdcd036ee88644c24e618baae54c66375ab440d7af3022" || { echo "oreon: Source130 SHA256 mismatch for xfrac.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xkeyval.tar.xz; test -f "$f" || { echo "oreon: missing Source131 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b9ff864c4f6e029b20c4f15f26a378bc9c089016225d4e19949af939259e0161" || { echo "oreon: Source131 SHA256 mismatch for xkeyval.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xkeyval.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source132 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8539784e5f0d375bb0556a971e46147780064c3c57b321ab5b8431120b308d90" || { echo "oreon: Source132 SHA256 mismatch for xkeyval.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xltxtra.tar.xz; test -f "$f" || { echo "oreon: missing Source133 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9a42c28340a004d9cc35b0ca94eb21f09491617a7b4d308760d76d4ede6a99e8" || { echo "oreon: Source133 SHA256 mismatch for xltxtra.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xltxtra.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source134 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0bcafa21a36c28b43cd9e4bdf147dbecdf5172c24bfd2b20c0c0ec2979d05c82" || { echo "oreon: Source134 SHA256 mismatch for xltxtra.doc.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xunicode.tar.xz; test -f "$f" || { echo "oreon: missing Source135 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e0ab404031563884e3769dda49113ddb363c01172b0008a2efdbc0560420b4db" || { echo "oreon: Source135 SHA256 mismatch for xunicode.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xunicode.doc.tar.xz; test -f "$f" || { echo "oreon: missing Source136 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e15130c1ace91a2a4ff39a0881b32f97b8f730e452eaa739ea855c6078436c58" || { echo "oreon: Source136 SHA256 mismatch for xunicode.doc.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 # Extract license files
 tar -xf %{SOURCE1}
 

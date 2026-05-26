@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3c39e1e291fef7be8f2de734c086b05b14ce1e80bf1dfd7e24e86aa2fa94f559
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           apache-logging-parent
 Summary:        Parent pom for Apache Logging Services projects
 Version:        9
@@ -7,10 +15,6 @@ License:        Apache-2.0
 URL:            https://logging.apache.org/
 Source0:        https://repo1.maven.org/maven2/org/apache/logging/logging-parent/%{version}/logging-parent-%{version}-source-release.zip
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-# oreon url source checksums begin
-%global source0_sha256 3c39e1e291fef7be8f2de734c086b05b14ce1e80bf1dfd7e24e86aa2fa94f559
-%global source0_file logging-parent-9-source-release.zip
-# oreon url source checksums end
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
@@ -27,9 +31,7 @@ Parent pom for Apache Logging Services projects.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/logging-parent-9-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3c39e1e291fef7be8f2de734c086b05b14ce1e80bf1dfd7e24e86aa2fa94f559" || { echo "oreon: Source0 SHA256 mismatch for logging-parent-9-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n logging-parent-%{version}
 cp -p %SOURCE1 LICENSE
 

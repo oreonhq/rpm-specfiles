@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 991d0376a63983c1b62e85624b613fa2d1168f73ba166939c216cbd0a2990856
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Upstream KDE automoc 0.9.88 ships Automoc4Config.cmake without cmake_policy(SET CMP0002 OLD).
 # Fedora automoc4 added that policy for ancient CMake; CMake 3.28+ rejects OLD for CMP0002 and
 # find_package(KDE4) fails. Epoch so this replaces same-version distro builds in mock.
@@ -13,10 +21,6 @@ URL:     https://invent.kde.org/developer-tools/automoc
 # GitHub tag tarball unpacks to directory automoc-0.9.88 (matches setup -n automoc plus hyphen plus version digits).
 # Fragment after hash sets the saved tarball basename for spectool (automoc plus version tarball name).
 Source0: https://github.com/KDE/automoc/archive/refs/tags/v%{version}.tar.gz#/automoc-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 991d0376a63983c1b62e85624b613fa2d1168f73ba166939c216cbd0a2990856
-%global source0_file v0.9.88.tar.gz
-# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
@@ -36,9 +40,7 @@ automoc4 binary and the CMake module files used by KDE4 and kdelibs4.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v0.9.88.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "991d0376a63983c1b62e85624b613fa2d1168f73ba166939c216cbd0a2990856" || { echo "oreon: Source0 SHA256 mismatch for v0.9.88.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n automoc-%{version}
 
 

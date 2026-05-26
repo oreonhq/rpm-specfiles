@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 47d4b2a5cf4f17f52550aa65b34030fbd1a242e1a233f248a5871620e0ff4c11
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libaccounts-glib
 Version:        1.25
 Release:        24%{?dist}
@@ -11,10 +19,6 @@ License:        LicenseRef-Callaway-LGPLv2
 
 URL:            https://gitlab.com/accounts-sso/libaccounts-glib
 Source0:        https://gitlab.com/accounts-sso/libaccounts-glib/-/archive/VERSION_1.25/libaccounts-glib-VERSION_1.25.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 47d4b2a5cf4f17f52550aa65b34030fbd1a242e1a233f248a5871620e0ff4c11
-%global source0_file libaccounts-glib-VERSION_1.25.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson >= 0.48.0
@@ -65,9 +69,7 @@ The %{name}-docs package contains documentation for %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libaccounts-glib-VERSION_1.25.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "47d4b2a5cf4f17f52550aa65b34030fbd1a242e1a233f248a5871620e0ff4c11" || { echo "oreon: Source0 SHA256 mismatch for libaccounts-glib-VERSION_1.25.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{ver_str} -p1
 
 

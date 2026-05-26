@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d94a93f0c97751c17014565f07bdc324bee45d396cd1bba83d8e7af92b945f0c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # RHEL does not have packaged rust libraries
 %bcond packaged_rust_libraries %[ %{undefined rhel} || %{defined epel} ]
 # The integration tests depend on the presence of these libraries
@@ -23,10 +31,6 @@ Source0:        https://files.pythonhosted.org/packages/source/s/setuptools_rust
 # https://github.com/PyO3/setuptools-rust/commit/8a76c7dd45af4cdaced3da756b4f898a34035bf5
 # https://github.com/PyO3/setuptools-rust/pull/576
 Patch:          setuptools_rust-1.12.0-pyo3-0.28.patch
-# oreon url source checksums begin
-%global source0_sha256 d94a93f0c97751c17014565f07bdc324bee45d396cd1bba83d8e7af92b945f0c
-%global source0_file setuptools_rust-1.12.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -58,9 +62,7 @@ Requires:       cargo
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/setuptools_rust-1.12.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d94a93f0c97751c17014565f07bdc324bee45d396cd1bba83d8e7af92b945f0c" || { echo "oreon: Source0 SHA256 mismatch for setuptools_rust-1.12.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n setuptools_rust-%{version}
 
 %cargo_prep

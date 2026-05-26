@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 abe6bc6876f32dba5467726ad67753b1efa28e14342550df2929ebeeb9d83e55
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global commit a1b44a8d9c27a527a0004cdd59db8c18f6cee3ba
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 %global gitdate 20260218.085444
@@ -12,10 +20,6 @@ Url:           https://invent.kde.org/plasma/plasma-bigscreen
 # Not currently in the plasma releases. Getting from gitlab tags.
 # Source0:       http://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 Source0:       https://invent.kde.org/plasma/%{name}/-/archive/%{commit}/%{name}-%{commit}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 abe6bc6876f32dba5467726ad67753b1efa28e14342550df2929ebeeb9d83e55
-%global source0_file plasma-bigscreen-a1b44a8d9c27a527a0004cdd59db8c18f6cee3ba.tar.gz
-# oreon url source checksums end
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}
@@ -84,9 +88,7 @@ Conflicts: %{name}-x11 < %{version}-%{release}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/plasma-bigscreen-a1b44a8d9c27a527a0004cdd59db8c18f6cee3ba.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "abe6bc6876f32dba5467726ad67753b1efa28e14342550df2929ebeeb9d83e55" || { echo "oreon: Source0 SHA256 mismatch for plasma-bigscreen-a1b44a8d9c27a527a0004cdd59db8c18f6cee3ba.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{commit}
 
 

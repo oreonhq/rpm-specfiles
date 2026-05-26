@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 27ba13f0d9512929166bbd8c9ef95d90d630fc80f0c9a1b7458891055e9282a4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Class-Singleton
 Version:        1.6
 Release:        15%{?dist}
@@ -5,10 +13,6 @@ Summary:        Implementation of a "Singleton" class
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Singleton
 Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHAY/Class-Singleton-1.6.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 27ba13f0d9512929166bbd8c9ef95d90d630fc80f0c9a1b7458891055e9282a4
-%global source0_file Class-Singleton-1.6.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 # Module Build
@@ -36,9 +40,7 @@ Class::Singleton, your module will inherit the Singleton instantiation
 method and can implement whatever specific functionality is required.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Class-Singleton-1.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "27ba13f0d9512929166bbd8c9ef95d90d630fc80f0c9a1b7458891055e9282a4" || { echo "oreon: Source0 SHA256 mismatch for Class-Singleton-1.6.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Class-Singleton-%{version}
 
 %build

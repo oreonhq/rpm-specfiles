@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a02f6580e9a53cb16694a99adbb6dbf76f17584f3e97f469a22286299507838c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global fontname oxygen
 %global fontconf 61-%{fontname}
 
@@ -13,10 +21,6 @@ URL:            http://www.kde.org
 Source0:        http://download.kde.org/stable/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        %{fontconf}-sans.conf
 Source2:        %{fontconf}-mono.conf
-# oreon url source checksums begin
-%global source0_sha256 a02f6580e9a53cb16694a99adbb6dbf76f17584f3e97f469a22286299507838c
-%global source0_file oxygen-fonts-5.4.3.tar.xz
-# oreon url source checksums end
 
 # essentially a noarch pkg here, no real -debuginfo needed (#1192729)
 %define debug_package   %{nil}
@@ -65,9 +69,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/oxygen-fonts-5.4.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a02f6580e9a53cb16694a99adbb6dbf76f17584f3e97f469a22286299507838c" || { echo "oreon: Source0 SHA256 mismatch for oxygen-fonts-5.4.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{version}
 
 %build

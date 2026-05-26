@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 66d511b9e6e334c0e62279eb234fbfb2b3110b1479c09b95b44c7afca8cff9e7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run the tests by default on Fedora
 # Some of the network tests fail on RHEL/CentOS Stream due to the network
 # configuration on the builders
@@ -32,10 +40,6 @@ Source1:        https://dist.libuv.org/dist/v%{version}/%{name}-v%{version}.tar.
 # cp temp/keysuv.gpg .
 Source2:        keysuv.gpg
 Source3:        libuv.abignore
-# oreon url source checksums begin
-%global source0_sha256 66d511b9e6e334c0e62279eb234fbfb2b3110b1479c09b95b44c7afca8cff9e7
-%global source0_file libuv-v1.52.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -68,9 +72,7 @@ Static library (.a) version of libuv.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libuv-v1.52.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "66d511b9e6e334c0e62279eb234fbfb2b3110b1479c09b95b44c7afca8cff9e7" || { echo "oreon: Source0 SHA256 mismatch for libuv-v1.52.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %autosetup -n %{name}-v%{version} -p1
 

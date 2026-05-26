@@ -1,3 +1,10 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7c1fb9ca34d9101d787fcacf37fbd3b56f1d8e686a86a32ff30d7abd1188c6aa
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
 
 Name:    annobin
 Summary: Annotate and examine compiled binary files
@@ -66,10 +73,6 @@ URL: https://sourceware.org/annobin/
 
 %global annobin_sources annobin-%{version}.tar.xz
 Source: https://nickc.fedorapeople.org/%{annobin_sources}
-# oreon url source checksums begin
-%global source0_sha256 7c1fb9ca34d9101d787fcacf37fbd3b56f1d8e686a86a32ff30d7abd1188c6aa
-%global source0_file annobin-13.08.tar.xz
-# oreon url source checksums end
 # For the latest sources use:  git clone git://sourceware.org/git/annobin.git
 
 # This is where a copy of the sources will be installed.
@@ -311,9 +314,7 @@ Installs an annobin plugin that can be used by Clang.
 #---------------------------------------------------------------------------------
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/annobin-13.08.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7c1fb9ca34d9101d787fcacf37fbd3b56f1d8e686a86a32ff30d7abd1188c6aa" || { echo "oreon: Source0 SHA256 mismatch for annobin-13.08.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 if [ -z "%{gcc_vr}" ]; then
     echo "*** Missing gcc_vr spec file macro, cannot continue." >&2
     exit 1

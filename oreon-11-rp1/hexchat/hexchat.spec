@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2e88340a8da274b87373ec0740746da78120cc6fbfdd201a4dd6999cac790e4a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global app_id io.github.Hexchat
 
 Summary:   A popular and easy to use graphical IRC (chat) client
@@ -12,10 +20,6 @@ Source:    https://github.com/hexchat/hexchat/releases/download/v%{version}/hexc
 Patch0:    https://github.com/hexchat/hexchat/commit/70069cd50eb07e8a40ac9b0efbb83fcb91a78b99.patch
 # replace hexchat.net links
 Patch1:    https://github.com/hexchat/hexchat/commit/cc60ad275a56126904df0b5e37cfd20db22cb359.patch
-# oreon url source checksums begin
-%global source0_sha256 2e88340a8da274b87373ec0740746da78120cc6fbfdd201a4dd6999cac790e4a
-%global source0_file hexchat-2.16.2.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: meson
@@ -49,9 +53,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 This package contains the development files for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/hexchat-2.16.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2e88340a8da274b87373ec0740746da78120cc6fbfdd201a4dd6999cac790e4a" || { echo "oreon: Source0 SHA256 mismatch for hexchat-2.16.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

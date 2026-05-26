@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 053794d6671a3e397d849e478a80b82a63cb9d8ca296bd35b73317bb5ceb87b5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pa_major   17.0
 #global pa_minor   0
 
@@ -70,10 +78,6 @@ Patch0004: 0004-tests-Don-t-run-volume-tests-with-impossible-alignme.patch
 Patch0005: 0005-rtp-recv-Remove-inappropriate-byte-order-conversion.patch
 # "array out-of-bounds" sure sounds bad
 Patch0006: 0006-stream-fix-array-out-of-bounds-in-stream_get_timing_.patch
-# oreon url source checksums begin
-%global source0_sha256 053794d6671a3e397d849e478a80b82a63cb9d8ca296bd35b73317bb5ceb87b5
-%global source0_file pulseaudio-17.0.tar.xz
-# oreon url source checksums end
 
 ## upstreamable patches
 
@@ -274,9 +278,7 @@ This package contains GDM integration hooks for the PulseAudio sound server.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pulseaudio-17.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "053794d6671a3e397d849e478a80b82a63cb9d8ca296bd35b73317bb5ceb87b5" || { echo "oreon: Source0 SHA256 mismatch for pulseaudio-17.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -T -b0 -n %{name}-%{version}%{?gitrel:-%{gitrel}-g%{shortcommit}}
 
 ## upstream patches

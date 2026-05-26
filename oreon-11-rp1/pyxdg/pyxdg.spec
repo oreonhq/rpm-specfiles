@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3267bb3074e934df202af2ee0868575484108581e6f3cb006af1da35395e88b4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           pyxdg
 Version:        0.28
 Release:        1%{?dist}
@@ -11,10 +19,6 @@ Patch0:         pyxdg-replace-imp-with-importlib.patch
 Patch1:         pyxdg-handle-python-3.14-ast.Str-changes.patch
 # https://cgit.freedesktop.org/xdg/pyxdg/commit/?id=63033ac306aa26d32e1439417e59ae8f8a4c9820
 Patch2:         pyxdg-handle-python-3.15-deprecations.patch
-# oreon url source checksums begin
-%global source0_sha256 3267bb3074e934df202af2ee0868575484108581e6f3cb006af1da35395e88b4
-%global source0_file pyxdg-0.28.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 # These are needed for the tests.
@@ -34,9 +38,7 @@ PyXDG is a python library to access freedesktop.org standards. This
 package contains a Python 3 version of PyXDG.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pyxdg-0.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3267bb3074e934df202af2ee0868575484108581e6f3cb006af1da35395e88b4" || { echo "oreon: Source0 SHA256 mismatch for pyxdg-0.28.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1 -b .replace-imp-with-importlib
 %patch -P1 -p1 -b .handle-python-3.14-ast.Str-changes

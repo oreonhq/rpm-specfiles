@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ecadd0e8873a553d7d6b23647b920fd20ef7fe4509cf86048a599573290634c6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with bootstrap
 
 Name:           plexus-components-pom
@@ -11,10 +19,6 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/codehaus-plexus/plexus-components/archive/refs/tags/plexus-components-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-# oreon url source checksums begin
-%global source0_sha256 ecadd0e8873a553d7d6b23647b920fd20ef7fe4509cf86048a599573290634c6
-%global source0_file plexus-components-14.2.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -29,9 +33,7 @@ This package provides Plexus Components parent POM used by different
 Plexus packages.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/plexus-components-14.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ecadd0e8873a553d7d6b23647b920fd20ef7fe4509cf86048a599573290634c6" || { echo "oreon: Source0 SHA256 mismatch for plexus-components-14.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 cp -p %{SOURCE1} LICENSE
 

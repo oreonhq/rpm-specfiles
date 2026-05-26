@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 114543336ab6cee3764e3c03202701ef79d7e5e8e4863fe64811e4d9e61884dc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: A binary file delta generator
 Name: xdelta
 Version: 3.1.0
@@ -18,10 +26,6 @@ BuildRequires: xz-devel
 # ~> proposal: http://code.google.com/p/xdelta/issues/detail?id=158
 # ~> private #958492
 Patch1: xdelta-3.0.6-man-page-day.patch
-# oreon url source checksums begin
-%global source0_sha256 114543336ab6cee3764e3c03202701ef79d7e5e8e4863fe64811e4d9e61884dc
-%global source0_file xdelta3-3.1.0.tar.gz
-# oreon url source checksums end
 
 %description
 Xdelta (X for XCF: the eXperimental Computing Facility at Berkeley) is
@@ -30,9 +34,7 @@ version control replacement library. Xdelta uses a binary file delta
 algorithm to replace the standard diff program used by RCS
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xdelta3-3.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "114543336ab6cee3764e3c03202701ef79d7e5e8e4863fe64811e4d9e61884dc" || { echo "oreon: Source0 SHA256 mismatch for xdelta3-3.1.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}3-%{version}
 %patch -P1 -p2 -b .man-page-day
 

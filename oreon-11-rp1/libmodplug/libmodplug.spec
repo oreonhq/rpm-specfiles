@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 457ca5a6c179656d66c01505c0d95fafaead4329b9dbaa0f997d00a3508ad9de
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libmodplug
 Version:        0.8.9.0
 Release:        1%{?dist}
@@ -8,10 +16,6 @@ URL:            http://modplug-xmms.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/modplug-xmms/%{name}-%{version}.tar.gz
 # Fedora specific, no need to send upstream
 Patch0:         %{name}-0.8.9.0-timiditypaths.patch
-# oreon url source checksums begin
-%global source0_sha256 457ca5a6c179656d66c01505c0d95fafaead4329b9dbaa0f997d00a3508ad9de
-%global source0_file libmodplug-0.8.9.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc, gcc-c++
 BuildRequires: make
@@ -30,9 +34,7 @@ Requires:       gcc-c++
 %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libmodplug-0.8.9.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "457ca5a6c179656d66c01505c0d95fafaead4329b9dbaa0f997d00a3508ad9de" || { echo "oreon: Source0 SHA256 mismatch for libmodplug-0.8.9.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 sed -i -e 's/\r//g' ChangeLog
 

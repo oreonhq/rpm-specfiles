@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 afd3ba68c8000d2be048dc292df99a9812df9ad2efaf0a366eea22ac1faa19a7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # doesn't make sense to install a polkit configuration inside a Flatpak
 %if 0%{?flatpak}
 %global with_polkit 0
@@ -15,10 +23,6 @@ URL:            https://pcsclite.apdu.fr/
 Source0:        https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.xz
 Source1:        https://pcsclite.apdu.fr/files/%{name}-%{version}.tar.xz.asc
 Source2:        gpgkey-F5E11B9FFE911146F41D953D78A1B4DFE8F9C57E.gpg
-# oreon url source checksums begin
-%global source0_sha256 afd3ba68c8000d2be048dc292df99a9812df9ad2efaf0a366eea22ac1faa19a7
-%global source0_file pcsc-lite-2.4.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  doxygen
 BuildRequires:  graphviz
@@ -83,9 +87,7 @@ Requires:       %{name}-libs = %{version}-%{release}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pcsc-lite-2.4.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "afd3ba68c8000d2be048dc292df99a9812df9ad2efaf0a366eea22ac1faa19a7" || { echo "oreon: Source0 SHA256 mismatch for pcsc-lite-2.4.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %setup -q

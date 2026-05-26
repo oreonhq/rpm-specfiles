@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fabb0b8c97e67c9b34b6cc18ed66f6c5e01c55b257dcf007555e0b027d4caf56
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %if ! (0%{?rhel})
 %bcond_without perl_Tie_IxHash_enables_optional_test
@@ -13,10 +21,6 @@ Summary:        Ordered associative arrays for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tie-IxHash
 Source0:        https://cpan.metacpan.org/authors/id/C/CH/CHORNY/Tie-IxHash-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 fabb0b8c97e67c9b34b6cc18ed66f6c5e01c55b257dcf007555e0b027d4caf56
-%global source0_file Tie-IxHash-1.23.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  coreutils
@@ -47,9 +51,7 @@ familiar perl array operations can also be performed on the IxHash.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Tie-IxHash-1.23.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fabb0b8c97e67c9b34b6cc18ed66f6c5e01c55b257dcf007555e0b027d4caf56" || { echo "oreon: Source0 SHA256 mismatch for Tie-IxHash-1.23.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Tie-IxHash-%{version}
 
 # Fix line endings

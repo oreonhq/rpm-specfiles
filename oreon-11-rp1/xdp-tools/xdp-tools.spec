@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e2211dcbd38fa6729853af3dc3b55816793a6563afa4361dd5ae04945a166332
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:             xdp-tools
 Version:          1.6.2
 Release:          1%{?dist}
@@ -7,10 +15,6 @@ Summary:          Utilities and example programs for use with XDP
 License:          GPL-2.0-only
 URL:              https://github.com/xdp-project/%{name}
 Source0:          https://github.com/xdp-project/%{name}/releases/download/v%{version}/xdp-tools-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 e2211dcbd38fa6729853af3dc3b55816793a6563afa4361dd5ae04945a166332
-%global source0_file xdp-tools-1.6.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires:    kernel-headers
 BuildRequires:    libbpf-devel
@@ -66,9 +70,7 @@ libxdp.
 The libxdp-static package contains the static library version of libxdp.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xdp-tools-1.6.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e2211dcbd38fa6729853af3dc3b55816793a6563afa4361dd5ae04945a166332" || { echo "oreon: Source0 SHA256 mismatch for xdp-tools-1.6.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}
 
 

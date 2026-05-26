@@ -1,12 +1,16 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Python serial port access library
 Name: pyserial
 Version: 3.5
 Release: 16%{?dist}
 Source0:        https://files.pythonhosted.org/packages/source/p/pyserial/pyserial-3.5.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb
-%global source0_file pyserial-3.5.tar.gz
-# oreon url source checksums end
 License: BSD-3-Clause
 URL: http://pypi.python.org/pypi/pyserial
 BuildRequires: python3-devel
@@ -30,9 +34,7 @@ Conflicts: python2-pyserial < 3.4-6
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pyserial-3.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3c77e014170dfffbd816e6ffc205e9842efb10be9f58ec16d3e8675b4925cddb" || { echo "oreon: Source0 SHA256 mismatch for pyserial-3.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 export UNZIP="-aa"
 %setup -q
 

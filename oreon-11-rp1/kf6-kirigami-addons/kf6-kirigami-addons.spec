@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 513051dff8417da1819d6ae89d6c21a03654c9a60891df60df6aba13df19d21b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global framework kirigami-addons
 %global orig_name kirigami-addons
 
@@ -13,10 +21,6 @@ License:        BSD-2-Clause AND CC-BY-SA-4.0 AND CC0-1.0 AND GPL-2.0-only AND G
 Summary:        Convergent visual components ("widgets") for Kirigami-based applications
 Url:            https://invent.kde.org/libraries/%{framework}
 Source:         https://download.kde.org/stable/%{framework}/%{framework}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 513051dff8417da1819d6ae89d6c21a03654c9a60891df60df6aba13df19d21b
-%global source0_file kirigami-addons-1.12.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -83,9 +87,7 @@ The %{name}-devel package contains CMake definitions, libraries
 and header files for developing applications that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kirigami-addons-1.12.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "513051dff8417da1819d6ae89d6c21a03654c9a60891df60df6aba13df19d21b" || { echo "oreon: Source0 SHA256 mismatch for kirigami-addons-1.12.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{framework}-%{version}
 
 %build

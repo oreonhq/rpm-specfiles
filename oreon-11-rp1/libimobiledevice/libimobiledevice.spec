@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 abd343e0f5a5fea43ed36e3fc54b803d0ef0a53ffd28304bae20111e93ee39e4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global forgeurl https://github.com/libimobiledevice/libimobiledevice
 %global commit ed9703db1ee6d54e3801b618cee9524563d709e1
 %global date 20240916
@@ -13,10 +21,6 @@ URL:            https://libimobiledevice.org/
 Source:        https://github.com/libimobiledevice/libimobiledevice/archive/ed9703db1ee6d54e3801b618cee9524563d709e1/libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz
 # Use SHA256 signature, instead of SHA1 for pairing
 Patch:        https://github.com/libimobiledevice/libimobiledevice/pull/1616.patch
-# oreon url source checksums begin
-%global source0_sha256 abd343e0f5a5fea43ed36e3fc54b803d0ef0a53ffd28304bae20111e93ee39e4
-%global source0_file libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -59,9 +63,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Utilities for use with libimobiledevice.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "abd343e0f5a5fea43ed36e3fc54b803d0ef0a53ffd28304bae20111e93ee39e4" || { echo "oreon: Source0 SHA256 mismatch for libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{commit}
 
 %if %{defined commit}

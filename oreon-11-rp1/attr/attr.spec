@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f2e97b0ab7ce293681ab701915766190d607a1dba7fae8a718138150b700a70b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Utilities for managing filesystem extended attributes
 Name: attr
 Version: 2.5.2
@@ -14,10 +22,6 @@ Source2: vapier-key.gpg
 # https://lists.nongnu.org/archive/html/acl-devel/2019-03/msg00001.html
 # https://lists.nongnu.org/archive/html/acl-devel/2019-05/msg00000.html
 Patch3:  0003-attr-2.4.48-xattr-conf-nfs4-acls.patch
-# oreon url source checksums begin
-%global source0_sha256 f2e97b0ab7ce293681ab701915766190d607a1dba7fae8a718138150b700a70b
-%global source0_file attr-2.5.2.tar.xz
-# oreon url source checksums end
 
 License: GPL-2.0-or-later
 URL: https://savannah.nongnu.org/projects/attr
@@ -72,9 +76,7 @@ which make use of extended attributes.  If you install libattr-devel,
 you'll also want to install attr.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/attr-2.5.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f2e97b0ab7ce293681ab701915766190d607a1dba7fae8a718138150b700a70b" || { echo "oreon: Source0 SHA256 mismatch for attr-2.5.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

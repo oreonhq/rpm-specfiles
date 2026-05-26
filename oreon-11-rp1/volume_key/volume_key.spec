@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6ca3748fc1dad22c450bbf6601d4e706cb11c5e662d11bb4aeb473a9cd77309b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Define `python3_sitearch' if there is no one:
 %{!?python3_sitearch:%global python3_sitearch %(%{__python3} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 
@@ -44,10 +52,6 @@ Patch0: volume_key-0.3.12-support_LUKS2_and_more.patch
 # Fix resource leaks
 # - backport of bf6618ec0b09b4e51fc97fa021e687fbd87599ba
 Patch1: volume_key-0.3.12-fix_resource_leaks.patch
-# oreon url source checksums begin
-%global source0_sha256 6ca3748fc1dad22c450bbf6601d4e706cb11c5e662d11bb4aeb473a9cd77309b
-%global source0_file volume_key-0.3.12.tar.xz
-# oreon url source checksums end
 BuildRequires: autoconf, automake, libtool
 BuildRequires: make
 BuildRequires: gcc
@@ -123,9 +127,7 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/volume_key-0.3.12.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6ca3748fc1dad22c450bbf6601d4e706cb11c5e662d11bb4aeb473a9cd77309b" || { echo "oreon: Source0 SHA256 mismatch for volume_key-0.3.12.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1
 %patch -P1 -p1

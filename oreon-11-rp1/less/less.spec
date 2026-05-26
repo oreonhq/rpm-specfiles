@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 61300f603798ecf1d7786570789f0ff3f5a1acf075a6fb9f756837d166e37d14
+%global source1_sha256 05220b4b4f1c6c56d3b4acf6998d79768dccd22c379639a6cf3589fbbd54ba1d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: A text file browser similar to more, but better
 Name: less
 Version: 692
@@ -18,12 +28,6 @@ Patch9: less-458-less-filters-man.patch
 Patch10: less-458-lesskey-usage.patch
 Patch11: less-458-old-bot-in-help.patch
 Patch13: less-436-help.patch
-# oreon url source checksums begin
-%global source0_sha256 61300f603798ecf1d7786570789f0ff3f5a1acf075a6fb9f756837d166e37d14
-%global source0_file less-692.tar.gz
-%global source1_sha256 05220b4b4f1c6c56d3b4acf6998d79768dccd22c379639a6cf3589fbbd54ba1d
-%global source1_file v2.22.tar.gz
-# oreon url source checksums end
 URL: https://www.greenwoodsoftware.com/less/
 BuildRequires: ncurses-devel
 BuildRequires: autoconf automake libtool
@@ -60,10 +64,7 @@ Syntax highlighting modes for the less pager.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/less-692.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61300f603798ecf1d7786570789f0ff3f5a1acf075a6fb9f756837d166e37d14" || { echo "oreon: Source0 SHA256 mismatch for less-692.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/v2.22.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "05220b4b4f1c6c56d3b4acf6998d79768dccd22c379639a6cf3589fbbd54ba1d" || { echo "oreon: Source1 SHA256 mismatch for v2.22.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -a 1
 %patch -P 4 -p1 -b .time
 %patch -P 5 -p2 -b .fsync

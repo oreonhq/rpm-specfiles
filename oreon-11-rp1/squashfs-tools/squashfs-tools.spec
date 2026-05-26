@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 91c49f9a1ed972ad00688a38222119e2baf49ba74cf5fda05729a79d7d59d335
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: squashfs-tools
 Version: 4.7.4
 Summary: Utility for the creation of squashfs filesystems
@@ -6,10 +14,6 @@ Summary: Utility for the creation of squashfs filesystems
 %forgemeta
 URL:	 %{forgeurl}
 Source:  %{forgesource}
-# oreon url source checksums begin
-%global source0_sha256 91c49f9a1ed972ad00688a38222119e2baf49ba74cf5fda05729a79d7d59d335
-%global source0_file squashfs-tools-4.7.4.tar.gz
-# oreon url source checksums end
 Release: 1%{dist}
 License: GPL-2.0-or-later
 
@@ -28,9 +32,7 @@ Squashfs is a highly compressed read-only filesystem for Linux.  This package
 contains the utilities for manipulating squashfs filesystems.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/squashfs-tools-4.7.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "91c49f9a1ed972ad00688a38222119e2baf49ba74cf5fda05729a79d7d59d335" || { echo "oreon: Source0 SHA256 mismatch for squashfs-tools-4.7.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %forgesetup
 
 %build

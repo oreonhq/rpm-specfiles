@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e0c6d8e9801d905343eb92a79a5bd46687c2781c287641f6cf7c13dd35b6e4cd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
 
@@ -30,10 +38,6 @@ Patch:          https://github.com/gildor478/ocaml-gettext/pull/37.patch
 # https://github.com/gildor478/ocaml-gettext/issues/40
 # https://github.com/gildor478/ocaml-gettext/pull/41
 Patch:        https://github.com/gildor478/ocaml-gettext/pull/37.patch
-# oreon url source checksums begin
-%global source0_sha256 e0c6d8e9801d905343eb92a79a5bd46687c2781c287641f6cf7c13dd35b6e4cd
-%global source0_file v0.5.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  ocaml >= 4.03.0
 BuildRequires:  ocaml-fileutils-devel >= 0.6.6-1
@@ -110,9 +114,7 @@ signature files for developing applications that use
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v0.5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e0c6d8e9801d905343eb92a79a5bd46687c2781c287641f6cf7c13dd35b6e4cd" || { echo "oreon: Source0 SHA256 mismatch for v0.5.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # Remove ocaml-seq dependency.  See note above.

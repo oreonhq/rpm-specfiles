@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0df16af8e5b3225a68b7b592ab531004ddb35a9682b50300ce50174ad867d9aa
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # According to documentation, module using Coro is just:
 # A PROOF-OF-CONCEPT IMPLEMENTATION FOR EXPERIMENTATION.
 # Omit Coro support on bootsrap bacause perl-DBI is pulled in by core
@@ -36,10 +44,6 @@ Summary:        A database access API for perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://dbi.perl.org/
 Source0:        https://cpan.metacpan.org/authors/id/H/HM/HMBRAND/DBI-1.647.tgz
-# oreon url source checksums begin
-%global source0_sha256 0df16af8e5b3225a68b7b592ab531004ddb35a9682b50300ce50174ad867d9aa
-%global source0_file DBI-1.647.tgz
-# oreon url source checksums end
 
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -173,9 +177,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/DBI-1.647.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0df16af8e5b3225a68b7b592ab531004ddb35a9682b50300ce50174ad867d9aa" || { echo "oreon: Source0 SHA256 mismatch for DBI-1.647.tgz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n DBI-%{version}
 for F in lib/DBD/Gofer.pm; do
     iconv -f ISO-8859-1 -t UTF-8 < "$F" > "${F}.utf8"

@@ -1,12 +1,16 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f50e55e42dadcd89d502947c92a0e2ae0e787e9d4cc6f96680e9ae0f663c5558
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: A set of tools to gather troubleshooting information from a system
 Name: sos
 Version: 4.11.0
 Release: %autorelease
 Source0: https://github.com/sosreport/sos/archive/%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 f50e55e42dadcd89d502947c92a0e2ae0e787e9d4cc6f96680e9ae0f663c5558
-%global source0_file 4.11.0.tar.gz
-# oreon url source checksums end
 License: GPL-2.0-only
 BuildArch: noarch
 Url: https://github.com/sosreport/sos
@@ -40,9 +44,7 @@ diagnostic purposes and debugging. Sos is commonly used to help
 support technicians and developers.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/4.11.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f50e55e42dadcd89d502947c92a0e2ae0e787e9d4cc6f96680e9ae0f663c5558" || { echo "oreon: Source0 SHA256 mismatch for 4.11.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}
 
 %if 0%{?fedora} >= 39 || 0%{?rhel} >= 11

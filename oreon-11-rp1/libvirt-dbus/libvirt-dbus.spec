@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 101ca3d018e7fdb8a5ab4482debb7cb0d181743beea2d20f3998b18e107d84e1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # -*- rpm-spec -*-
 
 %global meson_version 0.49.0
@@ -13,10 +21,6 @@ Summary: libvirt D-Bus API binding
 License: LGPL-2.1-or-later
 URL: https://libvirt.org/
 Source0: https://libvirt.org/sources/dbus/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 101ca3d018e7fdb8a5ab4482debb7cb0d181743beea2d20f3998b18e107d84e1
-%global source0_file libvirt-dbus-1.4.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: meson >= %{meson_version}
@@ -38,9 +42,7 @@ Requires: polkit
 This package provides D-Bus API for libvirt
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libvirt-dbus-1.4.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "101ca3d018e7fdb8a5ab4482debb7cb0d181743beea2d20f3998b18e107d84e1" || { echo "oreon: Source0 SHA256 mismatch for libvirt-dbus-1.4.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 # Create a sysusers.d config file

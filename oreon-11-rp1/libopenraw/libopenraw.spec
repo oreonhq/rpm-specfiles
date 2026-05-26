@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6405634f555849eb01cb028e2a63936e7b841151ea2a1571ac5b5b10431cfab9
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:	Decode camera RAW files
 Name:		libopenraw
 Version:	0.1.3
@@ -5,10 +13,6 @@ Release:	21%{?dist}
 License:	LGPL-3.0-or-later
 URL:		http://libopenraw.freedesktop.org/wiki
 Source0:	http://libopenraw.freedesktop.org/download/%{name}-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 6405634f555849eb01cb028e2a63936e7b841151ea2a1571ac5b5b10431cfab9
-%global source0_file libopenraw-0.1.3.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  boost-devel
 BuildRequires:  gcc-c++
@@ -59,9 +63,7 @@ Requires:	%{name}%{?_isa} = %{version}-%{release}
 digital cameras, in GTK+ applications.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libopenraw-0.1.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6405634f555849eb01cb028e2a63936e7b841151ea2a1571ac5b5b10431cfab9" || { echo "oreon: Source0 SHA256 mismatch for libopenraw-0.1.3.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 # this may be installed into a different prefix than gdk-pixbuf2 (e.g. flatpaks)
 sed -i -e '/gdk_pixbuf_moduledir/s/PKG_CONFIG/& --define-variable=prefix=${prefix}/' configure

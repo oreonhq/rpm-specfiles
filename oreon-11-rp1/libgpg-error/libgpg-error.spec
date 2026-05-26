@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a19bc5087fd97026d93cb4b45d51638d1a25202a5e1fbc3905799f424cfa6134
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: libgpg-error
 Version: 1.59
 Release: 1%{?dist}
@@ -9,10 +17,6 @@ Source0: https://www.gnupg.org/ftp/gcrypt/libgpg-error/%{name}-%{version}.tar.bz
 Source1: https://www.gnupg.org/ftp/gcrypt/libgpg-error/%{name}-%{version}.tar.bz2.sig
 Source2: https://gnupg.org/signature_key.asc
 Patch1: libgpg-error-1.29-multilib.patch
-# oreon url source checksums begin
-%global source0_sha256 a19bc5087fd97026d93cb4b45d51638d1a25202a5e1fbc3905799f424cfa6134
-%global source0_file libgpg-error-1.59.tar.bz2
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gnupg2
@@ -38,9 +42,7 @@ pinentry, SmartCard Daemon and possibly more in the future. This package
 contains files necessary to develop applications using libgpg-error.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libgpg-error-1.59.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a19bc5087fd97026d93cb4b45d51638d1a25202a5e1fbc3905799f424cfa6134" || { echo "oreon: Source0 SHA256 mismatch for libgpg-error-1.59.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 %patch 1 -p1 -b .multilib

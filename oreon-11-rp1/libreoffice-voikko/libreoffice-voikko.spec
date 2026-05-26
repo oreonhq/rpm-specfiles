@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8322b58d83eb6e1398d6914885d88a2ee08c8dd2fc2b72d75fba8fe83eefbe38
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global libo %{_libdir}/libreoffice
 # The location of the installed extension. Apparently the directory name must
 # end with .uno.pkg or unopkg will fail.
@@ -22,10 +30,6 @@ Source0:        http://www.puimula.org/voikko-sources/%{name}/%{name}-%{version}
 #Source0:        http://www.puimula.org/htp/testing/%%{name}-%%{version}rc2.tar.gz
 # https://github.com/voikko/libreoffice-voikko/pull/12
 Patch0:         0001-make-install-unpacked-flattens-the-python-hierarchy-.patch
-# oreon url source checksums begin
-%global source0_sha256 8322b58d83eb6e1398d6914885d88a2ee08c8dd2fc2b72d75fba8fe83eefbe38
-%global source0_file libreoffice-voikko-5.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:    python3-devel
 BuildRequires: make
@@ -40,9 +44,7 @@ provided by the Voikko library.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libreoffice-voikko-5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8322b58d83eb6e1398d6914885d88a2ee08c8dd2fc2b72d75fba8fe83eefbe38" || { echo "oreon: Source0 SHA256 mismatch for libreoffice-voikko-5.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1 -b .fix.install-unpacked
 

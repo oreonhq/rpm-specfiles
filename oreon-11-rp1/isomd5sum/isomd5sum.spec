@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b4ffe78a8277b28f7c4528989c55af3eec87d48245f362229c213c704b8c2b97
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global forgeurl https://github.com/rhinstaller/isomd5sum
 
 Summary: Utilities for working with md5sum implanted in ISO images
@@ -11,10 +19,6 @@ License: GPL-2.0-or-later
 %forgemeta
 Url:     %{forgeurl}
 Source0:        https://github.com/rhinstaller/isomd5sum/archive/1.2.5/isomd5sum-1.2.5.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 b4ffe78a8277b28f7c4528989c55af3eec87d48245f362229c213c704b8c2b97
-%global source0_file isomd5sum-1.2.5.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: popt-devel
@@ -43,9 +47,7 @@ an md5sum implanted into an ISO9660 image.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/isomd5sum-1.2.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b4ffe78a8277b28f7c4528989c55af3eec87d48245f362229c213c704b8c2b97" || { echo "oreon: Source0 SHA256 mismatch for isomd5sum-1.2.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %forgeautosetup
 
 

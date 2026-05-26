@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d75ac68dc11fc7efdc05be23095cbeb7ba39edf94c1fe0f6d975167e9e0ce9b5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # General maintainer notes:
 #   Fedora guideliens for packaging of SELinux rules:
 #     https://fedoraproject.org/wiki/SELinux/IndependentPolicy
@@ -17,10 +25,6 @@ URL:            https://github.com/devexp-db/mysql-selinux
 Summary:        SELinux policy modules for MySQL and MariaDB packages
 
 Source0:        https://github.com/devexp-db/mysql-selinux/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 d75ac68dc11fc7efdc05be23095cbeb7ba39edf94c1fe0f6d975167e9e0ce9b5
-%global source0_file 1.0.14.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -36,9 +40,7 @@ SELinux policy modules for MySQL and MariaDB packages.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/1.0.14.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d75ac68dc11fc7efdc05be23095cbeb7ba39edf94c1fe0f6d975167e9e0ce9b5" || { echo "oreon: Source0 SHA256 mismatch for 1.0.14.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{version}
 
 %build

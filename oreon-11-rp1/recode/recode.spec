@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f590407fc51badb351973fc1333ee33111f05ec83a8f954fd8cf0c5e30439806
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:       recode
 Version:    3.7.15
 Release:    3%{?dist}
@@ -54,10 +62,6 @@ License:    GPL-3.0-or-later AND LGPL-3.0-or-later AND BSD-2-Clause AND LicenseR
 URL:        https://github.com/rrthomas/recode
 Source:        https://github.com/rrthomas/recode/releases/download/v3.7.15/recode-3.7.15.tar.gz
 Patch:      recode-3.7.13-Rename-coliding-hash-functions.patch
-# oreon url source checksums begin
-%global source0_sha256 f590407fc51badb351973fc1333ee33111f05ec83a8f954fd8cf0c5e30439806
-%global source0_file recode-3.7.15.tar.gz
-# oreon url source checksums end
 
 
 BuildRequires:  autoconf
@@ -92,9 +96,7 @@ Requires:   %{name}%{?_isa} = %{version}-%{release}
 This package provides the header files for a recode library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/recode-3.7.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f590407fc51badb351973fc1333ee33111f05ec83a8f954fd8cf0c5e30439806" || { echo "oreon: Source0 SHA256 mismatch for recode-3.7.15.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}
 autoreconf -fi
 

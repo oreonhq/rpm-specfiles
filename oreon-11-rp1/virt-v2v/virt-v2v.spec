@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 206d792a8cf4ee1e99dc0a02e03a4576b77b9693d08154436f8d474f8dc5eccb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # If we should verify tarball signature with GPGv2.
 %global verify_tarball_signature 1
 
@@ -60,10 +68,6 @@ Source2:       libguestfs.keyring
 
 # Maintainer script which helps with handling patches.
 Source3:       copy-patches.sh
-# oreon url source checksums begin
-%global source0_sha256 206d792a8cf4ee1e99dc0a02e03a4576b77b9693d08154436f8d474f8dc5eccb
-%global source0_file virt-v2v-2.11.3.tar.gz
-# oreon url source checksums end
 
 BuildRequires: autoconf, automake, libtool
 BuildRequires: make
@@ -226,9 +230,7 @@ for %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/virt-v2v-2.11.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "206d792a8cf4ee1e99dc0a02e03a4576b77b9693d08154436f8d474f8dc5eccb" || { echo "oreon: Source0 SHA256 mismatch for virt-v2v-2.11.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if 0%{verify_tarball_signature}
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

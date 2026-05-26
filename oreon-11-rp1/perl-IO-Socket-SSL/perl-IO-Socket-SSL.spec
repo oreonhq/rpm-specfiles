@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b38473be20256b1a06447dd6769ad162bfad6a258234ed2c7e2e1819c16c4df7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?rhel} >= 9 || 0%{?oreon}
 %bcond_with perl_IO_Socket_SSL_test_unused_idn
 %bcond_with perl_IO_Socket_SSL_test_IO_Socket_INET6
@@ -19,10 +27,6 @@ Patch1:		IO-Socket-SSL-2.098-use-system-default-SSL-version.patch
 # A test for Enable-Post-Handshake-Authentication-TLSv1.3-feature.patch,
 # bug #1632660, requires openssl tool
 Patch2:		IO-Socket-SSL-2.087-Test-client-performs-Post-Handshake-Authentication.patch
-# oreon url source checksums begin
-%global source0_sha256 b38473be20256b1a06447dd6769ad162bfad6a258234ed2c7e2e1819c16c4df7
-%global source0_file IO-Socket-SSL-2.098.tar.gz
-# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -87,9 +91,7 @@ SSL version selection. As an extra bonus, it works perfectly with
 mod_perl.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/IO-Socket-SSL-2.098.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b38473be20256b1a06447dd6769ad162bfad6a258234ed2c7e2e1819c16c4df7" || { echo "oreon: Source0 SHA256 mismatch for IO-Socket-SSL-2.098.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n IO-Socket-SSL-%{version}
 
 # Use system-wide default cipher list to support use of system-wide

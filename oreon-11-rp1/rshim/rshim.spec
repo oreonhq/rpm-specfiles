@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 11a8351211fbe5757040f5784c6f77dadf0fd85a4333eb41d9bbd79cbd12353a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # SPDX-License-Identifier: GPL-2.0-only
 # Copyright (C) 2019 Mellanox Technologies. All Rights Reserved.
 #
@@ -11,10 +19,6 @@ Summary: User-space driver for Mellanox BlueField SoC
 License: (GPL-2.0-only OR BSD-3-Clause) AND MIT
 URL: https://github.com/mellanox/rshim-user-space
 Source0: https://github.com/Mellanox/rshim-user-space/archive/refs/tags/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 11a8351211fbe5757040f5784c6f77dadf0fd85a4333eb41d9bbd79cbd12353a
-%global source0_file rshim-2.6.6.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc, autoconf, automake, make
 BuildRequires: pkgconfig(libpci), pkgconfig(libusb-1.0), pkgconfig(fuse3)
@@ -34,9 +38,7 @@ interface. It provides ways to push boot stream, debug the target or login
 via the virtual console or network interface.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rshim-2.6.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "11a8351211fbe5757040f5784c6f77dadf0fd85a4333eb41d9bbd79cbd12353a" || { echo "oreon: Source0 SHA256 mismatch for rshim-2.6.6.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n rshim-user-space-%{name}-%{version}
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 94d734b9303b3b68df61e4255f2eddeee346b66ec4b6e134f19e1a3cc3ff4a09
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcnm Qalculate
 %global libversion 23
 %global libsymlink 3.10
@@ -11,10 +19,6 @@ License:	GPL-2.0-or-later
 
 URL:		https://qalculate.github.io/
 Source0:	https://github.com/%{srcnm}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 94d734b9303b3b68df61e4255f2eddeee346b66ec4b6e134f19e1a3cc3ff4a09
-%global source0_file libqalculate-5.9.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -65,9 +69,7 @@ This package provides the text-mode interface for Qalculate! The GTK and QT
 frontends are provided by qalculate-gtk and qalculate-kde packages resp.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libqalculate-5.9.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "94d734b9303b3b68df61e4255f2eddeee346b66ec4b6e134f19e1a3cc3ff4a09" || { echo "oreon: Source0 SHA256 mismatch for libqalculate-5.9.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

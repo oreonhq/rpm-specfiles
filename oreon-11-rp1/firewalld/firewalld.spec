@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 992853451a58d229068c0ed10c3e007b2032c0fb654f27d656bfa3c120a2f132
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: A firewall daemon with D-Bus interface providing a dynamic firewall
 Name: firewalld
 Version: 2.4.0
@@ -9,10 +17,6 @@ Source1: FedoraServer.xml
 Source2: FedoraWorkstation.xml
 Source3: org.fedoraproject.FirewallD1.desktop.rules.choice
 Patch0: fedora-only-MDNS-default.patch
-# oreon url source checksums begin
-%global source0_sha256 992853451a58d229068c0ed10c3e007b2032c0fb654f27d656bfa3c120a2f132
-%global source0_file firewalld-2.4.0.tar.bz2
-# oreon url source checksums end
 BuildArch: noarch
 BuildRequires: autoconf
 BuildRequires: automake
@@ -127,9 +131,7 @@ The firewall configuration application provides an configuration interface for
 firewalld.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/firewalld-2.4.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "992853451a58d229068c0ed10c3e007b2032c0fb654f27d656bfa3c120a2f132" || { echo "oreon: Source0 SHA256 mismatch for firewalld-2.4.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 %if 0%{?flatpak}
 sed -i -e 's|/usr|%{_prefix}|' src/firewall-applet.in src/firewall/config/__init__.py.in

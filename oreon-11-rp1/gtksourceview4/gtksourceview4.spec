@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7ec9d18fb283d1f84a3a3eff3b7a72b09a10c9c006597b3fbabbb5958420a87d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond glade %[!(0%{?rhel} >= 10)]
 
 %global glib_version 2.48
@@ -16,10 +24,6 @@ Source0:        https://download.gnome.org/sources/gtksourceview/4.8/gtksourcevi
 # https://gitlab.gnome.org/GNOME/gtksourceview/-/issues/278
 # Fix some regexes to work with pcre2
 Patch0:         0001-language-specs-use-N-U-escape-sequences.patch
-# oreon url source checksums begin
-%global source0_sha256 7ec9d18fb283d1f84a3a3eff3b7a72b09a10c9c006597b3fbabbb5958420a87d
-%global source0_file gtksourceview-4.8.4.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gettext
@@ -66,9 +70,7 @@ The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gtksourceview-4.8.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7ec9d18fb283d1f84a3a3eff3b7a72b09a10c9c006597b3fbabbb5958420a87d" || { echo "oreon: Source0 SHA256 mismatch for gtksourceview-4.8.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n gtksourceview-%{version} -p1
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e4de6b08f33fd8b8985d2f204381408c660bffa6170ac65b68ae1bd3cd575c0a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # The (empty) main package is arch, to have the package built and tests run
 # on all arches, but the actual result package is the noarch -devel subpackge.
 # Debuginfo packages are disabled to prevent rpmbuild from generating an empty
@@ -37,10 +45,6 @@ Patch0:         eigen3_docs.patch
 Patch1:         eigen3_libinstalldir.patch
 # Fix build error with doxygen >= 1.14
 Patch2:         eigen3-doxygen.patch
-# oreon url source checksums begin
-%global source0_sha256 e4de6b08f33fd8b8985d2f204381408c660bffa6170ac65b68ae1bd3cd575c0a
-%global source0_file eigen-5.0.1.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  %{blaslib}-devel
 BuildRequires:  fftw-devel
@@ -150,9 +154,7 @@ BuildArch:      noarch
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/eigen-5.0.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e4de6b08f33fd8b8985d2f204381408c660bffa6170ac65b68ae1bd3cd575c0a" || { echo "oreon: Source0 SHA256 mismatch for eigen-5.0.1.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n eigen-%{version}
 
 

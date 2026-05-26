@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source3_sha256 db214c4ea7ecde2f7986b869f6249864d3ff364e6f210c15aa2824bcbd850a20
+%global oreon_verify_sources \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           paps
 Version:        0.8.0
 Release:        15%{?dist}
@@ -50,10 +58,6 @@ Patch64:	paps-0.6.8-ftbfs.patch
 Patch100:	%{name}-fix-src-to-paps.patch
 Patch101:	%{name}-fix-build.patch
 Patch102:	%{name}-glib282.patch
-# oreon url source checksums begin
-%global source3_sha256 db214c4ea7ecde2f7986b869f6249864d3ff364e6f210c15aa2824bcbd850a20
-%global source3_file paps-0.6.8.tar.gz
-# oreon url source checksums end
 
 Summary:        Plain Text to PostScript converter
 %description
@@ -72,9 +76,7 @@ This package contains a CUPS filter based on paps.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/paps-0.6.8.tar.gz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "db214c4ea7ecde2f7986b869f6249864d3ff364e6f210c15aa2824bcbd850a20" || { echo "oreon: Source3 SHA256 mismatch for paps-0.6.8.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -a 3
 %patch 100 -p1 -b .src-to-paps
 %patch 101 -p1 -b .build

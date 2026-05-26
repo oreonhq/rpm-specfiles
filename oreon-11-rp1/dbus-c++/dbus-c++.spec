@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bc11ac297b3cb010be904c72789695543ee3fdf3d75cdc8225fd371385af4e61
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without ecore
 
 Name:          dbus-c++
@@ -23,10 +31,6 @@ Patch5: dbus-c++-writechar.patch
 # Fix template/operator issues
 # https://github.com/pkgw/dbus-cplusplus/commit/a0b9ef3b469ca23c6a3229d8abb967cbbddcee38
 Patch6: dbus-c++-template-operators.patch
-# oreon url source checksums begin
-%global source0_sha256 bc11ac297b3cb010be904c72789695543ee3fdf3d75cdc8225fd371385af4e61
-%global source0_file libdbus-c++-0.9.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -68,9 +72,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libdbus-c++-0.9.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bc11ac297b3cb010be904c72789695543ee3fdf3d75cdc8225fd371385af4e61" || { echo "oreon: Source0 SHA256 mismatch for libdbus-c++-0.9.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n lib%{name}-%{version}
 sed -i 's/\r//' AUTHORS
 sed -i 's/libtoolize --force --copy/libtoolize -if --copy/' bootstrap

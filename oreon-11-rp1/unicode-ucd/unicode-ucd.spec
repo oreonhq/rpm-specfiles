@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2066d1909b2ea93916ce092da1c0ee4808ea3ef8407c94b4f14f5b7eb263d28e
+%global source1_sha256 f7a48b2b545acfaa77b2d607ae28747404ce02baefee16396c5d2d7a8ef34b5e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # for other future directories from http://www.unicode.org/Public
 %global unicodedir %{_datadir}/unicode
 %global ucddir %{unicodedir}/ucd
@@ -17,12 +27,6 @@ URL:            http://www.unicode.org/ucd/
 Source0:        https://www.unicode.org/Public/%{version}/ucd/UCD.zip
 Source1:        https://www.unicode.org/Public/%{version}/ucd/Unihan.zip
 Source2:        https://www.unicode.org/license.txt
-# oreon url source checksums begin
-%global source0_sha256 2066d1909b2ea93916ce092da1c0ee4808ea3ef8407c94b4f14f5b7eb263d28e
-%global source0_file UCD.zip
-%global source1_sha256 f7a48b2b545acfaa77b2d607ae28747404ce02baefee16396c5d2d7a8ef34b5e
-%global source1_file Unihan.zip
-# oreon url source checksums end
 BuildArch:      noarch
 
 %description
@@ -42,10 +46,7 @@ Han database of Hanzi/Kanji/Hanja Chinese characters.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/UCD.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2066d1909b2ea93916ce092da1c0ee4808ea3ef8407c94b4f14f5b7eb263d28e" || { echo "oreon: Source0 SHA256 mismatch for UCD.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/Unihan.zip; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f7a48b2b545acfaa77b2d607ae28747404ce02baefee16396c5d2d7a8ef34b5e" || { echo "oreon: Source1 SHA256 mismatch for Unihan.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -c
 
 grep -q "%{version}" ReadMe.txt || (echo "zip file seems not %{version}" ; exit 1)

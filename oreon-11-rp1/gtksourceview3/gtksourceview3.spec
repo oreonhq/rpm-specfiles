@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 691b074a37b2a307f7f48edc5b8c7afa7301709be56378ccf9cc9735909077fd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global glib_version 2.48
 %global gtk_version 3.20
 
@@ -14,10 +22,6 @@ URL: https://wiki.gnome.org/Projects/GtkSourceView
 Source0: https://download.gnome.org/sources/gtksourceview/3.24/gtksourceview-%{version}.tar.xz
 # fix build with GCC 14 -Wincompatible-pointer-types
 Patch0:  0001-gcc14.patch
-# oreon url source checksums begin
-%global source0_sha256 691b074a37b2a307f7f48edc5b8c7afa7301709be56378ccf9cc9735909077fd
-%global source0_file gtksourceview-3.24.11.tar.xz
-# oreon url source checksums end
 
 BuildRequires: pkgconfig(gdk-pixbuf-2.0)
 BuildRequires: pkgconfig(gobject-introspection-1.0)
@@ -59,9 +63,7 @@ The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gtksourceview-3.24.11.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "691b074a37b2a307f7f48edc5b8c7afa7301709be56378ccf9cc9735909077fd" || { echo "oreon: Source0 SHA256 mismatch for gtksourceview-3.24.11.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n gtksourceview-%{version} -p1
 
 %build

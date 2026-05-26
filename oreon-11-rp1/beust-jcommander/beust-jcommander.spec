@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4adddcef38265d5339ec28a0e34fc2a7c2f59cf7d6fb988b4e56380c0de0f96b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with bootstrap
 
 Name:           beust-jcommander
@@ -16,10 +24,6 @@ Source1:        https://repo1.maven.org/maven2/com/beust/jcommander/1.82/jcomman
 Source2:        generate-tarball.sh
 
 Patch:          0001-ParseValues-NullPointerException-patch.patch
-# oreon url source checksums begin
-%global source0_sha256 4adddcef38265d5339ec28a0e34fc2a7c2f59cf7d6fb988b4e56380c0de0f96b
-%global source0_file dcf154b6d40dd3865e317de7250b7019044543a9.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -36,9 +40,7 @@ JCommander is a very small Java framework that makes it trivial to
 parse command line parameters (with annotations).
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dcf154b6d40dd3865e317de7250b7019044543a9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4adddcef38265d5339ec28a0e34fc2a7c2f59cf7d6fb988b4e56380c0de0f96b" || { echo "oreon: Source0 SHA256 mismatch for dcf154b6d40dd3865e317de7250b7019044543a9.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 chmod -x license.txt
 

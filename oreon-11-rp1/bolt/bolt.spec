@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0e9646ff153f4445d85bfaac1b0d77d86df9c639f84888f15ee7b0f1fa892b58
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:          bolt
 Version:       0.9.10
 Release:       %autorelease
@@ -6,10 +14,6 @@ License:       LGPL-2.1-or-later
 URL:           https://gitlab.freedesktop.org/bolt/bolt
 Source0:        https://gitlab.freedesktop.org/bolt/bolt/-/archive/0.9.10/bolt-0.9.10.tar.gz
 Patch0:        0001-test-test-unix-skip-unix-domain-socket-test.patch
-# oreon url source checksums begin
-%global source0_sha256 0e9646ff153f4445d85bfaac1b0d77d86df9c639f84888f15ee7b0f1fa892b58
-%global source0_file bolt-0.9.10.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: asciidoc
@@ -50,9 +54,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Test files for bolt
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/bolt-0.9.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0e9646ff153f4445d85bfaac1b0d77d86df9c639f84888f15ee7b0f1fa892b58" || { echo "oreon: Source0 SHA256 mismatch for bolt-0.9.10.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

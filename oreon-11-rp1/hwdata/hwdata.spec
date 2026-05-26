@@ -1,13 +1,17 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 13605519e72e46aa13d5eede1901a07a6c83cd25ef866a86e7458047b5c81ce5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: hwdata
 Summary: Hardware identification and configuration data
 Version: 0.405
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 Source: https://github.com/vcrhonek/hwdata/archive/v%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 13605519e72e46aa13d5eede1901a07a6c83cd25ef866a86e7458047b5c81ce5
-%global source0_file v0.405.tar.gz
-# oreon url source checksums end
 URL:    https://github.com/vcrhonek/hwdata
 BuildArch: noarch
 BuildRequires: make
@@ -25,9 +29,7 @@ The %{name}-devel package contains files for developing applications that use
 %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v0.405.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "13605519e72e46aa13d5eede1901a07a6c83cd25ef866a86e7458047b5c81ce5" || { echo "oreon: Source0 SHA256 mismatch for v0.405.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

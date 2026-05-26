@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4c50c448622dc9c5041ed10da7d87b3e4e71ccb49d4831a849211d423c5f5d33
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %undefine __cmake_in_source_build
 
 Name:           libqaccessibilityclient
@@ -7,10 +15,6 @@ Summary:        Accessibility client library for Qt
 License:        LGPL-2.0-or-later
 URL:            https://invent.kde.org/library/libqaccessibilityclient
 Source0:        https://download.kde.org/stable/libqaccessibilityclient/libqaccessibilityclient-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 4c50c448622dc9c5041ed10da7d87b3e4e71ccb49d4831a849211d423c5f5d33
-%global source0_file libqaccessibilityclient-0.6.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -38,9 +42,7 @@ Headers and CMake files for the Qt 6 build.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libqaccessibilityclient-0.6.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4c50c448622dc9c5041ed10da7d87b3e4e71ccb49d4831a849211d423c5f5d33" || { echo "oreon: Source0 SHA256 mismatch for libqaccessibilityclient-0.6.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n libqaccessibilityclient-%{version} -p1
 
 

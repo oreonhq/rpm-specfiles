@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9f7853249c9ea3b4df92fb6b790c03a60680fc029f44c8bf9894dccf019516bd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Variable-Magic
 Version:        0.64
 Release:        7%{?dist}
@@ -6,10 +14,6 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:            https://metacpan.org/release/Variable-Magic
 Source0:        https://cpan.metacpan.org/authors/id/V/VP/VPIT/Variable-Magic-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 9f7853249c9ea3b4df92fb6b790c03a60680fc029f44c8bf9894dccf019516bd
-%global source0_file Variable-Magic-0.64.tar.gz
-# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -60,9 +64,7 @@ assignation or destruction) that can be applied to it. With this module,
 you can add your own magic to any variable without the pain of the C API.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Variable-Magic-0.64.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9f7853249c9ea3b4df92fb6b790c03a60680fc029f44c8bf9894dccf019516bd" || { echo "oreon: Source0 SHA256 mismatch for Variable-Magic-0.64.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Variable-Magic-%{version}
 
 %build

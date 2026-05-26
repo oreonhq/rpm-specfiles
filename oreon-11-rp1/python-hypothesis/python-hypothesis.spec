@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 590d2574a7711de78c1d4d5bfed92fad11c08248482724b772ceb8401421f634
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without tests
 
 %if %{defined rhel} || 0%{?oreon}
@@ -37,10 +45,6 @@ Source:        https://github.com/HypothesisWorks/hypothesis/archive/hypothesis-
 # see https://github.com/python-attrs/attrs/pull/1329
 #     https://github.com/python-attrs/attrs/commit/7373d88f9bef8a2ff70972f81e8d8b9dfb7c5653
 Patch:          hypothesis-attrs-py314.diff
-# oreon url source checksums begin
-%global source0_sha256 590d2574a7711de78c1d4d5bfed92fad11c08248482724b772ceb8401421f634
-%global source0_file hypothesis-6.123.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -90,9 +94,7 @@ Summary:        %{summary}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/hypothesis-6.123.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "590d2574a7711de78c1d4d5bfed92fad11c08248482724b772ceb8401421f634" || { echo "oreon: Source0 SHA256 mismatch for hypothesis-6.123.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n hypothesis-hypothesis-python-%{version}/hypothesis-python -N
 # make it possible to patch files outside hypothesis-python
 pushd ..

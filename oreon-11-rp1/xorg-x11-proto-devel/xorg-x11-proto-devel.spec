@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 56898c716c0578df8a2d828c9c3e5c528277705c0484381a81960fe1a67668e8
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global debug_package %{nil}
 
 # When releasing a xorg-x11-proto-devel version with updated keysyms,
@@ -14,10 +22,6 @@ BuildArch: noarch
 Source0:  https://www.x.org/pub/individual/proto/xorgproto-%{version}.tar.xz
 
 Source40: make-git-snapshot.sh
-# oreon url source checksums begin
-%global source0_sha256 56898c716c0578df8a2d828c9c3e5c528277705c0484381a81960fe1a67668e8
-%global source0_file xorgproto-2025.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: pkgconfig
@@ -28,9 +32,7 @@ X.Org X11 Protocol headers
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xorgproto-2025.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "56898c716c0578df8a2d828c9c3e5c528277705c0484381a81960fe1a67668e8" || { echo "oreon: Source0 SHA256 mismatch for xorgproto-2025.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n xorgproto-%{version}
 
 %build

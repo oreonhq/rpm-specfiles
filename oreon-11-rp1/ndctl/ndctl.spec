@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a0f93995ceeb121196b9a25e9318bbb80c0b9c24072893f443538fe51165cdec
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		ndctl
 Version:	84
 Release:	1%{?dist}
@@ -5,10 +13,6 @@ Summary:	Manage "libnvdimm" subsystem devices (Non-volatile Memory)
 License:	GPL-2.0-only AND LGPL-2.1-only AND CC0-1.0 AND MIT
 Url:		https://github.com/pmem/ndctl
 Source0:	https://github.com/pmem/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 a0f93995ceeb121196b9a25e9318bbb80c0b9c24072893f443538fe51165cdec
-%global source0_file v84.tar.gz
-# oreon url source checksums end
 
 Requires:	ndctl-libs%{?_isa} = %{version}-%{release}
 Requires:	daxctl-libs%{?_isa} = %{version}-%{release}
@@ -127,9 +131,7 @@ libcxl is a library for enumerating and communicating with CXL devices.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v84.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a0f93995ceeb121196b9a25e9318bbb80c0b9c24072893f443538fe51165cdec" || { echo "oreon: Source0 SHA256 mismatch for v84.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q ndctl-%{version}
 
 %build

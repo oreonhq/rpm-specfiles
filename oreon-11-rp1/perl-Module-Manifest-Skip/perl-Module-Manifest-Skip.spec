@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2c5fc7860c44f7d3a049b624b248112b146761775d92e5e431eaa60e880513be
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Module-Manifest-Skip
 Version:        0.23
 Release:        35%{?dist}
@@ -8,10 +16,6 @@ Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Module-Manifest-S
 # Adapt to changes in Moo-2.004000, bug #1826148,
 # <https://github.com/ingydotnet/module-manifest-skip-pm/issues/7>
 Patch0:         Module-Manifest-Skip-0.23-Adapt-to-changes-in-Moo-2.004000.patch
-# oreon url source checksums begin
-%global source0_sha256 2c5fc7860c44f7d3a049b624b248112b146761775d92e5e431eaa60e880513be
-%global source0_file Module-Manifest-Skip-0.23.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -63,9 +67,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Module-Manifest-Skip-0.23.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c5fc7860c44f7d3a049b624b248112b146761775d92e5e431eaa60e880513be" || { echo "oreon: Source0 SHA256 mismatch for Module-Manifest-Skip-0.23.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Module-Manifest-Skip-%{version}
 %patch -P0 -p1
 # Help generators to recognize Perl scripts

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 01598a46c1162c27253a0de0236f520fd8ee8166e9ebb84a4243574f88e6e50a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Python docs can no longer be built as of version 2022.1.0 due to requiring
 # sphinx_book_theme, which is not available in Fedora or RHEL
 
@@ -18,10 +26,6 @@ Source8: tbbmalloc_proxy.pc
 
 # Fix failure to link with GCC 15
 Patch:   tbb-c++-linkage.patch
-# oreon url source checksums begin
-%global source0_sha256 01598a46c1162c27253a0de0236f520fd8ee8166e9ebb84a4243574f88e6e50a
-%global source0_file tbb-2022.3.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
@@ -80,9 +84,7 @@ Python 3 TBB module.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/tbb-2022.3.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "01598a46c1162c27253a0de0236f520fd8ee8166e9ebb84a4243574f88e6e50a" || { echo "oreon: Source0 SHA256 mismatch for tbb-2022.3.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n oneTBB-%{version}
 
 %generate_buildrequires

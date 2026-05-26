@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 11a615225baa5f8bb686824423f50e4427acd3f70d394765bdff32801f0fd5b0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora} < 20 && 0%{?rhel} < 7
 # Private libraries are not be exposed globally by RPM
 %{?filter_provides_in: %filter_provides_in %{php_extdir}/.*\.so$}
@@ -25,10 +33,6 @@ Patch6:         uuid-aarch64.patch
 
 # use ldflags for libs too
 Patch7:	        uuid-1.6.2-ldflags.patch
-# oreon url source checksums begin
-%global source0_sha256 11a615225baa5f8bb686824423f50e4427acd3f70d394765bdff32801f0fd5b0
-%global source0_file ossp-uuid_1.6.2.orig.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc-c++
@@ -109,9 +113,7 @@ Requires:       %{name}-devel = %{version}-%{release}
 DCE development headers and libraries for OSSP uuid.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ossp-uuid_1.6.2.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "11a615225baa5f8bb686824423f50e4427acd3f70d394765bdff32801f0fd5b0" || { echo "oreon: Source0 SHA256 mismatch for ossp-uuid_1.6.2.orig.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1
 %patch -P1 -p1

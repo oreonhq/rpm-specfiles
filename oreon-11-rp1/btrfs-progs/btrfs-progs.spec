@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bb27e1ec54e7c3c0b7b2e596f853a73c07a3d72f21bc94042073c24dbf045796
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Local definition of version_no_tilde when it doesn't exist
 %{!?version_no_tilde: %define version_no_tilde %{shrink:%(echo '%{version}' | tr '~' '-')}}
 
@@ -15,10 +23,6 @@ Source2:        gpgkey-F2B41200C54EFB30380C1756C565D5F9D76D583B.gpg
 # Special patch source, conditionally applied
 ## Disable RAID56 modes (RHEL-only)
 Source1001:     1001-balance-mkfs-Disable-raid56-modes.patch
-# oreon url source checksums begin
-%global source0_sha256 bb27e1ec54e7c3c0b7b2e596f853a73c07a3d72f21bc94042073c24dbf045796
-%global source0_file btrfs-progs-v6.19.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gnupg2
 BuildRequires:  gcc, autoconf, automake, make
@@ -96,9 +100,7 @@ btrfs filesystem-specific programs in Python.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/btrfs-progs-v6.19.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bb27e1ec54e7c3c0b7b2e596f853a73c07a3d72f21bc94042073c24dbf045796" || { echo "oreon: Source0 SHA256 mismatch for btrfs-progs-v6.19.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %autosetup -n %{name}-v%{version_no_tilde} -S git_am
 

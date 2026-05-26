@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 65d24c9651604c841ca55d08c284d115959fb150b86343898716b2c04566b8fd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without check
 %global udevdir %(pkg-config --variable=udevdir udev)
 %global cargo_install_lib 0
@@ -63,10 +71,6 @@ Patch02:        0001-Cargo.toml-drop-libbpf-sys-to-1.5.0.patch
 # https://gitlab.freedesktop.org/libevdev/udev-hid-bpf/-/merge_requests/223
 # Here, we still allow 0.5 as well for compatibility with vendored deps.
 Patch03:        udev-hid-bpf-2.2.0-20251121-stderrlog-0.6.patch
-# oreon url source checksums begin
-%global source0_sha256 65d24c9651604c841ca55d08c284d115959fb150b86343898716b2c04566b8fd
-%global source0_file udev-hid-bpf-2.2.0-20251121.tar.bz2
-# oreon url source checksums end
 
 %if 0%{?rhel} || 0%{?oreon}
 BuildRequires:  rust-toolset
@@ -123,9 +127,7 @@ for %{name} that have been merged into
 an upstream kernel.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/udev-hid-bpf-2.2.0-20251121.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "65d24c9651604c841ca55d08c284d115959fb150b86343898716b2c04566b8fd" || { echo "oreon: Source0 SHA256 mismatch for udev-hid-bpf-2.2.0-20251121.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -p1 -n %{name}-%{tarball}
 %py3_shebang_fix $(git grep -l  '#!/usr/bin/.*python3')
 

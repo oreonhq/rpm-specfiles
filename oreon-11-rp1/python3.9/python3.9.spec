@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 00e07d7c0f2f0cc002432d1ee84d2a40dae404a99303e3f97701c10966c91834
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # ==================
 # Top-level metadata
 # ==================
@@ -440,10 +448,6 @@ Patch475: 00475-cve-2025-15367.patch
 #
 # gh-144125: email: verify headers are sound in BytesGenerator
 Patch476: 00476-cve-2026-1299.patch
-# oreon url source checksums begin
-%global source0_sha256 00e07d7c0f2f0cc002432d1ee84d2a40dae404a99303e3f97701c10966c91834
-%global source0_file Python-3.9.25.tar.xz
-# oreon url source checksums end
 
 # (New patches go here ^^^)
 #
@@ -864,9 +868,7 @@ that support it, such as CentOS or RHEL or older Fedora releases.
 # ======================================================
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Python-3.9.25.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "00e07d7c0f2f0cc002432d1ee84d2a40dae404a99303e3f97701c10966c91834" || { echo "oreon: Source0 SHA256 mismatch for Python-3.9.25.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %gpgverify -k2 -s1 -d0
 %autosetup -S git_am -N -n Python-%{upstream_version}
 

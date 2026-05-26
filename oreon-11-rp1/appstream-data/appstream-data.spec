@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source2_sha256 0007ab31a22059bd1a83aa4a79a68e1d9ba257efbe1d29ea9d720b586c33137a
+%global oreon_verify_sources \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:   Fedora AppStream metadata
 Name:      appstream-data
 Version:   44
@@ -9,10 +17,6 @@ Source1:   https://dl.fedoraproject.org/pub/alt/screenshots/f%{version}/fedora-%
 Source2:   https://dl.fedoraproject.org/pub/alt/screenshots/f%{version}/fedora-%{version}-icons.tar.gz
 Source3:   gstreamer-non-free.xml
 Source4:   other-repos.xml
-# oreon url source checksums begin
-%global source2_sha256 0007ab31a22059bd1a83aa4a79a68e1d9ba257efbe1d29ea9d720b586c33137a
-%global source2_file fedora-44-icons.tar.gz
-# oreon url source checksums end
 
 BuildRequires: libappstream-glib
 

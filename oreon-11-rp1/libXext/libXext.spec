@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 edb59fa23994e405fdc5b400afdf5820ae6160b94f35e3dc3da4457a16e89753
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global tarball libXext
 #global gitdate 20130524
 %global gitversion dfe6e1f3b
@@ -15,10 +23,6 @@ Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
 Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 edb59fa23994e405fdc5b400afdf5820ae6160b94f35e3dc3da4457a16e89753
-%global source0_file libXext-1.3.6.tar.xz
-# oreon url source checksums end
 %endif
 
 Requires: libX11 >= 1.5.99.902
@@ -43,9 +47,7 @@ Requires: %{name} = %{version}-%{release}
 X.Org X11 libXext development package
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libXext-1.3.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "edb59fa23994e405fdc5b400afdf5820ae6160b94f35e3dc3da4457a16e89753" || { echo "oreon: Source0 SHA256 mismatch for libXext-1.3.6.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

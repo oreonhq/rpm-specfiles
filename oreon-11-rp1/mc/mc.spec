@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 cae149d42f844e5185d8c81d7db3913a8fa214c65f852200a9d896b468af164c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # NOTE: disabled sftp (needs to be ported to use libssh instead of libssh2)
 %bcond gpm %[!(0%{?rhel} >= 10)]
 %bcond slang 1
@@ -11,10 +19,6 @@ License:	GPL-3.0-or-later
 URL:		https://midnight-commander.org/
 Source:		http://ftp.midnight-commander.org/mc-%{version}.tar.xz
 Patch:		%{name}-spec.syntax.patch
-# oreon url source checksums begin
-%global source0_sha256 cae149d42f844e5185d8c81d7db3913a8fa214c65f852200a9d896b468af164c
-%global source0_file mc-4.8.33.tar.xz
-# oreon url source checksums end
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	gcc
@@ -50,9 +54,7 @@ Requires:	python3-boto
 Midnight Commander s3+ and UC1541 EXTFS backend scripts.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mc-4.8.33.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cae149d42f844e5185d8c81d7db3913a8fa214c65f852200a9d896b468af164c" || { echo "oreon: Source0 SHA256 mismatch for mc-4.8.33.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

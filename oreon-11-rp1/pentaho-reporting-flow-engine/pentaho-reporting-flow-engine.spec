@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 233f66e8d25c5dd971716d4200203a612a407649686ef3b52075d04b4c9df0dd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: pentaho-reporting-flow-engine
 Version: 0.9.4
 Release: 40%{?dist}
@@ -15,10 +23,6 @@ Requires: sac, flute, liblayout >= 0.2.10, libserializer
 BuildArch: noarch
 ExclusiveArch:  %{java_arches} noarch
 Patch0: pentaho-reporting-flow-engine-0.9.4-remove-commons-logging.patch
-# oreon url source checksums begin
-%global source0_sha256 233f66e8d25c5dd971716d4200203a612a407649686ef3b52075d04b4c9df0dd
-%global source0_file flow-engine-0.9.4.zip
-# oreon url source checksums end
 
 %description
 Pentaho Reporting Flow Engine is a free Java report library, formerly
@@ -33,9 +37,7 @@ Requires: jpackage-utils
 Javadoc for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/flow-engine-0.9.4.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "233f66e8d25c5dd971716d4200203a612a407649686ef3b52075d04b4c9df0dd" || { echo "oreon: Source0 SHA256 mismatch for flow-engine-0.9.4.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -c
 %patch -P0 -p1 -b .no_commons_logging
 mkdir -p lib

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3de1cbb889d06e5a6a945dcb921292544477ab89da95ca89f1eec2de29937afb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora}
 %bcond_without mdns
 %bcond_without braille
@@ -44,10 +52,6 @@ Patch003: foomatic-ripdie-error.patch
 Patch004: foomaticrip-reject-unknown-values.patch
 # CVE-2025-64524 fix
 Patch005: 0001-rastertopclx.c-Fix-infinite-loop-caused-by-crafted-f.patch
-# oreon url source checksums begin
-%global source0_sha256 3de1cbb889d06e5a6a945dcb921292544477ab89da95ca89f1eec2de29937afb
-%global source0_file cups-filters-2.0.1.tar.gz
-# oreon url source checksums end
 
 
 # driverless backend/driver was moved into a separate package to
@@ -132,9 +136,7 @@ queues.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cups-filters-2.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3de1cbb889d06e5a6a945dcb921292544477ab89da95ca89f1eec2de29937afb" || { echo "oreon: Source0 SHA256 mismatch for cups-filters-2.0.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -N
 
 %if 0%{?fedora} >= 43 || 0%{?rhel} >=9

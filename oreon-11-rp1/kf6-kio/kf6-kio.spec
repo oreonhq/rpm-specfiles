@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9fbe26ae37924f92f558ccdc09b573db38d8f07828894042ea3f8ddd4568f3c4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global framework kio
 
 %global stable_kf6 stable
@@ -25,10 +33,6 @@ Patch0:  0001-Give-the-kuriikwsfiltereng_private-a-VERSION-and-SOV.patch
 # Disable the help: and ghelp: protocol for Flatpak builds, to avoid depending
 # on the docbook stack.
 Patch101: kio-no-help-protocol.patch
-# oreon url source checksums begin
-%global source0_sha256 9fbe26ae37924f92f558ccdc09b573db38d8f07828894042ea3f8ddd4568f3c4
-%global source0_file kio-6.24.0.tar.xz
-# oreon url source checksums end
 %endif
 
 
@@ -161,9 +165,7 @@ Requires:       %{name}-core%{?_isa} = %{version}-%{release}
 %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kio-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9fbe26ae37924f92f558ccdc09b573db38d8f07828894042ea3f8ddd4568f3c4" || { echo "oreon: Source0 SHA256 mismatch for kio-6.24.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{framework}-%{version} -p1
 
 

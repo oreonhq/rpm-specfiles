@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 39f92f366bdf3f1a02af4da75b4a5c52df6c9f7e736c7d65de13283f9f0ef416
+%global source4_sha256 da313e9ed72260c0c0690e8c93f409dc426183dae6d7772d30cad8875b2e11b3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source4_sha256:%(test -z "%{source4_sha256}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_sha256}" || { echo "oreon: Source4 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           cmocka
 Version:        2.0.2
 Release:        %autorelease
@@ -10,12 +20,6 @@ Source0:        https://cmocka.org/files/2.0/%{name}-%{version}.tar.xz
 Source1:        https://cmocka.org/files/2.0/%{name}-%{version}.tar.xz.asc
 Source2:        cmocka.keyring
 Source4:        https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.4.1/doxygen-awesome-css-2.4.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 39f92f366bdf3f1a02af4da75b4a5c52df6c9f7e736c7d65de13283f9f0ef416
-%global source0_file cmocka-2.0.2.tar.xz
-%global source4_sha256 da313e9ed72260c0c0690e8c93f409dc426183dae6d7772d30cad8875b2e11b3
-%global source4_file doxygen-awesome-css-2.4.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  cmake
@@ -106,10 +110,7 @@ This package provides the API documentation for the cmocka unit testing
 framework.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cmocka-2.0.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "39f92f366bdf3f1a02af4da75b4a5c52df6c9f7e736c7d65de13283f9f0ef416" || { echo "oreon: Source0 SHA256 mismatch for cmocka-2.0.2.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/doxygen-awesome-css-2.4.1.tar.gz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "da313e9ed72260c0c0690e8c93f409dc426183dae6d7772d30cad8875b2e11b3" || { echo "oreon: Source4 SHA256 mismatch for doxygen-awesome-css-2.4.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -a4 -p1
 

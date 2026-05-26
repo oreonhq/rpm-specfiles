@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7adf1716d2a3df6802c3bb17664d79b9d68d7316a6773eb08d6e691c5ff0b2fc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # We don't want to bring luajit in RHEL
 %if 0%{?rhel} > 0
 %bcond_with lua
@@ -28,10 +36,6 @@ Source0:        https://github.com/iovisor/bcc/archive/v0.35.0/bcc-0.35.0.tar.gz
 Patch0:        https://github.com/iovisor/bcc/pull/5369.patch
 # Fix build with llvm 22
 Patch1:         https://github.com/iovisor/bcc/commit/4c7be1ec6ab74e973f8d18a9011fa349c3d9dd58.patch
-# oreon url source checksums begin
-%global source0_sha256 7adf1716d2a3df6802c3bb17664d79b9d68d7316a6773eb08d6e691c5ff0b2fc
-%global source0_file bcc-0.35.0.tar.gz
-# oreon url source checksums end
 
 # Arches will be included as upstream support is added and dependencies are
 # satisfied in the respective arches
@@ -131,9 +135,7 @@ BuildRequires:  bpftool
 Command line libbpf tools for BPF Compiler Collection (BCC)
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/bcc-0.35.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7adf1716d2a3df6802c3bb17664d79b9d68d7316a6773eb08d6e691c5ff0b2fc" || { echo "oreon: Source0 SHA256 mismatch for bcc-0.35.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

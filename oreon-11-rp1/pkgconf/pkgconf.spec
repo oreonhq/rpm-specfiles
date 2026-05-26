@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 cd05c9589b9f86ecf044c10a2269822bc9eb001eced2582cfffd658b0a50c243
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # pkgconf acts as pkgconfig
 %bcond pkgconfig_compat 1
 
@@ -38,10 +46,6 @@ Source0:        https://distfiles.dereferenced.org/%{name}/%{name}-%{version}.ta
 # Simple wrapper scripts to offer platform versions of pkgconfig
 Source1:        platform-pkg-config.in
 Source2:        pkg-config.in
-# oreon url source checksums begin
-%global source0_sha256 cd05c9589b9f86ecf044c10a2269822bc9eb001eced2582cfffd658b0a50c243
-%global source0_file pkgconf-2.5.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -128,9 +132,7 @@ manifest using data from installed .pc files.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pkgconf-2.5.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cd05c9589b9f86ecf044c10a2269822bc9eb001eced2582cfffd658b0a50c243" || { echo "oreon: Source0 SHA256 mismatch for pkgconf-2.5.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

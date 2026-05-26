@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           fmt
 Version:        11.2.0
 Release:        %autorelease
@@ -6,10 +14,6 @@ License:        MIT
 Summary:        Small, safe and fast formatting library for C++
 URL:            https://github.com/fmtlib/%{name}
 Source0:        https://github.com/fmtlib/fmt/archive/11.2.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af
-%global source0_file 11.2.0.tar.gz
-# oreon url source checksums end
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -37,9 +41,7 @@ Obsoletes:      cppformat-devel < %{?epoch:%{epoch}:}%{version}-%{release}
 This package contains the header file for using %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/11.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bc23066d87ab3168f27cef3e97d545fa63314f5c79df5ea444d41d56f962c6af" || { echo "oreon: Source0 SHA256 mismatch for 11.2.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7295491b4be5eeac5e7a3fb2067e236e2955ffdc6bbd45f546466edee321644b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pkgname libburn
 
 Summary:         Library for reading, mastering and writing optical discs
@@ -12,10 +20,6 @@ Source2:         https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB00
 Patch0:          libburn-0.6.16-multilib.patch
 Patch1:          libburn-1.5.4-rpath.patch
 Patch2:          https://dev.lovelyhq.com/libburnia/libburn/commit/d537f9dd35282df834a311ead5f113af67d223b3.patch#/libburn-1.5.6-c23.patch
-# oreon url source checksums begin
-%global source0_sha256 7295491b4be5eeac5e7a3fb2067e236e2955ffdc6bbd45f546466edee321644b
-%global source0_file libburn-1.5.6.tar.gz
-# oreon url source checksums end
 BuildRequires:   gnupg2
 BuildRequires:   gcc, make, intltool, gettext
 %if 0%{?rhel} && "%{name}" != "%{pkgname}"
@@ -64,9 +68,7 @@ A limited cdrecord compatibility wrapper which allows to use some %{name}
 features from the command line.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libburn-1.5.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7295491b4be5eeac5e7a3fb2067e236e2955ffdc6bbd45f546466edee321644b" || { echo "oreon: Source0 SHA256 mismatch for libburn-1.5.6.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -n %{pkgname}-%{version}
 

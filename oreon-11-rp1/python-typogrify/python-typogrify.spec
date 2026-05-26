@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8be4668cda434163ce229d87ca273a11922cb1614cb359970b7dc96eed13cb38
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pypi_name typogrify
 
 Name:           python-%{pypi_name}
@@ -9,10 +17,6 @@ Summary:        Filters to enhance web typography, with support for Django & Jin
 License:        BSD-3-Clause AND MIT
 URL:            https://github.com/mintchaos/typogrify
 Source:         %{pypi_source %{pypi_name}}
-# oreon url source checksums begin
-%global source0_sha256 8be4668cda434163ce229d87ca273a11922cb1614cb359970b7dc96eed13cb38
-%global source0_file typogrify-2.0.7.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
@@ -32,9 +36,7 @@ Summary:        %{summary}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/typogrify-2.0.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8be4668cda434163ce229d87ca273a11922cb1614cb359970b7dc96eed13cb38" || { echo "oreon: Source0 SHA256 mismatch for typogrify-2.0.7.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{pypi_name}-%{version}
 # remove shebang line from the python scripts
 for lib in $(find -type f -name '*.py'); do

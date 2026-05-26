@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b15309fc85623893289cb9b2b88dfa9ed1e69156b75f29938553a45be6d730af
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-IO-Tty
 Version:        1.20
 Release:        9%{?dist}
@@ -5,10 +13,6 @@ Summary:        Perl interface to pseudo tty's
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND BSD-2-Clause
 URL:            https://metacpan.org/release/IO-Tty
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/IO-Tty-1.20.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 b15309fc85623893289cb9b2b88dfa9ed1e69156b75f29938553a45be6d730af
-%global source0_file IO-Tty-1.20.tar.gz
-# oreon url source checksums end
 
 # Module Build
 BuildRequires:  coreutils
@@ -43,9 +47,7 @@ BuildRequires:  perl(Test::More)
 IO::Tty and IO::Pty provide an interface to pseudo tty's.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/IO-Tty-1.20.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b15309fc85623893289cb9b2b88dfa9ed1e69156b75f29938553a45be6d730af" || { echo "oreon: Source0 SHA256 mismatch for IO-Tty-1.20.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n IO-Tty-%{version}
 
 %build

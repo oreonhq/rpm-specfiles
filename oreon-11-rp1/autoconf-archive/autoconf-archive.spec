@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7bcd5d001916f3a50ed7436f4f700e3d2b1bade3ed803219c592d62502a57363
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           autoconf-archive
 Version:        2024.10.16
 Release:        5%{?dist}
@@ -12,10 +20,6 @@ Source1:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
 # gpg --keyserver pool.sks-keyservers.net --recv-keys 1A4F63A13A4649B632F65EE141BC28FE99089D72
 # gpg --export --export-options export-minimal 1A4F63A13A4649B632F65EE141BC28FE99089D72 > gpgkey-1A4F63A13A4649B632F65EE141BC28FE99089D72.gpg
 Source2:        gpgkey-1A4F63A13A4649B632F65EE141BC28FE99089D72.gpg
-# oreon url source checksums begin
-%global source0_sha256 7bcd5d001916f3a50ed7436f4f700e3d2b1bade3ed803219c592d62502a57363
-%global source0_file autoconf-archive-2024.10.16.tar.xz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  gnupg2
 BuildRequires:  make
@@ -27,9 +31,7 @@ GNU Autoconf that have been contributed as free software by friendly
 supporters of the cause from all over the Internet.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/autoconf-archive-2024.10.16.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7bcd5d001916f3a50ed7436f4f700e3d2b1bade3ed803219c592d62502a57363" || { echo "oreon: Source0 SHA256 mismatch for autoconf-archive-2024.10.16.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

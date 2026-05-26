@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1afcd33da9e8f913ace6a2126788162e207e26f5d5e29c6573c0e581ffc58b99
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # install init scripts to /usr/libexec with systemd
 %global script_path %{_libexecdir}/iptables
 
@@ -25,10 +33,6 @@ Source9: arptables.service
 Source10: ebtables.service
 Source11: ebtables-helper
 Source12: ebtables-config
-# oreon url source checksums begin
-%global source0_sha256 1afcd33da9e8f913ace6a2126788162e207e26f5d5e29c6573c0e581ffc58b99
-%global source0_file iptables-1.8.13.tar.xz
-# oreon url source checksums end
 
 # pf.os: ISC license
 # iptables-apply: Artistic Licence 2.0
@@ -187,9 +191,7 @@ Provides: %{_prefix}/sbin/iptables
 nftables compatibility for iptables, arptables and ebtables.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/iptables-1.8.13.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1afcd33da9e8f913ace6a2126788162e207e26f5d5e29c6573c0e581ffc58b99" || { echo "oreon: Source0 SHA256 mismatch for iptables-1.8.13.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

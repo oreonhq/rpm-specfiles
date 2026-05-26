@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 85b9b104d256c985e6e244b4227d447897fac429071cc114e5cc819dae848852
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: Box2D
 Version:  2.4.2
 Release:  7%{?dist}
@@ -6,10 +14,6 @@ Summary: A 2D Physics Engine for Games
 License: Zlib
 URL: http://box2d.org/
 Source0: https://github.com/erincatto/box2d/archive/v%{version}/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 85b9b104d256c985e6e244b4227d447897fac429071cc114e5cc819dae848852
-%global source0_file Box2D-2.4.2.tar.gz
-# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires: cmake
@@ -33,9 +37,7 @@ we encourage you to give credit to Box2D in your product.
 These are the development files.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Box2D-2.4.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "85b9b104d256c985e6e244b4227d447897fac429071cc114e5cc819dae848852" || { echo "oreon: Source0 SHA256 mismatch for Box2D-2.4.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -qn box2d-%{version}
 rm -r extern
 

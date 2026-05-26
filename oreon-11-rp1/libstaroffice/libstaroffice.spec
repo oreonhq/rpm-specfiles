@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f94fb0ad8216f97127bedef163a45886b43c62deac5e5b0f5e628e234220c8db
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global apiversion 0.0
 
 Name: libstaroffice
@@ -8,10 +16,6 @@ Summary: A library for import of binary StarOffice documents
 License: LGPL-2.1-or-later OR MPL-2.0
 URL: https://github.com/fosnola/libstaroffice/wiki
 Source: https://github.com/fosnola/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 f94fb0ad8216f97127bedef163a45886b43c62deac5e5b0f5e628e234220c8db
-%global source0_file libstaroffice-0.0.7.tar.xz
-# oreon url source checksums end
 
 BuildRequires: doxygen
 BuildRequires: gcc-c++
@@ -49,9 +53,7 @@ Tools to transform StarOffice documents into other formats. Currently
 supported: CSV, HTML, plain text, SVG, raw.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libstaroffice-0.0.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f94fb0ad8216f97127bedef163a45886b43c62deac5e5b0f5e628e234220c8db" || { echo "oreon: Source0 SHA256 mismatch for libstaroffice-0.0.7.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

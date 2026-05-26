@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3fcbd305e4abd34768c62050e18ca0986f7d9c5eca343fb98275418013065c0e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:	Library and frontend for decoding MPEG2/4 AAC
 Name:		faad2
 Epoch:		1
@@ -6,10 +14,6 @@ Release:	6%{?dist}
 License:	GPL-2.0-or-later
 URL:		https://github.com/knik0/faad2/
 Source:		https://github.com/knik0/faad2/archive/%{version}/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 3fcbd305e4abd34768c62050e18ca0986f7d9c5eca343fb98275418013065c0e
-%global source0_file faad2-2.11.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires:	gcc-c++
 BuildRequires:	cmake
@@ -42,9 +46,7 @@ written from scratch.
 This package contains development files and documentation for libfaad.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/faad2-2.11.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3fcbd305e4abd34768c62050e18ca0986f7d9c5eca343fb98275418013065c0e" || { echo "oreon: Source0 SHA256 mismatch for faad2-2.11.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

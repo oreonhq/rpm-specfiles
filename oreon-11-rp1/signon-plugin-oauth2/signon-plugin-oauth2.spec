@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5a1298cc49f504503f54f20f0f5f685e43f541244a654dd3da58951f43782625
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global gitdate 20231216
 %global commit0 fab698862466994a8fdc9aa335c87b4f05430ce6
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
@@ -11,10 +19,6 @@ License:        LGPL-2.1-or-later
 URL:            https://gitlab.com/accounts-sso/signon-plugin-oauth2
 
 Source0:        https://gitlab.com/accounts-sso/signon-plugin-oauth2/-/archive/%{commit0}/%{name}-%{commit0}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 5a1298cc49f504503f54f20f0f5f685e43f541244a654dd3da58951f43782625
-%global source0_file signon-plugin-oauth2-fab698862466994a8fdc9aa335c87b4f05430ce6.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  qt6-qtbase-devel
@@ -34,9 +38,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/signon-plugin-oauth2-fab698862466994a8fdc9aa335c87b4f05430ce6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5a1298cc49f504503f54f20f0f5f685e43f541244a654dd3da58951f43782625" || { echo "oreon: Source0 SHA256 mismatch for signon-plugin-oauth2-fab698862466994a8fdc9aa335c87b4f05430ce6.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{commit0} -p1
 
 

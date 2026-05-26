@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 416727ae1f1080ea6e3090cea36dd076826fc369151e36ab736557ba92196f9f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond abrt %{undefined rhel}
 
 Name:        mdadm
@@ -31,10 +39,6 @@ Patch:       0002-dont-stop-in-assemble.patch
 # Fedora customization patches
 Patch:       mdadm-udev.patch
 Patch:       mdadm-2.5.2-static.patch
-# oreon url source checksums begin
-%global source0_sha256 416727ae1f1080ea6e3090cea36dd076826fc369151e36ab736557ba92196f9f
-%global source0_file mdadm-4.3.tar.xz
-# oreon url source checksums end
 
 BuildRequires:    make
 BuildRequires:    systemd-rpm-macros
@@ -59,9 +63,7 @@ file can be used to help with some common tasks.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mdadm-4.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "416727ae1f1080ea6e3090cea36dd076826fc369151e36ab736557ba92196f9f" || { echo "oreon: Source0 SHA256 mismatch for mdadm-4.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 # because the tarball is what is signed, not the compressed tarball
 # keyring should be one from https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys
 # which will vary depending on who did the release

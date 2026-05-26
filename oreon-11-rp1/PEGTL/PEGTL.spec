@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 88b8e4ded6ea1f3f2223cc3e37072e2db1e123b90d36c309816341ae9d966723
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global debug_package   %{nil}
 
 Name:           PEGTL
@@ -9,10 +17,6 @@ URL:            https://github.com/taocpp/%{name}
 Source:        https://github.com/taocpp/PEGTL/archive/2.8.3/PEGTL-2.8.3.tar.gz
 
 Patch:          PEGTL-compiler-warning.patch
-# oreon url source checksums begin
-%global source0_sha256 88b8e4ded6ea1f3f2223cc3e37072e2db1e123b90d36c309816341ae9d966723
-%global source0_file PEGTL-2.8.3.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -35,9 +39,7 @@ The %{name}-devel package contains C++ header files for developing
 applications that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/PEGTL-2.8.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "88b8e4ded6ea1f3f2223cc3e37072e2db1e123b90d36c309816341ae9d966723" || { echo "oreon: Source0 SHA256 mismatch for PEGTL-2.8.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

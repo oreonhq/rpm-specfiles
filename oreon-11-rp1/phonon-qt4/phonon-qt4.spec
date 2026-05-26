@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2e8b145669afa0e93833e4064b657677abc9413e4007fa5ddc91397c9bddc295
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Multimedia framework api for Qt4
 Name:    phonon-qt4
 Version: 4.10.3
@@ -22,10 +30,6 @@ Patch10: phonon-rpath_use_link_path.patch
 Patch11: phonon-DEFAULT_SOURCE.patch
 
 Patch12: phonon-qt4-fix_cmake.patch
-# oreon url source checksums begin
-%global source0_sha256 2e8b145669afa0e93833e4064b657677abc9413e4007fa5ddc91397c9bddc295
-%global source0_file phonon-4.10.3.tar.xz
-# oreon url source checksums end
 
 # filter plugins
 %global __provides_exclude_from ^(%{_qt4_plugindir}/.*\\.so)$
@@ -68,9 +72,7 @@ Provides:  phonon-devel%{?_isa} = %{version}-%{release}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/phonon-4.10.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2e8b145669afa0e93833e4064b657677abc9413e4007fa5ddc91397c9bddc295" || { echo "oreon: Source0 SHA256 mismatch for phonon-4.10.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n phonon-%{version}
 
 %patch -P10 -p1 -b .10

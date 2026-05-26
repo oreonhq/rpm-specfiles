@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b5a568bac10823fccbaee6b046847fc8952f49f7e726057623843aa3a130813e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # SPDX-License-Identifier: MIT
 
 # Build as an OpenSSL provider instead of as an engine
@@ -22,10 +30,6 @@ Summary:        Intel QuickAssist Technology (QAT) OpenSSL Engine
 License:        BSD-3-Clause
 URL:            https://github.com/intel/QAT_Engine
 Source0:        https://github.com/intel/QAT_Engine/archive/v2.1.0/qatengine-2.1.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 b5a568bac10823fccbaee6b046847fc8952f49f7e726057623843aa3a130813e
-%global source0_file qatengine-2.1.0.tar.gz
-# oreon url source checksums end
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1909065
 ExclusiveArch:  x86_64
@@ -49,9 +53,7 @@ for both hardware and optimized software using Intel QuickAssist Technology
 enabled Intel platforms.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/qatengine-2.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b5a568bac10823fccbaee6b046847fc8952f49f7e726057623843aa3a130813e" || { echo "oreon: Source0 SHA256 mismatch for qatengine-2.1.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n QAT_Engine-%{version}
 
 %build

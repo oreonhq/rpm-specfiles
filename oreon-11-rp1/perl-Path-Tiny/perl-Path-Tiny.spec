@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ff20713d1a14d257af9c78209001f40dc177e4b9d1496115cbd8726d577946c7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %if ! (0%{?rhel})
 %bcond_without perl_Path_Tiny_enables_optional_test
@@ -12,10 +20,6 @@ Summary:	File path utility
 License:	Apache-2.0
 URL:		https://metacpan.org/release/Path-Tiny
 Source0:	https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Path-Tiny-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ff20713d1a14d257af9c78209001f40dc177e4b9d1496115cbd8726d577946c7
-%global source0_file Path-Tiny-0.150.tar.gz
-# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -104,9 +108,7 @@ The *_utf8 methods (slurp_utf8, lines_utf8, etc.) operate in raw mode without
 CRLF translation.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Path-Tiny-0.150.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ff20713d1a14d257af9c78209001f40dc177e4b9d1496115cbd8726d577946c7" || { echo "oreon: Source0 SHA256 mismatch for Path-Tiny-0.150.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Path-Tiny-%{version}
 
 %build

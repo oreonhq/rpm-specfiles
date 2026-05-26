@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source10_sha256 d511de1f556521041b0811c6fb9c3e175d9a527bce5ade9ca31ab79b0941823c
+%global oreon_verify_sources \
+%{?source10_sha256:%(test -z "%{source10_sha256}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_sha256}" || { echo "oreon: Source10 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           rust
 Version:        1.94.0
 Release:        %autorelease
@@ -162,10 +170,6 @@ Patch100:       rustc-1.94.0-disable-libssh2.patch
 
 # When building wasi, prevent linking a compiler-rt builtins library we don't have.
 Patch1000:	wasi-no-link-builtins.patch
-# oreon url source checksums begin
-%global source10_sha256 d511de1f556521041b0811c6fb9c3e175d9a527bce5ade9ca31ab79b0941823c
-%global source10_file wasi-libc-wasi-sdk-29.tar.gz
-# oreon url source checksums end
 
 # Get the Rust triple for any architecture and ABI.
 %{lua: function rust_triple(arch, abi)
@@ -684,9 +688,7 @@ the Cargo package manager, and a few convenience macros for rpm builds.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/wasi-libc-wasi-sdk-29.tar.gz; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d511de1f556521041b0811c6fb9c3e175d9a527bce5ade9ca31ab79b0941823c" || { echo "oreon: Source10 SHA256 mismatch for wasi-libc-wasi-sdk-29.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %gpgverify -k 2 -s 1 -d 0
 
 %ifarch %{bootstrap_arches}

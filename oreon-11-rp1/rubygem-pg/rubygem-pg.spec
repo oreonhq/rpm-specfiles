@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1388d0563e13d2758c1089e35e973a3249e955c659592d10e5b77c468f628a99
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Generated from pg-0.11.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name pg
 
@@ -14,10 +22,6 @@ Source1: %{gem_name}-%{version}-spec.tar.gz
 # Disable RPATH.
 # https://github.com/ged/ruby-pg/issues/183
 Patch0: rubygem-pg-1.3.0-remove-rpath.patch
-# oreon url source checksums begin
-%global source0_sha256 1388d0563e13d2758c1089e35e973a3249e955c659592d10e5b77c468f628a99
-%global source0_file pg-1.6.3.gem
-# oreon url source checksums end
 # lib/pg/text_{de,en}coder.rb
 Requires: rubygem(json)
 # This is optional dependency now.
@@ -50,9 +54,7 @@ BuildArch: noarch
 Documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pg-1.6.3.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1388d0563e13d2758c1089e35e973a3249e955c659592d10e5b77c468f628a99" || { echo "oreon: Source0 SHA256 mismatch for pg-1.6.3.gem" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %patch 0 -p1

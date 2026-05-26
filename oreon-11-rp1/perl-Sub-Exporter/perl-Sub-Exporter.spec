@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2a95695d35c5d0d5373a7e145c96b9b016113b74e94116835ac05450cae4d445
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run extra test
 %if ! (0%{?rhel})
 %bcond_without perl_Sub_Exporter_enables_extra_test
@@ -12,10 +20,6 @@ Summary:	Sophisticated exporter for custom-built routines
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Exporter
 Source0:	https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Sub-Exporter-0.991.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 2a95695d35c5d0d5373a7e145c96b9b016113b74e94116835ac05450cae4d445
-%global source0_file Sub-Exporter-0.991.tar.gz
-# oreon url source checksums end
 
 BuildArch:	noarch
 # Build
@@ -65,9 +69,7 @@ ACHTUNG! If you're not familiar with Exporter or exporting, read
 Sub::Exporter::Tutorial first!
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Sub-Exporter-0.991.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2a95695d35c5d0d5373a7e145c96b9b016113b74e94116835ac05450cae4d445" || { echo "oreon: Source0 SHA256 mismatch for Sub-Exporter-0.991.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Sub-Exporter-%{version}
 
 # Fix shellbangs

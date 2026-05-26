@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 86b11ad8b512204816241d5dd98ac0561d1f6b06180f658c532c3ffbc16925df
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Keep the *.la file around
 # See 
 %global __brp_remove_la_files %nil
@@ -12,10 +20,6 @@ BuildRequires:	zlib-devel
 Source0:        https://github.com/libnxz/power-gzip/archive/v0.64/libnxz-0.64.tar.gz
 # Fixes for GCC 14 and zlib-ng compat usage
 Patch0:         %{url}/pull/209.patch
-# oreon url source checksums begin
-%global source0_sha256 86b11ad8b512204816241d5dd98ac0561d1f6b06180f658c532c3ffbc16925df
-%global source0_file libnxz-0.64.tar.gz
-# oreon url source checksums end
 
 # Be explicit about the soname in order to avoid unintentional changes.
 %global soname libnxz.so.0
@@ -50,9 +54,7 @@ The %{name}-static package contains static libraries for developing
 application that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libnxz-0.64.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "86b11ad8b512204816241d5dd98ac0561d1f6b06180f658c532c3ffbc16925df" || { echo "oreon: Source0 SHA256 mismatch for libnxz-0.64.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n power-gzip-%{version}
 
 # Create a sysusers.d config file

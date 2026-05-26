@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2a3f50621a71c9c0c425fb6709ae69bb2cf4df4bfe72ac661c2ea302e5aba185
+%global source3_sha256 86019c5ddc6b310126664adf00b5f906b6ebd3d1cf5a2d1a7b546ccd481fab6d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define enable_japanese 1
 
 Summary: Converts LaTeX documents to HTML
@@ -15,12 +25,6 @@ Source2: %{name}-manpages.tar.gz
 Source3: http://takeno.iee.niit.ac.jp/~shige/TeX/latex2html/data2/l2h-2023-jp3.2b1.37.tar.gz
 Patch1: latex2html-2018.2-teTeX-l2h-config.patch
 Patch2: latex2html-2002-2-1-SHLIB.patch
-# oreon url source checksums begin
-%global source0_sha256 2a3f50621a71c9c0c425fb6709ae69bb2cf4df4bfe72ac661c2ea302e5aba185
-%global source0_file latex2html-2023.2.tar.gz
-%global source3_sha256 86019c5ddc6b310126664adf00b5f906b6ebd3d1cf5a2d1a7b546ccd481fab6d
-%global source3_file l2h-2023-jp3.2b1.37.tar.gz
-# oreon url source checksums end
 Requires: tex(latex), tex(dvips), tex(url.sty), tex(preview.sty), netpbm-progs, poppler-utils
 BuildRequires: tex(latex), tex(dvips), tex(url.sty), tex(preview.sty), netpbm-progs, poppler-utils
 BuildRequires: perl-interpreter >= 5.003, perl-generators, ghostscript >= 4.03
@@ -39,10 +43,7 @@ LATEX2HTML does also a good job in rapid web site deployment. These
 pages are generated from a single LATEX source.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/latex2html-2023.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2a3f50621a71c9c0c425fb6709ae69bb2cf4df4bfe72ac661c2ea302e5aba185" || { echo "oreon: Source0 SHA256 mismatch for latex2html-2023.2.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/l2h-2023-jp3.2b1.37.tar.gz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "86019c5ddc6b310126664adf00b5f906b6ebd3d1cf5a2d1a7b546ccd481fab6d" || { echo "oreon: Source3 SHA256 mismatch for l2h-2023-jp3.2b1.37.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -c -a 0
 
 pushd %{name}-%{version}

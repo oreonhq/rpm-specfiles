@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 213269b05aac957c98f6e944774bb438d0bd168a2ec60b9e4f8d92035925821c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without check
 
 Name:           libarchive
@@ -42,10 +50,6 @@ BuildRequires: make
 # loaded, which breaks the RIPEMD-160 test. This patch disables the RIPEMD-160
 # support explicitly.
 Patch0001: 0001-Drop-rmd160-from-OpenSSL.patch
-# oreon url source checksums begin
-%global source0_sha256 213269b05aac957c98f6e944774bb438d0bd168a2ec60b9e4f8d92035925821c
-%global source0_file libarchive-3.8.6.tar.gz
-# oreon url source checksums end
 
 %description
 Libarchive is a programming library that can create and read several different
@@ -100,9 +104,7 @@ libarchive packages. It is designed to provide an interface compatible with Info
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libarchive-3.8.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "213269b05aac957c98f6e944774bb438d0bd168a2ec60b9e4f8d92035925821c" || { echo "oreon: Source0 SHA256 mismatch for libarchive-3.8.6.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

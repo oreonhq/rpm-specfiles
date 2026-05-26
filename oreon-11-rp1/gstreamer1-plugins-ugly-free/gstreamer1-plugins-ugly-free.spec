@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0c04763200467b9b61a916b33646a6916a97cc9869d8b6dca57427b1f2734dee
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global         majorminor 1.0
 
 #global gitrel     140
@@ -17,10 +25,6 @@ URL:            http://gstreamer.freedesktop.org/
 Source0:        https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.28.3.tar.xz
 %else
 Source0:        https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 0c04763200467b9b61a916b33646a6916a97cc9869d8b6dca57427b1f2734dee
-%global source0_file gst-plugins-ugly-1.28.3.tar.xz
-# oreon url source checksums end
 %endif
 
 BuildRequires:	meson >= 0.48.0
@@ -61,9 +65,7 @@ is not fully compatible with LGPL.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gst-plugins-ugly-1.28.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0c04763200467b9b61a916b33646a6916a97cc9869d8b6dca57427b1f2734dee" || { echo "oreon: Source0 SHA256 mismatch for gst-plugins-ugly-1.28.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n gst-plugins-ugly-%{version}
 
 

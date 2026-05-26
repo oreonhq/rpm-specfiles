@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 91adaf6bc2e04575288c35681cad3bc9766fa24f5194cc10990991bcd703b24b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without bootstrap
 
 Name:           maven-dependency-tree
@@ -10,10 +18,6 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
-# oreon url source checksums begin
-%global source0_sha256 91adaf6bc2e04575288c35681cad3bc9766fa24f5194cc10990991bcd703b24b
-%global source0_file maven-dependency-tree-3.2.1-source-release.zip
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -34,9 +38,7 @@ Obsoletes:      %{name}-javadoc < 3.2.1-20
 Apache Maven dependency tree artifact. Originally part of maven-shared.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/maven-dependency-tree-3.2.1-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "91adaf6bc2e04575288c35681cad3bc9766fa24f5194cc10990991bcd703b24b" || { echo "oreon: Source0 SHA256 mismatch for maven-dependency-tree-3.2.1-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %pom_remove_plugin :apache-rat-plugin

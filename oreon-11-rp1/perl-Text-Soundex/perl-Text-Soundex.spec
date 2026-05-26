@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f6dd55b4280b25dea978221839864382560074e1d6933395faee2510c2db60ed
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Text-Soundex
 Version:        3.05
 Release:        36%{?dist}
@@ -7,10 +15,6 @@ Summary:        Implementation of the soundex algorithm
 License:        Soundex AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/Text-Soundex
 Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Text-Soundex-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 f6dd55b4280b25dea978221839864382560074e1d6933395faee2510c2db60ed
-%global source0_file Text-Soundex-3.05.tar.gz
-# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -50,9 +54,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Text-Soundex-3.05.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f6dd55b4280b25dea978221839864382560074e1d6933395faee2510c2db60ed" || { echo "oreon: Source0 SHA256 mismatch for Text-Soundex-3.05.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Text-Soundex-%{version}
 # Help generators to recognize Perl scripts
 for F in t/*.t; do

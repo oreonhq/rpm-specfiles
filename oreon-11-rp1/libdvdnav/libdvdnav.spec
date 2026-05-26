@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a2a18f5ad36d133c74bf9106b6445806fa253b09141a46392550394b647b221e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global abi 4
 
 Name:           libdvdnav
@@ -9,10 +17,6 @@ URL:            http://dvdnav.mplayerhq.hu/
 Source0:        https://download.videolan.org/pub/videolan/libdvdnav/%{version}/libdvdnav-%{version}.tar.xz
 Source1:        https://download.videolan.org/pub/videolan/libdvdnav/%{version}/libdvdnav-%{version}.tar.xz.asc
 Source2:        https://download.videolan.org/pub/keys/7180713BE58D1ADC.asc
-# oreon url source checksums begin
-%global source0_sha256 a2a18f5ad36d133c74bf9106b6445806fa253b09141a46392550394b647b221e
-%global source0_file libdvdnav-7.0.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  doxygen
 BuildRequires:  gcc
@@ -35,9 +39,7 @@ libdvdnav-devel contains the files necessary to build packages that use the
 libdvdnav library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libdvdnav-7.0.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a2a18f5ad36d133c74bf9106b6445806fa253b09141a46392550394b647b221e" || { echo "oreon: Source0 SHA256 mismatch for libdvdnav-7.0.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{S:2}' --signature='%{S:1}' --data='%{S:0}'
 %setup -q
 

@@ -1,3 +1,10 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6749259e89bbb273f3f5ad7acdffb7c47a2cf8fcaeab4c4695484cef5f4c6b46
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
 
 # Fedora package review: http://bugzilla.redhat.com/718395
 
@@ -15,10 +22,6 @@ Source0: https://github.com/metabrainz/libmusicbrainz/releases/download/release-
 Patch0: doxygen.patch
 Patch1: 0001-Don-t-emit-errors-unless-compiled-for-debug.patch
 Patch2: 0002-libxml2-2-12.patch
-# oreon url source checksums begin
-%global source0_sha256 6749259e89bbb273f3f5ad7acdffb7c47a2cf8fcaeab4c4695484cef5f4c6b46
-%global source0_file libmusicbrainz-5.1.0.tar.gz
-# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires: cmake
@@ -43,9 +46,7 @@ applications which will use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libmusicbrainz-5.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6749259e89bbb273f3f5ad7acdffb7c47a2cf8fcaeab4c4695484cef5f4c6b46" || { echo "oreon: Source0 SHA256 mismatch for libmusicbrainz-5.1.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n libmusicbrainz-%{version}
 %patch -P0 -p1 -b .doxygen
 %patch -P1 -p1 -b .silence-warnings

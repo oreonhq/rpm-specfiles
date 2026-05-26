@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 39c53f6b3b02cbc73176564413b51d3c0f375f9760983fd579c27f558b169cfc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # TODO: BR: perl(B::C) when available
 # Run optional test
 %bcond_without perl_Sub_Name_enables_optional_test
@@ -9,10 +17,6 @@ Summary:	Name - or rename - a sub
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Name
 Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Sub-Name-0.28.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 39c53f6b3b02cbc73176564413b51d3c0f375f9760983fd579c27f558b169cfc
-%global source0_file Sub-Name-0.28.tar.gz
-# oreon url source checksums end
 
 # Module Build
 BuildRequires:	coreutils
@@ -55,9 +59,7 @@ Note that this is mainly for aid in debugging; you still cannot call the sub
 by the new name (without some deep magic).
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Sub-Name-0.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "39c53f6b3b02cbc73176564413b51d3c0f375f9760983fd579c27f558b169cfc" || { echo "oreon: Source0 SHA256 mismatch for Sub-Name-0.28.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Sub-Name-%{version}
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bc9ed54ef6940a6ee076f8627458fbc3cfed9b2f7bf4ef6e865be7644a51ce8f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global _cups_serverbin %{_prefix}/lib/cups
 
 %if 0%{?fedora}
@@ -23,10 +31,6 @@ Source0:        https://github.com/OpenPrinting/cups-browsed/releases/download/2
 # Patches
 # https://github.com/OpenPrinting/cups-browsed/pull/50
 Patch01: 0001-Add-BrowseOptionsUpdate-configuration-directive-50.patch
-# oreon url source checksums begin
-%global source0_sha256 bc9ed54ef6940a6ee076f8627458fbc3cfed9b2f7bf4ef6e865be7644a51ce8f
-%global source0_file cups-browsed-2.1.1.tar.gz
-# oreon url source checksums end
 
 
 # remove once CentOS Stream 10 is released, cups-browsed
@@ -92,9 +96,7 @@ broadcast, or by polling a remote print server.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cups-browsed-2.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bc9ed54ef6940a6ee076f8627458fbc3cfed9b2f7bf4ef6e865be7644a51ce8f" || { echo "oreon: Source0 SHA256 mismatch for cups-browsed-2.1.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git
 
 

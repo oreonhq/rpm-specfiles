@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9d1cfba063cc18f72427a22451f7908836b7331ac8785dbe07553c5b043a0c3d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %if ! (0%{?rhel})
 %bcond_without perl_BSD_Resource_enables_optional_test
@@ -16,10 +24,6 @@ Summary:        BSD process resource limit and priority functions
 License:        (Artistic-2.0 OR LGPL-2.0-only) AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/BSD-Resource
 Source0:        https://cpan.metacpan.org/authors/id/J/JH/JHI/BSD-Resource-%{module_version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 9d1cfba063cc18f72427a22451f7908836b7331ac8785dbe07553c5b043a0c3d
-%global source0_file BSD-Resource-1.2911.tar.gz
-# oreon url source checksums end
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make
@@ -50,9 +54,7 @@ A module providing an interface for testing and setting process limits
 and priorities.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/BSD-Resource-1.2911.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9d1cfba063cc18f72427a22451f7908836b7331ac8785dbe07553c5b043a0c3d" || { echo "oreon: Source0 SHA256 mismatch for BSD-Resource-1.2911.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n BSD-Resource-%{module_version} 
 
 %build

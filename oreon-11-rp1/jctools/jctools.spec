@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8a21d8e3756d041580dfb91afe8070f7988e52a766ab6fba41bbcac7f96f4b6c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with bootstrap
 %global srcname JCTools
 
@@ -11,10 +19,6 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/JCTools/JCTools/archive/v4.0.5/JCTools-4.0.5.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 8a21d8e3756d041580dfb91afe8070f7988e52a766ab6fba41bbcac7f96f4b6c
-%global source0_file JCTools-4.0.5.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -41,9 +45,7 @@ currently missing from the JDK:
 ° Executor
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/JCTools-4.0.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8a21d8e3756d041580dfb91afe8070f7988e52a766ab6fba41bbcac7f96f4b6c" || { echo "oreon: Source0 SHA256 mismatch for JCTools-4.0.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 
 # drop some failure-prone tests (race conditions?)

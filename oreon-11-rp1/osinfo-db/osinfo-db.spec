@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 06379250c91306c98cb9726af44eae5909dfdd5449f90331e904ae1221d8d5e7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # -*- rpm-spec -*-
 
 %define with_mingw 0
@@ -11,10 +19,6 @@ Version: 20251212
 Release: %autorelease
 License: GPL-2.0-or-later
 Source: https://releases.pagure.org/libosinfo/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 06379250c91306c98cb9726af44eae5909dfdd5449f90331e904ae1221d8d5e7
-%global source0_file osinfo-db-20251212.tar.xz
-# oreon url source checksums end
 URL: http://libosinfo.org/
 BuildRequires: intltool
 BuildRequires: osinfo-db-tools

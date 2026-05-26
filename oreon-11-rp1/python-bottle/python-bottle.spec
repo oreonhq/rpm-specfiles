@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 807c789c3184d7070010dbdf1339ee46ff9fb9b6694d7caa3047f975f8a7df60
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname bottle
 
 Name:           python-%{srcname}
@@ -8,10 +16,6 @@ Summary:        Fast and simple WSGI-framework for small web-applications
 License:        MIT
 URL:            http://bottlepy.org
 Source0:        https://github.com/bottlepy/%{srcname}/archive/%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 807c789c3184d7070010dbdf1339ee46ff9fb9b6694d7caa3047f975f8a7df60
-%global source0_file 0.13.4.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -37,9 +41,7 @@ template engines. All in a single file and with no dependencies other than the
 Python Standard Library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/0.13.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "807c789c3184d7070010dbdf1339ee46ff9fb9b6694d7caa3047f975f8a7df60" || { echo "oreon: Source0 SHA256 mismatch for 0.13.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{srcname}-%{version}
 sed -i '/^#!/d' bottle.py
 

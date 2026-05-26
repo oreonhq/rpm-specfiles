@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 293c93858b2327c53d474a19feb3beb0652705eef060a4db63e10b51495dea2e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without httpclient
 %bcond_without oro
 %bcond_without vfs
@@ -24,10 +32,6 @@ Source2:        https://archive.apache.org/dist/ant/KEYS
 Source3:         00-global-settings.patch
 # java.util.jar.Pack200 was removed in modern JDKs, do not compile against it
 Patch0:          ivy-FileUtil-Pack200-reflection.patch
-# oreon url source checksums begin
-%global source0_sha256 293c93858b2327c53d474a19feb3beb0652705eef060a4db63e10b51495dea2e
-%global source0_file apache-ivy-2.5.3-src.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gnupg2
 BuildRequires:  ant
@@ -68,9 +72,7 @@ reporting and publication.
 %{?javadoc_package}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/apache-ivy-2.5.3-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "293c93858b2327c53d474a19feb3beb0652705eef060a4db63e10b51495dea2e" || { echo "oreon: Source0 SHA256 mismatch for apache-ivy-2.5.3-src.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 # Upstream tarball uses CRLF so %%autosetup patch step cannot match hunks

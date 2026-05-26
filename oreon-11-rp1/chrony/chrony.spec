@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source10_sha256 34a96eb96b319c64f3cc49e0b3a0ae5a1a0a041aab9adea027ab51875f2b2e83
+%global oreon_verify_sources \
+%{?source10_sha256:%(test -z "%{source10_sha256}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_sha256}" || { echo "oreon: Source10 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global _hardened_build 1
 %global clknetsim_ver 6ee99f50dec8
 %bcond_without debug
@@ -29,10 +37,6 @@ Patch1:         chrony-nm-dispatcher-dhcp.patch
 Patch2:         chrony-servicedirs.patch
 # update seccomp filter for new glibc
 Patch3:         chrony-seccomp.patch
-# oreon url source checksums begin
-%global source10_sha256 34a96eb96b319c64f3cc49e0b3a0ae5a1a0a041aab9adea027ab51875f2b2e83
-%global source10_file clknetsim-6ee99f50dec8.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  libcap-devel libedit-devel nettle-devel pps-tools-devel
 BuildRequires:  gcc gcc-c++ make bison systemd gnupg2
@@ -60,9 +64,7 @@ service to other computers in the network.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/clknetsim-6ee99f50dec8.tar.gz; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "34a96eb96b319c64f3cc49e0b3a0ae5a1a0a041aab9adea027ab51875f2b2e83" || { echo "oreon: Source10 SHA256 mismatch for clknetsim-6ee99f50dec8.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring=%{SOURCE2} --signature=%{SOURCE1} --data=%{SOURCE0}
 %setup -q -n %{name}-%{version}%{?prerelease} -a 10
 %{?gitpatch:%patch -P 0 -p1}

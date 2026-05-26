@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 20ff055be9829b69d46ebc400dfe516a40d287d7ce810c74355d6bdc1a28d8a9
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           s-nail
 Version:        14.9.25
 Release:        4%{?dist}
@@ -14,10 +22,6 @@ Source2:        steffen.asc
 # https://bugzilla.redhat.com/show_bug.cgi?id=2171723
 Patch0:		s-nail-makeflags.patch
 Patch1:		s-nail-14.9.25-test-sha256.patch
-# oreon url source checksums begin
-%global source0_sha256 20ff055be9829b69d46ebc400dfe516a40d287d7ce810c74355d6bdc1a28d8a9
-%global source0_file s-nail-14.9.25.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gnupg2
@@ -52,9 +56,7 @@ non-interactive scripting capabilities.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/s-nail-14.9.25.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "20ff055be9829b69d46ebc400dfe516a40d287d7ce810c74355d6bdc1a28d8a9" || { echo "oreon: Source0 SHA256 mismatch for s-nail-14.9.25.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup -p1

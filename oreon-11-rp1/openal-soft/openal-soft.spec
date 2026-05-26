@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9e3f95c7de7f349b8fb85746a3f46f5373326c4e27b3d787e9f4337fc1246fc1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           openal-soft
 Version:        1.24.2
 Release:        %autorelease
@@ -60,10 +68,6 @@ Source:         https://src.fedoraproject.org/lookaside/pkgs/rpms/openal-soft/op
 Source:         make_tarball.sh
 # Patch to unbundle fmt
 Patch:          0001-Unbundle-fmt.diff
-# oreon url source checksums begin
-%global source0_sha256 9e3f95c7de7f349b8fb85746a3f46f5373326c4e27b3d787e9f4337fc1246fc1
-%global source0_file openal-soft-1.24.2-clean.tar.xz
-# oreon url source checksums end
 
 # Implicit dependencies for the unbundling script: curl, rpm-build, tar.
 BuildRequires:  cmake
@@ -125,9 +129,7 @@ for configuring OpenAL features.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/openal-soft-1.24.2-clean.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9e3f95c7de7f349b8fb85746a3f46f5373326c4e27b3d787e9f4337fc1246fc1" || { echo "oreon: Source0 SHA256 mismatch for openal-soft-1.24.2-clean.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

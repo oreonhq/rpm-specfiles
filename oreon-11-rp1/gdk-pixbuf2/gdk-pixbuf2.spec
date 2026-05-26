@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 69b93e09139b80c0ee661503d60deb5a5874a31772b5184b9cd5462a4100ab68
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global glib2_version 2.56.0
 %global glycin_version 2.0.1
 
@@ -14,10 +22,6 @@ Summary:        An image loading library
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/gdk-pixbuf
 Source0:        https://download.gnome.org/sources/gdk-pixbuf/2.44/gdk-pixbuf-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 69b93e09139b80c0ee661503d60deb5a5874a31772b5184b9cd5462a4100ab68
-%global source0_file gdk-pixbuf-2.44.5.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  docbook-style-xsl
 BuildRequires:  gettext
@@ -81,9 +85,7 @@ The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gdk-pixbuf-2.44.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "69b93e09139b80c0ee661503d60deb5a5874a31772b5184b9cd5462a4100ab68" || { echo "oreon: Source0 SHA256 mismatch for gdk-pixbuf-2.44.5.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n gdk-pixbuf-%{version} -p1
 
 %build

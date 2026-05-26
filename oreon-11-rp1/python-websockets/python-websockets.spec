@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8451495265af3e368f794c4dc15c99ce90c771d95560f542bff8c64b5455af3b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pypi_name websockets
 
 Name:           python-%{pypi_name}
@@ -18,10 +26,6 @@ Patch:          https://github.com/python-websockets/websockets/pull/1639.patch
 # Support for Python 3.14
 # I remove the patch on the changelog because auto apply fails.
 Patch:          https://github.com/python-websockets/websockets/commit/036fd45c16afec1b713ae7f37393c76c3ff528a5.patch
-# oreon url source checksums begin
-%global source0_sha256 8451495265af3e368f794c4dc15c99ce90c771d95560f542bff8c64b5455af3b
-%global source0_file websockets-15.0.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  python3dist(pytest)
@@ -44,9 +48,7 @@ BuildRequires:  python3-devel
 %description -n python3-%{pypi_name} %{_description}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/websockets-15.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8451495265af3e368f794c4dc15c99ce90c771d95560f542bff8c64b5455af3b" || { echo "oreon: Source0 SHA256 mismatch for websockets-15.0.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{pypi_name}-%{version} -p1
 
 %generate_buildrequires

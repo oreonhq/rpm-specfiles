@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3201f1a60e3f16484082e6045c896842261fc345de9fb2e620fd2a2c7af3a93a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-File-Which
 Version:        1.27
 Release:        15%{?dist}
@@ -5,10 +13,6 @@ Summary:        Portable implementation of the 'which' utility
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Which
 Source0:        https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/File-Which-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 3201f1a60e3f16484082e6045c896842261fc345de9fb2e620fd2a2c7af3a93a
-%global source0_file File-Which-1.27.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  perl-interpreter
@@ -35,9 +39,7 @@ be used to get the absolute filename of an executable program
 installed somewhere in your PATH, or just check for its existence.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/File-Which-1.27.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3201f1a60e3f16484082e6045c896842261fc345de9fb2e620fd2a2c7af3a93a" || { echo "oreon: Source0 SHA256 mismatch for File-Which-1.27.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n File-Which-%{version}
 
 %build

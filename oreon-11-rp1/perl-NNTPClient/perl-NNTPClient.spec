@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5c51a634ffccca95eb2d95855bcc937b057f9a14bd79ee4db6e65583bd576da3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-NNTPClient
 Version:        0.37
 Release:        28%{?dist}
@@ -10,10 +18,6 @@ Source0:        https://cpan.metacpan.org/authors/id/R/RV/RVA/NNTPClient-%{versi
 Patch0:         NNTPClient-0.37-Skip-tests-with-unportable-commands.patch
 # Skip network tests by default, CPAN RT#118799, inn segfaults (bug #1395717)
 Patch1:         NNTPClient-0.37-Perform-network-tests-only-if-EXTENDED_TESTING-1.patch
-# oreon url source checksums begin
-%global source0_sha256 5c51a634ffccca95eb2d95855bcc937b057f9a14bd79ee4db6e65583bd576da3
-%global source0_file NNTPClient-0.37.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  make
@@ -45,9 +49,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/NNTPClient-0.37.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5c51a634ffccca95eb2d95855bcc937b057f9a14bd79ee4db6e65583bd576da3" || { echo "oreon: Source0 SHA256 mismatch for NNTPClient-0.37.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n NNTPClient-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

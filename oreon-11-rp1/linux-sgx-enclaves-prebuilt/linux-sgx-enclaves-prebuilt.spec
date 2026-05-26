@@ -1,3 +1,12 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 57c1e4637039a9fd93218a78f7f6e893c7d69960c7e180c1b8c9d3ed949495ce
+%global source1_sha256 ebd0a660969b934ec653a78a1c843df3f327d7ea866493c0dde58e18d92c4e40
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
 
 # There's no concept of debuginfo for SGX enclaves
 %global debug_package %{nil}
@@ -111,12 +120,6 @@ Source2: repack.sh
 #
 # but is then post-processed using repack.sh to create this
 Source3: prebuilt_dcap_%{dcap_version}-repacked.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 57c1e4637039a9fd93218a78f7f6e893c7d69960c7e180c1b8c9d3ed949495ce
-%global source0_file sgx_2.25_reproducible.tar.gz
-%global source1_sha256 ebd0a660969b934ec653a78a1c843df3f327d7ea866493c0dde58e18d92c4e40
-%global source1_file dcap_1.22_reproducible.tar.gz
-# oreon url source checksums end
 
 BuildRequires: sgx-rpm-macros
 
@@ -154,10 +157,7 @@ prebuilt by Intel. \
 %do_package qve %{with_enclave_qve} %{dcap_version}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sgx_2.25_reproducible.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "57c1e4637039a9fd93218a78f7f6e893c7d69960c7e180c1b8c9d3ed949495ce" || { echo "oreon: Source0 SHA256 mismatch for sgx_2.25_reproducible.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/dcap_1.22_reproducible.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ebd0a660969b934ec653a78a1c843df3f327d7ea866493c0dde58e18d92c4e40" || { echo "oreon: Source1 SHA256 mismatch for dcap_1.22_reproducible.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 # Upstream repo renamed to confidential-computing.sgx (GitHub archive top dir matches)
 %autosetup -n confidential-computing.sgx-sgx_%{linux_sgx_version}_reproducible
 

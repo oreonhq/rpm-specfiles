@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2d1c07e6aa509c017516c08307b0b707cd165a17275ab5f1caff9aaa0e3b6c7d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond CHECK 1
 
 Name:           ngtcp2
@@ -15,10 +23,6 @@ Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf4f3b914
 Source3:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v1.21.0/doc/mkapiref.py
 Source4:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v1.21.0/doc/source/index.rst
 Source5:        https://github.com/ngtcp2/ngtcp2/raw/refs/tags/v1.21.0/doc/source/programmers-guide.rst
-# oreon url source checksums begin
-%global source0_sha256 2d1c07e6aa509c017516c08307b0b707cd165a17275ab5f1caff9aaa0e3b6c7d
-%global source0_file ngtcp2-1.21.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  gcc
@@ -101,9 +105,7 @@ BuildArch:      noarch
 Development API documentation.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ngtcp2-1.21.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2d1c07e6aa509c017516c08307b0b707cd165a17275ab5f1caff9aaa0e3b6c7d" || { echo "oreon: Source0 SHA256 mismatch for ngtcp2-1.21.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 install -p -m 755 %{SOURCE3} doc/

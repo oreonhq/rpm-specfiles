@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a6c0a28a4055d5cde35ac9249ad0596ee6aa10f0a29bd88a6e197d29adee0a3c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?rhel}
 %bcond_with tests
 %else
@@ -18,10 +26,6 @@ Source1:        cloud-init-tmpfiles.conf
 # Fixes systemd dependency cycle on Fedora by adding DefaultDependencies=no
 # and including Fedora in distribution-specific conditional blocks
 Patch:          0001-fix-avoid-dependency-cycle-on-Fedora.patch
-# oreon url source checksums begin
-%global source0_sha256 a6c0a28a4055d5cde35ac9249ad0596ee6aa10f0a29bd88a6e197d29adee0a3c
-%global source0_file cloud-init-25.3.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -79,9 +83,7 @@ ssh keys and to let the user run various scripts.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cloud-init-25.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a6c0a28a4055d5cde35ac9249ad0596ee6aa10f0a29bd88a6e197d29adee0a3c" || { echo "oreon: Source0 SHA256 mismatch for cloud-init-25.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # Removing shebang manually because of rpmlint, will update upstream later

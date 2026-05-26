@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6e937f3650afab4aac198f348b89b1ca42edceb17fb6bb0918f642143ccfd15e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           liblockfile
 Version:        1.17
 Release:        12%{?dist}
@@ -7,10 +15,6 @@ Summary:        This implements a number of functions found in -lmail on SysV sy
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            http://packages.qa.debian.org/libl/liblockfile.html
 Source0:        http://deb.debian.org/debian/pool/main/libl/liblockfile/liblockfile_%{version}.orig.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 6e937f3650afab4aac198f348b89b1ca42edceb17fb6bb0918f642143ccfd15e
-%global source0_file liblockfile_1.17.orig.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires: make
@@ -33,9 +37,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/liblockfile_1.17.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6e937f3650afab4aac198f348b89b1ca42edceb17fb6bb0918f642143ccfd15e" || { echo "oreon: Source0 SHA256 mismatch for liblockfile_1.17.orig.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{VERSION}
 
 # There are occurrences of "install -g GROUP ...".

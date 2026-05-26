@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 66070ddb448fe9fcee76aa26be2ede5a80f85563e3a4afd59d2bfd79fbe2e831
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           cups-pk-helper
 Version:        0.2.7
 Release:        12%{?dist}
@@ -8,10 +16,6 @@ URL:            http://www.freedesktop.org/wiki/Software/cups-pk-helper/
 Source0:        http://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-%{version}.tar.xz
 
 Patch0:         polkit_result.patch
-# oreon url source checksums begin
-%global source0_sha256 66070ddb448fe9fcee76aa26be2ede5a80f85563e3a4afd59d2bfd79fbe2e831
-%global source0_file cups-pk-helper-0.2.7.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gettext
@@ -29,9 +33,7 @@ cups-pk-helper is an application which makes cups configuration
 interfaces available under control of PolicyKit.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cups-pk-helper-0.2.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "66070ddb448fe9fcee76aa26be2ede5a80f85563e3a4afd59d2bfd79fbe2e831" || { echo "oreon: Source0 SHA256 mismatch for cups-pk-helper-0.2.7.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

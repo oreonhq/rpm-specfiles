@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 750bc48b1d9362996de1d2bbe36d3b25f067b5077177d39c2faeb472bd5a7194
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perftest
 Summary:        IB Performance Tests
 # Upstream uses a dash in the version. Not valid in the Version field, so we use a dot instead.
@@ -10,10 +18,6 @@ License:        GPL-2.0-only OR BSD-2-Clause
 Source:		https://github.com/linux-rdma/perftest/releases/download/25.10.0-0.128/perftest-25.10.0-0.128.gd01b183.tar.gz
 Url:            https://github.com/linux-rdma/perftest
 Patch0:		Perftest-Fix-RDMA-CM-DMAH-bug.patch
-# oreon url source checksums begin
-%global source0_sha256 750bc48b1d9362996de1d2bbe36d3b25f067b5077177d39c2faeb472bd5a7194
-%global source0_file perftest-25.10.0-0.128.gd01b183.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc
@@ -31,9 +35,7 @@ connections.  It does not work on normal TCP/IP networks, only on
 RDMA networks.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/perftest-25.10.0-0.128.gd01b183.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "750bc48b1d9362996de1d2bbe36d3b25f067b5077177d39c2faeb472bd5a7194" || { echo "oreon: Source0 SHA256 mismatch for perftest-25.10.0-0.128.gd01b183.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 # The directory in the tarball has only the part before the dash.
 %global tarball_ver %{lua: _,_,v=string.find(rpm.expand("%{upstream_ver}"),"([^-]+)"); print(v)}
 

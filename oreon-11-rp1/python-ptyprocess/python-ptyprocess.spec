@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname ptyprocess
 
 %bcond_without tests
@@ -13,10 +21,6 @@ Source:         %{pypi_source}
 
 # Remove unittest.makeSuite, gone from Python 3.13
 Patch:          https://github.com/pexpect/ptyprocess/pull/75.patch
-# oreon url source checksums begin
-%global source0_sha256 5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220
-%global source0_file ptyprocess-0.7.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -37,9 +41,7 @@ Launch a subprocess in a pseudo terminal (pty), and interact with both the
 process and its pty.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ptyprocess-0.7.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5c5d0a3b48ceee0b48485e0c26037c0acd7d29765ca3fbb5cb3831d347423220" || { echo "oreon: Source0 SHA256 mismatch for ptyprocess-0.7.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n ptyprocess-%{version}
 
 %generate_buildrequires

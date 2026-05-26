@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e493065a6a485ef19cdae5d2bb1561eb9aa4b3d53f35237f6c32cf101a93a796
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           sblim-wbemcli
 Version:        1.6.3
 Release:        31%{?dist}
@@ -12,10 +20,6 @@ Patch2:         sblim-wbemcli-1.6.1-ssl-proto-option.patch
 Patch3:         sblim-wbemcli-1.6.3-fix-exit-status.patch
 Patch4:         sblim-wbemcli-1.6.3-covscan-fixes.patch
 Patch5:         sblim-wbemcli-1.6.3-fix-cmx-crash.patch
-# oreon url source checksums begin
-%global source0_sha256 e493065a6a485ef19cdae5d2bb1561eb9aa4b3d53f35237f6c32cf101a93a796
-%global source0_file sblim-wbemcli-1.6.3.tar.bz2
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  curl-devel >= 7.9.3
@@ -30,9 +34,7 @@ specially suited for basic systems management tasks as it can be used in
 scripts.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sblim-wbemcli-1.6.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e493065a6a485ef19cdae5d2bb1561eb9aa4b3d53f35237f6c32cf101a93a796" || { echo "oreon: Source0 SHA256 mismatch for sblim-wbemcli-1.6.3.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 autoreconf --install --force
 %patch -P0 -p1 -b .gcc43

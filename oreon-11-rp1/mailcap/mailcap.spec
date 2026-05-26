@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9a4032202fc0d2b0858f41b167389a9cfe52ac24ec282e6479b90765319de113
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           mailcap
 Version:        2.1.54
 Release:        10%{?dist}
@@ -6,10 +14,6 @@ Summary:        Helper application and MIME type associations for file types
 License:        LicenseRef-Fedora-Public-Domain AND MIT AND metamail
 URL:            https://pagure.io/mailcap
 Source0:        https://pagure.io/releases/mailcap/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 9a4032202fc0d2b0858f41b167389a9cfe52ac24ec282e6479b90765319de113
-%global source0_file mailcap-2.1.54.tar.xz
-# oreon url source checksums end
 BuildRequires: make
 BuildRequires:  perl-interpreter
 # the test script is written in python
@@ -38,9 +42,7 @@ MIME type mappings for nginx.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mailcap-2.1.54.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9a4032202fc0d2b0858f41b167389a9cfe52ac24ec282e6479b90765319de113" || { echo "oreon: Source0 SHA256 mismatch for mailcap-2.1.54.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: C library for multiple-precision floating-point computations
 Name: mpfr
 Version: 4.2.2
@@ -12,10 +20,6 @@ BuildRequires: make
 BuildRequires: texinfo
 
 Source: https://www.mpfr.org/%{name}-%{version}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01
-%global source0_file mpfr-4.2.2.tar.xz
-# oreon url source checksums end
 
 # Upstream post-release patches.  This currently contains:
 #Patch0: https://www.mpfr.org/%%{name}-%%{version}/allpatches
@@ -49,9 +53,7 @@ BuildArch: noarch
 Documentation for the MPFR library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mpfr-4.2.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b67ba0383ef7e8a8563734e2e889ef5ec3c3b898a01d00fa0a6869ad81c6ce01" || { echo "oreon: Source0 SHA256 mismatch for mpfr-4.2.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

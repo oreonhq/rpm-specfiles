@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1bc48d26478b677a6c090c25586a447507bd1b4cf88d369bd61820005ce1be39
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: An API for Run-time Code Generation
 License: LGPL-2.1-or-later AND GPL-3.0-or-later WITH Bison-exception-2.2 AND LicenseRef-Fedora-Public-Domain AND BSD-3-Clause
 Name: dyninst
@@ -12,10 +20,6 @@ Patch1: github-pr1721.patch
 Patch2: github-pr1880.patch
 Patch3: github-pr1880-ish.patch
 Patch4: github-pr1730.patch
-# oreon url source checksums begin
-%global source0_sha256 1bc48d26478b677a6c090c25586a447507bd1b4cf88d369bd61820005ce1be39
-%global source0_file v13.0.0.tar.gz
-# oreon url source checksums end
 
 %global dyninst_base dyninst-%{version}
 
@@ -67,9 +71,7 @@ libraries and interfaces. This is required for rebuilding any program
 that uses Dyninst.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v13.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1bc48d26478b677a6c090c25586a447507bd1b4cf88d369bd61820005ce1be39" || { echo "oreon: Source0 SHA256 mismatch for v13.0.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{version} -c
 # %setup -q -T -D -a 1
 

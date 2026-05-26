@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b9b1037173d6ae0181c3bd5a316ddab5afd6a342ad0dbdc18e940fc0ad2c3297
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		sblim-sfcCommon
 Version:	1.0.1
 Release:	29%{?dist}
@@ -7,10 +15,6 @@ License:	EPL-1.0
 URL:		http://sourceforge.net/projects/sblim/
 Source0:	http://downloads.sourceforge.net/sblim/%{name}-%{version}.tar.bz2
 Patch0:		sblim-sfcCommon-1.0.1-gcc15-fix.patch
-# oreon url source checksums begin
-%global source0_sha256 b9b1037173d6ae0181c3bd5a316ddab5afd6a342ad0dbdc18e940fc0ad2c3297
-%global source0_file sblim-sfcCommon-1.0.1.tar.bz2
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:	sblim-cmpi-devel
@@ -31,9 +35,7 @@ Sblim-sfcCommon Development Files.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sblim-sfcCommon-1.0.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b9b1037173d6ae0181c3bd5a316ddab5afd6a342ad0dbdc18e940fc0ad2c3297" || { echo "oreon: Source0 SHA256 mismatch for sblim-sfcCommon-1.0.1.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %autopatch -p1
 

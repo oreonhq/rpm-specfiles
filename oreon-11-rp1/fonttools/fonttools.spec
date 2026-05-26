@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9207dc3e2a8e3212986b1cdbe0696f6cebcf1a1d6de93cce11c2d85afb2a35dc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond tests 1
 
 # Some extras are disabled in RHEL to avoid bringing in additional
@@ -38,10 +46,6 @@ Summary:        Tools to manipulate font files
 License:        MIT
 URL:            https://github.com/fonttools/fonttools/
 Source:        https://github.com/fonttools/fonttools//archive/4.62.1/fonttools-4.62.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 9207dc3e2a8e3212986b1cdbe0696f6cebcf1a1d6de93cce11c2d85afb2a35dc
-%global source0_file fonttools-4.62.1.tar.gz
-# oreon url source checksums end
 
 Requires:       python3-fonttools = %{version}-%{release}
 Provides:       ttx = %{version}-%{release}
@@ -124,9 +128,7 @@ Obsoletes: python3-ufolib <= 2.1.1-11
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/fonttools-4.62.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9207dc3e2a8e3212986b1cdbe0696f6cebcf1a1d6de93cce11c2d85afb2a35dc" || { echo "oreon: Source0 SHA256 mismatch for fonttools-4.62.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # Remove shebang

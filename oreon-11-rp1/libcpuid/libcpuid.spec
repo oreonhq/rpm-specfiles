@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 81f2f40da5d66b8220476e116cb40bca4e6a62c0d22bdeeb8e3856cf14607007
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libcpuid
 Version:        0.8.1
 Release:        5%{?dist}
@@ -5,10 +13,6 @@ Summary:        Provides CPU identification for x86 and ARM
 License:        BSD-2-Clause
 URL:            https://github.com/anrieff/libcpuid
 Source0:        https://github.com/anrieff/libcpuid/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 81f2f40da5d66b8220476e116cb40bca4e6a62c0d22bdeeb8e3856cf14607007
-%global source0_file v0.8.1.tar.gz
-# oreon url source checksums end
 ExclusiveArch:  %{ix86} x86_64 %{arm} aarch64
 
 BuildRequires:  automake
@@ -50,9 +54,7 @@ Requires:       %{name}%{_isa} = %{version}-%{release}
 The python3-%{name} package contains Python bindings for the libcpuid library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v0.8.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "81f2f40da5d66b8220476e116cb40bca4e6a62c0d22bdeeb8e3856cf14607007" || { echo "oreon: Source0 SHA256 mismatch for v0.8.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}
 
 %generate_buildrequires

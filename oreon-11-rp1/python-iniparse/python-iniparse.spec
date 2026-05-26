@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 aa7e6a5340f149ecaa9f2b1059b422937f94387baae96ad4455d527d1071c3d7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Use the same directory of the main package for subpackage licence and docs
 %global _docdir_fmt %{name}
 
@@ -17,10 +25,6 @@ Source0:        https://github.com/candlepin/python-iniparse/archive/0.5.1/pytho
 
 # Python 3.14 support: Avoid the multiprocessing forkserver method
 Patch:          https://github.com/candlepin/python-iniparse/pull/38.patch
-# oreon url source checksums begin
-%global source0_sha256 aa7e6a5340f149ecaa9f2b1059b422937f94387baae96ad4455d527d1071c3d7
-%global source0_file python-iniparse-0.5.1.tar.gz
-# oreon url source checksums end
 
 BuildArch: noarch
 
@@ -43,9 +47,7 @@ Summary:        %{summary}
 %{_description}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/python-iniparse-0.5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aa7e6a5340f149ecaa9f2b1059b422937f94387baae96ad4455d527d1071c3d7" || { echo "oreon: Source0 SHA256 mismatch for python-iniparse-0.5.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 chmod -c -x html/index.html
 

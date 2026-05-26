@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 19d6dbd9c901c74441d9888c13cb1399f614fe8993d59062a72cfbceb00fed04
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           SFML
 Version:        2.6.2
 Release:        %autorelease
@@ -46,10 +54,6 @@ URL:            http://www.sfml-dev.org/
 # And here's the PR that changed (most) of the things: https://github.com/SFML/SFML/pull/1718
 
 Source0:        https://www.sfml-dev.org/files/%{name}-%{version}-sources.zip
-# oreon url source checksums begin
-%global source0_sha256 19d6dbd9c901c74441d9888c13cb1399f614fe8993d59062a72cfbceb00fed04
-%global source0_file SFML-2.6.2-sources.zip
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  doxygen
@@ -87,9 +91,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/SFML-2.6.2-sources.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "19d6dbd9c901c74441d9888c13cb1399f614fe8993d59062a72cfbceb00fed04" || { echo "oreon: Source0 SHA256 mismatch for SFML-2.6.2-sources.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 # fixup non needed executable permission on regular files
 find -type f -print0 | xargs -0 chmod -x

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d18b97764c755528c1051d376e33545d0eb60c6ebf85680436813fa5b04cc3d1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Default to no static libraries
 %{!?with_static: %global with_static 1}
 %bcond_without python
@@ -20,10 +28,6 @@ Patch1:		libpfm-fix-const.patch
 Patch2:		libpfm-python3-setup.patch
 Patch3:		libpfm-gcc14.patch
 Patch4:		libpfm-unused-vars.patch
-# oreon url source checksums begin
-%global source0_sha256 d18b97764c755528c1051d376e33545d0eb60c6ebf85680436813fa5b04cc3d1
-%global source0_file libpfm-4.13.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:	gcc
@@ -76,9 +80,7 @@ Python bindings for libpfm4 and perf_event_open system call.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libpfm-4.13.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d18b97764c755528c1051d376e33545d0eb60c6ebf85680436813fa5b04cc3d1" || { echo "oreon: Source0 SHA256 mismatch for libpfm-4.13.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P1 -p1 -b .fix-const
 %patch -P2 -p1 -b .python3

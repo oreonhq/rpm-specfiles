@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1c1285d911027d276f235b32a888ee7425c9ab356ee62cd126c4b3ee3ea659b3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %bcond_without perl_DateTime_TimeZone_enables_optional_test
 
@@ -21,10 +29,6 @@ Source1:        ftp://ftp.iana.org/tz/releases/tzdata%{tzversion}.tar.gz
 # Parse local time zone definition from /etc/localtime as before giving up,
 # bug #1135981, CPAN RT#55029
 Patch0:         DateTime-TimeZone-2.04-Parse-etc-localtime-by-DateTime-TimeZone-Tzfile.patch
-# oreon url source checksums begin
-%global source0_sha256 1c1285d911027d276f235b32a888ee7425c9ab356ee62cd126c4b3ee3ea659b3
-%global source0_file DateTime-TimeZone-2.68.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -136,9 +140,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/DateTime-TimeZone-2.68.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1c1285d911027d276f235b32a888ee7425c9ab356ee62cd126c4b3ee3ea659b3" || { echo "oreon: Source0 SHA256 mismatch for DateTime-TimeZone-2.68.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if !%{defined perl_bootstrap} && %{defined tzversion}
 %setup -q -T -a 1 -c -n tzdata-%{tzversion}
 %endif

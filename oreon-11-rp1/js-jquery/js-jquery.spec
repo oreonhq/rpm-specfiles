@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6150ac588f06b2bbcb277bbba6d696c296f1ee88160065a84b56e93c54fd1f64
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           js-jquery
 Version:        3.7.1
 Release:        8%{?dist}
@@ -16,10 +24,6 @@ Source1:        jquery_%{version}_node_modules.tar.gz
 
 # disable gzip-js during build
 Patch1:         %{name}-disable-gzip-js.patch
-# oreon url source checksums begin
-%global source0_sha256 6150ac588f06b2bbcb277bbba6d696c296f1ee88160065a84b56e93c54fd1f64
-%global source0_file jquery-3.7.1.tar.gz
-# oreon url source checksums end
 
 
 BuildRequires:  web-assets-devel
@@ -47,9 +51,7 @@ browsers. With a combination of versatility and extensibility, jQuery has
 changed the way that millions of people write JavaScript.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jquery-3.7.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6150ac588f06b2bbcb277bbba6d696c296f1ee88160065a84b56e93c54fd1f64" || { echo "oreon: Source0 SHA256 mismatch for jquery-3.7.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n jquery-%{version} -v -p1
 
 #remove precompiled stuff

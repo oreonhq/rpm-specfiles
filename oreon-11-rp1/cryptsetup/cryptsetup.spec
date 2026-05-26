@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 443e46f8964c9acc780f455afbb8e23aa0e8ed7ec504cfc59e04f406fa1e8a83
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Utility for setting up encrypted disks
 Name: cryptsetup
 Version: 2.8.4
@@ -17,10 +25,6 @@ Provides: %{name}-reencrypt = %{version}
 
 %global upstream_version %{version_no_tilde}
 Source0: https://www.kernel.org/pub/linux/utils/cryptsetup/v2.8/cryptsetup-%{upstream_version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 443e46f8964c9acc780f455afbb8e23aa0e8ed7ec504cfc59e04f406fa1e8a83
-%global source0_file cryptsetup-2.8.4.tar.xz
-# oreon url source checksums end
 
 %description
 The cryptsetup package contains a utility for setting up
@@ -65,9 +69,7 @@ The integritysetup package contains a utility for setting up
 disk integrity protection using dm-integrity kernel module.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cryptsetup-2.8.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "443e46f8964c9acc780f455afbb8e23aa0e8ed7ec504cfc59e04f406fa1e8a83" || { echo "oreon: Source0 SHA256 mismatch for cryptsetup-2.8.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n cryptsetup-%{upstream_version} -p 1
 
 %build

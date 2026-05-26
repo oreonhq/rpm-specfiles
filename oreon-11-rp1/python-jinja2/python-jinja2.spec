@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname jinja2
 
 Name:           python-jinja2
@@ -7,10 +15,6 @@ Summary:        General purpose template engine
 License:        BSD-3-Clause
 URL:            https://palletsprojects.com/p/jinja/
 Source0:        https://files.pythonhosted.org/packages/source/j/jinja2/jinja2-3.1.6.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d
-%global source0_file jinja2-3.1.6.tar.gz
-# oreon url source checksums end
 
 # Enable building without docs to avoid a circular dependency between this
 # and python-sphinx:
@@ -58,9 +62,7 @@ BuildRequires:  python3-sphinx-issues
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jinja2-3.1.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d" || { echo "oreon: Source0 SHA256 mismatch for jinja2-3.1.6.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{srcname}-%{version}
 
 

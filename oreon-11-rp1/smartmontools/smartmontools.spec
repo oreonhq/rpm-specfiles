@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 690b83ca331378da9ea0d9d61008c4b22dde391387b9bbad7f29387f2595f76e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # defining macros needed by SELinux
 %global with_selinux 1
 %global selinuxtype targeted
@@ -24,10 +32,6 @@ Source9:	smartmontools.tmpfilesd
 
 #fedora/rhel specific
 Patch1:		smartmontools-5.38-defaultconf.patch
-# oreon url source checksums begin
-%global source0_sha256 690b83ca331378da9ea0d9d61008c4b22dde391387b9bbad7f29387f2595f76e
-%global source0_file smartmontools-7.5.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:	gcc-c++ readline-devel ncurses-devel automake util-linux groff gettext
@@ -75,9 +79,7 @@ Custom SELinux policy module for smartmontools
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/smartmontools-7.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "690b83ca331378da9ea0d9d61008c4b22dde391387b9bbad7f29387f2595f76e" || { echo "oreon: Source0 SHA256 mismatch for smartmontools-7.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q 
 %patch -P1 -p1 -b .defaultconf
 cp %{SOURCE5} .

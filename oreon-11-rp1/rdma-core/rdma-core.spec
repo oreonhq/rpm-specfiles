@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 340be509137103677ea30798d6ffe64a991148dae333b79a5bc0744e219fde2f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: rdma-core
 Version: 61.0
 Release: %autorelease
@@ -12,10 +20,6 @@ Url: https://github.com/linux-rdma/rdma-core
 Source: https://github.com/linux-rdma/rdma-core/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Patch9998: 9998-kernel-boot-Do-not-perform-device-rename-on-OPA-devi.patch
 Patch9999: 9999-udev-keep-NAME_KERNEL-as-default-interface-naming-co.patch
-# oreon url source checksums begin
-%global source0_sha256 340be509137103677ea30798d6ffe64a991148dae333b79a5bc0744e219fde2f
-%global source0_file rdma-core-61.0.tar.gz
-# oreon url source checksums end
 # Do not build static libs by default.
 %define with_static %{?_with_static: 1} %{?!_with_static: 0}
 
@@ -306,9 +310,7 @@ easy, object-oriented access to IB verbs.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rdma-core-61.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "340be509137103677ea30798d6ffe64a991148dae333b79a5bc0744e219fde2f" || { echo "oreon: Source0 SHA256 mismatch for rdma-core-61.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %if 0%{?fedora} || 0%{?oreon}
 %patch 9998 -p1

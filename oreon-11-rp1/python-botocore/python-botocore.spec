@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9ee17553b7febd1a0c1253b3b62ab5d79607eb6163c8fb943470a8893c31d4fa
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pypi_name botocore
 %bcond_without tests
 
@@ -10,10 +18,6 @@ Summary:        Low-level, data-driven core of boto 3
 License:        Apache-2.0
 URL:            https://github.com/boto/botocore
 Source0:        https://files.pythonhosted.org/packages/source/b/botocore/botocore-1.42.70.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 9ee17553b7febd1a0c1253b3b62ab5d79607eb6163c8fb943470a8893c31d4fa
-%global source0_file botocore-1.42.70.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -40,9 +44,7 @@ Provides:       bundled(python3-requests) = 2.7.0
 %description -n python3-%{pypi_name} %{_description}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/botocore-1.42.70.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9ee17553b7febd1a0c1253b3b62ab5d79607eb6163c8fb943470a8893c31d4fa" || { echo "oreon: Source0 SHA256 mismatch for botocore-1.42.70.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{pypi_name}-%{version} -p1
 # Remove online tests
 rm -vr tests/integration

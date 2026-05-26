@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c389b863b29f012ccc1b3eef740982ff6c7654c13a2e343397ee466124f31339
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           gcompris-qt
 Version:        26.1
 Release:        1%{?dist}
@@ -9,10 +17,6 @@ Source0:        https://download.kde.org/stable/gcompris/qt/src/%{name}-%{versio
 Source1:        https://download.kde.org/stable/gcompris/qt/src/%{name}-%{version}.tar.xz.sig
 # Download from https://collaborate.kde.org/s/8GpWjyHg5xBTQFS
 Source2:        0x63d7264c05687d7e.asc
-# oreon url source checksums begin
-%global source0_sha256 c389b863b29f012ccc1b3eef740982ff6c7654c13a2e343397ee466124f31339
-%global source0_file gcompris-qt-26.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -78,9 +82,7 @@ More than 100 activities are available.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gcompris-qt-26.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c389b863b29f012ccc1b3eef740982ff6c7654c13a2e343397ee466124f31339" || { echo "oreon: Source0 SHA256 mismatch for gcompris-qt-26.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' \
   --data='%{SOURCE0}'
 %autosetup

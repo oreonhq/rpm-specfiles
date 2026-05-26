@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c0c1367e381e1ae4842a78f1b57c656ff19b25637e3a6527cb44ae5a1cc68d65
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond check 1
 
 # Use bundled deps as we don't ship the exact right versions for all the
@@ -58,10 +66,6 @@ Source1:        librsvg-%{version}-vendor.tar.xz
 Patch:          0001-Fedora-Drop-dependencies-required-for-benchmarking.patch
 Patch:          0002-Fedora-Drop-dependencies-and-references-to-mutation-.patch
 Patch:          0003-Fedora-Drop-windows-specific-dependencies.patch
-# oreon url source checksums begin
-%global source0_sha256 c0c1367e381e1ae4842a78f1b57c656ff19b25637e3a6527cb44ae5a1cc68d65
-%global source0_file librsvg-2.62.2.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson >= 1.3.0
@@ -115,9 +119,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 This package provides extra utilities based on the librsvg library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/librsvg-2.62.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c0c1367e381e1ae4842a78f1b57c656ff19b25637e3a6527cb44ae5a1cc68d65" || { echo "oreon: Source0 SHA256 mismatch for librsvg-2.62.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if ! 0%{?bundled_rust_deps}
 # use packaged Rust dependencies
 %autosetup -p1 -n librsvg-%{version}

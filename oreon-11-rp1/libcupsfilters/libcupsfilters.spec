@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ff31778a438bf335ceed254ccc706d5cd0eee55f608fcf567d88699b15f4fa9e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global _hardened_build 1
 
 %global upstream_version 2.1.1
@@ -22,10 +30,6 @@ Patch001: 0001-configure.ac-Make-CJK-fonts-name-configurable.patch
 Patch002: lcf-CVE-2025-57812.patch
 # CVE-2025-64503
 Patch003: 0001-Fix-out-of-bounds-write-in-cfFilterPDFToRaster.patch
-# oreon url source checksums begin
-%global source0_sha256 ff31778a438bf335ceed254ccc706d5cd0eee55f608fcf567d88699b15f4fa9e
-%global source0_file libcupsfilters-2.1.1.tar.gz
-# oreon url source checksums end
 
 
 # for generating configure and Makefile scripts in autogen.h
@@ -116,9 +120,7 @@ Development files for OpenPrinting cupsfilters library.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libcupsfilters-2.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ff31778a438bf335ceed254ccc706d5cd0eee55f608fcf567d88699b15f4fa9e" || { echo "oreon: Source0 SHA256 mismatch for libcupsfilters-2.1.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -n %{name}-%{upstream_version}
 
 

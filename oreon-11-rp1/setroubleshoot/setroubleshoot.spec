@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d3218c5eebe00bf77e84a079bca6a923d7219c31fe2911f18e6ba9cd530ca768
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Disable automatic compilation of Python files in extra directories
 %global _python_bytecompile_extra 0
 
@@ -15,10 +23,6 @@ Source2: %{name}.sysusers
 # git format-patch -N 3.3.36
 # for j in 00*patch; do printf "Patch: %s\n" $j; done
 Patch: 0001-browser-Always-show-Report-Bug-button.patch
-# oreon url source checksums begin
-%global source0_sha256 d3218c5eebe00bf77e84a079bca6a923d7219c31fe2911f18e6ba9cd530ca768
-%global source0_file setroubleshoot-3.3.36.tar.gz
-# oreon url source checksums end
 BuildRequires: gcc
 BuildRequires: make
 BuildRequires: libcap-ng-devel
@@ -76,9 +80,7 @@ to user preference. The same tools can be run on existing log files.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/setroubleshoot-3.3.36.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d3218c5eebe00bf77e84a079bca6a923d7219c31fe2911f18e6ba9cd530ca768" || { echo "oreon: Source0 SHA256 mismatch for setroubleshoot-3.3.36.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p 1 -S git
 
 %build

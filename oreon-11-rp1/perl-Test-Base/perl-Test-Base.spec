@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2794a1aaaeb1d3a287dd2c7286258663796562f7db9ccc6b424bc4f1de8ad014
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Report a difference on string nonequivalnce
 %bcond_without perl_Test_Base_enables_diff
 # Run extra test
@@ -12,10 +20,6 @@ Summary:        Data Driven Testing Framework
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Base
 Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Test-Base-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 2794a1aaaeb1d3a287dd2c7286258663796562f7db9ccc6b424bc4f1de8ad014
-%global source0_file Test-Base-0.89.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -107,9 +111,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Test-Base-0.89.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2794a1aaaeb1d3a287dd2c7286258663796562f7db9ccc6b424bc4f1de8ad014" || { echo "oreon: Source0 SHA256 mismatch for Test-Base-0.89.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Test-Base-%{version}
 # Remove skipped tests
 for T in \

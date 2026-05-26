@@ -1,3 +1,15 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc
+%global source1_sha256 719142a897aef4e5b47689ba4394934285045f45f6aade07c65160e1813839f2
+%global source2_sha256 06aaf46e1cabca75856193e83f01f260a0d3dfc9954081db5b4ed1467b4385a0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?with_xfree86:%define with_xfree86 1}
 %bcond_with bootstrap
 
@@ -22,14 +34,6 @@ Patch3:  freetype-2.6.5-libtool.patch
 Patch4:  freetype-2.8-multilib.patch
 
 Patch5:  freetype-2.10.0-internal-outline.patch
-# oreon url source checksums begin
-%global source0_sha256 32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc
-%global source0_file freetype-2.14.1.tar.xz
-%global source1_sha256 719142a897aef4e5b47689ba4394934285045f45f6aade07c65160e1813839f2
-%global source1_file freetype-doc-2.14.1.tar.xz
-%global source2_sha256 06aaf46e1cabca75856193e83f01f260a0d3dfc9954081db5b4ed1467b4385a0
-%global source2_file ft2demos-2.14.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: libX11-devel
@@ -80,11 +84,7 @@ FreeType.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/freetype-2.14.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "32427e8c471ac095853212a37aef816c60b42052d4d9e48230bab3bdf2936ccc" || { echo "oreon: Source0 SHA256 mismatch for freetype-2.14.1.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/freetype-doc-2.14.1.tar.xz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "719142a897aef4e5b47689ba4394934285045f45f6aade07c65160e1813839f2" || { echo "oreon: Source1 SHA256 mismatch for freetype-doc-2.14.1.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/ft2demos-2.14.1.tar.xz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "06aaf46e1cabca75856193e83f01f260a0d3dfc9954081db5b4ed1467b4385a0" || { echo "oreon: Source2 SHA256 mismatch for ft2demos-2.14.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -b 1 -a 2
 
 %patch 0  -p1 -b .enable-spr

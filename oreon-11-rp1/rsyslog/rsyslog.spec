@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4fe5256cea046d77546d36042d090e384184bc24041ecda5d03c03d35d1eabbb
+%global source5_sha256 0acb39e92d947e30175de0969a5b2e479e2983bc3e3d69c835ee5174610e9636
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source5_sha256:%(test -z "%{source5_sha256}" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_sha256}" || { echo "oreon: Source5 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define rsyslog_statedir %{_sharedstatedir}/rsyslog
 %define rsyslog_pkidir %{_sysconfdir}/pki/rsyslog
 %define rsyslog_docdir %{_docdir}/rsyslog
@@ -50,12 +60,6 @@ Source4: rsyslog.service
 # Add qpid-proton as another source, enable omamqp1 module in a
 # separatae sub-package with it statically linked(see rhbz#1713427)
 Source5: https://archive.apache.org/dist/qpid/proton/%{qpid_proton_v}/qpid-proton-%{qpid_proton_v}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 4fe5256cea046d77546d36042d090e384184bc24041ecda5d03c03d35d1eabbb
-%global source0_file rsyslog-8.2602.0.tar.gz
-%global source5_sha256 0acb39e92d947e30175de0969a5b2e479e2983bc3e3d69c835ee5174610e9636
-%global source5_file qpid-proton-0.40.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc
@@ -385,10 +389,7 @@ This module allows rsyslog to send messages to a RabbitMQ server.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rsyslog-8.2602.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4fe5256cea046d77546d36042d090e384184bc24041ecda5d03c03d35d1eabbb" || { echo "oreon: Source0 SHA256 mismatch for rsyslog-8.2602.0.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/qpid-proton-0.40.0.tar.gz; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0acb39e92d947e30175de0969a5b2e479e2983bc3e3d69c835ee5174610e9636" || { echo "oreon: Source5 SHA256 mismatch for qpid-proton-0.40.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 # set up rsyslog sources
 %setup -q -D
 

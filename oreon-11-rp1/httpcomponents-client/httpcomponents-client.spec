@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 020ce0f7500d33f6341e0e45305b34ff7ec272f8d52231e78011851e4fb5aa67
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without bootstrap
 
 Name:           httpcomponents-client
@@ -14,10 +22,6 @@ Source0:        https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcom
 Patch:          0001-Use-system-copy-of-effective_tld_names.dat.patch
 Patch:          0002-Port-to-mockito-2.patch
 Patch:          0003-Port-to-Mockito-5.patch
-# oreon url source checksums begin
-%global source0_sha256 020ce0f7500d33f6341e0e45305b34ff7ec272f8d52231e78011851e4fb5aa67
-%global source0_file httpcomponents-client-4.5.14-source-release.zip
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -48,9 +52,7 @@ for Commons HttpClient 3.x. Users of Commons HttpClient are strongly
 encouraged to upgrade.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/httpcomponents-client-4.5.14-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "020ce0f7500d33f6341e0e45305b34ff7ec272f8d52231e78011851e4fb5aa67" || { echo "oreon: Source0 SHA256 mismatch for httpcomponents-client-4.5.14-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %mvn_package :::tests: __noinstall

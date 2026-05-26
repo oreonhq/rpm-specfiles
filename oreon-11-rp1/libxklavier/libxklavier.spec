@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 17a34194df5cbcd3b7bfd0f561d95d1f723aa1c87fca56bc2c209514460a9320
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:	High-level API for X Keyboard Extension
 Name:		libxklavier
 Version:	5.4
@@ -20,10 +28,6 @@ Source: http://people.freedesktop.org/~svu/libxklavier-5.4.tar.bz2
 Patch01: 0001-props-fix-the-max-lengths-for-set_name-description-s.patch
 Patch02: 0002-config-use-our-name-description-setter-functions.patch
 Patch03: 0003-props-validate-name-and-descriptions-for-valid-UTF-8.patch
-# oreon url source checksums begin
-%global source0_sha256 17a34194df5cbcd3b7bfd0f561d95d1f723aa1c87fca56bc2c209514460a9320
-%global source0_file libxklavier-5.4.tar.bz2
-# oreon url source checksums end
 
 %description
 libxklavier is a library providing a high-level API for the X Keyboard
@@ -41,9 +45,7 @@ This package contains libraries, header files and developer documentation
 needed to develop libxklavier applications.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libxklavier-5.4.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "17a34194df5cbcd3b7bfd0f561d95d1f723aa1c87fca56bc2c209514460a9320" || { echo "oreon: Source0 SHA256 mismatch for libxklavier-5.4.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

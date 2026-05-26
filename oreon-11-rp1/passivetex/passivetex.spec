@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b6979e8f128ed3fc4873c812c0d7e1722b3bb3f12c0c20a85c98f5f40427a89d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:	Macros to process XSL formatting objects
 Name:		passivetex
 Version:	1.25
@@ -7,10 +15,6 @@ URL: https://github.com/sebastianrahtz/passivetex
 Source0:	https://github.com/sebastianrahtz/passivetex/archive/master.zip
 #Fix leader length.
 Patch0:		passivetex-1.21-leader.patch
-# oreon url source checksums begin
-%global source0_sha256 b6979e8f128ed3fc4873c812c0d7e1722b3bb3f12c0c20a85c98f5f40427a89d
-%global source0_file master.zip
-# oreon url source checksums end
 BuildArch:	noarch
 Requires: tex(latex)
 Requires(post): tex(latex)
@@ -24,9 +28,7 @@ objects.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/master.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b6979e8f128ed3fc4873c812c0d7e1722b3bb3f12c0c20a85c98f5f40427a89d" || { echo "oreon: Source0 SHA256 mismatch for master.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-master
 %patch -P0 -p1 -b .leader
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ea844b9686c94d666d9d444321d764490b2cde2f985c4165b4c2c77665caedc4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run extra test
 %if 0%{?fedora}
 %bcond_without perl_Dist_CheckConflicts_enables_extra_test
@@ -12,10 +20,6 @@ Summary:	Declare version conflicts for your dist
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Dist-CheckConflicts
 Source0:	https://cpan.metacpan.org/authors/id/D/DO/DOY/Dist-CheckConflicts-0.11.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ea844b9686c94d666d9d444321d764490b2cde2f985c4165b4c2c77665caedc4
-%global source0_file Dist-CheckConflicts-0.11.tar.gz
-# oreon url source checksums end
 
 BuildArch:	noarch
 # Module Build
@@ -70,9 +74,7 @@ module is upgraded, but until that happens, this module will allow users to do
 this manually.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Dist-CheckConflicts-0.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ea844b9686c94d666d9d444321d764490b2cde2f985c4165b4c2c77665caedc4" || { echo "oreon: Source0 SHA256 mismatch for Dist-CheckConflicts-0.11.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Dist-CheckConflicts-%{version}
 
 %build

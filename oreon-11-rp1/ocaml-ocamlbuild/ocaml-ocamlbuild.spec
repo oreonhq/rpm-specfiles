@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2ba6857f2991b7f69368e8db818b163d31cf5a367f15f5953bf8f01a77b3d4fc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
 
@@ -19,10 +27,6 @@ License:       LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 URL:           https://github.com/ocaml/ocamlbuild
 VCS:           git:%{url}.git
 Source0:        https://github.com/ocaml/ocamlbuild/archive/0.16.1/ocamlbuild-0.16.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 2ba6857f2991b7f69368e8db818b163d31cf5a367f15f5953bf8f01a77b3d4fc
-%global source0_file ocamlbuild-0.16.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: ocaml >= 4.08
@@ -54,9 +58,7 @@ This package contains the manual for %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ocamlbuild-0.16.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2ba6857f2991b7f69368e8db818b163d31cf5a367f15f5953bf8f01a77b3d4fc" || { echo "oreon: Source0 SHA256 mismatch for ocamlbuild-0.16.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n ocamlbuild-%{version}
 
 

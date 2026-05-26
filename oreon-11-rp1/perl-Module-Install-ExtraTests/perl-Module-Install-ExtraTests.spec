@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 643d528490df5f4fd8c9cf6afe431d32465f2d27b24bdddc0a53b02618e57db0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:       perl-Module-Install-ExtraTests 
 Version:    0.008
 Release:    37%{?dist}
@@ -6,10 +14,6 @@ Summary:    Ignorable, contextual test support for Module::Install
 Url:        https://metacpan.org/release/Module-Install-ExtraTests
 Source:     https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Module-Install-ExtraTests-%{version}.tar.gz 
 Patch0:     Module-Install-ExtraTests-0.008-Fix-building-on-Perl-without-dot-in-INC.patch
-# oreon url source checksums begin
-%global source0_sha256 643d528490df5f4fd8c9cf6afe431d32465f2d27b24bdddc0a53b02618e57db0
-%global source0_file Module-Install-ExtraTests-0.008.tar.gz
-# oreon url source checksums end
 BuildArch:  noarch
 # Build
 BuildRequires:  coreutils
@@ -45,9 +49,7 @@ instances:
   ./xt/release - run during "make disttest"
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Module-Install-ExtraTests-0.008.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "643d528490df5f4fd8c9cf6afe431d32465f2d27b24bdddc0a53b02618e57db0" || { echo "oreon: Source0 SHA256 mismatch for Module-Install-ExtraTests-0.008.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Module-Install-ExtraTests-%{version}
 %patch -P0 -p1
 

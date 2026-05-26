@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ec103fa05cb0f251e375f6ea0b6112cfc9d0acd977dc5b69fdc54242ba38a16f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond optional_tests %{undefined rhel}
 
 Name:		librdkafka
@@ -24,10 +32,6 @@ BuildRequires:	rapidjson-devel
 
 Patch1: disable-ssl-engine.patch
 Patch2: include-ossl-rand.patch
-# oreon url source checksums begin
-%global source0_sha256 ec103fa05cb0f251e375f6ea0b6112cfc9d0acd977dc5b69fdc54242ba38a16f
-%global source0_file librdkafka-2.12.1.tar.gz
-# oreon url source checksums end
 
 %description
 Librdkafka is a C/C++ library implementation of the Apache Kafka protocol,
@@ -47,9 +51,7 @@ This package contains headers and libraries required to build applications
 using librdkafka.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/librdkafka-2.12.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ec103fa05cb0f251e375f6ea0b6112cfc9d0acd977dc5b69fdc54242ba38a16f" || { echo "oreon: Source0 SHA256 mismatch for librdkafka-2.12.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

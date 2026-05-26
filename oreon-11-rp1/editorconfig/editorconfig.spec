@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ab9f897a90fb36cfc34e5b67221e55ab0e3119b3512de8e31029d376c6bab870
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # do not require a standalone uthash when built as part of RHEL
 %bcond system_uthash %[0%{?fedora} || 0%{?epel}]
 
@@ -39,10 +47,6 @@ Source0:        https://github.com/editorconfig/editorconfig-core-c/archive/v0.1
 # This makes sense upstream, but is too strict for downstream packaging
 # across various architectures, compiler versions, and so on.
 Patch0:         0001-Downstream-only-Do-not-compile-with-Werror.patch
-# oreon url source checksums begin
-%global source0_sha256 ab9f897a90fb36cfc34e5b67221e55ab0e3119b3512de8e31029d376c6bab870
-%global source0_file editorconfig-core-c-0.12.10.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  doxygen
@@ -103,9 +107,7 @@ This package contains the files needed for development.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/editorconfig-core-c-0.12.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ab9f897a90fb36cfc34e5b67221e55ab0e3119b3512de8e31029d376c6bab870" || { echo "oreon: Source0 SHA256 mismatch for editorconfig-core-c-0.12.10.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{srcname}-%{version} -p1
 %if %{with system_uthash}
 # Unbundle uthash

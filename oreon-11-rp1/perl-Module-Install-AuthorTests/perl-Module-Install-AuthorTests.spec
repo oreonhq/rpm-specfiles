@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4025722de6357edf53c28501b00e7da92cd2f9fc611ba0753761a0e1dff32d88
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Module-Install-AuthorTests
 Version:        0.002
 Release:        39%{?dist}
@@ -5,10 +13,6 @@ Summary:        Designate tests only run by module authors
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-AuthorTests
 Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Module-Install-AuthorTests-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 4025722de6357edf53c28501b00e7da92cd2f9fc611ba0753761a0e1dff32d88
-%global source0_file Module-Install-AuthorTests-0.002.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  perl-generators
@@ -31,9 +35,7 @@ Plug-in for Perl Module::Install package to declare tests in ./xt directory
 should be run only if the module is being built by an author.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Module-Install-AuthorTests-0.002.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4025722de6357edf53c28501b00e7da92cd2f9fc611ba0753761a0e1dff32d88" || { echo "oreon: Source0 SHA256 mismatch for Module-Install-AuthorTests-0.002.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Module-Install-AuthorTests-%{version}
 
 %build

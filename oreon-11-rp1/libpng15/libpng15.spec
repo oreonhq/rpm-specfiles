@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7d76275fad2ede4b7d87c5fd46e6f488d2a16b5a69dc968ffa840ab39ba756ed
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Old version of libpng, needed to run old binaries
 Name: libpng15
 Version: 1.5.30
@@ -13,10 +21,6 @@ Source1: pngusr.dfa
 
 Patch0: libpng15-CVE-2013-6954.patch
 Patch1: libpng15-CVE-2018-13785.patch
-# oreon url source checksums begin
-%global source0_sha256 7d76275fad2ede4b7d87c5fd46e6f488d2a16b5a69dc968ffa840ab39ba756ed
-%global source0_file libpng-1.5.30.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: zlib-devel
@@ -29,9 +33,7 @@ This version should be used only if you are unable to use the current
 version of libpng.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libpng-1.5.30.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7d76275fad2ede4b7d87c5fd46e6f488d2a16b5a69dc968ffa840ab39ba756ed" || { echo "oreon: Source0 SHA256 mismatch for libpng-1.5.30.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n libpng-%{version}
 
 %patch -P0 -p1

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ae470fec429775653e042015edc928d07c8c3b2fc59765172a330d3d87785f86
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: GNU's bc (a numeric processing language) and dc (a calculator)
 Name: bc
 Version: 1.08.2
@@ -10,10 +18,6 @@ Source2: kevin_pizzini.asc
 Patch1: bc-1.06-dc_ibase.patch
 Patch2: bc-1.06.95-doc.patch
 Patch3: bc-1.07.1-readline-echo-empty.diff
-# oreon url source checksums begin
-%global source0_sha256 ae470fec429775653e042015edc928d07c8c3b2fc59765172a330d3d87785f86
-%global source0_file bc-1.08.2.tar.gz
-# oreon url source checksums end
 BuildRequires: bison
 BuildRequires: ed
 BuildRequires: flex
@@ -34,9 +38,7 @@ Install the bc package if you need its number handling capabilities or
 if you would like to use its text mode calculator.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/bc-1.08.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ae470fec429775653e042015edc928d07c8c3b2fc59765172a330d3d87785f86" || { echo "oreon: Source0 SHA256 mismatch for bc-1.08.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

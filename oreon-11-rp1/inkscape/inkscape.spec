@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e83a2c3db570b6c5a1ff0fccfe7098837b3f6bd74b133567937c8a91710ed1d1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Reduce debuginfo verbosity
 %global optflags %(echo %{optflags} | sed 's/-g /-g1 /')
 
@@ -45,10 +53,6 @@ Source100:      Fedora-Color-Palette.gpl
 Patch0:         7722.patch
 # Poppler 26.01.0
 Patch1:         3a528728ebe33e10bb44d152f47cfedfddbfe18a.patch
-# oreon url source checksums begin
-%global source0_sha256 e83a2c3db570b6c5a1ff0fccfe7098837b3f6bd74b133567937c8a91710ed1d1
-%global source0_file inkscape-1.4.3.tar.xz
-# oreon url source checksums end
 
 # Don't drop i686 until at least texlive no longer needs it -GC, 2023-08-10
 #%%if 0%%{?fedora} >= 39
@@ -184,9 +188,7 @@ graphics in W3C standard Scalable Vector Graphics (SVG) file format.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/inkscape-1.4.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e83a2c3db570b6c5a1ff0fccfe7098837b3f6bd74b133567937c8a91710ed1d1" || { echo "oreon: Source0 SHA256 mismatch for inkscape-1.4.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE10}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup -n inkscape-1.4.3_2025-12-25_0d15f75042 -p1

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1a000a9c42ef0a561aa5b797df745f072a48a9d87bd65ec24a107e9e782927e0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global bits %{__isa_bits}
 %global debug_package %{nil}
 
@@ -13,10 +21,6 @@ Summary:        Jansi Native implements the JNI Libraries used by the Jansi proj
 License:        Apache-2.0
 URL:            http://jansi.fusesource.org/
 Source0:        https://github.com/fusesource/jansi-native/archive/%{commit}/jansi-native-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 1a000a9c42ef0a561aa5b797df745f072a48a9d87bd65ec24a107e9e782927e0
-%global source0_file jansi-native-1.8.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
@@ -43,9 +47,7 @@ BuildArch:        noarch
 This package contains the API documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jansi-native-1.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1a000a9c42ef0a561aa5b797df745f072a48a9d87bd65ec24a107e9e782927e0" || { echo "oreon: Source0 SHA256 mismatch for jansi-native-1.8.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n jansi-native-%{commit}
 
 %mvn_alias :jansi-linux%{bits} :jansi-linux

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 849205d0d2c065d916c5cc7438a101ae50ec561e0adc844c0e90a823448595f9
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Module-Install-Repository
 Version:        0.08
 Release:        5%{?dist}
@@ -8,10 +16,6 @@ Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIYAGAWA/Module-Instal
 
 Patch0:         Module-Install-Repository-0.06-Fix-building-on-Perl-without-dot-in-INC.patch
 Patch1:         Module-Install-Repository-0.08-Update-test_requires.patch
-# oreon url source checksums begin
-%global source0_sha256 849205d0d2c065d916c5cc7438a101ae50ec561e0adc844c0e90a823448595f9
-%global source0_file Module-Install-Repository-0.08.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -41,9 +45,7 @@ figure out repository URL and set it via repository(), which then will be
 added to resources under META.yml.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Module-Install-Repository-0.08.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "849205d0d2c065d916c5cc7438a101ae50ec561e0adc844c0e90a823448595f9" || { echo "oreon: Source0 SHA256 mismatch for Module-Install-Repository-0.08.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Module-Install-Repository-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

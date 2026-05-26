@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 af5b731c145c1d13c4e3b4eeb7d167e94e845e440f71e3496b4ed8dae0291960
+%global source1_sha256 eadf412754a2a9a727d79579873fbe7dae802038d4c2a19e452a886d4eddd111
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora} || 0%{?oreon}
 %bcond_without mingw
 %else
@@ -15,12 +25,6 @@ License:        MIT
 URL:            https://proj.org
 Source0:        https://download.osgeo.org/%{name}/%{name}-%{version}.tar.gz
 Source1:        https://download.osgeo.org/%{name}/%{name}-data-%{data_version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 af5b731c145c1d13c4e3b4eeb7d167e94e845e440f71e3496b4ed8dae0291960
-%global source0_file proj-9.8.1.tar.gz
-%global source1_sha256 eadf412754a2a9a727d79579873fbe7dae802038d4c2a19e452a886d4eddd111
-%global source1_file proj-data-1.24.tar.gz
-# oreon url source checksums end
 
 
 BuildRequires:  cmake
@@ -246,10 +250,7 @@ projection functions. Proj docs: http://www.remotesensing.org/dl/new_docs/
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/proj-9.8.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "af5b731c145c1d13c4e3b4eeb7d167e94e845e440f71e3496b4ed8dae0291960" || { echo "oreon: Source0 SHA256 mismatch for proj-9.8.1.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/proj-data-1.24.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "eadf412754a2a9a727d79579873fbe7dae802038d4c2a19e452a886d4eddd111" || { echo "oreon: Source1 SHA256 mismatch for proj-data-1.24.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

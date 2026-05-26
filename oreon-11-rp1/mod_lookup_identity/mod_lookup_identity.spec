@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 940f02a73b6d040a8aafee3895b71172a6e1c8d9475f68bf2476027bcd90149c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?_httpd_mmn: %{expand: %%global _httpd_mmn %%(cat %{_includedir}/httpd/.mmn || echo 0-0)}}
 %{!?_httpd_apxs:       %{expand: %%global _httpd_apxs       %%{_sbindir}/apxs}}
 %{!?_httpd_confdir:    %{expand: %%global _httpd_confdir    %%{_sysconfdir}/httpd/conf.d}}
@@ -13,10 +21,6 @@ Release: 25%{?dist}
 License: Apache-2.0
 URL: http://www.adelton.com/apache/mod_lookup_identity/
 Source0: http://www.adelton.com/apache/mod_lookup_identity/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 940f02a73b6d040a8aafee3895b71172a6e1c8d9475f68bf2476027bcd90149c
-%global source0_file mod_lookup_identity-1.0.0.tar.gz
-# oreon url source checksums end
 BuildRequires: gcc
 BuildRequires: httpd-devel
 BuildRequires: dbus-devel
@@ -38,9 +42,7 @@ in notes/environment variables to be consumed by web applications.
 Use of REMOTE_USER_* environment variables is recommended.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mod_lookup_identity-1.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "940f02a73b6d040a8aafee3895b71172a6e1c8d9475f68bf2476027bcd90149c" || { echo "oreon: Source0 SHA256 mismatch for mod_lookup_identity-1.0.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{version}
 
 %build

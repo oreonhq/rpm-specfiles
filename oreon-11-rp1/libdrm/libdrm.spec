@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 45ba9983b51c896406a3d654de81d313b953b76e6391e2797073d543c5f617d5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define bcond_meson() %{lua: do
   local option = rpm.expand("%{1}")
   local with = rpm.expand("%{?with_" .. option .. "}")
@@ -84,10 +92,6 @@ BuildRequires:  chrpath
 Patch1001:      libdrm-make-dri-perms-okay.patch
 # remove backwards compat not needed on Fedora
 Patch1002:      libdrm-2.4.0-no-bc.patch
-# oreon url source checksums begin
-%global source0_sha256 45ba9983b51c896406a3d654de81d313b953b76e6391e2797073d543c5f617d5
-%global source0_file libdrm-2.4.131.tar.xz
-# oreon url source checksums end
 
 %description
 Direct Rendering Manager runtime library
@@ -110,9 +114,7 @@ Utility programs for the kernel DRM interface.  Will void your warranty.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libdrm-2.4.131.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "45ba9983b51c896406a3d654de81d313b953b76e6391e2797073d543c5f617d5" || { echo "oreon: Source0 SHA256 mismatch for libdrm-2.4.131.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

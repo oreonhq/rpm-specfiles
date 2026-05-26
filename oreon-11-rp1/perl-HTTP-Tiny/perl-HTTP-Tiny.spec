@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 aeb59ac39d2f7bcbc6d09dd94ff5621e03d8a95abb12b49b392ccd35088c8ac1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %bcond_without perl_HTTP_Tiny_enables_optional_deps
 
@@ -11,10 +19,6 @@ Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/HTTP-Tiny-%{vers
 # Check for write failure, bug #1031096, refused by upstream,
 # <https://github.com/chansen/p5-http-tiny/issues/32>
 Patch1:         HTTP-Tiny-0.070-Croak-on-failed-write-into-a-file.patch
-# oreon url source checksums begin
-%global source0_sha256 aeb59ac39d2f7bcbc6d09dd94ff5621e03d8a95abb12b49b392ccd35088c8ac1
-%global source0_file HTTP-Tiny-0.092.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make
@@ -97,9 +101,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/HTTP-Tiny-0.092.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aeb59ac39d2f7bcbc6d09dd94ff5621e03d8a95abb12b49b392ccd35088c8ac1" || { echo "oreon: Source0 SHA256 mismatch for HTTP-Tiny-0.092.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n HTTP-Tiny-%{version}
 
 # Help generators to recognize Perl scripts

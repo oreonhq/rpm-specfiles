@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 694a8e44c87657c59292ede72891eb91d34131f6531463aab3009191c77364a8
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname ordered-set
 %global dir_name ordered_set
 
@@ -9,10 +17,6 @@ Summary:        Custom MutableSet that remembers its order
 License:        MIT
 URL:            https://github.com/rspeer/ordered-set
 Source0:        https://files.pythonhosted.org/packages/source/o/ordered-set/ordered-set-4.1.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 694a8e44c87657c59292ede72891eb91d34131f6531463aab3009191c77364a8
-%global source0_file ordered-set-4.1.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -37,9 +41,7 @@ Python 3 version.
 %pyproject_buildrequires
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ordered-set-4.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "694a8e44c87657c59292ede72891eb91d34131f6531463aab3009191c77364a8" || { echo "oreon: Source0 SHA256 mismatch for ordered-set-4.1.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{srcname}-%{version}
 
 %build

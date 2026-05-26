@@ -1,3 +1,19 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a5df9c1be9b17de3d8318fd28003780cf679eb2ba3cae33a6a1890d7f60d27dd
+%global source2_sha256 b28c91532a8b65a1f983b4c28b7488174e4a01008e29ce8e69bd789f28bc2a89
+%global source4_sha256 1d024d13b5086a3d6bba86314a38b267a3b371845b0227b4f803888ecbca5a7a
+%global source5_sha256 ee90a0f879d2b7b7159124ff22b937a2a9a8c36d3bb65d1da7dd3f04370a10bd
+%global source6_sha256 29edce3d302a15563d8663198bbc398c5a0554765c83830d0d4c0409d21a16c4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source4_sha256:%(test -z "%{source4_sha256}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_sha256}" || { echo "oreon: Source4 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source5_sha256:%(test -z "%{source5_sha256}" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_sha256}" || { echo "oreon: Source5 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source6_sha256:%(test -z "%{source6_sha256}" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_sha256}" || { echo "oreon: Source6 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # https://fedoraproject.org/wiki/Changes/SetBuildFlagsBuildCheck
 # breaks cross-building
 %undefine _auto_set_build_flags
@@ -141,18 +157,6 @@ Patch0015: 0015-OvmfPkg-X64-add-opt-org.tianocore-UninstallMemAttrPr.patch
 Patch0016: 0016-OvmfPkg-PlatformDxe-register-page-fault-handler-for-.patch
 Patch0017: 0017-OvmfPkg-PlatformDxe-add-check-for-1g-page-support.patch
 Patch0018: 0018-Revert-OvmfPkg-X86QemuLoadImageLib-flip-default-for-.patch
-# oreon url source checksums begin
-%global source0_sha256 a5df9c1be9b17de3d8318fd28003780cf679eb2ba3cae33a6a1890d7f60d27dd
-%global source0_file edk2-b7a715f7c03c.tar.gz
-%global source2_sha256 b28c91532a8b65a1f983b4c28b7488174e4a01008e29ce8e69bd789f28bc2a89
-%global source2_file openssl-3.5.5.tar.gz
-%global source4_sha256 1d024d13b5086a3d6bba86314a38b267a3b371845b0227b4f803888ecbca5a7a
-%global source4_file edk2-platforms-c3efe816e1bb.tar.gz
-%global source5_sha256 ee90a0f879d2b7b7159124ff22b937a2a9a8c36d3bb65d1da7dd3f04370a10bd
-%global source5_file jansson-2.13.1.tar.bz2
-%global source6_sha256 29edce3d302a15563d8663198bbc398c5a0554765c83830d0d4c0409d21a16c4
-%global source6_file dtc-1.7.0.tar.xz
-# oreon url source checksums end
 
 
 # needed by %prep
@@ -378,13 +382,7 @@ you probably want to install edk2-tools only.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/edk2-b7a715f7c03c.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a5df9c1be9b17de3d8318fd28003780cf679eb2ba3cae33a6a1890d7f60d27dd" || { echo "oreon: Source0 SHA256 mismatch for edk2-b7a715f7c03c.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/openssl-3.5.5.tar.gz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b28c91532a8b65a1f983b4c28b7488174e4a01008e29ce8e69bd789f28bc2a89" || { echo "oreon: Source2 SHA256 mismatch for openssl-3.5.5.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/edk2-platforms-c3efe816e1bb.tar.gz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1d024d13b5086a3d6bba86314a38b267a3b371845b0227b4f803888ecbca5a7a" || { echo "oreon: Source4 SHA256 mismatch for edk2-platforms-c3efe816e1bb.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/jansson-2.13.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ee90a0f879d2b7b7159124ff22b937a2a9a8c36d3bb65d1da7dd3f04370a10bd" || { echo "oreon: Source5 SHA256 mismatch for jansson-2.13.1.tar.bz2" >&2; exit 1; })
-%(f=%{_sourcedir}/dtc-1.7.0.tar.xz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "29edce3d302a15563d8663198bbc398c5a0554765c83830d0d4c0409d21a16c4" || { echo "oreon: Source6 SHA256 mismatch for dtc-1.7.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 # We needs some special git config options that %%autosetup won't give us.
 # We init the git dir ourselves, then tell %%autosetup not to blow it away.
 %setup -q -T -D -c -n edk2-%{GITCOMMIT}

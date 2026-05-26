@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bc30e097b36d3b193969c8e2f704db58c1f91ac1e4a25f857274ff599ceef673
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define VERSION %{version}
 
 %define bind_name bind
@@ -29,10 +37,6 @@ Source1:        https://releases.pagure.org/%{name}/%{name}-%{VERSION}.tar.bz2.a
 
 # https://pagure.io/bind-dyndb-ldap/pull-request/244
 Patch1:         bind-dyndb-ldap-11.10-check-pr244.patch
-# oreon url source checksums begin
-%global source0_sha256 bc30e097b36d3b193969c8e2f704db58c1f91ac1e4a25f857274ff599ceef673
-%global source0_file bind-dyndb-ldap-11.11.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  bind-devel >= %{bind_version}, bind-lite-devel >= %{bind_version}
 BuildRequires:  krb5-devel
@@ -64,9 +68,7 @@ off of your LDAP server.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/bind-dyndb-ldap-11.11.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bc30e097b36d3b193969c8e2f704db58c1f91ac1e4a25f857274ff599ceef673" || { echo "oreon: Source0 SHA256 mismatch for bind-dyndb-ldap-11.11.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{VERSION} -p1
 
 %build

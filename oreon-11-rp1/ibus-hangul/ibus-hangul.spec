@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a5aac88286cd18960229860e3e1a778978a7aeaa484ad9acfa48284b87fdc3bb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global require_ibus_version 1.3.99
 %global require_libhangul_version 0.1.0
 
@@ -12,10 +20,6 @@ Source0:    https://github.com/libhangul/ibus-hangul/releases/download/%{version
 # not upstreamed patches
 Patch1:     ibus-hangul-setup-abspath.patch
 Patch2:     ibus-hangul-fixes-osk.patch
-# oreon url source checksums begin
-%global source0_sha256 a5aac88286cd18960229860e3e1a778978a7aeaa484ad9acfa48284b87fdc3bb
-%global source0_file ibus-hangul-1.5.5.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gettext-devel, automake, libtool
 BuildRequires:  libhangul-devel >= %{require_libhangul_version}
@@ -44,9 +48,7 @@ The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ibus-hangul-1.5.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a5aac88286cd18960229860e3e1a778978a7aeaa484ad9acfa48284b87fdc3bb" || { echo "oreon: Source0 SHA256 mismatch for ibus-hangul-1.5.5.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

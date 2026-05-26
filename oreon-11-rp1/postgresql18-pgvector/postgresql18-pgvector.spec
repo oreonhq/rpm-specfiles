@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 867a2c328d4928a5a9d6f052cd3bc78c7d60228a9b914ad32aa3db88e9de27b0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?postgresql_default:%global postgresql_default 1}
 
 %global pname vector
@@ -22,10 +30,6 @@ Source0:	https://github.com/%{sname}/%{sname}/archive/refs/tags/v%{version}.tar.
 # not yet included in any tag or release
 Patch0:		78ed8f1.patch
 Patch1:		2c53c30.patch
-# oreon url source checksums begin
-%global source0_sha256 867a2c328d4928a5a9d6f052cd3bc78c7d60228a9b914ad32aa3db88e9de27b0
-%global source0_file v0.8.0.tar.gz
-# oreon url source checksums end
 
 %if %?postgresql_default
 %global pkgname %{sname}
@@ -69,9 +73,7 @@ This packages provides JIT support for pgvector
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v0.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "867a2c328d4928a5a9d6f052cd3bc78c7d60228a9b914ad32aa3db88e9de27b0" || { echo "oreon: Source0 SHA256 mismatch for v0.8.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{sname}-%{version}
 
 %build

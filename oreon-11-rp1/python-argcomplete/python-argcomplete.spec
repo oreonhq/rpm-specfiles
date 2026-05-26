@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 62e8ed4fd6a45864acc8235409461b72c9a28ee785a2011cc5eb78318786c89c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Disable check to avoid pulling unwanted package (fish) into RHEL 9
 %if 0%{?rhel} >= 9 && !0%{?epel} || 0%{?oreon}
 %bcond_with check
@@ -15,10 +23,6 @@ Release:       %autorelease
 License:       Apache-2.0
 URL:           https://github.com/kislyuk/argcomplete
 Source0:        https://files.pythonhosted.org/packages/source/a/argcomplete/argcomplete-3.6.3.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 62e8ed4fd6a45864acc8235409461b72c9a28ee785a2011cc5eb78318786c89c
-%global source0_file argcomplete-3.6.3.tar.gz
-# oreon url source checksums end
 
 BuildRequires: python3-devel
 
@@ -53,9 +57,7 @@ Summary:        %{summary}
 %description -n python3-argcomplete %_description
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/argcomplete-3.6.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "62e8ed4fd6a45864acc8235409461b72c9a28ee785a2011cc5eb78318786c89c" || { echo "oreon: Source0 SHA256 mismatch for argcomplete-3.6.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n argcomplete-%{version}
 # Remove useless BRs (aka linters)
 sed -i -r -e '/test = /s/"(coverage|ruff|mypy)"[, ]*//g' pyproject.toml

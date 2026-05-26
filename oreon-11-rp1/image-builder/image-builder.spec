@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e2f3196f505b81fe75f5d436ae2185994fd1ec4a89c65f449b6662df3731d4bd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # The minimum required osbuild version, note that this used to be 129
 # but got bumped to 138 for librepo support which is not strictly
 # required. So if this needs backport to places where there is no
@@ -28,10 +36,6 @@ License:        Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND CC-BY-SA-4.0 AN
 
 URL:            %{gourl}
 Source0:        https://github.com/osbuild/image-builder-cli/releases/download/v%{version}/image-builder-cli-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 e2f3196f505b81fe75f5d436ae2185994fd1ec4a89c65f449b6662df3731d4bd
-%global source0_file image-builder-cli-53.tar.gz
-# oreon url source checksums end
 
 
 BuildRequires:  %{?go_compiler:compiler(go-compiler)}%{!?go_compiler:golang}
@@ -210,9 +214,7 @@ Requires:   osbuild-depsolve-dnf >= %{min_osbuild_version}
 %{common_description}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/image-builder-cli-53.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e2f3196f505b81fe75f5d436ae2185994fd1ec4a89c65f449b6662df3731d4bd" || { echo "oreon: Source0 SHA256 mismatch for image-builder-cli-53.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if 0%{?rhel}
 %forgeautosetup -p1
 %else

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 613424039e0e1b6bb106f8f0df287e1d249ac285d854f4e1964d68e9b9ad7eb0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global gettext_package FontForge
 
 Name:           fontforge
@@ -8,10 +16,6 @@ Summary:        Outline and bitmap font editor
 License:        GPL-3.0-or-later
 URL:            http://fontforge.github.io/
 Source0:        https://github.com/fontforge/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 613424039e0e1b6bb106f8f0df287e1d249ac285d854f4e1964d68e9b9ad7eb0
-%global source0_file 20251009.tar.gz
-# oreon url source checksums end
 
 Requires:       xdg-utils
 Requires:       (autotrace or potrace)
@@ -72,9 +76,7 @@ This package contains documentation files for %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/20251009.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "613424039e0e1b6bb106f8f0df287e1d249ac285d854f4e1964d68e9b9ad7eb0" || { echo "oreon: Source0 SHA256 mismatch for 20251009.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

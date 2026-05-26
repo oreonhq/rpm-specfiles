@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 da1fba92daccd0667bc46c3ee952d4ae8cfc6bdb4c0bb4d34df26528fb240618
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Note to packagers:
 # libei-the-repo comes with three libraries, all independent of each other and
 # processes that use one may not use the other.
@@ -11,10 +19,6 @@ Summary:        Library for Emulated Input
 License:        MIT
 URL:            http://gitlab.freedesktop.org/libinput/libei
 Source0:        https://gitlab.freedesktop.org/libinput/libei/-/archive/%{version}/libei-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 da1fba92daccd0667bc46c3ee952d4ae8cfc6bdb4c0bb4d34df26528fb240618
-%global source0_file libei-1.5.0.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  git-core
@@ -80,9 +84,7 @@ Requires:       liboeffis%{?_isa} = %{version}-%{release}
 Library for XDG RemoteDesktop Portal Setup Development Package
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libei-1.5.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "da1fba92daccd0667bc46c3ee952d4ae8cfc6bdb4c0bb4d34df26528fb240618" || { echo "oreon: Source0 SHA256 mismatch for libei-1.5.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git
 # Replace whatever the source uses with the approved call
 %py3_shebang_fix $(git grep -l  '#!/usr/bin/.*python3')

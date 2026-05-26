@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 61f520e7c1664ae9301fa36a2b8e90cf4680887a71f456c290d5d8b879f1e2e6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           wireguard-tools
 Version:        1.0.20250521
 Release:        3%{?dist}
@@ -7,10 +15,6 @@ Summary:        Fast, modern, secure VPN tunnel
 License:        GPL-2.0-only
 
 Source0:        https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 61f520e7c1664ae9301fa36a2b8e90cf4680887a71f456c290d5d8b879f1e2e6
-%global source0_file wireguard-tools-1.0.20250521.tar.xz
-# oreon url source checksums end
 
 %{?systemd_requires}
 BuildRequires: make
@@ -29,9 +33,7 @@ many different circumstances. It runs over UDP.
 This package provides the wg binary for controlling WireGuard.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/wireguard-tools-1.0.20250521.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61f520e7c1664ae9301fa36a2b8e90cf4680887a71f456c290d5d8b879f1e2e6" || { echo "oreon: Source0 SHA256 mismatch for wireguard-tools-1.0.20250521.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

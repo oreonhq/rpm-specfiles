@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f7abd337784a9d1bd39cb8a587518aff6f2a43d916145eafd80b1b8b7146db66
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define source_name usb-modeswitch
 
 Name:       usb_modeswitch
@@ -15,10 +23,6 @@ Source1:    http://www.draisberghof.de/usb_modeswitch/device_reference.txt
 Patch0: device_reference-utf8.patch
 # Not submitted upstream due to lack of courage
 Patch1: usb_modeswitch-2.6.2-SIGTERM.patch
-# oreon url source checksums begin
-%global source0_sha256 f7abd337784a9d1bd39cb8a587518aff6f2a43d916145eafd80b1b8b7146db66
-%global source0_file usb-modeswitch-2.6.2.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc
@@ -44,9 +48,7 @@ Vodafone, Option, ZTE und Novatell werden unterstützt.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/usb-modeswitch-2.6.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f7abd337784a9d1bd39cb8a587518aff6f2a43d916145eafd80b1b8b7146db66" || { echo "oreon: Source0 SHA256 mismatch for usb-modeswitch-2.6.2.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{source_name}-%{version}
 cp -f %{SOURCE1} device_reference.txt
 

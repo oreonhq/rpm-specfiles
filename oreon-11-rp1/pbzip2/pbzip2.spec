@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8fd13eaaa266f7ee91f85c1ea97c86d9c9cc985969db9059cdebcb1e1b7bdbe6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		pbzip2
 Version:	1.1.13
 Release:	16%{?dist}
@@ -9,10 +17,6 @@ BuildRequires:	gcc-c++
 BuildRequires:	bzip2-devel
 Source0:	https://launchpad.net/pbzip2/1.1/%{version}/+download/pbzip2-%{version}.tar.gz
 Patch0:		%{name}-1.1.12-buildflags.patch
-# oreon url source checksums begin
-%global source0_sha256 8fd13eaaa266f7ee91f85c1ea97c86d9c9cc985969db9059cdebcb1e1b7bdbe6
-%global source0_file pbzip2-1.1.13.tar.gz
-# oreon url source checksums end
 
 %description
 PBZIP2 is a parallel implementation of the bzip2 block-sorting file
@@ -23,9 +27,7 @@ decompressed with bzip2).
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pbzip2-1.1.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8fd13eaaa266f7ee91f85c1ea97c86d9c9cc985969db9059cdebcb1e1b7bdbe6" || { echo "oreon: Source0 SHA256 mismatch for pbzip2-1.1.13.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 f=AUTHORS; iconv -f iso-8859-1 -t utf-8 $f > $f.utf8 && mv $f.utf8 $f
 

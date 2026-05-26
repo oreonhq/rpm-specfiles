@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 83f5619b87788a134e151560b954ab312e44a9763d935c0e419bbe5b8aa79b11
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pypi_name sip
 
 Name:           sip6
@@ -9,10 +17,6 @@ Summary:        SIP - Python/C++ Bindings Generator
 License:        BSD-2-Clause
 URL:            https://github.com/Python-SIP/sip
 Source0:        https://github.com/Python-SIP/sip/archive/6.15.1/sip-6.15.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 83f5619b87788a134e151560b954ab312e44a9763d935c0e419bbe5b8aa79b11
-%global source0_file sip-6.15.1.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -31,9 +35,7 @@ Python bindings for wxWidgets.}
 %description %_description
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sip-6.15.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "83f5619b87788a134e151560b954ab312e44a9763d935c0e419bbe5b8aa79b11" || { echo "oreon: Source0 SHA256 mismatch for sip-6.15.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{pypi_name}-%{version} -p 1
 
 %generate_buildrequires

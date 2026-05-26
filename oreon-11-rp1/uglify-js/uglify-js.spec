@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 744d9f31fe424514dd44728daa3e562a703fca53b6627ddeb655f77c2aa88ab4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{?nodejs_find_provides_and_requires}
 
 #enable/disable tests in case the deps aren't there
@@ -10,10 +18,6 @@ Summary:        JavaScript parser, mangler/compressor and beautifier toolkit
 License:        BSD-2-Clause
 URL:            https://github.com/mishoo/UglifyJS
 Source0:        https://registry.npmjs.org/%{name}/-/%{name}-%{version}.tgz
-# oreon url source checksums begin
-%global source0_sha256 744d9f31fe424514dd44728daa3e562a703fca53b6627ddeb655f77c2aa88ab4
-%global source0_file uglify-js-3.19.3.tgz
-# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{nodejs_arches} noarch
@@ -61,9 +65,7 @@ This package ships a JavaScript library suitable for use by any JavaScript
 runtime.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/uglify-js-3.19.3.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "744d9f31fe424514dd44728daa3e562a703fca53b6627ddeb655f77c2aa88ab4" || { echo "oreon: Source0 SHA256 mismatch for uglify-js-3.19.3.tgz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n package
 
 chmod 0755 bin/uglifyjs

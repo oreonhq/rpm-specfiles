@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 edac77a17fc36620c8324cc194ce1fad2f02e9fcbe72d08ad0b2c47f0c7fd8ef
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run extra test
 %if 0%{?perl_bootstrap:1} || ( 0%{?rhel} )
 %bcond_with perl_B_Hooks_EndOfScope_enables_extra_test
@@ -16,10 +24,6 @@ URL:		https://metacpan.org/release/B-Hooks-EndOfScope
 Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.28.tar.gz
 
 Patch0:		B-Hooks-EndOfScope-0.13-shellbangs.patch
-# oreon url source checksums begin
-%global source0_sha256 edac77a17fc36620c8324cc194ce1fad2f02e9fcbe72d08ad0b2c47f0c7fd8ef
-%global source0_file B-Hooks-EndOfScope-0.28.tar.gz
-# oreon url source checksums end
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
@@ -101,9 +105,7 @@ This module allows you to execute code when Perl has finished compiling the
 surrounding scope.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/B-Hooks-EndOfScope-0.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "edac77a17fc36620c8324cc194ce1fad2f02e9fcbe72d08ad0b2c47f0c7fd8ef" || { echo "oreon: Source0 SHA256 mismatch for B-Hooks-EndOfScope-0.28.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n B-Hooks-EndOfScope-%{version}
 
 # Remove shellbangs from tests to placate rpmlint

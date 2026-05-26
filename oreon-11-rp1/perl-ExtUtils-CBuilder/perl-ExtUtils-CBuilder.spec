@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 abc21827eb8a513171bf7fdecefce9945132cb76db945036518291f607b1491f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global base_version 0.280236
 
 Name:           perl-ExtUtils-CBuilder
@@ -18,10 +26,6 @@ Patch1:         ExtUtils-CBuilder-0.280236-Upgrade-to-0.280238.patch
 Patch2:         ExtUtils-CBuilder-0.280238-Upgrade-to-0.280240.patch
 # Unbundled from perl 5.42.0
 Patch3:         ExtUtils-CBuilder-0.280240-Upgrade-to-0.280242.patch
-# oreon url source checksums begin
-%global source0_sha256 abc21827eb8a513171bf7fdecefce9945132cb76db945036518291f607b1491f
-%global source0_file ExtUtils-CBuilder-0.280236.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -81,9 +85,7 @@ Tests from %{name}-%{version}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ExtUtils-CBuilder-0.280236.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "abc21827eb8a513171bf7fdecefce9945132cb76db945036518291f607b1491f" || { echo "oreon: Source0 SHA256 mismatch for ExtUtils-CBuilder-0.280236.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n ExtUtils-CBuilder-%{base_version}
 
 # Normalize shebangs

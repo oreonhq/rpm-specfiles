@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 62fec2273016fb6e69b18635e696fd2c91953af9cbe757b341721aec2232432e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 BuildArch: noarch
 
 %global archivename All_KhmerOS_%{version}
@@ -169,10 +177,6 @@ Source8:        68-%{fontpkgname8}.conf
 Source9:        68-%{fontpkgname9}.conf
 Source10:       68-%{fontpkgname10}.conf
 Source11:       License.txt
-# oreon url source checksums begin
-%global source0_sha256 62fec2273016fb6e69b18635e696fd2c91953af9cbe757b341721aec2232432e
-%global source0_file All_KhmerOS_5.0.zip
-# oreon url source checksums end
 
 Name:      khmer-os-fonts
 Summary:   Khmer font family set created by Danh Hong of the Cambodian Open Institute
@@ -197,9 +201,7 @@ This meta-package installs all the handwritten font family packages.
 %fontmetapkg -n khmer-os-handwritten-fonts -s handwrittenmetasummary -d handwrittenmetadescription -z 4,5
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/All_KhmerOS_5.0.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "62fec2273016fb6e69b18635e696fd2c91953af9cbe757b341721aec2232432e" || { echo "oreon: Source0 SHA256 mismatch for All_KhmerOS_5.0.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{archivename}
 install -p %{SOURCE11} .
 %linuxtext License.txt

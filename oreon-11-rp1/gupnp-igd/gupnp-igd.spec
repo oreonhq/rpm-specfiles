@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4099978339ab22126d4968f2a332b6d094fc44c78797860781f1fc2f11771b74
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           gupnp-igd
 Version:        1.6.0
 Release:        9%{?dist}
@@ -6,10 +14,6 @@ Summary:        Library to handle UPnP IGD port mapping
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/GUPnP
 Source0:        https://download.gnome.org/sources/%{name}/1.6/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 4099978339ab22126d4968f2a332b6d094fc44c78797860781f1fc2f11771b74
-%global source0_file gupnp-igd-1.6.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gupnp-1.6)
@@ -33,9 +37,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gupnp-igd-1.6.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4099978339ab22126d4968f2a332b6d094fc44c78797860781f1fc2f11771b74" || { echo "oreon: Source0 SHA256 mismatch for gupnp-igd-1.6.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

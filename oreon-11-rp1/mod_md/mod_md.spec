@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 674117771ec8bae121513876e8cadb1cef354d8867576373c7994224c925d770
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Module Magic Number
 %{!?_httpd_mmn: %global _httpd_mmn %(cat %{_includedir}/httpd/.mmn 2>/dev/null || echo 0-0)}
 # State directory
@@ -11,10 +19,6 @@ License:        Apache-2.0
 URL:            https://icing.github.io/mod_md/
 Source0:        https://github.com/icing/mod_md/releases/download/v%{version}/mod_md-%{version}.tar.gz
 Patch1:         mod_md-2.0.8-state_dir.patch
-# oreon url source checksums begin
-%global source0_sha256 674117771ec8bae121513876e8cadb1cef354d8867576373c7994224c925d770
-%global source0_file mod_md-2.6.7.tar.gz
-# oreon url source checksums end
 BuildRequires:  make, gcc
 BuildRequires:  pkgconfig, httpd-devel >= 2.4.41, openssl-devel >= 1.1.0, jansson-devel, libcurl-devel, xmlto
 Requires:       httpd-mmn = %{_httpd_mmn}, mod_ssl >= 1:2.4.41
@@ -28,9 +32,7 @@ certificate provisioning.  Certificates will be configured for managed
 domains and their virtual hosts automatically, including at renewal.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mod_md-2.6.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "674117771ec8bae121513876e8cadb1cef354d8867576373c7994224c925d770" || { echo "oreon: Source0 SHA256 mismatch for mod_md-2.6.7.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

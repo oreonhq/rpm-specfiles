@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f3f90b7672698e66583e86e676771fd339bd84a51514e818a064a6defa903bf1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with bootstrap
 %global upstream_version 2.0.0-M1
 
@@ -11,10 +19,6 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{upstream_version}/%{name}-%{upstream_version}-source-release.zip
-# oreon url source checksums begin
-%global source0_sha256 f3f90b7672698e66583e86e676771fd339bd84a51514e818a064a6defa903bf1
-%global source0_file maven-verifier-2.0.0-M1-source-release.zip
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -37,9 +41,7 @@ Obsoletes:      %{name}-javadoc < 2.0.0~M1-18
 Provides a test harness for Maven integration tests.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/maven-verifier-2.0.0-M1-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f3f90b7672698e66583e86e676771fd339bd84a51514e818a064a6defa903bf1" || { echo "oreon: Source0 SHA256 mismatch for maven-verifier-2.0.0-M1-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 
 # This test attempts to write outside the build directory

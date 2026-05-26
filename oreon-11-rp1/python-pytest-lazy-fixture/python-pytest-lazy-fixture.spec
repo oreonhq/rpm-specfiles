@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0e7d0c7f74ba33e6e80905e9bfd81f9d15ef9a790de97993e34213deb5ad10ac
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Enabled by default
 %bcond_without tests
 
@@ -15,10 +23,6 @@ Source0:        https://files.pythonhosted.org/packages/source/p/pytest-lazy-fix
 # Downstream only patch, upstream seems dead.
 # https://github.com/TvoroG/pytest-lazy-fixture/issues/65#issuecomment-1915829980
 Patch:          Minimal-patch-for-compatibility-with-pytest-8.patch
-# oreon url source checksums begin
-%global source0_sha256 0e7d0c7f74ba33e6e80905e9bfd81f9d15ef9a790de97993e34213deb5ad10ac
-%global source0_file pytest-lazy-fixture-0.6.3.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -35,9 +39,7 @@ Summary:        %{summary}
 %description -n python3-pytest-lazy-fixture %_description
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pytest-lazy-fixture-0.6.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0e7d0c7f74ba33e6e80905e9bfd81f9d15ef9a790de97993e34213deb5ad10ac" || { echo "oreon: Source0 SHA256 mismatch for pytest-lazy-fixture-0.6.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -N -n pytest-lazy-fixture-%{version}
 
 %if 0%{?rhel} == 0 || 0%{?rhel} > 10

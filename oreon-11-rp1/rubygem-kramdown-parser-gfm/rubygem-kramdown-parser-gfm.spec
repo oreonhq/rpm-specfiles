@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fb39745516427d2988543bf01fc4cf0ab1149476382393e0e9c48592f6581729
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global gem_name kramdown-parser-gfm
 
 Name:           rubygem-%{gem_name}
@@ -13,10 +21,6 @@ Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 
 # upstream patch to make test suite compatible with kramdown 2.2.0
 Patch0:        https://github.com/kramdown/parser-gfm/commit/ad48572.patch
-# oreon url source checksums begin
-%global source0_sha256 fb39745516427d2988543bf01fc4cf0ab1149476382393e0e9c48592f6581729
-%global source0_file kramdown-parser-gfm-1.1.0.gem
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -44,9 +48,7 @@ Documentation for %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kramdown-parser-gfm-1.1.0.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fb39745516427d2988543bf01fc4cf0ab1149476382393e0e9c48592f6581729" || { echo "oreon: Source0 SHA256 mismatch for kramdown-parser-gfm-1.1.0.gem" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{gem_name}-%{version}
 %patch -P0 -p1
 

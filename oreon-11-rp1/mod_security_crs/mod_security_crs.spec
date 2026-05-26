@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 656966868b7146c4776a0c051ab6385517bf753fa7e3463a95775c0b526c2afc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?_httpd_confdir:    %{expand: %%global _httpd_confdir    %%{_sysconfdir}/httpd/conf.d}}
 
 Summary: ModSecurity Core Ruleset
@@ -7,10 +15,6 @@ Release: 3%{?dist}
 License: Apache-2.0
 URL: https://coreruleset.org/
 Source: https://github.com/coreruleset/coreruleset/archive/refs/tags/v%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 656966868b7146c4776a0c051ab6385517bf753fa7e3463a95775c0b526c2afc
-%global source0_file v4.15.0.tar.gz
-# oreon url source checksums end
 BuildArch: noarch
 Requires: mod_security >= 2.9.6
 Obsoletes: mod_security_crs-extras < 3.0.0
@@ -21,9 +25,7 @@ Obsoletes: mod_security_crs-extras < 3.0.0
 This package provides the base rules for mod_security.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v4.15.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "656966868b7146c4776a0c051ab6385517bf753fa7e3463a95775c0b526c2afc" || { echo "oreon: Source0 SHA256 mismatch for v4.15.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -S gendiff -n coreruleset-%{version}
 
 %build

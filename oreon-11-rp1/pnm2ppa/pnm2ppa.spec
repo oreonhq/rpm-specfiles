@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1c50ea2c97b232f5bee6ac3fab408d64b6f1380f1e289ac278778a7e368e7379
+%global source1_sha256 101fbb63ca49506c7d9217ff82d6f344b80df29e81e43105115002888048f72b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: pnm2ppa
 Summary: Drivers for printing to HP PPA printers
 Epoch: 1
@@ -22,12 +32,6 @@ Patch5: pnm2ppa-ldflags.patch
 Patch6: pnm2ppa-aarch-help-crash.patch
 # GCC 15 defaults to C23
 Patch7: pnm2ppa-c23.patch
-# oreon url source checksums begin
-%global source0_sha256 1c50ea2c97b232f5bee6ac3fab408d64b6f1380f1e289ac278778a7e368e7379
-%global source0_file pnm2ppa-1.13.tar.gz
-%global source1_sha256 101fbb63ca49506c7d9217ff82d6f344b80df29e81e43105115002888048f72b
-%global source1_file ppa-0.8.6.tar.gz
-# oreon url source checksums end
 # pbm2ppa, pnm2ppa - GPL-2.0-or-later
 # pdq/* - GPL-2.0, but not shipped, thus not mentioned in license tag
 License: GPL-2.0-or-later
@@ -53,10 +57,7 @@ printer in PPA format.
 Install pnm2ppa if you need to print to a PPA printer.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pnm2ppa-1.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1c50ea2c97b232f5bee6ac3fab408d64b6f1380f1e289ac278778a7e368e7379" || { echo "oreon: Source0 SHA256 mismatch for pnm2ppa-1.13.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/ppa-0.8.6.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "101fbb63ca49506c7d9217ff82d6f344b80df29e81e43105115002888048f72b" || { echo "oreon: Source1 SHA256 mismatch for ppa-0.8.6.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 #pbm2ppa source

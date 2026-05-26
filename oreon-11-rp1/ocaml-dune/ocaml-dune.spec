@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 63fbef75d09dd4a05ee2624d41e574d658e33faff5c5b7d6bc67eab2af03dc71
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # TESTING NOTE: The testsuite requires numerous packages, many of which are
 # built with dune.  Furthermore, the testsuite assumes it is running in a git
 # checkout, and has access to the Internet.  We cannot satisfy any of these
@@ -61,10 +69,6 @@ Patch:          %{name}-unbundle-libev.patch
 # Temporary workaround for broken debuginfo (rhbz#2168932)
 # See https://github.com/ocaml/dune/issues/6929
 Patch:          %{name}-debuginfo.patch
-# oreon url source checksums begin
-%global source0_sha256 63fbef75d09dd4a05ee2624d41e574d658e33faff5c5b7d6bc67eab2af03dc71
-%global source0_file dune-3.23.1.tar.gz
-# oreon url source checksums end
 
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch:    %{ix86}
@@ -400,9 +404,7 @@ The ocaml-top-closure-devel package contains libraries and signature files for
 developing applications that use ocaml-top-closure.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dune-3.23.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "63fbef75d09dd4a05ee2624d41e574d658e33faff5c5b7d6bc67eab2af03dc71" || { echo "oreon: Source0 SHA256 mismatch for dune-3.23.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n dune-%{version} -p1
 
 # Make sure we don't use the bundled lmdb

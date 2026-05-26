@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2db1ebb5837b4cb20051c0ee5b733b4453e3137df0a92306034c867621edd7e7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Perform optional tests
 %if 0%{?rhel} > 8
 %bcond_with  perl_Crypt_DES_enables_optional_test
@@ -15,10 +23,6 @@ Source0:        https://cpan.metacpan.org/authors/id/D/DP/DPARIS/Crypt-DES-2.07.
 
 Patch0:         perl-Crypt-DES-init-braces.patch
 Patch99:        perl-Crypt-DES-fedora-c99.patch
-# oreon url source checksums begin
-%global source0_sha256 2db1ebb5837b4cb20051c0ee5b733b4453e3137df0a92306034c867621edd7e7
-%global source0_file Crypt-DES-2.07.tar.gz
-# oreon url source checksums end
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -48,9 +52,7 @@ BuildRequires:  perl(Crypt::CBC) > 1.22
 DES encryption module. The module implements the Crypt::CBC interface.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Crypt-DES-2.07.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2db1ebb5837b4cb20051c0ee5b733b4453e3137df0a92306034c867621edd7e7" || { echo "oreon: Source0 SHA256 mismatch for Crypt-DES-2.07.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Crypt-DES-%{version}
 
 # Fix "warning: missing braces around initializer [-Wmissing-braces]"

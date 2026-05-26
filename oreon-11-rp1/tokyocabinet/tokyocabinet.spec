@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a003f47c39a91e22d76bc4fe68b9b3de0f38851b160bbb1ca07a4f6441de1f90
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:	A modern implementation of a DBM
 Name:		tokyocabinet
 Version:	1.4.48
@@ -7,10 +15,6 @@ URL:		https://dbmx.net/tokyocabinet/
 Source:		https://dbmx.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:		tokyocabinet-fedora.patch
 Patch1:		tokyocabinet-manhelp.patch
-# oreon url source checksums begin
-%global source0_sha256 a003f47c39a91e22d76bc4fe68b9b3de0f38851b160bbb1ca07a4f6441de1f90
-%global source0_file tokyocabinet-1.4.48.tar.gz
-# oreon url source checksums end
 BuildRequires: make
 BuildRequires:	pkgconfig zlib-devel bzip2-devel autoconf gcc
 
@@ -44,9 +48,7 @@ This package contains documentation files for the libraries and header files
 needed for developing with %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/tokyocabinet-1.4.48.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a003f47c39a91e22d76bc4fe68b9b3de0f38851b160bbb1ca07a4f6441de1f90" || { echo "oreon: Source0 SHA256 mismatch for tokyocabinet-1.4.48.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p0 -b .fedora
 %patch -P1 -p1 -b .manhelp

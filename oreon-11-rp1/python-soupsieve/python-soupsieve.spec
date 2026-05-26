@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2082ad2c38f438aa89ddc3028d52b312e8242ad9e678b63c0af107746264c11d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond tests 1
 
 Name:           python-soupsieve
@@ -8,10 +16,6 @@ Summary:        CSS selector library
 License:        MIT
 URL:            https://github.com/facelessuser/soupsieve
 Source0:        https://github.com/facelessuser/soupsieve/archive/%{version}/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 2082ad2c38f438aa89ddc3028d52b312e8242ad9e678b63c0af107746264c11d
-%global source0_file python-soupsieve-2.8.3.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -43,9 +47,7 @@ Summary:        %{summary}
 %description -n python3-soupsieve %_description
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/python-soupsieve-2.8.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2082ad2c38f438aa89ddc3028d52b312e8242ad9e678b63c0af107746264c11d" || { echo "oreon: Source0 SHA256 mismatch for python-soupsieve-2.8.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n soupsieve-%{version}
 
 # Do not run coverage report during check

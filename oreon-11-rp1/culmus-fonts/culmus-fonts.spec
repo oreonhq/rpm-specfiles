@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 BuildArch: noarch
 BuildRequires: /usr/bin/makeotfexe
 BuildRequires: fontforge
@@ -259,10 +267,6 @@ Source14:  66-%{fontpkgname14}.conf
 Source15:  66-%{fontpkgname15}.conf
 Source16:  66-%{fontpkgname16}.conf
 Source17:  modify-font-metadata.pe
-# oreon url source checksums begin
-%global source0_sha256 c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05
-%global source0_file culmus-0.133.tar.gz
-# oreon url source checksums end
 
 Name:      culmus-fonts
 Summary:   Fonts for Hebrew from Culmus project
@@ -274,9 +278,7 @@ Summary:   Fonts for Hebrew from Culmus project
 %fontmetapkg
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/culmus-0.133.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c0c6873742d07544f6bacf2ad52eb9cb392974d56427938dc1dfbc8399c64d05" || { echo "oreon: Source0 SHA256 mismatch for culmus-0.133.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n culmus-%{version}
 cp -p %{SOURCE17} .
 

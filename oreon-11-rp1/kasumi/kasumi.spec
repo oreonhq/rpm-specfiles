@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a65b3ac5e682a39a55ebff6226e3e18931ee9feef1f944ca52529deb298209f5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # anthy-unicode migration
 # https://github.com/fcitx/fcitx-anthy/issues/12
 # https://osdn.net/projects/scim-imengine/ticket/40956
@@ -24,10 +32,6 @@ Patch2: kasumi-check-anthy-pkg.patch
 Patch3: kasumi-1938091.patch
 Patch4: kasumi-c89.patch
 Patch5: kasumi-fix-crash-on-close.patch
-# oreon url source checksums begin
-%global source0_sha256 a65b3ac5e682a39a55ebff6226e3e18931ee9feef1f944ca52529deb298209f5
-%global source0_file kasumi_2.5+debian2.orig.tar.gz
-# oreon url source checksums end
 
 
 Summary: An anthy dictionary management tool
@@ -53,9 +57,7 @@ Kasumi-unicode is a dictionary management tool for Anthy-unicode.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kasumi_2.5+debian2.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a65b3ac5e682a39a55ebff6226e3e18931ee9feef1f944ca52529deb298209f5" || { echo "oreon: Source0 SHA256 mismatch for kasumi_2.5+debian2.orig.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n kasumi-2.5+debian2 -p1
 
 %build

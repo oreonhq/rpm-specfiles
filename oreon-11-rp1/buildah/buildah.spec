@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 24c31fcacd707892d4f745b5fd5a631753bee49bf6c048cd65c42a5791986b67
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global with_debug 1
 
 %if 0%{?with_debug}
@@ -48,10 +56,6 @@ Summary: A command line tool used for creating OCI Images
 URL: https://%{name}.io
 # Tarball fetched from upstream
 Source:        https://github.com/containers/buildah/archive/v1.43.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 24c31fcacd707892d4f745b5fd5a631753bee49bf6c048cd65c42a5791986b67
-%global source0_file v1.43.0.tar.gz
-# oreon url source checksums end
 BuildRequires: device-mapper-devel
 BuildRequires: git-core
 BuildRequires: golang >= 1.16.6
@@ -115,9 +119,7 @@ Requires: git-daemon
 This package contains system tests for %{name}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v1.43.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "24c31fcacd707892d4f745b5fd5a631753bee49bf6c048cd65c42a5791986b67" || { echo "oreon: Source0 SHA256 mismatch for v1.43.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -Sgit -n %{name}-%{version}
 
 %build

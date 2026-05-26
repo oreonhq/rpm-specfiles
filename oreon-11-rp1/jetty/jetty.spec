@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 11b612ef3489f350c9d8eeeff3227e76752b089facad7507b831d822e091d9c0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Copyright (c) 2000-2007, JPackage Project
 # All rights reserved.
 #
@@ -66,10 +74,6 @@ Source6:        LICENSE-MIT
 
 Patch1:         0001-Distro-jetty.home.patch
 Patch2:         0002-Port-to-servlet-api-4-5.patch
-# oreon url source checksums begin
-%global source0_sha256 11b612ef3489f350c9d8eeeff3227e76752b089facad7507b831d822e091d9c0
-%global source0_file jetty-9.4.40.v20210413.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(javax.servlet:javax.servlet-api)
@@ -591,9 +595,7 @@ License:        (Apache-2.0 OR EPL-1.0) AND LicenseRef-Callaway-MIT
 %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jetty-9.4.40.v20210413.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "11b612ef3489f350c9d8eeeff3227e76752b089facad7507b831d822e091d9c0" || { echo "oreon: Source0 SHA256 mismatch for jetty-9.4.40.v20210413.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}.project-%{name}-%{version}%{addver}
 
 %patch -P1 -p1

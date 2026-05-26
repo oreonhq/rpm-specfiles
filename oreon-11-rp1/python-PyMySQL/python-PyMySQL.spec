@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4961d3e165614ae65014e361811a724e2044ad3ea3739de9903ae7c21f539f03
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           python-PyMySQL
 Version:        1.1.2
 Release:        3%{?dist}
@@ -6,10 +14,6 @@ Summary:        Pure-Python MySQL client library
 License:        MIT
 URL:            https://pypi.org/project/pymysql/
 Source:         %{pypi_source pymysql}
-# oreon url source checksums begin
-%global source0_sha256 4961d3e165614ae65014e361811a724e2044ad3ea3739de9903ae7c21f539f03
-%global source0_file pymysql-1.1.2.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -34,9 +38,7 @@ and Jython.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pymysql-1.1.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4961d3e165614ae65014e361811a724e2044ad3ea3739de9903ae7c21f539f03" || { echo "oreon: Source0 SHA256 mismatch for pymysql-1.1.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n pymysql-%{version}
 
 

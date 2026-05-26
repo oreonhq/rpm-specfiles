@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c0acf19ed013355d02c1e28220ad9d6f9088f7f61b4a29d16d5364298bc6e6f3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Only use poetry-core on Fedora and new EPEL releases because
 # it is missing elsewhere. Fall back to using setuptools instead.
 %if ! 0%{?rhel} || 0%{?epel} >= 10
@@ -17,10 +25,6 @@ Summary: Minimum functionality for rpmautospec
 License: MIT
 URL: https://github.com/fedora-infra/%{canonicalname}
 Source0:        https://files.pythonhosted.org/packages/source/r/rpmautospec_core/rpmautospec_core-0.1.5.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 c0acf19ed013355d02c1e28220ad9d6f9088f7f61b4a29d16d5364298bc6e6f3
-%global source0_file rpmautospec_core-0.1.5.tar.gz
-# oreon url source checksums end
 BuildArch: noarch
 BuildRequires: python3-devel >= 3.6.0
 # The dependencies needed for testing don’t get auto-generated.
@@ -42,9 +46,7 @@ Summary: %{summary}
 %description -n python3-%{canonicalname} %_description
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rpmautospec_core-0.1.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c0acf19ed013355d02c1e28220ad9d6f9088f7f61b4a29d16d5364298bc6e6f3" || { echo "oreon: Source0 SHA256 mismatch for rpmautospec_core-0.1.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{srcname}-%{version}
 %if %{without poetry_core}
 # by renaming the [build-system] section we fallback to setuptools (default per PEP 517)

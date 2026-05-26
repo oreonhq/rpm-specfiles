@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2ddabe29794489d11096ed831ad4d5c1626130019322d4305d58df84c835b279
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global  wayland_min_version 1.3
 
 Name:    kwayland-server
@@ -16,10 +24,6 @@ URL:     https://invent.kde.org/plasma/%{name}
 %global stable stable
 %endif
 Source0: http://download.kde.org/%{stable}/plasma/%{version}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 2ddabe29794489d11096ed831ad4d5c1626130019322d4305d58df84c835b279
-%global source0_file kwayland-server-5.24.5.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  qt5-qtbase-devel
 
@@ -44,9 +48,7 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kwayland-server-5.24.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2ddabe29794489d11096ed831ad4d5c1626130019322d4305d58df84c835b279" || { echo "oreon: Source0 SHA256 mismatch for kwayland-server-5.24.5.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 38fe08b8e1a3e5c6e7f2265be0e655804e0741258d753653d31bd8d36199f8e1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # TODO: https://fedoraproject.org/wiki/Packaging:AutoProvidesAndRequiresFiltering
 #       rpmlint warns about private-shared-object-provides
 #       can't use filter because the package doesn't met any of the required criteria
@@ -21,10 +29,6 @@ URL:        https://github.com/abrt/%{name}
 Source0:        https://github.com/abrt/gnome-abrt/archive/1.4.3/gnome-abrt-1.4.3.tar.gz
 %else
 Source0:        https://github.com/abrt/gnome-abrt/archive/1.4.3/gnome-abrt-1.4.3.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 38fe08b8e1a3e5c6e7f2265be0e655804e0741258d753653d31bd8d36199f8e1
-%global source0_file gnome-abrt-1.4.3.tar.gz
-# oreon url source checksums end
 %endif
 
 BuildRequires: git-core
@@ -61,9 +65,7 @@ provides them with convenient way for managing these problems.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gnome-abrt-1.4.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "38fe08b8e1a3e5c6e7f2265be0e655804e0741258d753653d31bd8d36199f8e1" || { echo "oreon: Source0 SHA256 mismatch for gnome-abrt-1.4.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git %{?snapshot:-n %{name}%-%{commit}}
 
 

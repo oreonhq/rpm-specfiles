@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Settings for EL <= 7
 %if 0%{?rhel} && 0%{?rhel} <= 7
 %{!?__global_ldflags: %global __global_ldflags -Wl,-z,relro}
@@ -75,10 +83,6 @@ Patch34: unzip-zipbomb-switch.patch
 
 Patch35: unzip-gnu89-build.patch
 Patch36: unzip-6.0-wcstombs-fortify.patch
-# oreon url source checksums begin
-%global source0_sha256 036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37
-%global source0_file unzip60.tar.gz
-# oreon url source checksums end
 URL: http://infozip.sourceforge.net
 BuildRequires: make
 BuildRequires:  bzip2-devel, gcc
@@ -95,9 +99,7 @@ Install the unzip package if you need to list, test or extract files from
 a zip archive.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/unzip60.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "036d96991646d0449ed0aa952e4fbe21b476ce994abc276e49d30e686708bd37" || { echo "oreon: Source0 SHA256 mismatch for unzip60.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n unzip60
 %patch -P1 -p1
 %patch -P2 -p1

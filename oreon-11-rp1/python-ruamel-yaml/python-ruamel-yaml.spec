@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4f7a55408e439741b74e18f81fe34a7dc4e4e5126cef47ca5e9e093a5a82e01c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Breaks the circular dependency with ruamel.yaml.clib.
 %bcond_with bootstrap
 
@@ -11,10 +19,6 @@ License:        MIT
 URL:            https://sourceforge.net/projects/ruamel-yaml
 # The PyPI sdist does not contain tests, so we use a snapshot from SourceForge
 Source:         https://yaml.dev/ruamel-dl-tagged-releases/ruamel.yaml-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 4f7a55408e439741b74e18f81fe34a7dc4e4e5126cef47ca5e9e093a5a82e01c
-%global source0_file ruamel.yaml-0.19.1.tar.xz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -41,9 +45,7 @@ Requires:       python3-ruamel-yaml+oldlibyaml = %{version}-%{release}
 %description -n python3-ruamel-yaml %{_description}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ruamel.yaml-0.19.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4f7a55408e439741b74e18f81fe34a7dc4e4e5126cef47ca5e9e093a5a82e01c" || { echo "oreon: Source0 SHA256 mismatch for ruamel.yaml-0.19.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n ruamel.yaml-%{version}
 
 %generate_buildrequires

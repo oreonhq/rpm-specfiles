@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 76f0dcb248f2e2f1251d4ecd20fd30fb400a360a3a37c6c340e0a52c2d1cdedf
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # build nano-default-editor by default only on fedora
 %if 0%{?fedora}
 %bcond_without default_editor
@@ -25,10 +33,6 @@ Source3:         nanorc
 Source11:        nano-default-editor.sh
 Source12:        nano-default-editor.csh
 Source13:        nano-default-editor.fish
-# oreon url source checksums begin
-%global source0_sha256 76f0dcb248f2e2f1251d4ecd20fd30fb400a360a3a37c6c340e0a52c2d1cdedf
-%global source0_file nano-8.7.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires:   file-devel
 BuildRequires:   gettext-devel
@@ -71,9 +75,7 @@ who don't have nano as a default editor during upgrade.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/nano-8.7.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "76f0dcb248f2e2f1251d4ecd20fd30fb400a360a3a37c6c340e0a52c2d1cdedf" || { echo "oreon: Source0 SHA256 mismatch for nano-8.7.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -S git_am
 

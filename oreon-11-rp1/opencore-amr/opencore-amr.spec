@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 483eb4061088e2b34b358e47540b5d495a96cd468e361050fae615b1809dc4a1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global sovermajor 0
 
 Name:           opencore-amr
@@ -8,10 +16,6 @@ License:        Apache-2.0
 URL:            http://sourceforge.net/projects/opencore-amr/
 Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:         opencore-amr-0.1.3-fix_pc.patch
-# oreon url source checksums begin
-%global source0_sha256 483eb4061088e2b34b358e47540b5d495a96cd468e361050fae615b1809dc4a1
-%global source0_file opencore-amr-0.1.6.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  make
@@ -31,9 +35,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/opencore-amr-0.1.6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "483eb4061088e2b34b358e47540b5d495a96cd468e361050fae615b1809dc4a1" || { echo "oreon: Source0 SHA256 mismatch for opencore-amr-0.1.6.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 mv opencore/README opencore/README.opencore
 

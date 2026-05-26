@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5a9722c6d9cb29ee133e5f7b08a5362762a0b5633ff5170642a5b0686e95e066
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %if ! (0%{?rhel})
 %bcond_without perl_Package_Stash_enables_optional_test
@@ -12,10 +20,6 @@ Summary:	Routines for manipulating stashes
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Package-Stash
 Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Package-Stash-0.40.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 5a9722c6d9cb29ee133e5f7b08a5362762a0b5633ff5170642a5b0686e95e066
-%global source0_file Package-Stash-0.40.tar.gz
-# oreon url source checksums end
 
 BuildArch:	noarch
 # Module Build
@@ -75,9 +79,7 @@ incredibly messy, and easy to get wrong. This module hides all of that behind
 a simple API.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Package-Stash-0.40.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5a9722c6d9cb29ee133e5f7b08a5362762a0b5633ff5170642a5b0686e95e066" || { echo "oreon: Source0 SHA256 mismatch for Package-Stash-0.40.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Package-Stash-%{version}
 
 %build

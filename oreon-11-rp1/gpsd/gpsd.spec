@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 409873f5048462ef1ac413a51ab35caa8b50b31be62b3347bee1cc2994e7c649
+%global source1_sha256 810c3f82c23758f8eaa23f7263363e1ac1822253dc8719ffa897ee77604bbe02
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pkgname gpsd
 
 # RHEL builds the core, EPEL builds the libs
@@ -34,12 +44,6 @@ Source11:       gpsd.sysconfig
 
 # Add old status names to gps.h for compatibility
 Patch1:         gpsd-apistatus.patch
-# oreon url source checksums begin
-%global source0_sha256 409873f5048462ef1ac413a51ab35caa8b50b31be62b3347bee1cc2994e7c649
-%global source0_file gpsd-3.27.5.tar.gz
-%global source1_sha256 810c3f82c23758f8eaa23f7263363e1ac1822253dc8719ffa897ee77604bbe02
-%global source1_file scons-4.9.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  dbus-devel
@@ -151,10 +155,7 @@ This package contains X clients using gpsd.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gpsd-3.27.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "409873f5048462ef1ac413a51ab35caa8b50b31be62b3347bee1cc2994e7c649" || { echo "oreon: Source0 SHA256 mismatch for gpsd-3.27.5.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/scons-4.9.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "810c3f82c23758f8eaa23f7263363e1ac1822253dc8719ffa897ee77604bbe02" || { echo "oreon: Source1 SHA256 mismatch for scons-4.9.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{pkgname}-%{version}
 %autopatch -p1
 

@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7bbc0543349b7feec33b30476901ae90b192a1a361ff6fc2f66e22bf2dc082ec
+%global source3_sha256 b2d38735eccf2cf8d2aedfdfdc79a1a9633149a49f3a1fe1615181dbe97c3dbe
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define srcname nmstate
 %define libname libnmstate
 
@@ -11,12 +21,6 @@ Source0:        https://github.com/nmstate/nmstate/releases/download/v2.2.57/nms
 Source1:        https://github.com/nmstate/nmstate/releases/download/v2.2.57/nmstate-2.2.57.tar.gz.asc
 Source2:        https://nmstate.io/nmstate.gpg
 Source3:        https://github.com/nmstate/nmstate/releases/download/v2.2.57/nmstate-vendor-2.2.57.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 7bbc0543349b7feec33b30476901ae90b192a1a361ff6fc2f66e22bf2dc082ec
-%global source0_file nmstate-2.2.57.tar.gz
-%global source3_sha256 b2d38735eccf2cf8d2aedfdfdc79a1a9633149a49f3a1fe1615181dbe97c3dbe
-%global source3_file nmstate-vendor-2.2.57.tar.xz
-# oreon url source checksums end
 # Force nmstate-libs upgrade along with nmstate rpm when installed
 # https://issues.redhat.com/browse/RHEL-52890
 Requires:       (nmstate-libs%{?_isa} = %{version}-%{release} if nmstate-libs)
@@ -169,10 +173,7 @@ which use "%{name}" crate with gen_revert feature.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/nmstate-2.2.57.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7bbc0543349b7feec33b30476901ae90b192a1a361ff6fc2f66e22bf2dc082ec" || { echo "oreon: Source0 SHA256 mismatch for nmstate-2.2.57.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/nmstate-vendor-2.2.57.tar.xz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b2d38735eccf2cf8d2aedfdfdc79a1a9633149a49f3a1fe1615181dbe97c3dbe" || { echo "oreon: Source3 SHA256 mismatch for nmstate-vendor-2.2.57.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 gpg2 --import --import-options import-export,import-minimal \
     %{SOURCE2} > ./gpgkey-mantainers.gpg
 gpgv2 --keyring ./gpgkey-mantainers.gpg %{SOURCE1} %{SOURCE0}

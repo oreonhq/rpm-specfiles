@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e5abd5af3a49eeb7e886f2ff9b5525717642ac2fb202b214b63ff5e990a779b9
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # some test dependencies are unwanted in RHEL
 %if 0%{?rhel}
 %bcond_with tests
@@ -13,10 +21,6 @@ Summary:        A simple wrapper around pip to support Pipenv and Poetry files
 License:        LGPL-3.0-or-later
 URL:            https://github.com/thoth-station/%{name}
 Source0:        https://github.com/thoth-station/micropipenv/archive/v1.10.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 e5abd5af3a49eeb7e886f2ff9b5525717642ac2fb202b214b63ff5e990a779b9
-%global source0_file v1.10.0.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  python3-devel
@@ -32,9 +36,7 @@ converting them to pip-tools compatible output.
 %pyproject_extras_subpkg -n %{name} toml
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v1.10.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e5abd5af3a49eeb7e886f2ff9b5525717642ac2fb202b214b63ff5e990a779b9" || { echo "oreon: Source0 SHA256 mismatch for v1.10.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 # Remove shebang line from the module
 sed -i '1{\@^#!/usr/bin/env python@d}' %{name}.py

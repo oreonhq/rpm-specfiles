@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 23762b05f46111edeb3c8a05016c8731c01bdb8c1f91be48c156c31ab85e74c4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:        Intrusion detection environment
 Name:           aide
 Version:        0.19.2
@@ -13,10 +21,6 @@ Source2:        gpgkey-aide.gpg
 Source3:        aide.conf
 Source4:        README.quickstart
 Source5:        aide.logrotate
-# oreon url source checksums begin
-%global source0_sha256 23762b05f46111edeb3c8a05016c8731c01bdb8c1f91be48c156c31ab85e74c4
-%global source0_file aide-0.19.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -44,9 +48,7 @@ AIDE (Advanced Intrusion Detection Environment) is a file integrity
 checker and intrusion detection program.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/aide-0.19.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "23762b05f46111edeb3c8a05016c8731c01bdb8c1f91be48c156c31ab85e74c4" || { echo "oreon: Source0 SHA256 mismatch for aide-0.19.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 cp -a %{SOURCE4} .

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1b220e3eec1714f0451b0e3652979bd280edf10893f617837b88e6359a804ded
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global commit 04f10f650d514df88b76d25e83db360142c7b174
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
@@ -10,10 +18,6 @@ Summary:        Header files from the SPIR-V registry
 License:        MIT
 URL:            https://github.com/KhronosGroup/SPIRV-Headers/
 Source0:        https://github.com/KhronosGroup/SPIRV-Headers//archive/04f10f650d514df88b76d25e83db360142c7b174/spirv-headers-04f10f6.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 1b220e3eec1714f0451b0e3652979bd280edf10893f617837b88e6359a804ded
-%global source0_file spirv-headers-04f10f6.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -46,9 +50,7 @@ This includes:
 * The XML registry fil
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/spirv-headers-04f10f6.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1b220e3eec1714f0451b0e3652979bd280edf10893f617837b88e6359a804ded" || { echo "oreon: Source0 SHA256 mismatch for spirv-headers-04f10f6.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n SPIRV-Headers-%{commit} -p1
 chmod a-x include/spirv/1.2/spirv.py
 

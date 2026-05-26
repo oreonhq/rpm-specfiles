@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 02f86e62206e5f8eb5665ca2627e2a2480c92f34adee7ed3f5193e69f068891a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Test-Unit
 Version:        0.29
 Release:        2%{?dist}
@@ -6,10 +14,6 @@ Summary:        The PerlUnit testing framework
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://perlunit.sourceforge.net/
 Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Test-Unit-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 02f86e62206e5f8eb5665ca2627e2a2480c92f34adee7ed3f5193e69f068891a
-%global source0_file Test-Unit-0.29.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  coreutils
@@ -54,9 +58,7 @@ Gamma.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Test-Unit-0.29.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "02f86e62206e5f8eb5665ca2627e2a2480c92f34adee7ed3f5193e69f068891a" || { echo "oreon: Source0 SHA256 mismatch for Test-Unit-0.29.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Test-Unit-%{version}
 perl -pi -e 's/\r//' examples/Experimental/Sample.pm
 chmod a+x TkTestRunner.pl TestRunner.pl

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b81255394e3ea8e8aa887276d22afa8985fc8daef60692eb2407d23049f03cfb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global so_version 1
 %global apiver 1.16
 
@@ -63,10 +71,6 @@ Patch:          https://gitlab.freedesktop.org/cairo/cairomm/-/merge_requests/29
 # Committed to master branch:
 # https://gitlab.freedesktop.org/cairo/cairomm/-/commit/43580ed75bde0b7d6ad442c90a22f80b50ce844d
 Patch:          https://gitlab.freedesktop.org/cairo/cairomm/-/commit/43580ed75bde0b7d6ad442c90a22f80b50ce844d.patch
-# oreon url source checksums begin
-%global source0_sha256 b81255394e3ea8e8aa887276d22afa8985fc8daef60692eb2407d23049f03cfb
-%global source0_file cairomm-1.18.0.tar.xz
-# oreon url source checksums end
 
 # For %%{gpgverify} macro
 BuildRequires:  gpgverify
@@ -144,9 +148,7 @@ The API/ABI version series is %{apiver}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cairomm-1.18.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b81255394e3ea8e8aa887276d22afa8985fc8daef60692eb2407d23049f03cfb" || { echo "oreon: Source0 SHA256 mismatch for cairomm-1.18.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} \
     --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 

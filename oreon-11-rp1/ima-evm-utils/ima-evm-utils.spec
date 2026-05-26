@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9346a5ccd5ca77caf6a9d2ac0d83873c04d0372414a632126df4e7a88bedff4a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # If the soname gets bumped we need to ship a compat library to be able
 # to bootstrap and rebuild rpm else we end up with chicken and egg problem.
 %global bootstrap 0
@@ -25,10 +33,6 @@ Source200: policy_list
 %if 0%{bootstrap}
 # compat source and patches
 Source10: ima-evm-utils-1.5.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 9346a5ccd5ca77caf6a9d2ac0d83873c04d0372414a632126df4e7a88bedff4a
-%global source0_file ima-evm-utils-1.6.2.tar.gz
-# oreon url source checksums end
 BuildRequires: openssl-devel-engine
 %endif
 
@@ -76,9 +80,7 @@ Requires: %{name}-libs = %{version}-%{release}
 This package provides the header files for %{name}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ima-evm-utils-1.6.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9346a5ccd5ca77caf6a9d2ac0d83873c04d0372414a632126df4e7a88bedff4a" || { echo "oreon: Source0 SHA256 mismatch for ima-evm-utils-1.6.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %if 0%{bootstrap}

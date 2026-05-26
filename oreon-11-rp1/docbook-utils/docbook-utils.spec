@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 154b120dd897d6411a55e5a2833044807eaf31a61412df601384be6fd101ed8f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: docbook-utils
 Version: 0.6.15
 Release: 6%{?dist}
@@ -27,10 +35,6 @@ Source2: gdp-both.dsl
 #We will ship newer version of docbook2man-spec.pl for better handling of docbook2man conversion
 #You could check it at http://sourceforge.net/projects/docbook2x/
 Source3: docbook2man-spec.pl
-# oreon url source checksums begin
-%global source0_sha256 154b120dd897d6411a55e5a2833044807eaf31a61412df601384be6fd101ed8f
-%global source0_file docbook-utils-0.6.15.tar.xz
-# oreon url source checksums end
 
 Obsoletes: stylesheets < %{version}-%{release}
 Provides: stylesheets = %{version}-%{release}
@@ -57,9 +61,7 @@ This package contains a script for converting DocBook documents to
 PDF format.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/docbook-utils-0.6.15.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "154b120dd897d6411a55e5a2833044807eaf31a61412df601384be6fd101ed8f" || { echo "oreon: Source0 SHA256 mismatch for docbook-utils-0.6.15.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

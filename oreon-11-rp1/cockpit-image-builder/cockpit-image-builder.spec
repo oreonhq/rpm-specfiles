@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ca36f6ddcf14ee4cb3ad5a850d444566a97ccb6762243f23a5f0448c9f8fc088
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           cockpit-image-builder
 Version:        94
 Release:        1%{?dist}
@@ -6,10 +14,6 @@ Summary:        Image builder plugin for Cockpit
 License:        Apache-2.0
 URL:            http://osbuild.org/
 Source0:        https://github.com/osbuild/image-builder-frontend/releases/download/v%{version}/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ca36f6ddcf14ee4cb3ad5a850d444566a97ccb6762243f23a5f0448c9f8fc088
-%global source0_file cockpit-image-builder-94.tar.gz
-# oreon url source checksums end
 
 Obsoletes:      cockpit-composer < 54
 Provides:       cockpit-composer = %{version}-%{release}
@@ -32,9 +36,7 @@ deploying systems or uploading to the cloud. It integrates into Cockpit
 as a frontend for osbuild.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cockpit-image-builder-94.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ca36f6ddcf14ee4cb3ad5a850d444566a97ccb6762243f23a5f0448c9f8fc088" || { echo "oreon: Source0 SHA256 mismatch for cockpit-image-builder-94.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}
 
 %build

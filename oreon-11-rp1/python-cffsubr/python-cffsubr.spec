@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2c321b6807bd95856d921ed9dce8506495cf49fc7a89a63cb942e8bece13addd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           python-cffsubr
 Version:        0.4.0
 Release:        3%{?dist}
@@ -14,10 +22,6 @@ URL:            https://pypi.org/project/cffsubr
 Source0:        https://files.pythonhosted.org/packages/source/c/cffsubr/cffsubr-0.4.0.tar.gz
 # Written for Fedora in groff_man(7) format based on the output of “cffsubr --help”
 Source1:        cffsubr.1
-# oreon url source checksums begin
-%global source0_sha256 2c321b6807bd95856d921ed9dce8506495cf49fc7a89a63cb942e8bece13addd
-%global source0_file cffsubr-0.4.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -44,9 +48,7 @@ Requires:       ((adobe-afdko >= 4.0.3) with (adobe-afdko < 5~~))
 Standalone CFF subroutinizer based on the AFDKO tx tool.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cffsubr-0.4.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2c321b6807bd95856d921ed9dce8506495cf49fc7a89a63cb942e8bece13addd" || { echo "oreon: Source0 SHA256 mismatch for cffsubr-0.4.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n cffsubr-%{version} -p1
 
 # Do not build the extension, which is a copy of the “tx” executable from

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f5a9f47de28530b1ae2069cfbc647a9a641baeeabe809bb0ef2b3ec5b9668d70
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 #%%global prever pre1
 #%%global ver %{version}-%{prever}
 
@@ -39,10 +47,6 @@ Patch4: gutenprint-python36syntax.patch
 # fix utf-8 support in translations
 # https://sourceforge.net/p/gimp-print/source/ci/96819fadd5ee6d0
 Patch5: 0001-genppd-Ensure-we-don-t-improperly-truncate-utf-8-enc.patch
-# oreon url source checksums begin
-%global source0_sha256 f5a9f47de28530b1ae2069cfbc647a9a641baeeabe809bb0ef2b3ec5b9668d70
-%global source0_file gutenprint-5.3.5.tar.xz
-# oreon url source checksums end
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND MIT AND GPL-3.0-or-later WITH Bison-exception-2.2
 
 
@@ -176,9 +180,7 @@ This package contains native CUPS support for a wide range of Canon,
 Epson, HP and compatible printers.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gutenprint-5.3.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f5a9f47de28530b1ae2069cfbc647a9a641baeeabe809bb0ef2b3ec5b9668d70" || { echo "oreon: Source0 SHA256 mismatch for gutenprint-5.3.5.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{version}
 # Fix menu placement of GIMP plugin.
 %patch -P 0 -p1 -b .menu

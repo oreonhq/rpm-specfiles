@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fbb934d7253a4ca6cd55f638b0bf97016db4a253d66acfa2b8fa76bad2db9e62
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global forgeurl https://github.com/libimobiledevice/usbmuxd
 %global commit 0b1b233b57d581515978a09e5a4394bfa4ee4962
 %global date 20240915
@@ -12,10 +20,6 @@ URL:            https://libimobiledevice.org
 Source0:        https://github.com/libimobiledevice/usbmuxd/archive/0b1b233b57d581515978a09e5a4394bfa4ee4962/usbmuxd-0b1b233b57d581515978a09e5a4394bfa4ee4962.tar.gz
 Source1:        %{name}.sysusers
 Source2:        %{name}.tmpfiles
-# oreon url source checksums begin
-%global source0_sha256 fbb934d7253a4ca6cd55f638b0bf97016db4a253d66acfa2b8fa76bad2db9e62
-%global source0_file usbmuxd-0b1b233b57d581515978a09e5a4394bfa4ee4962.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -39,9 +43,7 @@ iPad and Apple TV devices. It allows multiple services on the device to be
 accessed simultaneously.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/usbmuxd-0b1b233b57d581515978a09e5a4394bfa4ee4962.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fbb934d7253a4ca6cd55f638b0bf97016db4a253d66acfa2b8fa76bad2db9e62" || { echo "oreon: Source0 SHA256 mismatch for usbmuxd-0b1b233b57d581515978a09e5a4394bfa4ee4962.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{commit}
 
 %if %{defined commit}

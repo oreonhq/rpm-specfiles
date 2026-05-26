@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f8c7173b0914d0e3d957282077b366f0c8c70256715eaef3298ff32b92388a80
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		perl-Types-Serialiser
 Summary:	Simple data types for common serialization formats
 Version:	1.01
@@ -6,10 +14,6 @@ License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Types-Serialiser
 Source0:	https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Types-Serialiser-%{version}.tar.gz
 Patch0:		Types-Serialiser-1.01-provides.patch
-# oreon url source checksums begin
-%global source0_sha256 f8c7173b0914d0e3d957282077b366f0c8c70256715eaef3298ff32b92388a80
-%global source0_file Types-Serialiser-1.01.tar.gz
-# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -34,9 +38,7 @@ simple/small constants and containers that can be shared by different
 implementations so they become inter-operable between each other.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Types-Serialiser-1.01.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f8c7173b0914d0e3d957282077b366f0c8c70256715eaef3298ff32b92388a80" || { echo "oreon: Source0 SHA256 mismatch for Types-Serialiser-1.01.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Types-Serialiser-%{version}
 
 # Hide package declaration of JSON::PP::Boolean from rpm

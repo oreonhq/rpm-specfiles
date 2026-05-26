@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 de6646eb9891b59657d183c7fc9ffa823b8523856b942446707e2a8615f4866f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname justbases
 Name:       python-%{srcname}
 Version:    0.15.2
@@ -7,10 +15,6 @@ Summary:    A small library for precise conversion between arbitrary bases
 License:    LGPL-2.1-or-later
 URL:        http://pypi.python.org/pypi/justbases
 Source0:    https://pypi.io/packages/source/j/%{srcname}/%{srcname}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 de6646eb9891b59657d183c7fc9ffa823b8523856b942446707e2a8615f4866f
-%global source0_file justbases-0.15.2.tar.gz
-# oreon url source checksums end
 
 BuildArch:  noarch
 
@@ -28,9 +32,7 @@ A small library for precise conversion between arbitrary bases and native
 Python numbers.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/justbases-0.15.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "de6646eb9891b59657d183c7fc9ffa823b8523856b942446707e2a8615f4866f" || { echo "oreon: Source0 SHA256 mismatch for justbases-0.15.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires

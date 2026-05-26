@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d2704089f85fdb6f2cd7e77be21170ced4b4375c03ef1ad4cf1075bd414a63eb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		Judy
 Version:	1.0.5
 Release:	42%{?dist}
@@ -9,10 +17,6 @@ Source1:	README.Fedora
 Patch0:		Judy-1.0.4-test-shared.patch
 Patch1:		Judy-1.0.4-fix-Judy1-mans.patch
 Patch2:		04_fix_undefined_behavior_during_aggressive_loop_optimizations.patch
-# oreon url source checksums begin
-%global source0_sha256 d2704089f85fdb6f2cd7e77be21170ced4b4375c03ef1ad4cf1075bd414a63eb
-%global source0_file Judy-1.0.5.tar.gz
-# oreon url source checksums end
 BuildRequires:	coreutils
 BuildRequires:	gawk
 BuildRequires:	gcc >= 4.1
@@ -42,9 +46,7 @@ This package contains the development libraries and header files
 for developing applications that use the Judy library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Judy-1.0.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d2704089f85fdb6f2cd7e77be21170ced4b4375c03ef1ad4cf1075bd414a63eb" || { echo "oreon: Source0 SHA256 mismatch for Judy-1.0.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n judy-%{version}
 
 # Make tests use shared instead of static libJudy

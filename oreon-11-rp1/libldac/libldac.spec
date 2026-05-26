@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4bd8eece78bb5c1361fab95743e7100506e2408a25c4a592a0f8d349746dc5b4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Force out of source build
 %undefine __cmake_in_source_build
 
@@ -12,10 +20,6 @@ Summary:        A lossy audio codec for Bluetooth connections
 License:        Apache-2.0
 URL:            https://github.com/EHfive/ldacBT
 Source0:        https://github.com/EHfive/ldacBT/releases/download/v2.0.2.3/ldacBT-2.0.2.3.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 4bd8eece78bb5c1361fab95743e7100506e2408a25c4a592a0f8d349746dc5b4
-%global source0_file ldacBT-2.0.2.3.tar.gz
-# oreon url source checksums end
 
 # Upstream source throws error in a big-endian arch, see #1677491
 ExcludeArch:    s390x
@@ -37,9 +41,7 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ldacBT-2.0.2.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4bd8eece78bb5c1361fab95743e7100506e2408a25c4a592a0f8d349746dc5b4" || { echo "oreon: Source0 SHA256 mismatch for ldacBT-2.0.2.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{archivename}
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0a51b8f920254d8e83c34a4c3082b7d241f5d6fd65188afadf29859d5223ef78
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Scan ext file systems directly to increase the performace of a quota
 # initialization and check
 %bcond_without quota_enables_extdirect
@@ -59,10 +67,6 @@ Source4:    rpc-rquotad.sysconfig
 Patch0:     quota-4.06-warnquota-configuration-tunes.patch
 # Fix parsing a TCP port number
 Patch1:     quota-4.03-Validate-upper-bound-of-RPC-port.patch
-# oreon url source checksums begin
-%global source0_sha256 0a51b8f920254d8e83c34a4c3082b7d241f5d6fd65188afadf29859d5223ef78
-%global source0_file quota-4.11.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -184,9 +188,7 @@ Linux/UNIX environment.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/quota-4.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0a51b8f920254d8e83c34a4c3082b7d241f5d6fd65188afadf29859d5223ef78" || { echo "oreon: Source0 SHA256 mismatch for quota-4.11.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1
 %patch -P1 -p1

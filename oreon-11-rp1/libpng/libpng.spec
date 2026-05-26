@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 71a2c5b1218f60c4c6d2f1954c7eb20132156cae90bdb90b566c24db002782a6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:       A library of functions for manipulating PNG image format files
 Name:          libpng
 Epoch:         2
@@ -10,10 +18,6 @@ Source0:       https://github.com/glennrp/%{name}/archive/v%{version}/%{name}-%{
 Source1:       pngusr.dfa
 
 Patch0:        libpng-multilib.patch
-# oreon url source checksums begin
-%global source0_sha256 71a2c5b1218f60c4c6d2f1954c7eb20132156cae90bdb90b566c24db002782a6
-%global source0_file libpng-1.6.55.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: zlib-devel
@@ -60,9 +64,7 @@ Requires:      %{name}%{?_isa} = %{epoch}:%{version}-%{release}
 The libpng-tools package contains tools used by the authors of libpng.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libpng-1.6.55.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "71a2c5b1218f60c4c6d2f1954c7eb20132156cae90bdb90b566c24db002782a6" || { echo "oreon: Source0 SHA256 mismatch for libpng-1.6.55.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 # Provide pngusr.dfa for build.
 cp -p %{SOURCE1} .

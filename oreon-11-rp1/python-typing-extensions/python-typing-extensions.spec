@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           python-typing-extensions
 Version:        4.15.0
 Release:        4%{?dist}
@@ -18,10 +26,6 @@ Patch:          https://github.com/python/typing_extensions/commit/2638b86aad.pa
 # Remove no_type_check_decorator from _typing_names, followup of the above
 # https://github.com/python/typing_extensions/pull/723
 Patch:          https://github.com/python/typing_extensions/pull/723.patch
-# oreon url source checksums begin
-%global source0_sha256 0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466
-%global source0_file typing_extensions-4.15.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -52,9 +56,7 @@ Summary:       %{summary}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/typing_extensions-4.15.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0cea48d173cc12fa28ecabc3b837ea3cf6f38c6d1136f85cbaaf598984861466" || { echo "oreon: Source0 SHA256 mismatch for typing_extensions-4.15.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n typing_extensions-%{version}
 
 

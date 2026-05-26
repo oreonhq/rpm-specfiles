@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 dd8ff7cf90014af0c0f787eea34794ebf6415242ee1d6fa91eaba725cc441e84
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname rpds-py
 %global modname rpds_py
 
@@ -15,10 +23,6 @@ Patch:          do_not_require_win_only_pyo3_extension.patch
 # Remove pytest-run-parallel from test dependencies
 # and relax pytest version requirement
 Patch:          fix_test_group_dependencies.patch
-# oreon url source checksums begin
-%global source0_sha256 dd8ff7cf90014af0c0f787eea34794ebf6415242ee1d6fa91eaba725cc441e84
-%global source0_file rpds_py-0.30.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cargo-rpm-macros
 BuildRequires:  dos2unix
@@ -40,9 +44,7 @@ Summary:        %{summary}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rpds_py-0.30.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dd8ff7cf90014af0c0f787eea34794ebf6415242ee1d6fa91eaba725cc441e84" || { echo "oreon: Source0 SHA256 mismatch for rpds_py-0.30.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{modname}-%{version}
 
 # Fix line terminations

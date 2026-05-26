@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 71513a31c01a428bccd5367a32fd95f115d6dac50fb5b60c779d5c7942aec071
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Build with new api?
 %if 0%{?fedora} || 0%{?rhel} > 8
 %bcond_without new_api
@@ -193,10 +201,6 @@ Patch0000:        https://github.com/besser82/libxcrypt/commit/174c24d6e87a.patc
 # Patch 3000 - 5999: Backported patches from pull requests.
 # Do not use github .../commit/ba67911314f5.patch here: that diff does not apply to the v4.5.2 release tarball (Makefile.am, doc/crypt_gensalt.3).
 Patch3000:        https://github.com/besser82/libxcrypt/archive/refs/tags/v4.5.2.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 71513a31c01a428bccd5367a32fd95f115d6dac50fb5b60c779d5c7942aec071
-%global source0_file libxcrypt-4.5.2.tar.xz
-# oreon url source checksums end
 # Patch 6000 - 9999: Downstream patches.
 
 BuildRequires:  autoconf
@@ -342,9 +346,7 @@ discouraged.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libxcrypt-4.5.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "71513a31c01a428bccd5367a32fd95f115d6dac50fb5b60c779d5c7942aec071" || { echo "oreon: Source0 SHA256 mismatch for libxcrypt-4.5.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if %{without bootstrap}
 # Omitted during bootstrap.
 %{gpgverify} --keyring=%{SOURCE2} --signature=%{SOURCE1} --data=%{SOURCE0}

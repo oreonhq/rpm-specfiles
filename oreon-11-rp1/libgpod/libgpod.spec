@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 638a7959d04e95f1e62abad02bd33702e4e8dfef98485ac7d9d50395c37e955d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # If banshee ever stablizes around gtk3, we need to flip this on.
 %global with_gtk3 0
 
@@ -28,10 +36,6 @@ Patch5:  0001-configure.ac-Add-support-for-libplist-2.2.patch
 Patch6:  libgpod-0.8.3-no-plist_dict_insert_item.patch
 Patch99: libgpod-0.8.3-implicit-int.patch
 Patch100: pointer-types.patch
-# oreon url source checksums begin
-%global source0_sha256 638a7959d04e95f1e62abad02bd33702e4e8dfef98485ac7d9d50395c37e955d
-%global source0_file libgpod-0.8.3.tar.bz2
-# oreon url source checksums end
 
 BuildRequires: automake libtool
 BuildRequires: docbook-style-xsl
@@ -115,9 +119,7 @@ libgpod-sharp.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libgpod-0.8.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "638a7959d04e95f1e62abad02bd33702e4e8dfef98485ac7d9d50395c37e955d" || { echo "oreon: Source0 SHA256 mismatch for libgpod-0.8.3.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %if %{with_gtk3}

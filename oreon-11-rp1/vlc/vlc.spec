@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e891cae6aa3ccda69bf94173d5105cbc55c7a7d9b1d21b9b21666e69eff3e7e0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # codecs which cannot be shipped in Fedora proper
 %bcond freeworld 0
 %bcond x264 %{with freeworld}
@@ -80,10 +88,6 @@ Patch:		flatpak-cache.patch
 Patch:		gstreamer128.patch
 # fix build with libupnp-1.18
 Patch:		libupnp118.patch
-# oreon url source checksums begin
-%global source0_sha256 e891cae6aa3ccda69bf94173d5105cbc55c7a7d9b1d21b9b21666e69eff3e7e0
-%global source0_file vlc-3.0.23.tar.xz
-# oreon url source checksums end
 
 %{load:%{S:1}}
 %global __provides_exclude_from ^%{vlc_plugindir}/.*$
@@ -581,9 +585,7 @@ developing applications and plugins that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/vlc-3.0.23.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e891cae6aa3ccda69bf94173d5105cbc55c7a7d9b1d21b9b21666e69eff3e7e0" || { echo "oreon: Source0 SHA256 mismatch for vlc-3.0.23.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 %{?commit:-n %{name}-%{commit}}
 
 rm -f aclocal.m4 m4/lib*.m4 m4/lt*.m4

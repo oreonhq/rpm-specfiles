@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a8850d841adfe8ee5f7bb9f82cf449ab9b4950dc0633897071718e0d0036b6f6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname dasbus
 
 Name:           python-%{srcname}
@@ -12,10 +20,6 @@ Source0:        https://files.pythonhosted.org/packages/source/d/dasbus/dasbus-1
 Group:          Development/Libraries/Python
 %else
 Source0:        %{pypi_source}
-# oreon url source checksums begin
-%global source0_sha256 a8850d841adfe8ee5f7bb9f82cf449ab9b4950dc0633897071718e0d0036b6f6
-%global source0_file dasbus-1.7.tar.gz
-# oreon url source checksums end
 %endif
 
 BuildArch:      noarch
@@ -43,9 +47,7 @@ Requires:       python3-gobject-base
 %description -n python3-%{srcname} %{_description}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dasbus-1.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a8850d841adfe8ee5f7bb9f82cf449ab9b4950dc0633897071718e0d0036b6f6" || { echo "oreon: Source0 SHA256 mismatch for dasbus-1.7.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{srcname}-%{version}
 
 %build

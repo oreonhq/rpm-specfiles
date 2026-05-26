@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5002309b9a701260658e8b3a61540fd5673887cef998338e1992524a33b23ae3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global apiver 0.4
 
 %if !0%{?fedora}%{?rhel} || 0%{?fedora} >= 44
@@ -24,10 +32,6 @@ Summary:        Graph based image processing framework
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://www.gegl.org/
 Source0:        http://download.gimp.org/pub/gegl/%{apiver}/gegl-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 5002309b9a701260658e8b3a61540fd5673887cef998338e1992524a33b23ae3
-%global source0_file gegl-0.4.68.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  chrpath
 BuildRequires:  enscript
@@ -140,9 +144,7 @@ GEGL library.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gegl-0.4.68.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5002309b9a701260658e8b3a61540fd5673887cef998338e1992524a33b23ae3" || { echo "oreon: Source0 SHA256 mismatch for gegl-0.4.68.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n gegl-%{version}
 %if %{with use_system_libnsgif}
 rm -rf subprojects/libnsgif

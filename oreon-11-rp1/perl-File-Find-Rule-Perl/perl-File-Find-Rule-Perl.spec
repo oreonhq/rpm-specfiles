@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ae1886050d9ca21223c073e2870abdc80dc30e3f55289a11c37da3820a8321ff
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-File-Find-Rule-Perl
 Version:        1.16
 Release:        12%{?dist}
@@ -7,10 +15,6 @@ URL:            https://metacpan.org/release/File-Find-Rule-Perl
 Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Find-Rule-Perl-%{version}.tar.gz
 # Filter out the files rpm generates in sourcedir.
 Patch0:         0001-File-Find-Rule-Perl-1.16-fedora.patch
-# oreon url source checksums begin
-%global source0_sha256 ae1886050d9ca21223c073e2870abdc80dc30e3f55289a11c37da3820a8321ff
-%global source0_file File-Find-Rule-Perl-1.16.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 
 BuildRequires:  %{__make}
@@ -31,9 +35,7 @@ BuildRequires:  perl(Test::More) >= 0.47
 Common rules for searching for Perl things.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/File-Find-Rule-Perl-1.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ae1886050d9ca21223c073e2870abdc80dc30e3f55289a11c37da3820a8321ff" || { echo "oreon: Source0 SHA256 mismatch for File-Find-Rule-Perl-1.16.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n File-Find-Rule-Perl-%{version}
 %patch -P0 -p1
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source3_sha256 8b3e796574d63131fd3c90692c830ccf21a272433e3cc1b8c014979c84bd2ff4
+%global oreon_verify_sources \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # FIXME:  Figure out what to do about the gles* manpages, maybe different conflicting packages...
 %global codate 20190306
 %global commit 4547332f0f27d98601a8f5732ce8e85e09dbdb93
@@ -24,10 +32,6 @@ Source3:        http://www.w3.org/Math/DTD/mathml2.tgz
 Source4:        gl-manpages-1.0.1.tar.bz2
 #Silence author/version/manual etc. warnings
 Source5:        metainfo.xsl
-# oreon url source checksums begin
-%global source3_sha256 8b3e796574d63131fd3c90692c830ccf21a272433e3cc1b8c014979c84bd2ff4
-%global source3_file mathml2.tgz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -38,9 +42,7 @@ BuildRequires:  libxslt docbook-style-xsl docbook5-style-xsl python3
 OpenGL manpages
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mathml2.tgz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b3e796574d63131fd3c90692c830ccf21a272433e3cc1b8c014979c84bd2ff4" || { echo "oreon: Source3 SHA256 mismatch for mathml2.tgz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n OpenGL-Refpages-%{commit}
 tar xzf %{SOURCE3}
 cp -av %{SOURCE2} mathml2/

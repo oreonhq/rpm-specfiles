@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: GNU general-purpose parser generator
 Name: bison
 Version: 3.8.2
@@ -21,10 +29,6 @@ Patch0: bison-3.8.2-gcc15-glibcxx-assertions.patch
 # index-parse.c:1114:9: error: variable ‘yynerrs’ set but not used [-Werror=unused-but-set-variable=]
 # https://bugzilla.redhat.com/show_bug.cgi?id=2429571
 Patch1: https://github.com/akimd/bison/commit/a166d5450e3f47587b98f6005f9f5627dbe21a5b.patch
-# oreon url source checksums begin
-%global source0_sha256 9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2
-%global source0_file bison-3.8.2.tar.xz
-# oreon url source checksums end
 
 # testsuite dependency
 BuildRequires: gcc-c++
@@ -91,9 +95,7 @@ these files are available.  See the Internationalization in the
 Bison manual section for more information.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/bison-3.8.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9bba0214ccf7f1079c5d59210045227bcf619519840ebfa80cd3849cff5a5bf2" || { echo "oreon: Source0 SHA256 mismatch for bison-3.8.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

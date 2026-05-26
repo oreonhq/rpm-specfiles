@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c2c30a03b2006dcc46a2f0f60460253377feb30f33f1173ca9325fef27ed0d0c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define libselinuxver 3.10-1
 
 Summary: SELinux Translation Daemon
@@ -10,10 +18,6 @@ Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/
 Source1: https://github.com/SELinuxProject/selinux/releases/download/%{version}/mcstrans-%{version}.tar.gz.asc
 Source2: https://github.com/perfinion.gpg
 Source3: secolor.conf.8
-# oreon url source checksums begin
-%global source0_sha256 c2c30a03b2006dcc46a2f0f60460253377feb30f33f1173ca9325fef27ed0d0c
-%global source0_file mcstrans-3.10.tar.gz
-# oreon url source checksums end
 # fedora-selinux/selinux: git format-patch -N 3.10 -- mcstrans
 # i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 # Patch list start
@@ -45,9 +49,7 @@ mcstrans provides an translation daemon to translate SELinux categories
 from internal representations to user defined representation.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mcstrans-3.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c2c30a03b2006dcc46a2f0f60460253377feb30f33f1173ca9325fef27ed0d0c" || { echo "oreon: Source0 SHA256 mismatch for mcstrans-3.10.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n mcstrans-%{version}
 

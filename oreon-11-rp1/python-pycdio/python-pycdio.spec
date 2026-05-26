@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 61734db8c554b7b1a2cb2da2e2c15d3f9f5973a57cfb06f8854c38029004a9f8
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		python-pycdio
 Version:	2.1.1
 Release:	10%{?dist}
@@ -6,10 +14,6 @@ Summary:	A Python interface to the CD Input and Control library
 License:	GPL-3.0-or-later
 URL:		http://www.gnu.org/software/libcdio/
 Source0:        https://files.pythonhosted.org/packages/source/p/pycdio/pycdio-2.1.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 61734db8c554b7b1a2cb2da2e2c15d3f9f5973a57cfb06f8854c38029004a9f8
-%global source0_file pycdio-2.1.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires:	gcc
 BuildRequires:	python3-devel
@@ -36,9 +40,7 @@ control. Python programs wishing to be oblivious of the OS- and
 device-dependent properties of a CD-ROM can use this library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pycdio-2.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61734db8c554b7b1a2cb2da2e2c15d3f9f5973a57cfb06f8854c38029004a9f8" || { echo "oreon: Source0 SHA256 mismatch for pycdio-2.1.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n pycdio-%{version} -p1
 # hotfix for Python 3.12, please bring this upstream
 # fixes https://bugzilla.redhat.com/2155240

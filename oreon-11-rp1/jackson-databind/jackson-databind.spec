@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7c281aaa120eb289bfdf6aac47e4f0d6b8ba87e218ff82d88f834fdda4fbacb4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           jackson-databind
 Version:        2.18.2
 Release:        6%{?dist}
@@ -6,10 +14,6 @@ License:        Apache-2.0 and LGPL-2.0-or-later
 
 URL:            https://github.com/FasterXML/jackson-databind
 Source0:        https://github.com/FasterXML/jackson-databind/archive/jackson-databind-2.18.2.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 7c281aaa120eb289bfdf6aac47e4f0d6b8ba87e218ff82d88f834fdda4fbacb4
-%global source0_file jackson-databind-2.18.2.tar.gz
-# oreon url source checksums end
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || 0%{?oreon}
 BuildRequires:  maven-local
@@ -36,9 +40,7 @@ Processor. It builds on core streaming parser/generator package, and uses
 Jackson Annotations for configuration.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jackson-databind-2.18.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7c281aaa120eb289bfdf6aac47e4f0d6b8ba87e218ff82d88f834fdda4fbacb4" || { echo "oreon: Source0 SHA256 mismatch for jackson-databind-2.18.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{name}-%{version}
 
 # Remove plugins unnecessary for RPM builds

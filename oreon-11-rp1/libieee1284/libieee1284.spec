@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7730de107782e5d2b071bdcb5b06a44da74856f00ef4a9be85d1ba4806a38f1a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: A library for interfacing IEEE 1284-compatible devices
 Name: libieee1284
 Version: 0.2.11
@@ -7,10 +15,6 @@ License: GPL-2.0-or-later
 URL: http://cyberelk.net/tim/libieee1284/
 Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 Patch1: libieee1284-strict-aliasing.patch
-# oreon url source checksums begin
-%global source0_sha256 7730de107782e5d2b071bdcb5b06a44da74856f00ef4a9be85d1ba4806a38f1a
-%global source0_file libieee1284-0.2.11.tar.bz2
-# oreon url source checksums end
 BuildRequires: gcc
 BuildRequires: xmlto
 BuildRequires: make
@@ -28,9 +32,7 @@ The header files, static library, libtool library and man pages for
 developing applications that use libieee1284.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libieee1284-0.2.11.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7730de107782e5d2b071bdcb5b06a44da74856f00ef4a9be85d1ba4806a38f1a" || { echo "oreon: Source0 SHA256 mismatch for libieee1284-0.2.11.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 # Fixed strict aliasing warnings (bug #605170).
 %patch -P1 -p1 -b .strict-aliasing

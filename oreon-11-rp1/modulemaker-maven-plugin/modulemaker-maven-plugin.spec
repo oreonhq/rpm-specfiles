@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 62f6bbef4fb7c0084d455a582016b11ab839996537706c98c44367911fc56d4e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with bootstrap
 
 Name:           modulemaker-maven-plugin
@@ -11,10 +19,6 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/raphw/modulemaker-maven-plugin/archive/refs/tags/modulemaker-maven-plugin-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
-# oreon url source checksums begin
-%global source0_sha256 62f6bbef4fb7c0084d455a582016b11ab839996537706c98c44367911fc56d4e
-%global source0_file modulemaker-maven-plugin-1.11.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -36,9 +40,7 @@ This plugin allows the creation of a module-info.class for projects on Java 6
 to Java 8 where a module-info.java file cannot be compiled.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/modulemaker-maven-plugin-1.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "62f6bbef4fb7c0084d455a582016b11ab839996537706c98c44367911fc56d4e" || { echo "oreon: Source0 SHA256 mismatch for modulemaker-maven-plugin-1.11.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 
 cp -p %{SOURCE1} .

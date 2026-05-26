@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2ad39558db47a8fcc036e290e0b084671e58d43344a57b279abd870c4c67965f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global tarball xf86-video-qxl
 %global moduledir %(pkg-config xorg-server --variable=moduledir )
 %global driverdir %{moduledir}/drivers
@@ -22,10 +30,6 @@ Source0:    http://xorg.freedesktop.org/releases/individual/driver/%{tarball}-%{
 Patch1:     0001-worst-hack-of-all-time-to-qxl-driver.patch
 # This shebang patch is currently downstream-only
 Patch2:     0005-Xspice-Adjust-shebang-to-explicitly-mention-python3.patch
-# oreon url source checksums begin
-%global source0_sha256 2ad39558db47a8fcc036e290e0b084671e58d43344a57b279abd870c4c67965f
-%global source0_file xf86-video-qxl-0.1.6.tar.xz
-# oreon url source checksums end
 
 ExcludeArch: s390 s390x
 
@@ -67,9 +71,7 @@ XSpice is both an X and a Spice server.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xf86-video-qxl-0.1.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2ad39558db47a8fcc036e290e0b084671e58d43344a57b279abd870c4c67965f" || { echo "oreon: Source0 SHA256 mismatch for xf86-video-qxl-0.1.6.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git_am -n %{tarball}-%{version}
 
 %build

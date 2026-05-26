@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 daf00b183d9ad842eaafc7f8981f73e6e33ae9e1cb3f0e9a2cb7fbf030c36356
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global with_selinux 1
 %global selinuxtype targeted
 %global modulename adcli
@@ -11,10 +19,6 @@ URL:     https://gitlab.freedesktop.org/realmd/adcli
 Source0: https://gitlab.freedesktop.org/-/project/1196/uploads/5a1c55410c0965835b81fbd28d820d46/adcli-%{version}.tar.gz
 
 Patch1: 0001-enroll-fix-issues-if-default-keytab-is-used.patch
-# oreon url source checksums begin
-%global source0_sha256 daf00b183d9ad842eaafc7f8981f73e6e33ae9e1cb3f0e9a2cb7fbf030c36356
-%global source0_file adcli-0.9.3.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: intltool pkgconfig
@@ -68,9 +72,7 @@ files have the right SELinux context.
 %define _hardened_build 1
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/adcli-0.9.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "daf00b183d9ad842eaafc7f8981f73e6e33ae9e1cb3f0e9a2cb7fbf030c36356" || { echo "oreon: Source0 SHA256 mismatch for adcli-0.9.3.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

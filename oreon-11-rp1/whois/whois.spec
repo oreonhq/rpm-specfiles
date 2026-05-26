@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 121a3b0467ad64a0e7034b44e71bd1cf28a2e4cca82886d40804ce1fac6494c0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Package mkpasswd tool
 %{bcond_without whois_enables_mkpasswd}
 # Enable IDN, use libidn2 instead of libidn
@@ -20,10 +28,6 @@ Source1:    https://ftp.debian.org/debian/pool/main/w/%{name}/%{name}_%{version}
 # Debian-tag2upload service key obtained from
 # <https://packages.debian.org/trixie/debian-tag2upload-keyring>.
 Source2:    gpgkey-374D8CE4DB96E9CBD4C0972A606D084E4683C079.gpg
-# oreon url source checksums begin
-%global source0_sha256 121a3b0467ad64a0e7034b44e71bd1cf28a2e4cca82886d40804ce1fac6494c0
-%global source0_file whois_5.6.6.tar.xz
-# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  gcc
 BuildRequires:  gettext
@@ -94,9 +98,7 @@ BuildArch:  noarch
 whois tools messages translated into different natural languages.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/whois_5.6.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "121a3b0467ad64a0e7034b44e71bd1cf28a2e4cca82886d40804ce1fac6494c0" || { echo "oreon: Source0 SHA256 mismatch for whois_5.6.6.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if 0%{?fedora}
   export GNUPGHOME="$(mktemp --tmpdir -d %{name}-XXXXXXX)"
   TMPKEY="$GNUPGHOME/keyring.key"

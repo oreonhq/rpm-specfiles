@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 abded5f4fdd9338e89fd2f1d8271c44989dae5bf50aece41b6179d8e230704f8
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:        Get number of occupied columns of a string on terminal
 Name:           perl-Text-CharWidth
 Version:        0.04
@@ -6,10 +14,6 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:            https://metacpan.org/release/Text-CharWidth
 Source0:        https://cpan.metacpan.org/authors/id/K/KU/KUBOTA/Text-CharWidth-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 abded5f4fdd9338e89fd2f1d8271c44989dae5bf50aece41b6179d8e230704f8
-%global source0_file Text-CharWidth-0.04.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  coreutils
 BuildRequires:  gcc
@@ -32,9 +36,7 @@ This is a module to provide equivalent feature as wcwidth(3) and
 wcswidth(3). This also provides mblen(3) equivalent subroutine.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Text-CharWidth-0.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "abded5f4fdd9338e89fd2f1d8271c44989dae5bf50aece41b6179d8e230704f8" || { echo "oreon: Source0 SHA256 mismatch for Text-CharWidth-0.04.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Text-CharWidth-%{version}
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 551d039bfb0c837ba5a4d027cdb8ee16bded0eedb789821f8025d8a64b791f6d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global apiver 15
 
 Name:           weston
@@ -8,10 +16,6 @@ Summary:        A lightweight and functional Wayland compositor
 License:        MIT and CC-BY-SA-3.0
 URL:            https://wayland.pages.freedesktop.org/weston/
 Source0:        https://gitlab.freedesktop.org/wayland/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 551d039bfb0c837ba5a4d027cdb8ee16bded0eedb789821f8025d8a64b791f6d
-%global source0_file weston-15.0.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -123,9 +127,7 @@ Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 Common headers for weston
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/weston-15.0.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "551d039bfb0c837ba5a4d027cdb8ee16bded0eedb789821f8025d8a64b791f6d" || { echo "oreon: Source0 SHA256 mismatch for weston-15.0.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

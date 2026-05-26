@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9358cf29e11127b1a3196621d07159d3b013a0b79ebc388a25488a51443b8b81
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond tests 1
 %bcond pkcs11 %[0%{?fedora} < 43 && %{undefined rhel}]
 %bcond libproxy %{undefined rhel}
@@ -14,10 +22,6 @@ URL: https://notroj.github.io/neon/
 Source0: https://notroj.github.io/neon/neon-%{version}.tar.gz
 Patch0: neon-0.34.0-multilib.patch
 Patch1: neon-0.37.0-bigend.patch
-# oreon url source checksums begin
-%global source0_sha256 9358cf29e11127b1a3196621d07159d3b013a0b79ebc388a25488a51443b8b81
-%global source0_file neon-0.37.0.tar.gz
-# oreon url source checksums end
 BuildRequires: expat-devel, openssl-devel, zlib-devel, krb5-devel
 BuildRequires: pkgconfig, make, gcc, xmlto, libntlm-devel
 %if %{with pkcs11}
@@ -49,9 +53,7 @@ License: LGPL-2.0-or-later AND GPL-2.0-or-later
 The development library for the C language HTTP and WebDAV client library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/neon-0.37.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9358cf29e11127b1a3196621d07159d3b013a0b79ebc388a25488a51443b8b81" || { echo "oreon: Source0 SHA256 mismatch for neon-0.37.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -S gendiff
 
 # prevent installation of HTML docs

@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 80ac10ce40dc4fcfbfed8d085c457b5613da0e86a73611a3d5527d044a142d60
+%global source1_sha256 cc26b2fc76cfefe39d0f57061985e36184dd5b28e1245c42f3c71e789aaf6ebc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # TODO: Algorithms are available for the following, not yet packaged:
 # - Ada
 # - C#
@@ -23,12 +33,6 @@ Source0:        https://github.com/snowballstem/snowball/archive/v3.0.1/snowball
 Source1:        https://github.com/snowballstem/snowball-data/archive/%{snowball_data_git}/%{snowball_data_git}.tar.gz
 # Build a shared library instead of a static library
 Patch:          %{name}-sharedlib.patch
-# oreon url source checksums begin
-%global source0_sha256 80ac10ce40dc4fcfbfed8d085c457b5613da0e86a73611a3d5527d044a142d60
-%global source0_file snowball-3.0.1.tar.gz
-%global source1_sha256 cc26b2fc76cfefe39d0f57061985e36184dd5b28e1245c42f3c71e789aaf6ebc
-%global source1_file 381b447563f9bef87b218ebbedde3159afdc3032.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -154,10 +158,7 @@ Stemming algorithms written in Python 3.
 %langlist
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/snowball-3.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "80ac10ce40dc4fcfbfed8d085c457b5613da0e86a73611a3d5527d044a142d60" || { echo "oreon: Source0 SHA256 mismatch for snowball-3.0.1.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/381b447563f9bef87b218ebbedde3159afdc3032.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cc26b2fc76cfefe39d0f57061985e36184dd5b28e1245c42f3c71e789aaf6ebc" || { echo "oreon: Source1 SHA256 mismatch for 381b447563f9bef87b218ebbedde3159afdc3032.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -b 1
 
 # Fix an RST error

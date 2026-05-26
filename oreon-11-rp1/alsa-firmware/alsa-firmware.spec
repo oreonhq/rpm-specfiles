@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b67b6d7d08bcfc247ef6ff0ab88a99c188305a3cf57ae2dfd0bcd9a5b36cd5bb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # This is a firmware package, so binaries (which are not run on the host)
 # in the end package are expected.
 %define _binaries_in_noarch_packages_terminate_build   0
@@ -11,10 +19,6 @@ License:        GPL-1.0-or-later and BSD-3-Clause and GPL-2.0-or-later and GPL-2
 URL:            https://www.alsa-project.org/
 # HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
 Source0:        https://www.alsa-project.org/files/pub/firmware/%{name}-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 b67b6d7d08bcfc247ef6ff0ab88a99c188305a3cf57ae2dfd0bcd9a5b36cd5bb
-%global source0_file alsa-firmware-1.2.4.tar.bz2
-# oreon url source checksums end
 
 Requires:       alsa-tools-firmware >= 1.1.7
 Requires:       systemd
@@ -31,9 +35,7 @@ the alsa-tools-firmware package.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/alsa-firmware-1.2.4.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b67b6d7d08bcfc247ef6ff0ab88a99c188305a3cf57ae2dfd0bcd9a5b36cd5bb" || { echo "oreon: Source0 SHA256 mismatch for alsa-firmware-1.2.4.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 

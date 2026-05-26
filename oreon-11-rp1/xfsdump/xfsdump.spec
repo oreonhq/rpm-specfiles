@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2914dbbe1ebc88c7d93ad88e220aa57dabc43d216e11f06221c01edf3cc10732
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:	Backup and restore utilities for the XFS filesystem
 Name:		xfsdump
 Version:	3.2.0
@@ -8,10 +16,6 @@ License:	GPL-1.0-or-later
 Source0:	http://kernel.org/pub/linux/utils/fs/xfs/%{name}/%{name}-%{version}.tar.xz
 Source1:	http://kernel.org/pub/linux/utils/fs/xfs/%{name}/%{name}-%{version}.tar.sign
 Source2:	https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/13F703E6C11CF6F0.asc
-# oreon url source checksums begin
-%global source0_sha256 2914dbbe1ebc88c7d93ad88e220aa57dabc43d216e11f06221c01edf3cc10732
-%global source0_file xfsdump-3.2.0.tar.xz
-# oreon url source checksums end
 BuildRequires:	make
 BuildRequires:	gcc
 BuildRequires:	libtool, gettext, gawk
@@ -37,9 +41,7 @@ be layered on top of the full backup.  Single files and directory
 subtrees may be restored from full or partial backups.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xfsdump-3.2.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2914dbbe1ebc88c7d93ad88e220aa57dabc43d216e11f06221c01edf3cc10732" || { echo "oreon: Source0 SHA256 mismatch for xfsdump-3.2.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %setup -q
 

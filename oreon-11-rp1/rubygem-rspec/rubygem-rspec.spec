@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 206284a08ad798e61f86d7ca3e376718d52c0bc944626b2349266f239f820587
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global	gem_name	rspec
 
 Summary:	Behaviour driven development (BDD) framework for Ruby
@@ -8,10 +16,6 @@ Release:	2%{?dist}
 License:	MIT
 URL:		http://rspec.info
 Source0:	http://rubygems.org/gems/%{gem_name}-%{version}.gem
-# oreon url source checksums begin
-%global source0_sha256 206284a08ad798e61f86d7ca3e376718d52c0bc944626b2349266f239f820587
-%global source0_file rspec-3.13.2.gem
-# oreon url source checksums end
 
 BuildRequires:	rubygems-devel
 #BuildRequires:	ruby(release)
@@ -30,9 +34,7 @@ This package contains documentation for %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rspec-3.13.2.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "206284a08ad798e61f86d7ca3e376718d52c0bc944626b2349266f239f820587" || { echo "oreon: Source0 SHA256 mismatch for rspec-3.13.2.gem" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{gem_name}-%{version}
 mv ../%{gem_name}-%{version}.gemspec .
 

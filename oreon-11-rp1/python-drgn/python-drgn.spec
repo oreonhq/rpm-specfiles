@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6493eb999cc24521216f76aa7ecf89ed8fae28077bbe7aa638385934659eed22
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Created by pyp2rpm-3.3.5
 %if 0%{?rhel}
 %bcond_with docs
@@ -21,10 +29,6 @@ Summary:        Programmable debugger
 License:        LGPL-2.1-or-later
 URL:            https://github.com/osandov/drgn
 Source0:        https://files.pythonhosted.org/packages/source/d/drgn/drgn-0.1.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 6493eb999cc24521216f76aa7ecf89ed8fae28077bbe7aa638385934659eed22
-%global source0_file drgn-0.1.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  python3-devel
 BuildRequires:  python3dist(setuptools)
@@ -71,9 +75,7 @@ This package contains additional documentation for %{pypi_name}.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/drgn-0.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6493eb999cc24521216f76aa7ecf89ed8fae28077bbe7aa638385934659eed22" || { echo "oreon: Source0 SHA256 mismatch for drgn-0.1.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{pypi_name}-%{version} -p1
 # Remove bundled egg-info
 rm -rf %{pypi_name}.egg-info

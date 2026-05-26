@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 994d51325d25ad8aa7ce4ebaec003febcce822c3f8c911e3b17c52f7f589f950
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname markdown
 %global pkgname markdown
 
@@ -8,10 +16,6 @@ Summary:        Markdown implementation in Python
 License:        BSD-3-Clause
 URL:            https://python-markdown.github.io/
 Source0:        https://files.pythonhosted.org/packages/source/m/markdown/markdown-3.10.2.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 994d51325d25ad8aa7ce4ebaec003febcce822c3f8c911e3b17c52f7f589f950
-%global source0_file markdown-3.10.2.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -36,9 +40,7 @@ Summary:        %{summary}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/markdown-3.10.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "994d51325d25ad8aa7ce4ebaec003febcce822c3f8c911e3b17c52f7f589f950" || { echo "oreon: Source0 SHA256 mismatch for markdown-3.10.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{srcname}-%{version}
 
 %generate_buildrequires

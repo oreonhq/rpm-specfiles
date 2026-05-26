@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 659f40c440e31ba865c52c818a33d3ba6a97349e3353f8b1985179cb2aa71ec5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:    usbutils
 Version: 019
 Release: %autorelease
@@ -11,10 +19,6 @@ Source0: https://www.kernel.org/pub/linux/utils/usb/usbutils/%{name}-%{version}.
 # let's not include it in the ELN. https://github.com/gregkh/usbutils/issues/222#issuecomment-2715192013
 %if 0%{?fedora}
 Patch0: usbreset.patch
-# oreon url source checksums begin
-%global source0_sha256 659f40c440e31ba865c52c818a33d3ba6a97349e3353f8b1985179cb2aa71ec5
-%global source0_file usbutils-019.tar.xz
-# oreon url source checksums end
 %endif
 
 BuildRequires: meson
@@ -28,9 +32,7 @@ This package contains utilities for inspecting devices connected to a
 USB bus.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/usbutils-019.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "659f40c440e31ba865c52c818a33d3ba6a97349e3353f8b1985179cb2aa71ec5" || { echo "oreon: Source0 SHA256 mismatch for usbutils-019.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

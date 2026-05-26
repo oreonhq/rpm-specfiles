@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2b14b6a301412aa73fff8fe2e275c755828de2e4c5463ffc73b184c2d33b8cdc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Class-Inner
 Version:        0.200001
 Release:        43%{?dist}
@@ -7,10 +15,6 @@ Summary:        A perlish implementation of Java like inner classes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Inner
 SOurce0:        https://cpan.metacpan.org/authors/id/A/AR/ARUNBEAR/Class-Inner-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 2b14b6a301412aa73fff8fe2e275c755828de2e4c5463ffc73b184c2d33b8cdc
-%global source0_file Class-Inner-0.200001.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires: make
@@ -25,9 +29,7 @@ parent class's method.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Class-Inner-0.200001.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2b14b6a301412aa73fff8fe2e275c755828de2e4c5463ffc73b184c2d33b8cdc" || { echo "oreon: Source0 SHA256 mismatch for Class-Inner-0.200001.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Class-Inner-%{version}
 
 

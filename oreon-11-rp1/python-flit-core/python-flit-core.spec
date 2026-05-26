@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 18f63100d6f94385c6ed57a72073443e1a71a4acb4339491615d0f16d6ff01b2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # When bootstrapping new Python we need to build flit in bootstrap mode.
 # The Python RPM dependency generators and pip are not yet available.
 %bcond bootstrap 0
@@ -17,10 +25,6 @@ License:        BSD-3-Clause AND BSD-2-Clause
 
 URL:            https://flit.pypa.io/
 Source:         %{pypi_source flit_core}
-# oreon url source checksums begin
-%global source0_sha256 18f63100d6f94385c6ed57a72073443e1a71a4acb4339491615d0f16d6ff01b2
-%global source0_file flit_core-3.12.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
@@ -53,9 +57,7 @@ Requires:       python(abi) = %{python3_version}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/flit_core-3.12.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "18f63100d6f94385c6ed57a72073443e1a71a4acb4339491615d0f16d6ff01b2" || { echo "oreon: Source0 SHA256 mismatch for flit_core-3.12.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n flit_core-%{version}
 
 # Remove vendored tomli that flit_core includes to solve the circular dependency on older Pythons

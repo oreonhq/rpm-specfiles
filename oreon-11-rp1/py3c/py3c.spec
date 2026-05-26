@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 abc745079ef906148817f4472c3fb4bc41d62a9ea51a746b53e09819494ac006
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # A header-only library has no debuginfo
 %global debug_package %{nil}
 
@@ -12,10 +20,6 @@ License:        MIT AND CC-BY-SA-3.0
 URL:            http://py3c.readthedocs.io/
 
 Source0:        https://github.com/encukou/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 abc745079ef906148817f4472c3fb4bc41d62a9ea51a746b53e09819494ac006
-%global source0_file v1.4.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  gcc
@@ -54,9 +58,7 @@ Guide for porting CPython extensions from Python 2 to Python 3, using the
 py3c macros.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v1.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "abc745079ef906148817f4472c3fb4bc41d62a9ea51a746b53e09819494ac006" || { echo "oreon: Source0 SHA256 mismatch for v1.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

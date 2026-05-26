@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7b1048335f327958903867cea079dc072ea07f4eafae1b40c2e6f25db21686c0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		perl-Expect
 Version:	1.38
 Release:	5%{?dist}
@@ -5,10 +13,6 @@ Summary:	Expect for Perl
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Expect
 Source0:	https://cpan.metacpan.org/authors/id/J/JA/JACOBY/Expect-1.38.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 7b1048335f327958903867cea079dc072ea07f4eafae1b40c2e6f25db21686c0
-%global source0_file Expect-1.38.tar.gz
-# oreon url source checksums end
 
 BuildArch:	noarch
 # Module Build
@@ -46,9 +50,7 @@ a tool for automating interactive applications such as telnet, ftp,
 passwd, fsck, rlogin, tip, etc.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Expect-1.38.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b1048335f327958903867cea079dc072ea07f4eafae1b40c2e6f25db21686c0" || { echo "oreon: Source0 SHA256 mismatch for Expect-1.38.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Expect-%{version}
 sed -i 's|^#!/usr/local/bin/perl|#!/usr/bin/perl|' examples/kibitz/kibitz tutorial/[2-6].*
 chmod -c a-x Changes examples/*.pl examples/kibitz/* lib/Expect.pm LICENSE README.md tutorial/*

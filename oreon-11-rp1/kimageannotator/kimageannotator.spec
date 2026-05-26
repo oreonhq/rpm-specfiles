@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7eb593d975b1590a184354ef68dbc3c26479d58eaea00de461d73695176f623c
+%global source1_sha256 e78c785ec4a8a22a48a91835c97601f5704b5076b154415353b0d2697dc0b4f7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %undefine __cmake_in_source_build
 
 # Bundled here for %%build so mock does not need kcolorpicker-devel in the root yet.
@@ -14,12 +24,6 @@ URL:            https://github.com/ksnip/kImageAnnotator
 Source0:        https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v%{version}.tar.gz#/kImageAnnotator-%{version}.tar.gz
 Source1:        https://github.com/ksnip/kColorPicker/archive/refs/tags/v%{kcp_version}.tar.gz#/kColorPicker-%{kcp_version}.tar.gz
 Patch1:         kimageannotator-qt6-output-name.patch
-# oreon url source checksums begin
-%global source0_sha256 7eb593d975b1590a184354ef68dbc3c26479d58eaea00de461d73695176f623c
-%global source0_file v0.7.2.tar.gz
-%global source1_sha256 e78c785ec4a8a22a48a91835c97601f5704b5076b154415353b0d2697dc0b4f7
-%global source1_file v0.3.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -52,10 +56,7 @@ Requires:       kcolorpicker-devel%{?_isa}
 Headers and CMake package kImageAnnotator-Qt6 for downstream builds.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v0.7.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7eb593d975b1590a184354ef68dbc3c26479d58eaea00de461d73695176f623c" || { echo "oreon: Source0 SHA256 mismatch for v0.7.2.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/v0.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e78c785ec4a8a22a48a91835c97601f5704b5076b154415353b0d2697dc0b4f7" || { echo "oreon: Source1 SHA256 mismatch for v0.3.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n kImageAnnotator-%{version}
 tar -xf %{SOURCE1} -C %{_builddir}
 

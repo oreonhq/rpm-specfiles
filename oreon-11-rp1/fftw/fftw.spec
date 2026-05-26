@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if %{defined rhel}
 %bcond_with mpich
 %else
@@ -32,10 +40,6 @@ URL:            http://www.fftw.org
 Source0:        http://www.fftw.org/fftw-%{version}.tar.gz
 # https://github.com/FFTW/fftw3/pull/346
 Patch1:         fix_autotools_build.patch
-# oreon url source checksums begin
-%global source0_sha256 56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467
-%global source0_file fftw-3.3.10.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc-gfortran
 
@@ -292,9 +296,7 @@ This package contains the manual for the FFTW fast Fourier transform
 library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/fftw-3.3.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "56c932549852cddcfafdab3820b0200c7742675be92179e59e6215b340e26467" || { echo "oreon: Source0 SHA256 mismatch for fftw-3.3.10.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

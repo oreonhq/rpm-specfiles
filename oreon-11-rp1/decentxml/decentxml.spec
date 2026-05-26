@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source1_sha256 4f03503040be97dc04eb2fd5c7a448d197e720f069a6c6f33eba1b2c2bb17706
+%global oreon_verify_sources \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global revision 572a0baa91d1
 
 Name:             decentxml
@@ -23,10 +31,6 @@ Source0:          https://bitbucket.org/digulla/%{name}/get/r%{version}.zip
 
 # For running w3c conformance test suite.
 Source1:          http://www.w3.org/XML/Test/xmlts20031210.zip
-# oreon url source checksums begin
-%global source1_sha256 4f03503040be97dc04eb2fd5c7a448d197e720f069a6c6f33eba1b2c2bb17706
-%global source1_file xmlts20031210.zip
-# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)
@@ -52,9 +56,7 @@ Summary:          API documentation for %{name}
 This package contains the API documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xmlts20031210.zip; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4f03503040be97dc04eb2fd5c7a448d197e720f069a6c6f33eba1b2c2bb17706" || { echo "oreon: Source1 SHA256 mismatch for xmlts20031210.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n digulla-%{name}-%{revision}
 
 # We are looking for xml conformance data one level above so unzip

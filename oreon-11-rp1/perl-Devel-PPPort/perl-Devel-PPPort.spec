@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5290d5bb84cde9e9e61113a20c67b5d47267eb8e65a119a8a248cc96aac0badb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global base_version 3.68
 
 # Perform optional tests
@@ -17,10 +25,6 @@ Patch1:         Devel-PPPort-3.68-Add-shebang-to-tests.patch
 Patch2:         Devel-PPPort-3.71-Upgrade-to-3.72.patch
 # Upgrade to 3.73 based on perl-5.42.0
 Patch3:         Devel-PPPort-3.72-Upgrade-to-3.73.patch
-# oreon url source checksums begin
-%global source0_sha256 5290d5bb84cde9e9e61113a20c67b5d47267eb8e65a119a8a248cc96aac0badb
-%global source0_file Devel-PPPort-3.68.tar.gz
-# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -76,9 +80,7 @@ with "%{_libexecdir}/%{name}/test".
 %{?perl_default_filter}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Devel-PPPort-3.68.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5290d5bb84cde9e9e61113a20c67b5d47267eb8e65a119a8a248cc96aac0badb" || { echo "oreon: Source0 SHA256 mismatch for Devel-PPPort-3.68.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n Devel-PPPort-%{base_version}
 
 # Help generators to recognize Perl scripts

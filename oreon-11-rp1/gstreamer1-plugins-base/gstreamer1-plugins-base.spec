@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 969e3cbf05dfab92cf37e94840fbe398517d7ba3275331d1c216a2e30a7208d0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond cdparanoia %{undefined rhel}
 %bcond libvisual %{undefined rhel}
 
@@ -17,10 +25,6 @@ Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugin
 Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-%{version}.tar.xz
 %endif
 Patch0:         0001-missing-plugins-Remove-the-mpegaudioversion-field.patch
-# oreon url source checksums begin
-%global source0_sha256 969e3cbf05dfab92cf37e94840fbe398517d7ba3275331d1c216a2e30a7208d0
-%global source0_file gst-plugins-base-1.26.7.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  meson >= 0.48.0
 BuildRequires:  gcc
@@ -126,9 +130,7 @@ for the GStreamer Base Plugins library.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gst-plugins-base-1.26.7.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "969e3cbf05dfab92cf37e94840fbe398517d7ba3275331d1c216a2e30a7208d0" || { echo "oreon: Source0 SHA256 mismatch for gst-plugins-base-1.26.7.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n gst-plugins-base-%{version}
 %patch -P 0 -p1
 

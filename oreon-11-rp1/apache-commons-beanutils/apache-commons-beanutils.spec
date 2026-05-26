@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 28cace1c5f454f6b17bc7d0175aab79fe85799b4fd56b16bb4683dabd2c84cc7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without bootstrap
 
 Name:           apache-commons-beanutils
@@ -10,10 +18,6 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        http://archive.apache.org/dist/commons/beanutils/source/commons-beanutils-%{version}-src.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 28cace1c5f454f6b17bc7d0175aab79fe85799b4fd56b16bb4683dabd2c84cc7
-%global source0_file commons-beanutils-1.11.0-src.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -33,9 +37,7 @@ dependencies outside of the JDK are required, so the use of this package
 is very lightweight.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/commons-beanutils-1.11.0-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "28cace1c5f454f6b17bc7d0175aab79fe85799b4fd56b16bb4683dabd2c84cc7" || { echo "oreon: Source0 SHA256 mismatch for commons-beanutils-1.11.0-src.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n commons-beanutils-%{version}-src
 sed -i 's/\r//' *.txt
 

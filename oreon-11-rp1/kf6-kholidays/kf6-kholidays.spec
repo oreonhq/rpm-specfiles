@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 94a3c4ea003b82e0307ff81a665f957bb5ab9a6043e60faf1a2aee727519b7be
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global		framework kholidays
 
 %global stable_kf6 stable
@@ -14,10 +22,6 @@ URL:		https://invent.kde.org/frameworks/%{framework}
 
 Source0:	https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
 Source1:	https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
-# oreon url source checksums begin
-%global source0_sha256 94a3c4ea003b82e0307ff81a665f957bb5ab9a6043e60faf1a2aee727519b7be
-%global source0_file kholidays-6.24.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:	extra-cmake-modules >= %{version}
 BuildRequires:	kf6-rpm-macros
@@ -44,9 +48,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kholidays-6.24.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "94a3c4ea003b82e0307ff81a665f957bb5ab9a6043e60faf1a2aee727519b7be" || { echo "oreon: Source0 SHA256 mismatch for kholidays-6.24.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{framework}-%{version} -p1
 
 %build

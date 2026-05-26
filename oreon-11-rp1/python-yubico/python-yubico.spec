@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fa5c7b40322b31899060b65831a95429c5bbe1c1c800f95cb4b5ff00655523fe
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{?python_enable_dependency_generator}
 %global srcname yubico
 
@@ -10,10 +18,6 @@ License:        BSD-2-Clause
 URL:            https://github.com/Yubico/%{name}
 Source0:        https://github.com/Yubico/%{name}/archive/%{name}-%{version}.tar.gz
 Patch0001:      0001-literal-comparison.patch
-# oreon url source checksums begin
-%global source0_sha256 fa5c7b40322b31899060b65831a95429c5bbe1c1c800f95cb4b5ff00655523fe
-%global source0_file python-yubico-1.3.3.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -35,9 +39,7 @@ Pure-python library for interacting with Yubikeys. For Python 3.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/python-yubico-1.3.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fa5c7b40322b31899060b65831a95429c5bbe1c1c800f95cb4b5ff00655523fe" || { echo "oreon: Source0 SHA256 mismatch for python-yubico-1.3.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{name}-%{version} -p1
 
 

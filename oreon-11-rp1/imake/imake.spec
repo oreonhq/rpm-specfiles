@@ -1,3 +1,19 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 75decbcea8d7b354cf36adc9675e53c4790ee3de56a14bd87b42c8e8aad2ecf5
+%global source1_sha256 bfb26f8025189b2a01286ce6daacc2af8fe647440b40bb741dd5c397572cba5b
+%global source2_sha256 b275dcf1f7323ed89e8b36f8fbd5da665d8700005f1779fa5b90a1688bbf2ee4
+%global source3_sha256 7408955defcfab0f44d1bedd4ec0c20db61914917ad17bfc1f1c9bf56acc17b9
+%global source4_sha256 3e3437a9d3bb377755dd04a2c90d4c014d9fe90987ff73450bf5b8d161795e87
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source4_sha256:%(test -z "%{source4_sha256}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_sha256}" || { echo "oreon: Source4 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: imake source code configuration and build system
 Name: imake
 Version: 1.0.10
@@ -12,18 +28,6 @@ Source3: https://www.x.org/pub/individual/util/xorg-cf-files-1.0.8.tar.xz
 Source4: https://www.x.org/pub/individual/util/lndir-1.0.4.tar.xz
 Patch11: imake-1.0.2-abort.patch
 Patch12: xorg-cf-files-1.0.8-DEFAULT_SOURCE.patch
-# oreon url source checksums begin
-%global source0_sha256 75decbcea8d7b354cf36adc9675e53c4790ee3de56a14bd87b42c8e8aad2ecf5
-%global source0_file imake-1.0.10.tar.xz
-%global source1_sha256 bfb26f8025189b2a01286ce6daacc2af8fe647440b40bb741dd5c397572cba5b
-%global source1_file makedepend-1.0.8.tar.xz
-%global source2_sha256 b275dcf1f7323ed89e8b36f8fbd5da665d8700005f1779fa5b90a1688bbf2ee4
-%global source2_file gccmakedep-1.0.3.tar.bz2
-%global source3_sha256 7408955defcfab0f44d1bedd4ec0c20db61914917ad17bfc1f1c9bf56acc17b9
-%global source3_file xorg-cf-files-1.0.8.tar.xz
-%global source4_sha256 3e3437a9d3bb377755dd04a2c90d4c014d9fe90987ff73450bf5b8d161795e87
-%global source4_file lndir-1.0.4.tar.xz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: pkgconfig
@@ -47,13 +51,7 @@ used by new software projects.  Software developers are encouraged to
 migrate software to the GNU autotools system.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/imake-1.0.10.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "75decbcea8d7b354cf36adc9675e53c4790ee3de56a14bd87b42c8e8aad2ecf5" || { echo "oreon: Source0 SHA256 mismatch for imake-1.0.10.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/makedepend-1.0.8.tar.xz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bfb26f8025189b2a01286ce6daacc2af8fe647440b40bb741dd5c397572cba5b" || { echo "oreon: Source1 SHA256 mismatch for makedepend-1.0.8.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/gccmakedep-1.0.3.tar.bz2; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b275dcf1f7323ed89e8b36f8fbd5da665d8700005f1779fa5b90a1688bbf2ee4" || { echo "oreon: Source2 SHA256 mismatch for gccmakedep-1.0.3.tar.bz2" >&2; exit 1; })
-%(f=%{_sourcedir}/xorg-cf-files-1.0.8.tar.xz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7408955defcfab0f44d1bedd4ec0c20db61914917ad17bfc1f1c9bf56acc17b9" || { echo "oreon: Source3 SHA256 mismatch for xorg-cf-files-1.0.8.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/lndir-1.0.4.tar.xz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3e3437a9d3bb377755dd04a2c90d4c014d9fe90987ff73450bf5b8d161795e87" || { echo "oreon: Source4 SHA256 mismatch for lndir-1.0.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -c %{name}-%{version} -a1 -a2 -a3 -a4
 
 # imake patches

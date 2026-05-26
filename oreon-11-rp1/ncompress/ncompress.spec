@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 96ec931d06ab827fccad377839bfb91955274568392ddecf809e443443aead46
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Fast compression and decompression utilities
 Name: ncompress
 Version: 5.0
@@ -33,10 +41,6 @@ Patch4: ncompress-5.0-endians.patch
 # ~> 760657
 # ~> downstream
 Patch5: ncompress-5.0-memmove.patch
-# oreon url source checksums begin
-%global source0_sha256 96ec931d06ab827fccad377839bfb91955274568392ddecf809e443443aead46
-%global source0_file v5.0.tar.gz
-# oreon url source checksums end
 
 # silence gcc warnings
 # ~> downstream
@@ -59,9 +63,7 @@ which are compatible with the original UNIX compress utility.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "96ec931d06ab827fccad377839bfb91955274568392ddecf809e443443aead46" || { echo "oreon: Source0 SHA256 mismatch for v5.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %ifarch sparc m68k armv4l ppc s390 s390x ppc64 sparc64
 ARCH_FLAGS="$ARCH_FLAGS -DBYTEORDER=1234"
 %endif

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 771385049516fdd561fbb9164eddf376075c4c7de3900a8b18654660172748f1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: catatonit
 Version: 0.2.1
 Summary: A signal-forwarding process manager for containers
@@ -21,10 +29,6 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 URL: https://github.com/openSUSE/%{name}
 # Tarball fetched from upstream
 Source0:        https://github.com/openSUSE/catatonit/archive/v0.2.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 771385049516fdd561fbb9164eddf376075c4c7de3900a8b18654660172748f1
-%global source0_file v0.2.1.tar.gz
-# oreon url source checksums end
 BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: file
@@ -46,9 +50,7 @@ This is a reimplementation of other container init programs (such as
 signalfd(2)) and has no additional features.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v0.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "771385049516fdd561fbb9164eddf376075c4c7de3900a8b18654660172748f1" || { echo "oreon: Source0 SHA256 mismatch for v0.2.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -Sgit %{name}-%{version}
 
 %build

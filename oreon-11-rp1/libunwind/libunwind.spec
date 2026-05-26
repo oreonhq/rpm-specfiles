@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ddf0e32dd5fafe5283198d37e4bf9decf7ba1770b6e7e006c33e6df79e6a6157
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # The testsuite does not pass on all targets.
 #
 # aarch64
@@ -58,10 +66,6 @@ Patch2: libunwind-1.3.1-multilib-fix.patch
 Patch5: libunwind-no-dl-iterate-phdr.patch
 # Fix C23 issue
 Patch6: https://github.com/libunwind/libunwind/commit/457612f470f8c0e718cdf7f14ef1ecb583f3b3a6.patch
-# oreon url source checksums begin
-%global source0_sha256 ddf0e32dd5fafe5283198d37e4bf9decf7ba1770b6e7e006c33e6df79e6a6157
-%global source0_file libunwind-1.8.1.tar.gz
-# oreon url source checksums end
 
 ExclusiveArch: %{arm} aarch64 hppa ia64 mips ppc %{power64} s390x %{ix86} x86_64 riscv64
 
@@ -91,9 +95,7 @@ Requires: libunwind%{_isa} = %{version}-%{release}
 Test executables for libunwind. Not needed for library functionality.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libunwind-1.8.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ddf0e32dd5fafe5283198d37e4bf9decf7ba1770b6e7e006c33e6df79e6a6157" || { echo "oreon: Source0 SHA256 mismatch for libunwind-1.8.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}
 
 %build

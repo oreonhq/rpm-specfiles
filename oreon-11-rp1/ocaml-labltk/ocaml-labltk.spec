@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fe0e11bacdb537ce9027aec072262405f01fe4017d19213d5a82ef053e50594d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # This breaks basic usage of the package:
 # ocamlfind ocamlopt -package labltk tktest.ml -linkpkg -o tktest
 # gcc: fatal error: environment variable ‘RPM_ARCH’ not defined
@@ -25,10 +33,6 @@ Patch1:        labltk-8.06.11-enable-debugging.patch
 
 # Resolve an issue with ./configure and Tcl detection.
 Patch2:        labltk-8.06.12-use-fpic-configure.patch
-# oreon url source checksums begin
-%global source0_sha256 fe0e11bacdb537ce9027aec072262405f01fe4017d19213d5a82ef053e50594d
-%global source0_file labltk-8.06.15.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: ocaml
@@ -68,9 +72,7 @@ This package contains the API reference.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/labltk-8.06.15.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fe0e11bacdb537ce9027aec072262405f01fe4017d19213d5a82ef053e50594d" || { echo "oreon: Source0 SHA256 mismatch for labltk-8.06.15.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n labltk-%{version} -p1
 
 # Remove version control files which might get copied into documentation.

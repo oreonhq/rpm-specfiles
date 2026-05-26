@@ -1,3 +1,15 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 633b8c4706591ceae241c8432ef84f7c5ef9787f4eea535babf5fc6c6111ad5b
+%global source1_sha256 a3299f852374423b010f2fe1970c7a66a0d84e64029baff8f55a4b658295f579
+%global source3_sha256 2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global _hardened_build 0
 # https://github.com/varnishcache/varnish-cache/issues/2269
 %global debug_package %{nil}
@@ -49,14 +61,6 @@ Patch0:   varnish-7.7.0_fix_4298.patch
 # bundled jemalloc patch
 Patch100: jemalloc-5.3.0_fno-builtin.patch
 Patch101: jemalloc-5.3.0-aarch64-ts-segfault.patch
-# oreon url source checksums begin
-%global source0_sha256 633b8c4706591ceae241c8432ef84f7c5ef9787f4eea535babf5fc6c6111ad5b
-%global source0_file varnish-8.0.0.tgz
-%global source1_sha256 a3299f852374423b010f2fe1970c7a66a0d84e64029baff8f55a4b658295f579
-%global source1_file 1f0d212dc45065f38bd80ac57fe22773a20a0595.tar.gz
-%global source3_sha256 2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa
-%global source3_file jemalloc-5.3.0.tar.bz2
-# oreon url source checksums end
 %endif
 
 Provides: varnish%{_isa} = %{version}-%{release}
@@ -160,11 +164,7 @@ Summary: Documentation files for %name
 Documentation files for %name
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/varnish-8.0.0.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "633b8c4706591ceae241c8432ef84f7c5ef9787f4eea535babf5fc6c6111ad5b" || { echo "oreon: Source0 SHA256 mismatch for varnish-8.0.0.tgz" >&2; exit 1; })
-%(f=%{_sourcedir}/1f0d212dc45065f38bd80ac57fe22773a20a0595.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a3299f852374423b010f2fe1970c7a66a0d84e64029baff8f55a4b658295f579" || { echo "oreon: Source1 SHA256 mismatch for 1f0d212dc45065f38bd80ac57fe22773a20a0595.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/jemalloc-5.3.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa" || { echo "oreon: Source3 SHA256 mismatch for jemalloc-5.3.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 #patch 0 -p1
 tar xzf %SOURCE1

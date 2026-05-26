@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5252911bb5ab0732922e298348a94f0e348e0891935ff0876042ac1bd8c5eeed
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global libmodulemd_version 2.3.0
 
 %define __cmake_in_source_build 1
@@ -52,10 +60,6 @@ Patch4:         0004-spec-require-cmake-3.7.0.patch
 Patch5:         0005-Include-unistd.h-for-STDOUT_FILENO.patch
 Patch6:         0006-Use-RPMTAG_SHA1HEADER-instead-of-RPMTAG_HDRID.patch
 Patch7:         0007-spec-Consistently-use-CMake-RPM-macros.patch
-# oreon url source checksums begin
-%global source0_sha256 5252911bb5ab0732922e298348a94f0e348e0891935ff0876042ac1bd8c5eeed
-%global source0_file createrepo_c-1.2.1.tar.gz
-# oreon url source checksums end
 
 %global epoch_dep %{?epoch:%{epoch}:}
 
@@ -143,9 +147,7 @@ Requires:       %{name}-libs = %{epoch_dep}%{version}-%{release}
 Python 3 bindings for the createrepo_c library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/createrepo_c-1.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5252911bb5ab0732922e298348a94f0e348e0891935ff0876042ac1bd8c5eeed" || { echo "oreon: Source0 SHA256 mismatch for createrepo_c-1.2.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 %py3_shebang_fix examples/python
 mkdir build-py3

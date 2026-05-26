@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 460ced2b5644f458b7062fdcd12458c25405b98c5d78f812b4c2a6dfa368b9f9
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond docs %{undefined rhel}
 
 %global flatpak_version 1.5.0
@@ -15,10 +23,6 @@ Summary: Portal frontend service to flatpak
 License: LGPL-2.1-or-later
 URL:     https://github.com/flatpak/xdg-desktop-portal/
 Source0: https://github.com/flatpak/xdg-desktop-portal/releases/download/%{version}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 460ced2b5644f458b7062fdcd12458c25405b98c5d78f812b4c2a6dfa368b9f9
-%global source0_file xdg-desktop-portal-1.21.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: gettext
@@ -79,9 +83,7 @@ The pkg-config file for %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xdg-desktop-portal-1.21.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "460ced2b5644f458b7062fdcd12458c25405b98c5d78f812b4c2a6dfa368b9f9" || { echo "oreon: Source0 SHA256 mismatch for xdg-desktop-portal-1.21.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

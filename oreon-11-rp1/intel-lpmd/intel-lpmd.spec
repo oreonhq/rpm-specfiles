@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 31ed054a2afa6e4ae03b6a72becad4895aaf8731fad82e3f80cd70cae1ae060c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global daemon_name intel_lpmd
 
 Name:		intel-lpmd
@@ -8,10 +16,6 @@ Summary:	Intel Low Power Mode Daemon
 License:	GPL-2.0-or-later
 URL:		https://github.com/intel/intel-lpmd
 Source0:        https://github.com/intel/intel-lpmd/archive/v0.0.9/intel-lpmd-0.0.9.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 31ed054a2afa6e4ae03b6a72becad4895aaf8731fad82e3f80cd70cae1ae060c
-%global source0_file intel-lpmd-0.0.9.tar.gz
-# oreon url source checksums end
 
 ExclusiveArch:	x86_64
 
@@ -36,9 +40,7 @@ disabling the rest, and restoring the system from Low Power Mode by activating
 all CPUs.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/intel-lpmd-0.0.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "31ed054a2afa6e4ae03b6a72becad4895aaf8731fad82e3f80cd70cae1ae060c" || { echo "oreon: Source0 SHA256 mismatch for intel-lpmd-0.0.9.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # fedora path fix

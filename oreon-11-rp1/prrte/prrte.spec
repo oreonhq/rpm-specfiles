@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 83b6b37e21b315f069d69faa4686dcec3306225b48fdfe64588dec33e6063e72
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           prrte
 Version:        3.0.6
 Release:        %autorelease
@@ -12,10 +20,6 @@ URL:            https://github.com/openpmix/%{name}
 Source0:        https://github.com/openpmix/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.bz2
 # Upstream fix for --stdfor for non-zeron ranks - fixes rhbz#2307533
 Patch0:         https://patch-diff.githubusercontent.com/raw/openpmix/prrte/pull/2038.patch
-# oreon url source checksums begin
-%global source0_sha256 83b6b37e21b315f069d69faa4686dcec3306225b48fdfe64588dec33e6063e72
-%global source0_file prrte-3.0.6.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  flex
 BuildRequires:  gcc
@@ -61,9 +65,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/prrte-3.0.6.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "83b6b37e21b315f069d69faa4686dcec3306225b48fdfe64588dec33e6063e72" || { echo "oreon: Source0 SHA256 mismatch for prrte-3.0.6.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}
 
 # touch lexer sources to recompile them

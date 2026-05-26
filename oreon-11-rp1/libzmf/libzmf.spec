@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 27051a30cb057fdb5d5de65a1f165c7153dc76e27fe62251cbb86639eb2caf22
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global apiversion 0.0
 
 Name: libzmf
@@ -23,10 +31,6 @@ BuildRequires: pkgconfig(zlib)
 BuildRequires: make
 
 Patch: libzmf-install-docs.patch
-# oreon url source checksums begin
-%global source0_sha256 27051a30cb057fdb5d5de65a1f165c7153dc76e27fe62251cbb86639eb2caf22
-%global source0_file libzmf-0.0.2.tar.xz
-# oreon url source checksums end
 
 %description
 libzmf is library providing ability to interpret and import Zoner
@@ -57,9 +61,7 @@ Tools to transform Zoner documents into other formats.
 Currently supported: SVG, raw.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libzmf-0.0.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "27051a30cb057fdb5d5de65a1f165c7153dc76e27fe62251cbb86639eb2caf22" || { echo "oreon: Source0 SHA256 mismatch for libzmf-0.0.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

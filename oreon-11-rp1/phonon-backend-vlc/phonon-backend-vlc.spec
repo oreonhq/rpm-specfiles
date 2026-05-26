@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 338479dc451e4b94b3ca5b578def741dcf82f5c626a2807d36235be2dce7c9a5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond qt5 %[!(0%{?rhel} >= 10)]
 %bcond qt6 %[0%{?fedora} >= 40 || 0%{?rhel} >= 10]
 
@@ -8,10 +16,6 @@ Release:        %autorelease
 License:        LGPL-2.1-or-later
 URL:            https://invent.kde.org/libraries/phonon-vlc
 Source:         https://download.kde.org/stable/phonon/%{name}/%{version}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 338479dc451e4b94b3ca5b578def741dcf82f5c626a2807d36235be2dce7c9a5
-%global source0_file phonon-backend-vlc-0.12.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -76,9 +80,7 @@ BuildArch:      noarch
 %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/phonon-backend-vlc-0.12.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "338479dc451e4b94b3ca5b578def741dcf82f5c626a2807d36235be2dce7c9a5" || { echo "oreon: Source0 SHA256 mismatch for phonon-backend-vlc-0.12.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

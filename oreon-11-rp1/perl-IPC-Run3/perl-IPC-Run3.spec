@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9d048ae7b9ae63871bae976ba01e081d887392d904e5d48b04e22d35ed22011a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-IPC-Run3
 Version:        0.049
 Release:        5%{?dist}
@@ -31,10 +39,6 @@ BuildRequires:  perl(Test::Pod)
 # FIXME: For now, keep the patch, but do not apply it.
 # Upstream considers the issue to be a known implementation limitation.
 Patch0:         0001-test-and-fix-for-RT-52317-Calling-run3-garbles-STDIN.patch
-# oreon url source checksums begin
-%global source0_sha256 9d048ae7b9ae63871bae976ba01e081d887392d904e5d48b04e22d35ed22011a
-%global source0_file IPC-Run3-0.049.tar.gz
-# oreon url source checksums end
 
 %description
 This module allows you to run a subprocess and redirect stdin, stdout,
@@ -43,9 +47,7 @@ the need for using system, qx, and open3 with a simple, extremely Perlish
 API and none of the bloat and rarely used features of IPC::Run.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/IPC-Run3-0.049.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9d048ae7b9ae63871bae976ba01e081d887392d904e5d48b04e22d35ed22011a" || { echo "oreon: Source0 SHA256 mismatch for IPC-Run3-0.049.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n IPC-Run3-%{version}
 
 %build

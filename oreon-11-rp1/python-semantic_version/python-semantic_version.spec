@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e234480908f633d2d80fdd97e87699135b2ed2fc9876b7f41d1d4a2d3262a0c4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           python-semantic_version
 Version:        2.10.0
 Release:        %autorelease
@@ -6,10 +14,6 @@ Summary:        Library implementing the 'SemVer' scheme
 License:        BSD-2-Clause
 URL:            https://github.com/rbarrois/python-semanticversion
 Source:        https://github.com/rbarrois/python-semanticversion/archive/2.10.0/python-semanticversion-2.10.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 e234480908f633d2d80fdd97e87699135b2ed2fc9876b7f41d1d4a2d3262a0c4
-%global source0_file python-semanticversion-2.10.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  make
@@ -35,9 +39,7 @@ Summary:        %{summary}
 %description -n python3-semantic_version %{_description}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/python-semanticversion-2.10.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e234480908f633d2d80fdd97e87699135b2ed2fc9876b7f41d1d4a2d3262a0c4" || { echo "oreon: Source0 SHA256 mismatch for python-semanticversion-2.10.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n python-semanticversion-%{version}
 
 %generate_buildrequires

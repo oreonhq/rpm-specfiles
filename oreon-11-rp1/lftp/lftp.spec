@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 96e7199d7935be33cf6b1161e955b2aab40ab77ecdf2a19cea4fc1193f457edc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:	A sophisticated file transfer program
 Name:		lftp
 Version:	4.9.3
@@ -14,10 +22,6 @@ Patch1:  lftp-4.0.9-date_fmt.patch
 Patch2:  lftp-4.9.2-cdefs.patch
 Patch3:  lftp-4.9.2-tls-close.patch
 Patch4:  lftp-4.9.3-cert-pem-location.patch
-# oreon url source checksums begin
-%global source0_sha256 96e7199d7935be33cf6b1161e955b2aab40ab77ecdf2a19cea4fc1193f457edc
-%global source0_file lftp-4.9.3.tar.xz
-# oreon url source checksums end
 
 %description
 LFTP is a sophisticated ftp/http file transfer program. Like bash, it has job
@@ -34,9 +38,7 @@ BuildArch:	noarch
 Utility scripts for use with lftp.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/lftp-4.9.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "96e7199d7935be33cf6b1161e955b2aab40ab77ecdf2a19cea4fc1193f457edc" || { echo "oreon: Source0 SHA256 mismatch for lftp-4.9.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %patch -P1 -p1 -b .date_fmt

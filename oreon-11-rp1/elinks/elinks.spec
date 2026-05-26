@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a993a4870cadce60abbc724cf6a5c2a80f6be9020243b9e5ce075c16c6665c04
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?rhel} >= 10 || 0%{?rescue} || 0%{?oreon}
 %bcond_with gpm
 %else
@@ -54,10 +62,6 @@ Patch5: 0005-elinks-0.15.0-xterm.patch
 
 # let list_is_singleton() return false for an empty list (#1075415)
 Patch6: elinks-0.12pre6-list_is_singleton.patch
-# oreon url source checksums begin
-%global source0_sha256 a993a4870cadce60abbc724cf6a5c2a80f6be9020243b9e5ce075c16c6665c04
-%global source0_file elinks-0.19.0.tar.xz
-# oreon url source checksums end
 
 %description
 Elinks is a text-based Web browser. Elinks does not display any images,
@@ -66,9 +70,7 @@ advantage over graphical browsers is its speed--Elinks starts and exits
 quickly and swiftly displays Web pages.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/elinks-0.19.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a993a4870cadce60abbc724cf6a5c2a80f6be9020243b9e5ce075c16c6665c04" || { echo "oreon: Source0 SHA256 mismatch for elinks-0.19.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # remove bogus serial numbers

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9e8ed27088daaaaf9e76120a06cb320e2d6b5c50e75762facf2e5227d946e063
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global project_version_prime 5
 %global project_version_major 4
 %global project_version_minor 0
@@ -17,10 +25,6 @@ Patch2:         0002-Fix-segmentation-fault-in-cmd_requires_privileges.patch
 Patch3:         0003-dnf5daemon-server-Fix-daemon-crash-for-invalid-local.patch
 Patch4:         0004-libdnf5-cli-handle-C-or-POSIX-locale-gracefully-in-p.patch
 Patch5:         0005-tests-Fix-a-type-mismatch-in-libdnf5-cli-test_progre.patch
-# oreon url source checksums begin
-%global source0_sha256 9e8ed27088daaaaf9e76120a06cb320e2d6b5c50e75762facf2e5227d946e063
-%global source0_file dnf5-5.4.0.0.tar.gz
-# oreon url source checksums end
 
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
@@ -960,9 +964,7 @@ DNF5 plugin for working with RPM package manifest files.
 # ========== unpack, build, check & install ==========
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dnf5-5.4.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9e8ed27088daaaaf9e76120a06cb320e2d6b5c50e75762facf2e5227d946e063" || { echo "oreon: Source0 SHA256 mismatch for dnf5-5.4.0.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n dnf5-%{version}
 
 

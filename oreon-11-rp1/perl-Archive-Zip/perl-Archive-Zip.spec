@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 984e185d785baf6129c6e75f8eb44411745ac00bf6122fb1c8e822a3861ec650
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Archive-Zip
 Version:        1.68
 Release:        18%{?dist}
@@ -9,10 +17,6 @@ Summary:        Perl library for accessing Zip archives
 License:        ( GPL-1.0-or-later OR Artistic-1.0-Perl ) AND Info-ZIP
 URL:            https://metacpan.org/release/Archive-Zip
 Source0:        https://cpan.metacpan.org/authors/id/P/PH/PHRED/Archive-Zip-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 984e185d785baf6129c6e75f8eb44411745ac00bf6122fb1c8e822a3861ec650
-%global source0_file Archive-Zip-1.68.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 # For a Git binary patch
@@ -86,9 +90,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Archive-Zip-1.68.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "984e185d785baf6129c6e75f8eb44411745ac00bf6122fb1c8e822a3861ec650" || { echo "oreon: Source0 SHA256 mismatch for Archive-Zip-1.68.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -n Archive-Zip-%{version}
 for F in examples/*.pl; do
     perl -MExtUtils::MakeMaker -e "ExtUtils::MM_Unix->fixin(q{$F})"

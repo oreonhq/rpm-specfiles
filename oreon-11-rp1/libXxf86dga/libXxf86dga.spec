@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 be44427579808fe3a217d59f51cae756a26913eb6e4c8738ccab65ff56d7980f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global tarball libXxf86dga
 #global gitdate 20130524
 %global gitversion a8dc6be32
@@ -15,10 +23,6 @@ Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
 Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 be44427579808fe3a217d59f51cae756a26913eb6e4c8738ccab65ff56d7980f
-%global source0_file libXxf86dga-1.1.6.tar.xz
-# oreon url source checksums end
 %endif
 
 Requires: libX11 >= 1.5.99.902
@@ -42,9 +46,7 @@ Requires: %{name} = %{version}-%{release}
 X.Org X11 libXxf86dga development package
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libXxf86dga-1.1.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "be44427579808fe3a217d59f51cae756a26913eb6e4c8738ccab65ff56d7980f" || { echo "oreon: Source0 SHA256 mismatch for libXxf86dga-1.1.6.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d94a3d412df246afdc31a2199cbd8ae915167a3f4684f7b7014ce1200251ebb0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global base_version 1.04
 Name:           perl-Env
 Version:        1.06
@@ -11,10 +19,6 @@ BuildArch:      noarch
 Patch0:         Env-1.04-Upgrade-to-1.05.patch
 # Unbundled from perl 5.37.11
 Patch1:         Env-1.05-Upgrade-to-1.06.patch
-# oreon url source checksums begin
-%global source0_sha256 d94a3d412df246afdc31a2199cbd8ae915167a3f4684f7b7014ce1200251ebb0
-%global source0_file Env-1.04.tar.gz
-# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -44,9 +48,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Env-1.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d94a3d412df246afdc31a2199cbd8ae915167a3f4684f7b7014ce1200251ebb0" || { echo "oreon: Source0 SHA256 mismatch for Env-1.04.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Env-%{base_version}
 %patch -P0 -p1
 %patch -P1 -p1

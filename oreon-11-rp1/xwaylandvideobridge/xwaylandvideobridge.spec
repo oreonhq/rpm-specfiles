@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ea72ac7b2a67578e9994dcb0619602ead3097a46fb9336661da200e63927ebe6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           xwaylandvideobridge
 Version:        0.4.0
 Release:        12%{?dist}
@@ -8,10 +16,6 @@ URL:            https://invent.kde.org/system/xwaylandvideobridge
 Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
 
 Patch0:         xwaylandvideobridge-fix-build-against-qt-6-10.patch
-# oreon url source checksums begin
-%global source0_sha256 ea72ac7b2a67578e9994dcb0619602ead3097a46fb9336661da200e63927ebe6
-%global source0_file xwaylandvideobridge-0.4.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  libappstream-glib
 BuildRequires:  desktop-file-utils
@@ -46,9 +50,7 @@ but within the control of the user at all times.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xwaylandvideobridge-0.4.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ea72ac7b2a67578e9994dcb0619602ead3097a46fb9336661da200e63927ebe6" || { echo "oreon: Source0 SHA256 mismatch for xwaylandvideobridge-0.4.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{version} -p1
 
 

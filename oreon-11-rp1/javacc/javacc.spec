@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d1bfebb4ca9261c5c3b16b00280b3278a41b193ca8503f2987f72de453bf99c6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Copyright (c) 2000-2005, JPackage Project
 # All rights reserved.
 #
@@ -50,10 +58,6 @@ Source:        https://github.com/javacc/javacc/archive/javacc-7.0.13.tar.gz
 # Fix javadoc errors in the JavaCharStream template
 # https://github.com/javacc/javacc/pull/257
 Patch:          0001-Fix-javadoc-errors-in-JavaCharStream.template.patch
-# oreon url source checksums begin
-%global source0_sha256 d1bfebb4ca9261c5c3b16b00280b3278a41b193ca8503f2987f72de453bf99c6
-%global source0_file javacc-7.0.13.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -96,9 +100,7 @@ Requires:       %{name} = %{version}-%{release}
 Examples for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/javacc-7.0.13.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d1bfebb4ca9261c5c3b16b00280b3278a41b193ca8503f2987f72de453bf99c6" || { echo "oreon: Source0 SHA256 mismatch for javacc-7.0.13.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 
 # Remove binary information in the source tar

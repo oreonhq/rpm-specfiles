@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 21a95d6fcb0f02800bfba9e955d0c80dd6980239ccdff96209d682bf8c0973b6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           mariadb-java-client
 Version:        3.5.7
 Release:        %autorelease
@@ -8,10 +16,6 @@ Source0:        https://github.com/mariadb-corporation/mariadb-connector-j/archi
 # optional dependency not in Fedora
 Patch:          0001-Remove_waffle-jna.patch
 Patch:          0002-Remove-usage-of-junit-pioneer.patch
-# oreon url source checksums begin
-%global source0_sha256 21a95d6fcb0f02800bfba9e955d0c80dd6980239ccdff96209d682bf8c0973b6
-%global source0_file 3.5.7.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -41,9 +45,7 @@ Summary: Tests for %{name}
 This package contains tests for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/3.5.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "21a95d6fcb0f02800bfba9e955d0c80dd6980239ccdff96209d682bf8c0973b6" || { echo "oreon: Source0 SHA256 mismatch for 3.5.7.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 
 %pom_remove_dep ch.qos.logback:logback-classic

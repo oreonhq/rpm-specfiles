@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c4d10a1b665db893adc0c0aaee7ecd81b2b47c877d5cea0b40216707cbf327e4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # SPDX-License-Identifier: MIT
 %if 0%{?rhel} > 10 || 0%{?oreon}
 %bcond build_from_src 0
@@ -171,10 +179,6 @@ Source16: 58-%{fontpkgname6}.xml
 Patch0:   dejavu-fonts-ttf-urn-dtd.patch
 Patch1:   dejavu-lgc-fonts-ttf-urn-dtd.patch
 Patch2:   dejavu-fonts-urn-dtd.patch
-# oreon url source checksums begin
-%global source0_sha256 c4d10a1b665db893adc0c0aaee7ecd81b2b47c877d5cea0b40216707cbf327e4
-%global source0_file dejavu-fonts-version_2_37.tar.gz
-# oreon url source checksums end
 
 Name:     dejavu-fonts
 Summary:  The DejaVu font families
@@ -202,9 +206,7 @@ This package provides optional documentation files shipped with
 %{source_name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dejavu-fonts-version_2_37.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c4d10a1b665db893adc0c0aaee7ecd81b2b47c877d5cea0b40216707cbf327e4" || { echo "oreon: Source0 SHA256 mismatch for dejavu-fonts-version_2_37.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if %{with build_from_src}
 %setup -n %{name}-%{tag}
 %patch -P2 -p1

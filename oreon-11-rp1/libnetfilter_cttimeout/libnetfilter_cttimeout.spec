@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 aeab12754f557cba3ce2950a2029963d817490df7edb49880008b34d7ff8feba
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libnetfilter_cttimeout
 Version:        1.0.0
 Release:        29%{?dist}
@@ -5,10 +13,6 @@ Summary:        Timeout policy tuning for Netfilter/conntrack
 License:        GPL-2.0-or-later
 URL:            http://netfilter.org
 Source0:        http://netfilter.org/projects/%{name}/files/%{name}-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 aeab12754f557cba3ce2950a2029963d817490df7edb49880008b34d7ff8feba
-%global source0_file libnetfilter_cttimeout-1.0.0.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  libmnl-devel >= 1.0.0, pkgconfig, kernel-headers
@@ -37,9 +41,7 @@ build the ctnetlink message to communicate this new timeout
 policy to the kernel.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libnetfilter_cttimeout-1.0.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aeab12754f557cba3ce2950a2029963d817490df7edb49880008b34d7ff8feba" || { echo "oreon: Source0 SHA256 mismatch for libnetfilter_cttimeout-1.0.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

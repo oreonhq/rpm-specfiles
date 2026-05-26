@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8b3b182424251067a952fb4e6c7b95a21e644fbb27fbd5f8af2b2ed87ca419f5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global snapshot 0
 Summary: Off-The-Record Messaging library and toolkit
 Name: libotr
@@ -20,10 +28,6 @@ Buildrequires: libtool automake autoconf
 
 Patch: libotr-4.1.1-versioning.patch
 Patch: libotr-4.1.1-socket-h.patch
-# oreon url source checksums begin
-%global source0_sha256 8b3b182424251067a952fb4e6c7b95a21e644fbb27fbd5f8af2b2ed87ca419f5
-%global source0_file libotr-4.1.1.tar.gz
-# oreon url source checksums end
 
 %description
 Off-the-Record Messaging Library and Toolkit
@@ -40,9 +44,7 @@ Conflicts: libotr3-devel
 The devel package contains the libotr library and include files.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libotr-4.1.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b3b182424251067a952fb4e6c7b95a21e644fbb27fbd5f8af2b2ed87ca419f5" || { echo "oreon: Source0 SHA256 mismatch for libotr-4.1.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %if %{snapshot}

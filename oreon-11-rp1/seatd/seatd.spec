@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 302564d54d8e28191fadfd734f2675ecb0c9e0615a58011b89ef15dfa4dbaa96
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global libseat_sover   1
 %global _hardened_build 1
 
@@ -12,10 +20,6 @@ License:        MIT
 URL:            https://sr.ht/~kennylevinsen/seatd/
 Source0:        https://git.sr.ht/~kennylevinsen/seatd/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        seatd.sysusers
-# oreon url source checksums begin
-%global source0_sha256 302564d54d8e28191fadfd734f2675ecb0c9e0615a58011b89ef15dfa4dbaa96
-%global source0_file 0.9.3.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  meson >= 0.60.0
@@ -61,9 +65,7 @@ developing applications that use libseat.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/0.9.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "302564d54d8e28191fadfd734f2675ecb0c9e0615a58011b89ef15dfa4dbaa96" || { echo "oreon: Source0 SHA256 mismatch for 0.9.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 

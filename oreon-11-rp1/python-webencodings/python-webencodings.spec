@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 082367f568a7812aa5f6922ffe3d9d027cd83829dc32bcaac4c874eeed618000
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname webencodings
 %global desc This is a Python implementation of the WHATWG Encoding standard.
 
@@ -11,10 +19,6 @@ License: BSD-3-Clause
 Summary: Character encoding for the web
 URL: https://github.com/gsnedders/python-%{srcname}
 Source0:        https://github.com/gsnedders/python-webencodings/archive/v0.5.1/webencodings-0.5.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 082367f568a7812aa5f6922ffe3d9d027cd83829dc32bcaac4c874eeed618000
-%global source0_file webencodings-0.5.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools
@@ -47,9 +51,7 @@ Requires: python3
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/webencodings-0.5.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "082367f568a7812aa5f6922ffe3d9d027cd83829dc32bcaac4c874eeed618000" || { echo "oreon: Source0 SHA256 mismatch for webencodings-0.5.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n python-%{srcname}-%{version}
 
 

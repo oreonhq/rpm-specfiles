@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d15ac0ebff651fa19a984835b9621e442a7febafcc0b67aafa6a3e80438d0ac9
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global _hardened_build 1
 
 %ifarch %{kernel_arches}
@@ -85,10 +93,6 @@ Source5:        nbdkit-find-provides
 Source6:        %{modulename}.te
 Source7:        %{modulename}.if
 Source8:        %{modulename}.fc
-# oreon url source checksums begin
-%global source0_sha256 d15ac0ebff651fa19a984835b9621e442a7febafcc0b67aafa6a3e80438d0ac9
-%global source0_file nbdkit-1.47.9.tar.gz
-# oreon url source checksums end
 
 # For applying the patches:
 BuildRequires:  git
@@ -827,9 +831,7 @@ development kit for 64 bit versions of Windows.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/nbdkit-1.47.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d15ac0ebff651fa19a984835b9621e442a7febafcc0b67aafa6a3e80438d0ac9" || { echo "oreon: Source0 SHA256 mismatch for nbdkit-1.47.9.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if 0%{verify_tarball_signature}
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

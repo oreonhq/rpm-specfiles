@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4f48cdbc04516592e659c40145b500cd25a0638a3d148e1722864e02522669d5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		rteval
 Version:	3.10
 Release:	5%{?dist}
@@ -9,10 +17,6 @@ URL:		https://git.kernel.org/pub/scm/utils/rteval/rteval.git
 Source0:	https://www.kernel.org/pub/linux/utils/%{name}/%{name}-%{version}.tar.xz
 # https://lore.kernel.org/linux-rt-users/20251126231223.100316-1-yselkowi@redhat.com/T/#u
 Patch0:         0001-rteval-do-not-require-wheel-for-building.patch
-# oreon url source checksums begin
-%global source0_sha256 4f48cdbc04516592e659c40145b500cd25a0638a3d148e1722864e02522669d5
-%global source0_file rteval-3.10.tar.xz
-# oreon url source checksums end
 
 BuildRequires:	python3-devel
 Requires:	python3-libxml2
@@ -45,9 +49,7 @@ a statistical analysis of the event response times is done and printed
 to the screen.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rteval-3.10.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4f48cdbc04516592e659c40145b500cd25a0638a3d148e1722864e02522669d5" || { echo "oreon: Source0 SHA256 mismatch for rteval-3.10.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -v -p1
 # Delete setup.py so pyproject.toml build doesn't use it
 rm -f setup.py

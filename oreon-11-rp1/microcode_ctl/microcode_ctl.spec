@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 75fd729182e56a51bc7a6a5becf49b0b266e20cd0c4355f0b490d06aa0d4ba2c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define upstream_version 2.1-51
 %global debug_package %{nil}
 
@@ -9,10 +17,6 @@ Epoch:          2
 License:        GPL-2.0-or-later AND LicenseRef-Fedora-Firmware
 URL:            https://pagure.io/microcode_ctl
 Source0:        https://releases.pagure.org/microcode_ctl/%{name}-%{upstream_version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 75fd729182e56a51bc7a6a5becf49b0b266e20cd0c4355f0b490d06aa0d4ba2c
-%global source0_file microcode_ctl-2.1-51.tar.xz
-# oreon url source checksums end
 ExclusiveArch:  %{ix86} x86_64
 BuildRequires: make
 
@@ -25,9 +29,7 @@ boot i.e. it doesn't reflash your cpu permanently, reboot and it reverts
 back to the old microcode.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/microcode_ctl-2.1-51.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "75fd729182e56a51bc7a6a5becf49b0b266e20cd0c4355f0b490d06aa0d4ba2c" || { echo "oreon: Source0 SHA256 mismatch for microcode_ctl-2.1-51.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{upstream_version}
 
 %build

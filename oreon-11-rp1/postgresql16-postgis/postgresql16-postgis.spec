@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 58ff19ae133e470280efb4949ef92e0364d4c2a66bef8c57e69477348d815ea3
+%global source3_sha256 1217a0212aaa143e44831849d1845b198f248923d7e96634219d3369a6ec8714
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?javabuild:%global javabuild 0}
 %{!?utils:%global utils 1}
 %{!?gcj_support:%global gcj_support 0}
@@ -34,12 +44,6 @@ Source3:       https://download.osgeo.org/postgis/source/postgis-%{prevversion}.
 Patch1:        postgis2-proj8.patch
 Patch2:	       postgis-c99.patch
 Patch3:	       postgis-c99-2.patch
-# oreon url source checksums begin
-%global source0_sha256 58ff19ae133e470280efb4949ef92e0364d4c2a66bef8c57e69477348d815ea3
-%global source0_file postgis-3.6.3.tar.gz
-%global source3_sha256 1217a0212aaa143e44831849d1845b198f248923d7e96634219d3369a6ec8714
-%global source3_file postgis-2.5.5.tar.gz
-# oreon url source checksums end
 %endif
 
 # 
@@ -207,10 +211,7 @@ Requires:      %{pkgname}%{?_isa} = %{version}-%{release}
 The client package provides shp2pgsql, raster2pgsql and pgsql2shp for PostGIS.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/postgis-3.6.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "58ff19ae133e470280efb4949ef92e0364d4c2a66bef8c57e69477348d815ea3" || { echo "oreon: Source0 SHA256 mismatch for postgis-3.6.3.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/postgis-2.5.5.tar.gz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1217a0212aaa143e44831849d1845b198f248923d7e96634219d3369a6ec8714" || { echo "oreon: Source3 SHA256 mismatch for postgis-2.5.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if %upgrade_prev
 %setup -q -n postgis-%{version} -a 3
 %else

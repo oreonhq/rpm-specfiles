@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a1a39ffcea3ff2a7a7aae0c23877ddf4918b554bf82b0de5d7ce8e7f61ea8e32
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global apiversion 0.3
 
 Name: libmwaw
@@ -8,10 +16,6 @@ Summary: A library for import of many old Mac document formats
 License: LGPL-2.1-or-later OR MPL-2.0
 URL: http://sourceforge.net/projects/libmwaw/
 Source: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 a1a39ffcea3ff2a7a7aae0c23877ddf4918b554bf82b0de5d7ce8e7f61ea8e32
-%global source0_file libmwaw-0.3.22.tar.xz
-# oreon url source checksums end
 
 BuildRequires: doxygen
 BuildRequires: gcc-c++
@@ -53,9 +57,7 @@ Tools to transform the supported document formats into other formats.
 Supported output formats are CSV, HTML, SVG, plain text and raw.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libmwaw-0.3.22.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a1a39ffcea3ff2a7a7aae0c23877ddf4918b554bf82b0de5d7ce8e7f61ea8e32" || { echo "oreon: Source0 SHA256 mismatch for libmwaw-0.3.22.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

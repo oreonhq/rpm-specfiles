@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 670201ab9076b200856e0e17cf8a8fe3be4c1a2049d7e469b386465d5852170b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Tie-DataUUID
 Version:        1.02
 Release:        28%{?dist}
@@ -5,10 +13,6 @@ Summary:        Tie interface to Data::UUID
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tie-DataUUID
 Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARKF/Tie-DataUUID-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 670201ab9076b200856e0e17cf8a8fe3be4c1a2049d7e469b386465d5852170b
-%global source0_file Tie-DataUUID-1.02.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -49,9 +53,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Tie-DataUUID-1.02.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "670201ab9076b200856e0e17cf8a8fe3be4c1a2049d7e469b386465d5852170b" || { echo "oreon: Source0 SHA256 mismatch for Tie-DataUUID-1.02.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Tie-DataUUID-%{version}
 # Remove bundles modules
 rm -rf inc/*

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b9ffb88e62a06aa91bd7d5a28ef6bdbb942608aea90e3969aa29b33640035214
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-App-cpanminus
 Version:        1.7049
 Release:        1%{?dist}
@@ -14,10 +22,6 @@ Source1:        fatunpack
 # Correct an SHA version in a message, in upstream's devel branch,
 # <https://github.com/miyagawa/cpanminus/pull/617>
 Patch0:         App-cpanminus-1.7044-SHA1-SHA256-in-checksum-chat.patch
-# oreon url source checksums begin
-%global source0_sha256 b9ffb88e62a06aa91bd7d5a28ef6bdbb942608aea90e3969aa29b33640035214
-%global source0_file App-cpanminus-1.7049.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  %{_bindir}/podselect
 BuildRequires:  coreutils
@@ -132,9 +136,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/App-cpanminus-1.7049.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b9ffb88e62a06aa91bd7d5a28ef6bdbb942608aea90e3969aa29b33640035214" || { echo "oreon: Source0 SHA256 mismatch for App-cpanminus-1.7049.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n App-cpanminus-%{version}
 # Unbundle fat-packed modules
 podselect lib/App/cpanminus.pm > lib/App/cpanminus.pod

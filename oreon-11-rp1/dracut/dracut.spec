@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 159f83eab58a45885c0c2cc6969c35dc5ebac7b7340e659abe5cc9b8b452bf4b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define dracutlibdir %{_prefix}/lib/dracut
 %bcond_without doc
 
@@ -43,10 +51,6 @@ Patch6:  0006-fix-ossl-ignore-compiler-warnings.patch
 # Revert "feat(fips): include openssl's fips.so and openssl.cnf"
 # Author: Pavel Valena <pvalena@redhat.com>
 Patch7:  0007-Revert-feat-fips-include-openssl-s-fips.so-and-opens.patch
-# oreon url source checksums begin
-%global source0_sha256 159f83eab58a45885c0c2cc6969c35dc5ebac7b7340e659abe5cc9b8b452bf4b
-%global source0_file 109.tar.gz
-# oreon url source checksums end
 
 # Please use source-git to work with this spec file:
 # HowTo: https://packit.dev/source-git/work-with-source-git
@@ -185,9 +189,7 @@ in a squashfs image, result in a smaller initramfs size and reduce runtime memor
 usage.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/109.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "159f83eab58a45885c0c2cc6969c35dc5ebac7b7340e659abe5cc9b8b452bf4b" || { echo "oreon: Source0 SHA256 mismatch for 109.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-ng-%{version} -S git_am
 cp %{SOURCE1} .
 

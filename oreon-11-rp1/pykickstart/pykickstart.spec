@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 49bbc8a51b43a071af9e89944248929a6f3c038731e1a868701dc939aab4dc57
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Enable tests by default. To disable them use:
 #     rpmbuild -ba --without runtests pykickstart.spec
 %bcond_without runtests
@@ -12,10 +20,6 @@ Url:       http://fedoraproject.org/wiki/pykickstart
 Source0:   https://github.com/pykickstart/%{name}/releases/download/r%{version}/%{name}-%{version}.tar.gz
 %if %{with signed}
 Source1:   https://github.com/pykickstart/%{name}/releases/download/r%{version}/%{name}-%{version}.tar.gz.asc
-# oreon url source checksums begin
-%global source0_sha256 49bbc8a51b43a071af9e89944248929a6f3c038731e1a868701dc939aab4dc57
-%global source0_file pykickstart-3.69.tar.gz
-# oreon url source checksums end
 %endif
 
 BuildArch: noarch
@@ -49,9 +53,7 @@ Python 3 library for manipulating kickstart files.  The binaries are found in
 the pykickstart package.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pykickstart-3.69.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "49bbc8a51b43a071af9e89944248929a6f3c038731e1a868701dc939aab4dc57" || { echo "oreon: Source0 SHA256 mismatch for pykickstart-3.69.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

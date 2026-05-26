@@ -1,3 +1,15 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 652a98ca833ed638809a52bec225a7f37799f71a995778f9ccb68ad03bd1fc11
+%global source1_sha256 6f0d517e0c47e6446c74cf5503c87312181b80f04c95743f99f05af3ccc5e5a6
+%global source2_sha256 f6b50b0c103392af32a8be15b2b9d25959de9a00a70c3979128aafeaa5338b3f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # bcond default logic is nicely backwards...
 %bcond_without tcl
 %bcond_without tools
@@ -23,14 +35,6 @@ Source2: http://www.sqlite.org/%{year}/sqlite-autoconf-%{realver}.tar.gz
 # Support a system-wide lemon template
 Patch1: sqlite-3.6.23-lemon-system-template.patch
 Patch2: sqlite-3.49.0-fix-lemon-missing-cflags.patch
-# oreon url source checksums begin
-%global source0_sha256 652a98ca833ed638809a52bec225a7f37799f71a995778f9ccb68ad03bd1fc11
-%global source0_file sqlite-src-3520000.zip
-%global source1_sha256 6f0d517e0c47e6446c74cf5503c87312181b80f04c95743f99f05af3ccc5e5a6
-%global source1_file sqlite-doc-3520000.zip
-%global source2_sha256 f6b50b0c103392af32a8be15b2b9d25959de9a00a70c3979128aafeaa5338b3f
-%global source2_file sqlite-autoconf-3520000.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc gcc-c++
@@ -178,11 +182,7 @@ This package contains the analysis program for %{name}.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sqlite-src-3520000.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "652a98ca833ed638809a52bec225a7f37799f71a995778f9ccb68ad03bd1fc11" || { echo "oreon: Source0 SHA256 mismatch for sqlite-src-3520000.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/sqlite-doc-3520000.zip; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6f0d517e0c47e6446c74cf5503c87312181b80f04c95743f99f05af3ccc5e5a6" || { echo "oreon: Source1 SHA256 mismatch for sqlite-doc-3520000.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/sqlite-autoconf-3520000.tar.gz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f6b50b0c103392af32a8be15b2b9d25959de9a00a70c3979128aafeaa5338b3f" || { echo "oreon: Source2 SHA256 mismatch for sqlite-autoconf-3520000.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -a1 -n %{name}-src-%{realver}
 %patch -P 1 -p1
 %patch -P 2 -p1

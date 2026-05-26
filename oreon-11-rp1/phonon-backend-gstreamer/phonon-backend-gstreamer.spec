@@ -1,3 +1,10 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c5871835521d015ef2ad1276b1f58340d946c2903466337f3170bac3c58d61f2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
 
 Summary: Gstreamer phonon backend
 Name:    phonon-backend-gstreamer
@@ -16,10 +23,6 @@ URL:     https://community.kde.org/Phonon
 %global stable stable
 %endif
 Source0: http://download.kde.org/%{stable}/phonon/phonon-backend-gstreamer/%{version}/phonon-backend-gstreamer-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 c5871835521d015ef2ad1276b1f58340d946c2903466337f3170bac3c58d61f2
-%global source0_file phonon-backend-gstreamer-4.10.0.tar.xz
-# oreon url source checksums end
 
 ## upstream patches
 
@@ -52,9 +55,7 @@ Requires: gstreamer1-plugins-good%{?_isa}
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/phonon-backend-gstreamer-4.10.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c5871835521d015ef2ad1276b1f58340d946c2903466337f3170bac3c58d61f2" || { echo "oreon: Source0 SHA256 mismatch for phonon-backend-gstreamer-4.10.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n phonon-backend-gstreamer-%{version} -p1
 
 

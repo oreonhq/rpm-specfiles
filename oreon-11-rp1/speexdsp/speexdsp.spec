@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8c777343e4a6399569c72abc38a95b24db56882c83dbdb6c6424a5f4aeb54d3d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           speexdsp
 Version:        1.2.1
 Release:        10%{?dist}
@@ -6,10 +14,6 @@ Summary:        A voice compression format (DSP)
 License:        BSD-3-Clause
 URL:            http://www.speex.org/
 Source0:        http://downloads.xiph.org/releases/speex/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 8c777343e4a6399569c72abc38a95b24db56882c83dbdb6c6424a5f4aeb54d3d
-%global source0_file speexdsp-1.2.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -41,9 +45,7 @@ This is the DSP package, see the speex package for the codec part.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/speexdsp-1.2.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8c777343e4a6399569c72abc38a95b24db56882c83dbdb6c6424a5f4aeb54d3d" || { echo "oreon: Source0 SHA256 mismatch for speexdsp-1.2.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1bbfbf7d1d4871e5a83bab2137e22d089078206815190eb1d5c1260a3499456f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %bcond_without perl_Pod_Plainer_enables_optional_test
 
@@ -8,10 +16,6 @@ Summary:    Perl extension for converting modern POD to old-style POD
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:        https://metacpan.org/release/Pod-Plainer
 Source0:    https://cpan.metacpan.org/authors/id/R/RM/RMBARKER/Pod-Plainer-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 1bbfbf7d1d4871e5a83bab2137e22d089078206815190eb1d5c1260a3499456f
-%global source0_file Pod-Plainer-1.04.tar.gz
-# oreon url source checksums end
 BuildArch:  noarch
 BuildRequires:  make
 BuildRequires:  perl-generators
@@ -47,9 +51,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Pod-Plainer-1.04.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1bbfbf7d1d4871e5a83bab2137e22d089078206815190eb1d5c1260a3499456f" || { echo "oreon: Source0 SHA256 mismatch for Pod-Plainer-1.04.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Pod-Plainer-%{version}
 # Help generators to recognize Perl scripts
 for F in $(find t/ -name '*.t'); do

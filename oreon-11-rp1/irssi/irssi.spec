@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 72a951cb0ad622785a8962801f005a3a412736c7e7e3ce152f176287c52fe062
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?rhel} < 10
 %bcond_without	otr
 %else
@@ -41,10 +49,6 @@ Requires:	perl(lib)
 Requires:	perl(Symbol)
 # https://github.com/irssi/irssi/issues/1374
 Patch0:		irssi-1.4.1-botti-perl-link-fix.patch
-# oreon url source checksums begin
-%global source0_sha256 72a951cb0ad622785a8962801f005a3a412736c7e7e3ce152f176287c52fe062
-%global source0_file irssi-1.4.5.tar.xz
-# oreon url source checksums end
 
 %package devel
 Summary:	Development package for irssi
@@ -65,9 +69,7 @@ being maintained.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/irssi-1.4.5.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "72a951cb0ad622785a8962801f005a3a412736c7e7e3ce152f176287c52fe062" || { echo "oreon: Source0 SHA256 mismatch for irssi-1.4.5.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

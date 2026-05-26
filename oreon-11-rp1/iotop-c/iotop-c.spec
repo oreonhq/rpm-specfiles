@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7740ada353262808c12f19b5efc37b3c7bfb6be3be4abc0404557806d0204b26
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           iotop-c
 Version:        1.31
 Release:        1%{?dist}
@@ -8,10 +16,6 @@ URL:            https://github.com/Tomas-M/iotop/
 Source0:        https://github.com/Tomas-M/iotop/releases/download/v%{version}/iotop-%{version}.tar.xz
 Source1:        https://github.com/Tomas-M/iotop/releases/download/v%{version}/iotop-%{version}.tar.xz.asc
 Source2:        https://raw.githubusercontent.com/Tomas-M/iotop/v%{version}/debian/upstream/signing-key.asc
-# oreon url source checksums begin
-%global source0_sha256 7740ada353262808c12f19b5efc37b3c7bfb6be3be4abc0404557806d0204b26
-%global source0_file iotop-1.31.tar.xz
-# oreon url source checksums end
 
 Provides:       iotop
 Obsoletes:      iotop < 0.7
@@ -40,9 +44,7 @@ possible.
 %global _hardened_build 1
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/iotop-1.31.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7740ada353262808c12f19b5efc37b3c7bfb6be3be4abc0404557806d0204b26" || { echo "oreon: Source0 SHA256 mismatch for iotop-1.31.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -n iotop-%{version}
 

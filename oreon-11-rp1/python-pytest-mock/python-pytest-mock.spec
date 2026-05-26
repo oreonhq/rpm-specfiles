@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1849a238f6f396da19762269de72cb1814ab44416fa73a8686deac10b0d87a0f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pypi_name pytest_mock
 %global package_name pytest-mock
 %global file_name pytest_mock
@@ -10,10 +18,6 @@ Summary:        Thin-wrapper around the mock package for easier use with py.test
 License:        MIT
 URL:            https://github.com/pytest-dev/pytest-mock/
 Source0:        https://files.pythonhosted.org/packages/source/p/pytest_mock/pytest_mock-3.15.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 1849a238f6f396da19762269de72cb1814ab44416fa73a8686deac10b0d87a0f
-%global source0_file pytest_mock-3.15.1.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -39,9 +43,7 @@ patching API provided by the mock package, but with the benefit of not having
 to worry about undoing patches at the end of a test.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pytest_mock-3.15.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1849a238f6f396da19762269de72cb1814ab44416fa73a8686deac10b0d87a0f" || { echo "oreon: Source0 SHA256 mismatch for pytest_mock-3.15.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{file_name}-%{version} -p1
 # Correct end of line encoding for README
 sed -i 's/\r$//' README.rst

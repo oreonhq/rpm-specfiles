@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b10aceb30e93ddf13b2030eb70079574ba437be9b3b76065caf28a72c07e23e7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 #global pre_release .pre1
 
 Name:		libva
@@ -9,10 +17,6 @@ Summary:	Video Acceleration (VA) API for Linux
 License:	MIT AND HPND-sell-variant AND ICU
 URL:		https://github.com/intel/libva
 Source0:        https://github.com/intel/libva/archive/2.23.0/libva-2.23.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 b10aceb30e93ddf13b2030eb70079574ba437be9b3b76065caf28a72c07e23e7
-%global source0_file libva-2.23.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -48,9 +52,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libva-2.23.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b10aceb30e93ddf13b2030eb70079574ba437be9b3b76065caf28a72c07e23e7" || { echo "oreon: Source0 SHA256 mismatch for libva-2.23.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}%{?pre_release}
 
 %build

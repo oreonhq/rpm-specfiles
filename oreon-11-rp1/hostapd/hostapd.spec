@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2b3facb632fd4f65e32f4bf82a76b4b72c501f995a4f62e330219fe7aed1747a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global _hardened_build 1
 
 Name:           hostapd
@@ -16,10 +24,6 @@ Source5:        %{name}.init
 
 # use pkcs11-provider instead of OpenSSL engine
 Patch1: OpenSSL-Use-pkcs11-provider-when-OPENSSL_NO_ENGINE-i.patch
-# oreon url source checksums begin
-%global source0_sha256 2b3facb632fd4f65e32f4bf82a76b4b72c501f995a4f62e330219fe7aed1747a
-%global source0_file hostapd-2.11.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  libnl3-devel
 BuildRequires:  openssl-devel
@@ -66,9 +70,7 @@ Requires:       perl-interpreter
 Logwatch scripts for hostapd.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/hostapd-2.11.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2b3facb632fd4f65e32f4bf82a76b4b72c501f995a4f62e330219fe7aed1747a" || { echo "oreon: Source0 SHA256 mismatch for hostapd-2.11.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 sed \
     -e '$ a CONFIG_SAE=y' \

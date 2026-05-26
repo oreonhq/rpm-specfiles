@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 558544ad358283a7ab2930d69a9ceddf913f4a51ee9bf1bfb9e377322af81a69
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # To get the gmp-api commit to use, run:
 # rm -rf gmp-api;make gmp-bootstrap;cd gmp-api;git rev-parse HEAD
 %global commit1 1f5a2f07a565a9465c14d3a8b12f3202f83c775e
@@ -26,10 +34,6 @@ Source0:        https://github.com/cisco/openh264/archive/v%{version}/openh264-%
 Source1:        https://github.com/mozilla/gmp-api/archive/%{commit1}/gmp-api-%{shortcommit1}.tar.gz
 
 Patch0:         0001-Update-shared-lib-version-for-meson-3860.patch
-# oreon url source checksums begin
-%global source0_sha256 558544ad358283a7ab2930d69a9ceddf913f4a51ee9bf1bfb9e377322af81a69
-%global source0_file openh264-2.6.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  make
@@ -66,9 +70,7 @@ browsers.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/openh264-2.6.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "558544ad358283a7ab2930d69a9ceddf913f4a51ee9bf1bfb9e377322af81a69" || { echo "oreon: Source0 SHA256 mismatch for openh264-2.6.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P 0 -p1
 

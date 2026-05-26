@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 caa2fa959e389f4374d9e2df3af5c633452c12dd80442cba2e89cb7ff2b93c5b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: libopenmpt
 Version: 0.8.6
 Release: 1%{?dist}
@@ -10,10 +18,6 @@ Summary: C/C++ library to decode tracker music module (MOD) files
 URL: https://lib.openmpt.org/libopenmpt/
 
 Source0: https://lib.openmpt.org/files/libopenmpt/src/%{tar_root}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 caa2fa959e389f4374d9e2df3af5c633452c12dd80442cba2e89cb7ff2b93c5b
-%global source0_file libopenmpt-0.8.6+release.autotools.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc-c++
@@ -61,9 +65,7 @@ Files needed when building software which uses libopenmpt.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libopenmpt-0.8.6+release.autotools.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "caa2fa959e389f4374d9e2df3af5c633452c12dd80442cba2e89cb7ff2b93c5b" || { echo "oreon: Source0 SHA256 mismatch for libopenmpt-0.8.6+release.autotools.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{tar_root}
 sed -i 's/\r$//' LICENSE
 

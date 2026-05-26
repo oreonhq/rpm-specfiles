@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9d7be8a56d1bedda05c425306cc504ba134307e0c09bda4a788c98744ebcd95d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if ! (0%{?rhel})
 %{bcond_without perl_Net_SSLeay_enables_optional_test}
 %else
@@ -20,10 +28,6 @@ Source0:	https://cpan.metacpan.org/authors/id/C/CH/CHRISN/Net-SSLeay-1.94.tar.gz
 
 Patch0:		https://patch-diff.githubusercontent.com/raw/radiator-software/p5-net-ssleay/pull/514.patch
 Patch10:	Net-SSLeay-1.90-pkgconfig.patch
-# oreon url source checksums begin
-%global source0_sha256 9d7be8a56d1bedda05c425306cc504ba134307e0c09bda4a788c98744ebcd95d
-%global source0_file Net-SSLeay-1.94.tar.gz
-# oreon url source checksums end
 # =========== Module Build ===========================
 BuildRequires:	coreutils
 BuildRequires:	findutils
@@ -93,9 +97,7 @@ clients, and finally access to the SSL API of SSLeay/OpenSSL package
 so you can write servers or clients for more complicated applications.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Net-SSLeay-1.94.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9d7be8a56d1bedda05c425306cc504ba134307e0c09bda4a788c98744ebcd95d" || { echo "oreon: Source0 SHA256 mismatch for Net-SSLeay-1.94.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Net-SSLeay-%{version}
 
 # Fix for test suite compatibility with OpenSSL 3.4

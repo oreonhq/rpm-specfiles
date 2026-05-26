@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 38e0321f2d1811a4a7cc6f3ab784ff7d17efc9fda89a32ae9212af80f52c722c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:       ibus-sayura
 Version:    1.3.2
 Release:    35%{?dist}
@@ -9,10 +17,6 @@ Source0:    https://releases.pagure.org/ibus-sayura/%{name}-%{version}.tar.gz
 # This is a test patch so not submitted to upstream yet
 # This patch is created by Mike Fabian
 Patch0:     fix-for-wayland-rhbz1724759.patch
-# oreon url source checksums begin
-%global source0_sha256 38e0321f2d1811a4a7cc6f3ab784ff7d17efc9fda89a32ae9212af80f52c722c
-%global source0_file ibus-sayura-1.3.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gettext-devel
 BuildRequires:  libtool
@@ -24,9 +28,7 @@ Requires:   ibus
 The Sayura engine for IBus platform. It provides Sinhala input method.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ibus-sayura-1.3.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "38e0321f2d1811a4a7cc6f3ab784ff7d17efc9fda89a32ae9212af80f52c722c" || { echo "oreon: Source0 SHA256 mismatch for ibus-sayura-1.3.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

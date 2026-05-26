@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c9b4a9f7c05a725086dc7eab8cb151a60ad811ea0c75a7d1a8c422d5d22b598c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
 
@@ -68,10 +76,6 @@ Source7:       libguestfs.keyring
 
 # Maintainer script which helps with handling patches.
 Source8:       copy-patches.sh
-# oreon url source checksums begin
-%global source0_sha256 c9b4a9f7c05a725086dc7eab8cb151a60ad811ea0c75a7d1a8c422d5d22b598c
-%global source0_file libguestfs-1.59.4.tar.gz
-# oreon url source checksums end
 
 BuildRequires: autoconf, automake, libtool, gettext-devel
 
@@ -620,9 +624,7 @@ for %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libguestfs-1.59.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c9b4a9f7c05a725086dc7eab8cb151a60ad811ea0c75a7d1a8c422d5d22b598c" || { echo "oreon: Source0 SHA256 mismatch for libguestfs-1.59.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if 0%{verify_tarball_signature}
 %{gpgverify} --keyring='%{SOURCE7}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4aa50994232da74499b60b3ebf79118e30a1943be375b7d931dcf18df5442fd3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global _hardened_build 1
 
 # this is a correct if, bcond_with actually means without and vice versa
@@ -46,10 +54,6 @@ Requires: (selinux-policy >= 36.5 if selinux-policy)
 
 Patch0: 1-rt-comment-out-have-aesni.patch
 Patch1: 2-rt-revert-build-randstat.patch
-# oreon url source checksums begin
-%global source0_sha256 4aa50994232da74499b60b3ebf79118e30a1943be375b7d931dcf18df5442fd3
-%global source0_file rng-tools-6.17.tar.gz
-# oreon url source checksums end
 
 %description
 This is a random number generator daemon and its tools. It monitors
@@ -57,9 +61,7 @@ a set of entropy sources present on a system (like /dev/hwrng, RDRAND,
 TPM, jitter) and supplies entropy from them to a kernel entropy pool.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rng-tools-6.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4aa50994232da74499b60b3ebf79118e30a1943be375b7d931dcf18df5442fd3" || { echo "oreon: Source0 SHA256 mismatch for rng-tools-6.17.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p0
 
 %build

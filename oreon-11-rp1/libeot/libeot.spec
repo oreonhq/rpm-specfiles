@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 cf5091fa8e7dcdbe667335eb90a2cfdd0a3fe8f8c7c8d1ece44d9d055736a06a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: libeot
 Version: 0.01
 Release: %autorelease
@@ -6,10 +14,6 @@ Summary: A library for parsing Embedded OpenType font files
 License: MPL-2.0
 URL: https://github.com/umanwizard/libeot
 Source: http://dev-www.libreoffice.org/src/%{name}-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 cf5091fa8e7dcdbe667335eb90a2cfdd0a3fe8f8c7c8d1ece44d9d055736a06a
-%global source0_file libeot-0.01.tar.bz2
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: make
@@ -35,9 +39,7 @@ Tools to transform EOT font files into other formats. Only TTF is
 supported currently.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libeot-0.01.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cf5091fa8e7dcdbe667335eb90a2cfdd0a3fe8f8c7c8d1ece44d9d055736a06a" || { echo "oreon: Source0 SHA256 mismatch for libeot-0.01.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 37fd43a34e8118406e03a5d0e53f4a03c8aa50b219e8484a5d42349dc0f2c3fe
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # disable _package_note_flags
 %undefine _package_note_flags
 
@@ -256,10 +264,6 @@ Patch300: kdelibs-4.14.16-webkit.patch
 
 # set abrt default
 Patch301: kdelibs-4.x-abrt.patch
-# oreon url source checksums begin
-%global source0_sha256 37fd43a34e8118406e03a5d0e53f4a03c8aa50b219e8484a5d42349dc0f2c3fe
-%global source0_file kdelibs-4.14.38.tar.xz
-# oreon url source checksums end
 
 # kmailservice/ktelnetservice moved here
 Conflicts: kdelibs3 < 3.5.10-42
@@ -507,9 +511,7 @@ format for use with the Qt 4 Assistant or KDevelop 4.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kdelibs-4.14.38.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "37fd43a34e8118406e03a5d0e53f4a03c8aa50b219e8484a5d42349dc0f2c3fe" || { echo "oreon: Source0 SHA256 mismatch for kdelibs-4.14.38.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n kdelibs-%{version}
 
 %patch -P0 -p1 -b .parallel_devel

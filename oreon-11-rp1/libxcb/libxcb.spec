@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 599ebf9996710fea71622e6e184f3a8ad5b43d0e5fa8c4e407123c88a59a6d55
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Name:       libxcb
@@ -14,10 +22,6 @@ Source0:    http://xcb.freedesktop.org/dist/%{name}-%{version}.tar.xz
 # we don't need the library because glibc has working pthreads, but we need
 # the pkgconfig file so libs that link against libxcb know this...
 Source1:    pthread-stubs.pc.in
-# oreon url source checksums begin
-%global source0_sha256 599ebf9996710fea71622e6e184f3a8ad5b43d0e5fa8c4e407123c88a59a6d55
-%global source0_file libxcb-1.17.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  make
 BuildRequires:  doxygen
@@ -51,9 +55,7 @@ BuildArch:  noarch
 The %{name}-doc package contains documentation for the %{name} library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libxcb-1.17.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "599ebf9996710fea71622e6e184f3a8ad5b43d0e5fa8c4e407123c88a59a6d55" || { echo "oreon: Source0 SHA256 mismatch for libxcb-1.17.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

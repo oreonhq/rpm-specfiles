@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fdd805e233784aaee94459923165e61b6d72d0f9643cf38c7fc4213fc081fb20
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # The canonical copy of this spec file is upstream at:
 # https://github.com/coreos/rpm-ostree/blob/main/packaging/rpm-ostree.spec
 
@@ -14,10 +22,6 @@ Source0: https://github.com/coreos/rpm-ostree/releases/download/v%{version}/rpm-
 Patch0: 0001-rpmostreed-transaction-types-fix-override-reset.patch
 Patch1: 0001-Fix-silent-upgrade-failure-on-container-systems.patch
 Patch2: 0001-deploy-Print-status-message-on-container-early-retur.patch
-# oreon url source checksums begin
-%global source0_sha256 fdd805e233784aaee94459923165e61b6d72d0f9643cf38c7fc4213fc081fb20
-%global source0_file rpm-ostree-2026.1.tar.xz
-# oreon url source checksums end
 
 # See https://github.com/coreos/fedora-coreos-tracker/issues/1716
 # ostree not on i686 for RHEL 10
@@ -198,9 +202,7 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 The %{name}-devel package includes the header files for %{name}-libs.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rpm-ostree-2026.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fdd805e233784aaee94459923165e61b6d72d0f9643cf38c7fc4213fc081fb20" || { echo "oreon: Source0 SHA256 mismatch for rpm-ostree-2026.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -Sgit -n %{name}-%{version} -p1
 %if 0%{?__isa_bits} == 32
 sed -ie 's,^lto = true,lto = false,' Cargo.toml

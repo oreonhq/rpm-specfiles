@@ -1,3 +1,15 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957
+%global source1_sha256 697ebe6625444aef5080f58e49d03424bbb52e08bf483d3ddb5acf10cbd15740
+%global source3_sha256 4809b438f61e404dec1c857d56c8d60724312c19bd8b8cf720a1fbedf4f0766f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Timezone data
 Name: tzdata
 Version: 2025c
@@ -11,14 +23,6 @@ Source1: https://www.iana.org/time-zones/repository/releases/tzcode%{tzcode_vers
 
 Patch002: 0002-Fix-have-snprintf-error.patch
 Patch003: 0003-continue-to-ship-posixrules.patch
-# oreon url source checksums begin
-%global source0_sha256 4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957
-%global source0_file tzdata2025c.tar.gz
-%global source1_sha256 697ebe6625444aef5080f58e49d03424bbb52e08bf483d3ddb5acf10cbd15740
-%global source1_file tzcode2025c.tar.gz
-%global source3_sha256 4809b438f61e404dec1c857d56c8d60724312c19bd8b8cf720a1fbedf4f0766f
-%global source3_file javazic-1.8-37392f2f5d59.tar.xz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: gcc
@@ -47,11 +51,7 @@ Patch101: javazic-harden-links.patch
 This package contains timezone information for use by Java runtimes.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/tzdata2025c.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4aa79e4effee53fc4029ffe5f6ebe97937282ebcdf386d5d2da91ce84142f957" || { echo "oreon: Source0 SHA256 mismatch for tzdata2025c.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/tzcode2025c.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "697ebe6625444aef5080f58e49d03424bbb52e08bf483d3ddb5acf10cbd15740" || { echo "oreon: Source1 SHA256 mismatch for tzcode2025c.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/javazic-1.8-37392f2f5d59.tar.xz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4809b438f61e404dec1c857d56c8d60724312c19bd8b8cf720a1fbedf4f0766f" || { echo "oreon: Source3 SHA256 mismatch for javazic-1.8-37392f2f5d59.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -c -a 1
 
 %patch -p1 -P 2

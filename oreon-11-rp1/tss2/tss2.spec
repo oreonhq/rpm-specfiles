@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 66d46728f104d3ddfa442dd006d166129ec8c39ab1a5174ed1ca9423a9099794
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 #
 # Spec file for IBM's TSS for the TPM 2.0
 #
@@ -16,10 +24,6 @@ Summary:        IBM's TCG Software Stack (TSS) for TPM 2.0 and related utilities
 License:        BSD-3-Clause AND LicenseRef-TCGL
 URL:            https://sourceforge.net/projects/ibmtpm20tss/
 Source0:        https://sourceforge.net/projects/ibmtpm20tss/files/ibmtss%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 66d46728f104d3ddfa442dd006d166129ec8c39ab1a5174ed1ca9423a9099794
-%global source0_file ibmtss2.3.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  automake
 BuildRequires:  autoconf
@@ -46,9 +50,7 @@ Development libraries and headers for IBM's TSS 2.0. You will need this in
 order to build TSS 2.0 applications.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ibmtss2.3.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "66d46728f104d3ddfa442dd006d166129ec8c39ab1a5174ed1ca9423a9099794" || { echo "oreon: Source0 SHA256 mismatch for ibmtss2.3.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -c %{name}-%{version}
 
 %build

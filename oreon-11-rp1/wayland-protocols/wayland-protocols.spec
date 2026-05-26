@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5fd4349bcbc9bab9a46f8cf77d1f434296a7a052c87440a094f63fcf62a58e20
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Header-only library
 %global debug_package %{nil}
 
@@ -9,10 +17,6 @@ Summary:        Wayland protocols that adds functionality not available in the c
 License:        MIT
 URL:            https://wayland.freedesktop.org/
 Source0:        https://gitlab.freedesktop.org/wayland/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 5fd4349bcbc9bab9a46f8cf77d1f434296a7a052c87440a094f63fcf62a58e20
-%global source0_file wayland-protocols-1.47.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  gcc-g++
@@ -39,9 +43,7 @@ protocol either in Wayland core, or some other protocol in
 wayland-protocols.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/wayland-protocols-1.47.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5fd4349bcbc9bab9a46f8cf77d1f434296a7a052c87440a094f63fcf62a58e20" || { echo "oreon: Source0 SHA256 mismatch for wayland-protocols-1.47.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

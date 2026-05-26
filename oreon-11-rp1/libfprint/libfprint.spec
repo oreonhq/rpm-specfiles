@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8d5b202e836f69076c90ead0a654b0ee275788922359ebc9d7706bb5cde7ca54
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libfprint
 
 Version:        1.94.10
@@ -10,10 +18,6 @@ Summary:        Toolkit for fingerprint scanner
 License:        LGPL-2.1-or-later AND NIST-PD
 URL:            http://www.freedesktop.org/wiki/Software/fprint/libfprint
 Source0:        https://gitlab.freedesktop.org/libfprint/libfprint/-/archive/v%{version}/libfprint-v%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 8d5b202e836f69076c90ead0a654b0ee275788922359ebc9d7706bb5cde7ca54
-%global source0_file libfprint-v1.94.10.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -54,9 +58,7 @@ The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libfprint-v1.94.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8d5b202e836f69076c90ead0a654b0ee275788922359ebc9d7706bb5cde7ca54" || { echo "oreon: Source0 SHA256 mismatch for libfprint-v1.94.10.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -n libfprint-v%{version}
 
 %build

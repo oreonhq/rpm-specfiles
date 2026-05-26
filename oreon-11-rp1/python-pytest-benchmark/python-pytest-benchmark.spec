@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 85418c186ac26a9f3cc15d255cd40bb145f8681d0fca044768dd50fa05c8aafe
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname pytest-benchmark
 
 Name: python-%{srcname}
@@ -8,10 +16,6 @@ Summary: A py.test fixture for benchmarking code
 License: LicenseRef-Callaway-BSD
 URL: https://pytest-benchmark.readthedocs.io
 Source: https://github.com/ionelmc/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 85418c186ac26a9f3cc15d255cd40bb145f8681d0fca044768dd50fa05c8aafe
-%global source0_file pytest-benchmark-5.1.0.tar.gz
-# oreon url source checksums end
 BuildArch: noarch
 BuildRequires: python3-devel
 
@@ -37,9 +41,7 @@ Requires: python3-cpuinfo
 %description -n python3-%{srcname} %_description
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pytest-benchmark-5.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "85418c186ac26a9f3cc15d255cd40bb145f8681d0fca044768dd50fa05c8aafe" || { echo "oreon: Source0 SHA256 mismatch for pytest-benchmark-5.1.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{srcname}-%{version}
 
 %generate_buildrequires

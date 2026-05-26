@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8fc7dc560167b2cb7193e76aca625a152dc19b0ebf49816b78539cbb90d80d02
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 ### Abstract ###
 
 Name: gtkspell
@@ -7,10 +15,6 @@ License: GPL-2.0-or-later
 Summary: On-the-fly spell checking for GtkTextView widgets
 URL: http://gtkspell.sourceforge.net/
 Source: http://gtkspell.sourceforge.net/download/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 8fc7dc560167b2cb7193e76aca625a152dc19b0ebf49816b78539cbb90d80d02
-%global source0_file gtkspell-2.0.16.tar.gz
-# oreon url source checksums end
 
 ### Build Dependencies ###
 
@@ -37,9 +41,7 @@ The gtkspell-devel package provides header files for developing
 applications which use GtkSpell.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gtkspell-2.0.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8fc7dc560167b2cb7193e76aca625a152dc19b0ebf49816b78539cbb90d80d02" || { echo "oreon: Source0 SHA256 mismatch for gtkspell-2.0.16.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 10053dbc2fa342516b780a6bbf6e7b2a2360b8d49c5ac426936bf3df82526732
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global with_check 1
 
 Name:    libb2
@@ -7,10 +15,6 @@ Release: 15%{?dist}
 License: CC0-1.0 OR Apache-1.0 OR Apache-2.0
 URL:     https://blake2.net/
 Source0: https://github.com/BLAKE2/libb2/archive/v%{version}/libb2-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 10053dbc2fa342516b780a6bbf6e7b2a2360b8d49c5ac426936bf3df82526732
-%global source0_file libb2-0.98.1.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: automake
@@ -31,9 +35,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 %{summary}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libb2-0.98.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "10053dbc2fa342516b780a6bbf6e7b2a2360b8d49c5ac426936bf3df82526732" || { echo "oreon: Source0 SHA256 mismatch for libb2-0.98.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n libb2-%{version}
 
 # Force default Fedora cflags

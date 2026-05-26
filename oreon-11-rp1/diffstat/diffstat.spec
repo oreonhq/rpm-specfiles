@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 89f9294a8ac74fcef6f1b9ac408f43ebedf8d208e3efe0b99b4acc16dc6582c7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: A utility which provides statistics based on the output of diff
 Name: diffstat
 Version: 1.68
@@ -6,10 +14,6 @@ License: X11
 URL: https://invisible-island.net/diffstat
 Source0: https://invisible-island.net/archives/diffstat/%{name}-%{version}.tgz
 Source1: COPYING
-# oreon url source checksums begin
-%global source0_sha256 89f9294a8ac74fcef6f1b9ac408f43ebedf8d208e3efe0b99b4acc16dc6582c7
-%global source0_file diffstat-1.68.tgz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: xz
@@ -25,9 +29,7 @@ Install diffstat if you need a program which provides a summary of the
 diff command's output.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/diffstat-1.68.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "89f9294a8ac74fcef6f1b9ac408f43ebedf8d208e3efe0b99b4acc16dc6582c7" || { echo "oreon: Source0 SHA256 mismatch for diffstat-1.68.tgz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

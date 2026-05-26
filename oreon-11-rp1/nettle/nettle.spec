@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b0fcdd7fc0cdea6e80dcf1dd85ba794af0d5b4a57e26397eee3bc193272d9132
+%global source200_sha256 fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source200_sha256:%(test -z "%{source200_sha256}" || { f="%{SOURCE200}"; test -f "$f" || { echo "oreon: missing Source200 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source200_sha256}" || { echo "oreon: Source200 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Recent so-version, so we do not bump accidentally.
 %global nettle_so_ver 8
 %global hogweed_so_ver 6
@@ -46,12 +56,6 @@ Source200:	https://gmplib.org/download/gmp/gmp-6.2.1.tar.xz
 Source201:	gmp-6.2.1-intel-cet.patch
 Source202:	gmp-6.2.1-zeroize-allocator.patch
 Source203:	gmp-6.2.1-c23.patch
-# oreon url source checksums begin
-%global source0_sha256 b0fcdd7fc0cdea6e80dcf1dd85ba794af0d5b4a57e26397eee3bc193272d9132
-%global source0_file nettle-3.10.1.tar.gz
-%global source200_sha256 fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
-%global source200_file gmp-6.2.1.tar.xz
-# oreon url source checksums end
 %endif
 
 BuildRequires: make
@@ -86,10 +90,7 @@ applications with nettle.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/nettle-3.10.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b0fcdd7fc0cdea6e80dcf1dd85ba794af0d5b4a57e26397eee3bc193272d9132" || { echo "oreon: Source0 SHA256 mismatch for nettle-3.10.1.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/gmp-6.2.1.tar.xz; test -f "$f" || { echo "oreon: missing Source200 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2" || { echo "oreon: Source200 SHA256 mismatch for gmp-6.2.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -Tb 0 -p1
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2921cdc344f1acee04bcd6ea1e29565c1308263006e134a9ee38cf9c9d6fe75e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:       mkfontscale
 Version:    1.2.3
 Release:    4%{?dist}
@@ -8,10 +16,6 @@ URL:        https://www.x.org
 Source0:    https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
 
 Patch0:     mkfontscale-examine-all-encodings.patch
-# oreon url source checksums begin
-%global source0_sha256 2921cdc344f1acee04bcd6ea1e29565c1308263006e134a9ee38cf9c9d6fe75e
-%global source0_file mkfontscale-1.2.3.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc make libtool
 BuildRequires:  pkgconfig(fontenc)
@@ -32,9 +36,7 @@ legacy X11 font system.  It now includes the mkfontdir script previously
 distributed separately for compatibility with older X11 versions.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mkfontscale-1.2.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2921cdc344f1acee04bcd6ea1e29565c1308263006e134a9ee38cf9c9d6fe75e" || { echo "oreon: Source0 SHA256 mismatch for mkfontscale-1.2.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

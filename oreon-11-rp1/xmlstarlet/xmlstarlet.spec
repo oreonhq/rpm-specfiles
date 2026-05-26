@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 15d838c4f3375332fd95554619179b69e4ec91418a3a5296e7c631b7ed19e7ca
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Name: xmlstarlet
@@ -9,10 +17,6 @@ URL: http://xmlstar.sourceforge.net/
 Source0: http://downloads.sourceforge.net/xmlstar/%{name}-%{version}.tar.gz
 # https://sourceforge.net/p/xmlstar/bugs/109/
 Patch0: xmlstarlet-1.6.1-nogit.patch
-# oreon url source checksums begin
-%global source0_sha256 15d838c4f3375332fd95554619179b69e4ec91418a3a5296e7c631b7ed19e7ca
-%global source0_file xmlstarlet-1.6.1.tar.gz
-# oreon url source checksums end
 # http://sourceforge.net/tracker/?func=detail&aid=3266898&group_id=66612&atid=515106
 
 BuildRequires: make
@@ -29,9 +33,7 @@ plain text files using UNIX grep, sed, awk, diff, patch, join, etc
 commands.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xmlstarlet-1.6.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "15d838c4f3375332fd95554619179b69e4ec91418a3a5296e7c631b7ed19e7ca" || { echo "oreon: Source0 SHA256 mismatch for xmlstarlet-1.6.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

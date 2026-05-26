@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 78c9400d55eeeb5ab75161360543f9376438c4da4934cb34cdda5b46021ae379
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?rhel} && 0%{?rhel} < 8
 %bcond_without legacy_python
 %endif
@@ -19,10 +27,6 @@ Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
 Source0:        http://www.freedesktop.org/software/%{name}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 78c9400d55eeeb5ab75161360543f9376438c4da4934cb34cdda5b46021ae379
-%global source0_file evemu-2.7.0.tar.xz
-# oreon url source checksums end
 %endif
 
 BuildRequires:  automake libtool gcc gcc-c++ make
@@ -57,9 +61,7 @@ Requires:       pkgconfig
 %{name} development files.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/evemu-2.7.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "78c9400d55eeeb5ab75161360543f9376438c4da4934cb34cdda5b46021ae379" || { echo "oreon: Source0 SHA256 mismatch for evemu-2.7.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build

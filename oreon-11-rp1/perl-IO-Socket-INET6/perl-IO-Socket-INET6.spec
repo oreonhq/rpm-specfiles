@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b6da746853253d5b4ac43191b4f69a4719595ee13a7ca676a8054cf36e6d16bb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if ! (0%{?rhel})
 %{bcond_without perl_IO_Socket_INET6_enables_optional_test}
 %else
@@ -16,10 +24,6 @@ Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/IO-Socket-INET
 Patch0:         IO-Socket-INET6-2.72-fix_die_in_test.patch
 # Fix random test error in binding to socket BZ#1207174
 Patch1:         IO-Socket-INET6-2.72-bz1207174-fix_random_test_error.patch
-# oreon url source checksums begin
-%global source0_sha256 b6da746853253d5b4ac43191b4f69a4719595ee13a7ca676a8054cf36e6d16bb
-%global source0_file IO-Socket-INET6-2.73.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -53,9 +57,7 @@ BuildRequires:  perl(Test::TrailingSpace)
 Perl Object interface for AF_INET|AF_INET6 domain sockets.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/IO-Socket-INET6-2.73.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b6da746853253d5b4ac43191b4f69a4719595ee13a7ca676a8054cf36e6d16bb" || { echo "oreon: Source0 SHA256 mismatch for IO-Socket-INET6-2.73.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n IO-Socket-INET6-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

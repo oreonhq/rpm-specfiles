@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d9ef11948442197c9fa44bd6fbadc842b7280a60dfc40577af66fded637af356
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           kdsoap
 Version:        2.2.0
 Release:        %autorelease
@@ -15,10 +23,6 @@ URL:            https://github.com/KDAB/KDSoap
 Source0:        https://github.com/KDAB/KDSoap/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/KDAB/KDSoap/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz.asc
 Source2:        https://www.kdab.com/kdab-products.asc
-# oreon url source checksums begin
-%global source0_sha256 d9ef11948442197c9fa44bd6fbadc842b7280a60dfc40577af66fded637af356
-%global source0_file kdsoap-2.2.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
@@ -75,9 +79,7 @@ BuildArch:      noarch
 Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kdsoap-2.2.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d9ef11948442197c9fa44bd6fbadc842b7280a60dfc40577af66fded637af356" || { echo "oreon: Source0 SHA256 mismatch for kdsoap-2.2.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 42b4080ee99c9fb6a7d12d8e787637d057a635194e25971997eebbe8d5e57618
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Rotates, compresses, removes and mails system log files
 Name: logrotate
 Version: 3.22.0
@@ -12,10 +20,6 @@ Source1: https://github.com/logrotate/logrotate/releases/download/%{version}/log
 Source2: cgzones.pgp
 
 Source3: rwtab
-# oreon url source checksums begin
-%global source0_sha256 42b4080ee99c9fb6a7d12d8e787637d057a635194e25971997eebbe8d5e57618
-%global source0_file logrotate-3.22.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires: acl
 BuildRequires: automake
@@ -42,9 +46,7 @@ Install the logrotate package if you need a utility to deal with the
 log files on your system.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/logrotate-3.22.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "42b4080ee99c9fb6a7d12d8e787637d057a635194e25971997eebbe8d5e57618" || { echo "oreon: Source0 SHA256 mismatch for logrotate-3.22.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -S git
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 aeb951964c2f7ecc08174cb5517962d157595e9e3f38fc4a130b91dc2f9fec18
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global tarball_name xkbcommon
 
 Name:           libxkbcommon
@@ -8,10 +16,6 @@ License:        MIT AND X11 AND MIT-CMU
 URL:            http://www.x.org
 
 Source0:        https://github.com/xkbcommon/libxkbcommon/archive/refs/tags/%{tarball_name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 aeb951964c2f7ecc08174cb5517962d157595e9e3f38fc4a130b91dc2f9fec18
-%global source0_file xkbcommon-1.13.1.tar.gz
-# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires:  git meson
 BuildRequires:  byacc flex bison
@@ -66,9 +70,7 @@ Requires:       %{name}-utils%{?_isa} = %{version}-%{release}
 %{name}-x11-utils is a set of X11 utilities to analyze and test XKB parsing.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xkbcommon-1.13.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aeb951964c2f7ecc08174cb5517962d157595e9e3f38fc4a130b91dc2f9fec18" || { echo "oreon: Source0 SHA256 mismatch for xkbcommon-1.13.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -n %{name}-%{tarball_name}-%{version}
 
 %build

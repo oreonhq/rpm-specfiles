@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6fcf18b75d305d99d04d2e42982ed5b787a081af2842220ed63287a2d6a10988
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: A library for password generation and password quality checking
 Name: libpwquality
 Version: 1.4.5
@@ -10,10 +18,6 @@ Source0: https://github.com/libpwquality/libpwquality/releases/download/libpwqua
 # https://bugzilla.redhat.com/2165572
 # Upstream PR: https://github.com/libpwquality/libpwquality/pull/74
 Patch1: setuptools.patch
-# oreon url source checksums begin
-%global source0_sha256 6fcf18b75d305d99d04d2e42982ed5b787a081af2842220ed63287a2d6a10988
-%global source0_file libpwquality-1.4.5.tar.bz2
-# oreon url source checksums end
 
 # The package is BSD licensed with option to relicense as GPLv2+
 # - this option is redundant as the BSD license allows that anyway.
@@ -61,9 +65,7 @@ for easy password quality checking and generation of random
 pronounceable passwords from Python applications.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libpwquality-1.4.5.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6fcf18b75d305d99d04d2e42982ed5b787a081af2842220ed63287a2d6a10988" || { echo "oreon: Source0 SHA256 mismatch for libpwquality-1.4.5.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

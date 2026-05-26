@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a21d724ab3b3933330194353687df82c475b5dfb997513eef4c25de6c865ec33
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:    Small test program for liba52
 Name:       a52dec
 Version:    0.7.4
@@ -8,10 +16,6 @@ URL:        http://liba52.sourceforge.net
 Source0:    https://deb.debian.org/debian/pool/main/a/a52dec/a52dec_%{version}.orig.tar.gz
 Patch0:     a52dec-configure-optflags.patch
 Patch2:     liba52-silence.patch
-# oreon url source checksums begin
-%global source0_sha256 a21d724ab3b3933330194353687df82c475b5dfb997513eef4c25de6c865ec33
-%global source0_file a52dec_0.7.4.orig.tar.gz
-# oreon url source checksums end
 
 BuildRequires: autoconf automake libtool
 BuildRequires: gcc
@@ -51,9 +55,7 @@ developing applications that use liba52-devel.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/a52dec_0.7.4.orig.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a21d724ab3b3933330194353687df82c475b5dfb997513eef4c25de6c865ec33" || { echo "oreon: Source0 SHA256 mismatch for a52dec_0.7.4.orig.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 sed -i -e 's/-prefer-non-pic/-prefer-pic/' liba52/configure.incl

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7e607332b2d167663b0a8781113eef7e9115694404a8f576b5527b82ab76d53b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libslirp
 Version:        4.9.1
 Release:        3%{?dist}
@@ -7,10 +15,6 @@ Summary:        A general purpose TCP-IP emulator
 License:        BSD-3-Clause AND MIT
 URL:            https://gitlab.freedesktop.org/slirp/%{name}
 Source0:        https://gitlab.freedesktop.org/slirp/libslirp/-/archive/v4.9.1/libslirp-4.9.1.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 7e607332b2d167663b0a8781113eef7e9115694404a8f576b5527b82ab76d53b
-%global source0_file libslirp-4.9.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  git-core
 BuildRequires:  meson
@@ -32,9 +36,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libslirp-4.9.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7e607332b2d167663b0a8781113eef7e9115694404a8f576b5527b82ab76d53b" || { echo "oreon: Source0 SHA256 mismatch for libslirp-4.9.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git_am
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ec45a8c83ad92f101e161bca63f9278e86429bca21e352c6b22da4f427fd4850
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           low-memory-monitor
 Version:        2.1
 Release:        14%{?dist}
@@ -6,10 +14,6 @@ Summary:        Monitors low-memory conditions
 License:        GPL-3.0-or-later
 URL:            https://gitlab.freedesktop.org/hadess/low-memory-monitor
 Source0:        https://gitlab.freedesktop.org/hadess/low-memory-monitor/uploads/9c201566253ed52a9054f514f9904e48/low-memory-monitor-2.1.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 ec45a8c83ad92f101e161bca63f9278e86429bca21e352c6b22da4f427fd4850
-%global source0_file low-memory-monitor-2.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -35,9 +39,7 @@ Requires:       %{name} = %{version}-%{release}
 This package contains the documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/low-memory-monitor-2.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ec45a8c83ad92f101e161bca63f9278e86429bca21e352c6b22da4f427fd4850" || { echo "oreon: Source0 SHA256 mismatch for low-memory-monitor-2.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 

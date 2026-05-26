@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 cbc35996e911144fa62925366ad6a6212d6af2588f1e39075954973bbee627ae
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %undefine __cmake_in_source_build
 
 Name:           ebook-tools
@@ -7,10 +15,6 @@ Summary:        Tools and library for EPUB and LIT ebooks
 License:        MIT
 URL:            https://sourceforge.net/projects/ebook-tools/
 Source0:        https://downloads.sourceforge.net/ebook-tools/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 cbc35996e911144fa62925366ad6a6212d6af2588f1e39075954973bbee627ae
-%global source0_file ebook-tools-0.2.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules
@@ -42,9 +46,7 @@ Headers and libraries for libepub.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ebook-tools-0.2.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cbc35996e911144fa62925366ad6a6212d6af2588f1e39075954973bbee627ae" || { echo "oreon: Source0 SHA256 mismatch for ebook-tools-0.2.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

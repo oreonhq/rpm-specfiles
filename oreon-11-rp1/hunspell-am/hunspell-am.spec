@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c6abf8b090c390257637433dfb4f3190eea4131d5c469f8774cf023e395b0a10
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %global dict_dirname hunspell
 %else
@@ -10,10 +18,6 @@ Summary: Amharic hunspell dictionaries
 Version: 0.%{upstreamid}
 Release: 33%{?dist}
 Source: http://www.cs.ru.nl/~biniam/geez/dict/am_ET.zip
-# oreon url source checksums begin
-%global source0_sha256 c6abf8b090c390257637433dfb4f3190eea4131d5c469f8774cf023e395b0a10
-%global source0_file am_ET.zip
-# oreon url source checksums end
 URL: http://www.cs.ru.nl/~biniam/geez/index.php
 License: GPL-1.0-or-later
 BuildArch: noarch
@@ -25,9 +29,7 @@ Supplements: (hunspell and langpacks-am)
 Amharic hunspell dictionaries.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/am_ET.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c6abf8b090c390257637433dfb4f3190eea4131d5c469f8774cf023e395b0a10" || { echo "oreon: Source0 SHA256 mismatch for am_ET.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n am_ET
 
 %build

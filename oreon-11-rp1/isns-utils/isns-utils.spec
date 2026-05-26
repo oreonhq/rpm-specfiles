@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 47499f3ce87a832840884dcf3eedbec8c039f472fe921a5378e3b206a3fc1a32
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           isns-utils
 Version:        0.103
 Release:        4%{?dist}
@@ -8,10 +16,6 @@ URL:            https://github.com/open-iscsi/open-isns
 Source0:        https://github.com/open-iscsi/open-isns/archive/v%{version}.tar.gz#/open-isns-%{version}.tar.gz
 Source1:        isnsd.service
 Patch1:         test_as_installed.patch
-# oreon url source checksums begin
-%global source0_sha256 47499f3ce87a832840884dcf3eedbec8c039f472fe921a5378e3b206a3fc1a32
-%global source0_file v0.103.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  pkgconfig systemd-devel systemd
@@ -42,9 +46,7 @@ Development files for iSNS
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v0.103.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "47499f3ce87a832840884dcf3eedbec8c039f472fe921a5378e3b206a3fc1a32" || { echo "oreon: Source0 SHA256 mismatch for v0.103.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n open-isns-%{version}
 
 

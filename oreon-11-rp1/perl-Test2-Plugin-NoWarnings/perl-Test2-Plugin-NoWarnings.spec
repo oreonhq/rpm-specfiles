@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c97cb1122cc6e3e4a079059da71e12f65760bfb0671d19d25a7ec7c5f1f240fb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		perl-Test2-Plugin-NoWarnings
 Version:	0.10
 Release:	5%{?dist}
@@ -5,10 +13,6 @@ Summary:	Fail if tests warn
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Test2-Plugin-NoWarnings
 Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 c97cb1122cc6e3e4a079059da71e12f65760bfb0671d19d25a7ec7c5f1f240fb
-%global source0_file Test2-Plugin-NoWarnings-0.10.tar.gz
-# oreon url source checksums end
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
@@ -47,9 +51,7 @@ This module uses $SIG{__WARN__}, so if the code you're testing sets this, then
 this module will stop working.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Test2-Plugin-NoWarnings-0.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c97cb1122cc6e3e4a079059da71e12f65760bfb0671d19d25a7ec7c5f1f240fb" || { echo "oreon: Source0 SHA256 mismatch for Test2-Plugin-NoWarnings-0.10.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Test2-Plugin-NoWarnings-%{version}
 
 %build

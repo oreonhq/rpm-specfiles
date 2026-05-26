@@ -1,3 +1,19 @@
+# oreon source sha256 begin
+# URL sources: set %global sourceN_sha256 to 64-char hex (sha256sum). Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559
+%global source3_sha256 2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa
+%global source5_sha256 13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22
+%global source6_sha256 0f0515ff035156f8344ac583aa9f4a0c9d66a14c0b59542c3d6ccc7e15eba201
+%global source8_sha256 89e0ab01efe53312efcf8d921c41569043df99a730fc03f187671b55b9aa2fca
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source5_sha256:%(test -z "%{source5_sha256}" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_sha256}" || { echo "oreon: Source5 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source6_sha256:%(test -z "%{source6_sha256}" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_sha256}" || { echo "oreon: Source6 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source8_sha256:%(test -z "%{source8_sha256}" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_sha256}" || { echo "oreon: Source8 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global pkgname dirsrv
 
 # Exclude i686 bit arches
@@ -508,18 +524,6 @@ Source6:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/vendor-
 Source7:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/Cargo-3.2.0-14.lock/sha512/bdd7228ebcc4d312d414f642cf59ac9f6c043b98482ea6dec780a3830d248429262c76993eec7b52939e9a750713cecb618cbff6b94ff7e3e76f6f240c76d322/Cargo-3.2.0-14.lock
 Source8:        https://src.fedoraproject.org/repo/pkgs/rpms/389-ds-base/cockpit_dist-3.2.0-14.tar.bz2/sha512/70c7dc376676821b05fca257bc01f80202f7cee97221f52ad7ead237a547ee950edf2efb8c501d466d88b3dcaf1677c6c3a96ec20729a6896efdcdad9a96aed0/cockpit_dist-3.2.0-14.tar.bz2
 
-# oreon url source checksums begin
-%global source0_sha256 a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559
-%global source0_file 389-ds-base-3.2.1.tar.bz2
-%global source3_sha256 2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa
-%global source3_file jemalloc-5.3.0.tar.bz2
-%global source5_sha256 13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22
-%global source5_file libdb-5.3.28-59.tar.bz2
-%global source6_sha256 0f0515ff035156f8344ac583aa9f4a0c9d66a14c0b59542c3d6ccc7e15eba201
-%global source6_file vendor-3.2.0-14.tar.gz
-%global source8_sha256 89e0ab01efe53312efcf8d921c41569043df99a730fc03f187671b55b9aa2fca
-%global source8_file cockpit_dist-3.2.0-14.tar.bz2
-# oreon url source checksums end
 
 %description
 389 Directory Server is an LDAPv3 compliant server.  The base package includes
@@ -652,9 +656,7 @@ cd src/lib389
 %pyproject_buildrequires -g test
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/389-ds-base-3.2.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559" || { echo "oreon: Source0 SHA256 mismatch for 389-ds-base-3.2.1.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -p1 -n %{name}-%{version}
 %if %{defined SOURCE6}
 %(f=%{_sourcedir}/vendor-3.2.0-14.tar.gz; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f0515ff035156f8344ac583aa9f4a0c9d66a14c0b59542c3d6ccc7e15eba201" || { echo "oreon: Source6 SHA256 mismatch for vendor-3.2.0-14.tar.gz" >&2; exit 1; })

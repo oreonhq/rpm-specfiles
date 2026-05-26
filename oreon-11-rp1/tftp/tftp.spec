@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6064caa87435040181e4493b82a19fef5aa918f0e25d28ad2c3344c38e0d5a26
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global _hardened_build 1
 
 Summary: The client for the Trivial File Transfer Protocol (TFTP)
@@ -26,10 +34,6 @@ Patch14: tftp-hpa-5.2-osh.patch
 # https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git/patch/?id=b9f2335e88dcb3939015843c7143f1533c755a46
 Patch15: tftp-hpa-5.3-setjmp.patch
 Patch16: tftp-hpa-5.3-tftp-exit-code-cmdmode.patch
-# oreon url source checksums begin
-%global source0_sha256 6064caa87435040181e4493b82a19fef5aa918f0e25d28ad2c3344c38e0d5a26
-%global source0_file tftp-hpa-5.3.tar.gz
-# oreon url source checksums end
 
 BuildRequires: autoconf
 BuildRequires: gcc
@@ -59,9 +63,7 @@ enabled unless it is expressly needed.  The TFTP server is run by using
 systemd socket activation, and is disabled by default.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/tftp-hpa-5.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6064caa87435040181e4493b82a19fef5aa918f0e25d28ad2c3344c38e0d5a26" || { echo "oreon: Source0 SHA256 mismatch for tftp-hpa-5.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n tftp-hpa-%{version}
 %patch -P0 -p1 -b .zero
 %patch -P2 -p1 -b .tzfix

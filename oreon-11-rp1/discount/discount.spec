@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 72c1325ddfc40871d6810f1e272cf2d45b361f26357eb38f170fd04d737bb9f2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global somajor 2
 # Old-style C + hand-written Makefile: LTO can fail linking; GCC 15 is stricter on conversions.
 %global _lto_cflags %{nil}
@@ -9,10 +17,6 @@ Summary:        C implementation of Markdown
 License:        BSD-3-Clause
 URL:            https://github.com/Orc/discount
 Source0:        https://github.com/Orc/discount/archive/v2.2.7/discount-2.2.7.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 72c1325ddfc40871d6810f1e272cf2d45b361f26357eb38f170fd04d737bb9f2
-%global source0_file discount-2.2.7.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -37,9 +41,7 @@ Headers and pkg-config file for libmarkdown.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/discount-2.2.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "72c1325ddfc40871d6810f1e272cf2d45b361f26357eb38f170fd04d737bb9f2" || { echo "oreon: Source0 SHA256 mismatch for discount-2.2.7.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

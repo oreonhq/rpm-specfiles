@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d19d526e26e4620ae4fdc13f89d3e79b39df5fca643787c8b2e62151152ee4fd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           fabtests
 Version:        2.3.1
 Release:        %autorelease
@@ -7,10 +15,6 @@ Summary:        Test suite for libfabric API
 License:        (BSD-2-Clause OR GPL-2.0-only) AND MIT
 Url:            https://github.com/ofiwg/libfabric
 Source:         https://github.com/ofiwg/libfabric/releases/download/v%{version}/%{name}-%{version}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 d19d526e26e4620ae4fdc13f89d3e79b39df5fca643787c8b2e62151152ee4fd
-%global source0_file fabtests-2.3.1.tar.bz2
-# oreon url source checksums end
 BuildRequires:  libfabric-devel >= %{version}
 %ifarch %{valgrind_arches}
 BuildRequires:  valgrind-devel
@@ -24,9 +28,7 @@ Fabtests provides a set of examples that uses libfabric - a high-performance
 fabric software library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/fabtests-2.3.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d19d526e26e4620ae4fdc13f89d3e79b39df5fca643787c8b2e62151152ee4fd" || { echo "oreon: Source0 SHA256 mismatch for fabtests-2.3.1.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

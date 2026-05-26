@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1c2114ab6e0c0d2aa67d699960eb11df4f341e2403139cdf28ae9da858a6025f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global appstream_id org.kernel.software.network.ethtool
 
 Summary:        Settings tool for Ethernet NICs
@@ -11,10 +19,6 @@ URL:            https://www.kernel.org/pub/software/network/%{name}/
 Source0:        https://www.kernel.org/pub/software/network/%{name}/%{name}-%{version}.tar.xz
 Source1:        https://www.kernel.org/pub/software/network/%{name}/%{name}-%{version}.tar.sign
 Source2:        https://keys.openpgp.org/vks/v1/by-fingerprint/D2CB120AB45957B721CD9596F4554567B91DE934
-# oreon url source checksums begin
-%global source0_sha256 1c2114ab6e0c0d2aa67d699960eb11df4f341e2403139cdf28ae9da858a6025f
-%global source0_file ethtool-6.19.tar.xz
-# oreon url source checksums end
 BuildRequires:  gnupg2, xz
 BuildRequires:  gcc
 BuildRequires:  libappstream-glib
@@ -28,9 +32,7 @@ port, auto-negotiation, PCI locations and checksum offload on many
 network devices, especially of Ethernet devices.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ethtool-6.19.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1c2114ab6e0c0d2aa67d699960eb11df4f341e2403139cdf28ae9da858a6025f" || { echo "oreon: Source0 SHA256 mismatch for ethtool-6.19.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %autosetup
 

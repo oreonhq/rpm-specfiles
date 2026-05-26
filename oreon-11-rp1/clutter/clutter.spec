@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8b48fac159843f556d0a6be3dbfc6b083fc6d9c58a20a49a6b4919ab4263c4e6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global with_tests 1
 
 %global glib2_version 2.53.4
@@ -15,10 +23,6 @@ Summary:       Open Source software library for creating rich graphical user int
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://www.clutter-project.org/
 Source0:       https://download.gnome.org/sources/%{name}/1.26/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 8b48fac159843f556d0a6be3dbfc6b083fc6d9c58a20a49a6b4919ab4263c4e6
-%global source0_file clutter-1.26.4.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gettext
 BuildRequires: pkgconfig(atk)
@@ -89,9 +93,7 @@ the functionality of the installed clutter package.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/clutter-1.26.4.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b48fac159843f556d0a6be3dbfc6b083fc6d9c58a20a49a6b4919ab4263c4e6" || { echo "oreon: Source0 SHA256 mismatch for clutter-1.26.4.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

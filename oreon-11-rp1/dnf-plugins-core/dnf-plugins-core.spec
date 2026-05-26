@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0f6966a6cb62912cd3520ef2a09ddfcdb48aa3091009f9834526b04f6de9a70a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{?!dnf_lowest_compatible: %global dnf_lowest_compatible 4.19.0}
 %global dnf_plugins_extra 2.0.0
 %global hawkey_version 0.73.0
@@ -49,10 +57,6 @@ URL:            https://github.com/rpm-software-management/dnf-plugins-core
 Source0:        https://github.com/rpm-software-management/dnf-plugins-core/archive/4.10.1/dnf-plugins-core-4.10.1.tar.gz
 Patch1:         0001-Fix-building-with-CMake-4.patch
 Patch2:         0002-spec-Use-cmake-macros-for-invoking-a-build-script.patch
-# oreon url source checksums begin
-%global source0_sha256 0f6966a6cb62912cd3520ef2a09ddfcdb48aa3091009f9834526b04f6de9a70a
-%global source0_file dnf-plugins-core-4.10.1.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  cmake >= 3.18.0
 BuildRequires:  gettext
@@ -480,9 +484,7 @@ repository.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dnf-plugins-core-4.10.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0f6966a6cb62912cd3520ef2a09ddfcdb48aa3091009f9834526b04f6de9a70a" || { echo "oreon: Source0 SHA256 mismatch for dnf-plugins-core-4.10.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 %if %{with python2}
 mkdir build-py2

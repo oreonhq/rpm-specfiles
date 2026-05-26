@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 26b602ae454b0ba6d99ef44a09b6b9e0dfa7f67228106736df1f278c70bc91d3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global _generatorsdir %{_prefix}/lib/systemd/system-generators
 
 Name:    vsftpd
@@ -101,19 +109,13 @@ Patch73: vsftpd-3.0.5-replace-deprecated-openssl-functions.patch
 Patch74: vsftpd-3.0.5-add-option-for-tlsv1.3-ciphersuites.patch
 Patch75: vsftpd-3.0.5-use-old-tlsv-options.patch
 Patch76: 0076-Correct-the-definition-of-setup_bio_callbacks-in-ssl.patch
-# oreon url source checksums begin
-%global source0_sha256 26b602ae454b0ba6d99ef44a09b6b9e0dfa7f67228106736df1f278c70bc91d3
-%global source0_file vsftpd-3.0.5.tar.gz
-# oreon url source checksums end
 
 %description
 vsftpd is a Very Secure FTP daemon. It was written completely from
 scratch.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/vsftpd-3.0.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "26b602ae454b0ba6d99ef44a09b6b9e0dfa7f67228106736df1f278c70bc91d3" || { echo "oreon: Source0 SHA256 mismatch for vsftpd-3.0.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git
 cp %{SOURCE1} .
 

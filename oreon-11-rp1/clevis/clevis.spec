@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a0388a544c77139dc751cdbf66bdd38fc29c43f9e81a1cdfd119c84109ffca3f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           clevis
 Version:        21
 Release:        %autorelease
@@ -11,10 +19,6 @@ Source1:        clevis.sysusers
 Patch0001:      0001-PKCS-11-pin-fix-dracut-for-unconfigured-device.patch
 Patch0002:      0002-tpm2-use-first-pcr-algorithm-bank-supported-by.patch
 Patch0003:      0003-Include-tpm2_getcap-as-dracut-required-binary.patch
-# oreon url source checksums begin
-%global source0_sha256 a0388a544c77139dc751cdbf66bdd38fc29c43f9e81a1cdfd119c84109ffca3f
-%global source0_file clevis-21.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  git-core
 BuildRequires:  gcc
@@ -127,9 +131,7 @@ Requires:       openssl
 Automatically unlocks LUKS block devices through a PKCS#11 device.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/clevis-21.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a0388a544c77139dc751cdbf66bdd38fc29c43f9e81a1cdfd119c84109ffca3f" || { echo "oreon: Source0 SHA256 mismatch for clevis-21.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git
 
 %build

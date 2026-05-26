@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c24a81dea8e9f7f3c877618d3812a5293df772abc6b90fad1d34fa62326141bc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define __cmake_in_source_build 1
 
 Name:           libcomps
@@ -8,10 +16,6 @@ Summary:        Comps XML file manipulation library
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/libcomps
 Source0:        https://github.com/rpm-software-management/libcomps/archive/0.1.24/libcomps-0.1.24.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 c24a81dea8e9f7f3c877618d3812a5293df772abc6b90fad1d34fa62326141bc
-%global source0_file libcomps-0.1.24.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake >= 3.10
@@ -64,9 +68,7 @@ Obsoletes:      platform-python-%{name} < %{version}-%{release}
 Python3 bindings for libcomps library.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libcomps-0.1.24.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c24a81dea8e9f7f3c877618d3812a5293df772abc6b90fad1d34fa62326141bc" || { echo "oreon: Source0 SHA256 mismatch for libcomps-0.1.24.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}
 
 mkdir build-py3

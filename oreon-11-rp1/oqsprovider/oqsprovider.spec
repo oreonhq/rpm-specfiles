@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 36d83229c360d694c1ce968f985375aa4e1d15b262ca4f8c354e53ea99fe9195
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global oqs_version 0.8.0
 %global liboqs_min_version 0.12.0-1
 Name:       oqsprovider
@@ -15,10 +23,6 @@ Patch01:    01-remove-prenist.patch
 # https://github.com/open-quantum-safe/oqs-provider/pull/606
 Patch02:    02-mlkem1024-hybrid.patch
 Patch03:    03-iana-kem-only.patch
-# oreon url source checksums begin
-%global source0_sha256 36d83229c360d694c1ce968f985375aa4e1d15b262ca4f8c354e53ea99fe9195
-%global source0_file 0.8.0.tar.gz
-# oreon url source checksums end
 
 Requires: liboqs >= %{liboqs_min_version}
 Requires: openssl
@@ -37,9 +41,7 @@ functionality are available via the OpenSSL EVP interface. Key persistence is
 provided via the encode/decode mechanism and X.509 data structures.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/0.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "36d83229c360d694c1ce968f985375aa4e1d15b262ca4f8c354e53ea99fe9195" || { echo "oreon: Source0 SHA256 mismatch for 0.8.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -T -b 0 -p1 -n oqs-provider-%{oqs_version}
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 73f215eccbd8233f414737ac06bca2687e67c44b97d2d7576091aa9718551110
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libevdev
 Version:        1.13.6
 Release:        2%{?dist}
@@ -7,10 +15,6 @@ Summary:        Kernel Evdev Device Wrapper Library
 License:        MIT
 URL:            http://www.freedesktop.org/wiki/Software/libevdev
 Source0:        http://www.freedesktop.org/software/%{name}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 73f215eccbd8233f414737ac06bca2687e67c44b97d2d7576091aa9718551110
-%global source0_file libevdev-1.13.6.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  git-core
 BuildRequires:  meson gcc
@@ -35,9 +39,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Utilities to handle and/or debug evdev devices.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libevdev-1.13.6.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "73f215eccbd8233f414737ac06bca2687e67c44b97d2d7576091aa9718551110" || { echo "oreon: Source0 SHA256 mismatch for libevdev-1.13.6.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git
 # Replace whatever the source uses with the approved call
 %py3_shebang_fix $(git grep -l  '#!/usr/bin/.*python3')

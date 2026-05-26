@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 dc79ab072779be4403b45b60cd044dd13780d4bb9675d27abf1932ada7c8a88d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           nss_wrapper
 Version:        1.1.16
 Release:        %autorelease
@@ -11,10 +19,6 @@ Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        nss_wrapper.keyring
 
 Patch0:         nwrap-fix-tests.patch
-# oreon url source checksums begin
-%global source0_sha256 dc79ab072779be4403b45b60cd044dd13780d4bb9675d27abf1932ada7c8a88d
-%global source0_file nss_wrapper-1.1.16.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -57,9 +61,7 @@ The %{name}-libs package provides only the shared library.
 For a minimal footprint, install just this package.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/nss_wrapper-1.1.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dc79ab072779be4403b45b60cd044dd13780d4bb9675d27abf1932ada7c8a88d" || { echo "oreon: Source0 SHA256 mismatch for nss_wrapper-1.1.16.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

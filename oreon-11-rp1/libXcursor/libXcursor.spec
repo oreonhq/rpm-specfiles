@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fde9402dd4cfe79da71e2d96bb980afc5e6ff4f8a7d74c159e1966afb2b2c2c0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global tarball libXcursor
 #global gitdate 20130524
 %global gitversion 8f677eaea
@@ -17,10 +25,6 @@ Source3:    commitid
 Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
 %endif
 Source1: index.theme
-# oreon url source checksums begin
-%global source0_sha256 fde9402dd4cfe79da71e2d96bb980afc5e6ff4f8a7d74c159e1966afb2b2c2c0
-%global source0_file libXcursor-1.2.3.tar.xz
-# oreon url source checksums end
 
 Requires: libX11 >= 1.5.99.902
 
@@ -47,9 +51,7 @@ Requires: %{name} = %{version}-%{release}
 libXcursor development package.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libXcursor-1.2.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fde9402dd4cfe79da71e2d96bb980afc5e6ff4f8a7d74c159e1966afb2b2c2c0" || { echo "oreon: Source0 SHA256 mismatch for libXcursor-1.2.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 iconv --from=ISO-8859-2 --to=UTF-8 COPYING > COPYING.new && \
 touch -r COPYING COPYING.new && \

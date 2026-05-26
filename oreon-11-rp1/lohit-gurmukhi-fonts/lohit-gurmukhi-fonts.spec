@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 074d38a4124df51dc785a2a7fe03c5d0251c96ce6e96beb68832fcb27e8d33e7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global fontname lohit-gurmukhi
 %global fontconf0 66-%{fontname}.conf
 %global fontconf1 30-%{fontname}.conf
@@ -13,10 +21,6 @@ License:        OFL-1.1
 URL:            https://pagure.io/lohit
 Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
 Source1:        %{name}.conf
-# oreon url source checksums begin
-%global source0_sha256 074d38a4124df51dc785a2a7fe03c5d0251c96ce6e96beb68832fcb27e8d33e7
-%global source0_file lohit-gurmukhi-2.91.2.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires: fontforge >= 20080429
 BuildRequires:  fontpackages-devel
@@ -32,9 +36,7 @@ This package provides a free Gurmukhi script truetype font for Punjabi language.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/lohit-gurmukhi-2.91.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "074d38a4124df51dc785a2a7fe03c5d0251c96ce6e96beb68832fcb27e8d33e7" || { echo "oreon: Source0 SHA256 mismatch for lohit-gurmukhi-2.91.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{fontname}-%{version}
 
 %build

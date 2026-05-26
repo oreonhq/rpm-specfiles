@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 
 Summary: A tool for generating scanners (text pattern recognizers)
@@ -14,10 +22,6 @@ URL: https://github.com/westes/flex
 Source: https://github.com/westes/flex/releases/download/v%{version}/flex-%{version}.tar.gz
 
 Patch0: flex-rh1389575.patch
-# oreon url source checksums begin
-%global source0_sha256 e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995
-%global source0_file flex-2.6.4.tar.gz
-# oreon url source checksums end
 
 Requires: m4
 BuildRequires: gettext gettext-devel bison m4 help2man gcc gcc-c++ automake libtool
@@ -85,9 +89,7 @@ This package contains the static library with default implementations of
 statically link against instead of implementing their own.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/flex-2.6.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995" || { echo "oreon: Source0 SHA256 mismatch for flex-2.6.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

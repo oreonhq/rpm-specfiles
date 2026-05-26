@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c973a38d46d75ab2b411ab141e4c320a66dc4cc98832c3f2f6c5999531057861
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: A system tool for maintaining the /etc/rc*.d hierarchy
 Name: chkconfig
 Version: 1.33
@@ -11,10 +19,6 @@ Source: https://github.com/fedora-sysv/chkconfig/archive/%{version}.tar.gz#/%{na
 # ignore 'duplicate' entries in config file (same effective binary)
 # avoids issue where package install/update disables service
 Patch: 0001-Ignore-alternatives-that-are-binary-identical-to-exi.patch
-# oreon url source checksums begin
-%global source0_sha256 c973a38d46d75ab2b411ab141e4c320a66dc4cc98832c3f2f6c5999531057861
-%global source0_file 1.33.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc gettext libselinux-devel make newt-devel popt-devel pkgconfig(systemd)
 # beakerlib might not be available on CentOS Stream any more
@@ -60,9 +64,7 @@ programs fulfilling the same or similar functions to be installed on a single
 system at the same time.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/1.33.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c973a38d46d75ab2b411ab141e4c320a66dc4cc98832c3f2f6c5999531057861" || { echo "oreon: Source0 SHA256 mismatch for 1.33.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

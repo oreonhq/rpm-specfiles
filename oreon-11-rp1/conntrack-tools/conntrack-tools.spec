@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 067677f4c5f6564819e78ed3a9d4a8980935ea9273f3abb22a420ea30ab5ded6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           conntrack-tools
 Version:        1.4.8
 Release:        12%{?dist}
@@ -12,10 +20,6 @@ Source2:        NetfilterCoreTeam-OpenGPG-KEY.txt
 #Source2:        coreteam-gpg-key-0xD70D1A666ACF2B21.txt
 Source3:        conntrackd.service
 Source4:        conntrackd.conf
-# oreon url source checksums begin
-%global source0_sha256 067677f4c5f6564819e78ed3a9d4a8980935ea9273f3abb22a420ea30ab5ded6
-%global source0_file conntrack-tools-1.4.8.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -55,9 +59,7 @@ In addition, you can also monitor connection tracking events, e.g.
 show an event message (one line) per newly established connection.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/conntrack-tools-1.4.8.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "067677f4c5f6564819e78ed3a9d4a8980935ea9273f3abb22a420ea30ab5ded6" || { echo "oreon: Source0 SHA256 mismatch for conntrack-tools-1.4.8.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

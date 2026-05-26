@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 add272bb09e6384a4833ffca4896350fdb16e0ca22df68c0384773c67a175594
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %undefine __cmake_in_source_build
 
 Name:           woff2
@@ -12,10 +20,6 @@ Source0:        https://github.com/google/woff2/archive/v%{version}/%{name}-%{ve
 # https://github.com/google/woff2/pull/121
 Patch0:         covscan.patch
 Patch1:         include-cstdint.patch
-# oreon url source checksums begin
-%global source0_sha256 add272bb09e6384a4833ffca4896350fdb16e0ca22df68c0384773c67a175594
-%global source0_file woff2-1.0.2.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -43,9 +47,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Development files and utils for %{name}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/woff2-1.0.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "add272bb09e6384a4833ffca4896350fdb16e0ca22df68c0384773c67a175594" || { echo "oreon: Source0 SHA256 mismatch for woff2-1.0.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{version}
 sed -i 's/VERSION 2.8.6/VERSION 3.5...4.0/g' CMakeLists.txt
 

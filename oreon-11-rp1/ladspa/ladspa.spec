@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 27d24f279e4b81bd17ecbdcc38e4c42991bb388826c0b200067ce0eb59d3da5b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           ladspa
 Version:        1.17
 Release:        9%{?dist}
@@ -9,10 +17,6 @@ License:        LicenseRef-Callaway-LGPLv2+
 URL:            http://www.ladspa.org/
 Source:         http://www.ladspa.org/download/%{name}_sdk_%{version}.tgz
 Patch1:         ladspa-1.17.patch
-# oreon url source checksums begin
-%global source0_sha256 27d24f279e4b81bd17ecbdcc38e4c42991bb388826c0b200067ce0eb59d3da5b
-%global source0_file ladspa_sdk_1.17.tgz
-# oreon url source checksums end
 
 
 BuildRequires:  perl-interpreter
@@ -42,9 +46,7 @@ header file.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ladspa_sdk_1.17.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "27d24f279e4b81bd17ecbdcc38e4c42991bb388826c0b200067ce0eb59d3da5b" || { echo "oreon: Source0 SHA256 mismatch for ladspa_sdk_1.17.tgz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n ladspa_sdk_%{version}
 %patch -P1 -p1 -b .0001
 # respect RPM_OPT_FLAGS

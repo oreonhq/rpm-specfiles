@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a571b24181baaa76c96704e92acffc6934ff593e380dade274db4e43c140ad51
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Crypt-OpenSSL-Random
 Version:        0.17
 Release:        6%{?dist}
@@ -5,10 +13,6 @@ Summary:        OpenSSL/LibreSSL pseudo-random number generator access
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-OpenSSL-Random
 Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Crypt-OpenSSL-Random-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 a571b24181baaa76c96704e92acffc6934ff593e380dade274db4e43c140ad51
-%global source0_file Crypt-OpenSSL-Random-0.17.tar.gz
-# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -49,9 +53,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Crypt-OpenSSL-Random-0.17.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a571b24181baaa76c96704e92acffc6934ff593e380dade274db4e43c140ad51" || { echo "oreon: Source0 SHA256 mismatch for Crypt-OpenSSL-Random-0.17.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Crypt-OpenSSL-Random-%{version}
 # Remove author-only tests that are always skipped
 for F in t/z_kwalitee.t t/z_manifest.t t/z_meta.t t/z_perl_minimum_version.t \

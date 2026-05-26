@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ba09ede515a0ae8a7192040a1b778c0fb0f025fa5877e9be895cd325fa5e9d7b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # build with tests?
 %bcond_without tests
 
@@ -14,10 +22,6 @@ Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone --no-checkout https://github.com/brianmario/mysql2.git
 # cd mysql2 && git archive -v -o mysql2-0.5.7-tests.tar.gz 0.5.7 spec/
 Source1: %{gem_name}-%{version}-tests.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ba09ede515a0ae8a7192040a1b778c0fb0f025fa5877e9be895cd325fa5e9d7b
-%global source0_file mysql2-0.5.7.gem
-# oreon url source checksums end
 
 # Required in lib/mysql2.rb
 Requires: rubygem(bigdecimal)
@@ -57,9 +61,7 @@ BuildArch: noarch
 Documentation for %{name}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mysql2-0.5.7.gem; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ba09ede515a0ae8a7192040a1b778c0fb0f025fa5877e9be895cd325fa5e9d7b" || { echo "oreon: Source0 SHA256 mismatch for mysql2-0.5.7.gem" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %build

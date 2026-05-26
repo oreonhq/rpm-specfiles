@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 09702ddb078b637e85de9236cbedd3fb9d7af7c6e797026c538b45748ad4d631
+%global source2_sha256 bf79d401b6f1b507713615ad49ecfdd372ac715d426b5fc0f42ce2dcef1f9960
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           kea
 Version:        3.0.3
 Release:        %autorelease
@@ -41,12 +51,6 @@ Patch1:         kea-sd-daemon.patch
 Patch2:         kea-replace-BOOST_STATIC_ASSERT.patch
 # Based on: https://gitlab.isc.org/isc-projects/kea/-/commit/9a86f27a94677ec9ee1988af892d65b7ab22027e
 Patch3:         kea-move-to-system-timer.patch
-# oreon url source checksums begin
-%global source0_sha256 09702ddb078b637e85de9236cbedd3fb9d7af7c6e797026c538b45748ad4d631
-%global source0_file kea-3.0.3.tar.xz
-%global source2_sha256 bf79d401b6f1b507713615ad49ecfdd372ac715d426b5fc0f42ce2dcef1f9960
-%global source2_file keama-4.5.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires: boost-devel
 # %%meson -D crypto=openssl
@@ -150,10 +154,7 @@ The KEA Migration Assistant is an experimental tool which helps to translate
 ISC DHCP configurations to Kea.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kea-3.0.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "09702ddb078b637e85de9236cbedd3fb9d7af7c6e797026c538b45748ad4d631" || { echo "oreon: Source0 SHA256 mismatch for kea-3.0.3.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/keama-4.5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bf79d401b6f1b507713615ad49ecfdd372ac715d426b5fc0f42ce2dcef1f9960" || { echo "oreon: Source2 SHA256 mismatch for keama-4.5.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{S:10}' --signature='%{S:1}' --data='%{S:0}'
 %{gpgverify} --keyring='%{S:10}' --signature='%{S:3}' --data='%{S:2}'
 

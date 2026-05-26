@@ -1,3 +1,10 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 924337a2a8e5be043ebaea2a78365c7427ac6e9cee24610a0780808b2ba7579b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
 
 Summary: Open implementation of Service Location Protocol V2
 Name:    openslp
@@ -33,10 +40,6 @@ Patch6:  openslp-2.0.0-cve-2017-17833.patch
 # Patch7: fixes a heap overwrite vulnerability
 #   leading to remote code execution
 Patch7:  openslp-2.0.0-cve-2019-5544.patch
-# oreon url source checksums begin
-%global source0_sha256 924337a2a8e5be043ebaea2a78365c7427ac6e9cee24610a0780808b2ba7579b
-%global source0_file openslp-2.0.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires: automake libtool
@@ -69,9 +72,7 @@ OpenSLP server daemon to dynamically register services.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/openslp-2.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "924337a2a8e5be043ebaea2a78365c7427ac6e9cee24610a0780808b2ba7579b" || { echo "oreon: Source0 SHA256 mismatch for openslp-2.0.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %patch -P1 -p1 -b .multicast-set

@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c
+%global source1_sha256 8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global dracutlibdir %{_prefix}/lib/dracut
 %bcond_without check
 %global combined_license Apache-2.0 AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR ISC OR MIT) AND (Apache-2.0 OR MIT) AND ((Apache-2.0 OR MIT) AND BSD-3-Clause) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND BSD-2-Clause AND BSD-3-Clause AND (CC0-1.0 OR Apache-2.0) AND (CC0-1.0 OR MIT-0 OR Apache-2.0) AND ISC AND MIT AND ((MIT OR Apache-2.0) AND Unicode-DFS-2016) AND (Apache-2.0 OR MIT OR Zlib) AND MPL-2.0 AND (Unlicense OR MIT)
@@ -17,12 +27,6 @@ Patch1:         0001-use-released-aws-nitro-enclaves-cose-version.patch
 # - Update nix dependency from 0.26 to 0.31
 #   https://github.com/fdo-rs/fido-device-onboard-rs/pull/803
 Patch1000:      fido-device-onboard-fix-metadata.diff
-# oreon url source checksums begin
-%global source0_sha256 8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c
-%global source0_file fido-device-onboard-rs-0.5.5.tar.gz
-%global source1_sha256 8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c
-%global source1_file v0.5.5.tar.gz
-# oreon url source checksums end
 
 # Because nobody cares
 ExcludeArch: %{ix86}
@@ -47,10 +51,7 @@ BuildRequires:  libpq-devel
 
 %prep
 
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/fido-device-onboard-rs-0.5.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c" || { echo "oreon: Source0 SHA256 mismatch for fido-device-onboard-rs-0.5.5.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/v0.5.5.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c" || { echo "oreon: Source1 SHA256 mismatch for v0.5.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if 0%{?rhel} || 0%{?oreon}
 %autosetup -a1 -n %{name}-rs-%{version} -N
 %autopatch -p1 -M999

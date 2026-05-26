@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 b65b66b99f0424b93525f987386f22fc5efb9da2bfc92ad4a532249aaffbab0e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:          giflib
 Summary:       A library and utilities for processing GIFs
 Version:       6.1.3
@@ -18,10 +26,6 @@ Patch3:        getarg.patch
 # Proposed fix for CVE-2026-26740
 # https://sourceforge.net/p/giflib/bugs/199/
 Patch4:        CVE-2026-26740.patch
-# oreon url source checksums begin
-%global source0_sha256 b65b66b99f0424b93525f987386f22fc5efb9da2bfc92ad4a532249aaffbab0e
-%global source0_file giflib-6.1.3.tar.gz
-# oreon url source checksums end
 
 BuildRequires: cmake
 BuildRequires: gcc
@@ -95,9 +99,7 @@ BuildArch:     noarch
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/giflib-6.1.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "b65b66b99f0424b93525f987386f22fc5efb9da2bfc92ad4a532249aaffbab0e" || { echo "oreon: Source0 SHA256 mismatch for giflib-6.1.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 cp -a %{SOURCE1} .
 

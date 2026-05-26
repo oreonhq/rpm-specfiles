@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 988fd6b232dafa04b8b8198723efeaccdb3c6aa9c1c7936219d5791a8b7a8646
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:    bubblewrap
 Version: 0.11.0
 Release: 4%{?dist}
@@ -6,10 +14,6 @@ Summary: Core execution tool for unprivileged containers
 License: LGPL-2.0-or-later
 URL:     https://github.com/containers/bubblewrap/
 Source0: https://github.com/containers/bubblewrap/releases/download/v%{version}/bubblewrap-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 988fd6b232dafa04b8b8198723efeaccdb3c6aa9c1c7936219d5791a8b7a8646
-%global source0_file bubblewrap-0.11.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires: pkgconfig(bash-completion) >= 2.0
 BuildRequires: gcc
@@ -25,9 +29,7 @@ containers that works as a setuid binary on kernels without
 user namespaces.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/bubblewrap-0.11.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "988fd6b232dafa04b8b8198723efeaccdb3c6aa9c1c7936219d5791a8b7a8646" || { echo "oreon: Source0 SHA256 mismatch for bubblewrap-0.11.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup
 
 %build

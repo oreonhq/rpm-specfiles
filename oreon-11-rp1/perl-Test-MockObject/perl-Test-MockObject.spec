@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2b7f80da87f5a6fe0360d9ee521051053017442c3a26e85db68dfac9f8307623
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Test-MockObject
 Version:        1.20200122
 Release:        19%{?dist}
@@ -6,10 +14,6 @@ Summary:        Perl extension for emulating troublesome interfaces
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-MockObject
 Source0:        https://cpan.metacpan.org/authors/id/C/CH/CHROMATIC/Test-MockObject-1.20200122.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 2b7f80da87f5a6fe0360d9ee521051053017442c3a26e85db68dfac9f8307623
-%global source0_file Test-MockObject-1.20200122.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 # Build:
@@ -50,9 +54,7 @@ up your own data.  (Another option is not to test difficult things.
 Now you have no excuse.)
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Test-MockObject-1.20200122.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2b7f80da87f5a6fe0360d9ee521051053017442c3a26e85db68dfac9f8307623" || { echo "oreon: Source0 SHA256 mismatch for Test-MockObject-1.20200122.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Test-MockObject-%{version}
 
 %build

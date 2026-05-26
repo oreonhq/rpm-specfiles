@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5c9f64123c194b150fee89049991687386e6ff36ef2af7b80ba53efaf368cc95
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global font_util 1.4.1
 
 # Must be kept in sync with xorg-x11-fonts!
@@ -15,10 +23,6 @@ Source0:    http://www.x.org/pub/individual/font/font-util-%{font_util}.tar.xz
 # helper script used in post for xorg-x11-fonts
 Source5:    xorg-x11-fonts-update-dirs
 Source6:    xorg-x11-fonts-update-dirs.1
-# oreon url source checksums begin
-%global source0_sha256 5c9f64123c194b150fee89049991687386e6ff36ef2af7b80ba53efaf368cc95
-%global source0_file font-util-1.4.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc make libtool
 BuildRequires:  pkgconfig(xorg-macros) >= 1.8
@@ -38,9 +42,7 @@ X.Org X11 font utilities required for font installation, conversion, and
 generation.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/font-util-1.4.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5c9f64123c194b150fee89049991687386e6ff36ef2af7b80ba53efaf368cc95" || { echo "oreon: Source0 SHA256 mismatch for font-util-1.4.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n font-util-%{font_util}
 
 %build

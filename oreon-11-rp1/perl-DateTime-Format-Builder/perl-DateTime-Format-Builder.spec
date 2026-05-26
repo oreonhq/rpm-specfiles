@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 61ffb23d85b3ca1786b2da3289e99b57e0625fe0e49db02a6dc0cb62c689e2f2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?rhel} >= 9
 %bcond_with perl_DateTime_Format_Builder_enable_optional_tests
 %else
@@ -18,10 +26,6 @@ Summary:        Create DateTime parser classes and objects
 License:        Artistic-2.0 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/DateTime-Format-Builder            
 Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-Format-Builder-0.83.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 61ffb23d85b3ca1786b2da3289e99b57e0625fe0e49db02a6dc0cb62c689e2f2
-%global source0_file DateTime-Format-Builder-0.83.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 # Module Build
@@ -73,9 +77,7 @@ to any sub-classes, or for when you need to do something slightly beyond what
 is expected.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/DateTime-Format-Builder-0.83.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "61ffb23d85b3ca1786b2da3289e99b57e0625fe0e49db02a6dc0cb62c689e2f2" || { echo "oreon: Source0 SHA256 mismatch for DateTime-Format-Builder-0.83.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n DateTime-Format-Builder-%{real_version}
 
 # POD doesn't like E<copy> very much...

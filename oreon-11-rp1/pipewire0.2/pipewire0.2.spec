@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bfaa0f6ae6c0791e2e0b59234d399753bf24f1b33dbf587682363a8463dd8df1
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global apiversion   0.2
 %global spaversion   0.1
 
@@ -30,10 +38,6 @@ Source0:	https://github.com/PipeWire/pipewire/archive/%{version}/pipewire-%{vers
 ## upstream patches
 Patch1:		0001-build-and-link-a2dp-codecs.c-as-well.patch
 Patch2:		0001-bluez5-declare-factory-as-extern.patch
-# oreon url source checksums begin
-%global source0_sha256 bfaa0f6ae6c0791e2e0b59234d399753bf24f1b33dbf587682363a8463dd8df1
-%global source0_file pipewire-0.2.7.tar.gz
-# oreon url source checksums end
 
 ## upstreamable patches
 
@@ -96,9 +100,7 @@ Headers and libraries for developing applications that can communicate with
 a PipeWire media server.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pipewire-0.2.7.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bfaa0f6ae6c0791e2e0b59234d399753bf24f1b33dbf587682363a8463dd8df1" || { echo "oreon: Source0 SHA256 mismatch for pipewire-0.2.7.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -T -b0 -n pipewire-%{version}%{?gitrel:-%{gitrel}-g%{shortcommit}}
 
 %patch -P1 -p1 -b .0001

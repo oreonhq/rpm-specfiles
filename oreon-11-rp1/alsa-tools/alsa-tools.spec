@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 800498d35233672ef67f4bf74cc6e1d37e1fe70c0540e2d2e062f2319e7b5df7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # If you want to skip building the firmware subpackage, define the macro
 # _without_firmware to 1. This is not the actual firmware itself 
 # (see alsa-firmware), it is some complementary tools.
@@ -37,10 +45,6 @@ Source:         https://www.alsa-project.org/files/pub/tools/%{name}-%{version}.
 Source1:        90-alsa-tools-firmware.rules
 
 Patch1:         hwmixvolume-python.patch
-# oreon url source checksums begin
-%global source0_sha256 800498d35233672ef67f4bf74cc6e1d37e1fe70c0540e2d2e062f2319e7b5df7
-%global source0_file alsa-tools-1.2.15.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  gcc gcc-c++
 BuildRequires:  alsa-lib-devel >= %{version}
@@ -97,9 +101,7 @@ The following tools are available:
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/alsa-tools-1.2.15.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "800498d35233672ef67f4bf74cc6e1d37e1fe70c0540e2d2e062f2319e7b5df7" || { echo "oreon: Source0 SHA256 mismatch for alsa-tools-1.2.15.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{version}
 %patch -P 1 -p1 -b .hwmixvolume-python
 

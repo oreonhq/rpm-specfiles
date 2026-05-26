@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source1_sha256 00a25a5c3a18d9d7b0deb456344f7ab02f6f9ef8422fbe6174afafc546c8ee36
+%global oreon_verify_sources \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # This package calls binutils components directly and would need to pass
 # in flags to enable the LTO plugins
 # Disable LTO
@@ -1454,10 +1462,6 @@ Patch0425: 0425-tests-lib-functional_test-Unregister-commands-on-mod.patch
 Patch0426: 0426-commands-usbtest-Use-correct-string-length-field.patch
 Patch0427: 0427-commands-usbtest-Ensure-string-length-is-sufficient-.patch
 Patch0428: 0428-verifiers-Allocate-EFI-pages-instead-of-grub_malloc-.patch
-# oreon url source checksums begin
-%global source1_sha256 00a25a5c3a18d9d7b0deb456344f7ab02f6f9ef8422fbe6174afafc546c8ee36
-%global source1_file 9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz
-# oreon url source checksums end
 
 
 %description
@@ -1554,9 +1558,7 @@ This subpackage provides the GRUB user-space emulation modules.
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "00a25a5c3a18d9d7b0deb456344f7ab02f6f9ef8422fbe6174afafc546c8ee36" || { echo "oreon: Source1 SHA256 mismatch for 9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %do_common_setup
 %if 0%{with_efi_arch}
 mkdir grub-%{grubefiarch}-%{tarversion}

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5bb5d1be011158090157c9e7587ae5606c262a5020ecdc5caac6686b9910592e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Utility to set/show the host name or domain name
 Name: hostname
 Version: 3.25
@@ -16,19 +24,13 @@ BuildRequires: make
 
 # Initial changes
 Patch1: hostname-rh.patch
-# oreon url source checksums begin
-%global source0_sha256 5bb5d1be011158090157c9e7587ae5606c262a5020ecdc5caac6686b9910592e
-%global source0_file hostname_3.25.tar.xz
-# oreon url source checksums end
 
 %description
 This package provides commands which can be used to display the system's
 DNS name, and to display or set its hostname or NIS domain name.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/hostname_3.25.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5bb5d1be011158090157c9e7587ae5606c262a5020ecdc5caac6686b9910592e" || { echo "oreon: Source0 SHA256 mismatch for hostname_3.25.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n hostname
 cp %{SOURCE1} %{SOURCE2} %{SOURCE3} .
 %patch -P 1 -p1

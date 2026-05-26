@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5c180feaca2704d914054a1e6b453673cc9b65cfb3da307aff17439a9aa09d6b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global beta_number b3
 
 Summary:        Collection of tasks for Ant
@@ -16,10 +24,6 @@ Source2:        http://www.apache.org/licenses/LICENSE-2.0.txt
 
 Patch2:         ant-contrib-antservertest.patch
 Patch3:         ant-contrib-java-8.patch
-# oreon url source checksums begin
-%global source0_sha256 5c180feaca2704d914054a1e6b453673cc9b65cfb3da307aff17439a9aa09d6b
-%global source0_file ant-contrib-1.0b3-src.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  ivy-local, ant-openjdk25 , ant-openjdk25 
 BuildRequires:  junit
@@ -51,9 +55,7 @@ Summary:        Javadoc for %{name}
 Api documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ant-contrib-1.0b3-src.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5c180feaca2704d914054a1e6b453673cc9b65cfb3da307aff17439a9aa09d6b" || { echo "oreon: Source0 SHA256 mismatch for ant-contrib-1.0b3-src.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q  -n %{name}
 %autopatch -p1
 

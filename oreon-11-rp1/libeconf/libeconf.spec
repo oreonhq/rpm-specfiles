@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0605f8d8a2f4668cb16e279ebcad8002cc83f44610633157e9c4b8fc183a479b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Force out of source build
 %undefine __cmake_in_source_build
 
@@ -17,10 +25,6 @@ Source0:        https://github.com/openSUSE/libeconf/archive/refs/tags/v%{versio
 Patch0101:      0001-cmake-no-install-html.patch
 # Intermittent failure of a test in aarch64, thus temporarily disabling the failing test suite
 Patch0102:      0002-disable-test.patch
-# oreon url source checksums begin
-%global source0_sha256 0605f8d8a2f4668cb16e279ebcad8002cc83f44610633157e9c4b8fc183a479b
-%global source0_file v0.7.9.tar.gz
-# oreon url source checksums end
 
 
 BuildRequires:  cmake >= 3.12
@@ -52,9 +56,7 @@ configuration files from applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v0.7.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0605f8d8a2f4668cb16e279ebcad8002cc83f44610633157e9c4b8fc183a479b" || { echo "oreon: Source0 SHA256 mismatch for v0.7.9.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

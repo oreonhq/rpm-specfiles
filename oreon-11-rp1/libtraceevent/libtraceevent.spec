@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 dc456d4d2bf4b4cd4d0c737d3374a8093f9e5ca18c1d7fc2279a4bf41e613121
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # git tag
 #%%global commit 5dd505f3aba255c5fbc2a6dbed57fcba51b400f6
 #%%global commitdate 20201009
@@ -16,10 +24,6 @@ URL: https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/
 # git archive --prefix=libtraceevent-%%{version}/ -o libtraceevent-%%{version}.tar.gz %%{git_commit}
 #Source0: libtraceevent-%%{version}.tar.gz
 Source0: https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot/libtraceevent-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 dc456d4d2bf4b4cd4d0c737d3374a8093f9e5ca18c1d7fc2279a4bf41e613121
-%global source0_file libtraceevent-1.8.4.tar.gz
-# oreon url source checksums end
 BuildRequires:  gcc
 BuildRequires: xmlto
 BuildRequires: asciidoc
@@ -38,9 +42,7 @@ Requires: %{name}%{_isa} = %{version}-%{release}
 Development headers of %{name}-libs
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libtraceevent-1.8.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dc456d4d2bf4b4cd4d0c737d3374a8093f9e5ca18c1d7fc2279a4bf41e613121" || { echo "oreon: Source0 SHA256 mismatch for libtraceevent-1.8.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

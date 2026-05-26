@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c3d0d2f47602b21949ffb8669a7ef0a8ca5fa13ed5c1ee1d2d81edf05616187f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without tests
 
 %global srcname urwid
@@ -11,10 +19,6 @@ Summary:       Console user interface library
 License:       LGPL-2.1-or-later AND MIT
 URL:           http://excess.org/urwid/
 Source0:        https://files.pythonhosted.org/packages/source/u/urwid/urwid-3.0.4.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 c3d0d2f47602b21949ffb8669a7ef0a8ca5fa13ed5c1ee1d2d81edf05616187f
-%global source0_file urwid-3.0.4.tar.gz
-# oreon url source checksums end
 
 BuildArch:     noarch
 
@@ -40,9 +44,7 @@ BuildRequires: python3-pytest
 %pyproject_buildrequires
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/urwid-3.0.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c3d0d2f47602b21949ffb8669a7ef0a8ca5fa13ed5c1ee1d2d81edf05616187f" || { echo "oreon: Source0 SHA256 mismatch for urwid-3.0.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{srcname}-%{version}
 sed -i -e 's/--cov=urwid//' pyproject.toml
 find urwid -type f -name "*.py" -exec sed -i -e '/^#!\//, 1d' {} \;

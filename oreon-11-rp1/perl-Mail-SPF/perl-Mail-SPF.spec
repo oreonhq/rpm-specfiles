@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9ac60d00b957e849bafe90a8defdeee2e5ffab1c87ac5a4abc452875e9904863
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-Mail-SPF
 Version:        3.20250505
 Release:        3%{?dist}
@@ -5,10 +13,6 @@ Summary:        Object-oriented implementation of Sender Policy Framework
 License:        BSD-3-Clause
 URL:            https://metacpan.org/release/Mail-SPF
 Source0:        https://cpan.metacpan.org/authors/id/A/AD/ADAVIS/Mail-SPF-3.20250505.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 9ac60d00b957e849bafe90a8defdeee2e5ffab1c87ac5a4abc452875e9904863
-%global source0_file Mail-SPF-3.20250505.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 # Build
@@ -56,9 +60,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Mail-SPF-3.20250505.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9ac60d00b957e849bafe90a8defdeee2e5ffab1c87ac5a4abc452875e9904863" || { echo "oreon: Source0 SHA256 mismatch for Mail-SPF-3.20250505.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Mail-SPF-%{version}
 chmod -x bin/*
 

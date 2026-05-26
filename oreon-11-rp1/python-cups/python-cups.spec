@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 843e385c1dbf694996ca84ef02a7f30c28376035588f5fbeacd6bae005cf7c8d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{?filter_setup:
 %filter_provides_in %{python3_sitearch}/.*\.so$
 %filter_setup
@@ -11,10 +19,6 @@ Release:       8%{?dist}
 #URL:           http://cyberelk.net/tim/software/pycups/
 URL:           https://github.com/OpenPrinting/pycups/
 Source:        https://github.com/OpenPrinting/pycups/releases/download/v%{version}/pycups-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 843e385c1dbf694996ca84ef02a7f30c28376035588f5fbeacd6bae005cf7c8d
-%global source0_file pycups-2.0.4.tar.gz
-# oreon url source checksums end
 License:       GPL-2.0-or-later
 
 # all taken from upstream
@@ -54,9 +58,7 @@ Summary:       Documentation for python-cups
 Documentation for python-cups.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pycups-2.0.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "843e385c1dbf694996ca84ef02a7f30c28376035588f5fbeacd6bae005cf7c8d" || { echo "oreon: Source0 SHA256 mismatch for pycups-2.0.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git -n pycups-%{version}
 
 %build

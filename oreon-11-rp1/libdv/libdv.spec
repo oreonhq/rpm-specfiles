@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a305734033a9c25541a59e8dd1c254409953269ea7c710c39e540bd8853389ba
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libdv
 Version:        1.0.0
 Release:        46%{?dist}
@@ -11,10 +19,6 @@ Patch2:         %{name}-pic.patch
 Patch3:         %{name}-gtk2.patch
 Patch4:         %{name}-dso-linking.patch
 Patch5:         %{name}-gcc14.patch
-# oreon url source checksums begin
-%global source0_sha256 a305734033a9c25541a59e8dd1c254409953269ea7c710c39e540bd8853389ba
-%global source0_file libdv-1.0.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  autoconf
 BuildRequires:  automake
@@ -51,9 +55,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 This package contains development files for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libdv-1.0.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a305734033a9c25541a59e8dd1c254409953269ea7c710c39e540bd8853389ba" || { echo "oreon: Source0 SHA256 mismatch for libdv-1.0.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 
 
 %build

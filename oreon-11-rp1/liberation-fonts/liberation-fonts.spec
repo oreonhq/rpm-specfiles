@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7191c669bf38899f73a2094ed00f7b800553364f90e2637010a69c0e268f25d0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global archivename %{name}-ttf-%{version}
 %define catalogue %{_sysconfdir}/X11/fontpath.d
 
@@ -72,10 +80,6 @@ Source4:    59-%{fontpkgname3}.conf
 Name:       liberation-fonts
 Summary:    Fonts to replace commonly used Microsoft Windows fonts
 Source0:        https://github.com/liberationfonts/liberation-fonts/files/7261482/liberation-fonts-ttf-2.1.5.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 7191c669bf38899f73a2094ed00f7b800553364f90e2637010a69c0e268f25d0
-%global source0_file liberation-fonts-ttf-2.1.5.tar.gz
-# oreon url source checksums end
 
 %description
 %wordwrap -v common_description
@@ -85,9 +89,7 @@ Source0:        https://github.com/liberationfonts/liberation-fonts/files/726148
 %fontmetapkg
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/liberation-fonts-ttf-2.1.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7191c669bf38899f73a2094ed00f7b800553364f90e2637010a69c0e268f25d0" || { echo "oreon: Source0 SHA256 mismatch for liberation-fonts-ttf-2.1.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{archivename}
 
 %build

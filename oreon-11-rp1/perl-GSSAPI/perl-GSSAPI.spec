@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7d8f2c7b61762fb4ec72d2ec281290f2f87f9c7d298273da4525432a65e770d6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 #
 # Rebuild option:
 #
@@ -13,10 +21,6 @@ URL:            https://metacpan.org/release/GSSAPI
 Source0:        https://cpan.metacpan.org/authors/id/A/AG/AGROLMS/GSSAPI-%{version}.tar.gz
 # Fix a crash in gss_release_oid() when destructing out_mech (rhbz #1994263, CPAN RT#121873)
 Patch0:         GSSAPI-0.28-Fix-a-crash-in-gss_release_oid-when-destructing-out_.patch
-# oreon url source checksums begin
-%global source0_sha256 7d8f2c7b61762fb4ec72d2ec281290f2f87f9c7d298273da4525432a65e770d6
-%global source0_file GSSAPI-0.28.tar.gz
-# oreon url source checksums end
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc
@@ -49,9 +53,7 @@ described in rfc2743 and rfc2744 and implemented by the Kerberos-1.2
 distribution from MIT.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/GSSAPI-0.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7d8f2c7b61762fb4ec72d2ec281290f2f87f9c7d298273da4525432a65e770d6" || { echo "oreon: Source0 SHA256 mismatch for GSSAPI-0.28.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n GSSAPI-%{version}
 %patch -P0 -p1
 chmod -c a-x examples/*.pl

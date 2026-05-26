@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 066eb2d66430897fe1dadd271554ccdae33d77c512126a758fc4de37b1148799
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with trace
 
 Summary: Terminal emulator for the X Window System
@@ -21,10 +29,6 @@ Source3: https://invisible-island.net/archives/xterm/16colors.txt
 Patch1: xterm-defaults.patch
 Patch2: xterm-desktop.patch
 Patch3: xterm-man-paths.patch
-# oreon url source checksums begin
-%global source0_sha256 066eb2d66430897fe1dadd271554ccdae33d77c512126a758fc4de37b1148799
-%global source0_file xterm-406.tgz
-# oreon url source checksums end
 
 %global x11_app_defaults_dir %(pkg-config --variable appdefaultdir xt)
 
@@ -41,9 +45,7 @@ Prints a shell command for setting the appropriate environment variables to
 indicate the current size of the window from which the command is run.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/xterm-406.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "066eb2d66430897fe1dadd271554ccdae33d77c512126a758fc4de37b1148799" || { echo "oreon: Source0 SHA256 mismatch for xterm-406.tgz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup
 

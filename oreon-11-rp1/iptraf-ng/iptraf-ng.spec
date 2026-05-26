@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 75fd653745ea0705995c25e6c07b34252ecc2563c6a91b007a3a8c26f29cc252
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary:        A console-based network monitoring utility
 Name:           iptraf-ng
 Version:        1.2.2
@@ -5,10 +13,6 @@ Release:        20%{?dist}
 Source0:        https://github.com/iptraf-ng/iptraf-ng/archive/v%{version}.tar.gz
 Source1:        %{name}-logrotate.conf
 Source2:        %{name}-tmpfiles.conf
-# oreon url source checksums begin
-%global source0_sha256 75fd653745ea0705995c25e6c07b34252ecc2563c6a91b007a3a8c26f29cc252
-%global source0_file v1.2.2.tar.gz
-# oreon url source checksums end
 URL:            https://github.com/iptraf-ng/iptraf-ng/
 License:        GPL-2.0-or-later
 BuildRequires:  gcc
@@ -36,9 +40,7 @@ built-in raw socket interface of the Linux kernel, so it can be used
 on a wide variety of supported network cards.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v1.2.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "75fd653745ea0705995c25e6c07b34252ecc2563c6a91b007a3a8c26f29cc252" || { echo "oreon: Source0 SHA256 mismatch for v1.2.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

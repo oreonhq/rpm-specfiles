@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 15fbc5aba6beee0b17aecb04602ae39432393aba1ebd8e39b7cabf7db883299f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{?mingw_package_header}
 
 %global pkgname pcre2
@@ -18,10 +26,6 @@ Patch0:        pcre2-10.10-Fix-multilib.patch
 ## MinGW specific patches ##
 # Fix implicitly defined functions due to overly relaxed platform detection in macros
 Patch100:      pcre2-10.23-mingw.patch
-# oreon url source checksums begin
-%global source0_sha256 15fbc5aba6beee0b17aecb04602ae39432393aba1ebd8e39b7cabf7db883299f
-%global source0_file pcre2-10.46.tar.bz2
-# oreon url source checksums end
 
 
 BuildArch:     noarch
@@ -79,9 +83,7 @@ Static version of the MinGW Windows %{pkgname} library.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pcre2-10.46.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "15fbc5aba6beee0b17aecb04602ae39432393aba1ebd8e39b7cabf7db883299f" || { echo "oreon: Source0 SHA256 mismatch for pcre2-10.46.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{pkgname}-%{version}
 
 # Because of multilib patch

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d059b292cc9bcee53219ca620a24b35b16b316b2fc193b3e9f5c1298f5a67cb8
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global forgeurl https://github.com/skozina/kabi-dw
 %global commitdate 20190729
 %global commit bd56a6004d5d409d7d03c386400da3f49a8c4c03
@@ -12,10 +20,6 @@ Summary:        Detect changes in the ABI between kernel builds
 License:        GPL-3.0-or-later
 URL:            %{forgeurl}
 Source0:        https://github.com/skozina/kabi-dw/archive/bd56a6004d5d409d7d03c386400da3f49a8c4c03/kabi-dw-bd56a6004d5d409d7d03c386400da3f49a8c4c03.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 d059b292cc9bcee53219ca620a24b35b16b316b2fc193b3e9f5c1298f5a67cb8
-%global source0_file kabi-dw-bd56a6004d5d409d7d03c386400da3f49a8c4c03.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  elfutils-devel
 BuildRequires:  gcc
@@ -32,9 +36,7 @@ builds of the Linux kernel. This is done by dumping the DWARF type information
 later comparing the text files.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kabi-dw-bd56a6004d5d409d7d03c386400da3f49a8c4c03.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d059b292cc9bcee53219ca620a24b35b16b316b2fc193b3e9f5c1298f5a67cb8" || { echo "oreon: Source0 SHA256 mismatch for kabi-dw-bd56a6004d5d409d7d03c386400da3f49a8c4c03.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %forgesetup
 
 %build

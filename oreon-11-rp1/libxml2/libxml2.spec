@@ -1,3 +1,17 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c3d8c0c34aa39098f66576fe51969db12a5100b956233dc56506f7a8679be995
+%global source1_sha256 96151685cec997e1f9f3387e3626d61e6284d4d6e66e0e440c209286c03e9cc7
+%global source2_sha256 55e5c08db29946a91ea8e70e8f2418d3fd30d8b6777941dfba7f54726ffd9914
+%global source3_sha256 09bdf9f81f381ebf9bc158a9472e498e896f7a02eb7461146e9abe1b9493ca17
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libxml2
 Version:        2.12.10
 Release:        6%{?dist}
@@ -18,16 +32,6 @@ Patch0:         libxml2-multilib.patch
 # Patch from openSUSE.
 # See:  https://bugzilla.gnome.org/show_bug.cgi?id=789714
 Patch1:         libxml2-2.12.0-python3-unicode-errors.patch
-# oreon url source checksums begin
-%global source0_sha256 c3d8c0c34aa39098f66576fe51969db12a5100b956233dc56506f7a8679be995
-%global source0_file libxml2-2.12.10.tar.xz
-%global source1_sha256 96151685cec997e1f9f3387e3626d61e6284d4d6e66e0e440c209286c03e9cc7
-%global source1_file xmlts20080827.tar.gz
-%global source2_sha256 55e5c08db29946a91ea8e70e8f2418d3fd30d8b6777941dfba7f54726ffd9914
-%global source2_file xsts-2002-01-16.tar.gz
-%global source3_sha256 09bdf9f81f381ebf9bc158a9472e498e896f7a02eb7461146e9abe1b9493ca17
-%global source3_file xsts-2004-01-14.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  cmake-rpm-macros
 BuildRequires:  gcc
@@ -89,12 +93,7 @@ this includes parsing and validation even with complex DTDs, either
 at parse time or later once the document has been modified.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libxml2-2.12.10.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c3d8c0c34aa39098f66576fe51969db12a5100b956233dc56506f7a8679be995" || { echo "oreon: Source0 SHA256 mismatch for libxml2-2.12.10.tar.xz" >&2; exit 1; })
-%(f=%{_sourcedir}/xmlts20080827.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "96151685cec997e1f9f3387e3626d61e6284d4d6e66e0e440c209286c03e9cc7" || { echo "oreon: Source1 SHA256 mismatch for xmlts20080827.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/xsts-2002-01-16.tar.gz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "55e5c08db29946a91ea8e70e8f2418d3fd30d8b6777941dfba7f54726ffd9914" || { echo "oreon: Source2 SHA256 mismatch for xsts-2002-01-16.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/xsts-2004-01-14.tar.gz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "09bdf9f81f381ebf9bc158a9472e498e896f7a02eb7461146e9abe1b9493ca17" || { echo "oreon: Source3 SHA256 mismatch for xsts-2004-01-14.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 find doc -type f -executable -print -exec chmod 0644 {} ';'
 

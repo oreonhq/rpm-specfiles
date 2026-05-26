@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bc1a90697eb8ec6c3eed118105ef9cbdfdd676e563905bf1cb571a705598300e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{?mingw_package_header}
 
 Name:           mingw-fontconfig
@@ -11,10 +19,6 @@ Source0:        https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/%
 
 # Allow disabling tests (do not build)
 Patch0:         fontconfig_tests.patch
-# oreon url source checksums begin
-%global source0_sha256 bc1a90697eb8ec6c3eed118105ef9cbdfdd676e563905bf1cb571a705598300e
-%global source0_file fontconfig-2.17.1.tar.bz2
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -79,9 +83,7 @@ Static version of the cross compiled Fontconfig library.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/fontconfig-2.17.1.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bc1a90697eb8ec6c3eed118105ef9cbdfdd676e563905bf1cb571a705598300e" || { echo "oreon: Source0 SHA256 mismatch for fontconfig-2.17.1.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n fontconfig-%{version}
 
 

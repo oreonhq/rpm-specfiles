@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e4241780478c837ead3adaa931f5d5cc4d4e22615e8439b3f9d37c8eff31f3c0
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           jaxb-stax-ex
 Version:        2.1.0
 Release:        %autorelease
@@ -8,10 +16,6 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/eclipse-ee4j/jaxb-stax-ex/archive/2.1.0/jaxb-stax-ex-2.1.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 e4241780478c837ead3adaa931f5d5cc4d4e22615e8439b3f9d37c8eff31f3c0
-%global source0_file jaxb-stax-ex-2.1.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)
@@ -34,9 +38,7 @@ the following areas:
 - Improve the namespace support.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/jaxb-stax-ex-2.1.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e4241780478c837ead3adaa931f5d5cc4d4e22615e8439b3f9d37c8eff31f3c0" || { echo "oreon: Source0 SHA256 mismatch for jaxb-stax-ex-2.1.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %pom_remove_parent

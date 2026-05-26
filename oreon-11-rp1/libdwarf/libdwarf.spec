@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 28cf9a5d27aceff5c1f906244a4fe7ae208e41d20a6d8fc7e091c633a40b6e97
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:          libdwarf
 Epoch:         1
 Version:       2.3.1
@@ -9,10 +17,6 @@ URL:           https://www.prevanders.net/dwarf.html
 Source0:       https://www.prevanders.net/%{name}-%{version}.tar.xz
 # Make default-library=both work on linux
 Patch:         libdwarf-both.patch
-# oreon url source checksums begin
-%global source0_sha256 28cf9a5d27aceff5c1f906244a4fe7ae208e41d20a6d8fc7e091c633a40b6e97
-%global source0_file libdwarf-2.3.1.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gcc gcc-c++ meson python3
 
@@ -48,9 +52,7 @@ to access DWARF debug information.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libdwarf-2.3.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "28cf9a5d27aceff5c1f906244a4fe7ae208e41d20a6d8fc7e091c633a40b6e97" || { echo "oreon: Source0 SHA256 mismatch for libdwarf-2.3.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 50f0f94e8de44a3ca457156943068d694ca88474a94dbf6d85fa369f7e8ec1ae
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           exec-maven-plugin
 Version:        3.6.3
 Release:        %autorelease
@@ -6,10 +14,6 @@ Summary:        Exec Maven Plugin
 License:        Apache-2.0
 URL:            https://www.mojohaus.org/exec-maven-plugin/
 Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/%{name}/%{version}/%{name}-%{version}-source-release.zip
-# oreon url source checksums begin
-%global source0_sha256 50f0f94e8de44a3ca457156943068d694ca88474a94dbf6d85fa369f7e8ec1ae
-%global source0_file exec-maven-plugin-3.6.3-source-release.zip
-# oreon url source checksums end
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -37,9 +41,7 @@ A plugin to allow execution of system and Java programs.
 %javadoc_package
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/exec-maven-plugin-3.6.3-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "50f0f94e8de44a3ca457156943068d694ca88474a94dbf6d85fa369f7e8ec1ae" || { echo "oreon: Source0 SHA256 mismatch for exec-maven-plugin-3.6.3-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n exec-maven-plugin-%{version}
 
 find . -name *.jar -delete

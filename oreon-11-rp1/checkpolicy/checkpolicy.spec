@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2d92951dfcb090d6179e7a23856622e0fcbc32be03bf1e60ace9dc9cbda11e59
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %define libselinuxver 3.10-1
 %define libsepolver 3.10-1
 
@@ -9,10 +17,6 @@ License: GPL-2.0-or-later AND LGPL-2.1-or-later
 Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/checkpolicy-%{version}.tar.gz
 Source1: https://github.com/SELinuxProject/selinux/releases/download/%{version}/checkpolicy-%{version}.tar.gz.asc
 Source2: https://github.com/perfinion.gpg
-# oreon url source checksums begin
-%global source0_sha256 2d92951dfcb090d6179e7a23856622e0fcbc32be03bf1e60ace9dc9cbda11e59
-%global source0_file checkpolicy-3.10.tar.gz
-# oreon url source checksums end
 # $ git clone https://github.com/fedora-selinux/selinux.git
 # $ cd selinux
 # $ git format-patch -N 3.10 -- checkpolicy
@@ -39,9 +43,7 @@ This package contains checkpolicy, the SELinux policy compiler.
 Only required for building policies. 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/checkpolicy-3.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2d92951dfcb090d6179e7a23856622e0fcbc32be03bf1e60ace9dc9cbda11e59" || { echo "oreon: Source0 SHA256 mismatch for checkpolicy-3.10.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n checkpolicy-%{version}
 

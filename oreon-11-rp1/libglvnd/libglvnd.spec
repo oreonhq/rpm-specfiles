@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8797914ff69e62d7d89b331cab311b29fff5cfaddae5aae09695a7ccbaf353d7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global commit0 faa23f21fc677af5792825dc30cb1ccef4bf33a6
 %global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
 
@@ -22,10 +30,6 @@ License:        MIT-feh AND MIT-Modern-Variant AND BSD-1-Clause AND BSD-3-Clause
 URL:            https://gitlab.freedesktop.org/glvnd/libglvnd
 Source0:        https://gitlab.freedesktop.org/glvnd/libglvnd/-/archive/v1.7.0/libglvnd-1.7.0.tar.gz
 Patch1:         0001-glx-Add-another-fallback-library-name.patch
-# oreon url source checksums begin
-%global source0_sha256 8797914ff69e62d7d89b331cab311b29fff5cfaddae5aae09695a7ccbaf353d7
-%global source0_file libglvnd-1.7.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  libtool
@@ -149,9 +153,7 @@ libGL and libGLX are the common dispatch interface for the GLX API.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libglvnd-1.7.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8797914ff69e62d7d89b331cab311b29fff5cfaddae5aae09695a7ccbaf353d7" || { echo "oreon: Source0 SHA256 mismatch for libglvnd-1.7.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-v%{version}-%{?commit0}
 autoreconf -vif
 

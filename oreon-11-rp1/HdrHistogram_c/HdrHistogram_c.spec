@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bb95351a6a8b242dc9be1f28562761a84d4cf0a874ffc90a9b630770a6468e94
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: HdrHistogram_c
 Version: 0.11.8
 Release: 10%{?dist}
@@ -5,10 +13,6 @@ Summary: C port of the HdrHistogram
 License: BSD-2-Clause
 URL: https://github.com/HdrHistogram/%{name}
 Source0: https://github.com/HdrHistogram/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 bb95351a6a8b242dc9be1f28562761a84d4cf0a874ffc90a9b630770a6468e94
-%global source0_file HdrHistogram_c-0.11.8.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc g++ cmake zlib-devel
 
@@ -25,9 +29,7 @@ developing applications that use %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/HdrHistogram_c-0.11.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bb95351a6a8b242dc9be1f28562761a84d4cf0a874ffc90a9b630770a6468e94" || { echo "oreon: Source0 SHA256 mismatch for HdrHistogram_c-0.11.8.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-%{version}
 
 

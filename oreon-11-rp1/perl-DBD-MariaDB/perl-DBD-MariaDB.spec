@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f977a25b4116a0a95a7c8a894fd37097abe19af9a6a9ed4d800604ec17873fe4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Disable leak tests
 %bcond_with perl_DBD_MariaDB_enables_leak_test
 # Perform optional net_ssleay tests
@@ -18,10 +26,6 @@ Source1:        test-setup.t
 Source2:        test-clean.t
 Source3:        test-env.sh
 Patch0:         DBD-MariaDB-1.23-Run-test-setup-and-clean.patch
-# oreon url source checksums begin
-%global source0_sha256 f977a25b4116a0a95a7c8a894fd37097abe19af9a6a9ed4d800604ec17873fe4
-%global source0_file DBD-MariaDB-1.24.tar.gz
-# oreon url source checksums end
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make
@@ -108,9 +112,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/DBD-MariaDB-1.24.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f977a25b4116a0a95a7c8a894fd37097abe19af9a6a9ed4d800604ec17873fe4" || { echo "oreon: Source0 SHA256 mismatch for DBD-MariaDB-1.24.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n DBD-MariaDB-%{version}
 %patch -P0 -p1
 cp %{SOURCE1} %{SOURCE2} t/

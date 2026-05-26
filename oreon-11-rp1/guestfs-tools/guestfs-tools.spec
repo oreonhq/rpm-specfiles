@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1c607fc3ec8c4bae1a5266cc865f22e60e8e4103ff5433b9501649423c28fe06
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Architectures that we run the test suite on.
 #
 # As the test suite takes a very long time to run and is somewhat
@@ -36,10 +44,6 @@ Source1:       http://download.libguestfs.org/guestfs-tools/%{source_directory}/
 # Keyring used to verify tarball signature.
 %if 0%{verify_tarball_signature}
 Source2:       libguestfs.keyring
-# oreon url source checksums begin
-%global source0_sha256 1c607fc3ec8c4bae1a5266cc865f22e60e8e4103ff5433b9501649423c28fe06
-%global source0_file guestfs-tools-1.55.5.tar.gz
-# oreon url source checksums end
 %endif
 
 # Basic build requirements.
@@ -233,9 +237,7 @@ for %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/guestfs-tools-1.55.5.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1c607fc3ec8c4bae1a5266cc865f22e60e8e4103ff5433b9501649423c28fe06" || { echo "oreon: Source0 SHA256 mismatch for guestfs-tools-1.55.5.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if 0%{verify_tarball_signature}
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

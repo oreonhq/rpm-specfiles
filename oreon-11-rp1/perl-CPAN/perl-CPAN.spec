@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 5b337c9e0e6f037c16c3ba01c0b758600647a83de4a5e78e41a5cc26ee68a1ee
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Don not run gnupg1 tests by default, they need network access
 # (Socket::inet_aton('pool.sks-keyservers.net')).
 %bcond_with perl_CPAN_enables_gnupg_test
@@ -23,10 +31,6 @@ Patch1:         CPAN-2.18-Replace-configuration-directory-string-with-a-marke.pa
 Patch2:         CPAN-2.38-Only-require-config-for-CPAN-shell-operations.patch
 # Update man page to provide notes about first run, GH issue #194
 Patch3:         CPAN-2.38-Add-notes-about-first-configuration.patch
-# oreon url source checksums begin
-%global source0_sha256 5b337c9e0e6f037c16c3ba01c0b758600647a83de4a5e78e41a5cc26ee68a1ee
-%global source0_file CPAN-2.38.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -263,9 +267,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/CPAN-2.38.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5b337c9e0e6f037c16c3ba01c0b758600647a83de4a5e78e41a5cc26ee68a1ee" || { echo "oreon: Source0 SHA256 mismatch for CPAN-2.38.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n CPAN-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

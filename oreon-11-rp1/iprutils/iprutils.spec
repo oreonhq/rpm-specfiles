@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 027031d2101e448fadf74e1f75852dcc96d017f11758e6b270e10d9737f98c4e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global gitver rel-2-4-19
 
 Summary: Utilities for the IBM Power Linux RAID adapters
@@ -12,10 +20,6 @@ Source0: https://github.com/bjking1/iprutils/archive/%{gitver}/%{name}-%{version
 Source1: iprdbg.8.gz
 
 Patch10: iprutils-2.4.19-covscan.patch
-# oreon url source checksums begin
-%global source0_sha256 027031d2101e448fadf74e1f75852dcc96d017f11758e6b270e10d9737f98c4e
-%global source0_file iprutils-2.4.19.tar.gz
-# oreon url source checksums end
 
 ExclusiveArch: ppc64le
 
@@ -34,9 +38,7 @@ supported by the ipr SCSI storage device driver.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/iprutils-2.4.19.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "027031d2101e448fadf74e1f75852dcc96d017f11758e6b270e10d9737f98c4e" || { echo "oreon: Source0 SHA256 mismatch for iprutils-2.4.19.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{gitver}
 
 autoreconf -vif

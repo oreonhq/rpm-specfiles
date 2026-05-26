@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fb76247e369402be23f1f5c65d38a9639c1164d934e40f6a9cf3c9e96b652788
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: atk
 Version: 2.36.0
 Release: 5%{?dist}
@@ -6,10 +14,6 @@ Summary: Interfaces for accessibility support
 License: LGPLv2+
 URL: https://developer.gnome.org/platform-overview/stable/atk
 Source0: https://download.gnome.org/sources/atk/2.36/atk-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 fb76247e369402be23f1f5c65d38a9639c1164d934e40f6a9cf3c9e96b652788
-%global source0_file atk-2.36.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires: glib2-devel
 BuildRequires: gettext
@@ -33,9 +37,7 @@ This package includes libraries, header files, and developer documentation
 needed for development of applications or toolkits which use ATK.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/atk-2.36.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fb76247e369402be23f1f5c65d38a9639c1164d934e40f6a9cf3c9e96b652788" || { echo "oreon: Source0 SHA256 mismatch for atk-2.36.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a5d50a42b8c288febc07151ab643ac8de06a18446965c7241f89b4e810821913
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libvdpau
 Version:        1.5
 Release:        11%{?dist}
@@ -6,10 +14,6 @@ License:        MIT
 URL:            https://freedesktop.org/wiki/Software/VDPAU/
 Source0:        https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/%{version}/libvdpau-%{version}.tar.bz2
 Patch0:         https://gitlab.freedesktop.org/vdpau/libvdpau/-/commit/2afa3f989af24a922692ac719fae23c321776cdb.diff#/%{name}-av1-trace.patch
-# oreon url source checksums begin
-%global source0_sha256 a5d50a42b8c288febc07151ab643ac8de06a18446965c7241f89b4e810821913
-%global source0_file libvdpau-1.5.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
@@ -56,9 +60,7 @@ The %{name}-devel package contains libraries and header files for developing
 applications that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libvdpau-1.5.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a5d50a42b8c288febc07151ab643ac8de06a18446965c7241f89b4e810821913" || { echo "oreon: Source0 SHA256 mismatch for libvdpau-1.5.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

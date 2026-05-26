@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 77937baf07eadda4b2b311cf3af4c50269d2ea3165041f5843d96476c4c92777
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %ifarch %{java_arches}
 %global build_bdj 1
 %else
@@ -15,10 +23,6 @@ Source0:        https://download.videolan.org/pub/videolan/%{name}/%{version}/%{
 Patch0:         libbluray-0.8.0-no_doxygen_timestamp.patch
 # https://code.videolan.org/videolan/libbluray/-/commit/48d76414455ab6a7d270cec96d6e83673df8a00d
 Patch1:         libbluray-1.4.0-java_23_support.patch
-# oreon url source checksums begin
-%global source0_sha256 77937baf07eadda4b2b311cf3af4c50269d2ea3165041f5843d96476c4c92777
-%global source0_file libbluray-1.4.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  doxygen
 BuildRequires:  fontconfig-devel
@@ -71,9 +75,7 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libbluray-1.4.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "77937baf07eadda4b2b311cf3af4c50269d2ea3165041f5843d96476c4c92777" || { echo "oreon: Source0 SHA256 mismatch for libbluray-1.4.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1 -b .no_timestamp
 %patch -P1 -p1 -b .java_23

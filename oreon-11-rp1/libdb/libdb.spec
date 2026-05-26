@@ -1,3 +1,15 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e0a992d740709892e81f9d93f06daf305cf73fb81b545afe72478043172c3628
+%global source1_sha256 4220d4ddeb77fb57ba2f37c1aa105d561d3ef85a6fb89c79c3edd735d0e193c6
+%global source4_sha256 792e854b402e9e18ccfe6edef97fe86d2d95d24d75c405875d419526a6c114d4
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source4_sha256:%(test -z "%{source4_sha256}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_sha256}" || { echo "oreon: Source4 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # This must remain enabled even for RHEL/ELN until all libdb dependencies
 # are dropped, then this should be Fedora-only
 %bcond_without subpackages
@@ -77,14 +89,6 @@ Patch44: libdb-configure-c99.patch
 Patch45: libdb-sqlite-c99.patch
 # Fix build with tcl8
 Patch46: libdb-sqlite-tcl8.patch
-# oreon url source checksums begin
-%global source0_sha256 e0a992d740709892e81f9d93f06daf305cf73fb81b545afe72478043172c3628
-%global source0_file db-5.3.28.tar.gz
-%global source1_sha256 4220d4ddeb77fb57ba2f37c1aa105d561d3ef85a6fb89c79c3edd735d0e193c6
-%global source1_file db.1.85.tar.gz
-%global source4_sha256 792e854b402e9e18ccfe6edef97fe86d2d95d24d75c405875d419526a6c114d4
-%global source4_file v1.0.3.tar.gz
-# oreon url source checksums end
 
 URL: http://www.oracle.com/database/berkeley-db/
 License: BSD-3-Clause AND LGPL-2.1-only AND Sleepycat
@@ -257,11 +261,7 @@ for building programs which use the Berkeley DB in SQL.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/db-5.3.28.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e0a992d740709892e81f9d93f06daf305cf73fb81b545afe72478043172c3628" || { echo "oreon: Source0 SHA256 mismatch for db-5.3.28.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/db.1.85.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4220d4ddeb77fb57ba2f37c1aa105d561d3ef85a6fb89c79c3edd735d0e193c6" || { echo "oreon: Source1 SHA256 mismatch for db.1.85.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/v1.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "792e854b402e9e18ccfe6edef97fe86d2d95d24d75c405875d419526a6c114d4" || { echo "oreon: Source4 SHA256 mismatch for v1.0.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n db-%{version} -a 1
 cp %{SOURCE2} .
 tar -xf %{SOURCE3}

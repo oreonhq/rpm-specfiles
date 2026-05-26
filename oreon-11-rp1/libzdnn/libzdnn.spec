@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 154acbb56f374e9b88a30d55180d2da776e1742d252ae216d94e9c0b4cef28bd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		libzdnn
 Version:	1.0.1
 Release:	8%{?dist}
@@ -6,10 +14,6 @@ Summary:	Driver library for the IBM Z Neural Network Processing Assist Facility
 License:	Apache-2.0
 Url:		https://github.com/IBM/zDNN
 Source0:        https://github.com/IBM/zDNN/archive/v1.0.1/libzdnn-1.0.1.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 154acbb56f374e9b88a30d55180d2da776e1742d252ae216d94e9c0b4cef28bd
-%global source0_file libzdnn-1.0.1.tar.gz
-# oreon url source checksums end
 
 ExclusiveArch:	s390x
 BuildRequires:	gcc
@@ -47,9 +51,7 @@ The %{name}-static package contains the static library of %{name}.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libzdnn-1.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "154acbb56f374e9b88a30d55180d2da776e1742d252ae216d94e9c0b4cef28bd" || { echo "oreon: Source0 SHA256 mismatch for libzdnn-1.0.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n zDNN-%{version}
 autoreconf -i
 

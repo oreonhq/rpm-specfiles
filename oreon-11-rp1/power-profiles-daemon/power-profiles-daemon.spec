@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 528ee5b8ca0a27d8d66128ebf850e23be9571dc130cf2a82dd2463dac7d3a92f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global forgeurl    https://gitlab.freedesktop.org/upower/%{name}
 
 Version:        0.30
@@ -10,10 +18,6 @@ Summary:        Makes power profiles handling available over D-Bus
 License:        GPL-3.0-or-later
 URL:            %{forgeurl}
 Source0:        https://gitlab.freedesktop.org/upower/power-profiles-daemon/-/archive/0.30/power-profiles-daemon-0.30.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 528ee5b8ca0a27d8d66128ebf850e23be9571dc130cf2a82dd2463dac7d3a92f
-%global source0_file power-profiles-daemon-0.30.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:  meson
 BuildRequires:  gcc
@@ -48,9 +52,7 @@ BuildArch:      noarch
 This package contains the documentation for %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/power-profiles-daemon-0.30.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "528ee5b8ca0a27d8d66128ebf850e23be9571dc130cf2a82dd2463dac7d3a92f" || { echo "oreon: Source0 SHA256 mismatch for power-profiles-daemon-0.30.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %forgeautosetup
 
 %build

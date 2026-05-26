@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1dd098483eb1c7ee8e32eb2e99ad1910baefa4b75c3aff3a82f4d78688993b10
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without check
 
 Name:           python-humanize
@@ -8,10 +16,6 @@ Summary:        Turns dates in to human readable format, e.g '3 minutes ago'
 License:        MIT
 URL:            https://github.com/python-humanize/humanize
 Source0:        https://files.pythonhosted.org/packages/source/h/humanize/humanize-4.15.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 1dd098483eb1c7ee8e32eb2e99ad1910baefa4b75c3aff3a82f4d78688993b10
-%global source0_file humanize-4.15.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -32,9 +36,7 @@ a number into a fuzzy human readable duration ('3 minutes ago') or into a human
 readable size or throughput.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/humanize-4.15.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1dd098483eb1c7ee8e32eb2e99ad1910baefa4b75c3aff3a82f4d78688993b10" || { echo "oreon: Source0 SHA256 mismatch for humanize-4.15.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n humanize-%{version}
 
 # Remove shebangs from libs.

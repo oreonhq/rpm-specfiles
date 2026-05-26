@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9b02df578ec0aadd5e800e5f09281e80abddab5e0f74b4b88694f06c9956b6aa
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global mod_name blinker
 
 Name:           python-blinker
@@ -8,10 +16,6 @@ Summary:        Fast, simple object-to-object and broadcast signaling
 License:        MIT
 URL:            https://github.com/pallets-eco/blinker
 Source0:        https://github.com/pallets-eco/blinker/archive/1.9.0/blinker-1.9.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 9b02df578ec0aadd5e800e5f09281e80abddab5e0f74b4b88694f06c9956b6aa
-%global source0_file blinker-1.9.0.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -31,9 +35,7 @@ Blinker provides a fast dispatching system that allows any number
 of interested parties to subscribe to events, or "signals".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/blinker-1.9.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9b02df578ec0aadd5e800e5f09281e80abddab5e0f74b4b88694f06c9956b6aa" || { echo "oreon: Source0 SHA256 mismatch for blinker-1.9.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{mod_name}-%{version}
 # requirements in tests.txt are way too tight
 mv requirements/tests.in requirements/tests.txt

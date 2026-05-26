@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7301deb354dfab8b25367ba49f863cf157d5291ca878c76f94ebed4211a409d6
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 #global candidate rc2
 
 Name:          libi2cd
@@ -8,10 +16,6 @@ Summary:       C library for interacting with linux I2C devices
 License:       LGPL-2.1-or-later
 URL:           https://github.com/sstallion/libi2cd/
 Source0:       https://github.com/sstallion/libi2cd/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 7301deb354dfab8b25367ba49f863cf157d5291ca878c76f94ebed4211a409d6
-%global source0_file v1.0.3.tar.gz
-# oreon url source checksums end
 
 BuildRequires: automake autoconf libtool
 BuildRequires: gcc
@@ -32,9 +36,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Files for development with %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/v1.0.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7301deb354dfab8b25367ba49f863cf157d5291ca878c76f94ebed4211a409d6" || { echo "oreon: Source0 SHA256 mismatch for v1.0.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{version}%{?candidate:-%{candidate}}
 
 %build

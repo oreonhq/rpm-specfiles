@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 674dcaff25010e09e450aec458b8870d9e98c46f99538db457ab659b321d9989
+%global source1_sha256 376b2f89680a9cdea0289de4e633e2287dcd80ba887a7b77ee7281934e5d2a38
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global __cmake_in_source_build 1
 Summary:        A freely licensed alternative to the GLUT library
 Name:           freeglut
@@ -8,12 +18,6 @@ Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar
 # For the manpages
 Source1:        https://downloads.sourceforge.net/openglut/openglut-0.6.3-doc.tar.gz
 Patch0:         common.patch
-# oreon url source checksums begin
-%global source0_sha256 674dcaff25010e09e450aec458b8870d9e98c46f99538db457ab659b321d9989
-%global source0_file freeglut-3.8.0.tar.gz
-%global source1_sha256 376b2f89680a9cdea0289de4e633e2287dcd80ba887a7b77ee7281934e5d2a38
-%global source1_file openglut-0.6.3-doc.tar.gz
-# oreon url source checksums end
 
 License:        MIT
 
@@ -58,10 +62,7 @@ license.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/freeglut-3.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "674dcaff25010e09e450aec458b8870d9e98c46f99538db457ab659b321d9989" || { echo "oreon: Source0 SHA256 mismatch for freeglut-3.8.0.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/openglut-0.6.3-doc.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "376b2f89680a9cdea0289de4e633e2287dcd80ba887a7b77ee7281934e5d2a38" || { echo "oreon: Source1 SHA256 mismatch for openglut-0.6.3-doc.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -a 1
 %patch -P 0 -p0
 

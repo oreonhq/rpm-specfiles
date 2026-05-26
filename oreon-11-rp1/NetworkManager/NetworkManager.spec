@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 59a32d385cc1e7ae26e43798c6f12d07ff6198abd041ec0620b3a08cfc021ccc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:    NetworkManager
 Summary: Network connection manager and user applications
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
@@ -174,10 +182,6 @@ Source9: readme-ifcfg-rh-migrated.txt
 
 Patch1: 0001-polkit-noauth-group.patch
 Patch2: 0002-secret-permission-fixes.patch
-# oreon url source checksums begin
-%global source0_sha256 59a32d385cc1e7ae26e43798c6f12d07ff6198abd041ec0620b3a08cfc021ccc
-%global source0_file NetworkManager-1.56.0.tar.xz
-# oreon url source checksums end
 
 Requires(post): systemd
 Requires(post): systemd-udev
@@ -572,9 +576,7 @@ Preferably use nmcli instead.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/NetworkManager-1.56.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "59a32d385cc1e7ae26e43798c6f12d07ff6198abd041ec0620b3a08cfc021ccc" || { echo "oreon: Source0 SHA256 mismatch for NetworkManager-1.56.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n NetworkManager-%{version_no_tilde}
 
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # This spec file has been automatically updated
 %if 0%{?fedora}
 %bcond_without mingw
@@ -18,10 +26,6 @@ Source1:        https://github.com/p11-glue/p11-kit/releases/download/%{version}
 Source2:        https://p11-glue.github.io/p11-glue/p11-kit/p11-kit-release-keyring.gpg
 Source3:        trust-extract-compat
 Source4:        p11-kit-client.service
-# oreon url source checksums begin
-%global source0_sha256 09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828
-%global source0_file p11-kit-0.26.2.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  gcc
 BuildRequires:  libtasn1-devel >= 2.3
@@ -141,9 +145,7 @@ way that they're discoverable.  This library is cross-compiled for MinGW.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/p11-kit-0.26.2.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828" || { echo "oreon: Source0 SHA256 mismatch for p11-kit-0.26.2.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 
 %autosetup -p1

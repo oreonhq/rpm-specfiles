@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 809d5692ed1e58ad31b04a41c091cab22a79b53c6f9a4c65ecfc5d6c32ab0ab3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global nssdir /%{_lib}
 %global pamdir /%{_lib}/security
 
@@ -19,10 +27,6 @@ Source4:        nslcd.service
 Patch0001:      0001-Disable-pylint-tests.patch
 Patch0002:      0002-Watch-for-uint32_t-overflows.patch
 Patch0003:      0003-bool-name.patch
-# oreon url source checksums begin
-%global source0_sha256 809d5692ed1e58ad31b04a41c091cab22a79b53c6f9a4c65ecfc5d6c32ab0ab3
-%global source0_file nss-pam-ldapd-0.9.10.tar.gz
-# oreon url source checksums end
 
 BuildRequires: make
 BuildRequires:  gcc
@@ -52,9 +56,7 @@ service information (users, groups, etc.) on behalf of a lightweight
 nsswitch module.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/nss-pam-ldapd-0.9.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "809d5692ed1e58ad31b04a41c091cab22a79b53c6f9a4c65ecfc5d6c32ab0ab3" || { echo "oreon: Source0 SHA256 mismatch for nss-pam-ldapd-0.9.10.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 autoreconf -f -i
 

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1f6d51b0b4ccb98c0bc5bcf9339b721a7a82851b9af399b0c90eaa998de286cd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without vmguestlib
 
 Name: spausedd
@@ -7,10 +15,6 @@ Release: 12%{?dist}
 License: ISC
 URL: https://github.com/jfriesse/spausedd
 Source0: https://github.com/jfriesse/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 1f6d51b0b4ccb98c0bc5bcf9339b721a7a82851b9af399b0c90eaa998de286cd
-%global source0_file spausedd-20210719.tar.gz
-# oreon url source checksums end
 
 # VMGuestLib exists only for x86 architectures (for Fedora) and x86_64 (for RHEL)
 %if %{with vmguestlib}
@@ -39,9 +43,7 @@ BuildRequires: pkgconfig(vmguestlib)
 Utility to detect and log scheduler pause
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/spausedd-20210719.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1f6d51b0b4ccb98c0bc5bcf9339b721a7a82851b9af399b0c90eaa998de286cd" || { echo "oreon: Source0 SHA256 mismatch for spausedd-20210719.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git_am
 
 %build

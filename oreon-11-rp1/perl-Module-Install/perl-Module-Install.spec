@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 fbf91007f30565f3920e106055fd0d4287981d5e7dad8b35323ce4b733f15a7b
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %if ! (0%{?rhel})
 %bcond_without perl_Module_Install_enables_optional_test
@@ -15,10 +23,6 @@ Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Module-Install-%
 # Fix a crash when looking up 5.010 Perl core modules, CPAN RT#71565, proposed
 # to upstream <https://github.com/Perl-Toolchain-Gang/Module-Install/pull/64>
 Patch0:         Module-Install-1.19-Fix-Perl-version-lookup-with-Module-CoreList.patch
-# oreon url source checksums begin
-%global source0_sha256 fbf91007f30565f3920e106055fd0d4287981d5e7dad8b35323ce4b733f15a7b
-%global source0_file Module-Install-1.21.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils
@@ -135,9 +139,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Module-Install-1.21.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "fbf91007f30565f3920e106055fd0d4287981d5e7dad8b35323ce4b733f15a7b" || { echo "oreon: Source0 SHA256 mismatch for Module-Install-1.21.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Module-Install-%{version}
 %patch -P0 -p1
 # Help generators to recognize Perl scripts

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ff4791d5d9d3b96f942b38b901b3053f20a141b3e51747430dd38762929b1798
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           ongres-stringprep
 Version:        2.2
 Release:        %autorelease
@@ -5,10 +13,6 @@ Summary:        RFC 3454 Preparation of Internationalized Strings in pure Java
 License:        BSD-2-Clause
 URL:            https://github.com/ongres/stringprep
 Source0:        https://github.com/ongres/stringprep/archive/%{version}/stringprep-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ff4791d5d9d3b96f942b38b901b3053f20a141b3e51747430dd38762929b1798
-%global source0_file stringprep-2.2.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
@@ -23,9 +27,7 @@ The stringprep protocol does not stand on its own; it has to be used by other
 protocols at precisely-defined places in those other protocols.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/stringprep-2.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ff4791d5d9d3b96f942b38b901b3053f20a141b3e51747430dd38762929b1798" || { echo "oreon: Source0 SHA256 mismatch for stringprep-2.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n "stringprep-%{version}"
 find \( -name '*.jar' -o -name '*.class' \) -delete
 

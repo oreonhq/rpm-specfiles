@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ed3836885d78f734ccd7a98550ec422a616df7c31310c1b7b1f6459f5fb0e4bd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:      	perl-Class-ReturnValue
 Summary:   	Class::ReturnValue Perl module
 Version:   	0.55
@@ -7,10 +15,6 @@ URL:       	https://metacpan.org/release/Class-ReturnValue
 
 BuildArch: 	noarch
 Source:    	https://cpan.metacpan.org/authors/id/J/JE/JESSE/Class-ReturnValue-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ed3836885d78f734ccd7a98550ec422a616df7c31310c1b7b1f6459f5fb0e4bd
-%global source0_file Class-ReturnValue-0.55.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  %{__make}
 BuildRequires:  perl-generators
@@ -27,9 +31,7 @@ BuildRequires:	perl(Test::More)
 A return-value object that lets you treat it as as a boolean, array or object.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Class-ReturnValue-0.55.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ed3836885d78f734ccd7a98550ec422a616df7c31310c1b7b1f6459f5fb0e4bd" || { echo "oreon: Source0 SHA256 mismatch for Class-ReturnValue-0.55.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Class-ReturnValue-%{version} 
 rm -r inc
 

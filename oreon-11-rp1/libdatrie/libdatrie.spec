@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f04095010518635b51c2313efa4f290b7db828d6273e39b2b8858f859dfe81d5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           libdatrie
 Version:        0.2.14
 Release:        2%{?dist}
@@ -5,10 +13,6 @@ Summary:        Implementation of Double-Array structure for representing trie
 License:        LGPL-2.1-or-later
 URL:            http://linux.thai.net/projects/datrie
 Source0:        http://linux.thai.net/pub/thailinux/software/libthai/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 f04095010518635b51c2313efa4f290b7db828d6273e39b2b8858f859dfe81d5
-%global source0_file libdatrie-0.2.14.tar.xz
-# oreon url source checksums end
 BuildRequires:  autoconf, automake, libtool
 BuildRequires:  autoconf-archive
 BuildRequires:  doxygen
@@ -33,9 +37,7 @@ This package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libdatrie-0.2.14.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f04095010518635b51c2313efa4f290b7db828d6273e39b2b8858f859dfe81d5" || { echo "oreon: Source0 SHA256 mismatch for libdatrie-0.2.14.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 %build

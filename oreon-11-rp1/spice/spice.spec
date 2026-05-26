@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 0a6ec9528f05371261bbb2d46ff35e7b5c45ff89bb975a99af95a5f20ff4717d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           spice
 Version:        0.16.0
 Release:        4%{?dist}
@@ -8,10 +16,6 @@ URL:            http://www.spice-space.org/
 Source0:        http://www.spice-space.org/download/releases/%{name}-%{version}.tar.bz2
 Patch0000:      0001-test-gst-Fix-compilation-error.patch
 Patch0001:      0001-test-display-base-Fix-C-designated-initializer-for-a.patch
-# oreon url source checksums begin
-%global source0_sha256 0a6ec9528f05371261bbb2d46ff35e7b5c45ff89bb975a99af95a5f20ff4717d
-%global source0_file spice-0.16.0.tar.bz2
-# oreon url source checksums end
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=613529
 %if 0%{?rhel} && 0%{?rhel} <= 7
@@ -69,9 +73,7 @@ using spice-server, you will need to install spice-server-devel.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/spice-0.16.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0a6ec9528f05371261bbb2d46ff35e7b5c45ff89bb975a99af95a5f20ff4717d" || { echo "oreon: Source0 SHA256 mismatch for spice-0.16.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git_am
 
 

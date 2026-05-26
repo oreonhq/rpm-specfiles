@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f4e41de4397a05bbda69ff0d027edecc456e9f7dbc3d3bc7cd378f2ac0d6976d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with bootstrap
 
 Name:           plexus-io
@@ -11,10 +19,6 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/codehaus-plexus/plexus-io/archive/plexus-io-%{version}.tar.gz
 Source1:        http://www.apache.org/licenses/LICENSE-2.0.txt
-# oreon url source checksums begin
-%global source0_sha256 f4e41de4397a05bbda69ff0d027edecc456e9f7dbc3d3bc7cd378f2ac0d6976d
-%global source0_file plexus-io-3.5.0.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -41,9 +45,7 @@ Plexus IO is a set of plexus components, which are designed for use
 in I/O operations.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/plexus-io-3.5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f4e41de4397a05bbda69ff0d027edecc456e9f7dbc3d3bc7cd378f2ac0d6976d" || { echo "oreon: Source0 SHA256 mismatch for plexus-io-3.5.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 cp %{SOURCE1} .
 

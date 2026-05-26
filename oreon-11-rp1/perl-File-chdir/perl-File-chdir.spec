@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 31ebf912df48d5d681def74b9880d78b1f3aca4351a0ed1fe3570b8e03af6c79
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-File-chdir
 Version:        0.1011
 Release:        29%{?dist}
@@ -5,10 +13,6 @@ Summary:        A more sensible way to change directories
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-chdir
 Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/File-chdir-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 31ebf912df48d5d681def74b9880d78b1f3aca4351a0ed1fe3570b8e03af6c79
-%global source0_file File-chdir-0.1011.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
@@ -43,9 +47,7 @@ File::chdir gives you an alternative, $CWD and @CWD. These two variables
 combine all the power of chdir(), File::Spec and Cwd.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/File-chdir-0.1011.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "31ebf912df48d5d681def74b9880d78b1f3aca4351a0ed1fe3570b8e03af6c79" || { echo "oreon: Source0 SHA256 mismatch for File-chdir-0.1011.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n File-chdir-%{version}
 
 %build

@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 74e7cc3e9e03e609c1c74bb7e8862fcd988cdd64768dcbee4611581b7e633852
+%global source1_sha256 d6fbb91ae7824c52fb02f74d7bc2cd9092f130faec60f42326a59437fa7247a3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global dict_dirname hunspell 
 Name: hunspell-en
 Summary: English hunspell dictionaries
@@ -18,12 +28,6 @@ Patch4: hunspell-en-allow-non-typographical.marks.patch
 Patch7: en_IE.supplemental.patch
 #rhbz#1492306 for better or worse treat etc the same in US and GB
 Patch9: en_GB.etc.patch
-# oreon url source checksums begin
-%global source0_sha256 74e7cc3e9e03e609c1c74bb7e8862fcd988cdd64768dcbee4611581b7e633852
-%global source0_file rel-2026.02.25.tar.gz
-%global source1_sha256 d6fbb91ae7824c52fb02f74d7bc2cd9092f130faec60f42326a59437fa7247a3
-%global source1_file hunspell-en_GB-ise-2026.02.25.zip
-# oreon url source checksums end
 URL: http://wordlist.sourceforge.net/
 # README_en_GB.txt has specified just LGPL which mean LGPLv2+
 # scowl/speller/aspell/en_affix.dat is BSD
@@ -106,10 +110,7 @@ Summary: UK English hunspell dictionaries
 UK English hunspell dictionaries
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rel-2026.02.25.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "74e7cc3e9e03e609c1c74bb7e8862fcd988cdd64768dcbee4611581b7e633852" || { echo "oreon: Source0 SHA256 mismatch for rel-2026.02.25.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/hunspell-en_GB-ise-2026.02.25.zip; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d6fbb91ae7824c52fb02f74d7bc2cd9092f130faec60f42326a59437fa7247a3" || { echo "oreon: Source1 SHA256 mismatch for hunspell-en_GB-ise-2026.02.25.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n wordlist-rel-2026.02.25
 # Extract the pre-built en_GB dictionaries from GitHub release (they replace the need for Source1)
 # Note: Source1 is now the hunspell-en_GB-ise pre-built zip which provides ready-made dictionaries

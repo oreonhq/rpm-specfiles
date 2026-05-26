@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 398ec15cd899fcd8bef3db9ea1748bf631f15f6c32be203e475b67df510a5914
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %if ! (0%{?rhel})
 %bcond_without perl_Params_Classify_enables_optional_test
@@ -12,10 +20,6 @@ Summary:        Argument type classification
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Params-Classify
 Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/Params-Classify-0.015.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 398ec15cd899fcd8bef3db9ea1748bf631f15f6c32be203e475b67df510a5914
-%global source0_file Params-Classify-0.015.tar.gz
-# oreon url source checksums end
 
 # Module Build
 BuildRequires:  coreutils
@@ -58,9 +62,7 @@ differently depending on the type of their arguments (like overloaded
 functions in C++).
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Params-Classify-0.015.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "398ec15cd899fcd8bef3db9ea1748bf631f15f6c32be203e475b67df510a5914" || { echo "oreon: Source0 SHA256 mismatch for Params-Classify-0.015.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Params-Classify-%{version}
 
 %build

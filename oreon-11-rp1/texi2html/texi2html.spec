@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 e8a98b0ee20c495a6ab894398a065ef580272dbd5a15b1b19e8bd1bc89d9f9fa
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: texi2html
 Version: 5.0
 Release: 26%{?dist}
@@ -12,10 +20,6 @@ Source0: http://download.savannah.nongnu.org/releases/%{name}/%{name}-%{version}
 Patch0: texi2html-5.0-Do-not-install-Unicode-EastAsianWidth-if-external-is.patch
 # Do not install bundled libintl-perl, <https://savannah.nongnu.org/bugs/?43457>
 Patch1: texi2html-5.0-Do-not-install-libintl-perl-if-external-is-used.patch
-# oreon url source checksums begin
-%global source0_sha256 e8a98b0ee20c495a6ab894398a065ef580272dbd5a15b1b19e8bd1bc89d9f9fa
-%global source0_file texi2html-5.0.tar.bz2
-# oreon url source checksums end
 URL: http://www.nongnu.org/texi2html/
 Requires: perl-interpreter >= 5.004
 Requires: latex2html
@@ -43,9 +47,7 @@ of control over the final output, allowing most every aspect of the final
 output not specified in the Texinfo input file to be specified.  
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/texi2html-5.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "e8a98b0ee20c495a6ab894398a065ef580272dbd5a15b1b19e8bd1bc89d9f9fa" || { echo "oreon: Source0 SHA256 mismatch for texi2html-5.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch -P0 -p1
 %patch -P1 -p1

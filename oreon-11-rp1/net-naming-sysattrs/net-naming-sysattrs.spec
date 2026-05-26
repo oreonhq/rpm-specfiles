@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ba2e5f1280b3ecc182c4cb00ad464ffafd497b492fb2659f3fcd50cc478dbaae
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global dracutmoddir %{_prefix}/lib/dracut/modules.d
 
 Name:           net-naming-sysattrs
@@ -8,10 +16,6 @@ Summary:        Mechanism to emulate older network device naming behavior
 License:        MIT
 URL:            https://gitlab.com/mschmidt2/%{name}
 Source0:        https://gitlab.com/mschmidt2/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 ba2e5f1280b3ecc182c4cb00ad464ffafd497b492fb2659f3fcd50cc478dbaae
-%global source0_file net-naming-sysattrs-v263.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  make
@@ -41,9 +45,7 @@ The desired naming scheme can be specified on the kernel command line:
 (Default: rhel-9.0)
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/net-naming-sysattrs-v263.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ba2e5f1280b3ecc182c4cb00ad464ffafd497b492fb2659f3fcd50cc478dbaae" || { echo "oreon: Source0 SHA256 mismatch for net-naming-sysattrs-v263.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n %{name}-v%{version}
 
 %build

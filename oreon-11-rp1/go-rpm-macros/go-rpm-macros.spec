@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 4a8cb9ef892fdbac004c00ce228e6d793dbebb96473c0d077df146cb7f5a637e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond tests 1
 %global forgeurl  https://gitlab.com/fedora/sigs/go/go-rpm-macros
 Version:   3.8.0
@@ -31,10 +39,6 @@ Summary:   Build-stage rpm automation for Go packages
 License:   GPL-3.0-or-later
 URL:       %{forgeurl}
 Source:    %{forgesource}
-# oreon url source checksums begin
-%global source0_sha256 4a8cb9ef892fdbac004c00ce228e6d793dbebb96473c0d077df146cb7f5a637e
-%global source0_file go-rpm-macros-3.8.0.tar.bz2
-# oreon url source checksums end
 
 %if %{with tests}
 BuildRequires: pyproject-rpm-macros
@@ -106,9 +110,7 @@ This package contains documented rpm spec templates showcasing how to use the
 macros provided by go-rpm-macros to create Go packages.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/go-rpm-macros-3.8.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4a8cb9ef892fdbac004c00ce228e6d793dbebb96473c0d077df146cb7f5a637e" || { echo "oreon: Source0 SHA256 mismatch for go-rpm-macros-3.8.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %forgeautosetup -p1
 %writevars -f rpm/macros.d/macros.go-srpm golang_arches golang_arches_future gccgo_arches gopath
 for template in templates/rpm/*\.spec ; do

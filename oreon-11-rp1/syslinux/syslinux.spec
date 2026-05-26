@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3f6d50a57f3ed47d8234fd0ab4492634eb7c9aaf7dd902f33d3ac33564fd631d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # No, please don't break the build.  Thanks.
 %undefine _auto_set_build_flags
 
@@ -26,10 +34,6 @@ Patch0008: 0008-Fix-build-with-GCC-14.patch
 Patch0009: 0009-Rewrite_Digest_SHA1_to_SHA.patch
 Patch0010: 0010-Fix-reported-SAST-findings.patch
 Patch0011: 0011-core-Makefile-allow-relocations-on-text-sections.patch
-# oreon url source checksums begin
-%global source0_sha256 3f6d50a57f3ed47d8234fd0ab4492634eb7c9aaf7dd902f33d3ac33564fd631d
-%global source0_file syslinux-6.04-pre1.tar.xz
-# oreon url source checksums end
 
 # this is to keep rpmbuild from thinking the .c32 / .com / .0 / memdisk files
 # in noarch packages are a reason to stop the build.
@@ -122,9 +126,7 @@ SYSLINUX binaries and modules for 64-bit UEFI systems
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/syslinux-6.04-pre1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3f6d50a57f3ed47d8234fd0ab4492634eb7c9aaf7dd902f33d3ac33564fd631d" || { echo "oreon: Source0 SHA256 mismatch for syslinux-6.04-pre1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git_am -n syslinux-%{tarball_version}
 
 %build

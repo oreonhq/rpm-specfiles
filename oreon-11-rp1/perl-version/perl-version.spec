@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 dc07d9388ca3d3f67146312904bcdb35fe416bb30056158f80df3281a94fae58
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional test
 %if ! (0%{?rhel})
 %bcond_without perl_version_enables_optional_test
@@ -14,10 +22,6 @@ Summary:        Perl extension for Version Objects
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/version
 Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/version-%{module_version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 dc07d9388ca3d3f67146312904bcdb35fe416bb30056158f80df3281a94fae58
-%global source0_file version-0.9933.tar.gz
-# oreon url source checksums end
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
@@ -89,9 +93,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/version-0.9933.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dc07d9388ca3d3f67146312904bcdb35fe416bb30056158f80df3281a94fae58" || { echo "oreon: Source0 SHA256 mismatch for version-0.9933.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n version-%{module_version}
 
 # Help file to recognise the Perl scripts

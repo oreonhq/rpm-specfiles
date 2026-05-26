@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 149a65f019909c289714b57fb5c7cadba593e7b86ccf25cb49f7e54a2a1af1ce
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:		perl-parent
 Epoch:		1
 Version:	0.244
@@ -6,10 +14,6 @@ Summary:	Establish an ISA relationship with base classes at compile time
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/parent
 Source0:	https://cpan.metacpan.org/authors/id/C/CO/CORION/parent-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 149a65f019909c289714b57fb5c7cadba593e7b86ccf25cb49f7e54a2a1af1ce
-%global source0_file parent-0.244.tar.gz
-# oreon url source checksums end
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils
@@ -40,9 +44,7 @@ from those modules at the same time. Mostly similar in effect to:
 	}
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/parent-0.244.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "149a65f019909c289714b57fb5c7cadba593e7b86ccf25cb49f7e54a2a1af1ce" || { echo "oreon: Source0 SHA256 mismatch for parent-0.244.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n parent-%{version}
 
 %build

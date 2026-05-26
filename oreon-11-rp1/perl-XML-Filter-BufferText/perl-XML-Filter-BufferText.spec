@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8fd2126d3beec554df852919f4739e689202cbba6a17506e9b66ea165841a75c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           perl-XML-Filter-BufferText
 Version:        1.01
 Release:        52%{?dist}
@@ -6,10 +14,6 @@ Summary:        Filter to put all characters() in one event
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Filter-BufferText
 Source0:        https://cpan.metacpan.org/authors/id/R/RB/RBERJON/XML-Filter-BufferText-1.01.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 8fd2126d3beec554df852919f4739e689202cbba6a17506e9b66ea165841a75c
-%global source0_file XML-Filter-BufferText-1.01.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires: make
@@ -28,9 +32,7 @@ does the trivial but oft-repeated task of putting all characters into a
 single event.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/XML-Filter-BufferText-1.01.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8fd2126d3beec554df852919f4739e689202cbba6a17506e9b66ea165841a75c" || { echo "oreon: Source0 SHA256 mismatch for XML-Filter-BufferText-1.01.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n XML-Filter-BufferText-%{version}
 chmod 644 Changes README BufferText.pm
 

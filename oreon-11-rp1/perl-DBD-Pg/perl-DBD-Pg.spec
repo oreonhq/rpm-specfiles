@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6d30efeb119838ca22ae882b4183fe7fade42fb1ed99d6d1c84ce1625d86c9bd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Perform optional tests
 %bcond_without perl_DBD_Pg_enables_optional_test
 
@@ -9,10 +17,6 @@ Release:        1%{?dist}
 # other files:      Same as Perl (GPL-1.0-or-later OR Artistic-1.0-Perl)
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
 Source0:        https://cpan.metacpan.org/authors/id/T/TU/TURNSTEP/DBD-Pg-%{version}.tar.gz 
-# oreon url source checksums begin
-%global source0_sha256 6d30efeb119838ca22ae882b4183fe7fade42fb1ed99d6d1c84ce1625d86c9bd
-%global source0_file DBD-Pg-3.19.0.tar.gz
-# oreon url source checksums end
 URL:            https://metacpan.org/release/DBD-Pg
 
 BuildRequires:  coreutils
@@ -89,9 +93,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/DBD-Pg-3.19.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6d30efeb119838ca22ae882b4183fe7fade42fb1ed99d6d1c84ce1625d86c9bd" || { echo "oreon: Source0 SHA256 mismatch for DBD-Pg-3.19.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n DBD-Pg-%{version}
 
 # Help generators to recognize Perl scripts

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 c06b2570fe8cb425d0bda70c518becfc97b6e49bab289edae9359a4fb606d43e
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global srcname fs
 
 # RHEL does not include the test dependencies
@@ -17,10 +25,6 @@ Source0:        https://github.com/PyFilesystem/pyfilesystem2/archive/v%{version
 # https://github.com/PyFilesystem/pyfilesystem2/pull/570
 # changelog fragment removed to avoid conflict
 Patch:          570.patch
-# oreon url source checksums begin
-%global source0_sha256 c06b2570fe8cb425d0bda70c518becfc97b6e49bab289edae9359a4fb606d43e
-%global source0_file fs-2.4.16.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  python3-devel
@@ -47,9 +51,7 @@ Summary:        %{summary}
 %description -n python3-%{srcname} %_description
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/fs-2.4.16.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c06b2570fe8cb425d0bda70c518becfc97b6e49bab289edae9359a4fb606d43e" || { echo "oreon: Source0 SHA256 mismatch for fs-2.4.16.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n pyfilesystem2-%{version} -p1
 
 %generate_buildrequires

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 bebdf14615f292972c9c939a003f2ad79eef32ddf9ff8d67f611a5da5a2a4598
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # the package can work with devices from network, so use hardened build
 %global _hardened_build 1
 
@@ -18,10 +26,6 @@ Source1: lprint.conf
 Patch001: 0001-Update-state-filename-to-current-PAPPL-standard-rena.patch
 # https://github.com/michaelrsweet/lprint/pull/151
 Patch002: 0001-lprint.c-Enable-TLS-support-in-Web-UI.patch
-# oreon url source checksums begin
-%global source0_sha256 bebdf14615f292972c9c939a003f2ad79eef32ddf9ff8d67f611a5da5a2a4598
-%global source0_file lprint-1.3.1.tar.gz
-# oreon url source checksums end
 
 # uses CUPS API for arrays, options, rastering, HTTP, IPP support
 BuildRequires: pkgconfig(cups) >= 2.4.0
@@ -56,9 +60,7 @@ to send the print data to USB and network-connected label printers.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/lprint-1.3.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bebdf14615f292972c9c939a003f2ad79eef32ddf9ff8d67f611a5da5a2a4598" || { echo "oreon: Source0 SHA256 mismatch for lprint-1.3.1.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git
 
 

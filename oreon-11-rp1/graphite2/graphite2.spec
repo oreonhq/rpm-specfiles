@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f99d1c13aa5fa296898a181dff9b82fb25f6cc0933dbaa7a475d8109bd54209d
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           graphite2
 Version:        1.3.14
 Release:        20%{?dist}
@@ -13,10 +21,6 @@ Patch0:         graphite-arm-nodefaultlibs.patch
 Patch1:         graphite2-1.2.0-cmakepath.patch
 # This fixes compilation with gcc15
 Patch2:         graphite2-1.3.14-gcc15.patch
-# oreon url source checksums begin
-%global source0_sha256 f99d1c13aa5fa296898a181dff9b82fb25f6cc0933dbaa7a475d8109bd54209d
-%global source0_file graphite2-1.3.14.tgz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc
@@ -44,9 +48,7 @@ Includes and definitions for developing with graphite2.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/graphite2-1.3.14.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f99d1c13aa5fa296898a181dff9b82fb25f6cc0933dbaa7a475d8109bd54209d" || { echo "oreon: Source0 SHA256 mismatch for graphite2-1.3.14.tgz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 

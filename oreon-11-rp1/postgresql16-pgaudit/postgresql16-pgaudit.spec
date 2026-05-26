@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 d53ef985f2d0b15ba25c512c4ce967dce07b94fd4422c95bd04c4c1a055fe738
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %{!?postgresql_default:%global postgresql_default 0}
 
 %global majorname pgaudit
@@ -11,10 +19,6 @@ License:	PostgreSQL
 URL:		http://pgaudit.org
 
 Source0:	https://github.com/%{majorname}/%{majorname}/archive/%{version}/%{majorname}-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 d53ef985f2d0b15ba25c512c4ce967dce07b94fd4422c95bd04c4c1a055fe738
-%global source0_file pgaudit-16.0.tar.gz
-# oreon url source checksums end
 
 %if %?postgresql_default
 %global pkgname %{majorname}
@@ -70,9 +74,7 @@ the PostgreSQL Audit extension (pgaudit) is properly called an audit
 trail or audit log. The term audit log is used in this documentation.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/pgaudit-16.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "d53ef985f2d0b15ba25c512c4ce967dce07b94fd4422c95bd04c4c1a055fe738" || { echo "oreon: Source0 SHA256 mismatch for pgaudit-16.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{majorname}-%{version}
 
 

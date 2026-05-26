@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 156aed3b49f857d0ac74fb76f1982968bcbfd8382da3f5b6ae71f616729920d7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # For deep debugging we need to build binaries with extra debug info
 %bcond_with     debug
 # Enable building and packing of the testsuite
@@ -18,10 +26,6 @@ Url:            http://mariadb.org/
 
 %if %{with testsuite}
 Patch1:         testsuite.patch
-# oreon url source checksums begin
-%global source0_sha256 156aed3b49f857d0ac74fb76f1982968bcbfd8382da3f5b6ae71f616729920d7
-%global source0_file mariadb-connector-c-3.4.8-src.tar.gz
-# oreon url source checksums end
 %endif
 
 %if 0%{?flatpak}
@@ -92,9 +96,7 @@ and require this package, so the /etc/my.cnf file is present.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/mariadb-connector-c-3.4.8-src.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "156aed3b49f857d0ac74fb76f1982968bcbfd8382da3f5b6ae71f616729920d7" || { echo "oreon: Source0 SHA256 mismatch for mariadb-connector-c-3.4.8-src.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n %{name}-%{version}-src
 %if %{with testsuite}
 %patch -P1 -p1

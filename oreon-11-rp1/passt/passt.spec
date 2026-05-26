@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8a1452f19ebf7644baa29dbe07bfd7a264409afbc33fd759536f3a5c70973885
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # PASST - Plug A Simple Socket Transport
 #  for qemu/UNIX domain socket mode
 #
@@ -19,10 +27,6 @@ License:	GPL-2.0-or-later AND BSD-3-Clause
 Group:		System Environment/Daemons
 URL:		https://passt.top/
 Source:		https://passt.top/passt/snapshot/passt-%{git_hash}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 8a1452f19ebf7644baa29dbe07bfd7a264409afbc33fd759536f3a5c70973885
-%global source0_file passt-386b5f5472b89769c025f5d5056348532a823b93.tar.xz
-# oreon url source checksums end
 
 BuildRequires:	gcc, make, checkpolicy, selinux-policy-devel
 Requires:	(%{name}-selinux = %{version}-%{release} if selinux-policy-%{selinuxtype})
@@ -58,9 +62,7 @@ Requires(post):		selinux-policy-%{selinuxtype}
 This package adds SELinux enforcement to passt(1), pasta(1), passt-repair(1).
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/passt-386b5f5472b89769c025f5d5056348532a823b93.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8a1452f19ebf7644baa29dbe07bfd7a264409afbc33fd759536f3a5c70973885" || { echo "oreon: Source0 SHA256 mismatch for passt-386b5f5472b89769c025f5d5056348532a823b93.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n passt-%{git_hash}
 
 %build

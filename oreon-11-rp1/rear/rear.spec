@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 04dd1d06d2c38908935199a8f74499f107dce3dbdc19122b9286bc22dcc78ea3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # this is purely a shell script, so no debug packages
 %global debug_package %{nil}
 
@@ -94,10 +102,6 @@ Patch202: rear-bz1747468.patch
 Patch204: rear-bz2120736.patch
 Patch205: rear-bz2188593-nbu-systemd.patch
 Patch206: rear-nbu-RHEL-17390-RHEL-17393.patch
-# oreon url source checksums begin
-%global source0_sha256 04dd1d06d2c38908935199a8f74499f107dce3dbdc19122b9286bc22dcc78ea3
-%global source0_file rear-2.9.tar.gz
-# oreon url source checksums end
 
 # rear contains only bash scripts plus documentation so that on first glance it could be "BuildArch: noarch"
 # but actually it is not "noarch" because it only works on those architectures that are explicitly supported.
@@ -183,9 +187,7 @@ Professional services and support are available.
 
 #-- PREP, BUILD & INSTALL -----------------------------------------------------#
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rear-2.9.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "04dd1d06d2c38908935199a8f74499f107dce3dbdc19122b9286bc22dcc78ea3" || { echo "oreon: Source0 SHA256 mismatch for rear-2.9.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -S git
 
 # Change /lib to /usr/lib for COPY_AS_IS

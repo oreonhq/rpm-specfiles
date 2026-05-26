@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 adf6aa7ce055c0987e716a93ac01f3c0a97c1280421443cd6b21e0e71d763d14
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global         min_qt_version 5.12
 %global         min_kf_version 5.66
 
@@ -18,10 +26,6 @@ URL:            https://invent.kde.org/system/kio-fuse
 Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz.sig
 Source2:        gpgkey-21EC3FD75D26B39E820BE6FBD27C2C1AF21D8BAD.gpg
-# oreon url source checksums begin
-%global source0_sha256 adf6aa7ce055c0987e716a93ac01f3c0a97c1280421443cd6b21e0e71d763d14
-%global source0_file kio-fuse-5.1.1.tar.xz
-# oreon url source checksums end
 
 ## upstream fixes
 
@@ -56,9 +60,7 @@ FUSE.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kio-fuse-5.1.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "adf6aa7ce055c0987e716a93ac01f3c0a97c1280421443cd6b21e0e71d763d14" || { echo "oreon: Source0 SHA256 mismatch for kio-fuse-5.1.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

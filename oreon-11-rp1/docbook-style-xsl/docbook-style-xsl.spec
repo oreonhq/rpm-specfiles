@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ee8b9eca0b7a8f89075832a2da7534bce8c5478fc8fc2676f512d5d87d832102
+%global source2_sha256 9bc38a3015717279a3a0620efb2d4bcace430077241ae2b0da609ba67d8340bc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name: docbook-style-xsl
 Version: 1.79.2
 Release: 27%{?dist}
@@ -42,12 +52,6 @@ Patch7: docbook-style-xsl-non-recursive-string-subst.patch
 #Fix multilib problems with gtk-doc documentation
 #https://github.com/docbook/xslt10-stylesheets/issues/54
 Patch8: docbook-style-xsl-1.79.2-fix-gtk-doc-multilib.patch
-# oreon url source checksums begin
-%global source0_sha256 ee8b9eca0b7a8f89075832a2da7534bce8c5478fc8fc2676f512d5d87d832102
-%global source0_file docbook-xsl-nons-1.79.2.tar.bz2
-%global source2_sha256 9bc38a3015717279a3a0620efb2d4bcace430077241ae2b0da609ba67d8340bc
-%global source2_file docbook-xsl-doc-1.79.2.tar.bz2
-# oreon url source checksums end
 
 %description
 These XSL stylesheets allow you to transform any DocBook XML document to
@@ -55,10 +59,7 @@ other formats, such as HTML, FO, and XHMTL.  They are highly customizable.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/docbook-xsl-nons-1.79.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ee8b9eca0b7a8f89075832a2da7534bce8c5478fc8fc2676f512d5d87d832102" || { echo "oreon: Source0 SHA256 mismatch for docbook-xsl-nons-1.79.2.tar.bz2" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-xsl-doc-1.79.2.tar.bz2; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9bc38a3015717279a3a0620efb2d4bcace430077241ae2b0da609ba67d8340bc" || { echo "oreon: Source2 SHA256 mismatch for docbook-xsl-doc-1.79.2.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -c -T -n docbook-xsl-%{version}
 tar jxf %{SOURCE0}
 mv docbook-xsl-nons-%{version}/* .

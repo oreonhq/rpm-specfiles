@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 78db38bf378975b14d5e714b9667f4b4992e3da1907851d750e902b710481e25
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Graphical Boot Animation and Logger
 Name: plymouth
 Version: 24.004.60
@@ -116,10 +124,6 @@ Patch: 0001-ply-device-manager-Fix-race-in-fb_device_has_drm_dev.patch
 # https://bugzilla.redhat.com/show_bug.cgi?id=2433079
 # https://gitlab.freedesktop.org/plymouth/plymouth/-/commit/45655f12fa2d5553ab4ba509f2e203c249191664
 Patch: 0001-ply-keyboard-Fix-hang-on-read-of-incomplete-terminal.patch
-# oreon url source checksums begin
-%global source0_sha256 78db38bf378975b14d5e714b9667f4b4992e3da1907851d750e902b710481e25
-%global source0_file plymouth-24.004.60.tar.bz2
-# oreon url source checksums end
 
 BuildRequires: meson
 BuildRequires: system-logos
@@ -332,9 +336,7 @@ Plymouth. It features a small spinner on a dark background.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/plymouth-24.004.60.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "78db38bf378975b14d5e714b9667f4b4992e3da1907851d750e902b710481e25" || { echo "oreon: Source0 SHA256 mismatch for plymouth-24.004.60.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -a 1
 # Change the default theme
 sed -i -e 's/spinner/bgrt/g' src/plymouthd.defaults

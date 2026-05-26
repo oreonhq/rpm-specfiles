@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 06e4c1aaf958523f3fd1c57258c613c6c7ae56b8f1d678fa7943495d5ea6aeb5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global forgeurl0 https://github.com/NetworkConfiguration/dhcpcd
 
 Name: dhcpcd
@@ -15,10 +23,6 @@ Source3: %{name}.service
 Source4: %{name}@.service
 Source5: systemd-sysusers.conf
 Source6: systemd-tmpfiles.conf
-# oreon url source checksums begin
-%global source0_sha256 06e4c1aaf958523f3fd1c57258c613c6c7ae56b8f1d678fa7943495d5ea6aeb5
-%global source0_file dhcpcd-10.3.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: systemd-rpm-macros
@@ -39,9 +43,7 @@ that supports IPv4 and IPv6 configuration including configuration discovery
 through NDP, DHCPv4 and DHCPv6 protocols.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/dhcpcd-10.3.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "06e4c1aaf958523f3fd1c57258c613c6c7ae56b8f1d678fa7943495d5ea6aeb5" || { echo "oreon: Source0 SHA256 mismatch for dhcpcd-10.3.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if 0%{?fedora} || 0%{?rhel} > 8
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

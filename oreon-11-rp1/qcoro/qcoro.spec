@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 809afafab61593f994c005ca6e242300e1e3e7f4db8b5d41f8c642aab9450fbc
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global use_qt5 %[!(0%{?rhel} >= 11)]
 %global use_qt6 1
 
@@ -21,10 +29,6 @@ License: MIT
 Summary: C++ Coroutines for Qt
 URL: https://github.com/danvratil/%{name}
 Source0:        https://github.com/danvratil/qcoro/archive/v0.12.0/qcoro-0.12.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 809afafab61593f994c005ca6e242300e1e3e7f4db8b5d41f8c642aab9450fbc
-%global source0_file qcoro-0.12.0.tar.gz
-# oreon url source checksums end
 
 %if 0%{?use_qt5}
 BuildRequires: cmake(Qt5Concurrent)
@@ -91,9 +95,7 @@ Requires: qt6-qtbase-devel%{?_isa}
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/qcoro-0.12.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "809afafab61593f994c005ca6e242300e1e3e7f4db8b5d41f8c642aab9450fbc" || { echo "oreon: Source0 SHA256 mismatch for qcoro-0.12.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

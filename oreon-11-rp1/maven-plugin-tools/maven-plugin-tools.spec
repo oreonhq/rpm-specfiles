@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 cd6aecc881ea3cc28d8d31f1db42d84dc124672dd2d98c0758fd879f5d77c982
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without bootstrap
 
 Name:           maven-plugin-tools
@@ -14,10 +22,6 @@ Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugin-tools/%{n
 Patch:          0001-Disable-help-MOJO-generation.patch
 Patch:          0002-Remove-dependency-on-jtidy.patch
 Patch:          0003-Disable-reporting.patch
-# oreon url source checksums begin
-%global source0_sha256 cd6aecc881ea3cc28d8d31f1db42d84dc124672dd2d98c0758fd879f5d77c982
-%global source0_file maven-plugin-tools-3.9.0-source-release.zip
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -96,9 +100,7 @@ Provides:       maven-shared-plugin-tools-java = 0:%{version}-%{release}
 Descriptor extractor for plugins written in Java.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/maven-plugin-tools-3.9.0-source-release.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cd6aecc881ea3cc28d8d31f1db42d84dc124672dd2d98c0758fd879f5d77c982" || { echo "oreon: Source0 SHA256 mismatch for maven-plugin-tools-3.9.0-source-release.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 find -name '*.java' -exec sed -i 's/\r//' {} +
 

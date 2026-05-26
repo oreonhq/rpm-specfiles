@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 9f4c7a9531cec6941d6a9fd7fb70a4aeda24ea32800f578fd4099083f98b4e8a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:         ksh
 Summary:      The Original ATT Korn Shell
 URL:          http://www.kornshell.com/
@@ -19,10 +27,6 @@ Patch2:       ksh-1.0.11-redir.patch
 # add delay to sigchld.sh test to fix failures on slower builders
 # based on https://github.com/ksh93/ksh/pull/922
 Patch3:       ksh-1.0.11-sigchld-delay.patch
-# oreon url source checksums begin
-%global source0_sha256 9f4c7a9531cec6941d6a9fd7fb70a4aeda24ea32800f578fd4099083f98b4e8a
-%global source0_file ksh-1.0.10.tar.gz
-# oreon url source checksums end
 
 Conflicts:    pdksh
 Requires: coreutils, diffutils
@@ -49,9 +53,7 @@ KornShell is a shell programming language, which is upward compatible
 with "sh" (the Bourne Shell).
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/ksh-1.0.10.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "9f4c7a9531cec6941d6a9fd7fb70a4aeda24ea32800f578fd4099083f98b4e8a" || { echo "oreon: Source0 SHA256 mismatch for ksh-1.0.10.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 # /dev/fd test does not work because of mock

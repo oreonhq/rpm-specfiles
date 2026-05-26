@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7bc75be36b239e5b2e700a9570d2b53b43093d467f2abe6a743f9ff9093790cd
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional tests
 %if ! (0%{?rhel})
 %bcond_without perl_XML_XPath_enables_load_test
@@ -16,10 +24,6 @@ Summary:        XPath parser and evaluator for Perl
 License:        Artistic-2.0 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/XML-XPath
 Source0:        https://cpan.metacpan.org/authors/id/M/MA/MANWAR/XML-XPath-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 7bc75be36b239e5b2e700a9570d2b53b43093d467f2abe6a743f9ff9093790cd
-%global source0_file XML-XPath-1.48.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 BuildRequires:  coreutils
@@ -87,9 +91,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/XML-XPath-1.48.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7bc75be36b239e5b2e700a9570d2b53b43093d467f2abe6a743f9ff9093790cd" || { echo "oreon: Source0 SHA256 mismatch for XML-XPath-1.48.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n XML-XPath-%{version}
 
 %if %{without perl_XML_XPath_enables_load_test}

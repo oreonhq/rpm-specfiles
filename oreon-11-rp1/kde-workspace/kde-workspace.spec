@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7b4a0109fdcb11a5298c826c56572c7e6ddd51ef41ceb0ee55d76d539e10a343
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %if 0%{?fedora} > 17 || 0%{?rhel} > 6 || 0%{?oreon}
 %global systemd_login1 1
 %endif
@@ -64,10 +72,6 @@ Patch57: kde-workspace-4.8.0-bug796969.patch
 
 Patch58: kde-workspace-4.9.11-new_rundir.patch
 Patch59: kdm-settings-new_rundir.patch
-# oreon url source checksums begin
-%global source0_sha256 7b4a0109fdcb11a5298c826c56572c7e6ddd51ef41ceb0ee55d76d539e10a343
-%global source0_file kde-workspace-4.11.22.tar.gz
-# oreon url source checksums end
 ## upstream patches
 
 ## plasma active patches
@@ -270,9 +274,7 @@ Obsoletes: kde-plasma-translatoid < 1.30-20
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kde-workspace-4.11.22.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7b4a0109fdcb11a5298c826c56572c7e6ddd51ef41ceb0ee55d76d539e10a343" || { echo "oreon: Source0 SHA256 mismatch for kde-workspace-4.11.22.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n kde-workspace-%{version} %{?kdm_settings:-a1}
 
 # Well, I looked at doing this using the context menu plugin system and it

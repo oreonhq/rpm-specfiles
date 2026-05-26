@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1b022a0a6451827d060ee9cbfe9b2d8edbac2a3d7155cbee33ea93274b830fb5
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Extra tests require Test::Pod::Coverage::TrustMe, not yet available in Fedora
 %bcond_with perl_CPAN_Changes_enables_extra_test
 
@@ -8,10 +16,6 @@ Release:	3%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/CPAN-Changes
 Source0:	https://cpan.metacpan.org/authors/id/H/HA/HAARG/CPAN-Changes-0.500005.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 1b022a0a6451827d060ee9cbfe9b2d8edbac2a3d7155cbee33ea93274b830fb5
-%global source0_file CPAN-Changes-0.500005.tar.gz
-# oreon url source checksums end
 
 BuildArch:	noarch
 # Module Build
@@ -65,9 +69,7 @@ This module will help users programmatically read and write Changes files
 that conform to the specification.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/CPAN-Changes-0.500005.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1b022a0a6451827d060ee9cbfe9b2d8edbac2a3d7155cbee33ea93274b830fb5" || { echo "oreon: Source0 SHA256 mismatch for CPAN-Changes-0.500005.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n CPAN-Changes-%{version}
 
 %build

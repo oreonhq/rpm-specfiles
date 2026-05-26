@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 486c53e63c07cefd56ccd1234a665bc45fa2f37072c189ccb06373b97c7d73c2
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # ifdef'd in source code but runtime dep will be made for FT_Done_MM_Var symbol in freetype-2.9.1
 # so update the build deps as well to keep deps consistency between runtime and build time.
 %global freetype_version 2.9.1
@@ -24,10 +32,6 @@ Patch4:		%{name}-drop-lang-from-pkgkit-format.patch
 Patch5:		%{name}-disable-network-required-test.patch
 Patch6:		%{name}-lower-nonlatin-conf.patch
 Patch7:		%{name}-fix-crash.patch
-# oreon url source checksums begin
-%global source0_sha256 486c53e63c07cefd56ccd1234a665bc45fa2f37072c189ccb06373b97c7d73c2
-%global source0_file fontconfig-2.17.0.tar.bz2
-# oreon url source checksums end
 
 BuildRequires:	libxml2-devel
 BuildRequires:	freetype-devel >= %{freetype_version}
@@ -76,9 +80,7 @@ The fontconfig-devel-doc package contains the documentation files
 which is useful for developing applications that uses fontconfig.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/fontconfig-2.17.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "486c53e63c07cefd56ccd1234a665bc45fa2f37072c189ccb06373b97c7d73c2" || { echo "oreon: Source0 SHA256 mismatch for fontconfig-2.17.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 # To reduce a maintenance cost of fontconfig-lower-nonlatin-conf.patch
 mv conf.d/65-nonlatin.conf conf.d/69-nonlatin.conf

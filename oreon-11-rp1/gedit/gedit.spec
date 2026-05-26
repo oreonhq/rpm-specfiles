@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 f3437a675790c8593d511355252d751ab94328357bc6846d1106bf288161a5ed
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global amtk_version 5.9
 %global glib2_version 2.76
 %global gtk3_version 3.22
@@ -23,10 +31,6 @@ URL:		https://gedit-text-editor.org/
 Source:         https://gitlab.gnome.org/World/gedit/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 # libgd is a git submodule by design, but those are not included in git forge snapshot tarballs
 Source:         https://gitlab.gnome.org/GNOME/libgd/-/archive/%{libgd_commit}/libgd-%{libgd_commit}.tar.bz2
-# oreon url source checksums begin
-%global source0_sha256 f3437a675790c8593d511355252d751ab94328357bc6846d1106bf288161a5ed
-%global source0_file gedit-49.0.tar.bz2
-# oreon url source checksums end
 
 BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}
 BuildRequires: pkgconfig(gobject-introspection-1.0)
@@ -102,9 +106,7 @@ to gedit.
 Install gedit-devel if you want to write plugins for gedit.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gedit-49.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "f3437a675790c8593d511355252d751ab94328357bc6846d1106bf288161a5ed" || { echo "oreon: Source0 SHA256 mismatch for gedit-49.0.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n %{name}-%{tarball_version}
 tar --strip-components=1 -xf %{S:1} -C subprojects/libgd
 

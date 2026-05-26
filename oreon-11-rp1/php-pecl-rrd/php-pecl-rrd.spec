@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a42161e58cdc8a853b72cff298989dcbde82b0f76456dd59ce02854c92b730f7
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # remirepo/fedora spec file for php-pecl-rrd
 #
 # SPDX-FileCopyrightText:  Copyright 2011-2025 Remi Collet
@@ -25,10 +33,6 @@ Source0:      https://pecl.php.net/get/%{sources}.tgz
 
 Patch0:       %{pecl_name}-build.patch
 Patch1:       %{pecl_name}-php85.patch
-# oreon url source checksums begin
-%global source0_sha256 a42161e58cdc8a853b72cff298989dcbde82b0f76456dd59ce02854c92b730f7
-%global source0_file rrd-2.0.3.tgz
-# oreon url source checksums end
 
 ExcludeArch:   %{ix86}
 
@@ -64,9 +68,7 @@ system for time series data.
 
 
 %prep 
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/rrd-2.0.3.tgz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a42161e58cdc8a853b72cff298989dcbde82b0f76456dd59ce02854c92b730f7" || { echo "oreon: Source0 SHA256 mismatch for rrd-2.0.3.tgz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -c -q
 
 # Don't install/register tests

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 cf04b506ff5b4cbb4064490371810ff1feb3959133bf582d6f71b9a27b5dfeee
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:          libservicelog
 Version:       1.1.19
 Release:       17%{?dist}
@@ -13,10 +21,6 @@ Source1:       libservicelog.sysusers.conf
 
 # Link with needed libraries
 Patch0: libservicelog-1.1.9-libs.patch
-# oreon url source checksums begin
-%global source0_sha256 cf04b506ff5b4cbb4064490371810ff1feb3959133bf582d6f71b9a27b5dfeee
-%global source0_file libservicelog-1.1.19.tar.gz
-# oreon url source checksums end
 
 # sysusers_create_compat macro
 BuildRequires: systemd-rpm-macros
@@ -44,9 +48,7 @@ Contains header files for building with libservicelog.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/libservicelog-1.1.19.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "cf04b506ff5b4cbb4064490371810ff1feb3959133bf582d6f71b9a27b5dfeee" || { echo "oreon: Source0 SHA256 mismatch for libservicelog-1.1.19.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 %patch 0 -p1 -b .libs
 

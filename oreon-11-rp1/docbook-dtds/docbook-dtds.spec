@@ -1,3 +1,47 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ecf71cbe8ddbad7494ff520d5b4edf73a428c0b159178cb0cb619cba685e61c6
+%global source1_sha256 20261d2771b9a052abfa3d8fab1aa62be05791a010281c566f9073bf0e644538
+%global source2_sha256 dfef22f109779e4cfaafa27b6d381d975ac05eaafb5b3d4407d7043e310817bb
+%global source3_sha256 deaafcf0a3677692e7ad4412c0e41c1db3e9da6cdcdb3dd32b2cc1f9c97d6311
+%global source4_sha256 30f0644064e0ea71751438251940b1431f46acada814a062870f486c772e7772
+%global source5_sha256 67ebd2c94b342718c6865d2de60f5d4ff02d77a7e4b0d9e72a48c45f2b2635c3
+%global source6_sha256 acc4601e4f97a196076b7e64b368d9248b07c7abf26b34a02cca40eeebe60fa2
+%global source7_sha256 88f52fab7bd49b2e8f40c525014129c26a5a4b8bbd1494e00387556ec76f95ee
+%global source8_sha256 23068a94ea6fd484b004c5a73ec36a66aa47ea8f0d6b62cc1695931f5c143464
+%global source9_sha256 0ac7960409b032c8e517483523ecb92af4e59196a33b3e2c5617daa22b7a8a6c
+%global source10_sha256 02f159eb88c4254d95e831c51c144b1863b216d909b5ff45743a1ce6f5273090
+%global source11_sha256 8043e514e80c6c19cb146b5d37937d1305bf3abf9b0097c36df7f70f611cdf43
+%global source12_sha256 4e4e037a2b83c98c6c94818390d4bdd3f6e10f6ec62dd79188594e26190dc7b4
+%global source13_sha256 001d6f4945f36faf542b2d5ab421de03ed6bbda0b3adecb13ce69b22fd56b5f9
+%global source14_sha256 16d3120df58237e19445bc5ca14d05597d29e0734e93eb16582ec200ec065d19
+%global source15_sha256 38c0bcd5e40226b15d79b86b119341d88f5b6c6e80cd20fb262238963aec1d15
+%global source17_sha256 32d105b60a1524c71acbb9e700fb210fe69faf28716b9b6703901ba43a3973e5
+%global source18_sha256 c6b988431003b857927239d11254a57158b893e4960c80ae1a5ce02e8c6af7f5
+%global source19_sha256 710db64c36ed962aa8dab97bd1b5bea1b1fb4c613e0d3b8f8adf0069f535c699
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source4_sha256:%(test -z "%{source4_sha256}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_sha256}" || { echo "oreon: Source4 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source5_sha256:%(test -z "%{source5_sha256}" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_sha256}" || { echo "oreon: Source5 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source6_sha256:%(test -z "%{source6_sha256}" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_sha256}" || { echo "oreon: Source6 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source7_sha256:%(test -z "%{source7_sha256}" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source7_sha256}" || { echo "oreon: Source7 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source8_sha256:%(test -z "%{source8_sha256}" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_sha256}" || { echo "oreon: Source8 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source9_sha256:%(test -z "%{source9_sha256}" || { f="%{SOURCE9}"; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source9_sha256}" || { echo "oreon: Source9 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source10_sha256:%(test -z "%{source10_sha256}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_sha256}" || { echo "oreon: Source10 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source11_sha256:%(test -z "%{source11_sha256}" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_sha256}" || { echo "oreon: Source11 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source12_sha256:%(test -z "%{source12_sha256}" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_sha256}" || { echo "oreon: Source12 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source13_sha256:%(test -z "%{source13_sha256}" || { f="%{SOURCE13}"; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source13_sha256}" || { echo "oreon: Source13 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source14_sha256:%(test -z "%{source14_sha256}" || { f="%{SOURCE14}"; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source14_sha256}" || { echo "oreon: Source14 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source15_sha256:%(test -z "%{source15_sha256}" || { f="%{SOURCE15}"; test -f "$f" || { echo "oreon: missing Source15 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source15_sha256}" || { echo "oreon: Source15 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source17_sha256:%(test -z "%{source17_sha256}" || { f="%{SOURCE17}"; test -f "$f" || { echo "oreon: missing Source17 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source17_sha256}" || { echo "oreon: Source17 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source18_sha256:%(test -z "%{source18_sha256}" || { f="%{SOURCE18}"; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source18_sha256}" || { echo "oreon: Source18 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source19_sha256:%(test -z "%{source19_sha256}" || { f="%{SOURCE19}"; test -f "$f" || { echo "oreon: missing Source19 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source19_sha256}" || { echo "oreon: Source19 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global openjadever 1.3.2
 %global version_list "{3,4}.{0,1}-sgml 4.1.2-xml 4.{2,3,4,5}-{sgml,xml} 4.{2,3,4,5}-rng 4.{2,3,4,5}-xsd"
 %global catalog_list "{3,4}.{0,1}-sgml 4.1.2-xml 4.{2,3,4,5}-{sgml,xml}"
@@ -82,46 +126,6 @@ Patch6: docbook-dtds-ents.patch
 Patch7: docbook-sgml-systemrewrite.patch
 # Use XML at the end of public identificators of XML 4.1.2 ISO entities
 Patch8: docbook-dtd412-entities.patch
-# oreon url source checksums begin
-%global source0_sha256 ecf71cbe8ddbad7494ff520d5b4edf73a428c0b159178cb0cb619cba685e61c6
-%global source0_file docbk30.zip
-%global source1_sha256 20261d2771b9a052abfa3d8fab1aa62be05791a010281c566f9073bf0e644538
-%global source1_file docbk31.zip
-%global source2_sha256 dfef22f109779e4cfaafa27b6d381d975ac05eaafb5b3d4407d7043e310817bb
-%global source2_file docbk40.zip
-%global source3_sha256 deaafcf0a3677692e7ad4412c0e41c1db3e9da6cdcdb3dd32b2cc1f9c97d6311
-%global source3_file docbk41.zip
-%global source4_sha256 30f0644064e0ea71751438251940b1431f46acada814a062870f486c772e7772
-%global source4_file docbkx412.zip
-%global source5_sha256 67ebd2c94b342718c6865d2de60f5d4ff02d77a7e4b0d9e72a48c45f2b2635c3
-%global source5_file docbook-4.2.zip
-%global source6_sha256 acc4601e4f97a196076b7e64b368d9248b07c7abf26b34a02cca40eeebe60fa2
-%global source6_file docbook-xml-4.2.zip
-%global source7_sha256 88f52fab7bd49b2e8f40c525014129c26a5a4b8bbd1494e00387556ec76f95ee
-%global source7_file docbook-4.3.zip
-%global source8_sha256 23068a94ea6fd484b004c5a73ec36a66aa47ea8f0d6b62cc1695931f5c143464
-%global source8_file docbook-xml-4.3.zip
-%global source9_sha256 0ac7960409b032c8e517483523ecb92af4e59196a33b3e2c5617daa22b7a8a6c
-%global source9_file docbook-4.4.zip
-%global source10_sha256 02f159eb88c4254d95e831c51c144b1863b216d909b5ff45743a1ce6f5273090
-%global source10_file docbook-xml-4.4.zip
-%global source11_sha256 8043e514e80c6c19cb146b5d37937d1305bf3abf9b0097c36df7f70f611cdf43
-%global source11_file docbook-4.5.zip
-%global source12_sha256 4e4e037a2b83c98c6c94818390d4bdd3f6e10f6ec62dd79188594e26190dc7b4
-%global source12_file docbook-xml-4.5.zip
-%global source13_sha256 001d6f4945f36faf542b2d5ab421de03ed6bbda0b3adecb13ce69b22fd56b5f9
-%global source13_file docbook-rng-4.2.zip
-%global source14_sha256 16d3120df58237e19445bc5ca14d05597d29e0734e93eb16582ec200ec065d19
-%global source14_file docbook-rng-4.3.zip
-%global source15_sha256 38c0bcd5e40226b15d79b86b119341d88f5b6c6e80cd20fb262238963aec1d15
-%global source15_file docbook-rng-4.4.zip
-%global source17_sha256 32d105b60a1524c71acbb9e700fb210fe69faf28716b9b6703901ba43a3973e5
-%global source17_file docbook-xsd-4.2.zip
-%global source18_sha256 c6b988431003b857927239d11254a57158b893e4960c80ae1a5ce02e8c6af7f5
-%global source18_file docbook-xsd-4.3.zip
-%global source19_sha256 710db64c36ed962aa8dab97bd1b5bea1b1fb4c613e0d3b8f8adf0069f535c699
-%global source19_file docbook-xsd-4.4.zip
-# oreon url source checksums end
 
 %description
 The DocBook Document Type Definition (DTD) describes the syntax of
@@ -131,27 +135,7 @@ This package contains SGML and XML versions of the DocBook DTD.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/docbk30.zip; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ecf71cbe8ddbad7494ff520d5b4edf73a428c0b159178cb0cb619cba685e61c6" || { echo "oreon: Source0 SHA256 mismatch for docbk30.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbk31.zip; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "20261d2771b9a052abfa3d8fab1aa62be05791a010281c566f9073bf0e644538" || { echo "oreon: Source1 SHA256 mismatch for docbk31.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbk40.zip; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "dfef22f109779e4cfaafa27b6d381d975ac05eaafb5b3d4407d7043e310817bb" || { echo "oreon: Source2 SHA256 mismatch for docbk40.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbk41.zip; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "deaafcf0a3677692e7ad4412c0e41c1db3e9da6cdcdb3dd32b2cc1f9c97d6311" || { echo "oreon: Source3 SHA256 mismatch for docbk41.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbkx412.zip; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "30f0644064e0ea71751438251940b1431f46acada814a062870f486c772e7772" || { echo "oreon: Source4 SHA256 mismatch for docbkx412.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-4.2.zip; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "67ebd2c94b342718c6865d2de60f5d4ff02d77a7e4b0d9e72a48c45f2b2635c3" || { echo "oreon: Source5 SHA256 mismatch for docbook-4.2.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-xml-4.2.zip; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "acc4601e4f97a196076b7e64b368d9248b07c7abf26b34a02cca40eeebe60fa2" || { echo "oreon: Source6 SHA256 mismatch for docbook-xml-4.2.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-4.3.zip; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "88f52fab7bd49b2e8f40c525014129c26a5a4b8bbd1494e00387556ec76f95ee" || { echo "oreon: Source7 SHA256 mismatch for docbook-4.3.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-xml-4.3.zip; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "23068a94ea6fd484b004c5a73ec36a66aa47ea8f0d6b62cc1695931f5c143464" || { echo "oreon: Source8 SHA256 mismatch for docbook-xml-4.3.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-4.4.zip; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "0ac7960409b032c8e517483523ecb92af4e59196a33b3e2c5617daa22b7a8a6c" || { echo "oreon: Source9 SHA256 mismatch for docbook-4.4.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-xml-4.4.zip; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "02f159eb88c4254d95e831c51c144b1863b216d909b5ff45743a1ce6f5273090" || { echo "oreon: Source10 SHA256 mismatch for docbook-xml-4.4.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-4.5.zip; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8043e514e80c6c19cb146b5d37937d1305bf3abf9b0097c36df7f70f611cdf43" || { echo "oreon: Source11 SHA256 mismatch for docbook-4.5.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-xml-4.5.zip; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4e4e037a2b83c98c6c94818390d4bdd3f6e10f6ec62dd79188594e26190dc7b4" || { echo "oreon: Source12 SHA256 mismatch for docbook-xml-4.5.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-rng-4.2.zip; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "001d6f4945f36faf542b2d5ab421de03ed6bbda0b3adecb13ce69b22fd56b5f9" || { echo "oreon: Source13 SHA256 mismatch for docbook-rng-4.2.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-rng-4.3.zip; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "16d3120df58237e19445bc5ca14d05597d29e0734e93eb16582ec200ec065d19" || { echo "oreon: Source14 SHA256 mismatch for docbook-rng-4.3.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-rng-4.4.zip; test -f "$f" || { echo "oreon: missing Source15 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "38c0bcd5e40226b15d79b86b119341d88f5b6c6e80cd20fb262238963aec1d15" || { echo "oreon: Source15 SHA256 mismatch for docbook-rng-4.4.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-xsd-4.2.zip; test -f "$f" || { echo "oreon: missing Source17 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "32d105b60a1524c71acbb9e700fb210fe69faf28716b9b6703901ba43a3973e5" || { echo "oreon: Source17 SHA256 mismatch for docbook-xsd-4.2.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-xsd-4.3.zip; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "c6b988431003b857927239d11254a57158b893e4960c80ae1a5ce02e8c6af7f5" || { echo "oreon: Source18 SHA256 mismatch for docbook-xsd-4.3.zip" >&2; exit 1; })
-%(f=%{_sourcedir}/docbook-xsd-4.4.zip; test -f "$f" || { echo "oreon: missing Source19 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "710db64c36ed962aa8dab97bd1b5bea1b1fb4c613e0d3b8f8adf0069f535c699" || { echo "oreon: Source19 SHA256 mismatch for docbook-xsd-4.4.zip" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -c -T
 eval mkdir %{version_list}
 

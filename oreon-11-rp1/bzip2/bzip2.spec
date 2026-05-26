@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global library_version 1.0.8
 
 Summary: File compression utility
@@ -19,10 +27,6 @@ Patch0: bzip2-saneso.patch
 Patch1: bzip2-cflags.patch
 Patch2: bzip2-ldflags.patch
 Patch3: man_gzipdiff.patch
-# oreon url source checksums begin
-%global source0_sha256 ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
-%global source0_file bzip2-1.0.8.tar.gz
-# oreon url source checksums end
 
 BuildRequires: gcc
 BuildRequires: make
@@ -60,9 +64,7 @@ Summary: Libraries for applications using bzip2
 Static libraries for applications using the bzip2 compression format.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/bzip2-1.0.8.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269" || { echo "oreon: Source0 SHA256 mismatch for bzip2-1.0.8.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %{gpgverify} --keyring='%{SOURCE3}' --signature='%{SOURCE2}' --data='%{SOURCE0}'
 %setup -q
 %patch -P0 -p1

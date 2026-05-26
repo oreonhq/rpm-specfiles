@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7f212c96ee66547eeefb531267b641e5473d7d8529f0bd8ccdefd33cf7413f5c
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # No, please don't break the linker.  Thanks.
 %undefine _auto_set_build_flags
 
@@ -18,10 +26,6 @@ Source0: https://sourceforge.net/projects/gnu-efi/files/gnu-efi-%{version}.tar.b
 
 # use --output-target with objcopy
 Patch0048: 0049-objcopy-use-output-target-instead-of-target.patch
-# oreon url source checksums begin
-%global source0_sha256 7f212c96ee66547eeefb531267b641e5473d7d8529f0bd8ccdefd33cf7413f5c
-%global source0_file gnu-efi-3.0.18.tar.bz2
-# oreon url source checksums end
 
 ExclusiveArch: %{efi}
 BuildRequires: binutils
@@ -73,9 +77,7 @@ Summary: Utilities for EFI systems
 This package contains utilities for debugging and developing EFI systems.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/gnu-efi-3.0.18.tar.bz2; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7f212c96ee66547eeefb531267b641e5473d7d8529f0bd8ccdefd33cf7413f5c" || { echo "oreon: Source0 SHA256 mismatch for gnu-efi-3.0.18.tar.bz2" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -S git_am
 
 %build

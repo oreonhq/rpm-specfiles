@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 6e62a8ee0217c9cc38d5860110eb18eb8d89c05c420353d298e1431fe8bac00f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
 
@@ -12,10 +20,6 @@ License:        BSD-3-Clause
 URL:            https://ocaml-community.github.io/cppo/
 VCS:            git:%{giturl}.git
 Source0:        https://github.com/ocaml-community/cppo/archive/v1.8.0/cppo-1.8.0.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 6e62a8ee0217c9cc38d5860110eb18eb8d89c05c420353d298e1431fe8bac00f
-%global source0_file cppo-1.8.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  ocaml >= 4.02.3
 BuildRequires:  ocaml-dune
@@ -51,9 +55,7 @@ at build time.  To use it, call ocamlbuild with the argument
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/cppo-1.8.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "6e62a8ee0217c9cc38d5860110eb18eb8d89c05c420353d298e1431fe8bac00f" || { echo "oreon: Source0 SHA256 mismatch for cppo-1.8.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n cppo-%{version}
 
 

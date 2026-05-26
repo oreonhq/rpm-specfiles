@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 7c68bf05f196153b1b1669a7d17e5bfba6253e7cafb69f67d30a0d17e7facecb
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # SPDX-License-Identifier: MIT
 
 %global libqat_soversion  4
@@ -16,10 +24,6 @@ Recommends:       qatlib-service
 # https://bugzilla.redhat.com/show_bug.cgi?id=1897661
 ExcludeArch:      %{arm} aarch64 %{power64} s390x i686 riscv64
 Patch0:           force-32-bit-MMIO-CSR-reads.patch
-# oreon url source checksums begin
-%global source0_sha256 7c68bf05f196153b1b1669a7d17e5bfba6253e7cafb69f67d30a0d17e7facecb
-%global source0_file qatlib-26.02.0.tar.gz
-# oreon url source checksums end
 
 %description
 Intel QuickAssist Technology (Intel QAT) provides hardware acceleration
@@ -60,9 +64,7 @@ This package contains a daemon that manages QAT resources for the Intel
 QuickAssist Technology user space library (qatlib).
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/qatlib-26.02.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "7c68bf05f196153b1b1669a7d17e5bfba6253e7cafb69f67d30a0d17e7facecb" || { echo "oreon: Source0 SHA256 mismatch for qatlib-26.02.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

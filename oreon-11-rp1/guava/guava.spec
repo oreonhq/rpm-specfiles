@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 19bce47d3ed0631379a606d9ef86b4224689db49ba863621a8395f351904988f
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_with bootstrap
 
 Name:           guava
@@ -16,10 +24,6 @@ Source0:        https://github.com/google/guava/archive/v%{version}/guava-%{vers
 Patch:          0001-Remove-unused-annotation-module-dependencies.patch
 Patch:          0002-Remove-NullMarked-filtering-and-annotation-collectio.patch
 Patch:          0003-Fix-invalid-Maven-attribute-values-in-compilerArgs.patch
-# oreon url source checksums begin
-%global source0_sha256 19bce47d3ed0631379a606d9ef86b4224689db49ba863621a8395f351904988f
-%global source0_file guava-33.5.0.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -48,9 +52,7 @@ Summary:        The guava-testlib artifact
 guava-testlib provides additional functionality for conveninent unit testing
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/guava-33.5.0.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "19bce47d3ed0631379a606d9ef86b4224689db49ba863621a8395f351904988f" || { echo "oreon: Source0 SHA256 mismatch for guava-33.5.0.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -C
 
 find . -name '*.jar' -delete

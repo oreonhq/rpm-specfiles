@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1c674ab4665686a0887d7e24c03ab25f24201c213e82ea689d2f3e169ef7ef57
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond tests 1
 
 Name:           python-setuptools_scm
@@ -9,10 +17,6 @@ Summary:        Blessed package to manage your versions by SCM tags
 License:        MIT
 URL:            https://github.com/pypa/setuptools_scm/
 Source:         %{pypi_source setuptools_scm}
-# oreon url source checksums begin
-%global source0_sha256 1c674ab4665686a0887d7e24c03ab25f24201c213e82ea689d2f3e169ef7ef57
-%global source0_file setuptools_scm-9.2.2.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 
@@ -43,9 +47,7 @@ It also handles file finders for the supported SCMs.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/setuptools_scm-9.2.2.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1c674ab4665686a0887d7e24c03ab25f24201c213e82ea689d2f3e169ef7ef57" || { echo "oreon: Source0 SHA256 mismatch for setuptools_scm-9.2.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n setuptools_scm-%{version}
 # Remove flake8, mypy, ruff, … from the test dependencies
 sed -Ei '/^test = \[/,/^\]/ { /"(griffe|mypy|ruff|flake8).*"/d }' pyproject.toml

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 398ad29dee7f63a75888314e9424d40f52ce5a6a87ae88e7071e80af296ec348
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # When bootstrapping sphinx in Fedora, we don't yet have sphinxcontrib-*
 # Without the packages, we have warnings in docs, but it's not a hard dependency
 # We don't want to support sphinxcontrib-* in RHEL, hence disabling the dependencies
@@ -64,10 +72,6 @@ Patch:      https://github.com/sphinx-doc/sphinx/pull/13527.patch
 # Compatibility with docutils 0.22+
 Patch:      https://github.com/sphinx-doc/sphinx/pull/13610.patch
 Patch:      https://github.com/sphinx-doc/sphinx/pull/13883.patch
-# oreon url source checksums begin
-%global source0_sha256 398ad29dee7f63a75888314e9424d40f52ce5a6a87ae88e7071e80af296ec348
-%global source0_file sphinx-8.2.3.tar.gz
-# oreon url source checksums end
 
 BuildArch:     noarch
 
@@ -357,9 +361,7 @@ This package contains documentation in the HTML format.
 
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/sphinx-8.2.3.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "398ad29dee7f63a75888314e9424d40f52ce5a6a87ae88e7071e80af296ec348" || { echo "oreon: Source0 SHA256 mismatch for sphinx-8.2.3.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -n sphinx-%{upstream_version} -p1
 
 # Drop test-dependency on pytest-xdist

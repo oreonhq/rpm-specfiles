@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 533946d57897bf62a2cf8f74e488258e11fa0c55028fad43ada24c5686f38a06
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Summary: Driver for QPDL/SPL2 printers (Samsung and several Xerox printers)
 Name: splix
 Version: 2.0.1
@@ -12,10 +20,6 @@ Patch0: splix-deviceID.patch
 # rules.mk misses LDFLAGS
 Patch1: splix-ldflags.patch
 Patch2: splix-use-pkg-conf.patch
-# oreon url source checksums begin
-%global source0_sha256 533946d57897bf62a2cf8f74e488258e11fa0c55028fad43ada24c5686f38a06
-%global source0_file splix-2.0.1.tar.xz
-# oreon url source checksums end
 
 
 # postscriptdriver tags
@@ -43,9 +47,7 @@ language. It covers several Samsung, Xerox and Dell printers.
 Splix doesn't support old SPL(1) printers.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/splix-2.0.1.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "533946d57897bf62a2cf8f74e488258e11fa0c55028fad43ada24c5686f38a06" || { echo "oreon: Source0 SHA256 mismatch for splix-2.0.1.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q
 
 # remove old PPDs (not sure why some PPDs are outside ppd/)

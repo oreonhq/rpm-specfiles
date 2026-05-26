@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 2cd247c013e75f410659bac372aff93d22d71c5a54c059e137b9444af8b3427a
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 Name:           kdsoap-ws-discovery-client
 Version:        0.4.0
 Release:        2%{?dist}
@@ -6,10 +14,6 @@ Summary:        Library for finding WS-Discovery devices in the network using Qt
 License:        GPL-3.0-or-later AND LicenseRef-OASIS AND LicenseRef-WS-Addressing AND LicenseRef-Discovery AND W3C
 URL:            https://invent.kde.org/libraries/kdsoap-ws-discovery-client/
 Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 2cd247c013e75f410659bac372aff93d22d71c5a54c059e137b9444af8b3427a
-%global source0_file kdsoap-ws-discovery-client-0.4.0.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++
@@ -37,9 +41,7 @@ BuildArch:      noarch
 Developer Documentation files for %{name} for use with KDevelop or QtCreator.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/kdsoap-ws-discovery-client-0.4.0.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2cd247c013e75f410659bac372aff93d22d71c5a54c059e137b9444af8b3427a" || { echo "oreon: Source0 SHA256 mismatch for kdsoap-ws-discovery-client-0.4.0.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 %build

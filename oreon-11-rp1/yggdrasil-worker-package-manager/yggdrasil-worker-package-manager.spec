@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 3e24cd6b081b71140a775c4c79e9b46353d722d9b077b3deaf9d27bd75add215
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without check
 
 # https://github.com/redhatinsights/yggdrasil-worker-package-manager
@@ -24,10 +32,6 @@ Summary:        Package manager worker for yggdrasil
 License:        GPL-3.0-only
 URL:            %{gourl}
 Source:         %{url}/releases/download/%{tag}/%{name}-%{version}.tar.xz
-# oreon url source checksums begin
-%global source0_sha256 3e24cd6b081b71140a775c4c79e9b46353d722d9b077b3deaf9d27bd75add215
-%global source0_file yggdrasil-worker-package-manager-0.2.3.tar.xz
-# oreon url source checksums end
 
 BuildRequires:  systemd-rpm-macros
 BuildRequires:  meson
@@ -40,9 +44,7 @@ BuildRequires:  golang >= 1.21
 %gopkg
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/yggdrasil-worker-package-manager-0.2.3.tar.xz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "3e24cd6b081b71140a775c4c79e9b46353d722d9b077b3deaf9d27bd75add215" || { echo "oreon: Source0 SHA256 mismatch for yggdrasil-worker-package-manager-0.2.3.tar.xz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %goprep %{?rhel:-k}
 
 %if %{undefined rhel}

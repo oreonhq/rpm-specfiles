@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 aff67d64027f747b4611646fd0421802eda60397da9076e3f7fb17227e542e99
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global commit 7a86bc22066858afeb23845a191a6ab680b46233
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
@@ -10,10 +18,6 @@ URL:            https://github.com/harningt/luajson
 Source0:        https://github.com/harningt/luajson/archive/%{version}/luajson-%{version}.tar.gz
 # Support for lpeg 1.1.0
 Patch0:         https://github.com/harningt/luajson/pull/48.patch
-# oreon url source checksums begin
-%global source0_sha256 aff67d64027f747b4611646fd0421802eda60397da9076e3f7fb17227e542e99
-%global source0_file luajson-1.3.4.tar.gz
-# oreon url source checksums end
 BuildRequires:  lua-devel
 BuildRequires:  lua-lpeg >= 0.8.1
 # for checks
@@ -26,9 +30,7 @@ BuildArch:      noarch
 LuaJSON is a customizable JSON decoder/encoder, using LPEG for parsing.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/luajson-1.3.4.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "aff67d64027f747b4611646fd0421802eda60397da9076e3f7fb17227e542e99" || { echo "oreon: Source0 SHA256 mismatch for luajson-1.3.4.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1 -n luajson-%{version}
 
 %build

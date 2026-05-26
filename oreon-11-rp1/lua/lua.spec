@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source2_sha256 4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae
+%global source3_sha256 5e47bbfad7db2965d69580e918ee64edeb8d8d32de404b8dae9ce5c6d76a1472
+%global oreon_verify_sources \
+%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %global major_version 5.5
 # Normally, this is the same as version, but... not always.
 %global test_version 5.5.0
@@ -42,12 +52,6 @@ Patch9:		%{name}-5.4.8-bug3.patch
 # https://www.lua.org/bugs.html
 Patch10:	lua-5.5.0-bug1.patch
 Patch11:	lua-5.5.0-bug2.patch
-# oreon url source checksums begin
-%global source2_sha256 4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae
-%global source2_file lua-5.4.8.tar.gz
-%global source3_sha256 5e47bbfad7db2965d69580e918ee64edeb8d8d32de404b8dae9ce5c6d76a1472
-%global source3_file lua-5.5.0-tests.tar.gz
-# oreon url source checksums end
 
 BuildRequires:  automake autoconf libtool readline-devel ncurses-devel
 BuildRequires:  make
@@ -98,10 +102,7 @@ This package contains compatibility libraries for lua %{bootstrap_major_version}
 %endif
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/lua-5.4.8.tar.gz; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae" || { echo "oreon: Source2 SHA256 mismatch for lua-5.4.8.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/lua-5.5.0-tests.tar.gz; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "5e47bbfad7db2965d69580e918ee64edeb8d8d32de404b8dae9ce5c6d76a1472" || { echo "oreon: Source3 SHA256 mismatch for lua-5.5.0-tests.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %if 0%{?bootstrap}
 %setup -q -a 2 -a 3 -n %{name}-%{version}
 %else

@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 a75230ed063a49f2cab97463f0f312f143ff83b56c986b521392094ee3574d48
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 %bcond_without bootstrap
 
 Name:           maven-bundle-plugin
@@ -12,10 +20,6 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://repo1.maven.org/maven2/org/apache/felix/maven-bundle-plugin/%{version}/maven-bundle-plugin-%{version}-source-release.tar.gz
 
 Patch:          0001-Fix-incorrect-parent-relativePath.patch
-# oreon url source checksums begin
-%global source0_sha256 a75230ed063a49f2cab97463f0f312f143ff83b56c986b521392094ee3574d48
-%global source0_file maven-bundle-plugin-5.1.9-source-release.tar.gz
-# oreon url source checksums end
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -45,9 +49,7 @@ from the contents of the compilation classpath along with its
 resources and dependencies. Plus a zillion other features.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/maven-bundle-plugin-5.1.9-source-release.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "a75230ed063a49f2cab97463f0f312f143ff83b56c986b521392094ee3574d48" || { echo "oreon: Source0 SHA256 mismatch for maven-bundle-plugin-5.1.9-source-release.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %autosetup -p1
 
 find -name '*.jar' -delete

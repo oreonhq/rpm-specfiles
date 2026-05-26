@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 8f58620a8420255c49b6c43c5ff5802bd25e4f09240c51e5bf2b022833d41da3
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Perform release tests
 %bcond_without perl_Spiffy_enables_extra_test
 
@@ -8,10 +16,6 @@ Summary:        Framework for doing object oriented (OO) programming in Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Spiffy
 Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Spiffy-%{version}.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 8f58620a8420255c49b6c43c5ff5802bd25e4f09240c51e5bf2b022833d41da3
-%global source0_file Spiffy-0.46.tar.gz
-# oreon url source checksums end
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils
@@ -58,9 +62,7 @@ the nits and warts of traditional Perl OO, in a clean, straightforward and
 (perhaps someday) standard way.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/Spiffy-0.46.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "8f58620a8420255c49b6c43c5ff5802bd25e4f09240c51e5bf2b022833d41da3" || { echo "oreon: Source0 SHA256 mismatch for Spiffy-0.46.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n Spiffy-%{version}
 
 %build

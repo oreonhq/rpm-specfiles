@@ -1,3 +1,13 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 73dcdc633ec75ea2fc5329a1c3760407cceb9171428f4d0b885874f943a16797
+%global source1_sha256 bdc1da4a033280ac752e7d34b0418efaa45bed093235cb88e62ea961752a37f8
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
+%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 #
 # crash core analysis suite
 #
@@ -42,12 +52,6 @@ Patch21: 0020-Fix-pipe-parsing-to-correctly-handle-quotes.patch
 Patch22: 0021-Fix-file-redirection-not-working-for-external-comman.patch
 Patch23: 0022-Reapply-vmcoreinfo-read-vmcoreinfo-using-vmcoreinfo_.patch
 Patch24: 0023-Fix-for-help-r-D-to-display-register-values-and-note.patch
-# oreon url source checksums begin
-%global source0_sha256 73dcdc633ec75ea2fc5329a1c3760407cceb9171428f4d0b885874f943a16797
-%global source0_file 9.0.1.tar.gz
-%global source1_sha256 bdc1da4a033280ac752e7d34b0418efaa45bed093235cb88e62ea961752a37f8
-%global source1_file gdb-16.2.tar.gz
-# oreon url source checksums end
 
 %description
 The core analysis suite is a self-contained tool that can be used to
@@ -66,10 +70,7 @@ netdump, diskdump and kdump packages from Red Hat Linux, the mcore kernel patch
 offered by Mission Critical Linux, or the LKCD kernel patch.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/9.0.1.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "73dcdc633ec75ea2fc5329a1c3760407cceb9171428f4d0b885874f943a16797" || { echo "oreon: Source0 SHA256 mismatch for 9.0.1.tar.gz" >&2; exit 1; })
-%(f=%{_sourcedir}/gdb-16.2.tar.gz; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "bdc1da4a033280ac752e7d34b0418efaa45bed093235cb88e62ea961752a37f8" || { echo "oreon: Source1 SHA256 mismatch for gdb-16.2.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -n %{name}-%{version} -q
 %patch -P 0 -p1 -b lzo_snappy_zstd.patch
 %patch -P 1 -p1

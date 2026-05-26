@@ -1,3 +1,11 @@
+# oreon source sha256 begin
+# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
+%global source0_sha256 1557093e3ff0d650262a8340a1dafc5d033af986f98ee3e8a889d04b53e18019
+%global oreon_verify_sources \
+%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
+%(true)
+# oreon source sha256 end
+
 # Run optional tests
 %bcond_without perl_CPAN_Meta_Requirements_enables_optional_test
 
@@ -8,10 +16,6 @@ Summary:        Set of version requirements for a CPAN dist
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CPAN-Meta-Requirements
 Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/CPAN-Meta-Requirements-2.145.tar.gz
-# oreon url source checksums begin
-%global source0_sha256 1557093e3ff0d650262a8340a1dafc5d033af986f98ee3e8a889d04b53e18019
-%global source0_file CPAN-Meta-Requirements-2.145.tar.gz
-# oreon url source checksums end
 
 BuildArch:      noarch
 # Build
@@ -75,9 +79,7 @@ Logically impossible constraints will be identified immediately by thrown
 exceptions.
 
 %prep
-# oreon verify url source checksums begin
-%(f=%{_sourcedir}/CPAN-Meta-Requirements-2.145.tar.gz; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "1557093e3ff0d650262a8340a1dafc5d033af986f98ee3e8a889d04b53e18019" || { echo "oreon: Source0 SHA256 mismatch for CPAN-Meta-Requirements-2.145.tar.gz" >&2; exit 1; })
-# oreon verify url source checksums end
+%oreon_verify_sources
 %setup -q -n CPAN-Meta-Requirements-%{version}
 
 %build
