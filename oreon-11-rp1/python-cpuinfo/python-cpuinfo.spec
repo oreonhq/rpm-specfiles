@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 3cdbbf3fac90dc6f118bfd64384f309edeadd902d7c8fb17f02ffa1fc3f49690
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 3cdbbf3fac90dc6f118bfd64384f309edeadd902d7c8fb17f02ffa1fc3f49690
 
 %global srcname cpuinfo
 %global sum Getting CPU info
@@ -57,7 +51,7 @@ These approaches are used for getting info:
     Querying x86 CPUID register
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n py-%{srcname}-%{version}
 rm -rf *.egg-info
 

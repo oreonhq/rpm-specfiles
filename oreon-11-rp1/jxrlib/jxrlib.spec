@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 3e3c9d3752b0bbf018ed9ce01b43dcd4be866521dc2370dc9221520b5bd440d4
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 3e3c9d3752b0bbf018ed9ce01b43dcd4be866521dc2370dc9221520b5bd440d4
 
 Name:           jxrlib
 Version:        1.2
@@ -41,7 +35,7 @@ Headers for building against jxrlib.
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n jxrlib-1.2~git20170615.f752187
 # CRLF in a few sources breaks unified diffs
 sed -i 's/\r$//' jxrgluelib/JXRGlueJxr.c jxrencoderdecoder/JxrEncApp.c jxrencoderdecoder/JxrDecApp.c

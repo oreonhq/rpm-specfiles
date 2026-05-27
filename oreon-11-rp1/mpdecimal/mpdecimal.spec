@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 96d33abb4bb0070c7be0fed4246cd38416188325f820468214471938545b1ac8
-%global source1_sha256 b70a224cd52e82b7a8150aedac5efa2d0cb3941696fd829bdbe674f9f65c3926
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 96d33abb4bb0070c7be0fed4246cd38416188325f820468214471938545b1ac8
+%global source1_hash b70a224cd52e82b7a8150aedac5efa2d0cb3941696fd829bdbe674f9f65c3926
 
 # Whether to package the compatibility .so from the previous release.
 # This installs self as a build dependency and copies the files.
@@ -57,7 +50,8 @@ Summary:        Development headers for mpdecimal library
 The package contains development headers for the mpdecimal library.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %autosetup
 unzip -d tests/testdata %{SOURCE1}
 

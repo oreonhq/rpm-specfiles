@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 2c5fc7860c44f7d3a049b624b248112b146761775d92e5e431eaa60e880513be
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 2c5fc7860c44f7d3a049b624b248112b146761775d92e5e431eaa60e880513be
 
 Name:           perl-Module-Manifest-Skip
 Version:        0.23
@@ -67,7 +61,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n Module-Manifest-Skip-%{version}
 %patch -P0 -p1
 # Help generators to recognize Perl scripts

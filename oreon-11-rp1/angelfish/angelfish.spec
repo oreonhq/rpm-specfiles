@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # adblock requires rust and corrosion
 %bcond adblock 0
 
@@ -78,6 +80,7 @@ Requires:       qt6-qtwebengine%{?_isa}
 Web browser for mobile devices with Plasma integration
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{name}-%{version} -p1
 %if %{with adblock}
 %cargo_prep

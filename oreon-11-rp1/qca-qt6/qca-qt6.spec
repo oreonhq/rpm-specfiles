@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 615452d2f39f9e46edfc489f5aa219f6c3a8c59fec4969e306a232085ec2a5f2
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 615452d2f39f9e46edfc489f5aa219f6c3a8c59fec4969e306a232085ec2a5f2
 
 # qca-qt6 OBS package. Spec is inlined (no %%include) so SRPM gather always parses.
 # Bump: sync ../qca/qca.spec into qca-bundled.spec then replace body below this header from that file.
@@ -231,7 +225,7 @@ Requires: %{name}-qt6%{?_isa} = %{version}-%{release}
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n qca-v%{version}
 
 

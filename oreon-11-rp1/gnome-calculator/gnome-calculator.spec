@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global gtksourceview_version 5.3.0
 %global libadwaita_version 1.6~beta
 
@@ -49,6 +51,7 @@ developing applications that use %{name}.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 # check for human errors
 if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Error: Use tilde in Version field in front of alpha/beta/rc; checked '%{version}'" 1>&2; exit 1; fi
 

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global _python3_include %(%{__python3} -Ic "from distutils.sysconfig import get_python_inc; print(get_python_inc())")
 %global _python3_lib /usr/%{_lib}/lib%(basename %{_python3_include}).so
 
@@ -63,6 +65,7 @@ Conflicts: kdeedu-math < 4.7.0-10
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %py3_shebang_fix pykig/pykig.py

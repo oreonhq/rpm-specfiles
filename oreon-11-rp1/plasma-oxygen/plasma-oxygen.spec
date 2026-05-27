@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global         base_name oxygen
 
 # Disable kf5 support for RHEL 10+
@@ -105,6 +107,7 @@ Obsoletes:      plasma-oxygen-common < 5.1.1-2
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{base_name}-%{version} -p1
 
 

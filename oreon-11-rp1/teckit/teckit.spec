@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           teckit
 Version:        2.5.13
 Release:        2%{?dist}
@@ -118,6 +120,7 @@ Header files, pkg-config module, and documentation for developing application
 that use TECkit, a character encoding and mapping, library.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %dnl verification skipped because of repackaging
 %dnl %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1

@@ -1,20 +1,6 @@
-# oreon source sha256 begin
-# URL sources: set %global sourceN_sha256 to 64-char hex (sha256sum). Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559
-%global source3_sha256 2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa
-%global source5_sha256 13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22
-%global source6_sha256 cafc44c3f157dbf0074a4555649949c69887036ba61636dbf3217a76edbf9f96
-%global source7_sha256 f519b2902bcc325ce6e86710c1cdb1ff90ab7fa17402f899cbd4d15d099cf137
-%global source8_sha256 9e921b9aaa951883d3f7a6db1e95e9892469bb7be0d111745782abec2ef500f5
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source5_sha256:%(test -z "%{source5_sha256}" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_sha256}" || { echo "oreon: Source5 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source6_sha256:%(test -z "%{source6_sha256}" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_sha256}" || { echo "oreon: Source6 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source7_sha256:%(test -z "%{source7_sha256}" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source7_sha256}" || { echo "oreon: Source7 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source8_sha256:%(test -z "%{source8_sha256}" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_sha256}" || { echo "oreon: Source8 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash a5b7b533484f16d5271c97b7dbde485b22fa63d2bfb4434ce9b6720849e67559
+%global source3_hash 2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa
+%global source5_hash 13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22
 
 %global pkgname dirsrv
 
@@ -575,7 +561,9 @@ cd src/lib389
 %pyproject_buildrequires -g test
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
+%(test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; })
 %autosetup -S git -p1 -n %{name}-%{version}
 %if %{defined SOURCE6}
 rm -rf vendor

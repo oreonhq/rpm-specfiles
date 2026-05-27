@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           xml-commons-apis
 Version:        1.4.01
 Release:        %autorelease
@@ -29,6 +31,7 @@ the various externally-defined standard interfaces for XML. This
 includes the DOM, SAX, and JAXP.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -C
 # Make sure upstream hasn't sneaked in any jars we don't know about
 find -name '*.class' -exec rm -f '{}' \;

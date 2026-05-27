@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 06e931554949c850a00601574d2c485007335818361e98d49bb8535eac99cee2
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 06e931554949c850a00601574d2c485007335818361e98d49bb8535eac99cee2
 
 # Specify if the frontend will be compiled as part of the build or
 # is attached as a webpack tarball (in case of an unsuitable nodejs version on the build system)
@@ -138,7 +132,7 @@ scalable time series from pmseries(1) and Redis, live PCP metrics and
 bpftrace scripts from pmdabpftrace(1), as well as several dashboards.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -T -D -b 0
 %setup -q -T -D -b 1
 %if %{compile_frontend} == 0

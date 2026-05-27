@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name: hyphen-mn
 Summary: Mongolian hyphenation rules
 %global upstreamid 20100531
@@ -16,6 +18,7 @@ Patch0: hyphen-mn-cleantex.patch
 Mongolian hyphenation rules.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -T -q -c -n hyphen-mn
 cp -p %{SOURCE0} .
 %patch -P0 -p0 -b .clean

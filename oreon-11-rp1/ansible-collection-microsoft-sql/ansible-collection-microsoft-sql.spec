@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 148ef212d064a16ef4cad87be39663c29d0e36610d4df8d1bc7be2461160cddf
-%global source1_sha256 ca7164cf520a5f74247a76f02ab50703eeae536345e5c6026e3aa54c2011b9c7
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 148ef212d064a16ef4cad87be39663c29d0e36610d4df8d1bc7be2461160cddf
+%global source1_hash ca7164cf520a5f74247a76f02ab50703eeae536345e5c6026e3aa54c2011b9c7
 
 # NOTE: ansible-core is in rhel-8.6 and newer, but not installable
 # in buildroot as it depended on modular Python.
@@ -102,7 +95,8 @@ if st and st.type == "link" then
 end
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -a1 -n auto-maintenance-%{mainid}
 
 mv %{rolename}-%{source1id} %{rolename}

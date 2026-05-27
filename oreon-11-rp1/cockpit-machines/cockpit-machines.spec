@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 130c3639ed6b44f14f79b497cadd35c178761d1e70dc6bb1afeb35fac466424d
-%global source1_sha256 2e0bfb252887f0d6fb8a0a5651f4b976620ddf45921c2e58d1390ccb51fe694a
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 130c3639ed6b44f14f79b497cadd35c178761d1e70dc6bb1afeb35fac466424d
+%global source1_hash 2e0bfb252887f0d6fb8a0a5651f4b976620ddf45921c2e58d1390ccb51fe694a
 
 # SPDX-License-Identifier: LGPL-2.1-or-later
 #
@@ -101,7 +94,8 @@ Provides: bundled(npm(tslib)) = 2.8.1
 Cockpit component for managing libvirt virtual machines.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}
 %if %{defined rebuild_bundle}
 %setup -q -D -T -a 1 -n %{name}

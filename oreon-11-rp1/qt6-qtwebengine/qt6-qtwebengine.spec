@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global qt_module qtwebengine
 
 %global _hardened_build 1
@@ -471,6 +473,7 @@ Requires: qt6-qtsvg%{?_isa}
 %{summary}.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{qt_module}-everywhere-src-%{qt_version}%{?prerelease:-%{prerelease}} -a20
 
 mv pulse src/3rdparty/chromium/

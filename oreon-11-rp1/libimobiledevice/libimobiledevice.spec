@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 abd343e0f5a5fea43ed36e3fc54b803d0ef0a53ffd28304bae20111e93ee39e4
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash abd343e0f5a5fea43ed36e3fc54b803d0ef0a53ffd28304bae20111e93ee39e4
 
 %global forgeurl https://github.com/libimobiledevice/libimobiledevice
 %global commit ed9703db1ee6d54e3801b618cee9524563d709e1
@@ -63,7 +57,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Utilities for use with libimobiledevice.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}-%{commit}
 
 %if %{defined commit}

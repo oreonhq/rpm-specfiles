@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 69884a3b80438698e41dc4b39658fae611b45ad6cfb31e38db76279bfb4288b1
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 69884a3b80438698e41dc4b39658fae611b45ad6cfb31e38db76279bfb4288b1
 
 # pass --without tests to skip the test suite
 %bcond_without tests
@@ -55,7 +49,7 @@ rpmlint is a tool for checking common errors in RPM packages. Binary
 and source packages as well as spec files can be checked.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -Sgit_am
 
 # Replace python-magic dep with file-magic (rhbz#1899279)

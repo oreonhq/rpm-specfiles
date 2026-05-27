@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Without this the build time baloons from 1 hour to more than 46 on i686
 # https://bugzilla.redhat.com/show_bug.cgi?id=2390105
 %undefine _preserve_static_debuginfo
@@ -382,6 +384,7 @@ MinGW Windows Python3 GDAL bindings.
 %endif
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -N -p1 -n %{name}-%{version}%{?pre:%pre}-fedora
 
 # Delete bundled libraries

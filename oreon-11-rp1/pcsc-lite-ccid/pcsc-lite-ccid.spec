@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 32799ab16fe6e493c9452be3823f21810fbe80b884021a6f6f3fa69f26be5c86
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 32799ab16fe6e493c9452be3823f21810fbe80b884021a6f6f3fa69f26be5c86
 
 %global dropdir %(pkg-config libpcsclite --variable usbdropdir 2>/dev/null)
 %global pcsc_lite_ver 1.8.9
@@ -48,7 +42,7 @@ PC/SC Lite daemon.
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %setup -q -n ccid-%{version}
 %patch 0 -p1 -b .omnikey

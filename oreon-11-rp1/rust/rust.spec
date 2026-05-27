@@ -1,10 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source10_sha256 d511de1f556521041b0811c6fb9c3e175d9a527bce5ade9ca31ab79b0941823c
-%global oreon_verify_sources \
-%{?source10_sha256:%(test -z "%{source10_sha256}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_sha256}" || { echo "oreon: Source10 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash none
+%global source10_hash d511de1f556521041b0811c6fb9c3e175d9a527bce5ade9ca31ab79b0941823c
 
 Name:           rust
 Version:        1.94.0
@@ -688,7 +683,8 @@ the Cargo package manager, and a few convenience macros for rpm builds.
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source10_hash}" = "none" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_hash}" || { echo "oreon: Source10 hash mismatch" >&2; exit 1; }; })
 %gpgverify -k 2 -s 1 -d 0
 
 %ifarch %{bootstrap_arches}

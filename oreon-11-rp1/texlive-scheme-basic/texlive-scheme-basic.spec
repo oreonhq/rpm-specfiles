@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global tl_version 2025
 
 Name:           texlive-scheme-basic

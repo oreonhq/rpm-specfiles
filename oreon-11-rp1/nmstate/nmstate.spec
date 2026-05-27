@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 7bbc0543349b7feec33b30476901ae90b192a1a361ff6fc2f66e22bf2dc082ec
-%global source3_sha256 b2d38735eccf2cf8d2aedfdfdc79a1a9633149a49f3a1fe1615181dbe97c3dbe
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 7bbc0543349b7feec33b30476901ae90b192a1a361ff6fc2f66e22bf2dc082ec
+%global source3_hash b2d38735eccf2cf8d2aedfdfdc79a1a9633149a49f3a1fe1615181dbe97c3dbe
 
 %define srcname nmstate
 %define libname libnmstate
@@ -173,7 +166,8 @@ which use "%{name}" crate with gen_revert feature.
 %endif
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
 gpg2 --import --import-options import-export,import-minimal \
     %{SOURCE2} > ./gpgkey-mantainers.gpg
 gpgv2 --keyring ./gpgkey-mantainers.gpg %{SOURCE1} %{SOURCE0}

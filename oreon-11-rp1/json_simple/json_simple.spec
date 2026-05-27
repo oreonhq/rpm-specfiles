@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           json_simple
 Version:        1.1.1
 Release:        40%{?dist}
@@ -40,6 +42,7 @@ Summary:       API documentation for %{name}
 This package contains %{summary}.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n json-simple-%{version}
 find . -name '*.jar' -exec rm -f '{}' \;
 # All the files have dos line endings, remove them.

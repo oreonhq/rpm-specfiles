@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name: sane-frontends
 Version: 1.0.14
 Release: 54%{?dist}
@@ -47,6 +49,7 @@ BuildRequires: sane-backends-devel >= 1.0.19-15
 This packages includes the scanadf and xcam programs.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -S git
 
 %build

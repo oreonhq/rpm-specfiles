@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 5a78ae6b021aaf35f573a56c7803773b0accdf34112ebfebd00651be87c0e28e
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 5a78ae6b021aaf35f573a56c7803773b0accdf34112ebfebd00651be87c0e28e
 
 Name:           unity-gtk3-module
 Version:        0.0.0+18.04.20171202
@@ -47,7 +41,7 @@ Headers and pkg-config metadata for the Unity GTK3 menu parser library
 (libunity-gtk3-parser).
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 mkdir -p %{name}-%{version}
 tar -xzf %{SOURCE0} -C %{name}-%{version}
 # tests/ is wired in configure.ac + Makefile.am; deleting it without editing breaks automake.

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 9da85b30d9404d183da7ca7aedb83702cb07ed73c3078bf6f36c87f1e8a0196a
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 9da85b30d9404d183da7ca7aedb83702cb07ed73c3078bf6f36c87f1e8a0196a
 
 Name:           perl-CGI
 Summary:        Handle Common Gateway Interface requests and responses
@@ -89,7 +83,7 @@ Tests from %{name}-%{version}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n CGI-%{version}
 iconv -f iso8859-1 -t utf-8 < Changes > Changes.1
 mv Changes.1 Changes

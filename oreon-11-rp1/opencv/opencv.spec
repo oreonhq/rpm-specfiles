@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %bcond_with  tests
 %bcond_without  compat_openvc_pc
 %if %{without tests}
@@ -387,6 +389,7 @@ This package contains Java bindings for the OpenCV library.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 # autosetup doesn't work with 2 sources
 # https://github.com/rpm-software-management/rpm/issues/1204
 %setup -q -a1 %{?with_extras_tests:-a2} -a6

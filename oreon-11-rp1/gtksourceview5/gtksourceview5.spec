@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global glib_version 2.72
 %global gtk_version 4.17
 
@@ -66,6 +68,7 @@ The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n gtksourceview-%{version} -p1
 
 %build

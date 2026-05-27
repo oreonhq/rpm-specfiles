@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 873ab158c8b32ab6574a4a73bfd9e4e378aa89878e3d8f993b413ac35d259618
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 873ab158c8b32ab6574a4a73bfd9e4e378aa89878e3d8f993b413ac35d259618
 
 %global debug_package %{nil}
 
@@ -73,7 +67,7 @@ Conflicts: k3s-selinux <= 0.4-1
 SELinux policy modules for use with container runtimes.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -Sgit %{name}-%{version}
 
 sed -i 's/^man: install-policy/man:/' Makefile

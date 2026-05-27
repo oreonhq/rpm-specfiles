@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary: Pattern matching utilities
 Name: grep
 Version: 3.12
@@ -47,6 +49,7 @@ prints the matching lines. GNU's grep utilities include grep, egrep and fgrep.
 GNU grep is needed by many scripts, so it shall be installed on every system.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

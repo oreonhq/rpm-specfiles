@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 a88c3beee8d2f139b47f9d7e932ec198be24991dd46fcaef2961b4b5ea855ea2
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash a88c3beee8d2f139b47f9d7e932ec198be24991dd46fcaef2961b4b5ea855ea2
 
 Name:             adobe-mappings-cmap
 Summary:          CMap resources for Adobe's character collections
@@ -79,7 +73,7 @@ as well as all the fonts contained in this font set.
 #       postscript format as intended. That's why there is no %%build phase.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n cmap-resources-%{version} -S git
 
 %install

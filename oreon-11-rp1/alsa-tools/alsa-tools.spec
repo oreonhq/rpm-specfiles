@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 800498d35233672ef67f4bf74cc6e1d37e1fe70c0540e2d2e062f2319e7b5df7
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 800498d35233672ef67f4bf74cc6e1d37e1fe70c0540e2d2e062f2319e7b5df7
 
 # If you want to skip building the firmware subpackage, define the macro
 # _without_firmware to 1. This is not the actual firmware itself 
@@ -101,7 +95,7 @@ The following tools are available:
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{version}
 %patch -P 1 -p1 -b .hwmixvolume-python
 

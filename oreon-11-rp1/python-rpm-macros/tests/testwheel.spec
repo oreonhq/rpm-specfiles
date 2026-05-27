@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           testwheel
 Epoch:          42
 Version:        1
@@ -15,6 +17,7 @@ This builds and installs a wheel which we can then use as a test for
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 cat > pyproject.toml << EOF
 [project]
 name = "testwheel"

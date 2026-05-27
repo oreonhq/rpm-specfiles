@@ -1,16 +1,7 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 d95663fbbf3a80f81a9d98d895266bdcb74ba274bcc04ef6d76630a72dee016f
-%global source3_sha256 3b9a62538a8da151e807a3ddb1198e8605f2032544d78f403ae883d27ecf1ee4
-%global source12_sha256 8f1635afabb95e4fafe2f67d89c7052a1270d615bab5b85f1b54225695540c5a
-%global source18_sha256 6deb08c23d03d77d8f8bd1c14049eeef64aef8968fd8891df2dfc0b42f178eac
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source12_sha256:%(test -z "%{source12_sha256}" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_sha256}" || { echo "oreon: Source12 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source18_sha256:%(test -z "%{source18_sha256}" || { f="%{SOURCE18}"; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source18_sha256}" || { echo "oreon: Source18 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash d95663fbbf3a80f81a9d98d895266bdcb74ba274bcc04ef6d76630a72dee016f
+%global source3_hash 3b9a62538a8da151e807a3ddb1198e8605f2032544d78f403ae883d27ecf1ee4
+%global source12_hash 8f1635afabb95e4fafe2f67d89c7052a1270d615bab5b85f1b54225695540c5a
+%global source18_hash 6deb08c23d03d77d8f8bd1c14049eeef64aef8968fd8891df2dfc0b42f178eac
 
 # This is the PostgreSQL Global Development Group Official RPMset spec file,
 # or a derivative thereof.
@@ -522,7 +513,10 @@ goal of accelerating analytics queries.
 %endif
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
+%(test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; })
+%(test "%{source18_hash}" = "none" || { f="%{SOURCE18}"; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source18_hash}" || { echo "oreon: Source18 hash mismatch" >&2; exit 1; }; })
 (
   cd "$(dirname "%{SOURCE0}")"
   sha256sum -c %{SOURCE16}

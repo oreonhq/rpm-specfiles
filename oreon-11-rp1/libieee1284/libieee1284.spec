@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 7730de107782e5d2b071bdcb5b06a44da74856f00ef4a9be85d1ba4806a38f1a
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 7730de107782e5d2b071bdcb5b06a44da74856f00ef4a9be85d1ba4806a38f1a
 
 Summary: A library for interfacing IEEE 1284-compatible devices
 Name: libieee1284
@@ -32,7 +26,7 @@ The header files, static library, libtool library and man pages for
 developing applications that use libieee1284.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 # Fixed strict aliasing warnings (bug #605170).
 %patch -P1 -p1 -b .strict-aliasing

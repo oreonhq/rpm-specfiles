@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 28cde192929c8e7321de85de1ddbe736f1375148b02f2e17edd840042b1be855
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 28cde192929c8e7321de85de1ddbe736f1375148b02f2e17edd840042b1be855
 
 %global common_description %{expand:
 prompt_toolkit is a library for building powerful interactive command line
@@ -35,7 +29,7 @@ Recommends:     python3-pygments
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n prompt_toolkit-%{version}
 # Workaround for https://github.com/prompt-toolkit/python-prompt-toolkit/issues/1988
 sed -i 's/^__version__ = .*/__version__ = "%{version}"/' src/prompt_toolkit/__init__.py

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Since RHEL-5, QEMU is restricted to x86_64 only
 # As Boxes don't really handle the !qemu case very well (untested, the 'box
 # creation' UI would still be there but non-functional, ...), better to
@@ -113,6 +115,7 @@ gnome-boxes lets you easily create, setup, access, and use:
     local virtual machines
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 # check for human errors
 if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Error: Use tilde in Version field in front of alpha/beta/rc; checked '%{version}'" 1>&2; exit 1; fi
 

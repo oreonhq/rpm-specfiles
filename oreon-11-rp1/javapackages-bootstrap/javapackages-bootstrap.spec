@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 b8484d46d5161232315a359d94b21e834d4f65ac95ac1c7bbf55f096719bd0e6
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash b8484d46d5161232315a359d94b21e834d4f65ac95ac1c7bbf55f096719bd0e6
 
 # Exclude automatically generated requires on java interpreter which is not
 # owned by any package
@@ -67,7 +61,7 @@ example, JPB contains embedded version of XMvn, removing dependency of JPT on
 XMvn, allowing JPT to be used before one builds XMvn package.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 mkdir -p archive
 if ls archive/*.tar.zst >/dev/null 2>&1; then

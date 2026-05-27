@@ -1,18 +1,8 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 d74cda35bcaec3efac7f032944adb6cfac8a496f8f93c93315ad1ab586e1f74b
-%global source41_sha256 9aa8ec276e253ab8fffe04b786e322a1c1fe988e5e2af06fb617a43a4413d139
-%global source42_sha256 cec83bf402dc6ac0e5a2030500ef7296ad4d5c77e756475252b99e89a4d5ebfa
-%global source100_sha256 8ddc952a290821bde82a158dae0591aff2a0218e26f35d0b8decb9c672609a0f
-%global source101_sha256 3543108bb93f27ef00cd1c4381ac9a5b160ab8a1481a8a1df6359d0799fc18c5
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source41_sha256:%(test -z "%{source41_sha256}" || { f="%{SOURCE41}"; test -f "$f" || { echo "oreon: missing Source41 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source41_sha256}" || { echo "oreon: Source41 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source42_sha256:%(test -z "%{source42_sha256}" || { f="%{SOURCE42}"; test -f "$f" || { echo "oreon: missing Source42 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source42_sha256}" || { echo "oreon: Source42 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source100_sha256:%(test -z "%{source100_sha256}" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_sha256}" || { echo "oreon: Source100 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source101_sha256:%(test -z "%{source101_sha256}" || { f="%{SOURCE101}"; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source101_sha256}" || { echo "oreon: Source101 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash d74cda35bcaec3efac7f032944adb6cfac8a496f8f93c93315ad1ab586e1f74b
+%global source41_hash 9aa8ec276e253ab8fffe04b786e322a1c1fe988e5e2af06fb617a43a4413d139
+%global source42_hash cec83bf402dc6ac0e5a2030500ef7296ad4d5c77e756475252b99e89a4d5ebfa
+%global source100_hash 8ddc952a290821bde82a158dae0591aff2a0218e26f35d0b8decb9c672609a0f
+%global source101_hash 3543108bb93f27ef00cd1c4381ac9a5b160ab8a1481a8a1df6359d0799fc18c5
 
 Name: pcs
 Version: 0.12.2
@@ -296,7 +286,11 @@ Pacemaker/Corosync Configuration System (pcs) in the background.
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source41_hash}" = "none" || { f="%{SOURCE41}"; test -f "$f" || { echo "oreon: missing Source41 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source41_hash}" || { echo "oreon: Source41 hash mismatch" >&2; exit 1; }; })
+%(test "%{source42_hash}" = "none" || { f="%{SOURCE42}"; test -f "$f" || { echo "oreon: missing Source42 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source42_hash}" || { echo "oreon: Source42 hash mismatch" >&2; exit 1; }; })
+%(test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_hash}" || { echo "oreon: Source100 hash mismatch" >&2; exit 1; }; })
+%(test "%{source101_hash}" = "none" || { f="%{SOURCE101}"; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source101_hash}" || { echo "oreon: Source101 hash mismatch" >&2; exit 1; }; })
 # -- following is inspired by python-simplejon.el5 --
 # Update timestamps on the files touched by a patch, to avoid non-equal
 # .pyc/.pyo files across the multilib peers within a build

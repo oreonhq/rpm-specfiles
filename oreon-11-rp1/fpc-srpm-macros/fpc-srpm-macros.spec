@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           fpc-srpm-macros
 Version:        1.3
 Release:        %autorelease

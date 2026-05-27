@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # SPDX-License-Identifier: MIT
 # Copyright (C) Fedora Project Authors
 # License Text: https://spdx.org/licenses/MIT.html
@@ -92,6 +94,7 @@ This package installs extensive documentation for ansible-core
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n ansible-%{uversion} -a1
 # Relax setuptools constraint on Fedora
 # Future RHELs have new enough setuptools

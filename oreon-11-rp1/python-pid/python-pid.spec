@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 0e33670e83f6a33ebb0822e43a609c3247178d4a375ff50a4689e266d853eb66
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 0e33670e83f6a33ebb0822e43a609c3247178d4a375ff50a4689e266d853eb66
 
 %global srcname pid
 
@@ -42,7 +36,7 @@ BuildRequires:  python3dist(pytest)
 %description -n python%{python3_pkgversion}-%{srcname} %{common_description}
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 # This needs to have a blank line after because of a bug in the EL6 macros
 %autosetup -p1 -n %{srcname}-%{version}
 

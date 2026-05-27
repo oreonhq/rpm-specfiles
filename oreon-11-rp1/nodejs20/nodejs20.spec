@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # This should be moved to rpm-redhat-config or similar as soon as feasible
 # NOTE: %%SOURCE macros are not yet defined, so explicit path is needed
 %{load:%{_sourcedir}/nodejs.srpm.macros}
@@ -276,6 +278,7 @@ Conflicts:      alternative-for(nodejs-npm-bin)
 Binary symlinks for Node.js Package Manager.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n node-v%{node_version} -S git_am
 # clean the archive of the de-vendored dependencies, ensuring they are not used
 readonly -a devendored_paths=(

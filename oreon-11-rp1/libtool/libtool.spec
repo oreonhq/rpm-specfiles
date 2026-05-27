@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # See the bug #429880
 %global gcc_major  %(gcc -dumpversion || echo "666")
 # See rhbz#1193591
@@ -141,6 +143,7 @@ Static libraries and header files for development with ltdl.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n libtool-%{version} -p1
 
 autoreconf -v

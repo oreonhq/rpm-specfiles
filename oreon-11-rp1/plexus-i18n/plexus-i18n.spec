@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           plexus-i18n
 Version:        1.0
 Release:        0.37.b10.4%{?dist}
@@ -29,6 +31,7 @@ is like a J2EE application server, without all the baggage.
 %{?javadoc_package}
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 # -n: base directory name
 %autosetup -n plexus-i18n-1.0-beta-10
 # plexus maven plugin is deprecated

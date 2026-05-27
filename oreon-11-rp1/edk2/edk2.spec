@@ -1,18 +1,8 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 a5df9c1be9b17de3d8318fd28003780cf679eb2ba3cae33a6a1890d7f60d27dd
-%global source2_sha256 b28c91532a8b65a1f983b4c28b7488174e4a01008e29ce8e69bd789f28bc2a89
-%global source4_sha256 1d024d13b5086a3d6bba86314a38b267a3b371845b0227b4f803888ecbca5a7a
-%global source5_sha256 ee90a0f879d2b7b7159124ff22b937a2a9a8c36d3bb65d1da7dd3f04370a10bd
-%global source6_sha256 29edce3d302a15563d8663198bbc398c5a0554765c83830d0d4c0409d21a16c4
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source4_sha256:%(test -z "%{source4_sha256}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_sha256}" || { echo "oreon: Source4 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source5_sha256:%(test -z "%{source5_sha256}" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_sha256}" || { echo "oreon: Source5 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source6_sha256:%(test -z "%{source6_sha256}" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_sha256}" || { echo "oreon: Source6 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash a5df9c1be9b17de3d8318fd28003780cf679eb2ba3cae33a6a1890d7f60d27dd
+%global source2_hash b28c91532a8b65a1f983b4c28b7488174e4a01008e29ce8e69bd789f28bc2a89
+%global source4_hash 1d024d13b5086a3d6bba86314a38b267a3b371845b0227b4f803888ecbca5a7a
+%global source5_hash ee90a0f879d2b7b7159124ff22b937a2a9a8c36d3bb65d1da7dd3f04370a10bd
+%global source6_hash 29edce3d302a15563d8663198bbc398c5a0554765c83830d0d4c0409d21a16c4
 
 # https://fedoraproject.org/wiki/Changes/SetBuildFlagsBuildCheck
 # breaks cross-building
@@ -382,7 +372,11 @@ you probably want to install edk2-tools only.
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
+%(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })
+%(test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; })
+%(test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; })
 # We needs some special git config options that %%autosetup won't give us.
 # We init the git dir ourselves, then tell %%autosetup not to blow it away.
 %setup -q -T -D -c -n edk2-%{GITCOMMIT}

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 0e9247ab1c4e64110024e34082ce8401f089f7df8e40de0b1ce6a03641302d56
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 0e9247ab1c4e64110024e34082ce8401f089f7df8e40de0b1ce6a03641302d56
 
 Name:           libtommath
 Version:        1.3.1~rc1
@@ -64,7 +58,7 @@ The %{name}-doc package contains PDF documentation for using %{name}.
 %endif
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}-%{version_no_tilde}
 # Fix permissions on installed library
 sed -i -e 's/644 $(LIBNAME)/755 $(LIBNAME)/g' makefile.shared

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 01195879fb28cfb33e58d9d788d9d3d3a4e9d1af8c0fa960413e1311f8687b19
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 01195879fb28cfb33e58d9d788d9d3d3a4e9d1af8c0fa960413e1311f8687b19
 
 %bcond check 1
 
@@ -83,7 +77,7 @@ and QtQuick, while the back-end of Kaidan is entirely written in C++ using Qt
 and the Qt-based XMPP library QXmpp.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}-v%{version}
 
 sed -i 's|Qt6Keychain 0.15|Qt6Keychain|' CMakeLists.txt

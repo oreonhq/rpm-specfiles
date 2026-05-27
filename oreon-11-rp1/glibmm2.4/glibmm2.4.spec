@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global apiver 2.4
 # first two digits of version
 %define release_version %(echo %{version} | awk -F. '{print $1"."$2}')
@@ -74,6 +76,7 @@ This package contains the full API documentation for %{name}.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n glibmm-%{version}
 
 

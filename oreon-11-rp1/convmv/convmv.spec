@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 a37192e266742e7fe33ec19a3be49aea7fd4d066887863a6e193fa345bf2e592
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash a37192e266742e7fe33ec19a3be49aea7fd4d066887863a6e193fa345bf2e592
 
 Summary: Convert filename encodings
 Name: convmv
@@ -33,7 +27,7 @@ This package contains the tool convmv with which you can convert the encodings
 of filenames, e.g. from Latin1 to UTF-8.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 %patch 0 -p1 -b .preserve-timestamps
 tar -xf testsuite.tar

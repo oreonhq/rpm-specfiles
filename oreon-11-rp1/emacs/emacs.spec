@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # This file is encoded in UTF-8.  -*- coding: utf-8 -*-
 
 %bcond gpm %[!(0%{?rhel} >= 10)]
@@ -308,6 +310,7 @@ Development header files for Emacs.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 cat '%{SOURCE100}' '%{SOURCE101}' '%{SOURCE102}' > keyring
 %{gpgverify} --keyring=keyring --signature='%{SOURCE1}' --data='%{SOURCE0}'
 rm keyring

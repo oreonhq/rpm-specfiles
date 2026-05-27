@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 0a9afd41967e6f57096a56a181a23f81a2b999b62f1f2a4e4b26736580854fdb
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 0a9afd41967e6f57096a56a181a23f81a2b999b62f1f2a4e4b26736580854fdb
 
 Version: 33.003
 Release: %autorelease
@@ -194,7 +188,7 @@ Source17: 62-%{fontpkgname7}.conf
 %fontmetapkg
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -c
 cp %{fontconfs0} %{fontconfs8}
 cp %{fontconfs1} %{fontconfs9}

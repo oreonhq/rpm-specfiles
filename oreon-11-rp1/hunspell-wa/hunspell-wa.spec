@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 2b19e0ea6d0ba16221df9ca7e5b34d4f176706016d60432576da9952bad4093b
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 2b19e0ea6d0ba16221df9ca7e5b34d4f176706016d60432576da9952bad4093b
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %global dict_dirname hunspell
@@ -31,7 +25,7 @@ Supplements: (hunspell and langpacks-wa)
 Walloon hunspell dictionaries.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n aspell-wa-%{version}
 %patch -P0 -p1 -b .buildfix
 

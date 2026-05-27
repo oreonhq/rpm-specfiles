@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 ce7d6457409925cf5beca2ee8502ac764d0331e257758ffbf986a9103e1e84d2
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash ce7d6457409925cf5beca2ee8502ac764d0331e257758ffbf986a9103e1e84d2
 
 %global uname         jigawatts
 %global uversion      6c78499af1a1d536368267e5ab5449232b05f878
@@ -59,7 +53,7 @@ Summary: Javadoc for %{name}
 Javadoc for %{name}
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{uname}-%{uversion}
 %patch -P0 -p1
 %pom_add_dep org.apache.commons:commons-lang3:3.12.0:test

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
 %global python3_dbus_dir %(%{__python3} -c "import dbus.mainloop; print(dbus.mainloop.__path__[0])" 2>/dev/null || echo "%{python3_sitearch}/dbus/mainloop")
 %endif
@@ -151,6 +153,7 @@ Requires:  python%{python3_pkgversion}-qt5%{?_isa} = %{version}-%{release}
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n pyqt5-%{version}%{?snap:.%{snap}}
 
 #patch0 -p1

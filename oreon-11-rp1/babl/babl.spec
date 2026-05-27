@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # skip tests known to be problematic in a specific version
 %global skip_checks_version 0.1.58
 %ifarch ppc64 ppc64le
@@ -93,6 +95,7 @@ Conflicts:  %{name}-devel < 0.1.2-2%{?dist}
 This package contains documentation needed for developing with %{name}.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n babl-%{plain_version}
 
 %build

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global	mainver		1.19.1
 #%%global	prever		.rc4
 
@@ -78,6 +80,7 @@ This package provides non-Gem support for %{gem_name}.
 %global	version	%{mainver}%{?prever}
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{gem_name}-%{version} -a 1
 cp -a %{gem_name}-%{version}/{.,*} .
 mv ../%{gem_name}-%{version}.gemspec .

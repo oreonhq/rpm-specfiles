@@ -1,14 +1,6 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 61757bc0a58d789b8fcbdddf56c88a0230597184a70dcb2ac05b4c6b619f7d5c
-%global source10_sha256 ed21012c5b99da72abea53e9499f8df35b2394d3558bfcb4dbd1e61ee7e6381d
-%global source11_sha256 63dfb389efc15323892a971200b65324fba102b5db2fa4a2269c3c57c8775453
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source10_sha256:%(test -z "%{source10_sha256}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_sha256}" || { echo "oreon: Source10 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source11_sha256:%(test -z "%{source11_sha256}" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_sha256}" || { echo "oreon: Source11 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 61757bc0a58d789b8fcbdddf56c88a0230597184a70dcb2ac05b4c6b619f7d5c
+%global source10_hash ed21012c5b99da72abea53e9499f8df35b2394d3558bfcb4dbd1e61ee7e6381d
+%global source11_hash 63dfb389efc15323892a971200b65324fba102b5db2fa4a2269c3c57c8775453
 
 %global _hardened_build 1
 %global testsuite_ver d27dbd
@@ -80,7 +72,9 @@ linuxptp SELinux policy module
 %endif
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source10_hash}" = "none" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_hash}" || { echo "oreon: Source10 hash mismatch" >&2; exit 1; }; })
+%(test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; })
 %autosetup -N
 # autosetup doesn't accept multiple -a options
 %__rpmuncompress -x %{SOURCE10}

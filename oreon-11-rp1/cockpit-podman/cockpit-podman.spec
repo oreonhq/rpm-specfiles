@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 538a39ebbd4b2a85a38cc90f408759c32986a85b7cf48c936d6bce32bd9cd341
-%global source1_sha256 447a260efffc3ed8c6a710dbcb2b6bb52071b1d42ab3e0c74ac779cfad303997
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 538a39ebbd4b2a85a38cc90f408759c32986a85b7cf48c936d6bce32bd9cd341
+%global source1_hash 447a260efffc3ed8c6a710dbcb2b6bb52071b1d42ab3e0c74ac779cfad303997
 
 # SPDX-License-Identifier: LGPL-2.1-or-later
 #
@@ -77,7 +70,8 @@ Provides: bundled(npm(tslib)) = 2.8.1
 The Cockpit user interface for Podman containers.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}
 %if %{defined rebuild_bundle}
 %setup -q -D -T -a 1 -n %{name}

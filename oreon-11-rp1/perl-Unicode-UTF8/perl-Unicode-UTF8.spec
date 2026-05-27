@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 ca9dfbebf57cbe470dc68136ac792d6c89a38e7de5c7d2084b5c90e8d1010105
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash ca9dfbebf57cbe470dc68136ac792d6c89a38e7de5c7d2084b5c90e8d1010105
 
 # Run optional test
 %if ! (0%{?rhel}) || 0%{?oreon}
@@ -68,7 +62,7 @@ This module provides functions to encode and decode UTF-8 encoding form as
 specified by Unicode and ISO/IEC 10646:2011.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n Unicode-UTF8-%{version}
 
 %build

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 36d83229c360d694c1ce968f985375aa4e1d15b262ca4f8c354e53ea99fe9195
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 36d83229c360d694c1ce968f985375aa4e1d15b262ca4f8c354e53ea99fe9195
 
 %global oqs_version 0.8.0
 %global liboqs_min_version 0.12.0-1
@@ -41,7 +35,7 @@ functionality are available via the OpenSSL EVP interface. Key persistence is
 provided via the encode/decode mechanism and X.509 data structures.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -T -b 0 -p1 -n oqs-provider-%{oqs_version}
 
 %build

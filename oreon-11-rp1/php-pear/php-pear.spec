@@ -1,18 +1,9 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source21_sha256 f856095f64bb3ffa44f870202ffca8f4e6eceef3cb74674f12be3362faafa7d3
-%global source22_sha256 54bdfb7c2c958cbd7e1e8f1b964b95c3bfbf3b2779052523011b4ee49d7dfacd
-%global source23_sha256 d8d8996c5d3c68119c00b0724fe20f46ae0aa7795aa71d94e6b0622315e6a9e9
-%global source24_sha256 e0f8736cb47ce9dd32814de45425ff03ad55a72ba8bb757e42c456f861feedf6
-%global source25_sha256 503cdd117028458999d62ba1d477a112714fe3f9fb53df94324205b95455a237
-%global oreon_verify_sources \
-%{?source21_sha256:%(test -z "%{source21_sha256}" || { f="%{SOURCE21}"; test -f "$f" || { echo "oreon: missing Source21 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source21_sha256}" || { echo "oreon: Source21 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source22_sha256:%(test -z "%{source22_sha256}" || { f="%{SOURCE22}"; test -f "$f" || { echo "oreon: missing Source22 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source22_sha256}" || { echo "oreon: Source22 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source23_sha256:%(test -z "%{source23_sha256}" || { f="%{SOURCE23}"; test -f "$f" || { echo "oreon: missing Source23 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source23_sha256}" || { echo "oreon: Source23 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source24_sha256:%(test -z "%{source24_sha256}" || { f="%{SOURCE24}"; test -f "$f" || { echo "oreon: missing Source24 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source24_sha256}" || { echo "oreon: Source24 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source25_sha256:%(test -z "%{source25_sha256}" || { f="%{SOURCE25}"; test -f "$f" || { echo "oreon: missing Source25 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source25_sha256}" || { echo "oreon: Source25 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash none
+%global source21_hash f856095f64bb3ffa44f870202ffca8f4e6eceef3cb74674f12be3362faafa7d3
+%global source22_hash 54bdfb7c2c958cbd7e1e8f1b964b95c3bfbf3b2779052523011b4ee49d7dfacd
+%global source23_hash d8d8996c5d3c68119c00b0724fe20f46ae0aa7795aa71d94e6b0622315e6a9e9
+%global source24_hash e0f8736cb47ce9dd32814de45425ff03ad55a72ba8bb757e42c456f861feedf6
+%global source25_hash 503cdd117028458999d62ba1d477a112714fe3f9fb53df94324205b95455a237
 
 # Fedora spec file for php-pear
 #
@@ -128,7 +119,12 @@ PEAR is a framework and distribution system for reusable PHP
 components.  This package contains the basic PEAR components.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source21_hash}" = "none" || { f="%{SOURCE21}"; test -f "$f" || { echo "oreon: missing Source21 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source21_hash}" || { echo "oreon: Source21 hash mismatch" >&2; exit 1; }; })
+%(test "%{source22_hash}" = "none" || { f="%{SOURCE22}"; test -f "$f" || { echo "oreon: missing Source22 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source22_hash}" || { echo "oreon: Source22 hash mismatch" >&2; exit 1; }; })
+%(test "%{source23_hash}" = "none" || { f="%{SOURCE23}"; test -f "$f" || { echo "oreon: missing Source23 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source23_hash}" || { echo "oreon: Source23 hash mismatch" >&2; exit 1; }; })
+%(test "%{source24_hash}" = "none" || { f="%{SOURCE24}"; test -f "$f" || { echo "oreon: missing Source24 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source24_hash}" || { echo "oreon: Source24 hash mismatch" >&2; exit 1; }; })
+%(test "%{source25_hash}" = "none" || { f="%{SOURCE25}"; test -f "$f" || { echo "oreon: missing Source25 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source25_hash}" || { echo "oreon: Source25 hash mismatch" >&2; exit 1; }; })
 %setup -cT
 
 # Create a usable PEAR directory (used by install-pear.php)

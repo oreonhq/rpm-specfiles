@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %{!?postgresql_default:%global postgresql_default 0}
 
 %global pre Final
@@ -58,6 +60,7 @@ Just-in-time compilation support for %{majorname}.
 %endif
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{majorname}-%{full_version} -p1
 
 %build

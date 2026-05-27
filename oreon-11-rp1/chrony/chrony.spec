@@ -1,10 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source10_sha256 34a96eb96b319c64f3cc49e0b3a0ae5a1a0a041aab9adea027ab51875f2b2e83
-%global oreon_verify_sources \
-%{?source10_sha256:%(test -z "%{source10_sha256}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_sha256}" || { echo "oreon: Source10 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash none
+%global source10_hash 34a96eb96b319c64f3cc49e0b3a0ae5a1a0a041aab9adea027ab51875f2b2e83
 
 %global _hardened_build 1
 %global clknetsim_ver 6ee99f50dec8
@@ -64,7 +59,8 @@ service to other computers in the network.
 %endif
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source10_hash}" = "none" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_hash}" || { echo "oreon: Source10 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring=%{SOURCE2} --signature=%{SOURCE1} --data=%{SOURCE0}
 %setup -q -n %{name}-%{version}%{?prerelease} -a 10
 %{?gitpatch:%patch -P 0 -p1}

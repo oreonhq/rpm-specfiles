@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name: modulemd-tools
 Version: 0.16
 Release: 14%{?dist}
@@ -60,6 +62,7 @@ bld2repo - Simple tool for dowloading build required RPMs of a modular build fro
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 %patch 0 -p1
 

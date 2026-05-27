@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Name of the package without any prefixes
 %global majorname mysql
 %global package_version 8.0.45
@@ -468,6 +470,7 @@ the MySQL sources.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -N -n mysql-%{version}
 %autopatch -M 100 -p1
 

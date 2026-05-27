@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # avoid incompatible pointer type errors with GCC 14
 %global build_type_safety_c 2
 
@@ -41,6 +43,7 @@ Requires: glib2-devel
 Libraries, headers, and support files necessary to compile applications using libenchant.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 
 %build

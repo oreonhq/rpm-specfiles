@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %define prerelease beta1
 
 # We need avoid oython byte compiler to not crash over template .py file which
@@ -142,6 +144,7 @@ User documentation for %{name}.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n qt-creator-opensource-src-%{version}%{?prerelease:-%prerelease}
 
 # Remove some bundled libraries to be sure

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 355b4cbbed880b0381a04c46617b7656e362585d52e9cf84a67e2009b749ff11
 
 %bcond compat_libs %[!(0%{?rhel} >= 10) || %{defined eln}]
 %bcond gpm %[!(0%{?rhel} >= 10)]
@@ -114,7 +108,7 @@ Requires: %{name}-devel%{?_isa} = %{version}-%{release}
 The ncurses-static package includes static libraries of the ncurses library.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring=%{SOURCE2} --signature=%{SOURCE1} --data=%{SOURCE0}
 
 %setup -q -n %{name}-%{version}

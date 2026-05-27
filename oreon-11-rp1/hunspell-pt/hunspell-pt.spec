@@ -1,10 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 2700674e9fe644151362c32a78bb816fc844a37be690cfad6ee18e2bc744deb9
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 2700674e9fe644151362c32a78bb816fc844a37be690cfad6ee18e2bc744deb9
+%global source1_hash none
 
 %if 0%{?fedora} > 35 || 0%{?oreon}
 %global dict_dirname hunspell 
@@ -38,7 +33,8 @@ Supplements: (hunspell and langpacks-pt_BR)
 Brazilian Portuguese hunspell dictionaries
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n hunspell-pt_PT-20130125
 unzip -q -o %{SOURCE1}
 for i in README_pt_BR.TXT README_pt_PT.txt; do

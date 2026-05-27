@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 2c321b6807bd95856d921ed9dce8506495cf49fc7a89a63cb942e8bece13addd
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 2c321b6807bd95856d921ed9dce8506495cf49fc7a89a63cb942e8bece13addd
 
 Name:           python-cffsubr
 Version:        0.4.0
@@ -48,7 +42,7 @@ Requires:       ((adobe-afdko >= 4.0.3) with (adobe-afdko < 5~~))
 Standalone CFF subroutinizer based on the AFDKO tx tool.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n cffsubr-%{version} -p1
 
 # Do not build the extension, which is a copy of the “tx” executable from

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global gitdate 20131022
 %global gitfullrev 08767aa863cd27d1755ba0aff65b8cc1a0c1446a
 %global gitrev %(c=%{gitfullrev}; echo ${c:0:6})
@@ -25,6 +27,7 @@ files and displaying a menu from which you may launch a command to
 view a specific item.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{gitfullrev}
 %patch -P1 -p1 -b .default
 

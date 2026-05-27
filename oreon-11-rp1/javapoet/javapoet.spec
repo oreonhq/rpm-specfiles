@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 1632e64e80360fb3a52e53212cfdff5e623e55f461945704479de87bd92892dc
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 1632e64e80360fb3a52e53212cfdff5e623e55f461945704479de87bd92892dc
 
 Name:          javapoet
 Version:       1.7.0
@@ -41,7 +35,7 @@ Summary:       Javadoc for %{name}
 This package contains javadoc for %{name}.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{name}-%{version}
 sed 's;<java.version>1.7</java.version>;<java.version>1.8</java.version>;' -i pom.xml
 # remove unnecessary dependency on parent POM

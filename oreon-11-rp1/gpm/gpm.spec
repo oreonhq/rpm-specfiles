@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary: A mouse server for the Linux console
 Name: gpm
 Version: 1.20.7
@@ -74,6 +76,7 @@ mouse support to text-based Linux applications.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

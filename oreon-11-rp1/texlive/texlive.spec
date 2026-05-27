@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Once upon a time, this package had (almost) every component from the TeXLive project living inside of it.
 # While it started with the best of intentions, it ended up becoming a truly unmaintainable nightmare.
 # With TeXLive 2025, I converted this package into a series of packages, based on the natural
@@ -36,6 +38,7 @@ and collection metapackages exist and you can install them instead
 
 %prep
 
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %build
 # Nothing to build
 

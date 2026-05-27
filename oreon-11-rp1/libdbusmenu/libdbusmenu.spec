@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Todo: build docs
 # BuildRequires:  gtk-doc >= 1.14
 # configure --enable-gtk-doc --enable-gtk-doc-html --enable-gtk-doc-pdf
@@ -148,6 +150,7 @@ that use %{name}.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{version} -c
 
 export ACLOCAL_PATH=/usr/share/gettext/m4/

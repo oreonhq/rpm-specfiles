@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 25af66dfcbd3b1609311d0ca46f37fc586891fae621377aadbb2c9c4d7d935d2
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 25af66dfcbd3b1609311d0ca46f37fc586891fae621377aadbb2c9c4d7d935d2
 
 # Specify if the frontend will be compiled as part of the build or
 # is attached as a webpack tarball (in case of an unsuitable nodejs version on the build system)
@@ -765,7 +759,7 @@ BuildRequires:       selinux-policy-devel
 SELinux policy module supporting grafana
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -T -D -b 0
 %setup -q -T -D -b 1
 %if %{compile_frontend} == 0

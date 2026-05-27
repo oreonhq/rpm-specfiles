@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %bcond_without tests
 
 %global git_commit ee3f4d841d1ba7d5b1b57544c5068822ca92b1af
@@ -44,6 +46,7 @@ Install transfig if you need a utility for translating FIG or PIC figures into
 certain graphics languages.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -C
 autoreconf -i
 

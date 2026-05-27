@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           ansible-srpm-macros
 Version:        1
 Release:        20.1%{?dist}
@@ -17,6 +19,7 @@ of Ansible collections.
 The rest of the automation is provided by the ansible-packaging package.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -T -c
 cp -a %{sources} .
 

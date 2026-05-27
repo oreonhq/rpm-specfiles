@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global appstream_version 0.16.4
 %global flatpak_version 1.14.1
 %global fwupd_version 1.6.2
@@ -162,6 +164,7 @@ This package includes the rpm-ostree backend.
 %endif
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -S gendiff -n %{name}-%{tarball_version}
 
 %build

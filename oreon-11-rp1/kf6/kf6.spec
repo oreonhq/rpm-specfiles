@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global debug_package %{nil}
 
 Name:    kf6

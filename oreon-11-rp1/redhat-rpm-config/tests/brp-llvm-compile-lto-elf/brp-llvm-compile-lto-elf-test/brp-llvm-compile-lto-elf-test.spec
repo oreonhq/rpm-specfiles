@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name: brp-llvm-compile-lto-elf-test
 Version: 1
 Release: 1

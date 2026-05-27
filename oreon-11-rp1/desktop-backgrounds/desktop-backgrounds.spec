@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           desktop-backgrounds
 Version:        11
 Release:        1%{?dist}

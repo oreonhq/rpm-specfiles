@@ -1,10 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source31_sha256 dee152c42d1c0be89c94d6dd59de82b27301209a65d1a4f90e69c2b2637e2fbb
-%global oreon_verify_sources \
-%{?source31_sha256:%(test -z "%{source31_sha256}" || { f="%{SOURCE31}"; test -f "$f" || { echo "oreon: missing Source31 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source31_sha256}" || { echo "oreon: Source31 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash none
+%global source31_hash dee152c42d1c0be89c94d6dd59de82b27301209a65d1a4f90e69c2b2637e2fbb
 
 # RPM conditionals so as to be able to dynamically produce
 # slowdebug/release builds. See:
@@ -1723,7 +1718,8 @@ The %{origin_nice} %{featurever} cryptography adapter library.
 %endif
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source31_hash}" = "none" || { f="%{SOURCE31}"; test -f "$f" || { echo "oreon: missing Source31 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source31_hash}" || { echo "oreon: Source31 hash mismatch" >&2; exit 1; }; })
 echo "Preparing %{oj_vendor_version}"
 
 if [ %{include_normal_build} -eq 0 -o  %{include_normal_build} -eq 1 ] ; then

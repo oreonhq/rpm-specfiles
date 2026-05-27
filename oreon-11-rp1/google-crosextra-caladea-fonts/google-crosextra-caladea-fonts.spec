@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global archivename crosextrafonts-20130214
 
 Version:        1.002
@@ -33,6 +35,7 @@ Obsoletes: ht-caladea-fonts < 1:1.001-10.20200428git336a529
 %fontpkg
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{archivename}
 cp -p %{SOURCE3} .
 

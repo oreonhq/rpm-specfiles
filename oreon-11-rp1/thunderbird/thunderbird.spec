@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # ppc64le started to fail permanently, apparently OOM,
 # first f42 https://koji.fedoraproject.org/koji/taskinfo?taskID=124917502
 # then f40 https://koji.fedoraproject.org/koji/taskinfo?taskID=125295645
@@ -278,6 +280,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 %endif
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 
 # Build patches

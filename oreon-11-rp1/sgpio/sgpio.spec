@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary: SGPIO captive backplane tool
 Name: sgpio
 Version: 1.2.0.10
@@ -18,6 +20,7 @@ BuildRequires: dos2unix
 Intel SGPIO enclosure management utility
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n sgpio
 dos2unix --keepdate Makefile README
 %patch -P0 -p1 -b .makefile

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           python-ldap
 Version:        3.3.0
 Release:        0%{?dist}
@@ -38,6 +40,7 @@ Summary:        %{summary}
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup
 # Hack: We remove tests that are broken by OpenLDAP 2.5+ and/or require openldap-servers
 # Don't do this in the regular Fedora package, please

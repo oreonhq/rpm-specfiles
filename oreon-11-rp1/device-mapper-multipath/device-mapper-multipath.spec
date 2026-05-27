@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:    device-mapper-multipath
 Version: 0.13.1
 Release: 1%{?dist}
@@ -111,6 +113,7 @@ This package contains the files needed to develop applications that use
 device-mapper-multipath's libdmmp C API library
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n multipath-tools-0.13.1 -p1
 cp %{SOURCE1} .
 

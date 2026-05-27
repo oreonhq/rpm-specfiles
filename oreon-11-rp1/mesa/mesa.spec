@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %ifnarch s390x
 %global with_hardware 1
 %global with_kmsro 1
@@ -349,6 +351,7 @@ Obsoletes:      VK_hdr_layer < 1
 The drivers with support for the Vulkan API.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{name}-%{ver} -p1
 cp %{SOURCE1} docs/
 

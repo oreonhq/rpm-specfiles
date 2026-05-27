@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global commit		2a87ac6f6ea3495150bfa00d0c0fb53dd0a2f11b
 %global shortcommit 	%(c=%{commit}; echo ${c:0:7})
 %global date		20210729
@@ -29,6 +31,7 @@ Source1:        61-%{fontpkgname}.conf
 %fontpkg
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %{?shortcommit:
 %autosetup -n comfortaa-%{commit} }
 %{!?shortcommit:

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 63fbef75d09dd4a05ee2624d41e574d658e33faff5c5b7d6bc67eab2af03dc71
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 63fbef75d09dd4a05ee2624d41e574d658e33faff5c5b7d6bc67eab2af03dc71
 
 # TESTING NOTE: The testsuite requires numerous packages, many of which are
 # built with dune.  Furthermore, the testsuite assumes it is running in a git
@@ -404,7 +398,7 @@ The ocaml-top-closure-devel package contains libraries and signature files for
 developing applications that use ocaml-top-closure.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n dune-%{version} -p1
 
 # Make sure we don't use the bundled lmdb

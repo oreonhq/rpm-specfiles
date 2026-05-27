@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           lorax-templates-rhel
 Version:        11.0
 Release:        17%{?dist}
@@ -29,6 +31,7 @@ RHEL-specific Lorax templates for creating the boot.iso and live isos are
 placed in %{templatedir}
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup
 
 %build

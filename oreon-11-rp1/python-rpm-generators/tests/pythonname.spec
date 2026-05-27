@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           pythonname
 Version:        0
 Release:        0

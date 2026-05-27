@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 8b15f0a880ab87280c40cfd7235cfff28134bf14d5646c07518b1ff6642a2473
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 8b15f0a880ab87280c40cfd7235cfff28134bf14d5646c07518b1ff6642a2473
 
 # Copyright (c) 2007 SUSE LINUX Products GmbH, Nuernberg, Germany.
 # Copyright (c) 2007 Hans de Goede <j.w.r.degoede@hhs>, the Fedora project.
@@ -82,7 +76,7 @@ Obsoletes:      i2c-tools-devel < 4.0-1
 %{summary}.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

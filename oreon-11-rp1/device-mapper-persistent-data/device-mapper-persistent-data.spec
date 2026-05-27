@@ -1,3 +1,5 @@
+%global source0_hash none
+
 #
 # Copyright (C) 2011-2017 Red Hat, Inc
 #
@@ -43,6 +45,7 @@ are included and era check, dump, restore and invalidate to manage
 snapshot eras
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n thin-provisioning-tools-%{version}%{?version_suffix} -a1
 %cargo_prep -v vendor
 

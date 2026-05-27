@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary:          MirBSD enhanced version of the Korn Shell
 Name:             mksh
 Version:          59c
@@ -37,6 +39,7 @@ modern, robust shell good for interactive and especially script use, being a
 bourne shell replacement, pdksh successor and an alternative to the C shell.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}
 
 # we'll need this later

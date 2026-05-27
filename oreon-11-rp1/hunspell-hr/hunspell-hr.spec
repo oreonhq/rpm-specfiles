@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 0e4013ea6b41ad7c14933f5ea15302ef36378d0a4559cbbbe8a411b3e56ee12d
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 0e4013ea6b41ad7c14933f5ea15302ef36378d0a4559cbbbe8a411b3e56ee12d
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9
 %global dict_dirname hunspell
@@ -38,7 +32,7 @@ Supplements: (hyphen and langpacks-hr)
 Croatian hyphenation rules.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -c -n hunspell-hr
 
 %build

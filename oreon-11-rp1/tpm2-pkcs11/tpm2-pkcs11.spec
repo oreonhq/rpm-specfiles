@@ -1,3 +1,5 @@
+%global source0_hash none
+
 #global candidate RC0
 
 Name:		tpm2-pkcs11
@@ -52,6 +54,7 @@ Summary: The tools required to setup and configure TPM2 for PKCS#11
 The tools required to setup and configure TPM2 for PKCS#11.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 #gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %autosetup -p1 -n %{name}-%{version}%{?candidate:-%{candidate}}
 %if 0%{?rhel}

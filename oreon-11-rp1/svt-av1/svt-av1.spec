@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 802e9bb2b14f66e8c638f54857ccb84d3536144b0ae18b9f568bbf2314d2de88
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 802e9bb2b14f66e8c638f54857ccb84d3536144b0ae18b9f568bbf2314d2de88
 
 %global _description %{expand:
 The Scalable Video Technology for AV1 Encoder (SVT-AV1 Encoder) is an
@@ -71,7 +65,7 @@ BuildArch:  noarch
 This package contains the documentation for development of SVT-AV1.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n SVT-AV1-v%{version}
 
 # Mitigate name collisions

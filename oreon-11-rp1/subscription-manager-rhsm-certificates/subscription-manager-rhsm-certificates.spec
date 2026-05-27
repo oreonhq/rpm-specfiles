@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name: subscription-manager-rhsm-certificates
 Version: 20220623
 Release: 8%{?dist}
@@ -28,6 +30,7 @@ of a Red Hat Unified Entitlement Platform, used for the management of system ent
 and to receive access to content.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 
 %build

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global basedir /opt/test/byte_compilation
 
 # We have 3 different ways of bytecompiling: for 3.9+, 3.4-3.8, and 2.7

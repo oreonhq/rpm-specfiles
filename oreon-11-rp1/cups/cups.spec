@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 0339587204b4f9428dd0592eb301dec0bf9ea6ea8dce5d9690d56be585aba92d
 
 %global use_alternatives 1
 %global lspp 1 
@@ -279,7 +273,7 @@ is installed with a printer application, its print queue acts as IPP everywhere 
 to CUPS daemon. This solution will substitute printer drivers and raw queues in the future.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n cups-%{VERSION}
 # Prevent multilib conflict in cups-config script.
 %patch -P 1 -p1 -b .multilib

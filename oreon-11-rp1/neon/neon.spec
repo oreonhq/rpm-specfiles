@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 9358cf29e11127b1a3196621d07159d3b013a0b79ebc388a25488a51443b8b81
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 9358cf29e11127b1a3196621d07159d3b013a0b79ebc388a25488a51443b8b81
 
 %bcond tests 1
 %bcond pkcs11 %[0%{?fedora} < 43 && %{undefined rhel}]
@@ -53,7 +47,7 @@ License: LGPL-2.0-or-later AND GPL-2.0-or-later
 The development library for the C language HTTP and WebDAV client library.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -S gendiff
 
 # prevent installation of HTML docs

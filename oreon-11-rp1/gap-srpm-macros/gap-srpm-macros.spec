@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           gap-srpm-macros
 Version:        2
 Release:        %autorelease

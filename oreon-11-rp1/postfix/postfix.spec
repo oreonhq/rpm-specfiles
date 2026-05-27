@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 6367dcc6b9d6b444c4a1d09e9fda3abf1479d88c9c434a31cd5cfe06f9c36627
-%global source53_sha256 5ccba9ec765720c79b9d8ae0f02e4c39f042d54e742a238ebb20b51a61915167
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source53_sha256:%(test -z "%{source53_sha256}" || { f="%{SOURCE53}"; test -f "$f" || { echo "oreon: missing Source53 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source53_sha256}" || { echo "oreon: Source53 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 6367dcc6b9d6b444c4a1d09e9fda3abf1479d88c9c434a31cd5cfe06f9c36627
+%global source53_hash 5ccba9ec765720c79b9d8ae0f02e4c39f042d54e742a238ebb20b51a61915167
 
 # plugins have unresolvable symbols in compile time
 %undefine _strict_symbol_defs_build
@@ -267,7 +260,8 @@ maps with Postfix, you need this.
 %endif
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source53_hash}" = "none" || { f="%{SOURCE53}"; test -f "$f" || { echo "oreon: missing Source53 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source53_hash}" || { echo "oreon: Source53 hash mismatch" >&2; exit 1; }; })
 %setup -q
 # Apply obligatory patches
 %patch -P1 -p1 -b .config

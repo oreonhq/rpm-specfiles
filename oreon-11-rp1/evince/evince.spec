@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # texlive is buildroot only for Fedora flatpaks
 %bcond dvi %{undefined flatpak}
 # djvulibre, gspell are not available in RHEL 10+
@@ -156,6 +158,7 @@ This package brings the Evince previewer independently from Evince.
 It provides the printing preview for the GTK printing dialog.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build

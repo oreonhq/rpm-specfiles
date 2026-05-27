@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 0ef0e52b8a9cd932855379197dd8f94047b359ca0a78695144304cb45f87c9eb
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 0ef0e52b8a9cd932855379197dd8f94047b359ca0a78695144304cb45f87c9eb
 
 %global modname flask
 %global srcname flask
@@ -58,7 +52,7 @@ Documentation and examples for %{name}.
 %pyproject_buildrequires -x async -g tests %{?with_doc:-g docs}
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{srcname}-%{version}
 # Allow to use python-sphinx>=9
 sed -i 's/sphinx<9/sphinx/g' pyproject.toml

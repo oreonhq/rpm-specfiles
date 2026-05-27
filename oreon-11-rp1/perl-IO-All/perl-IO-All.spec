@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 54e21d250c0229127e30b77a3461e10077854ec244f26fb670f1b445ed4c4d5b
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 54e21d250c0229127e30b77a3461e10077854ec244f26fb670f1b445ed4c4d5b
 
 # Enable optional MLDBM support
 %if 0%{?rhel}
@@ -104,7 +98,7 @@ adds dozens of other helpful idiomatic methods including file stat and
 manipulation functions.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n IO-All-%{version}
 find -type f -perm /0100 -name '*.pm' -exec chmod -c a-x {} \;
 

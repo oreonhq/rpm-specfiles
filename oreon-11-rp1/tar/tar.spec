@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %bcond_without selinux
 # Don't run check on 32-bit arches, seems to be issues with some tests
 %ifarch %{ix86} %{arm}
@@ -94,6 +96,7 @@ the rmt package on the remote box.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 autoreconf -v
 

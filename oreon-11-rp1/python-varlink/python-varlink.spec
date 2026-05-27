@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 3c1f0ef71d887717e890a195811569535991863fa21da0c23c176d58f1732ebe
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 3c1f0ef71d887717e890a195811569535991863fa21da0c23c176d58f1732ebe
 
 Name:           python-varlink
 Version:        31.0.0
@@ -35,7 +29,7 @@ Obsoletes:     python-varlink <= 3-1.git.61.1bc637d.fc27
 %description -n python3-varlink %_description
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n varlink-%{version}
 # varlink also supports python-2.7 but python3 is required here
 sed -i -e 's#env python#env python3#' varlink/tests/test_certification.py

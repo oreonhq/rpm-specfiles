@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global	gem_name	rspec-support
 
 %global	mainver	3.13.7
@@ -58,6 +60,7 @@ Documentation for %{name}
 %global	version	%{version_orig}%{?prever}
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -T -n %{gem_name}-%{version} -b 1
 gem spec %{SOURCE0} -l --ruby > %{gem_name}.gemspec
 

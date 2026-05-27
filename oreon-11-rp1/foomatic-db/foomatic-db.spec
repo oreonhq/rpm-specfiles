@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global dbver_rel 4.0
 # When you change dbver_snap, rebuild also foomatic against this build to pick up new IEEE 1284 Device IDs.
 # The postscriptdriver tags get put onto foomatic, because that's there the actual CUPS driver lives.
@@ -59,6 +61,7 @@ Requires: %{name}-filesystem = %{version}-%{release}
 PPDs from printer manufacturers.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n foomatic-db-%{dbver_snap}
 
 find -type d | xargs -d '\n' chmod g-s

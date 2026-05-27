@@ -1,12 +1,6 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source3_sha256 ae14f24c14727e0b2ded1c5553031666099bd1054db3ef44bfa6e2bd6d554a56
-%global source12_sha256 8f1635afabb95e4fafe2f67d89c7052a1270d615bab5b85f1b54225695540c5a
-%global oreon_verify_sources \
-%{?source3_sha256:%(test -z "%{source3_sha256}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_sha256}" || { echo "oreon: Source3 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source12_sha256:%(test -z "%{source12_sha256}" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_sha256}" || { echo "oreon: Source12 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash none
+%global source3_hash ae14f24c14727e0b2ded1c5553031666099bd1054db3ef44bfa6e2bd6d554a56
+%global source12_hash 8f1635afabb95e4fafe2f67d89c7052a1270d615bab5b85f1b54225695540c5a
 
 # This is the PostgreSQL Global Development Group Official RPMset spec file,
 # or a derivative thereof.
@@ -511,7 +505,9 @@ goal of accelerating analytics queries.
 %endif
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
+%(test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; })
 (
   cd "$(dirname "%{SOURCE0}")"
   sha256sum -c %{SOURCE16}

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %define contentdir %{_datadir}/httpd
 %define docroot /var/www
 %define suexec_caller apache
@@ -258,6 +260,7 @@ The mod_lua module allows the server to be extended with scripts
 written in the Lua programming language.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -S gendiff
 

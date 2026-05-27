@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:       perl-srpm-macros    
 Version:    1
 Release:    61%{?dist}

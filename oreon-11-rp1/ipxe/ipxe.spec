@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 58c75f036970d47baebd549270c70cfc368ba6761ab732fa76e6a2a6f2341872
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 58c75f036970d47baebd549270c70cfc368ba6761ab732fa76e6a2a6f2341872
 
 # ROMS we want for QEMU with format PCIID:QEMUNAME
 %global qemuroms \\\
@@ -148,7 +142,7 @@ replacement for proprietary PXE ROMs, with many extra features such as
 DNS, HTTP, iSCSI, etc.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{githash}
 %autopatch -p1
 # ath9k drivers are too big for an Option ROM, and ipxe devs say it doesn't

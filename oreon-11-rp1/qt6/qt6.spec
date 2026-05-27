@@ -1,3 +1,4 @@
+%global source0_hash none
 
 Name: qt6
 # This version MUST remain in sync with Qt6 versions!

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:           nodejs-packaging
@@ -47,6 +49,7 @@ It generates a bundled license file that gets the licenses in the runtime
 dependency tarball
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 cp -da %{_sourcedir}/* .
 tar xvf test.tar.gz
 

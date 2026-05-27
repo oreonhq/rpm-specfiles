@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 09702ddb078b637e85de9236cbedd3fb9d7af7c6e797026c538b45748ad4d631
-%global source2_sha256 bf79d401b6f1b507713615ad49ecfdd372ac715d426b5fc0f42ce2dcef1f9960
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source2_sha256:%(test -z "%{source2_sha256}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_sha256}" || { echo "oreon: Source2 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 09702ddb078b637e85de9236cbedd3fb9d7af7c6e797026c538b45748ad4d631
+%global source2_hash bf79d401b6f1b507713615ad49ecfdd372ac715d426b5fc0f42ce2dcef1f9960
 
 Name:           kea
 Version:        3.0.3
@@ -154,7 +147,8 @@ The KEA Migration Assistant is an experimental tool which helps to translate
 ISC DHCP configurations to Kea.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{S:10}' --signature='%{S:1}' --data='%{S:0}'
 %{gpgverify} --keyring='%{S:10}' --signature='%{S:3}' --data='%{S:2}'
 

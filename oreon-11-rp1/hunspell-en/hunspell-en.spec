@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 74e7cc3e9e03e609c1c74bb7e8862fcd988cdd64768dcbee4611581b7e633852
-%global source1_sha256 d6fbb91ae7824c52fb02f74d7bc2cd9092f130faec60f42326a59437fa7247a3
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 74e7cc3e9e03e609c1c74bb7e8862fcd988cdd64768dcbee4611581b7e633852
+%global source1_hash d6fbb91ae7824c52fb02f74d7bc2cd9092f130faec60f42326a59437fa7247a3
 
 %global dict_dirname hunspell 
 Name: hunspell-en
@@ -110,7 +103,8 @@ Summary: UK English hunspell dictionaries
 UK English hunspell dictionaries
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n wordlist-rel-2026.02.25
 # Extract the pre-built en_GB dictionaries from GitHub release (they replace the need for Source1)
 # Note: Source1 is now the hunspell-en_GB-ise pre-built zip which provides ready-made dictionaries

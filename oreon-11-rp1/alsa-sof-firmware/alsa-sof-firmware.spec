@@ -1,3 +1,6 @@
+%global source0_hash none
+%global source3_hash none
+
 # This is a firmware package, so binaries (which are not run on the host)
 # in the end package are expected.
 %define _binaries_in_noarch_packages_terminate_build   0
@@ -45,6 +48,8 @@ License:        BSD-3-Clause
 This package contains the debug files for the Sound Open Firmware project.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
 %autosetup -n sof-bin-%{sof_ver_pkg0}
 
 mkdir -p firmware/intel

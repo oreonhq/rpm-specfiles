@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Do not build with zstd for RHEL < 8
 %if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?suse_version} && 0%{?suse_version} < 1500) || 0%{?oreon}
 %bcond_with zstd
@@ -53,6 +55,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The drpm-devel package provides a C interface (drpm.h) for the drpm library.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

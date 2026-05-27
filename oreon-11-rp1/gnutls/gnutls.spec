@@ -1,12 +1,6 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source100_sha256 fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
-%global source300_sha256 b5057cfb990108c4a9f21832f1f35f3d98115012d1628e00650558e6b49e8285
-%global oreon_verify_sources \
-%{?source100_sha256:%(test -z "%{source100_sha256}" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_sha256}" || { echo "oreon: Source100 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source300_sha256:%(test -z "%{source300_sha256}" || { f="%{SOURCE300}"; test -f "$f" || { echo "oreon: missing Source300 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source300_sha256}" || { echo "oreon: Source300 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash none
+%global source100_hash fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
+%global source300_hash b5057cfb990108c4a9f21832f1f35f3d98115012d1628e00650558e6b49e8285
 
 Version: 3.8.12
 Release: %{?autorelease}%{!?autorelease:1%{?dist}}
@@ -266,7 +260,9 @@ for MinGW.
 %endif
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_hash}" || { echo "oreon: Source100 hash mismatch" >&2; exit 1; }; })
+%(test "%{source300_hash}" = "none" || { f="%{SOURCE300}"; test -f "$f" || { echo "oreon: missing Source300 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source300_hash}" || { echo "oreon: Source300 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup -p1 -S git

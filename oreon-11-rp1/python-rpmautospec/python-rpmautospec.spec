@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 66fa5540871c1140ed051c89b0624f14eaf59609452448360fa58cd7211e7a41
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 66fa5540871c1140ed051c89b0624f14eaf59609452448360fa58cd7211e7a41
 
 # Polyfill %%bcond() macro for platforms without it
 %if 0%{!?bcond:1}
@@ -161,7 +155,7 @@ enabled packages locally.
 %pyproject_buildrequires %{!?with_minimal:-x all}
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{srcname}-%{version}
 %if %{with old_hatchling}
 sed -i -e 's/license-files = \(\[.*\]\)/license-files = {globs = \1}/' pyproject.toml

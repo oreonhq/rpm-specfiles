@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global run_testsuite 1
 %global mingw_build_ucrt64 1
 %define enable_new_dtags 0
@@ -194,6 +196,7 @@ understand Windows executables and DLLs.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n binutils-%{version}
 
 # See Patch02

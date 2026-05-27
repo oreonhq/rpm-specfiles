@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # RHEL/Fedora spec file for php-pecl-redis6
 # without SCL compatibility from:
 #
@@ -123,6 +125,7 @@ some doesn't work with an old server version.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -c
 
 # Don't install/register tests, license, and bundled library

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global base_name discover
 %global flatpak_version 0.8.0
 # enable snap support (or not)
@@ -198,6 +200,7 @@ Supplements: (%{name} and plasma-workspace%{?_isa})
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{base_name}-%{version} -p1
 
 

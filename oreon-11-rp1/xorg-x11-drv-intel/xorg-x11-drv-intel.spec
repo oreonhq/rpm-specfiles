@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 00b781eea055582820a123c47b62411bdf6aabf4f03dc0568faec55faf9667c9
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 00b781eea055582820a123c47b62411bdf6aabf4f03dc0568faec55faf9667c9
 
 %global commit ce811e78882d9f31636351dfe65351f4ded52c74
 %global date 20240506
@@ -81,7 +75,7 @@ Requires: polkit
 X.Org X11 Intel video driver.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %if 0%{?tag:1}
 %autosetup -p1 -n xf86-video-intel-%{version}
 %else

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 cdc4e4262d6ef9a1a57e018384cbeb1208d8abbc64176027e2c2455c81313159
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash cdc4e4262d6ef9a1a57e018384cbeb1208d8abbc64176027e2c2455c81313159
 
 %bcond tests 1
 
@@ -38,7 +32,7 @@ that expect to interpreted by a terminal emulator and wish to determine the
 printable width of a string on a Terminal.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n wcwidth-%{version}
 # skip coverage checks
 sed -i -e 's|--cov[^[:space:]]*||g' tox.ini

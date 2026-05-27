@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global gitver 0
 
 %if 0%{?gitver}
@@ -43,6 +45,7 @@ Requires: libxml2-python3
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{name}-%{version} -N
 %patch 0 -p1 -b .backup
 # upstream Makefile calls src/setup.py which imports src/setup_common.py

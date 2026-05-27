@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global glib2_version 2.68.0
 %global libxmlb_version 0.3.24
 %global libusb_version 1.0.9
@@ -184,6 +186,7 @@ or server machines.
 %endif
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

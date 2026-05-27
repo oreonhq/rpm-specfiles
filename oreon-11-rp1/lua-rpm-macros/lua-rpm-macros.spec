@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %if 0%{?el8}
 # RHEL8's lua-devel ships macros.lua and lua.attr
 # skip shipping lua-rpm-macros so we don't conflict
@@ -61,6 +63,7 @@ RPM macros for building Lua source packages.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -c -T
 cp -a %{sources} .
 %if %{without rpm_macros}

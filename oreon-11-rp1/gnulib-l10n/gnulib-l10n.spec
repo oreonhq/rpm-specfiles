@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary:        Compatibility package for gnulib-l10n
 Name:           gnulib-l10n
 Version:        20241231
@@ -17,6 +19,7 @@ This package intentionally ships metadata and documentation only.
 
 %prep
 
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %build
 
 %install

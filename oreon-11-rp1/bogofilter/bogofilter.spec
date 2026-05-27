@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 3248a1373bff552c500834adbea4b6caee04224516ae581fb25a4c6a6dee89ea
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 3248a1373bff552c500834adbea4b6caee04224516ae581fb25a4c6a6dee89ea
 
 %global with_libdb_migration 1
 %global libdb_migration_build_dir libdb_migration_build
@@ -62,7 +56,7 @@ bogoupgrade is in an extra package to remove the perl dependency on the
 main bogofilter package.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 iconv -f iso-8859-1 -t utf-8 \
  doc/bogofilter-faq-fr.html > doc/bogofilter-faq-fr.html.utf8

@@ -1,3 +1,4 @@
+%global source0_hash none
 
 %global _hardened_build 1
 
@@ -809,6 +810,7 @@ functionality, and also few other scripts required for setup.
 This package provides the glusterfs thin-arbiter translator.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{version}%{?prereltag}
 %ifarch x86_64 aarch64
 %patch 0001 -p1

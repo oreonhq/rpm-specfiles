@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary:    A GNU utility for monitoring a program's use of system resources
 Name:       time
 Version:    1.9
@@ -86,6 +88,7 @@ the resources used by that program while it is running, and displays
 the results.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 %patch -P0 -p1

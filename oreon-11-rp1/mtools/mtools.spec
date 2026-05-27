@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary: Programs for accessing MS-DOS disks without mounting the disks
 Name: mtools
 Version: 4.0.49
@@ -29,6 +31,7 @@ style long file names, OS/2 XDF disks, and 2m disks
 Mtools should be installed if you need to use MS-DOS disks
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{version}
 %patch -P0 -p1 -b .conf
 

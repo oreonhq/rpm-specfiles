@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary: The GNU line editor
 Name: ed
 Version: 1.22.5
@@ -26,6 +28,7 @@ files (both interactively and via shell scripts). For most purposes, ed has been
 replaced in normal usage by full-screen editors (emacs and vi, for example).
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %if 0%{?rhel} || 0%{?oreon}

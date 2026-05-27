@@ -1,3 +1,5 @@
+%global source0_hash none
+
 #global candidate rc2
 
 %if 0%{?fedora}
@@ -72,6 +74,7 @@ for Win64 target.
 %endif
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q %{?candidate:-n %{name}-%{version}-%{candidate}}
 cp %{SOURCE1} .
 cp %{SOURCE2} .

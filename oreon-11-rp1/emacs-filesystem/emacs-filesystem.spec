@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           emacs-filesystem
 Epoch:          1
 Version:        30.2

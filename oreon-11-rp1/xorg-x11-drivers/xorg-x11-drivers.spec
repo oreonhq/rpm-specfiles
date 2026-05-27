@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary:    X.Org X11 driver installation package
 Name:       xorg-x11-drivers
 Version:    2022

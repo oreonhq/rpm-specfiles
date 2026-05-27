@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 8bc2f162bafc42645c489905ad72540f0d3c284b360c96299095183c30cc9789
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 8bc2f162bafc42645c489905ad72540f0d3c284b360c96299095183c30cc9789
 
 # Perform optional tests
 %bcond_without perl_JSON_PP_enables_optional_test
@@ -75,7 +69,7 @@ Marc Lehmann in C, so must be compiled and installed in the used environment.
 JSON::PP is a pure-Perl module and is compatible with JSON::XS.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n JSON-PP-%{version}
 
 # Silence Getopt::Long warning (fix already committed upstream)

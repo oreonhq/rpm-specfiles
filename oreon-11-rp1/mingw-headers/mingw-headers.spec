@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global mingw_build_ucrt64 1
 # The mingw-w64-headers provide the headers pthread_time.h
 # and pthread_unistd.h by default and are dummy headers.
@@ -67,6 +69,7 @@ MinGW Windows cross-compiler Win64 header files.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n mingw-w64-v%{version}%{?pre:-%{pre}}
 
 

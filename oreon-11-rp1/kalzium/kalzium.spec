@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # workaround for bz#1546230
 # ocaml doesn't support relocation
 %undefine _hardened_build
@@ -98,6 +100,7 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 

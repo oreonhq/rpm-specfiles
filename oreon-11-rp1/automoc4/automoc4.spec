@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 991d0376a63983c1b62e85624b613fa2d1168f73ba166939c216cbd0a2990856
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 991d0376a63983c1b62e85624b613fa2d1168f73ba166939c216cbd0a2990856
 
 # Upstream KDE automoc 0.9.88 ships Automoc4Config.cmake without cmake_policy(SET CMP0002 OLD).
 # Fedora automoc4 added that policy for ancient CMake; CMake 3.28+ rejects OLD for CMP0002 and
@@ -40,7 +34,7 @@ automoc4 binary and the CMake module files used by KDE4 and kdelibs4.
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n automoc-%{version}
 
 

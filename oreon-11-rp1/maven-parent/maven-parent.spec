@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 6eef96011f3674fc1720fa61c6d1d5b276e96bb8902f33b5e28df0ee7b6ea47e
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 6eef96011f3674fc1720fa61c6d1d5b276e96bb8902f33b5e28df0ee7b6ea47e
 
 %bcond_without bootstrap
 
@@ -34,7 +28,7 @@ BuildRequires:  mvn(org.codehaus.plexus:plexus-component-metadata)
 Apache Maven parent POM file used by other Maven projects.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin :maven-checkstyle-plugin

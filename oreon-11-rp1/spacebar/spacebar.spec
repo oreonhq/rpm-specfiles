@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           spacebar
 Epoch:          1
 Version:        6.6.3
@@ -58,6 +60,7 @@ Requires:       telepathy-mission-control
 Spacebar is a telepathy-qt based SMS application that primarily targets Plasma Mobile.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n spacebar-%{version} -p1
 
 %build

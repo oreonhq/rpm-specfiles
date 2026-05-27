@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global commit 4f5c45238ef77e5d6b88bc403432bd59de7efde9
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
@@ -20,6 +22,7 @@ plotnetcfg is a tool that output a diagram of network configuration on the
 host in a form suitable for graphviz.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{commit}
 
 %build

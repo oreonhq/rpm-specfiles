@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 63cb6196e986a7e578c4d28b3c780e7194835bfc78b68eeb8f00599d4444888c
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 63cb6196e986a7e578c4d28b3c780e7194835bfc78b68eeb8f00599d4444888c
 
 Name:           perl-Devel-StackTrace
 Summary:        Perl module implementing stack trace and stack trace frame objects
@@ -41,7 +35,7 @@ objects, one for each level of the stack.  The frames contain all the
 data available from caller() as of Perl 5.6.0.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n Devel-StackTrace-%{version}
 
 %build

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %{?!PEGASUS_BUILD_TEST_RPM:     %global PEGASUS_BUILD_TEST_RPM        1}
 # do "rpmbuild --define 'PEGASUS_BUILD_TEST_RPM 1'" to build test RPM.
 
@@ -239,6 +241,7 @@ The OpenPegasus WBEM tests for the OpenPegasus %{version} Linux rpm.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{srcname}
 # convert DMTF schema for Pegasus
 export PEGASUS_ROOT=%PEGASUS_RPM_ROOT

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %bcond_with ld_lld
 %bcond_with clang
 

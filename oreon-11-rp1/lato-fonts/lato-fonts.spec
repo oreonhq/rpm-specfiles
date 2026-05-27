@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Version: 2.015
 Release: 25%{?dist}
 URL:     http://www.latofonts.com/
@@ -43,6 +45,7 @@ Source10: 61-%{fontpkgname0}.conf
 %fontpkg
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n Lato2OFL
 
 # Fix wrong end-of-lines encoding

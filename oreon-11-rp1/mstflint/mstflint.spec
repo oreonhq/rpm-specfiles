@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 a72f5efe6f599721f86c20e033f35f75540342b0270ad4461fab71dd50e7f6ef
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash a72f5efe6f599721f86c20e033f35f75540342b0270ad4461fab71dd50e7f6ef
 
 %global __remake_config 1
 
@@ -37,7 +31,7 @@ This package contains firmware update tool, vpd dump and register dump tools
 for network adapters based on Mellanox Technologies chips.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}-%{version}
 
 find . -type f -perm /a+x \( -name '*.[ch]' -o -name '*.cpp' \) -exec chmod a-x '{}' '+'

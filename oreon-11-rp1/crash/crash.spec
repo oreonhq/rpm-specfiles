@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 73dcdc633ec75ea2fc5329a1c3760407cceb9171428f4d0b885874f943a16797
-%global source1_sha256 bdc1da4a033280ac752e7d34b0418efaa45bed093235cb88e62ea961752a37f8
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 73dcdc633ec75ea2fc5329a1c3760407cceb9171428f4d0b885874f943a16797
+%global source1_hash bdc1da4a033280ac752e7d34b0418efaa45bed093235cb88e62ea961752a37f8
 
 #
 # crash core analysis suite
@@ -70,7 +63,8 @@ netdump, diskdump and kdump packages from Red Hat Linux, the mcore kernel patch
 offered by Mission Critical Linux, or the LKCD kernel patch.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -n %{name}-%{version} -q
 %patch -P 0 -p1 -b lzo_snappy_zstd.patch
 %patch -P 1 -p1

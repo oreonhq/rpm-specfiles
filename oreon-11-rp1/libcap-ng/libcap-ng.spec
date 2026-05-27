@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 52418b8940f83dcc00dcd01d187e67c3399ff65f3fa558442e3a21b415cc46c0
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 52418b8940f83dcc00dcd01d187e67c3399ff65f3fa558442e3a21b415cc46c0
 
 %global bpf_supported_arches aarch64 x86_64 ppc64le riscv64 s390x
 Summary: Alternate posix capabilities library
@@ -65,7 +59,7 @@ lets you set the file system based capabilities, and use cap-audit
 to determine the necessary capabilities for a program.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 touch NEWS
 autoreconf -fv --install

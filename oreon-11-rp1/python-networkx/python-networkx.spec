@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 e12df70fc51003f7d19e93220ff9ab919033056e658a38d1520532ece7af6fda
-%global source9_sha256 147081ba047c919782896b26852f812e65880a9e52f69070069f950eea90c396
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source9_sha256:%(test -z "%{source9_sha256}" || { f="%{SOURCE9}"; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source9_sha256}" || { echo "oreon: Source9 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash e12df70fc51003f7d19e93220ff9ab919033056e658a38d1520532ece7af6fda
+%global source9_hash 147081ba047c919782896b26852f812e65880a9e52f69070069f950eea90c396
 
 # There is a bootstrap loop between libpysal and networkx when tests/docs are
 # enabled
@@ -134,7 +127,8 @@ Documentation for networkx
 %endif
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source9_hash}" = "none" || { f="%{SOURCE9}"; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source9_hash}" || { echo "oreon: Source9 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n networkx-networkx-%{version}
 
 # Use local objects.inv for intersphinx

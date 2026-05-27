@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name: librepository
 Version: 1.1.3
 Release: 48%{?dist}
@@ -30,6 +32,7 @@ Requires: jpackage-utils
 Javadoc for %{name}.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -c
 %patch -P0 -p1 -b .build
 %patch -P1 -p1 -b .java11

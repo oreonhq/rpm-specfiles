@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Note: Termcap was deprecated and removed from Fedora after F-8.  It
 # has been replaced by ncurses.  However ncurses cannot be compiled on
 # Windows so we have to supply termcap.  In addition, the last stand-
@@ -93,6 +95,7 @@ Static version of the cross compiled termcap library.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n termcap-%{version}
 %patch -P0 -p1
 

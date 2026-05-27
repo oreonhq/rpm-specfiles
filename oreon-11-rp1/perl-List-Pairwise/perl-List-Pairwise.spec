@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 96d716f2b2832cf42875e3a4f81752a025be94c3114a382887dc2eb4515a302e
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 96d716f2b2832cf42875e3a4f81752a025be94c3114a382887dc2eb4515a302e
 
 Name:           perl-List-Pairwise
 Version:        1.03
@@ -40,7 +34,7 @@ List::Pairwise provides functions to map and grep lists two elements at a
 time, setting $a and $b to each pair instead of setting $_ to each element.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n List-Pairwise-%{version}
 %patch -P0 -p1
 # Remove bundled modules

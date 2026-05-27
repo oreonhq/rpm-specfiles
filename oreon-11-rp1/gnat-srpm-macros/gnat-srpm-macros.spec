@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           gnat-srpm-macros
 Version:        7
 Release:        %autorelease

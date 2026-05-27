@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Set this so that find-lang.sh will recognize the .po files.
 %global gettext_domain mit-krb5
 # Guess where the -libs subpackage's docs are going to go.
@@ -259,6 +261,7 @@ FOR TESTING PURPOSE ONLY
 Test sources for krb5 build, with pre-defined compilation parameters
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -S git_am -n %{name}-%{version}%{?dashpre}
 ln NOTICE LICENSE
 

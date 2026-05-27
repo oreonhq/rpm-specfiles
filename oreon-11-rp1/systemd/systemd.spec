@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # We ship a .pc file but don't want to have a dep on pkg-config. We
 # strip the automatically generated dep here and instead co-own the
 # directory.
@@ -760,6 +762,7 @@ library or other libraries from systemd-libs. This package conflicts with the
 main systemd package and is meant for use in exitrds.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %if %{with obs}
 # Recipe files in the OBS build are in a distro-specific dir, as they conflict (e.g. with SUSE ones)
 mv %{_sourcedir}/%{name}.fedora/* %{_sourcedir}

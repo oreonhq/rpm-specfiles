@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 fb2504cc93149d3dbe8ee9ddbf3136414a062c42bcfcf5fc65f12ccc1d16f589
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash fb2504cc93149d3dbe8ee9ddbf3136414a062c42bcfcf5fc65f12ccc1d16f589
 
 %bcond_without bootstrap
 
@@ -31,7 +25,7 @@ BuildRequires:  mvn(org.apache.maven.plugins:maven-assembly-plugin)
 Codehaus MOJO parent project pom file
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 # Not needed in Fedora.
 %pom_remove_plugin :maven-enforcer-plugin

@@ -1,3 +1,6 @@
+%global source0_hash none
+%global source00_hash none
+
 %{!?tetex:%global tetex 1}
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
 %global _vendorperllibdir %{_datadir}/perl5/vendor_perl
@@ -39,6 +42,8 @@ source.  Linuxdoc-tools is intended for writing technical software
 documentation.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source00_hash}" = "none" || { f="%{SOURCE00}"; test -f "$f" || { echo "oreon: missing Source00 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source00_hash}" || { echo "oreon: Source00 hash mismatch" >&2; exit 1; }; })
 %autosetup -S git
 
 %build

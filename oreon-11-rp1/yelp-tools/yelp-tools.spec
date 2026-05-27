@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global tarball_version %%(echo %{version} | tr '~' '.')
 
 %bcond url_handler 0%{?rhel}
@@ -35,6 +37,7 @@ lifting is done by packages like yelp-xsl and itstool. This package just
 wraps things up in a developer-friendly way.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build

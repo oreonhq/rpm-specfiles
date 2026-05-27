@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %define   baseversion     1.2.15
 %define   fixversion      .2
 %global   _hardened_build 1
@@ -66,6 +68,7 @@ This package contains tool for basic audio testing using Advanced Linux Sound
 Architecture (ALSA) framework and Fast Fourier Transform library.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{version}
 %if %{utils_patch}
 %patch -P1 -p1 -b .alsa-git

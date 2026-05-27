@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 da8192cf76d8871830d44d7bdc914bd1641105ac813798ddeac5f65ab8f73cee
-%global source1_sha256 f82128687117113dbe40bdc4e3141b87f96c2b01519c9022597da47e726a613e
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash da8192cf76d8871830d44d7bdc914bd1641105ac813798ddeac5f65ab8f73cee
+%global source1_hash f82128687117113dbe40bdc4e3141b87f96c2b01519c9022597da47e726a613e
 
 # Define variables to use in conditionals
 %global patricia_deps 0
@@ -158,7 +151,8 @@ This subpackage provides the 'sa-compile' tool.
 sa-compile uses "re2c" to compile the site-wide parts of the SpamAssassin ruleset.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE102}' --signature='%{SOURCE100}' --data='%{SOURCE0}'
 %{gpgverify} --keyring='%{SOURCE102}' --signature='%{SOURCE101}' --data='%{SOURCE1}'
 %setup -q -n Mail-SpamAssassin-%{version}

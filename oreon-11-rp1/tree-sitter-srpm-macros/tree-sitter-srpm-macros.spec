@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           tree-sitter-srpm-macros
 Version:        0.4.2
 Release:        %autorelease

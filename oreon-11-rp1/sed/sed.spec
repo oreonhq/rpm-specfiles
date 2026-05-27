@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # -*- coding: utf-8 -*-
 
 Summary: A GNU stream text editor
@@ -40,6 +42,7 @@ that sed performs (substitutions, deletions, insertions, etc.) can be
 specified in a script file or from the command line.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

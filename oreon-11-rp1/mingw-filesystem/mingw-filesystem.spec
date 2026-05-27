@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Define before mingw-binutils is build
 %bcond_with bootstrap
 
@@ -149,6 +151,7 @@ This environment is maintained by the Fedora MinGW SIG at:
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -c -T
 cp %{SOURCE0} COPYING
 

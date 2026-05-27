@@ -1,3 +1,5 @@
+%global source0_hash none
+
 #
 # Important notes regarding the package:
 # ======================================
@@ -186,6 +188,7 @@ contains additional localisation files.
 # Call the 'autosetup' macro to prepare the environment, but do not patch the
 # source code yet -- we need to copy the LICENSE.* files into the directory:
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -N -S git
 cp -a %{SOURCE1} %{SOURCE2} %{SOURCE3} .
 

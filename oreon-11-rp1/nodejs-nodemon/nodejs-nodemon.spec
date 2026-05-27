@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %{?nodejs_find_provides_and_requires}
 %global npm_name nodemon
 
@@ -41,6 +43,7 @@ replacement wrapper for node, think of it as replacing the word "node"
 on the command line when you run your script.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{npm_name}-%{version}
 %patch -P 0 
 %build

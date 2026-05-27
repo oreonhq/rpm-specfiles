@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %{?!with_python2:     %global with_python2     0}
 %{?!with_python3:     %global with_python3     1}
 %{?!with_munin:       %global with_munin       1}
@@ -234,6 +236,7 @@ Unbound dracut module allowing use of Unbound for name resolution
 in initramfs.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %if 0%{?fedora} || 0%{?rhel} >= 9
 # TODO: Remove Yorgos.asc and extra verification once releases start to be signed by new g2 key
 %{gpgverify} --keyring='%{SOURCE22}' --signature='%{SOURCE18}' --data='%{SOURCE0}' || \

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global glib2_version 2.80
 %global gtk4_version 4.17.3
 %global gtksourceview_version 5.15.0
@@ -45,6 +47,7 @@ You can come back to your work even if you've never saved it to a file.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 

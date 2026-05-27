@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global namedreltag .Final
 %global namedversion %{version}%{?namedreltag}
 %global oname jboss-jaxrs-api_2.0_spec
@@ -31,6 +33,7 @@ ExclusiveArch:  %{java_arches} noarch
 JSR 339: JAX-RS 2.0: The Java API for RESTful Web Services.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n jboss-jaxrs-api_spec-%{oname}-%{namedversion}
 %patch -P1 -p1
 

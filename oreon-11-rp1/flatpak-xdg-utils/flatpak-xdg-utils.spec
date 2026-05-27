@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 53705e4cfe81460d8cf6be6ce1b1f6a79c9d12b27b6fd6c6b8d48f6a863a17ff
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 53705e4cfe81460d8cf6be6ce1b1f6a79c9d12b27b6fd6c6b8d48f6a863a17ff
 
 Name:     flatpak-xdg-utils
 Summary:  Command-line tools for use inside Flatpak sandboxes
@@ -43,7 +37,7 @@ Requires:  flatpak-spawn%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 This package contains installed tests for %{name}.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup
 
 %build

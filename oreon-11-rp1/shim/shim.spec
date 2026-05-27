@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # this is to make us only expand %%{dist} if we're on a modularity build.
 # it's 2 macros make vim's \c not put a brace at the end of the changelog.
 %global _dist %{expand:%{?_module_build:%%{?dist}}}
@@ -60,6 +62,7 @@ the UEFI signing service.
 %endif
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 cd %{_builddir}
 rm -rf shim-%{version}
 mkdir shim-%{version}

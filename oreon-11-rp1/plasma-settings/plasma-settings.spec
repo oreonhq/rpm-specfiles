@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           plasma-settings
 Version: 6.6.5
 Release: 1%{?dist}
@@ -44,6 +46,7 @@ Notice that Wi-Fi, mobile broadband and hotspot KConfig
 modules are provided separately, by plasma-nm.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

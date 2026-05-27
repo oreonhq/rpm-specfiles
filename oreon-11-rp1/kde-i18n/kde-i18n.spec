@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %define buildall 0
 
 %global _changelog_trimtime %(date +%s -d "1 year ago")
@@ -564,6 +566,7 @@ Requires: %{name} = %{epoch}:%{version}-%{release}
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{version} -c
 
 for i in $(cat %{SOURCE1000}) ; do

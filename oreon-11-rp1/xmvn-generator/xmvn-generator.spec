@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %bcond bootstrap 0
 
 Name:           xmvn-generator
@@ -33,6 +35,7 @@ XMvn Generator is a dependency generator for RPM Package Manager
 written in Java and Lua.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -C
 %mvn_file : %{name}
 

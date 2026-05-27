@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 fb3197f17a99eb44d22a3a1a71f755f9622dd963e66acfdea1a45120951b02ed
-%global source1_sha256 9eda617f2db0302cb2bcbd3ad40037f961a76f0606dc486d096248c89e1685e5
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash fb3197f17a99eb44d22a3a1a71f755f9622dd963e66acfdea1a45120951b02ed
+%global source1_hash 9eda617f2db0302cb2bcbd3ad40037f961a76f0606dc486d096248c89e1685e5
 
 # {_exec_prefix}/lib/kbd is correct even on x86_64.
 # It is traditionally used for kdb data (console fonts, keymaps, ...).
@@ -79,7 +72,8 @@ The %{name}-legacy package contains original keymaps for kbd package.
 Please note that %{name}-legacy is not helpful without kbd.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -a 1
 cp -fp %{SOURCE3} .
 cp -fp %{SOURCE6} .

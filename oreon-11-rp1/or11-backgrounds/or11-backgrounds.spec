@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global relnum 11
 %global Bg_Name OR11
 %global bgname %(t="%{Bg_Name}";echo ${t,,})
@@ -134,6 +136,7 @@ This package contains supplemental wallpapers for XFCE.
 %endif
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{version}
 
 

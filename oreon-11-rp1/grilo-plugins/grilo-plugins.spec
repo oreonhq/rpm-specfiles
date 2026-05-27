@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # first two digits of version
 %define release_version %(echo %{version} | awk -F. '{print $1"."$2}')
 
@@ -69,6 +71,7 @@ This package contains plugins to get information from theses sources:
 - Tracker
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -S git
 
 %build

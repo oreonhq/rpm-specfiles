@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # See http://bugzilla.redhat.com/223663
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9
 %global multilib_basearchs x86_64 %{?mips64} ppc64 s390x sparc64
@@ -446,6 +448,7 @@ Qt5 libraries used for drawing widgets and OpenGL items.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{qt_module}-everywhere-src-%{version}
 
 ## dowstream patches

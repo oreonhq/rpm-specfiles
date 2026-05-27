@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 f2de1afb4f0c56c36e6d5260aa0bd2c8f18e4d85009dcf5842204ea2a7fbc3df
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash f2de1afb4f0c56c36e6d5260aa0bd2c8f18e4d85009dcf5842204ea2a7fbc3df
 
 # Run optional test
 %if ! 0%{?rhel} || 0%{?oreon}
@@ -79,7 +73,7 @@ library. It exports the Dump and Load functions for converting Perl data
 structures to YAML strings, and the other way around.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n YAML-Syck-%{version}
 
 %build

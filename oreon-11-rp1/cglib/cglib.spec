@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %bcond_with bootstrap
 %global tarball_name RELEASE_%(echo '%{version}' | tr . _)
 
@@ -33,6 +35,7 @@ for Java. It is used to extend Java classes and implements interfaces
 at run-time.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -C
 
 # remove unnecessary dependency on parent POM

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 5bb5d1be011158090157c9e7587ae5606c262a5020ecdc5caac6686b9910592e
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 5bb5d1be011158090157c9e7587ae5606c262a5020ecdc5caac6686b9910592e
 
 Summary: Utility to set/show the host name or domain name
 Name: hostname
@@ -30,7 +24,7 @@ This package provides commands which can be used to display the system's
 DNS name, and to display or set its hostname or NIS domain name.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n hostname
 cp %{SOURCE1} %{SOURCE2} %{SOURCE3} .
 %patch -P 1 -p1

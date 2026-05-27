@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global libhandy_version 1.5.0
 
 %global tarball_version %%(echo %{version} | tr '~' '.')
@@ -51,6 +53,7 @@ Requires: %{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
 This package contains header files for the libraries in the yelp-libs package.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # All Global changes to build and install go here.
 # Per the below section about __spec_install_pre, any rpm
 # environment changes that affect %%install need to go
@@ -2094,6 +2096,7 @@ Prebuilt default kernel image with auto DTB selection for ARM64 UEFI devices.
 	set -x
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %{log_msg "Start of prep stage"}
 
 %{log_msg "Sanity checks"}

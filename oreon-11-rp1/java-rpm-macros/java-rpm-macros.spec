@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           java-rpm-macros
 Version:        1
 Release:        %autorelease

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary: Produces a document with syntax highlighting
 Name: source-highlight
 Version: 3.1.9
@@ -37,6 +39,7 @@ Requires: boost-devel
 Development files for source-highlight
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

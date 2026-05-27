@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global cpan_version 0.019
 Name:           perl-IO-Compress-Brotli
 Version:        %{cpan_version}000
@@ -50,6 +52,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n IO-Compress-Brotli-%{cpan_version}
 %patch -P0 -p1
 

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %define _version_suffix -a155
 
 # The mingw* RPMs are noarch, and the wxi data files are
@@ -242,6 +244,7 @@ Requires:       libmsi1%{?_isa} = %{version}-%{release}
 The libmsi1-devel package includes the header files for libmsi.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -S git_am -n msitools-%{version}%{?_version_suffix}
 
 %build

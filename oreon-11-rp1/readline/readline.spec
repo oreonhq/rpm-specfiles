@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary: A library for editing typed command lines
 Name: readline
 Version: 8.3
@@ -52,6 +54,7 @@ The readline-static package contains the static version of the readline
 library.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

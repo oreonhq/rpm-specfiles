@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 b6da746853253d5b4ac43191b4f69a4719595ee13a7ca676a8054cf36e6d16bb
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash b6da746853253d5b4ac43191b4f69a4719595ee13a7ca676a8054cf36e6d16bb
 
 %if ! (0%{?rhel})
 %{bcond_without perl_IO_Socket_INET6_enables_optional_test}
@@ -57,7 +51,7 @@ BuildRequires:  perl(Test::TrailingSpace)
 Perl Object interface for AF_INET|AF_INET6 domain sockets.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n IO-Socket-INET6-%{version}
 %patch -P0 -p1
 %patch -P1 -p1

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global major_minor_version %%(echo %%{version} | cut -d "." -f 1-2)
 
 Name:           at-spi2-core
@@ -97,6 +99,7 @@ The at-spi2-atk-devel package includes the header files for the at-spi2-atk
 library.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

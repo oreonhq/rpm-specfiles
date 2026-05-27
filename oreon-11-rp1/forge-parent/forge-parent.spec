@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           forge-parent
 Version:        38
 Release:        34%{?dist}
@@ -18,6 +20,7 @@ Sonatype Forge is an open-source community dedicated to the creation of the
 next-generation of development tools and technologies.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -qcT
 cp -p %{SOURCE0} pom.xml
 cp -p %{SOURCE1} LICENSE

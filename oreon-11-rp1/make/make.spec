@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # -*- coding: utf-8 -*-
 # This decides the SRPM name.  Set to "make" for a rolling release
 # (like Fedora) or "make-latest" for a long term release that needs
@@ -77,6 +79,7 @@ Summary: Header file for externally visible definitions
 The %{make}-devel package contains gnumake.h.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n make-%{version} -p1
 
 rm -f tests/scripts/features/parallelism.orig

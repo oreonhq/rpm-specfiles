@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           perl-Mozilla-CA
 # You do not need to back-port a new version for updating a list of the
 # certificates. They are taken from ca-certificates package instead
@@ -43,6 +45,7 @@ Tests from %{name}. Execute them
 with "%{_libexecdir}/%{name}/test".
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n Mozilla-CA-%{version}
 %patch -P0 -p1
 # Remove a bundled CA bundle for sure

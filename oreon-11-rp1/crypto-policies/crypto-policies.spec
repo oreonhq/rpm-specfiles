@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global git_date 20251128
 %global git_commit 19878fea4c5f62208655e32269842bce55c819b2
 %{?git_commit:%global git_commit_hash %(c=%{git_commit}; echo ${c:0:7})}
@@ -60,6 +62,7 @@ either the pre-built policies from the base package or custom policies
 defined in simple policy definition files.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n fedora-crypto-policies-%{git_commit_hash}-%{git_commit}
 
 %build

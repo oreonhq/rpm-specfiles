@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary:          Library to support IDNA2008 internationalized domain names
 Name:             libidn2
 Version:          2.3.8
@@ -40,6 +42,7 @@ The idn2 package contains the idn2 command line tool for testing
 IDNA2008 conversions.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 

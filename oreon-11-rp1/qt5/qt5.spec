@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # include qt5,qt5-devel metapackages or not
 # dropped for f32+
 %if 0%{?fedora} < 32

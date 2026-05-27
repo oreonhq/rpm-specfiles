@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %bcond_with bootstrap
 
 Name:           osgi-core
@@ -25,6 +27,7 @@ Obsoletes:      %{name}-javadoc < 8.0.0-34
 OSGi Core, Interfaces and Classes for use in compiling bundles.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -C
 
 # Delete pre-built binaries

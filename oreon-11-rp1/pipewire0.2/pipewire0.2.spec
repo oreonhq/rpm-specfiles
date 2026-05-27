@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 bfaa0f6ae6c0791e2e0b59234d399753bf24f1b33dbf587682363a8463dd8df1
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash bfaa0f6ae6c0791e2e0b59234d399753bf24f1b33dbf587682363a8463dd8df1
 
 %global apiversion   0.2
 %global spaversion   0.1
@@ -100,7 +94,7 @@ Headers and libraries for developing applications that can communicate with
 a PipeWire media server.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -T -b0 -n pipewire-%{version}%{?gitrel:-%{gitrel}-g%{shortcommit}}
 
 %patch -P1 -p1 -b .0001

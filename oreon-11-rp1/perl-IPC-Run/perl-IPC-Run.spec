@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 b1e85a30405786ed8378b68dd57159315ad7ddc0a55e432aa9eeca6166ca53fe
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash b1e85a30405786ed8378b68dd57159315ad7ddc0a55e432aa9eeca6166ca53fe
 
 # Perform optional tests
 %bcond perl_IPC_Run_enables_optional_test %{undefined rhel}
@@ -80,7 +74,7 @@ Various redirection operators reminiscent of those seen on common Unix
 and DOS command lines are provided.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n IPC-Run-%{version}
 
 # Remove Windows-only features that could add unnecessary dependencies

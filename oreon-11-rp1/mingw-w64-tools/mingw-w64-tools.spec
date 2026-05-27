@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 5afe822af5c4edbf67daaf45eec61d538f49eef6b19524de64897c6b95828caf
 
 #%%global snapshot_date 20140530
 #%%global snapshot_rev 430863ffea2f6101fbfc0ee35ee098ab2f96b53c
@@ -46,7 +40,7 @@ It contains gendef, genidl and mingw-w64-widl
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %if 0%{?snapshot_date}
 rm -rf mingw-w64-v%{version}
 mkdir mingw-w64-v%{version}

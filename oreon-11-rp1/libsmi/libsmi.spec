@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 516044e684ff13abf56632e87a9db6b4bca2bfe5d87f108012bf4f74ae7df0b8
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 516044e684ff13abf56632e87a9db6b4bca2bfe5d87f108012bf4f74ae7df0b8
 
 # Upstream was putting changes silently into svn over a number of years
 # When they moved to gitlab, this became visible
@@ -68,7 +62,7 @@ This package contains development files needed to develop
 libsmi-based applications.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{commit}
 %patch -P 0 -p1 -b .wget111
 %patch -P 2 -p1 -b .clash

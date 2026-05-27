@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name: sgx-rpm-macros
 Version: 1
 Release: 4%{?dist}

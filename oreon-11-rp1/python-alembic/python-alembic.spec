@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 cb6e1fd84b6174ab8dbb2329f86d631ba9559dd78df550b57804d607672cedbc
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash cb6e1fd84b6174ab8dbb2329f86d631ba9559dd78df550b57804d607672cedbc
 
 Name:             python-alembic
 Version:          1.18.4
@@ -69,7 +63,7 @@ It contains no code, just makes sure the dependencies are installed.
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n alembic-%{version}
 # HTML documentation has bundled and pre-compiled/pre-minified JavaScript; see
 # https://docs.fedoraproject.org/en-US/packaging-guidelines/JavaScript/.

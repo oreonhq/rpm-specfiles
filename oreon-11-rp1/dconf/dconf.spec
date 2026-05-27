@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %define glib2_version 2.44.0
 
 Name:           dconf
@@ -37,6 +39,7 @@ dconf development package. Contains files needed for doing software
 development using dconf.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

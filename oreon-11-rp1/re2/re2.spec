@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 87f6029d2f6de8aa023654240a03ada90e876ce9a4676e258dd01ea4c26ffd67
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 87f6029d2f6de8aa023654240a03ada90e876ce9a4676e258dd01ea4c26ffd67
 
 # The Python extension tests now segfault on i686. Starting with Fedora 42, we
 # no longer build the Python extension on i686; in the medium term, we wish to
@@ -108,7 +102,7 @@ Known differences between this module’s API and the re module’s API:
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n re2-%{tag}
 # Show that a file licensed Apache-2.0 is not used in the build and does not
 # contribute to the licenses of the binary RPMs:

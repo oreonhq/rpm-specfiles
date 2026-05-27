@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           kio-ftps
 Version:        0.2
 Release:        34%{?dist}
@@ -19,6 +21,7 @@ An ftps KIO slave for KDE, based on rfc4217. It should work yet with
 most server implementations.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}
 %patch -P0 -p0 -b .qtnetwork
 

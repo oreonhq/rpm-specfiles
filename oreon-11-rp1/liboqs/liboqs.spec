@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global oqs_version 0.12.0
 Name:       liboqs
 Version:    %{oqs_version}
@@ -48,6 +50,7 @@ Requires:         liboqs%{?_isa} = %{version}-%{release}
 Header and Library files for doing development with liboqs.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -T -b 0 -q -n liboqs-%{oqs_version}
 %autopatch -p1
 #hobble

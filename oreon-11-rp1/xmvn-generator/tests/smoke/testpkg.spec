@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global __xmvngen_debug 1
 %global __xmvngen_provides_generators org.fedoraproject.xmvn.generator.jpms.JPMSGeneratorFactory
 %global __xmvngen_requires_generators %{nil}

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 20202c84b96625bab3d1ea2577c255fceb088f9c0ad187ed09757a8e8acca9a2
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 20202c84b96625bab3d1ea2577c255fceb088f9c0ad187ed09757a8e8acca9a2
 
 %bcond tests 1
 # We would like to have a BuildRequires and weak runtime dependency on
@@ -60,7 +54,7 @@ Recommends:     %{py3_dist awscrt} >= 0.19.18
 %description -n python3-boto3 %{_description}
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n boto3-%{version}
 
 %generate_buildrequires

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           pythonabi
 Version:        0
 Release:        0

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 005db45ef4ee017f5c32ec124f913a0546e77014266c6a1c50df902a55fe64df
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 005db45ef4ee017f5c32ec124f913a0546e77014266c6a1c50df902a55fe64df
 
 Summary: Compact Disc Digital Audio (CDDA) extraction tool (or ripper)
 Name: cdparanoia
@@ -76,7 +70,7 @@ The cdparanoia-devel package contains the libraries and header files needed
 for developing applications to read CD Digital Audio disks.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n cdparanoia-III-%{version}
 %patch -P0 -p3 -b .#463009
 %patch -P1 -p1 -b .endian

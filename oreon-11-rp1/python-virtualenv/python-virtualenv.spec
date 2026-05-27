@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 643d3914d73d3eeb0c552cbb12d7e82adf0e504dbf86a3182f8771a153a1971c
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 643d3914d73d3eeb0c552cbb12d7e82adf0e504dbf86a3182f8771a153a1971c
 
 %bcond bootstrap 0
 %bcond tests %{without bootstrap}
@@ -84,7 +78,7 @@ Requires:       (%{python_wheel_pkg_prefix}-wheel0.37-wheel if python3.6)
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n virtualenv-%{version}
 
 # Remove the wheels provided by RPM packages

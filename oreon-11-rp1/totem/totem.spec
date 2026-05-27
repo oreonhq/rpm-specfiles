@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global gst_plugins_base_version 1.6.0
 %global gtk3_version 3.19.4
 
@@ -109,6 +111,7 @@ The %{name}-devel package contains API documentation for
 developing developing plugins for %{name}.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build

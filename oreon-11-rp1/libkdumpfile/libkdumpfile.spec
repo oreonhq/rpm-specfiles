@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 16415528e870791ac8d392422f0986b4c3f83e6cb4267b4daffe6982fc5f4a3a
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 16415528e870791ac8d392422f0986b4c3f83e6cb4267b4daffe6982fc5f4a3a
 
 %if 0%{?fedora} >= 42 || 0%{?rhel} >= 10
 # Python bindings removed post-0.5.5
@@ -93,7 +87,7 @@ The %{name}-devel package contains misc utilities built with %{name}.
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 # Remove unneeded shebang
 sed -e "\|#!/usr/bin/env python|d" -i python/*/*.py

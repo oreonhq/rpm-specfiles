@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Fedora spec file for librabbitmq
 #
 # Copyright (c) 2012-2024 Remi Collet
@@ -66,6 +68,7 @@ amqp-publish        Publish a message on an AMQP server
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{gh_project}-%{gh_commit}
 
 # Copy sources to be included in -devel docs.

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global pypi_name clikit
 Name:           python-%{pypi_name}
 Version:        0.3.1
@@ -24,6 +26,7 @@ Summary:        %{summary}
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{pypi_name}-%{version}
 %if 0%{?rhel}
 # force the poetry-core build backend, as that is available rather than full poetry

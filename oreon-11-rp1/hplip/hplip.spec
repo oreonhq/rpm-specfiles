@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # we don't want to provide private python extension libs
 %{?filter_setup:
 %filter_provides_in %{python3_sitearch}/.*\.so$
@@ -396,6 +398,7 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 SANE driver for scanners in HP's multi-function devices (from HPOJ).
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 
 # The pstotiff filter is rubbish so replace it (launchpad #528394).

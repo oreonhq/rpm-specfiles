@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %bcond_without check
 %bcond_with tests
 %if 0%{?rhel} >= 9 || 0%{?fedora} > 41 || 0%{?oreon}
@@ -103,6 +105,7 @@ This package contains the integration test suite for bootc.
 %endif
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %if ! 0%{?container_build}
 %autosetup -p1 -a1
 # Default -v vendor config doesn't support non-crates.io deps (i.e. git)

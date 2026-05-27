@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Copyright (c) 2000-2008, JPackage Project
 # All rights reserved.
 #
@@ -183,6 +185,7 @@ Requires: %{name} = %{epoch}:%{version}-%{release}
 The ROOT web application for Apache Tomcat.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{packdname}
 # remove pre-built binaries and windows files
 find . -type f \( -name "*.bat" -o -name "*.class" -o -name Thumbs.db -o -name "*.gz" -o \

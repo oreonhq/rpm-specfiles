@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %bcond_without python3
 %if (0%{?fedora} && 0%{?fedora} < 32) || (0%{?rhel} && 0%{?rhel} < 9) || 0%{?oreon}
 %bcond_without python2
@@ -222,6 +224,7 @@ This is the Python 3 build of wx-siplib.
 
 %prep
 
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{version}%{?snap:.%{snap}}
 
 %patch -P50 -p1 -b .no_strip

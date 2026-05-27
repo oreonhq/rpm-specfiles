@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 640c56c4bcf8ce8f2aa65d6a633c19d58370527a5213e71aa76546c930c6a6fb
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 640c56c4bcf8ce8f2aa65d6a633c19d58370527a5213e71aa76546c930c6a6fb
 
 # secure boot support is for RHEL only
 %if 0%{?rhel} >= 8 || 0%{?oreon}
@@ -128,7 +122,7 @@ The s390utils packages contain a set of user space utilities that should to
 be used together with the zSeries (s390) Linux kernel and device drivers.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n s390-tools-%{version} -p1
 
 %if 0%{?rhel} || 0%{?oreon}

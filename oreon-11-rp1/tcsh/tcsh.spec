@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 4208cf4630fb64d91d81987f854f9570a5a0e8a001a92827def37d0ed8f37364
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 4208cf4630fb64d91d81987f854f9570a5a0e8a001a92827def37d0ed8f37364
 
 # === GLOBAL MACROS ===========================================================
 
@@ -82,7 +76,7 @@ job control and a C language like syntax.
 # Call the 'autosetup' macro to prepare the environment, but do not patch the
 # source code yet -- we need to convert the 'Fixes' file first:
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -N -S git
 
 # NOTE: If more files needs to be converted, add them here:

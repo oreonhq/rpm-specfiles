@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:tpm2-openssl
 Version: 1.2.0
 Release: 8%{?candidate:.%{candidate}}%{?dist}
@@ -38,6 +40,7 @@ Makes the TPM 2.0 accessible via the standard OpenSSL API and command line
 tools, adding TPM support to (almost) any OpenSSL 3.0-based application.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %autosetup -p1 -n %{name}-%{version}%{?candidate:-%{candidate}}
 

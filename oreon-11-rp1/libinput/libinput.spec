@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 af04645cef8ec4ef9b571664828086ea5a610c6f3e872880055c7fe2c9377de5
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash af04645cef8ec4ef9b571664828086ea5a610c6f3e872880055c7fe2c9377de5
 
 %global udevdir %(pkg-config --variable=udevdir udev)
 
@@ -74,7 +68,7 @@ The %{name}-test package contains the libinput test suite. It is not
 intended to be run by users.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -S git -p1
 # Replace whatever the source uses with the approved call
 %py3_shebang_fix $(git grep -l  '#!/usr/bin/.*python3')

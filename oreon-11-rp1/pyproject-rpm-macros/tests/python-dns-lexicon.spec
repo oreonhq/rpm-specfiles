@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name:           python-dns-lexicon
 Version:        3.8.1
 Release:        0%{?dist}
@@ -31,6 +33,7 @@ Summary:        %{summary}
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n lexicon-%{version}
 # The tox configuration lists a [dev] extra, but that installs nothing (is missing).
 # The test requirements are only specified via poetry.dev-dependencies.

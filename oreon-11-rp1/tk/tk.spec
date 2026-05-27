@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global major 9
 %global majorver %{major}.0
 %global vers %{majorver}.2
@@ -41,6 +43,7 @@ way to create cross-platform GUI applications.
 The package contains the development files and man pages for tk.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}%{vers}
 
 %build

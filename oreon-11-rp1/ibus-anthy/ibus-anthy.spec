@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 cad0d6e2c6fd27ea71299efdfa19954ad098fa9e54c6a232161bd25786c492e6
-%global source1_sha256 93d71c9a5c087ec863be19cbb7ee9f78cb0379a9dcf49839edee520447e6b1a2
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash cad0d6e2c6fd27ea71299efdfa19954ad098fa9e54c6a232161bd25786c492e6
+%global source1_hash 93d71c9a5c087ec863be19cbb7ee9f78cb0379a9dcf49839edee520447e6b1a2
 
 # https://fedoraproject.org/wiki/Changes/No_more_automagic_Python_bytecompilation_phase_3
 %global sub_version                     1.0
@@ -98,7 +91,8 @@ the functionality of the installed %{name} package.
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 SAVED_SUM=$(grep sha512sum %SOURCE1 | awk '{print $2}')
 MY_SUM=$(sha512sum %SOURCE0 | awk '{print $1}')
 if test x"$SAVED_SUM" != x"$MY_SUM" ; then

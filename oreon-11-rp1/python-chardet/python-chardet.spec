@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Version 6.0.0 had __version__ = "6.0.0dev0" in chardet/version.py. A
 # follow-up commit fixed this, updating the version to "6.0.0.post1", and was
 # released on PyPI as 6.0.0.post1, but no corresponding tag was pushed to

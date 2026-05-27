@@ -1,3 +1,5 @@
+%global source0_hash none
+
 #### options:
 # Use the following --with/--without <option> switches to control how the
 # package will be built:
@@ -348,6 +350,7 @@ The %{name}-devel-tools package contains gimptool, a helper program to
 build GNU Image Manipulation Program (GIMP) plug-ins and extensions.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 cat << EOF
 --- 8< --- Build options ---------------------------------------------------
 is default version: %{with is_default_version}

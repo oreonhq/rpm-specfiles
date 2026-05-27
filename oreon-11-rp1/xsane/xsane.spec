@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %if ! 0%{?fedora} || 0%{?fedora} >= 41 || 0%{?oreon}
 %bcond gimp 0
 %bcond pixbuf_extra_modules 1
@@ -146,6 +148,7 @@ Summary: Common files for xsane packages
 This package contains common files needed by other xsane packages.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 
 # convert some files to UTF-8

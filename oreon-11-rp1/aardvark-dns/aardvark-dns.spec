@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 42556bf547c435a8f0ccb586b4f5000da3106a58c26f82e22d9db81ee5bd7eb2
-%global source1_sha256 dcfad0419e30124fcb33aa9583c27cd12f2e11b2c67f118fcc54b68d1bed4dde
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 42556bf547c435a8f0ccb586b4f5000da3106a58c26f82e22d9db81ee5bd7eb2
+%global source1_hash dcfad0419e30124fcb33aa9583c27cd12f2e11b2c67f118fcc54b68d1bed4dde
 
 # trust-dns-{client,server} not available
 # using vendored deps
@@ -81,7 +74,8 @@ This package contains system tests for %{name} and is only intended to be used
 for gating tests.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %autosetup -Sgit %{name}-%{version}
 # Following steps are only required on environments like koji which have no
 # network access and thus depend on the vendored tarball. Copr pulls

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 40b4ac0b292b60ce3b87de7aa39bc2fb25a19d10e5c9f69866961c84b3f6d13b
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 40b4ac0b292b60ce3b87de7aa39bc2fb25a19d10e5c9f69866961c84b3f6d13b
 
 Name:		perl-Perl-Destruct-Level
 Summary:	Allows you to change perl's internal destruction level
@@ -49,7 +43,7 @@ Note that some embedded environments might extend the meaning of the
 destruction level for their own purposes: mod_perl does that, for example.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n Perl-Destruct-Level-%{version}
 
 %build

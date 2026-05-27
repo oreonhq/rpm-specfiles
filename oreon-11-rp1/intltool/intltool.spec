@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Name: intltool
 Summary: Utility for internationalizing various kinds of data files
 Version: 0.51.0
@@ -37,6 +39,7 @@ bonobo ui, nautilus theme, .desktop, and other data files and puts
 them in the po files.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
 %build

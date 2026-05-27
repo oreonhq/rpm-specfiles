@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Let’s try to build this as early as we can, since it’s a dependency for
 # some important libraries, such as python-platformdirs.
 %bcond bootstrap 0

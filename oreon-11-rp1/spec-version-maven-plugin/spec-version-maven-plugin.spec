@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 53c9a72d4e4e792d72dc39195783094eb92e9558d550958ffc68f9a91bcd0430
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 53c9a72d4e4e792d72dc39195783094eb92e9558d550958ffc68f9a91bcd0430
 
 %global giturl  https://github.com/eclipse-ee4j/glassfish-%{name}
 
@@ -35,7 +29,7 @@ Maven Plugin to configure APIs version and specs in a MANIFEST.MF file.
 %{?javadoc_package}
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -n glassfish-%{name}-%{version}
 
 %conf

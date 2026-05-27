@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 a49b08d56813789e5f03289a3f949459eafe9e40a1a9fc066c42c90009a322cf
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash a49b08d56813789e5f03289a3f949459eafe9e40a1a9fc066c42c90009a322cf
 
 Summary:        Internationalization library for Perl, compatible with gettext
 Name:           perl-libintl-perl
@@ -77,7 +71,7 @@ implemented for example in GNU gettext.
 
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n libintl-perl-%{version}
 find -type f -exec chmod -x {} \;
 find lib/Locale gettext_xs \( -name '*.pm' -o -name '*.pod' \) \

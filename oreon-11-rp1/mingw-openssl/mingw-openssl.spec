@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %global mingw_build_ucrt64 1
 %{?mingw_package_header}
 
@@ -287,6 +289,7 @@ Static version of the MinGW port of the OpenSSL toolkit.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -S git -n openssl-%{version}
 
 cp %{SOURCE12} crypto/ec/

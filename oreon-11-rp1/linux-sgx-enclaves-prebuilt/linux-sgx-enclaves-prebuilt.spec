@@ -1,12 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 57c1e4637039a9fd93218a78f7f6e893c7d69960c7e180c1b8c9d3ed949495ce
-%global source1_sha256 ebd0a660969b934ec653a78a1c843df3f327d7ea866493c0dde58e18d92c4e40
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })} \
-%{?source1_sha256:%(test -z "%{source1_sha256}" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_sha256}" || { echo "oreon: Source1 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 57c1e4637039a9fd93218a78f7f6e893c7d69960c7e180c1b8c9d3ed949495ce
+%global source1_hash ebd0a660969b934ec653a78a1c843df3f327d7ea866493c0dde58e18d92c4e40
 
 # There's no concept of debuginfo for SGX enclaves
 %global debug_package %{nil}
@@ -157,7 +150,8 @@ prebuilt by Intel. \
 %do_package qve %{with_enclave_qve} %{dcap_version}
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 # Upstream repo renamed to confidential-computing.sgx (GitHub archive top dir matches)
 %autosetup -n confidential-computing.sgx-sgx_%{linux_sgx_version}_reproducible
 

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 13702526f687c18b2540c1a3f2e189187baaa65211edcf7ff6772fa69f0536cf
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 13702526f687c18b2540c1a3f2e189187baaa65211edcf7ff6772fa69f0536cf
 
 %define _hardened_build 1
 
@@ -103,7 +97,7 @@ written in C and provides a more low-level and information rich access
 to similar features as the various script-hooks.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 gpgv2 --quiet --keyring %{SOURCE10} %{SOURCE1} %{SOURCE0}
 %autosetup -p1
 

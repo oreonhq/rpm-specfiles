@@ -1,3 +1,5 @@
+%global source0_hash none
+
 #global commit 7274cfad453d770f36b53ec5a2294ddd6d905703
 #global shortcommit %(c=%{commit}; echo ${c:0:7})
 
@@ -267,6 +269,7 @@ trained models for the Tesseract Open Source OCR Engine.\
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %if 0%{?commit:1}
 %autosetup -p1 -n tessdata_fast-%{commit}
 %else

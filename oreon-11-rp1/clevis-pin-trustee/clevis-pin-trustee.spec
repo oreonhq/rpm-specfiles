@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 5f229eed038f5259174b908614dff86a011c8dd837a29ed64495e6c4ef5b4dcc
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 5f229eed038f5259174b908614dff86a011c8dd837a29ed64495e6c4ef5b4dcc
 
 # SPDX-FileCopyrightText: Sergio Arroutbi <sarroutb@redhat.com>
 #
@@ -43,7 +37,7 @@ unlocking of LUKS-encrypted volumes in confidential computing environments by
 fetching encryption keys from Trustee servers after successful attestation.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup
 %cargo_prep
 

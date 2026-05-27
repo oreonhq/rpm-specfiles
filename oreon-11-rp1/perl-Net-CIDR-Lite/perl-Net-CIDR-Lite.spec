@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 4317d8cb341a617b9e0888da43c09cdffffcb0c9edf7b8c9928d742a563b8517
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 4317d8cb341a617b9e0888da43c09cdffffcb0c9edf7b8c9928d742a563b8517
 
 Name:           perl-Net-CIDR-Lite
 Version:        0.22
@@ -39,7 +33,7 @@ Faster alternative to Net::CIDR when merging a large number of CIDR address
 ranges. Works for IPv4 and IPv6 addresses.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n Net-CIDR-Lite-%{version}
 
 %build

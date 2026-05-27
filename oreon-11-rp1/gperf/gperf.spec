@@ -1,3 +1,5 @@
+%global source0_hash none
+
 Summary: A perfect hash function generator
 Name: gperf
 Version: 3.2.1
@@ -16,6 +18,7 @@ structure that allows recognition of a key word in a set of words
 using exactly one probe into the data structure.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q
 
 %build

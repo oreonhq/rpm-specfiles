@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %bcond_with bootstrap
 
 %global split_min_version 2.4.9-4.fc42.1
@@ -214,6 +216,7 @@ package contains the GnuPG Web Key Service client and server.
 
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %if ! %{with bootstrap}
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %define		mainver		0.996
 #%%define		betaver		pre3
 %define		baserelease	11
@@ -40,6 +42,7 @@ This is the development package that provides header files and libraries
 for MeCab.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{mainver}%{?betaver}
 
 

@@ -1,10 +1,4 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source0_sha256 486c53e63c07cefd56ccd1234a665bc45fa2f37072c189ccb06373b97c7d73c2
-%global oreon_verify_sources \
-%{?source0_sha256:%(test -z "%{source0_sha256}" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_sha256}" || { echo "oreon: Source0 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash 486c53e63c07cefd56ccd1234a665bc45fa2f37072c189ccb06373b97c7d73c2
 
 # ifdef'd in source code but runtime dep will be made for FT_Done_MM_Var symbol in freetype-2.9.1
 # so update the build deps as well to keep deps consistency between runtime and build time.
@@ -80,7 +74,7 @@ The fontconfig-devel-doc package contains the documentation files
 which is useful for developing applications that uses fontconfig.
 
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 # To reduce a maintenance cost of fontconfig-lower-nonlatin-conf.patch
 mv conf.d/65-nonlatin.conf conf.d/69-nonlatin.conf

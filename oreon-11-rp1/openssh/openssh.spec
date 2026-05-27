@@ -1,3 +1,5 @@
+%global source0_hash none
+
 # Do we want SELinux & Audit
 %if 0%{?!noselinux:1}
 %global WITH_SELINUX 1
@@ -239,6 +241,7 @@ an X11 passphrase dialog for OpenSSH.
 This package contains a test SK driver used for OpenSSH test purposes
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 gpg --batch --dearmor --output %{_builddir}/openssh-release-keyring.gpg %{SOURCE3}
 gpgv2 --quiet --keyring %{_builddir}/openssh-release-keyring.gpg %{SOURCE1} %{SOURCE0}
 %autosetup -T -b 0 -p1

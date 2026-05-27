@@ -1,10 +1,5 @@
-# oreon source sha256 begin
-# URL sources: global sourceN_sha256 = 64-char hex from sha256sum. Omit a sourceN_sha256 line to skip verify for that source.
-%global source3000_sha256 6898f963c8e938981e6c4a302e83ec5beb4630147c7311183cf61069af16333d
-%global oreon_verify_sources \
-%{?source3000_sha256:%(test -z "%{source3000_sha256}" || { f="%{SOURCE3000}"; test -f "$f" || { echo "oreon: missing Source3000 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3000_sha256}" || { echo "oreon: Source3000 sha256 mismatch" >&2; exit 1; }; })}
-%(true)
-# oreon source sha256 end
+%global source0_hash none
+%global source3000_hash 6898f963c8e938981e6c4a302e83ec5beb4630147c7311183cf61069af16333d
 
 #region globals
 #region version
@@ -1303,7 +1298,8 @@ Flang runtime libraries.
 
 #region prep
 %prep
-%oreon_verify_sources
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3000_hash}" = "none" || { f="%{SOURCE3000}"; test -f "$f" || { echo "oreon: missing Source3000 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3000_hash}" || { echo "oreon: Source3000 hash mismatch" >&2; exit 1; }; })
 %if %{without snapshot_build}
 # llvm
 %{gpgverify} --keyring='%{SOURCE6}' --signature='%{SOURCE1}' --data='%{SOURCE0}'

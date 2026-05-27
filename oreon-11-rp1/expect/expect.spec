@@ -1,3 +1,5 @@
+%global source0_hash none
+
 %{!?tcl_version: %global tcl_version %(echo 'puts $tcl_version' | tclsh)}
 %{!?tcl_sitearch: %global tcl_sitearch %{_libdir}/tcl%{tcl_version}}
 %global majorver 5.45.4
@@ -105,6 +107,7 @@ Please use tclsh with package require Tk and Expect instead
 of expectk.
 
 %prep
+%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %setup -q -n expect%{version}
 %patch -P0 -p1 -b .log_file
 %patch -P1 -p1 -b .pkgpath
