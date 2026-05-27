@@ -1811,7 +1811,7 @@ Requires: %{name}-%{?1:%{1}-}-modules-core-uname-r = %{KVERREL}%{uname_variant %
 %{expand:%%kernel_modules_extra_package %{?1:%{1}} %{!?{-n}:%{1}}%{?{-n}:%{-n*}} %{-m:%{-m}}}\
 %if %{-m:0}%{!-m:1}\
 %{expand:%%kernel_modules_internal_package %{?1:%{1}} %{!?{-n}:%{1}}%{?{-n}:%{-n*}}}\
-%if 0%{!?fedora:1}\ || 0%{?oreon}
+%if 0%{!?fedora:1} || 0%{?oreon}\
 %{expand:%%kernel_modules_partner_package %{?1:%{1}} %{!?{-n}:%{1}}%{?{-n}:%{-n*}}}\
 %endif\
 %{expand:%%kernel_debuginfo_package %{?1:%{1}}}\
@@ -4225,7 +4225,7 @@ fi\
 #
 %define kernel_variant_posttrans(v:u:) \
 %{expand:%%posttrans %{?-v:%{-v*}-}%{!?-u*:core}%{?-u*:uki-%{-u*}}}\
-%if 0%{!?fedora:1}\ || 0%{?oreon}
+%if 0%{!?fedora:1} || 0%{?oreon}\
 %if !%{with_automotive}\
 if [ -x %{_sbindir}/weak-modules ]\
 then\
@@ -4265,7 +4265,7 @@ fi\
 %{expand:%%kernel_modules_core_post %{?-v*}}\
 %{expand:%%kernel_modules_extra_post %{?-v*}}\
 %{expand:%%kernel_modules_internal_post %{?-v*}}\
-%if 0%{!?fedora:1}\ || 0%{?oreon}
+%if 0%{!?fedora:1} || 0%{?oreon}\
 %{expand:%%kernel_modules_partner_post %{?-v*}}\
 %endif\
 %{expand:%%kernel_variant_posttrans %{?-v*:-v %{-v*}}}\
@@ -4724,7 +4724,7 @@ fi\
 %{expand:%%files %{?3:%{3}-}devel-matched}\
 %{expand:%%files -f kernel-%{?3:%{3}-}modules-extra.list %{?3:%{3}-}modules-extra}\
 %{expand:%%files -f kernel-%{?3:%{3}-}modules-internal.list %{?3:%{3}-}modules-internal}\
-%if 0%{!?fedora:1}\ || 0%{?oreon}
+%if 0%{!?fedora:1} || 0%{?oreon}\
 %{expand:%%files -f kernel-%{?3:%{3}-}modules-partner.list %{?3:%{3}-}modules-partner}\
 %endif\
 %if %{with_debuginfo}\
