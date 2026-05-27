@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 63c4267799f2618dd7ac5997d0306bbcf2a5306caaca0056795bc6c61d00f8c8
 
 # Keep release branding, but avoid PGO/LTO in Oreon builds. Firefox PGO runs
 # extra instrumented build/profile phases and makes builders take many hours.
@@ -187,14 +187,14 @@ ExcludeArch: i686
 
 Summary:        Mozilla Firefox Web browser
 Name:           firefox
-Version:        150.0.1
+Version:        151.0.2
 Release:        1%{?pre_tag}%{?dist}
 URL:            https://www.mozilla.org/firefox/
 # Automatically converted from old format: MPLv1.1 or GPLv2+ or LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-MPLv1.1 OR GPL-2.0-or-later OR LicenseRef-Callaway-LGPLv2+
 Source0:        https://archive.mozilla.org/pub/firefox/releases/%{version}%{?pre_version}/source/firefox-%{version}%{?pre_version}.source.tar.xz
 %if %{with langpacks}
-Source1:        firefox-langpacks-%{version}%{?pre_version}-20260310.tar.xz
+Source1:        firefox-langpacks-%{version}%{?pre_version}-20260522.tar.xz
 %endif
 %if 0%{?use_bundled_cbindgen}
 Source2:        cbindgen-vendor.tar.xz
@@ -1307,6 +1307,9 @@ fi
 #---------------------------------------------------------------------
 
 %changelog
+* Tue May 26 2026 Oreon Packaging Team <packaging@oreonhq.com> - 151.0.2-1
+- Update to 151.0.2
+
 * Sat May 02 2026 Oreon Packaging Team <packaging@oreonhq.com> - 150.0.1-1
 - Update to 150.0.1
 
