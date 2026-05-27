@@ -425,11 +425,6 @@ Source4:          389-ds-base.sysusers
 Source5:          https://fedorapeople.org/groups/389ds/libdb-5.3.28-59.tar.bz2
 %endif
 
-Source6:          vendor-%{version}-1.tar.gz
-Source7:          Cargo-%{version}-1.lock
-Source8:          cockpit_dist-%{version}-1.tar.bz2
-
-
 %description
 389 Directory Server is an LDAPv3 compliant server.  The base package includes
 the LDAP server and command line utilities for server administration.
@@ -565,13 +560,6 @@ cd src/lib389
 %(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
 %(test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; })
 %autosetup -S git -p1 -n %{name}-%{version}
-%if %{defined SOURCE6}
-rm -rf vendor
-tar xzf %{SOURCE6}
-%endif
-%if %{defined SOURCE7}
-cp %{SOURCE7} src/Cargo.lock
-%endif
 
 %if %{with bundle_jemalloc}
 %(f=%{_sourcedir}/jemalloc-5.3.0.tar.bz2; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "2db82d1e7119df3e71b7640219b6dfe84789bc0537983c3b7ac4f7189aecfeaa" || { echo "oreon: Source3 SHA256 mismatch for jemalloc-5.3.0.tar.bz2" >&2; exit 1; })
@@ -581,11 +569,6 @@ cp %{SOURCE7} src/Cargo.lock
 %if %{with bundle_libdb}
 %(f=%{_sourcedir}/libdb-5.3.28-59.tar.bz2; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "13fe53591f75f448447e143aafe2639d70635ad0d87786737e5e259dcb13fc22" || { echo "oreon: Source5 SHA256 mismatch for libdb-5.3.28-59.tar.bz2" >&2; exit 1; })
 %setup -q -n %{name}-%{version} -T -D -b 5
-%endif
-
-%if %{defined SOURCE8}
-# Unpack prebuilt cockpit files
-tar xvjf %{SOURCE8} -C src/cockpit/389-console
 %endif
 
 cp %{SOURCE2} README.devel
@@ -700,6 +683,9 @@ popd
 # Generate symbolic info for debuggers
 export XCFLAGS=$RPM_OPT_FLAGS
 
+%if %{with cockpit}
+%make_build 389-console
+%endif
 %make_build
 
 %install
