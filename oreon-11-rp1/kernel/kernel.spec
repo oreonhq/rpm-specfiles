@@ -192,6 +192,7 @@ Summary: The Linux kernel
 %define specrpmversion 7.0.10
 %define specversion 7.0.10
 %define patchversion 7.0
+%define kernel_org_dir %(perl -e '@p=split /\\./,shift; print($p[1]==0 ? "v$p[0].x" : "v@{[join q{.}, @p]}")' %{patchversion})
 %define pkgrelease 200
 %define kversion 7
 %define tarfile_release 7.0.10
@@ -991,7 +992,7 @@ BuildRequires: redhat-sb-certs >= 9.4-0.1
 # exact git commit you can run
 #
 # xzcat -qq ${TARBALL} | git get-tar-commit-id
-Source0: linux-%{tarfile_release}.tar.xz
+Source0: https://cdn.kernel.org/pub/linux/kernel/%{kernel_org_dir}/linux-%{tarfile_release}.tar.xz
 
 Source1: Makefile.rhelver
 Source2: %{name}.changelog
@@ -1158,8 +1159,10 @@ Source212: Module.kabi_dup_s390x
 Source213: Module.kabi_dup_x86_64
 Source214: Module.kabi_dup_riscv64
 
+%if %{with_kabidwchk} || %{with_kabidw_base} || %{with_kernel_abi_stablelists}
 Source300: kernel-abi-stablelists-%{kabiversion}.tar.xz
 Source301: kernel-kabi-dw-%{kabiversion}.tar.xz
+%endif
 
 %if 0%{include_rt}
 %if 0%{include_rhel} || 0%{?oreon}
