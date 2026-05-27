@@ -889,7 +889,7 @@ MOZ_LINK_FLAGS="%{build_ldflags}"
 MOZ_LINK_FLAGS="$MOZ_LINK_FLAGS -Wl,--no-keep-memory"
 %endif
 %endif
-%ifarch %{ix86} s390x ppc64le aarch64
+%ifarch %{ix86} s390x ppc64le aarch64 x86_64
 # Append so mock redhat-rpm-config RUSTFLAGS (frame pointers, etc.) stay set.
 # Trailing -Cdebuginfo=0 wins over earlier -Cdebuginfo=2 from the environment.
 export RUSTFLAGS="${RUSTFLAGS:-} -Cdebuginfo=0"
@@ -905,6 +905,9 @@ MOZ_OPT_FLAGS="$MOZ_OPT_FLAGS -DNSS_PKCS11_3_0_STRICT"
 echo "export CFLAGS=\"$MOZ_OPT_FLAGS\"" >> .mozconfig
 echo "export CXXFLAGS=\"$MOZ_OPT_FLAGS\"" >> .mozconfig
 echo "export LDFLAGS=\"$MOZ_LINK_FLAGS\"" >> .mozconfig
+%ifarch %{ix86} s390x ppc64le aarch64 x86_64
+echo "export RUSTFLAGS=\"$RUSTFLAGS\"" >> .mozconfig
+%endif
 
 %if %{with build_with_clang}
 echo "export LLVM_PROFDATA=\"llvm-profdata\"" >> .mozconfig
@@ -971,7 +974,14 @@ sed -i -e 's|#!/usr/bin/env python3|#!/usr/bin/env python3.11|' mach
 
 export MACH_BUILD_PYTHON_NATIVE_PACKAGE_SOURCE=system
 export MACH_NATIVE_PACKAGE_SOURCE=system
+_firefox_build_tmp="$(pwd)/firefox-rpm-build-tmp"
+mkdir -p "${_firefox_build_tmp}"
+chmod 700 "${_firefox_build_tmp}"
+export TMPDIR="${_firefox_build_tmp}"
+export TMP="${TMPDIR}"
+export TEMP="${TMPDIR}"
 ./mach build -v 2>&1 | cat - || exit 1
+rm -rf "${_firefox_build_tmp}"
 
 %if %{build_with_pgo}
 kill $MUTTER_PID
