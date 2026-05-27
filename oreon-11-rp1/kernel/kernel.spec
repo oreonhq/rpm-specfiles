@@ -2448,6 +2448,13 @@ InitBuildVars() {
     %{log_msg "InitBuildVars: USING ARCH=$Arch"}
 
     KCFLAGS="%{?kcflags}"
+
+    _kernel_rpm_tmp="$(pwd)/rpm-kbuild-tmp${Variant:+-${Variant}}"
+    mkdir -p "${_kernel_rpm_tmp}"
+    chmod 700 "${_kernel_rpm_tmp}"
+    export TMPDIR="${_kernel_rpm_tmp}"
+    export TMP="${TMPDIR}"
+    export TEMP="${TMPDIR}"
 }
 
 #Build bootstrap bpftool
@@ -2507,9 +2514,10 @@ BuildKernel() {
     %{log_msg "Setup build-ids"}
     # This ensures build-ids are unique to allow parallel debuginfo
     perl -p -i -e "s/^CONFIG_BUILD_SALT.*/CONFIG_BUILD_SALT=\"%{KVERREL}\"/" .config
-    %{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags}
     if [ $DoModules -eq 1 ]; then
-	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} modules %{?sparse_mflags} || exit 1
+	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget modules %{?sparse_mflags} %{?kernel_mflags} || exit 1
+    else
+	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags}
     fi
 
     %{log_msg "Setup RPM_BUILD_ROOT directories"}
@@ -3254,6 +3262,11 @@ BuildKernel() {
         %endif
     fi
 %endif
+
+    if [ -n "${_kernel_rpm_tmp:-}" ] && [ -d "${_kernel_rpm_tmp}" ]; then
+        rm -rf "${_kernel_rpm_tmp}"
+    fi
+    unset TMPDIR TMP TEMP _kernel_rpm_tmp
 
 %if %{with_gcov}
     popd
@@ -4828,5 +4841,5 @@ fi\
 #
 #
 %changelog
-* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - %{gemini}
-- Import
+* Mon May 25 2026 Oreon Packaging Team <packaging@oreonhq.com> - 7.0.10-1
+- Import exact from f44
