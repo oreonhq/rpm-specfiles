@@ -2452,7 +2452,7 @@ InitBuildVars() {
 
     KCFLAGS="%{?kcflags}"
 
-    _kernel_rpm_tmp="$(pwd)/rpm-kbuild-tmp${Variant:+-${Variant}}"
+    _kernel_rpm_tmp="${RPM_BUILD_DIR}/rpm-kbuild-tmp${Variant:+-${Variant}}"
     mkdir -p "${_kernel_rpm_tmp}"
     chmod 700 "${_kernel_rpm_tmp}"
     export TMPDIR="${_kernel_rpm_tmp}"
@@ -2518,7 +2518,8 @@ BuildKernel() {
     # This ensures build-ids are unique to allow parallel debuginfo
     perl -p -i -e "s/^CONFIG_BUILD_SALT.*/CONFIG_BUILD_SALT=\"%{KVERREL}\"/" .config
     if [ $DoModules -eq 1 ]; then
-	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget modules %{?sparse_mflags} %{?kernel_mflags} || exit 1
+	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags} || exit 1
+	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} modules %{?sparse_mflags} %{?kernel_mflags} || exit 1
     else
 	%{make} ARCH=$Arch KCFLAGS="$KCFLAGS" WITH_GCOV="%{?with_gcov}" %{?_smp_mflags} $MakeTarget %{?sparse_mflags} %{?kernel_mflags}
     fi

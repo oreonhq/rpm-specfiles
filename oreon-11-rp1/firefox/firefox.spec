@@ -949,7 +949,11 @@ echo "ac_add_options --without-wasm-sandboxed-libraries" >> .mozconfig
 %else
 %constrain_build -m 4096
 %endif
-echo "mk_add_options MOZ_MAKE_FLAGS=\"-j%{_smp_build_ncpus}\"" >> .mozconfig
+_firefox_jobs=%{_smp_build_ncpus}
+if [ "${_firefox_jobs}" -gt 4 ]; then
+    _firefox_jobs=4
+fi
+echo "mk_add_options MOZ_MAKE_FLAGS=\"-j${_firefox_jobs}\"" >> .mozconfig
 
 echo "mk_add_options MOZ_SERVICES_SYNC=1" >> .mozconfig
 echo "export STRIP=/bin/true" >> .mozconfig
@@ -980,7 +984,10 @@ chmod 700 "${_firefox_build_tmp}"
 export TMPDIR="${_firefox_build_tmp}"
 export TMP="${TMPDIR}"
 export TEMP="${TMPDIR}"
-./mach build -v 2>&1 | cat - || exit 1
+export PYTHONUNBUFFERED=1
+ulimit -n 4096
+set -o pipefail
+./mach build -v || exit 1
 rm -rf "${_firefox_build_tmp}"
 
 %if %{build_with_pgo}

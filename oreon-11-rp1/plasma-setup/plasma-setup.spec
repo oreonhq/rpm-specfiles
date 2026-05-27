@@ -21,16 +21,6 @@ Source1: http://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_k
 # Backported changes
 
 # Proposed changes
-# https://invent.kde.org/plasma/plasma-setup/-/merge_requests/98
-# https://bugs.kde.org/show_bug.cgi?id=514841
-# https://bugzilla.redhat.com/show_bug.cgi?id=2455469
-# grant ourselves polkit permission to create system-wide network connections
-Patch501:       0001-fix-give-us-permission-to-create-system-wide-network.patch
-# https://invent.kde.org/plasma/plasma-setup/-/merge_requests/100
-# fix incorrect addAndActivateConnection() call in wifi module, may fix
-# some of the "strange" behavior observed in
-# https://bugzilla.redhat.com/show_bug.cgi?id=2455469#c0
-Patch502:       0001-wifi-fix-bogus-addAndActivateConnection-arg-from-f80.patch
 # https://invent.kde.org/plasma/plasma-setup/-/merge_requests/101
 # https://bugzilla.redhat.com/show_bug.cgi?id=2453216
 Patch503:       101.patch
