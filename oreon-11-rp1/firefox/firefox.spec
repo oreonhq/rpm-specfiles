@@ -268,9 +268,6 @@ Patch242:        0026-Add-KDE-integration-to-Firefox.patch
 # Upstream patches
 Patch400:        mozilla-1196777.patch
 Patch401:        mozilla-1667096.patch
-# Potential fix for PipeWire camera crashes
-# https://bugzilla.mozilla.org/show_bug.cgi?id=2023103
-Patch408:        firefox-libwebrtc-potential-fix-for-pipewire-camera-crashes.patch
 
 # PGO/LTO patches
 Patch600:        pgo.patch
@@ -591,7 +588,6 @@ cat %{SOURCE49} | sed -e "s|LIBCLANG_RT_PLACEHOLDER|`pwd`/wasi-sdk-30/build/sysr
 
 %patch -P400 -p1 -b .1196777
 %patch -P401 -p1 -b .1667096
-%patch -P408 -p1 -b .libwebrtc-potential-fix-for-pipewire-camera-crashes
 
 # PGO patches
 %if %{build_with_pgo}
