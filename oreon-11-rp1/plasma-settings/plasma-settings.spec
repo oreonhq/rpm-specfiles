@@ -1,12 +1,12 @@
-%global source0_hash none
+%global source0_hash 45a8a8d5eb22fa76263c06acea026a21c222ac853ca666c1a34a982d5c7bb47d
 
 Name:           plasma-settings
-Version: 6.6.5
+Version: 26.03.80
 Release: 1%{?dist}
 License:        BSD-2-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only
 Summary:        Convergent Plasma Mobile settings application
 Url:            https://invent.kde.org/plasma-mobile/plasma-settings
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://invent.kde.org/plasma-mobile/plasma-settings/-/archive/v%{version}/%{name}-v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  appstream
 BuildRequires:  cmake
@@ -47,7 +47,7 @@ modules are provided separately, by plasma-nm.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1
+%autosetup -p1 -n %{name}-v%{version}
 
 %build
 %cmake_kf6
@@ -71,9 +71,6 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.mo
 %{_kf6_datadir}/plasma-settings/
 
 %changelog
-* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
-- Update to KDE Plasma 6.6.5
-
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 
