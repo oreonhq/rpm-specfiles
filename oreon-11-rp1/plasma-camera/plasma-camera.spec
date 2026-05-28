@@ -1,13 +1,13 @@
-%global source0_hash none
+%global source0_hash 1be3dcfa8a226a84d3eb1cc8e3cc2e5d00707f8c1e7a98bd72f376dbaa95dd40
 
 Name:          plasma-camera
-Version: 6.6.5
+Version: 26.03.80
 Release: 1%{?dist}
 License:       BSD-3-Clause AND GPL-2.0-or-later AND CC0-1.0 AND GPL-3.0-or-later
 Summary:       Camera application for Plasma Mobile
-URL:           https://apps.kde.org/plasma.camera/
+URL:           https://invent.kde.org/plasma-mobile/plasma-camera
 
-Source0:       https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:       https://invent.kde.org/plasma-mobile/plasma-camera/-/archive/v%{version}/%{name}-v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # libcamera does not currently build on these architectures
 ExcludeArch: s390x ppc64le
@@ -44,7 +44,7 @@ switching between different camera devices.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1
+%autosetup -p1 -n %{name}-v%{version}
 
 
 %build
@@ -67,9 +67,6 @@ appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
 %{_metainfodir}/org.kde.plasma.camera.appdata.xml
 
 %changelog
-* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
-- Update to KDE Plasma 6.6.5
-
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 
