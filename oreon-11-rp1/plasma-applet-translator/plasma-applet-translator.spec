@@ -1,4 +1,4 @@
-%global source0_hash fec4b01ea5b0b32173ffd2708965b907565f8ad3ad0b378b203c1ef1b2e00ba4
+%global source0_hash 6311797cce81e628cadda29c77fc34c35361d2c9f51debf397a932de48071d07
 
 %global orig_name org.kde.plasma.translator
 
