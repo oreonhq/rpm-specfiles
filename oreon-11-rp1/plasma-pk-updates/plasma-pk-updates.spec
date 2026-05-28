@@ -4,8 +4,8 @@
 
 Name:           plasma-pk-updates
 Epoch:          1
-Version: 6.6.5
-Release: 1%{?dist}
+Version: 0.3.2
+Release: 24%{?dist}
 Summary:        Plasma applet for system updates using PackageKit
 
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
@@ -86,6 +86,9 @@ appstream-util validate-relax --nonet %{buildroot}%{_kf5_metainfodir}/org.kde.pl
 
 
 %changelog
+* Thu May 28 2026 Brandon Lester <boostyconnect@oreonproject.org> - 1:0.3.2-24
+- 0.3.2 from download.kde.org
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 

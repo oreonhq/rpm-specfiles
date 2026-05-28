@@ -1,12 +1,12 @@
-%global source0_hash 91b32509638ab602073816287110ac79b86ffc7f05c23b3285886f7ce6e4cd0f
+%global source0_hash 5d5d293cbaefc1d3074f3d3860cea0e55fc0d776b471e0f65744dcaa04b793b7
 
 Name:           plasma-pass
-Version: 6.6.5
+Version: 1.3.1
 Release: 1%{?dist}
 Summary:        Plasma applet to access passwords from the Pass password manager
 License:        CC0-1.0 AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/%{name}.git
-Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://invent.kde.org/plasma/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 
 
 BuildRequires:  gcc
@@ -50,7 +50,8 @@ password manager.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup
+%autosetup -n %{name}-v%{version}
+sed -i 's/set(KF6_MIN_VERSION "6.18.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeLists.txt
 
 
 %build
@@ -70,6 +71,9 @@ password manager.
 
 
 %changelog
+* Thu May 28 2026 Brandon Lester <boostyconnect@oreonproject.org> - 1.3.1-1
+- 1.3.1 from invent.kde.org
+
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
 - Update to KDE Plasma 6.6.5
 
