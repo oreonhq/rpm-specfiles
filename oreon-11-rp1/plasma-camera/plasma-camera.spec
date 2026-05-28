@@ -1,4 +1,4 @@
-%global source0_hash 1be3dcfa8a226a84d3eb1cc8e3cc2e5d00707f8c1e7a98bd72f376dbaa95dd40
+%global source0_hash 031c8f00095c174214ab8ffb1d807662df551966d72c3e367dccab2c3098eaac
 
 Name:          plasma-camera
 Version: 26.03.80
