@@ -74,6 +74,8 @@ Provides:       kf6-kactivities-devel = 1:%{version}-%{release}
 %{_kf6_libdir}/cmake/PlasmaActivities/
 %{_kf6_libdir}/libPlasmaActivities.so
 %{_kf6_libdir}/pkgconfig/PlasmaActivities.pc
+%{_datadir}/doc/qt6/PlasmaActivities.qch
+%{_datadir}/doc/qt6/PlasmaActivities.tags
 
 %changelog
 * Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
