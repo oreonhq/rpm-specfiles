@@ -68,6 +68,7 @@ sed -i 's/set(KF6_MIN_VERSION "6.18.0")/set(KF6_MIN_VERSION "6.6.0")/' CMakeList
 %{_kf6_qmldir}/org/kde/plasma/private/plasmapass/
 %{_kf6_datadir}/plasma/plasmoids/org.kde.plasma.pass/
 %{_kf6_datadir}/qlogging-categories6/plasma-pass.categories
+%{_kf6_metainfodir}/org.kde.plasma.pass.appdata.xml
 
 
 %changelog
