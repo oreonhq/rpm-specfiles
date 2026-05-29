@@ -79,7 +79,7 @@ mkdir -p $RPM_BUILD_ROOT%{_datadir}/icons/locolor/{16x16,22x22,32x32,48x48}/{act
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/applnk/{.hidden,Applications,Edutainment,Graphics,Internet,Settings,System,Toys,Utilities}
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/mimelnk/{all,application,audio,fonts,image,inode,interface,media,message,model,multipart,print,text,uri,video}
 # do qt3 too?
-# mkdir -p $RPM_BUILD_ROOT%{_prefix}/{lib,%{_lib}}/qt-3.3/plugins
+# mkdir -p $RPM_BUILD_ROOT%%{_prefix}/{lib,%%{_lib}}/qt-3.3/plugins
 mkdir -p $RPM_BUILD_ROOT%{_prefix}/{lib,%{_lib}}/kde3/plugins
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/HTML/en
 
@@ -114,7 +114,7 @@ mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/rpm \
          $RPM_BUILD_ROOT%{_kde4_datadir}/icons/locolor/{16x16,22x22,32x32,48x48}/{actions,apps,mimetypes} \
          $RPM_BUILD_ROOT%{_kde4_docdir}/HTML/en/common
 # do qt4 too?
-# mkdir -p $RPM_BUILD_ROOT%{_prefix}/{lib,%{_lib}}/qt4/plugins
+# mkdir -p $RPM_BUILD_ROOT%%{_prefix}/{lib,%%{_lib}}/qt4/plugins
 mkdir -p $RPM_BUILD_ROOT%{_kde4_prefix}/{lib,%{_lib}}/kde4/plugins/{gui_platform,styles}
 
 for locale in $(grep '=' %{SOURCE1} | awk -F= '{print $1}') ; do

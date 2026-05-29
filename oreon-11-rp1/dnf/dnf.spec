@@ -1,4 +1,6 @@
-%global source0_hash fabdc4436e9a8a152d38060602f491bee4245ad54656f01991f33d511c87bfb1
+%global source0_hash none
+
+%global source2_key_fpr E3F42FCE156830A80358E6E94FD1AEC3365AF7BF
 
 # default dependencies
 %global hawkey_version 0.75.0
@@ -59,7 +61,7 @@ Summary:        %{pkg_summary}
 License:        GPL-2.0-or-later AND GPL-1.0-only
 URL:            https://github.com/rpm-software-management/dnf
 Source0:        https://github.com/rpm-software-management/dnf/releases/download/4.24.0/dnf-4.24.0.tar.gz
-Source1:        https://github.com/rpm-software-management/dnf/releases/download/4.24.0/dnf-4.24.0.tar.gz.asc
+Source1:        dnf-4.24.0.tar.gz.asc
 # Key exported from Petr Pisar's keyring
 Source2:        gpgkey-E3F42FCE156830A80358E6E94FD1AEC3365AF7BF.gpg
 BuildArch:      noarch
@@ -187,7 +189,7 @@ Additional dependencies needed to perform transactions on booted bootc (bootable
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

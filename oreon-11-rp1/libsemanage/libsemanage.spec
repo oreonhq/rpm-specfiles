@@ -1,4 +1,6 @@
-%global source0_hash 1978894c414769ad77438d26886eaae3fb7bb74578ef2a5ad3130c89cb5cb1fe
+%global source0_hash none
+
+%global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
 %define libsepolver 3.10-1
 %define libselinuxver 3.10-1
@@ -9,8 +11,8 @@ Version: 3.10
 Release: 1%{?dist}
 License: LGPL-2.1-or-later
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/libsemanage-3.10.tar.gz
-Source1:        https://github.com/SELinuxProject/selinux/releases/download/3.10/libsemanage-3.10.tar.gz.asc
-Source2: https://github.com/perfinion.gpg
+Source1:        libsemanage-3.10.tar.gz.asc
+Source2: perfinion.gpg
 # git format-patch -N 3.10 -- libsemanage
 # i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
 # Patch list start
@@ -80,7 +82,7 @@ The libsemanage-python3 package contains the python 3 bindings for developing
 SELinux management applications.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n libsemanage-%{version}
 

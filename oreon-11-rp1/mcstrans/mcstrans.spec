@@ -1,4 +1,6 @@
-%global source0_hash c2c30a03b2006dcc46a2f0f60460253377feb30f33f1173ca9325fef27ed0d0c
+%global source0_hash none
+
+%global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
 %define libselinuxver 3.10-1
 
@@ -9,8 +11,8 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later
 Url: https://github.com/SELinuxProject/selinux/wiki
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/mcstrans-3.10.tar.gz
-Source1:        https://github.com/SELinuxProject/selinux/releases/download/3.10/mcstrans-3.10.tar.gz.asc
-Source2: https://github.com/perfinion.gpg
+Source1:        mcstrans-3.10.tar.gz.asc
+Source2: perfinion.gpg
 Source3: secolor.conf.8
 # fedora-selinux/selinux: git format-patch -N 3.10 -- mcstrans
 # i=1; for j in 00*patch; do printf "Patch%04d: %s\n" $i $j; i=$((i+1));done
@@ -43,7 +45,7 @@ mcstrans provides an translation daemon to translate SELinux categories
 from internal representations to user defined representation.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n mcstrans-%{version}
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2e18c2a976db50da58788c742fccddfcb41029a00399c03f747733025442673f
 
 Summary: Tracks runtime library calls from dynamically linked executables
 Name: ltrace
@@ -16,7 +16,7 @@ BuildRequires: gcc-c++
 BuildRequires: make
 
 #  https://gitlab.com/cespedes/ltrace/-/releases
-Source0:        https://gitlab.com/cespedes/ltrace/-/archive/v0.8.1/ltrace-0.8.1.tar.bz2
+Source0: https://gitlab.com/cespedes/ltrace/-/archive/v%{version}/ltrace-%{version}.tar.bz2
 
 %description
 Ltrace is a debugging program which runs a specified command until the
@@ -30,7 +30,7 @@ execution of processes.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%setup -q
+%autosetup -p1
 
 %build
 autoreconf -i

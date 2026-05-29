@@ -1,4 +1,6 @@
-%global source0_hash 274b9b919ef3152bfb3da3a13c950dd60d6e2bcd54230ffeca298d03b40d0525
+%global source0_hash none
+
+%global source2_key_fpr 37D964ACC04981C75500FB9BD55D978A8A1420E4
 
 Name:          libmnl
 Version:       1.0.5
@@ -8,8 +10,8 @@ Summary:       Minimalistic Netlink user-space library
 License:       LGPL-2.1-or-later
 URL:           https://netfilter.org/projects/libmnl/
 Source0:        https://netfilter.org/projects/libmnl/files/libmnl-1.0.5.tar.bz2
-Source1:        https://netfilter.org/projects/libmnl/files/libmnl-1.0.5.tar.bz2.sig
-Source2:       https://netfilter.org/files/coreteam-gpg-key-0xD55D978A8A1420E4.txt
+Source1:        libmnl-1.0.5.tar.bz2.sig
+Source2:       coreteam-gpg-key-0xD55D978A8A1420E4.txt
 
 BuildRequires: gcc
 BuildRequires: gnupg2
@@ -41,7 +43,7 @@ applications that use %{name}.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %setup -q
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 

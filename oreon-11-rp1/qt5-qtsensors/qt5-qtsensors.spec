@@ -11,7 +11,7 @@ Release: 2%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io/
 %global majmin %(echo %{version} | cut -d. -f1-2)
-Source0:        https://download.qt.io/official_releases/qt/%{qt5_version}/submodules/qtsensors-everywhere-opensource-src-%{qt5_version}.tar.xz
+Source0:        https://download.qt.io/official_releases/qt/%{version}/submodules/qtsensors-everywhere-opensource-src-%{version}.tar.xz
 # filter qml/plugin provides
 %global __provides_exclude_from ^(%{_qt5_archdatadir}/qml/.*\\.so|%{_qt5_plugindir}/.*\\.so)$
 

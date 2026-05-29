@@ -1,4 +1,6 @@
-%global source0_hash 7d550dccdfcd286e33895501829ed971eeb65c614e73aadb4a08aeef719b143a
+%global source0_hash none
+
+%global source2_key_fpr DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90
 
 %global expat_version 1.95.5
 %global glib2_version 2.40.0
@@ -15,7 +17,7 @@ License: (AFL-2.1 OR GPL-2.0-or-later) AND GPL-2.0-or-later
 URL:     https://www.freedesktop.org/software/dbus/
 #VCS:    git:https://gitlab.freedesktop.org/dbus/dbus-glib.git
 Source0:        https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.112.tar.gz
-Source1:        https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.112.tar.gz.asc
+Source1:        dbus-glib-0.112.tar.gz.asc
 # gpg --keyserver keyring.debian.org --recv-keys 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
 # gpg --export --export-options export-minimal 0x36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F > gpgkey-36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F.gpg
 Source2: gpgkey-36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F.gpg
@@ -44,7 +46,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Headers and static libraries for the D-Bus GLib bindings
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

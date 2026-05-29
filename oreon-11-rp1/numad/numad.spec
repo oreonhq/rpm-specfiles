@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d038dd8b20b3d059ae3d14f5114eea42f9445fee9e5542b2b1f409d3b5991c6e
 
 Name: numad
 Version: 0.5

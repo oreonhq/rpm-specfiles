@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2d61133ac5ace6a07005b8fab4462831ece12dd61660f48b8380cf74296778b2
 
 Name: hyphen-mr
 Summary: Marathi hyphenation rules

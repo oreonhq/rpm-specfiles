@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a49aa8081eeb3514eb9728fa5040f2eaa962d6c6f4ec9c32f6c1fba88f88a0f2
 
 Name:           python-setuptools_scm
 Version:        6.3.2

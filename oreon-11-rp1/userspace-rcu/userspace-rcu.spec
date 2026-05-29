@@ -1,4 +1,6 @@
-%global source0_hash 850b192096eb11ebf2c70e8f97bc7da7479ee41da1bebeb44e3986908bac414f
+%global source0_hash none
+
+%global source2_key_fpr 2A0B4ED915F2D3FA45F5B16217280A9781186ACF
 
 Name:           userspace-rcu
 Version:        0.15.6
@@ -8,10 +10,11 @@ License:        LGPL-2.1-or-later
 URL:            https://liburcu.org
 
 Source0:        https://lttng.org/files/urcu/userspace-rcu-0.15.6.tar.bz2
-Source1:        https://lttng.org/files/urcu/userspace-rcu-0.15.6.tar.bz2.asc
+Source1:        userspace-rcu-0.15.6.tar.bz2.asc
 # gpg2 --export --export-options export-minimal 2A0B4ED915F2D3FA45F5B16217280A9781186ACF > gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Source2:        gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Patch0:         regtest-without-bench.patch
+BuildRequires:  gnupg2
 BuildRequires:  autoconf
 BuildRequires:  automake
 BuildRequires:  gcc
@@ -38,7 +41,8 @@ that use %{name}
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 
 %build

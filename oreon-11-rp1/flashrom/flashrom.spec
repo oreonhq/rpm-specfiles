@@ -1,4 +1,6 @@
-%global source0_hash 8b9db3987df9b5fc81e70189d017905dd5f6be1e1410347f22687ab6d4c94423
+%global source0_hash none
+
+%global source2_key_fpr 6E6EF9A0BA478006E2776E4CC037BB413134D111
 
 Name:		flashrom
 Version:	1.6.0
@@ -8,7 +10,7 @@ License:	GPL-2.0-only
 URL:		https://flashrom.org
 
 Source0:        https://download.flashrom.org/releases/flashrom-v1.6.0.tar.xz
-Source1:        https://download.flashrom.org/releases/flashrom-v1.6.0.tar.xz.asc
+Source1:        flashrom-v1.6.0.tar.xz.asc
 # Find which key was used for signing the release:
 #
 # $ LANG=C gpg --verify flashrom-v1.3.0.tar.bz2.asc flashrom-v1.3.0.tar.bz2
@@ -57,7 +59,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Files for development with %{name}.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -n %{name}-v%{version}
 # Replace GROUP="plugdev" specifiers with TAG+="uaccess"

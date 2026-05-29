@@ -22,7 +22,7 @@ URL:     https://quickgit.kde.org/?p=soprano.git
 
 %if 0%{?snap:1}
 # git clone git://anongit.kde.org/soprano ; cd soprano
-# git archive --prefix=soprano-%{version}/ master | bzip2 > soprano-%{version}-%{snap}.tar.bz2
+# git archive --prefix=soprano-%%{version}/ master | bzip2 > soprano-%%{version}-%%{snap}.tar.bz2
 Source0:        http://downloads.sf.net/soprano/soprano-2.9.4.tar.bz2
 %else
 Source0:        http://downloads.sf.net/soprano/soprano-2.9.4.tar.bz2

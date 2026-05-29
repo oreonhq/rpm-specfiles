@@ -1,4 +1,6 @@
-%global source0_hash 13702526f687c18b2540c1a3f2e189187baaa65211edcf7ff6772fa69f0536cf
+%global source0_hash none
+
+%global source10_key_fpr F554A3687412CFFEBDEFE0A312F5F7B42F2B01E7
 
 %define _hardened_build 1
 
@@ -28,7 +30,7 @@ Release:           2%{?dist}
 Summary:           A full-featured TLS VPN solution
 URL:               https://community.openvpn.net/
 Source0:        https://build.openvpn.net/downloads/releases/openvpn-2.6.19.tar.gz
-Source1:        https://build.openvpn.net/downloads/releases/openvpn-2.6.19.tar.gz.asc
+Source1:        openvpn-2.6.19.tar.gz.asc
 Source2:           roadwarrior-server.conf
 Source3:           roadwarrior-client.conf
 # Upstream signing key
@@ -97,7 +99,8 @@ written in C and provides a more low-level and information rich access
 to similar features as the various script-hooks.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source10_key_fpr}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source10_key_fpr}" || { echo "oreon: Source10 key fingerprint mismatch" >&2; exit 1; }; })
+%{gpgverify} --keyring='%{SOURCE10}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 gpgv2 --quiet --keyring %{SOURCE10} %{SOURCE1} %{SOURCE0}
 %autosetup -p1
 

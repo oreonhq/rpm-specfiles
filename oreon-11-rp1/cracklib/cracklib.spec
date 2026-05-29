@@ -102,7 +102,7 @@ rm -f %{buildroot}%{dictdir}/cracklib-small
 sed s,/usr/lib/cracklib_dict,%{dictpath},g lib/crack.h > %{buildroot}%{_includedir}/crack.h
 ln -s cracklib-format %{buildroot}%{_sbindir}/mkdict
 # packer link removed as it clashes with hashicorp's packer binary.
-#ln -s cracklib-packer %{buildroot}/%{_sbindir}/packer
+#ln -s cracklib-packer %%{buildroot}/%%{_sbindir}/packer
 touch %{buildroot}/top
 
 toprelpath=..

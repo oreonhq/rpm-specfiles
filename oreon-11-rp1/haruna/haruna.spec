@@ -1,4 +1,6 @@
-%global source0_hash b29a717151b9d65f5abd736a3a774282d3014e281c8b89f2b79cc021042406e2
+%global source0_hash none
+
+%global source2_key_fpr 4E421C6554B89766DF9B7A37E12AB207C8755905
 
 Name:    haruna
 Version: 1.7.1
@@ -8,7 +10,7 @@ Summary: Open source video player built with Qt/QML and libmpv
 License: BSD-3-Clause AND CC-BY-4.0 AND CC-BY-SA-4.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND MIT
 URL:     https://invent.kde.org/multimedia/%{name}/
 Source0:        https://download.kde.org/stable/haruna/1.7.1/haruna-1.7.1.tar.xz
-Source1:        https://download.kde.org/stable/haruna/1.7.1/haruna-1.7.1.tar.xz.sig
+Source1:        haruna-1.7.1.tar.xz.sig
 Source2: gpgkey-4E421C6554B89766DF9B7A37E12AB207C8755905.gpg
 
 ## upstream patches
@@ -77,7 +79,7 @@ Features:
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

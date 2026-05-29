@@ -1,4 +1,6 @@
-%global source0_hash d555586797fa9f38344496d2a7ec1147b6caaf3fcc44c42d8d5173edd7a79a71
+%global source0_hash none
+
+%global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
 Summary: SELinux binary policy manipulation library
 Name: libsepol
@@ -6,8 +8,8 @@ Version: 3.10
 Release: 1%{?dist}
 License: LGPL-2.1-or-later
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/libsepol-3.10.tar.gz
-Source1:        https://github.com/SELinuxProject/selinux/releases/download/3.10/libsepol-3.10.tar.gz.asc
-Source2: https://github.com/perfinion.gpg
+Source1:        libsepol-3.10.tar.gz.asc
+Source2: perfinion.gpg
 URL: https://github.com/SELinuxProject/selinux/wiki
 # $ git clone https://github.com/fedora-selinux/selinux.git
 # $ cd selinux
@@ -61,7 +63,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 The libsepol-utils package contains the utilities
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n libsepol-%{version}
 

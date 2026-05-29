@@ -309,7 +309,7 @@ BuildRequires:    pkgconfig(bash-completion)
 # bash-completion >= 1.90 satisfies this requirement.
 # If it is not available, the condition can be adapted
 # and the completion script will be installed in the backwards compatible
-# %{sysconfdir}/bash_completion.d
+# %%{sysconfdir}/bash_completion.d
 %endif
 Requires:         libglusterfs0%{?_isa} = %{version}-%{release}
 

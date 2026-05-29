@@ -1,4 +1,6 @@
-%global source0_hash fbc30f77da3e12ecd4ef66ccf5ab77e0b744930ccd89062404082f928a8ec2e0
+%global source0_hash none
+
+%global source2_key_fpr 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
 
 Name:           resolv_wrapper
 Version:        1.1.8
@@ -9,7 +11,7 @@ License:        BSD-3-Clause
 Url:            http://cwrap.org/
 
 Source0:        https://ftp.samba.org/pub/cwrap/resolv_wrapper-1.1.8.tar.gz
-Source1:        https://ftp.samba.org/pub/cwrap/resolv_wrapper-1.1.8.tar.gz.asc
+Source1:        resolv_wrapper-1.1.8.tar.gz.asc
 Source2:        resolv_wrapper.keyring
 
 Patch0:         resolv_wrapper-fix-cmocka-1.1.6+-support.patch
@@ -39,7 +41,7 @@ This package doesn't have a devel package because this project is for
 development/testing.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

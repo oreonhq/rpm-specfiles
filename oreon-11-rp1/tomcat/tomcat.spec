@@ -354,7 +354,7 @@ pushd ${RPM_BUILD_ROOT}%{homedir}
 popd
 
 # Install the maven metadata for the spec impl artifacts as other projects use them
-#%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%{_mavenpomdir}
+#%%{__install} -d -m 0755 ${RPM_BUILD_ROOT}%%{_mavenpomdir}
 pushd res/maven
     for pom in *.pom; do
         # fix-up version in all pom files

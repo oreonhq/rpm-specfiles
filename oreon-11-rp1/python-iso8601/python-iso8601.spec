@@ -1,4 +1,4 @@
-%global source0_hash 6b1d3829ee8921c4301998c909f7829fa9ed3cbdac0d3b16af2d743aed1ba8df
+%global source0_hash none
 
 %global srcname iso8601
 %global pkgdesc \

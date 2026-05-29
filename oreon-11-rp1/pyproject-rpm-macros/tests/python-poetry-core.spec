@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d145ae121cf79118a8901b60f2c951c4edcc16f55eb8aaefc156aa33aa921f07
 
 Name:           python-poetry-core
 Version:        1.1.0

@@ -306,7 +306,7 @@ chmod 755 %{buildroot}%{_bindir}/%{name}-*
 install -pDm644 src/%{name}module.h %{buildroot}%{_includedir}/%{name}module.h
 
 # Install rpm macros for valkey modules
-#mkdir -p %{buildroot}%{_rpmmacrodir}
+#mkdir -p %%{buildroot}%%{_rpmmacrodir}
 install -pDm644 macros.%{name} %{buildroot}%{_rpmmacrodir}/macros.%{name}
 
 # compat script

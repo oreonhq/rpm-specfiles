@@ -25,7 +25,7 @@ License:       GD
 URL:           http://libgd.github.io/
 %if 0%{?commit:1}
 # git clone https://github.com/libgd/libgd.git; cd gd-libgd
-# git archive  --format=tgz --output=libgd-%{version}-%{commit}.tgz --prefix=libgd-%{version}/  master
+# git archive  --format=tgz --output=libgd-%%{version}-%%{commit}.tgz --prefix=libgd-%%{version}/  master
 Source0:        https://github.com/libgd/libgd/releases/download/gd-2.3.3/libgd-2.3.3.tar.xz
 %else
 Source0:        https://github.com/libgd/libgd/releases/download/gd-2.3.3/libgd-2.3.3.tar.xz

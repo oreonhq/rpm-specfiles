@@ -150,7 +150,7 @@ ln -s %{_bindir}/qmake-qt6.sh %{buildroot}%{_datadir}/qt6/wrappers/qmake
 
 # substitute custom flags, and the path to binaries: binaries referenced from
 # macros should not change if an application is built with a different prefix.
-# %_libdir is left as /usr/%{_lib} (e.g.) so that the resulting macros are
+# %_libdir is left as /usr/%%{_lib} (e.g.) so that the resulting macros are
 # architecture independent, and don't hardcode /usr/lib or /usr/lib64.
 sed -i \
   -e "s|@@QT6_CFLAGS@@|%{?qt6_cflags}|g" \

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash de04939485b53ee5d9a6855562d415b73060c52e681644386de4d5bd18e3f540
 
 Name:           python-ldap
 Version:        3.3.0

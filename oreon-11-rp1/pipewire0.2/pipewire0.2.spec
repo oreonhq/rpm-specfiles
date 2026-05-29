@@ -6,7 +6,7 @@
 #global snap       20141103
 #global gitrel     327
 #global gitcommit  aec811798cd883a454b9b5cd82c77831906bbd2d
-#global shortcommit %(c=%{gitcommit}; echo ${c:0:5})
+#global shortcommit %%(c=%%{gitcommit}; echo ${c:0:5})
 
 # https://bugzilla.redhat.com/983606
 %global _hardened_build 1
@@ -23,7 +23,7 @@ License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://pipewire.org/
 %if 0%{?gitrel}
 # git clone git://anongit.freedesktop.org/gstreamer/pipewire
-# cd pipewire; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
+# cd pipewire; git reset --hard %%{gitcommit}; ./autogen.sh; make; make distcheck
 Source0:        https://github.com/PipeWire/pipewire/archive/0.2.7/pipewire-0.2.7.tar.gz
 %else
 Source0:        https://github.com/PipeWire/pipewire/archive/0.2.7/pipewire-0.2.7.tar.gz

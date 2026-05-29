@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global source2_key_fpr 15D41BC02EB807D405EFFAF6C9183BEA0288CDEE
+
+
 Name:           teckit
 Version:        2.5.13
 Release:        2%{?dist}
@@ -80,7 +83,7 @@ URL:            https://software.sil.org/teckit/
 # <https://github.com/silnrsi/teckit/issues/34>.
 # Original URL is https://github.com/silnrsi/teckit/releases/download/v%%{version}/teckit-%%{version}.tar.xz
 Source0:        teckit-%{version}_repackaged.tar.xz
-Source1:        https://github.com/silnrsi/teckit/releases/download/v2.5.13/teckit-2.5.13.tar.xz.asc
+Source1:        https://github.com/silnrsi/teckit/releases/download/v%{version}/teckit-%{version}.tar.xz.asc
 # Exported from ppisar's keyring
 Source2:        gpgkey-15D41BC02EB807D405EFFAF6C9183BEA0288CDEE.gpg
 Source3:        repackage.sh
@@ -121,8 +124,9 @@ that use TECkit, a character encoding and mapping, library.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %dnl verification skipped because of repackaging
-%dnl %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 # Remove bundled libraries
 rm -r zlib-*/*.{c,h} SFconv/expat

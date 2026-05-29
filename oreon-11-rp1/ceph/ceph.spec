@@ -1580,7 +1580,7 @@ export GCC_COLORS=
 %if 0%{with make_check}
 %check
 # run in-tree unittests
-# cd %{_vpath_builddir}
+# cd %%{_vpath_builddir}
 # ctest "$CEPH_MFLAGS_JOBS"
 %endif
 

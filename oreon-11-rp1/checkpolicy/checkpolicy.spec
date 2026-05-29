@@ -1,4 +1,6 @@
-%global source0_hash 2d92951dfcb090d6179e7a23856622e0fcbc32be03bf1e60ace9dc9cbda11e59
+%global source0_hash none
+
+%global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
 %define libselinuxver 3.10-1
 %define libsepolver 3.10-1
@@ -9,8 +11,8 @@ Version: 3.10
 Release: 1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/checkpolicy-3.10.tar.gz
-Source1:        https://github.com/SELinuxProject/selinux/releases/download/3.10/checkpolicy-3.10.tar.gz.asc
-Source2: https://github.com/perfinion.gpg
+Source1:        checkpolicy-3.10.tar.gz.asc
+Source2: perfinion.gpg
 # $ git clone https://github.com/fedora-selinux/selinux.git
 # $ cd selinux
 # $ git format-patch -N 3.10 -- checkpolicy
@@ -37,7 +39,7 @@ This package contains checkpolicy, the SELinux policy compiler.
 Only required for building policies. 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n checkpolicy-%{version}
 

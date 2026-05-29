@@ -1,4 +1,6 @@
-%global source0_hash 1a6af424d8327e5eedef4e5fe7f5b924226dd617ac9f3de80f217d82a36a7121
+%global source0_hash none
+
+%global source2_key_fpr 88A228D89B07C2C77D0C780903D5DF8CFDD3E8E7
 
 Name:           libssh
 Version:        0.12.0
@@ -11,8 +13,8 @@ License:        LGPL-2.1-or-later
 URL:            http://www.libssh.org
 
 Source0:        https://www.libssh.org/files/0.12/libssh-0.12.0.tar.xz
-Source1:        https://www.libssh.org/files/0.12/libssh-0.12.0.tar.xz.asc
-Source2:        https://www.libssh.org/files/0x03D5DF8CFDD3E8E7_libssh_libssh_org_gpgkey.asc#/libssh.keyring
+Source1:        libssh-0.12.0.tar.xz.asc
+Source2:        libssh.keyring
 Source3:        libssh_client.config
 Source4:        libssh_server.config
 
@@ -80,7 +82,7 @@ Obsoletes:      %{name} < 0.9.0-3
 The %{name}-config package provides the default configuration files for %{name}.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

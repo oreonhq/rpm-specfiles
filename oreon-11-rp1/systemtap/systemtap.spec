@@ -792,7 +792,7 @@ mkdir -p $RPM_BUILD_ROOT%{_localstatedir}/run/systemtap
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d
 install -m 644 initscript/logrotate.stap-server $RPM_BUILD_ROOT%{_sysconfdir}/logrotate.d/stap-server
 
-# If using systemd systemtap.service file, retain the old init script in %{_libexecdir} as a helper.
+# If using systemd systemtap.service file, retain the old init script in %%{_libexecdir} as a helper.
 %if %{with_systemd}
 mkdir -p $RPM_BUILD_ROOT%{_unitdir}
 touch $RPM_BUILD_ROOT%{_unitdir}/systemtap.service
@@ -807,7 +807,7 @@ mkdir -p $RPM_BUILD_ROOT%{initdir}
 install -m 755 initscript/systemtap $RPM_BUILD_ROOT%{initdir}
 mkdir -p $RPM_BUILD_ROOT%{_sbindir}
 ln -sf %{initdir}/systemtap $RPM_BUILD_ROOT%{_sbindir}/systemtap-service
-# TODO CHECK CORRECTNESS: symlink %{_sbindir}/systemtap-service to %{initdir}/systemtap
+# TODO CHECK CORRECTNESS: symlink %%{_sbindir}/systemtap-service to %%{initdir}/systemtap
 %endif
 
 mkdir -p $RPM_BUILD_ROOT%{_sysconfdir}/systemtap
@@ -931,7 +931,7 @@ exit 0
 # ~stap-server directories and the explicit mkdir/chown/chmod bits
 # here.  Part of the reason may be that a preexisting stap-server
 # account may well be placed somewhere other than
-# %{_localstatedir}/lib/stap-server, but we'd like their permissions
+# %%{_localstatedir}/lib/stap-server, but we'd like their permissions
 # set similarly.
 
 test -e ~stap-server && chmod 750 ~stap-server

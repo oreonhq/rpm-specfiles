@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 12fa2c1f9bcb3563547bb077a5e07c75ef3cd4942b23761ead395026c9f80ac3
 
 %bcond_with bootstrap
 %global upstream_version %(echo '%{version}' | tr '~' '-')

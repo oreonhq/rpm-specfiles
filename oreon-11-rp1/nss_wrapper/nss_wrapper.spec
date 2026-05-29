@@ -1,4 +1,6 @@
-%global source0_hash dc79ab072779be4403b45b60cd044dd13780d4bb9675d27abf1932ada7c8a88d
+%global source0_hash none
+
+%global source2_key_fpr 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
 
 Name:           nss_wrapper
 Version:        1.1.16
@@ -9,7 +11,7 @@ Summary:        A wrapper for the user, group and hosts NSS API
 Url:            https://cwrap.org/
 
 Source0:        https://ftp.samba.org/pub/cwrap/nss_wrapper-1.1.16.tar.gz
-Source1:        https://ftp.samba.org/pub/cwrap/nss_wrapper-1.1.16.tar.gz.asc
+Source1:        nss_wrapper-1.1.16.tar.gz.asc
 Source2:        nss_wrapper.keyring
 
 Patch0:         nwrap-fix-tests.patch
@@ -55,7 +57,7 @@ The %{name}-libs package provides only the shared library.
 For a minimal footprint, install just this package.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

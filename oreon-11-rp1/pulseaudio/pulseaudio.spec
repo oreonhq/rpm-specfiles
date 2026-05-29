@@ -41,7 +41,7 @@ License:        LGPL-2.1-or-later
 URL:            http://www.freedesktop.org/wiki/Software/PulseAudio
 %if 0%{?gitrel}
 # git clone git://anongit.freedesktop.org/pulseaudio/pulseaudio
-# cd pulseaudio; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
+# cd pulseaudio; git reset --hard %%{gitcommit}; ./autogen.sh; make; make distcheck
 Source0:        http://freedesktop.org/software/pulseaudio/releases/pulseaudio-17.0.tar.xz
 %else
 Source0:        http://freedesktop.org/software/pulseaudio/releases/pulseaudio-.tar.xz
@@ -295,9 +295,9 @@ This package contains GDM integration hooks for the PulseAudio sound server.
 sed -i.PACKAGE_VERSION -e "s|^PACKAGE_VERSION=.*|PACKAGE_VERSION=\'%{version}\'|" configure
 %else
 
-#if "%{_libdir}" != "/usr/lib"
-#sed -i -e 's|"/lib /usr/lib|"/%{_lib} %{_libdir}|' configure
-#endif
+# if "%%{_libdir}" != "/usr/lib"
+#sed -i -e 's|"/lib /usr/lib|"/%%{_lib} %%{_libdir}|' configure
+# endif
 %endif
 
 %if 0%{?enable_daemon}

@@ -3,7 +3,7 @@
 %global commit ce811e78882d9f31636351dfe65351f4ded52c74
 %global date 20240506
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-#global tag %{version}
+#global tag %%{version}
 
 %define moduledir %(pkg-config xorg-server --variable=moduledir )
 %define driverdir	%{moduledir}/drivers
@@ -21,6 +21,7 @@ License:   MIT
 Source0:        https://www.x.org/archive/individual/driver/xf86-video-intel-2.99.917.tar.bz2
 %else
 Source0:        https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/archive/ce811e78882d9f31636351dfe65351f4ded52c74/xorg-x11-drv-intel-%(c=ce811e78882d9f31636351dfe65351f4ded52c74;.tar.gz
+Source30:   xserver-sdk-abi-requires
 %endif
 
 Patch0:	    intel-gcc-pr65873.patch

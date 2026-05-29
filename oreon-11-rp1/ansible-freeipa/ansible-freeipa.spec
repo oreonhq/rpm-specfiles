@@ -147,7 +147,7 @@ done
 %build
 
 %install
-# Create collection and install to %{buildroot}%{ansible_collections_dir}
+# Create collection and install to %%{buildroot}%%{ansible_collections_dir}
 # ansible-galaxy collection install creates ansible_collections directory
 # automatically in given path, therefore /..
 utils/build-galaxy-release.sh -o "%{version}" -p %{buildroot}%{ansible_collections_dir}/.. %{collection_namespace} %{collection_name}

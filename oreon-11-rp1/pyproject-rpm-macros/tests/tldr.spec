@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a288fa98d201a6848ae9642ee62548b2a1f0f5185808d3e668dde6a6e33aaa0a
 
 Name:           tldr
 Version:        0.4.4

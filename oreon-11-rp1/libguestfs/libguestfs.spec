@@ -1,4 +1,6 @@
-%global source0_hash c9b4a9f7c05a725086dc7eab8cb151a60ad811ea0c75a7d1a8c422d5d22b598c
+%global source0_hash none
+
+%global source7_key_fpr F7774FB1AD074A7E8C8767EA91738F73E1B768A0
 
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
@@ -51,7 +53,7 @@ ExcludeArch: %{power64}
 URL:           http://libguestfs.org/
 Source0:        http://libguestfs.org/download/1.59-development/libguestfs-1.59.4.tar.gz
 %if 0%{verify_tarball_signature}
-Source1:        http://libguestfs.org/download/1.59-development/libguestfs-1.59.4.tar.gz.sig
+Source1:        libguestfs-1.59.4.tar.gz.sig
 %endif
 
 # Replacement README file.
@@ -618,7 +620,7 @@ for %{name}.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source7_key_fpr}" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source7_key_fpr}" || { echo "oreon: Source7 key fingerprint mismatch" >&2; exit 1; }; })
 %if 0%{verify_tarball_signature}
 %{gpgverify} --keyring='%{SOURCE7}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

@@ -368,7 +368,7 @@ popd
 # Build NSS
 #
 # This package fails its testsuite with LTO.  Disable LTO for now
-#%global _lto_cflags %{nil}
+#%global _lto_cflags %%{nil}
 
 #export FREEBL_NO_DEPEND=1
 

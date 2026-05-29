@@ -1,6 +1,9 @@
 %global source0_hash 39f92f366bdf3f1a02af4da75b4a5c52df6c9f7e736c7d65de13283f9f0ef416
 %global source4_hash da313e9ed72260c0c0690e8c93f409dc426183dae6d7772d30cad8875b2e11b3
 
+%global source2_key_fpr 8DFF53E18F2ABC8D8F3C92237EE0FC4DCC014E3D
+
+
 Name:           cmocka
 Version:        2.0.2
 Release:        %autorelease
@@ -10,7 +13,7 @@ Summary:        An elegant unit testing framework for C with support for mock ob
 URL:            https://cmocka.org
 
 Source0:        https://cmocka.org/files/2.0/cmocka-2.0.2.tar.xz
-Source1:        https://cmocka.org/files/2.0/cmocka-2.0.2.tar.xz.asc
+Source1:        https://cmocka.org/files/2.0/%{name}-%{version}.tar.xz.asc
 Source2:        cmocka.keyring
 Source4:        https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.4.1/doxygen-awesome-css-2.4.1.tar.gz
 
@@ -105,6 +108,7 @@ framework.
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -a4 -p1
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d4051d623a2e0b7e51960ba963193b09ce6daeb9759a451844a21e4ddedfc1bd
 
 %global pypi_name pytest
 Name:           python-%{pypi_name}

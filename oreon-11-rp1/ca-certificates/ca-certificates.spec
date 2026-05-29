@@ -340,7 +340,7 @@ fi
 
 
 %post
-#if [ $1 -gt 1 ] ; then
+# if [ $1 -gt 1 ] ; then
 #  # when upgrading or downgrading
 #fi
 # if ln is available, go ahead and run the ca-legacy and update

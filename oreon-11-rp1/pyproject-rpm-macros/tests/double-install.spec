@@ -1,6 +1,6 @@
 %global source0_hash none
-%global source1_hash none
-%global source2_hash none
+%global source1_hash 249a30268bae5c0982ee4f31abb7126577c03602092a0f2c64b06a4f68176b30
+%global source2_hash a288fa98d201a6848ae9642ee62548b2a1f0f5185808d3e668dde6a6e33aaa0a
 
 Name:           double-install
 Version:        0

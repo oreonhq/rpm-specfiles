@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f104fa03692a2602fa0fec6c6a9e63b6c8a968de13e17c026957dd1f53d80990
 
 Name:           python-setuptools
 # on the CI we test different version of setuptools on different Fedora versions

@@ -21,6 +21,7 @@ URL:        http://www.x.org
 License:    MIT
 
 Source0:        https://www.x.org/releases/individual/driver/xf86-video-qxl-0.1.6.tar.xz
+Source30:   xserver-sdk-abi-requires
 Patch1:     0001-worst-hack-of-all-time-to-qxl-driver.patch
 # This shebang patch is currently downstream-only
 Patch2:     0005-Xspice-Adjust-shebang-to-explicitly-mention-python3.patch

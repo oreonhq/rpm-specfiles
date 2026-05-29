@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0c3c341e49f9f4f2532a4884509804190a0c2663e6120360bb298c5d174a8098
 
 %ifarch %{valgrind_arches}
 %global has_valgrind 1

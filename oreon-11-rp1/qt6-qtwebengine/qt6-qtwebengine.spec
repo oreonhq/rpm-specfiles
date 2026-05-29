@@ -518,7 +518,7 @@ ln -s /usr/lib/python%{python3_version}/site-packages/six.py src/3rdparty/chromi
 ln -s /usr/lib/python%{python3_version}/site-packages/six.py src/3rdparty/chromium/third_party/wpt_tools/wpt/tools/third_party/six/six.py
 %endif
 
-#%%if 0%{?use_system_re2}
+#%%if 0%%{?use_system_re2}
 # http://bugzilla.redhat.com/1337585
 # can't just delete, but we'll overwrite with system headers to be on the safe side
 #cp -bv /usr/include/re2/*.h src/3rdparty/chromium/third_party/re2/src/re2/

@@ -121,7 +121,7 @@ cp lib/native/aix-ppc64.jar lib/clover.jar
 # We pass -Ddynlink.native which comes from our patch because
 # upstream doesn't want to default to dynamic linking.
 # -Drelease removes the .SNAPSHOT suffix from maven artifact names
-#ant -Dcflags_extra.native="%{optflags}" -Ddynlink.native=true native compile javadoc jar contrib-jars
+#ant -Dcflags_extra.native="%%{optflags}" -Ddynlink.native=true native compile javadoc jar contrib-jars
 ant -Drelease -Dcompatibility=1.8 -Dplatform.compatibility=1.8\
  -Dcflags_extra.native="%{optflags}" -Ddynlink.native=true -DCC=%{__cc} native dist
 # remove compiled contribs

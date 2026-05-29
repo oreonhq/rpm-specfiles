@@ -190,7 +190,7 @@ V=1 make install_system_dirs DESTDIR=$RPM_BUILD_ROOT
 V=1 make install_systemd_units DESTDIR=$RPM_BUILD_ROOT
 V=1 make install_systemd_generators DESTDIR=$RPM_BUILD_ROOT
 V=1 make install_tmpfiles_configuration DESTDIR=$RPM_BUILD_ROOT
-#install -d ${RPM_BUILD_ROOT}%{_sysconfdir}/lvm/devices
+#install -d ${RPM_BUILD_ROOT}%%{_sysconfdir}/lvm/devices
 %if %{enable_testsuite}
 %make_install -C test
 %endif

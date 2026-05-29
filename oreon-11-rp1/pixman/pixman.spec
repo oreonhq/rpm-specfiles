@@ -13,7 +13,7 @@ License:        MIT
 URL:            https://gitlab.freedesktop.org/pixman/pixman
 #VCS:           git:git://git.freedesktop.org/git/pixman
 # To make git snapshots:
-# ./make-pixman-snapshot.sh %{\?gitrev}
+# ./make-pixman-snapshot.sh %%{\?gitrev}
 # if no revision specified, makes a new one from HEAD.
 Source0:        https://www.x.org/archive/individual/lib/pixman-0.46.2.tar.xz
 Source1:        make-pixman-snapshot.sh

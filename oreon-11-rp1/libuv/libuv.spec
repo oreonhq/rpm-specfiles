@@ -1,4 +1,6 @@
-%global source0_hash 66d511b9e6e334c0e62279eb234fbfb2b3110b1479c09b95b44c7afca8cff9e7
+%global source0_hash none
+
+%global source2_key_fpr 612F0EAD9401622379DF4402F28C3C8DA33C03BE
 
 # Run the tests by default on Fedora
 # Some of the network tests fail on RHEL/CentOS Stream due to the network
@@ -22,7 +24,7 @@ Summary:        Platform layer for node.js
 License:        MIT AND CC-BY-4.0 AND ISC AND BSD-2-Clause
 URL:            http://libuv.org/
 Source0:        http://dist.libuv.org/dist/v1.52.1/libuv-v1.52.1.tar.gz
-Source1:        https://dist.libuv.org/dist/v1.52.1/libuv-v1.52.1.tar.gz.sign
+Source1:        libuv-v1.52.1.tar.gz.sign
 # mkdir temp
 # gpg --no-default-keyring --keyring temp/keyring.gpg --keyserver keyserver.ubuntu.com \
 #  --recv-keys D77B1E34243FBAF05F8E9CC34F55C8C846AB89B9  \
@@ -66,7 +68,8 @@ Static library (.a) version of libuv.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %autosetup -n %{name}-v%{version} -p1
 

@@ -942,7 +942,7 @@ export GOEXPERIMENT=boringcrypto
 # comment out temporarily while intermittent ngalert tests are investigated
 # % gotest ./pkg/...
 
-# %if %{enable_fips_mode}
+# %if %%{enable_fips_mode}
 # OPENSSL_FORCE_FIPS_MODE=1 GOLANG_FIPS=1 go test -v ./pkg/util -run TestEncryption
 # %endif
 

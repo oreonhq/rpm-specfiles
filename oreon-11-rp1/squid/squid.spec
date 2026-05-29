@@ -168,7 +168,7 @@ make check
 
 echo "
 #
-# This is %{_sysconfdir}/httpd/conf.d/squid.conf
+# This is %%{_sysconfdir}/httpd/conf.d/squid.conf
 #
 
 ScriptAlias /Squid/cgi-bin/cachemgr.cgi %{_libdir}/squid/cachemgr.cgi

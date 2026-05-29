@@ -21,6 +21,7 @@ Source0:        https://www.x.org/pub/individual/driver/xf86-input-libinput-1.5.
 Source0:        https://www.x.org/pub/individual/driver/xf86-input-libinput-1.5.0.tar.xz
 %endif
 Source1:    71-libinput-overrides-wacom.conf
+Source30:   xserver-sdk-abi-requires
 
 # Fedora-only hack for hidpi screens
 # https://bugzilla.redhat.com/show_bug.cgi?id=1413306

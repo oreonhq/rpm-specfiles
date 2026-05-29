@@ -332,7 +332,7 @@ mkdir -p %{inst_srcdir}/{hw/dmx/doc,man,doc,hw/dmx/doxygen}
 cp {,%{inst_srcdir}/}hw/xquartz/bundle/cpprules.in
 cp {,%{inst_srcdir}/}man/Xserver.man
 cp {,%{inst_srcdir}/}doc/smartsched
-#cp {,%{inst_srcdir}/}hw/dmx/doxygen/doxygen.conf.in
+#cp {,%%{inst_srcdir}/}hw/dmx/doxygen/doxygen.conf.in
 cp {,%{inst_srcdir}/}xserver.ent.in
 cp {,%{inst_srcdir}/}hw/xfree86/Xorg.sh.in
 cp xkb/README.compiled %{inst_srcdir}/xkb

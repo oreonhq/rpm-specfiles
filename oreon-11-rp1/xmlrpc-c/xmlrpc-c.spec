@@ -12,7 +12,7 @@ Summary:        Lightweight RPC library based on XML and HTTP
 # Automatically converted from old format: BSD and MIT - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-MIT
 URL:            http://xmlrpc-c.sourceforge.net/
-Source:        https://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%%20Super%%20Stable/1.60.04/xmlrpc-c-1.60.04.tgz
+Source:         https://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%%20Super%%20Stable/%{version}/xmlrpc-c-%{version}.tgz
 
 # Upstreamable patches
 Patch102:       0002-Use-proper-datatypes-for-long-long.patch

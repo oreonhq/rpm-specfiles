@@ -85,7 +85,7 @@ BuildRequires: make
 Obsoletes: kactivities < 4.13.0-2
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 # not sure if an explicit dep is needed or worth it -- rex
-#Requires: nepomuk-core%{?_isa} >= %{version}
+#Requires: nepomuk-core%%{?_isa} >= %%{version}
 %description nepomuk
 %{summary}.
 

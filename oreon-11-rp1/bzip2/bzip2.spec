@@ -1,4 +1,6 @@
-%global source0_hash ab5a03176ee106d3f0fa90e381da478ddae405918153cca248e682cd0c4a2269
+%global source0_hash none
+
+%global source3_key_fpr EC3CFE88F6CA0788774F5C1D1AA44BE649DE760A
 
 %global library_version 1.0.8
 
@@ -11,7 +13,7 @@ URL: https://sourceware.org/bzip2
 #Source0: http://www.bzip.org/%%{version}/%%{name}-%%{version}.tar.gz
 Source0:        https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 Source1: bzip2.pc
-Source2:        https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz.sig
+Source2:        bzip2-1.0.8.tar.gz.sig
 # https://sourceware.org/bzip2/downloads.html links to the gpg key
 # https://sourceware.org/pub/bzip2/gpgkey-5C1D1AA44BE649DE760A.gpg
 # with which the tarballs are signed
@@ -58,7 +60,7 @@ Summary: Libraries for applications using bzip2
 Static libraries for applications using the bzip2 compression format.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source3_key_fpr}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source3_key_fpr}" || { echo "oreon: Source3 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE3}' --signature='%{SOURCE2}' --data='%{SOURCE0}'
 %setup -q
 %patch -P0 -p1

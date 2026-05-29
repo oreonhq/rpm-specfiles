@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 666c93fc10cb0aa924a373898a709eba4d43f4e453264a4c7396878ec8145a4a
 
 Name:           python-mistune
 Version:        0.8.3

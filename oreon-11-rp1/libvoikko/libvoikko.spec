@@ -1,4 +1,6 @@
-%global source0_hash d1162965c61de44f72162fd87ec1394bd4f90f87bc8152d13fe4ae692fdc73fa
+%global source0_hash none
+
+%global source2_key_fpr AC5D65F10C8596D7E2DAE2633D309B604AE3942E
 
 %global _hardened_build 1
 
@@ -19,7 +21,7 @@ Source0:        https://www.puimula.org/voikko-sources/libvoikko/libvoikko-4.3.3
 #  gpg --recv-keys "AC5D 65F1 0C85 96D7 E2DA  E263 3D30 9B60 4AE3 942E"
 # and then
 #  gpg2 --export --export-options export-minimal AC5D65F10C8596D7E2DAE2633D309B604AE3942E > gpgkey-AC5D65F10C8596D7E2DAE2633D309B604AE3942E.gpg
-Source1:        http://www.puimula.org/voikko-sources/libvoikko/libvoikko-4.3.3.tar.gz.asc
+Source1:        libvoikko-4.3.3.tar.gz.asc
 Source2:        gpgkey-AC5D65F10C8596D7E2DAE2633D309B604AE3942E.gpg
 
 Requires: voikko-fi
@@ -69,7 +71,7 @@ This module can be used to perform various natural language analysis
 tasks on Finnish text.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup

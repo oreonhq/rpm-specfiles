@@ -1,4 +1,6 @@
-%global source0_hash 937610b97c329a1ec9268553fb780037bcfff0dcffe9725ebc4fd9c1aa9075db
+%global source0_hash none
+
+%global source3_key_fpr 325F650C4C2B6AD58807327A3602B07F55D0C732
 
 Summary: A GNU archiving program
 Name: cpio
@@ -67,7 +69,7 @@ Install cpio if you need a program to manage file archives.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source3_key_fpr}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source3_key_fpr}" || { echo "oreon: Source3 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE3}' --signature='%{SOURCE2}' --data='%{SOURCE0}'
 %autosetup -p1
 

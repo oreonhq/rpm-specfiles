@@ -92,7 +92,7 @@ Internationalization pack for procps-ng
 
 %build
 # The following stuff is needed for git archives only
-#echo "%{version}" > .tarball-version
+#echo "%%{version}" > .tarball-version
 #./autogen.sh
 
 autoreconf --verbose --force --install

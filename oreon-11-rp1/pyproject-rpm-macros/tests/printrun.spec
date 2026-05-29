@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c2c52c088b836b2d549f014756f562b811ba4af122ae4fb679fd930323a44c41
 
 Name:           printrun
 Version:        2.0.0~rc6

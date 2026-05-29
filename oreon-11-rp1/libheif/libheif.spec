@@ -143,13 +143,13 @@ local basename=$(basename $1)
 cat >$1 <<EOF
 #include <bits/wordsize.h>
 
-#if __WORDSIZE == 32
+# if __WORDSIZE == 32
 # include "${basename%%.h}-32.h"
 #elif __WORDSIZE == 64
 # include "${basename%%.h}-64.h"
 #else
 # error "unexpected value for __WORDSIZE macro"
-#endif
+# endif
 EOF
 }
 

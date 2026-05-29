@@ -61,7 +61,7 @@ cp -p %{SOURCE1} .
 export CFLAGS="%{optflags} -fno-strict-aliasing"
 %configure --disable-static
 make
-#%{?_smp_mflags}
+#%%{?_smp_mflags}
 # fails to compile properly with parallel make:
 # https://sourceforge.net/p/judy/bugs/22/
 

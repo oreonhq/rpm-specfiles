@@ -1,11 +1,13 @@
-%global source0_hash f2e97b0ab7ce293681ab701915766190d607a1dba7fae8a718138150b700a70b
+%global source0_hash none
+
+%global source2_key_fpr B902B5271325F892AC251AD441633B9FE837F581
 
 Summary: Utilities for managing filesystem extended attributes
 Name: attr
 Version: 2.5.2
 Release: 8%{?dist}
 Source0:        https://download.savannah.nongnu.org/releases/attr/attr-2.5.2.tar.xz
-Source1:        https://download.savannah.nongnu.org/releases/attr/attr-2.5.2.tar.xz.sig
+Source1:        attr-2.5.2.tar.xz.sig
 # Retreived from https://savannah.nongnu.org/people/viewgpg.php?user_id=15000
 # Source2: agruen-key.gpg
 # Retrieved from https://savannah.nongnu.org/people/viewgpg.php?user_id=42032
@@ -70,7 +72,7 @@ which make use of extended attributes.  If you install libattr-devel,
 you'll also want to install attr.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

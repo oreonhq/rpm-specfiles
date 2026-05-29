@@ -71,7 +71,7 @@ ln -s gtk-lshw %{buildroot}%{_sbindir}/lshw-gui
 %endif
 %endif
 # translations seems borken, remove for now
-#find_lang %{name}
+#find_lang %%{name}
 rm -rf %{buildroot}%{_datadir}/locale/*/
 
 %check
@@ -85,7 +85,7 @@ appstream-util validate-relax --nonet %{buildroot}/%{_datadir}/appdata/*.appdata
     -disable ide -disable scsi -disable dmi -disable memory \
     -disable cpuinfo 2>/dev/null | %{__python3} -m json.tool
 
-#files -f %{name}.lang
+#files -f %%{name}.lang
 %files
 %license COPYING
 %doc README.md

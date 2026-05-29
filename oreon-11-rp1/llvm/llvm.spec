@@ -1827,7 +1827,7 @@ fi
 %global __cmake_builddir %{builddir_instrumented}
 
 # For -Wno-backend-plugin see https://llvm.org/docs/HowToBuildWithPGO.html
-#%%global optflags_for_instrumented %(echo %{optflags} -Wno-backend-plugin)
+#%%global optflags_for_instrumented %%(echo %%{optflags} -Wno-backend-plugin)
 
 %global cmake_config_args_instrumented %{cmake_config_args} \\\
   -DLLVM_ENABLE_PROJECTS:STRING="clang;lld" \\\
@@ -2148,7 +2148,7 @@ mkdir -p %{buildroot}%{python3_sitelib}/clang/
 # If we don't default to true here, we'll see this error:
 # install: omitting directory 'bindings/python/clang/__pycache__'
 # NOTE: this only happens if we include the gdb plugin of libomp.
-# Remove the plugin with command and we're good: rm -rf %{buildroot}/%{_datarootdir}/gdb
+# Remove the plugin with command and we're good: rm -rf %%{buildroot}/%%{_datarootdir}/gdb
 install -p -m644 clang/bindings/python/clang/* %{buildroot}%{python3_sitelib}/clang/
 %py_byte_compile %{__python3} %{buildroot}%{python3_sitelib}/clang
 
@@ -2247,8 +2247,8 @@ rm -rf %{buildroot}%{install_libdir}/libarcher_static.a
 # Remove the openmp gdb plugin for now
 rm -rf %{buildroot}/%{install_datadir}/gdb
 # # TODO(kkleine): These was added to avoid a permission issue
-# chmod go+w %{buildroot}/%{_datarootdir}/gdb/python/ompd/ompdModule.so
-# chmod +w %{buildroot}/%{_datarootdir}/gdb/python/ompd/ompdModule.so
+# chmod go+w %%{buildroot}/%%{_datarootdir}/gdb/python/ompd/ompdModule.so
+# chmod +w %%{buildroot}/%%{_datarootdir}/gdb/python/ompd/ompdModule.so
 
 %if %{with offload}
 # Remove files that we don't package, yet.
@@ -2963,7 +2963,7 @@ update-alternatives --install %{_bindir}/llvm-config-%{maj_ver} llvm-config-%{ma
 # Prioritize newer LLVM versions over older and 64-bit over 32-bit.
 update-alternatives --install %{_bindir}/llvm-config llvm-config %{install_bindir}/llvm-config $((%{maj_ver}*100+%{__isa_bits}))
 
-# Remove old llvm-config-%{__isa_bits} alternative. This will only do something during the
+# Remove old llvm-config-%%{__isa_bits} alternative. This will only do something during the
 # first upgrade from a version that used it. In all other cases it will error, so suppress the
 # expected error message.
 update-alternatives --remove llvm-config %{_bindir}/llvm-config-%{__isa_bits} 2>/dev/null ||:

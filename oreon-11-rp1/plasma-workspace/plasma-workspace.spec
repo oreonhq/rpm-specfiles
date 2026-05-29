@@ -440,7 +440,7 @@ EOL
 %install
 %cmake_install
 
-#chrpath --delete %{buildroot}%{_kf6_qtplugindir}/phonon_platform/kde.so
+#chrpath --delete %%{buildroot}%%{_kf6_qtplugindir}/phonon_platform/kde.so
 
 # General startplasma symlink
 ln -sr %{buildroot}%{_kf6_bindir}/startplasma-wayland %{buildroot}%{_kf6_bindir}/startplasma

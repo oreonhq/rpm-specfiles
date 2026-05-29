@@ -1,4 +1,6 @@
-%global source0_hash e83a2c3db570b6c5a1ff0fccfe7098837b3f6bd74b133567937c8a91710ed1d1
+%global source0_hash none
+
+%global source10_key_fpr 74E8DA1398055A8120B276EB5FCB204EF882B07A
 
 # Reduce debuginfo verbosity
 %global optflags %(echo %{optflags} | sed 's/-g /-g1 /')
@@ -33,10 +35,10 @@ URL:            https://inkscape.org/
 Source0:        https://media.inkscape.org/dl/resources/file/inkscape-1.4.3.tar.xz
 
 # The signatures were uploaded by the responsible release manager, and includes release date and commit, not using macros because it's inconsistent.
-Source1:        https://media.inkscape.org/media/resources/sigs/inkscape-1.4.3_2025-12-25_0d15f75042.tar.xz.sig
+Source1:        inkscape-1.4.3_2025-12-25_0d15f75042.tar.xz.sig
 
 # Keyring(s)
-Source10:       https://inkscape.org/~MarcJeanmougin/gpg/#/MarcJeanmougin.gpg
+Source10:       MarcJeanmougin.gpg
 
 
 # Should we split this package and mark it as a Enhance,
@@ -182,7 +184,7 @@ graphics in W3C standard Scalable Vector Graphics (SVG) file format.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source10_key_fpr}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source10_key_fpr}" || { echo "oreon: Source10 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE10}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup -n inkscape-1.4.3_2025-12-25_0d15f75042 -p1

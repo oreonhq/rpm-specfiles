@@ -1,4 +1,6 @@
-%global source0_hash 55e47994018c13743485544e7206780ffbb3c8495e704a99636503e6e77abf59
+%global source0_hash none
+
+%global source2_key_fpr 9147A339719518EE9011BCB54793916113084025
 
 Name:            libtalloc
 Version:         2.4.4
@@ -8,8 +10,8 @@ License:         LGPL-3.0-or-later
 URL:             https://talloc.samba.org/
 
 Source0:        https://www.samba.org/ftp/talloc/talloc-2.4.4.tar.gz
-Source1:        https://www.samba.org/ftp/talloc/talloc-2.4.4.tar.asc
-Source2:         https://download.samba.org/pub/samba/samba-pubkey.asc#/talloc.keyring
+Source1:        talloc-2.4.4.tar.asc
+Source2:         talloc.keyring
 
 BuildRequires: make
 BuildRequires: gcc
@@ -53,7 +55,8 @@ Requires: python3-talloc = %{version}-%{release}
 Development libraries for python3-talloc
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -n talloc-%{version} -p1
 
 %build

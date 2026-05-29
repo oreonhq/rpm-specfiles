@@ -71,7 +71,7 @@ based on the S-Lang extension language.
 %endif
 ;
 
-# fails with %{?_smp_mflags}
+# fails with %%{?_smp_mflags}
 # install_doc_dir sets SLANG_DOC_DIR macro
 make RPATH="" install_doc_dir=%{_pkgdocdir} all
 

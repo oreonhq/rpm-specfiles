@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash bb4136c7443610f8c2d2d357cad247c3e90bb5e6f0b7a02b0edfb11924ff9bc2
 
 Name:           pythondist
 Version:        4.3.0

@@ -467,7 +467,7 @@
 %global tl_version %{sub %{source_date} 1 4}
 # %%global source_svn svn66984
 %global source_name texlive-%{source_date}-source
-# %%global source_name texlive-source-build-%{source_svn}
+# %%global source_name texlive-source-build-%%{source_svn}
 %{!?_texdir: %global _texdir %{_datadir}/%{shortname}}
 %{!?_texmf_var: %global _texmf_var %{_var}/lib/texmf}
 
@@ -8294,10 +8294,10 @@ rm -rf %{buildroot}%{_texdir}/tlpkg/tlpobj/
 rm -rf %{buildroot}%{_texmf_main}/tlpkg/tlpobj/
 # texconfig needs tlmgr.pl
 # We're only including what it needs, no more.
-# rm -f %{buildroot}%{_texmf_main}/doc/man/man1/tlmgr.1
-# rm -f %{buildroot}%{_texmf_main}/scripts/texlive/tlmgr.pl
-# rm -f %{buildroot}%{_bindir}/tlmgr
-# rm -f %{buildroot}%{_texdir}/tlpkg/installer/config.guess
+# rm -f %%{buildroot}%%{_texmf_main}/doc/man/man1/tlmgr.1
+# rm -f %%{buildroot}%%{_texmf_main}/scripts/texlive/tlmgr.pl
+# rm -f %%{buildroot}%%{_bindir}/tlmgr
+# rm -f %%{buildroot}%%{_texdir}/tlpkg/installer/config.guess
 rm -f %{buildroot}%{_texmf_main}/scripts/texlive/tlmgr.pl.orig
 rm -f %{buildroot}%{_texmf_main}/scripts/texlive/tl-errmess.vbs
 rm -f %{buildroot}%{_texmf_main}/scripts/texlive/tlmgrgui.pl
@@ -8524,12 +8524,12 @@ export TEXMFLOCAL=/usr/share/texlive/texmf-local
 # touch /usr/share/texlive/kpathsea.log
 # /usr/share/texlive/texmf-dist/scripts/texlive/mktexlsr --version 2>&1 | tee -a /usr/share/texlive/kpathsea.log || :
 # /usr/share/texlive/texmf-dist/scripts/texlive/mktexlsr --verbose 2>&1 | tee -a /usr/share/texlive/kpathsea.log || :
-# /usr/bin/sh -x %{_bindir}/texhash 2>&1 | tee -a /usr/share/texlive/kpathsea.log || :
+# /usr/bin/sh -x %%{_bindir}/texhash 2>&1 | tee -a /usr/share/texlive/kpathsea.log || :
 /usr/share/texlive/texmf-dist/scripts/texlive/mktexlsr 2> /dev/null || :
 export TEXMF=/usr/share/texlive/texmf-dist
 export TEXMFCNF=/usr/share/texlive/texmf-dist/web2c
 export TEXMFCACHE=/var/lib/texmf
-# %{_bindir}/fmtutil-sys --all 2>&1 | tee -a /usr/share/texlive/kpathsea.log || :
+# %%{_bindir}/fmtutil-sys --all 2>&1 | tee -a /usr/share/texlive/kpathsea.log || :
 %{_bindir}/fmtutil-sys --all &> /dev/null || :
 
 %transfiletriggerpostun -n %{shortname}-kpathsea -- %{_texdir}
@@ -8552,7 +8552,7 @@ while read -r line; do
         fi
 done <<< "$list"
 # With the demise of updmap-map, we need to make system maps here.
-# %{_bindir}/updmap-sys --quiet --nomkmap >/dev/null || :
+# %%{_bindir}/updmap-sys --quiet --nomkmap >/dev/null || :
 yes | %{_bindir}/updmap-sys --quiet --syncwithtrees >/dev/null 2>&1 || :
 %{_bindir}/updmap-sys --quiet --force 2>&1 || :
 
@@ -8572,7 +8572,7 @@ while read -r line; do
         fi
 done <<< "$list"
 # With the demise of updmap-map, we need to make system maps here.
-# %{_bindir}/updmap-sys --quiet --nomkmap >/dev/null || :
+# %%{_bindir}/updmap-sys --quiet --nomkmap >/dev/null || :
 yes | %{_bindir}/updmap-sys --quiet --syncwithtrees >/dev/null 2>&1 || :
 %{_bindir}/updmap-sys --quiet --force 2>&1 || :
 

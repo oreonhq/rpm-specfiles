@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 127d301ba500ef7fd527d48e1a0a4bedc623b2eb5263fd8cb80b8db859ebac14
 
 # All Global changes to build and install go here.
 # Per the below section about __spec_install_pre, any rpm
@@ -163,7 +163,7 @@ Summary: The Linux kernel
 # genspec.sh variables
 #
 
-# kernel package name (should only be used to define %{name})
+# kernel package name (should only be used to define %%{name})
 %global package_name kernel
 %global gemini 0
 # Include Fedora files

@@ -1208,7 +1208,7 @@ install_binutils()
 #define BFD_HOST_64_BIT long long\
 #else\
 #define BFD_HOST_64_BIT long\
-#endif/' \
+# endif/' \
             -e 's/^#define BFD_HOST_U_64_BIT unsigned \(long \)\?long *$/#define BFD_HOST_U_64_BIT unsigned BFD_HOST_64_BIT/' \
             $local_incdir/bfd.h
 %endif

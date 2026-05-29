@@ -543,7 +543,7 @@ NO_TEST="$NO_TEST|RunCMake.ParseImplicitLinkInfo"
 bin/ctest%{?name_suffix} %{?_smp_mflags} -V -E "$NO_TEST" --output-on-failure
 ## do this only periodically, not for every build -- besser82 20221102
 # Keep an eye on failing tests
-#bin/ctest%{?name_suffix} %{?_smp_mflags} -V -R "$NO_TEST" --output-on-failure || :
+#bin/ctest%%{?name_suffix} %%{?_smp_mflags} -V -R "$NO_TEST" --output-on-failure || :
 popd
 %endif
 

@@ -1,5 +1,8 @@
 %global source0_hash adf6aa7ce055c0987e716a93ac01f3c0a97c1280421443cd6b21e0e71d763d14
 
+%global source2_key_fpr 21EC3FD75D26B39E820BE6FBD27C2C1AF21D8BAD
+
+
 %global         min_qt_version 5.12
 %global         min_kf_version 5.66
 
@@ -18,7 +21,7 @@ Summary:        KIO FUSE
 License:        GPL-3.0-or-later
 URL:            https://invent.kde.org/system/kio-fuse
 Source0:        https://download.kde.org/stable/kio-fuse/kio-fuse-5.1.1.tar.xz
-Source1:        https://download.kde.org/stable/kio-fuse/kio-fuse-5.1.1.tar.xz.sig
+Source1:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz.sig
 Source2:        gpgkey-21EC3FD75D26B39E820BE6FBD27C2C1AF21D8BAD.gpg
 
 ## upstream fixes
@@ -55,6 +58,7 @@ FUSE.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

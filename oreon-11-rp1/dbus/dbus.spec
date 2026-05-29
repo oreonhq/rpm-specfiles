@@ -1,4 +1,6 @@
-%global source0_hash 0ba2a1a4b16afe7bceb2c07e9ce99a8c2c3508e5dec290dbb643384bd6beb7e2
+%global source0_hash none
+
+%global source2_key_fpr DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90
 
 %global _hardened_build 1
 %{!?_pkgdocdir: %global _pkgdocdir %{_docdir}/%{name}-%{version}}
@@ -29,7 +31,7 @@ Summary: D-BUS message bus
 License: (AFL-2.1 OR GPL-2.0-or-later) AND GPL-2.0-or-later
 URL:     https://www.freedesktop.org/wiki/Software/dbus/
 Source0:        https://dbus.freedesktop.org/releases/dbus/dbus-1.16.2.tar.xz
-Source1:        https://dbus.freedesktop.org/releases/dbus/dbus-1.16.2.tar.xz.asc
+Source1:        dbus-1.16.2.tar.xz.asc
 # gpg --keyserver keyring.debian.org --recv-keys DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90
 # gpg --export --export-options export-minimal > gpgkey-DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90.gpg
 Source2: gpgkey-DA98F25C0871C49A59EAFF2C4DE8FF2A63C7CC90.gpg
@@ -162,7 +164,7 @@ in this separate package so server systems need not install X.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

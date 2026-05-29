@@ -40,12 +40,12 @@ for file in %{SOURCE0} %{SOURCE1} %{SOURCE2} %{SOURCE3} %{SOURCE4} ; do
 done
 
 %posttrans
-#if [ $1 -eq 0 ] ; then
+# if [ $1 -eq 0 ] ; then
   #copy recursively the content, but do not overwrite the original files provided by rootfiles package
   # NOTE: This has been broken by the conversion to tmpfiles. I see only one way to make it
   # work: to synthetize a tmpfiles entry for each of these additional files/dirs. That seems like
   # a lot of effort to continue supporting a feature for which there's likely not a high demand...
-  # cp -ndr --preserve=ownership,timestamps /etc/skel/. %{ROOTFILES_DIR}/ || :
+  # cp -ndr --preserve=ownership,timestamps /etc/skel/. %%{ROOTFILES_DIR}/ || :
 #fi
 
 %files

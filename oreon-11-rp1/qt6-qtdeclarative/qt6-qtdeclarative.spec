@@ -91,7 +91,7 @@ Summary: Programming examples for %{name}
 Requires:  %{name}%{?_isa} = %{version}-%{release}
 Obsoletes: qt6-qtquickcontrols2-examples < 6.2.0~beta3-1
 Provides:  qt6-qtquickcontrols2-examples = %{version}-%{release}
-# BuildRequires: qt6-qtdeclarative-devel >= %{version}
+# BuildRequires: qt6-qtdeclarative-devel >= %%{version}
 %description examples
 %{summary}.
 %endif
@@ -124,7 +124,7 @@ export PATH=`pwd`:$PATH
   install -p -m644 -D %{SOURCE5} %{buildroot}%{_qt6_headerdir}/QtQml/%{qt_version}/QtQml/private/qv4global_p.h
 %endif
 
-# hardlink files to %{_bindir}, add -qt6 postfix to not conflict
+# hardlink files to %%{_bindir}, add -qt6 postfix to not conflict
 mkdir %{buildroot}%{_bindir}
 pushd %{buildroot}%{_qt6_bindir}
 for i in * ; do

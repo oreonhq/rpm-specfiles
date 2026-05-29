@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 74b1081d21fff13ae4bd7c16e5d6e504a4c26f7cde1dca0d963a484174bbcacd
 
 %bcond_with largefile
 

@@ -320,10 +320,10 @@ if you need or want to override the preset made by this package.
 EOF
 
 %{__cat} << EOF > %{sysctl_prio}-%{name}-optmem_max.conf
-# See the 'README.%{distroname_ext}' file shipped in %%doc
-# with the %{name} package.
+# See the 'README.%%{distroname_ext}' file shipped in %%doc
+# with the %%{name} package.
 #
-# See '%{_sysctldir}/50-default.conf',
+# See '%%{_sysctldir}/50-default.conf',
 # if you need or want to override this preset.
 
 # Increase the ancillary buffer size per socket.

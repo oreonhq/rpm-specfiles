@@ -1,4 +1,6 @@
-%global source0_hash 089bc60fb59d6aecc5d994ff530fd0dcb3ee39aa55867849a2bbc4e555f9c304
+%global source0_hash none
+
+%global source2_key_fpr FCF986EA15E6E293A5644F10B4322F04D67658D8
 
 # For a complete build enable this
 %bcond all_codecs 0
@@ -112,7 +114,7 @@ Summary:        A complete solution to record, convert and stream audio and vide
 License:        GPL-3.0-or-later
 URL:            https://ffmpeg.org/
 Source0:        https://ffmpeg.org/releases/ffmpeg-7.1.2.tar.xz
-Source1:        https://ffmpeg.org/releases/ffmpeg-7.1.2.tar.xz.asc
+Source1:        ffmpeg-7.1.2.tar.xz.asc
 # https://ffmpeg.org/ffmpeg-devel.asc
 # gpg2 --import --import-options import-export,import-minimal ffmpeg-devel.asc > ./ffmpeg.keyring
 Source2:        ffmpeg.keyring
@@ -735,7 +737,7 @@ This build includes the full range of codecs offered by ffmpeg.
 %dnl --------------------------------------------------------------------------------
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup -S git_am

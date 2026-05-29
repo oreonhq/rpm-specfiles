@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3cd3e45eb6e2680cb05d52e1e80dd8f9d59d4765212f0e28f78e6c1783d18eae
 
 %global glib2_version 2.57.2
 %global gtk3_version 3.24.0

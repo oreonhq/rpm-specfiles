@@ -171,7 +171,7 @@ install -p -m 0644 sound-icons-0.1/* %{buildroot}%{_datadir}/sounds/%{name}/
 
 %find_lang speech-dispatcher
 
-#Remove %{_infodir}/dir file
+#Remove %%{_infodir}/dir file
 rm -f %{buildroot}%{_infodir}/dir
 
 find %{buildroot} -name '*.la' -delete

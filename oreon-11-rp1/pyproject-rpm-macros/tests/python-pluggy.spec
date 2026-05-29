@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2cffa88e94fdc978c4c574f15f9e59b7f4201d439195c3715ca9e2486f1d0cf1
 
 %global pypi_name pluggy
 Name:           python-%{pypi_name}

@@ -349,14 +349,14 @@ rm -f %{buildroot}%{_sysconfdir}/fonts/conf.d/%{fontconfig_prio}-urw-fallback-{s
 
 # We need to touch these files -- otherwise running 'rpm --setperms' would
 # result in these files having incorrect permissions like this: [-------.]
-#touch %{buildroot}%{_fontdir}/fonts.dir
-#touch %{buildroot}%{_fontdir}/fonts.scale
+#touch %%{buildroot}%%{_fontdir}/fonts.dir
+#touch %%{buildroot}%%{_fontdir}/fonts.scale
 touch %{buildroot}%{legacydir}/fonts.dir
 touch %{buildroot}%{legacydir}/fonts.scale
 
 # Install the symlink for the X11 Logical Font Description to actually work:
 install -m 0755 -d %{buildroot}%{_sysconfdir}/X11/fontpath.d
-#ln -sf %{_fontdir} %{buildroot}%{_sysconfdir}/X11/fontpath.d/%{name}
+#ln -sf %%{_fontdir} %%{buildroot}%%{_sysconfdir}/X11/fontpath.d/%%{name}
 ln -sf %{legacydir} %{buildroot}%{_sysconfdir}/X11/fontpath.d/urw-fonts
 
 # Generate the macro containing the path to our fonts:

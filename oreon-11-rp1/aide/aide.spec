@@ -1,4 +1,6 @@
-%global source0_hash 23762b05f46111edeb3c8a05016c8731c01bdb8c1f91be48c156c31ab85e74c4
+%global source0_hash none
+
+%global source2_key_fpr 2BBBD30FAAB29B3253BCFBA6F6947DAB68E7B931
 
 Summary:        Intrusion detection environment
 Name:           aide
@@ -8,7 +10,7 @@ URL:            https://github.com/aide/aide
 License:        GPL-2.0-or-later
 
 Source0:        https://github.com/aide/aide/releases/download/v0.19.2/aide-0.19.2.tar.gz
-Source1:        https://github.com/aide/aide/releases/download/v0.19.2/aide-0.19.2.tar.gz.asc
+Source1:        aide-0.19.2.tar.gz.asc
 # gpg2 --recv-keys 2BBBD30FAAB29B3253BCFBA6F6947DAB68E7B931
 # gpg2 --export --export-options export-minimal 2BBBD30FAAB29B3253BCFBA6F6947DAB68E7B931 >gpgkey-aide.gpg
 Source2:        gpgkey-aide.gpg
@@ -42,7 +44,7 @@ AIDE (Advanced Intrusion Detection Environment) is a file integrity
 checker and intrusion detection program.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 cp -a %{SOURCE4} .

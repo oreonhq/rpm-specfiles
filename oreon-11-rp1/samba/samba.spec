@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global source2_key_fpr 81F5E2832BD2545A1897B713AA99442FB680B620
+
+
 # The testsuite is disabled by default.
 #
 # To build and run the tests use:
@@ -79,7 +82,7 @@
 %else
 %bcond vfs_cephfs 0
 %bcond ceph_mutex 0
-#endif fedora
+# endif fedora
 %endif
 
 %if 0%{?fedora} || 0%{?oreon}
@@ -91,7 +94,7 @@
 #endifarch
 %endif
 
-#endif fedora
+# endif fedora
 %endif
 
 # Build vfs_io_uring module by default on 64bit Fedora
@@ -223,8 +226,8 @@ License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://www.samba.org
 
 # This is a xz recompressed file of https://ftp.samba.org/pub/samba/samba-%%{version}%%{pre_release}.tar.gz
-Source0:        https://ftp.samba.org/pub/samba/samba-%nil.tar.gz#/samba-%nil.tar.xz
-Source1:        https://ftp.samba.org/pub/samba/samba-%nil.tar.asc
+Source0:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.gz#/samba-%{version}%{pre_release}.tar.xz
+Source1:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.asc
 Source2:        samba-pubkey_AA99442FB680B620.gpg
 
 # Red Hat specific replacement-files
@@ -417,10 +420,10 @@ BuildRequires: python3-setproctitle
 
 %if %{without includelibs}
 BuildRequires: tdb-tools
-#endif without includelibs
+# endif without includelibs
 %endif
 
-#endif with dc
+# endif with dc
 %endif
 
 %if %{with testsuite}
@@ -448,7 +451,7 @@ BuildRequires: rsync
 BuildRequires: socket_wrapper
 BuildRequires: sudo
 BuildRequires: uid_wrapper
-#endif with testsuite
+# endif with testsuite
 %endif
 
 # filter out perl requirements pulled in from examples in the docdir.
@@ -669,7 +672,7 @@ BuildArch: noarch
 %description dc-provision
 The samba-dc-provision package provides files to setup a domain controller
 
-#endif with dc || with testsuite
+# endif with dc || with testsuite
 %endif
 
 ### DC-LIBS
@@ -708,7 +711,7 @@ Provides: bundled(libreplace) = %{samba_depver}
 %description dc-bind-dlz
 The %{name}-dc-bind-dlz package contains the libraries for bind to manage all
 name server related details of Samba AD.
-#endif with dc
+# endif with dc
 %endif
 
 ### DEVEL
@@ -745,7 +748,7 @@ Provides: bundled(libreplace) = %{samba_depver}
 
 %description vfs-cephfs
 Samba VFS module for Ceph distributed storage system integration.
-#endif with vfs_cephfs
+# endif with vfs_cephfs
 %endif
 
 ### IOURING
@@ -762,7 +765,7 @@ Provides: bundled(libreplace) = %{samba_depver}
 
 %description vfs-iouring
 Samba VFS module for io_uring instance integration.
-#endif with vfs_io_uring
+# endif with vfs_io_uring
 %endif
 
 ### GLUSTER
@@ -895,7 +898,7 @@ Requires: libsmbclient = %{samba_depver}
 The libsmbclient-devel package contains the header files and libraries needed
 to develop programs that link against the SMB client library in the Samba
 suite.
-#endif {with libsmbclient}
+# endif {with libsmbclient}
 %endif
 
 ### LIBWBCLIENT
@@ -920,7 +923,7 @@ Obsoletes: samba-winbind-devel < %{samba_depver}
 %description -n libwbclient-devel
 The libwbclient-devel package provides developer tools for the wbclient
 library.
-#endif {with libwbclient}
+# endif {with libwbclient}
 %endif
 
 ### PYTHON3
@@ -1224,7 +1227,7 @@ Requires: %{name}-client-libs = %{samba_depver}
 %description -n ctdb-pcp-pmda
 Performance Co-Pilot (PCP) support for CTDB
 
-#endif with pcp_pmda
+# endif with pcp_pmda
 %endif
 
 %if %{with etcd_mutex}
@@ -1238,7 +1241,7 @@ BuildArch: noarch
 %description -n ctdb-etcd-mutex
 Support for using an existing ETCD cluster as a mutex helper for CTDB
 
-#endif with etcd_mutex
+# endif with etcd_mutex
 %endif
 
 %if %{with ceph_mutex}
@@ -1250,10 +1253,10 @@ Requires: ctdb = %{samba_depver}
 %description -n ctdb-ceph-mutex
 Support for using an existing CEPH cluster as a mutex helper for CTDB
 
-#endif with ceph_mutex
+# endif with ceph_mutex
 %endif
 
-#endif with clustering
+# endif with clustering
 %endif
 
 %if %{with prometheus}
@@ -1265,7 +1268,7 @@ Requires: samba = %{samba_depver}
 %description prometheus
 Support for exporting metrics via Prometheus
 
-#endif with prometheus
+# endif with prometheus
 %endif
 
 ### LIBLDB
@@ -1344,6 +1347,7 @@ Python bindings for the LDB library
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
 xzcat %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %else
@@ -1370,7 +1374,7 @@ sed -i 's/#define WINBINDD_PRIV_SOCKET_SUBDIR.*/#define WINBINDD_PRIV_SOCKET_SUB
 %global _talloc_lib ,!talloc,!pytalloc,!pytalloc-util
 %global _tevent_lib ,!tevent,!pytevent
 %global _tdb_lib ,!tdb,!pytdb
-#endif with includelibs
+# endif with includelibs
 %endif
 
 %global _samba_bundled_libraries !popt%{_talloc_lib}%{_tevent_lib}%{_tdb_lib}
@@ -1412,9 +1416,9 @@ export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 %if 0%{?fedora} >= 37 || 0%{?oreon}
 export LDFLAGS="%{__global_ldflags} -fuse-ld=mold"
 export python_LDFLAGS="$(echo ${LDFLAGS} | sed -e 's/-Wl,-z,defs//g')"
-#endif fedora >= 37
+# endif fedora >= 37
 %endif
-#endif narch i686
+# endif narch i686
 %endif
 
 # Add support for mock ccache plugin
@@ -1610,12 +1614,12 @@ rm -f %{buildroot}%{_mandir}/man8/vfs_ceph_snapshots.8*
 for f in samba/libsamba-python-private-samba.so; do
     rm -f %{buildroot}%{_libdir}/$f
 done
-#endif without dc
+# endif without dc
 %endif
 
 %if %{with testsuite}
 rm -f %{buildroot}%{_mandir}/man8/vfs_nfs4acl_xattr.8*
-#endif with testsuite
+# endif with testsuite
 %endif
 
 pushd pidl
@@ -1637,10 +1641,10 @@ rm -f %{buildroot}%{_mandir}/man3/PyLdb*
 # CTDB
 %if %{with clustering}
 touch %{buildroot}%{_libexecdir}/ctdb/statd_callout
-#endif with clustering
+# endif with clustering
 %endif
 
-#endif !with testsuite
+# endif !with testsuite
 %endif
 
 %check
@@ -1683,7 +1687,7 @@ export SAMBA_DCERPCD_DONT_LOG_STDOUT=1
 %else
 %{__make} %{?_smp_mflags} test FAIL_IMMEDIATELY=1
 %endif
-#endif with testsuite
+# endif with testsuite
 %endif
 
 %if !%{with testsuite}
@@ -1741,7 +1745,7 @@ fi
 
 %postun dc
 %systemd_postun_with_restart samba.service
-#endif with dc
+# endif with dc
 %endif
 
 %post krb5-printing
@@ -1768,7 +1772,7 @@ if [ $1 -gt 1 ] ; then
     rm -f /var/lib/alternatives/libwbclient.so* 2>/dev/null
 fi
 %{?ldconfig}
-#endif {with libwbclient}
+# endif {with libwbclient}
 %endif
 
 %ldconfig_scriptlets test
@@ -2021,7 +2025,7 @@ fi
 %{_mandir}/man8/tdbdump.8.gz
 %{_mandir}/man8/tdbrestore.8.gz
 %{_mandir}/man8/tdbtool.8.gz
-#endif with includelibs
+# endif with includelibs
 %endif
 
 ### CORE-LIBS
@@ -2185,13 +2189,13 @@ fi
 
 %if %{without libwbclient}
 %{_libdir}/samba/libwbclient.so.*
-#endif without libwbclient
+# endif without libwbclient
 %endif
 
 %if %{without libsmbclient}
 %{_libdir}/samba/libsmbclient.so.%{libsmbclient_so_version}*
 %{_mandir}/man7/libsmbclient.7*
-#endif without libsmbclient
+# endif without libsmbclient
 %endif
 
 %if %{with includelibs}
@@ -2202,7 +2206,7 @@ fi
 
 %{_mandir}/man3/ldb.3.gz
 %{_mandir}/man3/talloc.3.gz
-#endif with includelibs
+# endif with includelibs
 %endif
 
 ### COMMON
@@ -2349,7 +2353,7 @@ fi
 %license source4/setup/ad-schema/licence.txt
 %{_datadir}/samba/setup
 
-#endif with dc
+# endif with dc
 %endif
 ### DC-LIBS
 %files dc-libs
@@ -2399,7 +2403,7 @@ fi
 %{_libdir}/samba/bind9/dlz_bind9_14.so
 %{_libdir}/samba/bind9/dlz_bind9_16.so
 %{_libdir}/samba/bind9/dlz_bind9_18.so
-#endif with dc
+# endif with dc
 %endif
 
 ### DEVEL
@@ -2525,12 +2529,12 @@ fi
 
 %if %{without libsmbclient}
 %{_includedir}/samba-4.0/libsmbclient.h
-#endif without libsmbclient
+# endif without libsmbclient
 %endif
 
 %if %{without libwbclient}
 %{_includedir}/samba-4.0/wbclient.h
-#endif without libwbclient
+# endif without libwbclient
 %endif
 
 ### VFS-CEPHFS
@@ -2632,7 +2636,7 @@ fi
 %{_libdir}/libsmbclient.so
 %{_libdir}/pkgconfig/smbclient.pc
 %{_mandir}/man7/libsmbclient.7*
-#endif {with libsmbclient}
+# endif {with libsmbclient}
 %endif
 
 ### LIBWBCLIENT
@@ -2645,7 +2649,7 @@ fi
 %{_includedir}/samba-4.0/wbclient.h
 %{_libdir}/libwbclient.so
 %{_libdir}/pkgconfig/wbclient.pc
-#endif {with libwbclient}
+# endif {with libwbclient}
 %endif
 
 ### PIDL
@@ -3225,7 +3229,7 @@ fi
 %{python3_sitearch}/talloc.cpython*.so
 %{python3_sitearch}/tdb.cpython*.so
 %{python3_sitearch}/tevent.py
-#endif with includelibs
+# endif with includelibs
 %endif
 
 %files -n python3-%{name}-dc
@@ -4106,24 +4110,24 @@ fi
 %{_localstatedir}/lib/pcp/pmdas/ctdb/help
 %{_localstatedir}/lib/pcp/pmdas/ctdb/pmdactdb
 %{_localstatedir}/lib/pcp/pmdas/ctdb/pmns
-#endif with pcp_pmda
+# endif with pcp_pmda
 %endif
 
 %if %{with etcd_mutex}
 %files -n ctdb-etcd-mutex
 %{_libexecdir}/ctdb/ctdb_etcd_lock
 %{_mandir}/man7/ctdb-etcd.7.gz
-#endif with etcd_mutex
+# endif with etcd_mutex
 %endif
 
 %if %{with ceph_mutex}
 %files -n ctdb-ceph-mutex
 %{_libexecdir}/ctdb/ctdb_mutex_ceph_rados_helper
 %{_mandir}/man7/ctdb_mutex_ceph_rados_helper.7.gz
-#endif with ceph_mutex
+# endif with ceph_mutex
 %endif
 
-#endif with clustering
+# endif with clustering
 %endif
 
 %if %{with winexe}
@@ -4137,7 +4141,7 @@ fi
 %files prometheus
 %{_bindir}/smb_prometheus_endpoint
 %{_mandir}/man8/smb_prometheus_endpoint.8.gz
-#endif with prometheus
+# endif with prometheus
 
 %endif
 %files -n libldb
@@ -4196,7 +4200,7 @@ fi
 %{_libdir}/samba/libpyldb-util.cpython-*-private-samba.so
 %{python3_sitearch}/_ldb_text.py
 %{python3_sitearch}/__pycache__/_ldb_text.cpython-*.py*
-#endif !with testsuite
+# endif !with testsuite
 %endif
 
 %changelog

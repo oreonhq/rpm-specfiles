@@ -77,7 +77,7 @@ Requires(post): selinux-policy-%{selinuxtype}
 
 %description selinux
 SELinux support for %{name}
-#endif with selinux
+# endif with selinux
 %endif
 
 %prep
@@ -114,7 +114,7 @@ for SELINUXVARIANT in %{selinux_variants}; do
 
     echo ${MODULE_PATH} >> selinux-files.txt
 done
-#endif with selinux
+# endif with selinux
 %endif
 
 # Configuration files
@@ -160,7 +160,7 @@ fi
 for SELINUXVARIANT in %{selinux_variants}; do
     %selinux_relabel_post -s ${SELINUXVARIANT}
 done
-#endif with selinux
+# endif with selinux
 %endif
 
 %post certmonger

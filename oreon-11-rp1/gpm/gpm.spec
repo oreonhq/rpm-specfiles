@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fa199e5c7745506df32ebe84d5454385cd6b82cc5036e9247763e41eb4983259
 
 Summary: A mouse server for the Linux console
 Name: gpm

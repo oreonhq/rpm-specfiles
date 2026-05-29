@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c729845434366216d320e936b8ad6f9d681aab72dc7cbc2d51bedc3582f3ad1e
 
 Name:           isort
 Version:        5.7.0

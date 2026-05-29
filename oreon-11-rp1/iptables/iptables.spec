@@ -1,5 +1,8 @@
 %global source0_hash 1afcd33da9e8f913ace6a2126788162e207e26f5d5e29c6573c0e581ffc58b99
 
+%global source2_key_fpr 8C5F7146A1757A65E2422A94D70D1A666ACF2B21
+
+
 # install init scripts to /usr/libexec with systemd
 %global script_path %{_libexecdir}/iptables
 
@@ -186,6 +189,7 @@ nftables compatibility for iptables, arptables and ebtables.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

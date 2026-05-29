@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c70dd71abe5a8c85e55e12c19bd91ccfeec11a6e99044204511f9ed547d48451
 
 %global pypi_name entrypoints
 Name:           python-%{pypi_name}

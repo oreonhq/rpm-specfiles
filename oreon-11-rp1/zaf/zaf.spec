@@ -5,7 +5,7 @@ Summary: South Africa hyphenation rules
 %define upstreamid 20080714
 Version: 0
 Release: 0.33.%{upstreamid}svn%{?dist}
-Source0: https://ftp.debian.org/debian/pool/main/z/zaf/zaf_0.1%2b20080714svn.orig.tar.bz2#/zaf-0-0.1.%{upstreamid}svn.tar.bz2
+Source0: zaf-0-0.1.%{upstreamid}svn.tar.bz2
 # Below URL is dead now, don't file any bugs for updating it.
 URL: http://zaf.sourceforge.net/
 #Hyphenation rules are already generated in upstream code

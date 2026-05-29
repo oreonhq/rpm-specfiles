@@ -352,7 +352,7 @@ make -C lib/dicts/cmu
 # local user-level builds. So, rather than doing that and then patching it
 # up, do the right parts by hand as necessary.
 
-# Create %{_libdir} because make install copies to it without first creating.
+# Create %%{_libdir} because make install copies to it without first creating.
 mkdir -p $RPM_BUILD_ROOT%{_libdir}
 
 # install the dictionaries

@@ -1,4 +1,6 @@
-%global source0_hash 7bcd5d001916f3a50ed7436f4f700e3d2b1bade3ed803219c592d62502a57363
+%global source0_hash none
+
+%global source2_key_fpr 1A4F63A13A4649B632F65EE141BC28FE99089D72
 
 Name:           autoconf-archive
 Version:        2024.10.16
@@ -25,7 +27,7 @@ GNU Autoconf that have been contributed as free software by friendly
 supporters of the cause from all over the Internet.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

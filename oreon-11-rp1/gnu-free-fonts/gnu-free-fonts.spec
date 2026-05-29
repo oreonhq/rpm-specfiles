@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0d62e2e22655f841c3ac5fb8c8059a52fe2c09c695d9e8eda9903406e942657a
 
 %global fontname gnu-free
 %global fontconf 69-%{fontname}

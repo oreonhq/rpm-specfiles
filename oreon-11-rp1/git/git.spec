@@ -92,8 +92,8 @@ URL:            https://git-scm.com/
 # Adjust Source URL path for release candidates
 %global rcpath  %(test "%{version}" = "%{real_version}" || echo testing/)
 
-Source0:        https://www.kernel.org/pub/software/scm/git/%(testgit-%(echo.tar.xz
-Source1:        https://www.kernel.org/pub/software/scm/git/%(testgit-%(echo.tar.sign
+Source0:        https://www.kernel.org/pub/software/scm/git/git-%{real_version}%{?rcpath:/%{version}}.tar.xz
+Source1:        https://www.kernel.org/pub/software/scm/git/git-%{real_version}%{?rcpath:/%{version}}.tar.sign
 
 # Junio C Hamano's key is used to sign git releases, it can be found in the
 # junio-gpg-pub tag within git.
@@ -881,7 +881,7 @@ GIT_SKIP_TESTS="$GIT_SKIP_TESTS t5300.1[02348] t5300.2[03459] t5300.30 t5300.4[5
 # t8020.19 'last-modified merge undoes changes'
 GIT_SKIP_TESTS="$GIT_SKIP_TESTS t8020.16 t8020.19"
 %endif
-# endif "%{_arch}" == "s390x"
+# endif "%%{_arch}" == "s390x"
 export GIT_SKIP_TESTS
 
 # Set LANG so various UTF-8 tests are run

@@ -71,7 +71,7 @@ BuildRequires: pkgconfig(libmaxminddb)
 BuildRequires: pkgconfig(taglib)
 
 ## TODO: Re-enable with Plasma 6 beta or later
-# %if %{undefined flatpak}
+# %if %%{undefined flatpak}
 # BuildRequires: cmake(LibKWorkspace)
 # %endif
 

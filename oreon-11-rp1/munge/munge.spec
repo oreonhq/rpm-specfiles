@@ -1,4 +1,6 @@
-%global source0_hash 39c3ec6ef5604bfa206e8aa10fc05d5119040f6de4a554bc0fb98ca1aed838dc
+%global source0_hash none
+
+%global source2_key_fpr A441880C3D4C7C36C5DD41E13B7ECB2B30DE0871
 
 %bcond_without check
 
@@ -11,8 +13,8 @@ Summary:        Enables uid & gid authentication across a host cluster
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://dun.github.io/munge/
 Source0:        https://github.com/dun/munge/releases/download/munge-0.5.18/munge-0.5.18.tar.xz
-Source1:        https://github.com/dun/munge/releases/download/munge-0.5.18/munge-0.5.18.tar.xz.asc
-Source2:        https://github.com/dun.gpg
+Source1:        munge-0.5.18.tar.xz.asc
+Source2:        dun.gpg
 Source3:        munge.sysusers
 Source4:        README.md
 
@@ -59,7 +61,7 @@ Runtime libraries for using MUNGE.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -N -S git
 cp "%{SOURCE4}"  README-Fedora.md

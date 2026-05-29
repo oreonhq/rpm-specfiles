@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ed5ad317858e0a9badbbada70df40194002e16e8834ac24491307c88f96f9702
 
 Summary: A perfect hash function generator
 Name: gperf

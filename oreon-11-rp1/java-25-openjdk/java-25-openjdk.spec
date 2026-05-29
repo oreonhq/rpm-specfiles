@@ -2270,7 +2270,7 @@ if ! nm $JAVA_HOME/bin/%{alt_java_name} | grep prctl ; then true ; else false; f
 # Check correct vendor values have been set
 $JAVA_HOME/bin/javac -d . %{SOURCE16}
 #TODO skipped vendor check. It now points to PORTABLE version of jdk.
-#$JAVA_HOME/bin/java $(echo $(basename %{SOURCE16})|sed "s|\.java||") "%{oj_vendor}" "%{oj_vendor_url}" "%{oj_vendor_bug_url}" "%{oj_vendor_version}"
+#$JAVA_HOME/bin/java $(echo $(basename %%{SOURCE16})|sed "s|\.java||") "%%{oj_vendor}" "%%{oj_vendor_url}" "%%{oj_vendor_bug_url}" "%%{oj_vendor_version}"
 
 # Check translations are available for new timezones
 $JAVA_HOME/bin/javac -d . %{SOURCE18}

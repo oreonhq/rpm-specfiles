@@ -212,8 +212,8 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.d
 %if 0%{?julia}
 %files julia
 %{_kf6_bindir}/cantor_juliaserver
-# %{_kf6_datadir}/cantor/julia/
-# %{_kf6_datadir}/cantor/juliabackend/
+# %%{_kf6_datadir}/cantor/julia/
+# %%{_kf6_datadir}/cantor/juliabackend/
 %{_kf6_qtplugindir}/cantor_plugins/backends/cantor_juliabackend.so
 %{_kf6_datadir}/cantor/julia/graphic_packages.xml
 %{_kf6_datadir}/cantor/juliabackend/scripts/variables_cleaner.jl

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 979a7442ca1be1eaa9fae3e0ab7d63828b85fd42ded2d6954340a8b926500b39
 
 %global pypi_name clikit
 Name:           python-%{pypi_name}

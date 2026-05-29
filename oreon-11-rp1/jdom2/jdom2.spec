@@ -64,9 +64,9 @@ mkdir lib
 
 # Make jar into an OSGi bundle
 # XXX disabled until BND is fixed
-#bnd wrap --output build/package/jdom-%{version}.bar --properties %{SOURCE3} \
-#         --version %{version} build/package/jdom-%{version}.jar
-#mv build/package/jdom-%{version}.bar build/package/jdom-%{version}.jar
+#bnd wrap --output build/package/jdom-%%{version}.bar --properties %%{SOURCE3} \
+#         --version %%{version} build/package/jdom-%%{version}.jar
+#mv build/package/jdom-%%{version}.bar build/package/jdom-%%{version}.jar
 
 %install
 %mvn_artifact build/maven/core/%{name}-%{version}.pom build/package/jdom-%{version}.jar

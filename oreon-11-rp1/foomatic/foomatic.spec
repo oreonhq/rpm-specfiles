@@ -97,7 +97,7 @@ rm -rf  \
         %{buildroot}%{_libdir}/ppr \
         %{buildroot}%{_sysconfdir}/foomatic/filter.conf.sample \
         %{buildroot}%{_datadir}/foomatic/templates
-#%{buildroot}%%{_libdir}/perl5/site_perl
+#%%{buildroot}%%{_libdir}/perl5/site_perl
 find %{buildroot} -name .packlist | xargs rm -f
 
 %post

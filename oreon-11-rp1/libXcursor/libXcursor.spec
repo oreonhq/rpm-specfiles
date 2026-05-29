@@ -56,7 +56,7 @@ mv COPYING.new COPYING
 
 %build
 autoreconf -v --install --force
-#export CFLAGS="$RPM_OPT_FLAGS -DICONDIR=\"%{_datadir}/icons\""
+#export CFLAGS="$RPM_OPT_FLAGS -DICONDIR=\"%%{_datadir}/icons\""
 %configure \
 %if ! %{with_static}
  --disable-static

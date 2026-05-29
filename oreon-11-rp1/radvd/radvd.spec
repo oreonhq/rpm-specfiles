@@ -1,4 +1,6 @@
-%global source0_hash 25d2960fb977ac35c45a8d85b71db22ed8af325db7dbf4a562fb03eab2848dcd
+%global source0_hash none
+
+%global source2_key_fpr 11ACBA4F4778E3F6E4EDF38EB27B944E34884E85
 
 Name: radvd
 Version: 2.20
@@ -8,9 +10,9 @@ License: radvd
 URL: https://radvd.litech.org
 
 Source0:        https://radvd.litech.org/dist/radvd-2.20.tar.xz
-Source1:        https://radvd.litech.org/dist/radvd-2.20.tar.xz.asc
+Source1:        radvd-2.20.tar.xz.asc
 # Robin Hugh Johnson's public key
-Source2: https://github.com/robbat2.gpg
+Source2: robbat2.gpg
 Source3: radvd.sysusers
 
 # allow glibc strlcpy, avoid libbsd dependency
@@ -43,7 +45,7 @@ Install radvd if you are setting up IPv6 network and/or Mobile IPv6
 services.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

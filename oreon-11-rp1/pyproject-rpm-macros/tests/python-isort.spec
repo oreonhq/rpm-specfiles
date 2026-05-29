@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d3bb35ff6cd1a33104f7325af49abd757fc26901501e11dd9d6e52e7accc18fa
 
 %global modname isort
 

@@ -79,7 +79,7 @@ BuildRequires:  mvn(org.xmlunit:xmlunit-matchers)
 %endif
 
 # XXX
-#BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %{bundled_slf4j_version}
+#BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:) = %%{bundled_slf4j_version}
 %if %{without bootstrap}
 BuildRequires:  mvn(org.slf4j:slf4j-simple::sources:)
 %endif

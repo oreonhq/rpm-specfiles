@@ -4,7 +4,7 @@
 
 #global gitrel     140
 #global gitcommit  4ca3a22b6b33ad8be4383063e76f79c4d346535d
-#global shortcommit %(c=%{gitcommit}; echo ${c:0:5})
+#global shortcommit %%(c=%%{gitcommit}; echo ${c:0:5})
 
 Name:           gstreamer1-plugins-ugly-free
 Version:        1.28.3
@@ -15,7 +15,7 @@ License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND CC0-1.0
 URL:            http://gstreamer.freedesktop.org/
 %if 0%{?gitrel}
 # git clone git://anongit.freedesktop.org/gstreamer/gst-plugins-ugly
-# cd gst-plugins-ugly; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
+# cd gst-plugins-ugly; git reset --hard %%{gitcommit}; ./autogen.sh; make; make distcheck
 Source0:        https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.28.3.tar.xz
 %else
 Source0:        https://gstreamer.freedesktop.org/src/gst-plugins-ugly/gst-plugins-ugly-1.28.3.tar.xz

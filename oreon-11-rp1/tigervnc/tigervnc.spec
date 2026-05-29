@@ -25,6 +25,7 @@ Source4:        HOWTO.md
 
 # Backwards compatibility
 Source5:        vncserver
+Source30:   xserver-sdk-abi-requires
 
 # Downstream patches
 Patch1:         tigervnc-vncsession-restore-script-systemd-service.patch

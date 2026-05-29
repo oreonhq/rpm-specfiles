@@ -14,6 +14,7 @@ URL:       http://www.x.org
 License:   MIT
 
 Source0:        https://www.x.org/pub/individual/driver/xf86-video-ati-22.0.0.tar.xz
+Source30:   xserver-sdk-abi-requires
 
 ExcludeArch: s390 s390x
 

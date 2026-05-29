@@ -1,4 +1,6 @@
-%global source0_hash b470e0095d45069a80cecf80bf9c5122642bc9c154f41aa76d3050e837d59a20
+%global source0_hash none
+
+%global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
 %global libauditver     4.0
 %global libsepolver     3.10-1
@@ -17,8 +19,8 @@ Release: 4%{?dist}
 License: GPL-2.0-or-later
 # https://github.com/SELinuxProject/selinux/wiki/Releases
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/selinux-3.10.tar.gz
-Source1:        https://github.com/SELinuxProject/selinux/releases/download/3.10/selinux-3.10.tar.gz.asc
-Source2: https://github.com/perfinion.gpg
+Source1:        selinux-3.10.tar.gz.asc
+Source2: perfinion.gpg
 Source3: changelog
 URL:     https://github.com/SELinuxProject/selinux
 Source13: system-config-selinux.png
@@ -155,7 +157,7 @@ install -m 755 -p %{SOURCE15} %{buildroot}/%{_libexecdir}/selinux/
 %find_lang selinux-gui
 %find_lang selinux-sandbox
 
-# Install changelog to %{_docdir}/%{name}
+# Install changelog to %%{_docdir}/%%{name}
 install -m 644 -p %{SOURCE3} %{buildroot}/%{_docdir}/%{name}
 
 %package python-utils

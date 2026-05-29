@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6e38f9023b9792f53ef982cce6be65d84fea656be87100ab2f2d0376563af486
 
 Name:           python-getmac
 Version:        0.8.3

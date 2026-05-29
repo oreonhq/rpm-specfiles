@@ -1,7 +1,7 @@
 %global source0_hash f5a9f47de28530b1ae2069cfbc647a9a641baeeabe809bb0ef2b3ec5b9668d70
 
 #%%global prever pre1
-#%%global ver %{version}-%{prever}
+#%%global ver %%{version}-%%{prever}
 
 # change with every change of major or minor version number
 #%%global majminver 5.3
@@ -242,7 +242,7 @@ rm -f %{name}.lang
 %find_lang %{name} --all-name
 cat %{name}-po.lang >>%{name}.lang
 
-#echo .so man8/cups-genppd.8 > %{buildroot}%{_mandir}/man8/cups-genppd.5.3.3
+#echo .so man8/cups-genppd.8 > %%{buildroot}%%{_mandir}/man8/cups-genppd.5.3.3
 
 # Fix up rpath.  If you can find a way to do this without resorting
 # to chrpath, please let me know!

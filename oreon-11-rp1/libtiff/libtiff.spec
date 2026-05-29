@@ -119,22 +119,22 @@ then
 
 #include <bits/wordsize.h>
 
-#if __WORDSIZE == 32
+# if __WORDSIZE == 32
 # include "tiffconf-32.h"
 #elif __WORDSIZE == 64
 # include "tiffconf-64.h"
 #else
 # error "unexpected value for __WORDSIZE macro"
-#endif
+# endif
 
-#endif
+# endif
 EOF
 
 fi
 
 %if 0%{?fedora} == 40
-# Copy old soname %{_libdir}/libtiff.so.5
-# Copy old soname %{_libdir}/libtiffxx.so.5
+# Copy old soname %%{_libdir}/libtiff.so.5
+# Copy old soname %%{_libdir}/libtiffxx.so.5
 cp %{_libdir}/libtiff.so.5* $RPM_BUILD_ROOT%{_libdir}
 cp %{_libdir}/libtiffxx.so.5* $RPM_BUILD_ROOT%{_libdir}
 %endif

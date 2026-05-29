@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b7812ed6d59f6b09ecceddaa0be842a7e82a79cc0e46ca60478a4ebf02f1e178
 
 %global debug_package %{nil}
 

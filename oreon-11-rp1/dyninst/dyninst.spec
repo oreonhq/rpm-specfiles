@@ -79,7 +79,7 @@ popd
 # cotire seems to cause non-deterministic gcc errors
 # https://bugzilla.redhat.com/show_bug.cgi?id=1420551
 # sed -i.cotire -e 's/USE_COTIRE true/USE_COTIRE false/' \
-#  %{dyninst_base}/cmake/shared.cmake
+#  %%{dyninst_base}/cmake/shared.cmake
 
 %build
 

@@ -1,4 +1,6 @@
-%global source0_hash 09fd9f44da4813a3141e73d5e7cf7008e5660d0405f13d56c15e1da9dcecf828
+%global source0_hash none
+
+%global source2_key_fpr 5D46CB0F763405A7053556F47A75A648B3F9220C
 
 # This spec file has been automatically updated
 %if 0%{?fedora}
@@ -16,8 +18,8 @@ Summary:        Library for loading and sharing PKCS#11 modules
 License:        BSD-3-Clause
 URL:            http://p11-glue.freedesktop.org/p11-kit.html
 Source0:        https://github.com/p11-glue/p11-kit/releases/download/0.26.2/p11-kit-0.26.2.tar.xz
-Source1:        https://github.com/p11-glue/p11-kit/releases/download/0.26.2/p11-kit-0.26.2.tar.xz.sig
-Source2:        https://p11-glue.github.io/p11-glue/p11-kit/p11-kit-release-keyring.gpg
+Source1:        p11-kit-0.26.2.tar.xz.sig
+Source2:        p11-kit-release-keyring.gpg
 Source3:        trust-extract-compat
 Source4:        p11-kit-client.service
 
@@ -139,7 +141,8 @@ way that they're discoverable.  This library is cross-compiled for MinGW.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 
 %autosetup -p1

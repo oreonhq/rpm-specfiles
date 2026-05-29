@@ -119,7 +119,7 @@ rm -f $RPM_BUILD_ROOT%{_libdir}/libunwind*.a
 mv -f $RPM_BUILD_ROOT%{_libdir}/libunwind-ptrace.a-save $RPM_BUILD_ROOT%{_libdir}/libunwind-ptrace.a
 
 # The tests want this one.
-# rm -f $RPM_BUILD_ROOT%{_libdir}/libunwind-ptrace*.so*
+# rm -f $RPM_BUILD_ROOT%%{_libdir}/libunwind-ptrace*.so*
 
 # fix multilib conflicts
 touch -r NEWS $RPM_BUILD_ROOT%{_includedir}/libunwind.h

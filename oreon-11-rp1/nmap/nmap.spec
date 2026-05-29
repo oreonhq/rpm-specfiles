@@ -1,5 +1,7 @@
 %global source0_hash none
 
+%global source2_key_fpr 436D66AB9A798425FDA0E3F801AF9F036B9355D0
+
 Name: nmap
 Epoch: 4
 Version: 7.92
@@ -12,8 +14,8 @@ URL: http://nmap.org/
 License: LicenseRef-Nmap
 
 Source0:        http://nmap.org/dist/nmap-7.92%{?prerelease}.tar.bz2
-Source1:        https://nmap.org/dist/sigs/nmap-7.92.tar.bz2.asc
-Source2: https://svn.nmap.org/nmap/docs/nmap_gpgkeys.txt
+Source1:        nmap-7.92.tar.bz2.asc
+Source2: nmap_gpgkeys.txt
 
 #prevent possible race condition for shtool, rhbz#158996
 Patch1: nmap-4.03-mktemp.patch
@@ -86,7 +88,7 @@ uses.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring=%{SOURCE2} --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 autoconf -f

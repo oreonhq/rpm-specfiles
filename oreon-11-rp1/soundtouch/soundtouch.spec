@@ -55,7 +55,7 @@ ln -s soundtouch.pc %{buildroot}%{_libdir}/pkgconfig/soundtouch-1.0.pc
 ## well conflict with other autoheader generated header files, so we override
 ## this with our own version which contains only the bare minimum:
 #echo '#define FLOAT_SAMPLES 1' \
-#  > %{buildroot}%{_includedir}/soundtouch/soundtouch_config.h
+#  > %%{buildroot}%%{_includedir}/soundtouch/soundtouch_config.h
 
 
 %files

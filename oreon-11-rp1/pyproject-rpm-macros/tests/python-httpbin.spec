@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 453cc4ce4686e4a54f5775877c7c1d841c5bc12a0da225e9f5655fb4846d0a49
 
 Name:           python-httpbin
 Version:        0.7.0

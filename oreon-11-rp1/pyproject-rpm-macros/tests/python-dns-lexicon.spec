@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 701c6984f9eda9538fe9a0f1914c41a09c942894cc96b7d6a77a4227af2fec0c
 
 Name:           python-dns-lexicon
 Version:        3.8.1

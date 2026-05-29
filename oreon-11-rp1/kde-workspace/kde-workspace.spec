@@ -4,9 +4,9 @@
 %global systemd_login1 1
 %endif
 
-#if 0%{?fedora} < 24
+# if 0%%{?fedora} < 24
 %global kdm 1
-#endif
+# endif
 
 %if 0%{?fedora} > 23 || 0%{?oreon}
 %global kdm_settings 1
@@ -114,7 +114,7 @@ Summary:  Development files for %{name}
 Obsoletes: kdebase-workspace-devel < 4.7.97-10
 Provides:  kdebase-workspace-devel = %{version}-%{release}
 Provides: solid-bluetooth-devel = %{version}-%{release}
-#Requires: ksysguard-libs%{?_isa} = %{epoch}:%{version}-%{release}
+#Requires: ksysguard-libs%%{?_isa} = %%{epoch}:%%{version}-%%{release}
 Requires: libkworkspace%{?_isa} = %{epoch}:%{version}-%{release}
 Requires: kdelibs4-devel
 %description devel
@@ -135,7 +135,7 @@ The Color Selection module is comprised of several sections:
 %package -n kde-platform-plugin
 Summary: KDE4 Platform plugin
 Requires: %{name}-common = %{epoch}:%{version}-%{release}
-#if 0%{?fedora} > 22
+# if 0%%{?fedora} > 22
 ## skip Supplements until dnf handling is better/fixed:
 ## https://bugzilla.redhat.com/show_bug.cgi?id=1325471
 %if 0
@@ -188,7 +188,7 @@ Requires: kdm = %{epoch}:%{version}-%{release}
 # http://bugzilla.redhat.com/784389
 Requires: kde-wallpapers
 # kdm already pulls in -common
-#Requires: %{name}-common = %{epoch}:%{version}-%{release}
+#Requires: %%{name}-common = %%{epoch}:%%{version}-%%{release}
 BuildArch: noarch
 %description -n kdm-themes
 A collection of extra kdm themes, including: circles, horos, oxygen, oxygen-air,

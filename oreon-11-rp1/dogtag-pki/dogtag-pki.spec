@@ -1903,7 +1903,7 @@ fi
 %{_datadir}/java/pki/pki-server.jar
 %{_datadir}/java/pki/pki-server-webapp.jar
 %{_datadir}/java/pki/pki-tomcat.jar
-#%{_datadir}/java/pki/pki-tomcat-9.0.jar
+#%%{_datadir}/java/pki/pki-tomcat-9.0.jar
 %{_datadir}/java/pki/pki-tomcat-10.1.jar
 %endif
 

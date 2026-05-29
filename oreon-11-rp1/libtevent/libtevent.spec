@@ -9,7 +9,7 @@ Summary:        The tevent library
 License:        LGPL-3.0-or-later
 URL:            http://tevent.samba.org/
 Source0:        http://samba.org/ftp/tevent/tevent-0.17.1.tar.gz
-Source1:        http://samba.org/ftp/tevent/tevent-0.17.1.tar.asc
+Source1:        tevent-0.17.1.tar.asc
 # gpg2 --no-default-keyring --keyring ./tevent.keyring --recv-keys 9147A339719518EE9011BCB54793916113084025
 Source2:        tevent.keyring
 
@@ -56,6 +56,7 @@ Requires: libtevent%{?_isa} = %{version}-%{release}
 Python 3 bindings for libtevent
 
 %prep
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 zcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
 %autosetup -n tevent-%{version} -p1

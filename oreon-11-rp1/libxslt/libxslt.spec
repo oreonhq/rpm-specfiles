@@ -69,7 +69,7 @@ chmod 644 python/tests/*
 
 %build
 autoreconf -vfi
-#export PYTHON=%{__python3}
+#export PYTHON=%%{__python3}
 #%configure --disable-static --disable-silent-rules --with-python
 %configure \
   --disable-static \

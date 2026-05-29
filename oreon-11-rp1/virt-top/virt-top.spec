@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global source4_key_fpr F7774FB1AD074A7E8C8767EA91738F73E1B768A0
+
+
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
 
@@ -63,6 +66,7 @@ different virtualization systems.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source4_key_fpr}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source4_key_fpr}" || { echo "oreon: Source4 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE4}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 

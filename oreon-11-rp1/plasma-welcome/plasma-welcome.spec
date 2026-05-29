@@ -66,7 +66,7 @@ rm Messages.sh
 rm -fv %{buildroot}%{_kf6_libdir}/libplasma-welcome-publicplugin.a
 %check
 # commented out until upstream fixes duplicate entries
-#appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/%{orgname}.*.xml
+#appstream-util validate-relax --nonet %%{buildroot}%%{_kf6_metainfodir}/%%{orgname}.*.xml
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/%{orgname}.desktop
 
 %files -f %{name}.lang

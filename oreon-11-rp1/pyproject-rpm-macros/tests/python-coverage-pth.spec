@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f8cfdc5f7f524267c5c8d5e92c39d72a3822875e6b0b53e7611af056e3ed9dbf
 
 Name:           python-coverage-pth
 Version:        0.0.2

@@ -139,8 +139,8 @@ find %{buildroot}/%{_bindir} -type f -name 'orcus-*' -print0 | xargs -0 chrpath 
 find %{buildroot}/%{_libdir} -type f -name '*.so.*' -print0 | xargs -0 chrpath --delete
 
 %check
-#export LD_LIBRARY_PATH=%{buildroot}%{_libdir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
-#make check %{?_smp_mflags}
+#export LD_LIBRARY_PATH=%%{buildroot}%%{_libdir}${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+#make check %%{?_smp_mflags}
 
 %ldconfig_scriptlets
 

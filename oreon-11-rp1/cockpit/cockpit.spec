@@ -16,7 +16,7 @@
 #
 
 # earliest base that the subpackages work on; this is still required as long as
-# we maintain the basic/optional split, then it can be replaced with just %{version}.
+# we maintain the basic/optional split, then it can be replaced with just %%{version}.
 %define required_base 266
 
 # we generally want CentOS packages to be like RHEL; special cases need to check the centos macro explicitly

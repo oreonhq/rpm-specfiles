@@ -100,9 +100,9 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.%{name}.d
 %{_kf6_metainfodir}/org.kde.%{name}.appdata.xml
 %{_kf6_datadir}/icons/hicolor/*/apps/%{name}.*
 %{_kf6_datadir}/%{name}/
-#{_kf6_datadir}/kconf_update/%{name}*
-#{_kf6_datadir}/kxmlgui5/%{name}/
-#{_kf6_datadir}/sounds/%{name}/
+#{_kf6_datadir}/kconf_update/%%{name}*
+#{_kf6_datadir}/kxmlgui5/%%{name}/
+#{_kf6_datadir}/sounds/%%{name}/
 %{_kf6_datadir}/config.kcfg/%{name}.kcfg
 %{_kf6_datadir}/qlogging-categories6/%{name}*
 %{_kf6_libdir}/libkcardgame.so

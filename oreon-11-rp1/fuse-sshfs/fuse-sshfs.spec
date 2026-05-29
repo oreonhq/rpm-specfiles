@@ -1,4 +1,6 @@
-%global source0_hash 0e45db63c2d00919db3174134fa234c6e0682d6fe573c46312d1d53d1d61a8bb
+%global source0_hash none
+
+%global source2_key_fpr 9C113099DF707BD240A192D4C6E054D074D5DD2B
 
 Name:           fuse-sshfs
 Version:        3.7.5
@@ -7,7 +9,7 @@ Summary:        FUSE-Filesystem to access remote filesystems via SSH
 License:        GPL-2.0-only
 URL:            https://github.com/libfuse/sshfs
 Source0:        https://github.com/libfuse/sshfs/releases/download/sshfs-3.7.5/sshfs-3.7.5.tar.xz
-Source1:        https://github.com/libfuse/sshfs/releases/download/sshfs-3.7.5/sshfs-3.7.5.tar.xz.asc
+Source1:        sshfs-3.7.5.tar.xz.asc
 # Find which key was used for signing the release:
 #
 # $ LANG=C gpg --verify sshfs-3.7.3.tar.xz.asc sshfs-3.7.3.tar.xz
@@ -49,7 +51,7 @@ mounting the filesystem is as easy as logging into the server with ssh.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -n sshfs-%{version}
 # fix tests

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d3f62a8bc39bf819036f22e07fa82b1a6f5647b2d0b96dadb521a84193cca027
 
 Name:             python-distroinfo
 Version:          0.3.2

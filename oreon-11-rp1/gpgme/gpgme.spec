@@ -189,7 +189,7 @@ gpgv2 --keyring ./gpg-keyring.gpg %{SOURCE1} %{SOURCE0}
 gpgv2 --keyring ./gpg-keyring.gpg %{SOURCE7} %{SOURCE4}
 gpgv2 --keyring ./gpg-keyring.gpg %{SOURCE8} %{SOURCE5}
 # pub key of gpgmepy signature not published yet
-# gpgv2 --keyring ./gpg-keyring.gpg %{SOURCE9} %{SOURCE6}
+# gpgv2 --keyring ./gpg-keyring.gpg %%{SOURCE9} %%{SOURCE6}
 
 # constant and predictable names for scripts and patches
 mkdir gpgmepp qgpgme gpgmepy
@@ -224,8 +224,8 @@ export CXXFLAGS="%{optflags} -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64 -I$(pwd)
 export CFLAGS="$(echo ${CFLAGS} | tr '\n\\' '  ')"
 export CXXFLAGS="$(echo ${CXXFLAGS} | tr '\n\\' '  ')"
 export SETUPTOOLS_USE_DISTUTILS=local
-#export PYTHON=%{python3}
-#export PYTHON_VERSION=%{python3_version}
+#export PYTHON=%%{python3}
+#export PYTHON_VERSION=%%{python3_version}
 
 GPGME_TOPDIR=$(pwd)
 mkdir build

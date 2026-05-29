@@ -64,7 +64,7 @@ iconv -f ISO88591 -t UTF8 NEWS -o NEWS.tmp
 touch -c -r NEWS NEWS.tmp
 mv NEWS.tmp NEWS
 # Remove files from $RPM_BUILD_ROOT that we aren't shipping.
-#rm $RPM_BUILD_ROOT%{_libdir}/lftp/%{version}/*.la
+#rm $RPM_BUILD_ROOT%%{_libdir}/lftp/%%{version}/*.la
 rm $RPM_BUILD_ROOT%{_libdir}/liblftp-jobs.la
 rm $RPM_BUILD_ROOT%{_libdir}/liblftp-tasks.la
 rm $RPM_BUILD_ROOT%{_libdir}/liblftp-jobs.so

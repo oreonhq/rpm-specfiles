@@ -53,7 +53,7 @@ Conflicts:      kde-workspace < 4.11.15-3
 %check
 desktop-file-validate %{buildroot}%{_datadir}/applications/org.kde.kmenuedit.desktop
 # commented out until upstream fixes a duplicate entries problem
-#appstream-util validate-relax --nonet %{buildroot}%{_metainfodir}/*.appdata.xml
+#appstream-util validate-relax --nonet %%{buildroot}%%{_metainfodir}/*.appdata.xml
 
 %files -f kmenuedit5.lang
 %license LICENSES/*

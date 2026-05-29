@@ -1660,7 +1660,7 @@ for i in `find %{gcc_target_platform}/[36]*/libstdc++-v3/include -name c++config
 #ifndef _CPP_CPPCONFIG_WRAPPER
 #define _CPP_CPPCONFIG_WRAPPER 1
 #include <bits/wordsize.h>
-#if __WORDSIZE == 32
+# if __WORDSIZE == 32
 %ifarch %{multilib_64_archs}
 `cat $(find %{gcc_target_platform}/32/libstdc++-v3/include -name c++config.h)`
 %else
@@ -1672,8 +1672,8 @@ for i in `find %{gcc_target_platform}/[36]*/libstdc++-v3/include -name c++config
 %else
 `cat $(find %{gcc_target_platform}/64/libstdc++-v3/include -name c++config.h)`
 %endif
-#endif
-#endif
+# endif
+# endif
 EOF
     break
   fi
@@ -1683,7 +1683,7 @@ for f in `find %{buildroot}%{_prefix}/include/c++/%{gcc_major}/%{gcc_target_plat
   for i in 1 2 4 8; do
     sed -i -e 's/#define _GLIBCXX_ATOMIC_BUILTINS_'$i' 1/#ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_'$i'\
 &\
-#endif/' $f
+# endif/' $f
   done
 done
 
@@ -2228,7 +2228,7 @@ done
 %if %{build_cobol}
 rm -f libgcobol.so
 echo 'INPUT ( %{_prefix}/lib64/'`echo ../../../../lib64/libgcobol.so.2.* | sed 's,^.*libg,libg,'`' )' > libgcobol.so
-#echo 'INPUT ( %{_prefix}/lib/'`echo ../../../../lib64/libgcobol.so.2.* | sed 's,^.*libg,libg,'`' )' > 32/libgcobol.so
+#echo 'INPUT ( %%{_prefix}/lib/'`echo ../../../../lib64/libgcobol.so.2.* | sed 's,^.*libg,libg,'`' )' > 32/libgcobol.so
 %endif
 %if %{build_algol68}
 rm -f libga68.so
@@ -2355,7 +2355,7 @@ for i in cor iso log min pim; do
 done
 %endif
 %if %{build_cobol}
-#ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libgcobol.a 32/libgcobol.a
+#ln -sf ../../../%%{multilib_32_arch}-%%{_vendor}-%%{_target_os}/%%{gcc_major}/libgcobol.a 32/libgcobol.a
 %endif
 %if %{build_algol68}
 ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/libga68.a 32/libga68.a
@@ -2383,7 +2383,7 @@ ln -sf ../../../%{multilib_32_arch}-%{_vendor}-%{_target_os}/%{gcc_major}/adalib
 
 # If we are building a debug package then copy all of the static archives
 # into the debug directory to keep them as unstripped copies.
-# if 0%{?_enable_debug_packages}
+# if 0%%{?_enable_debug_packages}
 %if 0
 for d in . $FULLLSUBDIR; do
   mkdir -p $RPM_BUILD_ROOT%{_prefix}/lib/debug%{_prefix}/lib/gcc/%{gcc_target_platform}/%{gcc_major}/$d

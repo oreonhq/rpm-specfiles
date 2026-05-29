@@ -1,4 +1,6 @@
-%global source0_hash 67b43aaaef5c951fa7af1a557cf7201a11fe89876b7c22ba0a03cbc316db5a9c
+%global source0_hash none
+
+%global source2_key_fpr 7F49314A26E0DE78427680E05F1B2A0789F12B11
 
 Name:           babeltrace
 Version:        1.5.11
@@ -7,7 +9,7 @@ Summary:        Trace Viewer and Converter, mainly for the Common Trace Format
 License:        MIT AND GPL-3.0-or-later WITH Bison-exception-2.2 AND LGPL-2.1-only AND BSD-4-Clause-UC
 URL:            https://www.efficios.com/babeltrace
 Source0:        https://www.efficios.com/files/babeltrace/babeltrace-1.5.11.tar.bz2
-Source1:        https://www.efficios.com/files/babeltrace/babeltrace-1.5.11.tar.bz2.asc
+Source1:        babeltrace-1.5.11.tar.bz2.asc
 # gpg2 --export --export-options export-minimal 7F49314A26E0DE78427680E05F1B2A0789F12B11 > gpgkey-7F49314A26E0DE78427680E05F1B2A0789F12B11.gpg
 Source2:        gpgkey-7F49314A26E0DE78427680E05F1B2A0789F12B11.gpg
 Patch0:         babeltrace-getaddrinfo.patch
@@ -66,7 +68,7 @@ to/from another trace format.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

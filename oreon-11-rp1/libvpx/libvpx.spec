@@ -117,7 +117,7 @@ rm -rf tmp
 # mv libvpx_g.a libNOTvpx_g.a
 
 # We need to do this so the examples can link against it.
-# ln -sf libvpx.so.%{soversion} libvpx.so
+# ln -sf libvpx.so.%%{soversion} libvpx.so
 
 # %make_build verbose=true target=examples CONFIG_SHARED=1
 # %make_build verbose=true target=docs

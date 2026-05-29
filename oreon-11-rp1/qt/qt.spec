@@ -301,7 +301,7 @@ Source31: https://pkgs.fedoraproject.org/repo/pkgs/qt4/hi48-app-qt4-logo.png/6dc
 %endif
 
 # workaround FTBFS with gcc9
-#if 0%{?fedora} > 29
+# if 0%%{?fedora} > 29
 %if 0
 %global no_javascript_jit -no-javascript-jit
 %endif
@@ -316,7 +316,7 @@ Source1: macros.qt4
 %define _qt4_prefix %{_libdir}/qt4
 %define _qt4_bindir %{_qt4_prefix}/bin
 # _qt4_datadir is not multilib clean, and hacks to workaround that breaks stuff.
-#define _qt4_datadir %{_datadir}/qt4
+#define _qt4_datadir %%{_datadir}/qt4
 %define _qt4_datadir %{_qt4_prefix}
 %define _qt4_demosdir %{_qt4_prefix}/demos
 %define _qt4_docdir %{_docdir}/qt4
@@ -457,7 +457,7 @@ Provides: bundled(clucene09)
 Summary: Graphical configuration tool for programs using Qt 4 
 # -config introduced in 4.7.1-10 , for upgrade path
 # seems to tickle a pk bug, https://bugzilla.redhat.com/674326
-#Obsoletes: %{name}-x11 < 1:4.7.1-10
+#Obsoletes: %%{name}-x11 < 1:4.7.1-10
 Obsoletes: qt4-config < 4.5.0
 Provides:  qt4-config = %{version}-%{release}
 Requires: %{name}-x11%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
@@ -611,7 +611,7 @@ Provides:  qt4-x11 = %{version}-%{release}
 %{?_isa:Provides: qt4-x11%{?_isa} = %{version}-%{release}}
 %if 0%{?fedora} || 0%{?rhel} > 7
 ## add kde-workspace too? -- rex
-#Requires: (sni-qt%{?_isa} if plasma-workspace)
+#Requires: (sni-qt%%{?_isa} if plasma-workspace)
 ## yum-based tools still cannot handle rich deps ^^, so settle for Recommends until fixed
 Recommends: sni-qt%{?_isa}
 %endif
@@ -917,13 +917,13 @@ for dep in \
   -ljpeg -lm -lmng -lpng -lpulse -lpulse-mainloop-glib ${ssl_libs} -lsqlite3 -lz \
   -L/usr/X11R6/lib -L/usr/X11R6/%{_lib} -L%{_libdir} ; do
   sed -i -e "s|$dep ||g" %{buildroot}%{_qt4_libdir}/lib*.la 
-#  sed -i -e "s|$dep ||g" %{buildroot}%{_qt4_libdir}/pkgconfig/*.pc
+#  sed -i -e "s|$dep ||g" %%{buildroot}%%{_qt4_libdir}/pkgconfig/*.pc
   sed -i -e "s|$dep ||g" %{buildroot}%{_qt4_libdir}/*.prl
 done
 # riskier
 for dep in -ldl -lphonon -lpthread -lICE -lSM -lX11 -lXcursor -lXext -lXfixes -lXft -lXinerama -lXi -lXrandr -lXrender -lXt ; do
   sed -i -e "s|$dep ||g" %{buildroot}%{_qt4_libdir}/lib*.la 
-#  sed -i -e "s|$dep ||g" %{buildroot}%{_qt4_libdir}/pkgconfig/*.pc 
+#  sed -i -e "s|$dep ||g" %%{buildroot}%%{_qt4_libdir}/pkgconfig/*.pc 
   sed -i -e "s|$dep ||g" %{buildroot}%{_qt4_libdir}/*.prl
 done
 
@@ -935,19 +935,19 @@ sed -i -e "s|-L%{_builddir}/qt-everywhere-opensource-src-%{version}%{?beta:-%{be
 
 # nuke QMAKE_PRL_LIBS, seems similar to static linking and .la files (#520323)
 # don't nuke, just drop -lphonon (above)
-#sed -i -e "s|^QMAKE_PRL_LIBS|#QMAKE_PRL_LIBS|" %{buildroot}%{_qt4_libdir}/*.prl
+#sed -i -e "s|^QMAKE_PRL_LIBS|#QMAKE_PRL_LIBS|" %%{buildroot}%%{_qt4_libdir}/*.prl
 
 # .la files, die, die, die.
 rm -f %{buildroot}%{_qt4_libdir}/lib*.la
 
 %if 0
-#if "%{_qt4_docdir}" != "%{_qt4_prefix}/doc"
+# if "%%{_qt4_docdir}" != "%%{_qt4_prefix}/doc"
 # -doc make symbolic link to _qt4_docdir
 rm -rf %{buildroot}%{_qt4_prefix}/doc
 ln -s  ../../share/doc/qt4 %{buildroot}%{_qt4_prefix}/doc
 %endif
 
-# hardlink files to %{_bindir}, add -qt4 postfix to not conflict
+# hardlink files to %%{_bindir}, add -qt4 postfix to not conflict
 mkdir %{buildroot}%{_bindir}
 pushd %{buildroot}%{_qt4_bindir}
 for i in * ; do
@@ -1080,7 +1080,7 @@ rm -fv  %{buildroot}%{_includedir}/phonon/phononnamespace.h
 # contents dup'd but should remove just in case
 rm -fv  %{buildroot}%{_includedir}/phonon/*.h
 rm -rfv %{buildroot}%{_qt4_headerdir}/phonon*
-#rm -rfv %{buildroot}%{_qt4_headerdir}/Qt/phonon*
+#rm -rfv %%{buildroot}%%{_qt4_headerdir}/Qt/phonon*
 rm -fv %{buildroot}%{_datadir}/dbus-1/interfaces/org.kde.Phonon.AudioOutput.xml
 rm -fv %{buildroot}%{_qt4_plugindir}/designer/libphononwidgets.so
 # backend

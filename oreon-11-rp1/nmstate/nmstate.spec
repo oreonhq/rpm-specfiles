@@ -1,5 +1,6 @@
-%global source0_hash 7bbc0543349b7feec33b30476901ae90b192a1a361ff6fc2f66e22bf2dc082ec
-%global source3_hash b2d38735eccf2cf8d2aedfdfdc79a1a9633149a49f3a1fe1615181dbe97c3dbe
+%global source0_hash none
+
+%global source2_key_fpr 48FD6FAE515A77B48436821C8789567B8715CEBC
 
 %define srcname nmstate
 %define libname libnmstate
@@ -11,8 +12,8 @@ Summary:        Declarative network manager API
 License:        Apache-2.0 AND LGPL-2.1-or-later
 URL:            https://github.com/%{srcname}/%{srcname}
 Source0:        https://github.com/nmstate/nmstate/releases/download/v2.2.57/nmstate-2.2.57.tar.gz
-Source1:        https://github.com/nmstate/nmstate/releases/download/v2.2.57/nmstate-2.2.57.tar.gz.asc
-Source2:        https://nmstate.io/nmstate.gpg
+Source1:        nmstate-2.2.57.tar.gz.asc
+Source2:        nmstate.gpg
 Source3:        https://github.com/nmstate/nmstate/releases/download/v2.2.57/nmstate-vendor-2.2.57.tar.xz
 # Force nmstate-libs upgrade along with nmstate rpm when installed
 # https://issues.redhat.com/browse/RHEL-52890
@@ -166,8 +167,8 @@ which use "%{name}" crate with gen_revert feature.
 %endif
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 gpg2 --import --import-options import-export,import-minimal \
     %{SOURCE2} > ./gpgkey-mantainers.gpg
 gpgv2 --keyring ./gpgkey-mantainers.gpg %{SOURCE1} %{SOURCE0}

@@ -174,7 +174,7 @@ cd tests
 [ $? -eq 0 ] || exit 1
 
 # misc tests
-#./run-misc-tests.sh %{buildroot}%{_bindir} %{version}
+#./run-misc-tests.sh %%{buildroot}%%{_bindir} %%{version}
 
 %pre
 if [ -e %{_bindir}/acpixtract-acpica ]

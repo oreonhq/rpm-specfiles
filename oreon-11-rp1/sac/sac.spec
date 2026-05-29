@@ -5,7 +5,7 @@ Version: 1.3
 Release: 51%{?dist}
 Summary: Java standard interface for CSS parser
 License: W3C
-#Original source: http://www.w3.org/2002/06/%{name}java-%{version}.zip
+#Original source: http://www.w3.org/2002/06/%%{name}java-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
 Source0: %{name}java-%{version}-jarsdeleted.zip

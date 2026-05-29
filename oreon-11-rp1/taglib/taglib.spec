@@ -147,8 +147,8 @@ export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig
 test "$(pkg-config --modversion taglib)" = "%{version}"
 test "$(pkg-config --modversion taglib_c)" = "%{version}"
 %if %{with tests}
-#ln -s ../../tests/data %{_target_platform}/tests/
-#LD_LIBRARY_PATH=%{buildroot}%{_libdir}:$LD_LIBRARY_PATH \
+#ln -s ../../tests/data %%{_target_platform}/tests/
+#LD_LIBRARY_PATH=%%{buildroot}%%{_libdir}:$LD_LIBRARY_PATH \
 %ctest
 %endif
 

@@ -1,6 +1,6 @@
-%global source0_hash 778694ef49ae25492c929e158eeccbc50e6ef37312db2c02fb494e2348029aaa
-%global source1_hash 3f687227fc9c9f2c342b12fa2c03cd60b6172dda3c6a13884b6b443398939a05
-%global source20_hash e10382ab75518bad8319eb922ad04f907cb20cccb451a3aa980c9d005e661acc
+%global source0_hash none
+
+%global source2_key_fpr E853C1848B0185CF42864DF363A8AD4B982C4373
 
 %global selinuxtype targeted
 %global moduletype distributed
@@ -14,10 +14,10 @@ License: GPL-3.0-or-later
 URL: https://github.com/linux-application-whitelisting/fapolicyd
 Source0:        https://github.com/linux-application-whitelisting/fapolicyd/releases/download/v1.4.3/fapolicyd-1.4.3.tar.gz
 Source1:        https://github.com/linux-application-whitelisting/fapolicyd-selinux/releases/download/v1.1/fapolicyd-selinux-1.1.tar.gz
-Source2: https://github.com/bachradsusi.gpg
+Source2: bachradsusi.gpg
 Source3: fapolicyd.sysusers
-Source10:        https://github.com/linux-application-whitelisting/fapolicyd/releases/download/v1.4.3/fapolicyd-1.4.3.tar.gz.asc
-Source11:        https://github.com/linux-application-whitelisting/fapolicyd-selinux/releases/download/v1.1/fapolicyd-selinux-1.1.tar.gz.asc
+Source10:        fapolicyd-1.4.3.tar.gz.asc
+Source11:        fapolicyd-selinux-1.1.tar.gz.asc
 # we bundle uthash for eln
 Source20: https://github.com/troydhanson/uthash/archive/refs/tags/v2.3.0.tar.gz#/uthash-2.3.0.tar.gz
 
@@ -71,9 +71,7 @@ BuildArch: noarch
 The %{name}-selinux package contains selinux policy for the %{name} daemon.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
-%(test "%{source20_hash}" = "none" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source20_hash}" || { echo "oreon: Source20 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE10}' --data='%{SOURCE0}'
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE11}' --data='%{SOURCE1}'
 

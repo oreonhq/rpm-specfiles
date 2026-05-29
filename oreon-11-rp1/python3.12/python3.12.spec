@@ -1,4 +1,6 @@
-%global source0_hash c08bc65a81971c1dd5783182826503369466c7e67374d1646519adf05207b684
+%global source0_hash none
+
+%global source2_key_fpr 7169605F62C751356D054A26A821E680E5FA6305
 
 # ==================
 # Top-level metadata
@@ -329,9 +331,9 @@ BuildRequires: python3-rpm-generators
 # =======================
 
 Source0:        https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tar.xz
-Source1:        https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tar.xz.asc
+Source1:        Python-3.12.13.tar.xz.asc
 # The release manager for Python 3.12 is Thomas Wouters
-Source2: https://github.com/Yhg1s.gpg
+Source2: Yhg1s.gpg
 
 # A simple script to check timestamps of bytecode files
 # Run in check section with Python that is currently being built
@@ -761,7 +763,8 @@ The debug runtime additionally supports debug builds of C-API extensions
 # ======================================================
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %gpgverify -k2 -s1 -d0
 %autosetup -S git_am -n Python-%{upstream_version}
 
@@ -1004,13 +1007,13 @@ InstallPython() {
   cat > %{buildroot}%{_includedir}/python${LDVersion}/pyconfig.h << EOF
 #include <bits/wordsize.h>
 
-#if __WORDSIZE == 32
-#include "%{_pyconfig32_h}"
+# if __WORDSIZE == 32
+#include "%%{_pyconfig32_h}"
 #elif __WORDSIZE == 64
-#include "%{_pyconfig64_h}"
+#include "%%{_pyconfig64_h}"
 #else
 #error "Unknown word size"
-#endif
+# endif
 EOF
 
   echo FINISHED: INSTALL OF PYTHON FOR CONFIGURATION: $ConfName

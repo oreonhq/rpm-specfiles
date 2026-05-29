@@ -192,8 +192,8 @@ EOF
 
 # Clean out files that should not be part of the rpm.
 find $RPM_BUILD_ROOT -name '*.la' -exec rm -fv {} ';'
-#rm -f $RPM_BUILD_ROOT%{_bindir}/gst-visualise*
-#rm -f $RPM_BUILD_ROOT%{_mandir}/man1/gst-visualise*
+#rm -f $RPM_BUILD_ROOT%%{_bindir}/gst-visualise*
+#rm -f $RPM_BUILD_ROOT%%{_mandir}/man1/gst-visualise*
 
 # Using a more robus approach above, avoids manual error-prone lists like below --rex
 %if 0

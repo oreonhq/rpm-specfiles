@@ -65,7 +65,7 @@ echo %{version}-%{release} > VERSION
 %generate_buildrequires
 
 %build
-#make %{?_smp_mflags} V=
+#make %%{?_smp_mflags} V=
 %cargo_build
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies

@@ -286,7 +286,7 @@ pushd openldap-ppolicy-check-password-%{check_password_version}
 mv check_password.so check_password.so.%{check_password_version}
 ln -s check_password.so.%{check_password_version} %{buildroot}%{_libdir}/openldap/check_password.so
 install -m 755 check_password.so.%{check_password_version} %{buildroot}%{_libdir}/openldap/
-# install -m 644 README %{buildroot}%{_libdir}/openldap
+# install -m 644 README %%{buildroot}%%{_libdir}/openldap
 install -d -m 755 %{buildroot}%{_sysconfdir}/openldap
 cat > %{buildroot}%{_sysconfdir}/openldap/check_password.conf <<EOF
 # OpenLDAP pwdChecker library configuration

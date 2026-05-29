@@ -9,8 +9,8 @@ License:        HPND AND MIT
 URL:            https://www.x.org/
 
 # git snapshot.  To recreate, run
-# % ./make-libpciaccess-snapshot.sh %{gitrev}
-#Source0:        libpciaccess-%{gitdate}.tar.bz2
+# % ./make-libpciaccess-snapshot.sh %%{gitrev}
+#Source0:        libpciaccess-%%{gitdate}.tar.bz2
 Source0:        https://www.x.org/archive/individual/lib/libpciaccess-0.16.tar.bz2
 Source1:        make-libpciaccess-snapshot.sh
 

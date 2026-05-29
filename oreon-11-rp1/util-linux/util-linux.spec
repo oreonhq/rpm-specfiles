@@ -456,8 +456,8 @@ rm -f %{buildroot}/sbin/sfdisk \
 
 # we install getopt-*.{bash,tcsh} by doc directive
 #chmod 644 misc-utils/getopt-*.{bash,tcsh}
-#rm -f %{buildroot}%{_datadir}/doc/util-linux/getopt/*
-#rmdir %{buildroot}%{_datadir}/doc/util-linux/getopt
+#rm -f %%{buildroot}%%{_datadir}/doc/util-linux/getopt/*
+#rmdir %%{buildroot}%%{_datadir}/doc/util-linux/getopt
 
 ln -sf ../proc/self/mounts %{buildroot}/etc/mtab
 

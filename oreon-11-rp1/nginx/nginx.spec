@@ -1,4 +1,9 @@
-%global source0_hash 20e5e0f2c917acfb51120eec2fba9a4ba4e1e10fd28465067cc87a7d81a829a3
+%global source0_hash none
+
+%global source3_key_fpr 43387825DDB1BB97EC36BA5D007C8D7C15D87369
+%global source4_key_fpr D6786CE303D9A9022998DC6CC8464D549AF75C0A
+%global source5_key_fpr 7338973069ED3F443F4D37DFA64FD5B17ADB39A8
+%global source6_key_fpr 13C82A63B603576156E30A4EA0EA981B66B0D967
 
 %global  _hardened_build     1
 %global  nginx_user          nginx
@@ -66,12 +71,12 @@ License:           BSD-2-Clause
 URL:               https://nginx.org
 
 Source0:        https://nginx.org/download/nginx-1.28.2.tar.gz
-Source1:        https://nginx.org/download/nginx-1.28.2.tar.gz.asc
+Source1:        nginx-1.28.2.tar.gz.asc
 # Keys are found here: https://nginx.org/en/pgp_keys.html
-Source3:           https://nginx.org/keys/arut.key
-Source4:           https://nginx.org/keys/pluknet.key
-Source5:           https://nginx.org/keys/sb.key
-Source6:           https://nginx.org/keys/thresh.key
+Source3:           arut.key
+Source4:           pluknet.key
+Source5:           sb.key
+Source6:           thresh.key
 Source10:          nginx.service
 Source11:          nginx.logrotate
 Source12:          nginx.conf
@@ -258,7 +263,10 @@ Requires:          zlib-devel
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source3_key_fpr}" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source3_key_fpr}" || { echo "oreon: Source3 key fingerprint mismatch" >&2; exit 1; }; })
+%(test -z "%{source4_key_fpr}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source4_key_fpr}" || { echo "oreon: Source4 key fingerprint mismatch" >&2; exit 1; }; })
+%(test -z "%{source5_key_fpr}" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source5_key_fpr}" || { echo "oreon: Source5 key fingerprint mismatch" >&2; exit 1; }; })
+%(test -z "%{source6_key_fpr}" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source6_key_fpr}" || { echo "oreon: Source6 key fingerprint mismatch" >&2; exit 1; }; })
 # Combine all keys from upstream into one file
 cat %{S:3} %{S:4} %{S:5} %{S:6} > %{_builddir}/%{name}.gpg
 %{gpgverify} --keyring='%{_builddir}/%{name}.gpg' --signature='%{SOURCE1}' --data='%{SOURCE0}'

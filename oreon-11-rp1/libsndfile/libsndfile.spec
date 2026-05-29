@@ -109,13 +109,13 @@ mv %{buildroot}%{_includedir}/sndfile.h \
 cat > %{buildroot}%{_includedir}/sndfile.h <<EOF
 #include <bits/wordsize.h>
 
-#if __WORDSIZE == 32
+# if __WORDSIZE == 32
 # include "sndfile-32.h"
 #elif __WORDSIZE == 64
 # include "sndfile-64.h"
 #else
 # error "unexpected value for __WORDSIZE macro"
-#endif
+# endif
 EOF
 
 %if 0%{?rhel} != 0

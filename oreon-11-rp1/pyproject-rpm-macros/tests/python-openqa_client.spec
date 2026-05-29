@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 421c798de61e63eeed0372196f613e8028f3396fc57578d7bfeb80c267726eaa
 
 %global pypi_name openqa_client
 Name:           python-%{pypi_name}

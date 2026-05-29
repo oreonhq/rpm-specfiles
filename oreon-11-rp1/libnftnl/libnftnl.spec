@@ -1,4 +1,6 @@
-%global source0_hash 607da28dba66fbdeccf8ef1395dded9077e8d19f2995f9a4d45a9c2f0bcffba8
+%global source0_hash none
+
+%global source2_key_fpr 8C5F7146A1757A65E2422A94D70D1A666ACF2B21
 
 Name:           libnftnl
 Version:        1.3.1
@@ -8,7 +10,7 @@ Summary:        Library for low-level interaction with nftables Netlink's API ov
 License:        GPL-2.0-or-later
 URL:            https://netfilter.org/projects/libnftnl/
 Source0:        https://netfilter.org/projects/libnftnl//files/libnftnl-1.3.1.tar.xz
-Source1:        https://netfilter.org/projects/libnftnl//files/libnftnl-1.3.1.tar.xz.sig
+Source1:        libnftnl-1.3.1.tar.xz.sig
 Source2:        coreteam-gpg-key-0xD70D1A666ACF2B21.txt
 
 BuildRequires:  libmnl-devel
@@ -28,7 +30,7 @@ The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

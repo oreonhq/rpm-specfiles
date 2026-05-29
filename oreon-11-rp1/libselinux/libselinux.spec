@@ -1,4 +1,6 @@
-%global source0_hash 1ef216c5b56fb7e0a51cd2909787a175a17ee391e0467894807873539ebe766b
+%global source0_hash none
+
+%global source2_key_fpr 63191CE94183098689CAB8DB7EF137EC935B0EAF
 
 %define ruby_inc %(pkg-config --cflags ruby)
 %define libsepolver 3.10-1
@@ -10,8 +12,8 @@ Release: 1%{?dist}
 License: LicenseRef-Fedora-Public-Domain
 # https://github.com/SELinuxProject/selinux/wiki/Releases
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/libselinux-3.10.tar.gz
-Source1:        https://github.com/SELinuxProject/selinux/releases/download/3.10/libselinux-3.10.tar.gz.asc
-Source2: https://github.com/perfinion.gpg
+Source1:        libselinux-3.10.tar.gz.asc
+Source2: perfinion.gpg
 Source3: selinuxconlist.8
 Source4: selinuxdefcon.8
 
@@ -94,7 +96,7 @@ The libselinux-static package contains the static libraries
 needed for developing SELinux applications. 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p 2 -n libselinux-%{version}
 

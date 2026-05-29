@@ -82,7 +82,7 @@ Summary:        Runtime libraries for %{name}
 %install
 DESTDIR="%{buildroot}" %{__cmake} --install "%{__cmake_builddir}" --verbose
 # baloodb not installed unless BUILD_EXPERIMENTAL is enabled, so omit translations
-#rm -fv %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/baloodb5.*
+#rm -fv %%{buildroot}%%{_datadir}/locale/*/LC_MESSAGES/baloodb5.*
 
 %find_lang baloodb6
 %find_lang baloo_file6

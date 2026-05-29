@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 01a7b881bd220bfdf615f97b8718f80bdfd3f6add385b993dcf6efd14e8c0ac6
 
 Summary: GNU data compression program
 Name: gzip

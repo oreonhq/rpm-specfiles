@@ -65,7 +65,7 @@ Release: 2%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
 %global  majmin %(echo %{version} | cut -d. -f1-2)
-Source0:        https://download.qt.io/official_releases/qt/%{qt5_version}/submodules/qtbase-everywhere-opensource-src-%{qt5_version}.tar.xz
+Source0:        https://download.qt.io/official_releases/qt/%{version}/submodules/qtbase-everywhere-opensource-src-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1227295
 Source1: qtlogging.ini
 
@@ -750,11 +750,11 @@ privat_header_file=%{buildroot}%{_qt5_headerdir}/QtCore/%{version}/QtCore/privat
 grep -v QT_FEATURE_sse2 $privat_header_file > ${privat_header_file}.me
 mv ${privat_header_file}.me ${privat_header_file}
 cat >>${privat_header_file}<<EOF
-#if defined(__x86_64__)
+# if defined(__x86_64__)
 #define QT_FEATURE_sse2 1
 #elif defined(__i386__)
 #define QT_FEATURE_sse2 -1
-#endif
+# endif
 EOF
 %endif
 

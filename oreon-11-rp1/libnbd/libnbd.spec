@@ -1,4 +1,6 @@
-%global source0_hash 0f3f802fc196c065b2e2af9aded196e73084cfd72695f5ea3264d7a7af604db6
+%global source0_hash none
+
+%global source2_key_fpr F7774FB1AD074A7E8C8767EA91738F73E1B768A0
 
 # i686 no longer has any kind of OCaml compiler, not even ocamlc.
 %ifnarch %{ix86}
@@ -30,7 +32,7 @@ License:        LGPL-2.0-or-later AND BSD-3-Clause
 URL:            https://gitlab.com/nbdkit/libnbd
 
 Source0:        http://libguestfs.org/download/libnbd/1.25-development/libnbd-1.25.4.tar.gz
-Source1:        http://libguestfs.org/download/libnbd/1.25-development/libnbd-1.25.4.tar.gz.sig
+Source1:        libnbd-1.25.4.tar.gz.sig
 # Keyring used to verify tarball signature.  This contains the single
 # key from here:
 # https://pgp.key-server.io/pks/lookup?search=rjones%40redhat.com&fingerprint=on&op=vindex
@@ -215,7 +217,7 @@ for %{name}.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %if 0%{verify_tarball_signature}
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

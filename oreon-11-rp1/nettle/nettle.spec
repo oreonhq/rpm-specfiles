@@ -1,5 +1,6 @@
-%global source0_hash b0fcdd7fc0cdea6e80dcf1dd85ba794af0d5b4a57e26397eee3bc193272d9132
-%global source200_hash fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
+%global source0_hash none
+
+%global source2_key_fpr 343C2FF0FBEE5EC2EDBEF399F3599FF828C67298
 
 # Recent so-version, so we do not bump accidentally.
 %global nettle_so_ver 8
@@ -33,9 +34,9 @@ Summary:        A low-level cryptographic library
 License:        LGPL-3.0-or-later OR GPL-2.0-or-later
 URL:            http://www.lysator.liu.se/~nisse/nettle/
 Source0:        https://ftpmirror.gnu.org/nettle/nettle-3.10.1.tar.gz
-Source1:        https://ftpmirror.gnu.org/nettle/nettle-3.10.1.tar.gz.sig
+Source1:        nettle-3.10.1.tar.gz.sig
 # Same keyring blob and SHA512 as Fedora nettle sources (not shipped on ftp.gnu.org).
-Source2:	https://src.fedoraproject.org/repo/pkgs/rpms/nettle/nettle-release-keyring.gpg/sha512/0e59447eb74017439c8b5b5b05173c0ffd710705d2a9c1f74833b7034fad1608fa1bdd2c308e6c42214553cd648606b6a07044ea39677b1b3452cb4d07bf889b/nettle-release-keyring.gpg
+Source2:	nettle-release-keyring.gpg
 %if 0%{?bootstrap}
 Source100:	%{name}-%{version_old}-hobbled.tar.xz
 Source101:	nettle-3.5-remove-ecc-testsuite.patch
@@ -83,8 +84,7 @@ applications with nettle.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source200_hash}" = "none" || { f="%{SOURCE200}"; test -f "$f" || { echo "oreon: missing Source200 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source200_hash}" || { echo "oreon: Source200 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %autosetup -Tb 0 -p1
 
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'

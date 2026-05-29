@@ -1,4 +1,4 @@
-%global source0_hash 494144427ba5dc235e69a2be02576591a8d9f84a7f62cdddf905ad88d2f089e8
+%global source0_hash de512ba0e1dead382bbfce372cde74b3f18971d876fffb635ee9333f0db05d43
 
 %global fontname fontawesome4
 %global fontconf 60-fontawesome.conf
@@ -12,7 +12,7 @@ Release:	26%{?dist}
 Summary:	Iconic font set
 License:	OFL-1.1-RFN
 URL:		http://fontawesome.io
-Source0:        http://fontawesome.io/assets/font-awesome-4.7.0.zip
+Source0:        https://github.com/FortAwesome/Font-Awesome/archive/refs/tags/v4.7.0.tar.gz#/font-awesome-4.7.0.zip
 Source1:	%{name}-fontconfig.conf
 Source2:	README-Trademarks.txt
 BuildArch:	noarch

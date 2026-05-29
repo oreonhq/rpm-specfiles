@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ddf2ea0d4439e1d57136be3623102af9458f601f5b1cb77e83246e88aea09d0e
 
 Name:		rteval-loads
 Version:	6.17.7

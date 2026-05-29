@@ -145,7 +145,7 @@ exec /usr/bin/ld "$@"
 LDWRAPPER
 chmod +x %{_builddir}/bin/ld
 
-# %{?_smp_mflags} does not work
+# %%{?_smp_mflags} does not work
 CFLAGS+="%{optflags}" make V=1 WERROR=0 LD=%{_builddir}/bin/ld PREFIX=%{_prefix} RUNDIR=/run/criu PYTHON=%{py_binary} PLUGINDIR=%{_libdir}/criu NETWORK_LOCK_DEFAULT=NETWORK_LOCK_NFTABLES
 make V=1 WERROR=0 PREFIX=%{_prefix} PLUGINDIR=%{_libdir}/criu amdgpu_plugin
 make docs V=1

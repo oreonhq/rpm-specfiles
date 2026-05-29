@@ -1523,7 +1523,7 @@ mv %{glibc_sysroot}/usr/sbin/{iconvconfig,zic} %{glibc_sysroot}/%{_bindir}/
 #	ln -s SUBDIR_UP/foo.so DESTDIR/SUBDIR/foo.so.
 #	When you call this function it is expected that you are in the root
 #	of the build directory, and that the default build directory is:
-#	"../build-%{target}" (relatively).
+#	"../build-%%{target}" (relatively).
 #	The primary use of this function is to install alternate runtimes
 #	into the build directory and avoid duplicating this code for each
 #	runtime.
@@ -1714,7 +1714,7 @@ chmod 644 %{glibc_sysroot}/etc/ld.so.conf
 mkdir -p %{glibc_sysroot}/etc/ld.so.conf.d
 truncate -s 0 %{glibc_sysroot}/etc/gai.conf
 
-# Include %{_libdir}/gconv/gconv-modules.cache
+# Include %%{_libdir}/gconv/gconv-modules.cache
 truncate -s 0 %{glibc_sysroot}%{_libdir}/gconv/gconv-modules.cache
 chmod 644 %{glibc_sysroot}%{_libdir}/gconv/gconv-modules.cache
 

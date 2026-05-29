@@ -1,4 +1,6 @@
-%global source0_hash 5977fc950f8d1395ccea9bd48c06b3f808fd3c2c961b44b0c2e6e29fc3a70a85
+%global source0_hash none
+
+%global source2_key_fpr C68187379B23DE9EFC46651E2C80FF56C6830A0E
 
 %bcond mingw %[0%{?fedora} && !0%{?flatpak}]
 
@@ -7,8 +9,8 @@ Name:           libusb1
 Version:        1.0.29
 Release:        %autorelease
 Source0:        https://github.com/libusb/libusb/releases/download/v1.0.29/libusb-1.0.29.tar.bz2
-Source1:        https://github.com/libusb/libusb/releases/download/v1.0.29/libusb-1.0.29.tar.bz2.asc
-Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xc68187379b23de9efc46651e2c80ff56c6830a0e#/libusb1.keyring
+Source1:        libusb-1.0.29.tar.bz2.asc
+Source2:        libusb1.keyring
 License:        LGPL-2.1-or-later
 URL:            http://libusb.info
 BuildRequires:  systemd-devel doxygen libtool
@@ -91,7 +93,7 @@ MinGW Windows %{name} library.
 %endif
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -n libusb-%{version}
 chmod -x examples/*.c

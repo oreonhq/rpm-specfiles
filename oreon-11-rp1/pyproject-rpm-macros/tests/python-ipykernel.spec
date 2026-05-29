@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d7678cf4e0a9bea0a55a03709fee64c0d7c64e3691c6c7bad215a77952ac4903
 
 Name:           python-ipykernel
 Version:        6.11.0

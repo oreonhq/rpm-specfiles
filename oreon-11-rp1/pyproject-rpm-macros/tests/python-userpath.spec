@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 04233d2fcfe5cff911c1e4fb7189755640e1524ff87a4b82ab9d6b875fee5787
 
 Name:           python-userpath
 Version:        1.8.0

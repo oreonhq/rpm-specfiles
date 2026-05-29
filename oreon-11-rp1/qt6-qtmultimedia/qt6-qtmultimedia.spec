@@ -104,7 +104,7 @@ Requires: pkgconfig(libpulse-mainloop-glib)
 %package examples
 Summary: Programming examples for %{name}
 Requires: %{name}%{?_isa} = %{version}-%{release}
-# BuildRequires: qt6-qtmultimedia-devel >= %{version}
+# BuildRequires: qt6-qtmultimedia-devel >= %%{version}
 %description examples
 %{summary}.
 %endif

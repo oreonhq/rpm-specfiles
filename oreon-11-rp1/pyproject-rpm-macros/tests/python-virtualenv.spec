@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 37a640ba82ed40b226599c522d411e4be5edb339a0c0de030c0dc7b646d61590
 
 Name:           python-virtualenv
 Version:        20.19.0

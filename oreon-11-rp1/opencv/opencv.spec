@@ -560,7 +560,7 @@ cp config-*.py %{buildroot}/%{python3_sitelib}/cv2/
     export DISPLAY=:99
     %ctest || :
 %endif
-#endif
+# endif
 
 
 %files

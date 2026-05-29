@@ -1,4 +1,6 @@
-%global source0_hash afd3ba68c8000d2be048dc292df99a9812df9ad2efaf0a366eea22ac1faa19a7
+%global source0_hash none
+
+%global source2_key_fpr F5E11B9FFE911146F41D953D78A1B4DFE8F9C57E
 
 # doesn't make sense to install a polkit configuration inside a Flatpak
 %if 0%{?flatpak}
@@ -15,7 +17,7 @@ Summary:        PC/SC Lite smart card framework and applications
 License:        BSD-3-Clause AND BSD-2-Clause AND GPL-3.0-or-later
 URL:            https://pcsclite.apdu.fr/
 Source0:        https://pcsclite.apdu.fr/files/pcsc-lite-2.4.1.tar.xz
-Source1:        https://pcsclite.apdu.fr/files/pcsc-lite-2.4.1.tar.xz.asc
+Source1:        pcsc-lite-2.4.1.tar.xz.asc
 Source2:        gpgkey-F5E11B9FFE911146F41D953D78A1B4DFE8F9C57E.gpg
 
 BuildRequires:  doxygen
@@ -81,7 +83,7 @@ Requires:       %{name}-libs = %{version}-%{release}
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %setup -q

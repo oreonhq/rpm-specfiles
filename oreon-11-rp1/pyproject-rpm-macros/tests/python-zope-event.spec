@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ce11004217863a4827ea1a67a31730bddab9073832bdb3b9be85869259118758
 
 Name:           python-zope-event
 Version:        4.2.0

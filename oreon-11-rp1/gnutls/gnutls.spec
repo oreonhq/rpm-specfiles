@@ -1,6 +1,6 @@
 %global source0_hash none
-%global source100_hash fd4829912cddd12f84181c3451cc752be224643e87fac497b69edddadc49b4f2
-%global source300_hash b5057cfb990108c4a9f21832f1f35f3d98115012d1628e00650558e6b49e8285
+
+%global source2_key_fpr 5D46CB0F763405A7053556F47A75A648B3F9220C
 
 Version: 3.8.12
 Release: %{?autorelease}%{!?autorelease:1%{?dist}}
@@ -124,8 +124,8 @@ BuildRequires:  mingw64-nettle >= 3.6
 URL: http://www.gnutls.org/
 %define short_version %(echo %{version} | grep -m1 -o "[0-9]*\.[0-9]*" | head -1)
 Source0:        https://www.gnupg.org/ftp/gcrypt/gnutls/v%(echo/gnutls-3.8.12.tar.xz
-Source1:        https://www.gnupg.org/ftp/gcrypt/gnutls/v%(echo/gnutls-3.8.12.tar.xz.sig
-Source2: https://gnutls.org/gnutls-release-keyring.gpg
+Source1:        gnutls-3.8.12.tar.xz.sig
+Source2: gnutls-release-keyring.gpg
 
 %if %{with bundled_gmp}
 Provides:	bundled(gmp) = 6.2.1
@@ -260,9 +260,7 @@ for MinGW.
 %endif
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_hash}" || { echo "oreon: Source100 hash mismatch" >&2; exit 1; }; })
-%(test "%{source300_hash}" = "none" || { f="%{SOURCE300}"; test -f "$f" || { echo "oreon: missing Source300 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source300_hash}" || { echo "oreon: Source300 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
 %autosetup -p1 -S git

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 453aa48cc81c8c05955c879c76eb757a2c091e4f9fe4d35be6a87c7d93ee18b6
 
 Name: hyphen-or
 Summary: Odia hyphenation rules

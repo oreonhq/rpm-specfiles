@@ -71,8 +71,8 @@ Requires:       python3-devel
 %cmake_install
 
 # Fixup documentation so it can get installed correctly in imath-devel
-#rm -rf %{__cmake_builddir}/docs/sphinx/.{doctrees,buildinfo}
-#mv %{__cmake_builddir}/docs/sphinx ./html
+#rm -rf %%{__cmake_builddir}/docs/sphinx/.{doctrees,buildinfo}
+#mv %%{__cmake_builddir}/docs/sphinx ./html
 
 
 %check

@@ -700,7 +700,7 @@ echo ====================TESTING=========================
 cd gdb
 gcc -o ./orphanripper %{SOURCE2} -Wall -lutil -ggdb2
 # Need to use a single --ignore option, second use overrides first.
-# No `%{?_smp_mflags}' here as it may race.
+# No `%%{?_smp_mflags}' here as it may race.
 # WARNING: can't generate a core file - core tests suppressed - check ulimit
 # "readline-overflow.exp" - Testcase is broken, functionality is OK.
 (

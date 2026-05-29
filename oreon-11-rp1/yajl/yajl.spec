@@ -20,7 +20,7 @@ URL: http://lloyd.github.com/yajl/
 #
 #   https://github.com/lloyd/yajl/releases/tag/2.1.0
 #
-Source0:        https://codeload.github.com/lloyd/yajl/tar.gz/refs/tags/2.1.0#/yajl-2.1.0.tar.gz
+Source0: https://codeload.github.com/lloyd/yajl/tar.gz/refs/tags/%{version}#/yajl-%{version}.tar.gz
 
 # Patches managed at https://github.com/berrange/yajl/tree/fedora-dist-git
 Patch: 0001-pkg-config-file-should-be-in-lib-dir-not-shared-data.patch

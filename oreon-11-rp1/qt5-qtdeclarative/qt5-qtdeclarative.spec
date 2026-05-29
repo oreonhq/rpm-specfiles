@@ -19,7 +19,7 @@ Release: 2%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
 %global majmin %(echo %{version} | cut -d. -f1-2)
-Source0:        https://download.qt.io/official_releases/qt/%{qt5_version}/submodules/qtdeclarative-everywhere-opensource-src-%{qt5_version}.tar.xz
+Source0:        https://download.qt.io/official_releases/qt/%{version}/submodules/qtdeclarative-everywhere-opensource-src-%{version}.tar.xz
 # header file to workaround multilib issue
 # https://bugzilla.redhat.com/show_bug.cgi?id=1441343
 Source5: qv4global_p-multilib.h
@@ -135,7 +135,7 @@ export PATH=`pwd`:$PATH
   install -p -m644 -D %{SOURCE5} %{buildroot}%{_qt5_headerdir}/QtQml/%{version}/QtQml/private/qv4global_p.h
 %endif
 
-# hardlink files to %{_bindir}, add -qt5 postfix to not conflict
+# hardlink files to %%{_bindir}, add -qt5 postfix to not conflict
 mkdir %{buildroot}%{_bindir}
 pushd %{buildroot}%{_qt5_bindir}
 for i in * ; do

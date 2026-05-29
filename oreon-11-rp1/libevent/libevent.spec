@@ -94,13 +94,13 @@ mv $RPM_BUILD_ROOT%{_includedir}/event2/event-config.h \
 cat > $RPM_BUILD_ROOT%{_includedir}/event2/event-config.h << EOF
 #include <bits/wordsize.h>
 
-#if __WORDSIZE == 32
+# if __WORDSIZE == 32
 #include <event2/event-config-32.h>
 #elif __WORDSIZE == 64
 #include <event2/event-config-64.h>
 #else
 #error "Unknown word size"
-#endif
+# endif
 EOF
 
 mkdir -p $RPM_BUILD_ROOT/%{develdocdir}/sample

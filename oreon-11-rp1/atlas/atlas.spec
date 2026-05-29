@@ -491,7 +491,7 @@ for type in %{types}; do
 	--prefix=%{buildroot}%{_prefix}			\
 	--incdir=%{buildroot}%{_includedir}		\
 	--libdir=%{buildroot}%{_libdir}/${libname}
-	#--with-netlib-lapack-tarfile=%{SOURCE10}
+	#--with-netlib-lapack-tarfile=%%{SOURCE10}
 
 	#matches both SLAPACK and SSLAPACK
 	sed -i "s#SLAPACKlib.*#SLAPACKlib = ${p}/liblapack_pic_pruned.a#" Make.inc

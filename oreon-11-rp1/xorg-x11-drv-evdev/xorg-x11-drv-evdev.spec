@@ -20,6 +20,7 @@ Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
 Source0:        https://www.x.org/pub/individual/driver/xf86-input-evdev-2.11.0.tar.xz
+Source30:   xserver-sdk-abi-requires
 %endif
 
 BuildRequires: make

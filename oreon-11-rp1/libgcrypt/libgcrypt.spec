@@ -74,8 +74,8 @@ make check
 
 # Disabled now due to failing in F44
 # https://github.com/rpminspect/rpminspect/issues/1546
-# export PROFILE=%{?dist}
-# annocheck --ignore-unknown --verbose --profile=${PROFILE:1} %{libpath}
+# export PROFILE=%%{?dist}
+# annocheck --ignore-unknown --verbose --profile=${PROFILE:1} %%{libpath}
 
 %install
 %make_install
@@ -91,7 +91,7 @@ rm -f ${RPM_BUILD_ROOT}/%{_infodir}/dir ${RPM_BUILD_ROOT}/%{_libdir}/*.la
 /sbin/ldconfig -n $RPM_BUILD_ROOT/%{_libdir}
 
 %if "%{gcrylibdir}" != "%{_libdir}"
-# Relocate the shared libraries to %{gcrylibdir}.
+# Relocate the shared libraries to %%{gcrylibdir}.
 mkdir -p $RPM_BUILD_ROOT%{gcrylibdir}
 for shlib in $RPM_BUILD_ROOT%{_libdir}/*.so* ; do
 	if test -L "$shlib" ; then

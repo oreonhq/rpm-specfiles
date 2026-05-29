@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 155752ba6796aa294cde87c2bf0e771a5891eeeacb131345be0e080a3ec0ceea
 
 Summary:        Compatibility package for gnulib-l10n
 Name:           gnulib-l10n

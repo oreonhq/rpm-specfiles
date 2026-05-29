@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5882f33917f2cf3113c0bb002fb2635af1aa669d4fb57af34a4354904a478962
 
 Name: hyphen-kn
 Summary: Kannada hyphenation rules

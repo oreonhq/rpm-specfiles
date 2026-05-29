@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4c2dae26d3083914a1183534607e0d5905472adbf48c35b787ead78fc0a8ebda
 
 Name:                 python-pello
 Version:              1.0.4

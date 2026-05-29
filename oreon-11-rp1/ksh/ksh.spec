@@ -103,7 +103,7 @@ done
         --slave %{_mandir}/man1/ksh.1.gz ksh-man \
                 %{_mandir}/man1/ksh93.1.gz
 
-#if not symlink we are updating ksh where there was no alternatives before
+# if not symlink we are updating ksh where there was no alternatives before
 #so replace with symlink and set alternatives
 if [ ! -L %{_bindir}/ksh ]; then
         %{_sbindir}/alternatives --auto ksh

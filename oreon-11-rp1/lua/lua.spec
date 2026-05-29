@@ -172,7 +172,7 @@ cd ./lua-%{test_version}-tests/
 #     /db.lua/d;
 #     /errors.lua/d;
 #     ' all.lua
-# LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%{_libdir} $RPM_BUILD_ROOT/%{_bindir}/lua all.lua
+# LD_LIBRARY_PATH=$RPM_BUILD_ROOT/%%{_libdir} $RPM_BUILD_ROOT/%%{_bindir}/lua all.lua
 
 # Removing tests that fail under mock/koji
 sed -i.orig -e '

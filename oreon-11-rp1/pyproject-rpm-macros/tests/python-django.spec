@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5052b34b34b3425233c682e0e11d658fd6efd587d11335a0203d827224ada8f2
 
 Name:           python-django
 Version:        3.0.7

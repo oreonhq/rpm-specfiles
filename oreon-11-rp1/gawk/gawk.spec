@@ -253,7 +253,7 @@ install -m 0644 -p awklib/eg/data/* %{buildroot}%{_docdir}/%{name}/eg/data/
 
 # === PACKAGING INSTRUCTIONS ==================================================
 
-#%files -f %{name}.lang
+#%files -f %%{name}.lang
 %files
 %{_bindir}/*awk
 %{_bindir}/gawkbug

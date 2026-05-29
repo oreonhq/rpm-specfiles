@@ -1,4 +1,6 @@
-%global source0_hash 32799ab16fe6e493c9452be3823f21810fbe80b884021a6f6f3fa69f26be5c86
+%global source0_hash none
+
+%global source2_key_fpr F5E11B9FFE911146F41D953D78A1B4DFE8F9C57E
 
 %global dropdir %(pkg-config libpcsclite --variable usbdropdir 2>/dev/null)
 %global pcsc_lite_ver 1.8.9
@@ -11,7 +13,7 @@ Summary:        Generic USB CCID smart card reader driver
 License:        BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://ccid.apdu.fr/files
 Source0:        https://ccid.apdu.fr/files/ccid-1.7.1.tar.xz
-Source1:        https://ccid.apdu.fr/files/ccid-1.7.1.tar.xz.asc
+Source1:        ccid-1.7.1.tar.xz.asc
 Source2:        gpgkey-F5E11B9FFE911146F41D953D78A1B4DFE8F9C57E.gpg
 Patch0:         ccid-1.4.26-omnikey-3121.patch
 
@@ -42,7 +44,8 @@ PC/SC Lite daemon.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
+%{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 gpgv2 --keyring %{SOURCE2} %{SOURCE1} %{SOURCE0}
 %setup -q -n ccid-%{version}
 %patch 0 -p1 -b .omnikey

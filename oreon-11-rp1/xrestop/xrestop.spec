@@ -6,7 +6,7 @@ Version: 0.6
 Release: 7%{?dist}
 License: GPL-2.0-or-later
 URL: http://www.freedesktop.org/Software/xrestop
-Source0:        https://gitlab.freedesktop.org/xorg/app/xrestop/-/archive/xrestop-0.6/xrestop-xrestop-0.6.tar.gz
+Source0: https://gitlab.freedesktop.org/xorg/app/xrestop/-/archive/xrestop-%{version}/xrestop-xrestop-%{version}.tar.gz
 
 BuildRequires: make
 BuildRequires:  gcc

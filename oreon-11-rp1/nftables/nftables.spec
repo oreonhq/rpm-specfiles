@@ -1,4 +1,6 @@
-%global source0_hash 372931bda8556b310636a2f9020adc710f9bab66f47efe0ce90bff800ac2530c
+%global source0_hash none
+
+%global source2_key_fpr 8C5F7146A1757A65E2422A94D70D1A666ACF2B21
 
 Name:           nftables
 Version:        1.1.6
@@ -10,7 +12,7 @@ Summary:        Netfilter Tables userspace utilities
 License:        GPL-2.0-only
 URL:            https://netfilter.org/projects/nftables/
 Source0:        https://netfilter.org/projects/nftables//files/nftables-1.1.6.tar.xz
-Source1:        https://netfilter.org/projects/nftables//files/nftables-1.1.6.tar.xz.sig
+Source1:        nftables-1.1.6.tar.xz.sig
 SOURCE2:        coreteam-gpg-key-0xD70D1A666ACF2B21.txt
 Source3:        nftables.service
 Source4:        nftables.conf
@@ -79,7 +81,7 @@ Manage an nftables-based firewall defined by ruleset snippets in /etc/nftables
 and /etc/sysconfig/nftables.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

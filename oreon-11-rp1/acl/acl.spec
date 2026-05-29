@@ -1,4 +1,6 @@
-%global source0_hash 5f2bdbad629707aa7d85c623f994aa8a1d2dec55a73de5205bac0bf6058a2f7c
+%global source0_hash none
+
+%global source2_key_fpr B902B5271325F892AC251AD441633B9FE837F581
 
 Summary: Access control list utilities
 Name: acl
@@ -14,7 +16,7 @@ BuildRequires: perl(FileHandle)
 BuildRequires: gnupg2
 Requires: libacl%{?_isa} = %{version}-%{release}
 Source0:        https://download-mirror.savannah.gnu.org/releases/acl/acl-2.3.2.tar.gz
-Source1:        https://download-mirror.savannah.gnu.org/releases/acl/acl-2.3.2.tar.gz.sig
+Source1:        acl-2.3.2.tar.gz.sig
 # Retreived from https://savannah.nongnu.org/people/viewgpg.php?user_id=15000
 # Source2: agruen-key.gpg
 # Retrieved from https://savannah.nongnu.org/people/viewgpg.php?user_id=42032
@@ -51,7 +53,7 @@ programs which make use of the access control list programming interface
 defined in POSIX 1003.1e draft standard 17.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

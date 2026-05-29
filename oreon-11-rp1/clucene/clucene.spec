@@ -125,7 +125,7 @@ export CTEST_OUTPUT_ON_FAILURE=1
 touch src/test/CMakeLists.txt && \
 make -C %{_target_platform} cl_test && \
 time make -C %{_target_platform} test ARGS="--timeout 300 --output-on-failure" ||:
-#endif
+# endif
 
 %ldconfig_scriptlets core
 

@@ -1,4 +1,6 @@
-%global source0_hash 067677f4c5f6564819e78ed3a9d4a8980935ea9273f3abb22a420ea30ab5ded6
+%global source0_hash none
+
+%global source2_key_fpr 37D964ACC04981C75500FB9BD55D978A8A1420E4
 
 Name:           conntrack-tools
 Version:        1.4.8
@@ -7,7 +9,7 @@ Summary:        Manipulate netfilter connection tracking table and run High Avai
 License:        GPL-2.0-only
 URL:            http://conntrack-tools.netfilter.org/
 Source0:        https://www.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.8.tar.xz
-Source1:        https://www.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.8.tar.xz.sig
+Source1:        conntrack-tools-1.4.8.tar.xz.sig
 # Note this openpgp key is expired and revoked, but is the one used for the 1.4.8 signature
 Source2:        NetfilterCoreTeam-OpenGPG-KEY.txt
 # Note this is the new key, presumbly will be used in the future (it signed the old key as well)
@@ -53,7 +55,7 @@ In addition, you can also monitor connection tracking events, e.g.
 show an event message (one line) per newly established connection.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

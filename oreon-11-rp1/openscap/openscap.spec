@@ -237,7 +237,7 @@ make docs
 %check
 %if %{with check}
 # Skip failing test in sce/test_sce_in_ds.sh
-# %{?_smp_mflags} not used as it is failing many other tests
+# %%{?_smp_mflags} not used as it is failing many other tests
 ctest -V -E sce/test_sce_in_ds.sh
 %endif
 

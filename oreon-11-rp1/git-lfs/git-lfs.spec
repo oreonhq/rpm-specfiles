@@ -2,7 +2,7 @@
 
 %bcond check 1
 
-%global go_vendor_license_check_disable %{defined rhel}
+%global go_vendor_license_check_disable 1
 %global gomodulesmode GO111MODULE=on
 
 # https://github.com/git-lfs/git-lfs

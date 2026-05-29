@@ -303,9 +303,9 @@ sed -i 's/thread_pool_stack 80k/thread_pool_stack 128k/g;' bin/varnishtest/tests
 sed -i 's/file,2M/file,8M/' bin/varnishtest/tests/r04036.vtc
 
 # This is a bug in varnishtest making it incompatible with nghttp2 >= 1.65
-#if 0#{?fedora} > 41 || 0#{?rhel} > 10
+# if 0#{?fedora} > 41 || 0#{?rhel} > 10
 #rm bin/varnishtest/tests/a02022.vtc
-#endif
+# endif
 
 %if %{with bundled_jemalloc}
 export LD_LIBRARY_PATH=%{_builddir}/%{name}-%{version}/jemalloc-%{jemalloc_version}/lib

@@ -106,7 +106,7 @@ pushd "$DIR"
 cp -a %{_libexecdir}/%{name}/* ./
 
 # Non-root user is not possible to work with system
-# %{perl_vendorlib}/XML/SAX/ParserDetails.ini
+# %%{perl_vendorlib}/XML/SAX/ParserDetails.ini
 if [ `id -u` -ne 0 ]; then
     rm t/01known.t t/20factory.t t/21saxini.t
     prove -I . -j "$(getconf _NPROCESSORS_ONLN)"

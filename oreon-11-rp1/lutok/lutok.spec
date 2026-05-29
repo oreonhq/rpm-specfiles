@@ -57,7 +57,7 @@ make %{?_smp_mflags} testsdir=%{_testsdir}
 # problem is that kyua-cli depends on lutok.  Introducing a circular dependency
 # for this minor benefit does not seem like the best move.  After all, we can
 # always install lutok-tests later and run the tests post-install.
-#make check testsdir=%{_testsdir}
+#make check testsdir=%%{_testsdir}
 
 %install
 make install DESTDIR=%{buildroot} doc_DATA= testsdir=%{_testsdir}

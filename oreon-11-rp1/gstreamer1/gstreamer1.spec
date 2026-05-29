@@ -26,7 +26,7 @@ License:        LGPL-2.1-or-later
 URL:            http://gstreamer.freedesktop.org/
 %if 0%{?gitrel}
 # git clone git://anongit.freedesktop.org/gstreamer/gstreamer
-# cd gstreamer; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
+# cd gstreamer; git reset --hard %%{gitcommit}; ./autogen.sh; make; make distcheck
 Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.26.7.tar.xz
 %else
 Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.26.7.tar.xz

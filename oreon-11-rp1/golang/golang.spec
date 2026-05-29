@@ -461,7 +461,7 @@ export CGO_ENABLED=0
 # doesn't work properly
 #ifarch aarch64
 #export CGO_CFLAGS="-mno-outline-atomics"
-#endif
+# endif
 
 # make sure to not timeout
 %ifnarch riscv64

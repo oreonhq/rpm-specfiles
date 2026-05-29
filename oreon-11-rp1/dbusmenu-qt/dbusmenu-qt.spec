@@ -21,8 +21,8 @@ Release: 0.40.%{snapshot}%{?dist}
 License: LGPL-2.0-or-later
 URL: https://launchpad.net/libdbusmenu-qt/
 %if 0%{?snapshot}
-# bzr branch lp:libdbusmenu-qt && cd libdbusmenu-qt && bzr export --root=libdbusmenu-qt-%{version}-%{snapshot}bzr.tar.gz
-#Source0:  libdbusmenu-qt-%{version}-%{snapshot}bzr.tar.gz
+# bzr branch lp:libdbusmenu-qt && cd libdbusmenu-qt && bzr export --root=libdbusmenu-qt-%%{version}-%%{snapshot}bzr.tar.gz
+#Source0:  libdbusmenu-qt-%%{version}-%%{snapshot}bzr.tar.gz
 Source0:        https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libdbusmenu-qt/0.9.3+16.04.20160218-0ubuntu1/libdbusmenu-qt_0.9.3+16.04.20160218.orig.tar.gz
 %else
 Source0:        https://launchpad.net/libdbusmenu-qt/trunk/0.9.3/+download/libdbusmenu-qt-0.9.3.tar.bz2

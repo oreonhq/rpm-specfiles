@@ -1,4 +1,6 @@
-%global source0_hash 6bc9723c7a50dd00c7da83d40b3bbb4b0746819f4d6e377c9bd897c898993e28
+%global source0_hash none
+
+%global source2_key_fpr 2A0B4ED915F2D3FA45F5B16217280A9781186ACF
 
 %define with_numactl          0%{!?_without_numactl:1}
 
@@ -22,7 +24,7 @@ License:        LGPL-2.1-only AND MIT AND GPL-2.0-only AND BSD-3-Clause AND BSD-
 Summary:        LTTng Userspace Tracer library
 URL:            https://lttng.org
 Source0:        https://lttng.org/files/lttng-ust/lttng-ust-2.15.0.tar.bz2
-Source1:        https://lttng.org/files/lttng-ust/lttng-ust-2.15.0.tar.bz2.asc
+Source1:        lttng-ust-2.15.0.tar.bz2.asc
 # gpg2 --export --export-options export-minimal 2A0B4ED915F2D3FA45F5B16217280A9781186ACF > gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Source2:        gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Patch0:         lttng-gen-tp-shebang.patch
@@ -70,7 +72,7 @@ applications that use %{name}'s Python logging backend.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1
 

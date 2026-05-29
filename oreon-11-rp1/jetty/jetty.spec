@@ -833,8 +833,8 @@ xmvn-subst -s -L -R %{buildroot} %{buildroot}%{homedir}/lib
 ln -sf %{_javadir}/ecj.jar $ecj
 
 # TODO uncomment when jetty-setuid is packaged
-# test -e %{_jnidir}/jetty-setuid/libsetuid-linux.so
-# ln -sf %{_jnidir}/jetty-setuid/libsetuid-linux.so %{buildroot}%{homedir}/lib/setuid/
+# test -e %%{_jnidir}/jetty-setuid/libsetuid-linux.so
+# ln -sf %%{_jnidir}/jetty-setuid/libsetuid-linux.so %%{buildroot}%%{homedir}/lib/setuid/
 
 ( cat << EO_RC
 JAVA_HOME=/usr/lib/jvm/java
@@ -872,7 +872,7 @@ ln -sf %{rundir} %{buildroot}%{homedir}/work
 # replace the startup script with ours
 cp -p %{SOURCE1} %{buildroot}%{homedir}/bin/jetty.sh
 
-# NOTE: %if %{without jp_minimal} still in effect
+# NOTE: %if %%{without jp_minimal} still in effect
 
 install -m0644 -D jetty.sysusers.conf %{buildroot}%{_sysusersdir}/jetty.conf
 

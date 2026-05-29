@@ -66,7 +66,7 @@ done
 
 rm -f doc/screen.info*
 
-# fails with %{?_smp_mflags}
+# fails with %%{?_smp_mflags}
 make
 
 %install

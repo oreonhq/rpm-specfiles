@@ -703,7 +703,7 @@ mysqlcheck,mysqldump,mysqlpump,mysqlimport,mysqlshow,mysqlslap,my_print_defaults
 %if %{with config}
 mkdir -p %{buildroot}%{_sysconfdir}/my.cnf.d
 %else
-#rm %{buildroot}%{_sysconfdir}/my.cnf
+#rm %%{buildroot}%%{_sysconfdir}/my.cnf
 %endif
 
 %if ! %{with common}

@@ -1039,9 +1039,9 @@ rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdgantt.mo
 rm -f %{buildroot}%{_datadir}/locale/*/entry.desktop
 
 # keep these ones because we're shipping KDE 3 kdewebdev (because of Quanta)
-# rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kfilereplace.mo
-# rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kimagemapeditor.mo
-# rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/klinkstatus.mo
+# rm -f %%{buildroot}%%{_datadir}/locale/*/LC_MESSAGES/kfilereplace.mo
+# rm -f %%{buildroot}%%{_datadir}/locale/*/LC_MESSAGES/kimagemapeditor.mo
+# rm -f %%{buildroot}%%{_datadir}/locale/*/LC_MESSAGES/klinkstatus.mo
 
 # remove docs which conflict with KDE 4 kde-l10n
 rm -rf %{buildroot}%{_docdir}/HTML/*/amor
@@ -1163,10 +1163,10 @@ rm -rf %{buildroot}%{_docdir}/HTML/*/superkaramba
 rm -rf %{buildroot}%{_docdir}/HTML/*/umbrello
 
 # keep these ones because we're shipping KDE 3 kdewebdev (because of Quanta)
-# rm -rf %{buildroot}%{_docdir}/HTML/*/kfilereplace
-# rm -rf %{buildroot}%{_docdir}/HTML/*/kimagemapeditor
-# rm -rf %{buildroot}%{_docdir}/HTML/*/klinkreplace
-# rm -rf %{buildroot}%{_docdir}/HTML/*/xsldbg
+# rm -rf %%{buildroot}%%{_docdir}/HTML/*/kfilereplace
+# rm -rf %%{buildroot}%%{_docdir}/HTML/*/kimagemapeditor
+# rm -rf %%{buildroot}%%{_docdir}/HTML/*/klinkreplace
+# rm -rf %%{buildroot}%%{_docdir}/HTML/*/xsldbg
 
 # remove .mo files which conflict with KDE 4 extragear
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kcoloredit.mo
@@ -1522,12 +1522,12 @@ rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/libkicker.mo
 %lang(nb) %{_datadir}/locale/nb/LC_MESSAGES/*
 %lang(nb) %{_datadir}/locale/nb/charset
 %lang(nb) %{_datadir}/locale/nb/README
-#%lang(nb) %{_docdir}/HTML/nb/
+#%lang(nb) %%{_docdir}/HTML/nb/
 
 %files Norwegian-Nynorsk
 %lang(nn) %{_datadir}/locale/nn/LC_MESSAGES/*
 %lang(nn) %{_datadir}/locale/nn/charset
-#%lang(nn) %{_docdir}/HTML/nn/
+#%lang(nn) %%{_docdir}/HTML/nn/
 
 %if %{buildall}
 %files Occitan

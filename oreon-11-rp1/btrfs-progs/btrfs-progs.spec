@@ -1,4 +1,6 @@
-%global source0_hash bb27e1ec54e7c3c0b7b2e596f853a73c07a3d72f21bc94042073c24dbf045796
+%global source0_hash none
+
+%global source2_key_fpr F2B41200C54EFB30380C1756C565D5F9D76D583B
 
 # Local definition of version_no_tilde when it doesn't exist
 %{!?version_no_tilde: %define version_no_tilde %{shrink:%(echo '%{version}' | tr '~' '-')}}
@@ -94,7 +96,7 @@ btrfs filesystem-specific programs in Python.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 xzcat '%{SOURCE0}' | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %autosetup -n %{name}-v%{version_no_tilde} -S git_am
 

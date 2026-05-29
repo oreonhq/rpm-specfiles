@@ -1,5 +1,7 @@
 %global source0_hash none
 
+%global source20_key_fpr 1198C0117593497A5EC5C199286AF1F9897469DC
+
 # Fedora spec file for php
 #
 # License: MIT
@@ -112,7 +114,7 @@ Source13: nginx-fpm.conf
 Source14: nginx-php.conf
 Source15: php.tmpfiles
 # See https://secure.php.net/gpg-keys.php
-Source20: https://www.php.net/distributions/php-keyring.gpg
+Source20: php-keyring.gpg
 Source21:        https://www.php.net/distributions/php-8.5.4%{?rcver}.tar.xz.asc
 # Configuration files for some extensions
 Source50: 10-opcache.ini
@@ -843,7 +845,7 @@ in pure PHP.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source20_key_fpr}" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source20_key_fpr}" || { echo "oreon: Source20 key fingerprint mismatch" >&2; exit 1; }; })
 %{?gpgverify:%{gpgverify} --keyring='%{SOURCE20}' --signature='%{SOURCE21}' --data='%{SOURCE0}'}
 
 %setup -q -n php-%{upver}%{?rcver}

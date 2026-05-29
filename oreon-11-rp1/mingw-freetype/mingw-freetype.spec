@@ -95,7 +95,7 @@ Static version of the MinGW Windows Freetype library.
 # The ft2demos Makefile is hacky and doesn't understand
 # cross-compilation.  This nearly works, but not quite, so
 # disable. it.
-#pushd ft2demos-%{version}
+#pushd ft2demos-%%{version}
 #make TOP_DIR=".." PLATFORM=win32
 #popd
 

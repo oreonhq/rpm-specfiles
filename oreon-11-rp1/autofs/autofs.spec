@@ -174,7 +174,7 @@ fi
 
 %triggerun -- %{name} < 5.0.6-5
 # Save the current service runlevel info
-# User must manually run systemd-sysv-convert --apply %{name}
+# User must manually run systemd-sysv-convert --apply %%{name}
 # to migrate them to systemd targets
 %{_bindir}/systemd-sysv-convert --save %{name} >/dev/null 2>&1 ||:
 

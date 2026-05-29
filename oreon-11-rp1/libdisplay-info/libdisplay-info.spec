@@ -1,4 +1,6 @@
-%global source0_hash 6ae77cd937f9cf7d1321d35c116062c4911e8447010a6a713ac4286f7a9d5987
+%global source0_hash none
+
+%global source2_key_fpr 34FF9526CFEF0E97A340E2E40FDE7BE0E88F5E48
 
 # See https://gitlab.freedesktop.org/emersion/libdisplay-info/-/merge_requests/149
 # for library versioning explanation.
@@ -14,9 +16,9 @@ Summary:        EDID and DisplayID library
 License:        MIT
 URL:            https://gitlab.freedesktop.org/emersion/libdisplay-info
 Source0:        https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.3.0/downloads/libdisplay-info-0.3.0.tar.xz
-Source1:        https://gitlab.freedesktop.org/emersion/libdisplay-info/-/releases/0.3.0/downloads/libdisplay-info-0.3.0.tar.xz.sig
+Source1:        libdisplay-info-0.3.0.tar.xz.sig
 # 0FDE7BE0E88F5E48: emersion <contact@emersion.fr>
-Source2:        https://emersion.fr/.well-known/openpgpkey/hu/dj3498u4hyyarh35rkjfnghbjxug6b19#/gpgkey-0FDE7BE0E88F5E48.gpg
+Source2:        gpgkey-0FDE7BE0E88F5E48.gpg
 
 BuildRequires:  gcc
 BuildRequires:  gnupg2
@@ -43,7 +45,7 @@ developing applications that use %{name}.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup
 
