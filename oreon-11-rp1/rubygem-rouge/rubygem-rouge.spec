@@ -1,4 +1,5 @@
 %global source0_hash dba5896715c0325c362e895460a6d350803dbf6427454f49a47500f3193ea739
+%global source1_hash c739e32fdbf2755d601414e863137d0a7da180b55d90b4bfb881f82f397ccf1b
 
 %global gem_name rouge
 
@@ -11,7 +12,7 @@ Summary:        Pure-ruby colorizer based on pygments
 License:        MIT AND BSD-2-Clause
 
 URL:            http://rouge.jneen.net/
-Source0:        https://rubygems.org/gems/rouge-4.7.0.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 Source1:        %{gem_name}-%{version}-test-missing-files.tar.gz
 # SOURCE1 is created by $ bash %%SOURCE2 %%version
 Source2:        rouge-create-missing-test-files.sh
@@ -40,6 +41,7 @@ Documentation for %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{gem_name}-%{version} -a 1
 mv ../%{gem_name}-%{version}.gemspec .
 

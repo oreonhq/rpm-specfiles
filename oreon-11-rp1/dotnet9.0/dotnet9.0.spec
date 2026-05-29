@@ -1,5 +1,4 @@
 %global source0_hash 3f052a13a2fe76ba19a05956b3c9baca954b5d4526818552c91a8563ba2e05b2
-%global source1_hash none
 
 %bcond_with bootstrap
 
@@ -38,7 +37,7 @@
 %global use_bundled_rapidjson 0
 %global use_bundled_zlib 0
 
-%if 0%{?rhel} > 0 || 0%{?oreon}
+%if 0%{?rhel} > 0 || (0%{?oreon} >= 11)
 %global use_bundled_rapidjson 1
 %endif
 
@@ -58,7 +57,7 @@
 %global mono_archs ppc64le s390x
 
 # On Fedora and RHEL > 9, ship RPM macros
-%if 0%{?fedora} || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global include_macros 1
 %else
 %global include_macros 0
@@ -85,14 +84,14 @@ URL:            https://github.com/dotnet/
 %if %{with bootstrap}
 # The source is generated on a Fedora box via:
 # ./build-dotnet-bootstrap-tarball %%{upstream_tag}
-Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/v9.0.117.tar.gz#/dotnet-9.0.117.tar.gz
+Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{upstream_tag_without_v}.tar.gz
 # The bootstrap SDK version is one listed in the global.json file of the main source archive
 %global bootstrap_sdk_version 9.0.100-rc.1.24452.12
 # Binaries can be at one of several different URLs:
 # GA releases:
 # Source1:        https://dotnetcli.azureedge.net/dotnet/Sdk/%%{bootstrap_sdk_version}/dotnet-sdk-%%{bootstrap_sdk_version}-linux-arm64.tar.gz
 # Preview releases:
-Source1:        https://dotnetbuilds.azureedge.net/public/Sdk/9.0.100-rc.1.24452.12/dotnet-sdk-9.0.100-rc.1.24452.12-linux-arm64.tar.gz
+Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-%{upstream_tag_without_v}.tar.gz.sig
 # To generate ppc64le and s390x archives:
 # 1. Find the source commits and versions of repos, use one of:
 #   - https://dotnetbuilds.azureedge.net/public/Sdk/%%{bootstrap_sdk_version}/productCommit-linux-x64.txt
@@ -109,7 +108,7 @@ Source3:        dotnet-prebuilts-%{bootstrap_sdk_version_ppc64le_s390x}-s390x.ta
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 %endif
 
-Source5:        https://github.com/dotnet/dotnet/releases/download/v9.0.117/release.json
+Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
 
 Source10:       macros.dotnet
 
@@ -137,7 +136,7 @@ ExclusiveArch:  aarch64 ppc64le s390x x86_64
 %if ! %{use_bundled_brotli}
 BuildRequires:  brotli-devel
 %endif
-%if 0%{?fedora} >= 43 || 0%{?oreon}
+%if 0%{?fedora} >= 43 || (0%{?oreon} >= 11)
 BuildRequires:  clang20
 %else
 BuildRequires:  clang
@@ -225,7 +224,7 @@ application to drive everything.
 # code (source or build) is generally version specific. We have kept
 # it around in older versions of RHEL and Fedora. But no reason to
 # continue this mistake.
-%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 ) || 0%{?oreon}
+%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 ) || (0%{?oreon} >= 11)
 
 %package -n dotnet
 
@@ -472,7 +471,6 @@ These are not meant for general use.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %if %{without bootstrap}
 # check gpg signatures only for non-bootstrap builds; bootstrap "sources" are hand-crafted
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
@@ -592,7 +590,7 @@ cp -a %{_libdir}/dotnet previously-built-dotnet
 find previously-built-dotnet
 %endif
 
-%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 # Setting this macro ensures that only clang supported options will be
 # added to ldflags and cflags.
 %global toolchain clang
@@ -809,7 +807,7 @@ rm %{buildroot}%{_libdir}/dotnet/dotnet
 
 
 %check
-%if 0%{?fedora} > 35 || 0%{?oreon}
+%if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 # lttng in Fedora > 35 is incompatible with .NET
 export COMPlus_LTTng=0
 %endif
@@ -821,7 +819,7 @@ export COMPlus_LTTng=0
 
 
 
-%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 ) || 0%{?oreon}
+%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 ) || (0%{?oreon} >= 11)
 %files -n dotnet
 # empty package useful for dependencies
 %endif

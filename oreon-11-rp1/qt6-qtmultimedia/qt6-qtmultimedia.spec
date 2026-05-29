@@ -3,11 +3,11 @@
 %global qt_module qtmultimedia
 
 %global gst 0.10
-%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 %global gst 1.0
 %endif
 
-%if 0%{?rhel} && ! 0%{?epel} || 0%{?oreon}
+%if 0%{?rhel} && ! 0%{?epel} || (0%{?oreon} >= 11)
 %bcond_with ffmpeg
 %else
 %bcond_without ffmpeg
@@ -32,7 +32,7 @@ Url:     http://www.qt.io
 
 %if 0%{?unstable}
 %else
-Source0:        https://download.qt.io/official_releases/qt/%{qt_version}/submodules/qtmultimedia-everywhere-src-%{qt_version}.tar.xz
+Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
 Patch0:  qtmultimedia-fix-build-on-x86-arch.patch
@@ -42,7 +42,7 @@ Patch0:  qtmultimedia-fix-build-on-x86-arch.patch
 
 BuildRequires: cmake
 BuildRequires: gcc-c++
-%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
 BuildRequires: gcc-toolset-13
 %endif
 BuildRequires: ninja-build
@@ -115,7 +115,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 
 %build
-%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
 . /opt/rh/gcc-toolset-13/enable
 %endif
 %cmake_qt6 \

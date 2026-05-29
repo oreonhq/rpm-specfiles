@@ -1,6 +1,6 @@
 %global source0_hash 043877c0857d8d46067cd2f18809d54fc876c399f0ecd438f60ea7f4d8037451
 
-%if 0%{?rhel} >= 8 || 0%{?oreon}
+%if 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
 %bcond_with php
 %bcond_with guile
 %else
@@ -19,12 +19,12 @@
 # Temporarily disable gtk & gdkpixbuf in Fedora 43 due to issues
 # with GDKPixbuf 2.44
 # see: https://bugzilla.redhat.com/show_bug.cgi?id=2395533
-%if 0%{?fedora} >= 43 || 0%{?oreon}
+%if 0%{?fedora} >= 43 || (0%{?oreon} >= 11)
 %bcond_with gtk2
 %bcond_with gdkpixbuf
 %else
 %bcond_without gdkpixbuf
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %bcond_with gtk2
 %else
 %bcond_without gtk2
@@ -57,7 +57,7 @@
 %global JAVA 0
 %endif
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global SHARP  0
 %global ARRRR  0
 %global DEVIL  0
@@ -112,7 +112,7 @@ Release:		2%{?dist}
 License:		epl-1.0 AND cpl-1.0 AND bsd-3-clause AND mit AND gpl-3.0-or-later WITH bison-exception-2.2 AND apache-1.1 AND lgpl-2.0-or-later WITH libtool-exception AND smlnj AND hpnd-uc
 URL:			http://www.graphviz.org/
 #Source0:		https://gitlab.com/%%{name}/%%{name}/-/archive/%%{version}/%%{name}-%%{version}.tar.bz2
-Source0:        https://gitlab.com/api/v4/projects/graphviz%2Fgraphviz/packages/generic/graphviz-releases/14.1.4/graphviz-14.1.4.tar.xz
+Source0:        https://gitlab.com/api/v4/projects/%{name}%2F%{name}/packages/generic/%{name}-releases/%{version}/%{name}-%{version}.tar.xz
 BuildRequires:		gcc-g++
 BuildRequires:		zlib-devel
 BuildRequires:		libpng-devel

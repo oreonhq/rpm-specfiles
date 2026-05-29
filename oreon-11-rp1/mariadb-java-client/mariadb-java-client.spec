@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        Connects applications developed in Java to MariaDB and MySQL databases
 License:        LGPL-2.1-or-later
 URL:            https://mariadb.com/kb/en/mariadb/about-mariadb-connector-j/
-Source0:        https://github.com/mariadb-corporation/mariadb-connector-j/archive/refs/tags/3.5.7.tar.gz#/mariadb-connector-j-3.5.7.tar.gz
+Source0:        https://github.com/mariadb-corporation/mariadb-connector-j/archive/refs/tags/%{version}.tar.gz#/mariadb-connector-j-%{version}.tar.gz
 # optional dependency not in Fedora
 Patch:          0001-Remove_waffle-jna.patch
 Patch:          0002-Remove-usage-of-junit-pioneer.patch

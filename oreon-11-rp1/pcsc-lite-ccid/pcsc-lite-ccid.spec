@@ -13,7 +13,7 @@ Summary:        Generic USB CCID smart card reader driver
 License:        BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://ccid.apdu.fr/files
 Source0:        https://ccid.apdu.fr/files/ccid-1.7.1.tar.xz
-Source1:        ccid-1.7.1.tar.xz.asc
+Source1:        https://ccid.apdu.fr/files/ccid-%{version}.tar.xz.asc
 Source2:        gpgkey-F5E11B9FFE911146F41D953D78A1B4DFE8F9C57E.gpg
 Patch0:         ccid-1.4.26-omnikey-3121.patch
 

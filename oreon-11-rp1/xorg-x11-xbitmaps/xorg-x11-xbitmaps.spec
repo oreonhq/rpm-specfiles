@@ -12,7 +12,7 @@ License: HPND AND ICU
 URL: http://www.x.org
 BuildArch: noarch
 
-Source0:        https://www.x.org/pub/individual/data/xbitmaps-1.1.3.tar.xz
+Source0:        https://www.x.org/pub/individual/data/xbitmaps-%{version}.tar.xz
 
 BuildRequires: make
 BuildRequires: automake gcc

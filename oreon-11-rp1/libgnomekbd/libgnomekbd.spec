@@ -7,7 +7,7 @@ Summary:        A keyboard configuration library
 
 License:        LGPL-2.0-or-later
 URL:            http://gswitchit.sourceforge.net
-Source0:        https://download.gnome.org/sources/libgnomekbd/3.28/libgnomekbd-3.28.1.tar.xz
+Source0:        https://download.gnome.org/sources/libgnomekbd/3.28/libgnomekbd-%{version}.tar.xz
 
 BuildRequires:  gettext-devel
 BuildRequires:  gtk3-devel >= 3.0.0

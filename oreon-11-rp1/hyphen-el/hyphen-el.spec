@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 8609bd1f835839b2b44ebd3587a2c4fc25327fb22f7de02a7528cae39d9d17d5
 
 Name: hyphen-el
 Summary: Greek hyphenation rules
 %global upstreamid 20051018
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
-Source:  http://download.services.openoffice.org/contrib/dictionaries/hyph_el_GR.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_el_GR.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: LGPL-2.1-or-later
 BuildArch: noarch

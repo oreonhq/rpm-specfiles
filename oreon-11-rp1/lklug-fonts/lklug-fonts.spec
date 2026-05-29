@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash de5750f7048973f851961050f76b8b58e9bda400d5007c3078d9317fbe2ff5fd
 
 BuildRequires: fontforge
 BuildRequires: make

@@ -1,6 +1,6 @@
 %global source0_hash 0c325228d16ea798ff5b2a2ebc685fcca0237ea23f08e9336ad98905a4dc9e3e
 
-%if 0%{?rhel} > 10 || 0%{?oreon}
+%if 0%{?rhel} > 10 || (0%{?oreon} >= 11)
 %bcond build_from_src 0
 %else
 %bcond build_from_src 1

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 58f7f86d63b9f4052c90f4964a37b608b4defabf0723902fa9b6f007a35fbdd4
 
 Name: mythes-ru
 Summary: Russian thesaurus

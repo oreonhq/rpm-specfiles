@@ -7,7 +7,7 @@ License:      EPL-2.0
 Epoch:        3
 Version:      1.0.10
 Release:      8%{?dist}
-Source0:        https://github.com/ksh93/ksh/archive/v1.0.10/ksh-1.0.10.tar.gz
+Source0:        https://github.com/ksh93/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:      kshcomp.conf
 Source2:      kshrc.rhs
 Source3:      dotkshrc

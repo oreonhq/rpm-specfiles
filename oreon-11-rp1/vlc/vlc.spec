@@ -46,12 +46,8 @@ Release:	%autorelease
 Summary:	The cross-platform open-source multimedia framework, player and server
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause
 URL:		https://www.videolan.org
-%if 0%{?commit:1}
-Source:        https://code.videolan.org/videolan/vlc/-/archive/%{commit}/vlc-%{commit}.tar.bz2
-%else
-Source:        https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz
-%endif
-Source:        https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz
+Source0:        https://get.videolan.org/vlc/%{version}/vlc-%{version}.tar.xz
+Source1:        macros.vlc
 
 ## upstream patches
 # spatialaudio: fix compilation with libspatialaudio 4.0
@@ -274,7 +270,7 @@ Recommends:	%{name}-gui-skins2%{?_isa} = %{epoch}:%{version}-%{release}
 Recommends:	%{name}-plugin-ffmpeg%{?_isa} = %{epoch}:%{version}-%{release}
 
 Requires:	hicolor-icon-theme
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 Requires:	kde-filesystem
 %else
 Requires:	kf5-filesystem
@@ -382,7 +378,7 @@ Installs all available plugins for VLC media player
 %package plugins-base
 Summary:	VLC media player core
 Requires:	%{name}-libs%{?_isa} = %{epoch}:%{version}-%{release}
-%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
 Requires:	google-noto-sans-mono-fonts
 Requires:	google-noto-serif-fonts
 %else

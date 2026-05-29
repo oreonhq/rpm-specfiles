@@ -1,8 +1,9 @@
 %global source0_hash dc530018a4684512f8f38143cd2a096c9f02a1fc2459edcfe534787a7fc77d4b
+%global source1_hash d9349a02080ff7ff48737ec946d2e7e872961af7a14829715ba6432616fbcd42
 
 %global gem_name coderay
 
-%if %{undefined rhel} || 0%{?oreon}
+%if %{undefined rhel} || (0%{?oreon} >= 11)
 %bcond_without shoulda
 %endif
 
@@ -12,7 +13,7 @@ Release: 12%{?dist}
 Summary: Fast syntax highlighting for selected languages
 License: MIT
 URL: http://coderay.rubychan.de
-Source0:        https://rubygems.org/gems/coderay-1.1.3.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/rubychan/coderay --no-checkout
 # cd coderay && git archive -v -o coderay-1.1.3-tests.txz v1.1.3 test spec
 Source1: %{gem_name}-%{version}-tests.txz
@@ -44,6 +45,7 @@ Documentation for %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{gem_name}-%{version} -b 1
 
 pushd ..

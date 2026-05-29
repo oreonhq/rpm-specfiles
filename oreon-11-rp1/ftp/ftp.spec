@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 61c913299b81a4671ff089aac821329f7db9bc111aa812993dd585798b700349
 
 Summary: The standard UNIX FTP (File Transfer Protocol) client
 Name: ftp

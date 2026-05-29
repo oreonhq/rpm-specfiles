@@ -10,7 +10,7 @@ Summary:   Number to number name and money text conversion library
 #CC-BY-SA or LGPLv3+
 License:   ( LGPL-3.0-or-later OR BSD-3-Clause ) AND ( LGPL-3.0-or-later OR CC-BY-SA-3.0 )
 URL:       https://github.com/Numbertext/libnumbertext
-Source:        https://github.com/Numbertext/libnumbertext/releases/download/1.0.11/libnumbertext-1.0.11.tar.xz
+Source:        https://github.com/Numbertext/libnumbertext/releases/download/%{version}/libnumbertext-%{version}.tar.xz
 
 BuildRequires: autoconf, automake, libtool, gcc-c++
 BuildRequires: make

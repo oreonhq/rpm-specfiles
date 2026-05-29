@@ -1,4 +1,5 @@
 %global source0_hash c0537067bdff5f0b5d7a2fd1cca13c220f6dadc89183f23739a2cf9df49c68ca
+%global source12_hash bb010722c2cd5d919945a929f1ee9ade18658791d12db53f8010351d91eed32d
 
 %global _hardened_build 1
 
@@ -25,7 +26,7 @@ Summary: The Point-to-Point Protocol daemon
 License: bsd-3-clause AND zlib AND licenseref-fedora-public-domain AND bsd-attribution-hpnd-disclaimer AND bsd-4.3tahoe AND bsd-4-clause-uc AND apache-2.0 AND lgpl-2.0-or-later AND (gpl-2.0-or-later OR bsd-2-clause OR bsd-3-clause OR bsd-4-clause) AND gpl-2.0-or-later AND xlock AND gpl-1.0-or-later AND mackerras-3-clause-acknowledgment AND mackerras-3-clause AND hpnd-fenneberg-Livingston AND sun-ppp AND hpnd-inria-imag AND sun-ppp-2000
 URL:     http://www.samba.org/ppp
 
-Source0:        https://github.com/paulusmack/ppp/archive/ppp-2.5.1.tar.gz
+Source0:        https://github.com/paulusmack/ppp/archive/ppp-%{version}.tar.gz
 Source1: ppp-pam.conf
 Source2: ppp-logrotate.conf
 Source3: ppp-tmpfiles.conf
@@ -56,7 +57,7 @@ BuildRequires: systemd-devel
 BuildRequires: glib2-devel
 BuildRequires: openssl-devel
 BuildRequires: libxcrypt-devel
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 Provides: bundled(linux-atm) = 2.4.1
 %else
 BuildRequires: linux-atm-libs-devel
@@ -87,6 +88,7 @@ This package contains the header files for building plugins for ppp.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n %{name}-%{name}-%{version}
 
 tar -xJf %{SOURCE12}

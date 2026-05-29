@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 32ea827edd3fb80a682ffbdf95d7ba6139ff074516e660c8923260fc82f5e0f0
 %global source5_hash d75786bb3dfe8ed8a190e61bc4f4c1dcc4a08a9c2e8fbbb325f32bf8bce69002
 %global source6_hash c41a4015b43948ab104e397c24f55750e5b11619ba249a86b78e3b91d538a2a9
 %global source7_hash 0c50e231046e33aa3b68e32dc1e82403189805400aee894f71ec31ac958a1812
@@ -503,7 +503,7 @@ Summary: TeX formatting system
 # So we'll just list the license texts. This is also a bit of a lie, since most of these license texts do not apply to themselves.
 License: Apache-2.0 AND Artistic-2.0 AND BSD-3-Clause AND GFDL-1.1-or-later AND GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND Knuth-CTAN AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND LPPL-1.3a AND LPPL-1.3c AND MIT AND OFL-1.1 AND LicenseRef-Public-Domain
 URL: http://tug.org/texlive/
-Source0:        https://ctan.math.illinois.edu/systems/texlive/Source/texlive-%20260301-source.tar.xz
+Source0:        https://ctan.math.illinois.edu/systems/texlive/Source/%{source_name}.tar.xz
 Source1: macros.texlive
 Source2: http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
 Source3: texlive-licenses.tar.xz

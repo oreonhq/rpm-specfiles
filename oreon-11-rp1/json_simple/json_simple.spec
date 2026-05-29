@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a380f6605c0d7c9c97451f57f206e641b3a437322f9008b1c04beaa8d1b6421b
 
 Name:           json_simple
 Version:        1.1.1

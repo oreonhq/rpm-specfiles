@@ -14,7 +14,7 @@ Release: 11%{?dist}
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License: Apache-2.0
 URL: https://www.adelton.com/apache/mod_intercept_form_submit/
-Source0:        https://www.adelton.com/apache/mod_intercept_form_submit/mod_intercept_form_submit-1.2.0.tar.gz
+Source0:        https://www.adelton.com/apache/mod_intercept_form_submit/%{name}-%{version}.tar.gz
 BuildRequires: gcc
 BuildRequires: httpd-devel
 BuildRequires: pkgconfig

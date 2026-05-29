@@ -6,7 +6,7 @@ Version:        1.3
 Release:        7%{?dist}
 License:        BSD-2-Clause AND BSD-3-Clause
 URL:            https://github.com/libnet/libnet
-Source0:        https://github.com/libnet/libnet/releases/download/v1.3/libnet-1.3.tar.gz
+Source0:        https://github.com/libnet/libnet/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Patch0:         libnet-config.patch
 BuildRequires:  gcc
 BuildRequires:  make

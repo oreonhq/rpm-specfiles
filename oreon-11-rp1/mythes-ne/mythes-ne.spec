@@ -1,10 +1,10 @@
-%global source0_hash none
+%global source0_hash 6c18a97d16343ea611c4a270f65295b462a6b795b1cac638fc3a6af630c0f7e4
 
 Name: mythes-ne
 Summary: Nepali thesaurus
 Version: 1.1
 Release: 32%{?dist}
-Source0: http://download.services.openoffice.org/contrib/dictionaries/thes_ne_NP_v2.zip
+Source0:        http://download.services.openoffice.org/contrib/dictionaries/thes_ne_NP_v2.zip
 URL: https://wiki.openoffice.org/wiki/Dictionaries
 License: LGPL-2.0-or-later
 BuildArch: noarch

@@ -1,6 +1,6 @@
 %global source0_hash ef0ca9ee27850d1a5c863bb7ff9aa08096c9ed312ece9087b30f3a426828de82
 
-%if !(0%{?fedora} >= 32 || 0%{?rhel} >= 8) || 0%{?oreon}
+%if !(0%{?fedora} >= 32 || 0%{?rhel} >= 8) || (0%{?oreon} >= 11)
 %global with_python2 1
 %endif
 
@@ -10,7 +10,7 @@ Version: 0.52.25
 Release: 6%{?dist}
 License: LGPL-2.0-only
 URL: https://pagure.io/newt
-Source:        https://pagure.io/releases/newt/newt-0.52.25.tar.gz
+Source:        https://pagure.io/releases/newt/newt-%{version}.tar.gz
 BuildRequires: make
 BuildRequires: gcc popt-devel python3-devel slang-devel
 %{?with_python2:BuildRequires: python2-devel}

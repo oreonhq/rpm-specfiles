@@ -40,9 +40,9 @@ URL:            https://jakarta.apache.org/oro/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://archive.apache.org/dist/jakarta/oro/jakarta-oro-2.0.8.tar.gz
+Source0:        http://archive.apache.org/dist/jakarta/oro/%{name}-%{version}.tar.gz
 Source1:        MANIFEST.MF
-Source2:        http://repo1.maven.org/maven2/oro/oro/2.0.8/oro-2.0.8.pom
+Source2:        http://repo1.maven.org/maven2/%{base_name}/%{base_name}/%{version}/%{base_name}-%{version}.pom
 
 Patch:          %{name}-build-xml.patch
 

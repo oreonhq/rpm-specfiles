@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b23ad7fd9f73e43ad1767e636040e88ba7c9e5775bfa5618436a0dd2c17c3716
 
 %global mingw_build_ucrt64 1
 %{?mingw_package_header}

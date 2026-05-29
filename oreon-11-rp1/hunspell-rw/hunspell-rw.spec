@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash 53e91005ca223a43ad66d8a88158dc4d34ee4f0db62fb46fa9eb02bb34d63c97
 
-%if 0%{?fedora} > 35 || 0%{?oreon}
+%if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
 %else
 %global dict_dirname myspell
@@ -10,7 +10,7 @@ Summary: Kinyarwanda hunspell dictionaries
 %global upstreamid 20050109
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/rw_RW.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/rw_RW.zip
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch

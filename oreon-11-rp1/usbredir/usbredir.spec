@@ -6,8 +6,8 @@ Release:        3%{?dist}
 Summary:        USB network redirection protocol libraries
 License:        LGPL-2.1-or-later
 URL:            https://www.spice-space.org/usbredir.html
-Source0:        http://spice-space.org/download/usbredir/usbredir-0.15.0.tar.xz
-Source1:        http://spice-space.org/download/usbredir/usbredir-0.15.0.tar.xz.sig
+Source0:        http://spice-space.org/download/%{name}/%{name}-%{version}.tar.xz
+Source1:        http://spice-space.org/download/%{name}/%{name}-%{version}.tar.xz.sig
 Source2:        victortoso-E37A484F.keyring
 BuildRequires:  gnupg2
 BuildRequires:  gcc g++

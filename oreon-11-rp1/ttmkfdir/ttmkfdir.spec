@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c65f8e2ba5522c896df2eb7256852bf0a5855109deec0f874379474ef76c1c1c
 
 Summary: Utility to create fonts.scale files for truetype fonts
 Name: ttmkfdir

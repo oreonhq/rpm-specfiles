@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash 943f1478cbf324e2fce4596bdf8232f7a6375bb484b786a1d05d7f88d31d8bb0
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -11,7 +11,7 @@ Summary: Maori hunspell dictionaries
 %global upstreamid 20080630
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/mi_NZ.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/mi_NZ.zip
 URL: https://wiki.openoffice.org/wiki/Dictionaries
 License: GPL-3.0-or-later
 BuildArch: noarch

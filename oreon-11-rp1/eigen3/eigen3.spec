@@ -6,7 +6,7 @@
 # debuginfo package for the empty main package.
 %global debug_package %{nil}
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %global blaslib flexiblas
 %global cmake_blas_flags -DBLA_VENDOR=FlexiBLAS
 %else
@@ -29,7 +29,7 @@ Summary:        A lightweight C++ template library for vector and matrix math
 
 License:        Apache-2.0 AND MPL-2.0 AND BSD-3-Clause AND Minpack
 URL:            http://eigen.tuxfamily.org/index.php?title=Main_Page
-Source0:        https://gitlab.com/libeigen/eigen/-/archive/5.0.1/eigen-5.0.1.tar.bz2
+Source0:        https://gitlab.com/libeigen/eigen/-/archive/%{version}/eigen-%{version}.tar.bz2
 # For mingw, read the comment in the file for details
 Source1:        mingw_TryRunResults.cmake
 

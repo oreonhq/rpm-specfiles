@@ -1,4 +1,5 @@
 %global source0_hash none
+%global source4_hash c77c5511a19884473d781176326d74d8f9e1e5b433c587d9eb55bc579def2ca1
 
 # ppc64le started to fail permanently, apparently OOM,
 # first f42 https://koji.fedoraproject.org/koji/taskinfo?taskID=124917502
@@ -12,7 +13,7 @@ ExcludeArch: i686
 %global rustflags_debuginfo 1
 %endif
 
-%if 0%{?fedora} > 35 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} > 35 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dictionarydir hunspell
 %else
 %global dictionarydir myspell
@@ -80,7 +81,7 @@ ExcludeArch: armv7hl
 %global only_wayland %[0%{?fedora} || 0%{?rhel} >= 10]
 
 # Where to place node-stdout-nonblocking-wrapper for build.
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || 0%{?oreon}
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || (0%{?oreon} >= 11)
 # RPM 4.20 defines %builddir
 %global nodewrapperdir %{builddir}/bin
 %else
@@ -97,7 +98,7 @@ Version:        150.0.2
 Release:        %autorelease
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPL-2.0 OR GPL-2.0-or-later OR LGPL-2.0-or-later
-Source0:        https://archive.mozilla.org/pub/thunderbird/releases/150.0.2%{?pre_version}/source/thunderbird-150.0.2%{?pre_version}.source.tar.xz
+Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
 Source1:        thunderbird-langpacks-%{version}%{?pre_version}-20260514.tar.xz
 %endif
@@ -281,6 +282,7 @@ debug %{name}, you want to install %{name}-debuginfo instead.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })
 %setup -q
 
 # Build patches

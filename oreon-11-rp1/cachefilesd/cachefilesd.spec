@@ -8,7 +8,7 @@ Release:	23%{?dist}%{?buildid}
 Summary:	CacheFiles user-space management daemon
 License:	GPL-2.0-or-later
 URL:		http://people.redhat.com/~dhowells/fscache/
-Source0:        http://people.redhat.com/dhowells/fscache/cachefilesd-0.10.10.tar.bz2
+Source0:        http://people.redhat.com/dhowells/fscache/cachefilesd-%{version}.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires: systemd-units

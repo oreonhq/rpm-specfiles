@@ -42,7 +42,7 @@ BuildRequires:  pkgconfig(Qt6Qml)
 
 BuildRequires:  pkgconfig(libxml-2.0)
 BuildRequires:  pkgconfig(poppler)
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires:  libphonenumber-devel
 BuildRequires:  protobuf-devel
 %endif

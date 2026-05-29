@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 28869a93011d8eec94e760c1a7d7ec2a337a62d9bc94b8a6a61d98504ed26cb3
 
 Name:           msv
 Version:        2022.7

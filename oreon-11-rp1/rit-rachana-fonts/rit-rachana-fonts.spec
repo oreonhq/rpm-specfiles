@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5508e6a81d8c21c38d0a04e1f09be7682aa945457ed6510e6e0fe76ebe15ded4
 
 # SPDX-License-Identifier: MIT
 Version:    1.5.2

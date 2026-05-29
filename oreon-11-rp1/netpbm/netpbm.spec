@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f1cfcfab1846e63d7d6dab8b60edabdb66b1a5f34cacb98c6b9771a7e34ef153
 
 Summary:         A library for handling different graphics file formats
 Name:            netpbm
@@ -37,7 +37,7 @@ BuildRequires:   libjpeg-devel, libpng-devel, libtiff-devel, flex, gcc, jbigkit-
 BuildRequires:   libX11-devel, perl-generators, python3, jasper-devel, libxml2-devel
 BuildRequires:   perl(Config), perl(Cwd), perl(English), perl(Fcntl), perl(File::Basename)
 BuildRequires:   perl(strict)
-%if (0%{?fedora} && 0%{?fedora} < 28) || (0%{?rhel} || 0%{?rhel} <= 7) || 0%{?oreon}
+%if (0%{?fedora} && 0%{?fedora} < 28) || (0%{?rhel} || 0%{?rhel} <= 7) || (0%{?oreon} >= 11)
 BuildRequires:   ghostscript-core
 %else
 BuildRequires:   ghostscript

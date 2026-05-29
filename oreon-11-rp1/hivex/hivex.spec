@@ -22,7 +22,7 @@ URL:            http://libguestfs.org/
 
 Source0:        http://libguestfs.org/download/hivex/hivex-1.3.24.tar.gz
 %if 0%{verify_tarball_signature}
-Source1:        hivex-1.3.24.tar.gz.sig
+Source1:        http://libguestfs.org/download/hivex/%{name}-%{version}.tar.gz.sig
 %endif
 
 # Keyring used to verify tarball signature.

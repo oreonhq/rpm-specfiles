@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 1d86e389dfe9c77b7fbcdc8e990770902d7b71655e6db9665c7606210a8aaf32
 
 %bcond_with bootstrap
 
-%if %{without bootstrap} && %{undefined rhel} || 0%{?oreon}
+%if %{without bootstrap} && %{undefined rhel} || (0%{?oreon} >= 11)
 %bcond_without bnd_maven_plugin
 %else
 %bcond_with bnd_maven_plugin
@@ -26,12 +26,12 @@ Source1:        generate-tarball.sh
 
 # Auxiliary parent pom, packager-written
 Source2:        aggregator.pom
-Source3:        https://repo1.maven.org/maven2/biz/aQute/bnd/aQute.libg/6.3.1/aQute.libg-6.3.1.pom
-Source4:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd/6.3.1/biz.aQute.bnd-6.3.1.pom
-Source5:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bndlib/6.3.1/biz.aQute.bndlib-6.3.1.pom
-Source6:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd.annotation/6.3.1/biz.aQute.bnd.annotation-6.3.1.pom
-Source7:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd.ant/6.3.1/biz.aQute.bnd.ant-6.3.1.pom
-Source8:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd.util/6.3.1/biz.aQute.bnd.util-6.3.1.pom
+Source3:        https://repo1.maven.org/maven2/biz/aQute/bnd/aQute.libg/%{version}/aQute.libg-%{version}.pom
+Source4:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd/%{version}/biz.aQute.bnd-%{version}.pom
+Source5:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bndlib/%{version}/biz.aQute.bndlib-%{version}.pom
+Source6:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd.annotation/%{version}/biz.aQute.bnd.annotation-%{version}.pom
+Source7:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd.ant/%{version}/biz.aQute.bnd.ant-%{version}.pom
+Source8:        https://repo1.maven.org/maven2/biz/aQute/bnd/biz.aQute.bnd.util/%{version}/biz.aQute.bnd.util-%{version}.pom
 
 Patch:          0001-Disable-removed-commands.patch
 Patch:          0002-Port-to-OSGI-7.0.0.patch

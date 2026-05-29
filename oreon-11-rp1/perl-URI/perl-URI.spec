@@ -1,7 +1,7 @@
 %global source0_hash de64c779a212ff1821896c5ca2bb69e74767d2674cee411e777deea7a22604a8
 
 # Support isbn URN via Business::ISBN that needs gd library
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_with perl_URI_enables_Business_ISBN
 %bcond_with perl_URI_enables_Regexp_IPv6
 %else

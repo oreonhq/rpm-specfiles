@@ -16,7 +16,7 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/%{version}/surefire-%{version}-source-release.zip
 # Remove bundled binaries which cannot be easily verified for licensing
 Source1:        generate-tarball.sh
-Source2:        https://raw.githubusercontent.com/junit-team/junit4/r3.8.2/cpl-v10.html
+Source2:        https://junit.sourceforge.net/cpl-v10.html
 
 Patch:          0001-Port-to-TestNG-7.4.0.patch
 Patch:          0002-Disable-JUnit-4.8-test-grouping.patch

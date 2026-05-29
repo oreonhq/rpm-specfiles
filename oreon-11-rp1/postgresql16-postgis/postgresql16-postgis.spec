@@ -28,10 +28,10 @@ Summary:       Geographic Information Systems Extensions to PostgreSQL
 License:       GPL-2.0-or-later
 
 URL:           https://www.postgis.net
-Source0:        https://download.osgeo.org/postgis/source/postgis-3.6.3.tar.gz
-Source2:        https://download.osgeo.org/postgis/docs/postgis-3.6.3-en.pdf
+Source0:        https://download.osgeo.org/postgis/source/postgis-%{version}.tar.gz
+Source2:        https://download.osgeo.org/postgis/docs/postgis-%{version}-en.pdf
 %if %upgrade_prev
-Source3:        https://download.osgeo.org/postgis/source/postgis-2.5.5.tar.gz
+Source3:        https://download.osgeo.org/postgis/source/postgis-%{prevversion}.tar.gz
 
 # Add proj8 compatibility to postgis-2.x (needed for upgrade package)
 Patch1:        postgis2-proj8.patch
@@ -50,7 +50,7 @@ Summary: Open-source vector similarity search for Postgres
 %global pkgname %name
 %endif
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires: SFCGAL-devel
 BuildRequires: gtk2-devel
 %endif
@@ -187,7 +187,7 @@ version of PostgreSQL.
 %endif
 %endif
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %package -n %{pkgname}-gui
 Summary:       The shp2pgsql-gui utility for PostGIS
 Requires:      %{pkgname}%{?_isa} = %{version}-%{release}
@@ -233,7 +233,7 @@ cp -p %{SOURCE2} .
 %if %llvmjit
 	--with-llvm \
 %endif
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 	--with-sfcgal \
 	--with-gui
 %endif
@@ -361,7 +361,7 @@ find %buildroot \( -name '*.la' -or -name '*.a' \) -delete
 
 
 %check
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 desktop-file-validate %{buildroot}/%{_datadir}/applications/shp2pgsql-gui.desktop
 %endif
 %if %runselftest
@@ -394,13 +394,13 @@ fi
 %{_datadir}/pgsql/extension/address_standardizer*.control
 %{_datadir}/pgsql/extension/postgis-*.sql
 %{_datadir}/pgsql/extension/postgis_raster*.sql
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %{_datadir}/pgsql/extension/postgis_sfcgal*.sql
 %endif
 %{_datadir}/pgsql/extension/postgis_topology*.sql
 %{_datadir}/pgsql/extension/postgis.control
 %{_datadir}/pgsql/extension/postgis_raster.control
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %{_datadir}/pgsql/extension/postgis_sfcgal.control
 %endif
 %{_datadir}/pgsql/extension/postgis_topology.control
@@ -413,7 +413,7 @@ fi
 %{_datadir}/postgis/repo_revision.pl
 %{_libdir}/pgsql/address_standardizer-%{soversion}.so
 %{_libdir}/pgsql/postgis_raster-%{soversion}.so
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %{_libdir}/pgsql/postgis_sfcgal-%{soversion}.so
 %endif
 %{_libdir}/pgsql/postgis_topology-%{soversion}.so
@@ -433,7 +433,7 @@ fi
 %{_mandir}/man1/postgis_restore.1*
 %{_mandir}/man1/shp2pgsql.1*
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %files -n %{pkgname}-gui
 %{_bindir}/shp2pgsql-gui
 %{_datadir}/applications/shp2pgsql-gui.desktop
@@ -446,7 +446,7 @@ fi
 %{_libdir}/pgsql/bitcode/address_standardizer-*
 %{_libdir}/pgsql/bitcode/postgis-*
 %{_libdir}/pgsql/bitcode/postgis_raster-*
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %{_libdir}/pgsql/bitcode/postgis_sfcgal-*
 %endif
 %{_libdir}/pgsql/bitcode/postgis_topology-*

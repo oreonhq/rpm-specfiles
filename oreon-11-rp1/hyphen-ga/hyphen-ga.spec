@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash fea98b191e283912c28e72e2aa8e30a3a69fb28894341506a6437712974d1189
 
 Name: hyphen-ga
 Summary: Irish hyphenation rules
 %global upstreamid 20040220
 Version: 0.%{upstreamid}
 Release: 34%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/hyph_ga_IE.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_ga_IE.zip
 URL: http://borel.slu.edu/fleiscin/index.html
 License: GPL-1.0-or-later
 BuildArch: noarch

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 54a78bdf2986fcfa3d2c234fa48d6d4c535ef5fe803906df708df11f570f2ce2
 
 # SPDX-License-Identifier: MIT
 BuildArch: noarch

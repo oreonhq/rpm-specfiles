@@ -1,6 +1,7 @@
-%global source0_hash none
+%global source0_hash 90e03c0153b925457620ade08ed955f2dbbe794e55544448ed997aba861a4d9e
 
 %global source2_key_fpr 15D41BC02EB807D405EFFAF6C9183BEA0288CDEE
+
 
 
 Name:           teckit

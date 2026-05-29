@@ -1,4 +1,4 @@
-%global source0_hash b049a7cffd9747ad834663f7785e23c00a9b30a949cfe407ad54fdcbbbca68ee
+%global source0_hash b30b7e80e5df817e3e4a259c18c6b62fd938d96a3143a6e349529324a6763021
 
 Version:       20020502
 Release:       39%{?dist}
@@ -19,7 +19,7 @@ URL:           https://www.kurditgroup.org/d/unikurd-web
 A widely used Kurdish font which supports various Arabic-like scripts
 (Arabic, Kurdish, Persian) and also Latin.}
 
-Source0:        https://www.kurditgroup.org/sites/default/files/unikurdweb_0.zip
+Source0:        https://www.kurditgroup.org/sites/default/files/%{archivename}.zip
 Source1:       65-%{fontpkgname}.conf
 
 %fontpkg

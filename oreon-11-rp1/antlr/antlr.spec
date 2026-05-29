@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5f898ab77ef57eeac52ed9d049e8881817db3f6c3562e6294e4f5dfc08fc1799
 
 # since we have only a static library
 %global debug_package %{nil}
@@ -14,7 +14,7 @@ ExclusiveArch: %{java_arches}
 # ./generate-tarball.sh
 Source0:       antlr-%{version}.tar.gz
 Source1:       %{name}-build.xml
-Source3:        http://repo2.maven.org/maven2/antlr/antlr/2.7.7/antlr-2.7.7.pom
+Source3:        http://repo2.maven.org/maven2/antlr/antlr/%{version}/%{name}-%{version}.pom
 # Repack the tarball without prebuilt binaries of unknown origin
 Source4:       generate-tarball.sh
 Patch:         %{name}-%{version}-newgcc.patch

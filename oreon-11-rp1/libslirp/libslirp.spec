@@ -1,4 +1,4 @@
-%global source0_hash 7e607332b2d167663b0a8781113eef7e9115694404a8f576b5527b82ab76d53b
+%global source0_hash 59535cd13665458ad0f8dcd5c2c1e311548ad46b9fdf804ee30f8a7d789868ad
 
 Name:           libslirp
 Version:        4.9.1

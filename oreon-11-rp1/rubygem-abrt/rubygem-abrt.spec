@@ -1,4 +1,5 @@
 %global source0_hash 6a97058583b091ad62d00ef18cc0b77e44ca7d20729d6f9fb40a01a41fd18735
+%global source1_hash 4d82e3fd8430f1ad297ea8107fbac54dae5396aca60177dbfcdde267c5817ec8
 
 # Generated from abrt-0.0.2.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name abrt
@@ -9,7 +10,7 @@ Release: 2%{?dist}
 Summary: ABRT support for Ruby
 License: MIT
 URL: http://github.com/voxik/abrt-ruby
-Source0:        https://rubygems.org/gems/abrt-0.5.0.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/voxik/abrt-ruby.git && cd abrt-ruby
 # git archive -v -o abrt-0.5.0-spec.tar.gz v0.5.0 spec/
 Source1: %{gem_name}-%{version}-spec.tar.gz
@@ -37,6 +38,7 @@ Documentation for %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %build

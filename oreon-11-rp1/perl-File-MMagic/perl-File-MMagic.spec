@@ -15,7 +15,7 @@ BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils
-%if 0%{?fedora} > 34 || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} > 34 || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 BuildRequires:  glibc-gconv-extra
 %endif
 BuildRequires:  glibc-common

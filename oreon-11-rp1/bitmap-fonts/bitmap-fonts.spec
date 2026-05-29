@@ -1,4 +1,5 @@
-%global source0_hash none
+%global source0_hash 11b77ba59659733ed93ca66dfa10fc4df6fbf5b8e70311110f5d29a43d963c34
+%global source1_hash f76459f98a870fba99f1a265b7c709ad7c0c01c23f6a5500c86c5b6f1fdddab9
 
 # SPDX-License-Identifier: MIT
 
@@ -185,6 +186,7 @@ Meta-package for installing all font families of opentype bitmap.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -a 1
 cp -p %{SOURCE2} .
 cp -p %{SOURCE3} .

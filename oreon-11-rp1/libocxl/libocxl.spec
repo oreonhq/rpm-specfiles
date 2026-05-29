@@ -7,7 +7,7 @@ Summary:        Allows to implement a user-space driver for an OpenCAPI accelera
 
 License:        Apache-2.0
 URL:            https://github.com/OpenCAPI/libocxl
-Source0:        https://github.com/OpenCAPI/libocxl/archive/1.2.1/libocxl-1.2.1.tar.gz
+Source0:        https://github.com/OpenCAPI/libocxl/archive/%{version}/%{name}-%{version}.tar.gz
 
 ExclusiveArch:  ppc64le
 

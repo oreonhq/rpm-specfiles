@@ -11,7 +11,7 @@ URL:            https://jakarta.ee/specifications/mail/2.1/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/mail-api/archive/2.1.5/mail-2.1.5.tar.gz
+Source0:        https://github.com/jakartaee/mail-api/archive/%{version}/mail-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

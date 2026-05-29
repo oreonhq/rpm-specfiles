@@ -16,9 +16,9 @@ URL:        http://www.x.org
 License:    MIT
 
 %if 0%{?gitdate}
-Source0:        https://www.x.org/pub/individual/driver/xf86-input-libinput-1.5.0.tar.xz
+Source0:        https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
 %else
-Source0:        https://www.x.org/pub/individual/driver/xf86-input-libinput-1.5.0.tar.xz
+Source0:        https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
 %endif
 Source1:    71-libinput-overrides-wacom.conf
 Source30:   xserver-sdk-abi-requires
@@ -33,8 +33,8 @@ BuildRequires: xorg-x11-server-devel >= 1.14.0
 BuildRequires: libudev-devel libevdev-devel libinput-devel >= 0.6.0-3
 BuildRequires: xorg-x11-util-macros
 
-Requires: Xorg %(xserver-sdk-abi-requires ansic)
-Requires: Xorg %(xserver-sdk-abi-requires xinput)
+Requires: Xorg %(sh %{SOURCE30} ansic)
+Requires: Xorg %(sh %{SOURCE30} xinput)
 Requires: xkeyboard-config
 Requires: libinput >= 0.21.0
 

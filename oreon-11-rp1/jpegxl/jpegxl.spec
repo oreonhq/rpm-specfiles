@@ -6,7 +6,7 @@ Release:        9%{?dist}
 Summary:        JPEG XL reference encoder and decoder (libjxl)
 License:        BSD-3-Clause
 URL:            https://github.com/libjxl/libjxl
-Source0:        https://github.com/libjxl/libjxl/archive/v0.11.1/libjxl-0.11.1.tar.gz
+Source0:        https://github.com/libjxl/libjxl/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

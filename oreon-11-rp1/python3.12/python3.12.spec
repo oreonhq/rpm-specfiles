@@ -333,7 +333,7 @@ BuildRequires: python3-rpm-generators
 Source0:        https://www.python.org/ftp/python/3.12.13/Python-3.12.13.tar.xz
 Source1:        Python-3.12.13.tar.xz.asc
 # The release manager for Python 3.12 is Thomas Wouters
-Source2: Yhg1s.gpg
+Source2:        https://github.com/Yhg1s.gpg
 
 # A simple script to check timestamps of bytecode files
 # Run in check section with Python that is currently being built

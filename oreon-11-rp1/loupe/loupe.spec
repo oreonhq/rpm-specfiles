@@ -56,7 +56,7 @@ Source1:        loupe-%{tarball_version}-vendor.tar.xz
 # 
 ExcludeArch:    %{ix86}
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  cargo-rpm-macros

@@ -7,7 +7,7 @@ Summary:        A programming language for automatic language analysis
 
 License:        GPL-2.0-or-later
 URL:            http://home.arcor.de/bjoern-beutel/malaga/
-Source0:        http://home.arcor.de/bjoern-beutel/malaga/malaga-7.12.tgz
+Source0:        http://home.arcor.de/bjoern-beutel/malaga/%{name}-%{version}.tgz
 # Fix map_file symbol conflict with samba. Upstream can be considered
 # inactive but as libvoikko >= 2.2 doesn't use libmalaga anymore, these kind
 # of problems won't probably come up. The only executables in Fedora which

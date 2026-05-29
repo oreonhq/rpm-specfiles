@@ -3,6 +3,7 @@
 %global source2_key_fpr F7774FB1AD074A7E8C8767EA91738F73E1B768A0
 
 
+
 %global _hardened_build 1
 
 %ifarch %{kernel_arches}
@@ -31,7 +32,7 @@
 %global have_blkio 1
 
 # Enable mingw subpackage on Fedora only.
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %global have_mingw 1
 %endif
 
@@ -66,12 +67,12 @@ Summary:        NBD server
 License:        BSD-3-Clause
 URL:            https://gitlab.com/nbdkit/nbdkit
 
-%if 0%{?rhel} >= 8 || 0%{?oreon}
+%if 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
 # On RHEL 8+, we cannot build the package on i686 (no virt stack).
 ExcludeArch:    i686
 %endif
 
-Source0:        http://libguestfs.org/download/nbdkit/1.47-development/nbdkit-1.47.9.tar.gz
+Source0:        http://libguestfs.org/download/nbdkit/%{source_directory}/%{name}-%{version}.tar.gz
 %if 0%{verify_tarball_signature}
 Source1:        http://libguestfs.org/download/nbdkit/%{source_directory}/%{name}-%{version}.tar.gz.sig
 # Keyring used to verify tarball signature.
@@ -103,20 +104,20 @@ BuildRequires:  gcc, gcc-c++
 BuildRequires:  %{_bindir}/pod2man
 BuildRequires:  pkgconfig(gnutls)
 BuildRequires:  pkgconfig(libselinux)
-%if !0%{?rhel} && 0%{?have_libguestfs} || 0%{?oreon}
+%if !0%{?rhel} && 0%{?have_libguestfs} || (0%{?oreon} >= 11)
 BuildRequires:  pkgconfig(libguestfs)
 %endif
 BuildRequires:  pkgconfig(libvirt)
 BuildRequires:  pkgconfig(liblzma)
 BuildRequires:  pkgconfig(zlib)
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  pkgconfig(zlib-ng)
 %endif
 BuildRequires:  pkgconfig(bzip2)
 BuildRequires:  pkgconfig(libzstd)
 BuildRequires:  pkgconfig(libcurl)
 BuildRequires:  pkgconfig(libnbd)
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 # We require libnfs >= 6, but the internal version is >= 16
 BuildRequires:  pkgconfig(libnfs) >= 16
 %endif
@@ -124,31 +125,31 @@ BuildRequires:  pkgconfig(libssh)
 BuildRequires:  e2fsprogs
 BuildRequires:  pkgconfig(ext2fs)
 BuildRequires:  pkgconfig(com_err)
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  xorriso
 BuildRequires:  pkgconfig(libtorrent-rasterbar)
 %endif
 %if 0%{?have_blkio}
 BuildRequires:  pkgconfig(blkio)
 %endif
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  pkgconfig(OpenCL)
 %endif
 BuildRequires:  bash-completion
-%if 0%{?fedora} || 0%{?rhel} >= 11 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 11 || (0%{?oreon} >= 11)
 BuildRequires:  bash-completion-devel
 %endif
 BuildRequires:  perl-devel
 BuildRequires:  perl(ExtUtils::Embed)
-%if 0%{?rhel} == 8 || 0%{?oreon}
+%if 0%{?rhel} == 8 || (0%{?oreon} >= 11)
 BuildRequires:  platform-python-devel
 %else
 BuildRequires:  python3-devel
 %endif
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  python3-boto3
 %endif
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %if 0%{?have_ocaml}
 BuildRequires:  ocaml >= 4.03
 BuildRequires:  ocaml-ocamldoc
@@ -169,7 +170,7 @@ BuildRequires:  glibc-utils
 BuildRequires:  /usr/bin/hexdump
 BuildRequires:  /usr/sbin/ip
 BuildRequires:  jq
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  /usr/bin/lzip
 %endif
 BuildRequires:  /usr/bin/nbdcopy
@@ -181,7 +182,7 @@ BuildRequires:  /usr/bin/qemu-io
 BuildRequires:  /usr/bin/qemu-nbd
 %endif
 BuildRequires:  /usr/sbin/sfdisk
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  /usr/bin/socat
 %endif
 BuildRequires:  /usr/sbin/ss
@@ -312,7 +313,7 @@ nbdkit-zero-plugin          Zero-length plugin for testing.
 %package example-plugins
 Summary:        Example plugins for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 # example4 is written in Perl.
 Requires:       %{name}-perl-plugin
 %endif
@@ -335,7 +336,7 @@ for %{name}.
 %endif
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package cc-plugin
 Summary:        Write small inline C plugins and scripts for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -349,7 +350,7 @@ in C, install %{name}-devel for that.
 %endif
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package cdi-plugin
 Summary:        Containerized Data Import plugin for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -369,7 +370,7 @@ Requires:       %{name}-server%{?_isa} = %{version}-%{release}
 This package contains cURL (HTTP/FTP) support for %{name}.
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 # In theory this is noarch, but because plugins are placed in _libdir
 # which varies across architectures, RPM does not allow this.
 %package gcs-plugin
@@ -385,7 +386,7 @@ Cloud Storage using %{name}.
 %endif
 
 
-%if !0%{?rhel} && 0%{?have_libguestfs} || 0%{?oreon}
+%if !0%{?rhel} && 0%{?have_libguestfs} || (0%{?oreon} >= 11)
 %package guestfs-plugin
 Summary:        libguestfs plugin for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -395,7 +396,7 @@ This package is a libguestfs plugin for %{name}.
 %endif
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package iso-plugin
 Summary:        Virtual ISO 9660 plugin for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -406,7 +407,7 @@ This package is a virtual ISO 9660 (CD-ROM) plugin for %{name}.
 %endif
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package libvirt-plugin
 Summary:        Libvirt plugin for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -428,7 +429,7 @@ Requires:       e2fsprogs
 This package is a virtual Linux disk plugin for %{name}.
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package lua-plugin
 Summary:        Lua plugin for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -447,7 +448,7 @@ This package lets you forward NBD connections from %{name}
 to another NBD server.
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package nfs-plugin
 Summary:        NFS (Network File Server) plugin for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -457,7 +458,7 @@ This package contains Network File Server (NFS) support for %{name}.
 %endif
 
 
-%if !0%{?rhel} && 0%{?have_ocaml} || 0%{?oreon}
+%if !0%{?rhel} && 0%{?have_ocaml} || (0%{?oreon} >= 11)
 %package ocaml-plugin
 Summary:        OCaml plugin for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -486,7 +487,7 @@ Requires:       %{name}-server%{?_isa} = %{version}-%{release}
 Requires:       util-linux, e2fsprogs
 # For other filesystems.
 Suggests:       xfsprogs
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 Suggests:       ntfsprogs, dosfstools
 %endif
 
@@ -494,7 +495,7 @@ Suggests:       ntfsprogs, dosfstools
 This package is a plugin to create filesystems on demand for %{name}.
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package perl-plugin
 Summary:        Perl plugin for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -512,7 +513,7 @@ Requires:       %{name}-server%{?_isa} = %{version}-%{release}
 This package lets you write Python 3 plugins for %{name}.
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 # In theory this is noarch, but because plugins are placed in _libdir
 # which varies across architectures, RPM does not allow this.
 %package S3-plugin
@@ -536,7 +537,7 @@ Requires:       %{name}-server%{?_isa} = %{version}-%{release}
 This package contains SSH support for %{name}.
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package tcl-plugin
 Summary:        Tcl plugin for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -553,7 +554,7 @@ Requires:       %{name}-server%{?_isa} = %{version}-%{release}
 Requires:       util-linux, e2fsprogs
 # For other filesystems.
 Suggests:       xfsprogs
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 Suggests:       ntfsprogs, dosfstools
 %endif
 
@@ -561,7 +562,7 @@ Suggests:       ntfsprogs, dosfstools
 This package is a remote temporary filesystem disk plugin for %{name}.
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package torrent-plugin
 Summary:        BitTorrent plugin for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -584,7 +585,7 @@ VMware VDDK for accessing VMware disks and servers.
 %endif
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package vram-plugin
 Summary:        use GPU Video RAM as a network block device
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -670,7 +671,7 @@ nbdkit-pause-filter        Pause NBD requests.
 
 nbdkit-protect-filter      Write-protect parts of a plugin.
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 nbdkit-qcow2dec-filter     Decode qcow2 files.
 
 %endif
@@ -709,7 +710,7 @@ Requires:       %{name}-server%{?_isa} = %{version}-%{release}
 This package is a bzip2 filter for %{name}.
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %package ext2-filter
 Summary:        ext2, ext3 and ext4 filesystem support for %{name}
 Requires:       %{name}-server%{?_isa} = %{version}-%{release}
@@ -859,7 +860,7 @@ export PYTHON=%{__python3}
     --with-selinux \
     --with-ssh \
     --with-zlib \
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
     --with-zlib-ng \
 %else
     --without-zlib-ng \
@@ -869,12 +870,12 @@ export PYTHON=%{__python3}
     --disable-golang \
     --disable-rust \
     --disable-valgrind \
-%if !0%{?rhel} && 0%{?have_ocaml} || 0%{?oreon}
+%if !0%{?rhel} && 0%{?have_ocaml} || (0%{?oreon} >= 11)
     --enable-ocaml \
 %else
     --disable-ocaml \
 %endif
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
     --enable-lua \
     --enable-perl \
     --enable-tcl \
@@ -903,7 +904,7 @@ export PYTHON=%{__python3}
 %else
     --disable-vddk \
 %endif
-%if !0%{?rhel} && 0%{?have_libguestfs} || 0%{?oreon}
+%if !0%{?rhel} && 0%{?have_libguestfs} || (0%{?oreon} >= 11)
     --with-libguestfs \
 %else
     --without-libguestfs \
@@ -985,7 +986,7 @@ find $RPM_BUILD_ROOT -name '*.la' -delete
 # rust plugin is built.  Delete it if this happens.
 rm -f $RPM_BUILD_ROOT%{_mandir}/man3/nbdkit-rust-plugin.3*
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 # In RHEL, remove some plugins and filters we cannot --disable.
 for f in cc cdi ; do
     rm -f $RPM_BUILD_ROOT%{_libdir}/%{name}/plugins/nbdkit-$f-plugin.so
@@ -1062,7 +1063,7 @@ skip_test tests/test-nbd-tls.sh tests/test-nbd-tls-psk.sh
 # nbdkit: error: allocator=malloc: mlock: Cannot allocate memory
 # It could be the mlock limit on the builder is too low.
 # https://bugzilla.redhat.com/show_bug.cgi?id=2044432
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %ifarch aarch64 %{power64}
 skip_test tests/test-memory-allocator-malloc-mlock.sh
 %endif
@@ -1168,7 +1169,7 @@ fi
 %doc README.md
 %license LICENSE
 %{_libdir}/%{name}/plugins/nbdkit-example*-plugin.so
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %{_libdir}/%{name}/plugins/nbdkit-example4-plugin
 %endif
 %{_mandir}/man1/nbdkit-example*-plugin.1*
@@ -1183,7 +1184,7 @@ fi
 %endif
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files cc-plugin
 %doc README.md
 %license LICENSE
@@ -1192,7 +1193,7 @@ fi
 %endif
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files cdi-plugin
 %doc README.md
 %license LICENSE
@@ -1208,7 +1209,7 @@ fi
 %{_mandir}/man1/nbdkit-curl-plugin.1*
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files gcs-plugin
 %doc README.md
 %license LICENSE
@@ -1217,7 +1218,7 @@ fi
 %endif
 
 
-%if !0%{?rhel} && 0%{?have_libguestfs} || 0%{?oreon}
+%if !0%{?rhel} && 0%{?have_libguestfs} || (0%{?oreon} >= 11)
 %files guestfs-plugin
 %doc README.md
 %license LICENSE
@@ -1226,7 +1227,7 @@ fi
 %endif
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files iso-plugin
 %doc README.md
 %license LICENSE
@@ -1235,7 +1236,7 @@ fi
 %endif
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files libvirt-plugin
 %doc README.md
 %license LICENSE
@@ -1251,7 +1252,7 @@ fi
 %{_mandir}/man1/nbdkit-linuxdisk-plugin.1*
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files lua-plugin
 %doc README.md
 %license LICENSE
@@ -1267,7 +1268,7 @@ fi
 %{_mandir}/man1/nbdkit-nbd-plugin.1*
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files nfs-plugin
 %doc README.md
 %license LICENSE
@@ -1276,7 +1277,7 @@ fi
 %endif
 
 
-%if !0%{?rhel} && 0%{?have_ocaml} || 0%{?oreon}
+%if !0%{?rhel} && 0%{?have_ocaml} || (0%{?oreon} >= 11)
 %files ocaml-plugin
 %doc README.md
 %license LICENSE
@@ -1297,7 +1298,7 @@ fi
 %{_mandir}/man1/nbdkit-ondemand-plugin.1*
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files perl-plugin
 %doc README.md
 %license LICENSE
@@ -1313,7 +1314,7 @@ fi
 %{_mandir}/man3/nbdkit-python-plugin.3*
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files S3-plugin
 %doc README.md
 %license LICENSE
@@ -1329,7 +1330,7 @@ fi
 %{_mandir}/man1/nbdkit-ssh-plugin.1*
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files tcl-plugin
 %doc README.md
 %license LICENSE
@@ -1345,7 +1346,7 @@ fi
 %{_mandir}/man1/nbdkit-tmpdisk-plugin.1*
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files torrent-plugin
 %doc README.md
 %license LICENSE
@@ -1363,7 +1364,7 @@ fi
 %endif
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files vram-plugin
 %doc README.md
 %license LICENSE
@@ -1408,7 +1409,7 @@ fi
 %{_libdir}/%{name}/filters/nbdkit-partition-filter.so
 %{_libdir}/%{name}/filters/nbdkit-pause-filter.so
 %{_libdir}/%{name}/filters/nbdkit-protect-filter.so
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %{_libdir}/%{name}/filters/nbdkit-qcow2dec-filter.so
 %endif
 %{_libdir}/%{name}/filters/nbdkit-rate-filter.so
@@ -1457,7 +1458,7 @@ fi
 %{_mandir}/man1/nbdkit-partition-filter.1*
 %{_mandir}/man1/nbdkit-pause-filter.1*
 %{_mandir}/man1/nbdkit-protect-filter.1*
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %{_mandir}/man1/nbdkit-qcow2dec-filter.1*
 %endif
 %{_mandir}/man1/nbdkit-rate-filter.1*
@@ -1482,7 +1483,7 @@ fi
 %{_mandir}/man1/nbdkit-bzip2-filter.1*
 
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %files ext2-filter
 %doc README.md
 %license LICENSE
@@ -1519,19 +1520,19 @@ fi
 %license LICENSE
 # Include the source of the example plugins in the documentation.
 %doc plugins/example*/*.c
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %doc build_native/plugins/example4/nbdkit-example4-plugin
 %doc plugins/lua/example.lua
 %endif
-%if !0%{?rhel} && 0%{?have_ocaml} || 0%{?oreon}
+%if !0%{?rhel} && 0%{?have_ocaml} || (0%{?oreon} >= 11)
 %doc plugins/ocaml/example.ml
 %endif
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %doc plugins/perl/example.pl
 %endif
 %doc plugins/python/examples/*.py
 %doc plugins/sh/examples/*.sh
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %doc plugins/tcl/example.tcl
 %endif
 %{_includedir}/nbdkit-common.h
@@ -1555,7 +1556,7 @@ fi
 
 %files bash-completion
 %license LICENSE
-%if 0%{?fedora} || 0%{?rhel} >= 11 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 11 || (0%{?oreon} >= 11)
 %dir %{bash_completions_dir}
 %{bash_completions_dir}/nbdkit
 %else

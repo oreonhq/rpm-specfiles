@@ -53,7 +53,7 @@ ExcludeArch:   %{power64}
 
 URL:           http://people.redhat.com/~rjones/supermin/
 Source0:        http://download.libguestfs.org/supermin/5.3-development/supermin-5.3.5.tar.gz
-Source1:        supermin-5.3.5.tar.gz.sig
+Source1:        http://download.libguestfs.org/supermin/%{source_directory}/%{name}-%{version}.tar.gz.sig
 # Keyring used to verify tarball signature.
 Source2:       libguestfs.keyring
 

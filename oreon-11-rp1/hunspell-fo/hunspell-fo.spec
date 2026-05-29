@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -10,7 +10,7 @@ Name: hunspell-fo
 Summary: Faroese hunspell dictionaries
 Version: 0.4.2
 Release: 27%{?dist}
-Source:        http://fo.speling.org/filer/myspell-fo-0.4.2.tar.bz2
+Source:        http://fo.speling.org/filer/myspell-fo-%{version}.tar.bz2
 URL: http://fo.speling.org/
 License: GPL-2.0-or-later
 BuildArch: noarch

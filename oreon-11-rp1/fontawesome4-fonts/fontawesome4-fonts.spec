@@ -1,4 +1,4 @@
-%global source0_hash de512ba0e1dead382bbfce372cde74b3f18971d876fffb635ee9333f0db05d43
+%global source0_hash 35d79ae86c8d4fd0f931843ec969191700940875bb941044a4c860eb200f166c
 
 %global fontname fontawesome4
 %global fontconf 60-fontawesome.conf
@@ -11,8 +11,8 @@ Release:	26%{?dist}
 
 Summary:	Iconic font set
 License:	OFL-1.1-RFN
-URL:		http://fontawesome.io
-Source0:        https://github.com/FortAwesome/Font-Awesome/archive/refs/tags/v4.7.0.tar.gz#/font-awesome-4.7.0.zip
+URL:		https://github.com/FortAwesome/Font-Awesome
+Source0:        https://github.com/FortAwesome/Font-Awesome/archive/v%{version}.zip
 Source1:	%{name}-fontconfig.conf
 Source2:	README-Trademarks.txt
 BuildArch:	noarch
@@ -48,7 +48,7 @@ typically used on the web.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -n font-awesome-%{version}
+%autosetup -n Font-Awesome-%{version}
 cp -p %SOURCE2 .
 
 %build

@@ -108,7 +108,7 @@ BuildArch: noarch
 The common code used by both the graphical and non-graphical parts of
 the configuration tool.
 
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 %package applet
 Summary: Print job notification applet
 Requires: %{name}-libs
@@ -147,7 +147,7 @@ touch %buildroot%{_localstatedir}/run/udev-configure-printer/usb-uris
 
 %find_lang system-config-printer
 
-%if 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 rm -rf %{buildroot}%{_bindir}/%{name}-applet \
        %{buildroot}%{_datadir}/%{name}/__pycache__/applet* \
        %{buildroot}%{_datadir}/%{name}/applet.py* \
@@ -239,7 +239,7 @@ rm -rf %{buildroot}%{_bindir}/%{name}-applet \
 %{python3_sitelib}/cupshelpers
 %{python3_sitelib}/*.egg-info/
 
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 %files applet
 %{_bindir}/%{name}-applet
 %{_datadir}/%{name}/__pycache__/applet*
@@ -255,7 +255,7 @@ rm -rf %{buildroot}%{_bindir}/%{name}-applet \
 %ghost %verify(not md5 size mtime) %config(noreplace,missingok) %attr(0644,root,root) %{_localstatedir}/run/udev-configure-printer/usb-uris
 %{_unitdir}/configure-printer@.service
 
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 %files
 %doc ChangeLog NEWS ABOUT-NLS AUTHORS ChangeLog-OLD
 %license COPYING

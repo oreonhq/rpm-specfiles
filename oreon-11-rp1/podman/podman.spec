@@ -11,13 +11,13 @@
 
 %global gomodulesmode GO111MODULE=on
 
-%if %{defined fedora} || 0%{?oreon}
+%if %{defined fedora} || (0%{?oreon} >= 11)
 %define build_with_btrfs 1
 # qemu-system* isn't packageed for CentOS Stream / RHEL
 %define qemu 1
 # bats is included in the default repos (No epel/copr etc.)
 %define distro_bats 1
-%if %{?fedora} >= 43 || 0%{?oreon}
+%if (0%{?fedora} >= 43) || (0%{?oreon} >= 11)
 %define sequoia 1
 %endif
 %endif
@@ -30,7 +30,7 @@
 %endif
 
 # Only RHEL and CentOS Stream rpms are built with fips-enabled go compiler
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 %define fips_enabled 1
 %endif
 
@@ -89,7 +89,7 @@ BuildRequires: glibc-devel
 BuildRequires: glibc-static
 BuildRequires: golang
 BuildRequires: git-core
-%if %{undefined rhel} || 0%{?rhel} >= 10 || 0%{?oreon}
+%if %{undefined rhel} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 BuildRequires: go-rpm-macros
 %endif
 BuildRequires: gpgme-devel
@@ -106,7 +106,7 @@ BuildRequires: systemd
 BuildRequires: systemd-devel
 Requires: catatonit
 Requires: conmon >= 2:2.1.7-2
-%if %{defined fedora} && 0%{?fedora} >= 40 || 0%{?oreon}
+%if %{defined fedora} && 0%{?fedora} >= 40 || (0%{?oreon} >= 11)
 # TODO: Remove the f40 conditional after a few releases to keep conditionals to
 # a minimum
 # Ref: https://bugzilla.redhat.com/show_bug.cgi?id=2269148
@@ -230,7 +230,7 @@ https://docs.podman.io/en/latest/markdown/podman-machine.1.html
 sed -i 's;@@PODMAN@@\;$(BINDIR);@@PODMAN@@\;%{_bindir};' Makefile
 
 # cgroups-v1 is supported on rhel9
-%if 0%{?rhel} == 9 || 0%{?oreon}
+%if 0%{?rhel} == 9 || (0%{?oreon} >= 11)
 sed -i '/DELETE ON RHEL9/,/DELETE ON RHEL9/d' libpod/runtime.go
 %endif
 
@@ -358,7 +358,7 @@ ln -s ../qemu-kvm %{buildroot}%{_libexecdir}/%{name}/qemu-system-%{arch}
 # iptables modules are only needed with iptables-legacy,
 # as of f41 netavark will default to nftables so do not load unessary modules
 # 
-%if %{defined fedora} && 0%{?fedora} < 41 || 0%{?oreon}
+%if %{defined fedora} && 0%{?fedora} < 41 || (0%{?oreon} >= 11)
 %{_modulesloaddir}/%{name}-iptables.conf
 %endif
 

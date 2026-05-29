@@ -243,7 +243,7 @@ cp %{SOURCE10} .
 
 %patch 101 -p1 -b .modern-rpm-api
 %patch 102 -p1
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %patch 103 -p1
 %endif
 

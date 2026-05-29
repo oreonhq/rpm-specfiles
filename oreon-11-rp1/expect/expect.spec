@@ -10,7 +10,7 @@ Version: %{majorver}
 Release: 31%{?dist}
 License: LicenseRef-Public-Domain
 URL: https://core.tcl.tk/expect/index
-Source:        http://downloads.sourceforge.net/expect/expect.tar.gz
+Source:        http://downloads.sourceforge.net/%{name}/%{name}%{version}.tar.gz
 Buildrequires: gcc autoconf automake chrpath
 BuildRequires: tcl-devel
 BuildRequires: make

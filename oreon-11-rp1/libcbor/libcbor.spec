@@ -7,7 +7,7 @@ Summary:	A CBOR parsing library
 
 License:	MIT
 URL:		http://libcbor.org
-Source0:        https://github.com/PJK/libcbor/archive/v0.13.0.tar.gz
+Source0:        https://github.com/PJK/%{name}/archive/v%{version}.tar.gz
 
 BuildRequires:	cmake
 BuildRequires:	doxygen

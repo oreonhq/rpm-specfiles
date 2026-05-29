@@ -1,7 +1,7 @@
 %global source0_hash f2de1afb4f0c56c36e6d5260aa0bd2c8f18e4d85009dcf5842204ea2a7fbc3df
 
 # Run optional test
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_without perl_YAML_Syck_enables_optional_test
 %else
 %bcond_with perl_YAML_Syck_enables_optional_test

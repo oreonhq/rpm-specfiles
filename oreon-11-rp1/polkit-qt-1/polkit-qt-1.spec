@@ -7,7 +7,7 @@ Summary:         Qt bindings for PolicyKit
 
 License:         BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:             https://api.kde.org/kdesupport-api/polkit-qt-1-apidocs/
-Source0:        https://download.kde.org/stable/polkit-qt-1/polkit-qt-1-0.201.1.tar.xz
+Source0:        https://download.kde.org/stable/%{name}/polkit-qt-1-%{version}.tar.xz
 
 
 BuildRequires:   cmake

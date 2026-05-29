@@ -124,8 +124,8 @@ BuildRequires:  mingw64-nettle >= 3.6
 URL: http://www.gnutls.org/
 %define short_version %(echo %{version} | grep -m1 -o "[0-9]*\.[0-9]*" | head -1)
 Source0:        https://www.gnupg.org/ftp/gcrypt/gnutls/v%(echo/gnutls-3.8.12.tar.xz
-Source1:        gnutls-3.8.12.tar.xz.sig
-Source2: gnutls-release-keyring.gpg
+Source1:        https://www.gnupg.org/ftp/gcrypt/gnutls/v%{short_version}/%{name}-%{version}.tar.xz.sig
+Source2:        https://gnutls.org/gnutls-release-keyring.gpg
 
 %if %{with bundled_gmp}
 Provides:	bundled(gmp) = 6.2.1

@@ -1,6 +1,6 @@
 %global source0_hash f9145054ae131973c61208ea82486d5dd10e3c5cdad23b7c4a0617743c8f5a18
 
-%if 0%{?fedora:1} || 0%{?oreon}
+%if 0%{?fedora:1} || (0%{?oreon} >= 11)
 %bcond_without oniguruma
 %else
 %bcond_with oniguruma
@@ -12,7 +12,7 @@ Version:	2.3.3
 Release:	9%{?dist}
 License:	GPL-2.0-or-later
 URL:		https://www.jedsoft.org/slang/
-Source:        https://www.jedsoft.org/releases/slang/slang-2.3.3.tar.bz2
+Source:        https://www.jedsoft.org/releases/%{name}/%{name}-%{version}.tar.bz2
 # disable test that fails with SIGHUP ignored (e.g. in koji)
 Patch2:		slang-sighuptest.patch
 BuildRequires: make

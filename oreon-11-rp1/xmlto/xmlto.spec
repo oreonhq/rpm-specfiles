@@ -7,7 +7,7 @@ Summary: A tool for converting XML files to various formats
 
 License: GPL-2.0-or-later
 URL: https://pagure.io/xmlto/
-Source0:        https://pagure.io/xmlto/archive/0.0.29/xmlto-0.0.29.tar.gz
+Source0:        https://pagure.io/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires: make
 BuildRequires: docbook-xsl

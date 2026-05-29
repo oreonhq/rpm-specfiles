@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -10,7 +10,7 @@ Name: hunspell-fr
 Summary: French hunspell dictionaries
 Version: 7.0
 Release: 2%{?dist}
-Source:        https://grammalecte.net/dic/hunspell-french-dictionaries-v7.0.zip
+Source:        https://grammalecte.net/dic/hunspell-french-dictionaries-v%{version}.zip
 URL: https://grammalecte.net/
 License: MPL-2.0
 BuildArch: noarch

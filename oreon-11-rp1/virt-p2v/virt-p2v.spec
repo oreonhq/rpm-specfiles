@@ -3,6 +3,7 @@
 %global source2_key_fpr F7774FB1AD074A7E8C8767EA91738F73E1B768A0
 
 
+
 # Verify tarball signature with GPGv2.
 %global verify_tarball_signature 1
 
@@ -25,7 +26,7 @@ ExclusiveArch: x86_64
 
 # Source and patches.
 URL:           http://libguestfs.org/
-Source0:        http://download.libguestfs.org/virt-p2v/virt-p2v-1.42.4.tar.gz
+Source0:        http://download.libguestfs.org/%{name}/%{name}-%{version}.tar.gz
 %if 0%{verify_tarball_signature}
 Source1:        http://download.libguestfs.org/%{name}/%{name}-%{version}.tar.gz.sig
 %endif

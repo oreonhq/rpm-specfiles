@@ -8,13 +8,13 @@ Release: %autorelease
 # The entire source is GPLv2 except doc/ed.info and doc/ed.texi, which are GFDL
 License: GPL-2.0-only AND GFDL-1.3-no-invariants-or-later
 URL:     https://www.gnu.org/software/ed/
-Source0:        https://ftpmirror.gnu.org/ed/ed-1.22.5.tar.lz
-Source1:        https://ftpmirror.gnu.org/ed/ed-1.22.5.tar.lz.sig
+Source0:        https://ftpmirror.gnu.org/ed/%{name}-%{version}.tar.lz
+Source1:        https://ftpmirror.gnu.org/ed/%{name}-%{version}.tar.lz.sig
 Source2: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x25B62C9821501AA0#./antoniodiazdiaz-keyring-2026.asc
 
 BuildRequires: gcc
 BuildRequires: make
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires: bsdtar
 %else
 BuildRequires: lzip
@@ -31,7 +31,7 @@ replaced in normal usage by full-screen editors (emacs and vi, for example).
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 # no lzip in RHEL; bsdtar can handle it but not from within %%setup.
 %setup -q -c -T
 bsdtar -xf %{SOURCE0} -C %{_builddir}

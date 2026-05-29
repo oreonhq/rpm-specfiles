@@ -9,7 +9,7 @@ Release:        6%{?dist}
 Summary:        Python WBEM client interface and related utilities
 License:        LGPL-2.1-or-later
 URL:            https://github.com/pywbem/pywbem
-Source0:        https://github.com/pywbem/pywbem/archive/v1.7.3/pywbem-1.7.3.tar.gz
+Source0:        https://github.com/pywbem/pywbem/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch1:         0001_test_fixes.patch
 Patch2:         0002_correct_test_libraries.patch
 BuildRequires:  python3-devel

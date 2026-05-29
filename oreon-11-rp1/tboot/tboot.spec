@@ -8,7 +8,7 @@ Epoch:         1
 
 License:       BSD-3-Clause
 URL:           http://sourceforge.net/projects/tboot/
-Source0:        https://sourceforge.net/projects/tboot/files/tboot/tboot-1.11.7.tar.gz
+Source0:        https://sourceforge.net/projects/tboot/files/%{name}/%{name}-%{version}.tar.gz
 Patch0:        tboot-gcc14.patch
 Patch1:        openssl-no-engine.patch
 Patch2:        tboot-sbin.patch

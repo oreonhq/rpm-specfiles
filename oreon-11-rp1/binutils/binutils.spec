@@ -58,7 +58,7 @@ URL: https://sourceware.org/binutils
 # Enable support for generating new dtags in the linker
 # Disable if it is necessary to use RPATH instead.
 # Currently enabled for Fedora, disabled for RHEL.
-%if 0%{?fedora} != 0 || 0%{?oreon}
+%if 0%{?fedora} != 0 || (0%{?oreon} >= 11)
 %define enable_new_dtags 1
 %else
 %define enable_new_dtags 0
@@ -220,16 +220,16 @@ URL: https://sourceware.org/binutils
 #----------------------------------------------------------------------------
 
 %if "%{source}" == "official-release"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 # Source0: https://ftp.gnu.org/gnu/binutils/binutils-%%{version}.tar.xz
 %elif "%{source}" == "even-pre-release"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "odd-pre-release"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "snapshot"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "tarball"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %endif
 
 Source1: binutils-2.19.50.0.1-output-format.sed

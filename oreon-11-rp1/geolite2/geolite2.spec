@@ -19,9 +19,9 @@ Summary:        Free IP geolocation databases
 # This database incorporates GeoNames geographical data, which is made available under the Creative Commons Attribution 3.0 License
 License:        CC-BY-SA-4.0 AND CC-BY-3.0
 URL:            https://dev.maxmind.com/geoip/geoip2/geolite2/
-Source0:        https://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN_20191217.tar.gz
-Source1:        https://geolite.maxmind.com/download/geoip/database/GeoLite2-City_20191217.tar.gz
-Source2:        https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country_20191217.tar.gz
+Source0:        https://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN_%{version}.tar.gz
+Source1:        https://geolite.maxmind.com/download/geoip/database/GeoLite2-City_%{version}.tar.gz
+Source2:        https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country_%{version}.tar.gz
 BuildArch:      noarch
 
 

@@ -4,13 +4,13 @@
 #%%global relc rc1
 
 # Simple way to disable tests
-%if 0%{?flatpak} || 0%{?rhel} || 0%{?fedora} || 0%{?oreon}
+%if 0%{?flatpak} || 0%{?rhel} || 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond_with tests
 %else
 %bcond_without tests
 %endif
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %global blaslib flexiblas
 %global blasvar %{nil}
 %else
@@ -34,7 +34,7 @@ Summary:        A fast multidimensional array facility for Python
 # numpy/random/src/sfc64: MIT
 License:        BSD-3-Clause AND MIT AND Apache-2.0 AND (Zlib OR BSL-1.0)
 URL:            http://www.numpy.org/
-Source0:        https://github.com/numpy/numpy/releases/download/v2.4.6/numpy-2.4.6.tar.gz
+Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Source1:        https://numpy.org/doc/%(echo 2.4.6 | cut -d. -f1-2)/numpy-html.zip
 
 # Fix FTBFS with GCC 16
@@ -68,7 +68,7 @@ Obsoletes:      numpy < 1:1.10.1-3
 BuildRequires:  python3-devel
 BuildRequires:  gcc-gfortran gcc gcc-c++
 BuildRequires:  lapack-devel
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires:  libdivide-devel
 %endif
 BuildRequires:  ninja-build
@@ -85,7 +85,7 @@ BuildRequires: chrpath
 #  https://bugzilla.redhat.com/show_bug.cgi?id=2332307
 Requires:       python3-numpy-f2py%{?_isa} = %{epoch}:%{version}-%{release}
 
-%if !0%{?fedora} || 0%{?oreon}
+%if !0%{?fedora} || (0%{?oreon} >= 11)
 Provides:       bundled(libdivide) = 3.0
 %endif
 
@@ -136,7 +136,7 @@ libraries = %{blaslib}%{blasvar}
 library_dirs = %{_libdir}
 EOF
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # Unbundle libdivide
 sed -i 's,"numpy/libdivide/libdivide.h",<libdivide.h>,' \
     numpy/_core/src/umath/loops.c.src
@@ -149,7 +149,7 @@ sed -i 's,"numpy/libdivide/libdivide.h",<libdivide.h>,' \
 %set_build_flags
 # Allow libdivide to use vector instructions where possible
 %ifarch x86_64
-%if 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 # x86_64-v3
 sed -i '/libdivide\.h/i#define LIBDIVIDE_AVX2' numpy/_core/src/umath/loops.c.src
 %else
@@ -161,7 +161,7 @@ sed -i '/libdivide\.h/i#define LIBDIVIDE_NEON' numpy/_core/src/umath/loops.c.src
 %endif
 
 #fix flags for ELN ppc64le
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %ifarch ppc64le
 find . -type f -print0 | xargs -0 sed -i s/mcpu=power8/mcpu=power9/
 %endif
@@ -186,7 +186,7 @@ popd &> /dev/null
 mkdir -p %{buildroot}%{_includedir}
 ln -s %{python3_sitearch}/%{name}/_core/include/numpy/ %{buildroot}%{_includedir}/numpy
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 rm %{buildroot}%{python3_sitearch}/numpy/_core/include/numpy/random/libdivide.h
 %endif
 

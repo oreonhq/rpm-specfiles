@@ -7,7 +7,7 @@ Release:       2%{?dist}
 
 License:       MIT
 URL:           http://www.sourceforge.net/projects/%{name}/
-Source:        http://downloads.sourceforge.net/giflib/giflib-6.1.3.tar.gz
+Source:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # Downstream cmake support
 Source1:       CMakeLists.txt
 # Fix several defects found by Coverity scan

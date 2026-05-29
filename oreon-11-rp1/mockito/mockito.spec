@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5a3c65731bff1e1af9ad777763f9c13095ade511a0ae8509e533110a1b07113b
 
 %bcond_with bootstrap
 
@@ -17,8 +17,8 @@ Source1:        generate-tarball.sh
 # A custom build script to allow building with maven instead of gradle
 Source2:        aggregator.pom
 # Maven central POMs for subprojects
-Source3:        https://repo1.maven.org/maven2/org/mockito/mockito-core/5.8.0/mockito-core-5.8.0.pom
-Source4:        https://repo1.maven.org/maven2/org/mockito/mockito-junit-jupiter/5.8.0/mockito-junit-jupiter-5.8.0.pom
+Source3:        https://repo1.maven.org/maven2/org/mockito/mockito-core/%{version}/mockito-core-%{version}.pom
+Source4:        https://repo1.maven.org/maven2/org/mockito/mockito-junit-jupiter/%{version}/mockito-junit-jupiter-%{version}.pom
 
 # Mockito expects byte-buddy to have a shaded/bundled version of ASM, but
 # we don't bundle in Fedora, so this patch makes mockito use ASM explicitly

@@ -6,7 +6,7 @@
 %global apidocs 1
 # upstream says tests busted, maybe to be fixed in some future point release
 %global tests 1
-%if 0%{?fedora} < 24 && 0%{?rhel} <= 7 || 0%{?oreon} 
+%if 0%{?fedora} < 24 && 0%{?rhel} <= 7 || (0%{?oreon} >= 11) 
 %global virtuoso 1
 %endif
 
@@ -23,9 +23,9 @@ URL:     https://quickgit.kde.org/?p=soprano.git
 %if 0%{?snap:1}
 # git clone git://anongit.kde.org/soprano ; cd soprano
 # git archive --prefix=soprano-%%{version}/ master | bzip2 > soprano-%%{version}-%%{snap}.tar.bz2
-Source0:        http://downloads.sf.net/soprano/soprano-2.9.4.tar.bz2
+Source0:        http://downloads.sf.net/soprano/soprano-%{version}.tar.bz2
 %else
-Source0:        http://downloads.sf.net/soprano/soprano-2.9.4.tar.bz2
+Source0:        http://downloads.sf.net/soprano/soprano-%{version}.tar.bz2
 %endif
 
 ## upstreamable patches

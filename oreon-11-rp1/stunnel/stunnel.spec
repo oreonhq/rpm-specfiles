@@ -3,13 +3,13 @@
 # Do not generate provides for private libraries
 %global __provides_exclude_from ^%{_libdir}/stunnel/.*$
 
-%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 %bcond_with libwrap
 %else
 %bcond_without libwrap
 %endif
 
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %bcond openssl_engine 0
 %else
 %bcond openssl_engine 1
@@ -53,7 +53,7 @@ BuildRequires: make
 BuildRequires: gcc
 BuildRequires: gnupg2
 BuildRequires: openssl-devel, pkgconfig, util-linux
-%if %{with openssl_engine} && 0%{?fedora} >= 41 || 0%{?oreon}
+%if %{with openssl_engine} && 0%{?fedora} >= 41 || (0%{?oreon} >= 11)
 BuildRequires: openssl-devel-engine
 %endif
 BuildRequires: autoconf automake libtool

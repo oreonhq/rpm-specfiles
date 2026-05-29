@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 66acafa62af615d120f467034f5ffea3850599415a913227d4b8ee375fce5c17
 
 # define to allow khtml to remain the default
 %ifarch ppc ppc64 s390 s390x
 %global khtml 1
 %endif
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global khtml 1
 %endif
 
@@ -83,7 +83,7 @@ sed -i.InitialPreference \
 %find_lang kwebkitpart
 
 
-%if 0%{?rhel} && 0%{?rhel} < 8 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
 %post
 touch --no-create %{_kde4_iconsdir}/hicolor &> /dev/null ||:
 

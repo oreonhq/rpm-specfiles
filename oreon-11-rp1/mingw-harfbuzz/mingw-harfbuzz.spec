@@ -9,7 +9,7 @@ Summary:        MinGW Windows Harfbuzz library
 
 License:        MIT
 URL:            http://www.harfbuzz.org
-Source0:        https://github.com/harfbuzz/harfbuzz/releases/download/13.0.1/harfbuzz-13.0.1.tar.xz
+Source0:        https://github.com/harfbuzz/harfbuzz/releases/download/%{version}/harfbuzz-%{version}.tar.xz
 
 # Invoke versioned python
 Patch0:         harfbuzz-python.patch

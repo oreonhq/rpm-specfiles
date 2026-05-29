@@ -11,7 +11,7 @@ URL:            https://joel-costigliola.github.io/assertj/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/joel-costigliola/assertj-core/archive/assertj-build-3.26.3.tar.gz
+Source0:        https://github.com/joel-costigliola/assertj-core/archive/assertj-build-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

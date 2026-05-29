@@ -7,7 +7,7 @@ Release: 4%{?dist}
 License: MIT-open-group
 URL: http://www.x.org
 
-Source0:        https://www.x.org/pub/individual/lib/libXau-1.0.12.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 
 BuildRequires: make
 BuildRequires: xorg-x11-util-macros

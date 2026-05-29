@@ -16,8 +16,8 @@ Epoch:		1
 License:	BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-or-later AND LGPL-2.0-or-later AND Zlib AND ISC AND (BSD-3-Clause OR GPL-2.0-only) AND (GPL-2.0-or-later AND Zlib)
 Url:		http://www.wireshark.org/
 
-Source0:        https://wireshark.org/download/src/wireshark-4.6.4.tar.xz
-Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.6.4.txt
+Source0:        https://wireshark.org/download/src/%{name}-%{version}.tar.xz
+Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%{version}.txt
 Source2:	90-wireshark-usbmon.rules
 Source3:	wireshark.sysusers
 
@@ -39,7 +39,7 @@ Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 Requires:	xdg-utils
 Requires:	hicolor-icon-theme
 
-%if %{with_maxminddb} && 0%{?fedora} || 0%{?oreon}
+%if %{with_maxminddb} && 0%{?fedora} || (0%{?oreon} >= 11)
 Requires:	libmaxminddb
 %endif
 
@@ -75,10 +75,10 @@ BuildRequires:	qt6-qtsvg-devel
 BuildRequires:  qt6-qtimageformats
 BuildRequires:	zlib-devel
 BuildRequires:	asciidoctor
-%if %{with_maxminddb} && 0%{?fedora} || 0%{?oreon}
+%if %{with_maxminddb} && 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires:	libmaxminddb-devel
 %endif
-%if %{with_lua} && 0%{?fedora} || 0%{?oreon}
+%if %{with_lua} && 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires:	lua-devel
 %endif
 Buildrequires:	git-core
@@ -97,7 +97,7 @@ BuildRequires:	snappy-devel
 BuildRequires:	brotli-devel
 BuildRequires:	opus-devel
 BuildRequires:	sbc-devel
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires:	ilbc-devel
 BuildRequires:	opencore-amr-devel
 # bcg729 for G.729
@@ -132,7 +132,7 @@ Requires:	%{name} = %{epoch}:%{version}-%{release}
 Requires:	%{name}-cli = %{epoch}:%{version}-%{release}
 Requires:	glibc-devel
 Requires:	glib2-devel
-%if %{with_pytools} && 0%{?fedora} || 0%{?oreon}
+%if %{with_pytools} && 0%{?fedora} || (0%{?oreon} >= 11)
 Requires: python3-ply
 Requires: omniORB-devel
 %endif
@@ -151,12 +151,12 @@ and plugins.
 %cmake -G "Unix Makefiles" \
   -DDISABLE_WERROR=ON \
   -DBUILD_wireshark=ON \
-%if %{with_lua} && 0%{?fedora} || 0%{?oreon}
+%if %{with_lua} && 0%{?fedora} || (0%{?oreon} >= 11)
   -DENABLE_LUA=ON \
 %else
   -DENABLE_LUA=OFF \
 %endif
-%if %{with_maxminddb} && 0%{?fedora} || 0%{?oreon} 
+%if %{with_maxminddb} && 0%{?fedora} || (0%{?oreon} >= 11) 
   -DBUILD_mmdbresolve=ON \
 %else
   -DBUILD_mmdbresolve=OFF \
@@ -187,7 +187,7 @@ mkdir -p %{buildroot}%{_udevrulesdir}
 install -m 0644 %{SOURCE2}		%{buildroot}%{_udevrulesdir}
 install -Dpm 0644 %{SOURCE3}		%{buildroot}%{_sysusersdir}/%{name}.conf
 
-%if %{with_pytools} && 0%{?fedora} || 0%{?oreon}
+%if %{with_pytools} && 0%{?fedora} || (0%{?oreon} >= 11)
 #install asn2wrs.py, idl2wrs and make-plugin-reg.py tools
 mkdir -p %{buildroot}%{_libexecdir}/wireshark/pytools
 install -m 0755 tools/asn2wrs.py %{buildroot}%{_libexecdir}/wireshark/pytools/
@@ -237,7 +237,7 @@ fi
 %{_bindir}/sharkd
 %{_bindir}/text2pcap
 %{_bindir}/tshark
-%if %{with_maxminddb} && 0%{?fedora} || 0%{?oreon}
+%if %{with_maxminddb} && 0%{?fedora} || (0%{?oreon} >= 11)
 %{_bindir}/mmdbresolve
 %endif
 %attr(0750, root, wireshark) %caps(cap_net_raw,cap_net_admin=ep) %{_bindir}/dumpcap
@@ -286,7 +286,7 @@ fi
 %{_mandir}/man4/extcap.*
 %{_datadir}/doc/wireshark/*
 
-%if %{with_maxminddb} && 0%{?fedora} || 0%{?oreon}
+%if %{with_maxminddb} && 0%{?fedora} || (0%{?oreon} >= 11)
 %{_mandir}/man1/mmdbresolve.*
 %endif
 %dir %{_datadir}/wireshark
@@ -300,7 +300,7 @@ fi
 %{_libdir}/lib*.so
 %{_libdir}/pkgconfig/%{name}.pc
 %{_libdir}/cmake/%{name}/*.cmake
-%if %{with_pytools} && 0%{?fedora} || 0%{?oreon}
+%if %{with_pytools} && 0%{?fedora} || (0%{?oreon} >= 11)
 %dir %{_libexecdir}/wireshark/pytools
 %{_libexecdir}/wireshark/pytools/*.py
 %{_libexecdir}/wireshark/pytools/idl2wrs

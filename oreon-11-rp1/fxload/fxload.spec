@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 05e5ffc08d30465c4e3121a07d54e79ad2daa7ea389a1587875d60377c45d970
 
 Name: fxload
 Version: 2008_10_13

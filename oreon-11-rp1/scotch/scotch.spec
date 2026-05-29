@@ -1,7 +1,7 @@
 %global source0_hash 75137f33ed28a12f433d4ab6e92794b2d4cfdd4377d35fe4361bc8e9808ffff4
 
 %bcond mpich %{undefined flatpak}
-%if 0%{?fedora} >= 40 || 0%{?oreon}
+%if 0%{?fedora} >= 40 || (0%{?oreon} >= 11)
 %ifarch %{ix86}
 %bcond openmpi 0
 %else

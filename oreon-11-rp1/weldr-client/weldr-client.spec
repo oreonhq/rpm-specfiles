@@ -4,6 +4,7 @@
 
 
 
+
 # Pass --without tests to skip building composer-cli-tests
 %bcond_without tests
 # Pass --without signed to skip gpg signed tar.gz (DO NOT DO THAT IN PRODUCTION)
@@ -28,7 +29,7 @@ Source0:        https://github.com/osbuild/weldr-client/archive/v36.2/weldr-clie
 Source2:        go-vendor-tools.toml
 %if %{with signed}
 Source3:        weldr-client-36.2.tar.gz.asc
-Source4:        gpg-872F3A8A0B84905AFFBC8766FF9868A2D488A5A9.key
+Source4:        https://keys.openpgp.org/vks/v1/by-fingerprint/872F3A8A0B84905AFFBC8766FF9868A2D488A5A9#/gpg-872F3A8A0B84905AFFBC8766FF9868A2D488A5A9.key
 %endif
 
 Obsoletes: composer-cli < 35.0
@@ -63,7 +64,7 @@ export GO_LDFLAGS="-X %{goipath}/cmd/composer-cli/root.Version=%{version} "
 %gobuild -o composer-cli ./cmd/composer-cli
 
 
-%if %{with tests} || 0%{?rhel} || 0%{?oreon}
+%if %{with tests} || 0%{?rhel} || (0%{?oreon} >= 11)
 # Build test binaries with `go test -c`, so that they can take advantage of
 # golang's testing package. The RHEL golang rpm macros don't support building them
 # directly. Thus, do it manually, taking care to also include a build id.
@@ -79,7 +80,7 @@ go test -c -tags=integration -buildmode pie -compiler gc -ldflags "${LDFLAGS}" -
 %go_vendor_license_install -c %{S:2}
 make DESTDIR=%{buildroot} install
 
-%if %{with tests} || 0%{?rhel} || 0%{?oreon}
+%if %{with tests} || 0%{?rhel} || (0%{?oreon} >= 11)
 make DESTDIR=%{buildroot} install-tests
 %endif
 
@@ -97,7 +98,7 @@ export GO_LDFLAGS="-X %{goipath}/cmd/composer-cli/root.Version=%{version} "
 %{_sysconfdir}/bash_completion.d/composer-cli
 %{_mandir}/man1/composer-cli*
 
-%if %{with tests} || 0%{?rhel} || 0%{?oreon}
+%if %{with tests} || 0%{?rhel} || (0%{?oreon} >= 11)
 %package tests
 Summary:    Integration tests for composer-cli
 

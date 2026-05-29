@@ -6,7 +6,7 @@ Version: 0.16
 Release: 3%{?dist}
 License: GPL-3.0-or-later AND (GPL-3.0-or-later WITH GCC-exception-3.1) AND GPL-2.0-or-later AND (GPL-2.0-or-later WITH GCC-exception-2.0) AND LGPL-2.0-or-later
 URL: https://sourceware.org/dwz/
-Source:        https://sourceware.org/ftp/dwz/releases/dwz-0.16.tar.xz
+Source:        https://sourceware.org/ftp/dwz/releases/%{name}-%{version}.tar.xz
 BuildRequires: gcc, gcc-c++, gdb, elfutils-libelf-devel, dejagnu
 # dwz builds with XXH_INLINE_ALL, so depend on (virtual) xxhash-static
 BuildRequires: make elfutils xxhash-devel xxhash-static

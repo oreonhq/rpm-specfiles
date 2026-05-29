@@ -35,7 +35,7 @@ Summary:	First-stage UEFI bootloader
 ExclusiveArch:	x86_64
 License:	BSD-2-Clause AND OpenSSL
 URL:		https://github.com/rhboot/shim
-Source0:        https://github.com/rhboot/shim/releases/download/15.8%{?dashpre}/shim-15.8%{?dotpre}.tar.bz2
+Source0:        https://github.com/rhboot/shim/releases/download/%{version}%{?dashpre}/shim-%{version}%{?dotpre}.tar.bz2
 Source1:	fedora-ca-20200709.cer
 %if 0%{?dbxfile}
 Source2:	%{dbxfile}

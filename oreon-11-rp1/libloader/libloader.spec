@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 2ae2fa6da45d91d495f647ed955f8af7bfc94ad8e7788169c423a516b84eea0f
 
 Name: libloader
 Version: 1.1.3

@@ -1,4 +1,5 @@
 %global source0_hash 1388d0563e13d2758c1089e35e973a3249e955c659592d10e5b77c468f628a99
+%global source1_hash 5bf95b0350adae30fd5f4984170e4ce0206c2c6bea14ba81dfb0c86f1dea417c
 
 # Generated from pg-0.11.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name pg
@@ -9,7 +10,7 @@ Release: 2%{?dist}
 Summary: Pg is the Ruby interface to the PostgreSQL RDBMS
 License: (BSD-2-Clause OR Ruby) AND PostgreSQL
 URL: https://github.com/ged/ruby-pg
-Source0:        https://rubygems.org/gems/pg-1.6.3.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone --no-checkout https://github.com/ged/ruby-pg.git
 # git archive -v -o pg-1.6.3-spec.tar.gz v1.6.3 spec/
 Source1: %{gem_name}-%{version}-spec.tar.gz
@@ -49,6 +50,7 @@ Documentation for %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %patch 0 -p1

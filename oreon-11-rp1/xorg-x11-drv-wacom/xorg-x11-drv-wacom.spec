@@ -16,11 +16,11 @@ URL:        http://www.x.org
 License:    GPL-2.0-or-later
 
 %if 0%{?gitdate}
-Source0:        https://github.com/linuxwacom/xf86-input-wacom/releases/download/xf86-input-wacom-1.2.4/xf86-input-wacom-1.2.4.tar.bz2
+Source0:        https://github.com/linuxwacom/xf86-input-wacom/releases/download/xf86-input-wacom-%{version}/xf86-input-wacom-%{version}.tar.bz2
 Source1: make-git-snapshot.sh
 Source2: commitid
 %else
-Source0:        https://github.com/linuxwacom/xf86-input-wacom/releases/download/xf86-input-wacom-1.2.4/xf86-input-wacom-1.2.4.tar.bz2
+Source0:        https://github.com/linuxwacom/xf86-input-wacom/releases/download/xf86-input-wacom-%{version}/xf86-input-wacom-%{version}.tar.bz2
 Source30:   xserver-sdk-abi-requires
 %endif
 
@@ -31,8 +31,8 @@ BuildRequires: libX11-devel libXi-devel libXrandr-devel libXinerama-devel
 BuildRequires: autoconf automake libtool
 BuildRequires: systemd systemd-devel
 
-Requires: Xorg %(xserver-sdk-abi-requires ansic)
-Requires: Xorg %(xserver-sdk-abi-requires xinput)
+Requires: Xorg %(sh %{SOURCE30} ansic)
+Requires: Xorg %(sh %{SOURCE30} xinput)
 Requires: xorg-x11-drv-wacom-serial-support
 
 Provides:  linuxwacom = %{version}-%{release}

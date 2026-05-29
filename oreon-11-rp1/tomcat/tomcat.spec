@@ -101,7 +101,7 @@ BuildRequires: tomcat-jakartaee-migration
 Requires:      (java-25-headless or java-25)
 Requires:      javapackages-tools
 Requires:      %{name}-lib = %{epoch}:%{version}-%{release}
-%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 Recommends:    tomcat-native >= %{native_version}
 %endif
 Requires(post):   systemd

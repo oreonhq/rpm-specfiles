@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 9ad8d1c3ab427508766eadc3f60902b79ddac3325a5c6ece8f3d82d6dc539c2f
 
 Name: hyphen-is
 Summary: Icelandic hyphenation rules
 %global upstreamid 20030920
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/hyph_is_IS.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_is_IS.zip
 Patch0: hyphen-is-lppl-license-fix.patch
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: LGPL-2.1-or-later OR SISSL

@@ -10,7 +10,7 @@ Release:        74%{?dist}
 Epoch:          2
 License:        GPL-2.0-or-later AND LicenseRef-Fedora-Firmware
 URL:            https://pagure.io/microcode_ctl
-Source0:        https://releases.pagure.org/microcode_ctl/microcode_ctl-2.1-51.tar.xz
+Source0:        https://releases.pagure.org/microcode_ctl/%{name}-%{upstream_version}.tar.xz
 ExclusiveArch:  %{ix86} x86_64
 BuildRequires: make
 

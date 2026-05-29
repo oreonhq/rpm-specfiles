@@ -1,4 +1,5 @@
 %global source0_hash 65d24c9651604c841ca55d08c284d115959fb150b86343898716b2c04566b8fd
+%global source1_hash b39a98fa8b5871b2b357b8c9793a067fec2dbe778a2481c9770aa9fda86921d7
 
 %bcond_without check
 %global udevdir %(pkg-config --variable=udevdir udev)
@@ -6,7 +7,7 @@
 %global crate udev-hid-bpf
 %global _firmware /usr/lib/firmware
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global bundled_rust_deps 1
 %global build_testing 0
 %global build_tracing 1
@@ -16,7 +17,7 @@
 %endif
 
 # Fedora 42 never shipped a kernel 6.12 so no need for our tracing sources
-%if 0%{?fedora} >= 42 || 0%{?oreon}
+%if 0%{?fedora} >= 42 || (0%{?oreon} >= 11)
 %global build_tracing "false"
 %else
 %global build_tracing "true"
@@ -53,7 +54,7 @@ License:        %{shrink:
     (Unlicense OR MIT)
     }
 URL:            https://gitlab.freedesktop.org/libevdev/udev-hid-bpf/
-Source0:        https://gitlab.freedesktop.org/libevdev/udev-hid-bpf/-/archive/2.2.0-20251121/udev-hid-bpf-2.2.0-20251121.tar.bz2
+Source0:        https://gitlab.freedesktop.org/libevdev/%{name}/-/archive/%{tarball}/%{name}-%{tarball}.tar.bz2
 # To recreate tarball:
 # $ centpkg prep (do not use fedpkg, it removes Cargo.lock)
 # $ pushd udev-hid-bpf-...; cargo vendor && tar Jcvf ../$(basename $PWD)-vendor.tar.xz vendor/ ; popd
@@ -66,7 +67,7 @@ Patch02:        0001-Cargo.toml-drop-libbpf-sys-to-1.5.0.patch
 # Here, we still allow 0.5 as well for compatibility with vendored deps.
 Patch03:        udev-hid-bpf-2.2.0-20251121-stderrlog-0.6.patch
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  cargo-rpm-macros >= 26
@@ -122,6 +123,7 @@ an upstream kernel.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %autosetup -S git -p1 -n %{name}-%{tarball}
 %py3_shebang_fix $(git grep -l  '#!/usr/bin/.*python3')
 

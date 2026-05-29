@@ -13,7 +13,7 @@ ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
 Source0:        https://github.com/cbeust/jcommander/archive/dcf154b6d40dd3865e317de7250b7019044543a9.tar.gz
-Source1:        https://repo1.maven.org/maven2/com/beust/jcommander/1.82/jcommander-1.82.pom
+Source1:        https://repo1.maven.org/maven2/com/beust/jcommander/%{version}/jcommander-%{version}.pom
 # Cleaned up bundled jars whose licensing cannot be easily verified
 Source2:        generate-tarball.sh
 

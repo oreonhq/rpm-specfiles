@@ -6,7 +6,7 @@ Release: 36%{?dist}
 Summary: Utility to test IP multicast functionality
 License: ISC
 URL: https://github.com/jfriesse/omping
-Source0:        https://github.com/jfriesse/omping/releases/download/0.0.4/omping-0.0.4.tar.gz
+Source0:        https://github.com/jfriesse/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make

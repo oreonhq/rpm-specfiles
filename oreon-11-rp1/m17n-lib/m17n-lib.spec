@@ -1,7 +1,7 @@
 %global source0_hash 7129fe3b7ad500f88b8af8605ef07b96c87a75ec986a695fffc0a409f44a7c86
 
 # note this duplicates native anthy IMEs
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond_without anthy
 %else
 %bcond_with anthy
@@ -14,7 +14,7 @@ Summary:        Multilingual text library
 
 License:        LGPL-2.1-or-later
 URL:            http://www.nongnu.org/m17n/
-Source0:        http://download.savannah.gnu.org/releases/m17n/m17n-lib-1.8.6.tar.gz
+Source0:        http://download.savannah.gnu.org/releases/m17n/%{name}-%{version}.tar.gz
 Patch0:         %{name}-1.8.0-multilib.patch
 
 BuildRequires: make

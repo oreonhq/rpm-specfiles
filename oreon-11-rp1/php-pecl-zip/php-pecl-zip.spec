@@ -31,7 +31,7 @@ Version:      %{upstream_version}%{?upstream_prever:~%{upstream_prever}}
 Release:      3%{?dist}
 %forgemeta
 URL:          %{forgeurl}
-Source0:        https://github.com/pierrejoye/php_zip/archive/1.22.8/php_zip-1.22.8.tar.gz
+Source0:        https://pecl.php.net/get/%{sources}.tgz
 
 ExcludeArch:   %{ix86}
 

@@ -16,7 +16,7 @@ BuildArch:      noarch
 
 BuildRequires:  meson
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Requires:       %{name}-legacy >= %{adwlegacy_ver}
 %endif
 Requires:       adwaita-cursor-theme = %{version}-%{release}
@@ -33,7 +33,7 @@ designed for the GNOME desktop.
 
 %package        devel
 Summary:        Development files for %{name}
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Requires:       %{name}-legacy-devel >= %{adwlegacy_ver}
 %endif
 Requires:       %{name} = %{version}-%{release}

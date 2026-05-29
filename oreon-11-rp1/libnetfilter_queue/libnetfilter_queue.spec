@@ -9,7 +9,7 @@ Summary:        Netfilter queue userspace library
 # Most files say GPLv2+, one says v2 only.
 License:        GPL-2.0-only
 URL:            http://netfilter.org
-Source0:        http://netfilter.org/projects/libnetfilter_queue/files/libnetfilter_queue-1.0.5.tar.bz2
+Source0:        http://netfilter.org/projects/%{name}/files/%{name}-%{version}.tar.bz2
 
 BuildRequires:  libnfnetlink-devel >= %{libnfnetlink}, pkgconfig, kernel-headers
 BuildRequires:  autoconf, automake, libtool, libmnl-devel >= 1.0.3

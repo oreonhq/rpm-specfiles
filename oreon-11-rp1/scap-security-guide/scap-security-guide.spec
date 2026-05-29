@@ -11,7 +11,7 @@ Release:	2%{?dist}
 Summary:	Security guidance and baselines in SCAP formats
 License:	BSD-3-Clause
 URL:		https://github.com/ComplianceAsCode/content/
-Source0:        https://github.com/ComplianceAsCode/content/releases/download/v0.1.80/scap-security-guide-0.1.80.tar.bz2
+Source0:        https://github.com/ComplianceAsCode/content/releases/download/v%{version}/scap-security-guide-%{version}.tar.bz2
 BuildArch:	noarch
 
 BuildRequires:	libxslt
@@ -44,7 +44,7 @@ The %{name}-doc package contains HTML formatted documents containing
 hardening guidances that have been generated from XCCDF benchmarks
 present in %{name} package.
 
-%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || 0%{?oreon}
+%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || (0%{?oreon} >= 11)
 %package	rule-playbooks
 Summary:	Ansible playbooks per each rule.
 Group:		System Environment/Base
@@ -60,7 +60,7 @@ The %{name}-rule-playbooks package contains individual ansible playbooks per rul
 
 %define cmake_defines_common -DSSG_SEPARATE_SCAP_FILES_ENABLED=OFF -DSSG_BASH_SCRIPTS_ENABLED=OFF -DSSG_BUILD_SCAP_12_DS=OFF
 %define cmake_defines_specific %{nil}
-%if 0%{?rhel} && ! %{defined eln} || 0%{?oreon}
+%if 0%{?rhel} && ! %{defined eln} || (0%{?oreon} >= 11)
 %define cmake_defines_specific -DSSG_PRODUCT_DEFAULT:BOOLEAN=FALSE -DSSG_PRODUCT_RHEL%{rhel}:BOOLEAN=TRUE -DSSG_SCIENTIFIC_LINUX_DERIVATIVES_ENABLED:BOOL=OFF -DSSG_CENTOS_DERIVATIVES_ENABLED:BOOL=OFF -DSSG_ANSIBLE_PLAYBOOKS_PER_RULE_ENABLED:BOOL=ON
 %endif
 %if 0%{?centos}
@@ -84,7 +84,7 @@ rm %{buildroot}/%{_docdir}/%{name}/Contributors.md
 %{_datadir}/%{name}/tailoring
 %lang(en) %{_mandir}/man8/scap-security-guide.8.*
 %doc %{_docdir}/%{name}/LICENSE
-%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || 0%{?oreon}
+%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || (0%{?oreon} >= 11)
 %exclude %{_datadir}/%{name}/ansible/rule_playbooks
 %endif
 
@@ -92,7 +92,7 @@ rm %{buildroot}/%{_docdir}/%{name}/Contributors.md
 %doc %{_docdir}/%{name}/guides/*.html
 %doc %{_docdir}/%{name}/tables/*.html
 
-%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || 0%{?oreon}
+%if ( %{defined rhel} && (! %{defined centos}) && (! %{defined eln}) ) || (0%{?oreon} >= 11)
 %files rule-playbooks
 %defattr(-,root,root,-)
 %{_datadir}/%{name}/ansible/rule_playbooks

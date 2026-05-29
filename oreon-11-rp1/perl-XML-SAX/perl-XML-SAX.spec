@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 044404d4fdb52485bf143e2661eb4b59de955d4805231befad1bb41bfb715a6f
 
 Summary:        SAX parser access API for Perl
 Name:           perl-XML-SAX

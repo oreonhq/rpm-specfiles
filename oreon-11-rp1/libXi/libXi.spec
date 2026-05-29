@@ -12,10 +12,10 @@ License: MIT-open-group AND SMLNJ AND MIT
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://www.x.org/pub/individual/lib/libXi-1.8.3.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 Source1:    make-git-snapshot.sh
 %else
-Source0:        https://www.x.org/pub/individual/lib/libXi-1.8.3.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 %endif
 
 BuildRequires: make

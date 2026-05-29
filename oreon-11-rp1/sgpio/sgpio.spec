@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9bf8c42acaa247efd9321bdb1fc2390022f0c554d77fbbd4a7363d990fc0270b
 
 Summary: SGPIO captive backplane tool
 Name: sgpio

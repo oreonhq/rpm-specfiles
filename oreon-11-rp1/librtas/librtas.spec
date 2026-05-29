@@ -7,7 +7,7 @@ Release: 6%{?dist}
 URL:     https://github.com/ibm-power-utilities/librtas
 License: LGPL-2.0-or-later
 
-Source0:        https://github.com/ibm-power-utilities/librtas/archive/v2.0.6/librtas-2.0.6.tar.gz
+Source0:        https://github.com/ibm-power-utilities/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 # upstream fixes for Lockdown-compatible ABI
 Patch1: librtas-01-lockdown-compatible-abi-phase.patch

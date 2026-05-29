@@ -1,4 +1,6 @@
 %global source0_hash 06e931554949c850a00601574d2c485007335818361e98d49bb8535eac99cee2
+%global source1_hash 172e926531a24c48da3b5cbe735571d9618b9b2ed97c8ea354c05d9c736b4aa3
+%global source2_hash 4417846b3d3d496956a40970452d24a798e758cda02cb306b30c04d26fd5d8fc
 
 # Specify if the frontend will be compiled as part of the build or
 # is attached as a webpack tarball (in case of an unsuitable nodejs version on the build system)
@@ -23,7 +25,7 @@ Summary:        Performance Co-Pilot Grafana Plugin
 License:        Apache-2.0
 URL:            https://github.com/performancecopilot/grafana-pcp
 
-Source0:        https://github.com/performancecopilot/grafana-pcp/archive/v5.3.0/grafana-pcp-5.3.0.tar.gz
+Source0:        https://github.com/performancecopilot/grafana-pcp/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1:        grafana-pcp-vendor-%{version}-1.tar.xz
 # Note: In case there were no changes to this tarball, the NVR of this tarball
 # lags behind the NVR of this package.
@@ -61,7 +63,7 @@ BuildRequires:  make, nodejs >= 1:14, yarnpkg, golang-github-google-jsonnet
 %{?systemd_requires}
 Requires:       grafana >= 9.0.9
 Suggests:       pcp >= 5.2.2
-%if 0%{?rhel} > 9 || 0%{?fedora} > 39 || 0%{?oreon}
+%if 0%{?rhel} > 9 || 0%{?fedora} > 39 || (0%{?oreon} >= 11)
 Suggests:       valkey
 %else
 Suggests:       redis >= 5.0.0
@@ -133,6 +135,8 @@ bpftrace scripts from pmdabpftrace(1), as well as several dashboards.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
+%(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
 %setup -q -T -D -b 0
 %setup -q -T -D -b 1
 %if %{compile_frontend} == 0

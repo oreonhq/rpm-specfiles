@@ -35,7 +35,7 @@
 %global spatialite "--with-spatialite"
 %endif
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond_without mingw
 %bcond_without python3
 %ifarch %{java_arches}
@@ -62,7 +62,7 @@ URL:           http://www.gdal.org
 # See PROVENANCE.TXT-fedora and the cleaner script for details!
 
 Source0:       %{name}-%{version}%{?pre:%pre}-fedora.tar.xz
-Source1:        http://download.osgeo.org/gdal/3.12.4/gdalautotest-3.12.4%{?pre:%pre}.zip
+Source1:        http://download.osgeo.org/%{name}/%{version}/%{name}autotest-%{version}%{?pre:%pre}.zip
 # Multilib compatible cpl-config.h header
 Source2:       cpl-config.h
 # Multilib compatible gdal-config script
@@ -99,7 +99,7 @@ BuildRequires: unzip
 BuildRequires: xz-devel
 BuildRequires: zlib-devel
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # Fedora dependencies
 BuildRequires: armadillo-devel
 BuildRequires: blosc-devel
@@ -243,7 +243,7 @@ BuildRequires: mingw64-python3-setuptools
 %endif
 %endif
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Requires:      gpsbabel
 %endif
 Requires:      %{name}-libs%{?_isa} = %{version}-%{release}
@@ -419,7 +419,7 @@ cp -a %{SOURCE4} .
   -DGDAL_JAVA_INSTALL_DIR=%{_jnidir}/%{name} \
   -DGDAL_JAVA_JNI_INSTALL_DIR=%{_jnidir}/%{name} \
 %endif
-%if ! 0%{?fedora} || 0%{?oreon}
+%if ! 0%{?fedora} || (0%{?oreon} >= 11)
   -DGDAL_BUILD_OPTIONAL_DRIVERS=OFF \
   -DOGR_BUILD_OPTIONAL_DRIVERS=OFF \
   -DBUILD_PYTHON_BINDINGS=OFF \
@@ -512,7 +512,7 @@ done
 %{_bindir}/ogrlineref
 %{_bindir}/ogrtindex
 %{_bindir}/sozip
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %{_bindir}/8211*
 %{_bindir}/s57dump
 %endif

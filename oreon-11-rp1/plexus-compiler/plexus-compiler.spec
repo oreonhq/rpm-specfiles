@@ -13,7 +13,7 @@ URL:            https://github.com/codehaus-plexus/plexus-compiler
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-compiler/archive/plexus-compiler-2.15.0.tar.gz
+Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 Source2:        LICENSE.MIT
 

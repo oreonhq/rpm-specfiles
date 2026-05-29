@@ -4,7 +4,7 @@
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9
 %global multilib_basearchs x86_64 %{?mips64} ppc64 s390x sparc64
 
-%if 0%{?fedora} < 29 && 0%{?rhel} < 9 || 0%{?oreon}
+%if 0%{?fedora} < 29 && 0%{?rhel} < 9 || (0%{?oreon} >= 11)
 %ifarch %{ix86}
 %global no_sse2  -no-sse2
 %endif
@@ -13,11 +13,11 @@
 
 # workaround https://bugzilla.redhat.com/show_bug.cgi?id=1668865
 # for current stable releases
-%if 0%{?fedora} < 30  || 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?fedora} < 30  || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %global no_feature_statx -no-feature-statx
 %global no_feature_renameat2 -no-feature-renameat2
 %endif
-%if 0%{?rhel} && 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %global no_feature_getentropy -no-feature-getentropy
 %endif
 
@@ -48,7 +48,7 @@
 %global rpm_macros_dir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 # use external qt_settings pkg
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %global qt_settings 1
 %endif
 
@@ -65,7 +65,7 @@ Release: 2%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://qt-project.org/
 %global  majmin %(echo %{version} | cut -d. -f1-2)
-Source0:        https://download.qt.io/official_releases/qt/%{version}/submodules/qtbase-everywhere-opensource-src-%{version}.tar.xz
+Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
 # https://bugzilla.redhat.com/show_bug.cgi?id=1227295
 Source1: qtlogging.ini
 
@@ -244,7 +244,7 @@ BuildRequires: pkgconfig(xkbcommon-x11) >= 0.4.1
 BuildRequires: pkgconfig(xkeyboard-config)
 %global vulkan 1
 BuildRequires: pkgconfig(vulkan)
-%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %global egl 1
 BuildRequires: pkgconfig(egl)
 BuildRequires: pkgconfig(gbm)
@@ -252,12 +252,12 @@ BuildRequires: pkgconfig(gbm)
 BuildRequires: pkgconfig(glesv2)
 %global sqlite -system-sqlite
 BuildRequires: pkgconfig(sqlite3) >= 3.7
-%if 0%{?fedora} > 22 || 0%{?oreon}
+%if 0%{?fedora} > 22 || (0%{?oreon} >= 11)
 %global harfbuzz -system-harfbuzz
 BuildRequires: pkgconfig(harfbuzz) >= 0.9.42
 %endif
 BuildRequires: pkgconfig(icu-i18n)
-%if 0%{?fedora} > 37 || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} > 37 || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 BuildRequires: pkgconfig(libpcre2-16) >= 10.20
 %else
 BuildRequires: pkgconfig(libpcre) >= 8.0
@@ -286,7 +286,7 @@ BuildRequires: xorg-x11-server-Xvfb
 Requires:      qt5-filesystem
 
 %if 0%{?qtchooser}
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Conflicts: qt < 1:4.8.6-10
 %endif
 Requires(post): %{_sbindir}/update-alternatives
@@ -298,7 +298,7 @@ Requires: qt-settings
 Requires: %{name}-common = %{version}-%{release}
 
 ## Sql drivers
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global ibase -no-sql-ibase
 %global tds -no-sql-tds
 %endif
@@ -390,7 +390,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %package mysql
 Summary: MySQL driver for Qt5's SQL classes
-%if 0%{?rhel} && 0%{?rhel} < 9 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 9 || (0%{?oreon} >= 11)
 BuildRequires: mysql-devel
 %else
 BuildRequires: mariadb-connector-c-devel
@@ -427,7 +427,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 Summary: Qt5 GUI-related libraries
 Requires: %{name}%{?_isa} = %{version}-%{release}
 # where Recommends are supported
-%if 0%{?fedora} || 0%{?rhel} >= 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
 Recommends: mesa-dri-drivers%{?_isa}
 Recommends: qt5-qtwayland%{?_isa}
 # Required for some locales: https://pagure.io/fedora-kde/SIG/issue/311
@@ -464,12 +464,12 @@ Qt5 libraries used for drawing widgets and OpenGL items.
 %patch -P55 -p1 -b .no_relocatable
 %patch -P56 -p1 -b .libglvnd
 %patch -P57 -p1 -b .qt5-qtbase-cxxflag
-%if 0%{?fedora} < 35 || 0%{?oreon}
+%if 0%{?fedora} < 35 || (0%{?oreon} >= 11)
 %patch -P58 -p1 -b .firebird
 %else
 %patch -P59 -p1 -b .firebird
 %endif
-%if 0%{?fedora} > 27 || 0%{?oreon}
+%if 0%{?fedora} > 27 || (0%{?oreon} >= 11)
 %patch -P60 -p1 -b .mysql
 %endif
 %patch -P61 -p1
@@ -486,10 +486,10 @@ Qt5 libraries used for drawing widgets and OpenGL items.
 %patch -P104 -p1
 
 ## Qt 6 backports
-%if 0%{?fedora} > 30 || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} > 30 || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 %patch -P150 -p1 -b .use-wayland-on-gnome.patch
 %endif
-%if 0%{?fedora} > 38 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} > 38 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %patch -P151 -p1
 %patch -P152 -p1
 %patch -P153 -p1
@@ -511,7 +511,7 @@ Qt5 libraries used for drawing widgets and OpenGL items.
 %patch -P169 -p1
 %endif
 
-%if 0%{?fedora} < 39 || 0%{?oreon}
+%if 0%{?fedora} < 39 || (0%{?oreon} >= 11)
 # Use QGnomePlatform by default
 %patch -P200 -p1
 %endif
@@ -744,7 +744,7 @@ popd
 install -p -m755 -D %{SOURCE6} %{buildroot}%{_sysconfdir}/X11/xinit/xinitrc.d/10-qt5-check-opengl2.sh
 
 # f29+ enables sse2 unconditionally on ix86 -- rex
-%if 0%{?fedora} < 29 && 0%{?rhel} < 9 || 0%{?oreon}
+%if 0%{?fedora} < 29 && 0%{?rhel} < 9 || (0%{?oreon} >= 11)
 # fix bz#1442553 multilib issue
 privat_header_file=%{buildroot}%{_qt5_headerdir}/QtCore/%{version}/QtCore/private/qconfig_p.h
 grep -v QT_FEATURE_sse2 $privat_header_file > ${privat_header_file}.me

@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %global python3_dbus_dir %(%{__python3} -c "import dbus.mainloop; print(dbus.mainloop.__path__[0])" 2>/dev/null || echo "%{python3_sitearch}/dbus/mainloop")
 %endif
 
@@ -12,7 +12,7 @@ Version: 6.11.0
 Release: 4%{?dist}
 License: gpl-3.0-only
 Url:     http://www.riverbankcomputing.com/software/pyqt/
-Source0:        https://pypi.python.org/packages/source/P/PyQt6/pyqt6-6.11.0%{?snap:.%{snap}}.tar.gz
+Source0:        https://pypi.python.org/packages/source/P/PyQt6/pyqt6-%{version}%{?snap:.%{snap}}.tar.gz
 Source1: macros.pyqt6
 
 # Compatibility with Python 3.15
@@ -38,7 +38,7 @@ BuildRequires: cmake(Qt6Multimedia)
 BuildRequires: cmake(Qt6Nfc)
 BuildRequires: cmake(Qt6Network)
 BuildRequires: cmake(Qt6OpenGL)
-%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?epel} || (0%{?oreon} >= 11)
 %ifarch %{qt6_qtwebengine_arches}
 BuildRequires: cmake(Qt6Pdf) cmake(Qt6PdfWidgets)
 %endif
@@ -179,7 +179,7 @@ sed -i \
 %{python3_sitearch}/PyQt6/QtMultimedia.*
 %{python3_sitearch}/PyQt6/QtMultimediaWidgets.*
 %{python3_sitearch}/PyQt6/QtNfc.*
-%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?epel} || (0%{?oreon} >= 11)
 %ifarch %{qt6_qtwebengine_arches}
 %{python3_sitearch}/PyQt6/QtPdf.*
 %{python3_sitearch}/PyQt6/QtPdfWidgets.*

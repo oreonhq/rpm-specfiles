@@ -1,4 +1,5 @@
 %global source0_hash 4eeb0185c0fbfa889efed923b5b50e949cd869e7d82ac74138acd0c9c7165ec0
+%global source1_hash 766de812aaa69ca57392eaab3f3b3bd764b4ba71f8f8b229fd9787934563abd6
 
 # Generated from ronn-ng-0.9.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name ronn-ng
@@ -9,7 +10,7 @@ Release:        8%{?dist}
 Summary:        Builds man pages from Markdown
 License:        MIT
 URL:            https://github.com/apjanke/ronn-ng
-Source0:        https://rubygems.org/gems/ronn-ng-0.10.1.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/apjanke/ronn-ng.git && cd ronn-ng
 # git archive -v -o ronn-ng-0.10.1-test.tar.gz v0.10.1 test/
 Source1: %{gem_name}-%{version}-test.tar.gz
@@ -48,6 +49,7 @@ Documentation for %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{gem_name}-%{version} -b 1
 (
 cd %{_builddir}/test

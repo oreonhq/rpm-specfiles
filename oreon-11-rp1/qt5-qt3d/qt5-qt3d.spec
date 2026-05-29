@@ -14,7 +14,7 @@ Release: 2%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
 %global majmin %(echo %{version} | cut -d. -f1-2)
-Source0:        https://download.qt.io/official_releases/qt/%{version}/submodules/qt3d-everywhere-opensource-src-%{version}.tar.xz
+Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
 Source1: qt3dcore-config-multilib_p.h
 
 BuildRequires: make
@@ -25,7 +25,7 @@ BuildRequires: qt5-qtbase-private-devel
 BuildRequires: qt5-qtdeclarative-devel
 BuildRequires: qt5-qtimageformats
 BuildRequires: qt5-qtxmlpatterns-devel
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires: pkgconfig(assimp) >= 3.3.1
 %endif
 Requires: qt5-qtimageformats%{?_isa} >= %{version}

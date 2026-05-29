@@ -7,7 +7,7 @@ Summary:        String handling essentials library
 
 License:        LGPL-2.1-or-later
 URL:            http://libestr.adiscon.com/
-Source0:        http://libestr.adiscon.com/files/download/libestr-0.1.11.tar.gz
+Source0:        http://libestr.adiscon.com/files/download/libestr-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make

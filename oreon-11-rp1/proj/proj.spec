@@ -1,7 +1,7 @@
 %global source0_hash af5b731c145c1d13c4e3b4eeb7d167e94e845e440f71e3496b4ed8dae0291960
 %global source1_hash eadf412754a2a9a727d79579873fbe7dae802038d4c2a19e452a886d4eddd111
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond_without mingw
 %else
 %bcond_with mingw
@@ -16,14 +16,14 @@ Summary:        Cartographic projection software (PROJ)
 
 License:        MIT
 URL:            https://proj.org
-Source0:        https://download.osgeo.org/proj/proj-9.8.1.tar.gz
-Source1:        https://download.osgeo.org/proj/proj-data-1.24.tar.gz
+Source0:        https://download.osgeo.org/%{name}/%{name}-%{version}.tar.gz
+Source1:        https://download.osgeo.org/%{name}/%{name}-data-%{data_version}.tar.gz
 
 
 BuildRequires:  cmake
 BuildRequires:  curl-devel
 BuildRequires:  gcc-c++
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires:  gmock-devel
 BuildRequires:  gtest-devel >= 1.8.0
 %endif
@@ -45,7 +45,7 @@ BuildRequires: mingw64-libtiff
 BuildRequires: mingw64-sqlite
 %endif
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Obsoletes:      proj-datumgrid < 1.8-6.3.2.6
 %endif
 
@@ -60,7 +60,7 @@ projection functions.
 %package devel
 Summary:        Development files for PROJ
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Obsoletes:      %{name}-static < 7.2.0
 %endif
 
@@ -76,7 +76,7 @@ BuildArch:      noarch
 Proj arch independent data files.
 
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %package data-europe
 Summary:        Compat package for old proj-datumgrid-europe
 BuildArch:      noarch
@@ -250,7 +250,7 @@ projection functions. Proj docs: http://www.remotesensing.org/dl/new_docs/
 
 %build
 # Native build
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %cmake -DUSE_EXTERNAL_GTEST=ON
 %else
 %cmake -DBUILD_TESTING=OFF
@@ -286,7 +286,7 @@ rm -rf %{buildroot}%{mingw64_datadir}/bash-completion
 %endif
 
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %check
 # nkg test requires internet connection
 %ctest -E nkg

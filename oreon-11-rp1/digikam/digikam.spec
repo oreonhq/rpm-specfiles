@@ -1,7 +1,7 @@
 %global source0_hash 7680ea024fe00e10c96090e45fe4b7b4a1c3993bc5e87576eddd4e0eefd08ef3
 
 %bcond_with build_with_qt6
-%if 0%{?fedora} > 39 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} > 39 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %bcond_without build_with_qt6
 ExclusiveArch: %{qt6_qtwebengine_arches}
 %else
@@ -21,9 +21,9 @@ Release: 5%{?beta}%{?dist}
 License: GPL-2.0-or-later
 URL:     http://www.digikam.org/
 %if 0%{?beta:1}
-Source0:        https://download.kde.org/unstable/digikam/digikam-9.0.0-%{beta}.tar.xz
+Source0:        https://download.kde.org/stable/digikam/%{version}/digiKam-%{version}.tar.xz
 %else
-Source0:        https://download.kde.org/stable/digikam/9.0.0/digiKam-9.0.0.tar.xz
+Source0:        https://download.kde.org/stable/digikam/%{version}/digiKam-%{version}.tar.xz
 %endif
 
 # rawhide s390x is borked recently
@@ -139,7 +139,7 @@ BuildRequires: pkgconfig(opencv) >= 3.3
 # Panorama plugin requires flex and bison
 BuildRequires: flex
 BuildRequires: bison
-%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 BuildRequires: pkgconfig(libheif)
 BuildRequires: pkgconfig(lqr-1)
 # MediaPlayer dependencies
@@ -217,7 +217,7 @@ needed to develop applications using %{name}.
   %{?ninja:-G Ninja} \
   -DENABLE_APPSTYLES:BOOL=ON \
   -DENABLE_KFILEMETADATASUPPORT:BOOL=ON \
-%if 0%{?rhel} && 0%{?rhel} < 9 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 9 || (0%{?oreon} >= 11)
   -DENABLE_MEDIAPLAYER:BOOL=OFF \
 %endif
   -DENABLE_MYSQLSUPPORT:BOOL=ON \
@@ -241,7 +241,7 @@ for i in %{buildroot}%{_datadir}/applications/*.desktop ; do
 desktop-file-validate $i ||:
 done
 
-%if 0%{?rhel} && 0%{?rhel} < 8 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
 %post
 touch --no-create %{_datadir}/icons/hicolor &> /dev/null || :
 

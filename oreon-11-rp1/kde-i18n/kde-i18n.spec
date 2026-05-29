@@ -770,7 +770,7 @@ rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdeqt.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdessh.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdesu.mo
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdesud.mo
-%if 0%{?fedora} > 12 || 0%{?oreon}
+%if 0%{?fedora} > 12 || (0%{?oreon} >= 11)
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdevelop.mo
 %endif
 rm -f %{buildroot}%{_datadir}/locale/*/LC_MESSAGES/kdf.mo

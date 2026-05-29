@@ -7,7 +7,7 @@ Summary:        On-the-fly spell checking for GtkTextView widgets
 
 License:        GPL-2.0-or-later
 URL:            https://gtkspell.sourceforge.net/
-Source0:        https://downloads.sourceforge.net/gtkspell/gtkspell3-3.0.10.tar.xz
+Source0:        https://downloads.sourceforge.net/gtkspell/gtkspell3-%{version}.tar.xz
 
 BuildRequires:  enchant2-devel
 BuildRequires:  gettext

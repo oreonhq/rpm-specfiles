@@ -21,7 +21,7 @@ Release:	%{?preminorver:0.}%{baserelease}%{?preminorver:%{rpmminorver}}%{?dist}
 # SPDX confirmed
 License:	MIT
 URL:		https://rspec.info
-Source0:        https://rubygems.org/gems/rspec-expectations-3.13.5%{?preminorver}.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{fullver}.gem
 # %%{SOURCE2} %%{name} %%{version}
 Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
 Source2:	rspec-related-create-full-tarball.sh
@@ -40,7 +40,7 @@ BuildRequires:	rubygem(rake)
 # Some features in expectations needs this
 BuildRequires:	rubygem(rspec-support) >= 3.9.3
 BuildRequires:	rubygem(minitest) >= 5
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:	rubygem(aruba)
 BuildRequires:	rubygem(cucumber)
 %endif
@@ -91,7 +91,7 @@ LANG=C.UTF-8
 export RUBYLIB=$(pwd)/lib
 rspec spec/
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 # Skip cucumber test
 exit 0
 %endif

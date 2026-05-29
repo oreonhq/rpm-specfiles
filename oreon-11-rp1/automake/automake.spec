@@ -95,7 +95,7 @@ BuildRequires: sharutils
 BuildREquires: texlive-dvips
 BuildRequires: texinfo-tex
 BuildRequires: vala
-%if !0%{?rhel:1} || 0%{?oreon}
+%if !0%{?rhel:1} || (0%{?oreon} >= 11)
 BuildRequires: gcc-objc
 BuildRequires: gcc-objc++
 BuildRequires: imake

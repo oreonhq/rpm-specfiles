@@ -12,7 +12,7 @@
 # Uncomment to update to final version
 #global versuf  -stable
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond_without  mingw
 %else
 %bcond_with     mingw

@@ -14,7 +14,7 @@ Source0:        http://ceres-solver.org/ceres-solver-2.2.0.tar.gz
 # Relax eigen version constraints
 Patch0:         ceres-solver-Support-Eigen3-5.0.0.patch
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %global blaslib flexiblas
 %global cmake_blas_flags -DBLA_VENDOR=FlexiBLAS
 %else
@@ -43,7 +43,7 @@ BuildRequires:  tbb-devel
 BuildRequires:  %{blaslib}-devel
 BuildRequires:  gflags-devel >= 2.2.1
 # Build against miniglog on RHEL6 until glog package is added to EPEL6
-%if (0%{?rhel} != 06) || 0%{?oreon}
+%if (0%{?rhel} != 06) || (0%{?oreon} >= 11)
 BuildRequires:  glog-devel >= 0.3.1
 %endif
 

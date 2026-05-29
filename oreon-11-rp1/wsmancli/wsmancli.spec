@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash dae475b4545dd2f17d101d5af94a98f5e08db829d1528fdcc2eec7c1ff12d789
 
 Name:           wsmancli
 Version:        2.8.0

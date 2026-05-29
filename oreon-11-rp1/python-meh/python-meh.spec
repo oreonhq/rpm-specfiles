@@ -13,7 +13,7 @@ Release: 12%{?dist}
 # This tarball was created from upstream git:
 #   git clone https://github.com/rhinstaller/python-meh
 #   cd python-meh && make archive
-Source0:        https://github.com/rhinstaller/python-meh/archive/python-meh-0.52.tar.gz
+Source0:        https://github.com/rhinstaller/python-meh/archive/%{name}-%{version}.tar.gz
 
 License: GPL-2.0-or-later
 BuildArch: noarch

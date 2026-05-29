@@ -57,7 +57,7 @@ URL:           https://github.com/libguestfs/virt-v2v
 
 Source0:        http://download.libguestfs.org/virt-v2v/2.11-development/virt-v2v-2.11.3.tar.gz
 %if 0%{verify_tarball_signature}
-Source1:        virt-v2v-2.11.3.tar.gz.sig
+Source1:        http://download.libguestfs.org/virt-v2v/%{source_directory}/%{name}-%{version}.tar.gz.sig
 # Keyring used to verify tarball signature.
 Source2:       libguestfs.keyring
 %endif

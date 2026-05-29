@@ -7,7 +7,7 @@
 
 %global crate keylime_agent
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 # RHEL: Use bundled deps as it doesn't ship Rust libraries
 %global bundled_rust_deps 1
 %global __brp_mangle_shebangs_exclude_from ^/usr/src/debug/.*$
@@ -82,7 +82,7 @@ Requires:       util-linux-core
 
 # The keylime-base package provides the keylime user creation. It is available
 # from Fedora 36
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 Requires:       keylime-base
 %endif
 
@@ -127,7 +127,7 @@ Requires: keylime-agent-rust-ima-emulator%{?_isa} = %{version}-%{release}
 
 # The keylime-base package provides the keylime user creation. It is available
 # from Fedora 36
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 Requires:       keylime-base
 %endif
 
@@ -149,7 +149,7 @@ Requires:       keylime-agent-rust-common = %{version}-%{release}
 
 # The keylime-base package provides the keylime user creation. It is available
 # from Fedora 36
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 Requires:       keylime-base
 %endif
 

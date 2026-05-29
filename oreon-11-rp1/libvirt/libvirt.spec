@@ -9,8 +9,8 @@
 %define min_fedora 41
 
 %define arches_qemu_kvm         %{ix86} x86_64 %{power64} aarch64 s390x riscv64
-%if 0%{?rhel} || 0%{?oreon}
-    %if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
+    %if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
         %define arches_qemu_kvm     x86_64 aarch64 s390x riscv64
     %else
         %define arches_qemu_kvm     x86_64 aarch64 s390x
@@ -23,7 +23,7 @@
 %define arches_systemtap_64bit  %{arches_64bit}
 %define arches_dmidecode        %{arches_x86} aarch64 riscv64
 %define arches_xen              %{arches_x86} aarch64
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
     %define arches_xen          x86_64 aarch64
 %endif
 %define arches_vbox             %{arches_x86}
@@ -43,7 +43,7 @@
     %define with_qemu      0%{!?_without_qemu:1}
 %else
     # QEMU drops 32-bit in Fedora 44
-    %if 0%{?fedora} > 43 || 0%{?oreon}
+    %if 0%{?fedora} > 43 || (0%{?oreon} >= 11)
         %define with_qemu  0
     %else
         %define with_qemu  0%{!?_without_qemu:1}
@@ -56,7 +56,7 @@
     %define with_qemu_kvm      0
 %endif
 
-%if 0%{?fedora} >= 42 || 0%{?oreon}
+%if 0%{?fedora} >= 42 || (0%{?oreon} >= 11)
     %define with_account_add 0
 %else
     %define with_account_add 1
@@ -65,7 +65,7 @@
 %define with_qemu_tcg      %{with_qemu}
 
 # RHEL disables TCG on all architectures
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
     %define with_qemu_tcg 0
 %endif
 
@@ -83,7 +83,7 @@
 %define with_storage_rbd      0%{!?_without_storage_rbd:1}
 
 %define with_storage_gluster 0%{!?_without_storage_gluster:1}
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
     # Glusterfs has been dropped in RHEL-9.
     %define with_storage_gluster 0
 %endif
@@ -91,7 +91,7 @@
 # On Fedora 43, the 'zfs-fuse' package was removed, but is obtainable via
 # other means. Build the backend, but it's no longer considered to be part
 # of 'daemon-driver-storage'.
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
     %define with_storage_zfs      0%{!?_without_storage_zfs:1}
 %else
     %define with_storage_zfs      0
@@ -99,7 +99,7 @@
 
 %define with_storage_iscsi_direct 0%{!?_without_storage_iscsi_direct:1}
 # libiscsi has been dropped in RHEL-9
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
     %define with_storage_iscsi_direct 0
 %endif
 
@@ -142,7 +142,7 @@
 %endif
 
 # RHEL doesn't ship many hypervisor drivers
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
     %define with_openvz 0
     %define with_vbox 0
     %define with_vmware 0
@@ -161,17 +161,17 @@
 
 # Enable sanlock library for lock management with QEMU
 # Sanlock is available only on arches where kvm is available for RHEL
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
     %define with_sanlock 0%{!?_without_sanlock:1}
 %endif
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
     %ifarch %{arches_qemu_kvm}
         %define with_sanlock 0%{!?_without_sanlock:1}
     %endif
 %endif
 
 # Enable libssh2 transport for new enough distros
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
     %define with_libssh2 0%{!?_without_libssh2:1}
 %endif
 
@@ -195,7 +195,7 @@
 # Right now that's not the case anywhere, but things should be fine by the time
 # Fedora 40 is released.
 %if %{with_qemu}
-    %if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+    %if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
         %define with_nbdkit 0%{!?_without_nbdkit:1}
 
         # setting 'with_nbdkit_config_default' must be done only when compiling
@@ -203,7 +203,7 @@
         #
         # TODO: add RHEL 9 once a minor release that contains the necessary SELinux
         #       bits exists (we only support the most recent minor release)
-        %if 0%{?fedora} || 0%{?oreon}
+        %if 0%{?fedora} || (0%{?oreon} >= 11)
             %define with_nbdkit_config_default 0%{!?_without_nbdkit_config_default:1}
         %endif
     %endif
@@ -214,13 +214,13 @@
 %endif
 
 %define with_modular_daemons 0
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
     %define with_modular_daemons 1
 %endif
 
 # Prefer nftables for future OS releases but keep using iptables
 # for existing ones
-%if 0%{?rhel} >= 10 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} >= 10 || 0%{?fedora} || (0%{?oreon} >= 11)
     %define prefer_nftables 1
     %define firewall_backend_priority nftables,iptables
 %else
@@ -244,7 +244,7 @@
 %define with_mingw32 0
 %define with_mingw64 0
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
     %if 0%{!?_without_mingw:1}
         %define with_mingw32 0%{!?_without_mingw32:1}
         %define with_mingw64 0%{!?_without_mingw64:1}
@@ -267,7 +267,7 @@
 # compiler warning into errors without being worried about frequent
 # changes in reported warnings. ELN is a rebuild of Rawhide so should
 # be treated as unstable for this flag
-%if 0%{?rhel} && !0%{?eln} || 0%{?oreon}
+%if 0%{?rhel} && !0%{?eln} || (0%{?oreon} >= 11)
     %define enable_werror -Dwerror=true
 %else
     %define enable_werror -Dwerror=false -Dgit_werror=disabled
@@ -304,7 +304,7 @@ URL: https://libvirt.org/
 %if %(echo %{version} | grep "\.0$" >/dev/null; echo $?) == 1
     %define mainturl stable_updates/
 %endif
-Source:        https://download.libvirt.org/%{?mainturl}libvirt-12.0.0.tar.xz
+Source:        https://download.libvirt.org/%{?mainturl}libvirt-%{version}.tar.xz
 
 # Fix IPv6 connections to ESXi
 # Upstream in > 12.0.0
@@ -534,7 +534,7 @@ Requires: dbus
 Requires(pre): shadow-utils
     %endif
 # Needed by /usr/libexec/libvirt-guests.sh script.
-    %if 0%{?fedora} || 0%{?oreon}
+    %if 0%{?fedora} || (0%{?oreon} >= 11)
 Requires: gettext-runtime
     %else
 Requires: gettext
@@ -758,10 +758,10 @@ multipath storage using device mapper.
 Summary: Storage driver plugin for gluster
 Requires: libvirt-daemon-driver-storage-core = %{version}-%{release}
 Requires: libvirt-libs = %{version}-%{release}
-        %if 0%{?fedora} || 0%{?oreon}
+        %if 0%{?fedora} || (0%{?oreon} >= 11)
 Requires: glusterfs-client >= 2.0.1
         %endif
-        %if 0%{?fedora} || 0%{?with_storage_gluster} || 0%{?oreon}
+        %if 0%{?fedora} || 0%{?with_storage_gluster} || (0%{?oreon} >= 11)
 Requires: /usr/sbin/gluster
         %endif
 
@@ -789,7 +789,7 @@ Requires: libvirt-libs = %{version}-%{release}
 # Starting with Fedora 43 the 'zfs-fuse' is no longer shipped but obtainable
 # externally. The package builds fine without these. Users will have to provide
 # their own implementation.
-        %if 0%{?fedora} && 0%{?fedora} < 43 || 0%{?oreon}
+        %if 0%{?fedora} && 0%{?fedora} < 43 || (0%{?oreon} >= 11)
 Requires: /sbin/zfs
 Requires: /sbin/zpool
         %endif
@@ -819,7 +819,7 @@ Requires: libvirt-daemon-driver-storage-rbd = %{version}-%{release}
 # Starting with Fedora 43 the 'zfs-fuse' is no longer shipped but obtainable
 # externally. We do not want to install this as part of 'daemon-driver-storage'
 # any more.
-    %if %{with_storage_zfs} && 0%{?fedora} && 0%{?fedora} < 43 || 0%{?oreon}
+    %if %{with_storage_zfs} && 0%{?fedora} && 0%{?fedora} < 43 || (0%{?oreon} >= 11)
 Requires: libvirt-daemon-driver-storage-zfs = %{version}-%{release}
     %endif
 
@@ -846,7 +846,7 @@ Requires: swtpm-tools
         %if %{with_numad}
 Requires: numad
         %endif
-        %if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+        %if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 Recommends: passt
 Recommends: passt-selinux
         %endif
@@ -1177,7 +1177,7 @@ MinGW Windows libvirt virtualization library.
 %autosetup -S git_am
 
 %build
-%if 0%{?fedora} >= %{min_fedora} || 0%{?rhel} >= %{min_rhel} || 0%{?oreon}
+%if 0%{?fedora} >= %{min_fedora} || 0%{?rhel} >= %{min_rhel} || (0%{?oreon} >= 11)
     %define supported_platform 1
 %else
     %define supported_platform 0

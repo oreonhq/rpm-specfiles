@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 8f6db89fddbabe7f6ea3644f6dd55db6597251e9d4b06535fd9235685b0c3fb6
 
 Name: hyphen-da
 Summary: Danish hyphenation rules
 %global upstreamid 20070903
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/hyph_da_DK.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_da_DK.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 Patch0: hyphen-da-lppl-license-fix.patch
 License: LGPL-2.1-or-later

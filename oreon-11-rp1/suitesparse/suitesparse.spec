@@ -37,7 +37,7 @@
 
 %global suitesparse_builds SuiteSparse %{?build64:SuiteSparse64 SuiteSparse64_}
 
-%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %global blaslib flexiblas
 %else
 %global blaslib openblas
@@ -80,7 +80,7 @@ Summary:        A collection of sparse matrix libraries
 
 License:        BSD-3-Clause AND LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:            http://faculty.cse.tamu.edu/davis/suitesparse.html
-Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v7.11.0/suitesparse-7.11.0.tar.gz
+Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/v%{version}/%{name}-%{version}.tar.gz
 #Source0:        https://github.com/DrTimothyAldenDavis/SuiteSparse/archive/%%{commit}/%%{name}-%%{commit}.tar.gz
 
 BuildRequires:  cmake

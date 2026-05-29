@@ -102,7 +102,7 @@ BuildRequires:  pkgconfig(libspelling-1)
 BuildRequires:  /usr/bin/appstream-util
 BuildRequires:  /usr/bin/desktop-file-validate
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  cargo-rpm-macros

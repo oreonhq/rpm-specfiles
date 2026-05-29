@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash 3ef99256b716a848400734079c5e9851e649a72c936c57a52de90d4269ed41c7
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -11,7 +11,7 @@ Summary: Welsh hunspell dictionaries
 %global upstreamid 20040425
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/cy_GB.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/cy_GB.zip
 URL: http://www.e-gymraeg.co.uk/
 License: GPL-1.0-or-later
 BuildArch: noarch

@@ -3,6 +3,7 @@
 %global source2_key_fpr 8C5F7146A1757A65E2422A94D70D1A666ACF2B21
 
 
+
 # install init scripts to /usr/libexec with systemd
 %global script_path %{_libexecdir}/iptables
 

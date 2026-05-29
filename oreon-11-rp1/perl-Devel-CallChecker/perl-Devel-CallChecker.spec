@@ -3,7 +3,7 @@
 # This file is licensed under the terms of GNU GPLv2+.
 
 # Run optional test
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_Devel_CallChecker_enables_optional_test
 %else
 %bcond_with perl_Devel_CallChecker_enables_optional_test

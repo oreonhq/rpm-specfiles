@@ -9,7 +9,7 @@ Version: 8.0.2
 Epoch: 1
 Release: 8%{?dist}
 License: Qhull
-Source0:        https://github.com/qhull/qhull/archive/v8.0.2.tar.gz#/qhull-8.0.2.tar.gz
+Source0:        https://github.com/qhull/qhull/archive/v%{version}.tar.gz#/qhull-%{version}.tar.gz
 
 # Install cmake and pkgconfig file into proper libdir
 # https://github.com/qhull/qhull/pull/123

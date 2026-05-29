@@ -1,7 +1,7 @@
 %global source0_hash c4d10a1b665db893adc0c0aaee7ecd81b2b47c877d5cea0b40216707cbf327e4
 
 # SPDX-License-Identifier: MIT
-%if 0%{?rhel} > 10 || 0%{?oreon}
+%if 0%{?rhel} > 10 || (0%{?oreon} >= 11)
 %bcond build_from_src 0
 %else
 %bcond build_from_src 1

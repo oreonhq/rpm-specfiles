@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 3558b4b7cae7836624036f17e28f3cdfe5b0f64e91d881ca63624324d6d367d8
 
 Name: mythes-ga
 Summary: Irish thesaurus
 %global upstreamid 20071001
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/thes_ga_IE_v2.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/thes_ga_IE_v2.zip
 URL: https://cadhan.com/lsg/index-en.html
 BuildRequires: unzip
 License: GFDL-1.2-or-later

@@ -5,7 +5,7 @@
 %global cpan_version %{cpan_version_major}%{?cpan_version_minor}
 
 # Run optional tests
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_Module_Build_enables_optional_test
 %else
 %bcond_with perl_Module_Build_enables_optional_test
@@ -70,7 +70,7 @@ BuildRequires:  perl(strict)
 BuildRequires:  perl(Archive::Zip)
 BuildRequires:  perl(File::ShareDir) >= 1.00
 BuildRequires:  perl(PAR::Dist)
-%if 0%{?fedora}  || 0%{?rhel} < 7 || 0%{?oreon}
+%if 0%{?fedora}  || 0%{?rhel} < 7 || (0%{?oreon} >= 11)
 BuildRequires:  perl(Pod::Readme)
 %endif
 %endif

@@ -15,7 +15,7 @@ Epoch:          1
 Summary:        Perl interface to the libxml2 library
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND MIT
 URL:            https://metacpan.org/release/XML-LibXML
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-LibXML-2.0213.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-LibXML-%{version}.tar.gz
 # Fix parsing ampersand entities in SAX interface, CPAN RT#131498,
 # posted to the upstream.
 Patch0:         XML-LibXML-2.0202-Parse-an-ampersand-entity-in-SAX-interface.patch
@@ -66,7 +66,7 @@ BuildRequires:  perl(XML::SAX)
 BuildRequires:  perl(XML::SAX::ParserFactory)
 # Optional tests
 # Optional Test::Differences has a fall-back
-%if ! ( 0%{?rhel} ) || 0%{?oreon}
+%if ! ( 0%{?rhel} ) || (0%{?oreon} >= 11)
 BuildRequires:  perl(Test::LeakTrace)
 %endif
 %if %{with thread_test}
@@ -94,7 +94,7 @@ Obsoletes:      perl-XML-LibXML-Common <= 0.13
 %global __requires_exclude %{__requires_exclude}|^perl\\(Counter)\s*$
 %global __requires_exclude %{__requires_exclude}|^perl\\(Stacker)\s*$
 %global __requires_exclude %{__requires_exclude}|^perl\\(TestHelpers)\s*$
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global __requires_exclude %{__requires_exclude}|^perl\\(Test::LeakTrace)\s*$
 %endif
 

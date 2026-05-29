@@ -11,7 +11,7 @@ URL:            https://tukaani.org/xz/java.html
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://tukaani.org/xz/xz-java-1.9.zip
+Source0:        https://tukaani.org/xz/xz-java-%{version}.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

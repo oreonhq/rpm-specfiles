@@ -1,4 +1,5 @@
 %global source0_hash faf38add90ccfed34917506894a4dfe6faab58abdf5ca44a4d48e2040cebcd36
+%global source4_hash 91a63540d0c5eeed36f91752a109b021a8318f648f04d4b40c2c572bad60919b
 
 %global sblim_testsuite_version 1.2.4
 %global provider_dir %{_libdir}/cmpi
@@ -11,7 +12,7 @@ Summary:        SBLIM Gatherer
 
 License:        EPL-1.0
 URL:            http://sourceforge.net/projects/sblim/
-Source0:        http://downloads.sourceforge.net/project/sblim/sblim-gather/2.2.9/sblim-gather-2.2.9.tar.bz2
+Source0:        http://downloads.sourceforge.net/project/sblim/%{name}/%{version}/%{name}-%{version}.tar.bz2
 Source1:        gather-config.h.prepend
 Source2:        gather-config.h
 Source3:        sblim-gather.tmpfiles
@@ -106,6 +107,7 @@ Testsuite
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })
 %setup -q
 # for missing providers
 tar xfvz %{SOURCE4}

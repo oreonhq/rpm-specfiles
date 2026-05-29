@@ -6,7 +6,7 @@ Release: 37%{?dist}
 Summary: SCSI media changer control program
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
-Source0:        http://downloads.sourceforge.net/mtx/mtx-1.3.12.tar.gz
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 # http://mtx.opensource-sw.net/bugs/view.php?id=9
 Patch0: %{name}-1.3.12-destdir.patch
 # http://mtx.opensource-sw.net/bugs/view.php?id=13

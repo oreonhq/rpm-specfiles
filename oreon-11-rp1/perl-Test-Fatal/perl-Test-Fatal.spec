@@ -1,6 +1,6 @@
 %global source0_hash b8d2cccf9ee467271bc478f9cf7eba49545452be9302ae359bc538b8bf687cd6
 
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 # Run extra test
 %bcond_without perl_Test_Fatal_enables_extra_test
 # Run optional test

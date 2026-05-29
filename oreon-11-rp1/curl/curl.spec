@@ -16,8 +16,8 @@ Name: curl
 Version: 8.18.0
 Release: 6%{?dist}
 License: curl
-Source0:        https://curl.se/download/curl-%{version_no_tilde}.tar.xz
-Source1:        https://curl.se/download/curl-%{version_no_tilde}.tar.xz.asc
+Source0:        https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz
+Source1:        https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz.asc
 # The curl download page ( https://curl.se/download.html ) links
 # to Daniel's address page https://daniel.haxx.se/address.html for the GPG Key,
 # which points to the GPG key as of April 7th 2016 of https://daniel.haxx.se/mykey.asc
@@ -53,7 +53,7 @@ Provides: curl-minimal = %{version}-%{release}
 Provides: webclient
 URL: https://curl.se/
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # instead of bundled wcurl utility, recommend wcurl package
 Recommends: wcurl
 %endif
@@ -86,7 +86,7 @@ BuildRequires: openssh-clients
 BuildRequires: openssh-server
 BuildRequires: openssl
 BuildRequires: openssl-devel
-%if %{with openssl_engine_support} && 0%{?fedora} >= 41 || 0%{?oreon}
+%if %{with openssl_engine_support} && 0%{?fedora} >= 41 || (0%{?oreon} >= 11)
 BuildRequires:  openssl-devel-engine
 %endif
 BuildRequires: perl-interpreter
@@ -142,7 +142,7 @@ BuildRequires: perl(Time::HiRes)
 BuildRequires: perl(Time::Local)
 BuildRequires: perl(vars)
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # needed for upstream test 1451
 BuildRequires: python3-impacket
 %endif

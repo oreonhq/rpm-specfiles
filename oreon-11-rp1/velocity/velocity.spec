@@ -11,7 +11,7 @@ URL:            https://velocity.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/apache/velocity-engine/archive/refs/tags/2.4.1.tar.gz#/velocity-2.4.1.tar.gz
+Source0:        https://github.com/apache/velocity-engine/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 Patch:          0001-Template-is-a-reserved-keyword-in-javacc.patch
 

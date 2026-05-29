@@ -17,7 +17,7 @@
 
 # Disable Aruba support in RHEL due to excesive dependency chain. This also
 # disables Cucumber integration test suite, which depends on Aruba as well.
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_without aruba
 %endif
 
@@ -31,7 +31,7 @@ Release:	%{?preminorver:0.}%{baserelease}%{?preminorver:%{rpmminorver}}%{?dist}
 # SPDX confirmed
 License:	MIT
 URL:		https://rspec.info
-Source0:        http://rubygems.org/gems/rspec-core-3.13.6%{?preminorver}.gem
+Source0:        http://rubygems.org/gems/%{gem_name}-%{fullver}.gem
 # %%{SOURCE2} %%{name} %%{version}
 Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
 Source2:	rspec-related-create-full-tarball.sh
@@ -62,14 +62,14 @@ BuildRequires:	rubygem(rr)
 BuildRequires:	rubygem(cucumber)
 %endif
 
-%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 BuildRequires:	glibc-langpack-en
 %endif
 
 %endif
 # Make the following dependency optionally installed
 # lib/rspec/core/rake_task
-%if 0%{?fedora} >= 36 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || (0%{?oreon} >= 11)
 Recommends:	rubygem(rake)
 %else
 Requires:	rubygem(rake)
@@ -155,7 +155,7 @@ exit 0
 sed -i features/command_line/init.feature \
        -e 's|^\([ \t]*\)\(Scenario: Accept and use the recommended settings\)|\1@broken\n\1\2|'
 
-%if 0%{?fedora} >= 34 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 34 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 for f in  \
 	`# disabling tests failing with rr 1.2.1` \
 	`# https://github.com/rspec/rspec-core/issues/2882` \
@@ -182,14 +182,14 @@ cucumber -v -f progress features/ || \
 	`# the conditions are correctly detected, the 'warning' called instead their` \
 	`# execution is troublesome, possibly due to upstream using old Cucumber?` \
 	--tag "not @skip-when-diff-lcs-1.3" \
-%if 0%{?fedora} >= 36 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || (0%{?oreon} >= 11)
 	`# Cucumber 7 upgrades diff-lcs to 1.5` \
 	--tag "not @skip-when-diff-lcs-1.4" \
 %endif
 	--tag "not @ruby-2-7" \
 	%{nil}
 
-%if 0%{?fedora} >= 34 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 34 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 for f in  \
 	features/mock_framework_integration/use_rr.feature \
 	%{nil}

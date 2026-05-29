@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -11,7 +11,7 @@ Summary: Hiligaynon hunspell dictionaries
 Epoch: 1
 Version: 0.14
 Release: 33%{?dist}
-Source:        https://addons.mozilla.org/firefox/downloads/file/108895/litreoir_hiligaynon-0.14-tb+fx+sm.xpi
+Source:        https://addons.mozilla.org/firefox/downloads/file/108895/litreoir_hiligaynon-%{version}-tb+fx+sm.xpi
 URL: http://extensions.services.openoffice.org/project/hunspell-hil
 License: GPL-2.0-or-later
 BuildArch: noarch

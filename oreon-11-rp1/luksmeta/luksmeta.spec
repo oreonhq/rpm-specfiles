@@ -7,7 +7,7 @@ Summary:        Utility for storing small metadata in the LUKSv1 header
 
 License:        LGPL-2.1-or-later
 URL:            https://github.com/latchset/%{name}
-Source0:        https://github.com/latchset/luksmeta/releases/download/v10/luksmeta-10.tar.bz2
+Source0:        https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires:  asciidoc

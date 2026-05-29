@@ -24,10 +24,10 @@ Provides: %1 = %{version}-%{release} \
 Conflicts: %1 \
 %endif
 
-Source0:        https://downloads.isc.org/isc/kea/3.0.3/kea-3.0.3.tar.xz
-Source1:        https://downloads.isc.org/isc/kea/3.0.3/kea-3.0.3.tar.xz.asc
-Source2:        https://downloads.isc.org/isc/keama/4.5.0/keama-4.5.0.tar.gz
-Source3:        https://downloads.isc.org/isc/keama/4.5.0/keama-4.5.0.tar.gz.asc
+Source0:        https://downloads.isc.org/isc/kea/%{version}/kea-%{version}.tar.xz
+Source1:        https://downloads.isc.org/isc/kea/%{version}/kea-%{version}.tar.xz.asc
+Source2:        https://downloads.isc.org/isc/keama/%{keama_version}/keama-%{keama_version}.tar.gz
+Source3:        https://downloads.isc.org/isc/keama/%{keama_version}/keama-%{keama_version}.tar.gz.asc
 Source10:       https://www.isc.org/docs/isc-keyblock.asc
 Source11:       kea-dhcp4.service
 Source12:       kea-dhcp6.service
@@ -48,7 +48,7 @@ Patch3:         kea-move-to-system-timer.patch
 BuildRequires: boost-devel
 # %%meson -D crypto=openssl
 BuildRequires: openssl-devel
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # https://bugzilla.redhat.com/show_bug.cgi?id=2300868#c4
 BuildRequires: openssl-devel-engine
 %endif
@@ -57,7 +57,7 @@ BuildRequires: krb5-devel
 # %%meson -D mysql=enabled
 BuildRequires: mariadb-connector-c-devel
 # %%meson -D postgresql=enabled
-%if 0%{?fedora} || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 BuildRequires: libpq-devel
 %else
 BuildRequires: postgresql-server-devel

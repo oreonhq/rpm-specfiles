@@ -35,10 +35,10 @@ URL:            https://inkscape.org/
 Source0:        https://media.inkscape.org/dl/resources/file/inkscape-1.4.3.tar.xz
 
 # The signatures were uploaded by the responsible release manager, and includes release date and commit, not using macros because it's inconsistent.
-Source1:        inkscape-1.4.3_2025-12-25_0d15f75042.tar.xz.sig
+Source1:        https://media.inkscape.org/media/resources/sigs/inkscape-1.4.4_2026-05-05_dcaf3e7d9e.tar.xz.sig
 
 # Keyring(s)
-Source10:       MarcJeanmougin.gpg
+Source10:        https://inkscape.org/~MarcJeanmougin/gpg/#/MarcJeanmougin.gpg
 
 
 # Should we split this package and mark it as a Enhance,

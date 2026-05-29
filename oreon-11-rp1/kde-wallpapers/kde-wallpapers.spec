@@ -14,7 +14,7 @@ URL:     http://www.kde.org/
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/stable/applications/15.08.3/src/kde-wallpapers-15.08.3.tar.xz
+Source0:        https://download.kde.org/%{stable}/applications/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildArch: noarch
 

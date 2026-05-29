@@ -18,7 +18,7 @@
 # All arches have mpich
 %bcond_without mpich
 
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %ifarch %{ix86}
     # No OpenMPI support on these arches
     %bcond_with openmpi
@@ -67,7 +67,7 @@ License: BSL-1.0 AND MIT AND Python-2.0.1
 URL: http://www.boost.org
 
 # https://archives.boost.io/release/1.90.0/source/boost_1_90_0.tar.bz2
-Source0:        https://archives.boost.io/release/1.90.0/source/boost_%{lua:.tar.bz2
+Source0:        https://archives.boost.io/release/%{version}/source/%{name}_%{version_enc}.tar.bz2
 # Add a manual page for b2, based on the online documentation:
 # http://www.boost.org/boost-build2/doc/html/bbv2/overview.html
 Source1: b2.1
@@ -539,7 +539,7 @@ Static Boost C++ libraries.
 
 %package doc
 Summary: HTML documentation for the Boost C++ libraries
-%if 0%{?rhel} >= 6 || 0%{?oreon}
+%if 0%{?rhel} >= 6 || (0%{?oreon} >= 11)
 BuildArch: noarch
 %endif
 
@@ -550,7 +550,7 @@ web page (http://www.boost.org/doc/libs/%{version_enc}).
 
 %package examples
 Summary: Source examples for the Boost C++ libraries
-%if 0%{?rhel} >= 6 || 0%{?oreon}
+%if 0%{?rhel} >= 6 || (0%{?oreon} >= 11)
 BuildArch: noarch
 %endif
 Requires: %{name}-devel = %{version}-%{release}

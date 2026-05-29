@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -10,7 +10,7 @@ Name: hunspell-haw
 Summary: Hawaiian hunspell dictionaries
 Version: 0.03
 Release: 20%{?dist}
-Source:        https://addons.mozilla.org/firefox/downloads/file/248540/hawaiian_spell_checker-0.03-tb+fx+fn+sm.xpi
+Source:        https://addons.mozilla.org/firefox/downloads/file/248540/hawaiian_spell_checker-%{version}-tb+fx+fn+sm.xpi
 URL: http://borel.slu.edu/crubadan/
 License: GPL-2.0-or-later
 BuildArch: noarch

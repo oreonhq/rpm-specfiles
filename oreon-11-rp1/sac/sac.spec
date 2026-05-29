@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0a8d214d24533ecfb6f548d5e74452e24f68db09685d77df84085feedb085978
 
 Name: sac
 Version: 1.3
@@ -14,7 +14,7 @@ Source2: %{name}-MANIFEST.MF
 Source3: https://repo1.maven.org/maven2/org/w3c/css/sac/1.3/sac-1.3.pom
 URL: http://www.w3.org/Style/CSS/SAC/
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires: ant-openjdk25 
 BuildRequires: javapackages-local-openjdk25
 %else

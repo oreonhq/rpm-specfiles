@@ -3,6 +3,7 @@
 %global source4_key_fpr F7774FB1AD074A7E8C8767EA91738F73E1B768A0
 
 
+
 # OCaml packages not built on i686 since OCaml 5 / Fedora 39.
 ExcludeArch: %{ix86}
 
@@ -12,14 +13,14 @@ Release:        6%{?dist}
 Summary:        Utility like top(1) for displaying virtualization stats
 License:        GPL-2.0-or-later
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 # No qemu-kvm on POWER (RHBZ#1946532).
 ExcludeArch:    %{power64}
 %endif
 
 URL:            https://people.redhat.com/~rjones/virt-top/
-Source0:        https://people.redhat.com/~rjones/virt-top/files/virt-top-1.1.2.tar.gz
-Source1:        https://people.redhat.com/~rjones/virt-top/files/virt-top-1.1.2.tar.gz.sig
+Source0:        https://people.redhat.com/~rjones/virt-top/files/%{name}-%{version}.tar.gz
+Source1:        https://people.redhat.com/~rjones/virt-top/files/%{name}-%{version}.tar.gz.sig
 
 # Post-process output of CSV file (RHBZ#665817, RHBZ#912020).
 Source2:        processcsv.py
@@ -70,7 +71,7 @@ different virtualization systems.
 %{gpgverify} --keyring='%{SOURCE4}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 
-%if 0%{?rhel} >= 6 || 0%{?oreon}
+%if 0%{?rhel} >= 6 || (0%{?oreon} >= 11)
 %patch -P1 -p1
 %endif
 
@@ -87,7 +88,7 @@ make
 rm -f src/virt-top.1
 make -C src virt-top.1
 
-%if 0%{?rhel} >= 6 || 0%{?oreon}
+%if 0%{?rhel} >= 6 || (0%{?oreon} >= 11)
 # Build processcsv.py.1.
 pod2man -c "Virtualization Support" --release "%{name}-%{version}" \
   %{SOURCE3} > processcsv.py.1
@@ -104,7 +105,7 @@ make DESTDIR=$RPM_BUILD_ROOT install
 mkdir -p $RPM_BUILD_ROOT%{_mandir}/man1
 install -m 0644 src/virt-top.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
-%if 0%{?rhel} >= 6 || 0%{?oreon}
+%if 0%{?rhel} >= 6 || (0%{?oreon} >= 11)
 # Install processcsv.py.
 install -m 0755 %{SOURCE2} $RPM_BUILD_ROOT%{_bindir}
 
@@ -118,7 +119,7 @@ install -m 0644 processcsv.py.1 $RPM_BUILD_ROOT%{_mandir}/man1/
 %license COPYING
 %{_bindir}/virt-top
 %{_mandir}/man1/virt-top.1*
-%if 0%{?rhel} >= 6 || 0%{?oreon}
+%if 0%{?rhel} >= 6 || (0%{?oreon} >= 11)
 %{_bindir}/processcsv.py
 %{_mandir}/man1/processcsv.py.1*
 %endif

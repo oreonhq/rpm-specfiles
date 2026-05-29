@@ -3,7 +3,7 @@
 %bcond efi_apps 0
 %bcond check    1
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 
 %ifarch aarch64
 %bcond efi_apps 1
@@ -38,7 +38,7 @@ License:        %{shrink:
 }
 
 URL:            https://gitlab.com/kraxel/virt-firmware-rs
-Source:        https://gitlab.com/kraxel/virt-firmware-rs/-/archive/v26.4/virt-firmware-rs-v26.4.tar.gz
+Source:        https://gitlab.com/kraxel/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 
 Patch1:		downgrade-dialoguer.patch
 

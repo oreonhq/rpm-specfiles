@@ -23,7 +23,7 @@
 %global qt6 1
 
 # Qt4 webkit is abandoned in Fedora 44+
-%if 0%{?fedora} <= 43 || 0%{?oreon}
+%if 0%{?fedora} <= 43 || (0%{?oreon} >= 11)
 %global qt4webkit 1
 %else
 %global qt4webkit 0
@@ -35,13 +35,13 @@ Version:	3.21.6
 Release:	1%{?dist}
 License:	GPL-1.0-or-later
 URL:		http://gambas.sourceforge.net/
-Source0:        https://gitlab.com/gambas/gambas/-/archive/3.21.6/gambas-3.21.6.tar.bz2
+Source0:        https://gitlab.com/gambas/gambas/-/archive/%{version}/gambas-%{version}.tar.bz2
 Source1:	%{name}.desktop
 BuildRequires:	gcc, gcc-c++
 BuildRequires:	automake, autoconf, SDL-devel, SDL_mixer-devel
 BuildRequires:	SDL2-devel, SDL2_mixer-devel, SDL2_image-devel, SDL2_ttf-devel
 BuildRequires:	mariadb-connector-c-devel, postgresql-server-devel
-%if 0%{?fedora} >= 35 || 0%{?oreon}
+%if 0%{?fedora} >= 35 || (0%{?oreon} >= 11)
 BuildRequires:	postgresql-private-devel
 %else
 BuildRequires:	libpq-devel
@@ -76,7 +76,7 @@ BuildRequires:	poppler-cpp-devel
 # We need this since linux/videodev.h is dead
 BuildRequires:	libv4l-devel
 BuildRequires:	openssl-devel, gmp-devel, glew-devel
-%if 0%{?fedora} >= 41 || 0%{?oreon}
+%if 0%{?fedora} >= 41 || (0%{?oreon} >= 11)
 BuildRequires:	openssl-devel-engine
 %endif
 BuildRequires:	gstreamer1-plugins-base-devel gstreamer1-devel
@@ -1233,7 +1233,7 @@ chmod -x main/lib/option/main.c
 %build
 # This is handled in a cleaner way with F38+, see:
 # https://src.fedoraproject.org/rpms/redhat-rpm-config/blob/rawhide/f/buildflags.md#source-fortification
-%if 0%{?fedora} <= 37 || 0%{?oreon}
+%if 0%{?fedora} <= 37 || (0%{?oreon} >= 11)
 # Gambas can't deal with -Wp,-D_FORTIFY_SOURCE=2 (or 3)
 MY_CFLAGS=`echo %{build_cflags} | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g' | sed -e 's/-Wp,-U_FORTIFY_SOURCE,-D_FORTIFY_SOURCE=3//g'`
 %endif
@@ -1285,7 +1285,7 @@ MY_CFLAGS=`echo %{build_cflags} | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g' | sed -e
 	--with-xml-libraries=%{_libdir} \
 	--with-xslt-libraries=%{_libdir} \
 	--with-zlib-libraries=%{_libdir} \
-%if %{?fedora} <= 37 || 0%{?oreon}
+%if 0%{?fedora} <= 37 || (0%{?oreon} >= 11)
 	AM_CFLAGS="$MY_CFLAGS" AM_CXXFLAGS="$MY_CFLAGS" CC="%{build_cc} $MY_CFLAGS"
 %else
 	AM_CFLAGS="%{build_cflags}" AM_CXXFLAGS="%{build_cflags}" CC="%{build_cc} %{build_cflags}"

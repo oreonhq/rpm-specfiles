@@ -11,7 +11,15 @@
 #
 # would also match 1.0, which is wrong since major numbers mean an ABI break.
 
-ver=$(pkg-config --variable abi_$1 xorg-server)
+ver=$(pkg-config --variable=abi_$1 xorg-server 2>/dev/null)
+if [ -z "$ver" ]; then
+    case $1 in
+    ansic) ver=0.4 ;;
+    videodrv) ver=25.2 ;;
+    xinput) ver=24.4 ;;
+    extension) ver=11.0 ;;
+    esac
+fi
 
 major=$(echo $ver | cut -f 1 -d .)
 minor=$(echo $ver | cut -f 2 -d .)

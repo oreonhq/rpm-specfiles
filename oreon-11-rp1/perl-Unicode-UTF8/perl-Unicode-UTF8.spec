@@ -1,7 +1,7 @@
 %global source0_hash ca9dfbebf57cbe470dc68136ac792d6c89a38e7de5c7d2084b5c90e8d1010105
 
 # Run optional test
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_Unicode_UTF8_enables_optional_test
 %else
 %bcond_with perl_Unicode_UTF8_enables_optional_test

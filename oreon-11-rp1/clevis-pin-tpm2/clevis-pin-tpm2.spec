@@ -34,7 +34,7 @@ Source:        https://github.com/fedora-iot/clevis-pin-tpm2//archive/v0.5.4/cle
 #   cargo vendor && tar Jcvf ../%%{name}-%%{version}-vendor.tar.xz vendor/ ; popd
 Source1:        https://github.com/fedora-iot/clevis-pin-tpm2/archive/refs/tags/v0.5.4.tar.gz
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  rust-toolset
 BuildRequires:  clang-devel
 BuildRequires:  openssl-devel
@@ -52,7 +52,7 @@ Requires:       clevis
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 %{?rhel:-a1}
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %cargo_prep -v vendor
 %else
 %cargo_prep
@@ -65,7 +65,7 @@ Requires:       clevis
 %cargo_build
 %{cargo_license_summary}
 %{cargo_license} > LICENSE.dependencies
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %cargo_vendor_manifest
 %endif
 
@@ -82,7 +82,7 @@ ln -s /usr/bin/clevis-pin-tpm2 %{buildroot}/usr/bin/clevis-decrypt-tpm2plus
 %files
 %license LICENSES/MIT.txt
 %license LICENSE.dependencies
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %license cargo-vendor.txt
 %endif
 %doc README.md

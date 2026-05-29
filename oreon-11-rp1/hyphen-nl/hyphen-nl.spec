@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash f48cb8a7ec86b94fe7383fd0c781c83b69c57b595cb10a6a69a5444f4f2368a7
 
 Name: hyphen-nl
 Summary: Dutch hyphenation rules
 %global upstreamid 20050617
 Version: 0.%{upstreamid}
 Release: 36%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/hyph_nl_NL.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_nl_NL.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: GPL-2.0-only
 BuildArch: noarch

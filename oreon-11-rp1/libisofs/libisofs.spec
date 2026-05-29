@@ -9,14 +9,14 @@ Release:        3%{?dist}
 # libisofs/make_isohybrid_mbr.c is LGPL-2.0-or-later, rest is GPL-2.0-or-later
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            https://libburnia-project.org/
-Source0:        https://files.libburnia-project.org/releases/libisofs-1.5.8.pl02.tar.gz
-Source1:        https://files.libburnia-project.org/releases/libisofs-1.5.8.pl02.tar.gz.sig
+Source0:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.pl02.tar.gz
+Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.pl02.tar.gz.sig
 Source2:        https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB007C4DD029E9CBDFC0ABC0A854
 Patch0:         libisofs-0.6.16-multilib.patch
 Patch1:         libisofs-1.5.4-rpath.patch
 BuildRequires:  gnupg2
 BuildRequires:  gcc, make, libacl-devel, zlib-devel
-%if 0%{?rhel} && "%{name}" != "%{pkgname}" || 0%{?oreon}
+%if 0%{?rhel} && "%{name}" != "%{pkgname}" || (0%{?oreon} >= 11)
 BuildRequires:  autoconf, automake, libtool
 %endif
 
@@ -55,7 +55,7 @@ documentation for developing applications that use %{name}.
 %autosetup -n %{pkgname}-%{version} -p1
 
 # Rename from libisofs to libisofs1 for EPEL
-%if 0%{?rhel} && "%{name}" != "%{pkgname}" || 0%{?oreon}
+%if 0%{?rhel} && "%{name}" != "%{pkgname}" || (0%{?oreon} >= 11)
 sed -e 's@libisofs_libisofs@libisofs_libisofs1@g' \
     -e 's@libisofs/libisofs.la@libisofs/libisofs1.la@g' \
     -e 's@(includedir)/libisofs@(includedir)/libisofs1@g' \

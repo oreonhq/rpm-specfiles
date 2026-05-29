@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -12,7 +12,7 @@ Version: 0.6
 Release: 35%{?dist}
 ## Note that upstream is dead and there is no download link available
 ## so please don't report FTBFS bugs for this package.
-Source0:        http://www-user.uni-bremen.de/~kmashrab/uzbek-word-list/uzbek-wordlist-0.6.tar.bz2
+Source0:        http://www-user.uni-bremen.de/~kmashrab/uzbek-word-list/uzbek-wordlist-%{version}.tar.bz2
 URL: http://www-user.uni-bremen.de/~kmashrab/uzbek-word-list
 License: GPL-2.0-or-later
 BuildArch: noarch

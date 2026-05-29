@@ -7,13 +7,13 @@ Release:          15%{?dist}
 # ISC (strlcpy.c) and MirOS (the rest)
 License:          MirOS AND ISC
 URL:              https://www.mirbsd.org/mksh.htm
-Source0:        https://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R59c.tgz
+Source0:        https://www.mirbsd.org/MirOS/dist/mir/%{name}/%{name}-R%{version}.tgz
 Source1:          dot-mkshrc
 Source2:          rtchecks.expected
 Provides:         /bin/ksh
 Provides:         /bin/lksh
 Provides:         /bin/mksh
-%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 Provides:         /bin/rksh
 %endif
 Provides:         /bin/rlksh
@@ -91,7 +91,7 @@ ln -s %{name} $RPM_BUILD_ROOT%{_bindir}/rmksh
 ln -s lksh $RPM_BUILD_ROOT%{_bindir}/rlksh
 ln -s %{name}.1 $RPM_BUILD_ROOT%{_mandir}/man1/rmksh.1
 ln -s lksh.1 $RPM_BUILD_ROOT%{_mandir}/man1/rlksh.1
-%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 touch $RPM_BUILD_ROOT{%{_bindir}/{ksh,rksh},%{_mandir}/man1/{ksh,rksh}.1}
 %else
 touch $RPM_BUILD_ROOT{%{_bindir}/ksh,%{_mandir}/man1/ksh.1}
@@ -118,7 +118,7 @@ done
 
 %post
 for d in /bin %{_bindir}; do
-%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
   for s in ksh %{name} rksh rmksh; do
 %else
   for s in ksh %{name} rmksh; do
@@ -128,11 +128,11 @@ for d in /bin %{_bindir}; do
 done
 
 alternatives --install %{_bindir}/ksh ksh %{_bindir}/%{name} 10 \
-%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
   --slave %{_bindir}/rksh rksh %{_bindir}/%{name} \
 %endif
   --slave %{_mandir}/man1/ksh.1.gz ksh-man %{_mandir}/man1/%{name}.1.gz \
-%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
   --slave %{_mandir}/man1/rksh.1.gz rksh-man %{_mandir}/man1/%{name}.1.gz
 %endif
 
@@ -156,7 +156,7 @@ done
 %ghost %{_bindir}/ksh
 %{_bindir}/lksh
 %{_bindir}/%{name}
-%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 %ghost %{_bindir}/rksh
 %endif
 %{_bindir}/rlksh
@@ -166,7 +166,7 @@ done
 %ghost %{_mandir}/man1/ksh.1*
 %{_mandir}/man1/lksh.1*
 %{_mandir}/man1/%{name}.1*
-%if 0%{?fedora} || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 %ghost %{_mandir}/man1/rksh.1*
 %endif
 %{_mandir}/man1/rlksh.1*

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3599e6f8ef667a9e8c09e94d6ecf7cbcb8885c70e4074beea4cb4ef941820097
 
 Name:           lorax-templates-rhel
 Version:        11.0

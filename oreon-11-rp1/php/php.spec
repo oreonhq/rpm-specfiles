@@ -114,7 +114,7 @@ Source13: nginx-fpm.conf
 Source14: nginx-php.conf
 Source15: php.tmpfiles
 # See https://secure.php.net/gpg-keys.php
-Source20: php-keyring.gpg
+Source20:        https://www.php.net/distributions/php-keyring.gpg
 Source21:        https://www.php.net/distributions/php-8.5.4%{?rcver}.tar.xz.asc
 # Configuration files for some extensions
 Source50: 10-opcache.ini

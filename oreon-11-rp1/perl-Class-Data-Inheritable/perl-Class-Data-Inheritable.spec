@@ -1,7 +1,7 @@
 %global source0_hash aa1ae68a611357b7bfd9a2f64907cc196ddd6d047cae64ef9d0ad099d98ae54a
 
 # Run optional test
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_Class_Data_Inheritable_enables_optional_test
 %else
 %bcond_with perl_Class_Data_Inheritable_enables_optional_test

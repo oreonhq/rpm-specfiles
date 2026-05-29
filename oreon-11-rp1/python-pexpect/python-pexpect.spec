@@ -18,7 +18,7 @@ URL:            https://github.com/pexpect/pexpect
 Source0:        https://github.com/pexpect/pexpect/archive/4.9.0/pexpect-4.9.0.tar.gz
 
 # Force NO_COLOR=1 to fix test failures with Python 3.13+ REPL
-Patch:          https://github.com/pexpect/pexpect/pull/794.patch
+Patch:        https://github.com/pexpect/pexpect/pull/808.patch
 # Tests: Avoid the multiprocessing forkserver method (for Python 3.14+ compatibility)
 Patch:          https://github.com/pexpect/pexpect/pull/808.patch
 

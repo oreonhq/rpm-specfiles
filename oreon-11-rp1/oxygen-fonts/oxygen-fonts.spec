@@ -12,7 +12,7 @@ Summary:        Oxygen fonts created by the KDE Community
 # Automatically converted from old format: OFL or GPLv3 with exceptions - review is highly recommended.
 License:        LicenseRef-Callaway-OFL OR LicenseRef-Callaway-GPLv3-with-exceptions
 URL:            http://www.kde.org
-Source0:        https://download.kde.org/stable/plasma/5.4.3/oxygen-fonts-5.4.3.tar.xz
+Source0:        https://download.kde.org/stable/plasma/%{version}/%{name}-%{version}.tar.xz
 Source1:        %{fontconf}-sans.conf
 Source2:        %{fontconf}-mono.conf
 

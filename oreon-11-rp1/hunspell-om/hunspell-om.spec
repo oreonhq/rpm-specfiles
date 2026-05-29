@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} > 35 || 0%{?oreon}
+%if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
 %else
 %global dict_dirname myspell
@@ -12,7 +12,7 @@ Version: 0.04
 Release: 34%{?dist}
 # Following links are dead now
 # Please don't report any bugs for it
-Source:        http://borel.slu.edu/obair/hunspell-om-0.04.oxt
+Source:        http://borel.slu.edu/obair/%{name}-%{version}.oxt
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-3.0-or-later
 BuildArch: noarch

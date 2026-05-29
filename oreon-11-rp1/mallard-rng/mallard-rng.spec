@@ -7,7 +7,7 @@ Summary: RELAX NG schemas for all Mallard versions
 
 License: MIT
 URL:     http://projectmallard.org/download/
-Source0:        http://projectmallard.org/download/mallard-rng-1.1.0.tar.bz2
+Source0:        http://projectmallard.org/download/%{name}-%{version}.tar.bz2
 
 BuildArch:        noarch
 BuildRequires:    make

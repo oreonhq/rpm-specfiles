@@ -1,4 +1,5 @@
 %global source0_hash 608dc9002b45a91d11ed59e352469ecc05e4f58fc1259fc9a9f5b8f0f8348a03
+%global source1_hash 1c84cad4624980259f00e2f9f8cc42c9b716986511ab6251fbb1547f612818f8
 
 %global testspec_version 3.6.3
 %define with_tests 0
@@ -10,7 +11,7 @@ Summary:        Wrapper around libsass to compile CSS stylesheet
 
 License:        MIT
 URL:            http://github.com/sass/sassc
-Source0:        https://github.com/sass/sassc/archive/3.6.2/sassc-3.6.2.tar.gz
+Source0:        https://github.com/sass/sassc/archive/%{version}/%{name}-%{version}.tar.gz
 # Test suite spec. According to this comment from an upstream dev, we should
 # not use the release tags on the test spec:
 # https://github.com/sass/libsass/issues/2258#issuecomment-268196004
@@ -41,6 +42,7 @@ application that can be installed and packaged for several operating systems.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %autosetup -a 1
 mv sass-spec-libsass-%{testspec_version} sass-spec
 autoreconf -fiv

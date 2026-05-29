@@ -1,13 +1,13 @@
-%global source0_hash none
+%global source0_hash 3b5e692f2d09696775d8f647cf6acd3d0093cbc6caa3b0107d5b6c68ba2891e3
 
 # Run test
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_YAML_enables_test
 %else
 %bcond_with perl_YAML_enables_test
 %endif
 # Run extra test
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_YAML_enables_extra_test
 %else
 %bcond_with perl_YAML_enables_extra_test

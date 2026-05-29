@@ -1,7 +1,7 @@
-%global source0_hash a8e6358a31c44ccdf1bfc46c95a77a6bfc7fc1f536aadb913ed4f4405c570cf6
+%global source0_hash none
 
 %global with_qt4 1
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global with_qt4 0
 %endif
 
@@ -23,9 +23,9 @@ URL: https://launchpad.net/libdbusmenu-qt/
 %if 0%{?snapshot}
 # bzr branch lp:libdbusmenu-qt && cd libdbusmenu-qt && bzr export --root=libdbusmenu-qt-%%{version}-%%{snapshot}bzr.tar.gz
 #Source0:  libdbusmenu-qt-%%{version}-%%{snapshot}bzr.tar.gz
-Source0:        https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libdbusmenu-qt/0.9.3+16.04.20160218-0ubuntu1/libdbusmenu-qt_0.9.3+16.04.20160218.orig.tar.gz
+Source0:        https://launchpad.net/libdbusmenu-qt/trunk/%{version}/+download/libdbusmenu-qt-%{version}.tar.bz2
 %else
-Source0:        https://launchpad.net/libdbusmenu-qt/trunk/0.9.3/+download/libdbusmenu-qt-0.9.3.tar.bz2
+Source0:        https://launchpad.net/libdbusmenu-qt/trunk/%{version}/+download/libdbusmenu-qt-%{version}.tar.bz2
 %endif
 
 

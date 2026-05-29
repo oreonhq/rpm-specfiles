@@ -9,8 +9,8 @@ Name:           libusb1
 Version:        1.0.29
 Release:        %autorelease
 Source0:        https://github.com/libusb/libusb/releases/download/v1.0.29/libusb-1.0.29.tar.bz2
-Source1:        libusb-1.0.29.tar.bz2.asc
-Source2:        libusb1.keyring
+Source1:        https://github.com/libusb/libusb/releases/download/v%{version}/libusb-%{version}.tar.bz2.asc
+Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xc68187379b23de9efc46651e2c80ff56c6830a0e#/%{name}.keyring
 License:        LGPL-2.1-or-later
 URL:            http://libusb.info
 BuildRequires:  systemd-devel doxygen libtool

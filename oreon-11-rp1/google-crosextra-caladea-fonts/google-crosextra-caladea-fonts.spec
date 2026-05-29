@@ -23,7 +23,7 @@ Caladea is metric-compatible with Cambria font. This font is a serif
 typeface family based on Lato.
 }
 
-Source0:        http://gsdview.appspot.com/chromeos-localmirror/distfiles/crosextrafonts-20130214.tar.gz
+Source0:        http://gsdview.appspot.com/chromeos-localmirror/distfiles/%{archivename}.tar.gz
 Source1:        30-0-%{fontpkgname}.conf
 Source2:        62-%{fontpkgname}.conf
 Source3:        https://www.apache.org/licenses/LICENSE-2.0.txt

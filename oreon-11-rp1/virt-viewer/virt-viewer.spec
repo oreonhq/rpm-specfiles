@@ -2,7 +2,7 @@
 
 # -*- rpm-spec -*-
 
-%if 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %global with_govirt 0
 %global with_spice 0
 %else
@@ -17,7 +17,7 @@ Release: %autorelease
 Summary: Virtual Machine Viewer
 License: GPL-2.0-or-later
 URL: https://gitlab.com/virt-viewer/virt-viewer
-Source0:        https://virt-manager.org/download/sources/virt-viewer/virt-viewer-11.0.tar.xz
+Source0:        https://virt-manager.org/download/sources/%{name}/%{name}-%{version}.tar.xz
 Patch: 0001-data-remove-bogus-param-for-meson-i18n.merge_file.patch
 Patch: 0001-Read-oVirt-CA-and-pass-it-to-gtk-vnc.patch
 Requires: openssh-clients
@@ -63,7 +63,7 @@ the display, and libvirt for looking up VNC/SPICE server details.
 # Enable -Werror on RHEL which has stable GCC toolchain, and
 # disable on Fedora/ELN which frequently sees new warnings
 # from updated GCC versions
-%if 0%{?rhel} && !0%{?eln} || 0%{?oreon}
+%if 0%{?rhel} && !0%{?eln} || (0%{?oreon} >= 11)
 %define werror_opt -Dwerror=true
 %else
 %define werror_opt -Dwerror=false -Dgit_werror=disabled
@@ -77,7 +77,7 @@ the display, and libvirt for looking up VNC/SPICE server details.
 %define spice_opt -Dspice=disabled
 %endif
 
-%if 0%{?rhel} > 0 || 0%{?oreon}
+%if 0%{?rhel} > 0 || (0%{?oreon} >= 11)
 %define osid_opt -Dos-id=rhel%{?rhel}
 %endif
 

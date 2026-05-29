@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ce98ad889b47dd8e57ca934f7f56210065596ef11a6973f872a6ec4efd44fcce
 
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.
@@ -6,7 +6,7 @@
 %global use_inotify 1
 
 # Plugin for container (docker, podman) is not supported on RHEL
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global use_container_plugin 0
 %else
 %global use_container_plugin 1
@@ -158,7 +158,7 @@ Requires: python3-gobject-base
 
 # rhel 8 has different naming for setuptools going forward
 # on newer rhels and Fedora setuptools is not needed on runtime at all
-%if (0%{?rhel} && 0%{?rhel} == 8) || 0%{?oreon}
+%if (0%{?rhel} && 0%{?rhel} == 8) || (0%{?oreon} >= 11)
 Requires:  platform-python-setuptools
 %endif
 
@@ -265,7 +265,7 @@ e.g. microdnf.
 %package -n dnf-plugin-subscription-manager
 Summary: Subscription Manager plugins for DNF
 
-%if (0%{?fedora} || 0%{?rhel}) || 0%{?oreon}
+%if (0%{?fedora} || 0%{?rhel}) || (0%{?oreon} >= 11)
 BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: json-c-devel
@@ -372,7 +372,7 @@ make -f Makefile VERSION=%{version}-%{release} CFLAGS="%{optflags}" \
 %if %{use_dnf}
 pushd src/plugins/libdnf
 %cmake -DCMAKE_BUILD_TYPE="Release"
-%if (0%{?rhel} && 0%{?rhel} <= 8) || 0%{?oreon}
+%if (0%{?rhel} && 0%{?rhel} <= 8) || (0%{?oreon} >= 11)
 %make_build
 %else
 %cmake_build
@@ -397,7 +397,7 @@ make -f Makefile install VERSION=%{version}-%{release} \
 %if %{use_dnf}
 pushd src/plugins/libdnf
 mkdir -p %{buildroot}%{_libdir}/libdnf/plugins
-%if (0%{?rhel} && 0%{?rhel} <= 8) || 0%{?oreon}
+%if (0%{?rhel} && 0%{?rhel} <= 8) || (0%{?oreon} >= 11)
 %make_install
 %else
 %cmake_install
@@ -681,7 +681,7 @@ find %{buildroot} -name \*.py* -exec touch -r %{SOURCE0} '{}' \;
 # When subscription-manager is upgraded on RHEL 8 (from RHEL 8.2 to RHEL 8.3), then kill
 # instance of rhsmd, because it is not necessary anymore and it can cause issues.
 # See: https://bugzilla.redhat.com/show_bug.cgi?id=1840364
-%if ( 0%{?rhel} || 0%{?fedora} ) || 0%{?oreon}
+%if ( 0%{?rhel} || 0%{?fedora} ) || (0%{?oreon} >= 11)
 if [ "$1" = "2" ] ; then
     killall rhsmd 2> /dev/null || true
 fi

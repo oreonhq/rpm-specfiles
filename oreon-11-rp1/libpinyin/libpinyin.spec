@@ -7,7 +7,7 @@ Summary:        Library to deal with pinyin
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/libpinyin/libpinyin
-Source0:        http://downloads.sourceforge.net/libpinyin/libpinyin/libpinyin-2.11.91.tar.gz
+Source0:        http://downloads.sourceforge.net/libpinyin/libpinyin/%{name}-%{version}.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  kyotocabinet-devel, glib2-devel

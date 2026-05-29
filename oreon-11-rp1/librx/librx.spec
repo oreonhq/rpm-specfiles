@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5bbbb99777fa998837ee19ed3b144e183c331d45cc19df90ec8810a4e66981c1
 
 Summary: POSIX regexp functions
 Name: librx

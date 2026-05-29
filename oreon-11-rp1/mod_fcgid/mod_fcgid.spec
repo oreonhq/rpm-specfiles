@@ -6,7 +6,7 @@ Release:	37%{?dist}
 Summary:	FastCGI interface module for Apache 2
 License:	Apache-2.0
 URL:		http://httpd.apache.org/mod_fcgid/
-Source0:        http://www.apache.org/dist/httpd/mod_fcgid/mod_fcgid-2.3.9.tar.bz2
+Source0:        http://www.apache.org/dist/httpd/mod_fcgid/mod_fcgid-%{version}.tar.bz2
 Source2:	mod_fcgid-2.1-README.RPM
 Source3:	mod_fcgid-2.1-README.SELinux
 Source4:	mod_fcgid-tmpfs.conf
@@ -21,7 +21,7 @@ BuildRequires:	make
 BuildRequires:	pkgconfig
 BuildRequires:	sed
 # systemd-rpm-macros needed for definition of %%{_tmpfilesdir}
-%if (0%{?fedora} && 0%{?fedora} <= 30) || 0%{?oreon}
+%if (0%{?fedora} && 0%{?fedora} <= 30) || (0%{?oreon} >= 11)
 BuildRequires:	systemd
 %else
 BuildRequires:	systemd-rpm-macros
@@ -44,7 +44,7 @@ cp -p %{SOURCE3} README.SELinux
 cp -p %{SOURCE5} fcgid24.conf
 
 # Fix shellbang in fixconf script for our location of sed
-%if (0%{?rhel} && 0%{?rhel} <= 7) || (0%{?fedora} && 0%{?fedora} <= 23) || 0%{?oreon}
+%if (0%{?rhel} && 0%{?rhel} <= 7) || (0%{?fedora} && 0%{?fedora} <= 23) || (0%{?oreon} >= 11)
 %patch -P 0 -p1
 %endif
 

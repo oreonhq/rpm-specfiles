@@ -1,10 +1,10 @@
-%global source0_hash 61ec17d669a21e75969a2050a4615d7cea612ffd66d35fe9f4a8259c6d4bcd91
+%global source0_hash 2806b2f49903b3f77ded3204f580eb0d7b8d9a74775ca2801f6394211d86e2d7
 
 Name: mythes-fr
 Summary: French thesaurus
 Version: 2.3
 Release: 29%{?dist}
-Source:        http://www.dicollecte.org/download/fr/thesaurus-v2.3.zip
+Source:        http://www.dicollecte.org/download/fr/thesaurus-v%{version}.zip
 URL: http://www.dicollecte.org/home.php?prj=fr
 License: LGPL-2.1-or-later
 BuildArch: noarch

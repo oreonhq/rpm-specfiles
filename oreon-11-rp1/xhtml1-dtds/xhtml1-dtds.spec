@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d6c90d23210f1133af5eb2b2c511dd97a34a54ee95ce3631be0bad7324e4d947
 
 %global date    20020801
 %global baserelease 24

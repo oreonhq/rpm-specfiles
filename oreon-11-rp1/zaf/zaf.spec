@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 202ef7ef6e46c6fb31c143e574f157d6ba4cf9ded8d41fd065bd58b9267bfb16
 
 Name: zaf
 Summary: South Africa hyphenation rules

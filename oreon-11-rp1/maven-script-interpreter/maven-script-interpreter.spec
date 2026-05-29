@@ -8,7 +8,7 @@ Summary:        Maven Script Interpreter
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            https://maven.apache.org/shared/maven-script-interpreter/
-Source0:        https://dlcdn.apache.org/maven/shared/maven-script-interpreter-1.3-source-release.zip
+Source0:        https://dlcdn.apache.org/maven/shared/%{name}-%{version}-source-release.zip
 
 
 BuildArch:      noarch

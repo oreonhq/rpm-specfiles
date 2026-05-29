@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash d26df549d2a78194456cce2b7b40161935c6dfb8cea8ba6237d0ceb6f91d5ce4
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -11,7 +11,7 @@ Summary: Tagalog hunspell dictionaries
 %global upstreamid 20050109
 Version: 0.%{upstreamid}
 Release: 36%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/tl_PH.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/tl_PH.zip
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch

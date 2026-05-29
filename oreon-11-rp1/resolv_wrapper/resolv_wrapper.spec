@@ -11,7 +11,7 @@ License:        BSD-3-Clause
 Url:            http://cwrap.org/
 
 Source0:        https://ftp.samba.org/pub/cwrap/resolv_wrapper-1.1.8.tar.gz
-Source1:        resolv_wrapper-1.1.8.tar.gz.asc
+Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        resolv_wrapper.keyring
 
 Patch0:         resolv_wrapper-fix-cmocka-1.1.6+-support.patch

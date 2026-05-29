@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5a9a04a2a6cb9a93a53aa865b6e118f6aa9e5e051acd8333ca99af82148fd211
 
 %define project_version 1.0-alpha-15
 

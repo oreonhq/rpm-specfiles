@@ -1,4 +1,5 @@
 %global source0_hash none
+%global source1_hash c3ff066b5cb2d861a016432fabe218561217ba4278c71d873a430b6e774871b8
 
 Name:           virtiofsd
 Version:        1.13.3
@@ -20,14 +21,14 @@ ExclusiveArch:  %{rust_arches}
 # Some of our deps (i.e. vm-memory) are not available on 32 bits targets.
 ExcludeArch:    i686
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  rust-packaging >= 21
 %endif
 BuildRequires:  libcap-ng-devel
 BuildRequires:  libseccomp-devel
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 Requires:       qemu-kvm-common
 %else
 Requires:       qemu-common
@@ -35,7 +36,7 @@ Requires:       qemu-common
 Requires:	shadow-utils
 Provides:       vhostuser-backend(fs)
 Conflicts:      qemu-virtiofsd
-%if 0%{?fedora} > 38 || 0%{?oreon}
+%if 0%{?fedora} > 38 || (0%{?oreon} >= 11)
 Obsoletes:      qemu-virtiofsd <= 2:8.0.0-1
 Provides:       qemu-virtiofsd = 2:7.2.1-1
 %endif
@@ -45,6 +46,7 @@ Provides:       qemu-virtiofsd = 2:7.2.1-1
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{name}-%{version_no_tilde} -p1 -a1
 %cargo_prep -v vendor
 rm -f Cargo.lock

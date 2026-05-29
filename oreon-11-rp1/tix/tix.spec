@@ -13,7 +13,7 @@ Version: %{tixmajor}.3
 Release: 46%{?dist}
 License: TCL
 URL: http://tix.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/project/tix/tix//Tix-src.tar.gz
+Source0:        http://downloads.sourceforge.net/project/%{name}/%{name}/%{version}/Tix%{version}-src.tar.gz
 #  0: Fixes BZ#81297 (soname of libraries)
 Patch0: tix-8.4.2-link.patch
 Patch1: tix-8.4.3-tcl86.patch

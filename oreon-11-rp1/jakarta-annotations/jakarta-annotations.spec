@@ -11,7 +11,7 @@ URL:            https://jakarta.ee/specifications/annotations/1.3/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/common-annotations-api/archive/1.3.5/common-annotations-api-1.3.5.tar.gz
+Source0:        https://github.com/jakartaee/common-annotations-api/archive/%{version}/common-annotations-api-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

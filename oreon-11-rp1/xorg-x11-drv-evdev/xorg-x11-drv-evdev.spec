@@ -15,11 +15,11 @@ URL:        http://www.x.org
 License:    HPND-sell-variant AND MIT
 
 %if 0%{?gitdate}
-Source0:        https://www.x.org/pub/individual/driver/xf86-input-evdev-2.11.0.tar.xz
+Source0:        https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
-Source0:        https://www.x.org/pub/individual/driver/xf86-input-evdev-2.11.0.tar.xz
+Source0:        https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
 Source30:   xserver-sdk-abi-requires
 %endif
 
@@ -29,8 +29,8 @@ BuildRequires: xorg-x11-server-devel >= 1.10.99.902
 BuildRequires: libudev-devel mtdev-devel libevdev-devel
 BuildRequires: xorg-x11-util-macros >= 1.3.0
 
-Requires: Xorg %(xserver-sdk-abi-requires ansic)
-Requires: Xorg %(xserver-sdk-abi-requires xinput)
+Requires: Xorg %(sh %{SOURCE30} ansic)
+Requires: Xorg %(sh %{SOURCE30} xinput)
 Requires:  xkeyboard-config >= 1.4-1
 Requires: mtdev
 

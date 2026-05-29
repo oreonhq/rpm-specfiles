@@ -12,13 +12,13 @@
 %global newlib_cygwin_gitrev d35cc82b5ec15bb8a5fe0fe11e183d1887992e99
 %global _unpackaged_files_terminate_build 0
 %global _find_debuginfo_opts --keep-section .a68_exports
-%if 0%{?fedora:1} || 0%{?oreon}
+%if 0%{?fedora:1} || (0%{?oreon} >= 11)
 %global _performance_build 1
 # Hardening slows the compiler way too much.
 %undefine _hardened_build
 %endif
 %undefine _auto_set_build_flags
-%if 0%{?fedora} > 27 || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} > 27 || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 # Until annobin is fixed (#1519165).
 %undefine _annotated_build
 %endif
@@ -30,19 +30,19 @@
 %if 0%{?__brp_strip_lto:1}
 %global __brp_strip_lto %{__brp_strip_lto} || :
 %endif
-%if 0%{?rhel} > 0 || 0%{?oreon}
+%if 0%{?rhel} > 0 || (0%{?oreon} >= 11)
 %define bugurl https://issues.redhat.com
 %else
 %define bugurl https://bugzilla.redhat.com/bugzilla
 %endif
 %{!?dist_bug_report_url: %global dist_bug_report_url %bugurl}
 
-%if 0%{?fedora} < 32 && 0%{?rhel} < 8 || 0%{?oreon}
+%if 0%{?fedora} < 32 && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
 %global multilib_64_archs sparc64 ppc64 ppc64p7 s390x x86_64
 %else
 %global multilib_64_archs sparc64 ppc64 ppc64p7 x86_64
 %endif
-%if 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 %global build_ada 0
 %global build_objc 0
 %global build_go 0
@@ -119,7 +119,7 @@
 %else
 %global build_libitm 0
 %endif
-%if 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 %global build_isl 0
 %else
 %global build_isl 1
@@ -140,7 +140,7 @@
 %else
 %global build_offload_amdgcn 0
 %endif
-%if 0%{?fedora} < 32 && 0%{?rhel} < 8 || 0%{?oreon}
+%if 0%{?fedora} < 32 && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
 %ifarch s390x
 %global multilib_32_arch s390
 %endif
@@ -154,7 +154,7 @@
 %ifarch x86_64
 %global multilib_32_arch i686
 %endif
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %global build_annobin_plugin 1
 %else
 %global build_annobin_plugin 0
@@ -195,7 +195,7 @@ Source1: nvptx-tools-%{nvptx_tools_gitrev}.tar.xz
 # rm -rf newlib-cygwin-dir.tmp
 Source2: newlib-cygwin-%{newlib_cygwin_gitrev}.tar.xz
 %global isl_version 0.24
-Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-0.24.tar.bz2
+Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
 URL: http://gcc.gnu.org
 # Need binutils with -pie support >= 2.14.90.0.4-4
 # Need binutils which can omit dot symbols and overlap .opd on ppc64 >= 2.15.91.0.2-4
@@ -290,7 +290,7 @@ Requires: glibc-devel >= 2.2.90-12
 # Make sure glibc supports TFmode long double
 Requires: glibc >= 2.3.90-35
 %endif
-%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7 || 0%{?oreon}
+%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7 || (0%{?oreon} >= 11)
 %ifarch %{arm}
 Requires: glibc >= 2.16
 %endif
@@ -415,7 +415,7 @@ Summary: GNU Standard C++ Library
 Autoreq: true
 Requires: glibc >= 2.10.90-7
 BuildRequires: tzdata >= 2017c
-%if 0%{?fedora} > 38 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} > 38 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 Recommends: tzdata >= 2017c
 %else
 Requires: tzdata >= 2017c
@@ -497,7 +497,7 @@ programs with the GNU Compiler Collection.
 %package -n libgfortran
 Summary: Fortran runtime
 Autoreq: true
-%if 0%{?fedora} < 28 && 0%{?rhel} < 8 || 0%{?oreon}
+%if 0%{?fedora} < 28 && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
 %if %{build_libquadmath}
 Requires: libquadmath = %{version}-%{release}
 %endif
@@ -646,7 +646,7 @@ installed separately.
 %package -n libgomp-offload-amdgcn
 Summary: GCC OpenMP v5.2 plugin for offloading to AMD GCN
 Requires: libgomp = %{version}-%{release}
-%if 0%{?fedora:1} || 0%{?oreon}
+%if 0%{?fedora:1} || (0%{?oreon} >= 11)
 Requires: rocm-runtime >= 6.0.0
 %endif
 
@@ -670,7 +670,7 @@ This package contains shared library with GCC JIT front-end.
 
 %package -n libgccjit-devel
 Summary: Support for embedding GCC inside programs and libraries
-%if 0%{?fedora} > 27 || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} > 27 || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 BuildRequires: python3-sphinx
 %else
 BuildRequires: python-sphinx
@@ -979,13 +979,13 @@ so that there cannot be any synchronization problems.
 %autopatch -p0 7
 %endif
 %autopatch -p0 -m 8 -M 9
-%if 0%{?fedora} >= 29 || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} >= 29 || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 %autopatch -p0 10
 %endif
 %autopatch -p0 -m 11 -M 99
 touch -r isl-0.24/m4/ax_prog_cxx_for_build.m4 isl-0.24/m4/ax_prog_cc_for_build.m4
 
-%if 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %autopatch -p1 100
 %endif
 
@@ -1203,7 +1203,7 @@ CONFIGURE_OPTS="\
 %endif
 %ifarch ppc64le %{mips} s390x
 %ifarch s390x
-%if 0%{?fedora} < 32 && 0%{?rhel} < 8 || 0%{?oreon}
+%if 0%{?fedora} < 32 && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
 	--enable-multilib \
 %else
 	--disable-multilib \
@@ -1232,7 +1232,7 @@ CONFIGURE_OPTS="\
 %if %{build_offload_nvptx}
 	--without-cuda-driver \
 %endif
-%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7 || 0%{?oreon}
+%if 0%{?fedora} >= 21 || 0%{?rhel} >= 7 || (0%{?oreon} >= 11)
 %if %{attr_ifunc}
 	--enable-gnu-indirect-function \
 %endif
@@ -1259,16 +1259,16 @@ CONFIGURE_OPTS="\
 	--host=%{gcc_target_platform} --build=%{gcc_target_platform} --target=%{gcc_target_platform} --with-cpu=v7
 %endif
 %ifarch ppc ppc64 ppc64p7
-%if 0%{?rhel} >= 7 || 0%{?oreon}
+%if 0%{?rhel} >= 7 || (0%{?oreon} >= 11)
 	--with-cpu-32=power7 --with-tune-32=power7 --with-cpu-64=power7 --with-tune-64=power7 \
 %endif
-%if 0%{?rhel} == 6 || 0%{?oreon}
+%if 0%{?rhel} == 6 || (0%{?oreon} >= 11)
 	--with-cpu-32=power4 --with-tune-32=power6 --with-cpu-64=power4 --with-tune-64=power6 \
 %endif
 %endif
 %ifarch ppc64le
-%if 0%{?rhel} >= 9 || 0%{?oreon}
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 	--with-cpu-32=power9 --with-tune-32=power10 --with-cpu-64=power9 --with-tune-64=power10 \
 %else
 	--with-cpu-32=power9 --with-tune-32=power9 --with-cpu-64=power9 --with-tune-64=power9 \
@@ -1283,17 +1283,17 @@ CONFIGURE_OPTS="\
 %ifarch %{ix86} x86_64
 	--enable-cet \
 	--with-tune=generic \
-%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11 || 0%{?oreon}
+%if 0%{?fedora} >= 44 || 0%{?rhel} >= 11 || (0%{?oreon} >= 11)
 	--with-tls=gnu2 \
 %endif
 %endif
-%if 0%{?rhel} >= 7 || 0%{?oreon}
+%if 0%{?rhel} >= 7 || (0%{?oreon} >= 11)
 %ifarch %{ix86}
 	--with-arch=x86-64 \
 %endif
 %ifarch x86_64
-%if 0%{?rhel} > 8 || 0%{?oreon}
-%if 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?rhel} > 8 || (0%{?oreon} >= 11)
+%if 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 	--with-arch_64=x86-64-v3 \
 %else
 	--with-arch_64=x86-64-v2 \
@@ -1310,10 +1310,10 @@ CONFIGURE_OPTS="\
 %endif
 %endif
 %ifarch s390 s390x
-%if 0%{?rhel} >= 7 || 0%{?oreon}
-%if 0%{?rhel} > 7 || 0%{?oreon}
-%if 0%{?rhel} > 8 || 0%{?oreon}
-%if 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?rhel} >= 7 || (0%{?oreon} >= 11)
+%if 0%{?rhel} > 7 || (0%{?oreon} >= 11)
+%if 0%{?rhel} > 8 || (0%{?oreon} >= 11)
+%if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 	--with-arch=z14 --with-tune=z15 \
 %else
 	--with-arch=z13 --with-tune=arch13 \
@@ -1325,10 +1325,10 @@ CONFIGURE_OPTS="\
 	--with-arch=z196 --with-tune=zEC12 \
 %endif
 %else
-%if 0%{?fedora} >= 38 || 0%{?oreon}
+%if 0%{?fedora} >= 38 || (0%{?oreon} >= 11)
 	--with-arch=z13 --with-tune=z14 \
 %else
-%if 0%{?fedora} >= 26 || 0%{?oreon}
+%if 0%{?fedora} >= 26 || (0%{?oreon} >= 11)
 	--with-arch=zEC12 --with-tune=z13 \
 %else
 	--with-arch=z9-109 --with-tune=z10 \
@@ -1353,12 +1353,12 @@ CONFIGURE_OPTS="\
 %ifnarch sparc sparcv9 ppc
 	--build=%{gcc_target_platform} \
 %endif
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %ifnarch %{arm}
 	--with-build-config=bootstrap-lto --enable-link-serialization=1 \
 %endif
 %endif
-%if 0%{?rhel:1} || 0%{?oreon}
+%if 0%{?rhel:1} || (0%{?oreon} >= 11)
 	--enable-host-pie --enable-host-bind-now \
 %endif
 	--disable-libssp \
@@ -2602,7 +2602,7 @@ cd obj-%{gcc_target_platform}
 
 # run the tests.
 LC_ALL=C make %{?_smp_mflags} -k check ALT_CC_UNDER_TEST=gcc ALT_CXX_UNDER_TEST=g++ \
-%if 0%{?fedora} >= 20 || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} >= 20 || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
      RUNTESTFLAGS="--target_board=unix/'{-foffload=disable,-fstack-protector-strong/-foffload=disable}'" || :
 %else
      RUNTESTFLAGS="--target_board=unix/'{-foffload=disable,-fstack-protector/-foffload=disable}'" || :

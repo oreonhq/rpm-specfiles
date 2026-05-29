@@ -64,7 +64,7 @@ BuildRequires:  perl(FindBin)
 BuildRequires:  perl(Test::More)
 # Optional tests:
 %if !%{defined perl_bootstrap}
-%if !( 0%{?rhel} >= 7 ) || 0%{?oreon}
+%if !( 0%{?rhel} >= 7 ) || (0%{?oreon} >= 11)
 %if %{with perl_Pod_Perldoc_enables_tk_test}
 BuildRequires:  perl(Tk)
 # Tk::FcyEntry is optional

@@ -37,7 +37,7 @@ Summary:   A software center for GNOME
 
 License:   GPL-2.0-or-later
 URL:       https://apps.gnome.org/Software
-Source0: https://download.gnome.org/sources/gnome-software/50/gnome-software-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/gnome-software/50/%{name}-%{tarball_version}.tar.xz
 %if %{with dnf5}
 # to update the patch enter the ./dnf5-plugin/ directory and run from
 # it the ./update-patch.sh script
@@ -48,7 +48,7 @@ Patch:     0002-plain-package-update-notification.patch
 
 # ostree and flatpak not on i686 for Fedora and RHEL 10
 # https://github.com/containers/composefs/pull/229#issuecomment-1838735764
-%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 ExcludeArch:    %{ix86}
 %endif
 
@@ -106,7 +106,7 @@ Requires: flatpak%{?_isa} >= %{flatpak_version}
 Requires: flatpak-libs%{?_isa} >= %{flatpak_version}
 Requires: fwupd%{?_isa} >= %{fwupd_version}
 Requires: glib2%{?_isa} >= %{glib2_version}
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 Requires: gnome-app-list
 %endif
 # gnome-menus is needed for app folder .directory entries
@@ -221,7 +221,7 @@ desktop-file-edit %{buildroot}%{_datadir}/applications/org.gnome.Software.deskto
 # set up for Fedora
 cat >> %{buildroot}%{_datadir}/glib-2.0/schemas/org.gnome.software-fedora.gschema.override << FOE
 [org.gnome.software]
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 official-repos = [ 'rhel-%{?rhel}' ]
 %else
 official-repos = [ 'anaconda', 'fedora', 'fedora-debuginfo', 'fedora-source', 'koji-override-0', 'koji-override-1', 'rawhide', 'rawhide-debuginfo', 'rawhide-source', 'updates', 'updates-debuginfo', 'updates-source', 'updates-testing', 'updates-testing-debuginfo', 'updates-testing-source', 'fedora-modular', 'fedora-modular-debuginfo', 'fedora-modular-source', 'rawhide-modular', 'rawhide-modular-debuginfo', 'rawhide-modular-source', 'fedora-cisco-openh264', 'fedora-cisco-openh264-debuginfo' ]

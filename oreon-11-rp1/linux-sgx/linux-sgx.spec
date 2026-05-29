@@ -239,14 +239,14 @@ URL:            https://github.com/intel/linux-sgx
 ############################################################
 # SGX related projects SourceN for N in (0..9)
 
-Source0:        https://github.com/intel/linux-sgx/archive/refs/tags/sgx_2.27.tar.gz#/linux-sgx-2.27.tar.gz
+Source0:        https://github.com/intel/linux-sgx/archive/refs/tags/sgx_%{linux_sgx_version}.tar.gz#/linux-sgx-%{linux_sgx_version}.tar.gz
 
 # repack.sh purges all the prebuilt AE's that we ship in a different RPM
 # as well as 'prebuilt/' content (openssl / OPA binaries) that we must
 # not distribute.
 Source1: repack.sh
 
-Source2:        https://github.com/intel/confidential-computing.tee.dcap/archive/refs/tags/DCAP_1.24.tar.gz
+Source2:        https://github.com/intel/confidential-computing.tee.dcap/archive/refs/tags/DCAP_%{dcap_version}.tar.gz
 Provides: bundled(dcap) = %{dcap_version}
 
 # Upload tarball is:
@@ -256,16 +256,16 @@ Provides: bundled(dcap) = %{dcap_version}
 # but is then post-processed using repack.sh to create this
 Source3: prebuilt_dcap_%{dcap_version}-repacked.tar.gz
 
-Source4:        https://github.com/intel/intel-sgx-ssl/archive/refs/tags/3.0_Rev5.1.tar.gz#/intel-sgx-ssl-3.0_Rev5.1.tar.gz
+Source4:        https://github.com/intel/intel-sgx-ssl/archive/refs/tags/%{sgx_ssl_version}.tar.gz#/intel-sgx-ssl-%{sgx_ssl_version}.tar.gz
 Provides: bundled(sgxssl) = %{sgx_ssl_version}
 
-Source5:        https://github.com/intel/ipp-crypto/archive/refs/tags/ippcp_2021.12.1.tar.gz
+Source5:        https://github.com/intel/ipp-crypto/archive/refs/tags/ippcp_%{ipp_crypto_version}.tar.gz
 Provides: bundled(ipp-crypto) = %{ipp_crypto_version}
 
-Source6:        https://github.com/intel/sgx-emm/archive/refs/tags/sgx-emm-1.0.3.tar.gz
+Source6:        https://github.com/intel/sgx-emm/archive/refs/tags/sgx-emm-%{sgx_emm_version}.tar.gz
 Provides: bundled(sgx-emm) = %{sgx_emm_version}
 
-Source7:        https://github.com/intel/confidential-computing.tee.dcap.qvl/archive/refs/tags/DCAP_1.24.tar.gz#/dcap-qvl-1.24.tar.gz
+Source7:        https://github.com/intel/confidential-computing.tee.dcap.qvl/archive/refs/tags/DCAP_%{dcap_qvl_version}.tar.gz#/dcap-qvl-%{dcap_qvl_version}.tar.gz
 Provides: bundled(dcap-qvl) = %{dcap_qvl_version}
 
 Source8:        https://github.com/intel/confidential-computing.tee.dcap.pccs/archive/refs/tags/DCAP_1.24.tar.gz#/pccs-1.24.tar.gz
@@ -275,20 +275,20 @@ Provides: bundled(pccs) = %{pccs_version}
 ############################################################
 # 3rd party projects SourceN for N in (10..19)
 
-Source10:        https://www.openssl.org/source/openssl-3.0.17.tar.gz
+Source10:        https://www.openssl.org/source/openssl-%{openssl_version}.tar.gz
 Provides: bundled(openssl) = %{openssl_version}
 
-Source11:        https://github.com/PJK/libcbor/archive/refs/tags/v0.10.2.tar.gz#/libcbor-0.10.2.tar.gz
+Source11:        https://github.com/PJK/libcbor/archive/refs/tags/v%{libcbor_version}.tar.gz#/libcbor-%{libcbor_version}.tar.gz
 Provides: bundled(libcbor) = %{libcbor_version}
 
 # XXX unbundle me, only used in native code, or also in enclaves ?
-Source12:        https://github.com/Thalhammer/jwt-cpp/archive/refs/tags/v0.6.0.tar.gz#/jwt-cpp-0.6.0.tar.gz
+Source12:        https://github.com/Thalhammer/jwt-cpp/archive/refs/tags/v%{jwt_cpp_version}.tar.gz#/jwt-cpp-%{jwt_cpp_version}.tar.gz
 Provides: bundled(jwt-cpp) = %{jwt_cpp_version}
 
-Source13:        https://github.com/bytecodealliance/wasm-micro-runtime/archive/refs/tags/WAMR-2.4.3.tar.gz#/wasm-micro-runtime-2.4.3.tar.gz
+Source13:        https://github.com/bytecodealliance/wasm-micro-runtime/archive/refs/tags/WAMR-%{wamr_version}.tar.gz#/wasm-micro-runtime-%{wamr_version}.tar.gz
 Provides: bundled(wasm-micro-runtime} = %{wamr_version}
 
-Source14:        https://github.com/leethomason/tinyxml2/archive/refs/tags/10.0.0.tar.gz#/tinyxml2-10.0.0.tar.gz
+Source14:        https://github.com/leethomason/tinyxml2/archive/refs/tags/%{tinyxml2_version}.tar.gz#/tinyxml2-%{tinyxml2_version}.tar.gz
 %if ! %{with_host_tinyxml2}
 Provides: bundled(tinyxml2) = %{tinyxml2_version}
 %endif

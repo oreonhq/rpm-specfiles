@@ -17,7 +17,7 @@ Summary:	A simple text editor for the GNOME desktop
 # Code is GPL-3.0-or-later and the Appdata is CC0-1.0
 License:	GPL-3.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:		https://gitlab.gnome.org/GNOME/gnome-text-editor
-Source0: https://download.gnome.org/sources/gnome-text-editor/50/gnome-text-editor-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
 BuildRequires:	pkgconfig(editorconfig)
 BuildRequires:	pkgconfig(enchant-2) >= %{enchant_version}
 BuildRequires:	pkgconfig(gio-unix-2.0) >= %{glib2_version}

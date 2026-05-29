@@ -1,7 +1,7 @@
 %global source0_hash 848c0d7d50d802045dcd3cd4205b9a9984903da6b2589d550d66ed8f3d4667be
 
 %bcond_with bootstrap
-%if !0%{?rhel} && %{without bootstrap} || 0%{?oreon}
+%if !0%{?rhel} && %{without bootstrap} || (0%{?oreon} >= 11)
 %bcond_without bnd_maven_plugin
 %else
 %bcond_with bnd_maven_plugin
@@ -16,7 +16,7 @@ URL:            https://javaparser.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/javaparser/javaparser/archive/javaparser-parent-3.27.1.tar.gz
+Source0:        https://github.com/javaparser/javaparser/archive/%{name}-parent-%{version}.tar.gz
 
 Patch:          0001-Port-to-OpenJDK-21.patch
 

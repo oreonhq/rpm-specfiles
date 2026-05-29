@@ -7,7 +7,7 @@ Release:          12%{?dist}
 License:          GPL-2.0-or-later
 
 URL:              http://sourceforge.net/projects/watchdog/
-Source0:        http://downloads.sourceforge.net/watchdog/watchdog-5.16.tar.gz
+Source0:        http://downloads.sourceforge.net/watchdog/watchdog-%{version}.tar.gz
 Source2:          README.watchdog.ipmi
 Source3:          README.Fedora
 Source4:          watchdog.service
@@ -60,7 +60,7 @@ autoreconf -i
 
 cp %{SOURCE2} .
 cp %{SOURCE3} .
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 mv README.Fedora README.RHEL
 %endif
 
@@ -110,7 +110,7 @@ rm %{name}.sysconfig
 
 %files
 %doc AUTHORS ChangeLog COPYING examples/ IAFA-PACKAGE NEWS README TODO README.watchdog.ipmi
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %doc README.RHEL
 %else
 %doc README.Fedora

@@ -9,7 +9,7 @@ Summary:        RPM Development Tools
 # everything else is GPL-2.0-or-later.
 License:        GPL-2.0-or-later AND GPL-2.0-only
 URL:            https://pagure.io/rpmdevtools
-Source0:        https://releases.pagure.org/rpmdevtools/rpmdevtools-9.6.tar.xz
+Source0:        https://releases.pagure.org/rpmdevtools/%{name}-%{version}.tar.xz
 Source1:        progressbar.py
 
 # Fedora-specific downstream patches
@@ -29,7 +29,7 @@ BuildRequires:  perl-generators
 # python dependencies for spectool
 # spectool is executed for creating man page
 BuildRequires:  python3-devel
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  python3dist(progressbar2)
 %endif
 BuildRequires:  python3dist(requests)
@@ -39,7 +39,7 @@ BuildRequires:  emacs-common >= 1:22.3-3
 BuildRequires:  bash-completion
 Requires:       curl
 Requires:       diffutils
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 Requires:       fakeroot
 %endif
 Requires:       file
@@ -48,7 +48,7 @@ Requires:       gawk
 Requires:       grep
 Requires:       rpm-build >= 4.4.2.3
 Requires:       python3dist(argcomplete)
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 Requires:       python3dist(progressbar2)
 %endif
 Requires:       python3dist(requests)
@@ -83,7 +83,7 @@ rpmdev-bumpspec     Bump revision in specfile
 grep -lF "%{_bindir}/python " * \
 | xargs sed -i -e "s|%{_bindir}/python |%{_bindir}/python3 |"
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 # Let spectool find the bundled progressbar2 implementation
 cp %{SOURCE1} .
 sed -i \
@@ -117,7 +117,7 @@ done
 ln -sr %{buildroot}%{_bindir}/rpmdev-spectool %{buildroot}%{_bindir}/spectool
 echo ".so man1/rpmdev-spectool.1" > %{buildroot}%{_mandir}/man1/spectool.1
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 cp %{SOURCE1} %{buildroot}%{_datadir}/rpmdevtools/
 %py_byte_compile %{python3} %{buildroot}%{_datadir}/rpmdevtools/
 %endif

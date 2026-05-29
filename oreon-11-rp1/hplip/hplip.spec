@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 80675d0cbc01a1236c37889e41018fadbb2593a4ded11787cd563a54047aff2d
 
 # we don't want to provide private python extension libs
 %{?filter_setup:
@@ -260,7 +260,7 @@ Patch73: hplip-scan-size.patch
 # https://bugs.launchpad.net/hplip/+bug/2110101
 Patch74: hplip-plugin-stdout.patch
 
-%if 0%{?fedora} || 0%{?rhel} <= 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} <= 8 || (0%{?oreon} >= 11)
 # mention hplip-gui if you want to have GUI
 Patch1000: hplip-fedora-gui.patch
 %endif
@@ -274,7 +274,7 @@ BuildRequires: automake
 BuildRequires: cups
 # uses functions from CUPS in filters, backends and libraries defining them
 BuildRequires: cups-devel
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 # needed for desktop file validation in spec file
 BuildRequires: desktop-file-utils
 %endif
@@ -311,7 +311,7 @@ BuildRequires: sane-backends-devel
 # macros: %%{_tmpfilesdir}, %%{_udevrulesdir}
 BuildRequires: systemd
 
-%if 0%{?fedora} || 0%{?rhel} <= 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} <= 8 || (0%{?oreon} >= 11)
 Suggests: hplip-gui
 %endif
 # uses avahi-browse for discovering IPP-over-USB printers
@@ -332,7 +332,7 @@ Requires: curl
 Requires: %{_bindir}/gpg
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 Requires: python3-dbus
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 Requires: python3-pillow
 %endif
 # user+group lp
@@ -367,7 +367,7 @@ Requires: python3
 %description libs
 Libraries needed by HPLIP.
 
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 %package gui
 Summary: HPLIP graphical tools
 BuildRequires: libappstream-glib
@@ -628,7 +628,7 @@ done
 %patch -P 74 -p1 -b .plugin-stdout
 
 # Fedora specific patches now, don't put a generic patches under it
-%if 0%{?fedora} || 0%{?rhel} <= 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} <= 8 || (0%{?oreon} >= 11)
 # mention hplip-gui should be installed if you want GUI
 %patch -P 1000 -p1 -b .fedora-gui
 %endif
@@ -751,7 +751,7 @@ rm -rf %{buildroot}%{_bindir}/hp-unload \
 # window), so don't ship the launcher yet.
 rm -f %{buildroot}%{_sysconfdir}/xdg/autostart/hplip-systray.desktop
 
-%if 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 rm -rf %{buildroot}%{_bindir}/hp-check \
        %{buildroot}%{_bindir}/hp-devicesettings \
        %{buildroot}%{_bindir}/hp-diagnose_plugin \
@@ -791,7 +791,7 @@ rm -rf %{buildroot}%{_bindir}/hp-check \
 
 install -p -m755 hp-plugin %{buildroot}%{_bindir}/hp-plugin-download
 
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 mkdir -p %{buildroot}%{_datadir}/metainfo
 cp %{SOURCE3} %{buildroot}%{_datadir}/metainfo/
 
@@ -871,7 +871,7 @@ find doc/images -type f -exec chmod 644 {} \;
 %{_bindir}/hp-plugin-download
 %{_bindir}/hp-probe
 %{_bindir}/hp-query
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 %{_bindir}/hp-scan
 %endif
 %{_bindir}/hp-sendfax
@@ -909,7 +909,7 @@ find doc/images -type f -exec chmod 644 {} \;
 %{_datadir}/hplip/plugin.py*
 %{_datadir}/hplip/probe.py*
 %{_datadir}/hplip/query.py*
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 %{_datadir}/hplip/scan.py*
 %endif
 %{_datadir}/hplip/sendfax.py*
@@ -926,7 +926,7 @@ find doc/images -type f -exec chmod 644 {} \;
 %{_datadir}/hplip/data/ps
 %{_datadir}/hplip/installer
 %{_datadir}/hplip/prnt
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 %{_datadir}/hplip/scan
 %endif
 %{_datadir}/ppd
@@ -955,7 +955,7 @@ find doc/images -type f -exec chmod 644 {} \;
 # Python extension
 %{python3_sitearch}/*
 
-%if 0%{?rhel} <= 8 || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} <= 8 || 0%{?fedora} || (0%{?oreon} >= 11)
 %files gui
 %{_bindir}/hp-check
 %{_bindir}/hp-devicesettings

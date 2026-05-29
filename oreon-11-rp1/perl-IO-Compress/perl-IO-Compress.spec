@@ -3,7 +3,7 @@
 # Run time expensive tests
 %bcond_without long_tests
 # Run optional test
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_IO_Compress_enables_optional_test
 %else
 %bcond_with perl_IO_Compress_enables_optional_test

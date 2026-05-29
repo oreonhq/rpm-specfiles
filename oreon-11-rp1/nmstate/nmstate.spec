@@ -13,7 +13,7 @@ License:        Apache-2.0 AND LGPL-2.1-or-later
 URL:            https://github.com/%{srcname}/%{srcname}
 Source0:        https://github.com/nmstate/nmstate/releases/download/v2.2.57/nmstate-2.2.57.tar.gz
 Source1:        nmstate-2.2.57.tar.gz.asc
-Source2:        nmstate.gpg
+Source2:        https://nmstate.io/nmstate.gpg
 Source3:        https://github.com/nmstate/nmstate/releases/download/v2.2.57/nmstate-vendor-2.2.57.tar.xz
 # Force nmstate-libs upgrade along with nmstate rpm when installed
 # https://issues.redhat.com/browse/RHEL-52890
@@ -22,7 +22,7 @@ BuildRequires:  python3-devel
 BuildRequires:  gnupg2
 BuildRequires:  systemd-devel
 BuildRequires:  systemd-rpm-macros
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  rust-packaging
@@ -115,7 +115,7 @@ License:        Apache-2.0
 %description -n python3-%{libname}
 This package contains the Python 3 library for Nmstate.
 
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 %package -n rust-%{name}-devel
 Summary:        Rust crate of nmstate
 BuildArch:      noarch
@@ -176,7 +176,7 @@ gpgv2 --keyring ./gpgkey-mantainers.gpg %{SOURCE1} %{SOURCE0}
 %autosetup -n %{name}-%{version_no_tilde} -p1 %{?rhel:-a3}
 
 pushd rust
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 mv ../vendor ./
 %cargo_prep -v vendor
 %else
@@ -189,7 +189,7 @@ pushd rust
 %cargo_build
 %cargo_license_summary
 %{cargo_license} > ../LICENSE.dependencies
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %cargo_vendor_manifest
 %endif
 popd
@@ -209,7 +209,7 @@ pushd rust/src/python
 %pyproject_install
 popd
 
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 pushd rust/src/lib
 # Fedora cargo2rpm has problem when working with worksace dependency
 #   https://pagure.io/fedora-rust/cargo2rpm/issue/13
@@ -228,7 +228,7 @@ popd
 %files
 %doc README.md
 %license LICENSE.dependencies
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %license rust/cargo-vendor.txt
 %endif
 %doc examples/
@@ -257,7 +257,7 @@ popd
 %files static
 %{_libdir}/libnmstate.a
 
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 %files -n rust-%{name}-devel
 %license LICENSE
 %{cargo_registry}/%{name}-%{version}/

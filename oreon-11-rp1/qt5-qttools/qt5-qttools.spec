@@ -20,7 +20,7 @@ Release: 4%{?dist}
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
 %global majmin %(echo %{version} | cut -d. -f1-2)
-Source0:        https://download.qt.io/official_releases/qt/%{version}/submodules/qttools-everywhere-opensource-src-%{version}.tar.xz
+Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
 ## upstream patches
 ## repo: https://invent.kde.org/qt/qt/qttools
 ## branch: kde/5.15
@@ -46,7 +46,7 @@ Source23: qdbusviewer.desktop
 
 BuildRequires: make
 # %%check needs cmake (and don't want to mess with cmake28)
-%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 BuildRequires: cmake
 %endif
 BuildRequires: desktop-file-utils
@@ -254,7 +254,7 @@ sed -i -e 's| Qt5UiPlugin||g' %{buildroot}%{_qt5_libdir}/pkgconfig/Qt5Designer.p
 
 
 ## work-in-progress... -- rex
-%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %check
 # TODO: Please submit an issue to upstream (rhbz#2381396)
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
@@ -311,7 +311,7 @@ popd
 %files  libs-help
 %{_qt5_libdir}/libQt5Help.so.5*
 
-%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} <= 7 || (0%{?oreon} >= 11)
 %post -n qt5-assistant
 touch --no-create %{_datadir}/icons/hicolor ||:
 
@@ -331,7 +331,7 @@ fi
 %{_datadir}/applications/*assistant.desktop
 %{_datadir}/icons/hicolor/*/apps/assistant*.*
 
-%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} <= 7 || (0%{?oreon} >= 11)
 %post -n qt5-doctools
 touch --no-create %{_datadir}/icons/hicolor ||:
 
@@ -355,7 +355,7 @@ fi
 %{_bindir}/qtattributionsscanner-qt5
 %{_qt5_bindir}/qtattributionsscanner*
 
-%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} <= 7 || (0%{?oreon} >= 11)
 %post -n qt5-designer
 touch --no-create %{_datadir}/icons/hicolor ||:
 
@@ -384,7 +384,7 @@ fi
 %{_qt5_libdir}/cmake/Qt5Designer/Qt5Designer_QWebViewPlugin.cmake
 %endif
 
-%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} <= 7 || (0%{?oreon} >= 11)
 %post -n qt5-linguist
 touch --no-create %{_datadir}/icons/hicolor ||:
 
@@ -420,7 +420,7 @@ fi
 %{_qt5_libdir}/cmake/Qt5LinguistTools/Qt5LinguistToolsConfig*.cmake
 %{_qt5_libdir}/cmake/Qt5LinguistTools/Qt5LinguistToolsMacros.cmake
 
-%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} <= 7 || (0%{?oreon} >= 11)
 %post -n qt5-qdbusviewer
 touch --no-create %{_datadir}/icons/hicolor ||:
 

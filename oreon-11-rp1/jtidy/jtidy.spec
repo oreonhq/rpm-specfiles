@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 97654df194fda0c4199297bfedda9c0d60c40cb5ab35f80782ca83274dbdd69a
 
 Name:             jtidy
 Version:          1.0

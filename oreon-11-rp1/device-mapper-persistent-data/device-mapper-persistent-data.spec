@@ -1,4 +1,5 @@
 %global source0_hash none
+%global source1_hash faaba5de4d7fe313cbaf6d08819c3bb6e229ef3acce638cae4225b35c290291d
 
 #
 # Copyright (C) 2011-2017 Red Hat, Inc
@@ -18,10 +19,10 @@ License: GPL-3.0-only AND (0BSD OR MIT OR Apache-2.0) AND Apache-2.0 AND (Apache
 #ExcludeArch: %%{ix86}
 URL: https://github.com/jthornber/thin-provisioning-tools
 #Source0: https://github.com/jthornber/thin-provisioning-tools/archive/thin-provisioning-tools-%%{version}.tar.gz
-Source0:        https://github.com/jthornber/thin-provisioning-tools/archive/v1.3.2%{?version_suffix}.tar.gz
+Source0:        https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}%{?version_suffix}.tar.gz
 Source1: dmpd132-vendor.tar.gz
 
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 BuildRequires: rust-toolset
 %else
 BuildRequires: rust-packaging
@@ -46,6 +47,7 @@ snapshot eras
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -n thin-provisioning-tools-%{version}%{?version_suffix} -a1
 %cargo_prep -v vendor
 

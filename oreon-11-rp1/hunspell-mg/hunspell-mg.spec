@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash a76d1339e97f7fb4f3ca5b51845c0f7951641a4b360c4e472ed0c87db89ee1ce
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -11,7 +11,7 @@ Summary: Malagasy hunspell dictionaries
 %global upstreamid 20050109
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/mg_MG.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/mg_MG.zip
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch

@@ -22,7 +22,7 @@
 # pmemcheck is not packaged by Fedora
 %bcond_with pmemcheck
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_with pandoc
 %else
 %bcond_without pandoc
@@ -38,7 +38,7 @@ Summary:	Persistent Memory Development Kit (formerly NVML)
 License:	BSD-3-Clause
 URL:		http://pmem.io/pmdk
 
-Source0:        https://github.com/pmem/pmdk/releases/download/2.1.0/pmdk-2.1.0.tar.gz
+Source0:        https://github.com/pmem/pmdk/releases/download/%{upstreamversion}/pmdk-%{upstreamversion}.tar.gz
 #Patch0:		0001-test-don-t-print-the-address-of-a-FILE-after-fclose.patch
 
 

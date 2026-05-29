@@ -7,7 +7,7 @@ Summary:        Python implementation of Varlink
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            https://github.com/varlink/%{name}
-Source0:        https://github.com/varlink/python-varlink/archive/31.0.0/python-varlink-31.0.0.tar.gz
+Source0:        https://github.com/varlink/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
 BuildRequires:  python3-rpm-macros

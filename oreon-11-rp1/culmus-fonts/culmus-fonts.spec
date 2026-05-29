@@ -243,7 +243,7 @@ Provides:  culmus-yehuda-clm-fonts = %{version}-%{release}
 
 This package provides Yehuda CLM, a sans-serif font family.
 }
-Source0:        http://downloads.sourceforge.net/culmus/culmus-0.133.tar.gz
+Source0:        http://downloads.sourceforge.net/culmus/culmus-%{version}.tar.gz
 Source1:   66-%{fontpkgname1}.conf
 Source2:   66-%{fontpkgname2}.conf
 Source3:   65-%{fontpkgname3}.conf

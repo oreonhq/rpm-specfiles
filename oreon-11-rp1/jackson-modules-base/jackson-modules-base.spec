@@ -14,7 +14,7 @@ Patch1:         0001-Expose-javax.security.auth-from-JDK-internals.patch
 Patch2:         0001-Replace-javax.activation-imports-with-jakarta.activa.patch
 Patch3:         0001-Use-jakarta.activation-namespace-in-jaxb-api.patch
 
-%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || 0%{?oreon}
+%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || (0%{?oreon} >= 11)
 BuildRequires:  maven-local
 %else
 BuildRequires:  maven-local-openjdk25
@@ -34,7 +34,7 @@ BuildRequires:  mvn(org.mockito:mockito-all)
 BuildRequires:  mvn(org.ow2.asm:asm)
 
 BuildArch:      noarch
-%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 ExclusiveArch:  %{java_arches} noarch
 %endif
 

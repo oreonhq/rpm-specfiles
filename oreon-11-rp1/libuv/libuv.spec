@@ -24,7 +24,7 @@ Summary:        Platform layer for node.js
 License:        MIT AND CC-BY-4.0 AND ISC AND BSD-2-Clause
 URL:            http://libuv.org/
 Source0:        http://dist.libuv.org/dist/v1.52.1/libuv-v1.52.1.tar.gz
-Source1:        libuv-v1.52.1.tar.gz.sign
+Source1:        https://dist.libuv.org/dist/v%{version}/%{name}-v%{version}.tar.gz.sign
 # mkdir temp
 # gpg --no-default-keyring --keyring temp/keyring.gpg --keyserver keyserver.ubuntu.com \
 #  --recv-keys D77B1E34243FBAF05F8E9CC34F55C8C846AB89B9  \

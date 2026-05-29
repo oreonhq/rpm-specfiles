@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 81f3659fa7755c45ea574c2ccf54c37a74165f6d978c18fcbcca1a807c888959
 
 Name:    device-mapper-multipath
 Version: 0.13.1

@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} || 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %global python3_dbus_dir %(%{__python3} -c "import dbus.mainloop; print(dbus.mainloop.__path__[0])" 2>/dev/null || echo "%{python3_sitearch}/dbus/mainloop")
 %endif
 
@@ -27,7 +27,7 @@ Release: 0.2%{?dist}
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License: GPL-3.0-only
 Url:     http://www.riverbankcomputing.com/software/pyqt/
-Source0:        https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.15.12/pyqt5-5.15.12%{?snap:.dev2507081429}.tar.gz
+Source0:        https://www.riverbankcomputing.com/static/Downloads/PyQt5/%{version}/pyqt5-%{version}%{?snap:.%{snap}}.tar.gz
 #Source0: https://pypi.python.org/packages/source/P/PyQt5/PyQt5-{version}.tar.gz
 
 Source1: macros.pyqt5
@@ -43,7 +43,7 @@ BuildRequires: chrpath
 BuildRequires: findutils
 BuildRequires: pkgconfig(dbus-1)
 BuildRequires: pkgconfig(dbus-python)
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires: pkgconfig(phonon4qt5)
 %endif
 BuildRequires: qt5-qtbase-private-devel

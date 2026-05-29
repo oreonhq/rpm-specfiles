@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4756da0f61ec7b069097b12d5623e2266f2ff17501ee785346c300e6b8eda467
 
 # Where lock files are stored
 %global _lockdir /run/lock/lockdev

@@ -29,7 +29,7 @@ BuildRequires:  perl(warnings)
 BuildRequires:  perl(File::Spec)
 BuildRequires:  perl(Test::More) >= 0.88
 # Extra Tests (not run when bootstrapping due to circular build dependencies)
-%if !%{defined perl_bootstrap} && ! ( 0%{?rhel} ) && %{with perl_CPAN_Meta_Requirements_enables_optional_test} || 0%{?oreon}
+%if !%{defined perl_bootstrap} && ! ( 0%{?rhel} ) && %{with perl_CPAN_Meta_Requirements_enables_optional_test} || (0%{?oreon} >= 11)
 BuildRequires:  findutils
 BuildRequires:  glibc-langpack-en
 BuildRequires:  perl(blib)
@@ -86,7 +86,7 @@ perl Makefile.PL INSTALLDIRS=vendor NO_PACKLIST=1 NO_PERLLOCAL=1 UNINST=0
 
 %check
 make test AUTHOR_TESTING=1
-%if !%{defined perl_bootstrap} && ! ( 0%{?rhel} ) && %{with perl_CPAN_Meta_Requirements_enables_optional_test} || 0%{?oreon}
+%if !%{defined perl_bootstrap} && ! ( 0%{?rhel} ) && %{with perl_CPAN_Meta_Requirements_enables_optional_test} || (0%{?oreon} >= 11)
 LANG=en_US make test TEST_FILES="$(echo $(find xt/ -name '*.t'))"
 %endif
 

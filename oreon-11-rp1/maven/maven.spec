@@ -18,7 +18,7 @@ URL:            https://maven.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/maven/maven-3/3.9.11/source/apache-maven-3.9.11-src.tar.gz
+Source0:        https://archive.apache.org/dist/maven/maven-3/%{version}/source/apache-maven-%{version}-src.tar.gz
 Source1:        maven-bash-completion
 Source2:        mvn.1
 

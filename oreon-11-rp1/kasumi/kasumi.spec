@@ -11,7 +11,7 @@ Release: 50%{?dist}
 
 License: GPL-2.0-or-later
 URL:     http://kasumi.sourceforge.jp/
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires: anthy-devel
 %endif
 BuildRequires: autoconf automake libtool
@@ -19,7 +19,7 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: gtk3-devel anthy-unicode-devel
 Requires: %{name}-common = %{version}-%{release}
-Source0: https://deb.debian.org/debian/pool/main/k/kasumi/kasumi_2.5+debian2.orig.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/k/kasumi/kasumi_2.5+debian2.orig.tar.gz
 Patch0: kasumi-853099-manpage.patch
 Patch1: kasumi-1928410-gtk3.patch
 Patch2: kasumi-check-anthy-pkg.patch
@@ -73,7 +73,7 @@ autoreconf -f -i
 %configure
 make %{?_smp_mflags}
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 mv kasumi kasumi-unicode
 make clean
 cp configure.in.orig configure.in
@@ -87,7 +87,7 @@ make %{?_smp_mflags}
 
 %install
 make install DESTDIR=$RPM_BUILD_ROOT INSTALL="install -p"
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 install -pm 755 kasumi-unicode $RPM_BUILD_ROOT%{_bindir}/kasumi-unicode
 %else
 mv $RPM_BUILD_ROOT%{_bindir}/kasumi $RPM_BUILD_ROOT%{_bindir}/kasumi-unicode
@@ -99,7 +99,7 @@ rm -rf $RPM_BUILD_ROOT%{_datadir}/applications/*.desktop
 %find_lang %{name}
 
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %files
 %{_bindir}/kasumi
 %doc AUTHORS ChangeLog NEWS README

@@ -2,7 +2,7 @@
 
 %global python_support 1
 
-%if 0%{?rhel} && 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %global python_support 0
 %endif
 
@@ -13,7 +13,7 @@ Summary: IPTC tag library
 
 License: LGPL-2.0-only
 URL: https://github.com/ianw/%{name}
-Source0:        https://github.com/ianw/libiptcdata/releases/download/libiptcdata-1.0.5.tar.gz
+Source0:        https://github.com/ianw/%{name}/releases/download/%{name}-%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake

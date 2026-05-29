@@ -1,7 +1,7 @@
 %global source0_hash 62e8ed4fd6a45864acc8235409461b72c9a28ee785a2011cc5eb78318786c89c
 
 # Disable check to avoid pulling unwanted package (fish) into RHEL 9
-%if 0%{?rhel} >= 9 && !0%{?epel} || 0%{?oreon}
+%if 0%{?rhel} >= 9 && !0%{?epel} || (0%{?oreon} >= 11)
 %bcond_with check
 %else
 %bcond_without check

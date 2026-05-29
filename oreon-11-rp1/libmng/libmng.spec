@@ -7,7 +7,7 @@ URL: http://www.libmng.com/
 Summary: Library for Multiple-image Network Graphics support
 # This is a common zlib variant.
 License: Zlib
-Source0:        http://download.sourceforge.net/sourceforge/libmng/libmng-2.0.3.tar.gz
+Source0:        http://download.sourceforge.net/sourceforge/%{name}/%{name}-%{version}.tar.gz
 BuildRequires: zlib-devel
 BuildRequires: libjpeg-turbo-devel
 BuildRequires: lcms2-devel

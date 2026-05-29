@@ -11,7 +11,7 @@ URL:            https://commons.apache.org/commons-parent-pom.html
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/apache/commons-parent/archive/rel/commons-parent-89.tar.gz
+Source0:        https://github.com/apache/commons-parent/archive/rel/commons-parent-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

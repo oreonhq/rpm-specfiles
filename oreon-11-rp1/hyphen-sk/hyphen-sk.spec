@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 488ad858c719e596f056537103ee6b21cfdd90e9b8619f65d9f9ed76ba2725b8
 
 Name: hyphen-sk
 Summary: Slovak hyphenation rules
 %global upstreamid 20031227
 Version: 0.%{upstreamid}
 Release: 36%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/hyph_sk_SK.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_sk_SK.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: GPL-1.0-or-later
 BuildArch: noarch

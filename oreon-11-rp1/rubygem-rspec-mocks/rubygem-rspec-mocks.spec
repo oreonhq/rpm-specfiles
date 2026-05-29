@@ -21,7 +21,7 @@ Release:	%{?preminorver:0.}%{baserelease}%{?preminorver:%{rpmminorver}}%{?dist}
 # SPDX confirmed
 License:	MIT
 URL:		https://rspec.info
-Source0:        https://rubygems.org/gems/rspec-mocks-3.13.8%{?preminorver}.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{fullver}.gem
 # %%{SOURCE2} %%{name} %%{version}
 Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
 Source2:	rspec-related-create-full-tarball.sh
@@ -34,7 +34,7 @@ BuildRequires:	rubygems-devel
 # rspec
 BuildRequires:	rubygem(rspec)
 BuildRequires:	rubygem(rake)
-%if %{undefined rhel} || 0%{?oreon}
+%if %{undefined rhel} || (0%{?oreon} >= 11)
 # cucumber
 BuildRequires:	rubygem(aruba)
 BuildRequires:	rubygem(cucumber)
@@ -87,7 +87,7 @@ rm -f %{buildroot}%{gem_instdir}/{.document,.yardopts}
 exit 0
 %endif
 
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 # avoid aruba dep on RHEL, but tests fail if files are removed entirely
 echo -n > spec/integration/rails_support_spec.rb
 echo -n > spec/support/aruba.rb
@@ -102,7 +102,7 @@ LANG=C.UTF-8
 export RUBYLIB=$(pwd)/lib
 rspec spec/
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 # Don't do cucumber test
 exit 0
 %endif

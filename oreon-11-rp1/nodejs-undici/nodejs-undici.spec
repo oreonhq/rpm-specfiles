@@ -1,4 +1,6 @@
 %global source0_hash ad5d01bb4c91ff274a8333cbad06da2c15fd637db4954bf3c69572245a54f19b
+%global source1_hash e1827250a39a3d45de04d4910b3e7994eb40ab46959828d243c097d65d30c55e
+%global source2_hash d20819dd6422769cb12ef7f2161dfd5a32d734f9422a183f53c04e154cd420ce
 
 %global     npm_name undici
 
@@ -52,6 +54,8 @@ An HTTP/1.1 client, written from scratch for Node.js.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
+%(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{npm_name}-%{version} -S git_am
 cp -p %{S:3} .
 

@@ -8,8 +8,8 @@ Summary:        A library to disable resource limits and other privilege droppin
 License:        GPL-3.0-or-later
 Url:            http://cwrap.org/
 
-Source0:        https://ftp.samba.org/pub/cwrap/priv_wrapper-1.0.1.tar.gz
-Source1:        https://ftp.samba.org/pub/cwrap/priv_wrapper-1.0.1.tar.gz.asc
+Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
+Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        priv_wrapper.keyring
 
 Patch0:         priv_wrapper-fix-cmocka-1.1.6+-support.patch

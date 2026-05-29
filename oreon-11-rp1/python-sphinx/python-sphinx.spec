@@ -95,7 +95,7 @@ BuildRequires: texinfo
 BuildRequires: ImageMagick
 %endif
 
-%if %{undefined rhel} && %{with latex_tests} || 0%{?oreon}
+%if %{undefined rhel} && %{with latex_tests} || (0%{?oreon} >= 11)
 BuildRequires: texlive-collection-fontsrecommended
 BuildRequires: texlive-collection-latex
 BuildRequires: texlive-gnu-freefont
@@ -235,7 +235,7 @@ the Python docs:
       snippets and inclusion of appropriately formatted docstrings.
 
 
-%if %{undefined rhel} || 0%{?oreon}
+%if %{undefined rhel} || (0%{?oreon} >= 11)
 %package -n python%{python3_pkgversion}-sphinx-latex
 Summary:       LaTeX builder dependencies for python%{python3_pkgversion}-sphinx
 
@@ -361,7 +361,7 @@ This package contains documentation in the HTML format.
 # Drop test-dependency on pytest-xdist
 # This allows for parallel testing, but has a lot of dependencies.
 # We want to avoid the dependency in RHEL, where it is not available.
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 sed -i -e '/pytest-xdist/d' pyproject.toml
 %endif
 
@@ -503,7 +503,7 @@ k="${k} and not test_check_js_search_indexes"
 %dir %{_datadir}/sphinx/locale/*
 %{_mandir}/man1/sphinx-*
 
-%if %{undefined rhel} || 0%{?oreon}
+%if %{undefined rhel} || (0%{?oreon} >= 11)
 %files -n python%{python3_pkgversion}-sphinx-latex
 # empty, this is a metapackage
 %endif

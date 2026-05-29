@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/plugins/maven-compiler-plugin
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/maven/plugins/maven-compiler-plugin-3.12.1-source-release.zip
+Source0:        https://archive.apache.org/dist/maven/plugins/%{name}-%{version}-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

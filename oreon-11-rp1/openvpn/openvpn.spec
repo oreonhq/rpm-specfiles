@@ -30,7 +30,7 @@ Release:           2%{?dist}
 Summary:           A full-featured TLS VPN solution
 URL:               https://community.openvpn.net/
 Source0:        https://build.openvpn.net/downloads/releases/openvpn-2.6.19.tar.gz
-Source1:        openvpn-2.6.19.tar.gz.asc
+Source1:        https://build.openvpn.net/downloads/releases/%{name}-%{version}.tar.gz.asc
 Source2:           roadwarrior-server.conf
 Source3:           roadwarrior-client.conf
 # Upstream signing key

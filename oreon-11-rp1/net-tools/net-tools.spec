@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 4c2653b5f16b277dd6f1459e3e56c55e8bb19ed8cf2b5e60f6174ead3bbede0e
 
 %global checkout 20160912git
 
-%if !0%{?fedora} || 0%{?fedora} >= 44 || 0%{?oreon}
+%if !0%{?fedora} || 0%{?fedora} >= 44 || (0%{?oreon} >= 11)
 %bcond remove_german_man8 1
 %bcond remove_french_man8 1
 %else

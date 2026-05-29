@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -12,7 +12,7 @@ Summary: Afrikaans hunspell dictionary
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
 # Following URL is dead now
-Source:        http://downloads.translate.org.za/spellchecker/afrikaans/myspell-af_ZA-0.20080825.zip
+Source:        http://downloads.translate.org.za/spellchecker/afrikaans/myspell-af_ZA-0.%{upstreamid}.zip
 URL: http://www.translate.org.za/
 License: LGPL-2.1-or-later
 BuildArch: noarch

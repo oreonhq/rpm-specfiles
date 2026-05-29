@@ -29,7 +29,7 @@ BuildRequires:  libbpf-static
 BuildRequires:  binutils-devel
 BuildRequires:  cereal-devel
 BuildRequires:  lldb-devel
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  libpcap-devel
 %endif
 BuildRequires:  rubygem-asciidoctor

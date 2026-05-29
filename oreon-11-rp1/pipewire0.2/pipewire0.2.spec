@@ -24,9 +24,9 @@ URL:            https://pipewire.org/
 %if 0%{?gitrel}
 # git clone git://anongit.freedesktop.org/gstreamer/pipewire
 # cd pipewire; git reset --hard %%{gitcommit}; ./autogen.sh; make; make distcheck
-Source0:        https://github.com/PipeWire/pipewire/archive/0.2.7/pipewire-0.2.7.tar.gz
+Source0:        https://github.com/PipeWire/pipewire/archive/%{version}/pipewire-%{version}.tar.gz
 %else
-Source0:        https://github.com/PipeWire/pipewire/archive/0.2.7/pipewire-0.2.7.tar.gz
+Source0:        https://github.com/PipeWire/pipewire/archive/%{version}/pipewire-%{version}.tar.gz
 %endif
 
 ## upstream patches

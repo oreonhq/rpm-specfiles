@@ -60,7 +60,7 @@ Release: %autorelease
 License: LicenseRef-Callaway-BSD OR GPL-2.0-only
 URL: https://github.com/cornelisnetworks/opa-psm2/
 
-Source0:        https://github.com/cornelisnetworks/opa-psm2/archive/refs/tags/PSM2_12.0.1.tar.gz
+Source0:        https://github.com/cornelisnetworks/opa-psm2/archive/refs/tags/PSM2_%{version}.tar.gz
 
 # The OPA product is supported on x86_64 only:
 ExclusiveArch: x86_64
@@ -121,7 +121,7 @@ rm -f %{buildroot}%{_libdir}/*.a
 %license COPYING
 %{_libdir}/libpsm2.so.2.*
 %{_libdir}/libpsm2.so.2
-%if 0%{?rhel} >= 8 || 0%{?oreon}
+%if 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
 %{_udevrulesdir}/40-psm.rules
 %endif
 
@@ -137,10 +137,10 @@ rm -f %{buildroot}%{_libdir}/*.a
 %{_libdir}/psm2-compat
 %{_udevrulesdir}/40-psm-compat.rules
 %{_prefix}/lib/libpsm2
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %{_prefix}/lib/modprobe.d/libpsm2-compat.conf
 %endif
-%if 0%{?rhel} >= 8 || 0%{?oreon}
+%if 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
 %{_sysconfdir}/modprobe.d/libpsm2-compat.conf
 %endif
 

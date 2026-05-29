@@ -12,7 +12,7 @@ Summary:    liboqs is an open source C library for quantum-safe cryptographic al
 #see https://github.com/open-quantum-safe/liboqs/blob/main/README.md#license for more details
 License:    MIT AND Apache-2.0 AND BSD-3-Clause AND (BSD-3-Clause OR GPL-1.0-or-later) AND CC0-1.0 AND Unlicense
 URL:        https://github.com/open-quantum-safe/liboqs.git
-Source:        https://github.com/open-quantum-safe/liboqs/archive/refs/tags/liboqs-0.12.0.tar.gz
+Source:        https://github.com/open-quantum-safe/liboqs/archive/refs/tags/liboqs-%{oqs_version}.tar.gz
 Patch1:	    liboqs-0.12.0-acvp_patch.patch
 Patch2:	    liboqs-0.10.0-std-stricter.patch
 # https://github.com/open-quantum-safe/liboqs/pull/2043
@@ -23,7 +23,7 @@ BuildRequires: cmake
 BuildRequires: gcc
 BuildRequires: openssl-devel
 BuildRequires: python3-pytest
-%if %{undefined rhel} || 0%{?oreon}
+%if %{undefined rhel} || (0%{?oreon} >= 11)
 BuildRequires: python3-pytest-xdist
 %endif
 BuildRequires: unzip
@@ -63,7 +63,7 @@ rm -rf src/kem/ntruprime
 # code_conventions is for upstream CI, requires astyle
 # pytest-xdist is not available in RHEL due to dependencies
 sed -e '/COMMAND.*pytest/s|$| --ignore tests/test_code_conventions.py|' \
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
     -e 's/--numprocesses=auto//' \
 %endif
     -i tests/CMakeLists.txt

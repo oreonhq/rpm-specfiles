@@ -17,7 +17,7 @@ BuildRequires:  pkg-config
 BuildRequires:  python3-devel
 BuildRequires:  systemd-devel
 BuildRequires:  systemd-rpm-macros
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  rust-packaging
@@ -43,7 +43,7 @@ BuildRequires:  (crate(pretty_assertions/default) >= 1.2 with crate(pretty_asser
 %description
 Unified interface for Linux network state querying.
 
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 %package -n     rust-%{name}-devel
 Summary:        %{summary}
 BuildArch:      noarch
@@ -85,7 +85,7 @@ This package contains C binding of %{name}.
 %(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{name}-%{version_no_tilde} -p1 %{?rhel:-a1}
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %cargo_prep -v vendor
 %else
 %cargo_prep
@@ -100,7 +100,7 @@ popd >/dev/null
 %cargo_build
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %cargo_vendor_manifest
 %endif
 
@@ -109,7 +109,7 @@ pushd src/python
 popd
 
 %install
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 pushd src/lib
 # The cargo_isntall does not support workspace:
 #   https://pagure.io/fedora-rust/cargo2rpm/issue/5
@@ -138,7 +138,7 @@ popd
 %doc AUTHORS CHANGELOG DEVEL.md README.md
 %license LICENSE
 %license LICENSE.dependencies
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %license cargo-vendor.txt
 %endif
 %{_bindir}/npc
@@ -154,7 +154,7 @@ popd
 %{_includedir}/nispor.h
 %{_libdir}/pkgconfig/nispor.pc
 
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 %files -n       rust-%{name}-devel
 %license LICENSE
 %{cargo_registry}/%{name}-%{version_no_tilde}/

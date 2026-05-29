@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 2b5660c2dd375a5475b5c2e24828e43ee001c9755e24b50a877d92aba6eb2728
 
 Name: mythes-cs
 Summary: Czech thesaurus
 %global upstreamid 20070926
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/thes_cs_CZ_v2.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/thes_cs_CZ_v2.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: MIT
 BuildArch: noarch

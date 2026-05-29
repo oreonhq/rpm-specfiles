@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ea6094c72cb9e60a42fb53509dc98d124a340f1c9222783b503208adc16a0a8f
 
 %bcond ldaptests %{undefined rhel}
 
@@ -21,7 +21,7 @@ BuildRequires: libselinux-devel
 BuildRequires: libxcrypt-devel
 BuildRequires: openldap-devel
 BuildRequires: python3-devel
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || 0%{?oreon}
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || (0%{?oreon} >= 11)
 BuildRequires: python3dist(crypt-r)
 %endif
 # To make sure the configure script can find it

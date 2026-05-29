@@ -1,7 +1,7 @@
 %global source0_hash 7830b4a57f7ec7410620d6c0150185449d7b4c9964c39a7dc397056032c32a08
 
 # Run optional tests
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_Devel_Hide_enables_optional_test
 %else
 %bcond_with perl_Devel_Hide_enables_optional_test

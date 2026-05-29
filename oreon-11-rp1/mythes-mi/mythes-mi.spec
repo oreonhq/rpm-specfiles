@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 048d45ec95faf0a00a10eeae2866c52212a21074762c6f5603f9f0655a48ee14
 
 Name: mythes-mi
 Summary: Maori thesaurus

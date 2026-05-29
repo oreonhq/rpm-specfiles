@@ -1,7 +1,7 @@
 %global source0_hash a250227eba47c6ad5aa32b9a72281343762f5d274ff38c53c2f43df5c63af3ec
 
 # build Rust binary and extensions for non-Enterprise Linux systems
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 %ifarch %{rust_arches}
 %bcond_with rust
 %else
@@ -21,7 +21,7 @@ Release: 1%{?dist}
 
 License: GPL-2.0-or-later
 URL: https://mercurial-scm.org/
-Source0:        https://www.mercurial-scm.org/release/mercurial-7.2.tar.gz
+Source0:        https://www.mercurial-scm.org/release/%{name}-%{upstreamversion}.tar.gz
 Source1: mercurial-site-start.el
 # Patch cargo metadata for dependency versions available in Fedora
 Patch0:  mercurial-rust-metadata.patch

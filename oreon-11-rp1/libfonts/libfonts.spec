@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6cbedbfaef3c62610243e446c93d0a97c15d89e13902e757958ca8ca06876b58
 
 Name: libfonts
 Version: 1.1.3

@@ -12,7 +12,7 @@ URL:            https://felix.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/felix/org.apache.felix.utils/1.11.8/org.apache.felix.utils-1.11.8-source-release.tar.gz
+Source0:        https://repo1.maven.org/maven2/org/apache/felix/%{bundle}/%{version}/%{bundle}-%{version}-source-release.tar.gz
 
 # The module org.osgi.cmpn requires implementing methods which were not
 # implemented in previous versions where org.osgi.compendium was used

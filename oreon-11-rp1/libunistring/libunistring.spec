@@ -7,7 +7,7 @@ Name: libunistring
 Summary: GNU Unicode string library
 License: GPL-2.0-or-later OR LGPL-3.0-or-later
 URL: https://www.gnu.org/software/libunistring/
-Source0:        https://ftp.gnu.org/gnu/libunistring/libunistring-1.1.tar.xz
+Source0:        https://ftp.gnu.org/gnu/libunistring/%{name}-%{version}.tar.xz
 BuildRequires: gcc
 BuildRequires: make
 Provides: bundled(gnulib)

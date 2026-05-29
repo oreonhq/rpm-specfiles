@@ -14,13 +14,13 @@ Release: 25%{?dist}
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License: Apache-2.0
 URL: http://www.adelton.com/apache/mod_lookup_identity/
-Source0:        http://www.adelton.com/apache/mod_lookup_identity/mod_lookup_identity-1.0.0.tar.gz
+Source0:        http://www.adelton.com/apache/mod_lookup_identity/%{name}-%{version}.tar.gz
 BuildRequires: gcc
 BuildRequires: httpd-devel
 BuildRequires: dbus-devel
 BuildRequires: pkgconfig
 Requires: httpd-mmn = %{_httpd_mmn}
-%if 0%{?fedora} || 0%{?rhel} >= 8 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
 Recommends: sssd-dbus
 %endif
 

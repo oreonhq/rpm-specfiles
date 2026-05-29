@@ -8,7 +8,7 @@
 %define min_rhel 8
 %define min_fedora 33
 
-%if (0%{?fedora} && 0%{?fedora} >= %{min_fedora}) || (0%{?rhel} && 0%{?rhel} >= %{min_rhel}) || 0%{?oreon}
+%if (0%{?fedora} && 0%{?fedora} >= %{min_fedora}) || (0%{?rhel} && 0%{?rhel} >= %{min_rhel}) || (0%{?oreon} >= 11)
     %define supported_platform 1
 %else
     %define supported_platform 0

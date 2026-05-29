@@ -27,7 +27,7 @@ designed in a similar style to traditional typefaces such as Monotype Naskh,
 extended to cover the full Unicode Arabic repertoire.
 }
 
-Source0:        https://software.sil.org/downloads/r/scheherazade/ScheherazadeNew-3.300.zip
+Source0:        https://software.sil.org/downloads/r/scheherazade/ScheherazadeNew-%{version}.zip
 Source1:    65-%{fontpkgname1}.conf
 
 Name:       sil-scheherazade-fonts

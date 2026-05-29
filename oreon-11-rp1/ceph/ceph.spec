@@ -37,7 +37,7 @@
 %else
 %bcond_with rbd_rwl_cache
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %ifarch s390x %{arm64} riscv64
 %bcond_with system_pmdk
 %else
@@ -96,14 +96,14 @@
 %else
 %bcond_without jaeger
 %endif
-%if 0%{?fedora} || 0%{?suse_version} >= 1500 || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?suse_version} >= 1500 || 0%{?rhel} || (0%{?oreon} >= 11)
 # distros that ship cmd2 and/or colorama
 %bcond_without cephfs_shell
 %else
 # distros that do _not_ ship cmd2/colorama
 %bcond_with cephfs_shell
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_without system_arrow
 %bcond_without system_utf8proc
 %else
@@ -114,7 +114,7 @@
 %endif
 # qat only supported for intel devices
 %ifarch x86_64
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_without system_qat
 %else
 # not fedora/rhel
@@ -124,7 +124,7 @@
 # not x86_64
 %bcond_with system_qat
 %endif
-%if 0%{?fedora} || 0%{?suse_version} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?suse_version} || 0%{?rhel} || (0%{?oreon} >= 11)
 %global weak_deps 1
 %endif
 %if %{with selinux}
@@ -183,7 +183,7 @@
 Name:		ceph
 Version:	20.2.1
 Release:	1%{?dist}
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 Epoch:		2
 %endif
 
@@ -197,7 +197,7 @@ License:	LGPL-2.1-or-later AND LGPL-3.0-only AND CC-BY-SA-3.0 AND GPL-2.0-only A
 Group:		System/Filesystems
 %endif
 URL:		http://ceph.com/
-Source:        https://download.ceph.com/tarballs/ceph-20.2.1.tar.gz
+Source:        https://download.ceph.com/tarballs/ceph-%{version}.tar.gz
 #Source0:	https://1.chacra.ceph.com/r/ceph/tentacle/
 Patch:		0001-src-common-crc32c_intel_fast.patch
 Patch:		0003-src-common-bitstr.h.patch
@@ -259,7 +259,7 @@ BuildRequires:	fuse3-devel
 BuildRequires:	grpc-devel
 BuildRequires:	gcc-c++
 BuildRequires:	libzstd-devel
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:	libatomic
 %endif
 %bcond_without ld_mold
@@ -268,7 +268,7 @@ BuildRequires:	mold
 %endif
 %if 0%{with tcmalloc}
 # libprofiler did not build on ppc64le until 2.7.90
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:	gperftools-devel >= 2.7.90
 %endif
 %if 0%{?suse_version}
@@ -352,7 +352,7 @@ BuildRequires:	re2-devel
 %if 0%{with jaeger}
 BuildRequires:	bison
 BuildRequires:	flex
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:	json-devel
 %endif
 %if 0%{?suse_version}
@@ -425,7 +425,7 @@ BuildRequires:	liblz4-devel >= 1.7
 BuildRequires:	golang-github-prometheus-prometheus
 BuildRequires:	jsonnet
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 Requires:	systemd
 %if 0%{with system_boost}
 BuildRequires:	boost-random
@@ -451,7 +451,7 @@ BuildRequires:	lz4-devel >= 1.7
 # distro-conditional make check dependencies
 %if 0%{with make_check}
 BuildRequires:	golang
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:	golang-github-prometheus
 BuildRequires:	libtool-ltdl-devel
 BuildRequires:	xmlsec1
@@ -481,7 +481,7 @@ BuildRequires:	xmlsec1-openssl-devel
 %endif
 # lttng and babeltrace for rbd-replay-prep
 %if %{with lttng}
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:	lttng-ust-devel
 BuildRequires:	libbabeltrace-devel
 %endif
@@ -493,15 +493,15 @@ BuildRequires:	babeltrace-devel
 %if 0%{?suse_version}
 BuildRequires:	libexpat-devel
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:	expat-devel
 %endif
 #hardened-cc1
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:	redhat-rpm-config
 %endif
 %if 0%{with crimson}
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:	cryptopp-devel
 %endif
 %if 0%{?suse_version}
@@ -539,7 +539,7 @@ Requires:	logrotate
 Requires:	psmisc
 Requires:	util-linux
 Requires:	which
-%if 0%{?rhel} && 0%{?rhel} < 8 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
 # The following is necessary due to tracker 36508 and can be removed once the
 # associated upstream bugs are resolved.
 %if 0%{with tcmalloc}
@@ -594,7 +594,7 @@ Requires:	python%{python3_pkgversion}-cephfs = %{_epoch_prefix}%{version}-%{rele
 Requires:	python%{python3_pkgversion}-rgw = %{_epoch_prefix}%{version}-%{release}
 Requires:	python%{python3_pkgversion}-ceph-argparse = %{_epoch_prefix}%{version}-%{release}
 Requires:	python%{python3_pkgversion}-ceph-common = %{_epoch_prefix}%{version}-%{release}
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 Requires:	python%{python3_pkgversion}-prettytable
 %endif
 %if 0%{?suse_version}
@@ -678,18 +678,18 @@ Group:		System/Filesystems
 Requires:	ceph-mgr = %{_epoch_prefix}%{version}-%{release}
 Requires:	ceph-grafana-dashboards = %{_epoch_prefix}%{version}-%{release}
 Requires:	ceph-prometheus-alerts = %{_epoch_prefix}%{version}-%{release}
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 Requires:	python%{python3_pkgversion}-grpcio
 Requires:	python%{python3_pkgversion}-grpcio-tools
 Requires:	python%{python3_pkgversion}-jmespath
 Requires:	python%{python3_pkgversion}-xmltodict
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 Requires:	python%{python3_pkgversion}-cherrypy
 Requires:	python%{python3_pkgversion}-routes
 %if 0%{?weak_deps}
 Recommends:	python%{python3_pkgversion}-saml
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Recommends:	python%{python3_pkgversion}-grpcio
 Recommends:	python%{python3_pkgversion}-grpcio-tools
 %endif
@@ -714,7 +714,7 @@ Group:		System/Filesystems
 %endif
 Requires:	ceph-mgr = %{_epoch_prefix}%{version}-%{release}
 Requires:	python%{python3_pkgversion}-numpy
-%if 0%{?fedora} || 0%{?suse_version} || 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?suse_version} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 Requires:	python%{python3_pkgversion}-scikit-learn
 %endif
 Requires:	python3-scipy
@@ -734,7 +734,7 @@ Requires:	python%{python3_pkgversion}-pyOpenSSL
 Requires:	python%{python3_pkgversion}-requests
 Requires:	python%{python3_pkgversion}-dateutil
 Requires:	python%{python3_pkgversion}-setuptools
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 Requires:	python%{python3_pkgversion}-cherrypy
 Requires:	python%{python3_pkgversion}-pyyaml
 %endif
@@ -789,7 +789,7 @@ Requires:	openssh
 Requires:	python%{python3_pkgversion}-CherryPy
 Requires:	python%{python3_pkgversion}-Jinja2
 %endif
-%if 0%{?rhel} || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} || 0%{?fedora} || (0%{?oreon} >= 11)
 Requires:	openssh-clients
 Requires:	python%{python3_pkgversion}-cherrypy
 Requires:	python%{python3_pkgversion}-jinja2
@@ -881,7 +881,7 @@ Requires:	ceph-selinux = %{_epoch_prefix}%{version}-%{release}
 %endif
 Requires:	librados2 = %{_epoch_prefix}%{version}-%{release}
 Requires:	librgw2 = %{_epoch_prefix}%{version}-%{release}
-%if 0%{?rhel} || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} || 0%{?fedora} || (0%{?oreon} >= 11)
 Requires:	mailcap
 %endif
 %if 0%{?weak_deps}
@@ -974,7 +974,7 @@ Summary:	RADOS distributed object store client library
 %if 0%{?suse_version}
 Group:		System/Libraries
 %endif
-%if 0%{?rhel} || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} || 0%{?fedora} || (0%{?oreon} >= 11)
 Obsoletes:	ceph-libs < %{_epoch_prefix}%{version}-%{release}
 %endif
 %description -n librados2
@@ -1121,7 +1121,7 @@ Requires:	librados2 = %{_epoch_prefix}%{version}-%{release}
 %if 0%{?suse_version}
 Requires(post): coreutils
 %endif
-%if 0%{?rhel} || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} || 0%{?fedora} || (0%{?oreon} >= 11)
 Obsoletes:	ceph-libs < %{_epoch_prefix}%{version}-%{release}
 %endif
 %description -n librbd1
@@ -1165,7 +1165,7 @@ Summary:	Ceph distributed file system client library
 Group:		System/Libraries
 %endif
 Obsoletes:	libcephfs1 < %{_epoch_prefix}%{version}-%{release}
-%if 0%{?rhel} || 0%{?fedora} || 0%{?oreon}
+%if 0%{?rhel} || 0%{?fedora} || (0%{?oreon} >= 11)
 Obsoletes:	ceph-libs < %{_epoch_prefix}%{version}-%{release}
 Obsoletes:	ceph-libcephfs < %{_epoch_prefix}%{version}-%{release}
 %endif
@@ -1240,7 +1240,7 @@ descriptions, and submitting the command to the appropriate daemon.
 
 %package -n python%{python3_pkgversion}-ceph-common
 Summary:	Python 3 utility libraries for Ceph
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 Requires:	python%{python3_pkgversion}-pyyaml
 %endif
 %if 0%{?suse_version}
@@ -1472,7 +1472,7 @@ env | sort
     -DWITH_OCF:BOOL=ON \
 %endif
     -DWITH_SYSTEM_ZSTD:BOOL=ON \
-%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
     -DWITH_SYSTEM_ROCKSDB:BOOL=OFF \
 %endif
     -DWITH_SYSTEM_LIBURING:BOOL=ON \
@@ -1522,7 +1522,7 @@ env | sort
 %else
     -DBOOST_J:STRING=%{_smp_build_ncpus} \
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
     -DWITH_FMT_HEADER_ONLY:BOOL=ON \
 %endif
 %if 0%{with system_arrow}
@@ -1595,7 +1595,7 @@ install -m 0755 %{buildroot}%{_bindir}/crimson-osd %{buildroot}%{_bindir}/ceph-o
 %endif
 
 install -m 0644 -D src/etc-rbdmap %{buildroot}%{_sysconfdir}/ceph/rbdmap
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 install -m 0644 -D etc/sysconfig/ceph %{buildroot}%{_sysconfdir}/sysconfig/ceph
 %endif
 %if 0%{?suse_version}
@@ -1707,7 +1707,7 @@ mv %{buildroot}%{_exec_prefix}/sbin/ceph-create-keys %{buildroot}%{_bindir}/
 %{_libdir}/libmgr_op_tp.so*
 %endif
 %config(noreplace) %{_sysconfdir}/logrotate.d/ceph
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %config(noreplace) %{_sysconfdir}/sysconfig/ceph
 %endif
 %if 0%{?suse_version}
@@ -1740,7 +1740,7 @@ if [ $1 -eq 1 ] ; then
 /usr/bin/systemctl preset ceph.target ceph-crash.service >/dev/null 2>&1 || :
 fi
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_post ceph.target ceph-crash.service
 %endif
 if [ $1 -eq 1 ] ; then
@@ -1763,7 +1763,7 @@ fi
 %if 0%{?suse_version}
 %service_del_preun ceph.target ceph-crash.service
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_preun ceph.target ceph-crash.service
 %endif
 
@@ -1842,7 +1842,7 @@ fi
 %pre common
 CEPH_GROUP_ID=167
 CEPH_USER_ID=167
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 /usr/sbin/groupadd ceph -g $CEPH_GROUP_ID -o -r 2>/dev/null || :
 /usr/sbin/useradd ceph -u $CEPH_USER_ID -o -r -g ceph -s /sbin/nologin -c "Ceph daemons" -d %{_localstatedir}/lib/ceph 2>/dev/null || :
 %endif
@@ -1888,7 +1888,7 @@ if [ $1 -eq 1 ] ; then
   /usr/bin/systemctl preset ceph-mds@.service ceph-mds.target >/dev/null 2>&1 || :
 fi
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_post ceph-mds@.service ceph-mds.target
 %endif
 if [ $1 -eq 1 ] ; then
@@ -1899,7 +1899,7 @@ fi
 %if 0%{?suse_version}
 %service_del_preun ceph-mds@.service ceph-mds.target
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_preun ceph-mds@.service ceph-mds.target
 %endif
 
@@ -1933,7 +1933,7 @@ if [ $1 -eq 1 ] ; then
   /usr/bin/systemctl preset ceph-mgr@.service ceph-mgr.target >/dev/null 2>&1 || :
 fi
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_post ceph-mgr@.service ceph-mgr.target
 %endif
 if [ $1 -eq 1 ] ; then
@@ -1944,7 +1944,7 @@ fi
 %if 0%{?suse_version}
 %service_del_preun ceph-mgr@.service ceph-mgr.target
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_preun ceph-mgr@.service ceph-mgr.target
 %endif
 
@@ -2072,7 +2072,7 @@ if [ $1 -eq 1 ] ; then
   /usr/bin/systemctl preset ceph-mon@.service ceph-mon.target >/dev/null 2>&1 || :
 fi
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_post ceph-mon@.service ceph-mon.target
 %endif
 if [ $1 -eq 1 ] ; then
@@ -2083,7 +2083,7 @@ fi
 %if 0%{?suse_version}
 %service_del_preun ceph-mon@.service ceph-mon.target
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_preun ceph-mon@.service ceph-mon.target
 %endif
 
@@ -2124,7 +2124,7 @@ if [ $1 -eq 1 ] ; then
   /usr/bin/systemctl preset cephfs-mirror@.service cephfs-mirror.target >/dev/null 2>&1 || :
 fi
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_post cephfs-mirror@.service cephfs-mirror.target
 %endif
 if [ $1 -eq 1 ] ; then
@@ -2135,7 +2135,7 @@ fi
 %if 0%{?suse_version}
 %service_del_preun cephfs-mirror@.service cephfs-mirror.target
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_preun cephfs-mirror@.service cephfs-mirror.target
 %endif
 
@@ -2173,7 +2173,7 @@ if [ $1 -eq 1 ] ; then
   /usr/bin/systemctl preset ceph-rbd-mirror@.service ceph-rbd-mirror.target >/dev/null 2>&1 || :
 fi
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_post ceph-rbd-mirror@.service ceph-rbd-mirror.target
 %endif
 if [ $1 -eq 1 ] ; then
@@ -2184,7 +2184,7 @@ fi
 %if 0%{?suse_version}
 %service_del_preun ceph-rbd-mirror@.service ceph-rbd-mirror.target
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_preun ceph-rbd-mirror@.service ceph-rbd-mirror.target
 %endif
 
@@ -2214,7 +2214,7 @@ if [ $1 -eq 1 ] ; then
   /usr/bin/systemctl preset ceph-immutable-object-cache@.service ceph-immutable-object-cache.target >/dev/null 2>&1 || :
 fi
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_post ceph-immutable-object-cache@.service ceph-immutable-object-cache.target
 %endif
 if [ $1 -eq 1 ] ; then
@@ -2225,7 +2225,7 @@ fi
 %if 0%{?suse_version}
 %service_del_preun ceph-immutable-object-cache@.service ceph-immutable-object-cache.target
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_preun ceph-immutable-object-cache@.service ceph-immutable-object-cache.target
 %endif
 
@@ -2268,7 +2268,7 @@ if [ $1 -eq 1 ] ; then
   /usr/bin/systemctl preset ceph-radosgw@.service ceph-radosgw.target >/dev/null 2>&1 || :
 fi
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_post ceph-radosgw@.service ceph-radosgw.target
 %endif
 if [ $1 -eq 1 ] ; then
@@ -2279,7 +2279,7 @@ fi
 %if 0%{?suse_version}
 %service_del_preun ceph-radosgw@.service ceph-radosgw.target
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_preun ceph-radosgw@.service ceph-radosgw.target
 %endif
 
@@ -2318,7 +2318,7 @@ if [ $1 -eq 1 ] ; then
   /usr/bin/systemctl preset ceph-osd@.service ceph-osd.target >/dev/null 2>&1 || :
 fi
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_post ceph-osd@.service ceph-osd.target
 %endif
 if [ $1 -eq 1 ] ; then
@@ -2330,7 +2330,7 @@ fi
 %if 0%{?suse_version}
 %service_del_preun ceph-osd@.service ceph-osd.target
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_preun ceph-osd@.service ceph-osd.target
 %endif
 
@@ -2369,7 +2369,7 @@ if [ $1 -eq 1 ] ; then
   /usr/bin/systemctl preset ceph-volume@.service >/dev/null 2>&1 || :
 fi
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_post ceph-volume@.service
 %endif
 
@@ -2377,7 +2377,7 @@ fi
 %if 0%{?suse_version}
 %service_del_preun ceph-volume@.service
 %endif
-%if 0%{?fedora} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} || (0%{?oreon} >= 11)
 %systemd_preun ceph-volume@.service
 %endif
 

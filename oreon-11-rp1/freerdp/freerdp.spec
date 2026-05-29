@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 98ee26d96b5212aefd547d5b27105a1213c1d391b6a07bfa05b5273eff0d418e
 
 # Can be rebuilt with FFmpeg support enabled by passing
 # "--with=ffmpeg" to mock/rpmbuild; or by globally

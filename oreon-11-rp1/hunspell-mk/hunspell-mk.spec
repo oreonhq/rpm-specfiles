@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash ff232a710fd42707ad1fe607e9e5999fefde2f7340273b1621f531ac797f5f9e
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -11,7 +11,7 @@ Summary: Macedonian hunspell dictionaries
 %global upstreamid 20051126
 Version: 0.%{upstreamid}
 Release: 36%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/mk_MK.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/mk_MK.zip
 URL: https://wiki.openoffice.org/wiki/Dictionaries
 License: GPL-1.0-or-later
 BuildArch: noarch

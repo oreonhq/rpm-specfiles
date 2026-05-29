@@ -3,7 +3,7 @@
 # -*- rpm-spec -*-
 
 %global with_mingw 0
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %global with_mingw 0%{!?_without_mingw:1}
 %endif
 
@@ -13,7 +13,7 @@ Release: 8%{?dist}
 Summary: libvirt glib integration for events
 License: LGPL-2.1-or-later
 URL: https://libvirt.org/
-Source0:        https://libvirt.org/sources/glib/libvirt-glib-5.0.0.tar.xz
+Source0:        https://libvirt.org/sources/glib/%{name}-%{version}.tar.xz
 
 BuildRequires: meson
 BuildRequires: glib2-devel

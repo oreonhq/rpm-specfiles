@@ -53,7 +53,7 @@ ExcludeArch: %{power64}
 URL:           http://libguestfs.org/
 Source0:        http://libguestfs.org/download/1.59-development/libguestfs-1.59.4.tar.gz
 %if 0%{verify_tarball_signature}
-Source1:        libguestfs-1.59.4.tar.gz.sig
+Source1:        http://libguestfs.org/download/%{source_directory}/%{name}-%{version}.tar.gz.sig
 %endif
 
 # Replacement README file.

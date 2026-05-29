@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8a67ea71ba7be94503008a4f44d5a0a2a2c81fd14b22204965e94fe8b2f9bf41
 
 #
 # All modifications and additions to the file contributed by third parties
@@ -69,21 +69,21 @@ BuildRequires: libxslt glib2-devel libqb-devel
 BuildRequires: systemd
 BuildRequires: which
 
-%if 0%{?fedora} || 0%{?centos} > 7 || 0%{?rhel} > 7 || 0%{?suse_version} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?centos} > 7 || 0%{?rhel} > 7 || 0%{?suse_version} || (0%{?oreon} >= 11)
 BuildRequires: python3-devel
 %else
 BuildRequires: python-devel
 %endif
 
 %ifarch x86_64
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires: python3-pyroute2
 %endif
 %endif
 
-%if 0%{?fedora} || 0%{?centos} || 0%{?rhel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?centos} || 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires: docbook-style-xsl docbook-dtds
-%if 0%{?rhel} == 0 || 0%{?oreon}
+%if 0%{?rhel} == 0 || (0%{?oreon} >= 11)
 BuildRequires: libnet-devel
 %endif
 %endif
@@ -110,24 +110,24 @@ Requires: /usr/sbin/fuser
 %endif
 
 # Filesystem / fs.sh / netfs.sh
-%if 0%{?fedora} > 39 || 0%{?rhel} > 9 || 0%{?suse_version} || 0%{?oreon}
+%if 0%{?fedora} > 39 || 0%{?rhel} > 9 || 0%{?suse_version} || (0%{?oreon} >= 11)
 Requires: /usr/sbin/fsck
 %else
 Requires: /sbin/fsck
 %endif
 Requires: /usr/sbin/fsck.ext2 /usr/sbin/fsck.ext3 /usr/sbin/fsck.ext4
 Requires: /usr/sbin/fsck.xfs
-%if 0%{?fedora} > 40 || 0%{?rhel} > 9 || 0%{?suse_version} || 0%{?oreon}
+%if 0%{?fedora} > 40 || 0%{?rhel} > 9 || 0%{?suse_version} || (0%{?oreon} >= 11)
 Recommends: /usr/sbin/mount.nfs /usr/sbin/mount.nfs4
 %else
-%if 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 Recommends: /sbin/mount.nfs /sbin/mount.nfs4
 %else
 Requires: /sbin/mount.nfs /sbin/mount.nfs4
 %endif
 %endif
-%if (0%{?fedora} && 0%{?fedora} < 33) || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || 0%{?oreon}
-%if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?centos} && 0%{?centos} < 8) || 0%{?oreon}
+%if (0%{?fedora} && 0%{?fedora} < 33) || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?centos} && 0%{?centos} < 9) || 0%{?suse_version} || (0%{?oreon} >= 11)
+%if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?centos} && 0%{?centos} < 8) || (0%{?oreon} >= 11)
 Requires: /usr/sbin/mount.cifs
 %else
 Recommends: /usr/sbin/mount.cifs
@@ -141,16 +141,16 @@ Requires: /sbin/ip
 Requires: /usr/sbin/lvm
 
 # nfsserver / netfs.sh
-%if 0%{?fedora} > 40 || 0%{?rhel} > 9 || 0%{?suse_version} || 0%{?oreon}
+%if 0%{?fedora} > 40 || 0%{?rhel} > 9 || 0%{?suse_version} || (0%{?oreon} >= 11)
 Recommends: /usr/sbin/rpc.statd
 %else
-%if 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 Recommends: /sbin/rpc.statd
 %else
 Requires: /sbin/rpc.statd
 %endif
 %endif
-%if 0%{?fedora} > 40 || 0%{?rhel} > 8 || 0%{?suse_version} || 0%{?oreon}
+%if 0%{?fedora} > 40 || 0%{?rhel} > 8 || 0%{?suse_version} || (0%{?oreon} >= 11)
 Recommends: /usr/sbin/rpc.nfsd /usr/sbin/rpc.mountd
 %else
 Requires: /usr/sbin/rpc.nfsd /usr/sbin/rpc.mountd
@@ -163,7 +163,7 @@ Requires: /usr/sbin/ethtool
 Requires: /sbin/rdisc /usr/sbin/arping /bin/ping /bin/ping6
 
 # nfsexport.sh
-%if 0%{?fedora} > 39 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} > 39 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 Requires: /usr/sbin/findfs
 Requires: /usr/sbin/quotaon /usr/sbin/quotacheck
 %else
@@ -183,15 +183,15 @@ License:	GPL-2.0-or-later
 Summary:	A Monitoring Daemon for Maintaining High Availability Resources
 Obsoletes:	heartbeat-ldirectord <= %{version}
 Provides:	heartbeat-ldirectord = %{version}
-%if 0%{?fedora} > 18 || 0%{?centos} > 6 || 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?fedora} > 18 || 0%{?centos} > 6 || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 BuildRequires: perl-podlators
 %endif
 Requires:       %{SSLeay} perl-libwww-perl perl-MailTools
 Requires:       ipvsadm logrotate
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Requires:	perl-Net-IMAP-Simple-SSL perl-IO-Socket-INET6
 %endif
-%if 0%{?fedora} < 34 || 0%{?oreon}
+%if 0%{?fedora} < 34 || (0%{?oreon} >= 11)
 Requires(post):  /sbin/chkconfig
 Requires(preun): /sbin/chkconfig
 %endif
@@ -214,7 +214,7 @@ See 'ldirectord -h' and linux-ha/doc/ldirectord for more information.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%if 0%{?suse_version} == 0 && 0%{?fedora} == 0 && 0%{?centos} == 0 && 0%{?rhel} == 0 || 0%{?oreon}
+%if 0%{?suse_version} == 0 && 0%{?fedora} == 0 && 0%{?centos} == 0 && 0%{?rhel} == 0 || (0%{?oreon} >= 11)
 %{error:Unable to determine the distribution/version. This is generally caused by missing /etc/rpm/macros.dist. Please install the correct build packages or define the required macros manually.}
 exit 1
 %endif
@@ -225,7 +225,7 @@ if [ ! -f configure ]; then
 	./autogen.sh
 fi
 
-%if 0%{?fedora} >= 11 || 0%{?centos} > 5 || 0%{?rhel} > 5 || 0%{?oreon}
+%if 0%{?fedora} >= 11 || 0%{?centos} > 5 || 0%{?rhel} > 5 || (0%{?oreon} >= 11)
 CFLAGS="$(echo '%{optflags}')"
 %global conf_opt_fatal "--enable-fatal-warnings=no"
 %else
@@ -246,7 +246,7 @@ CFLAGS="${CFLAGS} ${RPM_OPT_FLAGS}"
 export CFLAGS
 
 %configure \
-%if 0%{?fedora} || 0%{?centos} > 7 || 0%{?rhel} > 7 || 0%{?suse_version} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?centos} > 7 || 0%{?rhel} > 7 || 0%{?suse_version} || (0%{?oreon} >= 11)
 	PYTHON="%{__python3}" \
 %endif
 	%{conf_opt_fatal} \
@@ -363,7 +363,7 @@ ccs_update_schema > /dev/null 2>&1 ||:
 %insserv_cleanup
 %endif
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %preun -n ldirectord
 %if %{defined _unitdir}
 %systemd_preun ldirectord.service
@@ -403,7 +403,7 @@ ccs_update_schema > /dev/null 2>&1 ||:
 %if 0%{?suse_version}
 /sbin/rcldirectord
 %endif
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %{_usr}/lib/ocf/resource.d/heartbeat/ldirectord
 %endif
 %endif

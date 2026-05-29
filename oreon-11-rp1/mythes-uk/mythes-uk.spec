@@ -4,7 +4,7 @@ Name: mythes-uk
 Summary: Ukrainian thesaurus
 Version: 1.6.5
 Release: 32%{?dist}
-Source:        http://downloads.sourceforge.net/ispell-uk/spell-uk-1.6.5.tgz
+Source:        http://downloads.sourceforge.net/ispell-uk/spell-uk-%{version}.tgz
 URL: http://sourceforge.net/projects/ispell-uk
 #unused myspell dicts are under GPLv2+ or LGPLv2+ or MPLv1.1
 #unused hyphenation dicts are under GPLv2+

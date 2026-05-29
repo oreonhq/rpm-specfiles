@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 539ccdae201b9437176ffa1d08dbcfe4ba9a1ac9762e32917edffc788abaf053
 
 Name: hyphen-uk
 Summary: Ukrainian hyphenation rules
 %global upstreamid 20030903
 Version: 0.%{upstreamid}
 Release: 34%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/hyph_uk_UA.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_uk_UA.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: GPL-2.0-or-later
 BuildArch: noarch

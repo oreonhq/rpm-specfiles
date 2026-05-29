@@ -24,7 +24,7 @@ Patch4:         %{name}-copy-dunder.patch
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest
-%if %{undefined rhel} || 0%{?oreon}
+%if %{undefined rhel} || (0%{?oreon} >= 11)
 BuildRequires:  python3-pytest-xdist
 %endif
 BuildRequires:  tpm2-tss-devel >= 2.0.0

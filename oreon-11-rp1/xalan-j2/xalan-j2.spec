@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5888df7df67e743e2a65a2e1bb26eea5c9a5a2b7fda650a2926337bd99bb4a7e
 
 Name:           xalan-j2
 Version:        2.7.3
@@ -12,8 +12,8 @@ ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
 Source0:        %{name}-%{version}.tar.gz
-Source2:        https://repo1.maven.org/maven2/xalan/xalan/2.7.3/xalan-2.7.3.pom
-Source3:        https://repo1.maven.org/maven2/xalan/serializer/2.7.3/serializer-2.7.3.pom
+Source2:        https://repo1.maven.org/maven2/xalan/xalan/%{version}/xalan-%{version}.pom
+Source3:        https://repo1.maven.org/maven2/xalan/serializer/%{version}/serializer-%{version}.pom
 Source4:        xsltc-%{version}.pom
 # Remove bundled binaries which cannot be easily verified for licensing
 Source6:        generate-tarball.sh

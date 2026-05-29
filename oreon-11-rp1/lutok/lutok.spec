@@ -7,7 +7,7 @@ Release: 31%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL: http://code.google.com/p/lutok/
-Source0:        http://lutok.googlecode.com/files/lutok-0.4.tar.gz
+Source0:        http://lutok.googlecode.com/files/lutok-%{version}.tar.gz
 Source1: README.Fedora
 Requires: lua >= 5.2
 BuildRequires:  gcc-c++

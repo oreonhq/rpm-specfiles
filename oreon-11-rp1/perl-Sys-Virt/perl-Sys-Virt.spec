@@ -14,7 +14,7 @@ BuildRequires:  gcc
 BuildRequires:  git-core
 BuildRequires:  libvirt-devel >= %{version}
 BuildRequires:  perl-devel
-%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 BuildRequires:  perl-generators
 BuildRequires:  perl-interpreter
 %endif
@@ -35,7 +35,7 @@ BuildRequires:  perl(Time::HiRes)
 BuildRequires:  perl(XML::XPath)
 BuildRequires:  perl(XML::XPath::XMLParser)
 # Optional tests
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  perl(Test::CPAN::Changes)
 BuildRequires:  perl(Test::Pod) >= 1.00
 BuildRequires:  perl(Test::Pod::Coverage) >= 1.00

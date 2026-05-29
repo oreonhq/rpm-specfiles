@@ -1,7 +1,7 @@
 %global source0_hash none
 
 # Allow conditionally building without the reflections library
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 %bcond_with reflections
 %else
 %bcond_without reflections

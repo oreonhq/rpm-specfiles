@@ -1,4 +1,5 @@
 %global source0_hash 418e2de52bd2b2c83549b1fc18150d7a4d30270c9c4ff5cc5b87e98f16b7a33c
+%global source1_hash ec054fde139651b0c3be678b5de3ea9e6d2e586df479c962785f947adc486a0c
 %global source2_hash 1402b5826e9805792a0d33752514822bd134d80a4ce81ac6c1bfd2f35fa1d44c
 %global source3_hash 573a68916ac43c498291eb809ca61e84ad5a2b09f20baa5a69a90ba046e417b2
 %global source4_hash 1e2a310fd192e47c71574519ef571b8f3e858800dd22938e844d3ad21030d2a6
@@ -1002,6 +1003,7 @@ mathtools, stmaryrd, textcomp, tikz-cd, xcolor, and xparse.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
 %(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
 %(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })

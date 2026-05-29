@@ -24,7 +24,7 @@ Patch1000:      fido-device-onboard-fix-metadata.diff
 # Because nobody cares
 ExcludeArch: %{ix86}
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  rust-toolset
 %else
 BuildRequires:  rust-packaging
@@ -46,18 +46,18 @@ BuildRequires:  libpq-devel
 
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %autosetup -a1 -n %{name}-rs-%{version} -N
 %autopatch -p1 -M999
 rm -f Cargo.lock
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %cargo_prep -v vendor
 %else
 %cargo_prep -V 1
 %endif
 %endif
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %autosetup -p1 -n %{name}-rs-%{version}
 %cargo_prep
 %generate_buildrequires
@@ -70,7 +70,7 @@ rm -f Cargo.lock
 
 %{?cargo_license_summary}
 %{?cargo_license} > LICENSE.dependencies
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %cargo_vendor_manifest
 %endif
 
@@ -128,7 +128,7 @@ Requires: dracut
 
 %files -n fdo-init
 %license LICENSE LICENSE.dependencies
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %license cargo-vendor.txt
 %endif
 %{dracutlibdir}/modules.d/52fdo/
@@ -143,7 +143,7 @@ Requires: openssl-libs >= 3.0.1-12
 
 %files -n fdo-owner-onboarding-server
 %license LICENSE LICENSE.dependencies
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %license cargo-vendor.txt
 %endif
 %dir %{_sysconfdir}/fdo
@@ -186,7 +186,7 @@ License: %combined_license
 
 %files -n fdo-rendezvous-server
 %license LICENSE LICENSE.dependencies
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %license cargo-vendor.txt
 %endif
 %dir %{_sysconfdir}/fdo
@@ -221,7 +221,7 @@ Requires: openssl-libs >= 3.0.1-12
 
 %files -n fdo-manufacturing-server
 %license LICENSE LICENSE.dependencies
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %license cargo-vendor.txt
 %endif
 %dir %{_sysconfdir}/fdo
@@ -260,7 +260,7 @@ Requires: cryptsetup
 %{summary}
 
 %files -n fdo-client
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %license cargo-vendor.txt
 %endif
 %license LICENSE LICENSE.dependencies
@@ -283,7 +283,7 @@ License: %combined_license
 %{summary}
 
 %files -n fdo-owner-cli
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %license cargo-vendor.txt
 %endif
 %license LICENSE LICENSE.dependencies
@@ -303,7 +303,7 @@ Requires: fdo-init = %{version}-%{release}
 %{summary}
 
 %files -n fdo-admin-cli
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %license cargo-vendor.txt
 %endif
 %license LICENSE LICENSE.dependencies

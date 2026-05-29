@@ -26,7 +26,7 @@ Url:     http://www.qt.io
 
 %if 0%{?unstable}
 %else
-Source0:        https://download.qt.io/official_releases/qt/%{qt_version}/submodules/qtspeech-everywhere-src-%{qt_version}.tar.xz
+Source0:        https://download.qt.io/archive/qt/%{qt_version}/submodules/qtspeech-everywhere-src-%{qt_version}.tar.xz
 %endif
 
 BuildRequires: gcc-c++

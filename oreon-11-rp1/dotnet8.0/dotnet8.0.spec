@@ -63,9 +63,9 @@ URL:            https://github.com/dotnet/
 %global tarball_name dotnet-%{upstream_tag}-x64-bootstrap
 # The source is generated on a Fedora box via:
 # ./build-dotnet-tarball --bootstrap %%{upstream_tag}
-Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/v8.0.127.tar.gz#/dotnet-8.0.127.tar.gz
+Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{upstream_tag_without_v}.tar.gz
 # Generated via ./build-arm64-bootstrap-tarball
-Source1:        https://github.com/dotnet/dotnet/releases/download/v8.0.127/dotnet-8.0.127.tar.gz.sig
+Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-%{upstream_tag_without_v}.tar.gz.sig
 # Generated manually, same pattern as the arm64 tarball
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 # Generated manually, same pattern as the arm64 tarball
@@ -73,7 +73,7 @@ Source3:        dotnet-prebuilts-%{bootstrap_sdk_version}-s390x.tar.gz
 %else
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 %endif
-Source5:        https://github.com/dotnet/dotnet/releases/download/v8.0.127/release.json
+Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
 
 Source10:       macros.dotnet
 
@@ -102,7 +102,7 @@ Patch7:         runtime-clang-20-support.patch
 ExclusiveArch:  aarch64 ppc64le s390x x86_64
 
 
-%if 0%{?fedora} >= 43 || 0%{?oreon}
+%if 0%{?fedora} >= 43 || (0%{?oreon} >= 11)
 BuildRequires:  clang20
 %else
 BuildRequires:  clang
@@ -137,7 +137,7 @@ BuildRequires:  lttng-ust-devel
 BuildRequires:  make
 #BuildRequires:  nodejs-devel
 BuildRequires:  openssl-devel
-%if 0%{?fedora} >= 41 || 0%{?oreon}
+%if 0%{?fedora} >= 41 || (0%{?oreon} >= 11)
 BuildRequires:  openssl-devel-engine
 %endif
 BuildRequires:  python3
@@ -186,7 +186,7 @@ application to drive everything.
 # code (source or build) is generally version specific. We have kept
 # it around in older versions of RHEL and Fedora. But no reason to
 # continue this mistake.
-%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 ) || 0%{?oreon}
+%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 ) || (0%{?oreon} >= 11)
 
 %package -n dotnet
 
@@ -500,7 +500,7 @@ cp -a %{_libdir}/dotnet previously-built-dotnet
 find previously-built-dotnet
 %endif
 
-%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 # Setting this macro ensures that only clang supported options will be
 # added to ldflags and cflags.
 %global toolchain clang
@@ -535,7 +535,7 @@ CXXFLAGS=$(echo $CXXFLAGS | sed -e 's/ -march=z13//')
 CXXFLAGS=$(echo $CXXFLAGS | sed -e 's/ -mtune=z14//')
 %endif
 
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 # Workaround for https://github.com/dotnet/runtime/issues/109611
 # FIXME: Remove this, and replace with upstream fix
 CFLAGS=$(echo $CFLAGS | sed -e 's/-march=x86-64-v3 //')
@@ -705,7 +705,7 @@ rm %{buildroot}%{_rpmmacrodir}/macros.dotnet
 
 
 %check
-%if 0%{?fedora} > 35 || 0%{?oreon}
+%if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 # lttng in Fedora > 35 is incompatible with .NET
 export COMPlus_LTTng=0
 %endif
@@ -716,7 +716,7 @@ export COMPlus_LTTng=0
 %endif
 
 
-%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 ) || 0%{?oreon}
+%if ( 0%{?fedora} && 0%{?fedora} < 38 ) || ( 0%{?rhel} && 0%{?rhel} < 9 ) || (0%{?oreon} >= 11)
 %files -n dotnet
 # empty package useful for dependencies
 %endif

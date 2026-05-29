@@ -40,7 +40,7 @@ URL:            https://objenesis.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/easymock/objenesis/archive/3.5.tar.gz
+Source0:        https://github.com/easymock/%{name}/archive/%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

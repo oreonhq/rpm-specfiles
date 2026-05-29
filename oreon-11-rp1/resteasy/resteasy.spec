@@ -9,7 +9,7 @@ Release:        41%{?dist}
 Summary:        Framework for RESTful Web services and Java applications
 License:        Apache-2.0
 URL:            http://resteasy.jboss.org/
-Source0:        https://github.com/resteasy/Resteasy/archive/3.0.26.Final/resteasy-3.0.26.Final.tar.gz
+Source0:        https://github.com/resteasy/Resteasy/archive/%{namedversion}/%{name}-%{namedversion}.tar.gz
 Source1:        resteasy-jakarta.patch
 Patch1:         0001-RESTEASY-2559-Improper-validation-of-response-header.patch
 Patch2:         0001-Remove-Log4jLogger.patch
@@ -17,11 +17,11 @@ Patch3:         0001-Replace-javax.activation-imports-with-jakarta.activa.patch
 Patch4:         0001-Update-to-new-jakarta-xml-bind-namespace.patch
 
 BuildArch:      noarch
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 ExclusiveArch:  %{java_arches} noarch
 %endif
 
-%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} < 43 || 0%{?oreon}
+%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} < 43 || (0%{?oreon} >= 11)
 BuildRequires:  maven-local
 %else
 BuildRequires:  maven-local-openjdk21
@@ -33,7 +33,7 @@ BuildRequires:  mvn(jakarta.xml.bind:jakarta.xml.bind-api)
 BuildRequires:  mvn(org.apache.httpcomponents:httpclient)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-source-plugin)
 
-%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?fedora} && 0%{?fedora} < 43 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?fedora} && 0%{?fedora} < 43 || (0%{?oreon} >= 11)
 BuildRequires:  mvn(org.apache.tomcat:tomcat-servlet-api)
 %elif 0%{?rhel}
 BuildRequires:  tomcat9-servlet-4.0-api
@@ -136,7 +136,7 @@ Provides:       %{name}-servlet-initializer = %{version}-%{release}
 %patch 2 -p 1
 %patch 3 -p 1
 %patch 4 -p 1
-%if 0%{?fedora} >= 43 || 0%{?oreon}
+%if 0%{?fedora} >= 43 || (0%{?oreon} >= 11)
 patch -p 1 < %{_sourcedir}/resteasy-jakarta.patch
 %endif
 
@@ -248,7 +248,7 @@ find -name '*.jar' -print -delete
 
 %mvn_install
 
-%if 0%{?rhel} >= 10 || 0%{?fedora} && 0%{?fedora} >= 43 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || 0%{?fedora} && 0%{?fedora} >= 43 || (0%{?oreon} >= 11)
 /usr/bin/javax2jakarta -logLevel=ALL -profile=EE %{buildroot}%{_datadir}/java/resteasy/%{name}-client.jar %{buildroot}%{_datadir}/java/resteasy/%{name}-client.jar
 /usr/bin/javax2jakarta -logLevel=ALL -profile=EE %{buildroot}%{_datadir}/java/resteasy/%{name}-jackson2-provider.jar %{buildroot}%{_datadir}/java/resteasy/%{name}-jackson2-provider.jar
 /usr/bin/javax2jakarta -logLevel=ALL -profile=EE %{buildroot}%{_datadir}/java/resteasy/%{name}-jaxrs.jar  %{buildroot}%{_datadir}/java/resteasy/%{name}-jaxrs.jar

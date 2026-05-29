@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d82b9a627f5657015c27538e1e3f55537c695b12d72f9f44ad146314af940705
 
 %bcond_with bootstrap
 %global pkg_version 11b

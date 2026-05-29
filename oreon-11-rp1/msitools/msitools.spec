@@ -35,7 +35,7 @@ Summary:        Windows Installer tools
 # - subprojects/bats-core/* (not in any binary RPM)
 License:        LGPL-2.1-or-later AND GPL-2.0-or-later AND MS-RL
 URL:            http://ftp.gnome.org/pub/GNOME/sources/%{name}
-Source0:        http://ftp.gnome.org/pub/GNOME/sources/msitools/0.106.58/msitools-0.106.58%{?_version_suffix}.tar.xz
+Source0:        http://ftp.gnome.org/pub/GNOME/sources/%{name}/%{version}/%{name}-%{version}%{?_version_suffix}.tar.xz
 
 Requires:       libgsf >= 1.14.24-2
 
@@ -74,7 +74,7 @@ BuildRequires:  mingw32-winpthreads
 BuildRequires:  mingw64-winpthreads
 BuildRequires:  mingw32-zlib
 BuildRequires:  mingw64-zlib
-%if %{undefined rhel} || 0%{?oreon}
+%if %{undefined rhel} || (0%{?oreon} >= 11)
 BuildRequires:  mingw32-adwaita-icon-theme
 BuildRequires:  mingw64-adwaita-icon-theme
 BuildRequires:  mingw32-atk

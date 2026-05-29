@@ -12,7 +12,7 @@ Release: 1%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://apps.kde.org/kdebugsettings/
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kdebugsettings-26.04.1.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  extra-cmake-modules
@@ -57,7 +57,7 @@ An application to enable/disable qCDebug
 ## currently fails on all RHEL releases
 # RHEL8: https://bugzilla.redhat.com/show_bug.cgi?id=2107277
 # RHEL9: https://bugzilla.redhat.com/show_bug.cgi?id=2107278
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.kdebugsettings.desktop
 appstream-util validate-relax --nonet %{buildroot}%{_kf6_metainfodir}/org.kde.kdebugsettings.*.xml
 %endif

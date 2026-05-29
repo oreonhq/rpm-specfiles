@@ -1,7 +1,7 @@
 %global source0_hash 8fe65cfc0261ed3c8a4395f0524286f5719669fe305f9b03b16cf3684d62cd70
 
 # Run optional tests
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_Test_Harness_enables_optional_test
 %else
 %bcond_with perl_Test_Harness_enables_optional_test
@@ -14,7 +14,7 @@ Release:        5%{?dist}
 Summary:        Run Perl standard test scripts with statistics
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Harness
-Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-3.52.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-%{version}.tar.gz
 # Remove hard-coded shell bangs
 Patch0:         Test-Harness-3.38-Remove-shell-bangs.patch
 BuildArch:      noarch

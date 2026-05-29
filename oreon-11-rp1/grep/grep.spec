@@ -11,7 +11,7 @@ URL: https://www.gnu.org/software/grep/
 
 Source0:        https://ftp.gnu.org/pub/gnu/grep/grep-3.12.tar.xz
 Source1:        https://ftp.gnu.org/gnu/grep/grep-3.12.tar.xz.sig
-Source2: grep-keyring.gpg
+Source2:        https://savannah.gnu.org/project/release-gpgkeys.php?group=grep&download=1'#/grep-keyring.gpg
 Source3: colorgrep.sh
 Source4: colorgrep.csh
 Source5: GREP_COLORS

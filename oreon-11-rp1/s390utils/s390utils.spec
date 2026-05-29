@@ -1,13 +1,14 @@
 %global source0_hash 640c56c4bcf8ce8f2aa65d6a633c19d58370527a5213e71aa76546c930c6a6fb
+%global source1_hash 6ddfcffb26aa34beaa7d57027bf7e26c769cbe3e0723870fa86941512443658b
 
 # secure boot support is for RHEL only
-%if 0%{?rhel} >= 8 || 0%{?oreon}
+%if 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
 %bcond_without signzipl
 %else
 %bcond_with signzipl
 %endif
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond_without pandoc
 %else
 %bcond_with pandoc
@@ -46,12 +47,12 @@ Unicode-DFS-2016 AND
 }
 License:        MIT AND LGPL-2.1-or-later AND %{extra_licenses_from_rust_deps}
 URL:            https://github.com/ibm-s390-linux/s390-tools
-Source0:        https://github.com/ibm-s390-linux/s390-tools/archive/v2.41.0.tar.gz#/s390-tools-2.41.0.tar.gz
+Source0:        https://github.com/ibm-s390-linux/s390-tools/archive/v%{version}.tar.gz#/s390-tools-%{version}.tar.gz
 # To create the vendor tarball:
 #   tar xf s390-tools-%%{version}.tar.gz ; pushd s390-tools-%%{version}/rust ; \
 #   rm -f Cargo.lock && cargo vendor && \
 #   tar Jvcf ../../s390-tools-%%{version}-rust-vendor.tar.xz vendor/ ; popd
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 Source1:        s390-tools-%{version}-rust-vendor.tar.xz
 %endif
 Source5:        https://fedorapeople.org/cgit/sharkcz/public_git/utils.git/tree/zfcpconf.sh
@@ -105,7 +106,7 @@ Requires:       s390utils-se-data = %{epoch}:%{version}-%{release}
 BuildRequires:  make
 BuildRequires:  gcc-c++
 BuildRequires:  glib2-devel
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  libcurl-devel
 BuildRequires:  openssl-devel
 BuildRequires:  rust-toolset
@@ -123,9 +124,10 @@ be used together with the zSeries (s390) Linux kernel and device drivers.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %autosetup -n s390-tools-%{version} -p1
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 pushd rust
 tar xf %{SOURCE1}
 %cargo_prep -v vendor
@@ -143,7 +145,7 @@ echo 'g cpacfstats' > s390utils-cpacfstatsd.conf.usr
 # Create tmpfiles config files
 echo 'd /var/log/ts-shell 2770 root ts-shell' > s390utils-iucvterm.conf.tmp
 
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %generate_buildrequires
 pushd rust >/dev/null
 %cargo_generate_buildrequires
@@ -170,7 +172,7 @@ make \
 pushd rust
 %cargo_license_summary
 %{cargo_license} > LICENSE.dependencies
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %cargo_vendor_manifest
 %endif
 popd
@@ -284,7 +286,7 @@ done
 %doc README.md
 %license LICENSE
 %license rust/LICENSE.dependencies
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %license rust/cargo-vendor.txt
 %endif
 %{_bindir}/genprotimg
@@ -593,7 +595,7 @@ For more information refer to the following publications:
 %files base
 %doc README.md zdev/src/lszdev_usage.txt
 %license rust/LICENSE.dependencies
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %license rust/cargo-vendor.txt
 %endif
 %{_sbindir}/chccwdev

@@ -1,5 +1,5 @@
 %global source0_hash 1c50ea2c97b232f5bee6ac3fab408d64b6f1380f1e289ac278778a7e368e7379
-%global source1_hash 101fbb63ca49506c7d9217ff82d6f344b80df29e81e43105115002888048f72b
+%global source1_hash 86250d0c75fac18453cc569cc360f4e8570d6cf23d3a7f6f692e283dc50476b3
 
 Name: pnm2ppa
 Summary: Drivers for printing to HP PPA printers
@@ -7,7 +7,7 @@ Epoch: 1
 Version: 1.13
 Release: 8%{?dist}
 URL: http://sourceforge.net/projects/pnm2ppa 
-Source:        http://download.sourceforge.net/pnm2ppa/pnm2ppa-1.13.tar.gz
+Source:        http://download.sourceforge.net/pnm2ppa/pnm2ppa-%{version}.tar.gz
 # Following sourcelink is dead currently.
 Source1: http://www.httptech.com/ppa/files/ppa-0.8.6.tar.gz
 # Upstream sync.

@@ -31,14 +31,14 @@
 %global use_system_libpci 1
 %global use_system_libudev 1
 
-%if 0%{?rhel} && 0%{?rhel} == 9 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} == 9 || (0%{?oreon} >= 11)
 %global use_system_re2 0
 %global use_system_libicu 0
 %global use_system_minizip 0
 %global use_system_harfbuzz 0
 %endif
 
-%if 0%{?rhel} && 0%{?rhel} == 10 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} == 10 || (0%{?oreon} >= 11)
 %global use_system_zlib 0
 %endif
 
@@ -49,7 +49,7 @@
 %global enable_pdf_v8 1
 %endif
 
-%if 0%{?fedora} && 0%{?fedora} >= 39 || 0%{?oreon}
+%if 0%{?fedora} && 0%{?fedora} >= 39 || (0%{?oreon} >= 11)
 # Bundled python-six is too old to work with Python 3.12+
 %global use_system_py_six 1
 %endif
@@ -154,7 +154,7 @@ ExclusiveArch: %{qt6_qtwebengine_arches}
 BuildRequires: cmake
 BuildRequires: ninja-build >= 1.7.2
 BuildRequires: make
-%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
 BuildRequires: gcc-toolset-13
 BuildRequires: gcc-toolset-13-libatomic-devel
 %else
@@ -312,7 +312,7 @@ BuildRequires: pkgconfig(nss) >= 3.26
 BuildRequires: pkgconfig(poppler-cpp)
 
 
-%if 0%{?fedora} && 0%{?fedora} >= 39 || 0%{?oreon}
+%if 0%{?fedora} && 0%{?fedora} >= 39 || (0%{?oreon} >= 11)
 BuildRequires: python3-zombie-imp
 %endif
 
@@ -485,7 +485,7 @@ popd
 %patch -P2 -p1 -b .link-pipewire
 %patch -P3 -p1 -b .aarch64-new-stat
 %patch -P4 -p1 -b .use-openh264
-%if 0%{?fedora} > 43 || 0%{?rhel} > 10 || 0%{?oreon}
+%if 0%{?fedora} > 43 || 0%{?rhel} > 10 || (0%{?oreon} >= 11)
 %patch -P5 -p1 -b .chromium-141-glibc-2.42-SYS_SECCOMP
 %endif
 
@@ -549,7 +549,7 @@ src/3rdparty/chromium/build/linux/unbundle/replace_gn_files.py --system-librarie
 
 
 %build
-%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
 . /opt/rh/gcc-toolset-13/enable
 %endif
 export STRIP=strip
@@ -653,7 +653,7 @@ sed -i -e "s|%{version} \${_Qt6WebEngine|%{lesser_version} \${_Qt6WebEngine|" \
   %{buildroot}%{_qt6_libdir}/cmake/Qt6WebEngine*/Qt6WebEngine*Config.cmake
 
 
-%if 0%{?rhel} && 0%{?rhel} < 10 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 10 || (0%{?oreon} >= 11)
 %filetriggerin -- %{_datadir}/myspell
 %else
 %filetriggerin -- %{_datadir}/hunspell

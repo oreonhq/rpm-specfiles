@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e24d4f382d09ad38a6fa0631d084f77d9ddfc2c2836ec8b7193894db90372dd3
 
 Name: mythes-el
 Summary: Greek thesaurus

@@ -13,7 +13,7 @@ Summary:        Process and resource monitor
 
 License:        GPL-2.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:            https://wiki.gnome.org/Apps/SystemMonitor
-Source0: https://download.gnome.org/sources/gnome-system-monitor/50/gnome-system-monitor-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  meson

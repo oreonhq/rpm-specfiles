@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash 87ffd9ff45f0bb8b8c559f2611601ee63d759d249588ccc515f2cf1b349adf0d
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -11,7 +11,7 @@ Summary: Malay hunspell dictionaries
 %global upstreamid 20050117
 Version: 0.%{upstreamid}
 Release: 36%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/ms_MY.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/ms_MY.zip
 URL: https://wiki.openoffice.org/wiki/Dictionaries
 # affix file is under GPL+
 # rest package under GFDL

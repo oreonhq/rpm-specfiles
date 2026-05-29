@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} > 15 || 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?fedora} > 15 || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %global systemd 1
 %global	sysvinit 0
 %else
@@ -8,19 +8,19 @@
 %global	sysvinit 1
 %endif
 
-%if 0%{?fedora} > 15 && 0%{?fedora} < 20 || 0%{?oreon}
+%if 0%{?fedora} > 15 && 0%{?fedora} < 20 || (0%{?oreon} >= 11)
 %global systemdsysv 1
 %else
 %global systemdsysv 0
 %endif
 
-%if 0%{?fedora} > 14 || 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?fedora} > 14 || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %global tmpfiles 1
 %else
 %global tmpfiles 0
 %endif
 
-%if 0%{?fedora} > 9 || 0%{?rhel} > 5 || 0%{?oreon}
+%if 0%{?fedora} > 9 || 0%{?rhel} > 5 || (0%{?oreon} >= 11)
 %global sysvinitdir %{_initddir}
 %else
 %global sysvinitdir %{_initrddir}
@@ -35,7 +35,7 @@ Summary:	Certificate status monitor and PKI enrollment client
 
 License:	GPL-3.0-or-later
 URL:		http://pagure.io/certmonger/
-Source0:        http://releases.pagure.org/certmonger/certmonger-0.79.21.tar.gz
+Source0:        http://releases.pagure.org/certmonger/certmonger-%{version}.tar.gz
 #Source1:	http://releases.pagure.org/certmonger/certmonger-%%{version}.tar.gz.sig
 
 Patch0001:	0001-Replace-deprecated-OpenSSL-3.0.0-function-calls.patch
@@ -53,13 +53,13 @@ BuildRequires:	openldap-devel
 BuildRequires:	krb5-devel
 BuildRequires:	libidn2-devel
 BuildRequires:	dbus-devel, nspr-devel, nss-devel, openssl-devel
-%if 0%{?fedora} >= 12 || 0%{?rhel} >= 6 || 0%{?oreon}
+%if 0%{?fedora} >= 12 || 0%{?rhel} >= 6 || (0%{?oreon} >= 11)
 BuildRequires:	libuuid-devel
 %else
 BuildRequires:	e2fsprogs-devel
 %endif
 BuildRequires:	libtalloc-devel, libtevent-devel
-%if 0%{?rhel} >= 6 || 0%{?fedora} >= 9 || 0%{?oreon}
+%if 0%{?rhel} >= 6 || 0%{?fedora} >= 9 || (0%{?oreon} >= 11)
 BuildRequires:	libcurl-devel
 %else
 BuildRequires:	curl-devel
@@ -69,7 +69,7 @@ BuildRequires:	libxml2-devel
 BuildRequires:  xmlrpc-c-devel
 %endif
 BuildRequires:  jansson-devel
-%if 0%{?rhel} && 0%{?rhel} < 6 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 6 || (0%{?oreon} >= 11)
 BuildRequires:	bind-libbind-devel
 BuildRequires:	mktemp
 %endif
@@ -121,7 +121,7 @@ Requires(post):	/sbin/chkconfig, /sbin/service
 Requires(preun):	/sbin/chkconfig, /sbin/service, dbus, sed
 %endif
 
-%if 0%{?fedora} >= 15 || 0%{?oreon}
+%if 0%{?fedora} >= 15 || (0%{?oreon} >= 11)
 # Certain versions of libtevent have incorrect internal ABI versions.
 Conflicts: libtevent < 0.9.13
 %endif
@@ -134,7 +134,7 @@ system enrolled with a certificate authority (CA) and keeping it enrolled.
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1
 
-%if 0%{?rhel} > 0 || 0%{?oreon}
+%if 0%{?rhel} > 0 || (0%{?oreon} >= 11)
 # Enabled by default for RHEL for bug #765600, still disabled by default for
 # Fedora pending a similar bug report there.
 sed -i 's,^# chkconfig: - ,# chkconfig: 345 ,g' sysvinit/certmonger.in

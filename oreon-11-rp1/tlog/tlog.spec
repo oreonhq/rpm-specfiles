@@ -2,7 +2,7 @@
 
 %global _hardened_build 1
 
-%if 0%{?rhel} && 0%{?rhel} < 7 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 7 || (0%{?oreon} >= 11)
 # If it's RHEL6 and older
 %bcond_with systemd
 %else

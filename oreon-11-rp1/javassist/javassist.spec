@@ -9,7 +9,7 @@ License:        MPL-1.1 OR LGPL-2.1-or-later OR Apache-2.0
 %global upstream_version rel_%(sed s/\\\\./_/g <<<"%{version}")_ga
 
 URL:            https://www.javassist.org/
-Source0:        https://github.com/jboss-javassist/javassist/archive/refs/tags/rel_%(sed.tar.gz
+Source0:        https://github.com/jboss-%{name}/%{name}/archive/refs/tags/%{upstream_version}.tar.gz
 
 Patch:          0001-Remove-test-requiring-older-Java.patch
 

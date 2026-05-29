@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 65d04c7d9155854977623d31982356b465147cc6cfc5f7cda1b2792f226b599c
 
 Name:           xml-commons-apis
 Version:        1.4.01

@@ -56,7 +56,7 @@
 %global source84_hash 0096e2a80cf59af10a9f0919b262116707d647158f8cb66fcb7ad9be303a27af
 
 %define buildall 0
-%if 0%{?fedora} > 21 || 0%{?oreon}
+%if 0%{?fedora} > 21 || (0%{?oreon} >= 11)
 %define omit_plasma5_bits 1
 %endif
 
@@ -81,72 +81,72 @@ BuildArch: noarch
 %else
 %global stable stable
 %endif
-Source1:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ar-17.08.3.tar.xz
-Source2:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-bg-17.08.3.tar.xz
-Source3:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-bs-17.08.3.tar.xz
-Source4:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ca-17.08.3.tar.xz
-Source5:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ca@valencia-17.08.3.tar.xz
-Source6:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-cs-17.08.3.tar.xz
+Source1:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ar-%{version}.tar.xz
+Source2:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-bg-%{version}.tar.xz
+Source3:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-bs-%{version}.tar.xz
+Source4:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ca-%{version}.tar.xz
+Source5:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ca@valencia-%{version}.tar.xz
+Source6:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-cs-%{version}.tar.xz
 #Source7: https://download.kde.org/%%{stable}/applications/%%{version}/src/kde-l10n/%%{name}-csb-%%{version}.tar.xz
 # sorry, not alphabetical, I am lazy -- rex
-Source8:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ast-17.08.3.tar.xz
-Source10:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-da-17.08.3.tar.xz
-Source11:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-de-17.08.3.tar.xz
-Source12:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-el-17.08.3.tar.xz
-Source13:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-en_GB-17.08.3.tar.xz
-Source14:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-eo-17.08.3.tar.xz
-Source15:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-es-17.08.3.tar.xz
-Source16:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-et-17.08.3.tar.xz
-Source17:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-eu-17.08.3.tar.xz
-Source19:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-fa-17.08.3.tar.xz
-Source20:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-fi-17.08.3.tar.xz
-Source21:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-fr-17.08.3.tar.xz
+Source8:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ast-%{version}.tar.xz
+Source10:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-da-%{version}.tar.xz
+Source11:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-de-%{version}.tar.xz
+Source12:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-el-%{version}.tar.xz
+Source13:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-en_GB-%{version}.tar.xz
+Source14:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-eo-%{version}.tar.xz
+Source15:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-es-%{version}.tar.xz
+Source16:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-et-%{version}.tar.xz
+Source17:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-eu-%{version}.tar.xz
+Source19:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-fa-%{version}.tar.xz
+Source20:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-fi-%{version}.tar.xz
+Source21:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-fr-%{version}.tar.xz
 #Source22: https://download.kde.org/%%{stable}/applications/%%{version}/src/kde-l10n/%%{name}-fy-%%{version}.tar.xz
-Source23:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ga-17.08.3.tar.xz
-Source24:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-gl-17.08.3.tar.xz
+Source23:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ga-%{version}.tar.xz
+Source24:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-gl-%{version}.tar.xz
 #Source25: https://download.kde.org/%%{stable}/applications/%%{version}/src/kde-l10n/%%{name}-gu-%%{version}.tar.xz
-Source30:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-he-17.08.3.tar.xz
-Source31:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-hi-17.08.3.tar.xz
-Source32:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-hr-17.08.3.tar.xz
-Source33:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-hu-17.08.3.tar.xz
-Source34:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ia-17.08.3.tar.xz
-Source35:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-id-17.08.3.tar.xz
-Source36:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-is-17.08.3.tar.xz
-Source37:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-it-17.08.3.tar.xz
-Source40:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ja-17.08.3.tar.xz
-Source41:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-kk-17.08.3.tar.xz
-Source42:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-km-17.08.3.tar.xz
+Source30:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-he-%{version}.tar.xz
+Source31:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-hi-%{version}.tar.xz
+Source32:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-hr-%{version}.tar.xz
+Source33:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-hu-%{version}.tar.xz
+Source34:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ia-%{version}.tar.xz
+Source35:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-id-%{version}.tar.xz
+Source36:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-is-%{version}.tar.xz
+Source37:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-it-%{version}.tar.xz
+Source40:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ja-%{version}.tar.xz
+Source41:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-kk-%{version}.tar.xz
+Source42:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-km-%{version}.tar.xz
 #Source43: https://download.kde.org/%%{stable}/applications/%%{version}/src/kde-l10n/%%{name}-kn-%%{version}.tar.xz
-Source44:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ko-17.08.3.tar.xz
-Source45:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-lt-17.08.3.tar.xz
-Source46:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-lv-17.08.3.tar.xz
+Source44:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ko-%{version}.tar.xz
+Source45:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-lt-%{version}.tar.xz
+Source46:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-lv-%{version}.tar.xz
 #Source50: https://download.kde.org/%%{stable}/applications/%%{version}/src/kde-l10n/%%{name}-mai-%%{version}.tar.xz
 #Source51: https://download.kde.org/%%{stable}/applications/%%{version}/src/kde-l10n/%%{name}-mk-%%{version}.tar.xz
-Source52:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-mr-17.08.3.tar.xz
-Source53:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-nb-17.08.3.tar.xz
-Source54:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-nds-17.08.3.tar.xz
-Source55:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-nl-17.08.3.tar.xz
-Source56:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-nn-17.08.3.tar.xz
-Source60:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-pa-17.08.3.tar.xz
-Source61:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-pl-17.08.3.tar.xz
-Source62:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-pt-17.08.3.tar.xz
-Source63:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-pt_BR-17.08.3.tar.xz
-Source64:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ro-17.08.3.tar.xz
-Source65:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ru-17.08.3.tar.xz
-Source70:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-sk-17.08.3.tar.xz
+Source52:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-mr-%{version}.tar.xz
+Source53:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-nb-%{version}.tar.xz
+Source54:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-nds-%{version}.tar.xz
+Source55:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-nl-%{version}.tar.xz
+Source56:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-nn-%{version}.tar.xz
+Source60:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-pa-%{version}.tar.xz
+Source61:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-pl-%{version}.tar.xz
+Source62:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-pt-%{version}.tar.xz
+Source63:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-pt_BR-%{version}.tar.xz
+Source64:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ro-%{version}.tar.xz
+Source65:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ru-%{version}.tar.xz
+Source70:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-sk-%{version}.tar.xz
 #Source71: https://download.kde.org/%%{stable}/applications/%%{version}/src/kde-l10n/%%{name}-si-%%{version}.tar.xz
-Source72:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-sl-17.08.3.tar.xz
-Source73:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-sr-17.08.3.tar.xz
-Source74:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-sv-17.08.3.tar.xz
+Source72:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-sl-%{version}.tar.xz
+Source73:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-sr-%{version}.tar.xz
+Source74:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-sv-%{version}.tar.xz
 #Source75: https://download.kde.org/%%{stable}/applications/%%{version}/src/kde-l10n/%%{name}-tg-%%{version}.tar.xz
 #Source76: https://download.kde.org/%%{stable}/applications/%%{version}/src/kde-l10n/%%{name}-th-%%{version}.tar.xz
-Source77:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-tr-17.08.3.tar.xz
-Source78:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-ug-17.08.3.tar.xz
-Source80:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-uk-17.08.3.tar.xz
+Source77:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-tr-%{version}.tar.xz
+Source78:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-ug-%{version}.tar.xz
+Source80:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-uk-%{version}.tar.xz
 #Source81: https://download.kde.org/%%{stable}/applications/%%{version}/src/kde-l10n/%%{name}-vi-%%{version}.tar.xz
-Source82:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-wa-17.08.3.tar.xz
-Source83:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-zh_CN-17.08.3.tar.xz
-Source84:        https://download.kde.org/stable/applications/17.08.3/src/kde-l10n/kde-l10n-zh_TW-17.08.3.tar.xz
+Source82:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-wa-%{version}.tar.xz
+Source83:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-zh_CN-%{version}.tar.xz
+Source84:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-l10n/%{name}-zh_TW-%{version}.tar.xz
 Source1000: subdirs-kde-l10n
 
 BuildRequires: cmake
@@ -171,7 +171,7 @@ Conflicts: kde-i18n < 1:3.5.10-13
 # khelpcenter moved to kde-apps-16.04, and so did it's translations
 Conflicts: khelpcenter < 1:16.04
 
-%if 0%{?fedora} > 22 || 0%{?oreon}
+%if 0%{?fedora} > 22 || (0%{?oreon} >= 11)
 %global kdenlive 1
 Conflicts: kdenlive < 15.08
 %endif

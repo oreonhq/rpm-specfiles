@@ -14,7 +14,7 @@ URL:            https://jakarta.ee/specifications/activation/2.1/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/jaf-api/archive/2.1.3/jaf-2.1.3.tar.gz
+Source0:        https://github.com/jakartaee/jaf-api/archive/%{version}/jaf-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

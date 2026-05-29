@@ -1,12 +1,12 @@
 %global source0_hash c7cb9d023f6e5cd01d76568c3590303ea3ecb4ebe9535b31862957846f5e898a
 
 ## include -nepomuk subpkg support
-%if 0%{?fedora} < 24 || 0%{?oreon}
+%if 0%{?fedora} < 24 || (0%{?oreon} >= 11)
 %define nepomuk 1
 %endif
 
 ## favor kf5-kactivities
-%if 0%{?fedora} > 21 || 0%{?oreon}
+%if 0%{?fedora} > 21 || (0%{?oreon} >= 11)
 %define plasma5 1
 %endif
 
@@ -24,14 +24,14 @@ URL:     https://projects.kde.org/projects/kde/kdelibs/kactivities
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/stable/4.13.3/src/kactivities-4.13.3.tar.xz
+Source0:        https://download.kde.org/%{stable}/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: kdelibs4-devel >= %{version}
 %if ! 0%{?nepomuk}
 Obsoletes: kactivities-nepomuk < 4.13.3-20
 %endif
 
-%if 0%{?rhel} == 6 || 0%{?oreon}
+%if 0%{?rhel} == 6 || (0%{?oreon} >= 11)
 # see http://people.centos.org/tru/devtools-1.1/
 BuildRequires: devtoolset-1.1-gcc-c++
 %global devtoolset 1

@@ -30,7 +30,7 @@ Release:        3%{?dist}
 %forgemeta
 URL:            %{forgeurl}
 
-Source0:        https://github.com/krakjoe/apcu/archive/v5.1.28/apcu-5.1.28.tar.gz
+Source0:        https://pecl.php.net/get/%{sources}.tgz
 Source1:        %{pecl_name}.ini
 Source2:        %{pecl_name}-panel.conf
 Source3:        %{pecl_name}.conf.php

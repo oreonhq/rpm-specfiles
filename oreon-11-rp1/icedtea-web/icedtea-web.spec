@@ -4,7 +4,7 @@
 %global debug_package %{nil}
 
 # Build- and run-time version of OpenJDK Java
-%if 0%{?fedora} || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global java_version 21
 %else
 %global java_version 17
@@ -18,7 +18,7 @@ Release:           11%{?dist}
 # licensecheck -r --shortname-scheme=spdx . | sed -e 's/.*: //' | sort -u
 License:           GPL-2.0-only AND GPL-2.0-only WITH Classpath-exception-2.0 AND GPL-2.0-or-later AND GPL-2.0-or-later WITH Classpath-exception-2.0 AND LGPL-2.1-or-later AND Zlib
 URL:               https://github.com/AdoptOpenJDK/IcedTea-Web
-Source0:        https://github.com/AdoptOpenJDK/IcedTea-Web/archive/icedtea-web-1.8.8/icedtea-web-1.8.8.tar.gz
+Source0:        https://github.com/AdoptOpenJDK/IcedTea-Web/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
 # Upstream changes since IcedTea-Web 1.8.8
 Patch0:            https://github.com/AdoptOpenJDK/IcedTea-Web/compare/icedtea-web-1.8.8...af67182516b22e8caa3ff2c3c81be9ef9233563f.patch#/icedtea-web-1.8.8-upstream-changes.patch
 # Remove dependency to dunce (normalizes Windows paths to the most compatible format)

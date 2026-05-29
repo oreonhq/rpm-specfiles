@@ -1,10 +1,12 @@
 %global source0_hash 25af66dfcbd3b1609311d0ca46f37fc586891fae621377aadbb2c9c4d7d935d2
+%global source1_hash 0dbc69c10f8a6aea946e7410b256ab5596b6d3f2e26b8a8410f6b72a2f5805e6
+%global source2_hash 090f8ce45fb88d7b6048c1f8c7d26a39ffbc1ae57dcfec02ef8b20a03ee63a3b
 
 # Specify if the frontend will be compiled as part of the build or
 # is attached as a webpack tarball (in case of an unsuitable nodejs version on the build system)
 %define compile_frontend 0
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %define enable_fips_mode 1
 %else
 %define enable_fips_mode 0
@@ -34,7 +36,7 @@ License:          AGPL-3.0-only
 URL:              https://grafana.org
 
 # Source0 contains the tagged upstream sources
-Source0:        https://github.com/grafana/grafana/archive/v10.2.6/grafana-10.2.6.tar.gz
+Source0:        https://github.com/grafana/grafana/archive/v%{version}/%{name}-%{version}.tar.gz
 
 # Source1 contains the bundled Go and Node.js dependencies
 # Note: In case there were no changes to this tarball, the NVR of this tarball
@@ -114,7 +116,7 @@ BuildRequires:    openssl-devel
 # grafana-server service daemon uses systemd
 %{?systemd_requires}
 
-%if 0%{?fedora} >= 42 || 0%{?oreon}
+%if 0%{?fedora} >= 42 || (0%{?oreon} >= 11)
 %elif 0%{?fedora} || 0%{?rhel} >= 9
 Requires(pre):    shadow-utils
 %endif
@@ -123,7 +125,7 @@ Requires(pre):    shadow-utils
 BuildRequires:    shared-mime-info
 Requires:         shared-mime-info
 
-%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || 0%{?oreon}
+%if 0%{?fedora} >= 35 || 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
 # This ensures that the grafana-selinux package and all its dependencies are
 # not pulled into containers and other systems that do not use SELinux
 Requires: (grafana-selinux = %{version}-%{release} if selinux-policy-any)
@@ -131,7 +133,7 @@ Requires: (grafana-selinux = %{version}-%{release} if selinux-policy-any)
 Requires: grafana-selinux = %{version}-%{release}
 %endif
 
-%if 0%{?fedora} || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 Recommends: grafana-pcp
 %endif
 
@@ -760,6 +762,8 @@ SELinux policy module supporting grafana
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
+%(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
 %setup -q -T -D -b 0
 %setup -q -T -D -b 1
 %if %{compile_frontend} == 0
@@ -887,7 +891,7 @@ do
     %{buildroot}%{_datadir}/selinux/devel/include/distributed/grafana.if
 done
 
-%if 0%{?fedora} >= 42 || 0%{?oreon}
+%if 0%{?fedora} >= 42 || (0%{?oreon} >= 11)
 %elif 0%{?fedora} || 0%{?rhel} >= 9
 %pre
 %sysusers_create_compat %{SOURCE3}

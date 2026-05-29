@@ -12,7 +12,7 @@ URL:            https://relaxng.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/java-schema-utilities/relaxng-datatype-java/archive/refs/tags/relaxngDatatype-2011.1.tar.gz
+Source0:        https://github.com/java-schema-utilities/%{name}/archive/refs/tags/relaxngDatatype-%{version}.tar.gz
 Source1:        copying.txt
 
 BuildRequires:  maven-local-openjdk25

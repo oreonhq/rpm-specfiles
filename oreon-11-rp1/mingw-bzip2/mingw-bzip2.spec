@@ -10,7 +10,7 @@ Summary:        MinGW port of bzip2 file compression utility
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://www.bzip.org/
-Source0:        http://www.bzip.org/1.0.8/bzip2-1.0.8.tar.gz
+Source0:        http://www.bzip.org/%{version}/bzip2-%{version}.tar.gz
 
 BuildArch:      noarch
 

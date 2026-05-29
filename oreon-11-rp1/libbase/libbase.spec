@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 27ef2fa5f9e3a5ce85cfc1308600a7a93c24e25a33d4d63ea57ab308779453df
 
 Name: libbase
 Version: 1.1.3
@@ -10,7 +10,7 @@ License: LGPL-2.1-only
 #to simplify the licensing
 Source: %{name}-%{version}-jarsdeleted.zip
 URL: http://reporting.pentaho.org/
-%if 0%{?fedora} >= 43 || 0%{?oreon}
+%if 0%{?fedora} >= 43 || (0%{?oreon} >= 11)
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils
 Requires: java-25-headless, jpackage-utils
 %else

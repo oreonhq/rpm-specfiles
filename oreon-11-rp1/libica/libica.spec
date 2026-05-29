@@ -8,7 +8,7 @@ Version: 4.4.1
 Release: 3%{?dist}
 License: CPL-1.0
 URL: https://github.com/opencryptoki/
-Source0:        https://github.com/opencryptoki/libica/archive/v4.4.1/libica-4.4.1.tar.gz
+Source0:        https://github.com/opencryptoki/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 # annotate assembler source
 # https://bugzilla.redhat.com/show_bug.cgi?id=1630582
 # https://github.com/opencryptoki/libica/pull/24
@@ -92,7 +92,7 @@ fi
 %{_bindir}/icainfo-cex
 %{_bindir}/icastats
 %if %{with_fips}
-%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 # openssl 3.0 is available since Fedora 36 and RHEL 9
 %exclude %{_sysconfdir}/libica/openssl3-fips.cnf
 %endif

@@ -1,4 +1,4 @@
-%global source0_hash 03877d8c31ab4b85e344f3e53c8465afb7acd6a13111354514556eca4aad9172
+%global source0_hash 70518c5f824700d9895e4e4d8708d42fc18e80476abaae660ea22c8b961eb568
 
 Version:        0.003
 Release:        45%{?dist}
@@ -21,7 +21,7 @@ Tibetan text. It is based on Bhutanese manuscript examples, supports the
 Unicode and the Chinese encoding for Tibetan.
 The font supports the standard combinations used in most texts.}
 
-Source0:        http://chris.fynn.googlepages.com/jomolhari-alpha003c.zip
+Source0:        http://chris.fynn.googlepages.com/%{archivename}.zip
 Source1:        65-0-%{fontpkgname}.conf 
 
 %fontpkg

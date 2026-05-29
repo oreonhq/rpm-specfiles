@@ -16,7 +16,7 @@ URL:            https://voikko.puimula.org/
 # and then
 #  gpg2 --export --export-options export-minimal AC5D65F10C8596D7E2DAE2633D309B604AE3942E > gpgkey-AC5D65F10C8596D7E2DAE2633D309B604AE3942E.gpg
 Source0:        https://www.puimula.org/voikko-sources/voikko-fi/voikko-fi-2.5.tar.gz
-Source1:        voikko-fi-2.5.tar.gz.asc
+Source1:        https://www.puimula.org/voikko-sources/%{name}/%{name}-%{version}.tar.gz.asc
 Source2:        gpgkey-AC5D65F10C8596D7E2DAE2633D309B604AE3942E.gpg
 
 BuildRequires:  make

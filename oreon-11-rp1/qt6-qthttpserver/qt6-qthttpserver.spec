@@ -21,7 +21,7 @@ Url:     http://qt-project.org/
 
 %if 0%{?unstable}
 %else
-Source0:        https://download.qt.io/official_releases/qt/%{qt_version}/submodules/qthttpserver-everywhere-src-%{qt_version}.tar.xz
+Source0:        https://download.qt.io/archive/qt/%{qt_version}/submodules/qthttpserver-everywhere-src-%{qt_version}.tar.xz
 %endif
 
 BuildRequires: cmake

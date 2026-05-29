@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash eac36e05cf29d13ac4986c6e9d5a505fbc66315bd4a448fe3309b5b10d373ad1
 
 Name: librepository
 Version: 1.1.3

@@ -11,7 +11,7 @@ Release: 29%{?dist}
 # Automatically converted from old format: LGPLv2 - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2
 URL: http://www.musicbrainz.org/
-Source0:        https://github.com/metabrainz/libmusicbrainz/releases/download/release-5.1.0/libmusicbrainz-5.1.0.tar.gz
+Source0:        https://github.com/metabrainz/libmusicbrainz/releases/download/release-5.1.0/libmusicbrainz-%{version}.tar.gz
 # Filed upstream as http://tickets.musicbrainz.org/browse/LMB-41
 Patch0: doxygen.patch
 Patch1: 0001-Don-t-emit-errors-unless-compiled-for-debug.patch

@@ -11,8 +11,8 @@ URL:            https://github.com/apiguardian-team/apiguardian
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/apiguardian-team/apiguardian/archive/r1.1.2.tar.gz
-Source100:        https://repo1.maven.org/maven2/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.pom
+Source0:        https://github.com/apiguardian-team/apiguardian/archive/r%{version}.tar.gz
+Source100:        https://repo1.maven.org/maven2/org/apiguardian/apiguardian-api/%{version}/apiguardian-api-%{version}.pom
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

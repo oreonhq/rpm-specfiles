@@ -25,7 +25,7 @@ Summary:        RPC protocol definitions
 # Automatically converted from old format: BSD and LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-LGPLv2+
 Url:            https://github.com/thkukuk/rpcsvc-proto
-Source0:        https://github.com/thkukuk/rpcsvc-proto/releases/v1.4/rpcsvc-proto-1.4.tar.xz
+Source0:        https://github.com/thkukuk/rpcsvc-proto/releases/v%{version}/%{name}-%{version}.tar.xz
 
 Conflicts: glibc-headers < 2.26.9000-36
 Conflicts: glibc-common < 2.26.9000-36

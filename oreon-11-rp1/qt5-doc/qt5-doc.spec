@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ccceb68090754c60cbc09ebcd662a3224820fb4d1c9c3590ca45f8f14a98ab83
 
 Name:    qt5-doc
 Summary: Qt5 - Complete documentation

@@ -11,7 +11,7 @@ URL:            https://www.osgi.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://docs.osgi.org/download/r8/osgi.core-8.0.0.jar
+Source0:        https://docs.osgi.org/download/r8/osgi.core-%{version}.jar
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

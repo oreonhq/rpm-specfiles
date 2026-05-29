@@ -16,7 +16,7 @@ Summary:        OpenGL manpages
 # that is allowed
 License:        Apache-2.0 AND HPND AND HPND-sell-variant AND MIT AND OpenPBS-2.3 AND SGI-B-2.0 AND W3C-19980720 AND X11
 URL:            https://github.com/KhronosGroup/OpenGL-Refpages
-Source0:        https://github.com/KhronosGroup/OpenGL-Refpages/archive/4547332f0f27d98601a8f5732ce8e85e09dbdb93/gl-manpages-%(c=4547332f0f27d98601a8f5732ce8e85e09dbdb93;.tar.gz
+Source0:        https://github.com/KhronosGroup/OpenGL-Refpages/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 # FIXME: Bundle mathml and the Oasis dbmathl until they are packaged
 Source2:        http://www.oasis-open.org/docbook/xml/mathml/1.1CR1/dbmathml.dtd
 Source3:        http://www.w3.org/Math/DTD/mathml2.tgz

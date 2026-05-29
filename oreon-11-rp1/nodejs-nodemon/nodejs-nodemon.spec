@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6eb10e336e4e17838eaaabe1f4a02657bc846649d738a2902ac4edc1b2c70556
 
 %{?nodejs_find_provides_and_requires}
 %global npm_name nodemon

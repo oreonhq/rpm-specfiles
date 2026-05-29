@@ -11,7 +11,7 @@ URL:            https://www.osgi.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://osgi.org/download/r7/osgi.cmpn-7.0.0.jar
+Source0:        https://osgi.org/download/r7/osgi.cmpn-%{version}.jar
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

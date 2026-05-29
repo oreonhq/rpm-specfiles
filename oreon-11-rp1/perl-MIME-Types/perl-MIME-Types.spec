@@ -1,14 +1,14 @@
 %global source0_hash f31b1666bdf420b4b65c373ce0129ee349dd24bab4cd16c7f01b698fe450be6f
 
 # No Mojolicious in EPEL
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %global have_mojo 1
 %else
 %global have_mojo 0
 %endif
 
 # Run extra test
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_with perl_MIME_Types_enables_extra_test
 %else
 %bcond_without perl_MIME_Types_enables_extra_test

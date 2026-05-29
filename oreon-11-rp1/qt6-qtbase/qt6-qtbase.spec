@@ -8,13 +8,13 @@
 %global no_sse2  1
 %endif
 
-%if 0%{?rhel} && 0%{?rhel} < 9 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 9 || (0%{?oreon} >= 11)
 %ifarch %{ix86}
 %global no_sse2  1
 %endif
 %endif
 
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 # Use mutter on RHEL 10+ since it's the only shipped compositor
 %global wlheadless_compositor mutter
 %else
@@ -31,7 +31,7 @@
 %global qt_module qtbase
 
 # use external qt_settings pkg
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %global qt_settings 1
 %endif
 
@@ -59,7 +59,7 @@ Url:     http://qt-project.org/
 
 %if 0%{?unstable}
 %else
-Source0:        https://download.qt.io/official_releases/qt/%{qt_version}/submodules/qtbase-everywhere-src-%{qt_version}.tar.xz
+Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1227295
@@ -117,12 +117,12 @@ BuildRequires: ninja-build
 BuildRequires: cups-devel
 BuildRequires: desktop-file-utils
 BuildRequires: findutils
-%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?epel} || (0%{?oreon} >= 11)
 BuildRequires: double-conversion-devel
 %else
 Provides:      bundled(double-conversion)
 %endif
-%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?epel} || (0%{?oreon} >= 11)
 BuildRequires: libb2-devel
 %else
 Provides:      bundled(libb2)
@@ -133,7 +133,7 @@ BuildRequires: libmng-devel
 BuildRequires: libtiff-devel
 BuildRequires: libzstd-devel
 BuildRequires: mtdev-devel
-%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?epel} || (0%{?oreon} >= 11)
 BuildRequires: tslib-devel
 %endif
 BuildRequires: pkgconfig(alsa)
@@ -201,7 +201,7 @@ Requires:      qt6-filesystem
 Requires: %{name}-common = %{version}-%{release}
 
 ## Sql drivers
-%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?epel} || (0%{?oreon} >= 11)
 %global ibase 1
 %endif
 
@@ -290,7 +290,7 @@ Requires: %{name}%{?_isa} = %{version}-%{release}
 
 %package mysql
 Summary: MySQL driver for Qt6's SQL classes
-%if 0%{?fedora} > 27 || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} > 27 || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 BuildRequires: mariadb-connector-c-devel
 %else
 BuildRequires: mysql-devel
@@ -902,7 +902,7 @@ make check -k ||:
 %{_qt6_plugindir}/generic/libqevdevtabletplugin.so
 %{_qt6_plugindir}/generic/libqevdevtouchplugin.so
 %{_qt6_plugindir}/generic/libqlibinputplugin.so
-%if 0%{?fedora} || 0%{?epel} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?epel} || (0%{?oreon} >= 11)
 %{_qt6_plugindir}/generic/libqtslibplugin.so
 %endif
 %{_qt6_plugindir}/generic/libqtuiotouchplugin.so

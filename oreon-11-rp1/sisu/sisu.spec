@@ -13,7 +13,7 @@ URL:            https://eclipse.org/sisu/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-sisu/sisu-project/archive/refs/tags/milestones/0.9.0.M3.tar.gz#/sisu-0.9.0~M3.tar.gz
+Source0:        https://github.com/eclipse-sisu/sisu-project/archive/refs/tags/milestones/0.9.0.M3.tar.gz#/sisu-%{version}.tar.gz
 
 Patch:          0001-Add-ASM-support-for-Java-24-and-25.patch
 

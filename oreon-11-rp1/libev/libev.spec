@@ -10,7 +10,7 @@ Summary:          High-performance event loop/event model with lots of features
 
 License:          BSD-2-Clause OR GPL-2.0-or-later
 URL:              http://software.schmorp.de/pkg/libev.html
-Source0:        http://dist.schmorp.de/libev/Attic/libev-4.33.tar.gz
+Source0:        http://dist.schmorp.de/libev/Attic/%{name}-%{version}.tar.gz
 
 BuildRequires:    autoconf
 BuildRequires:    automake

@@ -23,7 +23,7 @@ Requires(post):	systemd
 Requires(preun):	systemd
 Requires(postun):	systemd
 
-Source0:        https://github.com/open-power/skiboot/archive/v7.1/skiboot-7.1.tar.gz
+Source0:        https://github.com/open-power/%{project}/archive/v%{version}/%{project}-%{version}.tar.gz
 Source1: opal-prd-rsyslog
 Source2: opal-prd-logrotate
 Source3: ffspart.man

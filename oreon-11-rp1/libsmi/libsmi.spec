@@ -20,7 +20,7 @@ Summary:	A library to access SMI MIB information
 # as part of the larger libsmi work, so we are choosing to use it under the core libsmi licenses instead.
 License:	TCL AND BSD-3-Clause
 URL:		http://www.ibr.cs.tu-bs.de/projects/libsmi/index.html
-Source0:        https://gitlab.ibr.cs.tu-bs.de/nm/libsmi/-/archive/c5830721/libsmi-c5830721.tar.gz
+Source0:        https://gitlab.ibr.cs.tu-bs.de/nm/libsmi/-/archive/%{commit}/libsmi-%{commit}.tar.gz
 Source1:	smi.conf
 Source2:	IETF-MIB-LICENSE.txt
 Patch0:		libsmi-0.4.8-wget111.patch

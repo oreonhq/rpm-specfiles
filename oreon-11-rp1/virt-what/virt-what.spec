@@ -3,6 +3,7 @@
 %global source2_key_fpr F7774FB1AD074A7E8C8767EA91738F73E1B768A0
 
 
+
 Name:           virt-what
 Version:        1.27
 Release:        5%{?dist}
@@ -10,8 +11,8 @@ Summary:        Detect if we are running in a virtual machine
 License:        GPL-2.0-or-later
 
 URL:            http://people.redhat.com/~rjones/virt-what/
-Source0:        http://people.redhat.com/~rjones/virt-what/files/virt-what-1.27.tar.gz
-Source1:        http://people.redhat.com/~rjones/virt-what/files/virt-what-1.27.tar.gz.sig
+Source0:        http://people.redhat.com/~rjones/virt-what/files/%{name}-%{version}.tar.gz
+Source1:        http://people.redhat.com/~rjones/virt-what/files/%{name}-%{version}.tar.gz.sig
 
 # Keyring used to verify tarball signature.
 Source2:       libguestfs.keyring

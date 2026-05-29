@@ -1,4 +1,5 @@
 %global source0_hash 35331f75689863e5be595f2bb04a8bc934ce734b8d76fa5d6aeb4d85424e8996
+%global source1_hash fd6cf1da31f5e7a1ddc91799d3bfd174f7c8612468bffe58b37d1bed1c12d71f
 
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
@@ -30,7 +31,7 @@ BuildRequires: python3
 BuildRequires: python3-rpm-macros
 BuildRequires: tar
 BuildRequires: xz
-%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || 0%{?oreon}
+%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || (0%{?oreon} >= 11)
 BuildRequires: systemd-rpm-macros
 %endif
 Requires:      nspr
@@ -40,11 +41,11 @@ Requires:      nss-util
 Requires:      popt
 Requires:      rpm
 ExclusiveArch: %{ix86} x86_64 ia64 aarch64 %{arm} riscv64
-%if 0%{?rhel} == 7 || 0%{?oreon}
+%if 0%{?rhel} == 7 || (0%{?oreon} >= 11)
 BuildRequires: rh-signing-tools >= 1.20-2
 %endif
 
-Source0:        https://github.com/rhboot/pesign/releases/download/116/pesign-116.tar.bz2
+Source0:        https://github.com/rhboot/pesign/releases/download/%{version}/pesign-%{version}.tar.bz2
 Source1: certs.tar.xz
 Source2: pesign.py
 Source3: pesign.patches
@@ -58,6 +59,7 @@ well as other associated tools.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -T -b 0
 %setup -q -T -D -c -n pesign-%{version}/ -a 1
 git init
@@ -81,7 +83,7 @@ make PREFIX=%{_prefix} LIBDIR=%{_libdir}
 mkdir -p %{buildroot}/%{_libdir}
 make PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot} \
 	install
-%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || 0%{?oreon}
+%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || (0%{?oreon} >= 11)
 make PREFIX=%{_prefix} LIBDIR=%{_libdir} INSTALLROOT=%{buildroot} \
 	install_systemd
 %endif
@@ -111,7 +113,7 @@ install -m 0755 %{SOURCE2} %{buildroot}%{python3_sitelib}/mockbuild/plugins/
 install -m0644 -D pesign.sysusers.conf %{buildroot}%{_sysusersdir}/pesign.conf
 
 
-%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || 0%{?oreon}
+%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || (0%{?oreon} >= 11)
 %post
 %systemd_post pesign.service
 
@@ -157,7 +159,7 @@ certutil -d %{_sysconfdir}/pki/pesign/ -X -L > /dev/null
 %dir %attr(0770, pesign, pesign) %{_rundir}/%{name}
 %ghost %attr(0660, -, -) %{_rundir}/%{name}/socket
 %ghost %attr(0660, -, -) %{_rundir}/%{name}/pesign.pid
-%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || 0%{?oreon}
+%if 0%{?rhel} >= 7 || 0%{?fedora} >= 17 || (0%{?oreon} >= 11)
 %{_tmpfilesdir}/pesign.conf
 %{_unitdir}/pesign.service
 %endif

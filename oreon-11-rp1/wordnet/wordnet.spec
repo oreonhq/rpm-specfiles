@@ -8,7 +8,7 @@ Summary:        A lexical database for the English language
 
 License:        MIT and GPL-2.0-or-later
 URL:            http://wordnet.princeton.edu/
-Source0:        http://wordnetcode.princeton.edu/3.0/WordNet-3.0.tar.bz2
+Source0:        http://wordnetcode.princeton.edu/%{version}/WordNet-%{version}.tar.bz2
 # Updated database
 Source1:        http://wordnetcode.princeton.edu/wn3.1.dict.tar.gz
 Patch0:         wordnet-3.0-CVE-2008-2149.patch
@@ -99,7 +99,7 @@ rm -rf dict/dbfiles
 libtoolize && aclocal
 autoupdate
 autoreconf -i
-%if 0%{?fedora} >= 21 || 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?fedora} >= 21 || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 export CFLAGS="%{?optflags} -DUSE_INTERP_RESULT"
 export CXXFLAGS="%{?optflags} -DUSE_INTERP_RESULT"
 %endif

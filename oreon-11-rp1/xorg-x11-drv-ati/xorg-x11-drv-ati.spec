@@ -13,7 +13,7 @@ Release:   6%{?dist}
 URL:       http://www.x.org
 License:   MIT
 
-Source0:        https://www.x.org/pub/individual/driver/xf86-video-ati-22.0.0.tar.xz
+Source0:        https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
 Source30:   xserver-sdk-abi-requires
 
 ExcludeArch: s390 s390x
@@ -33,8 +33,8 @@ BuildRequires:  pkgconfig(libudev)
 BuildRequires:  pkgconfig(xorg-server) >= 1.16
 
 Requires: libdrm >= 2.4.89
-Requires: Xorg %(xserver-sdk-abi-requires ansic)
-Requires: Xorg %(xserver-sdk-abi-requires videodrv)
+Requires: Xorg %(sh %{SOURCE30} ansic)
+Requires: Xorg %(sh %{SOURCE30} videodrv)
 
 %description 
 X.Org X11 ati video driver.

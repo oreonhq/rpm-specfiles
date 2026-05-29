@@ -20,7 +20,7 @@ BuildOption(install):   -l pytest_subtests
 # (For similar reasons, we don’t pass -t to %%pyproject_buildrequires and we
 # run tests via %%pytest directly instead of via %%tox: tox is unwanted in
 # RHEL/ELN, and the benefit of using it in this package is small.)
-%if %{undefined rhel} || 0%{?oreon}
+%if %{undefined rhel} || (0%{?oreon} >= 11)
 BuildRequires:  python3dist(pytest-xdist)
 %endif
 

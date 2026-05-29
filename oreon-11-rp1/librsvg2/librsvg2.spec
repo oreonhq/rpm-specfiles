@@ -1,10 +1,11 @@
 %global source0_hash c0c1367e381e1ae4842a78f1b57c656ff19b25637e3a6527cb44ae5a1cc68d65
+%global source1_hash 7595241971d88bc2757d1ff725798e496dc0b1711365c038664f40bec766f236
 
 %bcond check 1
 
 # Use bundled deps as we don't ship the exact right versions for all the
 # required rust libraries
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global bundled_rust_deps 1
 %else
 %global bundled_rust_deps 0
@@ -50,7 +51,7 @@ License:        %{shrink:
     (Unlicense OR MIT)
     }
 URL:            https://wiki.gnome.org/Projects/LibRsvg
-Source0:        https://download.gnome.org/sources/librsvg/2.62/librsvg-2.62.2.tar.xz
+Source0:        https://download.gnome.org/sources/librsvg/2.62/librsvg-%{version}.tar.xz
 # upstream dropped vendoring since 2.55.0 (GNOME/librsvg#718), to create:
 #   tar xf librsvg-%%{version}.tar.xz ; pushd librsvg-%%{version} ; \
 #   cargo vendor --versioned-dirs && tar Jcvf ../librsvg-%%{version}-vendor.tar.xz vendor/ ; popd
@@ -114,6 +115,7 @@ This package provides extra utilities based on the librsvg library.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %if ! 0%{?bundled_rust_deps}
 # use packaged Rust dependencies
 %autosetup -p1 -n librsvg-%{version}

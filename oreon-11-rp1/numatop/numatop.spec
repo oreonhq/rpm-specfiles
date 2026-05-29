@@ -7,7 +7,7 @@ Summary:        Memory access locality characterization and analysis
 
 License:        BSD-3-Clause
 URL:            https://01.org/numatop
-Source:        https://github.com/intel/numatop/archive/refs/tags/v2.5.1.tar.gz
+Source:        https://github.com/intel/numatop/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake

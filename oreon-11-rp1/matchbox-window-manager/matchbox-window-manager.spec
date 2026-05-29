@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 661859d44ed71fbc94db5aea92d22f0ff989eb7ec04643b0d7938be803983904
 
 %define libmatchbox_devel_ver 1.9-2
 %define alphatag 20070628svn

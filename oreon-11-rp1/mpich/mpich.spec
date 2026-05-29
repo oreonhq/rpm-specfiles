@@ -7,7 +7,7 @@ Release:        %autorelease
 License:        mpich2
 URL:            https://www.mpich.org/
 
-Source0:        https://www.mpich.org/static/downloads/4.2.2/mpich-4.2.2.tar.gz
+Source0:        https://www.mpich.org/static/downloads/%{version}/%{name}-%{version}.tar.gz
 Source1:        mpich.macros
 Source3:        mpich.pth.py3
 
@@ -29,7 +29,7 @@ BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  gcc-gfortran
 BuildRequires:  hwloc-devel >= 2.0
-%if ! (0%{?rhel} >= 10) || 0%{?oreon}
+%if ! (0%{?rhel} >= 10) || (0%{?oreon} >= 11)
 %ifarch x86_64
 # BuildRequires:  json-c-devel
 BuildRequires:  libpsm2-devel
@@ -42,7 +42,7 @@ BuildRequires:  numactl-devel
 %ifarch aarch64 ppc64le x86_64 riscv64
 BuildRequires:  ucx-devel
 %endif
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  yaksa-devel
 %else
 Provides:       bundled(yaksa) = 0.2
@@ -157,7 +157,7 @@ CONFIGURE_OPTS=(
 %ifarch aarch64 ppc64le x86_64 riscv64
         --with-ucx
 %endif
-%if ! 0%{?rhel} || 0%{?oreon}
+%if ! 0%{?rhel} || (0%{?oreon} >= 11)
         --with-yaksa
 %endif
 )

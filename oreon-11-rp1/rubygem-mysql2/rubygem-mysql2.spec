@@ -1,4 +1,5 @@
 %global source0_hash ba09ede515a0ae8a7192040a1b778c0fb0f025fa5877e9be895cd325fa5e9d7b
+%global source1_hash 8c6efdf0af93f8623bdec7703a2cebb7367621963b0a3ea95b880ef06a41ea28
 
 # build with tests?
 %bcond_without tests
@@ -12,7 +13,7 @@ Release: 3%{?dist}
 Summary: A simple, fast Mysql library for Ruby, binding to libmysql
 License: MIT
 URL: https://github.com/brianmario/mysql2
-Source0:        https://rubygems.org/gems/mysql2-0.5.7.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone --no-checkout https://github.com/brianmario/mysql2.git
 # cd mysql2 && git archive -v -o mysql2-0.5.7-tests.tar.gz 0.5.7 spec/
 Source1: %{gem_name}-%{version}-tests.tar.gz
@@ -30,7 +31,7 @@ BuildRequires: rubygem(rspec)
 # Used in mysql_install_db
 BuildRequires: %{_bindir}/hostname
 BuildRequires: rubygem(bigdecimal)
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 # Used in spec/em/em_spec.rb as optional dependency.
 # If rubygem-eventmachine is not present, the tests in the file are skipped.
 BuildRequires: rubygem(eventmachine)
@@ -56,6 +57,7 @@ Documentation for %{name}
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{gem_name}-%{version} -b 1
 
 %build

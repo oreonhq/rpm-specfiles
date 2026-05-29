@@ -1,6 +1,7 @@
 %global source0_hash 7b4a0109fdcb11a5298c826c56572c7e6ddd51ef41ceb0ee55d76d539e10a343
+%global source1_hash fd80466d8da6f402b992efe1adf99f8cc7dab66b01167dcf788b598a1c465df3
 
-%if 0%{?fedora} > 17 || 0%{?rhel} > 6 || 0%{?oreon}
+%if 0%{?fedora} > 17 || 0%{?rhel} > 6 || (0%{?oreon} >= 11)
 %global systemd_login1 1
 %endif
 
@@ -8,11 +9,11 @@
 %global kdm 1
 # endif
 
-%if 0%{?fedora} > 23 || 0%{?oreon}
+%if 0%{?fedora} > 23 || (0%{?oreon} >= 11)
 %global kdm_settings 1
 %endif
 
-%if 0%{?fedora} < 25 || 0%{?oreon}
+%if 0%{?fedora} < 25 || (0%{?oreon} >= 11)
 %define strigi 1
 %endif
 
@@ -24,7 +25,7 @@ Release: 47%{?dist}
 
 License: GPL-2.0-only
 URL:     https://github.com/KDE/%{name}
-Source0:        https://github.com/KDE/kde-workspace/archive/v4.11.22/kde-workspace-4.11.22.tar.gz
+Source0:        https://github.com/KDE/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1: kdm-settings-2.tar.gz
 
 # add konsole menuitem
@@ -269,6 +270,7 @@ Obsoletes: kde-plasma-translatoid < 1.30-20
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n kde-workspace-%{version} %{?kdm_settings:-a1}
 
 # Well, I looked at doing this using the context menu plugin system and it

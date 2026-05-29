@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a440d0b61d0b2264cd98ae6b06ed7e091bbd6ba0d84c2c2787d866b801b417cd
 
 Name:       lpsolve
 Version:    5.5.2.14

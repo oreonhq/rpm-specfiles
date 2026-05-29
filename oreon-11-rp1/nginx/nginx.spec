@@ -71,12 +71,12 @@ License:           BSD-2-Clause
 URL:               https://nginx.org
 
 Source0:        https://nginx.org/download/nginx-1.28.2.tar.gz
-Source1:        nginx-1.28.2.tar.gz.asc
+Source1:        https://nginx.org/download/nginx-%{version}.tar.gz.asc
 # Keys are found here: https://nginx.org/en/pgp_keys.html
-Source3:           arut.key
-Source4:           pluknet.key
-Source5:           sb.key
-Source6:           thresh.key
+Source3:        https://nginx.org/keys/arut.key
+Source4:        https://nginx.org/keys/pluknet.key
+Source5:        https://nginx.org/keys/sb.key
+Source6:        https://nginx.org/keys/thresh.key
 Source10:          nginx.service
 Source11:          nginx.logrotate
 Source12:          nginx.conf

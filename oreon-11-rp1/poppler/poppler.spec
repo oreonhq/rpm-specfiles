@@ -1,4 +1,5 @@
 %global source0_hash 1cb944a4b88847f5fb6551683bc799db59f04990f5d8be07aba2acbf38601089
+%global source3_hash 29e56e326f716fe1adfb2454aed6dce891d71186795f835543c560676a599889
 
 %global test_sha 03a4b9eb854a06a83c465e82de601796c458bbe9
 %global test_date 2021-01-11
@@ -8,10 +9,10 @@
 %if %{with qt}
 # Enable qt5 support (or not)
 # RHEL 10 drops support for Qt5, adds Qt6
-%if %{undefined rhel} || 0%{?rhel} < 10 || 0%{?oreon}
+%if %{undefined rhel} || 0%{?rhel} < 10 || (0%{?oreon} >= 11)
 %global qt5 1
 %endif
-%if %{undefined rhel} || 0%{?rhel} >= 10 || 0%{?oreon}
+%if %{undefined rhel} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %global qt6 1
 %endif
 %endif
@@ -22,8 +23,8 @@ Version: 26.01.0
 Release: %autorelease
 License: (GPL-2.0-only OR GPL-3.0-only) AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:     https://poppler.freedesktop.org/
-Source0:        https://poppler.freedesktop.org/poppler-26.01.0.tar.xz
-Source1:        https://poppler.freedesktop.org/poppler-26.01.0.tar.xz.sig
+Source0:        https://poppler.freedesktop.org/poppler-%{version}.tar.xz
+Source1:        https://poppler.freedesktop.org/poppler-%{version}.tar.xz.sig
 # https://pgp.surfnet.nl/pks/lookup?op=get&search=0xCA262C6C83DE4D2FB28A332A3A6A4DB839EAA6D7
 Source2: armored-keys.asc
 # git archive --prefix test/
@@ -180,6 +181,7 @@ other formats.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %autosetup -p1 -b 3
 

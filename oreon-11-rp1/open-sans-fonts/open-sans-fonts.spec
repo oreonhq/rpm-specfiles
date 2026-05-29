@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 329e6957238f8352d65c99c6286f18476ced5dc4aeb861d23550c78cd9565331
 
 %global fontname open-sans
 %global fontconf 60-%{fontname}.conf

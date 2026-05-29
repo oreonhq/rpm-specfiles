@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d51d47e3702b32d5feeceb9c1d63be840c73d334cf4acd4a4c71fd8ee1289fc7
 
 Name:           auto
 Summary:        Collection of source code generators for Java

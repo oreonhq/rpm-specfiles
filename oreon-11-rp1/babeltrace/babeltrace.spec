@@ -9,7 +9,7 @@ Summary:        Trace Viewer and Converter, mainly for the Common Trace Format
 License:        MIT AND GPL-3.0-or-later WITH Bison-exception-2.2 AND LGPL-2.1-only AND BSD-4-Clause-UC
 URL:            https://www.efficios.com/babeltrace
 Source0:        https://www.efficios.com/files/babeltrace/babeltrace-1.5.11.tar.bz2
-Source1:        babeltrace-1.5.11.tar.bz2.asc
+Source1:        https://www.efficios.com/files/%{name}/%{name}-%{version}.tar.bz2.asc
 # gpg2 --export --export-options export-minimal 7F49314A26E0DE78427680E05F1B2A0789F12B11 > gpgkey-7F49314A26E0DE78427680E05F1B2A0789F12B11.gpg
 Source2:        gpgkey-7F49314A26E0DE78427680E05F1B2A0789F12B11.gpg
 Patch0:         babeltrace-getaddrinfo.patch

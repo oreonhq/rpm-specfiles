@@ -13,7 +13,7 @@
 %bcond_without python_cpp
 %endif
 # Build -java subpackage
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 %bcond_with java
 %else
 %bcond_without java

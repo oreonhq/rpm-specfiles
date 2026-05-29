@@ -27,7 +27,7 @@ BuildRequires:  python3-rpm-macros
 # We require macros and lua defined in redhat-rpm-config
 # We constrain this to the version released after the code was split out that
 # doesn't contain the same files.
-%if (0%{?fedora} >= 40 || 0%{?rhel} >= 10) || 0%{?oreon}
+%if (0%{?fedora} >= 40 || 0%{?rhel} >= 10) || (0%{?oreon} >= 11)
 Requires:       redhat-rpm-config >= 266-1
 %elif 0%{?fedora} == 39
 Requires:       redhat-rpm-config >= 265-1

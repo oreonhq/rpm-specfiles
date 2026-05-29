@@ -1,7 +1,7 @@
 %global source0_hash 3462ecd1e67e85d5e4fa911bc6d8e38a884ba1d6e90a03535f0d28fe2ad0aacf
 
 # Perform optional tests
-%if 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %bcond_with perl_IO_Compress_Lzma_enables_optional_test
 %else
 %bcond_without perl_IO_Compress_Lzma_enables_optional_test

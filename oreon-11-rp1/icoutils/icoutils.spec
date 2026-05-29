@@ -1,4 +1,4 @@
-%global source0_hash cc9fa14f1bfc113e58dc45060d62742a14b19d2622d923ffb0902f6b64be9f11
+%global source0_hash 8db09712f56fd68c96e9ff879b87f583af153b4f6bcd8a43cf010c6d2304fbc8
 
 Name:           icoutils
 Version:        0.32.3
@@ -7,7 +7,7 @@ Summary:        Utility for extracting and converting Microsoft icon and cursor 
 
 License:        GPL-2.0-or-later AND GPL-3.0-or-later
 URL:            http://www.nongnu.org/icoutils/
-Source0:        http://savannah.nongnu.org/download/icoutils/icoutils-0.32.3.tar.bz2
+Source0:        http://savannah.nongnu.org/download/%{name}/%{name}-%{version}.tar.bz2
 
 # Possible security fix, at minimum it's a DoS.
 # Upstream commit d72956a6de228c91d1fc48fd15448fadea9ab6cf

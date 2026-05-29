@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -10,7 +10,7 @@ Name: hunspell-fy
 Summary: Frisian hunspell dictionaries
 Version: 3.0.0
 Release: 21%{?dist}
-Source:        https://addons.mozilla.org/firefox/downloads/file/499875/frysk_wurdboek-3.0.0-tb+fx+sm.xpi
+Source:        https://addons.mozilla.org/firefox/downloads/file/499875/frysk_wurdboek-%{version}-tb+fx+sm.xpi
 URL: http://www.mozilla-nl.org/projecten/frysk
 License: GPL-3.0-or-later
 BuildArch: noarch

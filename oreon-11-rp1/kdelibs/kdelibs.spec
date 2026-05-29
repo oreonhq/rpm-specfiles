@@ -15,32 +15,32 @@
 %define apidocs 1
 %endif
 %endif
-%if 0%{?epel} || 0%{?fedora} || 0%{?oreon}
+%if 0%{?epel} || 0%{?fedora} || (0%{?oreon} >= 11)
 %define webkit 0
 %endif
-%if 0%{?fedora} && 0%{?fedora} < 40 || 0%{?oreon}
+%if 0%{?fedora} && 0%{?fedora} < 40 || (0%{?oreon} >= 11)
 %define herqq 1
 %endif
-%if 0%{?fedora} < 24 || 0%{?oreon}
+%if 0%{?fedora} < 24 || (0%{?oreon} >= 11)
 %define nepomuk 1
 %endif
-%if 0%{?fedora} < 25 || 0%{?oreon}
+%if 0%{?fedora} < 25 || (0%{?oreon} >= 11)
 %define strigi 1
 %endif
 # to build/include QCH apidocs or not (currently broken)
 #define apidocs_qch 1
-%if 0%{?rhel} > 6 || 0%{?fedora} > 17 || 0%{?oreon}
+%if 0%{?rhel} > 6 || 0%{?fedora} > 17 || (0%{?oreon} >= 11)
 %define udisks udisks2
 %define udisks2 1
 %else
 %define udisks udisks
 %endif
-%if 0%{?rhel} == 6 || 0%{?oreon}
+%if 0%{?rhel} == 6 || (0%{?oreon} >= 11)
 %define hal 1
 %else
 %define upower 1
 %endif
-%if 0%{?fedora} < 44 || 0%{?oreon}
+%if 0%{?fedora} < 44 || (0%{?oreon} >= 11)
 %define libpcre 1
 %endif
 
@@ -75,14 +75,14 @@ URL:     http://www.kde.org/
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/stable/applications/17.08.3/src/kdelibs-4.14.38.tar.xz
+Source0:        https://download.kde.org/%{stable}/applications/%{apps_version}/src/kdelibs-%{version}.tar.xz
 
 Source1: macros.kde-apps
 
 Source10: SOLID_HAL_LEGACY.sh
 
 BuildRequires: kde4-macros(api) >= 2
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 BuildRequires: kde4-filesystem
 %else
 BuildRequires: kde-filesystem >= 4-23
@@ -96,7 +96,7 @@ Requires: /etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 Requires: dbusmenu-qt%{?_isa} >= %{dbusmenu_qt_version}
 Requires: docbook-dtds docbook-style-xsl
 Requires: hicolor-icon-theme
-%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 Requires: kde4-filesystem
 %else
 Requires: kde-filesystem >= 4-23
@@ -114,7 +114,7 @@ Requires: kde-l10n
 Requires: phonon%{?_isa} >= %{phonon_version} 
 Requires: shared-mime-info
 
-%if 0%{?fedora} > 22 || 0%{?oreon}
+%if 0%{?fedora} > 22 || (0%{?oreon} >= 11)
 # Rich deps are currently problematic
 # for any yum-based tools, see https://bugzilla.redhat.com/show_bug.cgi?id=1317481
 Recommends: kde-platform-plugin%{?_isa}
@@ -287,7 +287,7 @@ BuildRequires: libacl-devel libattr-devel
 BuildRequires: libjpeg-devel
 BuildRequires: libpng-devel
 BuildRequires: libutempter-devel
-%if 0%{?fedora} < 24 || 0%{?oreon}
+%if 0%{?fedora} < 24 || (0%{?oreon} >= 11)
 # strictly only a runtime dependency, but makes cmake happier at buildtime too -- rex
 BuildRequires: media-player-info
 Requires:      media-player-info
@@ -351,7 +351,7 @@ Provides: katepart%{?_isa} = %{version}-%{release}
 Provides: kross(javascript) = %{version}-%{release}
 Provides: kross(qtscript) = %{version}-%{release}
 
-%if 0%{?rhel} && 0%{?rhel} < 8 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
 Provides: kdelibs-experimental = %{version}-%{release}
 Obsoletes: kdelibs-experimental < 4.3.75
 %endif
@@ -387,7 +387,7 @@ Requires: %{name}-ktexteditor%{?_isa} = %{?epoch:%{epoch}:}%{version}-%{release}
 Obsoletes: kdelibs4-devel < %{version}-%{release}
 Provides:  kdelibs4-devel = %{version}-%{release}
 Provides:  kdelibs4-devel%{?_isa} = %{version}-%{release}
-%if 0%{?rhel} && 0%{?rhel} < 8 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
 Conflicts: kdebase-workspace-devel < 4.3.80
 Obsoletes: kdelibs-experimental-devel < 4.3.75
 Provides:  kdelibs-experimental-devel = %{version}-%{release}
@@ -509,7 +509,7 @@ format for use with the Qt 4 Assistant or KDevelop 4.
 %setup -q -n kdelibs-%{version}
 
 %patch -P0 -p1 -b .parallel_devel
-%if 0%{?fedora} > 23 || 0%{?oreon}
+%if 0%{?fedora} > 23 || (0%{?oreon} >= 11)
 %patch -P1 -p1 -b .no_fake_mimetypes
 %endif
 %patch -P2 -p1 -b .kde149705
@@ -548,7 +548,7 @@ sed -i -e "s|@@VERSION_RELEASE@@|%{version}-%{release}|" kio/kio/kprotocolmanage
 %patch -P71 -p1 -b .narror-warning
 %patch -P72 -p1 -b .qiodevice
 %patch -P73 -p1 -b .gcc11
-%if 0%{?fedora} > 36 || 0%{?oreon}
+%if 0%{?fedora} > 36 || (0%{?oreon} >= 11)
 %patch -P74 -p1 -b .jasper3
 %endif
 %patch -P75 -p1 -b .stdint
@@ -561,7 +561,7 @@ sed -i -e "s|@@VERSION_RELEASE@@|%{version}-%{release}|" kio/kio/kprotocolmanage
 %if ! 0%{?webkit}
 %patch -P300 -p1 -b .webkit
 %endif
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %patch -P301 -p1 -b .abrt
 %endif
 

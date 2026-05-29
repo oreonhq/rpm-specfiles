@@ -2,7 +2,7 @@
 
 %bcond_without tests
 
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 # The cli and ghostwriter extras require black, which is not currently in
 # RHEL/EPEL 10.  It was requested in rhbz#2319803, but the maintainer doesn't
 # think it's a good fit due to the fact that black doesn't have a stable Python

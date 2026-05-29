@@ -7,7 +7,7 @@ Summary:	A switch statement for Perl
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Switch
-Source0:        https://cpan.metacpan.org/authors/id/R/RG/RGARCIA/Switch-2.17.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RG/RGARCIA/Switch-%{version}.tar.gz
 Patch0:		Switch-2.17-Filter-1.50.patch
 BuildRequires:	findutils
 BuildRequires:	make

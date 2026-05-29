@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 03c167c60aeb5b7ee0c8314a7c42ace7e183acacd4613c52a6bd5ee02975cc28
 
 Name: hyphen-pl
 Summary: Polish hyphenation rules
 %global upstreamid 20060726
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/hyph_pl_PL.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_pl_PL.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: LGPL-2.1-or-later
 BuildArch: noarch

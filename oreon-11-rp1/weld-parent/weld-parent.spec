@@ -8,7 +8,7 @@ Summary:        Parent POM for Weld
 License:        Apache-2.0
 
 URL:            http://weld.cdi-spec.org
-Source0:        https://github.com/weld/parent/archive/46/weld-parent-46.tar.gz
+Source0:        https://github.com/weld/parent/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

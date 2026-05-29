@@ -1,4 +1,5 @@
 %global source0_hash 2a3f50621a71c9c0c425fb6709ae69bb2cf4df4bfe72ac661c2ea302e5aba185
+%global source2_hash 37447da2f95edd6c1dfb9ee21a8843998883360e878bd86a8082076b52aa0628
 %global source3_hash 86019c5ddc6b310126664adf00b5f906b6ebd3d1cf5a2d1a7b546ccd481fab6d
 
 %define enable_japanese 1
@@ -10,7 +11,7 @@ Release: 9%{?dist}
 License: GPL-2.0-or-later
 URL: https://github.com/latex2html/latex2html/releases
 # main latex2html source
-Source0:        https://github.com/latex2html/latex2html/archive/v2023.2/latex2html-2023.2.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1: cfgcache.pm
 Source2: %{name}-manpages.tar.gz
 # support for Japanese
@@ -37,6 +38,7 @@ pages are generated from a single LATEX source.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
 %(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
 %setup -q -c -a 0
 

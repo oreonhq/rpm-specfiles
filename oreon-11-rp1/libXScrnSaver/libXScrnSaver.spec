@@ -7,7 +7,7 @@ Release: 7%{?dist}
 License: X11
 URL: http://www.x.org
 
-Source0:        https://www.x.org/pub/individual/lib/libXScrnSaver-1.2.4.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 
 BuildRequires: make
 BuildRequires: xorg-x11-util-macros

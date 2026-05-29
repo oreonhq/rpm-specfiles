@@ -10,7 +10,7 @@ URL:            https://jakarta.apache.org/regexp/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://archive.apache.org/dist/jakarta/regexp/jakarta-regexp-1.5.tar.gz
+Source0:        http://archive.apache.org/dist/jakarta/%{name}/jakarta-%{name}-%{version}.tar.gz
 Source2:        jakarta-%{name}-osgi-manifest.MF
 
 Patch:          jakarta-%{name}-attach-osgi-manifest.patch

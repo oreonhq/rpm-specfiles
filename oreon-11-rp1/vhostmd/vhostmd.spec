@@ -102,7 +102,7 @@ rm $RPM_BUILD_ROOT%{_sysconfdir}/vhostmd/metric.dtd
 rm $RPM_BUILD_ROOT%{_sysconfdir}/vhostmd/vhostmd.conf
 cp %{SOURCE1} $RPM_BUILD_ROOT%{_sysconfdir}/vhostmd/vhostmd.conf
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 # Remove Perl script (https://bugzilla.redhat.com/show_bug.cgi?id=749875)
 rm $RPM_BUILD_ROOT%{_datadir}/vhostmd/scripts/pagerate.pl
 %endif
@@ -139,7 +139,7 @@ rm $RPM_BUILD_ROOT%{_datadir}/vhostmd/scripts/pagerate.pl
 
 %dir %{_datadir}/vhostmd
 %dir %{_datadir}/vhostmd/scripts
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 %{_datadir}/vhostmd/scripts/pagerate.pl
 %endif
 

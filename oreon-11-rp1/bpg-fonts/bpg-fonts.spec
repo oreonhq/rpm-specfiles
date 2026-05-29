@@ -1,4 +1,9 @@
-%global source0_hash none
+%global source0_hash c411b42fd11367075f5b10acf1117409c9840235d58713fd1f4bf09ba62c9c8f
+%global source81_hash 20679b9fa26ed7951647fc8f6b5a5520e555ee2a7a52f531a19027bd10c5c13e
+%global source82_hash 5eefabf5330713b72e85a9ef3b8106347b30e0ed99e9144cfee9e7fe81b8f464
+%global source83_hash 237070dcc1c6a09c0fc8ee51d29d50044999595c0019e0a50c739adacb85857f
+%global source84_hash 7c45a523312d43746d9ae12a7bc67b351291d40d8b9ccb248657a8e545203654
+%global source85_hash 5b84d87b208e99c497d36727ec12d89a642b163c5dd5e65d67ae4c761d73bbc5
 
 %global fontname bpg
 %global fontconf 64-%{fontname}.conf
@@ -557,6 +562,11 @@ This package contains the Ucnobi font family.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source81_hash}" = "none" || { f="%{SOURCE81}"; test -f "$f" || { echo "oreon: missing Source81 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source81_hash}" || { echo "oreon: Source81 hash mismatch" >&2; exit 1; }; })
+%(test "%{source82_hash}" = "none" || { f="%{SOURCE82}"; test -f "$f" || { echo "oreon: missing Source82 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source82_hash}" || { echo "oreon: Source82 hash mismatch" >&2; exit 1; }; })
+%(test "%{source83_hash}" = "none" || { f="%{SOURCE83}"; test -f "$f" || { echo "oreon: missing Source83 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source83_hash}" || { echo "oreon: Source83 hash mismatch" >&2; exit 1; }; })
+%(test "%{source84_hash}" = "none" || { f="%{SOURCE84}"; test -f "$f" || { echo "oreon: missing Source84 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source84_hash}" || { echo "oreon: Source84 hash mismatch" >&2; exit 1; }; })
+%(test "%{source85_hash}" = "none" || { f="%{SOURCE85}"; test -f "$f" || { echo "oreon: missing Source85 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source85_hash}" || { echo "oreon: Source85 hash mismatch" >&2; exit 1; }; })
 %setup -q -c -n %{name} -a 81 -a 82 -a 83 -a 84 -a 85
 mkdir -p Docs/
 cp -p %{SOURCE100} %{SOURCE101} Docs/

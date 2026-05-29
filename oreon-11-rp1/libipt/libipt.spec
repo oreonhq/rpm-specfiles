@@ -1,4 +1,5 @@
 %global source0_hash 713d3e76b6c3073b122a9f5b6c025bc301a0436582f132caf782814363acf60f
+%global source1_hash 44f1ae8e7073800a2c3a125a60a4b4d51584b23f6ab22a80dbdda4c4aba85c82
 
 # rmpbuild parameters:
 # --with docs: Build pre-generated documentation.
@@ -11,7 +12,7 @@ Release: 4%{?dist}
 Summary: Intel Processor Trace Decoder Library
 License: BSD-3-Clause
 URL: https://github.com/intel/libipt
-Source0:        https://github.com/intel/libipt/archive/v2.1.2.tar.gz
+Source0:        https://github.com/intel/libipt/archive/v%{version}.tar.gz
 Source1: doc-v%{version}.tar.xz
 Patch1: libipt-cmake40-compat.patch
 # c++ is required only for -DPTUNIT test "ptunit-cpp".
@@ -41,6 +42,7 @@ develop programs that use the Intel Processor Trace (Intel PT) Decoder Library.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n libipt-%{version}
 %patch -P 1 -p1
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 93c7e4f052aa7f279c92dbda182ea5467d101915847a93a917653283bd961962
 
 %define origname libxml
 

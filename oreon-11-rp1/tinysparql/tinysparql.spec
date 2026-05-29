@@ -6,7 +6,7 @@
 
 %global tracker_obsoletes_version 3.8
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond libstemmer 0
 %else
 %bcond libstemmer 1

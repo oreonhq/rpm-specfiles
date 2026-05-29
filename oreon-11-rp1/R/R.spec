@@ -92,7 +92,7 @@ BuildRequires:  tex(upquote.sty)
 BuildRequires:  texlive-helvetic
 BuildRequires:  texlive-times
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # No inconsolata on RHEL tex
 BuildRequires:  tex(inconsolata.sty)
 %endif
@@ -219,7 +219,7 @@ Recommends:     texlive
 Recommends:     texinfo-tex
 Recommends:     tidy
 Recommends:     devscripts-checkbashisms
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # No inconsolata on RHEL tex
 Recommends:     tex(inconsolata.sty)
 # "‘qpdf’ is needed for checks on size reduction of PDFs"

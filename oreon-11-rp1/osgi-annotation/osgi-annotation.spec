@@ -13,8 +13,8 @@ ExclusiveArch:  %{java_arches} noarch
 
 # Upstream project is behind an account registration system with no anonymous
 # read access, so we download the source from maven central instead
-Source0:        https://repo1.maven.org/maven2/org/osgi/osgi.annotation/8.1.0/osgi.annotation-8.1.0.jar
-Source1:        https://repo1.maven.org/maven2/org/osgi/osgi.annotation/8.1.0/osgi.annotation-8.1.0.pom
+Source0:        https://repo1.maven.org/maven2/org/osgi/osgi.annotation/%{version}/osgi.annotation-%{version}.jar
+Source1:        https://repo1.maven.org/maven2/org/osgi/osgi.annotation/%{version}/osgi.annotation-%{version}.pom
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

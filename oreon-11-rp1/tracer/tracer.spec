@@ -1,8 +1,8 @@
-%global source0_hash none
+%global source0_hash 32e8c70f497a14cfa0eb4a0e1a59fe5cb17193d84790d8ca728260423689d76d
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 
-%if 0%{?rhel} <= 7 || 0%{?oreon}
+%if 0%{?rhel} <= 7 || (0%{?oreon} >= 11)
 %bcond_without python2
 %bcond_with python3
 %bcond_with suggest
@@ -61,7 +61,7 @@ Obsoletes:      %{name} <= 0.6.11
 %endif
 BuildRequires:  python2-devel
 BuildRequires:  python2-sphinx
-%if 0%{?rhel} && 0%{?rhel} <= 7 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} <= 7 || (0%{?oreon} >= 11)
 BuildRequires:  rpm-python
 BuildRequires:  python2-mock
 Requires:       rpm-python
@@ -106,7 +106,7 @@ BuildRequires:  python3-dbus
 BuildRequires:  python3-rpm
 BuildRequires:  python3-distro
 BuildRequires:  python3-setuptools
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 BuildRequires:  python3-libdnf5
 %endif
 Requires:       python3-rpm
@@ -115,7 +115,7 @@ Requires:       python3-dbus
 Requires:       python3-six
 Requires:       python3-distro
 Requires:       %{name}-common = %{version}-%{release}
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Requires:       python3-libdnf5
 %endif
 %if %{with suggest}

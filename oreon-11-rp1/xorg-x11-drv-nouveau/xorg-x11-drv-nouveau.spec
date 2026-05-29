@@ -15,7 +15,7 @@ Release:   14%{?dist}
 URL:       http://www.x.org
 License:   MIT
 
-Source0:        https://www.x.org/archive/individual/driver/xf86-video-nouveau-1.0.17.tar.bz2
+Source0:        https://www.x.org/archive/individual/driver/xf86-video-nouveau-%{version}.tar.bz2
 Source30:   xserver-sdk-abi-requires
 
 Patch1: remove-sarea.h.patch
@@ -35,8 +35,8 @@ BuildRequires:  pkgconfig(libdrm_nouveau) >= 2.4.25
 BuildRequires:  pkgconfig(pciaccess) >= 0.10
 BuildRequires:  pkgconfig(libudev)
 
-Requires:   Xorg %(xserver-sdk-abi-requires ansic)
-Requires:   Xorg %(xserver-sdk-abi-requires videodrv)
+Requires:   Xorg %(sh %{SOURCE30} ansic)
+Requires:   Xorg %(sh %{SOURCE30} videodrv)
 Requires:   libdrm >= 2.4.33-0.1
 
 %description 

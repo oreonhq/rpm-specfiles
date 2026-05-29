@@ -14,7 +14,7 @@ URL:            https://jakarta.ee/specifications/servlet/5.0/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/servlet/archive/5.0.0-RELEASE/servlet-api-5.0.0.tar.gz
+Source0:        https://github.com/jakartaee/servlet/archive/%{version}-RELEASE/servlet-api-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

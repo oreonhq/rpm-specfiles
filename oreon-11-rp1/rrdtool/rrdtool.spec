@@ -1,4 +1,5 @@
 %global source0_hash 5e65385e51f4a7c4b42aa09566396c20e7e1a0a30c272d569ed029a81656e56b
+%global source1_hash d17123e101ada18cce7022d9794fb97344d3151028c4f51f652fcf992e8d0da2
 
 %global with_python3 %{?_without_python3: 0} %{?!_without_python3: 1}
 %global with_php %{?_without_php: 0} %{?!_without_php: 0}
@@ -24,7 +25,7 @@ Release: 11%{?dist}
 # gd license in php bindings isn't by default built-in
 License: gpl-1.0-or-later AND gpl-2.0-or-later AND gpl-2.0-or-later WITH rrdtool-floss-exception-2.0 AND mit AND lgpl-2.0-or-later AND lgpl-2.1-or-later AND bsd-source-code AND snprintf AND bsd-3-clause AND gpl-2.0-only AND licenseref-fedora-public-domain AND gtkbook
 URL: https://oss.oetiker.ch/rrdtool/
-Source0:        https://github.com/oetiker/rrdtool-1.x/releases/download/v1.9.0/rrdtool-1.9.0.tar.gz
+Source0:        https://github.com/oetiker/rrdtool-1.x/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Source1: php4-%{svnrev}.tar.gz
 Patch1: rrdtool-1.4.4-php54.patch
 # disable logo for php 5.5.
@@ -173,6 +174,7 @@ The %{name}-lua package includes RRDtool bindings for Lua.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{name}-%{version} %{?with_php: -a 1}
 %if %{with_php}
 %patch -P1 -p1 -b .php54
@@ -180,7 +182,7 @@ The %{name}-lua package includes RRDtool bindings for Lua.
 %endif
 # Workaround for rhbz#92165
 # Do not apply on RHEL-6 or lower
-%if %{?rhel} %{?!rhel:7} > 6 || 0%{?oreon}
+%if %{?rhel} %{?!rhel:7} > 6 || (0%{?oreon} >= 11)
 %patch -P3 -p1 -b .ruby-2-fix
 %endif
 %patch -P4 -p1 -b .php-ppc-fix

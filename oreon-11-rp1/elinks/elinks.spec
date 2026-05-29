@@ -1,6 +1,6 @@
 %global source0_hash a993a4870cadce60abbc724cf6a5c2a80f6be9020243b9e5ce075c16c6665c04
 
-%if 0%{?rhel} >= 10 || 0%{?rescue} || 0%{?oreon}
+%if 0%{?rhel} >= 10 || 0%{?rescue} || (0%{?oreon} >= 11)
 %bcond_with gpm
 %else
 %bcond_without gpm
@@ -12,7 +12,7 @@ Version:   0.19.0
 Release:   2%{?dist}
 License:   GPL-2.0-only
 URL:       https://github.com/rkd77/elinks
-Source:        https://github.com/rkd77/elinks/releases/download/v0.19.0/elinks-0.19.0.tar.xz
+Source:        https://github.com/rkd77/elinks/releases/download/v%{version}/elinks-%{version}.tar.xz
 Source2:   elinks.conf
 
 BuildRequires: automake

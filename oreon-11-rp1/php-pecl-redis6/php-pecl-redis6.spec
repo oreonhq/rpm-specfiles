@@ -15,7 +15,7 @@
 %global php_base     php
 
 %bcond_without       tests
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # optional compressors/serializers enabled by default
 %bcond_without       igbinary
 %bcond_without       msgpack
@@ -44,7 +44,7 @@ Version:       %{upstream_version}%{?upstream_prever:~%{upstream_prever}}
 Release:       2%{?dist}
 License:       PHP-3.01
 URL:           https://pecl.php.net/package/redis
-Source0:        https://pecl.php.net/get/redis-6.3.0%{?upstream_prever}.tgz
+Source0:        https://pecl.php.net/get/%{sources}.tgz
 
 ExcludeArch:   %{ix86}
 

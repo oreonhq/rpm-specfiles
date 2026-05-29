@@ -8,8 +8,8 @@ Version: 3.10
 Release: 1%{?dist}
 License: LGPL-2.1-or-later
 Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/libsepol-3.10.tar.gz
-Source1:        libsepol-3.10.tar.gz.asc
-Source2: perfinion.gpg
+Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsepol-%{version}.tar.gz.asc
+Source2:        https://github.com/perfinion.gpg
 URL: https://github.com/SELinuxProject/selinux/wiki
 # $ git clone https://github.com/fedora-selinux/selinux.git
 # $ cd selinux

@@ -7,7 +7,7 @@ Summary:        A GSSAPI Authentication module for Apache
 
 License:        MIT
 URL:            https://github.com/gssapi/mod_auth_gssapi
-Source0:        https://github.com/gssapi/mod_auth_gssapi/releases/download/v1.6.5/%name-1.6.5.tar.gz
+Source0:        https://github.com/gssapi/%{name}/releases/download/v%{version}/%name-%{version}.tar.gz
 
 BuildRequires:  httpd-devel, krb5-devel, openssl-devel
 BuildRequires:  autoconf, automake, libtool, bison, flex, make
@@ -16,7 +16,7 @@ Requires:       httpd-mmn = %{_httpd_mmn}
 Requires:       krb5-libs >= 1.11.5
 
 # If you're reading this: NTLM is insecure.  Migrate off it.
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %else
 BuildRequires: gssntlmssp-devel
 %endif

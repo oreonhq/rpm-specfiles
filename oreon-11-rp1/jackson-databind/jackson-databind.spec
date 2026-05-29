@@ -9,7 +9,7 @@ License:        Apache-2.0 and LGPL-2.0-or-later
 URL:            https://github.com/FasterXML/jackson-databind
 Source0:        https://github.com/FasterXML/jackson-databind/archive/jackson-databind-2.18.2.tar.gz
 
-%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || 0%{?oreon}
+%if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || (0%{?oreon} >= 11)
 BuildRequires:  maven-local
 %else
 BuildRequires:  maven-local-openjdk25
@@ -24,7 +24,7 @@ BuildRequires:  mvn(org.apache.felix:maven-bundle-plugin)
 BuildRequires:  mvn(org.mockito:mockito-core)
 
 BuildArch:      noarch
-%if 0%{?fedora} || 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 ExclusiveArch:  %{java_arches} noarch
 %endif
 

@@ -11,7 +11,7 @@ URL:            https://github.com/codehaus-plexus/plexus-components
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-components/archive/refs/tags/plexus-components-14.2.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-components/archive/refs/tags/plexus-components-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}

@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash ed8148c37bdd5d4fa612f584529933cb79b5c69666d9e8515c07c0b4af79e424
 
 Name: hyphen-id
 Summary: Indonesian hyphenation rules
 %global upstreamid 20040812
 Version: 0.%{upstreamid}
 Release: 34%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/hyph_id_ID.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_id_ID.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: GPL-1.0-or-later
 BuildArch: noarch

@@ -6,8 +6,8 @@ Version: 3.22.0
 Release: 5%{?dist}
 License: GPL-2.0-or-later
 URL: https://github.com/logrotate/logrotate
-Source0:        https://github.com/logrotate/logrotate/releases/download/3.22.0/logrotate-3.22.0.tar.xz
-Source1:        https://github.com/logrotate/logrotate/releases/download/3.22.0/logrotate-3.22.0.tar.xz.asc
+Source0:        https://github.com/logrotate/logrotate/releases/download/%{version}/logrotate-%{version}.tar.xz
+Source1:        https://github.com/logrotate/logrotate/releases/download/%{version}/logrotate-%{version}.tar.xz.asc
 
 # gpg --keyserver pgp.mit.edu --recv-key 8ECCDF12100AD84DA2EE7EBFC78CE737A3C3E28E
 # gpg --output cgzones.pgp --armor --export cgzones@googlemail.com

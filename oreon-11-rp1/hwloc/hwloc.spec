@@ -6,7 +6,7 @@ Version:   2.12.0
 Release:   %autorelease
 License:   BSD-2-Clause
 URL:       http://www.open-mpi.org/projects/hwloc/
-Source0:        https://download.open-mpi.org/release/hwloc/v2.11/hwloc-2.12.0.tar.bz2
+Source0:        https://download.open-mpi.org/release/hwloc/v2.11/hwloc-%{version}.tar.bz2
 Requires:  %{name}-libs%{?_isa} = %{version}-%{release}
 
 BuildRequires: gcc
@@ -18,7 +18,7 @@ BuildRequires: libX11-devel
 BuildRequires: libxml2-devel
 BuildRequires: lynx
 BuildRequires: ncurses-devel
-%if %{undefined rhel} || 0%{?oreon}
+%if %{undefined rhel} || (0%{?oreon} >= 11)
 %ifarch x86_64
 BuildRequires: oneapi-level-zero-devel
 %endif

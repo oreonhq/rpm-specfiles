@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 950ce21eef5fdd669468b355aeac44aee051d6eef1b52836a3c53bdf54d9cd07
 
 Name: libserializer
 Version: 1.1.2

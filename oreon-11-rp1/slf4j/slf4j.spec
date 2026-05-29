@@ -41,7 +41,7 @@ URL:            https://www.slf4j.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/qos-ch/slf4j/archive/v_1.7.36.tar.gz
+Source0:        https://github.com/qos-ch/slf4j/archive/v_%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}

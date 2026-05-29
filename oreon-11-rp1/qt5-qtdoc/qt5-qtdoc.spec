@@ -10,7 +10,7 @@ Release: 2%{?dist}
 License: GFDL-1.3-no-invariants-or-later
 Url:     http://www.qt.io
 %global majmin %(echo %{version} | cut -d. -f1-2)
-Source0:        https://download.qt.io/official_releases/qt/%{version}/submodules/qtdoc-everywhere-opensource-src-%{version}.tar.xz
+Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
 ## upstream patches
 ## repo: https://invent.kde.org/qt/qt/qtdoc
 ## branch: kde/5.15

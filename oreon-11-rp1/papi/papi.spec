@@ -21,7 +21,7 @@ Release: 3%{?dist}
 License: BSD-3-Clause
 Requires: papi-libs = %{version}-%{release}
 URL: http://icl.cs.utk.edu/papi/
-Source0:        http://icl.cs.utk.edu/projects/papi/downloads/papi-7.2.0.tar.gz
+Source0:        http://icl.cs.utk.edu/projects/papi/downloads/%{name}-%{version}.tar.gz
 Patch1: papi-nostatic.patch
 Patch2: papi-avail-path-fix.patch
 Patch3: papi-revert-event-depr.patch

@@ -5,7 +5,7 @@ Version: 2.5
 Release: 8%{?dist}
 License: GPL-2.0-or-later
 Summary: Setup RT/low-latency environment details
-Source0:        https://gitlab.com/rt-linux-tools/realtime-setup/-/archive/v2.5/realtime-setup-2.5.tar.bz2
+Source0:        https://gitlab.com/rt-linux-tools/%{name}/-/archive/v%{version}/%{name}-%{version}.tar.bz2
 URL:  https://gitlab.com/rt-linux-tools/realtime-setup.git
 
 BuildRequires: gcc

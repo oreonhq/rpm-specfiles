@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c3270f01b63089c7f6a952aabde75840c2c352bbd372fadd24a46e565c0228d6
 
 # snapshot version
 %global snapver .20240616git

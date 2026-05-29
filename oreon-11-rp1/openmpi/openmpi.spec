@@ -29,7 +29,7 @@
 %bcond_with java
 %endif
 
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 %bcond_with orangefs
 %bcond_with sphinx
 %else
@@ -38,7 +38,7 @@
 %endif
 
 %ifarch x86_64
-%if 0%{?rhel} >= 10 || 0%{?oreon}
+%if 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %bcond_with psm2
 %else
 %bcond_without psm2
@@ -71,7 +71,7 @@ URL:            http://www.open-mpi.org/
 ExcludeArch:    %{ix86}
 
 # We can't use %%{name} here because of _cc_name_suffix
-Source0:        https://www.open-mpi.org/software/ompi/v5.0/downloads/openmpi-5.0.9.tar.bz2
+Source0:        https://www.open-mpi.org/software/ompi/v5.0/downloads/openmpi-%{version}.tar.bz2
 Source1:        openmpi.module.in
 Source3:        openmpi.pth.py3
 Source4:        macros.openmpi
@@ -147,7 +147,7 @@ BuildRequires:  python3-sphinx_rtd_theme
 %endif
 
 Provides:       mpi
-%if 0%{?rhel} == 7 || 0%{?oreon}
+%if 0%{?rhel} == 7 || (0%{?oreon} >= 11)
 # Need this for /etc/profile.d/modules.sh
 Requires:       environment-modules
 %endif

@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/enforcer
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/enforcer/enforcer/3.5.0/enforcer-3.5.0-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/enforcer/enforcer/%{version}/enforcer-%{version}-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

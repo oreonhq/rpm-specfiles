@@ -1,7 +1,7 @@
 %global source0_hash none
 
 # Do not build with zstd for RHEL < 8
-%if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?suse_version} && 0%{?suse_version} < 1500) || 0%{?oreon}
+%if (0%{?rhel} && 0%{?rhel} < 8) || (0%{?suse_version} && 0%{?suse_version} < 1500) || (0%{?oreon} >= 11)
 %bcond_with zstd
 %else
 %bcond_without zstd
@@ -69,7 +69,7 @@ The drpm-devel package provides a C interface (drpm.h) for the drpm library.
 %check
 %ctest
 
-%if (0%{?rhel} && 0%{?rhel} < 8) || 0%{?suse_version} || 0%{?oreon}
+%if (0%{?rhel} && 0%{?rhel} < 8) || 0%{?suse_version} || (0%{?oreon} >= 11)
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig

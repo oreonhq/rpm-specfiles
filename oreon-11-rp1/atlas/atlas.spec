@@ -1,4 +1,14 @@
 %global source0_hash 2688eb733a6c5f78a18ef32144039adcd62fabce66f2eb51dd59dde806a6d2b7
+%global source1_hash 944f539ab2c63a9abf6a7485a549faf3823b5943edfd12e7b68572c0ae33e952
+%global source3_hash ae2e5e5f32b7aa5205864712682e7eaad73c410881affb10e69867c69ae43ad2
+%global source4_hash 097bd37d4eb57f2cdc01b614a865cf0460bd29915e5ae180a749fdd360bf7fe1
+%global source5_hash c6593148a5238d3ebadf130d3cc1b75232d2e12ba715d20d3bbfb52bd655d0b0
+%global source6_hash 8ee9c02a1d1d30348618d50d86ee7db99f9111b7a2d782601ca3bd8d16032099
+%global source7_hash 7fdacb9e329a3380d0110a970407693de53d57921efc5143361090373474df80
+%global source8_hash da76539f7eb16823ea29df8761eee9226625c2dc4199a6376a0cd950a27f0d10
+%global source9_hash 37c5fe026105f97ee83fc1a6d0816025b7b478f79c17f82793a5114670d75c8c
+%global source10_hash 4ef058106ed3e0f6241ad32bc57ee9673c94250caafdd8492a3ecd888eb74e0f
+%global source11_hash 747b566b4a3aebcc02286d7ea7b53b2d0d1ac7ab92c4ceb2149e0203d6441d10
 
 %define enable_native_atlas 0
 %global build_type_safety_c 0
@@ -13,7 +23,7 @@ Summary:        Automatically Tuned Linear Algebra Software
 
 License:        BSD-3-Clause
 URL:            http://math-atlas.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/math-atlas/atlas3.10.3.tar.bz2
+Source0:        http://downloads.sourceforge.net/math-atlas/%{name}%{version}.tar.bz2
 Source1:        PPRO32.tgz
 Source2:        README.dist
 #archdefs taken from debian:
@@ -337,6 +347,16 @@ CPUs. The base ATLAS builds for the ppc64 architecture are made for the Power 5 
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
+%(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })
+%(test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; })
+%(test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; })
+%(test "%{source7_hash}" = "none" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source7_hash}" || { echo "oreon: Source7 hash mismatch" >&2; exit 1; }; })
+%(test "%{source8_hash}" = "none" || { f="%{SOURCE8}"; test -f "$f" || { echo "oreon: missing Source8 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source8_hash}" || { echo "oreon: Source8 hash mismatch" >&2; exit 1; }; })
+%(test "%{source9_hash}" = "none" || { f="%{SOURCE9}"; test -f "$f" || { echo "oreon: missing Source9 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source9_hash}" || { echo "oreon: Source9 hash mismatch" >&2; exit 1; }; })
+%(test "%{source10_hash}" = "none" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source10_hash}" || { echo "oreon: Source10 hash mismatch" >&2; exit 1; }; })
+%(test "%{source11_hash}" = "none" || { f="%{SOURCE11}"; test -f "$f" || { echo "oreon: missing Source11 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source11_hash}" || { echo "oreon: Source11 hash mismatch" >&2; exit 1; }; })
 #cat /proc/cpuinfo
 %setup -q -n ATLAS
 

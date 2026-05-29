@@ -13,7 +13,7 @@ Release:   8%{?dist}
 URL:       http://www.x.org
 License:   MIT AND X11
 
-Source0:        https://www.x.org/archive/individual/driver/xf86-video-dummy-0.4.1.tar.xz
+Source0:        https://www.x.org/archive/individual/driver/%{tarball}-%{version}.tar.xz
 Source30:   xserver-sdk-abi-requires
 
 BuildRequires:  autoconf
@@ -22,8 +22,8 @@ BuildRequires:  libtool
 BuildRequires:  make
 BuildRequires:  pkgconfig(xorg-server) >= 1.4.99.901
 
-Requires: Xorg %(xserver-sdk-abi-requires ansic)
-Requires: Xorg %(xserver-sdk-abi-requires videodrv)
+Requires: Xorg %(sh %{SOURCE30} ansic)
+Requires: Xorg %(sh %{SOURCE30} videodrv)
 
 %description 
 X.Org X11 dummy video driver.

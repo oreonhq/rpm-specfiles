@@ -14,10 +14,10 @@ License: GPL-3.0-or-later
 URL: https://github.com/linux-application-whitelisting/fapolicyd
 Source0:        https://github.com/linux-application-whitelisting/fapolicyd/releases/download/v1.4.3/fapolicyd-1.4.3.tar.gz
 Source1:        https://github.com/linux-application-whitelisting/fapolicyd-selinux/releases/download/v1.1/fapolicyd-selinux-1.1.tar.gz
-Source2: bachradsusi.gpg
+Source2:        https://github.com/bachradsusi.gpg
 Source3: fapolicyd.sysusers
-Source10:        fapolicyd-1.4.3.tar.gz.asc
-Source11:        fapolicyd-selinux-1.1.tar.gz.asc
+Source10:        https://github.com/linux-application-whitelisting/fapolicyd/releases/download/v%{version}/fapolicyd-%{version}.tar.gz.asc
+Source11:        https://github.com/linux-application-whitelisting/%{name}-selinux/releases/download/v%{semodule_version}/%{name}-selinux-%{semodule_version}.tar.gz.asc
 # we bundle uthash for eln
 Source20: https://github.com/troydhanson/uthash/archive/refs/tags/v2.3.0.tar.gz#/uthash-2.3.0.tar.gz
 

@@ -7,7 +7,7 @@ Summary:        Tools for JSON Object Signing and Encryption (JOSE)
 
 License:        Apache-2.0
 URL:            https://github.com/latchset/%{name}
-Source0:        https://github.com/latchset/jose/releases/download/v14/jose-14.tar.xz
+Source0:        https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  pkgconfig

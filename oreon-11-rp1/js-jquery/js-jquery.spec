@@ -1,4 +1,5 @@
 %global source0_hash 6150ac588f06b2bbcb277bbba6d696c296f1ee88160065a84b56e93c54fd1f64
+%global source1_hash 164a251e86a8e5fc76b9bf074b2d91b4a876ba10b45c45d8017b53fd96415226
 
 Name:           js-jquery
 Version:        3.7.1
@@ -12,7 +13,7 @@ BuildArch:      noarch
 
 License:        MIT
 URL:            https://jquery.com/
-Source0:        https://github.com/jquery/jquery/archive/3.7.1/jquery-3.7.1.tar.gz
+Source0:        https://github.com/jquery/jquery/archive/%{version}/jquery-%{version}.tar.gz
 # Created by ./update-sources.sh <version>
 Source1:        jquery_%{version}_node_modules.tar.gz
 
@@ -46,6 +47,7 @@ changed the way that millions of people write JavaScript.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %autosetup -n jquery-%{version} -p1
 
 #remove precompiled stuff

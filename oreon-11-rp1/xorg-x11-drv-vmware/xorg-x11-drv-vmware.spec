@@ -13,7 +13,7 @@ Release:    12%{?dist}
 URL:        http://www.x.org
 License:    MIT AND X11
 
-Source0:        https://ftp.x.org/archive/individual/driver/xf86-video-vmware-13.4.0.tar.xz
+Source0:        https://ftp.x.org/archive/individual/driver/%{tarball}-%{version}.tar.xz
 Source30:   xserver-sdk-abi-requires
 
 ExclusiveArch: %{ix86} x86_64 ia64
@@ -31,8 +31,8 @@ BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(xext)
 BuildRequires:  pkgconfig(xorg-server) >= 1.12
 
-Requires: Xorg %(xserver-sdk-abi-requires ansic)
-Requires: Xorg %(xserver-sdk-abi-requires videodrv)
+Requires: Xorg %(sh %{SOURCE30} ansic)
+Requires: Xorg %(sh %{SOURCE30} videodrv)
 Requires: mesa-compat-libxatracker
 
 %description

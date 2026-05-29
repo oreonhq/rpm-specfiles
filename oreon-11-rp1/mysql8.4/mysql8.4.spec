@@ -10,7 +10,7 @@ ExcludeArch: %{ix86}
 
 
 # Set if this package will be the default one in distribution (never in RHEL)
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global mysql_default 0
 %else
 %{!?mysql_default:%global mysql_default 1}
@@ -61,7 +61,7 @@ ExcludeArch: %{ix86}
 #     - when kr5-devel is part of the buildroot, kerberos plugin is compiled no matter the WITH_AUTHENTICATION_KERBEROS value
 #     - when fido is disabled but ldap enabled, authentication_oci_client.so is still built
 # To avoid issues, leave either all ON or all OFF.
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond fido 1
 %bcond kerberos 1
 %bcond ldap 1
@@ -109,7 +109,7 @@ URL:              http://www.mysql.com
 # Usage of the `Universal-FOSS-exception-1.0` in the SPDX license expression does not signify that we regard "Interfaces" as protected by copyright.
 License:          GPL-2.0-only AND ( GPL-2.0-only WITH Universal-FOSS-exception-1.0 ) AND GPL-2.0-or-later AND ( LGPL-2.0-only WITH Universal-FOSS-exception-1.0 ) AND ( GPL-3.0-or-later WITH Bison-exception-2.2 ) AND ( GPL-2.0-only OR BSD-2-Clause ) AND BSD-2-Clause AND BSL-1.0 AND Apache-2.0 AND MIT
 
-Source0:        https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-.tar.gz
+Source0:        https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-%{version}.tar.gz
 Source3:          my.cnf.in
 Source6:          README.mysql-docs
 Source7:          README.mysql-license

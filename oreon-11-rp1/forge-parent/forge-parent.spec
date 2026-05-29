@@ -10,7 +10,7 @@ URL:            https://docs.sonatype.org/display/FORGE/Index
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://repo1.maven.org/maven2/org/sonatype/forge/forge-parent/38/forge-parent-38.pom
+Source0:        http://repo1.maven.org/maven2/org/sonatype/forge/%{name}/%{version}/%{name}-%{version}.pom
 Source1:        http://www.apache.org/licenses/LICENSE-2.0.txt
 
 BuildRequires:  maven-local-openjdk25

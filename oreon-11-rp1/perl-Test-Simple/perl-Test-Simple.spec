@@ -3,7 +3,7 @@
 # Disable non-core dependencies when bootstrapping a core module
 # Run optional tests with additional dependencies
 # Break lines according to Unicode rules
-%if !%{defined perl_bootstrap} && ! (0%{?rhel}) || 0%{?oreon}
+%if !%{defined perl_bootstrap} && ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_Test_Simple_enables_Module_Pluggable
 %bcond_without perl_Test_Simple_enables_optional_test
 %bcond_without perl_Test_Simple_enables_unicode
@@ -24,6 +24,7 @@ Release:        2%{?dist}
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND CC0-1.0 AND LicenseRef-Public-Domain
 URL:            https://metacpan.org/release/Test-Simple
 Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Simple-1.302219.tar.gz
+
 
 Patch0:         Test-Simple-1.302200-add_perl.patch
 BuildArch:      noarch

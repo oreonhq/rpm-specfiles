@@ -6,7 +6,7 @@ Version:	2.1.4
 Release:	38%{?dist}
 License:	Zlib
 URL:		http://nkf.osdn.jp/
-Source0:        http://iij.dl.osdn.jp/nkf/64158/nkf-2.1.4.tar.gz
+Source0:        http://iij.dl.osdn.jp/nkf/64158/%{name}-%{version}.tar.gz
 ## snippet from the source code
 Source3:	nkf.copyright
 Source4:	nkf.1j

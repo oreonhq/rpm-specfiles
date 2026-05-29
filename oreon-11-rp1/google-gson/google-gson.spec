@@ -12,7 +12,7 @@ URL:            https://github.com/google/gson
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/google/gson/archive/gson-parent-2.12.1.tar.gz
+Source0:        https://github.com/google/gson/archive/gson-parent-%{version}.tar.gz
 
 BuildRequires:  jurand
 %if %{with bootstrap}

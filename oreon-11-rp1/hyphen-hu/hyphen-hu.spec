@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e2db16201e32c38fd02346d3f59a99ff559487c7afbd3843d1ff6203aaa57ae3
 
 Name: hyphen-hu
 Summary: Hungarian hyphenation rules

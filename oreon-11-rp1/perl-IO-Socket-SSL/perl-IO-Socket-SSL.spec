@@ -1,6 +1,6 @@
 %global source0_hash b38473be20256b1a06447dd6769ad162bfad6a258234ed2c7e2e1819c16c4df7
 
-%if 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %bcond_with perl_IO_Socket_SSL_test_unused_idn
 %bcond_with perl_IO_Socket_SSL_test_IO_Socket_INET6
 %else

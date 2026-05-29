@@ -1,4 +1,4 @@
-%global source0_hash 90f670ad7fbbe0f2b6af3d39e8ce86cc3b729da9fefd2c96f66c14acfeb1b221
+%global source0_hash 23241e66c86f4c738a6b7b24622a6c4215cf1b43f428ff7d0684d25832ce7c11
 %global source1_hash 49b039601196e1a765e81c5c9a05a61ed3d33f23b3961323d7322e4fe213d3e6
 %global source4_hash 59c8556fd45e68599897cd5d74efad9c4a43f85e981fe7ac3ac5fd7aa70672ac
 
@@ -54,7 +54,7 @@
 %bcond_without lzo
 %bcond_without snappy
 %bcond_without zstd
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond_without lzma
 %else
 %bcond_with lzma
@@ -71,7 +71,7 @@
 %if !0%{?flatpak}
 %bcond_without pam
 %endif
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # MariaDB upstream packages this as a separate subpackage
 %bcond_without hashicorp
 %else
@@ -85,7 +85,7 @@
 # Other plugins
 # S3 storage engine
 #   https://mariadb.com/kb/en/s3-storage-engine/
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond_without cracklib
 %bcond_without connect
 %bcond_without sphinx
@@ -106,7 +106,7 @@
 #   RocksDB engine is available only for x86_64
 #   RocksDB may be built with jemalloc, if specified in CMake
 %ifarch x86_64
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond_without mroonga
 %bcond_without rocksdb
 %else
@@ -130,7 +130,7 @@
 # See mariadb-libfmt.patch for detailed description.
 # As the breaking issues are no longer present in fedora 41
 # and higher, this issue only remains in rhel
-%if 0%{?rhel} && 0%{?rhel} < 11 || 0%{?oreon}
+%if 0%{?rhel} && 0%{?rhel} < 11 || (0%{?oreon} >= 11)
 %bcond bundled_fmt 1
 %else
 %bcond bundled_fmt 0
@@ -171,14 +171,14 @@ Summary:          A very fast and robust SQL database server
 URL:              http://mariadb.org
 License:          ( GPL-2.0-only OR Apache-2.0 ) AND ( GPL-2.0-or-later OR Apache-2.0 ) AND BSD-2-Clause AND BSD-3-Clause AND CC-BY-4.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND ( GPL-3.0-or-later WITH Bison-exception-2.2 ) AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND OpenSSL AND MIT AND OFL-1.1 AND CC0-1.0 AND PHP-3.0 AND PHP-3.01 AND zlib AND dtoa AND FSFAP AND blessing AND Info-ZIP AND Boehm-GC
 
-Source0:        https://downloads.mariadb.org/interstitial/mariadb-/source/mariadb-.tar.gz
+Source0:        https://downloads.mariadb.org/interstitial/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 %if %{with bundled_fmt}
-Source1:        https://github.com/fmtlib/fmt/releases/download/11.1.4/fmt-11.1.4.zip
+Source1:        https://github.com/fmtlib/fmt/releases/download/%{fmt_bundled_version}/fmt-%{fmt_bundled_version}.zip
 %endif
 Source2:          mysql_config_multilib.sh
 Source3:          my.cnf.in
 %if %{with bundled_pcre}
-Source4:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.45/pcre2-10.45.zip
+Source4:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-%{pcre_bundled_version}/pcre2-%{pcre_bundled_version}.zip
 %endif
 Source6:          README.mariadb-docs
 Source8:          README.wsrep_sst_rsync_tunnel
@@ -269,7 +269,7 @@ BuildRequires:    libedit-devel
 BuildRequires:    ncurses-devel
 # debugging stuff
 BuildRequires:    systemtap-sdt-devel
-%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || 0%{?oreon}
+%if 0%{?fedora} >= 41 || 0%{?rhel} >= 11 || (0%{?oreon} >= 11)
 BuildRequires:    systemtap-sdt-dtrace
 %endif
 # Bison SQL parser; needed also for wsrep API

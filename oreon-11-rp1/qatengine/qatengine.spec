@@ -34,7 +34,7 @@ BuildRequires:  gcc
 BuildRequires:  libtool
 BuildRequires:  openssl-devel >= 1.1.1
 BuildRequires:  qatlib-devel >= 23.02.0
-%if !0%{?rhel} || 0%{?oreon}
+%if !0%{?rhel} || (0%{?oreon} >= 11)
 BuildRequires:  intel-ipp-crypto-mb-devel >= 1.0.6
 BuildRequires:  intel-ipsec-mb-devel >= 2.0
 %endif
@@ -58,7 +58,7 @@ autoreconf -ivf
 %install
 %make_install
 
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 find %{buildroot} -name "*.la" -delete
 %endif
 

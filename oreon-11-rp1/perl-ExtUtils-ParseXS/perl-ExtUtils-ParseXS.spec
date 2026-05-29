@@ -9,7 +9,7 @@ Release:        2%{?dist}
 Summary:        Module and a script for converting Perl XS code into C code
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-ParseXS
-Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-ParseXS-3.61.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-ParseXS-%{cpan_version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

@@ -17,7 +17,7 @@ License: (AFL-2.1 OR GPL-2.0-or-later) AND GPL-2.0-or-later
 URL:     https://www.freedesktop.org/software/dbus/
 #VCS:    git:https://gitlab.freedesktop.org/dbus/dbus-glib.git
 Source0:        https://dbus.freedesktop.org/releases/dbus-glib/dbus-glib-0.112.tar.gz
-Source1:        dbus-glib-0.112.tar.gz.asc
+Source1:        https://dbus.freedesktop.org/releases/dbus-glib/%{name}-%{version}.tar.gz.asc
 # gpg --keyserver keyring.debian.org --recv-keys 36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F
 # gpg --export --export-options export-minimal 0x36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F > gpgkey-36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F.gpg
 Source2: gpgkey-36EC5A6448A4F5EF79BEFE98E05AE1478F814C4F.gpg

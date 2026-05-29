@@ -1,4 +1,5 @@
 %global source0_hash none
+%global source30_hash 4172a1f7df3836d4af8153d88b53fb0f7176083372ad35695725f49e8c9fbd0a
 
 %global nspr_version 4.38.2
 %global nss_version 3.123.1
@@ -85,7 +86,7 @@ BuildRequires:    psmisc
 BuildRequires:    perl-interpreter
 BuildRequires:    gcc-c++
 
-Source0:        https://ftp.mozilla.org/pub/security/nss/releases/%{nss_release_tag}/src/nss-%{nss_archive_version}-with-nspr-%{nspr_archive_version}.tar.gz
+Source0:        https://ftp.mozilla.org/pub/security/nss/releases/%{nss_release_tag}/src/%{nss_nspr_archive}.tar.gz
 Source1:          nss-util.pc.in
 Source2:          nss-util-config.in
 Source3:          nss-softokn.pc.in
@@ -305,6 +306,7 @@ Header files for doing development with the Netscape Portable Runtime.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source30_hash}" = "none" || { f="%{SOURCE30}"; test -f "$f" || { echo "oreon: missing Source30 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source30_hash}" || { echo "oreon: Source30 hash mismatch" >&2; exit 1; }; })
 %setup -q -T -b 0 -n %{name}-%{nss_archive_version}
 cp ./nspr/config/nspr-config.in ./nspr/config/nspr-config-pc.in
 
@@ -704,7 +706,7 @@ mkdir -p $RPM_BUILD_ROOT/%{_libdir}/pkgconfig
 mkdir -p $RPM_BUILD_ROOT/%{saved_files_dir}
 mkdir -p $RPM_BUILD_ROOT/%{dracut_modules_dir}
 mkdir -p $RPM_BUILD_ROOT/%{dracut_conf_dir}
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 # not needed for rhel and its derivatives only fedora
 %else
 # because of the pp.1 conflict with perl-PAR-Packer
@@ -799,7 +801,7 @@ done
 for f in certutil cmsutil crlutil derdump modutil pk12util signtool signver ssltap vfychain vfyserv; do
   install -c -m 644 ./dist/docs/nroff/${f}.1 $RPM_BUILD_ROOT%{_mandir}/man1/${f}.1
 done
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 install -c -m 644 ./dist/docs/nroff/pp.1 $RPM_BUILD_ROOT%{_mandir}/man1/pp.1
 %else
 install -c -m 644 ./dist/docs/nroff/pp.1 $RPM_BUILD_ROOT%{_datadir}/doc/nss-tools/pp.1
@@ -894,7 +896,7 @@ fi
 # unsupported tools
 %doc %{_mandir}/man1/derdump.1*
 %doc %{_mandir}/man1/signtool.1*
-%if %{defined rhel} || 0%{?oreon}
+%if %{defined rhel} || (0%{?oreon} >= 11)
 %doc %{_mandir}/man1/pp.1*
 %else
 %dir %{_datadir}/doc/nss-tools

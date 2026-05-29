@@ -47,7 +47,7 @@ Version: 1.14.5
 Release: %autorelease
 License: Apache-2.0
 URL: https://subversion.apache.org/
-Source0:        https://downloads.apache.org/subversion/subversion-1.14.5.tar.bz2
+Source0:        https://downloads.apache.org/subversion/subversion-%{version}.tar.bz2
 Source1: subversion.conf
 Source3: filter-requires.sh
 Source4: http://www.xsteve.at/prg/emacs/psvn.el
@@ -176,7 +176,9 @@ passwords in the KDE Wallet.
 
 %package -n mod_dav_svn
 Summary: Apache httpd module for Subversion server
-%{?!_httpd_requires: Requires: httpd-mmn = %{_httpd_mmn}}
+%if %{undefined _httpd_requires}
+Requires: httpd-mmn = %{_httpd_mmn}
+%endif
 Requires: subversion-libs%{?_isa} = %{version}-%{release}
 BuildRequires: httpd-devel >= 2.4.63-4
 
@@ -265,7 +267,7 @@ perl -pi -e 's|/usr/bin/env python.*|%{svn_python}|' subversion/tests/cmdline/sv
 export svn_cv_ruby_link="%{__cc} -shared"
 export svn_cv_ruby_sitedir_libsuffix=""
 export svn_cv_ruby_sitedir_archsuffix=""
-%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 32 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 # Fix include path for ruby2.7
 export svn_cv_ruby_includes="-I%{_includedir}"
 %endif

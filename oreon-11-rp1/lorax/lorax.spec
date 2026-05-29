@@ -26,7 +26,7 @@ BuildRequires:  make
 BuildRequires:  systemd-rpm-macros
 
 Requires:       lorax-templates
-%if 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 Requires:       lorax-templates-rhel
 %endif
 
@@ -63,7 +63,7 @@ Requires:       python3-libdnf5
 Requires:       python3-librepo
 Requires:       python3-pycdio
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # Fedora specific deps
 %ifarch x86_64
 Requires:       hfsplus-tools
@@ -98,11 +98,11 @@ Requires: lorax = %{version}-%{release}
 %description docs
 Includes the full html documentation for lorax, livemedia-creator, and the pylorax library.
 
-%if ! (0%{?rhel} >= 10 && "%{_arch}" == "ppc64le") || 0%{?oreon}
+%if ! (0%{?rhel} >= 10 && "%{_arch}" == "ppc64le") || (0%{?oreon} >= 11)
 %package lmc-virt
 Summary:  livemedia-creator libvirt dependencies
 Requires: lorax = %{version}-%{release}
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 # RHEL doesn't have qemu, just qemu-kvm
 Requires: qemu-kvm
 %else
@@ -179,7 +179,7 @@ make DESTDIR=$RPM_BUILD_ROOT mandir=%{_mandir} install
 %files docs
 %doc docs/html/*
 
-%if ! (0%{?rhel} >= 10 && "%{_arch}" == "ppc64le") || 0%{?oreon}
+%if ! (0%{?rhel} >= 10 && "%{_arch}" == "ppc64le") || (0%{?oreon} >= 11)
 %files lmc-virt
 %endif
 

@@ -2,7 +2,7 @@
 
 %global with_mingw 0
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %global with_mingw 1
 %endif
 
@@ -14,7 +14,7 @@ Summary:    YAML 1.1 parser and emitter written in C
 # SPDX
 License:    MIT
 URL:        https://github.com/yaml/libyaml
-Source0:        https://github.com/yaml/libyaml/releases/download/0.2.5/yaml-0.2.5.tar.gz
+Source0:        https://github.com/yaml/libyaml/releases/download/%{version}/yaml-%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake

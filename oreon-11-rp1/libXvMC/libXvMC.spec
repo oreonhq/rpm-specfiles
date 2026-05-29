@@ -12,11 +12,11 @@ License: MIT
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://www.x.org/archive/individual/lib/libXvMC-1.0.13.tar.xz
+Source0:        https://www.x.org/archive/individual/lib/%{name}-%{version}.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
-Source0:        https://www.x.org/archive/individual/lib/libXvMC-1.0.13.tar.xz
+Source0:        https://www.x.org/archive/individual/lib/%{name}-%{version}.tar.xz
 %endif
 
 Requires: libX11 >= 1.5.99.902

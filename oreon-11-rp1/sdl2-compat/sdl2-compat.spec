@@ -3,7 +3,7 @@
 %global sdl3_minver 3.4.0
 
 # Features disabled for RHEL
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_with static
 %else
 %bcond_without static

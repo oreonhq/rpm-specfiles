@@ -1,7 +1,7 @@
 %global source0_hash aa80f52473b8ca3368e8f83496fac1b2a25d27723506b94c4ea6c861fce961f8
 
 # Run optional test
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_Compress_Raw_Bzip2_enables_optional_test
 %else
 %bcond_with perl_Compress_Raw_Bzip2_enables_optional_test

@@ -8,13 +8,13 @@
 %{?!fedora:%global fedora 0}
 
 # Map RHEL to Fedora version
-%if 0%{?rhel} == 6 || 0%{?oreon}
+%if 0%{?rhel} == 6 || (0%{?oreon} >= 11)
 %global fedora 12
 %endif
-%if 0%{?rhel} == 7 || 0%{?oreon}
+%if 0%{?rhel} == 7 || (0%{?oreon} >= 11)
 %global fedora 19
 %endif
-%if 0%{?rhel} > 7 || 0%{?oreon}
+%if 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 %global fedora 27
 %endif
 
@@ -45,79 +45,79 @@
 %global farstream_version       0.1
 
 # RHEL4: Use ALSA aplay to output sounds because it lacks gstreamer
-%if 0%{?fedora} < 5 || 0%{?oreon}
+%if 0%{?fedora} < 5 || (0%{?oreon} >= 11)
 %global force_sound_aplay       1
 %endif
 # RHEL4+ and FC5+: dbus, gstreamer, NetworkManager, modular X
-%if 0%{?fedora} >= 5 || 0%{?oreon}
+%if 0%{?fedora} >= 5 || (0%{?oreon} >= 11)
 %global dbus_integration        1
 %global gstreamer_integration   1
 %global nm_integration          1
 %global modular_x               1
 %endif
 # RHEL4+ and FC6+: dbus-glib split, bonjour, meanwhile
-%if 0%{?fedora} >= 6 || 0%{?oreon}
+%if 0%{?fedora} >= 6 || (0%{?oreon} >= 11)
 %global dbus_glib_splt          1
 %global bonjour_support         1
 %global meanwhile_integration   1
 %endif
 # RHEL4 and RHEL5: Use gnome-open instead of xdg-open (RHEL4 and RHEL5)
-%if 0%{?fedora} <= 6 || 0%{?oreon}
+%if 0%{?fedora} <= 6 || (0%{?oreon} >= 11)
 %global use_gnome_open          1
 %endif
 # F7+: Perl devel separated out
-%if 0%{?fedora} >= 7 || 0%{?oreon}
+%if 0%{?fedora} >= 7 || (0%{?oreon} >= 11)
 %global perl_devel_separated    1
 %endif
 # F8+: Perl embed separated out, generate pidgin API documentation
-%if 0%{?fedora} >= 8 || 0%{?oreon}
+%if 0%{?fedora} >= 8 || (0%{?oreon} >= 11)
 %global perl_embed_separated    1
 %global api_docs                1
 %endif
 # F10+: New NSS (3.12.3) disables weaker MD2 algorithm
-%if 0%{?fedora} >= 10 || 0%{?oreon}
+%if 0%{?fedora} >= 10 || (0%{?oreon} >= 11)
 %global nss_md2_disabled        1
 %endif
 # F11+: libidn for punycode domain support, voice and video support,
 # use system SSL certificates
-%if 0%{?fedora} >= 11 || 0%{?oreon}
+%if 0%{?fedora} >= 11 || (0%{?oreon} >= 11)
 %global vv_support              1
 %global libidn_support          1
 %global use_system_certs        1
 %endif
 # F12+: krb4 removed
-%if 0%{?fedora} >= 12 || 0%{?oreon}
+%if 0%{?fedora} >= 12 || (0%{?oreon} >= 11)
 %global krb4_removed            1
 %endif
 # F13+ Split Evolution plugin to separate package (#581144)
-%if 0%{?fedora} >= 13 || 0%{?oreon}
+%if 0%{?fedora} >= 13 || (0%{?oreon} >= 11)
 %global split_evolution         1
 %endif
 # F16+ Use system libgadu (#713888)
-%if 0%{?fedora} >= 16 || 0%{?oreon}
+%if 0%{?fedora} >= 16 || (0%{?oreon} >= 11)
 %global use_system_libgadu      1
 %endif
 # RHEL does not have libgadu
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global use_system_libgadu      0
 %endif
-%if 0%{?rhel} >= 7 || 0%{?oreon}
+%if 0%{?rhel} >= 7 || (0%{?oreon} >= 11)
 %global api_docs                0
 %endif
 # F18+ Disable evolution integration (temporarily?)
 # due to evolution-data-server 3.6 API changes
-%if 0%{?fedora} >= 18 || 0%{?oreon}
+%if 0%{?fedora} >= 18 || (0%{?oreon} >= 11)
 %global disable_evolution       1
 %global split_evolution         0
 %endif
 # F2+ Build against GStreamer 1.x
-%if 0%{?fedora} >= 22 || 0%{?oreon}
+%if 0%{?fedora} >= 22 || (0%{?oreon} >= 11)
 %global gstreamer_version       1.0
 %global farstream_version       0.2
 %global gst1                    1
 %endif
 # F29 doesn't support nm-glib anymore.
-%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8 || 0%{?oreon}
+%if 0%{?fedora} >= 29 || 0%{?rhel} >= 8 || (0%{?oreon} >= 11)
 %global nm_libnm_integration    1
 %endif
 # valgrind available only on selected arches
@@ -134,7 +134,7 @@ License:        LicenseRef-Callaway-BSD AND GPL-2.0-or-later AND GPL-2.0-only AN
 # GPLv2 - novell prpls
 # MIT - Zephyr prpl
 URL:            http://pidgin.im/
-Source0:        http://downloads.sourceforge.net/pidgin/pidgin-2.14.14.tar.bz2
+Source0:        http://downloads.sourceforge.net/pidgin/pidgin-%{version}.tar.bz2
 Obsoletes:      gaim < 999:1
 Provides:       gaim = 999:1
 
@@ -272,13 +272,13 @@ BuildRequires:  perl(ExtUtils::Embed)
 %endif
 # Voice and video support (F11+)
 %if %{vv_support}
-%if 0%{?fedora} >= 17 || 0%{?oreon}
+%if 0%{?fedora} >= 17 || (0%{?oreon} >= 11)
 BuildRequires:  pkgconfig(farstream-%{farstream_version})
 %else
 BuildRequires:  farsight2-devel
 %endif
 Requires:       gstreamer%{?gst1}-plugins-good
-%if 0%{?fedora} >= 12 || 0%{?oreon}
+%if 0%{?fedora} >= 12 || (0%{?oreon} >= 11)
 Requires:       gstreamer%{?gst1}-plugins-bad-free
 %endif
 %endif
@@ -300,7 +300,7 @@ BuildRequires:  valgrind-devel
 %endif
 
 # Need rpm 4.9+ to be able to do this filtering in arch packages with binaries
-%if 0%{?fedora} >= 15 || 0%{?oreon}
+%if 0%{?fedora} >= 15 || (0%{?oreon} >= 11)
 # Filter out plugins from provides
 %global __provides_exclude_from ^%{_libdir}/purple
 # Use define to delay evaluation
@@ -368,7 +368,7 @@ Requires:   glib2 >= %{glib_ver}
 # Bug #212817 Jabber needs cyrus-sasl plugins for authentication
 Requires:   cyrus-sasl-plain, cyrus-sasl-md5
 # Bug #979052 - Can't connect to xmpp server since upgrade from f18 to f19
-%if 0%{?fedora} >= 19 || 0%{?oreon}
+%if 0%{?fedora} >= 19 || (0%{?oreon} >= 11)
 Requires:   cyrus-sasl-scram
 %endif
 # Use system SSL certificates (F11+)
@@ -376,7 +376,7 @@ Requires:   cyrus-sasl-scram
 Requires:   ca-certificates
 %endif
 # Workaround for accidental shipping of pidgin-docs
-%if 0%{?rhel} == 5 || 0%{?oreon}
+%if 0%{?rhel} == 5 || (0%{?oreon} >= 11)
 Obsoletes:  pidgin-docs = 2.5.2
 %endif
 %if %{dbus_integration}
@@ -509,7 +509,7 @@ SWITCHES="--with-extraversion=%{release}"
 %endif
 %if %{dbus_integration}
     SWITCHES="$SWITCHES --enable-dbus"
-%if 0%{?fedora} >= 27 || 0%{?oreon}
+%if 0%{?fedora} >= 27 || (0%{?oreon} >= 11)
     SWITCHES="$SWITCHES --with-python=%{__python3}"
 %endif
 %else

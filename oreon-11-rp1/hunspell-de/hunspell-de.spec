@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d8155eca8c4ae0375d10ebbab1017d5ea2e941b07b01b84fc4306736dcefac3a
 
 Name:          hunspell-de
 Summary:       German hunspell dictionaries

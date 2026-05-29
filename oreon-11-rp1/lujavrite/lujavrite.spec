@@ -8,7 +8,7 @@ License:        Apache-2.0
 URL:            https://github.com/mizdebsk/lujavrite
 ExclusiveArch:  %{java_arches}
 
-Source:        https://github.com/mizdebsk/lujavrite/releases/download/1.2.3/lujavrite-1.2.3.tar.zst
+Source:        https://github.com/mizdebsk/lujavrite/releases/download/%{version}/lujavrite-%{version}.tar.zst
 
 BuildRequires:  cmake
 BuildRequires:  gcc

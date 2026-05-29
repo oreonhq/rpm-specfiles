@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c8ebebf7dbbbad58c3a169b037ccd5380f6143a9eb709bbb3cc11bd0a1e75a88
 
 Name:           plexus-i18n
 Version:        1.0

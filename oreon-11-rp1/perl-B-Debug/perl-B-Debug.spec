@@ -2,7 +2,7 @@
 
 # Run optional test
 %if !%{defined perl_bootstrap}
-%if ! (0%{?rhel}) || 0%{?oreon}
+%if ! (0%{?rhel}) || (0%{?oreon} >= 11)
 %bcond_without perl_B_Debug_enables_optional_test
 %else
 %bcond_with perl_B_Debug_enables_optional_test

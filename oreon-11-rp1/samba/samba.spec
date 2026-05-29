@@ -3,6 +3,7 @@
 %global source2_key_fpr 81F5E2832BD2545A1897B713AA99442FB680B620
 
 
+
 # The testsuite is disabled by default.
 #
 # To build and run the tests use:
@@ -41,7 +42,7 @@
 %{!?_make_verbose:%define _make_verbose V=1 VERBOSE=1}
 
 # Build with Active Directory Domain Controller support by default on Fedora
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond dc 1
 %else
 %bcond dc 0
@@ -54,7 +55,7 @@
 %bcond libwbclient 1
 
 # Build with winexe by default
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 
 %ifarch x86_64
 %bcond winexe 1
@@ -68,7 +69,7 @@
 %endif
 
 # Build vfs_ceph module and ctdb cepth mutex helper by default on 64bit Fedora
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 
 %ifarch aarch64 ppc64le s390x x86_64 riscv64
 %bcond vfs_cephfs 1
@@ -85,7 +86,7 @@
 # endif fedora
 %endif
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 
 %ifarch aarch64 ppc64le s390x x86_64 riscv64
 %bcond vfs_glusterfs 1
@@ -107,7 +108,7 @@
 
 # Build the ctdb-pcp-pmda package by default on Fedora, except for i686 where
 # pcp is no longer supported
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %ifnarch i686
 %bcond pcp_pmda 1
 %endif
@@ -116,7 +117,7 @@
 %endif
 
 # Build the etcd helpers by default on Fedora
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 # disable etcd mutex helper as etcd is orphaned in Fedora now
 %bcond etcd_mutex 0
 %else
@@ -124,7 +125,7 @@
 %endif
 
 # Build the prometheus exporter by default on Fedora
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %bcond prometheus 1
 %else
 %bcond prometheus 0
@@ -136,7 +137,7 @@
 %bcond lmdb 0
 %endif
 
-%if 0%{?fedora} >= 43 || 0%{?oreon}
+%if 0%{?fedora} >= 43 || (0%{?oreon} >= 11)
 %bcond varlink 1
 %else
 %bcond varlink 0
@@ -213,7 +214,7 @@ Name:           samba
 Version:        %{samba_version}
 Release:        %{samba_release}
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Epoch:          2
 %else
 Epoch:          0
@@ -344,7 +345,7 @@ BuildRequires: zlib-devel >= 1.2.3
 
 BuildRequires: pkgconfig(libsystemd)
 # TODO FIXME This is not in RHEL yet
-%if 0%{?fedora} >= 43 || 0%{?oreon}
+%if 0%{?fedora} >= 43 || (0%{?oreon} >= 11)
 BuildRequires: pkgconfig(libngtcp2)
 BuildRequires: pkgconfig(libngtcp2_crypto_gnutls)
 %else
@@ -356,7 +357,7 @@ BuildRequires: pkgconfig(libvarlink) >= 24
 %endif
 
 %ifnarch i686
-%if 0%{?fedora} >= 37 || 0%{?oreon}
+%if 0%{?fedora} >= 37 || (0%{?oreon} >= 11)
 BuildRequires: mold
 %endif
 %endif
@@ -408,7 +409,7 @@ BuildRequires: python3-tdb >= %{tdb_version}
 %if %{with dc}
 BuildRequires: bind
 BuildRequires: krb5-server >= %{required_mit_krb5}
-%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 BuildRequires: python3-dateutil
 %else
 BuildRequires: python3-iso8601
@@ -565,7 +566,7 @@ Summary: Files used by both Samba servers and clients
 BuildArch: noarch
 
 Requires(post): (systemd-standalone-tmpfiles or systemd)
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Recommends:     logrotate
 %endif
 
@@ -1348,7 +1349,7 @@ Python bindings for the LDB library
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %(test -z "%{source2_key_fpr}" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source2_key_fpr}" || { echo "oreon: Source2 key fingerprint mismatch" >&2; exit 1; }; })
-%if 0%{?fedora} || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 xzcat %{SOURCE0} | %{gpgverify} --keyring='%{SOURCE2}' --signature='%{SOURCE1}' --data=-
 %else
 xzcat %{SOURCE0} | gpgv2 --quiet --keyring %{SOURCE2} %{SOURCE1} -
@@ -1413,7 +1414,7 @@ export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 export python_LDFLAGS="$(echo %{__global_ldflags} | sed -e 's/-Wl,-z,defs//g')"
 
 %ifnarch i686 riscv64
-%if 0%{?fedora} >= 37 || 0%{?oreon}
+%if 0%{?fedora} >= 37 || (0%{?oreon} >= 11)
 export LDFLAGS="%{__global_ldflags} -fuse-ld=mold"
 export python_LDFLAGS="$(echo ${LDFLAGS} | sed -e 's/-Wl,-z,defs//g')"
 # endif fedora >= 37
@@ -2157,7 +2158,7 @@ fi
 %{_libdir}/samba/libndr-samba-private-samba.so
 %{_libdir}/samba/libndr-samba4-private-samba.so
 %{_libdir}/samba/libnetif-private-samba.so
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %{_libdir}/samba/libngtcp2-crypto-gnutls-private-samba.so
 %{_libdir}/samba/libngtcp2-private-samba.so
 %endif

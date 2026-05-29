@@ -11,7 +11,7 @@ URL:            https://bytebuddy.net
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/raphw/byte-buddy/archive/refs/tags/byte-buddy-1.17.7.tar.gz
+Source0:        https://github.com/raphw/byte-buddy/archive/refs/tags/byte-buddy-%{version}.tar.gz
 
 # Patch the build to avoid bundling inside shaded jars
 Patch:          0001-Avoid-bundling-asm.patch

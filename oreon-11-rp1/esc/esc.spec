@@ -15,7 +15,7 @@ BuildRequires: nspr-devel nss-devel nss-static
 
 BuildRequires: pcsc-lite-devel
 BuildRequires: desktop-file-utils
-%if ! 0%{?rhel} >= 9 || 0%{?oreon}
+%if ! 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 BuildRequires: pkgconfig(gconf-2.0)
 %endif
 BuildRequires: dbus-devel
@@ -50,7 +50,7 @@ AutoReqProv: 0
 %define pixmapdir  %{_datadir}/pixmaps
 %define docdir    %{_defaultdocdir}/%{escname}
 
-Source0:        https://www.dogtagpki.org/pki/sources/esc/esc-1.1.2.tar.bz2
+Source0:        https://www.dogtagpki.org/pki/sources/esc/%{escname}.tar.bz2
 Source1: https://www.dogtagpki.org/pki/sources/esc/esc
 # originally https://www.dogtagpki.org/pki/sources/esc/esc.desktop, since modified
 Source2: esc.desktop

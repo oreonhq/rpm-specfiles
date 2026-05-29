@@ -613,7 +613,7 @@ mksquashfs memdisk memdisk.squashfs -comp lzo			\
 
 %ifarch ppc64le
 # RHEL signs, Fedora + ELN + Oreon don't (ELN defines rhel)
-%if 0%{?fedora} || 0%{?eln} || 0%{?oreon}
+%if 0%{?fedora} || 0%{?eln} || (0%{?oreon} >= 11)
 %define ieee1275_mkimage()					\
 mkdir -p memdisk/fonts						\
 cp %{5}/unicode.pf2 memdisk/fonts				\

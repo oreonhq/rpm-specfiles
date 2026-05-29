@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 18bf0a302e9ba0492cf1c46efbaad1f614823e65d16dd98e5a0f4878c6733e60
 
 Name: hyphen-mi
 Summary: Maori hyphenation rules

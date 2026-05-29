@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 731a87fb5ed128341b4178b1dee11819fd5e7392e4ac0526c318d9ab28cf61c9
 
 Name: hyphen-de
 Summary: German hyphenation rules
 %global upstreamid 20060120
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/hyph_de_DE.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_de_DE.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: LGPL-2.1-or-later
 BuildArch: noarch

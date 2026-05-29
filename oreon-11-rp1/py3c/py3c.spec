@@ -13,7 +13,7 @@ License:        MIT AND CC-BY-SA-3.0
 
 URL:            http://py3c.readthedocs.io/
 
-Source0:        https://github.com/encukou/py3c/archive/v1.4.tar.gz#/py3c-1.4.tar.gz
+Source0:        https://github.com/encukou/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  make
 BuildRequires:  gcc

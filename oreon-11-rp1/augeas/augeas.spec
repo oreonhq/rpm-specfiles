@@ -1,4 +1,5 @@
 %global source0_hash b50ab817b7e246e63af3b489e572542986a3aa88dd63b83616a1f67fd347bf74
+%global source1_hash 61da4d20e2a8c7cc6ec98078cc376b62ee8a4437018f04253dfec85521c0a843
 
 Name:           augeas
 Version:        1.14.2
@@ -37,7 +38,7 @@ BuildRequires:  readline-devel
 BuildRequires:  libselinux-devel
 BuildRequires:  libxml2-devel
 BuildRequires:  bash-completion
-%if 0%{?fedora} > 40 || 0%{?rhel} > 10 || 0%{?oreon}
+%if 0%{?fedora} > 40 || 0%{?rhel} > 10 || (0%{?oreon} >= 11)
 BuildRequires:  bash-completion-devel
 %endif
 
@@ -99,6 +100,7 @@ for %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %forgeautosetup -p1
 zcat %{SOURCE1} | tar xf -
 
@@ -189,7 +191,7 @@ rm -f $RPM_BUILD_ROOT/usr/bin/dump
 %{_libdir}/libfa.a
 
 %files bash-completion
-%if 0%{?fedora} > 40 || 0%{?rhel} > 10 || 0%{?oreon}
+%if 0%{?fedora} > 40 || 0%{?rhel} > 10 || (0%{?oreon} >= 11)
 %dir %{bash_completions_dir}
 %{bash_completions_dir}/augmatch
 %{bash_completions_dir}/augprint

@@ -11,7 +11,7 @@ URL:            https://codehaus-plexus.github.io/plexus-archiver
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-archiver/archive/plexus-archiver-4.10.0.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-archiver/archive/plexus-archiver-%{version}.tar.gz
 
 Patch:          0001-Remove-support-for-snappy.patch
 Patch:          0002-Remove-support-for-zstd.patch

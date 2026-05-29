@@ -7,7 +7,7 @@ Release:        3%{?dist}
 Summary:        Runtime module handling
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Runtime
-Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/Module-Runtime-0.018.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/Module-Runtime-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

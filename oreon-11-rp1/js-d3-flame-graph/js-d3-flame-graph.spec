@@ -1,4 +1,5 @@
 %global source0_hash 83fbada3ba50f16993142dce679938bb41b4364d234538dbd08b1c1f1c89118e
+%global source1_hash e2265fd047ee728d2fd96c8dfe57dbd486753973ba49c3d462bb6657d19eef45
 
 %global         pkgname d3-flame-graph
 %global         github https://github.com/spiermar/d3-flame-graph
@@ -25,7 +26,7 @@ Patch1:         001-remove-unused-frontend-crypto-and-patch-md4.patch
 BuildRequires:  web-assets-devel
 BuildRequires:  nodejs, /usr/bin/node
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Requires:       web-assets-filesystem
 %endif
 
@@ -72,6 +73,7 @@ Documentation and example files for js-d3-flame-graph.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -T -D -b 0 -n %{pkgname}-%{version}
 %setup -q -T -D -b 1 -n %{pkgname}-%{version}
 

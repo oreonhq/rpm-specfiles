@@ -4,12 +4,12 @@
     %define fedora 32
 %endif
 
-%if 0%{?fedora} > 27 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} > 27 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %global use_python3 1
 %define __python %{__python3}
 %endif
 
-%if 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %global with_dii 0
 %else
 %global with_dii 1
@@ -86,7 +86,7 @@ Requires:           python
 Summary:            Python bindings for libpst
 Requires:           %{name}-libs%{?_isa} = %{version}-%{release}
 
-%if 0%{?fedora} >= 20 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 20 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %global __provides_exclude_from %{?__provides_exclude_from:%__provides_exclude_from|}^%{python_sitearch}/_.*\.so$
 %else
 %{?filter_setup:

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4c9daa7b4c07c5408b0dbc429c13153f45ec5de3d6aed083d2deafd333ba89e8
 
 Name: sane-frontends
 Version: 1.0.14

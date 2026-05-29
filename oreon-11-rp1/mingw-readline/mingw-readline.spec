@@ -9,7 +9,7 @@ Summary:        MinGW port of readline for editing typed command lines
 
 License:        GPL-2.0-or-later
 URL:            https://tiswww.case.edu/php/chet/readline/rltop.html
-Source0:        https://git.savannah.gnu.org/cgit/readline.git/snapshot/readline-8.3.tar.gz
+Source0:        https://git.savannah.gnu.org/cgit/readline.git/snapshot/readline-%{version}.tar.gz
 
 # Remove RPATH, use CFLAGS
 Patch1:         readline-8.0-shlib.patch

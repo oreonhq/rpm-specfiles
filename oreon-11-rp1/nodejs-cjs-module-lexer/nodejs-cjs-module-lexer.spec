@@ -1,4 +1,5 @@
 %global source0_hash ff07e0a58f14f24c6abdae64b2afdd309b21cb17f60e486e9eadc6e32ed99e87
+%global source2_hash a8c5d334676ac281bf7c83e79041745cf183fea13b158684b00854767b814051
 
 %global     npm_name cjs-module-lexer
 %global     prebuilt_blobs lib/lexer.wasm
@@ -13,7 +14,7 @@ Release:    %autorelease
 License:    MIT
 URL:        https://www.npmjs.com/package/cjs-module-lexer
 # The npmjs.org archive does not contain sources, only built artifacts
-Source:        https://github.com/nodejs/cjs-module-lexer/archive/1.4.1/cjs-module-lexer-1.4.1.tar.gz
+Source:        https://github.com/nodejs/%{npm_name}/archive/%{version}/%{npm_name}-%{version}.tar.gz
 # Production archive is not needed
 Source2:     %{npm_name}-%{version}-nm-dev.tgz
 Source3:     %{npm_name}-%{version}-bundled-licenses.txt
@@ -61,6 +62,7 @@ and is maintained for this purpose.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
 %autosetup -n %{npm_name}-%{version} -S git_am
 cp -p %{S:3} .
 

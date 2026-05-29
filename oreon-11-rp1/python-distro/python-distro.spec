@@ -32,7 +32,7 @@ for more information.
 
 %package -n     python3-%{pypi_name}
 Summary:        %{summary}
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 Suggests:       /usr/bin/lsb_release
 %endif
 

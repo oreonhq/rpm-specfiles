@@ -7,7 +7,7 @@ Summary:	Easy configuration generator interface for fontconfig
 
 License:	LGPL-3.0-or-later
 URL:		https://gitlab.com/tagoh/libeasyfc/
-Source0:        https://bitbucket.org/tagoh/libeasyfc/downloads/libeasyfc-0.14.1.tar.bz2
+Source0:        https://bitbucket.org/tagoh/libeasyfc/downloads/%{name}-%{version}.tar.bz2
 Patch0:		%{name}-freetype.patch
 
 BuildRequires:	glib2-devel gobject-introspection-devel libxml2-devel fontconfig-devel >= 2.12.93 harfbuzz-devel

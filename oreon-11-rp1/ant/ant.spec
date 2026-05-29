@@ -51,7 +51,7 @@ URL:            https://ant.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/ant/source/apache-ant-1.10.15-src.tar.bz2
+Source0:        https://archive.apache.org/dist/ant/source/apache-ant-%{version}-src.tar.bz2
 Source2:        apache-ant-1.8.ant.conf
 # manpage
 Source3:        ant.asciidoc

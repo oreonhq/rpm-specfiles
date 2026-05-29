@@ -1,5 +1,5 @@
 %global source0_hash none
-%global source1_hash none
+%global source1_hash 2846f6079d8965447b22c1637696be71b69bdca91f5558c0c2a2b9b3b8de8dd2
 
 Name: hyphen-pt
 Summary: Portuguese hyphenation rules
@@ -11,7 +11,7 @@ Source0: https://pt-br.libreoffice.org/assets/Uploads/PT-BR-Documents/VERO/hyphp
 # The contents of Source1 are the same rules that are currently (2022-05-16) in
 # use for pt-PT at https://cgit.freedesktop.org/libreoffice/dictionaries/tree/pt_PT
 # so we continue to use those rules in the absence of a contrary opinion
-Source1: http://download.services.openoffice.org/contrib/dictionaries/hyph_pt_PT.zip
+Source1:        http://download.services.openoffice.org/contrib/dictionaries/hyph_pt_PT.zip
 URL: https://pt-br.libreoffice.org/projetos/vero/
 License: LGPL-3.0-only AND GPL-1.0-or-later
 BuildArch: noarch

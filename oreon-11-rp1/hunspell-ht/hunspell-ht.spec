@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -10,7 +10,7 @@ Name: hunspell-ht
 Summary: Haitian Creole hunspell dictionaries
 Version: 0.06
 Release: 32%{?dist}
-Source:        http://extensions.services.openoffice.org/files/3247/3/hunspell-ht-0.06.oxt
+Source:        http://extensions.services.openoffice.org/files/3247/3/%{name}-%{version}.oxt
 URL: http://kok.logipam.org/
 License: GPL-3.0-or-later
 BuildArch: noarch

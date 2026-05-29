@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 306e375a4113992053c066c1a5e2574b2f1787e1ff75c2c23c2a7cd5f6ce65b5
 
 Name: hyphen-sl
 Summary: Slovenian hyphenation rules
 %global upstreamid 20070127
 Version: 0.%{upstreamid}
 Release: 34%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/hyph_sl_SI.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/hyph_sl_SI.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: LGPL-2.1-or-later
 BuildArch: noarch

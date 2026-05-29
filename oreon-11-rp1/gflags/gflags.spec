@@ -8,7 +8,7 @@ Summary:        Library for commandline flag processing
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            https://gflags.github.io/gflags/
-Source0:        https://github.com/gflags/gflags/archive/v2.2.2/gflags-2.2.2.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:         gflags-fix_pkgconfig.patch
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

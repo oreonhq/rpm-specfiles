@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f04f04bc6dca946f6be9b72b235cbe884197327f61609e349ed8b39ea5ce73db
 
 Summary: A utility which lists open files on a Linux/UNIX system
 Name: lsof

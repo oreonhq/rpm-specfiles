@@ -7,7 +7,7 @@ Summary:        Network Presence Binding Daemon
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/latchset/%{name}
-Source0:        https://github.com/latchset/tang/releases/download/v15/tang-15.tar.xz
+Source0:        https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 Source1:        tang.sysusers
 
 BuildRequires:  gcc

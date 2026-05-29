@@ -1,4 +1,4 @@
-%global source0_hash 61ec17d669a21e75969a2050a4615d7cea612ffd66d35fe9f4a8259c6d4bcd91
+%global source0_hash 2806b2f49903b3f77ded3204f580eb0d7b8d9a74775ca2801f6394211d86e2d7
 
 Name: hyphen-fr
 Summary: French hyphenation rules

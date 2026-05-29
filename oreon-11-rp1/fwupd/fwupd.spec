@@ -33,11 +33,11 @@
 %endif
 
 # only available recently
-%if 0%{?fedora} >= 30 || 0%{?oreon}
+%if 0%{?fedora} >= 30 || (0%{?oreon} >= 11)
 %global have_modem_manager 1
 %endif
 
-%if 0%{?fedora} || 0%{?oreon}
+%if 0%{?fedora} || (0%{?oreon} >= 11)
 %global have_passim 1
 %endif
 
@@ -47,7 +47,7 @@ Version:   2.1.3
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/fwupd/fwupd
-Source0:        http://people.freedesktop.org/~hughsient/releases/fwupd-2.1.3.tar.xz
+Source0:        http://people.freedesktop.org/~hughsient/releases/%{name}-%{version}.tar.xz
 
 BuildRequires: gettext
 BuildRequires: hwdata

@@ -25,8 +25,8 @@ BuildRequires: xemacs
 BuildRequires: xemacs-packages-extra
 %endif
 
-Source0:        https://github.com/fujiwarat/anthy-unicode/releases/download/1.0.0.20260213/anthy-unicode-1.0.0.20260213.tar.xz
-Source1:        https://github.com/fujiwarat/anthy-unicode/releases/download/1.0.0.20260213/anthy-unicode-1.0.0.20260213.tar.xz.sha256sum#/anthy-unicode.tar.xz.sha256sum
+Source0:        https://github.com/fujiwarat/anthy-unicode/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://github.com/fujiwarat/anthy-unicode/releases/download/%{version}/%{name}-%{version}.tar.xz.sha256sum#/%{name}.tar.xz.sha256sum
 Source2: %{name}-init.el
 # Upstreamed patches
 #Patch0: %%{name}-HEAD.patch

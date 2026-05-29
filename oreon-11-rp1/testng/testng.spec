@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4aeb00ab2a24fc3fd61c70a585142e2a681e10398e4894f76dc5854e227c2639
 
 %bcond_with bootstrap
 
@@ -14,7 +14,7 @@ ExclusiveArch:  %{java_arches} noarch
 # ./generate-tarball.sh
 Source0:        %{name}-%{version}.tar.gz
 # Allows building with maven instead of gradle
-Source1:        https://repo1.maven.org/maven2/org/testng/testng/7.8.0/testng-7.8.0.pom
+Source1:        https://repo1.maven.org/maven2/org/testng/testng/%{version}/testng-%{version}.pom
 # Remove bundled binaries to make sure we don't ship anything forbidden
 Source2:        generate-tarball.sh
 

@@ -11,7 +11,7 @@ Version:   1.7.2
 Release:   %autorelease
 License:   GPL-2.0-or-later AND BSD-3-Clause AND BSD-2-Clause AND ISC AND LGPL-2.1-or-later
 URL:       https://github.com/cronie-crond/cronie
-Source0:        https://github.com/cronie-crond/cronie/releases/download/cronie-1.7.2/cronie-1.7.2.tar.gz
+Source0:        https://github.com/cronie-crond/cronie/releases/download/cronie-%{version}/cronie-%{version}.tar.gz
 Source1:   cronie-tmpfiles.conf
 Source2:   cronie-anacron-tmpfiles.conf
 
@@ -48,7 +48,7 @@ Obsoletes:        %{name}-sysvinit
 
 Requires(post):   coreutils sed
 
-%if 0%{?fedora} && 0%{?fedora} < 28 || 0%{?rhel} && 0%{?rhel} < 8 || 0%{?oreon}
+%if 0%{?fedora} && 0%{?fedora} < 28 || 0%{?rhel} && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
 %{?systemd_requires}
 %else
 %{?systemd_ordering} # does not exist on Fedora27/RHEL7

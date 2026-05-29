@@ -1,6 +1,6 @@
-%global source0_hash none
+%global source0_hash 81b01ba579f560726150ddc71a47b6dc40e0df368ff8e643bc0846c017e9d235
 
-%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || 0%{?oreon}
+%if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
 %else
 %global dict_dirname myspell
@@ -11,7 +11,7 @@ Summary: Tetum hunspell dictionaries
 %global upstreamid 20050108
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source: http://download.services.openoffice.org/contrib/dictionaries/tet_ID.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/tet_ID.zip
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch

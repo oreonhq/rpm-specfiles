@@ -7,8 +7,8 @@ Summary:        Educational software suite for children aged 2 to 10
 
 License:        AGPL-3.0-only
 URL:            http://gcompris.net
-Source0:        https://download.kde.org/stable/gcompris/qt/src/gcompris-qt-26.1.tar.xz
-Source1:        https://download.kde.org/stable/gcompris/qt/src/gcompris-qt-26.1.tar.xz.sig
+Source0:        https://download.kde.org/stable/gcompris/qt/src/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/stable/gcompris/qt/src/%{name}-%{version}.tar.xz.sig
 # Download from https://collaborate.kde.org/s/8GpWjyHg5xBTQFS
 Source2:        0x63d7264c05687d7e.asc
 

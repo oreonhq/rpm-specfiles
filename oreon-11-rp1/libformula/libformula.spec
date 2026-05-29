@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 6f12dac0c26465bca4d8e09cbdaa52c4e9c9e7e66b2f7bfe5bf4924202e93c70
 
 Name: libformula
 Version: 1.1.3

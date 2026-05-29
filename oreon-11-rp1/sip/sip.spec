@@ -1,7 +1,7 @@
 %global source0_hash none
 
 %bcond_without python3
-%if (0%{?fedora} && 0%{?fedora} < 32) || (0%{?rhel} && 0%{?rhel} < 9) || 0%{?oreon}
+%if (0%{?fedora} && 0%{?fedora} < 32) || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?oreon} >= 11)
 %bcond_without python2
 %endif
 
@@ -12,7 +12,7 @@
 %{!?python2_sitearch:%global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %{!?python2_inc:%global python2_inc %(%{__python2} -c "from distutils.sysconfig import get_python_inc; print get_python_inc(1)")}
 
-%if 0%{?fedora} > 31 || 0%{?rhel} > 8 || 0%{?oreon}
+%if 0%{?fedora} > 31 || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 %global PYINCLUDE %{_includedir}/python%{python3_version}
 %else
 %global PYINCLUDE %{_includedir}/python%{python3_version}m
@@ -28,19 +28,19 @@
 
 # provide non-namespace python modules
 # needed by at least some legacy/non-qt consumers, e.g. pykde4
-%if 0%{?fedora} && 0%{?fedora} < 31 || 0%{?oreon}
+%if 0%{?fedora} && 0%{?fedora} < 31 || (0%{?oreon} >= 11)
 %global no_namespace 1
 %endif
 
 # Stop building siplib for wx on F34+
-%if 0%{?fedora} && 0%{?fedora} >= 34 || 0%{?oreon}
+%if 0%{?fedora} && 0%{?fedora} >= 34 || (0%{?oreon} >= 11)
 %global wx_siplib 0
 %else
 %global wx_siplib 1
 %endif
 
 # Stop building PyQt5.sip on F35+
-%if 0%{?fedora} && 0%{?fedora} >= 35 || 0%{?oreon}
+%if 0%{?fedora} && 0%{?fedora} >= 35 || (0%{?oreon} >= 11)
 %global pyqt5_sip 0
 %else
 %global pyqt5_sip 1
@@ -55,7 +55,7 @@ Release: 20%{?dist}
 # Automatically converted from old format: GPLv2 or GPLv3 and (GPLv3+ with exceptions) - review is highly recommended.
 License: GPL-2.0-only OR GPL-3.0-only AND (LicenseRef-Callaway-GPLv3+-with-exceptions)
 Url: https://riverbankcomputing.com/software/sip/intro
-Source0:        https://riverbankcomputing.com/static/Downloads/sip/4.19.25/sip-4.19.25%{?snap:.%{snap}}.tar.gz
+Source0:        https://riverbankcomputing.com/static/Downloads/sip/%{version}/sip-%{version}%{?snap:.%{snap}}.tar.gz
 
 Source10: sip-wrapper.sh
 

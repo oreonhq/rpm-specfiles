@@ -6,7 +6,7 @@
 # Pythran is an optional build dependency.
 # When used, it makes some modules faster,
 # but it is usually not available soon enough for new major Python versions.
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 %bcond_with pythran
 %bcond_with pooch
 %bcond_with tests
@@ -29,7 +29,7 @@
 # Set to pre-release version suffix if building pre-release, else %%{nil}
 %global rcver %{nil}
 
-%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || 0%{?oreon}
+%if 0%{?fedora} >= 33 || 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %global blaslib flexiblas
 %global blasvar %{nil}
 %else
@@ -169,7 +169,7 @@ sed -Ei '/^[[:blank:]]*"(asv|pytest-cov|pytest-timeout)"/d' pyproject.toml
 sed -i '/^[[:blank:]]*"scikit-umfpack"/d' pyproject.toml
 
 # No pytest-xdist in RHEL
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 sed -i '/^[[:blank:]]*"pytest-xdist"/d' pyproject.toml
 %endif
 
@@ -233,7 +233,7 @@ not test_distance_transform_cdt05'"
 %endif
 
 %ifarch x86_64
-%if 0%{?rhel} || 0%{?oreon}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
 # test_minimize_constrained started failing on ELN without any direct changes to scipy
 export PYTEST_ADDOPTS="-k '$SKIP_ALL and \
 not test_gh7799 and \

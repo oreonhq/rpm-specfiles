@@ -1,4 +1,5 @@
 %global source0_hash a25675ffbd055ae1186766cc1e120b4cf62588e88abb59b99c57e22b1c55c9eb
+%global source1_hash 1a28a40532d5d10581e29a978489a65abb140676a7c3ec13be8e2b614c0f74c7
 
 %global gem_name bundler
 
@@ -30,7 +31,7 @@ Summary: Library and utilities to manage a Ruby application's gem dependencies
 #   lib/rubygems/resolver/molinillo
 License: MIT AND (Ruby OR BSD-2-Clause)
 URL: https://bundler.io
-Source0:        https://rubygems.org/gems/bundler-2.6.9.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/rubygems/rubygems/ && cd rubygems
 # git archive -v -o bundler-2.6.9-specs.tar.gz bundler-v2.6.9 bundler/spec/ tool/bundler/{rubocop,standard,test}_gems.rb
 Source1: %{gem_name}-%{version}-specs.tar.gz
@@ -79,6 +80,7 @@ Documentation for %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
 %setup -q -n %{gem_name}-%{version} -b 1
 
 ( cd %{builddir}
