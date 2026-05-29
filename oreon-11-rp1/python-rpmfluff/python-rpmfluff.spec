@@ -9,7 +9,7 @@ Summary:       Lightweight way of building RPMs, and sabotaging them
 
 License:       GPL-2.0-or-later
 URL:           https://pagure.io/rpmfluff
-Source0:       https://pagure.io/releases/%{modname}/%{modname}-%{version}.tar.xz
+Source0:        https://pagure.io/releases/rpmfluff/rpmfluff-0.6.7.tar.xz
 
 BuildArch:     noarch
 

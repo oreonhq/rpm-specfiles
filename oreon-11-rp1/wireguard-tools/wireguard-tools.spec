@@ -8,7 +8,7 @@ Summary:        Fast, modern, secure VPN tunnel
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 
-Source0:        https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-%{version}.tar.xz
+Source0:        https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-1.0.20250521.tar.xz
 
 %{?systemd_requires}
 BuildRequires: make

@@ -11,7 +11,7 @@ Summary:        A library handling all the details of proxy configuration
 
 License:        LGPL-2.1-or-later
 URL:            https://libproxy.github.io/libproxy/
-Source0:        https://github.com/libproxy/%{name}/archive/refs/tags/%{version}.tar.gz
+Source0:        https://github.com/libproxy/libproxy/archive/refs/tags/0.5.12.tar.gz
 # https://github.com/libproxy/libproxy/issues/343
 Patch0:         libproxy-0.5.12-optional-static.patch
 

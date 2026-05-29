@@ -14,7 +14,7 @@ Release:   1%{?dist}
 License:   GPL-2.0-or-later
 URL:       http://www.gnome.org/projects/NetworkManager/
 
-Source0:   https://download.gnome.org/sources/NetworkManager-openvpn/1.12/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/NetworkManager-openvpn/1.12/NetworkManager-openvpn-1.12.5.tar.xz
 Patch0:    https://gitlab.gnome.org/GNOME/NetworkManager-openvpn/-/merge_requests/104.patch
 
 

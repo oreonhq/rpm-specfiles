@@ -7,7 +7,7 @@ Release:        6%{?dist}
 
 License:        MIT
 URL:            https://gitlab.gnome.org/GNOME/libxslt
-Source0:        https://download.gnome.org/sources/%{name}/1.1/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/libxslt/1.1/libxslt-1.1.43.tar.xz
 
 Provides: xsltproc = %{version}-%{release}
 

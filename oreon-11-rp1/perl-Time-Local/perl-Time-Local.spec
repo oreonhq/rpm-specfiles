@@ -8,7 +8,7 @@ Release:        521%{?dist}
 Summary:        Efficiently compute time from local and GMT time
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Time-Local
-Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Time-Local-%{cpan_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Time-Local-1.35.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

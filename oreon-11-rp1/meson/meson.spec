@@ -11,7 +11,7 @@ Summary:        High productivity build system
 
 License:        Apache-2.0
 URL:            https://mesonbuild.com/
-Source:         https://github.com/mesonbuild/meson/releases/download/%{version_no_tilde .}/meson-%{version_no_tilde %{quote:}}.tar.gz
+Source:        https://github.com/mesonbuild/meson/releases/download/%{version_no_tilde .}/meson-%{version_no_tilde %{quote:}}.tar.gz
 Patch0:         skip-aarch64-bindgen-cross-test-on-aarch64.patch
 
 BuildArch:      noarch

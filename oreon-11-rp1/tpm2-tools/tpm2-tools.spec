@@ -9,7 +9,7 @@ Summary: A bunch of TPM testing toolS build upon tpm2-tss
 
 License: BSD-3-Clause
 URL:     https://github.com/tpm2-software/tpm2-tools
-Source0: https://github.com/tpm2-software/tpm2-tools/releases/download/%{version}%{?candidate:-%{candidate}}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.gz
+Source0:        https://github.com/tpm2-software/tpm2-tools/releases/download/5.7%{?candidate:-%{candidate}}/tpm2-tools-5.7%{?candidate:-%{candidate}}.tar.gz
 
 BuildRequires: make
 BuildRequires: gcc-c++

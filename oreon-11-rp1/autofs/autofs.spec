@@ -20,7 +20,7 @@ Version: 5.1.9
 Release: 12%{?dist}
 Epoch: 1
 License: GPL-2.0-or-later
-Source: https://www.kernel.org/pub/linux/daemons/autofs/v5/autofs-%{version}.tar.gz
+Source:        https://www.kernel.org/pub/linux/daemons/autofs/v5/autofs-5.1.9.tar.gz
 Patch1: autofs-5.1.9-update-configure.patch
 Patch2: autofs-5.1.9-fix-ldap_parse_page_control-check.patch
 Patch3: autofs-5.1.9-fix-crash-in-make_options_string.patch

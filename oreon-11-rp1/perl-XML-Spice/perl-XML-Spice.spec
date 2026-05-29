@@ -6,7 +6,7 @@ Release:        28%{?dist}
 Summary:        Generating XML in Perl way
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Spice
-Source0:        https://cpan.metacpan.org/authors/id/R/RO/ROBN/XML-Spice-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RO/ROBN/XML-Spice-0.05.tar.gz
 BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  make

@@ -20,7 +20,7 @@ BuildRequires: libell-devel
 BuildRequires: systemd-units
 BuildRequires: systemd-rpm-macros
 
-Source0: https://github.com/multipath-tcp/mptcpd/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/multipath-tcp/mptcpd/archive/v0.14/mptcpd-0.14.tar.gz
 
 %description
 The Multipath TCP Daemon is a daemon for Linux based operating systems that

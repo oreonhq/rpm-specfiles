@@ -13,7 +13,7 @@ License:	PostgreSQL
 URL:		http://pgaudit.org
 
 # Temporary source until postgresql18 support is released
-Source0:	https://github.com/%{majorname}/%{majorname}/archive/refs/heads/main.tar.gz
+Source0:        https://github.com/pgaudit/pgaudit/archive/refs/heads/main.tar.gz
 # ExecutorStart_hook_type type was changed from void to bool in pg17
 
 %if %?postgresql_default

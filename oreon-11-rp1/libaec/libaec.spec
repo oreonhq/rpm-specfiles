@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Adaptive Entropy Coding library
 License:        LicenseRef-Callaway-BSD
 Url:            https://gitlab.dkrz.de/k202009/libaec
-Source0:        https://gitlab.dkrz.de/k202009/libaec/-/archive/v%{version}/libaec-v%{version}.tar.gz
+Source0:        https://gitlab.dkrz.de/k202009/libaec/-/archive/v1.1.6/libaec-v1.1.6.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  cmake >= 3.1

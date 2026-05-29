@@ -13,7 +13,7 @@ Name: %{fontname}-fonts
 Version: 2.0
 Release: 37%{?dist}
 License: GPL-2.0-only
-Source: http://downloads.sourceforge.net/sourceforge/arabeyes/%{fontname}_fonts_%{version}.tar.bz2
+Source:        http://downloads.sourceforge.net/sourceforge/arabeyes/kacst_fonts_2.0.tar.bz2
 Source1: %{fontconf}-art.conf
 Source2: %{fontconf}-book.conf
 Source3: %{fontconf}-decorative.conf

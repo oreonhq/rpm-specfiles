@@ -1,7 +1,7 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-font-viewer
 Version:        50.0
@@ -10,8 +10,7 @@ Summary:        Utility for previewing fonts for GNOME
 
 License:        GPL-2.0-or-later AND CC0-1.0
 URL:            https://gitlab.gnome.org/GNOME/gnome-font-viewer
-Source0:        https://download.gnome.org/sources/gnome-font-viewer/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-font-viewer/%{major_version}/gnome-font-viewer-%{tarball_version}.tar.xz
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  meson

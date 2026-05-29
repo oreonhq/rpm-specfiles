@@ -4,8 +4,8 @@
 %global __provides_exclude_from ^%{_libdir}/gnome-connections/
 %global __requires_exclude ^(%%(find %{buildroot}%{_libdir}/gnome-connections/ -name '*.so' | xargs -n1 basename | sort -u | paste -s -d '|' -))
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-connections
 Version:        50.0
@@ -14,8 +14,7 @@ Summary:        A remote desktop client for the GNOME desktop environment
 
 License:        GPL-3.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:            https://gitlab.gnome.org/gnome/connections/-/wikis/home
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-connections/%{major_version}/gnome-connections-%{tarball_version}.tar.xz
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  gettext

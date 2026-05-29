@@ -13,7 +13,7 @@ Summary:        Automatically Tuned Linear Algebra Software
 
 License:        BSD-3-Clause
 URL:            http://math-atlas.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/math-atlas/%{name}%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/math-atlas/atlas3.10.3.tar.bz2
 Source1:        PPRO32.tgz
 Source2:        README.dist
 #archdefs taken from debian:

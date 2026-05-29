@@ -33,7 +33,7 @@ Summary:	Regular expressions library
 # SPDX confirmed
 License:	BSD-2-Clause
 URL:		https://github.com/kkos/oniguruma/
-Source0:	https://github.com/kkos/oniguruma/releases/download/v%{mainver}%{?betaver:_%betaver}/onig-%{mainver}%{?postver:.%postver}%{?betaver:-%betaver}%{?gitversion:-%{?gitversion}}.tar.gz
+Source0:        https://github.com/kkos/oniguruma/releases/download/v6.9.10%{?betaver:_%betaver}/onig-6.9.10%{?postver:.%postver}%{?betaver:-%betaver}%{?gitversion:-%{?gitversion}}.tar.gz
 Source1:	create-tarball-from-git.sh
 
 BuildRequires:	make

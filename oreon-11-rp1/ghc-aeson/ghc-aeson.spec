@@ -35,15 +35,15 @@ Summary:        Fast JSON parsing and encoding
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/aeson
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{OneTuple}/%{OneTuple}.tar.gz
-Source2:        https://hackage.haskell.org/package/%{characterps}/%{characterps}.tar.gz
-Source3:        https://hackage.haskell.org/package/%{generically}/%{generically}.tar.gz
-Source4:        https://hackage.haskell.org/package/%{indexedtraversableinstances}/%{indexedtraversableinstances}.tar.gz
-Source5:        https://hackage.haskell.org/package/%{semialign}/%{semialign}.tar.gz
-Source6:        https://hackage.haskell.org/package/%{textiso8601}/%{textiso8601}.tar.gz
-Source7:        https://hackage.haskell.org/package/%{witherable}/%{witherable}.tar.gz
-Source8:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/aeson-%{version}/aeson-%{version}.tar.gz
+Source1:        https://hackage.haskell.org/package/OneTuple-0.4.2.1/OneTuple-0.4.2.1.tar.gz
+Source2:        https://hackage.haskell.org/package/character-ps-0.1/character-ps-0.1.tar.gz
+Source3:        https://hackage.haskell.org/package/generically-0.1.1/generically-0.1.1.tar.gz
+Source4:        https://hackage.haskell.org/package/indexed-traversable-instances-0.1.2/indexed-traversable-instances-0.1.2.tar.gz
+Source5:        https://hackage.haskell.org/package/semialign-1.3.1/semialign-1.3.1.tar.gz
+Source6:        https://hackage.haskell.org/package/text-iso8601-0.1.1/text-iso8601-0.1.1.tar.gz
+Source7:        https://hackage.haskell.org/package/witherable-0.5/witherable-0.5.tar.gz
+Source8:        https://hackage.haskell.org/package/aeson-%{version}/aeson.cabal#/aeson-%{version}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

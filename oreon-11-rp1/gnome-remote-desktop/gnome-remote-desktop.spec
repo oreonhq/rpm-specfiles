@@ -5,8 +5,8 @@
 %global systemd_unit_system gnome-remote-desktop.service
 %global systemd_unit_user gnome-remote-desktop.service
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 %bcond rdp %[0%{?fedora} || 0%{?rhel} >= 10]
 %bcond vnc %[0%{?fedora} || 0%{?rhel} < 10]
@@ -21,8 +21,7 @@ Summary:        GNOME Remote Desktop screen share service
 
 License:        GPL-2.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-remote-desktop
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-remote-desktop/%{major_version}/gnome-remote-desktop-%{tarball_version}.tar.xz
 # Adds encryption support (requires patched LibVNCServer)
 Patch0:         gnutls-anontls.patch
 

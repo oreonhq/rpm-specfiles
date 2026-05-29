@@ -11,7 +11,7 @@ Version: 	4.8.33
 Release:	3%{?dist}
 License:	GPL-3.0-or-later
 URL:		https://midnight-commander.org/
-Source:		http://ftp.midnight-commander.org/mc-%{version}.tar.xz
+Source:        http://ftp.midnight-commander.org/mc-4.8.33.tar.xz
 Patch:		%{name}-spec.syntax.patch
 BuildRequires:	autoconf
 BuildRequires:	automake

@@ -15,7 +15,7 @@ Release:        522%{?dist}
 Summary:        Perl extension for Version Objects
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/version
-Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/version-%{module_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/version-0.9933.tar.gz
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils

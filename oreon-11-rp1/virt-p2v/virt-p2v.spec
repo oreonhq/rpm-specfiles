@@ -22,9 +22,9 @@ ExclusiveArch: x86_64
 
 # Source and patches.
 URL:           http://libguestfs.org/
-Source0:       http://download.libguestfs.org/%{name}/%{name}-%{version}.tar.gz
+Source0:        http://download.libguestfs.org/virt-p2v/virt-p2v-1.42.4.tar.gz
 %if 0%{verify_tarball_signature}
-Source1:       http://download.libguestfs.org/%{name}/%{name}-%{version}.tar.gz.sig
+Source1:        http://download.libguestfs.org/virt-p2v/virt-p2v-1.42.4.tar.gz.sig
 %endif
 
 # Keyring used to verify tarball signature.

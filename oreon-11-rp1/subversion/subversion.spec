@@ -47,7 +47,7 @@ Version: 1.14.5
 Release: %autorelease
 License: Apache-2.0
 URL: https://subversion.apache.org/
-Source0: https://downloads.apache.org/subversion/subversion-%{version}.tar.bz2
+Source0:        https://downloads.apache.org/subversion/subversion-1.14.5.tar.bz2
 Source1: subversion.conf
 Source3: filter-requires.sh
 Source4: http://www.xsteve.at/prg/emacs/psvn.el

@@ -10,7 +10,7 @@ License:        LGPL-2.1-or-later
 URL:            https://github.com/PackageKit/PackageKit-Qt
 
 # Tag archive (consistent saved name for spectool)
-Source0:        https://github.com/PackageKit/PackageKit-Qt/archive/refs/tags/v%{version}.tar.gz#/PackageKit-Qt-%{version}.tar.gz
+Source0:        https://github.com/PackageKit/PackageKit-Qt/archive/refs/tags/v1.1.4.tar.gz#/PackageKit-Qt-1.1.4.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

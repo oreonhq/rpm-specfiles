@@ -15,7 +15,7 @@ Summary:        Character properties and classes for XML and Unicode
 License:        MIT
 URL:            https://hackage.haskell.org/package/hxt-charproperties
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/hxt-charproperties-9.5.0.0/hxt-charproperties-9.5.0.0.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

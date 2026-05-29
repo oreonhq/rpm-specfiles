@@ -7,7 +7,7 @@ Release:    12%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:    GPL-2.0-only
 Url:        http://sshpass.sourceforge.net/
-Source0:    http://downloads.sourceforge.net/sshpass/sshpass-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/sshpass/sshpass-1.09.tar.gz
 
 BuildRequires: make
 BuildRequires:  gcc

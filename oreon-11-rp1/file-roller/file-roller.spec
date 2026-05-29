@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           file-roller
 Version:        44.6
@@ -9,8 +9,7 @@ Summary:        Tool for viewing and creating archives
 
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Apps/FileRoller
-Source0:        https://download.gnome.org/sources/%{name}/44/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/file-roller/44/file-roller-%{tarball_version}.tar.xz
 BuildRequires:  meson
 BuildRequires:  gcc
 BuildRequires:  pkgconfig(glib-2.0)

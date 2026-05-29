@@ -13,7 +13,7 @@ Release:	3%{?dist}
 Summary:	File path utility
 License:	Apache-2.0
 URL:		https://metacpan.org/release/Path-Tiny
-Source0:	https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Path-Tiny-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Path-Tiny-0.150.tar.gz
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

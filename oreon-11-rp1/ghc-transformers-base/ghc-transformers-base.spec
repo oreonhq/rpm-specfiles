@@ -15,7 +15,7 @@ Summary:        Lift computations from the bottom of a transformer stack
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/transformers-base
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/transformers-base-0.4.6/transformers-base-0.4.6.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           seahorse
 Version:        47.0.1
@@ -11,8 +11,7 @@ Summary:        A GNOME application for managing encryption keys
 # libcryptui is LGPLv2+
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND CC-BY-SA-3.0
 URL:            https://wiki.gnome.org/Apps/Seahorse
-Source:         https://download.gnome.org/sources/%{name}/47/%{name}-%{tarball_version}.tar.xz
-
+Source: https://download.gnome.org/sources/seahorse/47/seahorse-%{tarball_version}.tar.xz
 # https://gitlab.gnome.org/GNOME/seahorse/-/merge_requests/248
 Patch1:         seahorse-47.0.1-allow-build-with-gpgme2.patch
 

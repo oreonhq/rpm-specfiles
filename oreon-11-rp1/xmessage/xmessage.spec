@@ -7,7 +7,7 @@ Summary:        Display a message or query in a window
 
 License:        MIT
 URL:            https://www.x.org
-Source0:        https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/app/xmessage-1.0.7.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  make

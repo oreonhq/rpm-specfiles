@@ -6,7 +6,7 @@ Release:        56%{?dist}
 Summary:        A collection of Perl modules for working with XML
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Public-Domain
 URL:            https://metacpan.org/release/libxml-perl
-Source0:        https://cpan.metacpan.org/authors/id/K/KM/KMACLEOD/libxml-perl-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/K/KM/KMACLEOD/libxml-perl-0.08.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

@@ -9,8 +9,8 @@ License:        Apache-2.0
 Summary:        An elegant unit testing framework for C with support for mock objects
 URL:            https://cmocka.org
 
-Source0:        https://cmocka.org/files/2.0/%{name}-%{version}.tar.xz
-Source1:        https://cmocka.org/files/2.0/%{name}-%{version}.tar.xz.asc
+Source0:        https://cmocka.org/files/2.0/cmocka-2.0.2.tar.xz
+Source1:        https://cmocka.org/files/2.0/cmocka-2.0.2.tar.xz.asc
 Source2:        cmocka.keyring
 Source4:        https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.4.1/doxygen-awesome-css-2.4.1.tar.gz
 

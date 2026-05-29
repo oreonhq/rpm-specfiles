@@ -7,7 +7,7 @@ Summary: A collection of CD/DVD utilities
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 URL:     http://cdrkit.org/
-Source:  http://cdrkit.org/releases/cdrkit-%{version}.tar.gz
+Source:        http://cdrkit.org/releases/cdrkit-1.1.11.tar.gz
 
 Patch1: cdrkit-1.1.8-werror.patch
 Patch2: cdrkit-1.1.9-efi-boot.patch

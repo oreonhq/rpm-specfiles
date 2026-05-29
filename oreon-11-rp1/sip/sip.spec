@@ -55,7 +55,7 @@ Release: 20%{?dist}
 # Automatically converted from old format: GPLv2 or GPLv3 and (GPLv3+ with exceptions) - review is highly recommended.
 License: GPL-2.0-only OR GPL-3.0-only AND (LicenseRef-Callaway-GPLv3+-with-exceptions)
 Url: https://riverbankcomputing.com/software/sip/intro
-Source0: https://riverbankcomputing.com/static/Downloads/sip/%{version}/sip-%{version}%{?snap:.%{snap}}.tar.gz
+Source0:        https://riverbankcomputing.com/static/Downloads/sip/4.19.25/sip-4.19.25%{?snap:.%{snap}}.tar.gz
 
 Source10: sip-wrapper.sh
 

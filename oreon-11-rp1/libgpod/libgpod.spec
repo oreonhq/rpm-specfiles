@@ -18,7 +18,7 @@ Version: 0.8.3
 Release: 56%{?dist}
 License: LGPL-2.1-or-later
 URL: http://www.gtkpod.org/libgpod.html
-Source0: http://downloads.sourceforge.net/gtkpod/%{name}-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/gtkpod/libgpod-0.8.3.tar.bz2
 
 # upstreamable patch: reduce pkgconfig-related overlinking
 Patch0:  libgpod-0.8.2-pkgconfig_overlinking.patch

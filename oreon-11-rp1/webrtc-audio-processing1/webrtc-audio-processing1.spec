@@ -7,7 +7,7 @@ Summary:        Library for echo cancellation
 
 License:        BSD-3-Clause
 URL:            http://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing/
-Source0:        http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/webrtc-audio-processing-%{version}.tar.xz
+Source0:        http://freedesktop.org/software/pulseaudio/webrtc-audio-processing/webrtc-audio-processing-1.3.tar.xz
 
 Patch0:         arches.patch
 Patch1:         65f002e.patch

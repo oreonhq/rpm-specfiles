@@ -8,8 +8,7 @@ Summary:       Python module for determining platform-specific directories
 # https://spdx.org/licenses/MIT.html
 License:       MIT
 URL:           https://github.com/ActiveState/appdirs
-Source:        %{pypi_source appdirs}
-
+Source:        https://files.pythonhosted.org/packages/source/a/appdirs/appdirs-1.4.4.tar.gz
 BuildArch:     noarch
 
 BuildRequires: python3-devel

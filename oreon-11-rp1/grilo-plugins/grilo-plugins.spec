@@ -14,7 +14,7 @@ Summary:	Plugins for the Grilo framework
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:	LicenseRef-Callaway-LGPLv2+
 URL:		https://wiki.gnome.org/Projects/Grilo
-Source0:	https://download.gnome.org/sources/grilo-plugins/%{release_version}/grilo-plugins-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/grilo-plugins/%(echo %{version} | cut -d. -f1)/grilo-plugins-0.3.18.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  meson

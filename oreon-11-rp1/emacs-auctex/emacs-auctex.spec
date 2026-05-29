@@ -12,7 +12,7 @@ Release:        %autorelease
 License:        GPL-3.0-or-later AND FSFAP AND GFDL-1.3-no-invariants-or-later AND Knuth-CTAN
 URL:            https://www.gnu.org/software/auctex/
 VCS:            git:https://git.savannah.gnu.org/cgit/auctex.git
-Source:         https://github.com/emacsmirror/auctex/archive/auctex-%{version}.tar.gz
+Source:        https://github.com/emacsmirror/auctex/archive/auctex-14.1.2.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  emacs-nw

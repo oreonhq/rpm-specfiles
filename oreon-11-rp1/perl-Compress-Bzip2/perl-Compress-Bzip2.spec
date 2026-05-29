@@ -17,7 +17,7 @@ Summary:        Interface to Bzip2 compression library
 # other files:                              GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Compress-Bzip2
-Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Compress-Bzip2-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Compress-Bzip2-2.28.tar.gz
 BuildRequires:  bzip2-devel >= 1.0.5
 BuildRequires:  coreutils
 BuildRequires:  findutils

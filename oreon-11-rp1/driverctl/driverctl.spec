@@ -9,7 +9,7 @@ License:	LGPL-2.1-or-later
 URL:		https://gitlab.com/driverctl/driverctl
 BuildArch:	noarch
 
-Source0:	https://gitlab.com/driverctl/driverctl/-/archive/%{version}/driverctl-%{version}.tar.bz2
+Source0:        https://gitlab.com/driverctl/driverctl/-/archive/0.121/driverctl-0.121.tar.bz2
 
 # for udev macros
 BuildRequires: systemd

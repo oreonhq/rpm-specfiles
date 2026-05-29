@@ -11,7 +11,7 @@ URL:            https://github.com/mojohaus/extra-enforcer-rules
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/extra-enforcer-rules/%{version}/extra-enforcer-rules-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/extra-enforcer-rules/1.10.0/extra-enforcer-rules-1.10.0-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

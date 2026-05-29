@@ -16,7 +16,7 @@ Summary:        Xerox-compatible finite-state compiler
 
 License:        Apache-2.0
 URL:            https://github.com/mhulden/foma
-Source0:        https://github.com/mhulden/%{name}/archive/%{commit0}.tar.gz#/%{name}-%{shortcommit0}.tar.gz
+Source0:        https://github.com/mhulden/foma/archive/dfe1ccb1055af99be0232a26520d247b5fe093bc.tar.gz#/foma-%(c=dfe1ccb1055af99be0232a26520d247b5fe093bc;.tar.gz
 
 # This patch is made after the OpenSUSE patch at
 # https://build.opensuse.org/package/view_file/openSUSE:Factory/foma/foma-harden-build.patch?expand=1

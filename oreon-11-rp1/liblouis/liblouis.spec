@@ -13,7 +13,7 @@ Summary:        Braille translation and back-translation library
 # - gnulib/warn-on-use.h
 License:        LGPL-2.1-or-later AND LGPL-2.0-or-later
 URL:            https://liblouis.io
-Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/liblouis/liblouis/releases/download/v3.33.0/liblouis-3.33.0.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  hardlink

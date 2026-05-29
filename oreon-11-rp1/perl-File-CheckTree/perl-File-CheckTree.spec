@@ -6,7 +6,7 @@ Release:        324%{?dist}
 Summary:        Run many file-test checks on a tree
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-CheckTree
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/File-CheckTree-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/File-CheckTree-4.42.tar.gz
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators

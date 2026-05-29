@@ -10,8 +10,7 @@ Release: 2%{?dist}
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0
 Url:     http://www.qt.io
 %global majmin %(echo %{version} | cut -d. -f1-2)
-Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-opensource-src-%{version}.tar.xz
-
+Source0:        https://download.qt.io/official_releases/qt/%{qt5_version}/submodules/qttranslations-everywhere-opensource-src-%{qt5_version}.tar.xz
 BuildArch: noarch
 
 %global _qt5_qmake %{_bindir}/qmake-qt5

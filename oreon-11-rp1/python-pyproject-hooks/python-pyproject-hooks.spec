@@ -11,8 +11,7 @@ Summary:        Wrappers to call pyproject.toml-based build backend hooks
 # SPDX
 License:        MIT
 URL:            https://pypi.org/project/pyproject_hooks/
-Source:         %{pypi_source pyproject_hooks}
-
+Source:        https://files.pythonhosted.org/packages/source/p/pyproject-hooks/pyproject-hooks-1.2.0.tar.gz
 # Upstream fix for compatibility with Python 3.15
 Patch:          f230da76.patch
 

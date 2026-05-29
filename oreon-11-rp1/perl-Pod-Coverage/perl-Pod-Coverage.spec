@@ -6,7 +6,7 @@ Release:        36%{?dist}
 Summary:        Checks if the documentation of a module is comprehensive
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Coverage
-Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Pod-Coverage-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Pod-Coverage-0.23.tar.gz
 # Make pod_cover more secure, CPAN RT#85540
 Patch0:         Pod-Coverage-0.23-Do-not-search-.-lib-by-pod_cover.patch
 BuildArch:      noarch

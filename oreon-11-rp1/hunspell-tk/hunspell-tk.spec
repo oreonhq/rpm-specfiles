@@ -13,7 +13,7 @@ Epoch: 1
 Release: 31%{?dist}
 # Following link is dead now
 # Do not report bugs to fix it
-Source: http://releases.mozilla.org/pub/mozilla.org/addons/204314/turkmen_spell_checker-%{version}-tb+fx+sm.xpi
+Source:        http://releases.mozilla.org/pub/mozilla.org/addons/204314/turkmen_spell_checker-0.02-tb+fx+sm.xpi
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch

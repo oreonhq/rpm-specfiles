@@ -15,7 +15,7 @@ Summary:        Nicer interface for reified information about data types
 License:        ISC
 URL:            https://hackage.haskell.org/package/th-abstraction
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/th-abstraction-0.7.2.0/th-abstraction-0.7.2.0.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

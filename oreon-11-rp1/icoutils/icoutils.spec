@@ -7,7 +7,7 @@ Summary:        Utility for extracting and converting Microsoft icon and cursor 
 
 License:        GPL-2.0-or-later AND GPL-3.0-or-later
 URL:            http://www.nongnu.org/icoutils/
-Source0:        http://savannah.nongnu.org/download/%{name}/%{name}-%{version}.tar.bz2
+Source0:        http://savannah.nongnu.org/download/icoutils/icoutils-0.32.3.tar.bz2
 
 # Possible security fix, at minimum it's a DoS.
 # Upstream commit d72956a6de228c91d1fc48fd15448fadea9ab6cf

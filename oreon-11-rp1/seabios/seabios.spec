@@ -13,7 +13,7 @@ License:        LGPL-3.0-only
 URL:            http://www.coreboot.org/SeaBIOS
 
 # code.coreboot.org HTTPS often fails TLS handshakes. GitHub tag matches release.
-Source0:        https://github.com/coreboot/seabios/archive/refs/tags/rel-%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/coreboot/seabios/archive/refs/tags/rel-1.17.0.tar.gz#/seabios-1.17.0.tar.gz
 
 Patch0001:      0001-Workaround-for-a-win8.1-32-S4-resume-bug.patch
 Patch0003:      0003-vgabios-Reorder-video-modes-to-work-around-a-Windows.patch

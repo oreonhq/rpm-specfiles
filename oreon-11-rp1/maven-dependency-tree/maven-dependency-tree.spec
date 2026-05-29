@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/maven-dependency-tree/3.2.1/maven-dependency-tree-3.2.1-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

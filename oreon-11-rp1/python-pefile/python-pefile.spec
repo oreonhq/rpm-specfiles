@@ -29,7 +29,7 @@ Some of the tasks that pefile makes possible are:\
 #Source0:        https://github.com/erocarrera/%%{srcname}/archive/v%%{version}.tar.gz#/%%{srcname}-%%{version}.tar.gz
 
 # Release tarball contains only the functionality
-Source0:        https://github.com/erocarrera/%{srcname}/releases/download/v%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/erocarrera/pefile/releases/download/v2024.8.26/pefile-2024.8.26.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python%{python3_pkgversion}-devel

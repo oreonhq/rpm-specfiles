@@ -10,8 +10,8 @@ Version: 2.9.2
 Release: 5%{?dist}
 License: GPL-2.0-only
 
-Source0: https://invisible-island.net/archives/lynx/tarballs/lynx%{version}%{devrel}.tar.bz2
-Source1: https://invisible-island.net/archives/lynx/tarballs/lynx%{version}%{devrel}.tar.bz2.asc
+Source0:        https://invisible-island.net/archives/lynx/tarballs/lynx2.9.2%{nil}.tar.bz2
+Source1:        https://invisible-island.net/archives/lynx/tarballs/lynx2.9.2%{nil}.tar.bz2.asc
 Source2: https://invisible-island.net/public/dickey@invisible-island.net-rsa3072.asc
 
 URL: https://lynx.invisible-island.net/

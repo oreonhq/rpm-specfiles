@@ -20,7 +20,7 @@ Release: 4%{?dist}
 License: LGPL-2.1-only
 URL:     https://userbase.kde.org/QCA
 # Stable mirror redirects can 500, use Invent archive (same tag as release tarball)
-Source0: https://invent.kde.org/libraries/qca/-/archive/v%{version}/qca-v%{version}.tar.gz
+Source0:        https://invent.kde.org/libraries/qca/-/archive/v2.3.10/qca-v2.3.10.tar.gz
 # Also generate pkgconfig file for qt6
 Patch0:  qca-qt6-pkgconfig.patch
 ## upstream patches

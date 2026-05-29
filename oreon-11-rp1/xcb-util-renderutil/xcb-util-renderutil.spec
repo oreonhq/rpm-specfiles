@@ -6,7 +6,7 @@ Release:	9%{?dist}
 Summary:	Convenience functions for the Render extension
 License:	X11-distribute-modifications-variant AND HPND-sell-variant
 URL:		http://xcb.freedesktop.org
-Source0:	http://xcb.freedesktop.org/dist/%{name}-%{version}.tar.xz
+Source0:        http://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.10.tar.xz
 BuildRequires:	make
 BuildRequires:	gcc
 BuildRequires:	pkgconfig(xcb-util) >= 0.3.8

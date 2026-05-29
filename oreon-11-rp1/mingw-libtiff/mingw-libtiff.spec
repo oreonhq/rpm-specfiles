@@ -8,7 +8,7 @@ Version:        4.7.1
 Release:        2%{?dist}
 License:        libtiff
 URL:            http://www.simplesystems.org/libtiff/
-Source:         https://download.osgeo.org/libtiff/tiff-%{version}.tar.xz
+Source:        https://download.osgeo.org/libtiff/tiff-4.7.1.tar.xz
 
 BuildArch:      noarch
 

@@ -15,8 +15,8 @@ Summary:        Locale library
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/old-locale
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/old-locale-1.0.0.7/old-locale-1.0.0.7.tar.gz
+Source1:        https://hackage.haskell.org/package/old-locale-1.0.0.7/old-locale.cabal#/old-locale-1.0.0.7.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

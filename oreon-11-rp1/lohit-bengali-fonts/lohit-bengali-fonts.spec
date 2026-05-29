@@ -22,7 +22,7 @@ This package provides a free Bengali TrueType/OpenType font.
 
 BuildRequires: make
 BuildRequires: fontforge
-Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
+Source0:        https://releases.pagure.org/lohit/lohit-bengali-2.91.5.tar.gz
 Source10:       66-%{fontpkgname}.conf
 
 

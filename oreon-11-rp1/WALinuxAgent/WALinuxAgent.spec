@@ -9,7 +9,7 @@ Summary:        The Microsoft Azure Linux Agent
 
 License:        Apache-2.0
 URL:            https://github.com/Azure/%{name}
-Source0:        https://github.com/Azure/%{name}/archive/v%{version}.tar.gz
+Source0:        https://github.com/Azure/WALinuxAgent/archive/v2.15.0.1.tar.gz
 Source1:        module-setup.sh
 
 Patch1:         0001-waagent.service-set-ConditionVirtualization-microsof.patch

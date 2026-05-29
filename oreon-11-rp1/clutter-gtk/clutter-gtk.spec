@@ -13,7 +13,7 @@ Summary:        A basic GTK clutter widget
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            http://www.clutter-project.org
-Source0:        http://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/clutter-gtk/1.8/clutter-gtk-1.8.4.tar.xz
 
 BuildRequires:  clutter-devel >= %{clutter_version}
 BuildRequires:  gtk3-devel >= %{gtk3_version}

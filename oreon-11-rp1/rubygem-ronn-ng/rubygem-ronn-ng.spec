@@ -9,7 +9,7 @@ Release:        8%{?dist}
 Summary:        Builds man pages from Markdown
 License:        MIT
 URL:            https://github.com/apjanke/ronn-ng
-Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/ronn-ng-0.10.1.gem
 # git clone https://github.com/apjanke/ronn-ng.git && cd ronn-ng
 # git archive -v -o ronn-ng-0.10.1-test.tar.gz v0.10.1 test/
 Source1: %{gem_name}-%{version}-test.tar.gz

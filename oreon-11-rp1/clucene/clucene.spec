@@ -16,7 +16,7 @@ License:	LicenseRef-Callaway-LGPLv2+ OR Apache-2.0
 URL:		http://www.sourceforge.net/projects/clucene
 # Release tag still records the old snapshot ids; sources are the upstream release tarball
 # (avoids vendoring clucene-core-2.3.3.4-e8e3d20.tar.xz in distgit; spectool can fetch this URL).
-Source0:	https://downloads.sourceforge.net/project/clucene/clucene-core-unstable/2.3/clucene-core-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/project/clucene/clucene-core-unstable/2.3/clucene-core-2.3.3.4.tar.gz
 
 BuildRequires:	boost-devel
 BuildRequires:	cmake

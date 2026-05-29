@@ -2,7 +2,7 @@
 
 %global _vpath_srcdir subprojects/extensions-app
 %global source_name gnome-shell
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 %global major_version %%(cut -d "." -f 1 <<<%{tarball_version})
 
 %global adwaita_version 1.5.0
@@ -14,8 +14,7 @@ Summary:       Manage GNOME Shell extensions
 
 License:       GPL-2.0-or-later
 URL:           https://gitlab.gnome.org/GNOME/%{source_name}
-Source0:       https://download.gnome.org/sources/%{source_name}/%{major_version}/%{source_name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-shell/%%(cut/gnome-shell-%{tarball_version}.tar.xz
 BuildRequires: gcc
 BuildRequires: gettext
 BuildRequires: meson

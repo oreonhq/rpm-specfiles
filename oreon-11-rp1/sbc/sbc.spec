@@ -7,7 +7,7 @@ Summary:       Sub Band Codec used by bluetooth A2DP
 
 License:       GPL-2.0-only AND LGPL-2.1-or-later
 URL:           http://www.bluez.org
-Source0:       http://www.kernel.org/pub/linux/bluetooth/%{name}-%{version}.tar.xz
+Source0:        http://www.kernel.org/pub/linux/bluetooth/sbc-2.1.tar.xz
 
 BuildRequires: make
 BuildRequires: gcc

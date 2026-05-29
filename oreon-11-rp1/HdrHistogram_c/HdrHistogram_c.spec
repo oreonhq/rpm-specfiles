@@ -6,7 +6,7 @@ Release: 10%{?dist}
 Summary: C port of the HdrHistogram 
 License: BSD-2-Clause
 URL: https://github.com/HdrHistogram/%{name}
-Source0: https://github.com/HdrHistogram/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/HdrHistogram/HdrHistogram_c/archive/0.11.8/HdrHistogram_c-0.11.8.tar.gz
 
 BuildRequires: gcc g++ cmake zlib-devel
 

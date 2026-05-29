@@ -6,7 +6,7 @@ Release:        4%{?dist}
 Summary:        Framework for more readable interactive test scripts
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Inter
-Source0:        https://cpan.metacpan.org/authors/id/S/SB/SBECK/Test-Inter-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SB/SBECK/Test-Inter-1.12.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

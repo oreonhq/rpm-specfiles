@@ -24,12 +24,12 @@ URL:            https://github.com/fedora-java/javapackages-bootstrap
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source:         https://github.com/fedora-java/javapackages-bootstrap/releases/download/%{version}/javapackages-bootstrap-%{version}.tar.zst
+Source:        https://github.com/fedora-java/javapackages-bootstrap/releases/download/1.27.0/javapackages-bootstrap-1.27.0.tar.zst
 # License breakdown
-Source:        https://github.com/fedora-java/javapackages-bootstrap/releases/download/%{version}/javapackages-bootstrap-%{version}.tar.zst
+Source:        https://github.com/fedora-java/javapackages-bootstrap/releases/download/1.27.0/javapackages-bootstrap-1.27.0.tar.zst
 # 132 *.tar.zst component archives ship in Fedora SRPM (not on upstream GitHub release).
 # %%prep unpacks them from Source200; or run fetch-jpb-vendor-tarballs.sh for local copies.
-Source200:      https://kojipkgs.fedoraproject.org/pub/fedora/linux/releases/44/Everything/source/tree/Packages/j/javapackages-bootstrap-%{version}-2.fc44.src.rpm
+Source200:        https://kojipkgs.fedoraproject.org/pub/fedora/linux/releases/44/Everything/source/tree/Packages/j/javapackages-bootstrap-1.27.0-2.fc44.src.rpm
 
 Patch:          0001-Switch-Dola-to-Lua-5.5.patch
 

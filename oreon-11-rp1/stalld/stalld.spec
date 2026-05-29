@@ -7,7 +7,7 @@ Summary:	Daemon that finds starving tasks and gives them a temporary boost
 
 License:	GPL-2.0-or-later AND GPL-2.0-only
 URL:		https://gitlab.com/rt-linux-tools/%{name}/%{name}.git
-Source0:	https://gitlab.com/rt-linux-tools/%{name}/-/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://gitlab.com/rt-linux-tools/stalld/-/archive/v1.27.1/stalld-1.27.1.tar.gz
 
 BuildRequires:	glibc-devel
 BuildRequires:	gcc

@@ -8,7 +8,7 @@ Version: 2.5.0
 Release: 3%{?dist}
 License: Apache-2.0
 URL: https://github.com/opencryptoki
-Source0: https://github.com/opencryptoki/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/opencryptoki/openssl-ibmca/archive/v2.5.0/openssl-ibmca-2.5.0.tar.gz
 # post GA fixes
 #Patch0: %%{name}-%%{version}-fixes.patch
 Requires: libica >= 4.0.0

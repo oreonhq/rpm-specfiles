@@ -11,7 +11,7 @@ Summary: Fast, pure-Ruby Markdown-superset converter
 # SPDX confirmed
 License:	MIT
 URL:		http://kramdown.gettalong.org
-Source0:	https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/kramdown-2.5.2.gem
 BuildRequires:	ruby(release)
 BuildRequires:	rubygems-devel
 BuildRequires:	rubygem(minitest) >= 5

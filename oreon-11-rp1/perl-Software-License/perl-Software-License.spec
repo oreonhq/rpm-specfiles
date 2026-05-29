@@ -19,7 +19,7 @@ Release:        3%{?dist}
 Summary:        Package that provides templated software licenses
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Software-License
-Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/Software-License-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/Software-License-0.104007.tar.gz
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

@@ -11,7 +11,7 @@ Summary: C/C++ library to decode tracker music module (MOD) files
 
 URL: https://lib.openmpt.org/libopenmpt/
 
-Source0: https://lib.openmpt.org/files/libopenmpt/src/%{tar_root}.tar.gz
+Source0:        https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-0.8.6+release.autotools.tar.gz
 
 BuildRequires: make
 BuildRequires: gcc-c++

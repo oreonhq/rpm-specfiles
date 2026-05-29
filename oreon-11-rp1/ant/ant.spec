@@ -51,7 +51,7 @@ URL:            https://ant.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/ant/source/apache-ant-%{version}-src.tar.bz2
+Source0:        https://archive.apache.org/dist/ant/source/apache-ant-1.10.15-src.tar.bz2
 Source2:        apache-ant-1.8.ant.conf
 # manpage
 Source3:        ant.asciidoc
@@ -331,7 +331,7 @@ Documentation pour %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 # clean jar files
 find . -name "*.jar" | xargs -t rm

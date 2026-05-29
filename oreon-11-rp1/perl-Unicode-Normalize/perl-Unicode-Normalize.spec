@@ -7,7 +7,7 @@ Release:        521%{?dist}
 Summary:        Unicode Normalization Forms
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Unicode-Normalize
-Source0:        https://cpan.metacpan.org/authors/id/K/KH/KHW/Unicode-Normalize-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/K/KH/KHW/Unicode-Normalize-1.26.tar.gz
 # Unbundled from perl 5.37.11
 Patch0:         Unicode-Normalize-1.26-Upgrade-to-1.32.patch
 BuildRequires:  coreutils

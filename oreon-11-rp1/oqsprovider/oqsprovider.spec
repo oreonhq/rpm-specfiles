@@ -9,7 +9,7 @@ Summary:    oqsprovider is an OpenSSL provider for quantum-safe algorithms based
 
 License:    Apache-2.0 AND MIT
 URL:        https://github.com/open-quantum-safe/oqs-provider.git
-Source0:    https://github.com/open-quantum-safe/oqs-provider/archive/refs/tags/%{oqs_version}.tar.gz
+Source0:        https://github.com/open-quantum-safe/oqs-provider/archive/refs/tags/0.8.0.tar.gz
 Source1:    oqsprovider.conf
 
 # https://github.com/open-quantum-safe/oqs-provider/pull/603

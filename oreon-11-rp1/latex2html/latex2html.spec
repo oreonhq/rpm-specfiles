@@ -10,7 +10,7 @@ Release: 9%{?dist}
 License: GPL-2.0-or-later
 URL: https://github.com/latex2html/latex2html/releases
 # main latex2html source
-Source0: https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/latex2html/latex2html/archive/v2023.2/latex2html-2023.2.tar.gz
 Source1: cfgcache.pm
 Source2: %{name}-manpages.tar.gz
 # support for Japanese

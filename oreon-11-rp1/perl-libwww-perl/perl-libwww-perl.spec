@@ -11,7 +11,7 @@ Release:        1%{?dist}
 Summary:        A Perl interface to the World-Wide Web
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/libwww-perl
-Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/libwww-perl-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/libwww-perl-6.83.tar.gz
 # Normalize shelbangs, not suitable for an upstream
 Patch0:         libwww-perl-6.39-Normalize-shebangs-in-examples.patch
 BuildArch:      noarch

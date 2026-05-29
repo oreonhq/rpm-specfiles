@@ -7,7 +7,7 @@ Summary:	GSSAPI NTLMSSP Mechanism
 
 License:	LGPL-3.0-or-later
 URL:		https://github.com/gssapi/gss-ntlmssp
-Source0:        https://github.com/gssapi/gss-ntlmssp/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/gssapi/gss-ntlmssp/releases/download/v1.3.1/gssntlmssp-1.3.1.tar.gz
 
 Requires: krb5-libs%{?_isa} >= 1.19
 

@@ -9,7 +9,7 @@ Summary:        RPM Development Tools
 # everything else is GPL-2.0-or-later.
 License:        GPL-2.0-or-later AND GPL-2.0-only
 URL:            https://pagure.io/rpmdevtools
-Source0:        https://releases.pagure.org/rpmdevtools/%{name}-%{version}.tar.xz
+Source0:        https://releases.pagure.org/rpmdevtools/rpmdevtools-9.6.tar.xz
 Source1:        progressbar.py
 
 # Fedora-specific downstream patches

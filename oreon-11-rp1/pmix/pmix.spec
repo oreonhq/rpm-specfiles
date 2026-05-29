@@ -6,7 +6,7 @@ Release:        3%{?dist}
 Summary:        Process Management Interface Exascale (PMIx)
 License:        BSD-3-Clause
 URL:            https://pmix.org/
-Source0:        https://github.com/openpmix/openpmix/releases/download/v%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/openpmix/openpmix/releases/download/v5.0.7/pmix-5.0.7.tar.bz2
 
 BuildRequires:  autoconf
 BuildRequires:  automake

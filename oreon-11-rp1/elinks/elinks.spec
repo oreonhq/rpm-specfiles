@@ -12,7 +12,7 @@ Version:   0.19.0
 Release:   2%{?dist}
 License:   GPL-2.0-only
 URL:       https://github.com/rkd77/elinks
-Source:    https://github.com/rkd77/elinks/releases/download/v%{version}/elinks-%{version}.tar.xz
+Source:        https://github.com/rkd77/elinks/releases/download/v0.19.0/elinks-0.19.0.tar.xz
 Source2:   elinks.conf
 
 BuildRequires: automake

@@ -8,7 +8,7 @@ Release:        5%{?dist}
 Summary:        KDE wrapper around Exiv2 (Qt 6)
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/graphics/libkexiv2
-Source0:        https://download.kde.org/stable/release-service/%{version}/src/libkexiv2-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/release-service/25.12.3/src/libkexiv2-25.12.3.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

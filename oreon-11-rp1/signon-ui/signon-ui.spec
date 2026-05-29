@@ -13,7 +13,7 @@ License:        GPL-3.0-only
 URL:            https://launchpad.net/signon-ui
 
 # Source0:      https://launchpad.net/signon-ui/trunk/%{version}/+download/signon-ui-%{version}.tar.bz2
-Source0:        https://gitlab.com/accounts-sso/%{name}/-/archive/%{commit0}/%{name}-%{commit0}.tar.bz2
+Source0:        https://gitlab.com/accounts-sso/signon-ui/-/archive/eef943f0edf3beee8ecb85d4a9dae3656002fc24/signon-ui-eef943f0edf3beee8ecb85d4a9dae3656002fc24.tar.bz2
 
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}
 

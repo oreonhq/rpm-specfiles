@@ -7,7 +7,7 @@ Epoch:          1
 Release:        7%{?dist}
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Devel-StackTrace
-Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Devel-StackTrace-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Devel-StackTrace-2.05.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  perl-generators

@@ -17,7 +17,7 @@ Summary:        MinGW Windows port of sqlite embeddable SQL database engine
 
 License:        blessing
 URL:            http://www.sqlite.org/
-Source0:        http://www.sqlite.org/2026/%{name1}-src-%{realver}.zip
+Source0:        http://www.sqlite.org/2026/sqlite-src-%(echo.zip
 
 BuildArch:      noarch
 

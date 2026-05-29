@@ -8,7 +8,7 @@ Epoch:		1
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:	GPL-2.0-only
 URL:		https://www.xiph.org/
-Source:		https://ftp.osuosl.org/pub/xiph/releases/vorbis/%{name}-%{version}.tar.gz
+Source:        https://ftp.osuosl.org/pub/xiph/releases/vorbis/vorbis-tools-1.4.3.tar.gz
 
 # http://lists.xiph.org/pipermail/vorbis-dev/2021-January/020538.html
 # http://lists.xiph.org/pipermail/vorbis-dev/2013-May/020336.html

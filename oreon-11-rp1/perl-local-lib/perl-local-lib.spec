@@ -6,7 +6,7 @@ Release:        11%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:        Create and use a local lib/ for perl modules
 Url:            https://metacpan.org/release/local-lib
-Source:         https://cpan.metacpan.org/authors/id/H/HA/HAARG/local-lib-%{version}.tar.gz
+Source:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/local-lib-2.000029.tar.gz
 Source10:       perl-homedir.sh
 Source11:       perl-homedir.csh
 BuildArch:      noarch

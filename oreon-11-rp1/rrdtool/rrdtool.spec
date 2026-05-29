@@ -24,7 +24,7 @@ Release: 11%{?dist}
 # gd license in php bindings isn't by default built-in
 License: gpl-1.0-or-later AND gpl-2.0-or-later AND gpl-2.0-or-later WITH rrdtool-floss-exception-2.0 AND mit AND lgpl-2.0-or-later AND lgpl-2.1-or-later AND bsd-source-code AND snprintf AND bsd-3-clause AND gpl-2.0-only AND licenseref-fedora-public-domain AND gtkbook
 URL: https://oss.oetiker.ch/rrdtool/
-Source0: https://github.com/oetiker/rrdtool-1.x/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/oetiker/rrdtool-1.x/releases/download/v1.9.0/rrdtool-1.9.0.tar.gz
 Source1: php4-%{svnrev}.tar.gz
 Patch1: rrdtool-1.4.4-php54.patch
 # disable logo for php 5.5.

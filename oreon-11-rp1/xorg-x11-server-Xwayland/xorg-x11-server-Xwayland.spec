@@ -15,9 +15,9 @@ Release:   2%{?gitdate:.%{gitdate}git%{shortcommit}}%{?dist}
 
 URL:       http://www.x.org
 %if 0%{?gitdate}
-Source0:   https://gitlab.freedesktop.org/xorg/%{pkgname}/-/archive/%{commit}/%{pkgname}-%{shortcommit}.tar.gz
+Source0:        https://gitlab.freedesktop.org/xorg/%{?gitdate:xserver}%{!?gitdate:xwayland}/-/archive/9a55c402aa803fb10e39ab4fd18a709d0cd06fd4/%{?gitdate:xserver}%{!?gitdate:xwayland}-%(c=9a55c402aa803fb10e39ab4fd18a709d0cd06fd4;.tar.gz
 %else
-Source0:   https://www.x.org/pub/individual/xserver/%{pkgname}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/xserver/%{?gitdate:xserver}%{!?gitdate:xwayland}-24.1.9.tar.xz
 %endif
 
 License:   MIT

@@ -4,7 +4,7 @@ Name: sound-theme-freedesktop
 Version: 0.8
 Release: %autorelease
 Summary: freedesktop.org sound theme
-Source0: http://people.freedesktop.org/~mccann/dist/sound-theme-freedesktop-%{version}.tar.bz2
+Source0:        http://people.freedesktop.org/~mccann/dist/sound-theme-freedesktop-0.8.tar.bz2
 # For details on the licenses used, see CREDITS
 License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-or-later AND CC-BY-SA-3.0 AND CC-BY-3.0 AND CC-BY-4.0
 Url: http://www.freedesktop.org/wiki/Specifications/sound-theme-spec

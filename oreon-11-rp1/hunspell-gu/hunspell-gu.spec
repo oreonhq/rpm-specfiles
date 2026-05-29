@@ -11,7 +11,7 @@ Summary: Gujarati hunspell dictionaries
 Version: 1.0.0
 Release: 28%{?dist}
 Epoch: 1
-Source: http://anishpatil.fedorapeople.org/gu_in.%{version}.tar.gz
+Source:        http://anishpatil.fedorapeople.org/gu_in.1.0.0.tar.gz
 URL: https://gitorious.org/hunspell_dictionaries/hunspell_dictionaries.git
 License: GPL-1.0-or-later
 BuildArch: noarch

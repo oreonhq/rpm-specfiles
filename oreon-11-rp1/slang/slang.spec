@@ -12,7 +12,7 @@ Version:	2.3.3
 Release:	9%{?dist}
 License:	GPL-2.0-or-later
 URL:		https://www.jedsoft.org/slang/
-Source:		https://www.jedsoft.org/releases/%{name}/%{name}-%{version}.tar.bz2
+Source:        https://www.jedsoft.org/releases/slang/slang-2.3.3.tar.bz2
 # disable test that fails with SIGHUP ignored (e.g. in koji)
 Patch2:		slang-sighuptest.patch
 BuildRequires: make

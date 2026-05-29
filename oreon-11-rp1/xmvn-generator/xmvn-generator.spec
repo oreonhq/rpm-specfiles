@@ -11,7 +11,7 @@ URL:            https://github.com/fedora-java/xmvn-generator
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source:         https://github.com/fedora-java/xmvn-generator/releases/download/%{version}/xmvn-generator-%{version}.tar.zst
+Source:        https://github.com/fedora-java/xmvn-generator/releases/download/2.1.1/xmvn-generator-2.1.1.tar.zst
 
 # https://github.com/fedora-java/xmvn-generator/pull/37
 Patch:          0001-Add-commons-lang3-to-generator-classpath.patch
@@ -36,7 +36,7 @@ written in Java and Lua.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 %mvn_file : %{name}
 
 %build

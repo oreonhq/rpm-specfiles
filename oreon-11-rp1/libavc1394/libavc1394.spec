@@ -6,7 +6,7 @@ Version:        0.5.4
 Release:        27%{?dist}
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            http://sourceforge.net/projects/libavc1394/
-Source:         https://sourceforge.net/projects/libavc1394/files/libavc1394/libavc1394-%{version}.tar.gz
+Source:        https://sourceforge.net/projects/libavc1394/files/libavc1394/libavc1394-0.5.4.tar.gz
 Patch1:         libavc1394-%{version}-librom.patch
 BuildRequires:  libraw1394-devel
 BuildRequires:  chrpath, gcc

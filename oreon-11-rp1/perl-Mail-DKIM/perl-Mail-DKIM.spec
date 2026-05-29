@@ -6,7 +6,7 @@ Release:        4%{?dist}
 Summary:        Sign and verify Internet mail with DKIM/DomainKey signatures
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://dkimproxy.sourceforge.net/
-Source0:        https://cpan.metacpan.org/authors/id/M/MB/MBRADSHAW/Mail-DKIM-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MB/MBRADSHAW/Mail-DKIM-1.20240923.tar.gz
 BuildArch:      noarch
 # build requirements
 BuildRequires:  coreutils

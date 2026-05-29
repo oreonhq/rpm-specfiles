@@ -7,7 +7,7 @@ License: LGPL-2.1-only AND LGPL-2.1-or-later AND GPL-2.0-only AND GPL-2.0-or-lat
 Summary: A library for reading tracing instances stored in a trace file
 
 URL: https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/
-Source0: https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-libtracecmd-%{version}.tar.gz
+Source0:        https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-libtracecmd-1.5.2.tar.gz
 
 ExcludeArch: %{ix86} %{arm}
 

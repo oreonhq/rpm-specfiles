@@ -12,7 +12,7 @@ URL:            https://commons.apache.org/proper/commons-io/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/commons/io/source/commons-io-%{version}-src.tar.gz
+Source0:        https://archive.apache.org/dist/commons/io/source/commons-io-2.20.0-src.tar.gz
 
 BuildRequires:  jurand
 %if %{with bootstrap}

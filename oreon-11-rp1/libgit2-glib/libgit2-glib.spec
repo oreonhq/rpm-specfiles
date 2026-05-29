@@ -11,7 +11,7 @@ Summary:        Git library for GLib
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://wiki.gnome.org/Projects/Libgit2-glib
-Source0:        https://download.gnome.org/sources/libgit2-glib/1.2/libgit2-glib-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/libgit2-glib/1.2/libgit2-glib-1.2.1.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gi-docgen

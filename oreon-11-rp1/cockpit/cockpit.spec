@@ -60,8 +60,8 @@ URL:            https://cockpit-project.org/
 
 Version:        357
 Release:        2%{?dist}
-Source0:        https://github.com/cockpit-project/cockpit/releases/download/%{version}/cockpit-%{version}.tar.xz
-Source1:        https://github.com/cockpit-project/cockpit/releases/download/%{version}/cockpit-node-%{version}.tar.xz
+Source0:        https://github.com/cockpit-project/cockpit/releases/download/357/cockpit-357.tar.xz
+Source1:        https://github.com/cockpit-project/cockpit/releases/download/357/cockpit-node-357.tar.xz
 
 %if 0%{?fedora} >= 41 || 0%{?rhel}
 ExcludeArch: %{ix86}

@@ -33,10 +33,10 @@ Source1: Makefile.devel
 Source2: selinux-policy.conf
 
 # https://github.com/fedora-selinux/macro-expander (pinned; #/ renames to macro-expander for %%install)
-Source3: https://raw.githubusercontent.com/fedora-selinux/macro-expander/%{macro_expander_commit}/macro-expander.sh#/macro-expander
+Source3:        https://raw.githubusercontent.com/fedora-selinux/macro-expander/76939da7d8246c9b21a60b3b96ca04d6288d4a25/macro-expander.sh#/macro-expander
 
 # https://github.com/containers/container-selinux — extract container.{if,te,fc} in %%prep
-Source4: https://github.com/containers/container-selinux/archive/%{container_selinux_commit}/container-selinux-%{container_selinux_commit}.tar.gz
+Source4:        https://github.com/containers/container-selinux/archive/add9f4a543f9fd3407f54717752ab640354654b2/container-selinux-add9f4a543f9fd3407f54717752ab640354654b2.tar.gz
 
 # modules enabled in -minimum policy
 Source16: modules-minimum.lst

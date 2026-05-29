@@ -25,9 +25,9 @@ License:	MIT AND Apache-2.0
 Provides:	bundled(gumbo-parser) = 0.10.1
 
 URL:		https://nokogiri.org
-Source0:	https://rubygems.org/gems/%{gem_name}-%{mainver}%{?prever}.gem
+Source0:        https://rubygems.org/gems/nokogiri-1.19.1%{?prever}.gem
 # %%{SOURCE2} %%{name} %%{version}
-Source1:	https://github.com/sparklemotion/%{gem_name}/archive/refs/tags/v%{version}%{?prever}.tar.gz#/rubygem-%{gem_name}-%{version}%{?prever}-full.tar.gz
+Source1:        https://github.com/sparklemotion/nokogiri/archive/refs/tags/v1.19.1%{?prever}%{?prever}.tar.gz#/rubygem-nokogiri-1.19.1%{?prever}%{?prever}-full.tar.gz
 # Shut down libxml2 version unmatching warning
 Patch0:	%{name}-1.11.0.rc4-shutdown-libxml2-warning.patch
 BuildRequires:	ruby(release)

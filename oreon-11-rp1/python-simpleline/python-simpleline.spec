@@ -10,7 +10,7 @@ Release: 18%{?dist}
 # This tarball was created from upstream git:
 #   git clone https://github.com/rhinstaller/python-simpleline
 #   cd python-simpleline && make archive
-Source0: https://github.com/rhinstaller/python-%{srcname}/releases/download/%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/rhinstaller/python-simpleline/releases/download/1.9.0/simpleline-1.9.0.tar.gz
 
 License: LGPL-3.0-or-later
 BuildArch: noarch

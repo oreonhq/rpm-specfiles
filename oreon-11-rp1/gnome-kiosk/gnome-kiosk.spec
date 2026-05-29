@@ -15,8 +15,8 @@
 %bcond x11 0
 %endif
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-kiosk
 Version:        50.0
@@ -25,8 +25,7 @@ Summary:        Window management and application launching for GNOME
 
 License:        GPL-2.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-kiosk
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-kiosk/%{major_version}/gnome-kiosk-%{tarball_version}.tar.xz
 %if %{with x11}
 Provides:       firstboot(windowmanager) = %{name}
 %endif

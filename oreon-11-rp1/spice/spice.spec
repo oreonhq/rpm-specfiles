@@ -7,7 +7,7 @@ Summary:        Implements the SPICE protocol
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            http://www.spice-space.org/
-Source0:        http://www.spice-space.org/download/releases/%{name}-%{version}.tar.bz2
+Source0:        http://www.spice-space.org/download/releases/spice-0.16.0.tar.bz2
 Patch0000:      0001-test-gst-Fix-compilation-error.patch
 Patch0001:      0001-test-display-base-Fix-C-designated-initializer-for-a.patch
 

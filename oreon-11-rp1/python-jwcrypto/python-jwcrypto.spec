@@ -9,7 +9,7 @@ Summary:        Implements JWK, JWS, JWE specifications using python-cryptograph
 
 License:        LGPL-3.0-or-later
 URL:            https://github.com/latchset/%{srcname}
-Source0:        https://github.com/latchset/%{srcname}/releases/download/v%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/latchset/jwcrypto/releases/download/v1.4.2/jwcrypto-1.4.2.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel

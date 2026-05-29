@@ -9,7 +9,7 @@ Summary:        Sphinx API for Web Apps
 
 License:        BSD-2-Clause
 URL:            https://github.com/sphinx-doc/sphinxcontrib-websupport
-Source:         %{pypi_source sphinxcontrib_websupport}
+Source:        https://files.pythonhosted.org/packages/source/s/sphinxcontrib-websupport/sphinxcontrib-websupport-1.2.7.tar.gz
 # Compatibility with Sphinx 9+
 Patch:          https://github.com/sphinx-doc/sphinxcontrib-websupport/pull/91.patch
 BuildArch:      noarch

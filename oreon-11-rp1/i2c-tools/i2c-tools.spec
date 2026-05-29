@@ -15,7 +15,7 @@ Summary:        A heterogeneous set of I2C tools for Linux
 License:        GPL-2.0-or-later
 URL:            https://i2c.wiki.kernel.org/index.php/I2C_Tools
 
-Source0:        https://www.kernel.org/pub/software/utils/i2c-tools/%{name}-%{version}.tar.xz
+Source0:        https://www.kernel.org/pub/software/utils/i2c-tools/i2c-tools-4.4.tar.xz
 
 # for /etc/udev/makedev.d resp /usr/lib/modprobe.d ownership
 Requires:       systemd-udev kmod

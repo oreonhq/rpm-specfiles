@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        Connects applications developed in Java to MariaDB and MySQL databases
 License:        LGPL-2.1-or-later
 URL:            https://mariadb.com/kb/en/mariadb/about-mariadb-connector-j/
-Source0:        https://github.com/mariadb-corporation/mariadb-connector-j/archive/refs/tags/%{version}.tar.gz#/mariadb-connector-j-%{version}.tar.gz
+Source0:        https://github.com/mariadb-corporation/mariadb-connector-j/archive/refs/tags/3.5.7.tar.gz#/mariadb-connector-j-3.5.7.tar.gz
 # optional dependency not in Fedora
 Patch:          0001-Remove_waffle-jna.patch
 Patch:          0002-Remove-usage-of-junit-pioneer.patch
@@ -40,7 +40,7 @@ This package contains tests for %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_dep ch.qos.logback:logback-classic
 grep -l -r '^import ch\.qos\.logback\.classic' src/test | xargs rm -v

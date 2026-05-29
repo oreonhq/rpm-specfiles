@@ -13,7 +13,7 @@ URL:            https://eclipse.org/sisu/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-sisu/sisu-project/archive/refs/tags/milestones/0.9.0.M3.tar.gz#/sisu-%{version}.tar.gz
+Source0:        https://github.com/eclipse-sisu/sisu-project/archive/refs/tags/milestones/0.9.0.M3.tar.gz#/sisu-0.9.0~M3.tar.gz
 
 Patch:          0001-Add-ASM-support-for-Java-24-and-25.patch
 
@@ -66,7 +66,7 @@ META-INF/sisu/javax.inject.Named index files for the Sisu container.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_disable_module org.eclipse.sisu.inject.extender
 %pom_disable_module org.eclipse.sisu.plexus.extender

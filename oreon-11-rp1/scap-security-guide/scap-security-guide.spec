@@ -11,7 +11,7 @@ Release:	2%{?dist}
 Summary:	Security guidance and baselines in SCAP formats
 License:	BSD-3-Clause
 URL:		https://github.com/ComplianceAsCode/content/
-Source0:	https://github.com/ComplianceAsCode/content/releases/download/v%{version}/scap-security-guide-%{version}.tar.bz2
+Source0:        https://github.com/ComplianceAsCode/content/releases/download/v0.1.80/scap-security-guide-0.1.80.tar.bz2
 BuildArch:	noarch
 
 BuildRequires:	libxslt

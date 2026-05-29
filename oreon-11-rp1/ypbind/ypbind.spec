@@ -8,7 +8,7 @@ Release: 17%{?dist}
 License: GPL-2.0-only
 Url: https://www.thkukuk.de/nis/nis/ypbind-mt/
 
-Source0: https://github.com/thkukuk/ypbind-mt/archive/v%{version}.tar.gz#/ypbind-mt-%{version}.tar.gz
+Source0:        https://github.com/thkukuk/ypbind-mt/archive/v2.7.2.tar.gz#/ypbind-mt-2.7.2.tar.gz
 #Source1: ypbind.init
 Source2: nis.sh
 Source3: ypbind.service

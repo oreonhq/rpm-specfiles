@@ -7,7 +7,7 @@ Summary: D-Bus Python Bindings
 
 License: MIT
 URL:     http://www.freedesktop.org/wiki/Software/DBusBindings/
-Source0: http://dbus.freedesktop.org/releases/dbus-python/%{name}-%{version}.tar.xz
+Source0:        http://dbus.freedesktop.org/releases/dbus-python/dbus-python-1.4.0.tar.xz
 
 BuildRequires: pkgconfig(dbus-1)
 BuildRequires: pkgconfig(glib-2.0)

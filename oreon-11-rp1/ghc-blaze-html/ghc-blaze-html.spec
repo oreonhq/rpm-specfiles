@@ -17,8 +17,8 @@ Summary:        A blazingly fast HTML combinator library for Haskell
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/blaze-html
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/blaze-html-0.9.2.0/blaze-html-0.9.2.0.tar.gz
+Source1:        https://hackage.haskell.org/package/blaze-html-0.9.2.0/blaze-html.cabal#/blaze-html-0.9.2.0.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

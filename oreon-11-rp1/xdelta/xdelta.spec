@@ -7,7 +7,7 @@ Release: 24%{?dist}
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License: Apache-2.0
 # the latest release tarball is only in the pre-relicensing GPL repo
-Source0: https://github.com/jmacd/xdelta-gpl/releases/download/v%{version}/xdelta3-%{version}.tar.gz
+Source0:        https://github.com/jmacd/xdelta-gpl/releases/download/v3.1.0/xdelta3-3.1.0.tar.gz
 URL: https://github.com/jmacd/xdelta
 
 # for testsuite

@@ -8,8 +8,8 @@ URL: https://www.gnu.org/software/gsl/
 VCS: git://git.savannah.gnu.org/gsl.git
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License: GPL-3.0-or-later
-Source0: https://ftp.gnu.org/gnu/gsl/%{name}-%{version}.tar.gz
-Source1: https://ftp.gnu.org/gnu/gsl/%{name}-%{version}.tar.gz.sig
+Source0:        https://ftp.gnu.org/gnu/gsl/gsl-2.8.tar.gz
+Source1:        https://ftp.gnu.org/gnu/gsl/gsl-2.8.tar.gz.sig
 Source2: https://www.gnu.org/software/gsl/key/gsl_key.txt
 Patch0: gsl-1.10-lib64.patch
 # http://lists.gnu.org/archive/html/bug-gsl/2015-12/msg00012.html

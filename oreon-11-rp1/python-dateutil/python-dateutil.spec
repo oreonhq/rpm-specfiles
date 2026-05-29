@@ -15,8 +15,7 @@ Summary:        Powerful extensions to the standard datetime module
 License:        (Apache-2.0 AND BSD-3-Clause) OR BSD-3-Clause
 
 URL:            https://github.com/dateutil/dateutil
-Source:         %{pypi_source python-dateutil}
-
+Source:        https://files.pythonhosted.org/packages/source/p/python-dateutil/python-dateutil-2.9.0.post0.tar.gz
 # Allow setuptools-scm dependency greater than v8.0
 Patch:          relax-setuptools_scm-requires.patch
 

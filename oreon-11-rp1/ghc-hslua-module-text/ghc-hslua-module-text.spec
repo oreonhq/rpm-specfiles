@@ -17,7 +17,7 @@ Summary:        Lua module for text
 License:        MIT
 URL:            https://hackage.haskell.org/package/hslua-module-text
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/hslua-module-text-1.1.1/hslua-module-text-1.1.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

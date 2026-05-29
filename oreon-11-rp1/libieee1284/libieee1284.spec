@@ -7,7 +7,7 @@ Release: 48%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL: http://cyberelk.net/tim/libieee1284/
-Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/libieee1284/libieee1284-0.2.11.tar.bz2
 Patch1: libieee1284-strict-aliasing.patch
 BuildRequires: gcc
 BuildRequires: xmlto

@@ -7,7 +7,7 @@ Summary:        GObject-based wrapper library for libudev
 
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/libgudev
-Source0:        https://download.gnome.org/sources/libgudev/%{version}/libgudev-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/libgudev/238/libgudev-238.tar.xz
 
 BuildRequires:  glib2-devel
 BuildRequires:  gobject-introspection-devel

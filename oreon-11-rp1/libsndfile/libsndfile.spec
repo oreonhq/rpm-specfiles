@@ -6,7 +6,7 @@ Version:	1.2.2
 Release:	11%{?dist}
 License:	LGPL-2.1-or-later AND GPL-2.0-or-later AND BSD-3-Clause
 URL:		http://libsndfile.github.io/libsndfile/
-Source0:        https://github.com/libsndfile/libsndfile/releases/download/%{version}/libsndfile-%{version}.tar.xz
+Source0:        https://github.com/libsndfile/libsndfile/releases/download/1.2.2/libsndfile-1.2.2.tar.xz
 Patch0:		libsndfile-1.0.25-system-gsm.patch
 
 #from upstream, for <= 1.2.2, rhbz#2322326

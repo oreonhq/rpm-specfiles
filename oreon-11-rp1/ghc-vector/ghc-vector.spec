@@ -23,9 +23,9 @@ Summary:        Efficient Arrays
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/vector
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{vectorstream}/%{vectorstream}.tar.gz
-Source2:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/vector-%{version}/vector-%{version}.tar.gz
+Source1:        https://hackage.haskell.org/package/vector-stream-0.1.0.1/vector-stream-0.1.0.1.tar.gz
+Source2:        https://hackage.haskell.org/package/vector-%{version}/vector.cabal#/vector-%{version}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

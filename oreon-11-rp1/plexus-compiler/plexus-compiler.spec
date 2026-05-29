@@ -13,7 +13,7 @@ URL:            https://github.com/codehaus-plexus/plexus-compiler
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-compiler/archive/plexus-compiler-2.15.0.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 Source2:        LICENSE.MIT
 
@@ -54,7 +54,7 @@ This package provides %{summary}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 find -name '.class' -delete
 

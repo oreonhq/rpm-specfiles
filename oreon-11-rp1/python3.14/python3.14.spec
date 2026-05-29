@@ -646,7 +646,7 @@ Requires: tzdata
 # Other subpackages (like -debug) also need this, but they all depend on -libs.
 # Since expat 2.7.4, the library has versioned symbols and this is no longer needed,
 # as the generated requirement will be in the form of libexpat.so.1(LIBEXPAT_2.7.2) etc.
-%global expat_version %(LANG=C rpm -q --qf '%%{version}' expat.%{_target_cpu} | sed 's/.*not installed/0/')
+%global expat_version %(LANG=C rpm -q --qf '%{version}' expat.%{_target_cpu} | sed 's/.*not installed/0/')
 %if v"%{expat_version}" < v"2.7.4"
 Requires: expat%{?_isa} >= %{expat_version}
 %endif

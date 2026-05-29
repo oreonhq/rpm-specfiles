@@ -10,7 +10,7 @@ Version: 1.2.5
 Release: 22%{?dist}
 License: GPL-2.0-only
 URL: http://bogofilter.sourceforge.net/
-Source0: http://downloads.sourceforge.net/bogofilter/bogofilter-%{version}.tar.xz
+Source0:        http://downloads.sourceforge.net/bogofilter/bogofilter-1.2.5.tar.xz
 BuildRequires: gcc
 BuildRequires: flex
 BuildRequires: pkgconfig(sqlite3)

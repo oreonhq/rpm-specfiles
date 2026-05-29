@@ -6,7 +6,7 @@ Version:	1.2.0
 Release:	21%{?dist}
 License:	BSD-3-clause AND TU-Berlin-1.0
 URL:		https://www.speex.org/
-Source0:	https://downloads.xiph.org/releases/speex/%{name}-%{version}.tar.gz
+Source0:        https://downloads.xiph.org/releases/speex/speex-1.2.0.tar.gz
 BuildRequires: make
 BuildRequires:	gcc
 BuildRequires:	pkgconfig(ogg)

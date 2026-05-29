@@ -11,7 +11,7 @@ URL:            https://github.com/codehaus-plexus/plexus-testing
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-testing/archive/plexus-testing-1.3.0.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

@@ -5,7 +5,7 @@ Summary: A GUI for gdb, the GNU debugger, and KDE
 Version: 3.2.0
 Release: 3%{?dist}
 Epoch: 1
-Source: http://download.sourceforge.net/kdbg/%{name}-%{version}.tar.gz
+Source:        http://download.sourceforge.net/kdbg/kdbg-3.2.0.tar.gz
 # No version specified.
 License: GPL-1.0-or-later
 URL: http://www.kdbg.org/

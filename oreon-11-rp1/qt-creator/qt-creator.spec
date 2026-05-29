@@ -16,7 +16,7 @@ ExcludeArch:    %{ix86}
 
 License:        GPL-3.0-only WITH Qt-GPL-exception-1.0
 URL:            https://www.qt.io/ide/
-Source0:        https://download.qt.io/%{?prerelease:development}%{?!prerelease:official}_releases/qtcreator/20.0/%{version}%{?prerelease:-%prerelease}/qt-creator-opensource-src-%{version}%{?prerelease:-%prerelease}.tar.xz
+Source0:        https://download.qt.io/%{?prerelease:development}%{?!prerelease:official}_releases/qtcreator/20.0/20.0.0%{?prerelease:-%prerelease}/qt-creator-opensource-src-20.0.0%{?prerelease:-%prerelease}.tar.xz
 Source1:        qt-creator-Fedora-privlibs
 
 # Fix leading whitespace in desktop file

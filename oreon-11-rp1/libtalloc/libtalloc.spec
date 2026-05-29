@@ -7,8 +7,8 @@ Summary:         The talloc library
 License:         LGPL-3.0-or-later
 URL:             https://talloc.samba.org/
 
-Source0:         https://www.samba.org/ftp/talloc/talloc-%{version}.tar.gz
-Source1:         https://www.samba.org/ftp/talloc/talloc-%{version}.tar.asc
+Source0:        https://www.samba.org/ftp/talloc/talloc-2.4.4.tar.gz
+Source1:        https://www.samba.org/ftp/talloc/talloc-2.4.4.tar.asc
 Source2:         https://download.samba.org/pub/samba/samba-pubkey.asc#/talloc.keyring
 
 BuildRequires: make

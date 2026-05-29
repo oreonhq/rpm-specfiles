@@ -6,7 +6,7 @@ Release:	8%{?dist}
 Summary:	A JSON implementation in C
 License:	MIT
 URL:		https://github.com/rsyslog/libfastjson
-Source0:	http://download.rsyslog.com/libfastjson/libfastjson-%{version}.tar.gz
+Source0:        http://download.rsyslog.com/libfastjson/libfastjson-1.2304.0.tar.gz
 
 BuildRequires: autoconf automake libtool
 BuildRequires: make

@@ -8,7 +8,7 @@ Summary:        Common build files of the C++ bindings
 BuildArch:      noarch
 License:        GPL-2.0-or-later
 URL:            https://gtkmm.org
-Source0:        https://download.gnome.org/sources/%{name}/1.0/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/mm-common/1.0/mm-common-1.0.7.tar.xz
 
 BuildRequires:  meson
 

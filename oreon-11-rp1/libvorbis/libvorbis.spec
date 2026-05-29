@@ -9,7 +9,7 @@ Release:	14%{?dist}
 Epoch:		1
 License:	BSD-3-Clause
 URL:		https://www.xiph.org/
-Source:		https://downloads.xiph.org/releases/vorbis/%{name}-%{version}.tar.xz
+Source:        https://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.xz
 BuildRequires:  gcc
 BuildRequires:	pkgconfig(ogg) >= 1.0
 BuildRequires: make

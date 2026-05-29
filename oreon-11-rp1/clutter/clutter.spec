@@ -16,7 +16,7 @@ Summary:       Open Source software library for creating rich graphical user int
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://www.clutter-project.org/
-Source0:       https://download.gnome.org/sources/%{name}/1.26/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/clutter/1.26/clutter-1.26.4.tar.xz
 
 BuildRequires: gettext
 BuildRequires: pkgconfig(atk)

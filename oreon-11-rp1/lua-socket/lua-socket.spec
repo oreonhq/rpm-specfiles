@@ -11,7 +11,7 @@ Version:        3.1.0
 Release:        9%{?dist}
 License:        MIT
 URL:            https://lunarmodules.github.io/luasocket/
-Source0:        https://github.com/lunarmodules/luasocket/archive/v%{version}/luasocket-%{version}.tar.gz
+Source0:        https://github.com/lunarmodules/luasocket/archive/v3.1.0/luasocket-3.1.0.tar.gz
 Requires:       lua(abi) = %{lua_version}
 BuildRequires:  gcc
 BuildRequires:  make

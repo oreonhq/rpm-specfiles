@@ -7,7 +7,7 @@ Summary:        JBIG1 lossless image compression tools
 
 License:        GPL-2.0-or-later
 URL:            http://www.cl.cam.ac.uk/~mgk25/jbigkit/
-Source0:        http://www.cl.cam.ac.uk/~mgk25/download/jbigkit-%{version}.tar.gz
+Source0:        http://www.cl.cam.ac.uk/~mgk25/download/jbigkit-2.1.tar.gz
 Patch0:         jbigkit-2.1-shlib.patch
 Patch1:         jbigkit-2.0-warnings.patch
 # jbigkit: Partial Fedora build flags injection (bug #1548546)

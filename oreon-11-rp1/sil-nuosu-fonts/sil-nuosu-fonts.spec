@@ -20,7 +20,7 @@ URL:     http://scripts.sil.org/SILYi_home
 The Nuosu SIL Font is a single Unicode font for the standardized Yi script used by a large ethnic group in southwestern China.
 }
 
-Source0:  https://github.com/silnrsi/font-nuosu/releases/download/v%{version}/NuosuSIL-%{version}.tar.xz
+Source0:        https://github.com/silnrsi/font-nuosu/releases/download/v2.200/NuosuSIL-2.200.tar.xz
 Source10: 66-sil-nuosu-fonts.conf
 
 %fontpkg

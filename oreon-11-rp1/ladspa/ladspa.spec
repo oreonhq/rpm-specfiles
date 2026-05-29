@@ -9,7 +9,7 @@ Summary:        Linux Audio Developer's Simple Plug-in API, examples and tools
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            http://www.ladspa.org/
-Source:         http://www.ladspa.org/download/%{name}_sdk_%{version}.tgz
+Source:        http://www.ladspa.org/download/ladspa_sdk_1.17.tgz
 Patch1:         ladspa-1.17.patch
 
 

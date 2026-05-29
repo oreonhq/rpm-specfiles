@@ -18,7 +18,7 @@ Summary:        High-quality splittable pseudorandom number generator
 License:        BSD-3-Clause AND LicenseRef-Fedora-Public-Domain
 URL:            https://hackage.haskell.org/package/tf-random
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/tf-random-0.5/tf-random-0.5.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

@@ -14,7 +14,7 @@ Release:        1%{?dist}
 License:        GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND LicenseRef-Callaway-BSD AND LGPL-3.0-or-later
 Summary:        A mobile podcast application
 Url:            https://apps.kde.org/%{name}
-Source:         https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kasts-26.03.80.tar.xz
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  libappstream-glib

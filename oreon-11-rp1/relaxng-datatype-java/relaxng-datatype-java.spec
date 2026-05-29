@@ -12,7 +12,7 @@ URL:            https://relaxng.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/java-schema-utilities/%{name}/archive/refs/tags/relaxngDatatype-%{version}.tar.gz
+Source0:        https://github.com/java-schema-utilities/relaxng-datatype-java/archive/refs/tags/relaxngDatatype-2011.1.tar.gz
 Source1:        copying.txt
 
 BuildRequires:  maven-local-openjdk25
@@ -24,7 +24,7 @@ Interface between RELAX NG validators and datatype libraries.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 cp %{SOURCE1} .
 
 %pom_remove_parent

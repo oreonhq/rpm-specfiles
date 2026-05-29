@@ -13,7 +13,7 @@ License:        LGPL-2.1-only
 URL:            https://gitlab.com/accounts-sso/signond
 
 # Temporary source, for plasma6 compatibility (fork archive; upstream is accounts-sso/signond).
-Source0:        https://gitlab.com/nicolasfella/signond/-/archive/%{commit0}/signond-%{commit0}.tar.gz
+Source0:        https://gitlab.com/nicolasfella/signond/-/archive/c8ad98249af541514ff7a81634d3295e712f1a39/signond-c8ad98249af541514ff7a81634d3295e712f1a39.tar.gz
 
 BuildRequires: make
 BuildRequires:  dbus-x11

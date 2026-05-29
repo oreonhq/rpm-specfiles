@@ -13,8 +13,7 @@ Summary:        C++ interface for the ATK library
 
 License:        LGPL-2.1-or-later
 URL:            https://www.gtkmm.org/
-Source0:        https://download.gnome.org/sources/atkmm/%{release_version}/atkmm-%{version}.tar.xz
-
+Source0: https://download.gnome.org/sources/atkmm/%(echo %{version} | cut -d. -f1)/atkmm-%{version}.tar.xz
 BuildRequires:  atk-devel
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++

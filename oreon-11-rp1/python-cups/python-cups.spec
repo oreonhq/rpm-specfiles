@@ -12,7 +12,7 @@ Release:       8%{?dist}
 # older URL, but still with useful information about pycups
 #URL:           http://cyberelk.net/tim/software/pycups/
 URL:           https://github.com/OpenPrinting/pycups/
-Source:        https://github.com/OpenPrinting/pycups/releases/download/v%{version}/pycups-%{version}.tar.gz
+Source:        https://github.com/OpenPrinting/pycups/releases/download/v2.0.4/pycups-2.0.4.tar.gz
 License:       GPL-2.0-or-later
 
 # all taken from upstream

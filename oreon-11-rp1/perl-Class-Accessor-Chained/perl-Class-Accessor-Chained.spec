@@ -6,7 +6,7 @@ Release:        56%{?dist}
 Summary:        Make chained accessors
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Accessor-Chained
-Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Class-Accessor-Chained-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Class-Accessor-Chained-0.01.tar.gz
 Patch0:         Class-Accessor-Chained-0.01-pod.patch
 BuildArch:      noarch
 BuildRequires:  /usr/bin/pod2text

@@ -8,7 +8,7 @@ Release: 34%{?dist}
 License: GPL-2.0-or-later
 Summary: On-the-fly spell checking for GtkTextView widgets
 URL: http://gtkspell.sourceforge.net/
-Source: http://gtkspell.sourceforge.net/download/%{name}-%{version}.tar.gz
+Source:        http://gtkspell.sourceforge.net/download/gtkspell-2.0.16.tar.gz
 
 ### Build Dependencies ###
 

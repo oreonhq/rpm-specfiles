@@ -8,7 +8,7 @@ Release:        521%{?dist}
 Summary:        Resolve POD escape sequences
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Escapes
-Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEILB/Pod-Escapes-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEILB/Pod-Escapes-1.07.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

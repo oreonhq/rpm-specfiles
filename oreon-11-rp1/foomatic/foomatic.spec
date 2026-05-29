@@ -7,7 +7,7 @@ Release:    35%{?dist}
 License:    GPL-2.0-or-later
 
 # The database engine.
-Source0: http://www.openprinting.org/download/foomatic/foomatic-db-engine-%{version}.tar.gz
+Source0:        http://www.openprinting.org/download/foomatic/foomatic-db-engine-4.0.13.tar.gz
 
 ## PATCHES FOR FOOMATIC-DB-ENGINE (PATCHES 101 TO 200)
 Patch101:  foomatic-manpages.patch

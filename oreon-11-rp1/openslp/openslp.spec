@@ -7,7 +7,7 @@ Release: 41%{?dist}
 
 License: BSD-3-Clause
 URL:     http://sourceforge.net/projects/openslp/
-Source0: http://downloads.sf.net/openslp/openslp-%{version}.tar.gz
+Source0:        http://downloads.sf.net/openslp/openslp-2.0.0.tar.gz
 
 # Source2,3: simple man pages (slightly modified help2man output)
 Source2: slpd.8.gz

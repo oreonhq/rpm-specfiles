@@ -12,7 +12,7 @@ Release: 11%{?dist}
 
 License: LGPLv3 and CC-BY-SA
 URL: https://lensfun.github.io/
-Source0: https://github.com/lensfun/lensfun/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/lensfun/lensfun/archive/v0.3.4/lensfun-0.3.4.tar.gz
 # Updated database. To generate:
 # curl -L -o version_1-$(date +"%Y-%m-%d").tar.bz2 http://lensfun.sourceforge.net/db/version_1.tar.bz2
 # Update this whenever updating the package

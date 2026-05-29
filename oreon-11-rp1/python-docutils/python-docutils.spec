@@ -11,7 +11,7 @@ Summary:        System for processing plaintext documentation
 # See: https://gitlab.com/fedora/legal/fedora-license-data/-/issues/216
 License:        LicenseRef-Fedora-Public-Domain AND BSD-2-Clause AND BSD-3-Clause AND PSF-2.0 AND GPL-3.0-or-later
 URL:            https://docutils.sourceforge.net
-Source0:        https://sourceforge.net/projects/docutils/files/docutils/%{version}/docutils-%{version}.tar.gz
+Source0:        https://sourceforge.net/projects/docutils/files/docutils/0.22.4/docutils-0.22.4.tar.gz
 
 BuildArch:      noarch
 

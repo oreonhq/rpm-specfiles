@@ -12,7 +12,7 @@ Release:          11%{?dist}
 License:          (GPL-2.0-only OR GPL-3.0-only) AND BSD-3-Clause
 
 URL:              https://poppler.freedesktop.org/
-Source:           https://poppler.freedesktop.org/poppler-data-%{version}.tar.gz
+Source:        https://poppler.freedesktop.org/poppler-data-0.4.11.tar.gz
 
 BuildArch:        noarch
 BuildRequires: make

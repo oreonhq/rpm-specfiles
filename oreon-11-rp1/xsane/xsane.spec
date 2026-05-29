@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 5782d23e67dc961c81eef13a87b17eb0144cae3d1ffc5cf7e0322da751482b4b
 
 %if ! 0%{?fedora} || 0%{?fedora} >= 41 || 0%{?oreon}
 %bcond gimp 0
@@ -23,7 +23,7 @@ Name: xsane
 Summary: X Window System front-end for the SANE scanner interface
 Version: 0.999
 Release: %{autorelease}
-Source0: http://www.xsane.org/download/%{name}-%{version}.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/x/xsane/xsane_0.999.orig.tar.gz#/xsane-0.999.tar.gz
 Source1: xsane-256x256.png
 # use "xdg-open" instead of "netscape" to launch help browser
 # submitted to upstream (Oliver Rauch) via email, 2013-06-04

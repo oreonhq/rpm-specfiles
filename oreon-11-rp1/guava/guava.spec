@@ -13,7 +13,7 @@ URL:            https://github.com/google/guava
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/google/guava/archive/v%{version}/guava-%{version}.tar.gz
+Source0:        https://github.com/google/guava/archive/v33.5.0/guava-33.5.0.tar.gz
 
 Patch:          0001-Remove-unused-annotation-module-dependencies.patch
 Patch:          0002-Remove-NullMarked-filtering-and-annotation-collectio.patch
@@ -47,7 +47,7 @@ guava-testlib provides additional functionality for conveninent unit testing
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 find . -name '*.jar' -delete
 

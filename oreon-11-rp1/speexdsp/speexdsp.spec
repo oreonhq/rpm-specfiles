@@ -7,7 +7,7 @@ Summary:        A voice compression format (DSP)
 
 License:        BSD-3-Clause
 URL:            http://www.speex.org/
-Source0:        http://downloads.xiph.org/releases/speex/%{name}-%{version}.tar.gz
+Source0:        http://downloads.xiph.org/releases/speex/speexdsp-1.2.1.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  make

@@ -9,7 +9,7 @@ Summary: OpenIB InfiniBand Subnet Manager and management utilities
 License: GPL-2.0-only OR Linux-OpenIB
 Url:     https://github.com/linux-rdma/opensm
 
-Source0: https://github.com/linux-rdma/opensm/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/linux-rdma/opensm/releases/download/3.3.24/opensm-3.3.24.tar.gz
 Source2: opensm.logrotate
 Source4: opensm.sysconfig
 Source5: opensm.service

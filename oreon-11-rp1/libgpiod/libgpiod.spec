@@ -10,7 +10,7 @@ Summary:       C library and tools for interacting with linux GPIO char device
 
 License:       LGPL-2.1-or-later
 URL:           https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/
-Source0:       https://mirrors.edge.kernel.org/pub/software/libs/%{name}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.xz
+Source0:        https://mirrors.edge.kernel.org/pub/software/libs/libgpiod/libgpiod-2.2.3%{?candidate:-%{candidate}}.tar.xz
 Source1:       gpiod-sysusers.conf
 
 BuildRequires: doxygen

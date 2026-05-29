@@ -6,7 +6,7 @@ Release:        27%{?dist}
 Summary:        Base class SAX drivers and filters
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-SAX-Base
-Source0:        https://cpan.metacpan.org/authors/id/G/GR/GRANTM/XML-SAX-Base-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/G/GR/GRANTM/XML-SAX-Base-1.09.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

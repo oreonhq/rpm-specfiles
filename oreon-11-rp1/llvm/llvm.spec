@@ -419,10 +419,10 @@ License:	Apache-2.0 WITH LLVM-exception OR NCSA
 URL:		http://llvm.org
 
 %if %{with snapshot_build}
-Source0: https://github.com/llvm/llvm-project/archive/%{llvm_snapshot_git_revision}.tar.gz
+Source0:        https://github.com/llvm/llvm-project/archive/%{llvm_snapshot_git_revision}.tar.gz
 %else
-Source0: https://github.com/llvm/llvm-project/releases/download/llvmorg-%{maj_ver}.%{min_ver}.%{patch_ver}%{?rc_ver:-%{rc_ver}}/%{src_tarball_dir}.tar.xz
-Source1: https://github.com/llvm/llvm-project/releases/download/llvmorg-%{maj_ver}.%{min_ver}.%{patch_ver}%{?rc_ver:-%{rc_ver}}/%{src_tarball_dir}.tar.xz.sig
+Source0:        https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.1%{?rc_ver:-%{rc_ver}}/llvm-project-22.1.1%{?rc_ver:-%{rc_ver}}.src.tar.xz
+Source1:        https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.1%{?rc_ver:-%{rc_ver}}/llvm-project-22.1.1%{?rc_ver:-%{rc_ver}}.src.tar.xz.sig
 %endif
 Source6: release-keys.asc
 
@@ -431,8 +431,8 @@ Source2005: macros.%{pkg_name_clang}
 %endif
 
 %if %{with bundle_compat_lib}
-Source3000: https://github.com/llvm/llvm-project/releases/download/llvmorg-%{compat_ver}/llvm-project-%{compat_ver}.src.tar.xz
-Source3001: https://github.com/llvm/llvm-project/releases/download/llvmorg-%{compat_ver}/llvm-project-%{compat_ver}.src.tar.xz.sig
+Source3000:        https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/llvm-project-20.1.8.src.tar.xz
+Source3001:        https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/llvm-project-20.1.8.src.tar.xz.sig
 %endif
 
 # Sources we use to split up the main spec file in sections so that we can more

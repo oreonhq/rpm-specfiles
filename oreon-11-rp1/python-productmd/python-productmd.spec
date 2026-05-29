@@ -7,8 +7,7 @@ Summary:        Library providing parsers for metadata related to OS installatio
 
 License:        LGPL-2.1-only
 URL:            https://github.com/release-engineering/productmd
-Source:         %{pypi_source productmd}
-
+Source:        https://files.pythonhosted.org/packages/source/p/productmd/productmd-1.50.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest

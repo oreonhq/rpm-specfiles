@@ -18,7 +18,7 @@ Release:	5%{?dist}
 License:	LGPL-3.0-or-later WITH openvpn-openssl-exception
 Url:		https://www.psycopg.org/
 
-Source:		https://github.com/psycopg/psycopg2/archive/%{version}/psycopg2-%{version}.tar.gz
+Source:        https://github.com/psycopg/psycopg2/archive/2.9.10/psycopg2-2.9.10.tar.gz
 
 BuildRequires:	python3-devel
 

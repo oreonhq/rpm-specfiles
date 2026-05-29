@@ -6,8 +6,8 @@ Release:        12%{?dist}
 Summary:        Manipulate netfilter connection tracking table and run High Availability
 License:        GPL-2.0-only
 URL:            http://conntrack-tools.netfilter.org/
-Source0:        https://www.netfilter.org/pub/conntrack-tools/conntrack-tools-%{version}.tar.xz
-Source1:        https://www.netfilter.org/pub/conntrack-tools/conntrack-tools-%{version}.tar.xz.sig
+Source0:        https://www.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.8.tar.xz
+Source1:        https://www.netfilter.org/pub/conntrack-tools/conntrack-tools-1.4.8.tar.xz.sig
 # Note this openpgp key is expired and revoked, but is the one used for the 1.4.8 signature
 Source2:        NetfilterCoreTeam-OpenGPG-KEY.txt
 # Note this is the new key, presumbly will be used in the future (it signed the old key as well)

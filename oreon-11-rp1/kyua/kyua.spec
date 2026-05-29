@@ -1,7 +1,7 @@
 %global source0_hash db6e5d341d5cf7e49e50aa361243e19087a00ba33742b0855d2685c0b8e721d6
 
 %global _testsdir %{_libexecdir}/%{name}/tests
-%global _make_args pkgtestsdir=%%{_testsdir} testsdir=%%{_testsdir}
+%global _make_args pkgtestsdir=%{_testsdir} testsdir=%{_testsdir}
 
 Name:           kyua
 Version:        0.13

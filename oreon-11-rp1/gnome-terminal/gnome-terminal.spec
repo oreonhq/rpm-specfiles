@@ -16,7 +16,7 @@ Summary: Terminal emulator for GNOME
 
 License: GPL-3.0-or-later AND GFDL-1.3-only
 URL:     https://wiki.gnome.org/Apps/Terminal
-Source0: https://download.gnome.org/sources/%{name}/3.60/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/gnome-terminal/3.60/gnome-terminal-3.60.0.tar.xz
 Source1: org.gnome.Terminal.gschema.override
 
 BuildRequires: pkgconfig(dconf)

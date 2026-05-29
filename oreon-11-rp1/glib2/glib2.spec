@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global major_minor_version %%(echo %%{version} | cut -d "." -f 1-2)
+%global major_minor_version %(echo %{version} | cut -d "." -f 1-2)
 
 Name:           glib2
 Version:        2.88.0
@@ -9,8 +9,7 @@ Summary:        A library of handy utility functions
 
 License:        LGPL-2.1-or-later
 URL:            https://www.gtk.org
-Source:         https://download.gnome.org/sources/glib/%{major_minor_version}/glib-%{version}.tar.xz
-
+Source: https://download.gnome.org/sources/glib/%{major_minor_version}/glib-%{version}.tar.xz
 # Required for RHEL core crypto components policy. Good for Fedora too.
 # https://bugzilla.redhat.com/show_bug.cgi?id=1630260
 # https://gitlab.gnome.org/GNOME/glib/-/merge_requests/903

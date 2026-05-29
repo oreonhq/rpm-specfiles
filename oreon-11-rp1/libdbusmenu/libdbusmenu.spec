@@ -26,7 +26,7 @@ Summary:    Library for passing menus over DBus
 
 License:    (LGPL-3.0-only OR LGPL-2.1-only) AND GPL-3.0-only
 URL:        https://launchpad.net/libdbusmenu
-Source0:    https://launchpad.net/libdbusmenu/%{ubuntu_release}/%{version}/+download/%{name}-%{version}.tar.gz
+Source0:        https://launchpad.net/libdbusmenu/16.04//+download/libdbusmenu-.tar.gz
 
 # patch to remove -Werror flag - fixes build despite usage of deprecated things
 Patch0:     00-no-werror.patch

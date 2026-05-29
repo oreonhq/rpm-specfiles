@@ -2,7 +2,7 @@
 
 %global systemd_units tinysparql-xdg-portal-3.service
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 %global tracker_obsoletes_version 3.8
 
@@ -19,8 +19,7 @@ Summary:        Desktop-neutral metadata database and search tool
 
 License:        GPL-2.0-or-later
 URL:            https://gnome.pages.gitlab.gnome.org/tinysparql/
-Source0:        https://download.gnome.org/sources/tinysparql/3.10/tinysparql-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/tinysparql/3.10/tinysparql-%{tarball_version}.tar.xz
 BuildRequires:  asciidoc
 BuildRequires:  gcc
 BuildRequires:  gettext

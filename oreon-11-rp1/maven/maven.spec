@@ -18,7 +18,7 @@ URL:            https://maven.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/maven/maven-3/%{version}/source/apache-maven-%{version}-src.tar.gz
+Source0:        https://archive.apache.org/dist/maven/maven-3/3.9.11/source/apache-maven-3.9.11-src.tar.gz
 Source1:        maven-bash-completion
 Source2:        mvn.1
 
@@ -123,7 +123,7 @@ Core part of Apache Maven that can be used as a library.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 find -name '*.java' -exec sed -i 's/\r//' {} +
 find -name 'pom.xml' -exec sed -i 's/\r//' {} +

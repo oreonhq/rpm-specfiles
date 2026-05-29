@@ -6,7 +6,7 @@ Release:        2%{?dist}
 Summary:        Touchscreen Access Library
 License:        LGPL-2.1-only
 URL:            https://github.com/kergoth/tslib
-Source0:        https://github.com/kergoth/tslib/releases/download/%{version}/tslib-%{version}.tar.bz2
+Source0:        https://github.com/kergoth/tslib/releases/download/1.24/tslib-1.24.tar.bz2
 BuildRequires:  make
 BuildRequires:  libtool, autoconf, automake
 BuildRequires:  SDL2-devel

@@ -11,7 +11,7 @@ Summary:        MinGW Windows Streaming-Media Framework Runtime
 
 License:        LGPL-2.0-or-later
 URL:            http://gstreamer.freedesktop.org/
-Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-%{version}.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.28.2.tar.xz
 
 BuildArch:      noarch
 

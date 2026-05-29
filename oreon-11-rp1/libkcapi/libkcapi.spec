@@ -123,8 +123,8 @@ Summary:        User space interface to the Linux Kernel Crypto API
 
 License:        BSD-3-Clause OR GPL-2.0-only
 URL:            https://www.chronox.de/%{name}/
-Source0:        https://www.chronox.de/%{name}/releases/%{version}/%{name}-%{version}.tar.xz
-Source1:        https://www.chronox.de/%{name}/releases/%{version}/%{name}-%{version}.tar.xz.asc
+Source0:        https://www.chronox.de/libkcapi/releases//libkcapi-.tar.xz
+Source1:        https://www.chronox.de/libkcapi/releases//libkcapi-.tar.xz.asc
 Source2:        sha512hmac-openssl.sh
 Source3:        fipshmac-openssl.sh
 

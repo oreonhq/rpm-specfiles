@@ -11,7 +11,7 @@ Summary:        Pure-ruby colorizer based on pygments
 License:        MIT AND BSD-2-Clause
 
 URL:            http://rouge.jneen.net/
-Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/rouge-4.7.0.gem
 Source1:        %{gem_name}-%{version}-test-missing-files.tar.gz
 # SOURCE1 is created by $ bash %%SOURCE2 %%version
 Source2:        rouge-create-missing-test-files.sh

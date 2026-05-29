@@ -73,11 +73,11 @@ Summary: Glasgow Haskell Compiler
 
 License: BSD-3-Clause AND HaskellReport
 URL: https://haskell.org/ghc/
-Source0: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.tar.xz
+Source0:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.tar.xz
 %if %{with testsuite}
-Source1: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-testsuite.tar.xz
+Source1:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-testsuite.tar.xz
 %endif
-Source2: https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.tar.xz.sig
+Source2:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.tar.xz.sig
 Source5: ghc-pkg.man
 Source6: haddock.man
 Source7: runghc.man

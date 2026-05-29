@@ -15,7 +15,7 @@ URL:            https://codehaus-plexus.github.io/plexus-xml/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-xml/archive/plexus-xml-4.0.4.tar.gz
 
 # https://github.com/codehaus-plexus/plexus-xml/pull/53
 Patch:          0001-Upgrade-to-Maven-4.0.0-rc-2.patch

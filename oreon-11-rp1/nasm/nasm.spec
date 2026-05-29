@@ -15,8 +15,8 @@ Version: 3.01
 Release: 2%{?dist}
 License: BSD-2-Clause
 URL: http://www.nasm.us
-Source0: https://www.nasm.us/pub/nasm/releasebuilds/%{version}/%{name}-%{version}.tar.xz
-Source1: https://www.nasm.us/pub/nasm/releasebuilds/%{version}/%{name}-%{version}-xdoc.tar.xz
+Source0:        https://www.nasm.us/pub/nasm/releasebuilds/3.01/nasm-3.01.tar.xz
+Source1:        https://www.nasm.us/pub/nasm/releasebuilds/3.01/nasm-3.01-xdoc.tar.xz
 
 BuildRequires: perl(Env)
 BuildRequires: autoconf

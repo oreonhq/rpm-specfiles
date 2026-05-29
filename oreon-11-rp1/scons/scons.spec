@@ -18,7 +18,7 @@ Summary:   An Open Source software construction tool
 License:   MIT AND DocBook-Stylesheet
 URL:       http://www.scons.org
 Source0:        https://files.pythonhosted.org/packages/source/s/scons/scons-4.10.1.tar.gz
-Source1:   https://scons.org/doc/production/scons-doc-%{version}.tar.gz
+Source1:        https://scons.org/doc/production/scons-doc-4.10.1.tar.gz
 
 # Support python-setuptools < 79
 Patch0:    scons-4.10.1-license_old_style.patch

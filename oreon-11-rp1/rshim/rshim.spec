@@ -12,7 +12,7 @@ Summary: User-space driver for Mellanox BlueField SoC
 # fwpkg_unpack.py: MIT
 License: (GPL-2.0-only OR BSD-3-Clause) AND MIT
 URL: https://github.com/mellanox/rshim-user-space
-Source0: https://github.com/Mellanox/rshim-user-space/archive/refs/tags/%{name}-%{version}.tar.gz
+Source0:        https://github.com/Mellanox/rshim-user-space/archive/refs/tags/rshim-2.6.6.tar.gz
 
 BuildRequires: gcc, autoconf, automake, make
 BuildRequires: pkgconfig(libpci), pkgconfig(libusb-1.0), pkgconfig(fuse3)

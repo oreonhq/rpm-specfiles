@@ -36,8 +36,8 @@ ExcludeArch: %{ix86}
 %global __provides_exclude_from ^%{_libdir}/gnome-boxes/
 %global __requires_exclude ^(%%(find %{buildroot}%{_libdir}/gnome-boxes/ -name '*.so' | xargs -n1 basename | sort -u | paste -s -d '|' -))
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:		gnome-boxes
 Version:	50.0
@@ -48,8 +48,7 @@ Summary:	A simple GNOME 3 application to access remote or virtual systems
 # CC-BY-SA-3.0.
 License:	LGPL-2.0-or-later AND CC0-1.0 AND CC-BY-SA-3.0
 URL:		https://wiki.gnome.org/Apps/Boxes
-Source0:	https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-boxes/%{major_version}/gnome-boxes-%{tarball_version}.tar.xz
 BuildRequires:	gettext >= 0.19.8
 BuildRequires:	meson
 BuildRequires:	vala >= 0.36.0

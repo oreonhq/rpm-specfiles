@@ -3,8 +3,8 @@
 %global gtksourceview_version 5.3.0
 %global libadwaita_version 1.6~beta
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-calculator
 Version:        50.0
@@ -13,8 +13,7 @@ Summary:        A desktop calculator
 
 License:        GPL-3.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:            https://wiki.gnome.org/Apps/Calculator
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-calculator/%{major_version}/gnome-calculator-%{tarball_version}.tar.xz
 BuildRequires:  blueprint-compiler
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext

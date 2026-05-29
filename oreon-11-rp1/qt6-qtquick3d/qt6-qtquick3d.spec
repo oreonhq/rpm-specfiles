@@ -37,9 +37,8 @@ Url:     http://www.qt.io
 %global  qt_version %(echo %{version} | cut -d~ -f1)
 
 %if 0%{?unstable}
-Source0: https://download.qt.io/development_releases/qt/%{majmin}/%{qt_version}/submodules/%{qt_module}-everywhere-src-%{qt_version}-%{prerelease}.tar.xz
 %else
-Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
+Source0:        https://download.qt.io/official_releases/qt/%{qt_version}/submodules/qtquick3d-everywhere-src-%{qt_version}.tar.xz
 %endif
 Patch0:  qtquick3d-fix-build-with-gcc11.patch
 # Shipped in every SRPM so %%{?fedora} >= 43 and Oreon builds always have the file

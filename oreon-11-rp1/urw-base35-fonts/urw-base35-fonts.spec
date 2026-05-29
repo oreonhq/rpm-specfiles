@@ -154,7 +154,7 @@ Release:          28%{?dist}
 License:          AGPL-3.0-only AND GPL-2.0-or-later
 
 URL:              https://github.com/ArtifexSoftware/urw-base35-fonts
-Source:           https://github.com/ArtifexSoftware/urw-base35-fonts/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source:        https://github.com/ArtifexSoftware/urw-base35-fonts/archive/20200910.tar.gz#/urw-base35-fonts-20200910.tar.gz
 # Fedora f43 lookaside (legacy AFM bundle). CTAN mirrors moved; this hash matches the F43 SRPM file.
 Source1:          https://src.fedoraproject.org/lookaside/pkgs/rpms/urw-base35-fonts/urw-fonts-1.0.7pre44.tar.bz2/sha512/ffcd58c7efc8e2a3d09d11282216a1c7917d13d5230548526b010ce3342c629a2c12bc825fb8fc1ec2bb39ae8144cc5c3da8ef5dd6462aa294236036f3bca347/urw-fonts-1.0.7pre44.tar.bz2
 

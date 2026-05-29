@@ -8,7 +8,7 @@ Release: 11%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://community.kde.org/Phonon
 
-Source0: https://download.kde.org/stable/phonon/%{version}/phonon-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/phonon/4.12.0/phonon-4.12.0.tar.xz
 
 BuildRequires: cmake
 BuildRequires: gcc-c++

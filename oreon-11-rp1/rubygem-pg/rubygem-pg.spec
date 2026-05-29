@@ -9,7 +9,7 @@ Release: 2%{?dist}
 Summary: Pg is the Ruby interface to the PostgreSQL RDBMS
 License: (BSD-2-Clause OR Ruby) AND PostgreSQL
 URL: https://github.com/ged/ruby-pg
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/pg-1.6.3.gem
 # git clone --no-checkout https://github.com/ged/ruby-pg.git
 # git archive -v -o pg-1.6.3-spec.tar.gz v1.6.3 spec/
 Source1: %{gem_name}-%{version}-spec.tar.gz

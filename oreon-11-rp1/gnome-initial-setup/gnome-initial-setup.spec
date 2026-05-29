@@ -7,7 +7,7 @@
 %global geoclue_version 2.6.0
 %global gnome_desktop_version 44.0-7
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 %if 0%{?rhel}
 %bcond_with webkitgtk
@@ -22,8 +22,7 @@ Summary:        Bootstrapping your OS
 
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Design/OS/InitialSetup
-Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-initial-setup/50/gnome-initial-setup-%{tarball_version}.tar.xz
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  meson

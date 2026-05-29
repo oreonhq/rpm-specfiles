@@ -50,7 +50,7 @@ License:        %{shrink:
     (Unlicense OR MIT)
     }
 URL:            https://wiki.gnome.org/Projects/LibRsvg
-Source0:        https://download.gnome.org/sources/librsvg/2.62/librsvg-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/librsvg/2.62/librsvg-2.62.2.tar.xz
 # upstream dropped vendoring since 2.55.0 (GNOME/librsvg#718), to create:
 #   tar xf librsvg-%%{version}.tar.xz ; pushd librsvg-%%{version} ; \
 #   cargo vendor --versioned-dirs && tar Jcvf ../librsvg-%%{version}-vendor.tar.xz vendor/ ; popd

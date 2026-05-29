@@ -7,7 +7,7 @@ Summary:	LinuxPPS user-space tools
 
 License:	GPL-2.0-or-later
 URL:		https://github.com/redlab-i/pps-tools
-Source0:	https://github.com/redlab-i/pps-tools/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/redlab-i/pps-tools/archive/v1.0.3/pps-tools-1.0.3.tar.gz
 
 BuildRequires: make
 BuildRequires:	gcc

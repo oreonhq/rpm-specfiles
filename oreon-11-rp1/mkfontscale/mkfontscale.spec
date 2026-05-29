@@ -7,7 +7,7 @@ Summary:    Tool to generate legacy X11 font system index files
 
 License:    MIT-open-group AND X11 AND MIT AND HPND-sell-variant
 URL:        https://www.x.org
-Source0:    https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/app/mkfontscale-1.2.3.tar.xz
 
 Patch0:     mkfontscale-examine-all-encodings.patch
 

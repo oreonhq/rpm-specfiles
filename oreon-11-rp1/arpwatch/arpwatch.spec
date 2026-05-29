@@ -44,7 +44,7 @@ BuildRequires:  libpcap-devel
 # Note that https://ee.lbl.gov/ may not link to the latest version; the
 # directory listing at https://ee.lbl.gov/downloads/arpwatch/ shows all
 # available versions.
-Source0:        https://ee.lbl.gov/downloads/arpwatch/arpwatch-%{version}.tar.gz
+Source0:        https://ee.lbl.gov/downloads/arpwatch/arpwatch-3.9.tar.gz
 # This file comes from https://standards-oui.ieee.org/oui/oui.csv; it is used
 # to generate ethercodes.dat. Because it is unversioned (and frequently
 # updated), we store the file directly in the repository with the spec file;

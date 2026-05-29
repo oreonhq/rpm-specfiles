@@ -7,7 +7,7 @@ Summary:        Automated decryption framework
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/latchset/%{name}
-Source0:        https://github.com/latchset/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/latchset/clevis/releases/download/v21/clevis-21.tar.xz
 Source1:        clevis.sysusers
 
 Patch0001:      0001-PKCS-11-pin-fix-dracut-for-unconfigured-device.patch

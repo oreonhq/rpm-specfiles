@@ -7,7 +7,7 @@ Summary:        Skip tests when modules not available
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:            https://metacpan.org/release/Test-Needs
-Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/Test-Needs-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/Test-Needs-0.002010.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  make

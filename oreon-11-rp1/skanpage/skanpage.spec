@@ -7,7 +7,7 @@ Summary:  Utility to scan images and multi-page documents
 License:  BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only
 
 URL:      https://invent.kde.org/utilities/%{name}
-Source0:  https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/skanpage-26.03.80.tar.xz
 
 ## Upstream patches
 

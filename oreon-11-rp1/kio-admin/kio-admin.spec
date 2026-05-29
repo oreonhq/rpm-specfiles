@@ -10,7 +10,7 @@ Summary:        Manage files as administrator using the admin:// KIO protocol
 License:        (GPL-2.0-only or GPL-3.0-only) and BSD-3-Clause and CC0-1.0 and FSFAP
 URL:            https://invent.kde.org/system/kio-admin
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kio-admin-26.04.1.tar.xz
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

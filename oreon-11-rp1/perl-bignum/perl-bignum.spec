@@ -6,7 +6,7 @@ Release:        522%{?dist}
 Summary:        Transparent big number support for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/bignum
-Source0:        https://cpan.metacpan.org/authors/id/P/PJ/PJACKLAM/bignum-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PJ/PJACKLAM/bignum-0.67.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

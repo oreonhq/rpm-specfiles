@@ -48,7 +48,7 @@ Provides:	fontawesome5-brands-fonts = %{version}-%{release}
 
 The FontAwesome Brand Fonts contain brand logos packaged as font files.}
 
-Source0:	https://github.com/FortAwesome/Font-Awesome/archive/%{version}/Font-Awesome-%{version}.tar.gz
+Source0:        https://github.com/FortAwesome/Font-Awesome/archive/6.7.2/Font-Awesome-6.7.2.tar.gz
 # Script to generate Source2
 Source1:	trademarks.py
 Source2:	README-Trademarks.txt

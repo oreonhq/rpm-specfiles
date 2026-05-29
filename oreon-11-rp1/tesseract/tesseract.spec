@@ -15,7 +15,7 @@ Summary:       Raw OCR Engine
 
 License:       Apache-2.0
 URL:           https://github.com/tesseract-ocr/%{name}
-Source0:       https://github.com/tesseract-ocr/tesseract/archive/%{version}%{?pre:-%pre}/%{name}-%{version}%{?pre:-%pre}.tar.gz
+Source0:        https://github.com/tesseract-ocr/tesseract/archive/5.5.2%{?pre:-%pre}/tesseract-5.5.2%{?pre:-%pre}.tar.gz
 
 # Fix library name case
 # Build training libs statically

@@ -13,7 +13,7 @@ Summary:        Module for sending mails with attachments through an SMTP server
 # Instead, its a friendly reminder of the law, so we won't list it here.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Mail-Sender
-Source0:        https://cpan.metacpan.org/authors/id/C/CA/CAPOEIRAB/Mail-Sender-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CA/CAPOEIRAB/Mail-Sender-0.903.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  coreutils

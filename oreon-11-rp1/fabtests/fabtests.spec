@@ -8,7 +8,7 @@ Summary:        Test suite for libfabric API
 # include/jsmn.h and common/jsmn.c are licensed under MIT.
 License:        (BSD-2-Clause OR GPL-2.0-only) AND MIT
 Url:            https://github.com/ofiwg/libfabric
-Source:         https://github.com/ofiwg/libfabric/releases/download/v%{version}/%{name}-%{version}.tar.bz2
+Source:        https://github.com/ofiwg/libfabric/releases/download/v2.3.1/fabtests-2.3.1.tar.bz2
 BuildRequires:  libfabric-devel >= %{version}
 %ifarch %{valgrind_arches}
 BuildRequires:  valgrind-devel

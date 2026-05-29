@@ -6,7 +6,7 @@ Release:        4%{?dist}
 Summary:        Capture STDOUT and STDERR from Perl, XS or external programs
 License:        Apache-2.0
 URL:            https://metacpan.org/release/Capture-Tiny
-Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Capture-Tiny-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Capture-Tiny-0.50.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

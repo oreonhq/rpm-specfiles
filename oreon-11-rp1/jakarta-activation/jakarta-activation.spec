@@ -14,7 +14,7 @@ URL:            https://jakarta.ee/specifications/activation/2.1/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/jaf-api/archive/%{version}/jaf-%{version}.tar.gz
+Source0:        https://github.com/jakartaee/jaf-api/archive/2.1.3/jaf-2.1.3.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -34,7 +34,7 @@ appropriate bean to perform the operation(s).
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 pushd api
 %pom_remove_parent

@@ -9,7 +9,7 @@ Release:        2%{?dist}
 Summary:        Small, simple, correct HTTP/1.1 client
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Tiny
-Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/HTTP-Tiny-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/HTTP-Tiny-0.092.tar.gz
 # Check for write failure, bug #1031096, refused by upstream,
 # <https://github.com/chansen/p5-http-tiny/issues/32>
 Patch1:         HTTP-Tiny-0.070-Croak-on-failed-write-into-a-file.patch

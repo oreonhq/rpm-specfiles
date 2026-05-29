@@ -7,7 +7,7 @@ Release:          12%{?dist}
 License:          GPL-2.0-or-later
 
 URL:              http://sourceforge.net/projects/watchdog/
-Source0:          http://downloads.sourceforge.net/watchdog/watchdog-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/watchdog/watchdog-5.16.tar.gz
 Source2:          README.watchdog.ipmi
 Source3:          README.Fedora
 Source4:          watchdog.service

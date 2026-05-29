@@ -15,7 +15,7 @@ Version:       0.4
 Release:       0.62.%{PREVER}%{?dist}
 License:       BSD-3-Clause
 URL:           https://sourceforge.net/projects/dump/
-Source:        https://downloads.sourceforge.net/dump/dump-%{DUMP_VERSION}.tar.gz
+Source:        https://downloads.sourceforge.net/dump/dump-0.4b52.tar.gz
 BuildRequires: e2fsprogs-devel >= 1.18, readline-devel >= 4.2
 BuildRequires: zlib-devel, bzip2-devel, automake, make
 BuildRequires: device-mapper-devel, libselinux-devel

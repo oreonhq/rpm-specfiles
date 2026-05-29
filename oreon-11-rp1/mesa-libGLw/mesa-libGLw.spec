@@ -8,7 +8,7 @@ License: SGI-OpenGL
 URL: http://www.mesa3d.org
 # archived project
 %global gitver b060a0782f09ebe4f60c8fd4564c11ba043c331f
-Source0: https://gitlab.freedesktop.org/mesa/glw/-/archive/%{gitver}/glw-%{gitver}.tar.bz2
+Source0:        https://gitlab.freedesktop.org/mesa/glw/-/archive/b060a0782f09ebe4f60c8fd4564c11ba043c331f/glw-b060a0782f09ebe4f60c8fd4564c11ba043c331f.tar.bz2
 
 BuildRequires: make
 BuildRequires: autoconf automake libtool

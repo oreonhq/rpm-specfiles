@@ -10,7 +10,7 @@ Release: 1%{?dist}
 License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND BSD-3-Clause
 URL: https://invent.kde.org/network/%{name}
 Summary: Client for matrix, the decentralized communication protocol
-Source: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/neochat-26.03.80.tar.xz
 
 BuildRequires: cmake(Qt6Core)
 BuildRequires: cmake(Qt6Quick)

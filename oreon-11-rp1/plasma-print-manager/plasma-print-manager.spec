@@ -14,8 +14,8 @@ Release: 1%{?dist}
 License: BSD-3-Clause AND GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{base_name}
 
-Source0: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz
-Source1: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/print-manager-6.6.5.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/print-manager-6.6.5.tar.xz.sig
 
 ## upstream patches
 

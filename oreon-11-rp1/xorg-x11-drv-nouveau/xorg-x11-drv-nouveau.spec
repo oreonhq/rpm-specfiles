@@ -15,7 +15,7 @@ Release:   14%{?dist}
 URL:       http://www.x.org
 License:   MIT
 
-Source0: http://xorg.freedesktop.org/archive/individual/driver/xf86-video-nouveau-%{version}.tar.bz2
+Source0:        https://www.x.org/archive/individual/driver/xf86-video-nouveau-1.0.17.tar.bz2
 
 Patch1: remove-sarea.h.patch
 # fixup driver for new X server ABI

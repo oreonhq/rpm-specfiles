@@ -6,7 +6,7 @@ Release:        54%{?dist}
 Summary:        Emulate file interface for in-core strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-String
-Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/IO-String-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/IO-String-1.08.tar.gz
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators

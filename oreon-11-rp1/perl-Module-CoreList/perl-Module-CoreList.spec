@@ -8,7 +8,7 @@ Release:        1%{?dist}
 Summary:        What modules are shipped with versions of perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-CoreList
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-CoreList-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-CoreList-5.20260308.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

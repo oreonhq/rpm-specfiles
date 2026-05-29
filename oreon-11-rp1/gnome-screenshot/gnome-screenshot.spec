@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           gnome-screenshot
 Version:        41.0
@@ -10,8 +10,7 @@ Summary:        A screenshot utility for GNOME
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-screenshot
-Source0:        https://download.gnome.org/sources/gnome-screenshot/41/gnome-screenshot-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-screenshot/41/gnome-screenshot-%{tarball_version}.tar.xz
 # Fix the build with meson 0.60
 # https://gitlab.gnome.org/GNOME/gnome-screenshot/-/merge_requests/57
 Patch0:         57.patch

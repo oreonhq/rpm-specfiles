@@ -7,7 +7,7 @@ Release:        %autorelease
 License:        mpich2
 URL:            https://www.mpich.org/
 
-Source0:        https://www.mpich.org/static/downloads/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://www.mpich.org/static/downloads/4.2.2/mpich-4.2.2.tar.gz
 Source1:        mpich.macros
 Source3:        mpich.pth.py3
 

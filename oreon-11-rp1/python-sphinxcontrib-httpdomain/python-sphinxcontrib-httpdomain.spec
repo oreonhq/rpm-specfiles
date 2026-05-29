@@ -8,7 +8,7 @@ Release:        7%{?dist}
 Summary:        Sphinx domain for documenting HTTP APIs
 License:        BSD-2-Clause
 URL:            http://packages.python.org/sphinxcontrib-httpdomain/
-Source0:        https://files.pythonhosted.org/packages/source/s/%{upstream_name}/%{upstream_name}-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/s/sphinxcontrib-httpdomain/sphinxcontrib-httpdomain-1.8.1.tar.gz
 # issue to be filed(?)
 Patch4:         0004-httpdomain-bump-domain-data-version.patch
 BuildArch:      noarch

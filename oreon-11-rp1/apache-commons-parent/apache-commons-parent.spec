@@ -11,7 +11,7 @@ URL:            https://commons.apache.org/commons-parent-pom.html
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/apache/commons-parent/archive/rel/commons-parent-%{version}.tar.gz
+Source0:        https://github.com/apache/commons-parent/archive/rel/commons-parent-89.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -34,7 +34,7 @@ The Project Object Model files for the apache-commons packages.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 # Plugin is not in fedora
 %pom_remove_plugin org.apache.commons:commons-build-plugin

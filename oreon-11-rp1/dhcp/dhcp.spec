@@ -43,8 +43,8 @@ Provides:  deprecated()
 Epoch:    12
 License:  ISC AND MPL-2.0
 Url:      https://www.isc.org/dhcp/
-Source0:  https://downloads.isc.org/isc/dhcp/%{DHCPVERSION}/dhcp-%{DHCPVERSION}.tar.gz
-Source9:  https://downloads.isc.org/isc/dhcp/%{DHCPVERSION}/dhcp-%{DHCPVERSION}.tar.gz.asc
+Source0:        https://downloads.isc.org/isc/dhcp/4.4.3%{?prever}%{?patchver:-P1}/dhcp-4.4.3%{?prever}%{?patchver:-P1}.tar.gz
+Source9:        https://downloads.isc.org/isc/dhcp/4.4.3%{?prever}%{?patchver:-P1}/dhcp-4.4.3%{?prever}%{?patchver:-P1}.tar.gz.asc
 Source10: codesign2021.txt
 Source1:  dhclient-script
 Source2:  README.dhclient.d

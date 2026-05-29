@@ -21,9 +21,9 @@ Summary:        Modern and extensible testing framework
 License:        MIT
 URL:            https://hackage.haskell.org/package/tasty
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{wcwidth}/%{wcwidth}.tar.gz
-Source2:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/tasty-%{version}/tasty-%{version}.tar.gz
+Source1:        https://hackage.haskell.org/package/wcwidth-0.0.2/wcwidth-0.0.2.tar.gz
+Source2:        https://hackage.haskell.org/package/tasty-%{version}/tasty.cabal#/tasty-%{version}.cabal
 # End cabal-rpm sources
 # https://github.com/UnkindPartition/tasty/pull/465
 Patch0:         https://patch-diff.githubusercontent.com/raw/UnkindPartition/tasty/pull/465.patch

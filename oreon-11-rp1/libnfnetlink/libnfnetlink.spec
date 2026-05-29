@@ -6,7 +6,7 @@ Release:        32%{?dist}
 Summary:        Netfilter netlink userspace library
 License:        GPL-2.0-or-later
 URL:            http://netfilter.org
-Source0:        http://netfilter.org/projects/libnfnetlink/files/%{name}-%{version}.tar.bz2
+Source0:        http://netfilter.org/projects/libnfnetlink/files/libnfnetlink-1.0.1.tar.bz2
 BuildRequires:	kernel-headers
 BuildRequires:  automake autoconf libtool pkgconfig
 BuildRequires: make

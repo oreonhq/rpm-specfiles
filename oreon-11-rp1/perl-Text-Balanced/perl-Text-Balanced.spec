@@ -6,7 +6,7 @@ Release:        2%{?dist}
 Summary:        Extract delimited text sequences from strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-Balanced
-Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHAY/Text-Balanced-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHAY/Text-Balanced-2.07.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

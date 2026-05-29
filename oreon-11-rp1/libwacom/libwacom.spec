@@ -9,7 +9,7 @@ Requires:       %{name}-data
 License:        HPND
 URL:            https://github.com/linuxwacom/libwacom
 
-Source0:        https://github.com/linuxwacom/libwacom/releases/download/%{name}-%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/linuxwacom/libwacom/releases/download/libwacom-2.18.0/libwacom-2.18.0.tar.xz
 
 BuildRequires:  meson gcc
 BuildRequires:  glib2-devel libgudev1-devel libevdev-devel

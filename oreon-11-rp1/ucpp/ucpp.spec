@@ -5,7 +5,7 @@ Name: ucpp
 Version: 1.3.5
 Release: 17%{?dist}
 URL: https://gitlab.com/scarabeusiv/ucpp
-Source0: https://gitlab.com/scarabeusiv/ucpp/-/archive/%{version}/ucpp-%{version}.tar.bz2
+Source0:        https://gitlab.com/scarabeusiv/ucpp/-/archive/1.3.5/ucpp-1.3.5.tar.bz2
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 BuildRequires: make

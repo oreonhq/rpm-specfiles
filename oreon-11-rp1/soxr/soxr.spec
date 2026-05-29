@@ -9,7 +9,7 @@ Summary:        The SoX Resampler library
 
 License:        LGPL-2.1-or-later
 URL:            https://sourceforge.net/p/soxr/wiki/Home/ 
-Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}-Source.tar.xz
+Source0:        http://downloads.sourceforge.net/soxr/soxr-0.1.3-Source.tar.xz
 
 # Don't use non-standard CMake variables
 # https://bugzilla.redhat.com/show_bug.cgi?id=2381660

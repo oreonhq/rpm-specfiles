@@ -93,9 +93,9 @@ Release:  2%{?dist}
 Epoch:    32
 Url:      https://www.isc.org/downloads/bind/
 #
-Source0:  https://downloads.isc.org/isc/bind9/%{version}/%{upname}-%{version}.tar.xz
+Source0:        https://downloads.isc.org/isc/bind9/9.18.44/bind-9.18.44.tar.xz
 Source1:  named.sysconfig
-Source2:  https://downloads.isc.org/isc/bind9/%{version}/%{upname}-%{version}.tar.xz.asc
+Source2:        https://downloads.isc.org/isc/bind9/9.18.44/bind-9.18.44.tar.xz.asc
 Source3:  named.logrotate
 Source4:  https://www.isc.org/docs/isc-keyblock.asc
 Source16: named.conf

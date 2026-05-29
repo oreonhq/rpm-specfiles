@@ -11,7 +11,7 @@ Summary:        Plasma applet for system updates using PackageKit
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/system/plasma-pk-updates
-Source0:        https://download.kde.org/stable/plasma-pk-updates/%{version}/plasma-pk-updates-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/plasma-pk-updates/0.3.2/plasma-pk-updates-0.3.2.tar.xz
 
 # Upstream patches
 Patch5: 0005-Several-fixes-related-to-the-network-state-and-apple.patch

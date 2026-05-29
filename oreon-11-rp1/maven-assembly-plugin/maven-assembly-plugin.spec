@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/plugins/maven-assembly-plugin/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/3.7.1/maven-assembly-plugin-3.7.1-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

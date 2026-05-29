@@ -10,7 +10,7 @@ Release:        %autorelease
 Summary:        Sphinx extension for QtHelp documents
 License:        BSD-2-Clause
 URL:            http://sphinx-doc.org/
-Source:         %{pypi_source sphinxcontrib_qthelp}
+Source:        https://files.pythonhosted.org/packages/source/s/sphinxcontrib-qthelp/sphinxcontrib-qthelp-2.0.0.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  gettext

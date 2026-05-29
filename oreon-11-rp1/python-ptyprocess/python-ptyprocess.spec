@@ -11,8 +11,7 @@ Summary:        Run a subprocess in a pseudo terminal
 
 License:        ISC
 URL:            https://github.com/pexpect/ptyprocess
-Source:         %{pypi_source}
-
+Source:        https://files.pythonhosted.org/packages/source/p/python-ptyprocess/python-ptyprocess-0.7.0.tar.gz
 # Remove unittest.makeSuite, gone from Python 3.13
 Patch:          https://github.com/pexpect/ptyprocess/pull/75.patch
 

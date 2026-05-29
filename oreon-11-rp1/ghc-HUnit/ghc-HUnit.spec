@@ -18,7 +18,7 @@ Summary:        A unit testing framework for Haskell
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/HUnit
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/HUnit-1.6.2.0/HUnit-1.6.2.0.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

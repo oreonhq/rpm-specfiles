@@ -9,9 +9,9 @@ License:        Apache-2.0
 URL:            https://maven.apache.org/shared/maven-reporting-api
 VCS:            git:https://github.com/apache/maven-reporting-api.git
 
-Source0:        https://archive.apache.org/dist/maven/reporting/%{name}-%{version}-source-release.zip
+Source0:        https://archive.apache.org/dist/maven/reporting/maven-reporting-api-4.0.0-source-release.zip
 # Source file signature
-Source1:        https://archive.apache.org/dist/maven/reporting/%{name}-%{version}-source-release.zip.asc
+Source1:        https://archive.apache.org/dist/maven/reporting/maven-reporting-api-4.0.0-source-release.zip.asc
 # Apache Maven public key
 Source2:        https://downloads.apache.org/maven/KEYS
 

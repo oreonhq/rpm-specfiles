@@ -13,7 +13,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/%{upstream_version}/surefire-%{upstream_version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/%{version}/surefire-%{version}-source-release.zip
 # Remove bundled binaries which cannot be easily verified for licensing
 Source1:        generate-tarball.sh
 Source2:        https://raw.githubusercontent.com/junit-team/junit4/r3.8.2/cpl-v10.html

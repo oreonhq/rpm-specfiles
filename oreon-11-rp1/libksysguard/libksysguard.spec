@@ -6,7 +6,7 @@ Release:        5%{?dist}
 Summary:        KDE system monitoring libraries and plugin runtime for Plasma
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/libksysguard
-Source0:        https://download.kde.org/stable/plasma/%{version}/libksysguard-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/plasma/6.6.3/libksysguard-6.6.3.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

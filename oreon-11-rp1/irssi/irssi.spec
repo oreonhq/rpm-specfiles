@@ -15,8 +15,8 @@ Release:	11%{?dist}
 
 License:	gpl-2.0-or-later AND gpl-2.0-only AND gfdl-1.1-or-later AND licenseref-fedora-public-domain AND hpnd-markus-kuhn
 URL:		http://irssi.org/
-Source0:	https://github.com/%{name}/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
-Source1:	https://github.com/%{name}/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz.asc
+Source0:        https://github.com/irssi/irssi/releases/download/1.4.5/irssi-1.4.5.tar.xz
+Source1:        https://github.com/irssi/irssi/releases/download/1.4.5/irssi-1.4.5.tar.xz.asc
 Source2:	gpgkey-7EE65E3082A5FB06AC7C368D00CCB587DDBEF0E1.asc
 Source3:	irssi-config.h
 

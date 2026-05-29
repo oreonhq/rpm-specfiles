@@ -6,7 +6,7 @@ Release:        32%{?dist}
 Summary:        Perl extension for very fast parsing of VCards
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-VCardFast
-Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Text-VCardFast-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Text-VCardFast-0.11.tar.gz
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make

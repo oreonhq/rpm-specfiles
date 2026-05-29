@@ -23,9 +23,9 @@ Summary:        Support for parsing and rendering YAML documents
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/yaml
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{libyaml}/%{libyaml}.tar.gz
-Source2:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/yaml-%{version}/yaml-%{version}.tar.gz
+Source1:        https://hackage.haskell.org/package/libyaml-0.1.4/libyaml-0.1.4.tar.gz
+Source2:        https://hackage.haskell.org/package/yaml-%{version}/yaml.cabal#/yaml-%{version}.cabal
 # End cabal-rpm sources
 Patch0:         system-libyaml.patch
 

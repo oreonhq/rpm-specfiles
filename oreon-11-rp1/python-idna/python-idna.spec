@@ -9,7 +9,7 @@ Summary:        Internationalized Domain Names in Applications (IDNA)
 
 License:        BSD-3-Clause
 URL:            https://github.com/kjd/idna
-Source0:        https://pypi.io/packages/source/i/%{srcname}/%{srcname}-%{version}.tar.gz
+Source0:        https://pypi.io/packages/source/i/idna/idna-3.11.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

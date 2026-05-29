@@ -7,7 +7,7 @@ Summary:       A library for access to RESTful web services
 
 License:       LGPL-2.1-only
 URL:           https://gitlab.gnome.org/GNOME/librest
-Source0:       https://download.gnome.org/sources/librest/0.10/librest-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/librest/0.10/librest-0.10.2.tar.xz
 
 BuildRequires: meson
 BuildRequires: pkgconfig(glib-2.0)

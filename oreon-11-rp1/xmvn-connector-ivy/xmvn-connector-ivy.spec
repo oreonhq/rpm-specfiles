@@ -9,7 +9,7 @@ URL:            https://fedora-java.github.io/xmvn/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/fedora-java/xmvn-connector-ivy/releases/download/%{version}/xmvn-connector-ivy-%{version}.tar.xz
+Source0:        https://github.com/fedora-java/xmvn-connector-ivy/releases/download/4.0.0/xmvn-connector-ivy-4.0.0.tar.xz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.ivy:ivy)

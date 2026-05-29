@@ -21,11 +21,11 @@ Summary: Sushy is a Python library to communicate with Redfish based systems
 License: Apache-2.0
 URL: http://launchpad.net/%{sname}/
 
-Source0: http://tarballs.openstack.org/%{sname}/%{sname}-%{upstream_version}.tar.gz
+Source0:        http://tarballs.openstack.org/sushy/sushy-%{upstream_version}.tar.gz
 # Required for tarball sources verification
 %if 0%{?sources_gpg} == 1
-Source101:        http://tarballs.openstack.org/%{sname}/%{sname}-%{upstream_version}.tar.gz.asc
-Source102:        https://releases.openstack.org/_static/%{sources_gpg_sign}.txt
+Source101:        http://tarballs.openstack.org/sushy/sushy-%{upstream_version}.tar.gz.asc
+Source102:        https://releases.openstack.org/_static/0xf8675126e2411e7748dd46662fc2093e4682645f.txt
 %endif
 
 BuildArch: noarch

@@ -10,7 +10,7 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 
 URL: https://oldmanprogrammer.net/source.php?dir=projects/tree
-Source: https://github.com/Old-Man-Programmer/tree/archive/refs/tags/%{version}.tar.gz
+Source:        https://github.com/Old-Man-Programmer/tree/archive/refs/tags/2.3.1.tar.gz
 
 BuildRequires: gcc
 BuildRequires: git-core

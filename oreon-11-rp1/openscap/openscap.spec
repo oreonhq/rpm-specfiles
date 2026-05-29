@@ -8,7 +8,7 @@ Summary:        Set of open source libraries enabling integration of the SCAP li
 License:        LGPL-2.1-or-later
 URL:            http://www.open-scap.org/
 VCS:            git:https://github.com/OpenSCAP/openscap
-Source0:        https://github.com/OpenSCAP/openscap/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/OpenSCAP/openscap/releases/download/1.4.3/openscap-1.4.3.tar.gz
 
 %global         common_description %{expand:
 OpenSCAP is a set of open source libraries providing an easier path

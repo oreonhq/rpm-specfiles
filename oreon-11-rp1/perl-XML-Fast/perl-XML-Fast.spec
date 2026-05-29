@@ -6,7 +6,7 @@ Release:        31%{?dist}
 Summary:        Simple and very fast XML to hash conversion
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Fast
-Source0:        https://cpan.metacpan.org/authors/id/M/MO/MONS/XML-Fast-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MO/MONS/XML-Fast-0.17.tar.gz
 # Do not override OPTIMIZE, CPAN RT#118714
 Patch0:         XML-Fast-0.17-Do-not-override-OPTIMIZE-by-default.patch
 BuildRequires:  findutils

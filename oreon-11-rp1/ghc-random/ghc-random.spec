@@ -23,8 +23,8 @@ Summary:        Pseudo-random number generation
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/random
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{splitmix}/%{splitmix}.tar.gz
+Source0:        https://hackage.haskell.org/package/random-%{version}/random-%{version}.tar.gz
+Source1:        https://hackage.haskell.org/package/splitmix-0.1.3.2/splitmix-0.1.3.2.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

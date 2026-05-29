@@ -40,7 +40,7 @@ http://wenq.org/eindex.cgi?Unicode_Chart_EN
 
 }
 
-Source0:  http://downloads.sourceforge.net/wqy/wqy-unibit-bdf-%{version}-1.tar.gz
+Source0:        http://downloads.sourceforge.net/wqy/wqy-unibit-bdf-1.1.0-1.tar.gz
 Patch0:   wqy-unibit-fixes-build.patch
 
 %fontpkg

@@ -6,7 +6,7 @@ Release:    2%{?dist}
 Summary:    New Zhuyin engine based on libzhuyin for IBus
 License:    GPL-2.0-or-later
 URL:        https://github.com/libzhuyin/ibus-libzhuyin
-Source0:    http://downloads.sourceforge.net/libzhuyin/ibus-libzhuyin/%{name}-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/libzhuyin/ibus-libzhuyin/ibus-libzhuyin-1.10.4.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  gettext-devel

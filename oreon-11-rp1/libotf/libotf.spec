@@ -7,7 +7,7 @@ Summary:	A Library for handling OpenType Font
 
 License:	LGPL-2.1-or-later
 URL:            http://www.nongnu.org/m17n/
-Source0:        http://download.savannah.gnu.org/releases/m17n/%{name}-%{version}.tar.gz
+Source0:        http://download.savannah.gnu.org/releases/m17n/libotf-0.9.16.tar.gz
 
 BuildRequires:	gcc chrpath freetype-devel libXaw-devel
 BuildRequires: make

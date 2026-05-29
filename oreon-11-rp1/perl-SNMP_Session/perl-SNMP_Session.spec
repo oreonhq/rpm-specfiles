@@ -7,7 +7,7 @@ Summary:        SNMP support for Perl 5
 
 License:        Artistic-2.0
 URL:            https://github.com/sleinen/snmp-session/
-Source0:        https://github.com/sleinen/snmp-session/archive/v%{version}/SNMP_Session-%{version}.tar.gz
+Source0:        https://github.com/sleinen/snmp-session/archive/v1.16/SNMP_Session-1.16.tar.gz
 Patch0:         SNMP_Session-1.13-fix_ivp6.patch
 BuildArch:      noarch
 BuildRequires:  make

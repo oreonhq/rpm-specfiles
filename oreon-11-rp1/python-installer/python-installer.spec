@@ -8,8 +8,7 @@ Summary:        A library for installing Python wheels
 # SPDX
 License:        MIT
 URL:            https://github.com/pypa/installer
-Source:         %{pypi_source installer}
-
+Source:        https://files.pythonhosted.org/packages/source/i/installer/installer-0.7.0.tar.gz
 # Fix the build with Python 3.13 - merged upstream
 # https://github.com/pypa/installer/commit/b23f89b10cf5
 Patch:          Fix-removed-importlib.resources.read_binary-in-Pytho.patch

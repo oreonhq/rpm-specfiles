@@ -13,7 +13,7 @@ Release:   6%{?dist}
 URL:       http://www.x.org
 License:   MIT
 
-Source0:   https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/driver/xf86-video-ati-22.0.0.tar.xz
 
 ExcludeArch: s390 s390x
 

@@ -5,7 +5,7 @@ Name:           libiec61883
 Version:        1.2.0
 Release:        %autorelease
 License:        LGPL-2.1-or-later AND GPL-2.0-or-later
-Source:         http://www.kernel.org/pub/linux/libs/ieee1394/%{name}-%{version}.tar.gz
+Source:        http://www.kernel.org/pub/linux/libs/ieee1394/libiec61883-1.2.0.tar.gz
 URL:            https://ieee1394.docs.kernel.org/en/latest/#libiec61883
 ExcludeArch:    s390 s390x
 

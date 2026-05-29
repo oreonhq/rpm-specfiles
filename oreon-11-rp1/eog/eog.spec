@@ -6,8 +6,8 @@
 %global libexif_version 0.6.14
 %global libhandy_version 1.5.0
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:    eog
 Version: 50.0
@@ -16,8 +16,7 @@ Summary: Eye of GNOME image viewer
 
 License: GPL-2.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:     https://wiki.gnome.org/Apps/EyeOfGnome
-Source0: https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/eog/%{major_version}/eog-%{tarball_version}.tar.xz
 Patch0:  eog-lower-requires-libpeas-version.patch
 
 BuildRequires: pkgconfig(exempi-2.0)

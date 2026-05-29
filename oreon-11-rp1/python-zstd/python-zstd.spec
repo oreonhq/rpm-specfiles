@@ -14,8 +14,7 @@ Summary:        Zstd Bindings for Python
 # original zstd bits are GPL-2.0-or-later OR BSD-2-Clause
 License:        BSD-2-Clause AND (GPL-2.0-or-later OR BSD-2-Clause)
 URL:            https://github.com/sergey-dryabzhinsky/python-zstd
-Source:         %{pypi_source}
-
+Source:        https://files.pythonhosted.org/packages/source/p/python-zstd/python-zstd-1.5.7.3.tar.gz
 # Patches to fix test execution
 Patch:          python-zstd-1.5.5.1-test-external.patch
 

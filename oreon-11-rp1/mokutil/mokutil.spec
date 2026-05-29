@@ -7,7 +7,7 @@ Epoch:          2
 Summary:        Tool to manage UEFI Secure Boot MoK Keys
 License:        GPL-3.0-or-later
 URL:            https://github.com/lcp/mokutil
-Source0:        https://github.com/lcp/mokutil/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/lcp/mokutil/archive/0.7.2.tar.gz#/mokutil-0.7.2.tar.gz
 ExclusiveArch:  %{ix86} x86_64 aarch64 %{arm} riscv64
 
 BuildRequires:  autoconf

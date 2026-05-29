@@ -10,7 +10,7 @@ Release:        1%{?dist}
 License:        GPL-2.0-or-later
 Summary:        Convergent KDE weather application
 Url:            https://apps.kde.org/kweather/
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kweather-26.03.80.tar.xz
 
 BuildRequires:  appstream
 BuildRequires:  cmake

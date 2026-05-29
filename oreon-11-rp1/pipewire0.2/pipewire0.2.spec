@@ -26,7 +26,7 @@ URL:            https://pipewire.org/
 # cd pipewire; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
 Source0:        https://github.com/PipeWire/pipewire/archive/0.2.7/pipewire-0.2.7.tar.gz
 %else
-Source0:	https://github.com/PipeWire/pipewire/archive/%{version}/pipewire-%{version}.tar.gz
+Source0:        https://github.com/PipeWire/pipewire/archive/0.2.7/pipewire-0.2.7.tar.gz
 %endif
 
 ## upstream patches

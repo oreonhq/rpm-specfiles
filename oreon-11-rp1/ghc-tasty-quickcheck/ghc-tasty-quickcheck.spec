@@ -17,8 +17,8 @@ Summary:        QuickCheck support for the Tasty test framework
 License:        MIT
 URL:            https://hackage.haskell.org/package/tasty-quickcheck
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/tasty-quickcheck-0.11.1/tasty-quickcheck-0.11.1.tar.gz
+Source1:        https://hackage.haskell.org/package/tasty-quickcheck-0.11.1/tasty-quickcheck.cabal#/tasty-quickcheck-0.11.1.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

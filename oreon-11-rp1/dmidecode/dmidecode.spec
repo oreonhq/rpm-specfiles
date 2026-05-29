@@ -6,7 +6,7 @@ Version:        3.6
 Release:        9%{?dist}
 Epoch:          1
 License:        GPL-2.0-or-later
-Source0:        https://download.savannah.gnu.org/releases/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://download.savannah.gnu.org/releases/dmidecode/dmidecode-3.6.tar.xz
 URL:            https://www.nongnu.org/dmidecode/
 BuildRequires:  gcc make
 BuildRequires:  pkgconfig(bash-completion)

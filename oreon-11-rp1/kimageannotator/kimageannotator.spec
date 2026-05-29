@@ -14,8 +14,8 @@ Summary:        Image annotation widget library for Qt (ksnip)
 License:        LGPL-3.0-or-later
 URL:            https://github.com/ksnip/kImageAnnotator
 
-Source0:        https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v%{version}.tar.gz#/kImageAnnotator-%{version}.tar.gz
-Source1:        https://github.com/ksnip/kColorPicker/archive/refs/tags/v%{kcp_version}.tar.gz#/kColorPicker-%{kcp_version}.tar.gz
+Source0:        https://github.com/ksnip/kImageAnnotator/archive/refs/tags/v0.7.2.tar.gz#/kImageAnnotator-0.7.2.tar.gz
+Source1:        https://github.com/ksnip/kColorPicker/archive/refs/tags/v0.3.1.tar.gz#/kColorPicker-0.3.1.tar.gz
 Patch1:         kimageannotator-qt6-output-name.patch
 
 BuildRequires:  cmake

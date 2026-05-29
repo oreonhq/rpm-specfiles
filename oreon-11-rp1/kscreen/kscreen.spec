@@ -12,8 +12,8 @@ Summary: KDE Display Management software
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later AND (GPL-2.0-only OR GPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
 
-Source0: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
-Source1: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/kscreen-6.6.3.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/kscreen-6.6.3.tar.xz.sig
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros

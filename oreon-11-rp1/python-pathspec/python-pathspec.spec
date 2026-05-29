@@ -7,8 +7,7 @@ Summary:        Utility library for gitignore style pattern matching of file pat
 
 License:        MPL-2.0
 URL:            https://github.com/cpburnz/python-path-specification
-Source:         %{pypi_source pathspec}
-
+Source:        https://files.pythonhosted.org/packages/source/p/pathspec/pathspec-1.0.4.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
 

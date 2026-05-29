@@ -12,7 +12,7 @@ Summary:          Intel QuickAssist user space library
 # For a breakdown of inbound licenses see the INSTALL file.
 License:          BSD-3-Clause
 URL:              https://github.com/intel/%{name}
-Source0:          https://github.com/intel/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/intel/qatlib/archive/26.02.0/qatlib-26.02.0.tar.gz
 BuildRequires:    systemd gcc make autoconf autoconf-archive automake libtool systemd-devel openssl-devel zlib-devel nasm numactl-devel
 Recommends:       qatlib-service
 # https://bugzilla.redhat.com/show_bug.cgi?id=1897661

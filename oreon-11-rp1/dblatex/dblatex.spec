@@ -15,7 +15,7 @@ BuildArch:  noarch
 # latex/misc/passivetex is MIT (not included in binary RPM so not listed)
 License:    GPL-2.0-or-later AND GPL-2.0-only AND LPPL-1.3a AND LicenseRef-DMIT AND LicenseRef-Fedora-Public-Domain
 URL:        http://dblatex.sourceforge.net/
-Source0:    http://downloads.sourceforge.net/%{name}/%{name}3-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/dblatex/dblatex3-0.3.12.tar.bz2
 # Source1 is from http://docbook.sourceforge.net/release/xsl/current/COPYING
 Source1:    COPYING-docbook-xsl
 Patch0:     dblatex-0.3.11-disable-debian.patch

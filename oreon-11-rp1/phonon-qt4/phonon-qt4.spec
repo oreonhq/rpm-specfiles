@@ -13,7 +13,7 @@ URL:     https://community.kde.org/Phonon
 %else
 %global stable stable
 %endif
-Source0: https://download.kde.org/%{stable}/phonon/%{version}/phonon-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/phonon/4.10.3/phonon-4.10.3.tar.xz
 
 ## upstream patches
 

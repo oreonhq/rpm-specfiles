@@ -16,7 +16,7 @@ Summary:	PTP implementation for Linux
 License:	GPL-2.0-or-later
 URL:		https://www.linuxptp.org/
 
-Source0:	https://downloads.nwtime.org/%{name}/%{name}-%{version}.tgz
+Source0:        https://downloads.nwtime.org/linuxptp/linuxptp-4.4.tgz
 Source1:	phc2sys.service
 Source2:	ptp4l.service
 Source3:	timemaster.service
@@ -27,9 +27,9 @@ Source7:	ts2phc.conf
 Source8:	linuxptp.sysusers
 Source9:	linuxptp.tmpfiles
 # external test suite
-Source10:	https://github.com/mlichvar/linuxptp-testsuite/archive/%{testsuite_ver}/linuxptp-testsuite-%{testsuite_ver}.tar.gz
+Source10:        https://github.com/mlichvar/linuxptp-testsuite/archive/d27dbd/linuxptp-testsuite-d27dbd.tar.gz
 # simulator for test suite
-Source11:	https://github.com/mlichvar/clknetsim/archive/%{clknetsim_ver}/clknetsim-%{clknetsim_ver}.tar.gz
+Source11:        https://github.com/mlichvar/clknetsim/archive/64df92/clknetsim-64df92.tar.gz
 # selinux policy
 Source20:	linuxptp.fc
 Source21:	linuxptp.if

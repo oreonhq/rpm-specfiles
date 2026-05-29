@@ -12,7 +12,7 @@ Release:	%autorelease
 # ext_libs/sqlite/ has the SQLite blessing.
 License:	(GPL-2.0-only OR Linux-OpenIB) AND BSD-3-Clause AND MIT AND blessing
 Url:		https://github.com/Mellanox/%{name}
-Source0: 	https://github.com/Mellanox/%{name}/releases/download/v%{version}-2/%{name}-%{version}-2.tar.gz
+Source0:        https://github.com/Mellanox/mstflint/releases/download/v4.34.0-2/mstflint-4.34.0-2.tar.gz
 
 BuildRequires:	make
 BuildRequires:	libstdc++-devel, zlib-devel, libibmad-devel, gcc-c++, gcc

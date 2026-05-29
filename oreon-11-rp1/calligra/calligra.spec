@@ -22,7 +22,7 @@ URL:     https://calligra.org/
 %else
 %global stable stable
 %endif
-Source0: https://download.kde.org/%{stable}/release-service/%{version}/src/calligra-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/release-service/26.04.1/src/calligra-26.04.1.tar.xz
 
 ## upstream patches
 

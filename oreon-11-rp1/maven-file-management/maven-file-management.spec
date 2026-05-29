@@ -12,7 +12,7 @@ URL:            https://maven.apache.org/shared/file-management
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/file-management/%{version}/file-management-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/file-management/3.1.0/file-management-3.1.0-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -34,7 +34,7 @@ Provides a component for plugins to easily resolve project dependencies.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %mvn_build -j

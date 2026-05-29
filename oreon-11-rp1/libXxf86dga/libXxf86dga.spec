@@ -16,7 +16,7 @@ Source0:        https://www.x.org/pub/individual/lib/libXxf86dga-1.1.6.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
-Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/libXxf86dga-1.1.6.tar.xz
 %endif
 
 Requires: libX11 >= 1.5.99.902

@@ -8,8 +8,8 @@
 # Filter out soname provides for plugins
 %global __provides_exclude_from ^(%{_libdir}/papers/.*\\.so|%{_libdir}/nautilus/extensions-4/.*\\.so)$
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           papers
 Version:        49.6
@@ -57,7 +57,7 @@ License:        %{shrink:
     (Unlicense OR MIT)
 }
 URL:            https://gitlab.gnome.org/GNOME/Incubator/papers
-Source:         https://download.gnome.org/sources/papers/%{major_version}/papers-%{tarball_version}.tar.xz
+Source: https://download.gnome.org/sources/papers/%{major_version}/papers-%{tarball_version}.tar.xz
 # To generate vendored cargo sources:
 #   tar xf papers-%%{tarball_version}.tar.xz
 #   pushd papers-%%{tarball_version}

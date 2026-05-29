@@ -26,7 +26,7 @@ Requires:       servicelog
 Requires:       lsvpd
 Requires:       powerpc-utils >= 1.3.0
 
-Source0:        https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/power-ras/ppc64-diag/archive/v2.7.11/ppc64-diag-2.7.11.tar.gz
 Source1:        add_regex.8
 Source2:        convert_dt_node_props.8
 Source3:        extract_opal_dump.8

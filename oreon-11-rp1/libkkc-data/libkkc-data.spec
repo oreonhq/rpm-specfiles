@@ -11,7 +11,7 @@ Summary:	Language model data for libkkc
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:	GPL-3.0-or-later
 URL:		https://github.com/ueno/libkkc/
-Source0:	https://github.com/ueno/libkkc/releases/download/v0.3.5/%{name}-%{version}.tar.xz
+Source0:        https://github.com/ueno/libkkc/releases/download/v0.3.5/libkkc-data-0.2.7.tar.xz
 Patch0:		https://github.com/ueno/libkkc/commit/ba1c1bd3eb86d887fc3689c3142732658071b5f7.patch
 
 BuildRequires:	gcc

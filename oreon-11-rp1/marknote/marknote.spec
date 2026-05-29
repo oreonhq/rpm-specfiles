@@ -7,7 +7,7 @@ License:       BSD-3-Clause AND CC-BY-SA-4.0 AND CC0-1.0 AND GPL-2.0-only AND GP
 Summary:       A simple markdown note management app for KDE
 URL:           https://apps.kde.org/%{name}/
 
-Source0:       https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/marknote/marknote-1.4.1.tar.xz
 
 BuildRequires: extra-cmake-modules
 BuildRequires: gcc-c++

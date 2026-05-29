@@ -15,7 +15,7 @@ Summary:        A library for handling streaming archive formats
 # ./aclocal.m4: (FSFULLR and/or GPL-2) with Libtool-exception exception
 License:        BSD-2-Clause AND FSFULLR AND GPL-2.0-or-later WITH Libtool-exception AND BSD-3-Clause AND FSFUL
 URL:            https://www.libarchive.org/
-Source0:        https://libarchive.org/downloads/%{name}-%{version}.tar.gz
+Source0:        https://libarchive.org/downloads/libarchive-3.8.6.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake

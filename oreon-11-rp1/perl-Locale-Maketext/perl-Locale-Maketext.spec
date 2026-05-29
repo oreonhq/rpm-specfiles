@@ -15,7 +15,7 @@ Release:        522%{?dist}
 Summary:        Framework for localization
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Locale-Maketext
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Locale-Maketext-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Locale-Maketext-1.32.tar.gz
 # Unbundled from perl 5.37.11
 Patch0:         Locale-Maketext-1.32-Upgrade-to-1.33.patch
 BuildArch:      noarch

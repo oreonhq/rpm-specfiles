@@ -10,7 +10,7 @@ Name: openoffice-lv
 Summary: Latvian linguistic dictionaries
 Version: 1.4.0
 Release: 12%{?dist}
-Source: http://dict.dv.lv/download/lv_LV-%{version}.oxt
+Source:        http://dict.dv.lv/download/lv_LV-1.4.0.oxt
 URL: http://dict.dv.lv/
 License: LGPL-2.1-or-later
 BuildArch: noarch

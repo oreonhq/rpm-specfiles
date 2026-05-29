@@ -6,7 +6,7 @@ Release:    %autorelease
 Summary:    Various tables for IBus-Table
 License:    LGPL-2.1-or-later AND GPL-3.0-or-later AND WTFPL
 URL:        http://github.com/moebiuscurve/ibus-table-others
-Source0:    http://mfabian.fedorapeople.org/ibus-table-others/%{name}-%{version}.tar.gz
+Source0:        http://mfabian.fedorapeople.org/ibus-table-others/ibus-table-others-1.3.22.tar.gz
 BuildArch:  noarch
 
 Requires:         ibus-table

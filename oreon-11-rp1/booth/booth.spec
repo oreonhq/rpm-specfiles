@@ -46,7 +46,7 @@ Release:        8%{?dist}
 Summary:        Ticket Manager for Multi-site Clusters
 License:        GPL-2.0-or-later
 Url:            https://github.com/%{github_owner}/%{name}
-Source0:        https://github.com/%{github_owner}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/ClusterLabs/booth/releases/download/v1.2/booth-1.2.tar.gz
 
 # direct build process dependencies
 BuildRequires:  autoconf

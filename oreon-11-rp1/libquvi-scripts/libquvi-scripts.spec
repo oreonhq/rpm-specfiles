@@ -8,7 +8,7 @@ Release:        27%{?dist}
 Summary:        Embedded lua scripts for parsing the media details
 License:        AGPL-3.0-or-later
 URL:            http://quvi.sourceforge.net
-Source0:        http://downloads.sourceforge.net/project/quvi/0.9/%{name}/%{name}-%{version}.tar.xz
+Source0:        http://downloads.sourceforge.net/project/quvi/0.9/libquvi-scripts/libquvi-scripts-0.9.20131130.tar.xz
 BuildArch:      noarch
 Requires:       lua-expat
 Requires:       lua-socket

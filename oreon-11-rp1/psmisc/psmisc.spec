@@ -7,7 +7,7 @@ Release: 7%{?dist}
 License: GPL-2.0-or-later
 URL: https://gitlab.com/psmisc/psmisc
 
-Source: https://sourceforge.net/projects/%{name}/files/%{name}/%{name}-%{version}.tar.xz
+Source:        https://sourceforge.net/projects/psmisc/files/psmisc/psmisc-23.7.tar.xz
 
 #The following has been reworked by upstream in a different way ... we'll see
 #Patch1: psmisc-22.13-fuser-silent.patch

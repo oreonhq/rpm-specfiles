@@ -6,7 +6,7 @@ Version: 0.4.5
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL: http://cyberelk.net/tim/patchutils/
-Source0: http://cyberelk.net/tim/data/patchutils/stable/%{name}-%{version}.tar.xz
+Source0:        http://cyberelk.net/tim/data/patchutils/stable/patchutils-0.4.5.tar.xz
 Obsoletes: interdiff <= 0.0.10
 Provides: interdiff = 0.0.11
 Requires: patch

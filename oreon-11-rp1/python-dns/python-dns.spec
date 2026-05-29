@@ -22,7 +22,7 @@ Summary:        DNS toolkit for Python
 License:        ISC
 URL:            http://www.dnspython.org
 
-Source0:        https://github.com/rthalley/%{pypi_name}/archive/v%{version}%{rctag}/%{pypi_name}-%{version}%{rctag}.tar.gz
+Source0:        https://github.com/rthalley/dnspython/archive/v2.8.0%{nil}/dnspython-2.8.0%{nil}.tar.gz
 
 BuildArch:      noarch
 

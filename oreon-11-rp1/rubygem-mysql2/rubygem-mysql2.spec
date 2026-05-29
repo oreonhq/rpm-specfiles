@@ -12,7 +12,7 @@ Release: 3%{?dist}
 Summary: A simple, fast Mysql library for Ruby, binding to libmysql
 License: MIT
 URL: https://github.com/brianmario/mysql2
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/mysql2-0.5.7.gem
 # git clone --no-checkout https://github.com/brianmario/mysql2.git
 # cd mysql2 && git archive -v -o mysql2-0.5.7-tests.tar.gz 0.5.7 spec/
 Source1: %{gem_name}-%{version}-tests.tar.gz

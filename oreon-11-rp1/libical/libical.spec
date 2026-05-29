@@ -8,7 +8,7 @@ Version:	3.0.20
 Release:	%{autorelease}
 License:	LGPL-2.1-only OR MPL-2.0
 URL:		https://libical.github.io/libical/
-Source:		https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/libical/libical/archive/v3.0.20/libical-3.0.20.tar.gz
 
 BuildRequires:	gcc
 BuildRequires:	gcc-c++

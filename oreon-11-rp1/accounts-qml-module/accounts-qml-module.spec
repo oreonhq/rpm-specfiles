@@ -9,7 +9,7 @@ URL:            https://gitlab.com/accounts-sso/accounts-qml-module
 # VERSION_0.7 tarball is Qt5-only (hardcoded accounts-qt5). Qt6 needs master after
 # https://gitlab.com/accounts-sso/accounts-qml-module/-/commit/05e79ebbbf3784a87f72b7be571070125c10dfe3
 %global gitrev 05e79ebbbf3784a87f72b7be571070125c10dfe3
-Source0:        https://gitlab.com/accounts-sso/accounts-qml-module/-/archive/%{gitrev}/accounts-qml-module-%{gitrev}.tar.bz2
+Source0:        https://gitlab.com/accounts-sso/accounts-qml-module/-/archive/05e79ebbbf3784a87f72b7be571070125c10dfe3/accounts-qml-module-05e79ebbbf3784a87f72b7be571070125c10dfe3.tar.bz2
 
 BuildRequires:  gcc-c++
 BuildRequires:  libaccounts-qt6-devel

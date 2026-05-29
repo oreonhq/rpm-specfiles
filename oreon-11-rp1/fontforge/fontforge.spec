@@ -9,7 +9,7 @@ Summary:        Outline and bitmap font editor
 
 License:        GPL-3.0-or-later
 URL:            http://fontforge.github.io/
-Source0:        https://github.com/fontforge/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/fontforge/fontforge/archive/20251009.tar.gz#/fontforge-20251009.tar.gz
 
 Requires:       xdg-utils
 Requires:       (autotrace or potrace)

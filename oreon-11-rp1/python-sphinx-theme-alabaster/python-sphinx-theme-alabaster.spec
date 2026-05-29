@@ -7,8 +7,7 @@ Summary:        Configurable sidebar-enabled Sphinx theme
 
 License:        BSD-3-Clause
 URL:            https://pypi.python.org/pypi/alabaster
-Source:         %{pypi_source alabaster}
-
+Source:        https://files.pythonhosted.org/packages/source/a/alabaster/alabaster-0.7.16.tar.gz
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
 

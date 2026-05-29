@@ -10,7 +10,7 @@ Summary:        Pure-python library for interacting with Yubikeys
 
 License:        BSD-2-Clause
 URL:            https://github.com/Yubico/%{name}
-Source0:        https://github.com/Yubico/%{name}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/Yubico/python-yubico/archive/python-yubico-1.3.3.tar.gz
 Patch0001:      0001-literal-comparison.patch
 
 BuildArch:      noarch

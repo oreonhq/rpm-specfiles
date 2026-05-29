@@ -6,7 +6,7 @@ Release:        5%{?dist}
 Summary:        Plasma day and night cycle scheduling daemon
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/plasma/knighttime
-Source0:        https://download.kde.org/stable/plasma/%{version}/knighttime-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/plasma/6.6.3/knighttime-6.6.3.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

@@ -6,7 +6,7 @@ Release: 4%{?dist}
 Summary: Cockpit Session Recording
 License: LGPL-2.1-or-later
 URL:     https://github.com/Scribery/%{name}
-Source:  https://github.com/Scribery/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source:        https://github.com/Scribery/cockpit-session-recording/releases/download/20/cockpit-session-recording-20.tar.xz
 
 BuildArch: noarch
 %if ! 0%{?rhel} || 0%{?rhel} >= 10

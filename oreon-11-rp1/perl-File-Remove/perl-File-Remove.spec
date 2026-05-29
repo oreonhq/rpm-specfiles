@@ -7,7 +7,7 @@ Summary:	Convenience module for removing files and directories
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:		https://metacpan.org/release/File-Remove
-Source0:	https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/File-Remove-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/File-Remove-1.61.tar.gz
 
 BuildRequires:	%{__perl}
 BuildRequires:	%{__make}

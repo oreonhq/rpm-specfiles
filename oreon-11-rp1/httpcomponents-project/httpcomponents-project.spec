@@ -11,7 +11,7 @@ URL:            https://hc.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/httpcomponents/httpcomponents-parent/httpcomponents-parent-%{version}-source-release.zip
+Source0:        https://archive.apache.org/dist/httpcomponents/httpcomponents-parent/httpcomponents-parent-13-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -28,7 +28,7 @@ use it as runtime requirement.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin :maven-site-plugin
 %pom_remove_plugin :animal-sniffer-maven-plugin

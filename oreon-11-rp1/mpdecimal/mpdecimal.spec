@@ -14,7 +14,7 @@ Summary:        Library for general decimal arithmetic
 License:        BSD-2-Clause
 
 URL:            https://www.bytereef.org/mpdecimal/index.html
-Source0:        https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-%{version}.tar.gz
+Source0:        https://www.bytereef.org/software/mpdecimal/releases/mpdecimal-4.0.1.tar.gz
 Source1:        https://speleotrove.com/decimal/dectest.zip
 
 BuildRequires:  make

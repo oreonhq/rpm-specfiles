@@ -8,7 +8,7 @@ Summary:    Optimized MPEG Audio Layer 2 encoding library based on tooLAME
 License:    LGPL-2.1-or-later
 URL:        http://www.twolame.org/
 
-Source:     http://downloads.sourceforge.net/twolame/%{name}-%{version}.tar.gz
+Source:        http://downloads.sourceforge.net/twolame/twolame-0.4.0.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake

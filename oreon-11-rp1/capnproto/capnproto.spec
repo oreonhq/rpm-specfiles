@@ -12,7 +12,7 @@ Summary:        A data interchange format and capability-based RPC system
 
 License:        MIT
 URL:            https://capnproto.org
-Source0:        https://capnproto.org/%{modulename}-%{version}.tar.gz
+Source0:        https://capnproto.org/capnproto-c++-1.3.0.tar.gz
 
 # We need C++
 BuildRequires:  gcc-c++

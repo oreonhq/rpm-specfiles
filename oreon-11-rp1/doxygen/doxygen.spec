@@ -26,7 +26,7 @@ Release: 3%{?dist}
 # No version is specified.
 License: GPL-2.0-or-later
 Url: https://github.com/doxygen
-Source0: https://www.doxygen.nl/files/%{name}-%{version}.src.tar.gz
+Source0:        https://www.doxygen.nl/files/doxygen-1.16.1.src.tar.gz
 # this icon is part of kdesdk
 Source1: doxywizard.desktop
 # hicolor PNGs from doxywizard.ico; ship doxywizard-icons.tar.xz next to this spec

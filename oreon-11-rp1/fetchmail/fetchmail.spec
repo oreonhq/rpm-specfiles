@@ -4,8 +4,8 @@ Summary: A remote mail retrieval and forwarding utility
 Name: fetchmail
 Version: 6.6.2
 Release: 2%{?dist}
-Source0: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
-Source1: http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz.asc
+Source0:        http://downloads.sourceforge.net/fetchmail/fetchmail-6.6.2.tar.xz
+Source1:        http://downloads.sourceforge.net/fetchmail/fetchmail-6.6.2.tar.xz.asc
 URL: http://www.fetchmail.info/
 # For a breakdown of the licensing, see COPYING
 License: GPL-2.0-or-later AND LicenseRef-Fedora-Public-Domain

@@ -19,7 +19,7 @@ URL: http://git.kernel.org/?p=linux/kernel/git/rostedt/trace-cmd.git;a=summary
 # git clone https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git
 # cd trace-cmd
 # git archive --prefix=trace-cmd-%%{version}/ -o trace-cmd-v%%{version}.tar.gz %%{git_commit}
-Source0: https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v%{srcversion}.tar.gz
+Source0:        https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v3.3.1.tar.gz
 Source1: trace-cmd.conf
 Source2: trace-cmd.service
 Source3: 98-trace-cmd.rules

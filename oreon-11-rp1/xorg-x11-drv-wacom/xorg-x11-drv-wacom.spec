@@ -20,7 +20,7 @@ Source0:        https://github.com/linuxwacom/xf86-input-wacom/releases/download
 Source1: make-git-snapshot.sh
 Source2: commitid
 %else
-Source0: https://github.com/linuxwacom/xf86-input-wacom/releases/download/xf86-input-wacom-%{version}/xf86-input-wacom-%{version}.tar.bz2
+Source0:        https://github.com/linuxwacom/xf86-input-wacom/releases/download/xf86-input-wacom-1.2.4/xf86-input-wacom-1.2.4.tar.bz2
 %endif
 
 BuildRequires: make

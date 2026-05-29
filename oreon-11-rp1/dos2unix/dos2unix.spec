@@ -6,8 +6,8 @@ Version: 7.5.3
 Release: 3%{?dist}
 License: BSD-3-Clause
 URL: https://waterlan.home.xs4all.nl/dos2unix.html
-Source: https://waterlan.home.xs4all.nl/dos2unix/%{name}-%{version}.tar.gz
-Source: https://waterlan.home.xs4all.nl/dos2unix/%{name}-%{version}.tar.gz.asc
+Source:        https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.3.tar.gz
+Source:        https://waterlan.home.xs4all.nl/dos2unix/dos2unix-7.5.3.tar.gz.asc
 Source: https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x38C1F572B12725BE#./38C1F572B12725BE.asc
 
 BuildRequires: gcc

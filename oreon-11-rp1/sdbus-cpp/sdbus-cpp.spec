@@ -10,7 +10,7 @@ Summary:        High-level C++ D-Bus library built on sd-bus
 License:        LGPL-2.1-or-later
 URL:            https://github.com/Kistler-Group/sdbus-cpp
 
-Source0:        https://github.com/Kistler-Group/sdbus-cpp/archive/refs/tags/v%{version}.tar.gz#/sdbus-cpp-%{version}.tar.gz
+Source0:        https://github.com/Kistler-Group/sdbus-cpp/archive/refs/tags/v2.2.1.tar.gz#/sdbus-cpp-2.2.1.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

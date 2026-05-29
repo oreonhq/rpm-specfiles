@@ -34,7 +34,7 @@ Version: 2.11.1
 Release: 2%{?dist}
 License: GPL-2.0-or-later
 URL:     https://github.com/storaged-project/udisks
-Source0: https://github.com/storaged-project/udisks/releases/download/udisks-%{version}/udisks-%{version}.tar.bz2
+Source0:        https://github.com/storaged-project/udisks/releases/download/udisks-2.11.1/udisks-2.11.1.tar.bz2
 
 BuildRequires: make
 BuildRequires: glib2-devel >= %{glib2_version}

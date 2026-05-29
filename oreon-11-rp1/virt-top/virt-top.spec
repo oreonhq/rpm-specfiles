@@ -15,8 +15,8 @@ ExcludeArch:    %{power64}
 %endif
 
 URL:            https://people.redhat.com/~rjones/virt-top/
-Source0:        https://people.redhat.com/~rjones/virt-top/files/%{name}-%{version}.tar.gz
-Source1:        https://people.redhat.com/~rjones/virt-top/files/%{name}-%{version}.tar.gz.sig
+Source0:        https://people.redhat.com/~rjones/virt-top/files/virt-top-1.1.2.tar.gz
+Source1:        https://people.redhat.com/~rjones/virt-top/files/virt-top-1.1.2.tar.gz.sig
 
 # Post-process output of CSV file (RHBZ#665817, RHBZ#912020).
 Source2:        processcsv.py

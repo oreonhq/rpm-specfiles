@@ -13,7 +13,7 @@ License:        BSD-2-Clause
 URL:            https://github.com/AOMediaCodec/libavif
 Source0:        https://github.com/AOMediaCodec/libavif/archive/v1.3.0/libavif-1.3.0.tar.gz
 # Vendored libargparse tarball so we never use FetchContent/git in mock (see ext/libargparse.patch)
-Source1:        https://github.com/kmurray/libargparse/archive/%{libargparse_commit}/libargparse-%{libargparse_commit}.tar.gz
+Source1:        https://github.com/kmurray/libargparse/archive/ee74d1b53bd680748af14e737378de57e2a0a954/libargparse-ee74d1b53bd680748af14e737378de57e2a0a954.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc

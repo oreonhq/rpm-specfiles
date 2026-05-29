@@ -6,7 +6,7 @@ Release:        9%{?dist}
 Summary:        Config file reading, writing, and validation
 License:        BSD-3-Clause
 URL:            http://configobj.readthedocs.org/
-Source0:        https://pypi.python.org/packages/source/c/configobj/configobj-%{version}.tar.gz
+Source0:        https://pypi.python.org/packages/source/c/configobj/configobj-5.0.9.tar.gz
 BuildArch:      noarch
 BuildRequires:  python%{python3_pkgversion}-devel
 BuildRequires:  python%{python3_pkgversion}-pytest

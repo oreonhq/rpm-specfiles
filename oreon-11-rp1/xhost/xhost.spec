@@ -7,7 +7,7 @@ Summary:    Manage hosts or users allowed to connect to the X server
 
 License:    MIT AND ICU
 URL:        https://www.x.org
-Source0:    https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/app/xhost-1.0.9.tar.xz
 
 Patch01:    0001-Replace-inet_addr-inet_aton-with-a-call-to-inet_pton.patch
 

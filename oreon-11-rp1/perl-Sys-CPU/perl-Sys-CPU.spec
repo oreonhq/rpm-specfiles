@@ -10,7 +10,7 @@ Summary:        Getting CPU information
 # See <https://bugzilla.redhat.com/show_bug.cgi?id=585336>.
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND (LGPL-3.0-only OR Artistic-2.0)
 URL:            https://metacpan.org/release/Sys-CPU
-Source0:        https://cpan.metacpan.org/authors/id/M/MZ/MZSANFORD/Sys-CPU-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MZ/MZSANFORD/Sys-CPU-0.61.tar.gz
 # Support cpu_type on ARM and AArch64, bug #1093266, CPAN RT#95400
 Patch0:         Sys-CPU-0.61-Add-support-for-cpu_type-on-ARM-and-AArch64-Linux-pl.patch
 # Accept undefined cpu_clock on ARM and AArch64, bug #1093266, CPAN RT#95400

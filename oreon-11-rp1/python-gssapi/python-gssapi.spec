@@ -9,7 +9,7 @@ Summary:        Python Bindings for GSSAPI (RFC 2743/2744 and extensions)
 
 License:        ISC
 URL:            https://github.com/pythongssapi/python-gssapi
-Source0:        https://github.com/pythongssapi/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/pythongssapi/python-gssapi/releases/download/v1.7.3/python-gssapi-1.7.3.tar.gz
 # https://github.com/pythongssapi/python-gssapi/pull/321
 Patch0:         cython3.patch
 

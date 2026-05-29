@@ -10,7 +10,7 @@ Summary:        A cross-platform C++ library for network programming
 
 License:        BSL-1.0
 URL:            https://think-async.com
-Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+Source0:        https://downloads.sourceforge.net/asio/asio-1.30.2.tar.bz2
 
 BuildRequires:  autoconf
 BuildRequires:  automake

@@ -17,13 +17,13 @@ Summary:        An NTP client/server
 
 License:        GPL-2.0-only
 URL:            https://chrony-project.org
-Source0:        https://chrony-project.org/releases/chrony-%{version}%{?prerelease}.tar.gz
-Source1:        https://chrony-project.org/releases/chrony-%{version}%{?prerelease}-tar-gz-asc.txt
+Source0:        https://chrony-project.org/releases/chrony-4.8%{?prerelease}.tar.gz
+Source1:        https://chrony-project.org/releases/chrony-4.8%{?prerelease}-tar-gz-asc.txt
 Source2:        https://chrony-project.org/gpgkey-8F375C7E8D0EE125A3D3BD51537E2B76F7680DAC.asc
 Source3:        chrony.dhclient
 Source4:        chrony.sysusers
 # simulator for test suite (pinned commit, reproducible tree name)
-Source10:       https://gitlab.com/chrony/clknetsim/-/archive/%{clknetsim_ver}/clknetsim-%{clknetsim_ver}.tar.gz
+Source10:        https://gitlab.com/chrony/clknetsim/-/archive/6ee99f50dec8/clknetsim-6ee99f50dec8.tar.gz
 %{?gitpatch:Patch0: chrony-%{version}%{?prerelease}-%{gitpatch}.patch.gz}
 
 # add distribution-specific bits to DHCP dispatcher

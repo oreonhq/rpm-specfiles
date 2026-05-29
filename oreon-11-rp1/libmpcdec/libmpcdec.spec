@@ -17,7 +17,7 @@ Release: %autorelease
 
 License: BSD-3-Clause
 URL: 	 https://www.musepack.net/
-Source:  https://files.musepack.net/source/musepack_src_r%{svn_release}.tar.gz
+Source:        https://files.musepack.net/source/musepack_src_r475.tar.gz
 
 ## upstream patches
 Patch:   0001-changes-a-seeking-behavior-that-confused-some-people.patch

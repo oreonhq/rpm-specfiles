@@ -13,7 +13,7 @@ Summary: Set of ABI analysis tools
 
 License: Apache-2.0 WITH LLVM-exception
 URL: https://sourceware.org/libabigail/
-Source0: http://mirrors.kernel.org/sourceware/libabigail/%{tarball_name}.tar.xz
+Source0:        http://mirrors.kernel.org/sourceware/libabigail/libabigail-2.9.tar.xz
 
 BuildRequires: git
 BuildRequires: libbpf-devel
@@ -105,7 +105,7 @@ them manually.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -v -S git
+%autosetup -S git
 
 %build
 %configure %{?with_abidb:--enable-abidb} --enable-ctf --enable-btf --disable-silent-rules --disable-zip-archive --disable-static

@@ -4,7 +4,7 @@ Name: mythes-pl
 Summary: Polish thesaurus
 Version: 1.5
 Release: 38%{?dist}
-Source: http://downloads.sourceforge.net/synonimy/OOo2-Thesaurus-%{version}.zip
+Source:        http://downloads.sourceforge.net/synonimy/OOo2-Thesaurus-1.5.zip
 # URL is dead now, please don't file bugs to fix it
 URL: http://synonimy.ux.pl/
 License: LGPL-2.1-only

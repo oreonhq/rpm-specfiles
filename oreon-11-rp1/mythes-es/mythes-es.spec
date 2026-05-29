@@ -4,7 +4,7 @@ Name: mythes-es
 Summary: Spanish thesaurus
 Version: 2.3
 Release: 20%{?dist}
-Source: https://github.com/sbosio/rla-es/releases/download/v%{version}/es_ANY.oxt
+Source:        https://github.com/sbosio/rla-es/releases/download/v2.3/es_ANY.oxt
 URL: https://github.com/sbosio/rla-es/tree/master/sinonimos
 License: LGPL-2.1-or-later
 BuildArch: noarch

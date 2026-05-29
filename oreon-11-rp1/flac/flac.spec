@@ -7,7 +7,7 @@ Summary:        An encoder/decoder for the Free Lossless Audio Codec
 
 License:        BSD-3-Clause AND GPL-2.0-or-later AND GFDL-1.3-or-later
 URL:            https://www.xiph.org/flac/
-Source:         https://downloads.xiph.org/releases/flac/flac-%{version}.tar.xz
+Source:        https://downloads.xiph.org/releases/flac/flac-1.5.0.tar.xz
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 
 BuildRequires:  cmake

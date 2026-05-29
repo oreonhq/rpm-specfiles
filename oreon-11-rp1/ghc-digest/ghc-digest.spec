@@ -15,7 +15,7 @@ Summary:        Various hashes for bytestrings; CRC32 and Adler32 for now
 License:        BSD-2-Clause
 URL:            https://hackage.haskell.org/package/digest
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/digest-0.0.2.1/digest-0.0.2.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

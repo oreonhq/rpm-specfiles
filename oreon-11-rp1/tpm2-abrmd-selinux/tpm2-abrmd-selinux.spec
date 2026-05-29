@@ -13,7 +13,7 @@ Summary: SELinux policies for tpm2-abrmd
 
 License: BSD-2-Clause
 URL:     https://github.com/tpm2-software/tpm2-abrmd
-Source0: https://github.com/tpm2-software/tpm2-abrmd/archive/%{version}/tpm2-abrmd-%{version}.tar.gz
+Source0:        https://github.com/tpm2-software/tpm2-abrmd/archive/2.3.1/tpm2-abrmd-2.3.1.tar.gz
 
 Patch0: selinux-allow-fwupd-to-communicate-with-tpm2-abrmd.patch
 

@@ -9,8 +9,8 @@ License:        Apache-2.0
 
 URL:            https://maven.apache.org/doxia/
 VCS:            git:https://github.com/apache/maven-doxia.git
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia/%{version}/doxia-%{version}-source-release.zip
-Source1:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia/%{version}/doxia-%{version}-source-release.zip.asc
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia/2.0.0/doxia-2.0.0-source-release.zip
+Source1:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia/2.0.0/doxia-2.0.0-source-release.zip.asc
 Source2:        https://downloads.apache.org/maven/KEYS
 
 BuildArch:      noarch

@@ -47,11 +47,11 @@ Summary:	The cross-platform open-source multimedia framework, player and server
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause
 URL:		https://www.videolan.org
 %if 0%{?commit:1}
-Source:		https://code.videolan.org/videolan/vlc/-/archive/%{commit}/vlc-%{commit}.tar.bz2
+Source:        https://code.videolan.org/videolan/vlc/-/archive/%{commit}/vlc-%{commit}.tar.bz2
 %else
-Source:		https://get.videolan.org/vlc/%{version}/vlc-%{version}.tar.xz
+Source:        https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz
 %endif
-Source:        https://get.videolan.org/vlc/%{version}/vlc-%{version}.tar.xz
+Source:        https://get.videolan.org/vlc/3.0.23/vlc-3.0.23.tar.xz
 
 ## upstream patches
 # spatialaudio: fix compilation with libspatialaudio 4.0

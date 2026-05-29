@@ -7,7 +7,7 @@ Version: 1.7
 Release: 14%{?dist}
 License: Symlinks
 # ibiblio mirror dead; local tarball matches Fedora dist-git (SHA512 verified)
-Source0:        http://ibiblio.org/pub/Linux/utils/file/%{name}-%{version}.tar.gz
+Source0:        http://ibiblio.org/pub/Linux/utils/file/symlinks-1.7.tar.gz
 # Taken from http://packages.debian.org/changelogs/pool/main/s/symlinks/symlinks_1.2-4.2/symlinks.copyright
 Source1: symlinks-LICENSE.txt
 BuildRequires: make

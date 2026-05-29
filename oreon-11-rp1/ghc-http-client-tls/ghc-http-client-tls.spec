@@ -17,8 +17,8 @@ Summary:        Http-client backend using the connection package and tls library
 License:        MIT
 URL:            https://hackage.haskell.org/package/http-client-tls
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/http-client-tls-0.3.6.4/http-client-tls-0.3.6.4.tar.gz
+Source1:        https://hackage.haskell.org/package/http-client-tls-0.3.6.4/http-client-tls.cabal#/http-client-tls-0.3.6.4.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

@@ -11,7 +11,7 @@ URL:            https://felix.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/felix/felix-parent/%{version}/%{name}-%{version}-source-release.tar.gz
+Source0:        https://repo1.maven.org/maven2/org/apache/felix/felix-parent/9/felix-parent-9-source-release.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

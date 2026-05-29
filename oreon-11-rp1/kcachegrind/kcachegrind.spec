@@ -12,7 +12,7 @@ Release: 1%{?dist}
 License: GPL-2.0-only AND LicenseRef-Callaway-GFDL
 URL:     https://invent.kde.org/sdk/%{name}
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kcachegrind-26.03.80.tar.xz
 
 ## upstream patches
 

@@ -11,8 +11,8 @@ Release: 1%{?dist}
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
 
-Source0: https://download.kde.org/%{stable_kf6}/plasma/%{version}/kde-gtk-config-%{version}.tar.xz
-Source1: https://download.kde.org/%{stable_kf6}/plasma/%{version}/kde-gtk-config-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/kde-gtk-config-6.6.5.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/kde-gtk-config-6.6.5.tar.xz.sig
 
 # upstream patches
 

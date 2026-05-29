@@ -11,8 +11,7 @@ License:        LGPL-2.0-or-later
 URL:            http://www.gtk.org
 # first two digits of version
 %global release_version %(echo %{version} | awk -F. '{print $1"."$2}')
-Source0:        http://download.gnome.org/sources/glib/%{release_version}/glib-%{version}.tar.xz
-
+Source0: https://download.gnome.org/sources/glib/%{release_version}/glib-%{version}.tar.xz
 BuildArch:      noarch
 
 BuildRequires:  meson

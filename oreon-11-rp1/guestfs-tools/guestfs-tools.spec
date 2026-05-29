@@ -30,9 +30,9 @@ ExcludeArch: %{power64}
 
 # Source and patches.
 URL:           http://libguestfs.org/
-Source0:       http://download.libguestfs.org/guestfs-tools/%{source_directory}/%{name}-%{version}.tar.gz
+Source0:        http://download.libguestfs.org/guestfs-tools/1.55-development/guestfs-tools-1.55.5.tar.gz
 %if 0%{verify_tarball_signature}
-Source1:       http://download.libguestfs.org/guestfs-tools/%{source_directory}/%{name}-%{version}.tar.gz.sig
+Source1:        http://download.libguestfs.org/guestfs-tools/1.55-development/guestfs-tools-1.55.5.tar.gz.sig
 %endif
 
 # Keyring used to verify tarball signature.

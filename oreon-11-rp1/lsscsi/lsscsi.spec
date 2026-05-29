@@ -6,7 +6,7 @@ Version:        0.32
 Release:        15%{?dist}
 License:        GPL-2.0-or-later
 # official git repository: https://github.com/doug-gilbert/lsscsi
-Source0:        http://sg.danny.cz/scsi/%{name}-%{version}.tgz
+Source0:        http://sg.danny.cz/scsi/lsscsi-0.32.tgz
 URL:            http://sg.danny.cz/scsi/lsscsi.html
 BuildRequires:  gcc
 BuildRequires:  make

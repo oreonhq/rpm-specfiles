@@ -1,7 +1,7 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-user-docs
 Version:        50.0
@@ -10,8 +10,7 @@ Summary:        GNOME User Documentation
 
 License:        CC-BY-SA-3.0
 URL:            https://help.gnome.org/
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-user-docs/%{major_version}/gnome-user-docs-%{tarball_version}.tar.xz
 BuildArch:      noarch
 
 BuildRequires:  gettext

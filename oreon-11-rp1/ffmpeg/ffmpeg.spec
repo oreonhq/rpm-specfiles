@@ -111,8 +111,8 @@ Release:        5%{?dist}
 Summary:        A complete solution to record, convert and stream audio and video
 License:        GPL-3.0-or-later
 URL:            https://ffmpeg.org/
-Source0:        https://ffmpeg.org/releases/ffmpeg-%{version}.tar.xz
-Source1:        https://ffmpeg.org/releases/ffmpeg-%{version}.tar.xz.asc
+Source0:        https://ffmpeg.org/releases/ffmpeg-7.1.2.tar.xz
+Source1:        https://ffmpeg.org/releases/ffmpeg-7.1.2.tar.xz.asc
 # https://ffmpeg.org/ffmpeg-devel.asc
 # gpg2 --import --import-options import-export,import-minimal ffmpeg-devel.asc > ./ffmpeg.keyring
 Source2:        ffmpeg.keyring

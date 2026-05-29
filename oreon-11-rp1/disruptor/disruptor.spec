@@ -11,8 +11,8 @@ URL:            https://lmax-exchange.github.io/disruptor/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/LMAX-Exchange/disruptor/archive/%{version}/%{name}-%{version}.tar.gz
-Source1:        https://repo1.maven.org/maven2/com/lmax/%{name}/%{version}/%{name}-%{version}.pom
+Source0:        https://github.com/LMAX-Exchange/disruptor/archive/3.4.4/disruptor-3.4.4.tar.gz
+Source1:        https://repo1.maven.org/maven2/com/lmax/disruptor/3.4.4/disruptor-3.4.4.pom
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

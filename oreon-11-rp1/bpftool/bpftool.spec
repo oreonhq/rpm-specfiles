@@ -10,7 +10,7 @@ Summary:        Inspection and simple manipulation of eBPF programs and maps
 
 License:        GPL-2.0-only OR BSD-2-Clause
 URL:            https://github.com/libbpf/bpftool
-Source:         https://github.com/libbpf/bpftool/releases/download/v%{version}/%{sources}.tar.gz
+Source:        https://github.com/libbpf/bpftool/releases/download/v7.6.0/bpftool-libbpf-v7.6.0-sources.tar.gz
 
 ExcludeArch:    %{ix86}
 
@@ -34,7 +34,7 @@ manipulation of eBPF programs and maps.
 
 %build
 # We need to use vmlinux.h from kernel-devel rather than the one from the running system
-%define kernel_version %(rpm -q --qf "%%{VERSION}-%%{RELEASE}.%%{ARCH}" kernel-devel)
+%define kernel_version %(rpm -q --qf "%{VERSION}-%{RELEASE}.%{ARCH}" kernel-devel)
 %make_build -C src/ EXTRA_CFLAGS="%{build_cflags}" EXTRA_LDFLAGS="%{build_ldflags}" VMLINUX_H="/usr/src/kernels/%{kernel_version}/vmlinux.h"
 
 %install

@@ -10,7 +10,7 @@ Release:        2%{?dist}
 License:        GPL-2.0-only OR GPL-3.0-only
 Summary:        Kirigami-based RSS reader
 Url:            https://invent.kde.org/network/alligator
-Source:         https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/alligator-26.03.80.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

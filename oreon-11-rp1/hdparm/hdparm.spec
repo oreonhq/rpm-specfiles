@@ -6,7 +6,7 @@ Version: 9.65
 Release: 10%{?dist}
 License: hdparm
 URL:    https://sourceforge.net/projects/%{name}/
-Source: https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source:        https://downloads.sourceforge.net/hdparm/hdparm-9.65.tar.gz
 Patch0: %{name}-9.60-ditch_dead_code.patch
 Patch1: %{name}-9.43-close_fd.patch
 Patch2: %{name}-9.43-get_geom.patch

@@ -18,9 +18,9 @@ Summary:        Read and write Windows Registry binary hive files
 License:        LGPL-2.1-only AND LGPL-2.0-or-later AND GPL-2.0-or-later
 URL:            http://libguestfs.org/
 
-Source0:        http://libguestfs.org/download/hivex/%{name}-%{version}.tar.gz
+Source0:        http://libguestfs.org/download/hivex/hivex-1.3.24.tar.gz
 %if 0%{verify_tarball_signature}
-Source1:        http://libguestfs.org/download/hivex/%{name}-%{version}.tar.gz.sig
+Source1:        http://libguestfs.org/download/hivex/hivex-1.3.24.tar.gz.sig
 %endif
 
 # Keyring used to verify tarball signature.

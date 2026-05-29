@@ -29,7 +29,7 @@
 #       tarballs, and their release tags/branches do not use the dot in version
 #       tag. This makes obtaining the current version harder, and might prevent
 #       automatic builds of new releases...
-%global version_short %%(echo "%{version}" | tr -d '.')
+%global version_short %(echo "%{version}" | tr -d '.')
 
 # Starting version of new sup-package layout scheme for Ghostscript, which is
 # conflicting with the previous sup-package layout scheme.
@@ -54,7 +54,7 @@ Release:          2%{?dist}
 License:          AGPL-3.0-or-later
 
 URL:              https://ghostscript.com/
-Source:           https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs%{version_short}/ghostscript-%{version}.tar.xz
+Source:        https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs%(echo/ghostscript-10.06.0.tar.xz
 
 Requires:         libgs%{?_isa} = %{version}-%{release}
 Requires:         %{name}-tools-fontutils = %{version}-%{release}

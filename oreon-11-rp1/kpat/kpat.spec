@@ -18,7 +18,7 @@ URL:     https://invent.kde.org/games/%{name}
 %else
 %global stable stable
 %endif
-Source0: http://download.kde.org/%{stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/release-service/26.04.1/src/kpat-26.04.1.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules

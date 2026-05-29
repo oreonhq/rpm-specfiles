@@ -3,7 +3,7 @@
 %define glib2_version 2.73.3
 %global libproxy_version 0.4.16
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 # Not yet sure whether to have libproxy in el10, but assume yes for now.
 %global with_libproxy 1
@@ -15,8 +15,7 @@ Summary:        Networking support for GLib
 
 License:        LGPL-2.1-or-later WITH cryptsetup-OpenSSL-exception
 URL:            https://gitlab.gnome.org/GNOME/glib-networking
-Source0:        https://download.gnome.org/sources/glib-networking/2.80/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/glib-networking/2.80/glib-networking-%{tarball_version}.tar.xz
 BuildRequires:  ca-certificates
 BuildRequires:  gcc
 BuildRequires:  gettext

@@ -19,8 +19,8 @@ Release:	%{baserelease}.git%{shorthash}%{?dist}
 # Automatically converted from old format: GPLv2+ and CC-BY-SA and Unicode and Public Domain and MIT - review is highly recommended.
 License:	GPL-2.0-or-later AND LicenseRef-Callaway-CC-BY-SA AND Unicode-DFS-2015 AND LicenseRef-Callaway-Public-Domain AND LicenseRef-Callaway-MIT
 
-Source0:	https://github.com/skk-dev/dict/archive/%{githash}/%{name}-%{gitdate_num}.git%{githash}.tar.gz
-Source1:	https://raw.githubusercontent.com/skk-dev/skktools/%{githash_tools}/unannotation.awk
+Source0:        https://github.com/skk-dev/dict/archive/b798a46b886f71c0c25ad2a9e78b1c3e8933970c/skkdic-20240131.gitb798a46b886f71c0c25ad2a9e78b1c3e8933970c.tar.gz
+Source1:        https://raw.githubusercontent.com/skk-dev/skktools/0fe2106fbc052445c611e6c5b2a79899d740edcb/unannotation.awk
 Source2:	license-investigation.txt
 Source200:	README-skkdic.rh.ja
 

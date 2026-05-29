@@ -7,7 +7,7 @@ Summary:        Replacer Maven Mojo
 License:        MIT
 URL:            https://github.com/beiliubei/maven-replacer-plugin
 # http://code.google.com/p/maven-replacer-plugin/
-Source0:        https://github.com/beiliubei/maven-replacer-plugin/archive/%{version}.tar.gz
+Source0:        https://github.com/beiliubei/maven-replacer-plugin/archive/1.6.tar.gz
 Patch1:         0001-Fix-build-with-Mockito-2.x.patch
 Patch2:         0002-Port-to-maven-plugin-annotations-from-Javadoc-tags.patch
 Patch3:         0003-Port-to-apache-commons-lang3.patch
@@ -45,7 +45,7 @@ This package contains javadoc for %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent

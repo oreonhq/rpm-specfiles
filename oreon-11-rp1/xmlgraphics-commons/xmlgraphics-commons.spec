@@ -8,7 +8,7 @@ Summary:        XML Graphics Commons
 
 License:        Apache-2.0 
 URL:            http://xmlgraphics.apache.org/
-Source0:        http://archive.apache.org/dist/xmlgraphics/commons/source/xmlgraphics-commons-%{version}-src.tar.gz
+Source0:        http://archive.apache.org/dist/xmlgraphics/commons/source/xmlgraphics-commons-2.11-src.tar.gz
 Patch1:         jdk25.patch
 
 BuildArch:      noarch

@@ -10,7 +10,7 @@ Release: 41%{?dist}
 Epoch: 1
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
-Source: http://www.abisource.com/downloads/enchant/%{version}/enchant-%{version}.tar.gz
+Source:        http://www.abisource.com/downloads/enchant/1.6.0/enchant-1.6.0.tar.gz
 URL: http://www.abisource.com/
 BuildRequires:  gcc-c++
 BuildRequires: glib2-devel >= 2.6.0

@@ -11,7 +11,7 @@ URL:            https://apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/apache/%{version}/apache-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/apache/35/apache-35-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

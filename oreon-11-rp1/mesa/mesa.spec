@@ -95,7 +95,7 @@ URL:            https://mesa3d.org
 # The "ver" variable contains the version in the second format.
 %global ver %{gsub %version ~ -}
 
-Source0:        https://archive.mesa3d.org/mesa-%{ver}.tar.xz
+Source0:        https://archive.mesa3d.org/mesa-%{gsub.tar.xz
 # src/gallium/auxiliary/postprocess/pp_mlaa* have an ... interestingly worded license.
 # Source1 contains email correspondence clarifying the license terms.
 # Fedora opts to ignore the optional part of clause 2 and treat that code as 2 clause BSD.
@@ -111,12 +111,12 @@ Source1:        Mesa-MLAA-License-Clarification-Email.txt
 %global rust_syn_ver 2.0.115
 %global rust_unicode_ident_ver 1.0.23
 %global rustc_hash_ver 2.1.1
-Source10:       https://crates.io/api/v1/crates/paste/%{rust_paste_ver}/download#/paste-%{rust_paste_ver}.tar.gz
-Source11:       https://crates.io/api/v1/crates/proc-macro2/%{rust_proc_macro2_ver}/download#/proc-macro2-%{rust_proc_macro2_ver}.tar.gz
-Source12:       https://crates.io/api/v1/crates/quote/%{rust_quote_ver}/download#/quote-%{rust_quote_ver}.tar.gz
-Source13:       https://crates.io/api/v1/crates/syn/%{rust_syn_ver}/download#/syn-%{rust_syn_ver}.tar.gz
-Source14:       https://crates.io/api/v1/crates/unicode-ident/%{rust_unicode_ident_ver}/download#/unicode-ident-%{rust_unicode_ident_ver}.tar.gz
-Source15:       https://crates.io/api/v1/crates/rustc-hash/%{rustc_hash_ver}/download#/rustc-hash-%{rustc_hash_ver}.tar.gz
+Source10:        https://crates.io/api/v1/crates/paste/1.0.15/download#/paste-1.0.15.tar.gz
+Source11:        https://crates.io/api/v1/crates/proc-macro2/1.0.106/download#/proc-macro2-1.0.106.tar.gz
+Source12:        https://crates.io/api/v1/crates/quote/1.0.44/download#/quote-1.0.44.tar.gz
+Source13:        https://crates.io/api/v1/crates/syn/2.0.115/download#/syn-2.0.115.tar.gz
+Source14:        https://crates.io/api/v1/crates/unicode-ident/1.0.23/download#/unicode-ident-1.0.23.tar.gz
+Source15:        https://crates.io/api/v1/crates/rustc-hash/2.1.1/download#/rustc-hash-2.1.1.tar.gz
 
 # Backport of https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/39951
 # which fixes compile-time conditional on AVX2 which is not built on Fedora

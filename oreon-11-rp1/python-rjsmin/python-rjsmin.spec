@@ -18,7 +18,7 @@ Summary:        Javascript Minifier
 
 License:        Apache-2.0
 URL:            http://opensource.perlig.de/rjsmin/
-Source0:        https://pypi.python.org/packages/source/r/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+Source0:        https://pypi.python.org/packages/source/r/rjsmin/rjsmin-1.2.5.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel

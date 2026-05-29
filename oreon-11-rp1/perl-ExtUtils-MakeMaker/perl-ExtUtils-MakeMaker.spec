@@ -12,7 +12,7 @@ Release:        1%{?dist}
 Summary:        Create a module Makefile
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/%{cpan_name}
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/%{cpan_name}-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/ExtUtils-MakeMaker-7.78.tar.gz
 # Do not set RPATH to perl shared-library modules by default. Bug #773622.
 # This is copy from `perl' package. This is a distributor extension.
 Patch0:         %{cpan_name}-7.36-USE_MM_LD_RUN_PATH.patch

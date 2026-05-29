@@ -11,7 +11,7 @@ Release: 2%{?dist}
 
 License: JasPer-2.0
 URL:     http://www.ece.uvic.ca/~frodo/jasper/
-Source0: https://github.com/jasper-software/%{name}/archive/refs/tags/version-%{version}.tar.gz
+Source0:        https://github.com/jasper-software/jasper/archive/refs/tags/version-4.2.8.tar.gz
 
 # architecture related patches
 Patch100: jasper-2.0.2-test-ppc64-disable.patch

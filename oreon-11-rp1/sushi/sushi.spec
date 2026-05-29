@@ -1,7 +1,7 @@
 %global source0_hash none
 
-%global url_ver %%(echo %{version}|cut -d. -f1,2)
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global url_ver %(echo %{version}|cut -d. -f1,2)
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 %global __provides_exclude_from ^%{_libdir}/%{name}/.*\\.so.*$
 
@@ -16,8 +16,7 @@ Summary:        A quick previewer for Nautilus
 #      LGPL-2.1-or-later WITH GStreamer-exception-2005
 License:        GPL-2.0-or-later WITH GStreamer-exception-2008 AND CC0-1.0 AND (LGPL-2.0-or-later AND LGPL-2.1-or-later WITH GStreamer-exception-2005)
 URL:            https://gitlab.gnome.org/GNOME/sushi
-Source0:        https://download.gnome.org/sources/%{name}/%{url_ver}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/sushi/%{url_ver}/sushi-%{tarball_version}.tar.xz
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  gjs-devel

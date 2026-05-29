@@ -13,7 +13,7 @@ URL:     http://fedoraproject.org/wiki/Anaconda
 # git checkout -b archive-branch anaconda-%%{version}-%%{release}
 # ./autogen.sh
 # make dist
-Source0: https://github.com/rhinstaller/%{name}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/rhinstaller/anaconda/releases/download/anaconda-44.25/anaconda-44.25.tar.bz2
 
 # Versions of required components (done so we make sure the buildrequires
 # match the requires versions of things).

@@ -8,7 +8,7 @@ Version: 1.0.4
 Release: 20%{?dist}
 License: MIT
 URL: http://www.x.org
-Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.bz2
+Source0:        https://www.x.org/pub/individual/lib/libXxf86misc-1.0.4.tar.bz2
 # copied out of xorgproto 2018.4
 Source1: xf86misc.h
 Source2: xf86mscstr.h

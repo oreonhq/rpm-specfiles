@@ -23,8 +23,8 @@ Summary:        Conversion between math formats
 License:        GPL-2.0-or-later
 URL:            https://hackage.haskell.org/package/texmath
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{typstsymbols}/%{typstsymbols}.tar.gz
+Source0:        https://hackage.haskell.org/package/texmath-%{version}/texmath-%{version}.tar.gz
+Source1:        https://hackage.haskell.org/package/typst-symbols-0.1.8.1/typst-symbols-0.1.8.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

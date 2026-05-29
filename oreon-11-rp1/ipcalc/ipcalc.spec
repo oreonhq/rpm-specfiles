@@ -6,7 +6,7 @@ Release: %autorelease
 Summary: IP network address calculator
 License: GPL-2.0-or-later
 URL: https://gitlab.com/ipcalc/ipcalc
-Source0: https://gitlab.com/ipcalc/ipcalc/-/archive/%{version}/ipcalc-%{version}.tar.gz
+Source0:        https://gitlab.com/ipcalc/ipcalc/-/archive/1.0.3/ipcalc-1.0.3.tar.gz
 
 BuildRequires: gcc, libmaxminddb-devel, meson, rubygem-ronn-ng
 Recommends:    libmaxminddb, geolite2-city, geolite2-country

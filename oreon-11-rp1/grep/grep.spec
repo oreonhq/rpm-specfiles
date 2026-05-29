@@ -7,8 +7,8 @@ Release: 3%{?dist}
 License: GPL-3.0-or-later AND LGPL-3.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-or-later AND LGPL-2.0-or-later AND GFDL-1.3-no-invariants-or-later
 URL: https://www.gnu.org/software/grep/
 
-Source0: https://ftp.gnu.org/pub/gnu/%{name}/%{name}-%{version}.tar.xz
-Source1: https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
+Source0:        https://ftp.gnu.org/pub/gnu/grep/grep-3.12.tar.xz
+Source1:        https://ftp.gnu.org/gnu/grep/grep-3.12.tar.xz.sig
 Source2: https://savannah.gnu.org/project/release-gpgkeys.php?group=grep&download=1'#/grep-keyring.gpg
 Source3: colorgrep.sh
 Source4: colorgrep.csh

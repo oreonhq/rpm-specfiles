@@ -35,7 +35,7 @@ Summary:        Windows Installer tools
 # - subprojects/bats-core/* (not in any binary RPM)
 License:        LGPL-2.1-or-later AND GPL-2.0-or-later AND MS-RL
 URL:            http://ftp.gnome.org/pub/GNOME/sources/%{name}
-Source0:        http://ftp.gnome.org/pub/GNOME/sources/%{name}/%{version}/%{name}-%{version}%{?_version_suffix}.tar.xz
+Source0:        http://ftp.gnome.org/pub/GNOME/sources/msitools/0.106.58/msitools-0.106.58%{?_version_suffix}.tar.xz
 
 Requires:       libgsf >= 1.14.24-2
 

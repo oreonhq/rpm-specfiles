@@ -17,8 +17,8 @@ URL:            https://github.com/cockpit-project/cockpit-podman
 %define rebuild_bundle 1
 %endif
 
-Source0: https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
-Source1: https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-node-%{version}.tar.xz
+Source0:        https://github.com/cockpit-project/cockpit-podman/releases/download/122/cockpit-podman-122.tar.xz
+Source1:        https://github.com/cockpit-project/cockpit-podman/releases/download/122/cockpit-podman-node-122.tar.xz
 
 BuildArch:      noarch
 %if 0%{?suse_version}

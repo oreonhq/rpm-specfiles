@@ -8,7 +8,7 @@ Summary:        A simple library for managing C++ modules (plug-ins)
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            http://code.google.com/p/libmodman/
-Source0:        http://libmodman.googlecode.com/files/%{name}-%{version}.tar.gz
+Source0:        http://libmodman.googlecode.com/files/libmodman-2.0.1.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

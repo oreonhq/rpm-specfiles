@@ -7,7 +7,7 @@ Release: 7%{?dist}
 License: MIT AND HPND-sell-variant
 URL: http://www.x.org
 
-Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/libXcomposite-0.4.6.tar.xz
 
 BuildRequires: make
 BuildRequires: xorg-x11-util-macros

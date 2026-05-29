@@ -11,8 +11,8 @@ Release: 10%{?dist}
 URL: https://github.com/cracklib/cracklib
 License: LGPL-2.1-or-later
 
-Source0: https://github.com/cracklib/cracklib/releases/download/v%{version}/cracklib-%{version}.tar.gz
-Source1: https://github.com/cracklib/cracklib/releases/download/v%{version}/cracklib-words-%{version}.gz
+Source0:        https://github.com/cracklib/cracklib/releases/download/v2.9.11/cracklib-2.9.11.tar.gz
+Source1:        https://github.com/cracklib/cracklib/releases/download/v2.9.11/cracklib-words-2.9.11.gz
 # From attachment to https://bugzilla.redhat.com/show_bug.cgi?id=627449
 Source2: cracklib.default.zh_CN.po
 # No upstream source; supplement for words missing from cracklib-words (from EL9 SRPM lineage)

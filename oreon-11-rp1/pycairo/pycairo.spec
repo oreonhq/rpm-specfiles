@@ -7,7 +7,7 @@ Summary: Python bindings for the cairo library
 
 License: LGPL-2.1-only OR MPL-1.1
 URL: https://www.cairographics.org/pycairo
-Source0: https://github.com/pygobject/pycairo/releases/download/v%{version}/pycairo-%{version}.tar.gz
+Source0:        https://github.com/pygobject/pycairo/releases/download/v1.28.0/pycairo-1.28.0.tar.gz
 
 BuildRequires: gcc
 BuildRequires: meson

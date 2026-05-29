@@ -14,7 +14,7 @@ Summary:        Libraries for videoconferencing
 # Automatically converted from old format: LGPLv2+ and GPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+ AND GPL-2.0-or-later
 URL:            https://www.freedesktop.org/wiki/Software/Farstream/
-Source0:        https://freedesktop.org/software/%{far}/releases/%{far}/%{far}-%{version}.tar.gz
+Source0:        https://freedesktop.org/software/farstream/releases/farstream/farstream-0.2.9.tar.gz
 # patch for upstream issue https://gitlab.freedesktop.org/farstream/farstream/issues/16
 Patch0:         farstream-0.2.8-configure-add-check-for-glib-mkenums.patch
 Patch1:         farstream-0.2.9-build-Adapt-to-backwards-incompatible-change-in-GNU-.patch

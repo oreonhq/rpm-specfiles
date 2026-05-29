@@ -8,7 +8,7 @@ Version:       0.9.6
 Release:       43%{?dist}
 License:       MIT
 URL:           https://github.com/seb-m/pyinotify
-Source0:       http://seb.dbzteam.org/pub/pyinotify/releases/pyinotify-%{version}.tar.gz
+Source0:        http://seb.dbzteam.org/pub/pyinotify/releases/pyinotify-0.9.6.tar.gz
 Patch:         pyinotify-0.9.6-epoint.patch
 # Upstream pull request https://github.com/seb-m/pyinotify/pull/205
 # Upstream issue https://github.com/seb-m/pyinotify/issues/204

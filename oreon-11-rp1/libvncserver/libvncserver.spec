@@ -10,7 +10,7 @@ Release:    6%{?dist}
 # NOTE: --with-filetransfer => GPLv2
 License:    GPL-2.0-or-later
 URL:        http://libvnc.github.io/
-Source0:    https://github.com/LibVNC/libvncserver/archive/LibVNCServer-%{version}.tar.gz
+Source0:        https://github.com/LibVNC/libvncserver/archive/LibVNCServer-0.9.15.tar.gz
 
 ## TLS security type enablement patches
 # https://github.com/LibVNC/libvncserver/pull/234

@@ -31,13 +31,13 @@ Summary:        Syntax highlighting library
 License:        GPL-2.0-or-later
 URL:            https://hackage.haskell.org/package/skylighting
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{skylightingcore}/%{skylightingcore}.tar.gz
-Source2:        https://hackage.haskell.org/package/%{skylightingformatansi}/%{skylightingformatansi}.tar.gz
-Source3:        https://hackage.haskell.org/package/%{skylightingformatblazehtml}/%{skylightingformatblazehtml}.tar.gz
-Source4:        https://hackage.haskell.org/package/%{skylightingformatcontext}/%{skylightingformatcontext}.tar.gz
-Source5:        https://hackage.haskell.org/package/%{skylightingformatlatex}/%{skylightingformatlatex}.tar.gz
-Source6:        https://hackage.haskell.org/package/%{skylightingformattypst}/%{skylightingformattypst}.tar.gz
+Source0:        https://hackage.haskell.org/package/skylighting-%{version}/skylighting-%{version}.tar.gz
+Source1:        https://hackage.haskell.org/package/skylighting-core-0.14.7/skylighting-core-0.14.7.tar.gz
+Source2:        https://hackage.haskell.org/package/skylighting-format-ansi-0.1/skylighting-format-ansi-0.1.tar.gz
+Source3:        https://hackage.haskell.org/package/skylighting-format-blaze-html-0.1.1.3/skylighting-format-blaze-html-0.1.1.3.tar.gz
+Source4:        https://hackage.haskell.org/package/skylighting-format-context-0.1.0.2/skylighting-format-context-0.1.0.2.tar.gz
+Source5:        https://hackage.haskell.org/package/skylighting-format-latex-0.1/skylighting-format-latex-0.1.tar.gz
+Source6:        https://hackage.haskell.org/package/skylighting-format-typst-0.1/skylighting-format-typst-0.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

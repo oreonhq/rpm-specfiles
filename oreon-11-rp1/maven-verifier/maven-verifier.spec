@@ -12,7 +12,7 @@ URL:            https://maven.apache.org/shared/maven-verifier
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{upstream_version}/%{name}-%{upstream_version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/maven-verifier/2.0.0-M1/maven-verifier-2.0.0-M1-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -36,7 +36,7 @@ Provides a test harness for Maven integration tests.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 # This test attempts to write outside the build directory
 rm src/test/java/org/apache/maven/shared/verifier/ForkedLauncherTest.java

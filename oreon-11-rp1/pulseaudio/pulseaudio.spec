@@ -44,8 +44,8 @@ URL:            http://www.freedesktop.org/wiki/Software/PulseAudio
 # cd pulseaudio; git reset --hard %{gitcommit}; ./autogen.sh; make; make distcheck
 Source0:        http://freedesktop.org/software/pulseaudio/releases/pulseaudio-17.0.tar.xz
 %else
-Source0:        http://freedesktop.org/software/pulseaudio/releases/pulseaudio-%{version}.tar.xz
-Source1:        http://freedesktop.org/software/pulseaudio/releases/pulseaudio-%{version}.tar.xz.sha256sum
+Source0:        http://freedesktop.org/software/pulseaudio/releases/pulseaudio-.tar.xz
+Source1:        http://freedesktop.org/software/pulseaudio/releases/pulseaudio-.tar.xz.sha256sum
 %endif
 
 Source5:        default.pa-for-gdm

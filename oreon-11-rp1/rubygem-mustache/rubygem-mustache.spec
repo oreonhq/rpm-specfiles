@@ -8,7 +8,7 @@ Release: 14%{?dist}
 Summary: Mustache is a framework-agnostic way to render logic-free views
 License: MIT
 URL: https://github.com/mustache/mustache
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/mustache-1.1.1.gem
 # Fix test race condition.
 # https://github.com/mustache/mustache/pull/258
 Patch0: rubygem-mustache-1.1.1-Fix-test-race-condition.patch

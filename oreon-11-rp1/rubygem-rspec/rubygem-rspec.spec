@@ -9,7 +9,7 @@ Release:	2%{?dist}
 
 License:	MIT
 URL:		http://rspec.info
-Source0:	http://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        http://rubygems.org/gems/rspec-3.13.2.gem
 
 BuildRequires:	rubygems-devel
 #BuildRequires:	ruby(release)

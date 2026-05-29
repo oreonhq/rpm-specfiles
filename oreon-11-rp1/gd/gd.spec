@@ -28,7 +28,7 @@ URL:           http://libgd.github.io/
 # git archive  --format=tgz --output=libgd-%{version}-%{commit}.tgz --prefix=libgd-%{version}/  master
 Source0:        https://github.com/libgd/libgd/releases/download/gd-2.3.3/libgd-2.3.3.tar.xz
 %else
-Source0:       https://github.com/libgd/libgd/releases/download/gd-%{version}/libgd-%{version}.tar.xz
+Source0:        https://github.com/libgd/libgd/releases/download/gd-2.3.3/libgd-2.3.3.tar.xz
 %endif
 
 # Needed by PHP see https://github.com/libgd/libgd/pull/766

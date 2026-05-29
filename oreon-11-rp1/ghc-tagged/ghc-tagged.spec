@@ -15,7 +15,7 @@ Summary:        Haskell 98 phantom types to avoid unsafely passing dummy argumen
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/tagged
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/tagged-0.8.9/tagged-0.8.9.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

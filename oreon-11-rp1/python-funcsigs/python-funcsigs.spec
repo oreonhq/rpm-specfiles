@@ -13,7 +13,7 @@ Summary:        Python function signatures from PEP362 for Python 2.6, 2.7 and 3
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            https://github.com/testing-cabal/funcsigs?
-Source0:        https://pypi.io/packages/source/f/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+Source0:        https://pypi.io/packages/source/f/funcsigs/funcsigs-1.0.2.tar.gz
 Patch0:         no-unittest2.patch
 
 BuildArch:      noarch

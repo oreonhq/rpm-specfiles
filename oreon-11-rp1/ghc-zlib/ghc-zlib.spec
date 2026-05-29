@@ -18,7 +18,7 @@ Summary:        Compression and decompression in the gzip and zlib formats
 License:        BSD-2-Clause
 URL:            https://hackage.haskell.org/package/zlib
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/zlib-0.7.1.1/zlib-0.7.1.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

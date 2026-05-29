@@ -42,7 +42,7 @@ Version: 1.33
 Release: 2%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://kronosnet.org
-Source0: https://kronosnet.org/releases/%{name}-%{version}.tar.xz
+Source0:        https://kronosnet.org/releases/kronosnet-1.33.tar.xz
 
 # Build dependencies
 BuildRequires: make

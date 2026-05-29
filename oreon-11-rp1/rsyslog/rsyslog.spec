@@ -45,14 +45,14 @@ Version: 8.2602.0
 Release: %autorelease
 License: GPL-3.0-or-later AND Apache-2.0
 URL: http://www.rsyslog.com/
-Source0: http://www.rsyslog.com/files/download/rsyslog/%{name}-%{version}.tar.gz
+Source0:        http://www.rsyslog.com/files/download/rsyslog/rsyslog-8.2602.0.tar.gz
 Source1: rsyslog.conf
 Source2: rsyslog.sysconfig
 Source3: rsyslog.log
 Source4: rsyslog.service
 # Add qpid-proton as another source, enable omamqp1 module in a
 # separatae sub-package with it statically linked(see rhbz#1713427)
-Source5: https://archive.apache.org/dist/qpid/proton/%{qpid_proton_v}/qpid-proton-%{qpid_proton_v}.tar.gz
+Source5:        https://archive.apache.org/dist/qpid/proton/0.40.0/qpid-proton-0.40.0.tar.gz
 
 BuildRequires: make
 BuildRequires: gcc

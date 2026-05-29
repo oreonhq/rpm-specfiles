@@ -17,7 +17,7 @@ Summary:        Numbers represented using scientific notation
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/scientific
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/scientific-0.3.8.1/scientific-0.3.8.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

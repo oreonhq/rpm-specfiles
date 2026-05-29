@@ -9,7 +9,7 @@ Summary:        Qt color picker widget library (ksnip)
 License:        LGPL-3.0-or-later
 URL:            https://github.com/ksnip/kColorPicker
 
-Source0:        https://github.com/ksnip/kColorPicker/archive/refs/tags/v%{version}.tar.gz#/kColorPicker-%{version}.tar.gz
+Source0:        https://github.com/ksnip/kColorPicker/archive/refs/tags/v0.3.1.tar.gz#/kColorPicker-0.3.1.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

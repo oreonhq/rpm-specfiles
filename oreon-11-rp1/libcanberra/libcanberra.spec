@@ -11,7 +11,7 @@ Name: libcanberra
 Version: 0.30
 Release: 39%{?dist}
 Summary: Portable Sound Event Library
-Source0: http://0pointer.de/lennart/projects/libcanberra/libcanberra-%{version}.tar.xz
+Source0:        http://0pointer.de/lennart/projects/libcanberra/libcanberra-0.30.tar.xz
 Patch0: 0001-gtk-Don-t-assume-all-GdkDisplays-are-GdkX11Displays-.patch
 License: LGPL-2.1-or-later
 Url: http://git.0pointer.de/?p=libcanberra.git;a=summary

@@ -6,7 +6,7 @@ Release:	33%{?dist}
 Summary:	Reusable Module::Install bits
 License:	CC0-1.0
 URL:		https://metacpan.org/release/Module-Package-Au
-Source0:	https://cpan.metacpan.org/authors/id/A/AU/AUDREYT/Module-Package-Au-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AU/AUDREYT/Module-Package-Au-2.tar.gz
 BuildArch:	noarch
 BuildRequires:	coreutils
 BuildRequires:	make

@@ -3,8 +3,8 @@
 %global gtk4_version 4.15.1
 %global libadwaita_version 1.6~alpha
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           baobab
 Version:        50.0
@@ -15,8 +15,7 @@ Summary:        A graphical directory tree analyzer
 # under CC0-1.0.
 License:        GPL-2.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:            https://wiki.gnome.org/Apps/Baobab
-Source0:        https://download.gnome.org/sources/baobab/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/baobab/%{major_version}/baobab-%{tarball_version}.tar.xz
 BuildRequires:  pkgconfig(gtk4) >= %{gtk4_version}
 BuildRequires:  pkgconfig(libadwaita-1) >= %{libadwaita_version}
 BuildRequires:  /usr/bin/appstream-util

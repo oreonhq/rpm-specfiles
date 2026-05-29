@@ -20,7 +20,7 @@ Summary:	User-mode networking daemons for virtual machines and namespaces
 License:	GPL-2.0-or-later AND BSD-3-Clause
 Group:		System Environment/Daemons
 URL:		https://passt.top/
-Source:		https://passt.top/passt/snapshot/passt-%{git_hash}.tar.xz
+Source:        https://passt.top/passt/snapshot/passt-386b5f5472b89769c025f5d5056348532a823b93.tar.xz
 
 BuildRequires:	gcc, make, checkpolicy, selinux-policy-devel
 Requires:	(%{name}-selinux = %{version}-%{release} if selinux-policy-%{selinuxtype})

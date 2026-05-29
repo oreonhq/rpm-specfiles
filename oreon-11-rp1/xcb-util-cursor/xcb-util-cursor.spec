@@ -6,7 +6,7 @@ Release:	%autorelease
 Summary:	Cursor library on top of libxcb
 License:	X11-distribute-modifications-variant
 URL:		http://xcb.freedesktop.org
-Source0:	http://xcb.freedesktop.org/dist/%{name}-%{version}.tar.xz
+Source0:        http://xcb.freedesktop.org/dist/xcb-util-cursor-0.1.6.tar.xz
 BuildRequires:	make
 BuildRequires:	gcc
 BuildRequires:	pkgconfig(xcb-util) >= 0.3.8

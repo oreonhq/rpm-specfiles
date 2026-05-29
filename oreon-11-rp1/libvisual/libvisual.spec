@@ -10,7 +10,7 @@ Epoch:          1
 Summary:        Abstraction library for audio visualisation plugins
 License:        LGPL-2.1-or-later
 URL:            https://github.com/Libvisual/libvisual
-Source0:        https://github.com/Libvisual/libvisual/releases/download/libvisual-%{version}/libvisual-%{version}.tar.bz2
+Source0:        https://github.com/Libvisual/libvisual/releases/download/libvisual-0.4.2/libvisual-0.4.2.tar.bz2
 
 Patch1:         libvisual-0.4.2-respect-environment-ldflags.patch
 Patch2:         libvisual-c99.patch

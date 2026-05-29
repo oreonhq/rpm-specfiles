@@ -23,7 +23,7 @@ Release: 10%{?dist}
 Summary: Tools to create anonymous, machine-friendly problem reports
 License: GPL-2.0-or-later
 URL: https://github.com/abrt/satyr
-Source0: https://github.com/abrt/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/abrt/satyr/releases/download/0.43/satyr-0.43.tar.gz
 
 # Avoid the multiprocessing forkserver method
 # Fix needed for Python 3.14

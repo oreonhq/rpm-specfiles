@@ -6,7 +6,7 @@ Release:        7%{?dist}
 Summary:        Parse directory listing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Listing
-Source0:        https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/File-Listing-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/File-Listing-6.16.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

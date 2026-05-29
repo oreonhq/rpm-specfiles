@@ -7,7 +7,7 @@ Summary: Core execution tool for unprivileged containers
 
 License: LGPL-2.0-or-later
 URL:     https://github.com/containers/bubblewrap/
-Source0: https://github.com/containers/bubblewrap/releases/download/v%{version}/bubblewrap-%{version}.tar.xz
+Source0:        https://github.com/containers/bubblewrap/releases/download/v0.11.0/bubblewrap-0.11.0.tar.xz
 
 BuildRequires: pkgconfig(bash-completion) >= 2.0
 BuildRequires: gcc

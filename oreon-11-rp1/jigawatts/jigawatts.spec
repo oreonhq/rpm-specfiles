@@ -15,7 +15,7 @@ Summary: Java CRIU helper
 # Automatically converted from old format: GPLv2 with exceptions - review is highly recommended.
 License: LicenseRef-Callaway-GPLv2-with-exceptions
 URL:     https://github.com/chflood/%{uname}
-Source0: https://github.com/chflood/jigawatts/archive/%{uversion}.tar.gz
+Source0:        https://github.com/chflood/jigawatts/archive/6c78499af1a1d536368267e5ab5449232b05f878.tar.gz
 
 # Pathces to move library out of the jar. This must be usptreamed in one or another way
 Patch0:  output_loc.patch

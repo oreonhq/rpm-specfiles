@@ -12,7 +12,7 @@ License: BSD-2-Clause
 URL:     https://invent.kde.org/plasma/%{name}
 
 # download.kde.org can redirect to mirrors that fail on Plasma tarballs
-Source0: https://invent.kde.org/plasma/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source0:        https://invent.kde.org/plasma/plasma-keyboard/-/archive/v6.6.5/plasma-keyboard-v6.6.5.tar.gz
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++

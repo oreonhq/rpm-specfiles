@@ -5,8 +5,8 @@ Version: 2.13
 Release: 2%{?dist}
 Summary: Linux-native io_uring I/O access library
 License: (GPL-2.0-only WITH Linux-syscall-note OR MIT) AND (LGPL-2.0-or-later OR MIT)
-Source0: https://brick.kernel.dk/snaps/%{name}-%{version}.tar.gz
-Source1: https://brick.kernel.dk/snaps/%{name}-%{version}.tar.gz.asc
+Source0:        https://brick.kernel.dk/snaps/liburing-2.13.tar.gz
+Source1:        https://brick.kernel.dk/snaps/liburing-2.13.tar.gz.asc
 URL: https://git.kernel.dk/cgit/liburing/
 BuildRequires: gcc
 BuildRequires: gcc-c++

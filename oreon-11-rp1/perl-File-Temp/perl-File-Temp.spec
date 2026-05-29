@@ -9,7 +9,7 @@ Release:        2%{?dist}
 Summary:        Return name and handle of a temporary file safely
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Temp
-Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-%{cpan_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Temp-0.2312.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

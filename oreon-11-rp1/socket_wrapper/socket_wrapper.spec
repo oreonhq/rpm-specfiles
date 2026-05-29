@@ -8,8 +8,8 @@ License:        BSD-3-Clause
 Summary:        A library passing all socket communications through Unix sockets
 Url:            http://cwrap.org/
 
-Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
-Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
+Source0:        https://ftp.samba.org/pub/cwrap/socket_wrapper-1.5.2.tar.gz
+Source1:        https://ftp.samba.org/pub/cwrap/socket_wrapper-1.5.2.tar.gz.asc
 Source2:        socket_wrapper.keyring
 
 BuildRequires:  cmake

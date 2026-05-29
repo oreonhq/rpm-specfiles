@@ -12,7 +12,7 @@ Summary: A collection of multi-dimensional data structures and indexing algorith
 
 License: MIT
 URL: https://gitlab.com/mdds/mdds
-Source0: https://gitlab.com/mdds/mdds/-/archive/%{version}/mdds-%{version}.tar.bz2
+Source0:        https://gitlab.com/mdds/mdds/-/archive/3.0.0/mdds-3.0.0.tar.bz2
 # https://gitlab.com/mdds/mdds/-/merge_requests/94
 Patch0:  include.patch
 

@@ -13,7 +13,7 @@ Release:	32%{?dist}
 Summary:	Retrieve names of code references
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Identify
-Source0:	https://cpan.metacpan.org/authors/id/R/RG/RGARCIA/Sub-Identify-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RG/RGARCIA/Sub-Identify-0.14.tar.gz
 # Module Build
 BuildRequires:	coreutils
 BuildRequires:	findutils

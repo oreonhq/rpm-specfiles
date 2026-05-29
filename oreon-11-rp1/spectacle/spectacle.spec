@@ -24,8 +24,8 @@ URL:     https://www.kde.org/applications/graphics/spectacle/
 %else
 %global stable stable
 %endif
-Source0: https://download.kde.org/%{stable}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
-Source1: https://download.kde.org/%{stable}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/spectacle-6.6.3.tar.xz
+Source1:        https://download.kde.org/stable/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/spectacle-6.6.3.tar.xz.sig
 
 ## upstream patches
 

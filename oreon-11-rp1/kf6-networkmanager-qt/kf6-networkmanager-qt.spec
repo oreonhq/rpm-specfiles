@@ -18,8 +18,8 @@ Release:	7%{?dist}
 Summary:        A Tier 1 KDE Frameworks 6 module that wraps NetworkManager DBus API
 License:        LGPL-2.0-or-later AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only) AND CC0-1.0
 URL:            https://invent.kde.org/frameworks/%{framework}
-Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/frameworks/6.24/networkmanager-qt-6.24.0.tar.xz
+Source1:        https://download.kde.org/stable/frameworks/6.24/networkmanager-qt-6.24.0.tar.xz.sig
 
 # Compile Tools
 BuildRequires:  cmake

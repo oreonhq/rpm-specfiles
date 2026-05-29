@@ -11,7 +11,7 @@ URL:            https://jflex.de/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://jflex.de/release/%{name}-%{version}.tar.gz
+Source0:        https://jflex.de/release/jflex-1.7.0.tar.gz
 Source4:        %{name}.1
 
 %if %{with bootstrap}

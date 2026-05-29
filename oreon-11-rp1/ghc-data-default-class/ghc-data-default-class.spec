@@ -15,7 +15,7 @@ Summary:        A class for types with a default value (compatibility shim)
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/data-default-class
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/data-default-class-0.2.0.0/data-default-class-0.2.0.0.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

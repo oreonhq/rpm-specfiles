@@ -13,8 +13,8 @@ ExclusiveArch:  %{java_arches} noarch
 
 # Upstream project is behind an account registration system with no anonymous
 # read access, so we download the source from maven central instead
-Source0:        https://repo1.maven.org/maven2/org/osgi/osgi.annotation/%{version}/osgi.annotation-%{version}.jar
-Source1:        https://repo1.maven.org/maven2/org/osgi/osgi.annotation/%{version}/osgi.annotation-%{version}.pom
+Source0:        https://repo1.maven.org/maven2/org/osgi/osgi.annotation/8.1.0/osgi.annotation-8.1.0.jar
+Source1:        https://repo1.maven.org/maven2/org/osgi/osgi.annotation/8.1.0/osgi.annotation-8.1.0.pom
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -31,7 +31,7 @@ needed at run-time.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 mkdir -p src/main/java && mv OSGI-OPT/src/org src/main/java
 

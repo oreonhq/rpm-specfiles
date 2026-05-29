@@ -6,7 +6,7 @@ Release:        14%{?dist}
 Summary:        Read a file backwards by lines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-ReadBackwards
-Source0:        https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/File-ReadBackwards-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/File-ReadBackwards-1.06.tar.gz
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

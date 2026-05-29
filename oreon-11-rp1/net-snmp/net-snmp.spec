@@ -17,7 +17,7 @@ Epoch:      1
 
 License:    MIT-CMU AND BSD-3-Clause AND MIT
 URL:        http://net-snmp.sourceforge.net/
-Source0:    https://downloads.sourceforge.net/project/net-snmp/net-snmp/%{version}/net-snmp-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/project/net-snmp/net-snmp/5.9.5.2/net-snmp-5.9.5.2.tar.gz
 Source1:    net-snmp.redhat.conf
 Source2:    net-snmp-config.h
 Source3:    net-snmp-config

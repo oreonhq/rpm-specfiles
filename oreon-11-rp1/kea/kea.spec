@@ -24,10 +24,10 @@ Provides: %1 = %{version}-%{release} \
 Conflicts: %1 \
 %endif
 
-Source0:        https://downloads.isc.org/isc/kea/%{version}/kea-%{version}.tar.xz
-Source1:        https://downloads.isc.org/isc/kea/%{version}/kea-%{version}.tar.xz.asc
-Source2:        https://downloads.isc.org/isc/keama/%{keama_version}/keama-%{keama_version}.tar.gz
-Source3:        https://downloads.isc.org/isc/keama/%{keama_version}/keama-%{keama_version}.tar.gz.asc
+Source0:        https://downloads.isc.org/isc/kea/3.0.3/kea-3.0.3.tar.xz
+Source1:        https://downloads.isc.org/isc/kea/3.0.3/kea-3.0.3.tar.xz.asc
+Source2:        https://downloads.isc.org/isc/keama/4.5.0/keama-4.5.0.tar.gz
+Source3:        https://downloads.isc.org/isc/keama/4.5.0/keama-4.5.0.tar.gz.asc
 Source10:       https://www.isc.org/docs/isc-keyblock.asc
 Source11:       kea-dhcp4.service
 Source12:       kea-dhcp6.service

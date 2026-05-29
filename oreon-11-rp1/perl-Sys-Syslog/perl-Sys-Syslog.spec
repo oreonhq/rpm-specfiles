@@ -17,7 +17,7 @@ Summary:        Perl interface to the UNIX syslog(3) calls
 # fallback/syslog.h:    BSD
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sys-Syslog
-Source0:        https://cpan.metacpan.org/authors/id/S/SA/SAPER/Sys-Syslog-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SA/SAPER/Sys-Syslog-0.36.tar.gz
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc

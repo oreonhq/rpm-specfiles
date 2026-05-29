@@ -41,7 +41,7 @@ Release:        %{release_number}%{?phase:.}%{?phase}%{?timestamp:.}%{?timestamp
 # $ git push origin v4.5.<z>
 # Then go to https://github.com/dogtagpki/jss/releases and download the source
 # tarball.
-Source:         https://github.com/dogtagpki/jss/archive/v%{version}%{?phase:-}%{?phase}/jss-%{version}%{?phase:-}%{?phase}.tar.gz
+Source:        https://github.com/dogtagpki/jss/archive/v%{?phase:-}%{?phase}/jss-%{?phase:-}%{?phase}.tar.gz
 
 # To create a patch for all changes since a version tag:
 # $ git format-patch \

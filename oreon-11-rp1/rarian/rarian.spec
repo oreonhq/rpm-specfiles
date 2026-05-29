@@ -6,7 +6,7 @@ Release: %{autorelease}
 License: LGPL-2.1-or-later AND Zlib
 Summary: Documentation meta-data library
 URL: http://rarian.freedesktop.org/
-Source: https://gitlab.freedesktop.org/rarian/rarian/-/releases/%{version}/downloads/assets/rarian-%{version}.tar.bz2
+Source:        https://gitlab.freedesktop.org/rarian/rarian/-/releases/0.8.6/downloads/assets/rarian-0.8.6.tar.bz2
 Source1: scrollkeeper-omf.dtd
 
 ### Dependencies ###

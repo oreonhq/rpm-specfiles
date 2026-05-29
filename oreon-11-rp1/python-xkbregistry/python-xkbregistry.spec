@@ -7,8 +7,7 @@ Summary:        Bindings for libxkbregistry using cffi
 
 License:        MIT
 URL:            https://github.com/sde1000/python-xkbregistry
-Source:         %{pypi_source xkbregistry}
-
+Source:        https://files.pythonhosted.org/packages/source/x/xkbregistry/xkbregistry-0.3.tar.gz
 BuildRequires:  python3-devel
 BuildRequires:  gcc
 BuildRequires:  libxkbcommon-devel

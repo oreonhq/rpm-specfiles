@@ -11,7 +11,7 @@ URL:            https://bytebuddy.net
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/raphw/byte-buddy/archive/refs/tags/byte-buddy-%{version}.tar.gz
+Source0:        https://github.com/raphw/byte-buddy/archive/refs/tags/byte-buddy-1.17.7.tar.gz
 
 # Patch the build to avoid bundling inside shaded jars
 Patch:          0001-Avoid-bundling-asm.patch
@@ -67,7 +67,7 @@ A plugin for post-processing class files via Byte Buddy in a Maven build.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 
 find -name '*.class' -delete

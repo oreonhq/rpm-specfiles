@@ -11,7 +11,7 @@ URL:            https://www.mojohaus.org/mojo-parent/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/mojo-parent/%{version}/mojo-parent-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/mojo-parent/85/mojo-parent-85-source-release.zip
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}

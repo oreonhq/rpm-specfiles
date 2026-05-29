@@ -15,7 +15,7 @@ Summary:        Socks proxy (ver 5)
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/socks
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/socks-0.6.1/socks-0.6.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

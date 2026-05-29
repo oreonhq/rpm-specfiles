@@ -11,7 +11,7 @@ License:        LGPL-2.1-only
 URL:            https://gitlab.com/accounts-sso/libaccounts-qt
 
 # Main Branch
-Source0:        https://gitlab.com/accounts-sso/libaccounts-qt/-/archive/VERSION_%{version}/libaccounts-qt-%{version}.tar.gz
+Source0:        https://gitlab.com/accounts-sso/libaccounts-qt/-/archive/VERSION_1.17/libaccounts-qt-1.17.tar.gz
 
 BuildRequires:  pkgconfig(libaccounts-glib) >= 1.23
 BuildRequires:  doxygen

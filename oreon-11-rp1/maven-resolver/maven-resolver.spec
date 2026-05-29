@@ -12,7 +12,7 @@ URL:            https://maven.apache.org/resolver/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/maven/resolver/maven-resolver-%{version}-source-release.zip
+Source0:        https://archive.apache.org/dist/maven/resolver/maven-resolver-1.9.24-source-release.zip
 
 Patch:          0001-Remove-use-of-deprecated-SHA-1-and-MD5-algorithms.patch
 Patch:          0002-Make-I-O-errors-during-test-cleanup-non-fatal.patch

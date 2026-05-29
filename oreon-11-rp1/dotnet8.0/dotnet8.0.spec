@@ -71,11 +71,9 @@ Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.as
 # Generated manually, same pattern as the arm64 tarball
 Source3:        dotnet-prebuilts-%{bootstrap_sdk_version}-s390x.tar.gz
 %else
-Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{upstream_tag_without_v}.tar.gz
-Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-%{upstream_tag_without_v}.tar.gz.sig
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 %endif
-Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
+Source5:        https://github.com/dotnet/dotnet/releases/download/v8.0.127/release.json
 
 Source10:       macros.dotnet
 

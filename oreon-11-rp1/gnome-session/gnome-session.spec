@@ -2,8 +2,8 @@
 
 %define po_package gnome-session
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-session
 Version:        50.0
@@ -12,8 +12,7 @@ Summary:        GNOME session manager
 
 License:        GPL-2.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-session
-Source:         https://download.gnome.org/sources/gnome-session/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source: https://download.gnome.org/sources/gnome-session/%{major_version}/gnome-session-%{tarball_version}.tar.xz
 # For https://fedoraproject.org/w/index.php?title=Changes/HiddenGrubMenu
 # This should go upstream once systemd has a generic interface for this
 Patch:          0001-Fedora-Set-grub-boot-flags-on-shutdown-reboot.patch

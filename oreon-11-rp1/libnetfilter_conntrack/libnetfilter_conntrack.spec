@@ -6,8 +6,8 @@ Release:        %autorelease
 Summary:        Netfilter conntrack userspace library
 License:        GPL-2.0-or-later
 URL:            http://netfilter.org
-Source0:        http://netfilter.org/projects/libnetfilter_conntrack/files/%{name}-%{version}.tar.xz
-Source1:        http://netfilter.org/projects/libnetfilter_conntrack/files/%{name}-%{version}.tar.xz.sig
+Source0:        http://netfilter.org/projects/libnetfilter_conntrack/files/libnetfilter_conntrack-1.1.1.tar.xz
+Source1:        http://netfilter.org/projects/libnetfilter_conntrack/files/libnetfilter_conntrack-1.1.1.tar.xz.sig
 Source2:        coreteam-gpg-key-0xD70D1A666ACF2B21.txt
 
 BuildRequires:  gcc

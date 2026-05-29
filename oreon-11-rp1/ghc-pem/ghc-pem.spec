@@ -17,7 +17,7 @@ Summary:        Privacy Enhanced Mail (PEM) format reader and writer
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/pem
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/pem-0.2.4/pem-0.2.4.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

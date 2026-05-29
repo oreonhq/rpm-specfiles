@@ -10,7 +10,7 @@ Summary:        A non-linear least squares minimizer
 License:        BSD-3-Clause AND Apache-2.0
 
 URL:            http://ceres-solver.org/
-Source0:        http://%{name}.org/%{name}-%{version}.tar.gz
+Source0:        http://ceres-solver.org/ceres-solver-2.2.0.tar.gz
 # Relax eigen version constraints
 Patch0:         ceres-solver-Support-Eigen3-5.0.0.patch
 

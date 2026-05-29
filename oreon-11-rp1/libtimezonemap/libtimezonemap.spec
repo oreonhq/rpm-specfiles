@@ -8,7 +8,7 @@ Summary:        Time zone map widget for Gtk+
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License:        GPL-3.0-only
 URL:            https://launchpad.net/timezonemap
-Source0:        https://codeberg.org/dashea/timezonemap/archive/%{version}.tar.gz
+Source0:        https://codeberg.org/dashea/timezonemap/archive/0.4.5.4.tar.gz
 
 BuildRequires:  autoconf automake libtool
 BuildRequires:  glib2-devel >= 2.26

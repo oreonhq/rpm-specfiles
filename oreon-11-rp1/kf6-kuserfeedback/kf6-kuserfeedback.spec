@@ -13,8 +13,8 @@ Release:	6%{?dist}
 
 License: MIT AND CC0-1.0 AND BSD-3-Clause
 URL:     https://invent.kde.org/frameworks/%{framework}
-Source0: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
-Source1: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/frameworks/6.24/kuserfeedback-6.24.0.tar.xz
+Source1:        https://download.kde.org/stable/frameworks/6.24/kuserfeedback-6.24.0.tar.xz.sig
 
 ## upstream patches
 

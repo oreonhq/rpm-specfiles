@@ -11,7 +11,7 @@ Summary:        Library of 2D and 3D vector, matrix, and math operations for com
 
 License:        BSD-3-Clause
 URL:            https://github.com/AcademySoftwareFoundation/Imath
-Source0:        https://github.com/AcademySoftwareFoundation/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/AcademySoftwareFoundation/Imath/archive/v3.1.12/Imath-3.1.12.tar.gz
 
 Patch0:         imath-disable-python-testPlane.patch
 

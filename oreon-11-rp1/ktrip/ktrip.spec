@@ -11,7 +11,7 @@ Summary:       Public transport navigation, allows you to find journeys between 
 License:       GPL-2.0-or-later
 Url:           https://invent.kde.org/utilities/ktrip
 
-Source0:       https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/ktrip-26.03.80.tar.xz
 
 BuildRequires: gcc-c++
 BuildRequires: cmake 

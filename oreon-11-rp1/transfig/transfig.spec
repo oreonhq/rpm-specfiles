@@ -13,7 +13,7 @@ Summary:        Utility for converting FIG files (made by xfig) to other formats
 License:        Xfig
 URL:            https://sourceforge.net/projects/mcj/
 #Source0:        https://downloads.sourceforge.net/mcj/fig2dev-%{version}.tar.xz
-Source0:        https://sourceforge.net/code-snapshots/git/m/mc/mcj/fig2dev.git/mcj-fig2dev-%{git_commit}.zip
+Source0:        https://sourceforge.net/code-snapshots/git/m/mc/mcj/fig2dev.git/mcj-fig2dev-ee3f4d841d1ba7d5b1b57544c5068822ca92b1af.zip
 
 Patch:          0001-Avoid-integer-overflow.patch
 Patch:          0002-Fix-invalid-value-passed-to-strchr.patch
@@ -47,7 +47,7 @@ certain graphics languages.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 autoreconf -i
 
 # Fix the manpage not being in UTF-8

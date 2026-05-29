@@ -6,7 +6,7 @@ Version:        1.91.1
 Release:        %autorelease
 License:        GPL-2.0-or-later
 URL:            https://upower.freedesktop.org/
-Source0:        https://gitlab.freedesktop.org/upower/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.bz2
+Source0:        https://gitlab.freedesktop.org/upower/upower/-/archive/v1.91.1/upower-v1.91.1.tar.bz2
 
 BuildRequires:  meson
 BuildRequires:  git

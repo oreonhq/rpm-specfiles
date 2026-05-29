@@ -1,15 +1,15 @@
-%global source0_hash f1aed3ddd1de209e0d60df54e968b141b4c868ff0c4706dedb85e4cce29f26af
+%global source0_hash df347ed5ec399e8f30cd3add5ea52bb2c2fcf04b3e6c00da0e43eac839a6282f
 
 %global debug_package %{nil}
 
 Name:           plasma-mobile-sounds
-Version: 6.6.5
+Version: 0.1
 Release: 1%{?dist}
 # Automatically converted from old format: CC-BY-SA and CC0 and CC-BY - review is highly recommended.
 License:        LicenseRef-Callaway-CC-BY-SA AND CC0-1.0 AND LicenseRef-Callaway-CC-BY
 Summary:        Plasma Mobile Sound Theme
 Url:            https://invent.kde.org/plasma-mobile/plasma-mobile-sounds
-Source:         https://download.kde.org/stable/plasma-mobile-sounds/0.1/plasma-mobile-sounds-0.1.tar.xz
+Source0:        https://invent.kde.org/plasma-mobile/plasma-mobile-sounds/-/archive/v0.1/plasma-mobile-sounds-v0.1.tar.gz#/plasma-mobile-sounds-0.1.tar.gz
 
 # Use cmake datadir
 # https://invent.kde.org/plasma-mobile/plasma-mobile-sounds/-/merge_requests/2
@@ -25,7 +25,7 @@ BuildRequires: kf6-rpm-macros
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -n plasma-mobile-sounds-0.1
+%autosetup -p1 -n plasma-mobile-sounds-v0.1
 
 %build
 %cmake_kf6
@@ -38,9 +38,6 @@ BuildRequires: kf6-rpm-macros
 %{_datadir}/sounds/plasma-mobile
 
 %changelog
-* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
-- Update to KDE Plasma 6.6.5
-
 * Sat Jan 17 2026 Fedora Release Engineering <releng@fedoraproject.org> - 0.1-12
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_44_Mass_Rebuild
 

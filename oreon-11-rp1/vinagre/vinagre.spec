@@ -18,7 +18,7 @@ Summary:        VNC client for GNOME
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Apps/Vinagre
 #VCS: git:git://git.gnome.org/vinagre
-Source0:        https://download.gnome.org/sources/%{name}/3.22/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/vinagre/3.22/vinagre-3.22.0.tar.xz
 
 # https://gitlab.gnome.org/GNOME/vinagre/merge_requests/3
 Patch0:         fix-build-with-recent-freerdp-versions.patch

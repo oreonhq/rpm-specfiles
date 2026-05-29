@@ -18,7 +18,7 @@ Summary: %{common_summary}
 Name: python-%{sname}
 Version: %{?version:%{version}}%{!?version:1.6.2}
 Release: 5%{?dist}
-Source0: https://tarballs.opendev.org/x/%{sname}/%{sname}-%{version}.tar.gz
+Source0:        https://tarballs.opendev.org/x/pyghmi/pyghmi-.tar.gz
 License: Apache-2.0
 Prefix: %{_prefix}
 BuildArch: noarch

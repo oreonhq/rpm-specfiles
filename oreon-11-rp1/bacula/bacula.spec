@@ -17,7 +17,7 @@ License:            LicenseRef-Bacula
 URL:                http://www.bacula.org
 
 # AGPL-3.0-only with exceptions
-Source0:            http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/bacula/bacula-15.0.3.tar.gz
 
 Source2:            quickstart_postgresql.txt
 Source3:            quickstart_mysql.txt
@@ -37,7 +37,7 @@ Source19:           https://salsa.debian.org/bacula-team/bacula/-/raw/master/deb
 
 # LGPL-3.0-only - S3 libs with AWS glacier support
 # https://gitlab.bacula.org/bacula-community-edition/libs3/-/commits/master?ref_type=heads
-Source20:            https://gitlab.bacula.org/bacula-community-edition/libs3/-/archive/%{commit}/libs3-%{shortcommit}.tar.bz2
+Source20:        https://gitlab.bacula.org/bacula-community-edition/libs3/-/archive/66885387c9f761253988321de9c4bbfc1660717d/libs3-%(c=66885387c9f761253988321de9c4bbfc1660717d;.tar.bz2
 Source21:            libs3-openssl.patch
 
 Patch1:             %{name}-openssl.patch

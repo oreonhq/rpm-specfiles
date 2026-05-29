@@ -11,7 +11,7 @@ Release: 1%{?dist}
 License: GPL-2.0-only OR GPL-3.0-only
 URL:     https://invent.kde.org/system/%{name}
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/khelpcenter-26.03.80.tar.xz
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  extra-cmake-modules

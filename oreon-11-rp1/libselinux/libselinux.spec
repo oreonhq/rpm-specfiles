@@ -9,8 +9,8 @@ Version: 3.10
 Release: 1%{?dist}
 License: LicenseRef-Fedora-Public-Domain
 # https://github.com/SELinuxProject/selinux/wiki/Releases
-Source0: https://github.com/SELinuxProject/selinux/releases/download/%{version}/libselinux-%{version}.tar.gz
-Source1: https://github.com/SELinuxProject/selinux/releases/download/%{version}/libselinux-%{version}.tar.gz.asc
+Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/libselinux-3.10.tar.gz
+Source1:        https://github.com/SELinuxProject/selinux/releases/download/3.10/libselinux-3.10.tar.gz.asc
 Source2: https://github.com/perfinion.gpg
 Source3: selinuxconlist.8
 Source4: selinuxdefcon.8

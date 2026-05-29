@@ -7,7 +7,7 @@ Release:        3%{?dist}
 Summary:        Networking constants and support functions
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Socket
-Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Socket-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/Socket-2.040.tar.gz
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc

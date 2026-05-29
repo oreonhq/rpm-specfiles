@@ -7,7 +7,7 @@ Summary:        Perl interface to Adobe Font Metrics files
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Font-AFM
-Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/Font-AFM-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/Font-AFM-1.20.tar.gz
 
 
 BuildArch:      noarch

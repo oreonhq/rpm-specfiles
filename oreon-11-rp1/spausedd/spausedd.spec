@@ -8,7 +8,7 @@ Version: 20210719
 Release: 12%{?dist}
 License: ISC
 URL: https://github.com/jfriesse/spausedd
-Source0: https://github.com/jfriesse/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/jfriesse/spausedd/releases/download/20210719/spausedd-20210719.tar.gz
 
 # VMGuestLib exists only for x86 architectures (for Fedora) and x86_64 (for RHEL)
 %if %{with vmguestlib}

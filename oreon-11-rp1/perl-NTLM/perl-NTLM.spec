@@ -9,7 +9,7 @@ Release:        42%{?dist}
 Summary:        NTLM Perl module
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/NTLM
-Source0:        https://cpan.metacpan.org/authors/id/N/NB/NBEBOUT/NTLM-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/N/NB/NBEBOUT/NTLM-1.09.tar.gz
 # Remove useless shebangs from the module files, CPAN RT#132167,
 # submitted to the upstream
 Patch0:         NTLM-1.09-Remove-shebangs-from-the-modules.patch

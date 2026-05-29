@@ -103,7 +103,7 @@ URL:              http://www.mysql.com
 # not only GPL code.  See README.mysql-license
 License:          GPL-2.0-or-later AND LGPL-2.1-only AND BSL-1.0 AND BSD-2-Clause
 
-Source0:          https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-boost-%{version}.tar.gz
+Source0:        https://cdn.mysql.com/Downloads/MySQL-8.0/mysql-boost-.tar.gz
 Source2:          mysql_config_multilib.sh
 Source3:          my.cnf.in
 Source6:          README.mysql-docs

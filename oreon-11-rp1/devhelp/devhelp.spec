@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 Name: devhelp
 Epoch: 1
@@ -11,8 +11,7 @@ Summary: API documentation browser
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License: GPL-3.0-or-later
 URL: https://wiki.gnome.org/Apps/Devhelp
-Source0: https://download.gnome.org/sources/%{name}/43/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/devhelp/43/devhelp-%{tarball_version}.tar.xz
 BuildRequires: chrpath
 BuildRequires: desktop-file-utils
 BuildRequires: gettext

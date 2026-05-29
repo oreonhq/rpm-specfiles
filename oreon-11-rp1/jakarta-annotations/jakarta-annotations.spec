@@ -11,7 +11,7 @@ URL:            https://jakarta.ee/specifications/annotations/1.3/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/common-annotations-api/archive/%{version}/common-annotations-api-%{version}.tar.gz
+Source0:        https://github.com/jakartaee/common-annotations-api/archive/1.3.5/common-annotations-api-1.3.5.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -31,7 +31,7 @@ programming that applies across a variety of Java technologies.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove unnecessary dependency on parent POM
 # org.eclipse.ee4j:project is not packaged and isn't needed

@@ -18,7 +18,7 @@ Release:       %autorelease
 Summary:       Stand-alone memory tester for x86-64 computers
 License:       GPL-2.0-only
 URL:           https://www.memtest.org/
-Source0:       https://github.com/memtest86plus/memtest86plus/archive/v%{version}/memtest86-plus-%{version}.tar.gz
+Source0:        https://github.com/memtest86plus/memtest86plus/archive/v8.00/memtest86-plus-8.00.tar.gz
 Source1:       memtest86+.kernel-install-plugin
 
 # https://github.com/memtest86plus/memtest86plus/pull/572

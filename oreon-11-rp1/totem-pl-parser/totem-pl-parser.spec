@@ -8,7 +8,7 @@ Summary:	Totem Playlist Parser library
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:	LicenseRef-Callaway-LGPLv2+
 Url:		https://wiki.gnome.org/Apps/Videos
-Source0:	https://download.gnome.org/sources/%{name}/3.26/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/totem-pl-parser/3.26/totem-pl-parser-3.26.6.tar.xz
 Patch0: totem-pl-parser-c99.patch
 
 BuildRequires:	glib2-devel

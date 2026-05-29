@@ -10,7 +10,7 @@ Summary:        Unit testing framework for C
 License:        LGPL-2.0-or-later
 URL:            http://cunit.sourceforge.net/
 Provides:       cunit = %{version}-%{release}
-Source0:        http://downloads.sourceforge.net/cunit/%{name}-%{tarver}.tar.bz2
+Source0:        http://downloads.sourceforge.net/cunit/CUnit-2.1-3.tar.bz2
 
 BuildRequires:  automake
 BuildRequires:  libtool

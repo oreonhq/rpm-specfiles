@@ -7,7 +7,7 @@ Summary:        Graphical tool for storage configuration
 
 License:        GPL-2.0-or-later
 URL:            https://github.com/storaged-project/blivet-gui
-Source0:        https://github.com/storaged-project/blivet-gui/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/storaged-project/blivet-gui/archive/refs/tags/2.6.0.tar.gz#/blivet-gui-2.6.0.tar.gz
 
 BuildArch:      noarch
 

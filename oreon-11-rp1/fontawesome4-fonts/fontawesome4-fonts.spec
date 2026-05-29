@@ -12,7 +12,7 @@ Release:	26%{?dist}
 Summary:	Iconic font set
 License:	OFL-1.1-RFN
 URL:		http://fontawesome.io
-Source0:	http://fontawesome.io/assets/font-awesome-%{version}.zip
+Source0:        http://fontawesome.io/assets/font-awesome-4.7.0.zip
 Source1:	%{name}-fontconfig.conf
 Source2:	README-Trademarks.txt
 BuildArch:	noarch

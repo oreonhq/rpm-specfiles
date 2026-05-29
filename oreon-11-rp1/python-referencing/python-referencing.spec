@@ -8,8 +8,7 @@ Release:        %autorelease
 Summary:        An implementation-agnostic implementation of JSON reference resolution
 License:        MIT
 URL:            https://pypi.python.org/pypi/%{srcname}
-Source:         %{pypi_source referencing}
-
+Source:        https://files.pythonhosted.org/packages/source/r/referencing/referencing-0.37.0.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

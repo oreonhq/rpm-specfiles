@@ -19,8 +19,8 @@ Release:	7%{?dist}
 Summary:	Schema Compatibility plugins for Directory Server
 License:	GPL-3.0-or-later
 URL:		http://pagure.io/slapi-nis/
-Source0:	https://releases.pagure.org/slapi-nis/slapi-nis-%{version}.tar.gz
-Source1:	https://releases.pagure.org/slapi-nis/slapi-nis-%{version}.tar.gz.asc
+Source0:        https://releases.pagure.org/slapi-nis/slapi-nis-0.70.0.tar.gz
+Source1:        https://releases.pagure.org/slapi-nis/slapi-nis-0.70.0.tar.gz.asc
 Patch0:		slapi-nis-eq_once_rel.patch
 Patch1:         slapi-nis-rhbz2341357-fix.patch
 

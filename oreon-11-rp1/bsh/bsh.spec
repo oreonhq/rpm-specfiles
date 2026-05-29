@@ -41,7 +41,7 @@ URL:            https://beanshell.github.io/
 License:        Apache-2.0 AND BSD-3-Clause AND LicenseRef-Public-Domain
 
 # ./generate-tarball.sh
-Source0:        https://github.com/beanshell/beanshell/archive/%{version}.tar.gz
+Source0:        https://github.com/beanshell/beanshell/archive/2.1.0.tar.gz
 # Remove bundled jars which cannot be easily verified for licensing
 # Remove code marked as SUN PROPRIETARY/CONFIDENTAIL
 Source2:        generate-tarball.sh

@@ -11,8 +11,8 @@ URL:            https://github.com/apiguardian-team/apiguardian
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/apiguardian-team/apiguardian/archive/r%{version}.tar.gz
-Source100:      https://repo1.maven.org/maven2/org/apiguardian/apiguardian-api/%{version}/apiguardian-api-%{version}.pom
+Source0:        https://github.com/apiguardian-team/apiguardian/archive/r1.1.2.tar.gz
+Source100:        https://repo1.maven.org/maven2/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.pom
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -31,7 +31,7 @@ indicate how they are intended to be used by consumers of the API.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 find -name \*.jar -delete
 cp -p %{SOURCE100} pom.xml
 

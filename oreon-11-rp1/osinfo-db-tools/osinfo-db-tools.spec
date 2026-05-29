@@ -12,7 +12,7 @@ Name: osinfo-db-tools
 Version: 1.12.0
 Release: %autorelease
 License: GPL-2.0-or-later
-Source: https://releases.pagure.org/libosinfo/%{name}-%{version}.tar.xz
+Source:        https://releases.pagure.org/libosinfo/osinfo-db-tools-1.12.0.tar.xz
 URL: https://libosinfo.org
 
 BuildRequires: meson

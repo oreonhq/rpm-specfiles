@@ -11,8 +11,7 @@ Summary:        The plugin manager stripped of pytest specific details
 # SPDX
 License:        MIT
 URL:            https://github.com/pytest-dev/pluggy
-Source:         %{pypi_source pluggy}
-
+Source:        https://files.pythonhosted.org/packages/source/p/pluggy/pluggy-1.6.0.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
 

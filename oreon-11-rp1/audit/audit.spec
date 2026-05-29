@@ -6,7 +6,7 @@ Version: 4.1.3
 Release: 2%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 URL: https://github.com/linux-audit/audit-userspace/
-Source0: https://github.com/linux-audit/audit-userspace/archive/refs/tags/v%{version}.tar.gz#/audit-userspace-%{version}.tar.gz
+Source0:        https://github.com/linux-audit/audit-userspace/archive/refs/tags/v4.1.3.tar.gz#/audit-userspace-4.1.3.tar.gz
 Source1: https://www.gnu.org/licenses/lgpl-2.1.txt
 BuildRequires: make gcc
 BuildRequires: autoconf automake libtool

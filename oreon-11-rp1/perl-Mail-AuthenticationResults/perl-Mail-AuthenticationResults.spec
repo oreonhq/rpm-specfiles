@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Object Oriented Authentication-Results Headers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Mail-AuthenticationResults/
-Source0:        https://cpan.metacpan.org/authors/id/M/MB/MBRADSHAW/Mail-AuthenticationResults-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MB/MBRADSHAW/Mail-AuthenticationResults-2.20260216.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  make

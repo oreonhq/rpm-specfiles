@@ -7,7 +7,7 @@ Release: 50%{?dist}
 Requires: sgml-common >= 0.5
 Provides: bundled(gettext) = 0.14.5
 URL: http://openjade.sourceforge.net/
-Source: http://download.sourceforge.net/openjade/OpenSP-%{version}.tar.gz
+Source:        http://download.sourceforge.net/openjade/OpenSP-1.5.2.tar.gz
 Patch0: opensp-multilib.patch
 Patch1: opensp-nodeids.patch
 Patch2: opensp-sigsegv.patch

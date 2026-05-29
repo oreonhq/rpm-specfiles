@@ -12,7 +12,7 @@ Summary:        Localization support for DateTime.pm
 # other files:          GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        ( GPL-1.0-or-later OR Artistic-1.0-Perl ) AND Unicode-DFS-2015
 URL:            https://metacpan.org/release/DateTime-Locale
-Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-Locale-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-Locale-1.45.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

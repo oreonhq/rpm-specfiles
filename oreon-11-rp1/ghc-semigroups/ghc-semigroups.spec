@@ -15,7 +15,7 @@ Summary:        Anything that associates
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/semigroups
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/semigroups-0.20.1/semigroups-0.20.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

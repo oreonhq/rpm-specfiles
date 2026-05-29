@@ -7,7 +7,7 @@ License: LGPL-2.1-or-later AND GPL-2.0-or-later AND GPL-2.0-only
 Summary: Library for access kernel tracefs
 
 URL: https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/
-Source0: https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-%{version}.tar.gz
+Source0:        https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-1.8.1.tar.gz
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  xmlto

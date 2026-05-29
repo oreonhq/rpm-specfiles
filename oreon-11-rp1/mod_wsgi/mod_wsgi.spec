@@ -16,7 +16,7 @@ Release:        7%{?dist}
 Summary:        A WSGI interface for Python web applications in Apache
 License:        Apache-2.0 AND CC-BY-3.0
 URL:            https://modwsgi.readthedocs.io/
-Source0:        https://github.com/GrahamDumpleton/mod_wsgi/archive/%{version}.tar.gz#/mod_wsgi-%{version}.tar.gz
+Source0:        https://github.com/GrahamDumpleton/mod_wsgi/archive/5.0.2.tar.gz#/mod_wsgi-5.0.2.tar.gz
 Source1:        wsgi.conf
 Source2:        wsgi-python3.conf
 Patch1:         mod_wsgi-4.5.20-exports.patch

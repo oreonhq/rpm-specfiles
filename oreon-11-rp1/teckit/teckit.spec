@@ -80,7 +80,7 @@ URL:            https://software.sil.org/teckit/
 # <https://github.com/silnrsi/teckit/issues/34>.
 # Original URL is https://github.com/silnrsi/teckit/releases/download/v%%{version}/teckit-%%{version}.tar.xz
 Source0:        teckit-%{version}_repackaged.tar.xz
-Source1:        https://github.com/silnrsi/teckit/releases/download/v%{version}/teckit-%{version}.tar.xz.asc
+Source1:        https://github.com/silnrsi/teckit/releases/download/v2.5.13/teckit-2.5.13.tar.xz.asc
 # Exported from ppisar's keyring
 Source2:        gpgkey-15D41BC02EB807D405EFFAF6C9183BEA0288CDEE.gpg
 Source3:        repackage.sh

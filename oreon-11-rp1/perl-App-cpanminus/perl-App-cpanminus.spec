@@ -11,7 +11,7 @@ Summary:        Get, unpack, build and install CPAN modules
 # fatunpack:    GPL+
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/App-cpanminus
-Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIYAGAWA/App-cpanminus-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIYAGAWA/App-cpanminus-1.7049.tar.gz
 Source1:        fatunpack
 # Correct an SHA version in a message, in upstream's devel branch,
 # <https://github.com/miyagawa/cpanminus/pull/617>

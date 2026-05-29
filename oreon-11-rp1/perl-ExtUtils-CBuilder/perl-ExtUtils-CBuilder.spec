@@ -11,7 +11,7 @@ Release:        521%{?dist}
 Summary:        Compile and link C code for Perl modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-CBuilder
-Source0:        https://cpan.metacpan.org/authors/id/A/AM/AMBS/ExtUtils-CBuilder-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AM/AMBS/ExtUtils-CBuilder-0.280236.tar.gz
 # Link XS modules to libperl.so with EU::CBuilder on Linux, bug #960048
 Patch0:         ExtUtils-CBuilder-0.280230-Link-XS-modules-to-libperl.so-with-EU-CBuilder-on-Li.patch
 # Unbundled from perl 5.37.11

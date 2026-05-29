@@ -47,7 +47,7 @@ Release: 10%{?dist}
 License: GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND GPL-2.0-or-later WITH Libtool-exception AND LGPL-2.0-or-later WITH Libtool-exception AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND MIT AND FSFAP AND FSFULLR AND FSFULLRWD AND GFDL-1.3-or-later AND X11 AND LicenseRef-Fedora-public-domain
 URL:     http://www.gnu.org/software/libtool/
 
-Source:  http://ftp.gnu.org/gnu/libtool/libtool-%{version}.tar.xz
+Source:        http://ftp.gnu.org/gnu/libtool/libtool-2.5.4.tar.xz
 
 # ~> downstream
 # ~> remove possibly once #1158915 gets fixed somehow

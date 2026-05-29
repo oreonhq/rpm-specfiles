@@ -6,7 +6,7 @@ Release:        26%{?dist}
 Summary:        Module::Install extension to automatically generate LICENSE files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-AutoLicense
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-Install-AutoLicense-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-Install-AutoLicense-0.10.tar.gz
 Patch0:         Use-Module-Install-AutoLicense-for-tarball.patch
 BuildArch:      noarch
 BuildRequires:  coreutils

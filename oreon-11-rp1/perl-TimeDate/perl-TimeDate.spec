@@ -7,7 +7,7 @@ Release:        1%{?dist}
 Summary:        A Perl module for time and date manipulation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/TimeDate
-Source0:        https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/TimeDate-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/TimeDate-2.34.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

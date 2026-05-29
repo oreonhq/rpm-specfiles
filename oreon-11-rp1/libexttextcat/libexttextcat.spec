@@ -7,7 +7,7 @@ Summary: Text categorization library
 
 License: BSD-3-Clause
 URL: https://wiki.documentfoundation.org/Libexttextcat
-Source: http://dev-www.libreoffice.org/src/libexttextcat/%{name}-%{version}.tar.xz
+Source:        http://dev-www.libreoffice.org/src/libexttextcat/libexttextcat-3.4.6.tar.xz
 
 BuildRequires: gcc
 BuildRequires: make

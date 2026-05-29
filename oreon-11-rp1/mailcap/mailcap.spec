@@ -7,7 +7,7 @@ Summary:        Helper application and MIME type associations for file types
 
 License:        LicenseRef-Fedora-Public-Domain AND MIT AND metamail
 URL:            https://pagure.io/mailcap
-Source0:        https://pagure.io/releases/mailcap/%{name}-%{version}.tar.xz
+Source0:        https://pagure.io/releases/mailcap/mailcap-2.1.54.tar.xz
 BuildRequires: make
 BuildRequires:  perl-interpreter
 # the test script is written in python

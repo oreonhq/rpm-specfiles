@@ -11,7 +11,7 @@ URL:            https://codehaus-plexus.github.io/plexus-archiver
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-archiver/archive/plexus-archiver-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-archiver/archive/plexus-archiver-4.10.0.tar.gz
 
 Patch:          0001-Remove-support-for-snappy.patch
 Patch:          0002-Remove-support-for-zstd.patch
@@ -50,7 +50,7 @@ is like a J2EE application server, without all the baggage.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %mvn_file :%{name} plexus/archiver
 

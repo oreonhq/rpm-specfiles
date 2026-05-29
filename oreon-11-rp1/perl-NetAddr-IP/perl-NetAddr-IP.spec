@@ -8,7 +8,7 @@ Summary:        Manages IPv4 and IPv6 addresses and subnets
 # Other files are (GPL-2.0-or-later OR Artistic-1.0-Perl)
 License:        GPL-2.0-or-later AND (GPL-2.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/NetAddr-IP
-Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIKER/NetAddr-IP-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIKER/NetAddr-IP-4.079.tar.gz
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils

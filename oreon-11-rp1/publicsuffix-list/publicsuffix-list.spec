@@ -16,7 +16,7 @@ Source2:        https://github.com/publicsuffix/list/raw/main/tests/test_psl.txt
 # Bootstrap: DAFSA generator (same script as libpsl's psl-make-dafsa subpackage) so we
 # do not need that RPM installed before publicsuffix-list-dafsa exists.
 %global libpsl_tools_ver 0.21.5
-Source3:        https://github.com/rockdaboot/libpsl/releases/download/%{libpsl_tools_ver}/libpsl-%{libpsl_tools_ver}.tar.gz
+Source3:        https://github.com/rockdaboot/libpsl/releases/download/0.21.5/libpsl-0.21.5.tar.gz
 
 BuildArch:      noarch
 

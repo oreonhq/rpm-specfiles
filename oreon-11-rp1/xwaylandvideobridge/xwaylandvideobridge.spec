@@ -7,7 +7,7 @@ Summary:        Utility to allow streaming Wayland windows to X applications
 
 License:        (GPL-2.0-only or GPL-3.0-only) and LGPL-2.0-or-later and BSD-3-Clause
 URL:            https://invent.kde.org/system/xwaylandvideobridge
-Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/xwaylandvideobridge/xwaylandvideobridge-0.4.0.tar.xz
 
 Patch0:         xwaylandvideobridge-fix-build-against-qt-6-10.patch
 

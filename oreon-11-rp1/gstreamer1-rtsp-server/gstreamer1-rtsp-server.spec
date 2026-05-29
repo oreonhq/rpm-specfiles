@@ -9,7 +9,7 @@ Summary:        GStreamer RTSP server library
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-only
 URL:            http://gstreamer.freedesktop.org/
-Source0:        http://gstreamer.freedesktop.org/src/gst-rtsp/gst-rtsp-server-%{version}.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gst-rtsp/gst-rtsp-server-1.26.7.tar.xz
 
 BuildRequires:  meson >= 0.48.0
 BuildRequires:  gcc

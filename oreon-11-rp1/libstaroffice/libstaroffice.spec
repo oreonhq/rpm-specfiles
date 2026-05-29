@@ -9,7 +9,7 @@ Summary: A library for import of binary StarOffice documents
 
 License: LGPL-2.1-or-later OR MPL-2.0
 URL: https://github.com/fosnola/libstaroffice/wiki
-Source: https://github.com/fosnola/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source:        https://github.com/fosnola/libstaroffice/releases/download/0.0.7/libstaroffice-0.0.7.tar.xz
 
 BuildRequires: doxygen
 BuildRequires: gcc-c++

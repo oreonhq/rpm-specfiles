@@ -13,7 +13,7 @@ Release:       2%{?dist}
 Summary:       The Xapian Probabilistic Information Retrieval Library
 License:       GPL-2.0-or-later
 URL:           https://www.xapian.org/
-Source0:       https://www.oligarchy.co.uk/xapian/%{version}/%{name}-%{version}.tar.xz
+Source0:        https://www.oligarchy.co.uk/xapian/1.4.30/xapian-core-1.4.30.tar.xz
 
 BuildRequires: gcc
 BuildRequires: gcc-c++

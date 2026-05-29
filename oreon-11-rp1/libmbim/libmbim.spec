@@ -6,7 +6,7 @@ Release: 3%{?dist}
 Summary: Support library for the Mobile Broadband Interface Model protocol
 License: LGPL-2.1-or-later
 URL: https://gitlab.freedesktop.org/mobile-broadband/libmbim/
-Source: https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/%{version}/%{name}-%{version}.tar.bz2
+Source:        https://gitlab.freedesktop.org/mobile-broadband/libmbim/-/archive/1.32.0/libmbim-1.32.0.tar.bz2
 
 BuildRequires: meson >= 0.53
 BuildRequires: gcc

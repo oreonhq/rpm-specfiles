@@ -10,7 +10,7 @@ Release: 1%{?dist}
 
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/edu/%{name}
-Source:  https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/step-26.03.80.tar.xz
 
 BuildRequires: cmake
 BuildRequires: gcc-c++

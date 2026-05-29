@@ -12,8 +12,8 @@ License: LGPL-2.1-or-later
 %define rebuild_bundle 1
 %endif
 
-Source0: https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
-Source1: https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-node-%{version}.tar.xz
+Source0:        https://github.com/cockpit-project/cockpit-files/releases/download/37/cockpit-files-37.tar.xz
+Source1:        https://github.com/cockpit-project/cockpit-files/releases/download/37/cockpit-files-node-37.tar.xz
 
 BuildArch: noarch
 BuildRequires: make

@@ -6,7 +6,7 @@ Release:        2%{?dist}
 Summary:        Implementation of Double-Array structure for representing trie
 License:        LGPL-2.1-or-later
 URL:            http://linux.thai.net/projects/datrie
-Source0:        http://linux.thai.net/pub/thailinux/software/libthai/%{name}-%{version}.tar.xz
+Source0:        http://linux.thai.net/pub/thailinux/software/libthai/libdatrie-0.2.14.tar.xz
 BuildRequires:  autoconf, automake, libtool
 BuildRequires:  autoconf-archive
 BuildRequires:  doxygen

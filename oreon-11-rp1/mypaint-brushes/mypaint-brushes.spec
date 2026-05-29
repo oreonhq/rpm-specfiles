@@ -12,7 +12,7 @@ Summary: Brushes to be used with the MyPaint library
 # but the shipped brush files are CC0
 License: CC0-1.0
 URL: https://github.com/mypaint/mypaint-brushes
-Source0: https://github.com/mypaint/mypaint-brushes/releases/download/v%{version}/mypaint-brushes-%{version}.tar.xz
+Source0:        https://github.com/mypaint/mypaint-brushes/releases/download/v1.3.1/mypaint-brushes-1.3.1.tar.xz
 
 BuildArch: noarch
 BuildRequires: make

@@ -6,7 +6,7 @@ Version: 1.68
 Release: 7%{?dist}
 License: X11
 URL: https://invisible-island.net/diffstat
-Source0: https://invisible-island.net/archives/diffstat/%{name}-%{version}.tgz
+Source0:        https://invisible-island.net/archives/diffstat/diffstat-1.68.tgz
 Source1: COPYING
 
 BuildRequires: gcc

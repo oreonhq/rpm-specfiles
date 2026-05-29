@@ -12,7 +12,7 @@ Summary:        Plug-ins implementation convenience library, API version 1
 
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/Libpeas
-Source0:        https://download.gnome.org/sources/%{tarball_name}/1.36/%{tarball_name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/libpeas/1.36/libpeas-1.36.0.tar.xz
 # girepository: port libpeas ABI to girepository
 # https://gitlab.gnome.org/GNOME/libpeas/-/commit/73e25b6059d2fdc090a3feb8341ff902c3ec0d16
 Patch0:         73e25b6059d2fdc090a3feb8341ff902c3ec0d16.patch

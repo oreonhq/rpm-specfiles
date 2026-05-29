@@ -6,7 +6,7 @@ Release:        12%{?dist}
 Summary:        Common rules for searching for Perl things
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Find-Rule-Perl
-Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Find-Rule-Perl-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/File-Find-Rule-Perl-1.16.tar.gz
 # Filter out the files rpm generates in sourcedir.
 Patch0:         0001-File-Find-Rule-Perl-1.16-fedora.patch
 BuildArch:      noarch

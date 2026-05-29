@@ -27,7 +27,7 @@ License: GPL-2.0-or-later
 URL: http://www.gnome.org/projects/NetworkManager/
 Obsoletes: NetworkManager-gnome < %{obsoletes_ver}
 
-Source: https://download.gnome.org/sources/network-manager-applet/1.36/%{name}-%{version}.tar.xz
+Source:        https://download.gnome.org/sources/network-manager-applet/1.36/network-manager-applet-1.36.0.tar.xz
 Patch1: 0001-nm-applet-no-notifications.patch
 
 %if ! 0%{?flatpak}

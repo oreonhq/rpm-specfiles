@@ -6,7 +6,7 @@ Release:        4%{?dist}
 Summary:        Generic file fetching mechanism
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Fetch
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/File-Fetch-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/File-Fetch-1.08.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

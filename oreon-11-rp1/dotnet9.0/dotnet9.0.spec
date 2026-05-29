@@ -92,7 +92,7 @@ Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/v9.0.117.tar.
 # GA releases:
 # Source1:        https://dotnetcli.azureedge.net/dotnet/Sdk/%%{bootstrap_sdk_version}/dotnet-sdk-%%{bootstrap_sdk_version}-linux-arm64.tar.gz
 # Preview releases:
-Source1:        https://dotnetbuilds.azureedge.net/public/Sdk/%{bootstrap_sdk_version}/dotnet-sdk-%{bootstrap_sdk_version}-linux-arm64.tar.gz
+Source1:        https://dotnetbuilds.azureedge.net/public/Sdk/9.0.100-rc.1.24452.12/dotnet-sdk-9.0.100-rc.1.24452.12-linux-arm64.tar.gz
 # To generate ppc64le and s390x archives:
 # 1. Find the source commits and versions of repos, use one of:
 #   - https://dotnetbuilds.azureedge.net/public/Sdk/%%{bootstrap_sdk_version}/productCommit-linux-x64.txt
@@ -106,12 +106,10 @@ Source1:        https://dotnetbuilds.azureedge.net/public/Sdk/%{bootstrap_sdk_ve
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 Source3:        dotnet-prebuilts-%{bootstrap_sdk_version_ppc64le_s390x}-s390x.tar.gz
 %else
-Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{upstream_tag_without_v}.tar.gz
-Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-%{upstream_tag_without_v}.tar.gz.sig
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 %endif
 
-Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
+Source5:        https://github.com/dotnet/dotnet/releases/download/v9.0.117/release.json
 
 Source10:       macros.dotnet
 

@@ -13,7 +13,7 @@ Summary:        Fast, pure-Python full text indexing, search, and spell checking
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD 
 URL:            http://pythonhosted.org/Whoosh/
-Source0:        https://pypi.python.org/packages/source/W/%{mod_name}/%{mod_name}-%{version}.tar.gz
+Source0:        https://pypi.python.org/packages/source/W/Whoosh/Whoosh-2.7.4.tar.gz
 Patch1:         whoosh-fix-sphinx.patch
 
 BuildArch:      noarch

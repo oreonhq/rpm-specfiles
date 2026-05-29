@@ -8,8 +8,8 @@ Summary:        A wrapper for privilege separation
 License:        GPL-3.0-or-later
 Url:            http://cwrap.org/
 
-Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
-Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
+Source0:        https://ftp.samba.org/pub/cwrap/uid_wrapper-1.3.2.tar.gz
+Source1:        https://ftp.samba.org/pub/cwrap/uid_wrapper-1.3.2.tar.gz.asc
 Source2:        uid_wrapper.keyring
 
 BuildRequires:  gcc

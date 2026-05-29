@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        RFC 3454 Preparation of Internationalized Strings in pure Java
 License:        BSD-2-Clause
 URL:            https://github.com/ongres/stringprep
-Source0:        https://github.com/ongres/stringprep/archive/%{version}/stringprep-%{version}.tar.gz
+Source0:        https://github.com/ongres/stringprep/archive/2.2/stringprep-2.2.tar.gz
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 

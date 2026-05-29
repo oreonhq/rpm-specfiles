@@ -10,7 +10,7 @@ Summary:        HTTP style message
 # other files:      GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND CC0-1.0
 URL:            https://metacpan.org/release/HTTP-Message
-Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTTP-Message-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTTP-Message-7.01.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

@@ -17,7 +17,7 @@ URL: https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/
 # cd libtraceevent
 # git archive --prefix=libtraceevent-%%{version}/ -o libtraceevent-%%{version}.tar.gz %%{git_commit}
 #Source0: libtraceevent-%%{version}.tar.gz
-Source0: https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot/libtraceevent-%{version}.tar.gz
+Source0:        https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/snapshot/libtraceevent-1.8.4.tar.gz
 BuildRequires:  gcc
 BuildRequires: xmlto
 BuildRequires: asciidoc

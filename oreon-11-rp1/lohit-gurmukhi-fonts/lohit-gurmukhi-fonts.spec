@@ -13,7 +13,7 @@ Summary:        Free Gurmukhi truetype font for Punjabi language
 
 License:        OFL-1.1
 URL:            https://pagure.io/lohit
-Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
+Source0:        https://releases.pagure.org/lohit/lohit-gurmukhi-2.91.2.tar.gz
 Source1:        %{name}.conf
 BuildArch:      noarch
 BuildRequires: fontforge >= 20080429

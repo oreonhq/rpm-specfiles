@@ -8,7 +8,7 @@ Release:    %autorelease
 Summary:    The M17N engine for IBus platform
 License:    GPL-2.0-or-later
 URL:        https://github.com/ibus/ibus-m17n
-Source0:    https://github.com/ibus/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/ibus/ibus-m17n/archive/1.4.39/ibus-m17n-1.4.39.tar.gz
 
 BuildRequires:  gettext-devel >= 0.19
 BuildRequires:  libtool

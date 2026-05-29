@@ -164,7 +164,7 @@ Release: 2%{?dist}
 
 ###############################################################################
 
-Source: https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/%{version_no_tilde}/downloads/%{name}-%{version_no_tilde}.tar.xz
+Source:        https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/%{version_no_tilde}/downloads/NetworkManager-%{version_no_tilde}.tar.xz
 Source1: NetworkManager.conf
 Source2: 00-server.conf
 Source4: 20-connectivity-fedora.conf

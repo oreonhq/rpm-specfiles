@@ -13,7 +13,7 @@ Release:        3%{?dist}
 Summary:        Perl module for processing huge XML documents in tree mode
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Twig
-Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIROD/XML-Twig-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIROD/XML-Twig-3.54.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  expat >= 2.0.1

@@ -12,7 +12,7 @@ Summary:        Enhanced config file parser library
 
 License:        MIT
 URL:            https://github.com/openSUSE/libeconf
-Source0:        https://github.com/openSUSE/libeconf/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/openSUSE/libeconf/archive/refs/tags/v0.7.9.tar.gz#/libeconf-0.7.9.tar.gz
 
 ### Patches ###
 # This should be a temporary workaround. I don't have enough time to check what's happening, but since we aren't shipping the html documentation it's fine to stop installing it

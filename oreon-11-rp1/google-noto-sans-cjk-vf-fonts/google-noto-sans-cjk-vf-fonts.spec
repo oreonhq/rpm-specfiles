@@ -65,7 +65,7 @@ The google-noto-sans-cjk-vf-fonts package contains Google Noto Sans CJK Variable
 
 The google-noto-sans-mono-cjk-vf-fonts package contains Google Noto Sans Mono CJK Variable fonts.}
 
-Source0:  https://github.com/googlefonts/noto-cjk/releases/download/Sans%{version}/01_NotoSansCJK-OTF-VF.zip
+Source0:        https://github.com/googlefonts/noto-cjk/releases/download/Sans2.004/01_NotoSansCJK-OTF-VF.zip
 Source1:  genfontconf.py
 Source10: 65-%{fontpkgname0}.conf
 Source11: 65-%{fontpkgname1}.conf

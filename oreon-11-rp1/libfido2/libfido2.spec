@@ -8,8 +8,8 @@ Summary:        FIDO2 library
 
 License:        BSD-2-Clause
 URL:            https://github.com/Yubico/%{name}
-Source0:        https://developers.yubico.com/%{name}/Releases/%{name}-%{version}.tar.gz
-Source1:        https://developers.yubico.com/%{name}/Releases/%{name}-%{version}.tar.gz.sig
+Source0:        https://developers.yubico.com/libfido2/Releases/libfido2-1.16.0.tar.gz
+Source1:        https://developers.yubico.com/libfido2/Releases/libfido2-1.16.0.tar.gz.sig
 #
 # Yubico does not provide a central gpg keyring download file. Instead, they
 # provide a list of individuals that release code and their fingerprints at

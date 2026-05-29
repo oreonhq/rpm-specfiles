@@ -9,7 +9,7 @@ URL:            https://xerces.apache.org/xml-commons/components/resolver/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://www.apache.org/dist/xerces/xml-commons/%{name}-%{version}.tar.gz
+Source0:        http://www.apache.org/dist/xerces/xml-commons/xml-commons-resolver-1.2.tar.gz
 Source5:        %{name}-pom.xml
 Source6:        %{name}-resolver.1
 Source7:        %{name}-xparse.1

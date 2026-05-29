@@ -1,16 +1,16 @@
-%global source0_hash none
+%global source0_hash 2cc6dec1115af4291593bcff14c1bc588f4c67bed6812132fc1ae7bce9e409df
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
 Name:           qmlkonsole
-Version:        26.03.80
+Version: 26.03.80
 Release:        1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 Summary:        Terminal app for Plasma Mobile
 Url:            https://invent.kde.org/plasma-mobile/qmlkonsole
-Source:         https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://invent.kde.org/plasma-mobile/qmlkonsole/-/archive/v26.03.80/qmlkonsole-v26.03.80.tar.gz#/qmlkonsole-26.03.80.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
@@ -45,7 +45,7 @@ Recommends:     dejavu-fonts-all
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup
+%autosetup -p1 -n qmlkonsole-v26.03.80
 
 %build
 %cmake_kf6

@@ -8,7 +8,7 @@ Release:        5%{?dist}
 Summary:        Accessibility client library for Qt
 License:        LGPL-2.0-or-later
 URL:            https://invent.kde.org/library/libqaccessibilityclient
-Source0:        https://download.kde.org/stable/libqaccessibilityclient/libqaccessibilityclient-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/libqaccessibilityclient/libqaccessibilityclient-0.6.0.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

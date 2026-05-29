@@ -6,8 +6,8 @@ Release:         %autorelease
 Summary:         The tdb library
 License:         LGPL-3.0-or-later
 URL:             http://tdb.samba.org/
-Source0:         http://samba.org/ftp/tdb/tdb-%{version}.tar.gz
-Source1:         http://samba.org/ftp/tdb/tdb-%{version}.tar.asc
+Source0:        http://samba.org/ftp/tdb/tdb-1.4.15.tar.gz
+Source1:        http://samba.org/ftp/tdb/tdb-1.4.15.tar.asc
 # gpg2 --no-default-keyring --keyring ./tdb.keyring --recv-keys 9147A339719518EE9011BCB54793916113084025
 Source2:         tdb.keyring
 

@@ -19,7 +19,7 @@ Summary:        A basic HTTP client engine
 License:        MIT AND BSD-3-Clause
 URL:            https://hackage.haskell.org/package/http-client
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/http-client-0.7.19/http-client-0.7.19.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

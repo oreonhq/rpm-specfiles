@@ -11,7 +11,7 @@ Summary:        A 2D graphics library
 
 License:        LGPL-2.1-only OR MPL-1.1
 URL:            https://cairographics.org
-Source:         https://cairographics.org/releases/%{name}-%{version}.tar.xz
+Source:        https://cairographics.org/releases/cairo-1.18.4.tar.xz
 
 Patch:          cairo-multilib.patch
 

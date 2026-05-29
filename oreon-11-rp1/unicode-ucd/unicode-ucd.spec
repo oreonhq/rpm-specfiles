@@ -17,8 +17,8 @@ Summary:        Unicode Character Database
 License:        Unicode-3.0
 URL:            http://www.unicode.org/ucd/
 # update with "fbrnch update-sources -f"
-Source0:        https://www.unicode.org/Public/%{version}/ucd/UCD.zip
-Source1:        https://www.unicode.org/Public/%{version}/ucd/Unihan.zip
+Source0:        https://www.unicode.org/Public/17.0.0/ucd/UCD.zip
+Source1:        https://www.unicode.org/Public/17.0.0/ucd/Unihan.zip
 Source2:        https://www.unicode.org/license.txt
 BuildArch:      noarch
 

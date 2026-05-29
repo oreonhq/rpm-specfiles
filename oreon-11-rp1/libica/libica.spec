@@ -8,7 +8,7 @@ Version: 4.4.1
 Release: 3%{?dist}
 License: CPL-1.0
 URL: https://github.com/opencryptoki/
-Source0: https://github.com/opencryptoki/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/opencryptoki/libica/archive/v4.4.1/libica-4.4.1.tar.gz
 # annotate assembler source
 # https://bugzilla.redhat.com/show_bug.cgi?id=1630582
 # https://github.com/opencryptoki/libica/pull/24

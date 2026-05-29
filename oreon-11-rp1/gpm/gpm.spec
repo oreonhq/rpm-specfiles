@@ -17,17 +17,9 @@ URL: http://www.nico.schottelius.org/software/gpm/
 # 4.] rm -rf %%{name}-%%{version}/doc/specs
 # 5.] tar cJf %%{name}-%%{version}.tar.xz %%{name}-%%{version}
 
-Source: %{name}-%{version}.tar.xz
+Source0:        https://github.com/telmich/gpm/archive/1.20.7/gpm-1.20.7.tar.gz#/gpm-1.20.7.tar.xz
 Source1: gpm.service
-Patch:  https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
-Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
-Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
-Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
-Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
-Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
-Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
-Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
-Patch:        https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
+Patch0: https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
 
 # Disabled, need to be reviewed
 # Patch: gpm-1.20.6-capability.patch
@@ -77,7 +69,7 @@ mouse support to text-based Linux applications.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1
+%autosetup -p1 -n gpm-%{version}
 
 %build
 export CFLAGS="$CFLAGS -std=gnu17 -Wno-unused-result -Wno-sign-compare -Wno-pointer-sign"

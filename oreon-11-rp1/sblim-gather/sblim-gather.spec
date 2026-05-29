@@ -11,7 +11,7 @@ Summary:        SBLIM Gatherer
 
 License:        EPL-1.0
 URL:            http://sourceforge.net/projects/sblim/
-Source0:        http://downloads.sourceforge.net/project/sblim/%{name}/%{version}/%{name}-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/project/sblim/sblim-gather/2.2.9/sblim-gather-2.2.9.tar.bz2
 Source1:        gather-config.h.prepend
 Source2:        gather-config.h
 Source3:        sblim-gather.tmpfiles

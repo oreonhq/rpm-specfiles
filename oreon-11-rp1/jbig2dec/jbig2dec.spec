@@ -6,7 +6,7 @@ Release:	%autorelease
 Summary:	A decoder implementation of the JBIG2 image compression format 
 License:	AGPL-3.0-or-later
 URL:		https://jbig2dec.com
-Source0:	https://github.com/ArtifexSoftware/jbig2dec/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/ArtifexSoftware/jbig2dec/releases/download/0.20/jbig2dec-0.20.tar.gz
 Requires:	%{name}-libs = %{version}-%{release}
 BuildRequires:	libtool
 BuildRequires:	libpng-devel

@@ -9,7 +9,7 @@ Summary:        GNOME Shell browser connector
 
 License:        GPL-3.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-browser-connector
-Source0:        https://download.gnome.org/sources/gnome-browser-connector/42/gnome-browser-connector-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/gnome-browser-connector/42/gnome-browser-connector-42.1.tar.xz
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  meson

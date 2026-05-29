@@ -28,7 +28,7 @@ URL:            https://dotat.at/prog/unifdef/
 # requires version.h and version.sh at the top level, and producing these
 # requires git history. For 2.12, the release archive and GitHub archive were
 # manually compared, and no unexpected discrepancies were found.
-Source:         https://dotat.at/prog/unifdef/unifdef-%{version}.tar.xz
+Source:        https://dotat.at/prog/unifdef/unifdef-2.12.tar.xz
 
 # tests: support both *BSD and Linux ls -l permissions output
 # https://github.com/fanf2/unifdef/pull/14

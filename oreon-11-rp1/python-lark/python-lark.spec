@@ -10,8 +10,7 @@ Summary:        Lark is a modern general-purpose parsing library for Python
 # the rest is MIT
 License:        MIT AND MPL-2.0 AND GPL-2.0-or-later
 Url:            https://github.com/lark-parser/lark
-Source:         %{pypi_source lark}
-
+Source:        https://files.pythonhosted.org/packages/source/l/lark/lark-1.2.2.tar.gz
 # Python 3.14 compatibility
 Patch:          https://github.com/lark-parser/lark/pull/1483.patch
 

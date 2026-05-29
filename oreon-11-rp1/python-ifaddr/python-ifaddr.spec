@@ -12,8 +12,7 @@ Summary:        Python library that allows you to find all the IP addresses of t
 
 License:        MIT
 URL:            https://pypi.org/project/ifaddr/
-Source:         %{pypi_source}
-
+Source:        https://files.pythonhosted.org/packages/source/p/python-ifaddr/python-ifaddr-0.2.0.tar.gz
 BuildArch:      noarch
 
 %description %{_description}

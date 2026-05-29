@@ -6,7 +6,7 @@ Version:    1.2.8
 Release:    %autorelease
 License:    MIT
 URL:        https://www.x.org
-Source0:    https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/app/xprop-1.2.8.tar.xz
 
 BuildRequires:  gcc make
 BuildRequires:  gettext-devel

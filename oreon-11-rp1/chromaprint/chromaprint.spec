@@ -21,7 +21,7 @@ Summary:        Library implementing the AcoustID fingerprinting
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            http://www.acoustid.org/chromaprint
-Source:         https://github.com/acoustid/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/acoustid/chromaprint/releases/download/v1.6.0/chromaprint-1.6.0.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc

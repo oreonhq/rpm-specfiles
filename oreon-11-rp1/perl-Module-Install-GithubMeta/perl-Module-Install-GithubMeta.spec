@@ -6,7 +6,7 @@ Release:    32%{?dist}
 # lib/Module/Install/GithubMeta.pm -> GPL+ or Artistic
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    A Module::Install extension to include GitHub meta information in META.yml 
-Source:     https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-Install-GithubMeta-%{version}.tar.gz 
+Source:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-Install-GithubMeta-0.30.tar.gz
 Url:        https://metacpan.org/release/Module-Install-GithubMeta
 BuildArch:  noarch
 

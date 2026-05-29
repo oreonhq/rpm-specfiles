@@ -8,7 +8,7 @@ Summary:       Library to access the DWARF Debugging file format
 
 License:       LGPL-2.1-only AND BSD-2-Clause-FreeBSD
 URL:           https://www.prevanders.net/dwarf.html
-Source0:       https://www.prevanders.net/%{name}-%{version}.tar.xz
+Source0:        https://www.prevanders.net/libdwarf-2.3.1.tar.xz
 # Make default-library=both work on linux
 Patch:         libdwarf-both.patch
 

@@ -15,8 +15,8 @@ URL:     https://userbase.kde.org/KWin
 %else
 %global stable stable
 %endif
-Source0: https://download.kde.org/%{stable}/plasma/%{plasma_version}/%{name}-%{version}.tar.xz
-Source1: https://download.kde.org/%{stable}/plasma/%{plasma_version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/plasma/%{plasma_version}/kwin-%{version}.tar.xz
+Source1:        https://download.kde.org/stable/plasma/%{plasma_version}/kwin-%{version}.tar.xz.sig
 
 ## upstream patches
 

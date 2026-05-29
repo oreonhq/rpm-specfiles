@@ -7,7 +7,7 @@ Release:        521%{?dist}
 Summary:        Thread-safe queues
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Thread-Queue
-Source0:        https://cpan.metacpan.org/authors/id/J/JD/JDHEDDEN/Thread-Queue-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JD/JDHEDDEN/Thread-Queue-3.13.tar.gz
 # Unbundled from perl 5.32.0
 Patch0:         Thread-Queue-3.13-Upgrade-to-3.14.patch
 BuildArch:      noarch

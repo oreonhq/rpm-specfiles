@@ -23,8 +23,8 @@ Release:	4%{?dist}
 # all other icons are LGPL-3.0-or-later
 License: LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND CC-BY-SA-4.0
 URL:     https://develop.kde.org/frameworks/breeze-icons/
-Source0: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
-Source1: https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/frameworks/6.24/breeze-icons-6.24.0.tar.xz
+Source1:        https://download.kde.org/stable/frameworks/6.24/breeze-icons-6.24.0.tar.xz.sig
 
 ## upstream patches
 

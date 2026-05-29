@@ -11,7 +11,7 @@ Release:        522%{?dist}
 Summary:        Finding and running system commands made easy
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IPC-Cmd
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/IPC-Cmd-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/IPC-Cmd-1.04.tar.gz
 # Replace ExtUtils::MakeMaker dependency with ExtUtils::MM::Utils.
 # This enables not to require perl-devel. Bug #1129443
 Patch0:         IPC-Cmd-0.96-Replace-EU-MM-dependency-with-EU-MM-Utils.patch

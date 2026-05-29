@@ -53,7 +53,7 @@ License:        %{shrink:
     (Unlicense OR MIT)
     }
 URL:            https://gitlab.freedesktop.org/libevdev/udev-hid-bpf/
-Source0:        https://gitlab.freedesktop.org/libevdev/%{name}/-/archive/%{tarball}/%{name}-%{tarball}.tar.bz2
+Source0:        https://gitlab.freedesktop.org/libevdev/udev-hid-bpf/-/archive/2.2.0-20251121/udev-hid-bpf-2.2.0-20251121.tar.bz2
 # To recreate tarball:
 # $ centpkg prep (do not use fedpkg, it removes Cargo.lock)
 # $ pushd udev-hid-bpf-...; cargo vendor && tar Jcvf ../$(basename $PWD)-vendor.tar.xz vendor/ ; popd

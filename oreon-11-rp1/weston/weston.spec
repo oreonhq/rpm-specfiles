@@ -9,7 +9,7 @@ Summary:        A lightweight and functional Wayland compositor
 
 License:        MIT and CC-BY-SA-3.0
 URL:            https://wayland.pages.freedesktop.org/weston/
-Source0:        https://gitlab.freedesktop.org/wayland/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz
+Source0:        https://gitlab.freedesktop.org/wayland/weston/-/releases/15.0.1/downloads/weston-15.0.1.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

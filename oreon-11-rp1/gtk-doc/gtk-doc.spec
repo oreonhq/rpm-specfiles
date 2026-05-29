@@ -9,7 +9,7 @@ Summary: API documentation generation tool for GTK+ and GNOME
 
 License: GPL-2.0-or-later AND GFDL-1.1-no-invariants-or-later
 URL: https://gitlab.gnome.org/GNOME/gtk-doc/
-Source0: http://download.gnome.org/sources/%{name}/1.35/%{name}-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/gtk-doc/1.35/gtk-doc-1.35.1.tar.xz
 
 # Resolve FTBFS, unclear if solution is 'proper'
 # https://gitlab.gnome.org/GNOME/gtk-doc/-/issues/150

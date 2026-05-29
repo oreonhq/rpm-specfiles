@@ -35,7 +35,7 @@ Summary:	Certificate status monitor and PKI enrollment client
 
 License:	GPL-3.0-or-later
 URL:		http://pagure.io/certmonger/
-Source0:	http://releases.pagure.org/certmonger/certmonger-%{version}.tar.gz
+Source0:        http://releases.pagure.org/certmonger/certmonger-0.79.21.tar.gz
 #Source1:	http://releases.pagure.org/certmonger/certmonger-%%{version}.tar.gz.sig
 
 Patch0001:	0001-Replace-deprecated-OpenSSL-3.0.0-function-calls.patch

@@ -7,7 +7,7 @@ Summary:        GObject based library for handling and rendering XPS documents
 
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/libgxps
-Source0:        https://ftp.gnome.org/pub/gnome/sources/%{name}/0.3/%{name}-%{version}.tar.xz
+Source0:        https://ftp.gnome.org/pub/gnome/sources/libgxps/0.3/libgxps-0.3.2.tar.xz
 
 BuildRequires:  meson
 BuildRequires:  gcc

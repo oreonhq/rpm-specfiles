@@ -9,7 +9,7 @@ Release:        %autorelease
 Summary:        Sphinx extension for HTML help files
 License:        BSD-2-Clause
 URL:            http://sphinx-doc.org/
-Source:         %{pypi_source sphinxcontrib_htmlhelp}
+Source:        https://files.pythonhosted.org/packages/source/s/sphinxcontrib-htmlhelp/sphinxcontrib-htmlhelp-2.1.0.tar.gz
 # Compatibility with Sphinx 9+
 Patch:          https://github.com/sphinx-doc/sphinxcontrib-htmlhelp/pull/44.patch
 BuildArch:      noarch

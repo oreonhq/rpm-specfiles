@@ -9,7 +9,7 @@ URL:            http://www.jcraft.com/jsch/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://download.sourceforge.net/sourceforge/jsch/jsch-%{version}.zip
+Source0:        http://download.sourceforge.net/sourceforge/jsch/jsch-0.1.55.zip
 # stripped manifest based on 
 # https://download.eclipse.org/tools/orbit/downloads/drops2/R20201130205003/repository/plugins/com.jcraft.jsch_0.1.55.v20190404-1902.jar
 Source1:        MANIFEST.MF
@@ -30,7 +30,7 @@ functionality into your own Java programs.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 %mvn_file : jsch
 
 %pom_remove_parent

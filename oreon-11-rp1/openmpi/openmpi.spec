@@ -71,7 +71,7 @@ URL:            http://www.open-mpi.org/
 ExcludeArch:    %{ix86}
 
 # We can't use %%{name} here because of _cc_name_suffix
-Source0:        https://www.open-mpi.org/software/ompi/v5.0/downloads/openmpi-%{version}.tar.bz2
+Source0:        https://www.open-mpi.org/software/ompi/v5.0/downloads/openmpi-5.0.9.tar.bz2
 Source1:        openmpi.module.in
 Source3:        openmpi.pth.py3
 Source4:        macros.openmpi

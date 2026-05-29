@@ -134,7 +134,7 @@ License:        LicenseRef-Callaway-BSD AND GPL-2.0-or-later AND GPL-2.0-only AN
 # GPLv2 - novell prpls
 # MIT - Zephyr prpl
 URL:            http://pidgin.im/
-Source0:        http://downloads.sourceforge.net/pidgin/pidgin-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/pidgin/pidgin-2.14.14.tar.bz2
 Obsoletes:      gaim < 999:1
 Provides:       gaim = 999:1
 

@@ -11,8 +11,8 @@
 Name: oddjob
 Version: 0.34.7
 Release: 18%{?dist}
-Source0: https://releases.pagure.org/oddjob/oddjob-%{version}.tar.gz
-Source1: https://releases.pagure.org/oddjob/oddjob-%{version}.tar.gz.asc
+Source0:        https://releases.pagure.org/oddjob/oddjob-0.34.7.tar.gz
+Source1:        https://releases.pagure.org/oddjob/oddjob-0.34.7.tar.gz.asc
 Patch1: oddjob-override-mask-fix.patch
 # Fix build with libxml2-2.12.0
 # https://pagure.io/oddjob/pull-request/24

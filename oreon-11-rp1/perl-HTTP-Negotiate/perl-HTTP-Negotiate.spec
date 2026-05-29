@@ -6,7 +6,7 @@ Release:        42%{?dist}
 Summary:        Choose a variant to serve
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Negotiate
-Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/HTTP-Negotiate-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/G/GA/GAAS/HTTP-Negotiate-6.01.tar.gz
 Patch0:         0001-Fix-warning-in-test.patch
 BuildArch:      noarch
 BuildRequires:  make

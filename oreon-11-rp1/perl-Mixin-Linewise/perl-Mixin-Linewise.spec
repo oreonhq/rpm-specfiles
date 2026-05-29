@@ -6,7 +6,7 @@ Release:        9%{?dist}
 Summary:        Write your linewise code for handles; this does the rest
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Mixin-Linewise
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Mixin-Linewise-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Mixin-Linewise-0.111.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

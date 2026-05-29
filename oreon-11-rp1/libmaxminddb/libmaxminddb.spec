@@ -7,7 +7,7 @@ Release:        1%{?dist}
 # BSD-3-Clause (src/maxminddb-compat-util.h) and Apache-2.0 (the rest)
 License:        Apache-2.0 AND BSD-3-Clause
 URL:            https://maxmind.github.io/libmaxminddb/
-Source0:        https://github.com/maxmind/libmaxminddb/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/maxmind/libmaxminddb/releases/download/1.13.3/libmaxminddb-1.13.3.tar.gz
 Source1:        maxminddb_config.h
 BuildRequires:  autoconf
 BuildRequires:  automake

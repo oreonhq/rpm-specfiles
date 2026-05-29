@@ -13,7 +13,7 @@ Release:        25%{?dist}
 Summary:        System V and POSIX timezone strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-TimeZone-SystemV
-Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/DateTime-TimeZone-SystemV-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/DateTime-TimeZone-SystemV-0.010.tar.gz
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

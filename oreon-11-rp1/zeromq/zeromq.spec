@@ -1,6 +1,6 @@
 %global source0_hash 6c972d1e6a91a0ecd79c3236f04cf0126f2f4dfbbad407d72b4606a7ba93f9c6
 
-%bcond_without pgm
+%bcond_with pgm
 %bcond_without unwind
 
 Name:           zeromq
@@ -10,7 +10,7 @@ Summary:        Software library for fast, message-based applications
 
 License:        MPL-2.0 AND BSD-3-Clause AND MIT
 URL:            https://zeromq.org
-Source0:        https://github.com/%{name}/libzmq/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/zeromq/libzmq/archive/v4.3.5/zeromq-4.3.5.tar.gz
 Patch1:         zeromq-configure-c99.patch
 
 BuildRequires:  make

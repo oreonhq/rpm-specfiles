@@ -12,7 +12,7 @@ Release:        1%{?dist}
 License:        BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND GPL-3.0-or-later
 Summary:        %{name} is a convergent calculator for Plasma.
 Url:            https://apps.kde.org/%{name}/
-Source:         https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kalk-26.03.80.tar.xz
 
 BuildRequires: gcc-c++
 BuildRequires: cmake

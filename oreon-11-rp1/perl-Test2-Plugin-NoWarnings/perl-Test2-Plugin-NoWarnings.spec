@@ -6,7 +6,7 @@ Release:	5%{?dist}
 Summary:	Fail if tests warn
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Test2-Plugin-NoWarnings
-Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Test2-Plugin-NoWarnings-0.10.tar.gz
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils

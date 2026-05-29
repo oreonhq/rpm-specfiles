@@ -18,7 +18,7 @@ Source0:        https://gitlab.freedesktop.org/libinput/libinput/-/archive/1.31.
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        https://gitlab.freedesktop.org/libinput/libinput/-/archive/%{version}/libinput-%{version}.tar.bz2
+Source0:        https://gitlab.freedesktop.org/libinput/libinput/-/archive/1.31.0/libinput-1.31.0.tar.bz2
 %endif
 
 BuildRequires:  git-core

@@ -9,7 +9,7 @@ Release:        35%{?dist}
 Summary:        Resolve public identifiers and remap system identifiers
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Catalog
-Source0:        https://cpan.metacpan.org/authors/id/J/JF/JFEARN/XML-Catalog-%{cpan_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JF/JFEARN/XML-Catalog-1.03.tar.gz
 # Adapt to changes in XML-Parser-2.48, bug #2457783, CPAN RT#176391,
 # proposed to upstream.
 Patch:          XML-Catalog-1.03-Adapt-to-changes-in-XML-Parser-2.48.patch

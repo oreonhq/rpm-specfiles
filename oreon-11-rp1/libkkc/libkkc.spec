@@ -9,7 +9,7 @@ Summary:	Japanese Kana Kanji conversion library
 
 License:	GPL-3.0-or-later
 URL:		https://github.com/ueno/libkkc
-Source0:	https://github.com/ueno/libkkc/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/ueno/libkkc/releases/download/v0.3.5/libkkc-0.3.5.tar.gz
 # remove for next release:
 Source1:        README.md
 Patch0:		libkkc-HEAD.patch

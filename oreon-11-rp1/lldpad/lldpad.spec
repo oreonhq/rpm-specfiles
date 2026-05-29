@@ -13,7 +13,7 @@ Release:            16.git%{checkout}%{?dist}
 Summary:            Intel LLDP Agent
 License:            GPL-2.0-only
 URL:                http://open-lldp.org/
-Source0:            https://github.com/intel/openlldp/archive/%{checkout}.tar.gz
+Source0:        https://github.com/intel/openlldp/archive/85e5583.tar.gz
 
 BuildRequires:      automake autoconf libtool
 BuildRequires:      flex >= 2.5.33

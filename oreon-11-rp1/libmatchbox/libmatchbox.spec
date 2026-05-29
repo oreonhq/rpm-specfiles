@@ -6,7 +6,7 @@ Version:        1.9
 Release:        41%{?dist}
 Url:            http://projects.o-hand.com/matchbox/
 License:        LGPL-2.1-or-later
-Source:         http://projects.o-hand.com/matchbox/sources/libmatchbox/%{version}/%{name}-%{version}.tar.bz2
+Source:        http://projects.o-hand.com/matchbox/sources/libmatchbox/1.9/libmatchbox-1.9.tar.bz2
 Patch0:         libmatchbox-1.9-add-needed.patch
 Patch1:         libmatchbox-1.9-libpng.patch
 Patch2:         libmatchbox-c99.patch

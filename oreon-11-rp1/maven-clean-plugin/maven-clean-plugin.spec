@@ -9,7 +9,7 @@ URL:            http://maven.apache.org/plugins/maven-clean-plugin/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-clean-plugin/3.3.2/maven-clean-plugin-3.3.2-source-release.zip
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)

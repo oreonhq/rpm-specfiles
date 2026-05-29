@@ -22,7 +22,7 @@ Summary:	OpenID Connect auth module for Apache HTTP Server
 
 License:	Apache-2.0
 URL:		https://github.com/OpenIDC/mod_auth_openidc
-Source0:	https://github.com/OpenIDC/mod_auth_openidc/releases/download/v%{version}/mod_auth_openidc-%{version}.tar.gz
+Source0:        https://github.com/OpenIDC/mod_auth_openidc/releases/download/v2.4.19.2/mod_auth_openidc-2.4.19.2.tar.gz
 
 BuildRequires: make
 BuildRequires: libxcrypt-devel

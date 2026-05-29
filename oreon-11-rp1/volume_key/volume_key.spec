@@ -39,7 +39,7 @@ License: GPL-2.0-only AND (MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.1-or-later)
 URL: https://pagure.io/%{name}/
 Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
-Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://releases.pagure.org/volume_key/volume_key-0.3.12.tar.xz
 # Support all LUKS devices
 # - backport of 26c09768662d8958debe8c9410dae9fda02292c3
 Patch0: volume_key-0.3.12-support_LUKS2_and_more.patch
@@ -74,7 +74,7 @@ encryption keys and storing them separately from volumes.\
 \
 %{desc_common}
 
-%global desc_python(V:) This package provides %%{-V:Python %%{-V*}}%%{!-V:Python} bindings for lib%{name}, a library for\
+%global desc_python(V:) This package provides %{-V:Python %{-V*}}%{!-V:Python} bindings for lib%{name}, a library for\
 manipulating storage volume encryption keys and storing them separately from\
 volumes.\
 \

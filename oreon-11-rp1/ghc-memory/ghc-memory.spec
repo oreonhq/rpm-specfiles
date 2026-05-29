@@ -17,8 +17,8 @@ Summary:        Memory and related abstraction stuff
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/memory
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/memory-0.18.0/memory-0.18.0.tar.gz
+Source1:        https://hackage.haskell.org/package/memory-0.18.0/memory.cabal#/memory-0.18.0.cabal
 # End cabal-rpm sources
 Patch0:         memory-Word64.patch
 

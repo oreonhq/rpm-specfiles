@@ -20,8 +20,8 @@ Summary:        The Wadler/Leijen Pretty Printer for colored ANSI terminal outpu
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/ansi-wl-pprint
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{prettyprintercompatansiwlpprint}/%{prettyprintercompatansiwlpprint}.tar.gz
+Source0:        https://hackage.haskell.org/package/ansi-wl-pprint-%{version}/ansi-wl-pprint-%{version}.tar.gz
+Source1:        https://hackage.haskell.org/package/prettyprinter-compat-ansi-wl-pprint-1.0.2/prettyprinter-compat-ansi-wl-pprint-1.0.2.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

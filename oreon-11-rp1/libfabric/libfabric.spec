@@ -17,7 +17,7 @@ Summary:        Open Fabric Interfaces
 
 License:        BSD-2-Clause OR GPL-2.0-only
 URL:            https://github.com/ofiwg/libfabric
-Source0:        https://github.com/ofiwg/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/ofiwg/libfabric/releases/download/v2.3.1/libfabric-2.3.1.tar.bz2
 
 %if %{__remake_config}
 BuildRequires:  automake

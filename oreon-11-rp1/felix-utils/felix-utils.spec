@@ -12,7 +12,7 @@ URL:            https://felix.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/felix/%{bundle}/%{version}/%{bundle}-%{version}-source-release.tar.gz
+Source0:        https://repo1.maven.org/maven2/org/apache/felix/org.apache.felix.utils/1.11.8/org.apache.felix.utils-1.11.8-source-release.tar.gz
 
 # The module org.osgi.cmpn requires implementing methods which were not
 # implemented in previous versions where org.osgi.compendium was used
@@ -35,7 +35,7 @@ Utility classes for OSGi
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_parent
 %pom_xpath_inject pom:project "<groupId>org.apache.felix</groupId>"

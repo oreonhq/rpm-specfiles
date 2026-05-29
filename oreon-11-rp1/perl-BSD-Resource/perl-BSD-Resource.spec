@@ -17,7 +17,7 @@ Summary:        BSD process resource limit and priority functions
 # No matter what POD says, ppport.h comes from perl with perl's license.
 License:        (Artistic-2.0 OR LGPL-2.0-only) AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/BSD-Resource
-Source0:        https://cpan.metacpan.org/authors/id/J/JH/JHI/BSD-Resource-%{module_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JH/JHI/BSD-Resource-1.2911.tar.gz
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make

@@ -11,7 +11,7 @@ URL:            https://github.com/raphw/modulemaker-maven-plugin
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/raphw/modulemaker-maven-plugin/archive/refs/tags/modulemaker-maven-plugin-%{version}.tar.gz
+Source0:        https://github.com/raphw/modulemaker-maven-plugin/archive/refs/tags/modulemaker-maven-plugin-1.11.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}
@@ -35,7 +35,7 @@ to Java 8 where a module-info.java file cannot be compiled.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 cp -p %{SOURCE1} .
 

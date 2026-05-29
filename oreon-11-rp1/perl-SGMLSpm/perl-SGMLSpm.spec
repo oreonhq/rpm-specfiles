@@ -7,7 +7,7 @@ Summary:        Perl library for parsing the output of nsgmls
 
 License:        GPL-2.0-or-later
 URL:            https://metacpan.org/release/SGMLSpm
-Source0:        https://cpan.metacpan.org/authors/id/D/DM/DMEGG/SGMLSpm-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DM/DMEGG/SGMLSpm-1.03ii.tar.gz
 
 BuildArch:      noarch
 BuildRequires: make

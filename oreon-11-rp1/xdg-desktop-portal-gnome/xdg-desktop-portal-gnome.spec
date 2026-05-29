@@ -2,8 +2,8 @@
 
 %global xdg_desktop_portal_version 1.19.1
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           xdg-desktop-portal-gnome
 Version:        50.0
@@ -12,8 +12,7 @@ Summary:        Backend implementation for xdg-desktop-portal using GNOME
 
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/%{name}
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/xdg-desktop-portal-gnome/%{major_version}/xdg-desktop-portal-gnome-%{tarball_version}.tar.xz
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  gettext

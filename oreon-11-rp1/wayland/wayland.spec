@@ -8,8 +8,8 @@ Summary:        Wayland Compositor Infrastructure
 # SPDX
 License:        MIT
 URL:            http://wayland.freedesktop.org/
-Source0:        https://gitlab.freedesktop.org/%{name}/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz
-Source1:        https://gitlab.freedesktop.org/%{name}/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz.sig
+Source0:        https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.24.0/downloads/wayland-1.24.0.tar.xz
+Source1:        https://gitlab.freedesktop.org/wayland/wayland/-/releases/1.24.0/downloads/wayland-1.24.0.tar.xz.sig
 Source2:        emersion-gpg-key.asc
 
 BuildRequires:  gcc

@@ -7,7 +7,7 @@ License:       BSD-3-Clause AND GPL-2.0-or-later AND CC0-1.0 AND GPL-3.0-or-late
 Summary:       Camera application for Plasma Mobile
 URL:           https://invent.kde.org/plasma-mobile/plasma-camera
 
-Source0:       https://invent.kde.org/plasma-mobile/plasma-camera/-/archive/v%{version}/%{name}-v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://invent.kde.org/plasma-mobile/plasma-camera/-/archive/v26.03.80/plasma-camera-v26.03.80.tar.gz#/plasma-camera-26.03.80.tar.gz
 
 # libcamera does not currently build on these architectures
 ExcludeArch: s390x ppc64le

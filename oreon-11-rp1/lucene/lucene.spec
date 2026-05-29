@@ -11,42 +11,42 @@ URL:            https://lucene.apache.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://dlcdn.apache.org/lucene/java/%{version}/lucene-%{version}-src.tgz
+Source0:        https://dlcdn.apache.org/lucene/java/10.3.2/lucene-10.3.2-src.tgz
 Source1:        aggregator.pom
 Source2:        aggregator-analysis.pom
 
-Source3:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-common/%{version}/lucene-analysis-common-%{version}.pom
-Source4:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-icu/%{version}/lucene-analysis-icu-%{version}.pom
-Source5:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-kuromoji/%{version}/lucene-analysis-kuromoji-%{version}.pom
-Source6:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-morfologik/%{version}/lucene-analysis-morfologik-%{version}.pom
-Source7:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-nori/%{version}/lucene-analysis-nori-%{version}.pom
-Source8:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-opennlp/%{version}/lucene-analysis-opennlp-%{version}.pom
-Source9:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-phonetic/%{version}/lucene-analysis-phonetic-%{version}.pom
-Source10:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-smartcn/%{version}/lucene-analysis-smartcn-%{version}.pom
-Source11:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-stempel/%{version}/lucene-analysis-stempel-%{version}.pom
+Source3:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-common/10.3.2/lucene-analysis-common-10.3.2.pom
+Source4:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-icu/10.3.2/lucene-analysis-icu-10.3.2.pom
+Source5:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-kuromoji/10.3.2/lucene-analysis-kuromoji-10.3.2.pom
+Source6:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-morfologik/10.3.2/lucene-analysis-morfologik-10.3.2.pom
+Source7:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-nori/10.3.2/lucene-analysis-nori-10.3.2.pom
+Source8:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-opennlp/10.3.2/lucene-analysis-opennlp-10.3.2.pom
+Source9:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-phonetic/10.3.2/lucene-analysis-phonetic-10.3.2.pom
+Source10:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-smartcn/10.3.2/lucene-analysis-smartcn-10.3.2.pom
+Source11:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-analysis-stempel/10.3.2/lucene-analysis-stempel-10.3.2.pom
 
-Source12:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-backward-codecs/%{version}/lucene-backward-codecs-%{version}.pom
-Source13:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-benchmark/%{version}/lucene-benchmark-%{version}.pom
-Source14:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-classification/%{version}/lucene-classification-%{version}.pom
-Source15:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-codecs/%{version}/lucene-codecs-%{version}.pom
-Source16:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-core/%{version}/lucene-core-%{version}.pom
-Source17:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-demo/%{version}/lucene-demo-%{version}.pom
-Source18:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-expressions/%{version}/lucene-expressions-%{version}.pom
-Source19:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-facet/%{version}/lucene-facet-%{version}.pom
-Source20:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-grouping/%{version}/lucene-grouping-%{version}.pom
-Source21:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-highlighter/%{version}/lucene-highlighter-%{version}.pom
-Source22:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-join/%{version}/lucene-join-%{version}.pom
-Source23:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-luke/%{version}/lucene-luke-%{version}.pom
-Source24:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-memory/%{version}/lucene-memory-%{version}.pom
-Source25:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-misc/%{version}/lucene-misc-%{version}.pom
-Source26:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-monitor/%{version}/lucene-monitor-%{version}.pom
-Source27:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-queries/%{version}/lucene-queries-%{version}.pom
-Source28:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-queryparser/%{version}/lucene-queryparser-%{version}.pom
-Source29:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-replicator/%{version}/lucene-replicator-%{version}.pom
-Source30:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-sandbox/%{version}/lucene-sandbox-%{version}.pom
-Source31:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-spatial3d/%{version}/lucene-spatial3d-%{version}.pom
-Source32:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-suggest/%{version}/lucene-suggest-%{version}.pom
-Source33:       https://repo1.maven.org/maven2/org/apache/lucene/lucene-test-framework/%{version}/lucene-test-framework-%{version}.pom
+Source12:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-backward-codecs/10.3.2/lucene-backward-codecs-10.3.2.pom
+Source13:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-benchmark/10.3.2/lucene-benchmark-10.3.2.pom
+Source14:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-classification/10.3.2/lucene-classification-10.3.2.pom
+Source15:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-codecs/10.3.2/lucene-codecs-10.3.2.pom
+Source16:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-core/10.3.2/lucene-core-10.3.2.pom
+Source17:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-demo/10.3.2/lucene-demo-10.3.2.pom
+Source18:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-expressions/10.3.2/lucene-expressions-10.3.2.pom
+Source19:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-facet/10.3.2/lucene-facet-10.3.2.pom
+Source20:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-grouping/10.3.2/lucene-grouping-10.3.2.pom
+Source21:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-highlighter/10.3.2/lucene-highlighter-10.3.2.pom
+Source22:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-join/10.3.2/lucene-join-10.3.2.pom
+Source23:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-luke/10.3.2/lucene-luke-10.3.2.pom
+Source24:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-memory/10.3.2/lucene-memory-10.3.2.pom
+Source25:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-misc/10.3.2/lucene-misc-10.3.2.pom
+Source26:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-monitor/10.3.2/lucene-monitor-10.3.2.pom
+Source27:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-queries/10.3.2/lucene-queries-10.3.2.pom
+Source28:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-queryparser/10.3.2/lucene-queryparser-10.3.2.pom
+Source29:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-replicator/10.3.2/lucene-replicator-10.3.2.pom
+Source30:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-sandbox/10.3.2/lucene-sandbox-10.3.2.pom
+Source31:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-spatial3d/10.3.2/lucene-spatial3d-10.3.2.pom
+Source32:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-suggest/10.3.2/lucene-suggest-10.3.2.pom
+Source33:        https://repo1.maven.org/maven2/org/apache/lucene/lucene-test-framework/10.3.2/lucene-test-framework-10.3.2.pom
 
 
 BuildRequires:  maven-local-openjdk25

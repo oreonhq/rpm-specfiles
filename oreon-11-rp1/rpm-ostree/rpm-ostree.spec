@@ -11,7 +11,7 @@ License: LGPL-2.0-or-later
 URL: https://github.com/coreos/rpm-ostree
 # This tarball is generated via "cd packaging && make -f Makefile.dist-packaging dist-snapshot"
 # in the upstream git.  It also contains vendored Rust sources.
-Source0: https://github.com/coreos/rpm-ostree/releases/download/v%{version}/rpm-ostree-%{version}.tar.xz
+Source0:        https://github.com/coreos/rpm-ostree/releases/download/v2026.1/rpm-ostree-2026.1.tar.xz
 
 Patch0: 0001-rpmostreed-transaction-types-fix-override-reset.patch
 Patch1: 0001-Fix-silent-upgrade-failure-on-container-systems.patch
@@ -197,7 +197,7 @@ The %{name}-devel package includes the header files for %{name}-libs.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -Sgit -n %{name}-%{version} -p1
+%autosetup -S git -n %{name}-%{version} -p1
 %if 0%{?__isa_bits} == 32
 sed -ie 's,^lto = true,lto = false,' Cargo.toml
 %endif

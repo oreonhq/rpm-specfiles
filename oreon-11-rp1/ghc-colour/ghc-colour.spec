@@ -17,7 +17,7 @@ Summary:        A model for human color perception
 License:        MIT
 URL:            https://hackage.haskell.org/package/colour
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/colour-2.3.6/colour-2.3.6.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

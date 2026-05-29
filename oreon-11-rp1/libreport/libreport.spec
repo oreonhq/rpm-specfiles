@@ -20,7 +20,7 @@ Version: 2.17.15
 Release: 10%{?dist}
 License: GPL-2.0-or-later
 URL: https://abrt.readthedocs.org/
-Source: https://github.com/abrt/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/abrt/libreport/archive/2.17.15/libreport-2.17.15.tar.gz
 BuildRequires: %{dbus_devel}
 BuildRequires: gtk3-devel
 BuildRequires: curl-devel

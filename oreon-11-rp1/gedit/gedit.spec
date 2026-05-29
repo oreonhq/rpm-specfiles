@@ -11,8 +11,8 @@
 # Filter provides for plugin .so files
 %global __provides_exclude_from ^%{_libdir}/gedit/plugins/
 
-%global api_version %%(ver=%%{version}; echo ${ver%%.*})
-%global tarball_version %%(ver=%%{version}; echo ${ver//~/.})
+%global api_version %%(ver=%{version}; echo ${ver%%.*})
+%global tarball_version %%(ver=%{version}; echo ${ver//~/.})
 %global libgd_commit 3cccf99234288a6121b3945a25cd4ec3b7445c74
 
 Name:		gedit
@@ -22,9 +22,9 @@ Release:	%autorelease
 Summary:	Text editor for the GNOME desktop
 License:	GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:		https://gedit-text-editor.org/
-Source:         https://gitlab.gnome.org/World/gedit/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
+Source:        https://gitlab.gnome.org/World/gedit/gedit/-/archive/49.0/gedit-49.0.tar.bz2
 # libgd is a git submodule by design, but those are not included in git forge snapshot tarballs
-Source:         https://gitlab.gnome.org/GNOME/libgd/-/archive/%{libgd_commit}/libgd-%{libgd_commit}.tar.bz2
+Source:        https://gitlab.gnome.org/GNOME/libgd/-/archive/3cccf99234288a6121b3945a25cd4ec3b7445c74/libgd-3cccf99234288a6121b3945a25cd4ec3b7445c74.tar.bz2
 
 BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}
 BuildRequires: pkgconfig(gobject-introspection-1.0)

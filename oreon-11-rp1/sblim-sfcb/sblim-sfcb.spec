@@ -12,7 +12,7 @@ URL: http://sblim.wiki.sourceforge.net/
 Version: 1.4.9
 Release: 39%{?dist}
 License: EPL-1.0
-Source0: http://downloads.sourceforge.net/sblim/%{name}-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/sblim/sblim-sfcb-1.4.9.tar.bz2
 Source1: sfcb.service
 # Missing man pages
 Source2: sfcbdump.1.gz

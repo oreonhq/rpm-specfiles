@@ -46,7 +46,7 @@ Unicode-DFS-2016 AND
 }
 License:        MIT AND LGPL-2.1-or-later AND %{extra_licenses_from_rust_deps}
 URL:            https://github.com/ibm-s390-linux/s390-tools
-Source0:        https://github.com/ibm-s390-linux/s390-tools/archive/v%{version}.tar.gz#/s390-tools-%{version}.tar.gz
+Source0:        https://github.com/ibm-s390-linux/s390-tools/archive/v2.41.0.tar.gz#/s390-tools-2.41.0.tar.gz
 # To create the vendor tarball:
 #   tar xf s390-tools-%%{version}.tar.gz ; pushd s390-tools-%%{version}/rust ; \
 #   rm -f Cargo.lock && cargo vendor && \

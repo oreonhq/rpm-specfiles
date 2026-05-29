@@ -12,7 +12,7 @@ URL:            https://github.com/codehaus-plexus/plexus-interpolation
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-interpolation/archive/plexus-interpolation-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-interpolation/archive/plexus-interpolation-1.27.tar.gz
 
 Patch:          0001-Use-PATH-env-variable-instead-of-JAVA_HOME.patch
 
@@ -36,7 +36,7 @@ related projects.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 %pom_add_dep junit:junit:4.13.1:test
 %pom_remove_plugin :maven-release-plugin
 %pom_remove_plugin :maven-scm-publish-plugin

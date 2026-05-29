@@ -7,7 +7,7 @@ Release:        13%{?dist}
 # One file is GPL-1.0-or-later OR Artistic-1.0-Perl (c/ppport.h)
 License:        Artistic-2.0 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/Params-Validate
-Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Params-Validate-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Params-Validate-1.31.tar.gz
 
 
 BuildRequires:  perl-devel

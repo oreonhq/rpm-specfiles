@@ -25,7 +25,7 @@ Release: 1%{?dist}
 # MIT .. term/PostScript/aglfn.txt
 License: gnuplot and MIT
 URL: http://www.gnuplot.info/
-Source0: https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/gnuplot/gnuplot-.tar.gz
 
 Patch1: gnuplot-4.2.0-fonts.patch
 # Fix out of tree parallel builds

@@ -10,7 +10,7 @@ Summary:        C++ mathematics library for graphics programming
 
 License:        MIT
 URL:            http://glm.g-truc.net/
-Source0:        https://github.com/g-truc/glm/archive/%{version}.tar.gz
+Source0:        https://github.com/g-truc/glm/archive/1.0.1.tar.gz
 Patch0:         glm-1.0.1-noarch.patch
 Patch1:         glm-1.0.1-without-werror.patch
 

@@ -1,7 +1,7 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_minor_version %%(echo %%{tarball_version} | cut -d "." -f 1-2)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_minor_version %(echo %{tarball_version} | cut -d "." -f 1-2)
 
 Name:           libgweather
 Version:        4.6.0
@@ -11,8 +11,7 @@ Summary:        A library for weather information
 # libgweather/third-party/kdtree.c is BSD-3-Clause
 License:        GPL-2.0-or-later AND BSD-3-Clause
 URL:            https://wiki.gnome.org/Projects/LibGWeather
-Source:         https://download.gnome.org/sources/%{name}/%{major_minor_version}/%{name}-%{tarball_version}.tar.xz
-
+Source: https://download.gnome.org/sources/libgweather/%{major_minor_version}/libgweather-%{tarball_version}.tar.xz
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  gi-docgen

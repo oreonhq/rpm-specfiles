@@ -11,7 +11,7 @@ Release: 1%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-3.0-or-later
 URL:     https://invent.kde.org/multimedia/audiocd-kio
 	
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/audiocd-kio-26.03.80.tar.xz
 
 # cdparanoia-devel not on all arches for RHEL8.
 %if 0%{?rhel} == 8

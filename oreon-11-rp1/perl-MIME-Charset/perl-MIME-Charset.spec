@@ -8,7 +8,7 @@ Release:        10%{?dist}
 Summary:        Charset Informations for MIME
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/MIME-Charset
-Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEZUMI/MIME-Charset-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEZUMI/MIME-Charset-1.013.1.tar.gz
 # Disable Module::AutoInstall
 Patch0:         MIME-Charset-1.012-Do-not-install-modules-from-the-Internet.patch
 BuildArch:      noarch

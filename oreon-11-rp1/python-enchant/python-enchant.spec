@@ -9,8 +9,7 @@ Summary:        Python bindings for Enchant spellchecking library
 
 License:        LGPL-2.1-or-later
 URL:            https://pyenchant.github.io/pyenchant/
-Source:         %{pypi_source pyenchant}
-
+Source:        https://files.pythonhosted.org/packages/source/p/pyenchant/pyenchant-3.3.0.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  enchant2

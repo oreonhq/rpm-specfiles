@@ -25,7 +25,7 @@ Release:        18%{?dist}
 ## Unused and nonpackaged
 # os_win32.c:   "See the LICENSE file"
 License:        OML
-Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/FCGI-%{version}.tar.gz 
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/FCGI-0.82.tar.gz
 # Fix CVE-2012-6687 in the bundled fcgi library, bug #1190294, CPAN RT#118405,
 # patch copied from Debian's libfcgi-perl.
 Patch0:         FCGI-0.78-CVE-2012-6687.patch

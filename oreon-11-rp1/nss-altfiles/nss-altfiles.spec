@@ -4,7 +4,7 @@ Summary: NSS module to look up from files in /usr/lib as well
 Name: nss-altfiles
 Version: 2.23.0
 Release: 9%{?dist}
-Source0: https://github.com/flatcar/nss-altfiles/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/flatcar/nss-altfiles/archive/v2.23.0.tar.gz#/nss-altfiles-2.23.0.tar.gz
 Source1: macros.altfiles
 Patch1: 0001-build-sys-Inherit-LDFLAGS.patch
 # From https://github.com/flatcar/nss-altfiles/commit/de2b32289bf701ce3c8167a1b58436866922085e
@@ -23,7 +23,7 @@ and from respective files for all other NSS maps.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -Sgit
+%autosetup -S git
 
 %build
 ./configure --with-types=all --prefix=%{_prefix} --libdir=%{_libdir} CFLAGS="%{optflags}" LDFLAGS="%{build_ldflags}"

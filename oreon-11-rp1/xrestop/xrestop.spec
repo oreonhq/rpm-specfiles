@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f71874dacec25c699af2c79cbf4d2bc08dae7d42f3e371812a0cc6fc114e61dc
 
 Summary: X Resource Monitor
 Name: xrestop
@@ -6,7 +6,7 @@ Version: 0.6
 Release: 7%{?dist}
 License: GPL-2.0-or-later
 URL: http://www.freedesktop.org/Software/xrestop
-Source0: %{name}-%{version}.tar.gz
+Source0:        https://gitlab.freedesktop.org/xorg/app/xrestop/-/archive/xrestop-0.6/xrestop-xrestop-0.6.tar.gz
 
 BuildRequires: make
 BuildRequires:  gcc
@@ -20,7 +20,7 @@ for tracking down application X resource usage leaks.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%setup -q
+%setup -q -n xrestop-xrestop-%{version}
 
 %build
 %configure

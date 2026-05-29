@@ -26,7 +26,7 @@ Release:          2%{?dist}
 License:          GPL-2.0-only
 
 URL:              https://github.com/fedora-sysv/initscripts
-Source:           https://github.com/fedora-sysv/initscripts/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source:        https://github.com/fedora-sysv/initscripts/archive/10.27.tar.gz#/initscripts-10.27.tar.gz
 
 %shared_requirements
 

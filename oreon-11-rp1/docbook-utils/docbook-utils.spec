@@ -23,7 +23,7 @@ BuildRequires: perl-SGMLSpm, openjade, docbook-style-dsssl
 BuildRequires: make
 
 BuildArch: noarch
-Source0: https://github.com/devexp-db/docbook-utils/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/devexp-db/docbook-utils/releases/download/v0.6.15/docbook-utils-0.6.15.tar.xz
 Source1: db2html
 Source2: gdp-both.dsl
 #We will ship newer version of docbook2man-spec.pl for better handling of docbook2man conversion

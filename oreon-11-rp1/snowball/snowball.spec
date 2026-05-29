@@ -23,7 +23,7 @@ URL:            https://snowballstem.org/
 VCS:            git:%{giturl}.git
 Source0:        https://github.com/snowballstem/snowball/archive/v3.0.1/snowball-3.0.1.tar.gz
 # Test data for the compiler (must match algorithms shipped in this snowball release)
-Source1:        https://github.com/snowballstem/snowball-data/archive/%{snowball_data_git}/%{snowball_data_git}.tar.gz
+Source1:        https://github.com/snowballstem/snowball-data/archive/381b447563f9bef87b218ebbedde3159afdc3032/381b447563f9bef87b218ebbedde3159afdc3032.tar.gz
 # Build a shared library instead of a static library
 Patch:          %{name}-sharedlib.patch
 

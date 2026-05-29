@@ -16,7 +16,7 @@ Summary:        Time zone object base class and factory
 # upstream or locally:                  LicenseRef-Public-Domain
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Public-Domain
 URL:            https://metacpan.org/release/DateTime-TimeZone
-Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-TimeZone-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.68.tar.gz
 %if %{defined tzversion}
 Source1:        ftp://ftp.iana.org/tz/releases/tzdata%{tzversion}.tar.gz
 %endif

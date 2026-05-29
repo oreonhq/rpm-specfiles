@@ -10,7 +10,7 @@ Name: hunspell-ga
 Summary: Irish hunspell dictionaries
 Version: 5.1
 Release: 10%{?dist}
-Source: https://github.com/kscanne/gaelspell/releases/download/v%{version}/hunspell-ga-%{version}.zip
+Source:        https://github.com/kscanne/gaelspell/releases/download/v5.1/hunspell-ga-5.1.zip
 URL: https://cadhan.com/gaelspell/
 License: GPL-2.0-or-later
 BuildArch: noarch

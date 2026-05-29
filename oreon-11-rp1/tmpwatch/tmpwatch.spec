@@ -5,7 +5,7 @@ Name: tmpwatch
 Version: 2.11
 Release: 30%{?dist}
 URL: https://pagure.io/%{name}
-Source0: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.bz2
+Source0:        https://releases.pagure.org/tmpwatch/tmpwatch-2.11.tar.bz2
 License: GPL-2.0-only
 Requires: psmisc
 Provides: bundled(gnulib)

@@ -40,8 +40,8 @@ URL:            http://www.jdom.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://jdom.org/dist/binary/archive/jdom-%{version}.tar.gz
-Source1:        https://repo1.maven.org/maven2/org/jdom/jdom/%{version}/jdom-%{version}.pom
+Source0:        http://jdom.org/dist/binary/archive/jdom-1.1.3.tar.gz
+Source1:        https://repo1.maven.org/maven2/org/jdom/jdom/1.1.3/jdom-1.1.3.pom
 
 Patch:          %{name}-crosslink.patch
 Patch:          %{name}-1.1-OSGiManifest.patch
@@ -74,7 +74,7 @@ Demonstrations and samples for %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;
 find . -name "*.class" -exec rm -f {} \;

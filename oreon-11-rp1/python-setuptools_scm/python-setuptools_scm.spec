@@ -10,8 +10,7 @@ Summary:        Blessed package to manage your versions by SCM tags
 # SPDX
 License:        MIT
 URL:            https://github.com/pypa/setuptools_scm/
-Source:         %{pypi_source setuptools_scm}
-
+Source:        https://files.pythonhosted.org/packages/source/s/setuptools-scm/setuptools-scm-9.2.2.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python%{python3_pkgversion}-devel

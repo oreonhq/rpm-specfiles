@@ -6,7 +6,7 @@ Release:        5%{?dist}
 Summary:        Provides CPU identification for x86 and ARM
 License:        BSD-2-Clause
 URL:            https://github.com/anrieff/libcpuid
-Source0:        https://github.com/anrieff/libcpuid/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/anrieff/libcpuid/archive/v0.8.1.tar.gz#/libcpuid-0.8.1.tar.gz
 ExclusiveArch:  %{ix86} x86_64 %{arm} aarch64
 
 BuildRequires:  automake

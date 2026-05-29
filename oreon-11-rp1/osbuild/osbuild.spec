@@ -20,7 +20,7 @@ License:        Apache-2.0
 URL:            %{forgeurl}
 
 Source0:        https://github.com/osbuild/osbuild/archive/v176/osbuild-176.tar.gz
-Source1:        https://github.com/osbuild/initrd/releases/download/%{osbuild_initrd_version}/osbuild-initrd-%{osbuild_initrd_version}.tar.gz
+Source1:        https://github.com/osbuild/initrd/releases/download/0.1/osbuild-initrd-0.1.tar.gz
 Summary:        A build system for OS images
 
 # There is no golang support for i686 on centos and RHEL

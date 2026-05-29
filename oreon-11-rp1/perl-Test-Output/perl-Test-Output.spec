@@ -9,7 +9,7 @@ Release:        3%{?dist}
 Summary:        Utilities to test STDOUT and STDERR messages
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Test-Output
-Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRIANDFOY/Test-Output-%{cpan_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRIANDFOY/Test-Output-1.036.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

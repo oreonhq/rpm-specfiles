@@ -12,7 +12,7 @@ BuildArch:      noarch
 
 License:        MIT
 URL:            https://jquery.com/
-Source0:        https://github.com/jquery/jquery/archive/%{version}/jquery-%{version}.tar.gz
+Source0:        https://github.com/jquery/jquery/archive/3.7.1/jquery-3.7.1.tar.gz
 # Created by ./update-sources.sh <version>
 Source1:        jquery_%{version}_node_modules.tar.gz
 
@@ -46,7 +46,7 @@ changed the way that millions of people write JavaScript.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -n jquery-%{version} -v -p1
+%autosetup -n jquery-%{version} -p1
 
 #remove precompiled stuff
 rm -rf dist/*

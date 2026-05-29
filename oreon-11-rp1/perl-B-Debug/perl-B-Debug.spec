@@ -18,7 +18,7 @@ Release:        444%{?dist}
 Summary:        Walk Perl syntax tree, print debug information about op-codes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/B-Debug
-Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/B-Debug-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/B-Debug-1.26.tar.gz
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators

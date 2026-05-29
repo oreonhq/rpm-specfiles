@@ -6,7 +6,7 @@ Release:        6%{?dist}
 Summary:        JPEG 2000 codec library
 License:        BSD-2-Clause
 URL:            https://www.openjpeg.org/
-Source0:        https://github.com/uclouvain/openjpeg/archive/v%{version}/openjpeg-%{version}.tar.gz
+Source0:        https://github.com/uclouvain/openjpeg/archive/v2.5.3/openjpeg-2.5.3.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc

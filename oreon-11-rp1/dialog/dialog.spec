@@ -7,8 +7,8 @@ Version: 1.3
 Release: 57.%{dialogsubversion}%{?dist}
 License: LGPL-2.1-only
 URL: https://invisible-island.net/dialog/dialog.html
-Source0: https://invisible-mirror.net/archives/dialog/dialog-%{version}-%{dialogsubversion}.tgz
-Source1: https://invisible-mirror.net/archives/dialog/dialog-%{version}-%{dialogsubversion}.tgz.asc
+Source0:        https://invisible-mirror.net/archives/dialog/dialog-1.3-20250116.tgz
+Source1:        https://invisible-mirror.net/archives/dialog/dialog-1.3-20250116.tgz.asc
 Source2: https://invisible-island.net/public/dickey@invisible-island.net-rsa3072.asc
 BuildRequires: ncurses-devel gcc gettext findutils libtool gnupg2
 BuildRequires: make

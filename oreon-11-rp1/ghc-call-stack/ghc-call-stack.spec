@@ -17,7 +17,7 @@ Summary:        GHC call-stacks backward compatibility
 License:        MIT
 URL:            https://hackage.haskell.org/package/call-stack
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/call-stack-0.4.0/call-stack-0.4.0.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

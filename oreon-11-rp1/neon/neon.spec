@@ -13,7 +13,7 @@ Version: 0.37.0
 Release: %autorelease
 License: LGPL-2.0-or-later
 URL: https://notroj.github.io/neon/
-Source0: https://notroj.github.io/neon/neon-%{version}.tar.gz
+Source0:        https://notroj.github.io/neon/neon-0.37.0.tar.gz
 Patch0: neon-0.34.0-multilib.patch
 Patch1: neon-0.37.0-bigend.patch
 BuildRequires: expat-devel, openssl-devel, zlib-devel, krb5-devel

@@ -22,7 +22,7 @@ This package provides a free Kannada truetype/opentype font.
 
 BuildRequires: make
 BuildRequires: fontforge
-Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
+Source0:        https://releases.pagure.org/lohit/lohit-kannada-2.5.4.tar.gz
 Source10:       66-%{fontpkgname}.conf
 
 %fontpkg

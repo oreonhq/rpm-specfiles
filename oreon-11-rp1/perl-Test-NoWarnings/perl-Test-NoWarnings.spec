@@ -13,7 +13,7 @@ Release:        12%{?dist}
 Summary:        Make sure you didn't emit any warnings while testing
 License:        LGPL-2.1-or-later
 URL:            https://metacpan.org/release/Test-NoWarnings
-Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/Test-NoWarnings-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/Test-NoWarnings-1.06.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

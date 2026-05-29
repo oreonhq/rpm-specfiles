@@ -40,9 +40,9 @@ URL:            https://jakarta.apache.org/oro/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://archive.apache.org/dist/jakarta/oro/%{name}-%{version}.tar.gz
+Source0:        http://archive.apache.org/dist/jakarta/oro/jakarta-oro-2.0.8.tar.gz
 Source1:        MANIFEST.MF
-Source2:        http://repo1.maven.org/maven2/%{base_name}/%{base_name}/%{version}/%{base_name}-%{version}.pom
+Source2:        http://repo1.maven.org/maven2/oro/oro/2.0.8/oro-2.0.8.pom
 
 Patch:          %{name}-build-xml.patch
 
@@ -62,7 +62,7 @@ libraries from ORO, Inc. (www.oroinc.com).
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;
 # remove all CVS files

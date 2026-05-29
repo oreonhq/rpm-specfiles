@@ -10,7 +10,7 @@ Release:        521%{?dist}
 Summary:        Check a remote host for reachability
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-Ping/
-Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Net-Ping-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Net-Ping-2.75.tar.gz
 # Unbundled from perl 5.37.11
 Patch0:         Net-Ping-2.75-Upgrade-to-2.76.patch
 BuildArch:      noarch

@@ -15,7 +15,7 @@ Version: 1.2.41
 Release: 4%{?dist}%{?extra_release}
 Epoch: 1
 License: MIT
-Source0: https://github.com/lsh123/xmlsec/releases/download/%{version}/xmlsec1-%{version}.tar.gz
+Source0:        https://github.com/lsh123/xmlsec/releases/download/1.2.41/xmlsec1-1.2.41.tar.gz
 URL: http://www.aleksey.com/xmlsec/
 
 Patch0: 0001-Conditional-include-for-openssl-engines.patch

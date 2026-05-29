@@ -11,7 +11,7 @@ Release:        4%{?dist}
 License:        CC-PDDC AND Apache-2.0 AND LGPL-2.0-or-later AND CC0-1.0 AND BSD-3-Clause AND GPL-2.0-or-later AND FSFAP
 Summary:        Vakzination manages your health certificates like vaccination, test, and recovery certificates.
 Url:            https://invent.kde.org/plasma-mobile/vakzination
-Source:         https://invent.kde.org/pim/%{name}/-/archive/%{commit0}/%{name}-%{commit0}.tar.gz
+Source0:        https://invent.kde.org/plasma-mobile/vakzination/-/archive/v23.01.0^git/vakzination-v23.01.0^git.tar.gz#/vakzination-23.01.0^git.tar.gz
 
 ExclusiveArch:  %{java_arches}
 
@@ -39,7 +39,7 @@ BuildRequires: cmake(Qt6Svg)
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -n %{name}-%{commit0}
+%autosetup -p1 -n vakzination-v23.01.0^git
 
 %build
 %cmake_kf6

@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           yelp-xsl
 Version:        49.0
@@ -9,7 +9,7 @@ Summary:        XSL stylesheets for the yelp help browser
 
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later AND MIT AND BSD-3-Clause
 URL:            https://download.gnome.org/sources/yelp-xsl
-Source0:        https://download.gnome.org/sources/%{name}/42/%{name}-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/yelp-xsl/49/yelp-xsl-%{tarball_version}.tar.xz
 BuildArch:      noarch
 
 BuildRequires:  meson

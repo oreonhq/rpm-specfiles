@@ -3,7 +3,7 @@
 %global glib2_version 2.44
 %global gtk3_version 3.20
 
-%global major_minor_version %%(echo %%{version} | cut -d "." -f 1-2)
+%global major_minor_version %(echo %{version} | cut -d "." -f 1-2)
 
 Name:           gspell
 Version:        1.14.3
@@ -12,8 +12,7 @@ Summary:        Spell-checking library for GTK+
 
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/gspell
-Source0:        https://download.gnome.org/sources/%{name}/%{major_minor_version}/%{name}-%{version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gspell/%{major_minor_version}/gspell-%{version}.tar.xz
 BuildRequires:  gettext
 BuildRequires:  gobject-introspection-devel
 BuildRequires:  gtk-doc

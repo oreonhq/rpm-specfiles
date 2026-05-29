@@ -44,7 +44,7 @@ Version:       %{upstream_version}%{?upstream_prever:~%{upstream_prever}}
 Release:       2%{?dist}
 License:       PHP-3.01
 URL:           https://pecl.php.net/package/redis
-Source0:       https://pecl.php.net/get/%{sources}.tgz
+Source0:        https://pecl.php.net/get/redis-6.3.0%{?upstream_prever}.tgz
 
 ExcludeArch:   %{ix86}
 

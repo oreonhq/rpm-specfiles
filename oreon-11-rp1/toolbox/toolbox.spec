@@ -49,7 +49,7 @@ Summary:       Tool for interactive command line environments on Linux
 
 License:       Apache-2.0
 URL:           https://containertoolbx.org/
-Source0:       https://github.com/containers/%{name}/releases/download/%{version}/%{name}-%{version}-vendored.tar.xz
+Source0:        https://github.com/containers/toolbox/releases/download/0.3/toolbox-0.3-vendored.tar.xz
 
 # RHEL specific
 Source1:       %{name}.conf

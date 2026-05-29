@@ -16,7 +16,7 @@ Source0:        https://www.x.org/pub/individual/lib/libXres-1.2.2.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
-Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/libXres-1.2.2.tar.xz
 %endif
 # Fixes a bug which causes metacity 3.38.0+ to crash on startup:
 # https://bugzilla.redhat.com/show_bug.cgi?id=1888993

@@ -17,7 +17,7 @@ Summary:        Automatically discover and run Hspec tests
 License:        MIT
 URL:            https://hackage.haskell.org/package/hspec-discover
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/hspec-discover-2.11.16/hspec-discover-2.11.16.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

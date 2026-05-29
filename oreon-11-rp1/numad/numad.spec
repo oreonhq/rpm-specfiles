@@ -7,11 +7,8 @@ Summary: NUMA user daemon
 
 License: LGPL-2.1-only
 URL: https://pagure.io/numad
-# The source for this package was pulled from upstream's vcs.  Use the
-# following commands to generate the tarball:
-#   git clone https://pagure.io/numad.git numad-0.5git
-#   tar --exclude-vcs -cJf numad-0.5git.tar.xz numad-0.5git/
-Source0: %{name}-%{version}git.tar.xz
+%global numad_commit ff1507f
+Source0:        https://pagure.io/numad/archive/ff1507f/numad-ff1507f.tar.gz#/numad-0.5git.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make
@@ -24,7 +21,7 @@ and memory to minimize memory latency and thus provide optimum performance.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -n %{name}-%{version}git
+%autosetup -n numad-%{numad_commit}
 
 %build
 %make_build CFLAGS="$CFLAGS"

@@ -10,7 +10,7 @@ License:        APSL-2.0
 URL:            http://gentoo-wiki.com/HOWTO_hfsplus
 
 # Upstream mirror is dead; Debian's orig tarball is the same diskdev_cmds tree.
-Source0: http://deb.debian.org/debian/pool/non-free/h/hfsprogs/hfsprogs_%{version}.orig.tar.gz
+Source0:        http://deb.debian.org/debian/pool/non-free/h/hfsprogs/hfsprogs_540.1.linux3.orig.tar.gz
 Patch0: hfsplus-tools-no-blocks.patch
 Patch1: hfsplus-tools-learn-to-stdarg.patch
 Patch2: hfsplus-tools-sysctl.patch

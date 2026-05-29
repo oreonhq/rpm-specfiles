@@ -6,7 +6,7 @@ Version: 5.0
 Release: 11%{?dist}
 License: Unlicense
 URL: https://github.com/vapier/%{name}
-Source: https://github.com/vapier/%{name}/archive/refs/tags/v%{version}.tar.gz
+Source:        https://github.com/vapier/ncompress/archive/refs/tags/v5.0.tar.gz
 
 # allow to build ncompress
 # ~> downstream

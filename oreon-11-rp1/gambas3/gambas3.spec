@@ -35,7 +35,7 @@ Version:	3.21.6
 Release:	1%{?dist}
 License:	GPL-1.0-or-later
 URL:		http://gambas.sourceforge.net/
-Source0:	https://gitlab.com/gambas/gambas/-/archive/%{version}/gambas-%{version}.tar.bz2
+Source0:        https://gitlab.com/gambas/gambas/-/archive/3.21.6/gambas-3.21.6.tar.bz2
 Source1:	%{name}.desktop
 BuildRequires:	gcc, gcc-c++
 BuildRequires:	automake, autoconf, SDL-devel, SDL_mixer-devel

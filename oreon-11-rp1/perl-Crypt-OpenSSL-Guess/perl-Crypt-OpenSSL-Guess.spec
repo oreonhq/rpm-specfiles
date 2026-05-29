@@ -6,7 +6,7 @@ Release:        11%{?dist}
 Summary:        Guess OpenSSL include path
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-OpenSSL-Guess/
-Source0:        https://cpan.metacpan.org/authors/id/A/AK/AKIYM/Crypt-OpenSSL-Guess-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AK/AKIYM/Crypt-OpenSSL-Guess-0.15.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

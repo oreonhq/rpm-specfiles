@@ -9,7 +9,7 @@ Summary:        Plug-ins implementation convenience library
 
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/Libpeas
-Source0:        https://download.gnome.org/sources/%{name}/2.2/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/libpeas/2.2/libpeas-2.2.1.tar.xz
 
 Patch0:         libpeas-fix-py-wrapper-refcount-test.patch
 

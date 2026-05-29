@@ -38,7 +38,7 @@ License:        %{shrink:
 }
 
 URL:            https://gitlab.com/kraxel/virt-firmware-rs
-Source:         https://gitlab.com/kraxel/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source:        https://gitlab.com/kraxel/virt-firmware-rs/-/archive/v26.4/virt-firmware-rs-v26.4.tar.gz
 
 Patch1:		downgrade-dialoguer.patch
 

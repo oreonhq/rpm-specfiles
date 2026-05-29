@@ -15,7 +15,7 @@ Summary:        Compatibility shim exposing the new types from newer transformer
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/transformers-compat
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/transformers-compat-0.7.2/transformers-compat-0.7.2.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

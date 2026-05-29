@@ -7,7 +7,7 @@ Summary:        Servicelog Tools
 
 License:        GPL-2.0-only
 URL:            https://github.com/power-ras/servicelog
-Source0:        https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/power-ras/servicelog/archive/v1.1.16/servicelog-1.1.16.tar.gz
 
 BuildRequires: make
 BuildRequires:  libservicelog-devel >= 1.1.9-2

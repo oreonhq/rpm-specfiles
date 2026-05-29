@@ -8,7 +8,7 @@ Release:        13%{?dist}
 Summary:        Use the Freedesktop.org base directory specification
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-BaseDir
-Source0:        https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/File-BaseDir-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/File-BaseDir-0.09.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

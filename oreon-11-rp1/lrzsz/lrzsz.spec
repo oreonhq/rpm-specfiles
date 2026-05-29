@@ -5,7 +5,7 @@ Name: lrzsz
 Version: 0.12.20
 Release: %autorelease
 License: GPL-2.0-or-later AND GPL-2.0-only
-Source: http://www.ohse.de/uwe/releases/%{name}-%{version}.tar.gz
+Source:        http://www.ohse.de/uwe/releases/lrzsz-0.12.20.tar.gz
 Patch1: lrzsz-0.12.20-glibc21.patch
 Patch2: lrzsz-0.12.20.patch
 Patch3: lrzsz-0.12.20-man.patch

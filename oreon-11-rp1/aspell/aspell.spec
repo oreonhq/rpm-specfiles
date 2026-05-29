@@ -13,7 +13,7 @@ Epoch: 12
 # BSD     .. myspell/munch.c
 License: LGPL-2.0-or-later AND LGPL-2.1-only AND GPL-2.0-or-later AND BSD-2-Clause
 URL: http://aspell.net/
-Source: https://ftp.gnu.org/gnu/aspell/aspell-%{version}.tar.gz
+Source:        https://ftp.gnu.org/gnu/aspell/aspell-0.60.8.1.tar.gz
 
 Patch0: aspell-0.60.7-fileconflict.patch
 Patch1: aspell-0.60.7-pspell_conf.patch

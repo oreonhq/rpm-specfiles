@@ -17,8 +17,8 @@ Summary:        Catchy combinators for HUnit
 License:        MIT
 URL:            https://hackage.haskell.org/package/hspec-expectations
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/hspec-expectations-0.8.4/hspec-expectations-0.8.4.tar.gz
+Source1:        https://hackage.haskell.org/package/hspec-expectations-0.8.4/hspec-expectations.cabal#/hspec-expectations-0.8.4.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

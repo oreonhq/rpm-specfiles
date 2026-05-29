@@ -18,7 +18,7 @@ License:    MIT
 %if 0%{?gitdate}
 Source0:        https://www.x.org/pub/individual/driver/xf86-input-libinput-1.5.0.tar.xz
 %else
-Source0:    https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/driver/xf86-input-libinput-1.5.0.tar.xz
 %endif
 Source1:    71-libinput-overrides-wacom.conf
 

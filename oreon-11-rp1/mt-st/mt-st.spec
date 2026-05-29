@@ -6,7 +6,7 @@ Version: 1.8
 Release: 3%{?dist}
 License: GPL-1.0-or-later
 URL: https://github.com/iustin/mt-st
-Source0: https://github.com/iustin/mt-st/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/iustin/mt-st/releases/download/v1.8/mt-st-1.8.tar.gz
 Source1: stinit.service
 BuildRequires: gcc
 BuildRequires: make

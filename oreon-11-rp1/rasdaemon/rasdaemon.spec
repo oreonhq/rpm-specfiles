@@ -8,7 +8,7 @@ Group:			Applications/System
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:		GPL-2.0-only
 URL:			http://git.infradead.org/users/mchehab/rasdaemon.git
-Source0:		http://www.infradead.org/~mchehab/rasdaemon/%{name}-%{version}.tar.bz2
+Source0:        http://www.infradead.org/~mchehab/rasdaemon/rasdaemon-0.8.0.tar.bz2
 
 ExcludeArch:		s390 s390x
 BuildRequires:		make

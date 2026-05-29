@@ -41,7 +41,7 @@ License: BSD-3-Clause AND MIT AND CC-PDDC AND (BSD-3-Clause OR Apache-2.0)
 # All other files
 
 URL: http://www.openucx.org
-Source: https://github.com/openucx/%{name}/releases/download/v%{version}/ucx-%{version}.tar.gz
+Source:        https://github.com/openucx/ucx/releases/download/v1.19.0/ucx-1.19.0.tar.gz
 Patch: Avoid-build-failure.patch
 
 BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)

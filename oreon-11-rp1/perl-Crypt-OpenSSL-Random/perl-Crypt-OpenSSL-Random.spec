@@ -6,7 +6,7 @@ Release:        6%{?dist}
 Summary:        OpenSSL/LibreSSL pseudo-random number generator access
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Crypt-OpenSSL-Random
-Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Crypt-OpenSSL-Random-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Crypt-OpenSSL-Random-0.17.tar.gz
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc

@@ -16,7 +16,7 @@ Release:        9%{?dist}
 Summary:        Read multiple hunks of data out of your DATA section
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-Section
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Data-Section-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Data-Section-0.200008.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

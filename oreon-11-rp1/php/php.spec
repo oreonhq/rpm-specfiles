@@ -98,7 +98,7 @@ Release: 1%{?dist}
 License: PHP-3.01 AND Zend-2.0 AND BSD-2-Clause AND MIT AND Apache-1.0 AND NCSA AND BSL-1.0
 URL: http://www.php.net/
 
-Source0: https://www.php.net/distributions/php-%{upver}%{?rcver}.tar.xz
+Source0:        https://www.php.net/distributions/php-8.5.4%{?rcver}.tar.xz
 Source1: php.conf
 Source2: php.ini
 Source3: macros.php
@@ -113,7 +113,7 @@ Source14: nginx-php.conf
 Source15: php.tmpfiles
 # See https://secure.php.net/gpg-keys.php
 Source20: https://www.php.net/distributions/php-keyring.gpg
-Source21: https://www.php.net/distributions/php-%{upver}%{?rcver}.tar.xz.asc
+Source21:        https://www.php.net/distributions/php-8.5.4%{?rcver}.tar.xz.asc
 # Configuration files for some extensions
 Source50: 10-opcache.ini
 Source51: opcache-default.blacklist

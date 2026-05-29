@@ -15,7 +15,7 @@ Version: 6.%{open_iscsi_version}.%{open_iscsi_build}
 Release: 0.git%{shortcommit0}%{?dist}.3
 License: GPL-2.0-or-later
 URL: https://github.com/open-iscsi/open-iscsi
-Source0: https://github.com/open-iscsi/open-iscsi/archive/%{commit0}.tar.gz#/open-iscsi-%{shortcommit0}.tar.gz
+Source0:        https://github.com/open-iscsi/open-iscsi/archive/4b3e853ab468a95d8a035efa8fc4298a6c6318a3.tar.gz#/open-iscsi-%(c=4b3e853ab468a95d8a035efa8fc4298a6c6318a3;.tar.gz
 Source4: 04-iscsi
 Source5: iscsi-tmpfiles.conf
 

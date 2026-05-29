@@ -22,7 +22,7 @@ This package provides a free Odia truetype/opentype font.
 
 BuildRequires: make
 BuildRequires: fontforge
-Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
+Source0:        https://releases.pagure.org/lohit/lohit-odia-2.91.2.tar.gz
 Source10:       66-%{fontpkgname}.conf
 
 %fontpkg

@@ -9,7 +9,7 @@ Release: 50%{?dist}
 License: GPL-2.0-only AND GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2
 URL: http://www.xiph.org/paranoia/index.html
 
-Source: http://downloads.xiph.org/releases/cdparanoia/cdparanoia-III-%{version}.src.tgz
+Source:        http://downloads.xiph.org/releases/cdparanoia/cdparanoia-III-10.2.src.tgz
 # Patch from upstream to fix cdda_interface.h C++ incompatibility ("private")
 # https://trac.xiph.org/changeset/15338
 # https://bugzilla.redhat.com/show_bug.cgi?id=463009

@@ -7,7 +7,7 @@ Name:           freeglut
 Version:        3.8.0
 Release:        2%{?dist}
 URL:            http://freeglut.sourceforge.net
-Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/freeglut/freeglut-3.8.0.tar.gz
 # For the manpages
 Source1:        https://downloads.sourceforge.net/openglut/openglut-0.6.3-doc.tar.gz
 Patch0:         common.patch

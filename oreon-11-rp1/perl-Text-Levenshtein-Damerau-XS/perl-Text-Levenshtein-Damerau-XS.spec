@@ -6,7 +6,7 @@ Release:        31%{?dist}
 Summary:        XS Damerau Levenshtein edit distance
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-Levenshtein-Damerau-XS
-Source0:        https://cpan.metacpan.org/authors/id/U/UG/UGEXE/Text-Levenshtein-Damerau-XS-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/U/UG/UGEXE/Text-Levenshtein-Damerau-XS-3.2.tar.gz
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make

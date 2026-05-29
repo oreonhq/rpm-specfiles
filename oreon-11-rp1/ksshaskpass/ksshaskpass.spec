@@ -12,8 +12,8 @@ Summary: A ssh-add helper that uses kwallet and kpassworddialog
 License: GPL-2.0-only
 URL:     https://cgit.kde.org/%{name}.git
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/ksshaskpass-6.6.3.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/ksshaskpass-6.6.3.tar.xz.sig
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gettext

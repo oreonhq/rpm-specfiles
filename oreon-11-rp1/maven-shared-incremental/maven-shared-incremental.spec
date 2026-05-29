@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/shared/maven-shared-incremental/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        http://repo1.maven.org/maven2/org/apache/maven/shared/maven-shared-incremental/1.1/maven-shared-incremental-1.1-source-release.zip
 
 # From upstream commit 1b5c81a7
 Patch:          0001-MSHARED-1374-Upgrade-parent-pom-to-41.patch
@@ -36,7 +36,7 @@ incremental build functionality in maven plugins.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 %pom_remove_dep :plexus-component-api
 
 %build

@@ -20,7 +20,7 @@ Source0:        http://www.freedesktop.org/software/evemu/evemu-2.7.0.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        http://www.freedesktop.org/software/%{name}/%{name}-%{version}.tar.xz
+Source0:        http://www.freedesktop.org/software/evemu/evemu-2.7.0.tar.xz
 %endif
 
 BuildRequires:  automake libtool gcc gcc-c++ make

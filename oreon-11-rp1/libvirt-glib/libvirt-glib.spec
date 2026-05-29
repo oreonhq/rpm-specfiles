@@ -13,7 +13,7 @@ Release: 8%{?dist}
 Summary: libvirt glib integration for events
 License: LGPL-2.1-or-later
 URL: https://libvirt.org/
-Source0: https://libvirt.org/sources/glib/%{name}-%{version}.tar.xz
+Source0:        https://libvirt.org/sources/glib/libvirt-glib-5.0.0.tar.xz
 
 BuildRequires: meson
 BuildRequires: glib2-devel

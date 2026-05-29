@@ -7,7 +7,7 @@ Summary:        Filtering proxy for D-Bus connections
 
 License:        LGPL-2.1-or-later
 URL:            https://github.com/flatpak/xdg-dbus-proxy/
-Source0:        https://github.com/flatpak/xdg-dbus-proxy/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/flatpak/xdg-dbus-proxy/releases/download/0.1.6/xdg-dbus-proxy-0.1.6.tar.xz
 
 BuildRequires:  meson
 BuildRequires:  docbook-style-xsl

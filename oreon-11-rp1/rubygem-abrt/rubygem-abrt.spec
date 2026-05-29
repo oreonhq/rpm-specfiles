@@ -9,7 +9,7 @@ Release: 2%{?dist}
 Summary: ABRT support for Ruby
 License: MIT
 URL: http://github.com/voxik/abrt-ruby
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/abrt-0.5.0.gem
 # git clone https://github.com/voxik/abrt-ruby.git && cd abrt-ruby
 # git archive -v -o abrt-0.5.0-spec.tar.gz v0.5.0 spec/
 Source1: %{gem_name}-%{version}-spec.tar.gz

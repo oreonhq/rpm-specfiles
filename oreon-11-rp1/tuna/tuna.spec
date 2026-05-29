@@ -7,7 +7,7 @@ Version: 0.20
 Release: 3%{?dist}
 License: GPL-2.0-only AND LGPL-2.1-only
 Summary: Application tuning GUI & command line utility
-Source: https://www.kernel.org/pub/software/utils/%{name}/%{name}-%{version}.tar.xz
+Source:        https://www.kernel.org/pub/software/utils/tuna/tuna-0.20.tar.xz
 URL: https://rt.wiki.kernel.org/index.php/Tuna
 BuildArch: noarch
 BuildRequires: python3-devel, gettext
@@ -46,7 +46,7 @@ priority is changed, be it using tuna or plain chrt & taskset.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -v -p1
+%autosetup -p1
 # Delete setup.py so pyproject.toml build doesn't use it
 rm -f setup.py
 # Prepare tuna script for installation (save to a separate location to avoid directory conflict)

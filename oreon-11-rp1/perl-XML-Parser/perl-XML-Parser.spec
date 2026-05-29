@@ -7,7 +7,7 @@ Summary:        Perl module for parsing XML documents
 
 License:        Artistic-2.0
 Url:            https://metacpan.org/release/XML-Parser
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-Parser-2.47.tar.gz
 
 # Build
 BuildRequires:  coreutils

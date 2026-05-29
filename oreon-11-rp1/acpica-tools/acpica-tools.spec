@@ -12,8 +12,8 @@ URL:            https://www.intel.com/content/www/us/en/developer/topic-technolo
 
 ExcludeArch:	i686 armv7hl s390x
 
-Source0:        https://github.com/acpica/acpica/releases/download/%{version}/acpica-unix2-%{version}.tar.gz
-Source1:        https://github.com/acpica/acpica/releases/download/%{version}/acpitests-unix-%{version}.tar.gz
+Source0:        https://github.com/acpica/acpica/releases/download/20251212/acpica-unix2-20251212.tar.gz
+Source1:        https://github.com/acpica/acpica/releases/download/20251212/acpitests-unix-20251212.tar.gz
 Source2:        README.Fedora
 Source3:        iasl.1
 Source4:        acpibin.1

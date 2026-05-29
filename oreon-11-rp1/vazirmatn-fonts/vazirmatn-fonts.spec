@@ -171,7 +171,7 @@ conf2vf(rpm.expand("%{fontconfs5}"), 11)
 This is the variable version of this font.
 }
 
-Source0:  https://github.com/rastikerdar/vazirmatn/releases/download/v%{version}/vazirmatn-v%{version}.zip
+Source0:        https://github.com/rastikerdar/vazirmatn/releases/download/v33.003/vazirmatn-v33.003.zip
 Source10: 55-%{fontpkgname0}.conf
 Source11: 55-%{fontpkgname1}.conf
 Source12: 62-%{fontpkgname2}.conf

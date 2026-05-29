@@ -17,13 +17,13 @@ BuildArch: noarch
 #old page - only part of it is included in sgml-common package.
 URL: https://www.w3.org/2003/entities/
 
-Source0: https://www.sourceware.org/pub/docbook-tools/new-trials/SOURCES/%{name}-%{version}.tgz
+Source0:        https://www.sourceware.org/pub/docbook-tools/new-trials/SOURCES/sgml-common-0.6.3.tgz
 # Following 4 from openjade/pubtext - same maintainer as in SGML-common, so up2date:
 Source1: xml.dcl
 Source2: xml.soc
 Source3: html.dcl
 Source4: html.soc
-Source5: http://www.w3.org/%{xmlxsdver}/xml.xsd
+Source5:        http://www.w3.org/2009/01/xml.xsd
 Source6: http://www.w3.org/TR/xmldsig-core/xmldsig-core-schema.xsd
 Source7: http://www.w3.org/2001/XMLSchema.dtd
 Source8: http://www.w3.org/2001/datatypes.dtd

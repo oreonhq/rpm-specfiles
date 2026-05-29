@@ -8,7 +8,7 @@ Release:        %autorelease
 Summary:        Salted Challenge Response Authentication Mechanism (SCRAM) - Java Implementation
 License:        BSD-2-Clause
 URL:            https://github.com/ongres/scram
-Source0:        https://github.com/ongres/scram/archive/%{upstream_version}/scram-%{upstream_version}.tar.gz
+Source0:        https://github.com/ongres/scram/archive/3.2/scram-3.2.tar.gz
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 

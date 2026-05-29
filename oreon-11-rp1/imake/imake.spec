@@ -11,7 +11,7 @@ Release: 6%{?dist}
 License: MIT-open-group AND HPND
 URL: http://www.x.org
 
-Source0: https://www.x.org/pub/individual/util/imake-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/util/imake-1.0.10.tar.xz
 Source1: https://www.x.org/pub/individual/util/makedepend-1.0.8.tar.xz
 Source2: https://www.x.org/pub/individual/util/gccmakedep-1.0.3.tar.bz2
 Source3: https://www.x.org/pub/individual/util/xorg-cf-files-1.0.8.tar.xz

@@ -14,8 +14,8 @@ Summary:        OpenCL (Open Computing Language) header files
 License:        Apache-2.0
 URL:            https://www.khronos.org/registry/cl/
 
-Source0:        https://github.com/KhronosGroup/OpenCL-Headers/archive/%{commit0}/OpenCL-Headers-%{shortcommit0}.tar.gz
-Source1:        https://github.com/KhronosGroup/OpenCL-CLHPP/archive/v%{cl_hpp_ver}/OpenCL-CLHPP-v%{cl_hpp_ver}.tar.gz
+Source0:        https://github.com/KhronosGroup/OpenCL-Headers/archive/8a97ebc88daa3495d6f57ec10bb515224400186f/OpenCL-Headers-%(c=8a97ebc88daa3495d6f57ec10bb515224400186f;.tar.gz
+Source1:        https://github.com/KhronosGroup/OpenCL-CLHPP/archive/v2025.07.22/OpenCL-CLHPP-v2025.07.22.tar.gz
 
 BuildArch:      noarch
 

@@ -75,7 +75,7 @@ Summary:        Icecast source streaming library
 # win32/Makefile.in:    FSFULLR
 License:        LGPL-2.0-or-later
 URL:            https://www.icecast.org/
-Source:         https://downloads.us.xiph.org/releases/libshout/libshout-%{version}.tar.gz
+Source:        https://downloads.us.xiph.org/releases/libshout/libshout-2.4.6.tar.gz
 # Fedora does not support ckport. Enable disabling it.
 # <https://gitlab.xiph.org/xiph/icecast-libshout/issues/2314>
 Patch0:         libshout-2.4.3-Allow-disabling-ckport-database-installation.patch

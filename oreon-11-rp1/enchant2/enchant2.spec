@@ -9,7 +9,7 @@ Summary:       An Enchanting Spell Checking Library
 
 License:       LGPL-2.0-or-later
 URL:           https://github.com/rrthomas/enchant
-Source0:       https://github.com/rrthomas/enchant/releases/download/v%{version}/enchant-%{version}.tar.gz
+Source0:        https://github.com/rrthomas/enchant/releases/download/v2.8.15/enchant-2.8.15.tar.gz
 
 %if !0%{?rhel}
 # Look for aspell using pkg-config, instead of AC_CHECK_LIB which adds -laspell

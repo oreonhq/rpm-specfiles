@@ -14,7 +14,7 @@ Release:        522%{?dist}
 Summary:        Look up Perl documentation in Pod format
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Perldoc
-Source0:        https://cpan.metacpan.org/authors/id/M/MA/MALLEN/Pod-Perldoc-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MA/MALLEN/Pod-Perldoc-3.28.tar.gz
 # Unbundled from perl 5.28.0-RC1
 Patch0:         Pod-Perldoc-3.28-Upgrade-to-3.2801.patch
 # 1/2 Fix searching for builtins in perlop POD, bug #1739463, CPAN RT#126015

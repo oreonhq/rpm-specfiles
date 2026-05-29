@@ -23,9 +23,9 @@ Version: 4.0.2
 Release: 3%{?dist}
 License: Apache-2.0
 URL: https://spamassassin.apache.org/
-Source0: https://www.apache.org/dist/%{name}/source/%{real_name}-%{version}.tar.bz2
+Source0:        https://www.apache.org/dist/spamassassin/source/Mail-SpamAssassin-4.0.2.tar.bz2
 #Source0: %%{real_name}-%%{version}-%%{prerev}.tar.bz2
-Source1: https://downloads.apache.org/%{name}/source/%{real_name}-rules-%{version}.r1928015.tgz
+Source1:        https://downloads.apache.org/spamassassin/source/Mail-SpamAssassin-rules-4.0.2.r1928015.tgz
 #Source1: %%{real_name}-rules-%%{version}.%%{prerev}.tgz
 Source2: redhat_local.cf
 Source3: spamassassin-default.rc
@@ -44,8 +44,8 @@ Source16: sa-update.service
 Source17: sa-update.timer
 
 # GPG Keys and source signatures
-Source100: https://www.apache.org/dist/%{name}/source/%{real_name}-%{version}.tar.bz2.asc
-Source101: https://www.apache.org/dist/%{name}/source/%{real_name}-rules-%{version}.r1928015.tgz.asc
+Source100:        https://www.apache.org/dist/spamassassin/source/Mail-SpamAssassin-4.0.2.tar.bz2.asc
+Source101:        https://www.apache.org/dist/spamassassin/source/Mail-SpamAssassin-rules-4.0.2.r1928015.tgz.asc
 Source102: https://www.apache.org/dist/spamassassin/KEYS
 
 # Patches 0-99 are RH specific

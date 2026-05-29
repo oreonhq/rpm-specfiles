@@ -15,7 +15,7 @@ Summary:        Lift control operations through monad transformers
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/monad-control
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/monad-control-1.0.3.1/monad-control-1.0.3.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

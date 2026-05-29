@@ -19,7 +19,7 @@ URL:            https://codehaus-plexus.github.io/plexus-utils/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-utils/archive/plexus-utils-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-utils/archive/plexus-utils-3.5.1.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

@@ -11,7 +11,7 @@ Summary:       MinGW Windows %{pkgname} library
 
 License:       BSD-3-Clause
 URL:           http://www.pcre.org/
-Source:        https://github.com/PhilipHazel/pcre2/releases/download/pcre2-%{version}/pcre2-%{version}.tar.bz2
+Source:        https://github.com/PhilipHazel/pcre2/releases/download/pcre2-10.46/pcre2-10.46.tar.bz2
 
 ## Patches taken from native package ##
 # Do no set RPATH if libdir is not /usr/lib

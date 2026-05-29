@@ -7,8 +7,7 @@ Release:        %autorelease
 Epoch:          1
 License:        MIT
 URL:            https://github.com/html5lib/html5lib-python
-Source:         %{pypi_source html5lib}
-
+Source:        https://files.pythonhosted.org/packages/source/h/html5lib/html5lib-1.1.tar.gz
 # Fix compatibility with pytest 6
 Patch:        https://github.com/html5lib/html5lib-python/pull/506.patch
 # Fix compatibility with pytest 7.4.0

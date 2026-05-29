@@ -21,8 +21,8 @@ Release:        1%{?dist}
 License:        LGPL-2.1-only AND MIT AND GPL-2.0-only AND BSD-3-Clause AND BSD-2-Clause
 Summary:        LTTng Userspace Tracer library
 URL:            https://lttng.org
-Source0:        https://lttng.org/files/lttng-ust/%{name}-%{version}.tar.bz2
-Source1:        https://lttng.org/files/lttng-ust/%{name}-%{version}.tar.bz2.asc
+Source0:        https://lttng.org/files/lttng-ust/lttng-ust-2.15.0.tar.bz2
+Source1:        https://lttng.org/files/lttng-ust/lttng-ust-2.15.0.tar.bz2.asc
 # gpg2 --export --export-options export-minimal 2A0B4ED915F2D3FA45F5B16217280A9781186ACF > gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Source2:        gpgkey-2A0B4ED915F2D3FA45F5B16217280A9781186ACF.gpg
 Patch0:         lttng-gen-tp-shebang.patch

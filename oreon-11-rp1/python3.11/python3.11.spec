@@ -528,7 +528,7 @@ Requires: tzdata
 # We avoid this problem by requiring at least the same version of expat that
 # was used during the build time.
 # Other subpackages (like -debug) also need this, but they all depend on -libs.
-%global expat_version %(LANG=C rpm -q --qf '%%{version}' expat.%{_target_cpu} | sed 's/.*not installed/0/')
+%global expat_version %(LANG=C rpm -q --qf '%{version}' expat.%{_target_cpu} | sed 's/.*not installed/0/')
 Requires: expat%{?_isa} >= %{expat_version}
 
 

@@ -17,7 +17,7 @@ Release:        11%{?dist}
 # The entire source code is GPLv2+ except some files in shared/ which are LGPLv2+
 License:        GPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/libnma/
-Source0:        https://download.gnome.org/sources/libnma/1.10/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/libnma/1.10/libnma-1.10.6.tar.xz
 
 Patch1:         0001-nm-applet-no-notifications.patch
 

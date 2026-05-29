@@ -4,8 +4,8 @@
 %global gtk4_version 4.5
 %global libadwaita_version 1.5
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           gnome-clocks
 Version:        50.0
@@ -16,8 +16,7 @@ Summary:        Clock application designed for GNOME 3
 # under CC-BY-SA-3.0.
 License:        GPL-2.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:            https://wiki.gnome.org/Apps/Clocks
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-clocks/%{major_version}/gnome-clocks-%{tarball_version}.tar.xz
 BuildRequires:  meson
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext

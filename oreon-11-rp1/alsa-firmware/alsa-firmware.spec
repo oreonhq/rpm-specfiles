@@ -12,7 +12,7 @@ Release:        17%{?dist}
 License:        GPL-1.0-or-later and BSD-3-Clause and GPL-2.0-or-later and GPL-2.0-only and LGPL-2.1-or-later
 URL:            https://www.alsa-project.org/
 # HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
-Source0:        https://www.alsa-project.org/files/pub/firmware/%{name}-%{version}.tar.bz2
+Source0:        https://www.alsa-project.org/files/pub/firmware/alsa-firmware-1.2.4.tar.bz2
 
 Requires:       alsa-tools-firmware >= 1.1.7
 Requires:       systemd

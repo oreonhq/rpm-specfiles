@@ -14,7 +14,7 @@ URL:            https://jakarta.ee/specifications/servlet/5.0/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/servlet/archive/%{version}-RELEASE/servlet-api-%{version}.tar.gz
+Source0:        https://github.com/jakartaee/servlet/archive/5.0.0-RELEASE/servlet-api-5.0.0.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -33,7 +33,7 @@ and responses.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove unnecessary dependency on parent POM
 %pom_remove_parent . api

@@ -8,7 +8,7 @@ Summary:        Efficient bit vector, set of integers and "big int" math library
 # Clarified by a private mail from the author:
 License:        ( GPL-2.0-or-later OR Artistic-1.0-Perl ) AND LGPL-2.0-or-later
 URL:            https://metacpan.org/release/Bit-Vector
-Source0:        https://cpan.metacpan.org/authors/id/S/ST/STBEY/Bit-Vector-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/ST/STBEY/Bit-Vector-7.4.tar.gz
 Patch0:         0001-Fix-bool-detection.patch
 BuildRequires:  coreutils
 BuildRequires:  findutils

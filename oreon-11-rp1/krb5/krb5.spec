@@ -6,7 +6,7 @@
 %define libsdocdir %{?_pkgdocdir:%(echo %{_pkgdocdir} | sed -e s,krb5,krb5-libs,g)}%{!?_pkgdocdir:%{_docdir}/%{name}-libs-%{version}}
 # Figure out where the default ccache lives and how we set it.
 %global configure_default_ccache_name 1
-%global configured_default_ccache_name KEYRING:persistent:%%{uid}
+%global configured_default_ccache_name KEYRING:persistent:%{uid}
 
 %global krb5_release %{autorelease}
 
@@ -38,8 +38,8 @@ Version: %{krb5_version}
 Release: %{krb5_release}
 
 # rharwood has trust path to signing key and verifies on check-in
-Source0: https://web.mit.edu/kerberos/dist/krb5/%{krb5_version_major_minor}/krb5-%{krb5_version}%{?krb5_pre_release}.tar.gz
-Source1: https://web.mit.edu/kerberos/dist/krb5/%{krb5_version_major_minor}/krb5-%{krb5_version}%{?krb5_pre_release}.tar.gz.asc
+Source0:        https://web.mit.edu/kerberos/dist/krb5/1.22/krb5-1.22.2%{?krb5_pre_release}.tar.gz
+Source1:        https://web.mit.edu/kerberos/dist/krb5/1.22/krb5-1.22.2%{?krb5_pre_release}.tar.gz.asc
 
 Source2: kprop.service
 Source3: kadmin.service

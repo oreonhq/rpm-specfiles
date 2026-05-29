@@ -15,7 +15,7 @@ Summary:        Foundation scrap box of array & string
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/basement
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/basement-0.0.16/basement-0.0.16.tar.gz
 # End cabal-rpm sources
 # https://github.com/haskell-foundation/foundation/issues/565
 Patch0:         https://patch-diff.githubusercontent.com/raw/haskell-foundation/foundation/pull/573.patch

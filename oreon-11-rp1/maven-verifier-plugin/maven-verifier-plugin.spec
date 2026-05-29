@@ -8,7 +8,7 @@ Summary:        Maven Verifier Plugin
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            http://maven.apache.org/plugins/maven-verifier-plugin/
-Source0:        http://www.apache.org/dist/maven/plugins/%{name}-%{version}-source-release.zip
+Source0:        http://www.apache.org/dist/maven/plugins/maven-verifier-plugin-1.1-source-release.zip
 
 BuildArch: noarch
 ExclusiveArch:  %{java_arches} noarch

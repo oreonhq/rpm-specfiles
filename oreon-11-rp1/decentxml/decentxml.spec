@@ -22,7 +22,7 @@ ExclusiveArch:  %{java_arches} noarch
 # folder structure due to how Bitbucket makes zip archives:
 #
 # decentxml-1.4 -> digulla-decentxml-572a0baa91d1
-Source0:          https://bitbucket.org/digulla/%{name}/get/r%{version}.zip
+Source0:        https://bitbucket.org/digulla/decentxml/get/r1.4.zip
 
 # For running w3c conformance test suite.
 Source1:          http://www.w3.org/XML/Test/xmlts20031210.zip

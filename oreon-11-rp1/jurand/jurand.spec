@@ -7,7 +7,7 @@ Summary:        A tool for manipulating Java symbols
 License:        Apache-2.0
 URL:            https://github.com/fedora-java/jurand
 
-Source0:        https://github.com/fedora-java/jurand/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/fedora-java/jurand/archive/refs/tags/1.3.5.tar.gz#/jurand-1.3.5.tar.gz
 
 BuildRequires:  diffutils
 BuildRequires:  gcc-c++
@@ -21,7 +21,7 @@ rather than applying simple regular expressions on the source code.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %build
 %{make_build} test-compile manpages

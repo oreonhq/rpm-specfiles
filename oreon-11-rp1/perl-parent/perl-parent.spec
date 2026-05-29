@@ -7,7 +7,7 @@ Release:	521%{?dist}
 Summary:	Establish an ISA relationship with base classes at compile time
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/parent
-Source0:	https://cpan.metacpan.org/authors/id/C/CO/CORION/parent-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CO/CORION/parent-0.244.tar.gz
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

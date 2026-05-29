@@ -7,7 +7,7 @@ Release:        521%{?dist}
 Summary:        Simplified Perl source filtering
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Filter-Simple
-Source0:        https://cpan.metacpan.org/authors/id/S/SM/SMUELLER/Filter-Simple-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SM/SMUELLER/Filter-Simple-0.94.tar.gz
 BuildArch:      noarch
 # Unbundled from perl 5.28.0-RC1
 Patch0:         Filter-Simple-0.94-Upgrade-to-0.95.patch

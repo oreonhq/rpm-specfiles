@@ -8,7 +8,7 @@ Release:        521%{?dist}
 Summary:        Perl extension for sharing data structures between threads
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/threads-shared
-Source0:        https://cpan.metacpan.org/authors/id/J/JD/JDHEDDEN/threads-shared-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JD/JDHEDDEN/threads-shared-1.59.tar.gz
 # Unbundled from perl 5.29.10
 Patch0:         threads-shared-1.59-Upgrade-to-1.60.patch
 # Fix a memory leak when assigning a shared reference to a shared string

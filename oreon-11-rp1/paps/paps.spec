@@ -7,10 +7,10 @@ Release:        15%{?dist}
 
 License:        LGPL-2.0-or-later
 URL:            https://github.com/dov/paps
-Source0:        https://github.com/dov/paps/archive/v%{name}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/dov/paps/archive/vpaps/paps-0.8.0.tar.gz
 Source1:        paps.convs
 Source2:        29-paps.conf
-Source3:        http://downloads.sourceforge.net/%{name}/%{name}-0.6.8.tar.gz
+Source3:        http://downloads.sourceforge.net/paps/paps-0.6.8.tar.gz
 BuildRequires:  make
 BuildRequires:  pango-devel automake autoconf libtool doxygen cups-devel intltool
 BuildRequires:  fmt-devel gcc-c++

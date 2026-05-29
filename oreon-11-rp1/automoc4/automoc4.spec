@@ -14,7 +14,7 @@ URL:     https://invent.kde.org/developer-tools/automoc
 
 # GitHub tag tarball unpacks to directory automoc-0.9.88 (matches setup -n automoc plus hyphen plus version digits).
 # Fragment after hash sets the saved tarball basename for spectool (automoc plus version tarball name).
-Source0: https://github.com/KDE/automoc/archive/refs/tags/v%{version}.tar.gz#/automoc-%{version}.tar.gz
+Source0:        https://github.com/KDE/automoc/archive/refs/tags/v0.9.88.tar.gz#/automoc-0.9.88.tar.gz
 
 BuildRequires: cmake
 BuildRequires: gcc-c++

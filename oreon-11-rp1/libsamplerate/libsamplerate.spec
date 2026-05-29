@@ -6,7 +6,7 @@ Version:	0.2.2
 Release:	12%{?dist}
 License:	BSD-2-Clause
 URL:		https://libsndfile.github.io/libsamplerate/
-Source0:	https://github.com/libsndfile/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/libsndfile/libsamplerate/releases/download/0.2.2/libsamplerate-0.2.2.tar.xz
 BuildRequires:	alsa-lib-devel
 BuildRequires:	fftw-devel >= 0.15.0
 BuildRequires:	gcc

@@ -13,7 +13,7 @@ License:        BSD-3-Clause AND MIT-CMU AND MIT
 URL:            https://github.com/lxml/lxml
 
 # drop isoschematron rng (bad license), see fedora-license-data #154
-Source0:        https://files.pythonhosted.org/packages/source/l/lxml/lxml-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/l/lxml/lxml-6.0.2.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  libxml2-devel

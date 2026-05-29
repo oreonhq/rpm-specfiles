@@ -32,8 +32,8 @@ Summary:        A low-level cryptographic library
 
 License:        LGPL-3.0-or-later OR GPL-2.0-or-later
 URL:            http://www.lysator.liu.se/~nisse/nettle/
-Source0:	https://ftpmirror.gnu.org/nettle/%{name}-%{version}.tar.gz
-Source1:	https://ftpmirror.gnu.org/nettle/%{name}-%{version}.tar.gz.sig
+Source0:        https://ftpmirror.gnu.org/nettle/nettle-3.10.1.tar.gz
+Source1:        https://ftpmirror.gnu.org/nettle/nettle-3.10.1.tar.gz.sig
 # Same keyring blob and SHA512 as Fedora nettle sources (not shipped on ftp.gnu.org).
 Source2:	https://src.fedoraproject.org/repo/pkgs/rpms/nettle/nettle-release-keyring.gpg/sha512/0e59447eb74017439c8b5b5b05173c0ffd710705d2a9c1f74833b7034fad1608fa1bdd2c308e6c42214553cd648606b6a07044ea39677b1b3452cb4d07bf889b/nettle-release-keyring.gpg
 %if 0%{?bootstrap}

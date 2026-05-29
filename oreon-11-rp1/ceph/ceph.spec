@@ -197,7 +197,7 @@ License:	LGPL-2.1-or-later AND LGPL-3.0-only AND CC-BY-SA-3.0 AND GPL-2.0-only A
 Group:		System/Filesystems
 %endif
 URL:		http://ceph.com/
-Source:		https://download.ceph.com/tarballs/ceph-%{version}.tar.gz
+Source:        https://download.ceph.com/tarballs/ceph-20.2.1.tar.gz
 #Source0:	https://1.chacra.ceph.com/r/ceph/tentacle/
 Patch:		0001-src-common-crc32c_intel_fast.patch
 Patch:		0003-src-common-bitstr.h.patch

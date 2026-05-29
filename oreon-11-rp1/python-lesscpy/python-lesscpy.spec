@@ -13,7 +13,7 @@ Summary:        Lesscss compiler
 
 License:        MIT
 URL:            https://github.com/robotis/lesscpy
-Source0:        https://pypi.python.org/packages/source/l/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
+Source0:        https://pypi.python.org/packages/source/l/lesscpy/lesscpy-0.14.0.tar.gz
 Patch1:         0001-Remove-tabfile-support-as-PLY-removed-it-as-well.patch
 
 BuildArch:      noarch

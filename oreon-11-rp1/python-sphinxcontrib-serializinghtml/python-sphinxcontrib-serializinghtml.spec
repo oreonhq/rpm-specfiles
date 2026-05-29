@@ -8,7 +8,7 @@ Release:        %autorelease
 Summary:        Sphinx extension for serialized HTML
 License:        BSD-2-Clause
 URL:            http://sphinx-doc.org/
-Source:         %{pypi_source sphinxcontrib_serializinghtml}
+Source:        https://files.pythonhosted.org/packages/source/s/sphinxcontrib-serializinghtml/sphinxcontrib-serializinghtml-2.0.0.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  gettext

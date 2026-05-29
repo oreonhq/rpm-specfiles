@@ -6,7 +6,7 @@ Release:	42%{?dist}
 Summary:	General purpose dynamic array
 License:	LGPL-2.0-or-later
 URL:		http://sourceforge.net/projects/judy/
-Source0:	http://downloads.sf.net/judy/Judy-%{version}.tar.gz
+Source0:        http://downloads.sf.net/judy/Judy-1.0.5.tar.gz
 Source1:	README.Fedora
 Patch0:		Judy-1.0.4-test-shared.patch
 Patch1:		Judy-1.0.4-fix-Judy1-mans.patch

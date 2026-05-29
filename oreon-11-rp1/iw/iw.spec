@@ -8,7 +8,7 @@ Summary:        A nl80211 based wireless configuration tool
 # part of sha256.c is public domain
 License:        ISC AND LicenseRef-Public-Domain
 URL:            https://wireless.docs.kernel.org/en/latest/en/users/documentation/iw.html
-Source0:        http://www.kernel.org/pub/software/network/iw/iw-%{version}.tar.xz
+Source0:        http://www.kernel.org/pub/software/network/iw/iw-6.17.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  kernel-headers

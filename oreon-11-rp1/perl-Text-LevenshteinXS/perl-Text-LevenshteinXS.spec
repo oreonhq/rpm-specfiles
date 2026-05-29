@@ -7,7 +7,7 @@ Summary:        XS implementation of the Levenshtein edit distance
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-LevenshteinXS
-Source0:        https://cpan.metacpan.org/authors/id/J/JG/JGOLDBERG/Text-LevenshteinXS-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JG/JGOLDBERG/Text-LevenshteinXS-0.03.tar.gz
 BuildRequires:  findutils
 BuildRequires:  gcc
 BuildRequires:  make

@@ -7,7 +7,7 @@ Summary:	The Oil Run-time Compiler
 
 License:	BSD-2-Clause AND BSD-3-Clause
 URL:		http://cgit.freedesktop.org/gstreamer/orc/
-Source0:	http://gstreamer.freedesktop.org/src/orc/%{name}-%{version}.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/orc/orc-0.4.41.tar.xz
 
 BuildRequires:	meson >= 0.47.0
 BuildRequires:  gcc

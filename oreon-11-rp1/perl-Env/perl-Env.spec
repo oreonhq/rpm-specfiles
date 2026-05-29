@@ -7,7 +7,7 @@ Release:        521%{?dist}
 Summary:        Perl module that imports environment variables as scalars or arrays
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Env
-Source0:        https://cpan.metacpan.org/authors/id/F/FL/FLORA/Env-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/F/FL/FLORA/Env-1.04.tar.gz
 BuildArch:      noarch
 # Unbundled from perl 5.34.0
 Patch0:         Env-1.04-Upgrade-to-1.05.patch

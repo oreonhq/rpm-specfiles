@@ -6,7 +6,7 @@ Release:	3%{?dist}
 
 License:	LGPL-2.1-or-later
 URL:		https://github.com/libhangul/libhangul
-Source0:	https://github.com/libhangul/libhangul/releases/download/libhangul-%{version}/libhangul-%{version}.tar.gz
+Source0:        https://github.com/libhangul/libhangul/releases/download/libhangul-0.2.0/libhangul-0.2.0.tar.gz
 
 Summary:	Hangul input library
 BuildRequires:	  gettext-devel, automake, libtool

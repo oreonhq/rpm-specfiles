@@ -11,8 +11,8 @@ Summary: Development tools for Plasma 6
 License: BSD-2-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/plasma/%{name}
 
-Source0:        http://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
-Source1:        http://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/plasma-sdk-6.6.5.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/plasma-sdk-6.6.5.tar.xz.sig
 
 
 BuildRequires:  extra-cmake-modules

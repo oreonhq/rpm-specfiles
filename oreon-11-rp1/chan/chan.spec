@@ -6,7 +6,7 @@ Release: 17%{?dist}
 Summary: Pure C implementation of Go channels
 License: Apache-2.0
 URL: https://github.com/tylertreat/%{name}
-Source0: https://github.com/tylertreat/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/tylertreat/chan/archive/0.0.4/chan-0.0.4.tar.gz
 
 BuildRequires: gcc autoconf automake libtool
 BuildRequires: make

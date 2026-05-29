@@ -26,7 +26,7 @@ supported for compatibility with CJK standards.
 The google-noto-serif-cjk-vf-fonts package contains Google Noto Serif CJK Variable fonts.
 }
 
-Source0:  https://github.com/googlefonts/noto-cjk/releases/download/Serif%{version}/02_NotoSerifCJK-OTF-VF.zip
+Source0:        https://github.com/googlefonts/noto-cjk/releases/download/Serif2.003/02_NotoSerifCJK-OTF-VF.zip
 Source1:  genfontconf.py
 Source10: 65-%{fontpkgname}.conf
 

@@ -25,9 +25,9 @@ Summary:	Bootloader with support for Linux, Multiboot and more
 License:	GPL-3.0-or-later
 URL:		http://www.gnu.org/software/grub/
 Obsoletes:	grub < 1:0.98
-Source0:	https://ftp.gnu.org/gnu/grub/grub-%{tarversion}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/grub/grub-2.12.tar.xz
 # Savannah cgit snapshots are flaky for spectool or mock, use GitHub mirror + fixed name
-Source1:	https://github.com/coreutils/gnulib/archive/%{gnulibversion}.tar.gz#/gnulib-%{gnulibversion}.tar.gz
+Source1:        https://github.com/coreutils/gnulib/archive/9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz#/gnulib-9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz
 Source2:	99-grub-mkconfig.install
 Source3:	http://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
 Source4:        http://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz

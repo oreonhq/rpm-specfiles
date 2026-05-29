@@ -20,9 +20,8 @@ Url:     http://qt-project.org/
 %global  qt_version %(echo %{version} | cut -d~ -f1)
 
 %if 0%{?unstable}
-Source0: https://download.qt.io/development_releases/qt/%{majmin}/%{qt_version}/submodules/%{qt_module}-everywhere-src-%{qt_version}-%{prerelease}.tar.xz
 %else
-Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
+Source0:        https://download.qt.io/official_releases/qt/%{qt_version}/submodules/qthttpserver-everywhere-src-%{qt_version}.tar.xz
 %endif
 
 BuildRequires: cmake

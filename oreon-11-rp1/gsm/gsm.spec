@@ -12,7 +12,7 @@ Summary:        Shared libraries for GSM speech compressor
 
 License:        tu-berlin-2.0
 URL:            https://www.quut.com/gsm/
-Source:         https://www.quut.com/gsm/%{name}-%{version}.tar.gz
+Source:        https://www.quut.com/gsm/gsm-1.0.24.tar.gz
 Patch0:         %{name}-makefile.patch
 Patch1:         %{name}-warnings.patch
 BuildRequires:  gcc

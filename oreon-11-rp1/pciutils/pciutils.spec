@@ -7,7 +7,7 @@ Summary:	PCI bus related utilities
 License:	GPL-2.0-or-later
 URL:		https://mj.ucw.cz/sw/pciutils/
 
-Source0:	https://www.kernel.org/pub/software/utils/pciutils/%{name}-%{version}.tar.xz
+Source0:        https://www.kernel.org/pub/software/utils/pciutils/pciutils-3.14.0.tar.xz
 Source1:	multilibconfigh
 Source2:	libpci_symbols.lst
 

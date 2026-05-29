@@ -33,7 +33,7 @@ titling text.}
 
 This package provide monospace version of overpass fonts.}
 
-Source0: https://github.com/RedHatBrand/Overpass/archive/%{version}.tar.gz
+Source0:        https://github.com/RedHatBrand/Overpass/archive/3.0.4.tar.gz
 Source10: 60-%{fontpkgname0}.conf
 Source11: 60-%{fontpkgname1}.conf
 

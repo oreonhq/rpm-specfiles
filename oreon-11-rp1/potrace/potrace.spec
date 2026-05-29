@@ -8,7 +8,7 @@ Summary:	Transform bitmaps into vector graphics
 # potrace/potrace-1.16/src/getopt.c is LGPL-2.0-or-later
 License:	GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:		http://potrace.sourceforge.net
-Source0:	http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        http://downloads.sourceforge.net/potrace/potrace-1.16.tar.gz
 # Documentation
 Source1:	http://potrace.sourceforge.net/potrace.pdf
 Source2:	http://potrace.sourceforge.net/potracelib.pdf

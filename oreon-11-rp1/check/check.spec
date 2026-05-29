@@ -18,7 +18,7 @@ VCS:            git:https://github.com/libcheck/check.git
 # Easiest way to verify: unpack both tarballs and run
 #    diff -r check-0.15.2 upstream-check-0.15.2
 # Source:       https://github.com/libcheck/check/archive/{version}/{name}-{version}.tar.gz
-Source:         https://github.com/libcheck/check/archive/%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/libcheck/check/archive/0.15.2/check-0.15.2.tar.gz
 # Only needed for autotools in Fedora
 Patch0:         %{name}-0.11.0-info-in-builddir.patch
 # Fix a texinfo error due to a missing @end verbatim

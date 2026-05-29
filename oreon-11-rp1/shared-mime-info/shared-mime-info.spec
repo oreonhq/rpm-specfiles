@@ -7,7 +7,7 @@ Version: 2.4
 Release: %autorelease
 License: GPL-2.0-or-later
 URL: http://freedesktop.org/Software/shared-mime-info
-Source0: https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/%{version}/shared-mime-info-%{version}.tar.bz2
+Source0:        https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/2.4/shared-mime-info-2.4.tar.bz2
 
 Source1: mimeapps.list
 # openat() with O_CREAT needs also mode
@@ -15,7 +15,7 @@ Source2: 0003-xdgmime-openat-fourth-arg.patch
 
 %global xdgmime_commit 4cc93f9381e0eddd2cac1e92c0f36b29dcd8c1ce
 # Tarball for https://gitlab.freedesktop.org/xdg/xdgmime/-/tree/%%{xdgmime_commit}
-Source6: https://gitlab.freedesktop.org/xdg/xdgmime/-/archive/%{xdgmime_commit}/xdgmime-%{xdgmime_commit}.tar.bz2
+Source6:        https://gitlab.freedesktop.org/xdg/xdgmime/-/archive/4cc93f9381e0eddd2cac1e92c0f36b29dcd8c1ce/xdgmime-4cc93f9381e0eddd2cac1e92c0f36b29dcd8c1ce.tar.bz2
 
 # Work-around for https://bugs.freedesktop.org/show_bug.cgi?id=40354
 Patch0: 0001-Remove-sub-classing-from-OO.o-mime-types.patch

@@ -20,9 +20,9 @@ Release:  3%{?prever_dot}%{?dist}
 License:  LGPL-2.1-or-later
 URL:      https://www.alsa-project.org/
 # HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
-Source:   https://www.alsa-project.org/files/pub/lib/%{name}-%{version}%{?prever}%{?postver}.tar.bz2
-Source1:  https://www.alsa-project.org/files/pub/lib/alsa-ucm-conf-%{version_alsa_ucm}.tar.bz2
-Source2:  https://www.alsa-project.org/files/pub/lib/alsa-topology-conf-%{version_alsa_tplg}.tar.bz2
+Source:        https://www.alsa-project.org/files/pub/lib/alsa-lib-%{?prever}%{?postver}.tar.bz2
+Source1:        https://www.alsa-project.org/files/pub/lib/alsa-ucm-conf-1.2.15.3.tar.bz2
+Source2:        https://www.alsa-project.org/files/pub/lib/alsa-topology-conf-1.2.5.tar.bz2
 Source10: asound.conf
 Source11: modprobe-dist-alsa.conf
 Source12: modprobe-dist-oss.conf

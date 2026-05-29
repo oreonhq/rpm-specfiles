@@ -8,7 +8,7 @@ Summary:        Data files describing media player capabilities
 # Automatically converted from old format: BSD - review is highly recommended.
 License:        LicenseRef-Callaway-BSD
 URL:            http://www.freedesktop.org/wiki/Software/media-player-info
-Source0:        http://www.freedesktop.org/software/media-player-info/%{name}-%{version}.tar.gz
+Source0:        http://www.freedesktop.org/software/media-player-info/media-player-info-23.tar.gz
 BuildArch:      noarch
 
 BuildRequires: make

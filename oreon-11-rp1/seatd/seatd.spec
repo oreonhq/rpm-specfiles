@@ -12,7 +12,7 @@ Summary:        Minimal seat management daemon
 
 License:        MIT
 URL:            https://sr.ht/~kennylevinsen/seatd/
-Source0:        https://git.sr.ht/~kennylevinsen/seatd/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://git.sr.ht/~kennylevinsen/seatd/archive/0.9.3.tar.gz#/seatd-0.9.3.tar.gz
 Source1:        seatd.sysusers
 
 BuildRequires:  gcc

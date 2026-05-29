@@ -9,7 +9,7 @@ Release:	%autorelease
 Summary:	module implementing HTTP/2 for Apache 2
 License:	Apache-2.0
 URL:		https://icing.github.io/mod_h2/
-Source0:	https://github.com/icing/mod_h2/releases/download/v%{version}/mod_http2-%{version}.tar.gz
+Source0:        https://github.com/icing/mod_h2/releases/download/v2.0.37/mod_http2-2.0.37.tar.gz
 BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  pkgconfig, httpd-devel >= 2.4.20, libnghttp2-devel >= 1.7.0, openssl-devel >= 1.0.2

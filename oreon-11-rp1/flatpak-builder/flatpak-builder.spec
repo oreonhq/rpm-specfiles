@@ -17,7 +17,7 @@ Summary:        Tool to build flatpaks from source
 # the rest is LGPLv2+
 License:        LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:            https://flatpak.org/
-Source0:        https://github.com/flatpak/flatpak-builder/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/flatpak/flatpak-builder/releases/download/1.4.7/flatpak-builder-1.4.7.tar.xz
 
 # ostree not on i686 for RHEL 10
 # https://github.com/containers/composefs/pull/229#issuecomment-1838735764

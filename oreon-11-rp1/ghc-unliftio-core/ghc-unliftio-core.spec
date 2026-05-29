@@ -15,8 +15,8 @@ Summary:        The MonadUnliftIO typeclass for unlifting monads to IO
 License:        MIT
 URL:            https://hackage.haskell.org/package/unliftio-core
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/unliftio-core-0.2.1.0/unliftio-core-0.2.1.0.tar.gz
+Source1:        https://hackage.haskell.org/package/unliftio-core-0.2.1.0/unliftio-core.cabal#/unliftio-core-0.2.1.0.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

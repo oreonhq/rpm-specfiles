@@ -10,7 +10,7 @@ Summary:        Library with cross-python path, ini-parsing, io, code, log facil
 License:        LicenseRef-Callaway-MIT AND LicenseRef-Callaway-Public-Domain
 #               main package: MIT, except: doc/style.css: Public Domain
 URL:            http://py.readthedocs.io/
-Source:         %{pypi_source}
+Source:        https://files.pythonhosted.org/packages/source/p/python-py/python-py-1.11.0.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
 

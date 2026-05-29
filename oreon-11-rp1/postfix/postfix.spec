@@ -77,7 +77,7 @@ Requires: findutils
 Requires: policycoreutils
 Provides: MTA smtpd smtpdaemon server(smtp)
 
-Source0: http://ftp.porcupine.org/mirrors/postfix-release/official/%{name}-%{version}.tar.gz
+Source0:        http://ftp.porcupine.org/mirrors/postfix-release/official/postfix-3.11.0.tar.gz
 Source1: postfix-etc-init.d-postfix
 Source2: postfix.service
 Source3: README-Postfix-SASL-RedHat.txt
@@ -90,7 +90,7 @@ Source6: postfix.sysusers
 %define pflogsumm_ver 1.1.6
 
 # Postfix Log Entry Summarizer: http://jimsun.linxnet.com/postfix_contrib.html
-Source53: http://jimsun.linxnet.com/downloads/pflogsumm-%{pflogsumm_ver}.tar.gz
+Source53:        http://jimsun.linxnet.com/downloads/pflogsumm-1.1.6.tar.gz
 
 # Sources >= 100 are config files
 

@@ -6,7 +6,7 @@ Version: 3.1
 Release: 6%{?dist}
 License: LicenseRef-Public-Domain
 URL: https://re2c.org/
-Source: https://github.com/skvadrik/re2c/releases/download/%{version}/re2c-%{version}.tar.xz
+Source:        https://github.com/skvadrik/re2c/releases/download/3.1/re2c-3.1.tar.xz
 
 BuildRequires: gcc
 BuildRequires: gcc-c++

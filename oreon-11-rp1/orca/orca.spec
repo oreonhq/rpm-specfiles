@@ -1,7 +1,7 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           orca
 Version:        50.0.7
@@ -10,8 +10,7 @@ Summary:        Assistive technology for people with visual impairments
 
 License:        LGPL-2.1-or-later AND CC-BY-SA-3.0
 URL:            https://wiki.gnome.org/Projects/Orca
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/orca/%{major_version}/orca-%{tarball_version}.tar.xz
 BuildArch:      noarch
 
 BuildRequires:  pkgconfig(atk-bridge-2.0)

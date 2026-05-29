@@ -12,7 +12,7 @@ Summary:        OAuth2 plugin for the Accounts framework
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.com/accounts-sso/signon-plugin-oauth2
 
-Source0:        https://gitlab.com/accounts-sso/signon-plugin-oauth2/-/archive/%{commit0}/%{name}-%{commit0}.tar.gz
+Source0:        https://gitlab.com/accounts-sso/signon-plugin-oauth2/-/archive/fab698862466994a8fdc9aa335c87b4f05430ce6/signon-plugin-oauth2-fab698862466994a8fdc9aa335c87b4f05430ce6.tar.gz
 
 BuildRequires: make
 BuildRequires:  qt6-qtbase-devel

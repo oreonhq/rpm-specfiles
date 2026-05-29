@@ -45,7 +45,7 @@ Summary:        A language for data analysis and graphics
 
 License:        GPL-2.0-or-later
 URL:            https://www.r-project.org
-Source0:        https://cran.r-project.org/src/base/R-4/R-%{version}.tar.gz
+Source0:        https://cran.r-project.org/src/base/R-4/R-.tar.gz
 # see https://bugzilla.redhat.com/show_bug.cgi?id=1324145
 Patch0:         R-3.3.0-fix-java_path-in-javareconf.patch
 

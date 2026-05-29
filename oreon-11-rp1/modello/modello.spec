@@ -14,7 +14,7 @@ URL:            https://codehaus-plexus.github.io/modello
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/codehaus/%{name}/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/codehaus/modello/modello/2.1.2/modello-2.1.2-source-release.zip
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 Patch:          0001-Revert-Switch-to-codehaus-plexus-build-api-1.2.0-345.patch

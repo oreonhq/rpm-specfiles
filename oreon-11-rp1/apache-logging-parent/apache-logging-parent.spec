@@ -7,7 +7,7 @@ Release:        13%{?dist}
 License:        Apache-2.0
 
 URL:            https://logging.apache.org/
-Source0:        https://repo1.maven.org/maven2/org/apache/logging/logging-parent/%{version}/logging-parent-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/logging/logging-parent/9/logging-parent-9-source-release.zip
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

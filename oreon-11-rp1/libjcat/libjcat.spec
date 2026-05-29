@@ -9,7 +9,7 @@ Version:   0.2.5
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/hughsie/%{name}
-Source0:   https://github.com/hughsie/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/hughsie/libjcat/releases/download/0.2.5/libjcat-0.2.5.tar.xz
 
 BuildRequires: gtk-doc
 BuildRequires: meson

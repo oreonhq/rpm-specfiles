@@ -13,7 +13,7 @@ Release:    12%{?dist}
 URL:        http://www.x.org
 License:    MIT AND X11
 
-Source0:    https://ftp.x.org/archive/individual/driver/%{tarball}-%{version}.tar.xz
+Source0:        https://ftp.x.org/archive/individual/driver/xf86-video-vmware-13.4.0.tar.xz
 
 ExclusiveArch: %{ix86} x86_64 ia64
 

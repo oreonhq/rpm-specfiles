@@ -12,7 +12,7 @@ URL:            https://github.com/google/gson
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/google/gson/archive/gson-parent-%{version}.tar.gz
+Source0:        https://github.com/google/gson/archive/gson-parent-2.12.1.tar.gz
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -32,7 +32,7 @@ pre-existing objects that you do not have source-code of.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin -r :spotless-maven-plugin

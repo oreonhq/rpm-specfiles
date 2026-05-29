@@ -8,7 +8,7 @@ Summary:        Library for CAB and related files compression and decompression
 # CRC32 is LicenseRef-Fedora-UltraPermissive
 License:        LGPL-2.1-only AND LicenseRef-Fedora-UltraPermissive AND MIT
 URL:            http://www.cabextract.org.uk/libmspack/
-Source0:        http://www.cabextract.org.uk/libmspack/%{name}-%{version}alpha.tar.gz
+Source0:        http://www.cabextract.org.uk/libmspack/libmspack-0.10.1alpha.tar.gz
 #Source0:        https://github.com/kyz/libmspack/archive/v%%{version}alpha/%%{name}-v%%{version}alpha.tar.gz
 
 BuildRequires:  doxygen

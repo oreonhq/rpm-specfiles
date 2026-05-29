@@ -9,7 +9,7 @@ URL:            https://commons.apache.org/bsf/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/commons/bsf/source/bsf-src-%{version}.tar.gz
+Source0:        https://archive.apache.org/dist/commons/bsf/source/bsf-src-2.4.0.tar.gz
 Source1:        %{name}-pom.xml
 
 Patch:          build-file.patch

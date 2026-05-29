@@ -18,7 +18,7 @@ Obsoletes: %{name}-reencrypt <= %{version}
 Provides: %{name}-reencrypt = %{version}
 
 %global upstream_version %{version_no_tilde}
-Source0: https://www.kernel.org/pub/linux/utils/cryptsetup/v2.8/cryptsetup-%{upstream_version}.tar.xz
+Source0:        https://www.kernel.org/pub/linux/utils/cryptsetup/v2.8/cryptsetup-%{version_no_tilde}.tar.xz
 
 %description
 The cryptsetup package contains a utility for setting up

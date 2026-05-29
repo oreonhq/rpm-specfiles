@@ -12,7 +12,7 @@ Release:        41%{?dist}
 Summary:        Theora Video Compression Codec
 License:        BSD-3-Clause
 URL:            http://www.theora.org
-Source0:        http://downloads.xiph.org/releases/theora/%{name}-%{version}.tar.xz
+Source0:        http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.xz
 Patch0:         libtheora-1.1.1-fix-pp_sharp_mod-calc.patch
 # https://bugs.archlinux.org/task/35985
 Patch1:         libtheora-1.1.1-libpng16.patch

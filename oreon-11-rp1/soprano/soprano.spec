@@ -25,7 +25,7 @@ URL:     https://quickgit.kde.org/?p=soprano.git
 # git archive --prefix=soprano-%{version}/ master | bzip2 > soprano-%{version}-%{snap}.tar.bz2
 Source0:        http://downloads.sf.net/soprano/soprano-2.9.4.tar.bz2
 %else
-Source0: http://downloads.sf.net/soprano/soprano-%{version}.tar.bz2
+Source0:        http://downloads.sf.net/soprano/soprano-2.9.4.tar.bz2
 %endif
 
 ## upstreamable patches

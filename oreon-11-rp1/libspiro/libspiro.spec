@@ -10,7 +10,7 @@ Summary:        Library to simplify the drawing of beautiful curves
 License:        GPL-3.0-or-later
 URL:            https://github.com/fontforge/libspiro/
 # Let's use libspiro-dist tarball from upstream as it does not require autoreconf
-Source0:        https://github.com/fontforge/libspiro/releases/download/%{version}/libspiro-dist-%{version}.tar.gz
+Source0:        https://github.com/fontforge/libspiro/releases/download/20240903/libspiro-dist-20240903.tar.gz
 BuildRequires:  gcc
 BuildRequires: make
 

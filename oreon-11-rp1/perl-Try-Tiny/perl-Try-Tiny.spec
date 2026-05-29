@@ -12,7 +12,7 @@ Version:	0.32
 Release:	4%{?dist}
 License:	MIT
 URL:		https://metacpan.org/release/Try-Tiny
-Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Try-Tiny-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Try-Tiny-0.32.tar.gz
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

@@ -9,7 +9,7 @@ Release:    31%{?dist}
 Summary:    Perl extension for converting modern POD to old-style POD
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:        https://metacpan.org/release/Pod-Plainer
-Source0:    https://cpan.metacpan.org/authors/id/R/RM/RMBARKER/Pod-Plainer-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RM/RMBARKER/Pod-Plainer-1.04.tar.gz
 BuildArch:  noarch
 BuildRequires:  make
 BuildRequires:  perl-generators

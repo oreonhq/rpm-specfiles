@@ -14,7 +14,7 @@ Release: 1%{?dist}
 
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND BSD-3-Clause AND CC-BY-SA-3.0 AND CC-BY-SA-4.0
 URL:     https://apps.kde.org/kiten/
-Source:  https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kiten-26.04.1.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: gettext

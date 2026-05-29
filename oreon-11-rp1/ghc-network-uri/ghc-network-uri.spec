@@ -17,8 +17,8 @@ Summary:        URI manipulation
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/network-uri
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/network-uri-2.6.4.2/network-uri-2.6.4.2.tar.gz
+Source1:        https://hackage.haskell.org/package/network-uri-2.6.4.2/network-uri.cabal#/network-uri-2.6.4.2.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

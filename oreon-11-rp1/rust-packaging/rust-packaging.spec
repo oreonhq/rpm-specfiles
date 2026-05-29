@@ -9,7 +9,7 @@ Summary:        RPM macros and generators for building Rust packages
 License:        MIT
 
 URL:            https://pagure.io/fedora-rust/rust-packaging
-Source0:        https://pagure.io/fedora-rust/rust-packaging/archive/%{version}/rust-packaging-%{version}.tar.gz
+Source0:        https://pagure.io/fedora-rust/rust-packaging/archive/26.4/rust-packaging-26.4.tar.gz
 
 # cargo_prep -V exists on some EL spec copies; this branch accepts the flag and
 # errors only when %%{?fedora} is defined so one macro file can be shared.

@@ -9,7 +9,7 @@ Summary: Additional components to increase the functionality of KIO Framework
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/network/kio-extras
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kio-extras-26.03.80.tar.xz
 
 ## upstramable patches
 

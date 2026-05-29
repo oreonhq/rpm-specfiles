@@ -10,7 +10,7 @@ Summary:        A tool for generating human-readable reports from (SCAP) XCCDF a
 # The entire source code is LGPL-2.1+ and GPL-2.0+ and MIT except schemas/ and assets/, which are Public Domain
 License:        LGPLv2+ and GPLv2+ and MIT and Public Domain
 URL:            https://github.com/OpenSCAP/%{name}
-Source0:        https://github.com/OpenSCAP/%{name}/releases/download/v%{version}/%{pymodule_name}-%{version}.tar.gz
+Source0:        https://github.com/OpenSCAP/openscap-report/releases/download/v1.0.0/openscap_report-1.0.0.tar.gz
 
 BuildArch:      noarch
 

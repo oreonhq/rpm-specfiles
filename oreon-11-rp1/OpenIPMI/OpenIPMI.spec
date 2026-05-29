@@ -12,7 +12,7 @@ Version:    2.0.36
 Release:    7%{?dist}
 License:    LGPL-2.1-or-later and GPL-2.0-or-later or BSD-3-Clause
 URL:        https://sourceforge.net/projects/openipmi/
-Source:     https://downloads.sourceforge.net/openipmi/%{name}-%{version}.tar.gz
+Source:        https://downloads.sourceforge.net/openipmi/OpenIPMI-2.0.36.tar.gz
 Source1:    openipmi.sysconf
 Source2:    openipmi-helper
 Source3:    ipmi.service

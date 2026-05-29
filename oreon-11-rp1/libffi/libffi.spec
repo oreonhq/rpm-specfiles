@@ -43,7 +43,7 @@ Summary:	A portable foreign function interface library
 License:	MIT AND CC-PDDC AND (GPL-3.0-or-later WITH Texinfo-exception)
 URL:		http://sourceware.org/libffi
 
-Source0:	https://github.com/libffi/libffi/releases/download/v%{version}/libffi-%{version}.tar.gz
+Source0:        https://github.com/libffi/libffi/releases/download/v3.5.2/libffi-3.5.2.tar.gz
 Source1:	ffi-multilib.h
 Source2:	ffitarget-multilib.h
 

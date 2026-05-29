@@ -15,7 +15,7 @@ Summary:       GEOS is a C++ port of the Java Topology Suite
 
 License:       LGPL-2.1-only
 URL:           http://trac.osgeo.org/geos/
-Source0:       http://download.osgeo.org/%{name}/%{name}-%{version}.tar.bz2
+Source0:        http://download.osgeo.org/geos/geos-3.14.1.tar.bz2
 
 BuildRequires: cmake
 BuildRequires: doxygen

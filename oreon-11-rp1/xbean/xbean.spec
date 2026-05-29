@@ -11,7 +11,7 @@ URL:            https://geronimo.apache.org/xbean/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/%{name}/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/xbean/xbean/4.24/xbean-4.24-source-release.zip
 
 Patch:          0001-Unbundle-ASM.patch
 Patch:          0002-Remove-dependency-on-log4j-and-commons-logging.patch

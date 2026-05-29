@@ -18,7 +18,7 @@ URL:     https://invent.kde.org/sdk/%{name}
 %else
 %global stable stable
 %endif
-Source0: https://download.kde.org/%{stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/release-service/26.03.80/src/kdesdk-thumbnailers-26.03.80.tar.xz
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  extra-cmake-modules

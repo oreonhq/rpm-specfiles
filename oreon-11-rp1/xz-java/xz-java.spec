@@ -11,7 +11,7 @@ URL:            https://tukaani.org/xz/java.html
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://tukaani.org/xz/xz-java-%{version}.zip
+Source0:        https://tukaani.org/xz/xz-java-1.9.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -32,7 +32,7 @@ for advanced users, including LZMA2 with preset dictionary.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %mvn_file : %{name} xz
 

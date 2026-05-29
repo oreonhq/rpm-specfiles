@@ -9,7 +9,7 @@ Summary:        Persistence for Perl data structures
 # Storable.pm:  GPL+ or Artistic
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Storable
-Source0:        https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/Storable-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/Storable-3.25.tar.gz
 # Unbundled from perl 5.37.12
 Patch0:         Storable-3.25-Upgrade-to-3.32.patch
 # Unbundled from perl 5.42.0

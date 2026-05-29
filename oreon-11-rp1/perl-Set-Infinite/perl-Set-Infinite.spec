@@ -6,7 +6,7 @@ Release:        44%{?dist}
 Summary:        Sets of intervals
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Set-Infinite
-Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/Set-Infinite-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/Set-Infinite-0.65.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  make

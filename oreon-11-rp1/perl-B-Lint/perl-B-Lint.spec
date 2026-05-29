@@ -6,7 +6,7 @@ Release:        34%{?dist}
 Summary:        Perl lint
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/B-Lint
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/B-Lint-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/B-Lint-1.20.tar.gz
 # Work around for Perl 5.22, bug #1231112, CPAN RT#101115
 Patch0:         B-Lint-1.20-Skip-a-bare-sub-test.patch
 BuildArch:      noarch

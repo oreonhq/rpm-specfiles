@@ -7,7 +7,7 @@
 %global gsettings_desktop_schemas_version 3.27.0
 %global po_package                        gnome-desktop-3.0
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:    gnome-desktop3
 Version: 44.5
@@ -16,8 +16,7 @@ Summary: Library with common API for various GNOME modules
 
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND GFDL-1.1-or-later
 URL:     https://gitlab.gnome.org/GNOME/gnome-desktop
-Source:  https://download.gnome.org/sources/gnome-desktop/44/gnome-desktop-%{tarball_version}.tar.xz
-
+Source: https://download.gnome.org/sources/gnome-desktop/44/gnome-desktop-%{tarball_version}.tar.xz
 BuildRequires: gcc
 BuildRequires: gettext
 BuildRequires: gtk-doc

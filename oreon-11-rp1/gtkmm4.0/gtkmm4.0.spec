@@ -18,8 +18,7 @@ Summary:        C++ interface for the GTK+ library
 
 License:        LGPL-2.1-or-later
 URL:            https://www.gtkmm.org/
-Source0:        https://download.gnome.org/sources/gtkmm/%{release_version}/gtkmm-%{version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gtkmm/%(echo %{version} | cut -d. -f1)/gtkmm-%{version}.tar.xz
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
 BuildRequires:  libxslt

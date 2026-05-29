@@ -9,7 +9,7 @@ Summary:        IEEE 802.11 AP, IEEE 802.1X/WPA/WPA2/EAP/RADIUS Authenticator
 License:        BSD-3-Clause
 URL:            http://w1.fi/hostapd
 
-Source0:        http://w1.fi/releases/%{name}-%{version}.tar.gz
+Source0:        http://w1.fi/releases/hostapd-2.11.tar.gz
 Source1:        %{name}.service
 Source2:        %{name}.conf
 Source3:        %{name}.conf.5

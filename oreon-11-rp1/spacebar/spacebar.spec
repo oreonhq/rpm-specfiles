@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9aa8ead91d9b692390b152266040ea55c282b3b2731c88c5ea62031515579431
 
 Name:           spacebar
 Epoch:          1
@@ -7,8 +7,7 @@ Release:        1%{?dist}
 License:        GPLv2+ and GPLv3 and GPLv2
 Summary:        Messaging app for Plasma Mobile
 Url:            https://invent.kde.org/plasma-mobile/spacebar
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
+Source0:        https://invent.kde.org/plasma-mobile/spacebar/-/archive/v6.6.3/spacebar-v6.6.3.tar.gz#/spacebar-6.6.3.tar.gz
 
 ExclusiveArch:  %{java_arches}
 
@@ -61,7 +60,7 @@ Spacebar is a telepathy-qt based SMS application that primarily targets Plasma M
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -n spacebar-%{version} -p1
+%autosetup -p1 -n spacebar-v6.6.3
 
 %build
 %cmake_kf6

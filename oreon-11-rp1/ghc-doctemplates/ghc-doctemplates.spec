@@ -29,11 +29,11 @@ Summary:        Pandoc-style document templates
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/doctemplates
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{doclayout}/%{doclayout}.tar.gz
-Source2:        https://hackage.haskell.org/package/%{emojis}/%{emojis}.tar.gz
-Source3:        https://hackage.haskell.org/package/%{errors}/%{errors}.tar.gz
-Source4:        https://hackage.haskell.org/package/%{textconversions}/%{textconversions}.tar.gz
+Source0:        https://hackage.haskell.org/package/doctemplates-%{version}/doctemplates-%{version}.tar.gz
+Source1:        https://hackage.haskell.org/package/doclayout-0.5.0.1/doclayout-0.5.0.1.tar.gz
+Source2:        https://hackage.haskell.org/package/emojis-0.1.4.1/emojis-0.1.4.1.tar.gz
+Source3:        https://hackage.haskell.org/package/errors-2.3.0/errors-2.3.0.tar.gz
+Source4:        https://hackage.haskell.org/package/text-conversions-0.3.1.1/text-conversions-0.3.1.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

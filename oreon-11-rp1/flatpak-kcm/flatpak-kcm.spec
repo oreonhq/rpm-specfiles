@@ -10,8 +10,8 @@ License:       BSD-2-Clause and BSD-3-Clause and CC0-1.0 and GPL-2.0-or-later
 Summary:       Flatpak Permissions Management KCM
 Url:           https://invent.kde.org/plasma/flatpak-kcm
 
-Source0:       https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
-Source1:       https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/flatpak-kcm-6.6.3.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/flatpak-kcm-6.6.3.tar.xz.sig
 
 BuildRequires: extra-cmake-modules
 BuildRequires: gcc-c++

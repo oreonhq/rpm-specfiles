@@ -32,7 +32,7 @@ Summary:	Open source Implementation of WS-Management
 
 License:	BSD-3-Clause AND MIT
 URL:		http://www.openwsman.org/
-Source0:	https://github.com/Openwsman/openwsman/archive/v%{version}.tar.gz
+Source0:        https://github.com/Openwsman/openwsman/archive/v2.8.1.tar.gz
 # help2man generated manpage for openwsmand binary
 Source1:	openwsmand.8.gz
 # service file for systemd

@@ -13,7 +13,7 @@ Summary:        KDE screen management library
 License:        LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND CC0-1.0
 URL:            https://invent.kde.org/plasma/libkscreen
 
-Source0:        https://download.kde.org/%{stable_plasma}/plasma/%{plasma_ver}/libkscreen-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/plasma/6.6.3/libkscreen-.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

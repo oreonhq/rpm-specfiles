@@ -10,7 +10,7 @@ Summary:        Pythonic DBus library
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://pypi.python.org/pypi/pydbus
-Source0:        https://files.pythonhosted.org/packages/source/%(n=%{srcname}; echo ${n:0:1})/%{srcname}/%{srcname}-%{version}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/%(n=pydbus; echo ${n:0:1})/pydbus/pydbus-0.6.0.tar.gz
 
 # upstream fix, not yet in release
 # https://github.com/LEW21/pydbus/commit/ff792feb45bbdc0dd6a9ff7453825e34b6554865

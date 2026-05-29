@@ -17,7 +17,7 @@ Summary:        Common lower-level functions for streaming data libraries
 License:        MIT
 URL:            https://hackage.haskell.org/package/streaming-commons
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/streaming-commons-0.2.3.1/streaming-commons-0.2.3.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

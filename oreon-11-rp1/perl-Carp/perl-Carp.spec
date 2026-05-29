@@ -7,7 +7,7 @@ Release:        521%{?dist}
 Summary:        Alternative warn and die for modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Carp
-Source0:        https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/Carp-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/Carp-1.50.tar.gz
 # Unbundled from perl 5.34.0
 Patch0:         Carp-1.50-Upgrade-to-1.52.patch
 # Unbundled from perl 5.37.11

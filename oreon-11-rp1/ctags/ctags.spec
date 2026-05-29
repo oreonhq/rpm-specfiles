@@ -6,7 +6,7 @@ Version: 6.2.1
 Release: 3%{?dist}
 License: GPL-2.0-or-later
 URL: https://ctags.io/
-Source0: https://github.com/universal-ctags/ctags/releases/download/v%{version}/universal-%{name}-%{version}.tar.gz
+Source0:        https://github.com/universal-ctags/ctags/releases/download/v6.2.1/universal-ctags-6.2.1.tar.gz
 
 BuildRequires: autoconf
 BuildRequires: automake

@@ -11,7 +11,7 @@ Release:        522%{?dist}
 Summary:        Perl Pollution Portability header generator
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-PPPort
-Source0:        https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/Devel-PPPort-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.68.tar.gz
 # Upgrade to 3.71 based on perl-5.37.11
 Patch0:         Devel-PPPort-3.68-Upgrade-to-3.71.patch
 Patch1:         Devel-PPPort-3.68-Add-shebang-to-tests.patch

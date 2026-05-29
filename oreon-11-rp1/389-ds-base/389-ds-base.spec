@@ -75,7 +75,7 @@ ExcludeArch: i686
 
 # Force to require nss version greater or equal as the version available at the build time
 # See bz1986327
-%define dirsrv_requires_ge()  %(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %%{name} >= %%{epoch}:%%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
+%define dirsrv_requires_ge()  %(LC_ALL="C" echo '%*' | xargs -r rpm -q --qf 'Requires: %{name} >= %{epoch}:%{version}\\n' | sed -e 's/ (none):/ /' -e 's/ 0:/ /' | grep -v "is not")
 
 Summary:          389 Directory Server (%{variant})
 Name:             389-ds-base
@@ -414,10 +414,10 @@ Requires:         python3-file-magic
 # Picks up our systemd deps.
 %{?systemd_requires}
 
-Source0:          https://github.com/389ds/%{name}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/389ds/389-ds-base/releases/download/389-ds-base-3.2.1/389-ds-base-3.2.1.tar.bz2
 Source2:          %{name}-devel.README
 %if %{with bundle_jemalloc}
-Source3:          https://github.com/jemalloc/%{jemalloc_name}/releases/download/%{jemalloc_ver}/%{jemalloc_name}-%{jemalloc_ver}.tar.bz2
+Source3:        https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2
 Source10:          jemalloc-5.3.0_throw_bad_alloc.patch
 %endif
 Source4:          389-ds-base.sysusers

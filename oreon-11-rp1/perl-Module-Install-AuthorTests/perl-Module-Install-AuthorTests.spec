@@ -6,7 +6,7 @@ Release:        39%{?dist}
 Summary:        Designate tests only run by module authors
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-AuthorTests
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Module-Install-AuthorTests-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Module-Install-AuthorTests-0.002.tar.gz
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  perl-generators

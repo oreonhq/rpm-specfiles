@@ -18,7 +18,7 @@ Epoch: 1
 Version: 2.2
 Release: 2%{?dist}
 
-Source: https://alioth-archive.debian.org/releases/spell-norwegian/spell-norwegian/%{version}/no_NO-pack2-%{version}.zip
+Source:        https://alioth-archive.debian.org/releases/spell-norwegian/spell-norwegian/2.2/no_NO-pack2-2.2.zip
 URL: https://alioth-archive.debian.org/releases/spell-norwegian/spell-norwegian/
 License: GPL-1.0-or-later
 BuildArch: noarch

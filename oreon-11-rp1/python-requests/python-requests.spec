@@ -14,7 +14,7 @@ Summary:        HTTP library, written in Python, for human beings
 
 License:        Apache-2.0
 URL:            https://pypi.io/project/requests
-Source:         https://github.com/requests/requests/archive/v%{version}/requests-v%{version}.tar.gz
+Source:        https://github.com/requests/requests/archive/v2.33.1/requests-v2.33.1.tar.gz
 
 # Explicitly use the system certificates in ca-certificates.
 # https://bugzilla.redhat.com/show_bug.cgi?id=904614

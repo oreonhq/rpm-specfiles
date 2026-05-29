@@ -6,7 +6,7 @@ Release:        4%{?dist}
 Summary:        Keyed-Hashing for Message Authentication
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Digest-HMAC
-Source0:        https://cpan.metacpan.org/authors/id/A/AR/ARODLAND/Digest-HMAC-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AR/ARODLAND/Digest-HMAC-1.05.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

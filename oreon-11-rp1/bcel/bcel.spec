@@ -9,7 +9,7 @@ URL:            https://commons.apache.org/proper/commons-bcel/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://archive.apache.org/dist/commons/bcel/source/bcel-%{version}-src.tar.gz
+Source0:        http://archive.apache.org/dist/commons/bcel/source/bcel-6.10.0-src.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.commons:commons-lang3)
@@ -36,7 +36,7 @@ being the Xalan XSLT processor at Apache.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin :maven-source-plugin
 %pom_remove_plugin :spotbugs-maven-plugin

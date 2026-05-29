@@ -13,7 +13,7 @@ URL:            https://pypi.python.org/pypi/dasbus
 Source0:        https://files.pythonhosted.org/packages/source/d/dasbus/dasbus-1.7.tar.gz
 Group:          Development/Libraries/Python
 %else
-Source0:        %{pypi_source}
+Source0:        https://files.pythonhosted.org/packages/source/p/python-dasbus/python-dasbus-1.7.tar.gz
 %endif
 
 BuildArch:      noarch

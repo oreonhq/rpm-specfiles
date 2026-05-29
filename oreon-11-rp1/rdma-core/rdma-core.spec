@@ -11,7 +11,7 @@ Summary: RDMA core userspace libraries and daemons
 #  providers/hfi1verbs Uses the 3 Clause BSD license
 License: GPL-2.0-only OR BSD-2-Clause AND BSD-3-Clause
 Url: https://github.com/linux-rdma/rdma-core
-Source: https://github.com/linux-rdma/rdma-core/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/linux-rdma/rdma-core/releases/download/v61.0/rdma-core-61.0.tar.gz
 Patch9998: 9998-kernel-boot-Do-not-perform-device-rename-on-OPA-devi.patch
 Patch9999: 9999-udev-keep-NAME_KERNEL-as-default-interface-naming-co.patch
 # Do not build static libs by default.

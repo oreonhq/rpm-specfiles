@@ -6,7 +6,7 @@ Release:        29%{?dist}
 Summary:        Perl DateTime extension for computing rfc2445 recurrences
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Event-ICal
-Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/DateTime-Event-ICal-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/DateTime-Event-ICal-0.13.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  make

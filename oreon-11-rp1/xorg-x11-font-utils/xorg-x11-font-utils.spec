@@ -13,7 +13,7 @@ Release:    63%{?dist}
 License:    MIT AND BSD-2-Clause AND MIT-open-group AND Unicode-3.0
 URL:        http://www.x.org
 
-Source0:    http://www.x.org/pub/individual/font/font-util-%{font_util}.tar.xz
+Source0:        http://www.x.org/pub/individual/font/font-util-1.4.1.tar.xz
 # helper script used in post for xorg-x11-fonts
 Source5:    xorg-x11-fonts-update-dirs
 Source6:    xorg-x11-fonts-update-dirs.1

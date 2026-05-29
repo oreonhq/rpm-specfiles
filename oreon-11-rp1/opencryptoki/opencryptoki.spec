@@ -6,7 +6,7 @@ Version: 3.26.0
 Release: 2%{?dist}
 License: CPL-1.0
 URL: https://github.com/opencryptoki/opencryptoki
-Source0: https://github.com/opencryptoki/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/opencryptoki/opencryptoki/archive/v3.26.0/opencryptoki-3.26.0.tar.gz
 # p11-kit default path
 Source1: opencryptoki.module
 # sysusers.d config file to allow rpm to create users/groups automatically

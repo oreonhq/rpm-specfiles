@@ -7,7 +7,7 @@ Summary:	Fake the system date
 
 License:	GPL-2.0-or-later
 URL:		http://packages.qa.debian.org/d/datefudge.html
-Source0:	http://cdn.debian.net/debian/pool/main/d/datefudge/%{name}_%{version}.tar.xz
+Source0:        http://cdn.debian.net/debian/pool/main/d/datefudge/datefudge_1.27.tar.xz
 
 BuildRequires:  gcc
 BuildRequires: make

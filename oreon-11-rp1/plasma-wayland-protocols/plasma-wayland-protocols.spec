@@ -11,7 +11,7 @@ Summary: Plasma Specific Protocols for Wayland
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-or-later AND MIT-CMU
 URL:     https://invent.kde.org/libraries/%{name}
 
-Source0: https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/plasma-wayland-protocols/plasma-wayland-protocols-1.21.0.tar.xz
 
 ## upstream patches (lookaside cache)
 BuildRequires:  kf6-rpm-macros

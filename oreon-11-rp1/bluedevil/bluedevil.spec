@@ -11,8 +11,8 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://cgit.kde.org/%{name}.git
 
-Source0: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
-Source1: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/bluedevil-6.6.3.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/bluedevil-6.6.3.tar.xz.sig
 
 
 BuildRequires:  extra-cmake-modules

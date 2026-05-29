@@ -7,7 +7,7 @@ Summary:        Image builder plugin for Cockpit
 
 License:        Apache-2.0
 URL:            http://osbuild.org/
-Source0:        https://github.com/osbuild/image-builder-frontend/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/osbuild/image-builder-frontend/releases/download/v94/cockpit-image-builder-94.tar.gz
 
 Obsoletes:      cockpit-composer < 54
 Provides:       cockpit-composer = %{version}-%{release}

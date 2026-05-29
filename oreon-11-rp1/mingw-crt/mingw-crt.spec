@@ -16,7 +16,7 @@ Summary:        MinGW Windows cross-compiler runtime
 
 License:        LicenseRef-Fedora-Public-Domain AND ZPL-2.1
 URL:            http://mingw-w64.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v13.0.0.tar.bz2
 
 
 # Note about standard dlls

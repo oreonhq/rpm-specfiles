@@ -85,10 +85,10 @@ License:        0BSD AND Apache-2.0 AND (Apache-2.0 WITH LLVM-exception) AND APS
 
 URL:            https://github.com/dotnet/
 
-Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{sdk_version}.tar.gz
-Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-%{sdk_version}.tar.gz.sig
+Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/v10.0.104.tar.gz#/dotnet-10.0.104.tar.gz
+Source1:        https://github.com/dotnet/dotnet/releases/download/v10.0.104/dotnet-10.0.104.tar.gz.sig
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
-Source3:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
+Source3:        https://github.com/dotnet/dotnet/releases/download/v10.0.104/release.json
 %if %{with bootstrap}
 # The bootstrap SDK version is one listed in the global.json file of the main source archive
 %global bootstrap_sdk_version 10.0.100-rc.1.25420.111

@@ -15,7 +15,7 @@ Summary:        Common "Text.Regex.*" API for Regex matching
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/regex-base
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/regex-base-0.94.0.3/regex-base-0.94.0.3.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

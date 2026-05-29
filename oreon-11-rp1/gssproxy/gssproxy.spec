@@ -8,7 +8,7 @@ Summary:	GSSAPI Proxy
 
 License:	MIT
 URL:		https://github.com/gssapi/gssproxy
-Source0:	https://github.com/gssapi/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/gssapi/gssproxy/releases/download/v0.9.2/gssproxy-0.9.2.tar.gz
 Source1:	rwtab
 Source2:        gssproxy.sock.compat.conf
 

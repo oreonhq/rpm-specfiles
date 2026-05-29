@@ -19,7 +19,7 @@ Source0:        https://www.x.org/pub/individual/driver/xf86-input-evdev-2.11.0.
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
-Source0:    https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/driver/xf86-input-evdev-2.11.0.tar.xz
 %endif
 
 BuildRequires: make

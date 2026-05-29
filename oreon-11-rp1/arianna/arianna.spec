@@ -9,7 +9,7 @@ Summary:       EPub Reader for mobile devices
 License:       GPL-3.0-only
 URL:           https://invent.kde.org/graphics/%{name}
 
-Source0:       http://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/arianna-26.03.80.tar.xz
 
 BuildRequires: kf6-rpm-macros
 BuildRequires: extra-cmake-modules

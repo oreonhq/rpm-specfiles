@@ -7,8 +7,8 @@ Release: 14%{?dist}
 License: GPL-3.0-or-later
 URL:     http://www.gnu.org/software/parted
 
-Source0: https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
-Source1: https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
+Source0:        https://ftp.gnu.org/gnu/parted/parted-3.6.tar.xz
+Source1:        https://ftp.gnu.org/gnu/parted/parted-3.6.tar.xz.sig
 Source2: pubkey.phillip.susi
 Source3: pubkey.brian.lane
 

@@ -23,7 +23,7 @@ Summary:        Performance Co-Pilot Grafana Plugin
 License:        Apache-2.0
 URL:            https://github.com/performancecopilot/grafana-pcp
 
-Source0:        https://github.com/performancecopilot/grafana-pcp/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/performancecopilot/grafana-pcp/archive/v5.3.0/grafana-pcp-5.3.0.tar.gz
 Source1:        grafana-pcp-vendor-%{version}-1.tar.xz
 # Note: In case there were no changes to this tarball, the NVR of this tarball
 # lags behind the NVR of this package.

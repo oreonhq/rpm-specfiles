@@ -7,7 +7,7 @@ Summary:       Static and spece-efficient trie data structure library
 
 License:       BSD-2-Clause OR LGPL-2.1-or-later
 URL:  https://github.com/s-yata/marisa-trie
-Source0: https://github.com/s-yata/marisa-trie/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/s-yata/marisa-trie/archive/refs/tags/v0.3.0.tar.gz#/marisa-0.3.0.tar.gz
 Source1: requirements.txt
 
 Patch0: marisa-fix-python-setup.patch

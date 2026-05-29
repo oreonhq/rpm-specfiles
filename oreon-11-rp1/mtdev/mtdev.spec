@@ -19,7 +19,7 @@ Source0:        http://bitmath.org/code/mtdev/mtdev-1.1.6.tar.bz2
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        http://bitmath.org/code/%{name}/%{name}-%{version}.tar.bz2
+Source0:        http://bitmath.org/code/mtdev/mtdev-1.1.6.tar.bz2
 %endif
 
 BuildRequires:  autoconf automake libtool gcc make make make make

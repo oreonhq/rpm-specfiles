@@ -23,8 +23,7 @@ Summary:        Tools for internationalizing Python applications
 
 License:        BSD-3-Clause
 URL:            https://babel.pocoo.org/
-Source:         %{pypi_source}
-
+Source:        https://files.pythonhosted.org/packages/source/b/babel/babel-2.18.0.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

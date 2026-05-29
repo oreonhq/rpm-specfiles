@@ -8,7 +8,7 @@ Summary:	Utility to evaluate system suitability for RT Linux
 Group:		Development/Tools
 License:	GPL-2.0-only AND GPL-2.0-or-later
 URL:		https://git.kernel.org/pub/scm/utils/rteval/rteval.git
-Source0:	https://www.kernel.org/pub/linux/utils/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://www.kernel.org/pub/linux/utils/rteval/rteval-3.10.tar.xz
 # https://lore.kernel.org/linux-rt-users/20251126231223.100316-1-yselkowi@redhat.com/T/#u
 Patch0:         0001-rteval-do-not-require-wheel-for-building.patch
 
@@ -44,7 +44,7 @@ to the screen.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -v -p1
+%autosetup -p1
 # Delete setup.py so pyproject.toml build doesn't use it
 rm -f setup.py
 

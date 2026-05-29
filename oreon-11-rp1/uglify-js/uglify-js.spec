@@ -11,7 +11,7 @@ Release:        6%{?dist}
 Summary:        JavaScript parser, mangler/compressor and beautifier toolkit
 License:        BSD-2-Clause
 URL:            https://github.com/mishoo/UglifyJS
-Source0:        https://registry.npmjs.org/%{name}/-/%{name}-%{version}.tgz
+Source0:        https://registry.npmjs.org/uglify-js/-/uglify-js-3.19.3.tgz
 
 BuildArch:      noarch
 ExclusiveArch:  %{nodejs_arches} noarch

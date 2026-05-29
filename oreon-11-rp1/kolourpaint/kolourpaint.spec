@@ -11,7 +11,7 @@ Release: 1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD 
 URL:     https://www.kde.org/applications/graphics/kolourpaint/
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kolourpaint-26.03.80.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: libappstream-glib

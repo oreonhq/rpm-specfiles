@@ -13,7 +13,7 @@ Release: 1%{?dist}
 License: GPL-2.0-only OR GPL-3.0-only
 URL:     https://utils.kde.org/projects/filelight
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/filelight-26.03.80.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: libappstream-glib

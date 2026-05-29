@@ -15,7 +15,7 @@ Release:        522%{?dist}
 Summary:        Perl pragma to declare constants
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/constant
-Source0:        https://cpan.metacpan.org/authors/id/S/SA/SAPER/constant-%{cpan_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SA/SAPER/constant-1.27.tar.gz
 # Update to 1.33
 Patch0:         constant-1.33-update.patch
 BuildArch:      noarch

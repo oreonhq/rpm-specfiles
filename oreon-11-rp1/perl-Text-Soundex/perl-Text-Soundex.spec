@@ -8,7 +8,7 @@ Summary:        Implementation of the soundex algorithm
 # added Perl license but kept the original license text.
 License:        Soundex AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/Text-Soundex
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Text-Soundex-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Text-Soundex-3.05.tar.gz
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc

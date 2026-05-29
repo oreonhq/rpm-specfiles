@@ -42,7 +42,7 @@ Version: 6.9
 Release: 1%{?dist}
 License: LGPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-or-later
 URL: http://brltty.app/
-Source0: http://brltty.app/archive/%{name}-%{version}.tar.xz
+Source0:        http://brltty.app/archive/brltty-6.9.tar.xz
 Source1: brltty.service
 Source2: brlapi-config.h
 Source3: brlapi-forbuild.h

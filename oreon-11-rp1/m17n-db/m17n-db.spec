@@ -7,7 +7,7 @@ Release:    %autorelease
 License:    LGPL-2.1-or-later
 URL:        http://www.nongnu.org/m17n
 
-Source0:    http://download-mirror.savannah.gnu.org/releases/m17n/%{name}-%{version}.tar.gz
+Source0:        http://download-mirror.savannah.gnu.org/releases/m17n/m17n-db-1.8.11.tar.gz
 # Following is awaiting for upstream commit
 Source1:    https://raw.githubusercontent.com/gnuman/m17n-inglish-mims/master/minglish/minglish.mim
 

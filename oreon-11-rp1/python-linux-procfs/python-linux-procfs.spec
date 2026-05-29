@@ -10,7 +10,7 @@ Version: 0.7.4
 Release: 2%{?dist}
 License: GPL-2.0-only
 Summary: Linux /proc abstraction classes
-Source: https://cdn.kernel.org/pub/software/libs/python/%{name}/%{name}-%{version}.tar.xz
+Source:        https://cdn.kernel.org/pub/software/libs/python/python-linux-procfs/python-linux-procfs-0.7.4.tar.xz
 URL: https://www.kernel.org/pub/software/libs/python/python-linux-procfs
 BuildArch: noarch
 BuildRequires: python3-devel

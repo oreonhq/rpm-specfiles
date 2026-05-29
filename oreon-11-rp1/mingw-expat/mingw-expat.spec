@@ -9,7 +9,7 @@ Summary:        MinGW Windows port of expat XML parser library
 
 License:        MIT
 URL:            http://www.libexpat.org/
-Source0:        http://downloads.sourceforge.net/expat/expat-%{version}.tar.bz2
+Source0:        http://downloads.sourceforge.net/expat/expat-2.8.1.tar.bz2
 
 BuildArch:      noarch
 

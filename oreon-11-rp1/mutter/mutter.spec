@@ -16,8 +16,8 @@
 %global wayland_protocols_version 1.45
 %global wayland_server_version 1.24
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:          mutter
 Version:       50.0
@@ -27,8 +27,7 @@ Summary:       Window and compositing manager based on Clutter
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:       GPL-2.0-or-later
 URL:           http://www.gnome.org
-Source0:       http://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/mutter/%{major_version}/mutter-%{tarball_version}.tar.xz
 BuildRequires: cvt
 BuildRequires: desktop-file-utils
 BuildRequires: mesa-libEGL-devel

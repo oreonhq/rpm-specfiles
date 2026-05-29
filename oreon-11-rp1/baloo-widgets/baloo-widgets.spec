@@ -8,7 +8,7 @@ Release: 1%{?dist}
 # # KDE e.V. may determine that future LGPL versions are accepted
 License: LGPL-2.0-only OR LGPL-3.0-only
 URL:     https://invent.kde.org/libraries/%{name}
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/baloo-widgets-26.03.80.tar.xz
 
 BuildRequires:  cmake(Qt6Widgets)
 BuildRequires:  cmake(Qt6Test)

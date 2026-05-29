@@ -7,8 +7,8 @@ Summary:        GLib ICE implementation
 
 License:        LGPL-2.1-or-later OR MPL-1.1
 URL:            https://nice.freedesktop.org/
-Source0:        https://nice.freedesktop.org/releases/%{name}-%{version}.tar.gz
-Source1:        https://nice.freedesktop.org/releases/%{name}-%{version}.tar.gz.asc
+Source0:        https://nice.freedesktop.org/releases/libnice-0.1.23.tar.gz
+Source1:        https://nice.freedesktop.org/releases/libnice-0.1.23.tar.gz.asc
 
 # gpg --recv-keys 1D388E5A4ED9A2BB
 # gpg --output olivier.pgp --armor --export olivier.crete@ocrete.ca

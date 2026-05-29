@@ -191,7 +191,7 @@ Url:           https://www.clusterlabs.org/
 # named correctly only for commit IDs, not tagged releases.)
 #
 # You can use "spectool -s 0 pacemaker.spec" (rpmdevtools) to show final URL.
-Source0:       https://codeload.github.com/%{github_owner}/%{name}/tar.gz/%{archive_github_url}
+Source0:        https://codeload.github.com/ClusterLabs/pacemaker/tar.gz/%(c=16e74fc4da93a08514e1ec320fa9530b6c3d9fd5;#/pacemaker-%(c=16e74fc4da93a08514e1ec320fa9530b6c3d9fd5;.tar.gz
 Source1:       pacemaker.sysusers
 
 # upstream commits

@@ -9,8 +9,8 @@ BuildArch:      noarch
 License:        CC0-1.0 AND BSD-2-Clause AND CC-BY-SA-4.0
 URL:            https://invent.kde.org/plasma/%{name}
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.2/ocean-sound-theme-6.6.2.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.2/ocean-sound-theme-6.6.2.tar.xz.sig
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros

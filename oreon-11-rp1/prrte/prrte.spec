@@ -11,7 +11,7 @@ Summary:        PMIx Reference RunTime Environment (PRRTE)
 # docs/_build/html/_static/css/fonts/* are (OFL-1.1 OR MIT)
 License:        BSD-3-Clause-Open-MPI AND BSD-2-Clause
 URL:            https://github.com/openpmix/%{name}
-Source0:        https://github.com/openpmix/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/openpmix/prrte/releases/download/v3.0.6/prrte-3.0.6.tar.bz2
 # Upstream fix for --stdfor for non-zeron ranks - fixes rhbz#2307533
 Patch0:         https://patch-diff.githubusercontent.com/raw/openpmix/prrte/pull/2038.patch
 

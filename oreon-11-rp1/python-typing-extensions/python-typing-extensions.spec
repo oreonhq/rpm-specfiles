@@ -7,8 +7,7 @@ Summary:        Backported and Experimental Type Hints for Python
 
 License:        PSF-2.0
 URL:            https://pypi.org/project/typing-extensions/
-Source:         %{pypi_source typing_extensions}
-
+Source:        https://files.pythonhosted.org/packages/source/t/typing-extensions/typing-extensions-4.15.0.tar.gz
 # fix test on 3.14
 # https://github.com/python/typing_extensions/pull/683
 Patch:          https://github.com/python/typing_extensions/pull/683.patch

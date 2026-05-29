@@ -6,7 +6,7 @@ Release:        35%{?dist}
 Summary:        MANIFEST.SKIP Manangement for Modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Manifest-Skip
-Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Module-Manifest-Skip-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Module-Manifest-Skip-0.23.tar.gz
 # Adapt to changes in Moo-2.004000, bug #1826148,
 # <https://github.com/ingydotnet/module-manifest-skip-pm/issues/7>
 Patch0:         Module-Manifest-Skip-0.23-Adapt-to-changes-in-Moo-2.004000.patch

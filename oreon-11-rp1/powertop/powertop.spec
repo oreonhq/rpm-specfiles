@@ -7,7 +7,7 @@ Summary:          Power consumption monitor
 
 License:          gpl-2.0-only AND lgpl-2.1-only AND isc
 URL:              http://01.org/powertop/
-Source0:          http://github.com/fenrus75/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        http://github.com/fenrus75/powertop/archive/v2.15/powertop-2.15.tar.gz
 Source1:          powertop.service
 
 # Sent upstream

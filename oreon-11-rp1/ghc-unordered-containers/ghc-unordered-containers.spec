@@ -17,7 +17,7 @@ Summary:        Efficient hashing-based container types
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/unordered-containers
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/unordered-containers-0.2.20.1/unordered-containers-0.2.20.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

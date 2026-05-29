@@ -8,8 +8,8 @@ Release:       14%{?dist}
 License:       GPL-2.0-or-later
 URL:           https://github.com/dcantrell/pyparted
 
-Source0:       https://github.com/dcantrell/pyparted/releases/download/v%{version}/%{name}-%{version}.tar.gz
-Source1:       https://github.com/dcantrell/pyparted/releases/download/v%{version}/%{name}-%{version}.tar.gz.asc
+Source0:        https://github.com/dcantrell/pyparted/releases/download/v3.13.0/pyparted-3.13.0.tar.gz
+Source1:        https://github.com/dcantrell/pyparted/releases/download/v3.13.0/pyparted-3.13.0.tar.gz.asc
 Source2:       keyring.gpg
 Source3:       trustdb.gpg
 

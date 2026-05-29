@@ -19,7 +19,7 @@ Name: gtk-vnc
 Version: 1.5.0
 Release: %autorelease
 License: LGPL-2.1-or-later
-Source: https://download.gnome.org/sources/%{name}/%{verdir}/%{name}-%{version}.tar.xz
+Source:        https://download.gnome.org/sources/gtk-vnc/%(echo %{version} | cut -d. -f1)/gtk-vnc-1.5.0.tar.xz
 Patch: 0001-make-gtk-vnc-debug-work-with-new-glib.patch
 Patch: 0002-Expand-log-message-to-include-log-domain-and-timesta.patch
 URL: https://gitlab.gnome.org/GNOME/gtk-vnc

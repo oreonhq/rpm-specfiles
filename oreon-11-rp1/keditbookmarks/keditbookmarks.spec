@@ -10,7 +10,7 @@ Release: 1%{?dist}
 License: GPL-2.0-only AND GPL-3.0-only AND LicenseRef-Callaway-GFDL
 URL:     https://www.kde.org/
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/keditbookmarks-26.03.80.tar.xz
 
 BuildRequires: desktop-file-utils
 

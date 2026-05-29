@@ -9,8 +9,7 @@ Summary:        Python interface to the pkg-config command line tool
 
 License:        MIT
 URL:            https://github.com/matze/pkgconfig
-Source:         %{pypi_source}
-
+Source:        https://files.pythonhosted.org/packages/source/p/python-pkgconfig/python-pkgconfig-1.6.0.tar.gz
 BuildArch:      noarch
 
 %description

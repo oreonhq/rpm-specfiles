@@ -14,7 +14,7 @@ Version:   1.4.8
 Release:   %autorelease
 License:   GPL-2.0-or-later AND LGPL-2.1-or-later
 URL:       https://www.freedesktop.org/software/colord/
-Source0:   https://www.freedesktop.org/software/colord/releases/%{name}-%{version}.tar.xz
+Source0:        https://www.freedesktop.org/software/colord/releases/colord-1.4.8.tar.xz
 
 %if !0%{?rhel}
 BuildRequires:  pkgconfig(bash-completion)

@@ -12,7 +12,7 @@ URL:            https://maven.apache.org/shared/maven-artifact-transfer
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/maven-artifact-transfer/0.13.1/maven-artifact-transfer-0.13.1-source-release.zip
 
 Patch:          0001-Compatibility-with-Maven-3.0.3-and-later.patch
 Patch:          0002-Remove-support-for-maven-3.0.X.patch

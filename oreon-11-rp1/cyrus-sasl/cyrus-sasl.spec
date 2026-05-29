@@ -15,7 +15,7 @@ License: BSD-Attribution-HPND-disclaimer
 URL: https://www.cyrusimap.org/sasl/
 
 # Upstream release tarball (dlcompat/srp stripped in %%prep like Fedora script)
-Source0: https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-%{version}/cyrus-sasl-%{version}.tar.gz
+Source0:        https://github.com/cyrusimap/cyrus-sasl/releases/download/cyrus-sasl-2.1.28/cyrus-sasl-2.1.28.tar.gz
 Source3: saslauth.sysusers
 Source5: saslauthd.service
 Source7: sasl-mechlist.c

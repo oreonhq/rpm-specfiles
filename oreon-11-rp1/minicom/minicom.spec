@@ -14,7 +14,7 @@ URL: https://salsa.debian.org/minicom-team/minicom
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND LicenseRef-Fedora-Public-Domain
 #ExcludeArch: s390 s390x
 
-Source0: https://salsa.debian.org/minicom-team/minicom/-/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://salsa.debian.org/minicom-team/minicom/-/archive/2.10/minicom-2.10.tar.gz
 
 # src/sysdep.h: remove cfset{i,o}speed macros for glibc
 # https://salsa.debian.org/minicom-team/minicom/-/commit/964ae563cb5a78545ae1a4a3b6784c69ec73bc48

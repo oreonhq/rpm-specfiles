@@ -7,7 +7,7 @@ Summary:	An advanced twin-panel (commander-style) file-manager for KDE
 
 License:	GPL-2.0-or-later
 URL:		https://www.krusader.org/
-Source0:	https://download.kde.org/stable/%{name}/%{version}/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/krusader/2.9.0/krusader-2.9.0.tar.xz
 
 BuildRequires:	bzip2-devel
 BuildRequires:	cmake

@@ -34,7 +34,7 @@ This package contains the non-variable font version of the Cantarell font.}
 
 This package contains the variable font version of the Cantarell font.}
 
-Source0: http://download.gnome.org/sources/cantarell-fonts/0.301/cantarell-fonts-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/cantarell-fonts/0.301/cantarell-fonts-0.301.tar.xz
 Source1: 31-cantarell.conf
 Source2: 31-cantarell-vf.conf
 

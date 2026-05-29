@@ -7,8 +7,8 @@ Release: 5%{?dist}
 
 # The library is LGPLv2+, the documentation GPLv3+
 License: GPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
-Source0: https://gnupg.org/ftp/gcrypt/libassuan/libassuan-%{version}.tar.bz2
-Source1: https://gnupg.org/ftp/gcrypt/libassuan/libassuan-%{version}.tar.bz2.sig
+Source0:        https://gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.7.tar.bz2
+Source1:        https://gnupg.org/ftp/gcrypt/libassuan/libassuan-2.5.7.tar.bz2.sig
 URL:     https://www.gnupg.org/
 
 Patch1:  libassuan-2.5.2-multilib.patch

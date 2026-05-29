@@ -11,7 +11,7 @@ Epoch: 1
 License: MIT-open-group
 URL: https://www.x.org
 
-Source0: https://www.x.org/pub/individual/app/%{pkgname}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/app/xauth-1.1.5.tar.xz
 
 BuildRequires: make
 BuildRequires: pkgconfig automake gcc

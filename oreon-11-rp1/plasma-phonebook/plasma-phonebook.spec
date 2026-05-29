@@ -1,4 +1,4 @@
-%global source0_hash 5fd7dc8f1447c15fb4c17aa0c9b78844c51fc2b03c64f31a5d26c4628ee0b2a2
+%global source0_hash cef8d4129225c95b3a4f35909723ee67e677f55e5d8812bcf3ccf165d0901b57
 
 Name:           plasma-phonebook
 Version: 26.04.1
@@ -6,7 +6,7 @@ Release: 1%{?dist}
 License:        CC0 and GPLv2 and GPLv3 and GPLv3+ and LGPLv2+
 Summary:        Convergent Plasma Mobile phonebook application
 Url:            https://invent.kde.org/plasma-mobile/%{name}
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://invent.kde.org/plasma-mobile/plasma-phonebook/-/archive/v26.04.1/plasma-phonebook-v26.04.1.tar.gz#/plasma-phonebook-26.04.1.tar.gz
 
 
 BuildRequires:  gcc-c++
@@ -45,7 +45,7 @@ Contacts application which allows adding, modifying and removing contacts.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1
+%autosetup -p1 -n plasma-phonebook-v26.04.1
 
 %build
 %cmake_kf6
@@ -65,9 +65,6 @@ Contacts application which allows adding, modifying and removing contacts.
 %{_qt6_plugindir}/kpeople/actions/phonebook_kpeople_plugin.so
 
 %changelog
-* Mon May 25 2026 Brandon Lester <boostyconnect@oreonproject.org> - 6.6.5-1
-- Update to KDE Plasma 6.6.5
-
 * Mon Mar 16 2026 Steve Cossette <farchord@gmail.com> - 26.03.80-1
 - 26.03.80
 

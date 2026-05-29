@@ -8,7 +8,7 @@ Epoch: 1
 # Note: baseboards/riscv-sim.exp is GPL 2.0 or later
 # GFDL-1.3-or-later: Everything in doc/
 License: GPL-3.0-or-later AND GFDL-1.3-or-later
-Source: https://ftp.gnu.org/gnu/dejagnu/dejagnu-%{version}.tar.gz
+Source:        https://ftp.gnu.org/gnu/dejagnu/dejagnu-1.6.3.tar.gz
 URL: http://www.gnu.org/software/dejagnu/
 Requires: expect
 BuildArch: noarch

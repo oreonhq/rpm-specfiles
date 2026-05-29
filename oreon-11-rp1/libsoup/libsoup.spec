@@ -12,7 +12,7 @@ Summary: Soup, an HTTP library implementation
 
 License: LGPL-2.0-only
 URL: https://wiki.gnome.org/Projects/libsoup
-Source0: https://download.gnome.org/sources/%{name}/2.74/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/libsoup/2.74/libsoup-2.74.3.tar.xz
 # https://gitlab.gnome.org/GNOME/libsoup/-/merge_requests/385
 Patch:   libsoup-2.74.3-libxml2-2.12.0-includes.patch
 

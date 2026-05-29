@@ -11,7 +11,7 @@ URL:            https://velocity.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/apache/velocity-engine/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/apache/velocity-engine/archive/refs/tags/2.4.1.tar.gz#/velocity-2.4.1.tar.gz
 
 Patch:          0001-Template-is-a-reserved-keyword-in-javacc.patch
 
@@ -53,7 +53,7 @@ applications to be developed according to a true MVC model.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %mvn_alias : velocity:velocity
 %mvn_alias : org.apache.velocity:velocity

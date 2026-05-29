@@ -7,7 +7,7 @@ Summary:        Anaconda installer Web interface
 License:        LGPL-2.1-or-later AND MIT
 URL:            https://github.com/rhinstaller/%{name}
 
-Source0:        https://github.com/rhinstaller/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/rhinstaller/anaconda-webui/releases/download/68/anaconda-webui-68.tar.xz
 BuildArch:      noarch
 BuildRequires:  libappstream-glib
 BuildRequires:  make

@@ -17,8 +17,8 @@ Summary:        KIO FUSE
 
 License:        GPL-3.0-or-later
 URL:            https://invent.kde.org/system/kio-fuse
-Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
-Source1:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/kio-fuse/kio-fuse-5.1.1.tar.xz
+Source1:        https://download.kde.org/stable/kio-fuse/kio-fuse-5.1.1.tar.xz.sig
 Source2:        gpgkey-21EC3FD75D26B39E820BE6FBD27C2C1AF21D8BAD.gpg
 
 ## upstream fixes

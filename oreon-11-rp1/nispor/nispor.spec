@@ -10,8 +10,8 @@ Release:        %autorelease
 Summary:        Unified interface for Linux network state querying
 License:        Apache-2.0
 URL:            https://github.com/nispor/nispor
-Source:         https://github.com/nispor/nispor/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
-Source1:        https://github.com/nispor/nispor/releases/download/v%{version}/nispor-vendor-%{version}.tar.xz
+Source:        https://github.com/nispor/nispor/archive/v1.2.27.tar.gz#/nispor-1.2.27.tar.gz
+Source1:        https://github.com/nispor/nispor/releases/download/v1.2.27/nispor-vendor-1.2.27.tar.xz
 BuildRequires:  make
 BuildRequires:  pkg-config
 BuildRequires:  python3-devel

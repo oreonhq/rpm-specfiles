@@ -12,7 +12,7 @@ Version: 6.11.0
 Release: 4%{?dist}
 License: gpl-3.0-only
 Url:     http://www.riverbankcomputing.com/software/pyqt/
-Source0: https://pypi.python.org/packages/source/P/PyQt6/pyqt6-%{version}%{?snap:.%{snap}}.tar.gz
+Source0:        https://pypi.python.org/packages/source/P/PyQt6/pyqt6-6.11.0%{?snap:.%{snap}}.tar.gz
 Source1: macros.pyqt6
 
 # Compatibility with Python 3.15

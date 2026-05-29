@@ -16,8 +16,8 @@ Epoch:		1
 License:	BSD-1-Clause AND BSD-2-Clause AND BSD-3-Clause AND MIT AND GPL-2.0-or-later AND LGPL-2.0-or-later AND Zlib AND ISC AND (BSD-3-Clause OR GPL-2.0-only) AND (GPL-2.0-or-later AND Zlib)
 Url:		http://www.wireshark.org/
 
-Source0:	https://wireshark.org/download/src/%{name}-%{version}.tar.xz
-Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%{version}.txt
+Source0:        https://wireshark.org/download/src/wireshark-4.6.4.tar.xz
+Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-4.6.4.txt
 Source2:	90-wireshark-usbmon.rules
 Source3:	wireshark.sysusers
 

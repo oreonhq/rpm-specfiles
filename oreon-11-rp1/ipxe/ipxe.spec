@@ -49,7 +49,7 @@ Summary: A network boot loader
 License: BSD-2-Clause AND BSD-3-Clause AND GPL-2.0-only AND (GPL-2.0-only OR MPL-1.1) AND GPL-2.0-or-later AND GPL-2.0-or-later WITH UBDL-exception AND ISC AND MIT
 URL:     http://ipxe.org/
 
-Source0: https://github.com/ipxe/ipxe/archive/%{githash}.tar.gz#/%{name}-%{version}-git%{hash}.tar.gz
+Source0:        https://github.com/ipxe/ipxe/archive/de8a0821c7bc737e724fa3dfb6d89dc36f591d7a.tar.gz#/ipxe--gitde8a0821.tar.gz
 
 # Enable IPv6 for qemu's config
 # Sent upstream: http://lists.ipxe.org/pipermail/ipxe-devel/2015-November/004494.html

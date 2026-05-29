@@ -6,7 +6,7 @@ Version: 2.11.3
 Release: %autorelease
 License: MIT AND Unicode-DFS-2015
 URL:     http://julialang.org/utf8proc/
-Source:  https://github.com/JuliaLang/utf8proc/archive/v%{version}.tar.gz#/%{name}-v%{version}.tar.gz
+Source:        https://github.com/JuliaLang/utf8proc/archive/v2.11.3.tar.gz#/utf8proc-v2.11.3.tar.gz
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: perl-interpreter

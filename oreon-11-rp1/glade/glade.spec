@@ -12,7 +12,7 @@ Summary:        User Interface Designer for GTK+
 # Automatically converted from old format: GPLv2+ and LGPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later AND LicenseRef-Callaway-LGPLv2+
 URL:            https://glade.gnome.org/
-Source0:        https://download.gnome.org/sources/glade/3.40/glade-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/glade/3.40/glade-3.40.0.tar.xz
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  docbook-style-xsl

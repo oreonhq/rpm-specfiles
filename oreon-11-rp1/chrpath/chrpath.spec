@@ -7,7 +7,7 @@ Summary:        Modify rpath of compiled programs
 
 License:        GPL-2.0-or-later
 URL:            https://salsa.debian.org/debian/chrpath
-Source0:        https://deb.debian.org/debian/pool/main/c/chrpath/chrpath_%{version}.orig.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/c/chrpath/chrpath_0.16.orig.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  make

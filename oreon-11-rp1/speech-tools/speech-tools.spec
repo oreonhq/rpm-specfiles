@@ -7,7 +7,7 @@ Summary:        Edinburgh speech tools library
 
 License:        MIT-Festival
 URL:            http://festvox.org
-Source0: http://festvox.org/packed/festival/%{version}/speech_tools-%{version}.0-release.tar.gz
+Source0:        http://festvox.org/packed/festival/2.5/speech_tools-2.5.0-release.tar.gz
 # The license is somewhat specific and only a part of the readme, so it needs to be copied.
 # The issue which could change the situation is: https://github.com/festvox/speech_tools/issues/15
 Source1: LICENSE

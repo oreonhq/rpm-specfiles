@@ -17,8 +17,8 @@ Summary:        ASN1 data reader and writer in RAW, BER and DER forms
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/asn1-encoding
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/asn1-encoding-0.9.6/asn1-encoding-0.9.6.tar.gz
+Source1:        https://hackage.haskell.org/package/asn1-encoding-0.9.6/asn1-encoding.cabal#/asn1-encoding-0.9.6.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

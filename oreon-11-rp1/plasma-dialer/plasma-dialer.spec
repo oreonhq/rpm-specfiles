@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ae403c3812dc2383ef5c693cf7089d17cd5c65748c97443f649c86da0a9e9cb0
 
 %global kde_name org.kde.plasma.dialer
 
@@ -9,8 +9,7 @@ Release: 1%{?dist}
 License:        BSD and CC0 and GPLv2 and GPLv2+ and GPLv3 and GPLv3+ and LGPLv2+ and LGPLv2.1 and LGPLv2.1+ and LGPLv3 and LGPLv3
 Summary:        Convergent Plasma Mobile dialer application
 Url:            https://invent.kde.org/plasma-mobile/plasma-dialer
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://invent.kde.org/plasma-mobile/plasma-dialer/-/archive/v6.6.5/plasma-dialer-v6.6.5.tar.gz#/plasma-dialer-6.6.5.tar.gz
 
 ## patches
 
@@ -73,7 +72,7 @@ developing applications that use %{name}.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -n plasma-dialer-%{version} -p1
+%autosetup -p1 -n plasma-dialer-v6.6.5
 
 %build
 %cmake_kf6

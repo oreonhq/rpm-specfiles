@@ -24,7 +24,7 @@ Requires(preun): /usr/sbin/alternatives
 
 Recommends: %{name}-info%{?_isa} = %{version}-%{release}
 
-Source0:         https://download.samba.org/pub/linux-cifs/cifs-utils/%{name}-%{version}.tar.bz2
+Source0:        https://download.samba.org/pub/linux-cifs/cifs-utils/cifs-utils-7.5.tar.bz2
 
 %description
 The SMB/CIFS protocol is a standard file sharing protocol widely deployed

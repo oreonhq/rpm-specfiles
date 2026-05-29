@@ -20,7 +20,7 @@ Summary: The libvirt virtualization API python3 binding
 Name: libvirt-python
 Version: 12.0.0
 Release: 1%{?dist}
-Source0: https://libvirt.org/sources/python/%{dist_name}-%{version}.tar.gz
+Source0:        https://libvirt.org/sources/python/libvirt_python-12.0.0.tar.gz
 Url: https://libvirt.org
 License: LGPL-2.1-or-later
 BuildRequires: libvirt-devel == %{version}

@@ -13,7 +13,7 @@ Version:	%{rpm_version}
 Release:	21%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/common-sense
-Source0:	https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/common-sense-%{cpan_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/common-sense-3.75.tar.gz
 Patch1:		common-sense-3.71-podenc.patch
 # Module Build
 BuildRequires:	coreutils

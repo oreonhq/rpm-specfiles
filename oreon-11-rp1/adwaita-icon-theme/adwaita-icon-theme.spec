@@ -2,7 +2,7 @@
 
 %global adwlegacy_ver 46.2
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           adwaita-icon-theme
 Version:        50~rc
@@ -11,8 +11,7 @@ Summary:        Adwaita icon theme
 
 License:        LGPL-3.0-only OR CC-BY-SA-3.0
 URL:            https://gitlab.gnome.org/GNOME/adwaita-icon-theme
-Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/adwaita-icon-theme/50/adwaita-icon-theme-%{tarball_version}.tar.xz
 BuildArch:      noarch
 
 BuildRequires:  meson

@@ -11,7 +11,7 @@ Version: 6.3.0
 Release: 5%{?dist}
 Epoch: 1
 URL: https://gmplib.org/
-Source0: https://gmplib.org/download/gmp/gmp-%{version}.tar.xz
+Source0:        https://gmplib.org/download/gmp/gmp-6.3.0.tar.xz
 Source2: gmp.h
 Source3: gmp-mparam.h
 Patch2: gmp-6.0.0-debuginfo.patch

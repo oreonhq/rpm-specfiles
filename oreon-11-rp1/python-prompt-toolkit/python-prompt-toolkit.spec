@@ -10,7 +10,7 @@ Release:        %autorelease
 Summary:        Library for building powerful interactive command line applications in Python
 License:        BSD-3-Clause
 URL:            https://github.com/prompt-toolkit/python-prompt-toolkit
-Source:         %{pypi_source prompt_toolkit}
+Source:        https://files.pythonhosted.org/packages/source/p/prompt-toolkit/prompt-toolkit-3.0.52.tar.gz
 BuildArch:      noarch
 
 

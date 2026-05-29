@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Client for DAV servers
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Net-DAVTalk
-Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-DAVTalk-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-DAVTalk-0.24.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

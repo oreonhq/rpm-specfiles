@@ -8,7 +8,7 @@ Release:        521%{?dist}
 Summary:        Perl interpreter-based threads
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/threads
-Source0:        https://cpan.metacpan.org/authors/id/J/JD/JDHEDDEN/threads-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JD/JDHEDDEN/threads-2.21.tar.gz
 # Unbundled from perl 5.40.0-RC1
 Patch0:         threads-2.21-Upgrade-to-2.40.patch
 # Unbundled from perl 5.42.0

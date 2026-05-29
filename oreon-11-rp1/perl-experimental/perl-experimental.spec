@@ -6,7 +6,7 @@ Release:        3%{?dist}
 Summary:        Experimental features made easy
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/experimental
-Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/experimental-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/experimental-0.036.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

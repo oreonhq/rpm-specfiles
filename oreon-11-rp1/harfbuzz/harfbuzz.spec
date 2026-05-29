@@ -7,7 +7,7 @@ Summary:        Text shaping library
 
 License:        MIT-Modern-Variant
 URL:            https://github.com/harfbuzz/harfbuzz/
-Source0:        https://github.com/harfbuzz/harfbuzz/releases/download/%{version}/harfbuzz-%{version}.tar.xz
+Source0:        https://github.com/harfbuzz/harfbuzz/releases/download/13.1.1/harfbuzz-13.1.1.tar.xz
 
 BuildRequires:  cairo-devel
 BuildRequires:  freetype-devel

@@ -7,7 +7,7 @@ Release: 1%{?dist}
 
 License: CC0-1.0 AND LGPL-2.1-only AND LGPL-3.0-only
 URL:     https://invent.kde.org/libraries/pulseaudio-qt
-Source:  https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+Source:        https://download.kde.org/stable/pulseaudio-qt/pulseaudio-qt-1.8.1.tar.xz
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros

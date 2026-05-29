@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1e98cc6f524142c2b80731778fe8c74458936118bf95ae33cfa1e9205bfd48a5
 
 # build order matters and multiple threads break it
 %global _smp_mflags -j1
@@ -12,7 +12,7 @@ Summary:        Lightweight RPC library based on XML and HTTP
 # Automatically converted from old format: BSD and MIT - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-MIT
 URL:            http://xmlrpc-c.sourceforge.net/
-Source:         http://dl.sourceforge.net/sourceforge/xmlrpc-c/xmlrpc-c-%version.tgz
+Source:        https://downloads.sourceforge.net/project/xmlrpc-c/Xmlrpc-c%%20Super%%20Stable/1.60.04/xmlrpc-c-1.60.04.tgz
 
 # Upstreamable patches
 Patch102:       0002-Use-proper-datatypes-for-long-long.patch
@@ -104,7 +104,7 @@ This package contains some handy XML-RPC demo applications.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -Sgit
+%autosetup -S git
 
 
 %build

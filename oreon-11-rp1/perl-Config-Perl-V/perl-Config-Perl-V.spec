@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Structured data retrieval of perl -V output
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Config-Perl-V
-Source0:        https://cpan.metacpan.org/authors/id/H/HM/HMBRAND/Config-Perl-V-%{version}.tgz
+Source0:        https://cpan.metacpan.org/authors/id/H/HM/HMBRAND/Config-Perl-V-0.39.tgz
 # Correct example
 Patch0:         Config-Perl-V-0.24-Remove-invalid-shellbang.patch
 BuildArch:      noarch

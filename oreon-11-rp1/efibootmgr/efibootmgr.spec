@@ -20,7 +20,7 @@ Requires: efi-filesystem
 ExclusiveArch: %{efi}
 
 # Tag is 18, not efibootmgr-18 (asset at .../download/18/...)
-Source0: https://github.com/rhboot/%{name}/releases/download/%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/rhboot/efibootmgr/releases/download/18/efibootmgr-18.tar.bz2
 
 # Was efibootmgr.patches (%%include needs SOURCES at parse time for spectool)
 Patch0001: 0001-Update-efibootmgr.c.patch

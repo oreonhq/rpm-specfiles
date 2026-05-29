@@ -9,7 +9,7 @@ Summary:        A small embeddable Tcl interpreter
 
 License:        BSD-2-Clause-Views
 URL:            http://jim.tcl.tk
-Source:         https://github.com/msteveb/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/msteveb/jimtcl/archive/0.83/jimtcl-0.83.tar.gz
 # readline expects applications to include stdio.h, jimtcl was not
 Patch:          https://github.com/msteveb/jimtcl/commit/35e0e1f9b1f018666e5170a35366c5fc3b97309c.patch#/jimtcl-stdio-for-readline.diff
 

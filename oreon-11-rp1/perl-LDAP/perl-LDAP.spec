@@ -17,7 +17,7 @@ Epoch:          1
 Summary:        LDAP Perl module
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/perl-ldap
-Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARSCHAP/perl-ldap-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARSCHAP/perl-ldap-0.68.tar.gz
 # Optional tests need to know a location of an LDAP server executable
 Patch0:         perl-ldap-0.65-Configure-usr-sbin-slapd-for-tests.patch
 # Remove an unreliable cancelling test

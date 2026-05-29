@@ -22,7 +22,7 @@ This package provides a free Tamil truetype/opentype font.
 
 BuildRequires: make
 BuildRequires: fontforge
-Source0:        https://github.com/lohit-fonts/lohit-tamil-fonts/archive/refs/tags/%{version}.tar.gz#/%{fontname}-fonts-%{version}.tar.gz
+Source0:        https://github.com/lohit-fonts/lohit-tamil-fonts/archive/refs/tags/2.91.3.tar.gz#/lohit-tamil-fonts-2.91.3.tar.gz
 Source10:       66-%{fontpkgname}.conf
 
 %fontpkg

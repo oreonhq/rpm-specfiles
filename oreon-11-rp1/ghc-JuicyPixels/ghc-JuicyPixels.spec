@@ -15,8 +15,8 @@ Summary:        Picture loading and serialization
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/JuicyPixels
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/JuicyPixels-3.3.9/JuicyPixels-3.3.9.tar.gz
+Source1:        https://hackage.haskell.org/package/JuicyPixels-3.3.9/JuicyPixels.cabal#/JuicyPixels-3.3.9.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

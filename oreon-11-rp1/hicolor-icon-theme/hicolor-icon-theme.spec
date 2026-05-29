@@ -7,7 +7,7 @@ Summary: Basic requirement for icon themes
 
 License: GPL-2.0-or-later
 URL: https://www.freedesktop.org/wiki/Software/icon-theme/
-Source0: https://icon-theme.freedesktop.org/releases/%{name}-%{version}.tar.xz
+Source0:        https://icon-theme.freedesktop.org/releases/hicolor-icon-theme-0.18.tar.xz
 
 BuildArch: noarch
 

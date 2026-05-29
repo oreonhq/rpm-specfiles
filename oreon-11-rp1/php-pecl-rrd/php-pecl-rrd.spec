@@ -23,7 +23,7 @@ Release:      21%{?dist}
 License:      BSD-2-Clause
 URL:          https://pecl.php.net/package/rrd
 
-Source0:      https://pecl.php.net/get/%{sources}.tgz
+Source0:        https://pecl.php.net/get/rrd-2.0.3.tgz
 
 Patch0:       %{pecl_name}-build.patch
 Patch1:       %{pecl_name}-php85.patch

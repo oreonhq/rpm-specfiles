@@ -9,7 +9,7 @@ Release:        5%{?dist}
 Summary:        Software library for MTP media players
 URL:            http://libmtp.sourceforge.net/
 
-Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/libmtp/libmtp/releases/download/v1.1.22/libmtp-1.1.22.tar.gz
 # m4/stdint.m4 is LicenseRef-Fedora-UltraPermissive
 # m4/iconv.m4 is FSFULLR
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.1-only AND FSFULLR AND LicenseRef-Fedora-UltraPermissive

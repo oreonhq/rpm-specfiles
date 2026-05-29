@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/shared/maven-shared-utils
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/maven-shared-utils/3.4.2/maven-shared-utils-3.4.2-source-release.zip
 
 Patch:          0001-Avoid-setting-POSIX-attributes-for-symbolic-links.patch
 

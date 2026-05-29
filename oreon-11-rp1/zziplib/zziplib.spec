@@ -9,8 +9,7 @@ Version: 0.13.78
 Release: 4%{?dist}
 License: LGPL-2.0-or-later OR MPL-1.1
 URL: http://zziplib.sourceforge.net/
-Source: https://github.com/gdraheim/zziplib/archive/v%{version}.tar.gz
-
+Source:        https://github.com/gdraheim/zziplib/archive/v0.13.78.tar.gz#/zziplib-0.13.78.tar.gz
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: perl-interpreter
@@ -69,10 +68,10 @@ zziplib library.
 export CMAKE_POLICY_VERSION_MINIMUM=3.5
 %cmake -B "%{_vpath_builddir}"
 
-%make_build -C "%{_vpath_builddir}"
+%cmake_build
 
 %install
-%make_install -C "%{_vpath_builddir}"
+%cmake_install
 
 %ldconfig_scriptlets
 

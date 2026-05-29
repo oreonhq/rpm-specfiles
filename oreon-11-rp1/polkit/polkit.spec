@@ -9,7 +9,7 @@ Version: 127
 Release: 3%{?dist}
 License: LGPL-2.0-or-later
 URL: https://github.com/polkit-org/polkit
-Source0: https://github.com/polkit-org/polkit/archive/refs/tags/%{version}.tar.gz
+Source0:        https://github.com/polkit-org/polkit/archive/refs/tags/127.tar.gz
 Source1: polkit.sysusers
 
 Patch1: 0001-polkit-agent-helper-service-simplify-sandbox-rules.patch

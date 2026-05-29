@@ -12,7 +12,7 @@ URL:            https://maven.apache.org/apache-resource-bundles/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/apache/resources/apache-resource-bundles/%{version}/apache-resource-bundles-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/apache/resources/apache-resource-bundles/1.5/apache-resource-bundles-1.5-source-release.zip
 
 Patch:          0001-Port-ITs-to-Maven-Verifier-2.0.0-M1.patch
 # From upstream commit 5eab384b

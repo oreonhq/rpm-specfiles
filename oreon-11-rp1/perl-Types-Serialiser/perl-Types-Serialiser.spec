@@ -6,7 +6,7 @@ Version:	1.01
 Release:	15%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Types-Serialiser
-Source0:	https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Types-Serialiser-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/ML/MLEHMANN/Types-Serialiser-1.01.tar.gz
 Patch0:		Types-Serialiser-1.01-provides.patch
 BuildArch:	noarch
 # Module Build

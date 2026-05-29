@@ -7,7 +7,7 @@ Summary:       Display dialog boxes from shell scripts
 
 License:       LGPL-2.1-or-later
 URL:           https://wiki.gnome.org/Projects/Zenity
-Source:        https://download.gnome.org/sources/%{name}/4.2/%{name}-%{version}.tar.xz
+Source:        https://download.gnome.org/sources/zenity/4.2/zenity-4.2.1.tar.xz
 
 BuildRequires: pkgconfig(libadwaita-1) >= 1.2
 BuildRequires: /usr/bin/help2man

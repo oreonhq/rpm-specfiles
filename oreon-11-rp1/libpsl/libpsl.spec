@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        C library for the Publix Suffix List
 License:        MIT
 URL:            https://rockdaboot.github.io/libpsl
-Source0:        https://github.com/rockdaboot/libpsl/releases/download/%{version}/libpsl-%{version}.tar.gz
+Source0:        https://github.com/rockdaboot/libpsl/releases/download/0.21.5/libpsl-0.21.5.tar.gz
 BuildRequires:  gcc
 BuildRequires:  gettext-devel
 BuildRequires:  glib2-devel

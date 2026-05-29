@@ -6,7 +6,7 @@ Release:    %autorelease
 Summary:    The Table engine for IBus platform
 License:    LGPL-2.1-or-later
 URL:        https://github.com/mike-fabian/ibus-table
-Source0:    https://github.com/mike-fabian/ibus-table/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/mike-fabian/ibus-table/releases/download/1.17.16/ibus-table-1.17.16.tar.gz
 Requires:       ibus > 1.3.0
 %{?__python3:Requires: %{__python3}}
 # To play a sound on error:

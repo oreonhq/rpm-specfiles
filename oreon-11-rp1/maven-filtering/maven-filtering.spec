@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/shared/%{name}/index.html
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/maven-filtering/3.3.2/maven-filtering-3.3.2-source-release.zip
 
 Patch:          0001-Skip-failed-tests.patch
 

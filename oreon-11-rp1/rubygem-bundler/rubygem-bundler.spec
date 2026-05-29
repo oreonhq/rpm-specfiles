@@ -30,7 +30,7 @@ Summary: Library and utilities to manage a Ruby application's gem dependencies
 #   lib/rubygems/resolver/molinillo
 License: MIT AND (Ruby OR BSD-2-Clause)
 URL: https://bundler.io
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/bundler-2.6.9.gem
 # git clone https://github.com/rubygems/rubygems/ && cd rubygems
 # git archive -v -o bundler-2.6.9-specs.tar.gz bundler-v2.6.9 bundler/spec/ tool/bundler/{rubocop,standard,test}_gems.rb
 Source1: %{gem_name}-%{version}-specs.tar.gz

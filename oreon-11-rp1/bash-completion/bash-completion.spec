@@ -14,7 +14,7 @@ Summary:        Programmable completion for Bash
 
 License:        GPL-2.0-or-later
 URL:            https://github.com/scop/bash-completion
-Source0:        https://github.com/scop/bash-completion/releases/download/%{upstream_version}/%{name}-%{upstream_version}.tar.xz
+Source0:        https://github.com/scop/bash-completion/releases/download/2.17.0/bash-completion-2.17.0.tar.xz
 
 BuildArch:      noarch
 %if %{with tests}

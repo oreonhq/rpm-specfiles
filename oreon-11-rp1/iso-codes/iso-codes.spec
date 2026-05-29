@@ -6,7 +6,7 @@ Version:    4.20.1
 Release:    3%{?dist}
 License:    LGPL-2.1-or-later
 URL:        https://salsa.debian.org/iso-codes-team/iso-codes
-Source0:    https://salsa.debian.org/iso-codes-team/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source0:        https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v4.20.1/iso-codes-v4.20.1.tar.gz
 
 BuildRequires: gettext
 BuildRequires: python3

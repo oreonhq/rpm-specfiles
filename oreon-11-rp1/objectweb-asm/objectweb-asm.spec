@@ -14,12 +14,12 @@ ExclusiveArch:  %{java_arches} noarch
 # ./generate-tarball.sh
 Source0:        %{name}-%{version}.tar.gz
 Source1:        aggregator.pom
-Source2:        https://repo1.maven.org/maven2/org/ow2/asm/asm/%{version}/asm-%{version}.pom
-Source3:        https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/%{version}/asm-analysis-%{version}.pom
-Source4:        https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/%{version}/asm-commons-%{version}.pom
-Source5:        https://repo1.maven.org/maven2/org/ow2/asm/asm-test/%{version}/asm-test-%{version}.pom
-Source6:        https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/%{version}/asm-tree-%{version}.pom
-Source7:        https://repo1.maven.org/maven2/org/ow2/asm/asm-util/%{version}/asm-util-%{version}.pom
+Source2:        https://repo1.maven.org/maven2/org/ow2/asm/asm/9.7.1/asm-9.7.1.pom
+Source3:        https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/9.7.1/asm-analysis-9.7.1.pom
+Source4:        https://repo1.maven.org/maven2/org/ow2/asm/asm-commons/9.7.1/asm-commons-9.7.1.pom
+Source5:        https://repo1.maven.org/maven2/org/ow2/asm/asm-test/9.7.1/asm-test-9.7.1.pom
+Source6:        https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/9.7.1/asm-tree-9.7.1.pom
+Source7:        https://repo1.maven.org/maven2/org/ow2/asm/asm-util/9.7.1/asm-util-9.7.1.pom
 # The source contains binary jars that cannot be verified for licensing and could be proprietary
 Source9:        generate-tarball.sh
 Source10:       tools-retrofitter.pom
@@ -45,7 +45,7 @@ custom complex transformations and code analysis tools.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 # A custom pom to aggregate the build
 cp -p %{SOURCE1} pom.xml

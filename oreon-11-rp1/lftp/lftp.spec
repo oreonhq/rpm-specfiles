@@ -5,7 +5,7 @@ Name:		lftp
 Version:	4.9.3
 Release:	6%{?dist}
 License:	GPL-3.0-or-later
-Source0:	http://lftp.yar.ru/ftp/%{name}-%{version}.tar.xz
+Source0:        http://lftp.yar.ru/ftp/lftp-4.9.3.tar.xz
 URL:		http://lftp.yar.ru/
 BuildRequires:	ncurses-devel, gnutls-devel, perl-generators, pkgconfig, readline-devel, gettext
 BuildRequires:	zlib-devel, gcc-c++

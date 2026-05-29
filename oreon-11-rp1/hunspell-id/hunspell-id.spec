@@ -13,7 +13,7 @@ Summary: Indonesian hunspell dictionaries
 %global upstreamver 2.3.0
 Version: 0.%{upstreamid}
 Release: 2%{?dist}
-Source: https://github.com/shuLhan/hunspell-id/archive/refs/tags/v%{upstreamver}.tar.gz
+Source:        https://github.com/shuLhan/hunspell-id/archive/refs/tags/v2.3.0.tar.gz
 URL: https://github.com/shuLhan/hunspell-id
 License: LGPL-3.0-or-later
 BuildArch: noarch

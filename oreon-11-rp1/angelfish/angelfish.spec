@@ -20,7 +20,7 @@ License:        MIT AND GPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later
 # For a breakdown of the licensing, see PACKAGE-LICENSING
 URL:            https://invent.kde.org/network/%{name}
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/angelfish-26.03.80.tar.xz
 
 
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}

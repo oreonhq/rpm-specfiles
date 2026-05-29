@@ -11,7 +11,7 @@ Summary:       Framework for interacting with systemd-journald
 License:       BSD-3-Clause and CC0-1.0 and MIT and LGPL-2.1-or-later and MIT
 URL:           https://invent.kde.org/system/%{name}
 
-Source:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kjournald-26.04.1.tar.xz
 
 BuildRequires: systemd-devel
 BuildRequires: kf6-rpm-macros

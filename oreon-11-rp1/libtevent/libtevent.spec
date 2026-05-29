@@ -8,8 +8,8 @@ Release:        %autorelease
 Summary:        The tevent library
 License:        LGPL-3.0-or-later
 URL:            http://tevent.samba.org/
-Source0:        http://samba.org/ftp/tevent/tevent-%{version}.tar.gz
-Source1:        http://samba.org/ftp/tevent/tevent-%{version}.tar.asc
+Source0:        http://samba.org/ftp/tevent/tevent-0.17.1.tar.gz
+Source1:        http://samba.org/ftp/tevent/tevent-0.17.1.tar.asc
 # gpg2 --no-default-keyring --keyring ./tevent.keyring --recv-keys 9147A339719518EE9011BCB54793916113084025
 Source2:        tevent.keyring
 

@@ -7,8 +7,8 @@ Summary:        Detect if we are running in a virtual machine
 License:        GPL-2.0-or-later
 
 URL:            http://people.redhat.com/~rjones/virt-what/
-Source0:        http://people.redhat.com/~rjones/virt-what/files/%{name}-%{version}.tar.gz
-Source1:        http://people.redhat.com/~rjones/virt-what/files/%{name}-%{version}.tar.gz.sig
+Source0:        http://people.redhat.com/~rjones/virt-what/files/virt-what-1.27.tar.gz
+Source1:        http://people.redhat.com/~rjones/virt-what/files/virt-what-1.27.tar.gz.sig
 
 # Keyring used to verify tarball signature.
 Source2:       libguestfs.keyring

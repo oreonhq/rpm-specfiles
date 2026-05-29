@@ -6,7 +6,7 @@ Release: 40%{?dist}
 Summary: Pentaho Flow Reporting Engine
 License: LGPL-2.1-or-later
 Epoch: 1
-Source: http://downloads.sourceforge.net/jfreereport/flow-engine-%{version}.zip
+Source:        http://downloads.sourceforge.net/jfreereport/flow-engine-0.9.4.zip
 URL: http://reporting.pentaho.org/
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, libbase, libserializer
 BuildRequires: libloader, libfonts, pentaho-libxml, xml-commons-apis

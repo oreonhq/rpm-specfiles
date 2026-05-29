@@ -19,7 +19,7 @@ Version:	5.9.0
 Release:	%autorelease
 License:	BSD-3-Clause AND BSD-2-Clause AND LicenseRef-Fedora-Public-Domain
 Url:		https://www.wavpack.com/
-Source:		https://www.wavpack.com/%{name}-%{version}.tar.bz2
+Source:        https://www.wavpack.com/wavpack-5.9.0.tar.bz2
 # Fedora-specific
 Patch1:		wavpack-0001-fix-for-MinGW.patch
 # Fedora-specific (we do not build any C++ code)

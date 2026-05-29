@@ -6,7 +6,7 @@ Release:        33%{?dist}
 Summary:        Map/grep arrays and hashes pairwise
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/List-Pairwise
-Source0:        https://cpan.metacpan.org/authors/id/T/TD/TDRUGEON/List-Pairwise-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TD/TDRUGEON/List-Pairwise-1.03.tar.gz
 Patch0:         List-Pairwise-1.03-Fix-building-on-Perl-without-dot-in-INC.patch
 BuildArch:      noarch
 # Build

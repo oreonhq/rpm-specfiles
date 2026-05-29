@@ -8,7 +8,7 @@ Release: 1%{?dist}
 License: GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-only AND BSD-2-Clause
 URL:     https://invent.kde.org/sdk/%{name}.git
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kde-dev-scripts-26.04.1.tar.xz
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  cmake(KF6DocTools)

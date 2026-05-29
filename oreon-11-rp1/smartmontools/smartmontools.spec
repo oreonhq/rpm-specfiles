@@ -13,7 +13,7 @@ Release:	6%{?dist}
 Epoch:		1
 License:	GPL-2.0-or-later
 URL:		https://www.smartmontools.org/
-Source0:	https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/smartmontools/smartmontools-7.5.tar.gz
 Source2:	smartmontools.sysconf
 Source4:	smartdnotify
 #semi-automatic update of drivedb.h

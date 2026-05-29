@@ -13,7 +13,7 @@ Release:        522%{?dist}
 Summary:        A module for Perl manipulation of .tar files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Archive-Tar
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Archive-Tar-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Archive-Tar-3.04.tar.gz
 # Remove annoying sleep after warnings in the build script
 Patch0:         Archive-Tar-2.02-Do-not-sleep-in-Makefile.PL.patch
 BuildArch:      noarch

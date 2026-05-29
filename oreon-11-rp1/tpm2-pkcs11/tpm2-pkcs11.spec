@@ -9,8 +9,8 @@ Summary:	PKCS#11 interface for TPM 2.0 hardware
 
 License:	BSD-2-Clause
 URL:		https://github.com/tpm2-software/tpm2-pkcs11
-Source0:	https://github.com/tpm2-software/%{name}/releases/download/%{version}%{?candidate:-%{candidate}}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.gz
-Source1:	https://github.com/tpm2-software/%{name}/releases/download/%{version}%{?candidate:-%{candidate}}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.gz.asc
+Source0:        https://github.com/tpm2-software/tpm2-pkcs11/releases/download/1.9.1%{?candidate:-%{candidate}}/tpm2-pkcs11-1.9.1%{?candidate:-%{candidate}}.tar.gz
+Source1:        https://github.com/tpm2-software/tpm2-pkcs11/releases/download/1.9.1%{?candidate:-%{candidate}}/tpm2-pkcs11-1.9.1%{?candidate:-%{candidate}}.tar.gz.asc
 # William Roberts (Bill Roberts) key from pgp.mit.edu
 Source2:	gpgkey-8E1F50C1.gpg
 

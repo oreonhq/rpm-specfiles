@@ -1261,7 +1261,7 @@ Source18: TestTranslations.java
 
 # FIPS support sources.
 # For libnssadapter.so (RHEL-128413)
-Source31: https://github.com/rh-openjdk/nss-native-fips-key-import-export-adapter/releases/download/%{nssadapter_version}/%{nssadapter_name}.tar.xz
+Source31:        https://github.com/rh-openjdk/nss-native-fips-key-import-export-adapter/releases/download/0.1.1/nssadapter-0.1.1.tar.xz
 # Create OpenJDK's crypto-policies hierarchy (RHEL-128409)
 Source32: create-redhat-properties-files.bash
 

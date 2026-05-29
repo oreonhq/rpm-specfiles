@@ -13,7 +13,7 @@ Summary:        Python's Filesystem abstraction layer
 # https://spdx.org/licenses/MIT.html
 License:        MIT
 URL:            https://pypi.org/project/fs/
-Source0:        https://github.com/PyFilesystem/pyfilesystem2/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/PyFilesystem/pyfilesystem2/archive/v2.4.16/fs-2.4.16.tar.gz
 
 # Replace TestCase method aliases removed in Python 3.12
 # https://github.com/PyFilesystem/pyfilesystem2/pull/570

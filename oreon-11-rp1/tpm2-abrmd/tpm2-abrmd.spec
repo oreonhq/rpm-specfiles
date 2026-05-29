@@ -10,7 +10,7 @@ Summary: A system daemon implementing TPM2 Access Broker and Resource Manager
 
 License: BSD-2-Clause
 URL:     https://github.com/tpm2-software/tpm2-abrmd
-Source0: https://github.com/tpm2-software/tpm2-abrmd/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/tpm2-software/tpm2-abrmd/releases/download/3.0.0/tpm2-abrmd-3.0.0.tar.gz
 
 %{?systemd_requires}
 BuildRequires: make

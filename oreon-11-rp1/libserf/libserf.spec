@@ -9,7 +9,7 @@ Release:        13%{?dist}
 Summary:        High-Performance Asynchronous HTTP Client Library
 License:        Apache-2.0
 URL:            https://serf.apache.org/
-Source0:        https://archive.apache.org/dist/serf/serf-%{version}.tar.bz2
+Source0:        https://archive.apache.org/dist/serf/serf-1.3.10.tar.bz2
 BuildRequires:  gcc, pkgconfig
 BuildRequires:  apr-devel, apr-util-devel, krb5-devel, openssl-devel
 BuildRequires:  zlib-devel, cmake

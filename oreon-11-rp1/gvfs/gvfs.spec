@@ -21,7 +21,7 @@
 %global talloc_version 1.3.0
 %global udisks2_version 1.97
 
-%global major_minor_version %%(echo %%{version} | cut -d "." -f 1-2)
+%global major_minor_version %(echo %{version} | cut -d "." -f 1-2)
 
 Name:    gvfs
 Version: 1.60.0
@@ -31,8 +31,7 @@ Summary: Backends for the gio framework in GLib
 License: LGPL-2.0-or-later AND GPL-3.0-only AND MPL-2.0 AND BSD-3-Clause-Sun
 
 URL:     https://wiki.gnome.org/Projects/gvfs
-Source0: https://download.gnome.org/sources/%{name}/%{major_minor_version}/%{name}-%{version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gvfs/%{major_minor_version}/gvfs-%{version}.tar.xz
 BuildRequires: meson
 BuildRequires: gcc
 BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}

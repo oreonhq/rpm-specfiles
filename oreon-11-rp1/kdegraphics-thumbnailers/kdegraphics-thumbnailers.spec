@@ -12,7 +12,7 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://www.kde.org/applications/graphics/
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kdegraphics-thumbnailers-26.03.80.tar.xz
 
 BuildRequires: extra-cmake-modules
 BuildRequires: kf6-rpm-macros

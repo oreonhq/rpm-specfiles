@@ -10,7 +10,7 @@ Summary: KDE Connect client for communication with smartphones
 
 Url:     https://community.kde.org/KDEConnect
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{base_name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kdeconnect-kde-26.03.80.tar.xz
 
 # Doesn't build on i686 as-of 25.03.80
 ExcludeArch: %{ix86}

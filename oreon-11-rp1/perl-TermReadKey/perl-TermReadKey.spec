@@ -6,7 +6,7 @@ Release:        27%{?dist}
 Summary:        A perl module for simple terminal control
 License:        TermReadKey AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/TermReadKey
-Source0:        https://cpan.metacpan.org/authors/id/J/JS/JSTOWE/TermReadKey-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JS/JSTOWE/TermReadKey-2.38.tar.gz
 Patch0: perl-TermReadKey-configure-c99.patch
 # Build
 BuildRequires:  findutils

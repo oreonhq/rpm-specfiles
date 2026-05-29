@@ -15,7 +15,7 @@ Summary:        Unbounded thread delays and timeouts
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/unbounded-delays
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/unbounded-delays-0.1.1.1/unbounded-delays-0.1.1.1.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

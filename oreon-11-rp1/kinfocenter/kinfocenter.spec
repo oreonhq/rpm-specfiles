@@ -11,8 +11,8 @@ Summary: KDE Info Center
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND FSFAP AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
 
-Source0: http://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
-Source1: http://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/kinfocenter-6.6.3.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/kinfocenter-6.6.3.tar.xz.sig
 
 BuildRequires:  qt6-qtbase-devel
 

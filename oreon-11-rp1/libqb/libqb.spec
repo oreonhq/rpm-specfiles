@@ -9,7 +9,7 @@ Summary:        Library providing high performance logging, tracing, ipc, and po
 
 License:        LGPL-2.1-or-later
 URL:            https://github.com/ClusterLabs/libqb
-Source0:        https://github.com/ClusterLabs/libqb/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/ClusterLabs/libqb/releases/download/v2.0.9/libqb-2.0.9.tar.xz
 
 
 BuildRequires:  autoconf automake libtool

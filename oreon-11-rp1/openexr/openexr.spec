@@ -6,7 +6,7 @@ Release:        6%{?dist}
 Summary:        Tools and libraries for ILM's OpenEXR high dynamic-range image format
 License:        BSD-3-Clause
 URL:            https://www.openexr.com/
-Source0:        https://github.com/AcademySoftwareFoundation/openexr/archive/v%{version}/openexr-%{version}.tar.gz
+Source0:        https://github.com/AcademySoftwareFoundation/openexr/archive/v3.3.3/openexr-3.3.3.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

@@ -47,7 +47,7 @@ URL:            http://www.sfml-dev.org/
 # See the asset_licenses.md for more details: https://github.com/SFML/SFML/blob/2.6.1/examples/asset_licenses.md
 # And here's the PR that changed (most) of the things: https://github.com/SFML/SFML/pull/1718
 
-Source0:        https://www.sfml-dev.org/files/%{name}-%{version}-sources.zip
+Source0:        https://www.sfml-dev.org/files/SFML-2.6.2-sources.zip
 
 BuildRequires:  cmake
 BuildRequires:  doxygen

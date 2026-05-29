@@ -8,7 +8,7 @@ Release:        3%{?dist}
 License:        BSD-3-Clause
 URL:            https://www.xiph.org/
 
-Source:         https://downloads.xiph.org/releases/ogg/%{name}-%{version}.tar.xz
+Source:        https://downloads.xiph.org/releases/ogg/libogg-1.3.6.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  make

@@ -16,8 +16,8 @@ Name:      mrtg
 Version:   2.17.10
 Release:   13%{?dist}
 URL:       http://oss.oetiker.ch/mrtg/
-Source0:   http://oss.oetiker.ch/mrtg/pub/mrtg-%{version}.tar.gz
-Source1:   http://oss.oetiker.ch/mrtg/pub/mrtg-%{version}.tar.gz.md5
+Source0:        http://oss.oetiker.ch/mrtg/pub/mrtg-2.17.10.tar.gz
+Source1:        http://oss.oetiker.ch/mrtg/pub/mrtg-2.17.10.tar.gz.md5
 # Source2: configuration file example
 Source2:   mrtg.cfg
 # Source3: script for filtering out false perl requires

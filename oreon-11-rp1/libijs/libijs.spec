@@ -20,7 +20,7 @@ Release:          26%{?dist}
 License:          AGPL-3.0-or-later
 
 URL:              https://ghostscript.com/
-Source:           https://github.com/ArtifexSoftware/ijs/archive/%{version}.tar.gz#/ijs-%{version}.tar.gz
+Source:        https://github.com/ArtifexSoftware/ijs/archive/0.35.tar.gz#/ijs-0.35.tar.gz
 
 BuildRequires:    gcc
 BuildRequires:    git

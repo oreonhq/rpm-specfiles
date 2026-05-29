@@ -10,8 +10,7 @@ Summary:        Content discovery framework
 
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/Grilo
-Source0:        https://download.gnome.org/sources/grilo/%{release_version}/grilo-%{version}.tar.xz
-
+Source0: https://download.gnome.org/sources/grilo/%(echo %{version} | cut -d. -f1)/grilo-%{version}.tar.xz
 BuildRequires:  meson
 BuildRequires:  git
 BuildRequires:  chrpath

@@ -7,7 +7,7 @@ Summary:        RDF Query Library
 
 License:        LGPL-2.1-or-later OR Apache-2.0
 URL:            http://librdf.org/rasqal/
-Source:         http://download.librdf.org/source/%{name}-%{version}.tar.gz
+Source:        http://download.librdf.org/source/rasqal-0.9.33.tar.gz
 
 BuildRequires: make
 BuildRequires:  gcc-c++

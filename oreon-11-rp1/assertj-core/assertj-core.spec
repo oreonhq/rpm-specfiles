@@ -11,7 +11,7 @@ URL:            https://joel-costigliola.github.io/assertj/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/joel-costigliola/assertj-core/archive/assertj-build-%{version}.tar.gz
+Source0:        https://github.com/joel-costigliola/assertj-core/archive/assertj-build-3.26.3.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -32,7 +32,7 @@ A rich and intuitive set of strongly-typed assertions to use for unit testing
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 %pom_remove_plugin -r :maven-javadoc-plugin
 %pom_remove_plugin -r :maven-enforcer-plugin

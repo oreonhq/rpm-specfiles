@@ -7,7 +7,7 @@ Release:    3%{?dist}
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    Parses ISO8601 date-time formats
 Url:        https://metacpan.org/release/DateTime-Format-ISO8601
-Source:     https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-Format-ISO8601-%{version}.tar.gz
+Source:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-Format-ISO8601-0.17.tar.gz
 BuildArch:  noarch
 BuildRequires:  coreutils
 BuildRequires:  make

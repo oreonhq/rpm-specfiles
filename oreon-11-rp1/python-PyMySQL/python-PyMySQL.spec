@@ -7,8 +7,7 @@ Summary:        Pure-Python MySQL client library
 
 License:        MIT
 URL:            https://pypi.org/project/pymysql/
-Source:         %{pypi_source pymysql}
-
+Source:        https://files.pythonhosted.org/packages/source/p/pymysql/pymysql-1.1.2.tar.gz
 BuildArch:      noarch
 
 %description

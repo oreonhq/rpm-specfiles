@@ -15,7 +15,7 @@ Summary:        A header-only C++11 serialization library
 # include/cereal/external/rapidxml/license.txt is MIT OR BSL-1.0
 License:        BSD-3-Clause AND BSL-1.0 AND Zlib AND MIT AND (MIT OR BSL-1.0)
 Url:            http://uscilab.github.io/cereal/
-Source0:        https://github.com/USCiLab/cereal/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/USCiLab/cereal/archive/v1.3.2.tar.gz#/cereal-1.3.2.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  boost-devel

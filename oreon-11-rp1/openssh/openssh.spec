@@ -43,8 +43,8 @@ Name: openssh
 Version: %{openssh_ver}
 Release: %autorelease
 URL: http://www.openssh.com/portable.html
-Source0: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz
-Source1: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-%{version}.tar.gz.asc
+Source0:        https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-.tar.gz
+Source1:        https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/portable/openssh-.tar.gz.asc
 Source2: sshd.pam
 Source3: https://cdn.openbsd.org/pub/OpenBSD/OpenSSH/RELEASE_KEY.asc
 Source6: ssh-keycat.pam

@@ -8,7 +8,7 @@ Release:        521%{?dist}
 Summary:        Implements default import method for modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Exporter
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Exporter-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/Exporter-5.78.tar.gz
 # Upgrade to 5.79 based on perl-5.42.0
 Patch0:         Exporter-5.78-Upgrade-to-5.79.patch
 BuildArch:      noarch

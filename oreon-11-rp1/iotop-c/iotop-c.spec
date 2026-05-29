@@ -7,9 +7,9 @@ Summary:        Simple top-like I/O monitor (implemented in C)
 
 License:        GPL-2.0-or-later
 URL:            https://github.com/Tomas-M/iotop/
-Source0:        https://github.com/Tomas-M/iotop/releases/download/v%{version}/iotop-%{version}.tar.xz
-Source1:        https://github.com/Tomas-M/iotop/releases/download/v%{version}/iotop-%{version}.tar.xz.asc
-Source2:        https://raw.githubusercontent.com/Tomas-M/iotop/v%{version}/debian/upstream/signing-key.asc
+Source0:        https://github.com/Tomas-M/iotop/releases/download/v1.31/iotop-1.31.tar.xz
+Source1:        https://github.com/Tomas-M/iotop/releases/download/v1.31/iotop-1.31.tar.xz.asc
+Source2:        https://raw.githubusercontent.com/Tomas-M/iotop/v1.31/debian/upstream/signing-key.asc
 
 Provides:       iotop
 Obsoletes:      iotop < 0.7

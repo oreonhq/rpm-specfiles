@@ -21,8 +21,8 @@ Summary:        Simple ANSI terminal support
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/ansi-terminal
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{ansiterminaltypes}/%{ansiterminaltypes}.tar.gz
+Source0:        https://hackage.haskell.org/package/ansi-terminal-%{version}/ansi-terminal-%{version}.tar.gz
+Source1:        https://hackage.haskell.org/package/ansi-terminal-types-1.1.3/ansi-terminal-types-1.1.3.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

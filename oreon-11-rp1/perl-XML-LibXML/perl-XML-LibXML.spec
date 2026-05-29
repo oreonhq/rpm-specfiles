@@ -15,7 +15,7 @@ Epoch:          1
 Summary:        Perl interface to the libxml2 library
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND MIT
 URL:            https://metacpan.org/release/XML-LibXML
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-LibXML-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-LibXML-2.0213.tar.gz
 # Fix parsing ampersand entities in SAX interface, CPAN RT#131498,
 # posted to the upstream.
 Patch0:         XML-LibXML-2.0202-Parse-an-ampersand-entity-in-SAX-interface.patch

@@ -17,8 +17,8 @@ Source1:        generate-tarball.sh
 # A custom build script to allow building with maven instead of gradle
 Source2:        aggregator.pom
 # Maven central POMs for subprojects
-Source3:        https://repo1.maven.org/maven2/org/mockito/mockito-core/%{version}/mockito-core-%{version}.pom
-Source4:        https://repo1.maven.org/maven2/org/mockito/mockito-junit-jupiter/%{version}/mockito-junit-jupiter-%{version}.pom
+Source3:        https://repo1.maven.org/maven2/org/mockito/mockito-core/5.8.0/mockito-core-5.8.0.pom
+Source4:        https://repo1.maven.org/maven2/org/mockito/mockito-junit-jupiter/5.8.0/mockito-junit-jupiter-5.8.0.pom
 
 # Mockito expects byte-buddy to have a shaded/bundled version of ASM, but
 # we don't bundle in Fedora, so this patch makes mockito use ASM explicitly
@@ -55,7 +55,7 @@ Mockito JUnit 5 support.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 cp %{SOURCE2} aggregator.pom
 cp %{SOURCE3} pom.xml

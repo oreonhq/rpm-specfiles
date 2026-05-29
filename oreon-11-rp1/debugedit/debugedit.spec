@@ -6,8 +6,8 @@ Release: 2%{?dist}
 Summary: Tools and scripts for creating debuginfo and source file distributions, collect build-ids and rewrite source paths in DWARF data for debugging, tracing and profiling.
 License: GPL-3.0-or-later AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL: https://sourceware.org/debugedit/
-Source0: https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz
-Source1: https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz.sig
+Source0:        https://sourceware.org/pub/debugedit/5.3/debugedit-5.3.tar.xz
+Source1:        https://sourceware.org/pub/debugedit/5.3/debugedit-5.3.tar.xz.sig
 Source2: gpgkey-CBA20376A15C6FFC11CD.gpg
 
 BuildRequires: make gcc gcc-c++

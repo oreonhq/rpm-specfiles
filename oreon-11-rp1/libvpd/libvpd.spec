@@ -7,7 +7,7 @@ Summary:	VPD Database access library for lsvpd
 
 License:	LGPL-2.0-or-later
 URL:		https://github.com/power-ras/%{name}/releases
-Source0:		https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/power-ras/libvpd/archive/v2.2.11/libvpd-2.2.11.tar.gz
 Source1:		99-libvpd.conf
 Patch1:		libvpd-install-rules-in-system-wide-dir.patch
 

@@ -18,7 +18,7 @@ URL:     https://www.kde.org/applications/education/ktouch/
 %global kf5_dl_stable stable
 %endif
 
-Source0: http://download.kde.org/%{kf5_dl_stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/release-service/25.12.3/src/ktouch-25.12.3.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules

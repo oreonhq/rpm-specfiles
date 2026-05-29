@@ -9,7 +9,7 @@ Release: %autorelease
 
 License: LGPL-2.1-or-later
 URL: http://www.opendap.org/
-Source0: https://github.com/OPENDAP/libdap4/archive/%{libdap_tag}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/OPENDAP/libdap4/archive/3.21.0-120/libdap-3.21.1.tar.gz
 # Don't run HTTP tests - builders don't have network connections
 Patch0: libdap-offline.patch
 # Add missing includes

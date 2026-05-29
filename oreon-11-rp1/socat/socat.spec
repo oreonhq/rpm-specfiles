@@ -8,7 +8,7 @@ Version: 1.8.1.0
 Release: %autorelease
 License: GPL-2.0-only
 Url:  http://www.dest-unreach.org/socat/
-Source: http://www.dest-unreach.org/socat/download/%{name}-%{version}.tar.gz
+Source:        http://www.dest-unreach.org/socat/download/socat-1.8.1.0.tar.gz
 
 Patch1: socat-1.8.1.0-printtime.patch
 

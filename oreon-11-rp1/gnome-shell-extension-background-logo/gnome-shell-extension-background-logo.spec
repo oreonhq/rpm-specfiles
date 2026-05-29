@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 %global shell_version %%(cut -d "~" -f 1 <<<%{version})
 
 Name:           gnome-shell-extension-background-logo
@@ -10,7 +10,7 @@ Summary:        Background logo extension for GNOME Shell
 
 License:        GPL-2.0-or-later
 URL:            https://pagure.io/background-logo-extension
-Source0:        https://releases.pagure.org/background-logo-extension/background-logo-extension-%{tarball_version}.tar.xz
+Source0:        https://releases.pagure.org/background-logo-extension/background-logo-extension-%(echo.tar.xz
 BuildArch:      noarch
 
 BuildRequires:  meson

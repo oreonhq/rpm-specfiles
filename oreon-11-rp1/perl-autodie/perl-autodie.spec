@@ -9,7 +9,7 @@ Release:        522%{?dist}
 Summary:        Replace functions with ones that succeed or die
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/autodie
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/autodie-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/autodie-2.37.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils

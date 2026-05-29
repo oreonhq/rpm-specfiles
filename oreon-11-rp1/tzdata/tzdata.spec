@@ -10,8 +10,8 @@ Version: 2025c
 Release: 3%{?dist}
 License: LicenseRef-Fedora-Public-Domain AND (GPL-2.0-only WITH ClassPath-exception-2.0)
 URL: https://www.iana.org/time-zones
-Source0: https://www.iana.org/time-zones/repository/releases/tzdata%{tzdata_version}.tar.gz
-Source1: https://www.iana.org/time-zones/repository/releases/tzcode%{tzcode_version}.tar.gz
+Source0:        https://www.iana.org/time-zones/repository/releases/tzdata2025c.tar.gz
+Source1:        https://www.iana.org/time-zones/repository/releases/tzcode2025c.tar.gz
 
 Patch002: 0002-Fix-have-snprintf-error.patch
 Patch003: 0003-continue-to-ship-posixrules.patch

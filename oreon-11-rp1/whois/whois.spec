@@ -16,8 +16,8 @@ Summary:    Improved WHOIS client
 License:    GPL-2.0-or-later
 URL:        https://www.linux.it/~md/software/
 VCS:        git:%{forgeurl}
-Source0:    https://ftp.debian.org/debian/pool/main/w/%{name}/%{name}_%{version}.tar.xz
-Source1:    https://ftp.debian.org/debian/pool/main/w/%{name}/%{name}_%{version}.dsc
+Source0:        https://ftp.debian.org/debian/pool/main/w/whois/whois_5.6.6.tar.xz
+Source1:        https://ftp.debian.org/debian/pool/main/w/whois/whois_5.6.6.dsc
 # This keyring needs to be processed at prep time, dscverify is not able to use it as it is
 # Debian-tag2upload service key obtained from
 # <https://packages.debian.org/trixie/debian-tag2upload-keyring>.

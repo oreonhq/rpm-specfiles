@@ -28,13 +28,13 @@ Summary: LDAP support libraries
 License: OLDAP-2.8
 URL: http://www.openldap.org/
 
-Source0: https://openldap.org/software/download/OpenLDAP/openldap-release/openldap-%{version}.tgz
+Source0:        https://openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.6.13.tgz
 Source1: slapd.service
 Source2: slapd.tmpfiles
 Source3: slapd.ldif
 Source4: ldap.conf
 Source6: openldap.sysusers
-Source10: https://github.com/ltb-project/openldap-ppolicy-check-password/archive/v%{check_password_version}/openldap-ppolicy-check-password-%{check_password_version}.tar.gz
+Source10:        https://github.com/ltb-project/openldap-ppolicy-check-password/archive/v1.1/openldap-ppolicy-check-password-1.1.tar.gz
 Source50: libexec-functions
 Source52: libexec-check-config.sh
 

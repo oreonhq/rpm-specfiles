@@ -16,8 +16,8 @@ Summary: Collection of simple PIN or passphrase entry dialogs
 
 License: GPL-2.0-or-later
 URL:     https://www.gnupg.org/
-Source0: https://gnupg.org/ftp/gcrypt/pinentry/%{name}-%{version}.tar.bz2
-Source1: https://gnupg.org/ftp/gcrypt/pinentry/%{name}-%{version}.tar.bz2.sig
+Source0:        https://gnupg.org/ftp/gcrypt/pinentry/pinentry-1.3.2.tar.bz2
+Source1:        https://gnupg.org/ftp/gcrypt/pinentry/pinentry-1.3.2.tar.bz2.sig
 Source2: https://gnupg.org/signature_key.asc
 
 Patch1: pinentry-1.1.1-coverity.patch

@@ -28,7 +28,7 @@ URL:           http://webmproject.org/
 Summary:       Library and tools for the WebP graphics format
 # Additional IPR is licensed as well. See PATENTS file for details
 License:       Apache-2.0 AND BSD-3-Clause WITH AdditionRef-WebM-patent-license AND BSD-3-Clause AND FSFULLRWD
-Source0:       http://downloads.webmproject.org/releases/webp/%{name}-%{version}.tar.gz
+Source0:        http://downloads.webmproject.org/releases/webp/libwebp-1.6.0.tar.gz
 Source1:       libwebp_jni_example.java
 # Fix build with freeglut
 Patch0:        libwebp-freeglut.patch

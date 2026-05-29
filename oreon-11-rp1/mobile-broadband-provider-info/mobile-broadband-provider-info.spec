@@ -6,7 +6,7 @@ Version: 20240407
 Release: 5%{?dist}
 URL: https://wiki.gnome.org/Projects/NetworkManager/MobileBroadband/ServiceProviders
 License: CC-PDDC
-Source: https://download.gnome.org/sources/%{name}/%{version}/%{name}-%{version}.tar.xz
+Source:        https://download.gnome.org/sources/mobile-broadband-provider-info/20240407/mobile-broadband-provider-info-20240407.tar.xz
 
 BuildArch: noarch
 

@@ -6,7 +6,7 @@ Release:        28%{?dist}
 Summary:        Tool for inspecting Perl subroutines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sub-Info
-Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Sub-Info-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Sub-Info-0.002.tar.gz
 BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  make

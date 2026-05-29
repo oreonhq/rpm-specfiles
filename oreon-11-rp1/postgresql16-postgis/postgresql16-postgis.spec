@@ -28,10 +28,10 @@ Summary:       Geographic Information Systems Extensions to PostgreSQL
 License:       GPL-2.0-or-later
 
 URL:           https://www.postgis.net
-Source0:       https://download.osgeo.org/postgis/source/postgis-%{version}.tar.gz
-Source2:       https://download.osgeo.org/postgis/docs/postgis-%{version}-en.pdf
+Source0:        https://download.osgeo.org/postgis/source/postgis-3.6.3.tar.gz
+Source2:        https://download.osgeo.org/postgis/docs/postgis-3.6.3-en.pdf
 %if %upgrade_prev
-Source3:       https://download.osgeo.org/postgis/source/postgis-%{prevversion}.tar.gz
+Source3:        https://download.osgeo.org/postgis/source/postgis-2.5.5.tar.gz
 
 # Add proj8 compatibility to postgis-2.x (needed for upgrade package)
 Patch1:        postgis2-proj8.patch

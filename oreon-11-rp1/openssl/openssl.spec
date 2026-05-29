@@ -38,7 +38,7 @@ Name: openssl
 Version: 3.5.5
 Release: 1%{?dist}
 Epoch: 1
-Source0: https://www.openssl.org/source/openssl-%{version}.tar.gz
+Source0:        https://www.openssl.org/source/openssl-3.5.5.tar.gz
 Source1: fips-hmacify.sh
 Source3: genpatches
 Source4: openssl.rpmlintrc

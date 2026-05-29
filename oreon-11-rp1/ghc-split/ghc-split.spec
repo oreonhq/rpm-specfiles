@@ -18,7 +18,7 @@ Summary:        Combinator library for splitting lists
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/split
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/split-0.2.5/split-0.2.5.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

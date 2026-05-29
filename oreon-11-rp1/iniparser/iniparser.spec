@@ -7,7 +7,7 @@ Summary:       C library for parsing "INI-style" files
 
 License:       MIT
 URL:           https://gitlab.com/%{name}/%{name}
-Source0:       https://gitlab.com/%{name}/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source0:        https://gitlab.com/iniparser/iniparser/-/archive/v4.2.6/iniparser-v4.2.6.tar.gz
 
 BuildRequires: gcc
 BuildRequires: gcc-c++

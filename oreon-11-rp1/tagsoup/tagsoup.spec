@@ -41,7 +41,7 @@ Summary:        A SAX-compliant HTML parser written in Java
 License:        Apache-2.0 AND (GPL-2.0-or-later OR LicenseRef-Callaway-AFL)
 Source0:        http://vrici.lojban.org/~cowan/XML/tagsoup/tagsoup-1.2.1-src.zip
 URL:            http://vrici.lojban.org/~cowan/XML/tagsoup/
-Source1:        https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/%{version}/tagsoup-%{version}.pom
+Source1:        https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/1.2.1/tagsoup-1.2.1.pom
 # fix version
 Patch0:         tagsoup-1.2.1-man.patch
 Patch1:         sourceTargetJdk8.patch

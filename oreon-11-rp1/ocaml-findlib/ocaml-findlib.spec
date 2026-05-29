@@ -15,7 +15,7 @@ License:        MIT
 
 URL:            http://projects.camlcity.org/projects/findlib.html
 VCS:            git:https://github.com/ocaml/ocamlfind.git
-Source0:        http://download.camlcity.org/download/findlib-%{version}.tar.gz
+Source0:        http://download.camlcity.org/download/findlib-1.9.8.tar.gz
 
 # Fix the toolbox build with OCaml 5.x
 Patch0:         %{name}-toolbox.patch

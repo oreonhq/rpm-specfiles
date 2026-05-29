@@ -9,8 +9,8 @@ Version: 6.6
 Release: 1%{?dist}
 License: MIT-open-group
 URL: https://invisible-island.net/ncurses/ncurses.html
-Source0: https://invisible-mirror.net/archives/ncurses/ncurses-%{version}.tar.gz
-Source1: https://invisible-mirror.net/archives/ncurses/ncurses-%{version}.tar.gz.asc
+Source0:        https://invisible-mirror.net/archives/ncurses/ncurses-6.6.tar.gz
+Source1:        https://invisible-mirror.net/archives/ncurses/ncurses-6.6.tar.gz.asc
 Source2: https://invisible-island.net/public/dickey@invisible-island.net-rsa3072.asc
 
 Patch8: ncurses-config.patch

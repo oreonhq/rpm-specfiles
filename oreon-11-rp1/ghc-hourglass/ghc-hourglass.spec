@@ -18,8 +18,8 @@ Summary:        Simple performant time related library
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/hourglass
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
-Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
+Source0:        https://hackage.haskell.org/package/hourglass-0.2.12/hourglass-0.2.12.tar.gz
+Source1:        https://hackage.haskell.org/package/hourglass-0.2.12/hourglass.cabal#/hourglass-0.2.12.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

@@ -18,7 +18,7 @@ Summary:        Parsing Expression Grammars for Lua
 
 License:        MIT
 URL:            http://www.inf.puc-rio.br/~roberto/%{lua_pkg_name}/
-Source0:        http://www.inf.puc-rio.br/~roberto/%{lua_pkg_name}/%{lua_pkg_name}-%{version}.tar.gz
+Source0:        http://www.inf.puc-rio.br/~roberto/lpeg/lpeg-1.1.0.tar.gz
 Patch1:         0001-inject-ldflags.patch
 
 BuildRequires:  gcc

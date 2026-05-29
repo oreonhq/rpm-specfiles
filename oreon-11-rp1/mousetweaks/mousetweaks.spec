@@ -7,7 +7,7 @@ Summary:        Mouse accessibility support for the GNOME desktop
 # Automatically converted from old format: GPLv3 and GFDL - review is highly recommended.
 License:        GPL-3.0-only AND LicenseRef-Callaway-GFDL
 URL:            https://wiki.gnome.org/Projects/Mousetweaks
-Source0:        http://download.gnome.org/sources/mousetweaks/3.32/%{name}-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/mousetweaks/3.32/mousetweaks-3.32.0.tar.xz
 
 BuildRequires: make
 BuildRequires:  gcc

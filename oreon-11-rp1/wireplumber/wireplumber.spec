@@ -7,7 +7,7 @@ Summary:    A modular session/policy manager for PipeWire
 
 License:    MIT
 URL:        https://pipewire.pages.freedesktop.org/wireplumber/
-Source0:    https://gitlab.freedesktop.org/pipewire/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://gitlab.freedesktop.org/pipewire/wireplumber/-/archive/0.5.13/wireplumber-0.5.13.tar.bz2
 
 ## upstream patches
 

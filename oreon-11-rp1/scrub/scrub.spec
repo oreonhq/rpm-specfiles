@@ -6,7 +6,7 @@ Release:	12%{?dist}
 Summary:	Disk scrubbing program
 License:	GPL-2.0-or-later
 URL:		https://github.com/chaos/scrub/
-Source0:	https://github.com/chaos/scrub/releases/download/%{version}/scrub-%{version}.tar.gz
+Source0:        https://github.com/chaos/scrub/releases/download/2.6.1/scrub-2.6.1.tar.gz
 # https://github.com/chaos/scrub/commit/b90fcb2330d00dbd1e9aeaa2e1a9807f8b80b922.patch
 Patch0:		scrub-2.6.1-symlinks-to-block-device.patch
 # https://github.com/chaos/scrub/commit/27f6452a658f057e3ba6bf9dfda070b6dffc6798.patch

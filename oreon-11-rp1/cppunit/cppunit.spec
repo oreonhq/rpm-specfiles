@@ -10,7 +10,7 @@ Summary: C++ unit testing framework
 # no license in files
 License: LGPL-2.1-or-later
 Url: https://www.freedesktop.org/wiki/Software/cppunit/
-Source: https://dev-www.libreoffice.org/src/%{name}-%{version}.tar.gz
+Source:        https://dev-www.libreoffice.org/src/cppunit-1.15.1.tar.gz
 
 # Backport patch to run tests in deterministic order
 # https://gerrit.libreoffice.org/c/cppunit/+/123963

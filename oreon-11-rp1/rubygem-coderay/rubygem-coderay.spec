@@ -12,7 +12,7 @@ Release: 12%{?dist}
 Summary: Fast syntax highlighting for selected languages
 License: MIT
 URL: http://coderay.rubychan.de
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/coderay-1.1.3.gem
 # git clone https://github.com/rubychan/coderay --no-checkout
 # cd coderay && git archive -v -o coderay-1.1.3-tests.txz v1.1.3 test spec
 Source1: %{gem_name}-%{version}-tests.txz

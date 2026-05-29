@@ -63,9 +63,8 @@ Version: 2.27.0
 Release: 1%{?prerel1}%{?git_suffix:.%{git_suffix}}%{?dist}
 License: GPL-2.0-or-later AND CC-BY-SA-3.0
 %if 0%{?git_commit:1}
-Source0: https://github.com/redhat-performance/%{name}/archive/%{git_commit}/%{name}-%{version}-%{git_suffix}.tar.gz
 %else
-Source0: https://github.com/redhat-performance/%{name}/archive/v%{version}%{?prerel2}/%{name}-%{version}%{?prerel2}.tar.gz
+Source0:        https://github.com/redhat-performance/tuned/archive/v2.27.0%{?prerel2}/tuned-2.27.0%{?prerel2}.tar.gz
 %endif
 URL: http://www.tuned-project.org/
 BuildArch: noarch

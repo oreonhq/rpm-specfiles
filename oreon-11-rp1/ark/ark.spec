@@ -24,7 +24,7 @@ URL:     https://www.kde.org/applications/utilities/ark/
 %else
 %global stable stable
 %endif
-Source0: https://download.kde.org/%{stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/release-service/26.03.80/src/ark-26.03.80.tar.xz
 
 ## upstreamable patches
 

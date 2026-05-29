@@ -7,7 +7,7 @@ Summary: Interfaces for accessibility support
 
 License: LGPLv2+
 URL: https://developer.gnome.org/platform-overview/stable/atk
-Source0: https://download.gnome.org/sources/atk/2.36/atk-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/atk/2.36/atk-2.36.0.tar.xz
 
 BuildRequires: glib2-devel
 BuildRequires: gettext

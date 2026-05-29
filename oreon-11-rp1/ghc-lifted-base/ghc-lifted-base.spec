@@ -17,7 +17,7 @@ Summary:        Lifted IO operations from the base library
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/lifted-base
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/lifted-base-0.2.3.12/lifted-base-0.2.3.12.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

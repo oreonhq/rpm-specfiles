@@ -6,7 +6,7 @@ Release:        32%{?dist}
 Summary:        User-space infrastructure for connection tracking helpers
 License:        GPL-2.0-only
 URL:            http://www.netfilter.org/projects/libnetfilter_cthelper/index.html
-Source0:        http://www.netfilter.org/projects/libnetfilter_cthelper/files/libnetfilter_cthelper-%{version}.tar.bz2
+Source0:        http://www.netfilter.org/projects/libnetfilter_cthelper/files/libnetfilter_cthelper-1.0.0.tar.bz2
 BuildRequires:  gcc
 BuildRequires:  libmnl-devel >= 1.0.0, pkgconfig, kernel-headers
 BuildRequires: make

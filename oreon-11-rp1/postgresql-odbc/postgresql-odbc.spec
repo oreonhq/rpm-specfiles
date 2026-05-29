@@ -11,7 +11,7 @@ Release: 7%{?dist}
 License: LGPL-2.0-or-later
 URL: https://odbc.postgresql.org/
 
-Source0: https://ftp.postgresql.org/pub/odbc/versions/src/%{upstream_name}-%{version}.tar.gz
+Source0:        https://ftp.postgresql.org/pub/odbc/versions/src/psqlodbc-16.00.0000.tar.gz
 
 Patch0: postgresql-odbc-09.06.0200-revert-money-fix.patch
 Patch1: postgresql-odbc-09.05.0400-revert-money-testsuite-fix.patch

@@ -7,7 +7,7 @@ Summary:        The OpenGL Extension Wrangler Library
 License:        BSD-3-Clause AND MIT AND MIT-Khronos-old
 URL:            https://github.com/nigels-com/glew
 
-Source0:        https://github.com/nigels-com/glew/releases/download/glew-%{version}/glew-%{version}.tgz
+Source0:        https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.tgz
 Patch0:         glew-2.1.0-install.patch
 Patch1:         glew-2.2.0-gcc12-cplusplus.patch
 BuildRequires:  gcc

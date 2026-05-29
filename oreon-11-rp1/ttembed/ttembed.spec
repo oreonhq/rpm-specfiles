@@ -6,7 +6,7 @@ Release:    25%{?dist}
 Summary:    Remove embedding limitations from TrueType fonts
 License:    Unlicense
 URL:        https://github.com/hisdeedsaredust/ttembed
-Source0:    https://github.com/hisdeedsaredust/ttembed/archive/v%{version}.tar.gz
+Source0:        https://github.com/hisdeedsaredust/ttembed/archive/v1.1.tar.gz
 
 BuildRequires: make
 BuildRequires:  gcc

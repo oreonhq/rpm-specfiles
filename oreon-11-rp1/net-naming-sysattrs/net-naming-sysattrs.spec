@@ -9,7 +9,7 @@ Summary:        Mechanism to emulate older network device naming behavior
 
 License:        MIT
 URL:            https://gitlab.com/mschmidt2/%{name}
-Source0:        https://gitlab.com/mschmidt2/%{name}/-/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source0:        https://gitlab.com/mschmidt2/net-naming-sysattrs/-/archive/v263/net-naming-sysattrs-v263.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  make

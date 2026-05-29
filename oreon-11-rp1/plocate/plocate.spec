@@ -10,7 +10,7 @@ Summary:        Much faster locate
 # * updatedb                  - GPL-2.0-only
 License:        GPL-2.0-or-later AND GPL-2.0-only
 URL:            https://plocate.sesse.net/
-Source0:        https://plocate.sesse.net/download/plocate-%{version}.tar.gz
+Source0:        https://plocate.sesse.net/download/plocate-1.1.24.tar.gz
 Source1:        plocate.sysusers
 
 BuildRequires:  meson

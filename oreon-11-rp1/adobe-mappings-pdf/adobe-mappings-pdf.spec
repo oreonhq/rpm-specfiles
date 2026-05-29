@@ -7,7 +7,7 @@ Release:          12%{?dist}
 License:          BSD-3-Clause
 
 URL:              https://www.adobe.com/
-Source:           https://github.com/adobe-type-tools/mapping-resources-pdf/archive/%{version}.tar.gz#/mapping-resources-pdf-%{version}.tar.gz
+Source:        https://github.com/adobe-type-tools/mapping-resources-pdf/archive/20190401.tar.gz#/mapping-resources-pdf-20190401.tar.gz
 
 BuildArch:        noarch
 BuildRequires:    git

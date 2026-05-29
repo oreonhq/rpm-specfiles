@@ -11,7 +11,7 @@ URL:            https://commons.apache.org/proper/commons-logging/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/commons/logging/source/commons-logging-%{version}-src.tar.gz
+Source0:        https://archive.apache.org/dist/commons/logging/source/commons-logging-1.3.5-src.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

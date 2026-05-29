@@ -7,7 +7,7 @@ Release: 5%{?dist}
 License: MIT-open-group AND HPND AND SMLNJ
 URL: http://www.x.org
 
-Source0: https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/libxkbfile-1.1.3.tar.xz
 
 BuildRequires: make
 BuildRequires: pkgconfig(xproto) pkgconfig(x11)

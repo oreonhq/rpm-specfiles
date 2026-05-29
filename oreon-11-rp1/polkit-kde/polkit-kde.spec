@@ -10,8 +10,8 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later AND CC0-1.0
 URL:     https://invent.kde.org/plasma/%{base_name}
 
-Source0: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz
-Source1: https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/polkit-kde-agent-1-6.6.3.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/polkit-kde-agent-1-6.6.3.tar.xz.sig
 
 
 ## upstreamable patches

@@ -6,7 +6,7 @@ Release:        28%{?dist}
 Summary:        Time zones for Data::ICal
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-ICal-TimeZone
-Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Data-ICal-TimeZone-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Data-ICal-TimeZone-1.23.tar.gz
 BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  make

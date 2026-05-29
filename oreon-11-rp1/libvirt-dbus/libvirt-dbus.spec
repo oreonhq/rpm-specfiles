@@ -14,7 +14,7 @@ Release: 9%{?dist}
 Summary: libvirt D-Bus API binding
 License: LGPL-2.1-or-later
 URL: https://libvirt.org/
-Source0: https://libvirt.org/sources/dbus/%{name}-%{version}.tar.xz
+Source0:        https://libvirt.org/sources/dbus/libvirt-dbus-1.4.1.tar.xz
 
 BuildRequires: gcc
 BuildRequires: meson >= %{meson_version}

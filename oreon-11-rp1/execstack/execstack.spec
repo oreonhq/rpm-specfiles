@@ -10,7 +10,7 @@ Summary:        Utility to set/clear/query executable stack bit
 
 License: GPL-2.0-or-later
 # work around for missing upstream tarball with latest checkin
-Source0: https://github.com/keszybz/prelink/archive/%{commit}.tar.gz#/prelink-%{shortcommit}.tar.gz
+Source0:        https://github.com/keszybz/prelink/archive/4c79120bcdbde0616f592458ccde7035e92ca3d8.tar.gz#/prelink-%(c=4c79120bcdbde0616f592458ccde7035e92ca3d8;.tar.gz
 
 Patch0:  Add-PL_ARCH-for-AArch64.patch
 Patch1: execstack-configure-c99.patch
@@ -35,7 +35,7 @@ with or without executable stack.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -n prelink-%{commit} -p1 -Sgit
+%autosetup -n prelink-%{commit} -p1 -S git
 
 %build
 sed -i -e '/^prelink_LDADD/s/$/ -lpthread/' src/Makefile.{am,in}

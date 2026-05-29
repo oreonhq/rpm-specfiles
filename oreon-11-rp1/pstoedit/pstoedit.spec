@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        Translates PostScript and PDF graphics into other vector formats
 License:        GPL-2.0-or-later
 URL:            http://www.pstoedit.net
-Source0:        https://github.com/woglu/pstoedit/archive/refs/tags/%{version}/pstoedit-%{version}.tar.gz
+Source0:        https://github.com/woglu/pstoedit/archive/refs/tags/4.3/pstoedit-4.3.tar.gz
 
 # Fix cflags of the pkg-config file
 Patch0:         %{name}-pkglibdir.patch

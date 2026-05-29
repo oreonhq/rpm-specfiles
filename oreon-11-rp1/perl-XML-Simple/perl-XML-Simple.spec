@@ -13,7 +13,7 @@ Release:        24%{?dist}
 Summary:        Easy API to maintain XML in Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-Simple
-Source0:        https://cpan.metacpan.org/authors/id/G/GR/GRANTM/XML-Simple-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/G/GR/GRANTM/XML-Simple-2.25.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

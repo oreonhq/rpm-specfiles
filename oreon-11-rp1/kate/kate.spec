@@ -20,7 +20,7 @@ Release: 1%{?dist}
 # ktexteditor: LGPLv2
 License: LGPL-2.0-only AND LGPL-2.0-or-later AND GPL-2.0-or-later
 URL:     https://apps.kde.org/kate/
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/kate-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kate-26.03.80.tar.xz
 
 ## upstream patches
 

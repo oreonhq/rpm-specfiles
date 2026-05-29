@@ -6,7 +6,7 @@ Release:        7%{?dist}
 Summary:        Python DB API 2.0 Module for ODBC
 License:        MIT-0
 URL:            https://github.com/mkleehammer/pyodbc
-Source0:        https://github.com/mkleehammer/pyodbc/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/mkleehammer/pyodbc/archive/5.1.0.tar.gz#/pyodbc-5.1.0.tar.gz
 # Fix build with Python 3.13
 # https://github.com/mkleehammer/pyodbc/pull/1361
 # https://bugzilla.redhat.com/show_bug.cgi?id=2246290

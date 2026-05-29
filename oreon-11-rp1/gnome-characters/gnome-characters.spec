@@ -6,8 +6,8 @@
 %global gtk4_version 4.6
 %global libadwaita_version 1.5~alpha
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:		gnome-characters
 Version:	50.0
@@ -17,8 +17,7 @@ Summary:	Character map application for GNOME
 # Other files are GPL 2.0 or later.
 License:	BSD-3-Clause AND GPL-2.0-or-later
 URL:		https://wiki.gnome.org/Design/Apps/CharacterMap
-Source0:	https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-characters/%{major_version}/gnome-characters-%{tarball_version}.tar.xz
 BuildRequires:	desktop-file-utils
 BuildRequires:	gettext
 BuildRequires:	gobject-introspection-devel

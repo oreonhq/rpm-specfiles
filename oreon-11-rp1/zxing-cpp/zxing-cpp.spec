@@ -10,7 +10,7 @@ Summary:        C++ port of the ZXing ("Zebra Crossing") barcode scanning librar
 License:        Apache-2.0 AND MIT
 URL:            https://github.com/zxing-cpp/zxing-cpp
 # codeload.github.com avoids intermittent 504s from /archive/ on busy workers.
-Source0:        https://codeload.github.com/zxing-cpp/zxing-cpp/tar.gz/refs/tags/v%{version}#/%{name}-%{version}.tar.gz
+Source0:        https://codeload.github.com/zxing-cpp/zxing-cpp/tar.gz/refs/tags/v2.2.1#/zxing-cpp-2.2.1.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

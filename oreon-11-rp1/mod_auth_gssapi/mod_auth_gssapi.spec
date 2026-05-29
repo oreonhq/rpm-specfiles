@@ -7,7 +7,7 @@ Summary:        A GSSAPI Authentication module for Apache
 
 License:        MIT
 URL:            https://github.com/gssapi/mod_auth_gssapi
-Source0:        https://github.com/gssapi/%{name}/releases/download/v%{version}/%name-%{version}.tar.gz
+Source0:        https://github.com/gssapi/mod_auth_gssapi/releases/download/v1.6.5/%name-1.6.5.tar.gz
 
 BuildRequires:  httpd-devel, krb5-devel, openssl-devel
 BuildRequires:  autoconf, automake, libtool, bison, flex, make

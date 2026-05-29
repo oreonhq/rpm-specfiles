@@ -98,9 +98,9 @@ URL:            https://github.com/intel/linux-sgx
 # The sources are needed so we can determine the ELF so version
 # symlinks that the loader code will expect to find
 
-Source0: https://github.com/intel/linux-sgx/archive/refs/tags/sgx_%{linux_sgx_version}_reproducible.tar.gz#/linux-sgx-%{linux_sgx_version}-reproducible.tar.gz
+Source0:        https://github.com/intel/linux-sgx/archive/refs/tags/sgx_2.25_reproducible.tar.gz#/linux-sgx-2.25-reproducible.tar.gz
 
-Source1: https://github.com/intel/SGXDataCenterAttestationPrimitives/archive/refs/tags/dcap_%{dcap_version}_reproducible.tar.gz
+Source1:        https://github.com/intel/SGXDataCenterAttestationPrimitives/archive/refs/tags/dcap_1.22_reproducible.tar.gz
 
 # repack.sh purges AE's that we do not want to (& are forbidden to)
 # ship, as well as 'prebuilt/' content (openssl / OPA binaries) that

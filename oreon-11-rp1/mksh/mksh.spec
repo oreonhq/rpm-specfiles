@@ -7,7 +7,7 @@ Release:          15%{?dist}
 # ISC (strlcpy.c) and MirOS (the rest)
 License:          MirOS AND ISC
 URL:              https://www.mirbsd.org/mksh.htm
-Source0:          https://www.mirbsd.org/MirOS/dist/mir/%{name}/%{name}-R%{version}.tgz
+Source0:        https://www.mirbsd.org/MirOS/dist/mir/mksh/mksh-R59c.tgz
 Source1:          dot-mkshrc
 Source2:          rtchecks.expected
 Provides:         /bin/ksh

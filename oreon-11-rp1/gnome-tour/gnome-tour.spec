@@ -6,7 +6,7 @@
 %global bundled_rust_deps 0
 %endif
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           gnome-tour
 Version:        48.1
@@ -23,7 +23,7 @@ Summary:        GNOME Tour and Greeter
 # Unlicense OR MIT
 License:        (Apache-2.0 OR MIT) AND CC-BY-SA-3.0 AND GPL-3.0-or-later AND MIT AND (MIT OR Apache-2.0) AND Unicode-DFS-2016 AND (Unlicense OR MIT)
 URL:            https://gitlab.gnome.org/GNOME/gnome-tour
-Source0:        https://download.gnome.org/sources/%{name}/48/%{name}-%{tarball_version}.tar.xz
+Source0: https://download.gnome.org/sources/gnome-tour/48/gnome-tour-%{tarball_version}.tar.xz
 # https://pagure.io/fedora-workstation/issue/175
 Source1:        welcome-fedora.svg
 

@@ -7,7 +7,7 @@ Epoch: 1
 Version: 1.13
 Release: 8%{?dist}
 URL: http://sourceforge.net/projects/pnm2ppa 
-Source: http://download.sourceforge.net/pnm2ppa/pnm2ppa-%{version}.tar.gz
+Source:        http://download.sourceforge.net/pnm2ppa/pnm2ppa-1.13.tar.gz
 # Following sourcelink is dead currently.
 Source1: http://www.httptech.com/ppa/files/ppa-0.8.6.tar.gz
 # Upstream sync.

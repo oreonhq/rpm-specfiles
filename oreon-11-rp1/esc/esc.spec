@@ -50,7 +50,7 @@ AutoReqProv: 0
 %define pixmapdir  %{_datadir}/pixmaps
 %define docdir    %{_defaultdocdir}/%{escname}
 
-Source0: https://www.dogtagpki.org/pki/sources/esc/%{escname}.tar.bz2 
+Source0:        https://www.dogtagpki.org/pki/sources/esc/esc-1.1.2.tar.bz2
 Source1: https://www.dogtagpki.org/pki/sources/esc/esc
 # originally https://www.dogtagpki.org/pki/sources/esc/esc.desktop, since modified
 Source2: esc.desktop

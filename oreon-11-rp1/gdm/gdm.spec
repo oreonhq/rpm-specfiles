@@ -4,8 +4,8 @@
 
 %define gtk3_version 2.99.2
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 # This controls support for launching X11 desktops.
 # gdm itself will always use Wayland.
@@ -23,7 +23,7 @@ Summary:        The GNOME Display Manager
 
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Projects/GDM
-Source0:        https://download.gnome.org/sources/gdm/%{major_version}/gdm-%{tarball_version}.tar.xz
+Source0: https://download.gnome.org/sources/gdm/%{major_version}/gdm-%{tarball_version}.tar.xz
 Source1:        org.gnome.login-screen.gschema.override
 Source2:        gdm.sysusers
 

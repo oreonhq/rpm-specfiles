@@ -16,8 +16,8 @@ Release: 8%{?dist}
 License: GPL-3.0-or-later
 URL: https://www.gnu.org/software/tar/
 
-Source0: https://ftp.gnu.org/gnu/tar/tar-%{version}.tar.xz
-Source1: https://ftp.gnu.org/gnu/tar/tar-%{version}.tar.xz.sig
+Source0:        https://ftp.gnu.org/gnu/tar/tar-1.35.tar.xz
+Source1:        https://ftp.gnu.org/gnu/tar/tar-1.35.tar.xz.sig
 
 # Note that all patches are documented in patch files (git format-patch format)
 Patch1:  tar-1.28-loneZeroWarning.patch

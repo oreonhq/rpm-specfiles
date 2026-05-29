@@ -22,7 +22,7 @@ Requires(post): systemd-units
 Requires(post): systemd-sysv
 Requires(preun): systemd-units
 Requires(postun): systemd-units
-Source0:        https://releases.pagure.org/sanlock/%{name}-%{version}.tar.gz
+Source0:        https://releases.pagure.org/sanlock/sanlock-5.0.0.tar.gz
 
 # Patch0: 0001-foo.patch
 

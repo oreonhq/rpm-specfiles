@@ -6,7 +6,7 @@ Release:        40%{?dist}
 Summary:        Generate fast XS accessors without run-time compilation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-XSAccessor
-Source0:        https://cpan.metacpan.org/authors/id/S/SM/SMUELLER/Class-XSAccessor-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SM/SMUELLER/Class-XSAccessor-1.19.tar.gz
 # Build:
 BuildRequires:  coreutils
 BuildRequires:  findutils

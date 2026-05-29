@@ -7,7 +7,7 @@ Summary:        Open an HTML file with automatic character set detection
 # examples/detect-encoding.pl: Public Domain
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Fedora-Public-Domain
 URL:            https://metacpan.org/release/IO-HTML
-Source0:        https://cpan.metacpan.org/authors/id/C/CJ/CJM/IO-HTML-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CJ/CJM/IO-HTML-1.004.tar.gz
 # Do not use /usr/bin/env in a shebang
 Patch0:         IO-HTML-1.004-Normalize-a-shebang.patch
 BuildArch:      noarch

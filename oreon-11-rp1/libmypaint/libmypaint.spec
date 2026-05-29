@@ -13,7 +13,7 @@ Summary: Library for making brush strokes
 
 License: ISC
 URL: https://github.com/mypaint/libmypaint
-Source0: https://github.com/mypaint/libmypaint/releases/download/v%{version}/libmypaint-%{version}.tar.xz
+Source0:        https://github.com/mypaint/libmypaint/releases/download/v1.6.1/libmypaint-1.6.1.tar.xz
 
 BuildRequires: babl-devel
 BuildRequires: gcc

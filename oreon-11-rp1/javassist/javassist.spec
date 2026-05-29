@@ -9,7 +9,7 @@ License:        MPL-1.1 OR LGPL-2.1-or-later OR Apache-2.0
 %global upstream_version rel_%(sed s/\\\\./_/g <<<"%{version}")_ga
 
 URL:            https://www.javassist.org/
-Source0:        https://github.com/jboss-%{name}/%{name}/archive/refs/tags/%{upstream_version}.tar.gz
+Source0:        https://github.com/jboss-javassist/javassist/archive/refs/tags/rel_%(sed.tar.gz
 
 Patch:          0001-Remove-test-requiring-older-Java.patch
 
@@ -38,7 +38,7 @@ other editors.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -C
+%autosetup -p1
 
 # remove unnecessary maven plugins
 %pom_remove_plugin :maven-source-plugin

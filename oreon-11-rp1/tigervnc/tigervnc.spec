@@ -17,7 +17,7 @@ Summary:        A TigerVNC remote display system
 License:        GPL-2.0-or-later
 URL:            https://www.tigervnc.com
 
-Source0:        https://github.com/TigerVNC/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/TigerVNC/tigervnc/archive/v1.16.2.tar.gz#/tigervnc-1.16.2.tar.gz
 Source1:        xvnc.service
 Source2:        xvnc.socket
 Source3:        10-libvnc.conf

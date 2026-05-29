@@ -9,7 +9,7 @@ Release:        8%{?dist}
 Summary:        Simple HTTP server class
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/HTTP-Daemon
-Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTTP-Daemon-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTTP-Daemon-6.16.tar.gz
 # Use Makefile.PL without unneeded dependencies
 Patch0:         HTTP-Daemon-6.04-EU-MM-is-not-deprecated.patch
 BuildArch:      noarch

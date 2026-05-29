@@ -14,7 +14,7 @@ Summary:        Cabinet file library and tool
 License:        LGPL-2.1-or-later
 #VCS:           git:git://git.gnome.org/gcab
 URL:            http://ftp.gnome.org/pub/GNOME/sources/gcab
-Source0:        http://ftp.gnome.org/pub/GNOME/sources/gcab/%{version}/%{name}-%{version}.tar.xz
+Source0:        http://ftp.gnome.org/pub/GNOME/sources/gcab/1.6/gcab-1.6.tar.xz
 
 BuildRequires:  git-core
 BuildRequires:  gettext

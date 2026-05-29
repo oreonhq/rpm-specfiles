@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/plugin-testing/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugin-testing/%{name}/%{version}/%{name}-%{version}-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugin-testing/maven-plugin-testing/3.3.0/maven-plugin-testing-3.3.0-source-release.zip
 
 Patch:          0001-Port-to-plexus-utils-3.0.21.patch
 Patch:          0002-Port-to-current-maven-artifact.patch

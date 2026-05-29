@@ -9,7 +9,7 @@ Summary: Mako template library for Python
 # examples/bench/basic.py is BSD-3-Clause
 License: MIT AND Python-2.0.1 AND BSD-3-Clause
 URL:     https://www.makotemplates.org/
-Source0: https://github.com/sqlalchemy/mako/archive/rel_%(echo %{version} | sed "s/\./_/g").tar.gz
+Source0:        https://github.com/sqlalchemy/mako/archive/rel_%(echo 1.2.3 | sed "s/\./_/g").tar.gz
 
 BuildArch:     noarch
 BuildRequires: python3-devel

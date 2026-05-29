@@ -8,7 +8,7 @@ Release: 26%{?dist}
 # CC-BY-SA or GPLv2 for the images
 License: GPL-2.0-or-later AND LicenseRef-OFSFDL AND (CC-BY-SA-3.0 OR GPL-2.0-only)
 Summary: A highly customizable texinfo to HTML and other formats translator
-Source0: http://download.savannah.nongnu.org/releases/%{name}/%{name}-%{version}.tar.bz2
+Source0:        http://download.savannah.nongnu.org/releases/texi2html/texi2html-5.0.tar.bz2
 # Do not install bundled Unicode-EastAsianWidth, bug #1154436,
 # <https://savannah.nongnu.org/bugs/?43456>
 Patch0: texi2html-5.0-Do-not-install-Unicode-EastAsianWidth-if-external-is.patch

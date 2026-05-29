@@ -8,7 +8,7 @@ Summary:	Toolchain to master DVD+RW/+R media
 License:	GPL-2.0-only
 URL:		http://fy.chalmers.se/~appro/linux/DVD+RW/
 
-Source:		http://fy.chalmers.se/~appro/linux/DVD+RW/tools/dvd+rw-tools-%{version}.tar.gz
+Source:        http://fy.chalmers.se/~appro/linux/DVD+RW/tools/dvd+rw-tools-7.1.tar.gz
 Source1:	index.html
 Patch1:		dvd+rw-tools-7.0.manpatch
 Patch2:		dvd+rw-tools-7.0-wexit.patch

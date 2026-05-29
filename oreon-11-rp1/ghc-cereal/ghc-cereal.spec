@@ -17,7 +17,7 @@ Summary:        A binary serialization library
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/cereal
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source0:        https://hackage.haskell.org/package/cereal-0.5.8.3/cereal-0.5.8.3.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

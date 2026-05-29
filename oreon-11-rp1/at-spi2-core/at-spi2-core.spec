@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global major_minor_version %%(echo %%{version} | cut -d "." -f 1-2)
+%global major_minor_version %(echo %{version} | cut -d "." -f 1-2)
 
 Name:           at-spi2-core
 Version:        2.60.0
@@ -9,7 +9,7 @@ Summary:        Protocol definitions and daemon for D-Bus at-spi
 
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/%{name}/
-Source0:        https://download.gnome.org/sources/%{name}/%{major_minor_version}/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/at-spi2-core/%{major_minor_version}/at-spi2-core-2.60.0.tar.xz
 # scriptlet to set AT_SPI_BUS for XWayland apps that run as root (i.e. anaconda)
 # https://bugzilla.redhat.com/show_bug.cgi?id=1821345
 Source1:        xwayland-session-scriptlet

@@ -12,8 +12,8 @@ Summary:        A library for reading DVD video discs based on Ogle code
 # src/dvdread/nav_types.h and src/nav_print.c are GPL-2.0 or GPL-3.0 (no later versions)
 License:        GPL-2.0-or-later AND LGPL-2.1-or-later AND (GPL-2.0-only OR GPL-3.0-only) AND LicenseRef-Fedora-Public-Domain
 URL:            https://www.videolan.org/developers/libdvdnav.html
-Source0:        https://download.videolan.org/pub/videolan/libdvdread/%{version}/libdvdread-%{version}.tar.xz
-Source1:        https://download.videolan.org/pub/videolan/libdvdread/%{version}/libdvdread-%{version}.tar.xz.asc
+Source0:        https://download.videolan.org/pub/videolan/libdvdread/7.0.1/libdvdread-7.0.1.tar.xz
+Source1:        https://download.videolan.org/pub/videolan/libdvdread/7.0.1/libdvdread-7.0.1.tar.xz.asc
 Source2:        https://download.videolan.org/pub/keys/7180713BE58D1ADC.asc
 
 BuildRequires:  doxygen

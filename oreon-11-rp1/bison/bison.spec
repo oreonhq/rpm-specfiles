@@ -9,8 +9,8 @@ Release: 15%{?dist}
 # corresponding to the following licenses across the bison source tree:
 License: GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Bison-exception-2.2 AND GPL-2.0-or-later AND GPL-2.0-or-later WITH Autoconf-exception-generic AND LGPL-3.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later AND FSFULLR AND GFDL-1.3-or-later AND X11
 
-Source0: https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
-Source1: https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
+Source0:        https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.xz
+Source1:        https://ftp.gnu.org/gnu/bison/bison-3.8.2.tar.xz.sig
 # genereted from https://ftp.gnu.org/gnu/gnu-keyring.gpg via:
 # curl https://ftp.gnu.org/gnu/gnu-keyring.gpg | gpg2 --import
 # gpg2 --export --export-options export-minimal 7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E > gpgkey-7DF84374B1EE1F9764BBE25D0DDCAA3278D5264E.gpg

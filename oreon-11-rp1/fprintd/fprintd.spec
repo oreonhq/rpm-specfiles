@@ -7,7 +7,7 @@ Summary:	D-Bus service for Fingerprint reader access
 
 # man page is GFDL-1.1-or-later
 License:	GPL-2.0-or-later AND GFDL-1.1-or-later
-Source0:	https://gitlab.freedesktop.org/libfprint/fprintd/-/archive/v%{version}/fprintd-v%{version}.tar.gz
+Source0:        https://gitlab.freedesktop.org/libfprint/fprintd/-/archive/v1.94.5/fprintd-v1.94.5.tar.gz
 Url:		http://www.freedesktop.org/wiki/Software/fprint/fprintd
 
 BuildRequires:	meson

@@ -14,8 +14,8 @@ Release: 15%{?dist}
 URL: https://www.eclipse.org
 License: EPL-2.0
 
-Source0: https://download.eclipse.org/eclipse/downloads/drops4/%{drop}/ecjsrc-%{jar_ver}.jar
-Source1: https://repo1.maven.org/maven2/org/eclipse/jdt/ecj/%{bundle_ver}/ecj-%{bundle_ver}.pom
+Source0:        https://download.eclipse.org/eclipse/downloads/drops4/R-4.23-202203080310/ecjsrc-4.23.jar
+Source1:        https://repo1.maven.org/maven2/org/eclipse/jdt/ecj/3.29.0/ecj-3.29.0.pom
 # The ecj build does not generate a proper manifest, so use the one from the binary distribution
 # Extracted from: https://download.eclipse.org/eclipse/downloads/drops4/%%{drop}/ecj-%%{jar_ver}.jar
 Source2: MANIFEST.MF

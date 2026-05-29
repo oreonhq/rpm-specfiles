@@ -67,7 +67,7 @@ License: BSL-1.0 AND MIT AND Python-2.0.1
 URL: http://www.boost.org
 
 # https://archives.boost.io/release/1.90.0/source/boost_1_90_0.tar.bz2
-Source0: https://archives.boost.io/release/%{version}/source/%{name}_%{version_enc}.tar.bz2
+Source0:        https://archives.boost.io/release/1.90.0/source/boost_%{lua:.tar.bz2
 # Add a manual page for b2, based on the online documentation:
 # http://www.boost.org/boost-build2/doc/html/bbv2/overview.html
 Source1: b2.1

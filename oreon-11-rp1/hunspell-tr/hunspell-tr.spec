@@ -13,7 +13,7 @@ License:    MIT
 Release:    11%{?dist}
 
 URL:        https://github.com/tdd-ai/hunspell-tr
-Source:     https://github.com/tdd-ai/hunspell-tr/archive/v%{version}/%{name}-v%{version}.tar.gz
+Source:        https://github.com/tdd-ai/hunspell-tr/archive/v1.1.0/hunspell-tr-v1.1.0.tar.gz
 
 
 BuildArch:  noarch

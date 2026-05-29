@@ -15,7 +15,7 @@ Summary:       Device Tree Compiler
 License:       GPL-2.0-or-later
 URL:           https://devicetree.org/
 
-Source0:       https://www.kernel.org/pub/software/utils/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://www.kernel.org/pub/software/utils/dtc/dtc-1.7.2.tar.xz
 Patch0001:     0001-build-fix-Dtools-false-build.patch
 Patch0002:     dtc-Fix-discarded-const-qualifiers.patch
 

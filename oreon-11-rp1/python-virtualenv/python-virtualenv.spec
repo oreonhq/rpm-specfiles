@@ -10,8 +10,7 @@ Summary:        Tool to create isolated Python environments
 
 License:        MIT
 URL:            http://pypi.python.org/pypi/virtualenv
-Source:         %{pypi_source virtualenv}
-
+Source:        https://files.pythonhosted.org/packages/source/v/virtualenv/virtualenv-20.35.4.tar.gz
 # Add /usr/share/python-wheels to extra_search_dir
 Patch:          rpm-wheels.patch
 

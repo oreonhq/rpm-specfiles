@@ -18,7 +18,7 @@ Summary:        Character encodings in Perl
 # other files:  GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Artistic-2.0
 URL:            https://metacpan.org/release/Encode
-Source0:        https://cpan.metacpan.org/authors/id/D/DA/DANKOGAI/Encode-%{cpan_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DA/DANKOGAI/Encode-3.21.tar.gz
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc

@@ -53,9 +53,9 @@ Summary:       Convert a virtual machine to run on KVM
 License:       GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:           https://github.com/libguestfs/virt-v2v
 
-Source0:       http://download.libguestfs.org/virt-v2v/%{source_directory}/%{name}-%{version}.tar.gz
+Source0:        http://download.libguestfs.org/virt-v2v/2.11-development/virt-v2v-2.11.3.tar.gz
 %if 0%{verify_tarball_signature}
-Source1:       http://download.libguestfs.org/virt-v2v/%{source_directory}/%{name}-%{version}.tar.gz.sig
+Source1:        http://download.libguestfs.org/virt-v2v/2.11-development/virt-v2v-2.11.3.tar.gz.sig
 # Keyring used to verify tarball signature.
 Source2:       libguestfs.keyring
 %endif

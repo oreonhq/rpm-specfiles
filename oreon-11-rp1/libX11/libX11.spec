@@ -12,11 +12,11 @@ License: MIT AND X11
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        https://xorg.freedesktop.org/archive/individual/lib/libX11-1.8.12.tar.xz
+Source0:        https://www.x.org/archive/individual/lib/libX11-1.8.12.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
-Source0: https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/archive/individual/lib/libX11-1.8.12.tar.xz
 %endif
 
 

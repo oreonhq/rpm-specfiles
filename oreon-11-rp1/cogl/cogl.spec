@@ -10,7 +10,7 @@ Summary:       A library for using 3D graphics hardware to draw pretty pictures
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://www.clutter-project.org/
-Source0:       http://download.gnome.org/sources/cogl/1.22/cogl-%{version}.tar.xz
+Source0:        http://download.gnome.org/sources/cogl/1.22/cogl-1.22.8.tar.xz
 
 # Vaguely related to https://bugzilla.gnome.org/show_bug.cgi?id=772419
 # but on the 1.22 branch, and the static inline in the header is gross

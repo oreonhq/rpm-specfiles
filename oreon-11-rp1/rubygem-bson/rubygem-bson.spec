@@ -12,7 +12,7 @@ License: Apache-2.0
 # Because there is a basic explanation about the bson
 # that is a beneficial for Fedora user.
 URL: http://bsonspec.org
-Source0: https://rubygems.org/gems/%{gem_name}-%{version}.gem
+Source0:        https://rubygems.org/gems/bson-4.15.0.gem
 # https://github.com/mongodb/bson-ruby/blob/e560ee5c65f9f82d8f3430b5a72d8c9a3f1e0fdb/lib/bson/decimal128.rb#L16
 # https://github.com/mongodb/bson-ruby/pull/340
 Patch0:  bson-pr340-testsuite-explicit-require.patch

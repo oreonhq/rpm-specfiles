@@ -7,8 +7,8 @@
 %global gtk4_version 4.17.5
 %global libadwaita_version 1.6~beta
 
-%global tarball_version %%(echo %%{version} | tr '~' '.')
-%global major_version %%(echo %%{tarball_version} | cut -d "." -f 1)
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d "." -f 1)
 
 Name:           nautilus
 Version:        50.0
@@ -18,7 +18,7 @@ Summary:        File manager for GNOME
 # Sources are GPL-3.0-or-later and Appdata is CC0-1.0.
 License:        GPL-3.0-or-later AND CC0-1.0
 URL:            https://apps.gnome.org/Nautilus/
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
+Source0: https://download.gnome.org/sources/nautilus/%{major_version}/nautilus-%{tarball_version}.tar.xz
 # https://pagure.io/fedora-workstation/issue/442
 Patch:          default-terminal.patch
 

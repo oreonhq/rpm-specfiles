@@ -12,7 +12,7 @@ Release: 4%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND MIT
 URL:     https://invent.kde.org/pim/akonadi
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/akonadi-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/akonadi-26.03.80.tar.xz
 
 ## mysql config
 Source10:       akonadiserverrc.mysql

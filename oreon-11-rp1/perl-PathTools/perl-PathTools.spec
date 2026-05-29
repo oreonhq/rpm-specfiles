@@ -10,7 +10,7 @@ Summary:        PathTools Perl module (Cwd, File::Spec)
 # other files:              GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        ( GPL-1.0-or-later OR Artistic-1.0-Perl ) AND BSD-3-Clause
 URL:            https://metacpan.org/release/PathTools
-Source0:        https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/PathTools-%{base_version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/X/XS/XSAWYERX/PathTools-3.75.tar.gz
 # Disable VMS tests (bug #973713)
 Patch0:         PathTools-3.74-Disable-VMS-tests.patch
 # Unbundled from perl 5.29.10

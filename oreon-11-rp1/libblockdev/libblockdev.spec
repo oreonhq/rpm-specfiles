@@ -92,7 +92,7 @@ Release:     2%{?dist}
 Summary:     A library for low-level manipulation with block devices
 License:     LGPL-2.1-or-later
 URL:         https://github.com/storaged-project/libblockdev
-Source0:     https://github.com/storaged-project/libblockdev/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/storaged-project/libblockdev/releases/download/3.4.0/libblockdev-3.4.0.tar.gz
 
 BuildRequires: make
 BuildRequires: glib2-devel

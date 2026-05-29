@@ -9,7 +9,7 @@ Release:        12%{?dist}
 Summary:        Automated hinting utility for TrueType fonts
 License:        FTL or GPL-2.0-only
 URL:            http://www.freetype.org/ttfautohint
-Source0:        http://download.savannah.gnu.org/releases/freetype/%{name}-%{version}.tar.gz
+Source0:        http://download.savannah.gnu.org/releases/freetype/ttfautohint-1.8.4.tar.gz
 
 BuildRequires:  autoconf automake libtool
 BuildRequires:  make

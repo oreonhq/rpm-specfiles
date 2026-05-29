@@ -11,7 +11,7 @@ Summary:        Tools to handle creating and mounting composefs images
 
 License:        LGPL-2.0-or-later AND Apache-2.0
 URL:            https://github.com/containers/composefs
-Source0:        https://github.com/containers/composefs/releases/download/v%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/containers/composefs/releases/download/v1.0.8/composefs-1.0.8.tar.xz
 
 BuildRequires:  gcc meson openssl-devel fuse3-devel
 %if %{with man}

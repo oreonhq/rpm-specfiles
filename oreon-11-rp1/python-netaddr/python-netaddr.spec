@@ -9,7 +9,7 @@ Summary:        A pure Python network address representation and manipulation li
 
 License:        BSD-3-Clause
 URL:            https://github.com/netaddr/netaddr
-Source0:        https://pypi.python.org/packages/source/n/netaddr/netaddr-%{version}.tar.gz
+Source0:        https://pypi.python.org/packages/source/n/netaddr/netaddr-1.3.0.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

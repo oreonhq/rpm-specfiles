@@ -10,7 +10,7 @@ Release: 4%{?dist}
 License: HPND-sell-variant AND MIT
 URL: http://www.x.org
 BuildArch: noarch
-Source0:  https://www.x.org/pub/individual/util/util-macros-%{version}.tar.xz
+Source0:        https://www.x.org/pub/individual/util/util-macros-1.20.2.tar.xz
 
 BuildRequires: make
 

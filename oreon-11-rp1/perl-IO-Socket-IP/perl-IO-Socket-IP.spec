@@ -13,7 +13,7 @@ Release:        522%{?dist}
 Summary:        Drop-in replacement for IO::Socket::INET supporting both IPv4 and IPv6
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Socket-IP
-Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/IO-Socket-IP-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/IO-Socket-IP-0.43.tar.gz
 # IO-Socket-IP-0.41 moved from ExtUtils::MakeMaker to Module::Build.
 # It will make problems, because IO::Socket::IP is a dual-lived package and
 # needs to be built very early on Perl bootstrap, but Module::Build is not

@@ -6,7 +6,7 @@ Version:	0.6.26
 Release:	%autorelease
 License:	LGPL-2.1-or-later
 URL:		https://libexif.github.io/
-Source0:	https://github.com/libexif/libexif/releases/download/v%{version}/libexif-%{version}.tar.bz2
+Source0:        https://github.com/libexif/libexif/releases/download/v0.6.26/libexif-0.6.26.tar.bz2
 
 BuildRequires:	autoconf
 BuildRequires:	automake

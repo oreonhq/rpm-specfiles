@@ -220,16 +220,16 @@ URL: https://sourceware.org/binutils
 #----------------------------------------------------------------------------
 
 %if "%{source}" == "official-release"
-Source0: https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.xz
 # Source0: https://ftp.gnu.org/gnu/binutils/binutils-%%{version}.tar.xz
 %elif "%{source}" == "even-pre-release"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.xz
 %elif "%{source}" == "odd-pre-release"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.xz
 %elif "%{source}" == "snapshot"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.xz
 %elif "%{source}" == "tarball"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-2.46.tar.xz
 %endif
 
 Source1: binutils-2.19.50.0.1-output-format.sed

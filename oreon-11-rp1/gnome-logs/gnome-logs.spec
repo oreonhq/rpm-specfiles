@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global tarball_version %%(echo %{version} | tr '~' '.')
+%global tarball_version %(echo %{version} | tr '~' '.')
 
 Name:           gnome-logs
 Version:        50.0
@@ -11,8 +11,7 @@ Summary:        Log viewer for the systemd journal
 # data/icons/scalable/org.gnome.Logs.svg is CC-BY-3.0
 License:        GPL-3.0-or-later AND CC0-1.0 AND CC-BY-3.0
 URL:            https://wiki.gnome.org/Apps/Logs
-Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
-
+Source0: https://download.gnome.org/sources/gnome-logs/50/gnome-logs-%{tarball_version}.tar.xz
 BuildRequires:  desktop-file-utils
 BuildRequires:  docbook-dtds
 BuildRequires:  docbook-style-xsl

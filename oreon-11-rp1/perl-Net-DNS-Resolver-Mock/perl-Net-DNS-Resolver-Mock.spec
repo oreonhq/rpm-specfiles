@@ -6,7 +6,7 @@ Release:        8%{?dist}
 Summary:        Mock a DNS Resolver object for testing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-DNS-Resolver-Mock
-Source0:        https://cpan.metacpan.org/authors/id/M/MB/MBRADSHAW/Net-DNS-Resolver-Mock-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MB/MBRADSHAW/Net-DNS-Resolver-Mock-1.20230216.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

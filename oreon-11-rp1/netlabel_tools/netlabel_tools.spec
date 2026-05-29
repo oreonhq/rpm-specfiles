@@ -6,7 +6,7 @@ Version: 0.30.0
 Release: 22%{?dist}
 License: GPL-2.0-only
 URL: https://github.com/netlabel/netlabel_tools
-Source: https://github.com/netlabel/netlabel_tools/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/netlabel/netlabel_tools/releases/download/v0.30.0/netlabel_tools-0.30.0.tar.gz
 Patch0: rhbz1683434.patch
 
 Requires: libnl3

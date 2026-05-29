@@ -27,11 +27,11 @@ This is the Roboto Slab family, which can be used alongside the normal
 Roboto family and the Roboto Condensed family.}
 
 # There are no tar archive so let's pick all the individual source files from github
-Source0:       https://raw.githubusercontent.com/google/fonts/%{commit0}/apache/robotoslab/RobotoSlab-Regular.ttf
-Source1:       https://raw.githubusercontent.com/google/fonts/%{commit0}/apache/robotoslab/RobotoSlab-Bold.ttf
-Source2:       https://raw.githubusercontent.com/google/fonts/%{commit0}/apache/robotoslab/RobotoSlab-Light.ttf
-Source3:       https://raw.githubusercontent.com/google/fonts/%{commit0}/apache/robotoslab/RobotoSlab-Thin.ttf
-Source4:       https://raw.githubusercontent.com/google/fonts/%{commit0}/apache/robotoslab/LICENSE.txt
+Source0:        https://raw.githubusercontent.com/google/fonts/90abd17b4f97671435798b6147b698aa9087612f/apache/robotoslab/RobotoSlab-Regular.ttf
+Source1:        https://raw.githubusercontent.com/google/fonts/90abd17b4f97671435798b6147b698aa9087612f/apache/robotoslab/RobotoSlab-Bold.ttf
+Source2:        https://raw.githubusercontent.com/google/fonts/90abd17b4f97671435798b6147b698aa9087612f/apache/robotoslab/RobotoSlab-Light.ttf
+Source3:        https://raw.githubusercontent.com/google/fonts/90abd17b4f97671435798b6147b698aa9087612f/apache/robotoslab/RobotoSlab-Thin.ttf
+Source4:        https://raw.githubusercontent.com/google/fonts/90abd17b4f97671435798b6147b698aa9087612f/apache/robotoslab/LICENSE.txt
 Source5:       64-%{fontpkgname}.conf
 
 %fontpkg

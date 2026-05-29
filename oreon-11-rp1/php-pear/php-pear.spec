@@ -39,7 +39,7 @@ Epoch: 1
 # LGPL-3.0-or-later: Structures_Graph
 License: BSD-2-Clause AND BSD-3-Clause AND LGPL-3.0-or-later
 URL: http://pear.php.net/package/PEAR
-Source0: http://download.pear.php.net/package/PEAR-%{version}%{?pearprever}.tgz
+Source0:        http://download.pear.php.net/package/PEAR-1.10.18%{?pearprever}.tgz
 # wget https://raw.githubusercontent.com/pear/pear-core/stable/install-pear.php
 Source1: install-pear.php
 Source3: cleanup.php
@@ -47,11 +47,11 @@ Source10: pear.sh
 Source11: pecl.sh
 Source12: peardev.sh
 Source13: macros.pear
-Source21: http://pear.php.net/get/Archive_Tar-%{arctarver}.tgz
-Source22: http://pear.php.net/get/Console_Getopt-%{getoptver}.tgz
-Source23: http://pear.php.net/get/Structures_Graph-%{structver}.tgz
-Source24: http://pear.php.net/get/XML_Util-%{xmlutil}.tgz
-Source25: http://pear.php.net/get/PEAR_Manpages-%{manpages}.tgz
+Source21:        http://pear.php.net/get/Archive_Tar-1.6.0.tgz
+Source22:        http://pear.php.net/get/Console_Getopt-1.4.3.tgz
+Source23:        http://pear.php.net/get/Structures_Graph-1.2.0.tgz
+Source24:        http://pear.php.net/get/XML_Util-1.4.5.tgz
+Source25:        http://pear.php.net/get/PEAR_Manpages-1.10.0.tgz
 
 BuildArch: noarch
 BuildRequires: php(language) > 5.4

@@ -7,7 +7,7 @@ Summary:        Embeddable Javascript engine
 
 License:        MIT
 Url:            http://duktape.org/
-Source0:        http://duktape.org/%{name}-%{version}.tar.xz
+Source0:        http://duktape.org/duktape-2.7.0.tar.xz
 Patch0:         duktape-2.7.0-link-against-libm.patch
 
 BuildRequires:  gcc

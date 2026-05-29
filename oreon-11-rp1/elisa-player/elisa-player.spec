@@ -17,7 +17,7 @@ Summary:    Elisa music player
 License:    LGPL-3.0-or-later AND LicenseRef-Callaway-CC-BY-SA
 URL:        https://community.kde.org/Elisa
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/elisa-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/elisa-26.03.80.tar.xz
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

@@ -9,7 +9,7 @@ Summary: CDDB retrieval library
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/multimedia/libkcddb
 
-Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/libkcddb-26.03.80.tar.xz
 
 BuildRequires: extra-cmake-modules
 BuildRequires: kf6-rpm-macros
