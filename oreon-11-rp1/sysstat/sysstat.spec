@@ -7,7 +7,8 @@ Release: 2%{?dist}
 License: GPL-2.0-or-later
 
 URL: https://sysstat.github.io
-Source:        https://github.com/sysstat/sysstat/archive/v12.7.9.tar.gz
+Source:        https://github.com/sysstat/sysstat/archive/refs/tags/v12.7.9.tar.gz
+
 Source1: sysstat-tmpfiles.conf
 
 # PCP is no longer available for %%{ix86} on F40

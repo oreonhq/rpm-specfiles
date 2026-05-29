@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7b632550ea1048fc10c741e46e2e3b093e5ca94dfa6209e9e0848800e247023b
 
 # See http://bugzilla.redhat.com/223663
 %global multilib_archs x86_64 %{ix86} %{?mips} ppc64 ppc s390x s390 sparc64 sparcv9

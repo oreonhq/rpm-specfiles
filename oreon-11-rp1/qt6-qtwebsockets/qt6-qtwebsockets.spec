@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 243e3aa11924c8c5c1645e892f62d013caa3766c57512ca926d5b58146646fbf
 
 %global qt_module qtwebsockets
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 40629895c69531a687a9c0258316cee3f04c2d18b2bf2ad36dc83e76a58f111a
 
 %global qt_module qtremoteobjects
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8e495245e5d1fe75de612c8a07e4043635407a1979bb1dd588f1751d1390203f
 
 %global qt_module qtscxml
 

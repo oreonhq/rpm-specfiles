@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 80d1b61bd4ab650790ae2ab29daa035eba8886d84f1d417f3bd41729198e9bd8
 
 # Version 6.0.0 had __version__ = "6.0.0dev0" in chardet/version.py. A
 # follow-up commit fixed this, updating the version to "6.0.0.post1", and was

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 390f8e52ddee3aca5c4de7eead900c84c4fa61ff6d1f0ebea9c7543365c09b0a
 
 %global qt_module qtmultimedia
 

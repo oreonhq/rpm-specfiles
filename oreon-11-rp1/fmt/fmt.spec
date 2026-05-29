@@ -7,7 +7,8 @@ Release:        %autorelease
 License:        MIT
 Summary:        Small, safe and fast formatting library for C++
 URL:            https://github.com/fmtlib/%{name}
-Source0:        https://github.com/fmtlib/fmt/archive/11.2.0.tar.gz
+Source0:        https://github.com/fmtlib/fmt/archive/refs/tags/11.2.0.tar.gz
+
 BuildRequires:  cmake
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

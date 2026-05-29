@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 94f90484be8e49d3eb3bfcf0ba6cb2d8a170fc831c78de138332feebdf193964
 
 %global qt_module qtlanguageserver
 

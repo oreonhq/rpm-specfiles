@@ -24,7 +24,7 @@ URL:     https://projects.kde.org/projects/kde/kdelibs/kactivities
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/%{stable}/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        http://download.kde.org/%{stable}/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: kdelibs4-devel >= %{version}
 %if ! 0%{?nepomuk}

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 95788aa502f75441d4edf65932b235f76523084e13dbbb7b9ee2d207b32bd9b3
 
 %global qt_module qtwayland
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 52e670f670b0304f534b24f98c47ceb8a41bb710464414ebc9527ec71cc86aa4
 
 %global qt_module qtdeclarative
 

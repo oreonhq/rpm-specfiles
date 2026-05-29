@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a4b8217ac76039613329a1eecba0b2f7d4de4cb07cca03ff0f4dda9311f71d30
 
 # Enable X11 for RHEL 9 and older only
 %bcond x11 %[0%{?rhel} && 0%{?rhel} < 10]

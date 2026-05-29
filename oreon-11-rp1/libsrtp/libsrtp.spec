@@ -6,7 +6,8 @@ Release:	4%{?dist}
 Summary:	An implementation of the Secure Real-time Transport Protocol (SRTP)
 License:	BSD-3-Clause
 URL:		https://github.com/cisco/libsrtp
-Source0:        https://github.com/cisco/libsrtp/archive/v2.6.0.tar.gz
+Source0:        https://github.com/cisco/libsrtp/archive/refs/tags/v2.6.0.tar.gz
+
 BuildRequires:	gcc
 BuildRequires:	doxygen
 BuildRequires:	meson

@@ -1,4 +1,5 @@
 %global source0_hash a58c57d95242a17cfe3adf40c764b15b1b1354ed689b684315c093e5b531538f
+%global source4_hash c9c6be08ba13ea176464a2a872c386418ee8366ff1d7c6965536800d15de001a
 
 # SPDX-License-Identifier: MIT
 
@@ -77,6 +78,7 @@ Source4:        Noto_Emoji.zip
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })
 %autosetup -p1 -a 4 -n noto-emoji-%{commit0}
 
 rm -rf third_party/pngquant

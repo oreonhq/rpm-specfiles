@@ -29,7 +29,8 @@ Release: %autorelease
 Summary: RESTful API for Podman
 URL: https://github.com/containers/%{pypi_name}-py
 # Tarball fetched from upstream
-Source0:        https://github.com/containers/podman-py/archive/v5.6.0.tar.gz
+Source0:        https://github.com/containers/podman-py/archive/refs/tags/v5.6.0.tar.gz
+
 BuildArch: noarch
 
 %description

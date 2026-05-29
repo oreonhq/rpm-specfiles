@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3fe3ed318c2a86d1417c5c29cf7494275e8fd4b537cd37453f5599c57365515c
 
 %global qt_module qtcharts
 

@@ -5,7 +5,7 @@ Summary: Portuguese thesaurus
 %global upstreamid 20060817
 Version: 0.%{upstreamid}
 Release: 39%{?dist}
-Source:        http://download.services.openoffice.org/contrib/dictionaries/thes_pt_PT_v2.zip
+Source:        thes_pt_PT_v2.zip
 URL: http://download.services.openoffice.org/contrib/dictionaries
 BuildRequires: unzip
 License: GPL-2.0-or-later

@@ -23,7 +23,7 @@ Name: xsane
 Summary: X Window System front-end for the SANE scanner interface
 Version: 0.999
 Release: %{autorelease}
-Source0: https://deb.debian.org/debian/pool/main/x/xsane/xsane_%{version}.orig.tar.gz#/xsane-%{version}.tar.gz
+Source0:        http://www.xsane.org/download/%{name}-%{version}.tar.gz
 Source1: xsane-256x256.png
 # use "xdg-open" instead of "netscape" to launch help browser
 # submitted to upstream (Oliver Rauch) via email, 2013-06-04

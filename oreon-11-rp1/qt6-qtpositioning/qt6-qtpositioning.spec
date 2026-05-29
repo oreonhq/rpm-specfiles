@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash d5e6b91801ae286e7630016caea3bdc5e1978b4291d6741d0d64c125650f78f5
 
 %global qt_module qtpositioning
 

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 23617062da7be526d023dec7f9b76231001a1098a7e5f94c646f2e4f87cfcf8f
 
 %global qt_module qtsensors
 

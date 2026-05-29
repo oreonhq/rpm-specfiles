@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7e7b0e66ad0f786595ff250301be5d4dd9ba35c6d96e331d7b8ddf1bcbb250b7
 
 %global qt_module qtquick3d
 

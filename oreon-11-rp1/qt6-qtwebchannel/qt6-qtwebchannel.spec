@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 69fbb50b71d6e6596c2d6863ee9a9c984a4d01378ee2b7b4163bb467a0158d82
 
 %global qt_module qtwebchannel
 

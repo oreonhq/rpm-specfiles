@@ -1,15 +1,17 @@
 %global source0_hash 4cf445ece3de2dbfa0069cd1f24e497dd23bd0d215049acf875ca3496a49763d
 %global source2_hash c9295f5fd3f489b2fbd5f0d33836b09420976506ac834bc9c9a401f4a6a1204a
+%global source3_hash b072fe155f9560067913d05dc44cfc02038a37fa94705f6123b2f0a610a9977a
 %global source4_hash 6a303a49efae2f9579640d152dab12ea17abd3b4674addb0470202e93fd0d646
 %global source5_hash ad7ec847da044f727a16597b3c6e63aa7f6db31036e44ca1b33f630b164ab801
 %global source6_hash fb12160e787e5a3ee5349b422f8a3a5e9babebc6483fc544a458b87487be8124
-%global source7_hash 7a1f0f5ee32214a278dd89f8d8f66b9cd8422f922abf6f1db578f9320834b9e5
-%global source8_hash a218ee3127cd1be6748308a3eed1924f1c5057666dcc15a6f56468812c27012c
+%global source7_hash c9295f5fd3f489b2fbd5f0d33836b09420976506ac834bc9c9a401f4a6a1204a
+%global source8_hash c9295f5fd3f489b2fbd5f0d33836b09420976506ac834bc9c9a401f4a6a1204a
 %global source10_hash dfdd77e4ea1b57ff3a6dbde6b0bdc3f31db5ac99e7fdd4eaf9e1fbb6ec2db8ce
 %global source11_hash e75f712215d7b7e5c89ef322a09b701f7159f028b8b48978865725f00f79875b
 %global source12_hash 0227bd6e0356b211341075c7997c837f0b388c01379bd256aa525566a5553f03
 %global source13_hash 4ac27e697a3e64959756624d68ec18ce5fc54a2d3f31f1b3f702be6fcd48a7d8
 %global source14_hash 3bdf15128ba16686e69bce256cc468e76c7b94ff2c7f391cc5ec09e40bff3839
+%global source53_hash 55ea8b0dda2558b92c31b2e742690fb36952f154985952699ea561dc0b839914
 
 # The enclave code must be built with very specific build
 # flags, that are different from what is used to build
@@ -687,6 +689,7 @@ in applications
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
 %(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })
 %(test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; })
 %(test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; })
@@ -697,6 +700,7 @@ in applications
 %(test "%{source12_hash}" = "none" || { f="%{SOURCE12}"; test -f "$f" || { echo "oreon: missing Source12 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source12_hash}" || { echo "oreon: Source12 hash mismatch" >&2; exit 1; }; })
 %(test "%{source13_hash}" = "none" || { f="%{SOURCE13}"; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source13_hash}" || { echo "oreon: Source13 hash mismatch" >&2; exit 1; }; })
 %(test "%{source14_hash}" = "none" || { f="%{SOURCE14}"; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source14_hash}" || { echo "oreon: Source14 hash mismatch" >&2; exit 1; }; })
+%(test "%{source53_hash}" = "none" || { f="%{SOURCE53}"; test -f "$f" || { echo "oreon: missing Source53 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source53_hash}" || { echo "oreon: Source53 hash mismatch" >&2; exit 1; }; })
 %setup -q -n confidential-computing.sgx-sgx_%{linux_sgx_version}
 
 %autopatch -m 0 -M 49 -p1

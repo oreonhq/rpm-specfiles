@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a1c6967b326243b2ca8d50bc7b7f7852c3975d9aa6ce4b186ebdf35bb1007e1c
 
 %global qt_module qtvirtualkeyboard
 

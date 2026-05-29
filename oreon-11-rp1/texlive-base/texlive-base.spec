@@ -1,15 +1,16 @@
 %global source0_hash 32ea827edd3fb80a682ffbdf95d7ba6139ff074516e660c8923260fc82f5e0f0
+%global source3_hash 9d64ea6f332782805cc79e8dad0ac8c111d6d3e6e4f566f5b00f47d1605490e0
 %global source5_hash d75786bb3dfe8ed8a190e61bc4f4c1dcc4a08a9c2e8fbbb325f32bf8bce69002
 %global source6_hash c41a4015b43948ab104e397c24f55750e5b11619ba249a86b78e3b91d538a2a9
 %global source7_hash 0c50e231046e33aa3b68e32dc1e82403189805400aee894f71ec31ac958a1812
 %global source8_hash 93a3f9cda5939cd74f3eab8fc3dbaeee675f80c27730d931600b4622e2a3f041
 %global source9_hash 7e380fb7069a703b7fdef0aca7e773bed6c04ff2c68210b78a0b5039373531ab
 %global source10_hash c5818cd2cf68a9b8a9b50ff45aa06547c6555c9c86d50d72a762a5a0278274b1
-%global source11_hash 1388a14bd0a47534bc6b514809c75b44cd1e65a05af4f843a48134f729fda211
-%global source12_hash 84a44b23bf3d5a9e38bcd48312a02fa2a667b32a24694d3277f55252b0303021
+%global source11_hash bc7deb19227c74d5664c4eb05becca498f5f48bab2953c79e180fd8199d1d5e2
+%global source12_hash 7b17408dd88f9501b3417f7ba9a187c3c4d2e2644d946a4247a8f2f195741785
 %global source13_hash 931037531aed699db35ec50949b5e87080e76ffaa8603cc0d6f6d1d8325c2cf9
 %global source14_hash 63d48c97e8a3ba597c641dd10474849c90505bf507b680f36c7ad873219a7091
-%global source15_hash d8aee08bffcb1aba9aa802cade9cbf28bef335394385eeb7bba5bfd7d946d632
+%global source15_hash 7c8e61f2d01a2ad4eaa20ecfab6f78c78837fd81cea24a3433a59e15c96342d3
 %global source16_hash a56039aaa31d4e8ff33dedb80570d23f5d4ba6d21cb0574cb562b5857f3ee90c
 %global source17_hash 7f96142694af599025f7f292726512810d1acc03671a6aeac29d417c82fa5214
 %global source18_hash 0276047b6bda37961007678630a91e905da4fbd006dfb4f8f2a8c7820680d657
@@ -65,8 +66,8 @@
 %global source68_hash 701e011a3054fe97bf6dd0bff3a746bc493d67a89816045c19f8324b73288924
 %global source69_hash a09305ffb1dac43fde87e27a24ec9e29d6bff619e2d31d045c9e00bfbf874caa
 %global source70_hash 732adfe0f555873a4810f449063da18269387ad3597310cebecd1d00b296d610
-%global source71_hash f2e07f23d479a8eef4119f43c5fba5fe678f4589ac3d62ad462250a57f944abd
-%global source72_hash 65ef48fb0deced52171edbbdbd3034d5a6a7a4390cb7b48abf139520281f9b15
+%global source71_hash 38c57d901d6f7683f471608451c3df9db9dcca23f93604d54c471066c1c9d2cf
+%global source72_hash 828576beeb767d12e31c04fa043c01d94a9761115856d00280d6c3e24d5e95d1
 %global source73_hash 756c1d559bcb05021f961749ffade8c3ebeb204092560e162a5f80a1c8b0bc73
 %global source74_hash e17a1b1955ce8b2e338faeec87e9f8e150df3b844819effa25bba795876fc3ac
 %global source75_hash df2df6889c18f32187700f140ae41a77517b95a1e289686be10fa5d1fdaf3514
@@ -306,8 +307,8 @@
 %global source309_hash 3b8818c8a9cd1725f0c7fe2e4ff28176cb5012cb84819712e17247c00c6c34ea
 %global source310_hash e1e3832dc442ad746b7a2bfd122a4ea0e869d9711aefd2aa29148136a73dfcfb
 %global source311_hash a1ffb2a5e0ddcd28e14b6476b8bcf11c132d4e1633f507c4d731c252f4b1e108
-%global source312_hash ea93451cae5df99d9ccc40d8a3268f122a2d73bc3be7366e278de38d77ab6877
-%global source313_hash 58cc93cd4c9302084666dd4a2b715f1ab7109cf1711065afae23129e55bf1509
+%global source312_hash 0a11199fe09d4e425f207e59acae7763b8fc306af814e0999be376f08c299242
+%global source313_hash fd0ebfa297069354111be2e135d642091c49327c18d16035cf12be117949c9f2
 %global source314_hash b2559b5e5dabcb1f8bb1ba6904a5d583acfbee3880b9bc9ff84104ec28bf41b2
 %global source315_hash 19e54c91f6fe90e1f4ee5dc5cfa6dcbcc27d9769e55a5f72dc52897e343fab86
 %global source316_hash f747d48a0acbc7361ce141b602f2a10834611f234761031070dd30567f66b7ec
@@ -327,8 +328,8 @@
 %global source330_hash ed5d2535b208ba90c03c826cdf5fdcd6a172a8964cdc60965ecdca17d51a098b
 %global source331_hash 76cd66a4f5e3c886b66757889c8930638475cc6da220d139fe88b1ebc713bcbf
 %global source332_hash 3ab85658f64fd7f893a327308823804d94343a1d29b29e53a668a0cbe551c0b6
-%global source333_hash cae119a2ef8ba093850f25b98f110ba78fb01cae9e418091b45c41c02010672c
-%global source334_hash 9a469460535971301b35580db291201d8f8415358791a3841a45d8d871dada41
+%global source333_hash 7d9ca35806bba840be40d254fd32823566b51fa4334c507acf2b33f42b7be0ac
+%global source334_hash fdbebc5022003f8bf34a1302f5f7328e8338ad5273216ba496c1db6c6cea9bec
 %global source335_hash 345bc6de2127f4e510868cfbdaa24bddbcb91f73073083edac7fa953f60a7f30
 %global source336_hash 39c7395da7b219c7f80c6982558a95cc311c14822a5bf1707f8ce15c48d8a431
 %global source337_hash af2507d86a111947e58d129bc2c606632eb8621f8df7d8b07fd06a6d7542a96f
@@ -7481,6 +7482,7 @@ LaTeX file remains on the archive.)
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
 %(test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; })
 %(test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; })
 %(test "%{source7_hash}" = "none" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source7_hash}" || { echo "oreon: Source7 hash mismatch" >&2; exit 1; }; })

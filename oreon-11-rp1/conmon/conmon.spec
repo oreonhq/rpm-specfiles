@@ -27,7 +27,8 @@ Release: %autorelease
 Summary: OCI container runtime monitor
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
-Source0:        https://github.com/containers/conmon/archive/v2.2.1.tar.gz
+Source0:        https://github.com/containers/conmon/archive/refs/tags/v2.2.1.tar.gz
+
 %if %{with docs}
 BuildRequires: go-md2man
 %endif

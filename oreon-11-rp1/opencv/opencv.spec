@@ -1,4 +1,7 @@
-%global source0_hash none
+%global source0_hash b43e9898e74a44c602fa27307550575638171530050aae5a69eb068422422da1
+%global source1_hash e5028403e98e52a173f1d6500ad99023647a177e370638959569d5b5577a2624
+%global source2_hash 13d3488ed1f083b106fddaf97e83e8d02cd7ca58bea8093a84ca1939bf1bf313
+%global source4_hash 3be62c864dcdd8b925e92f6a5b15a7a039819e04a6b3cf088827f08cf2cc07bf
 
 %bcond_with  tests
 %bcond_without  compat_openvc_pc
@@ -390,6 +393,9 @@ This package contains Java bindings for the OpenCV library.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
+%(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
+%(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })
 # autosetup doesn't work with 2 sources
 # https://github.com/rpm-software-management/rpm/issues/1204
 %setup -q -a1 %{?with_extras_tests:-a2} -a6

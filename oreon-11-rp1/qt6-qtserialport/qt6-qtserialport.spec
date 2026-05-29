@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9af31a898ffd9a7e4faf6fed845d29e783c716885789055cbe319f3e072d3974
 
 %global qt_module qtserialport
 

@@ -8,7 +8,8 @@ Release: 16%{?dist}
 License: GPL-2.0-only
 URL: https://www.thkukuk.de/nis/nis/ypserv/
 
-Source0:        https://github.com/thkukuk/ypserv/archive/v4.2.tar.gz
+Source0:        https://github.com/thkukuk/ypserv/archive/refs/tags/v4.2.tar.gz
+
 Source1: ypserv.service
 Source2: yppasswdd.service
 Source3: ypxfrd.service

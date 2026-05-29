@@ -1,4 +1,5 @@
 %global source0_hash none
+%global source0101_hash 2555db64b4ca51629f2ea3475be6b40460ac3bc900687a8e8b51f0befb0eb1a2
 
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
@@ -50,6 +51,7 @@ dependency tarball
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+%(test "%{source0101_hash}" = "none" || { f="%{SOURCE0101}"; test -f "$f" || { echo "oreon: missing Source0101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0101_hash}" || { echo "oreon: Source0101 hash mismatch" >&2; exit 1; }; })
 cp -da %{_sourcedir}/* .
 tar xvf test.tar.gz
 

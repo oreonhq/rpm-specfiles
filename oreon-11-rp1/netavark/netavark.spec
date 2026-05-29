@@ -45,7 +45,8 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: OCI network stack
 URL: https://github.com/containers/%{name}
 # Tarballs fetched from upstream's release page
-Source0:        https://github.com/containers/netavark/archive/v1.17.2.tar.gz
+Source0:        https://github.com/containers/netavark/archive/refs/tags/v1.17.2.tar.gz
+
 Source1:        https://github.com/containers/netavark/releases/download/v1.17.2/netavark-v1.17.2-vendor.tar.gz
 BuildRequires: cargo
 BuildRequires: %{_bindir}/go-md2man

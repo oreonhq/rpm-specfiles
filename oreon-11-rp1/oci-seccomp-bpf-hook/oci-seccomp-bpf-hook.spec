@@ -20,7 +20,8 @@ ExclusiveArch: x86_64 %{power64} aarch64 s390x armv7hl
 Summary: OCI Hook to generate seccomp json files based on EBF syscalls used by container
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
-Source0:        https://github.com/containers/oci-seccomp-bpf-hook/archive/v1.2.10.tar.gz
+Source0:        https://github.com/containers/oci-seccomp-bpf-hook/archive/refs/tags/v1.2.10.tar.gz
+
 BuildRequires: golang
 BuildRequires: go-md2man
 BuildRequires: go-rpm-macros

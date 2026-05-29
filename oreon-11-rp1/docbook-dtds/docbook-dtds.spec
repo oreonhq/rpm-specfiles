@@ -14,9 +14,11 @@
 %global source13_hash 001d6f4945f36faf542b2d5ab421de03ed6bbda0b3adecb13ce69b22fd56b5f9
 %global source14_hash 16d3120df58237e19445bc5ca14d05597d29e0734e93eb16582ec200ec065d19
 %global source15_hash 38c0bcd5e40226b15d79b86b119341d88f5b6c6e80cd20fb262238963aec1d15
+%global source16_hash 130370a5910c8eba97f1d823510c374aad9c94db2f8e797eb1a0f2a6e88edd14
 %global source17_hash 32d105b60a1524c71acbb9e700fb210fe69faf28716b9b6703901ba43a3973e5
 %global source18_hash c6b988431003b857927239d11254a57158b893e4960c80ae1a5ce02e8c6af7f5
 %global source19_hash 710db64c36ed962aa8dab97bd1b5bea1b1fb4c613e0d3b8f8adf0069f535c699
+%global source20_hash 31aa130bdb88a22907ce78326f846a093dac7a77c6dbc5f943278a5946637c1f
 
 %global openjadever 1.3.2
 %global version_list "{3,4}.{0,1}-sgml 4.1.2-xml 4.{2,3,4,5}-{sgml,xml} 4.{2,3,4,5}-rng 4.{2,3,4,5}-xsd"
@@ -127,9 +129,11 @@ This package contains SGML and XML versions of the DocBook DTD.
 %(test "%{source13_hash}" = "none" || { f="%{SOURCE13}"; test -f "$f" || { echo "oreon: missing Source13 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source13_hash}" || { echo "oreon: Source13 hash mismatch" >&2; exit 1; }; })
 %(test "%{source14_hash}" = "none" || { f="%{SOURCE14}"; test -f "$f" || { echo "oreon: missing Source14 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source14_hash}" || { echo "oreon: Source14 hash mismatch" >&2; exit 1; }; })
 %(test "%{source15_hash}" = "none" || { f="%{SOURCE15}"; test -f "$f" || { echo "oreon: missing Source15 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source15_hash}" || { echo "oreon: Source15 hash mismatch" >&2; exit 1; }; })
+%(test "%{source16_hash}" = "none" || { f="%{SOURCE16}"; test -f "$f" || { echo "oreon: missing Source16 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source16_hash}" || { echo "oreon: Source16 hash mismatch" >&2; exit 1; }; })
 %(test "%{source17_hash}" = "none" || { f="%{SOURCE17}"; test -f "$f" || { echo "oreon: missing Source17 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source17_hash}" || { echo "oreon: Source17 hash mismatch" >&2; exit 1; }; })
 %(test "%{source18_hash}" = "none" || { f="%{SOURCE18}"; test -f "$f" || { echo "oreon: missing Source18 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source18_hash}" || { echo "oreon: Source18 hash mismatch" >&2; exit 1; }; })
 %(test "%{source19_hash}" = "none" || { f="%{SOURCE19}"; test -f "$f" || { echo "oreon: missing Source19 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source19_hash}" || { echo "oreon: Source19 hash mismatch" >&2; exit 1; }; })
+%(test "%{source20_hash}" = "none" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source20_hash}" || { echo "oreon: Source20 hash mismatch" >&2; exit 1; }; })
 %setup -c -T
 eval mkdir %{version_list}
 

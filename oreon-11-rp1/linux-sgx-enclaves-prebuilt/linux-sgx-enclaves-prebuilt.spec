@@ -1,5 +1,6 @@
 %global source0_hash 57c1e4637039a9fd93218a78f7f6e893c7d69960c7e180c1b8c9d3ed949495ce
 %global source1_hash ebd0a660969b934ec653a78a1c843df3f327d7ea866493c0dde58e18d92c4e40
+%global source3_hash e85ce584bda515856e16116d00388d7147131e9d9a651e74e1020ca53254c97d
 
 # There's no concept of debuginfo for SGX enclaves
 %global debug_package %{nil}
@@ -152,6 +153,7 @@ prebuilt by Intel. \
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
+%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
 # Upstream repo renamed to confidential-computing.sgx (GitHub archive top dir matches)
 %autosetup -n confidential-computing.sgx-sgx_%{linux_sgx_version}_reproducible
 

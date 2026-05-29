@@ -6,7 +6,7 @@ Version: 1.20.3
 Release: 4%{?dist}
 License: LGPL-2.1-or-later
 URL: https://github.com/sahlberg/%{name}
-Source:        https://github.com/sahlberg/libiscsi/archive/1.20.3.tar.gz
+Source:        https://github.com/sahlberg/libiscsi/archive/refs/tags/1.20.3.tar.gz
 
 BuildRequires: autoconf
 BuildRequires: automake

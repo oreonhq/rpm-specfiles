@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c46c9c0c8d6815301a669cdbd5866c10bcfb9e56889f5d7da14e11d6ad24f20a
 
 %global qt_module qtserialbus
 

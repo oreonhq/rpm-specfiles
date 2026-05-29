@@ -1,5 +1,6 @@
 %global source0_hash none
 %global source3_hash 8b3e796574d63131fd3c90692c830ccf21a272433e3cc1b8c014979c84bd2ff4
+%global source4_hash 9b83c4f3a068a946739c07a0e4c4e273c7a5ade86a187de88f82dc25038bf35b
 
 # FIXME:  Figure out what to do about the gles* manpages, maybe different conflicting packages...
 %global codate 20190306
@@ -39,6 +40,7 @@ OpenGL manpages
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
 %(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
+%(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })
 %setup -q -n OpenGL-Refpages-%{commit}
 tar xzf %{SOURCE3}
 cp -av %{SOURCE2} mathml2/

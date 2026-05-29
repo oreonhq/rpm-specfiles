@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1e1a7b9c0a947731655334f5d79252d40cdaf58c1801074ea5e9e0821d6693ac
 
 %global qt_module qtdatavis3d
 

@@ -10,7 +10,8 @@ Name: hunspell-ko
 Summary: Korean hunspell dictionaries
 Version: 0.7.0
 Release: 23%{?dist}
-Source:        https://github.com/spellcheck-ko/hunspell-dict-ko/archive/0.7.0.tar.gz
+Source:        https://github.com/spellcheck-ko/hunspell-dict-ko/archive/refs/tags/0.7.0.tar.gz
+
 URL: https://github.com/spellcheck-ko/hunspell-dict-ko
 License: MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-only
 BuildArch: noarch

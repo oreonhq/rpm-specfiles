@@ -7,7 +7,7 @@ Summary:        Markdown parser for Python
 
 License:        BSD-3-Clause
 URL:            https://github.com/lepture/mistune
-Source0:        https://github.com/lepture/mistune/archive/v0.8.3.tar.gz
+Source0:        https://github.com/lepture/mistune/archive/refs/tags/v0.8.3.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  python%{python3_pkgversion}-devel
