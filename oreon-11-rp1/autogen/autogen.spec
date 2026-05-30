@@ -8,7 +8,7 @@ Release:	%autorelease
 # We redistribute them under GPLv3+.
 License:	GPL-3.0-or-later AND GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later AND BSD-2-Clause AND BSD-3-Clause AND GPL-1.0-or-later AND (LGPL-3.0-or-later OR BSD-3-Clause) AND GFDL-1.2-or-later
 URL:		http://www.gnu.org/software/autogen/
-Source0:	ftp://ftp.gnu.org/gnu/autogen/rel%{version}/%{name}-%{version}.tar.xz
+Source0:	https://ftp.gnu.org/gnu/autogen/rel%{version}/%{name}-%{version}.tar.xz
 
 # Fix multilib conflicts
 Patch0:		autogen-multilib.patch

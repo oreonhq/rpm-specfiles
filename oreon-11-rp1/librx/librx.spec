@@ -7,7 +7,7 @@ Release: 53%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL: http://www.gnu.org/software/rx/rx.html
-# Originally downloaded from ftp://ftp.gnu.org/gnu/rx/rx-1.5.tar.bz2
+# Originally downloaded from https://ftp.gnu.org/gnu/rx/rx-1.5.tar.bz2
 # The FSF no longer offers this code.
 Source0: rx-%{version}.tar.bz2
 Patch0: rx-1.5-shared.patch

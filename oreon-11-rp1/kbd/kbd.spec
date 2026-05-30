@@ -13,7 +13,7 @@ Summary:        Tools for configuring the console (keyboard, virtual terminals, 
 License:        GPL-2.0-or-later
 URL:            http://www.kbd-project.org/
 
-Source0:        ftp://ftp.altlinux.org/pub/people/legion/kbd/kbd-%{version}.tar.xz
+Source0:        https://ftp.altlinux.org/pub/people/legion/kbd/kbd-%{version}.tar.xz
 # Same tarballs as Fedora kbd lookaside (public mirrors)
 Source1:        https://www.linuxfromscratch.org/~ken/console-fonts/other/kbd-latsun-fonts.tar.bz2
 # latarcyrheb-sun16/sun32.psfu are in upstream kbd 2.9.0 (no separate Source2, Koji copy 404s)

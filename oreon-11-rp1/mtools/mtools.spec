@@ -5,7 +5,7 @@ Name: mtools
 Version: 4.0.49
 Release: %autorelease
 License: GPL-3.0-or-later
-Source0:        ftp://ftp.gnu.org/gnu/mtools/mtools-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/mtools/mtools-%{version}.tar.gz
 Url: https://www.gnu.org/software/mtools/
 Patch0: mtools-3.9.6-config.patch
 

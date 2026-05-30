@@ -13,7 +13,7 @@ Release:        0.53.%{?beta_tag}%{?dist}
 Summary:        Automatic moc for Qt 4
 License:        BSD-2-Clause
 URL:            http://www.kde.org
-Source0:        ftp://ftp.kde.org/pub/kde/stable/automoc4/%{beta}/automoc4-%{beta}.tar.bz2
+Source0:        https://download.kde.org/pub/kde/stable/automoc4/%{beta}/automoc4-%{beta}.tar.bz2
 
 ## upstream patches
 Patch1: 0001-fix-make-clean-it-s-SET_directory_properties-and-not.patch

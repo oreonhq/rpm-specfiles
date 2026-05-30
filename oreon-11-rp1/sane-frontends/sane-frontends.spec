@@ -8,7 +8,7 @@ URL: http://www.sane-project.org
 
 # Repacked the upstream source to remove bundled glibc functions
 # reported here https://gitlab.com/sane-project/frontends/-/merge_requests/11
-#Source0: ftp://ftp.sane-project.org/pub/sane/%%{name}-%%{version}/%%{name}-%%{version}.tar.gz
+#Source0: https://ftp.sane-project.org/pub/sane/%%{name}-%%{version}/%%{name}-%%{version}.tar.gz
 Source0: %{name}-%{version}-repacked.tar.gz
 
 # Fix array subscript out of bounds errors (#133121).

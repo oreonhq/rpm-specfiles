@@ -12,7 +12,7 @@ Release:        68%{?dist}
 Summary:        Universally Unique Identifier library
 License:        MIT
 URL:            http://www.ossp.org/pkg/lib/uuid/
-Source0:        ftp://ftp.ossp.org/pkg/lib/uuid/uuid-%{version}.tar.gz
+Source0:        https://ftp.ossp.org/pkg/lib/uuid/uuid-%{version}.tar.gz
 Patch0:         uuid-1.6.1-ossp.patch
 Patch1:         uuid-1.6.1-mkdir.patch
 Patch2:         uuid-1.6.2-php54.patch

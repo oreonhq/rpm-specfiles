@@ -13,7 +13,7 @@ License: GPL-3.0-or-later
 Url: https://www.gnu.org/software/bash
 Source0:        https://ftp.gnu.org/gnu/bash/bash-5.3.tar.gz
 # For now there isn't any doc
-#Source2: ftp://ftp.gnu.org/gnu/bash/bash-doc-%%{version}.tar.gz
+#Source2: https://ftp.gnu.org/gnu/bash/bash-doc-%%{version}.tar.gz
 
 Source1: dot-bashrc
 Source2: dot-bash_profile

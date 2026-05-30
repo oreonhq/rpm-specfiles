@@ -5,8 +5,8 @@ License:        Apache-2.0
 Summary:        An adminstration shell for NVMe storage targets
 Version:        0.8
 Release:        7%{?dist}
-URL:            ftp://ftp.infradead.org/pub/nvmetcli/
-Source:         ftp://ftp.infradead.org/pub/nvmetcli/%{name}-%{version}.tar.gz
+URL:            https://ftp.infradead.org/pub/nvmetcli/
+Source:         https://ftp.infradead.org/pub/nvmetcli/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  python3-devel python3-setuptools systemd-units asciidoc xmlto
