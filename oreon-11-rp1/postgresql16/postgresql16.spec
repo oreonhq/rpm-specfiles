@@ -72,7 +72,7 @@ Url: http://www.postgresql.org/
 
 %global service_name postgresql.service
 
-Source0:        https://ftp.postgresql.org/pub/source/v/postgresql-.tar.bz2
+Source0: https://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
 Source3:        https://ftp.postgresql.org/pub/source/v15.17/postgresql-15.17.tar.bz2
 Source4: Makefile.regress
 Source9: postgresql.tmpfiles.d
@@ -86,7 +86,7 @@ Source12:        https://github.com/devexp-db/postgresql-setup/releases/download
 # Those here are just to enforce packagers check that the tarball was downloaded
 # correctly.  Also, this allows us check that packagers-only tarballs do not
 # differ with publicly released ones.
-Source16:        https://ftp.postgresql.org/pub/source/v/postgresql-.tar.bz2.sha256
+Source16: https://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2.sha256
 Source17:        https://ftp.postgresql.org/pub/source/v15.17/postgresql-15.17.tar.bz2.sha256
 
 # Comments for these patches are in the patch files.

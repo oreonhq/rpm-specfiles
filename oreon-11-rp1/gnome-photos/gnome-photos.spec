@@ -26,7 +26,7 @@ Summary:       Access, organize and share your photos on GNOME
 # GNOME Photos itself is GPLv3+, but the bundled libgd is LGPLv2+
 License:       GPL-3.0-or-later AND LGPL-2.1-or-later
 URL:           https://wiki.gnome.org/Apps/Photos
-Source0: https://download.gnome.org/sources/gnome-photos/%{major_version}/gnome-photos-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
 Patch1:        0001-wip-item-manager-Handle-collection-COLUMNS_URNs-with.patch
 
 BuildRequires: /usr/bin/appstream-util

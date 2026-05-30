@@ -12,8 +12,8 @@ Summary:        Userspace programs for btrfs
 
 License:        GPL-2.0-only
 URL:            https://btrfs.readthedocs.io
-Source0:        https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v%{version_no_tilde}.tar.xz
-Source1:        https://www.kernel.org/pub/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v%{version_no_tilde}.tar.sign
+Source0:        https://www.kernel.org/pub/linux/kernel/people/kdave/%{name}/%{name}-v%{version_no_tilde}.tar.xz
+Source1:        https://www.kernel.org/pub/linux/kernel/people/kdave/%{name}/%{name}-v%{version_no_tilde}.tar.sign
 Source2:        gpgkey-F2B41200C54EFB30380C1756C565D5F9D76D583B.gpg
 
 # Special patch source, conditionally applied

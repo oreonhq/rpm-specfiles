@@ -1,5 +1,11 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+%global maj_ver_kf6 6
+%global min_ver_kf6 6
+%global bug_ver_kf6 5
+
+
 %global qt6_minver 6.6.0
 %global kf6_minver 6.5.0
 
@@ -15,8 +21,8 @@ Summary:        Initial setup for systems using KDE Plasma
 License:        (GPL-2.0-or-later or GPL-3.0-or-later) and GPL-2.0-or-later and GPL-3.0-or-later and (LGPL-2.0-or-later or LGPL-3.0-or-later) and (LGPL-2.1-or-later or LGPL-3.0-or-later) and LGPL-2.1-or-later and BSD-2-Clause and CC0-1.0
 URL:            https://invent.kde.org/plasma/%{name}
 
-Source0:        https://download.kde.org/stable/plasma/%{version}/plasma-setup-%{version}.tar.xz
-Source1:        https://download.kde.org/stable/plasma/%{version}/plasma-setup-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
 
 # Backported changes
 

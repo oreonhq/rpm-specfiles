@@ -1,5 +1,11 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+%global maj_ver_kf6 6
+%global min_ver_kf6 6
+%global bug_ver_kf6 5
+
+
 Name:    kwin
 Version: 6.6.5
 Release: 1%{?dist}
@@ -10,8 +16,8 @@ URL:     https://userbase.kde.org/KWin
 
 %global plasma_version %(echo %{version} | cut -d. -f1-3)
 
-Source0:        https://download.kde.org/stable/plasma/%{version}/kwin-%{version}.tar.xz
-Source1:        https://download.kde.org/stable/plasma/%{version}/kwin-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
 
 ## upstream patches
 

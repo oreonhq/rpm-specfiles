@@ -15,7 +15,7 @@ Summary:        C++ interface for Pango
 
 License:        LGPL-2.1-or-later
 URL:            https://www.gtkmm.org/
-Source0: https://download.gnome.org/sources/pangomm/%(echo %{version} | cut -d. -f1)/pangomm-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/pangomm/%{release_version}/pangomm-%{version}.tar.xz
 BuildRequires:  pkgconfig(cairomm-1.16) >= %{cairomm_version}
 BuildRequires:  pkgconfig(glibmm-2.68) >= %{glibmm_version}
 BuildRequires:  pkgconfig(pangocairo) >= %{pango_version}

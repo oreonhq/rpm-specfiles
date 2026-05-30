@@ -42,7 +42,7 @@ Version: %{rpmver}
 Release: %{?snapver:0.%{snapver}.}%{baserelease}%{?dist}
 Url: https://rpm.org/
 License: GPL-2.0-or-later
-Source0:        http://ftp.rpm.org/releases/%{?snapver:testing}%{!?snapver:rpm-%(echo/rpm-6.0.1%{?snapver:-%{snapver}}.tar.bz2
+Source0: http://ftp.rpm.org/releases/%{srcdir}/rpm-%{srcver}.tar.bz2
 
 Source10: rpmdb-rebuild.service
 

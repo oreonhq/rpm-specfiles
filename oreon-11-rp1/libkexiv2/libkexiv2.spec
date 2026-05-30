@@ -1,5 +1,8 @@
 %global source0_hash 8ed6de46cdd084a834dd0f2049d6490977a8eedc50a2e59f715fb1cecf6653ec
 
+%global stable_kf6 stable
+
+
 %undefine __cmake_in_source_build
 
 Name:           libkexiv2
@@ -8,7 +11,7 @@ Release:        5%{?dist}
 Summary:        KDE wrapper around Exiv2 (Qt 6)
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/graphics/libkexiv2
-Source0:        http://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

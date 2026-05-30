@@ -11,7 +11,7 @@ Release: 1%{?dist}
 Epoch:   1
 License: TCL AND HPND-Pbmplus AND CC-BY-SA-3.0 AND MIT-open-group AND MIT
 URL: http://tcl.sourceforge.net
-Source0:        http://download.sourceforge.net/sourceforge/tcl/tk-src.tar.gz
+Source0:        http://download.sourceforge.net/sourceforge/tcl/%{name}%{version}-src.tar.gz
 Requires: tcl = %{epoch}:%{vers}
 BuildRequires: make
 BuildRequires: gcc

@@ -14,7 +14,7 @@ Summary:        C++ interface for the GLib library
 
 License:        LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:            http://www.gtkmm.org/
-Source0: https://download.gnome.org/sources/glibmm/%(echo %{version} | cut -d. -f1)/glibmm-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/glibmm/%{release_version}/glibmm-%{version}.tar.xz
 BuildRequires:  doxygen
 BuildRequires:  gcc-c++
 BuildRequires:  pkgconfig(glib-2.0) >= %{glib2_version}

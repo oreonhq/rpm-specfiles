@@ -1,5 +1,9 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+%global majmin_ver_kf6 26.03
+
+
 Name:    parley
 Summary: Vocabulary Trainer
 Version: 26.03.80
@@ -8,7 +12,7 @@ Release: 1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL:     https://apps.kde.org/parley/
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/parley-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}

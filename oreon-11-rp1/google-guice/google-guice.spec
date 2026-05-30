@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 56c5cbaa160fc9e754b8d2d93b8d8584c8468726e6b16075a6d8a0f6c61fad25
 
 %bcond_with bootstrap
 
@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./create-tarball.sh %%{version}
-Source0:        https://github.com/google/guice/archive/refs/tags/v5.1.0.tar.gz
+Source0:        https://github.com/google/guice/archive/refs/tags/5.1.0.tar.gz
 Source1:        create-tarball.sh
 
 BuildRequires:  jurand

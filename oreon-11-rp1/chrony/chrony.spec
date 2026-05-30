@@ -17,8 +17,8 @@ Summary:        An NTP client/server
 
 License:        GPL-2.0-only
 URL:            https://chrony-project.org
-Source0:        https://chrony-project.org/releases/chrony-4.8%{?prerelease}.tar.gz
-Source1:        https://chrony-project.org/releases/chrony-4.8%{?prerelease}-tar-gz-asc.txt
+Source0:        https://chrony-project.org/releases/chrony-%{version}%{?prerelease}.tar.gz
+Source1:        https://chrony-project.org/releases/chrony-%{version}%{?prerelease}-tar-gz-asc.txt
 Source2:        https://chrony-project.org/gpgkey-8F375C7E8D0EE125A3D3BD51537E2B76F7680DAC.asc
 Source3:        chrony.dhclient
 Source4:        chrony.sysusers

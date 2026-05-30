@@ -1,5 +1,8 @@
 %global source0_hash cef8d4129225c95b3a4f35909723ee67e677f55e5d8812bcf3ccf165d0901b57
 
+%global stable_kf6 stable
+
+
 Name:           plasma-phonebook
 Version: 26.04.1
 Release: 1%{?dist}

@@ -1,5 +1,11 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+%global maj_ver_kf6 6
+%global min_ver_kf6 6
+%global bug_ver_kf6 5
+
+
 # Disable X11 for RHEL
 %bcond x11 %[%{undefined rhel}]
 
@@ -16,8 +22,8 @@ License:        BSD-3-Clause and CC0-1.0 and (GPL-2.0-only or GPL-3.0-only) and 
 Summary:        QML based login manager from KDE
 
 URL:            https://invent.kde.org/plasma/plasma-login-manager
-Source0:        https://download.kde.org/stable/plasma/%{version}/plasma-login-manager-%{version}.tar.xz
-Source1:        https://download.kde.org/stable/plasma/%{version}/plasma-login-manager-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
 
 # README.scripts
 Source10:       README.scripts

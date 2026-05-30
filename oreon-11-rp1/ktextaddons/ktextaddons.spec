@@ -9,7 +9,7 @@ License:       CC0-1.0 AND LGPL-2.0-or-later AND GPL-2.0-or-later AND BSD-3-Clau
 
 URL:           https://invent.kde.org/libraries/%{name}
 
-Source0:        http://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires: cmake
 BuildRequires: gcc-c++

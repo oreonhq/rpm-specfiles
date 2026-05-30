@@ -10,7 +10,7 @@ Summary:        GNOME User Documentation
 
 License:        CC-BY-SA-3.0
 URL:            https://help.gnome.org/
-Source0: https://download.gnome.org/sources/gnome-user-docs/%{major_version}/gnome-user-docs-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
 BuildArch:      noarch
 
 BuildRequires:  gettext

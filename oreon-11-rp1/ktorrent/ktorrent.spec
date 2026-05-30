@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
 
@@ -14,7 +17,7 @@ Summary: A BitTorrent program
 
 License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND (GPL-2.0-only OR GPL-3.0-only)
 URL:     https://www.kde.org/applications/internet/ktorrent/
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/ktorrent-26.04.1.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream patches
 

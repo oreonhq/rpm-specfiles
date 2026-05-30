@@ -10,7 +10,7 @@ Release: %autorelease
 # See https://gitlab.com/fedora/legal/fedora-license-data/-/merge_requests/359 for reasoning why Public Domain is not here.
 License: GPL-2.0-or-later
 URL: https://github.com/cronie-crond/crontabs
-Source0:        https://github.com/cronie-crond/crontabs/releases/download/crontabs-20190603/crontabs-%(echo 1.11^|cut -d\^ -f1)-20190603git.tar.gz
+Source0: https://github.com/cronie-crond/crontabs/releases/download/crontabs-%{snapshot_date}/%{name}-%(echo %{version}|cut -d\^ -f1)-%{snapshot_date}git.tar.gz
 BuildArch: noarch
 Requires: sed
 Requires: cronie

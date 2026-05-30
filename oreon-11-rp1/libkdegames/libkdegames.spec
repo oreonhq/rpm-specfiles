@@ -16,7 +16,7 @@ URL:     https://invent.kde.org/games/%{name}
 %else
 %global stable stable
 %endif
-Source0:        http://download.kde.org/%{stable}/release-service/%{version}/src/libkdegames-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable}/release-service/%{version}/src/libkdegames-%{version}.tar.xz
 
 BuildRequires: extra-cmake-modules
 BuildRequires: kf6-karchive-devel

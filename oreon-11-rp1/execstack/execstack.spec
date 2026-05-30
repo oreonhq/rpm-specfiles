@@ -10,7 +10,7 @@ Summary:        Utility to set/clear/query executable stack bit
 
 License: GPL-2.0-or-later
 # work around for missing upstream tarball with latest checkin
-Source0:        https://github.com/keszybz/prelink/archive/4c79120bcdbde0616f592458ccde7035e92ca3d8.tar.gz#/prelink-%(c=4c79120bcdbde0616f592458ccde7035e92ca3d8;.tar.gz
+Source0: https://github.com/keszybz/prelink/archive/%{commit}.tar.gz#/prelink-%{shortcommit}.tar.gz
 
 Patch0:  Add-PL_ARCH-for-AArch64.patch
 Patch1: execstack-configure-c99.patch

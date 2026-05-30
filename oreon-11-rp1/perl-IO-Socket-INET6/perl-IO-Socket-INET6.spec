@@ -14,6 +14,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Socket-INET6
 Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Socket-INET6-%{version}.tar.gz
 
+
 # Fix bad code in test. Original code hides error, related to BZ#1207174
 Patch0:         IO-Socket-INET6-2.72-fix_die_in_test.patch
 # Fix random test error in binding to socket BZ#1207174

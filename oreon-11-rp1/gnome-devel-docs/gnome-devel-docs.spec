@@ -15,7 +15,7 @@ Summary: GNOME developer documentation
 # programming-guidelines is licensed under CC-BY-SA-3.0
 License: GFDL-1.1-or-later AND CC-BY-SA-3.0 AND CC-BY-SA-4.0 AND CC-BY-SA-3.0 WITH GNOME-examples-exception
 URL: https://developer.gnome.org
-Source0: https://download.gnome.org/sources/gnome-devel-docs/40/gnome-devel-docs-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/40/%{name}-%{tarball_version}.tar.xz
 BuildArch: noarch
 BuildRequires: docbook-utils
 BuildRequires: gettext

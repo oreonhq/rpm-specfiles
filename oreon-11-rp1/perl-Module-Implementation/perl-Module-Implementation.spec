@@ -18,6 +18,7 @@ License:	Artistic-2.0
 URL:		https://metacpan.org/release/perl-Module-Implementation
 Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Implementation-%{version}.tar.gz
 
+
 BuildArch:	noarch
 # ===================================================================
 # Build requirements

@@ -16,7 +16,7 @@ Release: 3%{?dist}
 License: LicenseRef-Public-Domain AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND X11 AND X11-distribute-modifications-variant AND FSFUL
 
 URL: http://invisible-island.net/byacc/byacc.html
-Source: https://invisible-island.net/byacc/byacc-%{byaccdate}.tgz
+Source:        https://invisible-island.net/byacc/byacc-20241231.tgz
 
 BuildRequires:  gcc
 BuildRequires: make

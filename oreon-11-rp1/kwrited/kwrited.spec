@@ -1,5 +1,8 @@
 %global source0_hash 7d254573de29330bd47cb332de97a824e0ea23bcabc516cc917ba16823a40c80
 
+%global stable_kf6 stable
+
+
 Name:           kwrited
 Version:        6.6.3
 Release:        3%{?dist}

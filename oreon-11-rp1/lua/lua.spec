@@ -22,7 +22,7 @@ Release:        1%{?dist}
 Summary:        Powerful light-weight programming language
 License:        MIT
 URL:            https://www.lua.org/
-Source0:        https://www.lua.org/ftp/lua-.tar.gz
+Source0:        https://www.lua.org/ftp/lua-%{version}.tar.gz
 # copied from doc/readme.html on 2014-07-18
 Source1:        mit.txt
 %if 0%{?bootstrap}

@@ -39,7 +39,7 @@ Epoch: 1
 # LGPL-3.0-or-later: Structures_Graph
 License: BSD-2-Clause AND BSD-3-Clause AND LGPL-3.0-or-later
 URL: http://pear.php.net/package/PEAR
-Source0:        http://download.pear.php.net/package/PEAR-1.10.18%{?pearprever}.tgz
+Source0:        http://download.pear.php.net/package/PEAR-%{version}%{?pearprever}.tgz
 # wget https://raw.githubusercontent.com/pear/pear-core/stable/install-pear.php
 Source1: install-pear.php
 Source3: cleanup.php

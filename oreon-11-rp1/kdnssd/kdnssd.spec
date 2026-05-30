@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 %global base_name kio-zeroconf
 
 
@@ -14,7 +17,7 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.0-only
 URL:     https://invent.kde.org/network/%{base_name}
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kio-zeroconf-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{base_name}-%{version}.tar.xz
 
 # new upstream name in 4.12.95
 Provides: %{base_name} = %{version}-%{release}

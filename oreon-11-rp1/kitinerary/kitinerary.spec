@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 Name:    kitinerary
 Version: 26.04.1
 Release: 1%{?dist}
@@ -8,7 +11,7 @@ Summary: A library containing itinerary data model and itinerary extraction code
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-or-later AND ODbL-1.0
 URL:     https://invent.kde.org/frameworks/%{name}
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kitinerary-26.04.1.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 # 
 %if !%{defined fc40} && !%{defined fc41}

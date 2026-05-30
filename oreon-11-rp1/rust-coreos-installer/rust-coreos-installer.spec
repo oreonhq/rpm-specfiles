@@ -20,10 +20,10 @@ Summary:        Installer for Fedora CoreOS and RHEL CoreOS
 
 License:        Apache-2.0
 URL:            https://crates.io/crates/coreos-installer
-Source0:        https://crates.io/api/v1/crates/coreos-installer/0.26.0/download#/coreos-installer-0.26.0.crate
+Source0:        %{crates_source}
 # not used on Fedora
 Source1:        https://github.com/coreos/%{crate}/releases/download/v%{version}/%{crate}-%{version}-vendor.tar.gz
-Source2:        https://github.com/coreos/coreos-installer-dracut/archive/1a0a13fe12508367fffb49fc102dc50932da41ce/coreos-installer-dracut-%(c=1a0a13fe12508367fffb49fc102dc50932da41ce;.tar.gz
+Source2:        https://github.com/coreos/coreos-installer-dracut/archive/%{dracutcommit}/coreos-installer-dracut-%{dracutshortcommit}.tar.gz
 ExcludeArch:    %{ix86}
 
 %if 0%{?rhel}

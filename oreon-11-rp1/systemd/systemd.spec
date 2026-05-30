@@ -94,13 +94,13 @@ Summary:        System and Service Manager
 # packit will always rewrite the first Source0 it finds, ignoring any conditionals so list
 # the fallback source that's used if neither %%branch, %%commit or %%obs are defined first.
 %if %{undefined branch} && %{undefined commit} && %{without obs}
-Source0:        https://github.com/systemd/systemd/archive/v%{version_no_tilde}/systemd-%{version_no_tilde}.tar.gz
+Source0:        https://github.com/systemd/systemd/archive/v%{version_no_tilde}/%{name}-%{version}.tar.xz
 %elif %{defined branch}
-Source0:        https://github.com/systemd/systemd/archive/refs/heads/%{branch}.tar.gz
+Source0:        https://github.com/systemd/systemd/archive/v%{version_no_tilde}/%{name}-%{version}.tar.xz
 %elif %{defined commit}
-Source0:        https://github.com/systemd/systemd/archive/%{commit}/systemd-%{commit}.tar.gz
+Source0:        https://github.com/systemd/systemd/archive/v%{version_no_tilde}/%{name}-%{version}.tar.xz
 %elif %{with obs}
-Source0:        https://github.com/systemd/systemd/archive/v%{version_no_tilde}/systemd-.tar.xz
+Source0:        https://github.com/systemd/systemd/archive/v%{version_no_tilde}/%{name}-%{version}.tar.xz
 %endif
 # Vendored snapshot (refresh from build/src/rpm/triggers.systemd.sh or a Fedora SRPM when updating).
 # %%include reads this at spec parse time, so it must live in SOURCES with the spec.

@@ -11,7 +11,7 @@ Release: %{?prever:0.}1%{?prever:.%{prever}}%{?dist}.1
 License: BSD-2-clause
 # Upstream moved to a separate namespace from OpenDNSSEC
 Url: http://www.softhsm.org/
-Source:        https://github.com/softhsm/SoftHSMv2/archive/refs/tags/2.7.0%{?prever:-%prever}/SoftHSMv2-2.7.0%{?prever:-%prever}.tar.gz
+Source:        https://github.com/softhsm/SoftHSMv2/archive/refs/tags/%{version}%{?prever:-%prever}/%{origname}-%{version}%{?prever:-%prever}.tar.gz
 Source2: %{name}-sysusers.conf
 
 BuildRequires: make

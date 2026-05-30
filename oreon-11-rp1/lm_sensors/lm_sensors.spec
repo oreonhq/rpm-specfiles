@@ -17,7 +17,7 @@ License: GPL-2.0-or-later AND Linux-man-pages-copyleft-var AND Linux-man-pages-c
 
 URL: http://github.com/lm-sensors/lm-sensors/
 
-Source0:        https://github.com/lm-sensors/lm-sensors/archive/V%(echo/lm-sensors-%(echo.tar.gz
+Source0: https://github.com/lm-sensors/lm-sensors/archive/V%{upstream_version}/lm-sensors-%{upstream_version}.tar.gz
 Source1: lm_sensors.sysconfig
 # This one was taken from PLD-linux, Thanks!
 Source2: sensord.sysconfig

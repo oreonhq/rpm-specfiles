@@ -8,7 +8,7 @@ Summary:        Implementation of the Open Collaboration Services API
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LGPL-2.0-or-later
 URL:            https://invent.kde.org/kde/attica
-Source0:        http://download.kde.org/stable/attica/attica-%{version}.tar.bz2
+Source0:        https://download.kde.org/stable/attica/attica-%{version}.tar.bz2
 
 BuildRequires:  cmake >= 2.8
 BuildRequires:  gcc-c++

@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
@@ -9,7 +12,7 @@ Release:        1%{?dist}
 License:        GPL-3.0-or-later AND GPL-2.0-or-later AND CC0-1.0 AND CC-BY-SA-4.0
 Summary:        YouTube video player based on QtMultimedia and youtube-dl
 Url:            https://apps.kde.org/plasmatube/
-Source:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/plasmatube-26.03.80.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 # Upstream patches
 

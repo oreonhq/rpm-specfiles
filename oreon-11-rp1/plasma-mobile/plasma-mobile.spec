@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # 
 ExcludeArch: %{ix86}
 
@@ -9,8 +12,8 @@ Release: 1%{?dist}
 License:        CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND LGPL-3.0-only AND MIT
 Summary:        General UI components for Plasma Phone including shell, containment and applets
 Url:            https://invent.kde.org/plasma/plasma-mobile
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/plasma-mobile-6.6.5.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/plasma-mobile-6.6.5.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/plasma-mobile-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/plasma-mobile-%{version}.tar.xz.sig
 
 Source15:       fedora-lookandfeel.json
 

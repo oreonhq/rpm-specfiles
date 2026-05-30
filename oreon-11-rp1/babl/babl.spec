@@ -50,7 +50,7 @@ Release:    %autorelease
 # The gggl codes contained in this package are under the GPL, with exceptions allowing their use under libraries covered under the LGPL
 License:    LGPL-3.0-or-later AND GPL-3.0-or-later
 URL:        https://www.gegl.org/babl/
-Source0:        https://download.gimp.org/pub/babl/%major.%minor/babl-%{lua:.tar.xz
+Source0:        https://download.gimp.org/pub/babl/%{apiver}/%{name}-%{plain_version}.tar.xz
 %if %defined git_rev
 Patch:      babl-%{plain_version}-git%{git_rev}.patch
 %endif

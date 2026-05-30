@@ -11,7 +11,7 @@ Summary:        Experimental new features for GTK+ and GLib
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/libdazzle
-Source0:        https://download.gnome.org/sources/%{name}/3.42/%{name}-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/3.44/%{name}-%{version}.tar.xz
 
 BuildRequires:  gtk-doc
 BuildRequires:  meson

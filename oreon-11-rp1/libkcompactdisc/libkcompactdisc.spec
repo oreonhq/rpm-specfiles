@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 Name:    libkcompactdisc 
 Version: 25.12.2
 Release: 1%{?dist}
@@ -9,7 +12,7 @@ Summary: A KDE compact disc library
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/multimedia/libkcompactdisc
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/25.12.2/src/libkcompactdisc-25.12.2.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstreamable patches
 

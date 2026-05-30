@@ -12,11 +12,11 @@ License: HPND-sell-variant
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/archive/individual/lib/%{name}-%{version}.tar.xz
 Source2:    make-git-snapshot.sh
 Source3:    commitid
 %else
-Source0:        http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/archive/individual/lib/%{name}-%{version}.tar.xz
 %endif
 Source1: index.theme
 

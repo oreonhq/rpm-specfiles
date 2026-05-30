@@ -1,5 +1,8 @@
 %global source0_hash 031c8f00095c174214ab8ffb1d807662df551966d72c3e367dccab2c3098eaac
 
+%global stable_kf6 stable
+
+
 Name:          plasma-camera
 Version: 26.03.80
 Release: 1%{?dist}
@@ -44,7 +47,7 @@ switching between different camera devices.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -n %{name}-v%{version}
+%autosetup -p1 -n plasma-camera-v26.03.80
 
 
 %build

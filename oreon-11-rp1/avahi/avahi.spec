@@ -134,9 +134,9 @@ BuildRequires:    gcc-c++
 BuildRequires:    gettext-devel
 
 %if 0%{?rc:1}
-Source0:        https://github.com/avahi/avahi/archive/refs/tags/v%{version_no_tilde}.tar.gz
+Source0:        https://github.com/avahi/avahi/releases/download/v%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz
 %else
-Source0:        https://github.com/avahi/avahi/releases/download/v%{version_no_tilde}/avahi-%{version_no_tilde}.tar.gz
+Source0:        https://github.com/avahi/avahi/releases/download/v%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz
 %endif
 
 ## upstream patches

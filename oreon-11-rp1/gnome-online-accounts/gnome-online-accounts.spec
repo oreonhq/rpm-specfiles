@@ -16,7 +16,7 @@ Summary:	Single sign-on framework for GNOME
 # Sources are LGPL-2.0-or-later, icons are CC-BY-SA-4.0.
 License:	LGPL-2.0-or-later AND CC-BY-SA-4.0
 URL:		https://wiki.gnome.org/Projects/GnomeOnlineAccounts
-Source0:        https://download.gnome.org/sources/gnome-online-accounts/%{major_minor_version}/gnome-online-accounts-3.58.0.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/3.58/%{name}-%{version}.tar.xz
 
 BuildRequires:	pkgconfig(dbus-1)
 BuildRequires:	pkgconfig(gcr-4)

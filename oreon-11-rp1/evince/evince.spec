@@ -24,7 +24,7 @@ Summary:        Document viewer
 
 License:        GPL-2.0-or-later AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND X11 AND MIT AND Afmparse
 URL:            https://wiki.gnome.org/Apps/Evince
-Source0: https://download.gnome.org/sources/evince/48/evince-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
 Patch:          evince-46.3.1-kpathsea-header-files.patch
 
 BuildRequires:  gcc

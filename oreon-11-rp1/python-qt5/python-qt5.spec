@@ -27,7 +27,7 @@ Release: 0.2%{?dist}
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License: GPL-3.0-only
 Url:     http://www.riverbankcomputing.com/software/pyqt/
-Source0:        https://www.riverbankcomputing.com/static/Downloads/PyQt5/5.15.12/pyqt5-5.15.12%{?snap:.dev2507081429}.tar.gz
+Source0:        https://www.riverbankcomputing.com/static/Downloads/PyQt5/%{version}/pyqt5-%{version}%{?snap:.%{snap}}.tar.gz
 #Source0: https://pypi.python.org/packages/source/P/PyQt5/PyQt5-{version}.tar.gz
 
 Source1: macros.pyqt5

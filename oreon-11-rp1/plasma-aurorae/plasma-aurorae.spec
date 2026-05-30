@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 %define base_name aurorae
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
@@ -13,7 +16,7 @@ Summary: Window decoration engine for KWin (Aurorae)
 License: CC0-1.0 AND GPL-2.0-or-later AND MIT
 URL:     https://invent.kde.org/plasma/%{base_name}.git
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/aurorae-6.6.5.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++

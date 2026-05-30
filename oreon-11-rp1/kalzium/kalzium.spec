@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # workaround for bz#1546230
 # ocaml doesn't support relocation
 %undefine _hardened_build
@@ -28,7 +31,7 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/education/kalzium
 	
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kalzium-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream patches
 

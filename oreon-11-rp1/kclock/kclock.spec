@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 %global klockd_name org.kde.kclockd
 %global orig_name org.kde.kclock
 
@@ -13,7 +16,7 @@ Release:        2%{?dist}
 License:        LGPL-2.1-or-later AND LGPL-2.0-or-later AND GPL-3.0-or-later AND CC-BY-4.0 AND GPL-2.0-or-later
 Summary:        Clock app for Plasma Mobile
 Url:            https://apps.kde.org/kclock/
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kclock-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

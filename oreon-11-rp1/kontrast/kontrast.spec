@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
@@ -10,7 +13,7 @@ Summary:       Color contrast checker
 # BSD, CC0 are only for build files
 License:       GPL-3.0-only AND GPL-3.0-or-later AND CC-BY-SA-4.0
 URL:           https://apps.kde.org/kontrast/
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kontrast-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules

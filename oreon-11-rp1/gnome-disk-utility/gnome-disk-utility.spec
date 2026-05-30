@@ -11,7 +11,7 @@ Summary:        Disks
 
 License:        GPL-2.0-or-later AND CC0-1.0
 URL:            https://gitlab.gnome.org/GNOME/gnome-disk-utility
-Source0: https://download.gnome.org/sources/gnome-disk-utility/46/gnome-disk-utility-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/46/%{name}-%{tarball_version}.tar.xz
 BuildRequires:  gcc
 BuildRequires:  meson
 BuildRequires:  pkgconfig(dvdread)

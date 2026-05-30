@@ -15,7 +15,7 @@ License: HPND AND HPND-sell-variant AND MIT AND MIT-open-group AND X11
 URL: http://www.x.org
 BuildArch: noarch
 
-Source0:        https://xorg.freedesktop.org/archive/individual/lib/xtrans-%{version}.tar.xz
+Source0:        https://www.x.org/archive/individual/lib/xtrans-%{version}.tar.xz
 
 # Fedora specific patch
 Patch1: xtrans-1.0.3-avoid-gethostname.patch

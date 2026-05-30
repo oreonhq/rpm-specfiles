@@ -13,7 +13,7 @@ Summary:        MinGW compilation of International Components for Unicode Tools
 
 License:        Unicode-DFS-2016 AND BSD-2-Clause AND BSD-3-Clause AND LicenseRef-Fedora-Public-Domain
 URL:            http://icu-project.org
-Source0:        https://github.com/unicode-org/icu/releases/download/release-%(echo/icu4c-%(echo-src.tgz
+Source0:        https://github.com/unicode-org/icu/releases/download/release-%{dash_version}/icu4c-%{underscore_version}-src.tgz
 
 # Patch to fix the build from
 # https://build.opensuse.org/package/show/windows:mingw:win32/mingw32-icu

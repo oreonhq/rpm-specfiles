@@ -1,4 +1,10 @@
-%global source0_hash none
+%global source0_hash 1d758dffcc42e1d3fbbfea0500009d3dc795cf1313b93b574da83624177085f3
+
+%global stable_kf6 stable
+%global maj_ver_kf6 6
+%global min_ver_kf6 6
+%global bug_ver_kf6 5
+
 
 %global scim 1
 %if 0%{?rhel} && 0%{?rhel} > 7
@@ -13,9 +19,9 @@ Release: 1%{?dist}
 License: BSD-2-Clause AND BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
 
-Source0:        https://download.kde.org/stable/plasma/%{version}/plasma-desktop-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
 
-Source1:        https://download.kde.org/stable/plasma/%{version}/plasma-desktop-%{version}.tar.xz.sig
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
 
 ## upstream patches
 

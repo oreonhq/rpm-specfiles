@@ -18,7 +18,7 @@ URL:     https://invent.kde.org/education/rocs
 %global kf5_dl_stable stable
 %endif
 
-Source0:        http://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: gcc
 BuildRequires: gcc-c++

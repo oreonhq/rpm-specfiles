@@ -9,7 +9,7 @@ Release:        %autorelease
 Summary:        RPM Macros and Utilities for Node.js Packaging
 BuildArch:      noarch
 License:        MIT
-URL:            
+URL:            https://fedoraproject.org/wiki/Node.js/Packagers
 ExclusiveArch:  %{nodejs_arches} noarch
 
 Source0001: LICENSE

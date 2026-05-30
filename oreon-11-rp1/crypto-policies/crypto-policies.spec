@@ -18,7 +18,7 @@ Summary:        System-wide crypto policies
 
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.com/redhat-crypto/fedora-crypto-policies
-Source0:        https://gitlab.com/redhat-crypto/fedora-crypto-policies/-/archive/%{git_commit_hash}/crypto-policies-git%{git_commit_hash}.tar.gz
+Source0:        https://gitlab.com/redhat-crypto/fedora-crypto-policies/-/archive/%{git_commit_hash}/%{name}-git%{git_commit_hash}.tar.gz
 
 BuildArch: noarch
 ExclusiveArch:  %{java_arches} noarch

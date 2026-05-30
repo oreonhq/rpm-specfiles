@@ -63,7 +63,7 @@ Summary:       Apache Servlet/JSP Engine, RI for Servlet %{servletspec}/JSP %{js
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:       Apache-2.0
 URL:           http://tomcat.apache.org/
-Source0:        http://www.apache.org/dist/tomcat/tomcat-10/v/src/apache-tomcat--src.tar.gz
+Source0:        http://www.apache.org/dist/tomcat/tomcat-%{major_version}/v%{version}/src/%{packdname}.tar.gz
 Source1:       %{name}-%{major_version}.%{minor_version}.conf
 Source2:       %{name}-%{major_version}.%{minor_version}.sysconfig
 Source3:       %{name}-%{major_version}.%{minor_version}.wrapper

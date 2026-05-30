@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
@@ -10,7 +13,7 @@ License:       CC0-1.0 AND BSD-3-Clause AND BSD-2-Clause AND GPL-2.0-or-later AN
 Summary:       QR code scanner for KDE Plasma
 URL:           https://apps.kde.org/%{name}/
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/qrca-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: extra-cmake-modules
 BuildRequires: gcc-c++

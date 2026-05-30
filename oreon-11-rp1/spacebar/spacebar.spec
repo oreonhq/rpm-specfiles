@@ -1,5 +1,11 @@
 %global source0_hash 9aa8ead91d9b692390b152266040ea55c282b3b2731c88c5ea62031515579431
 
+%global stable_kf6 stable
+%global maj_ver_kf6 6
+%global min_ver_kf6 6
+%global bug_ver_kf6 3
+
+
 Name:           spacebar
 Epoch:          1
 Version:        6.6.3

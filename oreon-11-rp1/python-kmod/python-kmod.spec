@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0100ff27b7030a73e68ec07829d6123f412ce195dc761b954c92a38d18ba8539
 
 Name:           python-kmod
 License:        LGPL-2.0-or-later

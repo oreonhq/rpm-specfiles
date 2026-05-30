@@ -11,7 +11,7 @@ Release:        2%{?dist}
 # scripts/generator/* are Apache-2.0
 License:        BSD-3-Clause and Apache-2.0
 URL:            %forgeurl
-Source0:        https://github.com/google/googletest/archive/v1.17.0/googletest-1.17.0.tar.gz
+Source0:        https://github.com/google/googletest/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

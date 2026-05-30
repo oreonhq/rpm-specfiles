@@ -12,7 +12,7 @@ Summary:        Spell-checking library for GTK+
 
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/gspell
-Source0: https://download.gnome.org/sources/gspell/%{major_minor_version}/gspell-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/1.14/%{name}-%{version}.tar.xz
 BuildRequires:  gettext
 BuildRequires:  gobject-introspection-devel
 BuildRequires:  gtk-doc

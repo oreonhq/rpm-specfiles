@@ -5,7 +5,7 @@
 
 Name: initial-setup
 Summary: Initial system configuration utility
-URL: 
+URL: https://fedoraproject.org/wiki/InitialSetup
 License: GPL-2.0-or-later
 Version: 0.3.101
 Release: 7%{?dist}

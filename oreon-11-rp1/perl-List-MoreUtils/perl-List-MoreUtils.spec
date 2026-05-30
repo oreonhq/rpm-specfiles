@@ -10,6 +10,7 @@ License:	(GPL-1.0-or-later OR Artistic-1.0-Perl) AND Apache-2.0
 URL:		https://metacpan.org/release/List-MoreUtils
 Source0:        https://cpan.metacpan.org/modules/by-module/List/List-MoreUtils-%{version}.tar.gz
 
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

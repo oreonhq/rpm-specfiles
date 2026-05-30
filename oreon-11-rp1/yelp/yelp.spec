@@ -13,7 +13,7 @@ Summary:       Help browser for the GNOME desktop
 # Automatically converted from old format: LGPLv2+ and ASL 2.0 and GPLv2+ - review is highly recommended.
 License:       LicenseRef-Callaway-LGPLv2+ AND Apache-2.0 AND GPL-2.0-or-later
 URL:           https://wiki.gnome.org/Apps/Yelp
-Source: https://download.gnome.org/sources/yelp/49/yelp-%{tarball_version}.tar.xz
+Source:        https://download.gnome.org/sources/%{name}/49/%{name}-%{tarball_version}.tar.xz
 BuildRequires: pkgconfig(gtk4)
 BuildRequires: pkgconfig(libadwaita-1)
 BuildRequires: pkgconfig(liblzma)

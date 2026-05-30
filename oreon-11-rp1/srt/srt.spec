@@ -9,7 +9,7 @@ Summary:        Secure Reliable Transport protocol tools
 
 License:        MPL-2.0
 URL:            https://www.srtalliance.org
-Source0:        https://github.com/Haivision/srt/archive/v1.5.4%{nil}/srt-1.5.4%{nil}.tar.gz
+Source0:        https://github.com/Haivision/srt/archive/v%{version}%{rc}/%{name}-%{version}%{rc}.tar.gz
 
 # https://github.com/Haivision/srt/commit/0def1b1a1094fc57752f241250e9a1aed71bbffd
 Patch0:         0001-build-Update-for-compatibility-with-CMake-4.x-3167.patch

@@ -15,6 +15,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-Hide
 Source0:        https://cpan.metacpan.org/modules/by-module/Devel/Devel-Hide-%{version}.tar.gz
 
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

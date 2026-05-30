@@ -10,7 +10,7 @@ Summary:        URL extractor/launcher
 
 License:        GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            https://github.com/sigpipe/urlview
-Source0:        https://github.com/sigpipe/urlview/archive/%(c=08767aa863cd27d1755ba0aff65b8cc1a0c1446a;/urlview-%(c=08767aa863cd27d1755ba0aff65b8cc1a0c1446a;.tar.gz
+Source0:        https://github.com/sigpipe/urlview/archive/%{gitrev}/urlview-%{gitrev}.tar.gz
 
 BuildRequires: make
 BuildRequires:  gcc

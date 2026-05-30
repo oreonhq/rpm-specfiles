@@ -47,7 +47,7 @@ URL:     https://kde.org/
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/stable/release-service/%{version}/src/src/kde-runtime-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-runtime-%{version}.tar.xz
 
 # add shortcuts for search provider
 Patch1: kdebase-runtime-4.1.x-searchproviders-shortcuts.patch

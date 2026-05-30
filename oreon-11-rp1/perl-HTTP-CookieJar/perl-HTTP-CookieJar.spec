@@ -8,6 +8,7 @@ License:        Apache-2.0
 URL:            https://metacpan.org/release/HTTP-CookieJar
 Source0:        https://cpan.metacpan.org/modules/by-module/HTTP/HTTP-CookieJar-%{version}.tar.gz
 
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

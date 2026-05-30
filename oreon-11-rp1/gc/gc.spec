@@ -8,7 +8,7 @@ Release: 6%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL:     https://www.hboehm.info/gc/
-Source0:        https://github.com/ivmai/bdwgc/releases/download/v8.2.6/gc-8.2.6%{?pre}.tar.gz
+Source0:        https://github.com/ivmai/bdwgc/releases/download/v%{version}/gc-%{version}%{?pre}.tar.gz
 
 ## upstreamable patches
 

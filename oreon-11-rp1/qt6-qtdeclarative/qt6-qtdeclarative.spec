@@ -26,7 +26,7 @@ Url:     http://www.qt.io
 
 %if 0%{?unstable}
 %else
-Source0:        https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
+Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
 # header file to workaround multilib issue

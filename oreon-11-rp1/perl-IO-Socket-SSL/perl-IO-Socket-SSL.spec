@@ -16,6 +16,7 @@ License:	(GPL-1.0-or-later OR Artistic-1.0-Perl) AND MPL-2.0
 URL:		https://metacpan.org/release/IO-Socket-SSL
 Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Socket-SSL-%{version}.tar.gz
 
+
 Patch0:		IO-Socket-SSL-2.096-use-system-default-cipher-list.patch
 Patch1:		IO-Socket-SSL-2.098-use-system-default-SSL-version.patch
 # A test for Enable-Post-Handshake-Authentication-TLSv1.3-feature.patch,

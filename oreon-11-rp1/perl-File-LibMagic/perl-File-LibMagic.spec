@@ -11,6 +11,7 @@ License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/File-LibMagic
 Source0:        https://cpan.metacpan.org/modules/by-module/File/File-LibMagic-%{version}.tar.gz
 
+
 # Build
 BuildRequires:	coreutils
 BuildRequires:	file-devel

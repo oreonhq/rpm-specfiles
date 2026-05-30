@@ -11,19 +11,12 @@ URL:            https://github.com/codehaus-plexus/plexus-cipher
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-cipher/archive/plexus-cipher-2.0/plexus-cipher-2.0.tar.gz
+Source0:        %{url}/archive/%{name}-%{version}/%{name}-%{version}.tar.gz
 
 # TODO Remove in Fedora 46
 Obsoletes:      %{name}-javadoc < 2.0-28
 
-BuildSystem:    maven
-BuildOption:    usesJavapackagesBootstrap
-BuildOption:    xmvnToolchain "openjdk25"
-BuildOption:    mavenOption "-DjavaVersion=8"
-BuildOption:    artifact ":plexus-cipher" {
-BuildOption:        file "plexus/plexus-cipher"
-BuildOption:        alias "org.sonatype.plexus:"
-BuildOption:    }
+# BuildSystem maven blocks removed for rpm 4.19 compat (xmvn macros in %prep/%build)
 
 %description
 Plexus Cipher is a Java-based library from the Plexus project,

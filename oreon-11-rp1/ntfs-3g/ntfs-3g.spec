@@ -15,7 +15,7 @@ Summary:        Linux NTFS userspace driver
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://github.com/tuxera/ntfs-3g
-Source0:        https://download.tuxera.com/opensource/ntfs-3g_ntfsprogs-2022.10.3%{?subver}.tgz
+Source0:        http://tuxera.com/opensource/%{name}_ntfsprogs-%{version}%{?subver}.tgz
 Patch0:         ntfs-3g_ntfsprogs-2011.10.9-RC-ntfsck-unsupported-return-0.patch
 # Upstream seems mostly gone, but there are some patches merged after 2022.10.3
 Patch1:		https://github.com/tuxera/ntfs-3g/commit/e73d481a76a5814076ff78a1c3a70e9b7da7c0e9.patch

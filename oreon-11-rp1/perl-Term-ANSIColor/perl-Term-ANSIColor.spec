@@ -15,6 +15,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Term-ANSIColor
 Source0:        https://cpan.metacpan.org/modules/by-module/Term/Term-ANSIColor-%{version}.tar.gz
 
+
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils

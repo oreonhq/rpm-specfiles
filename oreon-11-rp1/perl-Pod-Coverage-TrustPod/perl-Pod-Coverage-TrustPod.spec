@@ -8,6 +8,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Coverage-TrustPod
 Source0:        https://cpan.metacpan.org/modules/by-module/Pod/Pod-Coverage-TrustPod-%{version}.tar.gz
 
+
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils

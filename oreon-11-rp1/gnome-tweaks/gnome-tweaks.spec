@@ -11,7 +11,7 @@ Summary:        Customize advanced GNOME 3 options
 # Software is GPL-3.0+, Appdata file is CC0-1.0
 License:        GPL-3.0-or-later AND CC0-1.0
 URL:            https://wiki.gnome.org/Apps/Tweaks
-Source0:        https://download.gnome.org/sources/gnome-tweaks/%%(cut/gnome-tweaks-%%(tr.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext

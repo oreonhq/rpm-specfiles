@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
@@ -11,8 +14,8 @@ Summary: Additional wallpapers for Plasma workspace
 License: LGPL-3.0-only
 URL:     https://cgit.kde.org/%{name}.git
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/plasma-workspace-wallpapers-6.6.5.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/plasma-workspace-wallpapers-6.6.5.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 BuildArch: noarch
 
 BuildRequires:  extra-cmake-modules

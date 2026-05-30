@@ -7,7 +7,7 @@ Summary:        XCB protocol descriptions
 
 License:        X11-distribute-modifications-variant
 URL:            https://xcb.freedesktop.org/
-Source0:        https://xorg.freedesktop.org/archive/individual/proto/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/archive/individual/proto/%{name}-%{version}.tar.xz
 
 BuildArch:      noarch
 

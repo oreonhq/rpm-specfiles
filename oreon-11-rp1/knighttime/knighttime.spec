@@ -1,5 +1,8 @@
 %global source0_hash 97f612eb6cae0ee39ad3579bb9124d701751c83fd02cd3f5ed120896b1313a21
 
+%global stable_kf6 stable
+
+
 Name:           knighttime
 Version:        6.6.3
 Release:        5%{?dist}

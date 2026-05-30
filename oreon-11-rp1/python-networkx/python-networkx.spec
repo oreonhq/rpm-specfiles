@@ -21,7 +21,7 @@ Summary:        Creates and Manipulates Graphs and Networks
 License:        BSD-3-Clause
 URL:            https://networkx.org/
 VCS:            git:%{giturl}.git
-Source0:        https://github.com/networkx/networkx/archive/networkx-3.6.1.tar.gz
+Source0:        %{giturl}/archive/networkx-%{version}.tar.gz
 # For intersphinx
 Source1:        https://numpy.org/neps/objects.inv#/objects-neps.inv
 Source2:        https://matplotlib.org/stable/objects.inv#/objects-matplotlib.inv
@@ -38,17 +38,14 @@ Source9:        https://www-personal.umich.edu/~mejn/netdata/football.zip
 # Examples that require packages not available from Fedora:
 # - osmnx requires osmnx
 # - plot_lines requires momepy
-Patch:          %{name}-doc.patch
+Patch:          %{name}-intersphinx.patch
 # Undo upstream change to use intersphinx_registry.  Fedora does not have it,
 # and it does not let us use local documentation in the build.
 Patch:          %{name}-intersphinx.patch
 
 BuildArch:      noarch
-BuildSystem:    pyproject
 %if %{with doctest}
-BuildOption(generate_buildrequires): -x doc,example,extra,test
 %endif
-BuildOption(install): -l networkx
 
 BuildRequires:  make
 

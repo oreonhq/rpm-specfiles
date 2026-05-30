@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 Name:           kio-gdrive
 Version:        26.04.1
 Release:        1%{?dist}
@@ -8,7 +11,7 @@ Summary:        An Google Drive KIO slave for KDE
 License:        GPL-2.0-or-later
 URL:            https://community.kde.org/KIO_GDrive
 # use releaseme
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kio-gdrive-26.04.1.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches

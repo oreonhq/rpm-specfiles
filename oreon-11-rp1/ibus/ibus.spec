@@ -65,8 +65,8 @@ Release:        3%{?dist}
 Summary:        Intelligent Input Bus for Linux OS
 License:        LGPL-2.1-or-later
 URL:            https://github.com/ibus/%name/wiki
-Source0: https://github.com/ibus/%name/releases/download/%{source_version}/ibus-%{source_version}.tar.gz
-Source1: https://github.com/ibus/%name/releases/download/%{source_version}/ibus-%{source_version}.tar.gz.sum#/ibus.tar.gz.sum
+Source0:        https://github.com/ibus/%name/releases/download/%{source_version}/%{name}-%{source_version}.tar.gz
+Source1:        https://github.com/ibus/%name/releases/download/%{source_version}/%{name}-%{source_version}.tar.gz.sum#/%{name}.tar.gz.sum
 Source2:        %{name}-xinput
 Source3:        %{name}.conf.5
 # Patch0:         %%{name}-HEAD.patch

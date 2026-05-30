@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 %global base_name oxygen-icons
 
 # trim changelog included in binary rpms
@@ -15,7 +18,7 @@ Release: 4%{?dist}
 License: LGPL-3.0-or-later
 URL:     https://techbase.kde.org/Projects/Oxygen
 
-Source0:        https://download.kde.org/%{stable_kf6}/oxygen-icons/oxygen-icons-6.1.0.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/oxygen-icons/%{base_name}-%{version}.tar.xz
 BuildArch: noarch
 
 ## upstreamable patches

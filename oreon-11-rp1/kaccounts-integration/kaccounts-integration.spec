@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # EPEL10 does not have kf5
 %if 0%{?rhel} && 0%{?rhel} >= 10
 %bcond_with kf5
@@ -14,7 +17,7 @@ Summary: Small system to administer web accounts across the KDE desktop
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.0-or-later
 URL:     https://invent.kde.org/network/%{name}
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kaccounts-integration-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream fixes
 

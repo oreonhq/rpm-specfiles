@@ -37,8 +37,8 @@ Summary:        The Sodium crypto library
 License:        ISC AND BSD-2-Clause AND CC0-1.0
 URL:            https://libsodium.org/
 
-Source0:        https://download.libsodium.org/libsodium/releases/libsodium-1.0.22%{?versuf}.tar.gz
-Source1:        https://download.libsodium.org/libsodium/releases/libsodium-1.0.22%{?versuf}.tar.gz.minisig
+Source0:        https://download.libsodium.org/libsodium/releases/%{name}-%{version}%{?versuf}.tar.gz
+Source1:        https://download.libsodium.org/libsodium/releases/%{name}-%{version}%{?versuf}.tar.gz.minisig
 
 BuildRequires: minisign
 BuildRequires: gcc

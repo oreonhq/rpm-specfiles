@@ -1,5 +1,9 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+%global majmin_ver_kf6 6.24
+
+
 %global framework extra-cmake-modules
 
 # uncomment to enable bootstrap mode
@@ -16,8 +20,8 @@ Release: 1%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL:     https://api.kde.org/ecm/
-Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/extra-cmake-modules-6.24.0.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/extra-cmake-modules-6.24.0.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
 BuildArch:      noarch
 
 ## upstreamable patches

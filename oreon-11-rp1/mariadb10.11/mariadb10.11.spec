@@ -171,7 +171,7 @@ Summary:          A very fast and robust SQL database server
 URL:              http://mariadb.org
 License:          ( GPL-2.0-only OR Apache-2.0 ) AND ( GPL-2.0-or-later OR Apache-2.0 ) AND BSD-2-Clause AND BSD-3-Clause AND CC-BY-4.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-or-later AND ( GPL-3.0-or-later WITH Bison-exception-2.2 ) AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND OpenSSL AND MIT AND OFL-1.1 AND CC0-1.0 AND PHP-3.0 AND PHP-3.01 AND zlib AND dtoa AND FSFAP AND blessing AND Info-ZIP AND Boehm-GC
 
-Source0:        https://downloads.mariadb.org/interstitial/mariadb-/source/mariadb-.tar.gz
+Source0:        https://downloads.mariadb.org/interstitial/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 %if %{with bundled_fmt}
 Source1:        https://github.com/fmtlib/fmt/releases/download/11.0.2/fmt-11.0.2.zip
 %endif

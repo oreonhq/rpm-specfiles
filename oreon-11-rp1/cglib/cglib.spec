@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 0c16a5d9d94e96690df19ec649a17b39eecfdb87504dcfc05a44bf5e910a6d1f
 
 %bcond_with bootstrap
 %global tarball_name RELEASE_%(echo '%{version}' | tr . _)
@@ -14,7 +14,7 @@ URL:            https://github.com/cglib/cglib
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/cglib/cglib/archive/RELEASE_%(echo.tar.gz
+Source0:        https://github.com/cglib/cglib/archive/%{tarball_name}.tar.gz
 
 Patch:          0001-Remove-unused-import.patch
 

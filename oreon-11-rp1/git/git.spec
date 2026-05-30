@@ -92,8 +92,8 @@ URL:            https://git-scm.com/
 # Adjust Source URL path for release candidates
 %global rcpath  %(test "%{version}" = "%{real_version}" || echo testing/)
 
-Source0:        https://www.kernel.org/pub/software/scm/git/git-%{real_version}%{?rcpath:/%{version}}.tar.xz
-Source1:        https://www.kernel.org/pub/software/scm/git/git-%{real_version}%{?rcpath:/%{version}}.tar.sign
+Source0:        https://www.kernel.org/pub/software/scm/git/%{rcpath}%{name}-%{real_version}.tar.xz
+Source1:        https://www.kernel.org/pub/software/scm/git/%{rcpath}%{name}-%{real_version}.tar.sign
 
 # Junio C Hamano's key is used to sign git releases, it can be found in the
 # junio-gpg-pub tag within git.

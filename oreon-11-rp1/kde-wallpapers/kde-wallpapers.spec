@@ -14,7 +14,7 @@ URL:     http://www.kde.org/
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/stable/release-service/%{version}/src/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable}/applications/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildArch: noarch
 

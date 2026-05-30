@@ -20,7 +20,7 @@ Summary:        Modify and extend GNOME Shell functionality and behavior
 
 License:        GPL-2.0-or-later
 URL:            http://wiki.gnome.org/Projects/GnomeShell/Extensions
-Source0:        http://ftp.gnome.org/pub/GNOME/sources/gnome-shell-extensions/%{major_version}/gnome-shell-extensions-%{tarball_version}.tar.xz
+Source0:        http://ftp.gnome.org/pub/GNOME/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
 
 BuildRequires:  meson
 BuildRequires:  git-core

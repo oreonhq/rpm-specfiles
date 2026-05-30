@@ -19,7 +19,7 @@ Summary:        Javascript Bindings for GNOME
 # modules/script/tweener/equations.js is BSD-3-Clause
 License:        MIT AND BSD-3-Clause AND (MIT OR LGPL-2.0-or-later) AND (MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.1-or-later)
 URL:            https://wiki.gnome.org/Projects/Gjs
-Source0: https://download.gnome.org/sources/gjs/%{major_minor_version}/gjs-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/1.88/%{name}-%{version}.tar.xz
 BuildRequires:  gcc-c++
 BuildRequires:  meson
 BuildRequires:  gettext

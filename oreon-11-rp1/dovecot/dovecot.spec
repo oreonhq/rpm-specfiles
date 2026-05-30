@@ -13,7 +13,7 @@ Release: 6%{?dist}
 License: MIT AND LGPL-2.1-only
 
 URL: https://www.dovecot.org/
-Source:        https://www.dovecot.org/releases/2.4/dovecot-2.4.2%{?prever}.tar.gz
+Source:        https://www.dovecot.org/releases/2.4/%{name}-%{version}%{?prever}.tar.gz
 Source1: dovecot.init
 Source2: dovecot.pam
 %global pigeonholever %{version}%{?prever}

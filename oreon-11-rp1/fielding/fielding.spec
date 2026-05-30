@@ -57,7 +57,7 @@ Summary:       A simple REST API testing tool
 License:       CC0-1.0 AND GPL-3.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:           https://apps.kde.org/en-gb/%{name}/
 
-Source:        https://invent.kde.org/utilities/fielding/-/archive/%(c=1912c8055d9f607916e0c6fc568e2c0ee0336493;/fielding-%(c=1912c8055d9f607916e0c6fc568e2c0ee0336493;.tar.gz
+Source:        https://invent.kde.org/utilities/%{name}/-/archive/%{shortcommit}/%{name}-%{shortcommit}.tar.gz
 
 BuildRequires: kf6-rpm-macros
 BuildRequires: extra-cmake-modules

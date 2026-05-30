@@ -18,6 +18,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-OptList
 Source0:        https://cpan.metacpan.org/modules/by-module/Data/Data-OptList-%{version}.tar.gz
 
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

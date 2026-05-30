@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 Name:       kwayland
 Version:    6.6.3
 Release:    4%{?dist}
@@ -8,8 +11,8 @@ Summary:    Qt-style API to interact with the wayland-client API
 License:    BSD-3-Clause AND CC0-1.0 AND LGPL-2.1-only AND LGPL-2.1-or-later AND LGPL-3.0-only AND MIT-CMU AND MIT
 URL:        https://invent.kde.org/plasma/%{name}
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/kwayland-6.6.3.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/kwayland-6.6.3.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

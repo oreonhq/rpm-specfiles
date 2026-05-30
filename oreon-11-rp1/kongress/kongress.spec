@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
@@ -10,7 +13,7 @@ Release:        1%{?dist}
 License:        CC0-1.0 AND LicenseRef-Callaway-CC-BY-SA AND LicenseRef-Callaway-BSD AND GPL-3.0-or-later
 Summary:        A companion application for conferences made by KDE
 Url:            https://apps.kde.org/kongress/
-Source:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kongress-26.03.80.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules

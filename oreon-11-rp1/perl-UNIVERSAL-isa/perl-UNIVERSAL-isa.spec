@@ -8,6 +8,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/UNIVERSAL-isa
 Source0:        https://cpan.metacpan.org/modules/by-module/UNIVERSAL/UNIVERSAL-isa-%{version}.tar.gz
 
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # trim changelog included in binary rpms
 %global _changelog_trimtime %(date +%s -d "1 year ago")
 
@@ -12,7 +15,7 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/multimedia/k3b
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/k3b-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream patches
 

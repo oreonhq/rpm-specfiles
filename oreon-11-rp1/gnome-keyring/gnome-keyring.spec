@@ -18,7 +18,7 @@ Summary:        Framework for managing passwords and other secrets
 # pkcs11/ is MPL-1.1 OR GPL-2.0-or-later OR  LGPL-2.1-or-later
 License:        GPL-2.0-only AND GPL-2.0-or-later AND LGPL-2.1-or-later AND ((GPL-2.0-or-later OR LGPL-3.0-or-later) OR BSD-3-Clause) AND (MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.1-or-later)
 URL:            https://wiki.gnome.org/Projects/GnomeKeyring
-Source0: https://download.gnome.org/sources/gnome-keyring/%{major_version}/gnome-keyring-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
 # https://gitlab.gnome.org/GNOME/gnome-keyring/-/merge_requests/78
 # https://gitlab.gnome.org/GNOME/gnome-keyring/-/issues/165
 # https://bugzilla.redhat.com/show_bug.cgi?id=2349314

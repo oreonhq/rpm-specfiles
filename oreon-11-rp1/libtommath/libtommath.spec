@@ -7,7 +7,7 @@ Summary:        A portable number theoretic multiple-precision integer library
 License:        Unlicense
 URL:            https://www.libtom.net/
 
-Source0:        https://github.com/libtom/libtommath/archive/v%{version_no_tilde}.tar.gz#/libtommath-%{version_no_tilde}.tar.gz
+Source0:        https://github.com/libtom/%{name}/archive/v%{version_no_tilde}.tar.gz#/%{name}-%{version_no_tilde}.tar.gz
 
 BuildRequires:  make
 BuildRequires:  libtool

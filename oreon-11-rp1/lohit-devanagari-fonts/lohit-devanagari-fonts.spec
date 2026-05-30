@@ -23,7 +23,7 @@ This package provides a free Devanagari Script TrueType/OpenType font.
 BuildRequires:  make
 BuildRequires:  fontforge
 BuildRequires:  ttfautohint
-Source0:        https://github.com/lohit-fonts/%{name}/files/6454324/lohit-devanagari-2.95.5.tar.gz
+Source0:        https://github.com/lohit-fonts/%{name}/files/6454324/%{fontname}-%{version}.tar.gz
 Source10:       59-%{fontpkgname}.conf
 Source11:       66-%{fontpkgname}.conf
 

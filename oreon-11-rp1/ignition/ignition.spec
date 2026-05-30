@@ -30,8 +30,8 @@ Summary:        First boot installer and configuration tool
 # Upstream license specification: Apache-2.0
 License:        Apache-2.0
 URL:            %{gourl}
-Source0:        https://github.com/coreos/ignition/archive/v2.26.0/ignition-2.26.0.tar.gz
-Source1:        https://github.com/fedora-iot/ignition-edge/archive/6be7c9429bca08066f5bbfa0cb8086421c0c538c/ignition-edge-%(c=6be7c9429bca08066f5bbfa0cb8086421c0c538c;.tar.gz
+Source0:        %{gosource}
+Source1:        https://github.com/fedora-iot/ignition-edge/archive/%{ignedgecommit}/ignition-edge-%{ignedgeshortcommit}.tar.gz
 Source2:        91-ignition-authorized-keys-file.conf
 
 # Fix format specifier for systemd version warning (Go 1.26 compatibility)

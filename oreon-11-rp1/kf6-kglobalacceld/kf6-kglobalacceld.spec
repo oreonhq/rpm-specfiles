@@ -1,5 +1,8 @@
 %global source0_hash bcb5d43146df016fe568401912538de8c70e01c4e6da78740e6f2181a8b29ea7
 
+%global stable_kf6 stable
+
+
 %global plasmaver %{version}
 
 Name:           kf6-kglobalacceld
@@ -8,7 +11,7 @@ Release:        6%{?dist}
 Summary:        Plasma daemon for global keyboard shortcuts
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-or-later
 URL:            https://invent.kde.org/plasma/kglobalacceld
-Source0:        https://download.kde.org/stable/plasma/6.6.3/kglobalacceld-6.6.3.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/kglobalacceld-%{version}.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

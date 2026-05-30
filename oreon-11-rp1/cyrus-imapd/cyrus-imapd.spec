@@ -42,8 +42,8 @@ URL: http://www.cyrusimap.org/
 #       # rpmbuild -bi /tmp/rpmbuild/SPECS/cyrus-imapd.spec 2>&1 | tee build.log
 %bcond_with cassandane
 
-Source0:        https://github.com/cyrusimap/cyrus-imapd/releases/download/cyrus-imapd-3.12.2%{?prever:-%prever}/cyrus-imapd-3.12.2%{?prever:-%prever}.tar.gz
-Source1:        https://github.com/cyrusimap/cyrus-imapd/releases/download/cyrus-imapd-3.12.2%{?prever:-%prever}/cyrus-imapd-3.12.2%{?prever:-%prever}.tar.gz.sig
+Source0:        https://github.com/cyrusimap/cyrus-imapd/releases/download/cyrus-imapd-%{version}%{?prever:-%prever}/cyrus-imapd-%{version}%{?prever:-%prever}.tar.gz
+Source1:        https://github.com/cyrusimap/cyrus-imapd/releases/download/cyrus-imapd-%{version}%{?prever:-%prever}/cyrus-imapd-%{version}%{?prever:-%prever}.tar.gz.sig
 # Ellie Timoney's public key from https://github.com/elliefm.gpg
 Source2: elliefm-pub.key
 Source10: cyrus-imapd.logrotate

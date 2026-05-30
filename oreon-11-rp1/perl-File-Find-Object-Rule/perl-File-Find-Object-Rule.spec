@@ -14,6 +14,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Find-Object-Rule
 Source0:        https://cpan.metacpan.org/modules/by-module/File/File-Find-Object-Rule-%{version}.tar.gz
 
+
 Patch0:         File-Find-Object-Rule-0.0310-shellbang.patch
 BuildArch:      noarch
 # Module Build

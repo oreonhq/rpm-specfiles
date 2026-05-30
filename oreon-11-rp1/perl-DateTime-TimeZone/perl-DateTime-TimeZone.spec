@@ -1,5 +1,5 @@
 %global source0_hash 1c1285d911027d276f235b32a888ee7425c9ab356ee62cd126c4b3ee3ea659b3
-%global source1_hash none
+%global source1_hash 114543d9f19a6bfeb5bca43686aea173d38755a3db1f2eec112647ae92c6f544
 
 # Run optional test
 %bcond_without perl_DateTime_TimeZone_enables_optional_test
@@ -19,7 +19,7 @@ License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Public-Do
 URL:            https://metacpan.org/release/DateTime-TimeZone
 Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-TimeZone-%{version}.tar.gz
 %if %{defined tzversion}
-Source1:        https://data.iana.org/time-zones/releases/tzdata%{tzversion}.tar.gz
+Source1:        https://data.iana.org/time-zones/releases/tzdata2026b.tar.gz
 %endif
 # Parse local time zone definition from /etc/localtime as before giving up,
 # bug #1135981, CPAN RT#55029

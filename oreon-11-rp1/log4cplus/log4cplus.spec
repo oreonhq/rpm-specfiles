@@ -15,8 +15,8 @@ Summary: Logging Framework for C++
 # catch/* is BSL-1.0
 License: (BSD-2-Clause OR Apache-2.0) AND Zlib AND BSL-1.0
 URL: https://github.com/log4cplus/log4cplus
-Source0:        https://github.com/log4cplus/log4cplus/releases/download/REL_%(echo/log4cplus-2.1.2%{?prever:-%{prever}}.tar.xz
-Source1:        https://github.com/log4cplus/log4cplus/releases/download/REL_%(echo/log4cplus-2.1.2%{?prever:-%{prever}}.tar.xz.sig
+Source0:        https://github.com/log4cplus/log4cplus/releases/download/REL_%{VER}/%{name}-%{version}%{?prever:-%{prever}}.tar.xz
+Source1:        https://github.com/log4cplus/log4cplus/releases/download/REL_%{VER}/%{name}-%{version}%{?prever:-%{prever}}.tar.xz.sig
 Source2: codesign.key
 
 %description

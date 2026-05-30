@@ -59,7 +59,7 @@ Url:     http://qt-project.org/
 
 %if 0%{?unstable}
 %else
-Source0:        https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
+Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1227295

@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 Name:    kgpg
 Summary: Manage GPG encryption keys
 Version: 26.03.80
@@ -8,7 +11,7 @@ Release: 1%{?dist}
 License: CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only)
 URL:     https://www.kde.org/applications/utilities/kgpg/
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kgpg-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: libappstream-glib

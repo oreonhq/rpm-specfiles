@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash a2a6b836036ae75f253b896344256e6318bd7ea7214da4a2dda69cadd045c942
 
 %{?python_enable_dependency_generator}
 

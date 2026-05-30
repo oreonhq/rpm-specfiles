@@ -79,9 +79,9 @@ Release:        %{baserelease}%{?snapdate:.%{snapdate}git%{shortcommit}}%{?dist}
 License:        MIT
 URL:            https://pipewire.org/
 %if 0%{?snapdate}
-Source0:        https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/%{gitcommit}/pipewire-%{shortcommit}.tar.gz
+Source0:        https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/%{version}/pipewire-%{version}.tar.gz
 %else
-Source0:        https://gitlab.freedesktop.org/pipewire/pipewire/-/archive//pipewire-.tar.gz
+Source0:        https://gitlab.freedesktop.org/pipewire/pipewire/-/archive/%{version}/pipewire-%{version}.tar.gz
 %endif
 Source1:        pipewire.sysusers
 

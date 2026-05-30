@@ -8,6 +8,7 @@ License:        LicenseRef-Fedora-Public-Domain
 URL:            https://metacpan.org/release/Digest-CRC
 Source0:        https://cpan.metacpan.org/modules/by-module/Digest/Digest-CRC-%{version}.tar.gz
 
+
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils

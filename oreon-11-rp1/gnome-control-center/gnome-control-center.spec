@@ -26,7 +26,7 @@ Summary:        Utilities to configure the GNOME desktop
 
 License:        GPL-2.0-or-later AND CC0-1.0
 URL:            https://gitlab.gnome.org/GNOME/gnome-control-center/
-Source0: https://download.gnome.org/sources/gnome-control-center/%{major_version}/gnome-control-center-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
 BuildRequires:  blueprint-compiler >= %{blueprint_compiler_version}
 BuildRequires:  desktop-file-utils
 BuildRequires:  docbook-style-xsl libxslt

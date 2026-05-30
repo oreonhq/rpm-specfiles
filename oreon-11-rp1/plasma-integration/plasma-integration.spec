@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # EPEL10 does not have kf5
 %if 0%{?rhel} && 0%{?rhel} >= 10
 %bcond_with kf5
@@ -15,8 +18,8 @@ Release: 1%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-3.0-only AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/plasma-integration-6.6.5.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/plasma-integration-6.6.5.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 
 BuildRequires:  kf6-rpm-macros
 BuildRequires:  extra-cmake-modules

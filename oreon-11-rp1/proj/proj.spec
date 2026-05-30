@@ -17,7 +17,7 @@ Summary:        Cartographic projection software (PROJ)
 License:        MIT
 URL:            https://proj.org
 Source0:        https://download.osgeo.org/%{name}/%{name}-%{version}.tar.gz
-Source1:        https://download.osgeo.org/proj/proj-data-1.24.tar.gz
+Source1:        https://download.osgeo.org/%{name}/%{name}-data-%{data_version}.tar.gz
 
 
 BuildRequires:  cmake

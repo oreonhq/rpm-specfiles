@@ -10,7 +10,7 @@ Summary:        Application for taking pictures and movies from a webcam
 
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Apps/Cheese
-Source0: https://download.gnome.org/sources/cheese/44/cheese-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/44/%{name}-%{tarball_version}.tar.xz
 Patch0: cheese-c99.patch
 # https://gitlab.gnome.org/GNOME/cheese/-/merge_requests/73
 # https://gitlab.gnome.org/GNOME/cheese/-/issues/183

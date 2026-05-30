@@ -10,7 +10,7 @@ Release:        1%{?dist}
 # but it does not end up in the binary package
 License:        Apache-2.0
 URL:            http://nedbatchelder.com/code/modules/coverage.html
-Source0:        https://pypi.python.org/packages/source/c/coverage/coverage-7.13.5%{?prever}.tar.gz
+Source0:        https://pypi.python.org/packages/source/c/coverage/coverage-%{version}%{?prever}.tar.gz
 BuildRequires:  gcc
 
 %description

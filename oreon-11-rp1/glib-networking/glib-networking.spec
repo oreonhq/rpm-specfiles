@@ -15,7 +15,7 @@ Summary:        Networking support for GLib
 
 License:        LGPL-2.1-or-later WITH cryptsetup-OpenSSL-exception
 URL:            https://gitlab.gnome.org/GNOME/glib-networking
-Source0: https://download.gnome.org/sources/glib-networking/2.80/glib-networking-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/glib-networking/2.80/%{name}-%{tarball_version}.tar.xz
 BuildRequires:  ca-certificates
 BuildRequires:  gcc
 BuildRequires:  gettext

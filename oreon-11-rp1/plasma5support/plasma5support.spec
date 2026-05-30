@@ -1,5 +1,8 @@
 %global source0_hash 7f764826ef8967990eb42da3636bbfdd29c85e3928eeb917b8d8fed4b77f730c
 
+%global stable_kf6 stable
+
+
 Name:           plasma5support
 Version:        6.6.3
 Release:        6%{?dist}

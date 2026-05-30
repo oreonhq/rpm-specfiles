@@ -18,7 +18,6 @@ URL:        https://unicode.org/cldr
 %if %is_official
 Source0:        https://github.com/unicode-org/cldr/archive/refs/tags/%{tag_version}.zip#/cldr-%{tag_version}.zip
 %else
-Source0:        https://github.com/unicode-org/cldr/archive/refs/tags/release-%(echo.zip#/cldr-release-%(echo.zip
 %endif
 #Patch0:     %%{name}-HEAD.patch
 BuildRequires: autoconf

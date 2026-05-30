@@ -8,6 +8,7 @@ Summary:	Expose PL_dirty, the flag that marks global destruction
 URL:		https://metacpan.org/release/Devel-GlobalDestruction
 Source:        https://cpan.metacpan.org/modules/by-module/Devel/Devel-GlobalDestruction-%{version}.tar.gz
 
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

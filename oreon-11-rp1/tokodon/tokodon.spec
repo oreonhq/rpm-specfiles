@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 Name:           tokodon 
 Version:        26.03.80
 Release:        1%{?dist}
@@ -8,7 +11,7 @@ License:        GPL-3.0-only AND CC0-1.0 AND LicenseRef-Callaway-BSD AND License
 # For a breakdown of the licensing, see PACKAGE-LICENSING
 Summary:        Kirigami-based mastodon client
 Url:            https://invent.kde.org/network/tokodon
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/tokodon-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

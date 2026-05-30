@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 Name:    kdegraphics-mobipocket
 Summary: A collection of plugins to handle mobipocket files
 Version: 26.04.1
@@ -7,7 +10,7 @@ Release: 1%{?dist}
 
 License: GPL-2.0-or-later AND CC0-1.0 AND LGPL-2.1-or-later
 URL:     https://www.kde.org/applications/graphics/
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kdegraphics-mobipocket-26.04.1.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: extra-cmake-modules
 BuildRequires: kf6-rpm-macros

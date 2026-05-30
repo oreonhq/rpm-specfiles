@@ -44,8 +44,8 @@ Summary:        Common Information Model (CIM) Schema
 Version:        %{major}.%{minor}.%{update}
 Release:        4%{?dist}
 License:        LicenseRef-DMTF
-Source0:        http://www.dmtf.org/standards/cim/cim_schema_v2550/cim_schema_Experimental-MOFs.zip
-Source1:        http://www.dmtf.org/standards/cim/cim_schema_v2550/cim_schema_Experimental-Doc.zip
+Source0:        http://www.dmtf.org/standards/cim/cim_schema_v%{major}%{minor}%{update}/cim_schema_%{version}Experimental-MOFs.zip
+Source1:        http://www.dmtf.org/standards/cim/cim_schema_v%{major}%{minor}%{update}/cim_schema_%{version}Experimental-Doc.zip
 Source2:        LICENSE
 BuildArch:      noarch
 

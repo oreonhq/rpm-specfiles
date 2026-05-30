@@ -9,7 +9,7 @@ Summary:        Desktop backgrounds packaged with the GNOME desktop
 
 License:        CC-BY-SA-3.0
 URL:            https://gitlab.gnome.org/GNOME/gnome-backgrounds
-Source0: https://download.gnome.org/sources/gnome-backgrounds/50/gnome-backgrounds-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
 BuildArch:      noarch
 
 BuildRequires:  gettext

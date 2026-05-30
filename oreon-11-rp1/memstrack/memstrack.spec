@@ -15,7 +15,7 @@ BuildRequires:  make
 BuildRequires:  gcc
 BuildRequires:  ncurses-devel
 
-Source:        https://github.com/ryncsn/memstrack/archive/560379ee67db48382ccc3ab3de866e239fd74ca8/memstrack-%(c=560379ee67db48382ccc3ab3de866e239fd74ca8;.tar.gz
+Source:         https://github.com/ryncsn/memstrack/archive/%{gitcommit}/memstrack-%{gitshortcommit}.tar.gz
 
 %description
 A memory allocation tracer, like a hot spot analyzer for memory allocation

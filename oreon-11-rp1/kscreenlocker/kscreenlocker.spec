@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 Name:    kscreenlocker
 Version: 6.6.3
 Release: 1%{?dist}
@@ -8,8 +11,8 @@ Summary: Library and components for secure lock screen architecture
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-only AND LGPL-3.0-only AND (GPL-2.0-only OR GPL-3.0-only) AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/plasma/%{name}
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/kscreenlocker-6.6.3.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.3/kscreenlocker-6.6.3.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 
 # help upgrades, split from plasma-workspace since 5.5
 Conflicts: plasma-workspace < 5.5

@@ -16,12 +16,12 @@ Summary:        HAProxy reverse proxy for high availability environments
 License:        GPL-2.0-or-later
 
 URL:            http://www.haproxy.org/
-Source0:        https://www.haproxy.org/download/%(b=%{version};
+Source0:        https://www.haproxy.org/download/%(b=%{version}; echo ${b%.*})/src/%{name}-%{version}.tar.gz
 Source1:        %{name}.service
 Source2:        %{name}.cfg
 Source3:        %{name}.logrotate
 Source4:        %{name}.sysconfig
-Source5:        %{name}.sysusers
+Source5:        %{name}.sysusersd
 Source6:        https://salsa.debian.org/haproxy-team/haproxy/-/raw/c30a7411203b8c4234698e47325d2543359f9d66/debian/halog.1
 
 # https://github.com/haproxy/haproxy/commit/1c0f781994a89b5cbd7b4b893c23e6d2b75b1764

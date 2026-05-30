@@ -31,7 +31,7 @@ Version:      %{upstream_version}%{?upstream_prever:~%{upstream_prever}}
 Release:      3%{?dist}
 %forgemeta
 URL:          %{forgeurl}
-Source0:        https://pecl.php.net/get/%{sources}.tgz
+Source0:      https://pecl.php.net/get/%{sources}.tgz
 
 ExcludeArch:   %{ix86}
 

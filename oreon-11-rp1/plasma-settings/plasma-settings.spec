@@ -1,5 +1,8 @@
 %global source0_hash 45a8a8d5eb22fa76263c06acea026a21c222ac853ca666c1a34a982d5c7bb47d
 
+%global stable_kf6 stable
+
+
 Name:           plasma-settings
 Version: 26.03.80
 Release: 1%{?dist}
@@ -47,7 +50,7 @@ modules are provided separately, by plasma-nm.
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%autosetup -p1 -n %{name}-v%{version}
+%autosetup -p1 -n plasma-settings-v26.03.80
 
 %build
 %cmake_kf6

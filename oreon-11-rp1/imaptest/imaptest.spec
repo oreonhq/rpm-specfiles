@@ -9,7 +9,7 @@ Version:        20250509
 Release:        2%{?dist}
 License:        MIT
 URL:            https://dovecot.github.io/imaptest/
-Source0:        https://github.com/dovecot/imaptest/archive/44ff753f51d1a767b8d71b04e882847664d9f0c8/imaptest-44ff753f51d1a767b8d71b04e882847664d9f0c8.tar.gz
+Source0:        https://github.com/dovecot/imaptest/archive/%{commit}/%{name}-%{commit}.tar.gz
 Patch0:         https://github.com/dovecot/imaptest/commit/39d3dcc8f8ae4e7e751cb0ba633301630e32f54e.patch#/imaptest-20250520-so-file.patch
 BuildRequires:  dovecot-devel >= 2.4.1
 BuildRequires:  gcc

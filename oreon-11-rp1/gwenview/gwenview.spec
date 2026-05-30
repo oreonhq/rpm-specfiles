@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
@@ -18,7 +21,7 @@ Release: 4%{?dist}
 License: GPL-2.0-or-later AND IJG AND LGPL-2.1-or-later AND MIT AND (GPL-2.0-only OR GPL-3.0-only)
 URL:     https://www.kde.org/applications/graphics/gwenview/
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/gwenview-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream patches
 

@@ -23,7 +23,7 @@ Requires:	kernel-devel
 Requires:	python3-requests
 BuildRequires:	python3-devel
 BuildRequires:	python3-setuptools
-Source0:        https://github.com/RedHatOfficial/ksc/archive/5955c6b2288353c5b093677221cc91a83a2c800c/ksc-%(c=5955c6b2288353c5b093677221cc91a83a2c800c;.tar.gz
+Source0:        https://github.com/RedHatOfficial/ksc/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 
 %description
 A kernel module source code checker to find usage of select symbols

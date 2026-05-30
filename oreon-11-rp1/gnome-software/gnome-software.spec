@@ -37,11 +37,11 @@ Summary:   A software center for GNOME
 
 License:   GPL-2.0-or-later
 URL:       https://apps.gnome.org/Software
-Source0:        https://download.gnome.org/sources/gnome-software/50/gnome-software-%(echo.tar.xz
+Source0:   https://download.gnome.org/sources/gnome-software/50/%{name}-%{tarball_version}.tar.xz
 %if %{with dnf5}
 # to update the patch enter the ./dnf5-plugin/ directory and run from
 # it the ./update-patch.sh script
-Patch:     0001-dnf5-plugin.patch
+Patch:     0002-plain-package-update-notification.patch
 %endif
 
 Patch:     0002-plain-package-update-notification.patch

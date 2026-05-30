@@ -12,7 +12,7 @@ URL:            https://maven.apache.org/shared/maven-verifier
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/maven-verifier/2.0.0-M1/maven-verifier-2.0.0-M1-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{upstream_version}/%{name}-%{upstream_version}-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

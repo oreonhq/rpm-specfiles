@@ -20,7 +20,7 @@ Summary:   Gnome CD/DVD burning application
 # libbrasero-media is GPL-2.0-or-later WITH GStreamer-exception-2008                                                                                                                         
 License:   GPL-3.0-or-later AND LGPL-2.0-or-later AND GPL-2.0-only AND CC-BY-SA-2.0 AND GPL-2.0-or-later WITH GStreamer-exception-2008
 URL:       https://wiki.gnome.org/Apps/Brasero
-Source0: https://download.gnome.org/sources/brasero/%(echo %{version} | cut -d. -f1)/brasero-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%{basever}/%{name}-%{version}.tar.xz
 # https://gitlab.gnome.org/GNOME/brasero/-/merge_requests/30
 Patch0:    0001-Fix-gcc-14.x-build-failure.patch
 

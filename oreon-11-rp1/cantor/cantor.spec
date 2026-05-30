@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # uncomment to enable bootstrap mode
 #global bootstrap 1
 
@@ -31,7 +34,7 @@ Release: 1%{?dist}
 
 License: GPL-2.0-or-later
 URL:     https://apps.kde.org/cantor/
-Source:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/cantor-26.03.80.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}

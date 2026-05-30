@@ -1,5 +1,8 @@
 %global source0_hash ae403c3812dc2383ef5c693cf7089d17cd5c65748c97443f649c86da0a9e9cb0
 
+%global stable_kf6 stable
+
+
 %global kde_name org.kde.plasma.dialer
 
 Name:           plasma-dialer

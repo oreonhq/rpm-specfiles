@@ -13,7 +13,7 @@ URL: http://nmap.org/
 # https://gitlab.com/fedora/legal/fedora-license-data/-/issues/543
 License: LicenseRef-Nmap
 
-Source0:        http://nmap.org/dist/nmap-7.92%{?prerelease}.tar.bz2
+Source0:        http://nmap.org/dist/%{name}-%{version}%{?prerelease}.tar.bz2
 Source1:        https://nmap.org/dist/sigs/%{name}-%{version}.tar.bz2.asc
 Source2:        https://svn.nmap.org/nmap/docs/nmap_gpgkeys.txt
 

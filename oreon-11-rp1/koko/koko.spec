@@ -1,4 +1,7 @@
 %global source0_hash none
+
+%global stable_kf6 stable
+
 %global source1_hash fc42c245de29c69fea0e038c12094104e9e83b0915c9f36c8d77e9f6596d1223
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
@@ -11,7 +14,7 @@ Release:        1%{?dist}
 License:        GPL-2.0-or-later AND GPL-3.0-only AND LicenseRef-Callaway-LGPLv2 AND LicenseRef-Callaway-LGPLv2+ AND CC0-1.0 AND LicenseRef-Callaway-BSD
 Summary:        An Image gallery application
 Url:            https://apps.kde.org/koko/
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/koko-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 Source1:        https://download.geonames.org/export/dump/cities1000.zip
 Source2:        https://download.geonames.org/export/dump/admin1CodesASCII.txt
 Source3:        https://download.geonames.org/export/dump/admin2Codes.txt

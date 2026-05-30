@@ -16,7 +16,7 @@ License: BSD-2-Clause AND BSD-3-Clause AND (GPL-1.0-or-later AND GPL-2.0-or-late
 
 URL: http://yasm.tortall.net/
 %if 0%{?git}
-Source:        https://github.com/yasm/yasm/archive/121ab150b3577b666c79a79f4a511798d7ad2432/yasm-%(c=121ab150b3577b666c79a79f4a511798d7ad2432;.tar.gz
+Source:        http://www.tortall.net/projects/yasm/releases/yasm-%{version}.tar.gz
 # https://github.com/yasm/yasm/issues/270
 Patch0: yasm-tests.patch
 # https://github.com/yasm/yasm/issues/283

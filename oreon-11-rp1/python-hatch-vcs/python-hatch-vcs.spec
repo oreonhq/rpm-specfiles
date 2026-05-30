@@ -13,9 +13,7 @@ Summary:        Hatch plugin for versioning with your preferred VCS
 # SPDX
 License:        MIT
 URL:            https://github.com/ofek/hatch-vcs
-Source:        https://files.pythonhosted.org/packages/source/h/hatch-vcs/hatch-vcs-0.5.0.tar.gz
-BuildSystem:            pyproject
-BuildOption(install):   -l hatch_vcs
+Source:         %{pypi_source hatch_vcs}
 
 BuildArch:      noarch
 

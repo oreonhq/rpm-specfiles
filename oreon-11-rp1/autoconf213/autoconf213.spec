@@ -7,7 +7,7 @@ Release:    60%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:    GPL-2.0-or-later
 URL:        http://www.gnu.org/software/autoconf/
-Source:     https://ftp.gnu.org/gnu/autoconf/autoconf-%{version}.tar.gz
+Source:        https://prep.ai.mit.edu/pub/gnu/autoconf/autoconf-%{version}.tar.gz
 Patch0:     autoconf-2.12-race.patch
 Patch1:     autoconf-2.13-mawk.patch
 Patch2:     autoconf-2.13-notmp.patch

@@ -20,15 +20,12 @@ Release:        %autorelease
 # SPDX
 License:        MIT
 URL:            https://github.com/mesonbuild/meson-python
-Source:        https://files.pythonhosted.org/packages/source/m/meson-python/meson-python-0.19.0.tar.gz
+Source:         %{pypi_source meson_python}
 # Downstream-only patch to remove the patchelf dependency (and corresponding
 # functionality), controlled by the patchelf build conditional
 Patch100:       meson-python-0.18.0-remove-patchelf.patch
 
-BuildSystem:            pyproject
-BuildOption(generate_buildrequires): -p %{?with_tests:-g test}
 # LICENSE duplicates LICENSES/MIT.txt, which is handled automatically.
-BuildOption(install):   -l mesonpy
 
 BuildArch:      noarch
 

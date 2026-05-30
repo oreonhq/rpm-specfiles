@@ -9,7 +9,7 @@ Release:    4%{?dist}
 License:    X11-distribute-modifications-variant AND MIT-open-group
 URL:        https://www.x.org
 
-Source0:        https://xorg.freedesktop.org/archive/individual/app/%{pkgname}-%{version}.tar.xz
+Source0:        https://www.x.org/archive/individual/app/%{pkgname}-%{version}.tar.xz
 Source10:   xinitrc-common
 Source11:   xinitrc
 Source12:   Xclients

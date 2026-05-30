@@ -21,7 +21,7 @@ Url:     http://qt-project.org/
 
 %if 0%{?unstable}
 %else
-Source0:        https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
+Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
 # filter qml provides

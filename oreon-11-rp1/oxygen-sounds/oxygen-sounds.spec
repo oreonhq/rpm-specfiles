@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # 
 ExcludeArch: %{ix86}
 
@@ -11,8 +14,8 @@ Summary:        The Oxygen Sound Theme
 License:        LGPL-3.0-or-later AND CC0-1.0 AND CC-BY-3.0 AND BSD-2-Clause
 URL:            https://invent.kde.org/plasma/oxygen-sounds
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/oxygen-sounds-6.6.5.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/oxygen-sounds-6.6.5.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 
 Provides:       oxygen-sound-theme = %{version}-%{release}
 Obsoletes:      oxygen-sound-theme <= 5.24.50

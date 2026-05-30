@@ -8,6 +8,7 @@ License:	Artistic-2.0
 URL:		https://metacpan.org/release/Package-DeprecationManager
 Source0:        https://cpan.metacpan.org/modules/by-module/Package/Package-DeprecationManager-%{version}.tar.gz
 
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

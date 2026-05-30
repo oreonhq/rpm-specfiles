@@ -13,7 +13,7 @@ Release: 10%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL: http://libcg.sourceforge.net/
 Source0:        https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
-Source1:        https://github.com/libcgroup/libcgroup-tests/archive/refs/tags/7c998caddcd8236fe4191841e361b401697fb777.tar.gz
+Source1:        https://github.com/%{name}/%{name}-tests/archive/%{tests_commit}.tar.gz
 
 Source2: cgconfig.service
 

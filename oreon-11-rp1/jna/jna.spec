@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash fe35d85e63ea998ec08f1beaa0162b1e7f233e9e82b8f43ba500a0a824874158
 
 # Allow conditionally building without the reflections library
 %if %{defined rhel} || (0%{?oreon} >= 11)
@@ -18,7 +18,7 @@ License:        Apache-2.0 OR LGPL-2.1-or-later
 
 URL:            https://github.com/java-native-access/jna/
 # ./generate-tarball.sh
-Source0:        https://github.com/java-native-access/jna/archive/refs/tags/v5.17.0.tar.gz
+Source0:        https://github.com/java-native-access/jna/archive/refs/tags/5.17.0.tar.gz
 Source1:        package-list
 Source2:        generate-tarball.sh
 

@@ -23,7 +23,7 @@ Bold, Regular, and Thin variants.
 It has very good European language coverage and decent Cyrillic coverage.}
 
 %{?shortcommit:
-Source0:        https://github.com/googlefonts/comfortaa/archive/%(c=2a87ac6f6ea3495150bfa00d0c0fb53dd0a2f11b;/comfortaa-%(c=2a87ac6f6ea3495150bfa00d0c0fb53dd0a2f11b;.tar.gz}
+Source0:        https://github.com/googlefonts/comfortaa/archive/%{version}/comfortaa-%{version}.tar.gz}
 %{!?shortcommit:
 Source0:        https://github.com/googlefonts/comfortaa/archive/%{version}/comfortaa-%{version}.tar.gz}
 Source1:        61-%{fontpkgname}.conf

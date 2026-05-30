@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 Name:    kontact
 Summary: Personal Information Manager
 Version: 26.03.80
@@ -10,7 +13,7 @@ Release: 1%{?dist}
 License: GPL-2.0-only AND LicenseRef-Callaway-GFDL
 URL:     https://invent.kde.org/pim/%{name}
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kontact-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 # handled by qt5-srpm-macros, which defines %%qt5_qtwebengine_arches
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}

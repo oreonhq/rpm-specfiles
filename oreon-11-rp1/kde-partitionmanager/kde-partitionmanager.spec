@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 %global base_name partitionmanager
 
 %global kf6min 5.240.0
@@ -17,7 +20,7 @@ Summary:        KDE Partition Manager
 
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later AND MIT AND CC-BY-4.0 AND CC0-1.0 AND GFDL-1.2-or-later
 URL:            https://apps.kde.org/partitionmanager/
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/partitionmanager-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/partitionmanager-%{version}.tar.xz
 
 BuildRequires:  cmake >= 3.16
 BuildRequires:  desktop-file-utils

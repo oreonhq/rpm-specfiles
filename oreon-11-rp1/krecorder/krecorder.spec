@@ -9,7 +9,7 @@ Release:        1%{?dist}
 License:        BSD-3-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-3.0-or-later
 Summary:        Convergent KDE audio recording application
 Url:            https://invent.kde.org/utilities/krecorder
-Source0:        https://download.kde.org/%{stable_kf5}/release-service/26.04.1/src/krecorder-26.04.1.tar.xz
+Source0:        https://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

@@ -43,12 +43,12 @@ SourceLicense:  %{shrink:
                 }
 
 %global src_base https://www.cairographics.org/releases
-Source0:        https://www.cairographics.org/releases/cairomm-1.18.0.tar.xz
+Source0:        %{src_base}/cairomm-%{version}.tar.xz
 # No keyring with authorized GPG signing keys is published
 # (https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/331), but we
 # are able to verify the signature using the key for Kjell Ahlstedt from
 # https://gitlab.freedesktop.org/freedesktop/freedesktop/-/issues/290.
-Source1:        cairomm-1.18.0.tar.xz.asc
+Source1:        %{src_base}/cairomm-%{version}.tar.xz.asc
 Source2:        https://gitlab.freedesktop.org/freedesktop/freedesktop/uploads/0ac64e9582659f70a719d59fb02cd037/gpg_key.pub
 
 # Fix outdated FSF mailing address in COPYING
@@ -66,7 +66,7 @@ Patch:          https://gitlab.freedesktop.org/cairo/cairomm/-/merge_requests/29
 # https://gitlab.freedesktop.org/cairo/cairomm/-/commit/43580ed75bde0b7d6ad442c90a22f80b50ce844d
 Patch:          https://gitlab.freedesktop.org/cairo/cairomm/-/commit/43580ed75bde0b7d6ad442c90a22f80b50ce844d.patch
 
-For %%{gpgverify} macro
+# For %%{gpgverify} macro
 BuildRequires:  gpgverify
 
 BuildRequires:  gcc-c++

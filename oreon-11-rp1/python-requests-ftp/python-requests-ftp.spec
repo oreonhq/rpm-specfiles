@@ -16,7 +16,7 @@ URL:            https://github.com/Lukasa/requests-ftp
 # the last pypi release was 0.3.1, from commit 20ce5bf5388ae9b9edfdd9bf6d381a399e5bcad0 but without test data
 %global commit d959118dbfc1f04c9726dfff48d5a2a64c1a01f2
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
-Source0:        https://github.com/Lukasa/requests-ftp/archive/d959118dbfc1f04c9726dfff48d5a2a64c1a01f2/requests-ftp-%(c=d959118dbfc1f04c9726dfff48d5a2a64c1a01f2;.tar.gz
+Source0:        https://github.com/Lukasa/%{srcname}/archive/%{commit}/%{srcname}-%{shortcommit}.tar.gz
 
 BuildArch:      noarch
 

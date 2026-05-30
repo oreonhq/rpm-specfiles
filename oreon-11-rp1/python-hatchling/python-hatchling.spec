@@ -8,7 +8,7 @@ Summary:        The build backend used by Hatch
 # SPDX
 License:        MIT
 URL:            https://pypi.org/project/hatchling
-Source0:        https://files.pythonhosted.org/packages/source/h/hatchling/hatchling-1.29.0.tar.gz
+Source0:        %{pypi_source hatchling}
 # Written for Fedora in groff_man(7) format based on --help output
 Source100:      hatchling.1
 Source200:      hatchling-build.1
@@ -17,8 +17,6 @@ Source310:      hatchling-dep-synced.1
 Source400:      hatchling-metadata.1
 Source500:      hatchling-version.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l hatchling
 # We cannot run the “downstream integration tests” included with the PyPI sdist
 # in an offline build. The primary tests are Hatch’s “backend” tests.
 

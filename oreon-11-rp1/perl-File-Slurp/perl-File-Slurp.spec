@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/File-Slurp
 Source0:        https://cpan.metacpan.org/modules/by-module/File/File-Slurp-%{version}.tar.gz
 
 
+
 BuildArch: noarch
 
 BuildRequires:  %{__perl}

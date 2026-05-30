@@ -28,15 +28,15 @@ Name: selinux-policy
 Version: 43.1
 Release: 1%{?dist}
 License: GPL-2.0-or-later
-Source:        https://github.com/fedora-selinux/selinux-policy/archive/f5ead57eed9c9322165762f6781b01353f2de870/selinux-policy-%(c=f5ead57eed9c9322165762f6781b01353f2de870;.tar.gz
+Source: %{giturl}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 Source1: Makefile.devel
 Source2: selinux-policy.conf
 
 # https://github.com/fedora-selinux/macro-expander (pinned; #/ renames to macro-expander for %%install)
-Source3:        https://raw.githubusercontent.com/fedora-selinux/macro-expander/76939da7d8246c9b21a60b3b96ca04d6288d4a25/macro-expander.sh#/macro-expander
+Source3: macro-expander
 
 # https://github.com/containers/container-selinux — extract container.{if,te,fc} in %%prep
-Source4:        https://github.com/containers/container-selinux/archive/add9f4a543f9fd3407f54717752ab640354654b2/container-selinux-add9f4a543f9fd3407f54717752ab640354654b2.tar.gz
+Source4: container-selinux.tgz
 
 # modules enabled in -minimum policy
 Source16: modules-minimum.lst

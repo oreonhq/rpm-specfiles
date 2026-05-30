@@ -15,7 +15,7 @@ Summary:        C++ interface for the GLib library
 # Library sources are LGPL 2.1+, tools used to generate sources are GPL 2+.
 License:        LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:            https://gtkmm.org/
-Source0: https://download.gnome.org/sources/glibmm/%(echo %{version} | cut -d. -f1)/glibmm-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/glibmm/%{release_version}/glibmm-%{version}.tar.xz
 Patch0:         glibmm24-gcc11.patch
 
 BuildRequires:  doxygen

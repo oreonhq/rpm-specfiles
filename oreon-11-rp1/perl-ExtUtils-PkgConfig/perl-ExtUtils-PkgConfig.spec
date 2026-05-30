@@ -8,6 +8,7 @@ License:        LGPL-2.0-or-later
 URL:            https://metacpan.org/release/ExtUtils-PkgConfig
 Source0:        https://cpan.metacpan.org/modules/by-module/ExtUtils/ExtUtils-PkgConfig-%{version}.tar.gz
 
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

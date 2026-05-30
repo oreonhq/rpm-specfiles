@@ -9,7 +9,7 @@ Version: 0.13.78
 Release: 4%{?dist}
 License: LGPL-2.0-or-later OR MPL-1.1
 URL: http://zziplib.sourceforge.net/
-Source:        https://github.com/gdraheim/zziplib/archive/v%{version}.tar.gz
+Source:        https://github.com/gdraheim/zziplib/archive/v%{version}.tar.gz#/zziplib-%{version}.tar.gz
 BuildRequires: make
 BuildRequires: gcc
 BuildRequires: perl-interpreter

@@ -1,4 +1,4 @@
-%global source0_hash da232d46ec4553b2f4b057b705acfa63466318f91f7e8de38dcfb30243fb6898
+%global source0_hash none
 
 %global commit0 3acc51828aceba310081c72a18f938f04d4487de
 %global date 20250407
@@ -13,9 +13,9 @@ License:        MIT
 URL:            https://github.com/NVIDIA/%{name}
 
 %if 0%{?tag:1}
-Source0:        https://github.com/NVIDIA/egl-wayland/archive/1.1.21/egl-wayland-1.1.21.tar.gz
+Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
 %else
-Source0:        https://github.com/NVIDIA/egl-wayland/archive/3acc51828aceba310081c72a18f938f04d4487de/egl-wayland-%(c=3acc51828aceba310081c72a18f938f04d4487de;.tar.gz
+Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
 %endif
 
 BuildRequires:  cmake

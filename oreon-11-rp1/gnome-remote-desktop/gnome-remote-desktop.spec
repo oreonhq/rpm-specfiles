@@ -21,7 +21,7 @@ Summary:        GNOME Remote Desktop screen share service
 
 License:        GPL-2.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-remote-desktop
-Source0: https://download.gnome.org/sources/gnome-remote-desktop/%{major_version}/gnome-remote-desktop-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
 # Adds encryption support (requires patched LibVNCServer)
 Patch0:         gnutls-anontls.patch
 

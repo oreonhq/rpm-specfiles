@@ -11,6 +11,7 @@ License:        CC0-1.0
 URL:            https://metacpan.org/release/Module-Signature
 Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Signature-%{version}.tar.gz
 
+
 BuildArch:      noarch
 # Module build
 BuildRequires:  coreutils

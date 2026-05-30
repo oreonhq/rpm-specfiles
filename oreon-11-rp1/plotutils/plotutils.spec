@@ -10,7 +10,7 @@ Summary:   GNU vector and raster graphics utilities and libraries
 # Automatically converted from old format: GPLv2+ and GPLv3+ - review is highly recommended.
 License:   GPL-2.0-or-later AND GPL-3.0-or-later
 URL:       http://www.gnu.org/software/plotutils/
-Source0:   https://ftp.gnu.org/gnu/plotutils/plotutils-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/plotutils/plotutils-%{version}.tar.gz
 Patch0:    plotutils-2.6-png15.patch
 Patch1:    plotutils-aarch64.patch
 Patch2:    plotutils-werror-format-security.patch

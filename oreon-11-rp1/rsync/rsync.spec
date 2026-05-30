@@ -14,7 +14,7 @@ Version: 3.4.1
 Release: 6%{?prerelease}%{?dist}
 URL: https://rsync.samba.org/
 
-Source0:        https://download.samba.org/pub/rsync/src/rsync-3.4.1%{?prerelease}.tar.gz
+Source0:        https://download.samba.org/pub/rsync/src/rsync-%{version}.tar.gz
 Source1:        https://download.samba.org/pub/rsync/src/rsync-patches-3.4.1%{?prerelease}.tar.gz
 Source2: rsyncd.socket
 Source3: rsyncd.service

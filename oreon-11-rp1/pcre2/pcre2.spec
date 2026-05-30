@@ -48,8 +48,8 @@ Summary:    Perl-compatible regular expression library
 # testdata:                             Public Domain
 License:    BSD-3-Clause AND FSFULLR AND X11 AND GPL-2.0-or-later AND FSFAP AND FSFUL AND GPL-3.0-or-later
 URL:        https://www.pcre.org/
-Source0:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.47/pcre2-10.47%{?rcversion:-%rcversion}.tar.bz2
-Source1:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.47/pcre2-10.47%{?rcversion:-%rcversion}.tar.bz2.sig
+Source0:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-%{version}/pcre2-%{myversion}.tar.bz2
+Source1:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-%{version}/pcre2-%{myversion}.tar.bz2.sig
 # This New-Public-Key was retrieved using
 # gpg --keyserver keyserver.ubuntu.com --recv-keys A95536204A3BB489715231282A98E77EB6F24CA8
 # gpg --export --armor A95536204A3BB489715231282A98E77EB6F24CA8 > New-Public-Key

@@ -48,7 +48,7 @@ Summary:	A simple GNOME 3 application to access remote or virtual systems
 # CC-BY-SA-3.0.
 License:	LGPL-2.0-or-later AND CC0-1.0 AND CC-BY-SA-3.0
 URL:		https://wiki.gnome.org/Apps/Boxes
-Source0: https://download.gnome.org/sources/gnome-boxes/%{major_version}/gnome-boxes-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
 BuildRequires:	gettext >= 0.19.8
 BuildRequires:	meson
 BuildRequires:	vala >= 0.36.0

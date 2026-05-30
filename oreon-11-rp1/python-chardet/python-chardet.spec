@@ -34,8 +34,6 @@ Source1:        get_source
 # Hand-written for Fedora in groff_man(7) format based on --help output
 Source2:        chardetect.1
 
-BuildSystem:            pyproject
-BuildOption(install):   -l chardet
 
 BuildArch:      noarch
 

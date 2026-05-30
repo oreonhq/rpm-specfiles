@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Mozilla-PublicSuffix
 Source0:        https://cpan.metacpan.org/modules/by-module/Mozilla/Mozilla-PublicSuffix-v%{version}.tar.gz
 
 
+
 # https://github.com/rsimoes/Mozilla-PublicSuffix/pull/6
 Patch1:         Mozilla-PublicSuffix-unbundle.patch
 

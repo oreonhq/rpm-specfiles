@@ -38,8 +38,8 @@ Release: %autorelease
 # rest is under GPL-2.0-or-later
 License: GPL-2.0-or-later AND MPL-2.0
 Url: https://libreswan.org/
-Source0:        https://download.libreswan.org/%{?prever:development/}libreswan-5.3%{?prever}.tar.gz
-Source1:        https://download.libreswan.org/%{?prever:development/}libreswan-5.3%{?prever}.tar.gz.asc
+Source0:        https://download.libreswan.org/%{?prever:development/}%{name}-%{version}%{?prever}.tar.gz
+Source1:        https://download.libreswan.org/%{?prever:development/}%{name}-%{version}%{?prever}.tar.gz.asc
 Source2: https://download.libreswan.org/LIBRESWAN-OpenPGP-KEY.txt
 %if 0%{with_cavstests}
 Source3: https://download.libreswan.org/cavs/ikev1_dsa.fax.bz2

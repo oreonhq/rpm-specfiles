@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 %global orgname org.kde.plasma-welcome
 
 Name:           plasma-welcome
@@ -9,8 +12,8 @@ License:        GPL-2.0-or-later and BSD-3-Clause
 Summary:        Plasma Welcome
 Url:            https://invent.kde.org/plasma/%{name}
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/plasma-welcome-6.6.5.tar.xz
-Source1:        https://download.kde.org/%{stable_kf6}/plasma/6.6.5/plasma-welcome-6.6.5.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 
 # Upstream patches
 

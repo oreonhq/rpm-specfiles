@@ -30,7 +30,7 @@ Source3:           %{name}.service
 Source4:           %{name}.sysusers
 Source5:           %{name}.tmpfiles
 Source9:           migrate_redis_to_valkey.sh
-Source50:        https://github.com/valkey-io/valkey-doc/archive/9.0.2/valkey-doc-9.0.2.tar.gz
+Source50:        https://github.com/valkey-io/%{name}-doc/archive/%{doc_version}/%{name}-doc-%{doc_version}.tar.gz
 
 # Fix default paths in configuration files for RPM layout
 Patch0:            %{name}-conf.patch

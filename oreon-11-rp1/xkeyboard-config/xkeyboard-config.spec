@@ -18,11 +18,11 @@ License:    HPND AND HPND-sell-variant AND X11 AND X11-distribute-modifications-
 URL:        http://www.freedesktop.org/wiki/Software/XKeyboardConfig
 
 %if 0%{?gitdate}
-Source0:        http://xorg.freedesktop.org/archive/individual/data/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/archive/individual/data/%{name}/%{name}-%{version}.tar.xz
 Source1:    make-git-snapshot.sh
 Source2:    commitid
 %else
-Source0:        http://xorg.freedesktop.org/archive/individual/data/%{name}/%{name}-%{version}.tar.xz
+Source0:        https://www.x.org/archive/individual/data/%{name}/%{name}-%{version}.tar.xz
 %endif
 
 BuildArch:  noarch

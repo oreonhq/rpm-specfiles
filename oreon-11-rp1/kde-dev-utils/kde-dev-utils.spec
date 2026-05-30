@@ -1,5 +1,8 @@
 %global source0_hash none
 
+%global stable_kf6 stable
+
+
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
 
@@ -11,7 +14,7 @@ Release: 1%{?dist}
 License: LGPL-2.0-only AND LGPL-3.0-only
 URL:     https://invent.kde.org/sdk/%{name}.git
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.03.80/src/kde-dev-utils-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream patches
 

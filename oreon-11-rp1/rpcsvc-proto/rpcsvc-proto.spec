@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash eaa227686b84e8ae20181d2119c0ccac29d82371441844008019a134dafe3613
 
 #
 # spec file for package rpcsvc-proto

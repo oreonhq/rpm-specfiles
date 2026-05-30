@@ -16,7 +16,7 @@ Summary:        Clock application designed for GNOME 3
 # under CC-BY-SA-3.0.
 License:        GPL-2.0-or-later AND CC-BY-SA-3.0 AND CC0-1.0
 URL:            https://wiki.gnome.org/Apps/Clocks
-Source0: https://download.gnome.org/sources/gnome-clocks/%{major_version}/gnome-clocks-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/gnome-clocks/50/%{name}-%{tarball_version}.tar.xz
 BuildRequires:  meson
 BuildRequires:  desktop-file-utils
 BuildRequires:  gettext

@@ -26,7 +26,7 @@ Release:    %autorelease
 
 License:    (LGPL-2.1-only OR MPL-1.1) AND BSD-2-Clause AND LGPL-2.1-only
 URL:        https://taglib.github.io/
-Source0:        https://taglib.github.io/releases/taglib-1.13.1%{?beta}.tar.gz
+Source0:        https://taglib.github.io/releases/taglib-%{version}%{?beta}.tar.gz
 
 # http://bugzilla.redhat.com/343241
 # fix multilib, and drop -lz flag to consumers (probably only needed for static linking)

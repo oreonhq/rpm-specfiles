@@ -10,7 +10,7 @@ Summary:        Plasma 6 applet for translate-shell
 
 License:        MIT
 URL:            https://store.kde.org/p/1395666
-Source0:        https://github.com/rcspam/org.kde.plasma.translator/archive/refs/tags/v6.0.0.tar.gz#/org.kde.plasma.translator-.tar.gz
+Source0:        http://qml.i-glu4it.ru/%{orig_name}_%{version}.tar.gz
 
 BuildArch:      noarch
 
