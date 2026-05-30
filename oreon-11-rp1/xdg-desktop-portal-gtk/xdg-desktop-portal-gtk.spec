@@ -9,7 +9,7 @@ Summary:        Backend implementation for xdg-desktop-portal using GTK+
 
 License:        LGPL-2.0-or-later
 URL:            https://github.com/flatpak/%{name}
-Source0:        https://github.com/flatpak/xdg-desktop-portal-gtk/releases/download/1.15.3/xdg-desktop-portal-gtk-1.15.3.tar.xz
+Source0:        https://github.com/flatpak/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gettext

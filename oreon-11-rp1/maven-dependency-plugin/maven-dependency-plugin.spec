@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/plugins/%{name}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-dependency-plugin/3.6.1/maven-dependency-plugin-3.6.1-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
 Patch:          0001-Port-tests-to-maven-model-3.6.X.patch
 Patch:          0002-MDEP-952-Cut-another-dependency-on-commons-lang3-479.patch

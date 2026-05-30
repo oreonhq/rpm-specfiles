@@ -13,7 +13,7 @@ Release:	24%{?dist}
 Summary:	Utility functions for checking references
 License:	MIT
 URL:		https://metacpan.org/release/Ref-Util
-Source0:	https://cpan.metacpan.org/authors/id/A/AR/ARC/Ref-Util-0.204.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Ref/Ref-Util-%{version}.tar.gz
 
 BuildArch:	noarch
 # Build

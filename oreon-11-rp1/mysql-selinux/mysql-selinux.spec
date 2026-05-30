@@ -18,7 +18,7 @@ License:        GPL-3.0-only
 URL:            https://github.com/devexp-db/mysql-selinux
 Summary:        SELinux policy modules for MySQL and MariaDB packages
 
-Source0:        https://github.com/devexp-db/mysql-selinux/archive/refs/tags/1.0.14.tar.gz#/mysql-selinux-1.0.14.tar.gz
+Source0:        https://github.com/devexp-db/mysql-selinux/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 

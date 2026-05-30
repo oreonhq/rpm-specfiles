@@ -10,7 +10,7 @@ Summary: A Label Printer Application
 
 License: Apache-2.0
 URL: https://www.msweet.org/lprint
-Source0:        https://github.com/michaelrsweet/lprint/releases/download/v1.3.1/lprint-1.3.1.tar.gz
+Source0:        https://github.com/michaelrsweet/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Source1: lprint.conf
 
 

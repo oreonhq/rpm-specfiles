@@ -23,7 +23,7 @@ Summary:           A persistent key-value database
 # fpconv: BSL-1.0
 License:           BSD-3-Clause AND BSD-2-Clause AND MIT AND BSL-1.0
 URL:               https://valkey.io
-Source0:        https://github.com/valkey-io/valkey/archive/9.0.3/valkey-9.0.3.tar.gz
+Source0:        https://github.com/valkey-io/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:           %{name}.logrotate
 Source2:           %{name}-sentinel.service
 Source3:           %{name}.service

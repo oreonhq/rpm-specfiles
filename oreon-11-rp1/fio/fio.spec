@@ -7,8 +7,8 @@ Summary:	Multithreaded IO generation tool
 
 License:	GPL-2.0-only
 URL:		http://git.kernel.dk/?p=fio.git;a=summary
-Source0:        http://brick.kernel.dk/snaps/fio-3.40.tar.bz2
-Source1:        https://brick.kernel.dk/snaps/fio-3.40.tar.bz2.asc
+Source0:        http://brick.kernel.dk/snaps/%{name}-%{version}.tar.bz2
+Source1:        https://brick.kernel.dk/snaps/%{name}-%{version}.tar.bz2.asc
 Source2:	https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/F7D358FB2971E0A6.asc
 
 %if 0%{?rhel} && 0%{?rhel} < 10

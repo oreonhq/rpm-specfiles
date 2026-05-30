@@ -27,9 +27,9 @@ URL:            http://gstreamer.freedesktop.org/
 %if 0%{?gitrel}
 # git clone git://anongit.freedesktop.org/gstreamer/gstreamer
 # cd gstreamer; git reset --hard %%{gitcommit}; ./autogen.sh; make; make distcheck
-Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.26.7.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-%{version}.tar.xz
 %else
-Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-1.26.7.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gstreamer/gstreamer-%{version}.tar.xz
 %endif
 ## For GStreamer RPM provides
 Patch0:         0001-gst-inspect-add-mode-to-output-RPM-requires-format.patch

@@ -7,7 +7,7 @@ Release:        2%{?dist}
 Summary:        Parse and format strptime and strftime patterns
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/DateTime-Format-Strptime
-Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-Format-Strptime-1.80.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/DateTime/DateTime-Format-Strptime-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

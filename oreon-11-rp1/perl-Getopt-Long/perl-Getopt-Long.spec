@@ -7,7 +7,7 @@ Release:        521%{?dist}
 Summary:        Extended processing of command line options
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Getopt-Long
-Source0:        https://cpan.metacpan.org/authors/id/J/JV/JV/Getopt-Long-2.58.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JV/JV/Getopt-Long-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

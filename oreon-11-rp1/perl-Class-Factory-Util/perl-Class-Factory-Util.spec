@@ -6,7 +6,7 @@ Release:        50%{?dist}
 Summary:        Provide utility methods for factory classes 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Factory-Util            
-Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Class-Factory-Util-1.7.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Class/Class-Factory-Util-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build

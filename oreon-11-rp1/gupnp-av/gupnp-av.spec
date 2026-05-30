@@ -8,7 +8,7 @@ Summary:       A collection of helpers for building UPnP AV applications
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://www.gupnp.org/
-Source0:        http://download.gnome.org/sources/gupnp-av/0.14/gupnp-av-0.14.4.tar.xz
+Source0:        http://download.gnome.org/sources/gupnp-av/0.14/%{name}-%{version}.tar.xz
 
 BuildRequires: gi-docgen
 BuildRequires: gobject-introspection-devel

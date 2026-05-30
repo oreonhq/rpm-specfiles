@@ -6,7 +6,7 @@ Release: 19%{?dist}
 Summary: Kerberos realm enrollment service
 License: LGPL-2.1-or-later
 URL:     https://gitlab.freedesktop.org/realmd/realmd
-Source0:        https://gitlab.freedesktop.org/realmd/realmd/uploads/204d05bd487908ece2ce2705a01d2b26/realmd-0.17.1.tar.gz
+Source0:        https://gitlab.freedesktop.org/realmd/realmd/uploads/204d05bd487908ece2ce2705a01d2b26/realmd-%{version}.tar.gz
 
 Patch0001: 0001-service-allow-multiple-names-and-_srv_-ad_server-opt.patch
 Patch0002: 0002-service-fix-error-message-when-removing-host-from-AD.patch

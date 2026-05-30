@@ -24,7 +24,7 @@ Summary:        Service daemon for mediating access to a GPS
 
 License:        BSD-2-Clause
 URL:            https://gpsd.gitlab.io/gpsd/index.html
-Source0:        https://download-mirror.savannah.gnu.org/releases/gpsd/gpsd-3.27.5.tar.gz
+Source0:        https://download-mirror.savannah.gnu.org/releases/gpsd/%{pkgname}-%{version}.tar.gz
 # used only for building
 %global scons_ver 4.9.1
 Source1:        https://github.com/SCons/scons/archive/4.9.1/scons-4.9.1.tar.gz

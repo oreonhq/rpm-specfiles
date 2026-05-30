@@ -6,7 +6,7 @@ Release:        21%{?dist}
 Summary:        Free MP3 audio compressor
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            http://lame.sourceforge.net/
-Source0:        https://downloads.sourceforge.net/lame/lame-3.100.tar.gz
+Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Patch1:         %{name}-noexecstack.patch
 Patch2:         libmp3lame-symbols.patch
 

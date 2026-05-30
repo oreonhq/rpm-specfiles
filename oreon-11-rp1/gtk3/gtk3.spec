@@ -32,7 +32,7 @@ Summary: GTK+ graphical user interface library
 
 License: LGPL-2.0-or-later
 URL:     https://gtk.org
-Source0:        https://download.gnome.org/sources/gtk/3.24/gtk-3.24.51.tar.xz
+Source0:        https://download.gnome.org/sources/gtk/%{major_minor_version}/gtk-%{version}.tar.xz
 
 patch0: drop-down-menu-fix.patch
 

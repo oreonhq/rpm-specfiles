@@ -9,7 +9,7 @@ Version:        0.34
 Release:        7%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Convert-ASN1
-Source0:        https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/Convert-ASN1-0.34.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/Convert-ASN1-%{version}.tar.gz
 # Allow running tests from a read-only location,
 # <https://github.com/gbarr/perl-Convert-ASN1/pull/40>
 Patch0:         Convert-ASN1-0.27-Use-temporary-output-files-for-tests.patch

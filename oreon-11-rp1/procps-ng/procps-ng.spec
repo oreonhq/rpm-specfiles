@@ -10,7 +10,7 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL: https://sourceforge.net/projects/procps-ng/
 
-Source0:        https://downloads.sourceforge.net/procps-ng/procps-ng-4.0.6.tar.xz
+Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires: make
 BuildRequires: ncurses-devel

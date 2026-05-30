@@ -10,7 +10,7 @@ Release: 5%{?dist}
 # SPDX
 License: MIT
 URL: http://www.x.org
-Source0:        https://www.x.org/pub/individual/lib/libfontenc-1.1.8.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 
 BuildRequires: gcc
 BuildRequires: libtool

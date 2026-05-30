@@ -17,7 +17,7 @@ Summary:        Support for reading and writing UTF8 Strings
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/utf8-string
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/utf8-string-1.0.2/utf8-string-1.0.2.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

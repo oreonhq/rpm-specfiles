@@ -16,7 +16,7 @@ Summary:        Fast, lightweight YAML loader and dumper
 # Note that libsyck COPYING file describes itself as BSD but it's actually MIT
 License:        GPL-2.0-or-later AND MIT
 URL:            https://metacpan.org/release/YAML-Syck
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/YAML-Syck-1.45.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/YAML/YAML-Syck-%{version}.tar.gz
 
 # Module Build
 BuildRequires:  coreutils

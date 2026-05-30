@@ -29,7 +29,7 @@ URL:     https://www.kde.org/applications/graphics/okular/
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/stable/release-service/26.03.80/src/okular-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream patches (master branch)
 

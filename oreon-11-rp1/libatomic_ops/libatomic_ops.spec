@@ -8,7 +8,7 @@ Release: 2%{?dist}
 # libatomic_ops MIT, libatomic_ops_gpl GPLv2+
 License: GPL-2.0-or-later AND MIT
 URL:     https://github.com/ivmai/libatomic_ops/
-Source0:        https://github.com/ivmai/libatomic_ops/releases/download/v7.10.0/libatomic_ops-7.10.0.tar.gz
+Source0:        https://github.com/ivmai/libatomic_ops/releases/download/v%{version}/libatomic_ops-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make

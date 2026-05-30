@@ -26,7 +26,7 @@ Release: 5%{?dist}
 # Caldera-no-preamble: strings/apr_snprintf.c
 License: Apache-2.0 AND (BSD-4-Clause-UC AND ISC AND Zlib AND Caldera-no-preamble)
 URL: https://apr.apache.org/
-Source0:        https://www.apache.org/dist/apr/apr-1.7.6.tar.bz2
+Source0:        https://www.apache.org/dist/apr/%{name}-%{version}.tar.bz2
 Source1: apr-wrapper.h
 Patch1: apr-1.7.2-libdir.patch
 Patch2: apr-1.2.7-pkgconf.patch

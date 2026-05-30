@@ -9,8 +9,8 @@ URL:            https://commons.apache.org/proper/commons-net/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/commons/net/source/commons-net-3.12.0-src.tar.gz
-Source1:        https://downloads.apache.org/commons/net/source/commons-net-3.12.0-src.tar.gz.asc
+Source0:        https://archive.apache.org/dist/commons/net/source/commons-net-%{version}-src.tar.gz
+Source1:        https://downloads.apache.org/commons/net/source/commons-net-%{version}-src.tar.gz.asc
 Source2:        https://downloads.apache.org/commons/KEYS
 
 BuildRequires:  maven-local-openjdk25

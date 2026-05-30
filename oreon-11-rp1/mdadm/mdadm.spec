@@ -9,7 +9,7 @@ Summary:     The mdadm program controls Linux md devices (software RAID arrays)
 URL:         http://www.kernel.org/pub/linux/utils/raid/mdadm/
 License:     GPL-2.0-or-later
 
-Source:        https://www.kernel.org/pub/linux/utils/raid/mdadm/mdadm-4.3.tar.xz
+Source:        https://www.kernel.org/pub/linux/utils/raid/mdadm/%{name}-%{version}.tar.xz
 Source1:     raid-check
 Source2:     mdadm-raid-check-sysconfig
 Source3:     mdmonitor.service
@@ -18,7 +18,7 @@ Source5:     mdadm_event.conf
 Source6:     raid-check.timer
 Source7:     raid-check.service
 Source8:     mdcheck
-Source10:        https://www.kernel.org/pub/linux/utils/raid/mdadm/mdadm-4.3.tar.sign
+Source10:        https://www.kernel.org/pub/linux/utils/raid/mdadm/%{name}-%{version}.tar.sign
 Source11:    https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/6F9E3E9D4EDEBB11.asc
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=2325906

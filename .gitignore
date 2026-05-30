@@ -6,9 +6,6 @@ oreon-11-rp1/**/*.tar.Z
 oreon-11-rp1/**/*.tgz
 oreon-11-rp1/**/*.txz
 oreon-11-rp1/**/*.zip
-!oreon-11-rp1/hyphen-*/*.zip
-!oreon-11-rp1/hunspell-*/*.zip
-!oreon-11-rp1/mythes-*/*.zip
 oreon-11-rp1/**/*.zst
 oreon-11-rp1/**/*.gem
 oreon-11-rp1/**/*.whl

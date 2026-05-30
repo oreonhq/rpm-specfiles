@@ -17,7 +17,7 @@ Summary:        XPath parser and evaluator for Perl
 # Others: Artistic-2.0
 License:        Artistic-2.0 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:            https://metacpan.org/release/XML-XPath
-Source0:        https://cpan.metacpan.org/authors/id/M/MA/MANWAR/XML-XPath-1.48.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MA/MANWAR/XML-XPath-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  coreutils

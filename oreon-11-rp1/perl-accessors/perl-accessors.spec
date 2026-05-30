@@ -6,7 +6,7 @@ Release:        47%{?dist}
 Summary:        Create accessor methods in caller's package
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/accessors
-Source0:        https://cpan.metacpan.org/authors/id/S/SP/SPURKIS/accessors-1.01.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SP/SPURKIS/accessors-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

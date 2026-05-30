@@ -7,7 +7,7 @@ Summary: Library for tracking application startup
 
 License: LGPL-2.0-or-later AND MIT
 URL:     https://www.freedesktop.org/wiki/Software/startup-notification/
-Source0:        http://www.freedesktop.org/software/startup-notification/releases/startup-notification-0.12.tar.gz
+Source0:        http://www.freedesktop.org/software/startup-notification/releases/%{name}-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: libX11-devel

@@ -28,7 +28,7 @@ Summary: LDAP support libraries
 License: OLDAP-2.8
 URL: http://www.openldap.org/
 
-Source0:        https://openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.6.13.tgz
+Source0:        https://openldap.org/software/download/OpenLDAP/openldap-release/openldap-%{version}.tgz
 Source1: slapd.service
 Source2: slapd.tmpfiles
 Source3: slapd.ldif

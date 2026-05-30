@@ -5,8 +5,8 @@ Name: blktrace
 Version: 1.3.0
 Release: 15%{?dist}
 License: GPL-2.0-or-later
-Source0:        http://brick.kernel.dk/snaps/blktrace-1.3.0.tar.bz2
-Source1:        https://brick.kernel.dk/snaps/blktrace-1.3.0.tar.bz2.asc
+Source0:        http://brick.kernel.dk/snaps/blktrace-%{version}.tar.bz2
+Source1:        https://brick.kernel.dk/snaps/blktrace-%{version}.tar.bz2.asc
 Source2: https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/F7D358FB2971E0A6.asc
 
 Url: http://brick.kernel.dk/snaps

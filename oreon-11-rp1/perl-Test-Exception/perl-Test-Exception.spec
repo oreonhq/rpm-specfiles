@@ -6,7 +6,7 @@ Release:        30%{?dist}
 Summary:        Library of test functions for exception based Perl code
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Exception
-Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Exception-0.43.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Exception-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

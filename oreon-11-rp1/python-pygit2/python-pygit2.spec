@@ -9,7 +9,7 @@ Summary:        Python bindings for libgit2
 
 License:        GPL-2.0-only WITH GCC-exception-2.0
 URL:            https://www.pygit2.org/
-Source0:        https://github.com/libgit2/pygit2/archive/v1.19.1.tar.gz#/pygit2-1.19.1.tar.gz
+Source0:        https://github.com/libgit2/pygit2/archive/v%{version}.tar.gz#/%{pkgname}-%{version}.tar.gz
 # mock (by default) and koji builds never have network access, but testing
 # that capability through a DNS resolution is not always accurate.
 # Forcefully disable all network tests to avoid unnecessary build failures.

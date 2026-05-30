@@ -9,7 +9,7 @@ Summary: A library for import of Apple iWork documents
 
 License: MPL-2.0
 URL: http://wiki.documentfoundation.org/DLP/Libraries/libetonyek
-Source:        http://dev-www.libreoffice.org/src/libetonyek/libetonyek-0.1.13.tar.xz
+Source:        http://dev-www.libreoffice.org/src/%{name}/%{name}-%{version}.tar.xz
 # https://gerrit.libreoffice.org/c/libetonyek/+/181278
 Patch0: mdds3.patch
 

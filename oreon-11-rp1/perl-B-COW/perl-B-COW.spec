@@ -6,7 +6,7 @@ Release:	12%{?dist}
 Summary:	Additional B helpers to check Copy On Write status
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/B-COW
-Source0:	https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/B-COW-0.007.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/B/B-COW-%{version}.tar.gz
 
 # Module Build
 BuildRequires:	coreutils

@@ -17,8 +17,8 @@ Summary:        Globbing library
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/Glob
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/Glob-0.10.2/Glob-0.10.2.tar.gz
-Source1:        https://hackage.haskell.org/package/Glob-0.10.2/Glob.cabal#/Glob-0.10.2.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

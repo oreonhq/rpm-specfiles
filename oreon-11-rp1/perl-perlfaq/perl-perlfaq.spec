@@ -7,7 +7,7 @@ Summary:        Frequently asked questions about Perl
 # Code examples are Public Domain
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Public-Domain
 URL:            https://metacpan.org/release/perlfaq
-Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/perlfaq-5.20250619.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/perlfaq-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

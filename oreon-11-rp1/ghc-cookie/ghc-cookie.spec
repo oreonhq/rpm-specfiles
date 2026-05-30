@@ -17,7 +17,7 @@ Summary:        HTTP cookie parsing and rendering
 License:        MIT
 URL:            https://hackage.haskell.org/package/cookie
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/cookie-0.5.1/cookie-0.5.1.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

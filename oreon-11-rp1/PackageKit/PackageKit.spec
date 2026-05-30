@@ -14,7 +14,7 @@ Version:   1.3.4
 Release:   %autorelease
 License:   GPL-2.0-or-later AND LGPL-2.1-or-later AND FSFAP
 URL:       http://www.freedesktop.org/software/PackageKit/
-Source0:        http://www.freedesktop.org/software/PackageKit/releases/PackageKit-1.3.4.tar.xz
+Source0:        http://www.freedesktop.org/software/PackageKit/releases/%{name}-%{version}.tar.xz
 
 # Backports from upstream (1~500)
 ## Fix turning off the Python backend

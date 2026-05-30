@@ -10,7 +10,7 @@ Summary:	Library for country/city/organization to IP address or hostname mapping
 # Note: bundled GeoIP.dat data is CC-BY-SA-3.0 but we don't use or package it
 License:	LGPL-2.1-or-later
 URL:		http://www.maxmind.com/app/c
-Source0:        https://github.com/maxmind/geoip-api-c/releases/download/v1.6.12/GeoIP-1.6.12.tar.gz
+Source0:        https://github.com/maxmind/geoip-api-c/releases/download/v%{version}/GeoIP-%{version}.tar.gz
 BuildRequires:	coreutils
 BuildRequires:	gcc
 BuildRequires:	make

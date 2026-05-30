@@ -6,7 +6,7 @@ Release: 	27%{?dist}
 Summary: 	Perl module to match globbing patterns against text
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/Text-Glob
-Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Text-Glob-0.11.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Text-Glob-%{version}.tar.gz
 
 BuildArch: noarch
 

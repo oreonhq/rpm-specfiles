@@ -17,7 +17,7 @@ Summary:        Run IO operations asynchronously and wait for their results
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/async
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/async-2.2.6/async-2.2.6.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

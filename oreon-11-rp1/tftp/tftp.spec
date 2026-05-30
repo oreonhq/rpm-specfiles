@@ -8,7 +8,7 @@ Version: 5.3
 Release: 3%{?dist}
 License: BSD-4-Clause-UC
 URL: http://www.kernel.org/pub/software/network/tftp/
-Source0:        https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git/snapshot/tftp-hpa-5.3.tar.gz
+Source0:        https://git.kernel.org/pub/scm/network/tftp/tftp-hpa.git/snapshot/tftp-hpa-%{version}.tar.gz
 Source1: tftp.socket
 Source2: tftp.service
 Source3: tftp-server-tmpfiles.conf

@@ -13,7 +13,7 @@ Release:	17%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:	Run commands simply, with detailed diagnostics
 URL:		https://metacpan.org/release/IPC-System-Simple
-Source0:	https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/IPC-System-Simple-1.30.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/IPC/IPC-System-Simple-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

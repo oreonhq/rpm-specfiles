@@ -8,8 +8,8 @@ Summary:        Environment for sending and receiving mail, providing functional
 # Everything is ISC except parts coming from the original Heirloom mailx which are BSD
 License:        ISC AND BSD-4-Clause-UC AND BSD-3-Clause AND HPND-sell-variant
 URL:            https://www.sdaoden.eu/code.html#s-nail
-Source0:        https://www.sdaoden.eu/downloads/s-nail-14.9.25.tar.xz
-Source1:        https://www.sdaoden.eu/downloads/s-nail-14.9.25.tar.xz.asc
+Source0:        https://www.sdaoden.eu/downloads/%{name}-%{version}.tar.xz
+Source1:        https://www.sdaoden.eu/downloads/%{name}-%{version}.tar.xz.asc
 # https://ftp.sdaoden.eu/steffen.asc
 Source2:        steffen.asc
 

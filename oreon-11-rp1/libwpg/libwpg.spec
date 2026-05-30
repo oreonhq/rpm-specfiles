@@ -9,7 +9,7 @@ Summary:        A library for import of WordPerfect Graphics images
 
 License:        LGPL-2.1-or-later OR MPL-2.0
 URL:            http://libwpg.sourceforge.net/
-Source0:        http://download.sourceforge.net/libwpg/libwpg-0.3.4.tar.xz
+Source0:        http://download.sourceforge.net/libwpg/%{name}-%{version}.tar.xz
 
 BuildRequires:  boost-devel
 BuildRequires:  doxygen

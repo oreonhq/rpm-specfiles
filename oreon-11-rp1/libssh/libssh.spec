@@ -12,7 +12,7 @@ License:        LGPL-2.1-or-later
 %bcond_without check
 URL:            http://www.libssh.org
 
-Source0:        https://www.libssh.org/files/0.12/libssh-0.12.0.tar.xz
+Source0:        https://www.libssh.org/files/0.12/%{name}-%{version}.tar.xz
 Source1:        https://www.libssh.org/files/0.12/%{name}-%{version}.tar.xz.asc
 Source2:        https://www.libssh.org/files/0x03D5DF8CFDD3E8E7_libssh_libssh_org_gpgkey.asc#/%{name}.keyring
 Source3:        libssh_client.config

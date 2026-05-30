@@ -19,8 +19,8 @@ Release:	2%{?dist}
 License:	0BSD AND GPL-2.0-or-later AND LicenseRef-Fedora-Public-Domain
 
 # official upstream release
-Source0:        https://github.com/tukaani-project/xz/releases/download/v5.8.2/xz-5.8.2.tar.gz
-Source1:        https://github.com/tukaani-project/xz/releases/download/v5.8.2/xz-5.8.2.tar.gz.sig
+Source0:        https://github.com/tukaani-project/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source1:        https://github.com/tukaani-project/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz.sig
 Source2:	https://tukaani.org/misc/lasse_collin_pubkey.txt
 
 Source100:	colorxzgrep.sh

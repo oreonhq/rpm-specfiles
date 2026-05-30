@@ -7,7 +7,7 @@ Summary:        C library implementing the Javascript Object Signing and Encrypt
 
 License:        MIT
 URL:            https://github.com/OpenIDC/cjose
-Source0:        https://github.com/OpenIDC/cjose/releases/download/v0.6.2.2/cjose-0.6.2.2.tar.gz
+Source0:        https://github.com/OpenIDC/cjose/releases/download/v%{version}/cjose-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  doxygen

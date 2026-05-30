@@ -8,7 +8,7 @@ Release:        16%{?dist}
 Summary:        Python library to retrieve information about network interfaces
 License:        MIT
 URL:            https://pypi.python.org/pypi/netifaces
-Source0:        https://files.pythonhosted.org/packages/source/n/netifaces/netifaces-0.11.0.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/n/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 
 BuildRequires:  gcc
 

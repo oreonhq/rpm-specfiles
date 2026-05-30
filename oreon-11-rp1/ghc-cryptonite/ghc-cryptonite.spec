@@ -21,7 +21,7 @@ Summary:        Cryptography Primitives sink
 License:        BSD-3-Clause AND (CC0-1.0 OR Apache-2.0) AND (CC0-1.0 OR Apache-2.0 OR OpenSSL)
 URL:            https://hackage.haskell.org/package/cryptonite
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/cryptonite-0.30/cryptonite-0.30.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

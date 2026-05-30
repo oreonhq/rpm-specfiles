@@ -7,7 +7,7 @@ Release: 17%{?dist}
 License: GPL-2.0-or-later
 URL: https://kernel.org/pub/linux/utils/kernel/ipvsadm/
 
-Source0:        https://kernel.org/pub/linux/utils/kernel/ipvsadm/ipvsadm-1.31.tar.gz
+Source0:        https://kernel.org/pub/linux/utils/kernel/ipvsadm/%{name}-%{version}.tar.gz
 Source1: ipvsadm.service
 Source2: ipvsadm-config
 

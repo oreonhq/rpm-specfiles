@@ -5,7 +5,7 @@ Summary: Czech thesaurus
 %global upstreamid 20070926
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source:        thes_cs_CZ_v2.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/thes_cs_CZ_v2.zip
 URL: http://wiki.services.openoffice.org/wiki/Dictionaries
 License: MIT
 BuildArch: noarch

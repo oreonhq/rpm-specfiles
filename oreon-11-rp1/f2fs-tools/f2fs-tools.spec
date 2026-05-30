@@ -7,7 +7,7 @@ Summary:	Tools for Flash-Friendly File System (F2FS)
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:	GPL-2.0-or-later
 URL:		http://sourceforge.net/projects/f2fs-tools/
-Source0:        http://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot/f2fs-tools-1.16.0.tar.gz
+Source0:        http://git.kernel.org/cgit/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot/%{name}-%{version}.tar.gz
 # Patch  from https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/patch/?id=6617d15a660becc23825007ab3fc2d270b5b250f
 Patch0:		f2fs-tools-1.16.0-c23.patch
 BuildRequires:	autoconf

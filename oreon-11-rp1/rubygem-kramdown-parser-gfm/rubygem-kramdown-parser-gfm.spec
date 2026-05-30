@@ -11,7 +11,7 @@ Release:        17%{?dist}
 License:        MIT
 
 URL:            https://github.com/kramdown/parser-gfm
-Source0:        https://rubygems.org/gems/kramdown-parser-gfm-1.1.0.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 
 # upstream patch to make test suite compatible with kramdown 2.2.0
 Patch0:        https://github.com/kramdown/parser-gfm/commit/ad48572.patch

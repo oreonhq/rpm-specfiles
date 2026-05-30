@@ -15,8 +15,8 @@ BuildRequires: libxkbfile-devel pcre2-devel pkgconfig(libpcre2-posix)
 BuildRequires: gnupg2
 Recommends: xorg-x11-fonts-misc
 
-Source0:        https://invisible-island.net/archives/xterm/xterm-406.tgz
-Source1:        https://invisible-island.net/archives/xterm/xterm-406.tgz.asc
+Source0:        https://invisible-island.net/archives/xterm/%{name}-%{version}.tgz
+Source1:        https://invisible-island.net/archives/xterm/%{name}-%{version}.tgz.asc
 Source2: https://invisible-island.net/public/dickey@invisible-island.net-rsa3072.asc
 Source3: https://invisible-island.net/archives/xterm/16colors.txt
 

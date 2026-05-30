@@ -12,7 +12,7 @@ Summary:        Cross-compiled version of binutils for Win32 and Win64 environme
 License:        GPL-3.0-or-later AND (GPL-3.0-or-later WITH Bison-exception-2.2) AND (LGPL-2.0-or-later WITH GCC-exception-2.0) AND BSD-3-Clause AND GFDL-1.3-or-later AND GPL-2.0-or-later AND LGPL-2.1-or-later AND LGPL-2.0-or-later
 
 URL:            http://www.gnu.org/software/binutils/
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-2.45.1.tar.xz
+Source0:        https://sourceware.org/pub/binutils/releases/binutils-%{version}.tar.xz
 
 ### Patches from native package
 # Purpose:  Use /lib64 and /usr/lib64 instead of /lib and /usr/lib in the

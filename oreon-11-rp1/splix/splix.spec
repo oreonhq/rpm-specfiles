@@ -6,7 +6,7 @@ Version: 2.0.1
 Release: 6%{?dist}
 License: GPL-2.0-only
 URL: https://openprinting.github.io/splix/
-Source0:        https://github.com/OpenPrinting/splix/releases/download/2.0.1/splix-2.0.1.tar.xz
+Source0:        https://github.com/OpenPrinting/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 # sent upstream as https://github.com/OpenPrinting/splix/pull/2
 # IEEE 1284 Device IDs

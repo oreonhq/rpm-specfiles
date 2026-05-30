@@ -6,7 +6,7 @@ Version:        4.19
 Release:        %autorelease
 License:        GPL-3.0-only
 URL:            http://www.andre-simon.de/
-Source0:        http://www.andre-simon.de/zip/highlight-4.19.tar.bz2
+Source0:        http://www.andre-simon.de/zip/%{name}-%{version}.tar.bz2
 
 %bcond qt %[%{undefined rhel} || 0%{?rhel} < 10]
 

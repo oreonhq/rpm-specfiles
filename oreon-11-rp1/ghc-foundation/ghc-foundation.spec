@@ -17,7 +17,7 @@ Summary:        Alternative prelude with batteries and no dependencies
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/foundation
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/foundation-0.0.30/foundation-0.0.30.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

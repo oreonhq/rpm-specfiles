@@ -10,7 +10,7 @@ Summary:        Inspection and simple manipulation of eBPF programs and maps
 
 License:        GPL-2.0-only OR BSD-2-Clause
 URL:            https://github.com/libbpf/bpftool
-Source:        https://github.com/libbpf/bpftool/releases/download/v7.6.0/bpftool-libbpf-v7.6.0-sources.tar.gz
+Source:        https://github.com/libbpf/bpftool/releases/download/v%{version}/%{sources}.tar.gz
 
 ExcludeArch:    %{ix86}
 

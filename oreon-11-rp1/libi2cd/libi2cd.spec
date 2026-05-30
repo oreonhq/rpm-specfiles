@@ -9,7 +9,7 @@ Summary:       C library for interacting with linux I2C devices
 
 License:       LGPL-2.1-or-later
 URL:           https://github.com/sstallion/libi2cd/
-Source0:        https://github.com/sstallion/libi2cd/archive/v1.0.3.tar.gz#/libi2cd-1.0.3.tar.gz
+Source0:        https://github.com/sstallion/libi2cd/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires: automake autoconf libtool
 BuildRequires: gcc

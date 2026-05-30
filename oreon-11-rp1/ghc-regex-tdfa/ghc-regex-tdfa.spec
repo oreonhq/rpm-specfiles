@@ -17,7 +17,7 @@ Summary:        Pure Haskell Tagged DFA Backend for "Text.Regex" (regex-base)
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/regex-tdfa
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/regex-tdfa-1.3.2.5/regex-tdfa-1.3.2.5.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

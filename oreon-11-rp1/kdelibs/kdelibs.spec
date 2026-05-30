@@ -75,7 +75,7 @@ URL:     http://www.kde.org/
 %else
 %global stable stable
 %endif
-Source0:        http://download.kde.org/%{stable}/applications/%{apps_version}/src/kdelibs-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable}/applications/%{apps_version}/src/kdelibs-%{version}.tar.xz
 
 Source1: macros.kde-apps
 

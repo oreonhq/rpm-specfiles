@@ -20,7 +20,7 @@ URL:            https://github.com/aravindavk/Navilu
 %global fontdescription   %{expand:
 This package provides a free Kannada opentype sans-serif font.}
 
-Source0:        https://github.com/aravindavk/Navilu/archive/v1.2.tar.gz#/Navilu-1.2.tar.gz
+Source0:        https://github.com/aravindavk/Navilu/archive/v%{version}.tar.gz#/%{fontfamily}-%{version}.tar.gz
 Source1:        67-%{fontpkgname}.conf
 
 %fontpkg

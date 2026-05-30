@@ -13,7 +13,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/hamcrest/JavaHamcrest/archive/v%{upstream_version}.tar.gz#/%{name}-%{version}.tar.gz
-Source1:        https://repo1.maven.org/maven2/org/hamcrest/hamcrest/%{upstream_version}/hamcrest-%{upstream_version}.pom
+Source1:        https://repo1.maven.org/maven2/org/hamcrest/hamcrest/%(echo/hamcrest-%(echo.pom
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

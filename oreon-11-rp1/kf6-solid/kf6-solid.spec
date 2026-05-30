@@ -12,8 +12,8 @@ Release:	7%{?dist}
 Summary:        KDE Frameworks 6 Tier 1 integration module that provides hardware information
 License:        LGPL-2.1-or-later AND LGPL-2.1-only AND CCO-1.0 AND BSD-3-Clause AND LGPL-3.0-only
 URL:            https://solid.kde.org/
-Source0:        https://download.kde.org/stable/frameworks/6.24/solid-6.24.0.tar.xz
-Source1:        https://download.kde.org/stable/frameworks/6.24/solid-6.24.0.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

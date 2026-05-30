@@ -304,7 +304,7 @@ URL: https://libvirt.org/
 %if %(echo %{version} | grep "\.0$" >/dev/null; echo $?) == 1
     %define mainturl stable_updates/
 %endif
-Source:        https://download.libvirt.org/%{?mainturl}libvirt-%{version}.tar.xz
+Source:        https://download.libvirt.org/%{?mainturl}libvirt-12.0.0.tar.xz
 
 # Fix IPv6 connections to ESXi
 # Upstream in > 12.0.0

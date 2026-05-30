@@ -6,7 +6,7 @@ Release:	5%{?dist}
 Summary:	Expect for Perl
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Expect
-Source0:	https://cpan.metacpan.org/authors/id/J/JA/JACOBY/Expect-1.38.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Expect/Expect-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

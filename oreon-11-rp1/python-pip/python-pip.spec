@@ -42,7 +42,7 @@ Summary:        A tool for installing and managing Python packages
 
 License:        MIT AND Python-2.0.1 AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MPL-2.0 AND (Apache-2.0 OR BSD-2-Clause)
 URL:            https://pip.pypa.io/
-Source0:        https://github.com/pypa/pip/archive/%{upstream_version}/%{srcname}-%{upstream_version}.tar.gz
+Source0:        https://github.com/pypa/pip/archive/26.0.1%{?prerel}/pip-26.0.1%{?prerel}.tar.gz
 
 # The following sources are wheels used only for tests.
 # They are not bundled in the built package and do not contribute to the overall license.

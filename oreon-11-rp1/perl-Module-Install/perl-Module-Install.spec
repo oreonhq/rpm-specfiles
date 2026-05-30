@@ -13,7 +13,7 @@ Release:        8%{?dist}
 Summary:        Standalone, extensible Perl module installer
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install
-Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Module-Install-1.21.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Module-Install-%{version}.tar.gz
 # Fix a crash when looking up 5.010 Perl core modules, CPAN RT#71565, proposed
 # to upstream <https://github.com/Perl-Toolchain-Gang/Module-Install/pull/64>
 Patch0:         Module-Install-1.19-Fix-Perl-version-lookup-with-Module-CoreList.patch

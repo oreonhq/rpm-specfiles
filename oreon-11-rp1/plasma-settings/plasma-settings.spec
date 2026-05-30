@@ -6,7 +6,7 @@ Release: 1%{?dist}
 License:        BSD-2-Clause AND CC-BY-4.0 AND CC0-1.0 AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only
 Summary:        Convergent Plasma Mobile settings application
 Url:            https://invent.kde.org/plasma-mobile/plasma-settings
-Source0:        https://invent.kde.org/plasma-mobile/plasma-settings/-/archive/v26.03.80/plasma-settings-v26.03.80.tar.gz#/plasma-settings-26.03.80.tar.gz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  appstream
 BuildRequires:  cmake

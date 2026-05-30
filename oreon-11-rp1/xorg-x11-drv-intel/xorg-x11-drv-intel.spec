@@ -17,7 +17,7 @@ Release:   65%{?dist}
 URL:       http://www.x.org
 License:   MIT
 
-Source0:        https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
+Source0:        https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/archive/ce811e78882d9f31636351dfe65351f4ded52c74/xorg-x11-drv-intel-%(c=ce811e78882d9f31636351dfe65351f4ded52c74;.tar.gz
 Source30:   xserver-sdk-abi-requires
 
 Patch0:	    intel-gcc-pr65873.patch

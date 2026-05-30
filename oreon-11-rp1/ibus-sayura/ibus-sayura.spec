@@ -6,7 +6,7 @@ Release:    35%{?dist}
 Summary:    The Sinhala engine for IBus input platform
 License:    GPL-2.0-or-later
 URL:        https://pagure.io/ibus-sayura
-Source0:        https://releases.pagure.org/ibus-sayura/ibus-sayura-1.3.2.tar.gz
+Source0:        https://releases.pagure.org/ibus-sayura/%{name}-%{version}.tar.gz
 
 # This is a test patch so not submitted to upstream yet
 # This patch is created by Mike Fabian

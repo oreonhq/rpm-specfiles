@@ -8,7 +8,7 @@ Summary:        C version of reader, parser and emitter for ruamel.yaml derived 
 # SPDX
 License:        MIT
 URL:            https://sourceforge.net/projects/ruamel-yaml-clib
-Source:        https://yaml.dev/ruamel-dl-tagged-releases/ruamel.yaml.clib-0.2.15.tar.xz
+Source:        https://yaml.dev/ruamel-dl-tagged-releases/ruamel.yaml.clib-%{version}.tar.xz
 
 Patch:          unbundle-libyaml.patch
 

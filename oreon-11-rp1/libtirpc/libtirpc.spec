@@ -8,7 +8,7 @@ Release:		2%{?dist}
 Summary:		Transport Independent RPC Library
 License:		SISSL AND BSD-3-Clause
 URL:  			http://git.linux-nfs.org/?p=steved/libtirpc.git;a=summary
-Source0:        http://downloads.sourceforge.net/libtirpc/libtirpc-1.3.7.tar.bz2
+Source0:        http://downloads.sourceforge.net/libtirpc/libtirpc-%{version}.tar.bz2
 
 BuildRequires:		automake, autoconf, libtool, pkgconfig
 BuildRequires:		krb5-devel

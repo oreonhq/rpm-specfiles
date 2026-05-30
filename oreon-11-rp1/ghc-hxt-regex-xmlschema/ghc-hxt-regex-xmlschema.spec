@@ -17,7 +17,7 @@ Summary:        A regular expression library for W3C XML Schema regular expressi
 License:        MIT
 URL:            https://hackage.haskell.org/package/hxt-regex-xmlschema
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/hxt-regex-xmlschema-9.2.0.7/hxt-regex-xmlschema-9.2.0.7.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

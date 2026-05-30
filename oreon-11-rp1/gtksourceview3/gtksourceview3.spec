@@ -13,7 +13,7 @@ Summary: Source code editing widget
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
 URL: https://wiki.gnome.org/Projects/GtkSourceView
-Source0:        https://download.gnome.org/sources/gtksourceview/3.24/gtksourceview-3.24.11.tar.xz
+Source0:        https://download.gnome.org/sources/gtksourceview/3.24/gtksourceview-%{version}.tar.xz
 # fix build with GCC 14 -Wincompatible-pointer-types
 Patch0:  0001-gcc14.patch
 

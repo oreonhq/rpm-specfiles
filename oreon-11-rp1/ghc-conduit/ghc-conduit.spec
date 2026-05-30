@@ -17,7 +17,7 @@ Summary:        Streaming data processing library
 License:        MIT
 URL:            https://hackage.haskell.org/package/conduit
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/conduit-1.3.6.1/conduit-1.3.6.1.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

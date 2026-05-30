@@ -15,7 +15,7 @@ License:        GPL-2.0-or-later
 BuildArch:      noarch
 
 URL:	        https://github.com/rwmjones/rhsrvany
-Source0:        https://github.com/rwmjones/rhsrvany/archive/refs/tags/v1.1.tar.gz#/rhsrvany-1.1.tar.gz
+Source0:        https://github.com/rwmjones/rhsrvany/archive/refs/tags/v%{version}.tar.gz#/rhsrvany-%{version}.tar.gz
 Source1:        COPYING
 
 # Needed because we build from the git version, using autoreconf.

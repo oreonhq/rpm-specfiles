@@ -6,7 +6,7 @@ Release:        16%{?dist}
 Summary:        Alternative interface to modules that export symbols
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Importer
-Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Importer-0.026.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Importer-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

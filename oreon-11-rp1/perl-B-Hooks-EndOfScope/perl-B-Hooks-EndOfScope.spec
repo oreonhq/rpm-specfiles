@@ -15,7 +15,7 @@ Release:	5%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:	Execute code after scope compilation finishes
 URL:		https://metacpan.org/release/B-Hooks-EndOfScope
-Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.28.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/B/B-Hooks-EndOfScope-%{version}.tar.gz
 
 Patch0:		B-Hooks-EndOfScope-0.13-shellbangs.patch
 BuildArch:	noarch

@@ -23,7 +23,7 @@ This package provides a free Telugu truetype/opentype font.
 BuildRequires: make
 BuildRequires: fontforge
 BuildRequires: ttfautohint
-Source0:        https://releases.pagure.org/lohit/lohit-telugu-2.5.5.tar.gz
+Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
 Source10:       66-%{fontpkgname}.conf
 
 %fontpkg

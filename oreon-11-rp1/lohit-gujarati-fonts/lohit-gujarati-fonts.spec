@@ -22,7 +22,7 @@ This package provides a free Gujarati truetype/opentype font.
 
 BuildRequires: make
 BuildRequires: fontforge
-Source0:        https://releases.pagure.org/lohit/lohit-gujarati-2.92.4.tar.gz
+Source0:        https://releases.pagure.org/lohit/%{fontname}-%{version}.tar.gz
 Source10:       66-%{fontpkgname}.conf
 
 %fontpkg

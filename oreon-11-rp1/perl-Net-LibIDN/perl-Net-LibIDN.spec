@@ -8,7 +8,7 @@ Version:        0.12
 Release:        55%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/%{pkgname}
-Source:        https://cpan.metacpan.org/authors/id/T/TH/THOR/Net-LibIDN-0.12.tar.gz
+Source:        https://cpan.metacpan.org/authors/id/T/TH/THOR/%{pkgname}-%{version}.tar.gz
 # Use distribution CFLAGS for tests, bug #1242794, CPAN RT#105853
 Patch0:         Net-LibIDN-0.12-Respect-Config-s-cc-ccflags-and-ldflags.patch
 BuildRequires:  make

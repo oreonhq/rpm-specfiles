@@ -6,7 +6,7 @@ Release:        40%{?dist}
 Summary:        Parse vFile formatted files into data structures
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Text-vFile-asData
-Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Text-vFile-asData-0.08.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Text-vFile-asData-%{version}.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  %{__make}

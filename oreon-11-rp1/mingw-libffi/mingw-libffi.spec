@@ -9,7 +9,7 @@ Summary:	A portable foreign function interface library for MinGW
 
 License:	MIT
 URL:		http://sourceware.org/libffi
-Source0:        https://github.com/libffi/libffi/releases/download/v3.5.2/libffi-3.5.2.tar.gz
+Source0:        https://github.com/libffi/libffi/releases/download/v%{version}/libffi-%{version}.tar.gz
 
 BuildArch:	noarch
 

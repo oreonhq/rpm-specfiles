@@ -12,7 +12,7 @@ Summary:       A big launcher giving you access to any installed apps and skills
 Url:           https://invent.kde.org/plasma/plasma-bigscreen
 
 # no release tarball on download.kde.org yet
-Source0:        https://invent.kde.org/plasma/%{name}/-/archive/%{commit}/%{name}-%{commit}.tar.gz
+Source0:        https://invent.kde.org/plasma/plasma-bigscreen/-/archive/a1b44a8d9c27a527a0004cdd59db8c18f6cee3ba/plasma-bigscreen-a1b44a8d9c27a527a0004cdd59db8c18f6cee3ba.tar.gz
 
 # handled by qt6-srpm-macros, which defines %%qt6_qtwebengine_arches
 %{?qt6_qtwebengine_arches:ExclusiveArch: %{qt6_qtwebengine_arches}}

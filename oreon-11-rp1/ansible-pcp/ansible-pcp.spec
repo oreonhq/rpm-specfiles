@@ -6,7 +6,7 @@ Release:          3%{?dist}
 Summary:          Ansible Metric collection for Performance Co-Pilot
 License:          MIT
 URL:              https://github.com/performancecopilot/ansible-pcp
-Source:        https://github.com/performancecopilot/ansible-pcp/archive/v2.4.2/ansible-pcp-2.4.2.tar.gz
+Source:        https://github.com/performancecopilot/ansible-pcp/archive/v%{version}/%{name}-%{version}.tar.gz
 BuildArch:        noarch
 
 %if %{defined rhel}

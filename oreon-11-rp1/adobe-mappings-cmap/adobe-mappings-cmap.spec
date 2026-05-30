@@ -7,7 +7,7 @@ Release:          5%{?dist}
 License:          BSD-3-Clause
 
 URL:              https://www.adobe.com/
-Source:        https://github.com/adobe-type-tools/cmap-resources/archive/20231115.tar.gz#/cmap-resources-20231115.tar.gz
+Source:        https://github.com/adobe-type-tools/cmap-resources/archive/%{version}.tar.gz#/cmap-resources-%{version}.tar.gz
 
 BuildArch:        noarch
 BuildRequires:    git

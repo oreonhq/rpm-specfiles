@@ -16,7 +16,7 @@ Release:        522%{?dist}
 Summary:        Perl extension for SHA-1/224/256/384/512
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Digest-SHA
-Source0:        https://cpan.metacpan.org/authors/id/M/MS/MSHELOR/Digest-SHA-6.04.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MS/MSHELOR/Digest-SHA-%{version}.tar.gz
 # Since 5.80, upstream overrides CFLAGS because they think it improves
 # performance. Revert it.
 Patch0:         Digest-SHA-5.93-Reset-CFLAGS.patch

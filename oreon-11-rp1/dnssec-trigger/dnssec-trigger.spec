@@ -13,10 +13,10 @@ Url: https://www.nlnetlabs.nl/projects/dnssec-trigger/
 
 %if 0%{?snapshot:1}
 # generated using './makedist.sh -s' in the cloned upstream trunk
-Source0:        https://www.nlnetlabs.nl/downloads/dnssec-trigger/dnssec-trigger-0.17.tar.gz
+Source0:        https://www.nlnetlabs.nl/downloads/dnssec-trigger/%{name}-%{version}.tar.gz
 %else
-Source0:        https://www.nlnetlabs.nl/downloads/dnssec-trigger/dnssec-trigger-0.17.tar.gz
-Source1:        https://www.nlnetlabs.nl/downloads/dnssec-trigger/dnssec-trigger-0.17.tar.gz.asc
+Source0:        https://www.nlnetlabs.nl/downloads/dnssec-trigger/%{name}-%{version}.tar.gz
+Source1:        https://www.nlnetlabs.nl/downloads/dnssec-trigger/%{name}-%{version}.tar.gz.asc
 Source2: https://keys.openpgp.org/vks/v1/by-fingerprint/EDFAA3F2CA4E6EB05681AF8E9F6F1C2D7E045F8D#/wouter.asc
 %endif
 Source3: dnssec-trigger.tmpfiles.d

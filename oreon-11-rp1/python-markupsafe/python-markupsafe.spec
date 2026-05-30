@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        Implements a XML/HTML/XHTML Markup safe string for Python
 License:        BSD-3-Clause
 URL:            https://palletsprojects.com/p/markupsafe/
-Source:        https://github.com/pallets/markupsafe/archive/3.0.2/markupsafe-3.0.2.tar.gz
+Source:        https://github.com/pallets/markupsafe/archive/%{version}/markupsafe-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel

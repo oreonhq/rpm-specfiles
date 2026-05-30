@@ -8,7 +8,7 @@ Release:        4%{?dist}
 Summary:        Framework for parsing POD documentation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Simple
-Source0:        https://cpan.metacpan.org/authors/id/K/KH/KHW/Pod-Simple-3.47.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/K/KH/KHW/Pod-Simple-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

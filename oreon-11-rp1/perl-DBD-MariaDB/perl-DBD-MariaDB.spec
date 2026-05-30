@@ -15,7 +15,7 @@ Release:        4%{?dist}
 Summary:        MariaDB and MySQL driver for the Perl5 Database Interface (DBI)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DBD-MariaDB/
-Source0:        https://cpan.metacpan.org/authors/id/P/PA/PALI/DBD-MariaDB-1.24.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PA/PALI/DBD-MariaDB-%{version}.tar.gz
 Source1:        test-setup.t
 Source2:        test-clean.t
 Source3:        test-env.sh

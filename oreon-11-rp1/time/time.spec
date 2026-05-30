@@ -47,8 +47,8 @@ Release:    28%{?dist}
 License:    GPL-3.0-or-later AND GFDL-1.3-no-invariants-or-later
 SourceLicense: %{license} AND GPL-3.0-or-later WITH Autoconf-exception-generic AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Texinfo-exception AND GPL-2.0-or-later WITH Autoconf-exception-generic AND GPL-1.0-or-later AND X11 AND FSFAP AND FSFUL AND FSFULLR AND LicenseRef-Fedora-Public-Domain
 Url:        https://www.gnu.org/software/%{name}/
-Source0:        https://ftp.gnu.org/gnu/time/time-1.9.tar.gz
-Source1:        https://ftp.gnu.org/gnu/time/time-1.9.tar.gz.sig
+Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz
+Source1:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.gz.sig
 # Obtained from a key server
 Source2:    gpgkey-F576AAAC1B0FF849792D8CB129A794FD2272BC86.gpg
 # Fix measuring time when a clock experiences a jump, bug #1004416,

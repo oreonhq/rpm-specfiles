@@ -16,8 +16,8 @@ Url: http://www.postgresql.org/
 # Source0: https://ftp.postgresql.org/pub/source/v%%{version}/postgresql-%%{version}.tar.bz2
 # Source1: https://ftp.postgresql.org/pub/source/v%%{version}/postgresql-%%{version}.tar.bz2.sha256
 
-Source0:        https://ftp.postgresql.org/pub/source/v%{betaversion}/postgresql-%{betaversion}.tar.bz2
-Source1:        https://ftp.postgresql.org/pub/source/v%{betaversion}/postgresql-%{betaversion}.tar.bz2.sha256
+Source0:        https://ftp.postgresql.org/pub/source/v18beta1/postgresql-18beta1.tar.bz2
+Source1:        https://ftp.postgresql.org/pub/source/v18beta1/postgresql-18beta1.tar.bz2.sha256
 
 
 # Comments for these patches are in the patch files.

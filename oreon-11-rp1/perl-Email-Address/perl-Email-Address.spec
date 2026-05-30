@@ -6,7 +6,7 @@ Release:        9%{?dist}
 Summary:        RFC 2822 Address Parsing and Creation (DEPRECATED)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Email-Address
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Email-Address-1.913.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Email/Email-Address-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build

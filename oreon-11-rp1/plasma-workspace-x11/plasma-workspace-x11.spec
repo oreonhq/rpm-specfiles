@@ -18,8 +18,8 @@ URL:     https://invent.kde.org/plasma/plasma-workspace
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/%{stable}/plasma/%{plasma_version}/plasma-workspace-%{version}.tar.xz
-Source1:        https://download.kde.org/%{stable}/plasma/%{plasma_version}/plasma-workspace-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/stable/plasma/%{version}/plasma-workspace-%{version}.tar.xz
+Source1:        https://download.kde.org/stable/plasma/%{version}/plasma-workspace-%{version}.tar.xz.sig
 
 ## upstreamable Patches
 

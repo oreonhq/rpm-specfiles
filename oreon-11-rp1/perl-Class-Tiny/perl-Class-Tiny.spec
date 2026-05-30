@@ -13,7 +13,7 @@ Release:        15%{?dist}
 Summary:        Minimalist class construction
 License:        Apache-2.0
 URL:            https://metacpan.org/release/Class-Tiny
-Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Class-Tiny-1.008.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Class-Tiny-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

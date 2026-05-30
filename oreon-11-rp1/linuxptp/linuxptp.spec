@@ -16,7 +16,7 @@ Summary:	PTP implementation for Linux
 License:	GPL-2.0-or-later
 URL:		https://www.linuxptp.org/
 
-Source0:        https://downloads.nwtime.org/linuxptp/linuxptp-4.4.tgz
+Source0:        https://downloads.nwtime.org/%{name}/%{name}-%{version}.tgz
 Source1:	phc2sys.service
 Source2:	ptp4l.service
 Source3:	timemaster.service

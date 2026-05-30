@@ -19,7 +19,7 @@ Summary:        Finnish spellchecker and hyphenator extension for LibreOffice
 License:        GPL-3.0-or-later
 URL:            http://voikko.puimula.org/
 # The usual format of stable release URLs
-Source0:        http://www.puimula.org/voikko-sources/libreoffice-voikko/libreoffice-voikko-5.0.tar.gz
+Source0:        http://www.puimula.org/voikko-sources/%{name}/%{name}-%{version}.tar.gz
 # The usual format of test release URLs
 #Source0:        http://www.puimula.org/htp/testing/%%{name}-%%{version}rc2.tar.gz
 # https://github.com/voikko/libreoffice-voikko/pull/12

@@ -7,7 +7,7 @@ Summary:        Archive library
 
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-autoar
-Source0:        https://download.gnome.org/sources/gnome-autoar/0.4/gnome-autoar-0.4.5.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/0.4/%{name}-%{version}.tar.xz
 
 
 BuildRequires:  gcc

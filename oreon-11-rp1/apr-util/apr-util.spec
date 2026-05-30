@@ -48,7 +48,7 @@ Release: 27%{?dist}
 # OLDAP-2.7 AND BSD-4.3RENO:       ldap/apr_ldap_url.c
 License: Apache-2.0 AND (Beerware AND LicenseRef-Fedora-Public-Domain AND OLDAP-2.7 AND BSD-4.3RENO)
 URL: https://apr.apache.org/
-Source0:        https://www.apache.org/dist/apr/apr-util-1.6.3.tar.bz2
+Source0:        https://www.apache.org/dist/apr/%{name}-%{version}.tar.bz2
 Patch1: apr-util-1.2.7-pkgconf.patch
 Patch2: apr-util-1.4.1-private.patch
 Patch3: apr-util-1.6.3-allow-ipv6.patch

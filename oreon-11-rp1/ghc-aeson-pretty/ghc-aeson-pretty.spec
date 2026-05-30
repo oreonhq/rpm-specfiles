@@ -15,7 +15,7 @@ Summary:        JSON pretty-printing library
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/aeson-pretty
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/aeson-pretty-0.8.10/aeson-pretty-0.8.10.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

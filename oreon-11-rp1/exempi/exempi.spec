@@ -6,7 +6,7 @@ Version:	2.6.4
 Release:	9%{?dist}
 License:	BSD-3-Clause
 URL:		http://libopenraw.freedesktop.org/wiki/Exempi
-Source0:        https://gitlab.freedesktop.org/libopenraw/exempi/-/archive/2.6.4/exempi-2.6.4.tar.bz2
+Source0:        https://gitlab.freedesktop.org/libopenraw/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 BuildRequires:	gcc-c++
 BuildRequires:	boost-devel expat-devel zlib-devel pkgconfig
 # Work around for aarch64 support (https://bugzilla.redhat.com/show_bug.cgi?id=925327)

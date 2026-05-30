@@ -14,7 +14,7 @@ Release:        5%{?dist}
 Summary:        Perl YAML Serialization using XS and libyaml
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/YAML-LibYAML
-Source0:        https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-v0.904.0.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TI/TINITA/YAML-LibYAML-v%{version}.tar.gz
 
 Patch0:         YAML-LibYAML-0.79-Unbundled-libyaml.patch
 

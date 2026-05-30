@@ -6,7 +6,7 @@ Release:        28%{?dist}
 Summary:        Tie interface to Data::UUID
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tie-DataUUID
-Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARKF/Tie-DataUUID-1.02.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARKF/Tie-DataUUID-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils

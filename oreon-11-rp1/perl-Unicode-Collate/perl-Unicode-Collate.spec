@@ -9,7 +9,7 @@ Summary:        Unicode Collation Algorithm
 # other files:          GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Unicode-DFS-2016
 URL:            https://metacpan.org/release/Unicode-Collate
-Source0:        https://cpan.metacpan.org/authors/id/S/SA/SADAHIRO/Unicode-Collate-1.31.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SA/SADAHIRO/Unicode-Collate-%{version}.tar.gz
 BuildRequires:  coreutils
 BuildRequires:  gcc
 BuildRequires:  findutils

@@ -9,7 +9,7 @@ Summary: A Router Advertisement daemon
 License: radvd
 URL: https://radvd.litech.org
 
-Source0:        https://radvd.litech.org/dist/radvd-2.20.tar.xz
+Source0:        https://radvd.litech.org/dist/%{name}-%{version}.tar.xz
 Source1:        https://radvd.litech.org/dist/%{name}-%{version}.tar.xz.asc
 # Robin Hugh Johnson's public key
 Source2:        https://github.com/robbat2.gpg

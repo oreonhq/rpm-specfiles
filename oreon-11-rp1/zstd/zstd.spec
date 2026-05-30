@@ -25,7 +25,7 @@ Summary:        Zstd compression library
 
 License:        BSD-3-Clause OR GPL-2.0-only
 URL:            https://github.com/facebook/zstd
-Source0:        https://github.com/facebook/zstd/archive/v1.5.7.tar.gz#/zstd-1.5.7.tar.gz
+Source0:        https://github.com/facebook/zstd/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 Patch1:         man-pages-1.5.7.patch
 

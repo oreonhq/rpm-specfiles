@@ -9,7 +9,7 @@ Summary:    A C binding to the X11 protocol
 License:    X11
 URL:        http://xcb.freedesktop.org/
 
-Source0:        http://xcb.freedesktop.org/dist/libxcb-1.17.0.tar.xz
+Source0:        http://xcb.freedesktop.org/dist/%{name}-%{version}.tar.xz
 
 # This is stolen straight from the pthread-stubs source:
 # http://cgit.freedesktop.org/xcb/pthread-stubs/blob/?id=6900598192bacf5fd9a34619b11328f746a5956d

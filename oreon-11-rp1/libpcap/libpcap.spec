@@ -15,8 +15,8 @@ BuildRequires: flex
 BuildRequires: gcc
 BuildRequires: git
 BuildRequires: glibc-kernheaders >= 2.2.0
-Source0:        https://www.tcpdump.org/release/libpcap-1.10.6.tar.xz
-Source1:        https://www.tcpdump.org/release/libpcap-1.10.6.tar.xz.sig
+Source0:        https://www.tcpdump.org/release/%{name}-%{version}.tar.xz
+Source1:        https://www.tcpdump.org/release/%{name}-%{version}.tar.xz.sig
 
 Patch0001:      0001-man-tcpdump-and-tcpslice-have-manpages-in-man8.patch
 Patch0002:      0002-pcap-config-mitigate-multilib-conflict.patch

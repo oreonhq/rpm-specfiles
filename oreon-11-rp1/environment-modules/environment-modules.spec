@@ -9,7 +9,7 @@ Summary:        Provides dynamic modification of a user's environment
 
 License:        GPL-2.0-or-later
 URL:            https://envmodules.io
-Source0:        http://downloads.sourceforge.net/modules/modules-5.6.1.tar.bz2
+Source0:        http://downloads.sourceforge.net/modules/modules-%{version}.tar.bz2
 
 BuildRequires:  tcl
 BuildRequires:  dejagnu

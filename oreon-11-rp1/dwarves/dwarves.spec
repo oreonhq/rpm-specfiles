@@ -9,7 +9,7 @@ Release: 3%{?dist}
 License: GPL-2.0-only
 Summary: Debugging Information Manipulation Tools (pahole & friends)
 URL: http://acmel.wordpress.com
-Source:        http://fedorapeople.org/~acme/dwarves/dwarves-1.30.tar.xz
+Source:        http://fedorapeople.org/~acme/dwarves/%{name}-%{version}.tar.xz
 Requires: %{libname}%{libver} = %{version}-%{release}
 BuildRequires: gcc
 BuildRequires: cmake >= 2.8.12

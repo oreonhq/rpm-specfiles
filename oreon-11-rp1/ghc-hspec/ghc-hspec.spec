@@ -15,7 +15,7 @@ Summary:        A Testing Framework for Haskell
 License:        MIT
 URL:            https://hackage.haskell.org/package/hspec
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/hspec-2.11.16/hspec-2.11.16.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

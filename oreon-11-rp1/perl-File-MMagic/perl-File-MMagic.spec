@@ -8,7 +8,7 @@ Summary:        A Perl module emulating the file(1) command
 # license, BSD license, and ASL 1.0 license.
 License:        App-s2p AND Apache-1.0 AND Spencer-94
 URL:            https://metacpan.org/release/File-MMagic
-Source0:        https://cpan.metacpan.org/authors/id/K/KN/KNOK/File-MMagic-1.30.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/File/File-MMagic-%{version}.tar.gz
 
 Patch0:         File-MMagic-1.30-rt109673.patch
 BuildArch:      noarch

@@ -45,7 +45,7 @@ License:        %{shrink:
 }
 # LICENSE.dependencies contains a full license breakdown
 URL:            https://gitlab.gnome.org/GNOME/loupe
-Source0: https://download.gnome.org/sources/loupe/50/loupe-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/loupe/50/loupe-%(echo.tar.xz
 # To create the vendor tarball:
 #   tar Jxvf loupe-%%{tarball_version}.tar.xz ; \
 #   pushd loupe-%%{tarball_version} ; \

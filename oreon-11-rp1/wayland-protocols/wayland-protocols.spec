@@ -10,7 +10,7 @@ Summary:        Wayland protocols that adds functionality not available in the c
 
 License:        MIT
 URL:            https://wayland.freedesktop.org/
-Source0:        https://gitlab.freedesktop.org/wayland/wayland-protocols/-/releases/1.47/downloads/wayland-protocols-1.47.tar.xz
+Source0:        https://gitlab.freedesktop.org/wayland/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-g++

@@ -7,7 +7,7 @@ Release: 4%{?dist}
 License: MIT-open-group
 URL: http://www.x.org
 
-Source0:        https://www.x.org/pub/individual/lib/libICE-1.1.2.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 
 # Needed for pre-glibc-2.25, which at this point would mean RHEL7 but not 8
 # Patch1: 0002-Add-getentropy-emulation-through-syscall.patch

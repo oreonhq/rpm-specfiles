@@ -13,7 +13,7 @@ Summary:            Universal Command Line Environment for AWS, version 2
 License:            Apache-2.0 AND MIT
 URL:                https://github.com/aws/aws-cli/tree/v2
 
-Source0:        https://github.com/aws/aws-cli/archive/2.33.0/aws-cli-2.33.0.tar.gz
+Source0:        https://github.com/aws/aws-cli/archive/%{version}/%{pkgname}-%{version}.tar.gz
 
 # adapt to whitespace formatting changes and removal of OrderedDict in ruamel-yaml
 Patch0:             ruamel-yaml-0.17.32.patch

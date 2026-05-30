@@ -9,7 +9,7 @@ Release:        1%{?dist}
 Summary:        Recursively copy perl data types
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Clone
-Source0:        https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/Clone-0.48.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Clone/Clone-%{version}.tar.gz
 
 # Build
 BuildRequires:  coreutils

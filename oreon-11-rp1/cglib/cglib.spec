@@ -14,7 +14,7 @@ URL:            https://github.com/cglib/cglib
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/cglib/cglib/archive/%{tarball_name}.tar.gz
+Source0:        https://github.com/cglib/cglib/archive/RELEASE_%(echo.tar.gz
 
 Patch:          0001-Remove-unused-import.patch
 

@@ -85,20 +85,20 @@ Source0:  %{archivename}.tar.xz
 # Brutal script used to pull sources from upstream git
 # Needs at least 2 Gib of space in /var/tmp
 Source1:  getdroid.sh
-Source11: 66-%{fontpkgname1}.conf
-Source12: 60-%{fontpkgname2}.conf
-Source13: 66-%{fontpkgname3}.conf
-Source14: 69-%{googledroid}-arabic-kufi-fonts.conf
-Source15: 69-%{googledroid}-arabic-naskh-fonts.conf
-Source16: 69-%{googledroidsans}-armenian-fonts.conf
-Source17: 69-%{googledroidsans}-devanagari-fonts.conf
-Source18: 69-%{googledroidsans}-ethiopic-fonts.conf
-Source19: 69-%{googledroidsans}-georgian-fonts.conf
-Source20: 69-%{googledroidsans}-hebrew-fonts.conf
-Source21: 69-%{googledroidsans}-japanese-fonts.conf
-Source22: 69-%{googledroidsans}-tamil-fonts.conf
-Source23: 69-%{googledroidsans}-thai-fonts.conf
-Source24: 69-%{googledroidsans}-fallback-fonts.conf
+Source11: 66-google-droid-sans-fonts.conf
+Source12: 60-google-droid-sans-mono-fonts.conf
+Source13: 66-google-droid-serif-fonts.conf
+Source14: 69-google-droid-arabic-kufi-fonts.conf
+Source15: 69-google-droid-arabic-naskh-fonts.conf
+Source16: 69-google-droid-sans-armenian-fonts.conf
+Source17: 69-google-droid-sans-devanagari-fonts.conf
+Source18: 69-google-droid-sans-ethiopic-fonts.conf
+Source19: 69-google-droid-sans-georgian-fonts.conf
+Source20: 69-google-droid-sans-hebrew-fonts.conf
+Source21: 69-google-droid-sans-japanese-fonts.conf
+Source22: 69-google-droid-sans-tamil-fonts.conf
+Source23: 69-google-droid-sans-thai-fonts.conf
+Source24: 69-google-droid-sans-fallback-fonts.conf
 
 Name:     google-droid-fonts
 Summary:  A set of general-purpose font families released by Google as part of Android

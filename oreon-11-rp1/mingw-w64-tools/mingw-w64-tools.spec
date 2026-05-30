@@ -24,7 +24,7 @@ URL:            http://mingw-w64.sourceforge.net/
 # spectool -g mingw-w64-tools.spec
 Source0:        http://sourceforge.net/code-snapshots/git/m/mi/mingw-w64/mingw-w64.git/mingw-w64-mingw-w64-%{snapshot_rev}.zip
 %else
-Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v13.0.0.tar.bz2
+Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}.tar.bz2
 %endif
 
 BuildRequires:  make

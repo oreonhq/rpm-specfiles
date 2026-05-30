@@ -11,7 +11,7 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL:     https://invent.kde.org/education/%{name}
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kgeography-26.04.1.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules

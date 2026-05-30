@@ -12,7 +12,7 @@ Release: 10%{?dist}
 Summary: Provide a list of changes between two sequenced collections
 License: MIT OR Artistic-2.0 OR GPL-2.0-or-later
 URL: https://github.com/halostatue/diff-lcs
-Source0:        https://rubygems.org/gems/diff-lcs-1.5.0.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # https://github.com/halostatue/diff-lcs/pull/97
 # Remove unneeded ostruct dep
 Patch0:  diff-lcs-pr97-remove-ostruct-dep.patch

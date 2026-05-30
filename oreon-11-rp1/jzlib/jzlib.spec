@@ -9,7 +9,7 @@ URL:            http://www.jcraft.com/jzlib/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/ymnk/jzlib/archive/refs/tags/1.1.3.tar.gz
+Source0:        https://github.com/ymnk/jzlib/archive/%{version}.tar.gz
 
 # This patch is sent upstream: https://github.com/ymnk/jzlib/pull/15
 Patch:          jzlib-javadoc-fixes.patch

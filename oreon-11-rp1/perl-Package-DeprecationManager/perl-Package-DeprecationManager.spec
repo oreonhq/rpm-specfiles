@@ -6,7 +6,7 @@ Release:	8%{?dist}
 Summary:	Manage deprecation warnings for your distribution
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Package-DeprecationManager
-Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Package-DeprecationManager-0.18.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Package/Package-DeprecationManager-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

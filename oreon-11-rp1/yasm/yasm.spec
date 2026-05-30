@@ -25,7 +25,7 @@ BuildRequires: autoconf
 BuildRequires: automake
 BuildRequires: python3
 %else
-Source:        http://www.tortall.net/projects/yasm/releases/yasm-1.3.0^.tar.gz
+Source:        http://www.tortall.net/projects/yasm/releases/yasm-%{version}.tar.gz
 %endif
 
 BuildRequires: make

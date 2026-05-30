@@ -13,7 +13,7 @@ Release:	11%{?dist}
 Summary:	Routines for manipulating stashes
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Package-Stash
-Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Package-Stash-0.40.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Package/Package-Stash-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

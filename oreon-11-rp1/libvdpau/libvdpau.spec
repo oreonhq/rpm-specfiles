@@ -6,7 +6,7 @@ Release:        11%{?dist}
 Summary:        Wrapper library for the Video Decode and Presentation API
 License:        MIT
 URL:            https://freedesktop.org/wiki/Software/VDPAU/
-Source0:        https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/1.5/libvdpau-1.5.tar.bz2
+Source0:        https://gitlab.freedesktop.org/vdpau/libvdpau/-/archive/%{version}/libvdpau-%{version}.tar.bz2
 Patch0:        https://gitlab.freedesktop.org/vdpau/libvdpau/-/commit/2afa3f989af24a922692ac719fae23c321776cdb.diff#/libvdpau-av1-trace.patch
 
 BuildRequires:  doxygen

@@ -9,7 +9,7 @@ Release:        2%{?dist}
 Summary:        XS functions to assist in parsing keyword syntax
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XS-Parse-Keyword
-Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.49.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PE/PEVANS/XS-Parse-Keyword-%{version}.tar.gz
 Source1:        macros.perl-XS-Parse-Keyword
 BuildRequires:  coreutils
 BuildRequires:  perl-devel

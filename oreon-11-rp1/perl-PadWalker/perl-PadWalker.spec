@@ -6,7 +6,7 @@ Release:        19%{?dist}
 Summary:        Play with other people's lexical variables
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/PadWalker
-Source0:        https://cpan.metacpan.org/authors/id/R/RO/ROBIN/PadWalker-2.5.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RO/ROBIN/PadWalker-%{version}.tar.gz
 # Build:
 BuildRequires:  coreutils
 BuildRequires:  findutils

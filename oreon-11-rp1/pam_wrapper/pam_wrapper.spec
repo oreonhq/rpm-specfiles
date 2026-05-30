@@ -10,7 +10,7 @@ Summary:        A tool to test PAM applications and PAM modules
 License:        GPL-3.0-or-later
 Url:            http://cwrap.org/
 
-Source0:        https://ftp.samba.org/pub/cwrap/pam_wrapper-1.1.8.tar.gz
+Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
 Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        pam_wrapper.keyring
 

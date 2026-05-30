@@ -160,16 +160,16 @@ This package provides System font family.
 }
 
 Source0:        http://downloads.sourceforge.net/khmer/%{archivename}.zip
-Source1:        68-%{fontpkgname1}.conf
-Source2:        68-%{fontpkgname2}.conf
-Source3:        68-%{fontpkgname3}.conf
-Source4:        68-%{fontpkgname4}.conf
-Source5:        68-%{fontpkgname5}.conf
-Source6:        68-%{fontpkgname6}.conf
-Source7:        68-%{fontpkgname7}.conf
-Source8:        68-%{fontpkgname8}.conf
-Source9:        68-%{fontpkgname9}.conf
-Source10:       68-%{fontpkgname10}.conf
+Source1:        68-khmer-os-battambang-fonts.conf
+Source2:        68-khmer-os-bokor-fonts.conf
+Source3:        68-khmer-os-content-fonts.conf
+Source4:        68-khmer-os-fasthand-fonts.conf
+Source5:        68-khmer-os-freehand-fonts.conf
+Source6:        68-khmer-os-metal-chrieng-fonts.conf
+Source7:        68-khmer-os-muol-fonts.conf
+Source8:        68-khmer-os-muol-pali-fonts.conf
+Source9:        68-khmer-os-siemreap-fonts.conf
+Source10:       68-khmer-os-system-fonts.conf
 Source11:       License.txt
 
 Name:      khmer-os-fonts

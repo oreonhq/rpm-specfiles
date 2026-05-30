@@ -9,7 +9,7 @@ Summary:	Simple program for reading/writing flash chips content
 License:	GPL-2.0-only
 URL:		https://flashrom.org
 
-Source0:        https://download.flashrom.org/releases/flashrom-v1.6.0.tar.xz
+Source0:        https://download.flashrom.org/releases/%{name}-v%{version}.tar.xz
 Source1:        https://download.flashrom.org/releases/%{name}-v%{version}.tar.xz.asc
 # Find which key was used for signing the release:
 #

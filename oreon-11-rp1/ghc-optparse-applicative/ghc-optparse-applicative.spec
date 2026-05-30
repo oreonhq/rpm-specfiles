@@ -18,8 +18,8 @@ Summary:        Utilities and combinators for parsing command line options
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/optparse-applicative
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/optparse-applicative-0.18.1.0/optparse-applicative-0.18.1.0.tar.gz
-Source1:        https://hackage.haskell.org/package/optparse-applicative-0.18.1.0/optparse-applicative.cabal#/optparse-applicative-0.18.1.0.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

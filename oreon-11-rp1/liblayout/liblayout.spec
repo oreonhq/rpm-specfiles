@@ -5,7 +5,7 @@ Version: 0.2.10
 Release: 41%{?dist}
 Summary: CSS based layouting framework
 License: LGPL-2.1-or-later and Unicode-DFS-2016
-Source:        http://downloads.sourceforge.net/jfreereport/liblayout-0.2.10.zip
+Source:        http://downloads.sourceforge.net/jfreereport/liblayout-%{version}.zip
 URL: http://reporting.pentaho.org/
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, flute, libloader
 BuildRequires: librepository, pentaho-libxml, libfonts, sac, libbase >= 1.1.3

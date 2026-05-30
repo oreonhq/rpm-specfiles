@@ -15,7 +15,7 @@ Summary:        Simple monadic parser for ASN1 stream types
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/asn1-parse
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/asn1-parse-0.9.5/asn1-parse-0.9.5.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

@@ -25,7 +25,7 @@ Summary:        Colorize Haskell code
 License:        LGPL-2.1-or-later
 URL:            https://hackage.haskell.org/package/hscolour
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/hscolour-1.25/hscolour-1.25.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

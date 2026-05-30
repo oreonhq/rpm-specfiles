@@ -24,7 +24,7 @@ Summary: Standalone file import filter library for spreadsheet documents
 
 License: MPL-2.0
 URL: https://gitlab.com/orcus/orcus
-Source0:        https://gitlab.com/orcus/orcus/-/archive/0.21.0/orcus-0.21.0.tar.bz2
+Source0:        https://gitlab.com/orcus/orcus/-/archive/%{version}/orcus-%{version}.tar.bz2
 Patch0: include.patch
 
 BuildRequires: make

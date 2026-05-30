@@ -8,7 +8,7 @@ Summary:	Provide the stuff missing in List::Util
 # All new code from version 0.417 onwards: Apache-2.0
 License:	(GPL-1.0-or-later OR Artistic-1.0-Perl) AND Apache-2.0
 URL:		https://metacpan.org/release/List-MoreUtils
-Source0:	https://cpan.metacpan.org/authors/id/R/RE/REHSACK/List-MoreUtils-0.430.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/List/List-MoreUtils-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

@@ -9,7 +9,7 @@ Release: 2%{?dist}
 
 License: GPL-2.0-only
 URL: https://github.com/makedumpfile/makedumpfile
-Source0:        https://github.com/makedumpfile/makedumpfile/archive/1.7.8/makedumpfile-1.7.8.tar.gz
+Source0:        https://github.com/makedumpfile/makedumpfile/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/lucchouina/eppic/archive/72da440362e20291d5ecbb04b6eb7c7b492f233c/eppic-%(c=72da440362e20291d5ecbb04b6eb7c7b492f233c;.tar.gz
 
 Conflicts: kexec-tools < 2.0.28-5

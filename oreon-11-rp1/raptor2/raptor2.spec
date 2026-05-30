@@ -7,7 +7,7 @@ Release: 50%{?dist}
 
 # Automatically converted from old format: GPLv2+ or LGPLv2+ or ASL 2.0 - review is highly recommended.
 License: GPL-2.0-or-later OR LicenseRef-Callaway-LGPLv2+ OR Apache-2.0
-Source:        http://download.librdf.org/source/raptor2-2.0.15.tar.gz
+Source:        http://download.librdf.org/source/raptor2-%{version}.tar.gz
 URL:     http://librdf.org/raptor/
 
 ## upstream patches

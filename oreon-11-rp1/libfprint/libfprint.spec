@@ -11,7 +11,7 @@ Summary:        Toolkit for fingerprint scanner
 # libfprint/nbis is NIST-PD
 License:        LGPL-2.1-or-later AND NIST-PD
 URL:            http://www.freedesktop.org/wiki/Software/fprint/libfprint
-Source0:        https://gitlab.freedesktop.org/libfprint/libfprint/-/archive/v1.94.10/libfprint-v1.94.10.tar.gz
+Source0:        https://gitlab.freedesktop.org/libfprint/libfprint/-/archive/v%{version}/libfprint-v%{version}.tar.gz
 
 BuildRequires:  meson
 BuildRequires:  gcc

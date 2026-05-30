@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Represent and manage a libvirt hypervisor connection
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Sys-Virt
-Source0:        https://cpan.metacpan.org/authors/id/D/DA/DANBERR/Sys-Virt-v12.0.0.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DA/DANBERR/Sys-Virt-v%{version}.tar.gz
 # Build
 BuildRequires:  coreutils
 BuildRequires:  findutils

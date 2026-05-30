@@ -19,7 +19,7 @@ Release: 16%{?dist}
 Summary: Tool for Checkpoint/Restore in User-space
 License: GPL-2.0-only AND LGPL-2.1-only AND MIT
 URL: http://criu.org/
-Source0:        https://github.com/checkpoint-restore/criu/archive/v4.2/criu-4.2.tar.gz
+Source0:        https://github.com/checkpoint-restore/criu/archive/v%{version}/criu-%{version}.tar.gz
 Patch0: 0001-rseq-use-kernel-rseq.h-when-glibc-detects-it.patch
 Patch1: 0001-tty-fix-compiler-error.patch
 

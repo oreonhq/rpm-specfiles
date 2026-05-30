@@ -21,7 +21,7 @@ Summary:    Royalty-free next-generation video format
 
 License:    BSD-3-Clause
 URL:        http://aomedia.org/
-Source:        https://aomedia.googlesource.com/aom/+archive/v3.13.3.tar.gz#/aom-3.13.3.tar.gz
+Source:        https://aomedia.googlesource.com/%{name}/+archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # Building static library breaks .cmake files if we don't ship it, so drop it
 Patch:      aom-nostatic.patch
 

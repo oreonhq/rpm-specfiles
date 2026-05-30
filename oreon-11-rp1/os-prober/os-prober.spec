@@ -8,7 +8,7 @@ Summary:        Probes disks on the system for installed operating systems
 # For more information about licensing, see copyright file.
 License:        GPL-2.0-or-later AND GPL-1.0-or-later
 URL:            http://kitenet.net/~joey/code/os-prober/
-Source0:        http://ftp.us.debian.org/debian/pool/main/o/os-prober/os-prober_1.81.tar.xz
+Source0:        http://ftp.us.debian.org/debian/pool/main/o/os-prober/%{name}_%{version}.tar.xz
 Patch0:         os-prober-no-dummy-mach-kernel.patch
 # Sent upstream
 Patch1:         os-prober-mdraidfix.patch

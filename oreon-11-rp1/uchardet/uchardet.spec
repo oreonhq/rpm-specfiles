@@ -9,7 +9,7 @@ Summary:       An encoding detector library ported from Mozilla
 
 License:       MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.0-or-later
 URL:           https://www.freedesktop.org/wiki/Software/%{name}
-Source0:        https://www.freedesktop.org/software/uchardet/releases/uchardet-0.0.8.tar.xz
+Source0:        https://www.freedesktop.org/software/%{name}/releases/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

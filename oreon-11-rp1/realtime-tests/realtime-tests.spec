@@ -6,7 +6,7 @@ Version: 2.10
 Release: 1%{?dist}
 License: GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND LGPL-2.1-or-later
 URL: https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
-Source0:        https://www.kernel.org/pub/linux/utils/rt-tests/rt-tests-2.10.tar.xz
+Source0:        https://www.kernel.org/pub/linux/utils/rt-tests/rt-tests-%{version}.tar.xz
 
 ExcludeArch: %{arm}
 BuildRequires: make

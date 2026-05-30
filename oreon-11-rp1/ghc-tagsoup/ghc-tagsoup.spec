@@ -17,7 +17,7 @@ Summary:        Parsing and extracting information from (possibly malformed) HTM
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/tagsoup
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/tagsoup-0.14.8/tagsoup-0.14.8.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

@@ -8,7 +8,7 @@ Summary:	Python bindings to the libevdev evdev device wrapper library
 # SPDX
 License:	MIT
 URL:		https://pypi.python.org/pypi/libevdev/
-Source0:        https://gitlab.freedesktop.org/libevdev/python-libevdev/-/archive/0.13.1/python-libevdev-0.13.1.tar.gz
+Source0:        https://gitlab.freedesktop.org/libevdev/python-libevdev/-/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildArch:	noarch
 

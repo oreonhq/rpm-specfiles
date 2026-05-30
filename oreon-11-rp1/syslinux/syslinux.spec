@@ -16,7 +16,7 @@ Release: 0.35%{?dist}
 License: GPL-2.0-or-later
 URL: http://syslinux.zytor.com/wiki/index.php/The_Syslinux_Project
 # Pre-releases live under Testing/6.04/ on kernel.org (top-level path 404)
-Source0:        https://cdn.kernel.org/pub/linux/utils/boot/syslinux/Testing/6.04/syslinux-6.04-pre1.tar.xz
+Source0:        http://www.kernel.org/pub/linux/utils/boot/syslinux/%{name}-%{tarball_version}.tar.xz
 Patch0001: 0001-Add-install-all-target-to-top-side-of-HAVE_FIRMWARE.patch
 Patch0002: 0002-ext4-64bit-feature.patch
 Patch0003: 0003-include-sysmacros-h.patch

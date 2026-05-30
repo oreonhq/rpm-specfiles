@@ -6,7 +6,7 @@ Release:        51%{?dist}
 Summary:        Perl module providing an object that dies whenever examined
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Object-Deadly
-Source0:        https://cpan.metacpan.org/authors/id/J/JJ/JJORE/Object-Deadly-0.09.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JJ/JJORE/Object-Deadly-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  make
 BuildRequires:  perl-generators

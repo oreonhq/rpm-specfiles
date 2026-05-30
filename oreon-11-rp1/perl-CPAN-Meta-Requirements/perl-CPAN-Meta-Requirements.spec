@@ -9,7 +9,7 @@ Release:        1%{?dist}
 Summary:        Set of version requirements for a CPAN dist
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CPAN-Meta-Requirements
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/CPAN-Meta-Requirements-2.145.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/CPAN/CPAN-Meta-Requirements-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build

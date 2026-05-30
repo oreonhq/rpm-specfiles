@@ -17,8 +17,8 @@ Summary:        Library for creating and modifying zip archives
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/zip-archive
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/zip-archive-0.4.3.2/zip-archive-0.4.3.2.tar.gz
-Source1:        https://hackage.haskell.org/package/zip-archive-0.4.3.2/zip-archive.cabal#/zip-archive-0.4.3.2.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

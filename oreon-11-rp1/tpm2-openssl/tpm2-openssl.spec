@@ -7,8 +7,8 @@ Summary: Provider for integration of TPM 2.0 to OpenSSL 3.0
 
 License: BSD-3-Clause
 URL: https://github.com/tpm2-software/tpm2-openssl
-Source0:        https://github.com/tpm2-software/%{name}/%{?candidate:archive/refs/tags}%{!?candidate:releases/download}/%{version}%{?candidate:-%{candidate}}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.gz
-Source1:        https://github.com/tpm2-software/%{name}/%{?candidate:archive/refs/tags}%{!?candidate:releases/download}/%{version}%{?candidate:-%{candidate}}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.gz.asc
+Source0:        https://github.com/tpm2-software/%{name}/%{?candidate:archive/refs/tags}%{!?candidate:releases/download}/1.2.0%{?candidate:-%{candidate}}/%{name}-1.2.0%{?candidate:-%{candidate}}.tar.gz
+Source1:        https://github.com/tpm2-software/%{name}/%{?candidate:archive/refs/tags}%{!?candidate:releases/download}/1.2.0%{?candidate:-%{candidate}}/%{name}-1.2.0%{?candidate:-%{candidate}}.tar.gz.asc
 Source2: gpgkey-B7201FE8031B07AF11F5423C6329CFCB6BE6FD76.gpg
 # Will be included in Source0 after https://github.com/tpm2-software/tpm2-openssl/pull/100
 Source3: run-with-simulator

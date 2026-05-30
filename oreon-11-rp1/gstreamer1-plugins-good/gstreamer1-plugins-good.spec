@@ -41,9 +41,9 @@ URL:            http://gstreamer.freedesktop.org/
 
 %if 0%{?gitrel}
 # Git snapshot workflow disabled (use release tarball).
-Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.26.7.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-%{version}.tar.xz
 %else
-Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-1.26.7.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-good/gst-plugins-good-%{version}.tar.xz
 %endif
 
 # Register as an AppStream component to be visible in the software center

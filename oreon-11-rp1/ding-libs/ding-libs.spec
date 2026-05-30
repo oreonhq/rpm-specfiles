@@ -6,7 +6,7 @@ Release: 62%{?dist}
 Summary: "Ding is not GLib" assorted utility libraries
 License: LGPL-3.0-or-later
 URL: https://github.com/SSSD/ding-libs/
-Source0:        https://github.com/SSSD/ding-libs//releases/download/0.7.0/ding-libs-0.7.0.tar.gz
+Source0:        https://releases.pagure.org/SSSD/ding-libs/%{name}-%{version}.tar.gz
 
 # If a new upstream release changes some, but not all of these
 # version numbers, remember to keep the Release tag in order to

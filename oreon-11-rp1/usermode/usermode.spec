@@ -14,7 +14,7 @@ Version: 1.114
 Release: 16%{?dist}
 License: GPL-2.0-or-later
 URL: https://pagure.io/%{name}/
-Source:        https://releases.pagure.org/usermode/usermode-1.114.tar.xz
+Source:        https://releases.pagure.org/%{name}/%{name}-%{version}.tar.xz
 Source1: config-util
 Patch1: fix-sast.patch
 Requires: pam, passwd, util-linux

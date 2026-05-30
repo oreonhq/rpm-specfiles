@@ -6,7 +6,7 @@ Release:	32%{?dist}
 Summary:	Easily test network connectivity
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-RequiresInternet
-Source0:	https://cpan.metacpan.org/authors/id/M/MA/MALLEN/Test-RequiresInternet-0.05.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-RequiresInternet-%{version}.tar.gz
 
 BuildArch:	noarch
 # Build

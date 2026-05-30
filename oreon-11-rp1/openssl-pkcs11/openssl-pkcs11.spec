@@ -12,7 +12,7 @@ Summary:        A PKCS#11 engine for use with OpenSSL
 # There are parts licensed with OpenSSL license too
 License:        LGPL-2.1-or-later AND BSD-2-Clause AND OpenSSL
 URL:            https://github.com/OpenSC/libp11
-Source0:        https://github.com/OpenSC/libp11/releases/download/libp11-0.4.13/libp11-0.4.13.tar.gz
+Source0:        https://github.com/OpenSC/libp11/releases/download/libp11-%{version}/libp11-%{version}.tar.gz
 
 BuildRequires: make
 BuildRequires:  autoconf automake libtool

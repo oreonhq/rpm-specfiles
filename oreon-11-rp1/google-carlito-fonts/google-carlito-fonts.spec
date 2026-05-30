@@ -25,7 +25,7 @@ bold, italic, and bold italic. The family covers Latin-Greek-Cyrillic (not a
 complete set, though) with about 2,000 glyphs. It has the same character
 coverage as Calibri. This font is sans-serif typeface family based on Lato.}
 
-Source0:        http://gsdview.appspot.com/chromeos-localmirror/distfiles/%{archivename}.tar.gz
+Source0:        http://gsdview.appspot.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-20130920.tar.gz
 Source1:        30-0-%{fontpkgname}.conf
 Source2:        62-%{fontpkgname}.conf
 

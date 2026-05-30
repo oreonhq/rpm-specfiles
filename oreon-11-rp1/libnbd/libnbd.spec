@@ -31,7 +31,7 @@ Summary:        NBD client library in userspace
 License:        LGPL-2.0-or-later AND BSD-3-Clause
 URL:            https://gitlab.com/nbdkit/libnbd
 
-Source0:        http://libguestfs.org/download/libnbd/1.25-development/libnbd-1.25.4.tar.gz
+Source0:        http://libguestfs.org/download/libnbd/%{source_directory}/%{name}-%{version}.tar.gz
 Source1:        http://libguestfs.org/download/libnbd/%{source_directory}/%{name}-%{version}.tar.gz.sig
 # Keyring used to verify tarball signature.  This contains the single
 # key from here:

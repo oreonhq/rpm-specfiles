@@ -8,7 +8,7 @@ Summary:          Utilities and example programs for use with XDP
 
 License:          GPL-2.0-only
 URL:              https://github.com/xdp-project/%{name}
-Source0:        https://github.com/xdp-project/xdp-tools/releases/download/v1.6.2/xdp-tools-1.6.2.tar.gz
+Source0:        https://github.com/xdp-project/%{name}/releases/download/v%{version}/xdp-tools-%{version}.tar.gz
 
 BuildRequires:    kernel-headers
 BuildRequires:    libbpf-devel

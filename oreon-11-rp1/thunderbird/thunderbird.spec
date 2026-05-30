@@ -98,7 +98,7 @@ Version:        150.0.2
 Release:        %autorelease
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPL-2.0 OR GPL-2.0-or-later OR LGPL-2.0-or-later
-Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
+Source0:        https://archive.mozilla.org/pub/thunderbird/releases/150.0.2%{?pre_version}/source/thunderbird-150.0.2%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
 Source1:        thunderbird-langpacks-%{version}%{?pre_version}-20260514.tar.xz
 %endif

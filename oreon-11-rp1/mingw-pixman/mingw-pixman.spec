@@ -10,7 +10,7 @@ Summary:        MinGW Windows Pixman library
 License:        MIT
 URL:            http://cgit.freedesktop.org/pixman/
 
-Source0:        http://cairographics.org/releases/pixman-0.46.4.tar.gz
+Source0:        http://cairographics.org/releases/pixman-%{version}.tar.gz
 Source1:        make-pixman-snapshot.sh
 
 BuildArch:      noarch

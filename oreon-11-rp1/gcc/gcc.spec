@@ -197,7 +197,7 @@ Source1: nvptx-tools-%{nvptx_tools_gitrev}.tar.xz
 # rm -rf newlib-cygwin-dir.tmp
 Source2: newlib-cygwin-%{newlib_cygwin_gitrev}.tar.xz
 %global isl_version 0.24
-Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
+Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-0.24.tar.bz2
 URL: http://gcc.gnu.org
 # Need binutils with -pie support >= 2.14.90.0.4-4
 # Need binutils which can omit dot symbols and overlap .opd on ppc64 >= 2.15.91.0.2-4

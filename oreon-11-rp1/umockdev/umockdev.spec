@@ -7,7 +7,7 @@ Summary:          Mock hardware devices
 
 License:          LGPL-2.1-or-later
 URL:              https://github.com/martinpitt/%{name}
-Source0:        https://github.com/martinpitt/umockdev/releases/download/0.19.5/umockdev-0.19.5.tar.xz
+Source0:        https://github.com/martinpitt/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires:    git
 BuildRequires:    meson

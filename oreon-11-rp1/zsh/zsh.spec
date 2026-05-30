@@ -6,7 +6,7 @@ Version: 5.9
 Release: 19%{?dist}
 License: MIT-Modern-Variant AND ISC AND GPL-2.0-only
 URL: http://zsh.sourceforge.net/
-Source0:        https://downloads.sourceforge.net/zsh/zsh-5.9.tar.xz
+Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
 Source1: zlogin.rhs
 Source2: zlogout.rhs
 Source3: zprofile.rhs

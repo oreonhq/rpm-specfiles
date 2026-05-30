@@ -6,7 +6,7 @@ Release:        26%{?dist}
 Summary:        Create a Fake ShareDir for your modules for testing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-File-ShareDir
-Source0:        https://cpan.metacpan.org/authors/id/K/KE/KENTNL/Test-File-ShareDir-1.001002.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/K/KE/KENTNL/Test-File-ShareDir-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  make

@@ -6,7 +6,7 @@ Release:	33%{?dist}
 Summary:	Perl module to test long strings
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-LongString
-Source0:        https://cpan.metacpan.org/authors/id/R/RG/RGARCIA/Test-LongString-0.17.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RG/RGARCIA/Test-LongString-%{version}.tar.gz
 
 BuildArch:	noarch
 

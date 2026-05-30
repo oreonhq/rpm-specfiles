@@ -34,11 +34,11 @@ and a Boolean expression which determine its logic.}
 %if %{with release}
 Release:       %autorelease
 # Source0:     https://github.com/%%{gituser}/%%{gitname}/archive/v%%{upversion}.tar.gz#/%%{name}-%%{upversion}.tar.gz
-Source0:        https://github.com/VirusTotal/yara/archive/v4.5.5.tar.gz#/yara-4.5.5.tar.gz
+Source0:        https://github.com/%{gituser}/%{gitname}/archive/%{commit}/%{name}-%{version}-git%{gitdate}-%{shortcommit}.tar.gz
 %else
 # Build from git commit baseline
 Release:       %autorelease -s %{gitdate}git%{shortcommit}
-Source0:        https://github.com/VirusTotal/yara/archive/f44a8958e88daa75d765a52a68876f2286d57a51/yara-4.5.5-git20251030-%(c=f44a8958e88daa75d765a52a68876f2286d57a51;.tar.gz
+Source0:        https://github.com/%{gituser}/%{gitname}/archive/%{commit}/%{name}-%{version}-git%{gitdate}-%{shortcommit}.tar.gz
 %endif
 
 # Use default sphix theme to generate documentation rather than sphinx_rtd_theme

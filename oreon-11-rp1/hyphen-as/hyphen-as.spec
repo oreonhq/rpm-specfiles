@@ -5,7 +5,7 @@ Summary: Assamese hyphenation rules
 Version: 0.7.0
 Release: 29%{?dist}
 Epoch: 1
-Source:        http://download.savannah.gnu.org/releases/smc/hyphenation/patterns/hyphen-as-0.7.0.tar.bz2
+Source:        http://download.savannah.gnu.org/releases/smc/hyphenation/patterns/%{name}-%{version}.tar.bz2
 URL: http://wiki.smc.org.in
 License: LGPL-3.0-or-later
 BuildArch: noarch

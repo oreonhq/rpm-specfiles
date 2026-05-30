@@ -11,7 +11,7 @@ License:        MIT AND GPL-3.0-or-later
 URL:            https://github.com/mm2/Little-CMS
 # Upstream moved tarballs off littlecms.com; GitHub release tag is lcms2.<minor> (e.g. 2.16 -> lcms2.16).
 %global lcms2_gh_tag lcms2.%(echo %{version} | cut -d. -f2)
-Source0:        https://github.com/mm2/Little-CMS/releases/download/lcms2.%(echo/lcms2-2.16.tar.gz
+Source0:        http://www.littlecms.com/lcms2-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  libjpeg-devel

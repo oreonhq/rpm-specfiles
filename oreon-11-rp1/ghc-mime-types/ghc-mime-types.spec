@@ -15,7 +15,7 @@ Summary:        Basic mime-type handling types and functions
 License:        MIT
 URL:            https://hackage.haskell.org/package/mime-types
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/mime-types-0.1.2.1/mime-types-0.1.2.1.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

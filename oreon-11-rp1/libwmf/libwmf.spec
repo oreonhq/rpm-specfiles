@@ -10,7 +10,7 @@ Release: 9%{?dist}
 #2. The header of the command-line wmf2plot utility places it under the GPLv2+.
 #   wmf2plot is neither built or install
 License: LGPL-2.1-or-later AND GPL-2.0-or-later AND GPL-1.0-or-later
-Source:        https://github.com/caolanm/libwmf/archive/refs/tags/v0.2.13.tar.gz
+Source:        https://github.com/caolanm/libwmf/archive/v%{version}.tar.gz
 
 URL: https://github.com/caolanm/libwmf
 

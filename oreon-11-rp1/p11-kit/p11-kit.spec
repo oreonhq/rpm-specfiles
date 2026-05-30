@@ -17,7 +17,7 @@ Summary:        Library for loading and sharing PKCS#11 modules
 
 License:        BSD-3-Clause
 URL:            http://p11-glue.freedesktop.org/p11-kit.html
-Source0:        https://github.com/p11-glue/p11-kit/releases/download/0.26.2/p11-kit-0.26.2.tar.xz
+Source0:        https://github.com/p11-glue/p11-kit/releases/download/%{version}/p11-kit-%{version}.tar.xz
 Source1:        https://github.com/p11-glue/p11-kit/releases/download/%{version}/p11-kit-%{version}.tar.xz.sig
 Source2:        https://p11-glue.github.io/p11-glue/p11-kit/p11-kit-release-keyring.gpg
 Source3:        trust-extract-compat

@@ -10,7 +10,7 @@ Version:   0.8.3
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       http://people.freedesktop.org/~hughsient/appstream-glib/
-Source0:        http://people.freedesktop.org/~hughsient/appstream-glib/releases/appstream-glib-0.8.3.tar.xz
+Source0:        http://people.freedesktop.org/~hughsient/appstream-glib/releases/appstream-glib-%{version}.tar.xz
 
 BuildRequires: glib2-devel >= %{glib2_version}
 BuildRequires: docbook-utils

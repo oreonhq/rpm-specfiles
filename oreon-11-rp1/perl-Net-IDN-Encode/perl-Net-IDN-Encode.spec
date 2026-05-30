@@ -6,7 +6,7 @@ Version:        2.500
 Release:        27%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-IDN-Encode
-Source0:        https://cpan.metacpan.org/authors/id/C/CF/CFAERBER/Net-IDN-Encode-2.500.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CF/CFAERBER/Net-IDN-Encode-%{version}.tar.gz
 # Make Unicode property generator compatible with perl 5.30-RC1,
 # CPAN RT#129588, <https://github.com/cfaerber/Net-IDN-Encode/pull/8>
 Patch0:         Net-IDN-Encode-2.500-Make-generated-arrays-available-at-compile-time.patch

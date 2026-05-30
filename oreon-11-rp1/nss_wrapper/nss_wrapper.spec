@@ -10,7 +10,7 @@ License:        BSD-3-Clause
 Summary:        A wrapper for the user, group and hosts NSS API
 Url:            https://cwrap.org/
 
-Source0:        https://ftp.samba.org/pub/cwrap/nss_wrapper-1.1.16.tar.gz
+Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
 Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
 Source2:        nss_wrapper.keyring
 

@@ -14,7 +14,7 @@ BuildRequires:  libxml2-devel
 BuildRequires:  systemd-units
 BuildRequires:  systemd-devel
 BuildRequires: make
-Source0:        https://releases.pagure.org/dlm/dlm-4.3.0.tar.gz
+Source0:        https://releases.pagure.org/dlm/%{name}-%{version}.tar.gz
 
 %if 0%{?rhel} && 0%{?rhel} <= 7
 ExclusiveArch: i686 x86_64

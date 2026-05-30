@@ -6,7 +6,7 @@ Release:        5%{?dist}
 Summary:        Automatically sets repository URL from Svn/Svk/Git checkout
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-Repository
-Source0:        https://cpan.metacpan.org/authors/id/M/MI/MIYAGAWA/Module-Install-Repository-0.08.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Install-Repository-%{version}.tar.gz
 
 Patch0:         Module-Install-Repository-0.06-Fix-building-on-Perl-without-dot-in-INC.patch
 Patch1:         Module-Install-Repository-0.08-Update-test_requires.patch

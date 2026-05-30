@@ -7,7 +7,7 @@ Release:        21%{?dist}
 License:        Apache-2.0
 
 URL:            http://commons.apache.org/proper/commons-collections/
-Source0:        http://archive.apache.org/dist/commons/collections/source/commons-collections4-4.4-src.tar.gz
+Source0:        http://archive.apache.org/dist/commons/collections/source/commons-collections4-%{version}-src.tar.gz
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

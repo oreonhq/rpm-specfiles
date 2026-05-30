@@ -13,7 +13,7 @@ Release:   %autorelease
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:   GPL-2.0-or-later
 URL:       http://cdrdao.sourceforge.net/
-Source0:        http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
 # https://github.com/cdrdao/cdrdao/pull/21
 # should fix whipper failure with this version of cdrdao:
 # https://github.com/whipper-team/whipper/issues/591

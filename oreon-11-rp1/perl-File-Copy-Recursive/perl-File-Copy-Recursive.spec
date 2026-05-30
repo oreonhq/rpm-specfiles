@@ -6,7 +6,7 @@ Release: 	19%{?dist}
 Summary: 	Extension for recursively copying files and directories 
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/File-Copy-Recursive
-Source0: 	https://cpan.metacpan.org/authors/id/D/DM/DMUEY/File-Copy-Recursive-0.45.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/File/File-Copy-Recursive-%{version}.tar.gz
 
 BuildArch: noarch
 

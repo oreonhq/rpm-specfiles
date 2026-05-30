@@ -55,7 +55,7 @@ Version: 2.03.39
 Release: %autorelease
 License: GPL-2.0-only
 URL: https://sourceware.org/lvm2
-Source0:        https://sourceware.org/pub/lvm2/releases/LVM2.2.03.39.tgz
+Source0:        https://sourceware.org/pub/lvm2/releases/LVM2.%{version}.tgz
 
 BuildRequires: make
 BuildRequires: gcc

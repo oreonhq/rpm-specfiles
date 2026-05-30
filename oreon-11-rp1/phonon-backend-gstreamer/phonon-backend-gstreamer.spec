@@ -16,7 +16,7 @@ URL:     https://community.kde.org/Phonon
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/stable/phonon/phonon-backend-gstreamer/4.10.0/phonon-backend-gstreamer-4.10.0.tar.xz
+Source0:        http://download.kde.org/%{stable}/phonon/phonon-backend-gstreamer/%{version}/phonon-backend-gstreamer-%{version}.tar.xz
 
 ## upstream patches
 

@@ -6,7 +6,7 @@ Release:        13%{?dist}
 Summary:        Test for trailing space in source files
 License:        MIT
 URL:            https://metacpan.org/release/Test-TrailingSpace
-Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/Test-TrailingSpace-0.0601.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-TrailingSpace-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build:

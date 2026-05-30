@@ -10,7 +10,7 @@ Summary:        Guessing reasonable defaults for locale, keyboard layout, territ
 # https://fedoraproject.org/wiki/Licensing:MIT?rd=Licensing/MIT#Modern_Style_without_sublicense_.28Unicode.29
 License:        GPL-3.0-or-later
 URL:            https://github.com/mike-fabian/langtable
-Source0:        https://github.com/mike-fabian/langtable/releases/download/0.0.70/langtable-0.0.70.tar.gz
+Source0:        https://github.com/mike-fabian/langtable/releases/download/%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  perl-interpreter
 BuildRequires:  python3-devel

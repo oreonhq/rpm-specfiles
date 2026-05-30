@@ -6,7 +6,7 @@ Version: 1.12.0
 Release: 1%{?dist}
 License: GPL-3.0-or-later
 URL: http://www.rsyslog.com/
-Source0:        http://download.rsyslog.com/librelp/librelp-1.12.0.tar.gz
+Source0:        http://download.rsyslog.com/%{name}/%{name}-%{version}.tar.gz
 
 %description
 Librelp is an easy to use library for the RELP protocol. RELP (stands

@@ -5,7 +5,7 @@ Name: fribidi
 Version: 1.0.16
 Release: 4%{?dist}
 URL: https://github.com/fribidi/fribidi/
-Source:        https://github.com/fribidi/fribidi/releases/download/v1.0.16/fribidi-1.0.16.tar.xz
+Source:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.xz
 License: LGPL-2.1-or-later AND Unicode-DFS-2016
 BuildRequires: gcc
 %if 0%{?rhel} && 0%{?rhel} <= 8

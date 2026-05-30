@@ -6,7 +6,7 @@ Release:    4%{?dist}
 Summary:    Intelligent Pinyin engine based on libpinyin for IBus
 License:    GPL-3.0-or-later
 URL:        https://github.com/libpinyin/ibus-libpinyin
-Source0:        http://downloads.sourceforge.net/libpinyin/ibus-libpinyin/ibus-libpinyin-1.16.5.tar.gz
+Source0:        http://downloads.sourceforge.net/libpinyin/ibus-libpinyin/%{name}-%{version}.tar.gz
 
 Requires:       python3-gobject
 Requires:       ibus >= 1.5.11

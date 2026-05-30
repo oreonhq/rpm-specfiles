@@ -6,7 +6,7 @@ Release:        28%{?dist}
 Summary:        Test environment setup for development with IDE
 License:        WTFPL
 URL:            https://metacpan.org/release/Test-InDistDir
-Source0:        https://cpan.metacpan.org/authors/id/M/MI/MITHALDU/Test-InDistDir-1.112071.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MI/MITHALDU/Test-InDistDir-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  make

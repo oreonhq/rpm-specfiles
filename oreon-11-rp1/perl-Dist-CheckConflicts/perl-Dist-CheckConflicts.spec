@@ -13,7 +13,7 @@ Release:	34%{?dist}
 Summary:	Declare version conflicts for your dist
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Dist-CheckConflicts
-Source0:	https://cpan.metacpan.org/authors/id/D/DO/DOY/Dist-CheckConflicts-0.11.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Dist/Dist-CheckConflicts-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

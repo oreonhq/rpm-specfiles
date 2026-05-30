@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/shared/maven-archiver/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/maven-archiver/3.6.2/maven-archiver-3.6.2-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

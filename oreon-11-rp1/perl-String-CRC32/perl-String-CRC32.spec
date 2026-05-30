@@ -6,7 +6,7 @@ Release:        17%{?dist}
 Summary:        Perl interface for cyclic redundancy check generation
 License:        LicenseRef-Fedora-Public-Domain
 URL:            https://metacpan.org/release/String-CRC32
-Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEEJO/String-CRC32-2.100.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/String/String-CRC32-%{version}.tar.gz
 
 # Module Build
 BuildRequires:  coreutils

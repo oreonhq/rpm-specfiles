@@ -11,8 +11,8 @@ Release: 4%{?dist}
 License: GPL-2.0-or-later AND GPL-3.0-or-later
 URL: http://www.nongnu.org/man-db/
 
-Source0:        http://download.savannah.gnu.org/releases/man-db/man-db-2.13.1.tar.xz
-Source1:        http://download.savannah.gnu.org/releases/man-db/man-db-2.13.1.tar.xz.asc
+Source0:        http://download.savannah.gnu.org/releases/%{name}/%{name}-%{version}.tar.xz
+Source1:        http://download.savannah.gnu.org/releases/%{name}/%{name}-%{version}.tar.xz.asc
 # Colin Watson signing key (also https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xac0a4ff12611b6fccf01c111393587d97d86500b)
 Source2: 0xac0a4ff12611b6fccf01c111393587d97d86500b
 

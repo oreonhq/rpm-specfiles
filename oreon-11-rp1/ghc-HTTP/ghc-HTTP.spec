@@ -17,8 +17,8 @@ Summary:        A library for client-side HTTP
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/HTTP
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/HTTP-4000.4.1/HTTP-4000.4.1.tar.gz
-Source1:        https://hackage.haskell.org/package/HTTP-4000.4.1/HTTP.cabal#/HTTP-4000.4.1.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

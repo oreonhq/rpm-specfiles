@@ -52,9 +52,9 @@ Release: 85%{?dist}
 License: (LGPL-2.0-or-later WITH FLTK-exception OR LicenseRef-Callaway-GPLv3-with-exceptions) AND Apache-2.0 AND LicenseRef-Callaway-BSD AND FTL AND LicenseRef-Callaway-MIT
 Url:     http://qt-project.org/
 %if 0%{?beta:1}
-Source0:        https://download.qt.io/archive/qt/4.8/%{version}/qt-everywhere-opensource-src-%{version}.tar.gz
+Source0:        https://download.qt-project.org/official_releases/qt/4.8/%{version}/qt-everywhere-opensource-src-%{version}.tar.gz
 %else
-Source0:        https://download.qt.io/archive/qt/4.8/%{version}/qt-everywhere-opensource-src-%{version}.tar.gz
+Source0:        https://download.qt-project.org/official_releases/qt/4.8/%{version}/qt-everywhere-opensource-src-%{version}.tar.gz
 %endif
 
 Obsoletes: qt4 < %{version}-%{release}

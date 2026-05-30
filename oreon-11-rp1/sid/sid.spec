@@ -34,7 +34,7 @@ URL: http://sid-project.github.io
 %if %{defined commit}
 Source0:        https://github.com/sid-project/sid/archive/%{commit}/sid-%{shortcommit}.tar.gz
 %else
-Source0:        https://github.com/sid-project/sid/archive/v0.0.7/sid-0.0.7.tar.gz
+Source0:        https://github.com/sid-project/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 %endif
 
 BuildRequires: autoconf

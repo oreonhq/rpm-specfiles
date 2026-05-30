@@ -9,7 +9,7 @@ Summary:        MinGW Windows Libpng library
 
 License:        Zlib
 URL:            http://www.libpng.org/pub/png/
-Source0:        http://downloads.sourceforge.net/libpng/libpng-1.6.55.tar.xz
+Source0:        http://downloads.sourceforge.net/libpng/libpng-%{version}.tar.xz
 
 BuildArch:      noarch
 

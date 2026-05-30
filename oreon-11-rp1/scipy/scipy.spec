@@ -70,7 +70,7 @@ Release:    3%{?dist}
 # LicenseRef-Public-Domain -- scipy/odr/__odrpack.c
 License:    BSD-3-Clause AND BSD-2-Clause AND MIT AND BSL-1.0 AND Boehm-GC AND Qhull AND LicenseRef-Public-Domain
 Url:        https://scipy.org/
-Source0:        https://github.com/scipy/scipy/releases/download/v1.16.2/scipy-1.16.2.tar.gz
+Source0:        https://github.com/scipy/scipy/releases/download/v%{version}/scipy-%{version}.tar.gz
 
 BuildRequires: %{blaslib}-devel
 BuildRequires: gcc-gfortran, gcc-c++

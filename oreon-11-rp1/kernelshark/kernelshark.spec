@@ -11,7 +11,7 @@ License: GPL-2.0-only AND LGPL-2.1-only
 Summary: GUI analysis for Ftrace data captured by trace-cmd
 
 URL: https://kernelshark.org
-Source0:        https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/snapshot/kernel-shark-kernelshark-v2.3.1.tar.gz
+Source0:        https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/snapshot/kernel-shark-kernelshark-v%{version}.tar.gz
 Source1: %{name}.appdata.xml
 
 ExcludeArch: %{ix86} %{arm}

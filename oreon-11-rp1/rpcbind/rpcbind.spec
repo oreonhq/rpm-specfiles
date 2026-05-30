@@ -11,7 +11,7 @@ Summary:        Universal Addresses to RPC Program Number Mapper
 License:        BSD-3-Clause
 URL:            http://nfsv4.bullopensource.org
 
-Source0:        http://downloads.sourceforge.net/rpcbind/rpcbind-1.2.8.tar.bz2
+Source0:        http://downloads.sourceforge.net/rpcbind/%{name}-%{version}.tar.bz2
 Source1: %{name}.sysconfig
 
 Requires: glibc-common setup

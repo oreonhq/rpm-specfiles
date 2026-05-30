@@ -51,7 +51,7 @@ ExcludeArch: %{power64}
 
 # Source and patches.
 URL:           http://libguestfs.org/
-Source0:        http://libguestfs.org/download/1.59-development/libguestfs-1.59.4.tar.gz
+Source0:        http://libguestfs.org/download/%{source_directory}/%{name}-%{version}.tar.gz
 %if 0%{verify_tarball_signature}
 Source1:        http://libguestfs.org/download/%{source_directory}/%{name}-%{version}.tar.gz.sig
 %endif

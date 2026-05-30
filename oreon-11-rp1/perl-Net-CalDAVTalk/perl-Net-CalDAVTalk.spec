@@ -13,7 +13,7 @@ Release:        25%{?dist}
 Summary:        CalDAV client with JSON data interface
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Net-CalDAVTalk
-Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-CalDAVTalk-0.12.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BR/BRONG/Net-CalDAVTalk-%{version}.tar.gz
 # Fix using Data::Dumper, CPAN RT#123646
 Patch0:         Net-CalDAVTalk-0.12-Load-Data-Dumper.patch
 BuildArch:      noarch

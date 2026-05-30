@@ -13,7 +13,7 @@ Version:        2.15
 Release:        8%{?dist}
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Class-Method-Modifiers
-Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Class-Method-Modifiers-2.15.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Class/Class-Method-Modifiers-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

@@ -9,7 +9,7 @@ Summary: An EPUB generator library
 
 License: MPL-2.0
 URL: https://sourceforge.net/projects/libepubgen/
-Source:        http://downloads.sourceforge.net/libepubgen/libepubgen-0.1.1.tar.xz
+Source:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires: boost-devel
 BuildRequires: doxygen

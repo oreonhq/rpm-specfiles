@@ -20,7 +20,7 @@ Release:    31%{?dist}
 # install-sh:                   MIT
 License:    GPL-3.0-or-later AND (GPL-3.0-or-later AND BSD-4-Clause) AND (LGPL-3.0-or-later OR BSD-3-Clause) AND LGPL-2.0-or-later AND LGPL-3.0-or-later AND LicenseRef-Fedora-Public-Domain AND GFDL-1.3-or-later
 SourceLicense:  %{license} AND GPL-2.0-or-later AND FSFULLR AND FSFAP AND MIT
-Source:        https://ftp.gnu.org/gnu/sharutils/sharutils-4.15.2.tar.xz
+Source:        ftp://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
 # Pass compilation with -Werror=format-security, bug #1037323
 Patch0:     %{name}-4.14.2-Pass-compilation-with-Werror-format-security.patch
 # Fix CVE-2018-1000097 (a heap buffer overflow in find_archive()),

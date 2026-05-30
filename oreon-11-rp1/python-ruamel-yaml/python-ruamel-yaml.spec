@@ -12,7 +12,7 @@ Summary:        YAML 1.2 loader/dumper package for Python
 License:        MIT
 URL:            https://sourceforge.net/projects/ruamel-yaml
 # The PyPI sdist does not contain tests, so we use a snapshot from SourceForge
-Source:        https://yaml.dev/ruamel-dl-tagged-releases/ruamel.yaml-0.19.1.tar.xz
+Source:        https://yaml.dev/ruamel-dl-tagged-releases/ruamel.yaml-%{version}.tar.xz
 
 BuildArch:      noarch
 

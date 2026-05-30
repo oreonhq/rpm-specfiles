@@ -20,7 +20,7 @@ URL:            https://github.com/aravindavk/Gubbi
 %global fontdescription   %{expand:
 This package provides a free Kannada opentype serif font.}
 
-Source0:        https://github.com/aravindavk/Gubbi/archive/v1.3.tar.gz#/Gubbi-1.3.tar.gz
+Source0:        https://github.com/aravindavk/Gubbi/archive/v%{version}.tar.gz#/%{fontfamily}-%{version}.tar.gz
 Source1:        65-0-%{fontpkgname}.conf
 
 %fontpkg

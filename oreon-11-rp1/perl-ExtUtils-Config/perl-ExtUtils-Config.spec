@@ -6,7 +6,7 @@ Release:	4%{?dist}
 Summary:	A wrapper for perl's configuration
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/ExtUtils-Config
-Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-Config-0.010.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/ExtUtils/ExtUtils-Config-%{version}.tar.gz
 
 BuildArch:	noarch
 # Build

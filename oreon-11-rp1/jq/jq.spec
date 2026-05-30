@@ -9,7 +9,7 @@ Summary:        Command-line JSON processor
 
 License:        MIT AND ICU AND CC-BY-3.0
 URL:            https://jqlang.org/
-Source0:        https://github.com/jqlang/jq/releases/download/jq-1.8.1/jq-1.8.1.tar.gz
+Source0:        https://github.com/jqlang/jq/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  flex

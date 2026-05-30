@@ -20,7 +20,7 @@ BuildRequires:  systemd-devel
 Provides:       crda = 3.18_2019.03.01-3
 Obsoletes:      crda <= 3.18_2019.03.01-2
 
-Source0:        http://www.kernel.org/pub/software/network/wireless-regdb/wireless-regdb-2026.02.04.tar.xz
+Source0:        http://www.kernel.org/pub/software/network/wireless-regdb/wireless-regdb-%{version}.tar.xz
 Source1:        setregdomain
 Source2:        setregdomain.1
 Source3:        85-regulatory.rules

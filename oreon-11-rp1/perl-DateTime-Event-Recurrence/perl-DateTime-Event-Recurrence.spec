@@ -6,7 +6,7 @@ Release:        26%{?dist}
 Summary:        DateTime::Set extension for create basic recurrence sets
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Event-Recurrence
-Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/DateTime-Event-Recurrence-0.19.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/DateTime-Event-Recurrence-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  make

@@ -11,7 +11,7 @@ Summary(zh_CN): 中文码表输入法
 Summary(zh_TW): 中文碼表輸入法
 License:        GPL-3.0-or-later
 URL:            https://github.com/mike-fabian/ibus-table-chinese
-Source0:        https://github.com/mike-fabian/ibus-table-chinese/archive/1.8.14.tar.gz#/ibus-table-chinese-1.8.14.tar.gz
+Source0:        https://github.com/mike-fabian/ibus-table-chinese/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake >= 3.0.0
 BuildRequires:  ibus-table-devel >= 1.10.0

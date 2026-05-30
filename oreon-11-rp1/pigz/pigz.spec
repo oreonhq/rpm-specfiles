@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        Parallel implementation of gzip
 License:        Zlib
 URL:            https://www.zlib.net/pigz/
-Source0:        https://www.zlib.net/pigz/pigz-2.8.tar.gz
+Source0:        https://www.zlib.net/%{name}/%{name}-%{version}.tar.gz
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  ncompress

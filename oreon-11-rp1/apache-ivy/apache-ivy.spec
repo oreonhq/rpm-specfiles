@@ -16,8 +16,8 @@ URL:            https://ant.apache.org/ivy
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/ant/ivy/2.5.3/apache-ivy-2.5.3-src.tar.gz
-Source1:        https://archive.apache.org/dist/ant/ivy/2.5.3/apache-ivy-2.5.3-src.tar.gz.asc
+Source0:        https://archive.apache.org/dist/ant/%{jarname}/%{version}/%{name}-%{version}-src.tar.gz
+Source1:        https://archive.apache.org/dist/ant/%{jarname}/%{version}/%{name}-%{version}-src.tar.gz.asc
 Source2:        https://archive.apache.org/dist/ant/KEYS
 
 # Non-upstreamable.  Add /etc/ivy/ivysettings.xml at the end list of

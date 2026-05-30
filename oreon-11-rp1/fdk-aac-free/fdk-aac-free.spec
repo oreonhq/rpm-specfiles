@@ -7,7 +7,7 @@ Summary:        Third-Party Modified Version of the Fraunhofer FDK AAC Codec Lib
 
 License:        FDK-AAC
 URL:            https://cgit.freedesktop.org/~wtay/fdk-aac/log/?h=fedora
-Source0:        https://wtaymans.fedorapeople.org/fdk-aac-free-2.0.3.tar.gz
+Source0:        https://wtaymans.fedorapeople.org/fdk-aac-free-%{version}.tar.gz
 
 BuildRequires:  gcc gcc-c++
 BuildRequires:  automake libtool

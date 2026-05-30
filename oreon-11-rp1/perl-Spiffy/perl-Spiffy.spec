@@ -9,7 +9,7 @@ Release:        34%{?dist}
 Summary:        Framework for doing object oriented (OO) programming in Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Spiffy
-Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Spiffy-0.46.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Spiffy-%{version}.tar.gz
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils

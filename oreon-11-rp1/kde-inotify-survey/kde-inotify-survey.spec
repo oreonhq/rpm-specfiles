@@ -19,7 +19,7 @@ URL:           https://invent.kde.org/system/%{name}
 %global kf5_dl_stable stable
 %endif
 
-Source:        https://download.kde.org/stable/release-service/26.03.80/src/kde-inotify-survey-26.03.80.tar.xz
+Source:        https://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 # Updates the dbus service config to use the right policies to satisfy a rpmlint error
 # Merge Request: https://invent.kde.org/frameworks/kauth/-/merge_requests/44

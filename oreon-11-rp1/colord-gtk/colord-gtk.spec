@@ -6,7 +6,7 @@ Version:   0.3.1
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       http://www.freedesktop.org/software/colord/
-Source0:        http://www.freedesktop.org/software/colord/releases/colord-gtk-0.3.1.tar.xz
+Source0:        http://www.freedesktop.org/software/colord/releases/%{name}-%{version}.tar.xz
 
 BuildRequires: meson
 BuildRequires: docbook5-style-xsl

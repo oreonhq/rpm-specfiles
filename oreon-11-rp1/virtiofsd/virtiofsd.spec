@@ -14,7 +14,7 @@ URL:            https://gitlab.com/virtio-fs/virtiofsd
 # if you need to get a different version:
 #     make VERSION=<version>
 #
-Source:         %{crates_source}
+Source0:        https://crates.io/api/v1/crates/%{crate}/1.13.3/download
 Source1:        %{name}-%{version}-vendor.tar.xz
 
 ExclusiveArch:  %{rust_arches}

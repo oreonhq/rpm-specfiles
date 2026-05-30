@@ -14,9 +14,9 @@ License:        LGPL-2.1-or-later
 URL:            http://gstreamer.freedesktop.org/
 %if 0%{?gitrel}
 # Git snapshot workflow disabled (use release tarball).
-Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.26.7.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-%{version}.tar.xz
 %else
-Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-1.26.7.tar.xz
+Source0:        http://gstreamer.freedesktop.org/src/gst-plugins-base/gst-plugins-base-%{version}.tar.xz
 %endif
 Patch0:         0001-missing-plugins-Remove-the-mpegaudioversion-field.patch
 

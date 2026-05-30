@@ -4,7 +4,7 @@ Name: hyphen-bg
 Summary: Bulgarian hyphenation rules
 Version: 4.3
 Release: 250%{?dist}
-Source:        http://downloads.sourceforge.net/bgoffice/OOo-hyph-bg-4.3.zip
+Source:        http://downloads.sourceforge.net/bgoffice/OOo-hyph-bg-%{version}.zip
 URL: http://bgoffice.sourceforge.net/
 License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
 BuildArch: noarch

@@ -11,7 +11,7 @@ URL:            https://www.x.org/
 # git snapshot.  To recreate, run
 # % ./make-libpciaccess-snapshot.sh %%{gitrev}
 #Source0:        libpciaccess-%%{gitdate}.tar.bz2
-Source0:        https://www.x.org/archive/individual/lib/libpciaccess-0.16.tar.bz2
+Source0:        https://www.x.org/archive/individual/lib/%{name}-%{version}.tar.bz2
 Source1:        make-libpciaccess-snapshot.sh
 
 Patch2:		libpciaccess-rom-size.patch

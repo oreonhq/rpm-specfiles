@@ -11,7 +11,7 @@ Release:        %autorelease
 Summary:        Certificate provisioning using ACME for the Apache HTTP Server
 License:        Apache-2.0
 URL:            https://icing.github.io/mod_md/
-Source0:        https://github.com/icing/mod_md/releases/download/v2.6.7/mod_md-2.6.7.tar.gz
+Source0:        https://github.com/icing/mod_md/releases/download/v%{version}/mod_md-%{version}.tar.gz
 Patch1:         mod_md-2.0.8-state_dir.patch
 BuildRequires:  make, gcc
 BuildRequires:  pkgconfig, httpd-devel >= 2.4.41, openssl-devel >= 1.1.0, jansson-devel, libcurl-devel, xmlto

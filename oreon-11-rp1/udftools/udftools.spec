@@ -7,7 +7,7 @@ Release: 13%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL: http://sourceforge.net/projects/linux-udf/
-Source:        https://github.com/pali/udftools/releases/download/2.3/udftools-2.3.tar.gz
+Source:        https://github.com/pali/udftools/releases/download/%{version}/udftools-%{version}.tar.gz
 Patch1: udftools-2.3-backported_fixes.patch
 BuildRequires: make
 BuildRequires: readline-devel, ncurses-devel

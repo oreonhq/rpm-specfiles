@@ -8,7 +8,7 @@ Release:              %autorelease
 Summary:              Linux D-Bus Message Broker
 License:              Apache-2.0 AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND (Apache-2.0 OR LGPL-2.1-or-later)
 URL:                  https://github.com/bus1/dbus-broker
-Source0:        https://github.com/bus1/dbus-broker/releases/download/v37/dbus-broker-37.tar.xz
+Source0:        https://github.com/bus1/dbus-broker/releases/download/v%{version}/dbus-broker-%{version}.tar.xz
 Patch0:               0001-test-sockopt-loosen-verification-of-stale-pidfds.patch
 BuildRequires:        pkgconfig(audit)
 BuildRequires:        pkgconfig(expat)

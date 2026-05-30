@@ -9,7 +9,7 @@ Summary:        A terminal multiplexer
 
 License:        ISC AND BSD-2-Clause AND BSD-3-Clause AND SSH-short AND LicenseRef-Fedora-Public-Domain
 URL:            https://tmux.github.io/
-Source0:        https://github.com/tmux/tmux/releases/download/3.6a/tmux-3.6a.tar.gz
+Source0:        https://github.com/tmux/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
 Source2:        tmux@.service
 Source3:        README.polkit
 BuildRequires:  byacc

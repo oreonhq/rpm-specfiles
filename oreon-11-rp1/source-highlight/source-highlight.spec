@@ -5,8 +5,8 @@ Name: source-highlight
 Version: 3.1.9
 Release: 27%{?dist}
 License: GPL-3.0-or-later AND GFDL-1.1-or-later AND LicenseRef-Fedora-Public-Domain AND GPL-2.0-only AND GPL-3.0-only AND GPL-3.0-or-later WITH Bison-exception-2.2
-Source0:        https://ftp.gnu.org/gnu/src-highlite/source-highlight-3.1.9.tar.gz
-Source1:        https://ftp.gnu.org/gnu/src-highlite/source-highlight-3.1.9.tar.gz.sig
+Source0:        ftp://ftp.gnu.org/gnu/src-highlite/%{name}-%{version}.tar.gz
+Source1:        ftp://ftp.gnu.org/gnu/src-highlite/%{name}-%{version}.tar.gz.sig
 URL: http://www.gnu.org/software/src-highlite/
 # Taken from https://git.savannah.gnu.org/cgit/src-highlite.git/patch/?id=904949c9026cb772dc93fbe0947a252ef47127f4
 # and slightly adapted

@@ -7,7 +7,7 @@ Summary:        Text based document generation
 
 License:        GPL-2.0-or-later
 URL:            http://asciidoc.org
-Source0:        https://github.com/asciidoc-py/asciidoc-py/archive/10.2.0/asciidoc-py-10.2.0.tar.gz
+Source0:        https://github.com/asciidoc-py/asciidoc-py/archive/%{version}/%{name}-py-%{version}.tar.gz
 
 BuildArch:      noarch
 

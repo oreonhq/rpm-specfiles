@@ -8,7 +8,7 @@ Summary:	Map view for Clutter
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:	LicenseRef-Callaway-LGPLv2+
 URL:		https://wiki.gnome.org/Projects/libchamplain
-Source0:        https://download.gnome.org/sources/libchamplain/0.12/libchamplain-0.12.21.tar.xz
+Source0:        https://download.gnome.org/sources/libchamplain/0.12/%{name}-%{version}.tar.xz
 
 BuildRequires:	clutter-devel
 BuildRequires:	clutter-gtk-devel

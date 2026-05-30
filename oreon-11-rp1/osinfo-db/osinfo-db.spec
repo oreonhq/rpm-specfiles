@@ -12,7 +12,7 @@ Name: osinfo-db
 Version: 20251212
 Release: %autorelease
 License: GPL-2.0-or-later
-Source:        https://releases.pagure.org/libosinfo/osinfo-db-20251212.tar.xz
+Source:        https://releases.pagure.org/libosinfo/%{name}-%{version}.tar.xz
 URL: http://libosinfo.org/
 BuildRequires: intltool
 BuildRequires: osinfo-db-tools

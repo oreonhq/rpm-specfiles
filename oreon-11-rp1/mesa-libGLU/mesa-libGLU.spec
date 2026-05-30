@@ -8,7 +8,7 @@ Summary:        Mesa libGLU library
 License:        X11
 URL:            http://mesa3d.org/
 # ftp.freedesktop.org TLS hostname does not match on some workers, use Mesa archive
-Source0:        https://mesa.freedesktop.org/archive/glu/glu-9.0.3.tar.xz
+Source0:        https://ftp.freedesktop.org/pub/mesa/glu/glu-%{version}.tar.xz
 Source2:        make-git-snapshot.sh
 
 BuildRequires:  gcc-c++

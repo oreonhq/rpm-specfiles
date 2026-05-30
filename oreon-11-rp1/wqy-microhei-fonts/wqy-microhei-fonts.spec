@@ -24,7 +24,7 @@ A new Sans Serif CJK font derived from Google's "Droid Sans Fallback"
 and covers the entire GBK code points (20932 Han glyphs).
 }
 
-Source0:        http://downloads.sourceforge.net/wqy/wqy-microhei-0.2.0-beta.tar.gz
+Source0:        http://downloads.sourceforge.net/wqy/%{archivename}.tar.gz
 Source10: 66-%{fontpkgname}.conf
 
 %fontpkg

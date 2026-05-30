@@ -7,7 +7,7 @@ Summary:        A helper that makes system-config-printer use PolicyKit
 
 License:        GPL-2.0-or-later
 URL:            http://www.freedesktop.org/wiki/Software/cups-pk-helper/
-Source0:        http://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-0.2.7.tar.xz
+Source0:        http://www.freedesktop.org/software/cups-pk-helper/releases/cups-pk-helper-%{version}.tar.xz
 
 Patch0:         polkit_result.patch
 

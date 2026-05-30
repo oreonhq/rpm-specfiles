@@ -13,7 +13,7 @@ Release: 9%{?dist}
 # FSFAP: README and NEWS
 License: LGPL-3.0-or-later AND FSFAP
 URL: https://www.multiprecision.org/mpc/
-Source0:        https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.gz
+Source0:        https://ftp.gnu.org/gnu/mpc/mpc-%{version}.tar.xz
 %if 0%{?bootstrap}
 Source1:        https://ftp.gnu.org/gnu/mpc/mpc-0.9.tar.gz
 %endif

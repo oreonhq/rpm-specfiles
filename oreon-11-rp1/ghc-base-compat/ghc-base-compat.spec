@@ -15,7 +15,7 @@ Summary:        A compatibility layer for base
 License:        MIT
 URL:            https://hackage.haskell.org/package/base-compat
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/base-compat-0.14.1/base-compat-0.14.1.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

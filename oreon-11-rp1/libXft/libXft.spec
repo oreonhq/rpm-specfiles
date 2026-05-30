@@ -7,7 +7,7 @@ Release: 10%{?dist}
 License: HPND-sell-variant
 URL: http://www.x.org
 
-Source0:        https://www.x.org/pub/individual/lib/libXft-2.3.8.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 
 # Bug report: https://bugzilla.redhat.com/show_bug.cgi?id=2154735
 # Upstream issue: https://gitlab.freedesktop.org/xorg/lib/libxft/-/issues/19

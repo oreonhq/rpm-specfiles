@@ -6,7 +6,7 @@ Version: 1.19
 Release: 19%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
-Source:        http://dl.cihar.com/enca/enca-1.19.tar.xz
+Source:        http://dl.cihar.com/enca/enca-%{version}.tar.xz
 URL: http://cihar.com/software/enca
 
 BuildRequires: gcc

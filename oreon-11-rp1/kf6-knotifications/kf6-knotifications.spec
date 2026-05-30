@@ -14,8 +14,8 @@ Summary: KDE Frameworks 6 Tier 2 solution with abstraction for system notificati
 License: BSD-3-Clause AND CC0-1.0 AND LGPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-3.0-only AND (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}
 
-Source0:        https://download.kde.org/stable/frameworks/6.24/knotifications-6.24.0.tar.xz
-Source1:        https://download.kde.org/stable/frameworks/6.24/knotifications-6.24.0.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
 
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  cmake

@@ -6,7 +6,7 @@ Version:            1.13
 Release:            8%{?dist}
 License:            GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:                https://metacpan.org/release/XML-Generator
-Source0:        https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/XML-Generator-1.13.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/XML-Generator-%{version}.tar.gz
 BuildArch:          noarch
 BuildRequires:      coreutils
 BuildRequires:      make

@@ -15,7 +15,7 @@ Summary:        ASN.1 types
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/asn1-types
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/asn1-types-0.3.4/asn1-types-0.3.4.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

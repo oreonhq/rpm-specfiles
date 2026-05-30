@@ -11,7 +11,7 @@ URL:            https://fedora-java.github.io/xmvn/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/fedora-java/xmvn/releases/download/4.3.0/xmvn-4.3.0.tar.xz
+Source0:        https://github.com/fedora-java/xmvn/releases/download/%{version}/xmvn-%{version}.tar.xz
 Source25:       toolchains-openjdk25.xml
 
 %if %{with bootstrap}

@@ -8,7 +8,7 @@ Summary:       Resource discovery and announcement over SSDP
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://www.gupnp.org/
-Source0:        https://download.gnome.org/sources/gssdp/1.6/gssdp-1.6.4.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/1.6/%{name}-%{version}.tar.xz
 
 BuildRequires: pkgconfig(gio-2.0)
 BuildRequires: pkgconfig(gtk4)

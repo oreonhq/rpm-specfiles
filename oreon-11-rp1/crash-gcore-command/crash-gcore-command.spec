@@ -7,7 +7,7 @@ Name: crash-gcore-command
 Version: 1.6.4
 Release: 11%{?dist}
 License: GPL-2.0-only
-Source0:        https://github.com/fujitsu/crash-gcore/archive/v1.6.4/crash-gcore-command-1.6.4.tar.gz
+Source0:        https://github.com/fujitsu/crash-gcore/archive/v%{version}/%{name}-%{version}.tar.gz
 URL: https://github.com/fujitsu/crash-gcore
 ExclusiveOS: Linux
 ExclusiveArch: aarch64 ppc64le x86_64

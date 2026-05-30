@@ -6,7 +6,7 @@ Version:	1.16
 Release:	31%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/IO-Multiplex
-Source0:	https://cpan.metacpan.org/authors/id/B/BB/BBB/IO-Multiplex-1.16.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Multiplex-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

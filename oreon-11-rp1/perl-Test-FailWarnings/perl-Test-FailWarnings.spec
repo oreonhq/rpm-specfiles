@@ -7,7 +7,7 @@ Summary:        Add test failures if warnings are caught
 License:        Apache-2.0
 
 URL:            https://metacpan.org/release/Test-FailWarnings
-Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Test-FailWarnings-0.008.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/Test-FailWarnings-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  make

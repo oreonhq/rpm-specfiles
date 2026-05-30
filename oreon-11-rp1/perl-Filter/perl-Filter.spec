@@ -14,7 +14,7 @@ Release:        2%{?dist}
 Summary:        Perl source filters
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Filter
-Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Filter-1.65.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RU/RURBAN/Filter-%{version}.tar.gz
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc

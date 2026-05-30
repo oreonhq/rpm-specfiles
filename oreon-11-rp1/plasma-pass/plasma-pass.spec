@@ -6,7 +6,7 @@ Release: 1%{?dist}
 Summary:        Plasma applet to access passwords from the Pass password manager
 License:        CC0-1.0 AND LGPL-2.1-or-later
 URL:            https://invent.kde.org/plasma/%{name}.git
-Source0:        https://invent.kde.org/plasma/plasma-pass/-/archive/v1.3.1/plasma-pass-v1.3.1.tar.gz
+Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
 
 
 BuildRequires:  gcc

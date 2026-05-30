@@ -7,7 +7,7 @@ Summary:        Perl extension for emulating troublesome interfaces
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-MockObject
-Source0:        https://cpan.metacpan.org/authors/id/C/CH/CHROMATIC/Test-MockObject-1.20200122.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-MockObject-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build:

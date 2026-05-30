@@ -11,7 +11,7 @@ Summary:            An implementation of the OAuth request-signing logic
 License:            BSD-3-Clause
 URL:                https://github.com/oauthlib/oauthlib
 
-Source0:        https://github.com/oauthlib/oauthlib/archive/v3.3.1/python-oauthlib-3.3.1.tar.gz
+Source0:        https://github.com/oauthlib/oauthlib/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildArch:          noarch
 

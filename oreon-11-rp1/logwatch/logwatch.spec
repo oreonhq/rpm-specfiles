@@ -7,7 +7,7 @@ Version: 7.14
 Release: 1%{?dist}
 License: MIT
 URL: https://sourceforge.net/projects/logwatch/
-Source0:        https://sourceforge.net/projects/logwatch/files/logwatch-7.14/logwatch-7.14.tar.gz
+Source0:        https://sourceforge.net/projects/logwatch/files/%{name}-%{version}/%{name}-%{version}.tar.gz
 BuildRequires: perl-generators
 Requires: grep
 Requires: dnf5

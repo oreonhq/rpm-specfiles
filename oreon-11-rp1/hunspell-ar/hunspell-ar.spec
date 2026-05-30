@@ -15,7 +15,7 @@ Release: 26%{?dist}
 License: GPL-2.0-only OR LGPL-2.1-only OR MPL-1.1
 
 URL: http://ayaspell.sourceforge.net/
-Source:        http://sourceforge.net/projects/ayaspell/files/hunspell-ar_3.5.2014-11-08.zip
+Source:        http://sourceforge.net/projects/ayaspell/files/hunspell-ar_%{version}.%{ver_date}.zip
 
 BuildArch: noarch
 Requires: hunspell-filesystem

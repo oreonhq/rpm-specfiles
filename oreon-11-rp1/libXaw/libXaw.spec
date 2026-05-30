@@ -9,7 +9,7 @@ Release: 5%{?dist}
 License: MIT-open-group AND X11 AND HPND AND HPND-sell-variant AND SMLNJ AND NTP
 URL: http://www.x.org
 
-Source0:        https://www.x.org/pub/individual/lib/libXaw-1.0.16.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 
 BuildRequires: make
 BuildRequires: autoconf automake libtool

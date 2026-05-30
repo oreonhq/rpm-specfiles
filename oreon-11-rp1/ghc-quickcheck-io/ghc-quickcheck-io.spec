@@ -15,7 +15,7 @@ Summary:        Use HUnit assertions as QuickCheck properties
 License:        MIT
 URL:            https://hackage.haskell.org/package/quickcheck-io
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/quickcheck-io-0.2.0/quickcheck-io-0.2.0.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

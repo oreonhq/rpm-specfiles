@@ -8,8 +8,8 @@ Release:        1%{?dist}
 Summary:        A library for reading DVD video discs based on Ogle code
 License:        GPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            http://dvdnav.mplayerhq.hu/
-Source0:        https://download.videolan.org/pub/videolan/libdvdnav/7.0.0/libdvdnav-7.0.0.tar.xz
-Source1:        https://download.videolan.org/pub/videolan/libdvdnav/7.0.0/libdvdnav-7.0.0.tar.xz.asc
+Source0:        https://download.videolan.org/pub/videolan/libdvdnav/%{version}/libdvdnav-%{version}.tar.xz
+Source1:        https://download.videolan.org/pub/videolan/libdvdnav/%{version}/libdvdnav-%{version}.tar.xz.asc
 Source2:        https://download.videolan.org/pub/keys/7180713BE58D1ADC.asc
 
 BuildRequires:  doxygen

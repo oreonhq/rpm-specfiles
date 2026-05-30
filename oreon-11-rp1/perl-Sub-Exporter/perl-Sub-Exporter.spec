@@ -13,7 +13,7 @@ Release:	7%{?dist}
 Summary:	Sophisticated exporter for custom-built routines
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Exporter
-Source0:	https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Sub-Exporter-0.991.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Sub/Sub-Exporter-%{version}.tar.gz
 
 BuildArch:	noarch
 # Build

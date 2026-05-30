@@ -8,7 +8,7 @@ Release:        11%{?dist}
 Summary:        Tools for connecting joysticks & legacy devices to the kernel's input subsystem
 License:        GPL-2.0-or-later
 URL:            http://sourceforge.net/projects/linuxconsole/
-Source:        http://downloads.sourceforge.net/linuxconsole/linuxconsoletools-1.8.1.tar.bz2
+Source:        http://downloads.sourceforge.net/linuxconsole/%{name}-%{version}.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires:  pkgconfig(sdl2)

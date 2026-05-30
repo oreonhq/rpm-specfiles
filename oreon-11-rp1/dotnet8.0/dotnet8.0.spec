@@ -64,9 +64,9 @@ URL:            https://github.com/dotnet/
 %global tarball_name dotnet-%{upstream_tag}-x64-bootstrap
 # The source is generated on a Fedora box via:
 # ./build-dotnet-tarball --bootstrap %%{upstream_tag}
-Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{upstream_tag_without_v}.tar.gz
+Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/v8.0.127.tar.gz#/dotnet-%(echo.tar.gz
 # Generated via ./build-arm64-bootstrap-tarball
-Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-%{upstream_tag_without_v}.tar.gz.sig
+Source1:        https://github.com/dotnet/dotnet/releases/download/v8.0.127/dotnet-%(echo.tar.gz.sig
 # Generated manually, same pattern as the arm64 tarball
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 # Generated manually, same pattern as the arm64 tarball
@@ -74,7 +74,7 @@ Source3:        dotnet-prebuilts-%{bootstrap_sdk_version}-s390x.tar.gz
 %else
 Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 %endif
-Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
+Source5:        https://github.com/dotnet/dotnet/releases/download/v8.0.127/release.json
 
 Source10:       macros.dotnet
 

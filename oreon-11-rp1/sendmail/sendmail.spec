@@ -48,7 +48,7 @@ Release: 3%{?dist}
 License: sendmail-8.23 AND MIT AND MIT-CMU AND BSD-3-Clause AND CDDL-1.0 AND BSD-4-Clause AND BSD-4-Clause-UC AND PostgreSQL AND ISC AND HPND-sell-variant AND mailprio
 URL: http://www.sendmail.org/
 
-Source0:        https://ftp.sendmail.org/sendmail.8.18.2.tar.gz
+Source0:        https://ftp.sendmail.org/sendmail.%{version}.tar.gz
 # Systemd Service file
 Source1: sendmail.service
 # NetworkManager dispatch script

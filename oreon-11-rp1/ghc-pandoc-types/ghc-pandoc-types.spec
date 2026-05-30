@@ -17,7 +17,7 @@ Summary:        Types for representing a structured document
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/pandoc-types
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/pandoc-types-1.23.1.1/pandoc-types-1.23.1.1.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

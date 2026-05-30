@@ -9,7 +9,7 @@ License:        GPL-2.0-only OR BSD-3-Clause
 URL:            https://github.com/OpenSC/pkcs11-helper
 
 # Tag is pkcs11-helper-VERSION; GitHub unpack dir is pkcs11-helper-pkcs11-helper-VERSION
-Source0:        https://github.com/OpenSC/pkcs11-helper/archive/refs/tags/pkcs11-helper-1.31.0.tar.gz#/pkcs11-helper-1.31.0.tar.gz
+Source0:        https://github.com/OpenSC/pkcs11-helper/releases/download/pkcs11-helper-%{version}/pkcs11-helper-%{version}.tar.bz2
 
 BuildRequires:  autoconf
 BuildRequires:  automake

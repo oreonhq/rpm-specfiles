@@ -6,7 +6,7 @@ Release: 	22%{?dist}
 Summary: 	Optimized module loading for forking or non-forking processes
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/prefork
-Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/prefork-1.05.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/prefork-%{version}.tar.gz
 
 BuildArch: noarch
 

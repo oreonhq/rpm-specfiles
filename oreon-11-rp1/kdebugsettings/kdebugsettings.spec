@@ -12,7 +12,7 @@ Release: 1%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://apps.kde.org/kdebugsettings/
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kdebugsettings-26.04.1.tar.xz
 
 BuildRequires:  desktop-file-utils
 BuildRequires:  extra-cmake-modules

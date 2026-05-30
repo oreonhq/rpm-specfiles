@@ -8,7 +8,7 @@ Summary:        Encoding and decoding of Base64 and quoted-printable strings
 # Other files:  GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND metamail
 URL:            https://metacpan.org/release/MIME-Base64
-Source0:        https://cpan.metacpan.org/authors/id/C/CA/CAPOEIRAB/MIME-Base64-3.16.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/C/CA/CAPOEIRAB/MIME-Base64-%{version}.tar.gz
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  gcc

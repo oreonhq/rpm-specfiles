@@ -6,7 +6,7 @@ Release:	4%{?dist}
 Summary:	Various portability utilities for module builders
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/ExtUtils-Helpers
-Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-Helpers-0.028.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/ExtUtils/ExtUtils-Helpers-%{version}.tar.gz
 
 BuildArch:	noarch
 # Build

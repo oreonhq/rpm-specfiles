@@ -10,7 +10,7 @@ Version: 4.4.1
 Release: 12%{?dist}
 License: GPL-3.0-or-later AND LGPL-2.1-or-later AND GFDL-1.3-or-later AND FSFULLR
 URL: https://www.gnu.org/software/make/
-Source:        https://ftp.gnu.org/gnu/make/make-4.4.1.tar.gz
+Source:        https://ftp.gnu.org/gnu/make/make-%{version}.tar.gz
 
 %if "%{name}" != "make"
 # Set this to the sub-package base name, for "make-latest"

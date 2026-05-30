@@ -9,7 +9,7 @@ Summary:        Font rendering capabilities for complex non-Roman writing system
 License:        LGPL-2.1-or-later OR MPL-2.0 OR GPL-2.0-or-later
 
 URL:            https://sourceforge.net/projects/silgraphite/
-Source0:        https://downloads.sourceforge.net/project/silgraphite/graphite2//graphite2-1.3.14.tgz
+Source0:        https://downloads.sourceforge.net/project/silgraphite/graphite2//%{name}-%{version}.tgz
 
 Patch0:         graphite-arm-nodefaultlibs.patch
 Patch1:         graphite2-1.2.0-cmakepath.patch

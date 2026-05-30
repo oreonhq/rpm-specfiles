@@ -7,7 +7,7 @@ Summary:	Source files for rteval loads
 Group:		Development/Tools
 License:	GPL-2.0-only
 URL:		https://git.kernel.org/pub/scm/utils/rteval/rteval.git
-Source0:        https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.17.7.tar.xz
+Source0:        https://www.kernel.org/pub/linux/kernel/v6.x/linux-%{version}.tar.xz
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch:	noarch

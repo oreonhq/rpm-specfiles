@@ -7,7 +7,7 @@ Version: 0.20
 Release: 3%{?dist}
 License: GPL-2.0-only AND LGPL-2.1-only
 Summary: Application tuning GUI & command line utility
-Source:        https://www.kernel.org/pub/software/utils/tuna/tuna-0.20.tar.xz
+Source:        https://www.kernel.org/pub/software/utils/%{name}/%{name}-%{version}.tar.xz
 URL: https://rt.wiki.kernel.org/index.php/Tuna
 BuildArch: noarch
 BuildRequires: python3-devel, gettext

@@ -6,7 +6,7 @@ Version:	0.80
 Release:	6%{?dist}
 License:	LicenseRef-Fedora-Public-Domain
 URL:		http://www.corpit.ru/mjt/tinycdb.html
-Source0:        http://www.corpit.ru/mjt/tinycdb/tinycdb-0.80.tar.gz
+Source0:        http://www.corpit.ru/mjt/%{name}/%{name}-%{version}.tar.gz
 # taken from the 0.77 tarball
 Source1:	libcdb.pc
 

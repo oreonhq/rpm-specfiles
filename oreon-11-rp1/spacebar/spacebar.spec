@@ -7,7 +7,7 @@ Release:        1%{?dist}
 License:        GPLv2+ and GPLv3 and GPLv2
 Summary:        Messaging app for Plasma Mobile
 Url:            https://invent.kde.org/plasma-mobile/spacebar
-Source0:        https://invent.kde.org/plasma-mobile/spacebar/-/archive/v6.6.3/spacebar-v6.6.3.tar.gz#/spacebar-6.6.3.tar.gz
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
 
 ExclusiveArch:  %{java_arches}
 

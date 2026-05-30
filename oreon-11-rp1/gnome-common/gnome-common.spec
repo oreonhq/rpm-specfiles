@@ -8,7 +8,7 @@ BuildArch:      noarch
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Projects/GnomeCommon
-Source0:        https://download.gnome.org/sources/gnome-common/3.18/gnome-common-3.18.0.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/3.18/%{name}-%{version}.tar.xz
 
 BuildRequires: make
 

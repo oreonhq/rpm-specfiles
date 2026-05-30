@@ -6,7 +6,7 @@ Version:        1.04
 Release:        18%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://www.lzop.org/
-Source0:        https://www.lzop.org/download/lzop-1.04.tar.gz
+Source0:        https://www.lzop.org/download/%{name}-%{version}.tar.gz
 BuildRequires:  gcc
 BuildRequires:  lzo-devel
 BuildRequires:  make

@@ -18,7 +18,7 @@ Summary: Desktop tool for managing virtual machines via libvirt
 License: GPL-2.0-or-later
 BuildArch: noarch
 URL: https://virt-manager.org/
-Source0:        https://releases.pagure.org/virt-manager/virt-manager-5.1.0.tar.xz
+Source0:        https://releases.pagure.org/%{name}/%{name}-%{version}.tar.xz
 
 Patch1: 0001-virtinst-cloudinit-include-empty-meta-data-file.patch
 

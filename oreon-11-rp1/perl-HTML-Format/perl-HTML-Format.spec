@@ -16,7 +16,7 @@ Summary:        HTML formatter modules
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/%{tarname}
-Source0:        https://cpan.metacpan.org/authors/id/N/NI/NIGELM/HTML-Format-2.16.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/N/NI/NIGELM/%{tarname}-%{version}.tar.gz
 
 BuildArch:      noarch
 

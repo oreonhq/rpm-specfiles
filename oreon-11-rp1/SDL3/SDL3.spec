@@ -27,7 +27,7 @@ Release:        3%{?dist}
 Summary:        Cross-platform multimedia library
 License:        Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 OR MIT)
 URL:            http://www.libsdl.org/
-Source0:        http://www.libsdl.org/release/SDL3-3.4.0.tar.gz
+Source0:        http://www.libsdl.org/release/%{name}-%{version}.tar.gz
 Source1:        SDL3_revision.h
 
 # Patches from upstream

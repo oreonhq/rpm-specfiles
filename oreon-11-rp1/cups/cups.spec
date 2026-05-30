@@ -28,13 +28,13 @@ Release: 8%{?dist}
 License: Apache-2.0 WITH LLVM-exception AND BSD-3-Clause AND Zlib AND BSD-2-Clause
 Url: https://openprinting.github.io/cups/
 # Apple stopped uploading the new versions into github, use OpenPrinting fork
-Source0:        https://github.com/OpenPrinting/cups/releases/download/v2.4.16/cups-2.4.16-source.tar.gz
+Source0:        https://github.com/OpenPrinting/cups/releases/download/v%{VERSION}/cups-%{VERSION}-source.tar.gz
 # Pixmap for desktop file
 Source1: cupsprinter.png
 # cups_serverbin macro definition for use during builds
 Source2: macros.cups
 # GPG signature for validating tarball
-Source3:        https://github.com/OpenPrinting/cups/releases/download/v2.4.16/cups-2.4.16-source.tar.gz.sig
+Source3:        https://github.com/OpenPrinting/cups/releases/download/v%{VERSION}/cups-%{VERSION}-source.tar.gz.sig
 
 # cups-config from devel package conflicted on multilib arches,
 # fixed hack with pkg-config calling for gnutls' libdir variable

@@ -13,7 +13,7 @@ License:        GPL-2.0-or-later
 ## Not installed
 # src/ThirdParty/Catch: Boost Software License - Version 1.0
 URL:            https://usbguard.github.io/
-Source0:        https://github.com/USBGuard/usbguard/releases/download/usbguard-1.1.3/usbguard-1.1.3.tar.gz
+Source0:        https://github.com/USBGuard/usbguard/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
 Source1:        https://github.com/USBGuard/usbguard-selinux/archive/refs/tags/v0.0.5.tar.gz#/usbguard-selinux-0.0.5.tar.gz
 Source2:        usbguard-daemon.conf
 

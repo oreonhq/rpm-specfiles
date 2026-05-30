@@ -12,7 +12,7 @@ Summary:        OCaml bindings for Augeas configuration API
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 
 URL:            https://people.redhat.com/~rjones/augeas/
-Source0:        https://download.libguestfs.org/ocaml-augeas/ocaml-augeas-0.7.tar.gz
+Source0:        https://download.libguestfs.org/ocaml-augeas/ocaml-augeas-%{version}.tar.gz
 Source1:        https://download.libguestfs.org/ocaml-augeas/ocaml-augeas-%{version}.tar.gz.sig
 Source2:        libguestfs.keyring
 

@@ -7,7 +7,7 @@ Release:        24%{?dist}
 
 License:        GPL-2.0-or-later
 URL:            http://sipe.sourceforge.net/
-Source0:        https://downloads.sourceforge.net/project/sipe/sipe/pidgin-sipe-1.25.0/pidgin-sipe-1.25.0.tar.bz2
+Source0:        https://downloads.sourceforge.net/project/sipe/sipe/pidgin-sipe-%{version}/pidgin-sipe-%{version}.tar.bz2
 Patch1:         pidgin-sipe-1.25.0-fix-false-negative-configure-checks.patch
 Patch2:         pidgin-sipe-1.25.0-fix-glib-2.68-build.patch
 Patch3:         pidgin-sipe-1.25.0-fix-libxml2-2.12-build.patch

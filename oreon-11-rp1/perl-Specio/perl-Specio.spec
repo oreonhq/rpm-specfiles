@@ -16,7 +16,7 @@ Summary:	Type constraints and coercions for Perl
 # Other files:			Artistic-2.0
 License:	Artistic-2.0 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:		https://metacpan.org/release/Specio
-Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Specio-0.53.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Specio-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

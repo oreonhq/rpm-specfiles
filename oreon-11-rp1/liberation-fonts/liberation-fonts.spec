@@ -67,9 +67,9 @@ Microsoft Courier New.
 
 %{common_description} }
 
-Source2:    59-%{fontpkgname1}.conf
-Source3:    59-%{fontpkgname2}.conf
-Source4:    59-%{fontpkgname3}.conf
+Source2:    59-liberation-mono-fonts.conf
+Source3:    59-liberation-sans-fonts.conf
+Source4:    59-liberation-serif-fonts.conf
 
 Name:       liberation-fonts
 Summary:    Fonts to replace commonly used Microsoft Windows fonts

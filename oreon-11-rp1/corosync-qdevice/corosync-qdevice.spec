@@ -12,7 +12,7 @@ Version: 3.0.4
 Release: 3%{?dist}
 License: BSD-3-Clause
 URL: https://github.com/corosync/corosync-qdevice
-Source0:        https://github.com/corosync/corosync-qdevice/releases/download/v3.0.4/corosync-qdevice-3.0.4.tar.gz
+Source0:        https://github.com/corosync/corosync-qdevice/releases/download/v%{version}/%{name}-%{version}.tar.gz
 
 # Runtime bits
 Requires: corosync >= 2.4.0

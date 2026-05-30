@@ -6,7 +6,7 @@ Release:        32%{?dist}
 Summary:        Check for pod coverage in your distribution
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/Test-Pod-Coverage
-Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEILB/Test-Pod-Coverage-1.10.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEILB/Test-Pod-Coverage-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  perl-interpreter

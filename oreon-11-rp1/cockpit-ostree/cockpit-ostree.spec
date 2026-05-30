@@ -12,7 +12,7 @@ Requires: cockpit-bridge >= 125
 Requires: cockpit-system >= 125
 Requires: rpm-ostree
 
-Source:        https://github.com/cockpit-project/cockpit-ostree/releases/download/222/cockpit-ostree-222.tar.xz
+Source:        https://github.com/cockpit-project/%{name}/releases/download/%{version}/cockpit-ostree-%{version}.tar.xz
 
 %if 0%{?fedora} >= 41 || 0%{?rhel}
 ExcludeArch: %{ix86}

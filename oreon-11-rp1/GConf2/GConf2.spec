@@ -35,7 +35,7 @@ Summary: A process-transparent configuration system
 License: LGPL-2.0-or-later AND GPL-2.0-or-later
 SourceLicense: %{license} AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-2.0-or-later WITH Autoconf-exception-generic AND GPL-2.0-or-later WITH Libtool-exception AND GPL-1.0-or-later WITH Autoconf-exception-generic AND FSFULLRWD AND FSFULLR AND FSFUL AND FSFAP AND X11 AND LicenseRef-Fedora-Public-Domain
 URL:     https://gitlab.gnome.org/Archive/gconf/
-Source0:        https://download.gnome.org/sources/GConf/3.2/GConf-3.2.6.tar.xz
+Source0:        https://download.gnome.org/sources/GConf/3.2/GConf-%{version}.tar.xz
 Source1: macros.gconf2
 
 # http://bugzilla.gnome.org/show_bug.cgi?id=568845

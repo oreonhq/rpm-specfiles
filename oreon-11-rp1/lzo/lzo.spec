@@ -7,7 +7,7 @@ Summary:        Data compression library with very fast (de)compression
 License:        gpl-2.0-or-later
 URL:            http://www.oberhumer.com/opensource/lzo/
 
-Source0:        http://www.oberhumer.com/opensource/lzo/download/lzo-2.10.tar.gz
+Source0:        http://www.oberhumer.com/opensource/lzo/download/%{name}-%{version}.tar.gz
 Patch0:         lzo-2.08-configure.patch
 Patch1:         lzo-2.08-rhbz1309225.patch
 

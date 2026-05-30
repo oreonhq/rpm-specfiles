@@ -6,7 +6,7 @@ Release: 33%{?dist}
 Summary: Library for writing UNIX daemons
 License: LGPL-2.1-or-later
 URL: http://0pointer.de/lennart/projects/libdaemon/
-Source0:        http://0pointer.de/lennart/projects/libdaemon/libdaemon-0.14.tar.gz
+Source0:        http://0pointer.de/lennart/projects/libdaemon/%{name}-%{version}.tar.gz
 
 # Requires lynx to build the docs
 BuildRequires:  gcc

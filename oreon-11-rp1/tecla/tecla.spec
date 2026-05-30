@@ -9,7 +9,7 @@ Summary:        Keyboard layout viewer
 
 License:        GPL-2.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/tecla
-Source: https://download.gnome.org/sources/tecla/50/tecla-%{tarball_version}.tar.xz
+Source:        https://download.gnome.org/sources/tecla/50/tecla-%(echo.tar.xz
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  meson

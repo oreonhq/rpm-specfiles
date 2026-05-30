@@ -1,4 +1,4 @@
-%global source0_hash 5f898ab77ef57eeac52ed9d049e8881817db3f6c3562e6294e4f5dfc08fc1799
+%global source0_hash 853aeb021aef7586bda29e74a6b03006bcb565a755c86b66032d8ec31b67dbb9
 
 # since we have only a static library
 %global debug_package %{nil}
@@ -12,7 +12,7 @@ URL:           http://www.antlr2.org/
 ExclusiveArch: %{java_arches}
 
 # ./generate-tarball.sh
-Source0:       antlr-%{version}.tar.gz
+Source0:        https://www.antlr2.org/download/antlr-%{version}.tar.gz
 Source1:       %{name}-build.xml
 Source3:        http://repo2.maven.org/maven2/antlr/antlr/%{version}/%{name}-%{version}.pom
 # Repack the tarball without prebuilt binaries of unknown origin

@@ -9,7 +9,7 @@ Name: hunspell-ro
 Summary: Romanian hunspell dictionaries
 Version: 3.3.10
 Release: 11%{?dist}
-Source:        http://downloads.sourceforge.net/rospell/ro_RO.3.3.10.zip
+Source:        http://downloads.sourceforge.net/rospell/ro_RO.%{version}.zip
 URL: http://rospell.sourceforge.net/
 License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1
 BuildArch: noarch

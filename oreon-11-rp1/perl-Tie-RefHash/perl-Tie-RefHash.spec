@@ -9,7 +9,7 @@ Release:        521%{?dist}
 Summary:        Use references as hash keys
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Tie-RefHash
-Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Tie-RefHash-1.41.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/ET/ETHER/Tie-RefHash-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

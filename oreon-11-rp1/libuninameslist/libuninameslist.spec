@@ -8,7 +8,7 @@ Summary:        A library providing Unicode character names and annotations
 
 License:        BSD-3-Clause
 URL:            https://github.com/fontforge/libuninameslist
-Source0:        https://github.com/fontforge/libuninameslist/archive/refs/tags/20260107.tar.gz
+Source0:        https://github.com/fontforge/libuninameslist/archive/%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake

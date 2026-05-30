@@ -6,7 +6,7 @@ Release:        15%{?dist}
 Summary:        A nouvelle cuisine portion size slice of Moose
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Role-Tiny
-Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/Role-Tiny-2.002004.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/Role-Tiny-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

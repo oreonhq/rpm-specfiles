@@ -7,7 +7,7 @@ Summary:        Composer GUI for use with Cockpit
 
 License:        MIT
 URL:            http://weldr.io/
-Source0:        https://github.com/osbuild/cockpit-composer/releases/download/53/cockpit-composer-53.tar.gz
+Source0:        https://github.com/osbuild/cockpit-composer/releases/download/%{version}/cockpit-composer-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  libappstream-glib

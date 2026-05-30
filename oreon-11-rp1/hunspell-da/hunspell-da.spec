@@ -10,7 +10,7 @@ Name: hunspell-da
 Summary: Danish hunspell dictionaries
 Version: 2.9.053
 Release: 2%{?dist}
-Source:        https://stavekontrolden.dk/dictionaries/da_DK/da_DK-2.9.053.oxt
+Source:        https://stavekontrolden.dk/dictionaries/da_DK/da_DK-%{version}.oxt
 URL: https://stavekontrolden.dk/
 # license information from README_da_DK.txt
 License: GPL-2.0-or-later OR LGPL-2.1-or-later OR MPL-1.1

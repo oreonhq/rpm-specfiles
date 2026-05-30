@@ -11,7 +11,7 @@ Summary: Tetum hunspell dictionaries
 %global upstreamid 20050108
 Version: 0.%{upstreamid}
 Release: 37%{?dist}
-Source:        tet_ID.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/tet_ID.zip
 URL: http://borel.slu.edu/crubadan/apps.html
 License: GPL-2.0-or-later
 BuildArch: noarch

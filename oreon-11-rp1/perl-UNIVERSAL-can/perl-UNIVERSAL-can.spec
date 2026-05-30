@@ -7,7 +7,7 @@ Summary:        Hack around people calling UNIVERSAL::can() as a function
 # Automatically converted from old format: GPL+ or Artistic - review is highly recommended.
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/UNIVERSAL-can
-Source0:        https://cpan.metacpan.org/authors/id/C/CH/CHROMATIC/UNIVERSAL-can-1.20140328.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/UNIVERSAL/UNIVERSAL-can-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build:

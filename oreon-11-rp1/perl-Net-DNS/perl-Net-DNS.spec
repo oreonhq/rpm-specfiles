@@ -6,8 +6,8 @@ Release:       2%{?dist}
 Summary:       DNS resolver modules for Perl
 License:       MIT
 URL:           https://www.net-dns.org
-Source0:        https://www.net-dns.org/download/Net-DNS-1.53.tar.gz
-Source1:        https://www.net-dns.org/download/Net-DNS-1.53.tar.gz.asc
+Source0:        https://www.net-dns.org/download/Net-DNS-%{version}.tar.gz
+Source1:        https://www.net-dns.org/download/Net-DNS-%{version}.tar.gz.asc
 Source2:       http://keys.openpgp.org/pks/lookup?op=get&search=0xE5F8F8212F77A498#/willem.nlnetlabs.nl
 
 BuildArch:     noarch

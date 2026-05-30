@@ -6,7 +6,7 @@ Release:	1%{?dist}
 Summary:	Tool for indenting and re-formatting Perl scripts
 License:	GPL-2.0-or-later
 URL:		http://perltidy.sourceforge.net/
-Source0:	https://cpan.metacpan.org/authors/id/S/SH/SHANCOCK/Perl-Tidy-20260204.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Perl/Perl-Tidy-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

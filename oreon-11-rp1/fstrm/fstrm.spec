@@ -9,7 +9,7 @@ Version: 0.6.1
 Release: 14%{?dist}
 License: MIT AND NTP
 URL: https://github.com/farsightsec/fstrm
-Source0:        https://dl.farsightsecurity.com/dist/fstrm/fstrm-0.6.1.tar.gz
+Source0:        https://dl.farsightsecurity.com/dist/%{name}/%{name}-%{version}.tar.gz
 # Patches to libmy library
 # https://github.com/farsightsec/libmy/pull/4
 Patch1: fstrm-0.6.1-Fix-deadcode-and-check-return-code.patch

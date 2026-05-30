@@ -6,7 +6,7 @@ Release:	18%{?dist}
 Summary:	Isolated String helpers from B
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/XString
-Source0:        https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/XString-0.005.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/XString-%{version}.tar.gz
 # Build
 BuildRequires:	coreutils
 BuildRequires:	findutils

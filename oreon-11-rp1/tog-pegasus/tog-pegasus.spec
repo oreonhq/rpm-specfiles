@@ -15,7 +15,7 @@ Summary:        OpenPegasus WBEM Services for Linux
 
 License:        MIT
 URL:            http://www.openpegasus.org
-Source0:        https://collaboration.opengroup.org/pegasus/documents/27211/pegasus-%{version}.tar.gz
+Source0:        https://collaboration.opengroup.org/pegasus/documents/27211/pegasus-.tar.gz
 #  1: Description of security enhacements
 Source1:        README.RedHat.Security
 #  3: Description of SSL settings

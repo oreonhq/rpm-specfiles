@@ -6,7 +6,7 @@ Release:        4%{?dist}
 Summary:        Get a domain name's public suffix via the Mozilla Public Suffix List
 License:        MIT
 URL:            https://metacpan.org/release/Mozilla-PublicSuffix
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TOMHUKINS/Mozilla-PublicSuffix-v1.0.7.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Mozilla/Mozilla-PublicSuffix-v%{version}.tar.gz
 
 
 # https://github.com/rsimoes/Mozilla-PublicSuffix/pull/6

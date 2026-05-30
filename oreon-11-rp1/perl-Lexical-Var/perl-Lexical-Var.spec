@@ -9,7 +9,7 @@ Release:        11%{?dist}
 Summary:        Static variables without name space pollution
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Lexical-Var
-Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/Lexical-Var-0.010.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Lexical/Lexical-Var-%{version}.tar.gz
 
 # Build
 BuildRequires:  coreutils

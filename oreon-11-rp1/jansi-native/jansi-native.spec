@@ -14,7 +14,7 @@ Summary:        Jansi Native implements the JNI Libraries used by the Jansi proj
 # Automatically converted from old format: ASL 2.0 - review is highly recommended.
 License:        Apache-2.0
 URL:            http://jansi.fusesource.org/
-Source0:        https://github.com/fusesource/jansi-native/archive/5015ad023a55785dbe6ad19cc786c0533387feff/jansi-native-1.8.tar.gz
+Source0:        https://github.com/fusesource/jansi-native/archive/%{commit}/jansi-native-%{version}.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(junit:junit)

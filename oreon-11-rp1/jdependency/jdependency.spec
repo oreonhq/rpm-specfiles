@@ -10,7 +10,7 @@ URL:            http://github.com/tcurdt/%{name}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://github.com/tcurdt/jdependency/archive/jdependency-2.12.tar.gz
+Source0:        http://github.com/tcurdt/%{name}/archive/%{name}-%{version}.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-io:commons-io)

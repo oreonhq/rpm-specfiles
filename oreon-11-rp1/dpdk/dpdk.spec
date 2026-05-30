@@ -15,7 +15,7 @@ Version: 24.11.4
 Release: %autorelease
 Epoch: 2
 URL: http://dpdk.org
-Source:        https://fast.dpdk.org/rel/dpdk-24.11.4.tar.xz
+Source:        https://fast.dpdk.org/rel/dpdk-%{version}.tar.xz
 
 BuildRequires: meson
 BuildRequires: python3-pyelftools

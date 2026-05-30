@@ -9,7 +9,7 @@ Release:	1%{?dist}
 Summary:	Low-level interface to lzma compression library
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Compress-Raw-Lzma
-Source0:	https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Lzma-2.221.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Compress/Compress-Raw-Lzma-%{version}.tar.gz
 
 # Module Build
 BuildRequires:	coreutils

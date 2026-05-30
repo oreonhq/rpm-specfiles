@@ -8,7 +8,7 @@ Summary:        Maven plugin for packaging artifacts in an uber-jar
 License:        Apache-2.0
 
 URL:            https://maven.apache.org/plugins/%{name}
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/maven-shade-plugin/3.6.1/maven-shade-plugin-3.6.1-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

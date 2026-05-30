@@ -13,7 +13,7 @@ Summary:        Plugins for gedit
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://gedit-text-editor.org/
-Source:        https://gitlab.gnome.org/World/gedit/gedit-plugins/-/archive/49.0/gedit-plugins-49.0.tar.bz2
+Source:        https://gitlab.gnome.org/World/gedit/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires:  gettext

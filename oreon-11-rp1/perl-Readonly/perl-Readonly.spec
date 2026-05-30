@@ -6,7 +6,7 @@ Release:	30%{?dist}
 Summary:	Facility for creating read-only scalars, arrays, hashes
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Readonly
-Source0:        https://cpan.metacpan.org/authors/id/S/SA/SANKO/Readonly-2.05.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SA/SANKO/Readonly-%{version}.tar.gz
 Patch0:		Readonly-2.05-interpreter.patch
 BuildArch:	noarch
 # Module Build

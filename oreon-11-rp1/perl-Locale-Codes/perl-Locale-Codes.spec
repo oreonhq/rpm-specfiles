@@ -6,7 +6,7 @@ Release:        2%{?dist}
 Summary:        Distribution of modules to handle locale codes
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Locale-Codes
-Source0:        https://cpan.metacpan.org/authors/id/S/SB/SBECK/Locale-Codes-3.86.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SB/SBECK/Locale-Codes-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

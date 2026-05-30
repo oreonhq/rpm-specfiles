@@ -10,7 +10,7 @@ Release:        %autorelease
 # elftools/construct is MIT
 License:        Unlicense AND MIT
 URL:            https://github.com/eliben/pyelftools
-Source0:        https://github.com/eliben/pyelftools/archive/v0.32/pyelftools-0.32.tar.gz
+Source0:        https://github.com/eliben/pyelftools/archive/v%{version}/%{name}-%{version}.tar.gz
 %global _description \
 Pure-Python library for parsing and analyzing ELF files\
 and DWARF debugging information.

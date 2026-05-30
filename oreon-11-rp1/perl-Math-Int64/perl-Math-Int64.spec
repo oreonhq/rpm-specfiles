@@ -6,7 +6,7 @@ Release:        7%{?dist}
 Summary:        Manipulate 64 bits integers in Perl
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND LicenseRef-Fedora-Public-Domain AND BSD-3-Clause
 URL:            https://metacpan.org/release/Math-Int64
-Source0:        https://cpan.metacpan.org/authors/id/S/SA/SALVA/Math-Int64-0.57.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Math/Math-Int64-%{version}.tar.gz
 
 BuildRequires:  coreutils
 BuildRequires:  findutils

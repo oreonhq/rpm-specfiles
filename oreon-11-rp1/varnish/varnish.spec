@@ -39,7 +39,7 @@ Version: 8.0.0
 Release: 2%{?dist}
 License: BSD-2-Clause AND (BSD-2-Clause-FreeBSD AND BSD-3-Clause AND LicenseRef-Fedora-Public-Domain AND Zlib)
 URL: https://www.varnish-cache.org/
-Source0:        http://varnish-cache.org/_downloads/varnish-8.0.0.tgz
+Source0:        http://varnish-cache.org/_downloads/%{name}-%{version}.tgz
 Source1:        https://github.com/varnishcache/pkg-varnish-cache/archive/1f0d212dc45065f38bd80ac57fe22773a20a0595.tar.gz#/pkg-varnish-cache-%(c=1f0d212dc45065f38bd80ac57fe22773a20a0595;.tar.gz
 Source2: varnish.sysusers
 Source3:        https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2

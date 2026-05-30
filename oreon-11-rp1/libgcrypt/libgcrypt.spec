@@ -4,8 +4,8 @@ Name: libgcrypt
 Version: 1.12.1
 Release: 1%{?dist}
 URL: https://www.gnupg.org/
-Source0:        https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.12.1.tar.bz2
-Source1:        https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-1.12.1.tar.bz2.sig
+Source0:        https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-%{version}.tar.bz2
+Source1:        https://www.gnupg.org/ftp/gcrypt/libgcrypt/libgcrypt-%{version}.tar.bz2.sig
 Source2: https://gnupg.org/signature_key.asc
 # Pass the annobin flags to the libgcrypt.so (#2016349)
 Patch1: libgcrypt-1.10.1-annobin.patch

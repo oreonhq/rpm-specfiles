@@ -17,8 +17,8 @@ Summary:        Fast combinator parsing for bytestrings and text
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/attoparsec
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/attoparsec-0.14.4/attoparsec-0.14.4.tar.gz
-Source1:        https://hackage.haskell.org/package/attoparsec-0.14.4/attoparsec.cabal#/attoparsec-0.14.4.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

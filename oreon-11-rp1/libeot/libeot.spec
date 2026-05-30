@@ -7,7 +7,7 @@ Summary: A library for parsing Embedded OpenType font files
 
 License: MPL-2.0
 URL: https://github.com/umanwizard/libeot
-Source:        http://dev-www.libreoffice.org/src/libeot-0.01.tar.bz2
+Source:        http://dev-www.libreoffice.org/src/%{name}-%{version}.tar.bz2
 
 BuildRequires: gcc
 BuildRequires: make

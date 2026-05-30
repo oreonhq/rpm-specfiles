@@ -9,7 +9,7 @@ Summary:        Applying JSON Patches in Python
 
 License:        BSD-3-Clause
 URL:            https://github.com/stefankoegl/python-json-patch
-Source0:        https://pypi.io/packages/source/j/jsonpatch/jsonpatch-1.33.tar.gz
+Source0:        https://pypi.io/packages/source/j/jsonpatch/%{pypi_name}-%{version}.tar.gz
 # tarball from pypi does not include file tests.js required for a specific test.
 # upstream issue https://github.com/stefankoegl/python-json-patch/issues/82
 Patch0:         0001-Skip-unit-test-in-packaging.patch

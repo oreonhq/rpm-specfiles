@@ -18,7 +18,7 @@ Version: 3.10
 Release: 4%{?dist}
 License: GPL-2.0-or-later
 # https://github.com/SELinuxProject/selinux/wiki/Releases
-Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/selinux-3.10.tar.gz
+Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/selinux-%{version}.tar.gz
 Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/selinux-%{version}.tar.gz.asc
 Source2:        https://github.com/perfinion.gpg
 Source3: changelog

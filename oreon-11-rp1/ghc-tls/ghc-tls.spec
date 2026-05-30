@@ -17,7 +17,7 @@ Summary:        TLS protocol native implementation
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/tls
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/tls-2.1.8/tls-2.1.8.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

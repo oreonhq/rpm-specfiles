@@ -8,7 +8,7 @@ License:   	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:       	https://metacpan.org/release/Class-ReturnValue
 
 BuildArch: 	noarch
-Source:        https://cpan.metacpan.org/authors/id/J/JE/JESSE/Class-ReturnValue-0.55.tar.gz
+Source:        https://cpan.metacpan.org/authors/id/J/JE/JESSE/Class-ReturnValue-%{version}.tar.gz
 
 BuildRequires:  %{__make}
 BuildRequires:  perl-generators

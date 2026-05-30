@@ -11,7 +11,7 @@ URL:            https://commons.apache.org/proper/commons-jxpath/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://www.apache.org/dist/commons/jxpath/source/commons-jxpath-1.4.0-src.tar.gz
+Source0:        http://www.apache.org/dist/commons/jxpath/source/commons-jxpath-%{version}-src.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

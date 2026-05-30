@@ -17,7 +17,7 @@ Summary:        Integer logarithms
 License:        MIT
 URL:            https://hackage.haskell.org/package/integer-logarithms
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/integer-logarithms-1.0.5/integer-logarithms-1.0.5.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

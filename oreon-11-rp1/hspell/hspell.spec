@@ -6,7 +6,7 @@ Version: 1.4
 Release: 25%{?dist}
 License: AGPL-3.0-only
 URL: http://hspell.ivrix.org.il/
-Source:        http://hspell.ivrix.org.il/hspell-1.4.tar.gz
+Source:        http://hspell.ivrix.org.il/%{name}-%{version}.tar.gz
 Patch0: 0001-require-local-module-explicitly.patch
 
 BuildRequires:  gcc, make, hunspell-devel

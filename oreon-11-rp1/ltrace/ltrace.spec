@@ -16,7 +16,7 @@ BuildRequires: gcc-c++
 BuildRequires: make
 
 #  https://gitlab.com/cespedes/ltrace/-/releases
-Source0: https://gitlab.com/cespedes/ltrace/-/archive/v%{version}/ltrace-%{version}.tar.bz2
+Source0:        https://gitlab.com/cespedes/ltrace/-/archive/v0.8.1/ltrace-0.8.1.tar.bz2
 
 %description
 Ltrace is a debugging program which runs a specified command until the

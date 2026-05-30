@@ -12,7 +12,7 @@ Summary:        Voikko is a library for spellcheckers and hyphenators
 License:        GPL-2.0-or-later
 URL:            https://voikko.puimula.org
 # The usual format of stable release URLs
-Source0:        https://www.puimula.org/voikko-sources/libvoikko/libvoikko-4.3.3.tar.gz
+Source0:        https://www.puimula.org/voikko-sources/%{name}/%{name}-%{version}.tar.gz
 # The usual format of test release URLs
 #Source0:        https://www.puimula.org/htp/testing/%%{name}-%%{version}rc1.tar.gz
 

@@ -10,7 +10,7 @@ Summary:        %{sum}
 
 License:        MIT
 URL:            https://github.com/workhorsy/py-cpuinfo
-Source0:        https://files.pythonhosted.org/packages/source/p/py-cpuinfo/py-cpuinfo-9.0.0.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/p/py-%{srcname}/py-%{srcname}-%{version}.tar.gz
 
 # s390x support
 Patch0:         py-cpuinfo-s390x.patch

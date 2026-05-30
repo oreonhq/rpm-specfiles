@@ -9,7 +9,7 @@ Summary: A library for import of Microsoft Publisher documents
 
 License: MPL-2.0
 URL: http://wiki.documentfoundation.org/DLP/Libraries/libmspub
-Source:        http://dev-www.libreoffice.org/src/libmspub/libmspub-0.1.4.tar.xz
+Source:        http://dev-www.libreoffice.org/src/%{name}/%{name}-%{version}.tar.xz
 
 Patch0: gcc10.patch
 Patch1: includes.patch

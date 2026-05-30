@@ -8,7 +8,7 @@ Summary:        YAML parser and emitter for Python
 # SPDX
 License:        MIT
 URL:            https://github.com/yaml/pyyaml
-Source:        https://github.com/yaml/pyyaml/archive/refs/tags/6.0.3.tar.gz
+Source:        https://github.com/yaml/pyyaml/archive/%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  libyaml-devel

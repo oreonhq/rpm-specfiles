@@ -6,7 +6,7 @@ Name: libgovirt
 Version: 0.3.11
 Release: 1%{?dist}%{?extra_release}
 License: LGPL-2.1-or-later
-Source0:        http://download.gnome.org/sources/libgovirt/0.3/libgovirt-0.3.11.tar.xz
+Source0:        http://download.gnome.org/sources/libgovirt/0.3/%{name}-%{version}.tar.xz
 URL: https://gitlab.gnome.org/GNOME/libgovirt
 
 BuildRequires: meson

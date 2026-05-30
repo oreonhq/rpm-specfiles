@@ -54,7 +54,7 @@ URL:            http://gstreamer.freedesktop.org/
 # Git snapshot workflow disabled (use release tarball).
 Source0:        gst-plugins-bad-%{version}.tar.xz
 %else
-Source:        https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-1.26.7.tar.xz
+Source:        https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-%{version}.tar.xz
 %endif
 
 # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/5622

@@ -7,7 +7,7 @@ Summary:        X11 shared memory fences
 
 License:        HPND-sell-variant
 URL:            https://www.x.org/
-Source0:        https://www.x.org/archive/individual/lib/libxshmfence-1.3.2.tar.xz
+Source0:        https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
 Patch0:         0001-alloc-Allow-disabling-memfd-usage-at-runtime-with-XS.patch
 
 # upstream tarball has broken libtool because libtool is never not broken

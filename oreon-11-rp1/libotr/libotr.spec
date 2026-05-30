@@ -7,7 +7,7 @@ Version: 4.1.1
 Release: 25%{?dist}
 # Automatically converted from old format: GPLv2 and LGPLv2 - review is highly recommended.
 License: GPL-2.0-only AND LicenseRef-Callaway-LGPLv2
-Source0:        http://otr.cypherpunks.ca/libotr-4.1.1.tar.gz
+Source0:        http://otr.cypherpunks.ca/%{name}-%{version}.tar.gz
 Url: http://otr.cypherpunks.ca/
 Provides: libotr-toolkit = %{version}
 Obsoletes: libotr-toolkit < %{version}

@@ -7,7 +7,7 @@ Summary:    Edit and display the X11 core keyboard map
 
 License:    MIT AND MIT-open-group
 URL:        https://www.x.org
-Source0:        https://www.x.org/pub/individual/app/xmodmap-1.0.11.tar.xz
+Source0:        https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
 
 BuildRequires:  automake libtool
 BuildRequires:  gcc make

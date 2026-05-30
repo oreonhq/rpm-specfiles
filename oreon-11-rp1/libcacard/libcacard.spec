@@ -7,8 +7,8 @@ Summary:        CAC (Common Access Card) library
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://gitlab.freedesktop.org/spice/libcacard
-Source0:        http://www.spice-space.org/download/libcacard/libcacard-2.8.2.tar.xz
-Source1:        http://www.spice-space.org/download/libcacard/libcacard-2.8.2.tar.xz.sha256sum
+Source0:        http://www.spice-space.org/download/libcacard/%{name}-%{version}.tar.xz
+Source1:        http://www.spice-space.org/download/libcacard/%{name}-%{version}.tar.xz.sha256sum
 Source3:        db2.crypt
 Epoch:          3
 

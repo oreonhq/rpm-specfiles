@@ -8,7 +8,7 @@ Summary: CD-ROM input and control library
 # src/getopt* are LGPL-2.1-or-later
 License: GPL-3.0-or-later AND BSD-2-Clause AND LGPL-2.1-or-later
 URL: http://www.gnu.org/software/libcdio/
-Source0:        https://github.com/libcdio/libcdio/releases/download/2.3.0/libcdio-2.3.0.tar.bz2
+Source0:        https://github.com/libcdio/libcdio/releases/download/%{version}/libcdio-%{version}.tar.bz2
 Source2: libcdio-no_date_footer.hml
 Source3: cdio_config.h
 

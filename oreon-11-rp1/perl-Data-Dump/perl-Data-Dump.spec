@@ -6,7 +6,7 @@ Release:        14%{?dist}
 Summary:        Pretty printing of data structures
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-Dump
-Source0:        https://cpan.metacpan.org/authors/id/G/GA/GARU/Data-Dump-1.25.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Data/Data-Dump-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build

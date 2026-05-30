@@ -9,7 +9,7 @@ Version:   0.1.10
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/hughsie/%{name}
-Source0:        https://github.com/hughsie/passim/releases/download/0.1.10/passim-0.1.10.tar.xz
+Source0:        https://github.com/hughsie/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires: gcc
 BuildRequires: gettext

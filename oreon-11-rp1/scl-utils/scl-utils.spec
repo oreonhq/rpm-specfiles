@@ -10,7 +10,7 @@ Summary:    Utilities for alternative packaging
 
 License:    GPL-2.0-or-later
 URL:        https://github.com/sclorg/scl-utils
-Source0:        https://github.com/sclorg/scl-utils/archive/2.0.3/scl-utils-2.0.3.tar.gz
+Source0:        https://github.com/sclorg/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
 Source1:    macros.scl-filesystem
 BuildRequires:	gcc make
 BuildRequires:  cmake

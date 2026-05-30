@@ -14,7 +14,7 @@ Release:        5%{?dist}
 Summary:        Date and time object for Perl
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/DateTime
-Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/DateTime-1.66.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/DateTime/DateTime-%{version}.tar.gz
 
 # Build:
 BuildRequires:  coreutils

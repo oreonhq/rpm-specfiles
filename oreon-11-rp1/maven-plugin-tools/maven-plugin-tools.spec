@@ -11,7 +11,7 @@ URL:            https://maven.apache.org/plugin-tools/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugin-tools/maven-plugin-tools/3.9.0/maven-plugin-tools-3.9.0-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/plugin-tools/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
 Patch:          0001-Disable-help-MOJO-generation.patch
 Patch:          0002-Remove-dependency-on-jtidy.patch

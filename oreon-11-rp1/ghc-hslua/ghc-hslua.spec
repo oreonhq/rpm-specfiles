@@ -44,8 +44,8 @@ Source1:        https://hackage.haskell.org/package/hslua-aeson-2.3.2/hslua-aeso
 Source2:        https://hackage.haskell.org/package/hslua-classes-2.3.2/hslua-classes-2.3.2.tar.gz
 Source3:        https://hackage.haskell.org/package/hslua-core-2.3.2.1/hslua-core-2.3.2.1.tar.gz
 Source4:        https://hackage.haskell.org/package/hslua-marshalling-2.3.2/hslua-marshalling-2.3.2.tar.gz
-Source5:        https://hackage.haskell.org/package/hslua-objectorientation-2.3.1/hslua-objectorientation-2.3.1.tar.gz
-Source6:        https://hackage.haskell.org/package/hslua-packaging-2.3.1/hslua-packaging-2.3.1.tar.gz
+Source5:        https://hackage.haskell.org/package/%{hsluaobjectorientation}/%{hsluaobjectorientation}.tar.gz
+Source6:        https://hackage.haskell.org/package/%{hsluapackaging}/%{hsluapackaging}.tar.gz
 Source7:        https://hackage.haskell.org/package/hslua-typing-0.1.1/hslua-typing-0.1.1.tar.gz
 Source8:        https://hackage.haskell.org/package/lua-2.3.4/lua-2.3.4.tar.gz
 # End cabal-rpm sources

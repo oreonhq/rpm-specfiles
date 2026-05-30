@@ -15,7 +15,7 @@ License: GPL-2.0-or-later AND MIT
 Requires: %{name}-filesystem = %{version}-%{release}
 Requires: %{name}-ppds = %{version}-%{release}
 
-Source0:        http://www.openprinting.org/download/foomatic/foomatic-db-%{dbver_rel}-%{dbver_snap}.tar.gz
+Source0:        https://www.openprinting.org/download/foomatic/foomatic-db-4.0-20230810.tar.gz
 
 Patch1: foomatic-db-device-ids.patch
 Patch2: foomatic-db-invalid.patch
@@ -41,7 +41,7 @@ BuildRequires: sed
 This is the database of printers, printer drivers, and driver options
 for Foomatic.
 
-The site http://www.openprinting.org/ is based on this database.
+The site https://www.openprinting.org/ is based on this database.
 
 %package filesystem
 Summary: Directory layout for the foomatic package

@@ -6,7 +6,7 @@ Release: 5%{?dist}
 Summary: Library for Neighbor Discovery Protocol
 License: LGPL-2.1-or-later
 URL: http://www.libndp.org/
-Source:        http://www.libndp.org/files/libndp-1.9.tar.gz
+Source:        http://www.libndp.org/files/libndp-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires: make

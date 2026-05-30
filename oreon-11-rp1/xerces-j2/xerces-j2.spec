@@ -18,7 +18,7 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        http://mirror.ox.ac.uk/sites/rsync.apache.org/xerces/j/source/Xerces-J-src.%{version}.tar.gz
 # Custom javac ant task used by the build
-Source3:        https://svn.apache.org/repos/asf/xerces/java/tags/Xerces-J_%{cvs_version}/tools/src/XJavac.java
+Source3:        https://svn.apache.org/repos/asf/xerces/java/tags/Xerces-J_%(tr/tools/src/XJavac.java
 Source7:        %{name}-pom.xml
 Source11:       %{name}-version.1
 Source12:       %{name}-constants.1

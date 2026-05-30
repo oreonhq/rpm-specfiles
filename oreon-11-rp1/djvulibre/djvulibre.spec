@@ -6,7 +6,7 @@ Release:        2%{?dist}
 Summary:        DjVu viewers, encoders, and libraries
 License:        GPL-2.0-or-later
 URL:            https://djvu.sourceforge.net/
-Source0:        https://downloads.sourceforge.net/djvu/djvulibre-3.5.28.tar.gz
+Source0:        http://downloads.sourceforge.net/djvu/%{name}-%{version}.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  libtiff-devel

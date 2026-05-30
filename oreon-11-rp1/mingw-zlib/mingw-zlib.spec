@@ -10,7 +10,7 @@ Summary:        MinGW Windows zlib compression library
 
 License:        Zlib
 URL:            https://www.zlib.net/
-Source0:        https://www.zlib.net/zlib-1.3.2.tar.xz
+Source0:        https://www.zlib.net/zlib-%{version}.tar.xz
 # Use UNIX naming convention for libraries
 Patch0:         mingw-zlib-cmake.patch
 

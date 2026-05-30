@@ -6,7 +6,7 @@ Release:	33%{?dist}
 Summary:	Compare XML in perl tests
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-XML
-Source0:	https://cpan.metacpan.org/authors/id/S/SE/SEMANTICO/Test-XML-0.08.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-XML-%{version}.tar.gz
 
 BuildArch:	noarch
 # Build

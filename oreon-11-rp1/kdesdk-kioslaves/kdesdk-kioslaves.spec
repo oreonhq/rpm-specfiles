@@ -21,7 +21,7 @@ URL:     https://cgit.kde.org/%{name}.git
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/stable/release-service/26.03.80/src/kdesdk-kio-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable}/release-service/%{version}/src/kdesdk-kio-%{version}.tar.xz
 
 BuildRequires: perl-generators
 

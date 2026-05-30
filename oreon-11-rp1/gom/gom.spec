@@ -8,7 +8,7 @@ Summary:        GObject to SQLite object mapper library
 # documentation is GFDL-1.1-or-later
 License:        LGPL-2.1-or-later AND GFDL-1.1-or-later
 URL:            https://wiki.gnome.org/Projects/Gom
-Source0:        https://download.gnome.org/sources/gom/0.5/gom-0.5.6.tar.xz
+Source0:        https://download.gnome.org/sources/gom/0.5/gom-%{version}.tar.xz
 
 BuildRequires:  gobject-introspection-devel
 BuildRequires:  meson

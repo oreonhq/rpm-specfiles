@@ -7,7 +7,7 @@ Summary:        SBLIM CMPI Provider Development Support
 
 License:        EPL-1.0
 URL:            http://sblim.wiki.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/sblim/sblim-cmpi-devel-2.0.3.tar.bz2
+Source0:        http://downloads.sourceforge.net/sblim/%{name}-%{version}.tar.bz2
 # Source1: macro definitions
 Source1: macros.sblim-cmpi-devel
 

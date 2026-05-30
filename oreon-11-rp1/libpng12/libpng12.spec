@@ -11,7 +11,7 @@ URL: http://www.libpng.org/pub/png/
 Obsoletes: libpng-compat <= 2:1.5.10
 
 # SourceForge libpng12 paths often 404 after releases move. Tag archive is stable.
-Source0:        https://github.com/pnggroup/libpng/archive/refs/tags/v1.2.57.tar.gz#/libpng-1.2.57.tar.gz
+Source0:        https://ftp-osl.osuosl.org/pub/libpng/src/libpng12/libpng-%{version}.tar.xz
 
 Patch0: libpng12-multilib.patch
 Patch1: libpng12-pngconf.patch

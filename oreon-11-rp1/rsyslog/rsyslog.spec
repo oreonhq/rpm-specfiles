@@ -45,7 +45,7 @@ Version: 8.2602.0
 Release: %autorelease
 License: GPL-3.0-or-later AND Apache-2.0
 URL: http://www.rsyslog.com/
-Source0:        http://www.rsyslog.com/files/download/rsyslog/rsyslog-8.2602.0.tar.gz
+Source0:        http://www.rsyslog.com/files/download/rsyslog/%{name}-%{version}.tar.gz
 Source1: rsyslog.conf
 Source2: rsyslog.sysconfig
 Source3: rsyslog.log

@@ -17,8 +17,8 @@ Summary:        Type definitions for Universally Unique Identifiers
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/uuid-types
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/uuid-types-1.0.6/uuid-types-1.0.6.tar.gz
-Source1:        https://hackage.haskell.org/package/uuid-types-1.0.6/uuid-types.cabal#/uuid-types-1.0.6.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

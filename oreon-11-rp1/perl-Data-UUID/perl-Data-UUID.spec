@@ -11,7 +11,7 @@ Summary:	Globally/Universally Unique Identifiers (GUIDs/UUIDs)
 # https://github.com/bleargh45/Data-UUID/issues/26
 License:	HP-1989 AND (GPL-1.0-or-later OR Artistic-1.0-Perl)
 URL:		https://metacpan.org/release/Data-UUID
-Source0:	https://cpan.metacpan.org/authors/id/G/GT/GTERMARS/Data-UUID-1.227.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Data/Data-UUID-%{version}.tar.gz
 
 # Module Build
 BuildRequires:	coreutils

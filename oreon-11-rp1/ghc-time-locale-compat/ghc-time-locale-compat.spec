@@ -15,7 +15,7 @@ Summary:        Compatibile module for time-format locale
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/time-locale-compat
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/time-locale-compat-0.1.1.5/time-locale-compat-0.1.1.5.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

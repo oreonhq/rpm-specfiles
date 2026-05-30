@@ -25,8 +25,8 @@ Release:        %autorelease
 Summary:        The Anthy engine for IBus input platform
 License:        GPL-2.0-or-later
 URL:            https://github.com/ibus/ibus/wiki
-Source0:        https://github.com/ibus/ibus-anthy/releases/download/1.5.18/ibus-anthy-1.5.18.tar.gz
-Source1:        https://github.com/ibus/ibus-anthy/releases/download/1.5.18/ibus-anthy-1.5.18.tar.gz.sum#/ibus-anthy.tar.gz.sum
+Source0:        https://github.com/ibus/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
+Source1:        https://github.com/ibus/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz.sum#/%{name}.tar.gz.sum
 
 # Upstreamed patches.
 # Patch0:         %%{name}-HEAD.patch

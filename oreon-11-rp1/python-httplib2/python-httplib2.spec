@@ -8,7 +8,7 @@ Release:        8%{?dist}
 Summary:        Comprehensive HTTP client library
 License:        MIT
 URL:            https://pypi.python.org/pypi/httplib2
-Source:        https://github.com/httplib2/httplib2/archive/v0.22.0/httplib2-0.22.0.tar.gz
+Source:        https://github.com/httplib2/httplib2/archive/v%{version}/%{srcname}-%{version}.tar.gz
 #
 # Patch to use the Fedora ca certs instead of the bundled ones
 #

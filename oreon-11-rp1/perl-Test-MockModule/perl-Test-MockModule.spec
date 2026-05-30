@@ -13,7 +13,7 @@ Release:        3%{?dist}
 Summary:        Override subroutines in a module for unit testing
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-MockModule
-Source0:        https://cpan.metacpan.org/authors/id/G/GF/GFRANKS/Test-MockModule-v0.180.0.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-MockModule-v%{version}.tar.gz
 
 BuildArch:      noarch
 # Build

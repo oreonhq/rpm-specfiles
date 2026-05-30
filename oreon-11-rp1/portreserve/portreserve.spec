@@ -9,7 +9,7 @@ Release: 40%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL: http://cyberelk.net/tim/portreserve/
-Source0:        http://cyberelk.net/tim/data/portreserve/stable/portreserve-0.0.5.tar.bz2
+Source0:        http://cyberelk.net/tim/data/portreserve/stable/%{name}-%{version}.tar.bz2
 Source1: portreserve.service
 Patch1: portreserve-pid-file.patch
 Requires(post): systemd-units

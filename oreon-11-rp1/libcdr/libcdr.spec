@@ -10,7 +10,7 @@ Summary: A library for import of CorelDRAW drawings
 # the only Public Domain source is src/lib/CDRColorProfiles.h
 License: MPL-2.0 AND LicenseRef-Fedora-Public-Domain
 URL: http://wiki.documentfoundation.org/DLP/Libraries/libcdr
-Source:        http://dev-www.libreoffice.org/src/libcdr/libcdr-0.1.8.tar.xz
+Source:        http://dev-www.libreoffice.org/src/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires: boost-devel
 BuildRequires: doxygen

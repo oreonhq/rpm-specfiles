@@ -10,7 +10,7 @@ Summary(de):    USB Modeswitch aktiviert UMTS-Karten
 License:    GPL-2.0-or-later
 URL:        http://www.draisberghof.de/usb_modeswitch/
 
-Source0:        http://www.draisberghof.de/usb_modeswitch/usb-modeswitch-2.6.2.tar.bz2
+Source0:        http://www.draisberghof.de/%{name}/%{source_name}-%{version}.tar.bz2
 Source1:    http://www.draisberghof.de/usb_modeswitch/device_reference.txt
 
 # Submitted upstream (2014-11-24)

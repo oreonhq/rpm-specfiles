@@ -13,7 +13,7 @@ License: BSD-2-Clause AND HPND AND HPND-sell-variant AND ICU AND MIT AND MIT-ope
 URL: https://www.x.org
 BuildArch: noarch
 
-Source0:        https://www.x.org/pub/individual/proto/xorgproto-2025.1.tar.xz
+Source0:        https://www.x.org/pub/individual/proto/xorgproto-%{version}.tar.xz
 
 Source40: make-git-snapshot.sh
 

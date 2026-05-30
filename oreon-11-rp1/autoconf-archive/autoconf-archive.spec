@@ -11,8 +11,8 @@ Summary:        The Autoconf Macro Archive
 # We only try to make an exhaustive list, not to decide what is to be applied.
 License:        GPL-2.0-or-later WITH Autoconf-exception-macro AND GPL-3.0-or-later AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Autoconf-exception-macro AND GFDL-1.3-or-later AND LGPL-3.0-or-later WITH Autoconf-exception-macro AND LGPL-2.1-or-later AND BSD-2-Clause AND BSD-3-Clause AND FSFAP AND FSFAP-no-warranty-disclaimer AND FSFULLR
 URL:            https://www.gnu.org/software/autoconf-archive/
-Source0:        https://ftp.gnu.org/gnu/autoconf-archive/autoconf-archive-2024.10.16.tar.xz
-Source1:        https://ftp.gnu.org/gnu/autoconf-archive/autoconf-archive-2024.10.16.tar.xz.sig
+Source0:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz
+Source1:        https://ftp.gnu.org/gnu/%{name}/%{name}-%{version}.tar.xz.sig
 # gpg --keyserver pool.sks-keyservers.net --recv-keys 1A4F63A13A4649B632F65EE141BC28FE99089D72
 # gpg --export --export-options export-minimal 1A4F63A13A4649B632F65EE141BC28FE99089D72 > gpgkey-1A4F63A13A4649B632F65EE141BC28FE99089D72.gpg
 Source2:        gpgkey-1A4F63A13A4649B632F65EE141BC28FE99089D72.gpg

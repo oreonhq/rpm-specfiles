@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f0c0960b4ff8ec78d1547d04e2fb94d77069f500225db356a6ac8b27e03e2350
 
 Version:        1.200
 Release:        32%{?dist}
@@ -32,8 +32,8 @@ a regular typeface, with no bold or italic version available or planned.}
 
 
 # download from http://scripts.sil.org/cms/scripts/render_download.php?site_id=nrsi&format=file&media_id=AbyssinicaSIL1.200.zip&filename=AbyssinicaSIL1.200.zip
-Source0:        %{archivename}.zip
-Source1:        66-%{fontpkgname}.conf
+Source0:        https://software.sil.org/downloads/r/abyssinica/AbyssinicaSIL1.200.zip
+Source1:        66-sil-abyssinica-fonts.conf
 
 %fontpkg
 

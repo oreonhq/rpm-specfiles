@@ -9,7 +9,7 @@ Summary:        Extremely fast compression algorithm
 
 License:        GPL-2.0-or-later AND BSD-2-Clause
 URL:            https://lz4.github.io/lz4/
-Source0:        https://github.com/lz4/lz4/archive/v1.10.0/lz4-1.10.0.tar.gz
+Source0:        https://github.com/lz4/lz4/archive/v%{version}/%{name}-%{version}.tar.gz
 
 Obsoletes:      %{name} < 1.7.5-3
 

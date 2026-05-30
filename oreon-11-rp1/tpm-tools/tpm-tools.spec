@@ -6,7 +6,7 @@ Version:          1.3.9.2
 Release:          %autorelease
 License:          CPL-1.0
 URL:              http://trousers.sourceforge.net
-Source0:        http://downloads.sourceforge.net/trousers/tpm-tools-1.3.9.2.tar.gz
+Source0:        http://downloads.sourceforge.net/trousers/%{name}-%{version}.tar.gz
 BuildRequires:    make gcc
 BuildRequires:    trousers-devel openssl-devel opencryptoki-devel gettext-devel autoconf automake libtool
 Patch0001:        0003-Allocate-OpenSSL-cipher-contexts-for-seal-unseal.patch

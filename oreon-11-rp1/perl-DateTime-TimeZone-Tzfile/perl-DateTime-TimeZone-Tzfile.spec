@@ -13,7 +13,7 @@ Release:        25%{?dist}
 Summary:        Tzfile (zoneinfo) timezone files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-TimeZone-Tzfile
-Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/DateTime-TimeZone-Tzfile-0.011.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/DateTime-TimeZone-Tzfile-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

@@ -6,8 +6,8 @@ Release:        %autorelease
 Summary:        The New GNU Portable Threads library
 License:        LGPL-2.1-or-later
 URL:            https://git.gnupg.org/cgi-bin/gitweb.cgi?p=npth.git
-Source0:        https://gnupg.org/ftp/gcrypt/npth/npth-1.8.tar.bz2
-Source1:        https://gnupg.org/ftp/gcrypt/npth/npth-1.8.tar.bz2.sig
+Source0:        https://gnupg.org/ftp/gcrypt/npth/%{name}-%{version}.tar.bz2
+Source1:        https://gnupg.org/ftp/gcrypt/npth/%{name}-%{version}.tar.bz2.sig
 # Full dist signing keys (npth .sig files may carry multiple signatures)
 Source2:        https://gnupg.org/signature_key.asc
 # Manual page is re-used and changed pth-config.1 from pth-devel package

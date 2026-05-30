@@ -15,7 +15,7 @@ Summary:        Type class for sequence of bytes
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/byteable
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/byteable-0.1.1/byteable-0.1.1.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

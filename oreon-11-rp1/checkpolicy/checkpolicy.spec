@@ -10,7 +10,7 @@ Name: checkpolicy
 Version: 3.10
 Release: 1%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.1-or-later
-Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/checkpolicy-3.10.tar.gz
+Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/checkpolicy-%{version}.tar.gz
 Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/checkpolicy-%{version}.tar.gz.asc
 Source2:        https://github.com/perfinion.gpg
 # $ git clone https://github.com/fedora-selinux/selinux.git

@@ -13,7 +13,7 @@ Summary:        Library providing XML and HTML support
 # Source1, Source2 and Source3 is covered by W3C
 License:        MIT AND ISC-Veillard AND W3C
 URL:            https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home
-Source0:        https://download.gnome.org/sources/libxml2/2.12/libxml2-2.12.10.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/2.12/%{name}-%{version}.tar.xz
 # https://www.w3.org/XML/Test/xmlconf-20080827.html
 Source1:        https://www.w3.org/XML/Test/xmlts20080827.tar.gz
 # https://www.w3.org/XML/2004/xml-schema-test-suite/index.html

@@ -8,7 +8,7 @@ Release:        %autorelease
 # SPDX
 License:        MIT
 URL:            https://github.com/pyparsing/pyparsing
-Source0:        https://github.com/pyparsing/pyparsing/archive/pyparsing_3.1.2/pyparsing-3.1.2.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/%{name}_%{version}/%{name}-%{version}.tar.gz
 
 # Python 3.14: Remove return from a finally block
 # Fixes https://bugzilla.redhat.com/2373915

@@ -6,7 +6,7 @@ Release:        522%{?dist}
 Summary:        Create or remove directory trees
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Path
-Source0:        https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/File-Path-2.18.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/File-Path-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

@@ -15,7 +15,7 @@ Summary:        Command line argument processing
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/cmdargs
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/cmdargs-0.10.22/cmdargs-0.10.22.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

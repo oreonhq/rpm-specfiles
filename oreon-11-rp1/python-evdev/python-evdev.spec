@@ -7,7 +7,7 @@ Summary:        Python bindings for the Linux input handling subsystem
 
 License:        BSD-3-Clause
 URL:            https://python-evdev.readthedocs.io
-Source0:        https://github.com/gvalkov/python-evdev/archive/refs/tags/v1.9.3.tar.gz
+Source0:        https://github.com/gvalkov/%{name}/archive/refs/tags/v%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  kernel-headers

@@ -10,8 +10,8 @@ Release: 1%{?dist}
 # old license (see README)
 License: Apache-2.0 OR Artistic-2.0
 URL:     https://qpdf.sourceforge.io/
-Source0:        https://github.com/qpdf/qpdf/releases/download/v12.3.2/qpdf-12.3.2.tar.gz
-Source1:        https://github.com/qpdf/qpdf/releases/download/v12.3.2/qpdf-12.3.2-doc.zip
+Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
+Source1:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}-doc.zip
 
 # make qpdf working under FIPS, downstream patch
 Patch1:  qpdf-relax.patch

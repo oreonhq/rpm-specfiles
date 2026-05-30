@@ -9,7 +9,7 @@ Release:	23%{?dist}
 Summary:	Testing Module for YAML Implementations
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-YAML
-Source0:	https://cpan.metacpan.org/authors/id/T/TI/TINITA/Test-YAML-1.07.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-YAML-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

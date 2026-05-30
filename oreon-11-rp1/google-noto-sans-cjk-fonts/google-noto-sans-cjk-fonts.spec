@@ -26,7 +26,7 @@ supported for compatibility with CJK standards.
 The google-noto-sans-cjk-fonts package contains Google Noto Sans CJK fonts.
 }
 
-Source0:        https://github.com/googlefonts/noto-cjk/releases/download/Sans2.004/03_NotoSansCJK-OTC.zip
+Source0:        https://github.com/googlefonts/noto-cjk/releases/download/Sans%{version}/03_NotoSansCJK-OTC.zip
 Source1:  genfontconf.py
 Source10: 65-%{fontpkgname}.conf
 Source11: 65-google-noto-sans-cjk-mono-fonts.conf

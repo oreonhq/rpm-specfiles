@@ -17,7 +17,7 @@ BuildArch: noarch
 #old page - only part of it is included in sgml-common package.
 URL: https://www.w3.org/2003/entities/
 
-Source0:        https://www.sourceware.org/pub/docbook-tools/new-trials/SOURCES/sgml-common-0.6.3.tgz
+Source0:        https://www.sourceware.org/pub/docbook-tools/new-trials/SOURCES/%{name}-%{version}.tgz
 # Following 4 from openjade/pubtext - same maintainer as in SGML-common, so up2date:
 Source1: xml.dcl
 Source2: xml.soc

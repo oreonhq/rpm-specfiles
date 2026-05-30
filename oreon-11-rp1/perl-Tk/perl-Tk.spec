@@ -13,7 +13,7 @@ Summary:        Perl Graphical User Interface ToolKit
 
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND SWL
 URL:            https://metacpan.org/release/Tk
-Source0:        https://cpan.metacpan.org/authors/id/S/SR/SREZIC/Tk-804.036.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SR/SREZIC/Tk-%{version}.tar.gz
 Patch0:         perl-Tk-widget.patch
 # modified version of http://ftp.de.debian.org/debian/pool/main/p/perl-tk/perl-tk_804.027-8.diff.gz
 Patch1:         perl-Tk-debian.patch.gz

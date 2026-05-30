@@ -6,7 +6,7 @@ Release:        28%{?dist}
 Summary:        Encoding and decoding of Base64 strings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Convert-Base64
-Source0:        https://cpan.metacpan.org/authors/id/R/RO/ROBN/Convert-Base64-0.001.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RO/ROBN/Convert-Base64-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  findutils
 BuildRequires:  make

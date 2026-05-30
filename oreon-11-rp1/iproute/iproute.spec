@@ -5,7 +5,7 @@ Name:               iproute
 Version:            6.17.0
 Release:            %autorelease
 URL:                https://kernel.org/pub/linux/utils/net/%{name}2/
-Source0:        https://kernel.org/pub/linux/utils/net/iproute2/iproute2-6.17.0.tar.xz
+Source0:        https://kernel.org/pub/linux/utils/net/%{name}2/%{name}2-%{version}.tar.xz
 %if 0%{?rhel}
 Source1:            rt_dsfield.deprecated
 %endif

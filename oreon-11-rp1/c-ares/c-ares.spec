@@ -8,7 +8,7 @@ Version: 1.34.6
 Release: 3%{?dist}
 License: MIT
 URL: http://c-ares.org/
-Source0:        https://github.com/c-ares/c-ares/releases/download/v1.34.6/c-ares-1.34.6.tar.gz
+Source0:        https://github.com/c-ares/c-ares/releases/download/v%{version}/c-ares-%{version}.tar.gz
 BuildRequires: gcc
 %if %{use_cmake}
 BuildRequires: cmake

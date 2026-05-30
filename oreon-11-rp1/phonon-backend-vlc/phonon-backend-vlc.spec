@@ -9,7 +9,7 @@ Version:        0.12.0
 Release:        %autorelease
 License:        LGPL-2.1-or-later
 URL:            https://invent.kde.org/libraries/phonon-vlc
-Source:        https://download.kde.org/stable/phonon/phonon-backend-vlc/0.12.0/phonon-backend-vlc-0.12.0.tar.xz
+Source:        https://download.kde.org/stable/phonon/%{name}/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

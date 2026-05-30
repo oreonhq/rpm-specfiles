@@ -6,7 +6,7 @@ Release:        9%{?dist}
 Summary:        Simple, sane and efficient module to slurp a file
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/File-Slurper
-Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/File-Slurper-0.014.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/File-Slurper-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

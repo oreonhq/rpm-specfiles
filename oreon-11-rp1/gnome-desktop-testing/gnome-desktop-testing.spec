@@ -9,7 +9,7 @@ Summary:        GNOME test runner for installed tests
 
 License:        LGPL-2.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/gnome-desktop-testing
-Source0:        https://download.gnome.org/sources/gnome-desktop-testing/%(c=2021.1;/gnome-desktop-testing-2021.1.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  pkgconfig(gio-unix-2.0)
 BuildRequires:  pkgconfig(libsystemd)

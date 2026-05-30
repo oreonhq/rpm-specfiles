@@ -6,7 +6,7 @@ Release: 1%{?dist}
 License:        CC0 and GPLv2 and GPLv3 and GPLv3+ and LGPLv2+
 Summary:        Convergent Plasma Mobile phonebook application
 Url:            https://invent.kde.org/plasma-mobile/%{name}
-Source0:        https://invent.kde.org/plasma-mobile/plasma-phonebook/-/archive/v26.04.1/plasma-phonebook-v26.04.1.tar.gz#/plasma-phonebook-26.04.1.tar.gz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 
 BuildRequires:  gcc-c++

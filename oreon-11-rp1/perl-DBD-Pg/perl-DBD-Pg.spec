@@ -10,7 +10,7 @@ Release:        1%{?dist}
 # Pg.pm, README:    Points to directory which contains GPL-2.0-or-later and Artistic-1.0-Perl
 # other files:      Same as Perl (GPL-1.0-or-later OR Artistic-1.0-Perl)
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
-Source0:        https://cpan.metacpan.org/authors/id/T/TU/TURNSTEP/DBD-Pg-3.19.0.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TU/TURNSTEP/DBD-Pg-%{version}.tar.gz
 URL:            https://metacpan.org/release/DBD-Pg
 
 BuildRequires:  coreutils

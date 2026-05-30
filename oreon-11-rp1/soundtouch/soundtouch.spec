@@ -7,7 +7,7 @@ Summary:        Audio Processing library for changing Tempo, Pitch and Playback 
 License:        LGPL-2.1-or-later
 URL:            http://www.surina.net/soundtouch/
 
-Source0:        https://codeberg.org/soundtouch/soundtouch/archive/2.4.0.tar.gz#/soundtouch-2.4.0.tar.gz
+Source0:        https://codeberg.org/soundtouch/soundtouch/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildRequires:  gcc-c++
 BuildRequires:  cmake
 

@@ -8,7 +8,7 @@ Release:        521%{?dist}
 Summary:        Check POD documents for syntax errors
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Pod-Checker
-Source0:        https://cpan.metacpan.org/authors/id/M/MA/MAREKR/Pod-Checker-1.77.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MA/MAREKR/Pod-Checker-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils

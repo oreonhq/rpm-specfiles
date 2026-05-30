@@ -10,7 +10,7 @@ Version:        3.11
 Release:        32%{?dist}
 License:        BSD-3-Clause
 URL:            https://github.com/dabeaz/ply
-Source0:        https://files.pythonhosted.org/packages/source/p/ply/ply-3.11.tar.gz
+Source0:        http://www.dabeaz.com/ply/%{modname}-%{version}.tar.gz
 # Fix build against Python 3.11
 # https://github.com/dabeaz/ply/pull/262
 Patch0:		262.patch

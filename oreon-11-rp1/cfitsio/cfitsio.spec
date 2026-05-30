@@ -7,7 +7,7 @@ Summary: Library for manipulating FITS data files
 
 License: CFITSIO
 URL: https://heasarc.gsfc.nasa.gov/fitsio/
-Source:        https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.3.tar.gz
+Source:        https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-%{version}.tar.gz
 # Remove soname version check
 Patch0: cfitsio-noversioncheck.patch
 

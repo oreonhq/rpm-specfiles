@@ -10,7 +10,7 @@ Summary:        Geocoding helper library
 # icons/maki/* are BSD-3-Clause
 License:        LGPL-2.0-or-later AND BSD-3-Clause
 URL:            http://www.gnome.org/
-Source0:        http://download.gnome.org/sources/geocode-glib/3.26/geocode-glib-3.26.4.tar.xz
+Source0:        http://download.gnome.org/sources/%{name}/3.26/%{name}-%{version}.tar.xz
 
 BuildRequires:  gettext
 BuildRequires:  gtk-doc

@@ -6,7 +6,7 @@ Release:	28%{?dist}
 Summary:	Only use Sub::Exporter if you need it
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Exporter-Progressive
-Source0:	https://cpan.metacpan.org/authors/id/F/FR/FREW/Sub-Exporter-Progressive-0.001013.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Sub/Sub-Exporter-Progressive-%{version}.tar.gz
 
 BuildArch:	noarch
 # =============== Module Build ======================

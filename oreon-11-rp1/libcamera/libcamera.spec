@@ -8,7 +8,7 @@ Summary: A library to support complex camera ISPs
 License: LGPL-2.1-or-later
 URL:     http://libcamera.org/
 
-Source0:        https://gitlab.freedesktop.org/camera/libcamera/-/archive/v0.7.0/libcamera-v0.7.0.tar.bz2
+Source0:        https://gitlab.freedesktop.org/camera/libcamera/-/archive/v%{version}/%{name}-v%{version}.tar.bz2
 Source1: qcam.desktop
 Source2: qcam.metainfo.xml
 Source3: 70-libcamera.rules

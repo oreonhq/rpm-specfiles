@@ -16,7 +16,7 @@ Release:	43%{?dist}
 Summary:	Loads one of several alternate underlying implementations for a module
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/perl-Module-Implementation
-Source0:	https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Module-Implementation-0.09.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Implementation-%{version}.tar.gz
 
 BuildArch:	noarch
 # ===================================================================

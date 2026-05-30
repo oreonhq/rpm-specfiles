@@ -9,7 +9,7 @@ Release: 5%{?dist}
 License: MIT-open-group AND SMLNJ AND X11 AND ISC
 URL: http://www.x.org
 
-Source0:        https://www.x.org/pub/individual/lib/libXmu-1.2.1.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 
 BuildRequires: make
 BuildRequires: autoconf automake libtool

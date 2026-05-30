@@ -11,8 +11,8 @@ Release:        22%{?dist}
 Summary:        An nsswitch module which uses directory servers
 License:        LGPL-2.0-or-later
 URL:            http://arthurdejong.org/nss-pam-ldapd/
-Source0:        http://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-0.9.10.tar.gz
-Source1:        http://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-0.9.10.tar.gz.sig
+Source0:        http://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-%{version}.tar.gz
+Source1:        http://arthurdejong.org/nss-pam-ldapd/nss-pam-ldapd-%{version}.tar.gz.sig
 Source3:        nslcd.tmpfiles
 Source4:        nslcd.service
 

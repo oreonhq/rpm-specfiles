@@ -9,7 +9,7 @@ Release:        %autorelease
 Summary:        GNOME Shell extension for no overview at start-up
 License:        GPL-3.0-only
 URL:            https://extensions.gnome.org/extension/4099/no-overview/
-Source0:        https://github.com/fthx/no-overview/archive/refs/tags/v49.zip#/no-overview-49.zip
+Source0:        https://github.com/fthx/no-overview/archive/refs/tags/v%{version}.zip#/no-overview-%{version}.zip
 
 Source1:        https://raw.githubusercontent.com/fthx/no-overview/main/LICENSE#/no-overview-LICENSE
 Source2:        https://raw.githubusercontent.com/fthx/no-overview/main/README.md#/no-overview-README.md

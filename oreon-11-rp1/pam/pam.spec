@@ -23,8 +23,8 @@ Release: 2%{?dist}
 # pam_timestamp and pam_loginuid modules are GPLv2+.
 License: BSD-3-Clause AND GPL-2.0-or-later
 URL: http://www.linux-pam.org/
-Source0:        https://github.com/linux-pam/linux-pam/releases/download/v1.7.2/Linux-PAM-1.7.2.tar.xz
-Source1:        https://github.com/linux-pam/linux-pam/releases/download/v1.7.2/Linux-PAM-1.7.2.tar.xz.asc
+Source0:        https://github.com/linux-pam/linux-pam/releases/download/v%{version}/Linux-PAM-%{version}.tar.xz
+Source1:        https://github.com/linux-pam/linux-pam/releases/download/v%{version}/Linux-PAM-%{version}.tar.xz.asc
 Source2:        https://releases.pagure.org/pam-redhat/pam-redhat-1.3.1.tar.xz
 Source3: macros.%{name}
 Source5: other.pamd

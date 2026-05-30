@@ -12,7 +12,7 @@ URL:            https://maven.apache.org/plugins/maven-invoker-plugin/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-invoker-plugin/3.9.0/maven-invoker-plugin-3.9.0-source-release.zip
+Source0:        https://repo.maven.apache.org/maven2/org/apache/maven/plugins/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(commons-beanutils:commons-beanutils)

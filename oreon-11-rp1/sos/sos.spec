@@ -4,7 +4,7 @@ Summary: A set of tools to gather troubleshooting information from a system
 Name: sos
 Version: 4.11.0
 Release: %autorelease
-Source0:        https://github.com/sosreport/sos/archive/refs/tags/4.11.0.tar.gz
+Source0:        https://github.com/sosreport/sos/archive/%{version}.tar.gz
 
 License: GPL-2.0-only
 BuildArch: noarch

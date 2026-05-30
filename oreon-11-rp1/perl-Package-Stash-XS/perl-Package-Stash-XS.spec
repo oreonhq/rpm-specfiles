@@ -13,7 +13,7 @@ Release:	13%{?dist}
 Summary:	Faster and more correct implementation of the Package::Stash API
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Package-Stash-XS
-Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Package-Stash-XS-0.30.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Package/Package-Stash-XS-%{version}.tar.gz
 
 # Module Build
 BuildRequires:	coreutils

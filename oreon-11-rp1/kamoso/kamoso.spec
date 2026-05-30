@@ -26,7 +26,7 @@ URL:     https://userbase.kde.org/Kamoso
 %global kf5_dl_stable stable
 %endif
 
-Source0:        https://download.kde.org/stable/release-service/26.03.80/src/kamoso-26.03.80.tar.xz
+Source0:        https://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 ## upstream patches
 

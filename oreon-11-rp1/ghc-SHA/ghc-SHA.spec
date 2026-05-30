@@ -17,7 +17,7 @@ Summary:        SHA message digest functions
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/SHA
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/SHA-1.6.4.4/SHA-1.6.4.4.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

@@ -11,7 +11,7 @@ Release:        1%{?dist}
 Summary:        Storage array management library
 License:        LGPL-2.1-or-later
 URL:            https://github.com/libstorage/libstoragemgmt
-Source0:        https://github.com/libstorage/libstoragemgmt/releases/download/1.10.3/libstoragemgmt-1.10.3.tar.gz
+Source0:        https://github.com/libstorage/libstoragemgmt/releases/download/%{version}/%{name}-%{version}.tar.gz
 Requires:       python3-%{name}%{_isa}
 Requires:       ledmon-libs
 

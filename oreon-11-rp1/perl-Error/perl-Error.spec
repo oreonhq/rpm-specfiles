@@ -7,7 +7,7 @@ Release:        3%{?dist}
 Summary:        Error/exception handling in an OO-ish way
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND X11
 URL:            https://metacpan.org/release/Error
-Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/Error-0.17030.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Error/Error-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build

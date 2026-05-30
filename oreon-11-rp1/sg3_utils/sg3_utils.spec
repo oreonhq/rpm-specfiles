@@ -9,7 +9,7 @@ Version: 1.48
 Release: 8%{?dist}
 License: GPL-2.0-or-later AND BSD-2-Clause
 URL:     https://sg.danny.cz/sg/sg3_utils.html
-Source0:        https://sg.danny.cz/sg/p/sg3_utils-1.48.tar.xz
+Source0:        https://sg.danny.cz/sg/p/sg3_utils-%{version}.tar.xz
 Source1: scsi-rescan.8
 # https://github.com/doug-gilbert/sg3_utils/pull/43
 # scripts/rescan-scsi-bus.sh: fix multipath resize without update

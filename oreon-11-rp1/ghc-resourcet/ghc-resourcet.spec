@@ -17,7 +17,7 @@ Summary:        Deterministic allocation and freeing of scarce resources
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/resourcet
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/resourcet-1.3.0/resourcet-1.3.0.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

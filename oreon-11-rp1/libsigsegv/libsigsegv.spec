@@ -7,7 +7,7 @@ Summary: Library for handling page faults in user mode
 
 License: GPL-2.0-or-later
 URL:     https://www.gnu.org/software/libsigsegv/
-Source0:        http://ftp.gnu.org/gnu/libsigsegv/libsigsegv-2.15.tar.gz
+Source0:        http://ftp.gnu.org/gnu/libsigsegv/libsigsegv-%{version}.tar.gz
 
 BuildRequires: automake libtool
 BuildRequires: gcc

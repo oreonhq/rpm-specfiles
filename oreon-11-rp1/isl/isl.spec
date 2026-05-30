@@ -30,7 +30,7 @@ Provides: isl = %{oldversion}
 Source0:        http://isl.gforge.inria.fr/isl-%{version}.tar.xz
 
 # Current gcc requires exactly 0.14
-Source1:        http://isl.gforge.inria.fr/isl-%{oldversion}.tar.xz
+Source1:        http://isl.gforge.inria.fr/isl-0.14.tar.xz
 
 %description
 isl is a library for manipulating sets and relations of integer points

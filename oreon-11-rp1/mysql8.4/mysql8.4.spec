@@ -109,7 +109,7 @@ URL:              http://www.mysql.com
 # Usage of the `Universal-FOSS-exception-1.0` in the SPDX license expression does not signify that we regard "Interfaces" as protected by copyright.
 License:          GPL-2.0-only AND ( GPL-2.0-only WITH Universal-FOSS-exception-1.0 ) AND GPL-2.0-or-later AND ( LGPL-2.0-only WITH Universal-FOSS-exception-1.0 ) AND ( GPL-3.0-or-later WITH Bison-exception-2.2 ) AND ( GPL-2.0-only OR BSD-2-Clause ) AND BSD-2-Clause AND BSL-1.0 AND Apache-2.0 AND MIT
 
-Source0:        https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-%{version}.tar.gz
+Source0:        https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-.tar.gz
 Source3:          my.cnf.in
 Source6:          README.mysql-docs
 Source7:          README.mysql-license

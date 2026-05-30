@@ -16,7 +16,7 @@ Release:        30%{?dist}
 Summary:        Module::Install extension to automatically convert POD to a README
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Install-ReadmeFromPod
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-Install-ReadmeFromPod-0.30.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-Install-ReadmeFromPod-%{version}.tar.gz
 # Regenerate README in UTF-8
 Patch0:         Module-Install-ReadmeFromPod-0.26-Regenerate-README-in-UTF-8.patch
 # Remove a bogus test that fails on PDF binary files randomly, CPAN RT#130221

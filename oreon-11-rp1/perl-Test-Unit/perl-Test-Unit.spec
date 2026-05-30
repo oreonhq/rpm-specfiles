@@ -7,7 +7,7 @@ Summary:        The PerlUnit testing framework
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            http://perlunit.sourceforge.net/
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Test-Unit-0.29.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Test-Unit-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  coreutils

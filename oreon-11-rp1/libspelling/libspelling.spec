@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        Spellcheck library for GTK 4
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/libspelling
-Source:        https://download.gnome.org/sources/libspelling/0.4/libspelling-0.4.10.tar.xz
+Source:        https://download.gnome.org/sources/libspelling/0.4/libspelling-%{version}.tar.xz
 
 BuildRequires:  meson
 BuildRequires:  gcc

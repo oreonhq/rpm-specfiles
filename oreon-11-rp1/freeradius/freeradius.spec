@@ -16,7 +16,7 @@ URL: http://www.freeradius.org/
 
 %global dist_base freeradius-server-%{version}
 
-Source0:        https://www.freeradius.org/ftp/pub/freeradius/freeradius-server-3.2.8.tar.bz2
+Source0:        https://www.freeradius.org/ftp/pub/freeradius/%{dist_base}.tar.bz2
 Source100: radiusd.service
 Source102: freeradius-logrotate
 Source103: freeradius-pam-conf

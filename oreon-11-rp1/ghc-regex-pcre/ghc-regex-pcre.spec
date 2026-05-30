@@ -15,7 +15,7 @@ Summary:        PCRE Backend for "Text.Regex" (regex-base)
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/regex-pcre
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/regex-pcre-0.95.0.1/regex-pcre-0.95.0.1.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

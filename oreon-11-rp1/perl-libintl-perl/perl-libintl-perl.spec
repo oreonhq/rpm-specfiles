@@ -12,7 +12,7 @@ Release:        1%{?dist}
 # COPYING:                      GPL-3.0-or-later
 License:        GPL-3.0-or-later AND LGPL-2.0-or-later
 URL:            https://metacpan.org/release/libintl-perl
-Source0:        https://cpan.metacpan.org/authors/id/G/GU/GUIDO/libintl-perl-1.37.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/G/GU/GUIDO/libintl-perl-%{version}.tar.gz
 # this module was renamed in the f25 dev cycle
 Provides:       perl-libintl = %{version}-%{release}
 Obsoletes:      perl-libintl < 1.25

@@ -7,8 +7,8 @@ Release:          3%{?dist}
 License:          (GPL-2.0-or-later OR LGPL-3.0-or-later) AND GPL-3.0-or-later
 URL:              https://www.gnu.org/software/libidn/#libidn2
 
-Source0:        https://ftp.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz
-Source1:        https://ftp.gnu.org/gnu/libidn/libidn2-2.3.8.tar.gz.sig
+Source0:        https://ftp.gnu.org/gnu/libidn/%{name}-%{version}.tar.gz
+Source1:        https://ftp.gnu.org/gnu/libidn/%{name}-%{version}.tar.gz.sig
 Source2:          https://keys.openpgp.org/vks/v1/by-fingerprint/B1D2BD1375BECB784CF4F8C4D73CF638C53C06BE
 
 BuildRequires:    gnupg2

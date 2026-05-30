@@ -6,7 +6,7 @@ Version:	1.0007
 Release:	22%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/XML-SemanticDiff
-Source0:	https://cpan.metacpan.org/authors/id/P/PE/PERIGRIN/XML-SemanticDiff-1.0007.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/XML/XML-SemanticDiff-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

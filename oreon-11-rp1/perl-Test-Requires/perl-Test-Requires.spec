@@ -6,7 +6,7 @@ Version:	0.11
 Release:	18%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Requires
-Source0:	https://cpan.metacpan.org/authors/id/T/TO/TOKUHIROM/Test-Requires-0.11.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Requires-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

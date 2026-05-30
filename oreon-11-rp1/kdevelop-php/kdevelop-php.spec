@@ -8,7 +8,7 @@ Release:        1%{?dist}
 # Most files LGPLv2+/GPLv2+
 License:        GPL-2.0-or-later
 URL:            https://kdevelop.org/
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/kdev-php-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kdev-php-26.04.1.tar.xz
 
 # kdevelop depends on qt6-qtwebengine, which is only available on some arches
 ExclusiveArch:  %{qt6_qtwebengine_arches}

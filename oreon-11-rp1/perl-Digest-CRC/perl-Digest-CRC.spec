@@ -6,7 +6,7 @@ Release:        13%{?dist}
 Summary:        Generic CRC functions
 License:        LicenseRef-Fedora-Public-Domain
 URL:            https://metacpan.org/release/Digest-CRC
-Source0:        https://cpan.metacpan.org/authors/id/O/OL/OLIMAUL/Digest-CRC-0.24.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Digest/Digest-CRC-%{version}.tar.gz
 
 # Build
 BuildRequires:  coreutils

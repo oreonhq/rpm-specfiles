@@ -17,8 +17,8 @@ URL:            https://github.com/cockpit-project/cockpit-machines
 %define rebuild_bundle 1
 %endif
 
-Source0:        https://github.com/cockpit-project/cockpit-machines/releases/download/349.1/cockpit-machines-349.1.tar.xz
-Source1:        https://github.com/cockpit-project/cockpit-machines/releases/download/349.1/cockpit-machines-node-349.1.tar.xz
+Source0:        https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://github.com/cockpit-project/%{name}/releases/download/%{version}/%{name}-node-%{version}.tar.xz
 
 BuildArch:      noarch
 %if 0%{?suse_version}

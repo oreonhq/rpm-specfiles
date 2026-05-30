@@ -11,7 +11,7 @@ Summary: Macedonian hunspell dictionaries
 %global upstreamid 20051126
 Version: 0.%{upstreamid}
 Release: 36%{?dist}
-Source:        mk_MK.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/mk_MK.zip
 URL: https://wiki.openoffice.org/wiki/Dictionaries
 License: GPL-1.0-or-later
 BuildArch: noarch

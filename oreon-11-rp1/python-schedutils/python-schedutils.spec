@@ -7,7 +7,7 @@ Release: 30%{?dist}
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 URL: https://rt.wiki.kernel.org/index.php/Tuna
-Source:        https://cdn.kernel.org/pub/software/libs/python/python-schedutils/python-schedutils-0.6.tar.xz
+Source:        https://cdn.kernel.org/pub/software/libs/python/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools

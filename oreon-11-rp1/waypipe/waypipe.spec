@@ -24,7 +24,7 @@ License:        GPL-3.0-or-later AND (Apache-2.0 OR MIT) AND ISC AND MIT
 # LICENSE.dependencies contains a full license breakdown
 
 URL:            https://gitlab.freedesktop.org/mstoeckl/waypipe
-Source0:        https://gitlab.freedesktop.org/mstoeckl/waypipe/-/archive/v0.11.0/waypipe-v0.11.0.tar.gz
+Source0:        https://gitlab.freedesktop.org/mstoeckl/waypipe/-/archive/v%{version}/%{name}-v%{version}.tar.gz
 Source1:        waypipe.1
 Patch1:         0001-Cargo.toml-features-remove-test_proto-from-defaults.patch
 %if 0%{?rhel} || (0%{?oreon} >= 11)

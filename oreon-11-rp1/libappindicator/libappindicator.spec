@@ -21,7 +21,7 @@ Summary:	Application indicators library
 License:	LicenseRef-Callaway-LGPLv2 AND LGPL-3.0-only
 URL:		https://launchpad.net/libappindicator
 # see https://launchpad.net/ubuntu/+source/libappindicator/12.10.1+20.10.20200706.1-0ubuntu1
-Source0:        https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/libappindicator/12.10.1+20.10.20200706.1-0ubuntu1/libappindicator_12.10.1+20.10.20200706.1.orig.tar.gz
+Source0:        https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/%{name}/%{version}+20.10.20200706.1-0ubuntu1/%{name}_%{version}+20.10.20200706.1.orig.tar.gz
 Patch0:		0001_Fix_mono_dir.patch
 
 BuildRequires: make

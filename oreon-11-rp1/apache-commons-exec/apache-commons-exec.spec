@@ -12,7 +12,7 @@ URL:            https://commons.apache.org/proper/%{short_name}
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://www.apache.org/dist/commons/exec/source/commons-exec-1.6.0-src.tar.gz
+Source0:        https://www.apache.org/dist/commons/%{base_name}/source/%{short_name}-%{version}-src.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(org.apache.commons:commons-parent:pom:)

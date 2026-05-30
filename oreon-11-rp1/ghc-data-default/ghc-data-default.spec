@@ -17,7 +17,7 @@ Summary:        A class for types with a default value
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/data-default
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/data-default-0.8.0.2/data-default-0.8.0.2.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

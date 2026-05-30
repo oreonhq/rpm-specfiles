@@ -11,7 +11,7 @@ URL:            https://hc.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-core/4.4.16/httpcomponents-core-4.4.16-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-core/%{version}/httpcomponents-core-%{version}-source-release.zip
 
 Patch:          0001-Port-to-mockito-2.patch
 Patch:          0002-Port-to-Mockito-5.patch

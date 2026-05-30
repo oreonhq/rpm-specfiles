@@ -7,7 +7,7 @@ Name: crash-trace-command
 Version: 3.0
 Release: 16%{?dist}
 License: GPL-2.0-only
-Source:        https://github.com/fujitsu/crash-trace/archive/v3.0/crash-trace-command-3.0.tar.gz
+Source:        https://github.com/fujitsu/crash-trace/archive/v%{version}/%{name}-%{version}.tar.gz
 URL: https://github.com/fujitsu/crash-trace
 ExclusiveOS: Linux
 ExclusiveArch: aarch64 ppc64le riscv64 s390x x86_64

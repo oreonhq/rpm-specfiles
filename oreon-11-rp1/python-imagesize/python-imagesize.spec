@@ -12,7 +12,7 @@ Summary:        %{sum}
 
 License:        MIT
 URL:            https://github.com/shibukawa/imagesize_py
-Source0:        https://files.pythonhosted.org/packages/source/i/imagesize/imagesize-2.0.0.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/i/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python%{python3_pkgversion}-setuptools

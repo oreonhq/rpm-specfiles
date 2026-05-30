@@ -20,7 +20,7 @@ Release:        2%{?dist}
 Summary:        MIME types module for Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/MIME-Types
-Source0:        https://cpan.metacpan.org/authors/id/M/MA/MARKOV/MIME-Types-2.30.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/MIME/MIME-Types-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

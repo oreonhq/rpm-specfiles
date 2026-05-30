@@ -4,7 +4,7 @@ Summary: NSS module to look up from files in /usr/lib as well
 Name: nss-altfiles
 Version: 2.23.0
 Release: 9%{?dist}
-Source0:        https://github.com/flatcar/nss-altfiles/archive/v2.23.0.tar.gz#/nss-altfiles-2.23.0.tar.gz
+Source0:        https://github.com/flatcar/nss-altfiles/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1: macros.altfiles
 Patch1: 0001-build-sys-Inherit-LDFLAGS.patch
 # From https://github.com/flatcar/nss-altfiles/commit/de2b32289bf701ce3c8167a1b58436866922085e

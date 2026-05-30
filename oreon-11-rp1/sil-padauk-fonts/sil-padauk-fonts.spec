@@ -34,7 +34,7 @@ This package provide the base fonts.}
 
 This package provide Padauk Book family font.}
 
-Source0:        https://github.com/silnrsi/font-padauk/releases/download/v3.003/padauk-3.003.zip
+Source0:        https://github.com/silnrsi/font-padauk/releases/download/v%{version}/padauk-%{version}.zip
 Source10: 65-%{fontpkgname0}.conf
 Source11: 66-%{fontpkgname1}.conf
 

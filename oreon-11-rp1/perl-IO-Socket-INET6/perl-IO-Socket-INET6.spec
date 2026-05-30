@@ -12,7 +12,7 @@ Release:        12%{?dist}
 Summary:        Perl Object interface for AF_INET|AF_INET6 domain sockets
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Socket-INET6
-Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/IO-Socket-INET6-2.73.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Socket-INET6-%{version}.tar.gz
 
 # Fix bad code in test. Original code hides error, related to BZ#1207174
 Patch0:         IO-Socket-INET6-2.72-fix_die_in_test.patch

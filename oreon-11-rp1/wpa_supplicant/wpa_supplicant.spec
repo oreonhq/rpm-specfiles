@@ -13,7 +13,7 @@ Epoch: 1
 Version: 2.11
 Release: 10%{?dist}
 License: BSD-3-Clause
-Source0:        http://w1.fi/releases/wpa_supplicant-2.11.tar.gz
+Source0:        http://w1.fi/releases/%{name}-%{version}.tar.gz
 Source1: wpa_supplicant.conf
 Source2: wpa_supplicant.service
 Source3: wpa_supplicant.sysconfig

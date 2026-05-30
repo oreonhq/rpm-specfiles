@@ -17,7 +17,7 @@ Summary:        Generic HTTP types for Haskell
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/http-types
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/http-types-0.12.4/http-types-0.12.4.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

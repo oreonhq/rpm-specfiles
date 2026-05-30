@@ -14,7 +14,7 @@ Release: %autorelease
 Summary: Serial Graph Partitioning and Fill-reducing Matrix Ordering
 License: Apache-2.0 AND LGPL-2.0-or-later
 URL:     http://glaros.dtc.umn.edu/gkhome/views/%{name}
-Source0:        https://github.com/scivision/METIS/archive/refs/tags/v5.1.0.3/METIS-5.1.0.3.tar.gz
+Source0:        https://github.com/scivision/METIS/archive/refs/tags/v%{version}/METIS-%{version}.tar.gz
 
 ## This patch sets up libmetis soname of libmetis
 Patch0:  %{name}-libmetis.patch

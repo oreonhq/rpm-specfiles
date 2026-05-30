@@ -12,7 +12,7 @@ Summary:        Library for Emulated Input
 
 License:        MIT
 URL:            http://gitlab.freedesktop.org/libinput/libei
-Source0:        https://gitlab.freedesktop.org/libinput/libei/-/archive/1.5.0/libei-1.5.0.tar.bz2
+Source0:        https://gitlab.freedesktop.org/libinput/libei/-/archive/%{version}/libei-%{version}.tar.bz2
 
 BuildRequires:  gcc
 BuildRequires:  git-core

@@ -12,7 +12,7 @@ Summary:        Fast Python ASN.1 parser and serializer
 
 License:        MIT
 URL:            https://github.com/wbond/asn1crypto
-Source0:        https://files.pythonhosted.org/packages/source/a/asn1crypto/asn1crypto-1.5.1.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/a/%{pypi_name}/%{pypi_name}-%{version}.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python%{python3_pkgversion}-devel

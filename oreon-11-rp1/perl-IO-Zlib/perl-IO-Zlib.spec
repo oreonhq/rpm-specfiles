@@ -8,7 +8,7 @@ Release:        521%{?dist}
 Summary:        Perl IO:: style interface to Compress::Zlib
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Zlib
-Source0:        https://cpan.metacpan.org/authors/id/T/TO/TOMHUGHES/IO-Zlib-1.15.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TO/TOMHUGHES/IO-Zlib-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

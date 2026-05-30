@@ -10,7 +10,7 @@ Name: hunspell-uk
 Summary: Ukrainian hunspell dictionaries
 Version: 6.6.1
 Release: 2%{?dist}
-Source:        https://github.com/brown-uk/dict_uk/releases/download/v6.6.1/dict-uk_UA-6.6.1.oxt
+Source:        https://github.com/brown-uk/dict_uk/releases/download/v%{version}/dict-uk_UA-%{version}.oxt
 URL: https://github.com/brown-uk/dict_uk/
 # license tag information obtained from README_uk_UA.txt file
 License: MPL-1.1

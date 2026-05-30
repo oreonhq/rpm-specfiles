@@ -13,7 +13,7 @@ Release:        18%{?dist}
 Summary:        Capture STDOUT/STDERR from sub-processes and XS/C modules
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-CaptureOutput
-Source0:        https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/IO-CaptureOutput-1.1105.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-CaptureOutput-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build:

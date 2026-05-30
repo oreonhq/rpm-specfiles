@@ -11,7 +11,7 @@ URL:            https://commons.apache.org/proper/commons-lang/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/commons/lang/source/commons-lang3-3.19.0-src.tar.gz
+Source0:        https://archive.apache.org/dist/commons/lang/source/commons-lang3-%{version}-src.tar.gz
 
 Patch:          0001-Remove-test-dependency-on-JUnit-Pioneer.patch
 

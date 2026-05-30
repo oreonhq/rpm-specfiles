@@ -6,7 +6,7 @@ Release:	24%{?dist}
 Summary:	Point-to-Point Tunneling Protocol (PPTP) Client
 License:	gpl-2.0-or-later
 URL:		http://pptpclient.sourceforge.net/
-Source0:        http://downloads.sf.net/pptpclient/pptp-1.10.0.tar.gz
+Source0:        http://downloads.sf.net/pptpclient/pptp-%{version}.tar.gz
 Source1:	pptp-tmpfs.conf
 BuildRequires:	make
 BuildRequires:	/usr/bin/pod2man

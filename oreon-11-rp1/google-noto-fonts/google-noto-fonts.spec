@@ -39,7 +39,7 @@ Release:        2%{?dist}
 Summary:        Hinted and Non Hinted OpenType fonts for Unicode scripts
 License:        OFL-1.1
 URL:            https://notofonts.github.io/
-Source0:        https://github.com/notofonts/notofonts.github.io/archive/refs/tags/noto-monthly-release-%{srcver}.zip
+Source0:        https://github.com/notofonts/notofonts.github.io/archive/refs/tags/noto-monthly-release-2025.12.01.zip
 Source1:        google-noto-sans-math-vf.conf
 Source2:        google-noto-sans-math.conf
 Source3:        google-noto-naskh-arabic-ex.conf

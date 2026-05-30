@@ -13,7 +13,7 @@ Summary: Bluetooth utilities
 License: GPL-2.0-or-later
 URL:     http://www.bluez.org/
 
-Source0:        https://www.kernel.org/pub/linux/bluetooth/bluez-5.86.tar.xz
+Source0:        https://www.kernel.org/pub/linux/bluetooth/%{name}-%{version}.tar.xz
 # https://patchwork.kernel.org/project/bluetooth/list/?series=1052631
 Patch1: big-endian-5.86.patch
 # https://patchwork.kernel.org/project/bluetooth/patch/ba0e71b91a24557f088b015a349c6ccee6260ec2.1771258477.git.pav@iki.fi/

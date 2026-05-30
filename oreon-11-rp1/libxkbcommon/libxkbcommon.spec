@@ -9,7 +9,7 @@ Summary:        X.Org X11 XKB parsing library
 License:        MIT AND X11 AND MIT-CMU
 URL:            http://www.x.org
 
-Source0:        https://github.com/xkbcommon/libxkbcommon/archive/refs/tags/xkbcommon-1.13.1.tar.gz
+Source0:        https://github.com/xkbcommon/libxkbcommon/archive/refs/tags/%{tarball_name}-%{version}.tar.gz
 BuildRequires:  gcc
 BuildRequires:  git meson
 BuildRequires:  byacc flex bison

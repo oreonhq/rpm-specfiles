@@ -8,7 +8,7 @@ Release:        521%{?dist}
 Summary:        Generic input parsing/checking mechanism
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Params-Check
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Params-Check-0.38.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Params/Params-Check-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  coreutils

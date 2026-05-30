@@ -21,8 +21,8 @@ Version: 5.78
 Release: %autorelease
 License: GPL-2.0-or-later WITH stunnel-exception AND MIT
 URL: https://www.stunnel.org/
-Source0:        https://www.stunnel.org/downloads/stunnel-5.78.tar.gz
-Source1:        https://www.stunnel.org/downloads/stunnel-5.78.tar.gz.asc
+Source0:        https://www.stunnel.org/downloads/stunnel-%{version}.tar.gz
+Source1:        https://www.stunnel.org/downloads/stunnel-%{version}.tar.gz.asc
 Source2: Certificate-Creation
 Source3: sfinger.xinetd
 Source4: stunnel-sfinger.conf

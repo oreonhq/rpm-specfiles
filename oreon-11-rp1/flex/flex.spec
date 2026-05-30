@@ -13,7 +13,7 @@ Release: 24%{?dist}
 License: BSD-3-Clause-flex AND GPL-3.0-or-later WITH Autoconf-exception-generic-3.0 AND GPL-3.0-or-later WITH Bison-exception-2.2 AND GPL-3.0-or-later WITH Texinfo-exception AND FSFAP AND FSFUL AND FSFULLR AND FSFULLRWD AND GPL-2.0-or-later AND X11
 
 URL: https://github.com/westes/flex
-Source:        https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
+Source:        https://github.com/westes/flex/releases/download/v%{version}/flex-%{version}.tar.gz
 
 Patch0: flex-rh1389575.patch
 

@@ -15,8 +15,8 @@ Summary:        Cross-platform library for setting environment variables
 License:        MIT
 URL:            https://hackage.haskell.org/package/setenv
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/setenv-0.1.1.3/setenv-0.1.1.3.tar.gz
-Source1:        https://hackage.haskell.org/package/setenv-0.1.1.3/setenv.cabal#/setenv-0.1.1.3.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

@@ -18,7 +18,7 @@ Requires(post): sgml-common
 Requires(preun): sgml-common
 
 BuildArch: noarch
-Source0:        http://prdownloads.sourceforge.net/docbook/docbook-dsssl-1.79.tar.gz
+Source0:        http://prdownloads.sourceforge.net/docbook/docbook-dsssl-%{version}.tar.gz
 Source1: %{name}.Makefile
 
 

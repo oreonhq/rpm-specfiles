@@ -70,7 +70,7 @@ Summary:           A high performance web server and reverse proxy server
 License:           BSD-2-Clause
 URL:               https://nginx.org
 
-Source0:        https://nginx.org/download/nginx-1.28.2.tar.gz
+Source0:        https://nginx.org/download/nginx-%{version}.tar.gz
 Source1:        https://nginx.org/download/nginx-%{version}.tar.gz.asc
 # Keys are found here: https://nginx.org/en/pgp_keys.html
 Source3:        https://nginx.org/keys/arut.key

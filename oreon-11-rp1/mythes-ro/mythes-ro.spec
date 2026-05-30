@@ -4,7 +4,7 @@ Name: mythes-ro
 Summary: Romanian thesaurus
 Version: 3.3
 Release: 32%{?dist}
-Source:        http://downloads.sourceforge.net/rospell/th_ro_RO.3.3.zip
+Source:        http://downloads.sourceforge.net/rospell/th_ro_RO.%{version}.zip
 URL: http://rospell.sourceforge.net/
 License: GPL-2.0-or-later
 BuildArch: noarch

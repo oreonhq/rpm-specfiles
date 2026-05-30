@@ -6,7 +6,7 @@ Version:  1.0.6
 Release:  4%{?dist}
 License:  LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:      https://github.com/flatpak/flatpak-xdg-utils
-Source:        https://github.com/flatpak/flatpak-xdg-utils/releases/download/1.0.6/flatpak-xdg-utils-1.0.6.tar.xz
+Source:        https://github.com/flatpak/%{name}/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  meson

@@ -6,7 +6,7 @@ Release:        3%{?dist}
 Summary:        Object-oriented implementation of Sender Policy Framework
 License:        BSD-3-Clause
 URL:            https://metacpan.org/release/Mail-SPF
-Source0:        https://cpan.metacpan.org/authors/id/A/AD/ADAVIS/Mail-SPF-3.20250505.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/M/MB/MBRADSHAW/Mail-SPF-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build

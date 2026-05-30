@@ -4,7 +4,7 @@ Name: iptstate
 Summary: A top-like display of IP Tables state table entries
 Version: 2.2.7
 Release: 11%{?dist}
-Source:        https://github.com/jaymzh/iptstate/releases/download/v2.2.7/iptstate-2.2.7.tar.bz2
+Source:        https://github.com/jaymzh/iptstate/releases/download/v%{version}/iptstate-%{version}.tar.bz2
 Patch01: 0001-Makefile-respect-LDFLAGS.patch
 Patch02: 0002-Makefile-Use-pkg-config.patch
 Patch03: 0003-Makefile-don-t-override-CPPFLAGS.patch

@@ -19,7 +19,7 @@ Release:          1%{?dist}
 License:          BSD-3-Clause
 
 URL:              http://www.tcsh.org/
-Source:        https://astron.com/pub/tcsh/tcsh-6.24.16.tar.gz
+Source:        https://astron.com/pub/tcsh/%{name}-%{version}.tar.gz
 
 Provides:         csh = %{version}
 Provides:         /bin/csh

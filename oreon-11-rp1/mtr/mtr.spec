@@ -9,7 +9,7 @@ Release: 14%{?dist}
 Epoch: 2
 License: GPL-2.0-only
 URL: https://www.bitwizard.nl/mtr/
-Source0:        https://github.com/traviscross/mtr/archive/v0.95/mtr-0.95.tar.gz
+Source0:        https://github.com/traviscross/mtr/archive/v%{version}/%{name}-%{version}.tar.gz
 Source1: net-x%{name}.desktop
 # https://github.com/traviscross/mtr/issues/469
 Patch0: https://github.com/traviscross/mtr/commit/5908af4c19188cb17b62f23368b6ef462831a0cb.patch#/mtr-0.95-snprintf-sizes.patch

@@ -12,7 +12,7 @@ Release:        1%{?dist}
 License:	GPL-2.0-or-later
 
 URL:		https://qalculate.github.io/
-Source0:        https://github.com/Qalculate/libqalculate/releases/download/v5.9.0/libqalculate-5.9.0.tar.gz
+Source0:        https://github.com/%{srcnm}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:	autoconf
 BuildRequires:	automake

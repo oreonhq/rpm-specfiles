@@ -20,7 +20,7 @@ Version:   1.2.30
 Release:   3%{?dist}
 License:   GPL-2.0-or-later
 URL:       https://gitlab.gnome.org/GNOME/NetworkManager-libreswan
-Source0:        https://download.gnome.org/sources/NetworkManager-libreswan/1.2/NetworkManager-libreswan-1.2.30.tar.xz
+Source0:        https://download.gnome.org/sources/NetworkManager-libreswan/1.2/%{name}-%{version}.tar.xz
 
 #Patch1: 0001-some.patch
 

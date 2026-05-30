@@ -29,8 +29,8 @@ Release: 1%{?dist}
 # * src/vasprintf.c - BSD-2-Clause-Darwin AND BSD-3-Clause
 License: BSD-2-Clause-Darwin AND BSD-2-Clause
 
-Source0:        http://ftp.astron.com/pub/file/file-5.47.tar.gz
-Source1:        http://ftp.astron.com/pub/file/file-5.47.tar.gz.asc
+Source0:        http://ftp.astron.com/pub/file/file-%{version}.tar.gz
+Source1:        http://ftp.astron.com/pub/file/file-%{version}.tar.gz.asc
 
 # gpg --keyserver hkp://keys.gnupg.net --recv-keys BE04995BA8F90ED0C0C176C471112AB16CB33B3A
 # gpg --output christoskey.asc --armor --export christos@zoulas.com

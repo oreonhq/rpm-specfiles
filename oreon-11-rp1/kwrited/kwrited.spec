@@ -6,7 +6,7 @@ Release:        3%{?dist}
 Summary:        KDE daemon for wall and write messages
 License:        GPL-2.0-or-later
 URL:            https://invent.kde.org/plasma/kwrited
-Source0:        https://download.kde.org/stable/plasma/6.6.3/kwrited-6.6.3.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

@@ -15,7 +15,7 @@ Summary:        Certificate Enrollment through CEP/CES
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/openSUSE/%{name}
-Source0:        https://github.com/openSUSE/cepces/archive/v0.3.17/cepces-0.3.17.tar.gz
+Source0:        https://github.com/openSUSE/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 

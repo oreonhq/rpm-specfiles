@@ -6,7 +6,7 @@ Release:        4%{?dist}
 Summary:        Object oriented File::Find replacement
 License:        GPL-2.0-or-later OR Artistic-2.0
 URL:            https://metacpan.org/release/File-Find-Object
-Source0:        https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/File-Find-Object-0.3.9.tar.gz
+Source0:        https://www.cpan.org/modules/by-module/File/File-Find-Object-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

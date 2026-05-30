@@ -10,7 +10,7 @@ Release: 5%{?dist}
 Summary: Active Directory enrollment
 License: LGPL-2.1-or-later
 URL:     https://gitlab.freedesktop.org/realmd/adcli
-Source0:        https://gitlab.freedesktop.org/-/project/1196/uploads/5a1c55410c0965835b81fbd28d820d46/adcli-0.9.3.1.tar.gz
+Source0:        https://gitlab.freedesktop.org/-/project/1196/uploads/5a1c55410c0965835b81fbd28d820d46/adcli-%{version}.tar.gz
 
 Patch1: 0001-enroll-fix-issues-if-default-keytab-is-used.patch
 

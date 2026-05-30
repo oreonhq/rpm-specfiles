@@ -19,7 +19,7 @@ Summary: The Berkeley DB database library for C
 Name: libdb
 Version: 5.3.28
 Release: 67%{?dist}
-Source0:        http://download.oracle.com/berkeley-db/db-5.3.28.tar.gz
+Source0:        http://download.oracle.com/berkeley-db/db-%{version}.tar.gz
 Source1: http://download.oracle.com/berkeley-db/db.1.85.tar.gz
 # For mt19937db.c
 Source2: http://www.gnu.org/licenses/lgpl-2.1.txt

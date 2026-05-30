@@ -17,8 +17,8 @@ Summary:        Fast base64 encoding and decoding for ByteStrings
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/base64-bytestring
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/base64-bytestring-1.2.1.0/base64-bytestring-1.2.1.0.tar.gz
-Source1:        https://hackage.haskell.org/package/base64-bytestring-1.2.1.0/base64-bytestring.cabal#/base64-bytestring-1.2.1.0.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

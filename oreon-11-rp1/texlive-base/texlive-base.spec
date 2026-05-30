@@ -504,7 +504,7 @@ Summary: TeX formatting system
 # So we'll just list the license texts. This is also a bit of a lie, since most of these license texts do not apply to themselves.
 License: Apache-2.0 AND Artistic-2.0 AND BSD-3-Clause AND GFDL-1.1-or-later AND GPL-1.0-or-later AND GPL-2.0-only AND GPL-2.0-or-later AND GPL-3.0-only AND GPL-3.0-or-later AND Knuth-CTAN AND LGPL-2.1-or-later AND LGPL-3.0-or-later AND LPPL-1.3a AND LPPL-1.3c AND MIT AND OFL-1.1 AND LicenseRef-Public-Domain
 URL: http://tug.org/texlive/
-Source0:        https://ctan.math.illinois.edu/systems/texlive/Source/%{source_name}.tar.xz
+Source0:        https://mirror.ctan.org/systems/texlive/Source/texlive-20260301-source.tar.xz
 Source1: macros.texlive
 Source2: http://tug.ctan.org/systems/texlive/tlnet/tlpkg/texlive.tlpdb
 Source3: texlive-licenses.tar.xz

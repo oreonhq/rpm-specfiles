@@ -169,7 +169,7 @@ Release: 3%{?release_override}%{?dist}
 Summary: Programmable system-wide instrumentation system
 License: GPL-2.0-or-later
 URL: https://sourceware.org/systemtap/
-Source:        https://sourceware.org/pub/systemtap/releases/systemtap-5.4.tar.gz
+Source:        ftp://sourceware.org/pub/systemtap/releases/systemtap-%{version}.tar.gz
 Patch0: systemtap-gcc16.patch
 
 # Build*

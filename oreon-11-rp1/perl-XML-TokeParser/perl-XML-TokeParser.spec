@@ -7,7 +7,7 @@ Summary:        Simplified interface to XML::Parser
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 
 URL:            https://metacpan.org/release/XML-TokeParser
-Source0:        https://cpan.metacpan.org/authors/id/P/PO/PODMASTER/XML-TokeParser-0.05.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PO/PODMASTER/XML-TokeParser-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  make

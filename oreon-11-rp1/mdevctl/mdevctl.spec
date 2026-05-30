@@ -13,7 +13,7 @@ Summary:        A mediated device management utility for Linux
 License:        LGPL-2.1-only
 URL:            https://crates.io/crates/mdevctl
 Source:         %{crates_source}
-Source1:        https://github.com/mdevctl/mdevctl/releases/download/v1.4.0/mdevctl-1.4.0-vendor.tar.gz
+Source1:        https://github.com/mdevctl/mdevctl/releases/download/v%{version}/mdevctl-%{version}-vendor.tar.gz
 
 # Patches >=1000 are only applied when using system Rust dependencies:
 # - Update nix dev-dependency to 0.31

@@ -10,7 +10,7 @@ License: LGPL-2.1-or-later AND LGPL-2.1-only AND BSD-2-Clause
 URL: https://ftp.altlinux.org/pub/people/ldv/utempter
 
 # spectool uses HTTP clients that do not speak FTP; same tree is on HTTPS.
-Source0:        https://ftp.altlinux.org/pub/people/ldv/utempter/libutempter-1.2.1.tar.gz
+Source0:        ftp://ftp.altlinux.org/pub/people/ldv/utempter/%{name}-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make

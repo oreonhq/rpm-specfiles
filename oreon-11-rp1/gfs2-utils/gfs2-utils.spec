@@ -24,7 +24,7 @@ BuildRequires: libuuid-devel
 BuildRequires: check-devel
 BuildRequires: bzip2-devel
 BuildRequires: make
-Source:        https://releases.pagure.org/gfs2-utils/gfs2-utils-3.6.1.tar.gz
+Source:        https://releases.pagure.org/gfs2-utils/gfs2-utils-%{version}.tar.gz
 URL: https://pagure.io/gfs2-utils
 
 %prep

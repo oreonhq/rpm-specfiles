@@ -20,7 +20,7 @@ Summary:        Application deployment framework for desktop apps
 
 License:        LGPL-2.1-or-later
 URL:            https://flatpak.org/
-Source0:        https://github.com/flatpak/flatpak/releases/download/1.17.2/flatpak-1.17.2.tar.xz
+Source0:        https://github.com/flatpak/flatpak/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 %if 0%{?oreon}
 # Add Flathub repository

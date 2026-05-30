@@ -7,7 +7,7 @@ Version: 2.1.6
 Release: 4%{?dist}
 License: GPL-2.0-or-later
 URL:  http://traceroute.sourceforge.net
-Source0:        https://downloads.sourceforge.net/project/traceroute/traceroute/traceroute-2.1.6/traceroute-2.1.6.tar.gz
+Source0:        https://downloads.sourceforge.net/project/traceroute/traceroute/traceroute-%{version}/traceroute-%{version}.tar.gz
 
 Provides: tcptraceroute = 1.5-1
 Obsoletes: tcptraceroute < 1.5-1

@@ -11,7 +11,7 @@ Release: 1%{?dist}
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License: GPL-2.0-or-later
 URL:     https://apps.kde.org/kturtle/
-Source:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source:        https://download.kde.org/%{stable_kf6}/release-service/26.04.1/src/kturtle-26.04.1.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules

@@ -11,7 +11,7 @@ Summary: Thai hunspell dictionaries
 %global upstreamid 20061212
 Version: 0.%{upstreamid}
 Release: 36%{?dist}
-Source:        th_TH.zip
+Source:        http://download.services.openoffice.org/contrib/dictionaries/th_TH.zip
 URL: https://wiki.openoffice.org/wiki/Dictionaries
 License: LGPL-2.1-or-later
 BuildArch: noarch

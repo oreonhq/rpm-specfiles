@@ -17,7 +17,7 @@ Summary:        Case insensitive string comparison
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/case-insensitive
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/case-insensitive-1.2.1.0/case-insensitive-1.2.1.0.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

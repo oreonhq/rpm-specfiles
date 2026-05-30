@@ -17,8 +17,8 @@ Summary:        A blazingly fast markup combinator library for Haskell
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/blaze-markup
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/blaze-markup-0.8.3.0/blaze-markup-0.8.3.0.tar.gz
-Source1:        https://hackage.haskell.org/package/blaze-markup-0.8.3.0/blaze-markup.cabal#/blaze-markup-0.8.3.0.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

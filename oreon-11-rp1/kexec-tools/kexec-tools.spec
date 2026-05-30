@@ -7,7 +7,7 @@ URL: https://kernel.org/pub/linux/utils/kernel/kexec
 License: GPL-2.0-only
 Summary: The kexec/kdump userspace component
 
-Source0:        https://kernel.org/pub/linux/utils/kernel/kexec/kexec-tools-2.0.32.tar.xz
+Source0:        https://kernel.org/pub/linux/utils/kernel/kexec/%{name}-%{version}.tar.xz
 
 BuildRequires: automake
 BuildRequires: autoconf

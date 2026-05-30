@@ -6,7 +6,7 @@ Version:   0.4.9
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/hughsie/libgusb
-Source0:        https://github.com/hughsie/libgusb/releases/download/0.4.9/libgusb-0.4.9.tar.xz
+Source0:        https://github.com/hughsie/libgusb/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires: glib2-devel >= 2.38.0
 BuildRequires: json-glib-devel

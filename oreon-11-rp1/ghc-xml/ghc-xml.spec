@@ -15,8 +15,8 @@ Summary:        A simple XML library
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/xml
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/xml-1.3.14/xml-1.3.14.tar.gz
-Source1:        https://hackage.haskell.org/package/xml-1.3.14/xml.cabal#/xml-1.3.14.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

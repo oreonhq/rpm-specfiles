@@ -11,7 +11,7 @@ Summary: Development Libraries and headers for EFI
 License: BSD-2-Clause AND BSD-2-Clause-Patent AND BSD-3-Clause AND BSD-4-Clause AND GPL-2.0-or-later AND GPL-2.0-only
 URL: https://sourceforge.net/projects/gnu-efi/
 
-Source0:        https://sourceforge.net/projects/gnu-efi/files/gnu-efi-3.0.18.tar.bz2
+Source0:        https://sourceforge.net/projects/gnu-efi/files/gnu-efi-%{version}.tar.bz2
 
 # upstream this breaks non-GNU LD, Heinrich Schuchardt asked us not to do this:
 # "The correct approach is to adjust the loader script to put non-static

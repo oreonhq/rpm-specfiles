@@ -9,7 +9,7 @@ Summary:       Minimalistic Netlink user-space library
 
 License:       LGPL-2.1-or-later
 URL:           https://netfilter.org/projects/libmnl/
-Source0:        https://netfilter.org/projects/libmnl/files/libmnl-1.0.5.tar.bz2
+Source0:        https://netfilter.org/projects/libmnl/files/%{name}-%{version}.tar.bz2
 Source1:        https://netfilter.org/projects/libmnl/files/%{name}-%{version}.tar.bz2.sig
 Source2:        https://netfilter.org/files/coreteam-gpg-key-0xD55D978A8A1420E4.txt
 

@@ -32,8 +32,8 @@ URL: http://www.kernel.org/doc/man-pages/
 # gpg --no-default-keyring --keyring ./man-pages.gpg \
 # 	--verify man-pages-%%{version}.tar.sign man-pages-%%{version}.tar.xz
 # Verify "Good signature from" for the stored key.
-Source0:        http://www.kernel.org/pub/linux/docs/man-pages/man-pages-6.13.tar.xz
-Source1:        http://www.kernel.org/pub/linux/docs/man-pages/man-pages-6.13.tar.sign
+Source0:        http://www.kernel.org/pub/linux/docs/man-pages/man-pages-%{version}.tar.xz
+Source1:        http://www.kernel.org/pub/linux/docs/man-pages/man-pages-%{version}.tar.sign
 
 BuildRequires: make
 Requires(post): %{_sbindir}/update-alternatives

@@ -23,7 +23,7 @@ BuildRequires:    pkgconfig(systemd)
 BuildRequires:    dbus-devel >= 1.2
 BuildRequires:    libcap-devel
 BuildRequires:    polkit-devel
-Source0:        https://gitlab.freedesktop.org/pipewire/rtkit/-/archive/v0.14/rtkit-v0.14.tar.bz2
+Source0:        http://0pointer.de/public/%{name}-%{version}.tar.xz
 
 Patch:            remove-debug-messages.patch
 

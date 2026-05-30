@@ -6,7 +6,7 @@ Release:        521%{?dist}
 Summary:        Install Perl files from here to there
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/ExtUtils-Install
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/ExtUtils-Install-2.22.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/ExtUtils-Install-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

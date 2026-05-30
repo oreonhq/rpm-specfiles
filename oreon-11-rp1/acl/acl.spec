@@ -15,7 +15,7 @@ BuildRequires: make
 BuildRequires: perl(FileHandle)
 BuildRequires: gnupg2
 Requires: libacl%{?_isa} = %{version}-%{release}
-Source0:        https://download-mirror.savannah.gnu.org/releases/acl/acl-2.3.2.tar.gz
+Source0:        https://download-mirror.savannah.gnu.org/releases/acl/acl-%{version}.tar.gz
 Source1:        https://download-mirror.savannah.gnu.org/releases/acl/acl-%{version}.tar.gz.sig
 # Retreived from https://savannah.nongnu.org/people/viewgpg.php?user_id=15000
 # Source2: agruen-key.gpg

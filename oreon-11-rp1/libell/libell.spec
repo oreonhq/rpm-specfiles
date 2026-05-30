@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        Embedded Linux library
 License:        LGPL-2.0-or-later
 URL:            https://01.org/ell
-Source0:        https://www.kernel.org/pub/linux/libs/ell/ell-0.83.tar.xz
+Source0:        https://www.kernel.org/pub/linux/libs/ell/ell-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  make

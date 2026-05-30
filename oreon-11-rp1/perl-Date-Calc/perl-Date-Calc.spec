@@ -6,7 +6,7 @@ Release:        32%{?dist}
 Summary:        Gregorian calendar date calculations
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Date-Calc
-Source0:        https://cpan.metacpan.org/authors/id/S/ST/STBEY/Date-Calc-6.4.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/ST/STBEY/Date-Calc-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

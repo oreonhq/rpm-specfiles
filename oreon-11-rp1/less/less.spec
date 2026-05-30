@@ -8,7 +8,7 @@ Release: 3%{?dist}
 # less dual license GPL-3.0-only OR BSD-2-Clause
 # lesspipe GPL-2.0-or-later
 License: (GPL-3.0-only OR BSD-2-Clause) AND GPL-2.0-or-later
-Source0:        https://www.greenwoodsoftware.com/less/less-692.tar.gz
+Source0:        https://www.greenwoodsoftware.com/less/%{name}-%{version}.tar.gz
 %global lesspipe_version 2.22
 Source1:        https://github.com/wofr06/lesspipe/archive/refs/tags/v2.22.tar.gz#/lesspipe-2.22.tar.gz
 Source2: less.sh

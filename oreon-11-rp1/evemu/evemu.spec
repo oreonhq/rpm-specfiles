@@ -16,11 +16,11 @@ License:        GPL-3.0-only AND LGPL-3.0-only AND GPL-3.0-or-later
 URL:            http://www.freedesktop.org/wiki/Evemu
 
 %if 0%{?gitdate}
-Source0:        http://www.freedesktop.org/software/evemu/evemu-2.7.0.tar.xz
+Source0:        http://www.freedesktop.org/software/%{name}/%{name}-%{version}.tar.xz
 Source1:        make-git-snapshot.sh
 Source2:        commitid
 %else
-Source0:        http://www.freedesktop.org/software/evemu/evemu-2.7.0.tar.xz
+Source0:        http://www.freedesktop.org/software/%{name}/%{name}-%{version}.tar.xz
 %endif
 
 BuildRequires:  automake libtool gcc gcc-c++ make

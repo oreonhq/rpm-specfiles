@@ -13,7 +13,7 @@ Release:        522%{?dist}
 Summary:        Color screen output using ANSI escape sequences
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Term-ANSIColor
-Source0:        https://cpan.metacpan.org/authors/id/R/RR/RRA/Term-ANSIColor-5.01.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Term/Term-ANSIColor-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  coreutils

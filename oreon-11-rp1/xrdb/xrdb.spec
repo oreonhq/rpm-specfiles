@@ -7,7 +7,7 @@ Summary:    X server resource database utility
 
 License:    HPND-DEC AND MIT-open-group
 URL:        https://www.x.org
-Source0:        https://www.x.org/pub/individual/app/xrdb-1.2.2.tar.xz
+Source0:        https://www.x.org/pub/individual/app/%{name}-%{version}.tar.xz
 
 BuildRequires:  automake libtool
 BuildRequires:  gcc make

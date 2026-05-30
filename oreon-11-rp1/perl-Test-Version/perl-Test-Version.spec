@@ -6,7 +6,7 @@ Release:	28%{?dist}
 Summary:	Check to see that versions in modules are sane
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Test-Version
-Source0:	https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Test-Version-2.09.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Version-%{version}.tar.gz
 
 BuildArch:	noarch
 # ===================================================================

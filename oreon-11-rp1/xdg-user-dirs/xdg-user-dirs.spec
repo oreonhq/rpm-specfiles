@@ -10,7 +10,7 @@ Summary:	Handles user special directories
 
 License:	GPL-2.0-or-later AND MIT
 URL:		https://freedesktop.org/wiki/Software/xdg-user-dirs
-Source0:        https://user-dirs.freedesktop.org/releases/xdg-user-dirs-0.18.tar.gz
+Source0:        https://user-dirs.freedesktop.org/releases/%{name}-%{version}.tar.gz
 
 # Backports from upstream
 Patch0001:	0001-Add-a-systemd-service-to-run-xdg-user-dirs-update.patch

@@ -41,8 +41,8 @@ URL:            https://dom4j.github.io/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/dom4j/dom4j/archive/version-2.1.4.tar.gz
-Source1:        https://repo1.maven.org/maven2/org/dom4j/dom4j/2.1.4/dom4j-2.1.4.pom
+Source0:        https://github.com/dom4j/dom4j/archive/version-%{version}.tar.gz
+Source1:        https://repo1.maven.org/maven2/org/%{name}/%{name}/%{version}/%{name}-%{version}.pom
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(jaxen:jaxen)

@@ -11,7 +11,7 @@ Summary:        A modern programming language for GNOME
 # Most files are LGPLv2.1+, curses.vapi is 2-clause BSD
 License:        LGPL-2.1-or-later AND BSD-2-Clause
 URL:            https://wiki.gnome.org/Projects/Vala
-Source0:        https://download.gnome.org/sources/vala/0.56/vala-0.56.18.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/0.56/%{name}-%{version}.tar.xz
 # warn instead of erroring out on unknown XML
 # needed to build libadwaita on c10s and jhbuild but somehow not on f42
 Patch0:        https://gitlab.gnome.org/GNOME/vala/-/merge_requests/423.patch#/vala-warn-on-unknown-xml.patch

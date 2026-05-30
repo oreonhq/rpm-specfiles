@@ -8,7 +8,7 @@ Summary:        A library for handling uncompressed audio and video data
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License:        GPL-3.0-or-later
 URL:            http://gmerlin.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gmerlin/gavl-1.4.0.tar.gz
+Source0:        http://downloads.sourceforge.net/gmerlin/gavl-%{version}.tar.gz
 Patch1:         gavl-1.1.1-system_libgdither.patch
 Patch2: gavl-configure-c99.patch
 Patch3: gavl-c99.patch

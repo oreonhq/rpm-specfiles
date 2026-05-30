@@ -12,7 +12,7 @@ Version: 1.4.3
 Release: 2%{?dist}
 License: GPL-3.0-or-later
 URL: https://github.com/linux-application-whitelisting/fapolicyd
-Source0:        https://github.com/linux-application-whitelisting/fapolicyd/releases/download/v1.4.3/fapolicyd-1.4.3.tar.gz
+Source0:        https://github.com/linux-application-whitelisting/fapolicyd/releases/download/v%{version}/fapolicyd-%{version}.tar.gz
 Source1:        https://github.com/linux-application-whitelisting/fapolicyd-selinux/releases/download/v1.1/fapolicyd-selinux-1.1.tar.gz
 Source2:        https://github.com/bachradsusi.gpg
 Source3: fapolicyd.sysusers

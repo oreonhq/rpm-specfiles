@@ -6,7 +6,7 @@ Release:        2%{?dist}
 Summary:        Agent for Spice guests
 License:        GPL-3.0-or-later
 URL:            https://spice-space.org/
-Source0:        https://spice-space.org/download/releases/spice-vdagent-0.23.0.tar.bz2
+Source0:        https://spice-space.org/download/releases/%{name}-%{version}.tar.bz2
 #Source1:        https://spice-space.org/download/releases/%%{name}-%%{version}.tar.bz2.sig
 #Source2:        victortoso-E37A484F.keyring
 

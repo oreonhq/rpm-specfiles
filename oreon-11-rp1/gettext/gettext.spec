@@ -27,7 +27,7 @@ Release: 1%{?dist}
 # Everything else is GPLv3+
 License: GPL-3.0-or-later and LGPL-2.0-or-later and GFDL-1.2-or-later
 URL: https://www.gnu.org/software/gettext/
-Source:        https://ftp.gnu.org/pub/gnu/gettext/gettext-1.0.tar.gz
+Source:        https://ftp.gnu.org/pub/gnu/%{name}/%{name}-%{version}.tar.gz
 Source2: msghack.py
 Source3: msghack.1
 

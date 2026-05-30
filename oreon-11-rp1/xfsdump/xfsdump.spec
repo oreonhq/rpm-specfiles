@@ -7,8 +7,8 @@ Release:	4%{?dist}
 # Licensing based on generic "GNU GENERAL PUBLIC LICENSE"
 # in source, with no mention of version.
 License:	GPL-1.0-or-later
-Source0:        http://kernel.org/pub/linux/utils/fs/xfs/xfsdump/xfsdump-3.2.0.tar.xz
-Source1:        http://kernel.org/pub/linux/utils/fs/xfs/xfsdump/xfsdump-3.2.0.tar.sign
+Source0:        http://kernel.org/pub/linux/utils/fs/xfs/%{name}/%{name}-%{version}.tar.xz
+Source1:        http://kernel.org/pub/linux/utils/fs/xfs/%{name}/%{name}-%{version}.tar.sign
 Source2:	https://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git/plain/keys/13F703E6C11CF6F0.asc
 BuildRequires:	make
 BuildRequires:	gcc

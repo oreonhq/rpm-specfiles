@@ -6,7 +6,7 @@ Release:        9%{?dist}
 Summary:        Perl extension to test methods for warnings
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Warn
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BIGJ/Test-Warn-0.37.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Warn-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build

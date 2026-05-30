@@ -33,7 +33,7 @@ Summary: String library, very low memory overhead, simple to import
 # Automatically converted from old format: MIT or LGPLv2+ or BSD - review is highly recommended.
 License: LicenseRef-Callaway-MIT OR LicenseRef-Callaway-LGPLv2+ OR LicenseRef-Callaway-BSD
 URL: http://www.and.org/ustr/
-Source0:        http://www.and.org/ustr/1.0.4/ustr-1.0.4.tar.bz2
+Source0:        http://www.and.org/ustr/%{version}/%{name}-%{version}.tar.bz2
 Patch0: c99-inline.patch
 # BuildRequires: make gcc sed
 

@@ -10,7 +10,7 @@ Release:	5%{?dist}
 Summary:	Name - or rename - a sub
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Sub-Name
-Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Sub-Name-0.28.tar.gz
+Source0:        https://www.cpan.org/modules/by-module/Sub/Sub-Name-%{version}.tar.gz
 
 # Module Build
 BuildRequires:	coreutils

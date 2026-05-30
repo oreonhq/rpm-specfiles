@@ -32,8 +32,8 @@ Name: httpd
 Version: 2.4.66
 Release: 5%{?dist}
 URL: https://httpd.apache.org/
-Source0:        https://www.apache.org/dist/httpd/httpd-2.4.66.tar.bz2
-Source1:        https://www.apache.org/dist/httpd/httpd-2.4.66.tar.bz2.asc
+Source0:        https://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2
+Source1:        https://www.apache.org/dist/httpd/httpd-%{version}.tar.bz2.asc
 # gpg key file downloaded and verified by luhliarik
 # https://httpd.apache.org/dev/verification.html
 Source2: https://dist.apache.org/repos/dist/release/httpd/KEYS

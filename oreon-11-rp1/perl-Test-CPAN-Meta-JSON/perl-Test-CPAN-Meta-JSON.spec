@@ -6,7 +6,7 @@ Release:	32%{?dist}
 Summary:	Validate a META.json file within a CPAN distribution
 License:	Artistic-2.0
 URL:		https://metacpan.org/release/Test-CPAN-Meta-YAML
-Source0:	https://cpan.metacpan.org/authors/id/B/BA/BARBIE/Test-CPAN-Meta-JSON-0.16.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-CPAN-Meta-JSON-%{version}.tar.gz
 
 Patch0:		Test-CPAN-Meta-JSON-0.16-utf8.patch
 BuildArch:	noarch

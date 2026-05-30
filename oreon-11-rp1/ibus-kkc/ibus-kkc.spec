@@ -7,7 +7,7 @@ Summary:	Japanese Kana Kanji input method for ibus
 
 License:	GPL-2.0-or-later
 URL:		https://github.com/ueno/ibus-kkc
-Source0:        https://github.com/ueno/ibus-kkc/releases/download/v1.5.22/ibus-kkc-1.5.22.tar.gz
+Source0:        https://github.com/ueno/ibus-kkc/releases/download/v%{version}/%{name}-%{version}.tar.gz
 Patch0:		ibus-kkc-content-type.patch
 Patch1:         ibus-HEAD.patch
 

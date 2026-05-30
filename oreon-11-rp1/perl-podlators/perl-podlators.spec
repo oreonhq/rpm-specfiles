@@ -30,7 +30,7 @@ Summary:        Format POD source into various output formats
 # t/style/strict.t:         MIT
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND FSFAP
 URL:            https://metacpan.org/release/podlators
-Source0:        https://cpan.metacpan.org/authors/id/R/RR/RRA/podlators-v6.0.2.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RR/RRA/podlators-v%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

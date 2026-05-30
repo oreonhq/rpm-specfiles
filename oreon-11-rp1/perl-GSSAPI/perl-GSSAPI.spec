@@ -12,7 +12,7 @@ Release:        51%{?dist}
 Summary:        Perl extension providing access to the GSSAPIv2 library
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/GSSAPI
-Source0:        https://cpan.metacpan.org/authors/id/A/AG/AGROLMS/GSSAPI-0.28.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AG/AGROLMS/GSSAPI-%{version}.tar.gz
 # Fix a crash in gss_release_oid() when destructing out_mech (rhbz #1994263, CPAN RT#121873)
 Patch0:         GSSAPI-0.28-Fix-a-crash-in-gss_release_oid-when-destructing-out_.patch
 BuildRequires:  coreutils

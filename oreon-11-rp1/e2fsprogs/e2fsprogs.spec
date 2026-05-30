@@ -8,8 +8,8 @@ Release: 1%{?dist}
 # License tags based on COPYING file distinctions for various components
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
-Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.4/e2fsprogs-1.47.4.tar.xz
-Source1:        https://www.kernel.org/pub/linux/kernel/people/tytso/e2fsprogs/v1.47.4/e2fsprogs-1.47.4.tar.sign
+Source0:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.xz
+Source1:        https://www.kernel.org/pub/linux/kernel/people/tytso/%{name}/v%{version}/%{name}-%{version}.tar.sign
 # GPG key fetched from https://thunk.org/tytso/tytso-key.asc
 # which was linked from https://thunk.org/tytso/
 # Also verified fingerprint matches on https://www.kernel.org/doc/wot/tytso.html

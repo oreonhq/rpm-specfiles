@@ -20,7 +20,7 @@ Summary:	Yet Another Part-of-Speech and Morphological Analyzer
 # SPDX confirmed
 License:	BSD-3-Clause OR LGPL-2.1-or-later OR GPL-2.0-or-later
 URL:		http://mecab.sourceforge.net/
-Source0:        http://mecab.googlecode.com/files/%{name}-%{version}.tar.gz
+Source0:        http://mecab.googlecode.com/files/mecab-.tar.gz
 
 BuildRequires:	make
 BuildRequires:	gcc-c++

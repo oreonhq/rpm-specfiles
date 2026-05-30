@@ -17,7 +17,7 @@ Release: 10%{?dist}
 License: GPL-2.0-or-later
 URL: http://www.keepalived.org/
 
-Source0:        http://www.keepalived.org/software/keepalived-2.2.8.tar.gz
+Source0:        http://www.keepalived.org/software/keepalived-%{version}.tar.gz
 Source1: keepalived.service
 #Patch0: keepalived-configure-c99.patch
 

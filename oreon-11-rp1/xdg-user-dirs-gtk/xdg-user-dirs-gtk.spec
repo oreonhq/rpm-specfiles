@@ -7,7 +7,7 @@ Summary:	Gnome integration of special directories
 
 License:	GPL-2.0-or-later
 URL:		https://gitlab.gnome.org/GNOME/xdg-user-dirs-gtk
-Source0:        https://download.gnome.org/sources/xdg-user-dirs-gtk/0.16/xdg-user-dirs-gtk-0.16.tar.xz
+Source0:        https://download.gnome.org/sources/xdg-user-dirs-gtk/%{version}/%{name}-%{version}.tar.xz
 
 # https://gitlab.gnome.org/GNOME/xdg-user-dirs-gtk/-/merge_requests/22
 Patch0:		xdg-user-dirs-gtk-0.16-not-showin-kde.patch

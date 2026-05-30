@@ -8,8 +8,8 @@ License:        Apache-2.0
 URL:            https://maven.apache.org/shared/maven-reporting-impl/
 VCS:            git:https://github.com/apache/maven-reporting-impl.git
 
-Source0:        https://archive.apache.org/dist/maven/reporting/maven-reporting-impl-4.0.0-source-release.zip
-Source1:        https://archive.apache.org/dist/maven/reporting/maven-reporting-impl-4.0.0-source-release.zip.asc
+Source0:        https://archive.apache.org/dist/maven/reporting/%{name}-%{version}-source-release.zip
+Source1:        https://archive.apache.org/dist/maven/reporting/%{name}-%{version}-source-release.zip.asc
 # Apache Maven public key
 Source2:        https://downloads.apache.org/maven/KEYS
 

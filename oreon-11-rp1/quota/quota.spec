@@ -52,7 +52,7 @@ Summary:    System administration tools for monitoring users' disk usage
 # mkinstalldirs:                    LicenseRef-Callaway-Public-Domain
 License:    GPL-2.0-only AND GPL-2.0-or-later
 URL:        http://sourceforge.net/projects/linuxquota/
-Source0:        http://downloads.sourceforge.net/linuxquota/quota-4.11.tar.gz
+Source0:        http://downloads.sourceforge.net/linuxquota/%{name}-%{version}.tar.gz
 Source1:    quota_nld.service
 Source2:    quota_nld.sysconfig
 Source3:    rpc-rquotad.service

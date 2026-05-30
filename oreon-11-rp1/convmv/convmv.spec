@@ -7,7 +7,7 @@ Release: 4%{?dist}
 
 License: GPL-2.0-only OR GPL-3.0-only
 URL: http://j3e.de/linux/convmv
-Source0:        http://j3e.de/linux/convmv/convmv-2.06.tar.gz
+Source0:        http://j3e.de/linux/convmv/convmv-%{version}.tar.gz
 Patch0: convmv-2.0-preserve-timestamps.patch
 BuildArch: noarch
 BuildRequires: make

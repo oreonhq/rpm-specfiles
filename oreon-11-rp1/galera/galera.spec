@@ -15,7 +15,7 @@ URL:            https://mariadb.com/docs/galera-cluster
 # The MariaDB upstream releases their own - further patched - version (dozens of files added) on their custom download web page. However they only release it with a MariaDB server release. 
 # So it can only be accessed through the 'https://archive.mariadb.org/mariadb-.../...' path which contains the major version of the MariaDB server.
 # Furthermore there is a lag (can be days, weeks) between when a new tag is done on GitHub and when MariaDB upstream releases the new version on their web with the new MariaDB server release.
-Source0:        https://archive.mariadb.org/mariadb-11.8/galera-26.4.25/src/galera-26.4.25.tar.gz
+Source0:        https://archive.mariadb.org/mariadb-11.8/%{name}-%{version}/src/%{name}-%{version}.tar.gz
 
 Patch0:         cmake_paths.patch
 Patch1:         docs.patch

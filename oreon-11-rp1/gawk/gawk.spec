@@ -47,7 +47,7 @@ Release:          2%{?dist}
 License:          GPL-3.0-or-later AND GPL-2.0-or-later AND LGPL-2.1-or-later AND BSD-3-Clause
 
 URL:              https://www.gnu.org/software/gawk/
-Source0:        https://ftp.gnu.org/gnu/gawk/gawk-5.4.0.tar.xz
+Source0:        https://ftp.gnu.org/gnu/gawk/gawk-%{version}.tar.xz
 
 Source1:          LICENSE.GPLv2
 Source2:          LICENSE.LGPLv2

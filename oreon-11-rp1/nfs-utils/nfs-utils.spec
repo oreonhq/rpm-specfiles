@@ -10,7 +10,7 @@ Epoch: 1
 # group all 32bit related archs
 %global all_32bit_archs i386 i486 i586 i686 athlon ppc sparcv9
 
-Source0:        https://www.kernel.org/pub/linux/utils/nfs-utils/2.8.7/nfs-utils-2.8.7.tar.xz
+Source0:        https://www.kernel.org/pub/linux/utils/nfs-utils/%{version}/%{name}-%{version}.tar.xz
 Source1: id_resolver.conf
 Source2: lockd.conf
 Source3: 24-nfs-server.conf

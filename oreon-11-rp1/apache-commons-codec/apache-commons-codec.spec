@@ -11,7 +11,7 @@ URL:            https://commons.apache.org/proper/commons-codec/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/commons/codec/source/commons-codec-1.19.0-src.tar.gz
+Source0:        https://archive.apache.org/dist/commons/codec/source/commons-codec-%{version}-src.tar.gz
 # Data in DoubleMetaphoneTest.java originally has an inadmissible license.
 # The author gives MIT in e-mail communication.
 Source1:        aspell-mail.txt

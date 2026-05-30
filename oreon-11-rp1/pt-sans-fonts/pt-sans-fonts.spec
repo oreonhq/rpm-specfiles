@@ -41,7 +41,7 @@ and released by ParaType.}
 
 # This is now dead and ParaType still publishes an older version on its website
 Source0:  http://www.fontstock.com/public/PTSansOFL.zip
-Source10: 58-%{fontpkgname}.xml
+Source10: 58-pt-sans-fonts.xml
 Source20: http://rus.paratype.ru/system/attachments/647/original/ptsans55reg.pdf
 Source21: http://rus.paratype.ru/system/attachments/650/original/ptsans75bold.pdf
 Source22: http://rus.paratype.ru/system/attachments/648/original/ptsans56it.pdf

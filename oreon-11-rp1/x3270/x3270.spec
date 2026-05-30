@@ -9,7 +9,7 @@ Version: 4.5ga5
 Release: 1%{?dist}
 License: BSD-3-Clause AND HPND-sell-variant AND MIT AND Apache-2.0
 URL: https://x3270.miraheze.org/wiki/Main_Page
-Source0:        http://downloads.sourceforge.net/x3270/suite3270-4.5ga5-src.tgz
+Source0:        http://downloads.sourceforge.net/%{name}/suite3270-%{version}-src.tgz
 Source1: x3270.png
 Source2: x3270.desktop
 Patch0: x3270-3.5-paths.patch

@@ -9,7 +9,7 @@ Summary:        Fast and simple WSGI-framework for small web-applications
 
 License:        MIT
 URL:            http://bottlepy.org
-Source0:        https://github.com/bottlepy/bottle/archive/0.13.4.tar.gz#/bottle-0.13.4.tar.gz
+Source0:        https://github.com/bottlepy/%{srcname}/archive/%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
 
 BuildArch:      noarch
 

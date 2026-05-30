@@ -17,7 +17,7 @@ License:        Apache-2.0
 URL:            https://crates.io/crates/afterburn
 Source0:        https://crates.io/api/v1/crates/afterburn/5.10.0/download#/afterburn-5.10.0.crate
 # not used on Fedora
-Source1:        https://github.com/coreos/afterburn/releases/download/v5.10.0/afterburn-5.10.0-vendor.tar.gz
+Source1:        https://github.com/coreos/%{crate}/releases/download/v%{version}/%{crate}-%{version}-vendor.tar.gz
 Source2:        90-afterburn-authorized-keys-file.conf
 
 # build(deps): bump mailparse from 0.15.0 to 0.16.1

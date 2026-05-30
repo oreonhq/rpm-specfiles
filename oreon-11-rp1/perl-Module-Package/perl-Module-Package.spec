@@ -6,7 +6,7 @@ Release:        39%{?dist}
 Summary:        Postmodern Perl Module Packaging
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Package
-Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Module-Package-0.30.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/I/IN/INGY/Module-Package-%{version}.tar.gz
 # Fix building on Perl without "." in @INC, CPAN RT#121748
 Patch0:         Module-Package-0.30-Fix-building-on-Perl-without-.-in-INC.patch
 BuildArch:      noarch

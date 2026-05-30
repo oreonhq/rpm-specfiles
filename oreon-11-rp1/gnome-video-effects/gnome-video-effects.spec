@@ -8,7 +8,7 @@ Summary:        Collection of GStreamer video effects
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:        GPL-2.0-only
 URL:            https://wiki.gnome.org/Projects/GnomeVideoEffects
-Source0:        http://ftp.gnome.org/pub/GNOME/sources/gnome-video-effects/0.6/gnome-video-effects-0.6.0.tar.xz
+Source0:        http://ftp.gnome.org/pub/GNOME/sources/%{name}/0.6/%{name}-%{version}.tar.xz
 Buildarch:      noarch
 
 BuildRequires:  gettext

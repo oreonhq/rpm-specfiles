@@ -28,7 +28,7 @@ Epoch: 5
 # pgpewrap.c setenv.c sha1.c wcwidth.c which are Public Domain
 License: GPL-2.0-or-later AND LicenseRef-Fedora-Public-Domain
 # hg snapshot created from http://dev.mutt.org/hg/mutt
-Source:        http://ftp.mutt.org/pub/mutt/mutt-2.3.0.tar.gz
+Source:        http://ftp.mutt.org/pub/%{name}/%{name}-%{version}.tar.gz
 Source1: mutt_ldap_query
 Patch1: mutt-1.10.0-muttrc.patch
 Patch2: mutt-1.8.0-cabundle.patch

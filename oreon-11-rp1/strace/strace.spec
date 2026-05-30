@@ -105,10 +105,10 @@ Group: Development%{?suse_version:/Tools}/Debuggers
 %endif
 URL: https://strace.io
 %if 0%{?fedora} >= 12 || 0%{?centos} >= 6 || 0%{?rhel} >= 6 || 0%{?suse_version} >= 1200
-Source:        https://strace.io/files/6.19/strace-6.19.tar.xz
+Source:        https://strace.io/files/%{version}/strace-%{version}.tar.xz
 BuildRequires: xz
 %else
-Source:        https://strace.io/files/6.19/strace-6.19.tar.xz
+Source:        https://strace.io/files/%{version}/strace-%{version}.tar.xz
 %endif
 BuildRequires: gcc gzip make
 

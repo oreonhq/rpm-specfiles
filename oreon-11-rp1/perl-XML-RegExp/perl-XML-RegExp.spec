@@ -7,7 +7,7 @@ Summary:        Regular expressions for XML tokens
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/XML-RegExp
-Source0:        https://cpan.metacpan.org/authors/id/T/TJ/TJMATHER/XML-RegExp-0.04.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/T/TJ/TJMATHER/XML-RegExp-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  coreutils

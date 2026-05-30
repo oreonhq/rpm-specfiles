@@ -6,7 +6,7 @@ Release:	28%{?dist}
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:	Expose PL_dirty, the flag that marks global destruction
 URL:		https://metacpan.org/release/Devel-GlobalDestruction
-Source:		https://cpan.metacpan.org/authors/id/H/HA/HAARG/Devel-GlobalDestruction-0.14.tar.gz
+Source:        https://cpan.metacpan.org/modules/by-module/Devel/Devel-GlobalDestruction-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

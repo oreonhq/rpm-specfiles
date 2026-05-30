@@ -64,7 +64,7 @@ Version: 2.9.0
 Release: 3%{?dist}
 License: GPL-2.0-or-later
 URL: https://lasso.entrouvert.org/
-Source0:        https://dev.entrouvert.org/lasso/lasso-2.9.0.tar.gz
+Source0:        https://dev.entrouvert.org/lasso/lasso-%{version}.tar.gz
 
 BuildRequires: autoconf
 BuildRequires: automake

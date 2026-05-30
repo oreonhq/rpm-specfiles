@@ -8,7 +8,7 @@ Summary:	Shared functions for Ayatana indicators
 # SPDX confirmed
 License:	GPL-3.0-only
 URL:		https://launchpad.net/libindicator
-Source0:        https://launchpad.net/libindicator/12.10/12.10.1/+download/libindicator-12.10.1.tar.gz
+Source0:        https://launchpad.net/libindicator/12.10/12.10.1/+download/%{name}-%{version}.tar.gz
 # From GLib 2.62
 Patch1:	libindicator-12.10.1-glib262-g_define_type_with_private.patch
 

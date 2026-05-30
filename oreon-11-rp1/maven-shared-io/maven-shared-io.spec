@@ -12,7 +12,7 @@ URL:            https://maven.apache.org/shared/maven-shared-io
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/maven-shared-io/3.0.0/maven-shared-io-3.0.0-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/shared/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
 # Rejected upstream: https://issues.apache.org/jira/browse/MSHARED-490
 Patch:          0001-Fix-running-tests-with-Maven-3.3.9.patch

@@ -11,7 +11,7 @@ URL:            https://commons.apache.org/proper/commons-cli/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/commons/cli/source/commons-cli-1.10.0-src.tar.gz
+Source0:        https://www.apache.org/dist/commons/cli/source/commons-cli-%{version}-src.tar.gz
 
 Patch:          0001-Port-tests-to-commons-lang3.patch
 

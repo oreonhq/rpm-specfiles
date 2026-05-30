@@ -21,7 +21,7 @@ Summary:        Portable temporary file and directory support
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/temporary
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/temporary-1.3/temporary-1.3.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

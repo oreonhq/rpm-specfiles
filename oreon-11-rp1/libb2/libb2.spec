@@ -8,7 +8,7 @@ Version: 0.98.1
 Release: 15%{?dist}
 License: CC0-1.0 OR Apache-1.0 OR Apache-2.0
 URL:     https://blake2.net/
-Source0:        https://github.com/BLAKE2/libb2/archive/v0.98.1/libb2-0.98.1.tar.gz
+Source0:        https://github.com/BLAKE2/libb2/archive/v%{version}/libb2-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: automake

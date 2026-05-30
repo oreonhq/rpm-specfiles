@@ -6,7 +6,7 @@ Release:    %autorelease
 Summary:    A completion input method
 License:    GPL-3.0-or-later AND Apache-2.0
 URL:        https://mike-fabian.github.io/ibus-typing-booster/
-Source0:        https://github.com/mike-fabian/ibus-typing-booster/releases/download/2.30.8/ibus-typing-booster-2.30.8.tar.gz
+Source0:        https://github.com/mike-fabian/ibus-typing-booster/releases/download/%{version}/ibus-typing-booster-%{version}.tar.gz
 Requires:   ibus >= 1.5.3
 Requires:   m17n-lib
 %{?__python3:Requires: %{__python3}}

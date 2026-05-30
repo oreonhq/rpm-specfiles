@@ -7,7 +7,7 @@ Release:       2%{?dist}
 License:       libtiff
 URL:           http://www.simplesystems.org/libtiff/
 
-Source:        http://download.osgeo.org/libtiff/tiff-4.7.1.tar.gz
+Source:        http://download.osgeo.org/libtiff/tiff-%{version}.tar.gz
 
 BuildRequires: gcc, gcc-c++
 BuildRequires: zlib-devel libjpeg-devel jbigkit-devel libzstd-devel libwebp-devel liblerc-devel

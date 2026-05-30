@@ -13,7 +13,7 @@ License:            LGPL-2.1-or-later
 %global repo_tag    v%{version}
 
 URL:                https://github.com/%{repo_owner}/%{repo_name}
-Source0:        https://github.com/fedora-iot/greenboot/archive/refs/tags/v0.15.8.tar.gz
+Source0:        https://github.com/%{repo_owner}/%{repo_name}/archive/%{repo_tag}.tar.gz
 
 ExcludeArch: s390x {%ix86}
 BuildRequires:      systemd-rpm-macros

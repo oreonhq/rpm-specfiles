@@ -66,7 +66,7 @@ Summary:	Linux kernel module management utilities
 #   build-aux/install-sh
 License:	GPL-2.0-or-later AND GPL-3.0-or-later AND FSFUL AND FSFULLRWD AND LGPL-2.1-only AND LGPL-2.1-or-later AND X11
 URL:		https://git.kernel.org/pub/scm/utils/kernel/kmod/kmod.git
-Source0:        https://www.kernel.org/pub/linux/utils/kernel/kmod/kmod-34.2.tar.xz
+Source0:        https://www.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
 Source1:	weak-modules
 Source2:	depmod.conf.dist
 Exclusiveos:	Linux

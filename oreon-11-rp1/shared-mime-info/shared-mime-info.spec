@@ -7,7 +7,7 @@ Version: 2.4
 Release: %autorelease
 License: GPL-2.0-or-later
 URL: http://freedesktop.org/Software/shared-mime-info
-Source0:        https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/2.4/shared-mime-info-2.4.tar.bz2
+Source0:        https://gitlab.freedesktop.org/xdg/shared-mime-info/-/archive/%{version}/shared-mime-info-%{version}.tar.bz2
 
 Source1: mimeapps.list
 # openat() with O_CREAT needs also mode

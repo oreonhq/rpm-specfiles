@@ -11,7 +11,7 @@ URL:            https://felix.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/felix/maven-bundle-plugin/5.1.9/maven-bundle-plugin-5.1.9-source-release.tar.gz
+Source0:        https://repo1.maven.org/maven2/org/apache/felix/maven-bundle-plugin/%{version}/maven-bundle-plugin-%{version}-source-release.tar.gz
 
 Patch:          0001-Fix-incorrect-parent-relativePath.patch
 

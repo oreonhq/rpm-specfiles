@@ -6,7 +6,7 @@ Release:        10%{?dist}
 Summary:        The nfs4 ACL tools
 License:        LGPL-2.1-or-later
 URL:            http://git.linux-nfs.org/?p=steved/nfs4-acl-tools.git;a=summary
-Source0:        http://linux-nfs.org/~steved/nfs4-acl-tools/nfs4-acl-tools-0.4.2.tar.gz
+Source0:        http://linux-nfs.org/~steved/nfs4-acl-tools/%{name}-%{version}.tar.gz
 
 BuildRequires: make
 BuildRequires: libtool

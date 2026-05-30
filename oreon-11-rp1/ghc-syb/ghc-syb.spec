@@ -18,7 +18,7 @@ Summary:        Scrap Your Boilerplate
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/syb
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/syb-0.7.2.4/syb-0.7.2.4.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

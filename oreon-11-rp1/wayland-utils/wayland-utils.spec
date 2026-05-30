@@ -8,7 +8,7 @@ Summary:        Wayland utilities
 License:        MIT
 URL:            https://wayland.freedesktop.org/
 # freedesktop.org/releases .tar.xz for this version returns 404 use git tag archive
-Source0:        https://gitlab.freedesktop.org/wayland/wayland-utils/-/archive/1.3.0/wayland-utils-1.3.0.tar.bz2
+Source0:        https://wayland.freedesktop.org/releases/%{name}-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  meson

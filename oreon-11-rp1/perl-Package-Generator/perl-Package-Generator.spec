@@ -13,7 +13,7 @@ Release:	35%{?dist}
 Summary:	Generate new packages quickly and easily
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Package-Generator
-Source0:	https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Package-Generator-1.106.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Package/Package-Generator-%{version}.tar.gz
 
 BuildArch:	noarch
 # Module Build

@@ -6,13 +6,13 @@ Summary: Portuguese hyphenation rules
 %global upstreamid 20140727
 Version: 0.%{upstreamid}
 Release: 13%{?dist}
-# latest seen in Hifenizador section of https://pt-br.libreoffice.org/projetos/vero/
-Source0: https://pt-br.libreoffice.org/assets/Uploads/PT-BR-Documents/VERO/hyphptBR-213.zip
+# latest seen in Hifenizador section of https://download.documentfoundation.org/libreoffice/src/projetos/vero/
+Source0:        https://download.documentfoundation.org/libreoffice/src/assets/Uploads/PT-BR-Documents/VERO/hyphptBR-213.zip
 # The contents of Source1 are the same rules that are currently (2022-05-16) in
 # use for pt-PT at https://cgit.freedesktop.org/libreoffice/dictionaries/tree/pt_PT
 # so we continue to use those rules in the absence of a contrary opinion
 Source1:        http://download.services.openoffice.org/contrib/dictionaries/hyph_pt_PT.zip
-URL: https://pt-br.libreoffice.org/projetos/vero/
+URL: https://download.documentfoundation.org/libreoffice/src/projetos/vero/
 License: LGPL-3.0-only AND GPL-1.0-or-later
 BuildArch: noarch
 

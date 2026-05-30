@@ -6,7 +6,7 @@ Version: 1.3.2
 Release: 85%{?dist}
 Requires: sgml-common
 URL: http://openjade.sourceforge.net/
-Source:        http://download.sourceforge.net/openjade/openjade-1.3.2.tar.gz
+Source:        http://download.sourceforge.net/openjade/openjade-%{version}.tar.gz
 
 # I can't get them from autoreconf, because of the very strange openjade structure of config files
 # 'config.sub' and 'config.guess' from upstream sources (2023-01-21 and 2023-01-01 respectivelly).

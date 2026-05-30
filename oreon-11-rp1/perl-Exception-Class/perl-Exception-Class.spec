@@ -6,7 +6,7 @@ Release:        14%{?dist}
 Summary:        Module that allows you to declare real exception classes in Perl
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Exception-Class
-Source0:        https://cpan.metacpan.org/authors/id/D/DR/DROLSKY/Exception-Class-1.45.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Exception/Exception-Class-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

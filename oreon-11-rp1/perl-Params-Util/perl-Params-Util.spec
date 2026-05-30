@@ -6,7 +6,7 @@ Release:	20%{?dist}
 Summary:	Simple standalone parameter-checking functions
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Params-Util
-Source0:        https://cpan.metacpan.org/authors/id/R/RE/REHSACK/Params-Util-1.102.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RE/REHSACK/Params-Util-%{version}.tar.gz
 
 Requires:	perl(Scalar::Util) >= 1.18
 Requires:       perl(XSLoader) >= 0.22

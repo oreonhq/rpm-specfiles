@@ -15,7 +15,7 @@ Release:	7%{?dist}
 # otherwise MIT
 License:	HPND AND LicenseRef-Fedora-Public-Domain AND Unicode-DFS-2016
 # Official release tarball on freedesktop.org is missing for some tags; GitLab tag archive matches upstream.
-Source:        https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/2.17.0/fontconfig-2.17.0.tar.bz2
+Source:        http://fontconfig.org/release/%{name}-%{version}.tar.xz
 URL:		http://fontconfig.org
 Source1:	25-no-bitmap-fedora.conf
 Source2:	fc-cache

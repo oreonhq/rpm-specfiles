@@ -28,7 +28,7 @@ extended to cover the full Unicode Arabic repertoire.
 }
 
 Source0:        https://software.sil.org/downloads/r/scheherazade/ScheherazadeNew-%{version}.zip
-Source1:    65-%{fontpkgname1}.conf
+Source1:    65-sil-scheherazade-new-fonts.conf
 
 Name:       sil-scheherazade-fonts
 Summary:    An Arabic script unicode font 

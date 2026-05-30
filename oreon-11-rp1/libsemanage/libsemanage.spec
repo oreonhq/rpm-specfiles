@@ -10,7 +10,7 @@ Name: libsemanage
 Version: 3.10
 Release: 1%{?dist}
 License: LGPL-2.1-or-later
-Source0:        https://github.com/SELinuxProject/selinux/releases/download/3.10/libsemanage-3.10.tar.gz
+Source0:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsemanage-%{version}.tar.gz
 Source1:        https://github.com/SELinuxProject/selinux/releases/download/%{version}/libsemanage-%{version}.tar.gz.asc
 Source2:        https://github.com/perfinion.gpg
 # git format-patch -N 3.10 -- libsemanage

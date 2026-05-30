@@ -54,7 +54,7 @@ Version:        42.7.8
 Release:        %autorelease
 License:        BSD-2-Clause
 URL:            https://jdbc.postgresql.org/
-Source0:        https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.8/postgresql-42.7.8-jdbc-src.tar.gz
+Source0:        https://repo1.maven.org/maven2/org/postgresql/postgresql/%{version}/postgresql-%{version}-jdbc-src.tar.gz
 Source1:        postgresql_jdbc_tests_init.sh
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

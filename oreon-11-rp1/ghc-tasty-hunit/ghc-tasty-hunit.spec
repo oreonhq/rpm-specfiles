@@ -15,7 +15,7 @@ Summary:        HUnit support for the Tasty test framework
 License:        MIT
 URL:            https://hackage.haskell.org/package/tasty-hunit
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/tasty-hunit-0.10.2/tasty-hunit-0.10.2.tar.gz
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

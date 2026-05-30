@@ -6,7 +6,7 @@ Release:	521%{?dist}
 Summary:	Gather package and POD information from perl module files
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Module-Metadata
-Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Module-Metadata-1.000038.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Metadata-%{version}.tar.gz
 
 BuildArch:	noarch
 # Build

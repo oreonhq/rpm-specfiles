@@ -40,7 +40,7 @@ phonetics.
 
 # Fonts retrieved 2015-08-07 from http://www.latofonts.com/download/Lato2OFL.zip
 Source0:  %{name}-%{version}.zip
-Source10: 61-%{fontpkgname0}.conf
+Source10: 61-lato-fonts.conf
 
 %fontpkg
 

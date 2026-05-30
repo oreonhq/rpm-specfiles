@@ -8,7 +8,7 @@ Release:        521%{?dist}
 Summary:        Run-time require of both modules and files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Module-Load
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BINGOS/Module-Load-0.36.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Module/Module-Load-%{version}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  coreutils

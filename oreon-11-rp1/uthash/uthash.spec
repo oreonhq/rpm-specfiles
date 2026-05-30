@@ -7,7 +7,7 @@ Summary:        A hash table for C structures
 
 License:        BSD-1-Clause
 URL:            http://troydhanson.github.io/%{name}
-Source0:        https://github.com/troydhanson/uthash/archive/v2.3.0/uthash-2.3.0.tar.gz
+Source0:        https://github.com/troydhanson/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires:  asciidoc
 BuildRequires:  gcc

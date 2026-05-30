@@ -18,7 +18,7 @@ Summary:        Low-level interface to the zlib compression library
 # zlib-src: Zlib
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND Zlib
 URL:            https://metacpan.org/release/Compress-Raw-Zlib
-Source0:        https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.222.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Zlib-%{version}.tar.gz
 # Module Build
 BuildRequires:  coreutils
 BuildRequires:  findutils

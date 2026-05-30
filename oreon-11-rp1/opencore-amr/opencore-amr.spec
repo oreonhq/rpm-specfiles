@@ -8,7 +8,7 @@ Release:        11%{?dist}
 Summary:        OpenCORE Adaptive Multi Rate Narrowband and Wideband speech lib
 License:        Apache-2.0
 URL:            http://sourceforge.net/projects/opencore-amr/
-Source0:        http://downloads.sourceforge.net/opencore-amr/opencore-amr-0.1.6.tar.gz
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:         opencore-amr-0.1.3-fix_pc.patch
 
 BuildRequires:  gcc-c++

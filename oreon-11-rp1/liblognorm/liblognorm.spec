@@ -8,7 +8,7 @@ Release:	17%{?dist}
 Summary:	Fast samples-based log normalization library
 License:	LGPL-2.1-or-later AND Apache-2.0
 URL:		http://www.liblognorm.com
-Source0:        http://www.liblognorm.com/files/download/liblognorm-2.0.6.tar.gz
+Source0:        http://www.liblognorm.com/files/download/%{name}-%{version}.tar.gz
 
 BuildRequires:	gcc
 BuildRequires:	chrpath

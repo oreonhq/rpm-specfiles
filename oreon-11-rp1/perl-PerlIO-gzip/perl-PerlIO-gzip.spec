@@ -6,7 +6,7 @@ Release:        31%{?dist}
 Summary:        Perl extension to provide a PerlIO layer to gzip/gunzip
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/PerlIO-gzip
-Source0:        https://cpan.metacpan.org/authors/id/N/NW/NWCLARK/PerlIO-gzip-0.20.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/PerlIO/PerlIO-gzip-%{version}.tar.gz
 
 # Build
 BuildRequires:  coreutils

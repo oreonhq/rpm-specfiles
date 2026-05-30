@@ -9,7 +9,7 @@ Summary: Open source video player built with Qt/QML and libmpv
 
 License: BSD-3-Clause AND CC-BY-4.0 AND CC-BY-SA-4.0 AND GPL-2.0-or-later AND GPL-3.0-or-later AND MIT
 URL:     https://invent.kde.org/multimedia/%{name}/
-Source0:        https://download.kde.org/stable/haruna/1.7.1/haruna-1.7.1.tar.xz
+Source0:        https://download.kde.org/stable/%{name}/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/stable/%{name}/%{version}/%{name}-%{version}.tar.xz.sig
 Source2: gpgkey-4E421C6554B89766DF9B7A37E12AB207C8755905.gpg
 

@@ -7,7 +7,7 @@ Summary:        Deprecated Xlib integration for gdk-pixbuf2
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/Archive/gdk-pixbuf-xlib
-Source0:        https://download.gnome.org/sources/gdk-pixbuf-xlib/2.40/gdk-pixbuf-xlib-2.40.2.tar.xz
+Source0:        https://download.gnome.org/sources/gdk-pixbuf-xlib/2.40/gdk-pixbuf-xlib-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  gtk-doc

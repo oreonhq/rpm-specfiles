@@ -9,8 +9,8 @@ Summary:        MS-KKDCP (kerberos proxy) WSGI module
 
 License:        MIT
 URL:            https://github.com/latchset/%{realname}
-Source0:        https://github.com/latchset/kdcproxy/releases/download/v1.1.0/kdcproxy-1.1.0.tar.gz
-Source1:        https://github.com/latchset/kdcproxy/releases/download/v1.1.0/kdcproxy-1.1.0.tar.gz.sha512sum.txt
+Source0:        https://github.com/latchset/%{realname}/releases/download/v%{version}/%{realname}-%{version}.tar.gz
+Source1:        https://github.com/latchset/%{realname}/releases/download/v%{version}/%{realname}-%{version}.tar.gz.sha512sum.txt
 
 # Patches
 

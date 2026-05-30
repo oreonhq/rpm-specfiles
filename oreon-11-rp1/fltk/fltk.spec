@@ -25,7 +25,7 @@ Summary:        C++ user interface toolkit
 License:        LGPL-2.0-or-later WITH FLTK-exception
 URL:            http://www.fltk.org/
 
-Source0:        https://github.com/fltk/fltk/releases/download/release-1.4.4/fltk-1.4.4-source.tar.gz
+Source0:        https://github.com/%{name}/%{name}/releases/download/release-%{version}/%{name}-%{version}-source.tar.gz
 Source1:        fltk-config.sh
 
 # Use the correct cmake data install location

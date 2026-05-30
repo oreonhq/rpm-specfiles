@@ -7,7 +7,7 @@ Summary:        RDF Application Framework
 
 License:        LGPL-2.1-or-later OR Apache-2.0
 URL:            http://librdf.org/
-Source0:        http://download.librdf.org/source/redland-1.0.17.tar.gz
+Source0:        http://download.librdf.org/source/%{name}-%{version}.tar.gz
 
 Patch1:         0001-rhbz-1936659-stub-deprecated.patch
 

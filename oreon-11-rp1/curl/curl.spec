@@ -16,8 +16,8 @@ Name: curl
 Version: 8.18.0
 Release: 6%{?dist}
 License: curl
-Source0:        https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz
-Source1:        https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz.asc
+Source0:        https://curl.se/download/curl-%{version_no_tilde}.tar.xz
+Source1:        https://curl.se/download/curl-%{version_no_tilde}.tar.xz.asc
 # The curl download page ( https://curl.se/download.html ) links
 # to Daniel's address page https://daniel.haxx.se/address.html for the GPG Key,
 # which points to the GPG key as of April 7th 2016 of https://daniel.haxx.se/mykey.asc

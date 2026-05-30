@@ -9,7 +9,7 @@ Summary:        Programmable DNS resolver class for offline emulation of DNS
 # Clarification requested at https://rt.cpan.org/Ticket/Display.html?id=147412
 License:        GPL-2.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-DNS-Resolver-Programmable
-Source0:        https://cpan.metacpan.org/authors/id/B/BI/BIGPRESH/Net-DNS-Resolver-Programmable-0.009.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Net/Net-DNS-Resolver-Programmable-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

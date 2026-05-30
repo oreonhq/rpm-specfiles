@@ -12,7 +12,7 @@ Release:        1%{?dist}
 Summary:        Tool for static C/C++ code analysis
 License:        GPL-3.0-or-later
 URL:            http://cppcheck.sourceforge.io/
-Source0:        https://github.com/danmar/cppcheck/archive/2.20.0.tar.gz#/cppcheck-2.20.0.tar.gz
+Source0:        https://github.com/danmar/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Fix location of translations
 Patch0:         cppcheck-2.11-translations.patch

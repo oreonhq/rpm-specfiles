@@ -9,7 +9,7 @@ Release: 11%{?dist}
 # SPDX
 License: MIT
 URL: http://www.mesa3d.org
-Source:        https://archive.mesa3d.org/demos/mesa-demos-9.0.0.tar.xz
+Source:        https://archive.mesa3d.org/demos/%{name}-%{version}.tar.xz
 # Patch pointblast/spriteblast/dinoshade out for legal reasons
 # (not in public domain)
 Patch0: mesa-demos-8.5.0-legal.patch

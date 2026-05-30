@@ -17,7 +17,7 @@ Version: 1.16.0
 Release: 3%{?dist}
 URL: https://github.com/freeipa/ansible-freeipa
 License: GPL-3.0-or-later
-Source:        https://github.com/freeipa/ansible-freeipa/archive/v1.16.0.tar.gz#/ansible-freeipa-1.16.0.tar.gz
+Source:        https://github.com/freeipa/ansible-freeipa/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildArch: noarch
 Requires: ansible-core >= 2.14.0
 BuildRequires: ansible-core >= 2.14.0

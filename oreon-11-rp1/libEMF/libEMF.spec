@@ -10,7 +10,7 @@ Release:	17%{?dist}
 # src/printemf.c: GPL-2.0-or-later
 License:	LGPL-2.1-or-later AND GPL-2.0-or-later
 URL:		http://libemf.sourceforge.net/
-Source0:        https://downloads.sourceforge.net/project/libemf/libemf/1.0.13/libemf-1.0.13.tar.gz
+Source0:        https://downloads.sourceforge.net/project/libemf/libemf/%{version}/libemf-%{version}.tar.gz
 Patch:		add-riscv64-support.patch
 BuildRequires:	gcc-c++
 BuildRequires: make

@@ -10,7 +10,7 @@ BuildRequires:	gcc
 BuildRequires: make
 
 License:	MIT
-Source0:        http://downloads.sourceforge.net/libkeepalive/libkeepalive-0.3.tar.gz
+Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 # All patches sent to the upstream maintainer directly via email.
 Patch1:		0001-Add-vim-modelines-to-source-files.patch

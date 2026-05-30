@@ -12,8 +12,8 @@ Release:	6%{?dist}
 Summary: Classes to read and interact with KColorScheme
 License: BSD-2-Clause and CC0-1.0 and LGPL-2.0-or-later and LGPL-2.1-only and LGPL-3.0-only and (LGPL-2.1-only OR LGPL-3.0-only)
 URL:     https://invent.kde.org/frameworks/%{framework}
-Source0:        https://download.kde.org/stable/frameworks/6.24/kcolorscheme-6.24.0.tar.xz
-Source1:        https://download.kde.org/stable/frameworks/6.24/kcolorscheme-6.24.0.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
 
 BuildRequires:  extra-cmake-modules >= %{version}
 BuildRequires:  gcc-c++

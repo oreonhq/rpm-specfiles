@@ -7,7 +7,7 @@ Release: 7%{?dist}
 License: HPND-sell-variant
 URL: http://www.x.org
 
-Source0:        https://www.x.org/pub/individual/lib/libXdamage-1.1.6.tar.xz
+Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.xz
 
 BuildRequires: make
 BuildRequires: xorg-x11-util-macros

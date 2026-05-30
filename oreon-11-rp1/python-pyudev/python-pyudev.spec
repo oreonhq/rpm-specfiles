@@ -14,7 +14,7 @@ Summary:          A libudev binding
 
 License:          LGPL-2.1-or-later
 URL:              http://pypi.python.org/pypi/pyudev
-Source0:        https://pypi.io/packages/source/p/pyudev/pyudev-0.24.4.tar.gz
+Source0:        https://pypi.io/packages/source/p/%{srcname}/%{srcname}-%{version}.tar.gz
 
 BuildArch:        noarch
 

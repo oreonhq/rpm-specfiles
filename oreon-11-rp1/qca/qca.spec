@@ -17,7 +17,7 @@ Release: 4%{?dist}
 
 License: LGPL-2.1-only
 URL:     https://userbase.kde.org/QCA
-Source0:        https://download.kde.org/stable/qca/2.3.10/qca-2.3.10.tar.xz
+Source0:        http://download.kde.org/stable/qca/%{version}/qca-%{version}.tar.xz
 # Also generate pkgconfig file for qt6
 Patch0:  qca-qt6-pkgconfig.patch
 ## upstream patches

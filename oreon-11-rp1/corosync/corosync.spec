@@ -20,7 +20,7 @@ Version: 3.1.10
 Release: 4%{?dist}
 License: BSD-3-Clause
 URL: http://corosync.github.io/corosync/
-Source0:        https://github.com/corosync/corosync/releases/download/v3.1.10/corosync-3.1.10.tar.gz
+Source0:        https://github.com/%{name}/%{name}/releases/download/v%{version}/%{name}-%{version}.tar.gz
 
 # Runtime bits
 # The automatic dependency overridden in favor of explicit version lock

@@ -12,7 +12,7 @@ Release: 10%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
 URL: http://libcg.sourceforge.net/
-Source0:        https://github.com/libcgroup/libcgroup/archive/v3.0/libcgroup-v3.0.tar.gz
+Source0:        https://github.com/%{name}/%{name}/archive/v%{version}/%{name}-v%{version}.tar.gz
 Source1:        https://github.com/libcgroup/libcgroup-tests/archive/refs/tags/7c998caddcd8236fe4191841e361b401697fb777.tar.gz
 
 Source2: cgconfig.service

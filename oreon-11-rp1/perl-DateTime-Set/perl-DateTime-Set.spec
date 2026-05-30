@@ -6,7 +6,7 @@ Release:        27%{?dist}
 Summary:        Datetime sets and set math
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/DateTime-Set
-Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/DateTime-Set-0.3900.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/F/FG/FGLOCK/DateTime-Set-%{version}.tar.gz
 Patch0:         DateTime-Set-0.32-version.patch
 BuildArch:      noarch
 # Build

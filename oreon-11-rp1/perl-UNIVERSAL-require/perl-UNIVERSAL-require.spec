@@ -6,7 +6,7 @@ Release:        14%{?dist}
 Summary:        Require() modules from a variable
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/UNIVERSAL-require
-Source0:        https://cpan.metacpan.org/authors/id/N/NE/NEILB/UNIVERSAL-require-0.19.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/UNIVERSAL/UNIVERSAL-require-%{version}.tar.gz
 
 Patch0:         UNIVERSAL-require-0.18-provides.patch
 BuildArch:      noarch

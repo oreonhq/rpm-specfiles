@@ -10,7 +10,7 @@ Summary: Very Secure Ftp Daemon
 # OpenSSL link exception
 License:  GPL-2.0-only WITH vsftpd-openssl-exception
 URL:      https://security.appspot.com/vsftpd.html
-Source0:        https://security.appspot.com/downloads/vsftpd-3.0.5.tar.gz
+Source0:        https://security.appspot.com/downloads/%{name}-%{version}.tar.gz
 Source1:  vsftpd.xinetd
 Source2:  vsftpd.pam
 Source3:  vsftpd.ftpusers

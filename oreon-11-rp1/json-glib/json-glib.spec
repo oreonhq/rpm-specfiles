@@ -9,7 +9,7 @@ Summary:        Library for JavaScript Object Notation format
 
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/JsonGlib
-Source0:        https://download.gnome.org/sources/json-glib/1.10/json-glib-1.10.8.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/1.10/%{name}-%{version}.tar.xz
 
 BuildRequires:  docbook-style-xsl
 BuildRequires:  gettext

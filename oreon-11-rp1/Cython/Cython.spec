@@ -17,7 +17,7 @@ Summary:        Language for writing Python extension modules
 
 License:        Apache-2.0
 URL:            http://www.cython.org
-Source:        https://github.com/cython/cython/archive/3.2.4/Cython-3.2.4.tar.gz
+Source:        https://github.com/cython/cython/archive/%{version}/Cython-%{version}.tar.gz
 
 BuildRequires:  python3-devel
 

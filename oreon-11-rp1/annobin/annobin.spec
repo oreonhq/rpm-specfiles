@@ -66,7 +66,7 @@ URL: https://sourceware.org/annobin/
 #---------------------------------------------------------------------------------
 
 %global annobin_sources annobin-%{version}.tar.xz
-Source:        https://nickc.fedorapeople.org/annobin-13.08.tar.xz
+Source:        https://nickc.fedorapeople.org/%{annobin_sources}
 # For the latest sources use:  git clone git://sourceware.org/git/annobin.git
 
 # This is where a copy of the sources will be installed.

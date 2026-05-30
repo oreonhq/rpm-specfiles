@@ -13,7 +13,7 @@ BuildRequires: gmp-devel
 BuildRequires: make
 BuildRequires: texinfo
 
-Source:        https://www.mpfr.org/mpfr-4.2.2/mpfr-4.2.2.tar.xz
+Source:        https://www.mpfr.org/%{name}-%{version}/%{name}-%{version}.tar.xz
 
 # Upstream post-release patches.  This currently contains:
 #Patch0: https://www.mpfr.org/%%{name}-%%{version}/allpatches

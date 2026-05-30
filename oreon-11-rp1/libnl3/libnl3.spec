@@ -17,8 +17,8 @@ URL: http://www.infradead.org/~tgr/libnl/
 %bcond_without python3
 %endif
 
-Source0:        https://github.com/thom311/libnl/releases/download/libnl%(echo/libnl-3.12.0.tar.gz
-Source1:        https://github.com/thom311/libnl/releases/download/libnl%(echo/libnl-doc-3.12.0.tar.gz
+Source0:        https://github.com/thom311/libnl/releases/download/%{version_path}/libnl-%{version}.tar.gz
+Source1:        https://github.com/thom311/libnl/releases/download/%{version_path}/libnl-doc-%{version}.tar.gz
 
 #Patch1: some.patch
 

@@ -1,4 +1,4 @@
-%global source0_hash 4c67460766abe2527793a98e3236cea356ca54ee05277fabdb9a2351378a97da
+%global source0_hash 3bb8be109cc449af54d03f28cc1c1a9e4d4150cb01b9af916a5516ed64740671
 
 # https://fedoraproject.org/wiki/Changes/EncourageI686LeafRemoval
 ExcludeArch: %{ix86}
@@ -12,7 +12,7 @@ License: BSD-2-Clause
 URL:     https://invent.kde.org/plasma/%{name}
 
 # download.kde.org can redirect to mirrors that fail on Plasma tarballs
-Source0:        http://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/stable/plasma/%{version}/plasma-keyboard-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++

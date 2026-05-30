@@ -7,7 +7,7 @@ Summary:        Simple programming interface for Ogg files and streams
 
 License:        BSD-3-Clause
 URL:            http://www.xiph.org/oggz/
-Source0:        http://downloads.xiph.org/releases/liboggz/liboggz-1.1.3.tar.gz
+Source0:        http://downloads.xiph.org/releases/liboggz/%{name}-%{version}.tar.gz
 # Always have oggz_off_t == loff_t even on 64-bit platforms
 Patch0:		liboggz-1.1.1-multilib.patch
 

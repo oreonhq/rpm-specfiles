@@ -14,7 +14,7 @@ License: GPL-2.0-or-later AND LGPL-2.1-or-later
 Summary: A complete ODBC driver manager for Linux
 URL:     http://www.unixODBC.org/
 
-Source:        http://www.unixODBC.org/unixODBC-2.3.14.tar.gz
+Source:        http://www.unixODBC.org/%{name}-%{version}.tar.gz
 Source1: odbcinst.ini
 
 Patch8:  so-version-bump.patch

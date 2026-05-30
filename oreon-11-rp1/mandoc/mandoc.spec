@@ -7,7 +7,7 @@ Summary:          A suite of tools for compiling mdoc and man
 
 License:          ISC AND BSD-2-Clause AND BSD-3-Clause
 URL:              https://mandoc.bsd.lv/
-Source0:        https://mandoc.bsd.lv/snapshots/mandoc-1.14.6.tar.gz
+Source0:        https://mandoc.bsd.lv/snapshots/mandoc-%{version}.tar.gz
 
 BuildRequires:    gcc
 BuildRequires:    make

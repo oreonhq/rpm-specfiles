@@ -7,7 +7,7 @@ Summary:        Geolocation service
 
 License:        GPL-2.0-or-later
 URL:            http://www.freedesktop.org/wiki/Software/GeoClue/
-Source0:        https://gitlab.freedesktop.org/geoclue/geoclue/-/archive/2.8.0/geoclue-2.8.0.tar.bz2
+Source0:        https://gitlab.freedesktop.org/geoclue/geoclue/-/archive/%{version}/geoclue-%{version}.tar.bz2
 Source1:        geoclue2.sysusers
 
 BuildRequires:  avahi-glib-devel

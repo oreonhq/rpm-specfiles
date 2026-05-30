@@ -6,7 +6,7 @@ Release:    37%{?dist}
 License:    GPL-1.0-or-later OR Artistic-1.0-Perl
 Summary:    Ignorable, contextual test support for Module::Install
 Url:        https://metacpan.org/release/Module-Install-ExtraTests
-Source:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Module-Install-ExtraTests-0.008.tar.gz
+Source:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Module-Install-ExtraTests-%{version}.tar.gz
 Patch0:     Module-Install-ExtraTests-0.008-Fix-building-on-Perl-without-dot-in-INC.patch
 BuildArch:  noarch
 # Build

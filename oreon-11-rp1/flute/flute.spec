@@ -6,7 +6,7 @@ Release: 42.OOo31%{?dist}
 Summary: Java CSS parser using SAC
 # The entire source code is W3C except ParseException.java which is LGPL version 2.1 or later
 License: W3C AND LGPL-2.1-or-later
-Source0:        http://downloads.sourceforge.net/jfreereport/flute-1.3.0-OOo31.zip
+Source0:        http://downloads.sourceforge.net/jfreereport/%{name}-%{version}-OOo31.zip
 URL: http://www.w3.org/Style/CSS/SAC/
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, sac
 Requires: java-25-headless, jpackage-utils sac

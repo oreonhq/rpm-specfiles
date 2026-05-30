@@ -38,7 +38,7 @@ Release: 6%{?dist}
 # !DISABLED DURING CONFIGURE, thus not in License tag! backend/escl* - GPL-3.0-or-later
 License: GPL-2.0-or-later WITH SANE-exception AND GPL-2.0-or-later AND GPL-2.0-only AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND LicenseRef-Fedora-Public-Domain AND IJG AND MIT
 # GitLab Download URLs are amazing. But the source code link has different name and doesnt have generated autotools stuff
-Source0:        https://gitlab.com/-/project/429008/uploads/843c156420e211859e974f78f64c3ea3/sane-backends-1.4.0.tar.gz
+Source0:        https://gitlab.com/-/project/429008/uploads/843c156420e211859e974f78f64c3ea3/%{name}-%{version}.tar.gz
 URL: http://www.sane-project.org
 
 Source1: sane.png

@@ -22,9 +22,9 @@ Summary:        Generate QR 2D barcodes
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://github.com/fukuchi/libqrencode
 # fukuchi.org upstream tarball is gone; GitHub tag archive unpacks as libqrencode-<version>/.
-Source0:        https://github.com/fukuchi/libqrencode/archive/refs/tags/v4.1.1/libqrencode-4.1.1.tar.gz
+Source0:        http://fukuchi.org/works/qrencode/qrencode-%{version}.tar.bz2
 %if 0%{?bootstrap}
-Source1:        https://github.com/fukuchi/libqrencode/archive/refs/tags/v4.1.1/libqrencode-4.1.1.tar.gz
+Source1:        http://fukuchi.org/works/qrencode/qrencode-%{version_old}.tar.bz2
 %endif
 
 BuildRequires: make

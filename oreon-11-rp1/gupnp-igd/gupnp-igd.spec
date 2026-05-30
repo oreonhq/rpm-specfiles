@@ -7,7 +7,7 @@ Summary:        Library to handle UPnP IGD port mapping
 
 License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/GUPnP
-Source0:        https://download.gnome.org/sources/gupnp-igd/1.6/gupnp-igd-1.6.0.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/1.6/%{name}-%{version}.tar.xz
 
 BuildRequires:  pkgconfig(glib-2.0)
 BuildRequires:  pkgconfig(gupnp-1.6)

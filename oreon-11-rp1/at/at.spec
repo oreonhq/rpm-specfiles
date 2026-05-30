@@ -11,7 +11,7 @@ Release:    21%{?dist}
 License:    GPL-3.0-or-later AND GPL-2.0-or-later AND ISC
 URL:        http://ftp.debian.org/debian/pool/main/a/at
 
-Source:        http://software.calhariz.com/at/at_3.2.5.orig.tar.gz
+Source:        http://software.calhariz.com/at/at_%{version}.orig.tar.gz
 # git upstream source git://git.debian.org/git/collab-maint/at.git
 Source1:    pam_atd
 Source2:    at-tmpfiles.conf

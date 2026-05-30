@@ -6,7 +6,7 @@ Version:        2.4.0
 Release:        3%{?dist}
 License:        LGPL-2.0-only AND GPL-3.0-or-later AND CC0-1.0 AND LGPL-2.0-or-later AND (GPL-2.0-or-later WITH Bison-exception-2.2) AND BSD-3-Clause
 URL:            http://techbase.kde.org/Development/KDevelop-PG-Qt_Introduction
-Source0:        https://download.kde.org/stable/kdevelop-pg-qt/2.4.0/src/kdevelop-pg-qt-2.4.0.tar.xz
+Source0:        https://download.kde.org/stable/kdevelop-pg-qt/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires:  bison
 BuildRequires:  flex

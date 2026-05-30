@@ -1,6 +1,4 @@
 %global source0_hash c4d10a1b665db893adc0c0aaee7ecd81b2b47c877d5cea0b40216707cbf327e4
-%global source1_hash fa9ca4d13871dd122f61258a80d01751d603b4d3ee14095d65453b4e846e17d7
-%global source2_hash f0ecb95e832a6adfde3e0cc7ec24b6b4e3471b3fc658125c8e57f981cb495689
 
 # SPDX-License-Identifier: MIT
 %if 0%{?rhel} > 10 || (0%{?oreon} >= 11)
@@ -163,9 +161,9 @@ Suggests:  font(dejavusansmono)
 This package consists of the DejaVu sans-serif mono-space font faces, with
 Unicode coverage restricted to Latin, Greek and Cyrillic.}
 
-Source0:  %{forgeurl}/archive/version_2_37/dejavu-fonts-version_2_37.tar.gz
-Source1:  %{forgeurl}/releases/download/%{tag}/dejavu-fonts-ttf-%{version}.tar.bz2
-Source2:  %{forgeurl}/releases/download/%{tag}/dejavu-lgc-fonts-ttf-%{version}.tar.bz2
+Source0:        %{forgeurl}/archive/version_2_37/dejavu-fonts-version_2_37.tar.gz
+Source1:        %{forgeurl}/releases/download/%{tag}/dejavu-fonts-ttf-%{version}.tar.bz2
+Source2:        %{forgeurl}/releases/download/%{tag}/dejavu-lgc-fonts-ttf-%{version}.tar.bz2
 Source11: 57-%{fontpkgname1}.xml
 Source12: 57-%{fontpkgname2}.xml
 Source13: 57-%{fontpkgname3}.xml
@@ -203,8 +201,6 @@ This package provides optional documentation files shipped with
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
-%(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
 %if %{with build_from_src}
 %setup -n %{name}-%{tag}
 %patch -P2 -p1

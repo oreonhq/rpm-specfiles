@@ -14,7 +14,7 @@ Summary:        An incremental parsing system for programming tools
 
 License:        MIT
 URL:            https://tree-sitter.github.io/
-Source0:        https://github.com/tree-sitter/tree-sitter/archive/v0.25.10/tree-sitter-0.25.10.tar.gz
+Source0:        https://github.com/tree-sitter/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make

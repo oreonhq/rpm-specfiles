@@ -6,7 +6,7 @@ Release:        18%{?dist}
 Summary:        Pure Python interface to the Pluggable Authentication Modules system on Linux
 License:        MIT
 URL:            https://github.com/FirefighterBlu3/python-pam
-Source0:        https://pypi.python.org/packages/source/p/python-pam/python-pam-2.0.2.tar.gz
+Source0:        https://pypi.python.org/packages/source/p/%{name}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  python3-devel
 

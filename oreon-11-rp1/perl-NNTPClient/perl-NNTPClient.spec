@@ -6,7 +6,7 @@ Release:        28%{?dist}
 Summary:        Perl 5 module to talk to NNTP (RFC977) server
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/NNTPClient
-Source0:        https://cpan.metacpan.org/authors/id/R/RV/RVA/NNTPClient-0.37.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RV/RVA/NNTPClient-%{version}.tar.gz
 # Skip unportable tests whose command is not supported by a server,
 # CPAN RT#118794
 Patch0:         NNTPClient-0.37-Skip-tests-with-unportable-commands.patch

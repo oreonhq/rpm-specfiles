@@ -6,7 +6,7 @@ Release:        1%{?dist}
 Summary:        Date manipulation routines
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Date-Manip
-Source0:        https://cpan.metacpan.org/authors/id/S/SB/SBECK/Date-Manip-6.99.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/S/SB/SBECK/Date-Manip-%{version}.tar.gz
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

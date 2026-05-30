@@ -20,7 +20,7 @@ Summary:        %{summary}
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/latchset/keycloak-httpd-client-install
-Source0:        https://github.com/latchset/keycloak-httpd-client-install/releases/download/v1.3/keycloak-httpd-client-install-1.3.tar.gz
+Source0:        https://github.com/latchset/keycloak-httpd-client-install/releases/download/v%{version}/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 
 %if %{with python2}

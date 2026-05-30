@@ -23,7 +23,7 @@ Summary:        Platform layer for node.js
 # include/uv/tree.h is BSD-2-Clause
 License:        MIT AND CC-BY-4.0 AND ISC AND BSD-2-Clause
 URL:            http://libuv.org/
-Source0:        http://dist.libuv.org/dist/v1.52.1/libuv-v1.52.1.tar.gz
+Source0:        http://dist.libuv.org/dist/v%{version}/libuv-v%{version}.tar.gz
 Source1:        https://dist.libuv.org/dist/v%{version}/%{name}-v%{version}.tar.gz.sign
 # mkdir temp
 # gpg --no-default-keyring --keyring temp/keyring.gpg --keyserver keyserver.ubuntu.com \

@@ -10,7 +10,7 @@ Summary:        Free and portable font rendering engine
 
 License:        FTL OR GPL-2.0-or-later
 URL:            http://www.freetype.org
-Source0:        http://download.savannah.gnu.org/releases/freetype/freetype-2.14.1.tar.xz
+Source0:        http://download.savannah.gnu.org/releases/freetype/freetype-%{version}.tar.xz
 
 # Patches from native Fedora package:
 

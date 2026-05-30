@@ -24,7 +24,7 @@ URL:     http://edu.kde.org/kstars
 %global kf5_dl_stable stable
 %endif
 
-Source0:        https://download.kde.org/stable/kstars/3.8.0/kstars-3.8.0.tar.xz
+Source0:        https://download.kde.org/%{stable_kf5}/%{name}/%{version}/%{name}-%{version}.tar.xz
 
 ## upstream patches
 

@@ -34,7 +34,7 @@ Release:        4%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://www.alsa-project.org/
 # HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
-Source:        https://www.alsa-project.org/files/pub/tools/alsa-tools-1.2.15.tar.bz2
+Source:        ftp://ftp.alsa-project.org/pub/tools/%{name}-%{version}.tar.bz2
 
 Source1:        90-alsa-tools-firmware.rules
 

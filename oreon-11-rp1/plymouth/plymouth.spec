@@ -7,7 +7,7 @@ Release: %autorelease
 License: GPL-2.0-or-later
 URL: http://www.freedesktop.org/wiki/Software/Plymouth
 
-Source0:        https://gitlab.freedesktop.org/plymouth/plymouth/-/archive/24.004.60/plymouth-24.004.60.tar.bz2
+Source0:        https://gitlab.freedesktop.org/plymouth/plymouth/-/archive/%{version}/%{name}-%{version}.tar.bz2
 # Spinner theme refresh from commit 1a01883 (git archive themes/spinner at that commit).
 # Drop on rebase if upstream release already includes it.
 Source1: spinner-update.tar.gz

@@ -10,7 +10,7 @@ Summary:       Native C++ bindings for D-Bus
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:       LicenseRef-Callaway-LGPLv2+
 URL:           http://sourceforge.net/projects/dbus-cplusplus/
-Source0:        http://downloads.sourceforge.net/dbus-cplusplus/libdbus-c++-0.9.0.tar.gz
+Source0:        http://downloads.sourceforge.net/dbus-cplusplus/lib%{name}-%{version}.tar.gz
 
 Patch1: dbus-c++-gcc4.7.patch
 Patch2: dbus-c++-linkfix.patch

@@ -27,7 +27,7 @@ Release: 25%{?dist}
 License: LicenseRef-Callaway-LGPLv2+
 URL: http://www.gtk.org
 #VCS: git:git://git.gnome.org/gtk+#gtk-2-24
-Source:        http://download.gnome.org/sources/gtk+/2.24/gtk+-2.24.33.tar.xz
+Source:        http://download.gnome.org/sources/gtk+/2.24/gtk+-%{version}.tar.xz
 Source2: update-gtk-immodules
 Source3: im-cedilla.conf
 Source4: update-gtk-immodules.1

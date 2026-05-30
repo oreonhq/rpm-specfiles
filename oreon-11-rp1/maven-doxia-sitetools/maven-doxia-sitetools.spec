@@ -14,8 +14,8 @@ VCS:            git:https://github.com/apache/maven-doxia-sitetools.git
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-sitetools/2.0.0/doxia-sitetools-2.0.0-source-release.zip
-Source1:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-sitetools/2.0.0/doxia-sitetools-2.0.0-source-release.zip.asc
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-sitetools/%{version}/doxia-sitetools-%{version}-source-release.zip
+Source1:        https://repo1.maven.org/maven2/org/apache/maven/doxia/doxia-sitetools/%{version}/doxia-sitetools-%{version}-source-release.zip.asc
 Source2:        https://downloads.apache.org/maven/KEYS
 
 Patch:          0001-Remove-dependency-on-velocity-tools.patch

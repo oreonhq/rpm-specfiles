@@ -10,7 +10,7 @@ Release: 31%{?dist}
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
 URL:     https://cgit.kde.org/oxygen-gtk.git/
-Source0:        https://download.kde.org/stable/oxygen-gtk2/1.4.6/src/oxygen-gtk2-1.4.6.tar.bz2
+Source0:        http://download.kde.org/stable/oxygen-gtk2/%{version}/src/%{name}-%{version}.tar.bz2
 
 ## upstream patches
 

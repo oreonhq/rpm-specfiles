@@ -14,8 +14,8 @@ Release:         3%{?dist}
 License:         GPL-3.0-or-later
 URL:             https://www.nano-editor.org
 
-Source0:        https://www.nano-editor.org/dist/v8/nano-8.7.1.tar.xz
-Source1:        https://www.nano-editor.org/dist/v8/nano-8.7.1.tar.xz.asc
+Source0:        https://www.nano-editor.org/dist/latest/%{name}-%{version}.tar.xz
+Source1:        https://www.nano-editor.org/dist/latest/%{name}-%{version}.tar.xz.asc
 # gpg --keyserver keyserver.ubuntu.com --recv-key 168E6F4297BFD7A79AFD4496514BBE2EB8E1961F
 # gpg --output bensberg.pgp --armor --export bensberg@telfort.nl
 Source2:         bensberg.pgp

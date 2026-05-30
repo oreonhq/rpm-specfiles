@@ -16,7 +16,7 @@ Release:        8%{?dist}
 Summary:        Parse and validate simple name/value option pairs
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-OptList
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Data-OptList-0.114.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Data/Data-OptList-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

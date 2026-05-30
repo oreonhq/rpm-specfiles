@@ -14,7 +14,7 @@ Summary:        Perl module for interacting with child processes
 # lib/IPC/Run/Win32IO.pm:       GPLv2 or Artistic
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IPC-Run
-Source0:        https://cpan.metacpan.org/authors/id/N/NJ/NJM/IPC-Run-20250809.0.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/IPC/IPC-Run-%{version}.tar.gz
 
 BuildArch:      noarch
 # Build

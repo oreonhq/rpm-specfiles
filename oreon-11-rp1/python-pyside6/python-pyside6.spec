@@ -23,7 +23,7 @@ Summary:        Python bindings for the Qt 6 cross-platform application and UI f
 License:        LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
 URL:            https://wiki.qt.io/Qt_for_Python
 
-Source0:        https://download.qt.io/archive/QtForPython/%{pypi_name}/%{camel_name}-%{qt6ver}-src/pyside-setup-everywhere-src-%{version}.tar.xz
+Source0:        https://download.qt.io/official_releases/QtForPython/%{pypi_name}/%{camel_name}-%{qt6ver}-src/pyside-setup-everywhere-src-%{version}.tar.xz
 # for documentation generation
 %global docs 0
 %global qt_module qtbase

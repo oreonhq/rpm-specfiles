@@ -13,7 +13,7 @@ Summary: Set of ABI analysis tools
 
 License: Apache-2.0 WITH LLVM-exception
 URL: https://sourceware.org/libabigail/
-Source0:        http://mirrors.kernel.org/sourceware/libabigail/libabigail-2.9.tar.xz
+Source0:        http://mirrors.kernel.org/sourceware/libabigail/%{tarball_name}.tar.xz
 
 BuildRequires: git
 BuildRequires: libbpf-devel

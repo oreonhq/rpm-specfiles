@@ -6,7 +6,7 @@ Release:        3%{?dist}
 Summary:        Extremely flexible deep comparison
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Deep
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Test-Deep-1.205.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Deep-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

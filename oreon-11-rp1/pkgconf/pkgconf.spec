@@ -35,7 +35,7 @@ Summary:        Package compiler and linker metadata toolkit
 # libpkgconf/win-dirent.h is MIT
 License:        ISC AND BSD-4-Clause AND BSD-2-Clause AND pkgconf AND MIT
 URL:            http://pkgconf.org/
-Source0:        https://distfiles.dereferenced.org/pkgconf/pkgconf-2.5.1.tar.xz
+Source0:        https://distfiles.dereferenced.org/%{name}/%{name}-%{version}.tar.xz
 
 # Simple wrapper scripts to offer platform versions of pkgconfig
 Source1:        platform-pkg-config.in

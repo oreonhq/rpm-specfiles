@@ -15,7 +15,7 @@ Summary:        An image loading library
 
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/gdk-pixbuf
-Source0:        https://download.gnome.org/sources/gdk-pixbuf/2.44/gdk-pixbuf-2.44.5.tar.xz
+Source0:        https://download.gnome.org/sources/gdk-pixbuf/2.44/gdk-pixbuf-%{real_version}.tar.xz
 
 BuildRequires:  docbook-style-xsl
 BuildRequires:  gettext

@@ -25,7 +25,7 @@ Release:   4%{?dist}
 License:   MIT
 URL:       https://github.com/alanxz/rabbitmq-c
 
-Source0:        https://github.com/alanxz/rabbitmq-c/archive/84b81cd97a1b5515d3d4b304796680da24c666d8/rabbitmq-c-0.15.0-%(c=84b81cd97a1b5515d3d4b304796680da24c666d8;.tar.gz
+Source0:        https://github.com/%{gh_owner}/%{gh_project}/archive/%{gh_commit}/%{gh_project}-%{version}-%{gh_short}.tar.gz
 
 
 BuildRequires: gcc

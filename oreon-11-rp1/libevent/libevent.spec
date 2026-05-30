@@ -11,7 +11,7 @@ Summary:        Abstract asynchronous event notification library
 # evndns.* and include/event2/dns.h has part of LicenseRef-Fedora-Public-Domain
 License:        BSD-3-Clause AND ISC AND LicenseRef-Fedora-Public-Domain
 URL:            http://libevent.org/
-Source0:        https://github.com/libevent/libevent/releases/download/release-2.1.12-stable/libevent-2.1.12-stable.tar.gz
+Source0:        https://github.com/libevent/libevent/releases/download/release-%{version}-stable/libevent-%{version}-stable.tar.gz
 
 BuildRequires: make
 BuildRequires:  gcc

@@ -10,7 +10,7 @@ Summary:        Perl library for accessing Zip archives
 # other files:                  GPL-1.0-or-later OR Artistic-1.0-Perl
 License:        ( GPL-1.0-or-later OR Artistic-1.0-Perl ) AND Info-ZIP
 URL:            https://metacpan.org/release/Archive-Zip
-Source0:        https://cpan.metacpan.org/authors/id/P/PH/PHRED/Archive-Zip-1.68.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PH/PHRED/Archive-Zip-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 # For a Git binary patch

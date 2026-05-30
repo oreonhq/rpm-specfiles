@@ -7,7 +7,7 @@ Name: which
 Version: 2.23
 Release: 4%{?dist}
 License: GPL-3.0-only
-Source0:        http://ftp.gnu.org/gnu/which/which-2.23.tar.gz
+Source0:        http://ftp.gnu.org/gnu/which/%{name}-%{version}.tar.gz
 Source1: which2.sh
 Source2: which2.csh
 Patch0: which-2.21-warning.patch

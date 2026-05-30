@@ -12,7 +12,7 @@ Name: libosinfo
 Version: 1.12.0
 Release: %autorelease
 License: LGPL-2.1-or-later
-Source:        https://releases.pagure.org/libosinfo/libosinfo-1.12.0.tar.xz
+Source:        https://releases.pagure.org/%{name}/%{name}-%{version}.tar.xz
 URL: https://libosinfo.org/
 
 BuildRequires: meson

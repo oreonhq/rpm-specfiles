@@ -6,7 +6,7 @@ Release:	2%{?dist}
 Summary:	Build.PL install path logic made easy
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/ExtUtils-InstallPaths
-Source0:	https://cpan.metacpan.org/authors/id/L/LE/LEONT/ExtUtils-InstallPaths-0.015.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/ExtUtils/ExtUtils-InstallPaths-%{version}.tar.gz
 
 BuildArch:	noarch
 # Build

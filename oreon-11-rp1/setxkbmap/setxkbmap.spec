@@ -7,7 +7,7 @@ Summary:    X11 keymap client
 
 License:    HPND
 URL:        https://www.x.org
-Source0:        https://www.x.org/pub/individual/app/setxkbmap-1.3.4.tar.xz
+Source0:        https://www.x.org/pub/individual/app/setxkbmap-%{version}.tar.xz
 
 BuildRequires:  make gcc
 BuildRequires:  pkgconfig(x11) pkgconfig(xrandr)

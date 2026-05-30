@@ -9,7 +9,7 @@ Release:   %autorelease
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:   GPL-2.0-or-later
 URL:       https://hexchat.github.io
-Source:        https://github.com/hexchat/hexchat/releases/download/v2.16.2/hexchat-2.16.2.tar.xz
+Source:        https://github.com/hexchat/hexchat/releases/download/v%{version}/hexchat-%{version}.tar.xz
 # Fix release date
 Patch0:    https://github.com/hexchat/hexchat/commit/70069cd50eb07e8a40ac9b0efbb83fcb91a78b99.patch
 # replace hexchat.net links

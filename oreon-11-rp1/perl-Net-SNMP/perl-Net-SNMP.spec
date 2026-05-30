@@ -7,7 +7,7 @@ Summary:        Object oriented interface to SNMP
 
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Net-SNMP
-Source0:        https://cpan.metacpan.org/authors/id/D/DT/DTOWN/Net-SNMP-v6.0.1.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/D/DT/DTOWN/Net-SNMP-v%{version}.tar.gz
 Patch0:         Net-SNMP-v6.0.1-Switch_from_Socket6_to_Socket.patch
 Patch1:         Net-SNMP-v6.0.1-Simple_rewrite_to_Digest-HMAC-helpers.patch
 Patch2:         Net-SNMP-v6.0.1-Split_usm.t_to_two_parts.patch

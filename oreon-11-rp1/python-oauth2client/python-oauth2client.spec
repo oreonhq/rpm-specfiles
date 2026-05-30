@@ -12,7 +12,7 @@ Summary:        %{sum}
 
 License:        Apache-2.0
 URL:            https://github.com/google/%{srcname}
-Source0:        https://github.com/google/oauth2client/archive/v4.1.3.tar.gz#/oauth2client-4.1.3.tar.gz
+Source0:        https://github.com/google/%{srcname}/archive/v%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
 Patch0:         docs-build-fix.patch
 Patch1:         doc-fix.patch
 Patch2:         keyring-remove.patch

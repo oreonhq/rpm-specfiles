@@ -9,7 +9,7 @@ Summary:        MinGW Windows Cairo library
 
 License:        LGPL-2.1-only OR MPL-1.1
 URL:            http://cairographics.org
-Source0:        https://www.cairographics.org/releases/cairo-1.18.4.tar.xz
+Source0:        https://www.cairographics.org/releases/cairo-%{version}.tar.xz
 
 BuildArch:      noarch
 

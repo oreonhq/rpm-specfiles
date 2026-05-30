@@ -13,7 +13,7 @@ Release:        2%{?dist}
 Summary:        Forces the unavailability of specified Perl modules (for testing)
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Devel-Hide
-Source0:        https://cpan.metacpan.org/authors/id/D/DC/DCANTRELL/Devel-Hide-0.0016.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Devel/Devel-Hide-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

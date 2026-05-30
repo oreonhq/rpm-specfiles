@@ -7,7 +7,7 @@ Summary:        Exec Maven Plugin
 
 License:        Apache-2.0
 URL:            https://www.mojohaus.org/exec-maven-plugin/
-Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/exec-maven-plugin/3.6.3/exec-maven-plugin-3.6.3-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/codehaus/mojo/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

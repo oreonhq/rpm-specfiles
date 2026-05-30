@@ -8,7 +8,7 @@ Summary:        GStreamer integration library for Clutter
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://developer.gnome.org/clutter-gst/stable/
-Source0:        https://download.gnome.org/sources/clutter-gst/3.0/clutter-gst-3.0.27.tar.xz
+Source0:        https://download.gnome.org/sources/clutter-gst/3.0/clutter-gst-%{version}.tar.xz
 
 Patch0:         remove-rgbx-bgrx-support.patch
 

@@ -16,7 +16,7 @@ Release:        522%{?dist}
 Summary:        Query, download and build perl modules from CPAN sites
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/CPAN
-Source0:        https://cpan.metacpan.org/authors/id/A/AN/ANDK/CPAN-2.38.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/A/AN/ANDK/CPAN-%{version}.tar.gz
 # Create site paths for the first time, bug #1158873, CPAN RT#99905
 Patch0:         CPAN-2.18-Attemp-to-create-site-library-directories-on-first-t.patch
 # Change configuration directory name

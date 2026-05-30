@@ -6,7 +6,7 @@ Version:	1.4.48
 Release:	30%{?dist}
 License:	LGPL-2.1-or-later
 URL:		https://dbmx.net/tokyocabinet/
-Source:        https://dbmx.net/tokyocabinet/tokyocabinet-1.4.48.tar.gz
+Source:        https://dbmx.net/%{name}/%{name}-%{version}.tar.gz
 Patch0:		tokyocabinet-fedora.patch
 Patch1:		tokyocabinet-manhelp.patch
 BuildRequires: make

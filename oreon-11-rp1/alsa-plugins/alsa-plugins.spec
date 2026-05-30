@@ -19,7 +19,7 @@ Summary:        The Advanced Linux Sound Architecture (ALSA) Plugins
 License:        GPL-2.0-or-later and LGPL-2.1-or-later and BSD-3-Clause
 URL:            https://www.alsa-project.org/
 # HTTPS so spectool/mock can fetch without FTP (often blocked in builders).
-Source0:        https://www.alsa-project.org/files/pub/plugins/alsa-plugins-1.2.12.tar.bz2
+Source0:        ftp://ftp.alsa-project.org/pub/plugins/%{name}-%{version}.tar.bz2
 Patch0:         alsa-git.patch
 
 BuildRequires:  autoconf automake libtool

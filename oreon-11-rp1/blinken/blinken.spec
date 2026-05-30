@@ -17,7 +17,7 @@ URL:     https://apps.kde.org/blinken/
 %global kf5_dl_stable stable
 %endif
 
-Source:        https://download.kde.org/stable/release-service/26.03.80/src/blinken-26.03.80.tar.xz
+Source:        https://download.kde.org/%{stable_kf5}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules

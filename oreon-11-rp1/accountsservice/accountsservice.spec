@@ -8,7 +8,7 @@ License:        GPL-3.0-or-later
 URL:            https://www.freedesktop.org/wiki/Software/AccountsService/
 
 #VCS: git:git://gitlab.freedesktop.org/accountsservice/accountsservice
-Source0:        https://www.freedesktop.org/software/accountsservice/accountsservice-23.13.9.tar.xz
+Source0:        https://www.freedesktop.org/software/accountsservice/accountsservice-%{version}.tar.xz
 
 BuildRequires:  gettext-devel
 BuildRequires:  pkgconfig(dbus-1)

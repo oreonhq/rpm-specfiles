@@ -11,7 +11,7 @@ URL:            https://commons.apache.org/proper/commons-compress/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/commons/compress/source/commons-compress-1.28.0-src.tar.gz
+Source0:        https://archive.apache.org/dist/commons/compress/source/commons-compress-%{version}-src.tar.gz
 
 Patch:          0001-Remove-Brotli-compressor.patch
 Patch:          0002-Remove-ZSTD-compressor.patch

@@ -8,7 +8,7 @@ Release:        31%{?dist}
 Summary:        Process the special UTF-7 variant required by IMAP
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Encode-IMAPUTF7
-Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Encode-IMAPUTF7-1.07.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Encode-IMAPUTF7-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

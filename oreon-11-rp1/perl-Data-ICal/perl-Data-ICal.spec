@@ -6,7 +6,7 @@ Release:        19%{?dist}
 Summary:        Generates iCalendar (RFC 2445) calendar files
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Data-ICal
-Source0:        https://cpan.metacpan.org/authors/id/B/BP/BPS/Data-ICal-0.24.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/B/BP/BPS/Data-ICal-%{version}.tar.gz
 
 BuildArch:      noarch
 

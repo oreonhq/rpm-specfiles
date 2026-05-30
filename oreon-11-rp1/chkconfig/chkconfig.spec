@@ -6,7 +6,7 @@ Version: 1.33
 Release: 5%{?dist}
 License: GPL-2.0-only
 URL: https://github.com/fedora-sysv/chkconfig
-Source:        https://github.com/fedora-sysv/chkconfig/archive/1.33.tar.gz#/chkconfig-1.33.tar.gz
+Source:        https://github.com/fedora-sysv/chkconfig/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # https://github.com/fedora-sysv/chkconfig/pull/157
 # https://bugzilla.redhat.com/show_bug.cgi?id=2363937

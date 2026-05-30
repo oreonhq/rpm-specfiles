@@ -12,7 +12,7 @@ Summary:        Library for echo cancellation
 
 License:        BSD-3-Clause
 URL:            https://www.freedesktop.org/software/pulseaudio/webrtc-audio-processing/
-Source:        https://freedesktop.org/software/pulseaudio/webrtc-audio-processing/webrtc-audio-processing-2.1.tar.xz
+Source:        https://github.com/mesonbuild/wrapdb/releases/download/abseil-cpp_%{absl_ver}-1/abseil-cpp_%{absl_ver}-1_patch.zip
 Source:        https://github.com/abseil/abseil-cpp/releases/download/20250814.1/abseil-cpp-20250814.1.tar.gz
 Source:        https://github.com/mesonbuild/wrapdb/releases/download/abseil-cpp_20250814.1-1/abseil-cpp_20250814.1-1_patch.zip
 

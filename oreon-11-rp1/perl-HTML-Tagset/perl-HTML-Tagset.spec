@@ -12,7 +12,7 @@ Release:        5%{?dist}
 Summary:        HTML::Tagset - data tables useful in parsing HTML
 License:        Artistic-2.0
 URL:            https://metacpan.org/release/HTML-Tagset
-Source0:        https://cpan.metacpan.org/authors/id/P/PE/PETDANCE/HTML-Tagset-3.24.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/P/PE/PETDANCE/HTML-Tagset-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  make

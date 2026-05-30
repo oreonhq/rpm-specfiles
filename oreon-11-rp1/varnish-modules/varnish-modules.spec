@@ -17,7 +17,7 @@ Summary: A collection of modules ("vmods") extending Varnish VCL
 
 License: BSD-2-Clause
 URL:     https://github.com/varnish/varnish-modules
-Source:        https://github.com/varnish/varnish-modules/releases/download/0.27.0/varnish-modules-0.27.0.tar.gz
+Source:        https://github.com/varnish/%{name}/releases/download/%{version}/%{name}-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make

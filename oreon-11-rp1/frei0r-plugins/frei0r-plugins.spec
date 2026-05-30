@@ -16,7 +16,7 @@ Summary:        Frei0r - a minimalist plugin API for video effects
 
 License:        GPL-2.0-or-later
 URL:            https://frei0r.dyne.org/
-Source0:        https://github.com/dyne/frei0r/archive/v2.5.5/frei0r-plugins-2.5.5.tar.gz
+Source0:        https://github.com/dyne/frei0r/archive/v%{version}/frei0r-plugins-%{version}.tar.gz
 
 
 Buildrequires:  cmake

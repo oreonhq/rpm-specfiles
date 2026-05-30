@@ -244,22 +244,22 @@ Provides:  culmus-yehuda-clm-fonts = %{version}-%{release}
 This package provides Yehuda CLM, a sans-serif font family.
 }
 Source0:        http://downloads.sourceforge.net/culmus/culmus-%{version}.tar.gz
-Source1:   66-%{fontpkgname1}.conf
-Source2:   66-%{fontpkgname2}.conf
-Source3:   65-%{fontpkgname3}.conf
-Source4:   66-%{fontpkgname4}.conf
-Source5:   66-%{fontpkgname5}.conf
-Source6:   66-%{fontpkgname6}.conf
-Source7:   66-%{fontpkgname7}.conf
-Source8:   66-%{fontpkgname8}.conf
-Source9:   66-%{fontpkgname9}.conf
-Source10:  66-%{fontpkgname10}.conf
-Source11:  66-%{fontpkgname11}.conf
-Source12:  66-%{fontpkgname12}.conf
-Source13:  66-%{fontpkgname13}.conf
-Source14:  66-%{fontpkgname14}.conf
-Source15:  66-%{fontpkgname15}.conf
-Source16:  66-%{fontpkgname16}.conf
+Source1:   66-clm-aharoni-fonts.conf
+Source2:   66-clm-caladings-fonts.conf
+Source3:   65-clm-david-fonts.conf
+Source4:   66-clm-drugulin-fonts.conf
+Source5:   66-clm-ellinia-fonts.conf
+Source6:   66-clm-frank-ruehl-fonts.conf
+Source7:   66-clm-hadasim-fonts.conf
+Source8:   66-clm-keter-yg-fonts.conf
+Source9:   66-clm-miriam-fonts.conf
+Source10:  66-clm-miriam-mono-fonts.conf
+Source11:  66-clm-nachlieli-fonts.conf
+Source12:  66-clm-shofar-fonts.conf
+Source13:  66-clm-simple-fonts.conf
+Source14:  66-clm-stam-ashkenaz-fonts.conf
+Source15:  66-clm-stam-sefarad-fonts.conf
+Source16:  66-clm-yehuda-fonts.conf
 Source17:  modify-font-metadata.pe
 
 Name:      culmus-fonts

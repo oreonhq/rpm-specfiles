@@ -7,7 +7,7 @@ Summary:        Library for finding WS-Discovery devices in the network using Qt
 
 License:        GPL-3.0-or-later AND LicenseRef-OASIS AND LicenseRef-WS-Addressing AND LicenseRef-Discovery AND W3C
 URL:            https://invent.kde.org/libraries/kdsoap-ws-discovery-client/
-Source0:        https://download.kde.org/stable/kdsoap-ws-discovery-client/kdsoap-ws-discovery-client-0.4.0.tar.xz
+Source0:        https://download.kde.org/stable/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires:  cmake
 BuildRequires:  gcc-c++

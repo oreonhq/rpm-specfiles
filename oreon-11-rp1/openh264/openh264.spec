@@ -24,7 +24,7 @@ Summary:        H.264 codec library
 
 License:        BSD-2-Clause
 URL:            https://www.openh264.org/
-Source0:        https://github.com/cisco/openh264/archive/v2.6.0/openh264-2.6.0.tar.gz
+Source0:        https://github.com/cisco/openh264/archive/v%{version}/openh264-%{version}.tar.gz
 Source1:        https://github.com/mozilla/gmp-api/archive/1f5a2f07a565a9465c14d3a8b12f3202f83c775e/gmp-api-%(c=1f5a2f07a565a9465c14d3a8b12f3202f83c775e;.tar.gz
 
 Patch0:         0001-Update-shared-lib-version-for-meson-3860.patch

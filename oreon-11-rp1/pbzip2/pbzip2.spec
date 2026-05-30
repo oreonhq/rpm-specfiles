@@ -9,7 +9,7 @@ License:	bzip2-1.0.6
 BuildRequires: make
 BuildRequires:	gcc-c++
 BuildRequires:	bzip2-devel
-Source0:        https://launchpad.net/pbzip2/1.1/1.1.13/+download/pbzip2-1.1.13.tar.gz
+Source0:        https://launchpad.net/pbzip2/1.1/%{version}/+download/pbzip2-%{version}.tar.gz
 Patch0:		%{name}-1.1.12-buildflags.patch
 
 %description

@@ -6,7 +6,7 @@ Release:	13%{?dist}
 Summary:	Mro::* interface compatibility for Perls < 5.9.5
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/MRO-Compat
-Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/MRO-Compat-0.15.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/H/HA/HAARG/MRO-Compat-%{version}.tar.gz
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils

@@ -10,7 +10,7 @@ Summary:        OCaml binding for libvirt
 License:        LGPL-2.1-or-later
 
 URL:            https://ocaml.libvirt.org/
-Source0:        https://download.libvirt.org/ocaml/ocaml-libvirt-0.6.1.7.tar.gz
+Source0:        https://download.libvirt.org/ocaml/%{name}-%{version}.tar.gz
 
 BuildRequires:  make
 BuildRequires:  ocaml >= 3.10.0

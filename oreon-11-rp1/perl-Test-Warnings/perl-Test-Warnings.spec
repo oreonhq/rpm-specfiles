@@ -13,7 +13,7 @@ Release:	3%{?dist}
 Summary:	Test for warnings and the lack of them
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/Test-Warnings
-Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/Test-Warnings-0.038.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Warnings-%{version}.tar.gz
 
 BuildArch:	noarch
 # Build

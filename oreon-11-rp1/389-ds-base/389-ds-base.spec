@@ -414,7 +414,7 @@ Requires:         python3-file-magic
 # Picks up our systemd deps.
 %{?systemd_requires}
 
-Source0:        https://github.com/389ds/389-ds-base/releases/download/389-ds-base-3.2.1/389-ds-base-3.2.1.tar.bz2
+Source0:        https://github.com/389ds/%{name}/releases/download/%{name}-%{version}/%{name}-%{version}.tar.bz2
 Source2:          %{name}-devel.README
 %if %{with bundle_jemalloc}
 Source3:        https://github.com/jemalloc/jemalloc/releases/download/5.3.0/jemalloc-5.3.0.tar.bz2

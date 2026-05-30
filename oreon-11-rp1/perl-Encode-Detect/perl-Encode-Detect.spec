@@ -7,7 +7,7 @@ Summary: Encode::Encoding subclass that detects the encoding of data
 
 License: MPL-1.1 OR GPL-2.0-or-later OR LGPL-2.0-or-later
 URL: https://metacpan.org/release/Encode-Detect
-Source0:        https://cpan.metacpan.org/authors/id/J/JG/JGMYERS/Encode-Detect-1.01.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/J/JG/JGMYERS/Encode-Detect-%{version}.tar.gz
 
 BuildRequires: coreutils
 BuildRequires: perl-devel

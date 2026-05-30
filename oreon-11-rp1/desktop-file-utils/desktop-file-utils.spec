@@ -5,7 +5,7 @@ Name: desktop-file-utils
 Version: 0.28
 Release: %autorelease
 URL: https://www.freedesktop.org/software/desktop-file-utils
-Source0:        https://www.freedesktop.org/software/desktop-file-utils/releases/desktop-file-utils-0.28.tar.xz
+Source0:        https://www.freedesktop.org/software/desktop-file-utils/releases/%{name}-%{version}.tar.xz
 Source1: desktop-entry-mode-init.el
 # https://gitlab.freedesktop.org/xdg/desktop-file-utils/-/merge_requests/24
 Patch0: 0001-validate-Add-Phosh-to-list-of-valid-OnlyShowIn-envir.patch

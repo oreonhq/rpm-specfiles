@@ -5,7 +5,7 @@ Name: diffutils
 Version: 3.12
 Release: 5%{?dist}
 URL: https://www.gnu.org/software/diffutils/diffutils.html
-Source:        https://ftp.gnu.org/gnu/diffutils/diffutils-3.12.tar.xz
+Source:        https://ftp.gnu.org/gnu/diffutils/diffutils-%{version}.tar.xz
 # upstream fixes
 # cross compile build of 3.12 diffutils fails
 Patch: diffutils-3.12-cross-compiler-build-fail.patch

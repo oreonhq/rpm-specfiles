@@ -7,7 +7,7 @@ Summary: CD paranoia on top of libcdio
 # Automatically converted from old format: GPLv3+ - review is highly recommended.
 License: GPL-3.0-or-later
 URL: http://www.gnu.org/software/libcdio/
-Source0:        https://github.com/libcdio/libcdio-paranoia/releases/download/release-10.2+2.0.2/libcdio-paranoia-10.2+2.0.2.tar.bz2
+Source0:        https://github.com/libcdio/libcdio-paranoia/releases/download/release-%{version}/libcdio-paranoia-%{version}.tar.bz2
 # Fix for https://bugzilla.redhat.com/show_bug.cgi?id=2334834
 # Based on https://github.com/libcdio/libcdio-paranoia/pull/52.patch
 Patch0: 2334834.patch

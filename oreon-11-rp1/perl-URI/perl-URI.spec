@@ -15,7 +15,7 @@ Release:        3%{?dist}
 Summary:        A Perl module implementing URI parsing and manipulation
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/URI
-Source0:        https://cpan.metacpan.org/authors/id/O/OA/OALDERS/URI-5.34.tar.gz
+Source0:        https://cpan.metacpan.org/modules/by-module/URI/URI-%{version}.tar.gz
 
 BuildArch:      noarch
 # Module Build

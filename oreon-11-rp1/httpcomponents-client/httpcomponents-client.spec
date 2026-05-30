@@ -11,7 +11,7 @@ URL:            https://hc.apache.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-client/4.5.14/httpcomponents-client-4.5.14-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/httpcomponents/httpcomponents-client/%{version}/httpcomponents-client-%{version}-source-release.zip
 
 Patch:          0001-Use-system-copy-of-effective_tld_names.dat.patch
 Patch:          0002-Port-to-mockito-2.patch

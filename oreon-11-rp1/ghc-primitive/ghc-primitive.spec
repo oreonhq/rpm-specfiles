@@ -17,8 +17,8 @@ Summary:        Primitive memory-related operations
 License:        BSD-3-Clause
 URL:            https://hackage.haskell.org/package/primitive
 # Begin cabal-rpm sources:
-Source0:        https://hackage.haskell.org/package/primitive-0.9.1.0/primitive-0.9.1.0.tar.gz
-Source1:        https://hackage.haskell.org/package/primitive-0.9.1.0/primitive.cabal#/primitive-0.9.1.0.cabal
+Source0:        https://hackage.haskell.org/package/%{pkgver}/%{pkgver}.tar.gz
+Source1:        https://hackage.haskell.org/package/%{pkgver}/%{pkg_name}.cabal#/%{pkgver}.cabal
 # End cabal-rpm sources
 
 # Begin cabal-rpm deps:

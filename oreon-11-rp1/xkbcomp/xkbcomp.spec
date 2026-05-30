@@ -8,7 +8,7 @@ Summary:    XKB keymap compiler
 License:    MIT-open-group AND HPND-DEC
 URL:        https://www.x.org
 
-Source0:        https://www.x.org/pub/individual/app/xkbcomp-1.5.0.tar.xz
+Source0:        https://www.x.org/pub/individual/app/xkbcomp-%{version}.tar.xz
 
 BuildRequires: make gcc
 BuildRequires: libxkbfile-devel

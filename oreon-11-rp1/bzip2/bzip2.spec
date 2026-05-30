@@ -11,7 +11,7 @@ Release: 23%{?dist}
 License: BSD-4-Clause
 URL: https://sourceware.org/bzip2
 #Source0: http://www.bzip.org/%%{version}/%%{name}-%%{version}.tar.gz
-Source0:        https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
+Source0:        https://sourceware.org/pub/bzip2/%{name}-%{version}.tar.gz
 Source1: bzip2.pc
 Source2:        https://sourceware.org/pub/bzip2/%{name}-%{version}.tar.gz.sig
 # https://sourceware.org/bzip2/downloads.html links to the gpg key

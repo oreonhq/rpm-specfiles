@@ -6,7 +6,7 @@ Version: 3.25
 Release: %autorelease
 License: GPL-2.0-or-later
 URL: https://tracker.debian.org/pkg/hostname
-Source0:        https://ftp.debian.org/debian/pool/main/h/hostname/hostname_3.25.tar.xz
+Source0:        https://ftp.debian.org/debian/pool/main/h/hostname/hostname_%{version}.tar.xz
 Source1: https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt
 Source2: nis-domainname
 Source3: nis-domainname.service

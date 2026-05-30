@@ -9,7 +9,7 @@ Summary: C library for reading, creating, and modifying zip archives
 
 License: BSD-3-Clause
 URL:     https://libzip.org/
-Source0:        https://libzip.org/download/libzip-1.11.4.tar.xz
+Source0:        https://libzip.org/download/libzip-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  zlib-devel

@@ -8,7 +8,7 @@ Summary:        Kernel Evdev Device Wrapper Library
 # SPDX
 License:        MIT
 URL:            http://www.freedesktop.org/wiki/Software/libevdev
-Source0:        http://www.freedesktop.org/software/libevdev/libevdev-1.13.6.tar.xz
+Source0:        http://www.freedesktop.org/software/%{name}/%{name}-%{version}.tar.xz
 
 BuildRequires:  git-core
 BuildRequires:  meson gcc

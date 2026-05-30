@@ -6,7 +6,7 @@ Release: 	42%{?dist}
 Summary: 	Perl module for numeric comparisons
 License: 	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL: 		https://metacpan.org/release/Number-Compare
-Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Number-Compare-0.03.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/Number-Compare-%{version}.tar.gz
 
 BuildArch: 	noarch
 

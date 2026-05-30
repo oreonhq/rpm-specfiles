@@ -11,8 +11,8 @@ Release: 1%{?dist}
 # the rest of the package under GPLv3+
 License: GPL-3.0-or-later AND LGPL-2.1-or-later AND (LGPL-3.0-or-later OR GPL-2.0-or-later)
 URL:     https://www.gnupg.org/
-Source0:        https://www.gnupg.org/ftp/gcrypt/libksba/libksba-1.6.8.tar.bz2
-Source1:        https://www.gnupg.org/ftp/gcrypt/libksba/libksba-1.6.8.tar.bz2.sig
+Source0:        https://www.gnupg.org/ftp/gcrypt/libksba/libksba-%{version}.tar.bz2
+Source1:        https://www.gnupg.org/ftp/gcrypt/libksba/libksba-%{version}.tar.bz2.sig
 Source2: https://gnupg.org/signature_key.asc
 
 Patch1: libksba-1.3.0-multilib.patch

@@ -9,7 +9,7 @@ Release:    12%{?dist}
 Summary:    The Hangul engine for IBus input platform
 License:    GPL-2.0-or-later
 URL:        https://github.com/libhangul/ibus-hangul
-Source0:        https://github.com/libhangul/ibus-hangul/releases/download/1.5.5/ibus-hangul-1.5.5.tar.xz
+Source0:        https://github.com/libhangul/ibus-hangul/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 # not upstreamed patches
 Patch1:     ibus-hangul-setup-abspath.patch

@@ -20,7 +20,7 @@ Release:	522%{?dist}
 Summary:	Read and write a subset of YAML for CPAN Meta files
 License:	GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:		https://metacpan.org/release/CPAN-Meta-YAML
-Source0:	https://cpan.metacpan.org/authors/id/E/ET/ETHER/CPAN-Meta-YAML-0.020.tar.gz
+Source0:        https://www.cpan.org/modules/by-module/CPAN/CPAN-Meta-YAML-%{version}.tar.gz
 
 BuildArch:	noarch
 # Build:

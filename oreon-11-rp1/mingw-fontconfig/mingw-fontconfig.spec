@@ -9,7 +9,7 @@ Summary:        MinGW Windows Fontconfig library
 
 License:        MIT
 URL:            http://fontconfig.org
-Source0:        https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/2.17.1/fontconfig-2.17.1.tar.bz2
+Source0:        https://gitlab.freedesktop.org/fontconfig/fontconfig/-/archive/%{version}/fontconfig-%{version}.tar.bz2
 
 # Allow disabling tests (do not build)
 Patch0:         fontconfig_tests.patch

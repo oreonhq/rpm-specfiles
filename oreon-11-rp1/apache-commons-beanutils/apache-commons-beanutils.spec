@@ -11,7 +11,7 @@ URL:            https://commons.apache.org/proper/commons-beanutils/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://archive.apache.org/dist/commons/beanutils/source/commons-beanutils-1.11.0-src.tar.gz
+Source0:        http://archive.apache.org/dist/commons/beanutils/source/commons-beanutils-%{version}-src.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
