@@ -47,9 +47,11 @@ Conflicts: %{sname}-any
 Open-source vector similarity search for Postgres. Supports L2 distance,
 inner product, and cosine distance
 
+%if %?postgresql_default
 %description -n %{pkgname}
 Open-source vector similarity search for Postgres. Supports L2 distance,
 inner product, and cosine distance
+%endif
 
 %if %llvm
 %package -n %{pkgname}-llvmjit
@@ -62,7 +64,7 @@ This packages provides JIT support for pgvector
 %endif
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{sname}-%{version}
 
 %build

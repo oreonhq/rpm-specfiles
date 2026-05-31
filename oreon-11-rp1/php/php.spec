@@ -202,7 +202,7 @@ Provides: php-zts%{?_isa} = %{version}-%{release}
 %endif
 
 %if %{with modphp}
-Requires: httpd-mmn = %{_httpd_mmn}
+Requires: httpd-mmn
 Provides: mod_php                = %{version}-%{release}
 # To ensure correct /var/lib/php/session ownership:
 Requires(pre): httpd-filesystem

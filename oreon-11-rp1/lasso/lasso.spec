@@ -144,8 +144,8 @@ Summary: Liberty Alliance Single Sign On (lasso) PHP bindings
 BuildRequires: expat-devel
 BuildRequires: php-devel
 Requires: %{name}%{?_isa} = %{version}-%{release}
-Requires: php(zend-abi) = %{php_zend_api}
-Requires: php(api) = %{php_core_api}
+Requires: php(zend-abi)
+Requires: php(api)
 
 %description -n php-%{name}
 PHP language bindings for the lasso (Liberty Alliance Single Sign On) library.
@@ -168,7 +168,7 @@ library.
 %endif
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 # Remove any python script shebang lines (unless they refer to python3)

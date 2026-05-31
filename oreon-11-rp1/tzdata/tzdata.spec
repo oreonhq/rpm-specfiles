@@ -34,7 +34,7 @@ the world.
 
 %package java
 Summary: Timezone data for Java
-Source3: https://pkgs.fedoraproject.org/repo/pkgs/rpms/tzdata/javazic-1.8-37392f2f5d59.tar.xz/sha512/2ba718dfeed53a3bd6b44e3dfe96338a609e482e4e6d942e2a7e622fc6c52606cb323ac3a59739c463e34f70fff217c0a61f5b3d3c4958eff2801b1504ee4204/javazic-1.8-37392f2f5d59.tar.xz
+Source3: javazic-1.8-37392f2f5d59.tar.xz
 Source4: ZoneTest.java
 Patch100: 8051641.patch
 Patch101: javazic-harden-links.patch
@@ -43,9 +43,9 @@ Patch101: javazic-harden-links.patch
 This package contains timezone information for use by Java runtimes.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
-%(test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -a 1
 
 %patch -p1 -P 2

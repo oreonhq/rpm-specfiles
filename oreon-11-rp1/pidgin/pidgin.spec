@@ -338,8 +338,7 @@ Requires:   %{name} = %{version}-%{release}
 Requires:   libpurple-devel = %{version}-%{release}
 Requires:   pkgconfig
 Requires:   gtk2-devel
-Obsoletes:  gaim-devel
-Provides:   gaim-devel = %{version}-%{release}
+Obsoletes:  gaim-devel < %{version}-%{release}Provides:   gaim-devel = %{version}-%{release}
 
 
 %description devel
@@ -362,8 +361,7 @@ Summary:    libpurple library for IM clients like Pidgin and Finch
 # Ensure elimination of gaim.i386 on x86_64
 Obsoletes:  gaim < 999:1
 %if %{meanwhile_integration}
-Obsoletes:  gaim-meanwhile
-%endif
+Obsoletes:  gaim-meanwhile < %{version}-%{release}%endif
 Requires:   glib2 >= %{glib_ver}
 # Bug #212817 Jabber needs cyrus-sasl plugins for authentication
 Requires:   cyrus-sasl-plain, cyrus-sasl-md5
@@ -462,8 +460,7 @@ Doxygen generated API documentation.
 %endif
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-echo "FEDORA=%{fedora} RHEL=%{rhel}"
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }echo "FEDORA=%{fedora} RHEL=%{rhel}"
 %setup -q
 ## Patches 0-99: Fedora specific or upstream wont accept
 %if %{force_sound_aplay}

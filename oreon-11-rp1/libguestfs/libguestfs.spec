@@ -566,8 +566,8 @@ ruby-%{name} contains Ruby bindings for %{name}.
 %package -n php-%{name}
 Summary:       PHP bindings for %{name}
 Requires:      %{name}%{?_isa} = %{epoch}:%{version}-%{release}
-Requires:	php(zend-abi) = %{php_zend_api}
-Requires:	php(api) = %{php_core_api}
+Requires:	php(zend-abi)
+Requires:	php(api)
 
 %description -n php-%{name}
 php-%{name} contains PHP bindings for %{name}.

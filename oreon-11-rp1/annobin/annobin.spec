@@ -308,8 +308,7 @@ Installs an annobin plugin that can be used by Clang.
 #---------------------------------------------------------------------------------
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-if [ -z "%{gcc_vr}" ]; then
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }if [ -z "%{gcc_vr}" ]; then
     echo "*** Missing gcc_vr spec file macro, cannot continue." >&2
     exit 1
 fi

@@ -43,7 +43,7 @@ other conversion server.
 %package -n emacs-%{pkg}
 Summary: Emacs files for %{pkg}
 Requires: %{name} = %{version}-%{release}
-Requires: emacs-filesystem >= %{_emacs_version}
+Requires: emacs-filesystem
 BuildArch: noarch
 
 %description -n emacs-%{pkg}
@@ -72,8 +72,7 @@ the programs which uses Anthy Unicode.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-SAVED_SUM=$(cat %SOURCE1 | awk '{print $1}')
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }SAVED_SUM=$(cat %SOURCE1 | awk '{print $1}')
 MY_SUM=$(sha256sum %SOURCE0 | awk '{print $1}')
 if test x"$SAVED_SUM" != x"$MY_SUM" ; then
     abort

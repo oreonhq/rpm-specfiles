@@ -12,7 +12,7 @@ Source0:        https://github.com/gssapi/%{name}/releases/download/v%{version}/
 BuildRequires:  httpd-devel, krb5-devel, openssl-devel
 BuildRequires:  autoconf, automake, libtool, bison, flex, make
 BuildRequires:  git
-Requires:       httpd-mmn = %{_httpd_mmn}
+Requires:       httpd-mmn
 Requires:       krb5-libs >= 1.11.5
 
 # If you're reading this: NTLM is insecure.  Migrate off it.
@@ -26,7 +26,7 @@ The mod_auth_gssapi module is an authentication service that implements the
 SPNEGO based HTTP Authentication protocol defined in RFC4559.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git_am
 
 %build

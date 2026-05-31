@@ -1,1 +1,0 @@
-python-cryptography-vectors was a testing-only dependency for python-cryptography. Since RHBZ#1952343 it is no longer used by python-cryptography.

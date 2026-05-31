@@ -22,7 +22,7 @@ Summary:        Bootstrapping your OS
 
 License:        GPL-2.0-or-later
 URL:            https://wiki.gnome.org/Design/OS/InitialSetup
-Source0:        https://download.gnome.org/sources/%{name}/%{major_version}/%{name}-%{tarball_version}.tar.xz
+Source0:        https://download.gnome.org/sources/%{name}/50/%{name}-%{tarball_version}.tar.xz
 BuildRequires:  desktop-file-utils
 BuildRequires:  gcc
 BuildRequires:  meson
@@ -77,7 +77,7 @@ a good setup experience to welcome you to your system, and walks
 you through configuring it. It is integrated with gdm.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{tarball_version}
 
 %build

@@ -63,7 +63,7 @@ Requires:       environment(modules)
 # Make sure this package is rebuilt with correct Python version when updating
 # Otherwise mpi.req from rpm-mpi-hooks doesn't work
 # https://bugzilla.redhat.com/show_bug.cgi?id=1705296
-Requires:       (python(abi) = %{python3_version} if python3)
+Requires:       python(abi)
 
 %description
 MPICH is a high-performance and widely portable implementation of the Message
@@ -122,13 +122,13 @@ Contains documentations, examples and man-pages for mpich
 %package -n python3-mpich
 Summary:        mpich support for Python 3
 Requires:       %{name} = %{version}-%{release}
-Requires:       python(abi) = %{python3_version}
+Requires:       python(abi)
 
 %description -n python3-mpich
 mpich support for Python 3.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
 %build

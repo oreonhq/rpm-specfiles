@@ -1,1 +1,0 @@
-This project was merged upstream into Eclipse ee4j's JAXB project (see: https://github.com/eclipse-ee4j/jaxb-ri ) and so is now a subpackage of the jaxb package in Fedora (see: https://src.fedoraproject.org/rpms/jaxb )

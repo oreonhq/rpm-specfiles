@@ -32,7 +32,7 @@ Summary: GTK+ graphical user interface library
 
 License: LGPL-2.0-or-later
 URL:     https://gtk.org
-Source0:        https://download.gnome.org/sources/gtk/%{major_minor_version}/gtk-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/gtk/3.24/gtk-%{version}.tar.xz
 
 patch0: drop-down-menu-fix.patch
 
@@ -174,7 +174,7 @@ The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n gtk-%{version} -p1
 
 %build

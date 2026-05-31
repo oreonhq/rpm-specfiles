@@ -1,9 +1,9 @@
-%global source0_hash none
-%global source81_hash none
-%global source82_hash none
-%global source83_hash none
-%global source84_hash none
-%global source85_hash none
+%global source0_hash c411b42fd11367075f5b10acf1117409c9840235d58713fd1f4bf09ba62c9c8f
+%global source81_hash 20679b9fa26ed7951647fc8f6b5a5520e555ee2a7a52f531a19027bd10c5c13e
+%global source82_hash 63eb9e0344bbd2b72796a2a6ddc5a8d09e3fff7d8834e0b7f796714eb0be80c2
+%global source83_hash 237070dcc1c6a09c0fc8ee51d29d50044999595c0019e0a50c739adacb85857f
+%global source84_hash 6a2a8154bcb97e58158c5986af346fa4ff5ff73c0aed4d1f760c718c6faf278b
+%global source85_hash 5b84d87b208e99c497d36727ec12d89a642b163c5dd5e65d67ae4c761d73bbc5
 
 %global fontname bpg
 %global fontconf 64-%{fontname}.conf
@@ -92,11 +92,11 @@ Source78:       %{fontname}-serif.metainfo.xml
 Source79:       %{fontname}-serif-modern.metainfo.xml
 Source80:       %{fontname}-ucnobi.metainfo.xml
 # 2017 DejaVu Unicode updates
-Source81:       BPG-2017-DejaVuSans.zip
-Source82:       BPG-2017-DejaVuSansCondensed.zip
-Source83:       BPG-2017-DejaVuSansMono.zip
-Source84:       BPG-2017-DejaVuSerif.zip
-Source85:       BPG-2017-DejaVuSerifCondensed.zip
+Source81:       https://app.box.com/index.php?rm=box_download_shared_file&shared_name=7z4lqt5ef4tpoo5l2n9ekhsd85lt66o4&file_id=f_258185331031#/BPG-2017-DejaVuSans.zip
+Source82:       https://app.box.com/index.php?rm=box_download_shared_file&shared_name=n6sfue34zdbszdjba4cmkpm8c2r9fqpm&file_id=f_258204195560#/BPG-2017-DejaVuSansCondensed.zip
+Source83:       https://app.box.com/index.php?rm=box_download_shared_file&shared_name=etsb9maks30e9j2mf6qm97c2it8nmfos&file_id=f_258125844848#/BPG-2017-DejaVuSansMono.zip
+Source84:       https://app.box.com/index.php?rm=box_download_shared_file&shared_name=uu4dm6ci9604iu88jm1vq62gbg9vjgzd&file_id=f_258238726578#/BPG-2017-DejaVuSerif.zip
+Source85:       https://app.box.com/index.php?rm=box_download_shared_file&shared_name=bn0tg6b3rrug8xekgydpgaco993ymr1k&file_id=f_258251678750#/BPG-2017-DejaVuSerifCondensed.zip
 Source86:       %{fontname}-dejavu-sans-mono.metainfo.xml
 Source87:       %{name}-dejavu-sans-mono-fontconfig.conf
 Source88:       %{fontname}-dejavu-serif.metainfo.xml
@@ -104,7 +104,7 @@ Source89:       %{name}-dejavu-serif-fontconfig.conf
 
 # Docs
 Source100:	README
-Source101:	http://www.gnu.org/licenses/gpl-3.0.txt
+Source101:	gpl-3.0.txt
 
 URL:		http://groups.google.com/group/bpg-fonts
 BuildRequires:	fontpackages-devel
@@ -561,12 +561,12 @@ This package contains the Ucnobi font family.
 %{_datadir}/appdata/%{fontname}-ucnobi.metainfo.xml
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source81_hash}" = "none" || { f="%{SOURCE81}"; test -f "$f" || { echo "oreon: missing Source81 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source81_hash}" || { echo "oreon: Source81 hash mismatch" >&2; exit 1; }; })
-%(test "%{source82_hash}" = "none" || { f="%{SOURCE82}"; test -f "$f" || { echo "oreon: missing Source82 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source82_hash}" || { echo "oreon: Source82 hash mismatch" >&2; exit 1; }; })
-%(test "%{source83_hash}" = "none" || { f="%{SOURCE83}"; test -f "$f" || { echo "oreon: missing Source83 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source83_hash}" || { echo "oreon: Source83 hash mismatch" >&2; exit 1; }; })
-%(test "%{source84_hash}" = "none" || { f="%{SOURCE84}"; test -f "$f" || { echo "oreon: missing Source84 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source84_hash}" || { echo "oreon: Source84 hash mismatch" >&2; exit 1; }; })
-%(test "%{source85_hash}" = "none" || { f="%{SOURCE85}"; test -f "$f" || { echo "oreon: missing Source85 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source85_hash}" || { echo "oreon: Source85 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source81_hash}" = "none" || { f="%{SOURCE81}"; test -f "$f" || { echo "oreon: missing Source81 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source81_hash}" || { echo "oreon: Source81 hash mismatch" >&2; exit 1; }; }
+test "%{source82_hash}" = "none" || { f="%{SOURCE82}"; test -f "$f" || { echo "oreon: missing Source82 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source82_hash}" || { echo "oreon: Source82 hash mismatch" >&2; exit 1; }; }
+test "%{source83_hash}" = "none" || { f="%{SOURCE83}"; test -f "$f" || { echo "oreon: missing Source83 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source83_hash}" || { echo "oreon: Source83 hash mismatch" >&2; exit 1; }; }
+test "%{source84_hash}" = "none" || { f="%{SOURCE84}"; test -f "$f" || { echo "oreon: missing Source84 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source84_hash}" || { echo "oreon: Source84 hash mismatch" >&2; exit 1; }; }
+test "%{source85_hash}" = "none" || { f="%{SOURCE85}"; test -f "$f" || { echo "oreon: missing Source85 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source85_hash}" || { echo "oreon: Source85 hash mismatch" >&2; exit 1; }; }
 %setup -q -c -n %{name} -a 81 -a 82 -a 83 -a 84 -a 85
 mkdir -p Docs/
 cp -p %{SOURCE100} %{SOURCE101} Docs/

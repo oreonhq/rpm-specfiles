@@ -36,8 +36,7 @@ BuildRequires:  python3dist(pytest)
 %description -n python%{python3_pkgversion}-%{srcname} %{common_description}
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-# This needs to have a blank line after because of a bug in the EL6 macros
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }# This needs to have a blank line after because of a bug in the EL6 macros
 %autosetup -p1 -n %{srcname}-%{version}
 
 rm -rf %{srcname}.egg-info

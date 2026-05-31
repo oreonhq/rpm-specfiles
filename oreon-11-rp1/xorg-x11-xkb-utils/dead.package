@@ -1,1 +1,0 @@
-xkbcomp and setxkbmap are individual packages now. xkbevd, xkbprint and xkbutils are being retired completely.

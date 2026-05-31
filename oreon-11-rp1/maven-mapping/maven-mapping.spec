@@ -31,7 +31,7 @@ Obsoletes:      %{name}-javadoc < 3.0.0-46
 Maven shared component that implements file name mapping.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 %pom_xpath_set "pom:project/pom:properties/pom:maven.compiler.target" "8" pom.xml
 %pom_xpath_set "pom:project/pom:properties/pom:maven.compiler.source" "8" pom.xml

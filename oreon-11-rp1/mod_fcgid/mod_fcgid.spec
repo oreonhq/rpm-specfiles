@@ -26,7 +26,7 @@ BuildRequires:	systemd
 %else
 BuildRequires:	systemd-rpm-macros
 %endif
-Requires:	httpd-mmn = %{_httpd_mmn}
+Requires:	httpd-mmn
 # systemd needed for ownership of %%{_tmpfilesdir}
 Requires:	systemd
 
@@ -37,7 +37,7 @@ the number of fastcgi servers, and kicking out corrupt fastcgi servers as soon
 as possible.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 cp -p %{SOURCE2} README.RPM
 cp -p %{SOURCE3} README.SELinux

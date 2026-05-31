@@ -29,7 +29,7 @@ Obsoletes:     python-varlink <= 3-1.git.61.1bc637d.fc27
 %description -n python3-varlink %_description
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n varlink-%{version}
 # varlink also supports python-2.7 but python3 is required here
 sed -i -e 's#env python#env python3#' varlink/tests/test_certification.py

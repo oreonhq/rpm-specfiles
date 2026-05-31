@@ -48,8 +48,7 @@ original style, using an open collaborative development process.}
 %global fontsummary1      DejaVu Sans, a variable-width sans-serif font family
 %global fontpkgheader1    %{expand:
 Obsoletes: dejavu-fonts-common < %{version}-%{release}
-Obsoletes: compat-f32-dejavu-sans-fonts
-Suggests:  font(dejavusansmono)
+Obsoletes: compat-f32-dejavu-sans-fonts < %{version}-%{release}Suggests:  font(dejavusansmono)
 }
 %if %{with build_from_src}
 %global fonts1            DejaVuSans.ttf DejaVuSans-*.ttf DejaVuSansCondensed*.ttf
@@ -70,8 +69,7 @@ their unabridged version.
 %global fontsummary2      DejaVu Serif, a variable-width serif font family
 %global fontpkgheader2    %{expand:
 Obsoletes: dejavu-math-tex-gyre-fonts < %{version}-%{release}
-Obsoletes: compat-f32-dejavu-serif-fonts
-}
+Obsoletes: compat-f32-dejavu-serif-fonts < %{version}-%{release}}
 %if %{with build_from_src}
 %global fonts2            DejaVuSerif.ttf DejaVuSerif-*.ttf DejaVuSerifCondensed*.ttf DejaVuMathTeXGyre.ttf
 %else
@@ -91,8 +89,7 @@ B. Jackowski, P. Strzelczyk and P. Pianowski, on behalf of TeX user groups.}
 %global fontfamily3       DejaVu Sans Mono
 %global fontsummary3      DejaVu Sans Mono, a mono-space sans-serif font family
 %global fontpkgheader3    %{expand:
-Obsoletes: compat-f32-dejavu-sans-mono-fonts
-}
+Obsoletes: compat-f32-dejavu-sans-mono-fonts < %{version}-%{release}}
 %if %{with build_from_src}
 %global fonts3            DejaVuSansMono*.ttf
 %else
@@ -166,12 +163,12 @@ Unicode coverage restricted to Latin, Greek and Cyrillic.}
 Source0:  %{forgeurl}/archive/version_2_37/dejavu-fonts-version_2_37.tar.gz
 Source1:  %{forgeurl}/releases/download/%{tag}/dejavu-fonts-ttf-%{version}.tar.bz2
 Source2:  %{forgeurl}/releases/download/%{tag}/dejavu-lgc-fonts-ttf-%{version}.tar.bz2
-Source11: 57-%{fontpkgname1}.xml
-Source12: 57-%{fontpkgname2}.xml
-Source13: 57-%{fontpkgname3}.xml
-Source14: 58-%{fontpkgname4}.xml
-Source15: 58-%{fontpkgname5}.xml
-Source16: 58-%{fontpkgname6}.xml
+Source11: 57-dejavu-sans-fonts.xml
+Source12: 57-dejavu-serif-fonts.xml
+Source13: 57-dejavu-sans-mono-fonts.xml
+Source14: 58-dejavu-lgc-sans-fonts.xml
+Source15: 58-dejavu-lgc-serif-fonts.xml
+Source16: 58-dejavu-lgc-sans-mono-fonts.xml
 Patch0:   dejavu-fonts-ttf-urn-dtd.patch
 Patch1:   dejavu-lgc-fonts-ttf-urn-dtd.patch
 Patch2:   dejavu-fonts-urn-dtd.patch
@@ -202,9 +199,9 @@ This package provides optional documentation files shipped with
 %{source_name}.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; })
-%(test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
+test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 %if %{with build_from_src}
 %setup -n %{name}-%{tag}
 %patch -P2 -p1

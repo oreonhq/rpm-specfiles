@@ -1,1 +1,0 @@
-All legacy fbdev drivers have been removed in favor of simplefb: https://fedoraproject.org/wiki/Changes/ReplaceFbdevDrivers

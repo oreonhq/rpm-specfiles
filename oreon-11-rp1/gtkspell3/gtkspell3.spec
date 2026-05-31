@@ -50,8 +50,7 @@ developing applications that use GtkSpell API version 3.0.
 
 %package -n mingw32-%{name}
 Summary:       MinGW Windows GtkSpell3 library
-Obsoletes:     mingw32-%{name}-static
-BuildArch:     noarch
+Obsoletes:     mingw32-%{name}-static < %{version}-%{release}BuildArch:     noarch
 
 %description -n mingw32-%{name}
 MinGW Windows GtkSpell3 library.
@@ -59,8 +58,7 @@ MinGW Windows GtkSpell3 library.
 
 %package -n mingw64-%{name}
 Summary:       MinGW Windows GtkSpell3 library
-Obsoletes:     mingw64-%{name}-static
-BuildArch:     noarch
+Obsoletes:     mingw64-%{name}-static < %{version}-%{release}BuildArch:     noarch
 
 %description -n mingw64-%{name}
 MinGW Windows GtkSpell3 library.
@@ -70,7 +68,7 @@ MinGW Windows GtkSpell3 library.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
 

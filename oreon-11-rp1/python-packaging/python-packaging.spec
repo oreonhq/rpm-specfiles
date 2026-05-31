@@ -66,7 +66,7 @@ Summary:        %{summary}
 %if %{with bootstrap}
 Provides:       python%{python3_pkgversion}dist(packaging) = %{version}
 Provides:       python%{python3_version}dist(packaging) = %{version}
-Requires:       python(abi) = %{python3_version}
+Requires:       python(abi)
 %endif
 
 %description -n python%{python3_pkgversion}-%{pypi_name}  %_description
@@ -82,7 +82,7 @@ Documentation for python-packaging
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{pypi_name}-%{version}
 
 

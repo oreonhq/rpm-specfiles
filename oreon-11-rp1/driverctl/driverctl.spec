@@ -1,4 +1,4 @@
-%global source0_hash 3d1e87cbcf22a1ed548f0fb0bdb9a1dbd3b4dcea0d23fd84444bd1673050b201
+%global source0_hash c98b05b52f4d83626fecfa141f34b5f7eb042ff51a8722d2275a2b6bd036bb5c
 
 Name:		driverctl
 Version:	0.121
@@ -9,7 +9,7 @@ License:	LGPL-2.1-or-later
 URL:		https://gitlab.com/driverctl/driverctl
 BuildArch:	noarch
 
-Source0:        https://gitlab.com/driverctl/%{name}/repository/archive.tar.gz?ref=%{version}#/%{name}-%{version}-%{commit}.tar.gz
+Source0:        https://gitlab.com/driverctl/driverctl/-/archive/%{version}/driverctl-%{version}.tar.gz
 
 # for udev macros
 BuildRequires: systemd
@@ -37,7 +37,7 @@ created by driverctl are persistent across system reboots
 by default.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %install

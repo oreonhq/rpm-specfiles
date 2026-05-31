@@ -41,7 +41,7 @@ existing WSGI adapters for mod_python or CGI.\
 %if %{with python2}
 %package -n python2-%{name}
 Summary: %summary
-Requires:       httpd-mmn = %{_httpd_mmn}
+Requires:       httpd-mmn
 BuildRequires:  python2-devel, python2-setuptools
 %{?python_provide:%python_provide python2-%{name}}
 %if 0%{?rhel} && 0%{?rhel} <= 7
@@ -57,7 +57,7 @@ Obsoletes: mod_wsgi < %{version}-%{release}
 %if %{with python3}
 %package -n python3-%{name}
 Summary:        %summary
-Requires:       httpd-mmn = %{_httpd_mmn}
+Requires:       httpd-mmn
 BuildRequires:  python3-devel, python3-sphinx, python3-sphinx_rtd_theme
 BuildRequires:  python3-setuptools
 %if !%{with python2}
@@ -71,7 +71,7 @@ Obsoletes: mod_wsgi < %{version}-%{release}
 %endif
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{version}
 
 : Python2=%{with python2} Python3=%{with python3}

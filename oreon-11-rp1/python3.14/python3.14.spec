@@ -248,8 +248,7 @@ Provides: bundled(python3dist(zipp)) = 3.19.2
 # preferable to an "extra" interpreter. For example, python3-3.6.1 will
 # replace python3.6-3.6.2.
 %define unversioned_obsoletes_of_python3_X_if_main() %{expand:\
-Obsoletes: python%{pybasever}%{?1:-%{1}}\
-}
+Obsoletes: python%{pybasever}%{?1:-%{1}}\ < %{version}-%{release}}
 %else
 %define unversioned_obsoletes_of_python3_X_if_main() %{nil}
 %endif
@@ -566,7 +565,7 @@ Provides: python-is-python3 = %{version}-%{release}
 %description -n python-unversioned-command
 This package contains /usr/bin/python - the "python" command that runs Python 3.
 
-%endif # with main_python
+%endif
 
 
 %package -n %{pkgname}-libs
@@ -798,7 +797,7 @@ of Python.
 
 The debug runtime additionally supports debug builds of C-API extensions
 (with the "d" ABI flag) for debugging issues in those extensions.
-%endif # with debug_build
+%endif
 
 
 %if %{with freethreading_build}
@@ -949,7 +948,7 @@ The self-test suite for the Free Threading Python interpreter.
 This is only useful to test Free Threading Python itself. For testing general
 Python code with the Free Threading build, you should use the unittest module
 from python%{pybasever}-freethreading-libs, or a library such as pytest.
-%endif  # with freethreading_build
+%endif
 
 %if %{with freethreading_build} && %{with debug_build}
 %package -n python%{pybasever}-freethreading-debug
@@ -980,7 +979,7 @@ and with the necessary changes needed to make the interpreter thread-safe.
 This package provides a version of the Python runtime with numerous debugging
 features enabled, aimed at advanced Python users such as developers of Python
 extension modules.
-%endif # with freethreading_build && debug_build
+%endif
 
 
 # ======================================================
@@ -988,7 +987,7 @@ extension modules.
 # ======================================================
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git_am -n Python-%{upstream_version}
 
 # Verify the second level of bundled provides is up to date
@@ -1149,7 +1148,7 @@ BuildPython() {
 BuildPython debug \
   "--without-ensurepip --with-pydebug %{?jit_flag}" \
   "%{optflags_debug}"
-%endif # with debug_build
+%endif
 
 BuildPython optimized \
   "--without-ensurepip %{?jit_flag} %{optimizations_flag}" \
@@ -1159,13 +1158,13 @@ BuildPython optimized \
 BuildPython freethreading-debug \
   "--without-ensurepip --with-pydebug --disable-gil" \
   "%{optflags_debug}"
-%endif # with freethreading_build && debug_build
+%endif
 
 %if %{with freethreading_build}
 BuildPython freethreading \
   "--without-ensurepip %{optimizations_flag} --disable-gil" \
   "%{optflags_optimized}"
-%endif # with freethreading_build
+%endif
 
 # ======================================================
 # Installing the built code:
@@ -1263,14 +1262,14 @@ InstallPython freethreading-debug \
   %{py_INSTSONAME_freethreading_debug} \
   "%{optflags_debug}" \
   %{LDVERSION_freethreading_debug}
-%endif # with freethreading_build && debug_build
+%endif
 
 %if %{with debug_build}
 InstallPython debug \
   %{py_INSTSONAME_debug} \
   "%{optflags_debug}" \
   %{LDVERSION_debug}
-%endif # with debug_build
+%endif
 
 %if %{with freethreading_build}
 # Now the freethreading optimized build:
@@ -1278,7 +1277,7 @@ InstallPython freethreading \
   %{py_INSTSONAME_freethreading} \
   "%{optflags_optimized}" \
   %{LDVERSION_freethreading}
-%endif # with freethreading_build
+%endif
 
 # Now the optimized build:
 InstallPython optimized \
@@ -1300,7 +1299,7 @@ install -d -m 0755 %{buildroot}%{pylibdir_freethreading}/site-packages/__pycache
 install -d -m 0755 %{buildroot}%{_prefix}/lib/python%{pybasever}/site-packages/__pycache__
 %if %{with freethreading_build}
 install -d -m 0755 %{buildroot}%{_prefix}/lib/python%{pybasever}%{ABIFLAGS_freethreading}/site-packages/__pycache__
-%endif # with freethreading_build
+%endif
 %endif
 
 %if %{with main_python}
@@ -1528,16 +1527,16 @@ CheckPython() {
 # Check each of the configurations:
 %if %{with debug_build}
 CheckPython debug
-%endif # with debug_build
+%endif
 CheckPython optimized
 %if %{with freethreading_build} && %{with debug_build}
 CheckPython freethreading-debug
-%endif # with freethreading_build && debug_build
+%endif
 %if %{with freethreading_build}
 CheckPython freethreading
-%endif # with freethreading_build
+%endif
 
-%endif # with tests
+%endif
 
 
 %files -n %{pkgname}
@@ -1858,7 +1857,7 @@ CheckPython freethreading
 %{pylibdir}/__pycache__/_sysconfigdata_%{ABIFLAGS_debug}_linux_%{platform_triplet}%{bytecode_suffixes}
 %{pylibdir}/_sysconfig_vars_%{ABIFLAGS_debug}_linux_%{platform_triplet}.json
 
-%endif # with debug_build
+%endif
 
 %if %{with freethreading_build}
 %files -n python%{pybasever}-freethreading
@@ -1956,7 +1955,7 @@ CheckPython freethreading
 # Extension modules
 %extension_modules_test %{dynload_dir_freethreading} %{SOABI_freethreading}
 
-%endif # with freethreading_build
+%endif
 
 %if %{with freethreading_build} && %{with debug_build}
 %files -n python%{pybasever}-freethreading-debug
@@ -1984,7 +1983,7 @@ CheckPython freethreading
 %{pylibdir_freethreading}/__pycache__/_sysconfigdata_%{ABIFLAGS_freethreading_debug}_linux_%{platform_triplet}%{bytecode_suffixes}
 %{pylibdir_freethreading}/_sysconfig_vars_%{ABIFLAGS_freethreading_debug}_linux_%{platform_triplet}.json
 
-%endif # with freethreading_build && debug_build
+%endif
 
 # We put the debug-gdb.py file inside /usr/lib/debug to avoid noise from ldconfig
 # See https://bugzilla.redhat.com/show_bug.cgi?id=562980

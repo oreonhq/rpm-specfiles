@@ -1,1 +1,0 @@
-Since upstream had decided to maintain all sub fonts from smc-fonts as individual fonts, so we have decided to split this package into individual font packages better to retire this package.

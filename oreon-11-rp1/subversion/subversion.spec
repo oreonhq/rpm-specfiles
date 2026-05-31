@@ -177,7 +177,7 @@ passwords in the KDE Wallet.
 %package -n mod_dav_svn
 Summary: Apache httpd module for Subversion server
 %if %{undefined _httpd_requires}
-Requires: httpd-mmn = %{_httpd_mmn}
+Requires: httpd-mmn
 %endif
 Requires: subversion-libs%{?_isa} = %{version}-%{release}
 BuildRequires: httpd-devel >= 2.4.63-4
@@ -232,7 +232,7 @@ Requires: subversion-libs%{?_isa} = %{version}-%{release}
 This package includes supplementary tools for use with Subversion.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -S gendiff
 
 :

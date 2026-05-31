@@ -1,3 +1,0 @@
-Retired: Use the unittest module from the Python standard library instead
-
-See https://bugzilla.redhat.com/show_bug.cgi?id=1794222

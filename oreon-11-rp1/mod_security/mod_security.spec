@@ -26,7 +26,7 @@ Patch2: mod_security-2.9.3-remote-rules-timeout.patch
 Patch3: mod_security-2.9.7-send_error_bucket.patch
 Patch4: mod_security-2.9.7-pipedlogs.patch
 
-Requires: httpd httpd-mmn = %{_httpd_mmn}
+Requires: httpd httpd-mmn
 %if 0%{?fedora} || 0%{?rhel} > 7 || (0%{?oreon} >= 11)
 # Ensure apache user exists for file ownership
 Requires(pre): httpd-filesystem
@@ -66,7 +66,7 @@ This package contains the ModSecurity Audit Log Collector.
 %endif
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n modsecurity-v%{version} -S git
 
 : Building with YAJL=%{with yajl} ssdeep=%{with ssdeep}

@@ -52,6 +52,7 @@ with performance comparable to using CLUSTER directly.
 Please check the documentation (in the doc directory or online)
 for installation and usage instructions.
 
+%if %?postgresql_default
 %description -n %{pkgname}
 pg_repack is a PostgreSQL extension which lets you remove
 bloat from tables and indexes, and optionally
@@ -63,9 +64,10 @@ with performance comparable to using CLUSTER directly.
 
 Please check the documentation (in the doc directory or online)
 for installation and usage instructions.
+%endif
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -n %{majorname}-ver_%{version} -q
 
 

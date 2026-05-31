@@ -265,8 +265,8 @@ Source24: qtdemo.desktop
 Source25: qtconfig.desktop
 
 # upstream qt4-logo, http://trolltech.com/images/products/qt/qt4-logo
-Source30: https://pkgs.fedoraproject.org/repo/pkgs/qt4/hi128-app-qt4-logo.png/d9f511e4b51983b4e10eb58b320416d5/hi128-app-qt4-logo.png
-Source31: https://pkgs.fedoraproject.org/repo/pkgs/qt4/hi48-app-qt4-logo.png/6dcc0672ff9e60a6b83f95c5f42bec5b/hi48-app-qt4-logo.png
+Source30: hi128-app-qt4-logo.png
+Source31: hi48-app-qt4-logo.png
 
 ## BOOTSTRAPPING, undef docs, demos, examples, phonon, webkit
 
@@ -629,7 +629,7 @@ and invoke methods on those objects.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n qt-everywhere-opensource-src-%{version} 
 
 %patch -P4 -p1 -b .uic_multilib

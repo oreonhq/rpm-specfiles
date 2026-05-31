@@ -1,1 +1,0 @@
-Deprecated upstream and removed since OCaml 4.09.  Use PPX extension points or ocaml-camlp5 instead.

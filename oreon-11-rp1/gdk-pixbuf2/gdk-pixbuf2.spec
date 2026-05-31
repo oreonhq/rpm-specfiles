@@ -15,7 +15,7 @@ Summary:        An image loading library
 
 License:        LGPL-2.1-or-later
 URL:            https://gitlab.gnome.org/GNOME/gdk-pixbuf
-Source0:        https://download.gnome.org/sources/gdk-pixbuf/2.44/gdk-pixbuf-%{real_version}.tar.xz
+Source0:        https://download.gnome.org/sources/gdk-pixbuf/2.44/gdk-pixbuf-%{version}.tar.xz
 
 BuildRequires:  docbook-style-xsl
 BuildRequires:  gettext
@@ -79,7 +79,7 @@ The %{name}-tests package contains tests that can be used to verify
 the functionality of the installed %{name} package.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n gdk-pixbuf-%{version} -p1
 
 %build

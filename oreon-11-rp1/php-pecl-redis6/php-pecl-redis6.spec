@@ -72,8 +72,8 @@ BuildRequires: redis
 %endif
 %endif
 
-Requires:      php(zend-abi) = %{php_zend_api}
-Requires:      php(api) = %{php_core_api}
+Requires:      php(zend-abi)
+Requires:      php(api)
 %if %{with igbinary}
 Requires:      %{php_base}-pecl-igbinary%{?_isa}
 %endif
@@ -125,7 +125,7 @@ some doesn't work with an old server version.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
 
 # Don't install/register tests, license, and bundled library

@@ -37,14 +37,14 @@ BuildRequires:	automake
 BuildRequires:	cjose-devel
 BuildRequires:	jq-devel
 %{?_with_hiredis:BuildRequires: hiredis-devel}
-Requires:	httpd-mmn = %{_httpd_mmn}
+Requires:	httpd-mmn
 
 %description
 This module enables an Apache 2.x web server to operate as
 an OpenID Connect Relying Party and/or OAuth 2.0 Resource Server.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q
 
 %build

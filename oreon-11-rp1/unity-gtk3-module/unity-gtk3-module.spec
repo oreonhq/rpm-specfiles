@@ -41,8 +41,7 @@ Headers and pkg-config metadata for the Unity GTK3 menu parser library
 (libunity-gtk3-parser).
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-mkdir -p %{name}-%{version}
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }mkdir -p %{name}-%{version}
 tar -xzf %{SOURCE0} -C %{name}-%{version}
 # tests/ is wired in configure.ac + Makefile.am; deleting it without editing breaks automake.
 cfg=$(find '%{name}-%{version}' -maxdepth 4 -name configure.ac -print -quit)

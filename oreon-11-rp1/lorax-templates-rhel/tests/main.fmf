@@ -1,4 +1,0 @@
-test: ./run_tests.sh
-require:
-  - lorax
-duration: 45m

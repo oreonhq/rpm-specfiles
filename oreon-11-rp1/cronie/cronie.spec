@@ -44,8 +44,7 @@ Buildrequires: audit-libs-devel >= 1.4.1
 BuildRequires:    gcc
 BuildRequires:    systemd
 BuildRequires:    make
-Obsoletes:        %{name}-sysvinit
-
+Obsoletes:        %{name}-sysvinit < %{version}-%{release}
 Requires(post):   coreutils sed
 
 %if 0%{?fedora} && 0%{?fedora} < 28 || 0%{?rhel} && 0%{?rhel} < 8 || (0%{?oreon} >= 11)
@@ -92,7 +91,7 @@ Old style of running {hourly,daily,weekly,monthly}.jobs without anacron. No
 extra features.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
 %build

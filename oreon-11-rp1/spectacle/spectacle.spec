@@ -24,8 +24,8 @@ URL:     https://www.kde.org/applications/graphics/spectacle/
 %else
 %global stable stable
 %endif
-Source0:        https://download.kde.org/%{stable}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
-Source1:        https://download.kde.org/%{stable}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable}/plasma/%{version}/%{name}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable}/plasma/%{version}/%{name}-%{version}.tar.xz.sig
 
 ## upstream patches
 
@@ -106,7 +106,7 @@ Conflicts: kde-l10n < 17.03
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{name}-%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}
 
 
@@ -692,5 +692,4 @@ desktop-file-validate %{buildroot}%{_kf6_datadir}/applications/org.kde.spectacle
 
 * Sun Jan 10 2016 Rex Dieter <rdieter@fedoraproject.org> 15.12.1-1
 - spectacle-15.12.1
-
 

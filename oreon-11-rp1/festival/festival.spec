@@ -20,11 +20,7 @@ URL: http://www.cstr.ed.ac.uk/projects/festival/
 # the hts_engine module is covered by the three-clause BSD license.
 License: MIT AND GPL-1.0-or-later AND TCL AND BSD-3-Clause
 
-Obsoletes: festival-lib
-Obsoletes: festival-speechtools-libs
-Obsoletes: festival-speechtools-libs-devel
-Obsoletes: festival-speechtools-utils
-
+Obsoletes: festival-lib < %{version}-%{release}Obsoletes: festival-speechtools-libs < %{version}-%{release}Obsoletes: festival-speechtools-libs-devel < %{version}-%{release}Obsoletes: festival-speechtools-utils < %{version}-%{release}
 # Files needed for everything...
 %global baseURL  http://festvox.org/packed/festival/2.5
 Source0:        http://festvox.org/packed/festival/2.5/festival-2.5.0-release.tar.gz
@@ -290,17 +286,17 @@ you can also interface with Festival in via the shell or with BSD sockets.
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_hash}" || { echo "oreon: Source100 hash mismatch" >&2; exit 1; }; })
-%(test "%{source101_hash}" = "none" || { f="%{SOURCE101}"; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source101_hash}" || { echo "oreon: Source101 hash mismatch" >&2; exit 1; }; })
-%(test "%{source200_hash}" = "none" || { f="%{SOURCE200}"; test -f "$f" || { echo "oreon: missing Source200 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source200_hash}" || { echo "oreon: Source200 hash mismatch" >&2; exit 1; }; })
-%(test "%{source202_hash}" = "none" || { f="%{SOURCE202}"; test -f "$f" || { echo "oreon: missing Source202 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source202_hash}" || { echo "oreon: Source202 hash mismatch" >&2; exit 1; }; })
-%(test "%{source220_hash}" = "none" || { f="%{SOURCE220}"; test -f "$f" || { echo "oreon: missing Source220 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source220_hash}" || { echo "oreon: Source220 hash mismatch" >&2; exit 1; }; })
-%(test "%{source221_hash}" = "none" || { f="%{SOURCE221}"; test -f "$f" || { echo "oreon: missing Source221 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source221_hash}" || { echo "oreon: Source221 hash mismatch" >&2; exit 1; }; })
-%(test "%{source222_hash}" = "none" || { f="%{SOURCE222}"; test -f "$f" || { echo "oreon: missing Source222 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source222_hash}" || { echo "oreon: Source222 hash mismatch" >&2; exit 1; }; })
-%(test "%{source223_hash}" = "none" || { f="%{SOURCE223}"; test -f "$f" || { echo "oreon: missing Source223 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source223_hash}" || { echo "oreon: Source223 hash mismatch" >&2; exit 1; }; })
-%(test "%{source224_hash}" = "none" || { f="%{SOURCE224}"; test -f "$f" || { echo "oreon: missing Source224 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source224_hash}" || { echo "oreon: Source224 hash mismatch" >&2; exit 1; }; })
-%(test "%{source225_hash}" = "none" || { f="%{SOURCE225}"; test -f "$f" || { echo "oreon: missing Source225 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source225_hash}" || { echo "oreon: Source225 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source100_hash}" = "none" || { f="%{SOURCE100}"; test -f "$f" || { echo "oreon: missing Source100 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source100_hash}" || { echo "oreon: Source100 hash mismatch" >&2; exit 1; }; }
+test "%{source101_hash}" = "none" || { f="%{SOURCE101}"; test -f "$f" || { echo "oreon: missing Source101 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source101_hash}" || { echo "oreon: Source101 hash mismatch" >&2; exit 1; }; }
+test "%{source200_hash}" = "none" || { f="%{SOURCE200}"; test -f "$f" || { echo "oreon: missing Source200 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source200_hash}" || { echo "oreon: Source200 hash mismatch" >&2; exit 1; }; }
+test "%{source202_hash}" = "none" || { f="%{SOURCE202}"; test -f "$f" || { echo "oreon: missing Source202 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source202_hash}" || { echo "oreon: Source202 hash mismatch" >&2; exit 1; }; }
+test "%{source220_hash}" = "none" || { f="%{SOURCE220}"; test -f "$f" || { echo "oreon: missing Source220 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source220_hash}" || { echo "oreon: Source220 hash mismatch" >&2; exit 1; }; }
+test "%{source221_hash}" = "none" || { f="%{SOURCE221}"; test -f "$f" || { echo "oreon: missing Source221 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source221_hash}" || { echo "oreon: Source221 hash mismatch" >&2; exit 1; }; }
+test "%{source222_hash}" = "none" || { f="%{SOURCE222}"; test -f "$f" || { echo "oreon: missing Source222 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source222_hash}" || { echo "oreon: Source222 hash mismatch" >&2; exit 1; }; }
+test "%{source223_hash}" = "none" || { f="%{SOURCE223}"; test -f "$f" || { echo "oreon: missing Source223 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source223_hash}" || { echo "oreon: Source223 hash mismatch" >&2; exit 1; }; }
+test "%{source224_hash}" = "none" || { f="%{SOURCE224}"; test -f "$f" || { echo "oreon: missing Source224 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source224_hash}" || { echo "oreon: Source224 hash mismatch" >&2; exit 1; }; }
+test "%{source225_hash}" = "none" || { f="%{SOURCE225}"; test -f "$f" || { echo "oreon: missing Source225 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source225_hash}" || { echo "oreon: Source225 hash mismatch" >&2; exit 1; }; }
 %setup -q -n festival
 
 # dictionaries

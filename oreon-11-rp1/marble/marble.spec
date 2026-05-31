@@ -158,7 +158,7 @@ Conflicts: %{name}-widget-qt5-devel < %{epoch}:%{version}-%{release}
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 # https://invent.kde.org/education/marble/-/merge_requests/143
 sed -i -e '/^Exec=/s/Behaim/behaim/' src/apps/behaim/org.kde.marble.behaim.desktop

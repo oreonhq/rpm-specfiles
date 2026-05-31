@@ -42,8 +42,8 @@ BuildRequires: %{php_base}-devel
 BuildRequires: pkgconfig(libzip) >= 1.0.0
 BuildRequires: zlib-devel
 
-Requires:     php(zend-abi) = %{php_zend_api}
-Requires:     php(api) = %{php_core_api}
+Requires:     php(zend-abi)
+Requires:     php(api)
 
 # Extension
 Provides:     php-%{pecl_name} = %{version}-%{release}
@@ -67,7 +67,7 @@ Zip is an extension to create and read zip files.
 
 
 %prep 
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %forgesetup
 
 # Sanity check, really often broken

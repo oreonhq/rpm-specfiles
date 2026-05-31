@@ -43,14 +43,14 @@ Summary:        %{summary}
 %if %{with bootstrap}
 Provides:       python%{python3_pkgversion}dist(flit-core) = %{version}
 Provides:       python%{python3_version}dist(flit-core) = %{version}
-Requires:       python(abi) = %{python3_version}
+Requires:       python(abi)
 %endif
 
 %description -n python%{python3_pkgversion}-flit-core %_description
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n flit_core-%{version}
 
 # Remove vendored tomli that flit_core includes to solve the circular dependency on older Pythons

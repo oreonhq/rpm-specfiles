@@ -485,8 +485,7 @@ Provides: python%{pybasever}%{?_isa} = %{version}-%{release}
 # Here we assert that *any* version of the system's default interpreter is
 # preferable to an "extra" interpreter. For example, python3-3.6.1 will
 # replace python3.6-3.6.2.
-Obsoletes: python%{pybasever}
-
+Obsoletes: python%{pybasever} < %{version}-%{release}
 # https://fedoraproject.org/wiki/Changes/Move_usr_bin_python_into_separate_package
 # https://fedoraproject.org/wiki/Changes/Python_means_Python3
 # We recommend /usr/bin/python so users get it by default
@@ -862,7 +861,7 @@ that support it, such as CentOS or RHEL or older Fedora releases.
 # ======================================================
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %gpgverify -k2 -s1 -d0
 %autosetup -S git_am -N -n Python-%{upstream_version}
 

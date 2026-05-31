@@ -32,11 +32,11 @@ Source: %{giturl}/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
 Source1: Makefile.devel
 Source2: selinux-policy.conf
 
-# https://github.com/fedora-selinux/macro-expander (pinned; #/ renames to macro-expander for %%install)
-Source3: macro-expander
+# https://github.com/fedora-selinux/macro-expander
+Source3: https://raw.githubusercontent.com/fedora-selinux/macro-expander/%{macro_expander_commit}/macro-expander.sh#/macro-expander
 
-# https://github.com/containers/container-selinux — extract container.{if,te,fc} in %%prep
-Source4: container-selinux.tgz
+# https://github.com/containers/container-selinux
+Source4: https://github.com/containers/container-selinux/archive/%{container_selinux_commit}/container-selinux-%{container_selinux_commit}.tar.gz
 
 # modules enabled in -minimum policy
 Source16: modules-minimum.lst
@@ -409,8 +409,8 @@ end
 %build
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%(test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
 %autosetup -p 1 -n %{name}-%{commit}
 tar -xf %{SOURCE4}
 cp container-selinux-%{container_selinux_commit}/container.{if,te,fc} policy/modules/contrib/

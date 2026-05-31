@@ -35,7 +35,7 @@ commonly used encoders and decoders. Examples include Base64, Hex,
 Phonetic and URLs.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n commons-codec-%{version}-src
 cp %{SOURCE1} aspell-mail.txt
 sed -i 's/\r//' RELEASE-NOTES*.txt LICENSE.txt NOTICE.txt

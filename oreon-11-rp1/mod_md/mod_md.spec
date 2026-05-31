@@ -15,7 +15,7 @@ Source0:        https://github.com/icing/mod_md/releases/download/v%{version}/mo
 Patch1:         mod_md-2.0.8-state_dir.patch
 BuildRequires:  make, gcc
 BuildRequires:  pkgconfig, httpd-devel >= 2.4.41, openssl-devel >= 1.1.0, jansson-devel, libcurl-devel, xmlto
-Requires:       httpd-mmn = %{_httpd_mmn}, mod_ssl >= 1:2.4.41
+Requires:       httpd-mmn, mod_ssl >= 1:2.4.41
 Conflicts:      httpd < 2.4.39-7
 Epoch:          1
 
@@ -26,7 +26,7 @@ certificate provisioning.  Certificates will be configured for managed
 domains and their virtual hosts automatically, including at renewal.
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
 %build

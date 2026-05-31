@@ -38,7 +38,7 @@ BuildRequires: pkgconfig
 %if 0%{?with_qt4}
 BuildRequires: pkgconfig(QJson)
 BuildRequires: pkgconfig(QtDBus) pkgconfig(QtGui)
-%endif # with_qt4
+%endif
 BuildRequires: pkgconfig(Qt5DBus) pkgconfig(Qt5Widgets)
 # test-suite
 BuildRequires: xorg-x11-server-Xvfb dbus-x11
@@ -67,7 +67,7 @@ BuildArch: noarch
 Conflicts: dbusmenu-qt-devel < 0.9.3
 %description doc
 %{summary}.
-%endif # with_qt4
+%endif
 
 %package -n dbusmenu-qt5
 Summary: A Qt implementation of the DBusMenu protocol
@@ -87,7 +87,7 @@ Requires: dbusmenu-qt5%{?_isa} = %{version}-%{release}
 
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n libdbusmenu-qt-%{version}+%{ubuntu}.%{snapshot}
 
 
@@ -105,7 +105,7 @@ pushd %{_target_platform}
 popd
 
 %make_build -C %{_target_platform}
-%endif # with_qt4
+%endif
 
 mkdir %{_target_platform}-qt5
 pushd %{_target_platform}-qt5
@@ -122,7 +122,7 @@ popd
 %install
 %if 0%{?with_qt4}
 make install/fast DESTDIR=%{buildroot} -C %{_target_platform}
-%endif # with_qt4
+%endif
 make install/fast DESTDIR=%{buildroot} -C %{_target_platform}-qt5
 
 # unpackaged files
@@ -134,7 +134,7 @@ rm -rfv %{buildroot}%{_docdir}/libdbusmenu-qt*-doc
 export PKG_CONFIG_PATH=%{buildroot}%{_libdir}/pkgconfig
 %if 0%{?with_qt4}
 test "$(pkg-config --modversion dbusmenu-qt)" = "%{tarballversion}"
-%endif # with_qt4
+%endif
 test "$(pkg-config --modversion dbusmenu-qt5)" = "%{tarballversion}"
 # test suite
 export CTEST_OUTPUT_ON_FAILURE=1
@@ -158,7 +158,7 @@ xvfb-run -a dbus-launch --exit-with-session make -C %{_target_platform} check AR
 
 %files doc
 %doc %{_target_platform}/html/
-%endif # with_qt4
+%endif
 
 %ldconfig_scriptlets -n dbusmenu-qt5
 

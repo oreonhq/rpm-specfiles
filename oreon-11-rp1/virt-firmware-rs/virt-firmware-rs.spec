@@ -60,10 +60,10 @@ Summary:        %{summary}
 A collection of tools to deal with efi and virtual machine
 firmware.  This package has EFI applications for %{efiarch}.
 
-%endif # build_efi_apps
+%endif
 
 %prep
-%(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
+test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n %{name}-v%{version} -p1
 # drop unused packages from workspace to reduce dependencies.
 sed -i Cargo.toml -e '/experimental/d'
