@@ -12,7 +12,7 @@ Summary:        OneAPI Level Zero Specification Headers and Loader
 
 License:        MIT
 URL:            https://github.com/oneapi-src/%{srcname}
-Source:        https://github.com/oneapi-src/level-zero/archive/v/level-zero-.tar.gz
+Source:         %{url}/archive/v%{version}/%{srcname}-%{version}.tar.gz
 
 ExclusiveArch:  x86_64
 

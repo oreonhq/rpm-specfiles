@@ -11,6 +11,7 @@ URL:            https://metacpan.org/release/File-MMagic
 Source0:        https://cpan.metacpan.org/modules/by-module/File/File-MMagic-%{version}.tar.gz
 
 
+
 Patch0:         File-MMagic-1.30-rt109673.patch
 BuildArch:      noarch
 # Module Build

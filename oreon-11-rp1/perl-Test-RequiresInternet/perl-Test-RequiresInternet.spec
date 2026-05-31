@@ -9,6 +9,7 @@ URL:		https://metacpan.org/release/Test-RequiresInternet
 Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-RequiresInternet-%{version}.tar.gz
 
 
+
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils

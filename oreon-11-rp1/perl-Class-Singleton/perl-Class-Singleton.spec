@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Class-Singleton
 Source0:        https://cpan.metacpan.org/modules/by-module/Class/Class-Singleton-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

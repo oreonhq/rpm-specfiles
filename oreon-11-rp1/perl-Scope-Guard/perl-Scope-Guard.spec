@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Scope-Guard
 Source0:        https://cpan.metacpan.org/modules/by-module/Scope/Scope-Guard-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

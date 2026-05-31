@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Encode-EUCJPASCII
 Source0:        https://cpan.metacpan.org/modules/by-module/Encode/Encode-EUCJPASCII-%{version}.tar.gz
 
 
+
 BuildRequires: make
 BuildRequires:  gcc
 BuildRequires:  perl(ExtUtils::MakeMaker)

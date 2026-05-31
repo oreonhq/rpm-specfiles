@@ -1,7 +1,7 @@
 %global source0_hash none
 
 Name: eth-tools
-Version: 12.1.0.1
+Version: 12.1.0.0
 Release: 6%{?dist}
 Summary: Intel Ethernet Fabric Suite basic tools and libraries for fabric management
 

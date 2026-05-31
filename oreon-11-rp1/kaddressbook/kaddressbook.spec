@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1b9f6f78f60a3044164a6b0b7fae5a9608925969d8c71541a61d84ab6d3caa2b
 
 %global stable_kf6 stable
 
@@ -11,7 +11,7 @@ Release: 1%{?dist}
 License: BSD-3-Clause AND CC0-1.0 AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:     https://www.kde.org/applications/office/kaddressbook
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        http://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 
 BuildRequires: desktop-file-utils

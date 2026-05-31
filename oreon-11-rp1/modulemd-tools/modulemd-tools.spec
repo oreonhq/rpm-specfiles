@@ -8,7 +8,7 @@ License: MIT
 BuildArch: noarch
 
 URL: https://github.com/rpm-software-management/modulemd-tools
-Source0:        https://github.com/rpm-software-management/modulemd-tools/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/rpm-software-management/modulemd-tools/archive/refs/tags/modulemd-tools-%{version}-1.tar.gz#/modulemd-tools-%{version}.tar.gz
 Patch0: 0001-createrepo_mod-fix-failing-tests-on-F39-because-of-n.patch
 
 BuildRequires: createrepo_c

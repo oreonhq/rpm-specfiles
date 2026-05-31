@@ -12,6 +12,7 @@ URL:		https://metacpan.org/release/Perl-OSType
 Source0:        https://cpan.metacpan.org/modules/by-module/Perl/Perl-OSType-%{version}.tar.gz
 
 
+
 Patch2:		Perl-OSType-1.010-stopwords.patch
 BuildArch:	noarch
 # Build

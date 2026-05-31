@@ -1,4 +1,4 @@
-%global source0_hash 0c16a5d9d94e96690df19ec649a17b39eecfdb87504dcfc05a44bf5e910a6d1f
+%global source0_hash none
 
 %bcond_with bootstrap
 %global tarball_name RELEASE_%(echo '%{version}' | tr . _)

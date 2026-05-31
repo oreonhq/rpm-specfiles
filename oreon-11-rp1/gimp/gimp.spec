@@ -280,10 +280,10 @@ Obsoletes:      gimp3 < %{version}-%{release}
 Provides:       gimp3 = %{version}-%{release}
 
 %if ! %defined snapshot
-Source0:        gimp-%{plain_version}-git%{git_rev}.tar.xz
+Source0:        https://download.gimp.org/pub/gimp/v%{bin_version}/gimp-%{plain_version}.tar.xz
 %else
 # Tarball built from git snapshot with `meson dist` and renamed accordingly
-Source0:        gimp-%{plain_version}-git%{git_rev}.tar.xz
+Source0:        https://download.gimp.org/pub/gimp/v%{bin_version}/gimp-%{plain_version}.tar.xz
 %endif
 
 # Fedora specific patches:

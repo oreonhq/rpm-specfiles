@@ -10,7 +10,7 @@ URL:            http://github.com/sonatype/oss-parents
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://repo1.maven.org/maven2/org/sonatype/spice/%{name}/%{version}/%{name}-%{version}.pom
+Source0:        https://repo1.maven.org/maven2/org/sonatype/spice/%{name}/%{version}/%{name}-%{version}.pom
 Source1:        http://apache.org/licenses/LICENSE-2.0.txt
 
 Patch0:         pom.patch

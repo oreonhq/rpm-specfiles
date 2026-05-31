@@ -11,7 +11,7 @@ Release:        3%{?dist}
 Summary:        Intel QuickAssist Technology (QAT) QATzip Library
 License:        BSD-3-Clause
 URL:            https://github.com/intel/%{githubname}
-Source0:        https://github.com/intel/QATzip/archive/1.3.1/qatzip-1.3.1.tar.gz
+Source0:        https://github.com/intel/QATzip/archive/refs/tags/v%{version}.tar.gz#/QATzip-%{version}.tar.gz
 
 BuildRequires:  gcc >= 4.8.5
 BuildRequires:  zlib-devel >= 1.2.7

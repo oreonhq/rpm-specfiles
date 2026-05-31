@@ -13,7 +13,7 @@ Summary:        Mozilla's CA certificate bundle in PEM format
 # lib/Mozilla/CA/cacert.pem:    MPL-2.0
 License:        MPL-2.0
 URL:            https://metacpan.org/release/Mozilla-CA
-Source0:        https://cpan.metacpan.org/authors/id/A/AB/ABH/Mozilla-CA-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/L/LW/LWP/Mozilla-CA-%{version}.tar.gz
 # Use a CA bundle from ca-certificates package, bug #738383
 Patch0:         Mozilla-CA-20250602-Redirect-to-ca-certificates-bundle.patch
 BuildArch:      noarch

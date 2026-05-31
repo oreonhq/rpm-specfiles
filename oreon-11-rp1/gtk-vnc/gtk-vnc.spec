@@ -6,8 +6,6 @@
 # or for RHEL 8 or newer. It may need some tweaks for other distros.
 
 %global tls_priority "@LIBVIRT,SYSTEM"
-%global verdir %(echo ${version} | cut -d. -f1,2)
-
 %global with_mingw 0
 
 %if 0%{?fedora} || (0%{?oreon} >= 11)
@@ -17,6 +15,7 @@
 Summary: A GTK widget for VNC clients
 Name: gtk-vnc
 Version: 1.5.0
+%global verdir %(echo %{version} | cut -d. -f1,2)
 Release: %autorelease
 License: LGPL-2.1-or-later
 Source: https://download.gnome.org/sources/%{name}/%{verdir}/%{name}-%{version}.tar.xz

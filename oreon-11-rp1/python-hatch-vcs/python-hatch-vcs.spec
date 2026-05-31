@@ -14,7 +14,6 @@ Summary:        Hatch plugin for versioning with your preferred VCS
 License:        MIT
 URL:            https://github.com/ofek/hatch-vcs
 Source:         %{pypi_source hatch_vcs}
-
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

@@ -19,6 +19,7 @@ URL:		https://metacpan.org/release/Specio
 Source0:        https://cpan.metacpan.org/modules/by-module/Test/Specio-%{version}.tar.gz
 
 
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

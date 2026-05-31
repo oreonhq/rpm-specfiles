@@ -9,7 +9,7 @@ Summary:        Support for unittest subTest() and subtests fixture
 License:        MIT
 URL:            https://github.com/pytest-dev/pytest-subtests
 # We *could* package from the PyPI sdist without losing anything, if we liked.
-Source:         %{url}/archive/v%{version}/pytest-subtests-%{version}.tar.gz
+Source:        https://github.com/pytest-dev/pytest-subtests/archive/v0.15.0/pytest-subtests-0.15.0.tar.gz
 
 
 # Don’t depend on pytest-xdist on RHEL/ELN, since it’s unwanted there. Keep the

@@ -17,7 +17,7 @@ ExcludeArch:    %{ix86}
 %global tag %{version}
 %forgemeta
 Url:            %{forgeurl}
-Source0:        https://github.com/weldr/lorax/archive/44.6/lorax-44.6.tar.gz
+Source0:        https://github.com/weldr/lorax/archive/refs/tags/lorax-%{version}-1.tar.gz#/lorax-%{version}.tar.gz
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-pip

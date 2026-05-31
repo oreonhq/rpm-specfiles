@@ -10,6 +10,7 @@ URL:            https://metacpan.org/release/Test-MockObject
 Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-MockObject-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils

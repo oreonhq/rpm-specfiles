@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Text-Unidecode
 Source0:        https://cpan.metacpan.org/modules/by-module/Text/Text-Unidecode-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Build
 BuildRequires:  make

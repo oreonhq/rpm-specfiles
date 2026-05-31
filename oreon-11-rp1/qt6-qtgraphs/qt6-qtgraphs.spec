@@ -27,7 +27,7 @@ Url:     https://doc.qt.io/qt-6/qtgraphs-index.html
 
 %if 0%{?unstable}
 %else
-Source0:        https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
+Source0:        https://download.qt.io/archive/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
 BuildRequires: cmake

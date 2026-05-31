@@ -6,14 +6,14 @@
 %global base_name kdeconnect-kde
 
 Name:    kde-connect
-Version: 26.03.80
+Version: 26.04.1
 Release: 1%{?dist}
 License: GPL-2.0-or-later
 Summary: KDE Connect client for communication with smartphones
 
 Url:     https://community.kde.org/KDEConnect
 
-Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{base_name}-%{version}.tar.xz
+Source0: https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{base_name}-%{version}.tar.xz
 
 # Doesn't build on i686 as-of 25.03.80
 ExcludeArch: %{ix86}

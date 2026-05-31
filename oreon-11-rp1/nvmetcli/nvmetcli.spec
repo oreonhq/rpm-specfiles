@@ -6,7 +6,7 @@ Summary:        An adminstration shell for NVMe storage targets
 Version:        0.8
 Release:        7%{?dist}
 URL:            https://ftp.infradead.org/pub/nvmetcli/
-Source:        https://ftp.infradead.org/pub/nvmetcli/%{name}-%{version}.tar.gz
+Source:        https://www.infradead.org/pub/nvmetcli/%{name}-%{version}.tar.gz
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  python3-devel python3-setuptools systemd-units asciidoc xmlto

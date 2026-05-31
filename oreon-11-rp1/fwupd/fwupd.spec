@@ -1,4 +1,4 @@
-%global source0_hash 19db782eeae2c7439ad27eb0b3ed8005689542f3a91606e9c4b459fcd09f73b6
+%global source0_hash none
 
 %global glib2_version 2.68.0
 %global libxmlb_version 0.3.24
@@ -47,7 +47,7 @@ Version:   2.1.3
 Release:   %autorelease
 License:   LGPL-2.1-or-later
 URL:       https://github.com/fwupd/fwupd
-Source0:        http://people.freedesktop.org/~hughsient/releases/%{name}-%{version}.tar.xz
+Source0:        https://github.com/fwupd/fwupd/releases/download/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires: gettext
 BuildRequires: hwdata

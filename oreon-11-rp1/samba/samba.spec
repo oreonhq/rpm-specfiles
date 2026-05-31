@@ -226,9 +226,9 @@ Summary:        Server and Client software to interoperate with Windows machines
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later
 URL:            https://www.samba.org
 
-# This is a xz recompressed file of https://ftp.samba.org/pub/samba/samba-%%{version}%%{pre_release}.tar.gz
-Source0:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.gz#/samba-%{version}%{pre_release}.tar.xz
-Source1:        https://ftp.samba.org/pub/samba/samba-%{version}%{pre_release}.tar.asc
+# This is a xz recompressed file of https://download.samba.org/pub/samba/stable/samba-%%{version}%%{pre_release}.tar.gz
+Source0:        https://download.samba.org/pub/samba/stable/samba-%{version}%{pre_release}.tar.gz#/samba-%{version}%{pre_release}.tar.xz
+Source1:        https://download.samba.org/pub/samba/stable/samba-%{version}%{pre_release}.tar.asc
 Source2:        samba-pubkey_AA99442FB680B620.gpg
 
 # Red Hat specific replacement-files

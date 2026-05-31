@@ -16,6 +16,7 @@ URL:		https://metacpan.org/release/Package-Stash
 Source0:        https://cpan.metacpan.org/modules/by-module/Package/Package-Stash-%{version}.tar.gz
 
 
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

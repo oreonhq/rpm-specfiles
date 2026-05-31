@@ -17,7 +17,7 @@ Version: 3.13.5
 Release: 2%{?dist}
 Summary: YANG data modeling language library
 Url: https://github.com/CESNET/libyang
-Source: %{url}/archive/%{name}-%{version}.tar.gz
+Source:        https://github.com/CESNET/libyang/archive/refs/tags/v%{version}.tar.gz#/libyang-%{version}.tar.gz
 License: BSD-3-Clause
 
 # disable tests failing on s390x

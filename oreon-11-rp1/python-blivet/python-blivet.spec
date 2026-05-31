@@ -12,8 +12,8 @@ Epoch: 1
 License: LGPL-2.1-or-later
 %global realname blivet
 %global realversion %{version}%{?prerelease}
-Source0:        http://github.com/storaged-project/blivet/releases/download/blivet-3.13.2%{?prerelease}/blivet-3.13.2%{?prerelease}.tar.gz
-Source1:        http://github.com/storaged-project/blivet/releases/download/blivet-3.13.2%{?prerelease}/blivet-3.13.2%{?prerelease}-tests.tar.gz
+Source0:        http://github.com/storaged-project/blivet/releases/download/%{realname}-%{realversion}/%{realname}-%{realversion}.tar.gz
+Source1:        http://github.com/storaged-project/blivet/releases/download/%{realname}-%{realversion}/%{realname}-%{realversion}-tests.tar.gz
 
 %if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 Patch0: 0001-remove-btrfs-plugin.patch

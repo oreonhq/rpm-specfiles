@@ -173,12 +173,12 @@ License:          ( GPL-2.0-only OR Apache-2.0 ) AND ( GPL-2.0-or-later OR Apach
 
 Source0:        https://downloads.mariadb.org/interstitial/mariadb-%{version}/source/mariadb-%{version}.tar.gz
 %if %{with bundled_fmt}
-Source1:        https://github.com/fmtlib/fmt/releases/download/11.0.2/fmt-11.0.2.zip
+Source1:        https://github.com/fmtlib/fmt/releases/download/%{fmt_bundled_version}/fmt-%{fmt_bundled_version}.zip
 %endif
 Source2:          mysql_config_multilib.sh
 Source3:          my.cnf.in
 %if %{with bundled_pcre}
-Source4:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.45/pcre2-10.45.zip
+Source4:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-%{pcre_bundled_version}/pcre2-%{pcre_bundled_version}.zip
 %endif
 Source6:          README.mariadb-docs
 Source8:          README.wsrep_sst_rsync_tunnel

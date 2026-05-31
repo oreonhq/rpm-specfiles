@@ -17,17 +17,17 @@
 # see also https://lists.fedoraproject.org/archives/list/devel@lists.fedoraproject.org/thread/JQQ66XJSIT2FGTK2YQY7AXMEH5IXMPUX/
 %undefine _strict_symbol_defs_build
 
-%global snap dev2507081429
+%global snap %{nil}
 
 Summary: PyQt5 is Python bindings for Qt5
 Name:    python-qt5
-Version: 5.15.12
+Version: 5.15.11
 Release: 0.2%{?dist}
 
 # Automatically converted from old format: GPLv3 - review is highly recommended.
 License: GPL-3.0-only
 Url:     http://www.riverbankcomputing.com/software/pyqt/
-Source0:        https://www.riverbankcomputing.com/static/Downloads/PyQt5/%{version}/pyqt5-%{version}%{?snap:.%{snap}}.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/P/PyQt5/PyQt5-%{version}.tar.gz
 #Source0: https://pypi.python.org/packages/source/P/PyQt5/PyQt5-{version}.tar.gz
 
 Source1: macros.pyqt5
@@ -154,7 +154,7 @@ Requires:  python%{python3_pkgversion}-qt5%{?_isa} = %{version}-%{release}
 
 %prep
 %(test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; })
-%setup -q -n pyqt5-%{version}%{?snap:.%{snap}}
+%setup -q -n PyQt5-%{version}
 
 #patch0 -p1
 

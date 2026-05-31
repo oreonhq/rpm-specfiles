@@ -86,7 +86,7 @@ Epoch:          1
 Version:        %{libo_version}.%{libo_min_version}%{?libo_prerelease}
 Release:        %autorelease -p
 %else
-Version:        %{libo_version}.%{libo_min_version}
+Version:        %{libo_version}.%{libo_min_version}%{?libo_prerelease}
 Release:        %autorelease
 %endif
 # default new files are: MPLv2
@@ -102,26 +102,26 @@ Release:        %autorelease
 License:        MPL-2.0 AND Apache-2.0 AND LGPL-3.0-only AND LGPL-3.0-or-later AND CC0-1.0 AND BSD-3-Clause AND (LGPL-2.1-only OR SISSL) AND (MPL-2.0 OR LGPL-3.0-or-later) AND (MPL-2.0 OR LGPL-2.1-or-later) AND (MPL-1.1 OR GPL-2.0-only OR LGPL-2.1-only) AND MIT
 URL:            http://www.libreoffice.org/
 
-Source0:        http://dev-builds.libreoffice.org/pre-releases/src/libreoffice-%{?libo_buildfix}.tar.xz
-Source1:        http://dev-builds.libreoffice.org/pre-releases/src/libreoffice-%{?libo_buildfix}.tar.xz.asc
-Source2:        http://dev-builds.libreoffice.org/pre-releases/src/libreoffice-help-%{?libo_buildfix}.tar.xz
-Source3:        http://dev-builds.libreoffice.org/pre-releases/src/libreoffice-help-%{?libo_buildfix}.tar.xz.asc
-Source4:        http://dev-builds.libreoffice.org/pre-releases/src/libreoffice-translations-%{?libo_buildfix}.tar.xz
-Source5:        http://dev-builds.libreoffice.org/pre-releases/src/libreoffice-translations-%{?libo_buildfix}.tar.xz.asc
+Source0:        %{source_url}/libreoffice-%{version}%{?libo_buildfix}.tar.xz
+Source1:        %{source_url}/libreoffice-%{version}%{?libo_buildfix}.tar.xz.asc
+Source2:        %{source_url}/libreoffice-help-%{version}%{?libo_buildfix}.tar.xz
+Source3:        %{source_url}/libreoffice-help-%{version}%{?libo_buildfix}.tar.xz.asc
+Source4:        %{source_url}/libreoffice-translations-%{version}%{?libo_buildfix}.tar.xz
+Source5:        %{source_url}/libreoffice-translations-%{version}%{?libo_buildfix}.tar.xz.asc
 Source6:        gpgkey-C2839ECAD9408FBE9531C3E9F434A1EFAFEEAEA3.gpg.asc
 Source7:        http://dev-www.libreoffice.org/extern/185d60944ea767075d27247c3162b3bc-unowinreg.dll
 Source8:        libreoffice-multiliblauncher.sh
 
-Source9:        http://dev-www.libreoffice.org/src/dtoa-20180411.tgz
-Source11:        http://dev-www.libreoffice.org/src/a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
+Source9:        %{external_url}/dtoa-20180411.tgz
+Source11:       %{external_url}/a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip
 
 # Unfortunately later versions of hsqldb changed the file format, so if we use a later version we lose
 # backwards compatability.
 # LibreOffice is also pinned to use hsqldb really old version 1.8.0 so there's currently no way building
 # with system provided hsqldb without major hacking.
 # TODO: unbundle libfixmath?
-Source12:        http://dev-www.libreoffice.org/src/17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
-Source13:        http://dev-www.libreoffice.org/src/../extern/f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf
+Source12:       %{external_url}/17410483b5b5f267aa18b7e00b65e6e0-hsqldb_1_8_0.zip
+Source13:       %{external_url}/../extern/f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf
 %global bundling_options --without-system-hsqldb --without-system-libfixmath
 
 Provides: bundled(hsqldb) = 1.8.0

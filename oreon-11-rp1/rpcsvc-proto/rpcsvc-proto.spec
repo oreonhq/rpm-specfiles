@@ -1,4 +1,4 @@
-%global source0_hash eaa227686b84e8ae20181d2119c0ccac29d82371441844008019a134dafe3613
+%global source0_hash none
 
 #
 # spec file for package rpcsvc-proto
@@ -25,7 +25,7 @@ Summary:        RPC protocol definitions
 # Automatically converted from old format: BSD and LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-BSD AND LicenseRef-Callaway-LGPLv2+
 Url:            https://github.com/thkukuk/rpcsvc-proto
-Source0:        https://github.com/thkukuk/rpcsvc-proto/releases/v%{version}/%{name}-%{version}.tar.xz
+Source0:        https://github.com/thkukuk/rpcsvc-proto/archive/refs/tags/v%{version}.tar.gz#/rpcsvc-proto-%{version}.tar.gz
 
 Conflicts: glibc-headers < 2.26.9000-36
 Conflicts: glibc-common < 2.26.9000-36

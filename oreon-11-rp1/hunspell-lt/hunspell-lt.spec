@@ -12,7 +12,7 @@ Version: 1.2.1
 Release: 37%{?dist}
 ## Note that upstream is dead and there is no download link available
 ## so please don't report FTBFS bugs for this package.
-Source:        https://ftp.akl.lt/ispell-lt/lt_LT-%{version}.zip
+Source:        https://www.akl.lt/ispell-lt/lt_LT-%{version}.zip
 URL: https://ftp.akl.lt/ispell-lt/
 License: BSD-3-Clause
 BuildArch: noarch

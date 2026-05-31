@@ -3,13 +3,13 @@
 # tests require internet connection
 %global with_tests 0
 Name:           python-ntplib
-Version:        0.3.3
+Version:        0.4.0
 Release:        40%{?dist}
 Summary:        Python module that offers a simple interface to query NTP servers
 
 License:        MIT
 URL:            http://pypi.python.org/pypi/ntplib/
-Source0:        https://pypi.python.org/packages/source/n/ntplib/ntplib-%{?version}.tar.gz
+Source0:        https://github.com/cf-natali/ntplib/archive/refs/tags/%{version}/ntplib-%{version}.tar.gz
 
 BuildArch:      noarch
 

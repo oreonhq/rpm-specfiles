@@ -6,7 +6,7 @@ Version: 0.51.0
 Release: %autorelease
 License: GPL-2.0-or-later WITH Autoconf-exception-generic
 #VCS: bzr:https://code.edge.launchpad.net/~intltool/intltool/trunk
-Source:        https://edge.launchpad.net/intltool/trunk/%{version}/+download/intltool-%{version}.tar.gz
+Source:        https://launchpad.net/intltool/trunk/%{version}/+download/intltool-%{version}.tar.gz
 URL: https://launchpad.net/intltool
 BuildArch: noarch
 Requires: patch

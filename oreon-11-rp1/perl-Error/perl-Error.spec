@@ -10,6 +10,7 @@ URL:            https://metacpan.org/release/Error
 Source0:        https://cpan.metacpan.org/modules/by-module/Error/Error-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

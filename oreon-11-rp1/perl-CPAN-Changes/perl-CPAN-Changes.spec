@@ -12,6 +12,7 @@ URL:		https://metacpan.org/release/CPAN-Changes
 Source0:        https://cpan.metacpan.org/modules/by-module/CPAN/CPAN-Changes-%{version}.tar.gz
 
 
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

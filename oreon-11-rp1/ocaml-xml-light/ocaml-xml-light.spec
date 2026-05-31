@@ -18,7 +18,7 @@ Summary:        Minimal XML parser and printer for OCaml
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 URL:            %{forgeurl}
 VCS:            git:%{forgesource}.git
-Source0:        https://github.com/ncannasse/xml-light/archive/v2.5/xml-light-2.5.tar.gz
+Source0:        https://github.com/ncannasse/xml-light/archive/refs/tags/%{version}.tar.gz#/xml-light-%{version}.tar.gz
 
 BuildRequires:  ocaml >= 4.03
 BuildRequires:  ocaml-dune >= 2.7

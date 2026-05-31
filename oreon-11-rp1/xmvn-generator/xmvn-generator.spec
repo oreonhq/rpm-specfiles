@@ -1,4 +1,4 @@
-%global source0_hash 2cb895fa0628141e83a2997d1b05ed39a5e104b0879f528ece8e077bf6b7bd4c
+%global source0_hash none
 
 %bcond bootstrap 0
 
@@ -11,7 +11,7 @@ URL:            https://github.com/fedora-java/xmvn-generator
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source:        https://github.com/fedora-java/xmvn-generator/releases/download/%{version}/xmvn-generator-%{version}.tar.zst
+Source:        https://github.com/fedora-java/xmvn-generator/archive/refs/tags/%{version}.tar.gz#/xmvn-generator-%{version}.tar.gz
 
 # https://github.com/fedora-java/xmvn-generator/pull/37
 Patch:          0001-Add-commons-lang3-to-generator-classpath.patch

@@ -20,7 +20,7 @@ Release:	%{baserelease}.git%{shorthash}%{?dist}
 License:	GPL-2.0-or-later AND LicenseRef-Callaway-CC-BY-SA AND Unicode-DFS-2015 AND LicenseRef-Callaway-Public-Domain AND LicenseRef-Callaway-MIT
 
 Source0:        https://github.com/skk-dev/dict/archive/%{githash}/%{name}-%{gitdate_num}.git%{githash}.tar.gz
-Source1:        https://raw.githubusercontent.com/skk-dev/skktools/0fe2106fbc052445c611e6c5b2a79899d740edcb/unannotation.awk
+Source1:        https://raw.githubusercontent.com/skk-dev/skktools/%{githash_tools}/unannotation.awk
 Source2:	license-investigation.txt
 Source200:	README-skkdic.rh.ja
 

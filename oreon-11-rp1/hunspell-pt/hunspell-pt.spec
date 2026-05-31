@@ -12,7 +12,7 @@ Summary: Portuguese hunspell dictionaries
 Version: 0.%{upstreamid}
 Release: 16%{?dist}
 Source0: http://natura.di.uminho.pt/download/sources/Dictionaries/hunspell/hunspell-pt_PT-20130125.tar.gz
-Source1:        https://download.documentfoundation.org/libreoffice/src/assets/Uploads/PT-BR-Documents/VERO/ptBR-2013-10-30AOC-2.zip
+Source1: https://pt-br.libreoffice.org/assets/Uploads/PT-BR-Documents/VERO/ptBR-2013-10-30AOC-2.zip
 URL: https://download.documentfoundation.org/libreoffice/src/projetos/vero
 # pt_BR dicts are under LGPLv3 or MPL, pt_PT under GPLv2 or LGPLv2 or MPLv1.1
 License: ( ( LGPL-3.0-only OR MPL-1.1 ) AND LGPL-2.1-only ) AND ( GPL-2.0-only OR LGPL-2.1-only OR MPL-1.1 )

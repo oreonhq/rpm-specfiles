@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%define _version_suffix -a155
+%define _version_suffix %{nil}
 
 # The mingw* RPMs are noarch, and the wxi data files are
 # arch independant, so it is a waste of CPU cycles to run
@@ -13,7 +13,7 @@
 %endif
 
 Name:           msitools
-Version:        0.106.58
+Version:        0.106
 Release:        %autorelease
 Summary:        Windows Installer tools
 

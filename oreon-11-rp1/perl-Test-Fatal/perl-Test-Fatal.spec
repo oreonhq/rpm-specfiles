@@ -19,6 +19,7 @@ URL:		https://metacpan.org/release/Test-Fatal
 Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Fatal-%{version}.tar.gz
 
 
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

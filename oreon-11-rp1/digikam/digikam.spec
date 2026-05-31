@@ -21,9 +21,9 @@ Release: 5%{?beta}%{?dist}
 License: GPL-2.0-or-later
 URL:     http://www.digikam.org/
 %if 0%{?beta:1}
-Source0:        https://download.kde.org/stable/digikam/%{version}/digiKam-%{version}.tar.xz
+Source0:        http://download.kde.org/stable/digikam/%{version}/digiKam-%{version}.tar.xz
 %else
-Source0:        https://download.kde.org/stable/digikam/%{version}/digiKam-%{version}.tar.xz
+Source0:        http://download.kde.org/stable/digikam/%{version}/digiKam-%{version}.tar.xz
 %endif
 
 # rawhide s390x is borked recently

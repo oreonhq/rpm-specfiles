@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 7fe0724d64efcc17c97a611f6bd1ea59cd13aab5969acb53cdbeed76d651e74f
 
 %global stable_kf6 stable
 

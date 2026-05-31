@@ -20,7 +20,7 @@ Summary:	Common functionality to Rspec series
 # SPDX confirmed
 License:	MIT
 URL:		https://rspec.info
-Source0:        https://rubygems.org/gems/rspec-support-3.13.7%{?prever}.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{mainver}%{?prever}.gem
 # %%{SOURCE2} %%{name} %%{version}
 Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
 Source2:	rspec-related-create-full-tarball.sh

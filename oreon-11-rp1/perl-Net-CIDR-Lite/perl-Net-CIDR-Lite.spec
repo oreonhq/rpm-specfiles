@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Net-CIDR-Lite
 Source0:        https://cpan.metacpan.org/modules/by-module/Net/Net-CIDR-Lite-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

@@ -45,7 +45,7 @@ ExclusiveArch: %{ix86} x86_64 ia64 aarch64 %{arm} riscv64
 BuildRequires: rh-signing-tools >= 1.20-2
 %endif
 
-Source0: https://github.com/rhboot/pesign/releases/download/%{version}/pesign-%{version}.tar.bz2
+Source0:        https://github.com/rhboot/pesign/releases/download/%{version}/pesign-%{version}.tar.bz2
 Source1: certs.tar.xz
 Source2: pesign.py
 Source3: pesign.patches

@@ -10,7 +10,7 @@ Name: hexedit
 Release: 10%{?dist}
 License: GPL-2.0-or-later
 URL: http://rigaux.org/hexedit.html
-Source: %{forgesource}
+Source:        https://github.com/pixel/hexedit/archive/refs/tags/%{version}.tar.gz#/hexedit-%{version}.tar.gz
 
 Patch1: hexedit-1.2.13-config.patch
 # Document --color option.  Sent upstream 2013-04-05.

@@ -10,7 +10,7 @@ BuildRequires: git sed
 BuildRequires: make
 BuildArch: noarch
 
-Source0:        https://github.com/rhboot/%{name}/releases/download/%{version}/%{name}-6.tar.bz2
+Source0:        https://github.com/rhboot/efi-rpm-macros/archive/refs/tags/%{version}.tar.gz#/efi-rpm-macros-%{version}.tar.gz
 # Not upstream, but trivial and posted upstream as a PR:
 # https://github.com/rhboot/efi-rpm-macros/pull/3
 Patch0001: 0001-add-riscv64-support.patch

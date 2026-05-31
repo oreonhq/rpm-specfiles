@@ -7,7 +7,7 @@ Summary:        Tomcat Migration Tool for Jakarta EE
 
 License:        Apache-2.0
 URL:            http://tomcat.apache.org/
-Source0:        http://www.apache.org/dist/tomcat/jakartaee-migration/v%{version}/source/jakartaee-migration-%{version}-src.tar.gz
+Source0:        https://archive.apache.org/dist/tomcat/jakartaee-migration/v%{version}/source/jakartaee-migration-%{version}-src.tar.gz
 Source1:        javax2jakarta
 # Do not generate manifest Class-Path, we rely on system-installed JARs
 Patch0:         tomcat-jakartaee-migration-1.0.9-no-manifest-classpath.patch

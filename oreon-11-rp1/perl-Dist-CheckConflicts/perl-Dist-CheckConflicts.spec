@@ -16,6 +16,7 @@ URL:		https://metacpan.org/release/Dist-CheckConflicts
 Source0:        https://cpan.metacpan.org/modules/by-module/Dist/Dist-CheckConflicts-%{version}.tar.gz
 
 
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

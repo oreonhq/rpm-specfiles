@@ -8,6 +8,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Mail-AuthenticationResults/
 Source0:        https://cpan.metacpan.org/modules/by-module/Mail/Mail-AuthenticationResults-%{version}.tar.gz
 
+
 BuildArch:      noarch
 
 BuildRequires:  make

@@ -9,6 +9,7 @@ URL:		https://metacpan.org/release/IO-stringy
 Source0:        https://cpan.metacpan.org/modules/by-module/IO/IO-Stringy-%{version}.tar.gz
 
 
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

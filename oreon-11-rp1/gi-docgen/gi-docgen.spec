@@ -85,7 +85,7 @@ SourceLicense:  %{shrink:
                 OFL-1.1
                 }
 URL:            https://gitlab.gnome.org/GNOME/gi-docgen
-Source:         %{url}/-/archive/%{version}/gi-docgen-%{version}.tar.bz2
+Source:        https://gitlab.gnome.org/GNOME/gi-docgen/-/archive/2026.1/gi-docgen-2026.1.tar.bz2
 
 # We are prohibited from bundling fonts, and we are prohibited from shipping
 # fonts in web font formats; see

@@ -22,7 +22,7 @@ Release:	%{?preminorver:0.}%{baserelease}%{?preminorver:%{rpmminorver}}%{?dist}
 # SPDX confirmed
 License:	MIT
 URL:		https://rspec.info
-Source0:        https://rubygems.org/gems/rspec-expectations-3.13.5%{?preminorver}.gem
+Source0:        https://rubygems.org/gems/%{gem_name}-%{fullver}.gem
 # %%{SOURCE2} %%{name} %%{version}
 Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
 Source2:	rspec-related-create-full-tarball.sh

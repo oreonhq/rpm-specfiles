@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 234116f4c05ae21d828594d652b4c4a052ef75727e2d8a4f3a4fb605de9e4c49
 
 #define snaptag .20080527svn811390
 %define beta 0.9.88
@@ -13,7 +13,7 @@ Release:        0.53.%{?beta_tag}%{?dist}
 Summary:        Automatic moc for Qt 4
 License:        BSD-2-Clause
 URL:            http://www.kde.org
-Source0:        https://ftp.kde.org/pub/kde/stable/automoc4/%{beta}/automoc4-%{beta}.tar.bz2
+Source0:        https://download.kde.org/stable/automoc4/%{beta}/automoc4-%{beta}.tar.bz2
 
 ## upstream patches
 Patch1: 0001-fix-make-clean-it-s-SET_directory_properties-and-not.patch

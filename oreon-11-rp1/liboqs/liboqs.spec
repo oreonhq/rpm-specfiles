@@ -12,7 +12,7 @@ Summary:    liboqs is an open source C library for quantum-safe cryptographic al
 #see https://github.com/open-quantum-safe/liboqs/blob/main/README.md#license for more details
 License:    MIT AND Apache-2.0 AND BSD-3-Clause AND (BSD-3-Clause OR GPL-1.0-or-later) AND CC0-1.0 AND Unlicense
 URL:        https://github.com/open-quantum-safe/liboqs.git
-Source:        https://github.com/open-quantum-safe/liboqs/archive/refs/tags/liboqs-0.12.0.tar.gz
+Source:        https://github.com/open-quantum-safe/liboqs/archive/refs/tags/%{version}.tar.gz#/liboqs-%{version}.tar.gz
 Patch1:	    liboqs-0.12.0-acvp_patch.patch
 Patch2:	    liboqs-0.10.0-std-stricter.patch
 # https://github.com/open-quantum-safe/liboqs/pull/2043

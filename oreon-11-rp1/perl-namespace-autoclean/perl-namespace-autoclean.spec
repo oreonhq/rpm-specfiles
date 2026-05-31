@@ -16,6 +16,7 @@ URL:            https://metacpan.org/release/namespace-autoclean
 Source0:        https://cpan.metacpan.org/modules/by-module/namespace/namespace-autoclean-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

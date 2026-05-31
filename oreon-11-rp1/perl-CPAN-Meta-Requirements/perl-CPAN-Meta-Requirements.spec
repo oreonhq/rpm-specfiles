@@ -12,6 +12,7 @@ URL:            https://metacpan.org/release/CPAN-Meta-Requirements
 Source0:        https://cpan.metacpan.org/modules/by-module/CPAN/CPAN-Meta-Requirements-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

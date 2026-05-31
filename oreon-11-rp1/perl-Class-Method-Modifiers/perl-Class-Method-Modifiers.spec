@@ -16,6 +16,7 @@ URL:            https://metacpan.org/release/Class-Method-Modifiers
 Source0:        https://cpan.metacpan.org/modules/by-module/Class/Class-Method-Modifiers-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

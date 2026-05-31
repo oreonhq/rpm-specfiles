@@ -13,7 +13,7 @@ Summary: IPTC tag library
 
 License: LGPL-2.0-only
 URL: https://github.com/ianw/%{name}
-Source0:        https://github.com/ianw/%{name}/releases/download/%{name}-%{version}.tar.gz
+Source0:        https://github.com/ianw/%{name}/releases/download/release_1_0_5/%{name}-%{version}.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake

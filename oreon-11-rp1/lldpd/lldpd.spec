@@ -7,7 +7,7 @@ Summary:  ISC-licensed implementation of LLDP
 License:  ISC
 
 URL:      https://github.com/lldpd/
-Source0:        https://github.com/lldpd/lldpd/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/lldpd/lldpd/archive/refs/tags/%{version}.tar.gz#/lldpd-%{version}.tar.gz
 Source1:  %{name}-fedora.service
 Source2:  %{name}-tmpfiles
 Source3:  %{name}-fedora.sysconfig

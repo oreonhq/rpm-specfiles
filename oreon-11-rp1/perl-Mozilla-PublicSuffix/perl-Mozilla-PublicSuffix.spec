@@ -10,6 +10,7 @@ Source0:        https://cpan.metacpan.org/modules/by-module/Mozilla/Mozilla-Publ
 
 
 
+
 # https://github.com/rsimoes/Mozilla-PublicSuffix/pull/6
 Patch1:         Mozilla-PublicSuffix-unbundle.patch
 

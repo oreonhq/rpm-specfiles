@@ -115,7 +115,7 @@ Summary:        The Go Programming Language
 # source tree includes several copies of Mark.Twain-Tom.Sawyer.txt under Public Domain
 License:        BSD-3-Clause AND LicenseRef-Public-Domain
 URL:            https://go.dev
-Source0:        https://go.dev/dl/go1.26%{?go_patch:.3}%{?go_prerelease}.src.tar.gz
+Source0:        https://go.dev/dl/go%{go_source}.src.tar.gz
 # make possible to override default traceback level at build time by setting build tag rpm_crashtraceback
 Source1:        fedora.go
 

@@ -9,6 +9,7 @@ URL:		https://metacpan.org/release/XML-SemanticDiff
 Source0:        https://cpan.metacpan.org/modules/by-module/XML/XML-SemanticDiff-%{version}.tar.gz
 
 
+
 BuildArch:	noarch
 # Module Build
 BuildRequires:	coreutils

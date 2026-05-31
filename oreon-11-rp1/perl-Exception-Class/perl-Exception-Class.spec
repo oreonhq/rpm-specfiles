@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Exception-Class
 Source0:        https://cpan.metacpan.org/modules/by-module/Exception/Exception-Class-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

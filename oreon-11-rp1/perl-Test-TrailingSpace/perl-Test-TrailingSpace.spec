@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Test-TrailingSpace
 Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-TrailingSpace-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Build:
 BuildRequires:  coreutils

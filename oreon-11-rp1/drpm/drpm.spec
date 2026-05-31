@@ -15,7 +15,7 @@ Summary:        A library for making, reading and applying deltarpm packages
 # Automatically converted from old format: LGPLv2+ and BSD - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+ AND LicenseRef-Callaway-BSD
 URL:            https://github.com/rpm-software-management/%{name}
-Source:        https://github.com/rpm-software-management/drpm/releases/download/0.5.3/drpm-0.5.3.tar.bz2
+Source:        https://github.com/rpm-software-management/drpm/archive/refs/tags/%{version}.tar.gz#/drpm-%{version}.tar.gz
 
 Patch01:        0001-Add-libcmocka-suppresion-file.patch
 

@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Email-Address
 Source0:        https://cpan.metacpan.org/modules/by-module/Email/Email-Address-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

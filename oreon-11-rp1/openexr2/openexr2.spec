@@ -14,9 +14,9 @@ License:        BSD-3-Clause
 URL:            https://www.openexr.com/
 Source0:        https://github.com/AcademySoftwareFoundation/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz
 # Backport updated binary files for the tests.
-Source1:        https://github.com/AcademySoftwareFoundation/openexr/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.interleaved.exr
-Source2:        https://github.com/AcademySoftwareFoundation/openexr/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.planar.exr
-Source3:        https://github.com/AcademySoftwareFoundation/openexr/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.tiled.exr
+Source1:        https://github.com/AcademySoftwareFoundation/%{srcname}/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.interleaved.exr
+Source2:        https://github.com/AcademySoftwareFoundation/%{srcname}/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.planar.exr
+Source3:        https://github.com/AcademySoftwareFoundation/%{srcname}/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.tiled.exr
 
 Patch0:         openexr-gcc11.patch
 Patch1:         openexr2-cstdint.patch

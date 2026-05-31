@@ -10,6 +10,7 @@ Source0:        https://cpan.metacpan.org/modules/by-module/File/File-Slurp-%{ve
 
 
 
+
 BuildArch: noarch
 
 BuildRequires:  %{__perl}

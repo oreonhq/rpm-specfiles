@@ -23,6 +23,7 @@ URL:            https://metacpan.org/release/MIME-Types
 Source0:        https://cpan.metacpan.org/modules/by-module/MIME/MIME-Types-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

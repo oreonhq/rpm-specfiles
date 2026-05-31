@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Net-SMTP-SSL
 Source0:        https://cpan.metacpan.org/modules/by-module/Net/Net-SMTP-SSL-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

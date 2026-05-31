@@ -10,7 +10,7 @@ URL:		https://github.com/xsuchy/python-hwdata
 # git clone https://github.com/xsuchy/python-hwdata.git
 # cd python-hwdata
 # tito build --tgz
-Source0:        https://github.com/xsuchy/python-hwdata/archive/refs/tags/v2.4.3.tar.gz
+Source0:        https://github.com/xsuchy/python-hwdata/archive/refs/tags/python-hwdata-%{version}-1.tar.gz#/python-hwdata-%{version}.tar.gz
 
 %description
 Provide python interface to database stored in hwdata package.

@@ -1,4 +1,4 @@
-%global source0_hash a65b3ac5e682a39a55ebff6226e3e18931ee9feef1f944ca52529deb298209f5
+%global source0_hash 396360c989d2d07cff7452c755df1212813c5824738bfde2c37c3a1b7fbf71dc
 
 # anthy-unicode migration
 # https://github.com/fcitx/fcitx-anthy/issues/12

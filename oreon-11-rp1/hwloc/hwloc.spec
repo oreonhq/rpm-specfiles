@@ -6,7 +6,7 @@ Version:   2.12.0
 Release:   %autorelease
 License:   BSD-2-Clause
 URL:       http://www.open-mpi.org/projects/hwloc/
-Source0:        https://download.open-mpi.org/release/hwloc/v2.11/hwloc-%{version}.tar.bz2
+Source0:        https://download.open-mpi.org/release/hwloc/v%(echo %{version} | cut -d. -f1,2)/hwloc-%{version}.tar.bz2
 Requires:  %{name}-libs%{?_isa} = %{version}-%{release}
 
 BuildRequires: gcc

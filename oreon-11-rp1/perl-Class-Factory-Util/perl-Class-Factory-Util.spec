@@ -9,6 +9,7 @@ URL:            https://metacpan.org/release/Class-Factory-Util
 Source0:        https://cpan.metacpan.org/modules/by-module/Class/Class-Factory-Util-%{version}.tar.gz
 
 
+
 BuildArch:      noarch
 # Build
 BuildRequires:  coreutils

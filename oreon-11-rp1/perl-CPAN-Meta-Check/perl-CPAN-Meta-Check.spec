@@ -16,6 +16,7 @@ URL:		https://metacpan.org/release/CPAN-Meta-Check
 Source0:        https://cpan.metacpan.org/modules/by-module/CPAN/CPAN-Meta-Check-%{version}.tar.gz
 
 
+
 BuildArch:	noarch
 # Build
 BuildRequires:	coreutils
