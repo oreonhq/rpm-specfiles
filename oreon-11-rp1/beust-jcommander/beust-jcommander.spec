@@ -15,8 +15,6 @@ ExclusiveArch:  %{java_arches} noarch
 Source0:        https://github.com/cbeust/jcommander/archive/dcf154b6d40dd3865e317de7250b7019044543a9.tar.gz
 Source1:        https://repo1.maven.org/maven2/com/beust/jcommander/%{version}/jcommander-%{version}.pom
 # Cleaned up bundled jars whose licensing cannot be easily verified
-Source2:        generate-tarball.sh
-
 Patch:          0001-ParseValues-NullPointerException-patch.patch
 
 %if %{with bootstrap}
@@ -35,7 +33,7 @@ parse command line parameters (with annotations).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n beust-jcommander-1.82
 chmod -x license.txt
 
 cp -p %SOURCE1 pom.xml

@@ -1,4 +1,4 @@
-%global source0_hash 5a3c65731bff1e1af9ad777763f9c13095ade511a0ae8509e533110a1b07113b
+%global source0_hash 45cd816c8213ae8b39feb7ab2241f27731b784bfb54fa02d3428e3202a129812
 
 %bcond_with bootstrap
 
@@ -12,8 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
-Source1:        generate-tarball.sh
+Source0:        https://github.com/mockito/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # A custom build script to allow building with maven instead of gradle
 Source2:        aggregator.pom
 # Maven central POMs for subprojects

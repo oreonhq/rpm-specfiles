@@ -1,4 +1,4 @@
-%global source0_hash 0ed6964a04c4a3ec07177318682df5f7f85d2dde519017d96e81403435abdfa2
+%global source0_hash e6ef91d439ada9045f419c77543ebe0416c3cdfc5b063448343417a3e4a72123
 
 %bcond_with bootstrap
 
@@ -14,8 +14,8 @@ ExclusiveArch:  %{java_arches} noarch
 # cvs -d:pserver:anonymous@aopalliance.cvs.sourceforge.net:/cvsroot/aopalliance login
 # password empty
 # cvs -z3 -d:pserver:anonymous@aopalliance.cvs.sourceforge.net:/cvsroot/aopalliance export -r HEAD aopalliance
-Source0:        aopalliance-src.tar.gz
-Source1:        http://repo1.maven.org/maven2/aopalliance/aopalliance/1.0/aopalliance-1.0.pom
+Source0:        https://repo1.maven.org/maven2/aopalliance/aopalliance/%{version}/aopalliance-%{version}-sources.jar
+Source1:        https://repo1.maven.org/maven2/aopalliance/aopalliance/%{version}/aopalliance-%{version}.pom
 Source2:        %{name}-MANIFEST.MF
 
 %if %{with bootstrap}
@@ -38,12 +38,13 @@ larger AOP community.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%setup -q -c -n %{name}
 
 %build
-export CLASSPATH=
-export OPT_JAR_LIST=:
-%ant -Dbuild.sysclasspath=only jar -Dant.build.javac.source=1.8 -Dant.build.javac.target=1.8
+mkdir -p build/classes build/javadoc
+javac -source 1.8 -target 1.8 -d build/classes $(find org -name '*.java')
+jar cf build/%{name}.jar -C build/classes .
+javadoc -source 1.8 -d build/javadoc $(find org -name '*.java')
 
 # Inject OSGi manifest required by Eclipse.
 %jar umf %{SOURCE2} build/%{name}.jar

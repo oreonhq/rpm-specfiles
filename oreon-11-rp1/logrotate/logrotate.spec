@@ -11,9 +11,9 @@ Source1:        https://github.com/logrotate/logrotate/releases/download/%{versi
 
 # gpg --keyserver pgp.mit.edu --recv-key 8ECCDF12100AD84DA2EE7EBFC78CE737A3C3E28E
 # gpg --output cgzones.pgp --armor --export cgzones@googlemail.com
-Source2: cgzones.pgp
+Source2:        https://raw.githubusercontent.com/logrotate/logrotate/HEAD/cgzones.pgp
 
-Source3: rwtab
+Source3:        https://raw.githubusercontent.com/logrotate/logrotate/HEAD/rwtab
 
 BuildRequires: acl
 BuildRequires: automake

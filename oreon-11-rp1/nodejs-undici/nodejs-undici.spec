@@ -24,7 +24,7 @@ Release:    %autorelease
 License:    MIT
 URL:        https://undici.nodejs.org
 # See Source4 on how these archives were generated
-Source0:        https://github.com/nodejs/undici/archive/v7.24.0/undici-v7.24.0.tar.gz
+Source0:        https://github.com/nodejs/undici/archive/v7.24.0/undici-v7.24.0.tar.gz#/nodejs-undici-7.24.0.tar.gz
 Source1:    %{npm_name}-%{version}-nm-prod.tgz
 Source2:    %{npm_name}-%{version}-nm-dev.tgz
 Source3:    %{npm_name}-%{version}-bundled-licenses.txt

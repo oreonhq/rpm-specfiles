@@ -38,7 +38,7 @@ Summary:	Persistent Memory Development Kit (formerly NVML)
 License:	BSD-3-Clause
 URL:		http://pmem.io/pmdk
 
-Source0:        https://github.com/pmem/pmdk/releases/download/%{upstreamversion}/pmdk-%{upstreamversion}.tar.gz
+Source0:        https://github.com/pmem/pmdk/releases/download/%{upstreamversion}/pmdk-%{upstreamversion}.tar.gz#/nvml-%{upstreamversion}.tar.gz
 #Patch0:		0001-test-don-t-print-the-address-of-a-FILE-after-fclose.patch
 
 

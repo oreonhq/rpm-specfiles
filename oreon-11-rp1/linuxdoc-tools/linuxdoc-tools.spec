@@ -10,8 +10,8 @@ Name: linuxdoc-tools
 Version: 0.9.85
 Release: 3%{?dist}
 License: X11-distribute-modifications-variant
-Source00:        https://ftp.debian.org/debian/pool/main/l/linuxdoc-tools/%{name}_%{version}.orig.tar.gz
-Source01:        https://ftp.debian.org/debian/pool/main/l/linuxdoc-tools/%{name}_%{version}.orig.tar.gz.asc
+Source00:        https://snapshot.debian.org/archive/debian/20241101T000000Z/pool/main/l/linuxdoc-tools/%{name}_%{version}.orig.tar.gz
+Source01:        https://snapshot.debian.org/archive/debian/20241101T000000Z/pool/main/l/linuxdoc-tools/%{name}_%{version}.orig.tar.gz.asc
 Patch01: 0001-downstream-Changed-default-papersize-to-letter.patch
 Patch02: 0002-downstream-Added-fix-to-have-lib64-in-perl-path-on-6.patch
 Url: http://packages.qa.debian.org/l/linuxdoc-tools.html

@@ -1,5 +1,5 @@
 %global source0_hash dba5896715c0325c362e895460a6d350803dbf6427454f49a47500f3193ea739
-%global source1_hash c739e32fdbf2755d601414e863137d0a7da180b55d90b4bfb881f82f397ccf1b
+%global source1_hash d1ea0cc4108007d4b7ebd86fadfe16fc2f4a9cdbf46b9d4eb5bd73758d90252b
 
 %global gem_name rouge
 
@@ -13,7 +13,7 @@ License:        MIT AND BSD-2-Clause
 
 URL:            http://rouge.jneen.net/
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
-Source1:        %{gem_name}-%{version}-test-missing-files.tar.gz
+Source1:        https://github.com/rouge-ruby/rouge/archive/refs/tags/v%{version}.tar.gz#/%{gem_name}-%{version}-test-missing-files.tar.gz
 # SOURCE1 is created by $ bash %%SOURCE2 %%version
 Source2:        rouge-create-missing-test-files.sh
 Source10:       spec_helper_assert.rb

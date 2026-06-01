@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%{!?tcl_version: %global tcl_version %(echo 'puts $tcl_version' | tclsh)}
+%{!?tcl_version: %global tcl_version 8.6}
 %{!?tcl_sitearch: %global tcl_sitearch %{_libdir}/tcl%{tcl_version}}
 %global majorver 5.45.4
 

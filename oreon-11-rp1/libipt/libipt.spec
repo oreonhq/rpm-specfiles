@@ -12,7 +12,7 @@ Release: 4%{?dist}
 Summary: Intel Processor Trace Decoder Library
 License: BSD-3-Clause
 URL: https://github.com/intel/libipt
-Source0:        https://github.com/intel/libipt/archive/v%{version}.tar.gz
+Source0:        https://github.com/intel/libipt/archive/v%{version}.tar.gz#/libipt-2.1.2.tar.gz
 Source1: doc-v%{version}.tar.xz
 Patch1: libipt-cmake40-compat.patch
 # c++ is required only for -DPTUNIT test "ptunit-cpp".

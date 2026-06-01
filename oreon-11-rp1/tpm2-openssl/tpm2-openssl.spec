@@ -9,9 +9,9 @@ License: BSD-3-Clause
 URL: https://github.com/tpm2-software/tpm2-openssl
 Source0:        https://github.com/tpm2-software/%{name}/%{?candidate:archive/refs/tags}%{!?candidate:releases/download}/%{version}%{?candidate:-%{candidate}}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.gz
 Source1:        https://github.com/tpm2-software/%{name}/%{?candidate:archive/refs/tags}%{!?candidate:releases/download}/%{version}%{?candidate:-%{candidate}}/%{name}-%{version}%{?candidate:-%{candidate}}.tar.gz.asc
-Source2: gpgkey-B7201FE8031B07AF11F5423C6329CFCB6BE6FD76.gpg
+Source2:        https://raw.githubusercontent.com/tpm2-software/tpm2-openssl/HEAD/gpgkey-B7201FE8031B07AF11F5423C6329CFCB6BE6FD76.gpg
 # Will be included in Source0 after https://github.com/tpm2-software/tpm2-openssl/pull/100
-Source3: run-with-simulator
+Source3:        https://raw.githubusercontent.com/tpm2-software/tpm2-openssl/HEAD/run-with-simulator
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=2301337
 Patch1: 0001-tests-rsa_pki-default-to-sha256.patch

@@ -1,4 +1,4 @@
-%global source0_hash 0a8d214d24533ecfb6f548d5e74452e24f68db09685d77df84085feedb085978
+%global source0_hash a228cae0e4c0cbefc7087cd1e17c0e8f91ee648949c6f0b9854c22f7ad1557b6
 
 Name: sac
 Version: 1.3
@@ -8,7 +8,7 @@ License: W3C
 #Original source: http://www.w3.org/2002/06/%%{name}java-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
-Source0: %{name}java-%{version}-jarsdeleted.zip
+Source0: https://www.w3.org/2002/06/%{name}java-%{version}.zip
 Source1: %{name}-build.xml
 Source2: %{name}-MANIFEST.MF
 Source3: https://repo1.maven.org/maven2/org/w3c/css/sac/1.3/sac-1.3.pom

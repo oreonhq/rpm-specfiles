@@ -47,8 +47,8 @@ The Compiler Plugin is used to compile the sources of your project.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 
-# Replace path to junit in a test case with the system wide .jar
-sed -i 's|localRepository,\ "junit/junit/3.8.1/junit-3.8.1.jar"|"%(find-jar junit || find-jar javapackages-bootstrap/junit)"|' src/test/java/org/apache/maven/plugin/compiler/CompilerMojoTestCase.java
+junit_jar=$(find-jar junit || find-jar javapackages-bootstrap/junit)
+sed -i "s|localRepository,\\ \"junit/junit/3.8.1/junit-3.8.1.jar\"|\"$junit_jar\"|" src/test/java/org/apache/maven/plugin/compiler/CompilerMojoTestCase.java
 
 %build
 # JAVA_HOME must be exported because unit tests make use of it for locating javac executable

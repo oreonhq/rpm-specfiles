@@ -8,7 +8,7 @@ License: GPL-2.0-or-later AND LGPL-2.0-only AND MIT
 Group:   System Environment/Libraries
 URL:     https://github.com/sctp/lksctp-tools/wiki
 
-Source0:        https://github.com/sctp/lksctp-tools/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/sctp/lksctp-tools/archive/%{name}-%{version}.tar.gz#/lksctp-tools-1.0.21.tar.gz
 BuildRequires: libtool, automake, autoconf, make
 
 %description

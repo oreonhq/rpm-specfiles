@@ -16,7 +16,7 @@ Summary:        Simple module to parse ISO 8601 dates
 
 License:        MIT
 URL:            https://github.com/micktwomey/pyiso8601
-Source:        https://github.com/micktwomey/pyiso8601/archive/refs/tags/2.1.0.tar.gz
+Source:        https://github.com/micktwomey/pyiso8601/archive/refs/tags/2.1.0.tar.gz#/python-iso8601-2.1.0.tar.gz
 # https://github.com/micktwomey/pyiso8601/pull/19
 Patch:          0001-Add-docs-and-test-extras.patch
 BuildArch:      noarch

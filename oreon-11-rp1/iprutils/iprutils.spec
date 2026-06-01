@@ -8,10 +8,10 @@ Version: 2.4.19
 Release: 17%{?dist}
 License: CPL-1.0
 URL:     https://github.com/bjking1/iprutils
-Source0:        https://github.com/bjking1/iprutils/archive/%{gitver}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/bjking1/iprutils/archive/%{gitver}/%{name}-%{version}.tar.gz#/iprutils-2.4.19.tar.gz
 
 # missing man page
-Source1: iprdbg.8.gz
+Source1:        https://raw.githubusercontent.com/bjking1/iprutils/HEAD/iprdbg.8.gz
 
 Patch10: iprutils-2.4.19-covscan.patch
 

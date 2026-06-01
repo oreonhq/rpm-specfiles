@@ -138,6 +138,7 @@ Provides: bundled(python3dist(tomli)) = 2.3.1
 Provides: bundled(python3dist(tomli-w)) = 1.2
 Provides: bundled(python3dist(truststore)) = 0.10.4
 Provides: bundled(python3dist(urllib3)) = 2.6.3
+
 }
 # setuptools
 # vendor.txt not in .whl
@@ -159,6 +160,7 @@ Provides: bundled(python3dist(typeguard)) = 4.3
 Provides: bundled(python3dist(typing-extensions)) = 4.12.2
 Provides: bundled(python3dist(wheel)) = 0.45.1
 Provides: bundled(python3dist(zipp)) = 3.19.2
+
 }
 
 # ABIFLAGS, LDVERSION and SOABI are in the upstream configure.ac

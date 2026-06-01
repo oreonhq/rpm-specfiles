@@ -11,7 +11,7 @@ License:	GPL-3.0-or-later
 URL:		https://github.com/ueno/libkkc
 Source0:        https://github.com/ueno/libkkc/releases/download/v%{version}/%{name}-%{version}.tar.gz
 # remove for next release:
-Source1:        README.md
+Source1:        https://raw.githubusercontent.com/ueno/libkkc/HEAD/README.md
 Patch0:		libkkc-HEAD.patch
 Patch1:         libkkc-POT.skip.patch
 Patch2:         libkkc-vala-abstract-create.patch

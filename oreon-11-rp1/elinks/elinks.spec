@@ -13,7 +13,7 @@ Release:   2%{?dist}
 License:   GPL-2.0-only
 URL:       https://github.com/rkd77/elinks
 Source:        https://github.com/rkd77/elinks/releases/download/v%{version}/elinks-%{version}.tar.xz
-Source2:   elinks.conf
+Source2:        https://raw.githubusercontent.com/rkd77/elinks/HEAD/elinks.conf
 
 BuildRequires: automake
 BuildRequires: bzip2-devel

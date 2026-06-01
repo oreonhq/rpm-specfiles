@@ -9,7 +9,7 @@ License:	GPL-2.0-only
 URL:		https://github.com/andikleen/mcelog
 Source0:        https://github.com/andikleen/mcelog/archive/v175/mcelog-175.tar.gz
 # note that this source OVERRIDES the one on the tarball above!
-Source1:	mcelog.conf
+Source1:        https://raw.githubusercontent.com/andikleen/mcelog/HEAD/mcelog.conf
 ExclusiveArch:	i686 x86_64
 Requires(post): systemd
 Requires(preun): systemd
@@ -24,7 +24,7 @@ on x86-32 and x86-64 systems.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+%autosetup -n mcelog-175
 
 %build
 %make_build CFLAGS="$RPM_OPT_FLAGS -fpie -pie"

@@ -1,5 +1,5 @@
 %global source0_hash dafb39c08ef24a0e2abd00d05d7341b1bf1f0c38bfcd5a4c69cf5f0ecb6db112
-%global source1_hash dedba907e034e12177c1d69ab4e0edecbb94f76aeb27e38fa6823b88cbbc67c1
+%global source1_hash 8f7497e25db07dae3b84e75f30419e582e20de0e18dcf49712fcdd24e4803ff9
 
 %if !0%{?bootstrap} && (0%{?fedora} || 0%{?rhel} > 6) || (0%{?oreon} >= 11)
 %global tests 1
@@ -13,11 +13,11 @@ Release: 11%{?dist}
 
 License: LGPLv3 and CC-BY-SA
 URL: https://lensfun.github.io/
-Source0:        https://github.com/lensfun/lensfun/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/lensfun/lensfun/archive/v%{version}/%{name}-%{version}.tar.gz#/lensfun-0.3.4.tar.gz
 # Updated database. To generate:
 # curl -L -o version_1-$(date +"%Y-%m-%d").tar.bz2 http://lensfun.sourceforge.net/db/version_1.tar.bz2
 # Update this whenever updating the package
-Source1: version_1-2024-06-27.tar.bz2
+Source1: https://lensfun.sourceforge.net/db/version_1.tar.bz2#/version_1-2026-05-31.tar.bz2
 
 ## upstream patches
 

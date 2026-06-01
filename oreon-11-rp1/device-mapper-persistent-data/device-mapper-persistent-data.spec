@@ -19,8 +19,8 @@ License: GPL-3.0-only AND (0BSD OR MIT OR Apache-2.0) AND Apache-2.0 AND (Apache
 #ExcludeArch: %%{ix86}
 URL: https://github.com/jthornber/thin-provisioning-tools
 #Source0: https://github.com/jthornber/thin-provisioning-tools/archive/thin-provisioning-tools-%%{version}.tar.gz
-Source0:        https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}%{?version_suffix}.tar.gz
-Source1: dmpd132-vendor.tar.gz
+Source0:        https://github.com/jthornber/thin-provisioning-tools/archive/v%{version}%{?version_suffix}.tar.gz#/device-mapper-persistent-data-1.3.2.tar.gz
+Source1:        https://raw.githubusercontent.com/jthornber/thin-provisioning-tools/HEAD/dmpd132-vendor.tar.gz
 
 %if %{defined rhel} || (0%{?oreon} >= 11)
 BuildRequires: rust-toolset

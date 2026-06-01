@@ -16,7 +16,7 @@ URL:            https://javaparser.org
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/javaparser/javaparser/archive/%{name}-parent-%{version}.tar.gz
+Source0:        https://github.com/javaparser/javaparser/archive/%{name}-parent-%{version}.tar.gz#/javaparser-3.27.1.tar.gz
 
 Patch:          0001-Port-to-OpenJDK-21.patch
 
@@ -43,7 +43,7 @@ ones to modify the source code.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n javaparser-3.27.1
 
 sed -i 's/\r//' readme.md
 

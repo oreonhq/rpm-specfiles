@@ -1,9 +1,9 @@
 %global source0_hash none
 
 # See the bug #429880
-%global gcc_major  %(gcc -dumpversion || echo "666")
+%global gcc_major  16
 # See rhbz#1193591
-%global automake_version %(set -- `automake --version | head -n 1` ; echo ${4-unknown})
+%global automake_version 1.18.1
 
 %bcond_without check
 

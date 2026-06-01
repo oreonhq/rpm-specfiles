@@ -1,4 +1,4 @@
-%global source0_hash 32e8c70f497a14cfa0eb4a0e1a59fe5cb17193d84790d8ca728260423689d76d
+%global source0_hash abaf8d37253b31c3d40b448acb857ce6456b7bd92b31adfc236b27632c56ae79
 
 %if 0%{?rhel} || (0%{?oreon} >= 11)
 
@@ -30,7 +30,7 @@ URL:        http://tracer-package.com/
 # git clone git@github.com:FrostyX/tracer.git
 # cd tracer
 # tito build --tgz
-Source0:    %{name}-%{version}.tar.gz
+Source0:    https://github.com/FrostyX/tracer/archive/refs/tags/tracer-%{version}-1.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  asciidoc
 BuildRequires:  gettext
@@ -134,7 +134,7 @@ Python 3 version.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -n %{name}-%{name}-%{version}-1
 %if %{with python2}
 sed -i -e '1s|^#!.*$|#!%{__python2}|' bin/%{name}.py
 %endif

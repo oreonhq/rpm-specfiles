@@ -35,14 +35,14 @@ ExclusiveArch:	aarch64
 License:	BSD-2-Clause AND OpenSSL
 URL:		https://github.com/rhboot/shim
 Source0:        https://github.com/rhboot/shim/releases/download/%{version}%{?dashpre}/shim-%{version}%{?dotpre}.tar.bz2
-Source1:	fedora-ca-20200709.cer
+Source1:        https://raw.githubusercontent.com/rhboot/shim/HEAD/fedora-ca-20200709.cer
 %if 0%{?dbxfile}
 Source2:	%{dbxfile}
 %endif
-Source3:	sbat.redhat.csv.in
-Source4:	shim.patches
+Source3:        https://raw.githubusercontent.com/rhboot/shim/HEAD/sbat.redhat.csv.in
+Source4:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shim.patches
 
-Source100:	shim-find-debuginfo.sh
+Source100:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shim-find-debuginfo.sh
 
 %include %{SOURCE4}
 

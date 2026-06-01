@@ -7,7 +7,7 @@ Summary:	VPD/hardware inventory utilities for Linux
 
 License:	GPL-2.0-or-later
 URL:    https://github.com/power-ras/%{name}/releases
-Source:        https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz#/lsvpd-1.7.15.tar.gz
 
 BuildRequires: gcc-c++
 BuildRequires: libvpd-devel >= 2.2.9

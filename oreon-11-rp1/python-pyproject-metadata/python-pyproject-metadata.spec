@@ -13,7 +13,7 @@ Summary:        PEP 621 metadata parsing
 License:        MIT
 URL:            https://github.com/FFY00/python-pyproject-metadata
 VCS:            git:%{url}.git
-Source:        https://github.com/FFY00/python-pyproject-metadata/archive/0.11.0/pyproject-metadata-0.11.0.tar.gz
+Source:        https://github.com/FFY00/python-pyproject-metadata/archive/0.11.0/pyproject-metadata-0.11.0.tar.gz#/python-pyproject-metadata-0.11.0.tar.gz
 
 BuildArch:      noarch
 

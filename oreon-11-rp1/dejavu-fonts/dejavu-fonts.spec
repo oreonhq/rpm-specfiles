@@ -47,8 +47,11 @@ original style, using an open collaborative development process.}
 %global fontfamily1       DejaVu Sans
 %global fontsummary1      DejaVu Sans, a variable-width sans-serif font family
 %global fontpkgheader1    %{expand:
+
 Obsoletes: dejavu-fonts-common < %{version}-%{release}
-Obsoletes: compat-f32-dejavu-sans-fonts < %{version}-%{release}Suggests:  font(dejavusansmono)
+Obsoletes: compat-f32-dejavu-sans-fonts < %{version}-%{release}
+Suggests:  font(dejavusansmono)
+
 }
 %if %{with build_from_src}
 %global fonts1            DejaVuSans.ttf DejaVuSans-*.ttf DejaVuSansCondensed*.ttf
@@ -68,8 +71,11 @@ their unabridged version.
 %global fontfamily2       DejaVu Serif
 %global fontsummary2      DejaVu Serif, a variable-width serif font family
 %global fontpkgheader2    %{expand:
+
 Obsoletes: dejavu-math-tex-gyre-fonts < %{version}-%{release}
-Obsoletes: compat-f32-dejavu-serif-fonts < %{version}-%{release}}
+Obsoletes: compat-f32-dejavu-serif-fonts < %{version}-%{release}
+
+}
 %if %{with build_from_src}
 %global fonts2            DejaVuSerif.ttf DejaVuSerif-*.ttf DejaVuSerifCondensed*.ttf DejaVuMathTeXGyre.ttf
 %else
@@ -84,12 +90,16 @@ This package consists of the DejaVu serif variable-width font faces, in their
 unabridged version.
 
 It includes the Mathematics extension, that was contributed to the project by
-B. Jackowski, P. Strzelczyk and P. Pianowski, on behalf of TeX user groups.}
+B. Jackowski, P. Strzelczyk and P. Pianowski, on behalf of TeX user groups.
+}
 
 %global fontfamily3       DejaVu Sans Mono
 %global fontsummary3      DejaVu Sans Mono, a mono-space sans-serif font family
 %global fontpkgheader3    %{expand:
-Obsoletes: compat-f32-dejavu-sans-mono-fonts < %{version}-%{release}}
+
+Obsoletes: compat-f32-dejavu-sans-mono-fonts < %{version}-%{release}
+
+}
 %if %{with build_from_src}
 %global fonts3            DejaVuSansMono*.ttf
 %else
@@ -101,12 +111,15 @@ Obsoletes: compat-f32-dejavu-sans-mono-fonts < %{version}-%{release}}
 %{common_description}
 
 This package consists of the DejaVu sans-serif mono-space font faces, in their
-unabridged version.}
+unabridged version.
+}
 
 %global fontfamily4       DejaVu LGC Sans
 %global fontsummary4      A variable-width Latin-Greek-Cyrillic sans-serif font family
 %global fontpkgheader4    %{expand:
+
 Suggests:  font(dejavusans)
+
 }
 %if %{with build_from_src}
 %global fonts4            DejaVuLGCSans.ttf DejaVuLGCSans-*.ttf DejaVuLGCSansCondensed*.ttf
@@ -120,12 +133,15 @@ Suggests:  font(dejavusans)
 %{common_description}
 
 This package consists of the DejaVu sans-serif variable-width font faces, with
-Unicode coverage restricted to Latin, Greek and Cyrillic.}
+Unicode coverage restricted to Latin, Greek and Cyrillic.
+}
 
 %global fontfamily5       DejaVu LGC Serif
 %global fontsummary5      A variable-width Latin-Greek-Cyrillic serif font family
 %global fontpkgheader5    %{expand:
+
 Suggests:  font(dejavuserif)
+
 }
 %if %{with build_from_src}
 %global fonts5            DejaVuLGCSerif.ttf DejaVuLGCSerif-*.ttf DejaVuLGCSerifCondensed*.ttf
@@ -139,12 +155,15 @@ Suggests:  font(dejavuserif)
 %{common_description}
 
 This package consists of the DejaVu serif variable-width font faces, with
-Unicode coverage restricted to Latin, Greek and Cyrillic.}
+Unicode coverage restricted to Latin, Greek and Cyrillic.
+}
 
 %global fontfamily6       DejaVu LGC Sans Mono
 %global fontsummary6      A variable-width Latin-Greek-Cyrillic mono-space font family
 %global fontpkgheader6    %{expand:
+
 Suggests:  font(dejavusansmono)
+
 }
 %if %{with build_from_src}
 %global fonts6            DejaVuLGCSansMono*.ttf
@@ -158,7 +177,8 @@ Suggests:  font(dejavusansmono)
 %{common_description}
 
 This package consists of the DejaVu sans-serif mono-space font faces, with
-Unicode coverage restricted to Latin, Greek and Cyrillic.}
+Unicode coverage restricted to Latin, Greek and Cyrillic.
+}
 
 Source0:  %{forgeurl}/archive/version_2_37/dejavu-fonts-version_2_37.tar.gz
 Source1:  %{forgeurl}/releases/download/%{tag}/dejavu-fonts-ttf-%{version}.tar.bz2

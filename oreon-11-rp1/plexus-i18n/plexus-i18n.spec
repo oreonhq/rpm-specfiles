@@ -11,7 +11,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 # svn export http://svn.codehaus.org/plexus/plexus-components/tags/plexus-i18n-1.0-beta-10/
 # tar cjf plexus-i18n-1.0-beta-10-src.tar.bz2 plexus-i18n-1.0-beta-10/
-Source0:        plexus-i18n-1.0-beta-10-src.tar.bz2
+Source0:        https://raw.githubusercontent.com/codehaus-plexus/plexus-i18n/HEAD/plexus-i18n-1.0-beta-10-src.tar.bz2
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.google.inject:guice)
 BuildRequires:  mvn(junit:junit)

@@ -101,7 +101,7 @@ Source5:        xorg.conf
 %global wechat_commit 3487ef7cde71d93c6a01bb0b84aa0f22c6128f6b
 %global wechat_shortcommit %(c=%{wechat_commit}; echo ${c:0:7})
 %global wechat_gitdate 20230712
-Source6:        https://github.com/WeChatCV/opencv_3rdparty/archive/%{wechat_commit}/wechat-%{wechat_gitdate}.git%{wechat_shortcommit}.tar.gz
+Source6:        https://github.com/WeChatCV/opencv_3rdparty/archive/%{wechat_commit}/wechat-%{wechat_gitdate}.git%{wechat_shortcommit}.tar.gz#/opencv-4.13.0.tar.gz
 
 Patch0:         opencv-4.1.0-install_3rdparty_licenses.patch
 # Fix build with vtk 9.6 - https://github.com/opencv/opencv_contrib/pull/4085

@@ -105,7 +105,8 @@ The %{name}-tools package contains leptonica utility tools.
 %if %{with mingw}
 %package -n mingw32-%{name}
 Summary:       MinGW Windows Leptonica library
-Obsoletes:     mingw32-%{name}-static < %{version}-%{release}BuildArch:     noarch
+Obsoletes:     mingw32-%{name}-static < %{version}-%{release}
+BuildArch:     noarch
 
 %description -n mingw32-%{name}
 MinGW Windows Leptonica library.
@@ -113,7 +114,8 @@ MinGW Windows Leptonica library.
 
 %package -n mingw64-%{name}
 Summary:       MinGW Windows Leptonica library
-Obsoletes:     mingw64-%{name}-static < %{version}-%{release}BuildArch:     noarch
+Obsoletes:     mingw64-%{name}-static < %{version}-%{release}
+BuildArch:     noarch
 
 %description -n mingw64-%{name}
 MinGW Windows Leptonica library.

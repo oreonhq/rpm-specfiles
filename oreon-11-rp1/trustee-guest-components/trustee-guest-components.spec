@@ -44,7 +44,7 @@ License:        Apache-2.0 AND (Apache-2.0 OR Apache-2.0 WITH LLVM-exception OR 
 # LICENSE.dependencies contains a full license breakdown
 
 URL:            https://github.com/confidential-containers/guest-components
-Source:        https://github.com/confidential-containers/%{projectname}/archive/refs/tags/v%{version}/%{projectname}-%{version}.tar.gz
+Source:        https://github.com/confidential-containers/%{projectname}/archive/refs/tags/v%{version}/%{projectname}-%{version}.tar.gz#/trustee-guest-components-0.17.0.tar.gz
 
 # * Remove workspace members which are not built
 Patch1:         0001-Fedora-Remove-workspace-members-which-are-not-built.patch

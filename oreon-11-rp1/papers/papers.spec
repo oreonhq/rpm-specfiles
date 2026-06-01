@@ -58,7 +58,7 @@ License:        %{shrink:
     (Unlicense OR MIT)
 }
 URL:            https://gitlab.gnome.org/GNOME/Incubator/papers
-Source:         https://download.gnome.org/sources/papers/%{major_version}/papers-%{tarball_version}.tar.xz
+Source:         https://download.gnome.org/sources/papers/49/papers-%{tarball_version}.tar.xz
 # To generate vendored cargo sources:
 #   tar xf papers-%%{tarball_version}.tar.xz
 #   pushd papers-%%{tarball_version}

@@ -19,9 +19,7 @@ License:        Apache-2.0 OR LGPL-2.1-or-later
 URL:            https://github.com/java-native-access/jna/
 # ./generate-tarball.sh
 Source0:        https://github.com/java-native-access/jna/archive/refs/tags/5.17.0.tar.gz
-Source1:        package-list
-Source2:        generate-tarball.sh
-
+Source1:        https://raw.githubusercontent.com/java-native-access/jna/HEAD/package-list
 Patch0:         0001-Adapt-build.patch
 # This patch is Fedora-specific for now until we get the huge
 # JNI library location mess sorted upstream

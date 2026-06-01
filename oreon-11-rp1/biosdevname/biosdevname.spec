@@ -14,7 +14,7 @@ URL:		http://linux.dell.com/files/%{name}
 # arches don't expect the PCI bus to be sorted breadth-first, or of
 # so, there haven't been any comments about that on LKML.
 ExclusiveArch:	%{ix86} x86_64
-Source0:        https://github.com/dell/biosdevname/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/dell/biosdevname/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz#/biosdevname-0.7.3.tar.gz
 
 BuildRequires:  autoconf
 BuildRequires:  automake

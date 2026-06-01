@@ -10,7 +10,7 @@ Summary:        Software library for fast, message-based applications
 
 License:        MPL-2.0 AND BSD-3-Clause AND MIT
 URL:            https://zeromq.org
-Source0:        https://github.com/%{name}/libzmq/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/%{name}/libzmq/archive/v%{version}/%{name}-%{version}.tar.gz#/zeromq-4.3.5.tar.gz
 Patch1:         zeromq-configure-c99.patch
 
 BuildRequires:  make

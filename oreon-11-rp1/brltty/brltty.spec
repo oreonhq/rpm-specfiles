@@ -14,7 +14,7 @@
 # disable python2 by default
 %bcond python2 0
 
-%{!?tcl_version: %global tcl_version %(echo 'puts $tcl_version' | tclsh)}
+%{!?tcl_version: %global tcl_version 8.6}
 %{!?tcl_sitearch: %global tcl_sitearch %{_prefix}/%{_lib}/tcl%{tcl_version}}
 
 # with speech dispatcher iff on Fedora:

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 4c4f3c7c479994c3ce09f542d4fbdc03eed58a2d7f320d32f2baf238b5b6f566
 
 # Copyright (c) 2000-2005, JPackage Project
 # All rights reserved.
@@ -40,7 +40,7 @@ URL:            https://jakarta.apache.org/oro/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://archive.apache.org/dist/jakarta/oro/%{name}-%{version}.tar.gz
+Source0:        https://archive.apache.org/dist/jakarta/oro/source/%{name}-%{version}.tar.gz
 Source1:        MANIFEST.MF
 Source2:        https://repo1.maven.org/maven2/%{base_name}/%{base_name}/%{version}/%{base_name}-%{version}.pom
 

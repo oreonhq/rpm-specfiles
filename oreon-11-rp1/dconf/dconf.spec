@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 16a47e49a58156dbb96578e1708325299e4c19eea9be128d5bd12fd0963d6c36
 
 %define glib2_version 2.44.0
 
@@ -9,7 +9,7 @@ Summary:        A configuration system
 
 License:        LGPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-or-later AND GPL-3.0-or-later
 URL:            https://wiki.gnome.org/Projects/dconf
-Source0:        https://download.gnome.org/sources/dconf/%(echo %{version} | cut -d. -f1,2)/dconf-%{version}.tar.xz
+Source0:        https://download.gnome.org/sources/dconf/0.49/dconf-%{version}.tar.xz
 
 Patch1:         dconf-override.patch
 

@@ -60,7 +60,7 @@ Release: %autorelease
 License: LicenseRef-Callaway-BSD OR GPL-2.0-only
 URL: https://github.com/cornelisnetworks/opa-psm2/
 
-Source0:        https://github.com/cornelisnetworks/opa-psm2/archive/refs/tags/PSM2_%{version}.tar.gz
+Source0:        https://github.com/cornelisnetworks/opa-psm2/archive/refs/tags/PSM2_%{version}.tar.gz#/libpsm2-12.0.1.tar.gz
 
 # The OPA product is supported on x86_64 only:
 ExclusiveArch: x86_64

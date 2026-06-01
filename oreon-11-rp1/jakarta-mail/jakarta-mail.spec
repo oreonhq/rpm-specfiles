@@ -11,7 +11,7 @@ URL:            https://jakarta.ee/specifications/mail/2.1/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/jakartaee/mail-api/archive/%{version}/mail-%{version}.tar.gz
+Source0:        https://github.com/jakartaee/mail-api/archive/%{version}/mail-%{version}.tar.gz#/jakarta-mail-2.1.5.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -31,7 +31,7 @@ framework to build mail and messaging applications.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n jakarta-mail-2.1.5
 
 pushd api
 # Remove unnecessary dependency on parent POM

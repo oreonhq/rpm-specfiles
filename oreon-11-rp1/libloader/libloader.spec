@@ -1,4 +1,4 @@
-%global source0_hash 2ae2fa6da45d91d495f647ed955f8af7bfc94ad8e7788169c423a516b84eea0f
+%global source0_hash 141a48e6d1311c262618b5e923f6fd44d5991d8e424c87eeb7dd1b7fc100404d
 
 Name: libloader
 Version: 1.1.3
@@ -8,7 +8,7 @@ License: LGPL-2.1-only
 #Original source: http://downloads.sourceforge.net/jfreereport/%%{name}-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
-Source: %{name}-%{version}-jarsdeleted.zip
+Source: https://downloads.sourceforge.net/jfreereport/%{name}-%{version}.zip
 URL: http://reporting.pentaho.org/
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils
 BuildRequires: libbase >= 1.1.3

@@ -1,6 +1,6 @@
 %global source0_hash 578ef277ef85b64c692a25f3f61d798d9f27b14ccb0961ae096d2e7252ff3966
 
-%{!?_httpd_mmn: %{expand: %%global _httpd_mmn %%(cat %{_includedir}/httpd/.mmn || echo 0-0)}}
+%{!?_httpd_mmn: %{expand: %%global _httpd_mmn 0-0}}
 %{!?_httpd_apxs:       %{expand: %%global _httpd_apxs       %%{_sbindir}/apxs}}
 %{!?_httpd_confdir:    %{expand: %%global _httpd_confdir    %%{_sysconfdir}/httpd/conf.d}}
 # /etc/httpd/conf.d with httpd < 2.4 and defined as /etc/httpd/conf.modules.d with httpd >= 2.4

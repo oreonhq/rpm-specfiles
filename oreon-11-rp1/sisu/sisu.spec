@@ -66,7 +66,7 @@ META-INF/sisu/javax.inject.Named index files for the Sisu container.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n sisu-0.9.0~M3
 
 %pom_disable_module org.eclipse.sisu.inject.extender
 %pom_disable_module org.eclipse.sisu.plexus.extender

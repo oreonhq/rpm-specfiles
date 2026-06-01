@@ -144,7 +144,7 @@ The %{name}-tcl package includes RRDtool bindings for Tcl.
 %endif
 
 %if %{with_ruby}
-%{!?ruby_vendorarchdir: %global ruby_vendorarchdir %(ruby -rrbconfig -e 'puts RbConfig::CONFIG["vendorarchdir"]')}
+%{!?ruby_vendorarchdir: %global ruby_vendorarchdir %(ruby -rrbconfig -e 'puts RbConfig::CONFIG["vendorarchdir"]' 2>/dev/null || echo %{_libdir}/ruby/vendor_ruby)}
 
 %package ruby
 Summary: Ruby RRDtool bindings
@@ -156,7 +156,7 @@ The %{name}-ruby package includes RRDtool bindings for Ruby.
 %endif
 
 %if %{with_lua}
-%{!?luaver: %global luaver %(lua -e "print(string.sub(_VERSION, 5))")}
+%{!?luaver: %global luaver %(lua -e "print(string.sub(_VERSION, 5))" 2>/dev/null || echo 5.4)}
 %global lualibdir %{_libdir}/lua/%{luaver}
 %global luapkgdir %{_datadir}/lua/%{luaver}
 

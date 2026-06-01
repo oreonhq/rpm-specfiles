@@ -845,7 +845,7 @@ in pure PHP.
 
 
 %prep
-%(test -z "%{source20_key_fpr}" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source20_key_fpr}" || { echo "oreon: Source20 key fingerprint mismatch" >&2; exit 1; }; })
+%(test -z "%{source20_key_fpr}" || { f="%{SOURCE20}"; test -f "$f" || { echo "oreon: missing Source20 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source20_key_fpr}" || { echo "oreon: Source20 key fingerprint mismatch" >&2; exit 1; }; })
 %{?gpgverify:%{gpgverify} --keyring='%{SOURCE20}' --signature='%{SOURCE21}' --data='%{SOURCE0}'}
 
 %setup -q -n php-%{upver}%{?rcver}

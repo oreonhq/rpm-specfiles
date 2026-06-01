@@ -16,7 +16,6 @@ Source0:        https://www.antlr2.org/download/antlr-2.7.7.tar.gz
 Source1:       %{name}-build.xml
 Source3:        http://repo2.maven.org/maven2/antlr/antlr/%{version}/%{name}-%{version}.pom
 # Repack the tarball without prebuilt binaries of unknown origin
-Source4:       generate-tarball.sh
 Patch:         %{name}-%{version}-newgcc.patch
 Patch:         %{name}-%{version}-configure-c99.patch
 

@@ -7,7 +7,7 @@ License:        BSD-3-Clause
 Url:            http://www.openwsman.org/
 # You can get this tarball here:
 # https://github.com/Openwsman/wsmancli/archive/v%%{version}.tar.gz
-Source:         wsmancli-%{version}.tar.gz
+Source:         https://github.com/Openwsman/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        COPYING
 Source2:        README
 Source3:        AUTHORS

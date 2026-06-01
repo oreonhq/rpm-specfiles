@@ -56,6 +56,7 @@ This package provides the Google “Noto Emoji” Black-and-White emoji font.
 %global fontpkgheader1    %{expand:
 Obsoletes:      google-noto-emoji-color-fonts < 20220916-6
 Provides:       google-noto-emoji-color-fonts = %{version}-%{release}
+
 }
 %global fonts1            Noto-COLRv1.ttf
 %global fontdescription1  %{expand:
@@ -70,7 +71,7 @@ This package provides the Google “Noto Emoji” Black-and-White emoji variable
 }
 
 Source0:        https://github.com/googlefonts/noto-emoji/archive/%{commit0}.tar.gz#/noto-emoji-%{shortcommit0}.tar.gz
-Source4:        Noto_Emoji.zip
+Source4:        https://github.com/googlefonts/noto-emoji/archive/refs/heads/main.zip#/Noto_Emoji.zip
 
 
 %fontpkg -a

@@ -11,7 +11,7 @@ Summary:        Utilities for interfacing with sysfs
 URL:            https://github.com/linux-ras/sysfsutils
 License:        GPL-2.0-only
 
-Source0:        https://github.com/linux-ras/sysfsutils/archive/v%{version}.tar.gz
+Source0:        https://github.com/linux-ras/sysfsutils/archive/v%{version}.tar.gz#/sysfsutils-2.1.1.tar.gz
 
 Patch0:         sysfsutils-2.1.1-fix-my-strncat.patch
 

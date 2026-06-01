@@ -64,9 +64,9 @@ Source15:       https://fedorapeople.org/cgit/sharkcz/public_git/utils.git/tree/
 Source16:       https://fedorapeople.org/cgit/sharkcz/public_git/utils.git/tree/ccw_init
 Source17:       https://fedorapeople.org/cgit/sharkcz/public_git/utils.git/tree/ccw.udev
 Source21:       https://fedorapeople.org/cgit/sharkcz/public_git/utils.git/tree/normalize_dasd_arg
-Source23:       20-zipl-kernel.install
-Source24:       52-zipl-rescue.install
-Source25:       91-zipl.install
+Source23:        https://raw.githubusercontent.com/ibm-s390-linux/s390-tools/HEAD/20-zipl-kernel.install
+Source24:        https://raw.githubusercontent.com/ibm-s390-linux/s390-tools/HEAD/52-zipl-rescue.install
+Source25:        https://raw.githubusercontent.com/ibm-s390-linux/s390-tools/HEAD/91-zipl.install
 
 %if %{with signzipl}
 %define pesign_name redhatsecureboot302

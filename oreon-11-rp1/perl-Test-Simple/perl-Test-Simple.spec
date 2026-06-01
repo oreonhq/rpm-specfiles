@@ -23,7 +23,7 @@ Release:        2%{?dist}
 # GPL-1.0-or-later OR Artistic-1.0-Perl: the rest of the distribution
 License:        (GPL-1.0-or-later OR Artistic-1.0-Perl) AND CC0-1.0 AND LicenseRef-Public-Domain
 URL:            https://metacpan.org/release/Test-Simple
-Source0:        https://cpan.metacpan.org/modules/by-module/Test/Test-Simple-%{version}.tar.gz
+Source0:        https://cpan.metacpan.org/authors/id/E/EX/EXODIST/Test-Simple-%{version}.tar.gz
 
 
 

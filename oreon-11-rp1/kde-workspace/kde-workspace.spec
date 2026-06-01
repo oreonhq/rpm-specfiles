@@ -25,8 +25,8 @@ Release: 47%{?dist}
 
 License: GPL-2.0-only
 URL:     https://github.com/KDE/%{name}
-Source0:        https://github.com/KDE/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-Source1: kdm-settings-2.tar.gz
+Source0:        https://github.com/KDE/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz#/kde-workspace-4.11.22.tar.gz
+Source1:        https://raw.githubusercontent.com/KDE/%{name}/HEAD/kdm-settings-2.tar.gz
 
 # add konsole menuitem
 # FIXME?  only show menu when/if konsole is installed? then we can drop the hard-dep

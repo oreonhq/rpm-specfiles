@@ -11,7 +11,7 @@ Summary:        Wrapper around libsass to compile CSS stylesheet
 
 License:        MIT
 URL:            http://github.com/sass/sassc
-Source0:        https://github.com/sass/sassc/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/sass/sassc/archive/%{version}/%{name}-%{version}.tar.gz#/sassc-3.6.2.tar.gz
 # Test suite spec. According to this comment from an upstream dev, we should
 # not use the release tags on the test spec:
 # https://github.com/sass/libsass/issues/2258#issuecomment-268196004

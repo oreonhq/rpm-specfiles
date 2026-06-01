@@ -23,6 +23,7 @@ used fonts on Microsoft systems: Times New Roman, Arial, and Courier New.}
 %global fontpkgheaderall  %{expand:
 Obsoletes: %{name} < %{epoch}:%{version}-%{release}
 Provides:  %{name} = %{epoch}:%{version}-%{release}
+
 }
 
 %global fontfamily1       Liberation Sans
@@ -30,6 +31,7 @@ Provides:  %{name} = %{epoch}:%{version}-%{release}
 %global fontpkgheader1    %{expand:
 Obsoletes: %{name}-common < %{epoch}:%{version}-%{release}
 Provides:  %{name}-common = %{epoch}:%{version}-%{release}
+
 }
 %global fonts1            LiberationSans*.ttf
 %global fontconfs1        %{SOURCE2}
@@ -44,6 +46,7 @@ Microsoft Arial.
 %global fontpkgheader2    %{expand:
 Obsoletes: %{name}-common < %{epoch}:%{version}-%{release}
 Provides:  %{name}-common = %{epoch}:%{version}-%{release}
+
 }
 %global fonts2            LiberationSerif*.ttf
 %global fontconfs2        %{SOURCE3}
@@ -58,6 +61,7 @@ Microsoft Times New Roman.
 %global fontpkgheader3    %{expand:
 Obsoletes: %{name}-common < %{epoch}:%{version}-%{release}
 Provides:  %{name}-common = %{epoch}:%{version}-%{release}
+
 }
 %global fonts3            LiberationMono*.ttf
 %global fontconfs3        %{SOURCE4}
@@ -67,9 +71,9 @@ Microsoft Courier New.
 
 %{common_description} }
 
-Source2:    59-liberation-mono-fonts.conf
-Source3:    59-liberation-sans-fonts.conf
-Source4:    59-liberation-serif-fonts.conf
+Source2:        https://raw.githubusercontent.com/liberationfonts/liberation-fonts/HEAD/59-liberation-mono-fonts.conf
+Source3:        https://raw.githubusercontent.com/liberationfonts/liberation-fonts/HEAD/59-liberation-sans-fonts.conf
+Source4:        https://raw.githubusercontent.com/liberationfonts/liberation-fonts/HEAD/59-liberation-serif-fonts.conf
 
 Name:       liberation-fonts
 Summary:    Fonts to replace commonly used Microsoft Windows fonts

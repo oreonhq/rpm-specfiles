@@ -11,16 +11,13 @@
 %global source225_hash 78cb93e361ab016fd23833c56853ddf21e2f1356310f54eed1c09a9755ce9f43
 
 Name: festival
-Summary: Speech synthesis and text-to-speech system
 Version: 2.5.0
 Release: %autorelease
+Summary: Speech synthesis and text-to-speech system
 
-URL: http://www.cstr.ed.ac.uk/projects/festival/
-# The Emacs file is GPL+, there is one TCL-licensed source file, and
-# the hts_engine module is covered by the three-clause BSD license.
 License: MIT AND GPL-1.0-or-later AND TCL AND BSD-3-Clause
+URL: http://www.cstr.ed.ac.uk/projects/festival/
 
-Obsoletes: festival-lib < %{version}-%{release}Obsoletes: festival-speechtools-libs < %{version}-%{release}Obsoletes: festival-speechtools-libs-devel < %{version}-%{release}Obsoletes: festival-speechtools-utils < %{version}-%{release}
 # Files needed for everything...
 %global baseURL  http://festvox.org/packed/festival/2.5
 Source0:        http://festvox.org/packed/festival/2.5/festival-2.5.0-release.tar.gz
@@ -77,6 +74,11 @@ BuildRequires: speech-tools-libs-static
 BuildRequires: systemd
 BuildRequires: make
 %{?systemd_requires}
+
+Obsoletes: festival-lib < %{version}-%{release}
+Obsoletes: festival-speechtools-libs < %{version}-%{release}
+Obsoletes: festival-speechtools-libs-devel < %{version}-%{release}
+Obsoletes: festival-speechtools-utils < %{version}-%{release}
 
 # Requires: festival-voice
 # The hard dep below provides a festival-voice, no need to require it here.

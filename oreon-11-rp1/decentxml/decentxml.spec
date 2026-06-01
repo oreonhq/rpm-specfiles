@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 84e096c352ffd8f9c1da4a3422c1db186d960aa4bb961676166c4f3687d752ad
 %global source1_hash 4f03503040be97dc04eb2fd5c7a448d197e720f069a6c6f33eba1b2c2bb17706
 
 %global revision 572a0baa91d1
@@ -22,7 +22,7 @@ ExclusiveArch:  %{java_arches} noarch
 # folder structure due to how Bitbucket makes zip archives:
 #
 # decentxml-1.4 -> digulla-decentxml-572a0baa91d1
-Source0:        https://bitbucket.org/digulla/%{name}/get/r%{version}.zip
+Source0:        https://repo1.maven.org/maven2/de/pdark/%{name}/%{version}/%{name}-%{version}-src.zip
 
 # For running w3c conformance test suite.
 Source1:          http://www.w3.org/XML/Test/xmlts20031210.zip
@@ -53,7 +53,7 @@ This package contains the API documentation for %{name}.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%setup -q -n digulla-%{name}-%{revision}
+%setup -q -n %{name}-%{version}
 
 # We are looking for xml conformance data one level above so unzip
 # here and symlink there.

@@ -24,7 +24,7 @@ It covers Unicode 13.0 and entire character set in 'definitive character set' of
 }
 
 # https://gitlab.com/rit-fonts/%%{fontsource}/-/jobs/artifacts/%%{version}/download?job=build-tag
-Source0:    %{fontsource}-%{version}.zip
+Source0:    https://gitlab.com/rit-fonts/%{fontsource}/-/jobs/artifacts/%{version}/download?job=build-tag#/%{fontsource}-%{version}.zip
 
 %fontpkg
 

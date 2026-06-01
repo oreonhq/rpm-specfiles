@@ -338,7 +338,9 @@ Requires:   %{name} = %{version}-%{release}
 Requires:   libpurple-devel = %{version}-%{release}
 Requires:   pkgconfig
 Requires:   gtk2-devel
-Obsoletes:  gaim-devel < %{version}-%{release}Provides:   gaim-devel = %{version}-%{release}
+Obsoletes:  gaim-devel < %{version}-%{release}
+
+Provides:   gaim-devel = %{version}-%{release}
 
 
 %description devel
@@ -361,7 +363,8 @@ Summary:    libpurple library for IM clients like Pidgin and Finch
 # Ensure elimination of gaim.i386 on x86_64
 Obsoletes:  gaim < 999:1
 %if %{meanwhile_integration}
-Obsoletes:  gaim-meanwhile < %{version}-%{release}%endif
+Obsoletes:  gaim-meanwhile < %{version}-%{release}
+%endif
 Requires:   glib2 >= %{glib_ver}
 # Bug #212817 Jabber needs cyrus-sasl plugins for authentication
 Requires:   cyrus-sasl-plain, cyrus-sasl-md5

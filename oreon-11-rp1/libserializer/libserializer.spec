@@ -1,4 +1,4 @@
-%global source0_hash 950ce21eef5fdd669468b355aeac44aee051d6eef1b52836a3c53bdf54d9cd07
+%global source0_hash 836784a9b3518e6ff116d5ee7999d228324522996f097765b6783df5f8d8e8a8
 
 Name: libserializer
 Version: 1.1.2
@@ -8,7 +8,7 @@ License: LGPL-2.1-or-later
 #Original source: http://downloads.sourceforge.net/jfreereport/libserializer-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
-Source: libserializer-%{version}-jarsdeleted.zip
+Source: https://downloads.sourceforge.net/jfreereport/libserializer-%{version}.zip
 URL: http://reporting.pentaho.org
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, libbase >= 1.1.2
 Requires: java-25-headless, jpackage-utils, libbase >= 1.1.2

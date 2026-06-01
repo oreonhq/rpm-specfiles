@@ -20,17 +20,17 @@ ExcludeArch:	%{ix86}
 # but we don't build a .arm package, just a shim-arm.aarch64 package
 ExcludeArch:	%{arm}
 
-Source0:	shim.rpmmacros
-Source1:	shim.conf
+Source0:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shim.rpmmacros
+Source1:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shim.conf
 
 # keep these two lists of sources synched up arch-wise.  That is 0 and 10
 # match, 1 and 11 match, ...
-Source10:	BOOTAA64.CSV
-Source20:	shimaa64.efi
-Source11:	BOOTIA32.CSV
-Source21:	shimia32.efi
-Source12:	BOOTX64.CSV
-Source22:	shimx64.efi
+Source10:        https://raw.githubusercontent.com/rhboot/shim/HEAD/BOOTAA64.CSV
+Source20:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shimaa64.efi
+Source11:        https://raw.githubusercontent.com/rhboot/shim/HEAD/BOOTIA32.CSV
+Source21:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shimia32.efi
+Source12:        https://raw.githubusercontent.com/rhboot/shim/HEAD/BOOTX64.CSV
+Source22:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shimx64.efi
 #Source13:	BOOTARM.CSV
 #Source23:	shimarm.efi
 

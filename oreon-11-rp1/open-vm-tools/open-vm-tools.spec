@@ -14,9 +14,9 @@ URL:              https://github.com/vmware/%{name}
 Source0:        https://github.com/vmware/%{name}/releases/download/stable-%{version}/%{name}-%{version}-%{toolsbuild}.tar.gz
 Source1:          %{toolsdaemon}.service
 Source2:          %{vgauthdaemon}.service
-Source3:          run-vmblock\x2dfuse.mount
-Source4:          open-vm-tools.conf
-Source5:          vmtoolsd.pam
+Source3:        https://raw.githubusercontent.com/vmware/%{name}/HEAD/run-vmblock\x2dfuse.mount
+Source4:        https://raw.githubusercontent.com/vmware/%{name}/HEAD/open-vm-tools.conf
+Source5:        https://raw.githubusercontent.com/vmware/%{name}/HEAD/vmtoolsd.pam
 
 Patch0:           open-vm-tools-gcc16.patch
 Patch1:           open-vm-tools-sigc++3.patch

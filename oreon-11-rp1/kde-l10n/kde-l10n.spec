@@ -209,6 +209,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-af)
 Provides: %{name}-Afrikaans = %{version}-%{release}
+
 Obsoletes: %{name}-Afrikaans < 4.14.3-2
 
 %description af
@@ -220,6 +221,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ar)
 Provides: %{name}-Arabic = %{version}-%{release}
+
 Obsoletes: %{name}-Arabic < 4.14.3-2
 %description ar
 %{summary}.
@@ -239,6 +241,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-az)
 Provides: %{name}-Azerbaijani = %{version}-%{release}
+
 Obsoletes: %{name}-Azerbaijani < 4.14.3-2
 %description az
 %{summary}.
@@ -249,6 +252,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-eu)
 Provides: %{name}-Basque = %{version}-%{release}
+
 Obsoletes: %{name}-Basque < 4.14.3-2
 %description eu
 %{summary}.
@@ -259,6 +263,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-be)
 Provides: %{name}-Belarusian = %{version}-%{release}
+
 Obsoletes: %{name}-Belarusian < 4.14.3-2
 %description be
 %{summary}.
@@ -269,6 +274,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-bn_IN)
 Provides: %{name}-Bengali-India = %{version}-%{release}
+
 Obsoletes: %{name}-Bengali-India < 4.14.3-2
 %description bn_IN
 %{summary}.
@@ -279,6 +285,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-bg)
 Provides: %{name}-Bulgarian = %{version}-%{release}
+
 Obsoletes: %{name}-Bulgarian < 4.14.3-2
 %description bg
 %{summary}.
@@ -289,6 +296,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-bo)
 Provides: %{name}-Tibetan = %{version}-%{release}
+
 Obsoletes: %{name}-Tibetan < 4.14.3-2
 %description bo
 %{summary}.
@@ -299,6 +307,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-br)
 Provides: %{name}-Breton = %{version}-%{release}
+
 Obsoletes: %{name}-Breton < 4.14.3-2
 %description br
 %{summary}.
@@ -309,6 +318,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-bs)
 Provides: %{name}-Bosnian = %{version}-%{release}
+
 Obsoletes: %{name}-Bosnian < 4.14.3-2
 %description bs
 %{summary}.
@@ -319,6 +329,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ca)
 Provides: %{name}-Catalan = %{version}-%{release}
+
 Obsoletes: %{name}-Catalan < 4.14.3-2
 %description ca
 %{summary}.
@@ -329,6 +340,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ca-valencia)
 Provides: %{name}-Catalan-Valencian = %{version}-%{release}
+
 Obsoletes: %{name}-Catalan-Valencian < 4.14.3-2
 %description ca-valencia
 %{summary}.
@@ -339,6 +351,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-cs)
 Provides: %{name}-Czech = %{version}-%{release}
+
 Obsoletes: %{name}-Czech < 4.14.3-2
 %description cs
 %{summary}.
@@ -349,6 +362,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-cy)
 Provides: %{name}-Welsh = %{version}-%{release}
+
 Obsoletes: %{name}-Welsh < 4.14.3-2
 %description cy
 %{summary}.
@@ -359,6 +373,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-da)
 Provides: %{name}-Danish = %{version}-%{release}
+
 Obsoletes: %{name}-Danish < 4.14.3-2
 %description da
 %{summary}.
@@ -369,6 +384,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-de)
 Provides: %{name}-German = %{version}-%{release}
+
 Obsoletes: %{name}-German < 4.14.3-2
 %description de
 %{summary}.
@@ -379,6 +395,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-el)
 Provides: %{name}-Greek = %{version}-%{release}
+
 Obsoletes: %{name}-Greek < 4.14.3-2
 %description el
 %{summary}.
@@ -389,6 +406,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-gu)
 Provides: %{name}-Gujarati = %{version}-%{release}
+
 Obsoletes: %{name}-Gujarati < 4.14.3-2
 %description gu
 %{summary}.
@@ -399,6 +417,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-en_GB)
 Provides: %{name}-British = %{version}-%{release}
+
 Obsoletes: %{name}-British < 4.14.3-2
 %description en_GB
 %{summary}.
@@ -409,6 +428,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-eo)
 Provides: %{name}-Esperanto = %{version}-%{release}
+
 Obsoletes: %{name}-Esperanto < 4.14.3-2
 %description eo
 %{summary}.
@@ -419,6 +439,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-es)
 Provides: %{name}-Spanish = %{version}-%{release}
+
 Obsoletes: %{name}-Spanish < 4.14.3-2
 %description es
 %{summary}.
@@ -429,6 +450,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-et)
 Provides: %{name}-Estonian = %{version}-%{release}
+
 Obsoletes: %{name}-Estonian < 4.14.3-2
 %description et
 %{summary}.
@@ -439,6 +461,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-fa)
 Provides: %{name}-Farsi = %{version}-%{release}
+
 Obsoletes: %{name}-Farsi < 4.14.3-2
 %description fa
 %{summary}.
@@ -449,6 +472,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-fi)
 Provides: %{name}-Finnish = %{version}-%{release}
+
 Obsoletes: %{name}-Finnish < 4.14.3-2
 %description fi
 %{summary}.
@@ -459,6 +483,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-fo)
 Provides: %{name}-Faroese = %{version}-%{release}
+
 Obsoletes: %{name}-Faroese < 4.14.3-2
 %description fo
 %{summary}.
@@ -469,6 +494,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-fr)
 Provides: %{name}-French = %{version}-%{release}
+
 Obsoletes: %{name}-French < 4.14.3-2
 %description fr
 %{summary}.
@@ -479,16 +505,19 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-fy)
 Provides: %{name}-Frisian = %{version}-%{release}
+
 Obsoletes: %{name}-Frisian < 4.14.3-2
 %description fy
 %{summary}.
 
 %package ga
 Summary: Irish language support for KDE Applications
-Obsoletes: kde-i18n-Gaeilge < %{version}-%{release}Requires: %{name} = %{version}-%{release}
+Obsoletes: kde-i18n-Gaeilge < %{version}-%{release}
+Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ga)
 Provides: %{name}-Irish = %{version}-%{release}
+
 Obsoletes: %{name}-Irish < 4.14.3-2
 %description ga
 %{summary}.
@@ -499,6 +528,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-gl)
 Provides: %{name}-Galician = %{version}-%{release}
+
 Obsoletes: %{name}-Galician < 4.14.3-2
 %description gl
 %{summary}.
@@ -509,6 +539,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-he)
 Provides: %{name}-Hebrew = %{version}-%{release}
+
 Obsoletes: %{name}-Hebrew < 4.14.3-2
 %description he
 %{summary}.
@@ -519,6 +550,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-hi)
 Provides: %{name}-Hindi = %{version}-%{release}
+
 Obsoletes: %{name}-Hindi < 4.14.3-2
 %description hi
 %{summary}.
@@ -529,6 +561,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-hne)
 Provides: %{name}-Chhattisgarhi = %{version}-%{release}
+
 Obsoletes: %{name}-Chhattisgarhi < 4.14.3-2
 %description hne
 %{summary}.
@@ -539,6 +572,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-hr)
 Provides: %{name}-Croatian = %{version}-%{release}
+
 Obsoletes: %{name}-Croatian < 4.14.3-2
 %description hr
 %{summary}.
@@ -549,6 +583,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-hu)
 Provides: %{name}-Hungarian = %{version}-%{release}
+
 Obsoletes: %{name}-Hungarian < 4.14.3-2
 %description hu
 %{summary}.
@@ -559,6 +594,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ia)
 Provides: %{name}-Interlingua = %{version}-%{release}
+
 Obsoletes: %{name}-Interlingua < 4.14.3-2
 %description ia
 %{summary}.
@@ -569,6 +605,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-id)
 Provides: %{name}-Indonesian = %{version}-%{release}
+
 Obsoletes: %{name}-Indonesian < 4.14.3-2
 %description id
 %{summary}.
@@ -579,6 +616,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-is)
 Provides: %{name}-Icelandic = %{version}-%{release}
+
 Obsoletes: %{name}-Icelandic < 4.14.3-2
 %description is
 %{summary}.
@@ -589,6 +627,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-it)
 Provides: %{name}-Italian = %{version}-%{release}
+
 Obsoletes: %{name}-Italian < 4.14.3-2
 %description it
 %{summary}.
@@ -599,6 +638,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ja)
 Provides: %{name}-Japanese = %{version}-%{release}
+
 Obsoletes: %{name}-Japanese < 4.14.3-2
 %description ja
 %{summary}.
@@ -609,6 +649,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-kn)
 Provides: %{name}-Kannada = %{version}-%{release}
+
 Obsoletes: %{name}-Kannada < 4.14.3-2
 %description kn
 %{summary}.
@@ -619,6 +660,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-csb)
 Provides: %{name}-Kashubian = %{version}-%{release}
+
 Obsoletes: %{name}-Kashubian < 4.14.3-2
 %description csb
 %{summary}.
@@ -629,6 +671,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-kk)
 Provides: %{name}-Kazakh = %{version}-%{release}
+
 Obsoletes: %{name}-Kazakh < 4.14.3-2
 %description kk
 %{summary}.
@@ -639,6 +682,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-km)
 Provides: %{name}-Khmer = %{version}-%{release}
+
 Obsoletes: %{name}-Khmer < 4.14.3-2
 %description km
 %{summary}.
@@ -649,6 +693,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ko)
 Provides: %{name}-Korean = %{version}-%{release}
+
 Obsoletes: %{name}-Korean < 4.14.3-2
 %description ko
 %{summary}.
@@ -659,6 +704,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ku)
 Provides: %{name}-Kurdish = %{version}-%{release}
+
 Obsoletes: %{name}-Kurdish < 4.14.3-2
 %description ku
 %{summary}.
@@ -669,6 +715,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-lo)
 Provides: %{name}-Lao = %{version}-%{release}
+
 Obsoletes: %{name}-Lao < 4.14.3-2
 %description lo
 %{summary}.
@@ -679,6 +726,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-lt)
 Provides: %{name}-Lithuanian = %{version}-%{release}
+
 Obsoletes: %{name}-Lithuanian < 4.14.3-2
 %description lt
 %{summary}.
@@ -689,6 +737,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-lv)
 Provides: %{name}-Latvian = %{version}-%{release}
+
 Obsoletes: %{name}-Latvian < 4.14.3-2
 %description lv
 %{summary}.
@@ -699,6 +748,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-nds)
 Provides: %{name}-LowSaxon = %{version}-%{release}
+
 Obsoletes: %{name}-LowSaxon < 4.14.3-2
 %description nds
 %{summary}.
@@ -709,6 +759,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-mi)
 Provides: %{name}-Maori = %{version}-%{release}
+
 Obsoletes: %{name}-Maori < 4.14.3-2
 %description mi
 %{summary}.
@@ -719,6 +770,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-mk)
 Provides: %{name}-Macedonian = %{version}-%{release}
+
 Obsoletes: %{name}-Macedonian < 4.14.3-2
 %description mk
 %{summary}.
@@ -729,6 +781,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-mai)
 Provides: %{name}-Maithili = %{version}-%{release}
+
 Obsoletes: %{name}-Maithili < 4.14.3-2
 %description mai
 %{summary}.
@@ -739,6 +792,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ml)
 Provides: %{name}-Malayalam = %{version}-%{release}
+
 Obsoletes: %{name}-Malayalam < 4.14.3-2
 %description ml
 %{summary}.
@@ -749,6 +803,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-mt)
 Provides: %{name}-Maltese = %{version}-%{release}
+
 Obsoletes: %{name}-Maltese < 4.14.3-2
 %description mt
 %{summary}.
@@ -759,6 +814,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-mr)
 Provides: %{name}-Marathi = %{version}-%{release}
+
 Obsoletes: %{name}-Marathi < 4.14.3-2
 %description mr
 %{summary}.
@@ -769,6 +825,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ne)
 Provides: %{name}-Nepali = %{version}-%{release}
+
 Obsoletes: %{name}-Nepali < 4.14.3-2
 %description ne
 %{summary}.
@@ -779,6 +836,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-nl)
 Provides: %{name}-Dutch = %{version}-%{release}
+
 Obsoletes: %{name}-Dutch < 4.14.3-2
 %description nl
 %{summary}.
@@ -789,6 +847,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-se)
 Provides: %{name}-NorthernSami = %{version}-%{release}
+
 Obsoletes: %{name}-NorthernSami < 4.14.3-2
 %description se
 %{summary}.
@@ -799,6 +858,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-nb)
 Provides: %{name}-Norwegian = %{version}-%{release}
+
 Obsoletes: %{name}-Norwegian < 4.14.3-2
 Obsoletes: kde-l10n-no <= 14.12.3
 %description nb
@@ -810,6 +870,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-nn)
 Provides: %{name}-Norwegian-Nynorsk = %{version}-%{release}
+
 Obsoletes: %{name}-Norwegian-Nynorsk < 4.14.3-2
 %description nn
 %{summary}.
@@ -820,6 +881,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-oc)
 Provides: %{name}-Occitan = %{version}-%{release}
+
 Obsoletes: %{name}-Occitan < 4.14.3-2
 %description oc
 %{summary}.
@@ -830,6 +892,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-pl)
 Provides: %{name}-Polish = %{version}-%{release}
+
 Obsoletes: %{name}-Polish < 4.14.3-2
 %description pl
 %{summary}.
@@ -840,6 +903,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-pt)
 Provides: %{name}-Portuguese = %{version}-%{release}
+
 Obsoletes: %{name}-Portuguese < 4.14.3-2
 %description pt
 %{summary}.
@@ -850,6 +914,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-pa)
 Provides: %{name}-Punjabi = %{version}-%{release}
+
 Obsoletes: %{name}-Punjabi < 4.14.3-2
 %description pa
 %{summary}.
@@ -860,6 +925,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-pt_BR)
 Provides: %{name}-Brazil = %{version}-%{release}
+
 Obsoletes: %{name}-Brazil < 4.14.3-2
 %description pt_BR
 %{summary}.
@@ -870,6 +936,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ro)
 Provides: %{name}-Romanian = %{version}-%{release}
+
 Obsoletes: %{name}-Romanian < 4.14.3-2
 %description ro
 %{summary}.
@@ -880,6 +947,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ru)
 Provides: %{name}-Russian = %{version}-%{release}
+
 Obsoletes: %{name}-Russian < 4.14.3-2
 %description ru
 %{summary}.
@@ -890,6 +958,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-si)
 Provides: %{name}-Sinhala = %{version}-%{release}
+
 Obsoletes: %{name}-Sinhala < 4.14.3-2
 %description si
 %{summary}.
@@ -900,6 +969,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-sk)
 Provides: %{name}-Slovak = %{version}-%{release}
+
 Obsoletes: %{name}-Slovak < 4.14.3-2
 %description sk
 %{summary}.
@@ -910,6 +980,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-sl)
 Provides: %{name}-Slovenian = %{version}-%{release}
+
 Obsoletes: %{name}-Slovenian < 4.14.3-2
 %description sl
 %{summary}.
@@ -920,6 +991,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-sr)
 Provides: %{name}-Serbian = %{version}-%{release}
+
 Obsoletes: %{name}-Serbian < 4.14.3-2
 %description sr
 %{summary}.
@@ -930,6 +1002,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-sv)
 Provides: %{name}-Swedish = %{version}-%{release}
+
 Obsoletes: %{name}-Swedish < 4.14.3-2
 %description sv
 %{summary}.
@@ -940,6 +1013,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ta)
 Provides: %{name}-Tamil = %{version}-%{release}
+
 Obsoletes: %{name}-Tamil < 4.14.3-2
 %description ta
 %{summary}.
@@ -950,6 +1024,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-tg)
 Provides: %{name}-Tajik = %{version}-%{release}
+
 Obsoletes: %{name}-Tajik < 4.14.3-2
 %description tg
 %{summary}.
@@ -960,6 +1035,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-th)
 Provides: %{name}-Thai = %{version}-%{release}
+
 Obsoletes: %{name}-Thai < 4.14.3-2
 %description th
 %{summary}.
@@ -970,6 +1046,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-tr)
 Provides: %{name}-Turkish = %{version}-%{release}
+
 Obsoletes: %{name}-Turkish < 4.14.3-2
 %description tr
 %{summary}.
@@ -980,6 +1057,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ug)
 Provides: %{name}-Uyghur = %{version}-%{release}
+
 Obsoletes: %{name}-Uyghur < 4.14.3-2
 %description ug 
 %{summary}.
@@ -990,6 +1068,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-uk)
 Provides: %{name}-Ukrainian = %{version}-%{release}
+
 Obsoletes: %{name}-Ukrainian < 4.14.3-2
 %description uk
 %{summary}.
@@ -1000,6 +1079,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ve)
 Provides: %{name}-Venda = %{version}-%{release}
+
 Obsoletes: %{name}-Venda < 4.14.3-2
 %description ve
 %{summary}.
@@ -1010,6 +1090,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-vi)
 Provides: %{name}-Vietnamese = %{version}-%{release}
+
 Obsoletes: %{name}-Vietnamese < 4.14.3-2
 %description vi
 %{summary}.
@@ -1020,6 +1101,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-wa)
 Provides: %{name}-Walloon = %{version}-%{release}
+
 Obsoletes: %{name}-Walloon < 4.14.3-2
 %description wa
 %{summary}.
@@ -1030,6 +1112,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-xh)
 Provides: %{name}-Xhosa = %{version}-%{release}
+
 Obsoletes: %{name}-Xhosa < 4.14.3-2
 %description xh
 %{summary}.
@@ -1040,6 +1123,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-zh_CN)
 Provides: %{name}-Chinese = %{version}-%{release}
+
 Obsoletes: %{name}-Chinese < 4.14.3-2
 %description zh_CN
 %{summary}.
@@ -1050,6 +1134,7 @@ Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-zh_TW)
 Provides: %{name}-Chinese-Traditional = %{version}-%{release}
+
 Obsoletes: %{name}-Chinese-Traditional < 4.14.3-2
 %description zh_TW
 %{summary}.

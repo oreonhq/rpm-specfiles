@@ -1,11 +1,11 @@
-%global source0_hash none
-%global source1_hash none
+%global source0_hash 45292f30b3cb8b9c03009804024df72a79e9b5ab89e41c94752d6ea58a1e4b02
+%global source1_hash b1044f02819da0708fc7071fa2a558ce5d3c29d6676c8cb113caaedd5903ff03
 
 Summary: Integer point manipulation library
 Name: isl
 Version: 0.16.1
 License: MIT
-URL: http://isl.gforge.inria.fr/
+URL: https://libisl.sourceforge.io/
 
 %global libmajor 15
 %global libversion %{libmajor}.1.1
@@ -27,10 +27,10 @@ BuildRequires: pkgconfig
 BuildRequires: make
 Provides: isl = %{oldversion}
 
-Source0:        http://isl.gforge.inria.fr/isl-%{version}.tar.xz
+Source0:        https://libisl.sourceforge.io/isl-%{version}.tar.xz
 
 # Current gcc requires exactly 0.14
-Source1:        http://isl.gforge.inria.fr/isl-%{oldversion}.tar.xz
+Source1:        https://libisl.sourceforge.io/isl-%{oldversion}.tar.xz
 
 %description
 isl is a library for manipulating sets and relations of integer points

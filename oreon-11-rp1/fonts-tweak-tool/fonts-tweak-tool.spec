@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1c647e31bee266d8c4f8ab5922dc8a4fec704bed0475629c1bcbb0ccdfdf3810
 
 Name: fonts-tweak-tool
 Version: 0.4.8
@@ -7,7 +7,7 @@ Summary: Tool for customizing fonts per language
 
 License: LGPL-3.0-or-later
 URL: https://gitlab.com/tagoh/%{name}/
-Source0:        https://gitlab.com/api/v4/projects/tagoh%2F%{name}packages/generic/%{name}/%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://gitlab.com/tagoh/%{name}/-/archive/%{version}/%{name}-%{version}.tar.bz2
 
 BuildRequires: desktop-file-utils
 BuildRequires: intltool

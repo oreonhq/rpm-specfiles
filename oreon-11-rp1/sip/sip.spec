@@ -2,15 +2,15 @@
 
 %bcond_without python3
 %if (0%{?fedora} && 0%{?fedora} < 32) || (0%{?rhel} && 0%{?rhel} < 9) || (0%{?oreon} >= 11)
-%bcond_without python2
+%bcond_with python2
 %endif
 
 %if %{with python3}
 %{!?python3_inc:%global python3_inc %(%{__python3} -c "from distutils.sysconfig import get_python_inc; print(get_python_inc(1))")}
 %endif
 %{!?__python2:%global __python2 /usr/bin/python2}
-%{!?python2_sitearch:%global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
-%{!?python2_inc:%global python2_inc %(%{__python2} -c "from distutils.sysconfig import get_python_inc; print get_python_inc(1)")}
+%{!?python2_sitearch:%global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))" 2>/dev/null || echo %{_libdir}/python2.7/site-packages)}
+%{!?python2_inc:%global python2_inc %(%{__python2} -c "from distutils.sysconfig import get_python_inc; print(get_python_inc(1))" 2>/dev/null || echo %{_includedir}/python2.7)}
 
 %if 0%{?fedora} > 31 || 0%{?rhel} > 8 || (0%{?oreon} >= 11)
 %global PYINCLUDE %{_includedir}/python%{python3_version}

@@ -15,7 +15,7 @@ URL:            https://codehaus-plexus.github.io/plexus-xml/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/%{name}/archive/%{name}-%{version}.tar.gz#/plexus-xml-4.0.4.tar.gz
 
 # https://github.com/codehaus-plexus/plexus-xml/pull/53
 Patch:          0001-Upgrade-to-Maven-4.0.0-rc-2.patch
@@ -37,7 +37,7 @@ A collection of various utility classes to ease working with XML.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n plexus-xml-4.0.4
 
 %build
 # Test dependencies are not packaged

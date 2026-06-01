@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 77ae1665a337f1c48c61d6b961db3e52119b38e58884d1c89684af31f87bc506
 
 Summary:          MirBSD enhanced version of the Korn Shell
 Name:             mksh
@@ -7,7 +7,7 @@ Release:          15%{?dist}
 # ISC (strlcpy.c) and MirOS (the rest)
 License:          MirOS AND ISC
 URL:              https://www.mirbsd.org/mksh.htm
-Source0:        https://www.mirbsd.org/MirOS/dist/mir/%{name}/%{name}-R%{version}.tgz
+Source0:        http://www.mirbsd.org/MirOS/dist/mir/%{name}/%{name}-R%{version}.tgz
 Source1:          dot-mkshrc
 Source2:          rtchecks.expected
 Provides:         /bin/ksh

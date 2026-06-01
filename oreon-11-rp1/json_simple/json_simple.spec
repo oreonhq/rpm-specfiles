@@ -1,4 +1,4 @@
-%global source0_hash a380f6605c0d7c9c97451f57f206e641b3a437322f9008b1c04beaa8d1b6421b
+%global source0_hash d1e45020d3d08855d8b393c6e6c4457931cf2c98c0c61f2b77f8bfb8348e7a1d
 
 Name:           json_simple
 Version:        1.1.1
@@ -10,9 +10,7 @@ URL:            http://code.google.com/p/json-simple/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-# svn export http://json-simple.googlecode.com/svn/tags/tag_release_1_1_1/ json-simple-1.1.1
-# tar czf json-simple-1.1.1-src-svn.tar.gz json-simple-1.1.1
-Source0:        json-simple-1.1.1-src-svn.tar.gz
+Source0:        https://github.com/fangyidong/json-simple/archive/refs/tags/tag_release_1_1_1.tar.gz#/json-simple-%{version}.tar.gz
 
 #https://code.google.com/p/json-simple/issues/detail?id=97
 Patch0:         json-simple-hash-java-1.8.patch
@@ -43,7 +41,7 @@ This package contains %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n json-simple-%{version}
+%setup -q -n json-simple-tag_release_1_1_1
 find . -name '*.jar' -exec rm -f '{}' \;
 # All the files have dos line endings, remove them.
 find . -type f -exec %{__sed} -i 's/\r//' {} \;

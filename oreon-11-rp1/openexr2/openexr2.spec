@@ -12,7 +12,7 @@ Summary:        Provides the specification and reference implementation of the E
 
 License:        BSD-3-Clause
 URL:            https://www.openexr.com/
-Source0:        https://github.com/AcademySoftwareFoundation/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/AcademySoftwareFoundation/%{srcname}/archive/v%{version}/%{srcname}-%{version}.tar.gz#/openexr2-2.5.8.tar.gz
 # Backport updated binary files for the tests.
 Source1:        https://github.com/AcademySoftwareFoundation/%{srcname}/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.interleaved.exr
 Source2:        https://github.com/AcademySoftwareFoundation/%{srcname}/raw/v3.1.11/src/test/OpenEXRTest/v1.7.test.planar.exr

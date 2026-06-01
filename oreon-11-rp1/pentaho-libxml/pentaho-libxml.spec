@@ -1,4 +1,4 @@
-%global source0_hash 93c7e4f052aa7f279c92dbda182ea5467d101915847a93a917653283bd961962
+%global source0_hash 570debae31c8187f8d6440bd07ac9b87efd078483eb2ae01ea64940c71967675
 
 %define origname libxml
 
@@ -10,7 +10,7 @@ License: LGPL-2.1-only
 #Original source: http://downloads.sourceforge.net/jfreereport/%%{origname}-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
-Source: %{origname}-%{version}-jarsdeleted.zip
+Source: https://downloads.sourceforge.net/jfreereport/%{origname}-%{version}.zip
 URL: http://reporting.pentaho.org/
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, libbase, libloader
 Requires: java-25-headless, jpackage-utils, libbase >= 1.1.2, libloader >= 1.1.2

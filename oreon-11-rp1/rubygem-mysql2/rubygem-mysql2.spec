@@ -1,5 +1,5 @@
 %global source0_hash ba09ede515a0ae8a7192040a1b778c0fb0f025fa5877e9be895cd325fa5e9d7b
-%global source1_hash 8c6efdf0af93f8623bdec7703a2cebb7367621963b0a3ea95b880ef06a41ea28
+%global source1_hash 8a70979ec650c3399891e6c05f2e65ada7a4b1da7ba14aeba14ab8317c5b506b
 
 # build with tests?
 %bcond_without tests
@@ -16,7 +16,7 @@ URL: https://github.com/brianmario/mysql2
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone --no-checkout https://github.com/brianmario/mysql2.git
 # cd mysql2 && git archive -v -o mysql2-0.5.7-tests.tar.gz 0.5.7 spec/
-Source1: %{gem_name}-%{version}-tests.tar.gz
+Source1: https://github.com/brianmario/mysql2/archive/refs/tags/%{version}.tar.gz#/%{gem_name}-%{version}-tests.tar.gz
 
 # Required in lib/mysql2.rb
 Requires: rubygem(bigdecimal)

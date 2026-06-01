@@ -1,4 +1,4 @@
-%global source0_hash 5e8e725db97e91cf4d14f82c1d75b45428b6f972eb4e5bd695e5aeefcad3686b
+%global source0_hash 8613a4ba7267b876f7017ce17dfbcce95baced39df007b831c685cccc3342f6e
 
 %global _hardened_build 1
 
@@ -36,8 +36,8 @@ License:        GPL-2.0-or-later
 %endif
 
 URL:            https://github.com/Scribery/%{name}
-Source0:        https://github.com/Scribery/tlog/releases/download/v14/tlog-14.tar.gz
-Source1:        tlog.sysusers
+Source0:        https://github.com/Scribery/tlog/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source1:        https://raw.githubusercontent.com/Scribery/%{name}/HEAD/tlog.sysusers
 
 Patch0001: 0001-Add-missing-argument-for-sigchld-handler.patch
 

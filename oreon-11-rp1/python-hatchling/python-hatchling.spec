@@ -8,7 +8,7 @@ Summary:        The build backend used by Hatch
 # SPDX
 License:        MIT
 URL:            https://pypi.org/project/hatchling
-Source0:        https://files.pythonhosted.org/packages/source/h/hatchling/hatchling-1.29.0.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/h/hatchling/hatchling-1.29.0.tar.gz#/python-hatchling-1.29.0.tar.gz
 # Written for Fedora in groff_man(7) format based on --help output
 Source100:      hatchling.1
 Source200:      hatchling-build.1

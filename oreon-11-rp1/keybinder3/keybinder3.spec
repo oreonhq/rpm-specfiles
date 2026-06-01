@@ -6,7 +6,7 @@ Release:	22%{?dist}
 Summary:	A library for registering global keyboard shortcuts
 License:	MIT
 URL:		https://github.com/kupferlauncher/keybinder
-Source0:        https://github.com/kupferlauncher/keybinder/releases/download/keybinder-3.0-v0.3.2/keybinder-3.0-0.3.2.tar.gz
+Source0:        https://github.com/kupferlauncher/keybinder/releases/download/keybinder-3.0-v0.3.2/keybinder-3.0-0.3.2.tar.gz#/keybinder3-0.3.2.tar.gz
 Patch0:        https://github.com/kupferlauncher/keybinder/pull/18.patch#/fix_gtkdoc.patch
 
 BuildRequires:	pkgconfig(gtk+-3.0), gtk-doc, gobject-introspection-devel

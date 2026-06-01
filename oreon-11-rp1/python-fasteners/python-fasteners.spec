@@ -10,7 +10,7 @@ Summary:        A python package that provides useful locks
 License:        Apache-2.0
 URL:            https://github.com/harlowja/fasteners
 # We need to use the GitHub archive instead of the PyPI sdist to get tests.
-Source:        https://github.com/harlowja/fasteners/archive/0.20/fasteners-0.20.tar.gz
+Source:        https://github.com/harlowja/fasteners/archive/0.20/fasteners-0.20.tar.gz#/python-fasteners-0.20.tar.gz
 
 %if %{with tests}
 %endif

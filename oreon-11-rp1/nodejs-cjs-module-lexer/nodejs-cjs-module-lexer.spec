@@ -14,7 +14,7 @@ Release:    %autorelease
 License:    MIT
 URL:        https://www.npmjs.com/package/cjs-module-lexer
 # The npmjs.org archive does not contain sources, only built artifacts
-Source:        https://github.com/nodejs/%{npm_name}/archive/%{version}/%{npm_name}-%{version}.tar.gz
+Source:        https://github.com/nodejs/%{npm_name}/archive/%{version}/%{npm_name}-%{version}.tar.gz#/nodejs-cjs-module-lexer-1.4.1.tar.gz
 # Production archive is not needed
 Source2:     %{npm_name}-%{version}-nm-dev.tgz
 Source3:     %{npm_name}-%{version}-bundled-licenses.txt

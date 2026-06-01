@@ -55,7 +55,8 @@ format image files.
 
 %package -n mingw32-%{name}
 Summary:       MinGW Windows %{name} library
-Obsoletes:     mingw32-%{name}-static < %{version}-%{release}BuildArch:     noarch
+BuildArch:     noarch
+Obsoletes:     mingw32-%{name}-static < %{version}-%{release}
 
 %description -n mingw32-%{name}
 %{summary}.
@@ -72,7 +73,8 @@ BuildArch:     noarch
 
 %package -n mingw64-%{name}
 Summary:       MinGW Windows %{name} library
-Obsoletes:     mingw64-%{name}-static < %{version}-%{release}BuildArch:     noarch
+BuildArch:     noarch
+Obsoletes:     mingw64-%{name}-static < %{version}-%{release}
 
 %description -n mingw64-%{name}
 %{summary}.

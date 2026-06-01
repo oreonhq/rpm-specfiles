@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 9609b75b0706265f589b9b15e9c1f986832b523b94f994d00f5284d3ff15f503
 
 %global glib2_version 2.68.0
 %global libxmlb_version 0.3.24

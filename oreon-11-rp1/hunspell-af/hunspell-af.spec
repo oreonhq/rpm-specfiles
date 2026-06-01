@@ -12,7 +12,7 @@ Summary: Afrikaans hunspell dictionary
 Version: 0.%{upstreamid}
 Release: 35%{?dist}
 # Following URL is dead now
-Source:        http://downloads.translate.org.za/spellchecker/afrikaans/myspell-af_ZA-0.%{upstreamid}.zip
+Source:        http://downloads.translate.org.za/spellchecker/afrikaans/myspell-af_ZA-0.%{upstreamid}.zip#/hunspell-af-0.%{upstreamid}.tar.gz
 URL: http://www.translate.org.za/
 License: LGPL-2.1-or-later
 BuildArch: noarch

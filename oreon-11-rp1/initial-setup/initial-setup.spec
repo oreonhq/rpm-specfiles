@@ -1,4 +1,4 @@
-%global source0_hash a4b8217ac76039613329a1eecba0b2f7d4de4cb07cca03ff0f4dda9311f71d30
+%global source0_hash 6a159b9628e59b76c127ab9d9bacd601f961f13a9012a6d7d5b19f93efe7eb10
 
 # Enable X11 for RHEL 9 and older only
 %bcond x11 %[0%{?rhel} && 0%{?rhel} < 10]
@@ -16,7 +16,7 @@ Release: 7%{?dist}
 # The source is thus available only from within this SRPM
 # or via direct git checkout:
 # git clone https://github.com/rhinstaller/initial-setup
-Source0: %{name}-%{version}.tar.gz
+Source0: https://github.com/rhinstaller/initial-setup/archive/refs/tags/r%{version}-1.tar.gz#/%{name}-%{version}.tar.gz
 
 %define debug_package %{nil}
 %define anacondaver 37.8-1
@@ -136,7 +136,7 @@ RemovePathPostfixes: .guixorg
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p 1
+%autosetup -p 1 -n %{name}-r%{version}-1
 
 # remove upstream egg-info
 rm -rf *.egg-info

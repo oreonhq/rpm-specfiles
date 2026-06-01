@@ -1,5 +1,5 @@
 %global source0_hash 4eeb0185c0fbfa889efed923b5b50e949cd869e7d82ac74138acd0c9c7165ec0
-%global source1_hash 766de812aaa69ca57392eaab3f3b3bd764b4ba71f8f8b229fd9787934563abd6
+%global source1_hash 180f18015ce01be1d10c24e13414134363d56f9efb741fda460358bb67d96684
 
 # Generated from ronn-ng-0.9.1.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name ronn-ng
@@ -13,7 +13,7 @@ URL:            https://github.com/apjanke/ronn-ng
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/apjanke/ronn-ng.git && cd ronn-ng
 # git archive -v -o ronn-ng-0.10.1-test.tar.gz v0.10.1 test/
-Source1: %{gem_name}-%{version}-test.tar.gz
+Source1: https://github.com/apjanke/ronn-ng/archive/refs/tags/v%{version}.tar.gz#/%{gem_name}-%{version}-test.tar.gz
 # https://github.com/apjanke/ronn-ng/pull/125
 # load fileutils explicitly for ruby34
 Patch0:         ronn-ng-pr125-ruby34-fileutils-deps.patch

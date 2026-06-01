@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash b347189ab550ae5bd1a19d323cdfd8928039853c23aa5e33d7273ab8c750692a
 
 %if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
 %bcond_with gconf
@@ -13,7 +13,7 @@ Release:   %autorelease
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:   GPL-2.0-or-later
 URL:       http://cdrdao.sourceforge.net/
-Source0:        http://prdownloads.sourceforge.net/%{name}/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/cdrdao/cdrdao/archive/refs/tags/rel_1_2_5.tar.gz#/%{name}-%{version}.tar.gz
 # https://github.com/cdrdao/cdrdao/pull/21
 # should fix whipper failure with this version of cdrdao:
 # https://github.com/whipper-team/whipper/issues/591
@@ -57,7 +57,7 @@ of pre-gaps, the pause areas between tracks.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p 1
+%autosetup -p 1 -n %{name}-rel_1_2_5
 
 %build
 #run autoreconf to support aarch64

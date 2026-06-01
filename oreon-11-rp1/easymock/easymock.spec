@@ -1,4 +1,4 @@
-%global source0_hash d0d7badd7697573aed4b844675b4b449df78f2217571a9e677ddb38c082be981
+%global source0_hash fd6ab5ea01df7730861cbcd998f952d64a88ae0087d10a3cfa5b7f5ea91765f5
 
 %bcond_with bootstrap
 
@@ -12,10 +12,8 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/easymock/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/easymock-5.6.0.tar.gz
 # Remove bundled binaries which cannot be easily verified for licensing
-Source1:        generate-tarball.sh
-
 Patch:          0001-Disable-android-support.patch
 # Forwarded: https://github.com/easymock/easymock/pull/807
 Patch:          0002-Migrate-from-deprecated-Hamcrest-is-to-isA.patch
@@ -53,7 +51,7 @@ So EasyMock is a perfect fit for Test-Driven Development.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{name}-%{version}
 
 
 %pom_remove_plugin -r :maven-javadoc-plugin

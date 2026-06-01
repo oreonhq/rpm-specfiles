@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 66bc8c38758801d5a1330588589b6e81f4d7272a6fbdad0cd4cfcd266848e160
 
 Name:    mallard-rng
 Version: 1.1.0
@@ -7,7 +7,7 @@ Summary: RELAX NG schemas for all Mallard versions
 
 License: MIT
 URL:     http://projectmallard.org/download/
-Source0:        http://projectmallard.org/download/%{name}-%{version}.tar.bz2
+Source0:        https://deb.debian.org/debian/pool/main/m/%{name}/%{name}_%{version}.orig.tar.bz2
 
 BuildArch:        noarch
 BuildRequires:    make

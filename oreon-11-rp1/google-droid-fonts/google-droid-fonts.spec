@@ -30,6 +30,7 @@ Pascal Zoghbi of 29ArabicLetters.}
 %global fontpkgheader1   %{expand:
 Obsoletes: google-droid-kufi-fonts < %{version}-%{release}
 Suggests: font(notosans)
+
 }
 %global fonts1            DroidSans*ttf DroidKufi*ttf
 %global fontsex1          DroidSansMono*ttf DroidSansFallback.ttf DroidSansHebrew.ttf
@@ -47,6 +48,7 @@ finalize the font family.}
 %global fontsummary2      Droid Sans Mono, a humanist mono-space sans-serif font family
 %global fontpkgheader2    %{expand:
 Suggests: font(notosansmono)
+
 }
 %global fonts2            DroidSansMono*ttf
 %global fontconfs2      %{SOURCE12}
@@ -60,6 +62,7 @@ user interfaces and electronic communication.}
 %global fontsummary3      Droid Serif, a contemporary serif font family
 %global fontpkgheader3    %{expand:
 Suggests: font(notoserif)
+
 }
 %global fonts3            DroidSerif*ttf DroidNaskh*ttf
 %global fontsex3          DroidNaskhUI-Regular.ttf DroidNaskh-Regular-Shift.ttf

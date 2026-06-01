@@ -17,7 +17,7 @@ Version:        4.26.0
 Release:        1%{?dist}
 License:        MIT
 URL:            https://github.com/Julian/jsonschema
-Source0:        https://files.pythonhosted.org/packages/source/j/jsonschema/jsonschema-4.26.0.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/j/jsonschema/jsonschema-4.26.0.tar.gz#/python-jsonschema-4.26.0.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

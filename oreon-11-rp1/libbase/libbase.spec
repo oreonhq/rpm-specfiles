@@ -1,4 +1,4 @@
-%global source0_hash 27ef2fa5f9e3a5ce85cfc1308600a7a93c24e25a33d4d63ea57ab308779453df
+%global source0_hash 9983f1cbd391352b143226635df4164cfab285cf630963f7fe4a17bc183894f6
 
 Name: libbase
 Version: 1.1.3
@@ -8,7 +8,7 @@ License: LGPL-2.1-only
 #Original source: http://downloads.sourceforge.net/jfreereport/%%{name}-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
-Source: %{name}-%{version}-jarsdeleted.zip
+Source: https://downloads.sourceforge.net/jfreereport/%{name}-%{version}.zip
 URL: http://reporting.pentaho.org/
 %if 0%{?fedora} >= 43 || (0%{?oreon} >= 11)
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils

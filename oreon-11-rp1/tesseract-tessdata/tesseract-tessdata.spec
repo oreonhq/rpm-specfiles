@@ -14,9 +14,9 @@ BuildArch:     noarch
 License:       Apache-2.0
 URL:           https://github.com/tesseract-ocr/tessdata_fast
 %if 0%{?commit:1}
-Source0:        https://github.com/tesseract-ocr/tessdata_fast/archive/%{version}%{?pre:-%pre}/tessdata_fast-%{version}%{?pre:-%pre}.tar.gz
+Source0:        https://github.com/tesseract-ocr/tessdata_fast/archive/%{version}%{?pre:-%pre}/tessdata_fast-%{version}%{?pre:-%pre}.tar.gz#/tesseract-tessdata-4.1.0.tar.gz
 %else
-Source0:        https://github.com/tesseract-ocr/tessdata_fast/archive/%{version}%{?pre:-%pre}/tessdata_fast-%{version}%{?pre:-%pre}.tar.gz
+Source0:        https://github.com/tesseract-ocr/tessdata_fast/archive/%{version}%{?pre:-%pre}/tessdata_fast-%{version}%{?pre:-%pre}.tar.gz#/tesseract-tessdata-4.1.0.tar.gz
 %endif
 
 
@@ -62,7 +62,6 @@ Data for processing images of mathematics with the Tesseract Open Source OCR Eng
 #
 %define lang_subpkg(l:m:n:) \
 %define macrolang %{-m:%{-m*}}%{!-m:%{error:3 letter Language code not defined}} \
-%define langcode %{-l:%{-l*}}%{!-l:%{error:Language code not defined}} \
 %define langname %{-n:%{-n*}}%{!-n:%{error:Language name not defined}} \
 \
 %package -n tesseract-langpack-%{macrolang}\
@@ -70,8 +69,8 @@ Summary:       %{langname} language data for %{name}\
 BuildArch:     noarch\
 Requires:      tesseract-common\
 Requires:      %{name}-doc = %{version}-%{release}\
-%{-l:Provides:      %{name}-langpack-%{langcode} = %{version}-%{release}\
-Supplements:   (tesseract and langpacks-%{langcode})}\
+%{-l:Provides:      %{name}-langpack-%{-l*} = %{version}-%{release}\
+Supplements:   (tesseract and langpacks-%{-l*})}\
 \
 %description -n tesseract-langpack-%{macrolang}\
 This package contains the fast integer version of the %{langname} language \

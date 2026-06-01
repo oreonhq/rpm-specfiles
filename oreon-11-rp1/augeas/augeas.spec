@@ -25,7 +25,7 @@ Source0:        https://github.com/rwmjones/augeas/archive/ada6219325d9a835b71b6
 # need to provide our own gnulib submodule.  I created this by doing:
 # (cd .gnulib && git archive --format=tar --prefix=.gnulib/ HEAD) |
 #   gzip -9 > gnulib-2f7479a16a.tar.gz
-Source1:        gnulib-2f7479a16a.tar.gz
+Source1:        https://github.com/coreutils/gnulib/archive/2f7479a16a.tar.gz#/gnulib-2f7479a16a.tar.gz
 
 Provides:       bundled(gnulib)
 

@@ -1,4 +1,4 @@
-%global source0_hash eac36e05cf29d13ac4986c6e9d5a505fbc66315bd4a448fe3309b5b10d373ad1
+%global source0_hash 8d33f9ad3f0fb47bc6e4b8d163e8c8d5d55031d523c3ec05e390dd837ed45625
 
 Name: librepository
 Version: 1.1.3
@@ -8,7 +8,7 @@ License: LGPL-2.1-only
 #Original source: http://downloads.sourceforge.net/jfreereport/%%name}-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
-Source: %{name}-%{version}-jarsdeleted.zip
+Source: https://downloads.sourceforge.net/jfreereport/%{name}-%{version}.zip
 URL: http://reporting.pentaho.org/
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, libbase >= 1.1.3
 Requires: java-25-headless, jpackage-utils, libbase >= 1.1.3

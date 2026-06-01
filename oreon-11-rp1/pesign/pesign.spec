@@ -46,9 +46,9 @@ BuildRequires: rh-signing-tools >= 1.20-2
 %endif
 
 Source0:        https://github.com/rhboot/pesign/releases/download/%{version}/pesign-%{version}.tar.bz2
-Source1: certs.tar.xz
-Source2: pesign.py
-Source3: pesign.patches
+Source1:        https://raw.githubusercontent.com/rhboot/pesign/HEAD/certs.tar.xz
+Source2:        https://raw.githubusercontent.com/rhboot/pesign/HEAD/pesign.py
+Source3:        https://raw.githubusercontent.com/rhboot/pesign/HEAD/pesign.patches
 
 # generate with tool
 %include %{SOURCE3}

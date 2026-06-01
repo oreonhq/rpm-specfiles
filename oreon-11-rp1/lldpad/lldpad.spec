@@ -13,7 +13,7 @@ Release:            16.git%{checkout}%{?dist}
 Summary:            Intel LLDP Agent
 License:            GPL-2.0-only
 URL:                http://open-lldp.org/
-Source0:        https://github.com/intel/openlldp/archive/refs/tags/85e5583.tar.gz
+Source0:        https://github.com/intel/openlldp/archive/%{checkout}.tar.gz#/openlldp-%{checkout}.tar.gz
 
 BuildRequires:      automake autoconf libtool
 BuildRequires:      flex >= 2.5.33
@@ -45,7 +45,7 @@ that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n openlldp-85e55837a81d710e5baa7da47f7ed0d205c8ede5
 
 %build
 ./bootstrap.sh

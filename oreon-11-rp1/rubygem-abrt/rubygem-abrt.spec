@@ -1,5 +1,5 @@
 %global source0_hash 6a97058583b091ad62d00ef18cc0b77e44ca7d20729d6f9fb40a01a41fd18735
-%global source1_hash 4d82e3fd8430f1ad297ea8107fbac54dae5396aca60177dbfcdde267c5817ec8
+%global source1_hash 18043e1d18329842e8ad3e8ac0ae1ca026093148aa833502f36b824c72fc01fd
 
 # Generated from abrt-0.0.2.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name abrt
@@ -13,7 +13,7 @@ URL: http://github.com/voxik/abrt-ruby
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/voxik/abrt-ruby.git && cd abrt-ruby
 # git archive -v -o abrt-0.5.0-spec.tar.gz v0.5.0 spec/
-Source1: %{gem_name}-%{version}-spec.tar.gz
+Source1: https://github.com/voxik/abrt-ruby/archive/refs/tags/v%{version}.tar.gz#/%{gem_name}-%{version}-spec.tar.gz
 Requires: libreport-filesystem
 # `logger` is now used instead of Ruby `Syslog`
 # https://github.com/voxik/abrt-ruby/pull/15/commits/ae31cc838a576794309209ec3ea83a18d12eb14e

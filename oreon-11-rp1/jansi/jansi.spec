@@ -1,4 +1,4 @@
-%global source0_hash adb920f39ccf5b9ad364c2560fc17299dfe6f429c91b691e40797337ae263045
+%global source0_hash f9e90c19c1922b51ff5bff5cc644a87a9c619b329b473a809e1d43a37a7fa1ce
 
 %bcond_with bootstrap
 
@@ -11,10 +11,8 @@ URL:            https://fusesource.github.io/jansi/
 ExclusiveArch:  %{java_arches}
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/fusesource/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jansi-2.4.2.tar.gz
 # Remove bundled binaries which cannot be easily verified for licensing
-Source1:        generate-tarball.sh
-
 # Change the location of the native artifact to where Fedora wants it
 Patch:          %{name}-jni.patch
 
@@ -41,7 +39,7 @@ when output is being sent to output devices which cannot support ANSI sequences.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{name}-%{version}
 
 # We don't need the Fuse JXR skin
 %pom_xpath_remove "pom:build/pom:extensions"

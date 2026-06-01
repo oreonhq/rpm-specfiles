@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8137cb0be4da66cd1a6e2f51c4ea533befdc63027ef3faed1875863e5f995e10
 
 %bcond_with bootstrap
 
@@ -12,11 +12,9 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-languages/archive/refs/tags/%{name}-%{version}.tar.gz#/plexus-languages-1.2.0.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 # Sources contain bundled jars that we cannot verify for licensing
-Source2:        generate-tarball.sh
-
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
 %else
@@ -37,7 +35,7 @@ language features.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{name}-%{version}
 
 cp %{SOURCE1} .
 

@@ -13,9 +13,8 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/3.2.2/surefire-3.2.2-source-release.zip
+Source0:        https://repo1.maven.org/maven2/org/apache/maven/surefire/surefire/3.2.2/surefire-3.2.2-source-release.zip#/maven-surefire-3.2.2.tar.gz
 # Remove bundled binaries which cannot be easily verified for licensing
-Source1:        generate-tarball.sh
 Source2:        https://junit.sourceforge.net/cpl-v10.html
 
 Patch:          0001-Port-to-TestNG-7.4.0.patch

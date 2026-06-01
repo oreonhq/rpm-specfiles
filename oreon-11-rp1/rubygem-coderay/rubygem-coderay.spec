@@ -1,5 +1,5 @@
 %global source0_hash dc530018a4684512f8f38143cd2a096c9f02a1fc2459edcfe534787a7fc77d4b
-%global source1_hash d9349a02080ff7ff48737ec946d2e7e872961af7a14829715ba6432616fbcd42
+%global source1_hash b69aa65951e5381fa807f347780030cfe557910427b5d26b9e0a309682186c8a
 
 %global gem_name coderay
 
@@ -16,7 +16,7 @@ URL: http://coderay.rubychan.de
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone https://github.com/rubychan/coderay --no-checkout
 # cd coderay && git archive -v -o coderay-1.1.3-tests.txz v1.1.3 test spec
-Source1: %{gem_name}-%{version}-tests.txz
+Source1: https://github.com/rubychan/coderay/archive/refs/tags/v%{version}.tar.gz#/%{gem_name}-%{version}-tests.txz
 # Fix test suite for ruby 3.0 change for methods on subclass of Array
 # https://github.com/rubychan/coderay/pull/255
 Patch0: rubygem-coderay-1.1.3-fix-tests-Array-on-ruby-3.0.patch

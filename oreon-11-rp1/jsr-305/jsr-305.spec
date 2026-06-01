@@ -1,4 +1,4 @@
-%global source0_hash 54c625077afc75ae4bdd654f1549f52dcc2d9884399628ac9b312fff8d46ed43
+%global source0_hash 8af3a7cf71c365163eb0409491ac7f8c28b0db61da1e35935ad1c6d50afc6df5
 %global source1_hash 57d47e633507ce6e039dd52752720fdc96262093d58e1f43a117a995e312cf09
 
 %bcond_with bootstrap
@@ -15,8 +15,8 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
-Source1:        https://github.com/stephenc/jcip-annotations/archive/refs/tags/jcip-annotations-1.0-1.tar.gz
+Source0:        https://github.com/amaembo/jsr-305/archive/d7734b13c61492982784560ed5b4f4bd6cf9bb2c/%{name}-%{version}.tar.gz#/jsr-305-3.0.2.tar.gz
+Source1:        https://github.com/stephenc/jcip-annotations/archive/refs/tags/jcip-annotations-1.0-1.tar.gz#/jsr-305-3.0.2.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -35,7 +35,7 @@ Detection.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n %{name}-d7734b13c61492982784560ed5b4f4bd6cf9bb2c
 
 # Replace javax.annotation.concurrent annotations (that are based on
 # code from https://jcip.net/ and are licensed under CC-BY-2.5, which

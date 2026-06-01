@@ -1069,6 +1069,7 @@ Provides: jre-%{origin}%{?1} = %{epoch}:%{version}-%{release}
 Provides: java%{?1} = %{epoch}:%{version}-%{release}
 Provides: jre%{?1} = %{epoch}:%{version}-%{release}
 %endif
+
 }
 
 %define java_headless_rpo() %{expand:
@@ -1111,6 +1112,7 @@ Provides: jre-%{origin}-headless%{?1} = %{epoch}:%{version}-%{release}
 Provides: jre-headless%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-headless%{?1} = %{epoch}:%{version}-%{release}
 %endif
+
 }
 
 %define java_devel_rpo() %{expand:
@@ -1133,6 +1135,7 @@ Provides: java-sdk-%{origin}%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-devel%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-sdk%{?1} = %{epoch}:%{version}-%{release}
 %endif
+
 }
 
 %define java_static_libs_rpo() %{expand:
@@ -1151,6 +1154,7 @@ Provides: java-%{javaver}-%{origin}-jmods%{?1} = %{epoch}:%{version}-%{release}
 %if %is_system_jdk
 Provides: java-jmods%{?1} = %{epoch}:%{version}-%{release}
 %endif
+
 }
 
 %define java_demo_rpo() %{expand:
@@ -1163,6 +1167,7 @@ Provides: java-%{javaver}-%{origin}-demo%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-demo%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-%{origin}-demo%{?1} = %{epoch}:%{version}-%{release}
 %endif
+
 }
 
 %define java_javadoc_rpo() %{expand:
@@ -1178,6 +1183,7 @@ Provides: java-%{javaver}-%{origin}-javadoc%{?1}%{?2} = %{epoch}:%{version}-%{re
 %if %is_system_jdk
 Provides: java-javadoc%{?1}%{?2} = %{epoch}:%{version}-%{release}
 %endif
+
 }
 
 %define java_src_rpo() %{expand:
@@ -1190,6 +1196,7 @@ Provides: java-%{javaver}-%{origin}-src%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-src%{?1} = %{epoch}:%{version}-%{release}
 Provides: java-%{origin}-src%{?1} = %{epoch}:%{version}-%{release}
 %endif
+
 }
 
 # Prevent brp-java-repack-jars from being run

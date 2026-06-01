@@ -10,7 +10,7 @@ Summary:        A single tool to manage your storage
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://system-storage-manager.github.io/
-Source0:        https://github.com/system-storage-manager/ssm/archive/%{name}-%{version}.tar.gz
+Source0:        https://github.com/system-storage-manager/ssm/archive/%{name}-%{version}.tar.gz#/system-storage-manager-1.3.tar.gz
 
 Patch1:         python3-sphinx.patch
 

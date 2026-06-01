@@ -11,7 +11,7 @@ URL:            https://github.com/codehaus-plexus/plexus-build-api
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-build-api/archive/refs/tags/plexus-build-api-0.0.7.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-build-api/archive/refs/tags/plexus-build-api-0.0.7.tar.gz#/plexus-build-api0-0.0.7.tar.gz
 Source1:        http://www.apache.org/licenses/LICENSE-2.0.txt
 
 # Forwarded upstream: https://github.com/sonatype/sisu-build-api/pull/2
@@ -34,7 +34,7 @@ Plexus Build API
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n plexus-build-api-plexus-build-api-0.0.7
 cp -p %{SOURCE1} .
 
 

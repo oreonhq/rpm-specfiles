@@ -1,4 +1,4 @@
-%global source0_hash 5f6b0bf60cbb946dc40e07d63e77f1d8307fbeeaf7bda39c56aff9fda1c387a9
+%global source0_hash 9a27844f4bea314fa3add288c1705360d59d9b7f1ca129062f07d0477d3effc5
 
 %bcond_with bootstrap
 %bcond_without jp_minimal
@@ -14,7 +14,7 @@ License:        Apache-2.0
 URL:            https://logging.apache.org/%{name}
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://archive.apache.org/dist/logging/%{name}/%{version}/apache-%{name}-%{version}-src.tar.gz
 
 Patch:          logging-log4j-Remove-unsupported-EventDataConverter.patch
 Patch:          0002-Remove-usage-of-toolchains.patch
@@ -134,7 +134,7 @@ Use NoSQL databases such as MongoDB and CouchDB to append log messages.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n apache-%{name}-%{version}-src
 
 %pom_remove_plugin -r :apache-rat-plugin
 %pom_remove_plugin -r :maven-site-plugin

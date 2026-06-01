@@ -82,17 +82,19 @@ License:        0BSD AND Apache-2.0 AND (Apache-2.0 WITH LLVM-exception) AND APS
 
 URL:            https://github.com/dotnet/
 
+Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{upstream_tag_without_v}.tar.gz
+Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-%{upstream_tag_without_v}.tar.gz.sig
+Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
+
 %if %{with bootstrap}
 # The source is generated on a Fedora box via:
 # ./build-dotnet-bootstrap-tarball %%{upstream_tag}
-Source0:        https://github.com/dotnet/dotnet/archive/refs/tags/%{upstream_tag}.tar.gz#/dotnet-%{upstream_tag_without_v}.tar.gz
 # The bootstrap SDK version is one listed in the global.json file of the main source archive
 %global bootstrap_sdk_version 9.0.100-rc.1.24452.12
 # Binaries can be at one of several different URLs:
 # GA releases:
 # Source1:        https://dotnetcli.azureedge.net/dotnet/Sdk/%%{bootstrap_sdk_version}/dotnet-sdk-%%{bootstrap_sdk_version}-linux-arm64.tar.gz
 # Preview releases:
-Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/dotnet-%{upstream_tag_without_v}.tar.gz.sig
 # To generate ppc64le and s390x archives:
 # 1. Find the source commits and versions of repos, use one of:
 #   - https://dotnetbuilds.azureedge.net/public/Sdk/%%{bootstrap_sdk_version}/productCommit-linux-x64.txt
@@ -103,18 +105,15 @@ Source1:        https://github.com/dotnet/dotnet/releases/download/%{upstream_ta
 # 5. Update the version below to match the SDK that was built from the VMR
 # The ppc64le/s390x SDK version is one produced
 %global bootstrap_sdk_version_ppc64le_s390x 9.0.100-rc.1.24452.1
-Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 Source3:        dotnet-prebuilts-%{bootstrap_sdk_version_ppc64le_s390x}-s390x.tar.gz
-%else
-Source2:        https://dotnet.microsoft.com/download/dotnet/release-key-2023.asc
 %endif
 
 Source5:        https://github.com/dotnet/dotnet/releases/download/%{upstream_tag}/release.json
 
-Source10:       macros.dotnet
+Source10:       https://raw.githubusercontent.com/dotnet/dotnet/%{upstream_tag}/macros.dotnet
 
-Source20:       check-debug-symbols.py
-Source21:       dotnet.sh.in
+Source20:       https://raw.githubusercontent.com/dotnet/dotnet/%{upstream_tag}/check-debug-symbols.py
+Source21:       https://raw.githubusercontent.com/dotnet/dotnet/%{upstream_tag}/dotnet.sh.in
 
 # https://github.com/dotnet/runtime/pull/95216#issuecomment-1842799314
 Patch0:         runtime-re-enable-implicit-rejection.patch

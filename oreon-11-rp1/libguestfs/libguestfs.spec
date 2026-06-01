@@ -620,7 +620,7 @@ for %{name}.
 
 
 %prep
-%(test -z "%{source7_key_fpr}" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source7_key_fpr}" || { echo "oreon: Source7 key fingerprint mismatch" >&2; exit 1; }; })
+%(test -z "%{source7_key_fpr}" || { f="%{SOURCE7}"; test -f "$f" || { echo "oreon: missing Source7 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source7_key_fpr}" || { echo "oreon: Source7 key fingerprint mismatch" >&2; exit 1; }; })
 %if 0%{verify_tarball_signature}
 %{gpgverify} --keyring='%{SOURCE7}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %endif

@@ -1,4 +1,4 @@
-%global source0_hash d6c90d23210f1133af5eb2b2c511dd97a34a54ee95ce3631be0bad7324e4d947
+%global source0_hash 148e9eccb5c91222b5f0c07359174ca0df1bd74834a2bae4c6e57c10136a2067
 
 %global date    20020801
 %global baserelease 24
@@ -14,7 +14,7 @@ Summary:        XHTML 1.0 document type definitions
 License:        W3C-19980720
 URL:            http://www.w3.org/TR/2002/REC-xhtml1-%{date}/
 # Source0 generated with Source99, see comments in the script
-Source0:        %{name}-%{date}.tar.xz
+Source0:        https://www.w3.org/TR/2002/REC-xhtml1-%{date}/xhtml1.tgz#/%{name}-%{date}.tar.gz
 Source1:        %{name}.catalog.xml
 Source99:       %{name}-prepare-tarball.sh
 Patch0:         %{name}-sgml-catalog.patch

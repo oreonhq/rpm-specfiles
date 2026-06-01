@@ -1,4 +1,4 @@
-%global source0_hash dbe1d53080cf6080c1aa0cf8959f3066fe650b2d9e2facd8ade1edcf4db14bb0
+%global source0_hash b82231e3d80513b6f4246231f1d6bbd6be9413cc549843aa3ef9c46f0fab8ec1
 
 %bcond_with bootstrap
 
@@ -12,10 +12,8 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/jhy/%{name}/archive/refs/tags/%{name}-%{version}.tar.gz#/jsoup-1.21.1.tar.gz
 # The sources contain non-free scraped web pages as test data
-Source1:        generate-tarball.sh
-
 BuildRequires:  jurand
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -46,7 +44,7 @@ tree.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{name}-%{version}
 
 %pom_remove_plugin :animal-sniffer-maven-plugin
 %pom_remove_plugin :maven-failsafe-plugin

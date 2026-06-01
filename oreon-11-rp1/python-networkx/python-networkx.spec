@@ -21,7 +21,7 @@ Summary:        Creates and Manipulates Graphs and Networks
 License:        BSD-3-Clause
 URL:            https://networkx.org/
 VCS:            git:%{giturl}.git
-Source0:        https://github.com/networkx/networkx/archive/networkx-3.6.1.tar.gz
+Source0:        https://github.com/networkx/networkx/archive/networkx-3.6.1.tar.gz#/python-networkx-3.6.1.tar.gz
 # For intersphinx
 Source1:        https://numpy.org/neps/objects.inv#/objects-neps.inv
 Source2:        https://matplotlib.org/stable/objects.inv#/objects-matplotlib.inv

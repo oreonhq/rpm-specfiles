@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 192c2fae048d4e7f514ba451627f9c4e612765099f819c19191f9fde3e609673
 
 %define byaccdate 20241231
 

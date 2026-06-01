@@ -11,7 +11,7 @@ URL:            https://github.com/uniVocity/univocity-parsers
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/uniVocity/univocity-parsers/archive/v%{version}.tar.gz
+Source0:        https://github.com/uniVocity/univocity-parsers/archive/v%{version}.tar.gz#/univocity-parsers-2.9.1.tar.gz
 
 Patch:          0001-Resolve-import-clash-with-OpenJDK-17.patch
 

@@ -7,7 +7,7 @@ Version: 0.64
 Release: 17%{?dist}
 License: LGPL-2.0-or-later
 URL: https://pagure.io/libuser
-Source: libuser-%{version}.tar.gz
+Source: https://releases.pagure.org/%{name}/%{name}-%{version}.tar.gz
 # https://pagure.io/libuser/pull-request/71
 Patch: 0001-tests-use-crypt_r-with-Python-3.13.patch
 Patch1:  libuser-0.64-editlocation.patch

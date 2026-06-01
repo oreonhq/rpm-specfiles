@@ -1,4 +1,4 @@
-%global source0_hash fc3f56389c48d9b957c286bcc3671ace54ccd37b0cc7f0d685c274fc40a64a9c
+%global source0_hash be03e0a4d086b932f90e7bd075765405d178a193c8c409afde8a81f2d216c840
 
 %bcond_with bootstrap
 
@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://gitlab.ow2.org/asm/asm/-/archive/ASM_9_7_1/asm-ASM_9_7_1.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        aggregator.pom
 Source2:        https://repo1.maven.org/maven2/org/ow2/asm/asm/%{version}/asm-%{version}.pom
 Source3:        https://repo1.maven.org/maven2/org/ow2/asm/asm-analysis/%{version}/asm-analysis-%{version}.pom
@@ -21,7 +21,6 @@ Source5:        https://repo1.maven.org/maven2/org/ow2/asm/asm-test/%{version}/a
 Source6:        https://repo1.maven.org/maven2/org/ow2/asm/asm-tree/%{version}/asm-tree-%{version}.pom
 Source7:        https://repo1.maven.org/maven2/org/ow2/asm/asm-util/%{version}/asm-util-%{version}.pom
 # The source contains binary jars that cannot be verified for licensing and could be proprietary
-Source9:        generate-tarball.sh
 Source10:       tools-retrofitter.pom
 
 Patch:          0001-Add-support-of-Java-25.patch
@@ -45,7 +44,7 @@ custom complex transformations and code analysis tools.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n asm-ASM_9_7_1
 
 # A custom pom to aggregate the build
 cp -p %{SOURCE1} pom.xml

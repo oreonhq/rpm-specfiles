@@ -42,7 +42,7 @@ Summary:        A tool for installing and managing Python packages
 
 License:        MIT AND Python-2.0.1 AND Apache-2.0 AND BSD-2-Clause AND BSD-3-Clause AND ISC AND MPL-2.0 AND (Apache-2.0 OR BSD-2-Clause)
 URL:            https://pip.pypa.io/
-Source0:        https://github.com/pypa/pip/archive/%{upstream_version}/%{srcname}-%{upstream_version}.tar.gz
+Source0:        https://github.com/pypa/pip/archive/%{upstream_version}/%{srcname}-%{upstream_version}.tar.gz#/python-pip-%{base_version}%{?prerel:~%{prerel}}.tar.gz
 
 # The following sources are wheels used only for tests.
 # They are not bundled in the built package and do not contribute to the overall license.
@@ -138,6 +138,7 @@ Provides: bundled(python%{1}dist(tomli)) = 2.3
 Provides: bundled(python%{1}dist(tomli-w)) = 1.2
 Provides: bundled(python%{1}dist(truststore)) = 0.10.4
 Provides: bundled(python%{1}dist(urllib3)) = 1.26.20
+
 }
 
 # Some manylinux1 wheels need libcrypt.so.1.

@@ -1,4 +1,4 @@
-%global source0_hash 1d86e389dfe9c77b7fbcdc8e990770902d7b71655e6db9665c7606210a8aaf32
+%global source0_hash b1b880e68a07bab6e9c303ed429b85b7830b71efecf731e8530262d426aedf01
 
 %bcond_with bootstrap
 
@@ -18,12 +18,10 @@ URL:            https://bnd.bndtools.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/bndtools/bnd/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # removes bundled jars from upstream tarball
 # run as:
 # ./generate-tarball.sh
-Source1:        generate-tarball.sh
-
 # Auxiliary parent pom, packager-written
 Source2:        aggregator.pom
 Source3:        https://repo1.maven.org/maven2/biz/aQute/bnd/aQute.libg/%{version}/aQute.libg-%{version}.pom
@@ -96,7 +94,7 @@ Summary:        BND Maven plugin
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n bnd-%{version}
 
 # the commands pull in more dependencies than we want (felix-resolver, jetty)
 rm biz.aQute.bnd/src/aQute/bnd/main/{ExportReportCommand,MbrCommand,RemoteCommand,ReporterLogger,ResolveCommand,Shell}.java

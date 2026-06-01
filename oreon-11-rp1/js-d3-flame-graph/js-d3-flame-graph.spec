@@ -14,7 +14,7 @@ BuildArch:      noarch
 License:        Apache-2.0
 URL:            %{github}
 
-Source0:        https://github.com/spiermar/d3-flame-graph/archive/4.0.7/d3-flame-graph-4.0.7.tar.gz
+Source0:        https://github.com/spiermar/d3-flame-graph/archive/4.0.7/d3-flame-graph-4.0.7.tar.gz#/js-d3-flame-graph-4.0.7.tar.gz
 # Note: In case there were no changes to this tarball, the NVR of this tarball
 # lags behind the NVR of this package.
 Source1:        js-d3-flame-graph-vendor-%{version}-1.tar.xz

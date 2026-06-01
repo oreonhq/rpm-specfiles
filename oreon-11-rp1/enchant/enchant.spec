@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 22080b2b94f222132da0d2d800437cf1ccd5e078df415e69771ad1070ac8487b
 
 # avoid incompatible pointer type errors with GCC 14
 %global build_type_safety_c 2
@@ -10,8 +10,8 @@ Release: 41%{?dist}
 Epoch: 1
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2+
-Source:        http://www.abisource.com/downloads/enchant/%{version}/enchant-%{version}.tar.gz
-URL: http://www.abisource.com/
+Source:        https://github.com/rrthomas/enchant/archive/refs/tags/enchant-1-6-0.tar.gz#/enchant-%{version}.tar.gz
+URL: https://github.com/rrthomas/enchant
 BuildRequires:  gcc-c++
 BuildRequires: glib2-devel >= 2.6.0
 BuildRequires: hunspell-devel
@@ -44,7 +44,7 @@ Libraries, headers, and support files necessary to compile applications using li
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -n enchant-enchant-1-6-0
 
 %build
 %configure --enable-myspell --with-myspell-dir=/usr/share/hunspell --disable-static --disable-ispell --disable-hspell --disable-zemberek --disable-aspell

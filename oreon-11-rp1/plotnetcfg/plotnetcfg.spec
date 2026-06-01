@@ -11,7 +11,7 @@ Summary:        A tool to plot network configuration
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:        GPL-2.0-or-later
 URL:            https://github.com/jbenc/plotnetcfg
-Source0:        https://github.com/jbenc/plotnetcfg/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
+Source0:        https://github.com/jbenc/plotnetcfg/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz#/plotnetcfg-0.4.1.tar.gz
 
 BuildRequires: make
 BuildRequires:  gcc, jansson-devel

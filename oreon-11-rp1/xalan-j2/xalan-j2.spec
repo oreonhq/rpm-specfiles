@@ -1,4 +1,4 @@
-%global source0_hash 5888df7df67e743e2a65a2e1bb26eea5c9a5a2b7fda650a2926337bd99bb4a7e
+%global source0_hash 638453194b6eb68f07f8d6becb14ff849913d3e93991fb866994badb94556456
 
 Name:           xalan-j2
 Version:        2.7.3
@@ -11,13 +11,11 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://archive.apache.org/dist/xalan/xalan-j/source/xalan-j_2_7_3-src.tar.gz#/%{name}-%{version}.tar.gz
 Source2:        https://repo1.maven.org/maven2/xalan/xalan/%{version}/xalan-%{version}.pom
 Source3:        https://repo1.maven.org/maven2/xalan/serializer/%{version}/serializer-%{version}.pom
 Source4:        xsltc-%{version}.pom
 # Remove bundled binaries which cannot be easily verified for licensing
-Source6:        generate-tarball.sh
-
 Patch:          xalan-j2-noxsltcdeps.patch
 
 BuildRequires:  javapackages-local-openjdk25
@@ -60,7 +58,7 @@ Documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n xalan-j_2_7_3
 
 sed -i '/<bootclasspath/d' build.xml
 

@@ -13,7 +13,7 @@ Summary:        A micro-framework for Python based on Werkzeug, Jinja 2 and good
 
 License:        BSD-3-Clause
 URL:            http://flask.pocoo.org/
-Source0:        https://files.pythonhosted.org/packages/source/f/flask/flask-3.1.3.tar.gz
+Source0:        https://files.pythonhosted.org/packages/source/f/flask/flask-3.1.3.tar.gz#/python-flask-3.1.3.tar.gz
 
 BuildArch:      noarch
 

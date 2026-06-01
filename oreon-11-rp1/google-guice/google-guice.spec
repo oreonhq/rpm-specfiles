@@ -12,8 +12,8 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./create-tarball.sh %%{version}
-Source0:        https://github.com/google/guice/archive/refs/tags/5.1.0.tar.gz
-Source1:        create-tarball.sh
+Source0:        https://github.com/google/guice/archive/refs/tags/5.1.0.tar.gz#/google-guice-5.1.0.tar.gz
+Source1:        https://raw.githubusercontent.com/google/guice/HEAD/create-tarball.sh
 
 BuildRequires:  jurand
 %if %{with bootstrap}
@@ -121,7 +121,7 @@ and above. This package provides Bill of Materials module for Guice.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n guice-5.1.0
 
 %java_remove_annotations core/src/ \
   -p ^com.google.common.annotations. \

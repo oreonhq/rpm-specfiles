@@ -29,6 +29,7 @@ terminals.
 %global fontpkgheader1    %{expand:
 Provides: %{name}-cjk = %{version}-%{release}
 Conflicts: bitmap-lucida-typewriter-opentype-fonts
+
 }
 %global fonts1            lut*.pcf.gz
 %global fontconfs1        %{SOURCE17}
@@ -56,6 +57,7 @@ Conflicts: bitmap-lucida-typewriter-fonts
 %global fontpkgheader3    %{expand:
 Provides: %{name}-cjk = %{version}-%{release}
 Conflicts: bitmap-fangsongti-opentype-fonts
+
 }
 %global fonts3            fangsongti*.pcf.gz
 %global fontconfs3        %{SOURCE13}
@@ -130,7 +132,7 @@ Conflicts: bitmap-fixed-fonts
 
 
 Source0:  bitmap-fonts-%{version}.tar.bz2
-Source1:  fixfont-3.5.tar.bz2
+Source1:        https://ftp.x.org/pub/individual/font/fixfont-3.5.tar.bz2
 Source2:  LICENSE
 Source3:  COPYING
 Source11: 66-bitmap-console.conf

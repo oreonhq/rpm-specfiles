@@ -23,7 +23,7 @@ Name: xsane
 Summary: X Window System front-end for the SANE scanner interface
 Version: 0.999
 Release: %{autorelease}
-Source0:        http://www.xsane.org/download/%{name}-%{version}.tar.gz
+Source0:        https://ftp.osuosl.org/pub/blfs/conglomeration/xsane/%{name}-%{version}.tar.gz
 Source1: xsane-256x256.png
 # use "xdg-open" instead of "netscape" to launch help browser
 # submitted to upstream (Oliver Rauch) via email, 2013-06-04

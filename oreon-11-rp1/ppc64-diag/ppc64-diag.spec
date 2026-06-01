@@ -26,12 +26,12 @@ Requires:       servicelog
 Requires:       lsvpd
 Requires:       powerpc-utils >= 1.3.0
 
-Source0:        https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz
-Source1:        add_regex.8
-Source2:        convert_dt_node_props.8
-Source3:        extract_opal_dump.8
-Source4:        extract_platdump.8
-Source5:        rtas_errd.8
+Source0:        https://github.com/power-ras/%{name}/archive/v%{version}/%{name}-%{version}.tar.gz#/ppc64-diag-2.7.11.tar.gz
+Source1:        https://raw.githubusercontent.com/power-ras/%{name}/HEAD/add_regex.8
+Source2:        https://raw.githubusercontent.com/power-ras/%{name}/HEAD/convert_dt_node_props.8
+Source3:        https://raw.githubusercontent.com/power-ras/%{name}/HEAD/extract_opal_dump.8
+Source4:        https://raw.githubusercontent.com/power-ras/%{name}/HEAD/extract_platdump.8
+Source5:        https://raw.githubusercontent.com/power-ras/%{name}/HEAD/rtas_errd.8
 
 # fix paths and permissions
 Patch0:         ppc64-diag-2.7.9-fedora.patch

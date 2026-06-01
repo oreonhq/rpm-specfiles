@@ -1,4 +1,4 @@
-%global source0_hash d82b9a627f5657015c27538e1e3f55537c695b12d72f9f44ad146314af940705
+%global source0_hash ed25f020c3eedad02d7bea4ce9fd845ca312e7433ddfa6405769502c3353dab2
 
 %bcond_with bootstrap
 %global pkg_version 11b
@@ -13,9 +13,7 @@ URL:            https://www2.cs.tum.edu/projects/cup/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-# git clone https://github.com/DrMichaelPetter/cup.git
-# git -C cup archive --prefix java_cup-0.11b/ c35ed3ab0cde2310af9b01321c930349c7c797e2 | zstd -15 >java_cup-0.11b.tar.zst
-Source0:        java_cup-%{version}.tar.zst
+Source0:        https://github.com/DrMichaelPetter/cup/archive/c35ed3ab0cde2310af9b01321c930349c7c797e2.tar.gz#/java_cup-%{version}.tar.gz
 # Add OSGi manifests
 Source2:        %{name}-MANIFEST.MF
 Source4:        %{name}-runtime-MANIFEST.MF
@@ -44,7 +42,7 @@ Documentation for java_cup.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n cup-c35ed3ab0cde2310af9b01321c930349c7c797e2
 
 # remove all binary files
 find -name "*.class" -delete
@@ -52,10 +50,10 @@ find -name "*.class" -delete
 %mvn_file ':{*}' @1
 
 # remove prebuilt JFlex
-rm -rf java_cup-%{version}/bin/JFlex.jar
+rm -rf bin/JFlex.jar
 
 # remove prebuilt java_cup, if not bootstrapping
-rm -rf java_cup-%{version}/bin/java-cup-11.jar
+rm -rf bin/java-cup-11.jar
 
 %build
 export CLASSPATH=$(build-classpath java_cup java_cup-runtime jflex)

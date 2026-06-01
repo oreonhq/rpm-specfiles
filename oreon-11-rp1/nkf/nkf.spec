@@ -1,15 +1,15 @@
-%global source0_hash none
+%global source0_hash 0693dc93fe462ac90ce61468ff4ea5b3cc98198504d0eaf6636e3938867c960d
 
 Name:		nkf
 Epoch:		1
 Version:	2.1.4
 Release:	38%{?dist}
 License:	Zlib
-URL:		http://nkf.osdn.jp/
-Source0:        http://iij.dl.osdn.jp/nkf/64158/%{name}-%{version}.tar.gz
+URL:		https://github.com/nurse/nkf
+Source0:        https://github.com/nurse/%{name}/archive/refs/tags/v2_1_4.tar.gz#/%{name}-%{version}.tar.gz
 ## snippet from the source code
-Source3:	nkf.copyright
-Source4:	nkf.1j
+Source3:        https://raw.githubusercontent.com/nurse/nkf/HEAD/nkf.copyright
+Source4:        https://raw.githubusercontent.com/nurse/nkf/HEAD/nkf.1j
 Patch0:		%{name}-fix-man.patch
 BuildRequires: make
 BuildRequires:	perl-devel
@@ -34,7 +34,7 @@ Conversion details are specified by flags before the last argument.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n %{name}-2_1_4
 cp -p %{SOURCE4} .
 
 %build

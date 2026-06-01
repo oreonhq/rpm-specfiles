@@ -1,5 +1,5 @@
 %global source0_hash 1388d0563e13d2758c1089e35e973a3249e955c659592d10e5b77c468f628a99
-%global source1_hash 5bf95b0350adae30fd5f4984170e4ce0206c2c6bea14ba81dfb0c86f1dea417c
+%global source1_hash b8018cb91daca6396d7de17d33645d00c7f3d7fe0ad8b9fa248bb24f2ec7efe8
 
 # Generated from pg-0.11.0.gem by gem2rpm -*- rpm-spec -*-
 %global gem_name pg
@@ -13,7 +13,7 @@ URL: https://github.com/ged/ruby-pg
 Source0:        https://rubygems.org/gems/%{gem_name}-%{version}.gem
 # git clone --no-checkout https://github.com/ged/ruby-pg.git
 # git archive -v -o pg-1.6.3-spec.tar.gz v1.6.3 spec/
-Source1: %{gem_name}-%{version}-spec.tar.gz
+Source1: https://github.com/ged/ruby-pg/archive/refs/tags/v%{version}.tar.gz#/%{gem_name}-%{version}-spec.tar.gz
 # Disable RPATH.
 # https://github.com/ged/ruby-pg/issues/183
 Patch0: rubygem-pg-1.3.0-remove-rpath.patch

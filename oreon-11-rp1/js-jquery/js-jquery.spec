@@ -13,7 +13,7 @@ BuildArch:      noarch
 
 License:        MIT
 URL:            https://jquery.com/
-Source0:        https://github.com/jquery/jquery/archive/%{version}/jquery-%{version}.tar.gz
+Source0:        https://github.com/jquery/jquery/archive/%{version}/jquery-%{version}.tar.gz#/js-jquery-3.7.1.tar.gz
 # Created by ./update-sources.sh <version>
 Source1:        jquery_%{version}_node_modules.tar.gz
 

@@ -1,4 +1,4 @@
-%global source0_hash 6f12dac0c26465bca4d8e09cbdaa52c4e9c9e7e66b2f7bfe5bf4924202e93c70
+%global source0_hash 5daf516c2169f63b995bc46d299b27b54587f0446c1923412e21a8554ce4a241
 
 Name: libformula
 Version: 1.1.3
@@ -8,7 +8,7 @@ License: LGPL-2.1-only
 #Original source: http://downloads.sourceforge.net/jfreereport/%%{name}-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
-Source: %{name}-%{version}-jarsdeleted.zip
+Source: https://downloads.sourceforge.net/jfreereport/%{name}-%{version}.zip
 URL: http://reporting.pentaho.org/
 BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, libbase >= 1.1.3
 Requires: java-25-headless, jpackage-utils, libbase >= 1.1.3

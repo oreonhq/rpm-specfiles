@@ -25,7 +25,7 @@ Summary:        Performance Co-Pilot Grafana Plugin
 License:        Apache-2.0
 URL:            https://github.com/performancecopilot/grafana-pcp
 
-Source0:        https://github.com/performancecopilot/grafana-pcp/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/performancecopilot/grafana-pcp/archive/v%{version}/%{name}-%{version}.tar.gz#/grafana-pcp-5.3.0.tar.gz
 Source1:        grafana-pcp-vendor-%{version}-1.tar.xz
 # Note: In case there were no changes to this tarball, the NVR of this tarball
 # lags behind the NVR of this package.
@@ -35,10 +35,10 @@ Source1:        grafana-pcp-vendor-%{version}-1.tar.xz
 # lags behind the NVR of this package.
 Source2:        grafana-pcp-webpack-%{version}-1.tar.gz
 %endif
-Source3:        create_bundles.sh
-Source4:        build_frontend.sh
-Source5:        list_bundled_nodejs_packages.py
-Source6:        create_bundles_in_container.sh
+Source3:        https://raw.githubusercontent.com/performancecopilot/grafana-pcp/HEAD/create_bundles.sh
+Source4:        https://raw.githubusercontent.com/performancecopilot/grafana-pcp/HEAD/build_frontend.sh
+Source5:        https://raw.githubusercontent.com/performancecopilot/grafana-pcp/HEAD/list_bundled_nodejs_packages.py
+Source6:        https://raw.githubusercontent.com/performancecopilot/grafana-pcp/HEAD/create_bundles_in_container.sh
 
 Patch1:         0001-remove-unused-frontend-crypto.patch
 Patch2:         0002-remove-faulty-metric-tables.patch

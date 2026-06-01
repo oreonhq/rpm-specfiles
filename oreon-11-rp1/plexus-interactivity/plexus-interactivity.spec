@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/codehaus-plexus/plexus-interactivity/archive/plexus-interactivity-1.3.tar.gz
-Source1:        LICENSE.MIT
+Source1:        https://raw.githubusercontent.com/codehaus-plexus/plexus-interactivity/HEAD/LICENSE.MIT
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap
@@ -35,7 +35,7 @@ sources.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n plexus-interactivity-plexus-interactivity-1.3
 cp %{SOURCE1} .
 
 %build

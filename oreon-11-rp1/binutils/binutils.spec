@@ -123,7 +123,7 @@ URL: https://sourceware.org/binutils
 # They are a "snapshot" of the about to be released branch sources, rather than
 # a snapshot of the mainline development sources.
 
-%define source official-release
+%define source snapshot
 # %%define source even-pre-release
 # %%define source odd-pre-release
 # %%define source snapshot
@@ -228,12 +228,12 @@ Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.t
 %elif "%{source}" == "odd-pre-release"
 Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "snapshot"
-Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
+Source0:        https://sourceware.org/git/binutils-gdb.git/snapshot/binutils-gdb-%{commit_id}.tar.bz2#/binutils-with-gold-%{version}-%{commit_id}.tar.bz2
 %elif "%{source}" == "tarball"
 Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %endif
 
-Source1: binutils-2.19.50.0.1-output-format.sed
+Source1: https://sourceware.org/git/binutils-gdb.git/plain/binutils-2.19.50.0.1-output-format.sed#/binutils-2.19.50.0.1-output-format.sed
 
 %if "%{gold_tarball}" != "none"
 Source2: %{gold_tarball}.tar.xz

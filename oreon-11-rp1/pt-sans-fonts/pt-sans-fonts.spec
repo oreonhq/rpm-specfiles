@@ -15,6 +15,7 @@ URL:     http://www.paratype.com/public/
 %global fontpkgheader     %{expand:
 Obsoletes: paratype-pt-sans-fonts         <= %{version}-%{release}
 Obsoletes: paratype-pt-sans-caption-fonts <= %{version}-%{release}
+
 }
 %global fonts             PTS*.ttf PTN*.ttf PTC*.ttf
 %global fontconfngs       %{SOURCE10}

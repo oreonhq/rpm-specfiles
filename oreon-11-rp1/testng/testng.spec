@@ -1,4 +1,4 @@
-%global source0_hash 4aeb00ab2a24fc3fd61c70a585142e2a681e10398e4894f76dc5854e227c2639
+%global source0_hash 94337f64dfc2d461adf9d3a7c6db9d0e4174ae314a061108713b2e8e7f28fe0a
 
 %bcond_with bootstrap
 
@@ -12,12 +12,10 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 # ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/testng-team/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # Allows building with maven instead of gradle
 Source1:        https://repo1.maven.org/maven2/org/testng/testng/%{version}/testng-%{version}.pom
 # Remove bundled binaries to make sure we don't ship anything forbidden
-Source2:        generate-tarball.sh
-
 Patch:          0001-Avoid-accidental-javascript-in-javadoc.patch
 Patch:          0002-Replace-bundled-jquery-with-CDN-link.patch
 

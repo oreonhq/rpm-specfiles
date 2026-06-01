@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f2f69d770b86cb5c26b5e0a4f4f0f09ecbf31f5774ed66d032f10ee1424a17d6
 
 # Copyright (c) 2000-2005, JPackage Project
 # All rights reserved.
@@ -39,8 +39,8 @@ Summary:        A SAX-compliant HTML parser written in Java
 # likely mixup of upstream but needs to be cleared up
 # Automatically converted from old format: ASL 2.0 and (GPLv2+ or AFL) - review is highly recommended.
 License:        Apache-2.0 AND (GPL-2.0-or-later OR LicenseRef-Callaway-AFL)
-Source0:        http://vrici.lojban.org/~cowan/XML/tagsoup/tagsoup-1.2.1-src.zip
-URL:            http://vrici.lojban.org/~cowan/XML/tagsoup/
+Source0:        https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/%{version}/tagsoup-%{version}-sources.jar#/tagsoup-%{version}-src.zip
+URL:            https://home.ccil.org/~cowan/XML/tagsoup/
 Source1:        https://repo1.maven.org/maven2/org/ccil/cowan/tagsoup/tagsoup/%{version}/tagsoup-%{version}.pom
 # fix version
 Patch0:         tagsoup-1.2.1-man.patch
@@ -70,7 +70,7 @@ Javadoc for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%setup -q -c
 
 find . -name '*.class' -delete
 find . -name "*.jar" -delete

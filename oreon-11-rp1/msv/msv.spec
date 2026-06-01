@@ -1,4 +1,4 @@
-%global source0_hash 28869a93011d8eec94e760c1a7d7ec2a337a62d9bc94b8a6a61d98504ed26cb3
+%global source0_hash 8b1279458c32580f17116bcd0af87ec583279bfa00276248f180118cdc823e3e
 
 Name:           msv
 Version:        2022.7
@@ -20,10 +20,7 @@ URL:            https://xmlark.github.io/msv/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-# ./generate-tarball.sh
-Source0:        %{name}-%{version}.tar.gz
-Source1:        generate-tarball.sh
-
+Source0:        https://github.com/xmlark/msv/archive/refs/tags/msv-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch:          0001-Disable-Apache-XercesImpl.patch
 
 BuildRequires:  maven-local-openjdk25
@@ -51,7 +48,7 @@ intended for use with applications that incorporate XML Schema Part 2.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n %{name}-%{name}-%{version}
 
 # Disable runtime dependency on Apache Xerces
 rm xsdlib/src/main/java/com/sun/msv/datatype/xsd/regex/XercesImpl.java

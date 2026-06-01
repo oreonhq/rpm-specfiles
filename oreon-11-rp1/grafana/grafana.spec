@@ -36,7 +36,7 @@ License:          AGPL-3.0-only
 URL:              https://grafana.org
 
 # Source0 contains the tagged upstream sources
-Source0:        https://github.com/grafana/grafana/archive/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/grafana/grafana/archive/v%{version}/%{name}-%{version}.tar.gz#/grafana-10.2.6.tar.gz
 
 # Source1 contains the bundled Go and Node.js dependencies
 # Note: In case there were no changes to this tarball, the NVR of this tarball

@@ -202,7 +202,9 @@ BuildRequires:  libicu-devel
 BuildRequires:  perl-interpreter
 Requires:       mozilla-filesystem
 BuildRequires:  dbus-glib-devel
-Obsoletes:      thunderbird-lightning < %{version}-%{release}Provides:       thunderbird-lightning
+Obsoletes:      thunderbird-lightning < %{version}-%{release}
+Provides:       thunderbird-lightning
+
 Obsoletes:      thunderbird-lightning-gdata <= 1:3.3.0.14
 BuildRequires:  rust
 BuildRequires:  cargo

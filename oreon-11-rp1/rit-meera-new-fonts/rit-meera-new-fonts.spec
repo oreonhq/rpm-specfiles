@@ -27,7 +27,7 @@ by KH Hussain and developed by Rachana Institute of Typography.
 
 
 # https://gitlab.com/rit-fonts/%%{fontsource}/-/jobs/artifacts/%%{version}/download?job=build-tag
-Source0:    %{fontsource}-%{version}.zip
+Source0:    https://gitlab.com/rit-fonts/%{fontsource}/-/jobs/artifacts/%{version}/download?job=build-tag#/%{fontsource}-%{version}.zip
 
 %fontpkg
 

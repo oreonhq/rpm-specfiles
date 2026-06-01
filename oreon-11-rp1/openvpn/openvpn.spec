@@ -99,7 +99,7 @@ written in C and provides a more low-level and information rich access
 to similar features as the various script-hooks.
 
 %prep
-%(test -z "%{source10_key_fpr}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 key $f" >&2; exit 1; }; fpr=$(gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source10_key_fpr}" || { echo "oreon: Source10 key fingerprint mismatch" >&2; exit 1; }; })
+%(test -z "%{source10_key_fpr}" || { f="%{SOURCE10}"; test -f "$f" || { echo "oreon: missing Source10 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source10_key_fpr}" || { echo "oreon: Source10 key fingerprint mismatch" >&2; exit 1; }; })
 %{gpgverify} --keyring='%{SOURCE10}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 gpgv2 --quiet --keyring %{SOURCE10} %{SOURCE1} %{SOURCE0}
 %autosetup -p1
