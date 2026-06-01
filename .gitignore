@@ -43,3 +43,5 @@ oreon-11-rp1/**/*.srpm
 !oreon-11-rp1/or11-**/*.txz
 !oreon-11-rp1/or11-**/*.zip
 !oreon-11-rp1/or11-**/*.zst
+
+.vscode/
