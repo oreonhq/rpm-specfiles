@@ -1,4 +1,4 @@
-%global source0_hash a02f6580e9a53cb16694a99adbb6dbf76f17584f3e97f469a22286299507838c
+%global source0_hash none
 
 %global fontname oxygen
 %global fontconf 61-%{fontname}

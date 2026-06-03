@@ -1,12 +1,10 @@
-%global source0_hash 4756da0f61ec7b069097b12d5623e2266f2ff17501ee785346c300e6b8eda467
+%global source0_hash none
 
-# Where lock files are stored
 %global _lockdir /run/lock/lockdev
 
 %global checkout 20111007git
 %global co_date  2011-10-07
 
-#http://lists.fedoraproject.org/pipermail/devel/2011-August/155358.html
 %global _hardened_build 1
 
 Summary: A library for locking devices
@@ -14,14 +12,12 @@ Name: lockdev
 Version: 1.0.4
 Release: %autorelease -p -e %{checkout}
 License: LGPL-2.1-or-later
-URL: https://alioth.debian.org/projects/lockdev/
+URL: https://github.com/definesat/lockdev
 
-# This is a nightly snapshot downloaded via
-# https://alioth.debian.org/snapshots.php?group_id=100443
 Source0: lockdev-%{version}.%{checkout}.tar.gz
 
-Patch1: lockdev-euidaccess.patch
-Patch2: 0001-major-and-minor-functions-moved-to-sysmacros.h.patch
+Patch1:        https://src.fedoraproject.org/rpms/lockdev/raw/rawhide/f/lockdev-euidaccess.patch
+Patch2:        https://src.fedoraproject.org/rpms/lockdev/raw/rawhide/f/0001-major-and-minor-functions-moved-to-sysmacros.h.patch
 
 Requires(post): glibc
 Requires(postun): glibc
@@ -34,6 +30,8 @@ BuildRequires: perl-interpreter
 BuildRequires: perl(ExtUtils::MakeMaker)
 BuildRequires: systemd
 BuildRequires: make
+BuildRequires: git
+BuildRequires: curl
 
 %description
 Lockdev provides a reliable way to put an exclusive lock to devices
@@ -50,26 +48,30 @@ package contains the development headers.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+_tar="lockdev-%{version}.%{checkout}.tar.gz"
+if test ! -f "$_tar"; then
+  curl -sfL -o _ld.tar.gz "https://codeload.github.com/definesat/lockdev/tar.gz/master"
+  rm -rf lockdev-scm-%{co_date}
+  mkdir lockdev-scm-%{co_date}
+  tar xzf _ld.tar.gz -C lockdev-scm-%{co_date} --strip-components=1
+  tar czf "$_tar" lockdev-scm-%{co_date}
+  rm -rf _ld.tar.gz lockdev-scm-%{co_date}
+fi
+test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n lockdev-scm-%{co_date}
 
-# Replace access() calls with euidaccess() (600636#c33)
 %patch -P1 -p1 -b .access
 %patch -P2 -p1
 
-# Create a sysusers.d config file
 cat >lockdev.sysusers.conf <<EOF
 g lock 54
 EOF
 
 %build
-# Generate version information from git release tag
 ./scripts/git-version > VERSION
 
-# To satisfy automake
 touch ChangeLog
 
-# Bootstrap autotools
 autoreconf --verbose --force --install
 
 CFLAGS="%{optflags} -D_PATH_LOCK=\\\"%{_lockdir}\\\"" \
@@ -82,15 +84,10 @@ make install DESTDIR=%{buildroot}
 
 rm -f %{buildroot}%{_libdir}/*.la
 
-# %%ghosted, but needs to be in buildroot
-# on reboot re-created by %%{_prefix}/lib/tmpfiles.d/legacy.conf
 mkdir -p %{buildroot}%{_lockdir}
 
-# install /usr/lib/tmpfiles.d/lockdev.conf (#1324184)
 mkdir -p ${RPM_BUILD_ROOT}%{_tmpfilesdir}
 cat > ${RPM_BUILD_ROOT}%{_tmpfilesdir}/lockdev.conf <<EOF
-# See tmpfiles.d(5) for details
-
 d %{_lockdir} 0775 root lock -
 EOF
 
@@ -99,7 +96,6 @@ install -m0644 -D lockdev.sysusers.conf %{buildroot}%{_sysusersdir}/lockdev.conf
 
 %post
 if [ $1 -eq 1 ] ; then
-# for the time until first reboot
 %tmpfiles_create lockdev.conf
 fi
 

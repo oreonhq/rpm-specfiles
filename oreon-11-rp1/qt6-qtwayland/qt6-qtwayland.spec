@@ -1,4 +1,4 @@
-%global source0_hash 95788aa502f75441d4edf65932b235f76523084e13dbbb7b9ee2d207b32bd9b3
+%global source0_hash none
 
 %global qt_module qtwayland
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - Wayland platform support and QtCompositor module
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0

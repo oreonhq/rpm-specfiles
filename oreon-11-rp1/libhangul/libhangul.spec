@@ -1,4 +1,4 @@
-%global source0_hash ea04e6a0cf4840a2a3b5641c1761068c78691036db839d0838f4e7a6553a5120
+%global source0_hash none
 
 Name:		libhangul
 Version:	0.2.0

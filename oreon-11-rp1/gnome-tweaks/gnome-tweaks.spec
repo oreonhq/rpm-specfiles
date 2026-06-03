@@ -1,7 +1,7 @@
 %global source0_hash none
 
-%global tarball_version %%(tr '~' '.' <<<%{version})
-%global major_version %%(cut -d '.' -f 1 <<<%{tarball_version})
+%global tarball_version %(echo %{version} | tr '~' '.')
+%global major_version %(echo %{tarball_version} | cut -d. -f1)
 
 Name:           gnome-tweaks
 Version:        49.0

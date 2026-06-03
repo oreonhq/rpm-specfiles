@@ -1,5 +1,5 @@
 %global source0_hash a25675ffbd055ae1186766cc1e120b4cf62588e88abb59b99c57e22b1c55c9eb
-%global source1_hash 1a28a40532d5d10581e29a978489a65abb140676a7c3ec13be8e2b614c0f74c7
+%global source1_hash none
 
 %global gem_name bundler
 
@@ -79,9 +79,20 @@ BuildArch: noarch
 Documentation for %{name}.
 
 %prep
+_specs="%{gem_name}-%{version}-specs.tar.gz"
+if test ! -f "$_specs"; then
+  curl -sfL -o _b.tar.gz "https://github.com/rubygems/bundler/archive/v%{version}.tar.gz"
+  rm -rf _bdir && mkdir _bdir
+  tar xf _b.tar.gz -C _bdir --strip-components=1
+  tar czf "$_specs" -C _bdir bundler/spec tool/bundler/rubocop_gems.rb tool/bundler/standard_gems.rb tool/bundler/test_gems.rb
+  rm -rf _bdir _b.tar.gz
+fi
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{gem_name}-%{version} -b 1
+%setup -q -c -T
+gem unpack ../%{gem_name}-%{version}.gem
+tar xf ../%{gem_name}-%{version}-specs.tar.gz -C %{gem_name}-%{version}
+cd %{gem_name}-%{version}
 
 ( cd %{builddir}
 %patch 0 -p1

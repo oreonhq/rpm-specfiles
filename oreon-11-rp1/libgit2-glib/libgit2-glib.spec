@@ -1,4 +1,4 @@
-%global source0_hash 97423a779002b3be8751c75f9d79049dfccca3616a26159fc162486772ba785f
+%global source0_hash none
 
 %global libgit2_version 1.9.0
 %global glib2_version 2.44.0
@@ -42,7 +42,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n libgit2-glib-1.2.1
 
 %build
 %meson -Dgtk_doc=true \

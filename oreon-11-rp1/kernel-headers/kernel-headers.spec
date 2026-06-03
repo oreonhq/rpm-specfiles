@@ -1,4 +1,4 @@
-%global source0_hash 2d008966890846791a708624cc3c953c955d2e03075afa5fdbf4142132845549
+%global source0_hash none
 
 # For a stable, released kernel, released_kernel should be 1. For rawhide
 # and/or a kernel built from an rc or git snapshot, released_kernel should
@@ -27,9 +27,12 @@ Release: %{specrelease}
 # directory, or git kernel source repository, and do eg.:
 # For a RHEL package: (...)/create_headers_tarball.sh -m RHEL_RELEASE
 # For a Fedora package: kernel/scripts/create_headers_tarball.sh -r <release number>
-Source0: kernel-headers-%{tarfile_release}.tar.xz
+Source0: https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-%{tarfile_release}.tar.xz#/kernel-headers-%{tarfile_release}.tar.xz
 Obsoletes: glibc-kernheaders < 3.0-46
 Provides: glibc-kernheaders = 3.0-46
+BuildRequires: curl
+BuildRequires: tar
+BuildRequires: xz
 %if "0%{?variant}"
 Obsoletes: kernel-headers < %{specversion}-%{specrelease}
 Provides: kernel-headers = %{specversion}-%{specrelease}
@@ -53,7 +56,16 @@ building most standard programs and are also needed for rebuilding the
 cross-glibc package.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+_tar="kernel-headers-%{tarfile_release}.tar.xz"
+if test ! -f "$_tar"; then
+  curl -sfL -o _linux.tar.xz "https://cdn.kernel.org/pub/linux/kernel/v7.x/linux-%{tarfile_release}.tar.xz"
+  rm -rf _kh linux-%{tarfile_release}
+  tar xJf _linux.tar.xz
+  bash linux-%{tarfile_release}/scripts/create_headers_tarball.sh -r %{tarfile_release}
+  mv kernel-headers-%{tarfile_release}.tar.xz "$_tar" 2>/dev/null || mv kernel-headers-*.tar.xz "$_tar"
+  rm -rf _linux.tar.xz linux-%{tarfile_release}
+fi
+test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -c
 
 %build

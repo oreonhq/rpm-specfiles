@@ -12,7 +12,7 @@ License:        Apache-2.0
 URL:            http://svn.codehaus.org/plexus/plexus-containers/tags/plexus-containers-1.0-alpha-15/plexus-component-api/
 #svn export http://svn.codehaus.org/plexus/plexus-containers/tags/plexus-containers-1.0-alpha-15/plexus-component-api/ plexus-component-api-1.0-alpha-15
 #tar zcf plexus-component-api-1.0-alpha-15.tar.gz plexus-component-api-1.0-alpha-15/
-Source0:        %{name}-%{project_version}.tar.gz
+Source0:        https://github.com/sonatype/plexus-containers/archive/plexus-containers-1.0-alpha-15.tar.gz#/plexus-component-api-1.0-alpha-15.tar.gz
 
 BuildArch: noarch
 ExclusiveArch:  %{java_arches} noarch
@@ -38,7 +38,7 @@ API documentation for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{name}-%{project_version}
+%setup -q -n plexus-containers-plexus-containers-1.0-alpha-15/%{name}-%{project_version}
 
 %build
 %mvn_build

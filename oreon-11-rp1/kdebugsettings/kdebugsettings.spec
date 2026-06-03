@@ -1,4 +1,4 @@
-%global source0_hash 7dfc8129112aa8f10ea6a73000e7a54d3720ee08b8cd8a1aa0dd0fc243fb4cdf
+%global source0_hash none
 
 %global stable_kf6 stable
 
@@ -41,7 +41,7 @@ An application to enable/disable qCDebug
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+%autosetup -n kdebugsettings-26.04.1
 
 
 %build

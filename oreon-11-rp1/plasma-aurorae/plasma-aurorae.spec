@@ -16,7 +16,7 @@ Summary: Window decoration engine for KWin (Aurorae)
 License: CC0-1.0 AND GPL-2.0-or-later AND MIT
 URL:     https://invent.kde.org/plasma/%{base_name}.git
 
-Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_name}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++

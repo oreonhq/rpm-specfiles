@@ -1,7 +1,5 @@
 %global source0_hash none
 
-%global tarball_version %(echo %{version} | tr '~' '.')
-
 Name:           tecla
 Version:        50.0
 Release:        %autorelease
@@ -9,7 +7,7 @@ Summary:        Keyboard layout viewer
 
 License:        GPL-2.0-or-later
 URL:            https://gitlab.gnome.org/GNOME/tecla
-Source:         https://download.gnome.org/sources/tecla/50/tecla-%{tarball_version}.tar.xz
+Source:         https://download.gnome.org/sources/tecla/50/tecla-%{version}.tar.xz
 BuildRequires:  gcc
 BuildRequires:  gettext
 BuildRequires:  meson
@@ -36,7 +34,7 @@ developing applications that use %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n tecla-%{tarball_version}
+%autosetup -p1 -n tecla-%{version}
 
 
 %build

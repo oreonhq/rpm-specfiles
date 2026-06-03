@@ -1,4 +1,4 @@
-%global source0_hash 8f207e8323a1ad470787f94e76e9fefbe8939989e334b6b0e900a03615dabf20
+%global source0_hash none
 
 Summary:        Tar file manipulation API
 Name:           libtar
@@ -6,22 +6,22 @@ Version:        1.2.20
 Release:        35%{?dist}
 License:        MIT
 URL:            http://repo.or.cz/libtar.git
-Source:         http://repo.or.cz/libtar.git/snapshot/refs/tags/v1.2.20.tar.gz#/libtar-v1.2.20.tar.gz
-Patch1:         libtar-1.2.11-missing-protos.patch
-Patch4:         libtar-1.2.11-mem-deref.patch
-Patch5:         libtar-1.2.20-fix-resource-leaks.patch
-Patch6:         libtar-1.2.11-bz729009.patch
-Patch7:         libtar-1.2.20-no-static-buffer.patch
+Source:         https://repo.or.cz/libtar.git/snapshot/refs/tags/v1.2.20.tar.gz#/libtar-v1.2.20.tar.gz
+Patch1:        https://src.fedoraproject.org/rpms/libtar/raw/rawhide/f/libtar-1.2.11-missing-protos.patch
+Patch4:        https://src.fedoraproject.org/rpms/libtar/raw/rawhide/f/libtar-1.2.11-mem-deref.patch
+Patch5:        https://src.fedoraproject.org/rpms/libtar/raw/rawhide/f/libtar-1.2.20-fix-resource-leaks.patch
+Patch6:        https://src.fedoraproject.org/rpms/libtar/raw/rawhide/f/libtar-1.2.11-bz729009.patch
+Patch7:        https://src.fedoraproject.org/rpms/libtar/raw/rawhide/f/libtar-1.2.20-no-static-buffer.patch
 
 # fix programming mistakes detected by static analysis
-Patch8:         libtar-1.2.20-static-analysis.patch
+Patch8:        https://src.fedoraproject.org/rpms/libtar/raw/rawhide/f/libtar-1.2.20-static-analysis.patch
 
 # fix out-of-bounds read in gnu_long{name,link} (CVE-2021-33643 CVE-2021-33644)
-Patch9:         libtar-1.2.20-CVE-2021-33643-CVE-2021-33644.patch
+Patch9:        https://src.fedoraproject.org/rpms/libtar/raw/rawhide/f/libtar-1.2.20-CVE-2021-33643-CVE-2021-33644.patch
 
 # fix memory leaks through gnu_long{name,link} (CVE-2021-33645 CVE-2021-33646)
-Patch10:        libtar-1.2.20-CVE-2021-33645-CVE-2021-33646.patch
-Patch11: libtar-configure-c99.patch
+Patch10:        https://src.fedoraproject.org/rpms/libtar/raw/rawhide/f/libtar-1.2.20-CVE-2021-33645-CVE-2021-33646.patch
+Patch11:        https://src.fedoraproject.org/rpms/libtar/raw/rawhide/f/libtar-configure-c99.patch
 
 BuildRequires:  libtool
 BuildRequires:  make

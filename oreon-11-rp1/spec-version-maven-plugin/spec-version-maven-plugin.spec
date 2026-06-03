@@ -1,4 +1,4 @@
-%global source0_hash 53c9a72d4e4e792d72dc39195783094eb92e9558d550958ffc68f9a91bcd0430
+%global source0_hash none
 
 %global giturl  https://github.com/eclipse-ee4j/glassfish-%{name}
 

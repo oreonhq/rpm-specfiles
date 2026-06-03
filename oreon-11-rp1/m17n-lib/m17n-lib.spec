@@ -1,4 +1,4 @@
-%global source0_hash 7129fe3b7ad500f88b8af8605ef07b96c87a75ec986a695fffc0a409f44a7c86
+%global source0_hash none
 
 # note this duplicates native anthy IMEs
 %if 0%{?fedora} || (0%{?oreon} >= 11)
@@ -14,7 +14,7 @@ Summary:        Multilingual text library
 
 License:        LGPL-2.1-or-later
 URL:            http://www.nongnu.org/m17n/
-Source0:        http://download.savannah.gnu.org/releases/m17n/%{name}-%{version}.tar.gz
+Source0:        https://download.savannah.gnu.org/releases/m17n/%{name}-%{version}.tar.gz
 Patch0:         %{name}-1.8.0-multilib.patch
 
 BuildRequires: make
@@ -70,7 +70,7 @@ Tools to test M17n GUI widget library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n m17n-lib-1.8.6
 
 %build
 #autoreconf -ivf

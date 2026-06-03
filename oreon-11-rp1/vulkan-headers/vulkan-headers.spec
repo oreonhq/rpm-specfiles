@@ -1,4 +1,4 @@
-%global source0_hash d73bc5036b6556b741f6985ff600ca720308c5f2850e4a43ceb498bd3de069e7
+%global source0_hash none
 
 %global __python %{__python3}
 Name:           vulkan-headers

@@ -1,4 +1,4 @@
-%global source0_hash 9af31a898ffd9a7e4faf6fed845d29e783c716885789055cbe319f3e072d3974
+%global source0_hash none
 
 %global qt_module qtserialport
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - SerialPort component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 # See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details

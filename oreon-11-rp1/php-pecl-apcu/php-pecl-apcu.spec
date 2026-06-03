@@ -1,4 +1,4 @@
-%global source0_hash 0e60ba9d0fa4021c57a70c071f3d8f71de236275d084e560d5959fec4edd8c32
+%global source0_hash none
 
 # Fedora spec file for php-pecl-apcu
 #

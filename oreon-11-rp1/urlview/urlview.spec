@@ -2,7 +2,7 @@
 
 %global gitdate 20131022
 %global gitfullrev 08767aa863cd27d1755ba0aff65b8cc1a0c1446a
-%global gitrev %(c=%{gitfullrev}; echo ${c:0:6})
+%global gitrev 08767a
 Name:           urlview
 Version:        0.9
 Release:        41.%{gitdate}git%{gitrev}%{?dist}
@@ -19,7 +19,7 @@ BuildRequires:  ncurses-devel
 # mutt packages before 5:1.5.16-2 included urlview
 Conflicts:      mutt < 5:1.5.16-2
 
-Patch1:         urlview-default.patch
+Patch1:        https://src.fedoraproject.org/rpms/urlview/raw/rawhide/f/urlview-default.patch
 
 %description
 urlview is a screen oriented program for extracting URLs from text

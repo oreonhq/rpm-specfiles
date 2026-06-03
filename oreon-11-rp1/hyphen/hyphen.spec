@@ -1,10 +1,10 @@
-%global source0_hash 304636d4eccd81a14b6914d07b84c79ebb815288c76fe027b9ebff6ff24d5705
+%global source0_hash none
 
 Name:      hyphen
 Summary:   A text hyphenation library
 Version:   2.8.8
 Release:   28%{?dist}
-Source:        http://downloads.sourceforge.net/hunspell/hyphen-%{version}.tar.gz
+Source:        https://downloads.sourceforge.net/hunspell/hyphen-%{version}.tar.gz
 URL:       http://hunspell.sf.net
 License:   GPL-2.0-only OR LGPL-2.1-or-later OR MPL-1.1
 BuildRequires: perl-interpreter, patch, autoconf, automake, libtool

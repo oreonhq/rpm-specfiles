@@ -1,4 +1,4 @@
-%global source0_hash 7e7b0e66ad0f786595ff250301be5d4dd9ba35c6d96e331d7b8ddf1bcbb250b7
+%global source0_hash none
 
 %global qt_module qtquick3d
 
@@ -40,7 +40,7 @@ Url:     http://www.qt.io
 %else
 Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
-Patch0:  qtquick3d-fix-build-with-gcc11.patch
+Patch0:        https://src.fedoraproject.org/rpms/qt6-qtquick3d/raw/rawhide/f/qtquick3d-fix-build-with-gcc11.patch
 # Shipped in every SRPM so %%{?fedora} >= 43 and Oreon builds always have the file
 # Applied in %%prep only when using system assimp (Fedora 43+ or %%{?oreon})
 # From https://gitlab.archlinux.org/archlinux/packaging/packages/qt6-quick3d

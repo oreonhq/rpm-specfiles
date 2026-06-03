@@ -1,4 +1,4 @@
-%global source0_hash 396360c989d2d07cff7452c755df1212813c5824738bfde2c37c3a1b7fbf71dc
+%global source0_hash 35f54b792f08b9f9349b3ff3d0c4d9303820ed8a114f605e655cd0d584d8134f
 
 # anthy-unicode migration
 # https://github.com/fcitx/fcitx-anthy/issues/12
@@ -19,13 +19,13 @@ BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: gtk3-devel anthy-unicode-devel
 Requires: %{name}-common = %{version}-%{release}
-Source0:        http://jaist.dl.sourceforge.jp/kasumi/41436/%{name}-%{version}.tar.gz
-Patch0: kasumi-853099-manpage.patch
-Patch1: kasumi-1928410-gtk3.patch
-Patch2: kasumi-check-anthy-pkg.patch
-Patch3: kasumi-1938091.patch
-Patch4: kasumi-c89.patch
-Patch5: kasumi-fix-crash-on-close.patch
+Source0:        https://downloads.sourceforge.net/project/kasumi/kasumi/%{version}/%{name}-%{version}.tar.gz
+Patch0:        https://src.fedoraproject.org/rpms/kasumi/raw/rawhide/f/kasumi-853099-manpage.patch
+Patch1:        https://src.fedoraproject.org/rpms/kasumi/raw/rawhide/f/kasumi-1928410-gtk3.patch
+Patch2:        https://src.fedoraproject.org/rpms/kasumi/raw/rawhide/f/kasumi-check-anthy-pkg.patch
+Patch3:        https://src.fedoraproject.org/rpms/kasumi/raw/rawhide/f/kasumi-1938091.patch
+Patch4:        https://src.fedoraproject.org/rpms/kasumi/raw/rawhide/f/kasumi-c89.patch
+Patch5:        https://src.fedoraproject.org/rpms/kasumi/raw/rawhide/f/kasumi-fix-crash-on-close.patch
 
 
 Summary: An anthy dictionary management tool

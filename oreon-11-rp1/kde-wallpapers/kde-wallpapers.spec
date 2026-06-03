@@ -1,4 +1,4 @@
-%global source0_hash 4dae4b2fcb58ac259435d46a560000b0dc7d0c79ea3f7e2fb0a431cbbd009593
+%global source0_hash none
 
 Summary: KDE Wallpapers
 Name:    kde-wallpapers
@@ -14,7 +14,7 @@ URL:     http://www.kde.org/
 %else
 %global stable stable
 %endif
-Source0:        http://download.kde.org/%{stable}/applications/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable}/applications/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildArch: noarch
 
@@ -34,8 +34,14 @@ Provides:  kdebase-workspace-wallpapers = %{version}-%{release}
 
 
 %prep
+for _f in /usr/lib*/automoc4/Automoc4Config.cmake; do
+  test -f "$_f" || continue
+  sed -i 's/cmake_minimum_required(VERSION 4.3)/cmake_minimum_required(VERSION 3.5)/' "$_f"
+done
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q 
+sed -i 's/cmake_minimum_required(VERSION [0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*)/cmake_minimum_required(VERSION 3.5)/' CMakeLists.txt 2>/dev/null || true
+sed -i 's/cmake_minimum_required(VERSION [0-9][0-9]*\.[0-9][0-9]*)/cmake_minimum_required(VERSION 3.5)/' CMakeLists.txt 2>/dev/null || true
 
 
 %build

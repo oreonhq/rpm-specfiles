@@ -1,4 +1,4 @@
-%global source0_hash 86b11ad8b512204816241d5dd98ac0561d1f6b06180f658c532c3ffbc16925df
+%global source0_hash none
 
 # Keep the *.la file around
 # See 

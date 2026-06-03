@@ -15,8 +15,8 @@ URL:            https://sourceforge.net/projects/mcj/
 #Source0:        https://downloads.sourceforge.net/mcj/fig2dev-%%{version}.tar.xz
 Source0:        https://downloads.sourceforge.net/project/mcj/fig2dev-%{version}.tar.xz
 
-Patch:          0001-Avoid-integer-overflow.patch
-Patch:          0002-Fix-invalid-value-passed-to-strchr.patch
+Patch:        https://src.fedoraproject.org/rpms/transfig/raw/rawhide/f/0001-Avoid-integer-overflow.patch
+Patch:        https://src.fedoraproject.org/rpms/transfig/raw/rawhide/f/0002-Fix-invalid-value-passed-to-strchr.patch
 
 Requires:       ghostscript
 Requires:       bc

@@ -1,19 +1,19 @@
-%global source0_hash c28b36b14bddb014d9e9c97c52459852f97bd405f89113f30bee45ed92728ff1
+%global source0_hash none
 
 Summary: The lrz and lsz modem communications programs
 Name: lrzsz
 Version: 0.12.20
 Release: %autorelease
 License: GPL-2.0-or-later AND GPL-2.0-only
-Source:        http://www.ohse.de/uwe/releases/%{name}-%{version}.tar.gz
-Patch1: lrzsz-0.12.20-glibc21.patch
-Patch2: lrzsz-0.12.20.patch
-Patch3: lrzsz-0.12.20-man.patch
-Patch4: lrzsz-0.12.20-aarch64.patch
-Patch5: lrzsz-configure-c99.patch
-Patch6: lrzsz-c99.patch
-Patch7: lrzsz-socklen.patch
-Patch8: lrzsz-gcc15.patch
+Source:        https://www.ohse.de/uwe/releases/%{name}-%{version}.tar.gz
+Patch1:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-0.12.20-glibc21.patch
+Patch2:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-0.12.20.patch
+Patch3:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-0.12.20-man.patch
+Patch4:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-0.12.20-aarch64.patch
+Patch5:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-configure-c99.patch
+Patch6:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-c99.patch
+Patch7:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-socklen.patch
+Patch8:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-gcc15.patch
 Url: http://www.ohse.de/uwe/software/lrzsz.html
 BuildRequires: gcc gettext
 BuildRequires: make
@@ -26,7 +26,7 @@ copylefted Zmodem solution for Linux systems.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n lrzsz-0.12.20
 
 rm -f po/*.gmo
 

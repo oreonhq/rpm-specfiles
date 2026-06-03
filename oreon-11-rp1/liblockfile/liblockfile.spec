@@ -1,4 +1,4 @@
-%global source0_hash 6e937f3650afab4aac198f348b89b1ca42edceb17fb6bb0918f642143ccfd15e
+%global source0_hash none
 
 Name:           liblockfile
 Version:        1.17
@@ -8,7 +8,7 @@ Summary:        This implements a number of functions found in -lmail on SysV sy
 # regarding license please see file COPYRIGHT
 License:        GPL-2.0-or-later AND LGPL-2.0-or-later
 URL:            http://packages.qa.debian.org/libl/liblockfile.html
-Source0:        http://deb.debian.org/debian/pool/main/libl/liblockfile/liblockfile_%{version}.orig.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/libl/liblockfile/liblockfile_%{version}.orig.tar.gz
 
 BuildRequires:  gcc
 BuildRequires: make

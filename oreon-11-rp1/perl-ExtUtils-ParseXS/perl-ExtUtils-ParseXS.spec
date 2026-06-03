@@ -1,4 +1,4 @@
-%global source0_hash 454df98b92124094764aad2145d18d5c0aaf814f050c9e9765fb47dc3f9638f9
+%global source0_hash none
 
 %global cpan_version 3.61
 Name:           perl-ExtUtils-ParseXS

@@ -40,12 +40,15 @@ URL:            http://gcc.gnu.org
 Source0:        %{srcdir}.tar.xz
 
 # See https://sourceforge.net/p/mingw-w64/mailman/mingw-w64-public/thread/8fd2fb03-9b8a-07e1-e162-0bb48bcc3984%40gmail.com/#msg37200751
-Patch0:         0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
+Patch0:        https://src.fedoraproject.org/rpms/mingw-gcc/raw/rawhide/f/0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
 # Add missing stdlib.h include
-Patch1:         mingw-gcc_include-stdlib.patch
+Patch1:        https://src.fedoraproject.org/rpms/mingw-gcc/raw/rawhide/f/mingw-gcc_include-stdlib.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  make
+BuildRequires:  git
+BuildRequires:  curl
+BuildRequires:  xz
 BuildRequires:  texinfo
 BuildRequires:  mingw32-filesystem >= 133
 BuildRequires:  mingw64-filesystem >= 133
@@ -384,7 +387,16 @@ MinGW Windows cross-compiler for FORTRAN for the win64 target.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+_tar="%{srcdir}.tar.xz"
+if test ! -f "$_tar"; then
+  rm -rf _gcc.tmp
+  curl -sfL -o "$_tar" "https://gcc.gnu.org/pub/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.xz" || \
+  curl -sfL -o "$_tar" "https://ftpmirror.gnu.org/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.xz" || \
+  (rm -rf _gcc.tmp && git clone --filter=blob:none --no-checkout https://gcc.gnu.org/git/gcc.git _gcc.tmp && \
+  git -C _gcc.tmp fetch --depth 1 origin %{gitrev} && \
+  git -C _gcc.tmp archive --prefix=%{srcdir}/ %{gitrev} | xz -9e > "$_tar" && rm -rf _gcc.tmp)
+fi
+test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1 -n %{srcdir}
 echo 'Fedora MinGW %{version}-%{release}' > gcc/DEV-PHASE
 

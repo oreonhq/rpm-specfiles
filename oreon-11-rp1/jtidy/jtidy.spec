@@ -9,8 +9,8 @@ License:          zlib
 URL:              http://jtidy.sourceforge.net/
 # svn export -r1125 https://jtidy.svn.sourceforge.net/svnroot/jtidy/trunk/jtidy/ jtidy
 # tar caf jtidy.tar.xz jtidy
-Source0:          %{name}.tar.xz
-Source1:          %{name}.jtidy.script
+Source0:        https://github.com/jtidy/jtidy/archive/svn-r1125.tar.gz
+Source1:        https://src.fedoraproject.org/rpms/jtidy/raw/rawhide/f/jtidy.jtidy.script
 
 Patch0:           javac-1.8.patch
 
@@ -40,7 +40,7 @@ This package contains %{summary}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{name}
+%setup -q -n jtidy-svn-r1125
 %patch -P0 -p1
 
 %build

@@ -1,4 +1,4 @@
-%global source0_hash 4bd8eece78bb5c1361fab95743e7100506e2408a25c4a592a0f8d349746dc5b4
+%global source0_hash none
 
 # Force out of source build
 %undefine __cmake_in_source_build

@@ -1,4 +1,4 @@
-%global source0_hash 2ddabe29794489d11096ed831ad4d5c1626130019322d4305d58df84c835b279
+%global source0_hash none
 
 %global  wayland_min_version 1.3
 
@@ -17,7 +17,7 @@ URL:     https://invent.kde.org/plasma/%{name}
 %else
 %global stable stable
 %endif
-Source0:        http://download.kde.org/%{stable}/plasma/%{version}/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable}/plasma/%{version}/%{name}-%{version}.tar.xz
 
 BuildRequires:  qt5-qtbase-devel
 

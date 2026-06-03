@@ -1,4 +1,4 @@
-%global source0_hash 0fc184ef4c90878d183e719c6a11e77320471e1d4c0fe1a61020132553ad2a72
+%global source0_hash none
 
 Summary:       Performs a verified launch using Intel TXT
 Name:          tboot
@@ -9,10 +9,10 @@ Epoch:         1
 License:       BSD-3-Clause
 URL:           http://sourceforge.net/projects/tboot/
 Source0:        https://sourceforge.net/projects/tboot/files/%{name}/%{name}-%{version}.tar.gz
-Patch0:        tboot-gcc14.patch
-Patch1:        openssl-no-engine.patch
-Patch2:        tboot-sbin.patch
-Patch3:        tboot-1.11.7-len.patch
+Patch0:        https://src.fedoraproject.org/rpms/tboot/raw/rawhide/f/tboot-gcc14.patch
+Patch1:        https://src.fedoraproject.org/rpms/tboot/raw/rawhide/f/openssl-no-engine.patch
+Patch2:        https://src.fedoraproject.org/rpms/tboot/raw/rawhide/f/tboot-sbin.patch
+Patch3:        https://src.fedoraproject.org/rpms/tboot/raw/rawhide/f/tboot-1.11.7-len.patch
 
 BuildRequires: make
 BuildRequires: gcc

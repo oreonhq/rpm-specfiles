@@ -1,22 +1,16 @@
 %global source0_hash none
 
 %global commit0 3acc51828aceba310081c72a18f938f04d4487de
-%global date 20250407
-%global shortcommit0 %(c=%{commit0}; echo ${c:0:7})
-%global tag %{version}
+%global shortcommit0 3acc518
 
 Name:           egl-wayland
-Version:        1.1.21%{!?tag:~%{date}git%{shortcommit0}}
+Version:        1.1.21
 Release:        %autorelease
 Summary:        EGLStream-based Wayland external platform
 License:        MIT
 URL:            https://github.com/NVIDIA/%{name}
 
-%if 0%{?tag:1}
 Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
-%else
-Source0:        %{url}/archive/%{commit0}/%{name}-%{shortcommit0}.tar.gz
-%endif
 
 BuildRequires:  cmake
 BuildRequires:  meson
@@ -26,12 +20,10 @@ BuildRequires:  pkgconfig(eglexternalplatform) >= 1.1
 BuildRequires:  pkgconfig(libdrm)
 BuildRequires:  pkgconfig(wayland-client)
 BuildRequires:  pkgconfig(wayland-egl-backend) >= 3
-# Explicit synchronization since 1.34:
 BuildRequires:  pkgconfig(wayland-protocols) >= 1.34
 BuildRequires:  pkgconfig(wayland-scanner)
 BuildRequires:  pkgconfig(wayland-server)
 
-# Required for directory ownership
 Requires:       libglvnd-egl%{?_isa}
 
 %description
@@ -56,11 +48,7 @@ This package contains development files.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%if 0%{?tag:1}
-%autosetup -p1
-%else
 %autosetup -p1 -n %{name}-%{commit0}
-%endif
 
 %build
 %meson

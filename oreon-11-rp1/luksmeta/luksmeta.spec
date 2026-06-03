@@ -1,4 +1,4 @@
-%global source0_hash a842538ba39680c8319c41dac0bcc082fe40fb43342561761925c0daa1a48f28
+%global source0_hash none
 
 Name:           luksmeta
 Version:        10
@@ -38,7 +38,7 @@ This package contains development files for the LUKSMeta library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+%autosetup -n luksmeta-10
 
 %build
 %configure

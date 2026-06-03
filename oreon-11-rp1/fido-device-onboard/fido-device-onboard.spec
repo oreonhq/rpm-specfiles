@@ -1,5 +1,5 @@
-%global source0_hash 8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c
-%global source1_hash 8b12a654f077ecac67eaaa0c8ed59bebf5d9f79273effce4a3f3be5541cef86c
+%global source0_hash none
+%global source1_hash none
 
 %global dracutlibdir %{_prefix}/lib/dracut
 %bcond_without check
@@ -14,12 +14,13 @@ License:        BSD-3-Clause
 URL:            https://github.com/fdo-rs/fido-device-onboard-rs
 Source0:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/v0.5.5/fido-device-onboard-rs-0.5.5.tar.gz
 Source1:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/refs/tags/v0.5.5.tar.gz
-Patch1:         0001-use-released-aws-nitro-enclaves-cose-version.patch
+Patch1:        https://src.fedoraproject.org/rpms/fido-device-onboard/raw/rawhide/f/0001-use-released-aws-nitro-enclaves-cose-version.patch
 
 # Patches >=1000 are only applied when using system Rust dependencies:
 # - Update nix dependency from 0.26 to 0.31
 #   https://github.com/fdo-rs/fido-device-onboard-rs/pull/803
-Patch1000:      fido-device-onboard-fix-metadata.diff
+Patch1000:        https://src.fedoraproject.org/rpms/fido-device-onboard/raw/rawhide/f/fido-device-onboard-fix-metadata.diff
+Patch1001:        https://github.com/fdo-rs/fido-device-onboard-rs/pull/739.patch#/fido-libcryptsetup-rs-0.11.patch
 
 # Because nobody cares
 ExcludeArch: %{ix86}

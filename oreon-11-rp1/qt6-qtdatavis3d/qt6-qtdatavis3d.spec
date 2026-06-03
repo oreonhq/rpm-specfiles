@@ -1,4 +1,4 @@
-%global source0_hash 1e1a7b9c0a947731655334f5d79252d40cdaf58c1801074ea5e9e0821d6693ac
+%global source0_hash none
 
 %global qt_module qtdatavis3d
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - Qt Data Visualization component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0

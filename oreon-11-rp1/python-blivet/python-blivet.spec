@@ -12,14 +12,14 @@ Epoch: 1
 License: LGPL-2.1-or-later
 %global realname blivet
 %global realversion %{version}%{?prerelease}
-Source0:        http://github.com/storaged-project/blivet/releases/download/%{realname}-%{realversion}/%{realname}-%{realversion}.tar.gz
-Source1:        http://github.com/storaged-project/blivet/releases/download/%{realname}-%{realversion}/%{realname}-%{realversion}-tests.tar.gz
+Source0:        https://github.com/storaged-project/blivet/releases/download/%{realname}-%{realversion}/%{realname}-%{realversion}.tar.gz
+Source1:        https://github.com/storaged-project/blivet/releases/download/%{realname}-%{realversion}/%{realname}-%{realversion}-tests.tar.gz
 
 %if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
-Patch0: 0001-remove-btrfs-plugin.patch
+Patch0:        https://src.fedoraproject.org/rpms/python-blivet/raw/rawhide/f/0001-remove-btrfs-plugin.patch
 %endif
 
-Patch1: 0002-Ignore-btrfs-mount-errors-during-storage-scan.patch
+Patch1:        https://src.fedoraproject.org/rpms/python-blivet/raw/rawhide/f/0002-Ignore-btrfs-mount-errors-during-storage-scan.patch
 
 # Versions of required components (done so we make sure the buildrequires
 # match the requires versions of things).

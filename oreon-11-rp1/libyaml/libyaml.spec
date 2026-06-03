@@ -1,8 +1,8 @@
-%global source0_hash c642ae9b75fee120b2d96c712538bd2cf283228d2337df2cf2988e3c02678ef4
+%global source0_hash none
 
 %global with_mingw 0
 
-%if 0%{?fedora} || (0%{?oreon} >= 11)
+%if 0%{?fedora}
 %global with_mingw 1
 %endif
 

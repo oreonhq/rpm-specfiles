@@ -1,4 +1,4 @@
-%global source0_hash 10bd584d8f00d8091e814902b9f0a3e209f16e938f510fc23ba05f3fa469db5a
+%global source0_hash none
 
 %global pkgname libisofs
 
@@ -12,8 +12,8 @@ URL:            https://libburnia-project.org/
 Source0:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.pl02.tar.gz
 Source1:        https://files.libburnia-project.org/releases/%{pkgname}-%{version}.pl02.tar.gz.sig
 Source2:        https://keys.openpgp.org/vks/v1/by-fingerprint/44BC9FD0D688EB007C4DD029E9CBDFC0ABC0A854
-Patch0:         libisofs-0.6.16-multilib.patch
-Patch1:         libisofs-1.5.4-rpath.patch
+Patch0:        https://src.fedoraproject.org/rpms/libisofs/raw/rawhide/f/libisofs-0.6.16-multilib.patch
+Patch1:        https://src.fedoraproject.org/rpms/libisofs/raw/rawhide/f/libisofs-1.5.4-rpath.patch
 BuildRequires:  gnupg2
 BuildRequires:  gcc, make, libacl-devel, zlib-devel
 %if 0%{?rhel} && "%{name}" != "%{pkgname}" || (0%{?oreon} >= 11)

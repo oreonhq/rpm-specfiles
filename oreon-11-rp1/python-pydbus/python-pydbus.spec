@@ -14,15 +14,15 @@ Source0:        https://files.pythonhosted.org/packages/source/%(n=%{srcname}; e
 
 # upstream fix, not yet in release
 # https://github.com/LEW21/pydbus/commit/ff792feb45bbdc0dd6a9ff7453825e34b6554865
-Patch1: 0001-make-direction-attribute-conforming-to-introspect.dt.patch
+Patch1:        https://src.fedoraproject.org/rpms/python-pydbus/raw/rawhide/f/0001-make-direction-attribute-conforming-to-introspect.dt.patch
 
 # patch submitted for upstream inclusion, not yet merged
 # https://github.com/LEW21/pydbus/pull/63
-Patch2: 0002-Support-asynchronous-calls-58.patch
+Patch2:        https://src.fedoraproject.org/rpms/python-pydbus/raw/rawhide/f/0002-Support-asynchronous-calls-58.patch
 
 # patch submitted for upstream inclusion, not yet merged
 # https://github.com/LEW21/pydbus/pull/64
-Patch3: 0003-Support-transformation-between-D-Bus-errors-and-exce.patch
+Patch3:        https://src.fedoraproject.org/rpms/python-pydbus/raw/rawhide/f/0003-Support-transformation-between-D-Bus-errors-and-exce.patch
 
 BuildArch:      noarch
 

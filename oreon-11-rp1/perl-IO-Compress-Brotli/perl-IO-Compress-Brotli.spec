@@ -8,7 +8,7 @@ Summary:        Perl bindings for Brotli compression
 License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/IO-Compress-Brotli/
 Source0:        https://cpan.metacpan.org/authors/id/T/TI/TIMLEGGE/IO-Compress-Brotli-%{cpan_version}.tar.gz
-Patch0:         IO-Compress-Brotli-0.019-Use-pkgconfig-instead-of-bundled-libbrotli.patch
+Patch0:        https://src.fedoraproject.org/rpms/perl-IO-Compress-Brotli/raw/rawhide/f/IO-Compress-Brotli-0.019-Use-pkgconfig-instead-of-bundled-libbrotli.patch
 
 # Build
 BuildRequires:  coreutils

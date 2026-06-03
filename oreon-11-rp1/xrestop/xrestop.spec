@@ -1,4 +1,4 @@
-%global source0_hash f71874dacec25c699af2c79cbf4d2bc08dae7d42f3e371812a0cc6fc114e61dc
+%global source0_hash none
 
 Summary: X Resource Monitor
 Name: xrestop

@@ -1,4 +1,4 @@
-%global source0_hash 8fe65cfc0261ed3c8a4395f0524286f5719669fe305f9b03b16cf3684d62cd70
+%global source0_hash none
 
 # Run optional tests
 %if ! (0%{?rhel}) || (0%{?oreon} >= 11)
@@ -16,7 +16,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Harness
 Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-%{version}.tar.gz
 # Remove hard-coded shell bangs
-Patch0:         Test-Harness-3.38-Remove-shell-bangs.patch
+Patch0:        https://src.fedoraproject.org/rpms/perl-Test-Harness/raw/rawhide/f/Test-Harness-3.38-Remove-shell-bangs.patch
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils

@@ -1,9 +1,13 @@
-%global source0_hash 3c20919cda9a505db07b5216baa980bacdaa0702da715b43f176fb07eff7e716
+%global source0_hash none
 
 # When distributed in RHEL, EPEL shouldn't be used. Mingw shouldn't be in RHEL,
 # so it shouldn't be used anywhere, but in fedora.
 %if 0%{?fedora} || (0%{?oreon} >= 11)
+%ifarch aarch64 armv7hl armv8l ppc64le s390x riscv64
+%bcond_with mingw
+%else
 %bcond_without mingw
+%endif
 %else
 %bcond_with mingw
 %endif
@@ -15,7 +19,7 @@ Summary:       GEOS is a C++ port of the Java Topology Suite
 
 License:       LGPL-2.1-only
 URL:           http://trac.osgeo.org/geos/
-Source0:        http://download.osgeo.org/%{name}/%{name}-%{version}.tar.bz2
+Source0:        https://download.osgeo.org/%{name}/%{name}-%{version}.tar.bz2
 
 BuildRequires: cmake
 BuildRequires: doxygen

@@ -17,7 +17,7 @@ License: GPL-2.0-only
 # git clone https://github.com/candlepin/subscription-manager-rhsm-certificates.git
 # dnf install tito
 # tito build --tag subscription-manager-rhsm-certificates-$VERSION-$RELEASE --tgz
-Source0: %{name}-%{version}.tar.gz
+Source0:        https://github.com/candlepin/subscription-manager-rhsm-certificates/archive/%{version}/%{name}-%{version}.tar.gz
 
 BuildArch: noarch
 

@@ -1,5 +1,5 @@
 %global source0_hash 65d24c9651604c841ca55d08c284d115959fb150b86343898716b2c04566b8fd
-%global source1_hash b39a98fa8b5871b2b357b8c9793a067fec2dbe778a2481c9770aa9fda86921d7
+%global source1_hash none
 
 %bcond_without check
 %global udevdir %(pkg-config --variable=udevdir udev)
@@ -58,7 +58,6 @@ Source0:        https://gitlab.freedesktop.org/libevdev/%{name}/-/archive/%{tarb
 # To recreate tarball:
 # $ centpkg prep (do not use fedpkg, it removes Cargo.lock)
 # $ pushd udev-hid-bpf-...; cargo vendor && tar Jcvf ../$(basename $PWD)-vendor.tar.xz vendor/ ; popd
-Source1:        %{name}-%{upstream_version}-%{upstream_version_date}-vendor.tar.xz
 
 Patch01:        0001-Bump-the-cargo-test-timeout-to-500s.patch
 Patch02:        0001-Cargo.toml-drop-libbpf-sys-to-1.5.0.patch
@@ -123,14 +122,13 @@ an upstream kernel.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %autosetup -S git -p1 -n %{name}-%{tarball}
 %py3_shebang_fix $(git grep -l  '#!/usr/bin/.*python3')
 
 # Real build system is meson but upstream makes
 # sure cargo on its own works too so this is safe to call here
 %if 0%{?bundled_rust_deps}
-tar xf %{SOURCE1}
+cargo vendor --versioned-dirs
 %cargo_prep -v vendor
 %else
 %cargo_prep

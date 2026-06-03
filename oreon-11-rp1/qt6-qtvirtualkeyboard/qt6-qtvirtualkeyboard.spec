@@ -1,4 +1,4 @@
-%global source0_hash a1c6967b326243b2ca8d50bc7b7f7852c3975d9aa6ce4b186ebdf35bb1007e1c
+%global source0_hash none
 
 %global qt_module qtvirtualkeyboard
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - VirtualKeyboard component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0

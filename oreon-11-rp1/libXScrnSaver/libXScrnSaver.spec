@@ -1,9 +1,9 @@
-%global source0_hash 75cd2859f38e207a090cac980d76bc71e9da99d48d09703584e00585abc920fe
+%global source0_hash none
 
-Summary: X.Org X11 libXss runtime library
 Name: libXScrnSaver
 Version: 1.2.4
 Release: 7%{?dist}
+Summary: X.Org X11 libXss runtime library
 License: X11
 URL: http://www.x.org
 

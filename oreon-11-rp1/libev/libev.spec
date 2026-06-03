@@ -1,4 +1,4 @@
-%global source0_hash 507eb7b8d1015fbec5b935f34ebed15bf346bed04a11ab82b8eee848c4205aea
+%global source0_hash none
 
 %global source_dir  %{_datadir}/%{name}-source
 %global inst_srcdir %{buildroot}/%{source_dir}
@@ -10,7 +10,7 @@ Summary:          High-performance event loop/event model with lots of features
 
 License:          BSD-2-Clause OR GPL-2.0-or-later
 URL:              http://software.schmorp.de/pkg/libev.html
-Source0:        http://dist.schmorp.de/libev/Attic/%{name}-%{version}.tar.gz
+Source0:        https://dist.schmorp.de/libev/Attic/%{name}-%{version}.tar.gz
 
 BuildRequires:    autoconf
 BuildRequires:    automake

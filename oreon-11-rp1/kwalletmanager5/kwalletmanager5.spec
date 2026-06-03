@@ -1,4 +1,4 @@
-%global source0_hash 7fe0724d64efcc17c97a611f6bd1ea59cd13aab5969acb53cdbeed76d651e74f
+%global source0_hash none
 
 %global stable_kf6 stable
 
@@ -26,7 +26,7 @@ Source:        https://download.kde.org/%{stable_kf6}/release-service/%{version}
 
 ## upstreamable patches
 # better/sane defaults (no autoclose mostly)
-Patch1: kwalletmanager-15.12.1-defaults.patch
+Patch1:        https://src.fedoraproject.org/rpms/kwalletmanager5/raw/rawhide/f/kwalletmanager-15.12.1-defaults.patch
 
 BuildRequires: desktop-file-utils
 BuildRequires: extra-cmake-modules

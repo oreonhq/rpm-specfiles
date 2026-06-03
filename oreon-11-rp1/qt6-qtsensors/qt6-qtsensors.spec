@@ -1,4 +1,4 @@
-%global source0_hash 23617062da7be526d023dec7f9b76231001a1098a7e5f94c646f2e4f87cfcf8f
+%global source0_hash none
 
 %global qt_module qtsensors
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - Sensors component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 # See LGPL_EXCEPTIONS.txt, LICENSE.GPL3, respectively, for exception details

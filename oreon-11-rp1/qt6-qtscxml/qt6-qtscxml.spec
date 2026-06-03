@@ -1,4 +1,4 @@
-%global source0_hash 8e495245e5d1fe75de612c8a07e4043635407a1979bb1dd588f1751d1390203f
+%global source0_hash none
 
 %global qt_module qtscxml
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - ScXml component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0

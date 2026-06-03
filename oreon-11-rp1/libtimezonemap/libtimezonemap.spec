@@ -1,4 +1,4 @@
-%global source0_hash 501e53c9db669db5e5cf37bbcfc52b6be64e213e128fc9f9d1ab70fc6b0930e9
+%global source0_hash none
 
 Name:           libtimezonemap
 Version:        0.4.5.4

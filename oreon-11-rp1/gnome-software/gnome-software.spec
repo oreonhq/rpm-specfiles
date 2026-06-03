@@ -41,10 +41,8 @@ Source0:   https://download.gnome.org/sources/gnome-software/50/%{name}-%{tarbal
 %if %{with dnf5}
 # to update the patch enter the ./dnf5-plugin/ directory and run from
 # it the ./update-patch.sh script
-Patch:     0002-plain-package-update-notification.patch
+Patch:        https://src.fedoraproject.org/rpms/gnome-software/raw/rawhide/f/0002-plain-package-update-notification.patch
 %endif
-
-Patch:     0002-plain-package-update-notification.patch
 
 # ostree and flatpak not on i686 for Fedora and RHEL 10
 # https://github.com/containers/composefs/pull/229#issuecomment-1838735764

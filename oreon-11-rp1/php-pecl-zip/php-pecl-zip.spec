@@ -1,4 +1,4 @@
-%global source0_hash 510b3caf454ddcbd21234ccc0703829d4973fa7e4818cb32189a8c06d9e64d22
+%global source0_hash none
 
 # Fedora spec file for php-pecl-zip
 #

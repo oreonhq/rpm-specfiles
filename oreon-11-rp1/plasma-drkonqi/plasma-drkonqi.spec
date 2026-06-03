@@ -1,4 +1,4 @@
-%global source0_hash b2b104d5f30224bca88280246ca990ac314d81cb1bf0d3857613ff683db92d82
+%global source0_hash none
 
 %global stable_kf6 stable
 
@@ -20,7 +20,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_
 
 ## upstreamable Patches
 # dnf debuginfo-install
-Patch:          drkonqi-installdbgsymbols.patch
+Patch:        https://src.fedoraproject.org/rpms/plasma-drkonqi/raw/rawhide/f/drkonqi-installdbgsymbols.patch
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros

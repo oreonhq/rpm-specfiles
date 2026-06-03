@@ -1,4 +1,4 @@
-%global source0_hash 46632b2785ff4a231dcf241eeb0dcb5fc0c7d4da8ee49cf5687722cdbe8b2024
+%global source0_hash none
 
 Name:           libestr
 Version:        0.1.11
@@ -7,7 +7,7 @@ Summary:        String handling essentials library
 
 License:        LGPL-2.1-or-later
 URL:            http://libestr.adiscon.com/
-Source0:        http://libestr.adiscon.com/files/download/libestr-%{version}.tar.gz
+Source0:        https://libestr.adiscon.com/files/download/libestr-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: make

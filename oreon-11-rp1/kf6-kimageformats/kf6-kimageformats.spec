@@ -1,4 +1,4 @@
-%global source0_hash 7e9d35863e2227e37623f390f0e53a216931cd17920582cfc8282a42e04f16e2
+%global source0_hash none
 
 %undefine __cmake_in_source_build
 %global framework kimageformats
@@ -14,8 +14,8 @@ Summary:        KDE Frameworks 6 Tier 1 addon with additional image plugins for 
 License:        LGPLv2+
 URL:            https://invent.kde.org/frameworks/%{framework}
 
-Source0:        http://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
-Source1:        http://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
+Source0:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz
+Source1:        https://download.kde.org/%{stable_kf6}/frameworks/%{majmin_ver_kf6}/%{framework}-%{version}.tar.xz.sig
 
 # upstream patches
 

@@ -9,7 +9,11 @@
 %global with_mingw 0
 
 %if 0%{?fedora} || (0%{?oreon} >= 11)
+%ifarch aarch64 armv7hl armv8l ppc64le s390x riscv64
+%global with_mingw 0
+%else
 %global with_mingw 1
+%endif
 %endif
 
 Summary: A GTK widget for VNC clients
@@ -19,8 +23,7 @@ Version: 1.5.0
 Release: %autorelease
 License: LGPL-2.1-or-later
 Source: https://download.gnome.org/sources/%{name}/%{verdir}/%{name}-%{version}.tar.xz
-Patch: 0002-Expand-log-message-to-include-log-domain-and-timesta.patch
-Patch: 0002-Expand-log-message-to-include-log-domain-and-timesta.patch
+Patch0:        https://src.fedoraproject.org/rpms/gtk-vnc/raw/rawhide/f/0001-make-gtk-vnc-debug-work-with-new-glib.patch
 URL: https://gitlab.gnome.org/GNOME/gtk-vnc
 Requires: gvnc = %{version}-%{release}
 BuildRequires: gcc

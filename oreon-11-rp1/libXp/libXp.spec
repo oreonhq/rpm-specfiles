@@ -1,4 +1,4 @@
-%global source0_hash 1f19e3b8e82a34a8fd9889a7d9af0abe8588cb03fb57c37c569634cf3b9df1a4
+%global source0_hash none
 
 # NOTE: This library has been deprecated in RHEL and Fedora for some
 # time now.  While we have removed the word "deprecated" from the package
@@ -26,7 +26,7 @@ BuildRequires: libXext-devel
 BuildRequires: libXau-devel
 BuildRequires: libtool automake autoconf gettext
 
-Patch0: add-proto-files.patch
+Patch0:        https://src.fedoraproject.org/rpms/libXp/raw/rawhide/f/add-proto-files.patch
 
 %description
 X.Org X11 libXp runtime library

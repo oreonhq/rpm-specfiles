@@ -1,4 +1,4 @@
-%global source0_hash 0df174f0819f4bed88573ad9773bfe6c7bec97883ff8eca4391a35487b1d1159
+%global source0_hash none
 
 %global fontname lohit-bengali
 

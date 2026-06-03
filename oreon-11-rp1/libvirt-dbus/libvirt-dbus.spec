@@ -1,4 +1,4 @@
-%global source0_hash 101ca3d018e7fdb8a5ab4482debb7cb0d181743beea2d20f3998b18e107d84e1
+%global source0_hash none
 
 # -*- rpm-spec -*-
 
@@ -37,7 +37,7 @@ This package provides D-Bus API for libvirt
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+%autosetup -n libvirt-dbus-1.4.1
 
 # Create a sysusers.d config file
 cat >libvirt-dbus.sysusers.conf <<EOF

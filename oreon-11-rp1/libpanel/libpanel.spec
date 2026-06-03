@@ -1,6 +1,6 @@
 %global source0_hash none
 
-%global tarball_version %(echo %{version} | tr '~' '.')
+%global tarball_version %{version}
 
 Name:           libpanel
 Version:        1.10.4

@@ -1,4 +1,4 @@
-%global source0_hash 8db09712f56fd68c96e9ff879b87f583af153b4f6bcd8a43cf010c6d2304fbc8
+%global source0_hash none
 
 Name:           icoutils
 Version:        0.32.3
@@ -7,13 +7,13 @@ Summary:        Utility for extracting and converting Microsoft icon and cursor 
 
 License:        GPL-2.0-or-later AND GPL-3.0-or-later
 URL:            http://www.nongnu.org/icoutils/
-Source0:        http://savannah.nongnu.org/download/%{name}/%{name}-%{version}.tar.bz2
+Source0:        https://savannah.nongnu.org/download/%{name}/%{name}-%{version}.tar.bz2
 
 # Possible security fix, at minimum it's a DoS.
 # Upstream commit d72956a6de228c91d1fc48fd15448fadea9ab6cf
-Patch1:         0001-wrestool-Fix-get_resource_id_quoted-to-return-heap-a.patch
+Patch1:        https://src.fedoraproject.org/rpms/icoutils/raw/rawhide/f/0001-wrestool-Fix-get_resource_id_quoted-to-return-heap-a.patch
 # Fix build for GCC 15
-Patch2:         0002-gcc15.patch
+Patch2:        https://src.fedoraproject.org/rpms/icoutils/raw/rawhide/f/0002-gcc15.patch
 
 BuildRequires:  autoconf
 BuildRequires:  automake

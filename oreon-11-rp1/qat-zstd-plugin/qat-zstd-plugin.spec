@@ -1,4 +1,4 @@
-%global source0_hash 00f2611719f0a1c9585965c6c3c1fe599119aa8e932a569041b1876ffc944fb3
+%global source0_hash none
 
 # SPDX-License-Identifier: MIT
 
@@ -11,7 +11,7 @@ License:	BSD-3-Clause
 URL:		https://github.com/intel/QAT-ZSTD-Plugin
 Source0:        https://github.com/intel/QAT-ZSTD-Plugin/archive/v1.0.0/qat-zstd-plugin-1.0.0.tar.gz
 
-Patch0:		test.patch
+Patch0:        https://src.fedoraproject.org/rpms/qat-zstd-plugin/raw/rawhide/f/test.patch
 
 BuildRequires:	automake
 BuildRequires:	gcc

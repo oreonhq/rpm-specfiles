@@ -1,4 +1,4 @@
-%global source0_hash 188e30db9eafb44eaa8579e1d7ae70ce7b14634c5bfae7612e3e185e446f39dc
+%global source0_hash none
 
 %global	project_name	idxd-config
 

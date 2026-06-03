@@ -1,4 +1,4 @@
-%global source0_hash 5dcb4db3b2340f81f601ce86d8d76b69e34d70f84f804192c901e4b7f84d5fb0
+%global source0_hash none
 
 Name:      libnumbertext
 Version:   1.0.11
@@ -27,7 +27,7 @@ Includes and definitions for developing with libnumbertext
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n libnumbertext-1.0.11
 
 %build
 autoreconf -v --install --force

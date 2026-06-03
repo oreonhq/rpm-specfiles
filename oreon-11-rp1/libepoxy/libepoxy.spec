@@ -1,16 +1,17 @@
-%global source0_hash 072cda4b59dd098bba8c2363a6247299db1fa89411dc221c8b81b8ee8192e623
+%global source0_hash none
 
-Summary: epoxy runtime library
+%bcond_with check
+
 Name: libepoxy
 Version: 1.5.10
 Release: 12%{?dist}
-# SPDX
+Summary: epoxy runtime library
 License: MIT
 URL: https://github.com/anholt/libepoxy
 Source0:        https://download.gnome.org/sources/%{name}/1.5/%{name}-%{version}.tar.xz
 
 # https://github.com/anholt/libepoxy/pull/270
-Patch0: Fix-dlwrap-on-riscv64.patch
+Patch0:        https://src.fedoraproject.org/rpms/libepoxy/raw/rawhide/f/Fix-dlwrap-on-riscv64.patch
 
 BuildRequires: meson
 BuildRequires: gcc
@@ -21,9 +22,11 @@ BuildRequires: libEGL-devel
 BuildRequires: libX11-devel
 BuildRequires: pkgconfig(glesv2)
 BuildRequires: python3
+%if %{with check}
 BuildRequires: mesa-dri-drivers
 BuildRequires: mutter
 BuildRequires: xwayland-run
+%endif
 
 %description
 A library for handling OpenGL function pointer management.
@@ -48,10 +51,10 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 %meson_install
 
 %check
-# this should be %%meson_test but the macro expands with a bajillion
-# embedded newlines for no obvious reason
+%if %{with check}
 xwfb-run -c mutter -- ninja -C %{_vpath_builddir} test || \
     (cat %{_vpath_builddir}/meson-logs/testlog.txt ; exit 1)
+%endif
 
 %files
 %license COPYING

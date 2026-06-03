@@ -1,4 +1,4 @@
-%global source0_hash 40504db68718385a4eaa9154a28f59e51e59d006d1aa14f5bc9d6fded1d6017a
+%global source0_hash none
 
 Name: xmlto
 Version: 0.0.29

@@ -1,4 +1,4 @@
-%global source0_hash 0332e53e7bebcea4f76d88478aad4d51a72ba23c32184cce88e4e1bcf7d4e7f8
+%global source0_hash none
 
 %global stable_kf6 stable
 
@@ -39,7 +39,7 @@ operations in root-scope.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n kio-admin-26.04.1
 
 %build
 %cmake_kf6 \

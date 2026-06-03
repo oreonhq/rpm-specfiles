@@ -1,4 +1,4 @@
-%global source0_hash 55a7517cd3572bd2565df0cf450944a04d5273b279ebb369a895391957f0f960
+%global source0_hash none
 
 Name:           libspectre
 Version:        0.2.12

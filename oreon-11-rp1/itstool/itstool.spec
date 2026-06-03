@@ -1,4 +1,4 @@
-%global source0_hash 6b9a7cd29a12bb95598f5750e8763cee78836a1a207f85b74d8b3275b27e87ca
+%global source0_hash fba78a37dc3535e4686c7f57407b97d03c676e3a57beac5fb2315162b0cc3176
 
 Name:           itstool
 Version:        2.0.7
@@ -7,11 +7,11 @@ Summary:        ITS-based XML translation tool
 
 License:        GPL-3.0-or-later
 URL:            http://itstool.org/
-Source0:        http://files.itstool.org/itstool/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/itstool/itstool/archive/refs/tags/%{version}.tar.gz#/itstool-%{version}.tar.gz
 # See:  https://github.com/itstool/itstool/issues/25
 Patch0:        https://sources.debian.org/data/main/i/itstool/2.0.5-2/debian/patches/fix_crash_912099.patch#/itstool-2.0.5-fix-crash-wrong-encoding.patch
 # Filed upstream at https://github.com/itstool/itstool/pull/51
-Patch1:         0001-Fix-insufficiently-quoted-regular-expressions.patch
+Patch1:        https://src.fedoraproject.org/rpms/itstool/raw/rawhide/f/0001-Fix-insufficiently-quoted-regular-expressions.patch
 
 BuildArch:      noarch
 

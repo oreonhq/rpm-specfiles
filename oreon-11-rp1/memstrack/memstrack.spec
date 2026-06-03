@@ -2,7 +2,7 @@
 
 # vim: syntax=spec
 %global gitcommit 560379ee67db48382ccc3ab3de866e239fd74ca8
-%global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
+%global gitshortcommit 560379e
 
 Name:           memstrack
 Version:        0.2.5

@@ -1,4 +1,4 @@
-%global source0_hash 20071129379656f5f3c3bc16d364612672b147d81191fb4eb9f9ff9fbee48410
+%global source0_hash none
 
 %global pypi_name tpm2-pytss
 %global _name tpm2_pytss

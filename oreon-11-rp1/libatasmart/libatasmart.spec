@@ -1,11 +1,11 @@
-%global source0_hash 61f0ea345f63d28ab2ff0dc352c22271661b66bf09642db3a4049ac9dbdb0f8d
+%global source0_hash none
 
 Name: libatasmart
 Version: 0.19
 Release: 32%{?dist}
 Summary: ATA S.M.A.R.T. Disk Health Monitoring Library
-Source0:        http://0pointer.de/public/libatasmart-%{version}.tar.xz
-Patch0: libatasmart-0.19-wd-fix.patch
+Source0:        https://0pointer.de/public/libatasmart-%{version}.tar.xz
+Patch0:        https://src.fedoraproject.org/rpms/libatasmart/raw/rawhide/f/libatasmart-0.19-wd-fix.patch
 License: LGPL-2.1-or-later
 Url: http://git.0pointer.de/?p=libatasmart.git;a=summary
 BuildRequires:  gcc
@@ -29,7 +29,7 @@ Development Files for libatasmart Client Development
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+%autosetup -n libatasmart-0.19
 
 %build
 %configure --disable-static

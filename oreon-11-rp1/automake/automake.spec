@@ -57,7 +57,7 @@ Source:        https://ftp.gnu.org/gnu/automake/automake-%{version}.tar.xz
 # The patch is only made necessary due to fedora specific changes
 # which lead to .package_note-automake-1.16.5-3.fc36.x86_64.ld
 # being inserted in build logs, breaking the original grep instruction
-Patch: fort2.patch
+Patch:        https://src.fedoraproject.org/rpms/automake/raw/rawhide/f/fort2.patch
 
 URL:        http://www.gnu.org/software/automake/
 Requires:   autoconf >= 2.65

@@ -1,4 +1,4 @@
-%global source0_hash f1cfcfab1846e63d7d6dab8b60edabdb66b1a5f34cacb98c6b9771a7e34ef153
+%global source0_hash none
 
 Summary:         A library for handling different graphics file formats
 Name:            netpbm
@@ -33,6 +33,7 @@ Patch17:         netpbm-c99.patch
 Patch18:         netpbm-shlib-ldflags.patch
 
 BuildRequires:   make
+BuildRequires:   subversion
 BuildRequires:   libjpeg-devel, libpng-devel, libtiff-devel, flex, gcc, jbigkit-devel
 BuildRequires:   libX11-devel, perl-generators, python3, jasper-devel, libxml2-devel
 BuildRequires:   perl(Config), perl(Cwd), perl(English), perl(Fcntl), perl(File::Basename)
@@ -89,7 +90,16 @@ If you need to look into the HTML documentation, you should install
 netpbm-doc.  You'll also need to install the netpbm-progs package.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+_tar="netpbm-%{version}.tar.xz"
+if test ! -f "$_tar"; then
+  rm -rf netpbm-%{version}
+  svn export --force https://svn.code.sf.net/p/netpbm/code/advanced netpbm-%{version}
+  svn export --force https://svn.code.sf.net/p/netpbm/code/userguide netpbm-%{version}/userguide
+  find netpbm-%{version} -name .svn -type d -prune -exec rm -rf {} +
+  tar cJf "$_tar" netpbm-%{version}
+  rm -rf netpbm-%{version}
+fi
+test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -p1
 rm -rf converter/other/jpeg2000/libjasper/
 rm -rf converter/other/jbig/libjbig/

@@ -12,7 +12,7 @@ Source1:  %{name}-fedora.service
 Source2:  %{name}-tmpfiles
 Source3:  %{name}-fedora.sysconfig
 Source4:  %{name}-systemd-sysusers.conf
-Patch1:   lldpd-configure-c99.patch
+Patch1:        https://src.fedoraproject.org/rpms/lldpd/raw/rawhide/f/lldpd-configure-c99.patch
 
 BuildRequires: check-devel
 BuildRequires: gcc

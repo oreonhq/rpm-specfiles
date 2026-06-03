@@ -1,4 +1,4 @@
-%global source0_hash e8e01cf13b08dfd9c8c60367bcb172c0dd09a161a7c2a351c08cfba246d64d4a
+%global source0_hash none
 
 Name:           jurand
 Version:        1.3.5
@@ -21,7 +21,7 @@ rather than applying simple regular expressions on the source code.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n jurand-1.3.5
 
 %build
 %{make_build} test-compile manpages

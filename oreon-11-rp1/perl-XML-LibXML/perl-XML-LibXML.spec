@@ -1,4 +1,4 @@
-%global source0_hash 2af21c5d61ac34ea26a5fabf15ba5a5841e648f7189db3e33b6f28b5489802ab
+%global source0_hash none
 
 # Do not invoke thread tests by default because the thread support is broken,
 # bug #1224731, CPAN RT#91800
@@ -18,9 +18,9 @@ URL:            https://metacpan.org/release/XML-LibXML
 Source0:        https://cpan.metacpan.org/authors/id/T/TO/TODDR/XML-LibXML-%{version}.tar.gz
 # Fix parsing ampersand entities in SAX interface, CPAN RT#131498,
 # posted to the upstream.
-Patch0:         XML-LibXML-2.0202-Parse-an-ampersand-entity-in-SAX-interface.patch
+Patch0:        https://src.fedoraproject.org/rpms/perl-XML-LibXML/raw/rawhide/f/XML-LibXML-2.0202-Parse-an-ampersand-entity-in-SAX-interface.patch
 # To reduce dependencies replace Alien::Libxml2 with pkg-config
-Patch1:         XML-LibXML-2.0212-Use-pkgconfig-instead-of-Alien-Libxml2.patch
+Patch1:        https://src.fedoraproject.org/rpms/perl-XML-LibXML/raw/rawhide/f/XML-LibXML-2.0212-Use-pkgconfig-instead-of-Alien-Libxml2.patch
 BuildRequires:  coreutils
 BuildRequires:  findutils
 BuildRequires:  glibc-common

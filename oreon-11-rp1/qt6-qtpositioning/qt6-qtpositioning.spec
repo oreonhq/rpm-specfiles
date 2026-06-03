@@ -1,4 +1,4 @@
-%global source0_hash d5e6b91801ae286e7630016caea3bdc5e1978b4291d6741d0d64c125650f78f5
+%global source0_hash none
 
 %global qt_module qtpositioning
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - Positioning component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0

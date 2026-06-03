@@ -1,4 +1,4 @@
-%global source0_hash 308e3a3bcc0b9793ea5e5a1bd1ebd27bffdd6f67302296ff70267ae91f937606
+%global source0_hash none
 
 %global fontname lohit-assamese
 

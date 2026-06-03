@@ -1,4 +1,4 @@
-%global source0_hash 4571059b7b5d48b7ce52b01389e95d798bf5cf2020523c153ff27b498153c9cb
+%global source0_hash none
 
 Name:           perl-libxml-perl
 Version:        0.08

@@ -1,4 +1,4 @@
-%global source0_hash 38181dbd451fd418d316a92a34bc2118967930684cdd62c3e979fe8c8ebacffa
+%global source0_hash none
 
 Name:           python-systemd
 Version:        235

@@ -1,5 +1,5 @@
 %global source0_hash none
-%global source1_hash c3ff066b5cb2d861a016432fabe218561217ba4278c71d873a430b6e774871b8
+%global source1_hash none
 
 Name:           virtiofsd
 Version:        1.13.3
@@ -15,7 +15,6 @@ URL:            https://gitlab.com/virtio-fs/virtiofsd
 #     make VERSION=<version>
 #
 Source0:        https://crates.io/api/v1/crates/%{name}/%{version}/download#/%{name}-%{version}.crate
-Source1:        %{name}-%{version}-vendor.tar.xz
 
 ExclusiveArch:  %{rust_arches}
 # Some of our deps (i.e. vm-memory) are not available on 32 bits targets.
@@ -46,8 +45,8 @@ Provides:       qemu-virtiofsd = 2:7.2.1-1
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-%autosetup -n %{name}-%{version_no_tilde} -p1 -a1
+%autosetup -n %{name}-%{version_no_tilde} -p1
+cargo vendor --versioned-dirs
 %cargo_prep -v vendor
 rm -f Cargo.lock
 

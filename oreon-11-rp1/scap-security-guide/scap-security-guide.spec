@@ -1,4 +1,4 @@
-%global source0_hash 3e056f460d6626b7109202cb94b2f7dd6af6ff89db22b699fede65ba9316919f
+%global source0_hash none
 
 # SSG build system and tests count with build directory name `build`.
 # For more details see:
@@ -60,8 +60,12 @@ test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "ore
 
 %define cmake_defines_common -DSSG_SEPARATE_SCAP_FILES_ENABLED=OFF -DSSG_BASH_SCRIPTS_ENABLED=OFF -DSSG_BUILD_SCAP_12_DS=OFF
 %define cmake_defines_specific %{nil}
-%if 0%{?rhel} && ! %{defined eln} || (0%{?oreon} >= 11)
+%if 0%{?oreon} >= 11
+%define cmake_defines_specific -DSSG_PRODUCT_DEFAULT:BOOLEAN=FALSE -DSSG_PRODUCT_FEDORA:BOOLEAN=TRUE -DSSG_ANSIBLE_PLAYBOOKS_PER_RULE_ENABLED:BOOL=ON
+%else
+%if 0%{?rhel} && ! %{defined eln}
 %define cmake_defines_specific -DSSG_PRODUCT_DEFAULT:BOOLEAN=FALSE -DSSG_PRODUCT_RHEL%{rhel}:BOOLEAN=TRUE -DSSG_SCIENTIFIC_LINUX_DERIVATIVES_ENABLED:BOOL=OFF -DSSG_CENTOS_DERIVATIVES_ENABLED:BOOL=OFF -DSSG_ANSIBLE_PLAYBOOKS_PER_RULE_ENABLED:BOOL=ON
+%endif
 %endif
 %if 0%{?centos}
 %define cmake_defines_specific -DSSG_PRODUCT_DEFAULT:BOOLEAN=FALSE -DSSG_PRODUCT_RHEL%{centos}:BOOLEAN=TRUE -DSSG_SCIENTIFIC_LINUX_DERIVATIVES_ENABLED:BOOL=OFF -DSSG_CENTOS_DERIVATIVES_ENABLED:BOOL=ON

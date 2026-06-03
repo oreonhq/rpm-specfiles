@@ -57,7 +57,7 @@ Version:	4.18.0
 Release:	1%{?rcver:%{rcver}}%{?numcomm:.%{numcomm}}%{?alphatag:.%{alphatag}}%{?dirty:.%{dirty}}%{?dist}
 License:	GPL-2.0-or-later AND LGPL-2.1-or-later
 URL:		https://github.com/ClusterLabs/resource-agents
-Source0:	%{upstream_prefix}-%{upstream_version}.tar.gz
+Source0:        https://github.com/ClusterLabs/resource-agents/archive/%{upstream_version}.tar.gz#/%{upstream_prefix}-%{upstream_version}.tar.gz
 Obsoletes:	heartbeat-resources <= %{version}
 Provides:	heartbeat-resources = %{version}
 

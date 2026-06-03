@@ -1,4 +1,4 @@
-%global source0_hash 6acdc0b3f144f0d7f71a361c3653b5ccc1ee5760b5eb5b2470c363bc5daed210
+%global source0_hash none
 
 # Enable hardened build, as the udev part runs with privilege.
 %global _hardened_build 1
@@ -14,8 +14,8 @@ URL: https://github.com/%{username}/%{name}
 Source0:        https://github.com/OpenPrinting/system-config-printer/archive/refs/tags/v1.5.18/system-config-printer-1.5.18.tar.gz#/system-config-printer-1.5.18.tar.xz
 
 # all upstream patches, remove with new release
-Patch0001: 0001-Fix-debugprint-in-options.py-fixes-291.patch
-Patch0002: 0001-udev-Fix-exit-value-when-device-is-already-handled.patch
+Patch0001:        https://src.fedoraproject.org/rpms/system-config-printer/raw/rawhide/f/0001-Fix-debugprint-in-options.py-fixes-291.patch
+Patch0002:        https://src.fedoraproject.org/rpms/system-config-printer/raw/rawhide/f/0001-udev-Fix-exit-value-when-device-is-already-handled.patch
 
 
 # needed for macro AM_GNU_GETTEXT in configure.ac

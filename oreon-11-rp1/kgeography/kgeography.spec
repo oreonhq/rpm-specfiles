@@ -1,4 +1,4 @@
-%global source0_hash c6880eaae67cd007d6026c106ce49692c1afbb89c4333e63747cea9a19b8caf9
+%global source0_hash none
 
 %global stable_kf6 stable
 
@@ -42,7 +42,7 @@ BuildRequires: cmake(KF6DocTools)
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+%autosetup -n kgeography-26.04.1
 
 
 %build

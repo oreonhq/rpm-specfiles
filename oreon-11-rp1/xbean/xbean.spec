@@ -1,4 +1,4 @@
-%global source0_hash e4b64b40641ffe64eb5d27361addf132ab0db5d712da9e4b67c7a71b78be2b5b
+%global source0_hash none
 
 %bcond_without bootstrap
 
@@ -13,8 +13,8 @@ ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://repo1.maven.org/maven2/org/apache/%{name}/%{name}/%{version}/%{name}-%{version}-source-release.zip
 
-Patch:          0001-Unbundle-ASM.patch
-Patch:          0002-Remove-dependency-on-log4j-and-commons-logging.patch
+Patch:        https://src.fedoraproject.org/rpms/xbean/raw/rawhide/f/0001-Unbundle-ASM.patch
+Patch:        https://src.fedoraproject.org/rpms/xbean/raw/rawhide/f/0002-Remove-dependency-on-log4j-and-commons-logging.patch
 
 # TODO Remove in Fedora 47
 Obsoletes:      %{name}-javadoc < 4.24-9

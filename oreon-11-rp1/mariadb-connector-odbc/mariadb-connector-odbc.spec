@@ -1,4 +1,4 @@
-%global source0_hash 9968979aae46a1750452eb934558af81c6eda957eaee00f7ec72b24ee8ead547
+%global source0_hash none
 
 # For deep debugging we need to build binaries with extra debug info
 %bcond debug 0

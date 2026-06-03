@@ -16,7 +16,7 @@ Source0:        https://crates.io/api/v1/crates/sevctl/0.6.2/download
 # Manually created patch for downstream crate metadata changes
 # * Drop vendored feature from openssl dependency
 # * Relax clap dependency
-Patch:          sevctl-fix-metadata.diff
+Patch:        https://src.fedoraproject.org/rpms/rust-sevctl/raw/rawhide/f/sevctl-fix-metadata.diff
 
 # SEV is an AMD x86_64 CPU feature so doesn't make sense to
 # try to build on other arches

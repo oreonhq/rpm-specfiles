@@ -1,4 +1,4 @@
-%global source0_hash 8909616b007139138d9d1cb51cc234edaf728f20a26897ef2959a570da02dc0a
+%global source0_hash none
 
 Name: omping
 Version: 0.0.4
@@ -18,7 +18,7 @@ primarily in local network.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git_am
+%autosetup -S git_am -n omping-0.0.4
 
 %build
 %set_build_flags

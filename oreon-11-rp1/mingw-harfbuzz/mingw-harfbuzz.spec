@@ -1,4 +1,4 @@
-%global source0_hash 3553d943401c34ab9b8c75f35cdb8452ca660233b0e9d4a22395ce5245484bd7
+%global source0_hash none
 
 %{?mingw_package_header}
 
@@ -12,7 +12,7 @@ URL:            http://www.harfbuzz.org
 Source0:        https://github.com/harfbuzz/harfbuzz/releases/download/%{version}/harfbuzz-%{version}.tar.xz
 
 # Invoke versioned python
-Patch0:         harfbuzz-python.patch
+Patch0:        https://src.fedoraproject.org/rpms/mingw-harfbuzz/raw/rawhide/f/harfbuzz-python.patch
 
 BuildArch:      noarch
 

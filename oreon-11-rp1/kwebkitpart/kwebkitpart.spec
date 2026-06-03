@@ -22,6 +22,8 @@ URL:     https://cgit.kde.org/kwebkitpart.git/
 # use releaseme script (kdelibs4 branch) to generate
 # with tweaks to CMakeLists.txt to properly handle translations
 Source0: kwebkitpart-%{version}-%{snap}.tar.xz
+# generated via releaseme; use invent snapshot when tarball missing
+# https://invent.kde.org/network/kwebkitpart/-/archive/v1.4.0/kwebkitpart-v1.4.0.tar.bz2
 
 ## upstreamable patches
 
@@ -58,7 +60,15 @@ browsing the web in Konqueror.
 
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+_src="kwebkitpart-%{version}-%{snap}.tar.xz"
+if test ! -f "$_src"; then
+  curl -sfL -o _kw.tar.bz2 "https://invent.kde.org/network/kwebkitpart/-/archive/v%{version}/kwebkitpart-v%{version}.tar.bz2"
+  rm -rf _kw && mkdir _kw
+  tar xjf _kw.tar.bz2 -C _kw --strip-components=1
+  tar cJf "$_src" -C _kw .
+  rm -rf _kw _kw.tar.bz2
+fi
+test "%{source0_hash}" = "none" || { f="$_src"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup
 
 

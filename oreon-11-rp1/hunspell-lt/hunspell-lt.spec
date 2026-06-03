@@ -8,12 +8,10 @@
 
 Name: hunspell-lt
 Summary: Lithuanian hunspell dictionaries
-Version: 1.2.1
-Release: 37%{?dist}
-## Note that upstream is dead and there is no download link available
-## so please don't report FTBFS bugs for this package.
-Source:        https://www.akl.lt/ispell-lt/lt_LT-%{version}.zip
-URL: https://ftp.akl.lt/ispell-lt/
+Version: 1.3.2
+Release: 38%{?dist}
+Source:        https://github.com/ispell-lt/ispell-lt/releases/download/rel-%{version}/openoffice-spellcheck-lt-%{version}.oxt
+URL: https://github.com/ispell-lt/ispell-lt/
 License: BSD-3-Clause
 BuildArch: noarch
 
@@ -25,14 +23,16 @@ Lithuanian hunspell dictionaries.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n lt_LT-%{version}
+%setup -q -c
+unzip -q openoffice-spellcheck-lt-%{version}.oxt
 
 %build
 chmod -x *
-for i in INSTRUKCIJOS.txt; do
-  tr -d '\r' < $i > $i.new
-  touch -r $i $i.new
-  mv -f $i.new $i
+for i in INSTRUKCIJOS.txt README*; do
+  test -f "$i" || continue
+  tr -d '\r' < "$i" > "$i.new"
+  touch -r "$i" "$i.new"
+  mv -f "$i.new" "$i"
 done
 
 %install
@@ -41,7 +41,7 @@ cp -p *.dic *.aff $RPM_BUILD_ROOT/%{_datadir}/%{dict_dirname}
 
 
 %files
-%doc README.EN INSTRUKCIJOS.txt
+%doc README* INSTRUKCIJOS.txt
 %{_datadir}/%{dict_dirname}/*
 
 %changelog

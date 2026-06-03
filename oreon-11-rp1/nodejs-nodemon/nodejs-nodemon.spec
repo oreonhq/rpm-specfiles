@@ -43,6 +43,16 @@ replacement wrapper for node, think of it as replacing the word "node"
 on the command line when you run your script.
 
 %prep
+_bundle="%{npm_name}-v%{version}-bundled.tar.gz"
+if test ! -f "$_bundle"; then
+  rm -rf _nm && mkdir _nm
+  curl -sfL -o _s.tar.gz "https://github.com/remy/nodemon/archive/v%{version}.tar.gz"
+  tar xf _s.tar.gz -C _nm --strip-components=1
+  ( cd _nm && npm install --omit=dev --ignore-scripts )
+  tar czf "$_bundle" -C _nm .
+  rm -rf _nm
+fi
+
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n %{npm_name}-%{version}
 %build

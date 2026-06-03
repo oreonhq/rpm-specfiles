@@ -308,7 +308,7 @@ Source:        https://download.libvirt.org/%{?mainturl}libvirt-%{version}.tar.x
 
 # Fix IPv6 connections to ESXi
 # Upstream in > 12.0.0
-Patch: 0001-esx-Allow-connecting-to-IPv6-server.patch
+Patch:        0001-esx-Allow-connecting-to-IPv6-server.patch
 
 Requires: libvirt-daemon = %{version}-%{release}
 Requires: libvirt-daemon-config-network = %{version}-%{release}
@@ -1174,7 +1174,7 @@ MinGW Windows libvirt virtualization library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git_am
+%autosetup -S git_am -n libvirt-12.0.0
 
 %build
 %if 0%{?fedora} >= %{min_fedora} || 0%{?rhel} >= %{min_rhel} || (0%{?oreon} >= 11)

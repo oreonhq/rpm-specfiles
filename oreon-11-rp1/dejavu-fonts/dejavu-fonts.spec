@@ -57,6 +57,7 @@ Summary:  The DejaVu font families
 
 
 
+
 %global common_description %{expand:
 The DejaVu font set is based on the “Bitstream Vera” fonts, release 1.10. Its
 purpose is to provide a wider range of characters, while maintaining the

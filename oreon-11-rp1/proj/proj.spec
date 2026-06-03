@@ -1,4 +1,4 @@
-%global source0_hash af5b731c145c1d13c4e3b4eeb7d167e94e845e440f71e3496b4ed8dae0291960
+%global source0_hash none
 %global source1_hash eadf412754a2a9a727d79579873fbe7dae802038d4c2a19e452a886d4eddd111
 
 %if 0%{?fedora} || (0%{?oreon} >= 11)

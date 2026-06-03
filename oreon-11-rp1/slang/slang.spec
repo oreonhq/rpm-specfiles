@@ -1,4 +1,4 @@
-%global source0_hash f9145054ae131973c61208ea82486d5dd10e3c5cdad23b7c4a0617743c8f5a18
+%global source0_hash none
 
 %if 0%{?fedora:1} || (0%{?oreon} >= 11)
 %bcond_without oniguruma
@@ -14,7 +14,7 @@ License:	GPL-2.0-or-later
 URL:		https://www.jedsoft.org/slang/
 Source:        https://www.jedsoft.org/releases/%{name}/%{name}-%{version}.tar.bz2
 # disable test that fails with SIGHUP ignored (e.g. in koji)
-Patch2:		slang-sighuptest.patch
+Patch2:        https://src.fedoraproject.org/rpms/slang/raw/rawhide/f/slang-sighuptest.patch
 BuildRequires: make
 BuildRequires:	gcc libpng-devel zlib-devel
 %{?with_oniguruma:BuildRequires: oniguruma-devel}

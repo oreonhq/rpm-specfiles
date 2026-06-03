@@ -1,4 +1,4 @@
-%global source0_hash fdd805e233784aaee94459923165e61b6d72d0f9643cf38c7fc4213fc081fb20
+%global source0_hash none
 
 # The canonical copy of this spec file is upstream at:
 # https://github.com/coreos/rpm-ostree/blob/main/packaging/rpm-ostree.spec
@@ -13,9 +13,9 @@ URL: https://github.com/coreos/rpm-ostree
 # in the upstream git.  It also contains vendored Rust sources.
 Source0:        https://github.com/coreos/rpm-ostree/releases/download/v%{version}/rpm-ostree-%{version}.tar.xz
 
-Patch0: 0001-rpmostreed-transaction-types-fix-override-reset.patch
-Patch1: 0001-Fix-silent-upgrade-failure-on-container-systems.patch
-Patch2: 0001-deploy-Print-status-message-on-container-early-retur.patch
+Patch0:        https://src.fedoraproject.org/rpms/rpm-ostree/raw/rawhide/f/0001-rpmostreed-transaction-types-fix-override-reset.patch
+Patch1:        https://src.fedoraproject.org/rpms/rpm-ostree/raw/rawhide/f/0001-Fix-silent-upgrade-failure-on-container-systems.patch
+Patch2:        https://src.fedoraproject.org/rpms/rpm-ostree/raw/rawhide/f/0001-deploy-Print-status-message-on-container-early-retur.patch
 
 # See https://github.com/coreos/fedora-coreos-tracker/issues/1716
 # ostree not on i686 for RHEL 10

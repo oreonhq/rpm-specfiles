@@ -1,5 +1,5 @@
-%global source0_hash 58ff19ae133e470280efb4949ef92e0364d4c2a66bef8c57e69477348d815ea3
-%global source3_hash 1217a0212aaa143e44831849d1845b198f248923d7e96634219d3369a6ec8714
+%global source0_hash none
+%global source3_hash none
 
 %{!?javabuild:%global javabuild 0}
 %{!?utils:%global utils 1}
@@ -34,9 +34,9 @@ Source2:        https://download.osgeo.org/postgis/docs/postgis-%{version}-en.pd
 Source3:        https://download.osgeo.org/postgis/source/postgis-%{prevversion}.tar.gz
 
 # Add proj8 compatibility to postgis-2.x (needed for upgrade package)
-Patch1:        postgis2-proj8.patch
-Patch2:	       postgis-c99.patch
-Patch3:	       postgis-c99-2.patch
+Patch1:        https://src.fedoraproject.org/rpms/postgresql16-postgis/raw/rawhide/f/postgis2-proj8.patch
+Patch2:        https://src.fedoraproject.org/rpms/postgresql16-postgis/raw/rawhide/f/postgis-c99.patch
+Patch3:        https://src.fedoraproject.org/rpms/postgresql16-postgis/raw/rawhide/f/postgis-c99-2.patch
 %endif
 
 # 

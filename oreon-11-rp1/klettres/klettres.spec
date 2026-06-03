@@ -1,4 +1,4 @@
-%global source0_hash 2943b345c0f8f8b634a6af9f58ebec11ea88ffcf2dbc989080505283e1e84a01
+%global source0_hash none
 
 %global stable_kf6 stable
 
@@ -47,7 +47,7 @@ very first sounds of a new language, for children or for adults.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n klettres-26.04.1
 
 
 %build

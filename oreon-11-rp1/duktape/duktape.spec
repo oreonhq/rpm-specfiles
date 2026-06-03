@@ -1,4 +1,4 @@
-%global source0_hash 90f8d2fa8b5567c6899830ddef2c03f3c27960b11aca222fa17aa7ac613c2890
+%global source0_hash none
 
 Name:           duktape
 Version:        2.7.0
@@ -7,8 +7,8 @@ Summary:        Embeddable Javascript engine
 
 License:        MIT
 Url:            http://duktape.org/
-Source0:        http://duktape.org/%{name}-%{version}.tar.xz
-Patch0:         duktape-2.7.0-link-against-libm.patch
+Source0:        https://duktape.org/%{name}-%{version}.tar.xz
+Patch0:        https://src.fedoraproject.org/rpms/duktape/raw/rawhide/f/duktape-2.7.0-link-against-libm.patch
 
 BuildRequires:  gcc
 BuildRequires:  pkgconfig

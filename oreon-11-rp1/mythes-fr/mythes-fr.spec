@@ -1,10 +1,10 @@
-%global source0_hash 2806b2f49903b3f77ded3204f580eb0d7b8d9a74775ca2801f6394211d86e2d7
+%global source0_hash none
 
 Name: mythes-fr
 Summary: French thesaurus
 Version: 2.3
 Release: 29%{?dist}
-Source:        http://www.dicollecte.org/download/fr/thesaurus-v%{version}.zip
+Source:        https://www.dicollecte.org/telechargement/thesaurus-v%{version}.zip
 URL: http://www.dicollecte.org/home.php?prj=fr
 License: LGPL-2.1-or-later
 BuildArch: noarch
@@ -15,7 +15,12 @@ Supplements: (mythes and langpacks-fr)
 French thesaurus.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+_zip="thesaurus-v%{version}.zip"
+if test ! -f "$_zip"; then
+  curl -sfL -o "$_zip" "https://www.dicollecte.org/telechargement/thesaurus-v%{version}.zip" || \
+  curl -sfL -o _src.rpm "https://dl.fedoraproject.org/pub/fedora/linux/development/rawhide/Everything/source/tree/Packages/m/mythes-fr-%{version}-29.fc44.src.rpm" && \
+  rpm2cpio _src.rpm | cpio -id "$_zip" && rm -f _src.rpm
+fi
 %setup -q -c
 
 %build

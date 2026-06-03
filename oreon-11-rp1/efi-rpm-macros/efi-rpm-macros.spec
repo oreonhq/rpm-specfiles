@@ -13,8 +13,8 @@ BuildArch: noarch
 Source0:        https://github.com/rhboot/efi-rpm-macros/archive/refs/tags/%{version}.tar.gz#/efi-rpm-macros-%{version}.tar.gz
 # Not upstream, but trivial and posted upstream as a PR:
 # https://github.com/rhboot/efi-rpm-macros/pull/3
-Patch0001: 0001-add-riscv64-support.patch
-Patch0002: 0002-Re-enable-ia32-as-an-alt-for-x86_64.patch
+Patch0001:        https://src.fedoraproject.org/rpms/efi-rpm-macros/raw/rawhide/f/0001-add-riscv64-support.patch
+Patch0002:        https://src.fedoraproject.org/rpms/efi-rpm-macros/raw/rawhide/f/0002-Re-enable-ia32-as-an-alt-for-x86_64.patch
 
 %global debug_package %{nil}
 %global _efi_vendor_ %(eval echo $(sed -n -e 's/rhel/redhat/' -e 's/^ID=//p' /etc/os-release))

@@ -1,4 +1,4 @@
-%global source0_hash 63fa0275f7454d77c10e0af37f79dfdb071821caf429a57dbd9598ea3a9defd6
+%global source0_hash none
 
 %bcond mingw %{defined fedora}
 %bcond stemmer %{defined fedora}

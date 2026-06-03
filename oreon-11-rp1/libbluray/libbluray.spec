@@ -1,4 +1,4 @@
-%global source0_hash 77937baf07eadda4b2b311cf3af4c50269d2ea3165041f5843d96476c4c92777
+%global source0_hash none
 
 %ifarch %{java_arches}
 %global build_bdj 1
@@ -14,9 +14,9 @@ License:        LGPL-2.0-or-later
 URL:            https://www.videolan.org/developers/libbluray.html
 
 Source0:        https://download.videolan.org/pub/videolan/%{name}/%{version}/%{name}-%{version}.tar.xz
-Patch0:         libbluray-0.8.0-no_doxygen_timestamp.patch
+Patch0:        https://src.fedoraproject.org/rpms/libbluray/raw/rawhide/f/libbluray-0.8.0-no_doxygen_timestamp.patch
 # https://code.videolan.org/videolan/libbluray/-/commit/48d76414455ab6a7d270cec96d6e83673df8a00d
-Patch1:         libbluray-1.4.0-java_23_support.patch
+Patch1:        https://src.fedoraproject.org/rpms/libbluray/raw/rawhide/f/libbluray-1.4.0-java_23_support.patch
 
 BuildRequires:  doxygen
 BuildRequires:  fontconfig-devel

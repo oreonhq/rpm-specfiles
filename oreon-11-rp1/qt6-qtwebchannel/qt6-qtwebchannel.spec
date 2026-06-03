@@ -1,4 +1,4 @@
-%global source0_hash 69fbb50b71d6e6596c2d6863ee9a9c984a4d01378ee2b7b4163bb467a0158d82
+%global source0_hash none
 
 %global qt_module qtwebchannel
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - WebChannel component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0

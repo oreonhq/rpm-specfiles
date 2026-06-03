@@ -49,8 +49,18 @@ BuildRequires: sane-backends-devel >= 1.0.19-15
 This packages includes the scanadf and xcam programs.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git
+_repacked="%{name}-%{version}-repacked.tar.gz"
+if test ! -f "$_repacked"; then
+  curl -sfL -o _up.tar.gz "https://gitlab.com/sane-project/frontends/-/archive/%{version}/frontends-%{version}.tar.gz"
+  rm -rf _sf _out && mkdir _sf _out
+  tar xf _up.tar.gz -C _sf --strip-components=1
+  rm -f _sf/lstat.c _sf/lstat.h _sf/mkdir.c _sf/mkdir.h _sf/readlink.c _sf/readlink.h
+  ( cd _sf && tar czf "../$_repacked" . )
+  rm -rf _sf _up.tar.gz
+fi
+
+test "%{source0_hash}" = "none" || { f="$_repacked"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%setup -q -n %{name}-%{version}
 
 %build
 # have to regenerate configure, the old one caused f.e.:

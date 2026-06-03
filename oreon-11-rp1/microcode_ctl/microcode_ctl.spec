@@ -1,4 +1,4 @@
-%global source0_hash 75fd729182e56a51bc7a6a5becf49b0b266e20cd0c4355f0b490d06aa0d4ba2c
+%global source0_hash none
 
 %define upstream_version 2.1-51
 %global debug_package %{nil}

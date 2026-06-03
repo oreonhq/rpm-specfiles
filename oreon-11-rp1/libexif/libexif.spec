@@ -1,4 +1,4 @@
-%global source0_hash 0830ed253fceeb60444fb309598bc8a9491d3007dc054aad3a50a347c5597c57
+%global source0_hash none
 
 Summary:	Library for extracting extra information from image files
 Name:		libexif
@@ -39,7 +39,7 @@ API Documentation for programmers wishing to use libexif in their programs.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n libexif-0.6.26
 autoreconf -fiv
 iconv -f latin1 -t utf-8 < COPYING > COPYING.utf8; cp COPYING.utf8 COPYING
 iconv -f latin1 -t utf-8 < README > README.utf8; cp README.utf8 README

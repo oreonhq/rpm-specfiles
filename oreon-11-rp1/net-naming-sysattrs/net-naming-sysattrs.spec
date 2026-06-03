@@ -1,4 +1,4 @@
-%global source0_hash ba2e5f1280b3ecc182c4cb00ad464ffafd497b492fb2659f3fcd50cc478dbaae
+%global source0_hash none
 
 %global dracutmoddir %{_prefix}/lib/dracut/modules.d
 

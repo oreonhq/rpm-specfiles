@@ -1,4 +1,4 @@
-%global source0_hash 390f8e52ddee3aca5c4de7eead900c84c4fa61ff6d1f0ebea9c7543365c09b0a
+%global source0_hash none
 
 %global qt_module qtmultimedia
 
@@ -22,7 +22,7 @@
 
 Summary: Qt6 - Multimedia support
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -35,7 +35,7 @@ Url:     http://www.qt.io
 Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
-Patch0:  qtmultimedia-fix-build-on-x86-arch.patch
+Patch0:        https://src.fedoraproject.org/rpms/qt6-qtmultimedia/raw/rawhide/f/qtmultimedia-fix-build-on-x86-arch.patch
 
 # filter plugin/qml provides
 %global __provides_exclude_from ^(%{_qt6_archdatadir}/qml/.*\\.so|%{_qt6_plugindir}/.*\\.so)$

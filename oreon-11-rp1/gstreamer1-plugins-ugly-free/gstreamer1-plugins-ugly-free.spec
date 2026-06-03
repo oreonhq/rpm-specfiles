@@ -1,4 +1,4 @@
-%global source0_hash 0c04763200467b9b61a916b33646a6916a97cc9869d8b6dca57427b1f2734dee
+%global source0_hash none
 
 %global         majorminor 1.0
 

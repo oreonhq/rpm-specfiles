@@ -1,4 +1,4 @@
-%global source0_hash ff3047b19d17b82e26891abbe1bb354a9da3f66393c07c71072de0615e21788c
+%global source0_hash none
 
 Name:           libpinyin
 Version:        2.11.91
@@ -7,7 +7,7 @@ Summary:        Library to deal with pinyin
 
 License:        GPL-3.0-or-later
 URL:            https://github.com/libpinyin/libpinyin
-Source0:        http://downloads.sourceforge.net/libpinyin/libpinyin/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/libpinyin/libpinyin/%{name}-%{version}.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  kyotocabinet-devel, glib2-devel

@@ -1,4 +1,4 @@
-%global source0_hash 202ef7ef6e46c6fb31c143e574f157d6ba4cf9ded8d41fd065bd58b9267bfb16
+%global source0_hash none
 
 Name: zaf
 Summary: South Africa hyphenation rules
@@ -6,11 +6,11 @@ Summary: South Africa hyphenation rules
 Version: 0
 Release: 0.33.%{upstreamid}svn%{?dist}
 Source0: zaf-0-0.1.%{upstreamid}svn.tar.bz2
-# Below URL is dead now, don't file any bugs for updating it.
-URL: http://zaf.sourceforge.net/
-#Hyphenation rules are already generated in upstream code
+URL: https://github.com/LibreOffice/dictionaries
 License: LGPL-2.1-or-later
 BuildArch: noarch
+BuildRequires: curl
+BuildRequires: tar
 
 %description
 South Africa hyphenation rules.
@@ -30,7 +30,25 @@ Requires: hyphen
 Zulu hyphenation rules.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+_tar="zaf-0-0.1.%{upstreamid}svn.tar.bz2"
+if test ! -f "$_tar"; then
+  curl -sfL -o _dict.tar.gz "https://github.com/LibreOffice/dictionaries/archive/refs/heads/master.tar.gz"
+  rm -rf zaf dictionaries-*
+  mkdir -p zaf/af/hyph zaf/zu/hyph
+  tar xzf _dict.tar.gz
+  _dict=$(ls -d dictionaries-*)
+  cp -p $_dict/af_ZA/hyph_af_ZA.dic zaf/af/hyph/
+  cp -p $_dict/zu_ZA/hyph_zu_ZA.dic zaf/zu/hyph/
+  cp -p $_dict/af_ZA/README_af_ZA.txt zaf/af/README
+  printf "LibreOffice dictionaries\n" > zaf/af/CREDITS
+  cp -p zaf/af/README zaf/af/COPYING
+  cp -p zaf/af/README zaf/zu/README
+  cp -p zaf/af/CREDITS zaf/zu/CREDITS
+  cp -p zaf/af/COPYING zaf/zu/COPYING
+  tar cjf "$_tar" zaf
+  rm -rf _dict.tar.gz $_dict zaf
+fi
+test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %autosetup -n zaf
 
 %build

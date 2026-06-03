@@ -1,4 +1,4 @@
-%global source0_hash 40629895c69531a687a9c0258316cee3f04c2d18b2bf2ad36dc83e76a58f111a
+%global source0_hash none
 
 %global qt_module qtremoteobjects
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - Qt Remote Objects
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0

@@ -23,7 +23,7 @@ Version: 5.0
 Release: 0.18%{gver}%{?dist}
 URL: https://wiki.linuxfoundation.org/lsb/start
 # https://github.com/LinuxStandardBase/lsb-samples/
-Source0: redhat-lsb-%{snapshot}.tar.gz
+Source0:        https://github.com/LinuxStandardBase/lsb-samples/archive/%{gitversion}.tar.gz
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 BuildRequires: make
@@ -59,7 +59,8 @@ Applications.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n redhat-lsb-%{snapshot}
+%setup -q -n lsb-samples-%{gitversion}
+test -d redhat-lsb || ln -s . redhat-lsb
 
 %build
 cd lsb_release/src

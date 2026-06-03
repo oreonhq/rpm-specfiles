@@ -1,4 +1,4 @@
-%global source0_hash 8774e9a12c70b0180b95d6b0b563c5aa4bea8d5960c15e18ae3b6d2521d64f8b
+%global source0_hash none
 
 Summary: General dimension convex hull programs
 Name: qhull
@@ -13,11 +13,11 @@ Source0:        https://github.com/qhull/qhull/archive/v%{version}.tar.gz#/qhull
 
 # Install cmake and pkgconfig file into proper libdir
 # https://github.com/qhull/qhull/pull/123
-Patch0: qhull-lib64.patch
+Patch0:        https://src.fedoraproject.org/rpms/qhull/raw/rawhide/f/qhull-lib64.patch
 # Install extra targets - libqhull and qhull_p
-Patch1: qhull-install.patch
+Patch1:        https://src.fedoraproject.org/rpms/qhull/raw/rawhide/f/qhull-install.patch
 # The static_r library needs fPIC
-Patch2: qhull-staticr-pic.patch
+Patch2:        https://src.fedoraproject.org/rpms/qhull/raw/rawhide/f/qhull-staticr-pic.patch
 
 URL: http://www.qhull.org
 

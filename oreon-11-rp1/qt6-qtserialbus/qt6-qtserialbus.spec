@@ -1,4 +1,4 @@
-%global source0_hash c46c9c0c8d6815301a669cdbd5866c10bcfb9e56889f5d7da14e11d6ad24f20a
+%global source0_hash none
 
 %global qt_module qtserialbus
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - SerialBus component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0
@@ -26,7 +26,7 @@ Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submod
 
 ## upstreamable patches
 # workaround FTBFS against kernel-header-5.2.0+
-Patch100: qtserialbus-everywhere-src-5.12.3-SIOCGSTAMP.patch
+Patch100:        https://src.fedoraproject.org/rpms/qt6-qtserialbus/raw/rawhide/f/qtserialbus-everywhere-src-5.12.3-SIOCGSTAMP.patch
 
 BuildRequires: cmake
 BuildRequires: gcc-c++

@@ -1,4 +1,4 @@
-%global source0_hash 212b2c2aaa71c1d29f4356ae64785ccca600a565cfe0e03349afcb95d1444a98
+%global source0_hash none
 
 %global stable_kf6 stable
 
@@ -78,7 +78,7 @@ Requires: %{name}-libs%{?_isa} = %{version}-%{release}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n krdc-26.04.1
 
 
 %build

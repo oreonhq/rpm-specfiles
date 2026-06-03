@@ -1,4 +1,4 @@
-%global source0_hash 682c18afb11cda41288c4508831cb59797417b9d81ea916e0e99722ebe9bce96
+%global source0_hash none
 
 %if 0%{?fedora} || 0%{?epel} || (0%{?oreon} >= 11)
 %global flags 1
@@ -47,50 +47,50 @@ URL:     https://kde.org/
 %else
 %global stable stable
 %endif
-Source0:        http://download.kde.org/%{stable}/applications/%{version}/src/kde-runtime-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable}/applications/%{version}/src/kde-runtime-%{version}.tar.xz
 
 # add shortcuts for search provider
-Patch1: kdebase-runtime-4.1.x-searchproviders-shortcuts.patch
+Patch1:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kdebase-runtime-4.1.x-searchproviders-shortcuts.patch
 
 # support kdesud -Wl,-z,relro,-z,now linker flags
-Patch2: kde-runtime-kdesud_relro.patch
+Patch2:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kde-runtime-kdesud_relro.patch
 
 # add OnlyShowIn=KDE  to Desktop/Home.desktop (like trash.desktop)
-Patch6: kdebase-runtime-4.3.3-home_onlyshowin_kde.patch
+Patch6:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kdebase-runtime-4.3.3-home_onlyshowin_kde.patch
 
 # correct path for htsearch
-Patch7: kdebase-runtime-4.5.3-htsearch.patch
+Patch7:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kdebase-runtime-4.5.3-htsearch.patch
 
 # Launch compiz via compiz-manager so we get window decorations and
 # other such decadent luxuries (AdamW 2011/01)
-Patch8: kdebase-runtime-4.5.95-compiz.patch
+Patch8:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kdebase-runtime-4.5.95-compiz.patch
 
 # add overrides in default manpath
-Patch9: kdebase-runtime-4.3.4-man-overrides.patch
+Patch9:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kdebase-runtime-4.3.4-man-overrides.patch
 
 # https://bugs.kde.org/show_bug.cgi?id=310486
 # revert the main part of:
 # http://commits.kde.org/kde-runtime/deee161a42efda74965ca4aab7d79fb7fb375352
 # (Upstream doesn't like this workaround.)
-Patch10: kde-runtime-4.9.98-kde#310486.patch
+Patch10:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kde-runtime-4.9.98-kde%23310486.patch
 
 # disable making files read only when moving them into trash
 # (Upstream wouldn't accept this)
-Patch11: kde-runtime-4.10.4-trash-readonly.patch
+Patch11:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kde-runtime-4.10.4-trash-readonly.patch
 
 ## upstreamable patches
 # make installdbgsymbols.sh use pkexec instead of su 
 # increase some timeouts in an effort to see (some) errors before close
-Patch50: kde-runtime-4.9.0-installdbgsymbols.patch
+Patch50:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kde-runtime-4.9.0-installdbgsymbols.patch
 # dnf-based version of patch50
-Patch53:  kde-runtime-16.04.1-installdgbsymbols-dnf.patch
+Patch53:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kde-runtime-16.04.1-installdgbsymbols-dnf.patch
 
 # use packagekit to install a possibly-missing gdb
-Patch51: kde-runtime-4.11.2-install_gdb.patch
+Patch51:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kde-runtime-4.11.2-install_gdb.patch
 
 # Fix FTBFS
 # workaround missing dependency on glib2 in NetworkManager.pc
-Patch52: kde-runtime-15.08.0-fix-build.patch
+Patch52:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kde-runtime-15.08.0-fix-build.patch
 
 # patch to use libtirpc for RPC, from Cygwin Ports
 # should be upstreamable, considering that glibc's builtin RPC is obsolete
@@ -99,15 +99,15 @@ Patch52: kde-runtime-15.08.0-fix-build.patch
 # (because:
 # https://github.com/cygwinports/kde-runtime/blob/master/15.04.3-libtirpc.patch
 # is incomplete)
-Patch54: kde-runtime-17.08.3-nfs-libtirpc.patch
+Patch54:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kde-runtime-17.08.3-nfs-libtirpc.patch
 
 # make some components optional (kwalletd)
-Patch55: kde-runtime-optional_components.patch
+Patch55:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kde-runtime-optional_components.patch
 
 ## upstream patches
 
 # rhel patches
-Patch300: kde-runtime-4.9.2-webkit.patch
+Patch300:        https://src.fedoraproject.org/rpms/kde-runtime/raw/rawhide/f/kde-runtime-4.9.2-webkit.patch
 
 Obsoletes: kdebase-runtime < 4.7.97-10
 Provides:  kdebase-runtime = %{version}-%{release}
@@ -300,6 +300,12 @@ BuildArch: noarch
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %setup -q -n kde-runtime-%{version}
+for _f in /usr/lib*/automoc4/Automoc4Config.cmake; do
+  test -f "$_f" || continue
+  sed -i 's/cmake_minimum_required(VERSION 4.3)/cmake_minimum_required(VERSION 3.5)/' "$_f"
+done
+sed -i 's/cmake_minimum_required(VERSION [0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*)/cmake_minimum_required(VERSION 3.5)/' CMakeLists.txt 2>/dev/null || true
+sed -i 's/cmake_minimum_required(VERSION [0-9][0-9]*\.[0-9][0-9]*)/cmake_minimum_required(VERSION 3.5)/' CMakeLists.txt 2>/dev/null || true
 
 ## upstream patches
 

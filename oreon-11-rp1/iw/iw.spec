@@ -1,4 +1,4 @@
-%global source0_hash 7d182e498289ab39b257da6780d562e415377107f50358ee5b55b8cfe40b1e33
+%global source0_hash none
 
 Name:           iw
 Version:        6.17
@@ -8,7 +8,7 @@ Summary:        A nl80211 based wireless configuration tool
 # part of sha256.c is public domain
 License:        ISC AND LicenseRef-Public-Domain
 URL:            https://wireless.docs.kernel.org/en/latest/en/users/documentation/iw.html
-Source0:        http://www.kernel.org/pub/software/network/iw/iw-%{version}.tar.xz
+Source0:        https://cdn.kernel.org/pub/software/network/iw/iw-%{version}.tar.xz
 
 BuildRequires:  gcc
 BuildRequires:  kernel-headers
@@ -25,7 +25,7 @@ only because most new wireless devices being sold are now SoftMAC.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+%autosetup -n iw-6.17
 
 
 %build

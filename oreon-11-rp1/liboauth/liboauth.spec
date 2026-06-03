@@ -1,4 +1,4 @@
-%global source0_hash 0df60157b052f0e774ade8a8bac59d6e8d4b464058cc55f9208d72e41156811f
+%global source0_hash none
 
 Name:           liboauth
 Version:        1.0.3
@@ -7,7 +7,7 @@ Summary:        OAuth library functions
 
 License:        MIT
 URL:            http://liboauth.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 %if 0%{?el5}
 %endif
 

@@ -1,4 +1,4 @@
-%global source0_hash ef0ca9ee27850d1a5c863bb7ff9aa08096c9ed312ece9087b30f3a426828de82
+%global source0_hash none
 
 %if !(0%{?fedora} >= 32 || 0%{?rhel} >= 8) || (0%{?oreon} >= 11)
 %global with_python2 1

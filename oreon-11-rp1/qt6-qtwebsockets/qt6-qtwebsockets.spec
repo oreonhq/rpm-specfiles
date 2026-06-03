@@ -1,4 +1,4 @@
-%global source0_hash 243e3aa11924c8c5c1645e892f62d013caa3766c57512ca926d5b58146646fbf
+%global source0_hash none
 
 %global qt_module qtwebsockets
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - WebSockets component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: LGPL-3.0-only OR GPL-3.0-only WITH Qt-GPL-exception-1.0

@@ -10,10 +10,10 @@ URL:            https://jakarta.apache.org/regexp/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://archive.apache.org/dist/jakarta/%{name}/jakarta-%{name}-%{version}.tar.gz
-Source2:        jakarta-%{name}-osgi-manifest.MF
+Source0:        https://archive.apache.org/dist/jakarta/regexp/source/jakarta-regexp-%{version}.tar.gz
+Source2:        https://src.fedoraproject.org/rpms/regexp/raw/rawhide/f/jakarta-regexp-osgi-manifest.MF
 
-Patch:          jakarta-%{name}-attach-osgi-manifest.patch
+Patch:          https://src.fedoraproject.org/rpms/regexp/raw/rawhide/f/jakarta-regexp-attach-osgi-manifest.patch
 
 BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  ant-openjdk25 
@@ -30,8 +30,12 @@ It includes complete Javadoc documentation as well as a simple Applet
 for visual debugging and testing suite for compatibility.
 
 %prep
+_tar="jakarta-regexp-%{version}.tar.gz"
+if test ! -f "$_tar"; then
+  curl -sfL -o "$_tar" "https://archive.apache.org/dist/jakarta/regexp/source/jakarta-regexp-%{version}.tar.gz"
+fi
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n regexp-1.5
 cp -p %{SOURCE2} MANIFEST.MF
 # remove all binary libs
 find . -name "*.jar" -exec rm -f {} \;

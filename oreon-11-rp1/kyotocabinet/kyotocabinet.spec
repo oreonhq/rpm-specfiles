@@ -1,4 +1,4 @@
-%global source0_hash 4c85d736668d82920bfdbdb92ac3d66b7db1108f09581a769dd9160a02def349
+%global source0_hash none
 
 Summary:        A straightforward implementation of DBM
 Name:           kyotocabinet
@@ -7,8 +7,8 @@ Release:        9%{?dist}
 License:        GPL-3.0-only
 URL:            https://dbmx.net/%{name}/
 Source:        https://dbmx.net/%{name}/pkg/%{name}-%{version}.tar.gz
-Patch0:         kyotocabinet-1.2.76-cflags.patch
-Patch1:         kyotocabinet-1.2.76-8-byte-atomics.patch
+Patch0:        https://src.fedoraproject.org/rpms/kyotocabinet/raw/rawhide/f/kyotocabinet-1.2.76-cflags.patch
+Patch1:        https://src.fedoraproject.org/rpms/kyotocabinet/raw/rawhide/f/kyotocabinet-1.2.76-8-byte-atomics.patch
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 BuildRequires:  gcc-c++, zlib-devel, lzo-devel, xz-devel
 
@@ -51,7 +51,7 @@ applications that use Kyoto Cabinet.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n kyotocabinet-1.2.80
 
 %build
 %configure --disable-opt --enable-lzo --enable-lzma

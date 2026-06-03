@@ -1,4 +1,4 @@
-%global source0_hash 64066fbd54e71d7ae4c8a4116997448a72808a2813cff3bb5d2c28f0fce9e0e5
+%global source0_hash none
 
 %undefine __cmake_in_source_build
 
@@ -23,13 +23,13 @@ URL:     https://quickgit.kde.org/?p=soprano.git
 %if 0%{?snap:1}
 # git clone git://anongit.kde.org/soprano ; cd soprano
 # git archive --prefix=soprano-%%{version}/ master | bzip2 > soprano-%%{version}-%%{snap}.tar.bz2
-Source0:        http://downloads.sf.net/soprano/soprano-%{version}.tar.bz2
+Source0:        https://downloads.sf.net/soprano/soprano-%{version}.tar.bz2
 %else
-Source0:        http://downloads.sf.net/soprano/soprano-%{version}.tar.bz2
+Source0:        https://downloads.sf.net/soprano/soprano-%{version}.tar.bz2
 %endif
 
 ## upstreamable patches
-Patch1: soprano-2.9.4-gcc6.patch
+Patch1:        https://src.fedoraproject.org/rpms/soprano/raw/rawhide/f/soprano-2.9.4-gcc6.patch
 
 ## upstream patches
 

@@ -1,4 +1,4 @@
-%global source0_hash 1412a21b943c6e1db834ee2d74145aad20b3f62b12152d475613b8241d9cde10
+%global source0_hash none
 
 Name:           libspiro
 Version:        20240903

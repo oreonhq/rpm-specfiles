@@ -1,4 +1,4 @@
-%global source0_hash 7ad14161a0de03b52c322c455ff012f41e6f4465006ab90e544d4f1b3a322bd1
+%global source0_hash none
 
 %global stable_kf6 stable
 
@@ -16,7 +16,7 @@ Release: 1%{?dist}
 
 License: GPL-2.0-or-later
 URL:     https://cgit.kde.org/%{name}.git
-Source0:        http://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: gcc-c++
 BuildRequires: cmake
@@ -50,7 +50,7 @@ Conflicts: kdeedu-math < 4.7.0-10
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n kmplot-26.04.1
 
 
 %build

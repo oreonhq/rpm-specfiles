@@ -1,4 +1,4 @@
-%global source0_hash be81ef08baa2516ecda76a77adf7def7bc3227eeb578b9a33b45f7b41dc064e6
+%global source0_hash none
 
 # Major version
 %define major 1

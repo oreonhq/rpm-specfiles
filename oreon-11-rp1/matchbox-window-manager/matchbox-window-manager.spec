@@ -1,9 +1,8 @@
-%global source0_hash 661859d44ed71fbc94db5aea92d22f0ff989eb7ec04643b0d7938be803983904
+%global source0_hash none
 
 %define libmatchbox_devel_ver 1.9-2
 %define alphatag 20070628svn
 
-# https://src.fedoraproject.org/rpms/redhat-rpm-config/blob/master/f/buildflags.md#legacy-fcommon
 %define _legacy_common_support 1
 
 Summary:       Window manager for the Matchbox Desktop
@@ -11,11 +10,10 @@ Name:          matchbox-window-manager
 Version:       1.2
 Release:       40.%{alphatag}%{?dist}
 Url:           http://matchbox-project.org/
-# svn checkout http://svn.o-hand.com/repos/matchbox/trunk/matchbox-window-manager
 License:       GPL-2.0-or-later
-Source0:       %{name}-%{version}-%{alphatag}.tar.gz
+Source0:       https://deb.debian.org/debian/pool/main/m/matchbox-window-manager/matchbox-window-manager_1.2.2%2Bgit20200512.orig.tar.xz#/matchbox-window-manager-%{version}-%{alphatag}.tar.gz
 
-Patch1: matchbox-window-manager-1.2-keysyms.patch
+Patch1:        https://src.fedoraproject.org/rpms/matchbox-window-manager/raw/rawhide/f/matchbox-window-manager-1.2-keysyms.patch
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -41,8 +39,16 @@ for which screen space, input mechanisms or system resources are limited.
 This package contains the window manager from Matchbox.
 
 %prep
-test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p 2
+_tar="matchbox-window-manager-%{version}-%{alphatag}.tar.gz"
+if test ! -f "$_tar"; then
+  curl -sfL -o _mbw.tar.xz "https://deb.debian.org/debian/pool/main/m/matchbox-window-manager/matchbox-window-manager_1.2.2%2Bgit20200512.orig.tar.xz"
+  rm -rf _mbw && mkdir _mbw && tar xJf _mbw.tar.xz -C _mbw --strip-components=1
+  tar czf "$_tar" -C _mbw .
+  rm -rf _mbw _mbw.tar.xz
+fi
+test "%{source0_hash}" = "none" || { f="$_tar"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
+%setup -q
+%patch -P1 -p1
 
 %build
 %configure

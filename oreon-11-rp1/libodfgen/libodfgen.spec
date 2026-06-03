@@ -1,4 +1,4 @@
-%global source0_hash 55200027fd46623b9bdddd38d275e7452d1b0ff8aeddcad6f9ae6dc25f610625
+%global source0_hash none
 
 %global apiversion 0.1
 
@@ -9,8 +9,8 @@ Summary: An ODF generator library
 
 License: LGPL-2.1-or-later OR MPL-2.0
 URL: https://sourceforge.net/p/libwpd/wiki/libodfgen/
-Source:        http://downloads.sourceforge.net/libwpd/%{name}-%{version}.tar.xz
-Patch0: includes.patch
+Source:        https://downloads.sourceforge.net/libwpd/%{name}-%{version}.tar.xz
+Patch0:        https://src.fedoraproject.org/rpms/libodfgen/raw/rawhide/f/includes.patch
 
 BuildRequires: doxygen
 BuildRequires: gcc-c++
@@ -41,7 +41,7 @@ The %{name}-doc package contains documentation files for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n libodfgen-0.1.8
 
 %build
 %configure --disable-silent-rules --disable-static

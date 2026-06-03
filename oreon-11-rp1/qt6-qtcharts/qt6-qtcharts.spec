@@ -1,4 +1,4 @@
-%global source0_hash 3fe3ed318c2a86d1417c5c29cf7494275e8fd4b537cd37453f5599c57365515c
+%global source0_hash none
 
 %global qt_module qtcharts
 
@@ -11,7 +11,7 @@
 
 Summary: Qt6 - Charts component
 Name:    qt6-%{qt_module}
-Version: 6.11.1
+Version: 6.10.3
 Release: 1%{?dist}
 
 License: GPL-3.0-only WITH Qt-GPL-exception-1.0

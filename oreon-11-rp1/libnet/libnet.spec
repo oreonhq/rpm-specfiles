@@ -1,4 +1,4 @@
-%global source0_hash ad1e2dd9b500c58ee462acd839d0a0ea9a2b9248a1287840bc601e774fb6b28f
+%global source0_hash none
 
 Summary:        C library for portable packet creation and injection
 Name:           libnet
@@ -7,7 +7,7 @@ Release:        7%{?dist}
 License:        BSD-2-Clause AND BSD-3-Clause
 URL:            https://github.com/libnet/libnet
 Source0:        https://github.com/libnet/libnet/releases/download/v%{version}/%{name}-%{version}.tar.gz
-Patch0:         libnet-config.patch
+Patch0:        https://src.fedoraproject.org/rpms/libnet/raw/rawhide/f/libnet-config.patch
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  %{_bindir}/pod2man

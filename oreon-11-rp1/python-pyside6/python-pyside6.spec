@@ -1,4 +1,4 @@
-%global source0_hash 2c7462fe0cecb5b8ac0a3d92014b8d0b88bd4d9f8646709dab5286d9416f45bc
+%global source0_hash none
 
 # Do not force clang as the C++ compiler for generated wrappers. Clang 16+ hits
 # -Wcast-function-type-mismatch on thousands of shiboken-generated PyMethodDef lines.
@@ -31,9 +31,9 @@ Source0:        https://download.qt.io/official_releases/QtForPython/%{pypi_name
 # Optional doc-only qtbase submodule tarball when %%docs is enabled (see Fedora python-pyside6).
 
 # Shipped in SRPM (avoid src.fedoraproject.org fetch flakiness in mock)
-Patch0:         0001-Revert-Modify-headers-installation-for-CMake-builds.patch
-Patch1:         0001-Always-link-to-python-libraries.patch
-Patch2:         0001-Fix-installation.patch
+Patch0:        https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-Revert-Modify-headers-installation-for-CMake-builds.patch
+Patch1:        https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-Always-link-to-python-libraries.patch
+Patch2:        https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-Fix-installation.patch
 Patch3:         0001-shiboken6-Fix-build-with-clang-22.patch
 Patch4:         0004-shiboken6-define-LLVM_VERSION-for-apiextractor.patch
 Patch5:         0005-QtCore-QDir-match-Qt-6.10-optional-QFile-Permissions.patch
