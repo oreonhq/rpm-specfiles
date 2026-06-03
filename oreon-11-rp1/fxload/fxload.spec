@@ -1,4 +1,4 @@
-%global source0_hash 05e5ffc08d30465c4e3121a07d54e79ad2daa7ea389a1587875d60377c45d970
+%global source0_hash none
 
 Name: fxload
 Version: 2008_10_13
@@ -7,9 +7,7 @@ Summary: A helper program to download firmware into FX and FX2 EZ-USB devices
 
 License: GPL-2.0-or-later
 URL: http://linux-hotplug.sourceforge.net/
-Source0: fxload-%{version}-noa3load.tar.gz
-# The above file is derived from:
-# http://downloads.sourceforge.net/project/linux-hotplug/fxload/2008_10_13/fxload-2008_10_13.tar.gz
+Source0: http://downloads.sourceforge.net/project/linux-hotplug/fxload/%{version}/fxload-%{version}.tar.gz
 # This file contains code that is copyright Cypress Semiconductor Inc,
 # and cannot be distributed. Therefore we use this script to remove the
 # copyright code before shipping it. Download the upstream tarball and
@@ -19,6 +17,7 @@ Source1: fxload-generate-tarball.sh
 Patch0: fxload-noa3load.patch
 Patch1: fxload-ldflags.patch
 
+BuildRequires: curl
 BuildRequires: gcc kernel-headers make
 Requires: udev
 Conflicts: hotplug-gtk hotplug
@@ -31,7 +30,10 @@ appears on the bus.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%{SOURCE1} %{version} %{_sourcedir}
+cd %{builddir}
+tar -xf %{_sourcedir}/fxload-%{version}-noa3load.tar.gz
+cd fxload-%{version}
 %patch -P0 -p1 -b .fxload-noa3load
 %patch -P1 -p1 -b .ldflags
 

@@ -14,7 +14,7 @@ URL:        http://www.x.org
 License:    MIT AND X11
 
 Source0:        https://ftp.x.org/archive/individual/driver/%{tarball}-%{version}.tar.xz
-Source30:   xserver-sdk-abi-requires
+Source30:        https://src.fedoraproject.org/rpms/xorg-x11-drv-vmware/raw/rawhide/f/xserver-sdk-abi-requires
 
 ExclusiveArch: %{ix86} x86_64 ia64
 

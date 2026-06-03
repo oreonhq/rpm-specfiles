@@ -1,3 +1,4 @@
+%global source2_hash 70da7140035621330f1b5ab6926197c3c3af467f2207d55a41f6396d9ad96abd
 %global source0_hash none
 %global source3_hash 8b3e796574d63131fd3c90692c830ccf21a272433e3cc1b8c014979c84bd2ff4
 %global source4_hash 9b83c4f3a068a946739c07a0e4c4e273c7a5ade86a187de88f82dc25038bf35b

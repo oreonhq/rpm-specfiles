@@ -32,7 +32,7 @@ Ratnaweera and Harshani Devadithya.
 #cd sinhala/fonts/
 #tar -czf lklug-%%{cvsdate}.tar.gz convert.ff COPYING  CREDITS lklug.sfd Makefile README.fonts
 Source: lklug-%{cvsdate}.tar.gz
-Source1: 65-lklug-fonts.conf
+Source1:        https://src.fedoraproject.org/rpms/lklug-fonts/raw/rawhide/f/65-lklug-fonts.conf
 
 %fontpkg
 

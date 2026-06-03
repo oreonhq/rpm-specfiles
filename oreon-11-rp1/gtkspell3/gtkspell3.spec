@@ -50,7 +50,9 @@ developing applications that use GtkSpell API version 3.0.
 
 %package -n mingw32-%{name}
 Summary:       MinGW Windows GtkSpell3 library
+
 BuildArch:     noarch
+
 Obsoletes:     mingw32-%{name}-static < %{version}-%{release}
 
 %description -n mingw32-%{name}
@@ -59,7 +61,9 @@ MinGW Windows GtkSpell3 library.
 
 %package -n mingw64-%{name}
 Summary:       MinGW Windows GtkSpell3 library
+
 BuildArch:     noarch
+
 Obsoletes:     mingw64-%{name}-static < %{version}-%{release}
 
 %description -n mingw64-%{name}

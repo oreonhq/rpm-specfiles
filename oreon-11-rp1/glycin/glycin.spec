@@ -4,7 +4,11 @@
 %bcond heif     %{undefined rhel}
 %bcond jpegxl   %{undefined rhel}
 
-%bcond bundled_rust_deps %{defined rhel}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
+%bcond_without bundled_rust_deps
+%else
+%bcond_with bundled_rust_deps
+%endif
 
 %global tarball_version %(echo %{version} | tr '~' '.')
 
@@ -61,8 +65,6 @@ Source0: https://download.gnome.org/sources/glycin/2.0/glycin-%{tarball_version}
 #   cargo vendor --versioned-dirs
 #   tar Jcvf ../glycin-%%{tarball_version}-vendor.tar.xz vendor/
 #   popd
-Source1:        glycin-%{tarball_version}-vendor.tar.xz
-
 # fixup for issue that makes "cargo tree" fail to parse tests/Cargo.toml
 Patch:          0001-fix-invalid-crate-manifest-for-tests-workspace-membe.patch
 # partial revert of https://gitlab.gnome.org/GNOME/glycin/-/commit/f637a7e
@@ -160,8 +162,9 @@ This package contains files for developing against libglycin-gtk4.
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %if %{with bundled_rust_deps}
-%autosetup -n glycin-%{tarball_version} -N -a1
+%autosetup -n glycin-%{tarball_version} -N
 %autopatch -p1 -M 0
+cargo vendor --versioned-dirs
 %cargo_prep -v vendor
 %else
 %autosetup -n glycin-%{tarball_version} -N

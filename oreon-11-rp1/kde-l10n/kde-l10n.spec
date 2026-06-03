@@ -71,6 +71,41 @@ Release: 22%{?dist}
 Url:     http://www.kde.org
 # Automatically converted from old format: LGPLv2 - review is highly recommended.
 License: LicenseRef-Callaway-LGPLv2
+
+# klickety moved kde-i18n -> kde-l10n (#656523)
+Conflicts: kde-i18n < 1:3.5.10-13
+# khelpcenter moved to kde-apps-16.04, and so did it's translations
+Conflicts: khelpcenter < 1:16.04
+
+%if 0%{?fedora} > 22 || (0%{?oreon} >= 11)
+%global kdenlive 1
+Conflicts: kdenlive < 15.08
+%endif
+
+# https://bugzilla.rpmfusion.org/show_bug.cgi?id=4459
+%if 0
+%global kwave 1
+Conflicts: kwave < 16.12
+%endif
+
+# Unfortunately, these are currently not available
+Obsoletes: kde-l10n-Kurdish < 4.3.98
+Obsoletes: kde-l10n-Bengali-India < 4.4.0
+Obsoletes: kde-l10n-Chhattisgarhi < 4.4.0
+Obsoletes: kde-l10n-Marathi < 4.4.0
+Obsoletes: kde-l10n-Kashubian < 4.5.0
+Obsoletes: kde-l10n-Macedonian < 4.5.0
+Obsoletes: kde-l10n-Esperanto < 4.6.0
+Obsoletes: kde-l10n-Frisian < 4.6.0
+Obsoletes: kde-l10n-Malayalam < 4.6.0
+Obsoletes: kde-l10n-Gujarati < 4.7.0
+Obsoletes: kde-l10n-Maithili < 4.7.0
+Obsoletes: kde-l10n-Kannada < 4.8.0
+Obsoletes: kde-l10n-Sinhala < 4.10.80
+Obsoletes: kde-l10n-Thai < 4.10.80
+Obsoletes: kde-l10n-Tajik < 4.12.0
+Obsoletes: kde-l10n-Vietnamese < 4.14.0
+
 BuildArch: noarch
 # optimize simple noarch pkg, no debuginfo
 %define debug_package   %{nil}
@@ -165,40 +200,6 @@ BuildRequires: qt5-qttools-devel
 BuildRequires: make
 
 Requires: kde-filesystem
-
-# klickety moved kde-i18n -> kde-l10n (#656523)
-Conflicts: kde-i18n < 1:3.5.10-13
-# khelpcenter moved to kde-apps-16.04, and so did it's translations
-Conflicts: khelpcenter < 1:16.04
-
-%if 0%{?fedora} > 22 || (0%{?oreon} >= 11)
-%global kdenlive 1
-Conflicts: kdenlive < 15.08
-%endif
-
-# https://bugzilla.rpmfusion.org/show_bug.cgi?id=4459
-%if 0
-%global kwave 1
-Conflicts: kwave < 16.12
-%endif
-
-# Unfortunately, these are currently not available
-Obsoletes: kde-l10n-Kurdish < 4.3.98
-Obsoletes: kde-l10n-Bengali-India < 4.4.0
-Obsoletes: kde-l10n-Chhattisgarhi < 4.4.0
-Obsoletes: kde-l10n-Marathi < 4.4.0
-Obsoletes: kde-l10n-Kashubian < 4.5.0
-Obsoletes: kde-l10n-Macedonian < 4.5.0
-Obsoletes: kde-l10n-Esperanto < 4.6.0
-Obsoletes: kde-l10n-Frisian < 4.6.0
-Obsoletes: kde-l10n-Malayalam < 4.6.0
-Obsoletes: kde-l10n-Gujarati < 4.7.0
-Obsoletes: kde-l10n-Maithili < 4.7.0
-Obsoletes: kde-l10n-Kannada < 4.8.0
-Obsoletes: kde-l10n-Sinhala < 4.10.80
-Obsoletes: kde-l10n-Thai < 4.10.80
-Obsoletes: kde-l10n-Tajik < 4.12.0
-Obsoletes: kde-l10n-Vietnamese < 4.14.0
 
 %description
 Internationalization support for KDE.
@@ -512,11 +513,13 @@ Obsoletes: %{name}-Frisian < 4.14.3-2
 
 %package ga
 Summary: Irish language support for KDE Applications
-Obsoletes: kde-i18n-Gaeilge < %{version}-%{release}
+
 Requires: %{name} = %{version}-%{release}
 #Requires: qt5-qttranslations
 Supplements: (%{name} = %{version}-%{release} and langpacks-ga)
 Provides: %{name}-Irish = %{version}-%{release}
+
+Obsoletes: kde-i18n-Gaeilge < %{version}-%{release}
 
 Obsoletes: %{name}-Irish < 4.14.3-2
 %description ga

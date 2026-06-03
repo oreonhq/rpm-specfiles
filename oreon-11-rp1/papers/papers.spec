@@ -1,7 +1,9 @@
 %global source0_hash none
-%global source1_hash none
-
-%bcond bundled_rust_deps %{defined rhel}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
+%bcond_without bundled_rust_deps
+%else
+%bcond_with bundled_rust_deps
+%endif
 
 # djvulibre is not available in RHEL 10+
 %bcond djvu %{undefined rhel}
@@ -65,8 +67,6 @@ Source:         https://download.gnome.org/sources/papers/49/papers-%{tarball_ve
 #   cargo vendor --versioned-dirs
 #   tar Jcvf ../papers-%%{tarball_version}-vendor.tar.xz vendor/
 #   popd
-Source1:        papers-%{tarball_version}-vendor.tar.xz
-
 # 
 ExcludeArch:    %{ix86}
 
@@ -166,15 +166,15 @@ This package brings the Papers thumbnailer independently from Papers.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }# check for human errors
 if [ `echo "%{version}" | grep -cE "\.alpha|\.beta|\.rc"` = "1" ]; then echo "Error: Use tilde in Version field in front of alpha/beta/rc; checked '%{version}'" 1>&2; exit 1; fi
 
-%if %{without bundled_rust_deps}
+%if %{with bundled_rust_deps}
+%autosetup -p1 -n papers-%{tarball_version}
+cargo vendor --versioned-dirs
+%cargo_prep -v vendor
+%else
 %autosetup -p1 -n papers-%{tarball_version}
 %cargo_prep
-%else
-%autosetup -p1 -n papers-%{tarball_version} -a1
-%cargo_prep -v vendor
 %endif
 
 %if %{without bundled_rust_deps}

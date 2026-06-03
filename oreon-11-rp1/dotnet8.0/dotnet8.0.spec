@@ -49,7 +49,11 @@
 
 %global mono_archs ppc64le s390x
 
+%if 0%{?oreon} >= 11
+%global runtime_id oreon-11-%{runtime_arch}
+%else
 %{!?runtime_id:%global runtime_id %(. /etc/os-release ; echo "${ID}.${VERSION_ID%%.*}")-%{runtime_arch}}
+%endif
 
 Name:           dotnet%{dotnetver}
 Version:        %{sdk_rpm_version}

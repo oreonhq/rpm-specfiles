@@ -42,7 +42,7 @@ License: (Apache-2.0 OR MIT) AND BSD-3-Clause AND (MIT OR Apache-2.0) AND Unicod
 URL:            https://github.com/keylime/rust-keylime/
 # The source tarball is downloaded using the following commands:
 #   spectool -g keylime-agent-rust.spec
-Source0:        https://github.com/keylime/rust-keylime//archive/refs/tags/v0.2.9.tar.gz
+Source0:        https://github.com/keylime/rust-keylime/archive/refs/tags/v%{version}.tar.gz#/rust-keylime-%{version}.tar.gz
 # The vendor tarball is created using cargo-vendor-filterer to remove Windows
 # related files (https://github.com/cgwalters/cargo-vendor-filterer)
 #   tar xf rust-keylime-%%{version}.tar.gz
@@ -55,7 +55,6 @@ Source0:        https://github.com/keylime/rust-keylime//archive/refs/tags/v0.2.
 #       --exclude-crate-path "libloading#tests" \
 #       --prefix=vendor --format=tar.zstd
 #   cp vendor.tar.zstd ../rust-keylime-%%{version}-vendor.tar.zstd
-Source1:        rust-keylime-%{version}-vendor.tar.zstd
 ## (0-99) General patches
 # Drop deprecated features and workaround unavailable components
 Patch0:       0001-rust-keylime-metadata.patch
@@ -162,10 +161,10 @@ The Keylime IMA emulator for testing with emulated TPM
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -S git -n rust-keylime-%{version} -N %{?bundled_rust_deps:-a1}
+%autosetup -S git -n rust-keylime-%{version} -N
 %autopatch -M 99 -p1
 %if 0%{?bundled_rust_deps}
-# Source1 is vendored dependencies
+cargo vendor --versioned-dirs
 %cargo_prep -v vendor
 # Add back the line below if patches are added (do not forget the '%')
 # autopatch -m 200 -p1

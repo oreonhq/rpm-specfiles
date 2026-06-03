@@ -12,21 +12,21 @@ License:        MIT
 URL:            https://fedoraproject.org/wiki/Node.js/Packagers
 ExclusiveArch:  %{nodejs_arches} noarch
 
-Source0001: LICENSE
-Source0002: README.md
-Source0003: macros.nodejs
-Source0004: multiver_modules
-Source0005: nodejs-fixdep
-Source0006: nodejs-setversion
-Source0007: nodejs-symlink-deps
-Source0008: nodejs.attr
-Source0009: nodejs.prov
-Source0010: nodejs.req
+Source0001:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/LICENSE
+Source0002:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/README.md
+Source0003:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/macros.nodejs
+Source0004:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/multiver_modules
+Source0005:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/nodejs-fixdep
+Source0006:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/nodejs-setversion
+Source0007:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/nodejs-symlink-deps
+Source0008:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/nodejs.attr
+Source0009:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/nodejs.prov
+Source0010:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/nodejs.req
 
-Source0111: nodejs-packaging-bundler
+Source0111:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/nodejs-packaging-bundler
 
 # Created with `tar cfz test.tar.gz test`
-Source0101: test.tar.gz
+Source0101:        https://src.fedoraproject.org/rpms/nodejs-packaging/raw/rawhide/f/test.tar.gz
 
 BuildRequires:  python3
 

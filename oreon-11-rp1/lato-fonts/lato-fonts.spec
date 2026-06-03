@@ -40,7 +40,7 @@ phonetics.
 
 # Fonts retrieved 2015-08-07 from http://www.latofonts.com/download/Lato2OFL.zip
 Source0:  %{name}-%{version}.zip
-Source10: 61-lato-fonts.conf
+Source10:        https://src.fedoraproject.org/rpms/lato-fonts/raw/rawhide/f/61-lato-fonts.conf
 
 %fontpkg
 

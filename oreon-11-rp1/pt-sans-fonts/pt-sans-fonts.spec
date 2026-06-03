@@ -1,4 +1,6 @@
-%global source0_hash d3734f1f299d756284f381c9add629845672acf71e4252af4eddc929983aafd4
+%global source21_hash dda0eb0c4c876b7be5fd3732fbf909600e852aabefd84b6d759a2ae8554c3bc4
+%global source20_hash dda0eb0c4c876b7be5fd3732fbf909600e852aabefd84b6d759a2ae8554c3bc4
+%global source0_hash 9c53ad6b9759208b6c8ee726cc939dabf97ea6f610c8308ceea0b9b954b410c3
 
 # SPDX-License-Identifier: MIT
 Version: 20141121

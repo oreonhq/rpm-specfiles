@@ -78,10 +78,10 @@ Url: http://www.postgresql.org/
 
 Source0:        https://ftp.postgresql.org/pub/source/v%{version}/postgresql-%{version}.tar.bz2
 Source3:        https://ftp.postgresql.org/pub/source/v%{prevversion}/postgresql-%{prevversion}.tar.bz2
-Source4: Makefile.regress
-Source9: postgresql.tmpfiles.d
-Source10: postgresql.pam
-Source11: postgresql-bashprofile
+Source4:        https://src.fedoraproject.org/rpms/postgresql18/raw/rawhide/f/Makefile.regress
+Source9:        https://src.fedoraproject.org/rpms/postgresql18/raw/rawhide/f/postgresql.tmpfiles.d
+Source10:        https://src.fedoraproject.org/rpms/postgresql18/raw/rawhide/f/postgresql.pam
+Source11:        https://src.fedoraproject.org/rpms/postgresql18/raw/rawhide/f/postgresql-bashprofile
 
 
 # git: https://github.com/devexp-db/postgresql-setup

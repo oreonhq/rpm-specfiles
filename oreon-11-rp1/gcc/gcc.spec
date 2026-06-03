@@ -199,6 +199,38 @@ Source2: newlib-cygwin-%{newlib_cygwin_gitrev}.tar.xz
 %global isl_version 0.24
 Source3:        https://gcc.gnu.org/pub/gcc/infrastructure/isl-%{isl_version}.tar.bz2
 URL: http://gcc.gnu.org
+
+# Make sure gdb will understand DW_FORM_strp
+Conflicts: gdb < 5.1-2
+Requires: glibc-devel >= 2.2.90-12
+%ifarch ppc ppc64 ppc64le ppc64p7 s390 s390x sparc sparcv9 alpha
+# Make sure glibc supports TFmode long double
+Requires: glibc >= 2.3.90-35
+%endif
+%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7 || (0%{?oreon} >= 11)
+%ifarch %{arm}
+Requires: glibc >= 2.16
+%endif
+%endif
+Requires: libgcc >= %{version}-%{release}
+Requires: libgomp = %{version}-%{release}
+%if %{build_libatomic}
+Requires: libatomic = %{version}-%{release}
+Obsoletes: libatomic-static < %{version}-%{release}
+Provides: libatomic-static = %{version}-%{release}
+%endif
+# lto-wrapper invokes make
+Requires: make
+%if !%{build_ada}
+Obsoletes: gcc-gnat < %{version}-%{release}
+%endif
+Obsoletes: gcc-java < %{version}-%{release}
+AutoReq: true
+Provides: bundled(libiberty)
+Provides: bundled(libbacktrace)
+Provides: bundled(libffi)
+Provides: gcc(major) = %{gcc_major}
+
 # Need binutils with -pie support >= 2.14.90.0.4-4
 # Need binutils which can omit dot symbols and overlap .opd on ppc64 >= 2.15.91.0.2-4
 # Need binutils which handle -msecure-plt on ppc >= 2.16.91.0.2-2
@@ -285,37 +317,6 @@ Requires: cpp = %{version}-%{release}
 # Need binutils which support --generate-missing-build-notes=yes >= 2.31
 # Need binutils that support .base64 >= 2.43
 Requires: binutils >= 2.43
-# Make sure gdb will understand DW_FORM_strp
-Conflicts: gdb < 5.1-2
-Requires: glibc-devel >= 2.2.90-12
-%ifarch ppc ppc64 ppc64le ppc64p7 s390 s390x sparc sparcv9 alpha
-# Make sure glibc supports TFmode long double
-Requires: glibc >= 2.3.90-35
-%endif
-%if 0%{?fedora} >= 18 || 0%{?rhel} >= 7 || (0%{?oreon} >= 11)
-%ifarch %{arm}
-Requires: glibc >= 2.16
-%endif
-%endif
-Requires: libgcc >= %{version}-%{release}
-Requires: libgomp = %{version}-%{release}
-%if %{build_libatomic}
-Requires: libatomic = %{version}-%{release}
-Obsoletes: libatomic-static < %{version}-%{release}
-Provides: libatomic-static = %{version}-%{release}
-%endif
-# lto-wrapper invokes make
-Requires: make
-%if !%{build_ada}
-Obsoletes: gcc-gnat < %{version}-%{release}
-%endif
-Obsoletes: gcc-java < %{version}-%{release}
-AutoReq: true
-Provides: bundled(libiberty)
-Provides: bundled(libbacktrace)
-Provides: bundled(libffi)
-Provides: gcc(major) = %{gcc_major}
-
 Patch0: gcc16-hack.patch
 Patch2: gcc16-sparc-config-detection.patch
 Patch3: gcc16-libgomp-omp_h-multilib.patch

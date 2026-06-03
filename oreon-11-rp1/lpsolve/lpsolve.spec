@@ -38,7 +38,7 @@ URL:        https://lp-solve.github.io/
 # <https://gitlab.com/fedora/legal/fedora-license-data/-/issues/230>.
 # A new upstream COLAMD code with an acceptable code is supplied in
 # Rebase-COLAMD-to-3.0.4.patch.
-Source:     lp_solve_%{version}_source-repackaged.tar.gz
+Source0:     https://github.com/lp-solve/lp_solve/releases/download/%{version}/lp_solve_%{version}_source.tar.gz#/lp_solve_%{version}_source-repackaged.tar.gz
 # Use system-wide compiler, compiler and linker flags
 Patch0:     lp_solve-5.5.2.14-Respect-CC-CFLAGS-and-LDFLAGS.patch
 # Do not duplicate library code in the the tool

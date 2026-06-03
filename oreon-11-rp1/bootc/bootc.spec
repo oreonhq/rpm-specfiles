@@ -14,10 +14,10 @@
     %bcond_with rhsm
 %endif
 
-%if 0%{?oreon} >= 11
+%if 0%{?fedora} || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)
 %global rust_minor 89
 %else
-%global rust_minor %(rustc --version 2>/dev/null | cut -f2 -d" " | cut -f2 -d"." || echo 0)
+%global rust_minor 0
 %endif
 
 # https://github.com/bootc-dev/bootc/issues/1640

@@ -131,7 +131,7 @@ Conflicts: bitmap-fixed-fonts
 }
 
 
-Source0:  bitmap-fonts-%{version}.tar.bz2
+Source0:  https://ftp.x.org/pub/individual/font/bitmap-fonts-%{version}.tar.bz2
 Source1:        https://ftp.x.org/pub/individual/font/fixfont-3.5.tar.bz2
 Source2:  LICENSE
 Source3:  COPYING

@@ -18,8 +18,8 @@ Url:		http://www.wireshark.org/
 
 Source0:        https://www.wireshark.org/download/src/all-versions/%{name}-%{version}.tar.xz
 Source1:        https://www.wireshark.org/download/src/all-versions/SIGNATURES-%{version}.txt
-Source2:	90-wireshark-usbmon.rules
-Source3:	wireshark.sysusers
+Source2:        https://src.fedoraproject.org/rpms/wireshark/raw/rawhide/f/90-wireshark-usbmon.rules
+Source3:        https://src.fedoraproject.org/rpms/wireshark/raw/rawhide/f/wireshark.sysusers
 
 # Fedora-specific
 Patch2:   wireshark-0002-Customize-permission-denied-error.patch

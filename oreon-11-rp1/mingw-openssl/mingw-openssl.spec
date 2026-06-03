@@ -25,12 +25,12 @@ License:        OpenSSL
 URL:            http://www.openssl.org/
 
 Source:  openssl-%{version}.tar.gz
-Source2: Makefile.certificate
-Source3: genpatches
-Source6: make-dummy-cert
-Source7: renew-dummy-cert
-Source12: ec_curve.c
-Source13: ectest.c
+Source2:        https://src.fedoraproject.org/rpms/mingw-openssl/raw/rawhide/f/Makefile.certificate
+Source3:        https://src.fedoraproject.org/rpms/mingw-openssl/raw/rawhide/f/genpatches
+Source6:        https://src.fedoraproject.org/rpms/mingw-openssl/raw/rawhide/f/make-dummy-cert
+Source7:        https://src.fedoraproject.org/rpms/mingw-openssl/raw/rawhide/f/renew-dummy-cert
+Source12:        https://src.fedoraproject.org/rpms/mingw-openssl/raw/rawhide/f/ec_curve.c
+Source13:        https://src.fedoraproject.org/rpms/mingw-openssl/raw/rawhide/f/ectest.c
 
 # Patches exported from source git
 # Aarch64 and ppc64le use lib64

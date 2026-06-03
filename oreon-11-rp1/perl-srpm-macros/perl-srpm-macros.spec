@@ -5,9 +5,10 @@ Version:    1
 Release:    61%{?dist}
 Summary:    RPM macros for building Perl source package from source repository
 License:    GPL-3.0-or-later
-Source0:    macros.perl-srpm
+
 BuildArch:  noarch
 
+Source0:    macros.perl-srpm
 %description
 These RPM macros are used for building Perl source packages from source
 repositories. They influence build-requires set into the source package.

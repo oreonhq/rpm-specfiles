@@ -48,6 +48,10 @@ Release: 12%{?dist}
 #     contrib/eqn2graph/eqn2graph.sh
 License: GPL-3.0-or-later AND GFDL-1.3-or-later AND BSD-4-Clause-UC AND MIT AND X11 AND LicenseRef-Public-Domain
 URL: http://www.gnu.org/software/groff/
+
+Provides: nroff-i18n = %{version}-%{release}
+Provides: bundled(gnulib)
+
 Source:        https://ftp.gnu.org/gnu/groff/groff-%{version}.tar.gz
 
 # resolves: #530788
@@ -75,9 +79,6 @@ BuildRequires: gcc, gcc-c++
 BuildRequires: bison, texinfo
 # psutils is required for the "psselect" command
 BuildRequires: git, netpbm-progs, perl-generators, psutils, ghostscript
-
-Provides: nroff-i18n = %{version}-%{release}
-Provides: bundled(gnulib)
 
 %global __requires_exclude %{?__requires_exclude:%__requires_exclude|}^perl\\([^.]*\\.pl\\)
 

@@ -105,7 +105,7 @@ BuildArch:      noarch
 Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-xetex.tar.xz
 
 # License texts
-Source1:        texlive-licenses.tar.xz
+Source1:        https://src.fedoraproject.org/rpms/texlive-collection-xetex/raw/rawhide/f/texlive-licenses.tar.xz
 
 Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/arabxetex.tar.xz
 Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/arabxetex.doc.tar.xz
@@ -196,7 +196,7 @@ Source87:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zb
 Source88:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zbmath-review-template.doc.tar.xz
 
 # AppStream metadata for font components
-Source89:        philokalia.metainfo.xml
+Source89:        https://src.fedoraproject.org/rpms/texlive-collection-xetex/raw/rawhide/f/philokalia.metainfo.xml
 BuildRequires:  texlive-base
 BuildRequires:  libappstream-glib
 Requires:       texlive-base

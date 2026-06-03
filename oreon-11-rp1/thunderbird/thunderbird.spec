@@ -98,6 +98,38 @@ Version:        150.0.2
 Release:        %autorelease
 URL:            http://www.mozilla.org/projects/thunderbird/
 License:        MPL-2.0 OR GPL-2.0-or-later OR LGPL-2.0-or-later
+
+Obsoletes:      thunderbird-lightning < %{version}-%{release}
+Provides:       thunderbird-lightning
+
+Obsoletes:      thunderbird-lightning-gdata <= 1:3.3.0.14
+BuildRequires:  rust
+BuildRequires:  cargo
+BuildRequires:  rust-version_check-devel
+BuildRequires:  clang-devel
+BuildRequires:  python3.11-devel
+%if !0%{?use_bundled_cbindgen}
+BuildRequires:  cbindgen
+%endif
+BuildRequires:  /usr/bin/node
+BuildRequires:  nasm >= 1.13
+
+%if 0%{?big_endian}
+BuildRequires:  icu
+%endif
+
+# require any OpenPGP backend with the librnp interface
+# see comm/mail/extensions/openpgp/content/modules/RNPLib.jsm
+# %%{mozappdir}/librnp.so or %%{_libdir}/librnp.so.0
+Requires:      (thunderbird-librnp%{?_isa} or librnp%{?_isa})
+# prefer the librnp implementation bundled with thunderbird
+Suggests:       thunderbird-librnp-rnp%{?_isa}
+
+Suggests:       u2f-hidraw-policy
+
+%if %{only_wayland}
+Obsoletes:      thunderbird-wayland < 115.11.0-1
+
 Source0:        https://archive.mozilla.org/pub/thunderbird/releases/%{version}%{?pre_version}/source/thunderbird-%{version}%{?pre_version}.source.tar.xz
 %if %{build_langpacks}
 Source1:        thunderbird-langpacks-%{version}%{?pre_version}-20260514.tar.xz
@@ -202,36 +234,6 @@ BuildRequires:  libicu-devel
 BuildRequires:  perl-interpreter
 Requires:       mozilla-filesystem
 BuildRequires:  dbus-glib-devel
-Obsoletes:      thunderbird-lightning < %{version}-%{release}
-Provides:       thunderbird-lightning
-
-Obsoletes:      thunderbird-lightning-gdata <= 1:3.3.0.14
-BuildRequires:  rust
-BuildRequires:  cargo
-BuildRequires:  rust-version_check-devel
-BuildRequires:  clang-devel
-BuildRequires:  python3.11-devel
-%if !0%{?use_bundled_cbindgen}
-BuildRequires:  cbindgen
-%endif
-BuildRequires:  /usr/bin/node
-BuildRequires:  nasm >= 1.13
-
-%if 0%{?big_endian}
-BuildRequires:  icu
-%endif
-
-# require any OpenPGP backend with the librnp interface
-# see comm/mail/extensions/openpgp/content/modules/RNPLib.jsm
-# %%{mozappdir}/librnp.so or %%{_libdir}/librnp.so.0
-Requires:      (thunderbird-librnp%{?_isa} or librnp%{?_isa})
-# prefer the librnp implementation bundled with thunderbird
-Suggests:       thunderbird-librnp-rnp%{?_isa}
-
-Suggests:       u2f-hidraw-policy
-
-%if %{only_wayland}
-Obsoletes:      thunderbird-wayland < 115.11.0-1
 %endif
 
 %description

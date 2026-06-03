@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c69b97f4b626ddf5e7fa31f04ae635d66afb42f4f98405a9173d72e1076a242d
 
 %if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
@@ -10,7 +10,7 @@ Summary: Swati hunspell dictionaries
 %global upstreamid 20091030
 Version: 0.%{upstreamid}
 Release: 33%{?dist}
-Source: https://downlaods.sourceforge.net/project/aoo-extensions/3137/0/dict-ss_za-2009.10.30.oxt
+Source:        https://downloads.sourceforge.net/project/aoo-extensions/3137/0/dict-ss_za-2009.10.30.oxt
 URL: http://www.translate.org.za/
 License: LGPL-2.1-or-later
 BuildArch: noarch

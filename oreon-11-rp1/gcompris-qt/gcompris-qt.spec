@@ -9,8 +9,7 @@ License:        AGPL-3.0-only
 URL:            http://gcompris.net
 Source0:        https://download.kde.org/stable/gcompris/qt/src/%{name}-%{version}.tar.xz
 Source1:        https://download.kde.org/stable/gcompris/qt/src/%{name}-%{version}.tar.xz.sig
-# Download from https://collaborate.kde.org/s/8GpWjyHg5xBTQFS
-Source2:        0x63d7264c05687d7e.asc
+Source2:        https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x63D7264C05687D7E#/0x63d7264c05687d7e.asc
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

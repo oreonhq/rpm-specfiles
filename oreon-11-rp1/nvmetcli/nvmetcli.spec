@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 51d6d7e2c5ed43c7e9528abff539b6a213c5469c6800af901e88ef254ce3ac16
 
 Name:           nvmetcli
 License:        Apache-2.0
@@ -6,7 +6,7 @@ Summary:        An adminstration shell for NVMe storage targets
 Version:        0.8
 Release:        7%{?dist}
 URL:            https://ftp.infradead.org/pub/nvmetcli/
-Source:        https://www.infradead.org/pub/nvmetcli/%{name}-%{version}.tar.gz
+Source:        https://github.com/hreinecke/nvmetcli/archive/refs/heads/master.tar.gz#/nvmetcli-0.8.tar.gz
 BuildArch:      noarch
 BuildRequires: make
 BuildRequires:  python3-devel python3-setuptools systemd-units asciidoc xmlto
@@ -24,7 +24,7 @@ as well as saving / restoring the configuration to / from a json file.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1
+%autosetup -p1 -n nvmetcli-master
 
 %build
 %{__python3} setup.py build

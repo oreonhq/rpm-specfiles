@@ -1,14 +1,15 @@
 %global source0_hash 2688eb733a6c5f78a18ef32144039adcd62fabce66f2eb51dd59dde806a6d2b7
-%global source1_hash 944f539ab2c63a9abf6a7485a549faf3823b5943edfd12e7b68572c0ae33e952
-%global source3_hash ae2e5e5f32b7aa5205864712682e7eaad73c410881affb10e69867c69ae43ad2
-%global source4_hash 097bd37d4eb57f2cdc01b614a865cf0460bd29915e5ae180a749fdd360bf7fe1
-%global source5_hash c6593148a5238d3ebadf130d3cc1b75232d2e12ba715d20d3bbfb52bd655d0b0
-%global source6_hash 8ee9c02a1d1d30348618d50d86ee7db99f9111b7a2d782601ca3bd8d16032099
-%global source7_hash 7fdacb9e329a3380d0110a970407693de53d57921efc5143361090373474df80
-%global source8_hash da76539f7eb16823ea29df8761eee9226625c2dc4199a6376a0cd950a27f0d10
-%global source9_hash 37c5fe026105f97ee83fc1a6d0816025b7b478f79c17f82793a5114670d75c8c
-%global source10_hash 4ef058106ed3e0f6241ad32bc57ee9673c94250caafdd8492a3ecd888eb74e0f
-%global source11_hash 747b566b4a3aebcc02286d7ea7b53b2d0d1ac7ab92c4ceb2149e0203d6441d10
+%global source1_hash e9cb3f968efcdbb81de505229d00dc0085afacee8e52dc0792deedd609e3b280
+%global source3_hash 98333b240d58a9b1f7b17d25bb9da825e5cc4b062a79a06fc2ada53deb513d20
+%global source4_hash 1aa5473dbb460dbe508ec807ed607906bdfd0dccb7b391985a237164dc22fb29
+%global source5_hash 45d1a864c7f6c708eb840f52376d54aca6f12a630cfd9855c59eed1f5fb5ca92
+%global source6_hash 8803cb3dc0f1a69e4032e4331f1bf9a1219f92900015018e473f1bcaad745c4e
+%global source7_hash d40f38da7b454f3b24548c034af28d0d6450589a31c1a52b5193aaa06a92cd85
+%global source8_hash c98ad2bce904a5850780c6af2d8e19242fe2ac1c65d0ebb5fabceb7553ae2fa2
+%global source9_hash ef620f572ae63c75138225b868a9b1b36830af335bcb6fe72c7b5543872652c4
+%global source10_hash 85e38a4d24e37e55f9d96e73479fbfad28e79a8cb203142294ba2b6082463083
+%global source11_hash 113e6dd9f45b0526872092407c0fc618373ef1abf37a7a163addd5b0577e85f3
+%global atlas_archdef_base https://git.centos.org/rpms/atlas/raw/c9s/f
 
 %define enable_native_atlas 0
 %global build_type_safety_c 0
@@ -24,22 +25,17 @@ Summary:        Automatically Tuned Linear Algebra Software
 License:        BSD-3-Clause
 URL:            http://math-atlas.sourceforge.net/
 Source0:        http://downloads.sourceforge.net/math-atlas/%{name}%{version}.tar.bz2
-Source1:        PPRO32.tgz
+Source1:        %{atlas_archdef_base}/PPRO32.tgz
 Source2:        README.dist
-#archdefs taken from debian:
-Source3: 	POWER332.tar.bz2
-Source4: 	IBMz932.tar.bz2
-Source5: 	IBMz964.tar.bz2
-#upstream arm uses softfp abi, fedora arm uses hard
-Source6: 	ARMv732NEON.tar.bz2
-#again, taken from debian
-Source7: 	IBMz1264.tar.bz2
-Source8:	ARMa732.tar.bz2
-
-#Provided By IBM
-Source9: IBMz1364VXZ.tar.bz2
-Source10: IBMz1464VXZ2.tar.bz2
-Source11: IBMz1564VXZ2.tar.bz2
+Source3:        %{atlas_archdef_base}/POWER332.tar.bz2
+Source4:        %{atlas_archdef_base}/IBMz932.tar.bz2
+Source5:        %{atlas_archdef_base}/IBMz964.tar.bz2
+Source6:        %{atlas_archdef_base}/ARMv732NEON.tar.bz2
+Source7:        %{atlas_archdef_base}/IBMz1264.tar.bz2
+Source8:        %{atlas_archdef_base}/ARMa732.tar.bz2
+Source9:        %{atlas_archdef_base}/IBMz1364VXZ.tar.bz2
+Source10:       %{atlas_archdef_base}/IBMz1464VXZ2.tar.bz2
+Source11:       %{atlas_archdef_base}/IBMz1564VXZ2.tar.bz2
 
 # Properly pass -melf_* to the linker with -Wl, fixes FTBFS bug 817552
 # https://sourceforge.net/tracker/?func=detail&atid=379484&aid=3555789&group_id=23725

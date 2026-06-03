@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1f80769c14ad8d29b070ef031d7e63c70739596b85b813644cbaa7f3161e3ee5
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
@@ -10,7 +10,7 @@ Name: hunspell-hsb
 Summary: Upper Sorbian hunspell dictionaries
 Version: 0.20060327.3
 Release: 31%{?dist}
-Source: https://addons.mozilla.org/firefox/downloads/file/113003/upper_sorbian_spelling_dictionary-0.0.20060327.3-tb+fx+sm.xpi
+Source:        upper_sorbian_spelling_dictionary-0.0.20060327.3-tb+fx+sm.xpi
 URL: http://sorbzilla.de/
 License: GPL-2.0-or-later
 BuildArch: noarch

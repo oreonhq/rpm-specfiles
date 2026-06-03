@@ -40,7 +40,8 @@ This package contains tests for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n mariadb-java-client-3.5.7
+%setup -q -n mariadb-connector-j-3.5.7
+%autosetup -p1 -n mariadb-connector-j-3.5.7
 
 %pom_remove_dep ch.qos.logback:logback-classic
 grep -l -r '^import ch\.qos\.logback\.classic' src/test | xargs rm -v

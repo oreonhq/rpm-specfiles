@@ -1,4 +1,4 @@
-%global source0_hash 98ee26d96b5212aefd547d5b27105a1213c1d391b6a07bfa05b5273eff0d418e
+%global source0_hash none
 
 # Can be rebuilt with FFmpeg support enabled by passing
 # "--with=ffmpeg" to mock/rpmbuild; or by globally
@@ -40,13 +40,12 @@ URL:            http://www.freerdp.com/
 
 # The license of the winpr/libwinpr/crt/unicode_builtin.c file is not allowed.
 # See: https://gitlab.com/fedora/legal/fedora-license-data/-/issues/498
-# Run the ./freerdp_download_and_repack.sh script to prepare tarball.
-Source0:        FreeRDP-%{version}-repack.tar.gz
-Source1:        freerdp_download_and_repack.sh
+Source0:        https://github.com/FreeRDP/FreeRDP/archive/%{version}/FreeRDP-%{version}.tar.gz#/freerdp-3.26.0.tar.gz
 
 # Fix TestNTLM with OpenSSL without legacy provider
 Patch0:         https://github.com/FreeRDP/FreeRDP/commit/e9b95a5a3cf6a182837773b92c825f48df953821.patch#/FreeRDP-e9b95a5.patch
 
+BuildRequires:  curl
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  alsa-lib-devel
@@ -176,7 +175,9 @@ developing applications that use %{name}-libwinpr.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n FreeRDP-%{version}
+%setup -q -n FreeRDP-%{version}
+rm -f winpr/libwinpr/crt/unicode_builtin.c
+%autopatch -p1
 
 # Rpmlint fixes
 find . -name "*.h" -exec chmod 664 {} \;

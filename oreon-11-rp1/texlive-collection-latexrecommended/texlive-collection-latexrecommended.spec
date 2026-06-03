@@ -153,7 +153,7 @@ BuildArch:      noarch
 Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-latexrecommended.tar.xz
 
 # License texts
-Source1:        texlive-licenses.tar.xz
+Source1:        https://src.fedoraproject.org/rpms/texlive-collection-latexrecommended/raw/rawhide/f/texlive-licenses.tar.xz
 
 Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/anysize.tar.xz
 Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/anysize.doc.tar.xz

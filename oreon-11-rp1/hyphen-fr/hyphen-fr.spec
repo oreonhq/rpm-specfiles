@@ -4,7 +4,7 @@ Name: hyphen-fr
 Summary: French hyphenation rules
 Version: 3.0
 Release: 20%{?dist}
-Source: http://www.dicollecte.org/download/fr/hyph-fr-v3.0.zip
+Source: http://www.dicollecte.org/download/fr/hyph-fr-v3.0.zip#/hyphen-fr-3.0.tar.gz
 URL: http://www.dicollecte.org/download.php?prj=fr
 License: LGPL-2.1-or-later
 BuildArch: noarch
@@ -17,7 +17,8 @@ French hyphenation rules.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c
+%setup -q -c -T -n %{name}-%{version}
+unzip -q %{SOURCE0}
 
 %build
 

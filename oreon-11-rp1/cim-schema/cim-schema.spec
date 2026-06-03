@@ -1,5 +1,5 @@
-%global source0_hash none
-%global source1_hash none
+%global source0_hash c62993354a67425f8340d79285e7b335c220d010135f237b3ebc4f6485a8a922
+%global source1_hash db2728548be18f0d17be645f7b2e3ee83bdf2b6f213a1d2e1337d206a95431f1
 
 #
 # spec file for package cim-schema
@@ -44,8 +44,8 @@ Summary:        Common Information Model (CIM) Schema
 Version:        %{major}.%{minor}.%{update}
 Release:        4%{?dist}
 License:        LicenseRef-DMTF
-Source0:        http://www.dmtf.org/standards/cim/cim_schema_v%{major}%{minor}%{update}/cim_schema_%{version}Experimental-MOFs.zip
-Source1:        http://www.dmtf.org/standards/cim/cim_schema_v%{major}%{minor}%{update}/cim_schema_%{version}Experimental-Doc.zip
+Source0:        cim_schema_2.55.0Experimental-MOFs.zip
+Source1:        cim_schema_2.55.0Experimental-Doc.zip
 Source2:        LICENSE
 BuildArch:      noarch
 

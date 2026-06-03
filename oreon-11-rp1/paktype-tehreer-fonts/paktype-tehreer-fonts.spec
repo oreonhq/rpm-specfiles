@@ -10,7 +10,7 @@ Release:     13%{?dist}
 Summary:     Fonts for Arabic from PakType
 License:     GPL-2.0-only WITH Font-exception-2.0
 URL:	     https://sourceforge.net/projects/paktype/
-Source0:        https://sourceforge.net/p/paktype/code/HEAD/tree/Fonts/Release/PakType-Tehreer-%{version}.tar.gz?format=raw#/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/project/paktype/PakType-Tehreer-6.0.tar.gz#/paktype-tehreer-fonts-6.0.tar.gz
 
 Source1:     %{fontconf}.conf
 BuildArch:   noarch

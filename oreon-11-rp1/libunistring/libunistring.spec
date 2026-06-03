@@ -7,11 +7,12 @@ Name: libunistring
 Summary: GNU Unicode string library
 License: GPL-2.0-or-later OR LGPL-3.0-or-later
 URL: https://www.gnu.org/software/libunistring/
+
+Provides: bundled(gnulib)
+
 Source0:        https://ftp.gnu.org/gnu/libunistring/%{name}-%{version}.tar.xz
 BuildRequires: gcc
 BuildRequires: make
-Provides: bundled(gnulib)
-
 %description
 This portable C library implements Unicode string types in three flavours:
 (UTF-8, UTF-16, UTF-32), together with functions for character processing

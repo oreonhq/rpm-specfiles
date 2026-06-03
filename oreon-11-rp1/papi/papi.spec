@@ -1,4 +1,4 @@
-%global source0_hash a9bff89ccf39915d729e08ae0a0c6a71ce0ebbe98411e9a2eb3c83c8db0af39c
+%global source0_hash f806e77e8cd08a0d3e4c002d8a8d3fefc64840ff663c2ac46bd66398c779c6db
 
 # Default to no static libraries
 %{!?with_static: %global with_static 0}
@@ -21,7 +21,7 @@ Release: 3%{?dist}
 License: BSD-3-Clause
 Requires: papi-libs = %{version}-%{release}
 URL: http://icl.cs.utk.edu/papi/
-Source0:        http://icl.cs.utk.edu/projects/papi/downloads/%{name}-%{version}.tar.gz
+Source0:        https://deb.debian.org/debian/pool/main/p/papi/papi_7.2.0.orig.tar.gz
 Patch1: papi-nostatic.patch
 Patch2: papi-avail-path-fix.patch
 Patch3: papi-revert-event-depr.patch

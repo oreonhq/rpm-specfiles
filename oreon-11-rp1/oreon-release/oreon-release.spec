@@ -10,10 +10,6 @@ Release:        2%{?dist}
 License:        MIT
 URL:            https://oreonhq.com/oreon
 
-Source1:        LICENSE
-Source10:       85-display-manager.preset
-Source11:       90-default.preset
-Source12:       99-default-disable.preset
 
 Provides:       oreon-release = %{version}-%{release}
 Provides:       oreon-release(%{version}) = %{release}
@@ -22,6 +18,11 @@ Provides:       system-release(11) = %{release}
 Provides:       base-module(platform:or%{version})
 Requires:       oreon-repos(%{version})
 BuildArch:      noarch
+
+Source1:        LICENSE
+Source10:       85-display-manager.preset
+Source11:       90-default.preset
+Source12:       99-default-disable.preset
 
 %description
 Oreon release files including base system configuration and identification.

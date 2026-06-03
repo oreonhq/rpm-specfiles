@@ -10,16 +10,17 @@ Release: 1%{?dist}
 
 License: GPL-2.0-or-later AND CC0-1.0 AND LGPL-2.1-or-later
 URL:     https://www.kde.org/applications/graphics/
+
+Obsoletes: qmobipocket < 16.12.0
+Provides:  qmobipocket = %{version}-%{release}
+Provides:  qmobipocket%{?_isa} = %{version}-%{release}
+
 Source0:        https://download.kde.org/%{stable_kf6}/release-service/%{version}/src/%{name}-%{version}.tar.xz
 
 BuildRequires: extra-cmake-modules
 BuildRequires: kf6-rpm-macros
 BuildRequires: cmake(Qt6Gui)
 BuildRequires: cmake(Qt6Core5Compat)
-
-Obsoletes: qmobipocket < 16.12.0
-Provides:  qmobipocket = %{version}-%{release}
-Provides:  qmobipocket%{?_isa} = %{version}-%{release}
 
 %description
 %{summary}.

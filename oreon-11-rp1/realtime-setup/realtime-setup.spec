@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash dc53d3c2d1603145ceaa336a3eef5a4143583a4e64834343ae0db12a339f38c6
 
 Name: realtime-setup
 Version: 2.5
 Release: 8%{?dist}
 License: GPL-2.0-or-later
 Summary: Setup RT/low-latency environment details
-Source0:        https://gitlab.com/rt-linux-tools/%{name}/-/archive/v%{version}/%{name}-%{version}.tar.bz2
+Source0:        https://gitlab.com/rt-linux-tools/realtime-setup/-/archive/master/realtime-setup-master.tar.bz2#/realtime-setup-2.5.tar.bz2
 URL:  https://gitlab.com/rt-linux-tools/realtime-setup.git
 
 BuildRequires: gcc
@@ -48,7 +48,7 @@ Neither the slub script or realtime-entsk are active by default.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{name}-%{version}
+%setup -q -n realtime-setup-master
 
 # Create a sysusers.d config file
 cat >realtime-setup.sysusers.conf <<EOF

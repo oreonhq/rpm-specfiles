@@ -1,4 +1,4 @@
-%global source0_hash 6dc9c7fc93bb488bb0520a6c780a8d3c0fb5486a4711aca49b4c53fac7393023
+%global source0_hash d1c030756ecc182defee9fe885638c1785d35a2c2a297b4604c0e0dcc78e47da
 
 Name:    cdrkit
 Version: 1.1.11
@@ -7,7 +7,7 @@ Summary: A collection of CD/DVD utilities
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 URL:     http://cdrkit.org/
-Source:        http://cdrkit.org/releases/cdrkit-%{version}.tar.gz
+Source:        https://deb.debian.org/debian/pool/main/c/cdrkit/cdrkit_%{version}.orig.tar.gz#/cdrkit-%{version}.tar.gz
 
 Patch1: cdrkit-1.1.8-werror.patch
 Patch2: cdrkit-1.1.9-efi-boot.patch

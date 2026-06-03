@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 950ddb58b92a1f295cf96cef86c3f35bf453cd695f533657367ef2312bf7c085
 
 Name: esc 
 Version: 1.1.2
@@ -27,6 +27,8 @@ BuildRequires: gjs-devel
 BuildRequires: gcc-c++
 BuildRequires: make
 BuildRequires: chrpath
+BuildRequires: cpio
+BuildRequires: rpm
 
 
 Requires: pcsc-lite nss nspr
@@ -50,11 +52,9 @@ AutoReqProv: 0
 %define pixmapdir  %{_datadir}/pixmaps
 %define docdir    %{_defaultdocdir}/%{escname}
 
-Source0:        https://www.dogtagpki.org/pki/sources/esc/%{escname}.tar.bz2
-Source1: https://www.dogtagpki.org/pki/sources/esc/esc
-# originally https://www.dogtagpki.org/pki/sources/esc/esc.desktop, since modified
+Source0:        https://download.rockylinux.org/pub/rocky/9/AppStream/source/tree/Packages/e/esc-1.1.2-16.el9.src.rpm
+Source1: esc
 Source2: esc.desktop
-Source3: https://www.dogtagpki.org/pki/sources/esc/esc.png
 Patch0: esc-gcc11.patch
 Patch1: esc-1.1.2-fix1.patch
 Patch2: esc-1.1.2-fix2.patch
@@ -77,7 +77,12 @@ cryptographic smartcards.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c -p1 -n %{escname}
+cd %{_sourcedir}
+rpm2cpio %{SOURCE0} | cpio -id esc-1.1.2.tar.bz2 esc.png
+cd %{builddir}
+tar -xjf %{_sourcedir}/esc-1.1.2.tar.bz2
+cd %{escname}
+%autopatch -p1
 
 
 %build
@@ -112,8 +117,8 @@ rm %{buildroot}%{escdir}/lib/*.la
 rm -r %{buildroot}%{_includedir}/coolkey-mgr/
 rm -r %{buildroot}%{_datadir}/gir-*/
 
-cp %{SOURCE3} %{buildroot}%{icondir}
-cp %{SOURCE3} %{buildroot}%{pixmapdir}/esc.png
+cp %{_sourcedir}/esc.png %{buildroot}%{icondir}
+cp %{_sourcedir}/esc.png %{buildroot}%{pixmapdir}/esc.png
 
 desktop-file-install --dir %{buildroot}%{_datadir}/applications %{SOURCE2}
 

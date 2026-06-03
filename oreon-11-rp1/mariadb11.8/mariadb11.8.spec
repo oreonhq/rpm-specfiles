@@ -175,24 +175,24 @@ Source0:        https://downloads.mariadb.org/interstitial/mariadb-%{version}/so
 %if %{with bundled_fmt}
 Source1:        https://github.com/fmtlib/fmt/releases/download/%{fmt_bundled_version}/fmt-%{fmt_bundled_version}.zip
 %endif
-Source2:          mysql_config_multilib.sh
-Source3:          my.cnf.in
+Source2:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/mysql_config_multilib.sh
+Source3:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/my.cnf.in
 %if %{with bundled_pcre}
 Source4:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-%{pcre_bundled_version}/pcre2-%{pcre_bundled_version}.zip
 %endif
-Source6:          README.mariadb-docs
-Source8:          README.wsrep_sst_rsync_tunnel
-Source10:         mariadb.tmpfiles.d.in
-Source11:         mysql.service.in
-Source12:         mariadb-prepare-db-dir.sh
-Source14:         mariadb-check-socket.sh
-Source15:         mariadb-scripts-common.sh
-Source16:         mariadb-check-upgrade.sh
-Source18:         mysql@.service.in
-Source50:         rh-skipped-tests-base.list
-Source51:         rh-skipped-tests-arm.list
-Source52:         rh-skipped-tests-s390.list
-Source53:         rh-skipped-tests-ppc.list
+Source6:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/README.mariadb-docs
+Source8:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/README.wsrep_sst_rsync_tunnel
+Source10:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/mariadb.tmpfiles.d.in
+Source11:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/mysql.service.in
+Source12:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/mariadb-prepare-db-dir.sh
+Source14:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/mariadb-check-socket.sh
+Source15:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/mariadb-scripts-common.sh
+Source16:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/mariadb-check-upgrade.sh
+Source18:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/mysql@.service.in
+Source50:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/rh-skipped-tests-base.list
+Source51:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/rh-skipped-tests-arm.list
+Source52:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/rh-skipped-tests-s390.list
+Source53:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/rh-skipped-tests-ppc.list
 # Red Hat OpenStack scripts:
 #   Clustercheck:
 #     Maintainer:
@@ -209,16 +209,16 @@ Source53:         rh-skipped-tests-ppc.list
 #       can run SQL commands to check whether the local galera is connected to the galera cluster.
 #     Proposed to MariaDB upstream: https://jira.mariadb.org/browse/MDEV-12442
 #       General upstream response was slightly positive
-Source70:         clustercheck.sh
-Source71:         LICENSE.clustercheck
+Source70:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/clustercheck.sh
+Source71:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/LICENSE.clustercheck
 
 # Upstream said: "Generally MariaDB has more allows to allow for xtradb sst mechanism".
 # https://jira.mariadb.org/browse/MDEV-12646
-Source72:         mariadb-server-galera.cil
+Source72:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/mariadb-server-galera.cil
 
 # Script to support encrypted rsync transfers when SST is required between nodes.
 # https://github.com/dciabrin/wsrep_sst_rsync_tunnel/blob/master/wsrep_sst_rsync_tunnel
-Source73:         wsrep_sst_rsync_tunnel
+Source73:        https://src.fedoraproject.org/rpms/mariadb11.8/raw/rawhide/f/wsrep_sst_rsync_tunnel
 
 #   Patch4: Use the correct log file pathname for Red Hat installations
 Patch4:           %{majorname}-logrotate.patch

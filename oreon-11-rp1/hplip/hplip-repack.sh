@@ -1,32 +1,18 @@
 #!/usr/bin/bash
+set -e
 
+VERSION="${1:?version required}"
+srcdir="${2:-.}"
+cd "$srcdir"
 
-VERSION=$1
-
-if [ "${VERSION:="*"}" == "*" ]
-then
-  echo "Define a version of hplip as an argument."
-  exit 1
+UPSTREAM="hplip-${VERSION}.tar.gz"
+if ! test -f "$UPSTREAM"; then
+  curl --fail --silent --location \
+    "https://downloads.sourceforge.net/hplip/${UPSTREAM}" \
+    -o "$UPSTREAM"
 fi
 
-# extract the original tarball
-tar -xaf hplip-$VERSION.tar.gz || exit 1
-
-# remove unwanted files - license-related ones reported here https://bugs.launchpad.net/hplip/+bug/2028938
-rm hplip-$VERSION/locatedriver
-
-# compress into a new tarball
-tar -cjvf hplip-$VERSION-repack.tar.gz hplip-$VERSION || exit 1
-
-# check whether plugin is available
-wget -O hplip-plugin.run https://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/hplip-$1-plugin.run || wget -O hplip-plugin.run https://developers.hp.com/sites/default/files/hplip-$1-plugin.run || exit 1
-
-# check whether the file is sane
-file --mime hplip-plugin.run | grep 'x-shellscript' || exit 1
-
-echo "hplip-${VERSION}-repack.tar.gz is prepared for uploading..."
-
-exit 0
-
-# upload a new source tarball
-#fedpkg new-sources hplip-$VERSION-repack.tar.gz || exit 1
+rm -rf "hplip-${VERSION}"
+tar -xaf "$UPSTREAM"
+rm -f "hplip-${VERSION}/locatedriver"
+tar -czf "hplip-${VERSION}-repack.tar.gz" "hplip-${VERSION}"

@@ -5,9 +5,10 @@ Version:        2
 Release:        21%{?dist}
 Summary:        OpenBLAS architecture macros
 License:        MIT
-Source0:        macros.openblas-srpm
+
 BuildArch:      noarch
 
+Source0:        macros.openblas-srpm
 %description
 %{summary}.
 

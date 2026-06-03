@@ -21,8 +21,8 @@ Summary:	A library to access SMI MIB information
 License:	TCL AND BSD-3-Clause
 URL:		http://www.ibr.cs.tu-bs.de/projects/libsmi/index.html
 Source0:        https://gitlab.ibr.cs.tu-bs.de/nm/libsmi/-/archive/%{commit}/libsmi-%{commit}.tar.gz
-Source1:	smi.conf
-Source2:	IETF-MIB-LICENSE.txt
+Source1:        https://src.fedoraproject.org/rpms/libsmi/raw/rawhide/f/smi.conf
+Source2:        https://src.fedoraproject.org/rpms/libsmi/raw/rawhide/f/IETF-MIB-LICENSE.txt
 Patch0:		libsmi-0.4.8-wget111.patch
 Patch2:		libsmi-c5830721-symbols-clash.patch
 Patch4:		libsmi-c5830721-configure-c99.patch

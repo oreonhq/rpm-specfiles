@@ -10,7 +10,7 @@ License:        MIT
 URL:            http://wayland.freedesktop.org/
 Source0:        https://gitlab.freedesktop.org/%{name}/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz
 Source1:        https://gitlab.freedesktop.org/%{name}/%{name}/-/releases/%{version}/downloads/%{name}-%{version}.tar.xz.sig
-Source2:        emersion-gpg-key.asc
+Source2:        https://src.fedoraproject.org/rpms/wayland/raw/rawhide/f/emersion-gpg-key.asc
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

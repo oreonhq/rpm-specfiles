@@ -1,10 +1,8 @@
 %global source0_hash 25af66dfcbd3b1609311d0ca46f37fc586891fae621377aadbb2c9c4d7d935d2
-%global source1_hash 0dbc69c10f8a6aea946e7410b256ab5596b6d3f2e26b8a8410f6b72a2f5805e6
-%global source2_hash 090f8ce45fb88d7b6048c1f8c7d26a39ffbc1ae57dcfec02ef8b20a03ee63a3b
+%global source1_hash none
+%global source2_hash none
 
-# Specify if the frontend will be compiled as part of the build or
-# is attached as a webpack tarball (in case of an unsuitable nodejs version on the build system)
-%define compile_frontend 0
+%define compile_frontend 1
 
 %if 0%{?rhel} || (0%{?oreon} >= 11)
 %define enable_fips_mode 1
@@ -37,18 +35,6 @@ URL:              https://grafana.org
 
 # Source0 contains the tagged upstream sources
 Source0:        https://github.com/grafana/grafana/archive/v%{version}/%{name}-%{version}.tar.gz#/grafana-10.2.6.tar.gz
-
-# Source1 contains the bundled Go and Node.js dependencies
-# Note: In case there were no changes to this tarball, the NVR of this tarball
-# lags behind the NVR of this package.
-Source1:          grafana-vendor-%{version}-12.tar.xz
-
-%if %{compile_frontend} == 0
-# Source2 contains the precompiled frontend
-# Note: In case there were no changes to this tarball, the NVR of this tarball
-# lags behind the NVR of this package.
-Source2:          grafana-webpack-%{version}-12.tar.gz
-%endif
 
 # Source3 contains the systemd-sysusers configuration
 Source3:          grafana.sysusers
@@ -762,16 +748,7 @@ SELinux policy module supporting grafana
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
 %setup -q -T -D -b 0
-%setup -q -T -D -b 1
-%if %{compile_frontend} == 0
-# remove bundled plugins source, otherwise they'll get merged
-# with the compiled bundled plugins when extracting the webpack
-rm -r plugins-bundled
-%setup -q -T -D -b 2
-%endif
 
 %patch -P 1 -p1
 %patch -P 2 -p1
@@ -796,6 +773,8 @@ rm -r plugins-bundled
 %endif
 %patch -P 1004 -p1
 
+go mod vendor
+make gen-go
 
 %build
 # Build the frontend

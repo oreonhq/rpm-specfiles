@@ -1,4 +1,4 @@
-%global source0_hash 3db34c925881dba88798127f584c0d9c1d28e33644f40b6f636cabee0b92a542
+%global source0_hash de779aa0141839388bb201e0a9d622b8433982e1c4d7bfc3ac6117b763972542
 
 #
 # spec file for package ceph

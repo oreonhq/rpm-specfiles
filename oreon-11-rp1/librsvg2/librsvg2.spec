@@ -1,5 +1,4 @@
 %global source0_hash c0c1367e381e1ae4842a78f1b57c656ff19b25637e3a6527cb44ae5a1cc68d65
-%global source1_hash 7595241971d88bc2757d1ff725798e496dc0b1711365c038664f40bec766f236
 
 %bcond check 1
 
@@ -55,8 +54,6 @@ Source0:        https://download.gnome.org/sources/librsvg/2.62/librsvg-%{versio
 # upstream dropped vendoring since 2.55.0 (GNOME/librsvg#718), to create:
 #   tar xf librsvg-%%{version}.tar.xz ; pushd librsvg-%%{version} ; \
 #   cargo vendor --versioned-dirs && tar Jcvf ../librsvg-%%{version}-vendor.tar.xz vendor/ ; popd
-Source1:        librsvg-%{version}-vendor.tar.xz
-
 # Patches to build with Fedora-packaged rust crates
 Patch:          0001-Fedora-Drop-dependencies-required-for-benchmarking.patch
 Patch:          0002-Fedora-Drop-dependencies-and-references-to-mutation-.patch
@@ -115,14 +112,14 @@ This package provides extra utilities based on the librsvg library.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %if ! 0%{?bundled_rust_deps}
 # use packaged Rust dependencies
 %autosetup -p1 -n librsvg-%{version}
 %cargo_prep
 %else
 # use vendored Rust dependencies
-%autosetup -N -n librsvg-%{version} -a1
+%autosetup -N -n librsvg-%{version}
+cargo vendor --versioned-dirs
 %cargo_prep -v vendor
 %endif
 

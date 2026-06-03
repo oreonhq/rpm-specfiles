@@ -31,7 +31,7 @@ Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submod
 
 # header file to workaround multilib issue
 # https://bugzilla.redhat.com/show_bug.cgi?id=1441343
-Source5: qv4global_p-multilib.h
+Source5:        https://src.fedoraproject.org/rpms/qt6-qtdeclarative/raw/rawhide/f/qv4global_p-multilib.h
 
 ## upstream patches
 Patch0:  qtdeclarative-dialogs-use-generic-qtquickcontrols-import-in-base-fallback-dialogs.patch

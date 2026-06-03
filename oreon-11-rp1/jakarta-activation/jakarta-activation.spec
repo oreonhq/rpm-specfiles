@@ -34,7 +34,8 @@ appropriate bean to perform the operation(s).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n jakarta-activation-2.1.3
+%setup -q -n jaf-api-2.1.3
+%autosetup -p1 -n jaf-api-2.1.3
 
 pushd api
 %pom_remove_parent

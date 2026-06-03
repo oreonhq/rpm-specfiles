@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 03ffc3010c95f295945a06d155a0c7a2909a94d918721f78f0846c637ffb5a98
 
 %if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
@@ -10,7 +10,7 @@ Summary: Shuswap hunspell dictionaries
 %global upstreamid 20090828
 Version: 0.%{upstreamid}
 Release: 32%{?dist}
-Source: http://secpewt.sd73.bc.ca/hunspell/hunspell-shs-ca.tar.gz
+Source:        hunspell-shs-ca.tar.gz
 URL: http://secpewt.sd73.bc.ca/wordlist
 License: GPL-2.0-or-later
 BuildArch: noarch

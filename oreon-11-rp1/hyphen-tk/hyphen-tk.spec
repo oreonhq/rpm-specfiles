@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash 801ef59c14dab4fec0a9ae178632e63b8ef9f0362dcea74f4a3689a4a7908690
 
 Name: hyphen-tk
 Summary: Turkmen hyphenation rules
 %global upstreamid 20210322
 Version: 0.%{upstreamid}
 Release: 8%{?dist}
-Source: http://mirror.ctan.org/language/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-tk.tex
+Source:        https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-tk.tex
 URL: http://tug.org/tex-hyphen
 License: MIT
 BuildArch: noarch

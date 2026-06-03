@@ -25,7 +25,7 @@ URL:		https://rspec.info
 Source0:        https://rubygems.org/gems/%{gem_name}-%{fullver}.gem
 # %%{SOURCE2} %%{name} %%{version}
 Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
-Source2:	rspec-related-create-full-tarball.sh
+Source2:        https://src.fedoraproject.org/rpms/rubygem-rspec-mocks/raw/rawhide/f/rspec-related-create-full-tarball.sh
 # https://github.com/rspec/rspec/pull/282/commits/939c4799993b7ff7e524fac701ae6490772ca6de
 # Skip mock for ruby4_0 Kernel#inspect
 Patch0:	rspec-mocks-pr282-skip-mock-for-ruby4_0-inspect.patch

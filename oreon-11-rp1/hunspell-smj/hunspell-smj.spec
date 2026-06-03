@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3626613a2b7ff446dcce1e499012516fa61ebdadb4546bdbc7df420b45470858
 
 %if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
@@ -9,7 +9,7 @@ Name: hunspell-smj
 Summary: Lule Saami hunspell dictionaries
 Version: 1.0
 Release: 0.33.beta7%{?dist}
-Source: http://divvun.no/static_files/hunspell-smj.tar.gz
+Source:        hunspell-smj.tar.gz
 URL: http://www.divvun.no/index.html
 License: GPL-3.0-only
 BuildArch: noarch

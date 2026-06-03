@@ -83,49 +83,49 @@ URL:        http://www.tianocore.org
 # git archive --format=tar --prefix=edk2-$COMMIT/ $COMMIT \
 # | xz -9ev >/tmp/edk2-$COMMIT.tar.xz
 Source0:        https://github.com/tianocore/edk2/archive/b7a715f7c03c/edk2-b7a715f7c03c.tar.gz
-Source1: ovmf-whitepaper-c770f8c.txt
+Source1:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/ovmf-whitepaper-c770f8c.txt
 Source2:        https://github.com/openssl/openssl/releases/download/openssl-3.5.5/openssl-3.5.5.tar.gz
 Source4:        https://github.com/tianocore/edk2-platforms/archive/c3efe816e1bb/edk2-platforms-c3efe816e1bb.tar.gz
 Source5: https://github.com/akheron/jansson/releases/download/v2.13.1/jansson-2.13.1.tar.bz2
 Source6: https://www.kernel.org/pub/software/utils/dtc/dtc-1.7.0.tar.xz
-Source9: README.experimental
+Source9:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/README.experimental
 
 # json description files
-Source10: 50-edk2-aarch64-qcow2.json
-Source11: 51-edk2-aarch64-raw.json
-Source12: 52-edk2-aarch64-verbose-qcow2.json
-Source13: 53-edk2-aarch64-verbose-raw.json
+Source10:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/50-edk2-aarch64-qcow2.json
+Source11:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/51-edk2-aarch64-raw.json
+Source12:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/52-edk2-aarch64-verbose-qcow2.json
+Source13:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/53-edk2-aarch64-verbose-raw.json
 
-Source20: 90-edk2-ovmf-qemuvars-x64-sb-enrolled.json
-Source21: 91-edk2-ovmf-qemuvars-x64-sb.json
-Source22: 90-edk2-aarch64-qemuvars-sb-enrolled.json
-Source23: 91-edk2-aarch64-qemuvars-sb.json
-Source24: 92-edk2-ovmf-igvm-x64-nosb.json
+Source20:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/90-edk2-ovmf-qemuvars-x64-sb-enrolled.json
+Source21:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/91-edk2-ovmf-qemuvars-x64-sb.json
+Source22:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/90-edk2-aarch64-qemuvars-sb-enrolled.json
+Source23:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/91-edk2-aarch64-qemuvars-sb.json
+Source24:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/92-edk2-ovmf-igvm-x64-nosb.json
 
-Source40: 30-edk2-ovmf-4m-qcow2-x64-sb-enrolled.json
-Source41: 31-edk2-ovmf-2m-raw-x64-sb-enrolled.json
-Source42: 40-edk2-ovmf-4m-qcow2-x64-sb.json
-Source43: 41-edk2-ovmf-2m-raw-x64-sb.json
-Source44: 50-edk2-ovmf-x64-microvm.json
-Source45: 50-edk2-ovmf-4m-qcow2-x64-nosb.json
-Source46: 51-edk2-ovmf-2m-raw-x64-nosb.json
-Source47: 60-edk2-ovmf-x64-stateless.json
-Source48: 61-edk2-ovmf-x64-amdsev.json
-Source49: 61-edk2-ovmf-x64-inteltdx.json
+Source40:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/30-edk2-ovmf-4m-qcow2-x64-sb-enrolled.json
+Source41:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/31-edk2-ovmf-2m-raw-x64-sb-enrolled.json
+Source42:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/40-edk2-ovmf-4m-qcow2-x64-sb.json
+Source43:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/41-edk2-ovmf-2m-raw-x64-sb.json
+Source44:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/50-edk2-ovmf-x64-microvm.json
+Source45:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/50-edk2-ovmf-4m-qcow2-x64-nosb.json
+Source46:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/51-edk2-ovmf-2m-raw-x64-nosb.json
+Source47:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/60-edk2-ovmf-x64-stateless.json
+Source48:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/61-edk2-ovmf-x64-amdsev.json
+Source49:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/61-edk2-ovmf-x64-inteltdx.json
 
-Source50: 50-edk2-riscv-qcow2.json
+Source50:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/50-edk2-riscv-qcow2.json
 
-Source60: 50-edk2-loongarch64.json
+Source60:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/50-edk2-loongarch64.json
 
 # https://gitlab.com/kraxel/edk2-build-config
-Source80: edk2-build.py
-Source81: edk2-build.fedora
-Source82: edk2-build.fedora.platforms
-Source83: edk2-build.rhel-9
-Source84: edk2-build.rhel-10
+Source80:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/edk2-build.py
+Source81:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/edk2-build.fedora
+Source82:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/edk2-build.fedora.platforms
+Source83:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/edk2-build.rhel-9
+Source84:        https://src.fedoraproject.org/rpms/edk2/raw/rawhide/f/edk2-build.rhel-10
 
-Source90: DBXUpdate-%{DBXDATE}.x64.bin
-Source92: DBXUpdate-%{DBXDATE}.aa64.bin
+Source90:        https://raw.githubusercontent.com/microsoft/secureboot_objects/main/PostSignedObjects/DBX/amd64/DBXUpdate.bin#/DBXUpdate-%{DBXDATE}.x64.bin
+Source92:        https://raw.githubusercontent.com/microsoft/secureboot_objects/main/PostSignedObjects/DBX/arm64/DBXUpdate.bin#/DBXUpdate-%{DBXDATE}.aa64.bin
 
 Patch0001: 0001-BaseTools-do-not-build-BrotliCompress-RH-only.patch
 Patch0002: 0002-MdeModulePkg-remove-package-private-Brotli-include-p.patch

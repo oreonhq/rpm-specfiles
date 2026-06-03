@@ -61,7 +61,7 @@ URL:           http://www.gdal.org
 # Source0:   http://download.osgeo.org/gdal/%%{version}/gdal-%%{version}.tar.xz
 # See PROVENANCE.TXT-fedora and the cleaner script for details!
 
-Source0:       %{name}-%{version}%{?pre:%pre}-fedora.tar.xz
+Source0:       https://download.osgeo.org/gdal/%{version}/gdal-%{version}%{?pre:%pre}.tar.xz
 Source1:        http://download.osgeo.org/%{name}/%{version}/%{name}autotest-%{version}%{?pre:%pre}.zip
 # Multilib compatible cpl-config.h header
 Source2:       cpl-config.h
@@ -75,6 +75,7 @@ Source5:       %{name}-cleaner.sh
 # Add some utils to the default install target
 Patch0:        gdal_utils.patch
 
+BuildRequires: curl
 BuildRequires: cmake
 BuildRequires: gcc-c++
 
@@ -385,7 +386,11 @@ MinGW Windows Python3 GDAL bindings.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -N -p1 -n %{name}-%{version}%{?pre:%pre}-fedora
+%{SOURCE5} %{version} %{?pre:%pre} %{_sourcedir}
+cd %{builddir}
+tar -xf %{_sourcedir}/%{name}-%{version}%{?pre:%pre}-fedora.tar.xz
+cd %{name}-%{version}%{?pre:%pre}-fedora
+%autopatch -p1
 
 # Delete bundled libraries
 # rm -rf frmts/zlib

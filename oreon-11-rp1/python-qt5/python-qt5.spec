@@ -30,7 +30,7 @@ Url:     http://www.riverbankcomputing.com/software/pyqt/
 Source0:        https://files.pythonhosted.org/packages/source/P/PyQt5/PyQt5-%{version}.tar.gz
 #Source0: https://pypi.python.org/packages/source/P/PyQt5/PyQt5-{version}.tar.gz
 
-Source1: macros.pyqt5
+Source1:        https://src.fedoraproject.org/rpms/python-qt5/raw/rawhide/f/macros.pyqt5
 
 ## upstream patches
 

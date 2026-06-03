@@ -16,7 +16,7 @@ URL:        http://www.google.com/fonts/specimen/Open+Sans
 # getopensans.sh.
 Source0:    %{name}-%{version}.tar.xz
 Source1:    %{name}-fontconfig.conf
-Source2:    getopensans.sh
+Source2:        https://src.fedoraproject.org/rpms/open-sans-fonts/raw/rawhide/f/getopensans.sh
 
 BuildArch:  noarch
 BuildRequires:  fontpackages-devel

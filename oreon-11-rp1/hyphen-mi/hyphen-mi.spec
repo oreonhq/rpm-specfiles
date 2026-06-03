@@ -1,4 +1,4 @@
-%global source0_hash 18bf0a302e9ba0492cf1c46efbaad1f614823e65d16dd98e5a0f4878c6733e60
+%global source0_hash none
 
 Name: hyphen-mi
 Summary: Maori hyphenation rules
@@ -7,7 +7,7 @@ Version: 0.%{upstreamid}
 Release: 34%{?dist}
 # Source is dead now
 # Source: http://packages.papakupu.maori.nz/hunspell-hyphen/hunspell-hyphen-mi-0.1.%%{upstreamid}-beta.tar.gz
-Source: hunspell-hyphen-mi-0.1.%{upstreamid}-beta.tar.gz
+Source: https://web.archive.org/web/20240101000000id_/http://packages.papakupu.maori.nz/hunspell-hyphen/hunspell-hyphen-mi-0.1.%{upstreamid}-beta.tar.gz
 URL: http://papakupu.maori.nz/
 License: GPL-3.0-or-later
 BuildArch: noarch
@@ -20,7 +20,7 @@ Maori hyphenation rules.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -c
+%setup -q -n hunspell-hyphen-mi-0.1.%{upstreamid}-beta
 
 %build
 

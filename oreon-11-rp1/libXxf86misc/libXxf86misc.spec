@@ -10,8 +10,8 @@ License: MIT
 URL: http://www.x.org
 Source0:        https://www.x.org/pub/individual/lib/%{name}-%{version}.tar.bz2
 # copied out of xorgproto 2018.4
-Source1: xf86misc.h
-Source2: xf86mscstr.h
+Source1:        https://src.fedoraproject.org/rpms/libXxf86misc/raw/rawhide/f/xf86misc.h
+Source2:        https://src.fedoraproject.org/rpms/libXxf86misc/raw/rawhide/f/xf86mscstr.h
 
 BuildRequires: make
 BuildRequires: sed

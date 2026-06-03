@@ -1,9 +1,6 @@
 %global source0_hash none
 
-%global with_qt4 1
-%if 0%{?rhel} || (0%{?oreon} >= 11)
 %global with_qt4 0
-%endif
 
 %global ubuntu 16.04
 %global snapshot 20160218

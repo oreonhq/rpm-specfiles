@@ -30,7 +30,7 @@ Obsoletes:     python-varlink <= 3-1.git.61.1bc637d.fc27
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -n varlink-%{version}
+%autosetup -n varlink-31.0.0
 # varlink also supports python-2.7 but python3 is required here
 sed -i -e 's#env python#env python3#' varlink/tests/test_certification.py
 # varlink also supports python-2.7 but python3 is required here

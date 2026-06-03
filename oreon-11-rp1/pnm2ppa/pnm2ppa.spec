@@ -1,5 +1,5 @@
 %global source0_hash 1c50ea2c97b232f5bee6ac3fab408d64b6f1380f1e289ac278778a7e368e7379
-%global source1_hash 86250d0c75fac18453cc569cc360f4e8570d6cf23d3a7f6f692e283dc50476b3
+%global source1_hash 5148b8278451f3dfc102f52691d00e90dfb0b34164b796201e7c220ea7cea237
 
 Name: pnm2ppa
 Summary: Drivers for printing to HP PPA printers

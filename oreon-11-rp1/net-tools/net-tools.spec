@@ -19,15 +19,15 @@ URL: http://sourceforge.net/projects/net-tools/
 
 # git archive --format=tar --remote=git://git.code.sf.net/p/net-tools/code master | xz > net-tools-%%{version}.%%{checkout}.tar.xz
 Source0: net-tools-%{version}.%{checkout}.tar.xz
-Source1: net-tools-config.h
-Source2: net-tools-config.make
-Source3: ether-wake.c
-Source4: ether-wake.8
-Source5: mii-diag.c
-Source6: mii-diag.8
-Source7: iptunnel.8
-Source8: ipmaddr.8
-Source9: arp-ethers.service
+Source1:        https://src.fedoraproject.org/rpms/net-tools/raw/rawhide/f/net-tools-config.h
+Source2:        https://src.fedoraproject.org/rpms/net-tools/raw/rawhide/f/net-tools-config.make
+Source3:        https://src.fedoraproject.org/rpms/net-tools/raw/rawhide/f/ether-wake.c
+Source4:        https://src.fedoraproject.org/rpms/net-tools/raw/rawhide/f/ether-wake.8
+Source5:        https://src.fedoraproject.org/rpms/net-tools/raw/rawhide/f/mii-diag.c
+Source6:        https://src.fedoraproject.org/rpms/net-tools/raw/rawhide/f/mii-diag.8
+Source7:        https://src.fedoraproject.org/rpms/net-tools/raw/rawhide/f/iptunnel.8
+Source8:        https://src.fedoraproject.org/rpms/net-tools/raw/rawhide/f/ipmaddr.8
+Source9:        https://src.fedoraproject.org/rpms/net-tools/raw/rawhide/f/arp-ethers.service
 
 # adds <delay> option that allows netstat to cycle printing through statistics every delay seconds.
 Patch1: net-tools-cycle.patch

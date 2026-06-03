@@ -31,7 +31,7 @@ BuildRequires:  python3-devel
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p 1 -n %{srcname}-%{version}
+%autosetup -p 1 -n pyiso8601-2.1.0
 
 %generate_buildrequires
 %pyproject_buildrequires %{?with_tests:-x test}

@@ -64,7 +64,11 @@
 %global include_macros 0
 %endif
 
+%if 0%{?oreon} >= 11
+%global runtime_id oreon-11-%{runtime_arch}
+%else
 %{!?runtime_id:%global runtime_id %(. /etc/os-release ; echo "${ID}.${VERSION_ID%%.*}")-%{runtime_arch}}
+%endif
 
 # Define macros for OS backwards compat
 %if %{undefined bash_completions_dir}

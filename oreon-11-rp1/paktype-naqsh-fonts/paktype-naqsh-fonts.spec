@@ -11,7 +11,7 @@ Summary:	Fonts for Arabic from PakType
 
 License:	GPL-2.0-only WITH Font-exception-2.0
 URL:		https://sourceforge.net/projects/paktype/
-Source0:        https://sourceforge.net/p/paktype/code/HEAD/tree/Fonts/Release/PakType-Naqsh-%{version}.tar.gz?format=raw#/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/project/paktype/PakType-Naqsh-6.0.tar.gz#/paktype-naqsh-fonts-6.0.tar.gz
 Source1:	%{fontconf}.conf
 BuildArch:	noarch
 BuildRequires:	fontpackages-devel

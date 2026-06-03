@@ -12,9 +12,10 @@ Summary:        Macros to simplify packaging of forge-hosted projects
 
 License:        GPL-1.0-or-later
 URL:            https://git.sr.ht/~gotmax23/forge-srpm-macros
-Source0:        https://git.sr.ht/~gotmax23/forge-srpm-macros/archive/v0.4.0.tar.gz#/forge-srpm-macros-0.4.0.tar.gz
 
 BuildArch:      noarch
+
+Source0:        https://git.sr.ht/~gotmax23/forge-srpm-macros/archive/v0.4.0.tar.gz#/forge-srpm-macros-0.4.0.tar.gz
 
 BuildRequires:  make
 %if %{with tests}

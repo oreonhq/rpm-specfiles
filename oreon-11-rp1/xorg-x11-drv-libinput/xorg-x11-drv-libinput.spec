@@ -20,8 +20,8 @@ Source0:        https://www.x.org/pub/individual/driver/%{tarball}-%{version}.ta
 %else
 Source0:        https://www.x.org/pub/individual/driver/%{tarball}-%{version}.tar.xz
 %endif
-Source1:    71-libinput-overrides-wacom.conf
-Source30:   xserver-sdk-abi-requires
+Source1:        https://src.fedoraproject.org/rpms/xorg-x11-drv-libinput/raw/rawhide/f/71-libinput-overrides-wacom.conf
+Source30:        https://src.fedoraproject.org/rpms/xorg-x11-drv-libinput/raw/rawhide/f/xserver-sdk-abi-requires
 
 # Fedora-only hack for hidpi screens
 # https://bugzilla.redhat.com/show_bug.cgi?id=1413306

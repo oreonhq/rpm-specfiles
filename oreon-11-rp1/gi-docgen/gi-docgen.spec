@@ -220,9 +220,8 @@ License:        (Apache-2.0 OR GPL-3.0-or-later) AND CC0-1.0
 Documentation for gi-docgen.
 
 
-%prep -a
-# Remove all bundled fonts.
-# See 0001-Downstream-only-use-local-packaged-fonts-instead-of-.patch.
+%prep
+%autosetup -n gi-docgen-%{version} -p1
 find . -type f \( -name '*.woff' -o -name '*.woff2' \) -print -delete
 
 

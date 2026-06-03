@@ -77,9 +77,9 @@ URL:     http://www.kde.org/
 %endif
 Source0:        http://download.kde.org/%{stable}/applications/%{apps_version}/src/kdelibs-%{version}.tar.xz
 
-Source1: macros.kde-apps
+Source1:        https://src.fedoraproject.org/rpms/kdelibs/raw/rawhide/f/macros.kde-apps
 
-Source10: SOLID_HAL_LEGACY.sh
+Source10:        https://src.fedoraproject.org/rpms/kdelibs/raw/rawhide/f/SOLID_HAL_LEGACY.sh
 
 BuildRequires: kde4-macros(api) >= 2
 %if 0%{?fedora} >= 40 || 0%{?rhel} >= 10 || (0%{?oreon} >= 11)

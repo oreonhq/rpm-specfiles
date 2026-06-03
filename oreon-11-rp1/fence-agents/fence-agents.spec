@@ -19,7 +19,7 @@ Release: 2%{?alphatag:.%{alphatag}}%{?dist}
 License: GPL-2.0-or-later AND LGPL-2.0-or-later
 Group: System Environment/Base
 URL: https://github.com/ClusterLabs/fence-agents
-Source0:        https://fedorahosted.org/releases/f/e/fence-agents/%{name}-%{version}.tar.gz
+Source0:        https://github.com/ClusterLabs/fence-agents/archive/refs/tags/v%{version}.tar.gz#/fence-agents-%{version}.tar.gz
 
 ExcludeArch: %{ix86}
 

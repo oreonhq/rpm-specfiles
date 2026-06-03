@@ -1,13 +1,15 @@
 %global source0_hash ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e
-%global source1_hash ea1a1a56c86af9a2126e1a6fd5f765030c4ee32e3ad26f5510303174ee54332e
-
 %global pkgname greenboot
 
 # Tests require privileged operations (grub edits, fs remount) and cannot run in mock.
 # Tests are executed in external CI instead.
 %bcond check 0
 
-%bcond bundled_rust_deps %{defined rhel}
+%if 0%{?rhel} || (0%{?oreon} >= 11)
+%bcond_without bundled_rust_deps
+%else
+%bcond_with bundled_rust_deps
+%endif
 
 Name:		greenboot-rs
 Version:	0.16.3
@@ -16,8 +18,7 @@ Summary:	Generic Health Check Framework for systemd
 # Aggregated license of statically linked dependencies as per %%cargo_license_summary
 License:	BSD-3-Clause AND ISC AND MIT AND Unicode-DFS-2016 AND (Apache-2.0 OR BSL-1.0) AND (Apache-2.0 OR MIT) AND (Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT) AND (Unlicense OR MIT)
 URL:		https://github.com/fedora-iot/greenboot-rs
-Source0:        https://github.com/fedora-iot/greenboot-rs/archive/refs/tags/v0.16.3.tar.gz#/greenboot-rs-0.16.3.tar.gz
-Source1:        https://github.com/fedora-iot/greenboot-rs/archive/refs/tags/v0.16.3.tar.gz
+Source0:        https://github.com/fedora-iot/greenboot-rs/archive/refs/tags/v%{version}.tar.gz#/greenboot-rs-%{version}.tar.gz
 
 ExcludeArch:	%{ix86}
 
@@ -61,9 +62,9 @@ This package adds some default healthchecks for greenboot.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 %if %{with bundled_rust_deps}
-%autosetup -p1 -a1 -n %{name}-%{version}
+%autosetup -p1 -n %{name}-%{version}
+cargo vendor --versioned-dirs
 %cargo_prep -v vendor
 %else
 %autosetup -n %{name}-%{version}

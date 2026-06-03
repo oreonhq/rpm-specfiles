@@ -17,8 +17,8 @@ Summary:        Cross-platform multimedia library
 License:        Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 OR MIT)
 URL:            http://www.libsdl.org/
 Source0:        http://www.libsdl.org/release/SDL2-2.28.5.tar.gz
-Source1:        SDL_config.h
-Source2:        SDL_revision.h
+Source1:        https://src.fedoraproject.org/rpms/SDL2/raw/rawhide/f/SDL_config.h
+Source2:        https://src.fedoraproject.org/rpms/SDL2/raw/rawhide/f/SDL_revision.h
 
 Patch0:         multilib.patch
 # Prefer Wayland by default

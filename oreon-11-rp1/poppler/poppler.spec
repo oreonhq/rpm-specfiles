@@ -26,7 +26,7 @@ URL:     https://poppler.freedesktop.org/
 Source0:        https://poppler.freedesktop.org/poppler-%{version}.tar.xz
 Source1:        https://poppler.freedesktop.org/poppler-%{version}.tar.xz.sig
 # https://pgp.surfnet.nl/pks/lookup?op=get&search=0xCA262C6C83DE4D2FB28A332A3A6A4DB839EAA6D7
-Source2: armored-keys.asc
+Source2:        https://src.fedoraproject.org/rpms/poppler/raw/rawhide/f/armored-keys.asc
 # git archive --prefix test/
 Source3: %{name}-test-%{test_date}-%{test_sha}.tar.xz
 

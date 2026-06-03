@@ -32,7 +32,8 @@ pre-existing objects that you do not have source-code of.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n google-gson-2.12.1
+%setup -q -n gson-gson-parent-2.12.1
+%autosetup -p1 -n gson-gson-parent-2.12.1
 
 %pom_remove_plugin -r :maven-enforcer-plugin
 %pom_remove_plugin -r :spotless-maven-plugin

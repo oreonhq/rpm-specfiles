@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 1904e60117fa73f12383076db314cd2e9fb62c1adc18b0439e758de9a640f4e7
 
 Name: eth-tools
 Version: 12.1.0.0
@@ -44,13 +44,14 @@ Contains tools for managing fabric on a management node.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -cn eth-fast-fabric-%{version_no_tilde} -n OpenIb_Host
+%autosetup -n OpenIb_Host
 
 %build
-cd OpenIb_Host
+cd eth-fast-fabric-%{version_no_tilde}/OpenIb_Host
 OPA_FEATURE_SET=opa10 CLOCAL='%build_cflags' CCLOCAL='%build_cxxflags' LDLOCAL='%build_ldflags' ./ff_build.sh %{_builddir}
 
 %install
+cd eth-fast-fabric-%{version_no_tilde}
 BUILDDIR=%{_builddir} DESTDIR=%{buildroot} LIBDIR=%{_prefix}/lib OpenIb_Host/ff_install.sh
 
 %files basic

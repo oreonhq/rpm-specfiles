@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash ab559ee78cbf63ce48b2dc3046cabf19bad21f735df47b48930da404f9535bc7
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell

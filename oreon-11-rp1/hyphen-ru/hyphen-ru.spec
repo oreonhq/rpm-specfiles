@@ -1,3 +1,5 @@
+%global source1_hash ce988fcc66e5e29d7474df5ab5b489d3f52a50ebccf570997f992d84221b922a
+%global source2_hash 12fa91c83d56ffefa589cf022d9f24ec5a5f4035b4c09484cf4270128c2c162a
 %global source0_hash none
 
 Name: hyphen-ru
@@ -5,8 +7,8 @@ Summary: Russian hyphenation rules
 %global upstreamid 20200325
 Version: 0.%{upstreamid}
 Release: 15%{?dist}
-Source1: http://mirrors.ctan.org/language/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-ru.tex
-Source2: http://mirrors.ctan.org/language/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/hyph-ru.pat.txt
+Source1:        https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-ru.tex
+Source2:        https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/txt/hyph-ru.pat.txt
 URL: https://ctan.org/tex-archive/language/hyph-utf8
 License: LPPL-1.3a
 BuildArch: noarch

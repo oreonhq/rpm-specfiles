@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash e080a1e42ac443d8451df46d9d6628e64e8317aa53d826f99099652aaba613d0
 
 Name: hyphen-eu
 Summary: Basque hyphenation rules
@@ -7,7 +7,7 @@ Summary: Basque hyphenation rules
 %global upstreamid 20190406
 Version: 0.%{upstreamid}
 Release: 13%{?dist}
-Source: http://mirrors.ctan.org/language/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-eu.tex
+Source:        https://raw.githubusercontent.com/hyphenation/tex-hyphen/master/hyph-utf8/tex/generic/hyph-utf8/patterns/tex/hyph-eu.tex
 URL: http://tp.lc.ehu.es/jma/basque.html
 License: MIT
 BuildArch: noarch

@@ -35,13 +35,20 @@ Summary:	First-stage UEFI bootloader
 ExclusiveArch:	x86_64
 License:	BSD-2-Clause AND OpenSSL
 URL:		https://github.com/rhboot/shim
+
+# Shim uses OpenSSL, but cannot use the system copy as the UEFI ABI is not
+# compatible with SysV (there's no red zone under UEFI) and there isn't a
+# POSIX-style C library.
+# BuildRequires:	OpenSSL
+Provides:	bundled(openssl) = %{openssl_vre}
+
 Source0:        https://github.com/rhboot/shim/releases/download/%{version}%{?dashpre}/shim-%{version}%{?dotpre}.tar.bz2
 Source1:        https://raw.githubusercontent.com/rhboot/shim/HEAD/fedora-ca-20200709.cer
 %if 0%{?dbxfile}
 Source2:	%{dbxfile}
 %endif
 Source3:        https://raw.githubusercontent.com/rhboot/shim/HEAD/sbat.redhat.csv
-Source4:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shim.patches
+Source4:        shim.patches
 
 Source100:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shim-find-debuginfo.sh
 
@@ -52,12 +59,6 @@ BuildRequires:	elfutils-libelf-devel
 BuildRequires:	git openssl-devel openssl
 BuildRequires:	pesign >= %{pesign_vre}
 BuildRequires:	dos2unix findutils
-
-# Shim uses OpenSSL, but cannot use the system copy as the UEFI ABI is not
-# compatible with SysV (there's no red zone under UEFI) and there isn't a
-# POSIX-style C library.
-# BuildRequires:	OpenSSL
-Provides:	bundled(openssl) = %{openssl_vre}
 
 %global desc \
 Initial UEFI bootloader that handles chaining to a trusted full \

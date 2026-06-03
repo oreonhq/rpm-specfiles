@@ -35,7 +35,7 @@ URL:		https://rspec.info
 Source0:        http://rubygems.org/gems/%{gem_name}-%{fullver}.gem
 # %%{SOURCE2} %%{name} %%{version}
 Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
-Source2:	rspec-related-create-full-tarball.sh
+Source2:        https://src.fedoraproject.org/rpms/rubygem-rspec-core/raw/rawhide/f/rspec-related-create-full-tarball.sh
 # Adjust backtrace filter for Fedora placement of StdLib.
 # https://github.com/rspec/rspec-core/pull/2881
 Patch0:		rubygem-rspec-core-3.10.1-Filter-content-of-usr-share-ruby.patch

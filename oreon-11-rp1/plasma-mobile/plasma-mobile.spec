@@ -15,7 +15,7 @@ Url:            https://invent.kde.org/plasma/plasma-mobile
 Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/plasma-mobile-%{version}.tar.xz
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/plasma-mobile-%{version}.tar.xz.sig
 
-Source15:       fedora-lookandfeel.json
+Source15:        https://src.fedoraproject.org/rpms/plasma-mobile/raw/rawhide/f/fedora-lookandfeel.json
 
 ## upstream patches
 

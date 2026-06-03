@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash c0580164ef90eac96294982ded68a4ff8a96b66d851d01c15ba6c9da773ff4aa
 
 Name: xhtml2fo-style-xsl
 Version: 20051222
@@ -14,7 +14,7 @@ Requires: xml-common >= 0.6.3-8
 #Requires(postun): libxml2
 
 BuildArch: noarch
-Source0: http://www.antennahouse.com/XSLsample/sample-xsl-xhtml2fo.zip
+Source0:        sample-xsl-xhtml2fo.zip
 Source1: AntennaHouse-COPYRIGHT
 
 %description

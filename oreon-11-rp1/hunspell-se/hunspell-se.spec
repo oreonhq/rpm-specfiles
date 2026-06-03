@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8363726f451d4ed02ee929ea9a4dc0f77334347f8fb518e993ba24bfea54688d
 
 %if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell 
@@ -9,7 +9,7 @@ Name: hunspell-se
 Summary: Northern Saami hunspell dictionaries
 Version: 1.0
 Release: 0.33.beta7%{?dist}
-Source: http://divvun.no/static_files/hunspell-se.tar.gz
+Source:        hunspell-se.tar.gz
 URL: http://www.divvun.no/index.html
 License: GPL-3.0-only
 BuildArch: noarch

@@ -23,7 +23,7 @@ URL:		https://rspec.info
 Source0:        https://rubygems.org/gems/%{gem_name}-%{mainver}%{?prever}.gem
 # %%{SOURCE2} %%{name} %%{version}
 Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
-Source2:	rspec-related-create-full-tarball.sh
+Source2:        https://src.fedoraproject.org/rpms/rubygem-rspec-support/raw/rawhide/f/rspec-related-create-full-tarball.sh
 # Workaround tests wrt diff/lcs diff format
 # Partially revert 3.13.2 -> 3.13.3 change
 Patch0:	rubygem-rspec-support-3.13.3-diff_spec-format-revert.patch

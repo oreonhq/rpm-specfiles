@@ -14,7 +14,7 @@ Summary:        A Qt-based client-side and server-side SOAP component
 # and are not used in the library code itself.
 License:        MIT
 URL:            https://github.com/KDAB/KDSoap
-Source0:        https://github.com/KDAB/KDSoap/releases/download/%{name}-%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/KDAB/KDSoap/archive/refs/tags/v2.2.0.tar.gz#/kdsoap-2.2.0.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake

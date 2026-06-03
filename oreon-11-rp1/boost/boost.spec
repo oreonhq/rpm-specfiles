@@ -70,7 +70,7 @@ URL: http://www.boost.org
 Source0: https://archives.boost.io/release/%{version}/source/%{name}_%{version_enc}.tar.bz2
 # Add a manual page for b2, based on the online documentation:
 # http://www.boost.org/boost-build2/doc/html/bbv2/overview.html
-Source1: b2.1
+Source1:        https://src.fedoraproject.org/rpms/boost/raw/rawhide/f/b2.1
 
 # Since Fedora 13, the Boost libraries are delivered with sonames
 # equal to the Boost version (e.g., 1.41.0).

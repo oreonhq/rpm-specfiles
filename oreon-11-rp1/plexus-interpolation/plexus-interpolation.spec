@@ -36,7 +36,8 @@ related projects.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n plexus-interpolation-1.27
+%setup -q -n plexus-interpolation-plexus-interpolation-1.27
+%autosetup -p1 -n plexus-interpolation-plexus-interpolation-1.27
 %pom_add_dep junit:junit:4.13.1:test
 %pom_remove_plugin :maven-release-plugin
 %pom_remove_plugin :maven-scm-publish-plugin

@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 8811e5feaae03e1b6e3008116fdc7471a53b6c0c5036751c637b15058f855ace
 
 Name:           malaga
 Version:        7.12 
@@ -7,7 +7,7 @@ Summary:        A programming language for automatic language analysis
 
 License:        GPL-2.0-or-later
 URL:            http://home.arcor.de/bjoern-beutel/malaga/
-Source0:        http://home.arcor.de/bjoern-beutel/malaga/%{name}-%{version}.tgz
+Source0:        https://deb.debian.org/debian/pool/main/m/malaga/malaga_7.12.orig.tar.gz
 # Fix map_file symbol conflict with samba. Upstream can be considered
 # inactive but as libvoikko >= 2.2 doesn't use libmalaga anymore, these kind
 # of problems won't probably come up. The only executables in Fedora which
@@ -52,7 +52,7 @@ Library files for %{name}.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup
+%autosetup -n malaga-7.12
 # Remove "@" marks so that the build process is more verbose
 sed -i.debug -e 's|^\([ \t][ \t]*\)@|\1|' Makefile.in
 # Remove "-s" so binaries won't be stripped

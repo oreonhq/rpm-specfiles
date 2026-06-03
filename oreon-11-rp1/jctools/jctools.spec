@@ -12,7 +12,7 @@ URL:            https://github.com/JCTools/JCTools
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/JCTools/JCTools/archive/v4.0.5/JCTools-4.0.5.tar.gz
+Source0:        https://github.com/JCTools/JCTools/archive/v4.0.5/JCTools-4.0.5.tar.gz#/jctools-4.0.5.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

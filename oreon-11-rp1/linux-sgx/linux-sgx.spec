@@ -11,7 +11,7 @@
 %global source12_hash 0227bd6e0356b211341075c7997c837f0b388c01379bd256aa525566a5553f03
 %global source13_hash 4ac27e697a3e64959756624d68ec18ce5fc54a2d3f31f1b3f702be6fcd48a7d8
 %global source14_hash 3bdf15128ba16686e69bce256cc468e76c7b94ff2c7f391cc5ec09e40bff3839
-%global source53_hash 55ea8b0dda2558b92c31b2e742690fb36952f154985952699ea561dc0b839914
+%global source53_hash none
 
 # The enclave code must be built with very specific build
 # flags, that are different from what is used to build
@@ -246,17 +246,12 @@ Source0:        https://github.com/intel/linux-sgx/archive/refs/tags/sgx_%{linux
 # repack.sh purges all the prebuilt AE's that we ship in a different RPM
 # as well as 'prebuilt/' content (openssl / OPA binaries) that we must
 # not distribute.
-Source1:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/repack.sh
+Source1:        https://src.fedoraproject.org/rpms/linux-sgx/raw/rawhide/f/repack.sh
 
 Source2:        https://github.com/intel/confidential-computing.tee.dcap/archive/refs/tags/DCAP_%{dcap_version}.tar.gz#/linux-sgx-%{linux_sgx_version}.tar.gz
 Provides: bundled(dcap) = %{dcap_version}
 
-# Upload tarball is:
-#
-#   https://download.01.org/intel-sgx/sgx-dcap/%%{dcap_version}/linux/prebuilt_dcap_%%{dcap_version}.tar.gz
-#
-# but is then post-processed using repack.sh to create this
-Source3: prebuilt_dcap_%{dcap_version}-repacked.tar.gz
+# repacked in %%prep from download.01.org prebuilt tarball
 
 Source4:        https://github.com/intel/intel-sgx-ssl/archive/refs/tags/%{sgx_ssl_version}.tar.gz#/intel-sgx-ssl-%{sgx_ssl_version}.tar.gz
 Provides: bundled(sgxssl) = %{sgx_ssl_version}
@@ -315,9 +310,8 @@ Source50:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/pccs.sys
 Source51:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/pccs.service
 # RPM build doesn't run this, but we want it in the src.rpm
 # as record of what was used to create Source54
-Source52:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/pccs-nodejs-bundler
-# Pre-created using Source53
-Source53: pccs-%{dcap_version}-%{node_modules_date}-node-modules.tar.xz
+Source52:        https://src.fedoraproject.org/rpms/linux-sgx/raw/rawhide/f/pccs-nodejs-bundler
+# built in %%prep via pccs-nodejs-bundler when missing
 
 ############################################################
 # External projects that have been copied in tarballs as bundles
@@ -687,9 +681,33 @@ in applications
 
 
 %prep
+_dcap="%{dcap_version}"
+_repacked="prebuilt_dcap_${_dcap}-repacked.tar.gz"
+if test ! -f "$_repacked"; then
+  _raw="prebuilt_dcap_${_dcap}.tar.gz"
+  curl -sfL -o "$_raw" "https://download.01.org/intel-sgx/sgx-dcap/${_dcap}/linux/${_raw}"
+  rm -rf _repack && mkdir _repack && (
+    cd _repack
+    tar zxf "../${_raw}"
+    for _f in libcrypto.a policy.wasm libsgx_pce.signed.so libsgx_id_enclave.signed.so libsgx_qe3.signed.so libsgx_tdqe.signed.so libsgx_qve.signed.so; do
+      find . -name "$_f" -delete -print
+    done
+    tar zcf "../${_repacked}" *
+  )
+  rm -rf _repack
+fi
+_nm="pccs-${_dcap}-%{node_modules_date}-node-modules.tar.xz"
+if test ! -f "$_nm"; then
+  curl -sfL -o "pccs-${_dcap}.tar.gz" "https://github.com/intel/confidential-computing.tee.dcap.pccs/archive/refs/tags/DCAP_${_dcap}.tar.gz"
+  curl -sfL -o pccs-nodejs-bundler "https://src.fedoraproject.org/rpms/linux-sgx/raw/rawhide/f/pccs-nodejs-bundler"
+  chmod +x pccs-nodejs-bundler
+  NPM_IGNORE_AUDIT=1 ./pccs-nodejs-bundler "${_dcap}"
+  _built=$(ls pccs-*-node-modules.tar.xz | head -1)
+  test -n "$_built" && mv "$_built" "$_nm"
+fi
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
-test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
+test "%{source3_hash}" = "none" || { f="$_repacked"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
 test "%{source4_hash}" = "none" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source4_hash}" || { echo "oreon: Source4 hash mismatch" >&2; exit 1; }; }
 test "%{source5_hash}" = "none" || { f="%{SOURCE5}"; test -f "$f" || { echo "oreon: missing Source5 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source5_hash}" || { echo "oreon: Source5 hash mismatch" >&2; exit 1; }; }
 test "%{source6_hash}" = "none" || { f="%{SOURCE6}"; test -f "$f" || { echo "oreon: missing Source6 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source6_hash}" || { echo "oreon: Source6 hash mismatch" >&2; exit 1; }; }
@@ -840,7 +858,7 @@ touch psw/ae/data/prebuilt/libsgx_{le,qe,pve,pce}.signed.so
 
 (
   cd external/dcap_source/QuoteGeneration
-  tar zxf %{SOURCE3}
+  tar zxf "$_repacked"
 
   # Again just pretend everything exists to placate build
   touch psw/ae/data/prebuilt/libsgx_{pce,id_enclave,qe3,tdqe,qve}.signed.so
@@ -1019,7 +1037,7 @@ LDFLAGS="%{build_ldflags}" \
     # PCCS NodeJS deps bundle
 
     cd external/dcap_source/QuoteGeneration/pccs
-    tar Jxvf %{SOURCE53}
+    tar Jxvf "pccs-%{dcap_version}-%{node_modules_date}-node-modules.tar.xz"
 
     cd service
 

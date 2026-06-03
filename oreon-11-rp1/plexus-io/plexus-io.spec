@@ -40,7 +40,8 @@ in I/O operations.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n plexus-io-3.5.0
+%setup -q -n plexus-io-plexus-io-3.5.0
+%autosetup -p1 -n plexus-io-plexus-io-3.5.0
 cp %{SOURCE1} .
 
 # Test fails in mock

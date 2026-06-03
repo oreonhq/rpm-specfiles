@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash f12af065aeea2a1acb37a359a215cb0404dbdd075f766faaf330dba41822869e
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
@@ -10,7 +10,7 @@ Name: hunspell-ak
 Summary: Akan hunspell dictionaries
 Version: 0.9.1
 Release: 22%{?dist}
-Source: https://addons.mozilla.org/firefox/downloads/file/376172/akan_spelling_dictionary-0.9.1-typefix-fx.xpi
+Source:        akan_spelling_dictionary-0.9.1-typefix-fx.xpi
 URL: http://kasahorow.org/content/akan-nsɛmfuaasekyerɛ
 #https://addons.mozilla.org/en-US/firefox/versions/license/73122
 License: LGPL-3.0-only

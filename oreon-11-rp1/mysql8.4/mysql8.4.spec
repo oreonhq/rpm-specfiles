@@ -110,26 +110,26 @@ URL:              http://www.mysql.com
 License:          GPL-2.0-only AND ( GPL-2.0-only WITH Universal-FOSS-exception-1.0 ) AND GPL-2.0-or-later AND ( LGPL-2.0-only WITH Universal-FOSS-exception-1.0 ) AND ( GPL-3.0-or-later WITH Bison-exception-2.2 ) AND ( GPL-2.0-only OR BSD-2-Clause ) AND BSD-2-Clause AND BSL-1.0 AND Apache-2.0 AND MIT
 
 Source0:        https://cdn.mysql.com/Downloads/MySQL-8.4/mysql-%{version}.tar.gz
-Source3:          my.cnf.in
-Source6:          README.mysql-docs
-Source7:          README.mysql-license
-Source10:         mysql.tmpfiles.d.in
-Source11:         mysql.service.in
-Source12:         mysql-prepare-db-dir.sh
-Source14:         mysql-check-socket.sh
-Source15:         mysql-scripts-common.sh
-Source17:         mysql-wait-stop.sh
-Source18:         mysql@.service.in
+Source3:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/my.cnf.in
+Source6:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/README.mysql-docs
+Source7:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/README.mysql-license
+Source10:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/mysql.tmpfiles.d.in
+Source11:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/mysql.service.in
+Source12:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/mysql-prepare-db-dir.sh
+Source14:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/mysql-check-socket.sh
+Source15:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/mysql-scripts-common.sh
+Source17:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/mysql-wait-stop.sh
+Source18:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/mysql@.service.in
 # To track rpmlint warnings
 Source30:         %{name}.rpmlintrc
 # Configuration for server
-Source31:         server.cnf.in
+Source31:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/server.cnf.in
 # Skipped tests lists
-Source50:         rh-skipped-tests-list-base.list
-Source51:         rh-skipped-tests-list-arm.list
-Source52:         rh-skipped-tests-list-s390.list
-Source53:         rh-skipped-tests-list-ppc.list
-Source54:         rh-skipped-tests-list-riscv.list
+Source50:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/rh-skipped-tests-list-base.list
+Source51:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/rh-skipped-tests-list-arm.list
+Source52:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/rh-skipped-tests-list-s390.list
+Source53:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/rh-skipped-tests-list-ppc.list
+Source54:        https://src.fedoraproject.org/rpms/mysql8.4/raw/rawhide/f/rh-skipped-tests-list-riscv.list
 
 # Comments for these patches are in the patch files
 # Patches common for more mysql-like packages

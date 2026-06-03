@@ -117,7 +117,7 @@ License:        BSD-3-Clause AND LicenseRef-Public-Domain
 URL:            https://go.dev
 Source0:        https://go.dev/dl/go%{go_source}.src.tar.gz
 # make possible to override default traceback level at build time by setting build tag rpm_crashtraceback
-Source1:        fedora.go
+Source1:        https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/fedora.go
 
 # The compiler is written in Go. Needs go(1.4+) compiler for build.
 %if !%{golang_bootstrap}
@@ -177,7 +177,7 @@ Obsoletes:      golang-race < 1.20~rc3-2
 # These are the only RHEL/Fedora architectures that we compile this package for
 ExclusiveArch:  %{golang_arches}
 
-Source100:      golang-gdbinit
+Source100:        https://src.fedoraproject.org/rpms/golang/raw/rawhide/f/golang-gdbinit
 
 %description
 %{summary}.

@@ -13,12 +13,12 @@ Summary:        SBLIM Gatherer
 License:        EPL-1.0
 URL:            http://sourceforge.net/projects/sblim/
 Source0:        http://downloads.sourceforge.net/project/sblim/%{name}/%{version}/%{name}-%{version}.tar.bz2
-Source1:        gather-config.h.prepend
-Source2:        gather-config.h
-Source3:        sblim-gather.tmpfiles
-Source4:        missing-providers.tgz
-Source5:        gatherer.service
-Source6:        reposd.service
+Source1:        https://src.fedoraproject.org/rpms/sblim-gather/raw/rawhide/f/gather-config.h.prepend
+Source2:        https://src.fedoraproject.org/rpms/sblim-gather/raw/rawhide/f/gather-config.h
+Source3:        https://src.fedoraproject.org/rpms/sblim-gather/raw/rawhide/f/sblim-gather.tmpfiles
+Source4:        https://src.fedoraproject.org/rpms/sblim-gather/raw/rawhide/f/missing-providers.tgz
+Source5:        https://src.fedoraproject.org/rpms/sblim-gather/raw/rawhide/f/gatherer.service
+Source6:        https://src.fedoraproject.org/rpms/sblim-gather/raw/rawhide/f/reposd.service
 
 BuildRequires: make
 BuildRequires:  sblim-cmpi-devel

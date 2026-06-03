@@ -1,6 +1,6 @@
-%global source0_hash none
-%global source1_hash none
-%global source2_hash none
+%global source0_hash cc6c27210fd2216a4150c940d0ab87c7d747a5bb85abf3bc4a51cbfb24ed3f76
+%global source1_hash ea2a65d8dbbbae4e2e0df119dc38847c1100b929e5268943a541484facb56d6d
+%global source2_hash 81e6a4caf98635746405f3c7d6a8d3e7a0698c0d12c03fdd5f8e45c86987d323
 
 %global common_description %{expand:
 GeoLite2 databases are free IP geolocation databases comparable to, but less
@@ -19,9 +19,9 @@ Summary:        Free IP geolocation databases
 # This database incorporates GeoNames geographical data, which is made available under the Creative Commons Attribution 3.0 License
 License:        CC-BY-SA-4.0 AND CC-BY-3.0
 URL:            https://dev.maxmind.com/geoip/geoip2/geolite2/
-Source0:        https://geolite.maxmind.com/download/geoip/database/GeoLite2-ASN_%{version}.tar.gz
-Source1:        https://geolite.maxmind.com/download/geoip/database/GeoLite2-City_%{version}.tar.gz
-Source2:        https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country_%{version}.tar.gz
+Source0:        https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb
+Source1:        https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-City.mmdb
+Source2:        https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb
 BuildArch:      noarch
 
 
@@ -53,29 +53,25 @@ Summary:        Free IP geolocation country database
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
 test "%{source2_hash}" = "none" || { f="%{SOURCE2}"; test -f "$f" || { echo "oreon: missing Source2 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source2_hash}" || { echo "oreon: Source2 hash mismatch" >&2; exit 1; }; }
-%setup -q -T -c -a 0 -a 1 -a 2
 
 
 %install
-for db in GeoLite2-{ASN,City,Country}; do
-    install -D -p -m 0644 ${db}_%{version}/$db.mmdb %{buildroot}%{_datadir}/GeoIP/$db.mmdb
-done
+install -D -p -m 0644 %{SOURCE0} %{buildroot}%{_datadir}/GeoIP/GeoLite2-ASN.mmdb
+install -D -p -m 0644 %{SOURCE1} %{buildroot}%{_datadir}/GeoIP/GeoLite2-City.mmdb
+install -D -p -m 0644 %{SOURCE2} %{buildroot}%{_datadir}/GeoIP/GeoLite2-Country.mmdb
 
 
 %files asn
-%license GeoLite2-ASN_%{version}/COPYRIGHT.txt GeoLite2-ASN_%{version}/LICENSE.txt
 %dir %{_datadir}/GeoIP
 %verify(not md5 size mtime) %{_datadir}/GeoIP/GeoLite2-ASN.mmdb
 
 
 %files city
-%license GeoLite2-City_%{version}/COPYRIGHT.txt GeoLite2-City_%{version}/LICENSE.txt
 %dir %{_datadir}/GeoIP
 %verify(not md5 size mtime) %{_datadir}/GeoIP/GeoLite2-City.mmdb
 
 
 %files country
-%license GeoLite2-Country_%{version}/COPYRIGHT.txt GeoLite2-Country_%{version}/LICENSE.txt
 %dir %{_datadir}/GeoIP
 %verify(not md5 size mtime) %{_datadir}/GeoIP/GeoLite2-Country.mmdb
 

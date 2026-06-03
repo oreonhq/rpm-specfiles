@@ -7,7 +7,7 @@ Version: 0.%{upstreamid}
 Release: 37%{?dist}
 # Source URL is dead now
 # Source: http://download.github.com/nagybence-huhyphn-aa3fc85.tar.gz
-Source: nagybence-huhyphn-aa3fc85.tar.gz
+Source:        https://github.com/nagybence/huhyphn/archive/aa3fc85.tar.gz#/nagybence-huhyphn-aa3fc85.tar.gz
 URL: http://www.tipogral.hu/
 License: GPL-2.0-only
 BuildArch: noarch

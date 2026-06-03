@@ -1,11 +1,11 @@
-%global source0_hash none
+%global source0_hash cb87ce1bee0d547f82bd5d2d1a7fdaca312510581a1295e824a507c59c4c92a2
 
 Name: hyphen-fo
 Summary: Faroese hyphenation rules
 %global upstreamid 20040420
 Version: 0.%{upstreamid}
 Release: 31%{?dist}
-Source: http://fo.speling.org/filer/hyph_fo_FO-20040420a.zip
+Source:        https://web.archive.org/web/20240101000000id_/http://fo.speling.org/filer/hyph_fo_FO-20040420a.zip
 URL: http://fo.speling.org/
 License: GPL-1.0-or-later
 BuildArch: noarch

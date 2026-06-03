@@ -1,4 +1,4 @@
-%global source0_hash 80675d0cbc01a1236c37889e41018fadbb2593a4ded11787cd563a54047aff2d
+%global source0_hash none
 
 # we don't want to provide private python extension libs
 %{?filter_setup:
@@ -22,6 +22,7 @@ Release: 2%{?dist}
 License: GPL-2.0-or-later AND MIT AND BSD-3-Clause-HP AND IJG AND GPL-2.0-only AND LGPL-2.1-or-later AND BSD-2-Clause AND LicenseRef-Public-Domain AND python-ldap
 
 Url: https://developers.hp.com/hp-linux-imaging-and-printing
+BuildRequires: curl
 # Original source tarball
 # Source0: http://downloads.sourceforge.net/sourceforge/hplip/hplip-%%{version}.tar.gz
 #
@@ -31,7 +32,7 @@ Url: https://developers.hp.com/hp-linux-imaging-and-printing
 # ./hplip-repack.sh <version>
 #
 
-Source0: hplip-%{version}-repack.tar.gz
+Source0: https://downloads.sourceforge.net/project/hplip/hplip/%{version}/hplip-%{version}.tar.gz
 Source1: hpcups-update-ppds.sh
 Source2: copy-deviceids.py
 Source3: %{name}.appdata.xml
@@ -399,7 +400,10 @@ SANE driver for scanners in HP's multi-function devices (from HPOJ).
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q
+%{SOURCE6} %{version} %{_sourcedir}
+cd %{builddir}
+tar -xf %{_sourcedir}/hplip-%{version}-repack.tar.gz
+cd hplip-%{version}
 
 # The pstotiff filter is rubbish so replace it (launchpad #528394).
 %patch -P 1 -p1 -b .pstotiff-is-rubbish

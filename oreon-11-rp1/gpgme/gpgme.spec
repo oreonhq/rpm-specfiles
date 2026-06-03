@@ -1,4 +1,5 @@
 %global source0_hash 821ab0695c842eab51752a81980c92b0410c7eadd04103f791d5d2a526784966
+%global source2_hash 7d06690e613cf84f325ba8e9d03070b4426cbc2c0fa73033fda81a57efc5a8ed
 %global source4_hash none
 %global source5_hash d4796049c06708a26f3096f748ef095347e1a3c1e570561701fe952c3f565382
 %global source6_hash 07e1265648ff51da238c9af7a18b3f1dc7b0c66b4f21a72f27c74b396cd3336d
@@ -25,7 +26,7 @@ License:        LGPL-2.1-or-later AND MIT
 URL:            https://gnupg.org/related_software/gpgme/
 Source0:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
-Source2:        gpgme-multilib.h
+Source2:        https://src.fedoraproject.org/rpms/gpgme/raw/rawhide/f/gpgme-multilib.h
 Source3:        https://gnupg.org/signature_key.asc
 Source4:        https://gnupg.org/ftp/gcrypt/gpgmepp/qgpgme-%{spversion}.tar.xz
 Source5:        https://gnupg.org/ftp/gcrypt/gpgmepp/gpgmepp-%{spversion}.tar.xz

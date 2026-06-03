@@ -1,4 +1,4 @@
-%global source0_hash ef0b8df430746b3907f8d0808e7fdd1f8bf2ebdfa098a4f8db1edbf89a760349
+%global source0_hash e53474b0a3de73ced570c3f2f605bedf88960c03773178ec763963d21cdb1bf6
 
 Name:			rasdaemon
 Version:		0.8.0
@@ -8,7 +8,7 @@ Group:			Applications/System
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License:		GPL-2.0-only
 URL:			http://git.infradead.org/users/mchehab/rasdaemon.git
-Source0:        http://www.infradead.org/~mchehab/rasdaemon/%{name}-%{version}.tar.bz2
+Source0:        https://github.com/mchehab/rasdaemon/archive/refs/tags/v0.8.0.tar.gz#/rasdaemon-0.8.0.tar.bz2
 
 ExcludeArch:		s390 s390x
 BuildRequires:		make

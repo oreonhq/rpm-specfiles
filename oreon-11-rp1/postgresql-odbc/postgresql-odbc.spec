@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash afd892f89d2ecee8d3f3b2314f1bd5bf2d02201872c6e3431e5c31096eca4c8b
 
 %bcond_without check
 
@@ -11,7 +11,7 @@ Release: 7%{?dist}
 License: LGPL-2.0-or-later
 URL: https://odbc.postgresql.org/
 
-Source0:        https://ftp.postgresql.org/pub/odbc/versions/src/%{upstream_name}-%{version}.tar.gz
+Source0:        https://repo.huaweicloud.com/postgresql/odbc/versions/src/psqlodbc-16.00.0000.tar.gz#/postgresql-odbc-16.00.0000.tar.gz
 
 Patch0: postgresql-odbc-09.06.0200-revert-money-fix.patch
 Patch1: postgresql-odbc-09.05.0400-revert-money-testsuite-fix.patch

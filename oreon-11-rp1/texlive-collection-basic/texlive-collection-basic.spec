@@ -58,7 +58,7 @@ BuildArch:      noarch
 Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-basic.tar.xz
 
 # License texts
-Source1:        texlive-licenses.tar.xz
+Source1:        https://src.fedoraproject.org/rpms/texlive-collection-basic/raw/rawhide/f/texlive-licenses.tar.xz
 
 Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amsfonts.tar.xz
 Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/amsfonts.doc.tar.xz

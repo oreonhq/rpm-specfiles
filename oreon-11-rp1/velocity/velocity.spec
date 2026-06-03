@@ -53,7 +53,8 @@ applications to be developed according to a true MVC model.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%autosetup -p1 -n velocity-2.4.1
+%setup -q -n velocity-engine-2.4.1
+%autosetup -p1 -n velocity-engine-2.4.1
 
 %mvn_alias : velocity:velocity
 %mvn_alias : org.apache.velocity:velocity

@@ -106,14 +106,9 @@ Source1:        https://github.com/intel/SGXDataCenterAttestationPrimitives/arch
 # repack.sh purges AE's that we do not want to (& are forbidden to)
 # ship, as well as 'prebuilt/' content (openssl / OPA binaries) that
 # we must not distribute
-Source2:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/repack.sh
+Source2:        https://src.fedoraproject.org/rpms/linux-sgx/raw/rawhide/f/repack.sh
 
-# Upload tarball is:
-#
-#   https://download.01.org/intel-sgx/sgx-dcap/%%{dcap_version}/linux/prebuilt_dcap_%%{dcap_version}.tar.gz
-#
-# but is then post-processed using repack.sh to create this
-Source3: prebuilt_dcap_%{dcap_version}-repacked.tar.gz
+# repacked in %%prep from download.01.org prebuilt tarball
 
 BuildRequires: sgx-rpm-macros
 
@@ -151,9 +146,25 @@ prebuilt by Intel. \
 %do_package qve %{with_enclave_qve} %{dcap_version}
 
 %prep
+_dcap="%{dcap_version}"
+_repacked="prebuilt_dcap_${_dcap}-repacked.tar.gz"
+if test ! -f "$_repacked"; then
+  _raw="prebuilt_dcap_${_dcap}.tar.gz"
+  curl -sfL -o "$_raw" "https://download.01.org/intel-sgx/sgx-dcap/${_dcap}/linux/${_raw}"
+  rm -rf _repack && mkdir _repack && (
+    cd _repack
+    tar zxf "../${_raw}"
+    for _f in libcrypto.a policy.wasm libsgx_pce.signed.so libsgx_id_enclave.signed.so libsgx_qe3.signed.so libsgx_tdqe.signed.so libsgx_qve.signed.so; do
+      find . -name "$_f" -delete -print
+    done
+    tar zcf "../${_repacked}" *
+  )
+  rm -rf _repack
+fi
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 test "%{source1_hash}" = "none" || { f="%{SOURCE1}"; test -f "$f" || { echo "oreon: missing Source1 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source1_hash}" || { echo "oreon: Source1 hash mismatch" >&2; exit 1; }; }
-test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }# Upstream repo renamed to confidential-computing.sgx (GitHub archive top dir matches)
+test "%{source3_hash}" = "none" || { f="$_repacked"; test -f "$f" || { echo "oreon: missing Source3 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source3_hash}" || { echo "oreon: Source3 hash mismatch" >&2; exit 1; }; }
+# Upstream repo renamed to confidential-computing.sgx (GitHub archive top dir matches)
 %autosetup -n confidential-computing.sgx-sgx_%{linux_sgx_version}_reproducible
 
 # dcap
@@ -165,7 +176,7 @@ test "%{source3_hash}" = "none" || { f="%{SOURCE3}"; test -f "$f" || { echo "ore
 
 (
   cd external/dcap_source/QuoteGeneration
-  tar zxf %{SOURCE3}
+  tar zxf "$_repacked"
 )
 
 %build

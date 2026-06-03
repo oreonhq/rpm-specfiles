@@ -6,6 +6,9 @@ Release: 2%{?dist}
 Summary: Tools and scripts for creating debuginfo and source file distributions, collect build-ids and rewrite source paths in DWARF data for debugging, tracing and profiling.
 License: GPL-3.0-or-later AND GPL-2.0-or-later AND LGPL-2.0-or-later
 URL: https://sourceware.org/debugedit/
+
+Suggests: gdb-minimal
+
 Source0:        https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz
 Source1:        https://sourceware.org/pub/debugedit/%{version}/%{name}-%{version}.tar.xz.sig
 Source2: gpgkey-CBA20376A15C6FFC11CD.gpg
@@ -42,7 +45,6 @@ Requires: findutils
 # For do_file, gdb_add_index
 # We only need gdb-add-index, so suggest gdb-minimal (full gdb is also ok)
 Requires: /usr/bin/gdb-add-index
-Suggests: gdb-minimal
 # For run_job, sed
 Requires: sed
 # For dwz

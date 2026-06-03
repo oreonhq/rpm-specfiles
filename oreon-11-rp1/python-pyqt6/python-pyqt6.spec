@@ -13,7 +13,7 @@ Release: 4%{?dist}
 License: gpl-3.0-only
 Url:     http://www.riverbankcomputing.com/software/pyqt/
 Source0:        https://pypi.python.org/packages/source/P/PyQt6/pyqt6-%{version}%{?snap:.%{snap}}.tar.gz
-Source1: macros.pyqt6
+Source1:        https://src.fedoraproject.org/rpms/python-pyqt6/raw/rawhide/f/macros.pyqt6
 
 # Compatibility with Python 3.15
 # brings back PyWeakref_GetObject which was removed in Python 3.15

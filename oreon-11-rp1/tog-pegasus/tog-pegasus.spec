@@ -17,30 +17,30 @@ License:        MIT
 URL:            http://www.openpegasus.org
 Source0:        https://collaboration.opengroup.org/pegasus/documents/27211/pegasus-%{version}.tar.gz
 #  1: Description of security enhacements
-Source1:        README.RedHat.Security
+Source1:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/README.RedHat.Security
 #  3: Description of SSL settings
-Source3:        README.RedHat.SSL
+Source3:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/README.RedHat.SSL
 #  4: /etc/tmpfiles.d configuration file
-Source4:        tog-pegasus.tmpfiles
+Source4:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/tog-pegasus.tmpfiles
 #  5: systemd service file
-Source5:        tog-pegasus.service
+Source5:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/tog-pegasus.service
 #  6: This file controls access to the Pegasus services by users with the PAM pam_access module
-Source6:        access.conf
+Source6:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/access.conf
 #  7: Simple wrapper for Pegasus's cimprovagt - because of confining providers in SELinux
-Source7:        cimprovagt-wrapper.sh
+Source7:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/cimprovagt-wrapper.sh
 #  8: Example wrapper confining Operating System Provider from sblim-cmpi-base package
-Source8:        cmpiOSBase_OperatingSystemProvider-cimprovagt.example
+Source8:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/cmpiOSBase_OperatingSystemProvider-cimprovagt.example
 #  9: DMTF CIM schema
-Source9:        cim_schema_2.38.0Experimental-MOFs.zip
+Source9:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/cim_schema_2.38.0Experimental-MOFs.zip
 # 10: Fedora/RHEL script for adding self-signed certificates to the local CA
 #     trust store
-Source10:       generate-certs
+Source10:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/generate-certs
 # 11: Configuration file for snmp tests in -test rpm
-Source11:       snmptrapd.conf
+Source11:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/snmptrapd.conf
 # 12: repupgrade man page based on pegasus/src/Clients/repupgrade/doc/repupgrade.html
-Source12:       repupgrade.1.gz
+Source12:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/repupgrade.1.gz
 # 13: sysusers conf file for dynamic creation of the 'pegasus' user and group
-Source13:       tog-pegasus.sysusers
+Source13:        https://src.fedoraproject.org/rpms/tog-pegasus/raw/rawhide/f/tog-pegasus.sysusers
 
 #  1: http://cvs.rdg.opengroup.org/bugzilla/show_bug.cgi?id=5011
 #     Removing insecure -rpath

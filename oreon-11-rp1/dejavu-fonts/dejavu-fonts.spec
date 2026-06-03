@@ -35,6 +35,28 @@ Release: 29%{?dist}
 License: Bitstream-Vera AND LicenseRef-Public-Domain
 URL:     https://dejavu-fonts.github.io/
 
+Source0:  %{forgeurl}/archive/version_2_37/dejavu-fonts-version_2_37.tar.gz
+Source1:  %{forgeurl}/releases/download/%{tag}/dejavu-fonts-ttf-%{version}.tar.bz2
+Source2:  %{forgeurl}/releases/download/%{tag}/dejavu-lgc-fonts-ttf-%{version}.tar.bz2
+Source11: 57-dejavu-sans-fonts.xml
+Source12: 57-dejavu-serif-fonts.xml
+Source13: 57-dejavu-sans-mono-fonts.xml
+Source14: 58-dejavu-lgc-sans-fonts.xml
+Source15: 58-dejavu-lgc-serif-fonts.xml
+Source16: 58-dejavu-lgc-sans-mono-fonts.xml
+Patch0:   dejavu-fonts-ttf-urn-dtd.patch
+Patch1:   dejavu-lgc-fonts-ttf-urn-dtd.patch
+Patch2:   dejavu-fonts-urn-dtd.patch
+
+Name:     dejavu-fonts
+Summary:  The DejaVu font families
+%description
+%wordwrap -v common_description
+
+%fontpkg -a
+
+
+
 %global common_description %{expand:
 The DejaVu font set is based on the “Bitstream Vera” fonts, release 1.10. Its
 purpose is to provide a wider range of characters, while maintaining the
@@ -180,25 +202,6 @@ This package consists of the DejaVu sans-serif mono-space font faces, with
 Unicode coverage restricted to Latin, Greek and Cyrillic.
 }
 
-Source0:  %{forgeurl}/archive/version_2_37/dejavu-fonts-version_2_37.tar.gz
-Source1:  %{forgeurl}/releases/download/%{tag}/dejavu-fonts-ttf-%{version}.tar.bz2
-Source2:  %{forgeurl}/releases/download/%{tag}/dejavu-lgc-fonts-ttf-%{version}.tar.bz2
-Source11: 57-dejavu-sans-fonts.xml
-Source12: 57-dejavu-serif-fonts.xml
-Source13: 57-dejavu-sans-mono-fonts.xml
-Source14: 58-dejavu-lgc-sans-fonts.xml
-Source15: 58-dejavu-lgc-serif-fonts.xml
-Source16: 58-dejavu-lgc-sans-mono-fonts.xml
-Patch0:   dejavu-fonts-ttf-urn-dtd.patch
-Patch1:   dejavu-lgc-fonts-ttf-urn-dtd.patch
-Patch2:   dejavu-fonts-urn-dtd.patch
-
-Name:     dejavu-fonts
-Summary:  The DejaVu font families
-%description
-%wordwrap -v common_description
-
-%fontpkg -a
 
 %fontmetapkg -z 1,2,3
 

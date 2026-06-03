@@ -72,7 +72,7 @@ BuildArch:      noarch
 Source0:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/collection-fontsrecommended.tar.xz
 
 # License texts
-Source1:        texlive-licenses.tar.xz
+Source1:        https://src.fedoraproject.org/rpms/texlive-collection-fontsrecommended/raw/rawhide/f/texlive-licenses.tar.xz
 
 Source2:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/avantgar.tar.xz
 Source3:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/bookman.tar.xz
@@ -130,10 +130,10 @@ Source54:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/za
 Source55:        https://ctan.math.illinois.edu/systems/texlive/tlnet/archive/zapfding.tar.xz
 
 # AppStream metadata for font components
-Source56:        lm.metainfo.xml
-Source57:        lm-math.metainfo.xml
-Source58:        tex-gyre.metainfo.xml
-Source59:        tex-gyre-math.metainfo.xml
+Source56:        https://src.fedoraproject.org/rpms/texlive-collection-fontsrecommended/raw/rawhide/f/lm.metainfo.xml
+Source57:        https://src.fedoraproject.org/rpms/texlive-collection-fontsrecommended/raw/rawhide/f/lm-math.metainfo.xml
+Source58:        https://src.fedoraproject.org/rpms/texlive-collection-fontsrecommended/raw/rawhide/f/tex-gyre.metainfo.xml
+Source59:        https://src.fedoraproject.org/rpms/texlive-collection-fontsrecommended/raw/rawhide/f/tex-gyre-math.metainfo.xml
 BuildRequires:  texlive-base
 BuildRequires:  libappstream-glib
 Requires:       texlive-base

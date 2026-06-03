@@ -18,6 +18,12 @@ Summary: Speech synthesis and text-to-speech system
 License: MIT AND GPL-1.0-or-later AND TCL AND BSD-3-Clause
 URL: http://www.cstr.ed.ac.uk/projects/festival/
 
+
+Obsoletes: festival-lib < %{version}-%{release}
+Obsoletes: festival-speechtools-libs < %{version}-%{release}
+Obsoletes: festival-speechtools-libs-devel < %{version}-%{release}
+Obsoletes: festival-speechtools-utils < %{version}-%{release}
+
 # Files needed for everything...
 %global baseURL  http://festvox.org/packed/festival/2.5
 Source0:        http://festvox.org/packed/festival/2.5/festival-2.5.0-release.tar.gz
@@ -74,11 +80,6 @@ BuildRequires: speech-tools-libs-static
 BuildRequires: systemd
 BuildRequires: make
 %{?systemd_requires}
-
-Obsoletes: festival-lib < %{version}-%{release}
-Obsoletes: festival-speechtools-libs < %{version}-%{release}
-Obsoletes: festival-speechtools-libs-devel < %{version}-%{release}
-Obsoletes: festival-speechtools-utils < %{version}-%{release}
 
 # Requires: festival-voice
 # The hard dep below provides a festival-voice, no need to require it here.

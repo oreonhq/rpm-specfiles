@@ -1,14 +1,15 @@
 #!/bin/sh
-version=$(cat freerdp.spec | grep "Version: " | tr --squeeze-repeats " " | cut --delimiter " " --fields 2)
+set -e
+version="${1:?version required}"
+srcdir="${2:-.}"
 
-echo "Downloading FreeRDP-$version.tar.gz"
-curl --silent --location "https://github.com/FreeRDP/FreeRDP/archive/$version/FreeRDP-$version.tar.gz" --output "FreeRDP-$version.tar.gz" || exit 1
+cd "$srcdir"
+test -f "FreeRDP-${version}.tar.gz" || \
+  curl --fail --silent --location \
+    "https://github.com/FreeRDP/FreeRDP/archive/${version}/FreeRDP-${version}.tar.gz" \
+    --output "FreeRDP-${version}.tar.gz"
 
-echo "Removing unicode_builtin.c"
-gzip --decompress "FreeRDP-$version.tar.gz" || exit 1
-tar --file "FreeRDP-$version.tar" --delete "*/winpr/libwinpr/crt/unicode_builtin.c" || exit 1
-gzip --best --no-name "FreeRDP-$version.tar" --stdout > FreeRDP-$version-repack.tar.gz
-rm FreeRDP-$version.tar
-
-echo "FreeRDP-$version-repack.tar.gz is prepared"
-exit 0
+gzip -dc "FreeRDP-${version}.tar.gz" > "FreeRDP-${version}.tar"
+tar --file "FreeRDP-${version}.tar" --delete "*/winpr/libwinpr/crt/unicode_builtin.c"
+gzip --best --no-name "FreeRDP-${version}.tar" --stdout > "FreeRDP-${version}-repack.tar.gz"
+rm -f "FreeRDP-${version}.tar"

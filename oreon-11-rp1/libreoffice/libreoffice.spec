@@ -108,9 +108,9 @@ Source2:        %{source_url}/libreoffice-help-%{version}%{?libo_buildfix}.tar.x
 Source3:        %{source_url}/libreoffice-help-%{version}%{?libo_buildfix}.tar.xz.asc
 Source4:        %{source_url}/libreoffice-translations-%{version}%{?libo_buildfix}.tar.xz
 Source5:        %{source_url}/libreoffice-translations-%{version}%{?libo_buildfix}.tar.xz.asc
-Source6:        gpgkey-C2839ECAD9408FBE9531C3E9F434A1EFAFEEAEA3.gpg.asc
+Source6:        https://src.fedoraproject.org/rpms/libreoffice/raw/rawhide/f/gpgkey-C2839ECAD9408FBE9531C3E9F434A1EFAFEEAEA3.gpg.asc
 Source7:        http://dev-www.libreoffice.org/extern/185d60944ea767075d27247c3162b3bc-unowinreg.dll
-Source8:        libreoffice-multiliblauncher.sh
+Source8:        https://src.fedoraproject.org/rpms/libreoffice/raw/rawhide/f/libreoffice-multiliblauncher.sh
 
 Source9:        %{external_url}/dtoa-20180411.tgz
 Source11:       %{external_url}/a7983f859eafb2677d7ff386a023bc40-xsltml_2.1.2.zip

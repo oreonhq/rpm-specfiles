@@ -1,4 +1,4 @@
-%global source0_hash none
+%global source0_hash 3aed6c3fe4e009b4a228d83366d4132030320e20215b939ea3f6f227dfe9c563
 
 %if 0%{?fedora} >= 36 || 0%{?rhel} > 9 || (0%{?oreon} >= 11)
 %global dict_dirname hunspell
@@ -10,7 +10,7 @@ Name: hunspell-ht
 Summary: Haitian Creole hunspell dictionaries
 Version: 0.06
 Release: 32%{?dist}
-Source:        http://extensions.services.openoffice.org/files/3247/3/%{name}-%{version}.oxt
+Source:        https://downloads.sourceforge.net/project/aoo-extensions/3247/3/hunspell-ht-0.06.oxt
 URL: http://kok.logipam.org/
 License: GPL-3.0-or-later
 BuildArch: noarch

@@ -40,7 +40,7 @@ Source1:        https://raw.githubusercontent.com/rhboot/shim/HEAD/fedora-ca-202
 Source2:	%{dbxfile}
 %endif
 Source3:        https://raw.githubusercontent.com/rhboot/shim/HEAD/sbat.redhat.csv.in
-Source4:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shim.patches
+Source4:        shim.patches
 
 Source100:        https://raw.githubusercontent.com/rhboot/shim/HEAD/shim-find-debuginfo.sh
 

@@ -15,7 +15,7 @@ Source0:        XML-SAX-%{version}-nopatents.tar.gz
 # Download the upstream tarball and invoke this script while in the
 # tarball's directory:
 # ./generate-tarball.sh %%{version}
-Source1: generate-tarball.sh
+Source1:        https://src.fedoraproject.org/rpms/perl-XML-SAX/raw/rawhide/f/generate-tarball.sh
 
 # Fix rt#20126
 Patch0:         perl-XML-SAX-0.99-rt20126.patch

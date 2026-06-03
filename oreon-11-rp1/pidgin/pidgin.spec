@@ -134,7 +134,8 @@ License:        LicenseRef-Callaway-BSD AND GPL-2.0-or-later AND GPL-2.0-only AN
 # GPLv2 - novell prpls
 # MIT - Zephyr prpl
 URL:            http://pidgin.im/
-Source0:        http://downloads.sourceforge.net/pidgin/pidgin-%{version}.tar.bz2
+Summary:        A Gtk+ based multiprotocol instant messaging client
+
 Obsoletes:      gaim < 999:1
 Provides:       gaim = 999:1
 
@@ -145,6 +146,8 @@ Obsoletes:      pidgin <= 2.7.1-1%{?dist}
 Obsoletes:      pidgin-evolution <= 2.10.6%{?dist}
 %endif
 %endif
+
+Source0:        http://downloads.sourceforge.net/pidgin/pidgin-%{version}.tar.bz2
 
 ## Fedora pidgin defaults
 # Only needs regenerating if Pidgin breaks backwards compatibility with prefs.xml
@@ -172,9 +175,6 @@ Patch1:         pidgin-2.14.4-valgrind.patch
 Patch100:       pidgin-rb4404.patch
 
 ## Patches 100+: To be Included in Future Upstream
-
-
-Summary:        A Gtk+ based multiprotocol instant messaging client
 
 # Require Binary Compatible glib
 # returns bogus value if glib2-devel is not installed in order for parsing to succeed
