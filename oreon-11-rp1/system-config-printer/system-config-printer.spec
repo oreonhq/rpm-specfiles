@@ -11,7 +11,7 @@ Version: 1.5.18
 Release: 17%{?dist}
 License: GPL-2.0-or-later
 URL: https://github.com/%{username}/%{name}
-Source0:        https://github.com/OpenPrinting/system-config-printer/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        https://github.com/OpenPrinting/system-config-printer/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # all upstream patches, remove with new release
 Patch0001:        0001-Fix-debugprint-in-options.py-fixes-291.patch

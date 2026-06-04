@@ -7,7 +7,7 @@ Summary:        The Real First Universal Charset Detector
 # SPDX
 License:        MIT
 URL:            https://github.com/ousret/charset_normalizer
-Source0:        https://github.com/ousret/charset_normalizer/archive/refs/tags/3.4.6.tar.gz
+Source0:        https://github.com/ousret/charset_normalizer/archive/refs/tags/3.4.6.tar.gz#/python-charset-normalizer-3.4.6.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

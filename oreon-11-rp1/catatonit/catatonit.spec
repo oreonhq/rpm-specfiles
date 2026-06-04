@@ -22,7 +22,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 %endif
 URL: https://github.com/openSUSE/%{name}
 # Tarball fetched from upstream
-Source0:        https://github.com/openSUSE/catatonit/archive/refs/tags/v0.2.1.tar.gz
+Source0:        https://github.com/openSUSE/catatonit/archive/refs/tags/v0.2.1.tar.gz#/catatonit-0.2.1.tar.gz
 
 BuildRequires: autoconf
 BuildRequires: automake

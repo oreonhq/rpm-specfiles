@@ -17,7 +17,7 @@ Summary:        Simple Signed Certificate Generator
 
 License:        GPL-3.0-or-later WITH cryptsetup-OpenSSL-exception
 URL:            https://%{provider_prefix}
-Source0:        https://github.com/sgallagher/sscg/archive/refs/tags/sscg-4.0.3.tar.gz
+Source0:        https://github.com/sgallagher/sscg/archive/refs/tags/sscg-4.0.3.tar.gz#/sscg-4.0.3.tar.gz
 BuildRequires:  gcc
 BuildRequires:  libtalloc-devel
 BuildRequires:  openssl

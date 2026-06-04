@@ -9,7 +9,7 @@ Summary:        Jackson modules: Base
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-modules-base
-Source0:        https://github.com/FasterXML/jackson-modules-base/archive/refs/tags/jackson-modules-base-2.18.2-take-2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-modules-base/archive/refs/tags/jackson-modules-base-2.18.2-take-2.tar.gz#/jackson-modules-base-2.18.2-take-2.tar.gz
 Patch1:         0001-Expose-javax.security.auth-from-JDK-internals.patch
 Patch2:         0001-Replace-javax.activation-imports-with-jakarta.activa.patch
 Patch3:         0001-Use-jakarta.activation-namespace-in-jaxb-api.patch

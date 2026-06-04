@@ -9,7 +9,7 @@ Summary:    Establish locations for files in multi-module builds
 License:    Apache-2.0
 URL:        https://github.com/jdcasey/directory-maven-plugin
 
-Source0:        https://github.com/jdcasey/directory-maven-plugin/archive/refs/tags/directory-maven-plugin-%{version}.tar.gz
+Source0:        https://github.com/jdcasey/directory-maven-plugin/archive/refs/tags/directory-maven-plugin-%{version}.tar.gz#/directory-maven-plugin-%{version}.tar.gz
 # Fixes bz 2261062 - no mojo definition build error
 # https://github.com/knight-of-ni/directory-maven-plugin/commit/ce51a6ea81b583c7b7b75e859bb1a508eb713fbe.patch
 Patch0:     directory-maven-plugin-fix-no-mojo-definition.patch

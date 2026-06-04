@@ -9,7 +9,7 @@ Release:        13%{?dist}
 Summary:        Combines motd, issue, profile features to show system information to the user before/on login
 License:        BSD-3-Clause
 URL:            https://github.com/%{github_owner}/%{github_project}
-Source0:        https://github.com/%{github_owner}/%{github_project}/archive/refs/tags/v%{version}.tar.gz
+Source0:        https://github.com/%{github_owner}/%{github_project}/archive/refs/tags/v%{version}.tar.gz#/console-login-helper-messages-0.21.3.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  systemd make

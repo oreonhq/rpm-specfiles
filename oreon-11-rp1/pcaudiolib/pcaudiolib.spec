@@ -9,7 +9,7 @@ Summary:        Portable C Audio Library
 # by coreaudio support, which we do not build. The rest is GPLv3+.
 License:        GPL-3.0-or-later
 URL:            https://github.com/rhdunn/pcaudiolib
-Source0:        https://github.com/rhdunn/pcaudiolib/archive/refs/tags/1.1.tar.gz
+Source0:        https://github.com/rhdunn/pcaudiolib/archive/refs/tags/1.1.tar.gz#/pcaudiolib-1.1.tar.gz
 
 BuildRequires:  gcc make autoconf automake libtool pkgconfig
 BuildRequires:  alsa-lib-devel pulseaudio-libs-devel

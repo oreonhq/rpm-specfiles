@@ -419,7 +419,7 @@ License:	Apache-2.0 WITH LLVM-exception OR NCSA
 URL:		http://llvm.org
 
 %if %{with snapshot_build}
-Source0:        https://github.com/llvm/llvm-project/archive/refs/tags/%{llvm_snapshot_git_revision}.tar.gz
+Source0:        https://github.com/llvm/llvm-project/archive/refs/tags/%{llvm_snapshot_git_revision}.tar.gz#/llvm-%{maj_ver}.%{min_ver}.%{patch_ver}%{?rc_ver:~%{rc_ver}}%{?llvm_snapshot_version_suffix:~%{llvm_snapshot_version_suffix}}.tar.gz
 %else
 Source0:        https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.1%{?rc_ver:-%{rc_ver}}/llvm-project-22.1.1%{?rc_ver:-%{rc_ver}}.src.tar.xz
 Source1:        https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.1%{?rc_ver:-%{rc_ver}}/llvm-project-22.1.1%{?rc_ver:-%{rc_ver}}.src.tar.xz.sig

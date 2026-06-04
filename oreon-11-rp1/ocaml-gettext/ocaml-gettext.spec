@@ -21,7 +21,7 @@ License:        LGPL-2.1-or-later with OCaml-LGPL-linking-exception
 URL:            https://github.com/gildor478/ocaml-gettext
 VCS:            git:%{url}.git
 
-Source0:        https://github.com/gildor478/ocaml-gettext/archive/refs/tags/v0.5.0.tar.gz
+Source0:        https://github.com/gildor478/ocaml-gettext/archive/refs/tags/v0.5.0.tar.gz#/ocaml-gettext-0.5.0.tar.gz
 
 # Fix to stop using dune-site
 # https://github.com/gildor478/ocaml-gettext/issues/36

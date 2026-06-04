@@ -42,7 +42,7 @@ Release: %autorelease
 License: GPL-2.0-only
 URL: https://github.com/containers/%{name}
 Summary: SELinux policies for container runtimes
-Source0:        https://github.com/containers/container-selinux/archive/refs/tags/v2.247.0.tar.gz
+Source0:        https://github.com/containers/container-selinux/archive/refs/tags/v2.247.0.tar.gz#/container-selinux-2.247.0.tar.gz
 
 BuildArch: noarch
 BuildRequires: make

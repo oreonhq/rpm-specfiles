@@ -11,7 +11,7 @@ URL:            https://github.com/codehaus-plexus/plexus-interactivity
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-interactivity/archive/refs/tags/plexus-interactivity-1.3.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-interactivity/archive/refs/tags/plexus-interactivity-1.3.tar.gz#/plexus-interactivity-1.3.tar.gz
 Source1:        https://raw.githubusercontent.com/codehaus-plexus/plexus-interactivity/HEAD/LICENSE.MIT
 
 %if %{with bootstrap}

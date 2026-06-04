@@ -13,7 +13,7 @@ License:        BSD-3-Clause
 
 URL:            https://github.com/fdo-rs/fido-device-onboard-rs
 Source0:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/refs/tags/v%{version}.tar.gz#/fido-device-onboard-rs-%{version}.tar.gz
-Source1:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/refs/tags/v0.5.5.tar.gz
+Source1:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/refs/tags/v0.5.5.tar.gz#/fido-device-onboard-0.5.5.tar.gz
 Patch1:        0001-use-released-aws-nitro-enclaves-cose-version.patch
 
 # Patches >=1000 are only applied when using system Rust dependencies:

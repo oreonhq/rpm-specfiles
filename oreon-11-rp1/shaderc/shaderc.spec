@@ -10,7 +10,7 @@ Summary:        Collection of tools, libraries, and tests for Vulkan shader comp
 
 License:        Apache-2.0
 URL:            https://github.com/google/shaderc
-Source:        https://github.com/google/shaderc/archive/refs/tags/301b4ede53d59b68bf55f95bb26412d9233c8187.tar.gz
+Source:        https://github.com/google/shaderc/archive/refs/tags/301b4ede53d59b68bf55f95bb26412d9233c8187.tar.gz#/shaderc-2026.1.tar.gz
 
 # Patch to unbundle 3rd party code
 Patch:          0001-Drop-third-party-code-in-CMakeLists.txt.patch

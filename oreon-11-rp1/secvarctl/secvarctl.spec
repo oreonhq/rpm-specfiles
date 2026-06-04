@@ -8,7 +8,7 @@ Summary:	    Suite of tools to manipulate and generate Secure Boot variables on 
 License:	    Apache-2.0
 URL:		    https://github.com/open-power/secvarctl
 Source0:        https://github.com/open-power/secvarctl/archive/refs/tags/v1.1.0.tar.gz#/secvarctl-1.1.0.tar.gz
-Source1:        https://github.com/ibm/libstb-secvar/archive/refs/tags/ce98be9d15ac2df062726b4451f0ec0c0b27fbf2.tar.gz
+Source1:        https://github.com/ibm/libstb-secvar/archive/refs/tags/ce98be9d15ac2df062726b4451f0ec0c0b27fbf2.tar.gz#/secvarctl-1.1.0.tar.gz
 
 BuildRequires:	gcc
 BuildRequires:	cmake

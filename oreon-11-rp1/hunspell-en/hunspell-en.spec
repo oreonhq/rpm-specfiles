@@ -7,7 +7,7 @@ Summary: English hunspell dictionaries
 %global upstreamid 20260225
 Version: 0.%{upstreamid}
 Release: 2%{?dist}
-Source0:        https://github.com/en-wl/wordlist/archive/refs/tags/rel-2026.02.25.tar.gz
+Source0:        https://github.com/en-wl/wordlist/archive/refs/tags/rel-2026.02.25.tar.gz#/hunspell-en-0.%{upstreamid}.tar.gz
 Source1: https://github.com/en-wl/wordlist/releases/download/rel-2026.02.25/hunspell-en_GB-ise-2026.02.25.zip
 Patch1: en_GB-singleletters.patch
 Patch2: en_GB.two_initial_caps.patch

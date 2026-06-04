@@ -44,8 +44,8 @@ Summary:        Vim-fork focused on extensibility and agility
 Url:            https://neovim.io
 
 Source0:        https://github.com/neovim/neovim/archive/refs/tags/v%{version}.tar.gz#/neovim-%{version}.tar.gz
-Source1:        https://raw.githubusercontent.com/neovim/neovim/v%{version}/runtime/sysinit.vim
-Source2:        https://raw.githubusercontent.com/neovim/neovim/v%{version}/runtime/template.spec
+Source1:        sysinit.vim
+Source2:        template.spec
 # vendor built in %%prep via cmake.deps
 Source4:        neovim-bundled-licenses.txt
 

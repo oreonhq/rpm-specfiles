@@ -59,7 +59,7 @@ Summary:        Java Webserver and Servlet Container
 # Automatically converted from old format: ASL 2.0 or EPL-1.0 - review is highly recommended.
 License:        Apache-2.0 OR EPL-1.0
 URL:            http://www.eclipse.org/jetty/
-Source0:        https://github.com/eclipse/%{name}.project/archive/refs/tags/%{name}-%{version}%{addver}.tar.gz
+Source0:        https://github.com/eclipse/%{name}.project/archive/refs/tags/%{name}-%{version}%{addver}.tar.gz#/jetty-9.4.40.tar.gz
 Source1:        jetty.sh
 Source3:        jetty.logrotate
 Source5:        %{name}.service

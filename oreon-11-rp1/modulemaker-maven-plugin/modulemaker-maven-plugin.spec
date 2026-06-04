@@ -11,7 +11,7 @@ URL:            https://github.com/raphw/modulemaker-maven-plugin
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/raphw/modulemaker-maven-plugin/archive/refs/tags/modulemaker-maven-plugin-%{version}.tar.gz
+Source0:        https://github.com/raphw/modulemaker-maven-plugin/archive/refs/tags/modulemaker-maven-plugin-%{version}.tar.gz#/modulemaker-maven-plugin-%{version}.tar.gz
 Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}

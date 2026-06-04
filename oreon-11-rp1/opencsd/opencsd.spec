@@ -9,7 +9,7 @@ Summary:        An open source CoreSight(tm) Trace Decode library
 
 License:        BSD-3-Clause
 URL:            https://github.com/Linaro/OpenCSD
-Source0:        https://github.com/Linaro/OpenCSD/archive/refs/tags/78141e2f0ef8fb67284cc1a159cb62737666c965.tar.gz
+Source0:        https://github.com/Linaro/OpenCSD/archive/refs/tags/78141e2f0ef8fb67284cc1a159cb62737666c965.tar.gz#/opencsd-1.6.1.tar.gz
 
 Patch0:         0001-hack-test.patch
 

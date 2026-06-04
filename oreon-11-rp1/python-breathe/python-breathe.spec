@@ -16,7 +16,7 @@ Summary:        Adds support for Doxygen xml output to reStructuredText and Sphi
 
 License:        BSD-3-Clause
 URL:            https://github.com/%{owner}/%{srcname}
-Source0:        https://github.com/michaeljones/breathe/archive/refs/tags/v4.36.0.tar.gz
+Source0:        https://github.com/michaeljones/breathe/archive/refs/tags/v4.36.0.tar.gz#/python-breathe-4.36.0.tar.gz
 
 BuildArch:      noarch
 

@@ -42,7 +42,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: Go replacement for libslirp and VPNKit
 URL: https://github.com/containers/%{name}
 # All SourceN files fetched from upstream
-Source0:        https://github.com/containers/gvisor-tap-vsock/archive/refs/tags/v0.8.8.tar.gz
+Source0:        https://github.com/containers/gvisor-tap-vsock/archive/refs/tags/v0.8.8.tar.gz#/gvisor-tap-vsock-0.8.8.tar.gz
 BuildRequires: gcc
 BuildRequires: glib2-devel
 BuildRequires: glibc-devel

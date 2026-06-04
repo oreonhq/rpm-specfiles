@@ -16,7 +16,7 @@ URL:		https://github.com/debezium/postgres-decoderbufs
 
 %global full_version %{version}.%{?pre:%pre}%{?!pre:Final}
 
-Source0:        https://github.com/debezium/%{majorname}/archive/refs/tags/v%{full_version}.tar.gz
+Source0:        https://github.com/debezium/%{majorname}/archive/refs/tags/v%{full_version}.tar.gz#/postgresql16-decoderbufs-3.2.0.tar.gz
 
 %if %?postgresql_default
 %global pkgname %{majorname}

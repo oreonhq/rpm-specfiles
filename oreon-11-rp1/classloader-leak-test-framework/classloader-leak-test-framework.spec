@@ -9,7 +9,7 @@ Release:        %autorelease
 Summary:        Detection and verification of Java ClassLoader leaks
 License:        Apache-2.0
 URL:            https://github.com/mjiderhamn/classloader-leak-prevention/tree/master/%{name}
-Source0:        https://github.com/mjiderhamn/classloader-leak-prevention/archive/refs/tags/%{nwname}-%{version}.tar.gz
+Source0:        https://github.com/mjiderhamn/classloader-leak-prevention/archive/refs/tags/%{nwname}-%{version}.tar.gz#/classloader-leak-test-framework-2.7.0.tar.gz
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

@@ -49,7 +49,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: A command line tool used for creating OCI Images
 URL: https://%{name}.io
 # Tarball fetched from upstream
-Source:        https://github.com/containers/buildah/archive/refs/tags/v1.43.0.tar.gz
+Source:        https://github.com/containers/buildah/archive/refs/tags/v1.43.0.tar.gz#/buildah-1.43.0.tar.gz
 
 BuildRequires: device-mapper-devel
 BuildRequires: git-core

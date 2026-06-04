@@ -12,7 +12,7 @@ Release: %autorelease
 Summary: Open source TPM software for Bootstrapping and Maintaining Trust
 
 URL:            https://github.com/keylime/keylime
-Source0:        https://github.com/keylime/keylime/archive/refs/tags/v%{version}.tar.gz
+Source0:        https://github.com/keylime/keylime/archive/refs/tags/v%{version}.tar.gz#/keylime-7.14.1.tar.gz
 # The selinux policy for keylime is distributed via this repo: https://github.com/RedHat-SP-Security/keylime-selinux
 Source1:        https://github.com/RedHat-SP-Security/%{name}-selinux/archive/refs/tags/v%{policy_version}.tar.gz#/keylime-selinux-%{policy_version}.tar.gz
 Source2:        %{name}.sysusers

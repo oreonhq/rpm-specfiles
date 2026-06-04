@@ -18,7 +18,7 @@ Release:	7%{?dist}
 Summary:	Open-source vector similarity search for Postgres
 License:	PostgreSQL
 URL:		https://github.com/%{sname}/%{sname}/
-Source0:        https://github.com/%{sname}/%{sname}/archive/refs/tags/v%{version}.tar.gz
+Source0:        https://github.com/%{sname}/%{sname}/archive/refs/tags/v%{version}.tar.gz#/postgresql16-pgvector-0.6.2.tar.gz
 
 %if %?postgresql_default
 %global pkgname %{sname}

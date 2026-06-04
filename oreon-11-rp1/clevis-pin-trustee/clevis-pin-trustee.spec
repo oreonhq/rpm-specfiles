@@ -22,7 +22,7 @@ Summary:        Clevis PIN for Trustee attestation
 # Unlicense OR MIT
 License:        BSD-3-Clause AND Unicode-DFS-2016 AND (0BSD OR MIT OR Apache-2.0) AND Apache-2.0 AND (Apache-2.0 OR BSL-1.0) AND (BSD-2-Clause OR Apache-2.0 OR MIT) AND MIT AND (MIT OR Zlib OR Apache-2.0) AND Unicode-3.0 AND (Unlicense OR MIT)
 URL:            https://github.com/latchset/clevis-pin-trustee
-Source0:        https://github.com/latchset/%{name}/archive/refs/tags/v%{version}.tar.gz
+Source0:        https://github.com/latchset/%{name}/archive/refs/tags/v%{version}.tar.gz#/clevis-pin-trustee-0.1.0.tar.gz
 
 BuildRequires:  cargo-rpm-macros
 

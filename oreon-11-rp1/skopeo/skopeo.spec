@@ -54,7 +54,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: Inspect container images and repositories on registries
 URL: https://github.com/containers/%{name}
 # Tarball fetched from upstream
-Source0:        https://github.com/containers/skopeo/archive/refs/tags/v1.22.0.tar.gz
+Source0:        https://github.com/containers/skopeo/archive/refs/tags/v1.22.0.tar.gz#/skopeo-1.22.0.tar.gz
 
 BuildRequires: %{_bindir}/go-md2man
 %if %{defined build_with_btrfs}

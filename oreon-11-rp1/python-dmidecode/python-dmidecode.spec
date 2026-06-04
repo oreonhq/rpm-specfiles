@@ -18,7 +18,7 @@ Version: 3.12.3
 Release: 16%{date}%{shortcommit}%{?dist}
 License: GPL-2.0-only
 URL: https://github.com/nima/python-dmidecode
-Source0:        https://github.com/nima/python-dmidecode/archive/refs/tags/v3.12.3.tar.gz
+Source0:        https://github.com/nima/python-dmidecode/archive/refs/tags/v3.12.3.tar.gz#/python-dmidecode-3.12.3.tar.gz
 
 Patch0: python-dmidecode-rhbz2154949.patch
 

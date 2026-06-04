@@ -24,7 +24,7 @@ Summary:          Java agent-based bytecode injection tool
 License:          LGPL-2.1-or-later AND BSD-3-Clause
 URL:              http://www.jboss.org/byteman
 # wget -O 4.0.16.tar.gz https://github.com/bytemanproject/byteman/archive/4.0.16.tar.gz
-Source0:        https://github.com/bytemanproject/byteman/archive/refs/tags/%{version}.tar.gz
+Source0:        https://github.com/bytemanproject/byteman/archive/refs/tags/%{version}.tar.gz#/byteman-4.0.26.tar.gz
 
 BuildArch:        noarch
 ExclusiveArch:  %{java_arches} noarch

@@ -21,7 +21,7 @@ License: GPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-only
 
 URL: https://github.com/dracut-ng/dracut-ng/wiki/
 
-Source0:        https://github.com/dracut-ng/dracut-ng/archive/refs/tags/%{version}.tar.gz
+Source0:        https://github.com/dracut-ng/dracut-ng/archive/refs/tags/%{version}.tar.gz#/dracut-109.tar.gz
 
 Source1: https://www.gnu.org/licenses/lgpl-2.1.txt
 # revert: "fix(install.d): correctly install pre-genned image and die if no args"

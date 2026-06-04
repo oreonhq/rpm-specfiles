@@ -11,7 +11,7 @@ URL:            https://github.com/codehaus-plexus/plexus-classworlds
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-classworlds/archive/refs/tags/plexus-classworlds-2.8.0.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-classworlds/archive/refs/tags/plexus-classworlds-2.8.0.tar.gz#/plexus-classworlds-2.8.0.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

@@ -7,7 +7,7 @@ Release: 22%{?dist}
 License: GPL-2.0-only
 
 URL: https://www.thkukuk.de/nis/nis/yp-tools/
-Source:        https://github.com/thkukuk/yp-tools/archive/refs/tags/v%{version}.tar.gz
+Source:        https://github.com/thkukuk/yp-tools/archive/refs/tags/v%{version}.tar.gz#/yp-tools-4.2.3.tar.gz
 
 Patch1: yp-tools-2.12-hash.patch
 Patch2: yp-tools-2.12-crypt.patch

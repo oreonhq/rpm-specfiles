@@ -26,7 +26,7 @@ Source2: http://www.gnu.org/licenses/lgpl-2.1.txt
 # Man pages from Fedora libdb SRPM (not in Oracle db tarball); kept next to spec for CI
 # e.g. libdb-5.3.28-67.fc44.src.rpm on dl.fedoraproject.org
 Source3: libdb-5.3.28-manpages.tar.gz
-Source4:        https://github.com/fila43/db_converter/archive/refs/tags/v1.0.3.tar.gz
+Source4:        https://github.com/fila43/db_converter/archive/refs/tags/v1.0.3.tar.gz#/libdb-5.3.28.tar.gz
 Patch0: libdb-multiarch.patch
 # db-1.85 upstream patches
 # Former Oracle URLs are dead; files vendored next to spec (same as Fedora libdb lookaside)

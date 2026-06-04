@@ -10,7 +10,7 @@ ExclusiveArch: x86_64 aarch64
 
 License: GPL-2.0-or-later
 URL: https://github.com/nhorman/redfish-finder
-Source:        https://github.com/nhorman/redfish-finder/archive/refs/tags/v0.4.tar.gz
+Source:        https://github.com/nhorman/redfish-finder/archive/refs/tags/v0.4.tar.gz#/redfish-finder-0.4.tar.gz
 
 # Fix shabang python interpreter: https://github.com/nhorman/redfish-finder/commit/59fc5f964bf6971da552d059520d7798fccbd4fc
 Patch0: redfish-finder-python3.patch

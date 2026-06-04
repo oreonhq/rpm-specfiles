@@ -17,7 +17,7 @@ URL:            https://cmocka.org
 Source0:        https://cmocka.org/files/2.0/%{name}-%{version}.tar.xz
 Source1:        https://cmocka.org/files/2.0/%{name}-%{version}.tar.xz.asc
 Source2:        cmocka.keyring
-Source4:        https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.4.1/doxygen-awesome-css-2.4.1.tar.gz#/cmocka-2.0.2.tar.gz
+Source4:        https://github.com/jothepro/doxygen-awesome-css/archive/refs/tags/v2.4.1.tar.gz#/doxygen-awesome-css-2.4.1.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  cmake

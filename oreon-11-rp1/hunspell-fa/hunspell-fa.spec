@@ -11,7 +11,7 @@ Summary: Farsi hunspell dictionaries
 %global upstreamid 20070116
 Version: 0.%{upstreamid}
 Release: 38%{?dist}
-Source0:        https://github.com/LibreOffice/dictionaries/archive/refs/heads/master.tar.gz
+Source0:        https://github.com/LibreOffice/dictionaries/archive/refs/heads/master.tar.gz#/hunspell-fa-0.%{upstreamid}.tar.gz
 URL:            https://github.com/LibreOffice/dictionaries
 License: GPL-2.0-or-later
 BuildArch: noarch

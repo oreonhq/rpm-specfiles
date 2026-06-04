@@ -11,7 +11,7 @@ Version:		1.15.0
 Release:		4%{?dist}
 License:		BSD-3-Clause
 URL:			http://www.webmproject.org/code/
-Source0:        https://github.com/webmproject/libvpx/archive/refs/tags/v%{version}.tar.gz
+Source0:        https://github.com/webmproject/libvpx/archive/refs/tags/v%{version}.tar.gz#/libvpx-1.15.0.tar.gz
 
 Source1:		vpx_config.h
 # Thanks to debian.

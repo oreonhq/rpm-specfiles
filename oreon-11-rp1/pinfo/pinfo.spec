@@ -7,7 +7,7 @@ Summary: An info file viewer
 License: GPL-2.0-only
 
 URL:    https://github.com/baszoetekouw/pinfo
-Source:        https://github.com/baszoetekouw/pinfo/archive/refs/tags/v0.6.13.tar.gz
+Source:        https://github.com/baszoetekouw/pinfo/archive/refs/tags/v0.6.13.tar.gz#/pinfo-0.6.13.tar.gz
 
 Patch1: pinfo-0.6.9-infopath.patch
 Patch2: pinfo-0.6.9-xdg.patch

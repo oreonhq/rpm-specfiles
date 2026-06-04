@@ -11,7 +11,7 @@ URL:            https://fusesource.com/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/fusesource/mvnplugins/archive/refs/tags/fusesource-pom-%{version}.tar.gz
+Source0:        https://github.com/fusesource/mvnplugins/archive/refs/tags/fusesource-pom-%{version}.tar.gz#/fusesource-pom-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

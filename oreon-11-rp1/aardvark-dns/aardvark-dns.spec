@@ -37,7 +37,7 @@ ExclusiveArch: aarch64 ppc64le s390x x86_64
 Summary: Authoritative DNS server for A/AAAA container records
 URL: https://github.com/containers/%{name}
 # Tarballs fetched from upstream's release page
-Source0:        https://github.com/containers/aardvark-dns/archive/refs/tags/v1.17.0.tar.gz
+Source0:        https://github.com/containers/aardvark-dns/archive/refs/tags/v1.17.0.tar.gz#/aardvark-dns-1.17.0.tar.gz
 
 Source1:        https://github.com/containers/aardvark-dns/releases/download/v1.17.0/aardvark-dns-v1.17.0-vendor.tar.gz
 BuildRequires: cargo

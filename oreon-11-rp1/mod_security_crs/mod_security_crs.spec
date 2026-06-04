@@ -8,7 +8,7 @@ Version: 4.15.0
 Release: 3%{?dist}
 License: Apache-2.0
 URL: https://coreruleset.org/
-Source:        https://github.com/coreruleset/coreruleset/archive/refs/tags/v%{version}.tar.gz
+Source:        https://github.com/coreruleset/coreruleset/archive/refs/tags/v%{version}.tar.gz#/mod_security_crs-4.15.0.tar.gz
 BuildArch: noarch
 Requires: mod_security >= 2.9.6
 Obsoletes: mod_security_crs-extras < 3.0.0

@@ -10,7 +10,7 @@ Name: hunspell-nl
 Summary: Dutch hunspell dictionaries
 Version: 2.20.19
 Release: 17%{?dist}
-Source:        https://github.com/OpenTaal/opentaal-hunspell/archive/refs/tags/2.20.19.tar.gz
+Source:        https://github.com/OpenTaal/opentaal-hunspell/archive/refs/tags/2.20.19.tar.gz#/hunspell-nl-2.20.19.tar.gz
 
 URL: https://opentaal.org/
 License: BSD-3-Clause OR CC-BY-3.0

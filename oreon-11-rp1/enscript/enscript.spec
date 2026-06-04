@@ -17,7 +17,7 @@ URL: http://www.gnu.org/software/enscript
 # $ git clone git://git.savannah.gnu.org/enscript.git
 # $ git archive --format=tar --prefix=enscript-1.6.4/ v1.6.4 |gzip > enscript-1.6.4.tar.gz
 Source0:        https://ftp.gnu.org/gnu/enscript/enscript-%{version}.tar.gz
-Source1:        https://ftp.gnu.org/gnu/enscript/enscript-ruby-1.6.4.tar.gz
+Source1:        enscript-ruby-1.6.4.tar.gz
 #http://neugierig.org/software/ruby/ruby-enscript.tar.gz
 Source2: enscript-php-1.6.4.st
 #http://home.raxnet.net/downloads/viewcvs/php.st

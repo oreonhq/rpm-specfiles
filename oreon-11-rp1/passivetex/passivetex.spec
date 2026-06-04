@@ -6,7 +6,7 @@ Version:	1.25
 Release:  42%{?dist}
 License:	MIT
 URL: https://github.com/sebastianrahtz/passivetex
-Source0:        https://github.com/sebastianrahtz/passivetex/archive/refs/tags/master.zip
+Source0:        https://github.com/sebastianrahtz/passivetex/archive/refs/tags/master.zip#/passivetex-1.25.zip
 #Fix leader length.
 Patch0:		passivetex-1.21-leader.patch
 BuildArch:	noarch

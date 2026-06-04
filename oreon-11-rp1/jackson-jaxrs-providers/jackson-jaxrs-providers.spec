@@ -9,7 +9,7 @@ Summary:        Jackson JAX-RS providers
 License:        Apache-2.0
 
 URL:            https://github.com/FasterXML/jackson-jaxrs-providers
-Source0:        https://github.com/FasterXML/jackson-jaxrs-providers/archive/refs/tags/jackson-jaxrs-providers-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-jaxrs-providers/archive/refs/tags/jackson-jaxrs-providers-2.18.2.tar.gz#/jackson-jaxrs-providers-2.18.2.tar.gz
 
 BuildArch:      noarch
 %if 0%{?fedora} || 0%{?rhel} >= 10

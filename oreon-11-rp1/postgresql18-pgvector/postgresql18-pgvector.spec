@@ -18,7 +18,7 @@ Release:	2%{?dist}
 Summary:	Open-source vector similarity search for Postgres
 License:	PostgreSQL
 URL:		https://github.com/%{sname}/%{sname}/
-Source0:        https://github.com/%{sname}/%{sname}/archive/refs/tags/v%{version}.tar.gz
+Source0:        https://github.com/%{sname}/%{sname}/archive/refs/tags/v%{version}.tar.gz#/postgresql18-pgvector-0.8.0.tar.gz
 
 # Upstream commits for compatiblity with PG18 present on master branch
 # not yet included in any tag or release

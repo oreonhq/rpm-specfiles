@@ -7,7 +7,7 @@ Summary:        Name Service Switch (NSS) module using NIS
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 Url:            https://github.com/thkukuk/libnss_nis
-Source:        https://github.com/thkukuk/libnss_nis/archive/refs/tags/v%{version}.tar.gz
+Source:        https://github.com/thkukuk/libnss_nis/archive/refs/tags/v%{version}.tar.gz#/nss_nis-3.2.tar.gz
 
 # https://github.com/systemd/systemd/issues/7074
 # https://bugzilla.redhat.com/show_bug.cgi?id=1829572

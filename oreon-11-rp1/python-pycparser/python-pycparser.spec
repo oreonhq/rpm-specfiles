@@ -12,7 +12,7 @@ Release:        %autorelease
 License:        BSD-3-Clause
 
 URL:            http://github.com/eliben/pycparser
-Source0:        http://github.com/eliben/pycparser/archive/release_v2.22.tar.gz
+Source0:        http://github.com/eliben/pycparser/archive/release_v2.22.tar.gz#/python-pycparser-2.22.tar.gz
 Source1:        pycparser-0.91.1-remove-relative-sys-path.py
 
 BuildArch:      noarch

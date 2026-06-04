@@ -39,7 +39,7 @@ Summary:        Tools to manipulate font files
 # https://spdx.org/licenses/MIT.html
 License:        MIT
 URL:            https://github.com/fonttools/fonttools/
-Source:        https://github.com/fonttools/fonttools//archive/refs/tags/4.62.1/fonttools-4.62.1.tar.gz
+Source:        https://github.com/fonttools/fonttools//archive/refs/tags/4.62.1/fonttools-4.62.1.tar.gz#/fonttools-4.62.1.tar.gz
 
 Requires:       python3-fonttools = %{version}-%{release}
 Provides:       ttx = %{version}-%{release}

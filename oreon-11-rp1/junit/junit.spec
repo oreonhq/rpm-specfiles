@@ -12,7 +12,7 @@ URL:            https://junit.org/junit4/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/junit-team/junit4/archive/refs/tags/r4.13.2.tar.gz
+Source0:        https://github.com/junit-team/junit4/archive/refs/tags/r4.13.2.tar.gz#/junit-4.13.2.tar.gz
 
 Patch:          0001-Port-to-hamcrest-2.2.patch
 Patch:          0002-Port-to-OpenJDK-21.patch

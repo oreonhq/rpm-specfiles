@@ -206,13 +206,13 @@ Release:          0.@PACKAGE_RELEASE@%{?dist}.27
 License:          GPL-2.0-only OR LGPL-3.0-or-later
 URL:              http://docs.gluster.org/
 %if ( 0%{_for_fedora_koji_builds} )
-Source0:        http://github.com/gluster/glusterfs/archive/v%{version}%{?prereltag}/glusterfs-%{version}%{?prereltag}.tar.gz
+Source0:        http://github.com/gluster/glusterfs/archive/v%{version}%{?prereltag}/glusterfs-%{version}%{?prereltag}.tar.gz#/glusterfs-%{version}%{?prereltag}.tar.gz
 Source1:          glusterd.sysconfig
 Source2:          glusterfsd.sysconfig
 Source7:          glusterfsd.service
 Source8:          glusterfsd.init
 %else
-Source0:        http://github.com/gluster/glusterfs/archive/v%{version}%{?prereltag}/glusterfs-%{version}%{?prereltag}.tar.gz
+Source0:        http://github.com/gluster/glusterfs/archive/v%{version}%{?prereltag}/glusterfs-%{version}%{?prereltag}.tar.gz#/glusterfs-%{version}%{?prereltag}.tar.gz
 %endif
 Patch0001:        0001-configure.ac.patch
 Patch0002:        0002-contrib-aclocal-python.m4.patch

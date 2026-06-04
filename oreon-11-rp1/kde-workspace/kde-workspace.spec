@@ -9,7 +9,7 @@
 %global kdm 1
 # endif
 
-%if 0%{?fedora} > 23 || (0%{?oreon} >= 11)
+%if 0%{?fedora} > 23 && 0%{?oreon} < 11
 %global kdm_settings 1
 %endif
 
@@ -25,8 +25,10 @@ Release: 47%{?dist}
 
 License: GPL-2.0-only
 URL:     https://github.com/KDE/%{name}
-Source0:        https://download.kde.org/stable/kde-workspace/4.11.22/src/kde-workspace-4.11.22.tar.xz
-Source1:        https://raw.githubusercontent.com/KDE/%{name}/HEAD/kdm-settings-2.tar.gz
+Source0:        https://github.com/KDE/kde-workspace/archive/refs/tags/v%{version}.tar.gz#/kde-workspace-%{version}.tar.xz
+%if 0%{?kdm_settings}
+Source1:        kdm-settings-2.tar.gz
+%endif
 
 # add konsole menuitem
 # FIXME?  only show menu when/if konsole is installed? then we can drop the hard-dep

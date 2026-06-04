@@ -14,7 +14,7 @@ Summary:        A simple wrapper around pip to support Pipenv and Poetry files
 
 License:        LGPL-3.0-or-later
 URL:            https://github.com/thoth-station/%{name}
-Source0:        https://github.com/thoth-station/micropipenv/archive/refs/tags/v1.10.0.tar.gz
+Source0:        https://github.com/thoth-station/micropipenv/archive/refs/tags/v1.10.0.tar.gz#/micropipenv-1.10.0.tar.gz
 
 BuildArch:      noarch
 

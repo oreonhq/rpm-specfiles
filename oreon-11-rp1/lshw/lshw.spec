@@ -10,7 +10,7 @@ Version:       B.02.20
 Release:       11%{?dist}
 License:       GPL-2.0-only
 URL:           https://github.com/lyonel/lshw
-Source0:        https://github.com/lyonel/lshw/archive/refs/tags/%{version}.tar.gz
+Source0:        https://github.com/lyonel/lshw/archive/refs/tags/%{version}.tar.gz#/lshw-B.02.20.tar.gz
 Source1:       https://salsa.debian.org/openstack-team/third-party/lshw/raw/debian/stein/debian/patches/lshw-gtk.1
 Patch:         lshw-B.02.20-209f83.patch
 Patch:         lshw-B.02.18-scandir.patch

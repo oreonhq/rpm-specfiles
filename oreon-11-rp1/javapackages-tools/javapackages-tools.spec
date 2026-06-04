@@ -21,7 +21,7 @@ License:        BSD-3-Clause
 URL:            https://github.com/fedora-java/javapackages
 BuildArch:      noarch
 
-Source:        https://github.com/fedora-java/javapackages/archive/refs/tags/%{version}.tar.gz
+Source:        https://github.com/fedora-java/javapackages/archive/refs/tags/%{version}.tar.gz#/javapackages-tools-6.5.1.tar.gz
 
 BuildRequires:  coreutils
 BuildRequires:  rubygem-asciidoctor

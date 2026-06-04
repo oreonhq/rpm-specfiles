@@ -10,7 +10,7 @@ Summary:        Extension to include jQuery on newer Sphinx releases
 # jquery-3.6.0.js and jquery.js are MIT
 License:        0BSD AND BSD-2-Clause AND MIT
 URL:            https://github.com/sphinx-contrib/jquery/
-Source:        https://github.com/sphinx-contrib/jquery//archive/refs/tags/v4.1/sphinxcontrib-jquery-4.1.tar.gz
+Source:        https://github.com/sphinx-contrib/jquery//archive/refs/tags/v4.1/sphinxcontrib-jquery-4.1.tar.gz#/python-sphinxcontrib-jquery-4.1.tar.gz
 
 # Make the tests pass with Sphinx 7.1+
 # Based on the original work in https://github.com/sphinx-contrib/jquery/pull/26

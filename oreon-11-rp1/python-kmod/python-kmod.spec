@@ -6,7 +6,7 @@ Summary:        Python module to work with kernel modules
 Version:        0.9.1
 Release:        12%{?dist}
 URL:            https://github.com/maurizio-lombardi/python-kmod/
-Source0:        https://github.com/agrover/python-kmod/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz#/python-kmod-0.9.1.tar.gz
+Source0:        https://github.com/agrover/python-kmod/archive/refs/tags/v%{version}.tar.gz#/python-kmod-%{version}.tar.gz
 BuildRequires:  gcc
 BuildRequires:  python3-Cython
 BuildRequires:  python3-devel

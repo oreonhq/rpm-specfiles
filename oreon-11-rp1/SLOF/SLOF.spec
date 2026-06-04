@@ -19,7 +19,7 @@ Summary:        Slimline Open Firmware
 License:        BSD-3-Clause
 URL:            http://www.openfirmware.info/SLOF
 
-Source0:        https://github.com/aik/SLOF/archive/refs/tags/qemu-slof-20220719.tar.gz
+Source0:        https://github.com/aik/SLOF/archive/refs/tags/qemu-slof-20220719.tar.gz#/SLOF-%{gittagdate}.tar.gz
 
 # the bundled libc stdbool.h is not compatible with C23
 # https://github.com/aik/SLOF/pull/5

@@ -7,7 +7,7 @@ Summary:        General data-binding package for Jackson (2.x)
 License:        Apache-2.0 and LGPL-2.0-or-later
 
 URL:            https://github.com/FasterXML/jackson-databind
-Source0:        https://github.com/FasterXML/jackson-databind/archive/refs/tags/jackson-databind-2.18.2.tar.gz
+Source0:        https://github.com/FasterXML/jackson-databind/archive/refs/tags/jackson-databind-2.18.2.tar.gz#/jackson-databind-2.18.2.tar.gz
 
 %if 0%{?rhel} || 0%{?fedora} && 0%{?fedora} <= 42 || (0%{?oreon} >= 11)
 BuildRequires:  maven-local

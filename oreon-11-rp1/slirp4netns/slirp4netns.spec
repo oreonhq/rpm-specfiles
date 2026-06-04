@@ -7,7 +7,7 @@ License: GPL-2.0-only
 Summary: slirp for network namespaces
 URL: https://github.com/rootless-containers/%{name}
 # Tarball fetched from upstream
-Source0:        https://github.com/rootless-containers/slirp4netns/archive/refs/tags/v1.3.1.tar.gz
+Source0:        https://github.com/rootless-containers/slirp4netns/archive/refs/tags/v1.3.1.tar.gz#/slirp4netns-1.3.1.tar.gz
 
 ExclusiveArch: %{golang_arches_future}
 BuildRequires: autoconf

@@ -2,7 +2,7 @@
 
 # globals for redhat-lsb-20231006git8d00acdc.tar.gz
 %global gitdate 20231006
-%global gitversion 8d00acdc
+%global gitversion a25a4fcd73c7
 
 %global snapshot %{gitdate}git%{gitversion}
 %global gver .%{gitdate}git%{gitversion}

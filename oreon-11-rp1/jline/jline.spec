@@ -10,7 +10,7 @@ License:        BSD-3-Clause AND Apache-2.0
 URL:            https://github.com/jline/jline3
 ExclusiveArch:  %{java_arches}
 
-Source0:        https://github.com/jline/jline3/archive/refs/tags/jline-3.30.4.tar.gz
+Source0:        https://github.com/jline/jline3/archive/refs/tags/jline-3.30.4.tar.gz#/jline-3.30.4.tar.gz
 
 # Fedora/RHEL specific: JNI shared objects MUST be placed in %%{_prefix}/lib/%%{name}
 Patch:          0001-Load-native-library-form-usr-lib-jline.patch

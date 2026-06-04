@@ -18,7 +18,7 @@ BuildRequires:      python3-devel
 BuildRequires:      python3-pytest
 %endif
 
-Source:        http://github.com/pytest-dev/iniconfig/archive/v2.3.0/iniconfig-2.3.0.tar.gz
+Source:        http://github.com/pytest-dev/iniconfig/archive/v2.3.0/iniconfig-2.3.0.tar.gz#/python-iniconfig-2.3.0.tar.gz
 
 %global _description %{expand:
 iniconfig is a small and simple INI-file parser module

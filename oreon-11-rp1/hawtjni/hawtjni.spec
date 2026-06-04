@@ -11,7 +11,7 @@ Summary:          Code generator that produces the JNI code
 License:          Apache-2.0 AND EPL-1.0 AND LicenseRef-Callaway-BSD
 
 URL:              http://hawtjni.fusesource.org/
-Source0:        https://github.com/fusesource/hawtjni/archive/refs/tags/%{name}-project-%{version}.tar.gz
+Source0:        https://github.com/fusesource/hawtjni/archive/refs/tags/%{name}-project-%{version}.tar.gz#/hawtjni-1.18.tar.gz
 
 # trivially port from commons-lang to commons-lang3
 Patch0:           00-hawtjni-port-to-commons-lang3.patch
