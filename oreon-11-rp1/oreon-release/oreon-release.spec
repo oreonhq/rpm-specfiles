@@ -6,7 +6,7 @@
 Summary:        Oreon release files
 Name:           oreon-release
 Version:        11
-Release:        2%{?dist}
+Release:        3%{?dist}
 License:        MIT
 URL:            https://oreonhq.com/oreon
 
@@ -32,7 +32,7 @@ Oreon release files including base system configuration and identification.
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
 %build
 cat > os-release << EOF
-NAME="Oreon Linux"
+NAME="Oreon"
 VERSION="%{version} (%{release_pack})"
 ID=oreon
 VERSION_ID=%{version}
