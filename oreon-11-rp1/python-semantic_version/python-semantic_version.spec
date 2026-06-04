@@ -7,7 +7,7 @@ Summary:        Library implementing the 'SemVer' scheme
 
 License:        BSD-2-Clause
 URL:            https://github.com/rbarrois/python-semanticversion
-Source:        https://github.com/rbarrois/python-semanticversion/archive/refs/tags/2.10.0/python-semanticversion-2.10.0.tar.gz
+Source:        https://github.com/rbarrois/python-semanticversion/archive/refs/tags/2.10.0.tar.gz#/python-semanticversion-2.10.0.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  make

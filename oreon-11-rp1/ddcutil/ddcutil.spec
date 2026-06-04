@@ -9,7 +9,7 @@ Summary:    Query and update monitor settings
 # Automatically converted from old format: GPLv2+ - review is highly recommended.
 License:    GPL-2.0-or-later
 URL:        http://www.ddcutil.com
-Source0:        https://github.com/rockowitz/ddcutil/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/rockowitz/ddcutil/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Excluding arch s390/s390x due to i2c-tools does so
 ExcludeArch:    s390 s390x

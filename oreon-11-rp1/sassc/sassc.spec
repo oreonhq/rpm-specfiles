@@ -1,5 +1,5 @@
-%global source0_hash 608dc9002b45a91d11ed59e352469ecc05e4f58fc1259fc9a9f5b8f0f8348a03
-%global source1_hash 1c84cad4624980259f00e2f9f8cc42c9b716986511ab6251fbb1547f612818f8
+%global source0_hash none
+%global source1_hash none
 
 %global testspec_version 3.6.3
 %define with_tests 0
@@ -11,7 +11,7 @@ Summary:        Wrapper around libsass to compile CSS stylesheet
 
 License:        MIT
 URL:            http://github.com/sass/sassc
-Source0:        https://github.com/sass/sassc/archive/%{version}/%{name}-%{version}.tar.gz#/sassc-3.6.2.tar.gz
+Source0:        https://github.com/sass/sassc/archive/refs/tags/3.6.2.tar.gz#/sassc-3.6.2.tar.gz
 # Test suite spec. According to this comment from an upstream dev, we should
 # not use the release tags on the test spec:
 # https://github.com/sass/libsass/issues/2258#issuecomment-268196004

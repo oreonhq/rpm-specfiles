@@ -7,7 +7,7 @@ Release:        3%{?dist}
 
 License:        BSD-3-Clause
 URL:            https://github.com/google/double-conversion
-Source0:        https://github.com/google/double-conversion/archive/refs/tags/v3.4.0/double-conversion-3.4.0.tar.gz
+Source0:        https://github.com/google/double-conversion/archive/refs/tags/v3.4.0.tar.gz#/double-conversion-3.4.0.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

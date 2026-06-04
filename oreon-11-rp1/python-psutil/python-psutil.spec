@@ -10,7 +10,7 @@ Summary:        A process and system utilities module for Python
 
 License:        BSD-3-Clause
 URL:            https://github.com/giampaolo/psutil
-Source:        https://github.com/giampaolo/psutil/archive/refs/tags/release-7.2.2/psutil-7.2.2.tar.gz
+Source:        https://github.com/giampaolo/psutil/archive/refs/tags/release-7.2.2.tar.gz#/psutil-7.2.2.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  make

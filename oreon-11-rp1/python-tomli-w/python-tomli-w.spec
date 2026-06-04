@@ -10,7 +10,7 @@ Summary:        A Python library for writing TOML
 # SPDX
 License:        MIT
 URL:            https://github.com/hukkin/tomli-w
-Source0:        https://github.com/hukkin/tomli-w/archive/refs/tags/1.2.0/tomli-w-1.2.0.tar.gz
+Source0:        https://github.com/hukkin/tomli-w/archive/refs/tags/1.2.0.tar.gz#/tomli-w-1.2.0.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  python3-devel

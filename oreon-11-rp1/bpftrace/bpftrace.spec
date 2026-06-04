@@ -1,4 +1,4 @@
-%global source0_hash e0514aa3e1a032b0b2de2cf3c281bfee9b9e80509498e70ed78786bbd64db373
+%global source0_hash none
 
 #global llvm_compat 18
 
@@ -9,7 +9,7 @@ Summary:        High-level tracing language for Linux eBPF
 License:        Apache-2.0
 
 URL:            https://github.com/iovisor/bpftrace
-Source0:        https://github.com/iovisor/bpftrace/archive/refs/tags/v0.24.2/bpftrace-0.24.2.tar.gz
+Source0:        https://github.com/iovisor/bpftrace/archive/refs/tags/v%{version}.tar.gz#/bpftrace-%{version}.tar.gz
 
 # Arches will be included as upstream support is added and dependencies are
 # satisfied in the respective arches

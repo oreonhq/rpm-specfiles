@@ -9,7 +9,7 @@ Release:        1%{?dist}
 Summary:        Local DNS cache configuration daemon
 License:        MIT
 URL:            https://github.com/InfrastructureServices/dnsconfd
-Source0:        https://github.com/InfrastructureServices/dnsconfd/archive/refs/tags/2.1.0/dnsconfd-2.1.0.tar.gz
+Source0:        https://github.com/InfrastructureServices/dnsconfd/archive/refs/tags/2.1.0.tar.gz#/dnsconfd-2.1.0.tar.gz
 Source1:        dnsconfd.sysusers
 
 BuildRequires:  pkgconfig(liburiparser) pkgconfig(jansson) pkgconfig(yaml-0.1)

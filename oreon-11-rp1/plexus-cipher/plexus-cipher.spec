@@ -11,7 +11,7 @@ URL:            https://github.com/codehaus-plexus/plexus-cipher
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/codehaus-plexus/plexus-cipher/archive/refs/tags/plexus-cipher-%{version}.tar.gz
+Source0:        https://github.com/codehaus-plexus/plexus-cipher/archive/refs/tags/plexus-cipher-%{version}.tar.gz#/plexus-cipher-%{version}.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

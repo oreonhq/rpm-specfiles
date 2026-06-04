@@ -67,12 +67,12 @@ BuildArch: noarch
 %endif
 
 # part after the last slash is recognized as filename in look-aside cache
-Source0:        https://github.com/ClusterLabs/pcs/archive/refs/tags/v0.12.2/pcs-0.12.2.tar.gz
+Source0:        https://github.com/ClusterLabs/pcs/archive/refs/tags/v0.12.2.tar.gz#/pcs-0.12.2.tar.gz
 
-Source41:        https://github.com/ondrejmular/pyagentx/archive/refs/tags/v0.4.pcs.2/pyagentx-0.4.pcs.2.tar.gz
-Source42:        https://github.com/konradhalas/dacite/archive/refs/tags/v1.9.2/dacite-1.9.2.tar.gz
+Source41:        https://github.com/ondrejmular/pyagentx/archive/refs/tags/v0.4.pcs.2.tar.gz#/pyagentx-0.4.pcs.2.tar.gz
+Source42:        https://github.com/konradhalas/dacite/archive/refs/tags/v1.9.2.tar.gz#/dacite-1.9.2.tar.gz
 
-Source100:        https://github.com/ClusterLabs/pcs-web-ui/archive/refs/tags/0.1.24.2/pcs-web-ui-0.1.24.2.tar.gz
+Source100:        https://github.com/ClusterLabs/pcs-web-ui/archive/refs/tags/0.1.24.2.tar.gz#/pcs-web-ui-0.1.24.2.tar.gz
 Source101:        https://github.com/ClusterLabs/pcs-web-ui/releases/download/0.1.24.2/pcs-web-ui-node-modules-0.1.24.2.tar.xz
 
 

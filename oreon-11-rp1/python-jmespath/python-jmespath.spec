@@ -9,7 +9,7 @@ Summary:        JSON Matching Expressions
 
 License:        MIT
 URL:            https://github.com/jmespath/jmespath.py
-Source0:        https://github.com/jmespath/jmespath.py/archive/refs/tags/1.0.1/jmespath.py-1.0.1.tar.gz
+Source0:        https://github.com/jmespath/jmespath.py/archive/refs/tags/1.0.1.tar.gz#/jmespath.py-1.0.1.tar.gz
 BuildArch:      noarch
 
 %description

@@ -23,7 +23,7 @@ Summary:        File System Library for the Lua Programming Language
 
 License:        MIT
 URL:            https://%{gitowner}.github.io/%{gitproject}/
-Source0:        https://github.com/%{gitowner}/%{gitproject}/archive/refs/tags/v%{gittag}/%{gitproject}-%{version}.tar.gz
+Source0:        https://github.com/%{gitowner}/%{gitproject}/archive/refs/tags/v%{gittag}.tar.gz#/%{gitproject}-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  make

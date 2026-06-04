@@ -12,7 +12,7 @@ Summary:            %{sum}
 # which is BSD-3-Clause
 License:            Apache-2.0 AND BSD-3-Clause
 URL:                https://github.com/scour-project/scour
-Source0:        https://github.com/scour-project/scour/archive/refs/tags/v0.38.2/scour-0.38.2.tar.gz
+Source0:        https://github.com/scour-project/scour/archive/refs/tags/v0.38.2.tar.gz#/scour-0.38.2.tar.gz
 
 BuildRequires:      python3-devel
 BuildRequires:      python3-setuptools

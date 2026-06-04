@@ -12,7 +12,7 @@ Release: 8%{?dist}
 License: BSD-4-Clause-UC AND GPL-2.0-or-later
 URL: https://github.com/iputils/iputils
 
-Source0:        https://github.com/iputils/iputils/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/iputils/iputils/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # Debian source is ifenslave-2.6 (not ifenslave); NixOS and old pool used:
 #   pool/main/i/ifenslave-2.6/ifenslave-2.6_1.1.0.orig.tar.gz
 # Immutable snapshot (same file as historic deb.debian.org).

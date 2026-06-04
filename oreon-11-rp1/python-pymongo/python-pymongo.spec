@@ -13,7 +13,7 @@ License:        Apache-2.0
 Summary:        Python driver for MongoDB
 URL:            https://pymongo.readthedocs.io/en/stable/
 VCS:            git:%{giturl}.git
-Source0:        https://github.com/mongodb/mongo-python-driver/archive/refs/tags/4.13.2/pymongo-4.13.2.tar.gz
+Source0:        https://github.com/mongodb/mongo-python-driver/archive/refs/tags/4.13.2.tar.gz#/pymongo-4.13.2.tar.gz
 # Don't fail tests on python 3.14 deprecation warnings
 # Downstream patch
 Patch0:         pymongo-nonfatal-warnings.patch

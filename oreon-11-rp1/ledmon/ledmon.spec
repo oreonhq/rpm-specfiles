@@ -6,7 +6,7 @@ Version: 1.1.0
 Release: 4%{?dist}
 License: GPL-2.0-only AND LGPL-2.1-only
 URL: https://github.com/intel/ledmon
-Source0:        https://github.com/intel/ledmon/archive/refs/tags/v1.1.0/ledmon-1.1.0.tar.gz
+Source0:        https://github.com/intel/ledmon/archive/refs/tags/v1.1.0.tar.gz#/ledmon-1.1.0.tar.gz
 
 BuildRequires: autoconf automake
 BuildRequires: autoconf-archive

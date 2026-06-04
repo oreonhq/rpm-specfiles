@@ -38,7 +38,7 @@ Summary:        Repodata downloading library
 
 License:        LGPL-2.1-or-later
 URL:            https://github.com/rpm-software-management/librepo
-Source0:        https://github.com/rpm-software-management/librepo/archive/refs/tags/1.20.0/librepo-1.20.0.tar.gz
+Source0:        https://github.com/rpm-software-management/librepo/archive/refs/tags/1.20.0.tar.gz#/librepo-1.20.0.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc

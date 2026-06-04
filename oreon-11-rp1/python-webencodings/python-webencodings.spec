@@ -12,7 +12,7 @@ BuildArch: noarch
 License: BSD-3-Clause
 Summary: Character encoding for the web
 URL: https://github.com/gsnedders/python-%{srcname}
-Source0:        https://github.com/gsnedders/python-webencodings/archive/refs/tags/v0.5.1/webencodings-0.5.1.tar.gz
+Source0:        https://github.com/gsnedders/python-webencodings/archive/refs/tags/v0.5.1.tar.gz#/webencodings-0.5.1.tar.gz
 
 BuildRequires: python3-devel
 BuildRequires: python3-setuptools

@@ -7,7 +7,7 @@ Release:        %autorelease
 License:        Apache-2.0
 
 URL:            https://www.mojohaus.org/xml-maven-plugin/
-Source0:        https://github.com/mojohaus/xml-maven-plugin/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/mojohaus/xml-maven-plugin/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch

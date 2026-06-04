@@ -9,7 +9,7 @@ Summary:        Transformer to dbus-python types
 
 License:        Apache-2.0
 URL:            https://github.com/stratis-storage/into-dbus-python
-Source0:        https://github.com/stratis-storage/into-dbus-python/archive/refs/tags/v0.8.2/into-dbus-python-0.8.2.tar.gz
+Source0:        https://github.com/stratis-storage/into-dbus-python/archive/refs/tags/v0.8.2.tar.gz#/into-dbus-python-0.8.2.tar.gz
 
 BuildArch:      noarch
 

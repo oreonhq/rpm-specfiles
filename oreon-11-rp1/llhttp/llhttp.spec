@@ -36,10 +36,10 @@ Summary:        Port of http_parser to llparse
 # SPDX
 License:        MIT
 URL:            https://github.com/nodejs/llhttp
-Source0:        https://github.com/nodejs/llhttp/archive/refs/tags/release/v9.3.1/llhttp-release-v9.3.1.tar.gz
+Source0:        https://github.com/nodejs/llhttp/archive/refs/tags/release.tar.gz#/v9.3.1/llhttp-release-v9.3.1.tar.gz
 # Contains the original TypeScript sources, which we must include in the source
 # RPM per packaging guidelines.
-Source1:        https://github.com/nodejs/llhttp/archive/refs/tags/v9.3.1/llhttp-9.3.1.tar.gz
+Source1:        https://github.com/nodejs/llhttp/archive/refs/tags/v9.3.1.tar.gz#/llhttp-9.3.1.tar.gz
 
 # For compiling the C library
 BuildRequires:  cmake

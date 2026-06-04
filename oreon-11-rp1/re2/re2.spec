@@ -23,7 +23,7 @@ Summary:        C++ fast alternative to backtracking RE engines
 License:        BSD-3-Clause
 SourceLicense:  %{license} AND Apache-2.0
 URL:            https://github.com/google/re2
-Source:        https://github.com/google/re2/archive/refs/tags/2025-11-05/re2-2025-11-05.tar.gz
+Source:        https://github.com/google/re2/archive/refs/tags/2025-11-05.tar.gz#/re2-2025-11-05.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  ninja-build

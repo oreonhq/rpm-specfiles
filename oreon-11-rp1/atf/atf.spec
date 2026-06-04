@@ -7,7 +7,7 @@ Release: 4%{?dist}
 # Automatically converted from old format: BSD - review is highly recommended.
 License: LicenseRef-Callaway-BSD
 URL:     https://github.com/freebsd/atf
-Source0:        https://github.com/freebsd/atf/archive/refs/tags/atf-0.23/atf-0.23.tar.gz
+Source0:        https://github.com/freebsd/atf/archive/refs/tags/atf-0.23.tar.gz#/atf-0.23.tar.gz
 Source1: README.Fedora
 
 %global _testsdir %{_libexecdir}/atf/tests

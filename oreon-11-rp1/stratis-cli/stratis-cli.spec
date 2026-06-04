@@ -7,7 +7,7 @@ Summary:        Command-line tool for interacting with the Stratis daemon
 
 License:        Apache-2.0
 URL:            https://github.com/stratis-storage/stratis-cli
-Source0:        https://github.com/stratis-storage/stratis-cli/archive/refs/tags/v3.8.3/stratis-cli-3.8.3.tar.gz
+Source0:        https://github.com/stratis-storage/stratis-cli/archive/refs/tags/v3.8.3.tar.gz#/stratis-cli-3.8.3.tar.gz
 
 BuildRequires:  python3-devel
 BuildRequires:  %{_bindir}/a2x

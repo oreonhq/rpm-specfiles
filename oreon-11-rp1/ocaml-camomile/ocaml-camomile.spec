@@ -19,7 +19,7 @@ Summary:        Unicode library for OCaml
 License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception AND ICU AND Unicode-3.0
 URL:            https://github.com/ocaml-community/Camomile
 VCS:            git:%{url}.git
-Source0:        https://github.com/ocaml-community/Camomile/archive/refs/tags/v2.0.0/Camomile-2.0.0.tar.gz
+Source0:        https://github.com/ocaml-community/Camomile/archive/refs/tags/v2.0.0.tar.gz#/Camomile-2.0.0.tar.gz
 
 # Fix a licensing issue in EO Unicode files.  Submitted but not
 # accepted upstream: https://github.com/yoriyuki/Camomile/pull/84

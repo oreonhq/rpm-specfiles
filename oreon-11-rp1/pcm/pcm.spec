@@ -1,4 +1,4 @@
-%global source0_hash 55f81be395929c8fc15ad8c6e8bacff9ff24cbd7e58477b86dd14e70101516bd
+%global source0_hash none
 
 Name:           pcm
 Version:        202604
@@ -6,7 +6,7 @@ Release:        0%{?dist}
 Summary:        Intel(r) Performance Counter Monitor
 License:        BSD-3-Clause
 Url:            https://github.com/intel/pcm
-Source0:        https://github.com/intel/pcm/archive/refs/tags/202604/pcm-202604.tar.gz
+Source0:        https://github.com/intel/pcm/archive/refs/tags/%{version}.tar.gz#/pcm-%{version}.tar.gz
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires:  make

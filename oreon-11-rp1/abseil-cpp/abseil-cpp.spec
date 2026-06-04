@@ -24,7 +24,7 @@ Summary:        C++ Common Libraries
 #     (https://gitlab.com/fedora/legal/fedora-license-data/-/merge_requests/205).
 License:        Apache-2.0 AND LicenseRef-Fedora-Public-Domain
 URL:            https://abseil.io
-Source:        https://github.com/abseil/abseil-cpp/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/abseil/abseil-cpp/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # Omit the “bind” block in test Test Mutex::FunctorCondition
 #

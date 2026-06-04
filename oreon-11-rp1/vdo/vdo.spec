@@ -7,7 +7,7 @@ Release: 2%{?dist}
 
 License: GPL-2.0-only
 URL: https://github.com/dm-vdo/vdo
-Source0:        https://github.com/dm-vdo/vdo/archive/refs/tags/8.3.2.1/vdo-8.3.2.1.tar.gz
+Source0:        https://github.com/dm-vdo/vdo/archive/refs/tags/8.3.2.1.tar.gz#/vdo-8.3.2.1.tar.gz
 
 %if 0%{?fedora}
 ExcludeArch: %{ix86}

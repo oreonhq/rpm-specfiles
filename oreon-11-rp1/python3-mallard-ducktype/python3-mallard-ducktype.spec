@@ -10,7 +10,7 @@ Summary: Parse Ducktype files and convert them to Mallard
 License: MIT
 URL:     https://pypi.python.org/pypi/%{srcname}
 # The PyPI tarball does not have AUTHORS or COPYING.
-Source0:        https://github.com/projectmallard/%{srcname}/archive/refs/tags/%{version}/%{version}.tar.gz
+Source0:        https://github.com/projectmallard/%{srcname}/archive/refs/tags/%{version}.tar.gz#/%{version}.tar.gz
 
 BuildArch:     noarch
 BuildRequires: python3-devel

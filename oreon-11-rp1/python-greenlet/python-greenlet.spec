@@ -8,7 +8,7 @@ Release:        2%{?dist}
 Summary:        Lightweight in-process concurrent programming
 License:        MIT AND PSF-2.0
 URL:            https://github.com/python-greenlet/greenlet
-Source0:        https://github.com/python-greenlet/greenlet/archive/refs/tags/3.3.0/greenlet-3.3.0.tar.gz
+Source0:        https://github.com/python-greenlet/greenlet/archive/refs/tags/3.3.0.tar.gz#/greenlet-3.3.0.tar.gz
 
 # Skip leak checking to avoid a missing dependency, `objgraph`
 Patch:        https://patch-diff.githubusercontent.com/raw/python-greenlet/greenlet/pull/482.patch

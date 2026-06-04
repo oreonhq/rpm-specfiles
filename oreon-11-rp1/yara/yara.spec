@@ -34,11 +34,11 @@ and a Boolean expression which determine its logic.}
 %if %{with release}
 Release:       %autorelease
 # Source0:     https://github.com/%%{gituser}/%%{gitname}/archive/v%%{upversion}.tar.gz#/%%{name}-%%{upversion}.tar.gz
-Source0:        https://github.com/%{gituser}/%{gitname}/archive/refs/tags/%{commit}/%{name}-%{version}-git%{gitdate}-%{shortcommit}.tar.gz
+Source0:        https://github.com/%{gituser}/%{gitname}/archive/refs/tags/%{commit}.tar.gz#/%{name}-%{version}-git%{gitdate}-%{shortcommit}.tar.gz
 %else
 # Build from git commit baseline
 Release:       %autorelease -s %{gitdate}git%{shortcommit}
-Source0:        https://github.com/%{gituser}/%{gitname}/archive/refs/tags/%{commit}/%{name}-%{version}-git%{gitdate}-%{shortcommit}.tar.gz
+Source0:        https://github.com/%{gituser}/%{gitname}/archive/refs/tags/%{commit}.tar.gz#/%{name}-%{version}-git%{gitdate}-%{shortcommit}.tar.gz
 %endif
 
 # Use default sphix theme to generate documentation rather than sphinx_rtd_theme

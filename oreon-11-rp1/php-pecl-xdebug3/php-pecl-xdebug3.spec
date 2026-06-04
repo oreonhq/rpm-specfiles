@@ -34,7 +34,7 @@ Name:           %{php_base}-pecl-xdebug3
 Summary:        Provides functions for function traces and profiling
 Version:        %{upstream_version}%{?upstream_prever:~%{upstream_lower}}
 Release:        1%{?dist}
-Source0:        https://github.com/%{pecl_name}/%{pecl_name}/archive/refs/tags/%{gh_commit}/%{pecl_name}-%{upstream_version}%{?upstream_prever}-%{gh_short}.tar.gz
+Source0:        https://github.com/%{pecl_name}/%{pecl_name}/archive/refs/tags/%{gh_commit}.tar.gz#/%{pecl_name}-%{upstream_version}%{?upstream_prever}-%{gh_short}.tar.gz
 
 License:        Xdebug-1.03
 URL:            https://xdebug.org/

@@ -7,7 +7,7 @@ Summary:	Utility to print NTP synchronization status
 
 License:	MIT
 URL:		https://github.com/mlichvar/ntpstat
-Source0:        https://github.com/mlichvar/ntpstat/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/mlichvar/ntpstat/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildArch:	noarch
 
 BuildRequires:	make

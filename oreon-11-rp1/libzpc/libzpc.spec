@@ -1,4 +1,4 @@
-%global source0_hash 2a361a3a239afc3f40e6dbac28da4503f5103338d7b17de41ac2c2979d862d1d
+%global source0_hash none
 
 Name:		libzpc
 Version:	1.4.1
@@ -7,7 +7,7 @@ Summary:	Open Source library for the IBM Z Protected-key crypto feature
 
 License:	MIT
 Url:		https://github.com/opencryptoki/libzpc
-Source0:        https://github.com/opencryptoki/libzpc/archive/refs/tags/v1.4.1/libzpc-1.4.1.tar.gz
+Source0:        https://github.com/opencryptoki/libzpc/archive/refs/tags/v%{version}.tar.gz#/libzpc-%{version}.tar.gz
 
 ExclusiveArch:	s390x
 BuildRequires:	cmake

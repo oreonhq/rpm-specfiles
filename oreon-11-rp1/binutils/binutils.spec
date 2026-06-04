@@ -228,7 +228,7 @@ Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.t
 %elif "%{source}" == "odd-pre-release"
 Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "snapshot"
-Source0:        https://sourceware.org/git/binutils-gdb.git/snapshot/binutils-gdb-%{commit_id}.tar.bz2#/binutils-with-gold-%{version}-%{commit_id}.tar.bz2
+Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %elif "%{source}" == "tarball"
 Source0:        https://ftp.gnu.org/gnu/binutils/binutils-with-gold-%{version}.tar.xz
 %endif

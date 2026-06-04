@@ -11,7 +11,7 @@ Release:        %autorelease
 Summary:        Daemon for communicating with Apple's iOS devices
 License:        GPL-3.0-only OR GPL-2.0-only
 URL:            https://libimobiledevice.org
-Source0:        https://github.com/libimobiledevice/usbmuxd/archive/refs/tags/0b1b233b57d581515978a09e5a4394bfa4ee4962/usbmuxd-0b1b233b57d581515978a09e5a4394bfa4ee4962.tar.gz
+Source0:        https://github.com/libimobiledevice/usbmuxd/archive/refs/tags/0b1b233b57d581515978a09e5a4394bfa4ee4962.tar.gz#/usbmuxd-0b1b233b57d581515978a09e5a4394bfa4ee4962.tar.gz
 Source1:        %{name}.sysusers
 Source2:        %{name}.tmpfiles
 

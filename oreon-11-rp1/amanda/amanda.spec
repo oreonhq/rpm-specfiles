@@ -19,7 +19,7 @@ Summary:       A network-capable tape backup solution
 Name:          amanda
 Version:       3.5.4
 Release:       %autorelease
-Source:        https://github.com/zmanda/amanda/archive/refs/tags/tag-community-%{version}/amanda-%{version}.tar.gz
+Source:        https://github.com/zmanda/amanda/archive/refs/tags/tag-community-%{version}.tar.gz#/amanda-%{version}.tar.gz
 Source1:       amanda.crontab
 Source4:       disklist
 Source8:       amandahosts

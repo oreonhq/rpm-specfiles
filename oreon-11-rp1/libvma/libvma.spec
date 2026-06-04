@@ -15,7 +15,7 @@ Summary: A library for boosting TCP and UDP traffic (over RDMA hardware)
 
 License: GPL-2.0-only OR BSD-2-Clause
 Url: https://github.com/Mellanox/libvma
-Source0:        https://github.com/Mellanox/libvma/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/Mellanox/libvma/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # libvma currently supports only the following architectures
 ExclusiveArch: x86_64 ppc64le ppc64 aarch64

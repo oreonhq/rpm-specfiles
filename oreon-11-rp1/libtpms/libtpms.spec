@@ -7,7 +7,7 @@ Summary:        Library providing Trusted Platform Module (TPM) functionality
 License:        BSD-3-Clause AND LicenseRef-TCGL
 
 URL:            https://github.com/stefanberger/libtpms
-Source0:        https://github.com/stefanberger/libtpms/archive/refs/tags/v0.10.2/libtpms-0.10.2.tar.gz
+Source0:        https://github.com/stefanberger/libtpms/archive/refs/tags/v0.10.2.tar.gz#/libtpms-0.10.2.tar.gz
 Source1:        https://github.com/stefanberger/libtpms/releases/download/v0.10.2/v0.10.2.tar.gz.asc#/libtpms-0.10.2.tar.gz.asc
 # https://github.com/stefanberger.gpg
 Source2:        gpgkey-B818B9CADF9089C2D5CEC66B75AD65802A0B4211.asc

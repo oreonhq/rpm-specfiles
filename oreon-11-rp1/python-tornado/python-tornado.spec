@@ -18,7 +18,7 @@ Summary:        Scalable, non-blocking web server and tools
 
 License:        Apache-2.0 
 URL:            https://www.tornadoweb.org
-Source0:        https://github.com/tornadoweb/tornado/archive/refs/tags/v%{version}/%{srcname}-%{version}.tar.gz
+Source0:        https://github.com/tornadoweb/tornado/archive/refs/tags/v%{version}.tar.gz#/%{srcname}-%{version}.tar.gz
 
 BuildRequires:  gcc
 BuildRequires:  python3-devel

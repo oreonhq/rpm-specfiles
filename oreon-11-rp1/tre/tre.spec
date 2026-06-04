@@ -9,9 +9,9 @@ Version: 0.9.0
 Release:        %{?autorelease}
 License: BSD-2-Clause
 %if 0%{?git}
-Source0:        https://github.com/laurikari/tre/archive/refs/tags/v%{version}/tre-%{version}.tar.gz
+Source0:        https://github.com/laurikari/tre/archive/refs/tags/v%{version}.tar.gz#/tre-%{version}.tar.gz
 %else
-Source0:        https://github.com/laurikari/tre/archive/refs/tags/v%{version}/tre-%{version}.tar.gz
+Source0:        https://github.com/laurikari/tre/archive/refs/tags/v%{version}.tar.gz#/tre-%{version}.tar.gz
 %endif
 # don't force build-time LDFLAGS into tre.pc
 Patch2: %{name}-ldflags.patch

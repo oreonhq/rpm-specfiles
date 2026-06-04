@@ -9,7 +9,7 @@ Summary:        Cross-platform colored terminal text
 
 License:        BSD-3-Clause
 URL:            https://github.com/tartley/colorama
-Source0:        https://github.com/tartley/colorama/archive/refs/tags/0.4.6/colorama-0.4.6.tar.gz
+Source0:        https://github.com/tartley/colorama/archive/refs/tags/0.4.6.tar.gz#/colorama-0.4.6.tar.gz
 BuildArch:      noarch
 
 BuildRequires:  python3-devel

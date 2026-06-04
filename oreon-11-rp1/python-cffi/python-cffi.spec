@@ -8,7 +8,7 @@ Summary:        Foreign Function Interface for Python to call C code
 # cffi/_imp_emulation.py has bits copied from CPython (PSF-2.0)
 License:        MIT AND PSF-2.0
 URL:            https://github.com/python-cffi/cffi
-Source:        https://github.com/python-cffi/cffi/archive/refs/tags/v2.0.0/cffi-2.0.0.tar.gz
+Source:        https://github.com/python-cffi/cffi/archive/refs/tags/v2.0.0.tar.gz#/cffi-2.0.0.tar.gz
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-pytest

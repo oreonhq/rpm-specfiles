@@ -11,7 +11,7 @@ URL:            https://lmax-exchange.github.io/disruptor/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/LMAX-Exchange/disruptor/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/LMAX-Exchange/disruptor/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:        https://repo1.maven.org/maven2/com/lmax/%{name}/%{version}/%{name}-%{version}.pom
 
 %if %{with bootstrap}

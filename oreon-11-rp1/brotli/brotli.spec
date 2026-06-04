@@ -7,7 +7,7 @@ Summary:        Lossless compression algorithm
 
 License:        MIT
 URL:            https://github.com/google/brotli
-Source0:        https://github.com/google/brotli/archive/refs/tags/v1.2.0/brotli-1.2.0.tar.gz
+Source0:        https://github.com/google/brotli/archive/refs/tags/v1.2.0.tar.gz#/brotli-1.2.0.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  gcc

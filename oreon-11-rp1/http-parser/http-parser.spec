@@ -7,7 +7,7 @@ Summary:        HTTP request/response parser for C
 
 License:        MIT
 URL:            https://github.com/nodejs/http-parser
-Source0:        https://github.com/nodejs/http-parser/archive/refs/tags/v2.9.4/http-parser-2.9.4.tar.gz
+Source0:        https://github.com/nodejs/http-parser/archive/refs/tags/v2.9.4.tar.gz#/http-parser-2.9.4.tar.gz
 # https://github.com/nodejs/http-parser/pull/483
 Patch0001:      0001-url-treat-empty-port-as-default.patch
 

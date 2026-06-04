@@ -7,7 +7,7 @@ Summary:        A hash table for C structures
 
 License:        BSD-1-Clause
 URL:            http://troydhanson.github.io/%{name}
-Source0:        https://github.com/troydhanson/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/troydhanson/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  asciidoc
 BuildRequires:  gcc

@@ -21,9 +21,9 @@ Summary:        Snowball compiler and stemming algorithms
 License:        BSD-3-Clause
 URL:            https://snowballstem.org/
 VCS:            git:%{giturl}.git
-Source0:        https://github.com/snowballstem/snowball/archive/refs/tags/v3.0.1/snowball-3.0.1.tar.gz
+Source0:        https://github.com/snowballstem/snowball/archive/refs/tags/v3.0.1.tar.gz#/snowball-3.0.1.tar.gz
 # Test data for the compiler (must match algorithms shipped in this snowball release)
-Source1:        https://github.com/snowballstem/snowball-data/archive/refs/tags/381b447563f9bef87b218ebbedde3159afdc3032/381b447563f9bef87b218ebbedde3159afdc3032.tar.gz
+Source1:        https://github.com/snowballstem/snowball-data/archive/refs/tags/381b447563f9bef87b218ebbedde3159afdc3032.tar.gz#/381b447563f9bef87b218ebbedde3159afdc3032.tar.gz
 # Build a shared library instead of a static library
 Patch:          %{name}-sharedlib.patch
 

@@ -45,7 +45,7 @@ Requires: (fuse-overlayfs if fedora-release-identity-server)
 Suggests: fuse-overlayfs
 %endif
 URL: https://github.com/%{project}/%{repo}
-Source0:        https://github.com/containers/container-libs/archive/refs/tags/common/v0.67.0.tar.gz
+Source0:        https://github.com/containers/container-libs/archive/refs/tags/common.tar.gz#/v0.67.0.tar.gz
 Source1: https://raw.githubusercontent.com/containers/shortnames/refs/heads/main/shortnames.conf
 # Fetch RPM-GPG-KEY-redhat-release from the authoritative source instead of storing
 # a copy in repo or dist-git. Depending on distribution-gpg-keys rpm is also

@@ -10,7 +10,7 @@ License:        MIT
 URL:            https://github.com/NVIDIA
 BuildArch:      noarch
 
-Source0:        https://github.com/NVIDIA/eglexternalplatform/archive/refs/tags/1.2.1/eglexternalplatform-1.2.1.tar.gz
+Source0:        https://github.com/NVIDIA/eglexternalplatform/archive/refs/tags/1.2.1.tar.gz#/eglexternalplatform-1.2.1.tar.gz
 
 BuildRequires:  meson
 

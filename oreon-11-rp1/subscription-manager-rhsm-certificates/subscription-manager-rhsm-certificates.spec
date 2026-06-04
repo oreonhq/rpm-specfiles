@@ -1,4 +1,4 @@
-%global source0_hash 9aad7c71a2eb099f94e0ff1edb668ea23c43b2953c60a519a956460eb515f1d6
+%global source0_hash none
 
 Name: subscription-manager-rhsm-certificates
 Version: 20220623

@@ -14,7 +14,7 @@ Summary:        SANE backend for AirScan (eSCL) and WSD document scanners
 # the exception is defined in LICENSE, meant for SANE project in most cases
 License:        GPL-2.0-or-later WITH SANE-exception AND MIT
 URL:            https://github.com/alexpevzner/sane-airscan
-Source:        https://github.com/alexpevzner/sane-airscan/archive/refs/tags/0.99.36/sane-airscan-0.99.36.tar.gz
+Source:        https://github.com/alexpevzner/sane-airscan/archive/refs/tags/0.99.36.tar.gz#/sane-airscan-0.99.36.tar.gz
 
 # backported from upstream
 

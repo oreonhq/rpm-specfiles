@@ -46,7 +46,7 @@ Version:        %{package_version}
 Release:        5%{?dist}
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/createrepo_c
-Source0:        https://github.com/rpm-software-management/createrepo_c/archive/refs/tags/1.2.1/createrepo_c-1.2.1.tar.gz
+Source0:        https://github.com/rpm-software-management/createrepo_c/archive/refs/tags/1.2.1.tar.gz#/createrepo_c-1.2.1.tar.gz
 Patch1:         0001-Fix-libname-of-Libs.private.patch
 Patch2:         0002-Use-IMPORTED_TARGET-for-3rd-party-dependencies.patch
 Patch3:         0003-Don-t-try-to-use-imported-targets-of-turned-off-depe.patch

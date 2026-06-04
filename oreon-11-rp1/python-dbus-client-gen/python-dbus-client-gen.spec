@@ -9,7 +9,7 @@ Summary:        Library for Generating D-Bus Client Code
 
 License:        MPL-2.0
 URL:            https://github.com/stratis-storage/dbus-client-gen
-Source0:        https://github.com/stratis-storage/dbus-client-gen/archive/refs/tags/v0.5.1/dbus-client-gen-0.5.1.tar.gz
+Source0:        https://github.com/stratis-storage/dbus-client-gen/archive/refs/tags/v0.5.1.tar.gz#/dbus-client-gen-0.5.1.tar.gz
 
 BuildArch:      noarch
 

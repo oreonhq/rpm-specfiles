@@ -1,4 +1,4 @@
-%global source0_hash ed25a39bb20178e79e18cc5d3202b198868986ec3e964b6285f6a7bac8469fdf
+%global source0_hash none
 
 Summary:	Tool to translate x86-64 CPU Machine Check Exception data
 Name:		mcelog
@@ -7,7 +7,7 @@ Release:	14%{?dist}
 Epoch:		3
 License:	GPL-2.0-only
 URL:		https://github.com/andikleen/mcelog
-Source0:        https://github.com/andikleen/mcelog/archive/refs/tags/v175/mcelog-175.tar.gz
+Source0:        https://github.com/andikleen/mcelog/archive/refs/tags/v%{version}.tar.gz#/mcelog-%{version}.tar.gz
 # note that this source OVERRIDES the one on the tarball above!
 Source1:        https://raw.githubusercontent.com/andikleen/mcelog/HEAD/mcelog.conf
 ExclusiveArch:	i686 x86_64

@@ -10,7 +10,7 @@ Summary:        A little TOML parser for Python
 
 License:        MIT
 URL:            https://pypi.org/project/tomli/
-Source0:        https://github.com/hukkin/tomli/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/hukkin/tomli/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  python3-devel
 

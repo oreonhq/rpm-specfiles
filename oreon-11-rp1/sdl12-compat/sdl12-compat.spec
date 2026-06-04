@@ -17,7 +17,7 @@ Summary:        SDL 1.2 runtime compatibility library using SDL 2.0
 # SDL12_compat.c is Zlib AND LicenseRef-Fedora-Public-Domain
 License:        Zlib AND (MIT-0 OR Unlicense OR CC0-1.0) AND MIT AND LicenseRef-Fedora-Public-Domain
 URL:            https://github.com/libsdl-org/sdl12-compat
-Source0:        https://github.com/libsdl-org/sdl12-compat/archive/refs/tags/release-1.2.74/sdl12-compat-1.2.74.tar.gz
+Source0:        https://github.com/libsdl-org/sdl12-compat/archive/refs/tags/release-1.2.74.tar.gz#/sdl12-compat-1.2.74.tar.gz
 # Multilib aware-header stub
 Source1:        SDL_config.h
 

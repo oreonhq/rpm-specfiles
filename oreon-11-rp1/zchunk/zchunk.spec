@@ -6,7 +6,7 @@ Release:        4%{?dist}
 Summary:        Compressed file format that allows easy deltas
 License:        BSD-2-Clause AND MIT
 URL:            https://github.com/zchunk/zchunk
-Source0:        https://github.com/zchunk/zchunk/archive/refs/tags/1.5.1/zchunk-1.5.1.tar.gz
+Source0:        https://github.com/zchunk/zchunk/archive/refs/tags/1.5.1.tar.gz#/zchunk-1.5.1.tar.gz
 BuildRequires:  gcc
 BuildRequires:  pkgconfig(libzstd)
 BuildRequires:  pkgconfig(libcurl)

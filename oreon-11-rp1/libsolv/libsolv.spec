@@ -52,7 +52,7 @@ Summary:        Package dependency solver
 License:        BSD-3-Clause
 SourceLicense:  %{license} AND BSD-2-Clause AND MIT
 URL:            https://github.com/openSUSE/libsolv
-Source:        https://github.com/openSUSE/libsolv/archive/refs/tags/0.7.36/libsolv-0.7.36.tar.gz
+Source:        https://github.com/openSUSE/libsolv/archive/refs/tags/0.7.36.tar.gz#/libsolv-0.7.36.tar.gz
 # Provides: python3dist(solv) in python3-solv
 # https://github.com/openSUSE/libsolv/pull/602
 # https://bugzilla.redhat.com/show_bug.cgi?id=2252743

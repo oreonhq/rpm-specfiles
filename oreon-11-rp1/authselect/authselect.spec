@@ -10,7 +10,7 @@ Summary:        Configures authentication and identity sources from supported pr
 URL:            https://github.com/authselect/authselect
 
 License:        GPL-3.0-or-later
-Source0:        https://github.com/authselect/authselect/archive/refs/tags/1.7.1/authselect-1.7.1.tar.gz
+Source0:        https://github.com/authselect/authselect/archive/refs/tags/1.7.1.tar.gz#/authselect-1.7.1.tar.gz
 
 %global makedir %{_builddir}/%{name}-%{version}
 

@@ -1,4 +1,4 @@
-%global source0_hash 31ed054a2afa6e4ae03b6a72becad4895aaf8731fad82e3f80cd70cae1ae060c
+%global source0_hash none
 
 %global daemon_name intel_lpmd
 
@@ -9,7 +9,7 @@ Summary:	Intel Low Power Mode Daemon
 
 License:	GPL-2.0-or-later
 URL:		https://github.com/intel/intel-lpmd
-Source0:        https://github.com/intel/intel-lpmd/archive/refs/tags/v0.0.9/intel-lpmd-0.0.9.tar.gz
+Source0:        https://github.com/intel/intel-lpmd/archive/refs/tags/v%{version}.tar.gz#/intel-lpmd-%{version}.tar.gz
 
 ExclusiveArch:	x86_64
 

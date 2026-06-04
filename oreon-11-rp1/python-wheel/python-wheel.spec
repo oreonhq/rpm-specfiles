@@ -20,7 +20,7 @@ Summary:        Built-package format for Python
 # packaging is Apache-2.0 OR BSD-2-Clause
 License:        MIT AND (Apache-2.0 OR BSD-2-Clause)
 URL:            https://github.com/pypa/wheel
-Source:        https://github.com/pypa/wheel/archive/refs/tags/0.45.1/wheel-0.45.1.tar.gz
+Source:        https://github.com/pypa/wheel/archive/refs/tags/0.45.1.tar.gz#/wheel-0.45.1.tar.gz
 # Compatibility with the setuptools 75+
 # https://github.com/pypa/wheel/issues/650
 Patch:          https://github.com/pypa/wheel/commit/3028d3.patch

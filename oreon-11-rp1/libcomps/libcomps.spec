@@ -9,7 +9,7 @@ Summary:        Comps XML file manipulation library
 
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/libcomps
-Source0:        https://github.com/rpm-software-management/libcomps/archive/refs/tags/0.1.24/libcomps-0.1.24.tar.gz
+Source0:        https://github.com/rpm-software-management/libcomps/archive/refs/tags/0.1.24.tar.gz#/libcomps-0.1.24.tar.gz
 
 BuildRequires:  gcc-c++
 BuildRequires:  cmake >= 3.10

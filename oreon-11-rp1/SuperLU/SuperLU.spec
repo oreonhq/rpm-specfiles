@@ -8,7 +8,7 @@ Release:	%autorelease
 Summary:	Subroutines to solve sparse linear systems
 License:	BSD-2-Clause AND GPL-2.0-or-later
 URL:		https://portal.nersc.gov/project/sparse/superlu/
-Source0:        https://github.com/xiaoyeli/superlu/archive/refs/tags/v%{version}/%{genname}-%{version}.tar.gz
+Source0:        https://github.com/xiaoyeli/superlu/archive/refs/tags/v%{version}.tar.gz#/%{genname}-%{version}.tar.gz
 
 # Use a pre-made configuration file for Make
 Source1:     %{name}-fedora-make.inc.in

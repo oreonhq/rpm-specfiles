@@ -13,7 +13,7 @@ License: Apache-2.0 AND BSD-3-Clause
 URL:     https://uxlfoundation.github.io/oneTBB/
 VCS:     git:%{giturl}.git
 
-Source0:        https://github.com/uxlfoundation/oneTBB/archive/refs/tags/v2022.3.0/tbb-2022.3.0.tar.gz
+Source0:        https://github.com/uxlfoundation/oneTBB/archive/refs/tags/v2022.3.0.tar.gz#/tbb-2022.3.0.tar.gz
 # These two are downstream sources.
 Source7: tbbmalloc.pc
 Source8: tbbmalloc_proxy.pc

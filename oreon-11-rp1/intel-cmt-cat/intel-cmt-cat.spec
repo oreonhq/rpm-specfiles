@@ -14,7 +14,7 @@ Summary:	Intel cache monitoring and allocation technology config tool
 
 License:	BSD-3-Clause
 URL: 		https://github.com/intel/intel-cmt-cat
-Source:        https://github.com/intel/intel-cmt-cat/archive/refs/tags/v25.04/intel-cmt-cat-25.04.tar.gz
+Source:        https://github.com/intel/intel-cmt-cat/archive/refs/tags/v%{version}.tar.gz#/intel-cmt-cat-%{version}.tar.gz
 
 Patch0:        0001-alter-install-paths.patch
 Patch1:        0002-remove-build-and-install-of-examples.patch

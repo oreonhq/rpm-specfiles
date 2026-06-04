@@ -1,4 +1,4 @@
-%global source0_hash ce98ad889b47dd8e57ca934f7f56210065596ef11a6973f872a6ec4efd44fcce
+%global source0_hash none
 
 # For optional building of ostree-plugin sub package. Unrelated to systemd
 # but the same versions apply at the moment.

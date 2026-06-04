@@ -11,7 +11,7 @@ URL: https://relax-and-recover.org
 
 License: GPL-3.0-or-later AND LGPL-2.1-or-later
 
-Source0:        https://github.com/rear/rear/archive/refs/tags/%{version}/rear-%{version}.tar.gz
+Source0:        https://github.com/rear/rear/archive/refs/tags/%{version}.tar.gz#/rear-%{version}.tar.gz
 # Add cronjob and systemd timer as documentation
 Source1: rear.cron
 Source2: rear.service

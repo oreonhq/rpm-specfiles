@@ -1,6 +1,6 @@
 %global source0_hash none
-%global source2_hash 37447da2f95edd6c1dfb9ee21a8843998883360e878bd86a8082076b52aa0628
-%global source3_hash 86019c5ddc6b310126664adf00b5f906b6ebd3d1cf5a2d1a7b546ccd481fab6d
+%global source2_hash none
+%global source3_hash none
 
 %define enable_japanese 1
 

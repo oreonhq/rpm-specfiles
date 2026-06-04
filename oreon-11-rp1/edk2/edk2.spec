@@ -82,10 +82,10 @@ URL:        http://www.tianocore.org
 # COMMIT=bb1bba3d7767
 # git archive --format=tar --prefix=edk2-$COMMIT/ $COMMIT \
 # | xz -9ev >/tmp/edk2-$COMMIT.tar.xz
-Source0:        https://github.com/tianocore/edk2/archive/refs/tags/b7a715f7c03c/edk2-b7a715f7c03c.tar.gz
+Source0:        https://github.com/tianocore/edk2/archive/refs/tags/b7a715f7c03c.tar.gz#/edk2-b7a715f7c03c.tar.gz
 Source1:        ovmf-whitepaper-c770f8c.txt
 Source2:        https://github.com/openssl/openssl/releases/download/openssl-3.5.5/openssl-3.5.5.tar.gz
-Source4:        https://github.com/tianocore/edk2-platforms/archive/refs/tags/c3efe816e1bb/edk2-platforms-c3efe816e1bb.tar.gz
+Source4:        https://github.com/tianocore/edk2-platforms/archive/refs/tags/c3efe816e1bb.tar.gz#/edk2-platforms-c3efe816e1bb.tar.gz
 Source5: https://github.com/akheron/jansson/releases/download/v2.13.1/jansson-2.13.1.tar.bz2
 Source6: https://www.kernel.org/pub/software/utils/dtc/dtc-1.7.0.tar.xz
 Source9:        README.experimental

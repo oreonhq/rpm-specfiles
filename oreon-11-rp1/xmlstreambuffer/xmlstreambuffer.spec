@@ -10,7 +10,7 @@ URL:            https://github.com/eclipse-ee4j/metro-xmlstreambuffer
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-ee4j/metro-xmlstreambuffer/archive/refs/tags/2.1.0/metro-xmlstreambuffer-2.1.0.tar.gz
+Source0:        https://github.com/eclipse-ee4j/metro-xmlstreambuffer/archive/refs/tags/2.1.0.tar.gz#/metro-xmlstreambuffer-2.1.0.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)

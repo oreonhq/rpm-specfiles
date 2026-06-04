@@ -48,7 +48,7 @@ Release:        9%{?dist}
 Summary:        Core Plugins for DNF
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf-plugins-core
-Source0:        https://github.com/rpm-software-management/dnf-plugins-core/archive/refs/tags/4.10.1/dnf-plugins-core-4.10.1.tar.gz
+Source0:        https://github.com/rpm-software-management/dnf-plugins-core/archive/refs/tags/4.10.1.tar.gz#/dnf-plugins-core-4.10.1.tar.gz
 Patch1:         0001-Fix-building-with-CMake-4.patch
 Patch2:         0002-spec-Use-cmake-macros-for-invoking-a-build-script.patch
 BuildArch:      noarch

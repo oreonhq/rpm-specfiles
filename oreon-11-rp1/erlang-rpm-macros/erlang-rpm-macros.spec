@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        Macros for simplifying building of Erlang packages
 License:        MIT
 URL:            https://github.com/fedora-erlang/erlang-rpm-macros
-Source0:        https://github.com/fedora-erlang/erlang-rpm-macros/archive/refs/tags/0.3.11/erlang-rpm-macros-0.3.11.tar.gz
+Source0:        https://github.com/fedora-erlang/erlang-rpm-macros/archive/refs/tags/0.3.11.tar.gz#/erlang-rpm-macros-0.3.11.tar.gz
 Patch0:         0001-README-drop-Fedora-EPEL-wording.patch
 
 BuildArch:      noarch

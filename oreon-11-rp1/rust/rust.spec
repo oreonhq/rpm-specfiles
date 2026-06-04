@@ -116,7 +116,7 @@ Source0:        https://static.rust-lang.org/dist/%{rustc_package}.tar.xz
 Source1:        https://static.rust-lang.org/dist/%{rustc_package}.tar.xz.asc
 Source2:        https://static.rust-lang.org/rust-key.gpg.ascii
 
-Source10:        https://github.com/WebAssembly/wasi-libc/archive/refs/tags/wasi-sdk-29/wasi-libc-wasi-sdk-29.tar.gz
+Source10:        https://github.com/WebAssembly/wasi-libc/archive/refs/tags/wasi-sdk-29.tar.gz#/wasi-libc-wasi-sdk-29.tar.gz
 
 # Sources for bootstrap_arches are inserted by lua below
 

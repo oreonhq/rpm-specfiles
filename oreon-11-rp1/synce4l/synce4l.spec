@@ -7,7 +7,7 @@ Summary:	SyncE implementation for Linux
 
 License:	GPL-2.0-or-later
 URL:		https://github.com/intel/synce4l
-Source0:        https://github.com/intel/synce4l/archive/refs/tags/%{version}/synce4l-%{version}.tar.gz
+Source0:        https://github.com/intel/synce4l/archive/refs/tags/%{version}.tar.gz#/synce4l-%{version}.tar.gz
 Source1:	synce4l.service
 
 # Fix compiler warnings to avoid build failures with -Werror

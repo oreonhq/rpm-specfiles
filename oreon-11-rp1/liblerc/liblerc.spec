@@ -9,7 +9,7 @@ Summary:        Library for Limited Error Raster Compression
 
 License:        Apache-2.0
 URL:            https://github.com/Esri/lerc
-Source0:        https://github.com/Esri/lerc/archive/refs/tags/v%{version}/lerc-%{version}.tar.gz
+Source0:        https://github.com/Esri/lerc/archive/refs/tags/v%{version}.tar.gz#/lerc-%{version}.tar.gz
 # Add version suffix to mingw dll
 Patch0:         lerc-dllver.patch
 

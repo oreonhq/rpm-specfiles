@@ -19,7 +19,7 @@ Summary:        Small, fast speech synthesis engine (text-to-speech)
 License:        MIT
 URL:            http://cmuflite.org/
 
-Source0:        https://github.com/festvox/flite/archive/refs/tags/v%{version}/flite-%{version}.tar.gz
+Source0:        https://github.com/festvox/flite/archive/refs/tags/v%{version}.tar.gz#/flite-%{version}.tar.gz
 Patch0:         flite-2.2-lto.patch
 # fixes build with texinfo-7.0+, see https://lists.gnu.org/archive/html/bug-texinfo/2022-11/msg00036.html
 Patch1:         flite-2.2-texinfo-7.0.patch

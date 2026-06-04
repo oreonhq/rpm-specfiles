@@ -11,7 +11,7 @@ Summary:	Zlib implementation for POWER processors
 License:    Apache-2.0 OR GPL-2.0-or-later
 Url:		https://github.com/libnxz/power-gzip
 BuildRequires:	zlib-devel
-Source0:        https://github.com/libnxz/power-gzip/archive/refs/tags/v0.64/libnxz-0.64.tar.gz
+Source0:        https://github.com/libnxz/power-gzip/archive/refs/tags/v%{version}.tar.gz#/libnxz-%{version}.tar.gz
 # Fixes for GCC 14 and zlib-ng compat usage
 Patch0:         %{url}/pull/209.patch
 

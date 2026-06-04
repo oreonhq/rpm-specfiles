@@ -9,7 +9,7 @@ Version: 1.16.1
 Release: 2%{?dist}
 License: LGPL-2.1-or-later
 URL:     https://github.com/linux-nvme/libnvme
-Source0:        https://github.com/linux-nvme/libnvme/archive/refs/tags/v1.16.1/libnvme-1.16.1.tar.gz
+Source0:        https://github.com/linux-nvme/libnvme/archive/refs/tags/v1.16.1.tar.gz#/libnvme-1.16.1.tar.gz
 
 BuildRequires: gcc gcc-c++
 BuildRequires: swig

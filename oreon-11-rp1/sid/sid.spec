@@ -32,9 +32,9 @@ Summary: Storage Instantiation Daemon (SID)
 License: GPL-2.0-or-later
 URL: http://sid-project.github.io
 %if %{defined commit}
-Source0:        https://github.com/sid-project/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/sid-project/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %else
-Source0:        https://github.com/sid-project/%{name}/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/sid-project/%{name}/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 %endif
 
 BuildRequires: autoconf

@@ -12,7 +12,7 @@ Summary:        A rust implementation of the FIDO Device Onboard Specification
 License:        BSD-3-Clause
 
 URL:            https://github.com/fdo-rs/fido-device-onboard-rs
-Source0:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/refs/tags/v0.5.5/fido-device-onboard-rs-0.5.5.tar.gz
+Source0:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/refs/tags/v%{version}.tar.gz#/fido-device-onboard-rs-%{version}.tar.gz
 Source1:        https://github.com/fdo-rs/fido-device-onboard-rs/archive/refs/tags/v0.5.5.tar.gz
 Patch1:        0001-use-released-aws-nitro-enclaves-cose-version.patch
 

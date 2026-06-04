@@ -20,7 +20,7 @@ Summary:        Minizip-ng contrib in zlib-ng with the latest bug fixes and adva
 
 License:        Zlib
 URL:            https://github.com/nmoinvaz/%{name}
-Source0:        https://github.com/nmoinvaz/%{name}/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/nmoinvaz/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Patch0:         minizip-ng-4.0.7-openssl_no_engine.patch
 
 BuildRequires: cmake

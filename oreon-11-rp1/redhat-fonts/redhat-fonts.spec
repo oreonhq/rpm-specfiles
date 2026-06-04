@@ -34,7 +34,7 @@ Summary:        Red Hat Typeface fonts
 License:        OFL-1.1-RFN AND CC-BY-SA-4.0
 URL:            https://github.com/RedHatOfficial/%{projname}
 
-Source0:        https://github.com/RedHatOfficial/RedHatFont/archive/refs/tags/4.1.0/RedHatFont-4.1.0.tar.gz
+Source0:        https://github.com/RedHatOfficial/RedHatFont/archive/refs/tags/4.1.0.tar.gz#/RedHatFont-4.1.0.tar.gz
 Source1:        %{fontconf}-display-fontconfig.conf
 Source2:        %{fontconf}-text-fontconfig.conf
 Source3:        %{fontconf}-mono-fontconfig.conf

@@ -14,7 +14,7 @@ Summary:	MinGW Windows pcre library
 
 License:	BSD-3-Clause
 URL:		http://www.pcre.org/
-Source0:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-%{version}/pcre2-%{version}.tar.bz2
+Source0:        https://ftp.exim.org/pub/pcre/pcre-%{version}.tar.bz2
 Source2:        https://ftp.pcre.org/pub/pcre/Public-Key
 
 # Refused by upstream, bug #675477

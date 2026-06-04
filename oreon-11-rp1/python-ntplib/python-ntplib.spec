@@ -9,7 +9,7 @@ Summary:        Python module that offers a simple interface to query NTP server
 
 License:        MIT
 URL:            http://pypi.python.org/pypi/ntplib/
-Source0:        https://github.com/cf-natali/ntplib/archive/refs/tags/%{version}/ntplib-%{version}.tar.gz
+Source0:        https://github.com/cf-natali/ntplib/archive/refs/tags/%{version}.tar.gz#/ntplib-%{version}.tar.gz
 
 BuildArch:      noarch
 

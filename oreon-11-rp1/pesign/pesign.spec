@@ -1,5 +1,5 @@
 %global source0_hash none
-%global source1_hash fd6cf1da31f5e7a1ddc91799d3bfd174f7c8612468bffe58b37d1bed1c12d71f
+%global source1_hash none
 
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 

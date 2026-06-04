@@ -57,7 +57,7 @@ License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 URL:            https://www.ocaml.org
 VCS:            git:%{giturl}.git
 
-Source0:        https://github.com/ocaml/ocaml/archive/refs/tags/5.4.1%{nil}/ocaml-5.4.1%{nil}.tar.gz
+Source0:        https://github.com/ocaml/ocaml/archive/refs/tags/5.4.1%{nil}.tar.gz#/ocaml-5.4.1%{nil}.tar.gz
 Source1:        macros.ocaml-rpm
 Source2:        ocaml_files.py
 

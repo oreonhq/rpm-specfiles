@@ -11,7 +11,7 @@ URL:            https://github.com/eclipse-ee4j/jaxb-ri
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-ee4j/jaxb-ri/archive/refs/tags/4.0.5-RI/jaxb-4.0.5.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-ri/archive/refs/tags/4.0.5-RI.tar.gz#/jaxb-4.0.5.tar.gz
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

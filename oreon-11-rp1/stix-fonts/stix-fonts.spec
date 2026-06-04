@@ -29,7 +29,7 @@ creation through final publication, both in electronic and print formats.
 }
 
 
-Source0:        https://github.com/stipub/stixfonts/archive/refs/tags/v2.13b171/stixfonts-2.13b171.tar.gz
+Source0:        https://github.com/stipub/stixfonts/archive/refs/tags/v2.13b171.tar.gz#/stixfonts-2.13b171.tar.gz
 Source10: 65-%{fontpkgname0}.xml
 
 %fontpkg -a

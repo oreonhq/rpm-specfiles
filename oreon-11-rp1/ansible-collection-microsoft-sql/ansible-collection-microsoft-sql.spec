@@ -55,8 +55,8 @@ Requires: linux-system-roles
 # %%global source1id 50edba099ab2c8b25b225fe760cb5a459b320030
 %global source1id %{version}
 %global parenturl https://github.com/linux-system-roles
-Source:        https://github.com/linux-system-roles/auto-maintenance/archive/refs/tags/eadd06cfa98d244b096cff24cd11b668428b1613/auto-maintenance-eadd06cfa98d244b096cff24cd11b668428b1613.tar.gz
-Source1:        https://github.com/linux-system-roles/mssql/archive/refs/tags/2.6.6/mssql-2.6.6.tar.gz
+Source:        https://github.com/linux-system-roles/auto-maintenance/archive/refs/tags/eadd06cfa98d244b096cff24cd11b668428b1613.tar.gz#/auto-maintenance-eadd06cfa98d244b096cff24cd11b668428b1613.tar.gz
+Source1:        https://github.com/linux-system-roles/mssql/archive/refs/tags/2.6.6.tar.gz#/mssql-2.6.6.tar.gz
 
 # EL only, includes macros available from ansible-packaging that is not available on EL
 Source1002: ansible-packaging.inc

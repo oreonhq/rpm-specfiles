@@ -9,8 +9,8 @@ Release: 2%{?dist}
 
 License: GPL-2.0-only
 URL: https://github.com/makedumpfile/makedumpfile
-Source0:        https://github.com/makedumpfile/makedumpfile/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
-Source1:        https://github.com/lucchouina/eppic/archive/refs/tags/%{eppic_ver}/eppic-%{eppic_shortver}.tar.gz
+Source0:        https://github.com/makedumpfile/makedumpfile/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source1:        https://github.com/lucchouina/eppic/archive/refs/tags/%{eppic_ver}.tar.gz#/eppic-%{eppic_shortver}.tar.gz
 
 Conflicts: kexec-tools < 2.0.28-5
 BuildRequires: make

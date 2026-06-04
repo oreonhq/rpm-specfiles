@@ -22,7 +22,7 @@ Release: 5%{?dist}
 License: MIT
 Summary: C++ Coroutines for Qt
 URL: https://github.com/danvratil/%{name}
-Source0:        https://github.com/danvratil/qcoro/archive/refs/tags/v0.12.0/qcoro-0.12.0.tar.gz
+Source0:        https://github.com/danvratil/qcoro/archive/refs/tags/v0.12.0.tar.gz#/qcoro-0.12.0.tar.gz
 
 %if 0%{?use_qt5}
 BuildRequires: cmake(Qt5Concurrent)

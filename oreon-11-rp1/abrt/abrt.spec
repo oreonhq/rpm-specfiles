@@ -62,7 +62,7 @@ Version: 2.17.8
 Release: 3%{?dist}
 License: GPL-2.0-or-later
 URL: https://abrt.readthedocs.org/
-Source:        https://github.com/abrt/%{name}/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source:        https://github.com/abrt/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 BuildRequires: git-core
 BuildRequires: %{dbus_devel}
 BuildRequires: hostname

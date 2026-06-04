@@ -23,7 +23,7 @@ License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 
 URL:            https://ocaml-community.github.io/calendar/
 VCS:            git:%{giturl}.git
-Source0:        https://github.com/ocaml-community/calendar/archive/refs/tags/v3.0.0/calendar-3.0.0.tar.gz
+Source0:        https://github.com/ocaml-community/calendar/archive/refs/tags/v3.0.0.tar.gz#/calendar-3.0.0.tar.gz
 # Work around https://github.com/ocaml-community/calendar/issues/43
 Patch:          %{name}-timezone-test.patch
 

@@ -53,7 +53,7 @@ License:        GPL-2.0-or-later
 Version:        1.5.2
 Release:        %{baserelease}%{?dist}
 Url:            https://github.com/%{github_owner}/%{name}
-Source0:        https://github.com/%{github_owner}/%{name}/archive/refs/tags/%{longcommit}/%{name}-%{longcommit}.tar.gz
+Source0:        https://github.com/%{github_owner}/%{name}/archive/refs/tags/%{longcommit}.tar.gz#/%{name}-%{longcommit}.tar.gz
 Patch0:         0001-Fix-query-watchdog-avoid-issues-on-heap-allocation-f.patch
 Patch1:         0002-Refactor-sbd-md-alloc-de-alloc-reverse-order.patch
 Patch2:         0003-spec-convert-license-naming-to-SPDX.patch

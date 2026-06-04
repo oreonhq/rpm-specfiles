@@ -34,7 +34,7 @@ Summary:        Library for property based testing
 
 License:        MPL-2.0
 URL:            https://github.com/HypothesisWorks/hypothesis
-Source:        https://github.com/HypothesisWorks/hypothesis/archive/refs/tags/hypothesis-python-6.123.0/hypothesis-6.123.0.tar.gz
+Source:        https://github.com/HypothesisWorks/hypothesis/archive/refs/tags/hypothesis-python-6.123.0.tar.gz#/hypothesis-6.123.0.tar.gz
 # Patch to use the version of attrs that works with Python 3.14
 # see https://github.com/python-attrs/attrs/pull/1329
 #     https://github.com/python-attrs/attrs/commit/7373d88f9bef8a2ff70972f81e8d8b9dfb7c5653

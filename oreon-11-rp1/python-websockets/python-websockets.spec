@@ -9,7 +9,7 @@ Summary:        Implementation of the WebSocket Protocol for Python
 
 License:        BSD-3-Clause
 URL:            https://github.com/aaugustin/websockets
-Source0:        https://github.com/aaugustin/websockets/archive/refs/tags/15.0.1/websockets-15.0.1.tar.gz
+Source0:        https://github.com/aaugustin/websockets/archive/refs/tags/15.0.1.tar.gz#/websockets-15.0.1.tar.gz
 
 # Fix help(websockets) when werkzeug isn't installed
 # This makes %%pyproject_check_import pass without werkzeug

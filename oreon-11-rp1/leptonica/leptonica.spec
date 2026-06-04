@@ -19,7 +19,7 @@ Summary:       C library for efficient image processing and image analysis opera
 
 License:       Leptonica
 URL:           https://github.com/danbloomberg/leptonica
-Source0:        https://github.com/DanBloomberg/leptonica/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/DanBloomberg/leptonica/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # Add soversion suffix on win32
 # Don't add _<CONFIG> suffix to pkgconfig filename
 Patch0:        leptonica_cmake.patch

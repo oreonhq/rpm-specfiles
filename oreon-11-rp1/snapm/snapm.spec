@@ -9,7 +9,7 @@ Summary:	%{summary}
 
 License:	Apache-2.0
 URL:		https://github.com/snapshotmanager/%{name}
-Source0:        https://github.com/snapshotmanager/snapm/archive/refs/tags/v0.7.0/snapm-0.7.0.tar.gz
+Source0:        https://github.com/snapshotmanager/snapm/archive/refs/tags/v0.7.0.tar.gz#/snapm-0.7.0.tar.gz
 
 BuildArch:	noarch
 

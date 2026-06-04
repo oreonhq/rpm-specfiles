@@ -21,7 +21,7 @@ Summary:    Manipulate system time per process for testing purposes
 License:    GPL-3.0-only AND GPL-2.0-only AND BSD-1-Clause
 SourceLicense:  %{license} AND GPL-2.0-or-later AND BSD-2-Clause
 URL:        https://github.com/wolfcw/libfaketime
-Source:        https://github.com/wolfcw/libfaketime/archive/refs/tags/v0.9.12/libfaketime-0.9.12.tar.gz
+Source:        https://github.com/wolfcw/libfaketime/archive/refs/tags/v0.9.12.tar.gz#/libfaketime-0.9.12.tar.gz
 # In upstream after 0.9.12, <https://github.com/wolfcw/libfaketime/pull/525>
 Patch0:     libfaketime-0.9.12-isoc23.patch
 # Make the libraries executable, needed for stripping them. Not suitable for

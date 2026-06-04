@@ -11,7 +11,7 @@ Release:        %autorelease
 
 License:        Apache-2.0
 URL:            https://github.com/googleapis/google-api-python-client
-Source0:        https://github.com/googleapis/google-api-python-client/archive/refs/tags/v2.192.0/google-api-python-client-2.192.0.tar.gz
+Source0:        https://github.com/googleapis/google-api-python-client/archive/refs/tags/v2.192.0.tar.gz#/google-api-python-client-2.192.0.tar.gz
 
 BuildArch:      noarch
 

@@ -9,7 +9,7 @@ Summary:        C/C++ port of the Sass CSS precompiler
 # src/ast.hpp, src/utf8* is BSL-1.0
 License:        MIT AND BSL-1.0
 URL:            https://sass-lang.com/libsass
-Source0:        https://github.com/sass/libsass/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/sass/libsass/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:  automake
 BuildRequires:  autoconf

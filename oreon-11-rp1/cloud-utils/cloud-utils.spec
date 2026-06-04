@@ -14,7 +14,7 @@ Release:	%autorelease
 License:	GPL-3.0-only
 URL:		https://github.com/canonical/%{name}
 
-Source:        https://github.com/canonical/cloud-utils/archive/refs/tags/0.33/cloud-utils-0.33.tar.gz
+Source:        https://github.com/canonical/cloud-utils/archive/refs/tags/0.33.tar.gz#/cloud-utils-0.33.tar.gz
 
 BuildArch:	noarch
 

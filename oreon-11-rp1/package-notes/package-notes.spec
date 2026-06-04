@@ -6,7 +6,7 @@ Release:        %autorelease
 Summary:        ELF Package and Dlopen Notes
 License:        0BSD
 URL:            https://github.com/systemd/package-notes
-Source:        https://github.com/systemd/package-notes/archive/refs/tags/v%{version_no_tilde}/%{name}-%{version_no_tilde}.tar.gz
+Source:        https://github.com/systemd/package-notes/archive/refs/tags/v%{version_no_tilde}.tar.gz#/%{name}-%{version_no_tilde}.tar.gz
 
 BuildArch:      noarch
 BuildRequires:  make

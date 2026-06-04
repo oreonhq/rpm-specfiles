@@ -23,14 +23,14 @@ Summary:           A persistent key-value database
 # fpconv: BSL-1.0
 License:           BSD-3-Clause AND BSD-2-Clause AND MIT AND BSL-1.0
 URL:               https://valkey.io
-Source0:        https://github.com/valkey-io/%{name}/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/valkey-io/%{name}/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:           %{name}.logrotate
 Source2:           %{name}-sentinel.service
 Source3:           %{name}.service
 Source4:           %{name}.sysusers
 Source5:           %{name}.tmpfiles
 Source9:           migrate_redis_to_valkey.sh
-Source50:        https://github.com/valkey-io/%{name}-doc/archive/refs/tags/%{doc_version}/%{name}-doc-%{doc_version}.tar.gz
+Source50:        https://github.com/valkey-io/%{name}-doc/archive/refs/tags/%{doc_version}.tar.gz#/%{name}-doc-%{doc_version}.tar.gz
 
 # Fix default paths in configuration files for RPM layout
 Patch0:            %{name}-conf.patch

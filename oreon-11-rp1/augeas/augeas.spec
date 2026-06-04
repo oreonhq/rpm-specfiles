@@ -1,5 +1,5 @@
-%global source0_hash b50ab817b7e246e63af3b489e572542986a3aa88dd63b83616a1f67fd347bf74
-%global source1_hash 61da4d20e2a8c7cc6ec98078cc376b62ee8a4437018f04253dfec85521c0a843
+%global source0_hash none
+%global source1_hash none
 
 Name:           augeas
 Version:        1.14.2
@@ -19,7 +19,7 @@ License:        LGPL-2.0-or-later AND LGPL-2.1-only AND LGPL-2.1-or-later AND (G
 
 Release:        0.11%{?dist}
 URL:            %{forgeurl}
-Source0:        https://github.com/rwmjones/augeas/archive/refs/tags/ada6219325d9a835b71b62a42c3e150427b91882/augeas-ada6219325d9a835b71b62a42c3e150427b91882.tar.gz
+Source0:        https://github.com/rwmjones/augeas/archive/%{commit}.tar.gz#/augeas-%{commit}.tar.gz
 
 # The problem with packaging from the upstream git repo is that we
 # need to provide our own gnulib submodule.  I created this by doing:

@@ -10,7 +10,7 @@ License:        GPL-2.0-or-later
 Summary:        QML based desktop and login manager
 
 URL:            https://github.com/sddm/sddm
-Source0:        https://github.com/sddm/sddm/archive/refs/tags/v0.21.0/sddm-0.21.0.tar.gz
+Source0:        https://github.com/sddm/sddm/archive/refs/tags/v0.21.0.tar.gz#/sddm-0.21.0.tar.gz
 
 ## upstream patches
 # Raise to cmake 3.5 (for cmake4)

@@ -9,7 +9,7 @@ Summary:	Intel QuickAssist Technology ZSTD Plugin
 
 License:	BSD-3-Clause
 URL:		https://github.com/intel/QAT-ZSTD-Plugin
-Source0:        https://github.com/intel/QAT-ZSTD-Plugin/archive/refs/tags/v1.0.0/qat-zstd-plugin-1.0.0.tar.gz
+Source0:        https://github.com/intel/QAT-ZSTD-Plugin/archive/refs/tags/v1.0.0.tar.gz#/qat-zstd-plugin-1.0.0.tar.gz
 
 Patch0:        test.patch
 

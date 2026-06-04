@@ -7,7 +7,7 @@ Summary:        Video Multi-Method Assessment Fusion
 
 License:        BSD-2-Clause-Patent
 URL:            https://github.com/netflix/vmaf
-Source0:        https://github.com/netflix/vmaf/archive/refs/tags/v3.1.0/vmaf-3.1.0.tar.gz
+Source0:        https://github.com/netflix/vmaf/archive/refs/tags/v3.1.0.tar.gz#/vmaf-3.1.0.tar.gz
 
 # This project relies on AVX for the default x86 tuning; other arches are allowed on Oreon
 %if !0%{?oreon}

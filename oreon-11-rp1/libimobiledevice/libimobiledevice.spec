@@ -12,7 +12,7 @@ Summary:        Library for connecting to mobile devices
 
 License:        LGPL-2.0-or-later
 URL:            https://libimobiledevice.org/
-Source:        https://github.com/libimobiledevice/libimobiledevice/archive/refs/tags/ed9703db1ee6d54e3801b618cee9524563d709e1/libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz
+Source:        https://github.com/libimobiledevice/libimobiledevice/archive/refs/tags/ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz#/libimobiledevice-ed9703db1ee6d54e3801b618cee9524563d709e1.tar.gz
 # Use SHA256 signature, instead of SHA1 for pairing
 Patch:        https://github.com/libimobiledevice/libimobiledevice/pull/1616.patch
 

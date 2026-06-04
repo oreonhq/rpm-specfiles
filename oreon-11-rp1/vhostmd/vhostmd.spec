@@ -10,7 +10,7 @@ License:       LGPL-2.1-or-later
 
 URL:           https://github.com/vhostmd/vhostmd
 
-Source0:        https://github.com/vhostmd/vhostmd/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/vhostmd/vhostmd/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:       vhostmd.conf
 
 Patch0001:     0001-Add-channel_path-setting-to-daemon-config-file.patch

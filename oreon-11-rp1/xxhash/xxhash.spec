@@ -9,7 +9,7 @@ Summary:	Extremely fast hash algorithm
 #		The source for the command line tool (xxhsum.c) is GPL-2.0-or-later
 License:	BSD-2-Clause AND GPL-2.0-or-later
 URL:		https://www.xxhash.com/
-Source0:        https://github.com/Cyan4973/xxHash/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/Cyan4973/xxHash/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires:	make
 BuildRequires:	gcc

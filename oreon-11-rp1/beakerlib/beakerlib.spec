@@ -67,7 +67,7 @@ BuildRequires: perl-generators
 BuildRequires: util-linux
 BuildRequires: make
 
-Source0:        https://github.com/beakerlib/beakerlib/archive/refs/tags/%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/beakerlib/beakerlib/archive/refs/tags/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 Source1:    %{name}-tmpfiles.conf
 
 Patch0: bugzilla-links.patch

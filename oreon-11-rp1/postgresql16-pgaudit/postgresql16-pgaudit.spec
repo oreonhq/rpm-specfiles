@@ -12,7 +12,7 @@ Summary:	PostgreSQL Audit Extension
 License:	PostgreSQL
 URL:		http://pgaudit.org
 
-Source0:        https://github.com/%{majorname}/%{majorname}/archive/refs/tags/%{version}/%{majorname}-%{version}.tar.gz
+Source0:        https://github.com/%{majorname}/%{majorname}/archive/refs/tags/%{version}.tar.gz#/%{majorname}-%{version}.tar.gz
 
 %if %?postgresql_default
 %global pkgname %{majorname}

@@ -9,7 +9,7 @@ Summary:        A modern, C++-native, header-only, framework for unit-tests, TDD
 
 License:        BSL-1.0
 URL:            https://github.com/catchorg/Catch2
-Source0:        https://github.com/catchorg/Catch2/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz
+Source0:        https://github.com/catchorg/Catch2/archive/refs/tags/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
 # https://github.com/catchorg/Catch2/issues/2178
 Patch0:         catch1-sigstksz.patch
 # Update minimum cmake version for cmake 4 support

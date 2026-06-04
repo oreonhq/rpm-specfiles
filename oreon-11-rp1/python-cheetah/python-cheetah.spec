@@ -14,7 +14,7 @@ Summary:        Template engine and code generator
 #   Cheetah/Tests/xmlrunner.py
 License:        MIT AND BSD-3-Clause-HP AND LGPL-2.1-or-later AND LicenseRef-Fedora-Public-Domain
 URL:            https://cheetahtemplate.org/
-Source:        https://github.com/CheetahTemplate3/cheetah3/archive/refs/tags/%{version}/cheetah3-%{version}.tar.gz
+Source:        https://github.com/CheetahTemplate3/cheetah3/archive/refs/tags/%{version}.tar.gz#/cheetah3-%{version}.tar.gz
 BuildRequires:  gcc
 BuildRequires:  python3-devel
 

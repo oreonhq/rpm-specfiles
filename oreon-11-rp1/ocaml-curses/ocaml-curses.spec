@@ -11,7 +11,7 @@ License:        LGPL-2.1-or-later WITH OCaml-LGPL-linking-exception
 
 URL:            https://github.com/mbacarella/curses
 VCS:            git:%{url}.git
-Source0:        https://github.com/mbacarella/curses/archive/refs/tags/1.0.11/curses-1.0.11.tar.gz
+Source0:        https://github.com/mbacarella/curses/archive/refs/tags/1.0.11.tar.gz#/curses-1.0.11.tar.gz
 
 BuildRequires:  ocaml >= 4.02.0
 BuildRequires:  ocaml-dune >= 2.7

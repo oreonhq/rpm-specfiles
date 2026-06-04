@@ -11,7 +11,7 @@ License:        LGPL-2.1-only WITH OCaml-LGPL-linking-exception
 
 URL:            https://github.com/Chris00/ocaml-csv
 VCS:            git:%{url}.git
-Source0:        https://github.com/Chris00/ocaml-csv/archive/refs/tags/2.4/ocaml-csv-2.4.tar.gz
+Source0:        https://github.com/Chris00/ocaml-csv/archive/refs/tags/2.4.tar.gz#/ocaml-csv-2.4.tar.gz
 # Remove references to a bytes library for OCaml 5.0 support
 Patch0:         %{name}-bytes.patch
 

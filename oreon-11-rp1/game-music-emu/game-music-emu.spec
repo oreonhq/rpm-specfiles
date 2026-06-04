@@ -8,7 +8,7 @@ Summary:        Video game music file emulation/playback library
 # Automatically converted from old format: LGPLv2+ - review is highly recommended.
 License:        LicenseRef-Callaway-LGPLv2+
 URL:            https://github.com/libgme/game-music-emu
-Source0:        https://github.com/libgme/game-music-emu/archive/refs/tags/0.6.4/game-music-emu-0.6.4.tar.gz
+Source0:        https://github.com/libgme/game-music-emu/archive/refs/tags/0.6.4.tar.gz#/game-music-emu-0.6.4.tar.gz
 
 
 BuildRequires:  gcc

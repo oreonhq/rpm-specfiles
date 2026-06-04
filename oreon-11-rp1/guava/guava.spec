@@ -13,7 +13,7 @@ URL:            https://github.com/google/guava
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/google/guava/archive/refs/tags/v%{version}/guava-%{version}.tar.gz
+Source0:        https://github.com/google/guava/archive/refs/tags/v%{version}.tar.gz#/guava-%{version}.tar.gz
 
 Patch:          0001-Remove-unused-annotation-module-dependencies.patch
 Patch:          0002-Remove-NullMarked-filtering-and-annotation-collectio.patch

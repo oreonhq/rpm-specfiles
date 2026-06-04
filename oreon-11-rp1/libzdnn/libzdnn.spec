@@ -7,7 +7,7 @@ Summary:	Driver library for the IBM Z Neural Network Processing Assist Facility
 
 License:	Apache-2.0
 Url:		https://github.com/IBM/zDNN
-Source0:        https://github.com/IBM/zDNN/archive/refs/tags/v1.0.1/libzdnn-1.0.1.tar.gz
+Source0:        https://github.com/IBM/zDNN/archive/refs/tags/v%{version}.tar.gz#/libzdnn-%{version}.tar.gz
 
 ExclusiveArch:	s390x
 BuildRequires:	gcc

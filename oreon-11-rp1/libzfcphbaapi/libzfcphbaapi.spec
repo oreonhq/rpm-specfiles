@@ -1,4 +1,4 @@
-%global source0_hash 70cee88660334342b17e73d4b46f13f356332c04e7f07c09f6fc2d669b20ccca
+%global source0_hash none
 
 Name:           libzfcphbaapi
 Summary:        HBA API for the zFCP device driver
@@ -6,7 +6,7 @@ Version:        3.0.3
 Release:        3%{?dist}
 License:        EPL-1.0
 URL:            https://github.com/ibm-s390-linux/libzfcphbaapi
-Source0:        https://github.com/ibm-s390-linux/libzfcphbaapi/archive/refs/tags/v3.0.3/libzfcphbaapi-3.0.3.tar.gz
+Source0:        https://github.com/ibm-s390-linux/libzfcphbaapi/archive/refs/tags/v%{version}.tar.gz#/libzfcphbaapi-%{version}.tar.gz
 Patch1:         %{name}-3.0.2-fedora.patch
 
 ExclusiveArch:  s390 s390x

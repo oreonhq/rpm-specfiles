@@ -29,7 +29,7 @@ Summary:        Butane config transpiler
 
 License:        Apache-2.0
 URL:            %{gourl}
-Source0:        https://github.com/coreos/butane/archive/refs/tags/v0.27.0/butane-0.27.0.tar.gz
+Source0:        https://github.com/coreos/butane/archive/refs/tags/v0.27.0.tar.gz#/butane-0.27.0.tar.gz
 
 # Upgrade path from old FCCT package; can be dropped in Fedora 36
 Provides:       fedora-coreos-config-transpiler = %{version}-%{release}

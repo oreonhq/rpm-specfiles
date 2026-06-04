@@ -11,7 +11,7 @@ Summary:	C library for encoding, decoding and manipulating JSON data
 # src/lookup3.h is LicenseRef-Fedora-Public-Domain
 License:	MIT AND LicenseRef-Fedora-Public-Domain
 URL:		%{forgeurl}
-Source0:        https://github.com/akheron/jansson/archive/refs/tags/v2.14/jansson-2.14.tar.gz
+Source0:        https://github.com/akheron/jansson/archive/refs/tags/v2.14.tar.gz#/jansson-2.14.tar.gz
 
 # Fix the tests.
 # Upstream commit 0677666f65b988b2dd44d02966a08fea490d5883

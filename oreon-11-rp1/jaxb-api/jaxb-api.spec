@@ -9,7 +9,7 @@ URL:            https://github.com/eclipse-ee4j/jaxb-api
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        https://github.com/eclipse-ee4j/jaxb-api/archive/refs/tags/4.0.5/jaxb-api-4.0.5.tar.gz
+Source0:        https://github.com/eclipse-ee4j/jaxb-api/archive/refs/tags/4.0.5.tar.gz#/jaxb-api-4.0.5.tar.gz
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(jakarta.activation:jakarta.activation-api)

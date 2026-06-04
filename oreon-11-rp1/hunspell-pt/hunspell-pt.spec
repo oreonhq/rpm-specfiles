@@ -1,4 +1,4 @@
-%global source0_hash 2700674e9fe644151362c32a78bb816fc844a37be690cfad6ee18e2bc744deb9
+%global source0_hash none
 %global source1_hash none
 
 %if 0%{?fedora} > 35 || (0%{?oreon} >= 11)
@@ -11,7 +11,7 @@ Summary: Portuguese hunspell dictionaries
 %global upstreamid 20131030
 Version: 0.%{upstreamid}
 Release: 16%{?dist}
-Source0:        https://github.com/ivandrofly/hunspell-pt/archive/refs/heads/master.tar.gz#/hunspell-pt.tar.gz
+Source0:        https://github.com/ivandrofly/hunspell-pt/archive/refs/heads/main.tar.gz#/hunspell-pt.tar.gz
 Source1: https://pt-br.libreoffice.org/assets/Uploads/PT-BR-Documents/VERO/ptBR-2013-10-30AOC-2.zip
 URL: https://download.documentfoundation.org/libreoffice/src/projetos/vero
 # pt_BR dicts are under LGPLv3 or MPL, pt_PT under GPLv2 or LGPLv2 or MPLv1.1

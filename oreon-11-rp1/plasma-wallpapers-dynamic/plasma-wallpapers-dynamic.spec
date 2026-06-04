@@ -11,7 +11,7 @@ Summary:        Dynamic wallpaper plugin for KDE Plasma
 
 License:        GPL-3.0-or-later AND LGPL-3.0-or-later AND BSD-3-Clause AND CC0-1.0 AND CC-BY-SA-4.0
 URL:            https://github.com/zzag/plasma5-%{component}
-Source0:        https://github.com/zzag/plasma5-wallpapers-dynamic/archive/refs/tags/5.0.1/plasma5-wallpapers-dynamic-5.0.1.tar.gz
+Source0:        https://github.com/zzag/plasma5-wallpapers-dynamic/archive/refs/tags/5.0.1.tar.gz#/plasma5-wallpapers-dynamic-5.0.1.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

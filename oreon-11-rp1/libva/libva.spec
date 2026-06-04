@@ -10,7 +10,7 @@ Summary:	Video Acceleration (VA) API for Linux
 # va/x11/va_dri* are ICU
 License:	MIT AND HPND-sell-variant AND ICU
 URL:		https://github.com/intel/libva
-Source0:        https://github.com/intel/libva/archive/refs/tags/2.23.0/libva-2.23.0.tar.gz
+Source0:        https://github.com/intel/libva/archive/refs/tags/2.23.0.tar.gz#/libva-2.23.0.tar.gz
 
 BuildRequires:  meson
 BuildRequires:  gcc

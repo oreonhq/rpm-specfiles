@@ -13,7 +13,7 @@ Summary:        Python attributes without boilerplate
 License:        MIT
 URL:            http://www.attrs.org/
 BuildArch:      noarch
-Source:        https://github.com/python-attrs/attrs/archive/refs/tags/%{version}/attrs-%{version}.tar.gz
+Source:        https://github.com/python-attrs/attrs/archive/refs/tags/%{version}.tar.gz#/attrs-%{version}.tar.gz
 
 BuildRequires:  python3-devel
 

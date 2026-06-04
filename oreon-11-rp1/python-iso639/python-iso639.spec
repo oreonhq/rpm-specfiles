@@ -9,7 +9,7 @@ Summary:        ISO639-2 support for Python
 
 License:        MIT
 URL:            https://github.com/janpipek/iso639-python
-Source0:        https://github.com/janpipek/iso639-python/archive/refs/tags/v0.1.4/iso639-0.1.4.tar.gz
+Source0:        https://github.com/janpipek/iso639-python/archive/refs/tags/v0.1.4.tar.gz#/iso639-0.1.4.tar.gz
 
 BuildArch:      noarch
 

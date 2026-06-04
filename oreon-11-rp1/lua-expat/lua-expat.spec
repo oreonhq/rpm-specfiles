@@ -11,7 +11,7 @@ Version:        1.5.2
 Release:        6%{?dist}
 License:        MIT
 URL:            https://lunarmodules.github.io/luaexpat/
-Source0:        https://github.com/lunarmodules/luaexpat/archive/refs/tags/%{version}/luaexpat-%{version}.tar.gz
+Source0:        https://github.com/lunarmodules/luaexpat/archive/refs/tags/%{version}.tar.gz#/luaexpat-%{version}.tar.gz
 Requires:       lua(abi) = %{lua_version}
 BuildRequires:  gcc
 BuildRequires:  make
