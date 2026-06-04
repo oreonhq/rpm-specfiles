@@ -10,7 +10,7 @@ Url:            http://cwrap.org/
 
 Source0:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz
 Source1:        https://ftp.samba.org/pub/cwrap/%{name}-%{version}.tar.gz.asc
-Source2:        https://src.fedoraproject.org/rpms/priv_wrapper/raw/rawhide/f/priv_wrapper.keyring
+Source2:        priv_wrapper.keyring
 
 Patch0:         priv_wrapper-fix-cmocka-1.1.6+-support.patch
 

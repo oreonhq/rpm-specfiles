@@ -40,7 +40,7 @@ URL:            http://www.jdom.org/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://jdom.org/dist/binary/archive/jdom-%{version}.tar.gz
+Source0:        https://jdom.org/dist/binary/archive/jdom-%{version}.tar.gz
 Source1:        https://repo1.maven.org/maven2/org/jdom/jdom/%{version}/jdom-%{version}.pom
 
 Patch:          %{name}-crosslink.patch

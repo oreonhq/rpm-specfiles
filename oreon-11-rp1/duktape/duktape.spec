@@ -8,7 +8,7 @@ Summary:        Embeddable Javascript engine
 License:        MIT
 Url:            http://duktape.org/
 Source0:        https://duktape.org/%{name}-%{version}.tar.xz
-Patch0:        https://src.fedoraproject.org/rpms/duktape/raw/rawhide/f/duktape-2.7.0-link-against-libm.patch
+Patch0:        duktape-2.7.0-link-against-libm.patch
 
 BuildRequires:  gcc
 BuildRequires:  pkgconfig

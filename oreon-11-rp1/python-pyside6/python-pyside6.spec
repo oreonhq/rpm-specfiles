@@ -31,9 +31,9 @@ Source0:        https://download.qt.io/official_releases/QtForPython/%{pypi_name
 # Optional doc-only qtbase submodule tarball when %%docs is enabled (see Fedora python-pyside6).
 
 # Shipped in SRPM (avoid src.fedoraproject.org fetch flakiness in mock)
-Patch0:        https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-Revert-Modify-headers-installation-for-CMake-builds.patch
-Patch1:        https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-Always-link-to-python-libraries.patch
-Patch2:        https://src.fedoraproject.org/rpms/python-pyside6/raw/rawhide/f/0001-Fix-installation.patch
+Patch0:        0001-Revert-Modify-headers-installation-for-CMake-builds.patch
+Patch1:        0001-Always-link-to-python-libraries.patch
+Patch2:        0001-Fix-installation.patch
 Patch3:         0001-shiboken6-Fix-build-with-clang-22.patch
 Patch4:         0004-shiboken6-define-LLVM_VERSION-for-apiextractor.patch
 Patch5:         0005-QtCore-QDir-match-Qt-6.10-optional-QFile-Permissions.patch

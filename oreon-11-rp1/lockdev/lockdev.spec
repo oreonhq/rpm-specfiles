@@ -14,10 +14,10 @@ Release: %autorelease -p -e %{checkout}
 License: LGPL-2.1-or-later
 URL: https://github.com/definesat/lockdev
 
-Source0: lockdev-%{version}.%{checkout}.tar.gz
+Source0:        https://codeload.github.com/definesat/lockdev/tar.gz/master#/lockdev-%{version}.%{checkout}.tar.gz
 
-Patch1:        https://src.fedoraproject.org/rpms/lockdev/raw/rawhide/f/lockdev-euidaccess.patch
-Patch2:        https://src.fedoraproject.org/rpms/lockdev/raw/rawhide/f/0001-major-and-minor-functions-moved-to-sysmacros.h.patch
+Patch1:        lockdev-euidaccess.patch
+Patch2:        0001-major-and-minor-functions-moved-to-sysmacros.h.patch
 
 Requires(post): glibc
 Requires(postun): glibc

@@ -21,7 +21,7 @@ Source1:        https://curl.se/download/%{name}-%{version_no_tilde}.tar.xz.asc
 # The curl download page ( https://curl.se/download.html ) links
 # to Daniel's address page https://daniel.haxx.se/address.html for the GPG Key,
 # which points to the GPG key as of April 7th 2016 of https://daniel.haxx.se/mykey.asc
-Source2:        https://src.fedoraproject.org/rpms/curl/raw/rawhide/f/mykey.asc
+Source2:        mykey.asc
 
 # update timer unconditionally in multi_remove_handle
 # rubygem-ethon: FTBFS in Fedora Rawhide

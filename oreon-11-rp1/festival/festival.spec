@@ -26,13 +26,13 @@ Obsoletes: festival-speechtools-utils < %{version}-%{release}
 
 # Files needed for everything...
 %global baseURL  http://festvox.org/packed/festival/2.5
-Source0:        http://festvox.org/packed/festival/2.5/festival-2.5.0-release.tar.gz
+Source0:        https://festvox.org/packed/festival/2.5/festival-2.5.0-release.tar.gz
 
 ### DICTIONARIES
 # Generic English dictionary
-Source100:        http://festvox.org/packed/festival/2.5/festlex_POSLEX.tar.gz
+Source100:        https://festvox.org/packed/festival/2.5/festlex_POSLEX.tar.gz
 # American English dictionary
-Source101:        http://festvox.org/packed/festival/2.5/festlex_CMU.tar.gz
+Source101:        https://festvox.org/packed/festival/2.5/festlex_CMU.tar.gz
 # OALD isn't included because it's got a more restrictive (non-commercial
 # only) license. OALD voices not included for same reason.
 
@@ -42,16 +42,16 @@ Source101:        http://festvox.org/packed/festival/2.5/festlex_CMU.tar.gz
 
 ### DIPHONE VOICES
 %global diphoneversion 0.19990610
-Source200:        http://festvox.org/packed/festival/2.5/voices/festvox_kallpc16k.tar.gz
-Source202:        http://festvox.org/packed/festival/2.5/voices/festvox_rablpc16k.tar.gz
+Source200:        https://festvox.org/packed/festival/2.5/voices/festvox_kallpc16k.tar.gz
+Source202:        https://festvox.org/packed/festival/2.5/voices/festvox_rablpc16k.tar.gz
 
 ### HTS VOICES
-Source220:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_awb_cg.tar.gz
-Source221:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_bdl_cg.tar.gz
-Source222:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_clb_cg.tar.gz
-Source223:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_jmk_cg.tar.gz
-Source224:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_rms_cg.tar.gz
-Source225:        http://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_slt_cg.tar.gz
+Source220:        https://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_awb_cg.tar.gz
+Source221:        https://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_bdl_cg.tar.gz
+Source222:        https://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_clb_cg.tar.gz
+Source223:        https://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_jmk_cg.tar.gz
+Source224:        https://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_rms_cg.tar.gz
+Source225:        https://festvox.org/packed/festival/2.5/voices/festvox_cmu_us_slt_cg.tar.gz
 
 ### Hispavoces Spanish voices left out; did they move?
 

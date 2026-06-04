@@ -28,16 +28,16 @@ Obsoletes:	grub < 1:0.98
 Source0:        https://ftp.gnu.org/gnu/grub/grub-%{tarversion}.tar.xz
 # Savannah cgit snapshots are flaky for spectool or mock, use GitHub mirror + fixed name
 Source1:        https://github.com/coreutils/gnulib/archive/9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz#/gnulib-9f48fb992a3d7e96610c4ce8be969cff2d61a01b.tar.gz
-Source2:        https://src.fedoraproject.org/rpms/grub2/raw/rawhide/f/99-grub-mkconfig.install
-Source3:	http://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
-Source4:        http://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
-Source5:        https://src.fedoraproject.org/rpms/grub2/raw/rawhide/f/bootstrap
-Source6:        https://src.fedoraproject.org/rpms/grub2/raw/rawhide/f/bootstrap.conf
-Source7:        https://src.fedoraproject.org/rpms/grub2/raw/rawhide/f/strtoull_test.c
-Source8:        https://src.fedoraproject.org/rpms/grub2/raw/rawhide/f/20-grub.install
-Source9:        https://src.fedoraproject.org/rpms/grub2/raw/rawhide/f/sbat.csv.in
-Source10:        https://src.fedoraproject.org/rpms/grub2/raw/rawhide/f/gen_grub_cfgstub
-Source11:        https://src.fedoraproject.org/rpms/grub2/raw/rawhide/f/95-set-boot-entry.install
+Source2:        99-grub-mkconfig.install
+Source3:	https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
+Source4:        https://unifoundry.com/pub/unifont/unifont-13.0.06/font-builds/unifont-13.0.06.pcf.gz
+Source5:        bootstrap
+Source6:        bootstrap.conf
+Source7:        strtoull_test.c
+Source8:        20-grub.install
+Source9:        sbat.csv.in
+Source10:        gen_grub_cfgstub
+Source11:        95-set-boot-entry.install
 
 
 # Inlined from grub.macros (parse-time %%include removed for spectool)

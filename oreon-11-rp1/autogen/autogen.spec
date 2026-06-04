@@ -11,12 +11,12 @@ URL:		http://www.gnu.org/software/autogen/
 Source0:        https://ftp.gnu.org/gnu/autogen/rel%{version}/%{name}-%{version}.tar.xz
 
 # Fix multilib conflicts
-Patch0:        https://src.fedoraproject.org/rpms/autogen/raw/rawhide/f/autogen-multilib.patch
+Patch0:        autogen-multilib.patch
 # Fix gcc error on overlapping strings
-Patch1:        https://src.fedoraproject.org/rpms/autogen/raw/rawhide/f/autogen-overlap.patch
-Patch2:        https://src.fedoraproject.org/rpms/autogen/raw/rawhide/f/autogen-configure-c99.patch
+Patch1:        autogen-overlap.patch
+Patch2:        autogen-configure-c99.patch
 # https://sourceforge.net/p/autogen/bugs/212/
-Patch3:        https://src.fedoraproject.org/rpms/autogen/raw/rawhide/f/autogen-fortify.patch
+Patch3:        autogen-fortify.patch
 
 Requires:	%{name}-libopts%{?_isa} = %{version}-%{release}
 

@@ -23,7 +23,7 @@ Patch9: ttmkfdir-3.0.9-bug434301.patch
 Patch10:ttmkfdir-3.0.9-freetype-header-fix2.patch
 Patch11:ttmkfdir-3.0.9-fedora-ldflags.patch
 Patch12:ttmkfdir-3.0.9-tag.patch
-Source10:        https://src.fedoraproject.org/rpms/ttmkfdir/raw/rawhide/f/ttmkfdir.1
+Source10:        ttmkfdir.1
 
 BuildRequires: make
 BuildRequires: freetype-devel >= 2.0

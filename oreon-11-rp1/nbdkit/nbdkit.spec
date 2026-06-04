@@ -72,9 +72,9 @@ URL:            https://gitlab.com/nbdkit/nbdkit
 ExcludeArch:    i686
 %endif
 
-Source0:        http://libguestfs.org/download/nbdkit/%{source_directory}/%{name}-%{version}.tar.gz
+Source0:        https://libguestfs.org/download/nbdkit/%{source_directory}/%{name}-%{version}.tar.gz
 %if 0%{verify_tarball_signature}
-Source1:        http://libguestfs.org/download/nbdkit/%{source_directory}/%{name}-%{version}.tar.gz.sig
+Source1:        https://libguestfs.org/download/nbdkit/%{source_directory}/%{name}-%{version}.tar.gz.sig
 # Keyring used to verify tarball signature.
 Source2:        https://gitlab.com/nbdkit/nbdkit/-/raw/HEAD/libguestfs.keyring
 %endif

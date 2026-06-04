@@ -26,9 +26,9 @@ ExclusiveArch: x86_64
 
 # Source and patches.
 URL:           http://libguestfs.org/
-Source0:        http://download.libguestfs.org/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://download.libguestfs.org/%{name}/%{name}-%{version}.tar.gz
 %if 0%{verify_tarball_signature}
-Source1:        http://download.libguestfs.org/%{name}/%{name}-%{version}.tar.gz.sig
+Source1:        https://download.libguestfs.org/%{name}/%{name}-%{version}.tar.gz.sig
 %endif
 
 # Keyring used to verify tarball signature.

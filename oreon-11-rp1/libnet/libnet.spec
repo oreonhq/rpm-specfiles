@@ -7,7 +7,7 @@ Release:        7%{?dist}
 License:        BSD-2-Clause AND BSD-3-Clause
 URL:            https://github.com/libnet/libnet
 Source0:        https://github.com/libnet/libnet/releases/download/v%{version}/%{name}-%{version}.tar.gz
-Patch0:        https://src.fedoraproject.org/rpms/libnet/raw/rawhide/f/libnet-config.patch
+Patch0:        libnet-config.patch
 BuildRequires:  gcc
 BuildRequires:  make
 BuildRequires:  %{_bindir}/pod2man

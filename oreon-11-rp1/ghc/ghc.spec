@@ -78,9 +78,9 @@ Source0:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.
 Source1:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-testsuite.tar.xz
 %endif
 Source2:        https://downloads.haskell.org/ghc/%{version}/ghc-%{version}-src.tar.xz.sig
-Source5:        https://src.fedoraproject.org/rpms/ghc/raw/rawhide/f/ghc-pkg.man
-Source6:        https://src.fedoraproject.org/rpms/ghc/raw/rawhide/f/haddock.man
-Source7:        https://src.fedoraproject.org/rpms/ghc/raw/rawhide/f/runghc.man
+Source5:        ghc-pkg.man
+Source6:        haddock.man
+Source7:        runghc.man
 
 # absolute haddock path (was for html/libraries -> libraries)
 Patch1: ghc-gen_contents_index-haddock-path.patch

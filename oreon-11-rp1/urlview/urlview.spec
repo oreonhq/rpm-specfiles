@@ -19,7 +19,7 @@ BuildRequires:  ncurses-devel
 # mutt packages before 5:1.5.16-2 included urlview
 Conflicts:      mutt < 5:1.5.16-2
 
-Patch1:        https://src.fedoraproject.org/rpms/urlview/raw/rawhide/f/urlview-default.patch
+Patch1:        urlview-default.patch
 
 %description
 urlview is a screen oriented program for extracting URLs from text

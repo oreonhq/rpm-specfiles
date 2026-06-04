@@ -8,7 +8,7 @@ Release: 29%{?dist}
 Summary: Command Line XML Toolkit
 License: MIT
 URL: http://xmlstar.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/xmlstar/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/xmlstar/%{name}-%{version}.tar.gz
 # https://sourceforge.net/p/xmlstar/bugs/109/
 Patch0: xmlstarlet-1.6.1-nogit.patch
 # http://sourceforge.net/tracker/?func=detail&aid=3266898&group_id=66612&atid=515106

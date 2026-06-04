@@ -29,7 +29,7 @@ Source:        https://github.com/fedora-java/javapackages-bootstrap/releases/do
 Source:        https://github.com/fedora-java/javapackages-bootstrap/releases/download/%{version}/javapackages-bootstrap-%{version}.tar.zst
 # 132 *.tar.zst component archives ship in Fedora SRPM (not on upstream GitHub release).
 # %%prep unpacks them from Source200; or run fetch-jpb-vendor-tarballs.sh for local copies.
-Source200:        https://kojipkgs.fedoraproject.org/pub/fedora/linux/releases/44/Everything/source/tree/Packages/j/javapackages-bootstrap-1.27.0-2.fc44.src.rpm
+Source200:        javapackages-bootstrap-vendor-archives.tar.zst
 
 Patch:          0001-Switch-Dola-to-Lua-5.5.patch
 

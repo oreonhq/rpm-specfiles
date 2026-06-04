@@ -1,4 +1,4 @@
-%global source0_hash b58a8dc1717b810a2dcc7cc920c324a8610823acd381fa378b951de321237c85
+%global source0_hash none
 
 ###############################################################################
 ###############################################################################
@@ -156,7 +156,7 @@ BuildRequires: %{systemd_units}
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%setup -q -n %{name}-%{version}%{?rcver:%{rcver}}%{?numcomm:.%{numcomm}}%{?alphatag:-%{alphatag}}%{?dirty:-%{dirty}}
+%setup -q -n %{name}-%{version}
 %patch -P0 -p1
 # prevent compilation of something that won't get used anyway
 sed -i.orig 's|FENCE_ZVM=1|FENCE_ZVM=0|' configure.ac

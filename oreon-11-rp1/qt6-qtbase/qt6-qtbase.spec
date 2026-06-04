@@ -63,18 +63,18 @@ Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submod
 %endif
 
 # https://bugzilla.redhat.com/show_bug.cgi?id=1227295
-Source1:        https://src.fedoraproject.org/rpms/qt6-qtbase/raw/rawhide/f/qtlogging.ini
+Source1:        qtlogging.ini
 
 # header file to workaround multilib issue
 # https://bugzilla.redhat.com/show_bug.cgi?id=1036956
-Source5:        https://src.fedoraproject.org/rpms/qt6-qtbase/raw/rawhide/f/qconfig-multilib.h
+Source5:        qconfig-multilib.h
 
 # xinitrc script to check for OpenGL 1 only drivers and automatically set
 # QT_XCB_FORCE_SOFTWARE_OPENGL for them
-Source6:        https://src.fedoraproject.org/rpms/qt6-qtbase/raw/rawhide/f/10-qt6-check-opengl2.sh
+Source6:        10-qt6-check-opengl2.sh
 
 # macros
-Source10:        https://src.fedoraproject.org/rpms/qt6-qtbase/raw/rawhide/f/macros.qt6-qtbase
+Source10:        macros.qt6-qtbase
 
 Patch1:  qtbase-CMake-Install-objects-files-into-ARCHDATADIR.patch
 Patch2:  qtbase-use-only-major-minor-for-private-api-tag.patch

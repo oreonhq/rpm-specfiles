@@ -26,7 +26,7 @@ Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submod
 
 ## upstreamable patches
 # workaround FTBFS against kernel-header-5.2.0+
-Patch100:        https://src.fedoraproject.org/rpms/qt6-qtserialbus/raw/rawhide/f/qtserialbus-everywhere-src-5.12.3-SIOCGSTAMP.patch
+Patch100:        qtserialbus-everywhere-src-5.12.3-SIOCGSTAMP.patch
 
 BuildRequires: cmake
 BuildRequires: gcc-c++

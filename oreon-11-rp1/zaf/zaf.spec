@@ -5,7 +5,7 @@ Summary: South Africa hyphenation rules
 %define upstreamid 20080714
 Version: 0
 Release: 0.33.%{upstreamid}svn%{?dist}
-Source0: zaf-0-0.1.%{upstreamid}svn.tar.bz2
+Source0:        https://github.com/LibreOffice/dictionaries/archive/refs/heads/master.tar.gz#/zaf-0.tar.gz
 URL: https://github.com/LibreOffice/dictionaries
 License: LGPL-2.1-or-later
 BuildArch: noarch

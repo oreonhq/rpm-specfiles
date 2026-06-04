@@ -99,7 +99,7 @@ Source0:        https://archive.mesa3d.org/mesa-%{ver}.tar.xz
 # src/gallium/auxiliary/postprocess/pp_mlaa* have an ... interestingly worded license.
 # Source1 contains email correspondence clarifying the license terms.
 # Fedora opts to ignore the optional part of clause 2 and treat that code as 2 clause BSD.
-Source1:        https://src.fedoraproject.org/rpms/mesa/raw/rawhide/f/Mesa-MLAA-License-Clarification-Email.txt
+Source1:        Mesa-MLAA-License-Clarification-Email.txt
 
 # In CentOS/RHEL, Rust crates required to build NVK are vendored.
 # The minimum target versions are obtained from the .wrap files

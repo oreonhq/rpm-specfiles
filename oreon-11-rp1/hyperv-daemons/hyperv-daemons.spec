@@ -17,20 +17,20 @@ URL:      http://www.kernel.org
 
 # Source files obtained from kernel upstream 6.10-rc4 (6ba59ff4227927d3a8530fc2973b80e94b54d58f)
 # git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-Source0:        https://src.fedoraproject.org/rpms/hyperv-daemons/raw/rawhide/f/tools-hv-6ba59ff42279.tar.gz
-Source1:        https://src.fedoraproject.org/rpms/hyperv-daemons/raw/rawhide/f/COPYING
+Source0:        https://github.com/microsoft/hyperv-daemons/archive/refs/heads/master.tar.gz#/tools-hv-6ba59ff42279.tar.gz
+Source1:        COPYING
 
 # HYPERV KVP DAEMON
-Source5:        https://src.fedoraproject.org/rpms/hyperv-daemons/raw/rawhide/f/hypervkvpd.service
-Source6:        https://src.fedoraproject.org/rpms/hyperv-daemons/raw/rawhide/f/hypervkvp.rules
+Source5:        hypervkvpd.service
+Source6:        hypervkvp.rules
 
 # HYPERV VSS DAEMON
-Source101:        https://src.fedoraproject.org/rpms/hyperv-daemons/raw/rawhide/f/hypervvssd.service
-Source102:        https://src.fedoraproject.org/rpms/hyperv-daemons/raw/rawhide/f/hypervvss.rules
+Source101:        hypervvssd.service
+Source102:        hypervvss.rules
 
 # HYPERV FCOPY DAEMON
-Source201:        https://src.fedoraproject.org/rpms/hyperv-daemons/raw/rawhide/f/hypervfcopyd.service
-Source202:        https://src.fedoraproject.org/rpms/hyperv-daemons/raw/rawhide/f/hypervfcopy.rules
+Source201:        hypervfcopyd.service
+Source202:        hypervfcopy.rules
 
 # Hyper-V is available only on x86 and aarch64 architectures
 # The base empty (a.k.a. virtual) package can not be noarch

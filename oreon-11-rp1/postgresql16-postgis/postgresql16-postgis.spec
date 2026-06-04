@@ -34,9 +34,9 @@ Source2:        https://download.osgeo.org/postgis/docs/postgis-%{version}-en.pd
 Source3:        https://download.osgeo.org/postgis/source/postgis-%{prevversion}.tar.gz
 
 # Add proj8 compatibility to postgis-2.x (needed for upgrade package)
-Patch1:        https://src.fedoraproject.org/rpms/postgresql16-postgis/raw/rawhide/f/postgis2-proj8.patch
-Patch2:        https://src.fedoraproject.org/rpms/postgresql16-postgis/raw/rawhide/f/postgis-c99.patch
-Patch3:        https://src.fedoraproject.org/rpms/postgresql16-postgis/raw/rawhide/f/postgis-c99-2.patch
+Patch1:        postgis2-proj8.patch
+Patch2:        postgis-c99.patch
+Patch3:        postgis-c99-2.patch
 %endif
 
 # 

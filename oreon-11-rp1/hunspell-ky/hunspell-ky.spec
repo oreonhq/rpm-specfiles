@@ -12,7 +12,7 @@ Summary: Kirghiz hunspell dictionaries
 Version: 0.%{upstreamid}
 Release: 36%{?dist}
 Source0: https://ftp.gnu.org/gnu/aspell/dict/ky/aspell6-ky-0.01-0.tar.bz2
-URL: http://ftp.gnu.org/gnu/aspell/dict/ky
+URL: https://ftp.gnu.org/gnu/aspell/dict/ky
 License: GPL-2.0-or-later
 BuildArch: noarch
 BuildRequires: aspell hunspell-tools

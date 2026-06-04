@@ -16,9 +16,9 @@ License:	BSD-3-Clause
 URL: 		https://github.com/intel/intel-cmt-cat
 Source:        https://github.com/intel/intel-cmt-cat/archive/v25.04/intel-cmt-cat-25.04.tar.gz
 
-Patch0:        https://src.fedoraproject.org/rpms/intel-cmt-cat/raw/rawhide/f/0001-alter-install-paths.patch
-Patch1:        https://src.fedoraproject.org/rpms/intel-cmt-cat/raw/rawhide/f/0002-remove-build-and-install-of-examples.patch
-Patch2:        https://src.fedoraproject.org/rpms/intel-cmt-cat/raw/rawhide/f/0003-allow-debian-flags-to-be-added.patch
+Patch0:        0001-alter-install-paths.patch
+Patch1:        0002-remove-build-and-install-of-examples.patch
+Patch2:        0003-allow-debian-flags-to-be-added.patch
 
 ExclusiveArch:	x86_64
 

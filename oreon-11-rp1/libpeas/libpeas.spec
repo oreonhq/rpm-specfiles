@@ -11,7 +11,7 @@ License:        LGPL-2.1-or-later
 URL:            https://wiki.gnome.org/Projects/Libpeas
 Source0:        https://download.gnome.org/sources/%{name}/2.2/%{name}-%{version}.tar.xz
 
-Patch0:        https://src.fedoraproject.org/rpms/libpeas/raw/rawhide/f/libpeas-fix-py-wrapper-refcount-test.patch
+Patch0:        libpeas-fix-py-wrapper-refcount-test.patch
 
 BuildRequires:  gcc
 BuildRequires:  gcc-c++

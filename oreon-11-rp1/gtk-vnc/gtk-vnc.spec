@@ -23,7 +23,7 @@ Version: 1.5.0
 Release: %autorelease
 License: LGPL-2.1-or-later
 Source: https://download.gnome.org/sources/%{name}/%{verdir}/%{name}-%{version}.tar.xz
-Patch0:        https://src.fedoraproject.org/rpms/gtk-vnc/raw/rawhide/f/0001-make-gtk-vnc-debug-work-with-new-glib.patch
+Patch0:        0001-make-gtk-vnc-debug-work-with-new-glib.patch
 URL: https://gitlab.gnome.org/GNOME/gtk-vnc
 Requires: gvnc = %{version}-%{release}
 BuildRequires: gcc

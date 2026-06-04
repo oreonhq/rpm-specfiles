@@ -29,13 +29,13 @@ License: LicenseRef-Not-Copyrightable
 Obsoletes: kde-filesystem < 4-36
 
 # teamnames (locales) borrowed from kde-i18n packaging
-Source1:        https://src.fedoraproject.org/rpms/kde-filesystem/raw/rawhide/f/teamnames
+Source1:        teamnames
 
-Source2:        https://src.fedoraproject.org/rpms/kde-filesystem/raw/rawhide/f/macros.kde4
+Source2:        macros.kde4
 # increment whenever dirs change in an incompatible way
 # kde4 apps built using macros.kde4 should
 
-Source3:        https://src.fedoraproject.org/rpms/kde-filesystem/raw/rawhide/f/applnk-hidden-directory
+Source3:        applnk-hidden-directory
 
 BuildRequires: gawk
 

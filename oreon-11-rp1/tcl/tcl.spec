@@ -15,7 +15,7 @@ Release: 1%{?dist}
 Epoch: 1
 License: TCL AND GPL-3.0-or-later WITH Bison-exception-2.2 AND BSD-3-Clause
 URL: http://tcl.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/sourceforge/tcl/tcl-core%{version}-src.tar.gz
+Source0:        https://downloads.sourceforge.net/sourceforge/tcl/tcl-core%{version}-src.tar.gz
 BuildRequires: make
 BuildRequires: autoconf
 BuildRequires: gcc

@@ -5,7 +5,7 @@ Version: 1.1.3
 Release: 48%{?dist}
 Summary: Hierarchical repository abstraction layer
 License: LGPL-2.1-only
-#Original source: http://downloads.sourceforge.net/jfreereport/%%name}-%%{version}.zip
+#Original source: https://downloads.sourceforge.net/jfreereport/%%name}-%%{version}.zip
 #unzip, find . -name "*.jar" -exec rm {} \;
 #to simplify the licensing
 Source: https://downloads.sourceforge.net/jfreereport/%{name}-%{version}.zip

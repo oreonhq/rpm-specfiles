@@ -18,7 +18,7 @@ URL:       http://www.x.org
 License:   MIT
 
 Source0:    https://gitlab.freedesktop.org/xorg/driver/xf86-video-intel/-/archive/%{commit}/%{name}-%{shortcommit}.tar.gz
-Source30:        https://src.fedoraproject.org/rpms/xorg-x11-drv-intel/raw/rawhide/f/xserver-sdk-abi-requires
+Source30:        xserver-sdk-abi-requires
 
 Patch0:	    intel-gcc-pr65873.patch
 # https://bugs.freedesktop.org/show_bug.cgi?id=96255#c11

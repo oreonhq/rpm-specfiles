@@ -87,14 +87,14 @@ BuildRequires:    perl-interpreter
 BuildRequires:    gcc-c++
 
 Source0:        https://ftp.mozilla.org/pub/security/nss/releases/%{nss_release_tag}/src/%{nss_nspr_archive}.tar.gz
-Source1:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nss-util.pc.in
-Source2:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nss-util-config.in
-Source3:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nss-softokn.pc.in
-Source4:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nss-softokn-config.in
-Source6:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nss-softokn-dracut-module-setup.sh
-Source7:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nss-softokn-dracut.conf
-Source8:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nss.pc.in
-Source9:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nss-config.in
+Source1:        nss-util.pc.in
+Source2:        nss-util-config.in
+Source3:        nss-softokn.pc.in
+Source4:        nss-softokn-config.in
+Source6:        nss-softokn-dracut-module-setup.sh
+Source7:        nss-softokn-dracut.conf
+Source8:        nss.pc.in
+Source9:        nss-config.in
 %if %{with dbm}
 Source10:         blank-cert8.db
 Source11:         blank-key3.db
@@ -102,21 +102,21 @@ Source12:         blank-secmod.db
 %endif
 Source13:        blank-cert9.db
 Source14:        blank-key4.db
-Source15:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/system-pkcs11.txt
-Source16:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/setup-nsssysinit.sh
-Source20:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nss-config.xml
-Source21:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/setup-nsssysinit.xml
-Source22:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/pkcs11.txt.xml
-Source24:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/cert9.db.xml
-Source26:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/key4.db.xml
+Source15:        system-pkcs11.txt
+Source16:        setup-nsssysinit.sh
+Source20:        nss-config.xml
+Source21:        setup-nsssysinit.xml
+Source22:        pkcs11.txt.xml
+Source24:        cert9.db.xml
+Source26:        key4.db.xml
 %if %{with dbm}
-Source23:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/cert8.db.xml
-Source25:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/key3.db.xml
-Source27:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/secmod.db.xml
+Source23:        cert8.db.xml
+Source25:        key3.db.xml
+Source27:        secmod.db.xml
 %endif
-Source30:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nss-3.118-ml-dsa-test-for-sign-verify-pkcs12_files.tar.xz
+Source30:        nss-3.118-ml-dsa-test-for-sign-verify-pkcs12_files.tar.xz
 
-Source101:        https://src.fedoraproject.org/rpms/nss/raw/rawhide/f/nspr-config.xml
+Source101:        nspr-config.xml
 
 # This patch uses the GCC -iquote option documented at
 # http://gcc.gnu.org/onlinedocs/gcc/Directory-Options.html#Directory-Options

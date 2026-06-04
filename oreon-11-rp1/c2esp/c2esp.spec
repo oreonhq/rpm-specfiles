@@ -9,7 +9,7 @@ Summary:        CUPS driver for Kodak AiO printers
 
 License:        GPL-2.0-or-later
 URL:            http://sourceforge.net/projects/cupsdriverkodak/
-Source0:        http://downloads.sourceforge.net/cupsdriverkodak/c2esp-27.tar.gz
+Source0:        https://downloads.sourceforge.net/cupsdriverkodak/c2esp-27.tar.gz
 
 Patch01: c2esp-ftbfs-gcc7.patch
 Patch02: c2esp-gcc10.patch

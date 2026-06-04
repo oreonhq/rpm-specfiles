@@ -12,7 +12,7 @@ Release:       %autorelease
 Summary:       Simple monitor script for use during development of a node.js app
 License:       ISC AND MIT
 URL:           https://github.com/remy/nodemon
-Source0:       %{npm_name}-v%{version}-bundled.tar.gz
+Source0:        https://github.com/remy/nodemon/archive/v%{version}.tar.gz#/%{npm_name}-v%{version}.tar.gz
 
 
 BuildRequires: nodejs-devel

@@ -19,8 +19,7 @@ ExcludeArch:    %{power64}
 %endif
 
 URL:            https://people.redhat.com/~rjones/virt-top/
-Source0:        https://people.redhat.com/~rjones/virt-top/files/%{name}-%{version}.tar.gz
-Source1:        https://people.redhat.com/~rjones/virt-top/files/%{name}-%{version}.tar.gz.sig
+Source0:        https://gitlab.com/rwmjones/virt-top/-/archive/v%{version}/virt-top-v%{version}.tar.gz#/virt-top-%{version}.tar.gz
 
 # Post-process output of CSV file (RHBZ#665817, RHBZ#912020).
 Source2:        processcsv.py
@@ -67,8 +66,6 @@ different virtualization systems.
 
 %prep
 test "%{source0_hash}" = "none" || { f="%{SOURCE0}"; test -f "$f" || { echo "oreon: missing Source0 $f" >&2; exit 1; }; h=$(sha256sum "$f" | awk '{print $1}'); test "$h" = "%{source0_hash}" || { echo "oreon: Source0 hash mismatch" >&2; exit 1; }; }
-%(test -z "%{source4_key_fpr}" || { f="%{SOURCE4}"; test -f "$f" || { echo "oreon: missing Source4 key $f" >&2; exit 1; }; fpr=$(GNUPGHOME=$(mktemp -d); export GNUPGHOME; trap 'rm -rf "$GNUPGHOME"' EXIT; gpg --batch --with-colons --import-options show-only --import "$f" | awk -F: '/^fpr:/ {print toupper($10); exit}'); test "$fpr" = "%{source4_key_fpr}" || { echo "oreon: Source4 key fingerprint mismatch" >&2; exit 1; }; })
-%{gpgverify} --keyring='%{SOURCE4}' --signature='%{SOURCE1}' --data='%{SOURCE0}'
 %setup -q
 
 %if 0%{?rhel} >= 6 || (0%{?oreon} >= 11)

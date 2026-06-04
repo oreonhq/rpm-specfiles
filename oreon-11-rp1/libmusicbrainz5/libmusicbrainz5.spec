@@ -13,9 +13,9 @@ License: LicenseRef-Callaway-LGPLv2
 URL: http://www.musicbrainz.org/
 Source0:        https://github.com/metabrainz/libmusicbrainz/releases/download/release-5.1.0/libmusicbrainz-%{version}.tar.gz
 # Filed upstream as http://tickets.musicbrainz.org/browse/LMB-41
-Patch0:        https://src.fedoraproject.org/rpms/libmusicbrainz5/raw/rawhide/f/doxygen.patch
-Patch1:        https://src.fedoraproject.org/rpms/libmusicbrainz5/raw/rawhide/f/0001-Don-t-emit-errors-unless-compiled-for-debug.patch
-Patch2:        https://src.fedoraproject.org/rpms/libmusicbrainz5/raw/rawhide/f/0002-libxml2-2-12.patch
+Patch0:        doxygen.patch
+Patch1:        0001-Don-t-emit-errors-unless-compiled-for-debug.patch
+Patch2:        0002-libxml2-2-12.patch
 BuildRequires:  gcc
 BuildRequires:  gcc-c++
 BuildRequires: cmake

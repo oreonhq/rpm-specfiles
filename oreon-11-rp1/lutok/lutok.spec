@@ -8,7 +8,7 @@ Release: 31%{?dist}
 License: LicenseRef-Callaway-BSD
 URL: http://code.google.com/p/lutok/
 Source0:        https://github.com/jmmv/lutok/releases/download/lutok-%{version}/lutok-%{version}.tar.gz
-Source1:        https://src.fedoraproject.org/rpms/lutok/raw/rawhide/f/README.Fedora
+Source1:        README.Fedora
 Requires: lua >= 5.2
 BuildRequires:  gcc-c++
 BuildRequires:  gcc

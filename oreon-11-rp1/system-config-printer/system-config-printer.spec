@@ -11,11 +11,11 @@ Version: 1.5.18
 Release: 17%{?dist}
 License: GPL-2.0-or-later
 URL: https://github.com/%{username}/%{name}
-Source0:        https://github.com/OpenPrinting/system-config-printer/archive/refs/tags/v1.5.18/system-config-printer-1.5.18.tar.gz#/system-config-printer-1.5.18.tar.xz
+Source0:        https://github.com/OpenPrinting/system-config-printer/archive/refs/tags/v%{version}/%{name}-%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 # all upstream patches, remove with new release
-Patch0001:        https://src.fedoraproject.org/rpms/system-config-printer/raw/rawhide/f/0001-Fix-debugprint-in-options.py-fixes-291.patch
-Patch0002:        https://src.fedoraproject.org/rpms/system-config-printer/raw/rawhide/f/0001-udev-Fix-exit-value-when-device-is-already-handled.patch
+Patch0001:        0001-Fix-debugprint-in-options.py-fixes-291.patch
+Patch0002:        0001-udev-Fix-exit-value-when-device-is-already-handled.patch
 
 
 # needed for macro AM_GNU_GETTEXT in configure.ac

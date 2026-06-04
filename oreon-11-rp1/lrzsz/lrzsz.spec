@@ -6,14 +6,14 @@ Version: 0.12.20
 Release: %autorelease
 License: GPL-2.0-or-later AND GPL-2.0-only
 Source:        https://www.ohse.de/uwe/releases/%{name}-%{version}.tar.gz
-Patch1:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-0.12.20-glibc21.patch
-Patch2:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-0.12.20.patch
-Patch3:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-0.12.20-man.patch
-Patch4:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-0.12.20-aarch64.patch
-Patch5:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-configure-c99.patch
-Patch6:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-c99.patch
-Patch7:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-socklen.patch
-Patch8:        https://src.fedoraproject.org/rpms/lrzsz/raw/rawhide/f/lrzsz-gcc15.patch
+Patch1:        lrzsz-0.12.20-glibc21.patch
+Patch2:        lrzsz-0.12.20.patch
+Patch3:        lrzsz-0.12.20-man.patch
+Patch4:        lrzsz-0.12.20-aarch64.patch
+Patch5:        lrzsz-configure-c99.patch
+Patch6:        lrzsz-c99.patch
+Patch7:        lrzsz-socklen.patch
+Patch8:        lrzsz-gcc15.patch
 Url: http://www.ohse.de/uwe/software/lrzsz.html
 BuildRequires: gcc gettext
 BuildRequires: make

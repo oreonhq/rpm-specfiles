@@ -12,7 +12,7 @@ URL:            http://www.harfbuzz.org
 Source0:        https://github.com/harfbuzz/harfbuzz/releases/download/%{version}/harfbuzz-%{version}.tar.xz
 
 # Invoke versioned python
-Patch0:        https://src.fedoraproject.org/rpms/mingw-harfbuzz/raw/rawhide/f/harfbuzz-python.patch
+Patch0:        harfbuzz-python.patch
 
 BuildArch:      noarch
 

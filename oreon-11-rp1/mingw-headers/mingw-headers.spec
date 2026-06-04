@@ -17,7 +17,7 @@ Summary:        Win32/Win64 header files
 
 License:        BSD-3-Clause AND LGPL-2.0-or-later AND LGPL-2.1-or-later AND GPL-2.0-or-later AND ZPL-2.1 AND MIT-Khronos-old AND LicenseRef-Fedora-Public-Domain
 URL:            http://mingw-w64.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}%{?pre:-%{pre}}.tar.bz2
+Source0:        https://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}%{?pre:-%{pre}}.tar.bz2
 
 # Our RPM macros automatically set the environment variable WIDL
 # This confuses the mingw-headers configure scripts and causes various

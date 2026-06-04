@@ -147,7 +147,7 @@ Obsoletes:      pidgin-evolution <= 2.10.6%{?dist}
 %endif
 %endif
 
-Source0:        http://downloads.sourceforge.net/pidgin/pidgin-%{version}.tar.bz2
+Source0:        https://downloads.sourceforge.net/pidgin/pidgin-%{version}.tar.bz2
 
 ## Fedora pidgin defaults
 # Only needs regenerating if Pidgin breaks backwards compatibility with prefs.xml

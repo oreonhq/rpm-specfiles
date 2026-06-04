@@ -17,7 +17,7 @@ License:            LicenseRef-Bacula
 URL:                http://www.bacula.org
 
 # AGPL-3.0-only with exceptions
-Source0:            http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:            https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 Source2:            quickstart_postgresql.txt
 Source3:            quickstart_mysql.txt

@@ -74,7 +74,7 @@ Version: 4.4.1
 Release: 5%{?dist}
 License: GPL-3.0-or-later AND BSD-3-Clause
 URL:     https://www.swig.org/
-Source0:        http://downloads.sourceforge.net/project/swig/swig/swig-%{version}/swig-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/project/swig/swig/swig-%{version}/swig-%{version}.tar.gz
 # Define the part of man page sections
 Source1: description.h2m
 %if %{with build_ccache_swig}

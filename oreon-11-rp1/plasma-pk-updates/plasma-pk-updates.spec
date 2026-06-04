@@ -14,23 +14,23 @@ URL:            https://invent.kde.org/system/plasma-pk-updates
 Source0:        https://download.kde.org/stable/plasma-pk-updates/%{version}/plasma-pk-updates-%{version}.tar.xz
 
 # Upstream patches
-Patch5:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0005-Several-fixes-related-to-the-network-state-and-apple.patch
-Patch6:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0006-Don-t-force-a-check-for-updates-when-the-applet-runs.patch
-Patch8:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0008-Replace-KIconLoader-pixmaps-with-standard-icon-names.patch
-Patch9:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0009-Fix-usage-of-0-for-null-pointer-constants.patch
-Patch10:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0010-Use-own-eventIds-and-ComponentName-instead-of-generi.patch
-Patch11:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0011-Make-the-notifications-less-obtrusive.patch
-Patch12:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0012-Fix-minor-typos.patch
-Patch13:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0013-Fix-warning-remove-unsigned-int-0-check.patch
-Patch14:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0014-Remove-explicit-initialization-of-default-constructe.patch
+Patch5:        0005-Several-fixes-related-to-the-network-state-and-apple.patch
+Patch6:        0006-Don-t-force-a-check-for-updates-when-the-applet-runs.patch
+Patch8:        0008-Replace-KIconLoader-pixmaps-with-standard-icon-names.patch
+Patch9:        0009-Fix-usage-of-0-for-null-pointer-constants.patch
+Patch10:        0010-Use-own-eventIds-and-ComponentName-instead-of-generi.patch
+Patch11:        0011-Make-the-notifications-less-obtrusive.patch
+Patch12:        0012-Fix-minor-typos.patch
+Patch13:        0013-Fix-warning-remove-unsigned-int-0-check.patch
+Patch14:        0014-Remove-explicit-initialization-of-default-constructe.patch
 ## Requires new SIP Power API from solid, not enabled by default
-Patch15:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0015-Port-away-from-KDELibs4Support-use-Solid-Power-inter.patch
-Patch30:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0030-Add-support-for-license-prompts.patch
-Patch35:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0035-Make-action-buttons-translatable.patch
-Patch42:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/0042-Don-t-show-an-error-for-a-failed-automatic-refresh.patch
+Patch15:        0015-Port-away-from-KDELibs4Support-use-Solid-Power-inter.patch
+Patch30:        0030-Add-support-for-license-prompts.patch
+Patch35:        0035-Make-action-buttons-translatable.patch
+Patch42:        0042-Don-t-show-an-error-for-a-failed-automatic-refresh.patch
 
 # Downstream patches
-Patch100:        https://src.fedoraproject.org/rpms/plasma-pk-updates/raw/rawhide/f/plasma-pk-updates-0.3.2-notif.patch
+Patch100:        plasma-pk-updates-0.3.2-notif.patch
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf5-kcoreaddons-devel

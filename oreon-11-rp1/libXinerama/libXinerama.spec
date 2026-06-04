@@ -12,11 +12,11 @@ License: MIT AND MIT-open-group AND X11
 URL: http://www.x.org
 
 %if 0%{?gitdate}
-Source0:        http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
-Source1:        https://src.fedoraproject.org/rpms/libXinerama/raw/rawhide/f/make-git-snapshot.sh
-Source2:        https://src.fedoraproject.org/rpms/libXinerama/raw/rawhide/f/commitid
+Source0:        https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
+Source1:        make-git-snapshot.sh
+Source2:        commitid
 %else
-Source0:        http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
+Source0:        https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
 %endif
 
 Requires: libX11 >= 1.5.99.902

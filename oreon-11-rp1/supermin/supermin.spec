@@ -52,8 +52,8 @@ ExcludeArch:   %{power64}
 %endif
 
 URL:           http://people.redhat.com/~rjones/supermin/
-Source0:        http://download.libguestfs.org/supermin/%{source_directory}/%{name}-%{version}.tar.gz
-Source1:        http://download.libguestfs.org/supermin/%{source_directory}/%{name}-%{version}.tar.gz.sig
+Source0:        https://download.libguestfs.org/supermin/%{source_directory}/%{name}-%{version}.tar.gz
+Source1:        https://download.libguestfs.org/supermin/%{source_directory}/%{name}-%{version}.tar.gz.sig
 # Keyring used to verify tarball signature.
 Source2:       libguestfs.keyring
 

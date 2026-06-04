@@ -9,7 +9,7 @@ Summary:        Curses library for MinGW
 
 License:        LicenseRef-Fedora-Public-Domain
 URL:            http://pdcurses.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/pdcurses/PDCurses-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/pdcurses/PDCurses-%{version}.tar.gz
 
 BuildArch:      noarch
 

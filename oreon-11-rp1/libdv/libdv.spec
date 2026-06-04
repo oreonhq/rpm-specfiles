@@ -6,7 +6,7 @@ Release:        46%{?dist}
 Summary:        Software decoder for DV format video
 License:        LGPL-2.0-or-later
 URL:            http://libdv.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 
 Patch1:         %{name}-no-exec-stack.patch
 Patch2:         %{name}-pic.patch

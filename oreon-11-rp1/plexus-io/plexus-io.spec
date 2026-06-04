@@ -12,7 +12,7 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://github.com/codehaus-plexus/plexus-io/archive/plexus-io-%{version}.tar.gz
-Source1:        http://www.apache.org/licenses/LICENSE-2.0.txt
+Source1:        https://www.apache.org/licenses/LICENSE-2.0.txt
 
 %if %{with bootstrap}
 BuildRequires:  javapackages-bootstrap

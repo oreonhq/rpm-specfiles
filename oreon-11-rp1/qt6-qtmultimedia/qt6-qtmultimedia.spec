@@ -35,7 +35,7 @@ Url:     http://www.qt.io
 Source0: https://download.qt.io/official_releases/qt/%{majmin}/%{version}/submodules/%{qt_module}-everywhere-src-%{version}.tar.xz
 %endif
 
-Patch0:        https://src.fedoraproject.org/rpms/qt6-qtmultimedia/raw/rawhide/f/qtmultimedia-fix-build-on-x86-arch.patch
+Patch0:        qtmultimedia-fix-build-on-x86-arch.patch
 
 # filter plugin/qml provides
 %global __provides_exclude_from ^(%{_qt6_archdatadir}/qml/.*\\.so|%{_qt6_plugindir}/.*\\.so)$

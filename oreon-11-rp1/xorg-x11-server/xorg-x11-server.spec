@@ -26,13 +26,13 @@ License:    Adobe-Display-PostScript AND BSD-3-Clause AND DEC-3-Clause AND HPND 
 
 Source0:        https://www.x.org/pub/individual/xserver/%{pkgname}-%{version}.tar.xz
 
-Source10:        https://src.fedoraproject.org/rpms/xorg-x11-server/raw/rawhide/f/xserver.pamd
+Source10:        xserver.pamd
 # "useful" xvfb-run script
-Source20:   http://svn.exactcode.de/t2/trunk/package/xorg/xorg-server/xvfb-run.sh
+Source20:   https://svn.exactcode.de/t2/trunk/package/xorg/xorg-server/xvfb-run.sh
 # for requires generation in drivers
-Source30:        https://src.fedoraproject.org/rpms/xorg-x11-server/raw/rawhide/f/xserver-sdk-abi-requires
+Source30:        xserver-sdk-abi-requires
 # maintainer convenience script
-Source40:        https://src.fedoraproject.org/rpms/xorg-x11-server/raw/rawhide/f/driver-abi-rebuild.sh
+Source40:        driver-abi-rebuild.sh
 
 # From Debian use intel ddx driver only for gen4 and older chipsets
 Patch0:     06_use-intel-only-on-pre-gen4.diff

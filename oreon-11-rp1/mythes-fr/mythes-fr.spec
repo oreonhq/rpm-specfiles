@@ -17,9 +17,7 @@ French thesaurus.
 %prep
 _zip="thesaurus-v%{version}.zip"
 if test ! -f "$_zip"; then
-  curl -sfL -o "$_zip" "https://www.dicollecte.org/telechargement/thesaurus-v%{version}.zip" || \
-  curl -sfL -o _src.rpm "https://dl.fedoraproject.org/pub/fedora/linux/development/rawhide/Everything/source/tree/Packages/m/mythes-fr-%{version}-29.fc44.src.rpm" && \
-  rpm2cpio _src.rpm | cpio -id "$_zip" && rm -f _src.rpm
+  curl -sfL -o "$_zip" "https://www.dicollecte.org/telechargement/thesaurus-v%{version}.zip"
 fi
 %setup -q -c
 

@@ -7,7 +7,7 @@ Release:        %autorelease
 License:        LicenseRef-Public-Domain
 URL:            http://byaccj.sourceforge.net/
 
-Source0:        http://sourceforge.net/projects/byaccj/files/byaccj/1.15/byaccj1.15_src.tar.gz#/byaccj-1.15.tar.gz
+Source0:        https://sourceforge.net/projects/byaccj/files/byaccj/1.15/byaccj1.15_src.tar.gz#/byaccj-1.15.tar.gz
 
 Patch:          byaccj-c99.patch
 

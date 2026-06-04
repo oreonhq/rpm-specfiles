@@ -1,4 +1,4 @@
-%global source0_hash 332cb37d0be20cb9541739c61f79bae5a477427d79ae85e352089afdaf6666e4
+%global source0_hash none
 
 # For the generated library symbol suffix
 %if 0%{?__isa_bits} == 32
@@ -15,10 +15,10 @@ Version:        2.28.5
 Release:        1%{?dist}
 Summary:        Cross-platform multimedia library
 License:        Zlib AND MIT AND Apache-2.0 AND (Apache-2.0 OR MIT)
-URL:            http://www.libsdl.org/
-Source0:        http://www.libsdl.org/release/SDL2-2.28.5.tar.gz
-Source1:        https://src.fedoraproject.org/rpms/SDL2/raw/rawhide/f/SDL_config.h
-Source2:        https://src.fedoraproject.org/rpms/SDL2/raw/rawhide/f/SDL_revision.h
+URL:            https://www.libsdl.org/
+Source0:        https://www.libsdl.org/release/SDL2-2.28.5.tar.gz
+Source1:        SDL_config.h
+Source2:        SDL_revision.h
 
 Patch0:         multilib.patch
 # Prefer Wayland by default

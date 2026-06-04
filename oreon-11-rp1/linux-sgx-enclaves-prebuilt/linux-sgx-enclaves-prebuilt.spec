@@ -106,7 +106,7 @@ Source1:        https://github.com/intel/SGXDataCenterAttestationPrimitives/arch
 # repack.sh purges AE's that we do not want to (& are forbidden to)
 # ship, as well as 'prebuilt/' content (openssl / OPA binaries) that
 # we must not distribute
-Source2:        https://src.fedoraproject.org/rpms/linux-sgx/raw/rawhide/f/repack.sh
+Source2:        repack.sh
 
 # repacked in %%prep from download.01.org prebuilt tarball
 

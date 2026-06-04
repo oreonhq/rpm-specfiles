@@ -10,7 +10,7 @@ Summary:   Free UCS Outline Fonts
 
 License:   GPL-3.0-or-later WITH Font-exception-2.0
 URL:       http://www.gnu.org/software/freefont/ 
-Source0:        http://ftp.gnu.org/gnu/freefont/freefont-src-%{version}.tar.gz
+Source0:        https://ftp.gnu.org/gnu/freefont/freefont-src-%{version}.tar.gz
 Source2:   %{fontconf}-mono.conf
 Source3:   %{fontconf}-sans.conf
 Source4:   %{fontconf}-serif.conf

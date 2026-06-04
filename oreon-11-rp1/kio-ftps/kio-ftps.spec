@@ -9,7 +9,7 @@ Summary:        An ftps KIO slave for KDE
 License:        GPL-2.0-or-later
 URL:            http://kasablanca.berlios.de/kio-ftps/
 Source0:        https://deb.debian.org/debian/pool/main/k/kio-ftps/kio-ftps_0.2.orig.tar.gz#/kio-ftps-%{version}.tar.gz
-Patch0:        https://src.fedoraproject.org/rpms/kio-ftps/raw/rawhide/f/qtnetwork.patch
+Patch0:        qtnetwork.patch
 
 BuildRequires:  kdelibs4-devel
 BuildRequires: make

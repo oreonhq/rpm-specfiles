@@ -429,7 +429,7 @@ make
 export IMAPTEST_COMMIT=44ff753f51d1a767b8d71b04e882847664d9f0c8
 
 # Do not depend on imaptest package (missing on RHEL10)
-wget https://src.fedoraproject.org/lookaside/pkgs/imaptest/imaptest-44ff753f51d1a767b8d71b04e882847664d9f0c8.tar.gz/sha512/35ce05ebb69d393d101d11959513ff4c699bfce47a81291b69e50c861cb81713ed216f0760e5984e72f8ad0cd7406716b9c9a159a2b472955b17e6e3cb9b3093/imaptest-44ff753f51d1a767b8d71b04e882847664d9f0c8.tar.gz
+# oreon: imaptest tarball must be local in dist-git
 rm -rf imaptest-src
 mkdir imaptest-src
 tar -xf imaptest-$IMAPTEST_COMMIT.tar.gz  --strip-components=1 -C imaptest-src

@@ -16,10 +16,10 @@ Source0:        https://github.com/storaged-project/blivet/releases/download/%{r
 Source1:        https://github.com/storaged-project/blivet/releases/download/%{realname}-%{realversion}/%{realname}-%{realversion}-tests.tar.gz
 
 %if 0%{?rhel} >= 9 || (0%{?oreon} >= 11)
-Patch0:        https://src.fedoraproject.org/rpms/python-blivet/raw/rawhide/f/0001-remove-btrfs-plugin.patch
+Patch0:        0001-remove-btrfs-plugin.patch
 %endif
 
-Patch1:        https://src.fedoraproject.org/rpms/python-blivet/raw/rawhide/f/0002-Ignore-btrfs-mount-errors-during-storage-scan.patch
+Patch1:        0002-Ignore-btrfs-mount-errors-during-storage-scan.patch
 
 # Versions of required components (done so we make sure the buildrequires
 # match the requires versions of things).

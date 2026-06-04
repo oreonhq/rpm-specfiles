@@ -22,23 +22,23 @@ Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{m
 
 Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz.sig
 
-Source11:        https://src.fedoraproject.org/rpms/plasma-workspace/raw/rawhide/f/startkderc
-Source15:        https://src.fedoraproject.org/rpms/plasma-workspace/raw/rawhide/f/fedora-lookandfeel.json
-Source16:        https://src.fedoraproject.org/rpms/plasma-workspace/raw/rawhide/f/fedoradark-lookandfeel.json
-Source17:        https://src.fedoraproject.org/rpms/plasma-workspace/raw/rawhide/f/fedoralight-lookandfeel.json
+Source11:        startkderc
+Source15:        fedora-lookandfeel.json
+Source16:        fedoradark-lookandfeel.json
+Source17:        fedoralight-lookandfeel.json
 
-Source100:        https://src.fedoraproject.org/rpms/plasma-workspace/raw/rawhide/f/kde
-Source101:        https://src.fedoraproject.org/rpms/plasma-workspace/raw/rawhide/f/kde-fingerprint
-Source102:        https://src.fedoraproject.org/rpms/plasma-workspace/raw/rawhide/f/kde-smartcard
+Source100:        kde
+Source101:        kde-fingerprint
+Source102:        kde-smartcard
 
 
 ## systemd user service dependencies
 ## (debating whether these be owned here or somewhere better...
 ## in the repective pkgs themselves? -- rdieter)
-Source40:        https://src.fedoraproject.org/rpms/plasma-workspace/raw/rawhide/f/ssh-agent.conf
+Source40:        ssh-agent.conf
 ## To be dropped when EL10 and F42 is no longer supported
 ## Or if spice-vd-agent >= 0.23.0 is shipped in any existing release
-Source41:        https://src.fedoraproject.org/rpms/plasma-workspace/raw/rawhide/f/spice-vdagent.conf
+Source41:        spice-vdagent.conf
 
 ## upstream patches
 

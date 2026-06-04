@@ -18,7 +18,7 @@ URL: http://www.nico.schottelius.org/software/gpm/
 # 5.] tar cJf %%{name}-%%{version}.tar.xz %%{name}-%%{version}
 
 Source0:        https://github.com/telmich/gpm/archive/1.20.7/gpm-1.20.7.tar.gz#/gpm-1.20.7.tar.xz
-Source1:        https://src.fedoraproject.org/rpms/gpm/raw/rawhide/f/gpm.service
+Source1:        gpm.service
 Patch0: https://github.com/telmich/gpm/compare/1.20.7...e82d1a653ca94aa4ed12441424da6ce780b1e530.diff
 
 # Disabled, need to be reviewed

@@ -13,7 +13,7 @@ Url:           http://matchbox-project.org/
 License:       GPL-2.0-or-later
 Source0:       https://deb.debian.org/debian/pool/main/m/matchbox-window-manager/matchbox-window-manager_1.2.2%2Bgit20200512.orig.tar.xz#/matchbox-window-manager-%{version}-%{alphatag}.tar.gz
 
-Patch1:        https://src.fedoraproject.org/rpms/matchbox-window-manager/raw/rawhide/f/matchbox-window-manager-1.2-keysyms.patch
+Patch1:        matchbox-window-manager-1.2-keysyms.patch
 
 BuildRequires:  gcc
 BuildRequires:  make

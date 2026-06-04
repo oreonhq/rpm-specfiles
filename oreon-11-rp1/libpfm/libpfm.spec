@@ -18,10 +18,10 @@ Summary:	Library to encode performance events for use by perf tool
 License:	MIT
 URL:		http://perfmon2.sourceforge.net/
 Source0:        https://sourceforge.net/projects/perfmon2/files/libpfm4/%{name}-%{version}.tar.gz
-Patch1:        https://src.fedoraproject.org/rpms/libpfm/raw/rawhide/f/libpfm-fix-const.patch
-Patch2:        https://src.fedoraproject.org/rpms/libpfm/raw/rawhide/f/libpfm-python3-setup.patch
-Patch3:        https://src.fedoraproject.org/rpms/libpfm/raw/rawhide/f/libpfm-gcc14.patch
-Patch4:        https://src.fedoraproject.org/rpms/libpfm/raw/rawhide/f/libpfm-unused-vars.patch
+Patch1:        libpfm-fix-const.patch
+Patch2:        libpfm-python3-setup.patch
+Patch3:        libpfm-gcc14.patch
+Patch4:        libpfm-unused-vars.patch
 
 BuildRequires: make
 BuildRequires:	gcc

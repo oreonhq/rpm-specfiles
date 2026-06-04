@@ -18,7 +18,7 @@ License: BSD-2-Clause
 URL:     https://invent.kde.org/plasma/%{name}
 
 # download.kde.org can redirect to mirrors that fail on Plasma tarballs
-Source0:        http://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
+Source0:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{min_ver_kf6}.%{bug_ver_kf6}/%{name}-%{version}.tar.xz
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  gcc-c++

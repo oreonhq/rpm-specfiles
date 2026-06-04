@@ -7,14 +7,14 @@ Name: setserial
 Version: 2.17
 Release: 64%{?dist}
 Source:        https://sourceforge.net/projects/setserial/files/setserial/%{version}/%{name}-%{version}.tar.gz
-Patch0:        https://src.fedoraproject.org/rpms/setserial/raw/rawhide/f/setserial-2.17-fhs.patch
-Patch1:        https://src.fedoraproject.org/rpms/setserial/raw/rawhide/f/setserial-2.17-rc.patch
-Patch2:        https://src.fedoraproject.org/rpms/setserial/raw/rawhide/f/setserial-2.17-readme.patch
-Patch3:        https://src.fedoraproject.org/rpms/setserial/raw/rawhide/f/setserial-2.17-spelling.patch
-Patch4:        https://src.fedoraproject.org/rpms/setserial/raw/rawhide/f/setserial-hayesesp.patch
-Patch5:        https://src.fedoraproject.org/rpms/setserial/raw/rawhide/f/setserial-aarch64.patch
-Patch6:        https://src.fedoraproject.org/rpms/setserial/raw/rawhide/f/setserial-configure-c99.patch
-Patch7:        https://src.fedoraproject.org/rpms/setserial/raw/rawhide/f/setserial-c99.patch
+Patch0:        setserial-2.17-fhs.patch
+Patch1:        setserial-2.17-rc.patch
+Patch2:        setserial-2.17-readme.patch
+Patch3:        setserial-2.17-spelling.patch
+Patch4:        setserial-hayesesp.patch
+Patch5:        setserial-aarch64.patch
+Patch6:        setserial-configure-c99.patch
+Patch7:        setserial-c99.patch
 License: GPL-1.0-or-later
 URL: http://setserial.sourceforge.net/
 ExcludeArch: s390 s390x

@@ -12,7 +12,7 @@ URL:           https://github.com/latchset/pkcs11-provider
 Source0:        https://github.com/latchset/pkcs11-provider/releases/download/v1.2.0/pkcs11-provider-1.2.0.tar.xz
 %if %{with gpgcheck}
 Source1:        https://github.com/latchset/pkcs11-provider/releases/download/v1.2.0/pkcs11-provider-1.2.0.tar.xz.asc
-Source2:       https://people.redhat.com/~ssorce/simo_redhat.asc
+Source2:       simo_redhat.asc
 %endif
 Source3:       pkcs11-provider.conf
 # https://github.com/latchset/pkcs11-provider/pull/689

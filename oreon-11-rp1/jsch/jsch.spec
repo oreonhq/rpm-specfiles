@@ -9,11 +9,11 @@ URL:            http://www.jcraft.com/jsch/
 BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
-Source0:        http://download.sourceforge.net/sourceforge/jsch/jsch-%{version}.zip
+Source0:        https://download.sourceforge.net/sourceforge/jsch/jsch-%{version}.zip
 # stripped manifest based on 
 # https://download.eclipse.org/tools/orbit/downloads/drops2/R20201130205003/repository/plugins/com.jcraft.jsch_0.1.55.v20190404-1902.jar
-Source1:        https://src.fedoraproject.org/rpms/jsch/raw/rawhide/f/MANIFEST.MF
-Source2:        https://src.fedoraproject.org/rpms/jsch/raw/rawhide/f/plugin.properties
+Source1:        MANIFEST.MF
+Source2:        plugin.properties
 
 BuildRequires:  maven-local-openjdk25
 BuildRequires:  mvn(com.jcraft:jzlib)

@@ -22,7 +22,7 @@ Release: 1%{?dist}
 License: GPL-2.0-or-later
 URL: https://mercurial-scm.org/
 Source0:        https://www.mercurial-scm.org/release/%{name}-%{upstreamversion}.tar.gz
-Source1:        https://src.fedoraproject.org/rpms/mercurial/raw/rawhide/f/mercurial-site-start.el
+Source1:        mercurial-site-start.el
 # Patch cargo metadata for dependency versions available in Fedora
 Patch0:  mercurial-rust-metadata.patch
 

@@ -27,18 +27,18 @@ License: bsd-3-clause AND zlib AND licenseref-fedora-public-domain AND bsd-attri
 URL:     http://www.samba.org/ppp
 
 Source0:        https://github.com/paulusmack/ppp/archive/ppp-%{version}.tar.gz
-Source1:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ppp-pam.conf
-Source2:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ppp-logrotate.conf
-Source3:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ppp-tmpfiles.conf
-Source4:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ip-down
-Source5:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ip-down.ipv6to4
-Source6:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ip-up
-Source7:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ip-up.ipv6to4
-Source8:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ipv6-down
-Source9:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ipv6-up
-Source12:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ppp-watch.tar.xz
-Source13:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ipv6-up.initscripts
-Source14:        https://src.fedoraproject.org/rpms/ppp/raw/rawhide/f/ipv6-down.initscripts
+Source1:        ppp-pam.conf
+Source2:        ppp-logrotate.conf
+Source3:        ppp-tmpfiles.conf
+Source4:        ip-down
+Source5:        ip-down.ipv6to4
+Source6:        ip-up
+Source7:        ip-up.ipv6to4
+Source8:        ipv6-down
+Source9:        ipv6-up
+Source12:        ppp-watch.tar.xz
+Source13:        ipv6-up.initscripts
+Source14:        ipv6-down.initscripts
 
 # Fedora-specific
 Patch0: ppp-2.5.0-use-change-resolv-function.patch

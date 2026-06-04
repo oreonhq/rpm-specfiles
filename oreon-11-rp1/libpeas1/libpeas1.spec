@@ -15,10 +15,10 @@ URL:            https://wiki.gnome.org/Projects/Libpeas
 Source0:        https://download.gnome.org/sources/%{tarball_name}/1.36/%{tarball_name}-%{version}.tar.xz
 # girepository: port libpeas ABI to girepository
 # https://gitlab.gnome.org/GNOME/libpeas/-/commit/73e25b6059d2fdc090a3feb8341ff902c3ec0d16
-Patch0:        https://src.fedoraproject.org/rpms/libpeas1/raw/rawhide/f/73e25b6059d2fdc090a3feb8341ff902c3ec0d16.patch
+Patch0:        73e25b6059d2fdc090a3feb8341ff902c3ec0d16.patch
 # build: handle depending on development releases of GLib
 # https://gitlab.gnome.org/GNOME/libpeas/-/commit/4613accc2e22395bb77bdf612fcdf90bf65f230f
-Patch1:        https://src.fedoraproject.org/rpms/libpeas1/raw/rawhide/f/4613accc2e22395bb77bdf612fcdf90bf65f230f.patch
+Patch1:        4613accc2e22395bb77bdf612fcdf90bf65f230f.patch
 
 BuildRequires:  gcc
 BuildRequires:  gettext

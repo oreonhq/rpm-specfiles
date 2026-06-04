@@ -141,20 +141,20 @@ Source:         node-v%{node_version}-stripped.tar.gz
 # - Full ICU database data
 Source001:        https://github.com/unicode-org/icu/releases/download/release-%{icu_version_major}.%{icu_version_minor}/icu4c-%{icu_version_major}.%{icu_version_minor}-data-bin-b.zip
 # - Downstream/distribution configuration files
-Source003:        https://src.fedoraproject.org/rpms/nodejs20/raw/rawhide/f/nodejs.pc.in
-Source004:        https://src.fedoraproject.org/rpms/nodejs20/raw/rawhide/f/v8.pc.in
-Source005:        https://src.fedoraproject.org/rpms/nodejs20/raw/rawhide/f/npmrc.in
-Source006:        https://src.fedoraproject.org/rpms/nodejs20/raw/rawhide/f/nodejs_abi.attr.in
-Source007:        https://src.fedoraproject.org/rpms/nodejs20/raw/rawhide/f/nodejs_abi.req.in
+Source003:        nodejs.pc.in
+Source004:        v8.pc.in
+Source005:        npmrc.in
+Source006:        nodejs_abi.attr.in
+Source007:        nodejs_abi.req.in
 # - Check section tests
-Source010:        https://src.fedoraproject.org/rpms/nodejs20/raw/rawhide/f/test-runner.sh
-Source011:        https://src.fedoraproject.org/rpms/nodejs20/raw/rawhide/f/test-should-pass.txt
-Source020:        https://src.fedoraproject.org/rpms/nodejs20/raw/rawhide/f/i18n-btest402.js
+Source010:        test-runner.sh
+Source011:        test-should-pass.txt
+Source020:        i18n-btest402.js
 # Source 100+: Packaging support files that won't be installed
 # - Packaging supports scripts and Makefile, used to semi-automate RPM updates. See the Makefile in the tarball on how this is created.
-Source100:        https://src.fedoraproject.org/rpms/nodejs20/raw/rawhide/f/packaging-scripts.tar.gz
+Source100:        packaging-scripts.tar.gz
 # - Additional SRPM macros
-Source101:        https://src.fedoraproject.org/rpms/nodejs20/raw/rawhide/f/nodejs.srpm.macros
+Source101:        nodejs.srpm.macros
 
 %patchlist
 0001-Remove-unused-OpenSSL-config.patch

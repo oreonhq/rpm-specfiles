@@ -16,7 +16,7 @@ License:        GPL-1.0-or-later OR Artistic-1.0-Perl
 URL:            https://metacpan.org/release/Test-Harness
 Source0:        https://cpan.metacpan.org/authors/id/L/LE/LEONT/Test-Harness-%{version}.tar.gz
 # Remove hard-coded shell bangs
-Patch0:        https://src.fedoraproject.org/rpms/perl-Test-Harness/raw/rawhide/f/Test-Harness-3.38-Remove-shell-bangs.patch
+Patch0:        Test-Harness-3.38-Remove-shell-bangs.patch
 BuildArch:      noarch
 BuildRequires:  coreutils
 BuildRequires:  findutils

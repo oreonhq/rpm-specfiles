@@ -11,19 +11,19 @@ URL:            http://wordnet.princeton.edu/
 Source0:        https://wordnetcode.princeton.edu/%{version}/WordNet-%{version}.tar.bz2
 # Updated database
 Source1:        https://wordnetcode.princeton.edu/wn3.1.dict.tar.gz
-Patch0:        https://src.fedoraproject.org/rpms/wordnet/raw/rawhide/f/wordnet-3.0-CVE-2008-2149.patch
-Patch1:        https://src.fedoraproject.org/rpms/wordnet/raw/rawhide/f/wordnet-3.0-CVE-2008-3908.patch
-Patch2:        https://src.fedoraproject.org/rpms/wordnet/raw/rawhide/f/wordnet-3.0-fix_man.patch
-Patch3:        https://src.fedoraproject.org/rpms/wordnet/raw/rawhide/f/wordnet-3.0-fix_resourcedir_path.patch
-Patch4:        https://src.fedoraproject.org/rpms/wordnet/raw/rawhide/f/wordnet-3.0-src_stubs_c.patch
+Patch0:        wordnet-3.0-CVE-2008-2149.patch
+Patch1:        wordnet-3.0-CVE-2008-3908.patch
+Patch2:        wordnet-3.0-fix_man.patch
+Patch3:        wordnet-3.0-fix_resourcedir_path.patch
+Patch4:        wordnet-3.0-src_stubs_c.patch
 # wordnet-3.0-wishwn_manpage.patch is GPL-2.0-or-later
-Patch5:        https://src.fedoraproject.org/rpms/wordnet/raw/rawhide/f/wordnet-3.0-wishwn_manpage.patch
-Patch6:        https://src.fedoraproject.org/rpms/wordnet/raw/rawhide/f/wordnet-3.0-use_system_tk_headers.patch
-Patch7:        https://src.fedoraproject.org/rpms/wordnet/raw/rawhide/f/wordnet-3.0-libtool.patch
+Patch5:        wordnet-3.0-wishwn_manpage.patch
+Patch6:        wordnet-3.0-use_system_tk_headers.patch
+Patch7:        wordnet-3.0-libtool.patch
 # Bug #585206
-Patch8:        https://src.fedoraproject.org/rpms/wordnet/raw/rawhide/f/wordnet-3.0-error_message.patch
+Patch8:        wordnet-3.0-error_message.patch
 # Bug #1037386
-Patch9:        https://src.fedoraproject.org/rpms/wordnet/raw/rawhide/f/wordnet-3.0-Pass-compilation-with-Werror-format-security.patch
+Patch9:        wordnet-3.0-Pass-compilation-with-Werror-format-security.patch
 BuildRequires:  automake >= 1.8
 BuildRequires:  coreutils
 BuildRequires:  gcc

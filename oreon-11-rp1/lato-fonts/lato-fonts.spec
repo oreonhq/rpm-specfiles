@@ -39,8 +39,8 @@ phonetics.
 }
 
 # Fonts retrieved 2015-08-07 from http://www.latofonts.com/download/Lato2OFL.zip
-Source0:  %{name}-%{version}.zip
-Source10:        https://src.fedoraproject.org/rpms/lato-fonts/raw/rawhide/f/61-lato-fonts.conf
+Source0:        https://github.com/latofonts/lato-source/archive/refs/tags/v%{version}.zip#/Lato2OFL.zip
+Source10:        61-lato-fonts.conf
 
 %fontpkg
 

@@ -18,21 +18,21 @@ Source0:        https://github.com/PCRE2Project/pcre2/releases/download/pcre2-%{
 Source2:        https://ftp.pcre.org/pub/pcre/Public-Key
 
 # Refused by upstream, bug #675477
-Patch1:        https://src.fedoraproject.org/rpms/mingw-pcre/raw/rawhide/f/pcre-8.32-refused_spelling_terminated.patch
+Patch1:        pcre-8.32-refused_spelling_terminated.patch
 # Fix recursion stack estimator, upstream bug #2173, refused by upstream
-Patch2:        https://src.fedoraproject.org/rpms/mingw-pcre/raw/rawhide/f/pcre-8.41-fix_stack_estimator.patch
+Patch2:        pcre-8.41-fix_stack_estimator.patch
 # Link applications to PCRE-specific symbols when using POSIX API, bug #1667614,
 # upstream bug 1830, partially borrowed from PCRE2, proposed to upstream,
 # This amends ABI, application built with this patch cannot run with
 # previous libpcreposix builds.
-Patch3:        https://src.fedoraproject.org/rpms/mingw-pcre/raw/rawhide/f/pcre-8.42-Declare-POSIX-regex-function-names-as-macros-to-PCRE.patch
+Patch3:        pcre-8.42-Declare-POSIX-regex-function-names-as-macros-to-PCRE.patch
 # Fix reading an uninitialized memory when populating a name table,
 # upstream bug #2661, proposed to the upstream
-Patch4:        https://src.fedoraproject.org/rpms/mingw-pcre/raw/rawhide/f/pcre-8.44-Inicialize-name-table-memory-region.patch
+Patch4:        pcre-8.44-Inicialize-name-table-memory-region.patch
 # Implement CET, bug #1909554, proposed to the upstream
 # <https://lists.exim.org/lurker/message/20201220.222016.d8cd6d61.en.html>
-Patch5:        https://src.fedoraproject.org/rpms/mingw-pcre/raw/rawhide/f/pcre-8.44-JIT-compiler-update-for-Intel-CET.patch
-Patch6:        https://src.fedoraproject.org/rpms/mingw-pcre/raw/rawhide/f/pcre-8.44-Pass-mshstk-to-the-compiler-when-Intel-CET-is-enable.patch
+Patch5:        pcre-8.44-JIT-compiler-update-for-Intel-CET.patch
+Patch6:        pcre-8.44-Pass-mshstk-to-the-compiler-when-Intel-CET-is-enable.patch
 
 BuildArch:	noarch
 

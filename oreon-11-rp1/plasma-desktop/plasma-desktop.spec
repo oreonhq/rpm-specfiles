@@ -31,7 +31,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{maj_ver_kf6}.%{m
 
 # Hide virtual keyboard indicator on sddm.
 # Do not remove this as it breaks Fedora's QA policy
-Patch101:        https://src.fedoraproject.org/rpms/plasma-desktop/raw/rawhide/f/hide-virtual-keyboard-indicator-on-sddm.patch
+Patch101:        hide-virtual-keyboard-indicator-on-sddm.patch
 
 ## upstreamable patches
 

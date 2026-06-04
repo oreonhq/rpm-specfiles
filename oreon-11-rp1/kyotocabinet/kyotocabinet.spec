@@ -7,8 +7,8 @@ Release:        9%{?dist}
 License:        GPL-3.0-only
 URL:            https://dbmx.net/%{name}/
 Source:        https://dbmx.net/%{name}/pkg/%{name}-%{version}.tar.gz
-Patch0:        https://src.fedoraproject.org/rpms/kyotocabinet/raw/rawhide/f/kyotocabinet-1.2.76-cflags.patch
-Patch1:        https://src.fedoraproject.org/rpms/kyotocabinet/raw/rawhide/f/kyotocabinet-1.2.76-8-byte-atomics.patch
+Patch0:        kyotocabinet-1.2.76-cflags.patch
+Patch1:        kyotocabinet-1.2.76-8-byte-atomics.patch
 Requires:       %{name}-libs%{?_isa} = %{version}-%{release}
 BuildRequires:  gcc-c++, zlib-devel, lzo-devel, xz-devel
 

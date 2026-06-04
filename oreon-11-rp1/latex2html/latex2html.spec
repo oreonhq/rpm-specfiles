@@ -16,7 +16,7 @@ Source1:        https://raw.githubusercontent.com/latex2html/latex2html/HEAD/cfg
 Source2: %{name}-manpages.tar.gz
 # support for Japanese
 # http://takeno.iee.niit.ac.jp/~shige/TeX/latex2html/
-Source3: http://takeno.iee.niit.ac.jp/~shige/TeX/latex2html/data2/l2h-2023-jp3.2b1.37.tar.gz
+Source3: https://takeno.iee.niit.ac.jp/~shige/TeX/latex2html/data2/l2h-2023-jp3.2b1.37.tar.gz
 Patch1: latex2html-2018.2-teTeX-l2h-config.patch
 Patch2: latex2html-2002-2-1-SHLIB.patch
 Requires: tex(latex), tex(dvips), tex(url.sty), tex(preview.sty), netpbm-progs, poppler-utils

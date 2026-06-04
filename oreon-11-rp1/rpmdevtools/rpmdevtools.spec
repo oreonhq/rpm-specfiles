@@ -10,7 +10,7 @@ Summary:        RPM Development Tools
 License:        GPL-2.0-or-later AND GPL-2.0-only
 URL:            https://pagure.io/rpmdevtools
 Source0:        https://releases.pagure.org/rpmdevtools/%{name}-%{version}.tar.xz
-Source1:        https://src.fedoraproject.org/rpms/rpmdevtools/raw/rawhide/f/progressbar.py
+Source1:        progressbar.py
 
 # Fedora-specific downstream patches
 ## Force legacy datestamp by default until rhbz#1715412 is resolved

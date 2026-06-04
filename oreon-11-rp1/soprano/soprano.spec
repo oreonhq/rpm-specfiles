@@ -29,7 +29,7 @@ Source0:        https://downloads.sf.net/soprano/soprano-%{version}.tar.bz2
 %endif
 
 ## upstreamable patches
-Patch1:        https://src.fedoraproject.org/rpms/soprano/raw/rawhide/f/soprano-2.9.4-gcc6.patch
+Patch1:        soprano-2.9.4-gcc6.patch
 
 ## upstream patches
 

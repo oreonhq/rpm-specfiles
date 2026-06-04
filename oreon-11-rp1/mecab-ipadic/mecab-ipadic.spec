@@ -21,7 +21,7 @@ Summary:	IPA dictionary for MeCab
 # SPDX confirmed
 License:	NAIST-2003
 URL:		http://mecab.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/mecab/%{name}-%{majorver}-%{date}.tar.gz
+Source0:        https://downloads.sourceforge.net/mecab/%{name}-%{majorver}-%{date}.tar.gz
 #Source2:	http://www.icot.or.jp/ARCHIVE/terms-and-conditions-for-IFS-J.html
 Source2:	http://www.jipdec.or.jp/icot/ARCHIVE/terms-and-conditions-for-IFS-J.html
 Source3:	LICENSE.Fedora

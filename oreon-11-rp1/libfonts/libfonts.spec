@@ -11,10 +11,10 @@ BuildRequires: ant-openjdk25 , java-25-devel, jpackage-utils, libloader >= 1.1.3
 Requires: java-25-headless, jpackage-utils, libloader >= 1.1.3
 BuildArch: noarch
 ExclusiveArch:  %{java_arches} noarch
-Patch0:        https://src.fedoraproject.org/rpms/libfonts/raw/rawhide/f/libfonts-1.1.2.build.patch
-Patch1:        https://src.fedoraproject.org/rpms/libfonts/raw/rawhide/f/libfonts-1.1.2.java11.patch
-Patch2:        https://src.fedoraproject.org/rpms/libfonts/raw/rawhide/f/libfonts-1.1.3-remove-antcontrib-support.patch
-Patch3:        https://src.fedoraproject.org/rpms/libfonts/raw/rawhide/f/libfonts-1.1.3-remove-commons-logging.patch
+Patch0:        libfonts-1.1.2.build.patch
+Patch1:        libfonts-1.1.2.java11.patch
+Patch2:        libfonts-1.1.3-remove-antcontrib-support.patch
+Patch3:        libfonts-1.1.3-remove-commons-logging.patch
 %description
 LibFonts is a library developed to support advanced layouting in JFreeReport.
 This library allows to read TrueType-Font files to extract layouting specific

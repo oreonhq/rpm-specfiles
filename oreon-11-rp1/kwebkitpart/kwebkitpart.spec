@@ -21,7 +21,7 @@ License: LicenseRef-Callaway-LGPLv2+
 URL:     https://cgit.kde.org/kwebkitpart.git/
 # use releaseme script (kdelibs4 branch) to generate
 # with tweaks to CMakeLists.txt to properly handle translations
-Source0: kwebkitpart-%{version}-%{snap}.tar.xz
+Source0:        https://invent.kde.org/network/kwebkitpart/-/archive/v%{version}/kwebkitpart-v%{version}.tar.bz2#/kwebkitpart-%{version}-%{snap}.tar.bz2
 # generated via releaseme; use invent snapshot when tarball missing
 # https://invent.kde.org/network/kwebkitpart/-/archive/v1.4.0/kwebkitpart-v1.4.0.tar.bz2
 

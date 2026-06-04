@@ -159,7 +159,7 @@ Provides: khmeros-base-fonts = %{version}-%{release}
 This package provides System font family.
 }
 
-Source0:        http://downloads.sourceforge.net/khmer/%{archivename}.zip
+Source0:        https://downloads.sourceforge.net/khmer/%{archivename}.zip
 Source1:        68-khmer-os-battambang-fonts.conf
 Source2:        68-khmer-os-bokor-fonts.conf
 Source3:        68-khmer-os-content-fonts.conf

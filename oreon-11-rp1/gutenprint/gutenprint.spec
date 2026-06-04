@@ -29,7 +29,7 @@ Summary: Printer Drivers Package
 Version: 5.3.5
 Release: 7%{?dist}
 URL: http://gimp-print.sourceforge.net/
-Source0:        http://downloads.sourceforge.net/gimp-print/%{name}-%{version}.tar.xz
+Source0:        https://downloads.sourceforge.net/gimp-print/%{name}-%{version}.tar.xz
 # Post-install script to update CUPS native PPDs.
 Source1: cups-genppdupdate.py.in
 # ported from old gimp-print package - fix for a menu in gimp gutenprint plugin

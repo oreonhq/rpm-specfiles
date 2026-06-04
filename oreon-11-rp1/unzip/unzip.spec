@@ -10,7 +10,7 @@ Name: unzip
 Version: 6.0
 Release: 69%{?dist}
 License: Info-ZIP
-Source: http://downloads.sourceforge.net/infozip/unzip60.tar.gz
+Source: https://downloads.sourceforge.net/infozip/unzip60.tar.gz
 
 # Not sent to upstream.
 Patch1: unzip-6.0-bzip2-configure.patch

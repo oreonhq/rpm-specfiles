@@ -53,10 +53,10 @@ Source0:        https://github.com/ipxe/ipxe/archive/de8a0821c7bc737e724fa3dfb6d
 
 # Enable IPv6 for qemu's config
 # Sent upstream: http://lists.ipxe.org/pipermail/ipxe-devel/2015-November/004494.html
-Patch0001:        https://src.fedoraproject.org/rpms/ipxe/raw/rawhide/f/0001-build-customize-configuration.patch
-Patch0002:        https://src.fedoraproject.org/rpms/ipxe/raw/rawhide/f/0002-Use-spec-compliant-timeouts.patch
+Patch0001:        0001-build-customize-configuration.patch
+Patch0002:        0002-Use-spec-compliant-timeouts.patch
 # https://github.com/ipxe/ipxe/issues/1419
-Patch0003:        https://src.fedoraproject.org/rpms/ipxe/raw/rawhide/f/gcc15.patch
+Patch0003:        gcc15.patch
 
 %ifarch %{buildarches}
 BuildRequires: perl-interpreter

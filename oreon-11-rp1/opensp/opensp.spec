@@ -8,11 +8,11 @@ Requires: sgml-common >= 0.5
 Provides: bundled(gettext) = 0.14.5
 URL: http://openjade.sourceforge.net/
 Source:        https://download.sourceforge.net/openjade/OpenSP-%{version}.tar.gz
-Patch0:        https://src.fedoraproject.org/rpms/opensp/raw/rawhide/f/opensp-multilib.patch
-Patch1:        https://src.fedoraproject.org/rpms/opensp/raw/rawhide/f/opensp-nodeids.patch
-Patch2:        https://src.fedoraproject.org/rpms/opensp/raw/rawhide/f/opensp-sigsegv.patch
-Patch3:        https://src.fedoraproject.org/rpms/opensp/raw/rawhide/f/opensp-manpage.patch
-Patch4:        https://src.fedoraproject.org/rpms/opensp/raw/rawhide/f/opensp-configure-c99.patch
+Patch0:        opensp-multilib.patch
+Patch1:        opensp-nodeids.patch
+Patch2:        opensp-sigsegv.patch
+Patch3:        opensp-manpage.patch
+Patch4:        opensp-configure-c99.patch
 License: X11
 
 BuildRequires: make

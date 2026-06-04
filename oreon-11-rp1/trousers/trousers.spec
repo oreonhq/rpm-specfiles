@@ -8,7 +8,7 @@ Release: 17%{?dist}
 License: LicenseRef-Callaway-BSD
 Url: http://trousers.sourceforge.net
 
-Source0:        http://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/%{name}/%{name}-%{version}.tar.gz
 Source1: tcsd.service
 Patch1:  trousers-0.3.14-noinline.patch
 # submitted upstream

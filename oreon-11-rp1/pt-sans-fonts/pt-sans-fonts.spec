@@ -43,16 +43,16 @@ It was designed by Alexandra Korolkova, Olga Umpeleva and Vladimir Yefimov
 and released by ParaType.}
 
 # This is now dead and ParaType still publishes an older version on its website
-Source0:  http://www.fontstock.com/public/PTSansOFL.zip
+Source0:  https://www.fontstock.com/public/PTSansOFL.zip
 Source10: 58-pt-sans-fonts.xml
-Source20: http://rus.paratype.ru/system/attachments/647/original/ptsans55reg.pdf
-Source21: http://rus.paratype.ru/system/attachments/650/original/ptsans75bold.pdf
-Source22: http://rus.paratype.ru/system/attachments/648/original/ptsans56it.pdf
-Source23: http://rus.paratype.ru/system/attachments/651/original/ptsans76bit.pdf
-Source24: http://rus.paratype.ru/system/attachments/652/original/ptsanscaption55.pdf
-Source25: http://rus.paratype.ru/system/attachments/653/original/ptsanscaption57bold.pdf
-Source26: http://rus.paratype.ru/system/attachments/649/original/ptsans57narrow.pdf
-Source27: http://rus.paratype.ru/system/attachments/655/original/ptsans77narrowbold.pdf
+Source20: https://rus.paratype.ru/system/attachments/647/original/ptsans55reg.pdf
+Source21: https://rus.paratype.ru/system/attachments/650/original/ptsans75bold.pdf
+Source22: https://rus.paratype.ru/system/attachments/648/original/ptsans56it.pdf
+Source23: https://rus.paratype.ru/system/attachments/651/original/ptsans76bit.pdf
+Source24: https://rus.paratype.ru/system/attachments/652/original/ptsanscaption55.pdf
+Source25: https://rus.paratype.ru/system/attachments/653/original/ptsanscaption57bold.pdf
+Source26: https://rus.paratype.ru/system/attachments/649/original/ptsans57narrow.pdf
+Source27: https://rus.paratype.ru/system/attachments/655/original/ptsans77narrowbold.pdf
 
 %fontpkg
 

@@ -7,7 +7,7 @@ Summary:        A library for rendering PostScript(TM) documents
 
 License:        GPL-2.0-or-later
 URL:            http://libspectre.freedesktop.org
-Source0:        http://libspectre.freedesktop.org/releases/%{name}-%{version}.tar.gz
+Source0:        https://libspectre.freedesktop.org/releases/%{name}-%{version}.tar.gz
 
 BuildRequires: make
 BuildRequires:  gcc

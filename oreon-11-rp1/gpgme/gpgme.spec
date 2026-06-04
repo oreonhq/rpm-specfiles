@@ -26,7 +26,7 @@ License:        LGPL-2.1-or-later AND MIT
 URL:            https://gnupg.org/related_software/gpgme/
 Source0:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2
 Source1:        https://gnupg.org/ftp/gcrypt/gpgme/gpgme-%{version}.tar.bz2.sig
-Source2:        https://src.fedoraproject.org/rpms/gpgme/raw/rawhide/f/gpgme-multilib.h
+Source2:        gpgme-multilib.h
 Source3:        https://gnupg.org/signature_key.asc
 Source4:        https://gnupg.org/ftp/gcrypt/gpgmepp/qgpgme-%{spversion}.tar.xz
 Source5:        https://gnupg.org/ftp/gcrypt/gpgmepp/gpgmepp-%{spversion}.tar.xz

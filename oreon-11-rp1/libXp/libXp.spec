@@ -26,7 +26,7 @@ BuildRequires: libXext-devel
 BuildRequires: libXau-devel
 BuildRequires: libtool automake autoconf gettext
 
-Patch0:        https://src.fedoraproject.org/rpms/libXp/raw/rawhide/f/add-proto-files.patch
+Patch0:        add-proto-files.patch
 
 %description
 X.Org X11 libXp runtime library

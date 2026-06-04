@@ -25,7 +25,7 @@ URL:		https://rspec.info
 Source0:        https://rubygems.org/gems/%{gem_name}-%{fullver}.gem
 # %%{SOURCE2} %%{name} %%{version}
 Source1:	rubygem-%{gem_name}-%{version}-full.tar.gz
-Source2:        https://src.fedoraproject.org/rpms/rubygem-rspec-expectations/raw/rawhide/f/rspec-related-create-full-tarball.sh
+Source2:        rspec-related-create-full-tarball.sh
 # Workaround tests wrt diff/lcs diff format
 # Partially revert 3.13.3 -> 3.13.4 change
 Patch0:	rubygem-rspec-expectations-3.13.4-diff_spec-format-revert.patch

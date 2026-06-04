@@ -46,9 +46,9 @@ Source0:        https://www.nlnetlabs.nl/downloads/ldns/ldns-1.9.0.tar.gz
 Source1:        https://www.nlnetlabs.nl/downloads/ldns/ldns-1.9.0.tar.gz.asc
 # Willem Toorop, https://www.nlnetlabs.nl/people/
 Source2: https://keys.openpgp.org/vks/v1/by-fingerprint/DC34EE5DB2417BCC151E5100E5F8F8212F77A498#/wtoorop.asc
-Patch1:        https://src.fedoraproject.org/rpms/ldns/raw/rawhide/f/ldns-1.7.0-multilib.patch
+Patch1:        ldns-1.7.0-multilib.patch
 # https://github.com/NLnetLabs/ldns/pull/288
-Patch8:        https://src.fedoraproject.org/rpms/ldns/raw/rawhide/f/ldns-1.9-std23-bool.patch
+Patch8:        ldns-1.9-std23-bool.patch
 
 BuildRequires: libtool
 BuildRequires: autoconf

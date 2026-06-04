@@ -6,7 +6,7 @@ Version: 1.2.0.10
 Release: 40%{?dist}
 License: GPL-2.0-or-later
 URL: https://sourceware.org/lvm2/wiki/DMRAID_Eventing
-Source:        https://src.fedoraproject.org/rpms/sgpio/raw/rawhide/f/sgpio-1.2-0.10-src.tar.gz
+Source:        sgpio-1.2-0.10-src.tar.gz
 # there is no official download link for the latest package
 #Source: http://sources.redhat.com/lvm2/wiki/DMRAID_Eventing?action=AttachFile&do=get&target=sgpio-1.2.tgz
 Patch0: sgpio-1.2-makefile.patch

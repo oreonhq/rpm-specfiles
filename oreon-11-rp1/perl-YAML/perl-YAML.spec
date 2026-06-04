@@ -24,7 +24,7 @@ URL:            https://metacpan.org/release/YAML
 Source0:        YAML-free-%{version}.tar.gz
 # Script to remove non-free content from upstream tarball
 # Usage: YAML-free YAML-%%{version}.tar.gz
-Source1:        https://src.fedoraproject.org/rpms/perl-YAML/raw/rawhide/f/YAML-free
+Source1:        YAML-free
 BuildArch:      noarch
 # Module Build
 BuildRequires:  coreutils

@@ -33,8 +33,8 @@ Summary:        A low-level cryptographic library
 
 License:        LGPL-3.0-or-later OR GPL-2.0-or-later
 URL:            http://www.lysator.liu.se/~nisse/nettle/
-Source0:        http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
-Source1:        http://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz.sig
+Source0:        https://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz
+Source1:        https://www.lysator.liu.se/~nisse/archive/%{name}-%{version}.tar.gz.sig
 # Same keyring blob and SHA512 as Fedora nettle sources (not shipped on ftp.gnu.org).
 Source2:	nettle-release-keyring.gpg
 %if 0%{?bootstrap}

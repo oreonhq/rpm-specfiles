@@ -10,7 +10,7 @@ URL:        http://sourceforge.net/projects/%{name}/
 
 ExcludeArch:    s390 s390x
 
-Source:        http://downloads.sourceforge.net/project/%{name}/%{name}-2/%{version}/%{name}-%{version}.tar.gz
+Source:        https://downloads.sourceforge.net/project/%{name}/%{name}-2/%{version}/%{name}-%{version}.tar.gz
 Patch0:     %{name}-sdl.patch
 
 BuildRequires:  autoconf

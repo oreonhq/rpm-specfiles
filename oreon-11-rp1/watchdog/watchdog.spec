@@ -7,11 +7,11 @@ Release:          12%{?dist}
 License:          GPL-2.0-or-later
 
 URL:              http://sourceforge.net/projects/watchdog/
-Source0:        http://downloads.sourceforge.net/watchdog/watchdog-%{version}.tar.gz
-Source2:        https://src.fedoraproject.org/rpms/watchdog/raw/rawhide/f/README.watchdog.ipmi
-Source3:        https://src.fedoraproject.org/rpms/watchdog/raw/rawhide/f/README.Fedora
-Source4:        https://src.fedoraproject.org/rpms/watchdog/raw/rawhide/f/watchdog.service
-Source5:        https://src.fedoraproject.org/rpms/watchdog/raw/rawhide/f/watchdog-ping.service
+Source0:        https://downloads.sourceforge.net/watchdog/watchdog-%{version}.tar.gz
+Source2:        README.watchdog.ipmi
+Source3:        README.Fedora
+Source4:        watchdog.service
+Source5:        watchdog-ping.service
 
 # Fixes building on glibc without RPC.  Sent upstream 2019-02-06.
 Patch1:           0001-Choose-libtirpc-or-another-RPC-library-for-XDR-heade.patch

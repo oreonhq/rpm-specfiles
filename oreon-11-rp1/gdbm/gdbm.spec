@@ -10,7 +10,7 @@ Epoch: 1
 License: GPL-3.0-or-later
 URL: http://www.gnu.org/software/gdbm/
 
-Source:        http://ftp.gnu.org/gnu/gdbm/gdbm-%{version}.tar.gz
+Source:        https://ftp.gnu.org/gnu/gdbm/gdbm-%{version}.tar.gz
 
 BuildRequires: gcc
 BuildRequires: libtool

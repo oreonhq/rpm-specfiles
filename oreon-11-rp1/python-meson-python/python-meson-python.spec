@@ -23,7 +23,7 @@ URL:            https://github.com/mesonbuild/meson-python
 Source:         %{pypi_source meson_python}
 # Downstream-only patch to remove the patchelf dependency (and corresponding
 # functionality), controlled by the patchelf build conditional
-Patch100:        https://src.fedoraproject.org/rpms/python-meson-python/raw/rawhide/f/meson-python-0.18.0-remove-patchelf.patch
+Patch100:        meson-python-0.18.0-remove-patchelf.patch
 
 # LICENSE duplicates LICENSES/MIT.txt, which is handled automatically.
 

@@ -8,7 +8,7 @@ Release:        2%{?dist}
 Summary:        Tools and library for EPUB and LIT ebooks
 License:        MIT
 URL:            https://sourceforge.net/projects/ebook-tools/
-Source0:        http://downloads.sourceforge.net/ebook-tools/%{name}-%{version}.tar.gz
+Source0:        https://downloads.sourceforge.net/ebook-tools/%{name}-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  extra-cmake-modules

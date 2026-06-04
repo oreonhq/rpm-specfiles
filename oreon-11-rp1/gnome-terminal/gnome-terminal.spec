@@ -17,7 +17,7 @@ Summary: Terminal emulator for GNOME
 License: GPL-3.0-or-later AND GFDL-1.3-only
 URL:     https://wiki.gnome.org/Apps/Terminal
 Source0:        https://download.gnome.org/sources/%{name}/3.60/%{name}-%{version}.tar.xz
-Source1:        https://src.fedoraproject.org/rpms/gnome-terminal/raw/rawhide/f/org.gnome.Terminal.gschema.override
+Source1:        org.gnome.Terminal.gschema.override
 
 BuildRequires: pkgconfig(dconf)
 BuildRequires: pkgconfig(glib-2.0) >= %{glib2_version}

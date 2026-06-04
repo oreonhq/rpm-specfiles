@@ -9,7 +9,7 @@ URL:            https://src.fedoraproject.org/rpms/ghc-srpm-macros
 
 BuildArch:      noarch
 
-Source0:        https://src.fedoraproject.org/rpms/ghc-srpm-macros/raw/rawhide/f/macros.ghc-srpm
+Source0:        macros.ghc-srpm
 
 %description
 Macros used when generating Haskell source RPM packages.

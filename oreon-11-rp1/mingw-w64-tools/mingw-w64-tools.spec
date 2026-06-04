@@ -22,9 +22,9 @@ URL:            http://mingw-w64.sourceforge.net/
 # This triggers the SourceForge instructure to generate a snapshot
 # After that you can pull in the archive with:
 # spectool -g mingw-w64-tools.spec
-Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}.tar.bz2
+Source0:        https://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}.tar.bz2
 %else
-Source0:        http://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}.tar.bz2
+Source0:        https://downloads.sourceforge.net/mingw-w64/mingw-w64-v%{version}.tar.bz2
 %endif
 
 BuildRequires:  make

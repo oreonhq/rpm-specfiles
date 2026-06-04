@@ -11,7 +11,7 @@ License:	BSD-3-Clause
 URL:		https://github.com/intel/QAT-ZSTD-Plugin
 Source0:        https://github.com/intel/QAT-ZSTD-Plugin/archive/v1.0.0/qat-zstd-plugin-1.0.0.tar.gz
 
-Patch0:        https://src.fedoraproject.org/rpms/qat-zstd-plugin/raw/rawhide/f/test.patch
+Patch0:        test.patch
 
 BuildRequires:	automake
 BuildRequires:	gcc

@@ -11,7 +11,7 @@ License: LicenseRef-Callaway-GFDL
 # The tarball for this docs are self generated through provided script on SOURCES generate-qt-doc.sh
 Url: http://qt-project.org/
 Source0: qt-doc-opensource-src-%{version}.tar.xz
-Source1:        https://src.fedoraproject.org/rpms/qt5-doc/raw/rawhide/f/generate-qt-doc.sh
+Source1:        generate-qt-doc.sh
 
 # optimize build, skip unecessary steps
 %global debug_package   %{nil}

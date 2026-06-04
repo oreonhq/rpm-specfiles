@@ -10,7 +10,7 @@ Summary:        Background logo extension for GNOME Shell
 
 License:        GPL-2.0-or-later
 URL:            https://pagure.io/background-logo-extension
-Source0:        https://forge.fedoraproject.org/workstation/background-logo-extension/releases/download/%{tarball_version}/background-logo-extension-%{tarball_version}.tar.xz
+Source0:        https://pagure.io/background-logo-extension/archive/%{tarball_version}/background-logo-extension-%{tarball_version}.tar.xz
 BuildArch:      noarch
 
 BuildRequires:  meson

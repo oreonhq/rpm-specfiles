@@ -17,7 +17,7 @@ BuildRequires: iso-codes-devel
 BuildRequires: gobject-introspection-devel
 Requires: iso-codes
 #Source: http://download.gnome.org/sources/libxklavier/5.3/%%{name}-%%{version}.tar.xz
-Source: http://people.freedesktop.org/~svu/libxklavier-5.4.tar.bz2
+Source: https://people.freedesktop.org/~svu/libxklavier-5.4.tar.bz2
 
 Patch01: 0001-props-fix-the-max-lengths-for-set_name-description-s.patch
 Patch02: 0002-config-use-our-name-description-setter-functions.patch

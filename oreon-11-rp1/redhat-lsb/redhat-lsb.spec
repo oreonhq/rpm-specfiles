@@ -23,7 +23,7 @@ Version: 5.0
 Release: 0.18%{gver}%{?dist}
 URL: https://wiki.linuxfoundation.org/lsb/start
 # https://github.com/LinuxStandardBase/lsb-samples/
-Source0:        https://github.com/LinuxStandardBase/lsb-samples/archive/%{gitversion}.tar.gz
+Source0:        https://github.com/LinuxStandardBase/lsb-samples/archive/%{gitversion}.tar.gz#/redhat-lsb-5.0.tar.gz
 # Automatically converted from old format: GPLv2 - review is highly recommended.
 License: GPL-2.0-only
 BuildRequires: make

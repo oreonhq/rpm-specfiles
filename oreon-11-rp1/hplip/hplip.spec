@@ -24,7 +24,7 @@ License: GPL-2.0-or-later AND MIT AND BSD-3-Clause-HP AND IJG AND GPL-2.0-only A
 Url: https://developers.hp.com/hp-linux-imaging-and-printing
 BuildRequires: curl
 # Original source tarball
-# Source0: http://downloads.sourceforge.net/sourceforge/hplip/hplip-%%{version}.tar.gz
+# Source0: https://downloads.sourceforge.net/sourceforge/hplip/hplip-%%{version}.tar.gz
 #
 # Repacked source tarball without redundant files - always repack
 # the original tarball once a new version arrives by:

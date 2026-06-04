@@ -13,8 +13,8 @@ URL: https://www.x.org
 
 %if 0%{?gitdate}
 Source0:        https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
-Source1:        https://src.fedoraproject.org/rpms/libXt/raw/rawhide/f/make-git-snapshot.sh
-Source2:        https://src.fedoraproject.org/rpms/libXt/raw/rawhide/f/commitid
+Source1:        make-git-snapshot.sh
+Source2:        commitid
 %else
 Source0:        https://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.xz
 %endif

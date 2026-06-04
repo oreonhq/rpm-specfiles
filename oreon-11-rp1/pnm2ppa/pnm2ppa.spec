@@ -9,7 +9,7 @@ Release: 8%{?dist}
 URL: http://sourceforge.net/projects/pnm2ppa 
 Source0:        https://downloads.sourceforge.net/pnm2ppa/pnm2ppa-1.13.tar.gz
 # Following sourcelink is dead currently.
-Source1: http://www.httptech.com/ppa/files/ppa-0.8.6.tar.gz
+Source1: https://www.httptech.com/ppa/files/ppa-0.8.6.tar.gz
 # Upstream sync.
 Patch1: pbm2ppa-20000205.diff
 # Use RPM_OPT_FLAGS.

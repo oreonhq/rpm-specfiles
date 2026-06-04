@@ -37,12 +37,12 @@ URL:            http://gcc.gnu.org
 # git --git-dir=gcc-dir.tmp/.git archive --prefix=%%{name}-%%{version}-%%{DATE}/ %%{gitrev} | xz -9e > %%{name}-%%{version}-%%{DATE}.tar.xz
 # rm -rf gcc-dir.tmp
 %global srcdir gcc-%{version}-%{DATE}
-Source0:        %{srcdir}.tar.xz
+Source0:        https://gcc.gnu.org/pub/gcc/gcc-%{gcc_version}/gcc-%{gcc_version}.tar.xz#/%{srcdir}.tar.xz
 
 # See https://sourceforge.net/p/mingw-w64/mailman/mingw-w64-public/thread/8fd2fb03-9b8a-07e1-e162-0bb48bcc3984%40gmail.com/#msg37200751
-Patch0:        https://src.fedoraproject.org/rpms/mingw-gcc/raw/rawhide/f/0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
+Patch0:        0020-libgomp-Don-t-hard-code-MS-printf-attributes.patch
 # Add missing stdlib.h include
-Patch1:        https://src.fedoraproject.org/rpms/mingw-gcc/raw/rawhide/f/mingw-gcc_include-stdlib.patch
+Patch1:        mingw-gcc_include-stdlib.patch
 
 BuildRequires:  gcc-c++
 BuildRequires:  make

@@ -11,7 +11,7 @@ Source0:        https://github.com/itstool/itstool/archive/refs/tags/%{version}.
 # See:  https://github.com/itstool/itstool/issues/25
 Patch0:        https://sources.debian.org/data/main/i/itstool/2.0.5-2/debian/patches/fix_crash_912099.patch#/itstool-2.0.5-fix-crash-wrong-encoding.patch
 # Filed upstream at https://github.com/itstool/itstool/pull/51
-Patch1:        https://src.fedoraproject.org/rpms/itstool/raw/rawhide/f/0001-Fix-insufficiently-quoted-regular-expressions.patch
+Patch1:        0001-Fix-insufficiently-quoted-regular-expressions.patch
 
 BuildArch:      noarch
 

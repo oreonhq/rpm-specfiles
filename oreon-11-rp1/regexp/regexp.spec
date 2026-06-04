@@ -11,9 +11,9 @@ BuildArch:      noarch
 ExclusiveArch:  %{java_arches} noarch
 
 Source0:        https://archive.apache.org/dist/jakarta/regexp/source/jakarta-regexp-%{version}.tar.gz
-Source2:        https://src.fedoraproject.org/rpms/regexp/raw/rawhide/f/jakarta-regexp-osgi-manifest.MF
+Source2:        jakarta-regexp-osgi-manifest.MF
 
-Patch:          https://src.fedoraproject.org/rpms/regexp/raw/rawhide/f/jakarta-regexp-attach-osgi-manifest.patch
+Patch:        jakarta-regexp-attach-osgi-manifest.patch
 
 BuildRequires:  javapackages-local-openjdk25
 BuildRequires:  ant-openjdk25 

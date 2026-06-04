@@ -9,7 +9,7 @@ Release: 27%{?dist}
 Summary: Czech spellchecker and hyphenation dictionaries for LibreOffice
 License: GPL-1.0-or-later
 URL: http://extensions.services.openoffice.org/en/project/dict-cs
-Source0: http://downloads.sourceforge.net/aoo-extensions/dict-cs-2.0.oxt
+Source0: https://downloads.sourceforge.net/aoo-extensions/dict-cs-2.0.oxt
 BuildArch: noarch
 
 BuildRequires: dos2unix

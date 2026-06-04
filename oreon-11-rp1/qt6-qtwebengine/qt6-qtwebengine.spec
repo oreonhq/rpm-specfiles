@@ -111,14 +111,14 @@ Source0: %{qt_module}-everywhere-src-%{version}-clean.tar.xz
 %endif
 
 # cleanup scripts used above
-Source2:        https://src.fedoraproject.org/rpms/qt6-qtwebengine/raw/rawhide/f/clean_qtwebengine.sh
-Source3:        https://src.fedoraproject.org/rpms/qt6-qtwebengine/raw/rawhide/f/clean_ffmpeg.sh
-Source4:        https://src.fedoraproject.org/rpms/qt6-qtwebengine/raw/rawhide/f/get_free_ffmpeg_source_files.py
+Source2:        clean_qtwebengine.sh
+Source3:        clean_ffmpeg.sh
+Source4:        get_free_ffmpeg_source_files.py
 # macros
-Source10:        https://src.fedoraproject.org/rpms/qt6-qtwebengine/raw/rawhide/f/macros.qt6-qtwebengine
+Source10:        macros.qt6-qtwebengine
 
 # pulseaudio headers
-Source20:        https://src.fedoraproject.org/rpms/qt6-qtwebengine/raw/rawhide/f/pulseaudio-12.2-headers.tar.gz
+Source20:        pulseaudio-12.2-headers.tar.gz
 
 # workaround FTBFS against kernel-headers-5.2.0+
 Patch1:   qtwebengine-SIOCGSTAMP.patch

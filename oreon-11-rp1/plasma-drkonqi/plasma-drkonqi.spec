@@ -20,7 +20,7 @@ Source1:        https://download.kde.org/%{stable_kf6}/plasma/%{version}/%{base_
 
 ## upstreamable Patches
 # dnf debuginfo-install
-Patch:        https://src.fedoraproject.org/rpms/plasma-drkonqi/raw/rawhide/f/drkonqi-installdbgsymbols.patch
+Patch:        drkonqi-installdbgsymbols.patch
 
 BuildRequires:  extra-cmake-modules
 BuildRequires:  kf6-rpm-macros

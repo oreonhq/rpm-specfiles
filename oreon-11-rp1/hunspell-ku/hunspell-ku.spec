@@ -11,7 +11,7 @@ Summary: Kurdish hunspell dictionaries
 Version: 0.21
 Release: 37%{?dist}
 #http://hunspell-ku.googlecode.com/files/ku_TR-021_source.zip ?
-Source0: http://downloads.sourceforge.net/myspellkurdish/ku_TR-021.zip
+Source0: https://downloads.sourceforge.net/myspellkurdish/ku_TR-021.zip
 #http://code.google.com/p/hunspell-ku/ ?
 URL: https://sourceforge.net/projects/myspellkurdish/
 License: GPL-3.0-only OR LGPL-3.0-only OR MPL-1.1

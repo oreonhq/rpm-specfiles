@@ -29,12 +29,12 @@ Source1:        https://downloads.isc.org/isc/kea/%{version}/kea-%{version}.tar.
 Source2:        https://downloads.isc.org/isc/keama/%{keama_version}/keama-%{keama_version}.tar.gz
 Source3:        https://downloads.isc.org/isc/keama/%{keama_version}/keama-%{keama_version}.tar.gz.asc
 Source10:       https://www.isc.org/docs/isc-keyblock.asc
-Source11:        https://src.fedoraproject.org/rpms/kea/raw/rawhide/f/kea-dhcp4.service
-Source12:        https://src.fedoraproject.org/rpms/kea/raw/rawhide/f/kea-dhcp6.service
-Source13:        https://src.fedoraproject.org/rpms/kea/raw/rawhide/f/kea-dhcp-ddns.service
-Source14:        https://src.fedoraproject.org/rpms/kea/raw/rawhide/f/kea-ctrl-agent.service
-Source15:        https://src.fedoraproject.org/rpms/kea/raw/rawhide/f/systemd-tmpfiles.conf
-Source16:        https://src.fedoraproject.org/rpms/kea/raw/rawhide/f/systemd-sysusers.conf
+Source11:        kea-dhcp4.service
+Source12:        kea-dhcp6.service
+Source13:        kea-dhcp-ddns.service
+Source14:        kea-ctrl-agent.service
+Source15:        systemd-tmpfiles.conf
+Source16:        systemd-sysusers.conf
 
 Patch1:         kea-sd-daemon.patch
 # Patch2 & Patch3:

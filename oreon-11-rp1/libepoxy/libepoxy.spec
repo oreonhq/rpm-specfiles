@@ -11,7 +11,7 @@ URL: https://github.com/anholt/libepoxy
 Source0:        https://download.gnome.org/sources/%{name}/1.5/%{name}-%{version}.tar.xz
 
 # https://github.com/anholt/libepoxy/pull/270
-Patch0:        https://src.fedoraproject.org/rpms/libepoxy/raw/rawhide/f/Fix-dlwrap-on-riscv64.patch
+Patch0:        Fix-dlwrap-on-riscv64.patch
 
 BuildRequires: meson
 BuildRequires: gcc

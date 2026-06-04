@@ -246,7 +246,7 @@ Source0:        https://github.com/intel/linux-sgx/archive/refs/tags/sgx_%{linux
 # repack.sh purges all the prebuilt AE's that we ship in a different RPM
 # as well as 'prebuilt/' content (openssl / OPA binaries) that we must
 # not distribute.
-Source1:        https://src.fedoraproject.org/rpms/linux-sgx/raw/rawhide/f/repack.sh
+Source1:        repack.sh
 
 Source2:        https://github.com/intel/confidential-computing.tee.dcap/archive/refs/tags/DCAP_%{dcap_version}.tar.gz#/linux-sgx-%{linux_sgx_version}.tar.gz
 Provides: bundled(dcap) = %{dcap_version}
@@ -310,7 +310,7 @@ Source50:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/pccs.sys
 Source51:        https://raw.githubusercontent.com/intel/linux-sgx/HEAD/pccs.service
 # RPM build doesn't run this, but we want it in the src.rpm
 # as record of what was used to create Source54
-Source52:        https://src.fedoraproject.org/rpms/linux-sgx/raw/rawhide/f/pccs-nodejs-bundler
+Source52:        pccs-nodejs-bundler
 # built in %%prep via pccs-nodejs-bundler when missing
 
 ############################################################
@@ -699,7 +699,7 @@ fi
 _nm="pccs-${_dcap}-%{node_modules_date}-node-modules.tar.xz"
 if test ! -f "$_nm"; then
   curl -sfL -o "pccs-${_dcap}.tar.gz" "https://github.com/intel/confidential-computing.tee.dcap.pccs/archive/refs/tags/DCAP_${_dcap}.tar.gz"
-  curl -sfL -o pccs-nodejs-bundler "https://src.fedoraproject.org/rpms/linux-sgx/raw/rawhide/f/pccs-nodejs-bundler"
+  test -f pccs-nodejs-bundler || { echo "oreon: add pccs-nodejs-bundler to dist-git" >&2; exit 1; }
   chmod +x pccs-nodejs-bundler
   NPM_IGNORE_AUDIT=1 ./pccs-nodejs-bundler "${_dcap}"
   _built=$(ls pccs-*-node-modules.tar.xz | head -1)

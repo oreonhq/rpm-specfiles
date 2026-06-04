@@ -71,20 +71,20 @@ License: Vim AND LGPL-2.1-or-later AND MIT AND GPL-1.0-only AND (GPL-2.0-only OR
 # GitHub tag matches vim.org releases (workers that cannot resolve ftp.vim.org still reach github.com)
 # #/ forces local name vim-9.2.0148.tar.gz (not v9.2.0148.tar.gz) so %%prep and appstream date match SOURCES
 Source0: https://ftp.vim.org/pub/vim/unix/vim-%{baseversion}-%{patchlevel}.tar.bz2
-Source1:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/virc
-Source2:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/vimrc
-Source3:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/gvim16.png
-Source4:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/gvim32.png
-Source5:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/gvim48.png
-Source6:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/gvim64.png
-Source7:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/spec-template.new
-Source8:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/macros.vim
-Source9:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/vim-default-editor.sh
-Source10:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/vim-default-editor.csh
-Source11:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/vim-default-editor.fish
-Source12:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/view_wrapper
-Source13:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/vim.sh
-Source14:        https://src.fedoraproject.org/rpms/vim/raw/rawhide/f/vim.fish
+Source1:        virc
+Source2:        vimrc
+Source3:        gvim16.png
+Source4:        gvim32.png
+Source5:        gvim48.png
+Source6:        gvim64.png
+Source7:        spec-template.new
+Source8:        macros.vim
+Source9:        vim-default-editor.sh
+Source10:        vim-default-editor.csh
+Source11:        vim-default-editor.fish
+Source12:        view_wrapper
+Source13:        vim.sh
+Source14:        vim.fish
 
 
 Patch1: vim-7.0-fixkeys.patch

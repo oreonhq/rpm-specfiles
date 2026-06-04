@@ -138,7 +138,7 @@ Source102:	gmp-6.2.1-c23.patch
 %if %{with leancrypto}
 Provides:	bundled(leancrypto) = 1.6.0
 # GitHub release has no upload asset, use archive URL that Content-Disposition names leancrypto-1.6.0.tar.gz
-Source300:	https://github.com/smuellerDD/leancrypto/archive/v1.6.0/leancrypto-1.6.0.tar.gz
+Source300:	https://github.com/smuellerDD/leancrypto/archive/v1.6.0/leancrypto-1.6.0.tar.gz#/gnutls-3.8.12.tar.gz
 %endif
 
 # Wildcard bundling exception https://fedorahosted.org/fpc/ticket/174

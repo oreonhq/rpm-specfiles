@@ -12,10 +12,10 @@ BuildRequires:	zlib-devel, gcc-c++
 BuildRequires: desktop-file-utils
 BuildRequires: make
 
-Patch1:        https://src.fedoraproject.org/rpms/lftp/raw/rawhide/f/lftp-4.0.9-date_fmt.patch
-Patch2:        https://src.fedoraproject.org/rpms/lftp/raw/rawhide/f/lftp-4.9.2-cdefs.patch
-Patch3:        https://src.fedoraproject.org/rpms/lftp/raw/rawhide/f/lftp-4.9.2-tls-close.patch
-Patch4:        https://src.fedoraproject.org/rpms/lftp/raw/rawhide/f/lftp-4.9.3-cert-pem-location.patch
+Patch1:        lftp-4.0.9-date_fmt.patch
+Patch2:        lftp-4.9.2-cdefs.patch
+Patch3:        lftp-4.9.2-tls-close.patch
+Patch4:        lftp-4.9.3-cert-pem-location.patch
 
 %description
 LFTP is a sophisticated ftp/http file transfer program. Like bash, it has job

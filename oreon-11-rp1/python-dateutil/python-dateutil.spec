@@ -17,10 +17,10 @@ License:        (Apache-2.0 AND BSD-3-Clause) OR BSD-3-Clause
 URL:            https://github.com/dateutil/dateutil
 Source:        https://files.pythonhosted.org/packages/source/p/python-dateutil/python-dateutil-2.9.0.post0.tar.gz
 # Allow setuptools-scm dependency greater than v8.0
-Patch:        https://src.fedoraproject.org/rpms/python-dateutil/raw/rawhide/f/relax-setuptools_scm-requires.patch
+Patch:        relax-setuptools_scm-requires.patch
 
 # Fix dateutil module import in sphinx config file
-Patch:        https://src.fedoraproject.org/rpms/python-dateutil/raw/rawhide/f/fix-sphinx-import.patch
+Patch:        fix-sphinx-import.patch
 
 # when bootstrapping dateutil-freezegun, we cannot run tests
 # on RHEL, we do not have or want all test dependencies

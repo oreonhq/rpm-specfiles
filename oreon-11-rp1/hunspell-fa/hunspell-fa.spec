@@ -14,7 +14,7 @@ Version: 0.%{upstreamid}
 Release: 38%{?dist}
 Source0: https://github.com/LibreOffice/dictionaries/raw/refs/heads/master/fa_IR/fa_IR.dic
 Source1: https://github.com/LibreOffice/dictionaries/raw/refs/heads/master/fa_IR/fa_IR.aff
-URL: http://ftp.gnu.org/gnu/aspell/dict/fa
+URL: https://ftp.gnu.org/gnu/aspell/dict/fa
 License: GPL-2.0-or-later
 BuildArch: noarch
 
